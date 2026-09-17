@@ -204,3 +204,39 @@ def test_episode_records_party_defeat_without_asking_for_impossible_switch(
     assert not result.battle_won
     assert result.stop_reason == "party_defeated"
     assert result.decisions == ()
+
+
+def test_episode_accepts_authenticated_trainer_prompt_as_first_boundary(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(
+            snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {"prompt": True})
+        ),
+    )
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    monkeypatch.setattr(session, "trainer_switch_prompt_visible", lambda raw: raw.battle_state == 2)
+
+    def resolve(_actions, _reader, _session, **_kwargs):
+        session.raw = RawGameState(True, 120, 2, 2, 2, 0, party_hp=(40, 35))
+
+    monkeypatch.setattr(episode, "resolve_trainer_switch_prompt", resolve)
+
+    class Policy:
+        policy_id = "prompt-unit-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("prompt must come first")
+
+        def choose_switch(self, _observation, _legal_slots, *, forced, may_decline):
+            assert not forced and may_decline
+            return None
+
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy()
+    )
+    assert result.decisions[0]["kind"] == "switch_prompt"
+    assert result.decisions[0]["party_slot"] is None

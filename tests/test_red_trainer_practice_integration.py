@@ -27,6 +27,7 @@ from pokemon_red_completion.battle_scenario_capture import (
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameBudgetController, FrameSafeExecutor
 from pokemon_red_completion.observation import BattleMenuPhase, PokemonRedStateReader
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_battle_catalog import (
     PokemonRedBattleCatalog,
     pokemon_red_move_ref,
@@ -46,6 +47,7 @@ from pokemon_red_completion.red_trainer_practice_counterfactual import (
 )
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
 from pokemon_red_completion.red_trainer_practice_policy import RedTrainerPracticeModelPolicy
+from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 pytestmark = pytest.mark.integration
@@ -53,6 +55,91 @@ pytestmark = pytest.mark.integration
 
 def _move(identifier: int, pp: int) -> dict[str, object]:
     return {"move_ref": pokemon_red_move_ref(identifier), "pp": pp}
+
+
+def test_train_replacement_prompt_has_matched_decline_and_switch_branches(tmp_path: Path) -> None:
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_STATE")
+    manifest_path = environ.get("POKEMON_RED_TRAINER_TRAIN_MANIFEST")
+    model_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_MODEL")
+    if not all((rom_path, state_path, manifest_path, model_path)):
+        pytest.skip("private authenticated train inputs not supplied")
+    assert rom_path and state_path and manifest_path and model_path
+    source = open_battle_scenario_capture(Path(state_path), Path(manifest_path))
+    with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(source.state_bytes)
+        reader = PokemonRedStateReader(emulator)
+        actions = FrameSafeExecutor(FrameBudgetController(emulator, maximum_frames=10000))
+        execute_bounded_battle_move_turn(
+            reader,
+            actions,
+            expected_map=source.manifest.expected_map,
+            selected_slot=1,
+            expected_battle_state=2,
+            settle_to_next_decision=True,
+            timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=40),
+        )
+        raw = reader.read()
+        assert reader.trainer_switch_prompt_visible(raw)
+        observation = PokemonRedObservationEncoder.from_state_reader(reader).snapshot_from_raw(raw)
+        prompt_state = emulator.save_state_bytes()
+    prompt_path = tmp_path / "prompt.state"
+    prompt_manifest_path = tmp_path / "prompt.state.json"
+    prompt_path.write_bytes(prompt_state)
+    prompt_manifest_path.write_bytes(
+        build_battle_scenario_capture_payload(
+            capture_id="trainer-train-prompt-diagnostic",
+            root_lineage_id=source.manifest.root_lineage_id,
+            partition=ScenarioPartition.TRAIN,
+            state_bytes=prompt_state,
+            initial_observation_sha256=canonical_sha256(observation.to_dict()),
+            source_commit="0" * 40,
+            expected_map=source.manifest.expected_map,
+            expected_battle_state=2,
+            source_state_sha256=source.manifest.state_sha256,
+        )
+    )
+    capture = open_battle_scenario_capture(prompt_path, prompt_manifest_path)
+    model = MaskedMLPMoveRanker.from_dict(json.loads(Path(model_path).read_bytes()))
+
+    class FrozenAttackBaseline:
+        policy_id = "prompt-branch-frozen-attack-continuation"
+
+        def choose_main(self, _observation, prepared):
+            index = model.predict(
+                prepared.features.candidate_vectors,
+                legal_mask=prepared.features.legal_mask,
+                current_pp=prepared.features.current_pp,
+            )
+            return BattleAction.move(prepared.features.slot_indices[index] + 1)
+
+        def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
+            return legal_party_slots[0] if forced else None
+
+    @contextmanager
+    def session_factory():
+        with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+            yield FrameBudgetController(emulator, maximum_frames=25000)
+
+    matched = collect_trainer_practice_counterfactuals(
+        capture,
+        session_factory=session_factory,
+        continuation_policy_factory=FrozenAttackBaseline,
+        first_choices=(
+            TrainerPracticeFirstChoice(None),
+            *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
+        ),
+        max_decisions=5,
+        player_turn_horizon=1,
+    )
+    assert matched.public_dict()["player_turn_horizon"] == 1
+    assert len(matched.branches) == 6
+    assert matched.root_lineage_id == source.manifest.root_lineage_id
+    assert all(
+        episode.decisions[0]["kind"] == "switch_prompt"
+        and episode.public_dict()["player_turn_count"] == 1
+        for _choice, episode in matched.branches
+    )
 
 
 def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() -> None:

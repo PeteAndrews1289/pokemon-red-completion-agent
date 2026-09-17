@@ -34,16 +34,16 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "A frozen move model chose 20 attacks in one authenticated six-on-six TRAIN episode. Fixed rules handled four optional and five forced switches; the party lost after four opponent KOs. No learned switch choice, fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged.",
-        "blocker": "Trainer roster setup, real replacement prompts, full-party episodes and explicit loss reporting are qualified. The missing learning result is an outcome-trained model-selected switch/control choice with disjoint natural development advantage.",
-        "decision": "Collect varied TRAIN outcomes for attack versus switch and switch targets, fit a challenger only on TRAIN, then compare it with frozen and fixed controls on untouched natural development battles before promotion.",
+        "blocker": "The attack/switch trainer now retains equal-turn matched choices from one authenticated TRAIN root. The missing learning result is a fitted switch/control challenger with varied-roster coverage and disjoint natural development advantage.",
+        "decision": "Vary TRAIN rosters and timings, fit attack-versus-switch and switch-target choices only on TRAIN, then compare a frozen challenger with fixed controls on untouched natural development battles before promotion.",
         "evidence": {
           "kind": "qualification",
           "path": "docs/evidence/red-trainer-practice-model-boundary-2026-09-17.json",
-          "sha256": "52e92cb837c98736a98cfbec2a671175c2918585e777f7bdcc5a8ad001f5f1e4"
+          "sha256": "e21839f9e49530b5e91450becb808326e8404809e5a4b42c0050769c1107df25"
         },
-        "learning_output": "One clean-opening TRAIN source yielded a six-on-six assisted trainer capture, four measured opening move outcomes and a retained 29-decision frozen attack baseline loss. This is a usable curriculum boundary and a failure observation, not a learner gain.",
+        "learning_output": "One clean-opening TRAIN source yielded a six-on-six trainer capture, four measured moves, a 29-decision frozen baseline loss, and six equal-two-turn attack/switch branches with terminal observations. This is usable curriculum evidence, not a learner gain.",
         "next_falsifier": "A switch-aware challenger cannot produce a legal useful switch, cannot outperform the no-optional-switch baseline in varied TRAIN battles, or fails untouched natural development comparison.",
-        "next_session_goal": "Sol High, Fast off, about 90-120 minutes: collect outcome-matched optional-switch and target alternatives across varied TRAIN rosters, fit one challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run.",
+        "next_session_goal": "Sol High, Fast off, about 90-120 minutes: vary authenticated TRAIN rosters and timings, fit one switch-aware challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run.",
         "product_alignment": "The model can own every full-party trainer battle decision in an authenticated short scenario; teacher memory edits only construct training conditions, and natural battles remain the promotion test.",
         "session_id": "2026-09-17-trainer-practice-model-boundary",
         "status": "closed",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Train outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.",
+      "next_decision": "Fit outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -23,6 +23,14 @@ adapter also executed a diagnostic voluntary switch to slot 6 and a subsequent
 frozen-model attack in the real emulator; its control and target heads were
 test stubs, not learned models.
 
+The matched TRAIN collector then branched that same state into one opening
+attack and all five voluntary switch targets. Each branch ran for **two actual
+player turns** (prompts and forced replacements do not count), retained its
+visible starting and terminal observations, and wrote a separate outcome. One
+root remains one root. Remaining player HP ranged from 431 to 499, and branches
+defeated either zero or one opponent. These are train comparisons, not an
+independent development result or an automatically chosen best action.
+
 A frozen attack model then made 20 attack choices during a retained 29-decision
 six-on-six episode. A fixed baseline declined four optional switches and used
 the first living forced replacement five times. It defeated four opponents,
@@ -30,9 +38,10 @@ lost all six party members, and stopped with an explicit `party_defeated`
 receipt. All 29 decisions retain their visible semantic observations and
 outcomes for future fitting, with no hidden opponent roster or private path.
 This is a useful failure, **not** learned switching or a win. The
-training lab can now expose the consequential decisions; the next work is
-outcome-matched switch/control training across varied rosters and a disjoint
-natural development comparison. No fit, promotion or transfer claim occurred.
+trainer lab is ready to supply attack-versus-switch and switch-target data;
+the next work is varied-roster training and a disjoint natural development
+comparison. No fit, promotion or transfer claim occurred. Status moves and
+items remain outside this attack/switch trainer's qualified scope.
 
 The broader non-integration suite was interrupted after 2,688 passes and three
 unrelated dashboard-fixture failures; it is not a full-suite pass. Focused

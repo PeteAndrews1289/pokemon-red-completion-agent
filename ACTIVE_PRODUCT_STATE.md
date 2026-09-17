@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Train outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.
+- Next decision: Fit outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.
 
 ### Mandatory mission check
 
@@ -65,12 +65,12 @@ outputs.
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | The model can own every full-party trainer battle decision in an authenticated short scenario; teacher memory edits only construct training conditions, and natural battles remain the promotion test. |
-| Learning output | One clean-opening TRAIN source yielded a six-on-six assisted trainer capture, four measured opening move outcomes and a retained 29-decision frozen attack baseline loss. This is a usable curriculum boundary and a failure observation, not a learner gain. |
+| Learning output | One clean-opening TRAIN source yielded a six-on-six trainer capture, four measured moves, a 29-decision frozen baseline loss, and six equal-two-turn attack/switch branches with terminal observations. This is usable curriculum evidence, not a learner gain. |
 | Authority delta | A frozen move model chose 20 attacks in one authenticated six-on-six TRAIN episode. Fixed rules handled four optional and five forced switches; the party lost after four opponent KOs. No learned switch choice, fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
 | Transfer result | No independent development or cross-title test ran. The assisted trainer battle inherits one TRAIN root; its loss is not an evaluation result. |
-| Blocker | Trainer roster setup, real replacement prompts, full-party episodes and explicit loss reporting are qualified. The missing learning result is an outcome-trained model-selected switch/control choice with disjoint natural development advantage. |
-| Decision | Collect varied TRAIN outcomes for attack versus switch and switch targets, fit a challenger only on TRAIN, then compare it with frozen and fixed controls on untouched natural development battles before promotion. |
-| Next session | Sol High, Fast off, about 90-120 minutes: collect outcome-matched optional-switch and target alternatives across varied TRAIN rosters, fit one challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run. |
+| Blocker | The attack/switch trainer now retains equal-turn matched choices from one authenticated TRAIN root. The missing learning result is a fitted switch/control challenger with varied-roster coverage and disjoint natural development advantage. |
+| Decision | Vary TRAIN rosters and timings, fit attack-versus-switch and switch-target choices only on TRAIN, then compare a frozen challenger with fixed controls on untouched natural development battles before promotion. |
+| Next session | Sol High, Fast off, about 90-120 minutes: vary authenticated TRAIN rosters and timings, fit one switch-aware challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run. |
 | Next falsifier | A switch-aware challenger cannot produce a legal useful switch, cannot outperform the no-optional-switch baseline in varied TRAIN battles, or fails untouched natural development comparison. |
 | Stop condition | Stop on incoherent generated state, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
