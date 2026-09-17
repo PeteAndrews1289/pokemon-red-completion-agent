@@ -40,7 +40,9 @@ def _bound_path(value: object, label: str) -> Path:
     return location
 
 
-def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
+def run(
+    plan_path: Path, *, check_only: bool = False, probe_only: bool = False
+) -> dict[str, object]:
     plan = json.loads(plan_path.read_bytes())
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("trainer fit corpus plan differs")
@@ -54,7 +56,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     seed = plan.get("seed")
     output = plan.get("output")
     if (
-        not isinstance(cases, list) or len(cases) < 16
+        not isinstance(cases, list) or len(cases) < (1 if probe_only else 16)
         or type(seed) is not int or seed < 0  # noqa: E721
         or not isinstance(output, str) or Path(output).exists()
     ):
@@ -128,6 +130,20 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "head_kinds": sorted(heads),
         })
     root_counts = Counter(row["root_lineage_id"] for row in scenario_receipts)
+    if probe_only:
+        return {
+            "status": "diagnostic_corpus_admitted_not_fit_eligible",
+            "scenario_count": len(scenario_targets),
+            "root_count": len(root_counts),
+            "head_kinds": sorted({
+                head
+                for row in scenario_receipts
+                if isinstance(row["head_kinds"], list)
+                for head in row["head_kinds"]
+            }),
+            "model_updates": 0,
+            "authority_promotions": 0,
+        }
     if len(root_counts) < 4 or any(count < 4 for count in root_counts.values()):
         raise ValueError("four independent TRAIN roots with four scenarios each required")
     if not all(
@@ -177,8 +193,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("plan", type=Path)
     parser.add_argument("--check-only", action="store_true")
+    parser.add_argument("--probe-only", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(run(args.plan, check_only=args.check_only), sort_keys=True))
+    if args.check_only and args.probe_only:
+        parser.error("choose one of --check-only or --probe-only")
+    print(json.dumps(run(args.plan, check_only=args.check_only,
+                         probe_only=args.probe_only), sort_keys=True))
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ from dataclasses import dataclass, replace
 from time import perf_counter_ns
 from typing import Protocol, cast
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_recovery import (
     resolve_trainer_switch_prompt,
@@ -221,7 +222,9 @@ def run_red_trainer_practice_episode(
                     "initial_observation_sha256": initial_sha256,
                 },
             )
-            session.tick(opening_idle_frames)
+            FrameSafeExecutor(session).execute(
+                MacroAction(MacroActionKind.WAIT, repeat=opening_idle_frames)
+            )
             settled = reader.read()
             _require_plausible_hp(settled)
             if (
