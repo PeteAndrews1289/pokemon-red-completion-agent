@@ -68,14 +68,46 @@ CONTROL_FEATURE_NAMES = (
     "history.opponent_turn",
     *(f"history.previous.{value.rsplit(':', 1)[-1]}" for value in CONTROL_CLASS_REFS),
     *(f"history.count.{value.rsplit(':', 1)[-1]}" for value in CONTROL_CLASS_REFS),
-    *(f"matchup.player_type.{name}" for name in (
-        "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
-        "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
-    )),
-    *(f"matchup.opponent_type.{name}" for name in (
-        "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
-        "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
-    )),
+    *(
+        f"matchup.player_type.{name}"
+        for name in (
+            "normal",
+            "fighting",
+            "flying",
+            "poison",
+            "ground",
+            "rock",
+            "bug",
+            "ghost",
+            "fire",
+            "water",
+            "grass",
+            "electric",
+            "psychic",
+            "ice",
+            "dragon",
+        )
+    ),
+    *(
+        f"matchup.opponent_type.{name}"
+        for name in (
+            "normal",
+            "fighting",
+            "flying",
+            "poison",
+            "ground",
+            "rock",
+            "bug",
+            "ghost",
+            "fire",
+            "water",
+            "grass",
+            "electric",
+            "psychic",
+            "ice",
+            "dragon",
+        )
+    ),
     "moves.best.category.physical",
     "moves.best.category.special",
     "moves.best.category.status",
@@ -111,7 +143,8 @@ class BattleControlHistory:
         ):
             raise BattleControlFeatureError("previous control action is invalid")
         if len(self.action_counts) != len(CONTROL_CLASS_REFS) or any(
-            type(value) is not int or value < 0 for value in self.action_counts  # noqa: E721
+            type(value) is not int or value < 0
+            for value in self.action_counts  # noqa: E721
         ):
             raise BattleControlFeatureError("control action counts are invalid")
         if (
@@ -123,8 +156,7 @@ class BattleControlHistory:
 
     def feature_values(self) -> tuple[float, ...]:
         previous = tuple(
-            float(self.previous_class_index == index)
-            for index in range(len(CONTROL_CLASS_REFS))
+            float(self.previous_class_index == index) for index in range(len(CONTROL_CLASS_REFS))
         )
         ceilings = (64, 16, 6, 6, 6, 6, 16, 16)
         counts = tuple(
@@ -147,6 +179,12 @@ class BattleControlHistoryTracker:
     battle_plan_id: str | None = None
     opponent_key: tuple[object, object] | None = None
     history: BattleControlHistory = BattleControlHistory()
+    pending_opponent_replacement: bool = False
+
+    def note_opponent_replacement(self) -> None:
+        """Record an observed new send-out, including a duplicate species."""
+
+        self.pending_opponent_replacement = True
 
     def before(
         self,
@@ -162,8 +200,10 @@ class BattleControlHistoryTracker:
             self.battle_plan_id = battle_plan_id
             self.opponent_key = opponent_key
             self.history = BattleControlHistory()
-        elif opponent_key != self.opponent_key:
+            self.pending_opponent_replacement = False
+        elif self.pending_opponent_replacement or opponent_key != self.opponent_key:
             self.opponent_key = opponent_key
+            self.pending_opponent_replacement = False
             self.history = BattleControlHistory(
                 battle_turn=self.history.battle_turn,
                 opponent_index=self.history.opponent_index + 1,
@@ -282,8 +322,7 @@ def project_control_features(
     hp_ratios = tuple(_ratio(member.get("hp_ratio"), "party member hp ratio") for member in members)
     living = tuple(value for value in hp_ratios if value > 0.0)
     levels = tuple(
-        _bounded(member.get("level"), 1, 100, "party member level")
-        for member in members
+        _bounded(member.get("level"), 1, 100, "party member level") for member in members
     )
     statuses = sum(member.get("status") is not None for member in members)
     kind = battle.get("kind")
@@ -401,15 +440,41 @@ def _move_control_features(batch: BattleFeatureBatch | None) -> tuple[float, ...
     player_types = tuple(
         float(first[MOVE_FEATURE_NAMES.index(f"state.player_type.{name}")])
         for name in (
-            "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
-            "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+            "normal",
+            "fighting",
+            "flying",
+            "poison",
+            "ground",
+            "rock",
+            "bug",
+            "ghost",
+            "fire",
+            "water",
+            "grass",
+            "electric",
+            "psychic",
+            "ice",
+            "dragon",
         )
     )
     opponent_types = tuple(
         float(first[MOVE_FEATURE_NAMES.index(f"state.opponent_type.{name}")])
         for name in (
-            "normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost",
-            "fire", "water", "grass", "electric", "psychic", "ice", "dragon",
+            "normal",
+            "fighting",
+            "flying",
+            "poison",
+            "ground",
+            "rock",
+            "bug",
+            "ghost",
+            "fire",
+            "water",
+            "grass",
+            "electric",
+            "psychic",
+            "ice",
+            "dragon",
         )
     )
     weighted = column("move.accuracy_weighted_effective_power_fraction").copy()

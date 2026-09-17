@@ -407,6 +407,18 @@ def test_depleted_counter_remains_a_safely_masked_candidate() -> None:
     assert _value(batch, 1, "move.effect.counter") == 0.0
 
 
+def test_trainer_segment_can_mask_counter_and_use_other_move() -> None:
+    snapshot = _snapshot()
+    _lead(snapshot)["moves"] = [
+        {"slot_index": 0, "move_ref": "pokemon.red.gb.us.rev0:move:068", "pp": 20},
+        {"slot_index": 1, "move_ref": "pokemon.red.gb.us.rev0:move:033", "pp": 35},
+    ]
+    batch = BattleFeatureProjector(
+        RED_BATTLE_CATALOG, mask_counter_without_prior_damage=True
+    ).project(snapshot)
+    assert batch.legal_mask == (False, True)
+
+
 def test_route_progress_and_objective_changes_cannot_change_vectors() -> None:
     baseline = _snapshot()
     changed = deepcopy(baseline)

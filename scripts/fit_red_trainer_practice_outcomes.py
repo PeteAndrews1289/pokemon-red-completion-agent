@@ -23,7 +23,10 @@ from pokemon_red_completion.battle_scenario_capture import (
 from pokemon_red_completion.red_autonomous_player import _record
 from pokemon_red_completion.red_trainer_practice_admission import inspect_trainer_practice_choices
 from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
-from pokemon_red_completion.red_trainer_practice_fit import fit_trainer_practice_three_heads
+from pokemon_red_completion.red_trainer_practice_fit import (
+    fit_trainer_practice_three_heads,
+    summarize_trainer_practice_training,
+)
 from pokemon_red_completion.red_trainer_practice_targets import (
     aggregate_trainer_timing_targets,
     extract_trainer_practice_targets,
@@ -180,7 +183,10 @@ def _root_source_from_parent(
 
 
 def run(
-    plan_path: Path, *, check_only: bool = False, probe_only: bool = False,
+    plan_path: Path,
+    *,
+    check_only: bool = False,
+    probe_only: bool = False,
     exploratory_fit: bool = False,
 ) -> dict[str, object]:
     plan = json.loads(plan_path.read_bytes())
@@ -198,8 +204,10 @@ def run(
     if (
         not isinstance(cases, list)
         or len(cases) < (1 if probe_only else 4 if exploratory_fit else 16)
-        or type(seed) is not int or seed < 0  # noqa: E721
-        or not isinstance(output, str) or Path(output).exists()
+        or type(seed) is not int
+        or seed < 0  # noqa: E721
+        or not isinstance(output, str)
+        or Path(output).exists()
     ):
         raise ValueError("trainer corpus size, seed, or output differs")
     scenario_targets = []
@@ -245,12 +253,9 @@ def run(
                 or fresh.manifest.root_lineage_id != capture.manifest.root_lineage_id
                 or fresh.manifest.source_state_sha256
                 != hashlib.sha256(origin_state_path.read_bytes()).hexdigest()
-                or origin_receipt.get("origin_state_sha256")
-                != fresh.manifest.source_state_sha256
-                or origin_receipt.get("battle_state_sha256")
-                != fresh.manifest.state_sha256
-                or origin_receipt.get("source_commit")
-                != fresh.manifest.source_commit
+                or origin_receipt.get("origin_state_sha256") != fresh.manifest.source_state_sha256
+                or origin_receipt.get("battle_state_sha256") != fresh.manifest.state_sha256
+                or origin_receipt.get("source_commit") != fresh.manifest.source_commit
                 or not (
                     capture.manifest.state_sha256 == fresh.manifest.state_sha256
                     or root_source_sha256 == fresh.manifest.state_sha256
@@ -273,16 +278,17 @@ def run(
                 or choice_plan.get("source_commit") != capture.manifest.source_commit
                 or choice_plan.get("opening_idle_frames") != offset
                 or choice_plan.get("player_turn_horizon") != document.get("player_turn_horizon")
-                or choice_plan.get("first_choice_refs") != [
-                    branch.get("first_choice_ref") for branch in document.get("branches", [])
-                ]
+                or choice_plan.get("first_choice_refs")
+                != [branch.get("first_choice_ref") for branch in document.get("branches", [])]
                 or not isinstance(choice_plan.get("model_sha256"), str)
                 or type(choice_plan.get("max_decisions")) is not int  # noqa: E721
             ):
                 raise ValueError("trainer timing choice plan differs")
             prefix = trial.get("branch_log_prefix")
             if not isinstance(prefix, str) or prefix not in {
-                "matched-branch", "prompt-branch", "forced-branch"
+                "matched-branch",
+                "prompt-branch",
+                "forced-branch",
             }:
                 raise ValueError("trainer branch log prefix differs")
             logs = {
@@ -290,7 +296,8 @@ def run(
                 for index, ref in enumerate(choice_plan["first_choice_refs"])
             }
             admitted = inspect_trainer_practice_choices(
-                capture, document,
+                capture,
+                document,
                 expected_choice_refs=tuple(choice_plan["first_choice_refs"]),
                 continuation_policy_id=choice_plan["continuation_policy_id"],
                 branch_event_logs=logs,
@@ -300,24 +307,24 @@ def run(
                 expected_opening_idle_frames=offset,
             )
             targets.append(extract_trainer_practice_targets(admitted, document))
-        aggregate = aggregate_trainer_timing_targets(
-            tuple(targets), expected_offsets=OFFSETS
-        )
+        aggregate = aggregate_trainer_timing_targets(tuple(targets), expected_offsets=OFFSETS)
         heads = aggregate["heads"]
         if not isinstance(heads, dict):
             raise ValueError("trainer scenario heads differ")
         scenario_targets.append(aggregate)
-        scenario_receipts.append({
-            "scenario_index": scenario_index,
-            "capture_id": capture.manifest.capture_id,
-            "root_lineage_id": capture.manifest.root_lineage_id,
-            "source_state_sha256": root_source_sha256,
-            "timing_count": len(OFFSETS),
-            "decision_context": aggregate["decision_context"],
-            "attack_depleted": aggregate["attack_depleted"],
-            "head_kinds": sorted(heads),
-            "fresh_origin_receipt": origin_receipt,
-        })
+        scenario_receipts.append(
+            {
+                "scenario_index": scenario_index,
+                "capture_id": capture.manifest.capture_id,
+                "root_lineage_id": capture.manifest.root_lineage_id,
+                "source_state_sha256": root_source_sha256,
+                "timing_count": len(OFFSETS),
+                "decision_context": aggregate["decision_context"],
+                "attack_depleted": aggregate["attack_depleted"],
+                "head_kinds": sorted(heads),
+                "fresh_origin_receipt": origin_receipt,
+            }
+        )
     _validate_root_source_provenance(scenario_receipts)
     if not (probe_only or exploratory_fit):
         _validate_qualified_fresh_origins(scenario_receipts)
@@ -327,12 +334,14 @@ def run(
             "status": "diagnostic_corpus_admitted_not_fit_eligible",
             "scenario_count": len(scenario_targets),
             "root_count": len(root_counts),
-            "head_kinds": sorted({
-                head
-                for row in scenario_receipts
-                if isinstance(row["head_kinds"], list)
-                for head in row["head_kinds"]
-            }),
+            "head_kinds": sorted(
+                {
+                    head
+                    for row in scenario_receipts
+                    if isinstance(row["head_kinds"], list)
+                    for head in row["head_kinds"]
+                }
+            ),
             "model_updates": 0,
             "authority_promotions": 0,
         }
@@ -355,8 +364,7 @@ def run(
     ):
         raise ValueError("trainer corpus lacks one or more learnable heads")
     if not exploratory_fit and (
-        {row["decision_context"] for row in scenario_receipts}
-        != {"main", "prompt", "forced"}
+        {row["decision_context"] for row in scenario_receipts} != {"main", "prompt", "forced"}
         or not any(row["attack_depleted"] is True for row in scenario_receipts)
     ):
         raise ValueError("trainer corpus lacks required decision contexts")
@@ -364,7 +372,8 @@ def run(
         return {
             "status": (
                 "correlated_exploratory_train_corpus_admitted_no_fit"
-                if exploratory_fit else "train_only_corpus_admitted_no_fit"
+                if exploratory_fit
+                else "train_only_corpus_admitted_no_fit"
             ),
             "scenario_count": len(scenario_targets),
             "root_count": len(root_counts),
@@ -379,8 +388,7 @@ def run(
     report = {
         "schema": "pokemon.red.trainer-practice-fit-receipt.v1",
         "qualification_tier": (
-            "correlated_exploratory_train_only"
-            if exploratory_fit else "independent_root_train"
+            "correlated_exploratory_train_only" if exploratory_fit else "independent_root_train"
         ),
         "promotion_eligible": False,
         "independent_train_supply_gate_passed": not exploratory_fit,
@@ -396,6 +404,7 @@ def run(
             )
             for head in ("move", "control", "switch")
         },
+        "training_diagnostics": summarize_trainer_practice_training(scenario_targets, model),
         "model_sha256": hashlib.sha256((destination / "model.json").read_bytes()).hexdigest(),
         "model_updates": 1,
         "development_evaluations": 0,
@@ -417,9 +426,17 @@ def main() -> None:
         parser.error("choose one of --check-only or --probe-only")
     if args.probe_only and args.exploratory_fit:
         parser.error("probe-only cannot also fit")
-    print(json.dumps(run(args.plan, check_only=args.check_only,
-                         probe_only=args.probe_only,
-                         exploratory_fit=args.exploratory_fit), sort_keys=True))
+    print(
+        json.dumps(
+            run(
+                args.plan,
+                check_only=args.check_only,
+                probe_only=args.probe_only,
+                exploratory_fit=args.exploratory_fit,
+            ),
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":

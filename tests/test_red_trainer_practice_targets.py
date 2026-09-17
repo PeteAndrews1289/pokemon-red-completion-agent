@@ -5,6 +5,7 @@ from copy import deepcopy
 import pytest
 
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
+from pokemon_red_completion.red_trainer_practice_returns import RETURN_SCHEMA_ID
 from pokemon_red_completion.red_trainer_practice_targets import (
     TrainerPracticeTargetError,
     aggregate_trainer_timing_targets,
@@ -36,7 +37,7 @@ def _contrast():
             {
                 "first_choice_ref": ref,
                 "whole_party_return": {
-                    "schema": "pokemon.red.trainer-practice.whole-party-return.v1",
+                    "schema": RETURN_SCHEMA_ID,
                     "value": value,
                 },
             }

@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import math
 from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
+from statistics import fmean
 
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.battle_semantics import (
@@ -37,7 +39,7 @@ CONTROL_ACTION_FEATURE_NAMES = (
     *(f"attack_or_decline.{name}" for name in CONTROL_FEATURE_NAMES_V2),
     *(f"switch.{name}" for name in CONTROL_FEATURE_NAMES_V2),
 )
-CONTROL_ACTION_SCHEMA_ID = f"{CONTROL_SCHEMA_ID}.action-interaction-v2"
+CONTROL_ACTION_SCHEMA_ID = f"{CONTROL_SCHEMA_ID}.action-interaction-v3"
 
 
 def control_action_candidates(
@@ -174,19 +176,17 @@ def fit_trainer_practice_three_heads(
     if require_corpus_floor and any(target.get("timing_count") != 5 for target in records):
         raise TrainerPracticeFitError("five declared timing offsets per scenario required")
     if require_corpus_floor and (
-        {target.get("decision_context") for target in records}
-        != {"main", "prompt", "forced"}
+        {target.get("decision_context") for target in records} != {"main", "prompt", "forced"}
         or not any(target.get("attack_depleted") is True for target in records)
     ):
-        raise TrainerPracticeFitError(
-            "main, prompt, forced and empty-attack contexts required"
-        )
+        raise TrainerPracticeFitError("main, prompt, forced and empty-attack contexts required")
     resolver = catalog if catalog is not None else PokemonRedBattleCatalog()
     examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
     for target in records:
         _append_examples(examples, target, resolver)
     if any(not examples[head] for head in examples):
         raise TrainerPracticeFitError("move, control and switch contrasts are all required")
+    examples = {head: _combine_identical_inputs(rows) for head, rows in examples.items()}
     return TrainerPracticeThreeHeadModel(
         move=TrainerHeadModel.fit(
             schema_id=MOVE_SCHEMA_ID,
@@ -231,6 +231,7 @@ def _append_examples(
         if not isinstance(head, Mapping):
             raise TrainerPracticeFitError("target head differs")
         refs, returns, best = head.get("choice_refs"), head.get("returns"), head.get("best_indices")
+        timing_returns = head.get("timing_returns")
         if (
             not isinstance(refs, list)
             or not isinstance(returns, list)
@@ -264,7 +265,143 @@ def _append_examples(
             )
             rows = control_action_candidates(common)
             best = list(_tied_values((attack_value, switch_value)))
-        examples[name].append(TrainerHeadExample(tuple(rows), tuple(best)))
+        observed = _observed_returns(name, refs, returns, timing_returns)
+        examples[name].append(
+            TrainerHeadExample(tuple(rows), tuple(best), _soft_return_target(observed))
+        )
+
+
+def _observed_returns(
+    head_name: str, refs: list[object], means: list[object], timing: object
+) -> tuple[tuple[float, ...], ...]:
+    """Keep each recorded timing's reward magnitude and decision uncertainty."""
+
+    if timing is None:
+        timing = [means]
+    if (
+        not isinstance(timing, list)
+        or not timing
+        or any(not isinstance(row, list) or len(row) != len(refs) for row in timing)
+    ):
+        raise TrainerPracticeFitError("timed return inventory differs")
+    observed = []
+    for row in timing:
+        if any(
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            for value in row
+        ):
+            raise TrainerPracticeFitError("timed return is invalid")
+        if head_name == "control":
+            attack = [
+                float(value)
+                for ref, value in zip(refs, row, strict=True)
+                if ":move:" in ref or ref.endswith("decline-switch")
+            ]
+            switches = [
+                float(value) for ref, value in zip(refs, row, strict=True) if ":switch:" in ref
+            ]
+            if not attack or not switches:
+                raise TrainerPracticeFitError("control return inventory differs")
+            observed.append((max(attack), max(switches)))
+        else:
+            observed.append(tuple(float(value) for value in row))
+    return tuple(observed)
+
+
+def _soft_return_target(timing: tuple[tuple[float, ...], ...]) -> tuple[float, ...]:
+    """Average reward-sensitive choice probabilities over declared RNG timings."""
+
+    temperature = 0.25
+    probabilities = []
+    for row in timing:
+        maximum = max(row)
+        weights = tuple(math.exp((value - maximum) / temperature) for value in row)
+        total = sum(weights)
+        probabilities.append(tuple(value / total for value in weights))
+    return tuple(fmean(row[index] for row in probabilities) for index in range(len(timing[0])))
+
+
+def _combine_identical_inputs(rows: list[TrainerHeadExample]) -> list[TrainerHeadExample]:
+    """One observable decision gets one target, even across repeated origins."""
+
+    groups: dict[tuple[tuple[float, ...], ...], list[TrainerHeadExample]] = {}
+    for row in rows:
+        groups.setdefault(row.candidate_vectors, []).append(row)
+    combined = []
+    for candidates, group in groups.items():
+        probabilities = tuple(
+            fmean(
+                case.target_probabilities[index]
+                for case in group
+                if case.target_probabilities is not None
+            )
+            for index in range(len(candidates))
+        )
+        highest = max(probabilities)
+        best = tuple(index for index, value in enumerate(probabilities) if highest - value <= 1e-8)
+        combined.append(TrainerHeadExample(candidates, best, probabilities))
+    return combined
+
+
+def summarize_trainer_practice_training(
+    targets: Iterable[Mapping[str, object]],
+    model: TrainerPracticeThreeHeadModel,
+    *,
+    catalog: PokemonRedBattleCatalog | None = None,
+) -> dict[str, dict[str, object]]:
+    """Expose semantic diversity, contradictory labels and TRAIN-only regret."""
+
+    records = tuple(targets)
+    examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
+    resolver = catalog or PokemonRedBattleCatalog()
+    for target in records:
+        _append_examples(examples, target, resolver)
+    results: dict[str, dict[str, object]] = {}
+    for name, rows in examples.items():
+        groups: dict[tuple[tuple[float, ...], ...], set[tuple[int, ...]]] = {}
+        measured: list[tuple[float, ...]] = []
+        for target in records:
+            heads = target.get("heads")
+            head = heads.get(name) if isinstance(heads, Mapping) else None
+            if not isinstance(head, Mapping):
+                continue
+            refs, returns = head.get("choice_refs"), head.get("returns")
+            if not isinstance(refs, list) or not isinstance(returns, list):
+                raise TrainerPracticeFitError("training diagnostic target differs")
+            timed = _observed_returns(name, refs, returns, head.get("timing_returns"))
+            measured.append(
+                tuple(fmean(timing[i] for timing in timed) for i in range(len(timed[0])))
+            )
+        if len(rows) != len(measured):
+            raise TrainerPracticeFitError("training diagnostic inventory differs")
+        candidate_model = getattr(model, name)
+        model_regret = []
+        first_regret = []
+        for row, rewards in zip(rows, measured, strict=True):
+            groups.setdefault(row.candidate_vectors, set()).add(row.best_indices)
+            best_return = max(rewards)
+            model_regret.append(
+                best_return - rewards[candidate_model.predict_index(row.candidate_vectors)]
+            )
+            first_regret.append(best_return - rewards[0])
+        results[name] = {
+            "examples": len(rows),
+            "unique_candidate_matrices": len(groups),
+            "repeated_input_groups": sum(
+                len(group) > 1
+                for group in (
+                    [row for row in rows if row.candidate_vectors == key] for key in groups
+                )
+            ),
+            "conflicting_winner_groups": sum(len(winners) > 1 for winners in groups.values()),
+            "model_mean_train_regret": round(fmean(model_regret), 9) if model_regret else None,
+            "first_candidate_mean_train_regret": round(fmean(first_regret), 9)
+            if first_regret
+            else None,
+        }
+    return results
 
 
 def _tied_values(values: tuple[float, ...]) -> tuple[int, ...]:

@@ -20,6 +20,7 @@ from pokemon_red_completion.red_battle_scenario import (
     prepare_red_battle_scenario,
     project_red_battle_turn_outcome,
     red_battle_move_is_model_supported,
+    red_battle_move_unsupported_reason,
     red_battle_supported_move_count,
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
@@ -128,6 +129,7 @@ def test_prospective_support_rule_matches_status_and_self_destruct_mask() -> Non
     assert not red_battle_move_is_model_supported(TAIL_WHIP_MOVE_ID, 30)
     assert not red_battle_move_is_model_supported(SELFDESTRUCT_MOVE_ID, 5)
     assert not red_battle_move_is_model_supported(MEGA_PUNCH_MOVE_ID, 0)
+    assert red_battle_move_unsupported_reason(68, 20) == "counter_needs_prior_damage"
     assert (
         red_battle_supported_move_count(
             (TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, SELFDESTRUCT_MOVE_ID, WATER_GUN_MOVE_ID),
@@ -135,6 +137,14 @@ def test_prospective_support_rule_matches_status_and_self_destruct_mask() -> Non
         )
         == 2
     )
+
+
+def test_counter_does_not_block_a_supported_attack_in_trainer_segment() -> None:
+    moves = (68, TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, WATER_GUN_MOVE_ID)
+    raw = replace(_raw(), active_party_moves=moves, first_party_moves=moves, party_moves=(moves,))
+    prepared = prepare_red_battle_scenario(PokemonRedObservationEncoder(Reader()), raw)
+    assert prepared.supported_candidate_mask == (False, True, False, True)
+    assert prepared.unsupported_candidate_reasons[0] == "counter_needs_prior_damage"
 
 
 def test_red_outcome_projector_measures_damage_and_pp_not_teacher_choice() -> None:

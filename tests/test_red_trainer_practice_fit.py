@@ -5,19 +5,27 @@ from copy import deepcopy
 import pytest
 from test_red_trainer_practice_features import _observation
 
+from pokemon_red_completion.battle_actions import BattleAction
+from pokemon_red_completion.battle_control_features import BattleControlHistoryTracker
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.battle_semantics import BattleFeatureProjector
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
+from pokemon_red_completion.red_trainer_practice_features import (
+    CONTROL_FEATURE_NAMES_V2,
+    project_trainer_control_features,
+)
 from pokemon_red_completion.red_trainer_practice_fit import (
     CONTROL_ACTION_FEATURE_NAMES,
     CONTROL_ACTION_SCHEMA_ID,
     TrainerPracticeFitError,
     TrainerPracticeThreeHeadModel,
+    _combine_identical_inputs,
+    _soft_return_target,
     control_action_candidates,
     fit_trainer_practice_three_heads,
+    summarize_trainer_practice_training,
 )
 from pokemon_red_completion.red_trainer_practice_head import TrainerHeadExample, TrainerHeadModel
-from pokemon_red_completion.red_trainer_practice_features import CONTROL_FEATURE_NAMES_V2
 
 
 def test_control_head_can_learn_opposite_choices_from_different_states():
@@ -40,6 +48,45 @@ def test_control_head_can_learn_opposite_choices_from_different_states():
     )
     assert model.predict_index(low_rows) == 1
     assert model.predict_index(high_rows) == 0
+
+
+def test_identical_inputs_combine_timing_uncertainty_once():
+    candidates = ((0.0, 1.0), (1.0, 0.0))
+    first = TrainerHeadExample(candidates, (0,), (0.8, 0.2))
+    second = TrainerHeadExample(candidates, (1,), (0.2, 0.8))
+    combined = _combine_identical_inputs([first, second])
+    assert len(combined) == 1
+    assert combined[0].target_probabilities == (0.5, 0.5)
+    assert combined[0].best_indices == (0, 1)
+    assert _soft_return_target(((1.0, 0.0), (0.0, 1.0))) == (0.5, 0.5)
+
+
+def test_training_diagnostics_report_unique_inputs_and_simple_baseline():
+    first = _target()
+    second = deepcopy(first)
+    second["capture_id"] = "unit-capture-two"
+    second["heads"]["move"]["returns"] = [1.0, 0.8]
+    second["heads"]["move"]["best_indices"] = [0]
+    model = fit_trainer_practice_three_heads(
+        [first, second], seed=22, require_corpus_floor=False, epochs=10
+    )
+    report = summarize_trainer_practice_training([first, second], model)
+    assert report["move"]["examples"] == 2
+    assert report["move"]["unique_candidate_matrices"] == 1
+    assert report["move"]["conflicting_winner_groups"] == 1
+    assert report["move"]["first_candidate_mean_train_regret"] == 0.1
+
+
+def test_stateless_control_projection_matches_live_history_contract():
+    observation = _target()["observation"]
+    catalog = PokemonRedBattleCatalog()
+    batch = BattleFeatureProjector(catalog).project(observation)
+    tracker = BattleControlHistoryTracker()
+    tracker.before("unit", observation)
+    tracker.advance(BattleAction.move(1), observation)
+    projected = project_trainer_control_features(observation, catalog=catalog, move_batch=batch)
+    assert not any(name.startswith("history.") for name in CONTROL_FEATURE_NAMES_V2)
+    assert len(projected) == len(CONTROL_FEATURE_NAMES_V2)
 
 
 def _target():

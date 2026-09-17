@@ -324,18 +324,21 @@ def run_red_trainer_practice_episode(
                     opening_idle_frames=opening_idle_frames,
                 )
             prepared_main = None
-            if not forced and not prompt and (
-                reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+            if (
+                not forced
+                and not prompt
+                and (reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN)
             ):
-                prepared_main = prepare_red_battle_scenario(
-                    encoder, raw, allow_no_attack=True
-                )
+                prepared_main = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
                 if not any(prepared_main.supported_candidate_mask) and not options:
-                    _emit(event_sink, {
-                        "event": "unsupported_action_boundary",
-                        "decision_index": decision_index,
-                        "reason": "struggle_required_no_living_reserve",
-                    })
+                    _emit(
+                        event_sink,
+                        {
+                            "event": "unsupported_action_boundary",
+                            "decision_index": decision_index,
+                            "reason": "struggle_required_no_living_reserve",
+                        },
+                    )
                     return RedTrainerPracticeEpisode(
                         capture_id=capture.manifest.capture_id,
                         manifest_sha256=capture.manifest_sha256,
@@ -435,6 +438,7 @@ def run_red_trainer_practice_episode(
                     session,
                     frames_before,
                     event_sink,
+                    policy,
                 )
                 continue
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
@@ -511,6 +515,7 @@ def run_red_trainer_practice_episode(
                     session,
                     frames_before,
                     event_sink,
+                    policy,
                 )
                 player_turns += 1
                 continue
@@ -572,6 +577,7 @@ def run_red_trainer_practice_episode(
                 session,
                 frames_before,
                 event_sink,
+                policy,
             )
             player_turns += 1
         final = reader.read()
@@ -686,6 +692,7 @@ def _main_model_input(prepared: PreparedRedBattleScenario) -> dict[str, object]:
         "candidate_move_slots": [slot + 1 for slot in batch.slot_indices],
         "legal_mask": list(batch.legal_mask),
         "supported_candidate_mask": list(prepared.supported_candidate_mask),
+        "unsupported_candidate_reasons": list(prepared.unsupported_candidate_reasons),
         "current_pp": list(batch.current_pp),
     }
 
@@ -705,6 +712,7 @@ def _complete_decision(
     session: TrainerPracticeSession,
     frames_before: int | None,
     event_sink: Callable[[Mapping[str, object]], None] | None,
+    policy: TrainerPracticePolicy,
 ) -> None:
     _require_plausible_hp(after)
     if (
@@ -712,6 +720,10 @@ def _complete_decision(
         and after.enemy_party_hp is not None
         and (len(before.enemy_party_hp) == len(after.enemy_party_hp))
     ):
+        # Referee evidence is retained only with the completed decision. It is
+        # never placed in the actor observation or passed to the policy.
+        decision["referee_opponent_roster_hp_before"] = list(before.enemy_party_hp)
+        decision["referee_opponent_roster_hp_after"] = list(after.enemy_party_hp)
         decision["opponent_faints"] = sum(
             old > 0 and new == 0
             for old, new in zip(before.enemy_party_hp, after.enemy_party_hp, strict=True)
@@ -732,6 +744,13 @@ def _complete_decision(
     )
     decisions.append(decision)
     _emit(event_sink, {"event": "decision_completed", "decision": decision})
+    transition = getattr(policy, "observe_opponent_transition", None)
+    if (
+        callable(transition)
+        and type(before.enemy_party_position) is int
+        and type(after.enemy_party_position) is int
+    ):
+        transition(before.enemy_party_position, after.enemy_party_position)
 
 
 def _emit(sink: Callable[[Mapping[str, object]], None] | None, event: Mapping[str, object]) -> None:

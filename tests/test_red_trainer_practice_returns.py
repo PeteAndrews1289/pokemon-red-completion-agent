@@ -10,22 +10,32 @@ from pokemon_red_completion.red_trainer_practice_returns import (
 
 def _episode(kind: str, *, party_hp_after: int, enemy_hp_after: int = 40):
     before = {
-        "party_hp": [50, 50], "party_max_hp": [60, 60],
+        "party_hp": [50, 50],
+        "party_max_hp": [60, 60],
         "party_pp": [[10, 0, 0, 0], [10, 0, 0, 0]],
     }
     after = deepcopy(before)
     after["party_hp"][1] = party_hp_after
     return {
-        "stop_reason": "player_turn_budget", "frames_executed": 500,
+        "stop_reason": "player_turn_budget",
+        "frames_executed": 500,
         "player_turn_count": 1,
-        "metrics": {"opponent_faints": 0, "party_faints": 0,
-                    "party_pp_spent": 1 if kind == "attack" else 0},
-        "decisions": [{
-            "kind": kind, "state_before": before, "state_after": after,
-            "opponent_hp_before": 40, "opponent_hp_after": enemy_hp_after,
+        "metrics": {
             "opponent_faints": 0,
-            "observation": {"features": {"battle": {"opponent_max_hp": 50}}},
-        }],
+            "party_faints": 0,
+            "party_pp_spent": 1 if kind == "attack" else 0,
+        },
+        "decisions": [
+            {
+                "kind": kind,
+                "state_before": before,
+                "state_after": after,
+                "opponent_hp_before": 40,
+                "opponent_hp_after": enemy_hp_after,
+                "opponent_faints": 0,
+                "observation": {"features": {"battle": {"opponent_max_hp": 50}}},
+            }
+        ],
     }
 
 
@@ -56,6 +66,31 @@ def test_replacement_hp_is_not_subtracted_from_defeated_opponent():
     episode["metrics"]["opponent_faints"] = 1
     episode["decisions"][0]["opponent_faints"] = 1
     assert score_trainer_practice_episode(episode).opponent_damage_fraction == 0.8
+
+
+def test_selected_turn_damage_survives_living_opponent_switch():
+    episode = _episode("attack", party_hp_after=50, enemy_hp_after=83)
+    decision = episode["decisions"][0]
+    decision["observation"]["features"]["battle"]["opponent_max_hp"] = 83
+    decision["opponent_hp_before"] = 83
+    decision["state_before"]["opponent_party_position"] = 0
+    decision["state_after"]["opponent_party_position"] = 1
+    decision["outcome"] = {"opponent_damage_fraction": 52 / 83}
+    decision["referee_opponent_roster_hp_before"] = [83, 83]
+    decision["referee_opponent_roster_hp_after"] = [31, 83]
+    assert score_trainer_practice_episode(episode).opponent_damage_fraction == round(52 / 83, 9)
+
+
+def test_roster_tracks_old_foe_when_switch_decision_changes_active_position():
+    episode = _episode("voluntary_switch", party_hp_after=50, enemy_hp_after=83)
+    decision = episode["decisions"][0]
+    decision["observation"]["features"]["battle"]["opponent_max_hp"] = 83
+    decision["opponent_hp_before"] = 83
+    decision["state_before"]["opponent_party_position"] = 0
+    decision["state_after"]["opponent_party_position"] = 1
+    decision["referee_opponent_roster_hp_before"] = [83, 83]
+    decision["referee_opponent_roster_hp_after"] = [31, 83]
+    assert score_trainer_practice_episode(episode).opponent_damage_fraction == round(52 / 83, 9)
 
 
 def test_tie_rule_preserves_near_equal_outcomes():

@@ -7,10 +7,11 @@ Every sibling branch is scored with the same coefficients and turn horizon.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-RETURN_SCHEMA_ID = "pokemon.red.trainer-practice.whole-party-return.v1"
+RETURN_SCHEMA_ID = "pokemon.red.trainer-practice.whole-party-return.v2"
 TIE_EPSILON = 0.02
 
 
@@ -102,12 +103,29 @@ def score_trainer_practice_episode(episode: Mapping[str, object]) -> TrainerPrac
             or enemy_after < 0
         ):
             raise TrainerPracticeReturnError("opponent HP evidence is invalid")
-        # A replacement opponent may have less HP than the one just defeated.
-        # Its HP is not damage dealt to the defeated species.
+        # The selected-turn measurement follows the attacked opponent before
+        # settlement can replace it. The final active HP belongs to a different
+        # party member after a trainer switch or knockout.
         decision_faints = _nonnegative(decision.get("opponent_faints", 0))
-        if decision_faints and enemy_after > 0:
+        selected = decision.get("outcome")
+        if decision.get("kind") == "attack" and isinstance(selected, Mapping):
+            fraction = selected.get("opponent_damage_fraction")
+            if (
+                isinstance(fraction, bool)
+                or not isinstance(fraction, (int, float))
+                or not math.isfinite(fraction)
+                or not 0 <= fraction <= 1
+            ):
+                raise TrainerPracticeReturnError("selected-turn opponent damage differs")
+            opponent_damage += float(fraction)
+        elif (roster_damage := _roster_damage(decision, before, enemy_cap)) is not None:
+            opponent_damage += roster_damage
+        elif decision_faints and enemy_after > 0:
             opponent_damage += enemy_before / enemy_cap
-        elif enemy_after <= enemy_before:
+        elif (
+            before.get("opponent_party_position") == after.get("opponent_party_position")
+            and enemy_after <= enemy_before
+        ):
             opponent_damage += (enemy_before - enemy_after) / enemy_cap
     stop = episode.get("stop_reason")
     terminal = 3.0 if stop == "battle_won" else -3.0 if stop == "party_defeated" else 0.0
@@ -178,3 +196,28 @@ def _nonnegative(value: object) -> int:
     if type(value) is not int or value < 0:  # noqa: E721
         raise TrainerPracticeReturnError("trainer cost differs")
     return value
+
+
+def _roster_damage(
+    decision: Mapping[str, object], before: Mapping[str, object], enemy_cap: int
+) -> float | None:
+    """Measure the affected active foe through a replacement, never the new foe."""
+
+    old = decision.get("referee_opponent_roster_hp_before")
+    new = decision.get("referee_opponent_roster_hp_after")
+    if old is None and new is None:
+        return None
+    if not isinstance(old, list) or not isinstance(new, list) or len(old) != len(new):
+        raise TrainerPracticeReturnError("opponent roster evidence differs")
+    position = before.get("opponent_party_position")
+    if type(position) is not int or not 0 <= position < len(old):  # noqa: E721
+        raise TrainerPracticeReturnError("affected opponent position differs")
+    if any(type(hp) is not int or hp < 0 for hp in (*old, *new)):  # noqa: E721
+        raise TrainerPracticeReturnError("opponent roster HP differs")
+    if any(
+        end < start
+        for index, (start, end) in enumerate(zip(old, new, strict=True))
+        if index != position
+    ):
+        raise TrainerPracticeReturnError("multiple opponents lost HP in one decision")
+    return max(0, old[position] - new[position]) / enemy_cap

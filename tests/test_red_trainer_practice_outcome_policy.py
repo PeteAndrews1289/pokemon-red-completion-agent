@@ -9,7 +9,11 @@ from test_red_trainer_practice_fit import _target
 from pokemon_red_completion.battle_actions import BattleActionKind
 from pokemon_red_completion.battle_semantics import BattleFeatureProjector
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
-from pokemon_red_completion.red_trainer_practice_fit import fit_trainer_practice_three_heads
+from pokemon_red_completion.red_trainer_practice_features import project_trainer_control_features
+from pokemon_red_completion.red_trainer_practice_fit import (
+    control_action_candidates,
+    fit_trainer_practice_three_heads,
+)
 from pokemon_red_completion.red_trainer_practice_outcome_policy import (
     RedTrainerPracticeOutcomePolicy,
     TrainerOutcomePolicyError,
@@ -36,6 +40,16 @@ def test_trained_policy_owns_main_and_forced_switch_choices():
     )
     assert action.kind in {BattleActionKind.SELECT_MOVE, BattleActionKind.SWITCH}
     assert policy.last_decision_diagnostics
+    expected = control_action_candidates(
+        tuple(
+            project_trainer_control_features(
+                observation, catalog=policy.catalog, move_batch=batch
+            ).tolist()
+        )
+    )
+    assert policy.last_decision_diagnostics["control_candidate_vectors"] == [
+        list(row) for row in expected
+    ]
     exhausted = replace(batch, legal_mask=(False, False), current_pp=(0.0, 0.0))
     forced_policy = RedTrainerPracticeOutcomePolicy(
         policy_id="unit-outcome",
@@ -70,11 +84,11 @@ def test_optional_prompt_without_living_reserve_declines_without_projection(monk
         "project_trainer_switch_features",
         lambda *_args: pytest.fail("empty optional prompt must not project targets"),
     )
-    assert policy.choose_switch(
-        target["observation"], (), forced=False, may_decline=True
-    ) is None
+    assert policy.choose_switch(target["observation"], (), forced=False, may_decline=True) is None
     assert policy.last_decision_diagnostics == {
-        "decision_mode": "prompt", "control_choice": "decline", "reason": "no_legal_target"
+        "decision_mode": "prompt",
+        "control_choice": "decline",
+        "reason": "no_legal_target",
     }
     with pytest.raises(TrainerOutcomePolicyError, match="no legal target"):
         policy.choose_switch(target["observation"], (), forced=True, may_decline=False)

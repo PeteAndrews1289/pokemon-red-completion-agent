@@ -15,7 +15,6 @@ from numpy.typing import NDArray
 
 from pokemon_red_completion.battle_control_features import (
     CONTROL_FEATURE_NAMES,
-    BattleControlHistory,
     project_control_features,
 )
 from pokemon_red_completion.battle_semantics import (
@@ -31,7 +30,7 @@ from pokemon_red_completion.battle_switch_target import (
 )
 
 MOVE_SCHEMA_ID = "pokemon.core.battle.move-ranker.observable-stats.v1"
-CONTROL_SCHEMA_ID = "pokemon.core.battle.control.observable-stats.v1"
+CONTROL_SCHEMA_ID = "pokemon.core.battle.control.observable-stats.v2"
 SWITCH_SCHEMA_ID = "pokemon.core.battle.switch.observable-stats.v1"
 _STATS = ("attack", "defense", "speed", "special")
 _STAT_STATE_NAMES = (
@@ -51,8 +50,11 @@ MOVE_FEATURE_NAMES = (
     "interaction.special_over_estimated_special",
     "interaction.player_speed_over_estimated_speed",
 )
+_STATELESS_CONTROL_INDICES = tuple(
+    index for index, name in enumerate(CONTROL_FEATURE_NAMES) if not name.startswith("history.")
+)
 CONTROL_FEATURE_NAMES_V2 = (
-    *CONTROL_FEATURE_NAMES,
+    *(CONTROL_FEATURE_NAMES[index] for index in _STATELESS_CONTROL_INDICES),
     *_STAT_STATE_NAMES,
     *(f"party.best_living_reserve.stat.{name}" for name in _STATS),
 )
@@ -119,7 +121,6 @@ def project_trainer_control_features(
     *,
     catalog: BattleMechanicsCatalog,
     move_batch: BattleFeatureBatch | None = None,
-    history: BattleControlHistory | None = None,
 ) -> NDArray[np.float64]:
     state, _, _, members = _visible_stats(observation)
     party = _mapping(_mapping(observation.get("features"), "features").get("party"), "party")
@@ -139,11 +140,14 @@ def project_trainer_control_features(
         default=None,
     )
     reserve_stats = _stat_values(best.get("stats"), "reserve") if best is not None else (0, 0, 0, 0)
-    legacy = project_control_features(
-        observation, move_batch=move_batch, history=history, catalog=catalog
-    )
+    legacy = project_control_features(observation, move_batch=move_batch, catalog=catalog)
     result = np.asarray(
-        (*legacy, *state, *(value / 999.0 for value in reserve_stats)), dtype=np.float64
+        (
+            *(legacy[index] for index in _STATELESS_CONTROL_INDICES),
+            *state,
+            *(value / 999.0 for value in reserve_stats),
+        ),
+        dtype=np.float64,
     )
     if result.shape != (len(CONTROL_FEATURE_NAMES_V2),):
         raise TrainerStatFeatureError("control stat feature width differs")

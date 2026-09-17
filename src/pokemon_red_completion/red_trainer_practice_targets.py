@@ -12,7 +12,7 @@ from typing import cast
 
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_trainer_practice_returns import tied_best_indices
+from pokemon_red_completion.red_trainer_practice_returns import RETURN_SCHEMA_ID, tied_best_indices
 
 
 class TrainerPracticeTargetError(ValueError):
@@ -51,7 +51,7 @@ def extract_trainer_practice_targets(
             or choice != branch.get("first_choice_ref")
             or not isinstance(episode, Mapping)
             or not isinstance(details, Mapping)
-            or details.get("schema") != "pokemon.red.trainer-practice.whole-party-return.v1"
+            or details.get("schema") != RETURN_SCHEMA_ID
             or not isinstance(details.get("value"), (int, float))
             or isinstance(details.get("value"), bool)
         ):

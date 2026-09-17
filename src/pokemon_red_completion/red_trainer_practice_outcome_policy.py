@@ -38,6 +38,12 @@ class RedTrainerPracticeOutcomePolicy:
         if not self.policy_id or not self.battle_plan_id:
             raise TrainerOutcomePolicyError("outcome policy identity is missing")
 
+    def observe_opponent_transition(self, before_position: int, after_position: int) -> None:
+        """Consume an observed send-out event without exposing a hidden roster."""
+
+        if before_position != after_position:
+            self.history.note_opponent_replacement()
+
     def observe_forced_choice(
         self, observation: Mapping[str, object], action: BattleAction
     ) -> None:
@@ -77,7 +83,6 @@ class RedTrainerPracticeOutcomePolicy:
                     observation,
                     catalog=self.catalog,
                     move_batch=prepared.features,
-                    history=history,
                 ).tolist()
             )
             control_candidates = control_action_candidates(control)
@@ -92,7 +97,9 @@ class RedTrainerPracticeOutcomePolicy:
                 self.last_decision_diagnostics = {
                     "decision_mode": "main",
                     "control_choice": "attack",
+                    "move_input_schema": moves.schema_id,
                     "move_candidate_slots": list(slots),
+                    "move_candidate_vectors": [list(row) for row in rows],
                     "move_probabilities": self.model.move.probabilities(rows).tolist(),
                     "switch_masked_until_attack": switch_masked,
                 }
@@ -109,6 +116,10 @@ class RedTrainerPracticeOutcomePolicy:
             self.last_decision_diagnostics["control_probabilities"] = (
                 self.model.control.probabilities(control_candidates).tolist()
             )
+            self.last_decision_diagnostics["control_input_schema"] = self.model.control.schema_id
+            self.last_decision_diagnostics["control_candidate_vectors"] = [
+                list(row) for row in control_candidates
+            ]
         if action.kind is BattleActionKind.SELECT_MOVE:
             self._unanswered_voluntary_switch_opponent = None
         elif action.kind is BattleActionKind.SWITCH:
@@ -145,7 +156,6 @@ class RedTrainerPracticeOutcomePolicy:
                 project_trainer_control_features(
                     observation,
                     catalog=self.catalog,
-                    history=history,
                 ).tolist()
             )
             options = control_action_candidates(control)
@@ -154,6 +164,8 @@ class RedTrainerPracticeOutcomePolicy:
                 self.last_decision_diagnostics = {
                     "decision_mode": "prompt",
                     "control_choice": "decline",
+                    "control_input_schema": self.model.control.schema_id,
+                    "control_candidate_vectors": [list(row) for row in options],
                     "control_probabilities": probabilities.tolist(),
                 }
                 return None
@@ -162,6 +174,15 @@ class RedTrainerPracticeOutcomePolicy:
             {
                 "decision_mode": "forced_switch" if forced else "prompt",
                 "control_choice": "switch",
+                **(
+                    {
+                        "control_input_schema": self.model.control.schema_id,
+                        "control_candidate_vectors": [list(row) for row in options],
+                        "control_probabilities": probabilities.tolist(),
+                    }
+                    if may_decline
+                    else {}
+                ),
             }
         )
         self.history.advance(BattleAction.switch(target), observation)
@@ -176,7 +197,9 @@ class RedTrainerPracticeOutcomePolicy:
         )
         index = self.model.switch.predict_index(rows)
         self.last_decision_diagnostics = {
+            "switch_input_schema": candidates.schema_id,
             "switch_candidate_slots": list(slots),
+            "switch_candidate_vectors": [list(row) for row in rows],
             "switch_probabilities": self.model.switch.probabilities(rows).tolist(),
         }
         return slots[index]

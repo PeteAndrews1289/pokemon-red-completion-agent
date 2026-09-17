@@ -18,6 +18,7 @@ class TrainerHeadError(ValueError):
 class TrainerHeadExample:
     candidate_vectors: tuple[tuple[float, ...], ...]
     best_indices: tuple[int, ...]
+    target_probabilities: tuple[float, ...] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -37,6 +38,12 @@ class TrainerHeadExample:
             for row in self.candidate_vectors
         ):
             raise TrainerHeadError("listwise feature matrix is invalid")
+        if self.target_probabilities is not None and (
+            len(self.target_probabilities) != len(self.candidate_vectors)
+            or any(not math.isfinite(value) or value < 0 for value in self.target_probabilities)
+            or not math.isclose(sum(self.target_probabilities), 1.0, abs_tol=1e-8)
+        ):
+            raise TrainerHeadError("soft listwise target differs")
 
 
 @dataclass(frozen=True, slots=True)
@@ -172,8 +179,11 @@ class TrainerHeadModel:
                 shifted = scores - np.max(scores)
                 p = np.exp(shifted)
                 p /= np.sum(p)
-                target = np.zeros(len(case.candidate_vectors))
-                target[list(case.best_indices)] = 1.0 / len(case.best_indices)
+                if case.target_probabilities is None:
+                    target = np.zeros(len(case.candidate_vectors))
+                    target[list(case.best_indices)] = 1.0 / len(case.best_indices)
+                else:
+                    target = np.asarray(case.target_probabilities, dtype=np.float64)
                 residual = p - target
                 g2 += h.T @ residual
                 dh = np.outer(residual, w2) * (1.0 - h * h)
