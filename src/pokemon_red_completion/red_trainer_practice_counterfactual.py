@@ -54,6 +54,7 @@ class TrainerPracticeCounterfactualSet:
     capture_id: str
     manifest_sha256: str
     root_lineage_id: str
+    player_turn_horizon: int
     branches: tuple[tuple[TrainerPracticeFirstChoice, RedTrainerPracticeEpisode], ...]
 
     def public_dict(self) -> dict[str, object]:
@@ -63,6 +64,7 @@ class TrainerPracticeCounterfactualSet:
             "manifest_sha256": self.manifest_sha256,
             "root_lineage_id": self.root_lineage_id,
             "partition": "train",
+            "player_turn_horizon": self.player_turn_horizon,
             "branch_count": len(self.branches),
             "branches": [
                 {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()}
@@ -125,7 +127,8 @@ def collect_trainer_practice_counterfactuals(
     session_factory: Callable[[], AbstractContextManager[TrainerPracticeSession]],
     continuation_policy_factory: Callable[[], TrainerPracticePolicy],
     first_choices: tuple[TrainerPracticeFirstChoice, ...],
-    max_decisions: int = 3,
+    max_decisions: int = 8,
+    player_turn_horizon: int = 2,
     branch_sink: Callable[
         [int, TrainerPracticeFirstChoice, RedTrainerPracticeEpisode], None
     ] | None = None,
@@ -145,6 +148,8 @@ def collect_trainer_practice_counterfactuals(
         or len({choice.semantic_ref for choice in first_choices}) != len(first_choices)
         or type(max_decisions) is not int  # noqa: E721
         or not 2 <= max_decisions <= 80
+        or type(player_turn_horizon) is not int  # noqa: E721
+        or not 1 <= player_turn_horizon <= max_decisions
     ):
         raise TrainerPracticeCounterfactualError("counterfactual branch inventory differs")
     branches: list[tuple[TrainerPracticeFirstChoice, RedTrainerPracticeEpisode]] = []
@@ -158,9 +163,20 @@ def collect_trainer_practice_counterfactuals(
             session_factory=session_factory,
             policy=wrapped,
             max_decisions=max_decisions,
+            max_player_turns=player_turn_horizon,
         )
         if not wrapped.consumed or not episode.decisions or episode.final_observation is None:
             raise TrainerPracticeCounterfactualError("counterfactual branch outcome is incomplete")
+        player_turns = sum(
+            step.get("kind") in {"attack", "voluntary_switch"} for step in episode.decisions
+        )
+        if episode.stop_reason == "decision_budget" or (
+            episode.stop_reason == "player_turn_budget"
+            and player_turns != player_turn_horizon
+        ):
+            raise TrainerPracticeCounterfactualError(
+                "counterfactual branch missed its turn horizon"
+            )
         branches.append((choice, episode))
         if branch_sink is not None:
             branch_sink(index, choice, episode)
@@ -168,5 +184,6 @@ def collect_trainer_practice_counterfactuals(
         capture_id=capture.manifest.capture_id,
         manifest_sha256=capture.manifest_sha256,
         root_lineage_id=capture.manifest.root_lineage_id,
+        player_turn_horizon=player_turn_horizon,
         branches=tuple(branches),
     )

@@ -141,12 +141,18 @@ def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() 
             TrainerPracticeFirstChoice(BattleAction.move(1)),
             *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
         ),
-        max_decisions=3,
+        max_decisions=8,
+        player_turn_horizon=2,
     )
     assert len(matched.branches) == 6
     assert matched.root_lineage_id == capture.manifest.root_lineage_id
     assert matched.public_dict()["new_independent_upstream_roots"] == 0
+    assert matched.public_dict()["player_turn_horizon"] == 2
     assert all(episode.final_observation is not None for _choice, episode in matched.branches)
+    assert all(
+        episode.public_dict()["player_turn_count"] == 2
+        for _choice, episode in matched.branches
+    )
     assert [episode.decisions[0]["kind"] for _choice, episode in matched.branches] == [
         "attack", "voluntary_switch", "voluntary_switch", "voluntary_switch",
         "voluntary_switch", "voluntary_switch",

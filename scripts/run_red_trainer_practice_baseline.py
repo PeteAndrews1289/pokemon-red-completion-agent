@@ -150,7 +150,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                         for slot in range(2, 7)
                     ),
                 ),
-                max_decisions=3,
+                max_decisions=8,
+                player_turn_horizon=2,
                 branch_sink=retain_branch,
             )
             if plan.get("matched_choices") == "opening_attack_vs_five_switches"

@@ -92,6 +92,9 @@ class RedTrainerPracticeEpisode:
             "policy_id": self.policy_id,
             "decisions": list(self.decisions),
             "decision_count": len(self.decisions),
+            "player_turn_count": sum(
+                step.get("kind") in {"attack", "voluntary_switch"} for step in self.decisions
+            ),
             "battle_won": self.battle_won,
             "final_battle_state": self.final_battle_state,
             "stop_reason": self.stop_reason,
@@ -113,6 +116,7 @@ def run_red_trainer_practice_episode(
     session_factory: Callable[[], AbstractContextManager[TrainerPracticeSession]],
     policy: TrainerPracticePolicy,
     max_decisions: int = 24,
+    max_player_turns: int | None = None,
     controller_timing: ControllerTiming | None = None,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
@@ -129,7 +133,13 @@ def run_red_trainer_practice_episode(
         raise RedTrainerPracticeEpisodeError("trainer episode needs a named policy and session")
     if type(max_decisions) is not int or max_decisions < 1:  # noqa: E721
         raise RedTrainerPracticeEpisodeError("trainer episode decision budget is invalid")
+    if max_player_turns is not None and (
+        type(max_player_turns) is not int  # noqa: E721
+        or not 1 <= max_player_turns <= max_decisions
+    ):
+        raise RedTrainerPracticeEpisodeError("trainer episode player-turn budget is invalid")
     decisions: list[dict[str, object]] = []
+    player_turns = 0
     with session_factory() as session:
         session.load_state_bytes(capture.state_bytes)
         reader = PokemonRedStateReader(cast(ReadOnlyMemory, session))
@@ -173,18 +183,29 @@ def run_red_trainer_practice_episode(
             )
             forced = raw.battler_hp == 0
             prompt = reader.trainer_switch_prompt_visible(raw)
+            if forced and not options:
+                return RedTrainerPracticeEpisode(
+                    capture_id=capture.manifest.capture_id,
+                    manifest_sha256=capture.manifest_sha256,
+                    policy_id=policy.policy_id,
+                    decisions=tuple(decisions),
+                    battle_won=False,
+                    final_battle_state=raw.battle_state,
+                    stop_reason="party_defeated",
+                    final_observation=observation,
+                )
+            if max_player_turns is not None and player_turns >= max_player_turns:
+                return RedTrainerPracticeEpisode(
+                    capture_id=capture.manifest.capture_id,
+                    manifest_sha256=capture.manifest_sha256,
+                    policy_id=policy.policy_id,
+                    decisions=tuple(decisions),
+                    battle_won=False,
+                    final_battle_state=raw.battle_state,
+                    stop_reason="player_turn_budget",
+                    final_observation=observation,
+                )
             if forced or prompt:
-                if forced and not options:
-                    return RedTrainerPracticeEpisode(
-                        capture_id=capture.manifest.capture_id,
-                        manifest_sha256=capture.manifest_sha256,
-                        policy_id=policy.policy_id,
-                        decisions=tuple(decisions),
-                        battle_won=False,
-                        final_battle_state=raw.battle_state,
-                        stop_reason="party_defeated",
-                        final_observation=observation,
-                    )
                 chosen_slot = policy.choose_switch(
                     observation,
                     options,
@@ -272,6 +293,7 @@ def run_red_trainer_practice_episode(
                         "opponent_hp_after": after_switch.enemy_hp,
                     }
                 )
+                player_turns += 1
                 continue
             if action.kind is not BattleActionKind.SELECT_MOVE or action.move_slot is None:
                 raise RedTrainerPracticeEpisodeError(
@@ -304,6 +326,7 @@ def run_red_trainer_practice_episode(
                     "outcome": outcome.public_dict(),
                 }
             )
+            player_turns += 1
         final = reader.read()
         if final.battle_state == 0:
             return _receipt(

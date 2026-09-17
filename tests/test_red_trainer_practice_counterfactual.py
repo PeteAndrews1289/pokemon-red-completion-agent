@@ -64,18 +64,22 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         policies.append(policy)
         return policy
 
-    def fake_run(_capture, *, session_factory, policy, max_decisions):
-        assert max_decisions == 3
+    def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns):
+        assert max_decisions == 8
+        assert max_player_turns == 2
         assert session_factory() is None
         action = policy.choose_main({}, object())
         return RedTrainerPracticeEpisode(
             capture_id=capture.manifest.capture_id,
             manifest_sha256=capture.manifest_sha256,
             policy_id=policy.policy_id,
-            decisions=({"kind": action.kind.value},),
+            decisions=(
+                {"kind": "voluntary_switch" if action.party_slot else "attack"},
+                {"kind": "attack"},
+            ),
             battle_won=False,
             final_battle_state=2,
-            stop_reason="decision_budget",
+            stop_reason="player_turn_budget",
             final_observation={"features": {"battle": {"kind": "trainer"}}},
         )
 
@@ -99,8 +103,8 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
     ]
     assert result.public_dict()["new_independent_upstream_roots"] == 0
     assert retained == [
-        (0, "pokemon.core:battle:move:1", "decision_budget"),
-        (1, "pokemon.core:battle:switch:2", "decision_budget"),
+        (0, "pokemon.core:battle:move:1", "player_turn_budget"),
+        (1, "pokemon.core:battle:switch:2", "player_turn_budget"),
     ]
 
 
