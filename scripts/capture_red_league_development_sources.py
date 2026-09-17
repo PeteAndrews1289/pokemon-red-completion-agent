@@ -37,7 +37,7 @@ from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCart
 from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
-from pokemon_red_completion.victory_road import _move, _pulse
+from pokemon_red_completion.victory_road import _move, _pulse, _settle_confirm
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
@@ -134,7 +134,12 @@ def run(stage: str, rom_path: Path, source_path: Path, output: Path) -> dict[str
             actions = CountingExecutor(
                 FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
             )
-            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=180))
+            if stage == "lance":
+                _settle_confirm(actions, reader, 200)
+                if (reader.read().player_x, reader.read().player_y) != (6, 11):
+                    raise ValueError("Lance entrance autowalk did not settle")
+            else:
+                actions.execute(MacroAction(MacroActionKind.WAIT, repeat=180))
             if not reader.read_input_readiness().ready:
                 raise ValueError("League checkpoint did not settle to field input")
             if spec["trigger"] == "interact":
