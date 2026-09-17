@@ -14,6 +14,7 @@ from pathlib import Path
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
@@ -39,6 +40,7 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
@@ -92,10 +94,22 @@ def _require_start(reader: PokemonRedStateReader) -> None:
         raise ValueError("Celadon source is not the untouched Gym approach boundary")
 
 
+def _model_ready_observation(reader: PokemonRedStateReader, rom: bytes, raw):
+    return prepare_red_battle_scenario(
+        PokemonRedObservationEncoder.from_state_reader(
+            reader,
+            include_battle_stats=True,
+            public_species_base_stats=RedPracticeCartridge(rom).public_base_stats,
+        ),
+        raw,
+        allow_no_attack=True,
+    )
+
+
 def run(
     rom_path: Path, source_path: Path, source_id: str, output_root: Path
 ) -> dict[str, object]:
-    _, source, output = _validate_request(rom_path, source_path, source_id, output_root)
+    rom, source, output = _validate_request(rom_path, source_path, source_id, output_root)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
     output.mkdir(parents=True, mode=0o700, exist_ok=False)
     report: dict[str, object] = {
@@ -158,9 +172,7 @@ def run(
                     or emulator.pressed_buttons
                 ):
                     raise ValueError("Celadon source trainer boundary differs")
-                prepared = prepare_red_battle_scenario(
-                    PokemonRedObservationEncoder.from_state_reader(reader), raw
-                )
+                prepared = _model_ready_observation(reader, rom, raw)
                 state = emulator.save_state_bytes()
                 manifest = build_battle_scenario_capture_payload(
                     capture_id=f"celadon-lass-{source_id}",
@@ -172,6 +184,7 @@ def run(
                     source_commit=commit,
                     expected_map=int(MapId.CELADON_GYM),
                     expected_battle_state=2,
+                    observation_schema=OBSERVATION_SCHEMA_V2,
                 )
                 (output / "source.state").write_bytes(state)
                 (output / "source.state.json").write_bytes(manifest)

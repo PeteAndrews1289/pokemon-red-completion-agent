@@ -1,6 +1,7 @@
 import hashlib
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -38,3 +39,29 @@ def test_request_requires_pinned_identity_bytes_clean_code_and_new_result(tmp_pa
 def test_route_budget_is_finite():
     assert 0 < source.MAX_ACTIONS <= 600
     assert 0 < source.MAX_FRAMES <= 180_000
+
+
+def test_natural_capture_observation_includes_public_battle_stats(monkeypatch):
+    stats = {25: (35, 55, 30, 90, 50)}
+    monkeypatch.setattr(
+        source, "RedPracticeCartridge",
+        lambda rom: SimpleNamespace(public_base_stats=stats if rom == b"red" else {}),
+    )
+    monkeypatch.setattr(
+        source.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda reader, **kwargs: (reader, kwargs),
+    )
+    monkeypatch.setattr(
+        source,
+        "prepare_red_battle_scenario",
+        lambda encoder, raw, **kwargs: (encoder, raw, kwargs),
+    )
+    reader, raw = object(), object()
+    encoded, retained_raw, options = source._model_ready_observation(reader, b"red", raw)
+    assert encoded == (
+        reader,
+        {"include_battle_stats": True, "public_species_base_stats": stats},
+    )
+    assert retained_raw is raw
+    assert options == {"allow_no_attack": True}
