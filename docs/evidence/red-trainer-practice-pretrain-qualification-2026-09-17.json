@@ -1,0 +1,96 @@
+{
+  "schema": "pokemon.red.trainer-practice-pretrain-qualification.v1",
+  "recorded_on": "2026-09-17",
+  "status": "ready_for_astra_review_not_ready_to_fit",
+  "product_goal": "A model that chooses attacks and switches in varied full-team battles and later proves advantage on natural battles",
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "mission_check": {
+    "reusable_capability": "Authenticated TRAIN trainer battles with model-controlled attacks and switches, complete choice/outcome logs, and read-only admission of executed short-horizon alternatives",
+    "learned_authority": "No new trained authority yet; the frozen move head and fixed switch rule remain a baseline",
+    "transfer_test": "Untouched natural DEVELOPMENT battles against frozen and fixed controls remain unopened",
+    "cheapest_falsifier": "A distinct TRAIN trainer battle exposes an invalid cartridge outcome or a matched choice set fails exact action/resource admission",
+    "time_box": "One bounded pretraining qualification session",
+    "stop_condition": "No replay of failed attempts, no weakened PP/HP guard, no fit or DEVELOPMENT access before independent review"
+  },
+  "retained_failed_variants": [
+    {
+      "configuration": "earlier type-immunity three-on-three",
+      "status": "failed_closed",
+      "completed_decisions": 11,
+      "unresolved_choice": 1,
+      "cause": "Off-slot PP increase at decision 12 still not established; the old in-flight after-state was not retained",
+      "retry": false,
+      "fit_eligible": false
+    },
+    {
+      "configuration": "custom-stat Gastly against Articuno and Dragonite, caused by mistaken internal-versus-National species identifiers",
+      "source_commit": "841d25111c678cd5df3124a3b0f0cddb24486d18",
+      "failure_sha256": "c23bac000bb33ccaf1a6769cb796a150f25aded68a796f5fec0d521a976993b7",
+      "status": "failed_closed",
+      "completed_decisions_in_old_log": 9,
+      "invalid_last_completed_decision": "Actor HP became 65535 after a knockout, above its declared maximum of 90; the next feature projection rejected it",
+      "mechanism": "Custom level-30 HP 90 exceeded cartridge-neutral HP 58; a level-up stat recalculation is a plausible mechanism, not established from the retained after-state",
+      "retry": false,
+      "fit_eligible": false
+    }
+  ],
+  "safety_improvements": {
+    "outcome_admission": "Future trainer episodes reject party or active HP above maximum before projecting and logging a selected-turn outcome",
+    "resource_telemetry": "Each future decision records party maximum HP and levels plus active maximum HP and level",
+    "species_identity": "An optional expected National Dex number for each combatant is checked against the authenticated cartridge before teacher writes; Red internal species IDs remain the executable references",
+    "matched_choice_admission": "An authenticated TRAIN capture must bind every branch, first executed action, equal turn horizon, plausible resources, zero intervention and explicit terminal. It reports measured metrics, not a teacher-preferred or unplayed-action target",
+    "old_failed_variants_admitted": 0
+  },
+  "new_valid_train_configuration": {
+    "source_commit": "d204d936d7971e0f0742124249681f8b11b7b5f2",
+    "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+    "assistance": "isolated_teacher_memory_intervention",
+    "actor": "Pikachu, National Dex 25, neutral cartridge-derived stats, level 32",
+    "player_reserves": ["Squirtle, National Dex 7", "Bulbasaur, National Dex 1"],
+    "opponent_roster": ["Geodude, National Dex 74", "Machop, National Dex 66", "Pidgeotto, National Dex 17"],
+    "materialization_outcome_sha256": "fc3e8d31a1497864dc341263bbd3d83f4b2b34e258375661f586752a62dec726",
+    "capture_manifest_sha256": "a080eb5b721868736a749c2007eefe3b09db70b7334b251df03b0cfc0e6ce47a",
+    "baseline_outcome_sha256": "a23b2f48998aa88895f71a3cf8be7508d38f1e958e18289ca237685e73b26391",
+    "event_log_verification_sha256": "d82e6b225fa670ac6ed41676451a3fcdda45ac210ffdd1d54d700329e3ea3803",
+    "chain_complete": true,
+    "decisions": 15,
+    "attacks": 12,
+    "forced_switches": 2,
+    "opponent_faints": 1,
+    "party_faints": 3,
+    "frames": 14498,
+    "frozen_attack_only_baseline_won": false,
+    "stop_reason": "party_defeated",
+    "matched_choices_sha256": "8bb5bf1c610f7b8e62975a849e02be36f537b8cec4fb654451cd805fa2dfab48",
+    "matched_first_choices": ["move 1", "move 2", "move 3", "move 4", "switch to party slot 2", "switch to party slot 3"],
+    "equal_player_turn_horizon": 2,
+    "switch_to_slot_2": {"opponent_faints": 1, "party_faints": 0, "party_hp_lost": 0},
+    "four_attack_branches": {"opponent_faints_each": 0, "party_hp_lost": [79, 50, 45, 25]},
+    "interpretation": "A useful observed TRAIN attack-versus-switch contrast; no scalar fit target was created",
+    "new_independent_upstream_roots": 0
+  },
+  "learning_and_acceptance": {
+    "new_model_updates": 0,
+    "new_authority_promotions": 0,
+    "new_independent_natural_development_comparisons": 0,
+    "model137": "137 examples, 92 successes, 58 economy-qualified unchanged",
+    "red_registered": "96/124 unchanged",
+    "fresh_red_acceptance": "0/5 unchanged"
+  },
+  "verification": {
+    "focused_rom_free_tests_passed": 293,
+    "ruff": "passed",
+    "mypy_changed_source_modules": "passed",
+    "collection_registry_regenerated_and_checked": true,
+    "product_focus": "passed",
+    "broader_suite": "interrupted after 1676 passes and three collection-registry failures caused by running with newly edited executable source before regeneration/commit; not a full-suite pass",
+    "post_commit_registry_tests": "3 passed, 36 deselected",
+    "rom_hack_or_crystal_opened": false
+  },
+  "review_questions": [
+    "Does fail-closed handling and explicit exclusion of the two failed variants suffice before fitting, despite the original PP mechanism remaining unknown?",
+    "Does the measured six-choice two-turn contrast support a title-neutral attack-versus-switch target without target leakage or counting siblings as independent roots?",
+    "What minimum distinct TRAIN roots and opponent/role coverage should be required before a switch-aware fit and untouched natural DEVELOPMENT comparison?"
+  ],
+  "next_gate": "Astra reviews this frozen pretraining boundary. Training remains gated on the review's accepted admission, target and diversity requirements; no DEVELOPMENT battle or full run is authorized here."
+}

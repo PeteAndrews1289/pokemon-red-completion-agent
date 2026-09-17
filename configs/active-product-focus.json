@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new model-selected outcome, fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged.",
-        "blocker": "The retained type-immunity TRAIN failure shows an off-slot PP increase at choice 12, but lacks the in-flight after-state needed to identify its cause. A ROM-free reproduction confirms the strict guard rejects that transition. The switch-aware challenger and independent development advantage remain absent; status moves and items remain outside trainer scope.",
-        "decision": "Do not replay or relabel the failed attempt. Prospectively capture the in-flight PP transition in a distinct TRAIN scenario with enriched failure diagnostics, or obtain independent cartridge evidence. Resume varied TRAIN contrasts only after the turn boundary is sound; then fit on TRAIN and compare with frozen/fixed controls on untouched natural DEVELOPMENT episodes.",
+        "authority_delta": "The frozen attack-only baseline completed 15 decisions and lost a distinct three-on-three TRAIN battle. Six executed opening choices passed read-only admission, but no switch-aware fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged.",
+        "blocker": "The original off-slot PP cause remains unknown and both failed variants are excluded. One valid six-choice TRAIN contrast is still one upstream root. No scalar target contract, distinct-root coverage, fitted challenger or independent natural DEVELOPMENT advantage exists yet; status moves and items remain outside trainer scope.",
+        "decision": "Astra reviews the pre-training package: failed-run exclusion, raw outcome-to-target contract and minimum distinct TRAIN roots/matchup coverage. Do not fit until that review is adjudicated. Then fit only admitted TRAIN outcomes and compare with frozen/fixed controls on untouched natural DEVELOPMENT battles.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-practice-pp-boundary-audit-2026-09-17.json",
-          "sha256": "81c425662636c0e7934cca9f6df0d8c37f2046565158094c67354e229ca3ec27"
+          "path": "docs/evidence/red-trainer-practice-pretrain-qualification-2026-09-17.json",
+          "sha256": "e60e8533ab41cae8dcc453973fe14d8b72e0b99251612f992556ae77292ab278"
         },
-        "learning_output": "The retained PP failure was audited without replay. Future failures retain more in-flight party context, and a ROM-free test confirms the off-slot PP increase still fails closed. No new training outcome, model update or learner gain.",
-        "next_falsifier": "A distinct TRAIN scenario with enriched diagnostics cannot establish a valid selected-turn boundary; alternatively, a fitted challenger cannot outperform frozen/fixed controls on disjoint natural DEVELOPMENT episodes.",
-        "next_session_goal": "Sol High, Fast off, one bounded session: capture a prospectively distinct TRAIN PP transition with enriched diagnostics or find independent cartridge evidence. Do not repeat the failed attempt, infer its label, fit on DEVELOPMENT or launch a full run.",
-        "product_alignment": "The strict PP guard prevents fabricated battle labels. Diagnostic maintenance is a bounded unblock for model-selected battle-outcome training, not learning progress.",
+        "learning_output": "One distinct assisted three-on-three TRAIN battle retained 15 frozen-baseline decisions and six executed equal-horizon opening choices. Switching to Squirtle beat the first opponent with no HP loss; all four attack openings beat none. All configurations share one upstream root; no model update or learner gain.",
+        "next_falsifier": "The proposed target or admission contract cannot keep failed variants out and sibling branches together, or future distinct TRAIN roots do not produce varied attack/switch outcomes; later, a fitted challenger fails natural DEVELOPMENT comparison.",
+        "next_session_goal": "Astra High, Fast off, read-only pre-training review: adjudicate failed-run exclusion, measured-outcome target construction and minimum distinct TRAIN-root/matchup coverage. No fit, DEVELOPMENT opening or full run yet.",
+        "product_alignment": "The six-choice contrast is model-relevant and actually executed. National-Dex identity checks, HP gating and read-only admission prevent mislabeled or fabricated trainer outcomes; engineering checks are not learner gains.",
         "session_id": "2026-09-17-trainer-practice-telemetry-varied-train",
         "status": "closed",
         "stop_condition": "No replay or relabel of the PP-failed attempt; stop on unverified turn effects, synthetic-root independence, development fitting, full run, ROM hack, Crystal or GitHub publication.",
-        "transfer_result": "No independent natural DEVELOPMENT or cross-title test ran. Existing assisted capture configurations still inherit one TRAIN root."
+        "transfer_result": "No independent natural DEVELOPMENT or cross-title test ran. All assisted capture configurations still inherit one TRAIN root."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Capture a distinct TRAIN PP transition with enriched diagnostics or independent cartridge evidence without replaying the consumed attempt; only then fit switch-aware choices from valid varied TRAIN outcomes and require disjoint natural development advantage over frozen/fixed controls before promotion.",
+      "next_decision": "Astra reviews failed-run exclusion, raw outcome-to-target construction and minimum distinct TRAIN-root/matchup coverage before any switch-aware fit; natural DEVELOPMENT advantage over frozen/fixed controls remains required before promotion.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
