@@ -3,48 +3,43 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Trainer-practice exploratory fit: promising TRAIN result, no promotion
+## Trainer-practice source and depleted-switch checkpoint: still no promotion
 
-The [session evidence](docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json)
-supersedes the prior prospective plan and defective initial fit. The factory
-had created reserve Pokémon with owner ID zero; they could ignore commands
-after a switch. Repaired reserves inherit the player's owner ID, and a live
-switch-to-Water-Gun mechanic test now executes. Existing complete branch logs
-were preserved; the defective cartridge captures and first fit are not valid
-quality evidence.
+The [latest evidence](docs/evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
+records one genuine new same-root switch-target TRAIN contrast. The teacher-only
+factory now materializes a trainer opening with both actor moves at zero PP and
+two healthy reserves. The bounded successor executed both switch choices at
+five declared timing offsets: all ten branch logs verified, and the measured
+two-turn returns favored Bulbasaur (1.2882) over Vaporeon (0.1254). One baseline
+battle won in six decisions. This generated a switch-head target, **not** a new
+model fit, independent root, or battle authority.
 
-Eight distinct assisted TRAIN scenarios, each at five declared timings, passed
-strict branch/return admission and fitted move, attack-versus-switch control,
-and switch-target heads. Four opening contrasts favored switches and four
-favored attacks. They all derive from **one authenticated upstream root**;
-timing siblings and assisted configurations do not supply independence.
+The first depleted pilot remains a failure: after sixteen decisions both
+reserves fainted, leaving an unsupported Struggle boundary. The episode runner
+now stops explicitly there without pretending an action was selected. Do not
+replay that pilot. Struggle is outside the declared initial battle segment.
 
-Two retained failures matter. The repaired four-case model never switched in
-its first fresh holdout and lost more HP than the frozen attack-only control,
-despite both winning 5/5. The eight-case model then repeatedly switched and
-failed all five trials of another holdout at an optional prompt with no living
-reserve. Those trials were not replayed. The controller now declines a
-targetless optional prompt and masks a second voluntary switch against the
-same opponent until the model attempts an attack; this is an explicit safety
-constraint, not learned post-switch value.
+Three predeclared Celadon Center-to-Gym-Lass captures reached authentic trainer
+MAIN without a battle action, but ancestry review found closely related saved
+contexts with the same player trainer ID and near-identical party. Their labels
+and hashes do not prove independent play. They are correlated TRAIN material,
+not three qualifying roots. The fit gate now rejects multiple members of the
+unresolved Celadon/lab alias cluster.
 
-With the unchanged eight-case model and that controller, a newly frozen
-Bulbasaur-versus-Pidgey TRAIN matchup produced **5/5 model wins versus 0/5**
-for the frozen attack-only control. The model selected the opening switch to
-Pikachu in every trial; all ten event logs were complete, with zero teacher
-fallback or invalid actions. This is positive same-root synthetic TRAIN
-transfer, not natural DEVELOPMENT or fixed-heuristic advantage. The model is
-not ready for the final Astra promotion pass.
+The previous [eight-scenario exploratory model](docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json)
+remains diagnostic only: its fresh same-root Bulbasaur-versus-Pidgey holdout
+won 5/5 against 0/5 for the frozen attack-only control, while two earlier
+holdouts failed and remain retained. The current qualified battle gate is four
+genuinely disjoint TRAIN origins with four admitted scenarios each, including
+prompt, forced and depleted-attack contexts, then a natural disjoint DEVELOPMENT
+comparison against frozen and fixed controls. Do not relabel timing or saved-state
+siblings, fit DEVELOPMENT, promote, run the full game, or push to GitHub.
 
-The remaining battle gate is four independent authenticated TRAIN roots with
-four admitted scenarios each, including prompt, forced and depleted-attack
-contexts, followed by disjoint natural DEVELOPMENT against frozen and fixed
-controls. The old supply strategy remains retired; do not relabel variants,
-replay failed trials, fit DEVELOPMENT or run the full game yet. Model137 stays
-137 examples / 92 successes / 58 economy-qualified; Red stays 96/124 and
-fresh acceptance 0/5. No battle authority, Red registration, cross-title
-transfer or GitHub publication advanced. Pete decides when to push.
+Model137 stays 137 examples / 92 successes / 58 economy-qualified; Red stays
+96/124 and fresh acceptance 0/5. No new player authority, registration,
+cross-title transfer, or GitHub publication occurred. Pete decides when to push.
 
-Next bounded objective: inventory and freeze independent short authentic
-trainer starts without the retired supply path. Use Sol High, Fast off for
-that evidence-collection work; reserve Astra High for a later promotion review.
+Next bounded objective: audit physical ancestry of unused authentic trainer
+starts and freeze four actually disjoint TRAIN origins before broadening the
+curriculum. Use Sol High, Fast off; reserve Astra High for the eventual
+qualified promotion review.

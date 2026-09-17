@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Secure independent authentic trainer TRAIN roots and prompt, forced and depleted-attack contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.
+- Next decision: Audit physical ancestry and secure four genuinely disjoint trainer TRAIN roots, then fill prompt and forced contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-exploratory-train-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json)
+**2026-09-17-trainer-source-depleted-switch-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is a measured model-owned switching improvement in bounded practice while keeping the final-player and independence gates intact. |
-| Learning output | Eight repaired TRAIN scenarios across five declared timings yielded eight examples for each of the move, control and switch heads. A fresh same-root TRAIN holdout finished 5/5 model wins versus 0/5 frozen attack-only wins with zero teacher fallback; an earlier holdout failed from repeat switching and remains retained. |
-| Authority delta | None. An eight-scenario same-root trainer model was fitted and tested only in TRAIN practice; it is not promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | Positive same-root synthetic TRAIN transfer only; no independent natural DEVELOPMENT or cross-title result. |
-| Blocker | The trainer has only one authenticated upstream root. It lacks independent natural TRAIN supply and has no prompt, forced or depleted-attack training context; natural DEVELOPMENT remains unopened. Earlier defective-reserve results were superseded, and the retired supply strategy remains closed. |
-| Decision | Retain the eight-scenario model as a diagnostic challenger after a positive fresh same-root TRAIN holdout. Seek independent authentic trainer roots and missing decision contexts before a qualified fit; require disjoint natural DEVELOPMENT advantage against frozen and fixed controls before promotion. |
-| Next session | Inventory and freeze independent short authentic trainer TRAIN starts, including prompt, forced and depleted-attack boundaries, without replaying consumed trials; then design natural DEVELOPMENT comparison. |
-| Next falsifier | A bounded authentic trainer source cannot supply independent roots and missing decision contexts, or a qualified challenger fails disjoint natural DEVELOPMENT versus frozen and fixed controls. |
-| Stop condition | No replay or replacement of failed trainer trials, no manufactured independent roots, no DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN success cannot satisfy the qualified four-by-four gate. |
+| Product alignment | The trainer learned a measurable switch-only choice from a real Red cartridge copy while root independence and final-player authority remained protected. |
+| Learning output | One new same-root TRAIN depleted-attack switch target was executed at five timings: 10/10 complete branch logs, mean two-turn returns 0.1254 versus 1.2882, target switch to Bulbasaur. Three natural Celadon captures supplied zero qualified independent roots. |
+| Authority delta | None. A new same-root depleted-attack switch target was measured but not fitted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No new natural DEVELOPMENT or cross-title result; the depleted contrast is same-root TRAIN only. |
+| Blocker | The three Celadon trainer captures are correlated saved contexts, not independent roots. The trainer still has one qualified upstream root; prompt and forced contexts remain missing and natural DEVELOPMENT remains unopened. All-party zero PP with no reserve reaches an explicitly unsupported Struggle boundary. |
+| Decision | Retain the eight-scenario model as diagnostic only and the new switch-only contrast as TRAIN material. Reject Celadon/lab aliases as separate fit roots; audit physical ancestry and freeze genuinely disjoint trainer TRAIN starts before qualified fitting. Require natural DEVELOPMENT advantage against frozen and fixed controls before promotion. |
+| Next session | Audit unused trainer-state ancestry, then freeze only four genuinely disjoint TRAIN origins and collect missing prompt and forced contexts without reusing consumed trials. |
+| Next falsifier | The unused authentic trainer bank may lack provably disjoint physical origins; if so, the four-root qualified-fit gate cannot open from this bank. |
+| Stop condition | No retry of the failed depleted pilot; no Celadon sibling-root qualification, DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN targets cannot satisfy the four-by-four gate. |
 
 ### Stop conditions
 

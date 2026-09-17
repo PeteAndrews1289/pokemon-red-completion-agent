@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon.red.trainer-source-and-depleted-switch-result.v1",
+  "session_date": "2026-09-17",
+  "status": "closed_with_one_new_same_root_train_target",
+  "product_claim": "The battle trainer can construct and measure a zero-attack-PP switch-target choice; the learner is not qualified or promoted.",
+  "celadon_source_pilot": {
+    "prospective_plans": [
+      "red-celadon-trainer-source-plan-2026-09-17.json",
+      "red-celadon-trainer-source-successor-plan-2026-09-17.json"
+    ],
+    "captured_before_battle_action": [
+      {"slot": "red-goal-v1-001-advance_story-train-01", "actions": 240, "frames": 31440, "capture_state_sha256": "ecf29ee29cbdec8e206440aeb417d036ea33f80f90b6496abdafea24a5d54ff6"},
+      {"slot": "red-goal-v1-002-advance_story-train-02", "actions": 240, "frames": 31440, "capture_state_sha256": "7193252bdf9501aff242b7f3b5922daea322bf46ac4a0f7df7ee4de019d60676"},
+      {"slot": "red-goal-v1-003-advance_story-train-03", "actions": 259, "frames": 33156, "capture_state_sha256": "c1ef3519554657d5246620366708dc566bc0367d913471ded5f35b85645a1ea7"}
+    ],
+    "ancestry_audit": "All three saves are historical Celadon catalog slots with the same player trainer ID and near-identical party state; their distinct slot labels and state hashes do not establish independent physical play. Conservatively classify them as correlated TRAIN material, not three independent roots. Their relationship to the preexisting lab source remains unresolved.",
+    "qualified_independent_roots_added": 0,
+    "fit_guard": "The qualified-fit provenance validator rejects multiple members of this unresolved Celadon/lab alias cluster."
+  },
+  "depleted_actor_pp": {
+    "factory": "Actor moves may have zero PP, but opponent move PP remains positive; a zero-attack trainer state requires a living reserve.",
+    "private_rom_materialization": "A Pikachu with two zero-PP moves and two healthy reserve switch options read back exactly.",
+    "first_pilot": {
+      "status": "retained_failed_no_retry",
+      "configuration_sha256": "442d2f2d1c482a0db4e0651c24feee3aa464b43fb50276c12fc7660e376ff6b5",
+      "reason": "After sixteen decisions both reserves had fainted, so the remaining zero-PP active Pokémon required Struggle; no switch target remained.",
+      "disposition": "An explicit unsupported-Struggle stop now ends this boundary without fabricating a model choice or a complete winning episode."
+    },
+    "bounded_successor": {
+      "configuration_sha256": "3601c70c7475314928f04e095ff23123c4a5f69a63f1552f2584a913bf4758e6",
+      "same_upstream_root": "red-lab-rival-train-20260917-offset137",
+      "assisted_state_sha256": "2dbdd15fe7a183ecd6d2bb9c9aee46893888dc9fb4afab783e2587bd4eb44894",
+      "baseline_battle_won": true,
+      "baseline_decisions": 6,
+      "opening_choices": ["switch:2", "switch:3"],
+      "timing_offsets": [0, 2, 4, 6, 8],
+      "complete_branch_logs": 10,
+      "branch_decisions_each": 2,
+      "admission_execution_proof_complete": true,
+      "admission_return_proof_complete": true,
+      "target_context": "depleted-attack MAIN",
+      "target_heads": ["switch"],
+      "mean_two_turn_return_switch_2": 0.125404762,
+      "mean_two_turn_return_switch_3": 1.288154762,
+      "preferred_target": "switch:3",
+      "baseline_outcome_sha256": "fac9c67d9f93add7ba532ce9eadb1912faae01d9e8d8f424869538844955ffbe",
+      "qualified_independent_roots_added": 0,
+      "model_updates": 0
+    }
+  },
+  "verification": {
+    "targeted_rom_free_tests": "21 passed for fit provenance, target extraction, episode and baseline checks",
+    "private_rom_switch_materialization": "2 passed in the earlier depleted/non-depleted integration pair",
+    "registry_regeneration": "passed",
+    "product_focus_and_docs": "passed",
+    "full_suite": "not run"
+  },
+  "remaining_gate": [
+    "Authenticate four genuinely disjoint TRAIN origins, with four admitted scenarios each; the Celadon aliases cannot be counted separately.",
+    "Collect and admit replacement-prompt and forced-replacement contrasts as well as depleted-attack contexts across that disjoint supply.",
+    "Fit a qualified challenger and compare it once on disjoint natural DEVELOPMENT trainer battles against frozen and fixed controls.",
+    "Resolve or explicitly exclude unsupported Struggle from the declared initial battle segment before broad battle-authority claims."
+  ],
+  "effects": {
+    "new_measured_same_root_train_scenarios": 1,
+    "new_qualified_independent_train_roots": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "red_registered_species_delta": 0,
+    "fresh_full_red_runs": 0,
+    "github_pushes": 0,
+    "crystal_execution": 0
+  }
+}

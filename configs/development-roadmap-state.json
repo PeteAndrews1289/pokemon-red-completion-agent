@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-exploratory-train-v1",
+  "as_of_session": "2026-09-17-trainer-source-depleted-switch-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1766,6 +1766,12 @@
       "result": "The repaired teacher factory now gives synthetic reserves the player's owner ID. Eight distinct same-root TRAIN trainer scenarios each passed five-timing admission and fitted an exploratory move/control/switch model. On a fresh synthetic TRAIN holdout, the model made its own opening switch and won all five timings while the frozen attack-only baseline lost all five; all ten logs completed without teacher fallback.",
       "deviation": "The original defective-reserve fit is superseded. A four-case fit had no switching advantage on its holdout, and the first eight-case holdout failed from repeated switches and a targetless optional prompt; those failures remain retained. A disclosed no-repeat-switch-until-attack safety mask and empty-prompt decline enabled the later result. Only one upstream root exists, the model has no prompt/forced/depletion training coverage or natural DEVELOPMENT comparison, and no authority, central Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced.",
       "next": "Sol High, Fast off: secure prospectively bounded independent authentic trainer TRAIN roots and missing prompt, forced and depleted-attack contexts. Keep the four-root-by-four-scenario fit gate; then compare against frozen and fixed controls on disjoint natural DEVELOPMENT before promotion."
+    },
+    {
+      "session": "2026-09-17-trainer-source-depleted-switch-v1",
+      "result": "A zero-attack-PP trainer opening produced one same-root TRAIN switch-target contrast across five timings, with ten complete branch logs and measured mean returns 0.1254 versus 1.2882. Three authentic Celadon trainer MAIN captures were retained but classified as correlated, not independent roots.",
+      "deviation": "The first depleted pilot hit an unsupported Struggle boundary after both reserves fainted and remains failed without retry. The successor completed one baseline battle and switch-only branch collection. A qualified fit now rejects the unresolved Celadon/lab alias cluster. No model fit, natural DEVELOPMENT, authority, Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced; stage and checklist exits remain unchanged.",
+      "next": "Sol High, Fast off: audit physical ancestry of unused authentic trainer states and freeze four genuinely disjoint TRAIN origins; collect missing prompt and forced contrasts before qualified fitting. Reserve Astra High for promotion review after natural DEVELOPMENT comparison."
     }
   ],
   "closed_milestones": [

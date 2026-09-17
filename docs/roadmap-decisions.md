@@ -1,5 +1,23 @@
 # Roadmap baseline and deviations
 
+## September 17 — require audited physical ancestry for trainer fit roots
+
+Three prospectively captured Celadon Gym trainer starts have different saved-state hashes
+and slot labels, but share a closely related historical catalog context and player
+trainer ID. They are useful correlated TRAIN material, not evidence of three new
+independent origins. The qualified trainer-fit gate now rejects multiple aliases
+from this unresolved family. Do not lower the four-origin-by-four-scenario gate or
+count timing offsets and assisted configurations as new roots.
+
+The [depleted-switch rehearsal](evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
+added one real, same-root TRAIN switch-target contrast with ten complete branches.
+It did not fit or promote a model. The next data step is an ancestry audit of unused
+authentic starts, followed by bounded prompt and forced-replacement contrasts on
+genuinely disjoint TRAIN origins. Natural DEVELOPMENT comparison remains the
+promotion gate. The unsupported Struggle boundary is an explicit limit of this
+initial battle segment, not a hidden teacher fallback. The Red-before-ROM-hack,
+Crystal and Emerald order is unchanged.
+
 ## September 16 — stop static battle-capture sampling; collect model-directed episodes
 
 The [action-free supply audit](evidence/red-natural-battle-supply-audit-2026-09-16.json)

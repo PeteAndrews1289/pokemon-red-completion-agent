@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-exploratory-train-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-source-depleted-switch-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-source-depleted-switch-v1
+
+A zero-attack-PP trainer opening produced one same-root TRAIN switch-target contrast across five timings, with ten complete branch logs and measured mean returns 0.1254 versus 1.2882. Three authentic Celadon trainer MAIN captures were retained but classified as correlated, not independent roots.
+
+**Deviation:** The first depleted pilot hit an unsupported Struggle boundary after both reserves fainted and remains failed without retry. The successor completed one baseline battle and switch-only branch collection. A qualified fit now rejects the unresolved Celadon/lab alias cluster. No model fit, natural DEVELOPMENT, authority, Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced; stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: audit physical ancestry of unused authentic trainer states and freeze four genuinely disjoint TRAIN origins; collect missing prompt and forced contrasts before qualified fitting. Reserve Astra High for promotion review after natural DEVELOPMENT comparison.
 
 ### 2026-09-17-trainer-exploratory-train-v1
 

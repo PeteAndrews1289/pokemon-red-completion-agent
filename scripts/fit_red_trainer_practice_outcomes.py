@@ -29,6 +29,14 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.trainer-practice-fit-corpus-plan.v1"
 OFFSETS = (0, 2, 4, 6, 8)
 SHA256 = re.compile(r"[0-9a-f]{64}")
+# Distinct slot IDs and state hashes from this historical catalog do not prove
+# independent play. Keep the aliases mutually exclusive until ancestry is audited.
+UNRESOLVED_CELADON_ANCESTRY = frozenset({
+    "red-lab-rival-train-20260917-offset137",
+    "red-goal-v1-001-advance_story-train-01",
+    "red-goal-v1-002-advance_story-train-02",
+    "red-goal-v1-003-advance_story-train-03",
+})
 
 
 def _validate_root_source_provenance(
@@ -57,6 +65,8 @@ def _validate_root_source_provenance(
             raise ValueError("one trainer source was relabeled as multiple roots")
         source_by_root[root] = source
         root_by_source[source] = root
+    if len(source_by_root.keys() & UNRESOLVED_CELADON_ANCESTRY) > 1:
+        raise ValueError("trainer roots have unresolved shared Celadon ancestry")
 
 
 def _validate_exploratory_supply(

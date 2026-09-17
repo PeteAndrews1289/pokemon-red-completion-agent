@@ -76,6 +76,21 @@ def test_three_head_targets_share_executed_whole_party_returns():
     assert result["heads"]["control"]["best_indices"] == [0]
 
 
+def test_depleted_main_context_trains_switch_target_without_fake_attack_target():
+    admission, document = _contrast()
+    admission["measured_choices"] = admission["measured_choices"][2:]
+    document["branches"] = document["branches"][2:]
+    for branch in document["branches"]:
+        branch["episode"]["decisions"][0]["model_input"] = {
+            "supported_candidate_mask": [False, False]
+        }
+    result = extract_trainer_practice_targets(admission, document)
+    assert result["attack_depleted"] is True
+    assert result["decision_context"] == "main"
+    assert set(result["heads"]) == {"switch"}
+    assert result["heads"]["switch"]["best_indices"] == [0]
+
+
 def test_target_extraction_refuses_unproven_or_different_start():
     admission, document = _contrast()
     admission["execution_proof_complete"] = False

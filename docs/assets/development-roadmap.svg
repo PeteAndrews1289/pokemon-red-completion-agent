@@ -173,10 +173,9 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-17-trainer-exploratory-train-v1</text>
-<text x="50" y="2958" class="body">The repaired teacher factory now gives synthetic reserves the player&#x27;s owner ID. Eight distinct same-root TRAIN trainer</text>
-<text x="50" y="2983" class="body">scenarios each passed five-timing admission and fitted an exploratory move/control/switch model. On a fresh synthetic TRAIN</text>
-<text x="50" y="3008" class="body">holdout, the model made its own opening switch and won all five timings while the frozen attack-only baseline lost all five;</text>
-<text x="50" y="3033" class="body">all ten logs completed without teacher fallback.</text>
+<text x="50" y="2923" class="small muted">2026-09-17-trainer-source-depleted-switch-v1</text>
+<text x="50" y="2958" class="body">A zero-attack-PP trainer opening produced one same-root TRAIN switch-target contrast across five timings, with ten complete</text>
+<text x="50" y="2983" class="body">branch logs and measured mean returns 0.1254 versus 1.2882. Three authentic Celadon trainer MAIN captures were retained but</text>
+<text x="50" y="3008" class="body">classified as correlated, not independent roots.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

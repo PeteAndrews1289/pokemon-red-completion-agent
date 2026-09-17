@@ -26,6 +26,19 @@ def test_fit_corpus_requires_consistent_distinct_upstream_states() -> None:
         _validate_root_source_provenance([first, _receipt("root-b", "not-a-hash")])
 
 
+def test_fit_rejects_unresolved_celadon_slot_aliases_as_independent_roots() -> None:
+    with pytest.raises(ValueError, match="unresolved shared Celadon ancestry"):
+        _validate_root_source_provenance([
+            _receipt("red-lab-rival-train-20260917-offset137", "a" * 64),
+            _receipt("red-goal-v1-001-advance_story-train-01", "b" * 64),
+        ])
+    with pytest.raises(ValueError, match="unresolved shared Celadon ancestry"):
+        _validate_root_source_provenance([
+            _receipt("red-goal-v1-002-advance_story-train-02", "a" * 64),
+            _receipt("red-goal-v1-003-advance_story-train-03", "b" * 64),
+        ])
+
+
 def test_exploratory_fit_discloses_one_root_and_requires_four_or_eight_varied_scenarios() -> None:
     receipts = [
         {"root_lineage_id": "one-root", "capture_id": f"capture-{index}"}

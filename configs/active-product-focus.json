@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. An eight-scenario same-root trainer model was fitted and tested only in TRAIN practice; it is not promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "The trainer has only one authenticated upstream root. It lacks independent natural TRAIN supply and has no prompt, forced or depleted-attack training context; natural DEVELOPMENT remains unopened. Earlier defective-reserve results were superseded, and the retired supply strategy remains closed.",
-        "decision": "Retain the eight-scenario model as a diagnostic challenger after a positive fresh same-root TRAIN holdout. Seek independent authentic trainer roots and missing decision contexts before a qualified fit; require disjoint natural DEVELOPMENT advantage against frozen and fixed controls before promotion.",
+        "authority_delta": "None. A new same-root depleted-attack switch target was measured but not fitted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "The three Celadon trainer captures are correlated saved contexts, not independent roots. The trainer still has one qualified upstream root; prompt and forced contexts remain missing and natural DEVELOPMENT remains unopened. All-party zero PP with no reserve reaches an explicitly unsupported Struggle boundary.",
+        "decision": "Retain the eight-scenario model as diagnostic only and the new switch-only contrast as TRAIN material. Reject Celadon/lab aliases as separate fit roots; audit physical ancestry and freeze genuinely disjoint trainer TRAIN starts before qualified fitting. Require natural DEVELOPMENT advantage against frozen and fixed controls before promotion.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json",
-          "sha256": "c6f32bb8d2e5bc1910ac824298bf084cd3eea6f51408c5004e1d97ce3118245b"
+          "path": "docs/evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json",
+          "sha256": "e8c14774d72ed2fc62f9c00b85cc23c77b602f3805d752ae4021d60cad913f33"
         },
-        "learning_output": "Eight repaired TRAIN scenarios across five declared timings yielded eight examples for each of the move, control and switch heads. A fresh same-root TRAIN holdout finished 5/5 model wins versus 0/5 frozen attack-only wins with zero teacher fallback; an earlier holdout failed from repeat switching and remains retained.",
-        "next_falsifier": "A bounded authentic trainer source cannot supply independent roots and missing decision contexts, or a qualified challenger fails disjoint natural DEVELOPMENT versus frozen and fixed controls.",
-        "next_session_goal": "Inventory and freeze independent short authentic trainer TRAIN starts, including prompt, forced and depleted-attack boundaries, without replaying consumed trials; then design natural DEVELOPMENT comparison.",
-        "product_alignment": "This is a measured model-owned switching improvement in bounded practice while keeping the final-player and independence gates intact.",
-        "session_id": "2026-09-17-trainer-exploratory-train-v1",
+        "learning_output": "One new same-root TRAIN depleted-attack switch target was executed at five timings: 10/10 complete branch logs, mean two-turn returns 0.1254 versus 1.2882, target switch to Bulbasaur. Three natural Celadon captures supplied zero qualified independent roots.",
+        "next_falsifier": "The unused authentic trainer bank may lack provably disjoint physical origins; if so, the four-root qualified-fit gate cannot open from this bank.",
+        "next_session_goal": "Audit unused trainer-state ancestry, then freeze only four genuinely disjoint TRAIN origins and collect missing prompt and forced contexts without reusing consumed trials.",
+        "product_alignment": "The trainer learned a measurable switch-only choice from a real Red cartridge copy while root independence and final-player authority remained protected.",
+        "session_id": "2026-09-17-trainer-source-depleted-switch-v1",
         "status": "closed",
-        "stop_condition": "No replay or replacement of failed trainer trials, no manufactured independent roots, no DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN success cannot satisfy the qualified four-by-four gate.",
-        "transfer_result": "Positive same-root synthetic TRAIN transfer only; no independent natural DEVELOPMENT or cross-title result."
+        "stop_condition": "No retry of the failed depleted pilot; no Celadon sibling-root qualification, DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN targets cannot satisfy the four-by-four gate.",
+        "transfer_result": "No new natural DEVELOPMENT or cross-title result; the depleted contrast is same-root TRAIN only."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Secure independent authentic trainer TRAIN roots and prompt, forced and depleted-attack contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.",
+      "next_decision": "Audit physical ancestry and secure four genuinely disjoint trainer TRAIN roots, then fill prompt and forced contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
