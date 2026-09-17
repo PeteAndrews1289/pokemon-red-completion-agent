@@ -93,5 +93,36 @@ def test_roster_tracks_old_foe_when_switch_decision_changes_active_position():
     assert score_trainer_practice_episode(episode).opponent_damage_fraction == round(52 / 83, 9)
 
 
+def test_four_opponent_battle_conserves_four_hp_bars_across_switches() -> None:
+    episode = _episode("attack", party_hp_after=50, enemy_hp_after=100)
+    episode["stop_reason"] = "battle_won"
+    episode["player_turn_count"] = 5
+    episode["metrics"]["opponent_faints"] = 4
+    sequence = (
+        (0, 1, 100, 100, 0.5, 0),
+        (1, 2, 100, 100, 1.0, 1),
+        (2, 3, 100, 100, 1.0, 1),
+        (3, 0, 100, 50, 1.0, 1),
+        (0, 0, 50, 0, 0.5, 1),
+    )
+    decisions = []
+    for before_slot, after_slot, before_hp, after_hp, damage, fainted in sequence:
+        decision = deepcopy(episode["decisions"][0])
+        decision["observation"]["features"]["battle"]["opponent_max_hp"] = 100
+        decision["state_before"]["opponent_party_position"] = before_slot
+        decision["state_after"]["opponent_party_position"] = after_slot
+        decision["opponent_hp_before"] = before_hp
+        decision["opponent_hp_after"] = after_hp
+        decision["outcome"] = {"opponent_damage_fraction": damage}
+        decision["opponent_faints"] = fainted
+        decisions.append(decision)
+    episode["decisions"] = decisions
+
+    result = score_trainer_practice_episode(episode)
+
+    assert result.opponent_faints == 4
+    assert result.opponent_damage_fraction == 4.0
+
+
 def test_tie_rule_preserves_near_equal_outcomes():
     assert tied_best_indices((1.0, 0.99, 0.9)) == (0, 1)

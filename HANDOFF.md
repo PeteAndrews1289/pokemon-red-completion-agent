@@ -3,50 +3,51 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Astra review complete: repair feedback before larger training
+## Trainer review repaired; challenger not promoted
 
-The [review](docs/reviews/red-trainer-astra-review-2026-09-17.md) and
-[measured evidence](docs/evidence/red-trainer-astra-review-2026-09-17.json)
-review local commit `5127cef4`. Keep the emulator factory, provenance, branch
-logs, actor/executor separation and small three-head model. No wholesale
-architecture replacement is justified by the current data.
+The [Astra review](docs/reviews/red-trainer-astra-review-2026-09-17.md) led to
+[measured remediation](docs/evidence/red-trainer-astra-remediation-2026-09-17.json).
+Damage scoring now follows the attacked opponent through a living switch;
+fit and live control inputs agree; an observed send-out event distinguishes
+same-species opponents; Counter is consistently excluded from the initial
+attack/switch scope. The runtime also survives a sleeping battler fainting
+before its selected move spends PP. Focused ROM-free regressions and real
+post-fix Agatha play verify these changes.
 
-Four fresh TRAIN source chains and all 140 timing trials / 500 branches passed
-existing admission on reconstruction. However, the 28 scenarios contain only
-four unique attack-input matrices, five control matrices and seven switch
-matrices. The attack model's 14/16 training winner hits equal always choosing
-the first candidate; some identical inputs have conflicting winner labels.
+Four independent clean-power TRAIN roots now provide 44 bounded contexts:
+28 retained, eight distinct-pilot additions and eight decisive type-pair
+additions. The same small three-head model was fitted from graded timing
+returns for 2400 epochs without additional gameplay. Move inputs increased
+from four to 20 unique candidate matrices. It learned two of three clear
+type-reversal pairs; its mean TRAIN move regret is 0.0354 versus 0.1750 for
+always choosing the first candidate. This is training progress, not a natural
+generalization claim. Frozen challenger SHA-256:
+`5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d`.
 
-Repair before a larger training campaign:
+Five previously unused natural DEVELOPMENT battles tested that frozen model.
+Cinnabar was a no-regression easy fight. Lorelei showed five voluntary switches
+and 13 attacks versus 25 for the older frozen control, but cost 424 versus
+341 party HP. A [predeclared League cohort](configs/red-trainer-league-development-cohort-2026-09-17.json)
+used Bruno, Agatha and Lance from one unresolved historical progression. Its
+first Agatha arm failed on a sleep/faint runtime defect, so the original cohort
+failed. After the mechanics-only fix, all Agatha arms finished; these results
+remain descriptive, not a retroactive cohort pass. Across Bruno, post-fix
+Agatha and Lance, the challenger won all three but used 27 attacks, lost one
+party member and 552 HP; the older frozen control won all three with 24
+attacks, zero faints and 340 HP lost. Bruno improved, Agatha and Lance
+regressed. All arms used zero teacher queries and zero invalid actions.
 
-1. Preserve damage across living opponent switches. The current return scorer
-   loses 52/83 damage on the first Fuchsia control attack and slightly reverses
-   control/challenger reward ordering. Original wins, HP and action counts are
-   valid. This switching pattern was absent from the 500 TRAIN branches.
-2. Match training and live history inputs: 57 history-related weight rows are
-   untouched random initialization, yet live history affects scores. Also fix
-   history identity for different opponents sharing species and level.
-3. Reconcile generation and model move support: Counter passes the scenario
-   support rule but stops feature projection. Explicitly declare attack/switch
-   scope; status, recovery and all-party Struggle remain unsupported.
-4. Build distinct paired TRAIN decisions and uncertainty-aware repeated targets.
-   Count unique inputs and compare simple controls before expanding the fit.
-5. Freeze one challenger for a prospective natural cohort with useful choices.
-   Easy battles require no regression; harder declared slices require benefit.
+Do not fit to, replay-tune or promote from these consumed DEVELOPMENT battles.
+All natural checkpoints share unresolved historical Red ancestry; no
+independent natural replication is claimed. The old frozen control retains
+authority. This trainer model is runnable and ready for further TRAIN work,
+not qualified for the final player. Model137 stays 137 examples / 92 successes
+/ 58 economy-qualified; Red remains 96/124 and fresh acceptance 0/5. No full
+game, ROM hack, Crystal work or GitHub push occurred. Pete decides publication.
 
-The two consumed natural DEVELOPMENT comparisons remain negative evidence,
-not material for tuning or replay. Celadon used the 16-context challenger;
-Fuchsia used the 28-context challenger. Both won less efficiently than controls,
-neither voluntarily switched, and the captures share historical ancestry.
-The current 28-context model SHA-256 remains
-`686361c0b4ca1852e1d2576819096db5f7886d617b9e00846c7970b69d8f0f38`.
-
-Review verification: 38 focused existing tests passed; code defects above were
-reproduced from retained evidence, not fixed during this review. No new model,
-gameplay, authority promotion, cross-title transfer or GitHub push occurred.
-Model137 remains 137 examples / 92 successes / 58 economy-qualified outcomes;
-Red stays 96/124 and fresh acceptance 0/5. Pete decides publication.
-
-Next: Sol High, Fast off, for scoring/history/support repairs with focused
-regressions (estimated one to two implementation sessions), then a small
-distinct-curriculum pilot. Do not make another general review a standing gate.
+Next bounded objective: Sol High, Fast off. Expand independent TRAIN scenarios
+with varied full teams, opponent types, switch costs and adverse statuses
+without reading these DEVELOPMENT outcomes into labels. Freeze a new fit and
+test on a genuinely new-origin natural trainer source. Stop if it cannot beat
+the older frozen control on the declared outcome vector; do not begin a full
+game run yet.

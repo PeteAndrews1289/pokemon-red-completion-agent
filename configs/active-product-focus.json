@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Review only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "The return scorer loses damage on living opponent switches; training omits history used at inference; species/level history aliases opponents; Counter support checks disagree. Sixteen attack examples contain only four unique input matrices with conflicting hard winners. The two negative natural comparisons do not establish replicated generalization or useful switching.",
-        "decision": "Keep the factory, provenance, branch logs and small three-head architecture. Repair scoring, history parity, opponent identity and support admission, then build distinct paired TRAIN decisions with uncertainty-aware targets before larger training.",
+        "authority_delta": "None. The new 44-context trainer challenger remains TRAIN-only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "The repaired trainer learner wins natural full-party battles and uses voluntary switches, but the predeclared correlated League cohort failed: its first Agatha arm exposed a runtime defect, and the post-fix descriptive comparison shows Agatha/Lance regressions versus the older frozen control. No independent natural-origin replication exists.",
+        "decision": "Keep the corrected scoring, input, opponent-tracking and support contracts. Do not promote the 44-context model. Expand varied independent TRAIN choices and freeze a new challenger before an independent-origin natural comparison.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-astra-review-2026-09-17.json",
-          "sha256": "7147536e7f4ad4c09c5abbfda89f3dd17a06aec6f940e331e3384801c6760036"
+          "path": "docs/evidence/red-trainer-astra-remediation-2026-09-17.json",
+          "sha256": "5d6fa819ed1df94278236990e82bda3cb673b2307969aa06580071ed9023b881"
         },
-        "learning_output": "No new examples or fit. Read-only reconstruction admitted four source chains, 140 timing trials and 500 branches. The audit measured four unique attack matrices, five control matrices and seven switch matrices; reproduced scoring and history defects; 38 focused existing tests passed despite those gaps.",
-        "next_falsifier": "Recorded switching regressions must conserve affected-opponent damage, fit/live input contracts must agree, and a small paired TRAIN pilot must learn observable decision reversals beyond first-candidate behavior.",
-        "next_session_goal": "Sol High: repair identity-aware scoring, history parity and opponent tracking, and reconcile support admission with focused tests. Then prepare distinct paired TRAIN contexts and uncertainty-aware targets; no large fit yet.",
-        "product_alignment": "Trustworthy feedback and observable decision variation are necessary for learning transferable battle choices; increasing model size is not justified by four unique attack inputs.",
-        "session_id": "2026-09-17-trainer-astra-review-v1",
+        "learning_output": "Sixteen new paired TRAIN contexts raised the corpus to 44 across four fresh origins and 20 unique attack matrices. A 2400-epoch graded-target fit learned two of three clear type reversals. Five new natural DEVELOPMENT battles were compared with one frozen challenger; all were wins, but the League outcome vector failed its predeclared control gate.",
+        "next_falsifier": "A new fit from broader independent TRAIN choices must win a prospectively declared independent-origin natural comparison without more faints, HP loss or attacks than the older frozen control.",
+        "next_session_goal": "Sol High, Fast off: build varied full-team and status-adverse TRAIN battle choices without fitting consumed DEVELOPMENT, then freeze one challenger and source a new independent-origin natural test.",
+        "product_alignment": "The battle segment now has trustworthy feedback and demonstrable autonomous choices, but natural regressions prevent moving that authority into the final Red player.",
+        "session_id": "2026-09-17-trainer-astra-remediation-v1",
         "status": "closed",
-        "stop_condition": "No new large training campaign before scoring/input repairs and a distinct-decision pilot. No replay-tuning consumed DEVELOPMENT, historical origin relabeling, authority promotion, full game or GitHub push.",
-        "transfer_result": "No new transfer measurement. Both retained natural comparisons favored controls, used different challengers and share historical ancestry; neither showed voluntary switching."
+        "stop_condition": "Preserve the failed cohort and consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, authority promotion, full game or GitHub push.",
+        "transfer_result": "No cross-title test. On correlated historical Red natural captures, the challenger won Cinnabar, Lorelei, Bruno, Agatha and Lance with zero teacher use; switching emerged but Agatha/Lance underperformed the frozen control."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Repair scoring/history/support contracts, then a small distinct paired TRAIN pilot with uncertainty-aware targets. Freeze one challenger for a prospective decision-rich natural cohort only after the pilot; no consumed DEVELOPMENT replay or full game.",
+      "next_decision": "The repaired 44-context battle learner is TRAIN-ready but not promotable: expand independent varied TRAIN scenarios, then test a frozen successor on a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

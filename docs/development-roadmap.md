@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-review-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-remediation-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-astra-remediation-v1
+
+Repaired return scoring, fit/live history parity, observed opponent replacement and Counter admission; added 16 new paired TRAIN contexts for 44 total across four clean-power roots. A 2400-epoch three-head fit learned two of three clear type reversals and autonomously won five new natural trainer battles. A sleeping-faint runtime defect found in the prospectively declared League cohort was repaired and verified.
+
+**Deviation:** The original League cohort failed at Agatha. Its mechanics-only replay completed, but descriptive Bruno/Agatha/Lance totals are worse than the older frozen control: 27 versus 24 attacks, one versus zero faints and 552 versus 340 HP lost. Historical natural checkpoints remain one unresolved origin cluster. The challenger is not promoted; Model137, Red 96/124, fresh acceptance 0/5, transfer, full run and GitHub publication are unchanged. Stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: broaden independent varied TRAIN battles without fitting consumed DEVELOPMENT, freeze a successor and evaluate it on a new-origin natural cohort. Stop on no control advantage; do not run the full game.
 
 ### 2026-09-17-trainer-astra-review-v1
 

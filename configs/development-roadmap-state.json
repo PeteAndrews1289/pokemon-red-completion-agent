@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-astra-review-v1",
+  "as_of_session": "2026-09-17-trainer-astra-remediation-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1784,6 +1784,12 @@
       "result": "Astra readmitted 140 retained timing trials and 500 branches, but found only four distinct attack inputs among sixteen examples, conflicting targets, switch-damage scoring loss, untrained live history, opponent identity aliasing and inconsistent move support. Thirty-eight focused existing tests passed. Keep the framework and small model; repair feedback before larger training.",
       "deviation": "Review only: no new fit, gameplay, authority or collection progress. Existing natural win and cost evidence remains valid. Stage and checklist exits are unchanged; independent origins are not a substitute for distinct decisions.",
       "next": "Sol High, Fast off: repair scoring/history/support with focused regressions, then run a small distinct paired TRAIN pilot with uncertainty-aware targets. Never tune on or replay consumed DEVELOPMENT encounters."
+    },
+    {
+      "session": "2026-09-17-trainer-astra-remediation-v1",
+      "result": "Repaired return scoring, fit/live history parity, observed opponent replacement and Counter admission; added 16 new paired TRAIN contexts for 44 total across four clean-power roots. A 2400-epoch three-head fit learned two of three clear type reversals and autonomously won five new natural trainer battles. A sleeping-faint runtime defect found in the prospectively declared League cohort was repaired and verified.",
+      "deviation": "The original League cohort failed at Agatha. Its mechanics-only replay completed, but descriptive Bruno/Agatha/Lance totals are worse than the older frozen control: 27 versus 24 attacks, one versus zero faints and 552 versus 340 HP lost. Historical natural checkpoints remain one unresolved origin cluster. The challenger is not promoted; Model137, Red 96/124, fresh acceptance 0/5, transfer, full run and GitHub publication are unchanged. Stage and checklist exits remain unchanged.",
+      "next": "Sol High, Fast off: broaden independent varied TRAIN battles without fitting consumed DEVELOPMENT, freeze a successor and evaluate it on a new-origin natural cohort. Stop on no control advantage; do not run the full game."
     }
   ],
   "closed_milestones": [

@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Repair scoring/history/support contracts, then a small distinct paired TRAIN pilot with uncertainty-aware targets. Freeze one challenger for a prospective decision-rich natural cohort only after the pilot; no consumed DEVELOPMENT replay or full game.
+- Next decision: The repaired 44-context battle learner is TRAIN-ready but not promotable: expand independent varied TRAIN scenarios, then test a frozen successor on a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-astra-review-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-review-2026-09-17.json)
+**2026-09-17-trainer-astra-remediation-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-remediation-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Trustworthy feedback and observable decision variation are necessary for learning transferable battle choices; increasing model size is not justified by four unique attack inputs. |
-| Learning output | No new examples or fit. Read-only reconstruction admitted four source chains, 140 timing trials and 500 branches. The audit measured four unique attack matrices, five control matrices and seven switch matrices; reproduced scoring and history defects; 38 focused existing tests passed despite those gaps. |
-| Authority delta | None. Review only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No new transfer measurement. Both retained natural comparisons favored controls, used different challengers and share historical ancestry; neither showed voluntary switching. |
-| Blocker | The return scorer loses damage on living opponent switches; training omits history used at inference; species/level history aliases opponents; Counter support checks disagree. Sixteen attack examples contain only four unique input matrices with conflicting hard winners. The two negative natural comparisons do not establish replicated generalization or useful switching. |
-| Decision | Keep the factory, provenance, branch logs and small three-head architecture. Repair scoring, history parity, opponent identity and support admission, then build distinct paired TRAIN decisions with uncertainty-aware targets before larger training. |
-| Next session | Sol High: repair identity-aware scoring, history parity and opponent tracking, and reconcile support admission with focused tests. Then prepare distinct paired TRAIN contexts and uncertainty-aware targets; no large fit yet. |
-| Next falsifier | Recorded switching regressions must conserve affected-opponent damage, fit/live input contracts must agree, and a small paired TRAIN pilot must learn observable decision reversals beyond first-candidate behavior. |
-| Stop condition | No new large training campaign before scoring/input repairs and a distinct-decision pilot. No replay-tuning consumed DEVELOPMENT, historical origin relabeling, authority promotion, full game or GitHub push. |
+| Product alignment | The battle segment now has trustworthy feedback and demonstrable autonomous choices, but natural regressions prevent moving that authority into the final Red player. |
+| Learning output | Sixteen new paired TRAIN contexts raised the corpus to 44 across four fresh origins and 20 unique attack matrices. A 2400-epoch graded-target fit learned two of three clear type reversals. Five new natural DEVELOPMENT battles were compared with one frozen challenger; all were wins, but the League outcome vector failed its predeclared control gate. |
+| Authority delta | None. The new 44-context trainer challenger remains TRAIN-only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No cross-title test. On correlated historical Red natural captures, the challenger won Cinnabar, Lorelei, Bruno, Agatha and Lance with zero teacher use; switching emerged but Agatha/Lance underperformed the frozen control. |
+| Blocker | The repaired trainer learner wins natural full-party battles and uses voluntary switches, but the predeclared correlated League cohort failed: its first Agatha arm exposed a runtime defect, and the post-fix descriptive comparison shows Agatha/Lance regressions versus the older frozen control. No independent natural-origin replication exists. |
+| Decision | Keep the corrected scoring, input, opponent-tracking and support contracts. Do not promote the 44-context model. Expand varied independent TRAIN choices and freeze a new challenger before an independent-origin natural comparison. |
+| Next session | Sol High, Fast off: build varied full-team and status-adverse TRAIN battle choices without fitting consumed DEVELOPMENT, then freeze one challenger and source a new independent-origin natural test. |
+| Next falsifier | A new fit from broader independent TRAIN choices must win a prospectively declared independent-origin natural comparison without more faints, HP loss or attacks than the older frozen control. |
+| Stop condition | Preserve the failed cohort and consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, authority promotion, full game or GitHub push. |
 
 ### Stop conditions
 
