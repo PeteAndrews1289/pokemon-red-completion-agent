@@ -91,12 +91,14 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 or raw.party_count != 6
                 or raw.event_flags is None
                 or event_flag_is_set(raw.event_flags, int(EventFlag.BEAT_LORELEI))
-                or not reader.read_input_readiness().ready
             ):
                 raise ValueError("Indigo validation source is not an unplayed Lorelei approach")
             actions = CountingExecutor(
                 FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
             )
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=180))
+            if not reader.read_input_readiness().ready:
+                raise ValueError("Indigo checkpoint did not settle to field input")
             _move(actions, reader, INDIGO_TO_LORELEI, "Lorelei room entry")
             entered = reader.read()
             if entered.map_id != MapId.LORELEIS_ROOM or (
