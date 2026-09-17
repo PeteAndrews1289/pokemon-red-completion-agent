@@ -11,6 +11,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
@@ -39,6 +40,8 @@ def main() -> int:
     parser.add_argument("--source-state", type=Path, action="append", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None)
+    parser.add_argument("--replace-slot", type=int, choices=range(1, 5), default=1)
+    parser.add_argument("--train-only", action="store_true")
     args = parser.parse_args()
     if args.output_dir.exists():
         parser.error("output directory already exists; this experiment is one-use")
@@ -51,11 +54,10 @@ def main() -> int:
     )
     if len({source.manifest.root_lineage_id for source in sources}) != len(sources):
         parser.error("source roots must be distinct")
-    if {source.manifest.partition for source in sources} != {
-        ScenarioPartition.TRAIN,
-        ScenarioPartition.DEVELOPMENT,
-    }:
-        parser.error("both train and development partitions are required")
+    _require_source_partitions(
+        tuple(source.manifest.partition for source in sources),
+        train_only=args.train_only,
+    )
     rom = resolve_rom_path(args.rom)
     commit = __import__("subprocess").check_output(
         ["git", "rev-parse", "HEAD"], cwd=PROJECT_ROOT, text=True
@@ -79,16 +81,13 @@ def main() -> int:
                 + before.active_party_index * PARTY_STRUCT_STRIDE
             )
             backend = emulator._require_backend()  # teacher-only state intervention
-            backend.memory[0xD01C] = 12  # Guillotine, deliberately risky
-            backend.memory[0xD02D] = 5
-            backend.memory[party_base + PARTY_MOVES_OFFSET] = 12
-            backend.memory[party_base + PARTY_PP_OFFSET] = 5
+            _insert_ohko_move(backend.memory, party_base=party_base, slot=args.replace_slot)
             after = reader.read()
             if (
                 after.battler_moves is None
-                or after.battler_moves[0] != 12
+                or after.battler_moves[args.replace_slot - 1] != 12
                 or after.battler_pp is None
-                or after.battler_pp[0] != 5
+                or after.battler_pp[args.replace_slot - 1] != 5
                 or reader.read_battle_menu_state(after).phase is not BattleMenuPhase.MAIN
             ):
                 raise RuntimeError("assisted state did not retain the policy boundary")
@@ -96,7 +95,7 @@ def main() -> int:
                 PokemonRedObservationEncoder.from_state_reader(reader), after
             )
             if (
-                not prepared.supported_candidate_mask[0]
+                not prepared.supported_candidate_mask[args.replace_slot - 1]
                 or sum(prepared.supported_candidate_mask) < 2
             ):
                 raise RuntimeError("assisted state lacks a supported move contrast")
@@ -119,8 +118,9 @@ def main() -> int:
                 "source_manifest_sha256": source.manifest_sha256,
                 "root_lineage_id": source.manifest.root_lineage_id,
                 "partition": source.manifest.partition.value,
-                "original_slot_1_move": before.battler_moves[0],
-                "assisted_slot_1_move": 12,
+                "assisted_physical_slot": args.replace_slot,
+                "original_slot_move": before.battler_moves[args.replace_slot - 1],
+                "assisted_slot_move": 12,
                 "assistance": "trainer_only_emulator_memory_edit_before_any_action",
             }))
     args.output_dir.mkdir(parents=True)
@@ -136,6 +136,28 @@ def main() -> int:
         open_battle_scenario_capture(state_path, manifest_path)
         print(json.dumps(record, sort_keys=True), flush=True)
     return 0
+
+
+def _require_source_partitions(
+    partitions: tuple[ScenarioPartition, ...], *, train_only: bool
+) -> None:
+    if train_only:
+        if not partitions or set(partitions) != {ScenarioPartition.TRAIN}:
+            raise ValueError("train-only derivation requires train sources only")
+    elif set(partitions) != {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise ValueError("both train and development partitions are required")
+
+
+def _insert_ohko_move(memory: Any, *, party_base: int, slot: int) -> None:
+    """Edit only a declared battle/party move and PP pair in private memory."""
+
+    if type(slot) is not int or not 1 <= slot <= 4:  # noqa: E721
+        raise ValueError("replacement slot must be 1 through 4")
+    index = slot - 1
+    memory[0xD01C + index] = 12  # Guillotine, deliberately risky
+    memory[0xD02D + index] = 5
+    memory[party_base + PARTY_MOVES_OFFSET + index] = 12
+    memory[party_base + PARTY_PP_OFFSET + index] = 5
 
 
 if __name__ == "__main__":
