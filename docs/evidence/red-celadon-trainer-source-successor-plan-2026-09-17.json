@@ -1,0 +1,15 @@
+{
+  "schema": "pokemon.red.celadon-trainer-source-successor-plan.v1",
+  "recorded_on": "2026-09-17",
+  "status": "prospective_not_executed",
+  "basis": "The predeclared first source reached Celadon Gym Lass MAIN in 240 actions and 31440 frames without battle input, under the unchanged 600-action and 180000-frame limits",
+  "sources": [
+    {"source_id": "red-goal-v1-002-advance_story-train-02", "source_state_sha256": "1a4452bce3c704bcb50bb441cbe6885d3e0bf9556294d9c3c407513ebe9edc9f"},
+    {"source_id": "red-goal-v1-003-advance_story-train-03", "source_state_sha256": "3734daa5dfecb8534b9ee0141459e9032d04d9612d0e6b2a085da0e75748dd9f"}
+  ],
+  "per_source_budget": {"actions": 600, "frames": 180000, "attempts": 1},
+  "endpoint": "First unfought Celadon Gym Lass MAIN decision, before any model or teacher battle action",
+  "independence_claim": "Distinct source IDs, state hashes and harness seeds are candidate lineages; verify ancestry before counting the four-root qualified-fit gate",
+  "stop_condition": "Keep a failed identity consumed and do not substitute another route or source; stop after these two captures for lineage audit",
+  "planned_effects": {"model_queries": 0, "model_updates": 0, "development_roots_opened": 0, "full_game_runs": 0, "github_pushes": 0}
+}
