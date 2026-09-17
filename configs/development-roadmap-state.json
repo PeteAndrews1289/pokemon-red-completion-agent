@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-choice-rich-battle-pilot",
+  "as_of_session": "2026-09-16-natural-battle-supply-audit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1700,6 +1700,12 @@
       "result": "Two assisted train roots yielded one correctable 3.132-regret choice and a private last-layer fit. Four precommitted development trials across two separate roots showed one pilot win and one tie versus frozen, but two ties versus the fixed heuristic.",
       "deviation": "The changed choice still missed the best move. Two assisted examples per partition are below ordinary coverage; no battle authority, Red collection, fresh-run gate, or cross-title transfer advanced. No GitHub push.",
       "next": "Sol High, Fast off: inventory natural choice-rich battle contexts for four independent train roots with four distinct informative examples each, plus disjoint development roots. Stop or redesign if supply is absent; do not promote this pilot."
+    },
+    {
+      "session": "2026-09-16-natural-battle-supply-audit",
+      "result": "Action-free inspection authenticated 81 source saves and found 18 natural train battle starts on 14 roots, none with four examples. Four starts were single-action; the other 14 contained only two move sets. Six untouched unclaimed train roots and four development roots remain.",
+      "deviation": "The static capture route cannot meet the ordinary four-by-four fit gate; no new gameplay, outcome, fit, authority, Red progress or fresh-run gate change. The learned model has not beaten the fixed heuristic in existing comparisons.",
+      "next": "Sol High, Fast off: implement and ROM-free-test a bounded model-directed multi-encounter train episode with durable pre-choice states and actual outcomes; at most one prospective train-only mechanical pilot, no fit yet."
     }
   ],
   "closed_milestones": [

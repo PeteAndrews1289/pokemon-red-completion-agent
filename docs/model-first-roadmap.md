@@ -24,11 +24,14 @@ choice failed at Safari travel and trained Model137 once. An isolated teacher-
 assisted Safari probe paid admission but reached its search cap without a catch.
 Both attempts remain consumed, with no repeated fit or funding claim.
 
-The latest session gave the existing frozen battle ranker real move authority
-in one natural encounter: Kingler28 versus Spearow15. It chose five Guillotines
-that dealt no damage, then Vicegrip delivered the knockout. All six choices
-controlled the exact recorded PP spend. Terminal HP59/76;149 actions/13,177
-frames including teacher setup. No new weights, registration or promotion.
+The frozen battle ranker has controlled one earned-state encounter, but used
+five ineffective Guillotines before a Vicegrip knockout. A later two-root
+assisted pilot corrected one risky attack choice yet only tied a fixed
+heuristic. The [natural supply audit](evidence/red-natural-battle-supply-audit-2026-09-16.json)
+then found that the existing bank has no four-example train root and only two
+move sets among its multi-action natural battle starts. The older 20-example
+development comparison also favored the fixed heuristic over the learned
+ranker, 2 wins to 0. No battle authority was promoted.
 
 This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
@@ -38,21 +41,22 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Attack reliability learning | Audit coverage, collect a small separately permitted outcome contrast, fit, then compare old/new choices and costs on untouched scenarios | Sol High, Fast off |
+| Model-directed battle experience | Record multiple natural encounters with model-owned attack choices, durable pre-choice states and actual outcomes; branch only isolated train states for candidate values | Sol High, Fast off |
+| Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:60–90 minutes for one reliability-focused learning cycle. Current
-accuracy and OHKO features already distinguish Guillotine from Vicegrip; missing
-speed coverage is a separate hypothesis, not a proven cause. Do not hardcode a
-move ban or fit/replay the consumed development encounter. Compare on separate
-scenarios and report correlated evidence honestly. No full run yet.
+Next time box:90–120 minutes to implement and ROM-free-test one bounded
+model-directed multi-encounter *training* episode. If those safeguards pass,
+run at most one prospectively frozen train-only mechanical pilot; no fit yet.
+Do not hardcode a move ban, lower the four-by-four fit gate, replay consumed
+trials or spend development roots before a justified challenger. No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-earned-learned-battle-2026-09-16.json) ·
+[Latest evidence](evidence/red-natural-battle-supply-audit-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

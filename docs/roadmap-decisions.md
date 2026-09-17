@@ -1,5 +1,28 @@
 # Roadmap baseline and deviations
 
+## September 16 — stop static battle-capture sampling; collect model-directed episodes
+
+The [action-free supply audit](evidence/red-natural-battle-supply-audit-2026-09-16.json)
+found 18 natural train battle starts across 14 upstream roots, with at most two
+starts on any root and four starts offering only one supported attack. The
+ordinary four-roots/four-examples-per-root fit gate cannot be met from this
+materialized bank. The 81 authenticated source saves have richer parties, but
+after historical materializations and account claims only six untouched train
+and four untouched development roots remain; the train roots span just two
+goal families. The older 20-example development comparison gave the fitted
+battle model zero wins and two losses against the fixed heuristic. The recent
+assisted pilot only tied that heuristic.
+
+Do not lower the gate again or manufacture independence by resetting one
+snapshot. The next capability is a bounded model-directed training episode:
+the model owns real attack choices across naturally encountered battles,
+pre-choice states and actual outcomes are retained, and only isolated
+train-side branches provide comparable candidate outcomes. Separate upstream
+development episodes test both the frozen model and fixed heuristic. This
+changes the immediate data strategy, not the Red completion gate, stage IDs,
+or the order of ROM hack, Crystal and Emerald. No root was claimed, no game
+input was sent and no model was fitted in this audit.
+
 ## September 16 — bounded live battle authority, without blanket promotion
 
 The next earned-state experiment connects the existing frozen expected-utility

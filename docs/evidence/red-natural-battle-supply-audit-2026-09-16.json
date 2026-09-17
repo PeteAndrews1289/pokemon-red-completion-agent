@@ -1,0 +1,67 @@
+{
+  "schema": "pokemon.red.natural-battle-supply-audit.v1",
+  "session": "2026-09-16-natural-battle-supply-audit",
+  "classification": "action_free_supply_falsifier_no_learning_output",
+  "mission_check": {
+    "capability": "Gather varied, real battle decisions and cartridge outcomes for a transferable attack policy",
+    "learned_authority": "Frozen battle ranker remains bounded development-only; no new player authority or fit",
+    "transfer_test": "Compare train episodes with separately reserved upstream development roots and different party/opponent contexts, not timing copies of one state",
+    "cheapest_falsifier": "Authenticated natural captures or unclaimed source roots cannot furnish four distinct choice-rich examples from each of four train roots without a new collection mechanism",
+    "time_box": "One action-free inventory session, at most two hours",
+    "stop_condition": "Stop the static-capture sampling route on insufficient per-root supply; no root claim, replay, model fit, promotion, full run or GitHub publication"
+  },
+  "authenticated_source_bank": {
+    "source_states_hashed_and_matched_to_catalog": 81,
+    "train_source_states": 54,
+    "validation_source_states": 27,
+    "train_states_with_a_party_member_having_two_supported_attacks": 54,
+    "distinct_supported_party_move_sets_across_train_bank": 16,
+    "note": "Read-only loaded-state inspection; party readiness does not prove an executable or informative battle capture"
+  },
+  "natural_battle_capture_bank": {
+    "distinct_train_capture_states": 18,
+    "distinct_train_upstream_roots": 14,
+    "maximum_captures_on_one_train_root": 2,
+    "multi_action_train_capture_states": 14,
+    "single_action_train_capture_states": 4,
+    "distinct_move_sets_among_multi_action_train_captures": 2,
+    "distinct_development_capture_states": 16,
+    "distinct_development_upstream_roots": 16,
+    "ordinary_train_fit_gate": "At least four roots and four examples per root; existing natural capture bank has zero roots meeting four examples",
+    "note": "Train capture manifests and state bytes were authenticated and observed; development captures were inventoried by manifests only. No controller input or outcome collection occurred."
+  },
+  "remaining_source_supply": {
+    "train_roots_with_no_account_claim": 9,
+    "untouched_and_unclaimed_train_roots": 6,
+    "untouched_and_unclaimed_train_goal_families": ["advance_story", "recover_control"],
+    "eligible_party_slots_per_untouched_train_root": [3, 3, 3, 6, 6, 6],
+    "distinct_supported_party_move_sets_across_untouched_train_roots": 11,
+    "untouched_and_unclaimed_development_roots": 4,
+    "note": "Account-claim availability alone is insufficient: three available train roots and one available validation root already have historical battle materializations and were excluded. Party slots are potential contrasts, not independent roots or completed examples."
+  },
+  "existing_model_comparator": {
+    "expected_utility_v2_development_examples": 20,
+    "learned_model_vs_fixed_heuristic": "0 wins, 2 losses, 18 equivalent choices",
+    "recent_assisted_pilot_vs_fixed_heuristic": "0 wins, 0 losses, 2 equivalent choices",
+    "interpretation": "Neither comparison establishes an advantage over a simple fixed rule; the assisted pilot is too small and the older evaluation is from historical training-control contexts"
+  },
+  "decision": {
+    "static_four_by_four_curriculum_frozen": false,
+    "reason": "The current natural capture bank has no four-example train root, and the small untouched source remainder is concentrated in two goal families. Repeating near-duplicate or assisted captures would not repair the demonstrated coverage and baseline problem.",
+    "next_capability": "Implement a bounded, model-directed multi-encounter training episode: retain each model-selected pre-decision state and actual outcome, then obtain comparable candidate outcomes only from isolated train-side branches of those states. Reserve separate upstream development episodes and require superiority to both frozen and fixed-heuristic controls before promotion.",
+    "next_cheapest_falsifier": "ROM-free test of durable choice-before-input, root/partition inheritance, distinct semantic decision counting, hard stops and no teacher fallback; then one precommitted train-only mechanical pilot if it passes",
+    "new_controller_actions": 0,
+    "new_emulator_frames": 0,
+    "new_outcome_examples": 0,
+    "model_fit": false,
+    "authority_promoted": false,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "gameplay_running": false,
+    "github_pushed": false
+  },
+  "private_receipts_sha256": {
+    "authenticated_source_catalog": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "historical_expected_utility_development_evaluation": "7a172e900229f6ca7271eb82eca646dfbe2c72df18734038623eb8dbb70c336f"
+  }
+}

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-choice-rich-battle-pilot**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-natural-battle-supply-audit**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-natural-battle-supply-audit
+
+Action-free inspection authenticated 81 source saves and found 18 natural train battle starts on 14 roots, none with four examples. Four starts were single-action; the other 14 contained only two move sets. Six untouched unclaimed train roots and four development roots remain.
+
+**Deviation:** The static capture route cannot meet the ordinary four-by-four fit gate; no new gameplay, outcome, fit, authority, Red progress or fresh-run gate change. The learned model has not beaten the fixed heuristic in existing comparisons.
+
+**Next:** Sol High, Fast off: implement and ROM-free-test a bounded model-directed multi-encounter train episode with durable pre-choice states and actual outcomes; at most one prospective train-only mechanical pilot, no fit yet.
 
 ### 2026-09-16-choice-rich-battle-pilot
 
