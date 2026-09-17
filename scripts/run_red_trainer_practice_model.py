@@ -104,9 +104,12 @@ def _authenticate(plan: object):
     ):
         raise ValueError("DEVELOPMENT root overlaps outcome-model training lineage")
     max_decisions, maximum_frames = plan.get("max_decisions"), plan.get("maximum_frames")
+    opening_idle_frames = plan.get("opening_idle_frames", 0)
     if (
         type(max_decisions) is not int or not 1 <= max_decisions <= 80
         or type(maximum_frames) is not int or not 1 <= maximum_frames <= 120000
+        or type(opening_idle_frames) is not int
+        or not 0 <= opening_idle_frames <= 12
     ):
         raise ValueError("trainer model budget differs")
     output = plan.get("output")
@@ -132,7 +135,9 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     assert isinstance(rom, dict) and isinstance(rom["path"], str)
     maximum_frames = plan["maximum_frames"]
     max_decisions = plan["max_decisions"]
+    opening_idle_frames = plan.get("opening_idle_frames", 0)
     assert isinstance(maximum_frames, int) and isinstance(max_decisions, int)
+    assert isinstance(opening_idle_frames, int)
 
     @contextmanager
     def session_factory():
@@ -172,6 +177,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         "capture_manifest_sha256": capture.manifest_sha256,
         "policy_id": policy.policy_id,
         "partition": capture.manifest.partition.value,
+        "opening_idle_frames": opening_idle_frames,
     })
     log = TrainerPracticeEventLog(output / "events", run_identity={
         "source_commit": plan["source_commit"],
@@ -183,6 +189,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         **model_identity,
         "max_decisions": max_decisions,
         "maximum_frames": maximum_frames,
+        "opening_idle_frames": opening_idle_frames,
     })
     try:
         episode = run_red_trainer_practice_episode(
@@ -190,6 +197,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             session_factory=session_factory,
             policy=policy,
             max_decisions=max_decisions,
+            opening_idle_frames=opening_idle_frames,
             event_sink=log.emit,
             public_species_base_stats=public_stats,
         )
@@ -210,6 +218,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         "partition": capture.manifest.partition.value,
         "root_lineage_id": capture.manifest.root_lineage_id,
         "source_commit": plan["source_commit"],
+        "opening_idle_frames": opening_idle_frames,
         "model_updates": 0,
         "authority_promotions": 0,
     })

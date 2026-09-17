@@ -143,6 +143,12 @@ def test_outcome_runner_requires_rich_observation_and_disjoint_development(
     manifest.root_lineage_id = "disjoint-root"
     _plan, _capture, loaded = runner._authenticate(plan)
     assert isinstance(loaded, TrainerPracticeThreeHeadModel)
+    plan["opening_idle_frames"] = 8
+    runner._authenticate(plan)
+    plan["opening_idle_frames"] = 13
+    with pytest.raises(ValueError, match="budget differs"):
+        runner._authenticate(plan)
+    plan["opening_idle_frames"] = 0
     manifest.observation_schema = None
     with pytest.raises(ValueError, match="actor-visible battle stats"):
         runner._authenticate(plan)
