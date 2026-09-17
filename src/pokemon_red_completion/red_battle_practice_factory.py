@@ -2,8 +2,8 @@
 
 Write authority is deliberately absent from model/executor interfaces. Only an
 isolated emulator copy may call this adapter; it never edits a save on disk.
-Supported axes are actor moves/PP, both levels, both five-stat blocks and
-current HP. Species, status and opponent moves remain unsupported.
+Supported axes are both Gen I species, moves/PP, levels, five-stat blocks and
+current HP. Status, items, multi-member teams and trainer AI remain unsupported.
 """
 
 from __future__ import annotations
@@ -11,19 +11,26 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from .battle_practice_factory import BattlePracticeError, BattlePracticeSpec, PracticeStats
+from .battle_practice_factory import (
+    BattlePracticeError,
+    BattlePracticeSpec,
+    PracticeMove,
+    PracticeStats,
+)
 from .observation import (
     PARTY_HP_OFFSET,
     PARTY_LEVEL_OFFSET,
     PARTY_MAX_HP_OFFSET,
     PARTY_MOVES_OFFSET,
     PARTY_PP_OFFSET,
+    PARTY_SPECIES_OFFSET,
     PARTY_STRUCT_STRIDE,
     BattleMenuPhase,
     PokemonRedStateReader,
     RamAddress,
 )
 from .red_battle_catalog import PokemonRedBattleCatalog
+from .red_battle_practice_cartridge import RedPracticeCartridge
 from .red_battle_scenario import prepare_red_battle_scenario
 from .red_trajectory import PokemonRedObservationEncoder
 
@@ -37,6 +44,21 @@ _ENEMY_BOX_LEVEL = 0xCFE8
 _PLAYER_UNMODIFIED_LEVEL = 0xCD0F
 _ENEMY_UNMODIFIED_LEVEL = int(RamAddress.ENEMY_UNMODIFIED_LEVEL)
 _PARTY_BOX_LEVEL_OFFSET = 3
+_PARTY_EXPERIENCE_OFFSET = 14
+_PARTY_STAT_EXP_OFFSET = 17
+_PARTY_DVS_OFFSET = 27
+_BATTLE_SPECIES = 0xD014
+_BATTLE_SPECIES_2 = 0xCFD9
+_BATTLE_TYPES = 0xD019
+_BATTLE_CATCH_RATE = 0xD01B
+_BATTLE_DVS = 0xD020
+_ENEMY_TYPES = int(RamAddress.ENEMY_TYPE_1)
+_ENEMY_CATCH_RATE = 0xCFEC
+_ENEMY_PP = 0xCFFE
+_ENEMY_DVS = 0xCFF1
+_ENEMY_BASE_STATS = 0xD002
+_ENEMY_ACTUAL_CATCH_RATE = 0xD007
+_ENEMY_BASE_EXP = 0xD008
 
 
 def _u16(memory: WritableRedMemory, address: int) -> int:
@@ -67,6 +89,31 @@ def _put_stats(memory: WritableRedMemory, base: int, stats: PracticeStats) -> No
         _put_u16(memory, base + offset, value)
 
 
+def _put_u24(memory: WritableRedMemory, address: int, value: int) -> None:
+    for offset in range(3):
+        memory[address + offset] = (value >> (16 - 8 * offset)) & 0xFF
+
+
+def _resolved_moves(
+    moves: tuple[PracticeMove, ...],
+    catalog: PokemonRedBattleCatalog,
+) -> tuple[tuple[int, ...], tuple[int, ...]]:
+    move_ids: list[int] = []
+    pp_values: list[int] = []
+    for move in moves:
+        try:
+            mechanics = catalog.resolve_move(move.move_ref)
+            move_id = int(move.move_ref.rsplit(":", 1)[1])
+            pp = move.pp
+        except (ValueError, IndexError) as error:
+            raise BattlePracticeError("Red practice move reference differs") from error
+        if pp > mechanics.max_pp or move_id not in catalog.move_ids:
+            raise BattlePracticeError("Red practice PP exceeds unboosted move capacity")
+        move_ids.append(move_id)
+        pp_values.append(pp)
+    return tuple((move_ids + [0] * 4)[:4]), tuple((pp_values + [0] * 4)[:4])
+
+
 class WritableRedMemory(Protocol):
     def __getitem__(self, address: int) -> int: ...
 
@@ -91,6 +138,9 @@ class RedPracticeReceipt:
     actor_hp: int | None = None
     actor_stats: PracticeStats | None = None
     opponent_stats: PracticeStats | None = None
+    opponent_move_ids: tuple[int, ...] | None = None
+    opponent_pp: tuple[int, ...] | None = None
+    actor_experience: int | None = None
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -124,6 +174,11 @@ class RedPracticeReceipt:
                 actor_stats=self.actor_stats.public_dict() if self.actor_stats else None,
                 opponent_stats=self.opponent_stats.public_dict() if self.opponent_stats else None,
             )
+        if self.opponent_move_ids is not None:
+            result["opponent_move_ids"] = list(self.opponent_move_ids)
+            result["opponent_pp"] = list(self.opponent_pp or ())
+        if self.actor_experience is not None:
+            result["actor_experience"] = self.actor_experience
         return result
 
 
@@ -131,6 +186,8 @@ def materialize_red_train_practice(
     reader: PokemonRedStateReader,
     memory: WritableRedMemory,
     spec: BattlePracticeSpec,
+    *,
+    cartridge: RedPracticeCartridge | None = None,
 ) -> RedPracticeReceipt:
     """Edit a private wild-battle copy and verify its semantic readback.
 
@@ -152,8 +209,6 @@ def materialize_red_train_practice(
         or before.enemy_hp is None
         or before.enemy_hp <= 0
         or before.enemy_max_hp is None
-        or spec.opponent_hp
-        > (spec.opponent_stats.max_hp if spec.opponent_stats else before.enemy_max_hp)
         or before.battler_moves != before.active_party_moves
         or before.battler_pp != before.active_party_pp
         or reader.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
@@ -167,23 +222,71 @@ def materialize_red_train_practice(
     ):
         raise BattlePracticeError("transformed or ambiguous opponent is unsupported")
     catalog = PokemonRedBattleCatalog()
-    move_ids: list[int] = []
-    pp_values: list[int] = []
-    for move in spec.actor_moves:
-        try:
-            mechanics = catalog.resolve_move(move.move_ref)
-            move_id = int(move.move_ref.rsplit(":", 1)[1])
-        except (ValueError, IndexError) as error:
-            raise BattlePracticeError("Red practice move reference differs") from error
-        if move.pp > mechanics.max_pp or move_id not in catalog.move_ids:
-            raise BattlePracticeError("Red practice PP exceeds unboosted move capacity")
-        move_ids.append(move_id)
-        pp_values.append(move.pp)
-    padded_moves = tuple((move_ids + [0] * 4)[:4])
-    padded_pp = tuple((pp_values + [0] * 4)[:4])
+    padded_moves, padded_pp = _resolved_moves(spec.actor_moves, catalog)
+    enemy_moves, enemy_pp = (
+        _resolved_moves(spec.opponent_moves, catalog)
+        if spec.opponent_moves is not None
+        else (None, None)
+    )
+    if (
+        spec.actor_species_ref is not None or spec.opponent_species_ref is not None
+    ) and cartridge is None:
+        raise BattlePracticeError("species practice requires authenticated cartridge data")
+    try:
+        actor_species_id = (
+            int(spec.actor_species_ref.rsplit(":", 1)[1])
+            if spec.actor_species_ref is not None
+            else before.active_party_species_id
+        )
+        opponent_species_id = (
+            int(spec.opponent_species_ref.rsplit(":", 1)[1])
+            if spec.opponent_species_ref is not None
+            else before.enemy_species_id
+        )
+        if spec.actor_species_ref is not None:
+            catalog.resolve_species(spec.actor_species_ref)
+        if spec.opponent_species_ref is not None:
+            catalog.resolve_species(spec.opponent_species_ref)
+    except (ValueError, IndexError) as error:
+        raise BattlePracticeError("Red practice species reference differs") from error
+    assert actor_species_id is not None and opponent_species_id is not None
+    actor_level = spec.actor_level or before.active_party_level
+    opponent_level = spec.opponent_level or before.enemy_level
+    assert actor_level is not None and opponent_level is not None
+    actor_data = cartridge.species(actor_species_id) if cartridge else None
+    opponent_data = cartridge.species(opponent_species_id) if cartridge else None
+    actor_auto_stats = (
+        spec.actor_stats is None
+        and actor_data is not None
+        and (spec.actor_species_ref is not None or spec.actor_level is not None)
+    )
+    opponent_auto_stats = (
+        spec.opponent_stats is None
+        and opponent_data is not None
+        and (spec.opponent_species_ref is not None or spec.opponent_level is not None)
+    )
+    actor_stats = spec.actor_stats or (
+        actor_data.neutral_stats(actor_level)
+        if actor_auto_stats and actor_data is not None
+        else None
+    )
+    opponent_stats = spec.opponent_stats or (
+        opponent_data.neutral_stats(opponent_level)
+        if opponent_auto_stats and opponent_data is not None
+        else None
+    )
+    opponent_max_hp = opponent_stats.max_hp if opponent_stats else before.enemy_max_hp
+    if opponent_max_hp is None or spec.opponent_hp > opponent_max_hp:
+        raise BattlePracticeError("practice opponent HP exceeds maximum")
     active_base = int(RamAddress.PARTY_MON_1) + before.active_party_index * PARTY_STRUCT_STRIDE
-    actor_hp = spec.actor_hp if spec.actor_hp is not None else before.active_party_hp
-    actor_max_hp = spec.actor_stats.max_hp if spec.actor_stats else before.active_party_max_hp
+    actor_max_hp = actor_stats.max_hp if actor_stats else before.active_party_max_hp
+    actor_hp = (
+        spec.actor_hp
+        if spec.actor_hp is not None
+        else actor_max_hp
+        if spec.actor_species_ref is not None
+        else before.active_party_hp
+    )
     if actor_hp is None or actor_max_hp is None or actor_hp > actor_max_hp:
         raise BattlePracticeError("practice actor HP exceeds maximum")
 
@@ -197,6 +300,8 @@ def materialize_red_train_practice(
             spec.actor_stats,
             spec.opponent_stats,
             spec.actor_hp,
+            spec.actor_species_ref,
+            spec.opponent_species_ref,
         )
     )
     if changing_combatants and (
@@ -207,9 +312,34 @@ def materialize_red_train_practice(
         or _u16(memory, _BATTLE_MAX_HP) != before.active_party_max_hp
     ):
         raise BattlePracticeError("source battle and party mirrors differ")
-    actor_level = spec.actor_level or before.active_party_level
-    opponent_level = spec.opponent_level or before.enemy_level
-    assert actor_level is not None and opponent_level is not None
+    if (spec.actor_species_ref is not None or spec.opponent_species_ref is not None) and (
+        memory[_BATTLE_SPECIES] != before.active_party_species_id
+        or memory[_BATTLE_SPECIES_2] != before.active_party_species_id
+        or memory[int(RamAddress.ENEMY_SPECIES_2)] != before.enemy_species_id
+        or memory[int(RamAddress.PARTY_SPECIES) + before.active_party_index]
+        != before.active_party_species_id
+    ):
+        raise BattlePracticeError("source species mirrors differ")
+    if spec.actor_species_ref is not None:
+        assert actor_data is not None
+        memory[int(RamAddress.PARTY_SPECIES) + before.active_party_index] = actor_species_id
+        memory[active_base + PARTY_SPECIES_OFFSET] = actor_species_id
+        memory[_BATTLE_SPECIES] = actor_species_id
+        memory[_BATTLE_SPECIES_2] = actor_species_id
+        for base in (active_base + 5, _BATTLE_TYPES):
+            memory[base], memory[base + 1] = actor_data.types
+        memory[active_base + 7] = actor_data.catch_rate
+        memory[_BATTLE_CATCH_RATE] = actor_data.catch_rate
+    if spec.opponent_species_ref is not None:
+        assert opponent_data is not None
+        memory[int(RamAddress.ENEMY_SPECIES)] = opponent_species_id
+        memory[int(RamAddress.ENEMY_SPECIES_2)] = opponent_species_id
+        memory[_ENEMY_TYPES], memory[_ENEMY_TYPES + 1] = opponent_data.types
+        memory[_ENEMY_CATCH_RATE] = opponent_data.catch_rate
+        memory[_ENEMY_ACTUAL_CATCH_RATE] = opponent_data.catch_rate
+        memory[_ENEMY_BASE_EXP] = opponent_data.base_experience
+        for index, value in enumerate(opponent_data.base_stats):
+            memory[_ENEMY_BASE_STATS + index] = value
     if spec.actor_level is not None:
         for address in (
             active_base + _PARTY_BOX_LEVEL_OFFSET,
@@ -222,14 +352,29 @@ def materialize_red_train_practice(
     if spec.opponent_level is not None:
         for address in (_ENEMY_BOX_LEVEL, int(RamAddress.ENEMY_LEVEL), _ENEMY_UNMODIFIED_LEVEL):
             memory[address] = opponent_level
-    if spec.actor_stats is not None:
-        _put_stats(memory, active_base + PARTY_MAX_HP_OFFSET, spec.actor_stats)
-        _put_stats(memory, _BATTLE_MAX_HP, spec.actor_stats)
-        _put_stats(memory, _PLAYER_UNMODIFIED_LEVEL + 1, spec.actor_stats)
-    if spec.opponent_stats is not None:
-        _put_stats(memory, int(RamAddress.ENEMY_MAX_HP), spec.opponent_stats)
-        _put_stats(memory, _ENEMY_UNMODIFIED_LEVEL + 1, spec.opponent_stats)
-    if spec.actor_hp is not None:
+    if actor_stats is not None:
+        _put_stats(memory, active_base + PARTY_MAX_HP_OFFSET, actor_stats)
+        _put_stats(memory, _BATTLE_MAX_HP, actor_stats)
+        _put_stats(memory, _PLAYER_UNMODIFIED_LEVEL + 1, actor_stats)
+    if opponent_stats is not None:
+        _put_stats(memory, int(RamAddress.ENEMY_MAX_HP), opponent_stats)
+        _put_stats(memory, _ENEMY_UNMODIFIED_LEVEL + 1, opponent_stats)
+    if actor_auto_stats:
+        for index in range(10):
+            memory[active_base + _PARTY_STAT_EXP_OFFSET + index] = 0
+        for base in (active_base + _PARTY_DVS_OFFSET, _BATTLE_DVS):
+            memory[base], memory[base + 1] = 0x88, 0x88
+    if opponent_auto_stats:
+        memory[_ENEMY_DVS], memory[_ENEMY_DVS + 1] = 0x88, 0x88
+    actor_experience = (
+        actor_data.experience_at_level(actor_level)
+        if actor_data is not None
+        and (spec.actor_species_ref is not None or spec.actor_level is not None)
+        else None
+    )
+    if actor_experience is not None:
+        _put_u24(memory, active_base + _PARTY_EXPERIENCE_OFFSET, actor_experience)
+    if spec.actor_hp is not None or spec.actor_species_ref is not None:
         _put_u16(memory, active_base + PARTY_HP_OFFSET, actor_hp)
         _put_u16(memory, _BATTLE_HP, actor_hp)
     for index, (move_id, pp) in enumerate(zip(padded_moves, padded_pp, strict=True)):
@@ -237,6 +382,10 @@ def materialize_red_train_practice(
         memory[_BATTLE_PP + index] = pp
         memory[active_base + PARTY_MOVES_OFFSET + index] = move_id
         memory[active_base + PARTY_PP_OFFSET + index] = pp
+    if enemy_moves is not None and enemy_pp is not None:
+        for index, (move_id, pp) in enumerate(zip(enemy_moves, enemy_pp, strict=True)):
+            memory[int(RamAddress.ENEMY_MOVES) + index] = move_id
+            memory[_ENEMY_PP + index] = pp
     memory[int(RamAddress.ENEMY_HP)] = spec.opponent_hp >> 8
     memory[int(RamAddress.ENEMY_HP) + 1] = spec.opponent_hp & 0xFF
 
@@ -245,14 +394,13 @@ def materialize_red_train_practice(
         after.map_id != before.map_id
         or after.battle_state != before.battle_state
         or after.active_party_index != before.active_party_index
-        or after.active_party_species_id != before.active_party_species_id
+        or after.active_party_species_id != actor_species_id
         or after.active_party_level != actor_level
         or after.active_party_hp != actor_hp
         or after.active_party_max_hp != actor_max_hp
-        or after.enemy_species_id != before.enemy_species_id
+        or after.enemy_species_id != opponent_species_id
         or after.enemy_level != opponent_level
-        or after.enemy_max_hp
-        != (spec.opponent_stats.max_hp if spec.opponent_stats else before.enemy_max_hp)
+        or after.enemy_max_hp != opponent_max_hp
         or after.enemy_hp != spec.opponent_hp
         or after.battler_moves != padded_moves
         or after.battler_pp != padded_pp
@@ -283,9 +431,9 @@ def materialize_red_train_practice(
             )
         )
         or (
-            spec.actor_stats is not None
+            actor_stats is not None
             and any(
-                _stats(memory, base) != spec.actor_stats
+                _stats(memory, base) != actor_stats
                 for base in (
                     active_base + PARTY_MAX_HP_OFFSET,
                     _BATTLE_MAX_HP,
@@ -294,18 +442,71 @@ def materialize_red_train_practice(
             )
         )
         or (
-            spec.opponent_stats is not None
+            opponent_stats is not None
             and any(
-                _stats(memory, base) != spec.opponent_stats
+                _stats(memory, base) != opponent_stats
                 for base in (
                     int(RamAddress.ENEMY_MAX_HP),
                     _ENEMY_UNMODIFIED_LEVEL + 1,
                 )
             )
         )
-        or (spec.actor_hp is not None and _u16(memory, _BATTLE_HP) != actor_hp)
+        or (
+            (spec.actor_hp is not None or spec.actor_species_ref is not None)
+            and _u16(memory, _BATTLE_HP) != actor_hp
+        )
+        or (
+            spec.actor_species_ref is not None
+            and (
+                actor_data is None
+                or memory[int(RamAddress.PARTY_SPECIES) + before.active_party_index]
+                != actor_species_id
+                or memory[_BATTLE_SPECIES] != actor_species_id
+                or memory[_BATTLE_SPECIES_2] != actor_species_id
+                or tuple(memory[_BATTLE_TYPES + i] for i in range(2)) != actor_data.types
+                or tuple(memory[active_base + 5 + i] for i in range(2)) != actor_data.types
+                or memory[_BATTLE_CATCH_RATE] != actor_data.catch_rate
+            )
+        )
+        or (
+            spec.opponent_species_ref is not None
+            and (
+                opponent_data is None
+                or memory[int(RamAddress.ENEMY_SPECIES_2)] != opponent_species_id
+                or tuple(memory[_ENEMY_TYPES + i] for i in range(2)) != opponent_data.types
+                or memory[_ENEMY_CATCH_RATE] != opponent_data.catch_rate
+                or memory[_ENEMY_ACTUAL_CATCH_RATE] != opponent_data.catch_rate
+                or memory[_ENEMY_BASE_EXP] != opponent_data.base_experience
+                or tuple(memory[_ENEMY_BASE_STATS + i] for i in range(5))
+                != opponent_data.base_stats
+            )
+        )
+        or (
+            enemy_moves is not None
+            and (
+                tuple(memory[int(RamAddress.ENEMY_MOVES) + i] for i in range(4)) != enemy_moves
+                or tuple(memory[_ENEMY_PP + i] for i in range(4)) != enemy_pp
+            )
+        )
+        or (
+            actor_experience is not None
+            and (
+                tuple(memory[active_base + _PARTY_EXPERIENCE_OFFSET + i] for i in range(3))
+                != tuple(actor_experience.to_bytes(3, "big"))
+            )
+        )
     ):
         raise BattlePracticeError("assisted battle did not read back consistently")
+    if spec.opponent_species_ref is not None:
+        assert opponent_data is not None
+        after_identity = reader.read_wild_capture_identity()
+        if (
+            after_identity is None
+            or after_identity.original_species_id != opponent_species_id
+            or after_identity.displayed_species_id != opponent_species_id
+            or after_identity.type_ids != opponent_data.types
+        ):
+            raise BattlePracticeError("assisted wild identity did not read back")
     prepared = prepare_red_battle_scenario(
         PokemonRedObservationEncoder.from_state_reader(reader), after
     )
@@ -323,10 +524,15 @@ def materialize_red_train_practice(
         actor_move_ids=padded_moves,
         actor_pp=padded_pp,
         opponent_hp=after.enemy_hp,
-        opponent_max_hp=after.enemy_max_hp,
+        opponent_max_hp=opponent_max_hp,
         observation_sha256=prepared.initial_observation_sha256,
         legal_move_count=legal_count,
-        actor_hp=actor_hp if spec.actor_hp is not None else None,
-        actor_stats=spec.actor_stats,
-        opponent_stats=spec.opponent_stats,
+        actor_hp=actor_hp
+        if spec.actor_hp is not None or spec.actor_species_ref is not None
+        else None,
+        actor_stats=actor_stats,
+        opponent_stats=opponent_stats,
+        opponent_move_ids=enemy_moves,
+        opponent_pp=enemy_pp,
+        actor_experience=actor_experience,
     )

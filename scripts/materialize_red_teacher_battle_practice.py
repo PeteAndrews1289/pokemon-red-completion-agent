@@ -17,6 +17,7 @@ from pokemon_red_completion.battle_scenario_capture import (
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.red_autonomous_player import _record, _write
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_practice_factory import (
     WritableRedMemory,
     materialize_red_train_practice,
@@ -41,7 +42,7 @@ def _bound_file(value: object, label: str) -> bytes:
 
 def _authenticate(
     plan: object, plan_bytes: bytes
-) -> tuple[dict[str, object], BattlePracticeSpec, bytes]:
+) -> tuple[dict[str, object], BattlePracticeSpec, bytes, bytes]:
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("teacher battle practice plan differs")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
@@ -70,12 +71,12 @@ def _authenticate(
     output = plan.get("output")
     if not isinstance(output, str) or Path(output).exists() or not plan_bytes:
         raise ValueError("teacher factory output must be new")
-    return plan, spec, source
+    return plan, spec, source, rom
 
 
 def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     plan_bytes = plan_path.read_bytes()
-    plan, spec, source = _authenticate(json.loads(plan_bytes), plan_bytes)
+    plan, spec, source, rom = _authenticate(json.loads(plan_bytes), plan_bytes)
     rom_binding = plan["rom"]
     assert isinstance(rom_binding, dict)
     rom_path = rom_binding["path"]
@@ -86,7 +87,10 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         reader = PokemonRedStateReader(emulator)
         backend = emulator._require_backend()  # isolated teacher-only write surface
         receipt = materialize_red_train_practice(
-            reader, cast(WritableRedMemory, backend.memory), spec
+            reader,
+            cast(WritableRedMemory, backend.memory),
+            spec,
+            cartridge=RedPracticeCartridge(rom),
         )
         if emulator.frame_count != before_frame:
             raise ValueError("teacher materialization advanced emulator frames")

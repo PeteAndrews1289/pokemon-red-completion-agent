@@ -73,6 +73,9 @@ class BattlePracticeSpec:
     actor_stats: PracticeStats | None = None
     opponent_stats: PracticeStats | None = None
     actor_hp: int | None = None
+    actor_species_ref: str | None = None
+    opponent_species_ref: str | None = None
+    opponent_moves: tuple[PracticeMove, ...] | None = None
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
@@ -109,6 +112,17 @@ class BattlePracticeSpec:
             raise BattlePracticeError("practice actor HP exceeds declared maximum")
         if self.opponent_stats is not None and self.opponent_hp > self.opponent_stats.max_hp:
             raise BattlePracticeError("practice opponent HP exceeds declared maximum")
+        for name in ("actor_species_ref", "opponent_species_ref"):
+            ref = getattr(self, name)
+            if ref is not None and (not isinstance(ref, str) or not ref):
+                raise BattlePracticeError(f"practice {name} differs")
+        if self.opponent_moves is not None and (
+            not isinstance(self.opponent_moves, tuple)
+            or not 1 <= len(self.opponent_moves) <= 4
+            or any(not isinstance(move, PracticeMove) for move in self.opponent_moves)
+            or len({move.move_ref for move in self.opponent_moves}) != len(self.opponent_moves)
+        ):
+            raise BattlePracticeError("practice opponent moves must be one to four distinct moves")
 
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
@@ -121,7 +135,16 @@ class BattlePracticeSpec:
             "actor_moves",
             "opponent_hp",
         }
-        optional = {"actor_level", "opponent_level", "actor_stats", "opponent_stats", "actor_hp"}
+        optional = {
+            "actor_level",
+            "opponent_level",
+            "actor_stats",
+            "opponent_stats",
+            "actor_hp",
+            "actor_species_ref",
+            "opponent_species_ref",
+            "opponent_moves",
+        }
         if (
             not isinstance(value, dict)
             or not required <= set(value)
@@ -133,6 +156,15 @@ class BattlePracticeSpec:
             not isinstance(move, dict) or set(move) != {"move_ref", "pp"} for move in moves
         ):
             raise BattlePracticeError("practice move records differ")
+        opponent_moves = value.get("opponent_moves")
+        if opponent_moves is not None and (
+            not isinstance(opponent_moves, list)
+            or any(
+                not isinstance(move, dict) or set(move) != {"move_ref", "pp"}
+                for move in opponent_moves
+            )
+        ):
+            raise BattlePracticeError("practice opponent move records differ")
         try:
             partition = ScenarioPartition(value["partition"])
             return cls(
@@ -156,6 +188,16 @@ class BattlePracticeSpec:
                     else None
                 ),
                 actor_hp=value.get("actor_hp"),
+                actor_species_ref=value.get("actor_species_ref"),
+                opponent_species_ref=value.get("opponent_species_ref"),
+                opponent_moves=(
+                    tuple(
+                        PracticeMove(move_ref=move["move_ref"], pp=move["pp"])
+                        for move in opponent_moves
+                    )
+                    if opponent_moves is not None
+                    else None
+                ),
             )
         except (TypeError, ValueError, KeyError) as error:
             raise BattlePracticeError(f"invalid practice condition: {error}") from error
@@ -189,5 +231,23 @@ class BattlePracticeSpec:
                 actor_stats=self.actor_stats.public_dict() if self.actor_stats else None,
                 opponent_stats=self.opponent_stats.public_dict() if self.opponent_stats else None,
                 actor_hp=self.actor_hp,
+            )
+        if any(
+            value is not None
+            for value in (
+                self.actor_species_ref,
+                self.opponent_species_ref,
+                self.opponent_moves,
+            )
+        ):
+            configuration["schema"] = "pokemon.core.battle-practice-configuration.v3"
+            configuration.update(
+                actor_species_ref=self.actor_species_ref,
+                opponent_species_ref=self.opponent_species_ref,
+                opponent_moves=(
+                    [{"move_ref": move.move_ref, "pp": move.pp} for move in self.opponent_moves]
+                    if self.opponent_moves is not None
+                    else None
+                ),
             )
         return canonical_sha256(configuration)

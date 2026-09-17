@@ -84,9 +84,10 @@ def test_factory_plan_authenticates_retained_state_and_rejects_reuse(tmp_path, m
         "check_output",
         lambda args, **kwargs: b"" if args[1] == "status" else b"a" * 40,
     )
-    _, spec, source = runner._authenticate(plan, b"plan")
+    _, spec, source, rom = runner._authenticate(plan, b"plan")
     assert isinstance(spec, BattlePracticeSpec)
     assert source == b"retained source"
+    assert rom == b"ROM"
     with pytest.raises(ValueError, match="retained train decision"):
         runner._authenticate({**plan, "source_observation_sha256": "x" * 64}, b"plan")
     Path(plan["output"]).mkdir()
@@ -99,7 +100,7 @@ def test_action_free_preflight_does_not_write_artifacts(tmp_path, monkeypatch):
     plan_path = tmp_path / "plan.json"
     plan_path.write_text(json.dumps(plan))
     spec = BattlePracticeSpec.from_dict(plan["practice"])
-    monkeypatch.setattr(runner, "_authenticate", lambda *_: (plan, spec, b"source"))
+    monkeypatch.setattr(runner, "_authenticate", lambda *_: (plan, spec, b"source", b"ROM"))
 
     class Emulator:
         frame_count = 0
@@ -118,10 +119,11 @@ def test_action_free_preflight_does_not_write_artifacts(tmp_path, monkeypatch):
 
     monkeypatch.setattr(runner, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
     monkeypatch.setattr(runner, "PokemonRedStateReader", lambda _emulator: object())
+    monkeypatch.setattr(runner, "RedPracticeCartridge", lambda _rom: object())
     monkeypatch.setattr(
         runner,
         "materialize_red_train_practice",
-        lambda *_args: SimpleNamespace(legal_move_count=2),
+        lambda *_args, **_kwargs: SimpleNamespace(legal_move_count=2),
     )
     assert runner.run(plan_path, check_only=True)["controller_actions"] == 0
     assert not Path(plan["output"]).exists()
