@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze a diverse choice-rich battle curriculum with disjoint development roots; fit only if train outcomes show a correctable model error.
+- Next decision: Find enough natural, independently rooted battle contrasts for the ordinary train-coverage gate; compare any challenger with both frozen and fixed-heuristic controls on separate roots before promotion.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A small predeclared choice-rich train curriculum still supplies no correctable model regret, or a fitted candidate loses to the frozen ranker on disjoint upstream development roots. |
+| Cheapest falsifier | A broader authentic choice-rich curriculum cannot meet ordinary independent-root coverage, or a fitted battle candidate fails to beat both the frozen ranker and fixed heuristic on separately reserved development roots. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-battle-timing-and-contrast** · status **closed** · evidence [qualification](docs/evidence/red-battle-timing-and-contrast-2026-09-16.json)
+**2026-09-16-choice-rich-battle-pilot** · status **closed** · evidence [qualification](docs/evidence/red-choice-rich-battle-pilot-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A transferable battle policy needs consequential, comparable attack choices that can expose model mistakes, not extra labels from near-duplicate easy turns. |
-| Learning output | Two additional authentic non-tied train examples from one root; 4/4 timing trials complete with zero quarantine and zero frozen-model regret. No fit or model-quality gain. |
-| Authority delta | No fit or promotion. Frozen battle ranker selected an observed best move in both new non-tied train captures; Model137 and Red progress unchanged. |
-| Transfer result | Both new states share training-control-v6-train-02; development remained unopened. No independent generalization or held-out advantage is claimed. |
-| Blocker | The authentic near-duplicate capture bank supplies little correctable battle regret; old timing mismatches are plausibly sleep-suppressed but individual frame counts were not retained. |
-| Decision | Stop probing nearly identical states. Design a small predeclared choice-rich train curriculum, keep sleep/recovery separate from attack-value targets, and reserve disjoint upstream development roots for an actual fitted challenger. |
-| Next session | Sol High, Fast off, about 60-90 minutes: freeze a diverse choice-rich train curriculum and disjoint upstream development comparison, then run only the smallest justified train preflight. No fit or development opening without corrective signal. |
-| Next falsifier | Predeclared diverse train contexts still show only correct frozen choices or no useful attack contrast; stop the battle fit proposal if so. |
-| Stop condition | Stop on consumed-trial replay, fit without a correctable train error, development opening without a frozen challenger and precommitted predictions, promotion without held-out advantage, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | A transferable battle policy needs learned attack decisions that outperform a simple fixed rule across genuinely varied battlers and opponents; a slot-4 assisted contrast is a feasibility signal, not the product. |
+| Learning output | Two assisted train examples across two roots exposed one 3.132-regret frozen choice and supported a private pilot fit. Four precommitted development trials across two separate roots showed one pilot win versus frozen and one tie, but no advantage over the fixed heuristic. |
+| Authority delta | A private, last-layer pilot fit was created from two assisted train examples; no battle or collection-player authority was promoted. Model137, Red 96/124, and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | Two reserved development roots were disjoint from the two train roots. The pilot beat frozen on one choice and tied on one but tied the fixed heuristic on both; no cross-title transfer or generalizable model superiority is claimed. |
+| Blocker | The pilot improves one development choice but misses its observed best move and only ties the fixed heuristic; two assisted examples per partition are below ordinary coverage. |
+| Decision | Close the two-root assisted pilot without promotion. Build a broader, more natural choice-rich curriculum with ordinary independent-root and per-lineage coverage, then require advantage over both controls. |
+| Next session | Sol High, Fast off, about 60-90 minutes: inventory and freeze a more natural battle curriculum with at least four independent train roots and four distinct informative examples per root, plus disjoint reserved development roots. Stop if supply is absent; no full run or promotion. |
+| Next falsifier | Broader authentic contexts cannot meet the normal four-root/four-example-per-root train gate, or the next candidate again ties the fixed heuristic on development. |
+| Stop condition | Stop on consumed-trial replay, weak two-root promotion, assisted-data leakage into final-player actions, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

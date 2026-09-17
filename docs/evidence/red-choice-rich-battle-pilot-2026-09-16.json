@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red.choice-rich-battle-pilot.v1",
+  "session": "2026-09-16-choice-rich-battle-pilot",
+  "classification": "assisted_development_pilot_no_authority_promotion",
+  "capability": "Learn useful battle-attack choices from cartridge outcomes across distinct upstream Red-goal roots",
+  "method": {
+    "source": "Four authenticated red-battle-v2 source captures from four distinct upstream goal roots, split two train and two development before outcomes",
+    "assistance": "Teacher-only in-memory insertion of Guillotine with five PP in physical move slot 4 of the active battler and party record before any input; not a final-player action",
+    "frame_targets": [2048, 2101],
+    "trials_per_capture": 2,
+    "train_source_roots": 2,
+    "development_source_roots": 2,
+    "partition_overlap": 0,
+    "source_history_limit": "The four upstream roots are historically existing captures, not newly earned full-player runs",
+    "prediction_committed_before_development_outcomes": true,
+    "development_fit": false
+  },
+  "train": {
+    "trials_complete": 4,
+    "trials_quarantined": 0,
+    "informative_examples": 2,
+    "frozen_choices": [2, 3],
+    "observed_best_choices": [2, 2],
+    "frozen_regret_on_second_example": 3.1320754717,
+    "pilot_fit": "Frozen MLP representation, last layer only; 200 epochs, learning rate 0.01, prior L2 0.1, with explicit pilot minima two roots and one example per root below the ordinary four-by-four gate",
+    "fit_loss_before": 0.5835127801241351,
+    "fit_loss_after": 0.09674429227070659,
+    "pilot_choices_after_fit": [2, 2]
+  },
+  "development": {
+    "trials_complete": 4,
+    "trials_quarantined": 0,
+    "informative_examples": 2,
+    "observed_expected_utilities": [
+      [0.5657894736842105, null, 0.21772591857000995, 0.0],
+      [-3.0, null, 3.0, -3.0]
+    ],
+    "observed_best_choices": [0, 2],
+    "frozen_choices": [3, 2],
+    "pilot_choices": [2, 2],
+    "fixed_heuristic_choices": [2, 2],
+    "pilot_vs_frozen": "One better choice, one equivalent choice, zero worse choices",
+    "pilot_vs_fixed_heuristic": "Two equivalent choices",
+    "frozen_mean_selected_expected_utility": 1.5,
+    "pilot_mean_selected_expected_utility": 1.608862959285005,
+    "limitation": "The pilot improves one choice but still misses that capture's best move; both models get only one of two best preferences. Two assisted development roots cannot establish generalizable superiority."
+  },
+  "decision": {
+    "model_fit_created": true,
+    "pilot_model_private": true,
+    "battle_authority_promoted": false,
+    "collection_player_model_changed": false,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "red_checkpoint": "96/124 native-route registrations, 74 specimens, 198 cash; Model137 137 examples, 92 successes, 58 economy-qualified; fresh acceptance 0/5",
+    "gameplay_running": false,
+    "github_pushed": false,
+    "next": "Stop this two-root pilot. Seek a broader, more natural choice-rich train curriculum meeting ordinary independent-root and per-lineage coverage, with separately reserved development roots. Require measured advantage over both frozen ranker and fixed heuristic before battle-authority promotion; otherwise reconsider the battle-learning representation."
+  },
+  "private_receipts_sha256": {
+    "plan": "4ba4fe7e6a8e5e80d8d8f1933775cab496d6f79a8109dceb98df796845edbb5d",
+    "train_dataset": "7d447e6373ef64c6171ce6bead9918a4ddc28a2e3a5f021bea8b3e9f5945d098",
+    "train_failures": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb",
+    "pilot_model": "1d25e0d4258408146778d6cf5dd645de655e01941f30efd4286a44fe79fa9d66",
+    "fit_report": "54b33371cff5375bf724d05eb46fed3f17325c128fd856a737bbffa961effd29",
+    "development_prediction_commitment": "fe914cbbf32a61d495d89e1b5ff74cb51f2300e02dde4fda9721078f657fce36",
+    "development_dataset": "5740750da4a3e7964275912a7f9ab7c84d6367475425806f1af53ce59975a83a",
+    "development_failures": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb",
+    "development_evaluation": "a910c4a36f17d881b2fdba8e9cfcee8dc18e33f2e4de3664343c38da190aed7f"
+  }
+}

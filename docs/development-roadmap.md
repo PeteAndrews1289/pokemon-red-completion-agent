@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-battle-timing-and-contrast**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-choice-rich-battle-pilot**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-choice-rich-battle-pilot
+
+Two assisted train roots yielded one correctable 3.132-regret choice and a private last-layer fit. Four precommitted development trials across two separate roots showed one pilot win and one tie versus frozen, but two ties versus the fixed heuristic.
+
+**Deviation:** The changed choice still missed the best move. Two assisted examples per partition are below ordinary coverage; no battle authority, Red collection, fresh-run gate, or cross-title transfer advanced. No GitHub push.
+
+**Next:** Sol High, Fast off: inventory natural choice-rich battle contexts for four independent train roots with four distinct informative examples each, plus disjoint development roots. Stop or redesign if supply is absent; do not promote this pilot.
 
 ### 2026-09-16-battle-timing-and-contrast
 
