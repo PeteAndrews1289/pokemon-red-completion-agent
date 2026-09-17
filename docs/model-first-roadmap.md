@@ -46,7 +46,13 @@ now constructs authenticated Red training captures with controlled actor
 moves/PP and opponent current HP. One generated four-move state produced a
 real Tackle-versus-knockout contrast. The model chose a successful move at
 one RNG timing; no fit, natural transfer or authority promotion followed.
-Species, levels, stats and opponent moves are not yet controllable.
+The [level/stat extension](evidence/red-teacher-battle-level-stats-2026-09-17.json)
+now controls both levels, current/max HP and Attack, Defense, Speed and Special
+with exact cartridge readback. One bounded four-way turn exposed a frozen-model
+miss: it selected Guillotine for zero damage while Ice Beam dealt 44.4% HP.
+That is a correctable assisted train case, not a fit or model improvement.
+Species and opponent moves remain unsupported, and changed actor level does
+not yet recalculate party experience for longer-lived battles.
 
 This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
@@ -56,16 +62,15 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Model-directed battle experience | Expand verified teacher-only battle controls into varied consequential training states; the first generated four-way menu has real outcome contrast | Sol High, Fast off |
+| Model-directed battle experience | Generate varied, bounded train choices from the verified level/stat controls; the first level-adjusted four-way menu exposed one correctable frozen-model miss | Sol High, Fast off |
 | Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:90–120 minutes to add one coherent battle-generation axis,
-preferably a species/level/stat package, and verify its real cartridge
-readback and bounded execution. Then build prospective varied training
+Next time box:90–120 minutes to address level-consistent actor experience or
+enforce single-turn practice, then build prospective varied training
 configurations and multiple RNG trials. Do not fit a single generated case,
 count siblings as independent roots, lower the four-by-four gate, replay
 consumed trials or spend development roots before a justified challenger.
@@ -75,5 +80,5 @@ Teachers may use disclosed training assistance; final-player cheats remain forbi
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-teacher-battle-practice-factory-2026-09-17.json) ·
+[Latest evidence](evidence/red-teacher-battle-level-stats-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)

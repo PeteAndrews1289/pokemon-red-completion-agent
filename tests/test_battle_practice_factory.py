@@ -154,6 +154,22 @@ def test_red_factory_rejects_hp_above_max_before_writes():
 def test_practice_level_and_stats_validation_and_legacy_hash():
     baseline = _spec()
     assert baseline.configuration_sha256 == _spec().configuration_sha256
+    previous = _spec(
+        source_state_sha256="d629f64d9800ecd7dda6cb6b47f4c12f1e0f81a5124422fde8e1a28b11ad902f",
+        root_lineage_id=(
+            "red-goal-root-c1d575483e311b3a9854b0e85237f725c3da1412ed62ab142dcd82050c666435"
+        ),
+        actor_moves=[
+            {"move_ref": pokemon_red_move_ref(33), "pp": 20},
+            {"move_ref": pokemon_red_move_ref(70), "pp": 15},
+            {"move_ref": pokemon_red_move_ref(58), "pp": 10},
+            {"move_ref": pokemon_red_move_ref(12), "pp": 5},
+        ],
+        opponent_hp=77,
+    )
+    assert previous.configuration_sha256 == (
+        "b7dc83e42f5b7ab910b52b0dd10ee951b243998a3ce4f8c7989d96b8ef23e876"
+    )
     with pytest.raises(BattlePracticeError, match="actor_level"):
         _spec(actor_level=101)
     with pytest.raises(BattlePracticeError, match="five declared fields"):
