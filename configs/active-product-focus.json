@@ -29,26 +29,26 @@
     },
     {
       "capability": "Choose and execute legal battle attacks from semantic observations, then improve attack reliability and resource value with separate training and comparison scenarios.",
-      "cheapest_falsifier": "A distinct train timing diagnostic still loses candidate-level frame evidence, or a stronger complete train bank cannot yield a held-out advantage without regression.",
+      "cheapest_falsifier": "A small predeclared choice-rich train curriculum still supplies no correctable model regret, or a fitted candidate loses to the frozen ranker on disjoint upstream development roots.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new fit or promotion. Live cartridge outcomes now retain player faints as negative utility; the two timing trials gave no candidate preference.",
-        "blocker": "The separate prior timing failures have no per-candidate frame receipts; surviving natural train cases offered only one 0.025-utility baseline regret.",
-        "decision": "Keep the equality gate and do not replay consumed trials. Diagnose timing on a distinct prospectively frozen train state, then seek a meaningful choice contrast before fitting or opening development.",
+        "authority_delta": "No fit or promotion. Frozen battle ranker selected an observed best move in both new non-tied train captures; Model137 and Red progress unchanged.",
+        "blocker": "The authentic near-duplicate capture bank supplies little correctable battle regret; old timing mismatches are plausibly sleep-suppressed but individual frame counts were not retained.",
+        "decision": "Stop probing nearly identical states. Design a small predeclared choice-rich train curriculum, keep sleep/recovery separate from attack-value targets, and reserve disjoint upstream development roots for an actual fitted challenger.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-live-faint-outcome-2026-09-16.json",
-          "sha256": "9cec7e26b7d7d29bed46ba2b7cc2efb297264b1d9a058b532abdb26b31ab11a8"
+          "path": "docs/evidence/red-battle-timing-and-contrast-2026-09-16.json",
+          "sha256": "1bce653f1d83c47ec94417bd53eebe69ef652932cf60a5f59d3892c5e8c71313"
         },
-        "learning_output": "One additional authentic train expected-utility example: 2/2 trials and six retained negative player-faint outcomes, but zero informative choice contrasts. No fit or model-quality gain.",
-        "next_falsifier": "A distinct prospectively frozen train trial still cannot explain a timing mismatch, or hard states still give tied move outcomes.",
-        "next_session_goal": "Sol High, Fast off, about 45-75 minutes: diagnose timing on a distinct train capture and seek an authentic non-tied battle choice; no consumed replay or development opening.",
-        "product_alignment": "Retained losses remove one data censoring failure, but meaningful attack choice requires different outcome values across moves.",
-        "session_id": "2026-09-16-live-faint-qualification",
+        "learning_output": "Two additional authentic non-tied train examples from one root; 4/4 timing trials complete with zero quarantine and zero frozen-model regret. No fit or model-quality gain.",
+        "next_falsifier": "Predeclared diverse train contexts still show only correct frozen choices or no useful attack contrast; stop the battle fit proposal if so.",
+        "next_session_goal": "Sol High, Fast off, about 60-90 minutes: freeze a diverse choice-rich train curriculum and disjoint upstream development comparison, then run only the smallest justified train preflight. No fit or development opening without corrective signal.",
+        "product_alignment": "A transferable battle policy needs consequential, comparable attack choices that can expose model mistakes, not extra labels from near-duplicate easy turns.",
+        "session_id": "2026-09-16-battle-timing-and-contrast",
         "status": "closed",
-        "stop_condition": "Stop on consumed-trial replay, development fitting or opening, model promotion without a held-out advantage, full run, ROM hack, Crystal or GitHub publication.",
-        "transfer_result": "The fresh capture is distinct from consumed trial states but shares an upstream train root. Development remained unopened; no transfer or held-out policy advantage is claimed."
+        "stop_condition": "Stop on consumed-trial replay, fit without a correctable train error, development opening without a frozen challenger and precommitted predictions, promotion without held-out advantage, full run, ROM hack, Crystal or GitHub publication.",
+        "transfer_result": "Both new states share training-control-v6-train-02; development remained unopened. No independent generalization or held-out advantage is claimed."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Diagnose pre-attack timing on a distinct train capture, then find a hard non-tied battle contrast before fitting or opening development.",
+      "next_decision": "Freeze a diverse choice-rich battle curriculum with disjoint development roots; fit only if train outcomes show a correctable model error.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

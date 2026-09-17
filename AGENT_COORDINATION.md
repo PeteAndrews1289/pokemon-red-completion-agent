@@ -11,19 +11,18 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The natural near-boundary battle experiment yielded five complete train
-examples from eight selected captures; three were excluded by player faints
-or unequal pre-attack timing. There was too little baseline regret to justify
-a fit, so the eight held-out development captures were not opened. The
-bounded-turn executor retained six actual cartridge player-faint outcomes
-in 2/2 fresh trials, but all choices tied before move execution. This proves
-the loss representation, not battle learning. Player model and Red progress
-are unchanged; gameplay stopped and no GitHub push.
+Two additional authentic train captures completed 4/4 timing trials and yielded
+two non-tied move-value examples, but the frozen ranker chose an observed best
+move in each. They share a train root and add zero independent-lineage advantage.
+The consumed timing-mismatch state starts asleep; sleep suppression plausibly
+skips the pre-attack frame hook, but original candidate counts were not kept.
+No retry, fit, development opening, model promotion, Red progress or GitHub push.
 
-The separate five timing mismatches have no per-candidate frame receipts, so
-their cause remains unknown; future errors now include candidate counts. Next:
-prospectively diagnose timing on a distinct train state, then seek a meaningful
-move-value contrast before fitting or opening development. Sol High, Fast off.
+Next: stop sampling near-duplicate bank states. Prospectively design a small
+choice-rich train curriculum and separate upstream-root comparison, with any
+training-only interventions marked. Do not confuse sleep/recovery with attack
+choice or open held-out outcomes without a justified candidate. Sol High,
+Fast off.
 
 ## Reviewer contribution
 
@@ -38,4 +37,5 @@ Claude unused; refreshed Flash quota unavailable.
 [OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·
 [Natural battle evidence](docs/evidence/red-natural-battle-boundary-2026-09-16.json) ·
 [Live faint evidence](docs/evidence/red-live-faint-outcome-2026-09-16.json) ·
+[Timing and contrast evidence](docs/evidence/red-battle-timing-and-contrast-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

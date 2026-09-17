@@ -1130,3 +1130,23 @@ another Safari patch. The Red-first stage IDs, full fresh-run/124-species gate,
 ROM-hack prohibition and later Crystal/Emerald order are unchanged.
 
 [Evidence](evidence/red-assisted-safari-mechanics-probe-2026-09-16.json).
+
+## September 16 — stop near-duplicate battle sampling without a corrective signal
+
+Two additional authentic Red train captures yielded non-tied move outcomes in
+four completed timing trials, yet the frozen battle ranker chose an observed
+best attack in both. They share one upstream root. The older natural bank's
+only baseline regret was about 0.025 utility, so more adjacent snapshots are
+unlikely to justify a meaningful fit or an unseen promotion claim. A separate
+consumed timing-mismatch capture began asleep; sleep suppression is a specific
+plausible cause, but its historical per-candidate counts cannot be recovered.
+
+The immediate tactic changes from sampling nearby natural states to freezing
+a small, diverse, consequential train curriculum with a distinct-root
+development comparison. Teacher-only interventions may be proposed and marked
+under Pete's training rule, never offered to the final actor. A fit requires
+actual correctable train error; development outcomes require a prospectively
+frozen challenger and predictions. This changes no Red-first stage, fresh
+start/124-species exit criterion, ROM-hack gate or later Crystal/Emerald order.
+
+[Evidence](evidence/red-battle-timing-and-contrast-2026-09-16.json).

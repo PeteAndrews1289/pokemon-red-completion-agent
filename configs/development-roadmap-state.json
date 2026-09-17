@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-live-faint-qualification",
+  "as_of_session": "2026-09-16-battle-timing-and-contrast",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1688,6 +1688,12 @@
       "result": "A distinct train capture completed 2/2 cartridge trials with six retained player faints at -2.3019 utility. All moves tied before execution; no fit or model gain.",
       "deviation": "Five old timing failures lack candidate-level frame evidence; future errors now report it. No consumed replay, development opening, registration, stage or fresh-run gate change.",
       "next": "Sol High, Fast off: diagnose timing on a distinct train state, then seek a non-tied hard battle choice before fitting. No full run or GitHub push."
+    },
+    {
+      "session": "2026-09-16-battle-timing-and-contrast",
+      "result": "Two distinct train states completed 4/4 timing trials and yielded non-tied move values. The frozen ranker selected a best move both times: zero regret and no fit.",
+      "deviation": "One shared train root; old mismatch begins asleep, but its missing candidate counts preclude a proven root cause. Stop near-duplicate sampling; no model, stage or fresh-run gate change.",
+      "next": "Sol High, Fast off: freeze a diverse choice-rich train curriculum with distinct development roots. Require a correctable train error before fitting or opening held-out outcomes."
     }
   ],
   "closed_milestones": [
