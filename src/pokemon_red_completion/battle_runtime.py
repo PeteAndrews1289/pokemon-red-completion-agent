@@ -605,10 +605,11 @@ def execute_bounded_battle_move_turn(
     selected_slot: int,
     expected_battle_state: int,
     minimum_pre_attack_frames: int | None = None,
+    settle_to_next_decision: bool = False,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
     label: str = "bounded battle turn",
 ) -> BattleTurnExecution:
-    """Execute one semantic move choice and stop after its observed turn effect.
+    """Execute one semantic move choice and observe its bounded result.
 
     Unlike :func:`run_adaptive_trainer_battle`, this entry point never calls a
     teacher or policy and never continues to the next decision.  It reuses the
@@ -632,6 +633,8 @@ def execute_bounded_battle_move_turn(
         or minimum_pre_attack_frames < 1
     ):
         raise ValueError("minimum_pre_attack_frames must be a positive integer or None")
+    if not isinstance(settle_to_next_decision, bool):
+        raise TypeError("settle_to_next_decision must be a bool")
     if _BATTLE_POLICY_OVERRIDE.get() is not None:
         raise BattleRuntimeError(
             f"{label} cannot run while a global battle-policy override is active."
@@ -691,6 +694,18 @@ def execute_bounded_battle_move_turn(
             before_attack=equalize_and_record_pre_attack_frames,
             allow_player_faint=True,
         )
+        if settle_to_next_decision:
+            _await_next_battle_decision(
+                reader,
+                measured,
+                expected_map=expected_map,
+                expected_battle_state=expected_battle_state,
+                initial_raw=initial,
+                slot=slot,
+                move_executed=move_executed,
+                timing=timing,
+                label=label,
+            )
         final = reader.read()
         _require_present_turn_state(
             final,
@@ -711,6 +726,60 @@ def execute_bounded_battle_move_turn(
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)
+
+
+def _await_next_battle_decision(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    *,
+    expected_map: int,
+    expected_battle_state: int,
+    initial_raw: RawGameState,
+    slot: int,
+    move_executed: bool,
+    timing: BattleRuntimeTiming,
+    label: str,
+) -> None:
+    """Finish opponent response without selecting a second player action."""
+
+    for pulse in range(timing.max_post_attack_transition_pulses + 1):
+        raw = reader.read()
+        _require_present_turn_state(
+            raw, expected_map=expected_map, label=label, allow_player_faint=True
+        )
+        if move_executed:
+            _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
+        if raw.battle_state == 0 or (raw.battler_hp or 0) == 0:
+            return
+        if raw.battle_state != expected_battle_state:
+            raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+        if menu.phase is BattleMenuPhase.MAIN:
+            # A one-frame MAIN signature can be stale during animation. Verify
+            # that the next decision remains available without pressing A.
+            _wait(executor, timing.menu_wait_frames)
+            stable = reader.read()
+            _require_present_turn_state(
+                stable, expected_map=expected_map, label=label, allow_player_faint=True
+            )
+            if move_executed:
+                _verify_selected_turn_pp(initial_raw, stable, slot=slot, label=label)
+            if stable.battle_state == 0 or (stable.battler_hp or 0) == 0:
+                return
+            if (
+                _validated_menu(reader.read_battle_menu_state(stable), label=label).phase
+                is BattleMenuPhase.MAIN
+            ):
+                return
+        if pulse == timing.max_post_attack_transition_pulses:
+            break
+        if menu.phase is BattleMenuPhase.UNKNOWN:
+            _pulse(executor, MacroAction(MacroActionKind.CONFIRM), timing.attack_wait_frames)
+        elif menu.phase is BattleMenuPhase.MOVE:
+            raise BattleRuntimeError(f"{label} reached a second move selection before settlement.")
+        else:
+            raise BattleRuntimeError(f"{label} reached an unsupported turn phase.")
+    raise BattleRuntimeError(f"{label} did not reach the next decision boundary.")
 
 
 @diagnose_battle_runtime

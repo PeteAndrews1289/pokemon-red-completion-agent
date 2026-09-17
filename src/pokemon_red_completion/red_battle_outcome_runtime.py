@@ -150,6 +150,7 @@ def execute_red_battle_candidate(
             selected_slot=prepared.features.slot_indices[candidate_index] + 1,
             expected_battle_state=capture.manifest.expected_battle_state,
             minimum_pre_attack_frames=COUNTERFACTUAL_PRE_ATTACK_FRAMES,
+            settle_to_next_decision=True,
             label="model-selected Red battle action",
         )
     return RedBattleCandidateExecution(
@@ -207,6 +208,7 @@ def collect_red_battle_outcome_example(
                 selected_slot=prepared.features.slot_indices[candidate_index] + 1,
                 expected_battle_state=capture.manifest.expected_battle_state,
                 minimum_pre_attack_frames=minimum_pre_attack_frames,
+                settle_to_next_decision=True,
                 label="authenticated Red battle counterfactual",
             )
             outcome = project_red_battle_turn_outcome(execution)

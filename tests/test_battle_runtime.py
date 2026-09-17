@@ -327,6 +327,72 @@ def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
     assert confirmations == 2
 
 
+def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif confirmations == 2:
+            runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif confirmations == 3:
+            runtime.raw = replace(runtime.raw, first_party_hp=19)
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = advance
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=1,
+        settle_to_next_decision=True,
+    )
+
+    assert result.final_state.enemy_hp == 11
+    assert result.final_state.battler_hp == 19
+    assert result.final_state.first_party_pp == (34, 30, 30, 11)
+    assert result.actions_executed == 7
+    assert result.frames_executed == 606
+    assert confirmations == 3
+
+
+def test_bounded_move_turn_settlement_fails_closed_without_next_boundary() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif confirmations == 2:
+            runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+    timing = replace(BattleRuntimeTiming(), max_post_attack_transition_pulses=2)
+    with pytest.raises(BattleRuntimeError, match="next decision boundary"):
+        execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1,
+            expected_battle_state=1,
+            settle_to_next_decision=True,
+            timing=timing,
+        )
+    assert runtime.raw.first_party_pp == (34, 30, 30, 11)
+
+
 @pytest.mark.parametrize("selected_move_spent", [False, True])
 def test_bounded_move_turn_records_faint_as_an_outcome(
     selected_move_spent: bool,

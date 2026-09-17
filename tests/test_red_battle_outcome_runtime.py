@@ -111,6 +111,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     loaded: list[bytes] = []
     selected_slots: list[int] = []
     pre_attack_targets: list[int] = []
+    settlement_targets: list[bool] = []
     retained: list[tuple[int, BattleTurnOutcome]] = []
     events: list[str] = []
 
@@ -131,6 +132,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
         pre_attack_targets.append(kwargs["minimum_pre_attack_frames"])
+        settlement_targets.append(kwargs["settle_to_next_decision"])
         events.append(f"execute:{kwargs['selected_slot']}")
         return BattleTurnExecution(
             _raw(),
@@ -196,6 +198,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
         for outcome in collection.outcomes
     )
     assert pre_attack_targets == [2_079, 2_079]
+    assert settlement_targets == [True, True]
     assert events == [
         "load",
         "claim:0",
@@ -238,6 +241,7 @@ def test_selected_candidate_executes_without_teacher(
     def execute(reader, executor, **kwargs):  # type: ignore[no-untyped-def]
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
+        assert kwargs["settle_to_next_decision"] is True
         return BattleTurnExecution(_raw(), _raw(), kwargs["selected_slot"], 1, 3_000, True, 2_048)
 
     monkeypatch.setattr(
