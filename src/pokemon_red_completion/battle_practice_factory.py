@@ -34,12 +34,45 @@ class PracticeMove:
 
 
 @dataclass(frozen=True, slots=True)
+class PracticeStats:
+    max_hp: int
+    attack: int
+    defense: int
+    speed: int
+    special: int
+
+    def __post_init__(self) -> None:
+        for name in ("max_hp", "attack", "defense", "speed", "special"):
+            value = getattr(self, name)
+            if type(value) is not int or not 1 <= value <= 999:  # noqa: E721
+                raise BattlePracticeError(f"practice {name} must be 1..999")
+
+    @classmethod
+    def from_dict(cls, value: object) -> PracticeStats:
+        fields = {"max_hp", "attack", "defense", "speed", "special"}
+        if not isinstance(value, dict) or set(value) != fields:
+            raise BattlePracticeError("practice stats need all five declared fields")
+        return cls(**value)
+
+    def public_dict(self) -> dict[str, int]:
+        return {
+            name: getattr(self, name)
+            for name in ("max_hp", "attack", "defense", "speed", "special")
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class BattlePracticeSpec:
     source_state_sha256: str
     root_lineage_id: str
     partition: ScenarioPartition
     actor_moves: tuple[PracticeMove, ...]
     opponent_hp: int
+    actor_level: int | None = None
+    opponent_level: int | None = None
+    actor_stats: PracticeStats | None = None
+    opponent_stats: PracticeStats | None = None
+    actor_hp: int | None = None
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
@@ -58,6 +91,24 @@ class BattlePracticeSpec:
             raise BattlePracticeError("practice moves must be distinct alternatives")
         if type(self.opponent_hp) is not int or self.opponent_hp <= 0:  # noqa: E721
             raise BattlePracticeError("practice opponent HP must be positive")
+        for name in ("actor_level", "opponent_level"):
+            level = getattr(self, name)
+            if level is not None and (type(level) is not int or not 1 <= level <= 100):  # noqa: E721
+                raise BattlePracticeError(f"practice {name} must be 1..100")
+        for name in ("actor_stats", "opponent_stats"):
+            stats = getattr(self, name)
+            if stats is not None and not isinstance(stats, PracticeStats):
+                raise BattlePracticeError(f"practice {name} differs")
+        if self.actor_hp is not None and (type(self.actor_hp) is not int or self.actor_hp <= 0):  # noqa: E721
+            raise BattlePracticeError("practice actor HP must be positive")
+        if (
+            self.actor_stats is not None
+            and self.actor_hp is not None
+            and self.actor_hp > self.actor_stats.max_hp
+        ):
+            raise BattlePracticeError("practice actor HP exceeds declared maximum")
+        if self.opponent_stats is not None and self.opponent_hp > self.opponent_stats.max_hp:
+            raise BattlePracticeError("practice opponent HP exceeds declared maximum")
 
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
@@ -70,7 +121,12 @@ class BattlePracticeSpec:
             "actor_moves",
             "opponent_hp",
         }
-        if not isinstance(value, dict) or set(value) != required:
+        optional = {"actor_level", "opponent_level", "actor_stats", "opponent_stats", "actor_hp"}
+        if (
+            not isinstance(value, dict)
+            or not required <= set(value)
+            or set(value) - required - optional
+        ):
             raise BattlePracticeError("unsupported or missing practice condition")
         moves = value["actor_moves"]
         if not isinstance(moves, list) or any(
@@ -87,21 +143,51 @@ class BattlePracticeSpec:
                     PracticeMove(move_ref=move["move_ref"], pp=move["pp"]) for move in moves
                 ),
                 opponent_hp=value["opponent_hp"],
+                actor_level=value.get("actor_level"),
+                opponent_level=value.get("opponent_level"),
+                actor_stats=(
+                    PracticeStats.from_dict(value["actor_stats"])
+                    if value.get("actor_stats") is not None
+                    else None
+                ),
+                opponent_stats=(
+                    PracticeStats.from_dict(value["opponent_stats"])
+                    if value.get("opponent_stats") is not None
+                    else None
+                ),
+                actor_hp=value.get("actor_hp"),
             )
         except (TypeError, ValueError, KeyError) as error:
             raise BattlePracticeError(f"invalid practice condition: {error}") from error
 
     @property
     def configuration_sha256(self) -> str:
-        return canonical_sha256(
-            {
-                "schema": "pokemon.core.battle-practice-configuration.v1",
-                "source_state_sha256": self.source_state_sha256,
-                "root_lineage_id": self.root_lineage_id,
-                "partition": self.partition.value,
-                "actor_moves": [
-                    {"move_ref": move.move_ref, "pp": move.pp} for move in self.actor_moves
-                ],
-                "opponent_hp": self.opponent_hp,
-            }
-        )
+        configuration: dict[str, object] = {
+            "schema": "pokemon.core.battle-practice-configuration.v1",
+            "source_state_sha256": self.source_state_sha256,
+            "root_lineage_id": self.root_lineage_id,
+            "partition": self.partition.value,
+            "actor_moves": [
+                {"move_ref": move.move_ref, "pp": move.pp} for move in self.actor_moves
+            ],
+            "opponent_hp": self.opponent_hp,
+        }
+        if any(
+            value is not None
+            for value in (
+                self.actor_level,
+                self.opponent_level,
+                self.actor_stats,
+                self.opponent_stats,
+                self.actor_hp,
+            )
+        ):
+            configuration["schema"] = "pokemon.core.battle-practice-configuration.v2"
+            configuration.update(
+                actor_level=self.actor_level,
+                opponent_level=self.opponent_level,
+                actor_stats=self.actor_stats.public_dict() if self.actor_stats else None,
+                opponent_stats=self.opponent_stats.public_dict() if self.opponent_stats else None,
+                actor_hp=self.actor_hp,
+            )
+        return canonical_sha256(configuration)
