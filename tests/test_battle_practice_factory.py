@@ -72,8 +72,23 @@ class FakeReader:
                 address + 1, default & 255
             )
 
+        party_bases = tuple(int(RamAddress.PARTY_MON_1) + i * PARTY_STRUCT_STRIDE for i in range(6))
+        party_species = tuple(self.memory.get(b, 28) for b in party_bases)
+
         return SimpleNamespace(
             battle_state=1,
+            party_count=6,
+            party_species_ids=party_species,
+            party_hp=tuple(word(b + 1, 90) for b in party_bases),
+            party_max_hp=tuple(word(b + 34, 90) for b in party_bases),
+            party_levels=tuple(self.memory.get(b + 33, 30) for b in party_bases),
+            party_status=tuple(self.memory.get(b + 4, 0) for b in party_bases),
+            party_moves=tuple(
+                tuple(self.memory.get(b + 8 + i, 0) for i in range(4)) for b in party_bases
+            ),
+            party_pp=tuple(
+                tuple(self.memory.get(b + 29 + i, 0) for i in range(4)) for b in party_bases
+            ),
             map_id=165,
             active_party_index=1,
             active_party_species_id=self.memory.get(base + PARTY_SPECIES_OFFSET, 28),
@@ -252,6 +267,69 @@ def test_red_factory_rejects_incoherent_source_mirror_before_writes():
     with pytest.raises(BattlePracticeError, match="source battle and party mirrors"):
         red.materialize_red_train_practice(reader, reader.memory, _spec(actor_level=24))
     assert reader.memory == before
+
+
+def test_reserve_spec_validation_and_hash():
+    reserve = {
+        "party_slot": 1,
+        "species_ref": pokemon_red_species_ref(84),
+        "level": 35,
+        "moves": [{"move_ref": pokemon_red_move_ref(85), "pp": 15}],
+    }
+    assert _spec(party_reserves=[reserve]).configuration_sha256 != _spec().configuration_sha256
+    with pytest.raises(BattlePracticeError, match="distinct slots"):
+        _spec(party_reserves=[reserve, reserve])
+    with pytest.raises(BattlePracticeError, match="1..100"):
+        _spec(party_reserves=[{**reserve, "level": 101}])
+    with pytest.raises(BattlePracticeError, match="reserve record differs"):
+        _spec(party_reserves=[{**reserve, "unknown": 1}])
+
+
+def test_red_factory_materializes_reserve_party_member(monkeypatch):
+    reader = _reader()
+    memory = reader.memory
+    base = int(RamAddress.PARTY_MON_1)
+    memory[base] = 28
+    memory[int(RamAddress.PARTY_SPECIES)] = 28
+    monkeypatch.setattr(red.PokemonRedObservationEncoder, "from_state_reader", lambda _r: object())
+    monkeypatch.setattr(
+        red,
+        "prepare_red_battle_scenario",
+        lambda _e, _r: SimpleNamespace(
+            supported_candidate_mask=(True, True, False, False),
+            initial_observation_sha256="b" * 64,
+        ),
+    )
+    species = SimpleNamespace(
+        types=(23, 23),
+        catch_rate=190,
+        nickname_bytes=b"PIKACHU\x50\x50\x50\x50",
+        neutral_stats=lambda _level: PracticeStats(70, 55, 40, 80, 45),
+        experience_at_level=lambda _level: 12345,
+    )
+    reserve = {
+        "party_slot": 1,
+        "species_ref": pokemon_red_species_ref(84),
+        "level": 35,
+        "moves": [
+            {"move_ref": pokemon_red_move_ref(85), "pp": 15},
+            {"move_ref": pokemon_red_move_ref(98), "pp": 30},
+        ],
+        "hp": 50,
+    }
+    receipt = red.materialize_red_train_practice(
+        reader,
+        memory,
+        _spec(party_reserves=[reserve]),
+        cartridge=SimpleNamespace(species=lambda _id: species),
+    )
+    assert receipt.party_reserves is not None
+    assert receipt.party_reserves[0]["species_id"] == 84
+    assert reader.read().party_species_ids[0] == 84
+    assert reader.read().party_hp[0] == 50
+    assert reader.read().party_moves[0] == (85, 98, 0, 0)
+    assert memory[base + 3] == memory[base + 33] == 35
+    assert bytes(memory[red.PARTY_NICKNAMES_BASE + i] for i in range(11)) == species.nickname_bytes
 
 
 def test_red_factory_changes_both_species_and_opponent_moves(monkeypatch):

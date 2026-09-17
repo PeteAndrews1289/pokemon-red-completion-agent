@@ -14,6 +14,10 @@ def _synthetic_rom(monkeypatch):
     reverse_types = {name: code for code, name in GEN1_TYPE_NAMES_BY_CODE.items()}
     rom = bytearray(0x40000)
     for internal, national in mapping.items():
+        name_at = practice._INTERNAL_NAMES_OFFSET + (internal - 1) * practice._INTERNAL_NAME_SIZE
+        rom[name_at : name_at + practice._INTERNAL_NAME_SIZE] = (
+            bytes([0x80 + internal % 26]) + b"\x50" * 9
+        )
         offset = (
             practice._MEW_BASE_STATS_OFFSET
             if national == 151
@@ -50,6 +54,8 @@ def test_all_151_species_and_move_sources(monkeypatch):
         assert species.teachable_moves_at_level(20) == (33, 45, 73, 75, 5)
         assert species.neutral_stats(30).max_hp == 67
         assert species.experience_at_level(5) == 135
+        assert len(species.nickname_bytes) == 11
+        assert species.nickname_bytes[-1] == 0x50
 
 
 def test_cartridge_rejects_table_corruption_and_unknown_species(monkeypatch):

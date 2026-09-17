@@ -18,6 +18,8 @@ from .red_battle_catalog import PokemonRedBattleCatalog, pokemon_red_species_ref
 _BASE_STATS_OFFSET = 0x383DE
 _MEW_BASE_STATS_OFFSET = 0x425B
 _BASE_ROW_SIZE = 28
+_INTERNAL_NAMES_OFFSET = 0x1C21E
+_INTERNAL_NAME_SIZE = 10
 _TMHM_MOVES = (
     5,
     13,
@@ -89,6 +91,7 @@ class RedPracticeSpecies:
     starting_moves: tuple[int, ...]
     level_up_moves: tuple[tuple[int, int], ...]
     tmhm_moves: tuple[int, ...]
+    nickname_bytes: bytes
 
     def intrinsic_moves_at_level(self, level: int) -> tuple[int, ...]:
         """Starting plus own level-up moves, not evolution-inherited or TM moves."""
@@ -185,6 +188,10 @@ class RedPracticeCartridge:
                 for index, move in enumerate(_TMHM_MOVES)
                 if row[20 + index // 8] & (1 << (index % 8))
             )
+            name_at = _INTERNAL_NAMES_OFFSET + (internal_id - 1) * _INTERNAL_NAME_SIZE
+            name = rom[name_at : name_at + _INTERNAL_NAME_SIZE]
+            if len(name) != _INTERNAL_NAME_SIZE or not name or name[0] in {0, 0x50}:
+                raise BattlePracticeError("Red practice species name table differs")
             species[internal_id] = RedPracticeSpecies(
                 internal_id=internal_id,
                 national_number=national_number,
@@ -196,6 +203,7 @@ class RedPracticeCartridge:
                 starting_moves=starting,
                 level_up_moves=learnsets[national_number],
                 tmhm_moves=tmhm,
+                nickname_bytes=name + b"\x50",
             )
         if len(species) != 151:
             raise BattlePracticeError("Red practice cartridge lacks 151 species")

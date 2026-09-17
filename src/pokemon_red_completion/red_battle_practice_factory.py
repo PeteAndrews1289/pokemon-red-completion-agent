@@ -2,8 +2,8 @@
 
 Write authority is deliberately absent from model/executor interfaces. Only an
 isolated emulator copy may call this adapter; it never edits a save on disk.
-Supported axes are both Gen I species, moves/PP, levels, five-stat blocks and
-current HP. Status, items, multi-member teams and trainer AI remain unsupported.
+Supported axes are both Gen I species, moves/PP, levels, five-stat blocks,
+current HP and existing reserve party slots. Trainer AI remains unsupported.
 """
 
 from __future__ import annotations
@@ -24,6 +24,7 @@ from .observation import (
     PARTY_MOVES_OFFSET,
     PARTY_PP_OFFSET,
     PARTY_SPECIES_OFFSET,
+    PARTY_STATUS_OFFSET,
     PARTY_STRUCT_STRIDE,
     BattleMenuPhase,
     PokemonRedStateReader,
@@ -32,6 +33,7 @@ from .observation import (
 from .red_battle_catalog import PokemonRedBattleCatalog
 from .red_battle_practice_cartridge import RedPracticeCartridge
 from .red_battle_scenario import prepare_red_battle_scenario
+from .red_pokedex import NICKNAME_LENGTH, PARTY_NICKNAMES_BASE
 from .red_trajectory import PokemonRedObservationEncoder
 
 _BATTLE_MOVES = 0xD01C  # pinned wBattleMonMoves, mirrored in active party struct
@@ -141,6 +143,7 @@ class RedPracticeReceipt:
     opponent_move_ids: tuple[int, ...] | None = None
     opponent_pp: tuple[int, ...] | None = None
     actor_experience: int | None = None
+    party_reserves: tuple[dict[str, object], ...] | None = None
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -179,6 +182,8 @@ class RedPracticeReceipt:
             result["opponent_pp"] = list(self.opponent_pp or ())
         if self.actor_experience is not None:
             result["actor_experience"] = self.actor_experience
+        if self.party_reserves is not None:
+            result["party_reserves"] = list(self.party_reserves)
         return result
 
 
@@ -229,7 +234,9 @@ def materialize_red_train_practice(
         else (None, None)
     )
     if (
-        spec.actor_species_ref is not None or spec.opponent_species_ref is not None
+        spec.actor_species_ref is not None
+        or spec.opponent_species_ref is not None
+        or spec.party_reserves is not None
     ) and cartridge is None:
         raise BattlePracticeError("species practice requires authenticated cartridge data")
     try:
@@ -289,6 +296,37 @@ def materialize_red_train_practice(
     )
     if actor_hp is None or actor_max_hp is None or actor_hp > actor_max_hp:
         raise BattlePracticeError("practice actor HP exceeds maximum")
+
+    # Resolve and validate the entire proposed team before touching emulator RAM.
+    resolved_reserves: list[
+        tuple[int, int, int, PracticeStats, tuple[int, ...], tuple[int, ...], object]
+    ] = []
+    if spec.party_reserves is not None:
+        assert cartridge is not None
+        if before.party_count is None or before.party_species_ids is None:
+            raise BattlePracticeError("source party inventory is unavailable")
+        for reserve in spec.party_reserves:
+            index = reserve.party_slot - 1
+            if index >= before.party_count or index == before.active_party_index:
+                raise BattlePracticeError("reserve slot must exist and not be active")
+            try:
+                catalog.resolve_species(reserve.species_ref)
+                species_id = int(reserve.species_ref.rsplit(":", 1)[1])
+            except (ValueError, IndexError) as error:
+                raise BattlePracticeError("reserve species reference differs") from error
+            species_data = cartridge.species(species_id)
+            stats = reserve.stats or species_data.neutral_stats(reserve.level)
+            hp = reserve.hp if reserve.hp is not None else stats.max_hp
+            if hp > stats.max_hp:
+                raise BattlePracticeError("reserve HP exceeds maximum")
+            moves, pp = _resolved_moves(reserve.moves, catalog)
+            base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+            if (
+                memory[int(RamAddress.PARTY_SPECIES) + index] != before.party_species_ids[index]
+                or memory[base + PARTY_SPECIES_OFFSET] != before.party_species_ids[index]
+            ):
+                raise BattlePracticeError("source reserve species mirrors differ")
+            resolved_reserves.append((index, species_id, hp, stats, moves, pp, species_data))
 
     # Battle, party and unmodified stat blocks are distinct Gen I copies.
     # Verify the source mirror before editing, then verify every edited copy.
@@ -389,7 +427,64 @@ def materialize_red_train_practice(
     memory[int(RamAddress.ENEMY_HP)] = spec.opponent_hp >> 8
     memory[int(RamAddress.ENEMY_HP) + 1] = spec.opponent_hp & 0xFF
 
+    for index, species_id, hp, stats, moves, pp, data in resolved_reserves:
+        base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+        reserve = next(item for item in spec.party_reserves or () if item.party_slot == index + 1)
+        memory[int(RamAddress.PARTY_SPECIES) + index] = species_id
+        memory[base + PARTY_SPECIES_OFFSET] = species_id
+        _put_u16(memory, base + PARTY_HP_OFFSET, hp)
+        memory[base + _PARTY_BOX_LEVEL_OFFSET] = reserve.level
+        memory[base + PARTY_LEVEL_OFFSET] = reserve.level
+        memory[base + PARTY_STATUS_OFFSET] = 0
+        memory[base + 5], memory[base + 6] = data.types
+        memory[base + 7] = data.catch_rate
+        _put_u24(memory, base + _PARTY_EXPERIENCE_OFFSET, data.experience_at_level(reserve.level))
+        for offset in range(10):
+            memory[base + _PARTY_STAT_EXP_OFFSET + offset] = 0
+        memory[base + _PARTY_DVS_OFFSET], memory[base + _PARTY_DVS_OFFSET + 1] = 0x88, 0x88
+        _put_stats(memory, base + PARTY_MAX_HP_OFFSET, stats)
+        for offset, (move, amount) in enumerate(zip(moves, pp, strict=True)):
+            memory[base + PARTY_MOVES_OFFSET + offset] = move
+            memory[base + PARTY_PP_OFFSET + offset] = amount
+        for offset, value in enumerate(data.nickname_bytes):
+            memory[PARTY_NICKNAMES_BASE + index * NICKNAME_LENGTH + offset] = value
+
     after = reader.read()
+    for index, species_id, hp, stats, moves, pp, data in resolved_reserves:
+        base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+        reserve = next(item for item in spec.party_reserves or () if item.party_slot == index + 1)
+        if (
+            after.party_species_ids is None
+            or after.party_species_ids[index] != species_id
+            or after.party_hp is None
+            or after.party_hp[index] != hp
+            or after.party_max_hp is None
+            or after.party_max_hp[index] != stats.max_hp
+            or after.party_levels is None
+            or after.party_levels[index] != reserve.level
+            or after.party_status is None
+            or after.party_status[index] != 0
+            or after.party_moves is None
+            or after.party_moves[index] != moves
+            or after.party_pp is None
+            or after.party_pp[index] != pp
+            or memory[base + _PARTY_BOX_LEVEL_OFFSET] != reserve.level
+            or tuple(memory[base + 5 + offset] for offset in range(2)) != data.types
+            or memory[base + 7] != data.catch_rate
+            or _stats(memory, base + PARTY_MAX_HP_OFFSET) != stats
+            or tuple(memory[base + _PARTY_EXPERIENCE_OFFSET + offset] for offset in range(3))
+            != tuple(data.experience_at_level(reserve.level).to_bytes(3, "big"))
+            or tuple(memory[base + _PARTY_STAT_EXP_OFFSET + offset] for offset in range(10))
+            != (0,) * 10
+            or (memory[base + _PARTY_DVS_OFFSET], memory[base + _PARTY_DVS_OFFSET + 1])
+            != (0x88, 0x88)
+            or tuple(
+                memory[PARTY_NICKNAMES_BASE + index * NICKNAME_LENGTH + offset]
+                for offset in range(NICKNAME_LENGTH)
+            )
+            != tuple(data.nickname_bytes)
+        ):
+            raise BattlePracticeError("assisted reserve did not read back consistently")
     if (
         after.map_id != before.map_id
         or after.battle_state != before.battle_state
@@ -535,4 +630,24 @@ def materialize_red_train_practice(
         opponent_move_ids=enemy_moves,
         opponent_pp=enemy_pp,
         actor_experience=actor_experience,
+        party_reserves=(
+            tuple(
+                {
+                    "party_slot": index + 1,
+                    "species_id": species_id,
+                    "level": next(
+                        item.level
+                        for item in spec.party_reserves or ()
+                        if item.party_slot == index + 1
+                    ),
+                    "hp": hp,
+                    "max_hp": stats.max_hp,
+                    "move_ids": list(moves),
+                    "pp": list(pp),
+                }
+                for index, species_id, hp, stats, moves, pp, _ in resolved_reserves
+            )
+            if spec.party_reserves is not None
+            else None
+        ),
     )

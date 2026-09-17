@@ -62,6 +62,72 @@ class PracticeStats:
 
 
 @dataclass(frozen=True, slots=True)
+class PracticeReserve:
+    party_slot: int  # one-based, matching the in-game party display
+    species_ref: str
+    level: int
+    moves: tuple[PracticeMove, ...]
+    hp: int | None = None
+    stats: PracticeStats | None = None
+
+    def __post_init__(self) -> None:
+        if type(self.party_slot) is not int or not 1 <= self.party_slot <= 6:  # noqa: E721
+            raise BattlePracticeError("reserve party slot must be 1..6")
+        if not isinstance(self.species_ref, str) or not self.species_ref:
+            raise BattlePracticeError("reserve species reference differs")
+        if type(self.level) is not int or not 1 <= self.level <= 100:  # noqa: E721
+            raise BattlePracticeError("reserve level must be 1..100")
+        if (
+            not isinstance(self.moves, tuple)
+            or not 1 <= len(self.moves) <= 4
+            or any(not isinstance(move, PracticeMove) for move in self.moves)
+            or len({move.move_ref for move in self.moves}) != len(self.moves)
+        ):
+            raise BattlePracticeError("reserve moves must be one to four distinct moves")
+        if self.hp is not None and (type(self.hp) is not int or self.hp <= 0):  # noqa: E721
+            raise BattlePracticeError("reserve HP must be positive")
+        if self.stats is not None and not isinstance(self.stats, PracticeStats):
+            raise BattlePracticeError("reserve stats differ")
+        if self.hp is not None and self.stats is not None and self.hp > self.stats.max_hp:
+            raise BattlePracticeError("reserve HP exceeds declared maximum")
+
+    @classmethod
+    def from_dict(cls, value: object) -> PracticeReserve:
+        required = {"party_slot", "species_ref", "level", "moves"}
+        if (
+            not isinstance(value, dict)
+            or not required <= set(value)
+            or set(value) - required - {"hp", "stats"}
+        ):
+            raise BattlePracticeError("reserve record differs")
+        moves = value["moves"]
+        if not isinstance(moves, list) or any(
+            not isinstance(move, dict) or set(move) != {"move_ref", "pp"} for move in moves
+        ):
+            raise BattlePracticeError("reserve move records differ")
+        return cls(
+            party_slot=value["party_slot"],
+            species_ref=value["species_ref"],
+            level=value["level"],
+            moves=tuple(PracticeMove(**move) for move in moves),
+            hp=value.get("hp"),
+            stats=PracticeStats.from_dict(value["stats"])
+            if value.get("stats") is not None
+            else None,
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "party_slot": self.party_slot,
+            "species_ref": self.species_ref,
+            "level": self.level,
+            "moves": [{"move_ref": move.move_ref, "pp": move.pp} for move in self.moves],
+            "hp": self.hp,
+            "stats": self.stats.public_dict() if self.stats else None,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class BattlePracticeSpec:
     source_state_sha256: str
     root_lineage_id: str
@@ -76,6 +142,7 @@ class BattlePracticeSpec:
     actor_species_ref: str | None = None
     opponent_species_ref: str | None = None
     opponent_moves: tuple[PracticeMove, ...] | None = None
+    party_reserves: tuple[PracticeReserve, ...] | None = None
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
@@ -123,6 +190,14 @@ class BattlePracticeSpec:
             or len({move.move_ref for move in self.opponent_moves}) != len(self.opponent_moves)
         ):
             raise BattlePracticeError("practice opponent moves must be one to four distinct moves")
+        if self.party_reserves is not None and (
+            not isinstance(self.party_reserves, tuple)
+            or not 1 <= len(self.party_reserves) <= 5
+            or any(not isinstance(reserve, PracticeReserve) for reserve in self.party_reserves)
+            or len({reserve.party_slot for reserve in self.party_reserves})
+            != len(self.party_reserves)
+        ):
+            raise BattlePracticeError("practice reserves must occupy one to five distinct slots")
 
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
@@ -144,6 +219,7 @@ class BattlePracticeSpec:
             "actor_species_ref",
             "opponent_species_ref",
             "opponent_moves",
+            "party_reserves",
         }
         if (
             not isinstance(value, dict)
@@ -165,6 +241,9 @@ class BattlePracticeSpec:
             )
         ):
             raise BattlePracticeError("practice opponent move records differ")
+        party_reserves = value.get("party_reserves")
+        if party_reserves is not None and not isinstance(party_reserves, list):
+            raise BattlePracticeError("practice reserve records differ")
         try:
             partition = ScenarioPartition(value["partition"])
             return cls(
@@ -196,6 +275,11 @@ class BattlePracticeSpec:
                         for move in opponent_moves
                     )
                     if opponent_moves is not None
+                    else None
+                ),
+                party_reserves=(
+                    tuple(PracticeReserve.from_dict(reserve) for reserve in party_reserves)
+                    if party_reserves is not None
                     else None
                 ),
             )
@@ -250,4 +334,9 @@ class BattlePracticeSpec:
                     else None
                 ),
             )
+        if self.party_reserves is not None:
+            configuration["schema"] = "pokemon.core.battle-practice-configuration.v4"
+            configuration["party_reserves"] = [
+                reserve.public_dict() for reserve in self.party_reserves
+            ]
         return canonical_sha256(configuration)
