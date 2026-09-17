@@ -8,6 +8,7 @@ import json
 import subprocess
 from pathlib import Path
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_outcome_capture_authentication import (
     BattleScenarioSourceBinding,
@@ -48,6 +49,38 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.model-battle-mansion-train-plan.v1"
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
+
+
+def _movement_settling_only(readiness: object) -> bool:
+    return all(
+        getattr(readiness, field, None) == 0
+        for field in (
+            "joy_ignore",
+            "simulated_joypad_index",
+            "npc_movement_script_table",
+            "status_flags_5",
+            "movement_flags",
+            "walk_counter",
+        )
+    )
+
+
+def _await_source_field_input(reader: PokemonRedStateReader, actions: CountingExecutor) -> None:
+    for attempt in range(5):
+        raw = reader.read()
+        if raw.map_id != MapId.CINNABAR_POKECENTER or raw.battle_state != 0:
+            raise ValueError("movement settling left the declared Center source")
+        readiness = reader.read_input_readiness()
+        if readiness.ready:
+            if (raw.player_x, raw.player_y) not in {(3, 3), (3, 7)}:
+                raise ValueError("movement settling changed the qualified Center boundary")
+            return
+        if not _movement_settling_only(readiness):
+            raise ValueError("source requires non-neutral input to become ready")
+        if attempt == 4:
+            break
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=16))
+    raise RuntimeError("source field did not settle inside the neutral wait bound")
 
 
 def _file(record: object, subject: str) -> bytes:
@@ -177,7 +210,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             or raw.party_moves is None
             or raw.party_pp is None
             or red_battle_supported_move_count(raw.party_moves[0], raw.party_pp[0]) < 2
-            or not reader.read_input_readiness().ready
+            or not _movement_settling_only(reader.read_input_readiness())
             or emulator.frame_count != initial_frame
         ):
             raise ValueError("source is not a ready, choice-rich Mansion transition")
@@ -218,6 +251,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
 
         def setup(index: int) -> None:
             if index == 0:
+                _await_source_field_input(reader, actions)
                 MANSION_TRAINING_VENUE.heal_and_return(actions, reader, budget)
             raw_field = reader.read()
             if raw_field.map_id != MapId.POKEMON_MANSION_1F or raw_field.battle_state != 0:

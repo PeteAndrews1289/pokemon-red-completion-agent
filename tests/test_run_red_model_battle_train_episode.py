@@ -75,6 +75,60 @@ def test_claim_uses_logical_and_physical_source_identity(monkeypatch):
     assert claims[0].claim_sha256 == digest
 
 
+def test_source_movement_settles_only_with_bounded_neutral_wait():
+    class Reader:
+        def __init__(self):
+            self.ready = False
+            self.map_id = runner.MapId.CINNABAR_POKECENTER
+
+        def read(self):
+            return SimpleNamespace(map_id=self.map_id, battle_state=0, player_x=3, player_y=3)
+
+        def read_input_readiness(self):
+            return SimpleNamespace(
+                ready=self.ready,
+                joy_ignore=0,
+                simulated_joypad_index=0,
+                npc_movement_script_table=0,
+                player_moving_direction=0 if self.ready else 1,
+                status_flags_5=0,
+                movement_flags=0,
+                walk_counter=0,
+            )
+
+    class Actions:
+        def __init__(self, reader):
+            self.reader = reader
+            self.calls = []
+
+        def execute(self, action):
+            self.calls.append(action)
+            self.reader.ready = True
+
+    reader = Reader()
+    actions = Actions(reader)
+    runner._await_source_field_input(reader, actions)
+    assert len(actions.calls) == 1
+    assert actions.calls[0].kind is runner.MacroActionKind.WAIT
+    assert actions.calls[0].repeat == 16
+
+    reader.ready = False
+    reader.map_id = runner.MapId.POKEMON_MANSION_1F
+    with pytest.raises(ValueError, match="left the declared Center"):
+        runner._await_source_field_input(reader, actions)
+    assert len(actions.calls) == 1
+    assert not runner._movement_settling_only(
+        SimpleNamespace(
+            joy_ignore=1,
+            simulated_joypad_index=0,
+            npc_movement_script_table=0,
+            status_flags_5=0,
+            movement_flags=0,
+            walk_counter=0,
+        )
+    )
+
+
 def test_action_free_preflight_cannot_claim_or_start_episode(tmp_path, monkeypatch):
     plan_path = tmp_path / "plan.json"
     plan_path.write_text(
@@ -140,7 +194,15 @@ def test_action_free_preflight_cannot_claim_or_start_episode(tmp_path, monkeypat
             return 8
 
         def read_input_readiness(self):
-            return SimpleNamespace(ready=True)
+            return SimpleNamespace(
+                ready=True,
+                joy_ignore=0,
+                simulated_joypad_index=0,
+                npc_movement_script_table=0,
+                status_flags_5=0,
+                movement_flags=0,
+                walk_counter=0,
+            )
 
     monkeypatch.setattr(runner, "PokemonRedStateReader", Reader)
     monkeypatch.setattr(
