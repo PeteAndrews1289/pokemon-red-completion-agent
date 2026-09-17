@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon.red.trainer-league-development-cohort.v1",
+  "purpose": "Prospective natural-battle comparison of the frozen 44-context trainer challenger",
+  "partition": "development",
+  "status_at_declaration": "no_cohort_battles_played",
+  "challenger_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+  "frozen_control_sha256": "6e57bce36ff9fa324a14b3989563696a9bd5dff8373e55ab196ebf36fc1b2269",
+  "fixed_control": "first-legal-attack",
+  "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+  "cohort": [
+    {
+      "encounter": "bruno",
+      "source": "portable-loop-post-lorelei.state",
+      "source_sha256": "cbc7a2d68593e4a3b113793ec918fc51868e804d3c8d120586c91971d643660f"
+    },
+    {
+      "encounter": "agatha",
+      "source": "portable-loop-post-bruno.state",
+      "source_sha256": "d95052c4b016a1487cba5620a6f883c4e96b618246f62c8555dc4b4715d0aac4"
+    },
+    {
+      "encounter": "lance",
+      "source": "portable-loop-post-agatha.state",
+      "source_sha256": "57817362e4b020cbbe7cc85d282d8079139ae0f974126e24f342e699a95a2a02"
+    }
+  ],
+  "ancestry": "all_three_share_one_unresolved_historical_red_progression",
+  "earlier_development_probes_excluded_from_this_cohort": [
+    "cinnabar-quiz1-natural-development-079",
+    "lorelei-natural-development-066"
+  ],
+  "all_arm_admission": {
+    "complete_event_log": true,
+    "teacher_queries": 0,
+    "invalid_actions": 0,
+    "memory_write_actions": 0
+  },
+  "success_rule": {
+    "all_three_challenger_battles_won": true,
+    "challenger_wins_not_less_than_frozen_control": true,
+    "aggregate_challenger_party_faints_not_more_than_frozen_control": true,
+    "aggregate_challenger_party_hp_lost_not_more_than_frozen_control": true,
+    "aggregate_challenger_attack_actions_not_more_than_frozen_control": true,
+    "at_least_one_encounter_has_fewer_attacks_and_a_voluntary_switch": true
+  },
+  "authority_note": "Passing this correlated DEVELOPMENT cohort would warrant a fresh independent-source validation, not final-model promotion. No model fitting or tuning is allowed from its results."
+}
