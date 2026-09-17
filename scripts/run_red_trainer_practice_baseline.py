@@ -19,6 +19,10 @@ from pokemon_red_completion.battle_scenario_capture import open_battle_scenario_
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameBudgetController
 from pokemon_red_completion.red_autonomous_player import _record
+from pokemon_red_completion.red_trainer_practice_counterfactual import (
+    TrainerPracticeFirstChoice,
+    collect_trainer_practice_counterfactuals,
+)
 from pokemon_red_completion.red_trainer_practice_episode import (
     run_red_trainer_practice_episode,
 )
@@ -64,6 +68,7 @@ def _authenticate(plan: object):
         or capture.manifest.expected_battle_state != 2
         or plan.get("max_decisions") != 80
         or plan.get("maximum_frames") != 120000
+        or plan.get("matched_choices") not in {None, "opening_attack_vs_five_switches"}
     ):
         raise ValueError("trainer baseline scope differs")
     output = plan.get("output")
@@ -126,6 +131,31 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             policy=FrozenAttackBaseline(),
             max_decisions=80,
         )
+
+        def retain_branch(index, choice, episode):  # type: ignore[no-untyped-def]
+            _record(
+                output / f"matched-branch-{index:02d}.json",
+                {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
+            )
+
+        matched = (
+            collect_trainer_practice_counterfactuals(
+                capture,
+                session_factory=session_factory,
+                continuation_policy_factory=FrozenAttackBaseline,
+                first_choices=(
+                    TrainerPracticeFirstChoice(BattleAction.move(1)),
+                    *(
+                        TrainerPracticeFirstChoice(BattleAction.switch(slot))
+                        for slot in range(2, 7)
+                    ),
+                ),
+                max_decisions=3,
+                branch_sink=retain_branch,
+            )
+            if plan.get("matched_choices") == "opening_attack_vs_five_switches"
+            else None
+        )
     except Exception as error:
         _record(output / "failure.json", {"type": type(error).__name__, "message": str(error)})
         raise
@@ -140,6 +170,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         }
     )
     _record(output / "outcome.json", report)
+    if matched is not None:
+        _record(output / "matched-choices.json", matched.public_dict())
     return report
 
 

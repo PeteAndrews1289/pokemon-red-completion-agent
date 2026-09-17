@@ -40,6 +40,10 @@ from pokemon_red_completion.red_battle_outcome_runtime import (
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_practice_factory import materialize_red_train_practice
 from pokemon_red_completion.red_battle_scenario import project_red_battle_turn_outcome
+from pokemon_red_completion.red_trainer_practice_counterfactual import (
+    TrainerPracticeFirstChoice,
+    collect_trainer_practice_counterfactuals,
+)
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
 from pokemon_red_completion.red_trainer_practice_policy import RedTrainerPracticeModelPolicy
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -128,6 +132,24 @@ def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() 
     assert switched.stop_reason == "decision_budget"
     assert [step["kind"] for step in switched.decisions] == ["voluntary_switch", "attack"]
     assert switched.decisions[0]["party_slot"] == 6
+
+    matched = collect_trainer_practice_counterfactuals(
+        capture,
+        session_factory=session_factory,
+        continuation_policy_factory=FrozenAttackBaseline,
+        first_choices=(
+            TrainerPracticeFirstChoice(BattleAction.move(1)),
+            *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
+        ),
+        max_decisions=3,
+    )
+    assert len(matched.branches) == 6
+    assert matched.root_lineage_id == capture.manifest.root_lineage_id
+    assert matched.public_dict()["new_independent_upstream_roots"] == 0
+    assert [episode.decisions[0]["kind"] for _choice, episode in matched.branches] == [
+        "attack", "voluntary_switch", "voluntary_switch", "voluntary_switch",
+        "voluntary_switch", "voluntary_switch",
+    ]
 
 
 @pytest.mark.parametrize("team_count", [2, 6])
