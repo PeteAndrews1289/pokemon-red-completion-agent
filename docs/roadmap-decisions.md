@@ -14,8 +14,14 @@ added same-root TRAIN contrasts for depleted-attack switching, optional prompts
 and forced replacements, with 10, 15 and 10 complete branches respectively.
 One deliberately exploratory fit used four scenarios from one authenticated
 upstream root, updated move/control/switch heads, and won three short live
-smokes without teacher queries or invalid actions. This validates the bounded
-trainer pipeline but does not qualify the model. The next data step is an
+smokes without teacher queries or invalid actions, but lost a different
+full-party TRAIN diagnostic. Scaling that unchanged model to 11 scenarios still
+lost: shared state features canceled in the linear attack-versus-switch ranker.
+Action-by-state control features repaired this structural limit. A new 11-case
+fit won the reused full-party diagnostic and another same-root full-party case,
+plus all three edge smokes without teacher queries or invalid actions. These
+are diagnostic, previously explored TRAIN configurations, not independent
+DEVELOPMENT evidence. The next data step is an
 ancestry audit of unused authentic starts and replication across three further
 genuinely disjoint TRAIN roots, each with four admitted scenarios. Natural
 DEVELOPMENT comparison remains the promotion gate. The unsupported Struggle

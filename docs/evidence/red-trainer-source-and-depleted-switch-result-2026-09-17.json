@@ -1,8 +1,8 @@
 {
   "schema": "pokemon.red.trainer-source-and-depleted-switch-result.v1",
   "session_date": "2026-09-17",
-  "status": "closed_with_four_context_exploratory_fit_and_live_smoke",
-  "product_claim": "The battle trainer can collect, admit, fit, and execute move, control, and switch choices across MAIN, depleted-attack MAIN, optional prompt, and forced replacement. This is a one-root exploratory model, not a qualified or promoted battle learner.",
+  "status": "closed_with_stateful_control_diagnostic_and_no_promotion",
+  "product_claim": "The battle trainer can collect, admit, fit, and execute move, state-dependent control, and switch choices across MAIN, depleted-attack MAIN, optional prompt, and forced replacement. This is one-root exploratory training, not a qualified or promoted battle learner.",
   "celadon_source_pilot": {
     "prospective_plans": [
       "red-celadon-trainer-source-plan-2026-09-17.json",
@@ -93,23 +93,49 @@
     ],
     "interpretation": "These are in-root controlled smoke cases proving live policy wiring, not held-out generalization or DEVELOPMENT evidence."
   },
+  "stateful_control_diagnostic": {
+    "structural_fault": "The earlier linear control head gave both actions identical state features plus fixed action indicators, so shared features canceled and attack-versus-switch probabilities could not depend on the observed state.",
+    "repair": "Add action-by-state interaction blocks to both fit and live inference, with an explicit regression test learning opposite choices for low and high HP. The diagnostic corpus size gate now permits 4–64 varied scenarios without changing the qualified four-root-by-four-scenario gate.",
+    "diagnostic_before_repair": {
+      "four_context_model_on_reused_s12": {"battle_won": false, "stop_reason": "party_defeated", "decisions": 13, "voluntary_switches": 0, "outcome_sha256": "0955814f9786c1d23f867a8bd6129df92b0f7a4e3067b0c4a6af554e031f5c24"},
+      "eleven_context_model_on_reused_s12": {"battle_won": false, "stop_reason": "party_defeated", "decisions": 13, "voluntary_switches": 0, "outcome_sha256": "afbfd3d740fe284d87a69fd500c82bd9d9a06bd82c0b2660826072ccc50233c9"}
+    },
+    "stateful_fit": {
+      "plan_sha256": "99e85d16285d87488a43a8d0347bdcd7655cc2fd3e7c9298ebbbda8d169fe12d",
+      "model_sha256": "db0bd7bb577fb3fa6cb760914f8441a3726001783ae1b4af31dca19b1cc20523",
+      "scenario_count": 11,
+      "independent_upstream_roots": 1,
+      "head_example_counts": {"move": 8, "control": 9, "switch": 11},
+      "qualification_tier": "correlated_exploratory_train_only",
+      "promotion_eligible": false,
+      "development_evaluations": 0
+    },
+    "live_diagnostics": [
+      {"context": "reused s12 full-party TRAIN diagnostic", "battle_won": true, "decisions": 7, "voluntary_switches": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "3e854bdb7b964e2b85d3636f86a9713d170aa6c95c88ad5d9a801ea19be97be9"},
+      {"context": "s11 full-party TRAIN diagnostic", "battle_won": true, "decisions": 14, "voluntary_switches": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "e04bcbf4ddbc55e631e11f0c298b505e0e53b752cd7cc4714b52e6d9b69c025c"},
+      {"context": "depleted-attack MAIN", "battle_won": true, "decisions": 6, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "d31aecca431498c12dd68c5ef4baac3cacc792529302125ab951a9a25d89f391"},
+      {"context": "optional prompt", "battle_won": true, "decisions": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "496a1ab694a0702852303262473655a3e9ebd08d5b5a0e718a13a7ad28f87cfe"},
+      {"context": "forced replacement", "battle_won": true, "decisions": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "6ead3025b056fe38d95d89c5924deeeef945283bbdce4285a6237196b7473f05"}
+    ],
+    "interpretation": "The s12 diagnostic was reused after observing failure, and s11 is previously explored same-root TRAIN material. These wins test the repair and guard against edge-context regression; they are not a fresh or natural DEVELOPMENT comparison."
+  },
   "verification": {
-    "targeted_rom_free_tests": "25 passed for fit ancestry, forced admission, and live runner checks at closeout",
+    "targeted_rom_free_tests": "25 passed for initial fit ancestry, forced admission, and live runner checks; 14 passed for scaled-fit, stateful-control, policy and runner checks after repair",
     "private_rom_switch_materialization": "2 passed in the earlier depleted/non-depleted integration pair",
     "registry_regeneration": "passed",
     "product_focus_and_docs": "passed",
-    "full_suite": "not run"
+    "broad_suite": "Interrupted at 65% after 8139 passed, 3 skipped and 1 xfailed in 16m42s; five failures were outside the trainer path: three historical dashboard training-projection tests, one product-focus dashboard test, and one local Mac runtime-identity test. The runtime-identity failure reproduced in isolation. No full-suite pass is claimed."
   },
   "remaining_gate": [
     "Authenticate four genuinely disjoint TRAIN origins, with four admitted scenarios each; the Celadon aliases cannot be counted separately.",
     "Replicate MAIN, depleted-attack, replacement-prompt and forced-replacement contrasts across the four disjoint TRAIN roots; one same-root example of each now exists.",
-    "Fit a qualified challenger and compare it once on disjoint natural DEVELOPMENT trainer battles against frozen and fixed controls.",
+    "Fit a qualified challenger and compare it once on disjoint natural DEVELOPMENT trainer battles against frozen and fixed controls; the same-root stateful diagnostics cannot substitute for this.",
     "Resolve or explicitly exclude unsupported Struggle from the declared initial battle segment before broad battle-authority claims."
   ],
   "effects": {
     "new_measured_same_root_train_scenarios": 3,
     "new_qualified_independent_train_roots": 0,
-    "exploratory_model_fits": 1,
+    "exploratory_model_fits": 3,
     "qualified_model_fits": 0,
     "authority_promotions": 0,
     "red_registered_species_delta": 0,

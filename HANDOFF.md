@@ -13,15 +13,20 @@ execution and return admission. The depleted and forced targets favored switch
 to Bulbasaur; the optional prompt favored decline. The teacher-only factory
 materializes these conditions directly in a private cartridge copy.
 
-One preregistered four-context exploratory fit traced every derived capture
-through its parent back to the common upstream lab root. It updated move,
-control and switch heads once; the qualified-fit gate rejects this as a
-one-root model. The live fitted model then won three short controlled smokes:
-depleted-PP switch in six decisions, prompt decline in two and forced switch
-in two, with zero teacher queries and zero invalid actions. This proves the
-collection-to-fit-to-execution plumbing is ready for broader training. It does
-**not** prove independent generalization, natural DEVELOPMENT advantage or
-battle authority.
+The first four-context fit traced every derived capture back to the common
+upstream lab root. It won three short interface smokes but lost a different
+full-party TRAIN diagnostic in 13 decisions without making a voluntary switch.
+Adding seven earlier admitted scenarios still lost that diagnostic. The cause
+was structural: both control candidates shared all state features in a linear
+ranker, leaving only a fixed attack/switch bias. Action-by-state features now
+let the control head learn when to switch; the unit test learns opposite choices
+at low and high HP. A fresh fit of the 11 scenarios won the reused full-party
+diagnostic in seven decisions with two voluntary switches, another same-root
+full-party diagnostic in 14 decisions, and all three edge-context smokes, with
+zero teacher queries or invalid actions. This is meaningful diagnostic progress
+and makes the collection-to-fit-to-execution path ready for broader training.
+It does **not** establish independent generalization, natural DEVELOPMENT
+advantage or battle authority. All three fits remain one-root exploratory only.
 
 The first depleted pilot remains a failure: after sixteen decisions both
 reserves fainted, leaving an unsupported Struggle boundary. The episode runner
@@ -51,5 +56,7 @@ cross-title transfer, or GitHub publication occurred. Pete decides when to push.
 
 Next bounded objective: audit physical ancestry of unused authentic trainer
 starts and freeze three further actually disjoint TRAIN origins, with four
-admitted scenarios on each, before qualified fitting. Use Sol High, Fast off;
-reserve Astra High for the eventual qualified promotion review.
+admitted scenarios on each, before qualified fitting. Also collect varied
+stateful control contrasts rather than merely increasing timing siblings.
+Use Sol High, Fast off; reserve Astra High for the eventual qualified promotion
+review.
