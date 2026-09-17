@@ -72,7 +72,7 @@ def test_derived_prompt_or_forced_capture_rejoins_authenticated_upstream_source(
         ])
 
 
-def test_exploratory_fit_discloses_one_root_and_requires_four_or_eight_varied_scenarios() -> None:
+def test_exploratory_fit_discloses_one_root_and_scales_varied_scenarios() -> None:
     receipts = [
         {"root_lineage_id": "one-root", "capture_id": f"capture-{index}"}
         for index in range(4)
@@ -89,7 +89,7 @@ def test_exploratory_fit_discloses_one_root_and_requires_four_or_eight_varied_sc
         for index in range(4)
     ]
     _validate_exploratory_supply(targets, receipts)
-    with pytest.raises(ValueError, match="exactly four"):
+    with pytest.raises(ValueError, match="4–64"):
         _validate_exploratory_supply(targets[:3], receipts[:3])
     duplicated = deepcopy(receipts)
     duplicated[3]["capture_id"] = "capture-0"
@@ -122,5 +122,13 @@ def test_exploratory_fit_discloses_one_root_and_requires_four_or_eight_varied_sc
     _validate_exploratory_supply(extension_targets, extension_receipts)
     with pytest.raises(ValueError, match="6 prospective matchup"):
         _validate_exploratory_supply(targets * 2, extension_receipts)
-    with pytest.raises(ValueError, match="exactly four or eight"):
-        _validate_exploratory_supply(extension_targets[:7], extension_receipts[:7])
+    _validate_exploratory_supply(extension_targets[:7], extension_receipts[:7])
+    _validate_exploratory_supply(
+        extension_targets + extension_targets[1:4],
+        extension_receipts + [
+            {"root_lineage_id": "one-root", "capture_id": f"capture-{index}"}
+            for index in range(8, 11)
+        ],
+    )
+    with pytest.raises(ValueError, match="4–64"):
+        _validate_exploratory_supply(extension_targets * 9, extension_receipts * 9)

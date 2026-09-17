@@ -77,8 +77,8 @@ def _validate_exploratory_supply(
     receipts: Sequence[Mapping[str, object]],
 ) -> None:
     """A bounded correlated TRAIN fit, never an independent-root qualification."""
-    if len(targets) not in {4, 8} or len(receipts) != len(targets):
-        raise ValueError("exploratory fit requires exactly four or eight declared scenarios")
+    if not 4 <= len(targets) <= 64 or len(receipts) != len(targets):
+        raise ValueError("exploratory fit requires 4–64 declared scenarios")
     if len({row.get("root_lineage_id") for row in receipts}) != 1:
         raise ValueError("exploratory fit requires one disclosed upstream TRAIN root")
     if len({row.get("capture_id") for row in receipts}) != len(targets):
@@ -102,7 +102,7 @@ def _validate_exploratory_supply(
         if not isinstance(actor, str) or not isinstance(opponent, str):
             raise ValueError("exploratory species references are missing")
         matchups.add((actor, opponent))
-    minimum_matchups = 3 if len(targets) == 4 else 6
+    minimum_matchups = 3 if len(targets) < 8 else 6
     if len(matchups) < minimum_matchups:
         raise ValueError(
             f"exploratory fit requires {minimum_matchups} prospective matchup profiles"
