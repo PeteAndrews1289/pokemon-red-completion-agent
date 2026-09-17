@@ -69,6 +69,8 @@ def test_three_head_targets_share_executed_whole_party_returns():
     result = extract_trainer_practice_targets(admission, document)
     assert result["scenario_count"] == 1
     assert result["root_lineage_id"] == "one-root"
+    assert result["decision_context"] == "main"
+    assert result["attack_depleted"] is False
     assert result["heads"]["move"]["best_indices"] == [0]
     assert result["heads"]["switch"]["best_indices"] == [0]
     assert result["heads"]["control"]["best_indices"] == [0]
@@ -100,5 +102,9 @@ def test_five_declared_timings_average_one_scenario_not_five_roots():
     assert result["timing_count"] == 5
     assert result["root_lineage_id"] == "one-root"
     assert result["heads"]["switch"]["returns"][0] == 0.94
+    targets[1]["decision_context"] = "prompt"
+    with pytest.raises(TrainerPracticeTargetError, match="comparable scenario"):
+        aggregate_trainer_timing_targets(tuple(targets), expected_offsets=offsets)
+    targets[1]["decision_context"] = "main"
     with pytest.raises(TrainerPracticeTargetError, match="timing schedule"):
         aggregate_trainer_timing_targets(tuple(targets), expected_offsets=(0, 2, 4, 6, 10))

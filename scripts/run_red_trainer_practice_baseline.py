@@ -377,13 +377,24 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             prompt_capture = open_battle_scenario_capture(
                 output / "prompt.state", output / "prompt.state.json"
             )
+            if raw.party_hp is None or raw.active_party_index is None:
+                raise ValueError("trainer prompt party is unavailable")
             prompt_choices = (
                 TrainerPracticeFirstChoice(None),
-                *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
+                *(
+                    TrainerPracticeFirstChoice(BattleAction.switch(index + 1))
+                    for index, hp in enumerate(raw.party_hp)
+                    if hp > 0 and index != raw.active_party_index
+                ),
             )
-            _record(
-                output / "matched-prompt-plan.json",
-                {
+            if len(prompt_choices) < 3:
+                raise ValueError("trainer prompt needs two living switch alternatives")
+            for offset in offsets:
+                prompt_directory = output / f"prompt-timing-{offset:02d}" if timed else output
+                if timed:
+                    prompt_directory.mkdir(mode=0o700, exist_ok=False)
+                prompt_plan_path = prompt_directory / "matched-prompt-plan.json"
+                _record(prompt_plan_path, {
                     "schema": "pokemon.red.trainer-practice-choice-plan.v1",
                     "capture_manifest_sha256": prompt_capture.manifest_sha256,
                     "source_commit": plan["source_commit"],
@@ -392,53 +403,62 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "first_choice_refs": [choice.semantic_ref for choice in prompt_choices],
                     "player_turn_horizon": 1,
                     "max_decisions": 5,
-                    "opening_idle_frames": 0,
-                },
-            )
-            prompt_plan_sha256 = hashlib.sha256(
-                (output / "matched-prompt-plan.json").read_bytes()
-            ).hexdigest()
+                    "opening_idle_frames": offset,
+                })
+                prompt_plan_sha256 = hashlib.sha256(prompt_plan_path.read_bytes()).hexdigest()
 
-            def retain_prompt_branch(index, choice, episode):  # type: ignore[no-untyped-def]
-                _record(
-                    output / f"prompt-branch-{index:02d}.json",
-                    {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
+                def retain_prompt_branch(  # type: ignore[no-untyped-def]
+                    index, choice, episode, directory=prompt_directory
+                ):
+                    _record(
+                        directory / f"prompt-branch-{index:02d}.json",
+                        {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
+                    )
+                    _record(
+                        directory / f"prompt-branch-{index:02d}-event-log-verification.json",
+                        verify_trainer_practice_event_log(
+                            directory / f"prompt-branch-{index:02d}-events"
+                        ),
+                    )
+
+                def prompt_branch_event_log(  # type: ignore[no-untyped-def]
+                    index, choice, directory=prompt_directory,
+                    timing_offset=offset, declared_plan_sha=prompt_plan_sha256,
+                ):
+                    return TrainerPracticeEventLog(
+                        directory / f"prompt-branch-{index:02d}-events",
+                        run_identity={
+                            "source_commit": plan["source_commit"],
+                            "capture_id": prompt_capture.manifest.capture_id,
+                            "root_lineage_id": prompt_capture.manifest.root_lineage_id,
+                            "partition": "train",
+                            "capture_manifest_sha256": prompt_capture.manifest_sha256,
+                            "model_sha256": model_binding["sha256"],
+                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "first_choice_ref": choice.semantic_ref,
+                            "player_turn_horizon": 1,
+                            "max_decisions": 5,
+                            "opening_idle_frames": timing_offset,
+                            "plan_sha256": declared_plan_sha,
+                        },
+                    )
+
+                matched_prompt = collect_trainer_practice_counterfactuals(
+                    prompt_capture,
+                    session_factory=session_factory,
+                    continuation_policy_factory=FrozenAttackBaseline,
+                    first_choices=prompt_choices,
+                    max_decisions=5,
+                    player_turn_horizon=1,
+                    branch_sink=retain_prompt_branch,
+                    branch_event_log_factory=prompt_branch_event_log,
+                    public_species_base_stats=public_stats,
+                    opening_idle_frames=offset,
                 )
                 _record(
-                    output / f"prompt-branch-{index:02d}-event-log-verification.json",
-                    verify_trainer_practice_event_log(output / f"prompt-branch-{index:02d}-events"),
+                    prompt_directory / "matched-prompt-choices.json",
+                    matched_prompt.public_dict(),
                 )
-
-            def prompt_branch_event_log(index, choice):  # type: ignore[no-untyped-def]
-                return TrainerPracticeEventLog(
-                    output / f"prompt-branch-{index:02d}-events",
-                    run_identity={
-                        "source_commit": plan["source_commit"],
-                        "capture_id": prompt_capture.manifest.capture_id,
-                        "root_lineage_id": prompt_capture.manifest.root_lineage_id,
-                        "partition": "train",
-                        "capture_manifest_sha256": prompt_capture.manifest_sha256,
-                        "model_sha256": model_binding["sha256"],
-                        "policy_id": FrozenAttackBaseline.policy_id,
-                        "first_choice_ref": choice.semantic_ref,
-                        "player_turn_horizon": 1,
-                        "max_decisions": 5,
-                        "opening_idle_frames": 0,
-                        "plan_sha256": prompt_plan_sha256,
-                    },
-                )
-
-            matched_prompt = collect_trainer_practice_counterfactuals(
-                prompt_capture,
-                session_factory=session_factory,
-                continuation_policy_factory=FrozenAttackBaseline,
-                first_choices=prompt_choices,
-                max_decisions=5,
-                player_turn_horizon=1,
-                branch_sink=retain_prompt_branch,
-                branch_event_log_factory=prompt_branch_event_log,
-                public_species_base_stats=public_stats,
-            )
     except Exception as error:
         log.fail(error)
         _record(
@@ -458,8 +478,6 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         }
     )
     _record(output / "outcome.json", report)
-    if matched_prompt is not None:
-        _record(output / "matched-prompt-choices.json", matched_prompt.public_dict())
     log.finish(
         {
             "battle_won": result.battle_won,

@@ -145,13 +145,23 @@ def fit_trainer_practice_three_heads(
     if len(set(capture_ids)) != len(capture_ids):
         raise TrainerPracticeFitError("one capture was counted twice")
     if require_corpus_floor and (
-        len(root_counts) < 4 or any(count < 4 for count in root_counts.values())
+        len(root_counts) < 4
+        or any(count < 4 for count in root_counts.values())
+        or len(set(root_counts.values())) != 1
     ):
         raise TrainerPracticeFitError(
-            "four independent TRAIN roots with four scenarios each required"
+            "balanced independent TRAIN roots with at least four scenarios each required"
         )
     if require_corpus_floor and any(target.get("timing_count") != 5 for target in records):
         raise TrainerPracticeFitError("five declared timing offsets per scenario required")
+    if require_corpus_floor and (
+        {target.get("decision_context") for target in records}
+        != {"main", "prompt", "forced"}
+        or not any(target.get("attack_depleted") is True for target in records)
+    ):
+        raise TrainerPracticeFitError(
+            "main, prompt, forced and empty-attack contexts required"
+        )
     resolver = catalog if catalog is not None else PokemonRedBattleCatalog()
     examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
     for target in records:

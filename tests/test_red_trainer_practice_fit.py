@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
 import pytest
 from test_red_trainer_practice_features import _observation
 
@@ -61,7 +63,7 @@ def _target():
 
 def test_train_only_three_head_fit_round_trip_and_corpus_floor():
     target = _target()
-    with pytest.raises(TrainerPracticeFitError, match="four independent"):
+    with pytest.raises(TrainerPracticeFitError, match="balanced independent"):
         fit_trainer_practice_three_heads([target], seed=12)
     model = fit_trainer_practice_three_heads(
         [target],
@@ -75,3 +77,22 @@ def test_train_only_three_head_fit_round_trip_and_corpus_floor():
     target["partition"] = "development"
     with pytest.raises(TrainerPracticeFitError, match="TRAIN"):
         fit_trainer_practice_three_heads([target], seed=12, require_corpus_floor=False)
+
+
+def test_fit_floor_rejects_contextless_or_unbalanced_scenario_supply():
+    records = []
+    for root in range(4):
+        for scenario in range(4):
+            record = deepcopy(_target())
+            record["root_lineage_id"] = f"root-{root}"
+            record["capture_id"] = f"capture-{root}-{scenario}"
+            record["timing_count"] = 5
+            record["decision_context"] = "main"
+            record["attack_depleted"] = False
+            records.append(record)
+    with pytest.raises(TrainerPracticeFitError, match="contexts required"):
+        fit_trainer_practice_three_heads(records, seed=12)
+    extra = deepcopy(records[0])
+    extra["capture_id"] = "unbalanced-extra"
+    with pytest.raises(TrainerPracticeFitError, match="balanced independent"):
+        fit_trainer_practice_three_heads([*records, extra], seed=12)

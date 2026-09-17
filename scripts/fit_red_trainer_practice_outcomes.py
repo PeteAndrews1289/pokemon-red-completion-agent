@@ -127,6 +127,8 @@ def run(
             "capture_id": capture.manifest.capture_id,
             "root_lineage_id": capture.manifest.root_lineage_id,
             "timing_count": len(OFFSETS),
+            "decision_context": aggregate["decision_context"],
+            "attack_depleted": aggregate["attack_depleted"],
             "head_kinds": sorted(heads),
         })
     root_counts = Counter(row["root_lineage_id"] for row in scenario_receipts)
@@ -144,8 +146,14 @@ def run(
             "model_updates": 0,
             "authority_promotions": 0,
         }
-    if len(root_counts) < 4 or any(count < 4 for count in root_counts.values()):
-        raise ValueError("four independent TRAIN roots with four scenarios each required")
+    if (
+        len(root_counts) < 4
+        or any(count < 4 for count in root_counts.values())
+        or len(set(root_counts.values())) != 1
+    ):
+        raise ValueError(
+            "balanced independent TRAIN roots with at least four scenarios each required"
+        )
     if not all(
         any(
             isinstance(row["head_kinds"], list) and head in row["head_kinds"]
@@ -154,6 +162,12 @@ def run(
         for head in ("move", "control", "switch")
     ):
         raise ValueError("trainer corpus lacks one or more learnable heads")
+    if (
+        {row["decision_context"] for row in scenario_receipts}
+        != {"main", "prompt", "forced"}
+        or not any(row["attack_depleted"] is True for row in scenario_receipts)
+    ):
+        raise ValueError("trainer corpus lacks required decision contexts")
     if check_only:
         return {
             "status": "train_only_corpus_admitted_no_fit",

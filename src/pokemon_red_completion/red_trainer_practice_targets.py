@@ -77,6 +77,24 @@ def extract_trainer_practice_targets(
         kinds.append(kind)
     if not isinstance(initial_observation, Mapping):
         raise TrainerPracticeTargetError("actor observation is missing")
+    if all(kind in {"attack", "voluntary_switch"} for kind in kinds):
+        context = "main"
+    elif all(kind == "switch_prompt" for kind in kinds):
+        context = "prompt"
+    elif all(kind == "forced_switch" for kind in kinds):
+        context = "forced"
+    else:
+        raise TrainerPracticeTargetError("first-choice contexts are mixed")
+    supported = (
+        initial_model_input.get("supported_candidate_mask")
+        if isinstance(initial_model_input, Mapping) else None
+    )
+    attack_depleted = (
+        context == "main"
+        and isinstance(supported, list)
+        and bool(supported)
+        and all(value is False for value in supported)
+    )
     groups: dict[str, tuple[int, ...]] = {}
     attack = tuple(i for i, kind in enumerate(kinds) if kind == "attack")
     switches = tuple(
@@ -117,6 +135,8 @@ def extract_trainer_practice_targets(
         "observation_schema": OBSERVATION_SCHEMA_V2,
         "scenario_count": 1,
         "timing_count": 1,
+        "decision_context": context,
+        "attack_depleted": attack_depleted,
         "timing_offset_frames": admission["opening_idle_frames"],
         "observation": dict(initial_observation),
         "legacy_model_input": initial_model_input,
@@ -145,6 +165,8 @@ def aggregate_trainer_timing_targets(
         first.get("manifest_sha256"),
         first.get("root_lineage_id"),
         first.get("observation"),
+        first.get("decision_context"),
+        first.get("attack_depleted"),
     )
     first_heads = first.get("heads")
     if not isinstance(first_heads, Mapping):
@@ -159,6 +181,8 @@ def aggregate_trainer_timing_targets(
                 target.get("manifest_sha256"),
                 target.get("root_lineage_id"),
                 target.get("observation"),
+                target.get("decision_context"),
+                target.get("attack_depleted"),
             )
             != expected_identity
             or not isinstance(target.get("heads"), Mapping)
@@ -212,6 +236,8 @@ def aggregate_trainer_timing_targets(
                 "observation",
                 "legacy_model_input",
                 "observation_schema",
+                "decision_context",
+                "attack_depleted",
             )
         },
         "timing_count": len(targets),
