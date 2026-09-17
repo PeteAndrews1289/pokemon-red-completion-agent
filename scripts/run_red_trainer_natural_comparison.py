@@ -77,7 +77,8 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         fit_receipt.get("qualification_tier") != "independent_root_train"
         or fit_receipt.get("independent_train_supply_gate_passed") is not True
         or fit_receipt.get("distinct_upstream_train_roots") != 4
-        or fit_receipt.get("scenario_count") != 16
+        or not isinstance(fit_receipt.get("scenario_count"), int)
+        or fit_receipt["scenario_count"] < 16
         or fit_receipt.get("model_sha256") != _binding(model_path)["sha256"]
     ):
         raise ValueError("natural trainer challenger is not TRAIN-qualified")
