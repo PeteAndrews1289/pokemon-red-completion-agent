@@ -135,6 +135,7 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
     assert session.loaded
     assert chosen == [2]
     assert result.battle_won
+    assert result.stop_reason == "battle_won"
     assert result.decisions[0]["kind"] == "attack"
     assert result.public_dict()["teacher_queries"] == 0
 
@@ -165,3 +166,38 @@ def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, mon
         episode.run_red_trainer_practice_episode(
             capture, session_factory=lambda: session, policy=Policy()
         )
+
+
+def test_episode_records_party_defeat_without_asking_for_impossible_switch(
+    tmp_path, monkeypatch
+):
+    capture = _capture(tmp_path)
+    session = Session()
+    session.raw = RawGameState(
+        True, 120, 2, 2, 2, 2, party_hp=(0, 0), active_party_index=0, active_party_hp=0
+    )
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(
+            snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {})
+        ),
+    )
+    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+
+    class Policy:
+        policy_id = "defeated-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("defeated party has no attack")
+
+        def choose_switch(self, *_args, **_kwargs):
+            raise AssertionError("defeated party has no switch")
+
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy()
+    )
+    assert not result.battle_won
+    assert result.stop_reason == "party_defeated"
+    assert result.decisions == ()

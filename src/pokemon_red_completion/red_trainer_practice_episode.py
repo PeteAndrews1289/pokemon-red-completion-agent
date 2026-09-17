@@ -81,6 +81,7 @@ class RedTrainerPracticeEpisode:
     decisions: tuple[dict[str, object], ...]
     battle_won: bool
     final_battle_state: int
+    stop_reason: str
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -92,6 +93,7 @@ class RedTrainerPracticeEpisode:
             "decision_count": len(self.decisions),
             "battle_won": self.battle_won,
             "final_battle_state": self.final_battle_state,
+            "stop_reason": self.stop_reason,
             "teacher_queries": 0,
             "memory_write_actions": 0,
             "authority_promotions": 0,
@@ -160,6 +162,16 @@ def run_red_trainer_practice_episode(
             forced = raw.battler_hp == 0
             prompt = reader.trainer_switch_prompt_visible(raw)
             if forced or prompt:
+                if forced and not options:
+                    return RedTrainerPracticeEpisode(
+                        capture_id=capture.manifest.capture_id,
+                        manifest_sha256=capture.manifest_sha256,
+                        policy_id=policy.policy_id,
+                        decisions=tuple(decisions),
+                        battle_won=False,
+                        final_battle_state=raw.battle_state,
+                        stop_reason="party_defeated",
+                    )
                 chosen_slot = policy.choose_switch(
                     observation,
                     options,
@@ -281,7 +293,15 @@ def run_red_trainer_practice_episode(
             return _receipt(
                 capture, policy.policy_id, decisions, final, reader.read_enemy_party_roster_hp()
             )
-        raise RedTrainerPracticeEpisodeError("trainer episode exhausted its decision budget")
+        return RedTrainerPracticeEpisode(
+            capture_id=capture.manifest.capture_id,
+            manifest_sha256=capture.manifest_sha256,
+            policy_id=policy.policy_id,
+            decisions=tuple(decisions),
+            battle_won=False,
+            final_battle_state=final.battle_state,
+            stop_reason="decision_budget",
+        )
 
 
 def _receipt(capture, policy_id, decisions, final, enemy_hp) -> RedTrainerPracticeEpisode:
@@ -299,4 +319,5 @@ def _receipt(capture, policy_id, decisions, final, enemy_hp) -> RedTrainerPracti
         decisions=tuple(decisions),
         battle_won=won,
         final_battle_state=final.battle_state,
+        stop_reason="battle_won" if won else "battle_exited_without_win",
     )

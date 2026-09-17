@@ -49,6 +49,57 @@ def _move(identifier: int, pp: int) -> dict[str, object]:
     return {"move_ref": pokemon_red_move_ref(identifier), "pp": pp}
 
 
+def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() -> None:
+    """A real TRAIN capture, unlike the old diagnostic state, exercises the model seam."""
+
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_STATE")
+    manifest_path = environ.get("POKEMON_RED_TRAINER_TRAIN_MANIFEST")
+    model_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_MODEL")
+    if not all((rom_path, state_path, manifest_path, model_path)):
+        pytest.skip("private authenticated train inputs not supplied")
+    assert state_path is not None and manifest_path is not None
+    assert rom_path is not None and model_path is not None
+    capture = open_battle_scenario_capture(Path(state_path), Path(manifest_path))
+    assert capture.manifest.partition is ScenarioPartition.TRAIN
+    assert capture.manifest.expected_battle_state == 2
+    model = MaskedMLPMoveRanker.from_dict(json.loads(Path(model_path).read_bytes()))
+
+    class FrozenAttackBaseline:
+        policy_id = "frozen-attack-model-with-decline-and-first-legal-switch-baseline"
+
+        def choose_main(self, _observation, prepared):
+            index = model.predict(
+                prepared.features.candidate_vectors,
+                legal_mask=prepared.features.legal_mask,
+                current_pp=prepared.features.current_pp,
+            )
+            return BattleAction.move(prepared.features.slot_indices[index] + 1)
+
+        def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
+            if forced:
+                return legal_party_slots[0]
+            assert may_decline
+            return None
+
+    @contextmanager
+    def session_factory():
+        with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+            yield FrameBudgetController(emulator, maximum_frames=120000)
+
+    episode = run_red_trainer_practice_episode(
+        capture,
+        session_factory=session_factory,
+        policy=FrozenAttackBaseline(),
+        max_decisions=80,
+    )
+    assert not episode.battle_won
+    assert episode.stop_reason == "party_defeated"
+    assert sum(step["kind"] == "attack" for step in episode.decisions) >= 6
+    assert any(step["kind"] == "switch_prompt" for step in episode.decisions)
+    assert episode.public_dict()["teacher_queries"] == 0
+
+
 @pytest.mark.parametrize("team_count", [2, 6])
 @pytest.mark.parametrize("target_index", [None, 1])
 def test_two_member_trainer_knockout_reaches_next_model_decision(
