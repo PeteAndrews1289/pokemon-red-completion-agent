@@ -288,6 +288,7 @@ class BattleTurnExecution:
     frames_executed: int
     move_executed: bool
     pre_attack_frames: int = 0
+    terminal_enemy_roster_hp: tuple[int, ...] | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.initial_state, RawGameState) or not isinstance(
@@ -310,6 +311,12 @@ class BattleTurnExecution:
             or not 0 <= self.pre_attack_frames <= self.frames_executed
         ):
             raise ValueError("pre_attack_frames must fit inside the execution frame count")
+        if self.terminal_enemy_roster_hp is not None and (
+            not isinstance(self.terminal_enemy_roster_hp, tuple)
+            or not 1 <= len(self.terminal_enemy_roster_hp) <= 6
+            or any(type(hp) is not int or hp < 0 for hp in self.terminal_enemy_roster_hp)  # noqa: E721
+        ):
+            raise ValueError("terminal enemy roster HP is invalid")
 
 
 @dataclass(frozen=True, slots=True)
@@ -723,6 +730,11 @@ def execute_bounded_battle_move_turn(
             frames_executed=measured.frames_executed,
             move_executed=move_executed,
             pre_attack_frames=observed_pre_attack_frames,
+            terminal_enemy_roster_hp=(
+                _terminal_enemy_roster_hp(reader)
+                if expected_battle_state == _TRAINER_BATTLE_STATE and final.battle_state == 0
+                else None
+            ),
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)
@@ -753,6 +765,12 @@ def _await_next_battle_decision(
             return
         if raw.battle_state != expected_battle_state:
             raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        if expected_battle_state == _TRAINER_BATTLE_STATE and _trainer_switch_prompt_visible(
+            reader, raw
+        ):
+            # This is a fresh player decision, not dialogue. Confirming here
+            # silently chooses YES and can strand the actor in the party menu.
+            return
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.MAIN:
             # A one-frame MAIN signature can be stale during animation. Verify
@@ -1060,6 +1078,11 @@ def _trainer_switch_prompt_visible(
 ) -> bool:
     detector = getattr(reader, "trainer_switch_prompt_visible", None)
     return bool(detector(raw)) if callable(detector) else False
+
+
+def _terminal_enemy_roster_hp(reader: BattleStateReader) -> tuple[int, ...] | None:
+    reader_method = getattr(reader, "read_enemy_party_roster_hp", None)
+    return reader_method() if callable(reader_method) else None
 
 
 def run_adaptive_wild_battle(

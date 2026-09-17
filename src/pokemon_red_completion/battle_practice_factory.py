@@ -143,6 +143,9 @@ class BattlePracticeSpec:
     opponent_species_ref: str | None = None
     opponent_moves: tuple[PracticeMove, ...] | None = None
     party_reserves: tuple[PracticeReserve, ...] | None = None
+    battle_kind: str = "wild"
+    opponent_party_count: int | None = None
+    opponent_reserves: tuple[PracticeReserve, ...] | None = None
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
@@ -198,6 +201,34 @@ class BattlePracticeSpec:
             != len(self.party_reserves)
         ):
             raise BattlePracticeError("practice reserves must occupy one to five distinct slots")
+        if self.battle_kind not in {"wild", "trainer"}:
+            raise BattlePracticeError("practice battle kind must be wild or trainer")
+        if self.battle_kind == "wild":
+            if self.opponent_party_count is not None or self.opponent_reserves is not None:
+                raise BattlePracticeError("wild practice cannot declare an opponent party")
+        else:
+            if (
+                type(self.opponent_party_count) is not int  # noqa: E721
+                or not 1 <= self.opponent_party_count <= 6
+            ):
+                raise BattlePracticeError("trainer practice party count must be 1..6")
+            if (
+                self.opponent_species_ref is None
+                or self.opponent_level is None
+                or self.opponent_moves is None
+            ):
+                raise BattlePracticeError("trainer practice needs an explicit active opponent")
+            if self.opponent_reserves is not None and (
+                not isinstance(self.opponent_reserves, tuple)
+                or not 1 <= len(self.opponent_reserves) <= 5
+                or any(not isinstance(item, PracticeReserve) for item in self.opponent_reserves)
+                or len({item.party_slot for item in self.opponent_reserves})
+                != len(self.opponent_reserves)
+                or any(
+                    item.party_slot > self.opponent_party_count for item in self.opponent_reserves
+                )
+            ):
+                raise BattlePracticeError("trainer practice opponent reserves differ")
 
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
@@ -220,6 +251,9 @@ class BattlePracticeSpec:
             "opponent_species_ref",
             "opponent_moves",
             "party_reserves",
+            "battle_kind",
+            "opponent_party_count",
+            "opponent_reserves",
         }
         if (
             not isinstance(value, dict)
@@ -244,6 +278,9 @@ class BattlePracticeSpec:
         party_reserves = value.get("party_reserves")
         if party_reserves is not None and not isinstance(party_reserves, list):
             raise BattlePracticeError("practice reserve records differ")
+        opponent_reserves = value.get("opponent_reserves")
+        if opponent_reserves is not None and not isinstance(opponent_reserves, list):
+            raise BattlePracticeError("practice opponent reserve records differ")
         try:
             partition = ScenarioPartition(value["partition"])
             return cls(
@@ -280,6 +317,13 @@ class BattlePracticeSpec:
                 party_reserves=(
                     tuple(PracticeReserve.from_dict(reserve) for reserve in party_reserves)
                     if party_reserves is not None
+                    else None
+                ),
+                battle_kind=value.get("battle_kind", "wild"),
+                opponent_party_count=value.get("opponent_party_count"),
+                opponent_reserves=(
+                    tuple(PracticeReserve.from_dict(reserve) for reserve in opponent_reserves)
+                    if opponent_reserves is not None
                     else None
                 ),
             )
@@ -339,4 +383,15 @@ class BattlePracticeSpec:
             configuration["party_reserves"] = [
                 reserve.public_dict() for reserve in self.party_reserves
             ]
+        if self.battle_kind == "trainer":
+            configuration["schema"] = "pokemon.core.battle-practice-configuration.v5"
+            configuration.update(
+                battle_kind=self.battle_kind,
+                opponent_party_count=self.opponent_party_count,
+                opponent_reserves=(
+                    [reserve.public_dict() for reserve in self.opponent_reserves]
+                    if self.opponent_reserves is not None
+                    else None
+                ),
+            )
         return canonical_sha256(configuration)

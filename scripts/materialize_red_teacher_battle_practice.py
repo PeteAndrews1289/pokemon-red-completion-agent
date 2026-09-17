@@ -13,6 +13,7 @@ from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
 from pokemon_red_completion.battle_scenario_capture import (
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
+    parse_battle_scenario_capture_manifest,
 )
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.observation import PokemonRedStateReader
@@ -22,9 +23,12 @@ from pokemon_red_completion.red_battle_practice_factory import (
     WritableRedMemory,
     materialize_red_train_practice,
 )
+from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
+from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.teacher-battle-practice-plan.v1"
+TRAINER_SCHEMA = "pokemon.red.teacher-battle-practice-plan.v2"
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 
 
@@ -43,7 +47,7 @@ def _bound_file(value: object, label: str) -> bytes:
 def _authenticate(
     plan: object, plan_bytes: bytes
 ) -> tuple[dict[str, object], BattlePracticeSpec, bytes, bytes]:
-    if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
+    if not isinstance(plan, dict) or plan.get("schema") not in {SCHEMA, TRAINER_SCHEMA}:
         raise ValueError("teacher battle practice plan differs")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise ValueError("commit teacher factory before cartridge materialization")
@@ -54,20 +58,35 @@ def _authenticate(
     if hashlib.sha256(rom).hexdigest() != ROM_SHA256:
         raise ValueError("teacher factory Red ROM differs")
     source = _bound_file(plan.get("source_state"), "source state")
-    query = json.loads(_bound_file(plan.get("source_query"), "source query"))
-    episode = json.loads(_bound_file(plan.get("source_episode"), "source episode"))
     spec = BattlePracticeSpec.from_dict(plan.get("practice"))
-    if (
-        not isinstance(query, dict)
-        or query.get("state_sha256") != hashlib.sha256(source).hexdigest()
-        or query.get("observation_sha256") != plan.get("source_observation_sha256")
-        or episode.get("schema") != "pokemon.red.model-battle-train-episode-outcome.v1"
-        or episode.get("root_lineage_id") != spec.root_lineage_id
-        or episode.get("completed_decisions", 0) < 1
-        or spec.source_state_sha256 != hashlib.sha256(source).hexdigest()
-        or plan.get("source_encounter_index") != 0
-    ):
-        raise ValueError("teacher factory source is not the retained train decision")
+    if plan["schema"] == SCHEMA:
+        query = json.loads(_bound_file(plan.get("source_query"), "source query"))
+        episode = json.loads(_bound_file(plan.get("source_episode"), "source episode"))
+        if (
+            spec.battle_kind != "wild"
+            or not isinstance(query, dict)
+            or query.get("state_sha256") != hashlib.sha256(source).hexdigest()
+            or query.get("observation_sha256") != plan.get("source_observation_sha256")
+            or episode.get("schema") != "pokemon.red.model-battle-train-episode-outcome.v1"
+            or episode.get("root_lineage_id") != spec.root_lineage_id
+            or episode.get("completed_decisions", 0) < 1
+            or spec.source_state_sha256 != hashlib.sha256(source).hexdigest()
+            or plan.get("source_encounter_index") != 0
+        ):
+            raise ValueError("teacher factory source is not the retained train decision")
+    else:
+        manifest = parse_battle_scenario_capture_manifest(
+            _bound_file(plan.get("source_capture_manifest"), "source capture manifest")
+        )
+        if (
+            spec.battle_kind != "trainer"
+            or manifest.partition is not spec.partition
+            or manifest.expected_battle_state != 2
+            or manifest.root_lineage_id != spec.root_lineage_id
+            or manifest.state_sha256 != hashlib.sha256(source).hexdigest()
+            or spec.source_state_sha256 != manifest.state_sha256
+        ):
+            raise ValueError("teacher factory source is not an authenticated train trainer capture")
     output = plan.get("output")
     if not isinstance(output, str) or Path(output).exists() or not plan_bytes:
         raise ValueError("teacher factory output must be new")
@@ -85,6 +104,17 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         emulator.load_state_bytes(source)
         before_frame = emulator.frame_count
         reader = PokemonRedStateReader(emulator)
+        if plan["schema"] == TRAINER_SCHEMA:
+            source_manifest = parse_battle_scenario_capture_manifest(
+                _bound_file(plan.get("source_capture_manifest"), "source capture manifest")
+            )
+            source_prepared = prepare_red_battle_scenario(
+                PokemonRedObservationEncoder.from_state_reader(reader), reader.read()
+            )
+            if source_prepared.initial_observation_sha256 != (
+                source_manifest.initial_observation_sha256
+            ):
+                raise ValueError("source trainer semantic observation differs from capture")
         backend = emulator._require_backend()  # isolated teacher-only write surface
         receipt = materialize_red_train_practice(
             reader,
@@ -120,7 +150,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             initial_observation_sha256=receipt.observation_sha256,
             source_commit=source_commit,
             expected_map=generated_map,
-            expected_battle_state=1,
+            expected_battle_state=1 if spec.battle_kind == "wild" else 2,
             source_state_sha256=spec.source_state_sha256,
         )
     output_path = plan["output"]

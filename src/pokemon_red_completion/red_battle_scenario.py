@@ -129,8 +129,8 @@ def prepare_red_battle_scenario(
 ) -> PreparedRedBattleScenario:
     """Project an active MAIN-menu state and admit observable attack moves only."""
 
-    if not isinstance(initial_state, RawGameState) or initial_state.battle_state != 1:
-        raise RedBattleScenarioError("the first outcome family requires an active wild battle")
+    if not isinstance(initial_state, RawGameState) or initial_state.battle_state not in {1, 2}:
+        raise RedBattleScenarioError("battle scenario requires an active wild or trainer battle")
     snapshot = encoder.snapshot_from_raw(initial_state)
     payload = snapshot.to_dict()
     catalog = PokemonRedBattleCatalog()
@@ -178,8 +178,8 @@ def project_red_battle_turn_outcome(
 
     before = execution.initial_state
     after = execution.final_state
-    if before.battle_state != 1:
-        raise RedBattleScenarioError("the first outcome family requires a wild battle")
+    if before.battle_state not in {1, 2}:
+        raise RedBattleScenarioError("turn outcome requires a wild or trainer battle")
     if after.battle_state not in {0, before.battle_state}:
         raise RedBattleScenarioError("battle outcome changed to an unsupported battle kind")
     if before.map_id != after.map_id:
@@ -220,10 +220,31 @@ def project_red_battle_turn_outcome(
     # selected move spends PP, the terminal cartridge state is still the
     # consequence observed after choosing that candidate.
     opponent_fainted = after.enemy_hp == 0
+    if before.battle_state == 2:
+        after_roster_hp = after.enemy_party_hp or execution.terminal_enemy_roster_hp
+        if (
+            before.enemy_party_position is None
+            or before.enemy_party_hp is None
+            or not 0 <= before.enemy_party_position < len(before.enemy_party_hp)
+            or after_roster_hp is None
+            or before.enemy_party_position >= len(after_roster_hp)
+        ):
+            raise RedBattleScenarioError("trainer outcome lacks enemy roster evidence")
+        opponent_fainted = after_roster_hp[before.enemy_party_position] == 0
     if opponent_fainted:
         opponent_damage = before_enemy_hp / before_enemy_max
     elif after.enemy_hp is None:
         raise RedBattleScenarioError("nonterminal outcome lacks final opponent HP")
+    elif before.battle_state == 2 and after.enemy_party_position != before.enemy_party_position:
+        assert after.enemy_party_hp is not None
+        assert before.enemy_party_position is not None
+        opponent_damage = (
+            max(
+                0,
+                before_enemy_hp - after.enemy_party_hp[before.enemy_party_position],
+            )
+            / before_enemy_max
+        )
     else:
         opponent_damage = max(0, before_enemy_hp - after.enemy_hp) / before_enemy_max
 

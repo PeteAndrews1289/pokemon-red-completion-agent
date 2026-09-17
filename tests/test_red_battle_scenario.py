@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+import pytest
+
 from pokemon_red_completion.battle_runtime import BattleTurnExecution
 from pokemon_red_completion.observation import (
     PIDGEOTTO_SPECIES_ID,
@@ -14,6 +16,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_battle_scenario import (
+    RedBattleScenarioError,
     prepare_red_battle_scenario,
     project_red_battle_turn_outcome,
     red_battle_move_is_model_supported,
@@ -125,10 +128,13 @@ def test_prospective_support_rule_matches_status_and_self_destruct_mask() -> Non
     assert not red_battle_move_is_model_supported(TAIL_WHIP_MOVE_ID, 30)
     assert not red_battle_move_is_model_supported(SELFDESTRUCT_MOVE_ID, 5)
     assert not red_battle_move_is_model_supported(MEGA_PUNCH_MOVE_ID, 0)
-    assert red_battle_supported_move_count(
-        (TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, SELFDESTRUCT_MOVE_ID, WATER_GUN_MOVE_ID),
-        (35, 30, 5, 25),
-    ) == 2
+    assert (
+        red_battle_supported_move_count(
+            (TACKLE_MOVE_ID, TAIL_WHIP_MOVE_ID, SELFDESTRUCT_MOVE_ID, WATER_GUN_MOVE_ID),
+            (35, 30, 5, 25),
+        )
+        == 2
+    )
 
 
 def test_red_outcome_projector_measures_damage_and_pp_not_teacher_choice() -> None:
@@ -184,12 +190,37 @@ def test_red_terminal_wild_outcome_distinguishes_opponent_and_player_faint() -> 
     assert tied_faints.opponent_fainted
 
 
+def test_terminal_trainer_outcome_requires_post_battle_roster_evidence() -> None:
+    before = replace(
+        _raw(),
+        battle_state=2,
+        enemy_party_count=2,
+        enemy_party_position=1,
+        enemy_party_hp=(0, 20),
+        enemy_hp=20,
+    )
+    after = replace(before, battle_state=0, enemy_hp=0, enemy_party_hp=None)
+    execution = BattleTurnExecution(
+        initial_state=before,
+        final_state=after,
+        selected_slot=1,
+        actions_executed=2,
+        frames_executed=48,
+        move_executed=True,
+        terminal_enemy_roster_hp=(0, 0),
+    )
+    outcome = project_red_battle_turn_outcome(execution)
+    assert outcome.opponent_fainted
+    assert outcome.battle_exited
+    assert outcome.opponent_damage_fraction == pytest.approx(20 / 60)
+    with pytest.raises(RedBattleScenarioError, match="roster evidence"):
+        project_red_battle_turn_outcome(replace(execution, terminal_enemy_roster_hp=None))
+
+
 def test_red_suppressed_move_retains_the_selected_turn_outcome() -> None:
     suppressed = replace(_raw(), enemy_hp=60, active_party_hp=110)
 
-    outcome = project_red_battle_turn_outcome(
-        _execution(suppressed, move_executed=False)
-    )
+    outcome = project_red_battle_turn_outcome(_execution(suppressed, move_executed=False))
 
     assert not outcome.move_executed
     assert outcome.learner_update_eligible
@@ -204,9 +235,7 @@ def test_red_suppressed_move_retains_opponent_terminal_value() -> None:
         active_party_hp=80,
     )
 
-    outcome = project_red_battle_turn_outcome(
-        _execution(self_destructed, move_executed=False)
-    )
+    outcome = project_red_battle_turn_outcome(_execution(self_destructed, move_executed=False))
 
     assert not outcome.move_executed
     assert outcome.opponent_fainted

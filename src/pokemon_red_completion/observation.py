@@ -75,6 +75,10 @@ class RamAddress(IntEnum):
     ENEMY_TYPE_2 = 0xCFEB
     ENEMY_MOVES = 0xCFED
     ENEMY_MON_PARTY_POS = 0xCFE8
+    ENEMY_PARTY_COUNT = 0xD89C
+    ENEMY_PARTY_SPECIES = 0xD89D
+    ENEMY_PARTY_MON_1 = 0xD8A4
+    ENEMY_PARTY_NICKNAMES = 0xD9EE
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
     ENEMY_ATTACK = 0xCFF6
@@ -1173,6 +1177,9 @@ class RawGameState:
     enemy_hp: int | None = None
     enemy_level: int | None = None
     enemy_max_hp: int | None = None
+    enemy_party_count: int | None = None
+    enemy_party_position: int | None = None
+    enemy_party_hp: tuple[int, ...] | None = None
     player_attack_stage: int | None = None
     player_special_stage: int | None = None
     player_accuracy_stage: int | None = None
@@ -3825,6 +3832,23 @@ class PokemonRedStateReader:
             else None
         )
         battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+        enemy_party_count = (
+            self._memory.read_u8(RamAddress.ENEMY_PARTY_COUNT) if battle_state == 2 else 0
+        )
+        if battle_state == 2 and 1 <= enemy_party_count <= PARTY_LIMIT:
+            enemy_party_hp = tuple(
+                self._read_u16_be(
+                    int(RamAddress.ENEMY_PARTY_MON_1)
+                    + index * PARTY_STRUCT_STRIDE
+                    + PARTY_HP_OFFSET
+                )
+                for index in range(enemy_party_count)
+            )
+            enemy_party_position = self._memory.read_u8(RamAddress.ENEMY_MON_PARTY_POS)
+        else:
+            enemy_party_count = None
+            enemy_party_hp = None
+            enemy_party_position = None
         active_party_index = (
             self._memory.read_u8(RamAddress.PLAYER_MON_NUMBER) if battle_state else None
         )
@@ -3885,6 +3909,9 @@ class PokemonRedStateReader:
             enemy_hp=self._read_u16_be(RamAddress.ENEMY_HP),
             enemy_level=self._memory.read_u8(RamAddress.ENEMY_LEVEL),
             enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
+            enemy_party_count=enemy_party_count,
+            enemy_party_position=enemy_party_position,
+            enemy_party_hp=enemy_party_hp,
             player_attack_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE) if battle_state else None
             ),
@@ -4636,6 +4663,22 @@ class PokemonRedStateReader:
                     selected_move_slot=selected_move_slot,
                 )
         return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    def read_enemy_party_roster_hp(self) -> tuple[int, ...] | None:
+        """Read a trainer roster after battle exit for outcome verification only."""
+
+        count = self._memory.read_u8(RamAddress.ENEMY_PARTY_COUNT)
+        if (
+            not 1 <= count <= PARTY_LIMIT
+            or self._memory.read_u8(int(RamAddress.ENEMY_PARTY_SPECIES) + count) != 0xFF
+        ):
+            return None
+        return tuple(
+            self._read_u16_be(
+                int(RamAddress.ENEMY_PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + PARTY_HP_OFFSET
+            )
+            for index in range(count)
+        )
 
     def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
         """Return whether Red's live trainer-switch yes/no prompt owns input.

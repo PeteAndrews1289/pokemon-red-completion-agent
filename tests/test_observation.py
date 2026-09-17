@@ -757,6 +757,25 @@ def test_reader_identifies_only_the_live_trainer_switch_prompt() -> None:
     assert not reader.trainer_switch_prompt_visible(replace(prompt, party_count=1))
 
 
+def test_reader_verifies_enemy_roster_hp_after_trainer_battle_exit() -> None:
+    first = int(RamAddress.ENEMY_PARTY_MON_1)
+    second = first + 44
+    memory = RecordingMemory(
+        {
+            RamAddress.ENEMY_PARTY_COUNT: 2,
+            int(RamAddress.ENEMY_PARTY_SPECIES) + 2: 0xFF,
+            first + 1: 0,
+            first + 2: 0,
+            second + 1: 0,
+            second + 2: 19,
+        }
+    )
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_enemy_party_roster_hp() == (0, 19)
+    memory.values[int(RamAddress.ENEMY_PARTY_SPECIES) + 2] = 0
+    assert reader.read_enemy_party_roster_hp() is None
+
+
 def test_reader_rejects_incoherent_current_box_memory() -> None:
     memory = RecordingMemory(
         {
@@ -1020,11 +1039,13 @@ def test_reader_exposes_pinned_player_disable_slot_and_turns() -> None:
 
 
 def test_reader_exposes_exact_pay_day_bcd_accumulator() -> None:
-    memory = RecordingMemory({
-        RamAddress.TOTAL_PAY_DAY_MONEY: 0x00,
-        int(RamAddress.TOTAL_PAY_DAY_MONEY) + 1: 0x00,
-        int(RamAddress.TOTAL_PAY_DAY_MONEY) + 2: 0x58,
-    })
+    memory = RecordingMemory(
+        {
+            RamAddress.TOTAL_PAY_DAY_MONEY: 0x00,
+            int(RamAddress.TOTAL_PAY_DAY_MONEY) + 1: 0x00,
+            int(RamAddress.TOTAL_PAY_DAY_MONEY) + 2: 0x58,
+        }
+    )
 
     assert RamAddress.TOTAL_PAY_DAY_MONEY == 0xCCE5
     assert PokemonRedStateReader(memory).read_total_pay_day_money() == 58

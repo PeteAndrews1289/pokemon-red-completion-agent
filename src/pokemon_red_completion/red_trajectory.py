@@ -158,6 +158,18 @@ class PokemonRedObservationEncoder:
                     "opponent_hp": raw.enemy_hp,
                     "opponent_max_hp": enemy_max_hp,
                     "opponent_hp_ratio": _ratio(raw.enemy_hp, enemy_max_hp),
+                    **(
+                        {
+                            "opponent_party_count": raw.enemy_party_count,
+                            "opponent_remaining_count": (
+                                sum(hp > 0 for hp in raw.enemy_party_hp)
+                                if raw.enemy_party_hp is not None
+                                else None
+                            ),
+                        }
+                        if raw.battle_state == 2
+                        else {}
+                    ),
                     "player_attack_stage": _normalize_stage(raw.player_attack_stage),
                     "player_special_stage": _normalize_stage(raw.player_special_stage),
                     "player_accuracy_stage": _normalize_stage(raw.player_accuracy_stage),
@@ -281,10 +293,7 @@ class PokemonRedBattleDecisionObserver:
 
         if not isinstance(intent, BattleIntent):
             raise ValueError("battle intent is required when recording starts")
-        if (
-            self._active_battle_instance_id is not None
-            and intent == self._active_battle_intent
-        ):
+        if self._active_battle_instance_id is not None and intent == self._active_battle_intent:
             return
         # A fresh adaptive-runtime entry with a different declared intent is
         # authoritative evidence of a new encounter.  Some external capture
@@ -298,7 +307,6 @@ class PokemonRedBattleDecisionObserver:
         self._next_battle_index += 1
         self._active_battle_instance_id = f"{self.recorder.episode_id}:battle:{battle_index}"
         self._active_battle_intent = intent
-
 
     def battle_finished(self) -> None:
         """Close the active encounter only after the runtime observes battle exit."""
@@ -460,9 +468,7 @@ class PokemonRedBattleScheduleObserver:
             raise ValueError("schedule attestation references an unknown battle plan") from error
         before = self.encoder.snapshot_from_raw(before_state, battle_menu=before_menu)
         after = self.encoder.snapshot_from_raw(after_state, battle_menu=after_menu)
-        execution_step_index = (
-            self.recorder.next_step_index - 1 if offset.frames > 0 else None
-        )
+        execution_step_index = self.recorder.next_step_index - 1 if offset.frames > 0 else None
         self.sink.record_event(
             SparseEvent(
                 event_id=f"{self.recorder.episode_id}:schedule:{ordinal}",
@@ -551,11 +557,7 @@ def _observable_move_values(
     for slot_index, move_id in enumerate(observed_moves or ()):
         if move_id == 0:
             continue
-        pp = (
-            observed_pp[slot_index] & 0x3F
-            if slot_index < len(observed_pp)
-            else None
-        )
+        pp = observed_pp[slot_index] & 0x3F if slot_index < len(observed_pp) else None
         moves.append(
             {
                 "slot_index": slot_index,

@@ -7,7 +7,9 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
-from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.battle_scenario_capture import build_battle_scenario_capture_payload
+from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref, pokemon_red_species_ref
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import materialize_red_teacher_battle_practice as runner  # noqa: E402
@@ -127,3 +129,94 @@ def test_action_free_preflight_does_not_write_artifacts(tmp_path, monkeypatch):
     )
     assert runner.run(plan_path, check_only=True)["controller_actions"] == 0
     assert not Path(plan["output"]).exists()
+
+
+def test_trainer_plan_requires_authenticated_train_capture(tmp_path, monkeypatch):
+    plan = _plan(tmp_path)
+    source = Path(plan["source_state"]["path"]).read_bytes()
+    manifest = build_battle_scenario_capture_payload(
+        capture_id="train-trainer-source",
+        root_lineage_id=plan["practice"]["root_lineage_id"],
+        partition=ScenarioPartition.TRAIN,
+        state_bytes=source,
+        initial_observation_sha256="b" * 64,
+        source_commit="c" * 40,
+        expected_map=120,
+        expected_battle_state=2,
+    )
+    plan.update(
+        schema=runner.TRAINER_SCHEMA,
+        source_capture_manifest=_bound(tmp_path / "before.state.json", manifest),
+    )
+    plan["practice"].update(
+        battle_kind="trainer",
+        opponent_species_ref=pokemon_red_species_ref(177),
+        opponent_level=30,
+        opponent_moves=[{"move_ref": pokemon_red_move_ref(55), "pp": 25}],
+        opponent_party_count=1,
+    )
+    monkeypatch.setattr(runner, "ROM_SHA256", hashlib.sha256(b"ROM").hexdigest())
+    monkeypatch.setattr(
+        runner.subprocess,
+        "check_output",
+        lambda args, **kwargs: b"" if args[1] == "status" else b"a" * 40,
+    )
+    _, spec, authenticated_source, _ = runner._authenticate(plan, b"plan")
+    assert spec.battle_kind == "trainer"
+    assert authenticated_source == source
+    with pytest.raises(ValueError, match="authenticated train trainer capture"):
+        runner._authenticate(
+            {**plan, "practice": {**plan["practice"], "root_lineage_id": "different-root"}},
+            b"plan",
+        )
+
+
+def test_trainer_plan_rechecks_semantic_source_before_teacher_writes(tmp_path, monkeypatch):
+    plan = _plan(tmp_path)
+    plan["schema"] = runner.TRAINER_SCHEMA
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(plan))
+    spec = BattlePracticeSpec.from_dict(plan["practice"])
+    monkeypatch.setattr(runner, "_authenticate", lambda *_: (plan, spec, b"source", b"ROM"))
+
+    class Emulator:
+        frame_count = 0
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def load_state_bytes(self, _payload):
+            pass
+
+    monkeypatch.setattr(runner, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
+    monkeypatch.setattr(
+        runner,
+        "PokemonRedStateReader",
+        lambda _emulator: SimpleNamespace(read=lambda: object()),
+    )
+    monkeypatch.setattr(runner, "_bound_file", lambda *_args: b"manifest")
+    monkeypatch.setattr(
+        runner,
+        "parse_battle_scenario_capture_manifest",
+        lambda _payload: SimpleNamespace(initial_observation_sha256="a" * 64),
+    )
+    monkeypatch.setattr(
+        runner.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: object(),
+    )
+    monkeypatch.setattr(
+        runner,
+        "prepare_red_battle_scenario",
+        lambda *_args: SimpleNamespace(initial_observation_sha256="b" * 64),
+    )
+    monkeypatch.setattr(
+        runner,
+        "materialize_red_train_practice",
+        lambda *_args, **_kwargs: pytest.fail("teacher wrote before source verification"),
+    )
+    with pytest.raises(ValueError, match="semantic observation differs"):
+        runner.run(plan_path, check_only=True)

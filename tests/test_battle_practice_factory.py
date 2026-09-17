@@ -60,6 +60,7 @@ class FakeReader:
         self.enemy_max_hp = 80
 
     def read(self):
+        party_count = self.memory.get(int(RamAddress.PARTY_COUNT), 6)
         base = int(RamAddress.PARTY_MON_1) + PARTY_STRUCT_STRIDE
         moves = tuple(self.memory.get(base + PARTY_MOVES_OFFSET + index, 0) for index in range(4))
         pp = tuple(self.memory.get(base + PARTY_PP_OFFSET + index, 0) for index in range(4))
@@ -72,12 +73,14 @@ class FakeReader:
                 address + 1, default & 255
             )
 
-        party_bases = tuple(int(RamAddress.PARTY_MON_1) + i * PARTY_STRUCT_STRIDE for i in range(6))
+        party_bases = tuple(
+            int(RamAddress.PARTY_MON_1) + i * PARTY_STRUCT_STRIDE for i in range(party_count)
+        )
         party_species = tuple(self.memory.get(b, 28) for b in party_bases)
 
         return SimpleNamespace(
             battle_state=1,
-            party_count=6,
+            party_count=party_count,
             party_species_ids=party_species,
             party_hp=tuple(word(b + 1, 90) for b in party_bases),
             party_max_hp=tuple(word(b + 34, 90) for b in party_bases),
@@ -285,6 +288,37 @@ def test_reserve_spec_validation_and_hash():
         _spec(party_reserves=[{**reserve, "unknown": 1}])
 
 
+def test_trainer_team_spec_requires_complete_bounded_declaration():
+    active = {
+        "battle_kind": "trainer",
+        "opponent_species_ref": pokemon_red_species_ref(177),
+        "opponent_level": 30,
+        "opponent_moves": [{"move_ref": pokemon_red_move_ref(55), "pp": 25}],
+        "opponent_party_count": 2,
+    }
+    reserve = {
+        "party_slot": 2,
+        "species_ref": pokemon_red_species_ref(176),
+        "level": 30,
+        "moves": [{"move_ref": pokemon_red_move_ref(52), "pp": 25}],
+    }
+    trainer = _spec(**active, opponent_reserves=[reserve])
+    assert trainer.battle_kind == "trainer"
+    assert trainer.opponent_party_count == 2
+    assert trainer.configuration_sha256 != _spec().configuration_sha256
+    assert _spec(**active, opponent_reserves=[reserve]).configuration_sha256 == (
+        trainer.configuration_sha256
+    )
+    with pytest.raises(BattlePracticeError, match="wild practice"):
+        _spec(opponent_party_count=2)
+    with pytest.raises(BattlePracticeError, match="party count"):
+        _spec(**{**active, "opponent_party_count": 7})
+    with pytest.raises(BattlePracticeError, match="explicit active"):
+        _spec(battle_kind="trainer", opponent_party_count=1)
+    with pytest.raises(BattlePracticeError, match="reserves differ"):
+        _spec(**active, opponent_reserves=[reserve, reserve])
+
+
 def test_red_factory_materializes_reserve_party_member(monkeypatch):
     reader = _reader()
     memory = reader.memory
@@ -330,6 +364,84 @@ def test_red_factory_materializes_reserve_party_member(monkeypatch):
     assert reader.read().party_moves[0] == (85, 98, 0, 0)
     assert memory[base + 3] == memory[base + 33] == 35
     assert bytes(memory[red.PARTY_NICKNAMES_BASE + i] for i in range(11)) == species.nickname_bytes
+
+
+def test_red_factory_expands_contiguous_player_party_slots(monkeypatch):
+    reader = _reader()
+    memory = reader.memory
+    memory[int(RamAddress.PARTY_COUNT)] = 3
+    for index in range(3):
+        memory[int(RamAddress.PARTY_SPECIES) + index] = 28
+        memory[int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE] = 28
+    memory[int(RamAddress.PARTY_SPECIES) + 3] = 0xFF
+    original_ot = tuple(range(11))
+    for offset, value in enumerate(original_ot):
+        memory[red._PARTY_OT + red.NICKNAME_LENGTH + offset] = value
+    monkeypatch.setattr(red.PokemonRedObservationEncoder, "from_state_reader", lambda _r: object())
+    monkeypatch.setattr(
+        red,
+        "prepare_red_battle_scenario",
+        lambda _e, _r: SimpleNamespace(
+            supported_candidate_mask=(True, True, False, False),
+            initial_observation_sha256="b" * 64,
+        ),
+    )
+    species = SimpleNamespace(
+        types=(23, 23),
+        catch_rate=190,
+        nickname_bytes=b"PIKACHU\x50\x50\x50\x50",
+        neutral_stats=lambda _level: PracticeStats(70, 55, 40, 80, 45),
+        experience_at_level=lambda _level: 12345,
+    )
+    reserves = [
+        {
+            "party_slot": slot,
+            "species_ref": pokemon_red_species_ref(number),
+            "level": 35,
+            "moves": [
+                {"move_ref": pokemon_red_move_ref(85), "pp": 15},
+                {"move_ref": pokemon_red_move_ref(98), "pp": 30},
+            ],
+        }
+        for slot, number in ((4, 84), (5, 177), (6, 176))
+    ]
+    receipt = red.materialize_red_train_practice(
+        reader,
+        memory,
+        _spec(party_reserves=reserves),
+        cartridge=SimpleNamespace(species=lambda _id: species),
+    )
+    assert reader.read().party_count == 6
+    assert memory[int(RamAddress.PARTY_SPECIES) + 6] == 0xFF
+    assert tuple(memory[red._PARTY_OT + 3 * red.NICKNAME_LENGTH + i] for i in range(11)) == (
+        original_ot
+    )
+    assert len(receipt.party_reserves or ()) == 3
+
+
+def test_red_factory_rejects_noncontiguous_party_expansion_before_writes():
+    reader = _reader()
+    memory = reader.memory
+    memory[int(RamAddress.PARTY_COUNT)] = 3
+    memory[int(RamAddress.PARTY_SPECIES) + 3] = 0xFF
+    before = dict(memory)
+    with pytest.raises(BattlePracticeError, match="contiguously"):
+        red.materialize_red_train_practice(
+            reader,
+            memory,
+            _spec(
+                party_reserves=[
+                    {
+                        "party_slot": 5,
+                        "species_ref": pokemon_red_species_ref(84),
+                        "level": 35,
+                        "moves": [{"move_ref": pokemon_red_move_ref(85), "pp": 15}],
+                    }
+                ]
+            ),
+            cartridge=SimpleNamespace(species=lambda _id: object()),
+        )
+    assert memory == before
 
 
 def test_red_factory_changes_both_species_and_opponent_moves(monkeypatch):
