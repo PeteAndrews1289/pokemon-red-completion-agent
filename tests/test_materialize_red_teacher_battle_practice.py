@@ -7,7 +7,10 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
-from pokemon_red_completion.battle_scenario_capture import build_battle_scenario_capture_payload
+from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
+    build_battle_scenario_capture_payload,
+)
 from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref, pokemon_red_species_ref
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
@@ -201,17 +204,20 @@ def test_trainer_plan_rechecks_semantic_source_before_teacher_writes(tmp_path, m
     monkeypatch.setattr(
         runner,
         "parse_battle_scenario_capture_manifest",
-        lambda _payload: SimpleNamespace(initial_observation_sha256="a" * 64),
+        lambda _payload: SimpleNamespace(
+            initial_observation_sha256="a" * 64, observation_schema=None
+        ),
     )
+    monkeypatch.setattr(runner, "RedPracticeCartridge", lambda _rom: object())
     monkeypatch.setattr(
         runner.PokemonRedObservationEncoder,
         "from_state_reader",
-        lambda _reader: object(),
+        lambda _reader, **_kwargs: object(),
     )
     monkeypatch.setattr(
         runner,
         "prepare_red_battle_scenario",
-        lambda *_args: SimpleNamespace(initial_observation_sha256="b" * 64),
+        lambda *_args, **_kwargs: SimpleNamespace(initial_observation_sha256="b" * 64),
     )
     monkeypatch.setattr(
         runner,
@@ -220,3 +226,65 @@ def test_trainer_plan_rechecks_semantic_source_before_teacher_writes(tmp_path, m
     )
     with pytest.raises(ValueError, match="semantic observation differs"):
         runner.run(plan_path, check_only=True)
+
+
+def test_trainer_materializer_accepts_exact_rich_source_observation(tmp_path, monkeypatch):
+    plan = _plan(tmp_path)
+    plan["schema"] = runner.TRAINER_SCHEMA
+    plan_path = tmp_path / "plan.json"
+    plan_path.write_text(json.dumps(plan))
+    spec = BattlePracticeSpec.from_dict(plan["practice"])
+    monkeypatch.setattr(runner, "_authenticate", lambda *_: (plan, spec, b"source", b"ROM"))
+
+    class Emulator:
+        frame_count = 0
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def load_state_bytes(self, _payload):
+            pass
+
+        def _require_backend(self):
+            return SimpleNamespace(memory={})
+
+    monkeypatch.setattr(runner, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
+    monkeypatch.setattr(
+        runner, "PokemonRedStateReader", lambda _emulator: SimpleNamespace(read=lambda: object())
+    )
+    monkeypatch.setattr(runner, "_bound_file", lambda *_args: b"manifest")
+    monkeypatch.setattr(
+        runner, "parse_battle_scenario_capture_manifest",
+        lambda _payload: SimpleNamespace(
+            initial_observation_sha256="a" * 64,
+            observation_schema=OBSERVATION_SCHEMA_V2,
+        ),
+    )
+    monkeypatch.setattr(
+        runner, "RedPracticeCartridge",
+        lambda _rom: SimpleNamespace(public_base_stats={}),
+    )
+    seen = {}
+
+    def encoder(_reader, **kwargs):
+        seen.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(runner.PokemonRedObservationEncoder, "from_state_reader", encoder)
+    monkeypatch.setattr(
+        runner,
+        "prepare_red_battle_scenario",
+        lambda *_args, **_kwargs: SimpleNamespace(initial_observation_sha256="a" * 64),
+    )
+    monkeypatch.setattr(
+        runner,
+        "materialize_red_train_practice",
+        lambda *_args, **_kwargs: SimpleNamespace(
+            legal_move_count=2, configuration_sha256="b" * 64
+        ),
+    )
+    assert runner.run(plan_path, check_only=True)["controller_actions"] == 0
+    assert seen == {"include_battle_stats": True, "public_species_base_stats": {}}

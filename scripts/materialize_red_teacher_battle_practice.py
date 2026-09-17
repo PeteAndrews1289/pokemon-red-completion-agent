@@ -113,8 +113,23 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             source_manifest = parse_battle_scenario_capture_manifest(
                 _bound_file(plan.get("source_capture_manifest"), "source capture manifest")
             )
+            source_cartridge = RedPracticeCartridge(rom)
             source_prepared = prepare_red_battle_scenario(
-                PokemonRedObservationEncoder.from_state_reader(reader), reader.read()
+                PokemonRedObservationEncoder.from_state_reader(
+                    reader,
+                    include_battle_stats=(
+                        source_manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                    ),
+                    public_species_base_stats=(
+                        source_cartridge.public_base_stats
+                        if source_manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                        else None
+                    ),
+                ),
+                reader.read(),
+                allow_no_attack=(
+                    source_manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                ),
             )
             if source_prepared.initial_observation_sha256 != (
                 source_manifest.initial_observation_sha256
