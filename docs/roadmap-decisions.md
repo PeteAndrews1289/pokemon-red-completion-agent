@@ -1195,3 +1195,26 @@ remain the held-out truth test. The Red fresh-start/124-species gate, ROM-hack
 prohibition, and Crystal-to-Emerald sequence do not change.
 
 [Evidence](evidence/red-teacher-battle-practice-factory-2026-09-17.json).
+
+## September 17 — separate exploratory battle fitting from promotion qualification
+
+Pete authorized the bounded work needed to get the trainer learning loop moving.
+The trainer inventory contains one authenticated upstream TRAIN battle root; its
+assisted variants and timing siblings cannot create independent roots. The
+retired clean-power supply campaign produced zero roots from twelve assignments,
+so we will not revive it or relabel its failures.
+
+Introduce a lower, explicitly **correlated exploratory TRAIN** tier: exactly
+four prospectively declared generated trainer scenarios from the existing
+authenticated root, each admitted at the same five timing offsets, covering
+at least three distinct actor/opponent matchup profiles. This tier may fit a
+diagnostic three-head model and let it choose in bounded TRAIN practice. Its
+receipt must say one root, no independent training qualification, no natural
+advantage, and no promotion eligibility. It is not a replacement for Astra's
+four-root-by-four-scenario qualified-fit gate; that gate and independent
+natural DEVELOPMENT comparison remain necessary before battle authority is
+promoted. Retain failed scenarios without replacement or replay.
+
+The Red fresh-start/124-species gate, no-final-player-cheats rule, ROM-hack
+prohibition, and Crystal-to-Emerald order do not change. No full-game run,
+DEVELOPMENT opening, or GitHub publication is authorized by this decision.

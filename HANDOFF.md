@@ -25,27 +25,29 @@ was retained and excluded, never replayed or relabeled. A narrow ROM-free rule
 now allows only post-battle restoration; a separate one-turn private-ROM mechanic
 case verified selected execution followed by terminal PP restoration.
 
-Training remains blocked by independent supply: only one authenticated trainer
-TRAIN root is available. The declared first-fit gate is four genuinely independent
-roots, four admitted scenarios per root, five timing trials per scenario, balanced
-root counts, and main/prompt/forced/empty-attack coverage. Timing siblings cannot
-create root independence. Routine clean-power teacher-root generation remains
-prohibited. Natural DEVELOPMENT is unopened and cannot be used for fit. Do not
-repeat failed PP/HP plans, fit below the gate, run a full game, or push GitHub.
+Pete authorized a bounded route to get learning started without manufacturing
+independent roots. The [prospective exploratory plan](docs/evidence/red-trainer-exploratory-curriculum-plan-2026-09-17.json)
+permits exactly four varied same-root TRAIN scenarios, five timing trials each,
+and a diagnostic three-head fit. The earlier admitted scenario may count as
+one. This is **correlated exploratory training**, not qualified battle
+authority. Astra's separate four-independent-roots-by-four-scenarios gate,
+prompt/forced/depletion coverage and natural DEVELOPMENT comparison remain
+necessary before promotion. The failed clean-power campaign remains retired;
+no routine source factory, DEVELOPMENT fit, failed-scenario replay, full game
+or GitHub push.
 
 Model137 remains 137 examples / 92 successes / 58 economy-qualified; Red is
 96/124 and fresh-run acceptance 0/5. No authority, registration, transfer, or
-full-game progress occurred. The next bounded objective is to obtain independent
-authenticated trainer TRAIN roots within the existing stop conditions, then
-qualify the missing contexts before fitting. If that supply is impossible, seek
-Pete's explicit direction to revise the stop condition; do not silently make
-lineages or reuse DEVELOPMENT.
+full-game progress occurred. The immediate objective is to freeze three
+additional varied configurations, run their five declared timings with complete
+logs, and fit only if all four scenarios admit. Do not relabel same-root variants
+as independent or spend DEVELOPMENT for this exploratory fit.
 
 Focused tests and five private-ROM mechanic cases passed. The broad run was
 interrupted after 7,711 passes and seven failures: four follow an existing
 dashboard pointer to a receipt lacking `completed_episode`, two stale historical
 count assertions were repaired after collection, and one exact-Mac dependency
 hash check remains environment-specific. This is not a full-suite pass. No Flash
-or Claude work was used in this repair session. Recommend Sol High, Fast off for the next bounded
-source-supply and corpus-qualification session; use Astra only for the milestone
-design/promotion decision once independent evidence exists.
+or Claude work was used in the repair session. Recommend Sol High, Fast off for
+exploratory data collection and fitting; use Astra for the later promotion
+decision once independent evidence exists.

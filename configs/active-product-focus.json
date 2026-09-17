@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. One corrected five-timing TRAIN scenario was admitted across move/control/switch heads, but no model was fitted or promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "Only one authenticated upstream trainer TRAIN root is available; a balanced four-root-by-four-scenario corpus with prompt, forced and empty-attack contexts is still missing. Routine clean-power teacher-root generation remains prohibited by the active lane.",
-        "decision": "The repaired trainer practice path is a qualified pilot, not training clearance. Preserve the failed terminal-PP attempt, secure independent TRAIN trainer roots without manufacturing lineage, then collect the bounded corpus before fitting and natural DEVELOPMENT comparison.",
+        "authority_delta": "None. One five-timing TRAIN scenario is admitted as one correlated target; no trainer model has been fitted or promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "One upstream trainer root exists. It cannot satisfy Astra's independent-root qualification gate, and the retired clean-power factory will not be retried. A separately labeled correlated exploratory TRAIN fit is now authorized as a diagnostic learning step, not a promotion.",
+        "decision": "Prospectively collect exactly four varied same-root TRAIN scenarios at five timings each and permit only a disclosed exploratory three-head fit. Retain the four-by-four independent-root qualification gate and natural DEVELOPMENT comparison for promotion.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-practice-repair-pilot-2026-09-17.json",
-          "sha256": "083e75c44db5f264ddc426d7a6f257fd614fe0252792c97044f92ca13539f887"
+          "path": "docs/evidence/red-trainer-exploratory-curriculum-plan-2026-09-17.json",
+          "sha256": "606ad7a4b174ce21775ea489eb96fc9f2798db6d7cc2616fb9abaa73f606356f"
         },
-        "learning_output": "One same-root TRAIN scenario, six choices under five declared timings, was execution- and return-admitted as one three-head target. No fit or authority change. Real cartridge probes passed native send-out stats/PP, level-up, losing switch and empty-attack switching.",
-        "next_falsifier": "Independent trainer source roots cannot be authenticated without violating the clean-power stop condition, or a new prompt/forced/depletion scenario fails execution or return admission. No fit below the frozen corpus floor.",
-        "next_session_goal": "Find or prospectively authorize independent authenticated TRAIN trainer sources; then collect four balanced scenarios per root with five timings, prompt/forced/depletion coverage, and fit only after admission.",
-        "product_alignment": "The pilot now measures actual attack-versus-switch outcomes with correct cartridge stats and complete logs, while explicitly withholding model credit until independent supply and coverage exist.",
-        "session_id": "2026-09-17-trainer-practice-astra-repair-pilot",
-        "status": "closed",
-        "stop_condition": "Do not replay or relabel failed PP/HP attempts, fit under the four-by-four balanced corpus floor, relabel timing siblings as independent, open DEVELOPMENT, run a full game or push GitHub.",
-        "transfer_result": "No natural DEVELOPMENT or cross-title execution. The qualified pilot remains one upstream TRAIN root."
+        "learning_output": "One same-root TRAIN scenario, six choices under five declared timings, remains one admitted three-head target. The new four-scenario exploratory curriculum is prospective and has not produced a fit yet.",
+        "next_falsifier": "A declared varied scenario fails execution or return admission, or the diagnostic challenger gains no held-out TRAIN advantage. No failed-scenario replacement.",
+        "next_session_goal": "Complete the bounded same-root exploratory corpus and diagnostic fit, then separately design independent natural DEVELOPMENT comparison before any promotion.",
+        "product_alignment": "This turns verified cartridge outcomes into actual diagnostic model learning while preserving honest lineage and withholding promotion claims.",
+        "session_id": "2026-09-17-trainer-exploratory-train-v1",
+        "status": "active",
+        "stop_condition": "No replay or replacement of failed PP/HP or newly declared scenarios, no manufactured independent roots, no DEVELOPMENT fitting/opening, full game, authority promotion or GitHub push. A same-root fit must be labeled exploratory and cannot satisfy the qualified four-by-four gate.",
+        "transfer_result": "None. Natural DEVELOPMENT and cross-title execution remain unopened."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Secure independent authenticated trainer TRAIN roots without violating the clean-power restriction; collect balanced four-by-four scenarios and five timing trials with prompt/forced/depletion coverage before the first three-head fit. Natural DEVELOPMENT follows a justified challenger.",
+      "next_decision": "Collect exactly four distinct same-root generated TRAIN trainer scenarios with five timing trials each, fit a clearly correlated exploratory three-head challenger, and test only in bounded TRAIN practice. Keep four-by-four independent-root and natural DEVELOPMENT gates for promotion.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

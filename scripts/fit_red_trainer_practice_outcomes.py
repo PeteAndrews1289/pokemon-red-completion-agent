@@ -59,6 +59,40 @@ def _validate_root_source_provenance(
         root_by_source[source] = root
 
 
+def _validate_exploratory_supply(
+    targets: Sequence[Mapping[str, object]],
+    receipts: Sequence[Mapping[str, object]],
+) -> None:
+    """A bounded correlated TRAIN fit, never an independent-root qualification."""
+    if len(targets) != 4 or len(receipts) != 4:
+        raise ValueError("exploratory fit requires exactly four declared scenarios")
+    if len({row.get("root_lineage_id") for row in receipts}) != 1:
+        raise ValueError("exploratory fit requires one disclosed upstream TRAIN root")
+    if len({row.get("capture_id") for row in receipts}) != 4:
+        raise ValueError("exploratory fit requires four distinct captures")
+    matchups: set[tuple[str, str]] = set()
+    for target in targets:
+        observation = target.get("observation")
+        if not isinstance(observation, Mapping):
+            raise ValueError("exploratory actor observation is missing")
+        features = observation.get("features")
+        if not isinstance(features, Mapping):
+            raise ValueError("exploratory actor features are missing")
+        party = features.get("party")
+        battle = features.get("battle")
+        if not isinstance(party, Mapping) or not isinstance(battle, Mapping):
+            raise ValueError("exploratory matchup is missing")
+        lead = party.get("lead")
+        if not isinstance(lead, Mapping):
+            raise ValueError("exploratory active party member is missing")
+        actor, opponent = lead.get("species_ref"), battle.get("opponent_species_ref")
+        if not isinstance(actor, str) or not isinstance(opponent, str):
+            raise ValueError("exploratory species references are missing")
+        matchups.add((actor, opponent))
+    if len(matchups) < 3:
+        raise ValueError("exploratory fit requires three prospective matchup profiles")
+
+
 def _bound_path(value: object, label: str) -> Path:
     if not isinstance(value, dict) or set(value) != {"path", "sha256"}:
         raise ValueError(f"{label} binding differs")
@@ -72,7 +106,8 @@ def _bound_path(value: object, label: str) -> Path:
 
 
 def run(
-    plan_path: Path, *, check_only: bool = False, probe_only: bool = False
+    plan_path: Path, *, check_only: bool = False, probe_only: bool = False,
+    exploratory_fit: bool = False,
 ) -> dict[str, object]:
     plan = json.loads(plan_path.read_bytes())
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
@@ -87,7 +122,8 @@ def run(
     seed = plan.get("seed")
     output = plan.get("output")
     if (
-        not isinstance(cases, list) or len(cases) < (1 if probe_only else 16)
+        not isinstance(cases, list)
+        or len(cases) < (1 if probe_only else 4 if exploratory_fit else 16)
         or type(seed) is not int or seed < 0  # noqa: E721
         or not isinstance(output, str) or Path(output).exists()
     ):
@@ -179,7 +215,9 @@ def run(
             "model_updates": 0,
             "authority_promotions": 0,
         }
-    if (
+    if exploratory_fit:
+        _validate_exploratory_supply(scenario_targets, scenario_receipts)
+    elif (
         len(root_counts) < 4
         or any(count < 4 for count in root_counts.values())
         or len(set(root_counts.values())) != 1
@@ -195,7 +233,7 @@ def run(
         for head in ("move", "control", "switch")
     ):
         raise ValueError("trainer corpus lacks one or more learnable heads")
-    if (
+    if not exploratory_fit and (
         {row["decision_context"] for row in scenario_receipts}
         != {"main", "prompt", "forced"}
         or not any(row["attack_depleted"] is True for row in scenario_receipts)
@@ -203,17 +241,28 @@ def run(
         raise ValueError("trainer corpus lacks required decision contexts")
     if check_only:
         return {
-            "status": "train_only_corpus_admitted_no_fit",
+            "status": (
+                "correlated_exploratory_train_corpus_admitted_no_fit"
+                if exploratory_fit else "train_only_corpus_admitted_no_fit"
+            ),
             "scenario_count": len(scenario_targets),
             "root_count": len(root_counts),
             "model_updates": 0,
         }
-    model = fit_trainer_practice_three_heads(scenario_targets, seed=seed)
+    model = fit_trainer_practice_three_heads(
+        scenario_targets, seed=seed, require_corpus_floor=not exploratory_fit
+    )
     destination = Path(output)
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
     _record(destination / "model.json", model.to_dict())
     report = {
         "schema": "pokemon.red.trainer-practice-fit-receipt.v1",
+        "qualification_tier": (
+            "correlated_exploratory_train_only"
+            if exploratory_fit else "independent_root_train"
+        ),
+        "promotion_eligible": False,
+        "independent_train_supply_gate_passed": not exploratory_fit,
         "source_commit": revision,
         "corpus_plan_sha256": hashlib.sha256(plan_path.read_bytes()).hexdigest(),
         "scenario_count": len(scenario_targets),
@@ -241,11 +290,15 @@ def main() -> None:
     parser.add_argument("plan", type=Path)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--probe-only", action="store_true")
+    parser.add_argument("--exploratory-fit", action="store_true")
     args = parser.parse_args()
     if args.check_only and args.probe_only:
         parser.error("choose one of --check-only or --probe-only")
+    if args.probe_only and args.exploratory_fit:
+        parser.error("probe-only cannot also fit")
     print(json.dumps(run(args.plan, check_only=args.check_only,
-                         probe_only=args.probe_only), sort_keys=True))
+                         probe_only=args.probe_only,
+                         exploratory_fit=args.exploratory_fit), sort_keys=True))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon.red.trainer-practice-exploratory-plan.v1",
+  "recorded_on": "2026-09-17",
+  "status": "prospective_not_executed",
+  "authorization": "Pete authorized the bounded work needed to get the battle trainer learning loop moving; no GitHub publication was authorized",
+  "mission_check": {
+    "reusable_capability": "Learn attack, voluntary-switch and replacement choices from executed whole-party trainer outcomes",
+    "learned_authority": "A diagnostic three-head model may choose in bounded TRAIN practice; no full-player battle authority or promotion",
+    "transfer_test": "Later disjoint natural DEVELOPMENT battles against frozen and fixed controls, not same-root timing siblings",
+    "cheapest_falsifier": "A prospectively declared varied trainer scenario fails complete execution/return admission, or the resulting challenger gains no advantage on held-out practice",
+    "time_box": "One session, at most two hours from 19:05 UTC on 2026-09-17",
+    "stop_condition": "Do not replace or replay a failed declared scenario; do not relabel the source root, fit DEVELOPMENT, open sealed evaluation, run a full game, promote the model or push GitHub"
+  },
+  "tier_split": {
+    "exploratory": "Exactly four distinct assisted TRAIN scenarios from the one authenticated trainer root, each with prospectively declared timing offsets 0,2,4,6,8 and at least three actor/opponent matchup profiles. The admitted earlier main-context pilot may count as one. A fit is diagnostic and correlated.",
+    "qualified": "Astra's balanced four-independent-roots-by-four-scenarios minimum and prompt/forced/depletion coverage remain the separate qualification gate. Natural DEVELOPMENT comparison remains necessary for promotion."
+  },
+  "source_inventory": {
+    "trainer_state_manifests": 9,
+    "distinct_upstream_trainer_root_ids": 1,
+    "upstream_root_id": "red-lab-rival-train-20260917-offset137",
+    "retired_clean_power_campaign_retried": false
+  },
+  "planned_effects": {
+    "new_full_game_runs": 0,
+    "development_roots_opened": 0,
+    "sealed_roots_opened": 0,
+    "authority_promotions": 0,
+    "github_pushes": 0
+  }
+}

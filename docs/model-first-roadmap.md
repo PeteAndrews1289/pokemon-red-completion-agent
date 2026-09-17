@@ -71,17 +71,19 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Model-directed battle experience | Capture model-selected attack and switch outcomes from varied six-member train states; measure choice contrasts across RNG timings | Sol High, Fast off |
-| Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
+| Exploratory trainer fit | Fit one explicitly correlated TRAIN-only attack/switch/replacement model from four distinct generated trainer scenarios with five timing trials each; retain failures and zero promotion claim | Sol High, Fast off |
+| Battle policy qualification and comparison | Retain the four-independent-roots-by-four-scenarios qualified-fit gate, then beat both the frozen model and fixed heuristic on separate natural DEVELOPMENT episodes before promotion | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:90–120 minutes to build prospective varied training
-configurations and multiple RNG trials. Do not fit a single generated case,
-count siblings as independent roots, lower the four-by-four gate, replay
-consumed trials or spend development roots before a justified challenger.
+Next time box:90–120 minutes to build four prospectively declared varied
+TRAIN configurations and five RNG trials each. The newly authorized
+correlated exploratory fit does not lower the separate four-by-four
+qualification gate. Do not fit a single generated case, count siblings as
+independent roots, replay consumed trials or spend development roots before
+a justified challenger.
 No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
