@@ -3,36 +3,41 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Battle practice: six-member party setup qualified
+## Trainer battle lab: model boundary qualified, learner still weak
 
-The teacher-only Red factory can set both combatants' Gen I species, level,
-stats, HP and moves/PP from the authenticated 151-species cartridge catalog.
-The [complete-turn verification](docs/evidence/red-battle-complete-turn-verification-2026-09-17.json)
-settles attack outcomes through the opponent's reply or battle exit; earlier
-first-effect labels are not complete turns. Teacher changes are confined to an
-isolated training capture; the model has no memory-write action.
+The [retained qualification](docs/evidence/red-trainer-practice-model-boundary-2026-09-17.json)
+starts from one clean-opening, authenticated Red lab-rival **TRAIN** capture. A
+teacher-only isolated copy can configure both six-member teams with any of the
+151 cartridge species, declared levels, stats, HP, and moves/PP. The original
+capture is unchanged. All derived variants inherit its one train lineage; no
+new independent evaluation root is created.
 
-The [six-member qualification](docs/evidence/red-teacher-battle-team-2026-09-17.json)
-adds up to five distinct existing reserve-party slots, each with cartridge-derived
-types, stats, experience and display name, plus declared level, HP and moves/PP.
-The source had six occupied slots. One private materialization used zero actions
-and frames and read back six distinct species. The existing semantic switch
-view exposed all five reserves. A bounded real-game switch to slot 2 succeeded
-in 18 actions and 1,098 frames; the opponent replied and battle state remained
-wild/active. Source state bytes were unchanged.
+The runner lets a policy select each legal attack, voluntary switch,
+between-opponent prompt response and forced replacement. It does not read
+private opponent reserve identities, choose for the policy, or write memory
+after episode start. Real-cartridge tests cover two and six opponents, prompt
+accept/decline, voluntary and forced switches, terminal roster verification,
+and every species' readback. A clean six-on-six state produced four measured
+opening move outcomes from the same starting state. The composed model-head
+adapter also executed a diagnostic voluntary switch to slot 6 and a subsequent
+frozen-model attack in the real emulator; its control and target heads were
+test stubs, not learned models.
 
-This is an infrastructure qualification, not model learning. No model selected
-that switch, no outcome was added to training, no fit or promotion occurred,
-and the generated state adds zero independent roots. Trainer opponent rosters,
-trainer AI, replacement after KO, items and multi-turn trainer-battle
-settlement are still unqualified. Custom movesets remain explicitly assisted.
+A frozen attack model then made 20 attack choices during a retained 29-decision
+six-on-six episode. A fixed baseline declined four optional switches and used
+the first living forced replacement five times. It defeated four opponents,
+lost all six party members, and stopped with an explicit `party_defeated`
+receipt. This is a useful failure, **not** learned switching or a win. The
+training lab can now expose the consequential decisions; the next work is
+outcome-matched switch/control training across varied rosters and a disjoint
+natural development comparison. No fit, promotion or transfer claim occurred.
 
-Next bounded work: capture model-selected attack and switch outcomes from
-varied six-member train states across multiple timings, then assess whether
-trainer-roster setup is the next bottleneck. Preserve root clustering and use
-untouched natural development battles before any promotion. No full Red run,
-ROM hack, Crystal execution or GitHub push.
+The broader non-integration suite was interrupted after 2,688 passes and three
+unrelated dashboard-fixture failures; it is not a full-suite pass. Focused
+tests, real-cartridge trainer integration, lint and type checking passed.
 
 Red remains 96/124 with 74 specimens and 198 cash. Model137 remains 137
 examples, 92 successes and 58 economy-qualified; fresh Red acceptance is 0/5.
-Gameplay is stopped. Recommended next: Sol High, Fast off, 90–120 minutes.
+Gameplay is stopped. No full Red run, ROM hack, Crystal execution or GitHub
+push. Recommended next: Sol High, Fast off, about 90–120 minutes for the
+switch-learning and held-out comparison gate.

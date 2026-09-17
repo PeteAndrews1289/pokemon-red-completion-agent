@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-team**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-practice-model-boundary**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-practice-model-boundary
+
+A clean TRAIN source yielded six-on-six trainer practice, four measured moves and a 29-decision frozen baseline loss. Full-party settlement and defeat receipts worked without post-start teacher action.
+
+**Deviation:** The fixed switch baseline lost after four opponent KOs; this is not a learned switch result or development evaluation. All assisted variants inherit one TRAIN root. No fit, promotion, Red registration, fresh acceptance, transfer or GitHub push.
+
+**Next:** Sol High, Fast off: collect outcome-matched switch/control decisions across varied TRAIN rosters, fit on TRAIN only, then test disjoint natural development advantage before promotion.
 
 ### 2026-09-17-teacher-battle-team
 

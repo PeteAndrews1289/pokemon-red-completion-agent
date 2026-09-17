@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon.red.trainer-practice-model-boundary-evidence.v1",
+  "recorded_on": "2026-09-17",
+  "status": "trainer_training_lab_qualified_model_competence_not_promoted",
+  "source": {
+    "kind": "fresh_clean_opening_lab_rival_train_capture",
+    "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+    "source_commit": "580c3b66464177b881b023ea09dd198ae449290b",
+    "state_sha256": "7e825d21d2d203f7c231df651f2b71916cc6b2c73da10df42cc0911ee78d3e35",
+    "manifest_sha256": "b38eef1315d5c6c919a922f6a06f811317408f3db2041b7b8a9c0cec2b90754e",
+    "partition": "train",
+    "opponent_party_count_before_assistance": 1,
+    "model_queries": 0,
+    "full_game_replays": 0
+  },
+  "factory": {
+    "battle_kind": "trainer",
+    "player_party_count": 6,
+    "opponent_party_count": 6,
+    "actor_move_count": 4,
+    "all_151_species_live_readback_passed": true,
+    "materialization_outcome_sha256": "ffcfd922eb5385fd11a40761b7ad6d8f6ac73655963fc45adce60ca6fa461c0c",
+    "assisted_capture_manifest_sha256": "91f9df406d359082313e8c24d881f424d25aaa7bceeb2932634ffd2ef2f18e43",
+    "assistance": "isolated_teacher_memory_intervention",
+    "materialization_controller_actions": 0,
+    "materialization_emulator_frames": 0,
+    "new_independent_upstream_roots": 0
+  },
+  "opening_move_outcomes": {
+    "measurement_outcome_sha256": "8d4aec2f8a05c1fcc8f67fda893d1f3d3fabe5db2c73f5491dae3390bb54daff",
+    "measured_candidates": 4,
+    "same_starting_state": true,
+    "minimum_pre_attack_frames": 2048,
+    "model_choice_candidate_index": 0,
+    "best_candidate_indices": [0, 2, 3],
+    "teacher_choice_targets": 0,
+    "model_updates": 0
+  },
+  "complete_episode": {
+    "baseline_outcome_sha256": "f9146d0b0455f2f22af0885c03a60a196ca859eda4252d6449c471ca5b371622",
+    "policy": "frozen_attack_model_decline_optional_first_legal_forced",
+    "decision_count": 29,
+    "attacks": 20,
+    "switch_prompts_declined": 4,
+    "forced_switches": 5,
+    "opponent_faints": 4,
+    "player_faints": 6,
+    "battle_won": false,
+    "stop_reason": "party_defeated",
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "learned_switch_authority": false
+  },
+  "verification": {
+    "focused_rom_free_tests_passed": 587,
+    "real_cartridge_trainer_integration_tests_passed": 6,
+    "composed_three_head_adapter_live_probe": "Diagnostic control and target heads chose a legal voluntary switch to slot 6; the frozen move head then selected an attack. This qualifies the adapter, not learned switch competence.",
+    "all_species_sweep_passed": true,
+    "ruff": "passed",
+    "mypy_changed_source_modules": "passed",
+    "broader_suite": "stopped_after_2688_passes_and_3_unrelated_dashboard_fixture_failures; not a full-suite pass"
+  },
+  "learning_and_product_delta": {
+    "registered_pokedex": "96/124 unchanged",
+    "model137": "137 examples, 92 successes, 58 economy-qualified unchanged",
+    "fresh_red_acceptance": "0/5 unchanged",
+    "fit": 0,
+    "promotion": 0,
+    "development_comparison": 0,
+    "transfer_result": 0
+  },
+  "next_gate": "Build and measure a varied switch-decision curriculum under this train lineage, fit only on TRAIN, then test a frozen challenger against untouched natural development battles and fixed controls."
+}

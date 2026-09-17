@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from pokemon_red_completion.battle_actions import BattleAction
+from pokemon_red_completion.battle_control_features import CONTROL_CLASS_REFS
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
 from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
 from pokemon_red_completion.battle_recovery import resolve_trainer_switch_prompt
@@ -40,6 +41,7 @@ from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCart
 from pokemon_red_completion.red_battle_practice_factory import materialize_red_train_practice
 from pokemon_red_completion.red_battle_scenario import project_red_battle_turn_outcome
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
+from pokemon_red_completion.red_trainer_practice_policy import RedTrainerPracticeModelPolicy
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 pytestmark = pytest.mark.integration
@@ -98,6 +100,34 @@ def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() 
     assert sum(step["kind"] == "attack" for step in episode.decisions) >= 6
     assert any(step["kind"] == "switch_prompt" for step in episode.decisions)
     assert episode.public_dict()["teacher_queries"] == 0
+
+    class SwitchThenAttack:
+        calls = 0
+
+        def predict_ref(self, _features):
+            self.calls += 1
+            return CONTROL_CLASS_REFS[5] if self.calls == 1 else CONTROL_CLASS_REFS[0]
+
+    class HighestSlot:
+        def probabilities(self, candidates):
+            return [float(item.party_slot) for item in candidates.candidates]
+
+    composed = RedTrainerPracticeModelPolicy(
+        policy_id="trainer-composed-model-seam-diagnostic",
+        battle_plan_id="trainer-train-lab",
+        move_model=model,
+        control_model=SwitchThenAttack(),
+        switch_model=HighestSlot(),
+    )
+    switched = run_red_trainer_practice_episode(
+        capture,
+        session_factory=session_factory,
+        policy=composed,
+        max_decisions=2,
+    )
+    assert switched.stop_reason == "decision_budget"
+    assert [step["kind"] for step in switched.decisions] == ["voluntary_switch", "attack"]
+    assert switched.decisions[0]["party_slot"] == 6
 
 
 @pytest.mark.parametrize("team_count", [2, 6])

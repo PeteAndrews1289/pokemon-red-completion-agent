@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build a varied, bounded assisted train curriculum from verified battle controls, then require disjoint natural development advantage over frozen and fixed-heuristic controls before promotion.
+- Next decision: Train outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose and execute legal battle attacks from semantic observations, then improve attack reliability and resource value with separate training and comparison scenarios. |
+| Reusable capability | Choose attacks, voluntary switches, replacement-prompt answers and forced replacements from semantic observations in bounded full-party trainer battles, then improve outcomes on separate natural battles. |
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A varied assisted train configuration fails exact readback or real turn execution, or the move ranker cannot improve against untouched natural battles. |
+| Cheapest falsifier | A model-selected switch cannot execute from an authenticated varied TRAIN battle, or a fitted challenger cannot beat frozen and fixed controls on untouched natural development battles. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-teacher-battle-team** · status **closed** · evidence [qualification](docs/evidence/red-teacher-battle-team-2026-09-17.json)
+**2026-09-17-trainer-practice-model-boundary** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-model-boundary-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Cartridge-backed party variation exposes real type and switch-target choices without giving the model memory-write authority; natural battles remain the truth test. |
-| Learning output | Six distinct party members and five semantic switch candidates read back from one assisted train state; one teacher-triggered real switch succeeded in 18 actions and 1098 frames. This is qualification, not model learning. |
-| Authority delta | A teacher-triggered real switch succeeded in a six-member assisted train state. No model query, fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent development or cross-title test ran. All assisted configurations inherit the same consumed train root; natural Red and other-title tests remain required. |
-| Blocker | The factory can replace five existing reserve slots and the real game accepts a configured switch, but there are no retained model-selected switch outcomes from these varied states. Trainer rosters, trainer AI and multi-turn trainer settlement are not qualified. |
-| Decision | Obtain bounded model-selected attack and switch outcomes from varied assisted train states, with multi-timing measurement; only then extend to trainer rosters and compare a fitted challenger on untouched natural development roots. |
-| Next session | Sol High, Fast off, about 90-120 minutes: prospectively capture model-selected attack and switch outcomes from varied six-member train states across timings; retain outcomes without fitting or claiming independent roots. Then scope trainer-roster setup. |
-| Next falsifier | The model cannot select or execute a useful switch from the varied party, complete-turn outcomes are unstable across timings, or a fitted challenger fails natural development comparison. |
-| Stop condition | Stop on incoherent generated state, unstable outcome, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | The model can own every full-party trainer battle decision in an authenticated short scenario; teacher memory edits only construct training conditions, and natural battles remain the promotion test. |
+| Learning output | One clean-opening TRAIN source yielded a six-on-six assisted trainer capture, four measured opening move outcomes and a retained 29-decision frozen attack baseline loss. This is a usable curriculum boundary and a failure observation, not a learner gain. |
+| Authority delta | A frozen move model chose 20 attacks in one authenticated six-on-six TRAIN episode. Fixed rules handled four optional and five forced switches; the party lost after four opponent KOs. No learned switch choice, fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No independent development or cross-title test ran. The assisted trainer battle inherits one TRAIN root; its loss is not an evaluation result. |
+| Blocker | Trainer roster setup, real replacement prompts, full-party episodes and explicit loss reporting are qualified. The missing learning result is an outcome-trained model-selected switch/control choice with disjoint natural development advantage. |
+| Decision | Collect varied TRAIN outcomes for attack versus switch and switch targets, fit a challenger only on TRAIN, then compare it with frozen and fixed controls on untouched natural development battles before promotion. |
+| Next session | Sol High, Fast off, about 90-120 minutes: collect outcome-matched optional-switch and target alternatives across varied TRAIN rosters, fit one challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run. |
+| Next falsifier | A switch-aware challenger cannot produce a legal useful switch, cannot outperform the no-optional-switch baseline in varied TRAIN battles, or fails untouched natural development comparison. |
+| Stop condition | Stop on incoherent generated state, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 
