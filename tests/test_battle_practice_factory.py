@@ -344,6 +344,9 @@ def test_red_factory_materializes_reserve_party_member(monkeypatch):
     base = int(RamAddress.PARTY_MON_1)
     memory[base] = 28
     memory[int(RamAddress.PARTY_SPECIES)] = 28
+    active_base = base + PARTY_STRUCT_STRIDE
+    memory[active_base + red._PARTY_OT_ID_OFFSET] = 0xAB
+    memory[active_base + red._PARTY_OT_ID_OFFSET + 1] = 0x6C
     monkeypatch.setattr(red.PokemonRedObservationEncoder, "from_state_reader", lambda _r: object())
     monkeypatch.setattr(
         red,
@@ -381,6 +384,9 @@ def test_red_factory_materializes_reserve_party_member(monkeypatch):
     assert reader.read().party_species_ids[0] == 84
     assert reader.read().party_hp[0] == 50
     assert reader.read().party_moves[0] == (85, 98, 0, 0)
+    assert tuple(memory[base + red._PARTY_OT_ID_OFFSET + i] for i in range(2)) == (
+        0xAB, 0x6C
+    )
     assert memory[base + 3] == memory[base + 33] == 35
     assert bytes(memory[red.PARTY_NICKNAMES_BASE + i] for i in range(11)) == species.nickname_bytes
 
@@ -393,6 +399,9 @@ def test_red_factory_expands_contiguous_player_party_slots(monkeypatch):
         memory[int(RamAddress.PARTY_SPECIES) + index] = 28
         memory[int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE] = 28
     memory[int(RamAddress.PARTY_SPECIES) + 3] = 0xFF
+    active_base = int(RamAddress.PARTY_MON_1) + PARTY_STRUCT_STRIDE
+    memory[active_base + red._PARTY_OT_ID_OFFSET] = 0xAB
+    memory[active_base + red._PARTY_OT_ID_OFFSET + 1] = 0x6C
     original_ot = tuple(range(11))
     for offset, value in enumerate(original_ot):
         memory[red._PARTY_OT + red.NICKNAME_LENGTH + offset] = value
@@ -435,6 +444,11 @@ def test_red_factory_expands_contiguous_player_party_slots(monkeypatch):
     assert tuple(memory[red._PARTY_OT + 3 * red.NICKNAME_LENGTH + i] for i in range(11)) == (
         original_ot
     )
+    for index in range(3, 6):
+        base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+        assert tuple(memory[base + red._PARTY_OT_ID_OFFSET + i] for i in range(2)) == (
+            0xAB, 0x6C
+        )
     assert len(receipt.party_reserves or ()) == 3
 
 

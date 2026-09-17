@@ -21,6 +21,7 @@ from pokemon_red_completion.battle_runtime import (
     execute_bounded_battle_move_turn,
 )
 from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
@@ -275,6 +276,99 @@ def test_live_losing_voluntary_switch_is_retained(
     assert episode.decisions[0]["state_after"]["party_hp"][1] == 0
     assert episode.public_dict()["metrics"]["party_faints"] >= 1
     assert episode.decisions[1]["kind"] == "forced_switch"
+
+
+def test_live_switch_in_attack_uses_reserve_move_effectiveness(tmp_path: Path) -> None:
+    """Independent teacher-only mechanic probe, excluded from learner evidence."""
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_SOURCE_STATE")
+    if not rom_path or not state_path:
+        pytest.skip("private authenticated TRAIN mechanic inputs not supplied")
+    source = Path(state_path).read_bytes()
+    cartridge = RedPracticeCartridge(Path(rom_path).read_bytes())
+    with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(source)
+        reader = PokemonRedStateReader(emulator)
+        before = reader.read()
+        assert before.map_id is not None
+        spec = BattlePracticeSpec.from_dict({
+            "source_state_sha256": sha256(source).hexdigest(),
+            "root_lineage_id": "trainer-switch-attack-mechanic-probe",
+            "partition": "train", "battle_kind": "trainer",
+            "actor_species_ref": pokemon_red_species_ref(84), "actor_level": 32,
+            "actor_moves": [_move(85, 15), _move(98, 30)],
+            "party_reserves": [{
+                "party_slot": 2, "species_ref": pokemon_red_species_ref(177),
+                "level": 32, "moves": [_move(55, 25), _move(33, 35)],
+            }],
+            "opponent_species_ref": pokemon_red_species_ref(169),
+            "opponent_level": 25, "opponent_hp": 30,
+            "opponent_moves": [_move(33, 35)], "opponent_party_count": 1,
+        })
+        materialize_red_train_practice(
+            reader, emulator._require_backend().memory, spec, cartridge=cartridge
+        )
+        assert not reader.read().enemy_using_trapping_move
+        memory = emulator._require_backend().memory
+        active_base = int(RamAddress.PARTY_MON_1)
+        reserve_base = active_base + PARTY_STRUCT_STRIDE
+        assert tuple(memory[active_base + 12 + i] for i in range(2)) == tuple(
+            memory[reserve_base + 12 + i] for i in range(2)
+        )
+        prepared = prepare_red_battle_scenario(
+            PokemonRedObservationEncoder.from_state_reader(
+                reader, include_battle_stats=True,
+                public_species_base_stats=cartridge.public_base_stats,
+            ),
+            reader.read(),
+        )
+        generated = emulator.save_state_bytes()
+    state_file = tmp_path / "switch-attack.state"
+    manifest_file = tmp_path / "switch-attack.state.json"
+    state_file.write_bytes(generated)
+    manifest_file.write_bytes(build_battle_scenario_capture_payload(
+        capture_id="switch-attack-mechanic-probe",
+        root_lineage_id=spec.root_lineage_id,
+        partition=ScenarioPartition.TRAIN,
+        state_bytes=generated,
+        initial_observation_sha256=prepared.initial_observation_sha256,
+        source_commit="0" * 40,
+        expected_map=before.map_id,
+        expected_battle_state=2,
+        source_state_sha256=spec.source_state_sha256,
+        observation_schema=OBSERVATION_SCHEMA_V2,
+    ))
+    capture = open_battle_scenario_capture(state_file, manifest_file)
+
+    class SwitchThenWaterGun:
+        policy_id = "diagnostic-switch-then-water-gun"
+        switched = False
+
+        def choose_main(self, _observation, _prepared):
+            if not self.switched:
+                self.switched = True
+                return BattleAction.switch(2)
+            return BattleAction.move(1)
+
+        def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
+            return legal_party_slots[0] if forced else None
+
+    @contextmanager
+    def session_factory():
+        with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+            yield FrameBudgetController(emulator, maximum_frames=12000)
+
+    episode = run_red_trainer_practice_episode(
+        capture, session_factory=session_factory, policy=SwitchThenWaterGun(),
+        max_decisions=3, public_species_base_stats=cartridge.public_base_stats,
+    )
+    assert episode.decisions[0]["kind"] == "voluntary_switch"
+    attack = next(row for row in episode.decisions if row["kind"] == "attack")
+    assert attack["move_slot"] == 1
+    assert attack["outcome"]["move_executed"] is True
+    assert attack["state_before"]["active_pp"][0] == 25
+    # Oak's post-battle script can refill PP after this one-hit knockout.
+    assert attack["opponent_hp_before"] - attack["opponent_hp_after"] >= 15
 
 
 def test_train_replacement_prompt_has_matched_decline_and_switch_branches(tmp_path: Path) -> None:

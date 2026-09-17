@@ -47,6 +47,7 @@ _ENEMY_BOX_LEVEL = 0xCFE8
 _PLAYER_UNMODIFIED_LEVEL = 0xCD0F
 _ENEMY_UNMODIFIED_LEVEL = int(RamAddress.ENEMY_UNMODIFIED_LEVEL)
 _PARTY_BOX_LEVEL_OFFSET = 3
+_PARTY_OT_ID_OFFSET = 12
 _PARTY_EXPERIENCE_OFFSET = 14
 _PARTY_STAT_EXP_OFFSET = 17
 _PARTY_DVS_OFFSET = 27
@@ -595,6 +596,10 @@ def materialize_red_train_practice(
     for index, species_id, hp, stats, moves, pp, data in resolved_reserves:
         base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
         reserve = next(item for item in spec.party_reserves or () if item.party_slot == index + 1)
+        for offset in range(2):
+            memory[base + _PARTY_OT_ID_OFFSET + offset] = memory[
+                active_base + _PARTY_OT_ID_OFFSET + offset
+            ]
         memory[int(RamAddress.PARTY_SPECIES) + index] = species_id
         memory[base + PARTY_SPECIES_OFFSET] = species_id
         _put_u16(memory, base + PARTY_HP_OFFSET, hp)
@@ -705,6 +710,8 @@ def materialize_red_train_practice(
             or memory[base + _PARTY_BOX_LEVEL_OFFSET] != reserve.level
             or tuple(memory[base + 5 + offset] for offset in range(2)) != data.types
             or memory[base + 7] != data.catch_rate
+            or tuple(memory[base + _PARTY_OT_ID_OFFSET + offset] for offset in range(2))
+            != tuple(memory[active_base + _PARTY_OT_ID_OFFSET + offset] for offset in range(2))
             or _stats(memory, base + PARTY_MAX_HP_OFFSET) != stats
             or tuple(memory[base + _PARTY_EXPERIENCE_OFFSET + offset] for offset in range(3))
             != tuple(data.experience_at_level(reserve.level).to_bytes(3, "big"))
