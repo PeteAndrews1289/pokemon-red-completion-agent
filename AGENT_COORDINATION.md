@@ -11,18 +11,17 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The source-authenticated train launcher passed ROM-free safety tests. One
-claim-first Mansion pilot produced three natural encounters, three model-owned
-attacks and three retained actual outcomes without teacher battle fallback.
-All were one-turn wins using the same move under one upstream train root. That
-root is consumed; five previously untouched train sources and four development
-sources remain reserved. No fit-eligible alternative-move labels, new fit,
-promotion, Red registration, fresh acceptance or GitHub push. Red is 96/124
-and fresh acceptance 0/5.
+The claim-first Mansion pilot retained three model-owned natural battle attacks
+under one consumed train root. Four timing-matched move branches from its first
+saved decision all produced one-turn knockouts and identical battle utility;
+the other two decisions were not branched. Five previously untouched train
+sources and four development sources remain reserved. No new model decision,
+fit-eligible example, fit, promotion, Red registration, fresh acceptance or
+GitHub push. Red is 96/124 and fresh acceptance 0/5.
 
-Next: branch only the retained train pre-choice states for bounded actual
-alternative-move outcomes; inspect timing comparability and meaningful value
-contrast before another root or fit. Stop if contrasts are trivial. Do not
+Next: inspect the untouched train sources action-free for level-appropriate,
+consequential multi-move battles. Precommit one bounded train pilot only if
+one qualifies; otherwise redesign source supply without fitting. Do not
 spend development roots, clone snapshots as independent evidence, replay
 consumed trials, fit this static bank, or promote a model that fails the fixed
 heuristic. Sol High, Fast off.
@@ -44,4 +43,5 @@ Claude unused; refreshed Flash quota unavailable.
 [Choice-rich pilot evidence](docs/evidence/red-choice-rich-battle-pilot-2026-09-16.json) ·
 [Natural supply audit](docs/evidence/red-natural-battle-supply-audit-2026-09-16.json) ·
 [Mansion train pilot](docs/evidence/red-model-battle-train-mansion-pilot-2026-09-17.json) ·
+[Retained train alternatives](docs/evidence/red-retained-train-battle-alternatives-2026-09-17.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

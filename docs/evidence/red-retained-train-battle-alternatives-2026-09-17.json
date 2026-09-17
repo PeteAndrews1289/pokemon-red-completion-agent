@@ -1,0 +1,55 @@
+{
+  "schema": "pokemon.red.retained-train-battle-alternatives-evidence.v1",
+  "session": "2026-09-17-retained-train-battle-alternatives",
+  "classification": "train_only_same_root_counterfactual_diagnostic_not_fit",
+  "mission_check": {
+    "capability": "Distinguish the value of legal battle moves from identical retained model-choice states",
+    "learned_authority": "The frozen model owned the original attack; the four replay branches are measurements, not new player decisions or a model update",
+    "transfer_test": "No development or transfer source opened; future promotion still requires disjoint-root comparison against frozen and fixed-heuristic controls",
+    "cheapest_falsifier": "All four legal moves from the first retained state have identical measured battle utility under matched pre-attack timing",
+    "time_box": "One session, one retained train decision, four bounded candidate branches",
+    "stop_condition": "Stop after a trivial first menu, an incomparable timing or boundary, a branch failure, a consumed-root retry request, model fitting, development opening, full run, or publication"
+  },
+  "provenance": {
+    "source_commit": "4d324c6a48ecfd3d943a2c1b7e1a80200bed126c",
+    "source_root_lineage_id": "red-goal-root-c1d575483e311b3a9854b0e85237f725c3da1412ed62ab142dcd82050c666435",
+    "source_episode_outcome_sha256": "48539bc569a65bd61b92fb1874f197b9cf83107f9d353c1ca0306eb576b0607f",
+    "source_query_sha256": "8e63155d149f07a7b5c83bbea2714ec4653b58e0a889b4f79eb02c05696b2f7b",
+    "source_before_state_sha256": "d629f64d9800ecd7dda6cb6b47f4c12f1e0f81a5124422fde8e1a28b11ad902f",
+    "plan_sha256": "a510b5a1d07fc363b47bab37a97264d35c19a116db37219f294963843f07f241",
+    "outcome_sha256": "d5aae8590cc42651d5b3980cee1d0636e998b6a31043f9d7c8ddda5e710d20fd",
+    "independent_upstream_roots_added": 0
+  },
+  "execution": {
+    "action_free_preflight_passed": true,
+    "preflight_controller_actions": 0,
+    "preflight_emulator_frames": 0,
+    "tested_encounter_index": 0,
+    "retained_encounters_not_branched": [1, 2],
+    "matched_pre_attack_frames": 2048,
+    "maximum_actions_per_branch": 32,
+    "maximum_frames_per_branch": 4096,
+    "candidate_move_ids": [56, 70, 58, 57],
+    "candidate_utilities": [3.0, 3.0, 3.0, 3.0],
+    "candidate_opponent_fainted": [true, true, true, true],
+    "candidate_player_damage_fractions": [0.0, 0.0, 0.0, 0.0],
+    "candidate_total_frames": [2456, 2252, 2456, 2456],
+    "candidate_actions": [7, 7, 11, 13],
+    "candidate_outcomes_retained": 4,
+    "branch_failures": 0,
+    "actual_selected_candidate_index": 0
+  },
+  "interpretation": {
+    "measured_battle_utility_contrast": 0.0,
+    "frame_cost_contrast": "Candidate 1 used 204 fewer total frames than candidate 0, but both knocked out the opponent with no damage. This is a narrow execution-cost difference, not demonstrated battle-value generalization.",
+    "fit_eligible_examples_added": 0,
+    "model_updates": 0,
+    "authority_promotions": 0,
+    "red_development_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "decision": "Stop this overleveled source family for now. Triage untouched train sources action-free for more consequential, level-appropriate multi-move battles; require a prospectively bounded scenario and a nontrivial real outcome contrast before fitting or opening development roots.",
+    "limitation": "Only encounter 0 was branched. The other retained encounters were not experimentally tested; the common level-60/61 lead versus level-32 opponents makes them a weak next use of time, but their alternative outcomes are unknown.",
+    "gameplay_running": false,
+    "github_pushed": false
+  }
+}

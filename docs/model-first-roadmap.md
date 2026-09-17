@@ -36,6 +36,11 @@ There are no fit-eligible alternative-move labels. The older 20-example
 development comparison favored the fixed heuristic over the learned ranker,
 2 wins to 0. No battle authority was promoted.
 
+Four [matched train-side move branches](evidence/red-retained-train-battle-alternatives-2026-09-17.json)
+from the first Mansion decision all produced one-turn knockouts and identical
+battle utility. This overleveled context is not useful battle-value training
+material. The other two saved decisions were not branched.
+
 This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
 Story-level learned play, robust trainer combat and fresh acceptance remain open.
@@ -44,17 +49,17 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Model-directed battle experience | Three consecutive train encounters are retained; branch their isolated pre-choice states and require comparable, nontrivial alternative outcomes before using another root | Sol High, Fast off |
+| Model-directed battle experience | Three consecutive train encounters are retained, but the first four-way menu was trivial; find a level-appropriate train context with consequential legal alternatives | Sol High, Fast off |
 | Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:60–90 minutes to test bounded isolated train-side branches from
-the three retained pre-choice states and inspect real alternative-move timing
-and value contrast; no fit yet. If alternatives are trivial or incomparable,
-stop this source family and seek a more consequential train context. Do not
+Next time box:60–90 minutes to inspect untouched train sources action-free
+for level parity and meaningful multi-move alternatives. Precommit at most one
+bounded pilot only if a source qualifies; otherwise redesign source supply,
+without fitting. Do not
 hardcode a move ban, lower the four-by-four fit gate, replay consumed trials
 or spend development roots before a justified challenger. No full run yet.
 
@@ -62,5 +67,5 @@ Teachers may use disclosed training assistance; final-player cheats remain forbi
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-model-battle-train-mansion-pilot-2026-09-17.json) ·
+[Latest evidence](evidence/red-retained-train-battle-alternatives-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)
