@@ -37,7 +37,7 @@
     "model_updates": 0
   },
   "complete_episode": {
-    "baseline_outcome_sha256": "4e7cd14b093017c99088c0eb688e02fa254331ce4335a10ec9f4a965edcd9b02",
+    "baseline_outcome_sha256": "93e5d9f1a46ba972f0eff6a56655c803f935cabc0977944d318c2e184d44b9a6",
     "episode_schema": "pokemon.red.trainer-practice-model-episode.v3",
     "semantic_observations_retained": 29,
     "hidden_opponent_roster_fields": 0,
@@ -70,9 +70,25 @@
     "private_path_strings": 0,
     "hidden_opponent_roster_fields": 0
   },
+  "matched_train_replacement_prompt": {
+    "prompt_capture_manifest_sha256": "81ce4030748fe08a29c097a46b9cdd42323cb4e710cd88c64052cfd7e542de0e",
+    "outcome_sha256": "cd91a5156220025d58cb63a244ff9a8de7e15fb7a3c976d7836a3134e4bb5c30",
+    "branch_count": 6,
+    "choices": "decline and five legal replacements",
+    "equal_player_turn_horizon": 1,
+    "all_terminal_semantic_observations_retained": true,
+    "all_six_branch_files_retained": true,
+    "remaining_player_hp_by_choice_order": [476, 498, 495, 486, 495, 488],
+    "opponent_remaining_by_choice_order": [5, 5, 5, 5, 5, 5],
+    "new_independent_upstream_roots": 0,
+    "fit": 0,
+    "development_comparison": 0,
+    "private_path_strings": 0,
+    "hidden_opponent_roster_fields": 0
+  },
   "verification": {
-    "focused_rom_free_tests_passed": 590,
-    "real_cartridge_trainer_integration_tests_passed": 6,
+    "focused_rom_free_tests_passed": 591,
+    "real_cartridge_trainer_integration_tests_passed": 7,
     "composed_three_head_adapter_live_probe": "Diagnostic control and target heads chose a legal voluntary switch to slot 6; the frozen move head then selected an attack. This qualifies the adapter, not learned switch competence.",
     "all_species_sweep_passed": true,
     "ruff": "passed",

@@ -122,7 +122,7 @@ Try legitimate linked-version acquisition when practical; otherwise earn deferre
 
 ### 2026-09-17-trainer-practice-model-boundary
 
-A clean TRAIN source yielded six-on-six trainer practice, a 29-decision baseline loss and six matched two-turn attack/switch branches with retained terminal observations.
+A clean TRAIN source yielded six-on-six practice, a 29-decision baseline loss, six matched opening branches and six matched replacement-prompt branches. No fit or promotion.
 
 **Deviation:** The fixed switch baseline lost after four opponent KOs; this is not a learned switch result or development evaluation. All assisted variants inherit one TRAIN root. No fit, promotion, Red registration, fresh acceptance, transfer or GitHub push.
 

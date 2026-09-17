@@ -31,6 +31,12 @@ root remains one root. Remaining player HP ranged from 431 to 499, and branches
 defeated either zero or one opponent. These are train comparisons, not an
 independent development result or an automatically chosen best action.
 
+An authenticated capture at the first trainer replacement prompt likewise
+compared **decline** with all five replacement targets. Each branch included
+one actual player turn after answering the prompt, with terminal observations
+and separate receipts. Remaining player HP ranged from 476 to 498. These
+branches share the same TRAIN root as the opening choices.
+
 A frozen attack model then made 20 attack choices during a retained 29-decision
 six-on-six episode. A fixed baseline declined four optional switches and used
 the first living forced replacement five times. It defeated four opponents,
