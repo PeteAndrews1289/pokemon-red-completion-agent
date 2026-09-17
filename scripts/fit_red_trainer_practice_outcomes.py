@@ -16,7 +16,10 @@ from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
-from pokemon_red_completion.battle_scenario_capture import open_battle_scenario_capture
+from pokemon_red_completion.battle_scenario_capture import (
+    BattleScenarioCaptureManifest,
+    open_battle_scenario_capture,
+)
 from pokemon_red_completion.red_autonomous_player import _record
 from pokemon_red_completion.red_trainer_practice_admission import inspect_trainer_practice_choices
 from pokemon_red_completion.red_trainer_practice_fit import fit_trainer_practice_three_heads
@@ -118,6 +121,27 @@ def _bound_path(value: object, label: str) -> Path:
     return location
 
 
+def _root_source_from_parent(
+    child: BattleScenarioCaptureManifest,
+    parent: BattleScenarioCaptureManifest | None,
+) -> str:
+    if parent is None:
+        if child.source_state_sha256 is None:
+            raise ValueError("trainer capture has no upstream state")
+        return child.source_state_sha256
+    if (
+        child.source_state_sha256 != parent.state_sha256
+        or child.root_lineage_id != parent.root_lineage_id
+        or child.partition != parent.partition
+        or child.expected_map != parent.expected_map
+        or child.expected_battle_state != parent.expected_battle_state
+        or child.observation_schema != parent.observation_schema
+        or parent.source_state_sha256 is None
+    ):
+        raise ValueError("trainer derived capture parent chain differs")
+    return parent.source_state_sha256
+
+
 def run(
     plan_path: Path, *, check_only: bool = False, probe_only: bool = False,
     exploratory_fit: bool = False,
@@ -154,6 +178,14 @@ def run(
         state_path = _bound_path(scenario.get("state"), "trainer state")
         manifest_path = _bound_path(scenario.get("manifest"), "trainer manifest")
         capture = open_battle_scenario_capture(state_path, manifest_path)
+        parent = None
+        if "parent_state" in scenario or "parent_manifest" in scenario:
+            parent_state_path = _bound_path(scenario.get("parent_state"), "trainer parent state")
+            parent_manifest_path = _bound_path(
+                scenario.get("parent_manifest"), "trainer parent manifest"
+            )
+            parent = open_battle_scenario_capture(parent_state_path, parent_manifest_path).manifest
+        root_source_sha256 = _root_source_from_parent(capture.manifest, parent)
         targets = []
         for offset, trial in zip(OFFSETS, scenario["trials"], strict=True):
             if not isinstance(trial, dict):
@@ -177,7 +209,7 @@ def run(
                 raise ValueError("trainer timing choice plan differs")
             prefix = trial.get("branch_log_prefix")
             if not isinstance(prefix, str) or prefix not in {
-                "matched-branch", "prompt-branch"
+                "matched-branch", "prompt-branch", "forced-branch"
             }:
                 raise ValueError("trainer branch log prefix differs")
             logs = {
@@ -206,7 +238,7 @@ def run(
             "scenario_index": scenario_index,
             "capture_id": capture.manifest.capture_id,
             "root_lineage_id": capture.manifest.root_lineage_id,
-            "source_state_sha256": capture.manifest.source_state_sha256,
+            "source_state_sha256": root_source_sha256,
             "timing_count": len(OFFSETS),
             "decision_context": aggregate["decision_context"],
             "attack_depleted": aggregate["attack_depleted"],

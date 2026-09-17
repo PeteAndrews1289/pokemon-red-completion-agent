@@ -11,6 +11,7 @@ from pokemon_red_completion.battle_scenario_capture import (
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_trainer_practice_admission import (
     TrainerPracticeAdmissionError,
+    _matches_first_choice,
     inspect_trainer_practice_choices,
 )
 from pokemon_red_completion.red_trainer_practice_log import TrainerPracticeEventLog
@@ -33,6 +34,15 @@ _END = {
     }
 }
 _CHOICES = ("pokemon.core:battle:move:1", "pokemon.core:battle:switch:2")
+
+
+def test_declared_switch_ref_matches_forced_replacement_slot():
+    assert _matches_first_choice(
+        {"kind": "forced_switch", "party_slot": 2}, "pokemon.core:battle:switch:2"
+    )
+    assert not _matches_first_choice(
+        {"kind": "forced_switch", "party_slot": 3}, "pokemon.core:battle:switch:2"
+    )
 
 
 def _inspect(capture, document):

@@ -19,7 +19,10 @@ def main() -> None:
     parser.add_argument("manifest", type=Path)
     parser.add_argument("choices", type=Path)
     parser.add_argument("--plan", type=Path, required=True)
-    parser.add_argument("--branch-log-prefix", choices=("matched-branch", "prompt-branch"))
+    parser.add_argument(
+        "--branch-log-prefix",
+        choices=("matched-branch", "prompt-branch", "forced-branch"),
+    )
     args = parser.parse_args()
     capture = open_battle_scenario_capture(args.state, args.manifest)
     document = json.loads(args.choices.read_bytes())

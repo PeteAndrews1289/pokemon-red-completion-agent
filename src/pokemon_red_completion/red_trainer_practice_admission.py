@@ -370,7 +370,7 @@ def _matches_first_choice(first: Mapping[str, object], choice: str) -> bool:
     if prefix == "pokemon.core:battle:move":
         return first.get("kind") == "attack" and first.get("move_slot") == slot
     if prefix == "pokemon.core:battle:switch":
-        return first.get("kind") in {"voluntary_switch", "switch_prompt"} and (
+        return first.get("kind") in {"voluntary_switch", "switch_prompt", "forced_switch"} and (
             first.get("party_slot") == slot
         )
     return False
