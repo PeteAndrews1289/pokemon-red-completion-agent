@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-natural-battle-supply-audit",
+  "as_of_session": "2026-09-17-model-battle-mansion-train-pilot",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1706,6 +1706,12 @@
       "result": "Action-free inspection authenticated 81 source saves and found 18 natural train battle starts on 14 roots, none with four examples. Four starts were single-action; the other 14 contained only two move sets. Six untouched unclaimed train roots and four development roots remain.",
       "deviation": "The static capture route cannot meet the ordinary four-by-four fit gate; no new gameplay, outcome, fit, authority, Red progress or fresh-run gate change. The learned model has not beaten the fixed heuristic in existing comparisons.",
       "next": "Sol High, Fast off: implement and ROM-free-test a bounded model-directed multi-encounter train episode with durable pre-choice states and actual outcomes; at most one prospective train-only mechanical pilot, no fit yet."
+    },
+    {
+      "session": "2026-09-17-model-battle-mansion-train-pilot",
+      "result": "One claim-first train root yielded three natural encounters, three frozen-model attack choices and three durable settled outcomes. Each was a one-turn win with move 56 against a level-32 opponent; the root is consumed.",
+      "deviation": "This proves repeated model-owned execution but not useful alternative-move judgment: one upstream root, one selected move, zero fit-eligible labels, no fit or promotion. Red remains 96/124 and fresh acceptance 0/5; no GitHub push.",
+      "next": "Sol High, Fast off: branch only retained train pre-choice states for bounded real alternative-move outcomes; inspect timing and value contrast before another root or fit."
     }
   ],
   "closed_milestones": [

@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Create authentic model-directed battle episode supply with real choice/outcome traces and train-only candidate branches; require independent development advantage over both frozen and fixed-heuristic controls before promotion.
+- Next decision: Measure real alternative-move outcomes from the retained train states before another root or fit; require disjoint development advantage over frozen and fixed-heuristic controls before promotion.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A bounded model-directed training episode cannot durably retain distinct, authentic battle decisions and outcomes across natural encounters, or its train-side branches lack comparable candidate timing. |
+| Cheapest falsifier | Isolated train-side branches of the three retained model choices cannot produce timing-matched, nontrivial alternative-move outcomes. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-natural-battle-supply-audit** · status **closed** · evidence [qualification](docs/evidence/red-natural-battle-supply-audit-2026-09-16.json)
+**2026-09-17-model-battle-mansion-train-pilot** · status **closed** · evidence [qualification](docs/evidence/red-model-battle-train-mansion-pilot-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The battle model must learn from varied consequential decisions it actually owns. Repeated timing clones and a narrow two-moveset capture bank do not supply that experience. |
-| Learning output | No new outcome example or fit. An action-free audit authenticated 81 source saves and 34 natural battle captures, found zero four-example train roots, and preserved the remaining unclaimed sources. |
-| Authority delta | No new fit or authority. Model137, frozen battle ranker, Red 96/124, and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No transfer test ran. Four unclaimed, never-materialized validation sources remain; their states were inspected action-free, but none was opened for battle outcomes. |
-| Blocker | The static natural battle bank has zero train roots with four examples; only six untouched and unclaimed train sources and four development sources remain. Historical and pilot fits have not beaten the fixed heuristic. |
-| Decision | Stop static capture sampling. Build a bounded model-directed multi-encounter training episode that retains real choices and before-state snapshots; branch only isolated train snapshots for candidate outcomes and compare on separate upstream development episodes. |
-| Next session | Sol High, Fast off, about 90-120 minutes: implement and test a bounded model-directed multi-encounter train episode with durable pre-choice snapshots, actual outcomes, no teacher fallback and one-use limits. Run at most one precommitted train-only mechanical pilot if ROM-free tests pass; do not fit yet. |
-| Next falsifier | ROM-free episode tests cannot guarantee choice-before-input retention, inherited root/partition identity, distinct semantic decision counting and hard stops; or one bounded train-only pilot cannot reach useful choice states. |
-| Stop condition | Stop on consumed-root replay, source cherry-picking after outcomes, synthetic action leakage, missing durable choice/outcome, development fitting, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | The pilot proves repeated model-owned attacks and durable cartridge outcomes, but one-root one-move one-turn wins do not yet teach transferable battle judgment. |
+| Learning output | Three authentic train-partition model choices and settled outcomes from three natural encounters under one upstream root. Each was a one-turn win with move 56; zero fit-eligible counterfactual labels or model updates. |
+| Authority delta | The frozen battle ranker owned three consecutive train-only attacks with no fallback. No fit or promotion; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No transfer test ran. Development roots remain unopened for this battle question. |
+| Blocker | The single-root pilot produced three one-turn wins using one move against level-32 wild opponents. Distinct hashes do not establish independent roots or meaningful alternative-move judgment; the remaining train supply is scarce. |
+| Decision | Stop new-root pilots for now. Measure actual alternative-move outcomes from isolated branches of the retained train pre-choice states, and reject this source family if contrasts are trivial or incomparable. Reserve separate development roots for a justified challenger. |
+| Next session | Sol High, Fast off, about 60-90 minutes: branch only the three retained train pre-choice states for bounded real alternative-move outcomes; audit timing and value contrast before another root or fit. |
+| Next falsifier | Train-only alternative-move branches fail to retain comparable timing/outcomes or reveal only trivial one-turn equivalence, making this root unhelpful for battle value learning. |
+| Stop condition | Stop on consumed-root retry, incomparable candidate timing, trivial alternatives without learning signal, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

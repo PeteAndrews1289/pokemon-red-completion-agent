@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-natural-battle-supply-audit**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-model-battle-mansion-train-pilot**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-model-battle-mansion-train-pilot
+
+One claim-first train root yielded three natural encounters, three frozen-model attack choices and three durable settled outcomes. Each was a one-turn win with move 56 against a level-32 opponent; the root is consumed.
+
+**Deviation:** This proves repeated model-owned execution but not useful alternative-move judgment: one upstream root, one selected move, zero fit-eligible labels, no fit or promotion. Red remains 96/124 and fresh acceptance 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: branch only retained train pre-choice states for bounded real alternative-move outcomes; inspect timing and value contrast before another root or fit.
 
 ### 2026-09-16-natural-battle-supply-audit
 

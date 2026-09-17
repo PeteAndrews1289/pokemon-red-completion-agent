@@ -11,22 +11,21 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The action-free natural battle supply audit found 18 train captures on 14
-upstream roots with at most two starts per root; four starts have only one
-supported attack. The ordinary four-by-four train gate is impossible from
-the current materialized bank. Of 54 authenticated train source saves, only
-six are both unclaimed and without prior battle materialization; four such
-development sources remain. The old 20-example evaluation had zero learned
-model wins and two losses against the fixed heuristic. No new fit, authority,
-Red progress, gameplay action or GitHub push. Red is 96/124 and fresh
-acceptance 0/5.
+The source-authenticated train launcher passed ROM-free safety tests. One
+claim-first Mansion pilot produced three natural encounters, three model-owned
+attacks and three retained actual outcomes without teacher battle fallback.
+All were one-turn wins using the same move under one upstream train root. That
+root is consumed; five previously untouched train sources and four development
+sources remain reserved. No fit-eligible alternative-move labels, new fit,
+promotion, Red registration, fresh acceptance or GitHub push. Red is 96/124
+and fresh acceptance 0/5.
 
-Next: build a bounded model-directed multi-encounter train episode with
-durable pre-choice snapshots and actual outcomes, then isolated train-only
-counterfactual branches. ROM-free safety tests first; at most one frozen
-train-only mechanical pilot. Do not spend development roots, clone snapshots
-as independent evidence, replay consumed trials, fit this static bank, or
-promote a model that fails the fixed heuristic. Sol High, Fast off.
+Next: branch only the retained train pre-choice states for bounded actual
+alternative-move outcomes; inspect timing comparability and meaningful value
+contrast before another root or fit. Stop if contrasts are trivial. Do not
+spend development roots, clone snapshots as independent evidence, replay
+consumed trials, fit this static bank, or promote a model that fails the fixed
+heuristic. Sol High, Fast off.
 
 ## Reviewer contribution
 
@@ -44,4 +43,5 @@ Claude unused; refreshed Flash quota unavailable.
 [Timing and contrast evidence](docs/evidence/red-battle-timing-and-contrast-2026-09-16.json) ·
 [Choice-rich pilot evidence](docs/evidence/red-choice-rich-battle-pilot-2026-09-16.json) ·
 [Natural supply audit](docs/evidence/red-natural-battle-supply-audit-2026-09-16.json) ·
+[Mansion train pilot](docs/evidence/red-model-battle-train-mansion-pilot-2026-09-17.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
