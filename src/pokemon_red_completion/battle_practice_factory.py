@@ -29,8 +29,8 @@ class PracticeMove:
     def __post_init__(self) -> None:
         if not isinstance(self.move_ref, str) or not self.move_ref:
             raise BattlePracticeError("practice move needs a nonempty semantic reference")
-        if type(self.pp) is not int or not 1 <= self.pp <= 63:  # noqa: E721
-            raise BattlePracticeError("practice move PP must be 1..63")
+        if type(self.pp) is not int or not 0 <= self.pp <= 63:  # noqa: E721
+            raise BattlePracticeError("practice move PP must be 0..63")
 
 
 @dataclass(frozen=True, slots=True)
@@ -206,6 +206,7 @@ class BattlePracticeSpec:
             or not 1 <= len(self.opponent_moves) <= 4
             or any(not isinstance(move, PracticeMove) for move in self.opponent_moves)
             or len({move.move_ref for move in self.opponent_moves}) != len(self.opponent_moves)
+            or any(move.pp == 0 for move in self.opponent_moves)
         ):
             raise BattlePracticeError("practice opponent moves must be one to four distinct moves")
         if self.party_reserves is not None and (
@@ -241,6 +242,11 @@ class BattlePracticeSpec:
                 != len(self.opponent_reserves)
                 or any(
                     item.party_slot > self.opponent_party_count for item in self.opponent_reserves
+                )
+                or any(
+                    move.pp == 0
+                    for item in self.opponent_reserves
+                    for move in item.moves
                 )
             ):
                 raise BattlePracticeError("trainer practice opponent reserves differ")

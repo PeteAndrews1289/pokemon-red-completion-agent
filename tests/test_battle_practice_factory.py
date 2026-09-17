@@ -47,11 +47,31 @@ def test_title_neutral_spec_rejects_unsupported_or_non_train_conditions():
     with pytest.raises(BattlePracticeError, match="train-only"):
         _spec(partition="development")
     with pytest.raises(BattlePracticeError, match="PP"):
-        _spec(actor_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": 0}] * 2)
+        _spec(actor_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": -1}] * 2)
     with pytest.raises(BattlePracticeError, match="distinct alternatives"):
         _spec(actor_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": 20}] * 2)
     with pytest.raises(BattlePracticeError, match="actor_national_number"):
         _spec(actor_national_number=0)
+
+
+def test_depleted_actor_pp_is_declared_but_enemy_pp_remains_supported():
+    depleted = _spec(actor_moves=[
+        {"move_ref": pokemon_red_move_ref(33), "pp": 0},
+        {"move_ref": pokemon_red_move_ref(70), "pp": 0},
+    ])
+    assert tuple(move.pp for move in depleted.actor_moves) == (0, 0)
+    with pytest.raises(BattlePracticeError, match="opponent moves"):
+        _spec(opponent_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": 0}])
+
+
+def test_depleted_actor_requires_a_living_nonactive_switch_target():
+    assert red._has_living_reserve(SimpleNamespace(party_hp=(70, 1, 0), active_party_index=0))
+    assert not red._has_living_reserve(
+        SimpleNamespace(party_hp=(70, 0, 0), active_party_index=0)
+    )
+    assert not red._has_living_reserve(
+        SimpleNamespace(party_hp=(0, 70, 0), active_party_index=1)
+    )
 
 
 def test_national_dex_intent_is_bound_into_configuration():

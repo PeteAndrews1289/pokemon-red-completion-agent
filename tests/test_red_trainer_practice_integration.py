@@ -204,7 +204,7 @@ def test_live_losing_voluntary_switch_is_retained(
             "root_lineage_id": "trainer-losing-switch-mechanic-probe",
             "partition": "train", "battle_kind": "trainer",
             "actor_species_ref": pokemon_red_species_ref(84), "actor_level": 35,
-            "actor_moves": [_move(85, 15), _move(98, 30)],
+            "actor_moves": [_move(85, 0 if depleted else 15), _move(98, 0 if depleted else 30)],
             "party_reserves": [
                 {"party_slot": 2, "species_ref": pokemon_red_species_ref(153),
                  "level": 5, "hp": 1, "moves": [_move(33, 35)]},
@@ -219,15 +219,8 @@ def test_live_losing_voluntary_switch_is_retained(
             reader, emulator._require_backend().memory, spec, cartridge=cartridge
         )
         if depleted:
-            assert before.active_party_index is not None
-            memory = emulator._require_backend().memory
-            active_base = (
-                int(RamAddress.PARTY_MON_1)
-                + before.active_party_index * PARTY_STRUCT_STRIDE
-            )
-            for index in range(2):
-                memory[0xD02D + index] = 0
-                memory[active_base + PARTY_PP_OFFSET + index] = 0
+            assert reader.read().active_party_pp is not None
+            assert reader.read().active_party_pp[:2] == (0, 0)
         observation = PokemonRedObservationEncoder.from_state_reader(reader)
         prepared = prepare_red_battle_scenario(
             observation, reader.read(), allow_no_attack=depleted

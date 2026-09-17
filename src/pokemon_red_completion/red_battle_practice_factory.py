@@ -120,6 +120,16 @@ def _resolved_moves(
     return tuple((move_ids + [0] * 4)[:4]), tuple((pp_values + [0] * 4)[:4])
 
 
+def _has_living_reserve(raw: object) -> bool:
+    party_hp = getattr(raw, "party_hp", None)
+    active = getattr(raw, "active_party_index", None)
+    return (
+        isinstance(party_hp, tuple)
+        and type(active) is int  # noqa: E721
+        and any(hp > 0 and index != active for index, hp in enumerate(party_hp))
+    )
+
+
 class WritableRedMemory(Protocol):
     def __getitem__(self, address: int) -> int: ...
 
@@ -845,10 +855,13 @@ def materialize_red_train_practice(
         ):
             raise BattlePracticeError("assisted wild identity did not read back")
     prepared = prepare_red_battle_scenario(
-        PokemonRedObservationEncoder.from_state_reader(reader), after
+        PokemonRedObservationEncoder.from_state_reader(reader), after,
+        **({"allow_no_attack": True} if spec.battle_kind == "trainer" else {}),
     )
     legal_count = sum(prepared.supported_candidate_mask)
-    if legal_count < 2:
+    if legal_count < 2 and not (
+        spec.battle_kind == "trainer" and legal_count == 0 and _has_living_reserve(after)
+    ):
         raise BattlePracticeError("assisted battle lacks two legal damaging moves")
     return RedPracticeReceipt(
         source_state_sha256=spec.source_state_sha256,
