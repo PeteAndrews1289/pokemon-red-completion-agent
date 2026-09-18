@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 from types import SimpleNamespace
 
@@ -52,3 +53,7 @@ def test_training_teacher_scores_legal_attacks_and_declines_prompts():
     assert action.move_slot == 1
     assert teacher.choose_switch(observation, (2, 3), forced=False, may_decline=True) is None
     assert teacher.choose_switch(observation, (2,), forced=True, may_decline=False) == 2
+    assert (
+        json.loads(json.dumps(teacher.last_decision_diagnostics))
+        == teacher.last_decision_diagnostics
+    )

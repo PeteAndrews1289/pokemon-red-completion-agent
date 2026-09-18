@@ -125,7 +125,10 @@ class StatDamageTeacher:
                 )
         if not scores:
             raise ValueError("teacher has no living replacement")
-        self.last_decision_diagnostics = {"training_teacher": True, "reserve_scores": scores}
+        self.last_decision_diagnostics = {
+            "training_teacher": True,
+            "reserve_scores": {str(slot): score for slot, score in scores.items()},
+        }
         return max(scores, key=scores.get)
 
 
@@ -224,8 +227,9 @@ def retained_targets(plan):
 
 
 def run(args):
+    resume = getattr(args, "resume", False)
     if (
-        args.output.exists()
+        args.output.exists() != resume
         or subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip()
     ):
         raise ValueError("terminal curriculum needs a new output and committed source")
@@ -247,28 +251,37 @@ def run(args):
         templates.append(
             json.loads((path.parent.parent / "materialize-plan.json").read_bytes())["practice"]
         )
-    args.output.mkdir(mode=0o700, parents=True, exist_ok=False)
+    if resume and (args.output / "model.json").exists():
+        raise ValueError("collection resume cannot repeat a completed fit")
+    args.output.mkdir(mode=0o700, parents=True, exist_ok=resume)
     code_sha = original._binding(Path(__file__))["sha256"]
-    original._write(
-        args.output / "plan.json",
-        {
-            "source_commit": commit,
-            "prior_plan": original._binding(args.prior_plan),
-            "frozen_model": original._binding(args.frozen_model),
-            "rom": rom,
-            "training_recipes": curriculum_cases(templates),
-            "reserved_recipes": curriculum_cases(templates, reserved=True),
-            "continuation": StatDamageTeacher.policy_id,
-            "continuation_code_sha256": code_sha,
-            "horizon": HORIZON,
-            "max_intermediate_captures_per_recipe": 2,
-            "timing_offsets": list(original.OFFSETS),
-            "fit_seed": 2026091801,
-            "epochs": 1200,
-            "control_target_mode": "fitted_components",
-            "promotion_eligible": False,
-        },
-    )
+    declaration = {
+        "source_commit": commit,
+        "prior_plan": original._binding(args.prior_plan),
+        "frozen_model": original._binding(args.frozen_model),
+        "rom": rom,
+        "training_recipes": curriculum_cases(templates),
+        "reserved_recipes": curriculum_cases(templates, reserved=True),
+        "continuation": StatDamageTeacher.policy_id,
+        "continuation_code_sha256": code_sha,
+        "horizon": HORIZON,
+        "max_intermediate_captures_per_recipe": 2,
+        "timing_offsets": list(original.OFFSETS),
+        "fit_seed": 2026091801,
+        "epochs": 1200,
+        "control_target_mode": "fitted_components",
+        "promotion_eligible": False,
+    }
+    if resume:
+        previous = json.loads((args.output / "plan.json").read_bytes())
+        ignored = {"source_commit", "continuation_code_sha256"}
+        if {k: v for k, v in previous.items() if k not in ignored} != json.loads(
+            json.dumps({k: v for k, v in declaration.items() if k not in ignored})
+        ):
+            raise ValueError("resume changes a declared input or experiment")
+        original._write(args.output / f"resume-{commit[:12]}.json", declaration)
+    else:
+        original._write(args.output / "plan.json", declaration)
     stats = RedPracticeCartridge(args.rom.read_bytes()).public_base_stats
     active = []
 
@@ -284,10 +297,19 @@ def run(args):
     def materialize(case, parent):
         root_index, foe_index, practice = case
         directory = parent / f"root-{root_index + 1:02d}-foe-{foe_index:02d}"
-        directory.mkdir(mode=0o700, parents=True, exist_ok=False)
         source, receipt = sources[root_index]
         practice["root_lineage_id"] = receipt["source_id"]
         practice["source_state_sha256"] = original._binding(source / "source.state")["sha256"]
+        if resume and directory.exists():
+            declared = json.loads((directory / "materialize-plan.json").read_bytes())
+            if declared["practice"] != practice or declared["rom"] != rom:
+                raise ValueError("resumed materialization changes its recipe")
+            state = directory / "materialized" / "assisted.state"
+            restored = open_battle_scenario_capture(state, state.with_suffix(".state.json"))
+            if restored.manifest.root_lineage_id != sources[root_index][1]["source_id"]:
+                raise ValueError("resumed capture root differs")
+            return directory, state
+        directory.mkdir(mode=0o700, parents=True, exist_ok=False)
         path = directory / "materialize-plan.json"
         original._write(
             path,
@@ -340,14 +362,19 @@ def run(args):
                 state_path, state_path.with_suffix(".state.json")
             )
             paths = [state_path]
-            log = TrainerPracticeEventLog(
-                directory / "teacher-events",
-                run_identity={
-                    "source_commit": commit,
-                    "capture_manifest_sha256": capture.manifest_sha256,
-                    "partition": "train",
-                    "policy_id": StatDamageTeacher.policy_id,
-                },
+            trace_path = directory / "teacher-outcome.json"
+            log = (
+                None
+                if trace_path.exists()
+                else TrainerPracticeEventLog(
+                    directory / "teacher-events",
+                    run_identity={
+                        "source_commit": commit,
+                        "capture_manifest_sha256": capture.manifest_sha256,
+                        "partition": "train",
+                        "policy_id": StatDamageTeacher.policy_id,
+                    },
+                )
             )
 
             def save_intermediate(
@@ -380,22 +407,34 @@ def run(args):
                 )
                 paths.append(path)
 
-            trace = run_red_trainer_practice_episode(
-                capture,
-                session_factory=session_factory,
-                policy=StatDamageTeacher(),
-                max_decisions=MAX_DECISIONS,
-                max_player_turns=HORIZON,
-                event_sink=save_intermediate,
-                public_species_base_stats=stats,
-            )
-            log.finish({"stop_reason": trace.stop_reason})
-            original._write(directory / "teacher-outcome.json", trace.public_dict())
-            original._write(
-                directory / "teacher-log-check.json",
-                verify_trainer_practice_event_log(log.directory),
-            )
-            traces.append(trace.stop_reason)
+            if trace_path.exists():
+                check = verify_trainer_practice_event_log(directory / "teacher-events")
+                if not check["complete"]:
+                    raise ValueError("resumed teacher trace is incomplete")
+                trace_document = json.loads(trace_path.read_bytes())
+                paths.extend(sorted(directory.glob("intermediate-*.state")))
+                for path in paths[1:]:
+                    child = open_battle_scenario_capture(path, path.with_suffix(".state.json"))
+                    if child.manifest.source_state_sha256 != capture.manifest.state_sha256:
+                        raise ValueError("resumed intermediate capture parent differs")
+            else:
+                trace = run_red_trainer_practice_episode(
+                    capture,
+                    session_factory=session_factory,
+                    policy=StatDamageTeacher(),
+                    max_decisions=MAX_DECISIONS,
+                    max_player_turns=HORIZON,
+                    event_sink=save_intermediate,
+                    public_species_base_stats=stats,
+                )
+                log.finish({"stop_reason": trace.stop_reason})
+                trace_document = trace.public_dict()
+                original._write(trace_path, trace_document)
+                original._write(
+                    directory / "teacher-log-check.json",
+                    verify_trainer_practice_event_log(log.directory),
+                )
+            traces.append(trace_document["stop_reason"])
             for capture_index, path in enumerate(paths):
                 current = open_battle_scenario_capture(path, path.with_suffix(".state.json"))
                 first_choices = choices_for(current)
@@ -404,10 +443,11 @@ def run(args):
                 timed = []
                 for offset in original.OFFSETS:
                     branch_dir = directory / f"capture-{capture_index:02d}-timing-{offset:02d}"
-                    branch_dir.mkdir(mode=0o700)
+                    branch_dir.mkdir(mode=0o700, exist_ok=resume)
                     refs = tuple(choice.semantic_ref for choice in first_choices)
                     plan = {
-                        "source_commit": commit,
+                        "source_commit": current.manifest.source_commit,
+                        "execution_source_commit": commit,
                         "capture_manifest_sha256": current.manifest_sha256,
                         "model_sha256": code_sha,
                         "continuation_policy_id": StatDamageTeacher.policy_id,
@@ -416,7 +456,17 @@ def run(args):
                         "max_decisions": MAX_DECISIONS,
                         "opening_idle_frames": offset,
                     }
-                    original._write(branch_dir / "plan.json", plan)
+                    if (branch_dir / "plan.json").exists():
+                        plan = json.loads((branch_dir / "plan.json").read_bytes())
+                        if (
+                            plan["first_choice_refs"] != list(refs)
+                            or plan["capture_manifest_sha256"] != current.manifest_sha256
+                            or plan["player_turn_horizon"] != HORIZON
+                            or plan["opening_idle_frames"] != offset
+                        ):
+                            raise ValueError("resumed branch plan differs")
+                    else:
+                        original._write(branch_dir / "plan.json", plan)
                     plan_sha = original._binding(branch_dir / "plan.json")["sha256"]
 
                     def event_log(
@@ -449,23 +499,24 @@ def run(args):
                             },
                         )
 
-                    measured = collect_trainer_practice_counterfactuals(
-                        current,
-                        session_factory=session_factory,
-                        continuation_policy_factory=StatDamageTeacher,
-                        first_choices=first_choices,
-                        max_decisions=MAX_DECISIONS,
-                        player_turn_horizon=HORIZON,
-                        branch_sink=retain,
-                        branch_event_log_factory=event_log,
-                        public_species_base_stats=stats,
-                        opening_idle_frames=offset,
-                    )
-                    document = measured.public_dict()
-                    original._write(branch_dir / "choices.json", document)
+                    if not (branch_dir / "choices.json").exists():
+                        measured = collect_trainer_practice_counterfactuals(
+                            current,
+                            session_factory=session_factory,
+                            continuation_policy_factory=StatDamageTeacher,
+                            first_choices=first_choices,
+                            max_decisions=MAX_DECISIONS,
+                            player_turn_horizon=HORIZON,
+                            branch_sink=retain,
+                            branch_event_log_factory=event_log,
+                            public_species_base_stats=stats,
+                            opening_idle_frames=offset,
+                        )
+                        original._write(branch_dir / "choices.json", measured.public_dict())
+                    document = json.loads((branch_dir / "choices.json").read_bytes())
                     if any(
-                        e.stop_reason not in {"battle_won", "party_defeated"}
-                        for _, e in measured.branches
+                        b["episode"]["stop_reason"] not in {"battle_won", "party_defeated"}
+                        for b in document["branches"]
                     ):
                         raise ValueError("terminal curriculum produced a truncated branch")
                     admission = inspect_trainer_practice_choices(
@@ -477,7 +528,7 @@ def run(args):
                             ref: branch_dir / f"branch-{i:02d}-events" for i, ref in enumerate(refs)
                         },
                         plan_sha256=plan_sha,
-                        model_sha256=code_sha,
+                        model_sha256=plan["model_sha256"],
                         max_decisions=MAX_DECISIONS,
                         expected_opening_idle_frames=offset,
                     )
@@ -563,7 +614,7 @@ def run(args):
         return result
     except Exception as error:
         original._write(
-            args.output / "failure.json",
+            args.output / (f"failure-{commit[:12]}.json" if resume else "failure.json"),
             {
                 "error": str(error),
                 "error_type": type(error).__name__,
@@ -579,6 +630,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("rom", "batch", "prior-plan", "frozen-model", "output"):
         parser.add_argument(f"--{name}", type=Path, required=True)
+    parser.add_argument("--resume", action="store_true")
     result = run(parser.parse_args())
     print(
         json.dumps(
