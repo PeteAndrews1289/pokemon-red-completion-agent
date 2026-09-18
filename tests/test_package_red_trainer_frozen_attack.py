@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 import pytest
 
@@ -44,3 +46,7 @@ def test_composition_preserves_heads_and_rejects_unrelated_lineage() -> None:
     assert composed.switch.to_dict() == corrected.switch.to_dict()
     with pytest.raises(ValueError, match="lineage"):
         compose(old, model(("unrelated",), 41))
+    aligned = replace(corrected, control_target_mode="fitted_components")
+    with pytest.raises(ValueError, match="fitted attack head"):
+        compose(old, aligned)
+    assert compose(aligned, aligned).control_target_mode == "fitted_components"

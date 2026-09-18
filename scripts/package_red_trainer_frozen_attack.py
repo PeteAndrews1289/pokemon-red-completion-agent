@@ -60,9 +60,14 @@ def compose(
         or set(old.train_root_ids) != set(corrected.train_root_ids)
     ):
         raise ValueError("frozen attack lineage differs from corrected TRAIN corpus")
+    if (
+        corrected.control_target_mode == "fitted_components"
+        and old.move.to_dict() != corrected.move.to_dict()
+    ):
+        raise ValueError("component-aligned control requires its fitted attack head")
     result = TrainerPracticeThreeHeadModel(
         old.move, corrected.control, corrected.switch,
-        corrected.train_capture_ids, corrected.train_root_ids,
+        corrected.train_capture_ids, corrected.train_root_ids, corrected.control_target_mode,
     )
     restored = TrainerPracticeThreeHeadModel.from_dict(result.to_dict())
     if (
