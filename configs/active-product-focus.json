@@ -29,26 +29,26 @@
     },
     {
       "capability": "Choose attacks, voluntary switches, replacement-prompt answers and forced replacements from semantic observations in bounded full-party trainer battles, then improve outcomes on separate natural battles.",
-      "cheapest_falsifier": "A prospective TRAIN pair fails to reverse attack-versus-switch preference when one observable factor changes, or a larger fit erases attack choices on the original TRAIN cases.",
+      "cheapest_falsifier": "A corrected target prefers a lower mean-return action, a fit fails common-case retention, or a bounded HP pair lacks a measured switch/stay reversal.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The 52-context refit is rejected; the older frozen control retains authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "All eight new five-on-five HP pairs preferred switching, so the intended switch/stay reversal was absent. The 52-context refit raised move regret on the identical original 44 TRAIN cases from 0.0354 to 0.1392. Earlier natural DEVELOPMENT outcomes remain consumed and no independent natural-origin replication exists.",
-        "decision": "Reject the 52-context fit. Obtain a focused design review before another prospectively balanced TRAIN contrast. Require both a real switch/stay reversal and retention of original attack skill before a new-origin natural evaluation.",
+        "authority_delta": "None. Earlier control authority, Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "The optimizer's soft targets disagree with expected-return evaluation, and control values assume timing-specific best child choices. The short HP pilot supplies no terminal full-battle contrast. Existing weights beat the new attack fit on the same 52-context corpus, so a capacity limit is not established.",
+        "decision": "Keep the small separate heads. Repair raw-return aggregation before softmax, take control maxima after averaging each action, and report composed-action regret. Then fit once and enforce common-case retention before a four-scenario terminal HP pilot.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-full-team-hp-pilot-2026-09-17.json",
-          "sha256": "1dc4f746644541f8bdf5bfcfc456c7a2a2d5aa787d967202f03252cf59ab6cb0"
+          "path": "docs/evidence/red-trainer-astra-focused-review-2026-09-17.json",
+          "sha256": "1f4ed73a885d066b7c3198e2b5e300d3b95e17529ece669a0571d474cfabbf4a"
         },
-        "learning_output": "Eight prospective five-on-five TRAIN contexts raised the corpus to 52 across the same four fresh origins. None supplied a switch/stay reversal. A 2400-epoch refit improved full-corpus move regret over always-first, but substantially worsened the original 44-case attack choices. This negative result rejects the recipe before another natural test.",
-        "next_falsifier": "A prospective balanced TRAIN pair must reverse switch/stay preference and a successor fit must retain the original 44-case attack performance before any new-origin natural comparison.",
-        "next_session_goal": "Focused Astra design review only; then Sol High, Fast off for one bounded, balanced switch/stay TRAIN contrast and original-44 retention gate. No new natural run until both pass.",
-        "product_alignment": "The battle learner remains a reusable segment, but this full-team HP recipe did not teach the required decision boundary and its refit regressed attack selection. No final Red authority changed.",
-        "session_id": "2026-09-17-trainer-full-team-hp-pilot-v1",
+        "learning_output": "Review only: 52 TRAIN contexts authenticated and 22 existing tests passed. Five head examples have soft targets that prefer worse mean-return actions; control uses timing-wise maxima; all 260 new HP branches truncated at two turns. No new fit or learning output.",
+        "next_falsifier": "Corrected target rankings must agree with mean returns within 0.02; original-44 attack regret <=0.0554, full-52 attack regret <=0.0648, and composed control-action regret <=0.1609 before the next paired pilot.",
+        "next_session_goal": "Sol High, Fast off: localized target repairs, mathematical regression tests and composed-action diagnostics; re-derive retained TRAIN records and fit once. No additional standing Astra gate.",
+        "product_alignment": "Correct battle targets and measure the complete selected action before scaling the reusable attack/switch learner.",
+        "session_id": "2026-09-17-trainer-astra-focused-review-v1",
         "status": "closed",
-        "stop_condition": "Do not scale the failed HP-pair recipe or promote its 52-context fit. Preserve consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, full game or GitHub push.",
-        "transfer_result": "No cross-title test or new natural evaluation in this session. The earlier correlated Red natural comparison remains a failed promotion gate."
+        "stop_condition": "Stop on a failed target or retention gate. Keep the rejected fit and all consumed DEVELOPMENT evidence. No full game, authority promotion or GitHub push.",
+        "transfer_result": "No gameplay, fit or new natural evaluation. Existing developmental comparisons retain their previous status."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "The 52-context full-team HP recipe and refit failed their TRAIN gate. Seek a focused design review, then require an actual switch/stay reversal and retention of original attack skill before a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.",
+      "next_decision": "Astra found mean-return target contradictions and timing-wise oracle control values. Repair target aggregation and composed-action diagnostics, retain prior attack skill, then measure a small terminal HP contrast before natural evaluation.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

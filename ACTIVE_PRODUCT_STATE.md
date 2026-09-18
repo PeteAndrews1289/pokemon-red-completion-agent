@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The 52-context full-team HP recipe and refit failed their TRAIN gate. Seek a focused design review, then require an actual switch/stay reversal and retention of original attack skill before a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.
+- Next decision: Astra found mean-return target contradictions and timing-wise oracle control values. Repair target aggregation and composed-action diagnostics, retain prior attack skill, then measure a small terminal HP contrast before natural evaluation.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A prospective TRAIN pair fails to reverse attack-versus-switch preference when one observable factor changes, or a larger fit erases attack choices on the original TRAIN cases. |
+| Cheapest falsifier | A corrected target prefers a lower mean-return action, a fit fails common-case retention, or a bounded HP pair lacks a measured switch/stay reversal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-full-team-hp-pilot-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-full-team-hp-pilot-2026-09-17.json)
+**2026-09-17-trainer-astra-focused-review-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-focused-review-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The battle learner remains a reusable segment, but this full-team HP recipe did not teach the required decision boundary and its refit regressed attack selection. No final Red authority changed. |
-| Learning output | Eight prospective five-on-five TRAIN contexts raised the corpus to 52 across the same four fresh origins. None supplied a switch/stay reversal. A 2400-epoch refit improved full-corpus move regret over always-first, but substantially worsened the original 44-case attack choices. This negative result rejects the recipe before another natural test. |
-| Authority delta | None. The 52-context refit is rejected; the older frozen control retains authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No cross-title test or new natural evaluation in this session. The earlier correlated Red natural comparison remains a failed promotion gate. |
-| Blocker | All eight new five-on-five HP pairs preferred switching, so the intended switch/stay reversal was absent. The 52-context refit raised move regret on the identical original 44 TRAIN cases from 0.0354 to 0.1392. Earlier natural DEVELOPMENT outcomes remain consumed and no independent natural-origin replication exists. |
-| Decision | Reject the 52-context fit. Obtain a focused design review before another prospectively balanced TRAIN contrast. Require both a real switch/stay reversal and retention of original attack skill before a new-origin natural evaluation. |
-| Next session | Focused Astra design review only; then Sol High, Fast off for one bounded, balanced switch/stay TRAIN contrast and original-44 retention gate. No new natural run until both pass. |
-| Next falsifier | A prospective balanced TRAIN pair must reverse switch/stay preference and a successor fit must retain the original 44-case attack performance before any new-origin natural comparison. |
-| Stop condition | Do not scale the failed HP-pair recipe or promote its 52-context fit. Preserve consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, full game or GitHub push. |
+| Product alignment | Correct battle targets and measure the complete selected action before scaling the reusable attack/switch learner. |
+| Learning output | Review only: 52 TRAIN contexts authenticated and 22 existing tests passed. Five head examples have soft targets that prefer worse mean-return actions; control uses timing-wise maxima; all 260 new HP branches truncated at two turns. No new fit or learning output. |
+| Authority delta | None. Earlier control authority, Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No gameplay, fit or new natural evaluation. Existing developmental comparisons retain their previous status. |
+| Blocker | The optimizer's soft targets disagree with expected-return evaluation, and control values assume timing-specific best child choices. The short HP pilot supplies no terminal full-battle contrast. Existing weights beat the new attack fit on the same 52-context corpus, so a capacity limit is not established. |
+| Decision | Keep the small separate heads. Repair raw-return aggregation before softmax, take control maxima after averaging each action, and report composed-action regret. Then fit once and enforce common-case retention before a four-scenario terminal HP pilot. |
+| Next session | Sol High, Fast off: localized target repairs, mathematical regression tests and composed-action diagnostics; re-derive retained TRAIN records and fit once. No additional standing Astra gate. |
+| Next falsifier | Corrected target rankings must agree with mean returns within 0.02; original-44 attack regret <=0.0554, full-52 attack regret <=0.0648, and composed control-action regret <=0.1609 before the next paired pilot. |
+| Stop condition | Stop on a failed target or retention gate. Keep the rejected fit and all consumed DEVELOPMENT evidence. No full game, authority promotion or GitHub push. |
 
 ### Stop conditions
 

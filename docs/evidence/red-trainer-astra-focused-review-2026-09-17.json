@@ -1,0 +1,40 @@
+{
+  "schema": "pokemon.red.trainer-astra-focused-review.v1",
+  "date": "2026-09-17",
+  "reviewed_commit": "e8148510",
+  "decision": "repair_targets_before_next_fit",
+  "authenticated_train_contexts": 52,
+  "authenticated_timing_records": 260,
+  "new_hp_pair_branches": 260,
+  "new_hp_pair_turn_horizon": 2,
+  "new_hp_pair_truncated_branches": 260,
+  "mean_return_vs_soft_target_mismatches_above_0_02": {
+    "move_case_indices": [19, 28],
+    "switch_case_indices": [47, 48, 49],
+    "indices_are_zero_based": true
+  },
+  "control_max_mean_vs_mean_max_winner_reversals_above_0_02": 0,
+  "control_synthetic_reproduction": {
+    "attack_returns": [1, 1, 1, 1, 1],
+    "first_switch_returns": [2, 2, -2, -2, -2],
+    "second_switch_returns": [-2, -2, 2, 2, 2],
+    "actual_action_means": [1, -0.4, 0.4],
+    "current_switch_target_probability": 0.9999546021312977
+  },
+  "old_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+  "new_model_sha256": "7193887eb3720ff447a6c8e383c937eeb578ecc974f35f6053f1942284d956a5",
+  "move_common_44_mean_regret": {"old": 0.035384769, "new": 0.139235557},
+  "move_all_52_mean_regret": {"old": 0.044750856, "new": 0.119987806},
+  "move_unique_28_current_target_cross_entropy": {"old": 0.818023803, "new": 0.819638400},
+  "composed_control_action_mean_regret": {
+    "all_44_control_contexts": {"old": 0.160857928, "new": 0.141050495},
+    "new_8_hp_contexts": {"old": 0.269667393, "new": 0.305424426}
+  },
+  "focused_existing_tests_passed": 22,
+  "gameplay_actions": 0,
+  "model_fits": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "github_pushes": 0,
+  "limitations": "TRAIN-only diagnostic review. Per-timing maxima did not reverse current corpus control winners. No new leakage defect was established. Target contradictions, truncation and optimization evidence do not prove a model-capacity limit."
+}
