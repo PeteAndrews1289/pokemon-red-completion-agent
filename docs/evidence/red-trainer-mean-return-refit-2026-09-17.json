@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon.red.trainer-mean-return-refit-evidence.v1",
+  "date": "2026-09-17",
+  "source_commit": "6b2484e3a7b03e90c0518eddb073f7a73a3437e1",
+  "training_target_schema": "pokemon.red.trainer-practice.mean-action-return.v2",
+  "decision": "STOP_AT_ORIGINAL_44_RETENTION_GATE",
+  "authenticated_train_contexts": 52,
+  "distinct_upstream_train_roots": 4,
+  "timings_per_context": 5,
+  "new_gameplay_actions": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "full_game_runs": 0,
+  "model_sha256": "be3a2a3aed8d4fe80ce6a9b084de667cb0fee65afe21f59f9ba6a38382038b26",
+  "fit_receipt_sha256": "99227d5ceb92436e03704bc8a1436796b4b6dc0dee1afbd1a7de7d8409b329db",
+  "fit_plan_sha256": "5d22429dc229610781cf9893335c45661c7b216415f9832be287132f6f99180f",
+  "optimizer_epochs": 2400,
+  "corrected_target_rank_check": {
+    "move_unique_inputs": 28,
+    "control_unique_inputs": 29,
+    "switch_unique_inputs": 23,
+    "mean_return_ranking_mismatches_above_0_02": 0
+  },
+  "predeclared_train_gates": {
+    "original_44_move_regret": {"observed": 0.057117017, "maximum": 0.0554, "passed": false},
+    "all_52_move_regret": {"observed": 0.054292974, "maximum": 0.0648, "passed": true},
+    "all_44_control_context_composed_regret": {"observed": 0.111140242, "maximum": 0.1609, "passed": true}
+  },
+  "optimization_diagnostics": {
+    "move_initial_cross_entropy": 0.865005419,
+    "move_final_cross_entropy": 0.735911698,
+    "move_final_gradient_norm": 0.025138309,
+    "control_final_gradient_norm": 0.033911498,
+    "switch_final_gradient_norm": 0.031074912
+  },
+  "focused_tests_passed": 24,
+  "next_pilot_started": false,
+  "interpretation": "The corrected objective fixed measured target-ranking contradictions and improved the 52-context fit, but the prespecified original-44 retention ceiling was exceeded by 0.001717. No threshold was waived and no HP pilot was run. This is TRAIN evidence only."
+}

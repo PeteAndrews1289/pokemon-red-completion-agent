@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Astra found mean-return target contradictions and timing-wise oracle control values. Repair target aggregation and composed-action diagnostics, retain prior attack skill, then measure a small terminal HP contrast before natural evaluation.
+- Next decision: Corrected battle targets now match mean returns, but the one refit narrowly failed original attack retention (0.0571 versus 0.0554). Preserve the stop, then test one declared ROM-free old-weight continuation before any HP or natural pilot.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-astra-focused-review-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-focused-review-2026-09-17.json)
+**2026-09-17-trainer-mean-return-refit-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-mean-return-refit-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Correct battle targets and measure the complete selected action before scaling the reusable attack/switch learner. |
-| Learning output | Review only: 52 TRAIN contexts authenticated and 22 existing tests passed. Five head examples have soft targets that prefer worse mean-return actions; control uses timing-wise maxima; all 260 new HP branches truncated at two turns. No new fit or learning output. |
-| Authority delta | None. Earlier control authority, Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No gameplay, fit or new natural evaluation. Existing developmental comparisons retain their previous status. |
-| Blocker | The optimizer's soft targets disagree with expected-return evaluation, and control values assume timing-specific best child choices. The short HP pilot supplies no terminal full-battle contrast. Existing weights beat the new attack fit on the same 52-context corpus, so a capacity limit is not established. |
-| Decision | Keep the small separate heads. Repair raw-return aggregation before softmax, take control maxima after averaging each action, and report composed-action regret. Then fit once and enforce common-case retention before a four-scenario terminal HP pilot. |
-| Next session | Sol High, Fast off: localized target repairs, mathematical regression tests and composed-action diagnostics; re-derive retained TRAIN records and fit once. No additional standing Astra gate. |
-| Next falsifier | Corrected target rankings must agree with mean returns within 0.02; original-44 attack regret <=0.0554, full-52 attack regret <=0.0648, and composed control-action regret <=0.1609 before the next paired pilot. |
-| Stop condition | Stop on a failed target or retention gate. Keep the rejected fit and all consumed DEVELOPMENT evidence. No full game, authority promotion or GitHub push. |
+| Product alignment | Battle target ranking now agrees with measured mean returns, but the learner still must retain its earlier attack skill before more gameplay. |
+| Learning output | Target correction eliminated all mean-return ranking mismatches across 80 combined head inputs. One authenticated 52-context TRAIN refit reached 0.0543 all-corpus attack regret and 0.1111 composed-action regret, but missed original-44 retention by 0.0017. No new gameplay or natural generalization result. |
+| Authority delta | None. The corrected fit is TRAIN-only and stopped at the original-44 retention gate. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No new gameplay or natural evaluation. Existing developmental comparisons retain their previous status. |
+| Blocker | Corrected targets have zero mean-return ranking mismatches, but the one 52-context fit scored 0.0571 original-44 attack regret against the declared 0.0554 ceiling. The terminal HP pilot and independent natural comparison remain unopened. |
+| Decision | Retain the target fixes and the failed fit. Stop at the predeclared retention gate. A future bounded old-weight continuation or equivalent ROM-free optimization experiment must be declared before another fit, with the same original-44, all-52 and composed-action gates. |
+| Next session | Sol High, Fast off: one bounded ROM-free old-weight continuation on corrected TRAIN targets, with unchanged retention gates. Run the four-scenario terminal HP pilot only if they pass. |
+| Next falsifier | A prospectively declared optimization successor must reach original-44 attack regret <=0.0554 while preserving all-52 attack regret <=0.0648 and composed-action regret <=0.1609. Otherwise stop before the HP pilot. |
+| Stop condition | Preserve the failed original-44 retention result. Do not run the HP pilot, use consumed DEVELOPMENT, promote authority, start a full game or push to GitHub until a separately declared successor passes the same gates. |
 
 ### Stop conditions
 

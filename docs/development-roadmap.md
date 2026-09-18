@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-focused-review-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-mean-return-refit-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-mean-return-refit-v1
+
+Corrected attack and switch targets rank mean TRAIN returns consistently across 80 unique head inputs. One 52-context refit improved all-corpus attack regret to 0.0543 and complete-action regret to 0.1111, without gameplay. Its original-44 attack regret was 0.0571 against the predeclared 0.0554 ceiling. No authority or completion gate advanced.
+
+**Deviation:** The small retention miss stops the terminal HP pilot. Retain the failed fit and unchanged threshold; stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: one prospectively bounded ROM-free old-weight continuation using the same retention gates. Run the four-case HP pilot only if it passes.
 
 ### 2026-09-17-trainer-astra-focused-review-v1
 
