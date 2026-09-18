@@ -1,0 +1,30 @@
+{
+  "schema": "pokemon.red.trainer-astra-readiness-review.v1",
+  "date": "2026-09-17",
+  "reviewed_source_commit": "886cd343d893ca9d4ea8c5467ee1a31de8254068",
+  "partition": "TRAIN_ONLY",
+  "method": "Authenticated retained 52-context reconstruction; existing heads composed only in memory; no fit, model artifact or gameplay.",
+  "attack_source_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+  "control_switch_source_model_sha256": "be3a2a3aed8d4fe80ce6a9b084de667cb0fee65afe21f59f9ba6a38382038b26",
+  "corpus_contexts": 52,
+  "attack_examples": 40,
+  "unique_attack_candidate_matrices": 28,
+  "control_contexts": 44,
+  "readonly_composition_gates": {
+    "original_44_attack": {"maximum": 0.0554, "observed": 0.035384769, "passed": true},
+    "all_52_attack": {"maximum": 0.0648, "observed": 0.044750856, "passed": true},
+    "composed_action": {"maximum": 0.1609, "observed": 0.112597023, "passed": true}
+  },
+  "old_full_policy_composed_regret": 0.160857928,
+  "reproduced_source_defect": "build_refit_plan inherits warm_start_move_model, warm_start_move_receipt and warm_start_move_epochs when all new warm arguments are omitted.",
+  "targeted_tests_passed": 34,
+  "test_scope": ["trainer_practice_head", "trainer_practice_fit", "trainer_practice_outcome_policy", "refit_trainer_practice_outcomes", "fit_trainer_practice_outcomes", "trainer_practice_returns", "trainer_practice_features", "run_trainer_full_team_pairs"],
+  "decision": "Package frozen old attack plus corrected control/switch; preserve gates; then terminal HP pilot, unseen variation and new-origin natural comparison. No further same-corpus attack refit.",
+  "new_natural_supply_verified": false,
+  "fits": 0,
+  "model_artifacts_created": 0,
+  "gameplay_actions": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "github_pushes": 0
+}

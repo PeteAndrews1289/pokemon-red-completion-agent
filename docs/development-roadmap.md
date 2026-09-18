@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-warm-attack-retention-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-readiness-decision-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-astra-readiness-decision-v1
+
+Astra evaluated old attack plus corrected control/switch in memory: all unchanged TRAIN gates pass (0.03538 original attack, 0.04475 all attack, 0.11260 composed regret). Reproduced inherited warm-start settings defect; 34 focused tests passed. No fit, gameplay or authority change.
+
+**Deviation:** Freeze attack weights instead of another same-corpus attack refit. Terminal HP learning, unseen variation and new-origin natural comparison remain required; stage and completion criteria unchanged.
+
+**Next:** Sol High, Fast off: authenticated composition, inherited-settings fix and terminal HP pilot. Inventory new natural supply; no standing Astra gate if checks pass.
 
 ### 2026-09-17-trainer-warm-attack-retention-v1
 

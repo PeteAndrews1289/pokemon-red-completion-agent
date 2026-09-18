@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The bounded old-weight continuation remained TRAIN-only and failed attack retention. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "The old-weight continuation reduced cross-entropy but raised all-52 attack regret from 0.0448 to 0.0850. Original-44 regret was 0.0857 versus the declared 0.0554 ceiling; one flipped decision lost 1.6276 reward. The terminal HP pilot remains unopened.",
-        "decision": "Stop the current optimization recipe after two retention failures. Preserve both fits and bring the measured loss-versus-regret conflict to one focused Astra design review before another fit or gameplay pilot.",
+        "authority_delta": "None. Read-only TRAIN diagnostics changed no model artifact or actor authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "Composite artifact is not yet packaged; terminal HP reversal, unseen variation and independent natural qualification remain unproved. New natural supply was not established.",
+        "decision": "Freeze the older attack head and reuse corrected cold-fit control/switch heads. Stop same-corpus attack refits. Package and verify the candidate, then the bounded terminal HP pilot; no standing additional Astra review.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-warm-attack-retention-2026-09-17.json",
-          "sha256": "8a10cb006fc518e12a5c566f13a992cfbf59eb4b119847ce7b41281b908157cd"
+          "path": "docs/evidence/red-trainer-astra-readiness-decision-2026-09-17.json",
+          "sha256": "ee5e3dc5ea9a15344e413d1f0aa682409b7376d25b0c33071f4a2c9c68962587"
         },
-        "learning_output": "One authenticated 52-context old-weight continuation changed only two original attack predictions, but one costly flip failed both attack gates. No new gameplay, natural generalization result or authority change occurred.",
-        "next_falsifier": "A newly declared objective or frozen-head composition must preserve original-44 attack regret <=0.0554, all-52 attack regret <=0.0648 and composed-action regret <=0.1609 before the terminal HP pilot.",
-        "next_session_goal": "Astra High, Fast off: decide one bounded optimization design from the retained loss-versus-regret evidence; then Sol High can implement it without opening consumed DEVELOPMENT.",
-        "product_alignment": "Battle target arithmetic is corrected, but improving training loss still erased a high-value attack choice. A design decision is required before model-directed battle authority can advance.",
-        "session_id": "2026-09-17-trainer-warm-attack-retention-v1",
+        "learning_output": "No fit or gameplay. Read-only composition preserves original-44 attack regret 0.035384769, all-52 attack 0.044750856 and composed-action 0.112597023, passing unchanged gates. 34 focused tests passed; warm-setting inheritance defect reproduced.",
+        "next_falsifier": "Packaged composition fails the unchanged 0.0554 / 0.0648 / 0.1609 regret vector, or terminal HP pairs lack opposite measured winners with >0.10 margins. Unseen variation and natural outcomes remain separate gates.",
+        "next_session_goal": "Sol High, Fast off: authenticated frozen-attack composition, inherited-settings fix and one four-scenario terminal HP pilot; reserve unseen variations before training. Inventory independent natural supply before planning comparison.",
+        "product_alignment": "Preserve demonstrated attack distinctions while moving to useful learned switching and unseen outcomes, rather than another optimizer loop over the same cases.",
+        "session_id": "2026-09-17-trainer-astra-readiness-decision-v1",
         "status": "closed",
-        "stop_condition": "Preserve both failed retention results and stop the current recipe. No HP pilot, consumed DEVELOPMENT use, authority promotion, full game or GitHub push before a newly reviewed design passes the same gates.",
-        "transfer_result": "No new gameplay or natural evaluation. Existing developmental comparisons retain their previous status."
+        "stop_condition": "Stop on a failed declared gate; retain failures. No consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. Seek direction before a broader natural-source creation campaign.",
+        "transfer_result": "None. Only retained TRAIN evidence was evaluated; no new natural origin was verified."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "The corrected cold fit and old-weight continuation both failed attack retention. Astra must choose one bounded design for the loss-versus-return conflict before any new fit, terminal HP pilot or natural comparison.",
+      "next_decision": "Astra's read-only frozen-attack composition passes all three unchanged TRAIN gates. Package it with authenticated per-head lineage, repair inherited warm-start settings, then test terminal HP-dependent switching and unseen variation before a new-origin natural comparison.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The corrected cold fit and old-weight continuation both failed attack retention. Astra must choose one bounded design for the loss-versus-return conflict before any new fit, terminal HP pilot or natural comparison.
+- Next decision: Astra's read-only frozen-attack composition passes all three unchanged TRAIN gates. Package it with authenticated per-head lineage, repair inherited warm-start settings, then test terminal HP-dependent switching and unseen variation before a new-origin natural comparison.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-warm-attack-retention-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-warm-attack-retention-2026-09-17.json)
+**2026-09-17-trainer-astra-readiness-decision-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-readiness-decision-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Battle target arithmetic is corrected, but improving training loss still erased a high-value attack choice. A design decision is required before model-directed battle authority can advance. |
-| Learning output | One authenticated 52-context old-weight continuation changed only two original attack predictions, but one costly flip failed both attack gates. No new gameplay, natural generalization result or authority change occurred. |
-| Authority delta | None. The bounded old-weight continuation remained TRAIN-only and failed attack retention. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No new gameplay or natural evaluation. Existing developmental comparisons retain their previous status. |
-| Blocker | The old-weight continuation reduced cross-entropy but raised all-52 attack regret from 0.0448 to 0.0850. Original-44 regret was 0.0857 versus the declared 0.0554 ceiling; one flipped decision lost 1.6276 reward. The terminal HP pilot remains unopened. |
-| Decision | Stop the current optimization recipe after two retention failures. Preserve both fits and bring the measured loss-versus-regret conflict to one focused Astra design review before another fit or gameplay pilot. |
-| Next session | Astra High, Fast off: decide one bounded optimization design from the retained loss-versus-regret evidence; then Sol High can implement it without opening consumed DEVELOPMENT. |
-| Next falsifier | A newly declared objective or frozen-head composition must preserve original-44 attack regret <=0.0554, all-52 attack regret <=0.0648 and composed-action regret <=0.1609 before the terminal HP pilot. |
-| Stop condition | Preserve both failed retention results and stop the current recipe. No HP pilot, consumed DEVELOPMENT use, authority promotion, full game or GitHub push before a newly reviewed design passes the same gates. |
+| Product alignment | Preserve demonstrated attack distinctions while moving to useful learned switching and unseen outcomes, rather than another optimizer loop over the same cases. |
+| Learning output | No fit or gameplay. Read-only composition preserves original-44 attack regret 0.035384769, all-52 attack 0.044750856 and composed-action 0.112597023, passing unchanged gates. 34 focused tests passed; warm-setting inheritance defect reproduced. |
+| Authority delta | None. Read-only TRAIN diagnostics changed no model artifact or actor authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | None. Only retained TRAIN evidence was evaluated; no new natural origin was verified. |
+| Blocker | Composite artifact is not yet packaged; terminal HP reversal, unseen variation and independent natural qualification remain unproved. New natural supply was not established. |
+| Decision | Freeze the older attack head and reuse corrected cold-fit control/switch heads. Stop same-corpus attack refits. Package and verify the candidate, then the bounded terminal HP pilot; no standing additional Astra review. |
+| Next session | Sol High, Fast off: authenticated frozen-attack composition, inherited-settings fix and one four-scenario terminal HP pilot; reserve unseen variations before training. Inventory independent natural supply before planning comparison. |
+| Next falsifier | Packaged composition fails the unchanged 0.0554 / 0.0648 / 0.1609 regret vector, or terminal HP pairs lack opposite measured winners with >0.10 margins. Unseen variation and natural outcomes remain separate gates. |
+| Stop condition | Stop on a failed declared gate; retain failures. No consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. Seek direction before a broader natural-source creation campaign. |
 
 ### Stop conditions
 

@@ -173,9 +173,9 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-17-trainer-warm-attack-retention-v1</text>
-<text x="50" y="2958" class="body">One old-weight attack continuation on 52 retained TRAIN contexts failed both attack gates: original-44 regret 0.0857 versus</text>
-<text x="50" y="2983" class="body">0.0554, all-52 regret 0.0850 versus 0.0648. Lower cross-entropy accompanied a high-cost flipped attack choice. No gameplay,</text>
-<text x="50" y="3008" class="body">authority or completion gate advanced.</text>
+<text x="50" y="2923" class="small muted">2026-09-17-trainer-astra-readiness-decision-v1</text>
+<text x="50" y="2958" class="body">Astra evaluated old attack plus corrected control/switch in memory: all unchanged TRAIN gates pass (0.03538 original attack,</text>
+<text x="50" y="2983" class="body">0.04475 all attack, 0.11260 composed regret). Reproduced inherited warm-start settings defect; 34 focused tests passed. No</text>
+<text x="50" y="3008" class="body">fit, gameplay or authority change.</text>
 <text x="50" y="3048" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>
