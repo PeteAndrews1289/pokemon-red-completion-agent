@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-mean-return-refit-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-warm-attack-retention-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-warm-attack-retention-v1
+
+One old-weight attack continuation on 52 retained TRAIN contexts failed both attack gates: original-44 regret 0.0857 versus 0.0554, all-52 regret 0.0850 versus 0.0648. Lower cross-entropy accompanied a high-cost flipped attack choice. No gameplay, authority or completion gate advanced.
+
+**Deviation:** Two retention failures now stop the current optimization recipe. The terminal HP pilot remains unopened and stage/checklist exits remain unchanged.
+
+**Next:** Astra High, Fast off: decide one bounded design for the loss-versus-return conflict before another fit.
 
 ### 2026-09-17-trainer-mean-return-refit-v1
 

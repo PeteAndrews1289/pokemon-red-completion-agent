@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-mean-return-refit-v1",
+  "as_of_session": "2026-09-17-trainer-warm-attack-retention-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1802,6 +1802,12 @@
       "result": "Corrected attack and switch targets rank mean TRAIN returns consistently across 80 unique head inputs. One 52-context refit improved all-corpus attack regret to 0.0543 and complete-action regret to 0.1111, without gameplay. Its original-44 attack regret was 0.0571 against the predeclared 0.0554 ceiling. No authority or completion gate advanced.",
       "deviation": "The small retention miss stops the terminal HP pilot. Retain the failed fit and unchanged threshold; stage and checklist exits remain unchanged.",
       "next": "Sol High, Fast off: one prospectively bounded ROM-free old-weight continuation using the same retention gates. Run the four-case HP pilot only if it passes."
+    },
+    {
+      "session": "2026-09-17-trainer-warm-attack-retention-v1",
+      "result": "One old-weight attack continuation on 52 retained TRAIN contexts failed both attack gates: original-44 regret 0.0857 versus 0.0554, all-52 regret 0.0850 versus 0.0648. Lower cross-entropy accompanied a high-cost flipped attack choice. No gameplay, authority or completion gate advanced.",
+      "deviation": "Two retention failures now stop the current optimization recipe. The terminal HP pilot remains unopened and stage/checklist exits remain unchanged.",
+      "next": "Astra High, Fast off: decide one bounded design for the loss-versus-return conflict before another fit."
     }
   ],
   "closed_milestones": [

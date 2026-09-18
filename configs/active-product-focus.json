@@ -33,21 +33,21 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The corrected fit is TRAIN-only and stopped at the original-44 retention gate. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
-        "blocker": "Corrected targets have zero mean-return ranking mismatches, but the one 52-context fit scored 0.0571 original-44 attack regret against the declared 0.0554 ceiling. The terminal HP pilot and independent natural comparison remain unopened.",
-        "decision": "Retain the target fixes and the failed fit. Stop at the predeclared retention gate. A future bounded old-weight continuation or equivalent ROM-free optimization experiment must be declared before another fit, with the same original-44, all-52 and composed-action gates.",
+        "authority_delta": "None. The bounded old-weight continuation remained TRAIN-only and failed attack retention. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged.",
+        "blocker": "The old-weight continuation reduced cross-entropy but raised all-52 attack regret from 0.0448 to 0.0850. Original-44 regret was 0.0857 versus the declared 0.0554 ceiling; one flipped decision lost 1.6276 reward. The terminal HP pilot remains unopened.",
+        "decision": "Stop the current optimization recipe after two retention failures. Preserve both fits and bring the measured loss-versus-regret conflict to one focused Astra design review before another fit or gameplay pilot.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-mean-return-refit-2026-09-17.json",
-          "sha256": "8339827231bee421f9ea89a6563217dc899b07a2cc28043c5b562d25235ccea3"
+          "path": "docs/evidence/red-trainer-warm-attack-retention-2026-09-17.json",
+          "sha256": "8a10cb006fc518e12a5c566f13a992cfbf59eb4b119847ce7b41281b908157cd"
         },
-        "learning_output": "Target correction eliminated all mean-return ranking mismatches across 80 combined head inputs. One authenticated 52-context TRAIN refit reached 0.0543 all-corpus attack regret and 0.1111 composed-action regret, but missed original-44 retention by 0.0017. No new gameplay or natural generalization result.",
-        "next_falsifier": "A prospectively declared optimization successor must reach original-44 attack regret <=0.0554 while preserving all-52 attack regret <=0.0648 and composed-action regret <=0.1609. Otherwise stop before the HP pilot.",
-        "next_session_goal": "Sol High, Fast off: one bounded ROM-free old-weight continuation on corrected TRAIN targets, with unchanged retention gates. Run the four-scenario terminal HP pilot only if they pass.",
-        "product_alignment": "Battle target ranking now agrees with measured mean returns, but the learner still must retain its earlier attack skill before more gameplay.",
-        "session_id": "2026-09-17-trainer-mean-return-refit-v1",
+        "learning_output": "One authenticated 52-context old-weight continuation changed only two original attack predictions, but one costly flip failed both attack gates. No new gameplay, natural generalization result or authority change occurred.",
+        "next_falsifier": "A newly declared objective or frozen-head composition must preserve original-44 attack regret <=0.0554, all-52 attack regret <=0.0648 and composed-action regret <=0.1609 before the terminal HP pilot.",
+        "next_session_goal": "Astra High, Fast off: decide one bounded optimization design from the retained loss-versus-regret evidence; then Sol High can implement it without opening consumed DEVELOPMENT.",
+        "product_alignment": "Battle target arithmetic is corrected, but improving training loss still erased a high-value attack choice. A design decision is required before model-directed battle authority can advance.",
+        "session_id": "2026-09-17-trainer-warm-attack-retention-v1",
         "status": "closed",
-        "stop_condition": "Preserve the failed original-44 retention result. Do not run the HP pilot, use consumed DEVELOPMENT, promote authority, start a full game or push to GitHub until a separately declared successor passes the same gates.",
+        "stop_condition": "Preserve both failed retention results and stop the current recipe. No HP pilot, consumed DEVELOPMENT use, authority promotion, full game or GitHub push before a newly reviewed design passes the same gates.",
         "transfer_result": "No new gameplay or natural evaluation. Existing developmental comparisons retain their previous status."
       },
       "learned_authority": {
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Corrected battle targets now match mean returns, but the one refit narrowly failed original attack retention (0.0571 versus 0.0554). Preserve the stop, then test one declared ROM-free old-weight continuation before any HP or natural pilot.",
+      "next_decision": "The corrected cold fit and old-weight continuation both failed attack retention. Astra must choose one bounded design for the loss-versus-return conflict before any new fit, terminal HP pilot or natural comparison.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

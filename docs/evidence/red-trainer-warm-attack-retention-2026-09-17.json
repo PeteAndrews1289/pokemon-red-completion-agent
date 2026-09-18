@@ -1,0 +1,44 @@
+{
+  "schema": "pokemon.red.trainer-warm-attack-retention-evidence.v1",
+  "date": "2026-09-17",
+  "fit_source_commit": "7380b66eec5e85712ddd953934cca9226d0a6c42",
+  "diagnostic_source_commit": "5779abb5",
+  "partition": "TRAIN_ONLY",
+  "old_move_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+  "new_model_sha256": "1eea0f709cb0bb5a080496e310a0e84aac0ffe287afbda7a3a2f433ce6e83f3c",
+  "fit_receipt_sha256": "31344fa2e8a1bbe01b66785d2f7c2ee104cf5324675eb38f466172d3eb6920c8",
+  "fit_plan_sha256": "e28416b736a907ddb75225335e1da979372e70fc1a3871b41367943b7e5fec2a",
+  "authenticated_train_contexts": 52,
+  "independent_train_roots": 4,
+  "timings_per_context": 5,
+  "move_continuation_epochs": 100,
+  "other_head_epochs": 2400,
+  "regret_gates": {
+    "original_44_move": {"maximum": 0.0554, "observed": 0.085655628, "passed": false},
+    "all_52_move": {"maximum": 0.0648, "observed": 0.084967544, "passed": false},
+    "all_44_control_context_composed": {"maximum": 0.1609, "observed": 0.112597023, "passed": true}
+  },
+  "old_move_on_same_corrected_targets": {
+    "all_52_move_regret": 0.044750856,
+    "cross_entropy": 0.784338806,
+    "gradient_norm": 0.108844612
+  },
+  "continued_move_on_same_corrected_targets": {
+    "all_52_move_regret": 0.084967544,
+    "cross_entropy": 0.770819817,
+    "gradient_norm": 0.072285209
+  },
+  "changed_original_attack_choices": [
+    {"case_index": 34, "old_regret": 0.018916667, "continued_regret": 0.0},
+    {"case_index": 43, "old_regret": 0.0, "continued_regret": 1.627584153}
+  ],
+  "case_34_and_43_identical_actor_and_opponent_species": true,
+  "case_34_and_43_identical_observable_move_inputs": false,
+  "diagnostic_correction": "The original warm-fit receipt labels seeded random initialization loss 0.865005419 as initial_cross_entropy. Read-only reconstruction found the actual old-weight initial loss 0.784338806. Source was fixed after this fit; the immutable receipt was not rewritten.",
+  "decision": "STOP_BEFORE_TERMINAL_HP_PILOT",
+  "reason": "The one predeclared old-weight continuation failed both attack retention gates. Lower cross-entropy did not prevent a large observed-return decision regression.",
+  "gameplay_actions": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "github_pushes": 0
+}

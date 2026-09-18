@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Corrected battle targets now match mean returns, but the one refit narrowly failed original attack retention (0.0571 versus 0.0554). Preserve the stop, then test one declared ROM-free old-weight continuation before any HP or natural pilot.
+- Next decision: The corrected cold fit and old-weight continuation both failed attack retention. Astra must choose one bounded design for the loss-versus-return conflict before any new fit, terminal HP pilot or natural comparison.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-mean-return-refit-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-mean-return-refit-2026-09-17.json)
+**2026-09-17-trainer-warm-attack-retention-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-warm-attack-retention-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Battle target ranking now agrees with measured mean returns, but the learner still must retain its earlier attack skill before more gameplay. |
-| Learning output | Target correction eliminated all mean-return ranking mismatches across 80 combined head inputs. One authenticated 52-context TRAIN refit reached 0.0543 all-corpus attack regret and 0.1111 composed-action regret, but missed original-44 retention by 0.0017. No new gameplay or natural generalization result. |
-| Authority delta | None. The corrected fit is TRAIN-only and stopped at the original-44 retention gate. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Product alignment | Battle target arithmetic is corrected, but improving training loss still erased a high-value attack choice. A design decision is required before model-directed battle authority can advance. |
+| Learning output | One authenticated 52-context old-weight continuation changed only two original attack predictions, but one costly flip failed both attack gates. No new gameplay, natural generalization result or authority change occurred. |
+| Authority delta | None. The bounded old-weight continuation remained TRAIN-only and failed attack retention. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
 | Transfer result | No new gameplay or natural evaluation. Existing developmental comparisons retain their previous status. |
-| Blocker | Corrected targets have zero mean-return ranking mismatches, but the one 52-context fit scored 0.0571 original-44 attack regret against the declared 0.0554 ceiling. The terminal HP pilot and independent natural comparison remain unopened. |
-| Decision | Retain the target fixes and the failed fit. Stop at the predeclared retention gate. A future bounded old-weight continuation or equivalent ROM-free optimization experiment must be declared before another fit, with the same original-44, all-52 and composed-action gates. |
-| Next session | Sol High, Fast off: one bounded ROM-free old-weight continuation on corrected TRAIN targets, with unchanged retention gates. Run the four-scenario terminal HP pilot only if they pass. |
-| Next falsifier | A prospectively declared optimization successor must reach original-44 attack regret <=0.0554 while preserving all-52 attack regret <=0.0648 and composed-action regret <=0.1609. Otherwise stop before the HP pilot. |
-| Stop condition | Preserve the failed original-44 retention result. Do not run the HP pilot, use consumed DEVELOPMENT, promote authority, start a full game or push to GitHub until a separately declared successor passes the same gates. |
+| Blocker | The old-weight continuation reduced cross-entropy but raised all-52 attack regret from 0.0448 to 0.0850. Original-44 regret was 0.0857 versus the declared 0.0554 ceiling; one flipped decision lost 1.6276 reward. The terminal HP pilot remains unopened. |
+| Decision | Stop the current optimization recipe after two retention failures. Preserve both fits and bring the measured loss-versus-regret conflict to one focused Astra design review before another fit or gameplay pilot. |
+| Next session | Astra High, Fast off: decide one bounded optimization design from the retained loss-versus-regret evidence; then Sol High can implement it without opening consumed DEVELOPMENT. |
+| Next falsifier | A newly declared objective or frozen-head composition must preserve original-44 attack regret <=0.0554, all-52 attack regret <=0.0648 and composed-action regret <=0.1609 before the terminal HP pilot. |
+| Stop condition | Preserve both failed retention results and stop the current recipe. No HP pilot, consumed DEVELOPMENT use, authority promotion, full game or GitHub push before a newly reviewed design passes the same gates. |
 
 ### Stop conditions
 
