@@ -1,0 +1,18 @@
+{
+  "schema": "pokemon.red.trainer-packaged-full-party-diagnostic-plan.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "capability": "Choose a reserve and continue through a complete multi-turn trainer battle using the packaged three-head policy.",
+  "learned_authority": "The packaged policy owns the opening switch, reserve choice, later attacks, and any replacement prompts; no authority promotion follows from a training-corpus replay.",
+  "transfer_test": "None; a new independent natural-origin battle is still required.",
+  "cheapest_falsifier": "One retained full-party healthy capture, fit-plan index 44, with five party members against Machop at 80 HP. Its short matched branches favored switching but all stopped at the turn limit.",
+  "time_box": "One episode, at most 80 decisions and 120000 controller frames.",
+  "stop_condition": "Stop this diagnostic after one episode, whether it wins, loses, or fails closed. Do not refit or tune the consumed capture.",
+  "source": "Authenticated retained TRAIN capture from red-trainer-full-team-pairs-20260917-v1/root-01-healthy; no new state materialization.",
+  "model": "Frozen attack plus corrected control/switch package, SHA-256 831980e325d6164c9314d9b8d93909a03b66e6d0bf47b3bfb5832e95963c00ee.",
+  "runner": "scripts/run_red_trainer_practice_model.py; opening timing offset 0.",
+  "interpretation_limit": "In-sample functionality diagnostic only, not a transfer or generalization result.",
+  "fits": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0
+}
