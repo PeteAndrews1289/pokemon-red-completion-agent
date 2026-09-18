@@ -73,6 +73,13 @@ def _opening_idle_frames(plan: dict[str, object]) -> int:
     return value
 
 
+def _matched_player_turn_horizon(plan: dict[str, object]) -> int:
+    value = plan.get("matched_player_turn_horizon", 2)
+    if type(value) is not int or value not in {2, 4}:  # noqa: E721
+        raise ValueError("trainer matched horizon differs")
+    return value
+
+
 def _timed_choice_plan_supported(plan: dict[str, object], observation_schema: str | None) -> bool:
     offsets = plan.get("matched_timing_offsets")
     return offsets is None or (
@@ -90,6 +97,7 @@ def _authenticate(plan: object):
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("trainer baseline plan differs")
     _opening_idle_frames(plan)
+    horizon = _matched_player_turn_horizon(plan)
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise ValueError("commit trainer baseline code before running it")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
@@ -123,6 +131,7 @@ def _authenticate(plan: object):
         or plan.get("matched_prompt_choices") not in {None, True}
         or plan.get("matched_forced_choices") not in {None, True}
         or not _timed_choice_plan_supported(plan, capture.manifest.observation_schema)
+        or (horizon == 4 and plan.get("matched_choices") != "all_legal_opening")
     ):
         raise ValueError("trainer baseline scope differs")
     if (
@@ -312,6 +321,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     )
     try:
         matched_choices = plan.get("matched_choices")
+        matched_horizon = _matched_player_turn_horizon(plan)
         first_choices = (
             all_legal_opening_choices()
             if matched_choices == "all_legal_opening"
@@ -337,8 +347,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "model_sha256": model_binding["sha256"],
                     "continuation_policy_id": AttackBaseline.policy_id,
                     "first_choice_refs": [choice.semantic_ref for choice in first_choices],
-                    "player_turn_horizon": 2,
-                    "max_decisions": 8,
+                    "player_turn_horizon": matched_horizon,
+                    "max_decisions": 12 if matched_horizon == 4 else 8,
                     "opening_idle_frames": offset,
                 })
         result = run_red_trainer_practice_episode(
@@ -387,8 +397,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                             "model_sha256": model_binding["sha256"],
                             "policy_id": AttackBaseline.policy_id,
                             "first_choice_ref": choice.semantic_ref,
-                            "player_turn_horizon": 2,
-                            "max_decisions": 8,
+                            "player_turn_horizon": matched_horizon,
+                            "max_decisions": 12 if matched_horizon == 4 else 8,
                             "opening_idle_frames": timing_offset,
                             "plan_sha256": declared_plan_sha,
                         },
@@ -399,8 +409,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     session_factory=session_factory,
                     continuation_policy_factory=AttackBaseline,
                     first_choices=first_choices,
-                    max_decisions=8,
-                    player_turn_horizon=2,
+                    max_decisions=12 if matched_horizon == 4 else 8,
+                    player_turn_horizon=matched_horizon,
                     branch_sink=retain_branch,
                     branch_event_log_factory=branch_event_log,
                     public_species_base_stats=public_stats,

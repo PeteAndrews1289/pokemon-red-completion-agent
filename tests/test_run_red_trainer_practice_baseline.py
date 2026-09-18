@@ -40,6 +40,14 @@ def test_baseline_timing_must_be_a_bounded_integer():
             baseline._opening_idle_frames({"opening_idle_frames": value})
 
 
+def test_terminal_pair_horizon_is_explicit_and_bounded():
+    assert baseline._matched_player_turn_horizon({}) == 2
+    assert baseline._matched_player_turn_horizon({"matched_player_turn_horizon": 4}) == 4
+    for value in (0, 3, 5, True, 4.0):
+        with pytest.raises(ValueError, match="horizon differs"):
+            baseline._matched_player_turn_horizon({"matched_player_turn_horizon": value})
+
+
 def test_timed_prompt_can_be_collected_without_unrequested_main_branches():
     schema = baseline.OBSERVATION_SCHEMA_V2
     prompt_only = {

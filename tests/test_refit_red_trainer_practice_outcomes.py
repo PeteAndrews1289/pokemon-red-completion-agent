@@ -39,6 +39,16 @@ def test_refit_plan_binds_one_declared_move_continuation(tmp_path):
     assert plan["warm_start_move_model"]["path"] == str(model)
     assert len(plan["warm_start_move_receipt"]["sha256"]) == 64
     assert plan["warm_start_move_epochs"] == 100
+    cold = build_refit_plan(
+        plan, commit="c" * 40, epochs=2400, output=tmp_path / "cold"
+    )
+    assert not any(key.startswith("warm_start_") for key in cold)
+    replacement = build_refit_plan(
+        plan, commit="c" * 40, epochs=2400, output=tmp_path / "replacement",
+        warm_start_move_model=model, warm_start_move_receipt=receipt,
+        warm_start_move_epochs=200,
+    )
+    assert replacement["warm_start_move_epochs"] == 200
     with pytest.raises(ValueError, match="schedule"):
         build_refit_plan(
             old, commit="b" * 40, epochs=2400, output=tmp_path / "fit",

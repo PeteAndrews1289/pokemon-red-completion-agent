@@ -43,8 +43,14 @@ def build_refit_plan(
         or not 100 <= warm_start_move_epochs <= epochs
     ):
         raise ValueError("warm-start schedule differs")
+    inherited = {
+        key: value for key, value in previous.items()
+        if key not in {
+            "warm_start_move_model", "warm_start_move_receipt", "warm_start_move_epochs"
+        }
+    }
     plan = {
-        **previous,
+        **inherited,
         "source_commit": commit,
         "epochs": epochs,
         "output": str(output),
