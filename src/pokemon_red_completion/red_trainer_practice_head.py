@@ -163,16 +163,28 @@ class TrainerHeadModel:
         hidden_units: int = 16,
         epochs: int = 300,
         learning_rate: float = 0.02,
+        initial_model: TrainerHeadModel | None = None,
     ) -> TrainerHeadModel:
         cases = tuple(examples)
         if not cases or any(len(case.candidate_vectors[0]) != len(feature_names) for case in cases):
             raise TrainerHeadError("head fit has no compatible examples")
         if not 2 <= hidden_units <= 128 or epochs < 1 or learning_rate <= 0:
             raise TrainerHeadError("head optimizer configuration differs")
-        rng = np.random.default_rng(seed)
-        w1 = rng.normal(0, 0.04, size=(len(feature_names), hidden_units))
-        b1 = np.zeros(hidden_units)
-        w2 = rng.normal(0, 0.04, size=hidden_units)
+        if initial_model is not None:
+            if (
+                initial_model.schema_id != schema_id
+                or initial_model.feature_names != feature_names
+                or initial_model.weights1.shape != (len(feature_names), hidden_units)
+            ):
+                raise TrainerHeadError("warm-start head is incompatible")
+            w1 = initial_model.weights1.copy()
+            b1 = initial_model.bias1.copy()
+            w2 = initial_model.weights2.copy()
+        else:
+            rng = np.random.default_rng(seed)
+            w1 = rng.normal(0, 0.04, size=(len(feature_names), hidden_units))
+            b1 = np.zeros(hidden_units)
+            w2 = rng.normal(0, 0.04, size=hidden_units)
         # A tiny full-batch learner keeps this first bounded fit inspectable.
         for _ in range(epochs):
             g1 = np.zeros_like(w1)

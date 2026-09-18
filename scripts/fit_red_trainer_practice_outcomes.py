@@ -25,6 +25,7 @@ from pokemon_red_completion.red_trainer_practice_admission import inspect_traine
 from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
 from pokemon_red_completion.red_trainer_practice_fit import (
     TRAINING_TARGET_SCHEMA_ID,
+    TrainerPracticeThreeHeadModel,
     fit_trainer_practice_three_heads,
     summarize_trainer_practice_training,
 )
@@ -214,6 +215,31 @@ def run(
         or Path(output).exists()
     ):
         raise ValueError("trainer corpus size, seed, or output differs")
+    warm_start = None
+    warm_epochs = plan.get("warm_start_move_epochs")
+    if (
+        "warm_start_move_model" in plan
+        or "warm_start_move_receipt" in plan
+        or warm_epochs is not None
+    ):
+        if (
+            type(warm_epochs) is not int  # noqa: E721
+            or not 100 <= warm_epochs <= epochs
+        ):
+            raise ValueError("warm-start move schedule differs")
+        warm_path = _bound_path(plan.get("warm_start_move_model"), "warm-start move model")
+        warm_receipt_path = _bound_path(plan.get("warm_start_move_receipt"), "warm-start receipt")
+        warm_receipt = json.loads(warm_receipt_path.read_bytes())
+        if (
+            warm_receipt.get("qualification_tier") != "independent_root_train"
+            or warm_receipt.get("independent_train_supply_gate_passed") is not True
+            or warm_receipt.get("development_evaluations") != 0
+            or warm_receipt.get("authority_promotions") != 0
+            or warm_receipt.get("model_sha256")
+            != hashlib.sha256(warm_path.read_bytes()).hexdigest()
+        ):
+            raise ValueError("warm-start move model lacks qualified TRAIN provenance")
+        warm_start = TrainerPracticeThreeHeadModel.from_dict(json.loads(warm_path.read_bytes()))
     scenario_targets = []
     scenario_receipts = []
     for scenario_index, scenario in enumerate(cases):
@@ -388,6 +414,8 @@ def run(
         seed=seed,
         require_corpus_floor=not exploratory_fit,
         epochs=epochs,
+        warm_start_move=warm_start,
+        warm_start_move_epochs=warm_epochs,
     )
     destination = Path(output)
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
@@ -406,6 +434,10 @@ def run(
         "distinct_upstream_train_roots": len(model.train_root_ids),
         "timing_trials_per_scenario": len(OFFSETS),
         "optimizer_epochs": epochs,
+        "warm_start_move_model_sha256": (
+            hashlib.sha256(warm_path.read_bytes()).hexdigest() if warm_start is not None else None
+        ),
+        "warm_start_move_epochs": warm_epochs,
         "head_example_counts": {
             head: sum(
                 isinstance(target["heads"], dict) and head in target["heads"]

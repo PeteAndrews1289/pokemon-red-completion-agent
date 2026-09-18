@@ -148,6 +148,8 @@ def fit_trainer_practice_three_heads(
     catalog: PokemonRedBattleCatalog | None = None,
     require_corpus_floor: bool = True,
     epochs: int = 300,
+    warm_start_move: TrainerPracticeThreeHeadModel | None = None,
+    warm_start_move_epochs: int | None = None,
 ) -> TrainerPracticeThreeHeadModel:
     records = tuple(targets)
     if not records:
@@ -168,6 +170,15 @@ def fit_trainer_practice_three_heads(
         capture_ids.append(target["capture_id"])  # type: ignore[arg-type]
     if len(set(capture_ids)) != len(capture_ids):
         raise TrainerPracticeFitError("one capture was counted twice")
+    if warm_start_move is not None and (
+        not set(warm_start_move.train_capture_ids).issubset(capture_ids)
+        or set(warm_start_move.train_root_ids) != set(root_counts)
+        or type(warm_start_move_epochs) is not int  # noqa: E721
+        or not 100 <= warm_start_move_epochs <= epochs
+    ):
+        raise TrainerPracticeFitError("warm-start move lineage or schedule differs")
+    if warm_start_move is None and warm_start_move_epochs is not None:
+        raise TrainerPracticeFitError("warm-start move schedule lacks a model")
     if require_corpus_floor and (
         len(root_counts) < 4
         or any(count < 4 for count in root_counts.values())
@@ -196,7 +207,8 @@ def fit_trainer_practice_three_heads(
             feature_names=MOVE_FEATURE_NAMES,
             examples=examples["move"],
             seed=seed,
-            epochs=epochs,
+            epochs=warm_start_move_epochs if warm_start_move is not None else epochs,
+            initial_model=warm_start_move.move if warm_start_move is not None else None,
         ),
         control=TrainerHeadModel.fit(
             schema_id=CONTROL_ACTION_SCHEMA_ID,

@@ -23,3 +23,25 @@ def test_refit_plan_preserves_exact_scenarios_and_changes_only_fit_binding(tmp_p
     assert old["source_commit"] == "a" * 40
     with pytest.raises(ValueError, match="optimizer"):
         build_refit_plan(old, commit="b" * 40, epochs=4000, output=tmp_path / "fit")
+
+
+def test_refit_plan_binds_one_declared_move_continuation(tmp_path):
+    old = {"schema": SCHEMA, "scenarios": [{}] * 16}
+    model = tmp_path / "model.json"
+    receipt = tmp_path / "receipt.json"
+    model.write_text("old model")
+    receipt.write_text("old receipt")
+    plan = build_refit_plan(
+        old, commit="b" * 40, epochs=2400, output=tmp_path / "fit",
+        warm_start_move_model=model, warm_start_move_receipt=receipt,
+        warm_start_move_epochs=100,
+    )
+    assert plan["warm_start_move_model"]["path"] == str(model)
+    assert len(plan["warm_start_move_receipt"]["sha256"]) == 64
+    assert plan["warm_start_move_epochs"] == 100
+    with pytest.raises(ValueError, match="schedule"):
+        build_refit_plan(
+            old, commit="b" * 40, epochs=2400, output=tmp_path / "fit",
+            warm_start_move_model=model, warm_start_move_receipt=receipt,
+            warm_start_move_epochs=0,
+        )

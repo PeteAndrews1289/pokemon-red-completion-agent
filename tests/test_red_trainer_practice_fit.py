@@ -199,6 +199,27 @@ def test_train_only_three_head_fit_round_trip_and_corpus_floor():
         fit_trainer_practice_three_heads([target], seed=12, require_corpus_floor=False)
 
 
+def test_move_continuation_requires_same_train_capture_and_root():
+    target = _target()
+    old = fit_trainer_practice_three_heads(
+        [target], seed=12, require_corpus_floor=False, epochs=10
+    )
+    new_target = deepcopy(target)
+    new_target["capture_id"] = "second-train-capture"
+    fitted = fit_trainer_practice_three_heads(
+        [target, new_target], seed=12, require_corpus_floor=False,
+        epochs=100, warm_start_move=old, warm_start_move_epochs=100,
+    )
+    assert len(fitted.train_capture_ids) == 2
+    unrelated = deepcopy(target)
+    unrelated["capture_id"] = "unrelated"
+    with pytest.raises(TrainerPracticeFitError, match="warm-start move lineage"):
+        fit_trainer_practice_three_heads(
+            [unrelated], seed=12, require_corpus_floor=False,
+            epochs=100, warm_start_move=old, warm_start_move_epochs=100,
+        )
+
+
 def test_fit_floor_rejects_contextless_or_unbalanced_scenario_supply():
     records = []
     for root in range(4):
