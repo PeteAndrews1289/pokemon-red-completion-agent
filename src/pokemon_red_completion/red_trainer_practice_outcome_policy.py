@@ -48,10 +48,13 @@ class RedTrainerPracticeOutcomePolicy:
         self, observation: Mapping[str, object], action: BattleAction
     ) -> None:
         history = self.history.before(self.battle_plan_id, observation)
-        if (
-            action.kind is BattleActionKind.SWITCH
-            and observation["features"]["party"]["lead"]["hp"] > 0
-        ):
+        features = observation.get("features")
+        party = features.get("party") if isinstance(features, Mapping) else None
+        lead = party.get("lead") if isinstance(party, Mapping) else None
+        hp = lead.get("hp") if isinstance(lead, Mapping) else None
+        if type(hp) is not int or hp < 0:  # noqa: E721
+            raise TrainerOutcomePolicyError("forced-choice lead HP is invalid")
+        if action.kind is BattleActionKind.SWITCH and hp > 0:
             self._unanswered_voluntary_switch_opponent = history.opponent_index
         elif action.kind is BattleActionKind.SELECT_MOVE:
             self._unanswered_voluntary_switch_opponent = None

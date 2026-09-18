@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import replace
 from types import SimpleNamespace
 
@@ -69,6 +70,17 @@ def test_trained_policy_owns_main_and_forced_switch_choices():
         may_decline=False,
     )
     assert replacement in {2, 3}
+
+
+@pytest.mark.parametrize("hp", [None, True, -1, "50"])
+def test_forced_choice_rejects_untyped_or_invalid_lead_hp(hp):
+    target = _target()
+    model = fit_trainer_practice_three_heads([target], seed=1, require_corpus_floor=False, epochs=1)
+    policy = RedTrainerPracticeOutcomePolicy(policy_id="unit", battle_plan_id="unit", model=model)
+    observation = deepcopy(target["observation"])
+    observation["features"]["party"]["lead"]["hp"] = hp
+    with pytest.raises(TrainerOutcomePolicyError, match="lead HP"):
+        policy.observe_forced_choice(observation, BattleAction.switch(2))
 
 
 def test_optional_prompt_without_living_reserve_declines_without_projection(monkeypatch):

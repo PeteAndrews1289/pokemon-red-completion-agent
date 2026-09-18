@@ -2,11 +2,14 @@ import json
 from copy import deepcopy
 from types import SimpleNamespace
 
+import pytest
 from run_red_trainer_terminal_curriculum import (
     MOVES,
     StatDamageTeacher,
+    compatible_resume_declaration,
     curriculum_cases,
     hard_curriculum_cases,
+    terminal_anchor_targets,
 )
 from test_red_trainer_practice_fit import _target
 
@@ -98,3 +101,28 @@ def test_hard_recipes_use_five_members_and_distinct_reserved_conditions():
         assert recipe["actor_moves"] == list(reversed(training["actor_moves"]))
         assert recipe["opponent_level"] != training["opponent_level"]
         assert recipe["actor_hp"] != training["actor_hp"]
+
+
+def test_resume_keeps_experiment_fixed_while_retaining_prior_model_examples():
+    previous = {
+        "source_commit": "old",
+        "continuation_code_sha256": "old",
+        "epochs": 1200,
+        "frozen_model": {"sha256": "same"},
+        "training_recipes": ["fixed"],
+    }
+    current = {**previous, "source_commit": "new", "retained_terminal_anchor_ids": ["prior"]}
+    assert compatible_resume_declaration(previous, current)
+    assert not compatible_resume_declaration(previous, {**current, "epochs": 2400})
+    assert not compatible_resume_declaration(previous, {**current, "training_recipes": ["new"]})
+    assert not compatible_resume_declaration(
+        current, {**current, "retained_terminal_anchor_ids": []}
+    )
+    assert not compatible_resume_declaration(
+        previous, {**current, "frozen_model": {"sha256": "other"}}
+    )
+
+
+def test_terminal_anchors_fail_closed_when_a_prior_example_is_missing(tmp_path):
+    with pytest.raises(ValueError, match="anchors are missing"):
+        terminal_anchor_targets(tmp_path / "model.json", {"missing"})

@@ -157,6 +157,11 @@ def test_component_aligned_fit_round_trips_and_reports_its_actual_control_target
     restored = TrainerPracticeThreeHeadModel.from_dict(model.to_dict())
     assert restored.control_target_mode == "fitted_components"
     assert summarize_trainer_practice_training([target], restored)["control"]["examples"] == 1
+    for invalid in (None, 1, [], {}, "unregistered-mode"):
+        with pytest.raises(TrainerPracticeFitError, match="control target mode"):
+            TrainerPracticeThreeHeadModel.from_dict(
+                {**model.to_dict(), "control_target_mode": invalid}
+            )
 
 
 def test_training_diagnostics_report_unique_inputs_and_simple_baseline():

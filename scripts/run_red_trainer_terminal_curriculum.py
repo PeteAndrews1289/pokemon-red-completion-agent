@@ -293,6 +293,64 @@ def retained_targets(plan):
     return targets
 
 
+def terminal_anchor_targets(model_path, required_capture_ids):
+    """Recover a warm start's earlier terminal examples from authenticated logs."""
+    targets = []
+    for target_path in sorted(model_path.parent.glob("train/*/target-*.json")):
+        retained = json.loads(target_path.read_bytes())
+        if retained.get("capture_id") not in required_capture_ids:
+            continue
+        directory = target_path.parent
+        capture_index = int(target_path.stem.rsplit("-", 1)[1])
+        state_path = (
+            directory / "materialized" / "assisted.state"
+            if capture_index == 0
+            else directory / f"intermediate-{capture_index:02d}.state"
+        )
+        capture = open_battle_scenario_capture(state_path, state_path.with_suffix(".state.json"))
+        timed = []
+        for offset in original.OFFSETS:
+            branch_dir = directory / f"capture-{capture_index:02d}-timing-{offset:02d}"
+            plan_path = branch_dir / "plan.json"
+            plan = json.loads(plan_path.read_bytes())
+            choices = json.loads((branch_dir / "choices.json").read_bytes())
+            if plan["continuation_policy_id"] != StatDamageTeacher.policy_id:
+                raise ValueError("terminal anchor continuation differs")
+            refs = tuple(plan["first_choice_refs"])
+            admission = inspect_trainer_practice_choices(
+                capture,
+                choices,
+                expected_choice_refs=refs,
+                continuation_policy_id=StatDamageTeacher.policy_id,
+                branch_event_logs={
+                    ref: branch_dir / f"branch-{i:02d}-events" for i, ref in enumerate(refs)
+                },
+                plan_sha256=original._binding(plan_path)["sha256"],
+                model_sha256=plan["model_sha256"],
+                max_decisions=plan["max_decisions"],
+                expected_opening_idle_frames=offset,
+            )
+            timed.append(extract_trainer_practice_targets(admission, choices))
+        target = aggregate_trainer_timing_targets(tuple(timed), expected_offsets=original.OFFSETS)
+        if json.loads(json.dumps(target)) != retained:
+            raise ValueError("terminal anchor target differs from measured branches")
+        targets.append(target)
+    if {target["capture_id"] for target in targets} != set(required_capture_ids):
+        raise ValueError("warm-start terminal anchors are missing")
+    return targets
+
+
+def compatible_resume_declaration(previous, declaration):
+    ignored = {"source_commit", "continuation_code_sha256"}
+    # Additive retention of the already-bound warm start's prior TRAIN rows is
+    # allowed before the first fit. It changes no executed recipe or branch.
+    if "retained_terminal_anchor_ids" not in previous:
+        ignored.add("retained_terminal_anchor_ids")
+    return {k: v for k, v in previous.items() if k not in ignored} == json.loads(
+        json.dumps({k: v for k, v in declaration.items() if k not in ignored})
+    )
+
+
 def run(args):
     resume = getattr(args, "resume", False)
     hard = getattr(args, "profile", "terminal") == "learner-five"
@@ -319,6 +377,10 @@ def run(args):
     frozen = TrainerPracticeThreeHeadModel.from_dict(json.loads(args.frozen_model.read_bytes()))
     if set(frozen.train_root_ids) != {row[1]["source_id"] for row in sources}:
         raise ValueError("terminal curriculum model roots differ")
+    inherited_ids = set(frozen.train_capture_ids) - {target["capture_id"] for target in old_targets}
+    inherited_targets = (
+        terminal_anchor_targets(args.frozen_model, inherited_ids) if inherited_ids else []
+    )
     templates = []
     for index in (0, 4, 8, 12):
         path = _bound_path(prior["scenarios"][index]["state"], "template state")
@@ -356,12 +418,11 @@ def run(args):
                 "max_decisions": max_decisions,
             }
         )
+    if inherited_ids:
+        declaration["retained_terminal_anchor_ids"] = sorted(inherited_ids)
     if resume:
         previous = json.loads((args.output / "plan.json").read_bytes())
-        ignored = {"source_commit", "continuation_code_sha256"}
-        if {k: v for k, v in previous.items() if k not in ignored} != json.loads(
-            json.dumps({k: v for k, v in declaration.items() if k not in ignored})
-        ):
+        if not compatible_resume_declaration(previous, declaration):
             raise ValueError("resume changes a declared input or experiment")
         original._write(args.output / f"resume-{commit[:12]}.json", declaration)
     else:
@@ -641,7 +702,7 @@ def run(args):
             )
         if len(targets) < 24:
             raise ValueError("terminal curriculum lacks intermediate decision supply")
-        all_targets = old_targets + targets
+        all_targets = old_targets + inherited_targets + targets
         fitted = fit_trainer_practice_three_heads(
             all_targets,
             seed=fit_seed,
@@ -658,11 +719,17 @@ def run(args):
             "retained52": summarize_trainer_practice_training(old_targets, fitted),
             "new_terminal": summarize_trainer_practice_training(targets, fitted),
         }
+        if inherited_targets:
+            reports["inherited_terminal"] = summarize_trainer_practice_training(
+                inherited_targets, fitted
+            )
         original._write(
             args.output / "fit-receipt.json",
             {
                 "new_terminal_contexts": len(targets),
-                "retained_contexts": len(old_targets),
+                "retained_contexts": len(old_targets) + len(inherited_targets),
+                "legacy_retained_contexts": len(old_targets),
+                "inherited_terminal_contexts": len(inherited_targets),
                 "source_commit": commit,
                 "model": original._binding(model_path),
                 "control_target_mode": fitted.control_target_mode,

@@ -142,13 +142,16 @@ class TrainerPracticeThreeHeadModel:
                 raise TrainerPracticeFitError("three-head lineage differs")
             if any(not isinstance(item, str) or not item for item in (*capture_ids, *root_ids)):
                 raise TrainerPracticeFitError("three-head lineage differs")
+            control_target_mode = value.get("control_target_mode", "best_component")
+            if not isinstance(control_target_mode, str):
+                raise TrainerPracticeFitError("control target mode differs")
             return cls(
                 move,
                 control,
                 switch,
                 tuple(capture_ids),
                 tuple(root_ids),
-                value.get("control_target_mode", "best_component"),
+                control_target_mode,
             )
         except (KeyError, TypeError, ValueError) as error:
             if isinstance(error, TrainerPracticeFitError):
@@ -219,12 +222,16 @@ def fit_trainer_practice_three_heads(
     if any(not examples[head] for head in examples):
         raise TrainerPracticeFitError("move, control and switch contrasts are all required")
     examples = {head: _combine_identical_inputs(rows) for head, rows in examples.items()}
+    move_epochs = epochs
+    if warm_start_move is not None:
+        assert isinstance(warm_start_move_epochs, int)
+        move_epochs = warm_start_move_epochs
     move = TrainerHeadModel.fit(
         schema_id=MOVE_SCHEMA_ID,
         feature_names=MOVE_FEATURE_NAMES,
         examples=examples["move"],
         seed=seed,
-        epochs=warm_start_move_epochs if warm_start_move is not None else epochs,
+        epochs=move_epochs,
         initial_model=warm_start_move.move if warm_start_move is not None else None,
     )
     switch = TrainerHeadModel.fit(
