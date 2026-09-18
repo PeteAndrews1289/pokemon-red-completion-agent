@@ -1,0 +1,18 @@
+{
+  "schema": "pokemon.red.trainer-packaged-rollout-diagnostic-plan.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "capability": "Choose and execute attacks and switches through a complete trainer battle using the packaged three-head policy.",
+  "learned_authority": "The packaged policy, not a forced opening or attack-only continuation, chooses every battle action; no authority is promoted by this in-sample diagnostic.",
+  "transfer_test": "None in this diagnostic; a separate natural-origin battle remains mandatory before promotion.",
+  "cheapest_falsifier": "One retained attack-favored decisive capture, root 03 decisive A (fit-plan index 40), timing offset 0. Its matched opening attack return exceeded the best switch return by 4.1921, and all five matched attack openings reached battle_won.",
+  "time_box": "One work session, maximum two hours.",
+  "stop_condition": "Stop after this one episode if the packaged policy does not attack at the opening, fails to win, invokes a teacher, or makes an illegal action. Do not refit on this consumed capture.",
+  "source": "Authenticated retained TRAIN capture from red-trainer-decisive-pairs-20260917-v2/root-03-decisive-a; no new state materialization.",
+  "model": "Frozen attack plus corrected control/switch package, SHA-256 831980e325d6164c9314d9b8d93909a03b66e6d0bf47b3bfb5832e95963c00ee.",
+  "runner": "scripts/run_red_trainer_practice_model.py, with 12 decisions and 120000 frame ceiling.",
+  "interpretation_limit": "The capture is part of the training corpus and can reveal implementation or policy failure only. A pass is not independent generalization evidence.",
+  "fits": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0
+}
