@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Astra's read-only frozen-attack composition passes all three unchanged TRAIN gates. Package it with authenticated per-head lineage, repair inherited warm-start settings, then test terminal HP-dependent switching and unseen variation before a new-origin natural comparison.
+- Next decision: The frozen-attack candidate is packaged and passes TRAIN retention. The first terminal HP scenario failed because 10 of 25 branches, including every switch branch, did not finish by four turns. Design one new bounded switching curriculum before any fit or natural comparison.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-astra-readiness-decision-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-readiness-decision-2026-09-17.json)
+**2026-09-17-trainer-frozen-composition-terminal-hp-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-frozen-composition-terminal-hp-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Preserve demonstrated attack distinctions while moving to useful learned switching and unseen outcomes, rather than another optimizer loop over the same cases. |
-| Learning output | No fit or gameplay. Read-only composition preserves original-44 attack regret 0.035384769, all-52 attack 0.044750856 and composed-action 0.112597023, passing unchanged gates. 34 focused tests passed; warm-setting inheritance defect reproduced. |
-| Authority delta | None. Read-only TRAIN diagnostics changed no model artifact or actor authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | None. Only retained TRAIN evidence was evaluated; no new natural origin was verified. |
-| Blocker | Composite artifact is not yet packaged; terminal HP reversal, unseen variation and independent natural qualification remain unproved. New natural supply was not established. |
-| Decision | Freeze the older attack head and reuse corrected cold-fit control/switch heads. Stop same-corpus attack refits. Package and verify the candidate, then the bounded terminal HP pilot; no standing additional Astra review. |
-| Next session | Sol High, Fast off: authenticated frozen-attack composition, inherited-settings fix and one four-scenario terminal HP pilot; reserve unseen variations before training. Inventory independent natural supply before planning comparison. |
-| Next falsifier | Packaged composition fails the unchanged 0.0554 / 0.0648 / 0.1609 regret vector, or terminal HP pairs lack opposite measured winners with >0.10 margins. Unseen variation and natural outcomes remain separate gates. |
-| Stop condition | Stop on a failed declared gate; retain failures. No consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. Seek direction before a broader natural-source creation campaign. |
+| Product alignment | The qualified component package preserves useful attack decisions. Real battle outcomes exposed the missing switching curriculum rather than supplying misleading short-horizon labels. |
+| Learning output | Packaged the old attack head with corrected control/switch weights; all three original TRAIN retention gates pass. The first terminal HP scenario retained 25 branches: 15 battle wins and 10 four-turn truncations, including all five switch branches. No fit or authority change. |
+| Authority delta | None. A qualified TRAIN candidate was packaged, but the bounded terminal pilot failed before fitting or promotion. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | None. The executed branches were teacher-assisted TRAIN examples from one existing origin; no unseen or natural comparison ran. |
+| Blocker | The first healthy-HP terminal scenario had 10 of 25 branches unfinished after four turns, including every switch branch. The critical case and second matchup remain unopened; no switching targets were admitted. |
+| Decision | Retain the frozen attack composition and stop this exact terminal HP recipe. Design a prospectively bounded continuation that can finish after switching; do not refit attacks or replay these branches. |
+| Next session | Sol High, Fast off: redesign one small terminal switching curriculum from the measured 10 truncations, with a continuation that can finish a switch branch. Freeze candidate weights and check the new recipe before execution. |
+| Next falsifier | One prospectively declared terminal HP pilot must finish every matched branch and show opposite healthy/critical action winners with >0.10 return margins before any switching fit. Preserve the three existing retention ceilings. |
+| Stop condition | The exact four-case recipe stopped on its first failed terminal scenario and may not replay. Preserve all branches. No consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. |
 
 ### Stop conditions
 

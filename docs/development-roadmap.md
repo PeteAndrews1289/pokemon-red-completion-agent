@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-readiness-decision-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-frozen-composition-terminal-hp-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-frozen-composition-terminal-hp-v1
+
+Packaged frozen attack plus corrected switching weights, passing all three unchanged TRAIN retention gates. Fixed inherited warm-start settings. The first terminal HP scenario retained 25 branches: 15 wins, 10 four-turn truncations, including every switch branch. No fit or authority change.
+
+**Deviation:** The declared terminal gate stopped the four-case recipe before the critical-HP case and second matchup. No misleading truncated target was admitted; stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: one prospective switching curriculum with a continuation that can complete a switched battle; preserve existing retention gates and reserve unseen variation.
 
 ### 2026-09-17-trainer-astra-readiness-decision-v1
 

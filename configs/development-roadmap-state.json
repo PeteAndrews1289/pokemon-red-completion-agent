@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-astra-readiness-decision-v1",
+  "as_of_session": "2026-09-17-trainer-frozen-composition-terminal-hp-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1814,6 +1814,12 @@
       "result": "Astra evaluated old attack plus corrected control/switch in memory: all unchanged TRAIN gates pass (0.03538 original attack, 0.04475 all attack, 0.11260 composed regret). Reproduced inherited warm-start settings defect; 34 focused tests passed. No fit, gameplay or authority change.",
       "deviation": "Freeze attack weights instead of another same-corpus attack refit. Terminal HP learning, unseen variation and new-origin natural comparison remain required; stage and completion criteria unchanged.",
       "next": "Sol High, Fast off: authenticated composition, inherited-settings fix and terminal HP pilot. Inventory new natural supply; no standing Astra gate if checks pass."
+    },
+    {
+      "session": "2026-09-17-trainer-frozen-composition-terminal-hp-v1",
+      "result": "Packaged frozen attack plus corrected switching weights, passing all three unchanged TRAIN retention gates. Fixed inherited warm-start settings. The first terminal HP scenario retained 25 branches: 15 wins, 10 four-turn truncations, including every switch branch. No fit or authority change.",
+      "deviation": "The declared terminal gate stopped the four-case recipe before the critical-HP case and second matchup. No misleading truncated target was admitted; stage and completion exits remain unchanged.",
+      "next": "Sol High, Fast off: one prospective switching curriculum with a continuation that can complete a switched battle; preserve existing retention gates and reserve unseen variation."
     }
   ],
   "closed_milestones": [
