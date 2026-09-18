@@ -60,7 +60,8 @@ def test_first_choice_owns_initial_action_and_then_defers_to_fresh_continuation(
     assert decline.choose_switch({}, (2, 3), forced=True, may_decline=False) == 2
 
 
-def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch):
+@pytest.mark.parametrize("budget", [8, 160])
+def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch, budget):
     capture = _capture(tmp_path)
     policies = []
     retained = []
@@ -72,7 +73,7 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
 
     def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns,
                  event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
-        assert max_decisions == 8
+        assert max_decisions == budget
         assert max_player_turns == 2
         assert session_factory() is None
         action = policy.choose_main({}, object())
@@ -95,6 +96,7 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         capture,
         session_factory=lambda: None,
         continuation_policy_factory=policy_factory,
+        max_decisions=budget,
         first_choices=(
             counterfactual.TrainerPracticeFirstChoice(BattleAction.move(1)),
             counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)),

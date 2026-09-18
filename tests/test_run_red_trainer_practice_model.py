@@ -92,6 +92,16 @@ def test_model_runner_loads_all_three_heads_and_rejects_test_partition(
         "output": str(tmp_path / "new-output"),
     }
     _plan, _capture, loaded = runner._authenticate(plan)
+    runner._authenticate({**plan, "max_decisions": 160, "maximum_frames": 240000})
+    for field, value in (("max_decisions", 161), ("maximum_frames", 240001)):
+        with pytest.raises(ValueError, match="budget differs"):
+            runner._authenticate({**plan, field: value})
+    capture.manifest.partition = ScenarioPartition.DEVELOPMENT
+    with pytest.raises(ValueError, match="budget differs"):
+        runner._authenticate({**plan, "max_decisions": 160})
+    with pytest.raises(ValueError, match="budget differs"):
+        runner._authenticate({**plan, "maximum_frames": 240000})
+    capture.manifest.partition = ScenarioPartition.TRAIN
     loaded_move, loaded_control, loaded_switch = loaded
     assert loaded_move.feature_names == FEATURE_NAMES
     assert loaded_control.class_refs == (CONTROL_CLASS_REFS[0], CONTROL_CLASS_REFS[5])

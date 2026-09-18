@@ -108,9 +108,15 @@ def _authenticate(plan: object):
         raise ValueError("DEVELOPMENT root overlaps outcome-model training lineage")
     max_decisions, maximum_frames = plan.get("max_decisions"), plan.get("maximum_frames")
     opening_idle_frames = plan.get("opening_idle_frames", 0)
+    # Complete TRAIN team fights need room for attacks, prompts and replacements.
+    # DEVELOPMENT retains its existing shorter promotion/evaluation boundary.
+    decision_cap, frame_cap = (
+        (160, 240000) if capture.manifest.partition is ScenarioPartition.TRAIN
+        else (80, 120000)
+    )
     if (
-        type(max_decisions) is not int or not 1 <= max_decisions <= 80
-        or type(maximum_frames) is not int or not 1 <= maximum_frames <= 120000
+        type(max_decisions) is not int or not 1 <= max_decisions <= decision_cap
+        or type(maximum_frames) is not int or not 1 <= maximum_frames <= frame_cap
         or type(opening_idle_frames) is not int
         or not 0 <= opening_idle_frames <= 12
     ):

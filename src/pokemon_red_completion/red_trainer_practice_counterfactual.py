@@ -169,7 +169,7 @@ def collect_trainer_practice_counterfactuals(
         or any(not isinstance(choice, TrainerPracticeFirstChoice) for choice in first_choices)
         or len({choice.semantic_ref for choice in first_choices}) != len(first_choices)
         or type(max_decisions) is not int  # noqa: E721
-        or not 2 <= max_decisions <= 80
+        or not 2 <= max_decisions <= 160
         or type(player_turn_horizon) is not int  # noqa: E721
         or not 1 <= player_turn_horizon <= max_decisions
     ):
