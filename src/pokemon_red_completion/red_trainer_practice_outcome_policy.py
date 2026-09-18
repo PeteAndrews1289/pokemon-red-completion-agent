@@ -18,6 +18,10 @@ from pokemon_red_completion.red_trainer_practice_fit import (
     TrainerPracticeThreeHeadModel,
     control_action_candidates,
 )
+from pokemon_red_completion.red_trainer_proposed_control import (
+    PROPOSED_CONTROL_SCHEMA,
+    proposed_control,
+)
 
 
 class TrainerOutcomePolicyError(ValueError):
@@ -96,6 +100,19 @@ class RedTrainerPracticeOutcomePolicy:
                 ).tolist()
             )
             control_candidates = control_action_candidates(control)
+            proposal = None
+            # No control prediction is needed when switching is impossible.
+            if self.model.control.schema_id == PROPOSED_CONTROL_SCHEMA and switches is not None:
+                proposal = proposed_control(
+                    observation,
+                    catalog=self.catalog,
+                    move_head=self.model.move,
+                    switch_head=self.model.switch,
+                    move_batch=prepared.features,
+                    move_slots=legal_moves,
+                    switch_slots=switches.candidate_slots,
+                )
+                control_candidates = proposal.candidate_vectors
             if switches is None or self.model.control.predict_index(control_candidates) == 0:
                 moves = project_trainer_move_features(observation, prepared.features)
                 slots = tuple(slot for slot in moves.candidate_slots if slot in legal_moves)
@@ -125,11 +142,18 @@ class RedTrainerPracticeOutcomePolicy:
                 )
             self.last_decision_diagnostics["control_probabilities"] = (
                 self.model.control.probabilities(control_candidates).tolist()
+                if switches is not None or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                else [1.0, 0.0]
             )
             self.last_decision_diagnostics["control_input_schema"] = self.model.control.schema_id
-            self.last_decision_diagnostics["control_candidate_vectors"] = [
-                list(row) for row in control_candidates
-            ]
+            self.last_decision_diagnostics["control_candidate_vectors"] = (
+                [list(row) for row in control_candidates]
+                if switches is not None or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                else []
+            )
+            if proposal is not None:
+                self.last_decision_diagnostics["proposed_move_slot"] = proposal.move_slot
+                self.last_decision_diagnostics["proposed_switch_slot"] = proposal.switch_slot
         if action.kind is BattleActionKind.SELECT_MOVE:
             self._unanswered_voluntary_switch_opponent = None
         elif action.kind is BattleActionKind.SWITCH:
@@ -169,6 +193,17 @@ class RedTrainerPracticeOutcomePolicy:
                 ).tolist()
             )
             options = control_action_candidates(control)
+            if self.model.control.schema_id == PROPOSED_CONTROL_SCHEMA:
+                proposal = proposed_control(
+                    observation,
+                    catalog=self.catalog,
+                    move_head=self.model.move,
+                    switch_head=self.model.switch,
+                    move_batch=None,
+                    move_slots=(),
+                    switch_slots=legal,
+                )
+                options = proposal.candidate_vectors
             probabilities = self.model.control.probabilities(options)
             if int(probabilities.argmax()) == 0:
                 self.last_decision_diagnostics = {

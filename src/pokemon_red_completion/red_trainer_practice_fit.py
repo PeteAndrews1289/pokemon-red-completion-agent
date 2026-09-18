@@ -33,6 +33,11 @@ from pokemon_red_completion.red_trainer_practice_head import (
     TrainerHeadExample,
     TrainerHeadModel,
 )
+from pokemon_red_completion.red_trainer_proposed_control import (
+    PROPOSED_CONTROL_NAMES,
+    PROPOSED_CONTROL_SCHEMA,
+    proposed_control,
+)
 
 CONTROL_ACTION_FEATURE_NAMES = (
     *CONTROL_FEATURE_NAMES_V2,
@@ -78,7 +83,7 @@ class TrainerPracticeThreeHeadModel:
     def __post_init__(self) -> None:
         expected = (
             (self.move, MOVE_SCHEMA_ID, MOVE_FEATURE_NAMES),
-            (self.control, CONTROL_ACTION_SCHEMA_ID, CONTROL_ACTION_FEATURE_NAMES),
+            (self.control, *control_schema(self.control.schema_id)),
             (self.switch, SWITCH_SCHEMA_ID, SWITCH_FEATURE_NAMES_V2),
         )
         if any(
@@ -90,6 +95,11 @@ class TrainerPracticeThreeHeadModel:
             raise TrainerPracticeFitError("three-head training lineage is missing")
         if self.control_target_mode not in {"best_component", "fitted_components"}:
             raise TrainerPracticeFitError("control target mode differs")
+        if (
+            self.control.schema_id == PROPOSED_CONTROL_SCHEMA
+            and self.control_target_mode != "fitted_components"
+        ):
+            raise TrainerPracticeFitError("proposed control requires fitted-component targets")
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -128,8 +138,8 @@ class TrainerPracticeThreeHeadModel:
             )
             control = TrainerHeadModel.from_dict(
                 control_data,
-                schema_id=CONTROL_ACTION_SCHEMA_ID,
-                feature_names=CONTROL_ACTION_FEATURE_NAMES,
+                schema_id=control_schema(control_data.get("schema_id"))[0],
+                feature_names=control_schema(control_data.get("schema_id"))[1],
             )
             switch = TrainerHeadModel.from_dict(
                 switch_data,
@@ -262,12 +272,68 @@ def fit_trainer_practice_three_heads(
     )
 
 
+def control_schema(schema: object) -> tuple[str, tuple[str, ...]]:
+    if schema == CONTROL_ACTION_SCHEMA_ID:
+        return CONTROL_ACTION_SCHEMA_ID, CONTROL_ACTION_FEATURE_NAMES
+    if schema == PROPOSED_CONTROL_SCHEMA:
+        return PROPOSED_CONTROL_SCHEMA, PROPOSED_CONTROL_NAMES
+    raise TrainerPracticeFitError("unknown trainer control schema")
+
+
+def refit_trainer_proposed_control(
+    targets: Iterable[Mapping[str, object]],
+    frozen: TrainerPracticeThreeHeadModel,
+    *,
+    seed: int,
+    epochs: int = 1200,
+) -> TrainerPracticeThreeHeadModel:
+    """One new control fit; attack and replacement weights remain unchanged."""
+    records = tuple(targets)
+    ids = tuple(record.get("capture_id") for record in records)
+    if (
+        len(set(ids)) != len(ids)
+        or set(ids) != set(frozen.train_capture_ids)
+        or {record.get("root_lineage_id") for record in records} != set(frozen.train_root_ids)
+        or any(
+            record.get("partition") != "train"
+            or record.get("observation_schema") != OBSERVATION_SCHEMA_V2
+            for record in records
+        )
+    ):
+        raise TrainerPracticeFitError("control-only fit must retain the exact TRAIN lineage")
+    examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
+    for target in records:
+        _append_examples(
+            examples,
+            target,
+            PokemonRedBattleCatalog(),
+            control_components=(frozen.move, frozen.switch),
+            control_input_schema=PROPOSED_CONTROL_SCHEMA,
+        )
+    control = TrainerHeadModel.fit(
+        schema_id=PROPOSED_CONTROL_SCHEMA,
+        feature_names=PROPOSED_CONTROL_NAMES,
+        examples=_combine_identical_inputs(examples["control"]),
+        seed=seed,
+        epochs=epochs,
+    )
+    return TrainerPracticeThreeHeadModel(
+        frozen.move,
+        control,
+        frozen.switch,
+        frozen.train_capture_ids,
+        frozen.train_root_ids,
+        "fitted_components",
+    )
+
+
 def _append_examples(
     examples: dict[str, list[TrainerHeadExample]],
     target: Mapping[str, object],
     catalog: PokemonRedBattleCatalog,
     *,
     control_components: tuple[TrainerHeadModel, TrainerHeadModel] | None = None,
+    control_input_schema: str = CONTROL_ACTION_SCHEMA_ID,
 ) -> None:
     observation = target.get("observation")
     heads = target.get("heads")
@@ -306,6 +372,30 @@ def _append_examples(
                 ).tolist()
             )
             rows = control_action_candidates(common)
+            if control_input_schema == PROPOSED_CONTROL_SCHEMA:
+                if control_components is None:
+                    raise TrainerPracticeFitError("proposed control components missing")
+                moves = tuple(
+                    int(ref.rsplit(":", 1)[1])
+                    for ref in refs
+                    if isinstance(ref, str) and ":move:" in ref
+                )
+                switches = tuple(
+                    int(ref.rsplit(":", 1)[1])
+                    for ref in refs
+                    if isinstance(ref, str) and ":switch:" in ref
+                )
+                rows = proposed_control(
+                    observation,
+                    catalog=catalog,
+                    move_head=control_components[0],
+                    switch_head=control_components[1],
+                    move_batch=base,
+                    move_slots=moves,
+                    switch_slots=switches,
+                ).candidate_vectors
+            elif control_input_schema != CONTROL_ACTION_SCHEMA_ID:
+                raise TrainerPracticeFitError("control input schema differs")
         observed = _observed_returns(name, refs, returns, timing_returns)
         mean_returns = _mean_action_returns(name, refs, observed)
         if name == "control" and control_components is not None:
@@ -466,6 +556,7 @@ def summarize_trainer_practice_training(
             control_components=(model.move, model.switch)
             if model.control_target_mode == "fitted_components"
             else None,
+            control_input_schema=model.control.schema_id,
         )
     results: dict[str, dict[str, object]] = {}
     for name, rows in examples.items():
@@ -576,7 +667,15 @@ def _summarize_composed_action(
         if not isinstance(heads, Mapping) or not isinstance(heads.get("control"), Mapping):
             continue
         examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
-        _append_examples(examples, target, catalog)
+        _append_examples(
+            examples,
+            target,
+            catalog,
+            control_components=(model.move, model.switch)
+            if model.control_target_mode == "fitted_components"
+            else None,
+            control_input_schema=model.control.schema_id,
+        )
         chosen_group = (
             "move"
             if model.control.predict_index(examples["control"][0].candidate_vectors) == 0
