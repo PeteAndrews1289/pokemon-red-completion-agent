@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The revised terminal pair solved branch truncation but both healthy and critical leads rationally favored switching. Inspect the packaged attack continuation and freeze varied realistic battle contexts before another switching fit; do not reshape this consumed pair until it yields a desired label.
+- Next decision: The packaged policy lost a five-member battle despite fitted opening-switch preference. Freeze a terminal multi-turn TRAIN curriculum from distinct sources with intermediate decisions; require separate natural-origin evaluation before any authority promotion. Do not refit or replay consumed captures.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A corrected target prefers a lower mean-return action, a fit fails common-case retention, or a bounded HP pair lacks a measured switch/stay reversal. |
+| Cheapest falsifier | One model-directed full-party trainer battle loses despite a fitted opening preference, or a prospective terminal curriculum cannot produce useful intermediate choices from distinct TRAIN origins. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-terminal-switch-successor-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-terminal-switch-successor-result-2026-09-17.json)
+**2026-09-17-trainer-packaged-rollout-diagnostic-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-packaged-rollout-diagnostic-result-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Completed terminal branches exposed a real learner weakness: attack continuation can sacrifice a healthy lead, so switching is rational at both HP levels. The negative contrast directs the next curriculum. |
-| Learning output | One new declared TRAIN pair retained 20/20 terminal branches. Healthy attack-minus-switch mean return was -0.4820; critical was -0.4721, so both favored switching. A read-only packaged-head check also selected the weak follow-up. No fit or authority change. |
-| Authority delta | None. The revised terminal TRAIN pair failed its switch/stay reversal before fit or promotion. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | None. The 20 terminal branches were assisted TRAIN alternatives from one existing origin; no unseen or natural comparison ran. |
-| Blocker | All 20 revised first-pair branches finished, but switching outperformed attacking at both healthy and critical HP. The packaged attack head also favors the weak follow-up move that explains the healthy result. No distinct switch/stay lesson was admitted. |
-| Decision | Retire the exact revised pair and preserve its negative result. Examine actual packaged attack continuation and prospectively select realistic scenarios with useful alternatives before a new switching fit; do not tune the same matchup into a desired label. |
-| Next session | Sol High, Fast off: inspect packaged-policy continuation and naturalistic TRAIN supply, then freeze one varied battle curriculum or report a concrete absence of useful alternatives. No same-pair rerun. |
-| Next falsifier | Prospectively measured naturalistic battle contrasts must yield useful attack and switch choices under the actual packaged continuation, without changing the declared return to force a reversal. Keep original retention gates before any promotion. |
-| Stop condition | The revised recipe stopped after its first pair failed the predeclared reversal gate; its second matchup and reserved variation remain unopened. Preserve all branches. No same-pair rerun, consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. |
+| Product alignment | The packaged model took real battle actions and visibly failed a full-party fight, identifying sustained decision-making rather than opening-label fit as the blocker to an autonomous Red player. |
+| Learning output | No new training target or fit. In-sample integrated policy diagnostic: one easy one-turn win, then one 16-decision full-party loss (five player faints, zero opponent faints). This is measured failure evidence, not learner improvement. |
+| Authority delta | None. Two in-sample packaged-policy TRAIN rollouts made no fit, promotion or collection progress. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | None. Both integrated rollouts used existing assisted TRAIN captures from origins already present in the fit. |
+| Blocker | The packaged policy won one easy attack-favored battle in one turn but lost a five-member battle after 16 decisions and five party faints. Its retained training labels mostly end at a short player-turn budget (965/1110 matched branches), so opening-choice retention does not establish sustained battle competence. |
+| Decision | Stop treating opening-only retention as full-battle readiness. Prospectively source terminal multi-turn TRAIN battles with intermediate choices and independent natural-origin evaluation. Do not refit or replay the consumed diagnostic captures or failed HP pair. |
+| Next session | Sol High, Fast off: inventory genuinely distinct TRAIN battle origins and freeze one bounded terminal, intermediate-choice curriculum. Stop if the supply is absent; do not tune consumed captures. |
+| Next falsifier | A newly sourced TRAIN terminal multi-turn battle must expose intermediate attack/switch/replacement decisions under one unchanged return and horizon; otherwise stop before fitting. Then test any frozen candidate on separate natural origins. |
+| Stop condition | The one full-party diagnostic ended in party defeat and was stopped after its single declared episode. Preserve both in-sample rollouts. No consumed-capture replay, refit, authority promotion, full game or GitHub push. |
 
 ### Stop conditions
 

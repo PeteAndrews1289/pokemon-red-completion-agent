@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-terminal-switch-successor-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-packaged-rollout-diagnostic-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-packaged-rollout-diagnostic-v1
+
+The packaged three-head policy won one easy TRAIN battle in one attack but lost a full-party TRAIN battle after 16 decisions and five party faints. Both logs verified, with no teacher intervention, memory edit, fit, authority, registration or transfer gain. An authenticated corpus audit found 965 of 1110 matched branches stopped at the turn budget.
+
+**Deviation:** Opening-choice retention is no longer treated as evidence of full-battle readiness. Preserve the in-sample failure without replay or refit; stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: audit distinct TRAIN origins and freeze one bounded terminal multi-turn curriculum with intermediate choices; require separate natural-origin evaluation before promotion.
 
 ### 2026-09-17-trainer-terminal-switch-successor-v1
 
