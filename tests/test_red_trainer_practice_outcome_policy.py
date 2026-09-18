@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 from test_red_trainer_practice_fit import _target
 
-from pokemon_red_completion.battle_actions import BattleActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_semantics import BattleFeatureProjector
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
 from pokemon_red_completion.red_trainer_practice_features import project_trainer_control_features
@@ -118,3 +118,28 @@ def test_voluntary_switch_requires_an_attack_before_another_same_opponent_switch
         observation, SimpleNamespace(features=exhausted, supported_candidate_mask=(False, False))
     )
     assert forced_action.kind is BattleActionKind.SWITCH
+
+
+def test_counterfactual_opening_switch_updates_the_same_guard_as_live_switch():
+    target = _target()
+    model = fit_trainer_practice_three_heads(
+        [target], seed=31, require_corpus_floor=False, epochs=10
+    )
+    policy = RedTrainerPracticeOutcomePolicy("test", "test", model)
+    observation = target["observation"]
+    policy.observe_forced_choice(observation, BattleAction.switch(2))
+    assert policy._unanswered_voluntary_switch_opponent == 0
+    batch = BattleFeatureProjector(PokemonRedBattleCatalog()).project(observation)
+    action = policy.choose_main(
+        observation, SimpleNamespace(features=batch, supported_candidate_mask=batch.legal_mask)
+    )
+    assert action.kind is BattleActionKind.SELECT_MOVE
+    assert policy.last_decision_diagnostics["switch_masked_until_attack"] is True
+    policy.observe_forced_choice(observation, BattleAction.move(1))
+    assert policy._unanswered_voluntary_switch_opponent is None
+    from copy import deepcopy
+
+    fainted = deepcopy(observation)
+    fainted["features"]["party"]["lead"]["hp"] = 0
+    policy.observe_forced_choice(fainted, BattleAction.switch(2))
+    assert policy._unanswered_voluntary_switch_opponent is None

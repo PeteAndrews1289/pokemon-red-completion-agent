@@ -107,6 +107,58 @@ def test_control_commits_to_one_reserve_before_hidden_timing():
     assert control.target_probabilities[0] > control.target_probabilities[1]
 
 
+def test_control_target_uses_returns_of_the_actions_its_components_choose():
+    from types import SimpleNamespace
+
+    target = _target()
+    target["heads"]["control"] = {
+        "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3",
+        ],
+        "returns": [4.0, 3.0, 5.0, -2.0],
+        "best_indices": [2],
+    }
+    examples = {"move": [], "control": [], "switch": []}
+    _append_examples(
+        examples,
+        target,
+        PokemonRedBattleCatalog(),
+        control_components=(
+            SimpleNamespace(predict_index=lambda _: 0),
+            SimpleNamespace(predict_index=lambda _: 1),
+        ),
+    )
+    assert examples["control"][0].mean_returns == (4.0, -2.0)
+    assert examples["control"][0].best_indices == (0,)
+
+
+def test_component_aligned_fit_round_trips_and_reports_its_actual_control_targets():
+    target = _target()
+    target["heads"]["control"] = {
+        "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3",
+        ],
+        "returns": [0.8, 1.0, 0.4, 0.7],
+        "best_indices": [1],
+    }
+    model = fit_trainer_practice_three_heads(
+        [target],
+        seed=12,
+        epochs=40,
+        require_corpus_floor=False,
+        control_target_mode="fitted_components",
+    )
+    restored = TrainerPracticeThreeHeadModel.from_dict(model.to_dict())
+    assert restored.control_target_mode == "fitted_components"
+    assert summarize_trainer_practice_training([target], restored)["control"]["examples"] == 1
+
+
 def test_training_diagnostics_report_unique_inputs_and_simple_baseline():
     first = _target()
     second = deepcopy(first)
@@ -202,30 +254,34 @@ def test_train_only_three_head_fit_round_trip_and_corpus_floor():
 
 def test_move_continuation_requires_same_train_capture_and_root():
     target = _target()
-    old = fit_trainer_practice_three_heads(
-        [target], seed=12, require_corpus_floor=False, epochs=10
-    )
+    old = fit_trainer_practice_three_heads([target], seed=12, require_corpus_floor=False, epochs=10)
     new_target = deepcopy(target)
     new_target["capture_id"] = "second-train-capture"
     fitted = fit_trainer_practice_three_heads(
-        [target, new_target], seed=12, require_corpus_floor=False,
-        epochs=100, warm_start_move=old, warm_start_move_epochs=100,
+        [target, new_target],
+        seed=12,
+        require_corpus_floor=False,
+        epochs=100,
+        warm_start_move=old,
+        warm_start_move_epochs=100,
     )
     assert len(fitted.train_capture_ids) == 2
     unrelated = deepcopy(target)
     unrelated["capture_id"] = "unrelated"
     with pytest.raises(TrainerPracticeFitError, match="warm-start move lineage"):
         fit_trainer_practice_three_heads(
-            [unrelated], seed=12, require_corpus_floor=False,
-            epochs=100, warm_start_move=old, warm_start_move_epochs=100,
+            [unrelated],
+            seed=12,
+            require_corpus_floor=False,
+            epochs=100,
+            warm_start_move=old,
+            warm_start_move_epochs=100,
         )
 
 
 def test_warm_start_diagnostics_use_actual_prior_weights():
     target = _target()
-    old = fit_trainer_practice_three_heads(
-        [target], seed=12, require_corpus_floor=False, epochs=10
-    )
+    old = fit_trainer_practice_three_heads([target], seed=12, require_corpus_floor=False, epochs=10)
     examples = {"move": [], "control": [], "switch": []}
     _append_examples(examples, target, PokemonRedBattleCatalog())
     row = _combine_identical_inputs(examples["move"])

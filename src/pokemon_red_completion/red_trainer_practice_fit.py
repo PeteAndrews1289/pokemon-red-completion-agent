@@ -73,6 +73,7 @@ class TrainerPracticeThreeHeadModel:
     switch: TrainerHeadModel
     train_capture_ids: tuple[str, ...]
     train_root_ids: tuple[str, ...]
+    control_target_mode: str = "best_component"
 
     def __post_init__(self) -> None:
         expected = (
@@ -87,6 +88,8 @@ class TrainerPracticeThreeHeadModel:
             raise TrainerPracticeFitError("three-head schemas are incompatible")
         if not self.train_capture_ids or not self.train_root_ids:
             raise TrainerPracticeFitError("three-head training lineage is missing")
+        if self.control_target_mode not in {"best_component", "fitted_components"}:
+            raise TrainerPracticeFitError("control target mode differs")
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -96,6 +99,11 @@ class TrainerPracticeThreeHeadModel:
             "switch": self.switch.to_dict(),
             "train_capture_ids": list(self.train_capture_ids),
             "train_root_ids": list(self.train_root_ids),
+            **(
+                {"control_target_mode": self.control_target_mode}
+                if self.control_target_mode != "best_component"
+                else {}
+            ),
         }
 
     @classmethod
@@ -134,7 +142,14 @@ class TrainerPracticeThreeHeadModel:
                 raise TrainerPracticeFitError("three-head lineage differs")
             if any(not isinstance(item, str) or not item for item in (*capture_ids, *root_ids)):
                 raise TrainerPracticeFitError("three-head lineage differs")
-            return cls(move, control, switch, tuple(capture_ids), tuple(root_ids))
+            return cls(
+                move,
+                control,
+                switch,
+                tuple(capture_ids),
+                tuple(root_ids),
+                value.get("control_target_mode", "best_component"),
+            )
         except (KeyError, TypeError, ValueError) as error:
             if isinstance(error, TrainerPracticeFitError):
                 raise
@@ -150,10 +165,13 @@ def fit_trainer_practice_three_heads(
     epochs: int = 300,
     warm_start_move: TrainerPracticeThreeHeadModel | None = None,
     warm_start_move_epochs: int | None = None,
+    control_target_mode: str = "best_component",
 ) -> TrainerPracticeThreeHeadModel:
     records = tuple(targets)
     if not records:
         raise TrainerPracticeFitError("TRAIN target corpus is empty")
+    if control_target_mode not in {"best_component", "fitted_components"}:
+        raise TrainerPracticeFitError("control target mode differs")
     root_counts: Counter[str] = Counter()
     capture_ids: list[str] = []
     for target in records:
@@ -201,15 +219,28 @@ def fit_trainer_practice_three_heads(
     if any(not examples[head] for head in examples):
         raise TrainerPracticeFitError("move, control and switch contrasts are all required")
     examples = {head: _combine_identical_inputs(rows) for head, rows in examples.items()}
+    move = TrainerHeadModel.fit(
+        schema_id=MOVE_SCHEMA_ID,
+        feature_names=MOVE_FEATURE_NAMES,
+        examples=examples["move"],
+        seed=seed,
+        epochs=warm_start_move_epochs if warm_start_move is not None else epochs,
+        initial_model=warm_start_move.move if warm_start_move is not None else None,
+    )
+    switch = TrainerHeadModel.fit(
+        schema_id=SWITCH_SCHEMA_ID,
+        feature_names=SWITCH_FEATURE_NAMES_V2,
+        examples=examples["switch"],
+        seed=seed + 2,
+        epochs=epochs,
+    )
+    if control_target_mode == "fitted_components":
+        aligned: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
+        for target in records:
+            _append_examples(aligned, target, resolver, control_components=(move, switch))
+        examples["control"] = _combine_identical_inputs(aligned["control"])
     return TrainerPracticeThreeHeadModel(
-        move=TrainerHeadModel.fit(
-            schema_id=MOVE_SCHEMA_ID,
-            feature_names=MOVE_FEATURE_NAMES,
-            examples=examples["move"],
-            seed=seed,
-            epochs=warm_start_move_epochs if warm_start_move is not None else epochs,
-            initial_model=warm_start_move.move if warm_start_move is not None else None,
-        ),
+        move=move,
         control=TrainerHeadModel.fit(
             schema_id=CONTROL_ACTION_SCHEMA_ID,
             feature_names=CONTROL_ACTION_FEATURE_NAMES,
@@ -217,15 +248,10 @@ def fit_trainer_practice_three_heads(
             seed=seed + 1,
             epochs=epochs,
         ),
-        switch=TrainerHeadModel.fit(
-            schema_id=SWITCH_SCHEMA_ID,
-            feature_names=SWITCH_FEATURE_NAMES_V2,
-            examples=examples["switch"],
-            seed=seed + 2,
-            epochs=epochs,
-        ),
+        switch=switch,
         train_capture_ids=tuple(capture_ids),
         train_root_ids=tuple(sorted(root_counts)),
+        control_target_mode=control_target_mode,
     )
 
 
@@ -233,6 +259,8 @@ def _append_examples(
     examples: dict[str, list[TrainerHeadExample]],
     target: Mapping[str, object],
     catalog: PokemonRedBattleCatalog,
+    *,
+    control_components: tuple[TrainerHeadModel, TrainerHeadModel] | None = None,
 ) -> None:
     observation = target.get("observation")
     heads = target.get("heads")
@@ -273,6 +301,30 @@ def _append_examples(
             rows = control_action_candidates(common)
         observed = _observed_returns(name, refs, returns, timing_returns)
         mean_returns = _mean_action_returns(name, refs, observed)
+        if name == "control" and control_components is not None:
+            means = tuple(fmean(row[i] for row in observed) for i in range(len(refs)))
+            selected = []
+            for kind, component in zip(("move", "switch"), control_components, strict=True):
+                eligible = [
+                    i for i, ref in enumerate(refs) if (":switch:" in ref) == (kind == "switch")
+                ]
+                if len(eligible) == 1:
+                    index = eligible[0]
+                else:
+                    if kind == "move":
+                        if base is None:
+                            raise TrainerPracticeFitError("selected move input is missing")
+                        projection = project_trainer_move_features(observation, base)
+                    else:
+                        projection = project_trainer_switch_features(observation, catalog)
+                    candidates = _rows_for_refs(
+                        [refs[i] for i in eligible],
+                        projection.candidate_slots,
+                        projection.candidate_vectors,
+                    )
+                    index = eligible[component.predict_index(candidates)]
+                selected.append(means[index])
+            mean_returns = tuple(selected)
         examples[name].append(
             TrainerHeadExample(
                 tuple(rows),
@@ -328,11 +380,13 @@ def _mean_action_returns(
     if head_name != "control":
         return means
     attack = [
-        value for ref, value in zip(refs, means, strict=True)
+        value
+        for ref, value in zip(refs, means, strict=True)
         if isinstance(ref, str) and (":move:" in ref or ref.endswith("decline-switch"))
     ]
     switches = [
-        value for ref, value in zip(refs, means, strict=True)
+        value
+        for ref, value in zip(refs, means, strict=True)
         if isinstance(ref, str) and ":switch:" in ref
     ]
     if not attack or not switches:
@@ -398,21 +452,18 @@ def summarize_trainer_practice_training(
     examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
     resolver = catalog or PokemonRedBattleCatalog()
     for target in records:
-        _append_examples(examples, target, resolver)
+        _append_examples(
+            examples,
+            target,
+            resolver,
+            control_components=(model.move, model.switch)
+            if model.control_target_mode == "fitted_components"
+            else None,
+        )
     results: dict[str, dict[str, object]] = {}
     for name, rows in examples.items():
         groups: dict[tuple[tuple[float, ...], ...], set[tuple[int, ...]]] = {}
-        measured: list[tuple[float, ...]] = []
-        for target in records:
-            heads = target.get("heads")
-            head = heads.get(name) if isinstance(heads, Mapping) else None
-            if not isinstance(head, Mapping):
-                continue
-            refs, returns = head.get("choice_refs"), head.get("returns")
-            if not isinstance(refs, list) or not isinstance(returns, list):
-                raise TrainerPracticeFitError("training diagnostic target differs")
-            timed = _observed_returns(name, refs, returns, head.get("timing_returns"))
-            measured.append(_mean_action_returns(name, refs, timed))
+        measured = [row.mean_returns for row in rows if row.mean_returns is not None]
         if len(rows) != len(measured):
             raise TrainerPracticeFitError("training diagnostic inventory differs")
         candidate_model = getattr(model, name)
@@ -450,8 +501,10 @@ def summarize_trainer_practice_training(
 
 
 def _optimizer_diagnostics(
-    rows: list[TrainerHeadExample], model: TrainerHeadModel,
-    *, initial_model: TrainerHeadModel | None = None,
+    rows: list[TrainerHeadExample],
+    model: TrainerHeadModel,
+    *,
+    initial_model: TrainerHeadModel | None = None,
 ) -> dict[str, float]:
     """Compare the declared seeded start with the fitted loss and gradient."""
 
@@ -497,11 +550,7 @@ def _optimizer_diagnostics(
         "final_cross_entropy": round(fmean(final_losses), 9),
         "final_gradient_norm": round(
             float(
-                np.sqrt(
-                    np.sum(gradient_w1**2)
-                    + np.sum(gradient_b1**2)
-                    + np.sum(gradient_w2**2)
-                )
+                np.sqrt(np.sum(gradient_w1**2) + np.sum(gradient_b1**2) + np.sum(gradient_w2**2))
                 / len(rows)
             ),
             9,
@@ -531,9 +580,9 @@ def _summarize_composed_action(
         if not isinstance(refs, list) or not isinstance(returns, list):
             raise TrainerPracticeFitError("composed control return inventory differs")
         eligible = [
-            ref for ref in refs
-            if isinstance(ref, str)
-            and ((":switch:" in ref) == (chosen_group == "switch"))
+            ref
+            for ref in refs
+            if isinstance(ref, str) and ((":switch:" in ref) == (chosen_group == "switch"))
         ]
         if examples[chosen_group]:
             child = heads[chosen_group]

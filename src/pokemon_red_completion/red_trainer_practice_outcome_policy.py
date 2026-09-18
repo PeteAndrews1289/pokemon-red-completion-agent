@@ -47,7 +47,14 @@ class RedTrainerPracticeOutcomePolicy:
     def observe_forced_choice(
         self, observation: Mapping[str, object], action: BattleAction
     ) -> None:
-        self.history.before(self.battle_plan_id, observation)
+        history = self.history.before(self.battle_plan_id, observation)
+        if (
+            action.kind is BattleActionKind.SWITCH
+            and observation["features"]["party"]["lead"]["hp"] > 0
+        ):
+            self._unanswered_voluntary_switch_opponent = history.opponent_index
+        elif action.kind is BattleActionKind.SELECT_MOVE:
+            self._unanswered_voluntary_switch_opponent = None
         self.history.advance(action, observation)
 
     def choose_main(
