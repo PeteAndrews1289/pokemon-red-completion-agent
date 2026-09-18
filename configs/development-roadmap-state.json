@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-packaged-rollout-diagnostic-v1",
+  "as_of_session": "2026-09-17-trainer-terminal-learning-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1832,6 +1832,12 @@
       "result": "The packaged three-head policy won one easy TRAIN battle in one attack but lost a full-party TRAIN battle after 16 decisions and five party faints. Both logs verified, with no teacher intervention, memory edit, fit, authority, registration or transfer gain. An authenticated corpus audit found 965 of 1110 matched branches stopped at the turn budget.",
       "deviation": "Opening-choice retention is no longer treated as evidence of full-battle readiness. Preserve the in-sample failure without replay or refit; stage and completion exits remain unchanged.",
       "next": "Sol High, Fast off: audit distinct TRAIN origins and freeze one bounded terminal multi-turn curriculum with intermediate choices; require separate natural-origin evaluation before promotion."
+    },
+    {
+      "session": "2026-09-17-trainer-terminal-learning-v1",
+      "result": "Two battle fits added 128 contexts and 3755 complete branches. Reserved five-member TRAIN wins improved 3/8 to 8/8; party faints 35 to 8. Original hard battle still lost; composed retention failed. No promotion or Red acceptance progress.",
+      "deviation": "One known TRAIN regression per candidate was prospectively authorized; both failures remain retained. Same-origin assisted variation is not independent natural transfer. No further fit or replay this session; stage and checklist exits are unchanged.",
+      "next": "One bounded concrete-action-conditioned control experiment using retained data, then independent natural validation after qualification. No blind refit sweep, full-game replay or GitHub push."
     }
   ],
   "closed_milestones": [

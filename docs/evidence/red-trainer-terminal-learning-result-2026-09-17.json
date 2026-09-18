@@ -1,0 +1,350 @@
+{
+  "schema": "pokemon.red.trainer-terminal-learning-result.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "implementation": {
+    "control_targets": "Opt-in fitted_components targets compare measured returns for the actions actually chosen by the fitted move and switch heads, instead of optimistic maxima over other actions.",
+    "compatibility": "Legacy model serialization and default fitting remain unchanged. Component-aligned packages reject replacement of their fitted move head with different weights.",
+    "branch_parity": "Forced initial voluntary switches now update the same attack-before-reswitch guard as live policy choices; genuine faint replacements do not set that guard.",
+    "collection": "Terminal matched branches and authenticated intermediate snapshots; safe resume reuses verified completed branches. Five-member mode samples frozen learner decisions 2,4,6,8.",
+    "warm_start": "Reauthenticate all inherited terminal targets and retain all 100 prior examples before the next single fit.",
+    "budgets": "TRAIN supports 160 decisions and 240000 frames; DEVELOPMENT remains capped at 80 decisions and 120000 frames."
+  },
+  "first_terminal_curriculum": {
+    "plan": "docs/evidence/red-trainer-terminal-curriculum-plan-2026-09-17.json",
+    "model_sha256": "3e7994142f4f7faa4e2a3a0c11f4b9d09a82eac1b7f274af8d21de64e0adf604",
+    "summary_sha256": "7164f3533d28edb39e9628daa837a6b1cb914b3a66dee7176973844c5f6fd9a9",
+    "new_contexts": 48,
+    "context_modes": {
+      "main": 37,
+      "prompt": 9,
+      "forced": 2
+    },
+    "branches": 1265,
+    "battle_won": 1265,
+    "truncated": 0,
+    "branch_decisions": 7154,
+    "fit_contexts": 100,
+    "fits": 1,
+    "retention_regret": {
+      "original44_move": 0.008849232,
+      "retained52_move": 0.035435587,
+      "retained52_composed": 0.09848804
+    },
+    "reserved_train_comparison": {
+      "paired_battles": 8,
+      "frozen": {
+        "wins": 8,
+        "decisions": 52,
+        "party_faints": 2,
+        "party_hp_lost": 474
+      },
+      "candidate": {
+        "wins": 8,
+        "decisions": 50,
+        "party_faints": 1,
+        "party_hp_lost": 382
+      }
+    },
+    "known_failure_regression": {
+      "plan": "docs/evidence/red-trainer-terminal-regression-plan-2026-09-17.json",
+      "outcome_sha256": "4c03a7a072c199f557a97a8248110feb607a721ff54d264fdcdf7cf95fb85ad0",
+      "stop_reason": "party_defeated",
+      "decisions": 17,
+      "party_faints": 5,
+      "opponent_faints": 0,
+      "party_hp_lost": 325,
+      "teacher_queries": 0,
+      "memory_write_actions": 0,
+      "invalid_actions": 0,
+      "event_log_complete": true,
+      "interpretation": "The easier curriculum did not fix the original five-member failure. The earlier attack-only baseline also lost, but knocked out three opponents."
+    }
+  },
+  "learner_five_curriculum": {
+    "plan": "docs/evidence/red-trainer-learner-five-plan-2026-09-17.json",
+    "anchor_amendment": "docs/evidence/red-trainer-learner-five-anchor-amendment-2026-09-17.json",
+    "regression_plan": "docs/evidence/red-trainer-learner-five-regression-plan-2026-09-17.json",
+    "training_recipes": 16,
+    "source_train_origins": 4,
+    "new_contexts": 80,
+    "context_modes": {
+      "main": 74,
+      "prompt": 3,
+      "forced": 3
+    },
+    "branches": 2490,
+    "battle_won": 2270,
+    "party_defeated": 220,
+    "truncated": 0,
+    "branch_decisions": 51384,
+    "branch_frames": 53135336,
+    "invalid_actions": 0,
+    "contexts_with_five_distinct_timing_return_rows": 80,
+    "retained_anchors": 100,
+    "model_sha256": "2d944149bf2c61b6e498ff677222414e59f131b4adc53065e737b26e8f7b81d6",
+    "summary_sha256": "8d6376ab3dbd5d9fac5d3beb6fcd8289255e5c7f661066cf7b61213a116375d1",
+    "fit_contexts": 180,
+    "fits": 1,
+    "source_commit": "68a139ffa68ac462e88fa0d5144391086cd43463",
+    "reports": {
+      "inherited_terminal": {
+        "composed_action": {
+          "examples": 46,
+          "model_mean_train_regret": 0.144395695
+        },
+        "control": {
+          "conflicting_winner_groups": 0,
+          "examples": 46,
+          "final_cross_entropy": 0.542493876,
+          "final_gradient_norm": 0.275920488,
+          "first_candidate_mean_train_regret": 0.356330899,
+          "initial_cross_entropy": 0.685702195,
+          "model_mean_train_regret": 0.055047414,
+          "repeated_input_groups": 0,
+          "unique_candidate_matrices": 46
+        },
+        "move": {
+          "conflicting_winner_groups": 0,
+          "examples": 37,
+          "final_cross_entropy": 1.346745029,
+          "final_gradient_norm": 0.256950107,
+          "first_candidate_mean_train_regret": 0.131666841,
+          "initial_cross_entropy": 1.386496646,
+          "model_mean_train_regret": 0.077005059,
+          "repeated_input_groups": 0,
+          "unique_candidate_matrices": 37
+        },
+        "switch": {
+          "conflicting_winner_groups": 5,
+          "examples": 48,
+          "final_cross_entropy": 0.575113365,
+          "final_gradient_norm": 0.120173076,
+          "first_candidate_mean_train_regret": 0.102611975,
+          "initial_cross_entropy": 0.693345187,
+          "model_mean_train_regret": 0.103266345,
+          "repeated_input_groups": 16,
+          "unique_candidate_matrices": 21
+        }
+      },
+      "new_terminal": {
+        "composed_action": {
+          "examples": 77,
+          "model_mean_train_regret": 0.951714697
+        },
+        "control": {
+          "conflicting_winner_groups": 1,
+          "examples": 77,
+          "final_cross_entropy": 0.621002575,
+          "final_gradient_norm": 0.217363144,
+          "first_candidate_mean_train_regret": 0.576458753,
+          "initial_cross_entropy": 0.694744209,
+          "model_mean_train_regret": 0.546004042,
+          "repeated_input_groups": 1,
+          "unique_candidate_matrices": 76
+        },
+        "move": {
+          "conflicting_winner_groups": 6,
+          "examples": 74,
+          "final_cross_entropy": 0.823024784,
+          "final_gradient_norm": 0.175183297,
+          "first_candidate_mean_train_regret": 0.227727513,
+          "initial_cross_entropy": 0.863460185,
+          "model_mean_train_regret": 0.341231678,
+          "repeated_input_groups": 7,
+          "unique_candidate_matrices": 61
+        },
+        "switch": {
+          "conflicting_winner_groups": 1,
+          "examples": 80,
+          "final_cross_entropy": 1.273060409,
+          "final_gradient_norm": 0.061127613,
+          "first_candidate_mean_train_regret": 2.156219302,
+          "initial_cross_entropy": 1.368467041,
+          "model_mean_train_regret": 1.021181119,
+          "repeated_input_groups": 3,
+          "unique_candidate_matrices": 77
+        }
+      },
+      "original44": {
+        "composed_action": {
+          "examples": 36,
+          "model_mean_train_regret": 0.46544463
+        },
+        "control": {
+          "conflicting_winner_groups": 1,
+          "examples": 36,
+          "final_cross_entropy": 0.531277259,
+          "final_gradient_norm": 0.757536993,
+          "first_candidate_mean_train_regret": 0.475433907,
+          "initial_cross_entropy": 0.694472009,
+          "model_mean_train_regret": 0.378165987,
+          "repeated_input_groups": 5,
+          "unique_candidate_matrices": 21
+        },
+        "move": {
+          "conflicting_winner_groups": 1,
+          "examples": 32,
+          "final_cross_entropy": 0.737965127,
+          "final_gradient_norm": 0.276717081,
+          "first_candidate_mean_train_regret": 0.175005484,
+          "initial_cross_entropy": 0.866412924,
+          "model_mean_train_regret": 0.008849232,
+          "repeated_input_groups": 4,
+          "unique_candidate_matrices": 20
+        },
+        "switch": {
+          "conflicting_winner_groups": 2,
+          "examples": 42,
+          "final_cross_entropy": 0.575797428,
+          "final_gradient_norm": 0.104162485,
+          "first_candidate_mean_train_regret": 0.801412164,
+          "initial_cross_entropy": 0.693340182,
+          "model_mean_train_regret": 0.134933859,
+          "repeated_input_groups": 7,
+          "unique_candidate_matrices": 19
+        }
+      },
+      "retained52": {
+        "composed_action": {
+          "examples": 44,
+          "model_mean_train_regret": 0.436327925
+        },
+        "control": {
+          "conflicting_winner_groups": 1,
+          "examples": 44,
+          "final_cross_entropy": 0.567781473,
+          "final_gradient_norm": 0.303431691,
+          "first_candidate_mean_train_regret": 0.47135904,
+          "initial_cross_entropy": 0.691160143,
+          "model_mean_train_regret": 0.339874323,
+          "repeated_input_groups": 5,
+          "unique_candidate_matrices": 29
+        },
+        "move": {
+          "conflicting_winner_groups": 1,
+          "examples": 40,
+          "final_cross_entropy": 0.762412397,
+          "final_gradient_norm": 0.088871584,
+          "first_candidate_mean_train_regret": 0.146977995,
+          "initial_cross_entropy": 0.866534358,
+          "model_mean_train_regret": 0.021896675,
+          "repeated_input_groups": 4,
+          "unique_candidate_matrices": 28
+        },
+        "switch": {
+          "conflicting_winner_groups": 3,
+          "examples": 50,
+          "final_cross_entropy": 0.734096329,
+          "final_gradient_norm": 0.080141118,
+          "first_candidate_mean_train_regret": 0.705168392,
+          "initial_cross_entropy": 0.813824997,
+          "model_mean_train_regret": 0.137173295,
+          "repeated_input_groups": 11,
+          "unique_candidate_matrices": 23
+        }
+      }
+    },
+    "retention_checks": [
+      {
+        "name": "original44_attack",
+        "value": 0.008849232,
+        "limit": 0.0554,
+        "passed": true
+      },
+      {
+        "name": "retained52_attack",
+        "value": 0.021896675,
+        "limit": 0.0648,
+        "passed": true
+      },
+      {
+        "name": "retained52_composed",
+        "value": 0.436327925,
+        "limit": 0.1609,
+        "passed": false
+      }
+    ],
+    "retention_passed": false,
+    "reserved_train_comparison": {
+      "frozen": {
+        "wins": 3,
+        "battles": 8,
+        "decisions": 268,
+        "party_faints": 35,
+        "opponent_faints": 32,
+        "party_hp_lost": 2372,
+        "party_pp_spent": 134,
+        "invalid_actions": 0
+      },
+      "candidate": {
+        "wins": 8,
+        "battles": 8,
+        "decisions": 161,
+        "party_faints": 8,
+        "opponent_faints": 40,
+        "party_hp_lost": 1112,
+        "party_pp_spent": 78,
+        "invalid_actions": 0
+      }
+    },
+    "known_failure_regression": {
+      "outcome_sha256": "f8d5ab7b0baa2bb8f8afc31c07e13b36d92b67c339dfde4a0fe52335d640923f",
+      "stop_reason": "party_defeated",
+      "decisions": 17,
+      "party_faints": 5,
+      "opponent_faints": 1,
+      "party_hp_lost": 325,
+      "invalid_actions": 0,
+      "teacher_queries": 0,
+      "memory_write_actions": 0,
+      "event_log_complete": true,
+      "observed_opening": "Selected Thunderbolt, dealt 46 damage, and fainted on the opponent's reply.",
+      "observed_control_failure": "After Bulbasaur's Vine Whip dealt 21 damage, the opponent had 13 HP and Bulbasaur had 21 HP. Control selected a voluntary switch to Squirtle instead of another attack.",
+      "inference_limit": "The previous damage suggests a possible finishing attack, not a verified counterfactual win. No additional fit or episode followed this regression."
+    }
+  },
+  "retained_engineering_failures": [
+    "Initial terminal collection stopped on integer-key diagnostic JSON normalization; repaired serialization and reused the six completed branches.",
+    "Five-member collection initially stopped at the old comparison budget check before any comparison branch; its completed learner trajectory was preserved.",
+    "After all 80 new contexts were collected, the warm-start lineage guard stopped before fitting because the earlier 48 terminal anchors were missing from the fit input. The prospective repair retained those anchors without replaying completed battles."
+  ],
+  "verification": {
+    "focused_tests_passed": 108,
+    "focused_tests_skipped": 13,
+    "mypy_source_files_passed": 538,
+    "full_suite_source_commit": "c20fcaa1",
+    "full_suite_passed": 12420,
+    "full_suite_failed": 9,
+    "full_suite_skipped": 16,
+    "full_suite_xfailed": 1,
+    "baseline_commit": "c6621013",
+    "baseline_reproduction": "Eight failures reproduced directly in pytest (315 passed,8 failed,1 skipped). The ninth reproduced by invoking the pre-session runtime qualification with the same repository-local dependency metadata directory.",
+    "preexisting_failure_groups": {
+      "dashboard_receipt_projection": 7,
+      "battle_timing_golden_hash": 1,
+      "legacy_local_pyboy_fingerprint": 1
+    }
+  },
+  "scope": {
+    "new_registered_goal_examples": 0,
+    "goal_model": "Model137:137 examples,92 successes,58 economy-qualified",
+    "red_registered_native": 96,
+    "red_native_target": 124,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_gates": 5,
+    "authority_promotions": 0,
+    "independent_natural_transfer_results": 0,
+    "full_game_replays": 0,
+    "github_pushes": 0,
+    "interpretation": "Assisted TRAIN setup and disclosed teacher continuation are not final-player authority. Reserved variations share the four TRAIN origins; the original failing capture is an in-sample regression, not independent evaluation."
+  },
+  "totals": {
+    "new_train_contexts": 128,
+    "terminal_branches": 3755,
+    "branch_decisions": 58538,
+    "new_candidate_fits": 2
+  },
+  "status": "completed_bounded_training_experiment_candidate_not_promotion_ready",
+  "next_decision": "Preserve the substantial full-battle gain, but do not promote or blindly refit. Audit control's use of pooled best-move and highest-HP-reserve summaries rather than actual child-selected action features, including explicit estimated knockout margins. Reconcile short-horizon legacy retention with complete-battle outcomes in a prospective bounded experiment; reuse the retained training data. Independent natural-battle validation and the fresh Red completion gate remain outstanding."
+}

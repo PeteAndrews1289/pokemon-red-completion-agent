@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The packaged policy lost a five-member battle despite fitted opening-switch preference. Freeze a terminal multi-turn TRAIN curriculum from distinct sources with intermediate decisions; require separate natural-origin evaluation before any authority promotion. Do not refit or replay consumed captures.
+- Next decision: Condition control on concrete child-selected actions and estimated finishing-hit margins in one bounded experiment using retained data. Resolve failed combined retention without erasing full-battle gains; require independent natural validation before promotion.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-packaged-rollout-diagnostic-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-packaged-rollout-diagnostic-result-2026-09-17.json)
+**2026-09-17-trainer-terminal-learning-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-terminal-learning-result-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The packaged model took real battle actions and visibly failed a full-party fight, identifying sustained decision-making rather than opening-label fit as the blocker to an autonomous Red player. |
-| Learning output | No new training target or fit. In-sample integrated policy diagnostic: one easy one-turn win, then one 16-decision full-party loss (five player faints, zero opponent faints). This is measured failure evidence, not learner improvement. |
-| Authority delta | None. Two in-sample packaged-policy TRAIN rollouts made no fit, promotion or collection progress. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | None. Both integrated rollouts used existing assisted TRAIN captures from origins already present in the fit. |
-| Blocker | The packaged policy won one easy attack-favored battle in one turn but lost a five-member battle after 16 decisions and five party faints. Its retained training labels mostly end at a short player-turn budget (965/1110 matched branches), so opening-choice retention does not establish sustained battle competence. |
-| Decision | Stop treating opening-only retention as full-battle readiness. Prospectively source terminal multi-turn TRAIN battles with intermediate choices and independent natural-origin evaluation. Do not refit or replay the consumed diagnostic captures or failed HP pair. |
-| Next session | Sol High, Fast off: inventory genuinely distinct TRAIN battle origins and freeze one bounded terminal, intermediate-choice curriculum. Stop if the supply is absent; do not tune consumed captures. |
-| Next falsifier | A newly sourced TRAIN terminal multi-turn battle must expose intermediate attack/switch/replacement decisions under one unchanged return and horizon; otherwise stop before fitting. Then test any frozen candidate on separate natural origins. |
-| Stop condition | The one full-party diagnostic ended in party defeat and was stopped after its single declared episode. Preserve both in-sample rollouts. No consumed-capture replay, refit, authority promotion, full game or GitHub push. |
+| Product alignment | The learner now wins reserved assisted five-member TRAIN battles but still makes consequential switching errors in the original hard battle. Full Red authority has not advanced. |
+| Learning output | 128 new TRAIN contexts and 3755 complete matched branches; two fits. Reserved five-member wins improved 3/8 to 8/8, party faints 35 to 8. Attack retention passed; combined-control retention failed. |
+| Authority delta | None. Two TRAIN battle fits remain unpromoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No independent natural transfer. Reserved variants share four TRAIN origins; the known failure is an in-sample regression. |
+| Blocker | The new five-member candidate won eight reserved TRAIN variants, but lost the original hard battle after 17 decisions (five party faints, one opponent faint). Retained52 composed regret 0.436327925 exceeds its unchanged 0.1609 limit. |
+| Decision | Preserve measured full-battle improvement without promotion. Stop after the declared regression; no further fit or replay this session. |
+| Next session | Astra High, Fast off: one bounded control-input experiment using retained data and explicit full-battle and retention gates. No blind refit sweep or standing review gate. |
+| Next falsifier | Test control inputs conditioned on the actual proposed move and reserve, including estimated finishing-hit margins. Reuse authenticated data; require retained competence and separate natural-origin outcomes before promotion. |
+| Stop condition | Both curricula and one declared regression per candidate are complete. Preserve failures, logs and weights. No more fit or replay this session, promotion, full game or GitHub push. |
 
 ### Stop conditions
 

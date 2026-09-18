@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-packaged-rollout-diagnostic-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-terminal-learning-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-terminal-learning-v1
+
+Two battle fits added 128 contexts and 3755 complete branches. Reserved five-member TRAIN wins improved 3/8 to 8/8; party faints 35 to 8. Original hard battle still lost; composed retention failed. No promotion or Red acceptance progress.
+
+**Deviation:** One known TRAIN regression per candidate was prospectively authorized; both failures remain retained. Same-origin assisted variation is not independent natural transfer. No further fit or replay this session; stage and checklist exits are unchanged.
+
+**Next:** One bounded concrete-action-conditioned control experiment using retained data, then independent natural validation after qualification. No blind refit sweep, full-game replay or GitHub push.
 
 ### 2026-09-17-trainer-packaged-rollout-diagnostic-v1
 
