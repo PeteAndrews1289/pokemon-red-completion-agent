@@ -24,6 +24,7 @@ from pokemon_red_completion.red_autonomous_player import _record
 from pokemon_red_completion.red_trainer_practice_admission import inspect_trainer_practice_choices
 from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
 from pokemon_red_completion.red_trainer_practice_fit import (
+    TRAINING_TARGET_SCHEMA_ID,
     fit_trainer_practice_three_heads,
     summarize_trainer_practice_training,
 )
@@ -393,6 +394,7 @@ def run(
     _record(destination / "model.json", model.to_dict())
     report = {
         "schema": "pokemon.red.trainer-practice-fit-receipt.v1",
+        "training_target_schema": TRAINING_TARGET_SCHEMA_ID,
         "qualification_tier": (
             "correlated_exploratory_train_only" if exploratory_fit else "independent_root_train"
         ),

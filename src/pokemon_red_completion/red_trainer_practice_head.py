@@ -19,6 +19,7 @@ class TrainerHeadExample:
     candidate_vectors: tuple[tuple[float, ...], ...]
     best_indices: tuple[int, ...]
     target_probabilities: tuple[float, ...] | None = None
+    mean_returns: tuple[float, ...] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -44,6 +45,11 @@ class TrainerHeadExample:
             or not math.isclose(sum(self.target_probabilities), 1.0, abs_tol=1e-8)
         ):
             raise TrainerHeadError("soft listwise target differs")
+        if self.mean_returns is not None and (
+            len(self.mean_returns) != len(self.candidate_vectors)
+            or any(not math.isfinite(value) for value in self.mean_returns)
+        ):
+            raise TrainerHeadError("mean return inventory differs")
 
 
 @dataclass(frozen=True, slots=True)

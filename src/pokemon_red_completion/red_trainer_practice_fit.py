@@ -8,6 +8,8 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from statistics import fmean
 
+import numpy as np
+
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.battle_semantics import (
     FEATURE_NAMES as LEGACY_MOVE_NAMES,
@@ -40,6 +42,7 @@ CONTROL_ACTION_FEATURE_NAMES = (
     *(f"switch.{name}" for name in CONTROL_FEATURE_NAMES_V2),
 )
 CONTROL_ACTION_SCHEMA_ID = f"{CONTROL_SCHEMA_ID}.action-interaction-v3"
+TRAINING_TARGET_SCHEMA_ID = "pokemon.red.trainer-practice.mean-action-return.v2"
 
 
 def control_action_candidates(
@@ -255,19 +258,16 @@ def _append_examples(
                     observation, catalog=catalog, move_batch=base
                 ).tolist()
             )
-            attack_value = max(
-                float(value)
-                for ref, value in zip(refs, returns, strict=True)
-                if ":move:" in ref or ref.endswith("decline-switch")
-            )
-            switch_value = max(
-                float(value) for ref, value in zip(refs, returns, strict=True) if ":switch:" in ref
-            )
             rows = control_action_candidates(common)
-            best = list(_tied_values((attack_value, switch_value)))
         observed = _observed_returns(name, refs, returns, timing_returns)
+        mean_returns = _mean_action_returns(name, refs, observed)
         examples[name].append(
-            TrainerHeadExample(tuple(rows), tuple(best), _soft_return_target(observed))
+            TrainerHeadExample(
+                tuple(rows),
+                _tied_values(mean_returns),
+                _soft_return_target((mean_returns,)),
+                mean_returns,
+            )
         )
 
 
@@ -293,36 +293,52 @@ def _observed_returns(
             for value in row
         ):
             raise TrainerPracticeFitError("timed return is invalid")
-        if head_name == "control":
-            attack = [
-                float(value)
-                for ref, value in zip(refs, row, strict=True)
-                if ":move:" in ref or ref.endswith("decline-switch")
-            ]
-            switches = [
-                float(value) for ref, value in zip(refs, row, strict=True) if ":switch:" in ref
-            ]
-            if not attack or not switches:
-                raise TrainerPracticeFitError("control return inventory differs")
-            observed.append((max(attack), max(switches)))
-        else:
-            observed.append(tuple(float(value) for value in row))
+        observed.append(tuple(float(value) for value in row))
+    if head_name == "control" and (
+        not any(
+            isinstance(ref, str) and (":move:" in ref or ref.endswith("decline-switch"))
+            for ref in refs
+        )
+        or not any(isinstance(ref, str) and ":switch:" in ref for ref in refs)
+    ):
+        raise TrainerPracticeFitError("control return inventory differs")
     return tuple(observed)
 
 
+def _mean_action_returns(
+    head_name: str,
+    refs: list[object],
+    timing: tuple[tuple[float, ...], ...],
+) -> tuple[float, ...]:
+    """Commit to one action before hidden timing is known."""
+
+    means = tuple(fmean(row[index] for row in timing) for index in range(len(refs)))
+    if head_name != "control":
+        return means
+    attack = [
+        value for ref, value in zip(refs, means, strict=True)
+        if isinstance(ref, str) and (":move:" in ref or ref.endswith("decline-switch"))
+    ]
+    switches = [
+        value for ref, value in zip(refs, means, strict=True)
+        if isinstance(ref, str) and ":switch:" in ref
+    ]
+    if not attack or not switches:
+        raise TrainerPracticeFitError("control return inventory differs")
+    return max(attack), max(switches)
+
+
 def _soft_return_target(timing: tuple[tuple[float, ...], ...]) -> tuple[float, ...]:
-    """Average reward-sensitive choice probabilities over declared RNG timings."""
+    """Apply one temperature after averaging the returns of each action."""
 
     # A one-point terminal difference should remain decisive after averaging
     # the five observed timings, while small noisy differences stay graded.
     temperature = 0.1
-    probabilities = []
-    for row in timing:
-        maximum = max(row)
-        weights = tuple(math.exp((value - maximum) / temperature) for value in row)
-        total = sum(weights)
-        probabilities.append(tuple(value / total for value in weights))
-    return tuple(fmean(row[index] for row in probabilities) for index in range(len(timing[0])))
+    means = tuple(fmean(row[index] for row in timing) for index in range(len(timing[0])))
+    maximum = max(means)
+    weights = tuple(math.exp((value - maximum) / temperature) for value in means)
+    total = sum(weights)
+    return tuple(value / total for value in weights)
 
 
 def _combine_identical_inputs(rows: list[TrainerHeadExample]) -> list[TrainerHeadExample]:
@@ -333,17 +349,27 @@ def _combine_identical_inputs(rows: list[TrainerHeadExample]) -> list[TrainerHea
         groups.setdefault(row.candidate_vectors, []).append(row)
     combined = []
     for candidates, group in groups.items():
-        probabilities = tuple(
-            fmean(
-                case.target_probabilities[index]
-                for case in group
-                if case.target_probabilities is not None
+        if all(case.mean_returns is not None for case in group):
+            means = tuple(
+                fmean(case.mean_returns[index] for case in group if case.mean_returns is not None)
+                for index in range(len(candidates))
             )
-            for index in range(len(candidates))
-        )
+            probabilities = _soft_return_target((means,))
+        elif all(case.mean_returns is None for case in group):
+            means = None
+            probabilities = tuple(
+                fmean(
+                    case.target_probabilities[index]
+                    for case in group
+                    if case.target_probabilities is not None
+                )
+                for index in range(len(candidates))
+            )
+        else:
+            raise TrainerPracticeFitError("mixed raw-return and legacy examples")
         highest = max(probabilities)
         best = tuple(index for index, value in enumerate(probabilities) if highest - value <= 1e-8)
-        combined.append(TrainerHeadExample(candidates, best, probabilities))
+        combined.append(TrainerHeadExample(candidates, best, probabilities, means))
     return combined
 
 
@@ -373,9 +399,7 @@ def summarize_trainer_practice_training(
             if not isinstance(refs, list) or not isinstance(returns, list):
                 raise TrainerPracticeFitError("training diagnostic target differs")
             timed = _observed_returns(name, refs, returns, head.get("timing_returns"))
-            measured.append(
-                tuple(fmean(timing[i] for timing in timed) for i in range(len(timed[0])))
-            )
+            measured.append(_mean_action_returns(name, refs, timed))
         if len(rows) != len(measured):
             raise TrainerPracticeFitError("training diagnostic inventory differs")
         candidate_model = getattr(model, name)
@@ -402,8 +426,104 @@ def summarize_trainer_practice_training(
             "first_candidate_mean_train_regret": round(fmean(first_regret), 9)
             if first_regret
             else None,
+            **_optimizer_diagnostics(_combine_identical_inputs(rows), candidate_model),
         }
+    results["composed_action"] = _summarize_composed_action(records, model, resolver)
     return results
+
+
+def _optimizer_diagnostics(
+    rows: list[TrainerHeadExample], model: TrainerHeadModel
+) -> dict[str, float]:
+    """Compare the declared seeded start with the fitted loss and gradient."""
+
+    rng = np.random.default_rng(model.training_seed)
+    initial_w1 = rng.normal(0, 0.04, size=model.weights1.shape)
+    initial_w2 = rng.normal(0, 0.04, size=model.weights2.shape)
+    initial_losses = []
+    final_losses = []
+    gradient_w1 = np.zeros_like(model.weights1)
+    gradient_b1 = np.zeros_like(model.bias1)
+    gradient_w2 = np.zeros_like(model.weights2)
+    for row in rows:
+        x = np.asarray(row.candidate_vectors, dtype=np.float64)
+        target = np.asarray(row.target_probabilities, dtype=np.float64)
+        initial_hidden = np.tanh(x @ initial_w1)
+        initial_scores = initial_hidden @ initial_w2
+        initial_shifted = initial_scores - np.max(initial_scores)
+        initial_probabilities = np.exp(initial_shifted)
+        initial_probabilities /= np.sum(initial_probabilities)
+        initial_losses.append(float(-np.dot(target, np.log(initial_probabilities))))
+        final_hidden = np.tanh(x @ model.weights1 + model.bias1)
+        final_probabilities = model.probabilities(row.candidate_vectors)
+        final_losses.append(float(-np.dot(target, np.log(final_probabilities))))
+        residual = final_probabilities - target
+        gradient_w2 += final_hidden.T @ residual
+        derivative = np.outer(residual, model.weights2) * (1.0 - final_hidden**2)
+        gradient_w1 += x.T @ derivative
+        gradient_b1 += np.sum(derivative, axis=0)
+    return {
+        "initial_cross_entropy": round(fmean(initial_losses), 9),
+        "final_cross_entropy": round(fmean(final_losses), 9),
+        "final_gradient_norm": round(
+            float(
+                np.sqrt(
+                    np.sum(gradient_w1**2)
+                    + np.sum(gradient_b1**2)
+                    + np.sum(gradient_w2**2)
+                )
+                / len(rows)
+            ),
+            9,
+        ),
+    }
+
+
+def _summarize_composed_action(
+    records: tuple[Mapping[str, object], ...],
+    model: TrainerPracticeThreeHeadModel,
+    catalog: PokemonRedBattleCatalog,
+) -> dict[str, object]:
+    regrets = []
+    for target in records:
+        heads = target.get("heads")
+        if not isinstance(heads, Mapping) or not isinstance(heads.get("control"), Mapping):
+            continue
+        examples: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
+        _append_examples(examples, target, catalog)
+        chosen_group = (
+            "move"
+            if model.control.predict_index(examples["control"][0].candidate_vectors) == 0
+            else "switch"
+        )
+        control = heads["control"]
+        refs, returns = control.get("choice_refs"), control.get("returns")
+        if not isinstance(refs, list) or not isinstance(returns, list):
+            raise TrainerPracticeFitError("composed control return inventory differs")
+        eligible = [
+            ref for ref in refs
+            if isinstance(ref, str)
+            and ((":switch:" in ref) == (chosen_group == "switch"))
+        ]
+        if examples[chosen_group]:
+            child = heads[chosen_group]
+            if not isinstance(child, Mapping) or not isinstance(child.get("choice_refs"), list):
+                raise TrainerPracticeFitError("composed child inventory differs")
+            index = getattr(model, chosen_group).predict_index(
+                examples[chosen_group][0].candidate_vectors
+            )
+            chosen = child["choice_refs"][index]
+        elif len(eligible) == 1:
+            chosen = eligible[0]
+        else:
+            raise TrainerPracticeFitError("composed child choice is ambiguous")
+        if chosen not in refs:
+            raise TrainerPracticeFitError("composed choice is absent")
+        regrets.append(max(float(value) for value in returns) - float(returns[refs.index(chosen)]))
+    return {
+        "examples": len(regrets),
+        "model_mean_train_regret": round(fmean(regrets), 9) if regrets else None,
+    }
 
 
 def _tied_values(values: tuple[float, ...]) -> tuple[int, ...]:

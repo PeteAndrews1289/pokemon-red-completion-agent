@@ -17,9 +17,13 @@ from pokemon_red_completion.red_trainer_practice_features import (
 from pokemon_red_completion.red_trainer_practice_fit import (
     CONTROL_ACTION_FEATURE_NAMES,
     CONTROL_ACTION_SCHEMA_ID,
+    TRAINING_TARGET_SCHEMA_ID,
     TrainerPracticeFitError,
     TrainerPracticeThreeHeadModel,
+    _append_examples,
     _combine_identical_inputs,
+    _mean_action_returns,
+    _observed_returns,
     _soft_return_target,
     control_action_candidates,
     fit_trainer_practice_three_heads,
@@ -62,6 +66,46 @@ def test_identical_inputs_combine_timing_uncertainty_once():
     assert _soft_return_target(((1.0, 0.0),))[0] > 0.999
 
 
+def test_target_softmax_preserves_mean_return_winner_and_combines_raw_returns():
+    timings = ((2.0, 0.0), (2.0, 0.0), (-2.0, 1.0), (-2.0, 1.0), (-2.0, 1.0))
+    assert _soft_return_target(timings)[1] > _soft_return_target(timings)[0]
+    candidates = ((0.0, 1.0), (1.0, 0.0))
+    cases = [
+        TrainerHeadExample(candidates, (0,), (0.99, 0.01), (2.0, 0.0)),
+        TrainerHeadExample(candidates, (1,), (0.01, 0.99), (-2.0, 1.0)),
+        TrainerHeadExample(candidates, (1,), (0.01, 0.99), (-2.0, 1.0)),
+    ]
+    combined = _combine_identical_inputs(cases)[0]
+    assert combined.mean_returns == (-2.0 / 3.0, 2.0 / 3.0)
+    assert combined.best_indices == (1,)
+    assert combined.target_probabilities[1] > combined.target_probabilities[0]
+    assert TRAINING_TARGET_SCHEMA_ID.endswith(".v2")
+
+
+def test_control_commits_to_one_reserve_before_hidden_timing():
+    refs = [
+        "pokemon.core:battle:move:1",
+        "pokemon.core:battle:switch:2",
+        "pokemon.core:battle:switch:3",
+    ]
+    timings = [[1.0, 2.0, -2.0], [1.0, 2.0, -2.0], *([[1.0, -2.0, 2.0]] * 3)]
+    observed = _observed_returns("control", refs, [1.0, -0.4, 0.4], timings)
+    assert _mean_action_returns("control", refs, observed) == (1.0, 0.4)
+    target = _target()
+    target["heads"]["control"] = {
+        "choice_refs": refs,
+        "returns": [1.0, -0.4, 0.4],
+        "best_indices": [0],
+        "timing_returns": timings,
+    }
+    examples = {"move": [], "control": [], "switch": []}
+    _append_examples(examples, target, PokemonRedBattleCatalog())
+    control = examples["control"][0]
+    assert control.best_indices == (0,)
+    assert control.mean_returns == (1.0, 0.4)
+    assert control.target_probabilities[0] > control.target_probabilities[1]
+
+
 def test_training_diagnostics_report_unique_inputs_and_simple_baseline():
     first = _target()
     second = deepcopy(first)
@@ -76,6 +120,7 @@ def test_training_diagnostics_report_unique_inputs_and_simple_baseline():
     assert report["move"]["unique_candidate_matrices"] == 1
     assert report["move"]["conflicting_winner_groups"] == 1
     assert report["move"]["first_candidate_mean_train_regret"] == 0.1
+    assert report["composed_action"]["examples"] == 2
 
 
 def test_stateless_control_projection_matches_live_history_contract():
