@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The repaired 44-context battle learner is TRAIN-ready but not promotable: expand independent varied TRAIN scenarios, then test a frozen successor on a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.
+- Next decision: The 52-context full-team HP recipe and refit failed their TRAIN gate. Seek a focused design review, then require an actual switch/stay reversal and retention of original attack skill before a new-origin natural cohort. No consumed DEVELOPMENT tuning or full game.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A varied TRAIN battle cannot preserve a valid selected-turn outcome, or a fitted switch-aware challenger fails separate natural DEVELOPMENT comparison against frozen and fixed controls. |
+| Cheapest falsifier | A prospective TRAIN pair fails to reverse attack-versus-switch preference when one observable factor changes, or a larger fit erases attack choices on the original TRAIN cases. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-astra-remediation-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-remediation-2026-09-17.json)
+**2026-09-17-trainer-full-team-hp-pilot-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-full-team-hp-pilot-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The battle segment now has trustworthy feedback and demonstrable autonomous choices, but natural regressions prevent moving that authority into the final Red player. |
-| Learning output | Sixteen new paired TRAIN contexts raised the corpus to 44 across four fresh origins and 20 unique attack matrices. A 2400-epoch graded-target fit learned two of three clear type reversals. Five new natural DEVELOPMENT battles were compared with one frozen challenger; all were wins, but the League outcome vector failed its predeclared control gate. |
-| Authority delta | None. The new 44-context trainer challenger remains TRAIN-only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No cross-title test. On correlated historical Red natural captures, the challenger won Cinnabar, Lorelei, Bruno, Agatha and Lance with zero teacher use; switching emerged but Agatha/Lance underperformed the frozen control. |
-| Blocker | The repaired trainer learner wins natural full-party battles and uses voluntary switches, but the predeclared correlated League cohort failed: its first Agatha arm exposed a runtime defect, and the post-fix descriptive comparison shows Agatha/Lance regressions versus the older frozen control. No independent natural-origin replication exists. |
-| Decision | Keep the corrected scoring, input, opponent-tracking and support contracts. Do not promote the 44-context model. Expand varied independent TRAIN choices and freeze a new challenger before an independent-origin natural comparison. |
-| Next session | Sol High, Fast off: build varied full-team and status-adverse TRAIN battle choices without fitting consumed DEVELOPMENT, then freeze one challenger and source a new independent-origin natural test. |
-| Next falsifier | A new fit from broader independent TRAIN choices must win a prospectively declared independent-origin natural comparison without more faints, HP loss or attacks than the older frozen control. |
-| Stop condition | Preserve the failed cohort and consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, authority promotion, full game or GitHub push. |
+| Product alignment | The battle learner remains a reusable segment, but this full-team HP recipe did not teach the required decision boundary and its refit regressed attack selection. No final Red authority changed. |
+| Learning output | Eight prospective five-on-five TRAIN contexts raised the corpus to 52 across the same four fresh origins. None supplied a switch/stay reversal. A 2400-epoch refit improved full-corpus move regret over always-first, but substantially worsened the original 44-case attack choices. This negative result rejects the recipe before another natural test. |
+| Authority delta | None. The 52-context refit is rejected; the older frozen control retains authority. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No cross-title test or new natural evaluation in this session. The earlier correlated Red natural comparison remains a failed promotion gate. |
+| Blocker | All eight new five-on-five HP pairs preferred switching, so the intended switch/stay reversal was absent. The 52-context refit raised move regret on the identical original 44 TRAIN cases from 0.0354 to 0.1392. Earlier natural DEVELOPMENT outcomes remain consumed and no independent natural-origin replication exists. |
+| Decision | Reject the 52-context fit. Obtain a focused design review before another prospectively balanced TRAIN contrast. Require both a real switch/stay reversal and retention of original attack skill before a new-origin natural evaluation. |
+| Next session | Focused Astra design review only; then Sol High, Fast off for one bounded, balanced switch/stay TRAIN contrast and original-44 retention gate. No new natural run until both pass. |
+| Next falsifier | A prospective balanced TRAIN pair must reverse switch/stay preference and a successor fit must retain the original 44-case attack performance before any new-origin natural comparison. |
+| Stop condition | Do not scale the failed HP-pair recipe or promote its 52-context fit. Preserve consumed DEVELOPMENT evidence. No replay-tuning, historical-origin relabeling, full game or GitHub push. |
 
 ### Stop conditions
 

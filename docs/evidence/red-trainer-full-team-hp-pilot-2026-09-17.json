@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon.red.trainer-full-team-hp-pilot-evidence.v1",
+  "date": "2026-09-17",
+  "source_commit": "040a7167",
+  "partition": "TRAIN_ONLY",
+  "question": "Do prospective five-on-five lead-HP pairs create a useful attack-versus-switch reversal without erasing previously learned attack choices?",
+  "design": {
+    "independent_boot_origins": 4,
+    "new_scenarios": 8,
+    "reused_authenticated_scenarios": 44,
+    "total_scenarios": 52,
+    "contrast": "Within each origin, only actor lead HP changes between healthy and 8 HP. Both sides have five members.",
+    "development_evaluations": 0,
+    "full_game_runs": 0,
+    "authority_promotions": 0
+  },
+  "new_pair_results": {
+    "attack_vs_switch_best": "switch in all eight cases",
+    "attack_choice_reversal_pairs": 1,
+    "switch_target_reversal_pairs": 1,
+    "learned_attack_vs_switch_reversals": 0,
+    "interpretation": "The curriculum missed its intended control-decision contrast. These eight examples do not establish HP-sensitive switching."
+  },
+  "fits": {
+    "initial_300_epoch": {
+      "model_sha256": "234a38ba964ad008fab7bd9c7251b10c6fb870cf8d9f35d07bff08983708a741",
+      "receipt_sha256": "a3d397828d2f371aade2cfbd11c0732da55d53540477817b1d757327726b913d",
+      "move_mean_train_regret": 0.165445916,
+      "first_move_mean_train_regret": 0.146977995
+    },
+    "refit_2400_epoch_same_records": {
+      "model_sha256": "7193887eb3720ff447a6c8e383c937eeb578ecc974f35f6053f1942284d956a5",
+      "receipt_sha256": "902840152857a497cdf7a1d7facdb2819874652991665f1483acb7f4540b4e48",
+      "fit_plan_sha256": "e4c20669987f13e90a559d65e64c32e9faad1a667435bfc9d8d8d253f3c569e6",
+      "move_examples": 40,
+      "unique_move_candidate_matrices": 28,
+      "move_mean_train_regret": 0.119987806,
+      "first_move_mean_train_regret": 0.146977995,
+      "control_mean_train_regret": 0.000390455,
+      "switch_mean_train_regret": 0.139060683
+    }
+  },
+  "same_original_44_train_cases": {
+    "original_44_context_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+    "original_model_move_mean_regret": 0.035384769,
+    "new_52_context_refit_move_mean_regret": 0.139235557,
+    "comparison": "The new fit regressed on the identical original 44 TRAIN targets; these are not held-out results."
+  },
+  "decision": "NO_GO_NEW_FIT",
+  "reason": "The prospective HP pairs supplied no attack-versus-switch reversal, and the larger fit substantially worsened attack selection on the common TRAIN cases. Keep the older frozen control as authority; neither TRAIN model is promotion-qualified.",
+  "exclusions": "No consumed DEVELOPMENT replay, label, fit or promotion; no sealed evaluation, full run, ROM hack, Crystal work or GitHub push."
+}

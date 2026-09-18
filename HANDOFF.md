@@ -5,6 +5,27 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 
 ## Trainer review repaired; challenger not promoted
 
+### September 17 follow-up: five-on-five HP pilot is a no-go
+
+A [prospective TRAIN pilot](docs/evidence/red-trainer-full-team-hp-pilot-2026-09-17.json)
+added eight healthy/critical lead-HP pairs from the same four independent
+clean-power origins, with five members on each side. The earlier 44 contexts
+were reused without gameplay. Switching won the measured attack-versus-switch
+choice in all eight new cases, so the intended HP-dependent control reversal
+was not present. A 2400-epoch refit on the 52 contexts improved over an
+always-first-move baseline on its full TRAIN corpus (move regret 0.1200 versus
+0.1470), but regressed on the **same original 44 TRAIN cases**: move regret
+0.1392 versus 0.0354 for the earlier 44-context model. Its SHA-256 is
+`7193887eb3720ff447a6c8e383c937eeb578ecc974f35f6053f1942284d956a5`.
+It is a rejected fit, not a new frozen challenger. There was no new natural
+evaluation or authority promotion.
+
+The [next Astra brief](docs/reviews/red-trainer-next-astra-brief-2026-09-17.md)
+asks for a bounded design decision about real switch/stay reversals and
+attack-head interference. Review is warranted as a **no-go diagnosis**, not as
+a final approval to start training or a full Red run. Do not use scarce quota
+to scale this failed recipe. The older frozen control still retains authority.
+
 The [Astra review](docs/reviews/red-trainer-astra-review-2026-09-17.md) led to
 [measured remediation](docs/evidence/red-trainer-astra-remediation-2026-09-17.json).
 Damage scoring now follows the attacked opponent through a living switch;
@@ -45,9 +66,8 @@ not qualified for the final player. Model137 stays 137 examples / 92 successes
 / 58 economy-qualified; Red remains 96/124 and fresh acceptance 0/5. No full
 game, ROM hack, Crystal work or GitHub push occurred. Pete decides publication.
 
-Next bounded objective: Sol High, Fast off. Expand independent TRAIN scenarios
-with varied full teams, opponent types, switch costs and adverse statuses
-without reading these DEVELOPMENT outcomes into labels. Freeze a new fit and
-test on a genuinely new-origin natural trainer source. Stop if it cannot beat
-the older frozen control on the declared outcome vector; do not begin a full
-game run yet.
+Next bounded objective: focused Astra design review, with no gameplay or fit.
+Then use Sol High, Fast off for one prospectively balanced TRAIN contrast that
+actually reverses switch/stay while preserving the original 44-case attack
+skill. Only after passing that gate should a frozen challenger face a genuinely
+new-origin natural comparison. Do not begin a full game run yet.
