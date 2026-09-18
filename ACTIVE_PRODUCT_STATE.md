@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The frozen-attack candidate is packaged and passes TRAIN retention. The first terminal HP scenario failed because 10 of 25 branches, including every switch branch, did not finish by four turns. Design one new bounded switching curriculum before any fit or natural comparison.
+- Next decision: The revised terminal pair solved branch truncation but both healthy and critical leads rationally favored switching. Inspect the packaged attack continuation and freeze varied realistic battle contexts before another switching fit; do not reshape this consumed pair until it yields a desired label.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-frozen-composition-terminal-hp-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-frozen-composition-terminal-hp-2026-09-17.json)
+**2026-09-17-trainer-terminal-switch-successor-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-terminal-switch-successor-result-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The qualified component package preserves useful attack decisions. Real battle outcomes exposed the missing switching curriculum rather than supplying misleading short-horizon labels. |
-| Learning output | Packaged the old attack head with corrected control/switch weights; all three original TRAIN retention gates pass. The first terminal HP scenario retained 25 branches: 15 battle wins and 10 four-turn truncations, including all five switch branches. No fit or authority change. |
-| Authority delta | None. A qualified TRAIN candidate was packaged, but the bounded terminal pilot failed before fitting or promotion. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | None. The executed branches were teacher-assisted TRAIN examples from one existing origin; no unseen or natural comparison ran. |
-| Blocker | The first healthy-HP terminal scenario had 10 of 25 branches unfinished after four turns, including every switch branch. The critical case and second matchup remain unopened; no switching targets were admitted. |
-| Decision | Retain the frozen attack composition and stop this exact terminal HP recipe. Design a prospectively bounded continuation that can finish after switching; do not refit attacks or replay these branches. |
-| Next session | Sol High, Fast off: redesign one small terminal switching curriculum from the measured 10 truncations, with a continuation that can finish a switch branch. Freeze candidate weights and check the new recipe before execution. |
-| Next falsifier | One prospectively declared terminal HP pilot must finish every matched branch and show opposite healthy/critical action winners with >0.10 return margins before any switching fit. Preserve the three existing retention ceilings. |
-| Stop condition | The exact four-case recipe stopped on its first failed terminal scenario and may not replay. Preserve all branches. No consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. |
+| Product alignment | Completed terminal branches exposed a real learner weakness: attack continuation can sacrifice a healthy lead, so switching is rational at both HP levels. The negative contrast directs the next curriculum. |
+| Learning output | One new declared TRAIN pair retained 20/20 terminal branches. Healthy attack-minus-switch mean return was -0.4820; critical was -0.4721, so both favored switching. A read-only packaged-head check also selected the weak follow-up. No fit or authority change. |
+| Authority delta | None. The revised terminal TRAIN pair failed its switch/stay reversal before fit or promotion. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | None. The 20 terminal branches were assisted TRAIN alternatives from one existing origin; no unseen or natural comparison ran. |
+| Blocker | All 20 revised first-pair branches finished, but switching outperformed attacking at both healthy and critical HP. The packaged attack head also favors the weak follow-up move that explains the healthy result. No distinct switch/stay lesson was admitted. |
+| Decision | Retire the exact revised pair and preserve its negative result. Examine actual packaged attack continuation and prospectively select realistic scenarios with useful alternatives before a new switching fit; do not tune the same matchup into a desired label. |
+| Next session | Sol High, Fast off: inspect packaged-policy continuation and naturalistic TRAIN supply, then freeze one varied battle curriculum or report a concrete absence of useful alternatives. No same-pair rerun. |
+| Next falsifier | Prospectively measured naturalistic battle contrasts must yield useful attack and switch choices under the actual packaged continuation, without changing the declared return to force a reversal. Keep original retention gates before any promotion. |
+| Stop condition | The revised recipe stopped after its first pair failed the predeclared reversal gate; its second matchup and reserved variation remain unopened. Preserve all branches. No same-pair rerun, consumed DEVELOPMENT tuning, authority promotion, full game or GitHub push. |
 
 ### Stop conditions
 

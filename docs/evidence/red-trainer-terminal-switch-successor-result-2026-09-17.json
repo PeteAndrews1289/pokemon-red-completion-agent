@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon.red.trainer-terminal-switch-successor-result.v1",
+  "date": "2026-09-17",
+  "source_commit": "c47d1918a0f9e33f230bd1f041e4086e86a1e2ed",
+  "plan": "docs/evidence/red-trainer-terminal-switch-successor-plan-2026-09-17.json",
+  "partition": "TRAIN_ONLY",
+  "status": "STOPPED_FAILED_FIRST_PAIR_REVERSAL",
+  "private_summary_sha256": "473b4c68b3c8f10382564764153026879040ef9505792b35e2be9294caf104d7",
+  "tested_root_count": 1,
+  "tested_scenario_count": 2,
+  "declared_scenario_count": 4,
+  "branches_completed": 20,
+  "branches_terminal": 20,
+  "truncated_branches": 0,
+  "first_pair": {
+    "matchup": "Pikachu versus Machop",
+    "healthy": {
+      "attack_mean_return": 3.7167059416,
+      "switch_mean_return": 4.198723588999999,
+      "attack_minus_switch": -0.4820176473999993,
+      "winner": "switch",
+      "attack_arm_party_faints_across_five_timings": 2
+    },
+    "critical": {
+      "attack_mean_return": 3.7266647652000002,
+      "switch_mean_return": 4.198723588999999,
+      "attack_minus_switch": -0.472058823799999,
+      "winner": "switch",
+      "attack_arm_one_turn_critical_knockouts_across_five_timings": 2
+    },
+    "healthy_attack_continuation": "After opening Thunderbolt, the frozen continuation selected move slot 3 in all five timings. It dealt much less damage than the opening Thunderbolt and caused two lead faints.",
+    "packaged_attack_head_followup_readonly": {
+      "choice": "move slot 3",
+      "probabilities_slots_1_to_4": [0.24626616847316476, 0.22075367957382666, 0.3129024889445929, 0.2200776630084157],
+      "interpretation": "The packaged attack head also favors the weak follow-up on the retained healthy timing-zero observation. Improving only the teacher continuation would not prove deployed-policy behavior."
+    }
+  },
+  "second_matchup_executed": false,
+  "new_train_targets_admitted": 0,
+  "fits": 0,
+  "unseen_variations_opened": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "red_registrations_delta": 0,
+  "fresh_acceptance_delta": 0,
+  "github_pushes": 0,
+  "next_decision": "Inspect attack continuation and prospective naturalistic scenarios before another switching corpus. Keep the frozen model unchanged. Do not manufacture a reversal by tuning the same matchup or score."
+}

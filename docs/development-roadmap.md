@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-frozen-composition-terminal-hp-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-terminal-switch-successor-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-terminal-switch-successor-v1
+
+The revised assisted TRAIN pair completed all 20 four-turn branches. Both healthy and critical leads favored switching, by 0.4820 and 0.4721 return respectively. The packaged attack head also favors the weak follow-up used by the baseline. No fit, authority, registration or transfer result advanced.
+
+**Deviation:** The predeclared switch/stay reversal gate stopped before the second matchup and reserved variations. Keep the negative result; do not tune this consumed pair to force a desired label. Stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: inspect packaged-policy continuation and varied realistic TRAIN supply before another switching fit. Preserve original retention and independent natural promotion gates.
 
 ### 2026-09-17-trainer-frozen-composition-terminal-hp-v1
 
