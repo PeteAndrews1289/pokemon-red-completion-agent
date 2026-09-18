@@ -32,6 +32,7 @@ from pokemon_red_completion.red_trainer_practice_features import (
 from pokemon_red_completion.red_trainer_practice_head import (
     TrainerHeadExample,
     TrainerHeadModel,
+    expected_regret_loss_gradient,
 )
 from pokemon_red_completion.red_trainer_proposed_control import (
     PROPOSED_CONTROL_NAMES,
@@ -179,7 +180,15 @@ def fit_trainer_practice_three_heads(
     warm_start_move: TrainerPracticeThreeHeadModel | None = None,
     warm_start_move_epochs: int | None = None,
     control_target_mode: str = "best_component",
+    control_input_schema: str = CONTROL_ACTION_SCHEMA_ID,
+    training_objective: str = "cross_entropy",
 ) -> TrainerPracticeThreeHeadModel:
+    control_schema(control_input_schema)
+    if (
+        control_input_schema == PROPOSED_CONTROL_SCHEMA
+        and control_target_mode != "fitted_components"
+    ):
+        raise TrainerPracticeFitError("proposed control requires fitted-component targets")
     records = tuple(targets)
     if not records:
         raise TrainerPracticeFitError("TRAIN target corpus is empty")
@@ -243,6 +252,7 @@ def fit_trainer_practice_three_heads(
         seed=seed,
         epochs=move_epochs,
         initial_model=warm_start_move.move if warm_start_move is not None else None,
+        training_objective=training_objective,
     )
     switch = TrainerHeadModel.fit(
         schema_id=SWITCH_SCHEMA_ID,
@@ -250,20 +260,28 @@ def fit_trainer_practice_three_heads(
         examples=examples["switch"],
         seed=seed + 2,
         epochs=epochs,
+        training_objective=training_objective,
     )
     if control_target_mode == "fitted_components":
         aligned: dict[str, list[TrainerHeadExample]] = {"move": [], "control": [], "switch": []}
         for target in records:
-            _append_examples(aligned, target, resolver, control_components=(move, switch))
+            _append_examples(
+                aligned,
+                target,
+                resolver,
+                control_components=(move, switch),
+                control_input_schema=control_input_schema,
+            )
         examples["control"] = _combine_identical_inputs(aligned["control"])
     return TrainerPracticeThreeHeadModel(
         move=move,
         control=TrainerHeadModel.fit(
-            schema_id=CONTROL_ACTION_SCHEMA_ID,
-            feature_names=CONTROL_ACTION_FEATURE_NAMES,
+            schema_id=control_schema(control_input_schema)[0],
+            feature_names=control_schema(control_input_schema)[1],
             examples=examples["control"],
             seed=seed + 1,
             epochs=epochs,
+            training_objective=training_objective,
         ),
         switch=switch,
         train_capture_ids=tuple(capture_ids),
@@ -623,6 +641,8 @@ def _optimizer_diagnostics(
         initial_w2 = rng.normal(0, 0.04, size=model.weights2.shape)
     initial_losses = []
     final_losses = []
+    initial_regrets = []
+    final_regrets = []
     gradient_w1 = np.zeros_like(model.weights1)
     gradient_b1 = np.zeros_like(model.bias1)
     gradient_w2 = np.zeros_like(model.weights2)
@@ -639,11 +659,29 @@ def _optimizer_diagnostics(
         final_probabilities = model.probabilities(row.candidate_vectors)
         final_losses.append(float(-np.dot(target, np.log(final_probabilities))))
         residual = final_probabilities - target
+        if row.mean_returns is not None:
+            initial_regrets.append(
+                expected_regret_loss_gradient(initial_probabilities, row.mean_returns)[0]
+            )
+            loss, regret_gradient = expected_regret_loss_gradient(
+                final_probabilities, row.mean_returns
+            )
+            final_regrets.append(loss)
+            if model.training_objective == "expected_regret":
+                residual = regret_gradient
         gradient_w2 += final_hidden.T @ residual
         derivative = np.outer(residual, model.weights2) * (1.0 - final_hidden**2)
         gradient_w1 += x.T @ derivative
         gradient_b1 += np.sum(derivative, axis=0)
     return {
+        **(
+            {
+                "initial_expected_regret": round(fmean(initial_regrets), 9),
+                "final_expected_regret": round(fmean(final_regrets), 9),
+            }
+            if initial_regrets
+            else {}
+        ),
         "initial_cross_entropy": round(fmean(initial_losses), 9),
         "final_cross_entropy": round(fmean(final_losses), 9),
         "final_gradient_norm": round(

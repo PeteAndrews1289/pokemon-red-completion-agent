@@ -1,0 +1,18 @@
+{
+  "schema": "pokemon.red.trainer-return-objective-plan.v1",
+  "date": "2026-09-17",
+  "authorization": "Continued work under Pete's latest finish request. The preceding one-fit control experiment is closed, including its failed gates. This separately declared successor follows a measured loss-versus-return discrepancy, not an optimizer sweep.",
+  "capability": "Learn attack and switching decisions in proportion to their measured consequence, instead of treating near-certain preferred labels as equally costly.",
+  "learned_authority": "All choices remain learned from authenticated TRAIN returns. No hardcoded move preference, teacher substitution, or final-actor memory edit.",
+  "transfer_test": "Eight fixed new TRAIN numeric variants, not independent natural transfer. Reuse the proposed-control variant recipes with actor HP 40, opponent HP 58 and all opponents level 30, opening idle 4. Compare frozen and candidate.",
+  "cheapest_falsifier": "Actual mean-return regret or complete-battle outcomes fail to improve despite changing the objective directly.",
+  "time_box": "One additional 1200-epoch fit, seed 2026091804, on the same 180 authenticated contexts; no extra collection, parameter sweep or repeated fit. 45 minutes including bounded verification.",
+  "stop_condition": "At most one candidate execution on the known TRAIN regression plus eight paired variants, each capped at 160 decisions/240000 frames. Retain every result; stop the fitting sequence after this successor regardless of outcome.",
+  "objective": "Minimize expected regret: sum over candidate probabilities times maximum measured mean return minus that candidate's measured mean return. Mean returns are averaged over recorded timings before optimization. Legacy default cross-entropy behavior remains unchanged.",
+  "components": "Warm-start attack from the preceding model; fit switch and proposed-action control with the same expected-return objective. Control targets and input proposals use the concrete fitted child heads.",
+  "frozen_model_sha256": "1925a27a7c73f4d49833f45527849b5ce9dd92e103e737d8e777a5708fa33e54",
+  "retention_gates": {"original44_attack": 0.0554, "retained52_attack": 0.0648, "retained52_composed": 0.1609},
+  "original_regression_identity": "assisted-train-cc2d973c9d0279e9",
+  "promotion_eligible": false,
+  "github_pushes": 0
+}

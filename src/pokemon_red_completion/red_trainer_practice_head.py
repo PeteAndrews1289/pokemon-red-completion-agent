@@ -60,8 +60,11 @@ class TrainerHeadModel:
     bias1: NDArray[np.float64]
     weights2: NDArray[np.float64]
     training_seed: int
+    training_objective: str = "cross_entropy"
 
     def __post_init__(self) -> None:
+        if self.training_objective not in {"cross_entropy", "expected_regret"}:
+            raise TrainerHeadError("head training objective differs")
         if (
             not self.schema_id
             or not self.feature_names
@@ -123,6 +126,11 @@ class TrainerHeadModel:
             "bias1": self.bias1.tolist(),
             "weights2": self.weights2.tolist(),
             "training_seed": self.training_seed,
+            **(
+                {"training_objective": self.training_objective}
+                if self.training_objective != "cross_entropy"
+                else {}
+            ),
         }
 
     @classmethod
@@ -148,6 +156,7 @@ class TrainerHeadModel:
                 bias1=np.asarray(value["bias1"], dtype=np.float64),
                 weights2=np.asarray(value["weights2"], dtype=np.float64),
                 training_seed=value["training_seed"],  # type: ignore[arg-type]
+                training_objective=value.get("training_objective", "cross_entropy"),  # type: ignore[arg-type]
             )
         except (KeyError, TypeError, ValueError) as error:
             raise TrainerHeadError("head checkpoint parameters are invalid") from error
@@ -164,12 +173,18 @@ class TrainerHeadModel:
         epochs: int = 300,
         learning_rate: float = 0.02,
         initial_model: TrainerHeadModel | None = None,
+        training_objective: str = "cross_entropy",
     ) -> TrainerHeadModel:
         cases = tuple(examples)
         if not cases or any(len(case.candidate_vectors[0]) != len(feature_names) for case in cases):
             raise TrainerHeadError("head fit has no compatible examples")
         if not 2 <= hidden_units <= 128 or epochs < 1 or learning_rate <= 0:
             raise TrainerHeadError("head optimizer configuration differs")
+        if training_objective not in {"cross_entropy", "expected_regret"} or (
+            training_objective == "expected_regret"
+            and any(case.mean_returns is None for case in cases)
+        ):
+            raise TrainerHeadError("expected-regret training requires measured returns")
         if initial_model is not None:
             if (
                 initial_model.schema_id != schema_id
@@ -203,6 +218,9 @@ class TrainerHeadModel:
                 else:
                     target = np.asarray(case.target_probabilities, dtype=np.float64)
                 residual = p - target
+                if training_objective == "expected_regret":
+                    assert case.mean_returns is not None
+                    _, residual = expected_regret_loss_gradient(p, case.mean_returns)
                 g2 += h.T @ residual
                 dh = np.outer(residual, w2) * (1.0 - h * h)
                 g1 += x.T @ dh
@@ -211,4 +229,17 @@ class TrainerHeadModel:
             w1 -= rate * np.clip(g1, -10, 10)
             b1 -= rate * np.clip(gb, -10, 10)
             w2 -= rate * np.clip(g2, -10, 10)
-        return cls(schema_id, feature_names, w1, b1, w2, seed)
+        return cls(schema_id, feature_names, w1, b1, w2, seed, training_objective)
+
+
+def expected_regret_loss_gradient(
+    probabilities: NDArray[np.float64],
+    returns: tuple[float, ...],
+) -> tuple[float, NDArray[np.float64]]:
+    """Expected return shortfall and its derivative with respect to logits."""
+    rewards = np.asarray(returns, dtype=np.float64)
+    if rewards.shape != probabilities.shape or not np.all(np.isfinite(rewards)):
+        raise TrainerHeadError("return-loss inventory differs")
+    regret = np.max(rewards) - rewards
+    loss = float(np.dot(probabilities, regret))
+    return loss, probabilities * (regret - loss)
