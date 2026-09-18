@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
 from statistics import fmean
@@ -82,7 +83,14 @@ def measured_pair(directory: Path) -> dict[str, object]:
     }
 
 
-def run(args: argparse.Namespace) -> dict[str, object]:
+def run(
+    args: argparse.Namespace,
+    *,
+    recipe_builder: Callable[
+        [tuple[dict[str, object], ...]], tuple[tuple[int, str, dict[str, object]], ...]
+    ] = terminal_hp_cases,
+    matched_choices: str = "all_legal_opening",
+) -> dict[str, object]:
     if args.output.exists():
         raise ValueError("terminal HP output must be new")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
@@ -105,7 +113,11 @@ def run(args: argparse.Namespace) -> dict[str, object]:
             raise ValueError("terminal HP template differs")
         templates.append(template["practice"])
     sources = original._source_rows(args.batch)
-    recipes = terminal_hp_cases(tuple(templates))
+    if matched_choices not in {"all_legal_opening", "opening_move_one_vs_switch_two"}:
+        raise ValueError("terminal HP opening choice inventory differs")
+    recipes = recipe_builder(tuple(templates))
+    if len(recipes) != 4:
+        raise ValueError("terminal HP pilot needs exactly four cases")
     args.output.mkdir(parents=True, mode=0o700, exist_ok=False)
     rows = []
     for root_index, name, practice in recipes:
@@ -144,7 +156,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
                 "max_decisions": 80,
                 "maximum_frames": 120000,
                 "matched_timing_offsets": list(original.OFFSETS),
-                "matched_choices": "all_legal_opening",
+                "matched_choices": matched_choices,
                 "matched_player_turn_horizon": 4,
                 "output": str(directory / "baseline"),
             })

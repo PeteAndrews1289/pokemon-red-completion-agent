@@ -127,11 +127,16 @@ def _authenticate(plan: object):
         or plan.get("max_decisions") != 80
         or plan.get("maximum_frames") != 120000
         or plan.get("matched_choices")
-        not in {None, "opening_attack_vs_five_switches", "all_legal_opening"}
+        not in {
+            None, "opening_attack_vs_five_switches", "all_legal_opening",
+            "opening_move_one_vs_switch_two",
+        }
         or plan.get("matched_prompt_choices") not in {None, True}
         or plan.get("matched_forced_choices") not in {None, True}
         or not _timed_choice_plan_supported(plan, capture.manifest.observation_schema)
-        or (horizon == 4 and plan.get("matched_choices") != "all_legal_opening")
+        or (horizon == 4 and plan.get("matched_choices") not in {
+            "all_legal_opening", "opening_move_one_vs_switch_two"
+        })
     ):
         raise ValueError("trainer baseline scope differs")
     if (
@@ -324,19 +329,30 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         matched_horizon = _matched_player_turn_horizon(plan)
         first_choices = (
             all_legal_opening_choices()
-            if matched_choices == "all_legal_opening"
+            if matched_choices in {"all_legal_opening", "opening_move_one_vs_switch_two"}
             else (
                 TrainerPracticeFirstChoice(BattleAction.move(1)),
                 *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
             )
         )
+        if matched_choices == "opening_move_one_vs_switch_two":
+            first_choices = tuple(
+                choice for ref in (
+                    "pokemon.core:battle:move:1", "pokemon.core:battle:switch:2"
+                ) for choice in first_choices if choice.semantic_ref == ref
+            )
+            if len(first_choices) != 2:
+                raise ValueError("two-choice opening inventory differs")
         timed = plan.get("matched_timing_offsets") is not None
         offsets = tuple(plan["matched_timing_offsets"]) if timed else (0,)
         branch_directories = (
             tuple(output / f"timing-{offset:02d}" for offset in offsets)
             if timed else (output,)
         )
-        if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}:
+        if matched_choices in {
+            "opening_attack_vs_five_switches", "all_legal_opening",
+            "opening_move_one_vs_switch_two",
+        }:
             for offset, branch_directory in zip(offsets, branch_directories, strict=True):
                 if timed:
                     branch_directory.mkdir(mode=0o700, exist_ok=False)
@@ -362,7 +378,10 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         )
 
         matched = None
-        if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}:
+        if matched_choices in {
+            "opening_attack_vs_five_switches", "all_legal_opening",
+            "opening_move_one_vs_switch_two",
+        }:
             for offset, branch_directory in zip(offsets, branch_directories, strict=True):
                 plan_sha = hashlib.sha256(
                     (branch_directory / "matched-plan.json").read_bytes()

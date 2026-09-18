@@ -1,0 +1,27 @@
+{
+  "schema": "pokemon.red.trainer-terminal-switch-successor-plan.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "previous_exact_recipe": "STOPPED_FAILED_TERMINAL_GATE",
+  "question": "Can a two-member player party against one opponent produce completed healthy-stay and critical-switch choices under a common four-turn horizon?",
+  "roots": [0, 3],
+  "matchups": ["Pikachu versus Machop", "Charmander versus Machop"],
+  "scenarios": 4,
+  "timing_offsets": [0, 2, 4, 6, 8],
+  "opening_choices": ["move slot 1", "switch to party slot 2"],
+  "opponent_hp": 70,
+  "opponent_move": "Tackle",
+  "reserve_moves": ["Surf", "BubbleBeam"],
+  "second_matchup_lead_moves": ["Flamethrower", "Ember"],
+  "player_turn_horizon": 4,
+  "maximum_matched_branches": 20,
+  "terminal_gate": "All matched branches end in battle_won or party_defeated within four player turns. Stop immediately on the first nonterminal scenario.",
+  "reversal_gate": "Both healthy scenarios favor attack over switch by more than 0.10 mean return; both critical scenarios favor switch over attack by more than 0.10. Stop after the first failed pair.",
+  "reserved_semantic_variations_before_fit": [
+    "Same two matchups with opponent level raised from 35 to 37 and otherwise identical cases",
+    "Same two matchups with healthy lead HP reduced by 5 and critical lead HP raised from 8 to 10"
+  ],
+  "promotion_gate": "Separate unseen semantic variations and genuinely independent natural trainer origins after a frozen model fit; this pilot alone cannot promote authority.",
+  "assistance": "Teacher-only initial species, moves, HP and opponent setup on isolated TRAIN copies; actor has no save-edit action.",
+  "stop_condition": "No replay or same-recipe refit after a failed terminal or reversal gate; preserve all executed branches."
+}
