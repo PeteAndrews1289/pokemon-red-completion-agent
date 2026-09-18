@@ -390,6 +390,7 @@ def summarize_trainer_practice_training(
     model: TrainerPracticeThreeHeadModel,
     *,
     catalog: PokemonRedBattleCatalog | None = None,
+    initial_move_model: TrainerHeadModel | None = None,
 ) -> dict[str, dict[str, object]]:
     """Expose semantic diversity, contradictory labels and TRAIN-only regret."""
 
@@ -438,20 +439,37 @@ def summarize_trainer_practice_training(
             "first_candidate_mean_train_regret": round(fmean(first_regret), 9)
             if first_regret
             else None,
-            **_optimizer_diagnostics(_combine_identical_inputs(rows), candidate_model),
+            **_optimizer_diagnostics(
+                _combine_identical_inputs(rows),
+                candidate_model,
+                initial_model=initial_move_model if name == "move" else None,
+            ),
         }
     results["composed_action"] = _summarize_composed_action(records, model, resolver)
     return results
 
 
 def _optimizer_diagnostics(
-    rows: list[TrainerHeadExample], model: TrainerHeadModel
+    rows: list[TrainerHeadExample], model: TrainerHeadModel,
+    *, initial_model: TrainerHeadModel | None = None,
 ) -> dict[str, float]:
     """Compare the declared seeded start with the fitted loss and gradient."""
 
-    rng = np.random.default_rng(model.training_seed)
-    initial_w1 = rng.normal(0, 0.04, size=model.weights1.shape)
-    initial_w2 = rng.normal(0, 0.04, size=model.weights2.shape)
+    if initial_model is not None:
+        if (
+            initial_model.schema_id != model.schema_id
+            or initial_model.feature_names != model.feature_names
+            or initial_model.weights1.shape != model.weights1.shape
+        ):
+            raise TrainerPracticeFitError("optimizer initial head differs")
+        initial_w1 = initial_model.weights1
+        initial_b1 = initial_model.bias1
+        initial_w2 = initial_model.weights2
+    else:
+        rng = np.random.default_rng(model.training_seed)
+        initial_w1 = rng.normal(0, 0.04, size=model.weights1.shape)
+        initial_b1 = np.zeros_like(model.bias1)
+        initial_w2 = rng.normal(0, 0.04, size=model.weights2.shape)
     initial_losses = []
     final_losses = []
     gradient_w1 = np.zeros_like(model.weights1)
@@ -460,7 +478,7 @@ def _optimizer_diagnostics(
     for row in rows:
         x = np.asarray(row.candidate_vectors, dtype=np.float64)
         target = np.asarray(row.target_probabilities, dtype=np.float64)
-        initial_hidden = np.tanh(x @ initial_w1)
+        initial_hidden = np.tanh(x @ initial_w1 + initial_b1)
         initial_scores = initial_hidden @ initial_w2
         initial_shifted = initial_scores - np.max(initial_scores)
         initial_probabilities = np.exp(initial_shifted)

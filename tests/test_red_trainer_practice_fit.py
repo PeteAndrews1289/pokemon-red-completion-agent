@@ -24,6 +24,7 @@ from pokemon_red_completion.red_trainer_practice_fit import (
     _combine_identical_inputs,
     _mean_action_returns,
     _observed_returns,
+    _optimizer_diagnostics,
     _soft_return_target,
     control_action_candidates,
     fit_trainer_practice_three_heads,
@@ -218,6 +219,20 @@ def test_move_continuation_requires_same_train_capture_and_root():
             [unrelated], seed=12, require_corpus_floor=False,
             epochs=100, warm_start_move=old, warm_start_move_epochs=100,
         )
+
+
+def test_warm_start_diagnostics_use_actual_prior_weights():
+    target = _target()
+    old = fit_trainer_practice_three_heads(
+        [target], seed=12, require_corpus_floor=False, epochs=10
+    )
+    examples = {"move": [], "control": [], "switch": []}
+    _append_examples(examples, target, PokemonRedBattleCatalog())
+    row = _combine_identical_inputs(examples["move"])
+    diagnostic = _optimizer_diagnostics(row, old.move, initial_model=old.move)
+    assert diagnostic["initial_cross_entropy"] == diagnostic["final_cross_entropy"]
+    with pytest.raises(TrainerPracticeFitError, match="initial head differs"):
+        _optimizer_diagnostics(row, old.move, initial_model=old.switch)
 
 
 def test_fit_floor_rejects_contextless_or_unbalanced_scenario_supply():

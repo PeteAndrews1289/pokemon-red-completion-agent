@@ -445,7 +445,11 @@ def run(
             )
             for head in ("move", "control", "switch")
         },
-        "training_diagnostics": summarize_trainer_practice_training(scenario_targets, model),
+        "training_diagnostics": summarize_trainer_practice_training(
+            scenario_targets,
+            model,
+            initial_move_model=warm_start.move if warm_start is not None else None,
+        ),
         "model_sha256": hashlib.sha256((destination / "model.json").read_bytes()).hexdigest(),
         "model_updates": 1,
         "development_evaluations": 0,
