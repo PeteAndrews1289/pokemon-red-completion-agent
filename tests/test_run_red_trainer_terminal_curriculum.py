@@ -2,7 +2,12 @@ import json
 from copy import deepcopy
 from types import SimpleNamespace
 
-from run_red_trainer_terminal_curriculum import MOVES, StatDamageTeacher, curriculum_cases
+from run_red_trainer_terminal_curriculum import (
+    MOVES,
+    StatDamageTeacher,
+    curriculum_cases,
+    hard_curriculum_cases,
+)
 from test_red_trainer_practice_fit import _target
 
 from pokemon_red_completion.battle_actions import BattleActionKind
@@ -57,3 +62,39 @@ def test_training_teacher_scores_legal_attacks_and_declines_prompts():
         json.loads(json.dumps(teacher.last_decision_diagnostics))
         == teacher.last_decision_diagnostics
     )
+
+
+def test_hard_recipes_use_five_members_and_distinct_reserved_conditions():
+    templates = [
+        {
+            "actor_species_ref": f"pokemon.red.gb.us.rev0:species:{s:03d}",
+            "opponent_hp": 80,
+            "actor_stats": {"attack": 999},
+            "opponent_stats": {"attack": 999},
+            "root_lineage_id": f"root-{s}",
+        }
+        for s in MOVES
+    ]
+    before = deepcopy(templates)
+    train = hard_curriculum_cases(templates)
+    reserved = hard_curriculum_cases(templates, reserved=True)
+    assert templates == before
+    assert len(train) == 16 and len(reserved) == 8
+    for root, _foe, recipe in train + reserved:
+        assert len(recipe["party_reserves"]) == 4
+        assert len(recipe["opponent_reserves"]) == 4
+        assert recipe["opponent_party_count"] == 5
+        assert "actor_stats" not in recipe and "opponent_stats" not in recipe
+        assert recipe["opponent_hp"] in (53, 55)
+        assert recipe["root_lineage_id"] == templates[root]["root_lineage_id"]
+        assert (
+            len(
+                {recipe["actor_species_ref"], *(m["species_ref"] for m in recipe["party_reserves"])}
+            )
+            == 5
+        )
+    for root, foe, recipe in reserved:
+        training = next(p for r, f, p in train if r == root and f == foe)
+        assert recipe["actor_moves"] == list(reversed(training["actor_moves"]))
+        assert recipe["opponent_level"] != training["opponent_level"]
+        assert recipe["actor_hp"] != training["actor_hp"]
