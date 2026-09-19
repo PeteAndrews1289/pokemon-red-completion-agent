@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Stop unconstrained fits. Test retention-constrained learning on the existing180 contexts before any single prospective successor; independent natural qualification remains required. No new trainer framework, corpus recollection, consumed DEVELOPMENT replay or full Red run.
+- Next decision: Retain the TRAIN-qualified checkpoint; integration is blocked by natural performance. Diagnose attack optimization and coverage on TRAIN only, preserving old gates. No consumed DEVELOPMENT replay or blind refit.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-return-objective-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-return-objective-result-2026-09-17.json)
+**2026-09-19-trainer-retention-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-retention-result-2026-09-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Measured complete-battle gains and diagnosed forgetting improve the path toward a learned player, but no final-player authority or fresh Red completion claim is justified. |
-| Learning output | 128 new contexts and3755 terminal branches supported two initial fits, followed by two180-context reuse fits. Concrete-action control fixed the observed 13-HP premature switch. The final comparison improved6/8 to8/8 wins and13 to9 party faints, but old attack knowledge regressed. |
-| Authority delta | None. Four battle fits in the extended session remain unpromoted. Model137, Red96/124 and fresh acceptance0/5 are unchanged. |
-| Transfer result | No independent natural transfer. All new comparisons used assisted numeric variations from four TRAIN origins; the original hard battle is a known TRAIN regression. |
-| Blocker | The final return-trained candidate won eight fresh assisted TRAIN variants versus six, but lost the known hard battle and failed all three retained gates. Earlier proposed-control training preserved attack competence but failed combined retention. |
-| Decision | Stop this fitting sequence. Preserve all four candidates and outcomes; do not promote any candidate or declare the autonomous player finished. |
-| Next session | Astra High, Fast off: one retention-constrained learning design and ROM-free feasibility check using existing data, not another trainer build or unconstrained fit. |
-| Next falsifier | A retention-constrained objective must improve terminal decisions without violating the unchanged older attack/control gates. Test feasibility on retained TRAIN data before another declared fit; independent natural battles remain required. |
-| Stop condition | The final declared fit, original TRAIN regression and eight fresh paired TRAIN variants completed. No more fit or replay in this sequence, no promotion, full game or GitHub push. |
+| Product alignment | Real retention-preserving learning and an unassisted natural Champion win advance the battle learner, but comparison costs reject final-player readiness. |
+| Learning output | Reused180 authenticated contexts, one fit, no new TRAIN collection. Terminal128 composed regret improves42.3% with all134 older head decisions preserved; all five prospective TRAIN checks pass. |
+| Authority delta | None. One new battle fit is TRAIN-qualified but failed its natural comparison; Model137 and Red acceptance remain unchanged. |
+| Transfer result | New descriptive natural Champion encounter: all arms win, frozen is better. Historical source is disjoint from four TRAIN boots but correlated with previous League evaluation ancestry. |
+| Blocker | All retention gates pass, but the natural Champion challenger needs22 decisions/1party faint/389HP versus frozen16/0/156. Integration is blocked by unfavorable natural performance. |
+| Decision | Keep the retention learner and fitted checkpoint. Reject player promotion; preserve the consumed Champion evaluation without tuning or replay. |
+| Next session | Astra High, Fast off: one TRAIN-only attack-optimization/coverage diagnosis, then prospectively bounded improvement only if justified; no new framework or consumed DEVELOPMENT replay. |
+| Next falsifier | Diagnose constrained attack-head optimization and move/stat coverage on TRAIN only before declaring any successor. Original numeric retention limits remain unchanged. |
+| Stop condition | One declared fit and one three-arm natural comparison completed; unfavorable natural result stops integration. No additional fit or replay in this sequence, no full game or push. |
 
 ### Stop conditions
 

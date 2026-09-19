@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-return-objective-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-trainer-retention-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-trainer-retention-v1
+
+One retention-constrained fit on180 existing contexts passes all old gates and improves terminal128 composed regret42.3%. Natural Champion wins22decisions/1faint/389HP, but frozen wins16/0/156. No new TRAIN data or player promotion.
+
+**Deviation:** The natural performance gate stops integration. Champion is an unused encounter for this trainer but shares historical League ancestry; no independent replication or fresh completion is claimed. Stage and checklist exits unchanged.
+
+**Next:** Astra High, Fast off: TRAIN-only attack optimizer/coverage diagnosis. Preserve the candidate and failed natural comparison; no framework rebuild, blind refit, consumed DEVELOPMENT replay or GitHub push.
 
 ### 2026-09-17-trainer-return-objective-v1
 

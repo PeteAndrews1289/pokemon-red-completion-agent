@@ -194,3 +194,32 @@ def test_champion_capture_is_separate_natural_boundary_not_consumed_lance():
     assert champion["trigger"] == "automatic_dialogue"
     assert len(champion["party"]) == 6
     assert champion["sha256"] != SOURCES["lance"]["sha256"]
+
+
+def test_winning_does_not_override_worse_natural_cost_or_promote():
+    arm = {
+        "battle_won": True,
+        "event_log_complete": True,
+        "teacher_queries": 0,
+        "invalid_actions": 0,
+        "party_faints": 0,
+        "party_hp_lost": 156,
+        "decision_count": 16,
+    }
+    summary = {
+        "model_sha256": "test",
+        "capture_id": "test",
+        "results": {
+            "fixed": arm,
+            "frozen": arm,
+            "challenger": {**arm, "party_faints": 1, "party_hp_lost": 389, "decision_count": 22},
+        },
+    }
+    verdict = comparison.comparison_verdict(summary)
+    assert verdict["checks"]["candidate_won"]
+    assert not verdict["natural_comparison_passed"]
+    assert not verdict["final_player_ready"]
+    summary["results"]["challenger"] = {**arm, "decision_count": 15}
+    verdict = comparison.comparison_verdict(summary)
+    assert verdict["natural_comparison_passed"]
+    assert not verdict["final_player_ready"]

@@ -99,6 +99,40 @@ def _result(output: Path) -> dict[str, object]:
     }
 
 
+def comparison_verdict(summary: dict[str, object]) -> dict[str, object]:
+    """Persist the no-integration decision separately from merely winning."""
+    results = summary["results"]
+    candidate, frozen = results["challenger"], results["frozen"]
+    checks = {
+        "candidate_won": candidate["battle_won"] is True,
+        "all_logs_complete_and_unassisted": all(
+            arm["event_log_complete"] is True
+            and arm["teacher_queries"] == 0
+            and arm["invalid_actions"] == 0
+            for arm in results.values()
+        ),
+        "no_more_party_faints_than_frozen": candidate["party_faints"] <= frozen["party_faints"],
+        "no_more_hp_loss_than_frozen": candidate["party_hp_lost"] <= frozen["party_hp_lost"],
+        "strict_efficiency_improvement": (
+            candidate["decision_count"] < frozen["decision_count"]
+            or candidate["party_hp_lost"] < frozen["party_hp_lost"]
+        ),
+    }
+    return {
+        "schema": "pokemon.red.trainer-natural-verdict.v1",
+        "model_sha256": summary["model_sha256"],
+        "capture_id": summary["capture_id"],
+        "checks": checks,
+        "natural_comparison_passed": all(checks.values()),
+        "independent_replicated_transfer": False,
+        "final_player_ready": False,
+        "authority_promotions": 0,
+        "reason": "Unfavorable natural comparison"
+        if not all(checks.values())
+        else "Single descriptive comparison; independent qualification still required",
+    }
+
+
 def run(args: argparse.Namespace) -> dict[str, object]:
     if args.output.exists():
         raise ValueError("natural trainer comparison output must be new")
@@ -198,6 +232,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "full_game_runs": 0,
     }
     _write(args.output / "summary.json", summary)
+    _write(args.output / "candidate-verdict.json", comparison_verdict(summary))
     return summary
 
 

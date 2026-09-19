@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Four battle fits in the extended session remain unpromoted. Model137, Red96/124 and fresh acceptance0/5 are unchanged.",
-        "blocker": "The final return-trained candidate won eight fresh assisted TRAIN variants versus six, but lost the known hard battle and failed all three retained gates. Earlier proposed-control training preserved attack competence but failed combined retention.",
-        "decision": "Stop this fitting sequence. Preserve all four candidates and outcomes; do not promote any candidate or declare the autonomous player finished.",
+        "authority_delta": "None. One new battle fit is TRAIN-qualified but failed its natural comparison; Model137 and Red acceptance remain unchanged.",
+        "blocker": "All retention gates pass, but the natural Champion challenger needs22 decisions/1party faint/389HP versus frozen16/0/156. Integration is blocked by unfavorable natural performance.",
+        "decision": "Keep the retention learner and fitted checkpoint. Reject player promotion; preserve the consumed Champion evaluation without tuning or replay.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-return-objective-result-2026-09-17.json",
-          "sha256": "f5c30178c104220a8a385a2c8558e1468043df662e756a5ae2dabac577dcd049"
+          "path": "docs/evidence/red-trainer-retention-result-2026-09-19.json",
+          "sha256": "ab8627121bc3cefbe72ff687f9721068f37d88ce55e5f7e2251f5440883c993c"
         },
-        "learning_output": "128 new contexts and3755 terminal branches supported two initial fits, followed by two180-context reuse fits. Concrete-action control fixed the observed 13-HP premature switch. The final comparison improved6/8 to8/8 wins and13 to9 party faints, but old attack knowledge regressed.",
-        "next_falsifier": "A retention-constrained objective must improve terminal decisions without violating the unchanged older attack/control gates. Test feasibility on retained TRAIN data before another declared fit; independent natural battles remain required.",
-        "next_session_goal": "Astra High, Fast off: one retention-constrained learning design and ROM-free feasibility check using existing data, not another trainer build or unconstrained fit.",
-        "product_alignment": "Measured complete-battle gains and diagnosed forgetting improve the path toward a learned player, but no final-player authority or fresh Red completion claim is justified.",
-        "session_id": "2026-09-17-trainer-return-objective-v1",
+        "learning_output": "Reused180 authenticated contexts, one fit, no new TRAIN collection. Terminal128 composed regret improves42.3% with all134 older head decisions preserved; all five prospective TRAIN checks pass.",
+        "next_falsifier": "Diagnose constrained attack-head optimization and move/stat coverage on TRAIN only before declaring any successor. Original numeric retention limits remain unchanged.",
+        "next_session_goal": "Astra High, Fast off: one TRAIN-only attack-optimization/coverage diagnosis, then prospectively bounded improvement only if justified; no new framework or consumed DEVELOPMENT replay.",
+        "product_alignment": "Real retention-preserving learning and an unassisted natural Champion win advance the battle learner, but comparison costs reject final-player readiness.",
+        "session_id": "2026-09-19-trainer-retention-v1",
         "status": "closed",
-        "stop_condition": "The final declared fit, original TRAIN regression and eight fresh paired TRAIN variants completed. No more fit or replay in this sequence, no promotion, full game or GitHub push.",
-        "transfer_result": "No independent natural transfer. All new comparisons used assisted numeric variations from four TRAIN origins; the original hard battle is a known TRAIN regression."
+        "stop_condition": "One declared fit and one three-arm natural comparison completed; unfavorable natural result stops integration. No additional fit or replay in this sequence, no full game or push.",
+        "transfer_result": "New descriptive natural Champion encounter: all arms win, frozen is better. Historical source is disjoint from four TRAIN boots but correlated with previous League evaluation ancestry."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Stop unconstrained fits. Test retention-constrained learning on the existing180 contexts before any single prospective successor; independent natural qualification remains required. No new trainer framework, corpus recollection, consumed DEVELOPMENT replay or full Red run.",
+      "next_decision": "Retain the TRAIN-qualified checkpoint; integration is blocked by natural performance. Diagnose attack optimization and coverage on TRAIN only, preserving old gates. No consumed DEVELOPMENT replay or blind refit.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
