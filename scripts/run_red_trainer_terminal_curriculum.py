@@ -351,13 +351,31 @@ def compatible_resume_declaration(previous, declaration):
     )
 
 
+def late_capture_reasons(event, seen, *, opponent_count=3):
+    """Prospective state coverage, never selected by eventual return or outcome."""
+    if event.get("event") != "decision_started" or event.get("decision_index", 0) < 2:
+        return set()
+    state = event["state_before"]
+    reasons = set()
+    if event["mode"] in {"forced_switch", "switch_prompt"}:
+        reasons.add(event["mode"])
+    if state.get("opponent_party_position") == opponent_count - 1:
+        reasons.add("last_opponent")
+    hp = state.get("party_hp")
+    if hp and sum(value > 0 for value in hp) == 1:
+        reasons.add("last_ally")
+    return reasons - seen
+
+
 def run(args):
     resume = getattr(args, "resume", False)
-    broad = getattr(args, "profile", "terminal") == "broad"
+    late = getattr(args, "profile", "terminal") == "late"
+    broad = getattr(args, "profile", "terminal") in {"broad", "late"}
     collect_only = getattr(args, "collect_only", False)
     if broad and not collect_only:
         raise ValueError("broad supply must be collected before a separately declared fit")
-    hard = getattr(args, "profile", "terminal") in {"learner-five", "broad"}
+    hard = getattr(args, "profile", "terminal") in {"learner-five", "broad", "late"}
+    supply_seed = 2026091904 if late else 2026091902
     recipes = hard_curriculum_cases if hard else curriculum_cases
     if broad:
         from run_red_trainer_broad_probe import broad_recipes
@@ -369,7 +387,7 @@ def run(args):
                 return []
             return [
                 (index % 4, index, recipe)
-                for index, recipe in enumerate(broad_recipes(cartridge, seed=2026091902, count=16))
+                for index, recipe in enumerate(broad_recipes(cartridge, seed=supply_seed, count=16))
             ]
 
     horizon = 40 if hard else HORIZON
@@ -377,7 +395,7 @@ def run(args):
     maximum_frames = 240000 if hard else 120000
     capture_decisions = (2, 4, 6, 8) if hard else (2, 3)
     if broad:
-        capture_decisions = (2, 4)
+        capture_decisions = (2, 4, 8, 12) if late else (2, 4)
     fit_seed = 2026091802 if hard else 2026091801
     if (
         args.output.exists() != resume
@@ -396,6 +414,17 @@ def run(args):
         from run_red_trainer_retention import admitted_cache
 
         _, cache_targets = admitted_cache(retained_cache)
+        if late:
+            from run_red_trainer_broad_fit import admitted_supply
+
+            extra = getattr(args, "retained_broad_supply", None)
+            if extra is None:
+                raise ValueError("late supply requires authenticated earlier broad TRAIN")
+            cache_targets += admitted_supply(
+                extra,
+                {t["root_lineage_id"] for t in cache_targets},
+                {t["capture_id"] for t in cache_targets},
+            )
     old_targets = cache_targets[:52] if cache_targets is not None else retained_targets(prior)
     if len(old_targets) != 52:
         raise ValueError("terminal curriculum needs the retained 52-context anchor")
@@ -451,10 +480,21 @@ def run(args):
     if inherited_ids:
         declaration["retained_terminal_anchor_ids"] = sorted(inherited_ids)
     if broad or collect_only:
-        declaration["profile"] = "broad" if broad else getattr(args, "profile", "terminal")
+        declaration["profile"] = getattr(args, "profile", "terminal")
         declaration["collect_only"] = collect_only
         declaration["epochs"] = 0 if collect_only else declaration["epochs"]
-        declaration["supply_seed"] = 2026091902 if broad else None
+        declaration["supply_seed"] = supply_seed if broad else None
+    if late:
+        declaration["capture_decisions"] = []
+        declaration["capture_semantics"] = [
+            "first_forced_switch",
+            "first_switch_prompt",
+            "first_last_opponent",
+            "first_last_ally",
+        ]
+        declaration["retained_broad_supply"] = original._binding(
+            args.retained_broad_supply / "collection.json"
+        )
     if retained_cache is not None:
         declaration["retained_cache_manifest"] = original._binding(retained_cache / "manifest.json")
     if resume:
@@ -544,6 +584,7 @@ def run(args):
                 state_path, state_path.with_suffix(".state.json")
             )
             paths = [state_path]
+            seen_late = set()
             trace_path = directory / "teacher-outcome.json"
             log = (
                 None
@@ -563,15 +604,26 @@ def run(args):
             )
 
             def save_intermediate(
-                event, log=log, paths=paths, directory=directory, capture=capture
+                event,
+                log=log,
+                paths=paths,
+                directory=directory,
+                capture=capture,
+                seen_late=seen_late,
             ):
                 log.emit(event)
+                reasons = late_capture_reasons(event, seen_late) if late else set()
                 if (
                     event.get("event") != "decision_started"
-                    or event.get("decision_index") not in capture_decisions
+                    or (
+                        not reasons
+                        if late
+                        else event.get("decision_index") not in capture_decisions
+                    )
                     or len(paths) > len(capture_decisions)
                 ):
                     return
+                seen_late.update(reasons)
                 payload = active[-1].save_state_bytes()
                 digest = hashlib.sha256(payload).hexdigest()
                 path = directory / f"intermediate-{len(paths):02d}.state"
@@ -853,10 +905,11 @@ def main():
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
-        "--profile", choices=("terminal", "learner-five", "broad"), default="terminal"
+        "--profile", choices=("terminal", "learner-five", "broad", "late"), default="terminal"
     )
     parser.add_argument("--collect-only", action="store_true")
     parser.add_argument("--retained-cache", type=Path)
+    parser.add_argument("--retained-broad-supply", type=Path)
     result = run(parser.parse_args())
     print(
         json.dumps(
