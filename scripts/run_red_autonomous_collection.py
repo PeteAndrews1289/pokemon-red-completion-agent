@@ -45,6 +45,10 @@ from pokemon_red_completion.red_collection import (
 )
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
+from pokemon_red_completion.red_learned_trainer import (
+    FrozenTrainerBattler,
+    load_frozen_trainer_model,
+)
 from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_player_model import (
     RedPlayerModelRecord,
@@ -178,6 +182,14 @@ def main() -> None:
     args = parser.parse_args()
     plan_bytes = args.plan.read_bytes()
     plan = json.loads(plan_bytes)
+    trainer_model = None
+    if "trainer_battler" in plan:
+        binding = plan["trainer_battler"]
+        trainer_model = load_frozen_trainer_model(
+            Path(binding["path"]).read_bytes(), binding["sha256"],
+        )
+        if not isinstance(binding.get("root_lineage_id"), str):
+            raise ValueError("learned trainer needs the actual development root lineage")
     assisted_money = plan.get("assisted_training_money")
     if assisted_money is not None and plan.get("mode") == "continue_selected_goal":
         raise ValueError("assisted money cannot rewrite a previously selected goal")
@@ -253,6 +265,12 @@ def main() -> None:
         "capture_destination_authority": "model_over_up_to_eight_observed_routes",
         "evolution_target_authority": "model_for_contrasts_uniform_for_equivalent_targets",
         "battle_move_authority": "existing_heuristic_controller",
+        "ordinary_trainer_battle_authority": (
+            "frozen-J" if trainer_model is not None else "existing_heuristic_controller"
+        ),
+        "trainer_battle_model_sha256": (
+            plan["trainer_battler"]["sha256"] if trainer_model is not None else None
+        ),
     }
     with PyBoyAdapter(Path(plan["rom"]["path"]), watch=False, speed=None) as emulator:
         original_reserves = None
@@ -308,6 +326,18 @@ def main() -> None:
             emulator=controller,
             reader=reader,
         )
+        if trainer_model is not None:
+            from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
+
+            battler = FrozenTrainerBattler(
+                session=controller, model=trainer_model, output=output / "trainer-battles",
+                source_commit=provenance["source_commit"],
+                root_lineage_id=plan["trainer_battler"]["root_lineage_id"],
+                source_state_sha256=capture.state_sha256,
+                public_species_base_stats=RedPracticeCartridge(payloads["rom"]).public_base_stats,
+            )
+            runtime.trainer_battle_runner = battler.run
+            runtime.trainer_battle_model_sha256 = plan["trainer_battler"]["sha256"]
         initial = runtime.adapter.observe().collection_observation
         registration = observation_from_collection(
             initial,

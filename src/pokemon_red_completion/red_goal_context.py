@@ -47,6 +47,7 @@ from pokemon_red_completion.observation import (
     ItemId,
     MapId,
     PokemonRedStateReader,
+    RawGameState,
 )
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAreaExecutionPolicy
@@ -244,6 +245,8 @@ class RedGoalContextRuntime:
     level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
     trainer_story_world: StrategicScenarioRouteWorld | None = None
     registration_policy: RedRegistrationPolicy | None = None
+    trainer_battle_runner: Callable[..., RawGameState] | None = None
+    trainer_battle_model_sha256: str | None = None
 
     def bound_configuration_sha256(self, configuration_sha256: str) -> str:
         if self.registration_policy is None:

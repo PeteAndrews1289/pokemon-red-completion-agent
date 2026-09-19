@@ -609,6 +609,7 @@ def bind_local_trainer_funding(
             validate_target=require_target,
             move_slot_policy=guard._safe_trainer_move,
             timing=DEFAULT_BATTLE_RUNTIME_TIMING,
+            battle_runner_override=runtime.trainer_battle_runner,
         )
         completed_receipt = receipt
         completed_report = GoalExecutionReport(
@@ -627,6 +628,11 @@ def bind_local_trainer_funding(
                     "pay_day_money": receipt.pay_day_money,
                 },
                 "finite_income": True,
+                "battle_authority": (
+                    "frozen_learned_trainer" if runtime.trainer_battle_runner is not None
+                    else "existing_heuristic_controller"
+                ),
+                "battle_model_sha256": runtime.trainer_battle_model_sha256,
                 "balls_purchased": 0,
                 **(
                     {"funding_transport": {"verified_flights": 1}}
@@ -692,6 +698,10 @@ def bind_local_trainer_funding(
                 "money": before_money,
                 "quote": asdict(target.quote),
                 "origin": original_at,
+                **(
+                    {"battle_model_sha256": runtime.trainer_battle_model_sha256}
+                    if runtime.trainer_battle_model_sha256 is not None else {}
+                ),
                 **(
                     {"fly_town": selected_flight.town, "fly_landing": selected_flight.landing}
                     if selected_flight is not None

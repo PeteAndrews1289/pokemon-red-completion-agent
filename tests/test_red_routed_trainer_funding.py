@@ -97,6 +97,8 @@ def fixture(monkeypatch):
         affordable_ball_purchase=True,
     )
     runtime = SimpleNamespace(
+        trainer_battle_runner=None,
+        trainer_battle_model_sha256=None,
         reader=reader,
         emulator=emulator,
         adapter=SimpleNamespace(observe=lambda: state),

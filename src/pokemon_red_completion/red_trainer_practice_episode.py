@@ -21,6 +21,7 @@ from pokemon_red_completion.battle_recovery import (
 )
 from pokemon_red_completion.battle_runtime import (
     DEFAULT_BATTLE_RUNTIME_TIMING,
+    BattleActionExecutor,
     execute_bounded_battle_move_turn,
 )
 from pokemon_red_completion.battle_scenario_capture import (
@@ -119,6 +120,8 @@ def run_live_red_trainer_practice_episode(
     max_decisions: int = 80,
     event_sink: Callable[[Mapping[str, object]], None] | None = None,
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
+    action_executor: BattleActionExecutor | None = None,
+    decision_guard: Callable[[RawGameState], None] | None = None,
 ) -> RedTrainerPracticeEpisode:
     """Use the existing actor in-place; caller retains the game even on failure.
 
@@ -138,6 +141,8 @@ def run_live_red_trainer_practice_episode(
         max_decisions=max_decisions,
         event_sink=event_sink,
         public_species_base_stats=public_species_base_stats,
+        action_executor=action_executor,
+        decision_guard=decision_guard,
     )
 
 
@@ -225,6 +230,8 @@ def run_red_trainer_practice_episode(
     event_sink: Callable[[Mapping[str, object]], None] | None = None,
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
     opening_idle_frames: int = 0,
+    action_executor: BattleActionExecutor | None = None,
+    decision_guard: Callable[[RawGameState], None] | None = None,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
 
@@ -315,7 +322,7 @@ def run_red_trainer_practice_episode(
                     "observation_sha256": initial_sha256,
                 },
             )
-        actions = FrameSafeExecutor(session, controller_timing)
+        actions = action_executor or FrameSafeExecutor(session, controller_timing)
         _emit(
             event_sink,
             {
@@ -354,6 +361,8 @@ def run_red_trainer_practice_episode(
                 or not 0 <= raw.active_party_index < len(raw.party_hp)
             ):
                 raise RedTrainerPracticeEpisodeError("trainer player party is unavailable")
+            if decision_guard is not None:
+                decision_guard(raw)
             observation = encoder.snapshot_from_raw(raw).to_dict()
             observation_sha256 = canonical_sha256(observation)
             options = tuple(
