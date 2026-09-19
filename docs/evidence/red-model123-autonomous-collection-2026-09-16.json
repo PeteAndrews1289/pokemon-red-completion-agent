@@ -1,0 +1,162 @@
+{
+  "schema": "pokemon.red.autonomous-collection-evidence.v1",
+  "session": "2026-09-16-model123-autonomous-collection",
+  "run_id": "model123-autonomous-collection-20260916",
+  "rigor": "correlated-development",
+  "source_commit": "d494f97e58a6bf1a3eaeade78f524e7b7b9141a8",
+  "source_bundle_sha256": "5090e89376e4a93325dcef630fb6b9803c7bda56119010480672dfcb85cd9399",
+  "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa",
+  "model_examples": 123,
+  "model_successes": 84,
+  "raw_result_sha256": "caaab5fbfab0a728bb6aaba88f28200e7adfe414b435cd93595af7e3064bea02",
+  "run_plan_sha256": "ecefd926ed2608eb2826602ef89f4bf1cd62571445db17ffd1cbe9522b13af5e",
+  "parent_state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051",
+  "terminal_state_sha256": "74fe9dc927695b1decf7810db7e176812f82d417ac5593e81da70af4948bc1f3",
+  "limits": {
+    "decisions": 3,
+    "actions": 30000,
+    "frames": 3000000,
+    "seconds_for_admission": 1800
+  },
+  "outcome": {
+    "stop_reason": "menu_unavailable",
+    "model_choices": 2,
+    "executed_goals": 2,
+    "verified_goals": 2,
+    "teacher_selected_executions": 0,
+    "teacher_labels": 0,
+    "retries": 0,
+    "gameplay_resets": 0,
+    "controller_actions": 755,
+    "emulator_frames": 64440,
+    "model_fits": 0,
+    "new_admitted_training_rows": 0,
+    "formal_authority_promotions": 0,
+    "full_run_gates_changed": 0
+  },
+  "choices": [
+    {
+      "ordinal": 0,
+      "kind": "evolve_species",
+      "selection_mode": "model_exploration",
+      "available_choices": 6,
+      "menu_sha256": "24b83cef9b0fb00d36ef967e391ff37c022b9e3e45b07f2e97559f5fe2e4914d",
+      "selected_index": 3,
+      "selection_probability": 0.4599660687689147,
+      "verification": "succeeded",
+      "safe_terminal": true,
+      "actions": 593,
+      "frames": 55044,
+      "cash_before": 6528,
+      "cash_after": 4428,
+      "registrations_before": 89,
+      "registrations_after": 90,
+      "registered_gain": [
+        "pokemon:national:045"
+      ],
+      "before_state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051",
+      "terminal_state_sha256": "6cbbc379e619335a15c22a62689999ad2323c16020e0e1aae926624a711c1ff8"
+    },
+    {
+      "ordinal": 1,
+      "kind": "resupply",
+      "selection_mode": "model_exploration",
+      "available_choices": 2,
+      "menu_sha256": "24b414968e17399e0c3c6ba39f717fff322117ab9fc4606697da1c95de131b51",
+      "selected_index": 0,
+      "selection_probability": 0.4362322649858991,
+      "verification": "succeeded",
+      "safe_terminal": true,
+      "actions": 162,
+      "frames": 9396,
+      "cash_before": 4428,
+      "cash_after": 228,
+      "registrations_before": 90,
+      "registrations_after": 90,
+      "registered_gain": [],
+      "before_state_sha256": "6cbbc379e619335a15c22a62689999ad2323c16020e0e1aae926624a711c1ff8",
+      "terminal_state_sha256": "74fe9dc927695b1decf7810db7e176812f82d417ac5593e81da70af4948bc1f3"
+    }
+  ],
+  "collection": {
+    "registered_before": 89,
+    "registered_after": 90,
+    "declared_red_route_target": 124,
+    "living_species_before": 67,
+    "living_species_after": 67,
+    "specimens": 71,
+    "cash_before": 6528,
+    "cash_after": 228,
+    "great_balls_before": 4,
+    "great_balls_after": 11,
+    "active_box_index": 3,
+    "active_box_count": 19,
+    "box_counts": [
+      19,
+      6,
+      19,
+      19,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "party_count": 6
+  },
+  "authority": {
+    "goals": "model",
+    "capture_destination": "model-over-enumerated-routes; no capture selected in this trial",
+    "evolution_target": "deterministic catalog",
+    "battle_moves": "existing heuristic controller",
+    "execution": "existing mechanical skills",
+    "safety": "stop without executing a teacher-selected fallback"
+  },
+  "preflight": {
+    "status": "action-free",
+    "actions": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "available_options": 6,
+    "state_bytes_unchanged": true
+  },
+  "terminal_inspection": {
+    "actions": 0,
+    "frames": 0,
+    "state_bytes_unchanged": true
+  },
+  "third_boundary": {
+    "model_query": false,
+    "execution": false,
+    "error_type": "RedLiveOptionMenuError",
+    "error": "mixed live menu needs distinct executable candidates",
+    "terminal_equals_second_outcome": true
+  },
+  "limitations": [
+    "No independent evaluation or fresh start-to-finish result.",
+    "Two measured outcomes are retained but not fitted; Model123 is unchanged.",
+    "Storage relief and earning are not enabled in this autonomous menu builder.",
+    "The resupply success verifies seven Great Balls purchased, not long-horizon decision quality.",
+    "Registration gain is not living-Dex gain; Vileplume replaced Gloom."
+  ],
+  "next": "Admit both exact observed outcomes with their costs, expose verified storage relief and legitimate earning as model options, then continue from the earned 90-registration terminal without a teacher-selected recovery.",
+  "validation": {
+    "targeted_tests_passed": 107,
+    "new_autonomous_tests_passed": 9,
+    "mypy": "passed",
+    "ruff": "passed",
+    "registry": "current",
+    "suite_scope": "targeted, not full suite"
+  },
+  "reviewers": {
+    "flash": "not used",
+    "claude": "not used",
+    "quota": "not refreshed"
+  },
+  "publication": {
+    "github_push": false
+  }
+}

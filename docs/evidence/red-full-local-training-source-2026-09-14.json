@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon.red.full-local-training-source.evidence.v1",
+  "session_id": "2026-09-14-full-local-training-source",
+  "classification": "engineering_not_learning",
+  "status": "source_selected_configuration_incomplete",
+  "source": {
+    "base_commit": "063ad9319807672822f1bfef4539545a7e154e86",
+    "selection_source_bundle_sha256": "c3f5edbf690aca228ac81ea15baf75f0c02f0b1f0614b6a8fd333f78d8aa11aa",
+    "working_tree_source": true,
+    "preceding_final_ci_run": 34876713998,
+    "preceding_final_ci_result": "passed"
+  },
+  "supply": {
+    "catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "claim_registry_state_sha256": "af05b9fa2375fc4ee2cd88423dd77eadaf8df49053a68e17b70a6acff5d57570",
+    "train_entries": 54,
+    "claimed_entries": 42,
+    "unclaimed_entries": 12,
+    "previous_diagnostic_claimed": true,
+    "selection_count": 1,
+    "selection_rule": "first-unclaimed-exclusive-train-slot-lexicographic",
+    "selection_record_sha256": "628732d3752e00900c3bdf99a8b247a28e237813bb68665749910023c9c3e1cb",
+    "readiness_record_sha256": "3a8c0c187e8adbb5bc54165b83a1459b406857a66ce6b10aa24af0742f9b235e",
+    "selection_is_execution_reservation": false,
+    "upstream_independence_established": false
+  },
+  "readiness": {
+    "selected_profile_kinds": ["advance_story", "recover_control", "restore_team"],
+    "wild_capture_declared": false,
+    "native_level_evolution_declared": false,
+    "registered_collector_requires_continuation": true,
+    "source_gameplay_feasibility_tested": false,
+    "interpretation": "configuration_and_direct_origin_gap_not_proof_of_impossible_gameplay"
+  },
+  "effects": {
+    "saved_payloads_opened": 0,
+    "roms_opened": 0,
+    "models_opened": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "root_claims": 0,
+    "registration_sessions": 0,
+    "new_training_examples": 0,
+    "fits": 0,
+    "source_substitutions": 0
+  },
+  "verification": {
+    "selector_catalog_claim_tests_passed": 34,
+    "focused_regression_tests_passed": 163,
+    "documentation_tests_passed": 164,
+    "ruff": "passed",
+    "mypy": "passed_498_source_files",
+    "full_suite_run_this_session": false
+  },
+  "reviewers": {
+    "claude": "opus-4-8_high_completed_read_only_no_concrete_findings",
+    "flash": "gemini-3.8-flash-high_completed_tool_free_test_proposal",
+    "accepted": "partition_aliases_deterministic_order_stale_claim_tests",
+    "rejected": "historical_menu_metadata_as_current_executable_availability",
+    "subscription_usage_and_resets": "unavailable_from_headless_interfaces"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86,
+    "authority_delta": "none"
+  },
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

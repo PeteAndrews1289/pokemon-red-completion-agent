@@ -150,6 +150,31 @@ GENERATION_ONE_LEVEL_EVOLUTIONS = frozenset(
     }
 )
 
+# Every item-triggered evolution in the supported Generation I cartridges,
+# expressed as (precursor, evolved species). These transformations consume a
+# retained precursor just like level evolutions and therefore belong in the
+# registered physical-ledger transition contract.
+GENERATION_ONE_ITEM_EVOLUTIONS = frozenset(
+    {
+        (25, 26),
+        (30, 31),
+        (33, 34),
+        (35, 36),
+        (37, 38),
+        (39, 40),
+        (44, 45),
+        (58, 59),
+        (61, 62),
+        (70, 71),
+        (90, 91),
+        (102, 103),
+        (120, 121),
+        (133, 134),
+        (133, 135),
+        (133, 136),
+    }
+)
+
 GENERATION_ONE_EVENT_ONLY = frozenset({151})
 
 if len(UNAVAILABLE_IN_RED) != 11 or len(UNAVAILABLE_IN_BLUE) != 11:
@@ -159,6 +184,7 @@ if UNAVAILABLE_IN_RED & UNAVAILABLE_IN_BLUE:
 
 __all__ = [
     "GENERATION_ONE_EVENT_ONLY",
+    "GENERATION_ONE_ITEM_EVOLUTIONS",
     "GENERATION_ONE_LEVEL_EVOLUTIONS",
     "GENERATION_ONE_SPECIES_COUNT",
     "GENERATION_ONE_TRADE_EVOLUTIONS",

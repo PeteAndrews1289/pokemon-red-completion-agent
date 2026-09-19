@@ -411,21 +411,23 @@ def test_status_runtime_rejects_target_change_even_when_transformed(
         type_ids=(24, 24),
     )
 
-    with pytest.raises(RedCaptureStatusError, match="target, party or bag"):
+    with pytest.raises(RedCaptureStatusError) as stopped:
         prepare()
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.ORIGINAL_SPECIES.value
 
 
 @pytest.mark.parametrize(
-    "change",
+    ("change", "reason"),
     [
-        {"enemy_hp": 49},
-        {"party_species_ids": (48,)},
-        {"bag_items": ((4, 19),)},
+        ({"enemy_hp": 49}, runtime.CaptureStatusDrift.TARGET_HP),
+        ({"party_species_ids": (48,)}, runtime.CaptureStatusDrift.PARTY_SPECIES),
+        ({"bag_items": ((4, 19),)}, runtime.CaptureStatusDrift.BAG_ITEMS),
     ],
 )
 def test_status_runtime_retains_hp_party_and_bag_guards_with_transformed_opponent(
     monkeypatch: pytest.MonkeyPatch,
     change,
+    reason,
 ) -> None:
     """HP change, party change, or bag change during transform must be rejected."""
     world, prepare = setup_transform_runtime(monkeypatch)
@@ -445,8 +447,9 @@ def test_status_runtime_retains_hp_party_and_bag_guards_with_transformed_opponen
         return result
 
     monkeypatch.setattr(runtime, "execute_bounded_battle_move_turn", corrupt_drift)
-    with pytest.raises(RedCaptureStatusError, match="target, party or bag"):
+    with pytest.raises(RedCaptureStatusError) as stopped:
         prepare()
+    assert stopped.value.reason_code == reason.value
 
 
 def test_status_runtime_rechecks_live_types_after_switch_avoiding_wrong_status_move(

@@ -79,30 +79,40 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 
 ## Default development loop
 
+### User-controlled publication — September 15, 2026
+
+Pete decides when to push to GitHub; publication requires his explicit instruction, not merely
+a completed session. Local implementation, testing and recoverable checkpoints may continue.
+A possible future paper is secondary to completing the player. Preserve original experiment
+configurations, model/code identities, outcomes, failures and intervention records as the work
+happens; do not reconstruct missing evidence later or turn paper preparation into a development gate.
+Keep current handoffs concise, replacing stale summaries and linking to retained evidence rather
+than copying the project's history into every handoff.
+
 ### Fixed visual roadmap and session closeout
 
 Use the [development infographic](docs/development-roadmap.md) and its
-[stable baseline](configs/development-roadmap-baseline-v2.json) to locate each substantial task
+[stable baseline](configs/development-roadmap-baseline-v4.json) to locate each substantial task
 within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
-Red registration and Blue/shared-ledger integration, a compatible Red modification, Crystal, then later titles.
+full Red registration and a fresh-start model-directed Red completion run, a compatible Red
+modification, Crystal, then at least Emerald. Version/trade support serves Red's explicit gate.
 This baseline is subordinate to the mission and this contract; it does not authorize execution.
 
-After **every completed work session**, and during a longer session after a substantial verified
-capability, fit, gameplay result or blocker changes our position:
+After an ordinary completed work session, replace the concise handoff and retain one factual
+evidence record. Refresh the active state when the blocker or next decision changes. Update the
+[roadmap status](configs/development-roadmap-state.json), infographic, review log and
+YouTube/project narrative only after a material learner milestone, a stage/strategy/requirements
+change, or Pete's explicit request. This keeps the eventual research record intact without making
+presentation maintenance a gate on the player.
 
-1. Update the active state and the [roadmap status](configs/development-roadmap-state.json).
-   Preserve earlier reviews; record what changed, whether it deviated from the plan, and why.
-2. Regenerate the infographic and its accessible Markdown with
-   `python scripts/development_roadmap.py --write`. Inspect the visual after layout/content changes.
-3. Refresh the handoff, next steps and YouTube/project narrative with the same factual result.
-   Update this North Star only when requirements, operating rules or the agreed sequence change;
-   do not rewrite its goals merely to make a session look successful.
-   Refresh concise summaries in place; do not prepend accumulating “Current” blocks.
-   The public README explains the project to a new reader, not to another agent.
-   Detailed session reports and superseded directions belong in dated history. Keep
-   explicit AI-assisted authorship, working/unfinished distinctions and links to evidence.
-4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
-   mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
+When those milestone surfaces do change, preserve earlier reviews, regenerate the infographic with
+`python scripts/development_roadmap.py --write`, inspect visual changes, and run the existing
+documentation check. Refresh summaries in place; do not prepend accumulating “Current” blocks.
+The public README explains the project to a new reader, not to another agent. Detailed reports and
+superseded directions belong in dated history. Update this North Star only when requirements,
+operating rules or the agreed sequence change; never rewrite its goals merely to make a session
+look successful. No extra CI workflow, mandatory outside audit, timed wakeup or minute-by-minute
+documentation loop is required.
 
 At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
 or recommendation. Do not manufacture feedback or confuse it with measured progress.
@@ -137,6 +147,21 @@ Use authenticated development checkpoints and short randomized scenarios:
 Do not replay Pallet Town to test a Saffron navigation change or a Cinnabar training policy.
 
 ## Full-run gate
+
+Pete's September 15 acceptance requirement is a fresh start-to-finish model-directed Red run
+with story completion and the **declared 124-species legitimate native Red route before any ROM
+hack**. Checkpoint story demonstrations do not meet that requirement. Version-, cable-trade- and
+event-dependent entries remain explicit deferred gaps rather than fabricated local flags. Mew is
+deferred until a later legitimate source. A simultaneous Red/Blue link experiment is desirable
+after model completeness, but inability to link the available emulators does not block the hack;
+the shared registry may earn those species in a later title. This changes the dependency gate,
+not the readiness conditions below, and authorizes neither cheating nor another teacher factory.
+
+Pete's September 16 clarification allows a teacher or training harness to intervene in an
+isolated development copy, including overriding money to exercise Safari mechanics. The final
+actor, official run and native registration gate remain unassisted. Retain the original state,
+mark assisted provenance, and exclude synthetic liquidity from ordinary economy-goal fits and
+legitimate funding claims. This is training scaffolding, not a second route to Red acceptance.
 
 A new clean-power full-game run is prohibited unless all of these are recorded first:
 

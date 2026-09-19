@@ -1,0 +1,220 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-13-model116-pay-day-accounting",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "diagnosis": {
+    "status": "cartridge_source_explained_and_rom_free_qualified",
+    "prior_failure_retained": true,
+    "ordinary_trainer_income": 2030,
+    "opponent_pay_day_income": 58,
+    "observed_total_income": 2088,
+    "cause": "The level29 opponent Meowth used Pay Day. Red adds twice the user's level to wTotalPayDayMoney and credits that accumulator at victory.",
+    "lifetime_contract": "A prior battle's accumulator may remain after battle. InitBattleVariables clears it when the next battle starts; the new battle's accumulator remains readable after victory.",
+    "final_verification": "initial cash plus ordinary trainer quote plus the current battle Pay Day accumulator, capped at999999"
+  },
+  "completed_episode": {
+    "status": "failed_before_trainer_interaction_no_retry",
+    "actions": 27,
+    "frames": 864,
+    "candidate_count": 6,
+    "selected_candidate_index": 2,
+    "selected_kind": "resupply",
+    "selected_probability": 0.30759519928865214,
+    "sampled_choices": 1,
+    "policy_queries_during_execution": 0,
+    "admitted_examples": 1,
+    "verified_collection_gain": 0,
+    "error_type": "TrainerFundingBattleError",
+    "error": "Pay Day accumulator was nonzero before trainer interaction",
+    "stale_pay_day_accumulator": 58,
+    "cash_before": 2146,
+    "cash_after": 2146,
+    "target_cash": 4200,
+    "target_cash_reached": false,
+    "terminal_state_sha256": "1f90711e2309f936b62f8fae8ec1bdf598f4ba466ee5a4e045a342d7f3f93623",
+    "retry_allowed": false,
+    "economy_outcome": {
+      "cash_delta": 0,
+      "cash_loss": 0,
+      "gross_income": null,
+      "gross_spend": null,
+      "net_item_decrease": 0,
+      "net_item_increase": 0,
+      "schema": "pokemon.core.resource-economy-outcome.v1",
+      "useful_liquidity_gain": 0
+    }
+  },
+  "measured_choice": {
+    "record_sha256": "6e1bfb55b16e200ed7a47d7e76edf63a91676813d0a1663a14dbc0200e7968fa",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "menu_sha256": "8a8eba9286420e7271a59afab7ee4438a3f28203d7a3f65911538d8512879f20",
+    "selected_candidate_index": 2,
+    "selected_probability": 0.30759519928865214,
+    "importance_weight": 3.251026031331472,
+    "source_binding_sha256": "c018b3326ce4e99a7ceac77119fcd7658f62b5625bca0eea701464c459574534",
+    "verified_success": false,
+    "completion_gain": 0,
+    "dependency_unlock_gain": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "collection": {
+    "registered_before": 84,
+    "registered_after": 84,
+    "living_species": 64,
+    "total_living_specimens": 68,
+    "required_native_registrations_remaining": 40
+  },
+  "learning": {
+    "prior_examples": 115,
+    "new_examples": 1,
+    "settled_examples": 116,
+    "successful_examples": 78,
+    "prior_rows_retained": true,
+    "teacher_labels": 0,
+    "historical_rewards_reused": false
+  },
+  "fit": {
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 116,
+      "settled_examples": 116,
+      "successful_examples": 78,
+      "economy_qualified_examples": 37,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.031483356668688484,
+      "weighted_mse_after": 0.012254204191987533,
+      "train_dataset_sha256": "4d784795ea872ccabb776b9687d2c79f8819aa637b1a81362f0d4cff70c7d73f"
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.013408242066183669
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.012254204191987531
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 116,
+      "model_sha256": "01e64ac47c96b05f43f9d1a75ee2d40ff75a5a4c000d0cb083dd0640317549b0",
+      "prior_model_sha256": "42dc459d3b921b2f8e7ae6959d09b70360f5a025fe7ed42d0b875392884c01a3",
+      "source_commit": "f19c936010f1085510542a77f6b37a4af9f429e2",
+      "source_bundle_sha256": "463321127ab12046857aeeaf7fa73ed91e92f51c6ad0a00d50f57a9048c130ca",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    }
+  },
+  "publication": {
+    "checkpoint_record_sha256": "ac86a839fde6e70fdc7e246d5eb5a8f06d4c79fc40cf9f2223181b817fea9f11",
+    "state_sha256": "1f90711e2309f936b62f8fae8ec1bdf598f4ba466ee5a4e045a342d7f3f93623",
+    "trajectory_manifest_sha256": "4ca6281426cf31a6ffe127540db65465da89b588992b8c2ada809cfd2b05e6c3",
+    "choice_record_sha256": "6e1bfb55b16e200ed7a47d7e76edf63a91676813d0a1663a14dbc0200e7968fa",
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "source": {
+    "execution_commit": "3effbfa4c90b0dcfecddd361f7a016e25877b9a1",
+    "execution_declaration_sha256": "eb270f1a90619143f2d459e6a098311f13a6f8b6c2a9aff2b4d32e610d778923",
+    "execution_source_binding_sha256": "0ddcbe2600787d54f59d61e244b446b534672d4669c042bb6d8308d789467843",
+    "execution_claim_sha256": "38e176cb88defbbd72e5ebdffe2cdebd76a43d7b7a4e593b52ab4c3d2194b827",
+    "failure_receipt_sha256": "a8585b1e37eb6ea7daa84c6e51114c5d3c3f9be4993cf6c222b43d419eab62f4",
+    "execution_qualification_ci_run_id": null,
+    "fit_commit": "f19c936010f1085510542a77f6b37a4af9f429e2",
+    "fit_source_bundle_sha256": "463321127ab12046857aeeaf7fa73ed91e92f51c6ad0a00d50f57a9048c130ca",
+    "fit_ci_is_dependency": false,
+    "cartridge_revision": "a1a22aaf84d1675bcdbaeb194592379d586d838e"
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "scope": "read-only accounting and adversarial-test review",
+      "accepted": "The terminal sampling boundary needed explicit protection against stale or ambiguous Pay Day state.",
+      "corrected": "The review assumed the accumulator cleared at battle end. Pinned cartridge source instead shows persistence after victory and clearing at the next battle's initialization.",
+      "quota": {
+        "five_hour_remaining_percent": 96.69,
+        "weekly_remaining_percent": 69.30,
+        "scope": "shared Gemini Flash/Pro group; not task-specific savings"
+      }
+    },
+    "claude": {
+      "status": "unavailable",
+      "scope": "three bounded read-only CLI review attempts",
+      "result": "No review response was returned before each attempt was interrupted; no contribution is claimed.",
+      "subscription_quota": "unavailable"
+    }
+  },
+  "verification": {
+    "focused_rom_free_passed": 393,
+    "schema_admission_passed": 252,
+    "ruff": "passed",
+    "mypy_source_files": 495,
+    "broad_intermediate_suite": "11560 passed, 1 xfailed; final source changed afterward",
+    "hosted_ci_run_id": 34770365977,
+    "hosted_ci_status_at_publication": "pending"
+  },
+  "next_menu": {
+    "action_free": true,
+    "candidate_count": 6,
+    "distinct_option_kinds": 3,
+    "ordinary_candidate_count": 3,
+    "supplemental_candidate_count": 3,
+    "selected_candidate_index": 2,
+    "selected_kind": "acquire",
+    "selected_private_goal_kind": "acquire_species",
+    "selected_probability": 0.0856079343148439,
+    "menu_sha256": "fa88ebd9acbef213c90a4ae1705c5c725ed600222bfb7fdab4727a3f16f9b3f8",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_labels": 0,
+    "identity_fields_public": 0,
+    "executed": false,
+    "execution_gate": "Execute this exact frozen acquisition at most once in the next bounded session; no resampling or consumed Model115 retry."
+  }
+}

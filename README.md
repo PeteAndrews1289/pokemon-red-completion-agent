@@ -7,27 +7,30 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **84 registered species**. The registered-objective model has **114 settled examples**. Model113's frozen fishing choice added one registration in 513 actions, became row114 without a teacher label, and produced a durable Model114 checkpoint. From it, Model114 selected a resupply/income goal from a six-choice, three-family menu; that choice is frozen but unexecuted.
+- The collection development save has **96/124 native registrations**. Model137 has **137 settled examples / 92 successes**; this is not fresh-game completion.
+- Frozen battler J has demonstrated learning and natural small-party switching wins. It is now explicitly connected to the main-player trainer-funding entry, with shared budgets and retained decision logs.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest continuation report](docs/work-sessions/2026-09-13-model114-frozen-fishing-learning.md),
-[latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
-[cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
-[latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),
-[route-capability report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md),
-[prior fishing report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) and
-[story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The first integrated funding goal failed after Wartortle fainted. A separate continuation
+from its retained state let J choose a replacement and four attacks. The party lost; normal
+blackout restored field control and halved cash. Both the loss and recovery are verified,
+without reset or teacher fallback. This proves battle lifecycle handling, not profitable funding.
+See [continuation evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json),
+[earlier battler qualification](docs/evidence/red-battler-earned-switch-result-2026-09-19.json)
+and the [current handoff](HANDOFF.md).
 
 ## What is not solved
 
-Fresh-game autonomy, reliable play across arbitrary seeds, complete Pokédex collection, learned low-level combat and transfer to Blue, ROM hacks or Crystal remain unfinished. Good results from related training states do not establish independent reliability.
+Fresh-game autonomy, broad battle reliability and move support, complete Pokédex collection and transfer to Blue, ROM hacks or Crystal remain unfinished. Small-party successes do not establish six-member mastery or independent reliability across arbitrary seeds.
+
+**Complete Red comes first:** one fresh start-to-finish model-directed run, Champion/Hall-of-Fame evidence and the declared124-species legitimate native route before any ROM hack. Unavailable version, trade and event dependencies remain explicit for later legitimate acquisition. After Red: a compatible unfamiliar hack, Crystal, then at least Emerald.
 
 ## How it works
 
 **Observe → choose a goal → execute a bounded skill → verify the result → save → learn.**
 
-Python and PyBoy provide game observation and control. A small NumPy-based goal-value model ranks available choices. Deterministic code handles navigation, menus, battles and capture/evolution mechanics. A SQLite-backed shared registration ledger keeps global credit separate from each save's Pokédex and physical inventory. LLM coding assistants help develop the software; they are not secretly choosing each live action.
+Python and PyBoy provide observation and control. A small NumPy goal-value model ranks choices. Deterministic code handles navigation, menus and capture/evolution mechanics. Frozen J can own supported ordinary trainer battles through an explicit per-run setting; wild captures and Elite Four controllers remain unchanged. SQLite-backed registration memory separates global credit, local flags and physical specimens. LLM coding assistants develop the software; they are not secretly choosing each live action.
 
 [Architecture and code map](docs/architecture.md) · [Development roadmap](docs/development-roadmap.md) · [Dashboard guide](docs/progress-dashboard.md)
 

@@ -27,6 +27,7 @@ from pokemon_red_completion.gen1_cartridge import (
     verify_evolution_graph,
 )
 from pokemon_red_completion.generation_one import (
+    GENERATION_ONE_ITEM_EVOLUTIONS,
     GENERATION_ONE_LEVEL_EVOLUTIONS,
     GENERATION_ONE_TRADE_EVOLUTIONS,
 )
@@ -36,15 +37,17 @@ RECORD = Path("docs/evidence/evolution-graph-2026-08-10.json")
 
 def test_wild_medium_separates_grass_water_and_zero_rate_stride(monkeypatch) -> None:
     from pokemon_red_completion import gen1_cartridge as cartridge
+
     # Independent fixture offsets and asymmetric tables exercise both strides.
     rom = bytearray(0x10000)
-    rom[0xceeb + 2 * 7:0xceeb + 2 * 7 + 2] = (0x5000).to_bytes(2, "little")
-    rom[0xceeb + 2 * 8:0xceeb + 2 * 8 + 2] = (0x5100).to_bytes(2, "little")
+    rom[0xCEEB + 2 * 7 : 0xCEEB + 2 * 7 + 2] = (0x5000).to_bytes(2, "little")
+    rom[0xCEEB + 2 * 8 : 0xCEEB + 2 * 8 + 2] = (0x5100).to_bytes(2, "little")
     grass = [(2 + n, 20 + n) for n in range(10)]
     water = [(30 + n, 60 + n) for n in range(10)]
-    rom[0xd000:0xd02a] = bytes([25, *(v for slot in grass for v in slot),
-                             10, *(v for slot in water for v in slot)])
-    rom[0xd100:0xd116] = bytes([0, 10, *(v for slot in water for v in slot)])
+    rom[0xD000:0xD02A] = bytes(
+        [25, *(v for slot in grass for v in slot), 10, *(v for slot in water for v in slot)]
+    )
+    rom[0xD100:0xD116] = bytes([0, 10, *(v for slot in water for v in slot)])
     checked = []
     monkeypatch.setattr(cartridge, "_verify_wild_tables", lambda tables: checked.append(tables))
     assert cartridge.wild_tables(bytes(rom), medium="grass") == {7: grass}
@@ -85,6 +88,17 @@ def test_the_declared_level_evolutions_are_the_complete_cartridge_graph(record: 
     )
 
     assert derived == GENERATION_ONE_LEVEL_EVOLUTIONS
+
+
+def test_the_declared_item_evolutions_are_the_complete_cartridge_graph(record: dict) -> None:
+    derived = frozenset(
+        (int(source), int(step["to"]))
+        for source, steps in record["graph"].items()
+        for step in steps
+        if step["method"] == EvolutionMethod.STONE.value
+    )
+
+    assert derived == GENERATION_ONE_ITEM_EVOLUTIONS
 
 
 def test_both_cartridges_carry_the_same_evolution_graph(record: dict) -> None:

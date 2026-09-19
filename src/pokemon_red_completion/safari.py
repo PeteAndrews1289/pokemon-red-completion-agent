@@ -832,6 +832,7 @@ def _move(
     label: str,
     *,
     expected_party_species_ids: tuple[int, ...] | None = None,
+    expected_safari_balls: int | None = None,
 ) -> int:
     encounters = 0
     state = reader.read()
@@ -867,7 +868,13 @@ def _move(
             if expected_party_species_ids is None
             else state.party_species_ids == expected_party_species_ids
         )
-        if not party_intact or _balls(emulator) not in {0, 30}:
+        balls = _balls(emulator)
+        balls_intact = (
+            balls in {0, 30}
+            if expected_safari_balls is None
+            else balls == expected_safari_balls
+        )
+        if not party_intact or not balls_intact:
             raise SafariChapterError(f"{label} changed party or Safari Balls.")
     return encounters
 

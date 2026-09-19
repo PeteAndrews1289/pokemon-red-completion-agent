@@ -14,6 +14,8 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 BATTLE_SCENARIO_CAPTURE_SCHEMA = "pokemon-private-battle-scenario-capture-v1"
 BATTLE_SCENARIO_CAPTURE_SCHEMA_V2 = "pokemon-private-battle-scenario-capture-v2"
+BATTLE_SCENARIO_CAPTURE_SCHEMA_V3 = "pokemon-private-battle-scenario-capture-v3"
+OBSERVATION_SCHEMA_V2 = "pokemon.red.gb.us.rev0.observation.v2"
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -37,6 +39,7 @@ class BattleScenarioCaptureManifest:
     expected_map: int
     expected_battle_state: int
     source_state_sha256: str | None = None
+    observation_schema: str | None = None
 
     def __post_init__(self) -> None:
         for name in ("capture_id", "root_lineage_id"):
@@ -54,9 +57,12 @@ class BattleScenarioCaptureManifest:
             or _SHA256.fullmatch(self.source_state_sha256) is None
         ):
             raise BattleScenarioCaptureError("source_state_sha256 is invalid")
-        if not isinstance(self.source_commit, str) or _GIT_COMMIT.fullmatch(
-            self.source_commit
-        ) is None:
+        if self.observation_schema not in {None, OBSERVATION_SCHEMA_V2}:
+            raise BattleScenarioCaptureError("observation schema is invalid")
+        if (
+            not isinstance(self.source_commit, str)
+            or _GIT_COMMIT.fullmatch(self.source_commit) is None
+        ):
             raise BattleScenarioCaptureError("source_commit is invalid")
         if type(self.expected_map) is not int or not 0 <= self.expected_map <= 0xFF:  # noqa: E721
             raise BattleScenarioCaptureError("expected_map is invalid")
@@ -70,7 +76,9 @@ class BattleScenarioCaptureManifest:
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "schema": (
-                BATTLE_SCENARIO_CAPTURE_SCHEMA
+                BATTLE_SCENARIO_CAPTURE_SCHEMA_V3
+                if self.observation_schema is not None
+                else BATTLE_SCENARIO_CAPTURE_SCHEMA
                 if self.source_state_sha256 is None
                 else BATTLE_SCENARIO_CAPTURE_SCHEMA_V2
             ),
@@ -83,7 +91,10 @@ class BattleScenarioCaptureManifest:
             "expected_map": self.expected_map,
             "expected_battle_state": self.expected_battle_state,
         }
-        if self.source_state_sha256 is not None:
+        if self.observation_schema is not None:
+            result["source_state_sha256"] = self.source_state_sha256
+            result["observation_schema"] = self.observation_schema
+        elif self.source_state_sha256 is not None:
             result["source_state_sha256"] = self.source_state_sha256
         return result
 
@@ -121,6 +132,7 @@ def build_battle_scenario_capture_payload(
     expected_map: int,
     expected_battle_state: int,
     source_state_sha256: str | None = None,
+    observation_schema: str | None = None,
 ) -> bytes:
     """Build the exact canonical sidecar for private state bytes."""
 
@@ -136,6 +148,7 @@ def build_battle_scenario_capture_payload(
         expected_map=expected_map,
         expected_battle_state=expected_battle_state,
         source_state_sha256=source_state_sha256,
+        observation_schema=observation_schema,
     )
     return _canonical_payload(manifest.public_dict())
 
@@ -231,6 +244,8 @@ def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:
             if schema == BATTLE_SCENARIO_CAPTURE_SCHEMA
             else base_fields | {"source_state_sha256"}
             if schema == BATTLE_SCENARIO_CAPTURE_SCHEMA_V2
+            else base_fields | {"source_state_sha256", "observation_schema"}
+            if schema == BATTLE_SCENARIO_CAPTURE_SCHEMA_V3
             else set()
         )
         if set(value) != expected_fields:
@@ -247,6 +262,7 @@ def _parse_manifest(payload: bytes) -> BattleScenarioCaptureManifest:
             expected_map=value["expected_map"],
             expected_battle_state=value["expected_battle_state"],
             source_state_sha256=value.get("source_state_sha256"),
+            observation_schema=value.get("observation_schema"),
         )
     except (
         BattleScenarioCaptureError,

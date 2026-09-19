@@ -48,6 +48,7 @@ class RamAddress(IntEnum):
     PLAYER_MON_NUMBER = 0xCC2F
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
+    TOTAL_PAY_DAY_MONEY = 0xCCE5
     PLAYER_ATTACK_STAGE = 0xCD1A
     PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
@@ -74,12 +75,17 @@ class RamAddress(IntEnum):
     ENEMY_TYPE_2 = 0xCFEB
     ENEMY_MOVES = 0xCFED
     ENEMY_MON_PARTY_POS = 0xCFE8
+    ENEMY_PARTY_COUNT = 0xD89C
+    ENEMY_PARTY_SPECIES = 0xD89D
+    ENEMY_PARTY_MON_1 = 0xD8A4
+    ENEMY_PARTY_NICKNAMES = 0xD9EE
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
     ENEMY_ATTACK = 0xCFF6
     ENEMY_SPEED = 0xCFFA
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
+    BATTLE_MON_SPEED = 0xD029
     BATTLE_MON_DEFENSE = 0xD027
     BATTLE_MON_ATTACK = 0xD025
     TRAINER_CLASS = 0xD031
@@ -134,6 +140,8 @@ class RamAddress(IntEnum):
     CURRENT_MAP_WIDTH = 0xD369
     NUM_SPRITES = 0xD4E1
     MAP_SPRITE_DATA = 0xD4E4
+    NUM_PC_ITEMS = 0xD53A
+    PC_ITEMS = 0xD53B
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
@@ -656,6 +664,7 @@ class ItemId(IntEnum):
     ULTRA_BALL = 0x02
     GREAT_BALL = 0x03
     POKE_BALL = 0x04
+    MOON_STONE = 0x0A
     ANTIDOTE = 0x0B
     AWAKENING = 0x0E
     PARLYZ_HEAL = 0x0F
@@ -664,7 +673,9 @@ class ItemId(IntEnum):
     HYPER_POTION = 0x12
     POTION = 0x14
     REPEL = 0x1E
+    FIRE_STONE = 0x20
     THUNDER_STONE = 0x21
+    WATER_STONE = 0x22
     SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
     OLD_AMBER = 0x1F
@@ -681,6 +692,7 @@ class ItemId(IntEnum):
     IRON = 0x25
     RARE_CANDY = 0x28
     X_ACCURACY = 0x2E
+    LEAF_STONE = 0x2F
     X_SPECIAL = 0x44
     CARD_KEY = 0x30
     FULL_HEAL = 0x34
@@ -938,6 +950,7 @@ PARTY_PP_OFFSET = 29
 PARTY_LEVEL_OFFSET = 33
 PARTY_MAX_HP_OFFSET = 34
 MAX_BAG_ITEMS = 20
+MAX_PC_ITEMS = 50
 EVENT_FLAGS_END = 0xD886
 EVENT_FLAG_BYTES = EVENT_FLAGS_END - int(RamAddress.EVENT_FLAGS)
 POKEDEX_SPECIES_COUNT = 151
@@ -1151,6 +1164,7 @@ class RawGameState:
     party_levels: tuple[int, ...] | None = None
     party_hp: tuple[int, ...] | None = None
     party_max_hp: tuple[int, ...] | None = None
+    party_stats: tuple[tuple[int, int, int, int], ...] | None = None
     party_status: tuple[int, ...] | None = None
     party_moves: tuple[tuple[int, ...], ...] | None = None
     party_pp: tuple[tuple[int, ...], ...] | None = None
@@ -1165,6 +1179,10 @@ class RawGameState:
     enemy_hp: int | None = None
     enemy_level: int | None = None
     enemy_max_hp: int | None = None
+    enemy_status: int | None = None
+    enemy_party_count: int | None = None
+    enemy_party_position: int | None = None
+    enemy_party_hp: tuple[int, ...] | None = None
     player_attack_stage: int | None = None
     player_special_stage: int | None = None
     player_accuracy_stage: int | None = None
@@ -1177,6 +1195,7 @@ class RawGameState:
     active_party_level: int | None = None
     active_party_hp: int | None = None
     active_party_max_hp: int | None = None
+    active_party_stats: tuple[int, int, int, int] | None = None
     active_party_status: int | None = None
     active_party_moves: tuple[int, ...] | None = None
     active_party_pp: tuple[int, ...] | None = None
@@ -3733,6 +3752,24 @@ class PokemonRedStateReader:
         self._last_encounter: tuple[int | None, ...] | None = None
         self._encounter_log = encounter_log_path()
 
+    def read_pc_items(self) -> tuple[tuple[int, int], ...]:
+        """Read Red's PC item box from its fixed revision-zero WRAM inventory."""
+        count = self._memory.read_u8(RamAddress.NUM_PC_ITEMS)
+        if not 0 <= count <= MAX_PC_ITEMS:
+            raise ValueError("PC item count is outside the supported bound")
+        entries = tuple(
+            (
+                self._memory.read_u8(int(RamAddress.PC_ITEMS) + index * 2),
+                self._memory.read_u8(int(RamAddress.PC_ITEMS) + index * 2 + 1),
+            )
+            for index in range(count)
+        )
+        if any(item_id <= 0 or quantity <= 0 for item_id, quantity in entries):
+            raise ValueError("PC item inventory contains an invalid entry")
+        if len({item_id for item_id, _ in entries}) != len(entries):
+            raise ValueError("PC item inventory contains a duplicate item")
+        return entries
+
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
         game_started = bool(status & GAME_TIMER_COUNTING_MASK)
@@ -3762,6 +3799,10 @@ class PokemonRedStateReader:
         )
         party_hp = tuple(self._read_u16_be(base + PARTY_HP_OFFSET) for base in party_bases)
         party_max_hp = tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases)
+        party_stats = tuple(
+            tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET + offset) for offset in (2, 4, 6, 8))
+            for base in party_bases
+        )
         party_status = tuple(
             self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
@@ -3799,6 +3840,23 @@ class PokemonRedStateReader:
             else None
         )
         battle_state = self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+        enemy_party_count = (
+            self._memory.read_u8(RamAddress.ENEMY_PARTY_COUNT) if battle_state == 2 else 0
+        )
+        if battle_state == 2 and 1 <= enemy_party_count <= PARTY_LIMIT:
+            enemy_party_hp = tuple(
+                self._read_u16_be(
+                    int(RamAddress.ENEMY_PARTY_MON_1)
+                    + index * PARTY_STRUCT_STRIDE
+                    + PARTY_HP_OFFSET
+                )
+                for index in range(enemy_party_count)
+            )
+            enemy_party_position = self._memory.read_u8(RamAddress.ENEMY_MON_PARTY_POS)
+        else:
+            enemy_party_count = None
+            enemy_party_hp = None
+            enemy_party_position = None
         active_party_index = (
             self._memory.read_u8(RamAddress.PLAYER_MON_NUMBER) if battle_state else None
         )
@@ -3808,6 +3866,7 @@ class PokemonRedStateReader:
             active_party_level = self._memory.read_u8(active_base + PARTY_LEVEL_OFFSET)
             active_party_hp = self._read_u16_be(active_base + PARTY_HP_OFFSET)
             active_party_max_hp = self._read_u16_be(active_base + PARTY_MAX_HP_OFFSET)
+            active_party_stats = party_stats[active_party_index]
             active_party_status = self._memory.read_u8(active_base + PARTY_STATUS_OFFSET)
             active_party_moves = tuple(
                 self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index) for index in range(4)
@@ -3821,6 +3880,7 @@ class PokemonRedStateReader:
             active_party_level = None
             active_party_hp = None
             active_party_max_hp = None
+            active_party_stats = None
             active_party_status = None
             active_party_moves = None
             active_party_pp = None
@@ -3845,6 +3905,7 @@ class PokemonRedStateReader:
             party_levels=party_levels,
             party_hp=party_hp,
             party_max_hp=party_max_hp,
+            party_stats=party_stats,
             party_status=party_status,
             party_moves=party_moves,
             party_pp=party_pp,
@@ -3859,6 +3920,10 @@ class PokemonRedStateReader:
             enemy_hp=self._read_u16_be(RamAddress.ENEMY_HP),
             enemy_level=self._memory.read_u8(RamAddress.ENEMY_LEVEL),
             enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
+            enemy_status=self._memory.read_u8(RamAddress.ENEMY_STATUS) if battle_state else None,
+            enemy_party_count=enemy_party_count,
+            enemy_party_position=enemy_party_position,
+            enemy_party_hp=enemy_party_hp,
             player_attack_stage=(
                 self._memory.read_u8(RamAddress.PLAYER_ATTACK_STAGE) if battle_state else None
             ),
@@ -3885,6 +3950,7 @@ class PokemonRedStateReader:
             active_party_level=active_party_level,
             active_party_hp=active_party_hp,
             active_party_max_hp=active_party_max_hp,
+            active_party_stats=active_party_stats,
             active_party_status=active_party_status,
             active_party_moves=active_party_moves,
             active_party_pp=active_party_pp,
@@ -3896,6 +3962,16 @@ class PokemonRedStateReader:
         if self._encounter_log is not None:
             self._record_encounter(raw)
         return raw
+
+    def read_total_pay_day_money(self) -> int:
+        """Read the battle's exact cartridge Pay Day accumulator.
+
+        Red adds this three-byte BCD value to the player's money at the end of
+        any won non-link battle, regardless of which side used Pay Day.  The
+        the next battle's initialization clears it, so callers must separate a
+        retained prior value from the newly initialized battle.
+        """
+        return self._read_bcd(RamAddress.TOTAL_PAY_DAY_MONEY, 3)
 
     def read_fossil_reviver_identity(self) -> tuple[int, int]:
         """Return the cartridge-retained fossil item and resulting internal species.
@@ -4080,16 +4156,20 @@ class PokemonRedStateReader:
         moves = self.read_trainer_entry_moves(expected)
         if moves is None:
             return False
+
         def flags() -> tuple[int, ...]:
-            return tuple(self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i)
-                         for i in range(3))
+            return tuple(
+                self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i) for i in range(3)
+            )
+
         before = flags()
         if self.read_trainer_entry_moves(expected) != moves or flags() != before:
             raise SemanticStateError("Mirror Move commitment changed while reading")
         return not (before[0] & 0x77 or before[1] & 0x60 or before[2] & 0x08)
 
     def read_trainer_entry_speeds(
-        self, expected: RawGameState,
+        self,
+        expected: RawGameState,
     ) -> tuple[int, tuple[int, ...]] | None:
         """Current enemy speed and conservative post-switch party speeds.
 
@@ -4099,21 +4179,29 @@ class PokemonRedStateReader:
         """
         before = self.read()
         if (
-            before != expected or before.battle_state != 2 or (before.enemy_hp or 0) <= 0
-            or type(before.party_count) is not int or not 1 <= before.party_count <= 6
+            before != expected
+            or before.battle_state != 2
+            or (before.enemy_hp or 0) <= 0
+            or type(before.party_count) is not int
+            or not 1 <= before.party_count <= 6
             or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
         ):
             return None
+
         def values() -> tuple[int, tuple[int, ...]]:
             return self._read_u16_be(RamAddress.ENEMY_SPEED), tuple(
                 self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 40)
                 for index in range(before.party_count or 0)
             )
+
         speeds = values()
         if not 1 <= speeds[0] <= 1023 or any(not 1 <= speed <= 999 for speed in speeds[1]):
             raise SemanticStateError("trainer entry speed domain differs")
-        if (self.read() != before or values() != speeds
-                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+        if (
+            self.read() != before
+            or values() != speeds
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
             raise SemanticStateError("trainer entry speeds changed while reading")
         return speeds
 
@@ -4589,6 +4677,22 @@ class PokemonRedStateReader:
                 )
         return BattleMenuState(BattleMenuPhase.UNKNOWN)
 
+    def read_enemy_party_roster_hp(self) -> tuple[int, ...] | None:
+        """Read a trainer roster after battle exit for outcome verification only."""
+
+        count = self._memory.read_u8(RamAddress.ENEMY_PARTY_COUNT)
+        if (
+            not 1 <= count <= PARTY_LIMIT
+            or self._memory.read_u8(int(RamAddress.ENEMY_PARTY_SPECIES) + count) != 0xFF
+        ):
+            return None
+        return tuple(
+            self._read_u16_be(
+                int(RamAddress.ENEMY_PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + PARTY_HP_OFFSET
+            )
+            for index in range(count)
+        )
+
     def trainer_switch_prompt_visible(self, raw: RawGameState) -> bool:
         """Return whether Red's live trainer-switch yes/no prompt owns input.
 
@@ -4613,6 +4717,40 @@ class PokemonRedStateReader:
             and self._active_menu_cursor()
         )
 
+    def read_move_learning_prompt(self, raw: RawGameState) -> tuple[str, int] | None:
+        """Recognize live Red move-learning input, not stale dialogue text.
+
+        Pinned pokered engine/pokemon/learn_move.asm and data/text/text_4.asm
+        distinguish replacing a move from confirming abandonment. Both use
+        the same yes/no menu, so a cursor signature alone is insufficient.
+        This adapter reads visible text; no species or route-specific policy.
+        """
+        if raw.battle_state not in {1, 2} or raw.enemy_hp != 0 or not self._active_menu_cursor():
+            return None
+        signature = tuple(self._memory.read_u8(address) for address in (
+            RamAddress.TOP_MENU_ITEM_Y, RamAddress.TOP_MENU_ITEM_X,
+            RamAddress.MAX_MENU_ITEM, RamAddress.MENU_WATCHED_KEYS,
+        ))
+        selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if signature not in {(8, 15, 1, 3), (8, 5, 3, 3)} or selected > signature[2]:
+            return None
+        letters = []
+        for offset in range(20 * 12, TILE_MAP_SIZE):
+            tile = self._memory.read_u8(int(RamAddress.TILE_MAP) + offset)
+            letters.append(
+                chr(ord("A") + tile - 0x80) if 0x80 <= tile <= 0x99
+                else chr(ord("a") + tile - 0xA0) if 0xA0 <= tile <= 0xB9 else " "
+            )
+        visible = " ".join("".join(letters).split())
+        if signature == (8, 15, 1, 3):
+            if "Abandon learning" in visible:
+                return "abandon_learning", selected
+            if "move to make room" in visible:
+                return "replace_move", selected
+        elif "Which move should" in visible and "be forgotten" in visible:
+            return "forget_move", selected
+        return None
+
     def _active_menu_cursor(self) -> bool:
         cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
         cursor_address |= self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
@@ -4634,6 +4772,16 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.TRAINER_CLASS),
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+        )
+
+    def read_party_original_trainer_ids(self) -> tuple[int, ...]:
+        """Read provenance-only party OT IDs; never include them in actor features."""
+        count = self._memory.read_u8(int(RamAddress.PARTY_COUNT))
+        if not 0 <= count <= 6:
+            raise ValueError("party count cannot identify original trainers")
+        return tuple(
+            self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 12)
+            for index in range(count)
         )
 
     def read_active_trainer_identity(self) -> tuple[int, int, int]:
@@ -4665,7 +4813,9 @@ class PokemonRedStateReader:
         if not 0 <= stage <= maximum or not 1 <= starter <= 190:
             raise SemanticStateError("final league scene fields are unavailable")
         return FinalLeagueScene(
-            map_id, stage, starter,
+            map_id,
+            stage,
+            starter,
             self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
             bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )

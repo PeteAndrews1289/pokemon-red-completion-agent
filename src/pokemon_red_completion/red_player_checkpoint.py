@@ -422,7 +422,7 @@ def open_red_player_checkpoint(
     if not isinstance(collection, Mapping):
         raise RedPlayerCheckpointError("checkpoint collection differs")
     from .registered_checkpoint import (
-        REGISTERED_CHECKPOINT_SCHEMA,
+        REGISTERED_CHECKPOINT_SCHEMAS,
         RegisteredCollectionCheckpoint,
     )
 
@@ -436,7 +436,7 @@ def open_red_player_checkpoint(
             RegisteredCollectionCheckpoint.from_public(dict(collection))
         except ValueError as error:
             raise RedPlayerCheckpointError("registered checkpoint collection invalid") from error
-    elif collection.get("schema") == REGISTERED_CHECKPOINT_SCHEMA:
+    elif collection.get("schema") in REGISTERED_CHECKPOINT_SCHEMAS:
         raise RedPlayerCheckpointError("legacy checkpoint cannot carry registered objective")
     terminal = document.get("terminal_result")
     steps = terminal.get("steps") if isinstance(terminal, Mapping) else None

@@ -21,7 +21,11 @@ import re
 from dataclasses import dataclass, replace
 from enum import StrEnum
 
-from pokemon_red_completion.goal_manager import GoalKind, GoalSituation
+from pokemon_red_completion.goal_manager import (
+    GoalKind,
+    GoalSelectionMode,
+    GoalSituation,
+)
 from pokemon_red_completion.goal_manager_runtime import (
     CompletionFirstGoalTeacher,
     ExecutableGoalBinding,
@@ -35,6 +39,7 @@ from pokemon_red_completion.living_dex_goal_policy import (
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
+    LivingDexOptionContext,
     LivingDexOptionMenu,
     LivingDexOptionUtility,
     LivingDexOptionValueModel,
@@ -51,11 +56,40 @@ RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA = (
 RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model111-automatic-fishing-plan.v1"
 )
-RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = (
-    "pokemon.red.private-model112-frozen-restore-plan.v1"
+RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = "pokemon.red.private-model112-frozen-restore-plan.v1"
+RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model118-frozen-restore-plan.v1"
+)
+RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model119-post-forced-frozen-restore-plan.v1"
 )
 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model113-frozen-acquisition-plan.v1"
+)
+RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model116-frozen-acquisition-plan.v1"
+)
+RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model114-frozen-resupply-plan.v1"
+)
+RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model115-frozen-resupply-plan.v1"
+)
+RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model120-frozen-resupply-plan.v1"
+)
+RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model117-frozen-purchase-plan.v1"
+)
+RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model121-safari-execution-plan.v1"
+)
+RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model122-heterogeneous-execution-plan.v1"
+)
+RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA = "pokemon.red.autonomous-option-execution.v1"
+RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.autonomous-option-execution.v2"
 )
 
 
@@ -64,10 +98,11 @@ class RedLiveOptionMenuError(ValueError):
 
 
 class RedLiveOptionSelectionMode(StrEnum):
-    """Whether hard safety or the learned model selected the private binding."""
+    """Which authority selected the private binding."""
 
     DETERMINISTIC_SAFETY = "deterministic_safety"
     MODEL_EXPLORATION = "model_exploration"
+    EQUIVALENT_EXPLORATION = "equivalent_exploration"
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,9 +121,158 @@ class RedLiveSupplementalOption:
             self.candidate.binding_ref != self.binding.binding_ref
             or self.candidate.availability is not LivingDexOptionAvailability.AVAILABLE
         ):
-            raise RedLiveOptionMenuError(
-                "supplemental candidate and executable binding differ"
-            )
+            raise RedLiveOptionMenuError("supplemental candidate and executable binding differ")
+
+
+@dataclass(frozen=True, slots=True)
+class RedLiveForcedSingleton:
+    """One supplemental action that is explicitly not a learned choice."""
+
+    situation: GoalSituation
+    original_bindings: GoalBindingSet
+    binding_set: GoalBindingSet
+    candidate: LivingDexOptionCandidate
+    context: LivingDexOptionContext
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.situation, GoalSituation):
+            raise TypeError("forced singleton needs a GoalSituation")
+        if not isinstance(self.original_bindings, GoalBindingSet):
+            raise TypeError("forced singleton needs original goal bindings")
+        if not isinstance(self.binding_set, GoalBindingSet):
+            raise TypeError("forced singleton needs rebound goal bindings")
+        if not isinstance(self.candidate, LivingDexOptionCandidate):
+            raise TypeError("forced singleton needs a living-Dex candidate")
+        if not isinstance(self.context, LivingDexOptionContext):
+            raise TypeError("forced singleton needs a living-Dex context")
+        if self.original_bindings.bindings:
+            raise RedLiveOptionMenuError("forced supplemental singleton rejects ordinary executors")
+        if len(self.binding_set.bindings) != 1:
+            raise RedLiveOptionMenuError("forced supplemental singleton needs one executor")
+        binding = self.binding_set.bindings[0]
+        if (
+            binding.kind is not GoalKind.ACQUIRE_SPECIES
+            or self.candidate.binding_ref != binding.binding_ref
+            or self.candidate.features.kind
+            is not living_dex_option_kind_for_goal(binding.kind, feature_version=4)
+            or self.candidate.availability is not LivingDexOptionAvailability.AVAILABLE
+        ):
+            raise RedLiveOptionMenuError("forced supplemental singleton candidate differs")
+        question = self.binding_set.question(self.situation)
+        if (
+            len(question.available_indices) != 1
+            or question.opportunities[question.available_indices[0]].binding_ref
+            != binding.binding_ref
+        ):
+            raise RedLiveOptionMenuError("forced supplemental singleton availability differs")
+
+    @property
+    def binding(self) -> ExecutableGoalBinding:
+        """Return the sole private executor without projecting its identity."""
+
+        return self.binding_set.bindings[0]
+
+    def policy_dict(self) -> dict[str, object]:
+        """Return the identity-free semantic declaration for this forced bridge."""
+
+        return {
+            "available_goal_count": 1,
+            "candidate": self.candidate.policy_dict(self.context),
+            "context": self.context.policy_dict(),
+            "model_queries": 0,
+            "ordinary_candidate_count": 0,
+            "schema": "pokemon.red.live-forced-singleton.v1",
+            "selected_kind": GoalKind.ACQUIRE_SPECIES.value,
+            "selection_mode": GoalSelectionMode.FORCED_SINGLETON.value,
+            "supplemental_candidate_count": 1,
+            "teacher_labels": 0,
+            "training_examples": 0,
+        }
+
+    @property
+    def policy_sha256(self) -> str:
+        return canonical_sha256(self.policy_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **self.policy_dict(),
+            "policy_sha256": self.policy_sha256,
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+        }
+
+
+def build_red_live_forced_singleton(
+    *,
+    situation: GoalSituation,
+    binding_set: GoalBindingSet,
+    supplements: tuple[RedLiveSupplementalOption, ...],
+    economy_snapshot: EconomySnapshot | None = None,
+    target_cash: int | None = None,
+    safety: CompletionFirstGoalTeacher | None = None,
+) -> RedLiveForcedSingleton:
+    """Bind one supplemental acquisition without invoking learned authority."""
+
+    if not isinstance(situation, GoalSituation):
+        raise TypeError("forced singleton needs a GoalSituation")
+    if not isinstance(binding_set, GoalBindingSet):
+        raise TypeError("forced singleton needs a GoalBindingSet")
+    if not isinstance(supplements, tuple) or any(
+        not isinstance(item, RedLiveSupplementalOption) for item in supplements
+    ):
+        raise TypeError("forced singleton supplements must be immutable")
+    if binding_set.bindings:
+        raise RedLiveOptionMenuError("forced supplemental singleton rejects ordinary executors")
+    if len(supplements) != 1:
+        raise RedLiveOptionMenuError("forced supplemental singleton needs exactly one candidate")
+    if (economy_snapshot is None) != (target_cash is None):
+        raise RedLiveOptionMenuError("forced singleton economy context is incomplete")
+    if safety is None:
+        safety = CompletionFirstGoalTeacher()
+    if not isinstance(safety, CompletionFirstGoalTeacher):
+        raise TypeError("forced singleton needs a safety policy")
+    # The configured Red pressure reaches the gate with two active-box slots
+    # still free.  One bounded acquisition remains safe at that exact boundary;
+    # mask only once the pressure exceeds it (one or zero slots remain).
+    if situation.storage_pressure > safety.storage_gate:
+        raise RedLiveOptionMenuError("forced acquisition singleton is masked by storage safety")
+
+    supplement = supplements[0]
+    binding = supplement.binding
+    expected_kind = living_dex_option_kind_for_goal(binding.kind, feature_version=4)
+    if (
+        binding.kind is not GoalKind.ACQUIRE_SPECIES
+        or expected_kind is None
+        or supplement.candidate.features.kind is not expected_kind
+    ):
+        raise RedLiveOptionMenuError("forced singleton needs one portable acquisition")
+    if economy_snapshot is None and supplement.candidate.economy_offer is not None:
+        raise RedLiveOptionMenuError("economy-bearing forced singleton needs measured context")
+    matching_indices = tuple(
+        index
+        for index, opportunity in enumerate(binding_set.opportunities)
+        if opportunity.kind is binding.kind
+    )
+    if len(matching_indices) != 1:
+        raise RedLiveOptionMenuError("forced singleton needs one masked acquisition opportunity")
+    selected_index = matching_indices[0]
+    opportunities = tuple(
+        binding.opportunity if index == selected_index else opportunity
+        for index, opportunity in enumerate(binding_set.opportunities)
+    )
+    rebound = GoalBindingSet(opportunities, (binding,))
+    context = living_dex_option_context_from_goal_situation(
+        situation,
+        economy_snapshot=economy_snapshot,
+        target_cash=target_cash,
+    )
+    return RedLiveForcedSingleton(
+        situation,
+        binding_set,
+        rebound,
+        supplement.candidate,
+        context,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -117,12 +301,9 @@ class RedLiveOptionSet:
             != tuple(item.binding_ref for item in self.menu.candidates)
         ):
             raise RedLiveOptionMenuError("live option menu and bindings differ")
-        if (
-            not isinstance(self.ordinary_binding_refs, frozenset)
-            or not self.ordinary_binding_refs <= {
-                item.binding_ref for item in self.bindings
-            }
-        ):
+        if not isinstance(
+            self.ordinary_binding_refs, frozenset
+        ) or not self.ordinary_binding_refs <= {item.binding_ref for item in self.bindings}:
             raise RedLiveOptionMenuError("ordinary binding inventory differs")
         if (
             not isinstance(self.ordering_seed_sha256, str)
@@ -131,10 +312,7 @@ class RedLiveOptionSet:
             raise RedLiveOptionMenuError("live option ordering seed differs")
 
     def binding(self, candidate_index: int) -> ExecutableGoalBinding:
-        if (
-            type(candidate_index) is not int
-            or candidate_index not in self.menu.available_indices
-        ):
+        if type(candidate_index) is not int or candidate_index not in self.menu.available_indices:
             raise RedLiveOptionMenuError("live option selection is unavailable")
         return self.bindings[candidate_index]
 
@@ -142,10 +320,7 @@ class RedLiveOptionSet:
         return {
             "available_candidate_count": len(self.menu.available_indices),
             "distinct_option_kinds": len(
-                {
-                    self.menu.candidates[index].features.kind
-                    for index in self.menu.available_indices
-                }
+                {self.menu.candidates[index].features.kind for index in self.menu.available_indices}
             ),
             "identity_fields_public": 0,
             "menu": self.menu.policy_dict(),
@@ -153,9 +328,7 @@ class RedLiveOptionSet:
             "ordinary_candidate_count": len(self.ordinary_binding_refs),
             "private_binding_fields": 0,
             "schema": "pokemon.red.live-mixed-option-set.v1",
-            "supplemental_candidate_count": (
-                len(self.bindings) - len(self.ordinary_binding_refs)
-            ),
+            "supplemental_candidate_count": (len(self.bindings) - len(self.ordinary_binding_refs)),
         }
 
 
@@ -197,17 +370,30 @@ class RedLiveOptionChoice:
             raise RedLiveOptionMenuError("live mixed-family choice differs")
         if self.probabilities[self.selected_candidate_index] <= 0.0:
             raise RedLiveOptionMenuError("selected live option has zero probability")
-        if (
-            self.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
-            and (
-                any(value is not None for value in self.scores)
-                or sum(
-                value > 0.0 for value in self.probabilities
-                )
-                != 1
-            )
+        if self.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY and (
+            any(value is not None for value in self.scores)
+            or sum(value > 0.0 for value in self.probabilities) != 1
         ):
             raise RedLiveOptionMenuError("safety choice retained model authority")
+        if self.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION:
+            available = self.options.menu.available_indices
+            if (
+                len(available) < 2
+                or any(value is not None for value in self.scores)
+                or len({
+                    self.options.menu.candidate_vector(index)
+                    for index in available
+                }) != 1
+                or any(
+                    not math.isclose(
+                        probability,
+                        1.0 / len(available) if index in available else 0.0,
+                        abs_tol=1e-12,
+                    )
+                    for index, probability in enumerate(self.probabilities)
+                )
+            ):
+                raise RedLiveOptionMenuError("equivalent exploration differs")
 
     @property
     def selected_binding(self) -> ExecutableGoalBinding:
@@ -251,16 +437,13 @@ def build_red_live_option_set(
         raise TypeError("mixed live menu needs a GoalSituation")
     if not isinstance(binding_set, GoalBindingSet):
         raise TypeError("mixed live menu needs a GoalBindingSet")
-    if (
-        not isinstance(supplements, tuple)
-        or any(not isinstance(item, RedLiveSupplementalOption) for item in supplements)
+    if not isinstance(supplements, tuple) or any(
+        not isinstance(item, RedLiveSupplementalOption) for item in supplements
     ):
         raise TypeError("mixed live menu supplements must be immutable")
     if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4}:
         raise RedLiveOptionMenuError("mixed live menu feature version differs")
-    if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(
-        ordering_seed_sha256
-    ) is None:
+    if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(ordering_seed_sha256) is None:
         raise RedLiveOptionMenuError("mixed live menu ordering seed differs")
     if (economy_snapshot is None) != (target_cash is None):
         raise RedLiveOptionMenuError("mixed live menu economy context is incomplete")
@@ -275,8 +458,10 @@ def build_red_live_option_set(
             "control recovery must remain outside learned mixed-family authority"
         )
     available_kinds = {binding.kind for binding in binding_set.bindings}
+    # Equality is the measured two-slot Red boundary, where one acquisition is
+    # still safe.  Above the gate, require explicit storage relief.
     mask_acquisitions = (
-        situation.storage_pressure >= safety.storage_gate
+        situation.storage_pressure > safety.storage_gate
         and GoalKind.MANAGE_STORAGE not in available_kinds
     )
     rows: list[tuple[ExecutableGoalBinding, LivingDexOptionCandidate, bool]] = []
@@ -303,16 +488,12 @@ def build_red_live_option_set(
             feature_version=model_feature_version,
         )
         if expected_kind is None or supplement.candidate.features.kind is not expected_kind:
-            raise RedLiveOptionMenuError(
-                "supplemental executor and portable option kind differ"
-            )
+            raise RedLiveOptionMenuError("supplemental executor and portable option kind differ")
         rows.append((supplement.binding, supplement.candidate, False))
 
     refs = tuple(binding.binding_ref for binding, _candidate, _ordinary in rows)
     if len(rows) < 2 or len(set(refs)) != len(refs):
-        raise RedLiveOptionMenuError(
-            "mixed live menu needs distinct executable candidates"
-        )
+        raise RedLiveOptionMenuError("mixed live menu needs distinct executable candidates")
 
     def ordering_key(index: int) -> str:
         return canonical_sha256(
@@ -330,8 +511,7 @@ def build_red_live_option_set(
         target_cash=target_cash,
     )
     if economy_snapshot is None and any(
-        candidate.economy_offer is not None
-        for _binding, candidate, _ordinary in ordered
+        candidate.economy_offer is not None for _binding, candidate, _ordinary in ordered
     ):
         raise RedLiveOptionMenuError(
             "economy-bearing mixed options need a measured economy context"
@@ -344,9 +524,7 @@ def build_red_live_option_set(
         binding_set,
         menu,
         tuple(binding for binding, _candidate, _ordinary in ordered),
-        frozenset(
-            binding.binding_ref for binding, _candidate, ordinary in ordered if ordinary
-        ),
+        frozenset(binding.binding_ref for binding, _candidate, ordinary in ordered if ordinary),
         ordering_seed_sha256,
     )
 
@@ -402,8 +580,7 @@ def select_red_live_option(
             and selected_opportunity.resource_quote.expected_income > 0
             and options.menu.context.economy_snapshot is not None
             and options.menu.context.target_cash is not None
-            and options.menu.context.target_cash
-            > options.menu.context.economy_snapshot.cash
+            and options.menu.context.target_cash > options.menu.context.economy_snapshot.cash
         )
     safety_forced = deterministic is not None and (
         deterministic.kind is GoalKind.RECOVER_CONTROL
@@ -434,8 +611,7 @@ def select_red_live_option(
                 "safety-selected goal is absent from the mixed menu"
             ) from error
         probabilities = tuple(
-            1.0 if index == selected_index else 0.0
-            for index in range(len(options.bindings))
+            1.0 if index == selected_index else 0.0 for index in range(len(options.bindings))
         )
         return RedLiveOptionChoice(
             options,
@@ -447,6 +623,26 @@ def select_red_live_option(
             model.model_sha256,
         )
 
+    # Identical inputs cannot express a target preference. Sample uniformly
+    # from the real options, with a separate mode and no model query.
+    if len({
+        options.menu.candidate_vector(i)
+        for i in options.menu.available_indices
+    }) < 2:
+        available = options.menu.available_indices
+        probabilities = tuple(
+            1.0 / len(available) if index in available else 0.0
+            for index in range(len(options.bindings))
+        )
+        return RedLiveOptionChoice(
+            options,
+            random.Random(seed).choice(available),
+            RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION,
+            (None,) * len(options.bindings),
+            probabilities,
+            seed,
+            model.model_sha256,
+        )
     raw_scores = model.scores(options.menu, utility)
     if len(raw_scores) != len(options.bindings):
         raise RedLiveOptionMenuError("mixed live model score width differs")
@@ -463,17 +659,13 @@ def select_red_live_option(
     mix = float(exploration_mix)
     probabilities_list = [0.0] * len(options.bindings)
     for index, weight in zip(available, exponentials, strict=True):
-        probabilities_list[index] = (
-            (1.0 - mix) * weight / total + mix / len(available)
-        )
+        probabilities_list[index] = (1.0 - mix) * weight / total + mix / len(available)
     selected_index = random.Random(seed).choices(
         range(len(probabilities_list)),
         weights=probabilities_list,
         k=1,
     )[0]
-    scores = tuple(
-        None if value is None else float(value) for value in raw_scores
-    )
+    scores = tuple(None if value is None else float(value) for value in raw_scores)
     return RedLiveOptionChoice(
         options,
         selected_index,
@@ -504,14 +696,25 @@ def supplemental_live_option(
 __all__ = [
     "RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_OPTION_POLICY",
+    "RedLiveForcedSingleton",
     "RedLiveOptionChoice",
     "RedLiveOptionMenuError",
     "RedLiveOptionSelectionMode",
     "RedLiveOptionSet",
     "RedLiveSupplementalOption",
+    "build_red_live_forced_singleton",
     "build_red_live_option_set",
     "select_red_live_option",
     "supplemental_live_option",

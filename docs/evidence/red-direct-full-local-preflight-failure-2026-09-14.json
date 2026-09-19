@@ -1,0 +1,91 @@
+{
+  "schema": "pokemon.red.direct-full-local-preflight-failure.evidence.v1",
+  "session_id": "2026-09-14-direct-full-local-preflight-failure",
+  "classification": "maintenance_after_consumed_live_gate",
+  "status": "closed_without_preflight_or_gameplay",
+  "source": {
+    "selection_id": "full-local-source-20260914-v1",
+    "selection_record_sha256": "628732d3752e00900c3bdf99a8b247a28e237813bb68665749910023c9c3e1cb",
+    "published_source_commit": "424695ca8e39c8690b79f2a0dcfb47f4ab8f6931",
+    "exact_ci_run": 34889466446,
+    "exact_ci_attempt": 1,
+    "root_pair_claim_sha256": "4ae6d8d9009ec40ba94f037e09a3508062a7bcddf2171971b873a8f02909dc11",
+    "execution_identity_sha256": "0354594a008c0c03c5350406e24ac91c8f5cf1cb09aee438226ee5775b31c2f0",
+    "source_substitutions": 0,
+    "same_claim_preparation_recoveries": 1,
+    "gameplay_retries": 0,
+    "retry_allowed": false
+  },
+  "attempts": [
+    {
+      "ordinal": 1,
+      "private_failure_record_id": "full-local-direct-preflight-20260914-v1",
+      "private_failure_record_sha256": "c74940f0d07cb6f0801b6f536b50e81677473f68a8e8cdc73d4e1f6b4fdf1bc8",
+      "failed_stage": "regional_profile_scope",
+      "selected_payload_opened": false,
+      "cause": "parser_default_regional_transitions_was_none"
+    },
+    {
+      "ordinal": 2,
+      "private_failure_record_id": "full-local-direct-preflight-20260914-v1-recovery",
+      "private_failure_record_sha256": "3bf1c3f23336d675abfed3edb6d6b183b71fed173b8f9de9b0cb6a2b0a659af6",
+      "failed_stage": "training_plan_construction",
+      "selected_payload_opened": true,
+      "cause": "feature_version_4_selected_economy_behavior_before_economy_schema_and_supply_fields"
+    }
+  ],
+  "effects": {
+    "root_pair_claims": 1,
+    "selected_source_payload_opens": 1,
+    "completed_action_free_preflights": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "registration_sessions": 0,
+    "registration_observations": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "maintenance": {
+    "empty_regional_transition_default_normalized": true,
+    "legacy_wild_source_fallback_preserved": true,
+    "v4_base_training_behavior": "living-dex-player-optional-recovery-v4",
+    "economy_schema_strictness_preserved": true,
+    "unsupported_future_feature_versions_rejected": true,
+    "runner_tests_added": 2,
+    "plan_feature_versions_added_to_matrix": [
+      4,
+      5
+    ]
+  },
+  "verification": {
+    "focused_tests": "129_passed",
+    "ruff": "passed",
+    "mypy": "passed_499_source_files",
+    "hosted_equivalent_suite": "11710_passed_1_expected_failure",
+    "local_only_exception": "existing_exact_mac_pyboy_metadata_fingerprint_test_excluded",
+    "registration_session_absence_checked": true,
+    "registration_run_absence_checked": true
+  },
+  "reviewers": {
+    "flash": "gemini-3.8-flash-high_completed_tool_free_review",
+    "flash_findings": "two_accepted_one_rejected",
+    "claude": "claude-opus-4-8_high_completed_pass_no_p0_p1",
+    "claude_cost_usd": 1.4518645,
+    "quota_windows": "unavailable_from_headless_cli_output"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "next_gate": "publish_and_green_the_maintenance_then_freeze_a_separate_new_source_in_a_later_session",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

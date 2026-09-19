@@ -57,9 +57,7 @@ def sole_living_switch_target(
     ):
         return None
     candidates = tuple(
-        index
-        for index, hp in enumerate(party_hp)
-        if index != active_party_index and hp > 0
+        index for index, hp in enumerate(party_hp) if index != active_party_index and hp > 0
     )
     return candidates[0] if len(candidates) == 1 else None
 
@@ -73,6 +71,7 @@ def switch_active_battler(
     expected_battle_state: int = 2,
     label: str,
     wait_frames: int = 180,
+    allow_faint_outcome: bool = False,
 ) -> None:
     """Switch to one living party member through a fully observed battle-menu gate."""
 
@@ -113,8 +112,12 @@ def switch_active_battler(
     for pulse_index in range(48):
         settled = reader.read()
         if _party_hp(emulator)[party_index] <= 0:
+            if allow_faint_outcome and settled.active_party_index == party_index:
+                return
             raise ProtectedRecoveryError(f"{label} target fainted during the switch.")
         if settled.battle_state != expected_battle_state:
+            if allow_faint_outcome and settled.battle_state == 0:
+                return
             raise ProtectedRecoveryError(f"{label} left its active battle during the switch.")
         if (
             settled.active_party_index == party_index
@@ -127,6 +130,71 @@ def switch_active_battler(
             wait_frames=wait_frames,
         )
     raise ProtectedRecoveryError(f"{label} did not return to MAIN with its selected battler.")
+
+
+def resolve_trainer_switch_prompt(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    target_index: int | None,
+    label: str,
+    wait_frames: int = 180,
+) -> None:
+    """Execute the actor's explicit response to a trainer replacement prompt.
+
+    ``None`` declines. A zero-based living, non-active party index accepts and
+    switches to that member. This operation never decides which answer to give.
+    """
+
+    before = reader.read()
+    if not reader.trainer_switch_prompt_visible(before):
+        raise ProtectedRecoveryError(f"{label} is not at a live trainer switch prompt.")
+    if target_index is not None:
+        party = before.party_hp
+        if (
+            type(target_index) is not int  # noqa: E721
+            or party is None
+            or not 0 <= target_index < len(party)
+            or target_index == before.active_party_index
+            or party[target_index] <= 0
+        ):
+            raise ProtectedRecoveryError(f"{label} lacks a living switch target.")
+        if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == 1:
+            _pulse(actions, MacroActionKind.MOVE, "up", 120, wait_frames)
+        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+        for _ in range(12):
+            if not reader.trainer_switch_prompt_visible(reader.read()) and _forced_party_menu_ready(
+                emulator, len(party)
+            ):
+                break
+            _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+        else:
+            raise ProtectedRecoveryError(f"{label} did not open the live party menu.")
+        _select_cursor(actions, emulator, target_index, wait_frames)
+        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+        for _ in range(12):
+            if emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) == PARTY_SUBMENU_SWITCH:
+                break
+            _pulse(actions, MacroActionKind.MOVE, "up", 120, wait_frames)
+        else:
+            raise ProtectedRecoveryError(f"{label} did not expose the SWITCH command.")
+        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    else:
+        _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
+
+    for _ in range(48):
+        after = reader.read()
+        if after.battle_state != 2:
+            raise ProtectedRecoveryError(f"{label} left its trainer battle.")
+        if reader.trainer_switch_prompt_visible(after):
+            raise ProtectedRecoveryError(f"{label} did not resolve the switch prompt.")
+        if target_index is not None and after.active_party_index != target_index:
+            pass
+        elif reader.read_battle_menu_state(after).phase is BattleMenuPhase.MAIN:
+            return
+        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+    raise ProtectedRecoveryError(f"{label} did not return to the next MAIN decision.")
 
 
 def _switch_forced_fainted_battler(
@@ -330,9 +398,7 @@ def _restore_lead_after_surviving_pivot(
     for pulse_index in range(32):
         raw = reader.read()
         if raw.battle_state != 2:
-            raise ProtectedRecoveryError(
-                "Surviving recovery pivot left its trainer battle."
-            )
+            raise ProtectedRecoveryError("Surviving recovery pivot left its trainer battle.")
         if reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
             break
         _pulse(

@@ -1,0 +1,124 @@
+{
+  "schema": "pokemon.red.bounded-battle-cartridge-qualification.v1",
+  "status": "failed_at_first_cross_venue_setup_and_retained",
+  "source": {
+    "git_commit": "e3c97eb568ad11b9bf62e1446691cf7b80ebd715",
+    "source_bundle_sha256": "f77499fe35b591ecd4adfe3a4cfda46beabfa972a236c39a611ab12de089af05",
+    "qualification_ci_run_id": 34974811318,
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "recovered_terminal_sha256": "21f77af82628f903f1b44ce8f052f6d58b5c2889bb7a545d33b27c427cc4096d",
+    "recovered_terminal_unchanged_after_campaign": true,
+    "correlated_development_only": true
+  },
+  "prospective_limits": {
+    "declared_executable_cases": 6,
+    "declared_coverage_gap_records": 2,
+    "maximum_cases": 12,
+    "maximum_actions_per_case": 2000,
+    "maximum_frames_per_case": 200000,
+    "maximum_actions_total": 12000,
+    "maximum_frames_total": 2000000,
+    "maximum_encounter_steps": 512,
+    "retry_allowed": false
+  },
+  "synthetic_failure_gate": {
+    "status": "passed",
+    "cartridge_opened": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "diagnostic_phase": "entry",
+    "failed_episode_reopened_exactly": true
+  },
+  "cartridge_results": {
+    "cases_opened": 4,
+    "cases_settled": 3,
+    "cases_failed": 1,
+    "executable_cases_not_opened_after_stop": 2,
+    "coverage_gap_records_not_written_after_stop": 2,
+    "known_success_actions": 223,
+    "known_success_frames": 19851,
+    "failed_case_exact_cost_known": false,
+    "all_executed_costs_retained": false,
+    "all_executed_boundaries_settled_or_expected_failure": false,
+    "gate_passed": false,
+    "cases": [
+      {
+        "case_id": "route11-p0-w0",
+        "status": "settled_wild_win",
+        "supported_move_menu_size": 2,
+        "pre_encounter_wait_frames": 0,
+        "selected_turns": 3,
+        "controller_actions": 49,
+        "emulator_frames": 4357,
+        "status_condition_observed": false,
+        "terminal_reopened_exactly": true
+      },
+      {
+        "case_id": "route11-p1-w37",
+        "status": "settled_wild_win",
+        "supported_move_menu_size": 3,
+        "pre_encounter_wait_frames": 37,
+        "selected_turns": 1,
+        "controller_actions": 54,
+        "emulator_frames": 4802,
+        "status_condition_observed": false,
+        "terminal_reopened_exactly": true
+      },
+      {
+        "case_id": "route11-p4-w83",
+        "status": "settled_wild_win",
+        "supported_move_menu_size": 4,
+        "pre_encounter_wait_frames": 83,
+        "selected_turns": 2,
+        "controller_actions": 120,
+        "emulator_frames": 10692,
+        "status_condition_observed": true,
+        "status_suppressed_first_selection_without_pp_spend": true,
+        "subsequent_selection_settled": true,
+        "terminal_reopened_exactly": true
+      },
+      {
+        "case_id": "diglett-p0-w149",
+        "status": "unexpected_materializer_error",
+        "venue_relocation_required": true,
+        "failure_type": "RepeatableRedBattleScenarioRuntimeError",
+        "materialization_phase_inferred_from_exception_type_and_runner_control_flow": true,
+        "materialization_phase_durably_retained": false,
+        "failed_episode_reopened": true,
+        "semantic_failure_message_retained": false,
+        "failure_phase_retained": false,
+        "exact_action_cost_retained": false,
+        "exact_frame_cost_retained": false,
+        "retry_allowed": false
+      }
+    ]
+  },
+  "declared_coverage_gaps": {
+    "move_learning": "not available from the authenticated source without a long grind",
+    "forced_switch": "not available from the authenticated source without manufacturing unsafe state",
+    "alternate_venue_settlement": "not reached because the first relocation setup failed",
+    "same_battler_move_replacement": "legacy inference remains unqualified"
+  },
+  "adjudication": {
+    "cheapest_falsifier_triggered": "The failed case lost its semantic phase and exact resource cost even though its failed episode was durable and reopenable.",
+    "campaign_stopped_at_first_failure": true,
+    "failed_identity_replayed": false,
+    "live_patch_or_retry_chain_used": false,
+    "official_collection_remains_paused": true,
+    "required_next_contract": "A new runner identity must durably checkpoint setup phase and cumulative action/frame costs before and after each bounded component, preserving a sanitized semantic reason for both materializer and battle-runtime failures."
+  },
+  "learning_and_authority": {
+    "model_examples_before": 121,
+    "model_examples_after": 121,
+    "model_successes_before": 83,
+    "model_successes_after": 83,
+    "local_registrations_before": 86,
+    "local_registrations_after": 86,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0
+  }
+}

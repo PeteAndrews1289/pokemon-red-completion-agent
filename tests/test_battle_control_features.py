@@ -187,9 +187,7 @@ def test_control_projection_is_invariant_to_party_slot_permutation() -> None:
     assert project_control_features(
         original,
         catalog=RED_BATTLE_CATALOG,
-    ) == pytest.approx(
-        project_control_features(permuted, catalog=RED_BATTLE_CATALOG)
-    )
+    ) == pytest.approx(project_control_features(permuted, catalog=RED_BATTLE_CATALOG))
 
 
 def test_control_history_tracks_causal_actions_and_opponent_changes() -> None:
@@ -225,3 +223,20 @@ def test_control_history_does_not_treat_opponent_healing_as_a_transition() -> No
     assert healed.battle_turn == 1
     assert healed.opponent_index == 0
     assert healed.opponent_turn == 1
+
+
+def test_control_history_counts_observed_duplicate_species_sendout_once() -> None:
+    tracker = BattleControlHistoryTracker()
+    observation = _observation()
+    tracker.before("battle-one", observation)
+    tracker.advance(BattleAction.move(1), observation)
+    tracker.note_opponent_replacement()
+    second = tracker.before("battle-one", observation)
+    assert second.opponent_index == 1
+    assert second.opponent_turn == 0
+    observation["features"]["battle"]["opponent_species_ref"] = (  # type: ignore[index]
+        "pokemon:test:another-opponent"
+    )
+    tracker.note_opponent_replacement()
+    third = tracker.before("battle-one", observation)
+    assert third.opponent_index == 2

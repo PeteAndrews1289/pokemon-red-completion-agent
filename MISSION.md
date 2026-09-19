@@ -27,11 +27,24 @@ Concretely, success is:
    forces the system to exercise the whole game rather than the shortest path through it.
 3. **Transfer.** Knowledge earned in one generation reduces the teaching required for the next.
 
-The agreed delivery sequence is useful sustained Red play, model-directed story completion and
-registered collection, Blue/shared-ledger integration, then a compatible unfamiliar Red ROM modification as an intermediate adaptation
-test before Crystal. Initial performance and improvement with experience must be reported separately.
-Red experience should reduce the learning required; it does not guarantee immediate success on a
-modified game. This sequencing does not replace the long-term cross-title registered-Pokédex goal.
+The delivery gate revised by Pete on September 15 is **complete Red's legitimate native route
+before any ROM hack**: a fresh start-to-finish, model-directed run, concurrent Champion and
+Hall-of-Fame evidence, and the declared 124-species selected Red route registered in that run's
+save. A fixed walkthrough with random timing or a stitched checkpoint demonstration does not
+satisfy this gate. Deterministic mechanics may support the player, but consequential progression
+and resource decisions must belong to the model under declared authority.
+
+Version, cable-trade and event dependencies remain explicit legitimate gaps; shared credit never
+fabricates a local Red flag. Mew is deferred until a later legitimate source. Red/Blue link play
+may be attempted after model completeness, but an unavailable emulator link does not block the
+ROM-hack gate: record the dependency and earn it in a later title instead. The final player and
+official completion run may not cheat or edit a save. Training may use disclosed, isolated state
+interventions, including money overrides, to teach or test a mechanic without a resource bottleneck.
+Such assisted results are not legitimate funding, fresh-run completion or ordinary economy labels;
+the model must never receive an action that can perform the intervention itself.
+After that gate: a compatible unfamiliar Red ROM modification, then Crystal, continuing the
+shared registered Pokédex through at least Emerald. Report initial transfer and adaptation
+separately. Red experience should reduce teaching, not guarantee immediate success.
 
 ## Explicit scope revision — September 9, 2026
 

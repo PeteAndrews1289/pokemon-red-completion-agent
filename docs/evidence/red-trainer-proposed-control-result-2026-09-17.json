@@ -1,0 +1,323 @@
+{
+  "schema": "pokemon.red.trainer-proposed-control-result.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "source_commit": "ebc83493",
+  "model_sha256": "1925a27a7c73f4d49833f45527849b5ce9dd92e103e737d8e777a5708fa33e54",
+  "summary_sha256": "b67bdd09a9e3e2935cc021d3267f7d395ba16e2f24be7e323179d07ac3012fae",
+  "regression_sha256": "d209b7c7fb38b044b20cf98fbe7fed81d7be735c6fc339e705502fea2d075721",
+  "reports": {
+    "inherited_terminal": {
+      "composed_action": {
+        "examples": 46,
+        "model_mean_train_regret": 0.137389699
+      },
+      "control": {
+        "conflicting_winner_groups": 0,
+        "examples": 46,
+        "final_cross_entropy": 0.525942026,
+        "final_gradient_norm": 0.249858294,
+        "first_candidate_mean_train_regret": 0.356330899,
+        "initial_cross_entropy": 0.703856728,
+        "model_mean_train_regret": 0.048041417,
+        "repeated_input_groups": 0,
+        "unique_candidate_matrices": 46
+      },
+      "move": {
+        "conflicting_winner_groups": 0,
+        "examples": 37,
+        "final_cross_entropy": 1.346745029,
+        "final_gradient_norm": 0.256950107,
+        "first_candidate_mean_train_regret": 0.131666841,
+        "initial_cross_entropy": 1.386496646,
+        "model_mean_train_regret": 0.077005059,
+        "repeated_input_groups": 0,
+        "unique_candidate_matrices": 37
+      },
+      "switch": {
+        "conflicting_winner_groups": 5,
+        "examples": 48,
+        "final_cross_entropy": 0.575113365,
+        "final_gradient_norm": 0.120173076,
+        "first_candidate_mean_train_regret": 0.102611975,
+        "initial_cross_entropy": 0.693345187,
+        "model_mean_train_regret": 0.103266345,
+        "repeated_input_groups": 16,
+        "unique_candidate_matrices": 21
+      }
+    },
+    "new_terminal": {
+      "composed_action": {
+        "examples": 77,
+        "model_mean_train_regret": 1.140483473
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 77,
+        "final_cross_entropy": 0.610962817,
+        "final_gradient_norm": 0.213183844,
+        "first_candidate_mean_train_regret": 0.576458753,
+        "initial_cross_entropy": 0.691140822,
+        "model_mean_train_regret": 0.734772818,
+        "repeated_input_groups": 1,
+        "unique_candidate_matrices": 76
+      },
+      "move": {
+        "conflicting_winner_groups": 6,
+        "examples": 74,
+        "final_cross_entropy": 0.823024784,
+        "final_gradient_norm": 0.175183297,
+        "first_candidate_mean_train_regret": 0.227727513,
+        "initial_cross_entropy": 0.863460185,
+        "model_mean_train_regret": 0.341231678,
+        "repeated_input_groups": 7,
+        "unique_candidate_matrices": 61
+      },
+      "switch": {
+        "conflicting_winner_groups": 1,
+        "examples": 80,
+        "final_cross_entropy": 1.273060409,
+        "final_gradient_norm": 0.061127613,
+        "first_candidate_mean_train_regret": 2.156219302,
+        "initial_cross_entropy": 1.368467041,
+        "model_mean_train_regret": 1.021181119,
+        "repeated_input_groups": 3,
+        "unique_candidate_matrices": 77
+      }
+    },
+    "original44": {
+      "composed_action": {
+        "examples": 36,
+        "model_mean_train_regret": 0.354898296
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 36,
+        "final_cross_entropy": 0.511671493,
+        "final_gradient_norm": 0.871278739,
+        "first_candidate_mean_train_regret": 0.475433907,
+        "initial_cross_entropy": 0.696847226,
+        "model_mean_train_regret": 0.267619654,
+        "repeated_input_groups": 5,
+        "unique_candidate_matrices": 21
+      },
+      "move": {
+        "conflicting_winner_groups": 1,
+        "examples": 32,
+        "final_cross_entropy": 0.737965127,
+        "final_gradient_norm": 0.276717081,
+        "first_candidate_mean_train_regret": 0.175005484,
+        "initial_cross_entropy": 0.866412924,
+        "model_mean_train_regret": 0.008849232,
+        "repeated_input_groups": 4,
+        "unique_candidate_matrices": 20
+      },
+      "switch": {
+        "conflicting_winner_groups": 2,
+        "examples": 42,
+        "final_cross_entropy": 0.575797428,
+        "final_gradient_norm": 0.104162485,
+        "first_candidate_mean_train_regret": 0.801412164,
+        "initial_cross_entropy": 0.693340182,
+        "model_mean_train_regret": 0.134933859,
+        "repeated_input_groups": 7,
+        "unique_candidate_matrices": 19
+      }
+    },
+    "retained52": {
+      "composed_action": {
+        "examples": 44,
+        "model_mean_train_regret": 0.34099642
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 44,
+        "final_cross_entropy": 0.545487415,
+        "final_gradient_norm": 0.349001329,
+        "first_candidate_mean_train_regret": 0.47135904,
+        "initial_cross_entropy": 0.700617467,
+        "model_mean_train_regret": 0.244542819,
+        "repeated_input_groups": 5,
+        "unique_candidate_matrices": 29
+      },
+      "move": {
+        "conflicting_winner_groups": 1,
+        "examples": 40,
+        "final_cross_entropy": 0.762412397,
+        "final_gradient_norm": 0.088871584,
+        "first_candidate_mean_train_regret": 0.146977995,
+        "initial_cross_entropy": 0.866534358,
+        "model_mean_train_regret": 0.021896675,
+        "repeated_input_groups": 4,
+        "unique_candidate_matrices": 28
+      },
+      "switch": {
+        "conflicting_winner_groups": 3,
+        "examples": 50,
+        "final_cross_entropy": 0.734096329,
+        "final_gradient_norm": 0.080141118,
+        "first_candidate_mean_train_regret": 0.705168392,
+        "initial_cross_entropy": 0.813824997,
+        "model_mean_train_regret": 0.137173295,
+        "repeated_input_groups": 11,
+        "unique_candidate_matrices": 23
+      }
+    }
+  },
+  "comparison": {
+    "frozen": {
+      "wins": 7,
+      "battles": 8,
+      "decisions": 176,
+      "party_faints": 16,
+      "party_hp_lost": 1470,
+      "party_pp_spent": 86,
+      "invalid_action_failures": 0
+    },
+    "candidate": {
+      "wins": 8,
+      "battles": 8,
+      "decisions": 155,
+      "party_faints": 9,
+      "party_hp_lost": 1148,
+      "party_pp_spent": 83,
+      "invalid_action_failures": 0
+    }
+  },
+  "regression": {
+    "battle_won": false,
+    "stop_reason": "party_defeated",
+    "decision_count": 27,
+    "metrics": {
+      "attack_turn_utility_sum": -5.067551824212271,
+      "invalid_action_failures": 0,
+      "move_suppressed_or_failed": 1,
+      "opponent_faints": 3,
+      "party_faints": 5,
+      "party_hp_lost": 325,
+      "party_pp_spent": 17,
+      "party_status_changes": 0,
+      "policy_latency_ns_max": 1720417,
+      "policy_latency_ns_mean": 823572.4444444445,
+      "policy_latency_ns_min": 173333,
+      "teacher_interventions": 0
+    },
+    "teacher_queries": 0,
+    "memory_write_actions": 0
+  },
+  "verification": {
+    "battle_logs_complete": 17,
+    "outcomes": 17,
+    "teacher_queries": 0,
+    "memory_write_actions": 0
+  },
+  "move_audit": {
+    "move_contexts": 74,
+    "suboptimal_selected_moves": 29,
+    "largest_measured_gaps": [
+      {
+        "capture": "terminal-intermediate-bca96bb850742714aaee7074",
+        "regret": 8.149286,
+        "chosen": "pokemon.core:battle:move:2",
+        "best": "pokemon.core:battle:move:1",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:033",
+        "best_move": "pokemon.red.gb.us.rev0:move:055",
+        "level": 32,
+        "chosen_return": 0.993077,
+        "best_return": 9.142362
+      },
+      {
+        "capture": "terminal-intermediate-46bbbf458c06420bf3d5d9f1",
+        "regret": 2.61803,
+        "chosen": "pokemon.core:battle:move:2",
+        "best": "pokemon.core:battle:move:1",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:033",
+        "best_move": "pokemon.red.gb.us.rev0:move:055",
+        "level": 32,
+        "chosen_return": 6.531029,
+        "best_return": 9.149058
+      },
+      {
+        "capture": "terminal-intermediate-790d271ae1382c05757af5b6",
+        "regret": 2.542946,
+        "chosen": "pokemon.core:battle:move:2",
+        "best": "pokemon.core:battle:move:1",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:033",
+        "best_move": "pokemon.red.gb.us.rev0:move:055",
+        "level": 32,
+        "chosen_return": 0.733233,
+        "best_return": 3.276179
+      },
+      {
+        "capture": "terminal-intermediate-d036558be869cfd088e08c9d",
+        "regret": 2.390967,
+        "chosen": "pokemon.core:battle:move:1",
+        "best": "pokemon.core:battle:move:2",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:022",
+        "best_move": "pokemon.red.gb.us.rev0:move:033",
+        "level": 32,
+        "chosen_return": 5.886036,
+        "best_return": 8.277003
+      },
+      {
+        "capture": "assisted-train-d211c87898523584",
+        "regret": 2.229549,
+        "chosen": "pokemon.core:battle:move:3",
+        "best": "pokemon.core:battle:move:1",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:034",
+        "best_move": "pokemon.red.gb.us.rev0:move:085",
+        "level": 32,
+        "chosen_return": -4.062577,
+        "best_return": -1.833029
+      },
+      {
+        "capture": "terminal-intermediate-e330e79d3e0b55b66b765e2a",
+        "regret": 1.090472,
+        "chosen": "pokemon.core:battle:move:1",
+        "best": "pokemon.core:battle:move:3",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:085",
+        "best_move": "pokemon.red.gb.us.rev0:move:034",
+        "level": 32,
+        "chosen_return": 5.50614,
+        "best_return": 6.596612
+      },
+      {
+        "capture": "terminal-intermediate-b45c5f5d5295d2a0c91b01b0",
+        "regret": 0.870244,
+        "chosen": "pokemon.core:battle:move:1",
+        "best": "pokemon.core:battle:move:4",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:085",
+        "best_move": "pokemon.red.gb.us.rev0:move:084",
+        "level": 32,
+        "chosen_return": 6.58425,
+        "best_return": 7.454494
+      },
+      {
+        "capture": "assisted-train-8610d7b25b9d1b30",
+        "regret": 0.67049,
+        "chosen": "pokemon.core:battle:move:1",
+        "best": "pokemon.core:battle:move:2",
+        "chosen_move": "pokemon.red.gb.us.rev0:move:055",
+        "best_move": "pokemon.red.gb.us.rev0:move:033",
+        "level": 32,
+        "chosen_return": 7.920164,
+        "best_return": 8.590655
+      }
+    ]
+  },
+  "conclusion": {
+    "reported_premature_switch_fixed": true,
+    "original_battle_won": false,
+    "retention_passed": false,
+    "authority_promotions": 0,
+    "independent_natural_transfer": false,
+    "full_red_run": false,
+    "github_pushes": 0
+  },
+  "tests": {
+    "focused_passed": 117,
+    "integration_skipped": 13,
+    "mypy_source_files": 539
+  },
+  "next": "Close the single control-only fit. Reassessment found 29/74 inferior attack choices in retained terminal data, with a maximum measured mean-return gap of 8.149286. A separately declared expected-return objective successor may reuse these TRAIN data; no metric threshold or consumed DEVELOPMENT changes."
+}

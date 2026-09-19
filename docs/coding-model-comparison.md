@@ -4,6 +4,26 @@ Purpose: assess whether GPT-6 improves useful project progress enough to justify
 relative to GPT-5.6 Sol. These are observations from development, not a controlled benchmark.
 The coding assistant and the trained Pokemon policy are different models.
 
+## 2026-09-14: Sol freeze-failure adjudication and external review
+
+Starting revision `42cb6089`. GPT-5.6 Sol reconstructed Model120's exact action-free two-option menu
+and invoked the player model once. A private wrapper then accessed a nonexistent choice attribute
+before persisting the returned index. Sol stopped with zero gameplay and learning, sealed the seed
+as consumed, and did not infer or redraw the answer.
+
+Claude Sonnet High was restored through the direct CLI and completed a bounded no-tools review.
+Gemini3.8 Flash High completed the same review through `agy`. Both approved the no-redraw ruling and
+found a narrower prospective integrity gap: a process interruption after query processing but
+before receipt fsync could still permit a second query. Claude also required content identity for a
+reconstructed index. Sol accepted both findings, adding an exclusive fsynced pre-query tombstone and
+selected-option content hash to the unexecuted V2 freeze.
+
+Judgment: Sol handled the adverse result honestly and integrated two useful external findings, but
+the session produced no measured learner output and includes one failed implementation. It is not
+evidence of superiority over Astra or another coding model. Antigravity reported100% five-hour and
+65% weekly Gemini quota remaining after the review. Exact Sol tokens and direct Claude percentage
+remain unavailable.
+
 ## 2026-09-05: Sol bounded live-runner qualification
 
 Starting point: GPT-5.6 Sol inherited the green five-input readiness and synthetic production
@@ -286,3 +306,64 @@ Recommendation for the next session: **Sol High, Fast off** for cross-box helper
 implementation and focused tests. Use Astra High only if preserving field-move dependencies across
 box switching exposes an ambiguous ownership or composition problem. External review is most useful
 after the executable menu changes, not before this clearly bounded adapter seam.
+
+## 2026-09-13: Model119 frozen-restoration session
+
+Sol High completed the exact frozen-restoration execution, independent before/after observation,
+one measured fit and zero-input checkpoint publication. The single gameplay attempt fully restored
+HP/PP in153 actions/5,424 frames and produced Model119 with119 examples/81 successes. The next
+inventory correctly stopped at one fishing acquisition instead of claiming a model ranking choice.
+
+Flash3.8 High saved a live failure: its runner review caught a stale menu-era source-bundle
+comparison before controller input. Claude Sonnet supplied the missing public export and a clean
+worktree guard. Accepted findings were fixed; both requests to split mandatory registry identity
+changes were rejected. Flash timed out only after delivering its finding, and both CLIs left quota
+unavailable. Exact assistant usage and account debit remain unavailable, so this is not a measured
+cost comparison.
+
+Recommendation for the next session: **Sol High, Fast off**. The forced-singleton supplemental
+bridge has established semantics and a narrow integration surface. Use bounded Flash/Claude review
+after implementation; escalate to Astra High only if authenticating the supplemental binding would
+require a new authority contract or weaken the learned-choice boundary.
+
+## 2026-09-13: Model119 forced-singleton fishing session
+
+Sol High implemented and qualified the forced acquisition boundary, froze the exact one-candidate
+state, executed it once and verified the child checkpoint and next menu. The capture added
+Poliwhirl in905 actions/45,564 frames while leaving Model119 at119 examples. The task required
+careful evidence bookkeeping but no new policy architecture, so Astra was not needed.
+
+Flash3.8 High passed the bridge and produced one useful runner finding: writing the controller claim
+inside observation weakened the meaning of that claim. Codex moved it into the sole executor after
+durable decision recording. Three Flash P0 claims were rejected against existing tests. Claude
+Sonnet supplied the forced enum and minimum-width requirements; its exact-file follow-up timed out.
+Neither CLI exposed service quota, and exact token/account debit remains unavailable, so this is not
+a measured cost comparison.
+
+Recommendation for the next session: **Sol High, Fast off**. The new terminal exposes the familiar
+two-option freeze/execute/fit loop. Escalate to Astra High only if the corrected checkpoint cannot
+enter measured-choice admission without changing authority semantics.
+
+## 2026-09-13: Model120 frozen field-restoration session
+
+Sol High froze Model119's exact two-option menu, executed its one sampled restoration and admitted
+the retained result through a narrowly corrected field-item contract. The executor consumed one
+Full Heal and cured one status in58 actions/4,776 frames. The eligible success produced Model120
+with120 examples/82 successes. An action-free continuation exposed routed restoration and trainer
+resupply without sampling either.
+
+Flash3.8 High completed a compact no-tools review and passed the admission change with no P0/P1.
+Claude Sonnet High independently passed the exact diff and found one missing reverse
+cross-admission test; Codex accepted and added it. Claude's suggestion to require the public
+closeout record before fitting was treated as a sequencing preference: immutable private evidence
+and exact-source CI already existed, and public evidence was completed in the same session. Neither
+reviewer edited source or ran gameplay.
+
+Antigravity exposed usable quota at closeout: Gemini99.80% five-hour/64.74% weekly remaining, and
+its separate Claude/GPT pool available. Claude's earlier authenticated snapshot showed82% session
+and48% weekly remaining; its closeout invocation prompted for login, so no fresher direct Claude
+reading is claimed. Exact token debit remains unavailable, so this is not a cost comparison.
+
+Recommendation for the next session: **GPT-5.6 Sol, High effort, Fast off**. Use Astra High only if
+the next cycle requires a new authority contract, fresh-run generalization design or explicit
+version/trade/event dependency architecture.

@@ -1,0 +1,20 @@
+{
+  "schema": "pokemon.red.trainer-learner-five-regression-plan.v1",
+  "date": "2026-09-17",
+  "timing": "Declared before the five-member candidate fit and before its reserved comparisons.",
+  "user_authorization": "The current request asks to fix the observed failure. A single regression after a genuinely new-data fit is a normal verification step, not a retry of the previous frozen model or an independent evaluation.",
+  "amends": "Supersedes only the no-original-regression-replay clause in red-trainer-learner-five-plan-2026-09-17.json. Preserve the previous failed regression unchanged. New training, reserved cases, optimizer, seed and retention gates do not change.",
+  "capability": "Check whether the newly fitted integrated policy now completes the specific five-member TRAIN battle that exposed destructive switching and weak attacks.",
+  "learned_authority": "The frozen candidate owns every action; zero teacher substitutions, model updates or memory edits during execution.",
+  "transfer_test": "This is explicitly a known, in-sample TRAIN regression. Reserved variations remain separate and neither result establishes independent natural transfer.",
+  "cheapest_falsifier": "The candidate still loses the retained failing battle or repeats costly switch cycles.",
+  "time_box": "One episode, at most 80 decisions and 120000 frames, opening timing zero.",
+  "stop_condition": "Retain the single result, success or failure. No additional fit, timing search or retry follows this regression in this session.",
+  "candidate": "Only the single declared learner-five fit, with 100 authenticated retained anchors plus the newly collected learner-state contexts. Bind its exact model hash before execution.",
+  "capture_id": "assisted-train-cc2d973c9d0279e9",
+  "state_sha256": "537a290a9cf91ec8d2d47751482ec93417b9de60b632a3574ffe1da72137a4fc",
+  "manifest_sha256": "14fc433cb491a513c69aa8b69e21ff2353202994d39c5cfc284825b83159531c",
+  "prior_terminal_candidate_result_sha256": "4c03a7a072c199f557a97a8248110feb607a721ff54d264fdcdf7cf95fb85ad0",
+  "authority_promotions": 0,
+  "github_pushes": 0
+}

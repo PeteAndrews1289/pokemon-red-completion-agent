@@ -1,0 +1,63 @@
+{
+  "baseline_id": "red-first-v4-legitimate-native",
+  "adopted": "2026-09-15",
+  "mission": "A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.",
+  "stages": [
+    {
+      "id": "foundation",
+      "title": "Build the learning loop",
+      "goal": "Observe, act, verify, save and learn from actual outcomes.",
+      "exit": "Authenticated saved-state collection, retained-data fitting and a bounded post-fit continuation.",
+      "scope": "Teacher and deterministic mechanics support learning; they are not the final player."
+    },
+    {
+      "id": "adaptive-red",
+      "title": "Make useful Red decisions",
+      "goal": "Remember failed searches and choose productive alternatives.",
+      "exit": "A history-aware learner chooses between useful executable goals, learns from the result and continues productively.",
+      "scope": "Search history must inform learned choices, not a scripted rule forcing another goal."
+    },
+    {
+      "id": "sustained-red",
+      "title": "Sustain model-directed play",
+      "goal": "Combine navigation, battles, captures, resources and recovery.",
+      "exit": "Repeated multi-goal progress across varied Red situations, with measured costs, interventions and recovery.",
+      "scope": "Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence."
+    },
+    {
+      "id": "red-story",
+      "title": "Finish Red with the model",
+      "goal": "Choose progression from a fresh game through the Champion.",
+      "exit": "One authenticated fresh start-to-finish model-directed Red run with concurrent Champion and Hall-of-Fame evidence; no fixed walkthrough or checkpoint stitching.",
+      "scope": "Earlier checkpoint completion is supporting evidence, not this fresh-run gate."
+    },
+    {
+      "id": "red-collection",
+      "title": "Complete Red's legitimate native route",
+      "goal": "Register the declared 124-species Red route in the same fresh-run save.",
+      "exit": "124/124 selected-route registration in the authenticated model-directed run, with every unavailable version, cable-trade or event dependency recorded for later legitimate acquisition.",
+      "scope": "No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota."
+    },
+    {
+      "id": "red-hack",
+      "title": "Adapt to an unfamiliar Red hack",
+      "goal": "Test changed encounters, rules or difficulty in a compatible hack.",
+      "exit": "Only after the fresh Red story/124-route gate: compare initial performance and adaptation with a learner lacking Red experience.",
+      "scope": "Compatibility and initial performance are separate tests; deferred species remain explicit shared-ledger gaps."
+    },
+    {
+      "id": "crystal",
+      "title": "Transfer and learn Crystal",
+      "goal": "Reuse shared skills while learning new mechanics and progression.",
+      "exit": "Measured transfer and adaptation, then model-led story and new registrations against the shared ledger.",
+      "scope": "Add the title adapter, time-dependent encounters, breeding and new mechanics; not another fixed walkthrough."
+    },
+    {
+      "id": "cross-generation",
+      "title": "Accumulate a cross-game registered Dex",
+      "goal": "Continue the shared registered Pokedex through at least Emerald.",
+      "exit": "Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.",
+      "scope": "Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games."
+    }
+  ]
+}

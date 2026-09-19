@@ -1,0 +1,122 @@
+{
+  "schema": "pokemon.red.durable-battle-cartridge-campaign.v1",
+  "session": "2026-09-15-durable-battle-cartridge-campaign",
+  "status": "stopped_on_first_failure",
+  "source": {
+    "commit": "d3ad4edd72ab75c8e057f2cf04e472b9c82d9db7",
+    "bundle_sha256": "5c76ef8e15e05be967b2fdbff553edc68c27363efbb9c87ff3839fc80d34fe3c",
+    "qualification_ci_run_id": 34989253573,
+    "qualification_ci_status": "passed",
+    "qualification_ci_url": "https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/34989253573"
+  },
+  "implementation": {
+    "durable_nonresumable_campaign_epoch": true,
+    "assignment_and_claim_before_case_input": true,
+    "campaign_journal_checkpoints": [
+      "case_opening",
+      "case_closed"
+    ],
+    "shared_budget_snapshots": true,
+    "first_failure_closes_campaign": true,
+    "same_epoch_retry_allowed": false,
+    "same_epoch_resume_allowed": false,
+    "focused_tests_passed": 389,
+    "whole_source_mypy_files": 504,
+    "ruff": "passed"
+  },
+  "frozen_campaign": {
+    "campaign_id": "battle-cartridge-v2-20260915-campaign-b",
+    "plan_sha256": "49726aae42aa56bcb50c9885cc09f8d5ee2f8388e32783247969e581cf4146f1",
+    "declared_cases": 4,
+    "maximum_cases": 4,
+    "per_case_action_cap": 2000,
+    "per_case_frame_cap": 200000,
+    "campaign_action_cap": 12000,
+    "campaign_frame_cap": 2000000,
+    "encounter_step_cap": 512,
+    "source_state_sha256": "21f77af82628f903f1b44ce8f052f6d58b5c2889bb7a545d33b27c427cc4096d",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "venues": [
+      "route_11",
+      "digletts_cave"
+    ],
+    "declared_coverage_gaps": [
+      "forced_switch",
+      "move_learning",
+      "same_battler_move_replacement"
+    ]
+  },
+  "execution": {
+    "opened_cases": 1,
+    "completed_cases": 0,
+    "unopened_cases": 3,
+    "actions_attempted": 893,
+    "actions_completed": 893,
+    "emulator_frames": 80081,
+    "cost_known": true,
+    "campaign_closed": true,
+    "later_episode_artifacts_absent": true,
+    "failure": {
+      "case_id": "route11-p3-w17-b",
+      "episode_id": "battle-cartridge-v2-20260915-route11-p3-w17-b",
+      "phase": "battle",
+      "reason": "battle_failed",
+      "runtime_phase": "policy_selection",
+      "error_type": "BattleRuntimeError",
+      "journal_healthy": true,
+      "retry_allowed": false,
+      "active_party_index": 3,
+      "enemy_hp_at_failure": 34,
+      "battler_hp_at_failure": 44,
+      "battler_pp_at_failure": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "retained_selections": 75,
+      "explanation": "The fixed maintenance policy spent the active battler's final remaining PP while enemy HP remained unchanged, then had no usable move on the next MAIN-menu decision. Exact opponent identity and type interaction are not claimed."
+    }
+  },
+  "learning_delta": {
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "fits": 0,
+    "successes": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registrations": 0,
+    "living_species": 0,
+    "specimens": 0
+  },
+  "unchanged_state": {
+    "model": "Model121",
+    "examples": 121,
+    "successes": 83,
+    "local_registered": 86,
+    "local_target": 151,
+    "living_species": 66,
+    "specimens": 70,
+    "collection_checklist_done": 25,
+    "collection_checklist_total": 26,
+    "fresh_red_gates_passed": 0,
+    "fresh_red_gates_total": 5
+  },
+  "review": {
+    "antigravity_model": "Gemini 3.8 Flash High",
+    "initial_findings": [
+      "durable campaign state required",
+      "new campaign epoch required"
+    ],
+    "final_verdict": "GO; no remaining P0/P1 defects",
+    "quota_after_refresh": {
+      "gemini_weekly_remaining_percent": 58,
+      "gemini_five_hour_remaining_percent": 99,
+      "claude_gpt_weekly_remaining_percent": 86,
+      "claude_gpt_five_hour_remaining_percent": 100
+    }
+  },
+  "next": "Astra High: one bounded architecture session for a generic, observable no-damage/no-PP contingency using existing switch mechanics. Prohibit species, map and case identities; qualify ROM-free. Do not replay campaign B or open a replacement cartridge campaign in that session."
+}

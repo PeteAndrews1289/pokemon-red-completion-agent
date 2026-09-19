@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model114-frozen-fishing-learning**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battle-lifecycle-continuation**.
 
-A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
+A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 14/15 acceptance items (93%).**
+**Broaden model-directed Red collection: 29/29 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -17,7 +17,8 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
-- [ ] Expose a useful choice across more than one acquisition family
+- [x] Expose a useful choice across more than one acquisition family ([evidence](../docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json))
+- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
@@ -27,8 +28,21 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
 - [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
 - [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
+- [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
+- [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
+- [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
+- [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
+- [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
+- [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
+- [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
+- [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
+- [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
+- [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
+- [x] Bound regional route inventory without weakening full verification ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
+- [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
+- [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Pinned historical learning receipt: **135 examples**. The current model and integration boundary are reported below in the latest review and active state; this older chart receipt is not full-game competence.
 
 ## Stable goals and exit criteria
 
@@ -62,33 +76,31 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — verified
+### 04. Finish Red with the model — planned
 
-Plan quests, prerequisites and puzzles through the Champion.
+Choose progression from a fresh game through the Champion.
 
-**Exit criterion:** Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.
+**Exit criterion:** One authenticated fresh start-to-finish model-directed Red run with concurrent Champion and Hall-of-Fame evidence; no fixed walkthrough or checkpoint stitching.
 
-Teacher completion already exists. It does not satisfy this learned-player milestone.
+Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
-[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
+### 05. Complete Red's legitimate native route — current
 
-### 05. Build the shared registered Dex — current
+Register the declared 124-species Red route in the same fresh-run save.
 
-Catch, evolve and record missing species; deposit completed lines and skip already-credited work.
+**Exit criterion:** 124/124 selected-route registration in the authenticated model-directed run, with every unavailable version, cable-trade or event dependency recorded for later legitimate acquisition.
 
-**Exit criterion:** Verified registered-objective Red collection, fresh-run sequencing and shared-ledger continuity on Blue under explicit availability rules.
+No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
-
-[Current evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model137-fishing-route-drift-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
 Test changed encounters, rules or difficulty in a compatible hack.
 
-**Exit criterion:** Report initial performance and learning gains against an otherwise identical learner without Red experience.
+**Exit criterion:** Only after the fresh Red story/124-route gate: compare initial performance and adaptation with a learner lacking Red experience.
 
-Compatibility is checked separately. Red competence does not guarantee an immediate win.
+Compatibility and initial performance are separate tests; deferred species remain explicit shared-ledger gaps.
 
 ### 07. Transfer and learn Crystal — planned
 
@@ -100,13 +112,837 @@ Add the title adapter, time-dependent encounters, breeding and new mechanics; no
 
 ### 08. Accumulate a cross-game registered Dex — planned
 
-Reuse competence and verified registration while pursuing new gaps in later games.
+Continue the shared registered Pokedex through at least Emerald.
 
 **Exit criterion:** Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.
 
-Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
+Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battle-lifecycle-continuation
+
+Frozen J continued the retained faint with one forced replacement and four attacks. Natural loss, normal blackout and field control verified; cash1706 to853, party restored. Original funding goal remains failed.
+
+**Deviation:** No reset, teacher rescue, fit, six-member promotion or collection gain. All28 native registration gaps enumerated; return to useful main-save choices. Existing September15 native-route/deferred-dependency requirement restored in stale completion-contract prose; stage criteria unchanged.
+
+**Next:** Return to the exact Model137 main-save terminal; rebuild useful funding/admission or non-Safari options and retain one model-selected result. Qualify six-member battle scope if needed; no blind refit or full run.
+
+### 2026-09-19-player-battler-integration
+
+Frozen J is connected to ordinary trainer funding. One new earned-state goal exercised4model decisions but failed after Wartortle fainted; strict funding guard stopped the unfinished battle. Exact final state retained and reopened. Model137/Red96of124 unchanged.
+
+**Deviation:** No stage exit, fit or fresh-run gate changed. Direct prepared-entry probe, not high-level model-selected funding. Current docs refreshed and this checkpoint authorized for GitHub; earlier evidence remains unchanged.
+
+**Next:** Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run.
+
+### 2026-09-19-battler-live-v1
+
+Frozen J won two new earned-state trainer encounters with two voluntary switches and33decisions. Both returned verified live field state without reset or assistance. Supported small-party battler v1 is packaged; main-player call-site integration is next.
+
+**Deviation:** No fit or stage/checklist exit change. The previous reserve-coverage failure remains historical. These are same-origin continuations, not new independent roots or six-member mastery. Recovery needs persist in the earned states.
+
+**Next:** Astra High, Fast off: explicitly connect J to one supported main-player trainer boundary and verify one bounded saved-state goal. No new trainer refit/review cycle or full run.
+
+### 2026-09-19-battler-natural-team-v1
+
+Frozen J and H each won6/6 natural two-member battles. J37decisions/90HP lost versus H42/102. Neither used a reserve: switching coverage remains missing. All12earned endpoints retained and reopened read-only; no fit or player integration.
+
+**Deviation:** No stage or checklist change. Retained the failed coverage gate rather than counting starter-only wins as switching proof. Current-source consistency check requires this session record and regenerated projection.
+
+**Next:** Astra High, Fast off per Pete: bounded new-encounter reserve-use probe from earned saves with normal menu lead changes, then one player objective/ledger. No fresh-source factory, refit or replay.
+
+### 2026-09-19-battler-policy-learning-v1
+
+One J fit preserves15 TRAIN checks after16 policy-bound measurements/400branches. Unused generated teams:9/24wins versus H7/24, fewer faints. Two natural boot origins at three timings: J6/6, H5/6, first-legal0/6. J frozen and packaged; no final-player promotion.
+
+**Deviation:** Pete clarified learning rather than perfect wins and authorized two bounded natural starts. Prospective learning gate does not require teacher superiority; historical failures retain their verdicts. Small descriptive cohorts, attack-only natural evidence, no stage/checklist exit changes.
+
+**Next:** Sol High, Fast off: legitimate independent natural full-party tests, then bounded earned-state integration with durable final-state capture. Keep J fixed; no consumed-test fitting/replay or new review cycle.
+
+### 2026-09-19-battler-readiness-v1
+
+318 fitted battle TRAIN contexts,138 added through3265 complete matched branches. H improves14wins versus11 but teacher17; I fits TRAIN better yet regresses7wins versus H14. No final-player readiness.
+
+**Deviation:** Four-root120-branch audit changes best action in4/4 states under learner continuation. Next work addresses policy-dependent target semantics; no gate relaxation, consumed evaluation reuse, stage/checklist exit change or new framework.
+
+**Next:** Astra High, Fast off: explicit learner-continuation target contract and bounded four-root supply, then one declared fit and unused comparison. Independent natural full-party qualification still needs source preparation approval.
+
+### 2026-09-19-trainer-retention-v1
+
+One retention-constrained fit on180 existing contexts passes all old gates and improves terminal128 composed regret42.3%. Natural Champion wins22decisions/1faint/389HP, but frozen wins16/0/156. No new TRAIN data or player promotion.
+
+**Deviation:** The natural performance gate stops integration. Champion is an unused encounter for this trainer but shares historical League ancestry; no independent replication or fresh completion is claimed. Stage and checklist exits unchanged.
+
+**Next:** Astra High, Fast off: TRAIN-only attack optimizer/coverage diagnosis. Preserve the candidate and failed natural comparison; no framework rebuild, blind refit, consumed DEVELOPMENT replay or GitHub push.
+
+### 2026-09-17-trainer-return-objective-v1
+
+Concrete-action control fixed the observed 13-HP premature switch and improved reserved TRAIN play. A return-based successor won8/8 versus6/8 on harder fresh variants, but lost the known battle and failed all three retained gates. Four fits total in the extended session; none promoted.
+
+**Deviation:** Pete's explicit added-credit finish request reopened bounded work. The one-fit control experiment closed before a separately declared objective successor. Preserve every failure; assisted TRAIN variants do not establish natural transfer, and no stage or Red completion criteria change.
+
+**Next:** Stop this fitting sequence. Use the retained180-context corpus for a retention-constrained learning feasibility check; no new trainer infrastructure or data recollection, and no consumed DEVELOPMENT replay.
+
+### 2026-09-17-trainer-terminal-learning-v1
+
+Two battle fits added 128 contexts and 3755 complete branches. Reserved five-member TRAIN wins improved 3/8 to 8/8; party faints 35 to 8. Original hard battle still lost; composed retention failed. No promotion or Red acceptance progress.
+
+**Deviation:** One known TRAIN regression per candidate was prospectively authorized; both failures remain retained. Same-origin assisted variation is not independent natural transfer. No further fit or replay this session; stage and checklist exits are unchanged.
+
+**Next:** One bounded concrete-action-conditioned control experiment using retained data, then independent natural validation after qualification. No blind refit sweep, full-game replay or GitHub push.
+
+### 2026-09-17-trainer-packaged-rollout-diagnostic-v1
+
+The packaged three-head policy won one easy TRAIN battle in one attack but lost a full-party TRAIN battle after 16 decisions and five party faints. Both logs verified, with no teacher intervention, memory edit, fit, authority, registration or transfer gain. An authenticated corpus audit found 965 of 1110 matched branches stopped at the turn budget.
+
+**Deviation:** Opening-choice retention is no longer treated as evidence of full-battle readiness. Preserve the in-sample failure without replay or refit; stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: audit distinct TRAIN origins and freeze one bounded terminal multi-turn curriculum with intermediate choices; require separate natural-origin evaluation before promotion.
+
+### 2026-09-17-trainer-terminal-switch-successor-v1
+
+The revised assisted TRAIN pair completed all 20 four-turn branches. Both healthy and critical leads favored switching, by 0.4820 and 0.4721 return respectively. The packaged attack head also favors the weak follow-up used by the baseline. No fit, authority, registration or transfer result advanced.
+
+**Deviation:** The predeclared switch/stay reversal gate stopped before the second matchup and reserved variations. Keep the negative result; do not tune this consumed pair to force a desired label. Stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: inspect packaged-policy continuation and varied realistic TRAIN supply before another switching fit. Preserve original retention and independent natural promotion gates.
+
+### 2026-09-17-trainer-frozen-composition-terminal-hp-v1
+
+Packaged frozen attack plus corrected switching weights, passing all three unchanged TRAIN retention gates. Fixed inherited warm-start settings. The first terminal HP scenario retained 25 branches: 15 wins, 10 four-turn truncations, including every switch branch. No fit or authority change.
+
+**Deviation:** The declared terminal gate stopped the four-case recipe before the critical-HP case and second matchup. No misleading truncated target was admitted; stage and completion exits remain unchanged.
+
+**Next:** Sol High, Fast off: one prospective switching curriculum with a continuation that can complete a switched battle; preserve existing retention gates and reserve unseen variation.
+
+### 2026-09-17-trainer-astra-readiness-decision-v1
+
+Astra evaluated old attack plus corrected control/switch in memory: all unchanged TRAIN gates pass (0.03538 original attack, 0.04475 all attack, 0.11260 composed regret). Reproduced inherited warm-start settings defect; 34 focused tests passed. No fit, gameplay or authority change.
+
+**Deviation:** Freeze attack weights instead of another same-corpus attack refit. Terminal HP learning, unseen variation and new-origin natural comparison remain required; stage and completion criteria unchanged.
+
+**Next:** Sol High, Fast off: authenticated composition, inherited-settings fix and terminal HP pilot. Inventory new natural supply; no standing Astra gate if checks pass.
+
+### 2026-09-17-trainer-warm-attack-retention-v1
+
+One old-weight attack continuation on 52 retained TRAIN contexts failed both attack gates: original-44 regret 0.0857 versus 0.0554, all-52 regret 0.0850 versus 0.0648. Lower cross-entropy accompanied a high-cost flipped attack choice. No gameplay, authority or completion gate advanced.
+
+**Deviation:** Two retention failures now stop the current optimization recipe. The terminal HP pilot remains unopened and stage/checklist exits remain unchanged.
+
+**Next:** Astra High, Fast off: decide one bounded design for the loss-versus-return conflict before another fit.
+
+### 2026-09-17-trainer-mean-return-refit-v1
+
+Corrected attack and switch targets rank mean TRAIN returns consistently across 80 unique head inputs. One 52-context refit improved all-corpus attack regret to 0.0543 and complete-action regret to 0.1111, without gameplay. Its original-44 attack regret was 0.0571 against the predeclared 0.0554 ceiling. No authority or completion gate advanced.
+
+**Deviation:** The small retention miss stops the terminal HP pilot. Retain the failed fit and unchanged threshold; stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: one prospectively bounded ROM-free old-weight continuation using the same retention gates. Run the four-case HP pilot only if it passes.
+
+### 2026-09-17-trainer-astra-focused-review-v1
+
+Astra authenticated 52 TRAIN contexts and found two target defects: averaged timing-wise softmax can prefer worse mean returns, and control maxima use hidden-timing best actions. All 260 new HP-pair branches truncated at two turns. Existing attack weights outperform the new fit; model capacity is not established as the blocker. No learner authority or completion gate advanced.
+
+**Deviation:** Repair target mathematics and composed-action diagnostics before another fit; the rejected full-team HP recipe is not a full-battle contrast. Stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: localized target fixes and common-case retention, then one bounded terminal HP-pair pilot. No standing extra review gate.
+
+### 2026-09-17-trainer-astra-remediation-v1
+
+Repaired return scoring, fit/live history parity, observed opponent replacement and Counter admission; added 16 new paired TRAIN contexts for 44 total across four clean-power roots. A 2400-epoch three-head fit learned two of three clear type reversals and autonomously won five new natural trainer battles. A sleeping-faint runtime defect found in the prospectively declared League cohort was repaired and verified.
+
+**Deviation:** The original League cohort failed at Agatha. Its mechanics-only replay completed, but descriptive Bruno/Agatha/Lance totals are worse than the older frozen control: 27 versus 24 attacks, one versus zero faints and 552 versus 340 HP lost. Historical natural checkpoints remain one unresolved origin cluster. The challenger is not promoted; Model137, Red 96/124, fresh acceptance 0/5, transfer, full run and GitHub publication are unchanged. Stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: broaden independent varied TRAIN battles without fitting consumed DEVELOPMENT, freeze a successor and evaluate it on a new-origin natural cohort. Stop on no control advantage; do not run the full game.
+
+### 2026-09-17-trainer-astra-review-v1
+
+Astra readmitted 140 retained timing trials and 500 branches, but found only four distinct attack inputs among sixteen examples, conflicting targets, switch-damage scoring loss, untrained live history, opponent identity aliasing and inconsistent move support. Thirty-eight focused existing tests passed. Keep the framework and small model; repair feedback before larger training.
+
+**Deviation:** Review only: no new fit, gameplay, authority or collection progress. Existing natural win and cost evidence remains valid. Stage and checklist exits are unchanged; independent origins are not a substitute for distinct decisions.
+
+**Next:** Sol High, Fast off: repair scoring/history/support with focused regressions, then run a small distinct paired TRAIN pilot with uncertainty-aware targets. Never tune on or replay consumed DEVELOPMENT encounters.
+
+### 2026-09-17-trainer-fresh-roots-natural-comparison-v1
+
+Four separate clean-power starts supplied four distinct origin hashes and first-party trainer IDs. Sixteen four-context TRAIN scenarios at five timings qualified a three-head fit; twelve additional move contrasts expanded it to 28 contexts without replay. On Celadon and Fuchsia natural DEVELOPMENT trainers the challenger won, but both frozen and fixed controls won faster and without HP loss. All six arm logs completed without teacher queries or invalid actions.
+
+**Deviation:** The historical 81-state goal bank is conservatively one unresolved origin cluster, not independent supply. The two DEVELOPMENT encounters are disjoint from TRAIN but correlated to each other through historical saves. Their unfavorable outcomes block authority promotion; no voluntary switching benefit, Model137 increment, Red registration, fresh acceptance, transfer, full run or GitHub publication occurred. Stage and checklist exits remain unchanged.
+
+**Next:** Astra High, Fast off: review the source-chain, fit targets, constant-attack behavior, and prospective independent natural evaluation design. Redesign on TRAIN only; never tune on or replay these two DEVELOPMENT encounters.
+
+### 2026-09-17-trainer-source-depleted-switch-v1
+
+The trainer collected admitted same-root depleted-attack, optional-prompt and forced-replacement contrasts at five timings each. A four-context exploratory fit and unchanged 11-case fit lost a full-party TRAIN diagnostic. State-by-action control features repaired the linear ranker's cancellation flaw; the new 11-case one-root fit won two full-party TRAIN diagnostics and all three edge smokes. An unmodified Celadon Gym Lass TRAIN capture was bridged to stat-rich observation without game input. After a narrow pre-move-menu faint repair, the model completed 33 logged decisions but lost, while the frozen attack-only comparator won in 24. No teacher queries or invalid actions occurred in either completed natural run.
+
+**Deviation:** The first depleted and forced pilots, plus the first natural Celadon pre-menu-faint pilot, remain failed without replay; distinct bounded successors completed. The reused full-party diagnostic cannot count as independent evaluation. Three Celadon source captures remain correlated, and every fit is one-root TRAIN only. The natural TRAIN loss blocks any quality claim. No natural DEVELOPMENT, authority, Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced; stage and checklist exits remain unchanged.
+
+**Next:** Sol High, Fast off: audit ancestry and freeze three further disjoint TRAIN origins with four admitted contexts each. Collect naturalistic control contrasts that address over-switching without replay-tuning the consumed Celadon case. Then compare a qualified fit on untouched natural DEVELOPMENT against frozen and fixed controls. Reserve Astra High for promotion review.
+
+### 2026-09-17-trainer-exploratory-train-v1
+
+The repaired teacher factory now gives synthetic reserves the player's owner ID. Eight distinct same-root TRAIN trainer scenarios each passed five-timing admission and fitted an exploratory move/control/switch model. On a fresh synthetic TRAIN holdout, the model made its own opening switch and won all five timings while the frozen attack-only baseline lost all five; all ten logs completed without teacher fallback.
+
+**Deviation:** The original defective-reserve fit is superseded. A four-case fit had no switching advantage on its holdout, and the first eight-case holdout failed from repeated switches and a targetless optional prompt; those failures remain retained. A disclosed no-repeat-switch-until-attack safety mask and empty-prompt decline enabled the later result. Only one upstream root exists, the model has no prompt/forced/depletion training coverage or natural DEVELOPMENT comparison, and no authority, central Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced.
+
+**Next:** Sol High, Fast off: secure prospectively bounded independent authentic trainer TRAIN roots and missing prompt, forced and depleted-attack contexts. Keep the four-root-by-four-scenario fit gate; then compare against frozen and fixed controls on disjoint natural DEVELOPMENT before promotion.
+
+### 2026-09-17-trainer-practice-astra-repair-pilot
+
+Cartridge stat and reserve semantics, loss-preserving switch execution, actor-visible combat features, whole-party returns and strict evidence admission were repaired. One prospectively declared six-choice trainer scenario passed all five timing trials as one TRAIN target across move, control and switch heads; native mechanic probes passed.
+
+**Deviation:** The scenario still has one upstream TRAIN root; a second prospectively declared prompt scenario failed closed at terminal PP restoration and was excluded without replay. A narrow terminal rule passed ROM-free and a separate one-turn private-ROM mechanic case. No fit, authority promotion, Red registration, fresh acceptance, natural DEVELOPMENT, transfer or GitHub push. Stage and checklist exits remain unchanged.
+
+**Next:** Secure four genuinely independent authenticated trainer TRAIN roots without reopening the prohibited clean-power factory. Collect four admitted scenarios per root with five timings and prompt, forced and depleted-attack coverage before the first fit; compare any challenger on disjoint natural DEVELOPMENT.
+
+### 2026-09-17-trainer-practice-telemetry-varied-train
+
+Trainer decision logging and cohort reporting passed real Red tests. The six-on-six frozen baseline lost; a low-HP six-choice TRAIN contrast was retained. A type-immunity run stopped at the PP boundary after eleven completed decisions.
+
+**Deviation:** All three assisted configurations share one TRAIN root. The PP-accounting failure is unresolved and was not replayed or relabeled. No fitted switch challenger, natural development comparison, authority promotion, Red registration, fresh acceptance, transfer or GitHub push. Stage and checklist exits are unchanged; this review is a required projection sync, not learning progress.
+
+**Next:** Sol High, Fast off: inspect the retained PP failure or a ROM-free reproducer without replay. Resume prospective varied TRAIN contrasts only after the turn boundary is sound; fit on TRAIN and compare against frozen/fixed controls on disjoint natural DEVELOPMENT roots.
+
+### 2026-09-17-trainer-practice-model-boundary
+
+A clean TRAIN source yielded six-on-six practice, a 29-decision baseline loss, six matched opening branches and six matched replacement-prompt branches. No fit or promotion.
+
+**Deviation:** The fixed switch baseline lost after four opponent KOs; this is not a learned switch result or development evaluation. All assisted variants inherit one TRAIN root. No fit, promotion, Red registration, fresh acceptance, transfer or GitHub push.
+
+**Next:** Sol High, Fast off: vary authenticated TRAIN rosters and timings, fit a switch-aware challenger on TRAIN only, then test disjoint natural development advantage.
+
+### 2026-09-17-teacher-battle-team
+
+The teacher-only factory configured five reserve slots from the Red cartridge in one six-member private train state. All five appeared as semantic switch candidates, and one bounded real switch succeeded in 18 actions and 1098 frames.
+
+**Deviation:** This qualified team construction and switch mechanics, not model-selected switching or full trainer battles. No fit, promotion, independent root, Red registration, fresh acceptance or GitHub push.
+
+**Next:** Sol High, Fast off: capture model-selected attack and switch outcomes from varied six-member train states across timings, then scope trainer-roster setup.
+
+### 2026-09-17-teacher-battle-species-moves
+
+The teacher-only factory now reads all 151 Red species and their starting, level-up and TM/HM move availability from the cartridge. It configures both combatants, both movesets, stats, levels and actor experience. A private Pikachu-versus-Squirtle state passed exact readback and four real move branches; Thunderbolt won the turn and was the frozen model's choice.
+
+**Deviation:** One assisted root and one RNG timing establish control, not model improvement or independent coverage. Custom movesets are assisted; teams, switching, status, items and trainer AI remain unsupported. No fit, promotion, Red registration, fresh acceptance or GitHub push.
+
+**Next:** Sol High, Fast off: prospectively vary species, movesets and timing in bounded train episodes; only consider a fit with the existing multi-root gate and natural held-out comparison.
+
+### 2026-09-17-teacher-battle-level-stats
+
+The teacher-only Red factory now controls and reads back both levels, current/max HP, and Attack, Defense, Speed and Special across battle mirrors. Four matched real turns at new settings yielded one correctable frozen-model choice: Guillotine missed while Ice Beam dealt 44.4% HP.
+
+**Deviation:** The new case shares the prior train root and one RNG timing. Actor experience was not recalculated for its changed level. No fit, promotion, Red registration, fresh acceptance, independent evaluation or GitHub push.
+
+**Next:** Sol High, Fast off: bound level-consistent experience or single-turn use, then prospectively sample varied assisted train configurations and timings. Do not count siblings as independent roots or promote without natural held-out advantage.
+
+### 2026-09-17-teacher-battle-practice-factory
+
+Teacher-only Red battle factory generated one authenticated train state with controlled actor moves/PP and opponent current HP. Four matched real cartridge outcomes contrasted Tackle's partial damage with three one-turn knockouts; the frozen model selected successful Guillotine at this timing.
+
+**Deviation:** One assisted state, one upstream train root and one RNG timing provide neither independent coverage nor a correctable model error. No fit, promotion, Red registration, fresh-run progress, cross-title transfer or GitHub push.
+
+**Next:** Sol High, Fast off: extend verified teacher-only generation by one coherent battle axis, preferably a species/level/stat package; test one isolated generated battle before broader train sampling.
+
+### 2026-09-17-retained-train-battle-alternatives
+
+Four exact-state train-only move branches from the first saved Mansion decision used matched 2048-frame pre-attack timing and all produced one-turn knockouts with utility 3.0. Terminals and a 204-frame execution-cost difference were retained.
+
+**Deviation:** One root and one observation; the other two decisions were not branched. No fit-eligible addition, model update, battle promotion, Red registration or fresh acceptance. Stop the overleveled source family for now; no GitHub push.
+
+**Next:** Sol High, Fast off: triage untouched train roots action-free for level-appropriate, consequential move choices; precommit one bounded pilot only if a source qualifies.
+
+### 2026-09-17-model-battle-mansion-train-pilot
+
+One claim-first train root yielded three natural encounters, three frozen-model attack choices and three durable settled outcomes. Each was a one-turn win with move 56 against a level-32 opponent; the root is consumed.
+
+**Deviation:** This proves repeated model-owned execution but not useful alternative-move judgment: one upstream root, one selected move, zero fit-eligible labels, no fit or promotion. Red remains 96/124 and fresh acceptance 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: branch only retained train pre-choice states for bounded real alternative-move outcomes; inspect timing and value contrast before another root or fit.
+
+### 2026-09-16-natural-battle-supply-audit
+
+Action-free inspection authenticated 81 source saves and found 18 natural train battle starts on 14 roots, none with four examples. Four starts were single-action; the other 14 contained only two move sets. Six untouched unclaimed train roots and four development roots remain.
+
+**Deviation:** The static capture route cannot meet the ordinary four-by-four fit gate; no new gameplay, outcome, fit, authority, Red progress or fresh-run gate change. The learned model has not beaten the fixed heuristic in existing comparisons.
+
+**Next:** Sol High, Fast off: implement and ROM-free-test a bounded model-directed multi-encounter train episode with durable pre-choice states and actual outcomes; at most one prospective train-only mechanical pilot, no fit yet.
+
+### 2026-09-16-choice-rich-battle-pilot
+
+Two assisted train roots yielded one correctable 3.132-regret choice and a private last-layer fit. Four precommitted development trials across two separate roots showed one pilot win and one tie versus frozen, but two ties versus the fixed heuristic.
+
+**Deviation:** The changed choice still missed the best move. Two assisted examples per partition are below ordinary coverage; no battle authority, Red collection, fresh-run gate, or cross-title transfer advanced. No GitHub push.
+
+**Next:** Sol High, Fast off: inventory natural choice-rich battle contexts for four independent train roots with four distinct informative examples each, plus disjoint development roots. Stop or redesign if supply is absent; do not promote this pilot.
+
+### 2026-09-16-battle-timing-and-contrast
+
+Two distinct train states completed 4/4 timing trials and yielded non-tied move values. The frozen ranker selected a best move both times: zero regret and no fit.
+
+**Deviation:** One shared train root; old mismatch begins asleep, but its missing candidate counts preclude a proven root cause. Stop near-duplicate sampling; no model, stage or fresh-run gate change.
+
+**Next:** Sol High, Fast off: freeze a diverse choice-rich train curriculum with distinct development roots. Require a correctable train error before fitting or opening held-out outcomes.
+
+### 2026-09-16-live-faint-qualification
+
+A distinct train capture completed 2/2 cartridge trials with six retained player faints at -2.3019 utility. All moves tied before execution; no fit or model gain.
+
+**Deviation:** Five old timing failures lack candidate-level frame evidence; future errors now report it. No consumed replay, development opening, registration, stage or fresh-run gate change.
+
+**Next:** Sol High, Fast off: diagnose timing on a distinct train state, then seek a non-tied hard battle choice before fitting. No full run or GitHub push.
+
+### 2026-09-16-natural-near-boundary-battle
+
+Five natural train examples survived eight captures; 10/40 trials were quarantined by faints or frame mismatch. The bounded faint-outcome repair passed 258 tests; a fresh 2/2 cartridge check did not faint.
+
+**Deviation:** Stop the fit and leave eight planned development captures unopened: surviving baseline regret was only 0.025 utility and hard-loss censoring remained unresolved. No model, registration, stage, fresh-run or GitHub publication delta.
+
+**Next:** Sol High, Fast off: verify a live faint-bearing result on a distinct unused train capture and diagnose timing mismatch before another train/development freeze. Never replay consumed trials.
+
+### 2026-09-16-earned-learned-battle
+
+Frozen battle ranker controlled six attacks: five zero-damage Guillotines, then a Vicegrip KO. Exact PP spends verified; 149 actions / 13177 frames; safe field terminal at 59/76 HP.
+
+**Deviation:** Bounded correlated development control, not good battle judgment. No fit, collection gain, stage exit, independent advantage or promotion. Model137 and fresh-Red gates unchanged.
+
+**Next:** Sol High, Fast off: a reliability-focused training and untouched-comparison cycle. Keep this consumed encounter diagnostic; no development fit or hardcoded move ban.
+
+### 2026-09-16-assisted-safari-mechanics-probe
+
+One marked teacher-selected Safari attempt paid 500 admission and reached the area, then stopped safely at the 66-semantic-action survey limit after 431 controller actions / 53700 frames. It retained 27 Safari Balls and 437 steps but no new registration or specimen.
+
+**Deviation:** Assisted mechanics only: zero model queries, fits, authority promotions or fresh-run credit. The original 96/124 earned save stayed unchanged and the probe is consumed. No stage exit, transfer claim or GitHub push.
+
+**Next:** Astra High, Fast off: qualify a genuine bounded model-controlled decision on an earned Red state. If collection remains singleton, prioritize a story/battle authority boundary instead of replaying or widening Safari.
+
+### 2026-09-16-assisted-safari-admission-qualification
+
+A trainer-only in-memory money override derived a marked 500-cash state from the authenticated 198-cash post-Marowak save. An action-free menu inspection exposed evolution and Safari acquisition, with zero actions, frames, model queries or registrations. The original save SHA remained unchanged.
+
+**Deviation:** Pete clarified that training teachers may cheat, while the final player and official Red gate may not. Assisted provenance is explicit and ordinary goal-value fitting rejects it. Model137 remains 137 examples / 92 successes / 58 economy-qualified; earned Red remains 96/124 and fresh acceptance 0/5. No stage exit, independent claim or GitHub push.
+
+**Next:** Sol High, Fast off: one marked teacher-selected assisted Safari mechanical probe, then resume unassisted model choice on earned states and prioritize story/battle authority. Genuine funding is still required for an official run.
+
+### 2026-09-16-model137-fishing-route-drift
+
+A five-option post-Marowak menu led Model136 to choose fishing. Traversal stopped before fishing after 735 actions / 22944 frames when a Safari-gate up step expected (2,3) but observed (3,4). Its one safe measured failure trained Model137 to 137 examples / 92 successes / 58 economy-qualified; Red stayed 96/124.
+
+**Deviation:** Read-only reconstruction showed all four false fishing offers crossed an unguarded paid Safari gate with 198 cash against a 500 fee. A two-lane semantic admission requirement now excludes them; the exact failed terminal has no two-option menu. No registration, cash or specimen loss, teacher override, replay, independent promotion, fresh-start Red acceptance or GitHub push occurred. The older dashboard counter is a frozen audit projection.
+
+**Next:** Sol High, Fast off: qualify legitimate funding for 302 cash and compose the existing metered Safari skill as a model option, or find a distinct non-Safari goal. Require two executable options before another Model137 choice.
+
+### 2026-09-16-model136-marowak-choice-fit
+
+A six-option post-Kingler menu led Model135 to choose Cubone-to-Marowak. The bounded cartridge run verified Marowak #105 and advanced the development save 95 to 96/124 in 17066 actions / 1468626 frames. Its one observed success trained Model136 to 136 examples / 92 successes / 57 economy-qualified.
+
+**Deviation:** Correlated development only, not fresh-start acceptance or independent promotion. Cash stayed 198, physical specimens 74, and teacher actions zero. No earlier Kingler chunk was refitted and no GitHub push occurred.
+
+**Next:** Sol High, Fast off: qualify practical alternatives from the exact 96/124 terminal and let Model136 choose one bounded new goal. Stop if resources, availability or safety fail instead of forcing a target.
+
+### 2026-09-16-model137-targeted-kingler-completion
+
+Model134's previously selected Krabby goal finished through an exact-target bounded continuation. Kingler #099 registered at level 28 in 12208 actions / 1095240 frames from the earned level-19 terminal. Red advanced 94 to 95/124 on a safe development save.
+
+**Deviation:** One completed model-selected goal, but no new model query, fit or authority promotion in this session. Model135 stays 135 examples / 91 successes / 56 economy-qualified; 74 specimens and 198 cash remain. Fresh Red acceptance remains 0/5. No GitHub push.
+
+**Next:** Sol High, Fast off: expose genuine post-Kingler alternatives from the exact 95/124 terminal, let Model135 choose a new goal, and retain one bounded costed outcome without replaying the completed evolution.
+
+### 2026-09-16-model136-selected-goal-continuation
+
+The prior model-selected Krabby goal persisted through one bounded support chunk. Krabby rose from level 16 and 4905 XP to level 19 and 7095 XP in 4591 actions / 418136 frames. The terminal is safe and the goal is pending, with about 14857 XP to level 28.
+
+**Deviation:** No new model decision, fit, teacher action, registration or authority promotion. Red stays 94/124 with 74 specimens; Model135 stays 135 examples / 91 successes / 56 economy-qualified. Fresh Red acceptance remains 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: resume the same goal from the exact terminal, reducing repeated global-menu cost through private target binding if it can be proved safe. Preserve original reserves and stop on target mismatch, unsafe state or no trainee XP.
+
+### 2026-09-16-model135-in-party-continuation
+
+The earned Route 11 save qualifies eight distinct action-free choices, including Krabby's in-party evolution and recovery. Original party reserves are authenticated from the parent outcome. The previous attempt earned 1530 Krabby XP in 3000 actions; approximately 17047 XP remain to level 28.
+
+**Deviation:** This is execution qualification, not a new model choice, gameplay, fit or registration. Model135 stays at 135 examples / 91 successes; Red stays 94/124 with 74 specimens and 198 cash. Fresh Red acceptance remains 0/5. No GitHub push.
+
+**Next:** Sol High, Fast off, 45-60 minutes: carry the prior model-selected goal across bounded chunks with one outcome and measured XP/action/frame cost. Then execute one prospective continuation from the earned terminal; stop on lost identity, unsafe state or no XP progress.
+
+### 2026-09-16-model135-opportunity-discovery
+
+Action-free discovery restored seven distinct choices: four fishing destinations and three level evolutions. Model134 chose Krabby-to-Kingler; Krabby advanced level 15 to 16 before the 3000-action cap, with a safe terminal after 272555 frames. The incomplete result was fitted once into Model135: 135 examples / 91 successes / 56 economy-qualified.
+
+**Deviation:** No evolution or new registration: Red remains 94/124, 74 specimens and 198 cash. No replay, teacher substitution, independent evaluation or GitHub push. The earlier League diagnosis is corrected: travel supports indoor exit/Fly, but the partial event flags fail eligibility. Fresh-Red gates remain 0/5.
+
+**Next:** Sol High, Fast off, 45-60 minutes: qualify in-party continuation from earned level 16 while retaining original reserves; inspect throughput before proposing a budget. Do not restart the old attempt, protect the temporary trainee against intended evolution or blindly increase the cap.
+
+### 2026-09-16-model134-post-cloyster-empty-menu
+
+The action-free inventory from the authentic post-Cloyster terminal exposed zero ordinary goals, regional captures or item evolutions. Ball resupply requires 2400 cash against 198; League funding cannot bind away from a fresh postgame boundary. No gameplay, query, fit or registration changed.
+
+**Deviation:** The empty menu stopped before any input. Original state and Model134 remain unchanged, at 94/124 registrations, 74 specimens and 134 examples / 91 successes. No full-Red gate change or GitHub push.
+
+**Next:** Astra High, Fast off: qualify reusable discovery and safe transport to a legitimate collection or income opportunity from the earned terminal; do not force a zero-option choice or replay the prior evolution.
+
+### 2026-09-16-model134-equivalent-evolution
+
+One honest uniform support choice among five equivalent stone evolutions selected Shellder-to-Cloyster. The native executor succeeded in 620 actions / 64968 frames; Red advanced 93/124 to 94/124 registrations, kept 74 specimens, and spent 2100 from 2298 cash. Terminal is safe and input-ready.
+
+**Deviation:** Zero model decisions, teacher actions or fits. Model134 remains 134 examples / 91 fitted successes. This is collection progress, not a learned target preference or a fresh-Red acceptance gate. No GitHub push.
+
+**Next:** Sol High, Fast off: inspect the exact 198-cash terminal action-free and qualify at most one newly planned bounded model-directed collection goal. Never replay or fit the support tie.
+
+### 2026-09-16-model134-multi-evolution-menu
+
+Action-free cartridge inspection exposes five separately verified stone targets instead of one preselected evolution. Each has its own executor and a 2100 purchase quote. All five have identical portable inputs; 113 targeted ROM-free tests and four-file type checks pass.
+
+**Deviation:** The declared feature-distinction falsifier fired. No query, gameplay, fit, registration, promotion or fresh-Red gate changed. Model134 remains 134 examples / 91 successes; Red remains 93/124, 74 specimens and 2298 cash. No GitHub push.
+
+**Next:** Sol High, Fast off: qualify explicitly labelled equivalent-target exploration without claiming learned target preference, then one new bounded continuation if qualified. Do not invent identity features or spend another session manufacturing distinctions.
+
+### 2026-09-16-model134-center-restore-singleton
+
+Model133 chose Center restoration over evolution and verified whole-party recovery after 22 actions / 1584 frames. It fit once as Model134: 134 examples / 91 successes. Red remains 93/124, 74 specimens and 2298 cash, safe at the Center.
+
+**Deviation:** The item-evolution repair was not exercised live. An action-free next inventory finds evolution as the sole executable goal; no restore need, regional acquisition or finite resupply. No second model choice, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.
+
+**Next:** Astra High, Fast off: inventory distinct feasible evolution targets action-free. Expose a portable multi-target choice only if two real executors exist; otherwise stop and reassess without forcing the singleton.
+
+### 2026-09-16-model133-item-evolution-departure
+
+Model132 selected evolution from a verified restore-versus-evolution menu. The item skill stopped after 106 actions / 6780 frames on an invalid healed-Center farewell assumption. It ended safe, the failure fit once as Model133: 133 examples / 90 successes. Red remains 93/124, 74 specimens, 2298 cash.
+
+**Deviation:** The terminal's unhealed party and absent dialogue explain the unconditional precondition error. A generic conditional-departure repair passed 114 ROM-free tests but has not been live validated. No replay, item spend, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.
+
+**Next:** Sol High, Fast off: verify the saved Center menu action-free, then permit at most one fresh Model133 choice from real restoration/evolution alternatives. Stop if the boundary failure repeats.
+
+### 2026-09-16-model132-routed-menu-income
+
+A verified action-free Center-heal versus finite-income menu gave Model131 one real choice. It selected income, earned 690 in 92 actions / 7981 frames, ended safe and fit once as Model132: 132 examples / 90 successes. Red remains 93/124 with 74 specimens and 2298 cash.
+
+**Deviation:** No registration, independent evaluation, authority promotion or teacher action. The next state exposes Center restoration and a quoted 2100 evolution; no second model query or game input occurred. Full-Red gate remains 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: one bounded Model132 choice from the verified restore-versus-evolution menu; retain the real result and stop on unsafe or unverifiable state.
+
+### 2026-09-16-capture-initialization-recovery
+
+Corrected pre-introduction HP latching with declared-target verification and preserved setup guards. One qualified exact-state continuation caught Haunter in 158 actions / 13716 frames, reaching 93/124 registrations and 74 specimens at a safe terminal.
+
+**Deviation:** Support recovery adds no learner example: Model131 remains 131 examples / 89 successes. The original failure remains fitted; live recovery from MAIN does not prove the historical callback entry. The next action-free menu has only resupply, no acquisitions or restoration. Routed Center recovery is disabled and the capture helper is at 34/70 HP.
+
+**Next:** Sol High, Fast off: qualify existing routed restoration in the mixed menu, then permit one fresh Model131 decision only with real executable alternatives. No replay, forced species, full-Red gate change or GitHub push.
+
+### 2026-09-16-model131-capture-status-drift
+
+Model130 selected an acquisition from a four-option menu and stopped after112actions/5256frames when capture preparation observed target-HP drift. The typed failure was fitted once: Model131 has131 examples/89 successes. Red remains92/124 with73 specimens and1608 cash.
+
+**Deviation:** The terminal is inside a wild battle and not input-ready. No catch, cash or ball spend, teacher action, replay, independent evaluation, authority promotion, full-Red gate or GitHub push occurred. Cause of target-HP drift remains unknown.
+
+**Next:** Astra High, Fast off: diagnose general capture-status turn semantics with ROM-free cases, then consider a separately qualified exact-state safety continuation only if justified. Do not replay Model130 or route-patch the failure.
+
+### 2026-09-16-model130-bounded-admission-and-search-failure
+
+Versioned bounded admission fitted the original Model128 restoration success without replay. Model129 then chose an acquisition route that safely exhausted its survey after three encounters and no catch; the verified failure was fitted. Model130 has130 examples/89 successes. Red remains92/124 with73 specimens.
+
+**Deviation:** Two correlated development lessons, zero new registrations, no independent evaluation or authority promotion. The fixed30000/3000000 reward normalization and older records were preserved while the original3000/300000 execution ceilings were authenticated. No teacher choice, retry, full-Red gate or GitHub push changed.
+
+**Next:** Sol High, Fast off: allow at most one fresh Model130 choice from the action-free four-option safe terminal. Stop for a general acquisition-yield review if another search exhausts without a registration.
+
+### 2026-09-16-model128-measured-restore-budget-boundary
+
+An action-free five-option menu offered three acquisitions, restoration and finite income. Model128 selected and successfully executed restoration in62 actions/5064 frames. Red remains92/124 with73 specimens and1608 cash; the terminal is safe.
+
+**Deviation:** One raw on-policy success is retained, but the run's prospective3000/300000 execution ceiling conflicts with the learner's fixed30000/3000000 normalization. Admission failed closed before any example or fit. Do not edit the consumed plan or replay the choice; Model128 remains128 examples/88 successes.
+
+**Next:** Sol High, Fast off: version and test truthful bounded-budget admission. Fit this original receipt once only if its exact limits can be represented without reinterpreting old rewards; otherwise leave it excluded and inspect the earned state action-free.
+
+### 2026-09-16-model127-capture-guard-recovery
+
+Generic field-specific capture-status diagnostics passed ROM-free tests without weakening protection. A separately qualified exact-state support continuation caught Gastly, raising Red from91 to92/124 registrations and from72 to73 specimens; the terminal is safe.
+
+**Deviation:** The historical guard mismatch field cannot be reconstructed from its old exception. Recovery used156 actions/13752 frames but no route replay, model query, teacher choice, new training label or authority promotion. Model128 remains128 examples/88 successes; no full-Red gate or GitHub push changed.
+
+**Next:** Sol High, Fast off: inspect the exact safe terminal action-free, then permit at most one fresh Model128 decision only if executable alternatives exist. Preserve its actual result; do not replay Model127 or fit support recovery.
+
+### 2026-09-16-model128-affordability-and-capture-failure
+
+Observed supply need suppressed unnecessary finite income, leaving three capture destinations. Model127 chose one, but a capture-status safety guard halted after276 actions/10368 frames. The failed choice fitted Model128 at128 examples/88 successes; Red stays91/124.
+
+**Deviation:** The exact terminal is an unsafe wild battle; no capture or registration occurred. The exception was preserved and fitted as failure without replay. No teacher action, authority promotion, full-Red gate or GitHub push occurred.
+
+**Next:** Sol High, Fast off: keep gameplay stopped and diagnose the protected capture-status field generically before separately qualifying recovery or another prospectively distinct attempt.
+
+### 2026-09-16-model127-second-finite-funding
+
+Model126 selected a second finite trainer-income option from four executable choices and earned660 in47 actions/3985 frames. The safe terminal has1608 cash,91/124 registrations and72 specimens. One measured choice fitted Model127 at127 examples/88 successes.
+
+**Deviation:** Two consecutive income choices produced no new registrations. This is bounded correlated development, not independent evaluation or a collection gain. No teacher action, retry, authority promotion, full-Red gate or GitHub push occurred.
+
+**Next:** Sol High, Fast off: audit affordability and option values at the exact terminal before another action; test a general need-conditioned income offer without hand-selecting capture.
+
+### 2026-09-16-model126-bounded-region-and-funding
+
+Nearby-first bounded inventory produced a four-option action-free menu in about18 seconds. Model125 selected finite income, earned720 in42 actions/3925 frames and fitted Model126 at126 examples/87 successes. Cash is948; Red remains91/124 with72 specimens.
+
+**Deviation:** The model chose economy rather than collection and that real decision was retained. The payout is one finite ordinary trainer, not renewable League evidence. No retry, teacher choice, support action, authority promotion, full-Red gate or GitHub push occurred.
+
+**Next:** Sol High, Fast off: permit at most one Model126 choice from the already verified four-option terminal and retain its actual result. Keep partial-League reset as a separate prerequisite.
+
+### 2026-09-16-model125-prerequisites-and-cubone
+
+Two retained autonomous choices fitted Model125 at125 examples/86 successes. Nonlearning storage safety created19 box slots, Model125 chose Pokemon Tower from four capture routes, and exact-state support caught Cubone without replaying the route. Red reached91/124 registrations and72 specimens.
+
+**Deviation:** The capture adapter's generic failure did not retain its nested cause, so the failed outcome remains failed and excluded. A separate authenticated support continuation resumed only the exact battle with zero model queries or teacher choices. No full-Red gate or formal authority promotion changed.
+
+**Next:** Bound action-free regional inventory by reachable-region priority, then allow at most one new Model125 choice from the exact91-registration terminal. Qualify partial-League reset separately; do not sell items or publish to GitHub.
+
+### 2026-09-16-model123-autonomous-collection
+
+Two consecutive Model123 goals completed without a teacher-selected action or state reset: Vileplume evolution and seven Great Balls purchased. Red advanced89 to90/124 registrations, with67 living species and71 specimens;755 actions/64440 frames.107 targeted tests passed.
+
+**Deviation:** At Pete's direction, replaced one-off teacher-steered execution with a bounded goal/destination decision loop. The third menu lacked distinct executable candidates at228 cash and one free active-box slot. This correlated development run is not an independent evaluation; Model123 remains123 examples/84 successes and no full-Red gate changed.
+
+**Next:** Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned90-registration terminal; no manual recovery goal or reset.
+
+### 2026-09-15-model123-item-evolution-integration-query-failure
+
+Generic stone procurement, boxed preparation and item use now form one goal-manager executable. Fire and Water families passed ROM-free gates,372 targeted tests passed, and the89-registration terminal exposed acquire,evolve and resupply with zero input, zero frames and no identity fields.
+
+**Deviation:** The sole Model123 selection returned, but a post-query enum assertion failed before its selected arm was persisted. The write-ahead intent consumes seed123091501; no gameplay, cash, registration, fit, authority or transfer counter changed, and no redraw or inferred arm is allowed.
+
+**Next:** Astra High, Fast off: audit the one-shot boundary and either close this exact retained-state lane or freeze a prospectively distinct recovery experiment before any further query. Do not execute gameplay without a durable decision.
+
+### 2026-09-15-model123-renewable-stone-execution
+
+One no-retry League attempt beat Lorelei, Bruno and Agatha before retaining a Lance failure with17257 cash. Controlled blackout, a legitimate2100 Thunder Stone purchase and generic PC preparation then registered Raichu. Red is89/124 on the declared route with67 living species,71 specimens and6528 cash.
+
+**Deviation:** The four retained phases used2397 actions/228915 frames with zero retries, model queries or teacher labels. This is capability and collection progress, not learned authority; Model123 remains123 examples/84 successes and all fresh-Red gates remain unchanged.
+
+**Next:** Sol High, Fast off: integrate generic stone procurement plus boxed item use as one goal-manager executable, qualify two stone families ROM-free, then require the next gameplay decision to be exactly one identity-free Model123 acquisition-versus-item-evolution query.
+
+### 2026-09-15-model123-renewable-stone-preflight
+
+The untouched88-registration terminal now action-free qualifies for a29799-gross,29624-net renewable League cycle through the cartridge-native Indigo-lobby reset. Cartridge learnsets cover151 species/728 rows; all seven physical buyable-stone candidates avoid a move prompt at their stored levels.
+
+**Deviation:** No gameplay, model query, fit, authority, registration or transfer counter changed. Pete revised the pre-hack collection gate to the legitimate124-species Red route and deferred Mew/version/link dependencies to later legitimate acquisition; baseline V4 records the change without rewriting V1-V3.
+
+**Next:** Sol High, Fast off: execute one claimed renewable League cycle and preserve its first outcome. Continue to postgame settlement, catalog-derived stone purchase, boxed retrieval and live evolution only after each prior boundary verifies; stop on the first unsupported mechanic.
+
+### 2026-09-15-model123-next-menu-capability-gate
+
+The authenticated88-registration terminal failed the cheapest heterogeneous-menu gate before any model query or input: no boxed level evolution remains, no evolution stone is held, and cash206 is below the2100 stone price. A reusable party-only stone-use controller now passes40 focused and79 combined controller/protocol tests.
+
+**Deviation:** No learning, registration, fit, authority or transfer counter changed. Item use remains separate from procurement and lacks live cartridge qualification. The full suite reached6770 passes before an unrelated exact local PyBoy metadata pin failed; no GitHub push occurred and all five full-Red gates remain false.
+
+**Next:** Sol High, Fast off: ROM-free qualify a reusable bounded sale-and-stone-purchase provider plus cartridge-derived move-learning admission, then integrate item evolution. Return immediately to one measured Model123 choice once two families are genuinely executable; otherwise reassess the lane.
+
+### 2026-09-15-model123-heterogeneous-evolution-fit
+
+The one successful mixed-family outcome was fitted exactly once. Model123 has123 examples/84 successes, retains all122 prior rows and keeps evolution selected on the frozen menu with probability0.852719 versus0.852663 before fitting. The durable Red state remains88/151 registered,67 living species and71 specimens.
+
+**Deviation:** The first acceptance pass failed only because its one-off verifier assumed append ordering while the corpus canonically sorts row fingerprints. The existing sealed fit was verified without refitting or replaying gameplay. None of the five full-Red completion gates changed.
+
+**Next:** Sol High, Fast off: construct and freeze Model123's next identity-free heterogeneous menu from the authenticated88-registration terminal. Authorize at most one model-selected outcome only if at least two legitimate families are executable; no teacher substitution, full run, push or ROM-hack work.
+
+### 2026-09-15-model122-heterogeneous-evolution
+
+Stored Silph Scope support exposed four Pokemon Tower capture sources action-free. Model122 then chose evolution from a genuine acquire/evolve menu and succeeded in11623actions/1050627frames, advancing Red to88/151 registrations with67living species and71specimens.
+
+**Deviation:** The model legitimately selected evolution, so the qualified capture-item composite was not forced. One successful measured outcome is durable but not yet fitted; Model122 remains122 examples/83 successes and no full-Red gate changed.
+
+**Next:** Sol High, Fast off: fit exactly the retained heterogeneous success into Model123, verify all prior rows and the frozen-menu selected-option response, then inspect the88-registration terminal action-free. No replay, forced capture, full run, push or ROM-hack work.
+
+### 2026-09-15-model122-safari-transport-tentacruel
+
+The heterogeneous Safari/evolution choice retained a failed Safari acquisition and fit Model122 at122 examples/83 successes. Semantic Safari exit plus Fly was cartridge-qualified, then one forced Tentacool evolution registered Tentacruel. Red is87/151 registered with67 living species and71 specimens.
+
+**Deviation:** The Safari failure required bounded generic transport repair and two exact no-retry recoveries. Tentacruel was a forced singleton, so it advances collection but adds no query, label or training target. The mixed-acquisition checklist closes26/26 without satisfying any of the five full-Red completion gates.
+
+**Next:** Sol High, Fast off: action-free freeze the exact Model122 terminal, require at least two executable acquisition families, and retain at most one model-selected outcome. No forced-evolution replay, full run, GitHub push or ROM-hack work.
+
+### 2026-09-15-local-battle-cartridge-campaign-c
+
+Campaign C settled its first Route11 battle, then stopped after117 total actions/9881 frames when player-owned Wrap continued automatically without a new move menu; the third case never opened. The generic repair passes312 focused tests and three slow compatibility checks. No learning or collection delta.
+
+**Deviation:** The exact campaign and failure remain consumed, and the repair has no post-repair cartridge claim. End the standalone qualification loop because repeated isolated campaigns delay measured collection progress; Red-first stage exits and order are unchanged.
+
+**Next:** Sol High, Fast off: build one legitimate heterogeneous acquisition choice from the authenticated Model121 terminal and execute at most one retained selection. Do not create Campaign D by default.
+
+### 2026-09-15-battle-stall-contingency
+
+One voluntary live-battler switch after observed stall or no usable move passes 537 ROM-free focused tests, lint and whole-source type checking. It uses the original runtime budget and metered executor; old frozen policies remain unchanged.
+
+**Deviation:** Clarify the prior roadmap: voluntary contingency switching is not fainted forced-switch handling. No cartridge, learning, registration or authority delta; stage criteria and denominators stay unchanged.
+
+**Next:** Sol High, Fast off: freeze a distinct campaign C with the opt-in policy, varied short controls and cross-venue coverage. Credit switches only if actually observed and durably settled. No replay or in-campaign replacement.
+
+### 2026-09-15-durable-battle-cartridge-campaign
+
+Campaign B stopped on its first Route11 control after 893 actions / 80,081 frames. V2 reopened exact battle/policy-selection failure evidence; the final active move PP was exhausted while opponent HP stayed unchanged, and three later cases never opened.
+
+**Deviation:** The campaign failed honestly and is consumed. It added no model query, example, fit or registration, but converted the prior unknown-cost failure class into an exact generic no-progress/no-usable-PP falsifier.
+
+**Next:** Astra High, Fast off: one ROM-free architecture session for an observable identity-free switch contingency using existing battle mechanics. Do not replay campaign B or freeze its replacement in that session.
+
+### 2026-09-15-cartridge-journal-v2
+
+Integrated V2 journal passes371 focused tests and whole-source type checking. Setup and battle retain phase/reason/attempted/completed/frame evidence, including partial failures and session changes. No gameplay or learning.
+
+**Deviation:** Planned maintenance only. Restored the prior battle-runtime-refocus review accidentally omitted by the previous closeout; no checklist or learning denominator changed.
+
+**Next:** Sol High, Fast off: freeze distinct cartridge identities and exact inputs for a bounded V2 campaign, including cross-venue setup. Stop on the first failure; no consumed-case retry.
+
+### 2026-09-15-bounded-battle-cartridge-qualification
+
+Synthetic diagnostic reopening passed and three Route11 cartridge cases settled in223actions/19851frames. The first Diglett relocation failed and exposed missing phase/cost evidence; campaign stopped.
+
+**Deviation:** Qualification failed honestly. The failed episode was durable but retained only its exception class, so alternate-venue and extended-training reliability remain open; no learning counter changed.
+
+**Next:** Astra High, Fast off: build and ROM-free test a V2 cross-component phase/reason/cost journal before any new cartridge identity.
+
+### 2026-09-15-battle-runtime-refocus
+
+Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.
+
+**Deviation:** User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.
+
+**Next:** Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready.
+
+### 2026-09-15-exact-terminal-recovery
+
+Recovery settled the terminal in11 actions/1320 frames, preserving86 registrations. The menu has restoration and resupply.
+
+**Deviation:** Prior closeout left entry points stale; corrected here. Evolution and recovery identities remain consumed.
+
+**Next:** User requested a battle-runtime refocus before collection.
+
+### 2026-09-15-safe-singleton-evolution
+
+One safe Tentacool evolution ran once:61 verified quanta advanced level5 to24 before BattleRuntimeError. The sealed mid-battle terminal preserves86 registrations/66 living species/70 specimens; no retry.
+
+**Deviation:** The planned menu rebuild could not occur because the actual terminal is mid-battle. The attempt used25301 actions/2232160 frames, queried no model, created no row or fit, and is permanently consumed without retry. This is real gameplay progress but an eighth consecutive session without measured learning output.
+
+**Next:** Sol High: authenticate and diagnose the exact retained terminal action-free. Freeze one recovery-only settlement only if existing recovery preserves the collection; do not automatically resume evolution. Rebuild the menu after a stable terminal.
+
+### 2026-09-15-fossil-evolution-bridge
+
+The exact action-free Model121 scan found ready evolution and zero executable fossil targets. No adapter, query, claim, action, frame, outcome or fit occurred; Model121 remains121/83 with86 local registrations.
+
+**Deviation:** The cheapest falsifier fired before implementation, so the planned conditional bridge was correctly skipped. This seventh consecutive no-learning session ends the serial provider-probe loop. Flash3.8 High recommended a safe forced-singleton evolution followed by a fresh menu rebuild; Claude returned no completed verdict.
+
+**Next:** Sol High: inspect the ready evolution's resource type and physical-preservation constraints action-free. If it is a safe level-triggered transition, freeze and execute it exactly once without a model query or fit, then rebuild the heterogeneous menu from the retained terminal.
+
+### 2026-09-15-fishing-evolution-bridge
+
+The reusable full-Pokedex observer now falls back from unavailable grass capture to one best reachable productive fishing executor while retaining ready evolution and identity-free acquire/evolve policy input. The exact committed Model121 state has zero reachable fishing destinations, so the gate failed with zero gameplay or learning delta.
+
+**Deviation:** The adapter completed as planned, but the exact endpoint falsified fishing as its acquisition partner. This sixth consecutive no-learning session stopped before reset, query or input; it did not patch a route, substitute another mechanic, touch source four or weaken the milestone.
+
+**Next:** Sol High: qualify the already-implemented fossil acquisition provider at the exact terminal and adapt it beside evolution only if an observed target is executable. Run one lesson only after the unchanged two-family gate passes.
+
+### 2026-09-14-route-feasible-candidate-gate
+
+Evolution routing is restored. Four grass corridors were checked action-free: three have ready capture providers but no route; one lacks resources. No learning delta.
+
+**Deviation:** The generic candidate falsifier fired, so gameplay stopped without a reset or source. This fifth no-learning session closes grass-corridor routing at this endpoint rather than adding map/species exceptions. The prior evolution discrepancy is resolved as lost transport permission.
+
+**Next:** Sol High: connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the ready evolution option. Declare and play one lesson only after the unchanged two-family gate passes.
+
+### 2026-09-14-capture-route-capability-repair
+
+Direct retargeting now preserves exactly eight declared generic capture capabilities without copying target identity. ROM-free regressions pass, but the exact zero-input terminal still has no capture route; no learning delta.
+
+**Deviation:** The flags-alone hypothesis was falsified and the repair lane stopped without gameplay. The repaired-profile check also reports evolution unavailable, contradicting the prior legacy-profile diagnostic; the discrepancy is preserved and neither family is treated as executable. This is a fourth consecutive no-learning session.
+
+**Next:** Sol High: qualify generic route-feasible capture candidate selection and declare one new collection lesson only if the unchanged capture-plus-evolution gate passes. No species-specific patch, consumed-reset retry, protected-root scan or source four.
+
+### 2026-09-14-registered-correlated-reset
+
+Reset bridge implemented. Model121's gate stopped before query/input/fit: evolution ready; capture routing unavailable. Reset closed, nine unused sources preserved. No learning delta.
+
+**Deviation:** No learned result. The original failure omitted typed family details; matching read-only reconstruction retained them and future recorder behavior was repaired. This third no-learning session is engineering progress only; the consumed reset cannot replay.
+
+**Next:** Sol High: source-free capture transport-capability preservation and route-feasibility test, then a scoped repair if justified. Do not redesign admission, scan sources or replay the closed reset. A played successor needs a new prospective scope.
+
+### 2026-09-14-full-pokedex-supply-admission
+
+Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.
+
+**Deviation:** The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.
+
+**Next:** Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation.
+
+### 2026-09-14-full-pokedex-family-diagnostics
+
+Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.
+
+**Deviation:** None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.
+
+**Next:** Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software.
+
+### 2026-09-14-third-source-roadmap-audit
+
+Third source prepared and registered, then failed the two-acquisition-family gate. No model query, action, frame, outcome or fit. Nine unused sources remain; exact repair CI and17 source-free tests passed.
+
+**Deviation:** The expected menu unblock did not occur. The source is permanently closed without replacement, and missing per-family diagnostics limit the explanation. Today adds one measured lesson (120 to121, +0.83% dataset size), no local registrations (86/151), and no progress on the fixed21/22 checklist. Expanded25/26 is not a whole-project percentage.
+
+**Next:** Source-free rejection diagnostics and eligibility tests, then a separately justified measured lesson, practical training batch and separate-lineage reliability/dependency review. No fourth-source authority, fresh run, ROM hack or Crystal execution follows from this roadmap.
+
+### 2026-09-14-direct-profile-encounter-media-repair
+
+The generic encounter-media repair is qualified ROM-free. Five regressions cover the complete catalog, Route21 coexistence, real unmocked corridor derivation, clean exhaustion and invalid-candidate defense; the named rehearsal now passes17 tests. Zero source, ROM, emulator or model effects occurred.
+
+**Deviation:** This maintenance directly unblocks the named learning experiment but creates no learner or transfer result. Both consumed sources remain closed, the zero-learning alarm remains active and no third source was selected or claimed. Flash3.8 High and Claude Opus4.6 returned PASS without findings.
+
+**Next:** Publish and require exact-head CI. Then separately re-audit the two failures, remaining inventory and strengthened gate; authorize at most one distinct third-source action-free attempt only if its irreversible cost is justified.
+
+### 2026-09-14-direct-full-local-source-v2-preflight-failure
+
+The 12-test rehearsal passed, then one distinct source was selected and claimed exactly once. Preparation opened only that source and failed before action-free preflight because wild:Route21:water entered the grass-only corridor sorter. Zero model queries, actions, frames, registration sessions, outcomes, examples or fits occurred.
+
+**Deviation:** The source is consumed without retry or replacement. The failure is a generic public-catalog integration defect, not evidence about the source's cartridge feasibility. Flash confirmed a second uncaught resolver boundary. The zero-learning alarm remains active and all Red-final, ROM-hack and later-title gates stay closed.
+
+**Next:** Implement and publish the generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression tests. Do not select or claim another source in that repair session; re-audit third-source spending only after exact-head CI.
+
+### 2026-09-14-nonconsuming-direct-rehearsal
+
+A named ROM-free rehearsal passes 12 real component checks covering the parser fallback, v4 base-plan behavior, temporary direct registration, two-family proposal/observer, real preflight qualification and zero action/frame effects.
+
+**Deviation:** This user-requested maintenance session produced no learner outcome or transfer result. Flash rejected a heavily mocked first design; it was removed and replaced with an honest component suite. The anti-drift alarm remains active and every full-game gate stays unchanged.
+
+**Next:** Publish and green the rehearsal. Then run it before freezing and claiming one distinct unused source; require a real capture-plus-evolution action-free menu before one Model121 episode, with no fallback source.
+
+### 2026-09-14-direct-full-local-preflight-failure
+
+The exact frozen source was claimed once. Its first preparation failed before payload access on a null parser default; one same-claim recovery opened and authenticated only that source, then failed during v4 base-plan construction. Both failures are retained with zero completed preflights, actions, frames, queries, registration sessions, outcomes, examples or fits.
+
+**Deviation:** The live gate exposed two generic preparation defects rather than an acquisition-family result. The source is consumed and was not retried or replaced. Maintenance now normalizes empty regional input, preserves legacy wild sources and keeps v4 base behavior separate from strict economy promotion; learning counters and all stage exits remain unchanged.
+
+**Next:** Publish and require exact-head CI for the generic repair. In a separate session, freeze one distinct unused source prospectively and run only its exact-claim two-family gate before any model query or gameplay.
+
+### 2026-09-14-direct-catalog-origin-bridge
+
+Direct catalog-origin completion plans and local-registration sessions are qualified without a fabricated predecessor. A read-only inventory observation now derives one boxed level evolution and one ordinary wild corridor, while the runner requires an already-atomic exact-root claim before opening ROM or saved-state payloads. Model121 remains121 examples/83 successes/86 registrations; no game or learning effect occurred.
+
+**Deviation:** This was an engineering session, not a measured learner result. The frozen source remained unopened and unclaimed because exact-head publication and CI must precede irreversible consumption. Legacy continuation schemas and their checkpoint requirements remain unchanged.
+
+**Next:** Publish the exact bridge and require exact-head CI. Then atomically claim only the frozen source, run the action-free two-family preflight, and stop without substitution on claim conflict or menu failure; execute and fit one model-selected outcome only if it passes.
+
+### 2026-09-14-full-local-training-source
+
+A metadata-only census found54 train entries,42 claimed and12 unclaimed. One source was frozen by slot order before payload/menu inspection; its configuration lacks capture/evolution declarations. Zero game effects or learning results.
+
+**Deviation:** The previous handoff overstated direct-start readiness: completion-dose training and registration require a continuation. The selected profile omission is not proof of impossible gameplay. No root was claimed, substituted or opened.
+
+**Next:** Implement direct catalog-origin training/session anchoring and inventory-derived acquisition declarations; then claim and inspect only the frozen source. Require two real families before one model choice, retaining any failure without replacement.
+
+### 2026-09-14-model121-full-local-collector-stop
+
+The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is training-ineligible and its original state has zero frozen-catalog matches.
+
+**Deviation:** No gameplay, query, label, registration session, outcome, fit, promotion or stage exit occurred. One hosted legacy false-mode compatibility failure was repaired without changing the opt-in contract. The provenance falsifier outranked pressure to produce another row.
+
+**Next:** Provision one prospectively eligible catalog-backed departure for the integrated full-local collector. Require two executable acquisition families action-free, then freeze and execute one exploratory model choice; do not search consumed historical states or weaken training provenance.
+
+### 2026-09-14-full-pokedex-shared-departure
+
+Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed. Model121 remains121 examples/83 successes/86 registrations; no learning result.
+
+**Deviation:** The prior structural-incompatibility diagnosis was too broad: it inspected the local enumerator rather than the existing travel-aware router. Corrected without a new route engine or a historical-menu search. Historical catalog identity does not prove independent upstream lineage. No stage exit or consumed-trial rule changed.
+
+**Next:** Use the qualified runtime for one model-selected measured outcome from a prospectively eligible authenticated train departure. Preserve costs, failures and terminal registration before fitting; do not count this engineering diagnostic as learning.
+
+### 2026-09-14-full-pokedex-goal-proposal-falsification
+
+The full151 inventory now gates profile-bound goal proposal. An authenticated historical state had three missing wild targets plus a physical precursor for a missing evolution, but only the wild family was executable. The required two-family gate failed with zero controller actions, frames, model queries or claims.
+
+**Deviation:** No outcome, example, fit, registration, authority or stage changed. This is the second consecutive session without measured learning output, so the anti-drift alarm requires a shared-departure executor redesign rather than another menu search or wrapper.
+
+**Next:** From one authenticated Pokemon Center state, expose travel-capable capture and native boxed evolution before selection. Run only the action-free gate first and allow gameplay only if two independently verified acquisition families are available.
+
+### 2026-09-14-model121-full-pokedex-refocus
+
+Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.
+
+**Deviation:** The dated handoff proposed freezing another same-lineage choice, but the North Star's anti-drift rule outranked it. No learning counter, registration, authority or stage changed. This is one engineering-only reorientation session; the mixed-acquisition-family milestone remains open.
+
+**Next:** Connect the151-target inventory to goal proposal and qualify one independent action-free menu spanning at least two supported executable acquisition families. Stop before gameplay if the gate fails; do not return to the Model121 resource loop.
+
+### 2026-09-14-model121-frozen-resupply
+
+Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70 specimens with cash706.
+
+**Deviation:** The first fit preflight correctly rejected the new write-ahead declaration schema. The original receipt was preserved; a narrow exact-key and three-hash admission passed hosted CI before the row was fit. No retry, redraw, teacher fallback, authority promotion, hack, Crystal access or full replay occurred.
+
+**Next:** Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result.
+
+### 2026-09-14-model120-freeze-instrumentation-failure
+
+The exact two-option Model120 menu was rebuilt action-free and queried once, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed; the selection is unknown. No gameplay, fit or counter changed.
+
+**Deviation:** This session produced no measured learning output and therefore triggers the one-session reorientation alarm. It stopped without redraw and prepared an unexecuted V2 freeze with a pre-query tombstone, write-ahead decision receipt and selected-option content hash.
+
+**Next:** In a new session, run the repaired Model120 V2 identity once. If it retains a valid decision, execute only that binding and fit only its eligible measured result; treat any ambiguous tombstone as consumed.
+
+### 2026-09-13-model120-frozen-field-restore
+
+Model119 selected restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames. The verified success became row120; Model120 has120 examples/82 successes and retains86 registrations/66 living species/70 specimens.
+
+**Deviation:** The generic runner preserved a failure after applying routed-Center postconditions to a single-field-item binding. A zero-input audit passed the exact original binding verifier and admitted only that retained terminal; there was no retry, redraw, teacher fallback, hack, Crystal access or full replay.
+
+**Next:** Freeze Model120's exact routed-restore-versus-trainer-resupply menu, execute the sampled choice once and fit only its eligible measured result.
+
+### 2026-09-13-model119-forced-singleton-fishing
+
+The sole fishing acquisition executed once under forced-singleton authority and captured national species061 in905 actions/45,564 frames. Collection advanced to86 registrations/66 living species/70 specimens; Model119 stayed119 examples/81 successes with zero model queries, teacher labels or training examples.
+
+**Deviation:** A zero-input audit corrected one private result field that had mislabeled the checkpoint document hash as the sealed record hash; the original result was preserved and the valid checkpoint reopened. Flash's observation-purity finding moved the controller claim into the executor before input. No retry, redraw, fit, hack, Crystal work or full replay occurred.
+
+**Next:** Freeze Model119's genuine two-option resupply-versus-restore menu from the corrected checkpoint, execute the sampled choice once and fit only its eligible measured result.
+
+### 2026-09-13-model119-frozen-restore
+
+Model118's frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85 registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one supplemental fishing acquisition.
+
+**Deviation:** The mixed-option contract rejected the singleton instead of inventing a learned choice. No controller input, model query, teacher label or fit followed that stop. Exact hosted CI passed before the restoration; a duplicate local suite reached7,742 passing tests without failure before being deliberately stopped.
+
+**Next:** Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model/teacher queries and choice-fit exclusion, then execute once from Model119 without retry.
+
+### 2026-09-13-model118-frozen-purchase
+
+Model117's frozen resupply executed once:134 actions and7,716 frames bought3 Ultra Balls for exactly1,800 money. The terminal remained at85 registered species, Model118 retained all118 rows with80 successes and improved weighted MSE from0.0311424461 to0.0120639699.
+
+**Deviation:** No redraw, retry, teacher label, ROM hack, Crystal work or full replay occurred. Exact hosted CI passed before input; one broad local runtime-identity assertion remains blocked by a pre-existing PyBoy RECORD digest mismatch while the other11,567 tests passed.
+
+**Next:** Execute Model118's exact frozen restore once from checkpoint ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d, retain the actual outcome and fit only eligible measured evidence.
+
+### 2026-09-13-model117-sparse-fishing-menu
+
+Zero/one-destination fishing degradation passed150 broader targeted tests. The actual Model117 terminal exposed one identity-free fishing supplement beside three ordinary goals and froze resupply candidate0 at probability0.2577685686 with zero actions, frames or teacher labels.
+
+**Deviation:** No gameplay or learning output occurred. Claude found singleton travel-effort saturation and Flash found exact test gaps; the accepted repairs preserved historical multi-destination behavior. Both final verdicts were PASS.
+
+**Next:** Execute Model117's exact frozen resupply once from the authenticated parent, retain its actual resource result and fit only eligible measured evidence. No redraw, retry, hack, Crystal or full replay.
+
+### 2026-09-13-model117-frozen-acquisition
+
+Model116's exact frozen acquisition added one registration in979actions/59232frames across six casts. The verified success became row117; Model117 has117 examples,79 successes,85 registrations,65 living species and69 specimens.
+
+**Deviation:** Model117's next action-free menu failed closed before selection because fewer than two reachable productive fishing destinations remain. No second gameplay attempt, manual target, teacher label, retry or authority promotion occurred.
+
+**Next:** Qualify identity-free one/zero-destination fishing degradation, then rebuild and freeze Model117's next mixed menu without controller input. No hack, Crystal or full replay.
+
+### 2026-09-13-model116-pay-day-accounting
+
+Pinned cartridge source explains Model114's extra58 as opponent Pay Day. Model115's exact continuation stopped on the retained accumulator after27 actions/864 frames; its actual failure became row116. Model116 has116 examples,78 successes,84 registrations and cash2146; its next acquisition choice is frozen.
+
+**Deviation:** The first verifier assumed the Pay Day accumulator cleared at battle end. Source proved it persists until the next battle initializes, so the final contract now proves stale prior value, exact battle-init clear and current-battle terminal value. Neither historical failure was relabeled or retried.
+
+**Next:** Execute Model116's exact frozen acquisition once, retain its actual result, fit only eligible evidence, publish the terminal and rebuild the menu. No resampling, consumed Model115 retry, hack, Crystal or full replay.
+
+### 2026-09-13-model115-frozen-resupply-learning
+
+Model115 retains one income-verification failure: 115 examples, 84 registrations, cash2146. The next income choice is frozen and stopped.
+
+**Deviation:** Actual terminal cash2146 differed from expected2088; retained as failure, never retried. Pete strengthened the gate: full fresh-run Red story and local Pokedex before any ROM hack. V3 preserves V1/V2 and returns the unproved fresh-run story exit to planned.
+
+**Next:** Diagnose and qualify income accounting before executing the exact frozen Model115 choice. No post-hoc tolerance, resampling or consumed retry. Red remains the curriculum through the full fresh-run/Pokedex gate, followed by hack, Crystal and at least Emerald.
 
 ### 2026-09-13-model114-frozen-fishing-learning
 

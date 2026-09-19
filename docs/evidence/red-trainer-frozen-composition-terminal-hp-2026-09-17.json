@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon.red.trainer-frozen-composition-terminal-hp.v1",
+  "date": "2026-09-17",
+  "source_commit": "bf2037159aa1cac66e8a3b362c794c2e8e5c1a10",
+  "partition": "TRAIN_ONLY",
+  "mission_check": {
+    "capability": "Select attacks and switches from semantic Red battle observations.",
+    "learned_authority": "The candidate policy owns the attack/switch decision only after separate promotion gates; this session packaged components and measured TRAIN alternatives.",
+    "transfer_test": "Reserved semantic variation and new-origin natural battles after a terminal TRAIN curriculum passes.",
+    "cheapest_falsifier": "Any matched branch is nonterminal by the declared four-player-turn horizon, or a healthy/critical pair lacks opposite winners.",
+    "time_box": "One session, two-hour reassessment cap.",
+    "stop_condition": "Stop the exact pilot on a failed terminal or reversal gate; preserve all branches and do not fit or promote."
+  },
+  "component_package": {
+    "status": "packaged_train_candidate_not_promoted",
+    "model_sha256": "831980e325d6164c9314d9b8d93909a03b66e6d0bf47b3bfb5832e95963c00ee",
+    "attack_source_model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+    "control_switch_source_model_sha256": "be3a2a3aed8d4fe80ce6a9b084de667cb0fee65afe21f59f9ba6a38382038b26",
+    "retention": {
+      "original_44_attack": {"maximum": 0.0554, "observed": 0.035384769, "passed": true},
+      "all_52_attack": {"maximum": 0.0648, "observed": 0.044750856, "passed": true},
+      "composed_action": {"maximum": 0.1609, "observed": 0.112597023, "passed": true}
+    },
+    "optimizer_updates": 0
+  },
+  "implementation": {
+    "warm_start_inheritance_fixed": true,
+    "four_turn_matched_branch_support": true,
+    "targeted_tests_passed": 17,
+    "ruff_passed": true,
+    "collection_registry_check_passed": true
+  },
+  "bounded_pilot": {
+    "declared_scenarios": 4,
+    "scenario_executed": "first matchup healthy lead",
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "first_choices_per_timing": 5,
+    "branches_retained": 25,
+    "battle_won": 15,
+    "player_turn_budget": 10,
+    "switch_branches_truncated": 5,
+    "switch_branch_timing_zero_opponent_hp_start": 70,
+    "switch_branch_timing_zero_opponent_hp_after_four_turns": 41,
+    "failure_receipt_sha256": "86d7a17cce2c3945fbc6f22be16803852223f767fdb33df5276f86cef9efcae8",
+    "status": "STOPPED_FAILED_TERMINAL_GATE",
+    "critical_hp_executed": false,
+    "second_matchup_executed": false
+  },
+  "new_train_targets_admitted": 0,
+  "fits": 0,
+  "development_evaluations": 0,
+  "authority_promotions": 0,
+  "registrations_delta": 0,
+  "fresh_red_acceptance_delta": 0,
+  "github_pushes": 0,
+  "next_decision": "Design one new prospective terminal curriculum with a continuation policy that can finish after switching, first checking expected remaining turns without replaying this failed identity."
+}

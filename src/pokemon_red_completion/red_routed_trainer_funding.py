@@ -54,6 +54,7 @@ from .route_plan import RoutePlan
 if TYPE_CHECKING:
     from .red_funding_fly import FundingFlyCandidate
     from .red_resource_goal_router import RedResourceGoalRouter
+    from .red_trainer_funding_battle import TrainerFundingBattleReceipt
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -122,7 +123,8 @@ def _funding_flights_enabled(router: RedResourceGoalRouter) -> bool:
 
 
 def _execute_funding_flight(
-    router: RedResourceGoalRouter, selected: FundingFlyCandidate,
+    router: RedResourceGoalRouter,
+    selected: FundingFlyCandidate,
 ) -> None:
     """Recheck a frozen destination, then verify its landing before any onward walk."""
     from .actions import MacroAction, MacroActionKind
@@ -140,13 +142,17 @@ def _execute_funding_flight(
     )
     runtime = router.runtime
     port = Gen1FieldMovePort(actions, runtime.reader, runtime.emulator)
-    port.execute(MacroAction(
-        MacroActionKind.FIELD_MOVE,
-        "fly:" + RED_FLY_TOWN_NAMES[selected.town].lower().replace(" ", "_"),
-    ))
+    port.execute(
+        MacroAction(
+            MacroActionKind.FIELD_MOVE,
+            "fly:" + RED_FLY_TOWN_NAMES[selected.town].lower().replace(" ", "_"),
+        )
+    )
     current = runtime.adapter.observe()
     if (
-        len(port.fly_receipts) != 1 or not current.input_ready or current.raw.battle_state != 0
+        len(port.fly_receipts) != 1
+        or not current.input_ready
+        or current.raw.battle_state != 0
         or (current.raw.map_id, current.raw.player_y, current.raw.player_x)
         != (selected.town, *selected.landing)
         or runtime.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
@@ -202,7 +208,9 @@ def active_trainer_funding_candidate(
 
 
 def _candidates(
-    router: RedResourceGoalRouter, *, world: StrategicScenarioRouteWorld | None = None,
+    router: RedResourceGoalRouter,
+    *,
+    world: StrategicScenarioRouteWorld | None = None,
 ) -> tuple[TrainerFundingCandidate, ...]:
     observed = world is None and getattr(router, "observed_trainer_funding", False)
     world = router.world if world is None else world
@@ -254,9 +262,11 @@ def _candidates(
     if observed:
         blocks = reader.read_current_map_blocks()
         if (
-            blocks.map_id != raw.map_id or start.map_id != raw.map_id
+            blocks.map_id != raw.map_id
+            or start.map_id != raw.map_id
             or start.at != (raw.player_y, raw.player_x)
-            or not start.ready or start.interruption is not None
+            or not start.ready
+            or start.interruption is not None
         ):
             raise RedTrainerFundingError("observed funding menu does not match active field")
         world = world.with_current_blocks(blocks)
@@ -266,8 +276,9 @@ def _candidates(
         if raw.event_flags is None:
             return ()
         indoor_exit = (
-            start.last_outside_map if _indoor_funding_enabled(router)
-            and raw.map_id in _POKEMON_CENTER_MAPS else None
+            start.last_outside_map
+            if _indoor_funding_enabled(router) and raw.map_id in _POKEMON_CENTER_MAPS
+            else None
         )
         if indoor_exit is None:
             from .red_declared_funding_departure import declared_mart_funding_exit
@@ -289,7 +300,8 @@ def _candidates(
             indoor_exit_map=indoor_exit,
             static_blockers=(
                 {m: world.object_blockers[m] for m in maps}
-                if _funding_flights_enabled(router) else None
+                if _funding_flights_enabled(router)
+                else None
             ),
         )
     return local_trainer_funding_candidates(rom, world, start, zones)
@@ -297,14 +309,14 @@ def _candidates(
 
 def _indoor_funding_enabled(router: RedResourceGoalRouter) -> bool:
     return any(
-        spec.kind is GoalKind.RESUPPLY
-        and spec.parameters.get("indoor_funding_departure") is True
+        spec.kind is GoalKind.RESUPPLY and spec.parameters.get("indoor_funding_departure") is True
         for spec in router.runtime.profile.providers
     )
 
 
 def _observed_funding_target(
-    router: RedResourceGoalRouter, target: TrainerFundingCandidate,
+    router: RedResourceGoalRouter,
+    target: TrainerFundingCandidate,
 ) -> TrainerFundingCandidate:
     """Requalify the same quoted trainer before input, keeping old menus stable."""
     reader = router.runtime.reader
@@ -317,7 +329,8 @@ def _observed_funding_target(
     if reader.read() != before or reader.read_current_map_blocks() != blocks:
         raise RedTrainerFundingError("funding observation changed during route qualification")
     matches = tuple(
-        candidate for candidate in candidates
+        candidate
+        for candidate in candidates
         if candidate.trainer == target.trainer and candidate.quote == target.quote
     )
     if len(matches) != 1:
@@ -336,15 +349,15 @@ def bind_local_trainer_funding(
         for s in router.runtime.profile.providers
     )
     composable_income = any(
-        s.kind is GoalKind.RESUPPLY
-        and s.parameters.get("composable_trainer_funding") is True
+        s.kind is GoalKind.RESUPPLY and s.parameters.get("composable_trainer_funding") is True
         for s in router.runtime.profile.providers
     )
     purchases = tuple(b for b in bindings.bindings if b.kind is GoalKind.RESUPPLY)
     if bindings.allow_resource_variants or (purchases and not variants):
         return bindings
     if purchases and (
-        len(purchases) != 1 or purchases[0].resource_quote is None
+        len(purchases) != 1
+        or purchases[0].resource_quote is None
         or purchases[0].resource_quote.purchase_cost <= 0
         or purchases[0].resource_quote.expected_income != 0
     ):
@@ -355,6 +368,9 @@ def bind_local_trainer_funding(
         return bindings
     provider = router.runtime.provider_for(GoalKind.RESUPPLY, router.actions)
     raw = observation.raw
+    target_cash = getattr(router, "trainer_funding_target_cash", None)
+    if target_cash is not None and (type(target_cash) is not int or target_cash < 0):
+        raise RedTrainerFundingError("trainer funding target cash differs")
     if (
         not isinstance(provider, RedMartResupplyGoalProvider)
         or not provider.affordable_ball_purchase
@@ -367,19 +383,24 @@ def bind_local_trainer_funding(
         or not raw.party_hp
         or len(raw.party_hp) != observation.party.size
         or any(hp <= 0 for hp in raw.party_hp)
+        or (
+            router.runtime.trainer_battle_runner is not None
+            and not 1 <= observation.party.size <= 3
+        )
     ):
         return bindings
+    proactive_shortfall = target_cash is not None and raw.player_money < target_cash
     if variants:
         from .red_capture_funding_budget import red_capture_funding_budget
 
         budget = red_capture_funding_budget(observation, provider)
-        if budget is None or budget.shortfall == 0:
+        if (budget is None or budget.shortfall == 0) and not proactive_shortfall:
             return bindings
         if purchases:
             assert purchases[0].resource_quote is not None
             if purchases[0].resource_quote.available_funds != raw.player_money:
                 return bindings
-    elif raw.player_money >= provider.purchases[0].unit_price:
+    elif raw.player_money >= provider.purchases[0].unit_price and not proactive_shortfall:
         return bindings
     try:
         escort = plan_capture_lead(observation.party)
@@ -410,8 +431,7 @@ def bind_local_trainer_funding(
         # battle to make irreversible positive progress toward it.
         and (
             composable_income
-            or c.quote.expected_money_after(raw.player_money)
-            >= provider.purchases[0].unit_price
+            or c.quote.expected_money_after(raw.player_money) >= provider.purchases[0].unit_price
         )
         and c.quote.expected_money_after(raw.player_money) > raw.player_money
         and (
@@ -432,8 +452,10 @@ def bind_local_trainer_funding(
     target, selected_flight = max(
         candidates,
         key=lambda pair: (
-            pair[0].quote.expected_victory_money / (
-                len(pair[0].approach.steps) + 10 * len(pair[0].quote.party)
+            pair[0].quote.expected_victory_money
+            / (
+                len(pair[0].approach.steps)
+                + 10 * len(pair[0].quote.party)
                 + (32 if pair[1] is not None else 0)
             )
         ),
@@ -444,6 +466,7 @@ def bind_local_trainer_funding(
     original_at = (raw.map_id, raw.player_y, raw.player_x)
     claimed = False
     completed_report: GoalExecutionReport | None = None
+    completed_receipt: TrainerFundingBattleReceipt | None = None
     final_party_species: tuple[int, ...] = ()
 
     def require_target(*, before_departure: bool = False) -> None:
@@ -511,7 +534,7 @@ def bind_local_trainer_funding(
             raise RedTrainerFundingError("trainer roster/reward changed before interaction")
 
     def execute() -> GoalExecutionReport:
-        nonlocal claimed, completed_report, final_party_species, target
+        nonlocal claimed, completed_receipt, completed_report, final_party_species, target
         if claimed:
             raise RedTrainerFundingError("trainer funding binding already consumed")
         claimed = True
@@ -590,7 +613,9 @@ def bind_local_trainer_funding(
             validate_target=require_target,
             move_slot_policy=guard._safe_trainer_move,
             timing=DEFAULT_BATTLE_RUNTIME_TIMING,
+            battle_runner_override=runtime.trainer_battle_runner,
         )
+        completed_receipt = receipt
         completed_report = GoalExecutionReport(
             actions.actions_executed - action_start,
             runtime.emulator.frame_count - frame_start,
@@ -603,11 +628,21 @@ def bind_local_trainer_funding(
                     "initial_money": receipt.initial_money,
                     "final_money": receipt.final_money,
                     "payout": receipt.payout,
+                    "ordinary_victory_money": receipt.ordinary_victory_money,
+                    "pay_day_money": receipt.pay_day_money,
                 },
                 "finite_income": True,
+                "battle_authority": (
+                    "frozen_learned_trainer" if runtime.trainer_battle_runner is not None
+                    else "existing_heuristic_controller"
+                ),
+                "battle_model_sha256": runtime.trainer_battle_model_sha256,
                 "balls_purchased": 0,
-                **({"funding_transport": {"verified_flights": 1}}
-                   if selected_flight is not None else {}),
+                **(
+                    {"funding_transport": {"verified_flights": 1}}
+                    if selected_flight is not None
+                    else {}
+                ),
                 **(
                     {
                         "funding_facing_interruption": {
@@ -631,6 +666,7 @@ def bind_local_trainer_funding(
         quote = trainer_party_quote(router.world.rom, t.trainer_class, t.trainer_set)
         if (
             completed_report is None
+            or completed_receipt is None
             or report is not completed_report
             or quote != target.quote
             or final.battle_state != 0
@@ -640,7 +676,13 @@ def bind_local_trainer_funding(
             or (final.map_id, final.player_y, final.player_x)
             != (t.map_id, *target.approach.terminal_at)
             or not event_flag_is_set(final.event_flags, t.event_flag)
-            or final.player_money != quote.expected_money_after(before_money)
+            or final.player_money
+            != min(
+                999999,
+                before_money
+                + completed_receipt.ordinary_victory_money
+                + completed_receipt.pay_day_money,
+            )
             or final.bag_items != before_bag
             or tuple(final.party_species_ids or ()) != final_party_species
             or not final.party_hp
@@ -660,8 +702,15 @@ def bind_local_trainer_funding(
                 "money": before_money,
                 "quote": asdict(target.quote),
                 "origin": original_at,
-                **({"fly_town": selected_flight.town, "fly_landing": selected_flight.landing}
-                   if selected_flight is not None else {}),
+                **(
+                    {"battle_model_sha256": runtime.trainer_battle_model_sha256}
+                    if runtime.trainer_battle_model_sha256 is not None else {}
+                ),
+                **(
+                    {"fly_town": selected_flight.town, "fly_landing": selected_flight.landing}
+                    if selected_flight is not None
+                    else {}
+                ),
             }
         ),
         kind=GoalKind.RESUPPLY,
@@ -671,17 +720,25 @@ def bind_local_trainer_funding(
             (),
             expected_income=target.quote.expected_money_after(before_money) - before_money,
         ),
-        estimated_effort=min(1.0, 0.15 + len(target.approach.steps) / 256
-                             + (0.2 if selected_flight is not None else 0)),
+        estimated_effort=min(
+            1.0,
+            0.15 + len(target.approach.steps) / 256 + (0.2 if selected_flight is not None else 0),
+        ),
         estimated_risk=0.15,
         execute=execute,
         verify=verify,
     )
     return GoalBindingSet(
-        (tuple(
-            o for o in bindings.opportunities
-            if o.kind is not GoalKind.RESUPPLY or o.availability is GoalAvailability.AVAILABLE
-        ) + (binding.opportunity,)) if purchases else tuple(
+        (
+            tuple(
+                o
+                for o in bindings.opportunities
+                if o.kind is not GoalKind.RESUPPLY or o.availability is GoalAvailability.AVAILABLE
+            )
+            + (binding.opportunity,)
+        )
+        if purchases
+        else tuple(
             binding.opportunity if o.kind is GoalKind.RESUPPLY else o
             for o in bindings.opportunities
         ),

@@ -3,6 +3,8 @@ from __future__ import annotations
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 
+import pytest
+
 from pokemon_red_completion.battle_outcome_learning import BattleTurnOutcome
 from pokemon_red_completion.battle_runtime import BattleTurnExecution
 from pokemon_red_completion.battle_scenario_capture import (
@@ -16,12 +18,24 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.red_battle_outcome_runtime import (
+    RedBattleOutcomeRuntimeError,
+    _shared_pre_attack_frames,
     collect_red_battle_outcome_example,
     execute_red_battle_candidate,
     prepare_red_battle_outcome_capture,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
 from pokemon_red_completion.scenario_lab import ScenarioPartition
+
+
+def test_mismatched_counterfactual_frames_identify_candidates() -> None:
+    first = BattleTurnOutcome(True, 0.0, 0.0, False, False, False, 1, 3_000, 2_048)
+    second = BattleTurnOutcome(True, 0.0, 0.0, False, False, False, 1, 3_000, 2_049)
+    with pytest.raises(
+        RedBattleOutcomeRuntimeError,
+        match=r"candidate_frames=\(2048, None, 2049\)",
+    ):
+        _shared_pre_attack_frames((first, None, second))
 
 
 def _prepared() -> PreparedRedBattleScenario:
@@ -97,6 +111,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
     loaded: list[bytes] = []
     selected_slots: list[int] = []
     pre_attack_targets: list[int] = []
+    settlement_targets: list[bool] = []
     retained: list[tuple[int, BattleTurnOutcome]] = []
     events: list[str] = []
 
@@ -117,6 +132,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
         pre_attack_targets.append(kwargs["minimum_pre_attack_frames"])
+        settlement_targets.append(kwargs["settle_to_next_decision"])
         events.append(f"execute:{kwargs['selected_slot']}")
         return BattleTurnExecution(
             _raw(),
@@ -182,6 +198,7 @@ def test_counterfactual_collection_resets_exact_state_for_each_supported_move(
         for outcome in collection.outcomes
     )
     assert pre_attack_targets == [2_079, 2_079]
+    assert settlement_targets == [True, True]
     assert events == [
         "load",
         "claim:0",
@@ -224,6 +241,7 @@ def test_selected_candidate_executes_without_teacher(
     def execute(reader, executor, **kwargs):  # type: ignore[no-untyped-def]
         del reader, executor
         selected_slots.append(kwargs["selected_slot"])
+        assert kwargs["settle_to_next_decision"] is True
         return BattleTurnExecution(_raw(), _raw(), kwargs["selected_slot"], 1, 3_000, True, 2_048)
 
     monkeypatch.setattr(

@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon.red.model123-item-evolution-integration-query-failure.v1",
+  "session_id": "2026-09-15-model123-item-evolution-integration-query-failure",
+  "status": "capability_qualified_query_consumed_without_durable_decision",
+  "classification": "learning_attempt_failed_after_model_selection_before_gameplay",
+  "source": {
+    "commit": "c729b7ad0fb567f4f5c1953fb691cee07a49e5d1",
+    "source_bundle_sha256": "5010bef1cb07556b0ccc3bb4be7805206c4fb75b3c9c7030efcf42548768e4fb",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "origin_state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051",
+    "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa"
+  },
+  "capability_qualification": {
+    "status": "verified",
+    "generic_item_evolution_binding": true,
+    "procurement_deferred_until_selected": true,
+    "rom_free_stone_families": ["fire", "water"],
+    "focused_tests_passed": 372,
+    "static_analysis": "passed",
+    "product_focus": "passed"
+  },
+  "live_menu": {
+    "status": "verified_zero_input_heterogeneous_menu",
+    "menu_sha256": "0687aeae6d028b08a098eaa75fb3e19c2474b6e5879ca3b4d288a61a87332c14",
+    "available_candidate_count": 3,
+    "portable_option_kinds": ["acquire", "evolve", "resupply"],
+    "identity_fields_public": 0,
+    "cash": 6528,
+    "storage_pressure": 0.75,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "state_unchanged": true
+  },
+  "model_query": {
+    "status": "consumed_without_durable_decision",
+    "selection_seed": 123091501,
+    "exploration_mix": 0.25,
+    "query_intent_sha256": "b2c026e8a465f596b6444abdb59c5072ef3d2f54e72b1ffb40eafa6cb425167e",
+    "failed_runner_sha256": "40d57bdc51684e7b761096e7a194e1c0fde7179387c271c7f4a704b66ea1264c",
+    "failure": "The model selection returned, then the post-query authority assertion referenced the nonexistent MODEL_GREEDY enum member before the decision record was written.",
+    "decision_record_written": false,
+    "frozen_menu_record_written": false,
+    "selected_option_recoverable_from_durable_output": false,
+    "retry_performed": false,
+    "retry_authorized": false
+  },
+  "effects": {
+    "model_queries": 1,
+    "teacher_labels": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "training_examples_added": 0,
+    "registrations_added": 0,
+    "cash_spent": 0,
+    "gameplay_executed": false
+  },
+  "terminal": {
+    "registered_declared_route": 89,
+    "declared_route_target": 124,
+    "declared_route_percent": 71.77,
+    "living_species": 67,
+    "specimens": 71,
+    "cash": 6528,
+    "state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051"
+  },
+  "learning": {
+    "model": "Model123",
+    "settled_examples": 123,
+    "successes": 84,
+    "authority_delta": "none",
+    "reason": "No durable selected arm or gameplay outcome exists, so the attempted query cannot become a training row or authority claim."
+  },
+  "next_decision": "Choose a prospectively distinct, non-retry recovery experiment or close this exact retained-state query lane; never redraw selection seed 123091501 or infer its selected arm."
+}

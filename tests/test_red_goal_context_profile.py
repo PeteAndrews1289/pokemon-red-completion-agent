@@ -56,19 +56,82 @@ def _provider(
     }
 
 
+@pytest.mark.parametrize(
+    ("source", "target", "item"),
+    (
+        (58, 59, ItemId.FIRE_STONE),
+        (61, 62, ItemId.WATER_STONE),
+    ),
+)
+def test_targeted_item_evolution_profile_accepts_distinct_buyable_families(
+    source: int,
+    target: int,
+    item: ItemId,
+) -> None:
+    profile = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(
+                GoalKind.EVOLVE_SPECIES,
+                RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+                {
+                    "source_species_ref": red_species_ref(source),
+                    "target_species_ref": red_species_ref(target),
+                    "item_id": int(item),
+                },
+            ),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+        )
+    )
+    evolution = profile.providers[1]
+    assert evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+    assert evolution.parameters["item_id"] == int(item)
+
+
+def test_targeted_item_evolution_profile_rejects_wrong_stone_family() -> None:
+    with pytest.raises(RedGoalContextProfileError, match="acquisition graph"):
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                _provider(
+                    GoalKind.EVOLVE_SPECIES,
+                    RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+                    {
+                        "source_species_ref": red_species_ref(58),
+                        "target_species_ref": red_species_ref(59),
+                        "item_id": int(ItemId.WATER_STONE),
+                    },
+                ),
+                _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            )
+        )
+
+
 def _supply_transition_profile(map_id=MapId.CINNABAR_MART, item=ItemId.GREAT_BALL):
-    return parse_red_goal_context_profile(_payload(
-        _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
-        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
-        _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, {
-            "map_id": int(map_id), "player_x": 2, "player_y": 5,
-            "interaction_direction": "left", "purchases": [{
-                "absolute_index": 0 if item is ItemId.POKE_BALL else 1,
-                "item_id": int(item), "quantity": 10,
-                "unit_price": 200 if item is ItemId.POKE_BALL else 600,
-            }],
-        }),
-    ))
+    return parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(
+                GoalKind.RESUPPLY,
+                RedGoalMechanic.MART_RESUPPLY,
+                {
+                    "map_id": int(map_id),
+                    "player_x": 2,
+                    "player_y": 5,
+                    "interaction_direction": "left",
+                    "purchases": [
+                        {
+                            "absolute_index": 0 if item is ItemId.POKE_BALL else 1,
+                            "item_id": int(item),
+                            "quantity": 10,
+                            "unit_price": 200 if item is ItemId.POKE_BALL else 600,
+                        }
+                    ],
+                },
+            ),
+        )
+    )
 
 
 def test_resupply_transition_keeps_all_other_skills_and_contract():
@@ -82,11 +145,11 @@ def test_resupply_transition_keeps_all_other_skills_and_contract():
     affordable = bind_affordable_ball_supply_profile(after)
     require_resupply_only_profile_transition(after, affordable)
     assert affordable.providers[:2] == after.providers[:2]
-    assert affordable.providers[2].parameters['affordable_ball_purchase'] is True
-    assert 'affordable_ball_purchase' not in after.providers[2].parameters
+    assert affordable.providers[2].parameters["affordable_ball_purchase"] is True
+    assert "affordable_ball_purchase" not in after.providers[2].parameters
     assert (
-        affordable.providers[2].parameters['purchases']
-        == after.providers[2].parameters['purchases']
+        affordable.providers[2].parameters["purchases"]
+        == after.providers[2].parameters["purchases"]
     )
 
 
@@ -95,10 +158,12 @@ def _indoor_supply_profile(**overrides):
     params = dict(before.providers[2].parameters)
     params["purchases"] = [dict(p) for p in params["purchases"]]
     params.update(indoor_funding_departure=True, **overrides)
-    return parse_red_goal_context_profile(_payload(
-        *(_provider(s.kind, s.mechanic, dict(s.parameters)) for s in before.providers[:2]),
-        _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
-    ))
+    return parse_red_goal_context_profile(
+        _payload(
+            *(_provider(s.kind, s.mechanic, dict(s.parameters)) for s in before.providers[:2]),
+            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
+        )
+    )
 
 
 def test_mart_funding_transition_is_explicit_and_only_changes_supply():
@@ -107,15 +172,17 @@ def test_mart_funding_transition_is_explicit_and_only_changes_supply():
     before = _indoor_supply_profile()
     after = bind_mart_funding_departure_profile(before)
     assert "mart_funding_departure" not in before.providers[2].parameters
-    assert after.providers[2].parameters == dict(before.providers[2].parameters,
-                                                mart_funding_departure=True)
+    assert after.providers[2].parameters == dict(
+        before.providers[2].parameters, mart_funding_departure=True
+    )
     assert before.providers[:2] == after.providers[:2]
     assert before.manager_config == after.manager_config
     assert before.profile_sha256 != after.profile_sha256
     assert bind_mart_funding_departure_profile(after) == after
     with pytest.raises(RedGoalContextProfileError, match="indoor funding"):
         bind_mart_funding_departure_profile(
-            bind_affordable_ball_supply_profile(_supply_transition_profile()))
+            bind_affordable_ball_supply_profile(_supply_transition_profile())
+        )
 
 
 @pytest.mark.parametrize("flag", [1, "true", None])
@@ -130,9 +197,11 @@ def test_mart_funding_profile_requires_existing_indoor_mode():
     params["purchases"] = [dict(p) for p in params["purchases"]]
     params["indoor_funding_departure"] = False
     with pytest.raises(RedGoalContextProfileError, match="indoor funding"):
-        parse_red_goal_context_profile(_payload(
-            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
-        ))
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
+            )
+        )
 
 
 def test_resource_choice_opt_in_keeps_existing_skills_and_reserves():
@@ -181,7 +250,8 @@ def test_funding_fly_is_separate_explicit_supply_transition():
     after = bind_funding_fly_profile(before)
     assert "funding_fly_transport" not in before.providers[2].parameters
     assert after.providers[2].parameters == dict(
-        before.providers[2].parameters, funding_fly_transport=True,
+        before.providers[2].parameters,
+        funding_fly_transport=True,
     )
     assert before.manager_config == after.manager_config
     assert before.providers[:2] == after.providers[:2]
@@ -189,14 +259,22 @@ def test_funding_fly_is_separate_explicit_supply_transition():
     assert bind_funding_fly_profile(after) == after
     with pytest.raises(RedGoalContextProfileError, match="affordable"):
         bind_funding_fly_profile(_supply_transition_profile())
-    no_supply = parse_red_goal_context_profile(_payload(
-        _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
-        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
-        _provider(GoalKind.MANAGE_STORAGE, RedGoalMechanic.BOX_SWITCH, {
-            "target_box_index": 1, "map_id": int(MapId.CINNABAR_POKECENTER),
-            "player_x": 13, "player_y": 4,
-        }),
-    ))
+    no_supply = parse_red_goal_context_profile(
+        _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(
+                GoalKind.MANAGE_STORAGE,
+                RedGoalMechanic.BOX_SWITCH,
+                {
+                    "target_box_index": 1,
+                    "map_id": int(MapId.CINNABAR_POKECENTER),
+                    "player_x": 13,
+                    "player_y": 4,
+                },
+            ),
+        )
+    )
     with pytest.raises(RedGoalContextProfileError, match="existing Mart"):
         bind_funding_fly_profile(no_supply)
 
@@ -208,38 +286,68 @@ def test_funding_fly_rejects_nonboolean_profile_flag(flag):
 
 
 def test_funding_fly_false_remains_disabled_and_requires_affordable_when_true():
-    assert _indoor_supply_profile(funding_fly_transport=False).providers[2].parameters[
-        "funding_fly_transport"
-    ] is False
+    assert (
+        _indoor_supply_profile(funding_fly_transport=False)
+        .providers[2]
+        .parameters["funding_fly_transport"]
+        is False
+    )
     before = _supply_transition_profile()
     parameters = dict(before.providers[2].parameters, funding_fly_transport=True)
     parameters["purchases"] = [dict(p) for p in parameters["purchases"]]
     with pytest.raises(RedGoalContextProfileError, match="affordable"):
-        parse_red_goal_context_profile(_payload(
-            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, parameters),
-        ))
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, parameters),
+            )
+        )
 
 
 @pytest.mark.parametrize("flag", [True, False, 1, "true"])
 def test_resource_choice_profile_flag_is_explicit_and_boolean(flag):
     before = bind_affordable_ball_supply_profile(_supply_transition_profile())
     # Build real canonical input; opt-in does not relax the fixed reserve contract.
-    payload = json.loads(build_red_goal_context_profile_payload(
-        profile_id=before.profile_id,
-        providers=tuple((s.kind, s.mechanic, {
-            **s.parameters, "purchases": [dict(p) for p in s.parameters["purchases"]],
-            "resource_choice_variants": flag,
-        } if s.kind is GoalKind.RESUPPLY else dict(s.parameters)) for s in before.providers),
-    )) if type(flag) is bool else None
+    payload = (
+        json.loads(
+            build_red_goal_context_profile_payload(
+                profile_id=before.profile_id,
+                providers=tuple(
+                    (
+                        s.kind,
+                        s.mechanic,
+                        {
+                            **s.parameters,
+                            "purchases": [dict(p) for p in s.parameters["purchases"]],
+                            "resource_choice_variants": flag,
+                        }
+                        if s.kind is GoalKind.RESUPPLY
+                        else dict(s.parameters),
+                    )
+                    for s in before.providers
+                ),
+            )
+        )
+        if type(flag) is bool
+        else None
+    )
     if payload is None:
         with pytest.raises(RedGoalContextProfileError, match="bool"):
             build_red_goal_context_profile_payload(
                 profile_id=before.profile_id,
-                providers=tuple((s.kind, s.mechanic, {
-                    **s.parameters, "purchases": [dict(p) for p in s.parameters["purchases"]],
-                    "resource_choice_variants": flag,
-                } if s.kind is GoalKind.RESUPPLY else dict(s.parameters))
-                    for s in before.providers),
+                providers=tuple(
+                    (
+                        s.kind,
+                        s.mechanic,
+                        {
+                            **s.parameters,
+                            "purchases": [dict(p) for p in s.parameters["purchases"]],
+                            "resource_choice_variants": flag,
+                        }
+                        if s.kind is GoalKind.RESUPPLY
+                        else dict(s.parameters),
+                    )
+                    for s in before.providers
+                ),
             )
         return
     custom = parse_red_goal_context_profile(
@@ -259,16 +367,29 @@ def test_resource_choice_profile_flag_is_explicit_and_boolean(flag):
 @pytest.mark.parametrize("flag", [True, False, 1, "yes"])
 def test_indoor_funding_flag_is_explicit_and_supply_scoped(flag):
     params = {
-        "map_id": int(MapId.CERULEAN_MART), "player_x": 2, "player_y": 5,
-        "interaction_direction": "left", "affordable_ball_purchase": True,
+        "map_id": int(MapId.CERULEAN_MART),
+        "player_x": 2,
+        "player_y": 5,
+        "interaction_direction": "left",
+        "affordable_ball_purchase": True,
         "indoor_funding_departure": flag,
-        "purchases": [{"absolute_index": 0, "item_id": int(ItemId.POKE_BALL),
-                       "quantity": 10, "unit_price": 200}],
+        "purchases": [
+            {
+                "absolute_index": 0,
+                "item_id": int(ItemId.POKE_BALL),
+                "quantity": 10,
+                "unit_price": 200,
+            }
+        ],
     }
+
     def payload():
-        return _payload(_provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
-                        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
-                        _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params))
+        return _payload(
+            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
+        )
+
     if type(flag) is not bool:
         with pytest.raises(RedGoalContextProfileError, match="bool"):
             parse_red_goal_context_profile(payload())
@@ -283,53 +404,86 @@ def test_indoor_funding_flag_is_explicit_and_supply_scoped(flag):
 @pytest.mark.parametrize("damage", ["not_boolean", "non_ball", "mixed", "hidden_sale"])
 def test_affordable_supply_profile_rejects_ambiguous_or_hidden_funding(damage):
     parameters = {
-        "map_id": int(MapId.CERULEAN_MART), "player_x": 2, "player_y": 5,
-        "interaction_direction": "left", "affordable_ball_purchase": True,
-        "purchases": [{"absolute_index": 0, "item_id": int(ItemId.POKE_BALL),
-                       "quantity": 10, "unit_price": 200}],
+        "map_id": int(MapId.CERULEAN_MART),
+        "player_x": 2,
+        "player_y": 5,
+        "interaction_direction": "left",
+        "affordable_ball_purchase": True,
+        "purchases": [
+            {
+                "absolute_index": 0,
+                "item_id": int(ItemId.POKE_BALL),
+                "quantity": 10,
+                "unit_price": 200,
+            }
+        ],
     }
     if damage == "not_boolean":
         parameters["affordable_ball_purchase"] = 1
     elif damage == "non_ball":
         parameters["purchases"][0]["item_id"] = int(ItemId.POTION)
     elif damage == "mixed":
-        parameters["purchases"].append({
-            "absolute_index": 1, "item_id": int(ItemId.POTION),
-            "quantity": 1, "unit_price": 300,
-        })
+        parameters["purchases"].append(
+            {
+                "absolute_index": 1,
+                "item_id": int(ItemId.POTION),
+                "quantity": 1,
+                "unit_price": 300,
+            }
+        )
     else:
         parameters["funding_sale"] = {
-            "item_id": int(ItemId.HYPER_POTION), "quantity": 1, "minimum_remaining": 8,
+            "item_id": int(ItemId.HYPER_POTION),
+            "quantity": 1,
+            "minimum_remaining": 8,
         }
     with pytest.raises(RedGoalContextProfileError, match="affordable supply"):
-        parse_red_goal_context_profile(_payload(
-            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, parameters),
-        ))
+        parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, parameters),
+            )
+        )
 
 
 @pytest.mark.parametrize("damage", ["identity", "inventory", "other_skill"])
 def test_resupply_transition_rejects_unrelated_changes(damage):
     from dataclasses import replace
+
     before = _supply_transition_profile()
     after = _supply_transition_profile(MapId.CERULEAN_MART, ItemId.POKE_BALL)
     if damage == "identity":
         after = replace(after, profile_id="changed")
     elif damage == "inventory":
-        after = replace(after, providers=(before.providers[0], before.providers[1],
-            parse_red_goal_context_profile(_payload(
-                _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
-                _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
-                _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
-            )).providers[2]))
+        after = replace(
+            after,
+            providers=(
+                before.providers[0],
+                before.providers[1],
+                parse_red_goal_context_profile(
+                    _payload(
+                        _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+                        _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
+                    )
+                ).providers[2],
+            ),
+        )
     else:
-        other = parse_red_goal_context_profile(_payload(
-            _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
-            _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.CENTER_RESTORE),
-            _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
-        ))
-        after = replace(after, providers=(
-            after.providers[0], other.providers[1], after.providers[2],
-        ))
+        other = parse_red_goal_context_profile(
+            _payload(
+                _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.CENTER_RESTORE),
+                _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
+            )
+        )
+        after = replace(
+            after,
+            providers=(
+                after.providers[0],
+                other.providers[1],
+                after.providers[2],
+            ),
+        )
     with pytest.raises(RedGoalContextProfileError, match="resupply transition"):
         require_resupply_only_profile_transition(before, after)
 

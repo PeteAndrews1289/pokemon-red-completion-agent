@@ -283,7 +283,7 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == ("00499bc68b099ffcd0125a6777bc3b836a84ff0b")
@@ -298,6 +298,7 @@ def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() ->
         "module-assignments.blaine",
         "module-assignments.red-team-training",
         "module-assignments.training-venue",
+        "red.adaptive-wild-battle",
         "red.route-11-heal-and-return",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
@@ -306,13 +307,13 @@ def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() ->
         "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "b30404afdcad255a6c5e6b9ab221878e9c9829c2dbbfab56dc35d99ae973204f"
+        "6a5e45df1a9b79636ead10f94c287567bce3808d895a60b0cf4cd0c2113debfc"
     )
     assert attestation.current_elements_sha256 == (
-        "6056f92d8bf4eb2a78c033bebf1d18662baef7b55ed7d1a5dbe23619ef536a88"
+        "f038a3f9cfbe897569e6852a29a90ecf7e88768e68ecbf601ad171018f149741"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "dc08e8c06a8b18b5497cb393407bab8b8996f20b7eec820d478ff8e4eb20d5bd"
+        "63c0bd15569d11e4f9ba8455853edfc8c10d7109e192599952a1ef7e96b76d6e"
     )
 
 
@@ -751,11 +752,11 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
-    # Reviewed September9: the module adds an explicit verified battle-exit
-    # scene handoff. Default settlement remains unchanged (dedicated regression
-    # test); this contract fingerprints the whole module, including that opt-in.
+    # Reviewed September19: the whole-module identity includes trainer faint,
+    # sleep and automatic move-learning settlement (through69cf57c3). This
+    # refresh does not change the policy/recovery/accounting golden contracts.
     assert contract.battle_timing_sha256 == (
-        "5d16989f2bf05f3c24709013dcb352ce8e32f9aee6e304b60fd35c2649e1ec63"
+        "f95c96b4fe6f51ec53bbee8c36daa11c8f2ce3e865fd14e8693e8593622047b2"
     )
     assert contract.accounting_sha256 == (
         "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"

@@ -1677,9 +1677,32 @@ def _purchase_thunder_stone(
     emulator: EmulatorState,
     timing: SaffronTiming,
 ) -> int:
+    return purchase_celadon_evolution_stone(
+        actions,
+        reader,
+        emulator,
+        timing,
+        item=ItemId.THUNDER_STONE,
+        absolute_index=2,
+        price=THUNDER_STONE_PRICE,
+    )
+
+
+def purchase_celadon_evolution_stone(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    timing: SaffronTiming,
+    *,
+    item: ItemId,
+    absolute_index: int,
+    price: int,
+) -> int:
+    """Buy one exact stone from the qualified Celadon 4F clerk boundary."""
+
     before_money = _money(emulator)
-    if _bag(emulator).get(ItemId.THUNDER_STONE, 0):
-        raise SaffronChapterError("Thunder Stone unexpectedly existed before purchase.")
+    if _bag(emulator).get(item, 0):
+        raise SaffronChapterError("Evolution stone unexpectedly existed before purchase.")
     _move(
         actions,
         reader,
@@ -1699,20 +1722,17 @@ def _purchase_thunder_stone(
             actions,
             emulator,
             DEFAULT_LAVENDER_TIMING,
-            absolute_index=2,
-            item=ItemId.THUNDER_STONE,
+            absolute_index=absolute_index,
+            item=item,
             quantity=1,
             target_bag_quantity=1,
         )
         _close_menus(actions, reader, DEFAULT_LAVENDER_TIMING)
     except LavenderChapterError as error:
-        raise SaffronChapterError(f"Thunder Stone purchase failed: {error}") from error
+        raise SaffronChapterError(f"Evolution stone purchase failed: {error}") from error
     after_money = _money(emulator)
-    if (
-        _bag(emulator).get(ItemId.THUNDER_STONE, 0) != 1
-        or before_money - after_money != THUNDER_STONE_PRICE
-    ):
-        raise SaffronChapterError("Thunder Stone economy proof failed.")
+    if _bag(emulator).get(item, 0) != 1 or before_money - after_money != price:
+        raise SaffronChapterError("Evolution stone economy proof failed.")
     _move(
         actions,
         reader,

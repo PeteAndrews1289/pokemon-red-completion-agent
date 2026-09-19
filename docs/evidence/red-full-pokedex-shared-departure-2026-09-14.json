@@ -1,0 +1,112 @@
+{
+  "schema": "pokemon.red.full-pokedex-shared-departure-qualification.v1",
+  "session_id": "2026-09-14-full-pokedex-shared-departure",
+  "status": "redesign_implemented_action_free_gate_passed",
+  "classification": "engineering_qualification_not_learning",
+  "source": {
+    "base_commit": "afb30af7e71dba8a3cb0255269a4f781e85fd6a0",
+    "diagnostic_source_bundle_sha256": "b6c8601aefd3ac1caf28ad43e0cf1096bb1b8f50198354a72f117744a243eeb7",
+    "publication_source_bundle_sha256": "b6c8601aefd3ac1caf28ad43e0cf1096bb1b8f50198354a72f117744a243eeb7",
+    "execution_source_was_working_tree": true,
+    "source_change_after_final_diagnostic": false
+  },
+  "diagnostic": {
+    "schema": "pokemon.red.full-local-departure-inspection.v1",
+    "passed": true,
+    "failure": null,
+    "acquisition_family_count": 2,
+    "local_registration_count": 18,
+    "local_target_count": 151,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "state_bytes_unchanged": true,
+    "model_queries": 0,
+    "outcomes": 0,
+    "fits": 0,
+    "claims": 0,
+    "classification": "action_free_engineering_diagnostic",
+    "upstream_independence_verified": false
+  },
+  "context_scope": {
+    "distinct_saved_states_opened": 1,
+    "read_only_diagnostic_invocations": 3,
+    "state_sha256": "806b0336010b58e606f0cd2270e97bc1e2e0e1f6de6a1ff5192552f3ebc04bd3",
+    "same_saved_state_as_previous_session": true,
+    "historical_menu_search": false,
+    "sealed_or_benchmark_access": false,
+    "consumed_trial_reexecuted": false,
+    "training_eligibility_established": false,
+    "center_departure_rom_free_test_passed": true,
+    "real_departure_was_existing_field_state": true,
+    "reason_for_rechecks": "verify adapter/checkpoint compatibility and final single-choice terminal-observation contract on the same input"
+  },
+  "engineering": {
+    "existing_resource_router_reused": true,
+    "arbitrary_binding_suffix_authentication_removed": true,
+    "capture_targets_join_actual_provider_demand": true,
+    "local_red_scope_has_151_targets": true,
+    "shared_local_physical_views_preserved": true,
+    "historical_shared124_serialization_unchanged": true,
+    "local_novelty_reward_uses_151_denominator": true,
+    "checkpoint_and_failure_recovery_roundtrips_tested": true,
+    "all_original_available_goals_preserved": true,
+    "one_shot_shared_departure_guard": true,
+    "stale_state_rejected_before_input": true,
+    "new_route_engine": false,
+    "one_attempt_across_repeated_preselection_observations": true,
+    "fresh_terminal_ledger_readable_after_diversity_is_lost": true
+  },
+  "verification": {
+    "focused_rom_free_tests_passed": 363,
+    "repository_ruff": "passed",
+    "source_and_changed_script_mypy": "passed_499_files",
+    "expanded_non_ci_script_mypy": "failed_107_errors_in_24_files_not_repaired_in_this_scope",
+    "full_pytest_suite_run_this_session": false,
+    "collection_registry_check": "passed",
+    "documentation_focus_roadmap_tests_passed": 164,
+    "configured_mypy": "passed_497_source_files"
+  },
+  "learning": {
+    "model_before": 121,
+    "model_after": 121,
+    "examples_before": 121,
+    "examples_after": 121,
+    "successes_before": 83,
+    "successes_after": 83,
+    "retained_model_checkpoint_local_registrations": 86,
+    "new_examples": 0,
+    "new_registrations": 0,
+    "authority_promotions": 0,
+    "independent_evaluations": 0,
+    "gameplay_running": false,
+    "anti_drift_alarm_remains_active": true
+  },
+  "reviewers": {
+    "claude": {
+      "model": "claude-opus-4-8",
+      "effort": "high",
+      "first_review": "completed_read_only",
+      "followup_delta_review": "incomplete_session_limit_429_no_final_verdict",
+      "accepted": "bound-config mismatch, routed suffix mismatch and capture allowlist gap",
+      "rejected": "use shared policy.registered output as local owned flags; keep trusting arbitrary suffix-shaped callbacks",
+      "reported_limit_reset": "2026-09-14 13:00 America/New_York",
+      "remaining_percentages": "unavailable",
+      "weekly_quota": "unavailable"
+    },
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "review": "completed_read_only",
+      "accepted": "legacy byte compatibility and local/shared/physical, reserve, router and allowlist test categories",
+      "rejected": "illustrative non-repository species identifiers are not usable fixtures",
+      "remaining_percentages_and_resets": "unavailable_from_headless_cli"
+    }
+  },
+  "next": {
+    "objective": "one prospectively bounded model-selected mixed-family training outcome from an eligible authenticated train departure",
+    "retain": "actual choice, costs, failure or success, fresh local ledger and saved terminal before fitting",
+    "do_not": "reuse consumed trial identities, infer independent lineage, fit this diagnostic, repeat the Model121 resource loop, or start a full replay",
+    "model": "GPT-5.6 Sol",
+    "effort": "high",
+    "fast": false
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "schema": "pokemon.red.capture-guard-recovery-session.v1",
+  "session": "2026-09-16-capture-initialization-recovery",
+  "rigor": "correlated-development-support",
+  "status": "exact_state_recovery_complete_next_menu_blocked",
+  "source_commit": "3fc34e3b",
+  "diagnostics": {
+    "reusable_change": "Latch opponent stats after the shared battle MAIN boundary and check settled original identity against the declared capture target; preserve party and bag through initialization and all protected checks through actual setup turns.",
+    "confirmed_code_defect": "The old helper latched enemy HP before introduction settlement and rejected legitimate opponent initialization. ROM-free stale-HP cases reproduced the failure before the fix.",
+    "historical_cause_confidence": "consistent_with_initialization_timing_not_directly_traced",
+    "historical_limitation": "The old receipt names target-HP drift but lacks its callback-entry HP. Do not claim the retained live attempt directly proves the exact stale value.",
+    "read_only_failure_inspection": {
+      "entry_save_stale_enemy_hp": 54,
+      "failure_terminal_enemy_hp": 63,
+      "failure_terminal_enemy_max_hp": 63,
+      "failure_terminal_phase": "main",
+      "party_hp_and_pp_unchanged_across_failed_attempt": true,
+      "frames": 0,
+      "state_unchanged": true
+    },
+    "rom_free_tests_passed": 217,
+    "lint_and_type_checks_passed": true
+  },
+  "recovery": {
+    "plan_sha256": "d1bad5629cb761cf735eb6984a96ef66bb3ddbd8e3c14626f5ea69901a7f182b",
+    "source_failure_terminal_sha256": "188cb302c3d338715fce55e4d2858a6bbc4486e0cd81aa36883357ce28fb55b6",
+    "result_sha256": "84bf887adee82f4af3975c7fcbc680b793b6f37b5c37b6b999a13d43fd4965a2",
+    "terminal_state_sha256": "8569b536859dc6ab0882b2c1bed28c0e029ced050b07b35b00741d17498a59aa",
+    "exact_state_preflight_eligible": true,
+    "route_replayed": false,
+    "model_queries": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "learning_eligible": false,
+    "actions": 158,
+    "frames": 13716,
+    "caught": true,
+    "target_species_ref": "pokemon:national:093",
+    "registrations_before": 92,
+    "registrations_after": 93,
+    "specimens_before": 73,
+    "specimens_after": 74,
+    "specimen_delta": 1,
+    "cash_after": 1608,
+    "great_balls_before": 7,
+    "great_balls_after": 6,
+    "status_attempts": 1,
+    "verified_status": "paralysis",
+    "status_target_hp_before": 63,
+    "status_target_hp_after": 63,
+    "battle_state_after": 0,
+    "safe_terminal": true
+  },
+  "next_menu_inspection": {
+    "status": "insufficient_executable_alternatives",
+    "ordinary_available_kinds": ["resupply"],
+    "regional_acquisition_candidates": 0,
+    "restore_team_availability": "unavailable",
+    "restore_team_reason": "no_legal_target",
+    "mixed_router_routed_recovery_enabled": false,
+    "capture_helper_hp": 34,
+    "capture_helper_max_hp": 70,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "controller_read_only": true,
+    "new_run_started": false
+  },
+  "learning": {
+    "model": "Model131",
+    "settled_examples_before": 131,
+    "settled_examples_after": 131,
+    "successful_examples_before": 89,
+    "successful_examples_after": 89,
+    "new_train_examples": 0,
+    "independent_evaluation": false,
+    "original_model130_choice_remains_a_fitted_failure": true
+  },
+  "review": {
+    "reviewer": "Gemini 3.8 Flash High through Antigravity",
+    "status": "completed_read_only_design_review",
+    "accepted": ["settle before latching stats", "bind original target identity", "zero-input MAIN entry", "retain setup damage and inventory checks"],
+    "rejected": ["battle-state zero describes a wild MAIN menu", "automatically flee on identity mismatch", "require full target HP for every capture"],
+    "quota": "unavailable_not_refreshed",
+    "claude_used": false
+  },
+  "boundaries": {
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "github_push": false
+  }
+}

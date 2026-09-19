@@ -21,8 +21,12 @@ from typing import cast
 from pokemon_red_completion.generation_one import GENERATION_ONE_LEVEL_EVOLUTIONS
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.observation import ItemId, MapId
-from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
+from pokemon_red_completion.red_acquisition import (
+    RED_ACQUISITION_CATALOG,
+    RedAcquisitionKind,
+)
 from pokemon_red_completion.red_collection import red_species_number
+from pokemon_red_completion.red_evolution_stones import buyable_evolution_stone
 from pokemon_red_completion.red_goal_manager import RedGoalManagerConfig
 
 RED_GOAL_CONTEXT_PROFILE_SCHEMA = "pokemon-red-goal-manager-context-profile-v1"
@@ -46,6 +50,7 @@ class RedGoalMechanic(StrEnum):
     DIGLETT_EVOLUTION = "diglett_evolution"
     TARGETED_PARTY_DEVELOPMENT = "targeted_party_development"
     TARGETED_LEVEL_EVOLUTION = "targeted_level_evolution"
+    TARGETED_ITEM_EVOLUTION = "targeted_item_evolution"
     FIELD_RESTORE = "field_restore"
     FIELD_PP_RESTORE = "field_pp_restore"
     CENTER_RESTORE = "center_restore"
@@ -63,6 +68,7 @@ _MECHANIC_KIND = {
     RedGoalMechanic.DIGLETT_EVOLUTION: GoalKind.EVOLVE_SPECIES,
     RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: GoalKind.EVOLVE_SPECIES,
+    RedGoalMechanic.TARGETED_ITEM_EVOLUTION: GoalKind.EVOLVE_SPECIES,
     RedGoalMechanic.FIELD_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.FIELD_PP_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.CENTER_RESTORE: GoalKind.RESTORE_TEAM,
@@ -83,9 +89,7 @@ class RedGoalProviderSpec:
     configuration_sha256: str
 
     def __post_init__(self) -> None:
-        if not isinstance(self.kind, GoalKind) or not isinstance(
-            self.mechanic, RedGoalMechanic
-        ):
+        if not isinstance(self.kind, GoalKind) or not isinstance(self.mechanic, RedGoalMechanic):
             raise RedGoalContextProfileError("provider identity is invalid")
         if _MECHANIC_KIND[self.mechanic] is not self.kind:
             raise RedGoalContextProfileError("provider mechanic and goal kind differ")
@@ -120,9 +124,7 @@ class RedGoalContextProfile:
             raise RedGoalContextProfileError("context profile digest is invalid")
         if not isinstance(self.manager_config, RedGoalManagerConfig):
             raise RedGoalContextProfileError("context manager configuration is invalid")
-        if not isinstance(self.providers, tuple) or not 3 <= len(self.providers) <= len(
-            GoalKind
-        ):
+        if not isinstance(self.providers, tuple) or not 3 <= len(self.providers) <= len(GoalKind):
             raise RedGoalContextProfileError(
                 "context profile needs between three and nine providers"
             )
@@ -130,9 +132,7 @@ class RedGoalContextProfile:
         if len(kinds) != len(set(kinds)):
             raise RedGoalContextProfileError("context profile duplicates a goal kind")
         if kinds != tuple(kind for kind in GoalKind if kind in set(kinds)):
-            raise RedGoalContextProfileError(
-                "context providers must use canonical semantic order"
-            )
+            raise RedGoalContextProfileError("context providers must use canonical semantic order")
 
     def public_dict(self) -> dict[str, object]:
         """Return only identities and semantic coverage, never private parameters."""
@@ -149,19 +149,28 @@ class RedGoalContextProfile:
 
 
 def build_native_boxed_evolution_profile_payload(
-    profile: RedGoalContextProfile, *, source_species: int,
-    target_species: int, evolution_level: int,
+    profile: RedGoalContextProfile,
+    *,
+    source_species: int,
+    target_species: int,
+    evolution_level: int,
 ) -> bytes:
     """Declare useful collection evolution instead of arbitrary party grinding."""
     from pokemon_red_completion.red_collection import red_species_ref
+
     providers = {
         spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
-        for spec in profile.providers if spec.kind is not GoalKind.DEVELOP_TEAM
+        for spec in profile.providers
+        if spec.kind is not GoalKind.DEVELOP_TEAM
     }
     providers[GoalKind.EVOLVE_SPECIES] = (
-        GoalKind.EVOLVE_SPECIES, RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
-        {"source_species_ref": red_species_ref(source_species),
-         "target_species_ref": red_species_ref(target_species), "evolution_level": evolution_level},
+        GoalKind.EVOLVE_SPECIES,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        {
+            "source_species_ref": red_species_ref(source_species),
+            "target_species_ref": red_species_ref(target_species),
+            "evolution_level": evolution_level,
+        },
     )
     return build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
@@ -181,9 +190,12 @@ def bind_resupply_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextP
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("resupply Fly needs an existing Mart objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_capture_surf_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -198,9 +210,12 @@ def bind_capture_surf_profile(profile: RedGoalContextProfile) -> RedGoalContextP
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("Surf transport needs an existing capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_capture_cut_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -215,9 +230,12 @@ def bind_capture_cut_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("Cut transport needs an existing capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -232,9 +250,12 @@ def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("Fly transport needs an existing capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_capture_access_requirements_profile(
@@ -251,9 +272,12 @@ def bind_capture_access_requirements_profile(
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("capture access requirements need a capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_travel_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -268,9 +292,12 @@ def bind_travel_capture_profile(profile: RedGoalContextProfile) -> RedGoalContex
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("travel capture needs a capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_observed_local_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -285,9 +312,12 @@ def bind_observed_local_capture_profile(profile: RedGoalContextProfile) -> RedGo
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("observed local capture needs a capture objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_indoor_fly_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -296,17 +326,26 @@ def bind_indoor_fly_departure_profile(profile: RedGoalContextProfile) -> RedGoal
     found = False
     for spec in profile.providers:
         parameters = cast(dict[str, object], _thaw(spec.parameters))
-        if spec.mechanic in {
-            RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
-        } and parameters.get("fly_transport") is True:
+        if (
+            spec.mechanic
+            in {
+                RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+                RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+            }
+            and parameters.get("fly_transport") is True
+        ):
             parameters["indoor_fly_departure"] = True
             found = True
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("indoor departure needs an existing Fly objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_evolution_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -315,19 +354,26 @@ def bind_evolution_fly_profile(profile: RedGoalContextProfile) -> RedGoalContext
     found = False
     for spec in profile.providers:
         parameters = cast(dict[str, object], _thaw(spec.parameters))
-        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        if spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             parameters["fly_transport"] = True
             found = True
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("Fly transport needs an existing evolution objective")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def require_resupply_only_profile_transition(
-    before: RedGoalContextProfile, after: RedGoalContextProfile,
+    before: RedGoalContextProfile,
+    after: RedGoalContextProfile,
 ) -> None:
     """An explicit regional shop change may not alter any other playing skill."""
     if not isinstance(before, RedGoalContextProfile) or not isinstance(
@@ -393,7 +439,9 @@ def build_red_goal_context_profile_payload(
 
 
 def bind_cartridge_trainer_story_profile(
-    profile: RedGoalContextProfile, *, objective_id: str = "defeat_lorelei",
+    profile: RedGoalContextProfile,
+    *,
+    objective_id: str = "defeat_lorelei",
     maximum_full_restores: int = 0,
     recovery_controller: str = "critical-inclusive",
 ) -> RedGoalContextProfile:
@@ -411,20 +459,27 @@ def bind_cartridge_trainer_story_profile(
         for spec in profile.providers
     }
     providers[GoalKind.ADVANCE_STORY] = (
-        GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY,
-        {"trainer_objective": objective_id,
-         **({"maximum_full_restores": maximum_full_restores} if maximum_full_restores else {})},
+        GoalKind.ADVANCE_STORY,
+        RedGoalMechanic.MIDGAME_STORY,
+        {
+            "trainer_objective": objective_id,
+            **({"maximum_full_restores": maximum_full_restores} if maximum_full_restores else {}),
+        },
     )
     if recovery_controller != "critical-inclusive":
         providers[GoalKind.ADVANCE_STORY][2]["recovery_controller"] = recovery_controller
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id,
-        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+        )
+    )
 
 
 def bind_affordable_field_restore_profile(
-    profile: RedGoalContextProfile, *, reserve_last_full_restore: bool = False,
+    profile: RedGoalContextProfile,
+    *,
+    reserve_last_full_restore: bool = False,
 ) -> RedGoalContextProfile:
     """Opt into one owned recovery item, without changing historical profiles."""
     if type(reserve_last_full_restore) is not bool:
@@ -434,14 +489,19 @@ def bind_affordable_field_restore_profile(
         for spec in profile.providers
     }
     providers[GoalKind.RESTORE_TEAM] = (
-        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
-        {"affordable_single_item": True,
-         **({"reserve_last_full_restore": True} if reserve_last_full_restore else {})},
+        GoalKind.RESTORE_TEAM,
+        RedGoalMechanic.FIELD_RESTORE,
+        {
+            "affordable_single_item": True,
+            **({"reserve_last_full_restore": True} if reserve_last_full_restore else {}),
+        },
     )
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id,
-        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+        )
+    )
 
 
 def bind_combined_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -451,14 +511,20 @@ def bind_combined_field_restore_profile(profile: RedGoalContextProfile) -> RedGo
         for spec in profile.providers
     }
     providers[GoalKind.RESTORE_TEAM] = (
-        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
-        {"affordable_single_item": True, "reserve_last_full_restore": True,
-         "include_pp_fallback": True},
+        GoalKind.RESTORE_TEAM,
+        RedGoalMechanic.FIELD_RESTORE,
+        {
+            "affordable_single_item": True,
+            "reserve_last_full_restore": True,
+            "include_pp_fallback": True,
+        },
     )
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id,
-        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+        )
+    )
 
 
 def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -468,12 +534,16 @@ def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalCont
         for spec in profile.providers
     }
     providers[GoalKind.RESTORE_TEAM] = (
-        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_PP_RESTORE, {},
+        GoalKind.RESTORE_TEAM,
+        RedGoalMechanic.FIELD_PP_RESTORE,
+        {},
     )
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id,
-        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+        )
+    )
 
 
 def bind_dig_recovery_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -488,9 +558,12 @@ def bind_dig_recovery_profile(profile: RedGoalContextProfile) -> RedGoalContextP
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("Dig recovery requires field restoration")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -506,9 +579,12 @@ def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGo
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedGoalContextProfileError("affordable supply requires an existing Mart skill")
-    changed = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    changed = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -524,16 +600,25 @@ def bind_resource_choice_profile(profile: RedGoalContextProfile) -> RedGoalConte
                 raise RedGoalContextProfileError("resource variants require affordable supply")
             parameters["resource_choice_variants"] = True
             found = True
-        providers.append({
-            "kind": spec.kind.value, "mechanic": spec.mechanic.value,
-            "parameters": parameters,
-        })
+        providers.append(
+            {
+                "kind": spec.kind.value,
+                "mechanic": spec.mechanic.value,
+                "parameters": parameters,
+            }
+        )
     if not found:
         raise RedGoalContextProfileError("resource variants require an existing Mart skill")
-    changed = parse_red_goal_context_profile(_canonical_line({
-        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
-        "manager_config": asdict(profile.manager_config), "providers": providers,
-    }))
+    changed = parse_red_goal_context_profile(
+        _canonical_line(
+            {
+                "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+                "profile_id": profile.profile_id,
+                "manager_config": asdict(profile.manager_config),
+                "providers": providers,
+            }
+        )
+    )
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -556,21 +641,27 @@ def bind_composable_trainer_funding_profile(
                 )
             parameters["composable_trainer_funding"] = True
             found = True
-        providers.append({
-            "kind": spec.kind.value,
-            "mechanic": spec.mechanic.value,
-            "parameters": parameters,
-        })
+        providers.append(
+            {
+                "kind": spec.kind.value,
+                "mechanic": spec.mechanic.value,
+                "parameters": parameters,
+            }
+        )
     if not found:
         raise RedGoalContextProfileError(
             "composable trainer funding requires an existing Mart skill"
         )
-    changed = parse_red_goal_context_profile(_canonical_line({
-        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
-        "profile_id": profile.profile_id,
-        "manager_config": asdict(profile.manager_config),
-        "providers": providers,
-    }))
+    changed = parse_red_goal_context_profile(
+        _canonical_line(
+            {
+                "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+                "profile_id": profile.profile_id,
+                "manager_config": asdict(profile.manager_config),
+                "providers": providers,
+            }
+        )
+    )
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -582,19 +673,28 @@ def bind_mart_funding_departure_profile(profile: RedGoalContextProfile) -> RedGo
     for spec in profile.providers:
         parameters = cast(dict[str, object], _thaw(spec.parameters))
         if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
-            if (parameters.get("affordable_ball_purchase") is not True
-                    or parameters.get("indoor_funding_departure") is not True):
+            if (
+                parameters.get("affordable_ball_purchase") is not True
+                or parameters.get("indoor_funding_departure") is not True
+            ):
                 raise RedGoalContextProfileError("Mart funding requires existing indoor funding")
             parameters["mart_funding_departure"] = True
             found = True
-        providers.append({"kind": spec.kind.value, "mechanic": spec.mechanic.value,
-                          "parameters": parameters})
+        providers.append(
+            {"kind": spec.kind.value, "mechanic": spec.mechanic.value, "parameters": parameters}
+        )
     if not found:
         raise RedGoalContextProfileError("Mart funding requires an existing Mart skill")
-    changed = parse_red_goal_context_profile(_canonical_line({
-        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
-        "manager_config": asdict(profile.manager_config), "providers": providers,
-    }))
+    changed = parse_red_goal_context_profile(
+        _canonical_line(
+            {
+                "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+                "profile_id": profile.profile_id,
+                "manager_config": asdict(profile.manager_config),
+                "providers": providers,
+            }
+        )
+    )
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -610,14 +710,21 @@ def bind_funding_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
                 raise RedGoalContextProfileError("funding Fly requires affordable capture supply")
             parameters["funding_fly_transport"] = True
             found = True
-        providers.append({"kind": spec.kind.value, "mechanic": spec.mechanic.value,
-                          "parameters": parameters})
+        providers.append(
+            {"kind": spec.kind.value, "mechanic": spec.mechanic.value, "parameters": parameters}
+        )
     if not found:
         raise RedGoalContextProfileError("funding Fly requires an existing Mart skill")
-    changed = parse_red_goal_context_profile(_canonical_line({
-        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
-        "manager_config": asdict(profile.manager_config), "providers": providers,
-    }))
+    changed = parse_red_goal_context_profile(
+        _canonical_line(
+            {
+                "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+                "profile_id": profile.profile_id,
+                "manager_config": asdict(profile.manager_config),
+                "providers": providers,
+            }
+        )
+    )
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -641,9 +748,7 @@ def build_acquisition_replanning_profile_payload(
             "acquisition replanning requires the qualified four-battle dose"
         )
     if any(provider.kind is GoalKind.DEVELOP_TEAM for provider in profile.providers):
-        raise RedGoalContextProfileError(
-            "acquisition profile already exposes team development"
-        )
+        raise RedGoalContextProfileError("acquisition profile already exposes team development")
     capture = next(
         (
             provider
@@ -666,9 +771,7 @@ def build_acquisition_replanning_profile_payload(
         )
     capture_parameters = _thaw(capture.parameters)
     discovery_parameters = _thaw(discovery.parameters)
-    if capture_parameters != discovery_parameters or not isinstance(
-        capture_parameters, dict
-    ):
+    if capture_parameters != discovery_parameters or not isinstance(capture_parameters, dict):
         raise RedGoalContextProfileError(
             "acquisition and discovery corridors describe different sources"
         )
@@ -725,13 +828,9 @@ def parse_red_goal_context_profile(payload: bytes) -> RedGoalContextProfile:
     try:
         value = json.loads(payload.decode("ascii"), object_pairs_hook=_unique_object)
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        raise RedGoalContextProfileError(
-            "context profile is not canonical ASCII JSON"
-        ) from None
+        raise RedGoalContextProfileError("context profile is not canonical ASCII JSON") from None
     if not isinstance(value, dict) or _canonical_line(value) != payload:
-        raise RedGoalContextProfileError(
-            "context profile is not canonical ASCII JSON"
-        )
+        raise RedGoalContextProfileError("context profile is not canonical ASCII JSON")
     _exact_keys(value, {"schema", "profile_id", "manager_config", "providers"})
     if value["schema"] != RED_GOAL_CONTEXT_PROFILE_SCHEMA:
         raise RedGoalContextProfileError("context profile schema differs")
@@ -765,15 +864,9 @@ def _parse_manager_config(value: object) -> RedGoalManagerConfig:
         result = RedGoalManagerConfig(
             required_party_size=_integer(row["required_party_size"], "party size"),
             required_team_level=_integer(row["required_team_level"], "team level"),
-            desired_capture_items=_integer(
-                row["desired_capture_items"], "capture reserve"
-            ),
-            desired_recovery_items=_integer(
-                row["desired_recovery_items"], "recovery reserve"
-            ),
-            desired_storage_headroom=_integer(
-                row["desired_storage_headroom"], "storage reserve"
-            ),
+            desired_capture_items=_integer(row["desired_capture_items"], "capture reserve"),
+            desired_recovery_items=_integer(row["desired_recovery_items"], "recovery reserve"),
+            desired_storage_headroom=_integer(row["desired_storage_headroom"], "storage reserve"),
         )
     except (TypeError, ValueError) as error:
         raise RedGoalContextProfileError(str(error)) from error
@@ -827,9 +920,12 @@ def _parse_parameters(
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
         if not row:
             return row
-        _exact_keys(row, {"trainer_objective"} | (
-            {"maximum_full_restores"} if "maximum_full_restores" in row else set()
-        ) | ({"recovery_controller"} if "recovery_controller" in row else set()))
+        _exact_keys(
+            row,
+            {"trainer_objective"}
+            | ({"maximum_full_restores"} if "maximum_full_restores" in row else set())
+            | ({"recovery_controller"} if "recovery_controller" in row else set()),
+        )
         if "recovery_controller" in row and (
             row["recovery_controller"] != "ordinary-bounded-healing"
             or "maximum_full_restores" not in row
@@ -843,14 +939,21 @@ def _parse_parameters(
         ):
             raise RedGoalContextProfileError("explicit story recovery requires one or two items")
         if row["trainer_objective"] not in (
-            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion",
+            "defeat_lorelei",
+            "defeat_bruno",
+            "defeat_agatha",
+            "defeat_lance",
+            "defeat_champion",
         ):
             raise RedGoalContextProfileError("cartridge story objective is not supported")
         return row
     if mechanic is RedGoalMechanic.FIELD_RESTORE and row:
-        _exact_keys(row, {"affordable_single_item"} | (
-            {"reserve_last_full_restore"} if "reserve_last_full_restore" in row else set()
-        ) | ({"include_pp_fallback"} if "include_pp_fallback" in row else set()))
+        _exact_keys(
+            row,
+            {"affordable_single_item"}
+            | ({"reserve_last_full_restore"} if "reserve_last_full_restore" in row else set())
+            | ({"include_pp_fallback"} if "include_pp_fallback" in row else set()),
+        )
         if row["affordable_single_item"] is not True:
             raise RedGoalContextProfileError("single-item recovery requires explicit opt-in")
         if "reserve_last_full_restore" in row and row["reserve_last_full_restore"] is not True:
@@ -882,9 +985,7 @@ def _parse_parameters(
             "development level increment",
         )
         if level_increment != 1:
-            raise RedGoalContextProfileError(
-                "targeted development requires one level of progress"
-            )
+            raise RedGoalContextProfileError("targeted development requires one level of progress")
         return {
             "trainee_species_ref": trainee_species_ref,
             "level_increment": level_increment,
@@ -901,7 +1002,8 @@ def _parse_parameters(
                 "source_species_ref",
                 "target_species_ref",
                 "evolution_level",
-            } | optional,
+            }
+            | optional,
         )
         source_species_ref = _species_ref(
             row["source_species_ref"],
@@ -932,6 +1034,41 @@ def _parse_parameters(
             "evolution_level": evolution_level,
             **{key: row[key] for key in optional},
         }
+    if mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+        optional = {key for key in ("fly_transport", "indoor_fly_departure") if key in row}
+        if any(type(row[key]) is not bool for key in optional):
+            raise RedGoalContextProfileError("Fly transport must be an explicit boolean")
+        if "indoor_fly_departure" in row and row.get("fly_transport") is not True:
+            raise RedGoalContextProfileError("indoor departure requires Fly transport")
+        _exact_keys(
+            row,
+            {"source_species_ref", "target_species_ref", "item_id"} | optional,
+        )
+        source_species_ref = _species_ref(row["source_species_ref"], "evolution source")
+        target_species_ref = _species_ref(row["target_species_ref"], "evolution target")
+        item_id = _positive_integer(row["item_id"], "evolution item")
+        try:
+            offer = buyable_evolution_stone(item_id)
+            method = RED_ACQUISITION_CATALOG.method_for(target_species_ref)
+        except ValueError:
+            raise RedGoalContextProfileError(
+                "targeted item evolution is not a buyable Red stone evolution"
+            ) from None
+        if (
+            method.kind is not RedAcquisitionKind.EVOLUTION
+            or method.consumes_species_ref != source_species_ref
+            or method.source_id != offer.acquisition_source_id
+            or method.required_item_ref != offer.catalog_item_ref
+        ):
+            raise RedGoalContextProfileError(
+                "targeted item evolution differs from Red's acquisition graph"
+            )
+        return {
+            "source_species_ref": source_species_ref,
+            "target_species_ref": target_species_ref,
+            "item_id": item_id,
+            **{key: row[key] for key in optional},
+        }
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
@@ -960,8 +1097,10 @@ def _parse_parameters(
             if (
                 mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
                 or row["capture_search_budget"] != "bounded-search-v1"
-                or search_legs > 160 or search_legs % 2 != 0
-                or search_actions > 256 or search_encounters > 32
+                or search_legs > 160
+                or search_legs % 2 != 0
+                or search_actions > 256
+                or search_encounters > 32
                 or search_legs + 2 * search_encounters + 2 > search_actions
             ):
                 raise RedGoalContextProfileError("capture search budget differs")
@@ -993,8 +1132,10 @@ def _parse_parameters(
                 raise RedGoalContextProfileError("indoor departure requires capture Fly transport")
             required.add("indoor_fly_departure")
         if "travel_capture" in row:
-            if (mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
-                    or type(row["travel_capture"]) is not bool):
+            if (
+                mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                or type(row["travel_capture"]) is not bool
+            ):
                 raise RedGoalContextProfileError("travel capture must be a capture boolean")
             required.add("travel_capture")
         if "observed_local_capture" in row:
@@ -1005,16 +1146,19 @@ def _parse_parameters(
                 raise RedGoalContextProfileError("observed local capture must be a boolean")
             required.add("observed_local_capture")
         if "capture_access_requirements" in row:
-            if (mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
-                    or type(row["capture_access_requirements"]) is not bool):
+            if (
+                mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                or type(row["capture_access_requirements"]) is not bool
+            ):
                 raise RedGoalContextProfileError("capture access requirements must be a boolean")
             required.add("capture_access_requirements")
         if "capture_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 not isinstance(capture_species, list)
                 or not capture_species
-                or any(type(number) is not int or not 1 <= number <= 151
-                       for number in capture_species)
+                or any(
+                    type(number) is not int or not 1 <= number <= 151 for number in capture_species
+                )
                 or capture_species != sorted(set(capture_species))
             ):
                 raise RedGoalContextProfileError("local capture species are invalid")
@@ -1029,8 +1173,9 @@ def _parse_parameters(
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_DISCOVERY or (
                 not isinstance(local_species, list)
                 or not local_species
-                or any(type(number) is not int or not 1 <= number <= 151
-                       for number in local_species)
+                or any(
+                    type(number) is not int or not 1 <= number <= 151 for number in local_species
+                )
                 or local_species != sorted(set(local_species))
             ):
                 raise RedGoalContextProfileError("local discovery species are invalid")
@@ -1058,12 +1203,8 @@ def _parse_parameters(
             "forward_directions": list(directions),
             "starting_endpoint": starting_endpoint,
             "maximum_legs": _positive_integer(row["maximum_legs"], "survey legs"),
-            "maximum_seek_steps": _positive_integer(
-                row["maximum_seek_steps"], "seek steps"
-            ),
-            "maximum_encounters": _positive_integer(
-                row["maximum_encounters"], "encounter bound"
-            ),
+            "maximum_seek_steps": _positive_integer(row["maximum_seek_steps"], "seek steps"),
+            "maximum_encounters": _positive_integer(row["maximum_encounters"], "encounter bound"),
         }
         if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
             parsed["completed_battles"] = _positive_integer(
@@ -1101,19 +1242,32 @@ def _parse_parameters(
                 "player_y",
                 "interaction_direction",
                 "purchases",
-            } | ({"funding_sale"} if "funding_sale" in row else set())
+            }
+            | ({"funding_sale"} if "funding_sale" in row else set())
             | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
-            | {key for key in (
-                "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-                "resource_choice_variants", "composable_trainer_funding",
-                "mart_funding_departure", "funding_fly_transport",
-            ) if key in row},
+            | {
+                key
+                for key in (
+                    "fly_transport",
+                    "indoor_fly_departure",
+                    "indoor_funding_departure",
+                    "resource_choice_variants",
+                    "composable_trainer_funding",
+                    "mart_funding_departure",
+                    "funding_fly_transport",
+                )
+                if key in row
+            },
         )
         transport_fields: dict[str, object] = {}
         for key in (
-            "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-            "resource_choice_variants", "composable_trainer_funding",
-            "mart_funding_departure", "funding_fly_transport",
+            "fly_transport",
+            "indoor_fly_departure",
+            "indoor_funding_departure",
+            "resource_choice_variants",
+            "composable_trainer_funding",
+            "mart_funding_departure",
+            "funding_fly_transport",
         ):
             if key in row:
                 if type(row[key]) is not bool:
@@ -1154,11 +1308,16 @@ def _parse_parameters(
         if "affordable_ball_purchase" in row:
             value = row["affordable_ball_purchase"]
             if type(value) is not bool or (
-                value and (
+                value
+                and (
                     len(parsed_purchases) != 1
-                    or parsed_purchases[0]["item_id"] not in {
-                        int(ItemId.POKE_BALL), int(ItemId.GREAT_BALL), int(ItemId.ULTRA_BALL),
-                    } or "funding_sale" in row
+                    or parsed_purchases[0]["item_id"]
+                    not in {
+                        int(ItemId.POKE_BALL),
+                        int(ItemId.GREAT_BALL),
+                        int(ItemId.ULTRA_BALL),
+                    }
+                    or "funding_sale" in row
                 )
             ):
                 raise RedGoalContextProfileError(
@@ -1178,16 +1337,18 @@ def _parse_parameters(
                 raise RedGoalContextProfileError("Mart funding sale violates protected reserve")
             if any(p["item_id"] == item for p in parsed_purchases):
                 raise RedGoalContextProfileError("Mart cannot sell and rebuy the same item")
-            sale_fields = {"funding_sale": {
-                "item_id": item, "quantity": quantity, "minimum_retained": retained,
-            }}
+            sale_fields = {
+                "funding_sale": {
+                    "item_id": item,
+                    "quantity": quantity,
+                    "minimum_retained": retained,
+                }
+            }
         return {
             "map_id": int(_map_id(row["map_id"])),
             "player_x": _integer(row["player_x"], "Mart x coordinate"),
             "player_y": _integer(row["player_y"], "Mart y coordinate"),
-            "interaction_direction": _direction(
-                row["interaction_direction"], "Mart interaction"
-            ),
+            "interaction_direction": _direction(row["interaction_direction"], "Mart interaction"),
             "purchases": parsed_purchases,
             **sale_fields,
             **affordability_fields,

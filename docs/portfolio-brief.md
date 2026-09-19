@@ -2,36 +2,39 @@
 
 ## Thirty-second explanation
 
-I’m directing an AI-assisted project to build a Pokémon player that learns which goals to pursue—catching missing species, evolving them and managing resources—and eventually reuses that knowledge across games. The current system combines a small learned planner with deterministic game-control skills, then verifies the actual outcome before using it for training.
+I direct an AI-assisted project to build a Pokémon player that learns useful goals and battle
+decisions, verifies what happened, and eventually transfers those skills between games.
+It combines small learned models with deterministic navigation/menu skills. It is active
+development, not a finished autonomous player.
 
-## Demonstrated work
+## Demonstrated
 
-- Model-selected collection and resource goals in bounded Red episodes.
-- Incremental learning from actual outcomes, including failures.
-- 84 verified registered species and 114 settled examples in the current collection-learning dataset. Model113's frozen fishing choice added one registration and became row114 without a teacher label. From the durable Model114 checkpoint, the model selected resupply/income from six choices across three goal families; that choice remains unexecuted. These are same-lineage development results, not independent improvement.
-- Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
-- Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
+- Model-selected collection/resource choices and fitting from actual outcomes, including failures.
+- Main Red development save:96/124 registrations; Model137:137 examples,92 successes.
+- Frozen battle learner J: modest unused-team improvement,9/24 wins versus predecessor7/24.
+- Natural small-party wins with voluntary switching and no teacher battle choices.
+- Explicit integration into the main player's ordinary trainer-funding entry.
+- Durable saves, decision/timing logs, independent verification and shared registration memory.
 
-[Evidence for the current model](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
+The first main-entry goal failed after Wartortle fainted. The old funding guard stopped the
+unfinished battle; four decisions and the exact state were retained without reset or teacher
+substitution. A separate retained-state continuation then completed five J decisions and a natural
+loss/blackout, restoring field control with the expected cash loss. This establishes battle
+lifecycle handling, not successful funding or six-member mastery.
 
-The automatic runtime now derives useful fishing sources from current cartridge and save data
-instead of a named-species route. Capture preparation can retrieve a status-move helper from any
-verified box after selection. The first five-choice execution stopped at a dialogue boundary after
-228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
-The next checkpoint recovered in 8 actions and preserved every registration and specimen. Its
-frozen restore produced Model113; the following frozen fishing choice added registration84 and
-produced Model114. The new three-family menu selected resupply/income as the next bounded goal.
+## Remaining work
 
-## My role and the stack
+Broader qualified battle scope, sustainable resource planning,28 remaining native registrations
+and a fresh model-directed Red run. Fresh-run acceptance remains0/5. ROM-hack transfer, Crystal
+and Emerald follow Red acceptance. Prior checkpoint-based Champion/Hall-of-Fame work used
+deterministic battle mechanics and is not the required fresh-game completion.
 
-Pete owns requirements, directs AI coding agents, challenges architecture and scope decisions, observes runs and validates results. Codex, Claude and Antigravity contribute implementation and review. The stack is Python, PyBoy, NumPy, SQLite, a local web dashboard and automated verification with pytest/Ruff/mypy/GitHub Actions.
+## Role and technology
 
-## The engineering lesson
+Pete Andrews defines requirements, directs the AI workflow and validates outcomes. Codex, Claude
+and Antigravity have contributed implementation or reviews; authorship is explicitly AI-assisted.
+Python, PyBoy, NumPy, SQLite, typed skills, hash-linked evidence, pytest, Ruff and mypy.
+Coding assistants are not secretly choosing the gameplay actions.
 
-A system can report a success without having learned a useful choice. The important design work is separating model authority from fixed mechanics, preserving failures and actual costs, and distinguishing saved-state progress from independent competence.
-
-## Honest limitations
-
-The project is still active. It does not yet demonstrate arbitrary-seed fresh-game play, a complete Pokédex, learned low-level combat or cross-game transfer. The small current dataset contains related development examples, not independent games.
-
-[Architecture](architecture.md) · [Roadmap](model-first-roadmap.md) · [Historical brief](history/portfolio-through-2026-09-10.md)
+[Evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
+[Architecture](architecture.md) · [Interview handoff](ai-systems-specialist-interview-handoff.md)

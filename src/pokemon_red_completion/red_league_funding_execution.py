@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass, replace
-from typing import TYPE_CHECKING, NoReturn
+from typing import TYPE_CHECKING, NoReturn, cast
 
 from .actions import MacroAction, MacroActionKind
 from .executor import CountingExecutor, FrameSafeExecutor, WindowedFrameBudgetController
@@ -25,6 +25,7 @@ from .red_champion_story import RedCartridgeChampionSkill
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_league_funding import (
     RedLeagueFundingQualification,
+    projected_fresh_league_events,
     qualify_red_league_funding,
 )
 from .red_pc_storage import face_pc_boundary
@@ -132,8 +133,11 @@ class _CampaignActionCompiler:
 
     caller: CountingExecutor
     bounded: FrameSafeExecutor
+    through_caller: bool = False
 
     def execute(self, action: MacroAction) -> object:
+        if self.through_caller:
+            return self.caller.execute(action)
         result = self.bounded.execute(action)
         self.caller.actions_executed += 1
         return result
@@ -243,7 +247,8 @@ def _run_battle(
     before_actions = actions.actions_executed
     before_frames = runtime.emulator.frame_count
     before_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
-        int(ItemId.FULL_RESTORE), 0,
+        int(ItemId.FULL_RESTORE),
+        0,
     )
     skill: RedCartridgeChampionSkill | RedCartridgeLoreleiSkill
     if objective_id == "defeat_champion":
@@ -278,7 +283,8 @@ def _run_battle(
     report = skill.execute()
     after_money = _money(runtime)
     after_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
-        int(ItemId.FULL_RESTORE), 0,
+        int(ItemId.FULL_RESTORE),
+        0,
     )
     spent = before_restores - after_restores
     critical_claimed = report.evidence.get("critical_exposures_claimed", 0)
@@ -288,8 +294,7 @@ def _run_battle(
         or report.frames_executed != runtime.emulator.frame_count - before_frames
         or not 0 <= spent <= maximum_full_restores
         or report.evidence.get("bag_items_spent") != spent
-        or report.evidence.get("maximum_critical_exposures", 0)
-        != maximum_critical_exposures
+        or report.evidence.get("maximum_critical_exposures", 0) != maximum_critical_exposures
         or type(critical_claimed) is not int
         or not 0 <= critical_claimed <= maximum_critical_exposures
     ):
@@ -386,9 +391,12 @@ def execute_red_league_funding(
     for name, value in (("maximum_actions", maximum_actions), ("maximum_frames", maximum_frames)):
         if type(value) is not int or value <= 0:  # noqa: E721
             raise ValueError(f"{name} must be a positive integer")
+    delegate = actions.delegate
+    nested = isinstance(delegate, HardCompositionActionLimiter)
+    frame_safe = cast(HardCompositionActionLimiter, delegate).delegate if nested else delegate
     if (
-        not isinstance(actions.delegate, FrameSafeExecutor)
-        or actions.delegate.controller is not runtime.emulator
+        not isinstance(frame_safe, FrameSafeExecutor)
+        or frame_safe.controller is not runtime.emulator
     ):
         raise TypeError("League funding requires one direct frame-safe controller chain")
     if not isinstance(binding, RedLeagueFundingExecutionBinding):
@@ -414,13 +422,23 @@ def execute_red_league_funding(
     starting_party_hp = before.raw.party_hp
     starting_party_pp = before.raw.party_pp
     starting_party_status = before.raw.party_status
-    starting_events = before.raw.event_flags
     starting_ledger = dependency_specimen_ledger(before.collection_observation)
     starting_frames = runtime.emulator.frame_count
     if before.raw.event_flags is None:
         raise RedLeagueFundingExecutionError("League funding lost its bound event flags")
+    expected_supply_events = before.raw.event_flags
+    if qualification.reset_stale_league_events:
+        expected_supply_events, reset_required = projected_fresh_league_events(
+            before.raw.event_flags,
+        )
+        if not reset_required:
+            raise RedLeagueFundingExecutionError(
+                "League funding lost its bound pre-entry event reset"
+            )
     league_arrival = trainer_room_arrival(
-        world.rom, int(MapId.LORELEIS_ROOM), before.raw.event_flags,
+        world.rom,
+        int(MapId.LORELEIS_ROOM),
+        expected_supply_events,
     )
     entry_limits = replace(
         _ROUTE_LIMITS,
@@ -438,7 +456,8 @@ def execute_red_league_funding(
     limiter = HardCompositionActionLimiter(
         _CampaignActionCompiler(
             actions,
-            FrameSafeExecutor(frame_limiter, actions.delegate.timing),
+            FrameSafeExecutor(frame_limiter, frame_safe.timing),
+            through_caller=nested,
         ),
         maximum_actions_per_decision=maximum_actions,
         maximum_episode_actions=maximum_actions,
@@ -517,9 +536,8 @@ def execute_red_league_funding(
             or supply_boundary.raw.party_pp != starting_party_pp
             or supply_boundary.raw.party_status != starting_party_status
             or supply_boundary.raw.badge_bits != starting_badges
-            or supply_boundary.raw.event_flags != starting_events
-            or dependency_specimen_ledger(supply_boundary.collection_observation)
-            != starting_ledger
+            or supply_boundary.raw.event_flags != expected_supply_events
+            or dependency_specimen_ledger(supply_boundary.collection_observation) != starting_ledger
         ):
             fail("supply_route", "League funding supply route changed its bound state")
         _execute_supply(runtime, bounded_actions, qualification)
@@ -527,14 +545,15 @@ def execute_red_league_funding(
         if (
             supplied.raw.bag_items != _bag_after_supply(starting_bag, qualification)
             or supplied.raw.player_money
-            != starting_money + qualification.supply.sale_proceeds
+            != starting_money
+            + qualification.supply.sale_proceeds
             - qualification.supply.purchase_cost
             or supplied.raw.party_species_ids != starting_party
             or supplied.raw.party_hp != starting_party_hp
             or supplied.raw.party_pp != starting_party_pp
             or supplied.raw.party_status != starting_party_status
             or supplied.raw.badge_bits != starting_badges
-            or supplied.raw.event_flags != starting_events
+            or supplied.raw.event_flags != expected_supply_events
             or dependency_specimen_ledger(supplied.collection_observation) != starting_ledger
         ):
             fail("supply", "League funding supply accounting changed")
@@ -569,10 +588,7 @@ def execute_red_league_funding(
                 remaining_full_restores,
             )
             recovery_controller = quote.recovery_controller
-            if (
-                recovery_controller == "ordinary-bounded-healing"
-                and not battle_restore_budget
-            ):
+            if recovery_controller == "ordinary-bounded-healing" and not battle_restore_budget:
                 recovery_controller = "damage-bounded-zero-item"
             results.append(
                 _run_battle(
@@ -618,9 +634,8 @@ def execute_red_league_funding(
         expected_bag = tuple(
             (item, remaining)
             for item, quantity in supplied_bag
-            if (remaining := quantity - (
-                restore_spent if item == int(ItemId.FULL_RESTORE) else 0
-            )) > 0
+            if (remaining := quantity - (restore_spent if item == int(ItemId.FULL_RESTORE) else 0))
+            > 0
         )
         if after.raw.bag_items != expected_bag:
             fail("terminal", "League funding terminal bag differs from supplied use")

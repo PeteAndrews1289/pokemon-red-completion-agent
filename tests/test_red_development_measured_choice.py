@@ -32,8 +32,18 @@ from pokemon_red_completion.collection import CollectionLocation, LivingSpecimen
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import GoalManagerCompositionError
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
+from pokemon_red_completion.living_dex_option_value import (
+    LivingDexOptionAvailability,
+    LivingDexOptionCandidate,
+    LivingDexOptionFeatures,
+    LivingDexOptionKind,
+)
 from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_autonomous_learning import (
+    authenticated_autonomous_execution_limits,
+    publish_autonomous_measured_choice,
+)
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_development_measured_choice import (
     DEVELOPMENT_MEASURED_CHOICE_KIND,
@@ -45,6 +55,7 @@ from pokemon_red_completion.red_development_measured_choice import (
     RedDevelopmentMeasuredChoiceInput,
     RedDevelopmentMeasuredSegment,
     _replay_behavior,
+    _validate_behavior,
     development_measured_choice_record_id,
     load_red_development_measured_choice_example,
     publish_development_measured_choice,
@@ -53,10 +64,21 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
+    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     build_red_live_option_set,
     select_red_live_option,
     supplemental_live_option,
@@ -242,9 +264,7 @@ def _valid_failed_fishing_choice(
     model_sha256: str = "1" * 64,
     behavior=None,
 ) -> RedDevelopmentMeasuredChoice:
-    base = _valid_choice(
-        tmp_path, model_sha256=model_sha256, behavior=behavior
-    )
+    base = _valid_choice(tmp_path, model_sha256=model_sha256, behavior=behavior)
     after = base.before_observation
     declaration = {
         "schema": "pokemon.red.private-model106-fishing-capture-plan.v1",
@@ -502,15 +522,20 @@ def _valid_automatic_fishing_failure_choice(
     )
 
 
-def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+def _valid_frozen_restore_choice(
+    tmp_path: Path,
+    *,
+    declaration_schema: str = RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+) -> RedDevelopmentMeasuredChoice:
     base = _valid_mixed_restore_choice(tmp_path)
     frozen_seed = base.selection_seed
-    while _replay_behavior(
-        _live_model(), base.menu, seed=frozen_seed
-    )[2] == base.selected_candidate_index:
+    while (
+        _replay_behavior(_live_model(), base.menu, seed=frozen_seed)[2]
+        == base.selected_candidate_index
+    ):
         frozen_seed += 1
     declaration = {
-        "schema": RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        "schema": declaration_schema,
         "executable_source_commit": "e" * 40,
         "current_repository_head": "9" * 40,
         "source_bundle_sha256": "f" * 64,
@@ -521,7 +546,11 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         "menu_sha256": base.menu.policy_sha256,
         "model_sha256": base.model_sha256,
         "selected_candidate_index": base.selected_candidate_index,
-        "selected_binding_ref": "pokemon.red:recovery:routed-center:" + "0" * 64,
+        "selected_binding_ref": (
+            "pokemon.red:recovery:single-field-item:profile-" + "0" * 64 + ":config-" + "1" * 64
+            if declaration_schema == RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+            else "pokemon.red:recovery:routed-center:" + "0" * 64
+        ),
         "selection_seed": frozen_seed,
         "behavior_probabilities": list(base.behavior_probabilities),
         "maximum_frames": 500_000,
@@ -529,9 +558,7 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         "retry_authorized": False,
         "teacher_labels": 0,
     }
-    segment = replace(
-        base.segments[0], declaration_sha256=canonical_sha256(declaration)
-    )
+    segment = replace(base.segments[0], declaration_sha256=canonical_sha256(declaration))
     return replace(
         base,
         choice_id="model112-frozen-restore-20260913",
@@ -543,16 +570,21 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
     )
 
 
-def _valid_frozen_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+def _valid_frozen_fishing_choice(
+    tmp_path: Path,
+    *,
+    declaration_schema: str = RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+) -> RedDevelopmentMeasuredChoice:
     base = _valid_automatic_fishing_failure_choice(tmp_path)
     frozen_seed = base.selection_seed
-    while _replay_behavior(
-        _live_model(), base.menu, seed=frozen_seed
-    )[2] == base.selected_candidate_index:
+    while (
+        _replay_behavior(_live_model(), base.menu, seed=frozen_seed)[2]
+        == base.selected_candidate_index
+    ):
         frozen_seed += 1
     source = base.selection_declaration
     declaration = {
-        "schema": RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        "schema": declaration_schema,
         "executable_source_commit": source["source_commit"],
         "current_repository_head": "9" * 40,
         "source_bundle_sha256": source["source_bundle_sha256"],
@@ -572,9 +604,7 @@ def _valid_frozen_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         "retry_authorized": False,
         "teacher_labels": 0,
     }
-    segment = replace(
-        base.segments[0], declaration_sha256=canonical_sha256(declaration)
-    )
+    segment = replace(base.segments[0], declaration_sha256=canonical_sha256(declaration))
     return replace(
         base,
         choice_id="model113-frozen-fishing-20260913",
@@ -585,6 +615,491 @@ def _valid_frozen_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         segments=(segment,),
         segments_sha256=canonical_sha256([segment.public_dict()]),
     )
+
+
+def _valid_frozen_resupply_choice(tmp_path: Path, *, succeeded=True):
+    base = _valid_frozen_restore_choice(tmp_path)
+    economy = EconomySnapshot(58, (("red-item-004", 6),))
+    options = build_red_live_option_set(
+        situation=_live_situation(resources=0.4),
+        binding_set=_live_ordinary_bindings([]),
+        supplements=(),
+        model_feature_version=4,
+        ordering_seed_sha256="9" * 64,
+        economy_snapshot=economy,
+        target_cash=4200,
+    )
+    index = next(
+        i for i, c in enumerate(options.menu.candidates) if c.features.kind.value == "resupply"
+    )
+    scores, probabilities, _ = _replay_behavior(_live_model(), options.menu, seed=7)
+    declaration = {
+        **base.selection_declaration,
+        "schema": RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        "menu_sha256": options.menu.policy_sha256,
+        "selected_candidate_index": index,
+        "selected_binding_ref": "red-trainer-funding:" + "0" * 64,
+        "selection_seed": 7,
+        "behavior_probabilities": list(probabilities),
+    }
+    segment = replace(
+        base.segments[0],
+        declaration_sha256=canonical_sha256(declaration),
+        status="retained_success" if succeeded else "retained_exception",
+    )
+    # A failed verifier can coexist with a real cash increase. Quotes are not targets.
+    after = EconomySnapshot(2088 if succeeded else 2146, economy.inventory)
+    outcome = red_registered_economy_outcome(
+        base.before_observation,
+        base.after_observation,
+        selected_kind=GoalKind.RESUPPLY,
+        succeeded=succeeded,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+        before_economy=economy,
+        after_economy=after,
+        target_cash=4200,
+    )
+    return replace(
+        base,
+        choice_id="frozen-resupply",
+        menu=options.menu,
+        selected_candidate_index=index,
+        behavior_probabilities=probabilities,
+        scores=scores,
+        selection_seed=7,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        selected_goal_kind=GoalKind.RESUPPLY,
+        succeeded=succeeded,
+        before_economy=economy,
+        after_economy=after,
+        target_cash=4200,
+        resource_costs={
+            name: getattr(outcome, name)
+            for name in ("irreversible_loss", "party_cost", "resource_cost", "storage_cost")
+        },
+    )
+
+
+def _valid_write_ahead_frozen_resupply_choice(tmp_path: Path):
+    base = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **base.selection_declaration,
+        "schema": RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        "decision_file_sha256": "1" * 64,
+        "observation_file_sha256": "2" * 64,
+        "query_intent_file_sha256": "3" * 64,
+    }
+    segment = replace(base.segments[0], declaration_sha256=canonical_sha256(declaration))
+    return replace(
+        base,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
+def _valid_frozen_safari_failure_choice(tmp_path: Path):
+    base = _valid_automatic_fishing_failure_choice(tmp_path)
+    declaration = {
+        "schema": RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "runner_sha256": "0" * 64,
+        "menu_file_sha256": "1" * 64,
+        "query_intent_sha256": "2" * 64,
+        "decision_sha256": "3" * 64,
+        "parent_state_sha256": base.parent_state_sha256,
+        "model_sha256": base.model_sha256,
+        "model_file_sha256": "4" * 64,
+        "policy_sha256": "5" * 64,
+        "profile_sha256": "6" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "selected_binding_ref": "pokemon.red:safari-live:" + "7" * 64,
+        "selected_option_sha256": "8" * 64,
+        "selection_seed": base.selection_seed,
+        "behavior_probabilities": list(base.behavior_probabilities),
+        "maximum_actions": 30_000,
+        "maximum_frames": 3_000_000,
+        "policy_queries_during_execution": 0,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(base.segments[0], declaration_sha256=canonical_sha256(declaration))
+    return replace(
+        base,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        observer_source_commit=declaration["source_commit"],
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
+def _valid_heterogeneous_evolution_choice(tmp_path: Path):
+    base = _valid_mixed_restore_choice(tmp_path)
+    _, before_raw, after_raw, policy = observations(tmp_path / "evolution")
+    before = project_registered_observation(before_raw, policy).public_dict()
+    after = project_registered_observation(after_raw, policy).public_dict()
+    calls: list[str] = []
+    evolve = _live_binding(
+        GoalKind.EVOLVE_SPECIES,
+        binding_ref="private:red:evolution",
+        calls=calls,
+    )
+    acquire = _live_binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:acquisition",
+        calls=calls,
+    )
+    evolve_candidate = LivingDexOptionCandidate(
+        binding_ref="evolution-row",
+        features=LivingDexOptionFeatures(
+            kind=LivingDexOptionKind.EVOLVE,
+            completion_gain=1.0,
+            dependency_unlock_gain=0.0,
+            travel_effort=0.0,
+            execution_effort=0.425,
+            resource_cost=0.0,
+            storage_cost=0.0,
+            party_risk=0.18,
+            irreversibility_risk=0.0,
+            uncertainty=0.0,
+        ),
+        availability=LivingDexOptionAvailability.AVAILABLE,
+    )
+    options = build_red_live_option_set(
+        situation=_live_situation(resources=0.4),
+        binding_set=_live_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(evolve, evolve_candidate),
+            supplemental_live_option(
+                acquire,
+                _live_fishing_candidate("acquisition-row", travel=0.658),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="9" * 64,
+        economy_snapshot=base.before_economy,
+        target_cash=base.target_cash,
+    )
+    selected_index = next(
+        index
+        for index, candidate in enumerate(options.menu.candidates)
+        if candidate.features.kind.value == "evolve"
+    )
+    seed = 122_091_503
+    scores, probabilities, _ = _replay_behavior(_live_model(), options.menu, seed=seed)
+    declaration = {
+        "schema": RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "runner_sha256": "0" * 64,
+        "menu_file_sha256": "1" * 64,
+        "query_intent_sha256": "2" * 64,
+        "decision_sha256": "3" * 64,
+        "parent_state_sha256": base.parent_state_sha256,
+        "model_sha256": base.model_sha256,
+        "model_file_sha256": "4" * 64,
+        "policy_sha256": "5" * 64,
+        "profile_sha256": "6" * 64,
+        "menu_sha256": options.menu.policy_sha256,
+        "selected_candidate_index": selected_index,
+        "selected_binding_ref": "red-collection-fly-goal:" + "7" * 64 + ":" + "8" * 64,
+        "selected_option_sha256": canonical_sha256(
+            options.menu.candidates[selected_index].policy_dict(options.menu.context)
+        ),
+        "selection_seed": seed,
+        "behavior_probabilities": list(probabilities),
+        "maximum_actions": 30_000,
+        "maximum_frames": 3_000_000,
+        "policy_queries_during_execution": 0,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        declaration_sha256=canonical_sha256(declaration),
+        controller_actions=11_623,
+        emulator_frames=1_050_627,
+    )
+    outcome = red_registered_economy_outcome(
+        before,
+        after,
+        selected_kind=GoalKind.EVOLVE_SPECIES,
+        succeeded=True,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+        before_economy=base.before_economy,
+        after_economy=base.after_economy,
+        target_cash=base.target_cash,
+    )
+    return replace(
+        base,
+        choice_id="model122-heterogeneous-evolution",
+        menu=options.menu,
+        selected_candidate_index=selected_index,
+        behavior_probabilities=probabilities,
+        scores=scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        before_observation=before,
+        after_observation=after,
+        before_observation_sha256=canonical_sha256(before),
+        after_observation_sha256=canonical_sha256(after),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            name: getattr(outcome, name)
+            for name in ("irreversible_loss", "party_cost", "resource_cost", "storage_cost")
+        },
+        observer_source_commit=declaration["source_commit"],
+        selected_goal_kind=GoalKind.EVOLVE_SPECIES,
+        succeeded=True,
+    )
+
+
+def test_frozen_safari_declaration_round_trips_without_replay(tmp_path):
+    choice = _valid_frozen_safari_failure_choice(tmp_path)
+
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+
+    assert restored.public_dict() == choice.public_dict()
+    assert restored.selected_goal_kind is GoalKind.ACQUIRE_SPECIES
+    assert restored.succeeded is False
+    assert restored.to_observed_arm_example().outcome.verified_success is False
+
+
+def test_heterogeneous_evolution_declaration_round_trips_without_resampling(tmp_path):
+    choice = _valid_heterogeneous_evolution_choice(tmp_path)
+
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+
+    assert restored.public_dict() == choice.public_dict()
+    assert restored.selected_goal_kind is GoalKind.EVOLVE_SPECIES
+    assert restored.succeeded is True
+    assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+def test_heterogeneous_evolution_selected_option_hash_is_required(tmp_path):
+    choice = _valid_heterogeneous_evolution_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_option_sha256"] = "9" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="selected option hash differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_write_ahead_frozen_resupply_declaration_round_trips(tmp_path):
+    choice = _valid_write_ahead_frozen_resupply_choice(tmp_path)
+    assert (
+        RedDevelopmentMeasuredChoice.from_public(choice.public_dict()).public_dict()
+        == choice.public_dict()
+    )
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "decision_file_sha256",
+        "observation_file_sha256",
+        "query_intent_file_sha256",
+    ],
+)
+def test_write_ahead_frozen_resupply_receipt_hashes_are_required(tmp_path, key):
+    doc = _valid_write_ahead_frozen_resupply_choice(tmp_path).public_dict()
+    doc["selection_declaration"][key] = "not-a-sha256"
+    digest = canonical_sha256(doc["selection_declaration"])
+    doc["selection_declaration_sha256"] = digest
+    doc["segments"][0]["declaration_sha256"] = digest
+    doc["segments_sha256"] = canonical_sha256(doc["segments"])
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+
+def test_write_ahead_frozen_resupply_rejects_missing_receipt_hash(tmp_path):
+    doc = _valid_write_ahead_frozen_resupply_choice(tmp_path).public_dict()
+    del doc["selection_declaration"]["decision_file_sha256"]
+    digest = canonical_sha256(doc["selection_declaration"])
+    doc["selection_declaration_sha256"] = digest
+    doc["segments"][0]["declaration_sha256"] = digest
+    doc["segments_sha256"] = canonical_sha256(doc["segments"])
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+
+@pytest.mark.parametrize("succeeded", [True, False])
+def test_frozen_resupply_retains_partial_budget_and_verification_failure(tmp_path, succeeded):
+    choice = _valid_frozen_resupply_choice(tmp_path, succeeded=succeeded)
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+    arm = restored.to_observed_arm_example()
+    assert arm.outcome.verified_success is succeeded
+    assert arm.outcome.completion_gain == 0
+    assert arm.outcome.dependency_unlock_gain == 0
+    assert arm.outcome.economy.cash_delta == (2030 if succeeded else 2088)
+    assert arm.outcome.economy.useful_liquidity_gain == pytest.approx(
+        (2030 if succeeded else 2088) / 4200
+    )
+    assert restored.after_economy.cash < restored.target_cash
+    assert restored.action_trace_available is False
+    assert restored.independent_evaluation is False
+    assert restored.authority_promotion_eligible is False
+
+
+def test_frozen_resupply_checks_model_scores_without_random_draw(tmp_path, monkeypatch):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    import pokemon_red_completion.red_development_measured_choice as admission
+
+    class Behavior:
+        objective = REGISTERED_OBJECTIVE
+        model = _live_model()
+
+    monkeypatch.setattr(admission, "RedPlayerModelRecord", Behavior)
+    monkeypatch.setattr(admission.random, "Random", lambda *_: pytest.fail("second draw"))
+    _validate_behavior(choice, Behavior())
+    with pytest.raises(ValueError, match="does not replay"):
+        _validate_behavior(replace(choice, scores=tuple(x + 1 for x in choice.scores)), Behavior())
+
+
+def test_frozen_resupply_continuation_accepts_local_qualification_without_redraw(tmp_path):
+    choice = _valid_frozen_resupply_choice(tmp_path, succeeded=False)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+        "qualification_ci_run_id": None,
+    }
+    segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
+    continuation = replace(
+        choice,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+    restored = RedDevelopmentMeasuredChoice.from_public(continuation.public_dict())
+    assert restored.selected_goal_kind is GoalKind.RESUPPLY
+    assert restored.selection_declaration["qualification_ci_run_id"] is None
+
+
+def test_frozen_purchase_continuation_admits_fly_bound_resupply_without_redraw(tmp_path):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+        "selected_binding_ref": "red-collection-fly-goal:" + "1" * 64 + ":" + "2" * 64,
+        "maximum_frames": 3_000_000,
+    }
+    segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
+    continuation = replace(
+        choice,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+    restored = RedDevelopmentMeasuredChoice.from_public(continuation.public_dict())
+    assert restored.selected_goal_kind is GoalKind.RESUPPLY
+    assert restored.selection_declaration["selected_binding_ref"].startswith(
+        "red-collection-fly-goal:"
+    )
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_frames", 500_000),
+        ("qualification_ci_run_id", None),
+        ("policy_queries_during_execution", 1),
+        ("selected_binding_ref", "red-collection-fly-goal:wrong"),
+    ),
+)
+def test_frozen_purchase_continuation_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+        "selected_binding_ref": "red-collection-fly-goal:" + "1" * 64 + ":" + "2" * 64,
+        "maximum_frames": 3_000_000,
+    }
+    declaration[key] = value
+    segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
+    with pytest.raises(ValueError):
+        replace(
+            choice,
+            selection_declaration=declaration,
+            selection_declaration_sha256=canonical_sha256(declaration),
+            segments=(segment,),
+            segments_sha256=canonical_sha256([segment.public_dict()]),
+        )
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [
+        ("parent_checkpoint_sha256", "0" * 64),
+        ("parent_state_sha256", "0" * 64),
+        ("model_sha256", "0" * 64),
+        ("menu_sha256", "0" * 64),
+        ("selected_candidate_index", 99),
+        ("selected_binding_ref", ""),
+        ("selected_binding_ref", "red-trainer-funding:wrong"),
+        ("selection_seed", 999),
+        ("maximum_frames", 500001),
+        ("policy_queries_during_execution", 1),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+        ("qualification_ci_run_id", 0),
+        ("executable_source_commit", "0" * 40),
+        ("source_bundle_sha256", "0" * 64),
+        ("schema", RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA),
+    ],
+)
+def test_frozen_resupply_declaration_mutations_rejected(tmp_path, key, value):
+    doc = _valid_frozen_resupply_choice(tmp_path).public_dict()
+    doc["selection_declaration"][key] = value
+    digest = canonical_sha256(doc["selection_declaration"])
+    doc["selection_declaration_sha256"] = digest
+    doc["segments"][0]["declaration_sha256"] = digest
+    doc["segments_sha256"] = canonical_sha256(doc["segments"])
+    with pytest.raises(ValueError):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+
+def test_frozen_resupply_schema_cannot_relabel_restore(tmp_path):
+    base = _valid_frozen_restore_choice(tmp_path)
+    declaration = {
+        **base.selection_declaration,
+        "schema": RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+    }
+    segment = replace(base.segments[0], declaration_sha256=canonical_sha256(declaration))
+    with pytest.raises(ValueError, match="selected goal kind"):
+        replace(
+            base,
+            selection_declaration=declaration,
+            selection_declaration_sha256=canonical_sha256(declaration),
+            segments=(segment,),
+            segments_sha256=canonical_sha256([segment.public_dict()]),
+        )
 
 
 def _bind_parent(store, choice, behavior):
@@ -601,9 +1116,7 @@ def _bind_parent(store, choice, behavior):
         **choice.selection_declaration,
         "parent_checkpoint_sha256": record.summary.record_sha256,
     }
-    segment = replace(
-        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
-    )
+    segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
     segments = (segment, *choice.segments[1:])
     return replace(
         choice,
@@ -673,7 +1186,6 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert choice.authority_promotion_eligible is False
     assert choice.teacher_labels == 0
     assert choice.training_only is True
-
     pub = choice.public_dict()
     assert pub["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA
     assert pub["choice_id"] == "safari-choice-kangaskhan"
@@ -691,13 +1203,11 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
         "storage_cost": 0.0,
     }
 
-    # Deserialization round-trip
     restored = RedDevelopmentMeasuredChoice.from_public(pub)
     assert restored.public_dict() == pub
     assert restored.record_sha256 == choice.record_sha256
     assert restored.decision_sha256 == choice.decision_sha256
 
-    # Arm conversion
     arm = choice.to_observed_arm_example()
     assert arm.partition == "train"
     assert arm.decision_sha256 == choice.decision_sha256
@@ -705,6 +1215,242 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert arm.outcome.target_vector is not None
     assert arm.outcome.action_cost == 150 / 30_000
     assert arm.outcome.frame_cost == 2400 / 3_000_000
+
+
+@pytest.mark.parametrize(
+    ("status", "tight_budget"),
+    [
+        ("succeeded", False),
+        ("exception", False),
+        ("succeeded", True),
+        ("verification_failed", True),
+    ],
+)
+def test_autonomous_choice_is_admitted_without_replaying_actions(
+    tmp_path, monkeypatch, status, tight_budget
+):
+    store, _, _, behavior = _bootstrap_registered_model(tmp_path / "registered", monkeypatch)
+    behavior = replace(behavior, model=_live_model())
+    base = _valid_choice(
+        tmp_path / "choice",
+        model_sha256=behavior.model.model_sha256,
+        behavior=behavior.model,
+    )
+    menu = replace(
+        base.menu,
+        context=replace(
+            base.menu.context,
+            economy_snapshot=EconomySnapshot(1000, ()),
+            target_cash=1000,
+        ),
+    )
+    seed = 0
+    scores, probabilities, selected_index = _replay_behavior(behavior.model, menu, seed=seed)
+    while selected_index != 0:
+        seed += 1
+        scores, probabilities, selected_index = _replay_behavior(behavior.model, menu, seed=seed)
+    selected_kind = base.selected_goal_kind.value
+    intent = {
+        "menu": {
+            "menu": menu.policy_dict(),
+            "menu_sha256": menu.policy_sha256,
+        },
+        "model_sha256": behavior.model.model_sha256,
+        "query_may_be_consumed": True,
+        "selection_seed": seed,
+        "state_sha256": base.parent_state_sha256,
+    }
+    decision = {
+        "actions_executed": 0,
+        "candidate_count": len(menu.candidates),
+        "emulator_frames": 0,
+        "menu_sha256": menu.policy_sha256,
+        "mode": "model_exploration",
+        "model_sha256": behavior.model.model_sha256,
+        "policy_id": RED_LIVE_MIXED_OPTION_POLICY,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "probabilities": list(probabilities),
+        "schema": "pokemon.red.live-mixed-option-choice.v1",
+        "scores": list(scores),
+        "selected_candidate_index": selected_index,
+        "selected_option_kind": menu.candidates[selected_index].features.kind.value,
+        "teacher_labels": 0,
+    }
+    outcome = {
+        "after": {"actions": 150, "frames": 2400},
+        "before": {"actions": 0, "frames": 0},
+        "before_state_sha256": base.parent_state_sha256,
+        "choice": decision,
+        "error": "capture controller failed" if status == "exception" else None,
+        "error_type": "RedTravelCaptureError" if status == "exception" else None,
+        "error_chain": (
+            [{"error": "capture controller failed", "error_type": "RedTravelCaptureError"}]
+            if status == "exception" else None
+        ),
+        "failure_reason": "search_exhausted" if status == "verification_failed" else None,
+        "ordinal": 0,
+        "safe_terminal": status != "exception",
+        "selected_kind": selected_kind,
+        "terminal_state_sha256": base.terminal_state_sha256,
+        "verification": (
+            "succeeded" if status == "succeeded" else
+            "failed" if status == "verification_failed" else None
+        ),
+    }
+    measured, result = publish_autonomous_measured_choice(
+        store,
+        behavior=behavior,
+        run_id="autonomous-test",
+        ordinal=0,
+        intent=intent,
+        decision=decision,
+        outcome=outcome,
+        before_observation=base.before_observation,
+        after_observation=(
+            base.after_observation if status == "succeeded" else base.before_observation
+        ),
+        before_economy=EconomySnapshot(1000, ()),
+        after_economy=EconomySnapshot(1000, ()),
+        autonomous_plan_sha256="4" * 64,
+        autonomous_result_sha256="5" * 64,
+        intent_sha256="6" * 64,
+        decision_sha256="7" * 64,
+        outcome_sha256="8" * 64,
+        source_commit="9" * 40,
+        source_bundle_sha256="a" * 64,
+        execution_maximum_actions=3000 if tight_budget else 30_000,
+        execution_maximum_frames=300_000 if tight_budget else 3_000_000,
+    )
+
+    example = load_red_development_measured_choice_example(
+        store, measured, objective=REGISTERED_OBJECTIVE
+    )
+    assert example.outcome.verified_success is (status == "succeeded")
+    assert example.outcome.action_cost == 150 / 30_000
+    assert result["eligible_examples"] == 1
+    assert result["action_trace_available"] is False
+    assert result["authority_promotion_eligible"] is False
+    if status == "verification_failed":
+        unverified = {**outcome, "failure_reason": None}
+        with pytest.raises(ValueError, match="choice receipt differs"):
+            publish_autonomous_measured_choice(
+                store,
+                behavior=behavior,
+                run_id="autonomous-unverified",
+                ordinal=0,
+                intent=intent,
+                decision=decision,
+                outcome=unverified,
+                before_observation=base.before_observation,
+                after_observation=base.before_observation,
+                before_economy=EconomySnapshot(1000, ()),
+                after_economy=EconomySnapshot(1000, ()),
+                autonomous_plan_sha256="4" * 64,
+                autonomous_result_sha256="5" * 64,
+                intent_sha256="6" * 64,
+                decision_sha256="7" * 64,
+                outcome_sha256="8" * 64,
+                source_commit="9" * 40,
+                source_bundle_sha256="a" * 64,
+                execution_maximum_actions=3000,
+                execution_maximum_frames=300_000,
+            )
+    record = store.find_sealed_record(
+        development_measured_choice_record_id(measured.choice_id),
+        expected_kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
+    )
+    assert record is not None
+    choice = RedDevelopmentMeasuredChoice.from_public(record.read())
+    assert choice.selection_declaration["schema"] == (
+        RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
+        if tight_budget else RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+    )
+    if tight_budget:
+        assert choice.selection_declaration["execution_maximum_actions"] == 3000
+        assert choice.selection_declaration["execution_maximum_frames"] == 300_000
+        assert choice.maximum_actions == 30_000
+        assert choice.maximum_frames == 3_000_000
+        for key, value in (
+            ("execution_maximum_actions", 149),
+            ("execution_maximum_frames", 2399),
+        ):
+            declaration = {**choice.selection_declaration, key: value}
+            segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
+            with pytest.raises(ValueError, match="execution ceiling"):
+                replace(
+                    choice,
+                    selection_declaration=declaration,
+                    selection_declaration_sha256=canonical_sha256(declaration),
+                    segments=(segment,),
+                    segments_sha256=canonical_sha256([segment.public_dict()]),
+                )
+
+    altered = deepcopy(outcome)
+    altered["terminal_state_sha256"] = "0" * 64
+    with pytest.raises(Exception, match="already exists with different content"):
+        publish_autonomous_measured_choice(
+            store,
+            behavior=behavior,
+            run_id="autonomous-test",
+            ordinal=0,
+            intent=intent,
+            decision=decision,
+            outcome=altered,
+            before_observation=base.before_observation,
+            after_observation=(
+                base.after_observation if status == "succeeded" else base.before_observation
+            ),
+            before_economy=EconomySnapshot(1000, ()),
+            after_economy=EconomySnapshot(1000, ()),
+            autonomous_plan_sha256="4" * 64,
+            autonomous_result_sha256="5" * 64,
+            intent_sha256="6" * 64,
+            decision_sha256="7" * 64,
+            outcome_sha256="0" * 64,
+            source_commit="9" * 40,
+            source_bundle_sha256="a" * 64,
+            execution_maximum_actions=3000 if tight_budget else 30_000,
+            execution_maximum_frames=300_000 if tight_budget else 3_000_000,
+        )
+
+
+@pytest.mark.parametrize(
+    ("actions", "frames", "provenance_actions", "provenance_frames"),
+    [
+        (3000, 300_000, 3000, 300_000),
+        (30_000, 3_000_000, 30_000, 3_000_000),
+    ],
+)
+def test_autonomous_execution_limits_preserve_authenticated_run_ceiling(
+    actions, frames, provenance_actions, provenance_frames
+):
+    assert authenticated_autonomous_execution_limits(
+        {"maximum_actions": actions, "maximum_frames": frames},
+        {"maximum_actions": provenance_actions, "maximum_frames": provenance_frames},
+    ) == (actions, frames)
+
+
+@pytest.mark.parametrize(
+    ("actions", "frames", "provenance_actions", "provenance_frames"),
+    [
+        (3000, 300_000, 30_000, 300_000),
+        (3000, 300_000, 3000, 3_000_000),
+        (0, 300_000, 0, 300_000),
+        (3000, 0, 3000, 0),
+        (30_001, 300_000, 30_001, 300_000),
+        (3000, 3_000_001, 3000, 3_000_001),
+        (True, 300_000, True, 300_000),
+    ],
+)
+def test_autonomous_execution_limits_reject_mismatch_or_unsafe_ceiling(
+    actions, frames, provenance_actions, provenance_frames
+):
+    with pytest.raises(ValueError, match="execution limits"):
+        authenticated_autonomous_execution_limits(
+            {"maximum_actions": actions, "maximum_frames": frames},
+            {"maximum_actions": provenance_actions, "maximum_frames": provenance_frames},
+        )
 
 
 def test_fishing_measured_choice_roundtrip(tmp_path):
@@ -735,9 +1481,9 @@ def test_mixed_restore_choice_roundtrip_retains_economy_and_exact_propensity(tmp
     assert arm.outcome.economy is not None
     assert arm.outcome.economy.cash_delta == 0
     assert arm.importance_weight(4.0) == 4.0
-    assert arm.selected_probability == choice.behavior_probabilities[
-        choice.selected_candidate_index
-    ]
+    assert (
+        arm.selected_probability == choice.behavior_probabilities[choice.selected_candidate_index]
+    )
 
 
 def test_automatic_fishing_failure_uses_frozen_menu_to_recover_selected_kind(tmp_path):
@@ -752,8 +1498,18 @@ def test_automatic_fishing_failure_uses_frozen_menu_to_recover_selected_kind(tmp
     assert restored.to_observed_arm_example().outcome.verified_success is False
 
 
-def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_path):
-    choice = _valid_frozen_restore_choice(tmp_path)
+@pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(
+    tmp_path, declaration_schema
+):
+    choice = _valid_frozen_restore_choice(tmp_path, declaration_schema=declaration_schema)
     document = choice.public_dict()
     restored = RedDevelopmentMeasuredChoice.from_public(document)
 
@@ -762,13 +1518,23 @@ def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_
     assert restored.public_dict() == document
     assert restored.selected_goal_kind is GoalKind.RESTORE_TEAM
     assert restored.succeeded is True
-    assert _replay_behavior(
-        _live_model(), restored.menu, seed=restored.selection_seed
-    )[2] != restored.selected_candidate_index
+    assert (
+        _replay_behavior(_live_model(), restored.menu, seed=restored.selection_seed)[2]
+        != restored.selected_candidate_index
+    )
 
 
-def test_frozen_fishing_declaration_reuses_selected_kind_without_resampling(tmp_path):
-    choice = _valid_frozen_fishing_choice(tmp_path)
+@pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+def test_frozen_fishing_declaration_reuses_selected_kind_without_resampling(
+    tmp_path, declaration_schema
+):
+    choice = _valid_frozen_fishing_choice(tmp_path, declaration_schema=declaration_schema)
     document = choice.public_dict()
     restored = RedDevelopmentMeasuredChoice.from_public(document)
 
@@ -776,9 +1542,10 @@ def test_frozen_fishing_declaration_reuses_selected_kind_without_resampling(tmp_
     assert "source_commit" not in choice.selection_declaration
     assert restored.public_dict() == document
     assert restored.selected_goal_kind is GoalKind.ACQUIRE_SPECIES
-    assert _replay_behavior(
-        _live_model(), restored.menu, seed=restored.selection_seed
-    )[2] != restored.selected_candidate_index
+    assert (
+        _replay_behavior(_live_model(), restored.menu, seed=restored.selection_seed)[2]
+        != restored.selected_candidate_index
+    )
 
 
 @pytest.mark.parametrize(
@@ -809,6 +1576,14 @@ def test_frozen_fishing_declaration_tampering_fails_closed(tmp_path, key, value)
 
 
 @pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+@pytest.mark.parametrize(
     ("key", "value"),
     (
         ("maximum_frames", 500_001),
@@ -821,8 +1596,10 @@ def test_frozen_fishing_declaration_tampering_fails_closed(tmp_path, key, value)
         ("teacher_labels", 1),
     ),
 )
-def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value):
-    choice = _valid_frozen_restore_choice(tmp_path)
+def test_frozen_restore_declaration_tampering_fails_closed(
+    tmp_path, declaration_schema, key, value
+):
+    choice = _valid_frozen_restore_choice(tmp_path, declaration_schema=declaration_schema)
     document = choice.public_dict()
     declaration = cast(dict[str, object], document["selection_declaration"])
     declaration[key] = value
@@ -833,6 +1610,62 @@ def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value)
     document["segments_sha256"] = canonical_sha256(segments)
 
     with pytest.raises(ValueError, match="pre-input declaration|differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_model118_frozen_restore_rejects_non_recovery_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = "red-trainer-funding:" + "0" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_frozen_field_restore_rejects_routed_center_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=(RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA),
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = "pokemon.red:recovery:routed-center:" + "0" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_frozen_routed_restore_rejects_field_item_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = (
+        "pokemon.red:recovery:single-field-item:profile-" + "0" * 64 + ":config-" + "1" * 64
+    )
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
         RedDevelopmentMeasuredChoice.from_public(document)
 
 
@@ -847,9 +1680,7 @@ def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value)
         ("teacher_labels", 1),
     ),
 )
-def test_automatic_fishing_declaration_tampering_fails_closed(
-    tmp_path, key, value
-):
+def test_automatic_fishing_declaration_tampering_fails_closed(tmp_path, key, value):
     choice = _valid_automatic_fishing_failure_choice(tmp_path)
     document = choice.public_dict()
     declaration = cast(dict[str, object], document["selection_declaration"])
@@ -1143,13 +1974,9 @@ def test_publish_and_load_measured_choice(tmp_path, monkeypatch):
 
 
 @pytest.mark.parametrize("fault", ["probabilities", "scores", "seed"])
-def test_loader_replays_behavior_from_model_not_self_reported_values(
-    tmp_path, monkeypatch, fault
-):
+def test_loader_replays_behavior_from_model_not_self_reported_values(tmp_path, monkeypatch, fault):
     store, _, _, model = _bootstrap_registered_model(tmp_path, monkeypatch)
-    choice = _valid_choice(
-        tmp_path, model_sha256=model.model.model_sha256, behavior=model.model
-    )
+    choice = _valid_choice(tmp_path, model_sha256=model.model.model_sha256, behavior=model.model)
     choice = _bind_parent(store, choice, model)
     document = choice.public_dict()
     if fault == "probabilities":
@@ -1173,13 +2000,9 @@ def test_loader_replays_behavior_from_model_not_self_reported_values(
         kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
         record=document,
     )
-    item = RedDevelopmentMeasuredChoiceInput(
-        choice.choice_id, sealed.summary.record_sha256, model
-    )
+    item = RedDevelopmentMeasuredChoiceInput(choice.choice_id, sealed.summary.record_sha256, model)
     with pytest.raises(ValueError, match="behavior selection does not replay"):
-        load_red_development_measured_choice_example(
-            store, item, objective=REGISTERED_OBJECTIVE
-        )
+        load_red_development_measured_choice_example(store, item, objective=REGISTERED_OBJECTIVE)
 
 
 def test_serialized_choice_rejects_extra_keys_and_changed_outcome(tmp_path):
@@ -1254,9 +2077,7 @@ def test_fit_red_player_update_with_failed_measured_choice(tmp_path, monkeypatch
         registered_objective=True,
     )
     model_sha256 = _model_sha(fitted)
-    record = store.find_sealed_record(
-        f"rpr-model-{model_sha256}", expected_kind="red_player_model"
-    )
+    record = store.find_sealed_record(f"rpr-model-{model_sha256}", expected_kind="red_player_model")
     model_b = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=model_sha256
     )

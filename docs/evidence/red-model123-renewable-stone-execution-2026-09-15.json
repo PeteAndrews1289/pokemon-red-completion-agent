@@ -1,0 +1,100 @@
+{
+  "schema": "pokemon.red.model123-renewable-stone-execution.v1",
+  "session_id": "2026-09-15-model123-renewable-stone-execution",
+  "status": "verified_capability_execution",
+  "classification": "maintenance_unblocking_one_measured_model123_choice",
+  "source": {
+    "commit": "7cf5593bc279508684cb34bd68a49b2b57403cd3",
+    "source_bundle_sha256": "7c361fd4444e831de23793f3b8d89da39c0113a8940df9ca6e321ddd8a1c1c51",
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "origin_state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b",
+    "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa"
+  },
+  "renewable_funding_attempt": {
+    "result_sha256": "cbff1ff1b709a373e654eed624dd82cdedeb94d533b752cccdcbb6d8eb034351",
+    "runner_sha256": "b9282719afb8807dfc2efd620ebe90653586fff64d67e9bc43478b0362922eec",
+    "status": "failed_retained_no_retry",
+    "completed_opponents": ["Lorelei", "Bruno", "Agatha"],
+    "stopped_at": "Lance",
+    "failure": "trainer funding battle move-slot policy rejected the current MAIN-menu turn",
+    "cash_before_bootstrap": 206,
+    "cash_after_bootstrap": 31,
+    "cash_retained": 17257,
+    "actions": 980,
+    "frames": 90951,
+    "finite_completion_assets_sold": false,
+    "retry_performed": false
+  },
+  "controlled_blackout": {
+    "result_sha256": "ca16aa4883484e3855e4d1233b81542643f502217689388094615d1725c58f21",
+    "runner_sha256": "b47882d10c44f260dfea21b0d3bcc2026c2f59e9bd8c8be7390203f78a493950",
+    "status": "verified_controlled_blackout",
+    "cash_before": 17257,
+    "cash_after": 8628,
+    "actions": 832,
+    "frames": 79884,
+    "registered_species": 88
+  },
+  "stone_purchase": {
+    "result_sha256": "abd30b0ab3c5f5de810b77dfc84e7a318a29bf2c42b227371cdcd7c16a8b0d47",
+    "runner_sha256": "30a3bced151a6a7f6f78b2eb7a7c02062db09247086b19a9a5ae1fbfbe0a4fb8",
+    "status": "verified_thunder_stone_purchase",
+    "item_id": 33,
+    "price": 2100,
+    "cash_before": 8628,
+    "cash_after": 6528,
+    "fly_receipts": 1,
+    "route_steps_planned": 56,
+    "route_steps_executed": 70,
+    "actions": 360,
+    "frames": 39060,
+    "terminal_state_sha256": "e258e8d34e562ce50b6d26c01c8c92839a6e7ce0e45f96f370f70faa4b00641c"
+  },
+  "boxed_item_evolution": {
+    "result_sha256": "0a54c8e5527dea6104d8cba3a35dea491cd9d86c3a5867b8c285bddfe4f83281",
+    "runner_sha256": "4f66693c5665b849239d4e2bafa4719f29f77923be17b70bdbe988518cbf30ce",
+    "status": "verified_pikachu_to_raichu_item_evolution",
+    "source_national": 25,
+    "target_national": 26,
+    "source_level": 3,
+    "move_prompt_moves": [],
+    "storage_deposit_passed": true,
+    "storage_box_switch_passed": true,
+    "storage_withdraw_passed": true,
+    "evolution_actions": 68,
+    "total_actions": 225,
+    "frames": 19020,
+    "cash_after": 6528,
+    "registered_species_before": 88,
+    "registered_species_after": 89,
+    "specimens_before": 71,
+    "specimens_after": 71,
+    "terminal_state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051"
+  },
+  "totals": {
+    "controller_actions": 2397,
+    "emulator_frames": 228915,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples_added": 0,
+    "registrations_added": 1,
+    "retry_count": 0
+  },
+  "terminal": {
+    "registered_declared_route": 89,
+    "declared_route_target": 124,
+    "declared_route_percent": 71.77,
+    "living_species": 67,
+    "specimens": 71,
+    "cash": 6528,
+    "state_sha256": "d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051"
+  },
+  "learning": {
+    "model": "Model123",
+    "settled_examples": 123,
+    "successes": 84,
+    "authority_delta": "none",
+    "reason": "Funding, purchase, storage and item use were deterministic capability qualification, not a model-selected outcome."
+  },
+  "next_falsifier": "The generic goal manager cannot bind a boxed item evolution, including needed shop procurement, beside a genuinely executable acquisition without exposing species identity or requiring a route-specific patch."
+}

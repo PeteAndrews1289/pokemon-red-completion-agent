@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.trainer-proposed-control-plan.v1",
+  "date": "2026-09-17",
+  "authorization": "Pete explicitly requested continued implementation after the prior two-fit session stopped and supplied additional credits. This is a new bounded successor, not a silent replay of the stopped experiment.",
+  "capability": "Compare the actual proposed attack and switch target, with a public-stat estimated finishing-hit margin.",
+  "learned_authority": "Only the learned control head changes. Retain the five-member candidate move and replacement weights byte-for-byte; no rule forces an attack or chooses a teacher action during play.",
+  "transfer_test": "Eight fresh assisted TRAIN numeric variants across the same four origins, compared with the frozen previous candidate. These are not independent natural transfer. Natural qualification remains required separately.",
+  "cheapest_falsifier": "ROM-free composed retention still fails, or the candidate loses the known hard regression or regresses on reserved complete battles.",
+  "time_box": "90 minutes for implementation, one control-only fit and bounded verification; reassess on failure rather than optimizer sweeps.",
+  "stop_condition": "One 1200-epoch control fit, seed 2026091803, on the existing authenticated 180 contexts. No new training collection, repeated fit, timing search or full-game run. Retain failures. At most one known TRAIN regression and eight fresh paired TRAIN comparisons with 160 decisions/240000 frames per arm.",
+  "frozen_components_model_sha256": "2d944149bf2c61b6e498ff677222414e59f131b4adc53065e737b26e8f7b81d6",
+  "retention_gates": {"original44_attack": 0.0554, "retained52_attack": 0.0648, "retained52_composed": 0.1609},
+  "known_regression": "One execution of the new candidate on assisted-train-cc2d973c9d0279e9, preserving earlier failures. This is known TRAIN, not an independent test, and is authorized even if retention fails to distinguish offline and actual behavior.",
+  "fresh_variants": "Reuse the disclosed learner-five reserved recipes but actor HP 42 and opponent level 30, opponent HP 56, opening idle 2. Freeze before fitting; no case selection from outcomes.",
+  "promotion_eligible": false,
+  "github_pushes": 0
+}

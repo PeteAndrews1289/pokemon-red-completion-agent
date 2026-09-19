@@ -1,0 +1,122 @@
+{
+  "schema": "pokemon.red.earned-learned-battle-result.v1",
+  "session": "2026-09-16-earned-learned-battle",
+  "classification": "correlated_development_live_move_authority_not_promotion",
+  "source_commit": "6b1e5142b22f49d7a825a5dfac3e18dc108f1ce9",
+  "private_receipts": {
+    "retained_plan_sha256": "21e11d1f0758b9428a7d91e5fe0501c340d971abec40b8d9954950ab9d69e1ba",
+    "outcome_sha256": "710f4a45470794a71313e922ad1a5e2e7a259192fff45b4aca4543f9f79070a8",
+    "collection_verification_sha256": "a26e5de2ef7b993745ed5edc61bcc80c672772501210f9c4ba0304d81df7f90d",
+    "setup_outcome_sha256": "91058efdbb38ed3a2326ce157b44b0766787d64810acc546736c0eba47ee5592"
+  },
+  "provenance": {
+    "original_state_sha256": "a5f7d8ef8f66e64cead9760a1fb3dd9d892f12cf60800352dd81aeb868a034a6",
+    "original_state_unchanged": true,
+    "terminal_state_sha256": "934eb4dc3394bda303171c28d93fc4cdddce2f83e75fe10049f6f9bba84656ae",
+    "battle_model_file_sha256": "6e57bce36ff9fa324a14b3989563696a9bd5dff8373e55ab196ebf36fc1b2269",
+    "battle_model_canonical_sha256": "19ac6d3db3305c2e9979f1f31f0d70f4d7ae3df2737b64585313812aef7619db",
+    "battle_model": "frozen expected-utility-v2, previously fitted on separate battle training scenarios",
+    "teacher_setup": "Route 11 natural encounter; predeclared party slot 6 moved to lead",
+    "state_edits": [],
+    "partition": "correlated_development",
+    "fit_allowed": false,
+    "consumed": true
+  },
+  "execution": {
+    "player": "Kingler level 28",
+    "opponent": "Spearow level 15",
+    "model_queries": 6,
+    "choices_persisted_before_execution": 6,
+    "distinct_observation_hashes": 6,
+    "exact_selected_slot_pp_spends_verified": 6,
+    "move_sequence": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      11
+    ],
+    "selected_physical_slots": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      3
+    ],
+    "supported_alternatives_per_query": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      2
+    ],
+    "guillotine_pp_before_after": [
+      5,
+      0
+    ],
+    "guillotine_total_damage_observed": 0,
+    "vicegrip_pp_before_after": [
+      30,
+      29
+    ],
+    "player_hp_before_after": [
+      76,
+      59
+    ],
+    "opponent_hp_before_after": [
+      38,
+      0
+    ],
+    "teacher_battle_queries": 0,
+    "teacher_battle_fallbacks": 0,
+    "total_controller_actions": 149,
+    "total_emulator_frames": 13177,
+    "setup_controller_actions": 80,
+    "setup_emulator_frames": 6840,
+    "stop_reason": "battle_exited",
+    "terminal_field_input_ready": true,
+    "registered_before_after": [
+      96,
+      96
+    ],
+    "specimens_before_after": [
+      74,
+      74
+    ],
+    "cash_before_after": [
+      198,
+      198
+    ],
+    "owned_flags_preserved": true
+  },
+  "learning": {
+    "model_updates": 0,
+    "new_training_examples": 0,
+    "authority_promotions": 0,
+    "transfer_tests": 0,
+    "goal_model_unchanged": "Model137: 137 examples / 92 successes / 58 economy-qualified",
+    "authority_delta": "Frozen battle ranker controlled every attack in this encounter. Ordinary collection control remains unchanged.",
+    "limitation": "Low-level opponent beaten inefficiently. Repeated Guillotine until PP exhaustion, then Vicegrip. Live control is proved, not good judgment, online weight updates or mastery.",
+    "action_free_diagnostic": "Initial legal scores: Bubble -6.813425, Vicegrip -4.753639, Guillotine -4.051581. Accuracy 0.30 and OHKO flag already represented; relative speed absent. Not proof of a sole causal defect or justification for a move-specific ban."
+  },
+  "verification": {
+    "targeted_rom_free_tests_passed": 301,
+    "mypy_changed_source_files": 2,
+    "lint_passed": true,
+    "full_suite_run": false,
+    "flash_review": "Gemini 3.8 Flash High completed architecture review. Accepted mapping, settling and stop guards; counterfactual delay not used.",
+    "flash_refreshed_quota": "unavailable",
+    "claude_used": false,
+    "github_push": false,
+    "gameplay_running": false,
+    "flash_outcome_review": {
+      "accepted": "Prioritize outcome training; accuracy and OHKO semantics are already distinguishable.",
+      "rejected": "Never fit development captures. Linear-weight explanation is inapplicable to this MLP; zero OHKO training coverage and guaranteed Vicegrip success were not verified.",
+      "status": "Both bounded app reviews completed; no reviewer edits or gameplay."
+    }
+  },
+  "next": "Audit reliability/mechanics coverage, then train attack value on separate permitted training scenarios and compare on untouched scenarios. Do not fit or replay this consumed development encounter or hardcode Guillotine avoidance."
+}

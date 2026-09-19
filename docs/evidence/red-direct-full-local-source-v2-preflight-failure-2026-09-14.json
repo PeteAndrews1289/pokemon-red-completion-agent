@@ -1,0 +1,99 @@
+{
+  "schema": "pokemon.red.direct-full-local-source-v2-preflight-failure.evidence.v1",
+  "session_id": "2026-09-14-direct-full-local-source-v2-preflight-failure",
+  "classification": "consumed_live_gate_failure_before_action_free_preflight",
+  "status": "closed_without_preflight_or_gameplay",
+  "published_boundary": {
+    "source_commit": "b09a5bd2edebfc37cd9e782b4e6e4ab9a5f3e05d",
+    "source_bundle_sha256": "93db8e857dfb950d6bc6a0afe50974b143239e741962c8e30b1b926948ed9f7e",
+    "exact_ci_run": 34908309943,
+    "exact_ci_attempt": 1,
+    "rehearsal": "12_passed_11704_deselected"
+  },
+  "catalog": {
+    "catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "entries": 81,
+    "eligible_train_entries": 54,
+    "unclaimed_eligible_sources_at_selection": 11
+  },
+  "source": {
+    "selection_id": "full-local-source-20260914-v2",
+    "selection_record_sha256": "b6a43444ae03c783c3a8b2d0d1f491a762d12273914dfb9645477e17012bfca8",
+    "capture_id": "red-goal-v1-002-advance_story-train-02",
+    "state_sha256": "1a4452bce3c704bcb50bb441cbe6885d3e0bf9556294d9c3c407513ebe9edc9f",
+    "envelope_sha256": "cecbcf96b2fe1147f6105bb88e4154a98b0f897b33e8788da2595bbcf5f7a378",
+    "logical_root_identity_sha256": "221a65c329492b64dd726f40688d511df11f3a788ef71a5ea9fa29e9057221b5",
+    "physical_root_identity_sha256": "4b72b44e2ee66139e05efe4b2dd996464e747b5f4fc787fa76a285e806bb421f",
+    "context_identity_sha256": "5480e078db429edd75b2b89f44684f79e2bb11b04af1c080e89adaab84163f4d",
+    "root_pair_claim_sha256": "6479e3698a6d5856718f11dacf011d819d413eac5d205227e15323ac130dc881",
+    "claim_record_sha256": "6e1f5663f5e0ee03bc83e142cb00316bbb0d7603766266a493807356ad1a7728",
+    "source_substitutions": 0,
+    "gameplay_retries": 0,
+    "retry_allowed": false
+  },
+  "preflight": {
+    "private_failure_record_id": "full-local-direct-preflight-20260914-v2",
+    "private_failure_record_sha256": "536e4741a8d1642056eb758f07f4987888bd04f9a48ea7f9c4cb1abde0969c09",
+    "failed_stage": "direct_profile_capture_corridor_selection",
+    "error_type": "RedLivingDexMultifamilyError",
+    "error": "wild source is not a grass-map source",
+    "cause": "The catalog classifies wild:Route21:water as a WILD method, while direct-profile candidate sorting resolves every WILD source with the grass-only map resolver.",
+    "selected_payload_opened": true,
+    "action_free_preflight_completed": false,
+    "registration_session_created": false,
+    "registration_run_created": false
+  },
+  "effects": {
+    "root_pair_claims": 1,
+    "selected_source_payload_opens": 1,
+    "completed_action_free_preflights": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "registration_sessions": 0,
+    "registration_observations": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "static_diagnosis": {
+    "catalog_non_grass_source": "wild:Route21:water",
+    "catalog_species_ref": "pokemon:national:072",
+    "valid_colocated_grass_source": "wild:Route21:grass",
+    "valid_colocated_species_ref": "pokemon:national:114",
+    "primary_failure": "_wild_sources calls the grass-only resolver in its sort key before filtering unsupported encounter media.",
+    "secondary_failure": "_capture_corridor resolves the source outside its try block and does not catch RedLivingDexMultifamilyError.",
+    "scope": "generic_direct_profile_integration_defect_not_source_specific_feasibility_evidence"
+  },
+  "required_nonconsuming_gate": [
+    "exclude non-grass encounter media from grass-corridor candidates",
+    "validate every returned candidate against the complete public acquisition catalog",
+    "preserve Route21 grass priority when water and grass species are both missing",
+    "derive a profile through the real unmocked catalog-and-corridor path",
+    "fail with RedFullPokedexDirectProfileError when no grass candidate remains"
+  ],
+  "reviewers": {
+    "flash_model": "gemini-3.8-flash-high",
+    "flash_effort": "high",
+    "flash_result": "diagnosis_confirmed_with_two_p0_and_one_p1_findings",
+    "claude": "not_invoked",
+    "available_cli_models": [
+      "claude-opus-4-6-thinking",
+      "claude-sonnet-4-6"
+    ],
+    "quota_windows": "unavailable_from_headless_cli_output"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "next_gate": "Implement and publish the generic ROM-free source-media filter and defensive corridor boundary, then pass complete-catalog regression tests before any other source is selected or claimed.",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

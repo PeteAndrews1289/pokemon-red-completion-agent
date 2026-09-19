@@ -1,0 +1,78 @@
+{
+  "schema": "pokemon.red.registered-player-qualification.v1",
+  "session": "2026-09-16-model136-selected-goal-continuation",
+  "rigor": "correlated-development",
+  "status": "safe_pending_evolution_with_measured_xp",
+  "source_commit": "5f7a823e",
+  "source_bundle_sha256": "acd7a3879194ca517f3ad023080423ae634218193fc231a25ce829bf6184a091",
+  "registry_sha256": "eef78d82cbc825679d72c23870760258704e008a699d521bd4dfe8ce18b66fff",
+  "parent_model_choice": {
+    "target": "Krabby to Kingler",
+    "previous_terminal_state_sha256": "44cd6d26b76796349b3995339427f75ec3031b6ecfb78c7434d5dac5a35fdfa8",
+    "selected_configuration_sha256": "64ead73c1e76de43d35fb08048850f5e10e91a96e50bc06263f5a50be6bf8d0d",
+    "previous_outcome_sha256": "e2f2262cb1ab2623e42a9f050f16ad72dbd2f9153d8503272eec262489be617c",
+    "no_new_goal_query_or_teacher_selection": true
+  },
+  "private_run": {
+    "plan_sha256": "fd20fbe50e0cbd6841e08940c67b26610568fc48fe651b2dc97d87990dbc7ee2",
+    "output_plan_sha256": "ed213833f481c60d78a2e679093ec38033f1bdf3941539de755e602bb955f88e",
+    "outcome_sha256": "26f1f12ea2f6643334339bddb0bb63437bb4a3be34619f260ed7e1e451bc336b",
+    "result_sha256": "9db584303d0194070ed430cacd7130b0126ea640fd6312544c54cdcc41bb4286",
+    "terminal_state_sha256": "9764ec06b43b893574877ab34f8b3e93945787b2ce10b5927abf10fe99eea0f7",
+    "maximum_actions": 8000,
+    "maximum_frames": 800000,
+    "maximum_training_quanta": 8,
+    "status": "pending",
+    "safe_terminal": true,
+    "verification": "failed",
+    "evolution_observed": false,
+    "model_decisions": 0,
+    "model_queries": 0,
+    "teacher_actions": 0
+  },
+  "measurement": {
+    "before_krabby_level": 16,
+    "before_krabby_experience": 4905,
+    "after_krabby_level": 19,
+    "after_krabby_experience": 7095,
+    "krabby_experience_gain": 2190,
+    "dugtrio_shared_experience_gain": 1872,
+    "all_party_experience_gain": 4062,
+    "controller_actions": 4591,
+    "emulator_frames": 418136,
+    "krabby_experience_per_action": 0.47702,
+    "krabby_experience_per_frame": 0.005237,
+    "estimated_experience_remaining_to_level_28": 14857,
+    "estimate_note": "28 cubed minus observed Krabby experience, assuming its observed medium-fast curve; throughput is one correlated chunk and must not be projected as a guarantee."
+  },
+  "collection": {
+    "before_registered": 94,
+    "after_registered": 94,
+    "native_target": 124,
+    "before_specimens": 74,
+    "after_specimens": 74,
+    "cash": 198,
+    "new_registration": false
+  },
+  "verification": {
+    "rom_free_tests_passed": 96,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "product_focus_passed": true,
+    "registry_checked": true,
+    "action_free_live_unique_binding": true,
+    "action_free_inspection_actions": 0,
+    "action_free_inspection_frames": 0,
+    "full_suite_run": false
+  },
+  "limitations": {
+    "new_fitted_examples": 0,
+    "independent_evaluation": false,
+    "fresh_red_completed": false,
+    "fresh_red_acceptance": "0/5",
+    "goal_completion": false,
+    "menu_construction_wall_time_cost": "Several minutes per chunk; targeted rebinding remains a valuable optimization.",
+    "github_push": false
+  },
+  "next": "Continue the same authenticated goal from the exact safe terminal, preferably with targeted private rebinding to avoid rebuilding unrelated route alternatives; stop if the trainee cannot gain safe XP or the target ceases to bind uniquely. Do not fit each chunk as another model decision."
+}

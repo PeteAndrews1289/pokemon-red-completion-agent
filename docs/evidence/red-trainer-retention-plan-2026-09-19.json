@@ -1,0 +1,26 @@
+{
+  "schema": "pokemon.red.battle-retention-plan.v1",
+  "capability": "Learn full-battle choices without forgetting demonstrated earlier battle competence.",
+  "learned_authority": "Three existing learned heads continue to select moves, reserves and attack/switch; no rules or teacher substitution gain authority.",
+  "transfer_test": "Only after unchanged TRAIN retention and terminal-improvement gates pass, qualify the frozen candidate on unused natural trainer sources, then bounded player integration. Never reuse consumed DEVELOPMENT sources.",
+  "cheapest_falsifier": "ROM-free reconstruction of 180 authenticated TRAIN targets, conflicting-input and reward-scale analysis, and feasible retained model inspection.",
+  "time_box": "One session, at most two hours; one prospective constrained fit after the audit, no hyperparameter sweep.",
+  "stop_condition": "Stop the candidate on retention or terminal-improvement failure; stop promotion if natural transfer cannot be demonstrated. Preserve every failure and do not loosen thresholds.",
+  "retention_limits": {"original44_move": 0.0554, "retained52_move": 0.0648, "retained52_composed": 0.1609},
+  "corpus": {"old": 52, "terminal_ancestor": 48, "terminal_new": 80},
+  "audit_result": "180 contexts authenticated. No identical-input conflicting preference crosses old/new groups. The 100-context ancestor satisfies all unchanged retention limits; this proves a feasible start, not successful terminal learnability.",
+  "fit": {
+    "count": 1,
+    "start": "Frozen 100-context terminal ancestor; algebraic zero-new-weight control schema bridge preserves old scores",
+    "head_order": ["move", "switch", "control"],
+    "epochs_per_head": 1200,
+    "learning_rate": 0.2,
+    "objective": "Expected regret on 128 full-battle contexts, with hard preservation of every old52 head decision",
+    "projection_passes": 10,
+    "maximum_step_halvings": 12,
+    "acceptance": "Actual nonlinear loss decreases and every older head argmax and protected margin are preserved; otherwise stop that head",
+    "terminal_gate": "At least 10% improvement in terminal128 composed regret and no increase in new80 composed regret; old gates unchanged"
+  },
+  "recollections": 0,
+  "github_publication": false
+}

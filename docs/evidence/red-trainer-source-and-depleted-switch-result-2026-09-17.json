@@ -1,0 +1,181 @@
+{
+  "schema": "pokemon.red.trainer-source-and-depleted-switch-result.v1",
+  "session_date": "2026-09-17",
+  "status": "closed_with_model_ready_trainer_and_natural_train_loss",
+  "product_claim": "The battle trainer can collect, admit, fit, and execute move, state-dependent control, and switch choices across MAIN, depleted-attack MAIN, optional prompt, forced replacement, and an unmodified natural trainer encounter. The current one-root exploratory model lost that natural TRAIN battle while the frozen comparator won; it is not qualified or promoted.",
+  "celadon_source_pilot": {
+    "prospective_plans": [
+      "red-celadon-trainer-source-plan-2026-09-17.json",
+      "red-celadon-trainer-source-successor-plan-2026-09-17.json"
+    ],
+    "captured_before_battle_action": [
+      {"slot": "red-goal-v1-001-advance_story-train-01", "actions": 240, "frames": 31440, "capture_state_sha256": "ecf29ee29cbdec8e206440aeb417d036ea33f80f90b6496abdafea24a5d54ff6"},
+      {"slot": "red-goal-v1-002-advance_story-train-02", "actions": 240, "frames": 31440, "capture_state_sha256": "7193252bdf9501aff242b7f3b5922daea322bf46ac4a0f7df7ee4de019d60676"},
+      {"slot": "red-goal-v1-003-advance_story-train-03", "actions": 259, "frames": 33156, "capture_state_sha256": "c1ef3519554657d5246620366708dc566bc0367d913471ded5f35b85645a1ea7"}
+    ],
+    "ancestry_audit": "All three saves are historical Celadon catalog slots with the same player trainer ID and near-identical party state; their distinct slot labels and state hashes do not establish independent physical play. Conservatively classify them as correlated TRAIN material, not three independent roots. Their relationship to the preexisting lab source remains unresolved.",
+    "qualified_independent_roots_added": 0,
+    "fit_guard": "The qualified-fit provenance validator rejects multiple members of this unresolved Celadon/lab alias cluster."
+  },
+  "depleted_actor_pp": {
+    "factory": "Actor moves may have zero PP, but opponent move PP remains positive; a zero-attack trainer state requires a living reserve.",
+    "private_rom_materialization": "A Pikachu with two zero-PP moves and two healthy reserve switch options read back exactly.",
+    "first_pilot": {
+      "status": "retained_failed_no_retry",
+      "configuration_sha256": "442d2f2d1c482a0db4e0651c24feee3aa464b43fb50276c12fc7660e376ff6b5",
+      "reason": "After sixteen decisions both reserves had fainted, so the remaining zero-PP active Pokémon required Struggle; no switch target remained.",
+      "disposition": "An explicit unsupported-Struggle stop now ends this boundary without fabricating a model choice or a complete winning episode."
+    },
+    "bounded_successor": {
+      "configuration_sha256": "3601c70c7475314928f04e095ff23123c4a5f69a63f1552f2584a913bf4758e6",
+      "same_upstream_root": "red-lab-rival-train-20260917-offset137",
+      "assisted_state_sha256": "2dbdd15fe7a183ecd6d2bb9c9aee46893888dc9fb4afab783e2587bd4eb44894",
+      "baseline_battle_won": true,
+      "baseline_decisions": 6,
+      "opening_choices": ["switch:2", "switch:3"],
+      "timing_offsets": [0, 2, 4, 6, 8],
+      "complete_branch_logs": 10,
+      "branch_decisions_each": 2,
+      "admission_execution_proof_complete": true,
+      "admission_return_proof_complete": true,
+      "target_context": "depleted-attack MAIN",
+      "target_heads": ["switch"],
+      "mean_two_turn_return_switch_2": 0.125404762,
+      "mean_two_turn_return_switch_3": 1.288154762,
+      "preferred_target": "switch:3",
+      "baseline_outcome_sha256": "fac9c67d9f93add7ba532ce9eadb1912faae01d9e8d8f424869538844955ffbe",
+      "qualified_independent_roots_added": 0,
+      "model_updates": 0
+    }
+  },
+  "additional_contexts": {
+    "optional_prompt": {
+      "same_upstream_root": "red-lab-rival-train-20260917-offset137",
+      "baseline_battle_won": true,
+      "baseline_decisions": 3,
+      "opening_choices": ["decline", "switch:2", "switch:3"],
+      "timing_offsets": [0, 2, 4, 6, 8],
+      "complete_branch_logs": 15,
+      "admission_execution_and_return_proof_complete": true,
+      "mean_two_turn_return_decline": 4.387931034,
+      "mean_two_turn_return_switch_2": 1.962287877,
+      "mean_two_turn_return_switch_3": 0.078773219,
+      "preferred_target": "decline"
+    },
+    "forced_replacement": {
+      "same_upstream_root": "red-lab-rival-train-20260917-offset137",
+      "first_pilot": "Retained as failed: a forced state was materialized, but branch replay treated its initial menu as ordinary attack; no retry of that configuration.",
+      "bounded_successor_baseline_battle_won": true,
+      "bounded_successor_baseline_decisions": 7,
+      "opening_choices": ["switch:2", "switch:3"],
+      "timing_offsets": [0, 2, 4, 6, 8],
+      "complete_branch_logs": 10,
+      "admission_execution_and_return_proof_complete": true,
+      "mean_two_turn_return_switch_2": 0.03992838,
+      "mean_two_turn_return_switch_3": 3.541916003,
+      "preferred_target": "switch:3"
+    }
+  },
+  "four_context_fit": {
+    "plan_sha256": "43bd0152953782391ecaaf0daee3b0cff9710e9dd7997ec672d3ec129992e760",
+    "model_sha256": "5f50b20258c93ea1c69d7ffe53a5893c107c57273414e02fd227150ccfe19878",
+    "scenario_count": 4,
+    "independent_upstream_roots": 1,
+    "head_example_counts": {"move": 1, "control": 2, "switch": 4},
+    "model_updates": 1,
+    "qualification_tier": "correlated_exploratory_train_only",
+    "promotion_eligible": false,
+    "development_evaluations": 0,
+    "live_smoke": [
+      {"context": "depleted-attack MAIN", "battle_won": true, "decisions": 6, "first_choice": "switch:3", "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "aca62381cf2e5cd6f1a5f2f486d9711f6579969c2d857a57f7920aaca16b75ae"},
+      {"context": "optional prompt", "battle_won": true, "decisions": 2, "first_choice": "decline", "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "68a3e9dc946f57428eaee87308ba0151bab45166a89eaa81a3e2252e8a4f87ee"},
+      {"context": "forced replacement", "battle_won": true, "decisions": 2, "first_choice": "switch:3", "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "4805dc6903b75e4f650d9e4f1ab3cfc8856e8d1302ce17234d64e0501b093d7a"}
+    ],
+    "interpretation": "These are in-root controlled smoke cases proving live policy wiring, not held-out generalization or DEVELOPMENT evidence."
+  },
+  "stateful_control_diagnostic": {
+    "structural_fault": "The earlier linear control head gave both actions identical state features plus fixed action indicators, so shared features canceled and attack-versus-switch probabilities could not depend on the observed state.",
+    "repair": "Add action-by-state interaction blocks to both fit and live inference, with an explicit regression test learning opposite choices for low and high HP. The diagnostic corpus size gate now permits 4–64 varied scenarios without changing the qualified four-root-by-four-scenario gate.",
+    "diagnostic_before_repair": {
+      "four_context_model_on_reused_s12": {"battle_won": false, "stop_reason": "party_defeated", "decisions": 13, "voluntary_switches": 0, "outcome_sha256": "0955814f9786c1d23f867a8bd6129df92b0f7a4e3067b0c4a6af554e031f5c24"},
+      "eleven_context_model_on_reused_s12": {"battle_won": false, "stop_reason": "party_defeated", "decisions": 13, "voluntary_switches": 0, "outcome_sha256": "afbfd3d740fe284d87a69fd500c82bd9d9a06bd82c0b2660826072ccc50233c9"}
+    },
+    "stateful_fit": {
+      "plan_sha256": "99e85d16285d87488a43a8d0347bdcd7655cc2fd3e7c9298ebbbda8d169fe12d",
+      "model_sha256": "db0bd7bb577fb3fa6cb760914f8441a3726001783ae1b4af31dca19b1cc20523",
+      "scenario_count": 11,
+      "independent_upstream_roots": 1,
+      "head_example_counts": {"move": 8, "control": 9, "switch": 11},
+      "qualification_tier": "correlated_exploratory_train_only",
+      "promotion_eligible": false,
+      "development_evaluations": 0
+    },
+    "live_diagnostics": [
+      {"context": "reused s12 full-party TRAIN diagnostic", "battle_won": true, "decisions": 7, "voluntary_switches": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "3e854bdb7b964e2b85d3636f86a9713d170aa6c95c88ad5d9a801ea19be97be9"},
+      {"context": "s11 full-party TRAIN diagnostic", "battle_won": true, "decisions": 14, "voluntary_switches": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "e04bcbf4ddbc55e631e11f0c298b505e0e53b752cd7cc4714b52e6d9b69c025c"},
+      {"context": "depleted-attack MAIN", "battle_won": true, "decisions": 6, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "d31aecca431498c12dd68c5ef4baac3cacc792529302125ab951a9a25d89f391"},
+      {"context": "optional prompt", "battle_won": true, "decisions": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "496a1ab694a0702852303262473655a3e9ebd08d5b5a0e718a13a7ad28f87cfe"},
+      {"context": "forced replacement", "battle_won": true, "decisions": 2, "teacher_queries": 0, "invalid_actions": 0, "outcome_sha256": "6ead3025b056fe38d95d89c5924deeeef945283bbdce4285a6237196b7473f05"}
+    ],
+    "interpretation": "The s12 diagnostic was reused after observing failure, and s11 is previously explored same-root TRAIN material. These wins test the repair and guard against edge-context regression; they are not a fresh or natural DEVELOPMENT comparison."
+  },
+  "natural_trainer_diagnostic": {
+    "source": "Unmodified first Celadon Gym Lass MAIN from historical advance-story TRAIN slot 001; its physical ancestry relative to the lab root remains unresolved and it is not a new independent root.",
+    "model_ready_capture": "The legacy capture lacked actor-visible stat schema. A zero-input private derivation retained identical state bytes and authenticated parent manifest while binding a V2 stat-rich observation; future natural Celadon captures now produce V2 directly.",
+    "capture_derivation_sha256": "bbef670a1ca6f3160a7b4d6686f5ed0cb55722452224ccdb41e857fd5a5803c6",
+    "first_model_pilot": "Retained failed, no retry: during an opponent trapping sequence the active actor fainted after FIGHT confirmation but before a move cursor appeared. The turn executor rejected the faint before the episode could request forced replacement.",
+    "repair": "An unspent pre-move-menu faint with unchanged selected-battler PP now returns a verified suppressed turn; a PP change still fails closed. The distinct bounded successor completed without invalid actions or teacher input.",
+    "successor_model": {
+      "battle_won": false,
+      "stop_reason": "party_defeated",
+      "decisions": 33,
+      "action_counts": {"attack": 22, "voluntary_switch": 8, "forced_switch": 2, "switch_prompt": 1},
+      "opponent_faints": 1,
+      "party_faints": 3,
+      "teacher_queries": 0,
+      "invalid_actions": 0,
+      "event_log_complete": true,
+      "outcome_sha256": "4237894ddcb7e07862a76467a0ac6a58b82844684f2b06bcb0eb35e525bf5b5c"
+    },
+    "frozen_comparator": {
+      "battle_won": true,
+      "stop_reason": "battle_won",
+      "decisions": 24,
+      "action_counts": {"attack": 23, "voluntary_switch": 0, "forced_switch": 0, "switch_prompt": 1},
+      "opponent_faints": 2,
+      "party_faints": 0,
+      "teacher_queries": 0,
+      "invalid_actions": 0,
+      "event_log_complete": true,
+      "outcome_sha256": "132dc66cff89dc1853915ea377233a8fe3a64fffbe746ecc9e939a7ffa4f3614"
+    },
+    "interpretation": "This is a same-capture TRAIN diagnostic, not a natural disjoint DEVELOPMENT promotion test. The model's eight voluntary switches and loss show that its correlated synthetic control fit is not yet a reliable natural trainer policy. Keep both outcomes; do not tune on a replay of this exact case."
+  },
+  "verification": {
+    "targeted_rom_free_tests": "25 passed for initial fit ancestry, forced admission, and live runner checks; 14 passed for scaled-fit, stateful-control, policy and runner checks after repair",
+    "private_rom_switch_materialization": "2 passed in the earlier depleted/non-depleted integration pair",
+    "natural_capture_and_turn_checks": "3 capture-script ROM-free tests and 256 battle-runtime tests passed; natural successor and comparator event logs both complete",
+    "final_targeted_suite": "273 passed across battle runtime, natural capture, trainer fit and policy, fit provenance, and model runner; 12 documentation-surface tests passed",
+    "registry_regeneration": "passed",
+    "product_focus_and_docs": "passed",
+    "broad_suite": "Interrupted at 65% after 8139 passed, 3 skipped and 1 xfailed in 16m42s; five failures were outside the trainer path: three historical dashboard training-projection tests, one product-focus dashboard test, and one local Mac runtime-identity test. The runtime-identity failure reproduced in isolation. No full-suite pass is claimed."
+  },
+  "remaining_gate": [
+    "Authenticate four genuinely disjoint TRAIN origins, with four admitted scenarios each; the Celadon aliases cannot be counted separately.",
+    "Replicate MAIN, depleted-attack, replacement-prompt and forced-replacement contrasts across the four disjoint TRAIN roots; one same-root example of each now exists.",
+    "Fit a qualified challenger and compare it once on disjoint natural DEVELOPMENT trainer battles against frozen and fixed controls; the same-root stateful diagnostics cannot substitute for this.",
+    "Train against varied natural control situations: the one-root stateful model lost the Celadon TRAIN diagnostic while the frozen comparator won. Do not tune on a replay of that exact case.",
+    "Resolve or explicitly exclude unsupported Struggle from the declared initial battle segment before broad battle-authority claims."
+  ],
+  "effects": {
+    "new_measured_same_root_train_scenarios": 3,
+    "new_qualified_independent_train_roots": 0,
+    "exploratory_model_fits": 3,
+    "qualified_model_fits": 0,
+    "authority_promotions": 0,
+    "red_registered_species_delta": 0,
+    "fresh_full_red_runs": 0,
+    "github_pushes": 0,
+    "crystal_execution": 0
+  }
+}

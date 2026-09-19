@@ -10,6 +10,19 @@ A run completes Pokémon Red only when the referee observes both:
 Entering the Champion room, winning an isolated battle, reporting eight badges, or reaching an
 adjacent map is insufficient.
 
+## Complete-Red curriculum gate
+
+The story success condition above is necessary but no longer sufficient to advance beyond
+Red. Pete's September 15 revision requires one fresh start-to-finish, model-directed Red run
+with Champion/Hall-of-Fame evidence and all 124 species on the declared legitimate native
+route registered in that same save before any ROM hack. Fixed walkthroughs with randomized
+timing, checkpoint stitching, or an undeclared smaller denominator do not qualify.
+Unavailable version, cable-trade, event and mutually exclusive dependencies must be explicitly
+recorded for later legitimate acquisition; they do not require cheating or block the hack gate
+merely because a link/event source is unavailable. Mew is deferred. Global ledger credit never
+substitutes for a local owned flag. This aligns the contract with the existing mission and
+North Star, not a new relaxation. Earlier story-only results retain their original scope.
+
 ## Clean power-on
 
 The supported runtime starts PyBoy with its packaged DMG-compatible boot ROM, immutable verified

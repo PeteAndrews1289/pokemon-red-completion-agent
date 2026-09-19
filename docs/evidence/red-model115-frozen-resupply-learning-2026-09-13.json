@@ -1,0 +1,267 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {
+    "record_sha256": "b20868d76116f2a44382e9fa4601d273e66084dd52316d6fbb2500fbf559becf",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "session_id": "2026-09-13-model115-frozen-resupply-learning",
+  "learning": {
+    "starting_examples": 114,
+    "ending_examples": 115,
+    "new_settled_examples": 1,
+    "successful_examples": 78,
+    "teacher_labels": 0
+  },
+  "collection": {
+    "starting_registered_species": 84,
+    "ending_registered_species": 84,
+    "ending_living_species": 64,
+    "ending_specimens": 68,
+    "required_red_registrations_remaining": 40,
+    "remaining_counter_scope": "existing 124-entry native-availability scope, not the full Red completion gate"
+  },
+  "completed_episode": {
+    "status": "retained_verification_failure",
+    "actions": 160,
+    "frames": 10633,
+    "candidate_count": 6,
+    "selected_candidate_index": 5,
+    "selected_kind": "resupply",
+    "selected_probability": 0.43869514182473374,
+    "sampled_choices": 1,
+    "policy_queries_during_execution": 0,
+    "admitted_examples": 1,
+    "verified_collection_gain": 0,
+    "error_type": "TrainerFundingBattleError",
+    "error": "player money 2146 does not match expected 2088",
+    "cash_before": 58,
+    "cash_after": 2146,
+    "quoted_income": 2030,
+    "target_cash": 4200,
+    "target_cash_reached": false,
+    "economy_outcome": {
+      "cash_delta": 2088,
+      "cash_loss": 0,
+      "gross_income": null,
+      "gross_spend": null,
+      "net_item_decrease": 0,
+      "net_item_increase": 0,
+      "schema": "pokemon.core.resource-economy-outcome.v1",
+      "useful_liquidity_gain": 0.49714285714285716
+    }
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "11c53aa123e499d2f15a20223c712f9ddc6423005f672fcf43b630b24908956f",
+    "fit_report": {
+      "measured_choice_examples": 1,
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 115,
+      "economy_qualified_examples": 36,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 115,
+      "successful_examples": 78,
+      "total_examples": 115,
+      "train_dataset_sha256": "b64846a68bdc19da81600bedb76ba23fff8c502fd153079c3905cbaf1f968a4f",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012294951973619189,
+      "weighted_mse_before": 0.03138202524898835
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "measured_evidence_action_trace_available": false,
+    "measured_evidence_authority_promotions": 0,
+    "measured_evidence_independent_evaluations": 0,
+    "measured_source_examples": 11,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "85f5b16824482d5b6044247ffdeff303dffe02b8f6823d9983d29f167dc00556",
+      "file_sha256": "6ad3c4bf91b7b77e21165ed180a50830b0a38d755742391f4def3cc3dc810735",
+      "independent_evaluation": false,
+      "model_sha256": "42dc459d3b921b2f8e7ae6959d09b70360f5a025fe7ed42d0b875392884c01a3",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "f503725e2153e7523d9be26a431c45782f1b473c3406e87dfa96a9450f190ec3",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 115,
+      "source_bundle_sha256": "564e9c9114d88dd505f1456f33e7207b3808b81230c1b94e7d411fb8334331aa",
+      "source_commit": "fa6cc4724f4c2bfeefcf55133961f0a789144c04"
+    },
+    "new_measured_source_examples": 1,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10191104780295021,
+        0.000006867511693782513,
+        0.0000029661029445601856,
+        0.0016401499244164282,
+        0.0013472557501078275,
+        0.01182068865571953,
+        0.0011165947892264002,
+        0.0000028180840203290785,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 115,
+      "total_examples": 115,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.013094265402342119
+    },
+    "regional_source_examples": 33,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09472255404291839,
+        0.000006862872925297097,
+        0.000002966109379808034,
+        0.0016375254517078319,
+        0.0013459947083891684,
+        0.01182028178529298,
+        0.0011155663810053337,
+        0.0000028164109538457815,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 115,
+      "total_examples": 115,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012294951973619184
+    }
+  },
+  "publication": {
+    "checkpoint_record_sha256": "95c98fdd3e1e653d82f013e85c2d55cc19d919a26f4169ac77bba6ae0ed546b5",
+    "state_sha256": "cbe2f9cd6e9a21b4f8ccac21990b994e54c02aab16e3ba21ae6eb4ae6f005d35",
+    "trajectory_manifest_sha256": "f8c12ad54958014b51024b8ac1de9f7810d353ef21c0a3463907b5ee342f759a",
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "source": {
+    "execution_commit": "ab1a6c196dbe6f5c8fe8550f9d3ff78588428b1e",
+    "execution_source_bundle_sha256": "cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f",
+    "execution_ci_run_id": 34760862464,
+    "original_menu_commit": "003612b8b505781a917bbbd416155f5b2defe2eb",
+    "source_binding_sha256": "83f45aed63146defa2795e1f56f473d2f43738197138beaadcaddf8b83ce5a6e",
+    "fit_commit": "fa6cc4724f4c2bfeefcf55133961f0a789144c04",
+    "fit_source_bundle_sha256": "564e9c9114d88dd505f1456f33e7207b3808b81230c1b94e7d411fb8334331aa",
+    "fit_ci_is_dependency": false
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "scope": "isolated draft attempt then no-tools schema/test proposal",
+      "accepted": "Separate frozen resupply schema and four-site admission integration.",
+      "corrected": "Draft test probabilities were invented and target cash disagreed with its menu; replaced with actual fixture-derived distributions and matching budgets. Added no-random-draw and positive-cash failed-verification tests.",
+      "initial_edit_attempt": "denied command permission; no edits; no permission broadening",
+      "quota": {
+        "five_hour_remaining_percent": 96.12,
+        "weekly_remaining_percent": 68.38,
+        "scope": "shared Gemini group; not task-specific savings"
+      }
+    },
+    "claude": {
+      "model": "claude-opus-4-8",
+      "status": "completed",
+      "scope": "five-file read-only execution/admission/economy review; no final integrated-code audit",
+      "accepted": "All schema branches must update; original-menu provenance remains separately bound and lower trust.",
+      "rejected": "The prospective hardcoded-payout concern is not this failure's cause: the existing battle verifier raised before the runner success check. Frozen quote was2030; historical failed receipt remains unchanged.",
+      "reported_cost_usd": 1.647777,
+      "fast": false,
+      "subscription_quota": "unavailable; interactive first-run setup prevented a reading"
+    }
+  },
+  "verification": {
+    "focused_rom_free_passed": 179
+  },
+  "next_menu": {
+    "action_free": true,
+    "candidate_count": 6,
+    "distinct_option_kinds": 3,
+    "ordinary_candidate_count": 3,
+    "supplemental_candidate_count": 3,
+    "selected_candidate_index": 2,
+    "selected_kind": "resupply",
+    "selected_probability": 0.30759519928865214,
+    "menu_sha256": "8a8eba9286420e7271a59afab7ee4438a3f28203d7a3f65911538d8512879f20",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "identity_fields_public": 0,
+    "executed": false,
+    "execution_gate": "Diagnose the prior payout mismatch before executing another trainer-income choice; no retry or resampling."
+  }
+}

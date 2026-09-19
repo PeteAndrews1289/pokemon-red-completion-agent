@@ -178,11 +178,11 @@ def require_recovery_checkpoint_origin(
         raise RedFailureRecoveryError("recovery checkpoint collection missing")
     if schema == REGISTERED_RECOVERY_CHECKPOINT_SCHEMA:
         from .registered_checkpoint import (
-            REGISTERED_CHECKPOINT_SCHEMA,
+            REGISTERED_CHECKPOINT_SCHEMAS,
             RegisteredCollectionCheckpoint,
         )
 
-        if collection.get("schema") != REGISTERED_CHECKPOINT_SCHEMA:
+        if collection.get("schema") not in REGISTERED_CHECKPOINT_SCHEMAS:
             raise RedFailureRecoveryError(
                 "registered recovery checkpoint requires registered collection"
             )
@@ -216,9 +216,9 @@ def require_recovery_checkpoint_origin(
         ):
             raise RedFailureRecoveryError("registered recovery observation differs from state")
     elif schema == RECOVERY_CHECKPOINT_SCHEMA:
-        from .registered_checkpoint import REGISTERED_CHECKPOINT_SCHEMA
+        from .registered_checkpoint import REGISTERED_CHECKPOINT_SCHEMAS
 
-        if collection.get("schema") == REGISTERED_CHECKPOINT_SCHEMA:
+        if collection.get("schema") in REGISTERED_CHECKPOINT_SCHEMAS:
             raise RedFailureRecoveryError(
                 "legacy recovery checkpoint cannot carry registered collection"
             )

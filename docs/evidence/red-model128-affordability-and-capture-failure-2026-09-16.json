@@ -1,0 +1,132 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session": "2026-09-16-model128-affordability-and-capture-failure",
+  "rigor": "correlated-development",
+  "status": "fit_complete_bounded_only",
+  "source_commits": {
+    "affordability": "b6232a6c",
+    "failure_admission": "d94d9ec0"
+  },
+  "implementation": {
+    "capability": "derive_finite_income_need_from_observed_capture_reserve",
+    "prior_fixed_cash_target": 3600,
+    "observed_cash": 1608,
+    "observed_capture_items": 9,
+    "declared_capture_reserve": 10,
+    "quoted_unit_price": 600,
+    "derived_cash_target": 600,
+    "cash_shortfall": 0,
+    "cash_starved_rom_free_cases_passed": true,
+    "identity_bearing_policy_features": 0
+  },
+  "exact_state_preflight": {
+    "parent_state_sha256": "eb7727340207f5fc64b85c0dbefd2cb493c6d3e3befe2bed648c4832aaaf9ce5",
+    "status": "verified_action_free",
+    "menu_sha256": "70d4c135e94690c3c04ef48bb031ddf9ddc2007e971f35cbd54af4c99e060c32",
+    "available_candidates": 3,
+    "candidate_kinds": ["acquire_species", "acquire_species", "acquire_species"],
+    "actions": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "public_identity_fields": 0,
+    "private_binding_fields": 0
+  },
+  "autonomous_outcome": {
+    "result_sha256": "60124ec0821d5d96a828cb4d02f771a7162b8e7be5a77da7fc0d0b40b4684288",
+    "behavior_model_sha256": "b14ee9c8a27065139d23e3bb62d45a866bea6d31bb336810ef7c03078da46ff3",
+    "model_decisions": 1,
+    "support_decisions": 0,
+    "teacher_actions": 0,
+    "selected_option_kind": "acquire_species",
+    "selected_probability": 0.34685503938826423,
+    "actions": 276,
+    "frames": 10368,
+    "cash_before": 1608,
+    "cash_after": 1608,
+    "registrations_before": 91,
+    "registrations_after": 91,
+    "specimens_before": 72,
+    "specimens_after": 72,
+    "verification": null,
+    "error_chain": ["RedTravelCaptureError", "RedCaptureStatusError"],
+    "retained_error": "capture status changed target, party or bag",
+    "safe_terminal": false,
+    "terminal_battle_state": 1,
+    "terminal_input_ready": false,
+    "terminal_state_sha256": "70541c6f70c0db2368ab27269dc88b81a80f0f36c004d56e31d7bec5552a3f6f",
+    "learning_eligible": true,
+    "retry_allowed": false
+  },
+  "fit": {
+    "result_sha256": "0aaa22d1f71abb04d13724b05562f140303d0ad94d96d3108d781b02cbe94200",
+    "new_measured_source_examples": 1,
+    "new_settled_examples": 1,
+    "replayed_actions": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "fit_report": {
+      "measured_choice_examples": 1,
+      "total_examples": 128,
+      "settled_examples": 128,
+      "successful_examples": 88,
+      "economy_qualified_examples": 49,
+      "weighted_mse_before": 0.03086481745278779,
+      "weighted_mse_after": 0.011548598899267255
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "model_sha256": "f3965e6d941653af6aca56ad54d091b62b65f8187b8a14678f8e27083e76ec50",
+      "file_sha256": "f974020b6eb143b205e5fb58cfd4c3d276efe14ce2517d508a4ff3cee459c6a4",
+      "prior_model_sha256": "b14ee9c8a27065139d23e3bb62d45a866bea6d31bb336810ef7c03078da46ff3",
+      "settled_examples": 128,
+      "successful_examples": 88,
+      "economy_qualified_examples": 49,
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "prior_train_error": {"weighted_mse": 0.011559093104998204},
+    "updated_train_error": {"weighted_mse": 0.011548598899267256}
+  },
+  "completed_episode": {
+    "status": "one_retained_autonomous_exception_admitted",
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {"teacher_labels": 0, "observer_actions": 0, "observer_frames": 0},
+  "in_sample_policy_replay": {"performed": false, "choices": [], "controller_actions": 0, "independent_evaluation": false},
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "teacher_actions": 0,
+    "replayed_actions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0
+  },
+  "limitations": [
+    "The capture-status guard does not identify which protected field changed; the exact terminal is retained but unsafe for autonomous continuation.",
+    "The fitted row is a failure lesson. No capture, new registration, independent evaluation or authority promotion is claimed.",
+    "The consumed Model127 attempt will not be replayed or substituted."
+  ],
+  "publication": {"github_push": false}
+}

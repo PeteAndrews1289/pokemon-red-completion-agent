@@ -1,0 +1,195 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session": "2026-09-16-model125-prerequisites-and-cubone",
+  "rigor": "correlated-development",
+  "status": "fit_complete_bounded_only",
+  "source_commits": [
+    "8892880c",
+    "e25efde5",
+    "f81d4bbd",
+    "35b7bb88"
+  ],
+  "fit": {
+    "result_sha256": "fe5aa17d3b0f1996bde55c253636c6976fb22f2bf05d2fdc0b828d69881de6c7",
+    "model_file_sha256": "88da18db6a6674c55599796a313b4ee4b2c6be2e3d117b225b99cefa83afdb46",
+    "new_measured_source_examples": 2,
+    "economy_qualified_examples": 46,
+    "replayed_actions": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "prior_rows_retained": true,
+    "settled_examples_before": 123,
+    "settled_examples_after": 125,
+    "successful_examples_before": 84,
+    "successful_examples_after": 86,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 125,
+      "model_sha256": "6d3bfe033525f27dfb08ab01b7645591199a1eb02c5fe2f18fb10e5319724f7c",
+      "prior_model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa",
+      "source_commit": "e25efde5576b3c636c3eac25b9ad2e8e8d1a3e1f",
+      "source_bundle_sha256": "d4e02851c7912f997aec8edc688108f68a29ba5cdb741a65ddf71116231aae26",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 2,
+      "total_examples": 125,
+      "settled_examples": 125,
+      "successful_examples": 86,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.030891297550066477,
+      "weighted_mse_after": 0.011586741665496345
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.030891297550066477
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.011586741665496345
+    },
+    "new_settled_examples": 2
+  },
+  "completed_episode": {
+    "status": "two_retained_autonomous_choices_admitted",
+    "sampled_choices": 2,
+    "admitted_examples": 2,
+    "curriculum_outcomes": 0,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "menu_redraw": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": true
+  },
+  "capabilities": {
+    "registered_item_evolutions_declared": true,
+    "routed_storage_relief_exposed": true,
+    "proactive_trainer_funding_exposed": true,
+    "league_funding_requires_fresh_qualification": true,
+    "deterministic_storage_safety_is_nonlearning": true,
+    "typed_execution_failure_chain_retained": true,
+    "exact_failed_capture_resume_available": true
+  },
+  "autonomous_run": {
+    "result_sha256": "53df1f7f6dc646f53decad5f745552ff0e41d5ff594c1a5102175a99db619b5a",
+    "model_decisions": 1,
+    "support_decisions": 1,
+    "teacher_actions": 0,
+    "storage_actions": 176,
+    "storage_frames": 8616,
+    "active_box_before": 3,
+    "active_box_after": 5,
+    "storage_headroom_gained": 19,
+    "selected_capture_probability": 0.2353796930142132,
+    "selected_capture_source": "PokemonTower3F",
+    "selected_capture_target": "pokemon:national:104",
+    "capture_failure": "generic controller failure retained a stable wild battle before a throw or status move; the original nested cause was not persisted",
+    "balls_spent_before_recovery": 0,
+    "party_damage_before_recovery": 0,
+    "unsafe_terminal_retained": true
+  },
+  "capture_recovery": {
+    "result_sha256": "78b315efe83a09f2868c973b8bd357f6ffdf6403d5db02d9d5bdd3a72eb93211",
+    "parent_state_sha256": "7808db3560411da34078d266ae24abdf875974db70f713d98c734c2cd28a4238",
+    "terminal_state_sha256": "3b30ec3959c53279861ae33ee35c2310a18c3e224ae405be7fbfaf41809f6e86",
+    "route_replayed": false,
+    "model_queries": 0,
+    "teacher_actions": 0,
+    "learning_eligible": false,
+    "actions": 174,
+    "frames": 15408,
+    "caught": true,
+    "status_applied": "paralysis",
+    "great_balls_spent": 2,
+    "registration_gain": 1,
+    "specimen_gain": 1,
+    "registered_before": 90,
+    "registered_after": 91,
+    "safe_terminal": true
+  },
+  "collection": {
+    "declared_red_route_target": 124,
+    "registered": 91,
+    "completion_fraction": 0.7338709677419355,
+    "specimens": 72,
+    "cash": 228,
+    "great_balls": 9,
+    "active_box_index": 5,
+    "active_box_headroom": 19
+  },
+  "funding_observation": {
+    "ordinary_trainer_available": false,
+    "league_funding_available": false,
+    "reason": "The retained save has a partial League flag pattern, not a qualified fresh League attempt.",
+    "required_next_capability": "Verified partial-League exit/reset before renewable income can enter the model menu."
+  },
+  "post_capture_menu": {
+    "gameplay_actions": 0,
+    "model_queries": 0,
+    "status": "time_boxed_during_action_free_route_enumeration",
+    "observed_problem": "Global regional route inventory from inside Pokemon Tower exceeded one minute before producing a menu.",
+    "next": "Prioritize bounded reachable regional candidates before another model query."
+  },
+  "validation": {
+    "focused_tests_passed": 354,
+    "recovery_tests_passed": 87,
+    "full_suite_partial": "7504 passed, 3 skipped, 1 xfailed before intentional stop; one unrelated local PyBoy identity failure",
+    "mypy": "passed",
+    "ruff": "passed",
+    "registry": "current",
+    "product_focus": "passed"
+  },
+  "limitations": [
+    "The Cubone recovery is legitimate collection progress but not a training example or authority promotion.",
+    "No independent evaluation, fresh-start run, Champion/Hall-of-Fame gate or 124/124 completion is claimed.",
+    "No ordinary or renewable income source is currently qualified from this exact save.",
+    "Post-capture menu enumeration is too slow from the current indoor state and was stopped before a model query."
+  ],
+  "reviewers": {
+    "flash": "not used",
+    "claude": "not used",
+    "quota": "not refreshed"
+  },
+  "publication": {
+    "github_push": false
+  }
+}

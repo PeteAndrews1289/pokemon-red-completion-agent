@@ -1,0 +1,91 @@
+{
+  "schema": "pokemon.red.full-pokedex-supply-admission.evidence.v1",
+  "session_id": "2026-09-14-full-pokedex-supply-admission",
+  "classification": "learning-supply-reorientation",
+  "status": "blind-fourth-source-rejected-correlated-reset-required",
+  "source_commit": "9016d466c29b7cccd9c075ab2bc79e3c0c407dd8",
+  "decision": {
+    "fourth_direct_source_authorized": false,
+    "consumed_sources_reopened": false,
+    "unused_eligible_sources_preserved": 9,
+    "reason": "Metadata-only source selection cannot prove that both capture and evolution are executable before the irreversible root claim. A one-family gate failure would consume another source before a model query or retained outcome.",
+    "two_family_gate_preserved": true,
+    "preclaim_private_source_scanning_authorized": false,
+    "preclaim_scanning_reason": "Opening multiple protected payloads and selecting the first passing menu would bypass claim-first admission and cherry-pick private state feasibility.",
+    "next_supply": "One prospectively declared correlated training reset from the authenticated Model121 terminal, not an independent root or evaluation history."
+  },
+  "current_architecture": {
+    "selection_basis": "metadata-only first available eligible train slot",
+    "claim_before_payload": true,
+    "payload_before_claim": false,
+    "two_family_gate_after_claim": true,
+    "model_query_after_two_family_gate": true,
+    "gate_failure_can_be_diagnostic_only_source_spend": true,
+    "current_model121_terminal_catalog_matches": 0,
+    "current_model121_terminal_training_eligible": false
+  },
+  "required_correlated_reset_contract": {
+    "versioned_registered_reset_schema_required": true,
+    "exact_parent_checkpoint_required": true,
+    "parent_partition": "train",
+    "independent_evaluation": false,
+    "new_upstream_lineage_claim": false,
+    "fresh_source_claims": 0,
+    "fixed_reset_identity_before_model_query": true,
+    "full_capture_and_evolution_menu_required": true,
+    "write_ahead_choice_required": true,
+    "execute_selected_binding_at_most_once": true,
+    "retain_success_failure_and_interruption": true,
+    "fresh_terminal_registration_observation_required": true,
+    "actual_resource_costs_required": true,
+    "fit_only_settled_measured_choice": true,
+    "teacher_labels": 0,
+    "fallbacks": 0,
+    "full_replays": 0
+  },
+  "verification": {
+    "source_free_supply_proposal_inspector_continuation_and_training_plan_tests": "185_passed",
+    "flash_model": "gemini-3.8-flash-high",
+    "flash_effort": "high",
+    "flash_verdict": "no-go",
+    "claude_model": "opus",
+    "claude_effort": "high",
+    "claude_verdict": "no-go",
+    "accepted_review_result": "Current claim-then-gate ordering cannot assure a measured lesson from source four.",
+    "rejected_review_suggestion": "Preclaim scanning of multiple protected source payloads; this conflicts with the claim-first anti-cherry-picking boundary."
+  },
+  "effects": {
+    "source_selections": 0,
+    "root_pair_claims": 0,
+    "source_payload_opens": 0,
+    "rom_opens": 0,
+    "registration_sessions": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "gameplay_executions": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "anti_drift": {
+    "consecutive_sessions_without_learning": 2,
+    "configured_maximum": 1,
+    "alarm_fired": true,
+    "response": "Stop finite-source analysis and source spending. The next session must target the correlated-reset implementation and one retained lesson rather than another diagnostic or roadmap-only session."
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "next_gate": "Implement and source-free qualify a versioned registered correlated-reset admission for the exact Model121 terminal. Then inspect that reusable checkpoint action-free and execute one retained capture/evolution choice only if both families pass.",
+  "next_model_recommendation": "Astra High Fast off",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

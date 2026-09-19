@@ -1,7 +1,12 @@
 from types import SimpleNamespace
 
 import pytest
-from run_paired_red_bounded_player import _checkpoint_completion_dose, _player_limits
+from run_paired_red_bounded_player import (
+    _checkpoint_completion_dose,
+    _checkpoint_full_local_pokedex_choice,
+    _player_limits,
+    _player_observer,
+)
 from test_red_player_training import _plan
 
 from pokemon_red_completion.red_player_training_plan import (
@@ -69,6 +74,46 @@ def test_player_hard_limits_match_declared_completion_dose(count):
         assert limits.max_total_frames == count * plan.maximum_frames
 
 
+def test_full_local_choice_uses_dedicated_player_factory(monkeypatch):
+    import pokemon_red_completion.red_full_pokedex_goal_proposal as full
+
+    expected = object()
+    seen = []
+
+    def build(*args, **kwargs):
+        seen.append((args, kwargs))
+        return expected
+
+    monkeypatch.setattr(full, "build_red_full_pokedex_player_observer", build)
+    runtime, actions, world, attempt = object(), object(), object(), object()
+    result = _player_observer(
+        runtime,
+        actions,
+        world,
+        True,
+        completion_dose=True,
+        retain_quantum=lambda: None,
+        full_local_pokedex_choice=True,
+        full_local_pokedex_attempt=attempt,
+    )
+    assert result is expected
+    assert seen[0][0] == (runtime, actions, world)
+    assert seen[0][1]["maximum_quanta"] == 128
+    assert seen[0][1]["maximum_controller_actions"] == 30_000
+    assert seen[0][1]["maximum_emulator_frames"] == 3_000_000
+    assert seen[0][1]["quote_resource_costs"] is True
+    assert seen[0][1]["attempt"] is attempt
+
+
+@pytest.mark.parametrize("world,dose", [(None, True), (object(), False)])
+def test_full_local_choice_requires_world_and_completion_dose(world, dose):
+    with pytest.raises(RuntimeError, match="full_local_pokedex_choice_scope"):
+        _player_observer(
+            object(), object(), world, completion_dose=dose,
+            full_local_pokedex_choice=True,
+        )
+
+
 @pytest.mark.parametrize("completion", [False, True])
 def test_completion_plan_still_authenticates_its_parent_checkpoint(completion):
     from pokemon_red_completion.red_player_training_dataset import _require_continuation_origin
@@ -100,6 +145,25 @@ def test_restore_dose_comes_from_authenticated_parent_not_successor(feature_vers
         }}})
     with pytest.raises(RuntimeError, match="continuation_parent_plan"):
         _checkpoint_completion_dose({"metadata": {"player_training_plan": "v4"}})
+
+
+def test_full_local_choice_restores_only_from_a_completion_dose():
+    _, _, complete = completion_plan()
+    assert _checkpoint_full_local_pokedex_choice({"metadata": {}}) is False
+    assert _checkpoint_full_local_pokedex_choice({
+        "metadata": {
+            "player_training_plan": complete.document,
+            "full_local_pokedex_choice": True,
+        },
+    }) is True
+    with pytest.raises(RuntimeError, match="continuation_parent_full_local"):
+        _checkpoint_full_local_pokedex_choice({
+            "metadata": {"full_local_pokedex_choice": True},
+        })
+    with pytest.raises(RuntimeError, match="continuation_parent_full_local"):
+        _checkpoint_full_local_pokedex_choice({
+            "metadata": {"full_local_pokedex_choice": 1},
+        })
 
 
 @pytest.mark.parametrize("parent_dose,successor_dose", [(False, True), (True, False)])

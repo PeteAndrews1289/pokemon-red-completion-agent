@@ -183,13 +183,19 @@ _MODEL112_AUTOMATIC_FISHING_FAILURE_PATH = (
 _MODEL112_AUTOMATIC_FISHING_FAILURE_SHA256 = (
     "066d6d8751f6817ad489c12d5a50627adeff61dbdc0836aafd6f4f66b3716a85"
 )
+_MODEL123_HETEROGENEOUS_EVOLUTION_FIT_PATH = (
+    "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json"
+)
+_MODEL123_HETEROGENEOUS_EVOLUTION_FIT_SHA256 = (
+    "8257203c2b59c7e5e514880b4e8352f65bdd8fb6007328ae86b7cd2cba32aab6"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 112,
     "composition_attempts": 6,
     "development_episode_attempts": 30,
-    "model_fits": 15,
+    "model_fits": 16,
     "outcome_questions": {"development": 61, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -1104,7 +1110,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 17:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 18:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1553,6 +1559,32 @@ def _validate_projected_counters(
     if not isinstance(automatic_failure, Mapping):
         raise ProductFocusError("automatic fishing failure evidence is invalid")
     _validate_model112_automatic_fishing_failure_projection(automatic_failure)
+    heterogeneous_fit_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 17],
+        subject="projected Model123 heterogeneous fit evidence",
+    )
+    if heterogeneous_fit_evidence != {
+        "kind": "model_fit",
+        "path": _MODEL123_HETEROGENEOUS_EVOLUTION_FIT_PATH,
+        "sha256": _MODEL123_HETEROGENEOUS_EVOLUTION_FIT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    heterogeneous_fit_path = (
+        root / _MODEL123_HETEROGENEOUS_EVOLUTION_FIT_PATH
+    ).resolve()
+    try:
+        heterogeneous_fit = json.loads(
+            heterogeneous_fit_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("Model123 heterogeneous fit evidence is invalid") from None
+    if not isinstance(heterogeneous_fit, Mapping):
+        raise ProductFocusError("Model123 heterogeneous fit evidence is invalid")
+    _validate_model123_heterogeneous_evolution_fit_projection(heterogeneous_fit)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1894,6 +1926,92 @@ def _validate_model112_automatic_fishing_failure_projection(
         "known_local_environment_failure": "macos_pyboy_metadata_fingerprint",
     }:
         raise ProductFocusError("automatic fishing failure validation differs")
+
+
+def _validate_model123_heterogeneous_evolution_fit_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project one measured mixed-family success and its bounded fit."""
+
+    expected = {
+        "schema": "pokemon.red.registered-player-learning-session.v1",
+        "status": "fit_complete_bounded_only",
+        "prior_model_sha256": (
+            "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69"
+        ),
+        "model_sha256": (
+            "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa"
+        ),
+    }
+    if {key: receipt.get(key) for key in expected} != expected:
+        raise ProductFocusError("Model123 heterogeneous fit projection differs")
+    fit = _mapping_value(receipt.get("fit"), subject="Model123 heterogeneous fit")
+    if {
+        key: fit.get(key)
+        for key in (
+            "settled_examples_before",
+            "settled_examples_after",
+            "successful_examples_before",
+            "successful_examples_after",
+            "new_settled_examples",
+            "new_measured_source_examples",
+            "prior_rows_retained",
+            "new_row_count",
+            "controller_actions",
+            "authority_promotions",
+        )
+    } != {
+        "settled_examples_before": 122,
+        "settled_examples_after": 123,
+        "successful_examples_before": 83,
+        "successful_examples_after": 84,
+        "new_settled_examples": 1,
+        "new_measured_source_examples": 1,
+        "prior_rows_retained": True,
+        "new_row_count": 1,
+        "controller_actions": 0,
+        "authority_promotions": 0,
+    }:
+        raise ProductFocusError("Model123 heterogeneous fit counters differ")
+    replay = _mapping_value(
+        receipt.get("frozen_menu_replay"),
+        subject="Model123 heterogeneous frozen-menu replay",
+    )
+    before = replay.get("selected_probability_before")
+    after = replay.get("selected_probability_after")
+    if (
+        replay.get("selected_candidate_index") != 0
+        or replay.get("selected_option_kind") != "evolve"
+        or replay.get("selected_after_fit") is not True
+        or replay.get("support_decreased") is not False
+        or not isinstance(before, (int, float))
+        or not isinstance(after, (int, float))
+        or after < before
+    ):
+        raise ProductFocusError("Model123 heterogeneous frozen-menu replay differs")
+    outcome = _mapping_value(
+        receipt.get("outcome"), subject="Model123 heterogeneous outcome"
+    )
+    if {
+        key: outcome.get(key)
+        for key in (
+            "verified_success",
+            "registered_species_before",
+            "registered_species_after",
+            "teacher_labels",
+        )
+    } != {
+        "verified_success": True,
+        "registered_species_before": 87,
+        "registered_species_after": 88,
+        "teacher_labels": 0,
+    }:
+        raise ProductFocusError("Model123 heterogeneous outcome projection differs")
+    recovery = _mapping_value(
+        receipt.get("verifier_recovery"), subject="Model123 verifier recovery"
+    )
+    if recovery.get("fit_rerun") is not False or recovery.get("gameplay_replayed") is not False:
+        raise ProductFocusError("Model123 verifier recovery projection differs")
 
 
 def _validate_repeatable_living_dex_first_two_projection(

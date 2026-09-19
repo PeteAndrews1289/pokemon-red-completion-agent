@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.trainer-terminal-regression-plan.v1",
+  "date": "2026-09-17",
+  "user_authorization": "The user explicitly asked to fix the observed full-party failure. This one post-fix regression revisits the retained failing TRAIN capture; it is not held-out or promotion evidence.",
+  "capability": "Complete the retained five-member trainer fight with the newly trained integrated policy.",
+  "learned_authority": "The candidate owns all actions. No teacher continuation, forced opening, weight update or save edit occurs during this regression.",
+  "transfer_test": "The eight prospective TRAIN variations are already recorded separately; this regression is explicitly in-sample.",
+  "cheapest_falsifier": "The candidate loses the original failing battle or repeats damaging switch cycles.",
+  "time_box": "One episode, maximum 80 decisions and 120000 frames.",
+  "stop_condition": "One episode only, retain success or failure. Do not refit against this regression result.",
+  "capture_id": "assisted-train-cc2d973c9d0279e9",
+  "state_sha256": "537a290a9cf91ec8d2d47751482ec93417b9de60b632a3574ffe1da72137a4fc",
+  "comparison": "Retained frozen result 77f5f00773eb12880881be9b09febd8c2ec6e63b7df51bbd4ef58a2d57212bd6: party_defeated, 16 decisions, five party faints, zero opponent faints.",
+  "candidate": "The single frozen terminal-curriculum fit, with 48 new terminal contexts plus the 52 retained anchors and component-aligned control targets.",
+  "opening_idle_frames": 0,
+  "authority_promotions": 0
+}

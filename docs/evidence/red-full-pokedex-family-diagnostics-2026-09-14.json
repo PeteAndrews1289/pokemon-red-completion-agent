@@ -1,0 +1,89 @@
+{
+  "schema": "pokemon.red.full-pokedex-family-diagnostics.evidence.v1",
+  "session_id": "2026-09-14-full-pokedex-family-diagnostics",
+  "classification": "maintenance_unblocking_measured_collection_lesson",
+  "status": "qualified_rom_free_exact_head_ci_passed",
+  "source_commit": "93ca9495d0abccf7511639af2abdc5cbbec41bb5",
+  "source_bundle_sha256": "d0e25c279fcd93a2447958f26c57e3a59d9e38174ab2c9780349bc63955dadae",
+  "purpose": "Retain identity-free reasons when a real full-local menu cannot expose both capture and evolution, before any future source-spending decision.",
+  "diagnostic_contract": {
+    "schema": "pokemon.red.full-pokedex-family-diagnostic.v1",
+    "supported_portable_options": [
+      "acquire",
+      "evolve"
+    ],
+    "distinguished_exclusions": [
+      "capture_route_missing_capability",
+      "capture_resource_missing",
+      "physical_precursor_missing",
+      "physical_precursor_protected",
+      "target_already_registered"
+    ],
+    "other_fail_closed_reasons": [
+      "profile_declaration_missing",
+      "no_solo_catalog_target",
+      "no_missing_executable_target",
+      "router_binding_unavailable"
+    ],
+    "two_family_gate_preserved": true,
+    "ready_diagnostics_must_equal_candidate_families": true,
+    "target_route_profile_binding_identity_public": false,
+    "identity_fields_public": 0
+  },
+  "verification": {
+    "focused_goal_and_inspector_tests": "25_passed",
+    "nonconsuming_direct_rehearsal": "22_passed_11699_deselected",
+    "related_profile_router_registration_evolution_tests": "247_passed",
+    "ruff": "passed_changed_files",
+    "mypy": "passed_499_source_files",
+    "collection_registry_check": "passed",
+    "collection_registry_sha256": "9a415b54f1991273a3906a4cfe05e41bc695dccf73a3aedc46e02e4d2a25e215",
+    "exact_head_ci_run": 34918614083,
+    "exact_head_ci_attempt": 1,
+    "exact_head_ci": "success",
+    "exact_head_ci_full_suite": "11713_passed_4_skipped_1_xfailed"
+  },
+  "effects": {
+    "source_selections": 0,
+    "root_pair_claims": 0,
+    "source_payload_opens": 0,
+    "rom_opens": 0,
+    "registration_sessions": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "gameplay_executions": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "historical_boundary": {
+    "third_source_retroactively_diagnosed": false,
+    "reason": "Its frozen failure record predates this contract and retained no per-family fields; reopening or reconstructing that source remains forbidden.",
+    "consumed_sources": 3,
+    "unused_eligible_sources": 9
+  },
+  "reviewers": {
+    "flash_model": "gemini-3.8-flash-high",
+    "flash_effort": "high",
+    "flash_status": "completed_read_only_review",
+    "flash_result": "pass_no_p0_p1_p2",
+    "accepted_findings": 0,
+    "rejected_findings": 0,
+    "claude": "not_used",
+    "quota_windows": "unavailable_from_headless_cli_output"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "next_gate": "Separately justify a practical source-supply plan for one measured collection lesson. Exact-head CI passed; this qualification still does not authorize source four.",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

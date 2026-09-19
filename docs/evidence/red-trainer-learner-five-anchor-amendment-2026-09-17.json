@@ -1,0 +1,15 @@
+{
+  "schema": "pokemon.red.trainer-learner-five-anchor-amendment.v1",
+  "date": "2026-09-17",
+  "plan": "docs/evidence/red-trainer-learner-five-plan-2026-09-17.json",
+  "timing": "Declared during collection, before any five-member fit or reserved evaluation.",
+  "reason": "The frozen warm start was fitted on 52 earlier contexts plus 48 terminal contexts. The existing lineage guard correctly requires retaining its prior training contexts; the initial collector only reloaded the earlier 52.",
+  "change": "Reauthenticate and retain all 48 terminal contexts from their existing capture and matched-branch logs. Add them to the 52 original anchors and newly collected five-member contexts before the single declared fit.",
+  "retained_anchors_before": 52,
+  "retained_anchors_after": 100,
+  "unchanged": ["All new training recipes", "All capture decision indices", "All matched branches", "All reserved variations", "Reward and horizon", "One fit", "Seed and 1200-epoch schedule", "Original44 and all52 retention thresholds", "No authority promotion"],
+  "additional_gameplay": 0,
+  "prior_model_capture_ids_must_be_retained": true,
+  "fit_eligibility": "Every inherited target must exactly reconstruct from verified TRAIN branch logs; missing or changed evidence stops before fitting.",
+  "existing_results": "Preserve the original collection and any fit-preflight failure; resuming may verify completed branches but must not replay them."
+}

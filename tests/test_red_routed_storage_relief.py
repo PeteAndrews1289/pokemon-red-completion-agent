@@ -32,25 +32,40 @@ def fixture(monkeypatch):
     calls = []
     actions = SimpleNamespace(actions_executed=0)
     emulator = SimpleNamespace(frame_count=0)
-    raw = SimpleNamespace(map_id=22, player_y=5, player_x=6, battle_state=0,
-                          bag_items=((4, 2),), player_money=109)
-    collection = SimpleNamespace(current_box_index=0,
-        box_counts=(20, 3, 0) + (20,) * 9, box_capacity=20,
-        specimens=("a", "a", "b"))
-    observation = SimpleNamespace(raw=raw, input_ready=True,
-        collection_observation=collection, immediate_capture_slots=0)
+    raw = SimpleNamespace(
+        map_id=22, player_y=5, player_x=6, battle_state=0, bag_items=((4, 2),), player_money=109
+    )
+    collection = SimpleNamespace(
+        current_box_index=0,
+        box_counts=(20, 3, 0) + (20,) * 9,
+        box_capacity=20,
+        specimens=("a", "a", "b"),
+    )
+    observation = SimpleNamespace(
+        raw=raw, input_ready=True, collection_observation=collection, immediate_capture_slots=0
+    )
     traversal = SimpleNamespace(observe=lambda: (raw.map_id, raw.player_y, raw.player_x))
     adapter = SimpleNamespace(observe=lambda: observation)
     runtime = SimpleNamespace(reader=SimpleNamespace(), emulator=emulator, adapter=adapter)
     route = SimpleNamespace(steps=(1, 2), terminal_map=64)
     world = SimpleNamespace(plan_feasible_to_map=lambda *_a, **_k: route)
     router = Router(runtime, actions, world)
-    other = ExecutableGoalBinding("evolution", GoalKind.EVOLVE_SPECIES, .3, .1,
+    other = ExecutableGoalBinding(
+        "evolution",
+        GoalKind.EVOLVE_SPECIES,
+        0.3,
+        0.1,
         execute=lambda: pytest.fail("goal changed"),
-        verify=lambda _: GoalVerification.succeeded())
-    restore = ExecutableGoalBinding("restore", GoalKind.RESTORE_TEAM, .2, .1,
+        verify=lambda _: GoalVerification.succeeded(),
+    )
+    restore = ExecutableGoalBinding(
+        "restore",
+        GoalKind.RESTORE_TEAM,
+        0.2,
+        0.1,
         execute=lambda: pytest.fail("goal changed"),
-        verify=lambda _: GoalVerification.succeeded())
+        verify=lambda _: GoalVerification.succeeded(),
+    )
     bindings = GoalBindingSet((other.opportunity, restore.opportunity), (other, restore))
 
     monkeypatch.setattr(storage, "Gen1TraversalObserver", lambda _: traversal)
@@ -58,8 +73,9 @@ def fixture(monkeypatch):
     monkeypatch.setattr(storage, "dependency_specimen_ledger", lambda c: tuple(c.specimens))
     monkeypatch.setattr(storage, "prepare_center_departure", lambda *_: None)
     monkeypatch.setattr(storage, "Gen1RouteInterruptionHandler", lambda *_a, **_k: None)
-    monkeypatch.setattr("pokemon_red_completion.red_resource_goal_router._walking_plan",
-                        lambda _: True)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_resource_goal_router._walking_plan", lambda _: True
+    )
 
     def tick(action_count, frame_count):
         actions.actions_executed += action_count
@@ -79,17 +95,28 @@ def fixture(monkeypatch):
         return GoalExecutionReport(3, 30, {"collection_preserved": True})
 
     def provider(*, target_box_index, **_kwargs):
-        binding = ExecutableGoalBinding("local-box-switch", GoalKind.MANAGE_STORAGE,
-            .08, .03, execute=lambda: switch(target_box_index),
-            verify=lambda _: GoalVerification.succeeded())
+        binding = ExecutableGoalBinding(
+            "local-box-switch",
+            GoalKind.MANAGE_STORAGE,
+            0.08,
+            0.03,
+            execute=lambda: switch(target_box_index),
+            verify=lambda _: GoalVerification.succeeded(),
+        )
         return SimpleNamespace(offer=lambda _observation: SimpleNamespace(binding=binding))
 
     monkeypatch.setattr(storage, "execute_route", travel)
-    monkeypatch.setattr(storage, "face_pc_boundary",
-                        lambda *_a: (calls.append("face"), tick(1, 1)))
+    monkeypatch.setattr(storage, "face_pc_boundary", lambda *_a: (calls.append("face"), tick(1, 1)))
     monkeypatch.setattr(storage, "RedBoxSwitchGoalProvider", provider)
-    return SimpleNamespace(router=router, bindings=bindings, observation=observation,
-        collection=collection, raw=raw, calls=calls, travel=travel)
+    return SimpleNamespace(
+        router=router,
+        bindings=bindings,
+        observation=observation,
+        collection=collection,
+        raw=raw,
+        calls=calls,
+        travel=travel,
+    )
 
 
 def test_full_active_box_offers_action_free_routed_relief(monkeypatch):
@@ -99,8 +126,12 @@ def test_full_active_box_offers_action_free_routed_relief(monkeypatch):
     selected = next(item for item in result.bindings if item.kind is GoalKind.MANAGE_STORAGE)
     report = selected.execute()
     assert report.evidence["routed_storage_relief"] == {
-        "initial_box_index": 0, "target_box_index": 2, "headroom_gained": 20,
-        "collection_preserved": True, "setup_training_rows": 0, "route_steps": 2,
+        "initial_box_index": 0,
+        "target_box_index": 2,
+        "headroom_gained": 20,
+        "collection_preserved": True,
+        "setup_training_rows": 0,
+        "route_steps": 2,
     }
     assert selected.verify(report).status.value == "succeeded"
     assert f.calls == ["travel", "face", ("switch", 2)]
@@ -108,34 +139,55 @@ def test_full_active_box_offers_action_free_routed_relief(monkeypatch):
         selected.execute()
 
 
+def test_one_remaining_slot_offers_relief_before_capture_disappears(monkeypatch):
+    f = fixture(monkeypatch)
+    f.collection.box_counts = (19, 3, 0) + (20,) * 9
+    f.observation.immediate_capture_slots = 1
+    result = storage.bind_routed_storage_relief(f.router, f.bindings, f.observation)
+    assert f.calls == []
+    selected = next(item for item in result.bindings if item.kind is GoalKind.MANAGE_STORAGE)
+    report = selected.execute()
+    assert selected.verify(report).status.value == "succeeded"
+    assert f.collection.current_box_index == 2
+    assert f.observation.immediate_capture_slots == 20
+
+
 @pytest.mark.parametrize("condition", ["room", "no_target", "route", "existing"])
 def test_relief_is_not_fabricated(monkeypatch, condition):
     f = fixture(monkeypatch)
     if condition == "room":
-        f.collection.box_counts = (19, 3, 0) + (20,) * 9
-        f.observation.immediate_capture_slots = 1
+        f.collection.box_counts = (18, 3, 0) + (20,) * 9
+        f.observation.immediate_capture_slots = 2
     elif condition == "no_target":
         f.collection.box_counts = (20,) * 12
     elif condition == "route":
         f.router.world.plan_feasible_to_map = lambda *_a, **_k: (_ for _ in ()).throw(
-            RoutePlanningError("blocked"))
+            RoutePlanningError("blocked")
+        )
     else:
-        existing = ExecutableGoalBinding("existing-storage", GoalKind.MANAGE_STORAGE,
-            .1, .1, execute=lambda: pytest.fail("not executed"),
-            verify=lambda _: GoalVerification.succeeded())
-        f.bindings = GoalBindingSet((*f.bindings.opportunities, existing.opportunity),
-                                    (*f.bindings.bindings, existing))
-    assert storage.bind_routed_storage_relief(
-        f.router, f.bindings, f.observation) is f.bindings
+        existing = ExecutableGoalBinding(
+            "existing-storage",
+            GoalKind.MANAGE_STORAGE,
+            0.1,
+            0.1,
+            execute=lambda: pytest.fail("not executed"),
+            verify=lambda _: GoalVerification.succeeded(),
+        )
+        f.bindings = GoalBindingSet(
+            (*f.bindings.opportunities, existing.opportunity), (*f.bindings.bindings, existing)
+        )
+    assert storage.bind_routed_storage_relief(f.router, f.bindings, f.observation) is f.bindings
     assert f.calls == []
 
 
 @pytest.mark.parametrize("change", ["location", "box", "ledger", "money"])
 def test_relief_rejects_stale_start_before_input(monkeypatch, change):
     f = fixture(monkeypatch)
-    selected = next(item for item in storage.bind_routed_storage_relief(
-        f.router, f.bindings, f.observation).bindings
-        if item.kind is GoalKind.MANAGE_STORAGE)
+    selected = next(
+        item
+        for item in storage.bind_routed_storage_relief(f.router, f.bindings, f.observation).bindings
+        if item.kind is GoalKind.MANAGE_STORAGE
+    )
     if change == "location":
         f.raw.player_x += 1
     elif change == "box":
@@ -169,9 +221,11 @@ def test_transport_cannot_hide_protected_mutation(monkeypatch, change):
         return result
 
     monkeypatch.setattr(storage, "execute_route", corrupt)
-    selected = next(item for item in storage.bind_routed_storage_relief(
-        f.router, f.bindings, f.observation).bindings
-        if item.kind is GoalKind.MANAGE_STORAGE)
+    selected = next(
+        item
+        for item in storage.bind_routed_storage_relief(f.router, f.bindings, f.observation).bindings
+        if item.kind is GoalKind.MANAGE_STORAGE
+    )
     with pytest.raises(storage.RedRoutedStorageReliefError, match="protected state"):
         selected.execute()
     assert not any(isinstance(item, tuple) and item[0] == "switch" for item in f.calls)

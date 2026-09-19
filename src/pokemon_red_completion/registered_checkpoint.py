@@ -18,6 +18,10 @@ from .provenance import canonical_sha256
 from .registered_collection import REGISTERED_OBJECTIVE
 
 REGISTERED_CHECKPOINT_SCHEMA = "pokemon.core.registered-collection-checkpoint.v1"
+LOCAL_REGISTERED_CHECKPOINT_SCHEMA = "pokemon.core.registered-collection-checkpoint.v2"
+REGISTERED_CHECKPOINT_SCHEMAS = frozenset({
+    REGISTERED_CHECKPOINT_SCHEMA, LOCAL_REGISTERED_CHECKPOINT_SCHEMA,
+})
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -34,9 +38,16 @@ class RegisteredCollectionCheckpoint(LivingCollectionCheckpoint):
     target_species: tuple[str, ...]
     protected_counts: tuple[tuple[str, int], ...]
     binding_sha256: str
+    completion_scope: str = "shared"
+
+    @property
+    def credited_species(self) -> tuple[str, ...]:
+        return self.local_species if self.completion_scope == "local_red" else self.global_species
 
     def __post_init__(self) -> None:
         super(RegisteredCollectionCheckpoint, self).__post_init__()
+        if self.completion_scope not in {"shared", "local_red"}:
+            raise ValueError("registered checkpoint completion scope differs")
         for values in (self.global_species, self.local_species, self.target_species):
             if (not isinstance(values, tuple)
                     or any(not isinstance(s, str) or not s for s in values)
@@ -55,8 +66,8 @@ class RegisteredCollectionCheckpoint(LivingCollectionCheckpoint):
         if (not isinstance(self.binding_sha256, str) or len(self.binding_sha256) != 64
                 or any(c not in "0123456789abcdef" for c in self.binding_sha256)):
             raise ValueError("registered checkpoint binding differs")
-        missing = tuple(sorted(set(self.target_species) - set(self.global_species)))
-        if (self.registered_species != len(set(self.global_species) & set(self.target_species))
+        missing = tuple(sorted(set(self.target_species) - set(self.credited_species)))
+        if (self.registered_species != len(set(self.credited_species) & set(self.target_species))
                 or self.living_species != len(counts)
                 or self.required_specimens_remaining != len(missing)
                 or self.retained_captures != sum(counts.values())
@@ -73,7 +84,7 @@ class RegisteredCollectionCheckpoint(LivingCollectionCheckpoint):
             raise ValueError("registered checkpoint projections differ")
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        document: dict[str, object] = {
             "schema": REGISTERED_CHECKPOINT_SCHEMA,
             "objective": REGISTERED_OBJECTIVE,
             "binding_sha256": self.binding_sha256,
@@ -93,10 +104,17 @@ class RegisteredCollectionCheckpoint(LivingCollectionCheckpoint):
             "protected_counts": [list(item) for item in self.protected_counts],
             "allowed_evolutions": [list(item) for item in self.allowed_evolutions],
         }
+        if self.completion_scope == "local_red":
+            document.update({
+                "schema": LOCAL_REGISTERED_CHECKPOINT_SCHEMA,
+                "completion_scope": self.completion_scope,
+            })
+        return document
 
     @classmethod
     def from_public(cls, document: object) -> RegisteredCollectionCheckpoint:
-        if not isinstance(document, dict) or document.get("schema") != REGISTERED_CHECKPOINT_SCHEMA:
+        if (not isinstance(document, dict)
+                or document.get("schema") not in REGISTERED_CHECKPOINT_SCHEMAS):
             raise ValueError("registered checkpoint schema differs")
         try:
             result = cls(
@@ -116,6 +134,7 @@ class RegisteredCollectionCheckpoint(LivingCollectionCheckpoint):
                 target_species=tuple(document["target_species"]),
                 protected_counts=tuple(tuple(item) for item in document["protected_counts"]),
                 binding_sha256=document["binding_sha256"],
+                completion_scope=document.get("completion_scope", "shared"),
             )
         except (KeyError, TypeError) as error:
             raise ValueError("registered checkpoint fields differ") from error
@@ -136,6 +155,7 @@ def require_registered_transition(
     costs remain observable; only first global registration is completion gain.
     """
     if (before.binding_sha256 != after.binding_sha256
+            or before.completion_scope != after.completion_scope
             or before.completion_contract_sha256 != after.completion_contract_sha256
             or before.target_species != after.target_species
             or before.protected_counts != after.protected_counts

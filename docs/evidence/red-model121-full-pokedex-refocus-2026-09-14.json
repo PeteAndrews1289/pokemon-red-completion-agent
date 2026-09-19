@@ -1,0 +1,102 @@
+{
+  "schema": "pokemon.red.model121-full-pokedex-refocus-evidence.v1",
+  "session_id": "2026-09-14-model121-full-pokedex-refocus",
+  "status": "action_free_boundary_stopped_and_full_target_classified",
+  "model121_boundary": {
+    "model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+    "checkpoint_record_sha256": "8da4f48720d1a8dc4dc1b64877aee3ab3042e75320b16a5c5e4b4a4a4e0aebc6",
+    "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+    "inspection_sha256": "46a0834f324a384becb46935ec820413f5c2090aee736bf011c9e05b814b01a7",
+    "menu_sha256": "29cc6a8cab9c99632d8f9dc9314391c857fc035c9fbba738940fe1bfc0906980",
+    "available_candidate_count": 2,
+    "candidate_kinds": [
+      "resupply",
+      "restore"
+    ],
+    "acquisition_candidate_count": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "gameplay_authorized": false,
+    "stop_reason": "same_lineage_resource_loop_only"
+  },
+  "full_red_inventory": {
+    "target_count": 151,
+    "local_registered_count": 86,
+    "missing_local_count": 65,
+    "full_local_registration_complete": false,
+    "missing_resolution_counts": {
+      "solo_catalog_plan": 38,
+      "version_trade": 11,
+      "link_trade": 4,
+      "supporting_save_trade": 11,
+      "legitimate_event_input": 1
+    },
+    "unsupported_count": 0,
+    "local_completion_authority": "local_red_owned_flags_only",
+    "shared_registration_can_set_local_flag": false,
+    "physical_specimen_can_set_local_flag": false,
+    "solo_catalog_implies_current_execution": false
+  },
+  "implementation": {
+    "source_commit": "679d2b68297c0d0069cc354a1db0bc3ad54d448d",
+    "source_bundle_sha256": "5aea3ff7077f23579ac46984913f4116046d97207e768b9507bbf8206e59ca54",
+    "ci_run_id": 34851396444,
+    "ci_conclusion": "success",
+    "ci_tests_passed": 11608,
+    "ci_tests_skipped": 4,
+    "ci_tests_xfailed": 1,
+    "focused_tests_passed": 95,
+    "ruff": "passed",
+    "mypy": "passed",
+    "public_artifact_check": "passed",
+    "product_focus_check": "passed"
+  },
+  "learning_delta": {
+    "model_before": 121,
+    "model_after": 121,
+    "training_examples_before": 121,
+    "training_examples_after": 121,
+    "successes_before": 83,
+    "successes_after": 83,
+    "registrations_before": 86,
+    "registrations_after": 86,
+    "authority_promotions": 0,
+    "independent_evaluations": 0
+  },
+  "external_review": {
+    "gemini_3_8_flash_high": {
+      "status": "completed",
+      "quota": "unavailable_from_agy_cli",
+      "initial_verdict": "stop",
+      "accepted_findings": [
+        "remove executable-authority wording from the solo catalog",
+        "cover a supporting-save branch evolution",
+        "test public serialization"
+      ],
+      "resolved_differently": [
+        "distinguish planning from execution structurally with solo_catalog_plan rather than a docstring assertion"
+      ]
+    },
+    "claude_sonnet": {
+      "status": "completed_via_agy",
+      "standalone_cli": "login_required",
+      "quota": "unavailable_from_agy_cli",
+      "verdict": "go",
+      "p0_findings": 0,
+      "p1_findings": 0,
+      "p2_findings": 2,
+      "accepted_findings": [],
+      "rejected_findings": [
+        "the evidence already records target_count 151 and its arithmetic closes",
+        "the Eevee note incorrectly treated cataloged species 133 as an excluded branch and identified no failing behavior"
+      ]
+    }
+  },
+  "next": {
+    "objective": "Connect the 151-entry inventory to goal proposal and qualify one independent action-free menu spanning at least two acquisition families.",
+    "gameplay_gate": "No gameplay unless two genuinely executable acquisition families are exposed from an independent authenticated scenario."
+  }
+}

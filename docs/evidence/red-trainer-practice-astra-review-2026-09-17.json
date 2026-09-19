@@ -1,0 +1,127 @@
+{
+  "schema": "pokemon.red.trainer-practice-pretraining-review.v1",
+  "recorded_on": "2026-09-17",
+  "reviewed_source_commit": "e98bc1f8fa8b16f43947bad745f1272824c3e682",
+  "status": "review_complete_training_not_cleared",
+  "scope": "Read-only source/evidence review and in-memory adversarial probes; no production-source repair, gameplay or model fit",
+  "supersedes_readiness_claim": "Prior qualification established executed assisted contrasts, not correct neutral stats or trustworthy training admission. Preserve historical evidence unchanged; do not automatically fit it.",
+  "mission_check": {
+    "capability": "Learn attack, switch and replacement choices from reliable whole-party outcomes",
+    "learned_authority": "No authority change; review unblocks an outcome-trained challenger",
+    "transfer_test": "Disjoint natural DEVELOPMENT battles against frozen and fixed controls after a justified fit",
+    "cheapest_falsifier": "Mutate retained reports in memory; compare stats to cartridge formula; simulate losing switches and empty attack menus",
+    "time_box": "One review session, maximum two hours",
+    "stop_condition": "Report reproducible blockers without fitting, replaying failed attempts, opening DEVELOPMENT or weakening guards"
+  },
+  "artifact_bindings": {
+    "capture_manifest_sha256": "a080eb5b721868736a749c2007eefe3b09db70b7334b251df03b0cfc0e6ce47a",
+    "matched_choices_sha256": "8bb5bf1c610f7b8e62975a849e02be36f537b8cec4fb654451cd805fa2dfab48",
+    "baseline_outcome_sha256": "a23b2f48998aa88895f71a3cf8be7508d38f1e958e18289ca237685e73b26391",
+    "materialization_outcome_sha256": "fc3e8d31a1497864dc341263bbd3d83f4b2b34e258375661f586752a62dec726"
+  },
+  "findings": [
+    {
+      "id": "R1", "severity": "high", "status": "confirmed",
+      "title": "Neutral stat formula undercounts DVs",
+      "location": "src/pokemon_red_completion/red_battle_practice_cartridge.py:125",
+      "evidence": "Factory uses2*base+DV, cartridge CalcStat uses2*(base+DV). Level32 Pikachu DV8 is42/26/65/39 Attack/Defense/Speed/Special instead of45/29/67/42. DV15 HP is69 instead of74.",
+      "required_fix": "Correct formula; independent known-value tests across all151 species, level and even/odd DV boundaries; verify real recalculation, not only write/readback."
+    },
+    {
+      "id": "R2", "severity": "high", "status": "confirmed",
+      "title": "Enemy reserve stat and PP overrides do not survive native send-out",
+      "location": "src/pokemon_red_completion/red_battle_practice_factory.py:596",
+      "evidence": "Configured Machop maximum HP84 becomes89 in retained live observations. LoadEnemyMonData recalculates stats with fixed trainer DVs and initializes move PP; party-field readback does not prove persistent live overrides.",
+      "required_fix": "Native full-battle mode must use verified native trainer stats/PP and reject unsupported overrides. Keep arbitrary active-combatant edits in bounded teacher probes until separately implemented and qualified persistent training-only control exists; actor never receives write authority."
+    },
+    {
+      "id": "R3", "severity": "high", "status": "confirmed",
+      "title": "Admission accepts inconsistent or fabricated reports",
+      "location": "src/pokemon_red_completion/red_trainer_practice_admission.py:31",
+      "evidence": "All ten independently mutated copies of actual matched-choice evidence were accepted. Original files unchanged. Mutation inventory retained below.",
+      "required_fix": "Bind complete prospective choice/timing inventory and per-branch run/source/model/terminal identities; recompute hashes, totals and metrics; verify legality, continuity, resources and terminal proof. Add rejection regressions for every mutation; self-reported hashes are not execution proof."
+    },
+    {
+      "id": "R4", "severity": "high", "status": "confirmed",
+      "title": "A legal losing switch becomes an infrastructure error",
+      "location": "src/pokemon_red_completion/battle_recovery.py:113",
+      "evidence": "ROM-free simulation of a legal switch followed by target faint raises ProtectedRecoveryError before trainer decision completion. The helper also rejects battle exit during switching.",
+      "required_fix": "Learning-oriented switch result must retain selected-and-executed losses, forced replacement and legitimate terminals separately from cursor failures. Preserve protected-recovery safety for other callers."
+    },
+    {
+      "id": "R5", "severity": "high", "status": "confirmed",
+      "title": "No usable attack prevents a legal switch decision",
+      "location": "src/pokemon_red_completion/red_trainer_practice_episode.py:335",
+      "evidence": "MAIN prepares an attack batch before control selection. PreparedRedBattleScenario rejects an all-zero-PP menu despite healthy reserves. Status-only menus face the same structural restriction.",
+      "required_fix": "Build control/switch legality independently of attack availability; permit legal switches with an empty attack mask. Explicitly support or declare all-party depletion/Struggle rather than calling it a generic crash."
+    },
+    {
+      "id": "R6", "severity": "high", "status": "confirmed",
+      "title": "Actor features omit mechanics being varied",
+      "location": "src/pokemon_red_completion/battle_semantics.py:68",
+      "evidence": "Move/control/switch features omit actual Attack/Defense/Speed/Special and species base stats. Move head also lacks player Special stage and enemy status. Replacing Pikachu with Raichu while retaining ratios, levels and moves produces identical move features. Arbitrary stat variation can create indistinguishable inputs with conflicting outcomes.",
+      "required_fix": "Version title-neutral actor/reserve observable stats, relevant stages/status and public opponent estimates or observed history; no hidden enemy reserve/DV/future-RNG leakage. Test sensitivity and permutation invariance; explicitly migrate incompatible model inputs."
+    },
+    {
+      "id": "R7", "severity": "high", "status": "missing_contract",
+      "title": "No valid joint attack/switch target or fitting adapter",
+      "location": "src/pokemon_red_completion/red_trainer_practice_episode.py:637",
+      "evidence": "attack_turn_utility_sum ignores switch damage: switch2 and switch3 both score2.869565217391304 despite HP losses0 and31. Opponent faint totals inspect attack decisions only. Admission returns fit_targets0, not a three-head training dataset.",
+      "required_fix": "Measure whole-party consequences for every action. Freeze common return, horizon/truncation, timing schedule and tie handling; derive move/control/target heads from the same measured action values, not teacher preferences. Retain PP and frames; inference latency stays diagnostic. Implement TRAIN-only extraction and round-trip fitting tests."
+    },
+    {
+      "id": "R8", "severity": "medium", "status": "confirmed",
+      "title": "Matched branches lack baseline-quality failure retention",
+      "location": "src/pokemon_red_completion/red_trainer_practice_counterfactual.py:156",
+      "evidence": "Branch episode receives no event_sink; branch_sink runs only after completion. A failed branch loses its decision prefix and policy choices; outer failure attaches to baseline log. Wrapper also hides continuation diagnostics and bypasses stateful history updates for its forced opening.",
+      "required_fix": "Per-branch identity/start/choice/completion/failure chains and terminal hashes; retained excluded prefixes; forwarded diagnostics; synchronized or explicitly unsupported stateful continuation history."
+    },
+    {
+      "id": "R9", "severity": "high", "status": "coverage_gap",
+      "title": "One root and one timing do not qualify the training curriculum",
+      "evidence": "Recent trainer variants share one upstream TRAIN root; useful opening set has six choices, one timing and two turns. No switch-aware fit or independent natural comparison exists.",
+      "required_fix": "Keep the four-roots-by-four-scenarios minimum for first bounded fit, balance true lineages and prospectively freeze action/RNG inventory. Cover beneficial and harmful attacks/switches, prompt answers, forced replacements, depletion, speed and mixed damage categories. This is a pilot floor, not generalization proof."
+    },
+    {
+      "id": "R10", "severity": "medium", "status": "unresolved_and_scope_limit",
+      "title": "Historical failures stay excluded; catalog coverage is not all-move support",
+      "evidence": "Original off-slot PP increase remains unexplained. HP65535 from a custom-stat case is excluded; level-up recalculation is plausible, not proven. New HP guards do not make arbitrary stats stable across level-up. Actor excludes status-only, self-destruct actions and items despite all151 species catalog support.",
+      "required_fix": "No replay or relabel of old failures. Prospectively test PP mirrors and level-up recalculation with complete diagnostics. First trainable segment is damaging attacks/switches/replacements; status, recovery/items and remaining special mechanics are later full-battle scope."
+    }
+  ],
+  "admission_mutations_all_accepted": [
+    "999 opponent knockouts", "Changed first observation with old digest", "Omitted four of six choices",
+    "Different continuation policy", "Disconnected resource state chain", "Final enemy HP65535",
+    "Negative step frames", "Nonfirst move slot99", "Forged battle_won terminal", "Deleted final observation"
+  ],
+  "review_decisions": {
+    "failed_run_exclusion": "Necessary but insufficient. Do not demand impossible reconstruction of lost old after-state; require new prospectively declared PP/stat mechanic qualification and complete evidence.",
+    "existing_six_choice_set": "Executed assisted diagnostic only pending stronger admission; no automatic fit clearance and no retrospective neutral-stat claim.",
+    "first_fit_floor": "At least four independent authenticated TRAIN lineages and four admitted scenarios per lineage:16 scenario examples, not16 individual branch rows. Confirm supply without opening natural DEVELOPMENT.",
+    "rng_recommendation": "Five prospectively declared observation-preserving timings per scenario/action under a fixed cost cap; retain means, spread and ties. Five is a starting schedule, not certainty. Never add trials after seeing a desired result.",
+    "target_direction": "Common whole-party return: verified terminal outcome, KO differential and normalized HP changes for every action. Freeze coefficients, PP treatment, horizon/truncation and ties before collection; separate MAIN/prompt/forced contexts. No attack-only utility sum.",
+    "training_vs_promotion": "First fit can train the attack/switch/replacement segment after repairs and coverage. Natural DEVELOPMENT advantage is a subsequent use/promotion gate, not a prerequisite to fit and not a substitute for training."
+  },
+  "ordered_work_packets": [
+    {"order": 1, "name": "Cartridge fidelity", "issues": ["R1", "R2", "R10"], "exit": "Correct known-value stats; native reserve stats/PP contract; prospectively qualified level-up/PP boundaries; no persistent arbitrary-override claim."},
+    {"order": 2, "name": "Loss-preserving execution and evidence", "issues": ["R3", "R4", "R5", "R8"], "exit": "Switch KOs and no-attack switches retained; per-branch crash logs; all ten mutations rejected plus legality/terminal/continuity regressions."},
+    {"order": 3, "name": "Learnable features and returns", "issues": ["R6", "R7"], "exit": "Observable-stat feature contract without leakage; switch costs enter common return; TRAIN-only three-head extraction and synthetic round-trip fit tests."},
+    {"order": 4, "name": "Corpus qualification and first fit", "issues": ["R9"], "exit": "Four-by-four lineage-balanced scenario corpus with frozen timing coverage and genuine contrasts; fit challenger, then separately compare on untouched natural DEVELOPMENT."}
+  ],
+  "verification": {
+    "targeted_tests_passed": 300, "targeted_suite_seconds": 2.30, "full_suite_run": false,
+    "initial_test_command": "Aborted collection before tests for one nonexistent filename; corrected test inventory then passed300 tests.",
+    "adversarial_method": "Independently deep-copy actual retained JSON, mutate in memory, inspect against original authenticated capture; originals unchanged.",
+    "other_probes": ["Pikachu/Raichu feature collision", "Empty attack mask rejection", "Immediate switch KO exception", "Four stat-formula cases", "Retained Machop maximum-HP discrepancy"],
+    "production_source_changes": 0, "new_gameplay_frames": 0, "old_failed_attempt_replays": 0,
+    "model_updates": 0, "authority_promotions": 0, "new_train_roots": 0,
+    "development_or_sealed_roots_opened": 0, "github_pushes": 0, "external_reviewers_used": false
+  },
+  "sources": [
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/home/move_mon.asm",
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/engine/battle/core.asm"
+  ],
+  "learning_counters": "Unchanged: Model137137 examples/92 successes/58 economy-qualified; Red96/124; fresh acceptance0/5",
+  "next_objective": "Packet1 stat fidelity and native reserve materialization contract; no training launch until repairs and corpus admission pass",
+  "next_session_setting": "Sol High, Fast off for specified cartridge repairs; Astra High for unresolved representation/target design"
+}

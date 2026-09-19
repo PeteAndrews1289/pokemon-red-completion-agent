@@ -32,6 +32,24 @@ COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
 CURRICULUM_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v5"
 REGISTERED_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v1"
 ECONOMY_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v2"
+DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.direct-catalog-bounded-player-training-plan.v1"
+)
+DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.direct-catalog-registered-player-training-plan.v1"
+)
+CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.correlated-reset-training-plan.v1"
+CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.registered-correlated-reset-training-plan.v1"
+)
+CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-correlated-reset-training-plan.v2"
+ECONOMY_TRAINING_SCHEMAS = frozenset({
+    ECONOMY_TRAINING_PLAN_SCHEMA, CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+})
+CORRELATED_TRAINING_SCHEMAS = frozenset({
+    CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA, CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+    CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+})
 STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
@@ -43,13 +61,30 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        economy = document.get("schema") == ECONOMY_TRAINING_PLAN_SCHEMA
-        registered = economy or document.get("schema") == REGISTERED_TRAINING_PLAN_SCHEMA
+        schema = document.get("schema")
+        correlated = schema in CORRELATED_TRAINING_SCHEMAS
+        economy = schema in ECONOMY_TRAINING_SCHEMAS
+        direct = schema in {
+            DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+            DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        }
+        registered = economy or schema in {
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+            DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+            CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+        }
         curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
-        completion = registered or curriculum or (
-            document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
-        )
-        continuation = completion or document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
+        completion = correlated or registered or curriculum or schema in {
+            COMPLETION_TRAINING_PLAN_SCHEMA,
+            DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+        }
+        continuation = correlated or schema in {
+            CONTINUATION_TRAINING_PLAN_SCHEMA,
+            COMPLETION_TRAINING_PLAN_SCHEMA,
+            CURRICULUM_TRAINING_PLAN_SCHEMA,
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+            ECONOMY_TRAINING_PLAN_SCHEMA,
+        }
         if (
             document.get("schema")
             not in {
@@ -59,6 +94,9 @@ class RedPlayerTrainingPlan:
                 CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             or document.get("partition") != "train"
         ):
@@ -86,6 +124,17 @@ class RedPlayerTrainingPlan:
             "historical_trial_retry",
             "episode_retry_after_input",
         }
+        if correlated:
+            # The recorder's context fields identify the reset declaration, not
+            # an immutable catalog entry. Never fabricate a catalog assignment.
+            expected_fields.remove("catalog_source_commit")
+            expected_fields.update({"reset_id", "parent_manifest_sha256", "parent_evidence_tier",
+                                    "independent_root", "catalog_admitted"})
+            if (document.get("independent_root") is not False
+                    or document.get("catalog_admitted") is not False
+                    or document.get("parent_evidence_tier") != "registered-measured-terminal"
+                    or document.get("decision_limit") != 1):
+                raise ValueError("correlated reset scope differs")
         if continuation:
             expected_fields.update(
                 {
@@ -96,6 +145,8 @@ class RedPlayerTrainingPlan:
                     "continuation_checkpoint_sha256",
                 }
             )
+        if direct:
+            expected_fields.update({"origin_profile_sha256", "root_pair_claim_sha256"})
         if completion:
             expected_fields.update({"maximum_actions", "maximum_frames"})
             if (
@@ -141,11 +192,16 @@ class RedPlayerTrainingPlan:
             }
         ):
             raise ValueError("player training behavior differs")
-        for name in ("source_commit", "catalog_source_commit"):
+        source_fields = (
+            ("source_commit",) if correlated else ("source_commit", "catalog_source_commit")
+        )
+        for name in source_fields:
             value = document[name]
             if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40}", value) is None:
                 raise ValueError("player training source differs")
         identities: tuple[str, ...] = ("episode_id", "root_lineage_id")
+        if correlated:
+            identities += ("reset_id",)
         if continuation:
             identities += ("continuation_episode_id",)
         for name in identities:
@@ -177,6 +233,9 @@ class RedPlayerTrainingPlan:
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             else 6000
         )
@@ -189,6 +248,9 @@ class RedPlayerTrainingPlan:
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             else 600000
         )
@@ -212,6 +274,33 @@ def declare_completion_dose(plan: RedPlayerTrainingPlan) -> RedPlayerTrainingPla
         {
             **plan.document,
             "schema": COMPLETION_TRAINING_PLAN_SCHEMA,
+            "maximum_actions": COMPLETION_ACTIONS,
+            "maximum_frames": COMPLETION_FRAMES,
+        }
+    )
+
+
+def declare_direct_completion_dose(
+    plan: RedPlayerTrainingPlan,
+    *,
+    execution_profile_sha256: str,
+    root_pair_claim_sha256: str,
+) -> RedPlayerTrainingPlan:
+    """Bind a completion dose directly to one authenticated catalog origin.
+
+    Direct initialization is not a continuation and never invents a parent
+    episode or checkpoint.  The original catalog profile and the exact profile
+    used for execution are both retained in the declaration.
+    """
+    if plan.document["schema"] != TRAINING_PLAN_SCHEMA:
+        raise ValueError("direct completion dose requires an original catalog plan")
+    return RedPlayerTrainingPlan(
+        {
+            **plan.document,
+            "schema": DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+            "origin_profile_sha256": plan.document["profile_sha256"],
+            "profile_sha256": execution_profile_sha256,
+            "root_pair_claim_sha256": root_pair_claim_sha256,
             "maximum_actions": COMPLETION_ACTIONS,
             "maximum_frames": COMPLETION_FRAMES,
         }
@@ -312,7 +401,11 @@ def declare_red_player_training(
             "partition": "train",
             "seed": seed,
             "decision_limit": decision_limit,
-            "behavior_policy_id": exploration_policy_id(feature_version),
+            # A v4 model can score the base episode, but the economy behavior
+            # contract is only legal after registration adds its supply fields.
+            "behavior_policy_id": exploration_policy_id(
+                3 if feature_version == 4 else feature_version
+            ),
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": catalog.catalog_sha256,
             "context_id": entry.context_id,

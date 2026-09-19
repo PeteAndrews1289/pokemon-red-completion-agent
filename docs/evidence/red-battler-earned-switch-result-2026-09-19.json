@@ -1,0 +1,242 @@
+{
+  "schema": "pokemon.red.earned-switch-result.v1",
+  "session_id": "2026-09-19-battler-live-v1",
+  "plan": "docs/evidence/red-battler-earned-switch-plan-2026-09-19.json",
+  "status": "qualified_supported_small_party_live_battler_v1",
+  "live_package_sha256": "d5e4a79c5b2baf19e91445ca1a9cbef4e858e104e2d8d4589b85119437e67fb4",
+  "execution_source_commit": "bfe9a440",
+  "candidate_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "small_party_probe_passed": true,
+  "live_field_handoff_passed": true,
+  "origins": {
+    "existing_natural_origins": 2,
+    "new_independent_roots": 0,
+    "parent_selection": "J timing0 for boots2900/3100, frozen before new encounters",
+    "sources_replayed": false,
+    "new_clean_power_runs": 0,
+    "memory_edits": 0
+  },
+  "episodes": [
+    {
+      "boot": 2900,
+      "parent_state_sha256": "447c576084b5e0c5e25f17b08b7e8ed674c7a38bdc0ddc8a7859893b623d06c7",
+      "final_state_sha256": "87809bd86de16e19d74c5f9ca4140c7af1c2ffa0e1717fc9e30ef1fe946c2ba3",
+      "result_sha256": "a8f465e0ba4360d18fbfacaa4d145a76708ef7f1da0e4f27d70de0cec5af1019",
+      "wins": 1,
+      "decisions": 18,
+      "action_counts": {
+        "attack": 15,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 1
+      },
+      "metrics": {
+        "attack_turn_utility_sum": 8.103776223776224,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 34,
+        "party_pp_spent": 15,
+        "party_status_changes": 1,
+        "policy_latency_ns_max": 2107167,
+        "policy_latency_ns_mean": 1114275.5555555555,
+        "policy_latency_ns_min": 465958,
+        "teacher_interventions": 0
+      },
+      "battle_frames": 20262,
+      "total_frames": 26082,
+      "field_actions": 65,
+      "policy_elapsed_ns": 20056960,
+      "goal_outcome": {
+        "goal_kind": "advance_story",
+        "outcome_verified_from_fresh_ledger": true,
+        "registrations_and_party_preserved": true,
+        "selection_mode": "predeclared_development_objective_not_goal_model_selection",
+        "status": "succeeded"
+      },
+      "final_ledger": {
+        "battle_state": 0,
+        "cash": 1706,
+        "champion_event": false,
+        "full_game_complete": false,
+        "hall_of_fame_fact": false,
+        "hall_of_fame_mode": false,
+        "input_ready": true,
+        "next_trainer_defeated": true,
+        "party_hp": [
+          10,
+          10
+        ],
+        "party_levels": [
+          6,
+          17
+        ],
+        "party_national_ids": [
+          41,
+          8
+        ],
+        "registered": [
+          7,
+          8,
+          41
+        ],
+        "required_trainer_defeated": true
+      },
+      "final_party_status": [
+        0,
+        8
+      ],
+      "initial_loads": 1,
+      "battle_resets": 0,
+      "failure": null
+    },
+    {
+      "boot": 3100,
+      "parent_state_sha256": "eb263787f387b404f0e3acff6fd579f7cd01e75355233a8d0049179c4477d7eb",
+      "final_state_sha256": "bcfb5c9df52a3c21527cc31df449a42dcf4fee3ebf4df6b4312768828f815f88",
+      "result_sha256": "94b30768b7fd9d230b8f8f7917766b585d7d956a882cbf58a8778f8d91ff5557",
+      "wins": 1,
+      "decisions": 15,
+      "action_counts": {
+        "attack": 12,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 1
+      },
+      "metrics": {
+        "attack_turn_utility_sum": 8.531862745098039,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 23,
+        "party_pp_spent": 12,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1435459,
+        "policy_latency_ns_mean": 1078633.3333333333,
+        "policy_latency_ns_min": 459875,
+        "teacher_interventions": 0
+      },
+      "battle_frames": 16442,
+      "total_frames": 21206,
+      "field_actions": 57,
+      "policy_elapsed_ns": 16179500,
+      "goal_outcome": {
+        "goal_kind": "advance_story",
+        "outcome_verified_from_fresh_ledger": true,
+        "registrations_and_party_preserved": true,
+        "selection_mode": "predeclared_development_objective_not_goal_model_selection",
+        "status": "succeeded"
+      },
+      "final_ledger": {
+        "battle_state": 0,
+        "cash": 1706,
+        "champion_event": false,
+        "full_game_complete": false,
+        "hall_of_fame_fact": false,
+        "hall_of_fame_mode": false,
+        "input_ready": true,
+        "next_trainer_defeated": true,
+        "party_hp": [
+          12,
+          12
+        ],
+        "party_levels": [
+          10,
+          17
+        ],
+        "party_national_ids": [
+          41,
+          8
+        ],
+        "registered": [
+          7,
+          8,
+          41
+        ],
+        "required_trainer_defeated": true
+      },
+      "final_party_status": [
+        0,
+        0
+      ],
+      "initial_loads": 1,
+      "battle_resets": 0,
+      "failure": null
+    }
+  ],
+  "summary": {
+    "battles": 2,
+    "wins": 2,
+    "decisions": 33,
+    "voluntary_switches": 2,
+    "forced_switches": 0,
+    "prompt_declines": 4,
+    "attacks": 27,
+    "party_faints": 0,
+    "invalid_actions": 0,
+    "teacher_battle_queries": 0,
+    "opponent_faints": 6,
+    "hp_lost": 57,
+    "battle_frames": 36704,
+    "total_frames": 47288,
+    "policy_milliseconds_per_decision": 1.0980745454545453,
+    "typed_story_objectives_succeeded": 2,
+    "high_level_learned_goal_choices": 0
+  },
+  "engineering": [
+    "In-place existing-actor bridge checks current capture bytes and refuses resets; never closes the parent emulator.",
+    "Fresh story, party, registration and completion-referee ledger after ordinary return or exception.",
+    "Existing short traversal and normal field-party swap used as disclosed setup; no learned navigation or high-level goal-choice claim."
+  ],
+  "verification": {
+    "saved_endpoints_reopened": 2,
+    "battle_endpoints_reopened": 2,
+    "event_chains_and_observations_match": true,
+    "fresh_final_ledgers_match": true,
+    "read_only_actions": 0,
+    "read_only_frames": 0,
+    "focused_tests_passed": 1194,
+    "optional_integration_skipped": 13,
+    "mypy_source_files_passed": 527,
+    "full_suite_rerun": false,
+    "historical_unrelated_failures_not_fixed": true
+  },
+  "training_delta": {
+    "new_examples": 0,
+    "new_fits": 0,
+    "weight_updates": 0,
+    "unique_train_contexts": 318
+  },
+  "main_player": {
+    "model": 137,
+    "examples": 137,
+    "successes": 92,
+    "economy_qualified": 58,
+    "registered": 96,
+    "native_target": 124,
+    "specimens": 74,
+    "cash": 198,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_total": 5,
+    "automatically_switched_to_J": false
+  },
+  "limitations": [
+    "arbitrary six-member battles",
+    "status/recovery/boost move choices",
+    "Counter",
+    "self-destruct",
+    "all-party Struggle",
+    "full-player autonomy",
+    "Two same-origin continuations, same new trainer type; small descriptive coverage, not statistical reliability.",
+    "Boot2900 Wartortle ended poisoned; both endpoints need resource-aware recovery before extended play."
+  ],
+  "decision": "Wrap the supported battle-trainer v1 build and freeze J. Return to main-player wiring and bounded game goals. No new refit, generic review or curriculum-expansion gate.",
+  "remaining_to_main_game": "One explicit supported trainer call site must invoke the qualified live bridge under main-player authority, then one bounded saved-state goal must verify the handoff. Existing main collection battle controllers were not silently replaced.",
+  "next_estimate": "One focused integration session, approximately45-60minutes if the existing player boundary fits; not a guarantee of full-Red readiness.",
+  "gameplay_running": false,
+  "github_pushed": false,
+  "external_reviewers_used": [],
+  "model_recommendation": "Astra High, Fast off: main-player integration and recovery judgment."
+}

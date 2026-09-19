@@ -1,0 +1,108 @@
+{
+  "schema": "pokemon.red.trainer-astra-review.v1",
+  "session_date": "2026-09-17",
+  "reviewed_commit": "5127cef4",
+  "status": "review_complete_repairs_required_before_large_training",
+  "review_scope": "Read-only source, authenticated retained TRAIN branches, frozen model parameters and consumed natural DEVELOPMENT logs. No battle replay or model refit.",
+  "mission_check": {
+    "capability": "Reliable training of transferable attack and switching decisions.",
+    "learned_authority": "No change during review; identify what prevents trustworthy battle learning.",
+    "transfer_test": "Inspect the two existing natural comparisons and design a stronger prospective evaluation without replaying them.",
+    "cheapest_falsifier": "Recompute damage and project the retained training inputs; a scoring or input mismatch defeats training readiness.",
+    "time_box": "One review session, at most two hours.",
+    "stop_condition": "Finish with reproducible findings and a bounded repair plan; no new gameplay, fit or promotion."
+  },
+  "authenticated_train_audit": {
+    "fresh_source_chains_accepted": 4,
+    "scenarios": 28,
+    "timing_trials_readmitted": 140,
+    "branches_readmitted": 500,
+    "recorded_attack_decisions": 700,
+    "nonfaint_opponent_switch_attack_boundaries_in_train": 0,
+    "actor_party_sizes": {"3": 28},
+    "initial_actor_status_nonempty": 0,
+    "initial_opponent_status_nonempty": 0,
+    "heads": {
+      "move": {"examples": 16, "unique_candidate_matrices": 4, "training_argmax_hits": 14, "always_first_candidate_hits": 14, "learned_predictions_at_candidate_zero": 16, "conflicting_identical_input_groups": 1},
+      "control": {"examples": 20, "unique_candidate_matrices": 5, "training_argmax_hits": 20, "conflicting_identical_input_groups": 1},
+      "switch": {"examples": 28, "unique_candidate_matrices": 7, "training_argmax_hits": 27, "conflicting_identical_input_groups": 2}
+    },
+    "move_conflict_group": {
+      "scenario_indices": [0, 19, 22, 25],
+      "identical_projected_inputs": true,
+      "best_candidate_indices": [[2], [0], [2], [0, 1]],
+      "interpretation": "Per-root five-timing hard winners disagree for an identical actor input. The learner cannot infer hidden timing from this observation."
+    }
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "priority": 1,
+      "title": "Whole-party return loses damage when a trainer switches without fainting",
+      "location": "src/pokemon_red_completion/red_trainer_practice_returns.py:105",
+      "evidence": "Fuchsia fixed first attack damaged a foe by 52/83, then opponent position changed 0 to 1 with active HP 83 before and after. The selected-turn log retains 0.626506 damage but whole-party return adds zero.",
+      "fixed_fuchsia_scored_damage": 3.373493976,
+      "challenger_fuchsia_scored_damage": 3.5,
+      "both_selected_turn_damage_totals": 4.0,
+      "fixed_fuchsia_return": 8.685686382,
+      "challenger_fuchsia_return": 8.702698493,
+      "impact": "The return orders the less efficient, damaged challenger above the control; the difference falls within the current tie threshold. The original win, HP-loss and action counts remain valid. This switching pattern was absent from the current 500 TRAIN branches.",
+      "repair": "Bind damage to the affected opponent instance across settling, voluntary switches and faint replacements. Keep referee-only roster evidence separate from actor inputs."
+    },
+    {
+      "id": "R2",
+      "priority": 1,
+      "title": "The supply gate does not establish useful curriculum breadth or stable targets",
+      "location": "scripts/extend_fresh_red_trainer_curriculum.py:69",
+      "evidence": "The extension repeats four MAIN templates across four boot origins. Sixteen move examples are four unique candidate matrices; the move model and always-first-candidate both hit 14/16 training winners. Identical matrices have incompatible hard winners.",
+      "impact": "Origin count and context count hide low semantic diversity and stochastic label conflict. Bigger batches of these templates would add replication with little new decision coverage.",
+      "repair": "Report unique input/configuration counts and contradiction diagnostics; use prospectively varied paired decisions and preserve return magnitude/uncertainty across repeats before larger fitting."
+    },
+    {
+      "id": "R3",
+      "priority": 2,
+      "title": "Training and inference disagree about battle-history inputs",
+      "location": "src/pokemon_red_completion/red_trainer_practice_fit.py:251",
+      "evidence": "TRAIN projection calls the control projector without history; live inference supplies a tracker. All 57 history-related input rows in the extended control head retain their exact randomly initialized weights.",
+      "unchanged_history_weight_rows": 57,
+      "same_train_observation_attack_probability": {"empty_history": 0.18722533090006307, "after_one_attack": 0.18923065194483768, "after_one_switch": 0.19397604664980958},
+      "impact": "Live temporal inputs affect scores despite receiving no training gradient. This demonstrates unsupported behavior, not proof that it caused either natural loss of efficiency.",
+      "repair": "Use one versioned input contract: either train retained histories and log exact projected head inputs, or remove history from this initial head in both fitting and inference."
+    },
+    {
+      "id": "R4",
+      "priority": 2,
+      "title": "Opponent history aliases different Pokemon with the same species and level",
+      "location": "src/pokemon_red_completion/battle_control_features.py:160",
+      "evidence": "The retained Fuchsia control changes opponent position from 0 to 1; both are species 048 at level 31. Reconstructing the tracker leaves opponent_index at 0 and opponent_turn at 1.",
+      "impact": "New-opponent history and the post-switch guard can carry over to a different opponent.",
+      "repair": "Track an observed send-out instance or explicit transition event, including same-species replacements; keep hidden reserve identities out of the actor observation."
+    },
+    {
+      "id": "R5",
+      "priority": 2,
+      "title": "Natural evaluation does not yet test the intended switching and combat decisions",
+      "location": "scripts/run_red_trainer_natural_comparison.py:141",
+      "evidence": "Celadon starts level 44 against level 23 and the control knocks out both opponents in one attack each. Fuchsia starts level 40 against level 31. The captures share historical ancestry, use different challengers, and neither challenger voluntarily switches.",
+      "impact": "These are useful smoke and negative-control results. They cannot measure improvement of the 28-context model over the 16-context model, establish replicated natural generalization, or prove useful switching.",
+      "repair": "Freeze one challenger and a prospective natural cohort with nontrivial alternatives. Require no regression on easy fights and improvement on declared difficult decision slices; preserve root/encounter clustering."
+    },
+    {
+      "id": "R6",
+      "priority": 2,
+      "title": "The initial attack/switch scope needs an explicit executable move-support contract",
+      "location": "src/pokemon_red_completion/red_battle_scenario.py:69",
+      "moves_counted_supported_by_power_mask": 106,
+      "moves_excluded_by_power_mask": 59,
+      "counter_counted_supported_but_projection_errors": true,
+      "evidence": "The power mask accepts Counter while the feature projector rejects any positive-PP Counter before selecting among other moves. Status moves, recovery/boost actions and all-party Struggle are outside the current learner segment.",
+      "impact": "All 151 species being configurable does not mean arbitrary Gen-1 movesets can enter the learner or that it can learn status and recovery tactics.",
+      "repair": "Reconcile support checks before capture admission, retain exact exclusion reasons, and document the initial segment. Add status, recovery and Struggle as separately tested expansions."
+    }
+  ],
+  "review_decision": "Retain the emulator factory, source receipts, branch logging, TRAIN/DEVELOPMENT separation and small three-head architecture. Repair identity-aware scoring, history parity and support admission; design diverse paired TRAIN contexts with uncertainty-aware targets before large training. No blanket architecture replacement is justified by the current four unique attack inputs.",
+  "effects": {"gameplay_actions": 0, "model_fits": 0, "training_examples_added": 0, "authority_promotions": 0, "red_registration_delta": 0, "github_pushes": 0},
+  "reviewers": "Astra review only in this session; Flash and Claude were not invoked.",
+  "verification": {"focused_existing_tests_passed": 38, "scope": "Returns, fit, outcome policy, practice features, control features and battle semantics. Existing tests pass despite the reproduced review findings; no full-suite claim."},
+  "product_counters": {"model137_examples": 137, "model137_successes": 92, "economy_qualified": 58, "red_native_registrations": 96, "red_native_target": 124, "fresh_red_acceptance": "0/5"}
+}

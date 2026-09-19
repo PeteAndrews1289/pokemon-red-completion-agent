@@ -1,0 +1,131 @@
+{
+  "schema": "pokemon.red.full-pokedex-goal-proposal-falsification.v1",
+  "session_id": "2026-09-14-full-pokedex-goal-proposal-falsification",
+  "status": "action_free_mixed_acquisition_gate_failed",
+  "implementation": {
+    "source_commit": "17eab16f2174eb7986300672a57aaff49a7050fb",
+    "source_bundle_sha256": "afb76d48dd7c1d48cf2547ab9bfe7371047022a1b14ac264aed1d80d8085cb54",
+    "focused_tests_passed": 21,
+    "ruff": "passed",
+    "mypy": "passed",
+    "collection_registry_check": "passed",
+    "full_suite": {
+      "tests_passed": 11619,
+      "tests_skipped": 3,
+      "tests_xfailed": 1,
+      "tests_failed": 1,
+      "failure": "pre-existing exact local Mac PyBoy metadata digest qualification",
+      "related_to_change": false
+    },
+    "documentation_focus_tests_passed": 150,
+    "documentation_check": "passed",
+    "product_focus_check": "passed"
+  },
+  "authenticated_context": {
+    "source_commit": "4207981a3c7b7dfbfa47f0a7add6975068bcfc50",
+    "registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+    "slot_id": "red-goal-v1-013-acquire_species-train-04",
+    "partition": "train",
+    "root_lineage_id": "red-goal-root-b489c29bc9dd70694920d925006494ba0b40752536db37358a6e8d8916fbd58f",
+    "state_sha256": "806b0336010b58e606f0cd2270e97bc1e2e0e1f6de6a1ff5192552f3ebc04bd3",
+    "envelope_sha256": "9ddd88751846148168c524e0d1edcee504d493a6a71658d6cd55c071d82870e2",
+    "derived_profile_sha256": "36fb62e903305349668d68a5d1fd7478656bf7008936ce4876bba75cb3f15685",
+    "outside_model106_through_model121_checkpoint_lineage": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "pressed_buttons": 0,
+    "claim_created": false
+  },
+  "full_red_inventory": {
+    "target_count": 151,
+    "local_registered_count": 18,
+    "wild_source_missing_targets": [
+      77,
+      88,
+      110
+    ],
+    "evolution_precursor_number": 11,
+    "evolution_precursor_physically_present": true,
+    "evolution_target_number": 12,
+    "evolution_target_locally_missing": true,
+    "shared_registration_used_as_local_credit": false,
+    "physical_specimen_used_as_local_credit": false
+  },
+  "action_free_gate": {
+    "available_goal_kinds": [
+      "acquire_species",
+      "restore_team",
+      "explore"
+    ],
+    "proposed_acquisition_families": [
+      "wild"
+    ],
+    "proposed_acquisition_family_count": 1,
+    "required_acquisition_family_count": 2,
+    "passed": false,
+    "failure": "full-Pokedex proposal needs at least two executable acquisition families",
+    "observed_cause": "capture is executable only at its encounter source while the native boxed level evolution is executable only from a supported Pokemon Center boundary"
+  },
+  "execution": {
+    "gameplay_authorized": false,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "outcomes": 0,
+    "model_fit": false,
+    "registration_delta": 0
+  },
+  "learning_delta": {
+    "model_before": 121,
+    "model_after": 121,
+    "training_examples_before": 121,
+    "training_examples_after": 121,
+    "successes_before": 83,
+    "successes_after": 83,
+    "registrations_before": 86,
+    "registrations_after": 86,
+    "authority_promotions": 0,
+    "independent_evaluations": 0,
+    "consecutive_sessions_without_measured_learning_output": 2,
+    "anti_drift_alarm_fired": true
+  },
+  "external_review": {
+    "gemini_3_8_flash_high": {
+      "status": "completed_read_only",
+      "contribution": "recommended the inventory-to-binding join and fail-closed family, identity and local-registration invariants",
+      "accepted": [
+        "derive proposals from authenticated bindings and locally missing targets",
+        "require distinct acquisition mechanics rather than option-family hashes",
+        "keep target and route identity out of the public policy view"
+      ],
+      "rejected": [
+        "treat a private option family hash as an acquisition-family label"
+      ],
+      "quota": "unavailable_from_agy_cli"
+    },
+    "claude_sonnet_4_6_via_agy": {
+      "status": "completed_read_only",
+      "verdict": "stop_before_gameplay_correct",
+      "accepted": [
+        "the mixed-acquisition gate correctly prevented gameplay"
+      ],
+      "rejected": [
+        "duplicate acquire goal kinds are possible despite the profile uniqueness invariant",
+        "Mansion targets 77, 88 and 110 are outside the solo catalog"
+      ],
+      "advisory": [
+        "clarify that zero action and frame fields are invariants of proposal construction"
+      ],
+      "quota": "unavailable_from_agy_cli"
+    },
+    "standalone_claude_cli": {
+      "binary_version": "2.1.197",
+      "status": "login_required"
+    }
+  },
+  "next": {
+    "decision": "redesign one collection proposal boundary so at least two independently verified acquisition executors share the same preselection departure state",
+    "cheapest_falsifier": "a Pokemon Center action-free inventory still cannot expose both a travel-capable wild capture and a native boxed level evolution",
+    "gameplay_gate": "no gameplay until the same authenticated state exposes at least two full-Pokedex acquisition families and the session can produce a measured outcome"
+  }
+}

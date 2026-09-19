@@ -1,0 +1,205 @@
+{
+  "comparison": {
+    "authority_promotions": 0,
+    "checks": {
+      "actual_reserve_use_each_origin": false,
+      "all_terminal_unassisted_with_endpoints": true,
+      "wins_no_regression": true
+    },
+    "final_player_ready": false,
+    "independent_natural_origins": 2,
+    "model_updates": 0,
+    "multiple_forced_target_choice_qualified": false,
+    "natural_team_gate_passed": false,
+    "perfect_wins_required": false,
+    "reserve_use_origins": [],
+    "six_member_qualification": false,
+    "totals": {
+      "H": {
+        "actions": {
+          "attack": 36,
+          "forced_switch": 0,
+          "switch_prompt": 6,
+          "voluntary_switch": 0
+        },
+        "decisions": 42,
+        "failures": 0,
+        "faints": 0,
+        "hp_lost": 102,
+        "wins": 6
+      },
+      "J": {
+        "actions": {
+          "attack": 31,
+          "forced_switch": 0,
+          "switch_prompt": 6,
+          "voluntary_switch": 0
+        },
+        "decisions": 37,
+        "failures": 0,
+        "faints": 0,
+        "hp_lost": 90,
+        "wins": 6
+      }
+    }
+  },
+  "conclusion": "J and H each won6/6 without assistance. J used37 versus42 decisions and lost90 versus102 HP. Both declined all6 replacement prompts and never used the reserve. The two-member setup did not exercise switching; this is a coverage failure, not evidence that declining was wrong. No refit or post-hoc passing gate.",
+  "endpoint_verification": {
+    "continuation_executions": 0,
+    "input_ready": 12,
+    "not_a_completed_player_goal": true,
+    "observation_and_enemy_roster_matches": 12,
+    "released_buttons": 12,
+    "reopened_read_only": 12,
+    "saved": 12,
+    "source_model_outcome_log_snapshot_bindings_verified": 12,
+    "verification_actions": 0,
+    "verification_frames": 0
+  },
+  "external_reviewers_used": [],
+  "gameplay_running": false,
+  "github_pushed": false,
+  "limitations": [
+    "Two independent origins, not six. Same trainer archetype in both.",
+    "Own levels15/6 and15/10 at opening are unequal, not balanced full teams.",
+    "Six-member play and multiple forced-target selection are unqualified.",
+    "Status/recovery/boost, Counter, self-destruct and all-party Struggle remain excluded."
+  ],
+  "main_player": {
+    "economy_qualified": 58,
+    "examples": 137,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_total": 5,
+    "model": 137,
+    "native_target": 124,
+    "registered": 96,
+    "successes": 92
+  },
+  "model_recommendation": "Astra High, Fast off; user preference retained.",
+  "models": {
+    "H": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+    "J": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09"
+  },
+  "next": "Keep J frozen. Prospectively plan one small-party transfer probe from retained earned endpoints, using normal menu lead changes and a new encounter to create meaningful reserve decisions; no fresh-start factory, no memory edits, no replay. Only after coverage evidence, execute one bounded player objective with fresh ledger. Estimate30-45minutes if existing mechanics suffice.",
+  "plan": "docs/evidence/red-battler-natural-team-plan-2026-09-19.json",
+  "preparation": {
+    "authority_promotions": 0,
+    "full_party_switching_qualified": false,
+    "independent_boot_origins": 2,
+    "natural_battles_tested": 0,
+    "sources": [
+      {
+        "actions": 5726,
+        "authority_promotions": 0,
+        "battle_state_sha256": "c56d308ad212c8732c81875318fc712a48da12a20170b56fdce4e3bbc5e93fd8",
+        "boot_frames": 2900,
+        "capture_manifest_sha256": "42856c6835344f4abca572b8abcd400e610395396561bbf1089ca09217862146",
+        "first_party_ot_id": 27334,
+        "frames": 412716,
+        "fresh_power_on": true,
+        "full_game_runs": 0,
+        "memory_writes": 0,
+        "model_queries": 0,
+        "origin_state_sha256": "7a7d01bbcdf71d3464e972cc94d4be695991cce56a18f39aacc5a9efcfa26bae",
+        "partition": "development",
+        "party_count": 2,
+        "party_hp": [
+          42,
+          22
+        ],
+        "party_levels": [
+          15,
+          6
+        ],
+        "party_moves": [
+          [
+            33,
+            39,
+            5,
+            55
+          ],
+          [
+            141,
+            0,
+            0,
+            0
+          ]
+        ],
+        "root_lineage_id": "fresh-red-team-development-boot2900",
+        "source_commit": "4ca4423f95b067a7a7f03ab8bf498037264d988e"
+      },
+      {
+        "actions": 5707,
+        "authority_promotions": 0,
+        "battle_state_sha256": "4fcaef18682c0541aadb7cdadeaaf2ea923d6229cbbaf4dccc749c0ab257a45a",
+        "boot_frames": 3100,
+        "capture_manifest_sha256": "4b903680fc62dee5cdeee19e47d53c6be13aa84e5b9505f31e3e1faac8943c4d",
+        "first_party_ot_id": 4522,
+        "frames": 411521,
+        "fresh_power_on": true,
+        "full_game_runs": 0,
+        "memory_writes": 0,
+        "model_queries": 0,
+        "origin_state_sha256": "48f6c3ec2c9d8e9232dbf6cfa73a38ddb00a1dc3c0011d82dc88834b32d231b6",
+        "partition": "development",
+        "party_count": 2,
+        "party_hp": [
+          41,
+          12
+        ],
+        "party_levels": [
+          15,
+          10
+        ],
+        "party_moves": [
+          [
+            33,
+            39,
+            5,
+            55
+          ],
+          [
+            141,
+            48,
+            0,
+            0
+          ]
+        ],
+        "root_lineage_id": "fresh-red-team-development-boot3100",
+        "source_commit": "4ca4423f95b067a7a7f03ab8bf498037264d988e"
+      }
+    ],
+    "status": "captured"
+  },
+  "private_artifact_receipts": {
+    "comparison_plan": {
+      "sha256": "65a1bad2a31eceb9c6fd9deaa58158a0ced773ae810dd15db2c8a3f959229f28"
+    },
+    "comparison_result": {
+      "sha256": "517545b114dd6f07e5690e2164e9897691833e6b508cffdcf3f86cbedb43e400"
+    },
+    "source_result": {
+      "sha256": "46af6edb5097fe2d9b7bdfb1016c923ac49c80dbeba48a1010e70875b9e53ff3"
+    }
+  },
+  "schema": "pokemon.red.battler-natural-team-result.v1",
+  "session_id": "2026-09-19-battler-natural-team-v1",
+  "source_commits": {
+    "comparison": "eebfefb3",
+    "preparation": "4ca4423f"
+  },
+  "status": "natural_battles_passed_switch_coverage_not_met",
+  "tests": {
+    "focused_passed": 1184,
+    "full_suite_rerun": false,
+    "optional_integration_skipped": 13,
+    "previous_unrelated_failures_not_fixed": true
+  },
+  "training_delta": {
+    "existing_physical_train_contexts": 318,
+    "fits": 0,
+    "new_examples": 0,
+    "prior_learning_result_preserved": true,
+    "weight_changes": 0
+  }
+}

@@ -14,16 +14,16 @@ valuable evidence without remaining an instruction.
    Blue/shared memory, Crystal and later titles.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
-As of the latest measured session, Model114 has 114 settled training-only examples. Its durable Red
-checkpoint contains 84 registered species, 64 living species and 68 physical specimens. Model113's
-frozen fishing choice added one registration in 513 actions / 30,804 frames and became row114 with
-zero teacher labels. From the resulting checkpoint, Model114 selected resupply/income from six
-choices across three goal families. That choice is frozen but unexecuted. This is bounded
-development, not independent full-game competence.
+Model137 remains137examples/92successes/58economy-qualified; its main save is96/124 native
+registrations,74specimens and198cash. Frozen battler J is now opt-in at the main-player ordinary
+trainer entry. Its first integration goal failed after one faint; four decisions and the exact
+unfinished-battle state were retained. A separate continuation completed five J decisions and a
+verified loss/blackout, returning field control without reset. No fit, collection gain or fresh-run
+acceptance occurred. See the [checkpoint report](work-sessions/2026-09-19-battle-lifecycle-continuation.md).
 
 ## Reader-facing summaries
 
-- [Architecture](architecture.md) explains the learned-planner/deterministic-skill hierarchy.
+- [Architecture](architecture.md) explains the learned planner/battler and bounded skill hierarchy.
 - [Portfolio brief](portfolio-brief.md) is the short public explanation.
 - [AI Systems Specialist handoff](ai-systems-specialist-interview-handoff.md) is the detailed,
   interview-safe account of capabilities and limitations.

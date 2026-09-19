@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon.red.full-local-collector-stop.evidence.v1",
+  "session_id": "2026-09-14-model121-full-local-collector-stop",
+  "status": "stopped_before_controller_input",
+  "source_commit": "88bcc77d68beeac4bc8abcf15adda91f91df8729",
+  "implementation_commits": [
+    "5868e7f79375b05add7a3918e2c12622d900fcb9",
+    "abcfedafb401ff39776f6e6d53d1593975a71d56",
+    "88bcc77d68beeac4bc8abcf15adda91f91df8729"
+  ],
+  "model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+  "checkpoint": {
+    "episode_id": "red-model121-frozen-resupply-terminal-20260914",
+    "record_sha256": "8da4f48720d1a8dc4dc1b64877aee3ab3042e75320b16a5c5e4b4a4a4e0aebc6",
+    "partition": "train",
+    "training_eligible": false,
+    "catalog_state_matches": 0,
+    "local_registered_species": 86,
+    "living_species": 66,
+    "total_living_specimens": 70
+  },
+  "collector_integration": {
+    "full_local_choice_flag": true,
+    "completion_scope": "local_red",
+    "candidate_families_required": 2,
+    "write_ahead_selection_required": true,
+    "shared_attempt_authority": true,
+    "legacy_mode_default": false
+  },
+  "stop": {
+    "reason": "the exact Model121 parent is not an eligible catalog training capture",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "registration_sessions_created": 0,
+    "training_examples_added": 0,
+    "model_fitted": false,
+    "gameplay_executed": false
+  },
+  "verification": {
+    "focused_tests_before_hosted_repair": 194,
+    "focused_tests_after_hosted_repair": 144,
+    "ruff": "passed",
+    "mypy": "passed",
+    "collection_registry": "regenerated_and_checked",
+    "initial_hosted_ci_run_id": 34871389806,
+    "initial_hosted_ci_result": "failed_on_legacy_false-mode_test_double_then_repaired",
+    "replacement_hosted_ci_run_id": 34873249583,
+    "replacement_hosted_ci_result": "passed",
+    "hosted_tests_passed": 11675,
+    "hosted_tests_skipped": 4,
+    "hosted_tests_xfailed": 1
+  },
+  "external_review": {
+    "claude_opus": "go_no_p0_or_p1; prepare-time scope guard accepted",
+    "gemini_3_8_flash_high": "stop_adjudicated; zero findings accepted"
+  },
+  "authority_delta": "none",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

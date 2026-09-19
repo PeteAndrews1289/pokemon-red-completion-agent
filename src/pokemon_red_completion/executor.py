@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.emulator import CausallyMeteredEmulator
 
 
 class ControllerPort(Protocol):
@@ -16,6 +17,71 @@ class ControllerPort(Protocol):
     def release(self, button: str) -> None: ...
 
     def tick(self, frames: int) -> None: ...
+
+
+class BorrowedLiveController:
+    """Forward controls without giving a nested skill reset or close authority."""
+
+    def __init__(self, session: Any, *, error_type: type[Exception] = RuntimeError) -> None:
+        self.session = session
+        self.error_type = error_type
+        self.initialized = False
+
+    def load_state_bytes(self, payload: bytes) -> None:
+        if self.initialized or self.session.save_state_bytes() != payload:
+            raise self.error_type("live trainer state differs or reset attempted")
+        self.initialized = True
+
+    @property
+    def frame_count(self) -> int:
+        return self.session.frame_count
+
+    def press(self, button: str) -> None:
+        self.session.press(button)
+
+    def release(self, button: str) -> None:
+        self.session.release(button)
+
+    def tick(self, frames: int) -> None:
+        self.session.tick(frames)
+
+    def read_u8(self, address: int) -> int:
+        return self.session.read_u8(address)
+
+
+class JournaledController(CausallyMeteredEmulator):
+    """Keep primitive control here while a caller owns durable costs.
+
+    Cleanup releases remain possible after journal failure. Tick callbacks
+    distinguish partial errors from silent short ticks.
+    """
+
+    def __init__(
+        self,
+        session: Any,
+        *,
+        admit_input: Callable[[], None],
+        admit_frames: Callable[[int], None],
+        record_frames: Callable[[int], None],
+        tick_failed: Callable[[], None],
+        tick_completed: Callable[[int], None],
+    ) -> None:
+        super().__init__(session, admit_frames=admit_frames, record_frames=record_frames)
+        self._admit_input = admit_input
+        self._tick_failed = tick_failed
+        self._tick_completed = tick_completed
+
+    def press(self, button: str) -> None:
+        self._admit_input()
+        super().press(button)
+
+    def tick(self, frames: int) -> None:
+        try:
+            super().tick(frames)
+        except BaseException:
+            self._tick_failed()
+            raise
+        self._tick_completed(frames)
 
 
 class UnsupportedMacroActionError(ValueError):
@@ -318,9 +384,7 @@ class FrameSafeExecutor:
                 "down",
                 "left",
             }:
-                raise UnsupportedMacroActionError(
-                    f"invalid movement direction: {action.value!r}"
-                )
+                raise UnsupportedMacroActionError(f"invalid movement direction: {action.value!r}")
             return action.value
         if action.kind in {MacroActionKind.INTERACT, MacroActionKind.CONFIRM}:
             return "a"

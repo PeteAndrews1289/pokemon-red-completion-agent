@@ -1,0 +1,117 @@
+{
+  "schema": "pokemon.red.trainer-fresh-root-qualification-and-natural-comparison.v1",
+  "session_date": "2026-09-17",
+  "status": "ready_for_astra_review_not_ready_for_promotion",
+  "mission_check": {
+    "reusable_capability": "Train and execute attack, voluntary-switch, switch-prompt and forced-replacement choices in full-party trainer battles from semantic cartridge observations.",
+    "learned_authority": "A frozen three-head model selects battle actions without teacher substitution; no production battle authority was promoted.",
+    "transfer_test": "Four independent clean-power TRAIN starts supply varied contexts; two separate natural DEVELOPMENT trainer encounters compare the fitted policy with frozen and fixed controls. The DEVELOPMENT encounters share unresolved historical ancestry with each other, so they are not two independent evaluation roots.",
+    "cheapest_falsifier": "One natural DEVELOPMENT trainer battle in which the challenger needs more decisions or loses more HP than both controls blocks promotion.",
+    "time_box": "2026-09-17 21:35-23:35 UTC maximum; close early on a failed natural comparison without replay-tuning that encounter.",
+    "stop_condition": "No DEVELOPMENT fitting, same-encounter tuning, full Red replay, authority promotion, Crystal execution or GitHub push. Preserve both unfavorable natural comparisons for Astra review."
+  },
+  "legacy_ancestry_audit": {
+    "inspected_historical_goal_bank_states": 81,
+    "distinct_first_party_ot_ids": 1,
+    "first_party_ot_id": 43884,
+    "conclusion": "Distinct historical slot labels and state hashes do not establish independent physical starts. Goal-bank, derived goal-root and training-control labels are conservatively one unresolved ancestry cluster, excluded from qualified independent-root TRAIN supply."
+  },
+  "fresh_train_sources": {
+    "fresh_power_on_starts": 4,
+    "boot_frame_offsets": [2000, 2100, 2200, 2300],
+    "distinct_origin_state_hashes": 4,
+    "distinct_first_party_ot_ids": 4,
+    "source_ids": [
+      "fresh-red-lab-rival-train-boot2000",
+      "fresh-red-lab-rival-train-boot2100",
+      "fresh-red-lab-rival-train-boot2200",
+      "fresh-red-lab-rival-train-boot2300"
+    ],
+    "source_receipt_schema": "pokemon.red.fresh-trainer-train-batch.v1",
+    "model_queries": 0,
+    "model_updates": 0,
+    "full_game_runs": 0
+  },
+  "qualified_train_fit": {
+    "initial_contexts": 16,
+    "initial_model_sha256": "c270ace60f1d430763d8d8eef5e2f7540154e4199d961d58f44c5fed486589b1",
+    "initial_head_examples": {"control": 8, "move": 4, "switch": 16},
+    "new_contrast_contexts": 12,
+    "total_admitted_contexts": 28,
+    "reused_contexts_not_replayed": 16,
+    "timing_offsets_per_context": 5,
+    "source_roots": 4,
+    "extended_model_sha256": "686361c0b4ca1852e1d2576819096db5f7886d617b9e00846c7970b69d8f0f38",
+    "extended_head_examples": {"control": 20, "move": 16, "switch": 28},
+    "qualification_tier": "independent_root_train",
+    "development_inputs_in_fit": 0,
+    "authority_promotions": 0
+  },
+  "natural_development_comparisons": [
+    {
+      "encounter": "Celadon Gym Lass",
+      "source_capture_manifest_sha256": "62bbb2d306a415f7a5b9622eb03f595a80929785b8b7bd87e70c7210ddcc6c3f",
+      "challenger_model_sha256": "c270ace60f1d430763d8d8eef5e2f7540154e4199d961d58f44c5fed486589b1",
+      "challenger": {"won": true, "decisions": 8, "party_hp_lost": 12, "attack_slots": [4, 4, 4, 4, 4, 4, 4]},
+      "frozen": {"won": true, "decisions": 3, "party_hp_lost": 0},
+      "fixed_first_legal_attack": {"won": true, "decisions": 3, "party_hp_lost": 0},
+      "diagnostic": "The challenger repeated slot 4 across every attack. Four consecutive selected turns produced no move execution and allowed damage before the final knockout; both controls finished in two attacks. The log does not establish the exact cause of each suppressed turn."
+    },
+    {
+      "encounter": "Fuchsia Gym Juggler 3",
+      "source_capture_manifest_sha256": "080de50d91eeccbd7d0005a15b6954a6f2a61aea2ce052e18ad307d4b10f52f9",
+      "challenger_model_sha256": "686361c0b4ca1852e1d2576819096db5f7886d617b9e00846c7970b69d8f0f38",
+      "challenger": {"won": true, "decisions": 11, "party_hp_lost": 22, "attack_slots": [3, 3, 3, 3, 3, 3, 3, 3]},
+      "frozen": {"won": true, "decisions": 10, "party_hp_lost": 0},
+      "fixed_first_legal_attack": {"won": true, "decisions": 10, "party_hp_lost": 0},
+      "diagnostic": "The broader fit still selected one attack slot throughout. It won all four matchups, but needed one more action and took damage that both controls avoided."
+    }
+  ],
+  "comparison_integrity": {
+    "three_plans_frozen_before_each_development_execution": true,
+    "development_outcome_model_updates": 0,
+    "all_six_arms_complete_event_logs": true,
+    "teacher_queries": 0,
+    "invalid_actions": 0,
+    "natural_voluntary_switches_in_challenger_arms": 0,
+    "evaluation_independence_caveat": "Both DEVELOPMENT captures are disjoint from the four fresh TRAIN roots, but their historical source saves appear to share one older walkthrough origin. Treat the two encounters as descriptive, correlated evaluations."
+  },
+  "retained_failures": [
+    "The first clean-power source pilot was unretained and was not reused as a qualified root.",
+    "The first fresh curriculum stopped before materialization because the stat-rich V2 source observation was rejected; a tested input-contract repair preceded a new curriculum run.",
+    "The first Celadon natural capture stopped at start-readiness before a battle action; a neutral settle preceded a new capture.",
+    "All-party zero-PP with no living reserve remains an explicit unsupported Struggle boundary."
+  ],
+  "review_questions": [
+    "Is the four-root fresh-power ancestry and source-chain validator sufficient for TRAIN qualification, including alias handling and development exclusion?",
+    "Do the 28 TRAIN contexts cover the state/action contrasts needed to learn useful move and switch decisions, or is a redesigned value target/model required?",
+    "What prospective natural DEVELOPMENT supply would actually test advantageous switching and generalization without reusing these two battles?",
+    "Should the unsupported Struggle boundary remain a declared exclusion for this battle segment, or must it be implemented before wider integration?"
+  ],
+  "promotion_decision": "No. Both natural comparisons favored frozen and fixed controls on action and HP efficiency. Reconsider after a redesigned TRAIN curriculum or policy and prospective, ancestry-audited DEVELOPMENT wins; never fit to these two DEVELOPMENT outcomes.",
+  "verification": {
+    "targeted_rom_free_tests": "111 passed, 13 skipped across trainer practice, fit, fresh curriculum, natural comparison, documentation surface and roadmap; skipped cases require private cartridge integration.",
+    "regression_guards": "Fresh-curriculum tests recheck physical origin and trainer-ID distinctness instead of trusting only the batch summary; the stricter read-only preflight accepted the retained four-source batch. Natural-comparison tests require all three plans before any DEVELOPMENT arm, reject TRAIN ancestry overlap before output creation, and reject an unqualified fit before opening DEVELOPMENT.",
+    "static_checks": "Ruff and git diff --check passed on changed source and tests.",
+    "metadata_and_docs": "Prospective collection registry regenerate/check, active product focus, roadmap generation and documentation checks passed.",
+    "full_suite": "Not run in this session; no full-suite pass is claimed. A previous broad suite had unrelated known failures and was interrupted at 65%."
+  },
+  "reviewer_availability": {
+    "flash": "Flash 3.8 High completed a bounded read-only ancestry audit and agreed the historical labels did not prove independent clean-power starts; no code edits were accepted from it.",
+    "claude": "Opus CLI attempted but returned Not logged in, so no Claude review occurred.",
+    "refreshed_quotas": "Unavailable"
+  },
+  "product_counters": {
+    "model137_fitted_examples": 137,
+    "model137_verified_successes": 92,
+    "model137_economy_qualified_outcomes": 58,
+    "red_native_registrations": 96,
+    "red_declared_native_target": 124,
+    "fresh_red_acceptance_gates_passed": 0,
+    "fresh_red_acceptance_gates_total": 5,
+    "full_game_runs": 0,
+    "authority_promotions": 0,
+    "github_pushes": 0,
+    "crystal_execution": 0
+  }
+}

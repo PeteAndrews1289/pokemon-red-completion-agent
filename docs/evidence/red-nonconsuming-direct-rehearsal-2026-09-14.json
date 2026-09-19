@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon.red.nonconsuming-direct-rehearsal.evidence.v1",
+  "session_id": "2026-09-14-nonconsuming-direct-rehearsal",
+  "classification": "maintenance_unblocking_named_direct_full_local_experiment",
+  "status": "qualified_without_rom_or_private_source",
+  "purpose": "Catch direct-origin preparation and preflight integration regressions before a scarce source is claimed.",
+  "command": "PYTHONPATH=src:scripts .venv/bin/pytest -q -m nonconsuming_direct_rehearsal",
+  "result": {
+    "tests_passed": 12,
+    "tests_failed": 0,
+    "tests_deselected": 11704,
+    "rom_required": false,
+    "private_source_required": false
+  },
+  "real_components_exercised": [
+    "direct_cli_parser_default_into_prepare_source_boundary",
+    "feature_v4_base_training_plan_declaration",
+    "temporary_direct_registration_session_roundtrip",
+    "travel_capture_and_native_evolution_proposal",
+    "full_local_registered_player_observer",
+    "bounded_player_preflight_with_two_authorities",
+    "outer_action_free_preflight_budget_and_history_contract"
+  ],
+  "historical_failure_sensitivity": {
+    "regional_transitions_none": "The parsed default is null and must reach source authentication instead of regional_profile_scope failure.",
+    "feature_v4_base_behavior": "The actual base declaration must select living-dex-player-optional-recovery-v4 rather than an economy-only policy."
+  },
+  "effects": {
+    "root_pair_claims": 0,
+    "real_source_payload_opens": 0,
+    "real_registration_sessions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "scope_limit": "This ROM-free suite does not authenticate a candidate save, prove cartridge-specific routing, or establish that a future source exposes two executable acquisition families. Those questions remain behind the exact one-source claim gate.",
+  "verification": {
+    "marked_rehearsal": "12_passed",
+    "changed_component_tests": "164_passed",
+    "ruff": "passed",
+    "mypy": "passed_499_source_files",
+    "product_focus": "passed",
+    "initial_complete_local_suite": "11708_passed_4_failed_3_skipped_1_xfailed",
+    "registry_failures_after_regeneration": "3_passed",
+    "remaining_local_exception": "existing_exact_mac_pyboy_metadata_fingerprint_test",
+    "collection_registry_sha256": "e543bba45c9538c65f304ab4427f20f0ba036dc62c9cd644b79cc182b499022b",
+    "source_bundle_sha256": "93db8e857dfb950d6bc6a0afe50974b143239e741962c8e30b1b926948ed9f7e",
+    "exact_head_ci": "pending_publication"
+  },
+  "reviewers": {
+    "flash_model": "gemini-3.8-flash-high",
+    "flash_effort": "high",
+    "initial_design": "rejected_for_excessive_mocking_and_false_end_to_end_claim",
+    "final_design": "passed_with_no_p0_or_p1_findings",
+    "accepted_change": "Replaced one mocked end-to-end test with a named suite of real component checks.",
+    "claude": "not_invoked",
+    "quota_windows": "unavailable_from_headless_cli_output"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "next_gate": "Run the rehearsal on the published exact source, then freeze and claim one distinct unused source and require a real action-free capture-plus-evolution menu before gameplay.",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

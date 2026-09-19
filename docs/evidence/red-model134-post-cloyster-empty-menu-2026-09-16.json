@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon.red.action-free-collection-inventory.v1",
+  "session": "2026-09-16-model134-post-cloyster-empty-menu",
+  "status": "stopped_before_gameplay_no_executable_goals",
+  "source_commit": "fb0cea05",
+  "plan_sha256": "469aed7f5edc00b98a0a1475b7e74c934050b4813ac0f48255ca6da348c4815c",
+  "source_state_file_sha256_verified_after_inspection": "123a5a4d7880942a292bf6fc6a1136eb74a17bcf4883f4a34d71457ee82ad355",
+  "model_sha256": "1a18c9327475411f2edc59a3f5cdc05cb3448cfb0fa233202996d8a70071ddd1",
+  "inventory": {
+    "ordinary_available": 0,
+    "regional_acquisitions": 0,
+    "item_evolutions": 0,
+    "league_funding_available": false,
+    "league_funding_reason": "save is not at a fresh postgame League boundary",
+    "cash": 198,
+    "capture_purchase_target_cash": 2400,
+    "capture_purchase_shortfall": 2202,
+    "registered_species": 94,
+    "specimens": 74,
+    "available_capture_balls_in_bag": 6,
+    "ordinary_unavailable_reasons": {
+      "advance_story": "missing_capability",
+      "acquire_species": "no_legal_target",
+      "develop_team": "missing_capability",
+      "evolve_species": "no_legal_target",
+      "restore_team": "no_legal_target",
+      "resupply": "missing_resource",
+      "manage_storage": "missing_capability",
+      "recover_control": "no_legal_target",
+      "explore": "no_legal_target"
+    }
+  },
+  "inspection": {
+    "mode": "read_only_controller",
+    "menu_builder_result": "mixed live menu needs distinct executable candidates",
+    "diagnostic": "Zero ordinary goals and zero supplements; no model menu could be constructed.",
+    "gameplay_started": false,
+    "model_queries": 0,
+    "teacher_actions": 0,
+    "controller_actions": 0,
+    "new_fit": false,
+    "run_output_claimed": false
+  },
+  "learning_delta": {
+    "new_examples": 0,
+    "new_fitted_successes": 0,
+    "new_registrations": 0,
+    "model": 134,
+    "settled_examples": 134,
+    "fitted_successes": 91
+  },
+  "next": "Qualify a reusable, observed route from the safe Center to a legitimate collection or income opportunity, with resource and return safety. Do not force an empty-menu action or replay the consumed Cloyster evolution."
+}

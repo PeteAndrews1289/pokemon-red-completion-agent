@@ -1,0 +1,95 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session": "2026-09-16-model134-center-restore-singleton",
+  "rigor": "correlated-development",
+  "status": "one_model_restore_success_next_menu_singleton",
+  "execution_source_commit": "2b57f73f23b72ae976b87f4ddac329c6566fa6f9",
+  "prior_menu_qualification": {
+    "available_kinds": ["restore_team", "evolve_species"],
+    "available_candidate_count": 2,
+    "menu_sha256": "5aa87266c9ac9106c1464ea73d237f5c3a1c0260a3ec4f72e045b224bb6e9280",
+    "quoted_evolution_spend": 2100,
+    "cash": 2298,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0
+  },
+  "autonomous_outcome": {
+    "plan_sha256": "3a7346005b6e295a48c74eb5a63bcd7ba2339d6bc79f4dabcb223cd05897558f",
+    "result_sha256": "5ae269bb95a687462867a095d6190b74b43632bec21fbe4c09640e00ba8e8871",
+    "outcome_sha256": "3778a3fbc1e8e520d72b6ca2415daff000781e77f7aa96f8f971379f1c480bf0",
+    "behavior_model_sha256": "27d020f7b342bc2e19dead722ed02026c7571ce96a0157bfa58211dd4fd75b61",
+    "selected_option_kind": "restore",
+    "selected_candidate_index": 0,
+    "selected_probability": 0.6849985762754633,
+    "selection_mode": "model_exploration",
+    "verification": "succeeded",
+    "stop_reason": "decision_budget",
+    "actions": 22,
+    "frames": 1584,
+    "cash_before": 2298,
+    "cash_after": 2298,
+    "registrations_before": 93,
+    "registrations_after": 93,
+    "specimens_before": 74,
+    "specimens_after": 74,
+    "teacher_actions": 0,
+    "safe_terminal": true,
+    "terminal_state_sha256": "99690264b5819d201de6546444ef160a1ad8cfd329cc0cf0e24ac433f3cdffba",
+    "whole_party_restore_verified": true
+  },
+  "fit": {
+    "result_sha256": "7e25c110e9431d3da190741aa5567ed9935ab5592f531ebcd033723ca0103882",
+    "new_measured_source_examples": 1,
+    "new_settled_examples": 1,
+    "teacher_actions": 0,
+    "replayed_actions": 0,
+    "authority_promotions": 0,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "fit_report": {
+      "settled_examples": 134,
+      "successful_examples": 91,
+      "economy_qualified_examples": 55,
+      "weighted_mse_before": 0.03093442526697182,
+      "weighted_mse_after": 0.011868705374437197
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "model_sha256": "1a18c9327475411f2edc59a3f5cdc05cb3448cfb0fa233202996d8a70071ddd1",
+      "file_sha256": "56bdff182476b48ab036cde991569c57a51031078a55f912b6e7a90d91604830",
+      "prior_model_sha256": "27d020f7b342bc2e19dead722ed02026c7571ce96a0157bfa58211dd4fd75b61",
+      "settled_examples": 134,
+      "independent_evaluation": false,
+      "authority": "bounded_development_only"
+    }
+  },
+  "next_action_free_inventory": {
+    "status": "insufficient_executable_alternatives",
+    "available_kinds": ["evolve_species"],
+    "regional_acquisition_candidates": 0,
+    "supplemental_candidates": 0,
+    "restore_team_reason": "no_legal_target",
+    "resupply_reason": "no_legal_target",
+    "target_cash": 2400,
+    "cash": 2298,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "new_run_started": false
+  },
+  "limitations": [
+    "The item-evolution departure repair remains untested in live execution because Model133 chose restoration.",
+    "No further model choice is authorized from the singleton menu; no second candidate is manufactured.",
+    "This correlated development success does not establish independent transfer or sustained autonomous play."
+  ],
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "github_push": false
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "pokemon.red.local-battle-cartridge-campaign-result.v1",
+  "session": "2026-09-15-local-battle-cartridge-campaign-c",
+  "status": "stopped_on_first_failure",
+  "source": {
+    "commit": "3f6235a840fce018edfcaca8fe3484170df240c4",
+    "source_bundle_sha256": "84147cf4385d61ee03a76f987159ed4bb6cebcf2ea7621fdbc7a1aa69e1b48a5",
+    "plan_sha256": "bc72b965adf8ad8d50637161db2bc322704bda64fc0f5ae3c73d7aed0dfffb87",
+    "source_state_sha256": "21f77af82628f903f1b44ce8f052f6d58b5c2889bb7a545d33b27c427cc4096d",
+    "publication_required": false,
+    "exact_clean_local_source_required": true
+  },
+  "campaign": {
+    "cases_declared": 3,
+    "cases_opened": 2,
+    "cases_completed": 1,
+    "actions_attempted": 117,
+    "actions_completed": 117,
+    "emulator_frames": 9881,
+    "cost_known": true,
+    "retry_allowed": false,
+    "resume_allowed": false,
+    "replacement_created": false
+  },
+  "cases": [
+    {
+      "case_id": "route11-p3-w29-c",
+      "ordinal": 1,
+      "status": "complete",
+      "result": "settled_wild_battle",
+      "actions": 72,
+      "emulator_frames": 6150,
+      "selections": 1,
+      "contingency_switch_observed": false
+    },
+    {
+      "case_id": "route11-p0-w47-c",
+      "ordinal": 2,
+      "status": "failed",
+      "error_type": "BattleRuntimeError",
+      "phase": "battle",
+      "runtime_phase": "await_move_menu",
+      "actions": 45,
+      "emulator_frames": 3731,
+      "cost_known": true,
+      "action_in_flight": false,
+      "selected_move_id": 35,
+      "selected_move": "Wrap",
+      "first_hit_enemy_hp": [37, 32],
+      "first_hit_pp": [19, 18],
+      "automatic_continuation_enemy_hp": [32, 27],
+      "automatic_continuation_pp": [18, 18],
+      "cause": "A player-owned Gen I multi-turn move dealt automatic continuation damage while suppressing the move menu; the runtime incorrectly required a new semantic move selection."
+    },
+    {
+      "case_id": "diglett-p5-w211-c",
+      "ordinal": 3,
+      "status": "unopened"
+    }
+  ],
+  "repair": {
+    "scope": "Generic observable automatic-damage continuation; no species, map, route or case identity.",
+    "behavior": "When enemy HP decreases while the active battler PP vector is unchanged before a new move menu appears, treat the turn as automatic battle progress rather than issuing a substitute move or failing for a missing menu.",
+    "post_repair_cartridge_execution": false,
+    "claim": "ROM-free regression qualified only; cartridge behavior after the repair remains unmeasured.",
+    "working_source_bundle_sha256": "d8d45dbc32230cb59cc397e6a81c369ef0ccfd775ec4be5390857bd99044c6ae"
+  },
+  "verification": {
+    "focused_tests_passed": 312,
+    "historical_compatibility_checks_passed": 3,
+    "ruff": "passed",
+    "whole_source_mypy_files": 505,
+    "collection_registry_check": "passed",
+    "full_local_suite": "not_claimed",
+    "known_unrelated_local_failure": "Retired exact-local PyBoy RECORD receipt differs on this Mac; GitHub skips that environment-specific test."
+  },
+  "learning_delta": {
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "fits": 0,
+    "successes": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registrations": 0,
+    "living_species": 0,
+    "specimens": 0
+  },
+  "unchanged_state": {
+    "model": "Model121",
+    "examples": 121,
+    "successes": 83,
+    "local_registered": 86,
+    "local_target": 151,
+    "living_species": 66,
+    "specimens": 70,
+    "collection_checklist_done": 25,
+    "collection_checklist_total": 26,
+    "fresh_red_gates_passed": 0,
+    "fresh_red_gates_total": 5
+  },
+  "review": {
+    "antigravity_requested_model": "Gemini 3.8 Flash High",
+    "new_review_completed": false,
+    "reason": "The Antigravity message box did not accept automation input; review was not made an execution gate.",
+    "claude_cli_used": false,
+    "service_quota_refreshed": false
+  },
+  "decision": "Campaign C is consumed and the separate disposable cartridge-qualification loop ends here. Do not create Campaign D merely to replay the patch-run-patch cycle. The next bounded session returns to an actual heterogeneous collection choice, where retained acquisition progress is the primary output and real play supplies further battle evidence."
+}

@@ -107,6 +107,21 @@ def test_switch_active_battler_observes_party_menu_and_returns_to_main(monkeypat
     )
 
 
+def test_learning_switch_retains_an_immediate_target_faint(monkeypatch) -> None:
+    simulation = _SwitchSimulation()
+    monkeypatch.setattr(
+        battle_recovery, "_party_hp",
+        lambda _emulator: (50, 0 if simulation.active == 1 else 30, 20),
+    )
+
+    battle_recovery.switch_active_battler(
+        simulation, simulation, simulation, 1,
+        label="trainer practice losing switch", allow_faint_outcome=True,
+    )
+    assert simulation.active == 1
+    assert simulation.actions
+
+
 def test_switch_active_battler_supports_a_living_wild_battle_target(
     monkeypatch,
 ) -> None:  # type: ignore[no-untyped-def]

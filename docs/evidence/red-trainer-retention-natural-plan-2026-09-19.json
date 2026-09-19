@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.retention-natural-comparison-plan.v1",
+  "candidate_sha256": "9f2aa62d01b72217931a3fab4b60e69522734f69b7eeab43b90e46498c34cbbc",
+  "offline_result": "All three old gates unchanged; terminal128 composed regret 0.829764698 to 0.478781094. No additional fit.",
+  "source_state_sha256": "153b4f43807e3bffe402a7451769bdbbd4d590ad8f84e6242bb91cbce6ca78c7",
+  "capture_id": "league-champion-natural-development-portable-loop",
+  "source_audit": "No previous battle-trainer Champion natural capture/comparison found in project evidence or retained trainer comparison directories. Post-Lance checkpoint authenticated against its original receipt. Other historical models and the source-producing teacher have played the story; this is not a fresh full-game evaluation.",
+  "ancestry": "Historical progression cluster, disjoint from four fresh lab-rival TRAIN starts but correlated with earlier League DEVELOPMENT saves. This comparison cannot establish independent replicated transfer.",
+  "arms": ["first-legal-attack", "frozen-attack", "retention-challenger"],
+  "capture_limits": {"actions": 600, "frames": 180000, "battle_choices": 0},
+  "arm_limits": {"decisions": 80, "frames": 120000},
+  "gate": "Challenger wins with no invalid actions, no teacher or memory edits, no more party faints or HP lost than frozen, and fewer decisions or HP lost than frozen. One capture, all plans frozen before execution, no retries or tuning.",
+  "stop_condition": "A loss, unsupported mechanic, incomplete trace or unfavorable comparison blocks integration. Even a favorable result needs separate independent-origin natural evidence before final-player promotion.",
+  "fits": 0,
+  "full_game_runs": 0,
+  "publication": false
+}

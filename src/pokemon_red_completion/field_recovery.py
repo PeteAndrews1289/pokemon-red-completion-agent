@@ -33,6 +33,18 @@ class FieldRecoveryError(RuntimeError):
     """Raised when observed party recovery cannot be planned or verified."""
 
 
+def recovery_item_hp(item: ItemId, hp: int, maximum: int) -> int:
+    """Exact cartridge recovery amounts, including early-game stock."""
+    if item is ItemId.FULL_HEAL:
+        return hp
+    if item is ItemId.FULL_RESTORE:
+        return maximum
+    amounts = {ItemId.POTION: 20, ItemId.SUPER_POTION: 50, ItemId.HYPER_POTION: 200}
+    if item not in amounts:
+        raise FieldRecoveryError("unsupported field recovery item")
+    return min(maximum, hp + amounts[item])
+
+
 def plan_party_recovery(
     party_hp: tuple[int, ...],
     party_max_hp: tuple[int, ...],
@@ -73,7 +85,8 @@ def use_field_recovery_item(
     before_status = _party_status(emulator)
     before_quantity = _bag(emulator).get(item, 0)
     if (
-        party_index >= len(before_hp)
+        party_index < 0
+        or party_index >= len(before_hp)
         or party_index >= len(before_max_hp)
         or party_index >= len(before_status)
         or before_quantity <= 0
@@ -81,6 +94,11 @@ def use_field_recovery_item(
         raise FieldRecoveryError(
             f"{item.name} target {party_index + 1} lacks valid recovery evidence."
         )
+
+    expected_hp = recovery_item_hp(item, before_hp[party_index], before_max_hp[party_index])
+    expected_status = (
+        0 if item in {ItemId.FULL_HEAL, ItemId.FULL_RESTORE} else before_status[party_index]
+    )
 
     _open_bag(actions, emulator, timing)
     _select_bag_item(actions, emulator, item, timing)
@@ -93,17 +111,10 @@ def use_field_recovery_item(
         current_hp = _party_hp(emulator)
         current_status = _party_status(emulator)
         item_consumed = _bag(emulator).get(item, 0) == before_quantity - 1
-        expected_hp = (
-            before_hp[party_index]
-            if item is ItemId.FULL_HEAL
-            else before_max_hp[party_index]
-            if item is ItemId.FULL_RESTORE
-            else min(before_max_hp[party_index], before_hp[party_index] + 200)
-        )
         if (
             item_consumed
             and current_hp[party_index] == expected_hp
-            and current_status[party_index] == 0
+            and current_status[party_index] == expected_status
         ):
             _close_menus(actions, reader, timing)
             return

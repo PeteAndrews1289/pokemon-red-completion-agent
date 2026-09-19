@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon.red.teacher-battle-species-moves-evidence.v1",
+  "session": "2026-09-17-teacher-battle-species-moves",
+  "classification": "isolated_assisted_train_battle_validation_not_fit_or_promotion",
+  "mission_check": {
+    "reusable_capability": "Construct model-owned move-choice practice for any of Red's 151 species with both combatants' moves, PP, levels and coherent battle stats",
+    "learned_authority": "The actor sees semantic battle observations and can only choose controller actions; cartridge edits remain teacher-only setup",
+    "transfer_test": "Require a prospectively varied train curriculum and disjoint untouched natural development battles before any promotion; no transfer result here",
+    "cheapest_falsifier": "A cartridge-derived species or moveset fails exact readback or a generated real battle fails to execute",
+    "time_box": "One implementation session and one four-candidate real-cartridge qualification",
+    "stop_condition": "Stop on incoherent state, unexecutable moves, synthetic-root independence claim, model fit, full run or GitHub publication"
+  },
+  "implementation": {
+    "source_commit": "f28a6252bd786b9366d8e2f884efc12c14cccd22",
+    "species_count": 151,
+    "move_count": 165,
+    "cartridge_sources": ["national/internal species map", "base stats", "starting moves", "level-up learnsets", "TM/HM compatibility", "growth rate"],
+    "new_axes": ["actor_species_ref", "opponent_species_ref", "opponent_moves"],
+    "prior_axes_preserved": ["actor_moves", "actor_level", "opponent_level", "actor_hp", "opponent_hp", "actor_stats", "opponent_stats"],
+    "model_memory_write_interface_added": false,
+    "legacy_configuration_hashes_preserved": true
+  },
+  "provenance": {
+    "source_root_lineage_id": "red-goal-root-c1d575483e311b3a9854b0e85237f725c3da1412ed62ab142dcd82050c666435",
+    "source_state_sha256": "d629f64d9800ecd7dda6cb6b47f4c12f1e0f81a5124422fde8e1a28b11ad902f",
+    "materialization_plan_sha256": "7777faf27d744d5f9f9fcd5b460b83234d980b2691ae1295a58168d2d8e277b3",
+    "materialization_outcome_sha256": "f3b05459482b6dbda0dc9803897e18ff3a805ce43e84878ab6e291373b893e48",
+    "measurement_plan_sha256": "67c914d92467322306e06754ad55dd5584d6bdc424ea500d5315c7ecd2d8e76a",
+    "measurement_outcome_sha256": "42255740a3052d80beb6a54072b39af7af6f775d72b53e55bf229488e3ea4ee3",
+    "assisted_state_sha256": "feb3164c4eefd63cd928947db4b8424136d62d4f9a5bdc92ac6f382a05874fe9",
+    "independent_upstream_roots_added": 0
+  },
+  "qualification": {
+    "source_state_unchanged": true,
+    "materialization_controller_actions": 0,
+    "materialization_emulator_frames": 0,
+    "actor": {"national_number": 25, "internal_id": 84, "level": 35, "hp": 69, "moves": [84, 98, 129, 85], "experience": 42875},
+    "opponent": {"national_number": 7, "internal_id": 177, "level": 33, "hp": 72, "moves": [145, 55, 33, 44]},
+    "legal_move_count": 4,
+    "candidate_pre_attack_frames": 2048,
+    "candidate_outcomes_retained": 4,
+    "candidate_opponent_damage_fractions": [0.5694444444444444, 0.25, 0.2361111111111111, 1.0],
+    "model_choice_candidate_index": 3,
+    "best_candidate_index": 3,
+    "model_updates": 0,
+    "authority_promotions": 0,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0
+  },
+  "limitations": [
+    "One generated configuration and one RNG timing share a consumed train root; they do not establish model improvement or independent coverage",
+    "The catalog distinguishes intrinsic and TM/HM-compatible moves, but trainer-requested custom movesets are allowed and must be labeled assisted, not naturally legal",
+    "Evolution-inherited and event-only moves are not claimed by the current availability API",
+    "Status, items, multi-member teams, switching and trainer AI remain unsupported"
+  ],
+  "github_pushed": false
+}

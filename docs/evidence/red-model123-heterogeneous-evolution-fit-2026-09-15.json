@@ -1,0 +1,167 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "source_commit": "c80d645d92f81266c4a51c14902e1560d1c29e68",
+  "source_bundle_sha256": "c9699f5e67103368bf86331f3f0093b853605d1d7412e6e2b2191a76935c778c",
+  "prior_model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+  "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa",
+  "model_record_sha256": "a69dfb53502cb9845b55424141b9af5a579dab48d09cefc1421ca49cf62a48c6",
+  "corpus_sha256": "74f5b40191aa75ec155c9ee805b2666a40ffef54ca90be35c96230fcef5f81e3",
+  "corpus_record_sha256": "bb61a4c971a18ee1202aca0cae202b09e943f300fb66209ba41265f8e89ad0ea",
+  "measured_choice_record_sha256": "b335bdccfe8ec6c5d9d89237efd372b7eb479271d9033fef9971870bee76c514",
+  "fit_report_sha256": "da1d743a4f365ba7fe34bcef754233015b1f16d9b39e5b4a2506a7d46d276f50",
+  "fit": {
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "settled_examples_before": 122,
+    "settled_examples_after": 123,
+    "successful_examples_before": 83,
+    "successful_examples_after": 84,
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "measured_source_examples": 19,
+    "regional_source_examples": 33,
+    "prior_rows_retained": true,
+    "new_row_count": 1,
+    "new_row_sha256": "4b244ce7c7e9e86a319d647b61f9910c6a7ff0388dbf55bded07c3ccf6769d42",
+    "retained_row_order": "canonical_sorted",
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 123,
+      "settled_examples": 123,
+      "successful_examples": 84,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.011658873623708944,
+      "weighted_mse_after": 0.011661425277722083
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.011658873623708944
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.011661425277722083
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 123,
+      "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa",
+      "prior_model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+      "source_commit": "c80d645d92f81266c4a51c14902e1560d1c29e68",
+      "source_bundle_sha256": "c9699f5e67103368bf86331f3f0093b853605d1d7412e6e2b2191a76935c778c",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    }
+  },
+  "frozen_menu_replay": {
+    "menu_sha256": "27a79320bfe05cceab9ed4e80c0c7de18a393de16327799e9784eb464b5a1a46",
+    "selection_seed": 122091503,
+    "selected_candidate_index": 0,
+    "selected_option_kind": "evolve",
+    "selected_probability_before": 0.8526630332370512,
+    "selected_probability_after": 0.8527187521031948,
+    "selected_after_fit": true,
+    "support_decreased": false
+  },
+  "outcome": {
+    "verified_success": true,
+    "registered_species_before": 87,
+    "registered_species_after": 88,
+    "completion_gain": 0.008064516129032258,
+    "teacher_labels": 0
+  },
+  "completed_episode": {
+    "status": "retained_heterogeneous_evolution_success",
+    "actions": 11623,
+    "frames": 1050627,
+    "selected_candidate_index": 0,
+    "selected_kind": "evolve_species",
+    "selected_probability": 0.8526630332370512,
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "cash_before": 206,
+    "cash_after": 206,
+    "registered_before": 87,
+    "registered_after": 88,
+    "living_species_after": 67,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false,
+    "terminal_state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b"
+  },
+  "terminal_observation": {
+    "episode_id": "red-model122-heterogeneous-evolution-terminal-20260915",
+    "checkpoint_record_sha256": "10e1f29eef8beea403c083400a1c95c5f86ec3c35d1ee8b3bd78c7938dc4cb0a",
+    "state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b",
+    "registered_species": 88,
+    "living_species": 67,
+    "total_living_specimens": 71,
+    "cash": 206,
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "verifier_recovery": {
+    "initial_failure": "The one-off gate assumed retained row fingerprints were append ordered.",
+    "adjudication": "The corpus contract sorts fingerprints canonically; set inclusion proved all 122 prior rows remained and exactly one new row was added.",
+    "fit_rerun": false,
+    "gameplay_replayed": false
+  },
+  "review": {
+    "gemini_3_8_flash_high": "Accepted its concrete request to bind the selected menu option cryptographically; rejected its generic-schema concern because this declaration authenticates one exact historical receipt.",
+    "claude_used": false
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {
+    "record_sha256": "b335bdccfe8ec6c5d9d89237efd372b7eb479271d9033fef9971870bee76c514",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "selected_candidate_index": 0,
+    "selected_probability": 0.8526630332370512,
+    "verified_success": true,
+    "completion_gain": 0.008064516129032258,
+    "dependency_unlock_gain": 0.022727272727272707
+  },
+  "in_sample_policy_replay": {
+    "choices": [
+      {
+        "prior_greedy": "evolve",
+        "updated_greedy": "evolve"
+      }
+    ],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": true
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "menu_redraw": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "publication": {
+    "github_pushed": false,
+    "user_controls_publication": true
+  }
+}

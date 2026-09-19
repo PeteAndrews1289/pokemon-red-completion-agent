@@ -29,6 +29,7 @@ from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
 )
 from pokemon_red_completion.red_resource_goal_router import (
+    _MAX_ROUTE_SCRIPTED_DIALOGUES,
     _ROUTE_LIMITS,
     _walking_plan,
 )
@@ -41,7 +42,11 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedRoutedSemanticBudgetMeter,
     RedSemanticTransportRoute,
 )
-from pokemon_red_completion.route_executor import TraversalObserver
+from pokemon_red_completion.red_safari_exit import (
+    RedSafariExitDialogueHandler,
+    normalize_active_safari_exit_plan,
+)
+from pokemon_red_completion.route_executor import InterruptionHandler, TraversalObserver
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import (
     FreshDestinationGoalOffer,
@@ -80,8 +85,10 @@ def bind_indoor_collection_departure(
     from pokemon_red_completion.red_collection_fly import bind_collection_fly
 
     if (
-        spec.mechanic not in {
+        spec.mechanic
+        not in {
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
             RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
             RedGoalMechanic.MART_RESUPPLY,
         }
@@ -114,6 +121,10 @@ def bind_indoor_collection_departure(
         plan = router.world.plan_feasible_to_map(start, start.last_outside_map)
     except RoutePlanningError:
         return None
+
+    safari_exit_plan = normalize_active_safari_exit_plan(plan)
+    if safari_exit_plan is not None:
+        plan = safari_exit_plan
 
     if (
         not plan.steps
@@ -153,9 +164,7 @@ def bind_indoor_collection_departure(
         observation_sha256=red_living_dex_setup_fresh_observation_sha256(projected_fresh),
     )
 
-    disposable_flight = bind_collection_fly(
-        router, spec, provider, projected_fresh, traversal
-    )
+    disposable_flight = bind_collection_fly(router, spec, provider, projected_fresh, traversal)
     if disposable_flight is None:
         return None
 
@@ -165,6 +174,21 @@ def bind_indoor_collection_departure(
     started: list[RoutedSemanticBudgetCheckpoint] = []
 
     from pokemon_red_completion.red_travel_capture_runtime import bind_travel_capture_handler
+
+    route_handler: InterruptionHandler = guarded_collection_route_handler(
+        actions,
+        reader,
+        route_name="indoor collection departure",
+        maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
+    )
+    if safari_exit_plan is not None:
+        route_handler = RedSafariExitDialogueHandler(actions, reader, route_handler)
+
+    def replan(request):
+        replacement = router._replan(request)
+        if safari_exit_plan is None:
+            return replacement
+        return normalize_active_safari_exit_plan(replacement) or replacement
 
     transport = RedSemanticTransportRoute(
         binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
@@ -180,22 +204,21 @@ def bind_indoor_collection_departure(
         traversal_observer=traversal,
         emulator=runtime.emulator,
         interruption_handler=bind_travel_capture_handler(
-            router, spec, guarded_collection_route_handler(
-                actions, reader, route_name="indoor collection departure",
-            ),
+            router,
+            spec,
+            route_handler,
         ),
-        replanner=router._replan,
+        replanner=replan,
         route_limits=_ROUTE_LIMITS,
         prepare_departure=lambda: prepare_center_departure(actions, reader),
     )
     departure = transport.route_binding()
 
     def execute_departure() -> GoalExecutionReport:
-        current = FreshRedGoalObservation(
-            "0" * 64, runtime.adapter.observe(), traversal.observe()
-        )
+        current = FreshRedGoalObservation("0" * 64, runtime.adapter.observe(), traversal.observe())
         if (
-            current.observation != fresh.observation or current.traversal != fresh.traversal
+            current.observation != fresh.observation
+            or current.traversal != fresh.traversal
             or red_living_dex_setup_fresh_observation_sha256(current) != origin
         ):
             raise RoutedSemanticGoalError("indoor departure origin changed before input")
@@ -210,10 +233,9 @@ def bind_indoor_collection_departure(
             actual,
             observation_sha256=red_living_dex_setup_fresh_observation_sha256(actual),
         )
-        if (
-            not terminal_boundary.matches_traversal(actual.traversal)
-            or not terminal_boundary.matches_goal_observation(actual.observation)
-        ):
+        if not terminal_boundary.matches_traversal(
+            actual.traversal
+        ) or not terminal_boundary.matches_goal_observation(actual.observation):
             return FreshDestinationGoalOffer.unavailable(
                 observation_sha256=actual.observation_sha256,
                 terminal_boundary_sha256=terminal_boundary.sha256,
@@ -223,7 +245,8 @@ def bind_indoor_collection_departure(
         now = meter.checkpoint()
         remaining_actions = (
             router.maximum_controller_actions
-            - now.controller_actions + started[0].controller_actions
+            - now.controller_actions
+            + started[0].controller_actions
         )
         remaining_frames = (
             router.maximum_emulator_frames - now.emulator_frames + started[0].emulator_frames
@@ -236,12 +259,11 @@ def bind_indoor_collection_departure(
                 reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
             )
         remaining_router = replace(
-            router, maximum_controller_actions=remaining_actions,
+            router,
+            maximum_controller_actions=remaining_actions,
             maximum_emulator_frames=remaining_frames,
         )
-        actual_flight = bind_collection_fly(
-            remaining_router, spec, provider, actual, traversal
-        )
+        actual_flight = bind_collection_fly(remaining_router, spec, provider, actual, traversal)
         if actual_flight is None:
             return FreshDestinationGoalOffer.unavailable(
                 observation_sha256=actual.observation_sha256,

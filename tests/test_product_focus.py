@@ -23,6 +23,7 @@ from product_focus import (  # noqa: E402
     _validate_model107_measured_fishing_failure_projection,
     _validate_model108_adaptive_fishing_projection,
     _validate_model112_automatic_fishing_failure_projection,
+    _validate_model123_heterogeneous_evolution_fit_projection,
     _validate_paired_bounded_player_projection,
     _validate_repeatable_living_dex_calibration_audit_projection,
     _validate_repeatable_living_dex_first_two_projection,
@@ -96,6 +97,10 @@ MODEL108_ADAPTIVE_FISHING_LOOP = (
 MODEL112_AUTOMATIC_FISHING_FAILURE = (
     PROJECT_ROOT
     / "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+)
+MODEL123_HETEROGENEOUS_EVOLUTION_FIT = (
+    PROJECT_ROOT
+    / "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -396,9 +401,9 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Registered Train Example · train", 114, 12),)
+    assert focus_scorecard(state) == (("Registered Train Example · train", 135, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
-    assert state.progress["model_fits"] == 15
+    assert state.progress["model_fits"] == 16
     assert state.progress["composition_attempts"] == 6
     assert state.progress["unseen_comparisons"] == 9
     assert state.progress["development_episode_attempts"] == 30
@@ -526,6 +531,36 @@ def test_automatic_fishing_failure_projection_rejects_claim_drift(
     target[field] = not value if isinstance(value, bool) else 999
     with pytest.raises(ProductFocusError, match="automatic fishing failure"):
         _validate_model112_automatic_fishing_failure_projection(changed)
+
+
+@pytest.mark.parametrize(
+    ("section", "field"),
+    (
+        (None, "model_sha256"),
+        ("fit", "settled_examples_after"),
+        ("fit", "prior_rows_retained"),
+        ("frozen_menu_replay", "selected_after_fit"),
+        ("frozen_menu_replay", "support_decreased"),
+        ("outcome", "registered_species_after"),
+        ("outcome", "teacher_labels"),
+        ("verifier_recovery", "fit_rerun"),
+        ("verifier_recovery", "gameplay_replayed"),
+    ),
+)
+def test_model123_heterogeneous_fit_projection_rejects_claim_drift(
+    section: str | None, field: str
+) -> None:
+    receipt = json.loads(
+        MODEL123_HETEROGENEOUS_EVOLUTION_FIT.read_text(encoding="ascii")
+    )
+    _validate_model123_heterogeneous_evolution_fit_projection(receipt)
+
+    changed = deepcopy(receipt)
+    target = changed if section is None else changed[section]
+    value = target[field]
+    target[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="Model123"):
+        _validate_model123_heterogeneous_evolution_fit_projection(changed)
 
 
 def test_paired_player_projection_rejects_counter_or_arm_drift() -> None:
@@ -1840,7 +1875,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     # Only actual new-objective outcomes advance this separate counter.
-    assert rows == ("Registered Train Example · train: 114/12",)
+    assert rows == ("Registered Train Example · train: 135/12",)
 
 
 @pytest.mark.parametrize("goal", [

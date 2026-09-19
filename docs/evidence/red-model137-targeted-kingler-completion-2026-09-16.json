@@ -1,0 +1,86 @@
+{
+  "schema": "pokemon.red.registered-player-qualification.v1",
+  "session": "2026-09-16-model137-targeted-kingler-completion",
+  "rigor": "correlated-development",
+  "status": "prior_model_selected_goal_completed",
+  "source_commit": "ca68bacb",
+  "source_bundle_sha256": "69689883238dd1c412b3e2919e7626bd3a46c82ddb94e8edb5853ffdbe136c7b",
+  "registry_sha256": "5b7132579d8594d95b44b5b8aadbd1c90a4a9f1c7dfb7f2d026434edffa14834",
+  "goal_authority": {
+    "selected_by": "Model134 on its original seven-choice menu",
+    "goal": "Krabby to Kingler",
+    "selected_configuration_sha256": "64ead73c1e76de43d35fb08048850f5e10e91a96e50be6bf8d0d",
+    "prior_terminal_state_sha256": "9764ec06b43b893574877ab34f8b3e93945787b2ce10b5927abf10fe99eea0f7",
+    "new_model_decisions": 0,
+    "new_model_queries": 0,
+    "teacher_actions": 0,
+    "new_fitted_examples": 0,
+    "limitation": "The earlier capped choice was fitted once as an incomplete outcome. This continuation is not a second goal decision or another fitted label."
+  },
+  "targeted_qualification": {
+    "status": "verified_action_free",
+    "private_live_evolution_alternatives": 3,
+    "exact_matching_bindings": 1,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "unrelated_regional_route_menu_built": false
+  },
+  "private_run": {
+    "plan_sha256": "a7e2e736e55f29adccaafefbc91ab1079cc9c366b1bd715909e6c490f7d7feb8",
+    "output_plan_sha256": "8860a063673590eab22b9962ecfb1f945750259e42d4df04606ef7899d453112",
+    "outcome_sha256": "c4f06358c28f95d68e2304e3dfbc8ce5e0ba01355b8b8574b17fbb95de5df214",
+    "result_sha256": "28026c72cdb2945705ef1ed1a145939f7ac8c42b9a42d1741eab5376fb35a98b",
+    "terminal_state_sha256": "150d1c02ae785497e768e7c1f7216b0f3b8c62a3e29c81e71d505b9e3e84f456",
+    "maximum_actions": 36000,
+    "maximum_frames": 3500000,
+    "maximum_training_quanta": 64,
+    "controller_actions": 12208,
+    "emulator_frames": 1095240,
+    "safe_terminal": true,
+    "verification": "succeeded",
+    "status": "complete",
+    "error_chain": null
+  },
+  "measurement": {
+    "before_krabby_level": 19,
+    "before_krabby_experience": 7095,
+    "after_kingler_level": 28,
+    "after_kingler_experience": 22029,
+    "trainee_experience_gain_across_evolution": 14934,
+    "trainee_experience_per_action": 1.2233,
+    "unchanged_species_party_experience_gain": 2621,
+    "accounting_note": "The generic result's 2621 experience_gain excludes the evolved slot because its species ID changed; exact before/after slot-1 cartridge reads prove the trainee's 14934-XP gain. Do not use the generic total as Krabby throughput."
+  },
+  "collection": {
+    "before_registered": 94,
+    "after_registered": 95,
+    "new_registration": "pokemon:national:099",
+    "lost_registrations": [],
+    "native_route_target": 124,
+    "before_specimens": 74,
+    "after_specimens": 74,
+    "before_cash": 198,
+    "after_cash": 198,
+    "after_party_species": "Kingler",
+    "before_physical_krabby": 1,
+    "after_physical_krabby": 0,
+    "after_physical_kingler": 1
+  },
+  "verification": {
+    "focused_rom_free_tests_passed": 99,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "registry_regenerated_and_checked": true,
+    "product_focus_passed_before_execution": true,
+    "full_suite_run": false
+  },
+  "limitations": {
+    "independent_evaluation": false,
+    "fresh_red_acceptance": "0/5",
+    "rom_hack_unlocked": false,
+    "crystal_unlocked": false,
+    "github_push": false
+  },
+  "next": "Replan from the exact safe 95/124 terminal with a new model decision among genuinely distinct live goals. Keep the completed evolution and its support chunks one causal goal, do not refit the incomplete choice again, and inspect resource practicality before another long goal."
+}

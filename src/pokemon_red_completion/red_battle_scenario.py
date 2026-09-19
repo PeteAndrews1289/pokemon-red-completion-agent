@@ -35,20 +35,34 @@ def red_battle_move_is_model_supported(
 ) -> bool:
     """Return the learner's title-adapter support rule for one Red move slot."""
 
+    return red_battle_move_unsupported_reason(move_id, current_pp, catalog=catalog) is None
+
+
+def red_battle_move_unsupported_reason(
+    move_id: object, current_pp: object, *, catalog: PokemonRedBattleCatalog | None = None
+) -> str | None:
+    """Explain why one visible move cannot be an attack choice in this segment."""
+
+    if type(move_id) is not int or move_id <= 0:  # noqa: E721
+        return "invalid_move"
     if (
-        type(move_id) is not int  # noqa: E721
-        or move_id <= 0
-        or isinstance(current_pp, bool)
+        isinstance(current_pp, bool)
         or not isinstance(current_pp, (int, float))
         or not math.isfinite(current_pp)
         or current_pp <= 0
     ):
-        return False
+        return "no_pp"
     resolved_catalog = catalog or PokemonRedBattleCatalog()
-    return red_battle_move_is_refreshable_model_supported(
-        move_id,
-        catalog=resolved_catalog,
-    )
+    mechanics = resolved_catalog.resolve_move(pokemon_red_move_ref(move_id))
+    if mechanics.max_pp <= 0:
+        return "no_pp_capacity"
+    if "counter" in mechanics.effect_flags:
+        return "counter_needs_prior_damage"
+    if "self_destruct" in mechanics.effect_flags:
+        return "self_destruct_outside_segment"
+    if mechanics.power <= 0:
+        return "status_or_non_damaging_outside_segment"
+    return None
 
 
 def red_battle_move_is_refreshable_model_supported(
@@ -63,15 +77,7 @@ def red_battle_move_is_refreshable_model_supported(
     cartridge catalog must give the move a positive PP capacity.
     """
 
-    if type(move_id) is not int or move_id <= 0:  # noqa: E721
-        return False
-    resolved_catalog = catalog or PokemonRedBattleCatalog()
-    mechanics = resolved_catalog.resolve_move(pokemon_red_move_ref(move_id))
-    return (
-        mechanics.max_pp > 0
-        and mechanics.power > 0
-        and "self_destruct" not in mechanics.effect_flags
-    )
+    return red_battle_move_unsupported_reason(move_id, 1, catalog=catalog) is None
 
 
 def red_battle_supported_move_count(
@@ -111,10 +117,22 @@ class PreparedRedBattleScenario:
 
     initial_observation_sha256: str
     features: BattleFeatureBatch
+    allow_no_attack: bool = False
+    unsupported_candidate_reasons: tuple[str | None, ...] = ()
 
     def __post_init__(self) -> None:
-        if not any(self.features.legal_mask):
+        if not any(self.features.legal_mask) and not self.allow_no_attack:
             raise RedBattleScenarioError("battle scenario has no supported damaging candidate")
+        if self.unsupported_candidate_reasons and (
+            len(self.unsupported_candidate_reasons) != len(self.features.legal_mask)
+            or any(
+                legal and reason is not None
+                for legal, reason in zip(
+                    self.features.legal_mask, self.unsupported_candidate_reasons, strict=True
+                )
+            )
+        ):
+            raise RedBattleScenarioError("move support reasons differ from legal candidates")
 
     @property
     def supported_candidate_mask(self) -> tuple[bool, ...]:
@@ -126,20 +144,23 @@ class PreparedRedBattleScenario:
 def prepare_red_battle_scenario(
     encoder: PokemonRedObservationEncoder,
     initial_state: RawGameState,
+    *,
+    allow_no_attack: bool = False,
 ) -> PreparedRedBattleScenario:
     """Project an active MAIN-menu state and admit observable attack moves only."""
 
-    if not isinstance(initial_state, RawGameState) or initial_state.battle_state != 1:
-        raise RedBattleScenarioError("the first outcome family requires an active wild battle")
+    if not isinstance(initial_state, RawGameState) or initial_state.battle_state not in {1, 2}:
+        raise RedBattleScenarioError("battle scenario requires an active wild or trainer battle")
     snapshot = encoder.snapshot_from_raw(initial_state)
     payload = snapshot.to_dict()
     catalog = PokemonRedBattleCatalog()
-    projector = BattleFeatureProjector(catalog)
+    projector = BattleFeatureProjector(catalog, mask_counter_without_prior_damage=True)
     projected = projector.project(payload)
     moves = initial_state.battler_moves
     if moves is None:
         raise RedBattleScenarioError("battle move identities do not match projected candidates")
     supported_values: list[bool] = []
+    reasons: list[str | None] = []
     for slot_index, legal, pp in zip(
         projected.slot_indices,
         projected.legal_mask,
@@ -148,14 +169,11 @@ def prepare_red_battle_scenario(
     ):
         if slot_index >= len(moves) or moves[slot_index] == 0:
             raise RedBattleScenarioError("battle move identities do not match projected candidates")
-        supported_values.append(
-            legal
-            and red_battle_move_is_model_supported(
-                moves[slot_index],
-                pp,
-                catalog=catalog,
-            )
-        )
+        reason = red_battle_move_unsupported_reason(moves[slot_index], pp, catalog=catalog)
+        if reason is None and not legal:
+            reason = "disabled_or_mechanically_illegal"
+        reasons.append(reason)
+        supported_values.append(reason is None)
     supported = tuple(supported_values)
     features = BattleFeatureBatch(
         feature_names=projected.feature_names,
@@ -168,6 +186,8 @@ def prepare_red_battle_scenario(
     return PreparedRedBattleScenario(
         initial_observation_sha256=canonical_sha256(payload),
         features=features,
+        allow_no_attack=allow_no_attack,
+        unsupported_candidate_reasons=tuple(reasons),
     )
 
 
@@ -178,8 +198,8 @@ def project_red_battle_turn_outcome(
 
     before = execution.initial_state
     after = execution.final_state
-    if before.battle_state != 1:
-        raise RedBattleScenarioError("the first outcome family requires a wild battle")
+    if before.battle_state not in {1, 2}:
+        raise RedBattleScenarioError("turn outcome requires a wild or trainer battle")
     if after.battle_state not in {0, before.battle_state}:
         raise RedBattleScenarioError("battle outcome changed to an unsupported battle kind")
     if before.map_id != after.map_id:
@@ -220,10 +240,31 @@ def project_red_battle_turn_outcome(
     # selected move spends PP, the terminal cartridge state is still the
     # consequence observed after choosing that candidate.
     opponent_fainted = after.enemy_hp == 0
+    if before.battle_state == 2:
+        after_roster_hp = after.enemy_party_hp or execution.terminal_enemy_roster_hp
+        if (
+            before.enemy_party_position is None
+            or before.enemy_party_hp is None
+            or not 0 <= before.enemy_party_position < len(before.enemy_party_hp)
+            or after_roster_hp is None
+            or before.enemy_party_position >= len(after_roster_hp)
+        ):
+            raise RedBattleScenarioError("trainer outcome lacks enemy roster evidence")
+        opponent_fainted = after_roster_hp[before.enemy_party_position] == 0
     if opponent_fainted:
         opponent_damage = before_enemy_hp / before_enemy_max
     elif after.enemy_hp is None:
         raise RedBattleScenarioError("nonterminal outcome lacks final opponent HP")
+    elif before.battle_state == 2 and after.enemy_party_position != before.enemy_party_position:
+        assert after.enemy_party_hp is not None
+        assert before.enemy_party_position is not None
+        opponent_damage = (
+            max(
+                0,
+                before_enemy_hp - after.enemy_party_hp[before.enemy_party_position],
+            )
+            / before_enemy_max
+        )
     else:
         opponent_damage = max(0, before_enemy_hp - after.enemy_hp) / before_enemy_max
 

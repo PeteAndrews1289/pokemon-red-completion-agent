@@ -105,7 +105,7 @@ def bind_travel_capture_handler(
         runtime.reader,
         port,
         fallback,
-        policy.registered,
+        policy.goal_registered,
         policy.targets,
         dict(_ordinary_species(router.world.rom)),
         lambda: runtime.emulator.frame_count,

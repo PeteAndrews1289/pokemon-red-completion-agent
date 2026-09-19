@@ -148,9 +148,14 @@ def materialize_repeatable_red_battle_scenario(
     session_factory: RepeatableRedBattleScenarioSessionFactory,
     controller_timing: ControllerTiming | None = None,
     maximum_encounter_steps: int = 512,
+    executor_factory: Callable[
+        [RepeatableRedBattleScenarioSession, ControllerTiming], FrameSafeExecutor
+    ] = FrameSafeExecutor,
+    phase_observer: Callable[[str], None] = lambda phase: None,
 ) -> MaterializedRepeatableRedBattleScenario:
     """Execute one frozen assignment using only natural cartridge transitions."""
 
+    phase_observer("source_inspection")
     _require_materialization_inputs(
         source,
         assignment,
@@ -179,10 +184,11 @@ def materialize_repeatable_red_battle_scenario(
                 "loaded source differs from its authenticated observation"
             )
 
-        controller = FrameSafeExecutor(session, timing)
+        controller = executor_factory(session, timing)
         actions = CountingExecutor(controller)
         if assignment.scenario_kind is RepeatableBattleScenarioKind.WILD:
             assert assignment.venue_id is not None
+            phase_observer("relocation")
             edge, venue = _selected_venue(
                 raw,
                 assignment.venue_id,
@@ -191,6 +197,7 @@ def materialize_repeatable_red_battle_scenario(
                 rom_bytes=rom_bytes,
             )
             _prepare_source_venue(edge, venue, actions, reader, session)
+            phase_observer("encounter_setup")
             if assignment.pre_encounter_wait_frames:
                 actions.execute(
                     MacroAction(
@@ -212,6 +219,7 @@ def materialize_repeatable_red_battle_scenario(
             expected_map = venue.map_id
             expected_battle_state = 1
         else:
+            phase_observer("encounter_setup")
             if assignment.pre_encounter_wait_frames:
                 actions.execute(
                     MacroAction(

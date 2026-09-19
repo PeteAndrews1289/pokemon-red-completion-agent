@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon.red.cartridge-journal-qualification.v2",
+  "session": "2026-09-15-cartridge-journal-v2",
+  "status": "rom_free_qualification_passed",
+  "prior_campaign_status": "failed_consumed_no_retry",
+  "implementation": {
+    "integrated_entry": "qualify_repeatable_red_wild_battle",
+    "phases": ["source_inspection", "relocation", "encounter_setup", "battle", "terminal"],
+    "durable_assignment_and_claim_before_input": true,
+    "attempted_and_completed_actions_separate": true,
+    "actual_partial_tick_frames_retained": true,
+    "unknown_cost_explicit": true,
+    "prospective_case_and_campaign_caps": true,
+    "failure_closes_campaign": true,
+    "terminal_and_failure_readback_required": true,
+    "campaign_resume_supported": false,
+    "new_cartridge_campaign_frozen": false
+  },
+  "verification": {
+    "focused_regression_tests_passed": 371,
+    "focused_regression_tests_failed": 0,
+    "new_journal_and_integrated_tests": 33,
+    "whole_source_mypy_files": 503,
+    "ruff": "passed",
+    "full_local_suite_run": false,
+    "synthetic_cases": [
+      "failure_at_each_phase_exact_reopen",
+      "setup_direct_controller_boundary_included",
+      "actual_shared_wild_runtime_partial_action_failure",
+      "multiple_session_frame_origins",
+      "case_and_campaign_action_and_frame_caps",
+      "partial_tick_original_error_and_button_release",
+      "unreadable_counter_explicit_unknown",
+      "silent_short_tick_and_overrun_rejected",
+      "pre_input_and_post_action_persistence_failure",
+      "runtime_sink_failure_and_swallowed_actor_error_rejected",
+      "interrupt_retention",
+      "post_publication_readback_failure_without_double_abort",
+      "duplicate_identity_and_finished_executor_rejected"
+    ]
+  },
+  "learning_delta": {"examples": 0, "successes": 0, "fits": 0, "authority": 0},
+  "cartridge_delta": {"cases_opened": 0, "actions": 0, "frames": 0, "registrations": 0},
+  "unchanged_state": {
+    "model": "Model121", "examples": 121, "successes": 83,
+    "local_registered": 86, "local_target": 151,
+    "living_species": 66, "specimens": 70,
+    "collection_checklist_done": 25, "collection_checklist_total": 26,
+    "fresh_red_gates_passed": 0, "fresh_red_gates_total": 5
+  },
+  "limits": [
+    "No new cartridge or independent reliability evidence.",
+    "Unknown prior Diglett failure cause remains unknown; no historical cost reconstructed.",
+    "Move learning, forced switching, same-battler move replacement and alternate venue remain gaps.",
+    "A process kill or failed storage device can leave unresolved in-flight evidence; never resume or claim exact final cost.",
+    "A defective emulator can overrun a requested tick; retain actual cost and stop, never hide the excess."
+  ],
+  "review": {
+    "claude": "Opus High completed read-only accounting review: GO, no blocking findings; reviewed pre-final-refinement snapshot, not a substitute for final tests.",
+    "flash": "Gemini 3.8 Flash Low via agy timed out at three minutes without a verdict; no finding credited.",
+    "refreshed_service_quotas": "unavailable from both CLI commands"
+  },
+  "next": "Sol High: freeze a distinct bounded campaign with the V2 runner and exact source identities; no consumed-case replay. Stop on first accounting or settlement failure."
+}

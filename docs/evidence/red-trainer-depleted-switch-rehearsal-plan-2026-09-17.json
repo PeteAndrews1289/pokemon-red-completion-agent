@@ -1,0 +1,32 @@
+{
+  "schema": "pokemon.red.trainer-depleted-switch-rehearsal-plan.v1",
+  "purpose": "Check that a copied TRAIN trainer battle with zero actor attack PP yields legal switch-target counterfactuals and complete telemetry.",
+  "partition": "train",
+  "independence_claim": false,
+  "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+  "configuration_sha256": "442d2f2d1c482a0db4e0651c24feee3aa464b43fb50276c12fc7660e376ff6b5",
+  "source_commit": "HEAD after this prospective freeze commit",
+  "actor": "Pikachu level 35, Thunderbolt and Quick Attack both at zero PP",
+  "living_reserves": ["Vaporeon level 34", "Bulbasaur level 34"],
+  "opponent": "Vaporeon level 30 with a second opponent",
+  "action_free_preflight": {
+    "status": "passed",
+    "legal_move_count": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "execution_bound": {
+    "materializations": 1,
+    "baseline_runs": 1,
+    "counterfactual_opening_choices": ["switch:2", "switch:3"],
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "maximum_frames_per_episode": 120000,
+    "maximum_decisions_per_episode": 80,
+    "no_retry_after_failure": true
+  },
+  "success_criteria": [
+    "Assisted state has zero legal actor attacks and two legal living reserve switches.",
+    "All declared opening switch branches produce authenticated, complete event logs.",
+    "Any resulting labels remain same-root TRAIN only, never independent-root qualification."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "collection": {
+    "living_species": 66,
+    "registered_species": 86,
+    "total_living_specimens": 70
+  },
+  "external_review": {
+    "claude": {
+      "cli_version": "2.1.197",
+      "status": "reachable_not_logged_in_no_verdict"
+    },
+    "flash": {
+      "cli_version": "1.2.3",
+      "model": "gemini-3.8-flash-high",
+      "status": "reachable_timed_out_no_verdict"
+    }
+  },
+  "learning": {
+    "authority_promotion_performed": false,
+    "fit_performed": false,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0
+  },
+  "menu": {
+    "candidate_kinds": [
+      "restore_team",
+      "resupply"
+    ],
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "file_sha256": "c332ebc6dd316cf3d7ece2395a6e606c401fe16a0ba672cfddbbfe7a07b374fe",
+    "menu_sha256": "9e3c0c4f4e53826f44a753bf04c19869a185ea090f596631f33791f604ae685b",
+    "model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+    "status": "observed_action_free",
+    "supplemental_candidates": 0
+  },
+  "recovery": {
+    "collection_preserved": true,
+    "controller_actions": 11,
+    "emulator_frames": 1320,
+    "evolution_resumed": false,
+    "final_battle_state": 0,
+    "input_ready": true,
+    "manifest_sha256": "6958aea5101be534d60a736e8d9c84e51c12dab08966c7f9b509da3265d7a05f",
+    "map_id": 22,
+    "maximum_controller_actions": 256,
+    "maximum_emulator_frames": 100000,
+    "parent_state_sha256": "7541317818590ed65ee08ffc9c7e43af44999eb06524cf3032ed8ba082624b1a",
+    "position_yx": [
+      6,
+      12
+    ],
+    "primitive": "pokemon_red_completion.route_1_wild.flee_wild",
+    "result_sha256": "8089437618ae2c6285b678cad3af4fcf2a650b8c1f6b380b6936e6612b42d3d4",
+    "retry_allowed": false,
+    "run_attempts": 1,
+    "state_sha256": "21f77af82628f903f1b44ce8f052f6d58b5c2889bb7a545d33b27c427cc4096d",
+    "status": "verified_wild_exit_input_ready"
+  },
+  "roadmap": {
+    "development_save_pokedex_fraction": 0.5695364238410596,
+    "expanded_collection_checklist_complete": 25,
+    "expanded_collection_checklist_total": 26,
+    "final_fresh_red_gate_complete": 0,
+    "final_fresh_red_gate_total": 5,
+    "rom_hack_or_crystal_authorized": false
+  },
+  "schema": "pokemon.red.exact-terminal-recovery-public.v1",
+  "source": {
+    "commit": "ba84577e8190d7c87aa6c1704aa5affa5738d8ec",
+    "qualification_ci_run_id": 34959885914,
+    "source_bundle_sha256": "fce8013b5532c5e6e987423bef598a0aec98b3ee3336bd42cb37c3603a795ace"
+  },
+  "status": "verified_recovery_and_action_free_menu"
+}

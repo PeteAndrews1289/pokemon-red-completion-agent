@@ -29,8 +29,11 @@ class RedRegistrationPolicy:
     initial_snapshot_sha256: str
     initial_collection: CollectionObservation
     protected_counts: Mapping[str, int]
+    completion_scope: str = "shared"
 
     def __post_init__(self) -> None:
+        if self.completion_scope not in {"shared", "local_red"}:
+            raise ValueError("Red registration completion scope differs")
         initial = self.initial_memory.latest(self.run_id)
         if initial is None or initial.game_id != RED_COLLECTION_GAME_ID:
             raise ValueError("Red registered binding requires an actual Red run identity")
@@ -63,10 +66,17 @@ class RedRegistrationPolicy:
 
     @property
     def targets(self) -> frozenset[str]:
+        if self.completion_scope == "local_red":
+            return frozenset(red_species_ref(n) for n in range(1, 152))
         return frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species)
 
+    def goal_registered(self, current: CollectionObservation) -> frozenset[str]:
+        """Completion credit for this objective, without changing shared memory."""
+        shared = self.registered(current)
+        return current.owned_species if self.completion_scope == "local_red" else shared
+
     def document(self) -> dict[str, object]:
-        return {
+        document: dict[str, object] = {
             "schema": "pokemon.red.registered-runtime-binding.v1",
             "objective": REGISTERED_OBJECTIVE,
             "initial_memory_sha256": self.initial_memory.sha256,
@@ -75,6 +85,12 @@ class RedRegistrationPolicy:
             "targets": sorted(self.targets),
             "protected_counts": dict(sorted(self.protected_counts.items())),
         }
+        if self.completion_scope == "local_red":
+            document.update({
+                "schema": "pokemon.red.registered-runtime-binding.v2",
+                "completion_scope": self.completion_scope,
+            })
+        return document
 
     @property
     def sha256(self) -> str:
@@ -84,7 +100,7 @@ class RedRegistrationPolicy:
         self, current: CollectionObservation, source: str, target: str,
     ) -> bool:
         """No last-copy quota; explicit reserves and actual local stock still apply."""
-        registered = self.registered(current)
+        registered = self.goal_registered(current)
         counts = Counter(s.species_ref for s in current.specimens)
         return (target in self.targets and target not in registered
                 and counts[source] > self.protected_counts.get(source, 0))

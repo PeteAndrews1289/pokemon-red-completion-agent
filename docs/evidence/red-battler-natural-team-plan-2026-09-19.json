@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon.red.bounded-natural-team-plan.v1",
+  "mission_check": {
+    "capability": "Retain earned battle endpoints and test the frozen battler with a legitimately acquired reserve in natural trainer battles.",
+    "learned_authority": "Frozen J owns attacks, voluntary switches and replacements; preparation remains disclosed teacher gameplay.",
+    "transfer_test": "At most two unused natural boot origins, disjoint from the four TRAIN origins; frozen H and J at three paired timings.",
+    "cheapest_falsifier": "One bounded source preparation failure stops preparation; any actor assistance or invalid execution prevents natural qualification.",
+    "time_box": "Two hours including implementation, preparation and comparison; reassess source preparation after 45 minutes.",
+    "stop_condition": "No route repair, source replacement, fitting, consumed-trial replay, full-game run or GitHub push. Missing meaningful switching coverage is reported, not manufactured."
+  },
+  "preparation": {
+    "boot_frames": [2900, 3100],
+    "maximum_frames_per_source": 1000000,
+    "chapters": ["opening", "Oak errand", "Pewter", "Cerulean until required Rocket before actor selection"],
+    "boundary": "Mt. Moon required Rocket MAIN, two usable own Pokemon acquired by ordinary gameplay",
+    "source_memory_writes": 0,
+    "source_loads": 0,
+    "disclosure": "Existing teacher preparation includes its normal item sales, purchases, Zubat capture and move teaching. These are not model funding decisions or learned outcomes.",
+    "limitation": "Two own members test reserve use, not a nontrivial choice among multiple forced-replacement targets or six-member competence."
+  },
+  "comparison": {
+    "candidate_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+    "predecessor_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+    "opening_idle_frames": [0, 4, 8],
+    "max_decisions": 80,
+    "maximum_frames": 120000,
+    "max_cells": 12,
+    "order": "boot ascending, timing ascending, H then J; all plans frozen before first cell",
+    "criteria": "Terminal unassisted execution, no invalid actions or writes, no aggregate win regression versus H and actual reserve-use evidence. Perfect wins and statistical significance are not required.",
+    "retention": "Retain final state bytes on success and failure before closing the emulator; bind successful runner results to source, model, log and snapshot."
+  },
+  "integration": {
+    "condition": "Only if the declared natural test meets its gate",
+    "selection": "First successful J endpoint in declared order, without replay",
+    "scope": "One bounded earned-state semantic objective with fresh completion ledger; no full-player promotion."
+  }
+}

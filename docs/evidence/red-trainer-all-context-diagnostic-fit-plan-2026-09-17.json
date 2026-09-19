@@ -1,0 +1,26 @@
+{
+  "schema": "pokemon.red.trainer-all-context-diagnostic-fit-plan.v1",
+  "status": "prospective_not_executed",
+  "purpose": "Exercise the complete model-fitting interface with real execution-proven MAIN, depleted-MAIN, optional-prompt and forced-switch contrasts.",
+  "partition": "train",
+  "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+  "scenario_capture_ids": [
+    "assisted-train-8f3f40405567914b",
+    "assisted-train-3601c70c74753149",
+    "assisted-train-4809c8d4ab0a9aec-replacement-prompt",
+    "assisted-train-48d56e859f1f0c80-forced-replacement"
+  ],
+  "timing_offsets_each": [0, 2, 4, 6, 8],
+  "seed": 20260917,
+  "fits": 1,
+  "probe_then_check_then_fit": true,
+  "exploratory_fit_only": true,
+  "independence_claim": false,
+  "development_opened": false,
+  "promotion_allowed": false,
+  "success_criteria": [
+    "All four scenario chains join to the same authenticated original TRAIN state and complete event logs.",
+    "The three move/control/switch heads fit without treating timing siblings as separate roots.",
+    "The resulting model remains a diagnostic artifact; no quality claim or final-player authority follows without disjoint natural DEVELOPMENT."
+  ]
+}

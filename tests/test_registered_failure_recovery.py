@@ -42,9 +42,6 @@ from pokemon_red_completion.red_registration_session import (
     observe_registration,
     validate_terminal_registration,
 )
-from pokemon_red_completion.registered_checkpoint import (
-    REGISTERED_CHECKPOINT_SCHEMA,
-)
 
 
 class _Emulator:
@@ -66,8 +63,8 @@ class _Meter:
         return CompositionBudgetCheckpoint(self.actions, 37)
 
 
-@pytest.fixture
-def case(tmp_path: Path):
+@pytest.fixture(params=["shared", "local_red"])
+def case(tmp_path: Path, request):
     store_root = tmp_path / "root"
     store_root.mkdir(parents=True, exist_ok=True)
     _, _, store = _make_store(store_root)
@@ -86,6 +83,7 @@ def case(tmp_path: Path):
     )
 
     _, before, _, policy = observations(tmp_path / "fixture")
+    policy = replace(policy, completion_scope=request.param)
     reg_checkpoint = project_registered_observation(before, policy).registered_checkpoint
     obs = replace(_observation(storage=4), collection=reg_checkpoint)
 
@@ -288,7 +286,7 @@ def test_registered_recovery_roundtrip_zero_model_decisions(case):
         expected_rom_sha256=arguments["rom_sha256"],
         expected_context_origin="training",
     )
-    assert checkpoint.collection["schema"] == REGISTERED_CHECKPOINT_SCHEMA
+    assert checkpoint.collection == observation.collection.public_dict()
     assert document["terminal_result"]["decisions"] == 0
     assert document["terminal_result"]["authority_decisions"] == 0
     assert document["terminal_result"]["training_examples"] == 0

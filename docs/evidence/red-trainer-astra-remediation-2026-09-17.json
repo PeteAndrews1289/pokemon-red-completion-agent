@@ -1,0 +1,86 @@
+{
+  "schema": "pokemon.red.trainer-astra-remediation.v1",
+  "session_date": "2026-09-17",
+  "status": "mechanics_repaired_training_pilot_completed_natural_promotion_gate_failed",
+  "review": "docs/reviews/red-trainer-astra-review-2026-09-17.md",
+  "mission_check": {
+    "reusable_capability": "Three-head model chooses attacks, voluntary switches, prompted switches and forced replacements in bounded full-party Red trainer battles.",
+    "learned_authority": "TRAIN-only fit; no live-player or final-model promotion.",
+    "transfer_test": "Separate natural DEVELOPMENT battles using one frozen challenger and fixed/frozen controls; all historical captures share unresolved ancestry.",
+    "cheapest_falsifier": "Corrected feedback and distinct TRAIN pairs must teach observable choice reversals; natural hard battles must improve without worse losses.",
+    "time_box": "One implementation and bounded evaluation session; no full-game replay.",
+    "stop_condition": "Preserve failed natural cohort; do not tune on DEVELOPMENT or promote after a mixed/negative comparison."
+  },
+  "review_findings": {
+    "R1": "repaired; selected-turn attack damage and referee-only roster damage survive living opponent switches; four-foe no-healing conservation test passes",
+    "R2": "partly addressed; 16 new distinct paired TRAIN contexts, graded timing-averaged targets, duplicate-input aggregation and simple-control regret diagnostics; one of three reversal pairs still missed",
+    "R3": "repaired; versioned fit/live control projection excludes untrained history and logs exact head vectors",
+    "R4": "repaired; explicit observed replacement event distinguishes same-species and return send-outs without hidden roster identity",
+    "R5": "evaluated but not passed; prospective correlated League cohort fails its frozen-control outcome rule",
+    "R6": "repaired for declared attack/switch segment; Counter is masked consistently; status strategy, recovery/boost and all-party Struggle remain unsupported"
+  },
+  "train": {
+    "upstream_clean_power_roots": 4,
+    "original_contexts": 28,
+    "new_contexts": 16,
+    "total_contexts": 44,
+    "fit_receipt_sha256": "0730ef919fabb75e0fb0e08e38189c95d931f34f1b6dee51b49256b399114ff7",
+    "model_sha256": "5142af9d2dce76f455bdaf2b3230fa025956e6c1aa3ba3c73d47700dd6942c0d",
+    "optimizer_epochs": 2400,
+    "examples_and_unique_inputs": {
+      "move": [32, 20],
+      "control": [36, 21],
+      "switch": [42, 19]
+    },
+    "mean_train_regret_model_vs_first_candidate": {
+      "move": [0.035384769, 0.175005484],
+      "control": [0.000477223, 0.529148633],
+      "switch": [0.134933859, 0.801412164]
+    },
+    "clear_type_reversal_pairs_learned": "2_of_3",
+    "development_used_for_fit": false
+  },
+  "development": {
+    "ancestry": "Cinnabar, Lorelei and the portable-loop League checkpoints are correlated historical Red progression; no independent natural origin is claimed.",
+    "cinnabar_exploratory": {
+      "summary_sha256": "453e0674fd9683bb13d1d0313515c067e1d02a0466e6e8add6c0dc22ddb6f9be",
+      "challenger": {"won": true, "attacks": 3, "party_faints": 0, "party_hp_lost": 0, "voluntary_switches": 0},
+      "frozen": {"won": true, "attacks": 3, "party_faints": 0, "party_hp_lost": 0},
+      "fixed": {"won": true, "attacks": 6, "party_faints": 0, "party_hp_lost": 6}
+    },
+    "lorelei_exploratory": {
+      "summary_sha256": "fa2e9dcbb296d78dbf03efc0730c29193ce43a192d78c502368e133e02baecca",
+      "challenger": {"won": true, "attacks": 13, "party_faints": 2, "party_hp_lost": 424, "voluntary_switches": 5},
+      "frozen": {"won": true, "attacks": 25, "party_faints": 2, "party_hp_lost": 341},
+      "fixed": {"won": true, "attacks": 26, "party_faints": 3, "party_hp_lost": 463},
+      "interpretation": "Switching and attack efficiency appeared, but the HP tradeoff is unfavorable against frozen."
+    },
+    "predeclared_league_cohort": {
+      "plan_sha256": "5f1eb8900876553cd60677cb0922a6e2b72398b91431f8d00b1de5755a9e4d8d",
+      "result": "failed",
+      "bruno_summary_sha256": "8b00038b41aa1f46c806b05bb8a144bd4606592e3f3d73cc534c4077cd7107a3",
+      "agatha_first_attempt_failure_sha256": "79276220745206d157d513c63bac5f24dbe104f782148472c37b828455192d1a",
+      "agatha_post_mechanics_fix_summary_sha256": "b77c4b175aea91dff7ce571a34256ada9b59f2e6883cea6799ac3bcbee890e36",
+      "lance_summary_sha256": "237d2d6ee9fca6ac6f6b5fc99a4dd97178924c85ff9c09b1331757d351c2b655",
+      "challenger_post_fix_descriptive_totals": {"wins": 3, "attacks": 27, "party_faints": 1, "party_hp_lost": 552},
+      "frozen_post_fix_descriptive_totals": {"wins": 3, "attacks": 24, "party_faints": 0, "party_hp_lost": 340},
+      "comparison_status": "The original prospectively declared attempt failed on Agatha before all arms completed. A mechanics-only fix permitted a separate descriptive Agatha replay; even on that replay the frozen control remains better overall. The first cohort is not retroactively upgraded to a pass."
+    }
+  },
+  "new_mechanics_defect": {
+    "trigger": "Sleeping selected battler faints before its move spends PP during Agatha.",
+    "repair": "Bounded sleep recovery admits the expected unspent faint, preserves map and PP proof, and returns to forced-replacement handling.",
+    "verification": "ROM-free regression and complete post-fix Agatha comparison; no training update."
+  },
+  "product_counters": {
+    "model137_examples": 137,
+    "model137_successes": 92,
+    "model137_economy_qualified": 58,
+    "red_native_registrations": "96/124",
+    "fresh_acceptance": "0/5",
+    "trainer_model_authority_promotions": 0,
+    "full_game_runs": 0,
+    "github_pushes": 0
+  },
+  "next_bounded_decision": "Expand varied independent TRAIN battle choices without consulting consumed DEVELOPMENT outcomes, then fit and evaluate on a new independent-origin natural source. Until that gate passes, keep the older frozen control and deny full-player trainer authority."
+}

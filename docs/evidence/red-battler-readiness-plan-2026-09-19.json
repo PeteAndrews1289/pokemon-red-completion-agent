@@ -1,0 +1,39 @@
+{
+  "schema": "pokemon.red.battler-readiness-plan.v1",
+  "session": "2026-09-19-battler-readiness-v1",
+  "capability": "Reliable learned attack and party-switch decisions across varied multi-turn trainer battles.",
+  "learned_authority": "Existing neural heads choose moves, attack versus switch, and replacements. No referee, lookup table or teacher substitutes actions during evaluation.",
+  "transfer_test": "Freeze each candidate before prospective unused scenario comparisons; retain natural encounter ancestry and require independent-origin evidence for broader readiness. No consumed DEVELOPMENT replay or training.",
+  "cheapest_falsifier": "Inspect stalled attack-gradient constraints and observed TRAIN coverage without fitting or launching a ROM.",
+  "time_box": "Two hours before mandatory reassessment; proceed through diagnosis, justified bounded learning and qualification rather than stopping at another review.",
+  "stop_condition": "Stop a declared candidate on its frozen failure rules. Retain diagnostics before deciding whether a distinct successor is justified; no blind hyperparameter sweep, weakened retention limits, full-game run or publication.",
+  "unchanged_retention_limits": {"original44_move": 0.0554, "retained52_move": 0.0648, "retained52_composed": 0.1609},
+  "readiness_scope": "Attack and switching segment only; unsupported status/recovery/boost, Counter, self-destruct and all-party Struggle remain explicit exclusions.",
+  "initial_action": "Read-only existing TRAIN audit completed: one binding protected attack was worse by 0.1005979682 measured return, and finite projection left a linearized violation. Terminal128 covers only five active species, all level32.",
+  "bounded_successor": {
+    "initial_model_sha256": "9f2aa62d01b72217931a3fab4b60e69522734f69b7eeab43b90e46498c34cbbc",
+    "authenticated_cache_manifest_sha256": "1ace87d6705c4002d0064590ae09526e64506a35e16fcc9a4ab3b53e1af043fe",
+    "fits": 1,
+    "head_order": ["move", "control"],
+    "switch_head": "frozen",
+    "optimizer": "Adam, 2400 epochs per head, learning rate0.005, beta1=0.9, beta2=0.999, epsilon1e-8, no restarts",
+    "loss": "equal group weight old52 and terminal128 measured expected regret",
+    "checkpoint_selection": "Only numeric-budget-feasible TRAIN checkpoints; minimize terminal selected-action regret, then terminal expected regret, then earliest epoch. Intermediate iterates are never deployed.",
+    "move_budgets": "original44<=0.0554, retained52<=0.0648, new80 no regression",
+    "control_budgets": "retained52 composed<=0.1609, new80 composed no regression; exact child-proposal regret included",
+    "acceptance": "All unchanged old gates, at least10% improvement versus initial in both terminal128 move and composed selected-action regret, and no new80 move or composed regression",
+    "development": "No DEVELOPMENT observations enter optimization, checkpoint selection or fit. Consumed Champion remains failed and unavailable for reuse. Freeze broader TRAIN qualification recipes separately before emulator execution."
+  },
+  "saturation_successor": {
+    "initial_model_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+    "diagnosis": "On late90 TRAIN, all24 control errors and all12 switch errors have >99% predicted confidence. Best measured alternatives can have probability below1e-30; control expected-regret gradient norm is0.0000126858. New-team comparison improved14wins versus11 but teacher won17; its cases are excluded from fitting.",
+    "fits": 1,
+    "new_labels": 0,
+    "corpus": "Same authenticated318 TRAIN contexts; prior228 and late90 get equal group weight.",
+    "loss": "Measured-return-gap weighted pairwise logistic ranking. Confidently inverted preferences retain a correction gradient. No teacher preference labels or hand-coded inference scores.",
+    "schedule": "Same move/switch/control warm-start heads,2400Adam epochs each,learning rate0.005; no restart or sweep.",
+    "selection": "Actual selected-action regret first, expected regret second, earliest feasible checkpoint; all existing numerical retention gates remain.",
+    "qualification": "Only after TRAIN acceptance, freeze candidate against its predecessor and separate teacher on24new recipes with seed2026091908. No replay of earlier cohorts or natural DEVELOPMENT."
+  },
+  "github_publication": false
+}

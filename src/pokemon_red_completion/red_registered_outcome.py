@@ -46,7 +46,7 @@ def red_registered_outcome_from_observations(
         old_local, new_local, succeeded=succeeded, actions=actions, frames=frames,
         maximum_actions=maximum_actions, maximum_frames=maximum_frames,
     )
-    novelty = len((set(new.global_species) - set(old.global_species)) & set(old.target_species))
+    novelty = len((set(new.credited_species) - set(old.credited_species)) & set(old.target_species))
     return replace(
         costs, verified_success=succeeded,
         completion_gain=novelty / max(1, len(old.target_species)),

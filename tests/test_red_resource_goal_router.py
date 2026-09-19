@@ -12,10 +12,17 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalExecutionReport,
+    GoalVerification,
+)
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import ItemId, MapId
+from pokemon_red_completion.red_capture_access import required_wild_source_items
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalMechanic,
+    bind_resupply_fly_profile,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
@@ -26,6 +33,8 @@ from pokemon_red_completion.red_goal_skills import (
     RedMartPurchase,
     RedMartResupplyGoalProvider,
 )
+from pokemon_red_completion.red_routed_capture_items import bind_capture_item_support
+from pokemon_red_completion.red_routed_semantic_goal import FreshRedGoalObservation
 from pokemon_red_completion.route_executor import TraversalSnapshot
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
@@ -193,6 +202,58 @@ def test_route_limit_covers_every_declared_handler_interruption() -> None:
     )
 
 
+def test_explicit_fly_precedes_an_available_cross_region_walk(fixture, monkeypatch):
+    f = fixture
+    f.router.runtime.profile = bind_resupply_fly_profile(f.router.runtime.profile)
+    flight = ExecutableGoalBinding(
+        "synthetic-preferred-flight",
+        GoalKind.RESUPPLY,
+        0.2,
+        0.1,
+        lambda: GoalExecutionReport(0, 0, {}),
+        lambda _report: GoalVerification.succeeded(),
+    )
+    calls = []
+
+    def bind(*args):
+        calls.append(args[1].parameters["fly_transport"])
+        return flight
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_collection_fly.bind_collection_fly", bind,
+    )
+    f.world.plan_feasible_to_map = lambda *_a, **_k: pytest.fail(
+        "walking planner ran before explicit Fly"
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert result.bindings == (flight,)
+    assert calls == [True]
+    assert f.actions.actions_executed == 0
+
+
+def test_illegal_explicit_fly_falls_back_to_walking(fixture, monkeypatch):
+    f = fixture
+    f.router.runtime.profile = bind_resupply_fly_profile(f.router.runtime.profile)
+    calls = []
+
+    def bind(*_args):
+        calls.append("fly")
+        return None
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_collection_fly.bind_collection_fly", bind,
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert calls == ["fly"]
+    assert len(f.world.plans) == 1
+    assert any(binding.kind is GoalKind.RESUPPLY for binding in result.bindings)
+    assert f.actions.actions_executed == 0
+
+
 def test_router_does_not_advertise_route_without_every_interruption_capability(
     fixture, monkeypatch,
 ):
@@ -306,6 +367,135 @@ def test_routed_kind_filter_skips_unrelated_transport_but_keeps_local_menu(fixtu
     for invalid in (set(), frozenset(), frozenset({"acquire"})):
         with pytest.raises(TypeError, match="GoalKind frozenset"):
             f.router.enumerate_routed_kinds(f.adapter.observe(), invalid)
+
+
+def test_missing_capture_item_uses_only_explicit_item_support(fixture, monkeypatch):
+    f = fixture
+    f.reader.raw = replace(
+        f.reader.raw,
+        map_id=int(MapId.ROUTE_1),
+        bag_items=((int(ItemId.POKE_BALL), 10),),
+        bag_item_ids=(int(ItemId.POKE_BALL),),
+    )
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:PokemonTower3F:grass",
+        area_executor=_AreaExecutor(
+            f.reader, f.actions, source_id="wild:PokemonTower3F:grass"
+        ),
+        actions=f.actions,
+        emulator=f.port,
+        adapter=f.adapter,
+        required_capture_items=required_wild_source_items(
+            "wild:PokemonTower3F:grass"
+        ),
+    )
+    f.router.runtime.profile = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id="synthetic-capture-item-support",
+            providers=(
+                (
+                    GoalKind.ACQUIRE_SPECIES,
+                    RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                    {
+                        "source_id": "wild:PokemonTower3F:grass",
+                        "label": "synthetic Tower source",
+                        "map_id": int(MapId.POKEMON_TOWER_3F),
+                        "player_x": 4,
+                        "player_y": 2,
+                        "forward_directions": ["up"],
+                        "starting_endpoint": "south",
+                        "maximum_legs": 8,
+                        "maximum_seek_steps": 8,
+                        "maximum_encounters": 8,
+                    },
+                ),
+                (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+                (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {}),
+            ),
+        )
+    )
+    f.router.runtime.provider_for = lambda *_a: provider
+    f.router.runtime.enumerator = lambda *_a: RedGoalOpportunityEnumerator((provider,))
+    supported = ExecutableGoalBinding(
+        "synthetic-capture-item-support",
+        GoalKind.ACQUIRE_SPECIES,
+        0.4,
+        0.2,
+        lambda: GoalExecutionReport(0, 0, {}),
+        lambda _report: GoalVerification.succeeded(),
+    )
+    calls = []
+
+    def bind(*args):
+        calls.append(args)
+        return supported
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_routed_capture_items.bind_capture_item_support",
+        bind,
+    )
+    before = (f.actions.actions_executed, f.port.frame_count)
+
+    disabled = f.router.enumerate(f.adapter.observe())
+    assert not calls
+    assert all(binding.kind is not GoalKind.ACQUIRE_SPECIES for binding in disabled.bindings)
+
+    f.router.prepare_capture_items = True
+    enabled = f.router.enumerate(f.adapter.observe())
+    assert len(calls) == 1
+    assert calls[0][2] is provider
+    assert enabled.require(supported.binding_ref) is supported
+    assert (f.actions.actions_executed, f.port.frame_count) == before
+
+
+@pytest.mark.parametrize("poke_balls,expected", [(10, True), (0, False)])
+def test_capture_item_support_planning_is_action_free_and_requires_other_resources(
+    fixture, poke_balls, expected,
+):
+    f = fixture
+    f.reader.raw = replace(
+        f.reader.raw,
+        map_id=int(MapId.ROUTE_1),
+        bag_items=(
+            ((int(ItemId.POKE_BALL), poke_balls),) if poke_balls else ()
+        ),
+        bag_item_ids=((int(ItemId.POKE_BALL),) if poke_balls else ()),
+    )
+    f.reader.read_pc_items = lambda: ((int(ItemId.SILPH_SCOPE), 1),)
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:PokemonTower3F:grass",
+        area_executor=_AreaExecutor(
+            f.reader, f.actions, source_id="wild:PokemonTower3F:grass"
+        ),
+        actions=f.actions,
+        emulator=f.port,
+        adapter=f.adapter,
+        required_capture_items=(ItemId.SILPH_SCOPE,),
+    )
+    spec = SimpleNamespace(
+        parameters={
+            "map_id": int(MapId.POKEMON_TOWER_3F),
+            "player_x": 4,
+            "player_y": 2,
+        }
+    )
+    observation = f.adapter.observe()
+    fresh = FreshRedGoalObservation(
+        "0" * 64, observation, f.port.observe()
+    )
+    before = (f.actions.actions_executed, f.port.frame_count)
+
+    binding = bind_capture_item_support(
+        f.router, spec, provider, observation, fresh, f.port
+    )
+
+    assert (binding is not None) is expected
+    if binding is not None:
+        assert binding.kind is GoalKind.ACQUIRE_SPECIES
+        assert binding.search_source_ref == (
+            "pokemon.red:acquisition:wild:PokemonTower3F:grass"
+        )
+    assert (f.actions.actions_executed, f.port.frame_count) == before
 
 
 def test_inventory_route_cache_reuses_identical_success_and_failure_queries(fixture):

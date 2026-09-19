@@ -1,0 +1,100 @@
+{
+  "schema": "pokemon.red.registered-player-capability-gate.v1",
+  "status": "stopped_no_heterogeneous_executable_menu",
+  "source_parent_commit": "7041d1f9dee0ca397f20429f6beddaff19f47598",
+  "source_bundle_before_sha256": "c9699f5e67103368bf86331f3f0093b853605d1d7412e6e2b2191a76935c778c",
+  "prospective_source_bundle_sha256": "138e80818844547c8f7e5c68c104844371fee33e712ce11693e9ec3de0826022",
+  "model": {
+    "name": "Model123",
+    "sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa",
+    "settled_examples": 123,
+    "successful_examples": 84,
+    "queries": 0
+  },
+  "authenticated_terminal": {
+    "episode_id": "red-model122-heterogeneous-evolution-terminal-20260915",
+    "checkpoint_record_sha256": "10e1f29eef8beea403c083400a1c95c5f86ec3c35d1ee8b3bd78c7938dc4cb0a",
+    "checkpoint_manifest_sha256": "0b89c21aa3d9fd757613b508161d49bf83d368a343765f3f5ab417731d9d0b6e",
+    "state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b",
+    "registered_species": 88,
+    "living_species": 67,
+    "total_living_specimens": 71,
+    "cash": 206,
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "action_free_falsifier": {
+    "missing_boxed_level_evolutions": 0,
+    "evolution_stones_in_bag": 0,
+    "evolution_stones_in_pc": 0,
+    "stone_price": 2100,
+    "cash": 206,
+    "missing_stone_evolution_candidates_with_owned_precursors": 9,
+    "conclusion": "The terminal cannot truthfully expose an immediately executable evolution family alongside acquisition. No menu was frozen and no model choice was requested."
+  },
+  "capability_added": {
+    "module": "src/pokemon_red_completion/red_party_item_evolution.py",
+    "scope": "bounded party-only item evolution using an already-held exact cartridge-derived item",
+    "verified_properties": [
+      "rejects invalid cartridge edges, battle state, unavailable inventory and unauthorized registration transitions before input",
+      "uses bounded menu actions and verifies the exact evolved species, one-item consumption, unchanged unrelated party state and monotonic Pokedex state",
+      "does not purchase items, withdraw boxed specimens or claim live cartridge qualification"
+    ],
+    "focused_tests_passed": 40,
+    "combined_protocol_tests_passed": 79,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "live_gameplay_qualified": false
+  },
+  "funding_observation": {
+    "status": "calculation_only_not_execution_authority",
+    "renewable_inventory_sale_value_available": 1900,
+    "cash_after_candidate_sales": 2106,
+    "cash_after_one_stone_purchase": 6,
+    "required_next_binding": "A separate reusable procurement provider must authenticate shop access, bounded sales, purchase and resulting inventory before item evolution can be offered."
+  },
+  "effects": {
+    "learning_examples": 0,
+    "successful_examples": 0,
+    "registered_species": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0
+  },
+  "review": {
+    "gemini_3_8_flash_high": {
+      "used": true,
+      "accepted": "Keep stone use hermetic and require the stone to be held; implement shopping or other procurement as a separate provider.",
+      "rejected_or_deferred": "An in-game trade does not by itself restore heterogeneous GoalKind coverage, and no trade outcome was authorized.",
+      "quota_refreshed": false
+    },
+    "claude_used": false
+  },
+  "verification": {
+    "full_suite_progress_before_stop": {
+      "passed": 6770,
+      "skipped": 3,
+      "xfailed": 1,
+      "failed": 2,
+      "progress_percent": 56
+    },
+    "isolated_failure_recheck": {
+      "historical_registry_loader": "passed",
+      "exact_local_mac_runtime_identity": "failed because installed PyBoy metadata bytes do not match the historical exact pin"
+    },
+    "new_module_related_failures": 0
+  },
+  "boundaries": {
+    "gameplay_started": false,
+    "menu_frozen": false,
+    "choice_executed": false,
+    "teacher_substitution": false,
+    "github_pushed": false,
+    "user_controls_publication": true
+  },
+  "next_bounded_objective": "Bind and ROM-free qualify one separate funding-and-stone-procurement provider plus cartridge-derived move-learning admission; integrate it with party item evolution without route-specific orchestration. Stop before gameplay if a reusable shop boundary cannot be authenticated."
+}

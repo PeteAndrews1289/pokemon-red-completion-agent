@@ -79,6 +79,27 @@ def _raw() -> RawGameState:
     )
 
 
+def test_trainer_snapshot_exposes_opponent_team_depth_without_private_roster() -> None:
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        enemy_species_id=177,
+        enemy_level=30,
+        enemy_hp=20,
+        enemy_max_hp=60,
+        enemy_party_count=6,
+        enemy_party_position=2,
+        enemy_party_hp=(0, 0, 20, 45, 0, 12),
+    )
+    encoder = PokemonRedObservationEncoder(
+        _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
+    )
+    battle = encoder.snapshot().to_dict()["features"]["battle"]
+    assert battle["opponent_party_count"] == 6
+    assert battle["opponent_remaining_count"] == 3
+    assert "opponent_party_hp" not in battle
+
+
 def test_red_encoder_exposes_normalized_and_namespaced_semantics() -> None:
     encoder = PokemonRedObservationEncoder(
         _Reader(_raw(), BattleMenuState(BattleMenuPhase.UNKNOWN))
@@ -183,6 +204,8 @@ def test_red_encoder_normalizes_battle_state_without_raw_memory() -> None:
         "opponent_hp": 11,
         "opponent_max_hp": 22,
         "opponent_hp_ratio": 0.5,
+        "opponent_party_count": None,
+        "opponent_remaining_count": None,
         "player_attack_stage": 1,
         "player_special_stage": None,
         "player_accuracy_stage": -1,
@@ -294,9 +317,13 @@ def test_red_encoder_exposes_all_party_moves_for_matchup_ranking() -> None:
         enemy_max_hp=150,
     )
 
-    members = PokemonRedObservationEncoder(
-        _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
-    ).snapshot().to_dict()["features"]["party"]["members"]
+    members = (
+        PokemonRedObservationEncoder(
+            _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
+        )
+        .snapshot()
+        .to_dict()["features"]["party"]["members"]
+    )
 
     assert [move["move_ref"] for move in members[1]["moves"]] == [
         pokemon_red_move_ref(0x57),
@@ -770,3 +797,24 @@ def test_snapshot_from_raw_uses_the_exact_policy_state_instead_of_rereading() ->
     features = snapshot.to_dict()["features"]
     assert features["party"]["lead"]["hp"] == 17
     assert features["battle"]["opponent_hp"] == 11
+
+
+def test_versioned_battle_stat_view_exposes_only_public_opponent_mechanics() -> None:
+    raw = replace(
+        _raw(), battle_state=2, enemy_species_id=0x99, enemy_level=32,
+        enemy_hp=30, enemy_max_hp=70, enemy_status=0x40,
+        party_stats=((45, 29, 67, 42),), active_party_stats=(45, 29, 67, 42),
+    )
+    reader = _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
+    old = PokemonRedObservationEncoder(reader).snapshot().to_dict()
+    enriched = PokemonRedObservationEncoder(
+        reader, include_battle_stats=True,
+        public_species_base_stats={0x99: (35, 55, 30, 90, 50)},
+    ).snapshot().to_dict()
+    assert "stats" not in old["features"]["party"]["lead"]
+    assert "opponent_public_base_stats" not in old["features"]["battle"]
+    assert enriched["features"]["party"]["lead"]["stats"] == {
+        "attack": 45, "defense": 29, "speed": 67, "special": 42,
+    }
+    assert enriched["features"]["battle"]["opponent_public_base_stats"]["speed"] == 90
+    assert enriched["features"]["battle"]["opponent_status"] == "paralysis"

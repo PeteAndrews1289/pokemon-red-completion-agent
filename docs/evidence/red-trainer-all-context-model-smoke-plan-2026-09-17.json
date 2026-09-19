@@ -1,0 +1,21 @@
+{
+  "schema": "pokemon.red.trainer-all-context-model-smoke-plan.v1",
+  "status": "prospective_not_executed",
+  "purpose": "Verify that the newly fitted three-head diagnostic model owns legal live decisions from each non-ordinary trainer context without teacher fallback.",
+  "model_sha256": "5f50b20258c93ea1c69d7ffe53a5893c107c57273414e02fd227150ccfe19878",
+  "qualification_tier": "correlated_exploratory_train_only",
+  "partition": "train",
+  "captures": [
+    "assisted-train-3601c70c74753149",
+    "assisted-train-4809c8d4ab0a9aec-replacement-prompt",
+    "assisted-train-48d56e859f1f0c80-forced-replacement"
+  ],
+  "one_attempt_each": true,
+  "maximum_decisions_each": 80,
+  "maximum_frames_each": 120000,
+  "success_criteria": [
+    "Each run records its model-selected semantic action before controller input.",
+    "Each selected action is legal and the event log verifies without a teacher choice or fallback.",
+    "These in-training-context smoke runs are not generalization, development advantage or promotion evidence."
+  ]
+}

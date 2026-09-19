@@ -10,7 +10,13 @@ from pokemon_red_completion.gen1_trainer_parties import (
     TrainerPartyMember,
     TrainerPartyQuote,
 )
-from pokemon_red_completion.observation import Badge, EventFlag, ItemId, RawGameState
+from pokemon_red_completion.observation import (
+    Badge,
+    EventFlag,
+    ItemId,
+    RawGameState,
+    event_flag_is_set,
+)
 from pokemon_red_completion.party import (
     MoveObservation,
     PartyMemberObservation,
@@ -143,7 +149,7 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "defeat_champion",
     ]
     assert result.public_dict() == {
-        "schema": "pokemon.red.repeatable-league-funding-qualification.v3",
+        "schema": "pokemon.red.repeatable-league-funding-qualification.v4",
         "status": "ready_for_bounded_executor",
         "exit_steps": 1,
         "fly_town": 9,
@@ -158,6 +164,7 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "expected_net_income": 1_500,
         "supported_attack_pp": 50,
         "opponent_attack_demands": 26,
+        "pre_entry_league_reset": False,
         "minimum_one_attack_allocation": True,
         "battles": [
             {
@@ -165,8 +172,7 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
                 "expected_money": money,
                 "maximum_opponent_level": level,
                 "recovery_controller": (
-                    "bounded-critical-risk" if name == "lance"
-                    else "ordinary-bounded-healing"
+                    "bounded-critical-risk" if name == "lance" else "ordinary-bounded-healing"
                 ),
                 "maximum_full_restores": 0 if name == "lance" else 1,
                 "maximum_critical_exposures": 2 if name == "lance" else 0,
@@ -201,7 +207,10 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
     ],
 )
 def test_quoted_controller_authority_cannot_be_malformed(
-    objective, controller, restores, risks,
+    objective,
+    controller,
+    restores,
+    risks,
 ):
     with pytest.raises(ValueError, match="controller contract"):
         league.RedLeagueBattleQuote(
@@ -225,6 +234,51 @@ def test_qualification_rejects_a_partially_consumed_league(qualified, consumed):
     observation.raw = replace(observation.raw, event_flags=bytes(flags))
     with pytest.raises(league.RedLeagueFundingError, match="fresh postgame"):
         league.qualify_red_league_funding(b"rom", observation, reader, world)
+
+
+def test_qualification_projects_complete_blackout_prefix_through_lobby_reset(
+    qualified,
+    monkeypatch,
+):
+    observation, reader, world = qualified
+    flags = bytearray(observation.raw.event_flags)
+    for consumed in (
+        EventFlag.BEAT_LORELEI,
+        EventFlag.BEAT_BRUNO,
+        EventFlag.BEAT_AGATHA,
+        EventFlag.BEAT_LANCES_ROOM_TRAINER,
+        EventFlag.BEAT_LANCE,
+    ):
+        flags[int(consumed) // 8] |= 1 << (int(consumed) % 8)
+    observation.raw = replace(observation.raw, event_flags=bytes(flags))
+    projected = []
+    monkeypatch.setattr(
+        league,
+        "trainer_room_arrival",
+        lambda _rom, _map, events: projected.append(events) or "lorelei-arrival",
+    )
+    monkeypatch.setattr(
+        league,
+        "_room_quote",
+        lambda _rom, events, *_args: projected.append(events) or _quote(len(projected), 100),
+    )
+
+    result = league.qualify_red_league_funding(b"rom", observation, reader, world)
+
+    assert result.reset_stale_league_events is True
+    assert projected
+    assert all(
+        not event_flag_is_set(events, event)
+        for events in projected
+        for event in (
+            EventFlag.BEAT_LORELEI,
+            EventFlag.BEAT_BRUNO,
+            EventFlag.BEAT_AGATHA,
+            EventFlag.BEAT_LANCES_ROOM_TRAINER,
+            EventFlag.BEAT_LANCE,
+            EventFlag.BEAT_CHAMPION_RIVAL,
+        )
+    )
 
 
 def test_qualification_rejects_nominal_income_that_would_hit_the_money_cap(qualified):
@@ -266,16 +320,20 @@ def test_supply_refuses_to_liquidate_finite_completion_assets():
 
 
 def test_pp_allocation_cannot_reuse_one_effective_pp_for_two_opponents():
-    party = PartyObservation((PartyMemberObservation(
-        slot=1,
-        species_id=84,
-        level=75,
-        hp=200,
-        max_hp=200,
-        status=StatusCondition.HEALTHY,
-        moves=(MoveObservation(85, 1), MoveObservation(33, 35)),
-        experience=None,
-    ),))
+    party = PartyObservation(
+        (
+            PartyMemberObservation(
+                slot=1,
+                species_id=84,
+                level=75,
+                hp=200,
+                max_hp=200,
+                status=StatusCondition.HEALTHY,
+                moves=(MoveObservation(85, 1), MoveObservation(33, 35)),
+                experience=None,
+            ),
+        )
+    )
     quote = TrainerPartyQuote(
         201,
         1,
@@ -288,9 +346,11 @@ def test_pp_allocation_cannot_reuse_one_effective_pp_for_two_opponents():
 
     funded = replace(
         party,
-        members=(replace(
-            party.members[0],
-            moves=(MoveObservation(85, 2), MoveObservation(33, 35)),
-        ),),
+        members=(
+            replace(
+                party.members[0],
+                moves=(MoveObservation(85, 2), MoveObservation(33, 35)),
+            ),
+        ),
     )
     assert league._minimum_attack_allocation(funded, (quote,)) == (37, 2)

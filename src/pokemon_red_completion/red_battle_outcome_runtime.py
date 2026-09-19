@@ -150,6 +150,7 @@ def execute_red_battle_candidate(
             selected_slot=prepared.features.slot_indices[candidate_index] + 1,
             expected_battle_state=capture.manifest.expected_battle_state,
             minimum_pre_attack_frames=COUNTERFACTUAL_PRE_ATTACK_FRAMES,
+            settle_to_next_decision=True,
             label="model-selected Red battle action",
         )
     return RedBattleCandidateExecution(
@@ -207,6 +208,7 @@ def collect_red_battle_outcome_example(
                 selected_slot=prepared.features.slot_indices[candidate_index] + 1,
                 expected_battle_state=capture.manifest.expected_battle_state,
                 minimum_pre_attack_frames=minimum_pre_attack_frames,
+                settle_to_next_decision=True,
                 label="authenticated Red battle counterfactual",
             )
             outcome = project_red_battle_turn_outcome(execution)
@@ -295,11 +297,14 @@ def _prepare_loaded_boundary(
 def _shared_pre_attack_frames(
     outcomes: tuple[BattleTurnOutcome | None, ...],
 ) -> int:
-    measured = {
-        outcome.pre_attack_frames for outcome in outcomes if outcome is not None
-    }
+    by_candidate = tuple(
+        outcome.pre_attack_frames if outcome is not None else None
+        for outcome in outcomes
+    )
+    measured = {frames for frames in by_candidate if frames is not None}
     if len(measured) != 1 or 0 in measured:
         raise RedBattleOutcomeRuntimeError(
-            "counterfactual candidates do not share one positive pre-attack frame count"
+            "counterfactual candidates do not share one positive pre-attack frame count: "
+            f"candidate_frames={by_candidate}"
         )
     return next(iter(measured))

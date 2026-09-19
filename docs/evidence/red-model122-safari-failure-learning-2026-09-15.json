@@ -1,0 +1,140 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-15-model122-safari-failure-learning",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "completed_episode": {
+    "status": "retained_safari_acquisition_failure",
+    "actions": 295,
+    "frames": 37128,
+    "selected_candidate_index": 1,
+    "selected_kind": "acquire_species",
+    "selected_probability": 0.13961839320833427,
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "cash_before": 706,
+    "cash_after": 206,
+    "registered_before": 86,
+    "registered_after": 86,
+    "living_species_before": 66,
+    "living_species_after": 67,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false,
+    "terminal_state_sha256": "ac32cf550b3ddcf5800537815f25e8eaac4007c3992dda4a7e6941ff14a74d2b"
+  },
+  "learning": {
+    "prior_examples": 121,
+    "new_examples": 1,
+    "settled_examples": 122,
+    "successful_examples": 83,
+    "measured_source_examples": 18,
+    "economy_qualified_examples": 43,
+    "regional_source_examples": 33,
+    "choice_record_sha256": "c3be426c01f48defe9fcacf6aecb97e9e7746187e44a699ebdb7ba9942e977f4",
+    "weighted_mse_before": 0.031033205152916334,
+    "weighted_mse_after": 0.011703054377279724,
+    "counterfactual_targets": 0,
+    "unselected_action_targets": 0,
+    "teacher_labels": 0,
+    "authority_promotions": 0,
+    "model": {
+      "model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+      "prior_model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+      "authority": "bounded_development_only",
+      "source_commit": "3a9d36f85cb32182750286d72b69827bd33f6cf2",
+      "source_bundle_sha256": "008fdf1621f3d219d8b414af1380297be1a7716e23877bf6474e15ebfaf8672f"
+    }
+  },
+  "measured_choice": {
+    "record_sha256": "c3be426c01f48defe9fcacf6aecb97e9e7746187e44a699ebdb7ba9942e977f4",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "selected_candidate_index": 1,
+    "selected_probability": 0.13961839320833427,
+    "verified_success": false,
+    "completion_gain": 0.0,
+    "dependency_unlock_gain": 0.0
+  },
+  "fit": {
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 122,
+      "model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+      "prior_model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+      "source_commit": "3a9d36f85cb32182750286d72b69827bd33f6cf2",
+      "source_bundle_sha256": "008fdf1621f3d219d8b414af1380297be1a7716e23877bf6474e15ebfaf8672f",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 122,
+      "settled_examples": 122,
+      "successful_examples": 83,
+      "economy_qualified_examples": 43,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.031033205152916334,
+      "weighted_mse_after": 0.011703054377279724
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.011699153076906717
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.011703054377279722
+    }
+  },
+  "publication": {
+    "episode_id": "red-model122-safari-measured-terminal-20260915",
+    "checkpoint_record_sha256": "c0f1739ffbcdde045339fd747dd68c25de10d4d7d06c1aee4d41793b21b9cfe1",
+    "trajectory_manifest_sha256": "11eaa8802c9df6bf1e564a30afb99ea07d6da2ab274b4db1f8d6f3168aec3be4",
+    "state_sha256": "ac32cf550b3ddcf5800537815f25e8eaac4007c3992dda4a7e6941ff14a74d2b",
+    "registered_species": 86,
+    "living_species": 67,
+    "total_living_specimens": 71,
+    "cash": 206,
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "menu_redraw": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  }
+}

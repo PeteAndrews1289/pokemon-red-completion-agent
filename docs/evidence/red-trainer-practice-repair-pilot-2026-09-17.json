@@ -1,0 +1,84 @@
+{
+  "schema": "pokemon.red.trainer-practice-repair-pilot.v1",
+  "recorded_on": "2026-09-17",
+  "status": "mechanics_and_one_scenario_admitted_training_not_cleared",
+  "review_addressed": "docs/evidence/red-trainer-practice-astra-review-2026-09-17.json",
+  "mission_check": {
+    "capability": "Learn attacks, switches and replacements from executed whole-party trainer outcomes",
+    "authority_now": "No new fit or promotion; Model137 and Red 96/124 unchanged",
+    "authority_target": "Three actor-only outcome heads choose attack, control and switch target",
+    "transfer_test": "Disjoint natural DEVELOPMENT comparison remains unopened",
+    "cheapest_falsifier": "A prospectively declared timed branch cannot be admitted, or a selected-turn guard rejects native terminal resource restoration",
+    "time_box": "One bounded repair and pilot session",
+    "stop_condition": "No replay of failed attempts, no fit below corpus floor, no DEVELOPMENT or sealed execution, no GitHub push"
+  },
+  "implementation": {
+    "stat_formula": "Gen I 2*(base+DV), including derived HP DV",
+    "trainer_reserves": "Native trainer DVs and PP are used; unsupported persistent overrides are rejected",
+    "admission": "Prospective choices/timing, complete branch logs, legality, actor observations, resource chains, terminal and measured metrics are cross-checked",
+    "loss_preservation": "A voluntary switch-in KO remains an executed decision and can lead to a forced replacement",
+    "empty_attack": "Legal switching remains available with no supported attack; Struggle/all-party depletion stays outside the first segment",
+    "observation": "Versioned actor-visible own stats, status/stages and public opponent base stats; legacy model inputs are not silently migrated",
+    "return": "Common whole-party terminal, KO, damage, HP and PP values across attack/switch/prompt/forced branches",
+    "fit_boundary": "Five declared timings form one scenario; equal-count four-root supply with at least four scenarios per root and main/prompt/forced/empty-attack contexts is required. Root labels must bind consistently to distinct upstream source-state hashes; distinct hashes are necessary but do not alone prove independent play.",
+    "model_runner": "The new checkpoint can act on TRAIN or disjoint DEVELOPMENT captures without teacher fallback; no checkpoint was fitted here"
+  },
+  "live_mechanic_checks": {
+    "private_red_rom_authenticated": true,
+    "native_reserve_sendout_stats_and_pp": "passed",
+    "level_up_recalculation_and_hp_bounds": "passed",
+    "off_slot_pp_unchanged_in_bounded_turn": "passed",
+    "selected_pp_spent_then_restored_at_battle_exit": "passed in a separate one-turn teacher-only mechanic case",
+    "switch_in_ko_and_forced_replacement": "passed",
+    "depleted_attack_menu_still_permits_switch": "passed",
+    "historical_pp_or_hp_failure_replayed": false
+  },
+  "admitted_train_pilot": {
+    "source_commit": "2e230a28a91adb6e07256e6b1192d1a2ead54d3a",
+    "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+    "capture_manifest_sha256": "dddc2d8a95f9a5bd2fa38e578ed90be57cb690c9640eab55eef95fb5b3aa3a8f",
+    "materialization_outcome_sha256": "cbad0458ce26858683d69f7b6c89acc3c379cf2b025a33977ff7e2de1d996188",
+    "baseline_outcome_sha256": "125df7ad9f692b276ce94183264d88b40948fccad575dde026cb8ac4ddff5892",
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "opening_choices_per_timing": 6,
+    "completed_executed_branches": 30,
+    "execution_proof_complete_at_all_timings": true,
+    "whole_party_return_proof_complete_at_all_timings": true,
+    "learner_head_kinds": ["move", "control", "switch"],
+    "decision_context": "main",
+    "distinct_upstream_train_roots": 1,
+    "scenarios_counted_for_first_fit": 1,
+    "fit_eligible_now": false,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "second_prospective_scenario": {
+    "status": "failed_closed_excluded",
+    "source_commit": "afbb510bfb2a47076e73546c0fe386337cf22ce7",
+    "materialization_outcome_sha256": "e03f8a10159657593dfb34a6e761b00b1f7d3e9be1d15fc064df88f470c86d3a",
+    "baseline_plan_sha256": "071caa8b3645dfd2fbd17730e60ff0fed7fab5746931af25725db4ab60f5faf3",
+    "failure_sha256": "3ca63592b2954af992236d8bfb509d274a15b2b2972ffceef09a07404d2e9576",
+    "event_log_verification_sha256": "865c7d9103ccd8802043161e1441c3df790e03ddef08b933427d2e13c52b3688",
+    "completed_decisions": 2,
+    "unresolved_selected_decision": 1,
+    "observed_mechanism": "Selected slot 1 spent PP from 14 to 13 while battle state remained 2. At battle exit (state 0), party PP returned to 15; the old guard interpreted this terminal restoration as an in-battle PP violation.",
+    "repair": "The selected spend remains verified before settlement; later in-battle PP increases still fail. A ROM-free terminal-restoration regression and a separate private-ROM one-turn mechanic case pass. The failed scenario was not replayed or fitted.",
+    "training_credit": 0
+  },
+  "verification": {
+    "focused_battle_tests": "254 battle-runtime/integration tests passed with 11 private-input skips; 67 trainer-practice tests and the new root-source provenance regression passed separately",
+    "live_private_mechanic_cases": 5,
+    "ruff_changed_code": "passed",
+    "mypy_changed_code": "passed",
+    "full_suite": "The fresh broad run was interrupted after 7711 passes, three skips, one expected failure and seven failures. Four failures use the existing dashboard pointer to a Model135 receipt without completed_episode; two stale historical-count assertions expected 131 instead of the tracked 135 and were repaired afterward (146/147 focus tests then pass); one exact-Mac PyBoy metadata hash check remains environment-specific and unrelated to battle. No new trainer-practice failure appeared in the completed portion; this is not a full-suite pass.",
+    "development_opened": false,
+    "full_game_replayed": false,
+    "github_pushed": false
+  },
+  "remaining_gates": [
+    "At least four genuinely independent authenticated TRAIN trainer roots; the private trainer source inventory currently exposes one. The active-lane stop condition forbids routine clean-power teacher-root generation.",
+    "Four admitted scenarios per root, balanced across roots, including prompt, forced replacement, empty-attack and varied type/speed/damage outcomes. Timing siblings count as one scenario.",
+    "A bounded first TRAIN-only fit, then independent natural DEVELOPMENT comparison against frozen and fixed controls before any authority claim.",
+    "Status, recovery, items, self-destruct, Struggle and remaining special mechanics are later full-battle scope."
+  ]
+}

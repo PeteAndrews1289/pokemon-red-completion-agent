@@ -4,8 +4,11 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.observation import (
+    ItemId,
     MapId,
     MenuCursorState,
+    PokemonRedStateReader,
+    RamAddress,
     RawGameState,
     RedBoxCollectionState,
     RedCurrentBoxState,
@@ -16,8 +19,10 @@ from pokemon_red_completion.red_pc_storage import (
     deposit_party_member,
     face_pc_boundary,
     open_bills_pc,
+    open_reds_pc,
     switch_box,
     withdraw_box_member,
+    withdraw_single_pc_item,
 )
 
 WARTORTLE = 0xB3
@@ -438,3 +443,115 @@ def test_generic_pc_still_rejects_wrong_visible_choice_or_menu_shape(menu):
         MacroActionKind.INTERACT, MacroActionKind.WAIT,
         MacroActionKind.CONFIRM, MacroActionKind.WAIT,
     ]
+
+
+def test_reader_exposes_exact_bounded_pc_item_inventory() -> None:
+    memory = {
+        int(RamAddress.NUM_PC_ITEMS): 2,
+        int(RamAddress.PC_ITEMS): int(ItemId.POTION),
+        int(RamAddress.PC_ITEMS) + 1: 10,
+        int(RamAddress.PC_ITEMS) + 2: int(ItemId.SILPH_SCOPE),
+        int(RamAddress.PC_ITEMS) + 3: 1,
+    }
+    reader = PokemonRedStateReader(type("Memory", (), {
+        "read_u8": lambda self, address: memory.get(int(address), 0)
+    })())
+    assert reader.read_pc_items() == (
+        (int(ItemId.POTION), 10),
+        (int(ItemId.SILPH_SCOPE), 1),
+    )
+    memory[int(RamAddress.NUM_PC_ITEMS)] = 51
+    with pytest.raises(ValueError, match="outside the supported bound"):
+        reader.read_pc_items()
+
+
+def test_open_reds_pc_verifies_generic_and_item_menu_boundaries() -> None:
+    reader = _Reader()
+    reader.menu = MenuCursorState(0, 0, 0, 0, 0)
+
+    class Executor:
+        actions: list[MacroAction] = []
+        confirms = 0
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                reader.menu = replace(
+                    reader.menu,
+                    selected_visible_index=reader.menu.selected_visible_index + 1,
+                )
+            elif action.kind is MacroActionKind.CONFIRM:
+                self.confirms += 1
+                if self.confirms == 1:
+                    reader.menu = MenuCursorState(0, 17, 3, 1, 2)
+                elif self.confirms == 3:
+                    reader.menu = MenuCursorState(0, 0, 3, 1, 2)
+
+    executor = Executor()
+    open_reds_pc(
+        executor,
+        reader,  # type: ignore[arg-type]
+        timing=RedPCStorageTiming(wait_frames=1),
+    )
+    assert executor.confirms == 3
+    assert reader.menu == MenuCursorState(0, 0, 3, 1, 2)
+
+
+def test_single_pc_item_withdrawal_proves_exact_item_only_transition() -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        bag_items=((int(ItemId.GREAT_BALL), 4),),
+        player_money=206,
+    )
+    reader.pc_items = (
+        (int(ItemId.POTION), 10),
+        (int(ItemId.GOLD_TEETH), 1),
+        (int(ItemId.RARE_CANDY), 1),
+        (int(ItemId.SILPH_SCOPE), 1),
+    )
+    reader.collection = _collection()
+    reader.read_pc_items = lambda: reader.pc_items  # type: ignore[method-assign]
+    reader.read_all_box_states = lambda: reader.collection  # type: ignore[method-assign]
+    reader.menu = MenuCursorState(0, 0, 3, 1, 2)
+
+    class Executor:
+        actions: list[MacroAction] = []
+        phase = "red"
+
+        def execute(self, action: MacroAction) -> None:
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                reader.menu = replace(
+                    reader.menu,
+                    selected_visible_index=(
+                        reader.menu.selected_visible_index
+                        + (1 if action.value == "down" else -1)
+                    ),
+                )
+            elif action.kind is MacroActionKind.CONFIRM and self.phase == "red":
+                self.phase = "items"
+                reader.menu = MenuCursorState(0, 0, 5, 1, 2)
+            elif action.kind is MacroActionKind.CONFIRM and self.phase == "items":
+                assert reader.menu.selected_absolute_index == 3
+                self.phase = "complete"
+                reader.raw = replace(
+                    reader.raw,
+                    bag_items=(
+                        (int(ItemId.GREAT_BALL), 4),
+                        (int(ItemId.SILPH_SCOPE), 1),
+                    ),
+                )
+                reader.pc_items = reader.pc_items[:3]
+
+    executor = Executor()
+    report = withdraw_single_pc_item(
+        executor,
+        reader,  # type: ignore[arg-type]
+        item_id=int(ItemId.SILPH_SCOPE),
+        timing=RedPCStorageTiming(wait_frames=1),
+    )
+    assert report.passed
+    assert report.pc_after == reader.pc_items
+    assert dict(report.bag_after)[int(ItemId.SILPH_SCOPE)] == 1
+    assert reader.raw.player_money == 206

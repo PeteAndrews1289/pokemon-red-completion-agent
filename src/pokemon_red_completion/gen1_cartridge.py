@@ -197,7 +197,9 @@ def bank_offset(bank: int, address: int) -> int:
 
 
 def wild_tables(
-    rom: bytes, *, medium: str | None = None,
+    rom: bytes,
+    *,
+    medium: str | None = None,
 ) -> dict[int, list[tuple[int, int]]]:
     """Every ``(level, internal species)`` slot each map can field.
 
@@ -311,14 +313,75 @@ def evolution_graph(rom: bytes) -> dict[int, tuple[Evolution, ...]]:
     return {species: tuple(items) for species, items in graph.items()}
 
 
+def level_up_learnsets(rom: bytes) -> dict[int, tuple[tuple[int, int], ...]]:
+    """Read each species' ``(level, move)`` rows from the evolution/move table.
+
+    Generation I stores the learnset immediately after the zero-terminated
+    evolution rows addressed by ``EVOLUTION_POINTER_ARRAY``. Stone evolution
+    calls the same level-up move routine at the evolved specimen's current
+    level, so item-use qualification must know whether a move prompt will open.
+    """
+
+    # This whole-table check authenticates the shared pointer array before the
+    # adjacent learnset payload is interpreted.
+    evolution_graph(rom)
+    dex = internal_to_dex(rom)
+    result: dict[int, tuple[tuple[int, int], ...]] = {}
+    for internal, species in dex.items():
+        at = EVOLUTION_POINTER_ARRAY + 2 * (internal - 1)
+        address = int.from_bytes(rom[at : at + 2], "little")
+        if not 0x4000 <= address <= 0x7FFF:
+            raise CartridgeReadError(
+                f"species {species} has learnset pointer {address:#06x}, outside its bank"
+            )
+        cursor = bank_offset(EVOLUTION_DATA_BANK, address)
+        for _ in range(4):
+            kind = rom[cursor]
+            if kind == 0:
+                cursor += 1
+                break
+            if kind in {1, 3}:
+                cursor += 3
+            elif kind == 2:
+                cursor += 4
+            else:
+                raise CartridgeReadError(
+                    f"unknown evolution kind {kind} before species {species} learnset"
+                )
+        else:
+            raise CartridgeReadError(f"species {species} evolution rows do not terminate")
+        rows: list[tuple[int, int]] = []
+        for _ in range(64):
+            level = rom[cursor]
+            if level == 0:
+                break
+            move = rom[cursor + 1]
+            if (
+                not 1 <= level <= MAXIMUM_LEVEL
+                or not 1 <= move <= 165
+                or (rows and level < rows[-1][0])
+            ):
+                raise CartridgeReadError(f"species {species} learnset row is invalid")
+            rows.append((level, move))
+            cursor += 2
+        else:
+            raise CartridgeReadError(f"species {species} learnset does not terminate")
+        result[species] = tuple(rows)
+    if (
+        len(result) != SPECIES_COUNT
+        or sum(map(len, result.values())) != 728
+        or sum(bool(rows) for rows in result.values()) != 139
+    ):
+        raise CartridgeReadError("the supported cartridge learnset totals differ")
+    return result
+
+
 def verify_evolution_graph(graph: Mapping[int, Collection[Evolution]]) -> None:
     """Refuse an anchored fragment masquerading as the complete graph."""
 
     diglett = graph.get(50, [])
     if not any(
-        step.method is EvolutionMethod.LEVEL
-        and step.requirement == 26
-        and step.to_species == 51
+        step.method is EvolutionMethod.LEVEL and step.requirement == 26 and step.to_species == 51
         for step in diglett
     ):
         raise CartridgeReadError(
@@ -326,9 +389,7 @@ def verify_evolution_graph(graph: Mapping[int, Collection[Evolution]]) -> None:
             "pointer array is not where it was located"
         )
     kadabra = graph.get(64, [])
-    if not any(
-        step.method is EvolutionMethod.TRADE and step.to_species == 65 for step in kadabra
-    ):
+    if not any(step.method is EvolutionMethod.TRADE and step.to_species == 65 for step in kadabra):
         raise CartridgeReadError(
             "Kadabra does not evolve by trade into Alakazam; the evolution pointer "
             "array is not where it was located"
@@ -609,14 +670,8 @@ def in_game_trades(rom: bytes) -> tuple[InGameTrade, ...]:
             raise CartridgeReadError(f"trade {index} swaps a species for itself")
         nickname = _decode_text(rom[at + 3 : at + 3 + IN_GAME_TRADE_NICKNAME_BYTES])
         if not nickname or "?" in nickname:
-            raise CartridgeReadError(
-                f"trade {index} has no readable nickname; the stride is wrong"
-            )
-        trades.append(
-            InGameTrade(
-                give_species=dex[give], get_species=dex[get], nickname=nickname
-            )
-        )
+            raise CartridgeReadError(f"trade {index} has no readable nickname; the stride is wrong")
+        trades.append(InGameTrade(give_species=dex[give], get_species=dex[get], nickname=nickname))
     _verify_the_trade_table_ends(rom, dex)
     return tuple(trades)
 

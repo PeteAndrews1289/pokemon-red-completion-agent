@@ -2335,7 +2335,10 @@ class LiveWildEncounterExecutor:
         if self._capture_status_support:
             from pokemon_red_completion.red_capture_status_runtime import RedCaptureStatusPreparer
 
-            prepare = RedCaptureStatusPreparer(self._emulator, self._executor, self._reader)
+            prepare = RedCaptureStatusPreparer(
+                self._emulator, self._executor, self._reader,
+                expected_original_species_id=raw.enemy_species_id,
+            )
             try:
                 return _try_catch_wild(
                     self._emulator, self._executor, self._reader, raw.enemy_species_id,

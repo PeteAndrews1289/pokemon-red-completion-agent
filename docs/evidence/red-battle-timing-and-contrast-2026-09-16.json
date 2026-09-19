@@ -1,0 +1,67 @@
+{
+  "schema": "pokemon.red.battle-timing-and-contrast-session.v1",
+  "session": "2026-09-16-battle-timing-and-contrast",
+  "classification": "correlated_train_diagnostics_no_fit_or_promotion",
+  "mission_check": {
+    "capability": "Learn battle attack value from comparable cartridge turns, including consequential failures",
+    "learned_authority": "Frozen expected-utility-v2 selected the observed best moves in both new captures; no fit or promotion",
+    "transfer_test": "Two different authentic train states and active battlers, but both share training-control-v6-train-02; held-out development unopened",
+    "cheapest_falsifier": "Two bounded timing trials per capture expose unequal candidate timing, tied choices, or no correctable model regret",
+    "time_box": "One session, at most two hours; two captures and four cartridge timing trials",
+    "stop_condition": "No consumed-trial replay, weak same-root fit, development opening, full run, ROM hack, Crystal or GitHub publication"
+  },
+  "timing_probe": {
+    "capture_id": "repeatable-battle-train-efd19aef596565285b01",
+    "state_sha256": "c31423027bcecb0043baaa8dddcf7c6ef17d403237f79881581554e861954878",
+    "frame_targets": [2048, 2101],
+    "trials_complete": 2,
+    "trials_quarantined": 0,
+    "candidate_frames_equal": true,
+    "expected_utilities": [0.6666666666666666, null, 3.0, 3.0],
+    "frozen_model_choice": 3,
+    "frozen_model_choice_probability": 0.7519041503602608,
+    "frozen_model_regret": 0.0,
+    "finding": "One authentic non-tied choice but no timing mismatch; the selected move knocked out the opponent"
+  },
+  "timing_mismatch_diagnosis": {
+    "consumed_mismatch_capture_id": "repeatable-battle-train-43d1499e405644560013",
+    "consumed_capture_replayed": false,
+    "action_free_observation": "The consumed capture starts at full HP with battler_status=2, a nonzero Gen I sleep counter; the distinct timing probe starts awake with battler_status=0",
+    "code_path": "Sleep and other suppressed-turn branches can return before the pre-attack frame callback; the collector then rejects a zero versus positive candidate-frame comparison",
+    "causal_status": "plausible explanation, not confirmed for the five consumed trials because their candidate frame counts were not retained",
+    "next": "Treat sleeping boundaries as a separate no-action/recovery lesson when designing the next curriculum; do not impute attack preferences from a suppressed turn"
+  },
+  "contrast_probe": {
+    "capture_id": "repeatable-battle-train-cb1ade313f1c84c07da1",
+    "state_sha256": "e8476d68108f71666ec880af3a57ab847a89f36963c2948dc9c03e625d436120",
+    "frame_targets": [2048, 2101],
+    "trials_complete": 2,
+    "trials_quarantined": 0,
+    "expected_utilities": [0.5, null, -0.13513513513513514],
+    "frozen_model_choice": 0,
+    "frozen_model_choice_probability_approx": 0.84,
+    "frozen_model_regret": 0.0,
+    "finding": "The higher displayed-power alternative dealt zero damage in both trials; the frozen model correctly chose the lower-power attack"
+  },
+  "decision": {
+    "new_complete_train_examples": 2,
+    "new_informative_choice_examples": 2,
+    "independent_train_roots_added": 0,
+    "model_fit": false,
+    "held_out_development_opened": false,
+    "battle_authority_promoted": false,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "gameplay_running": false,
+    "github_pushed": false,
+    "next": "Stop probing nearly identical capture states. Design a small, predeclared training curriculum with differentiated action consequences and separate-lineage held-out comparisons; disclose any teacher-only state interventions."
+  },
+  "private_receipts_sha256": {
+    "timing_plan": "7771044012be8959c29c11020d61149d0bbf6ab7ff261e8f3b20090edd09fa6e",
+    "timing_dataset": "7f04200fa5d440efa999506379b079f9a41edaae2d453e57349d9d3929c83cf5",
+    "timing_failures": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb",
+    "contrast_plan": "2560012ea84554b6c32d93c422f83903f20af4f38afe3942380fc88c8a0700ab",
+    "contrast_dataset": "a671dab5959f7ce6115cde5fcab917efd87ce1f51860c73a987eeab59edd879d",
+    "contrast_failures": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb"
+  }
+}

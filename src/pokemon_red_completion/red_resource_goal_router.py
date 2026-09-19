@@ -67,6 +67,7 @@ _MECHANICS = frozenset(
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         RedGoalMechanic.MART_RESUPPLY,
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
     }
 )
 # Resource routes also perform bounded encounter search.  Sixteen exits is a
@@ -84,9 +85,7 @@ _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
     max_interruptions=(
-        _MAX_ROUTE_FLEES
-        + _MAX_ROUTE_TRAINER_BATTLES
-        + _MAX_ROUTE_SCRIPTED_DIALOGUES
+        _MAX_ROUTE_FLEES + _MAX_ROUTE_TRAINER_BATTLES + _MAX_ROUTE_SCRIPTED_DIALOGUES
     ),
     max_replans=8,
     replan_after_unchanged=2,
@@ -103,10 +102,7 @@ class RedResourceGoalRoutingError(RuntimeError):
 def _supports_required_route_interruptions(handler: InterruptionHandler) -> bool:
     """Fail closed unless every dynamic route interruption is explicitly supported."""
     kinds = getattr(handler, "handled_interruption_kinds", None)
-    return (
-        isinstance(kinds, frozenset)
-        and kinds >= _REQUIRED_ROUTE_INTERRUPTION_KINDS
-    )
+    return isinstance(kinds, frozenset) and kinds >= _REQUIRED_ROUTE_INTERRUPTION_KINDS
 
 
 @dataclass(slots=True)
@@ -120,6 +116,7 @@ class RedResourceGoalRouter:
     maximum_emulator_frames: int = 600_000
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
+    prepare_capture_items: bool = False
     prepare_capture_storage: bool = False
     routed_storage_relief: bool = False
     routed_recovery: bool = False
@@ -127,15 +124,16 @@ class RedResourceGoalRouter:
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
     observed_trainer_funding: bool = False
+    trainer_funding_target_cash: int | None = None
     prepare_capture_escort: bool = True
     # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
     # and escort preparation enabled without planning unused Center routes.
     include_recovery_offers: bool = True
     # Shared only during one action-free candidate inventory. It is explicitly
     # cleared before returning so a later live observation cannot inherit it.
-    route_plan_cache: dict[
-        tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
-    ] | None = field(default=None, repr=False, compare=False)
+    route_plan_cache: (
+        dict[tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str] | None
+    ) = field(default=None, repr=False, compare=False)
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         """Enumerate every local and routable goal in the active profile."""
@@ -176,7 +174,8 @@ class RedResourceGoalRouter:
             self.runtime.reader,
             hazard_projector=Gen1TrainerSightProjector(self.world.rom, self.runtime.reader),
             capability_projector=partial(
-                collection_field_capabilities, self.runtime.emulator,
+                collection_field_capabilities,
+                self.runtime.emulator,
                 allow_cut=any(_cut_enabled(s) for s in self.runtime.profile.providers),
                 allow_surf=any(_surf_enabled(s) for s in self.runtime.profile.providers),
             ),
@@ -205,11 +204,19 @@ class RedResourceGoalRouter:
             capture = bind_observed_local_capture(self, capture_spec, observation)
             local = GoalBindingSet(
                 tuple(
-                    (capture.opportunity if capture is not None else replace(
-                        item, availability=GoalAvailability.UNAVAILABLE,
-                        estimated_effort=None, estimated_risk=None,
-                        unavailable_reason=GoalUnavailableReason.MISSING_CAPABILITY,
-                    )) if item.kind is GoalKind.ACQUIRE_SPECIES else item
+                    (
+                        capture.opportunity
+                        if capture is not None
+                        else replace(
+                            item,
+                            availability=GoalAvailability.UNAVAILABLE,
+                            estimated_effort=None,
+                            estimated_risk=None,
+                            unavailable_reason=GoalUnavailableReason.MISSING_CAPABILITY,
+                        )
+                    )
+                    if item.kind is GoalKind.ACQUIRE_SPECIES
+                    else item
                     for item in local.opportunities
                 ),
                 tuple(b for b in local.bindings if b.kind is not GoalKind.ACQUIRE_SPECIES)
@@ -220,12 +227,20 @@ class RedResourceGoalRouter:
             if routed_kinds is not None and opportunity.kind not in routed_kinds:
                 continue
             spec = specs.get(opportunity.kind)
+            may_prepare_capture_item = (
+                self.prepare_capture_items
+                and opportunity.kind is GoalKind.ACQUIRE_SPECIES
+                and opportunity.unavailable_reason is GoalUnavailableReason.MISSING_RESOURCE
+            )
             if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
                 # Never reinstate the static, unreachable patch as a fallback.
                 continue
             if (
                 opportunity.availability is GoalAvailability.AVAILABLE
-                or opportunity.unavailable_reason is not GoalUnavailableReason.MISSING_CAPABILITY
+                or (
+                    opportunity.unavailable_reason is not GoalUnavailableReason.MISSING_CAPABILITY
+                    and not may_prepare_capture_item
+                )
                 or spec is None
                 or spec.mechanic not in _MECHANICS
             ):
@@ -238,6 +253,18 @@ class RedResourceGoalRouter:
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
+                if self.prepare_capture_items and isinstance(provider, RedAreaSurveyGoalProvider):
+                    from pokemon_red_completion.red_routed_capture_items import (
+                        bind_capture_item_support,
+                    )
+
+                    supported = bind_capture_item_support(
+                        self, spec, provider, observation, fresh, traversal
+                    )
+                    if supported is not None:
+                        replacements[supported.binding_ref] = supported
+                        opportunities[index] = supported.opportunity
+                        continue
                 opportunities[index] = replace(
                     opportunity, unavailable_reason=availability.unavailable_reason
                 )
@@ -250,18 +277,28 @@ class RedResourceGoalRouter:
                 if fixed_provider is None:
                     raise RedResourceGoalRoutingError("available purchase lost its fixed quote")
                 provider = fixed_provider
-            plan = self._plan(spec, fresh)
-            if plan is None:
+            # Explicit Fly support is a transport preference, not just a
+            # fallback for disconnected walking graphs. Prefer a legal flight
+            # (or local indoor egress followed by flight) before accepting a
+            # high-variance cross-region walk. An unavailable flight returns
+            # None and preserves the ordinary walking fallback below.
+            if spec.parameters.get("fly_transport") is True:
                 from pokemon_red_completion.red_collection_fly import bind_collection_fly
 
                 flight = bind_collection_fly(self, spec, provider, fresh, traversal)
                 if flight is not None:
                     replacements[flight.binding_ref] = flight
                     opportunities[index] = flight.opportunity
+                    continue
+            plan = self._plan(spec, fresh)
+            if plan is None:
                 continue
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
-                self.actions, self.runtime.reader, maximum_flees=_MAX_ROUTE_FLEES,
-                maximum_trainer_battles=_MAX_ROUTE_TRAINER_BATTLES, stabilization_frames=180,
+                self.actions,
+                self.runtime.reader,
+                maximum_flees=_MAX_ROUTE_FLEES,
+                maximum_trainer_battles=_MAX_ROUTE_TRAINER_BATTLES,
+                stabilization_frames=180,
                 maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 route_name="bounded resource-goal transport",
             )
@@ -269,6 +306,7 @@ class RedResourceGoalRouter:
                 from pokemon_red_completion.red_routed_recovery import (
                     guarded_collection_route_handler,
                 )
+
                 interruption_handler = guarded_collection_route_handler(
                     self.actions,
                     self.runtime.reader,
@@ -280,6 +318,7 @@ class RedResourceGoalRouter:
                 bind_travel_capture_destination,
                 bind_travel_capture_handler,
             )
+
             interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
             if not _supports_required_route_interruptions(interruption_handler):
                 continue
@@ -299,7 +338,9 @@ class RedResourceGoalRouter:
                 emulator=self.runtime.emulator,
                 interruption_handler=interruption_handler,
                 replanner=partial(
-                    self._replan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+                    self._replan,
+                    allow_cut=_cut_enabled(spec),
+                    allow_surf=_surf_enabled(spec),
                 ),
                 field_actions=self.field_actions_for(spec),
                 route_limits=_ROUTE_LIMITS,
@@ -322,11 +363,19 @@ class RedResourceGoalRouter:
                 from pokemon_red_completion.red_capture_preparation import (
                     EscortPreparedCaptureProvider,
                 )
+
                 destination_provider = EscortPreparedCaptureProvider(
-                    provider, self.runtime, self.actions,
+                    provider,
+                    self.runtime,
+                    self.actions,
                 )
             destination_provider = bind_travel_capture_destination(
-                self, spec, destination_provider, provider, observation, [interruption_handler],
+                self,
+                spec,
+                destination_provider,
+                provider,
+                observation,
+                [interruption_handler],
             )
             destination = RedFreshGoalDestinationBinder(
                 kind=spec.kind,
@@ -339,9 +388,14 @@ class RedResourceGoalRouter:
                 transport=transport,
                 destination=destination,
                 estimated_effort=min(
-                    1.0, 0.36 + len(plan.steps) / 1_000
-                    + (provider.search_effort_surcharge
-                       if isinstance(provider, RedAreaSurveyGoalProvider) else 0.0),
+                    1.0,
+                    0.36
+                    + len(plan.steps) / 1_000
+                    + (
+                        provider.search_effort_surcharge
+                        if isinstance(provider, RedAreaSurveyGoalProvider)
+                        else 0.0
+                    ),
                 ),
                 estimated_risk=0.18,
                 limits=RoutedSemanticGoalLimits(
@@ -361,6 +415,7 @@ class RedResourceGoalRouter:
             from pokemon_red_completion.red_routed_storage_relief import (
                 bind_routed_storage_relief,
             )
+
             result = bind_routed_storage_relief(self, result, observation)
         if self.prepare_capture_storage:
             from pokemon_red_completion.red_routed_capture_storage import (
@@ -389,7 +444,9 @@ class RedResourceGoalRouter:
 
             if self.include_recovery_offers:
                 result = bind_routed_center_recovery(
-                    self, result, observation,
+                    self,
+                    result,
+                    observation,
                     prepare_escort=prepare_escort,
                 )
             if self.prepare_capture_escort:
@@ -470,9 +527,17 @@ class RedResourceGoalRouter:
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
-        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        if spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             # Known mechanic entry boundaries, connected by the cartridge router.
-            for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
+            centers = (
+                (MapId.CELADON_POKECENTER,)
+                if spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+                else (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER)
+            )
+            for center in centers:
                 try:
                     plan = self.plan_feasible_to_map(
                         fresh.traversal,
@@ -482,7 +547,9 @@ class RedResourceGoalRouter:
                 except RoutePlanningError:
                     continue
                 if plan.steps and _supported_plan(
-                    plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+                    plan,
+                    allow_cut=_cut_enabled(spec),
+                    allow_surf=_surf_enabled(spec),
                 ):
                     return plan
             return None
@@ -498,7 +565,9 @@ class RedResourceGoalRouter:
         except RoutePlanningError:
             return None
         if not plan.steps or not _supported_plan(
-            plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+            plan,
+            allow_cut=_cut_enabled(spec),
+            allow_surf=_surf_enabled(spec),
         ):
             return None
         return plan
@@ -508,12 +577,18 @@ class RedResourceGoalRouter:
         if not (_cut_enabled(spec) or _surf_enabled(spec)):
             return None
         return Gen1FieldMovePort(
-            self.actions, self.runtime.reader, self.runtime.emulator,
+            self.actions,
+            self.runtime.reader,
+            self.runtime.emulator,
             cut_block_swaps={swap.before: swap.after for swap in self.world.rules.cut_block_swaps},
         )
 
     def _replan(
-        self, request: ReplanRequest, *, allow_cut: bool = False, allow_surf: bool = False,
+        self,
+        request: ReplanRequest,
+        *,
+        allow_cut: bool = False,
+        allow_surf: bool = False,
     ) -> RoutePlan:
         plan = self.world.replanner()(request)
         if not _supported_plan(plan, allow_cut=allow_cut, allow_surf=allow_surf):
@@ -522,29 +597,43 @@ class RedResourceGoalRouter:
 
 
 def _cut_enabled(spec: RedGoalProviderSpec) -> bool:
-    return (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
-            and spec.parameters.get("cut_transport") is True)
+    return (
+        spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+        and spec.parameters.get("cut_transport") is True
+    )
 
 
 def _surf_enabled(spec: RedGoalProviderSpec) -> bool:
-    return (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
-            and spec.parameters.get("surf_transport") is True)
+    return (
+        spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+        and spec.parameters.get("surf_transport") is True
+    )
 
 
 def collection_field_capabilities(
-    memory: ReadOnlyMemory, raw: RawGameState, *, allow_cut: bool, allow_surf: bool,
+    memory: ReadOnlyMemory,
+    raw: RawGameState,
+    *,
+    allow_cut: bool,
+    allow_surf: bool,
 ) -> frozenset[str]:
     """Expose only declared mechanics with live badge/holder/title permission."""
     result = cut_capabilities(raw) if allow_cut else frozenset()
     if allow_surf:
-        result = result.union(surf_capabilities(
-            raw, surf_allowed=surf_permission(memory, raw).allowed,
-        ))
+        result = result.union(
+            surf_capabilities(
+                raw,
+                surf_allowed=surf_permission(memory, raw).allowed,
+            )
+        )
     return result
 
 
 def _supported_plan(
-    plan: RoutePlan, *, allow_cut: bool = False, allow_surf: bool = False,
+    plan: RoutePlan,
+    *,
+    allow_cut: bool = False,
+    allow_surf: bool = False,
 ) -> bool:
     for step in plan.steps:
         if step.action_kind is MacroActionKind.MOVE and step.action in _WALK_ACTIONS:
@@ -556,12 +645,15 @@ def _supported_plan(
                 return False
         elif step.action_kind is MacroActionKind.FIELD_MOVE:
             if allow_cut and step.action in {"cut:" + d for d in _WALK_ACTIONS}:
-                if (step.source_mode not in {None, "land"}
-                        or step.expected_mode not in {None, "land"}):
+                if step.source_mode not in {None, "land"} or step.expected_mode not in {
+                    None,
+                    "land",
+                }:
                     return False
             elif allow_surf and step.action in {"surf:" + d for d in _WALK_ACTIONS}:
                 if (
-                    step.source_mode != "land" or step.expected_mode != "water"
+                    step.source_mode != "land"
+                    or step.expected_mode != "water"
                     or step.source_map != step.expected_map
                     or step.source_map == SEAFOAM_ISLANDS_B4F_MAP_ID
                 ):

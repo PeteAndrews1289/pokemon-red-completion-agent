@@ -1,4 +1,5 @@
 """Route to a PC and recover capture capacity from an already-full box."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -41,7 +42,7 @@ def bind_routed_storage_relief(
     bindings: GoalBindingSet,
     observation: RedGoalObservation,
 ) -> GoalBindingSet:
-    """Offer standalone storage relief when the active box is already full.
+    """Offer standalone storage relief before the active box blocks safe capture.
 
     This differs from capture-storage preparation, which reserves a final slot
     and then performs a selected capture. Storage relief is its own measured
@@ -56,10 +57,14 @@ def bind_routed_storage_relief(
     initial_box = collection.current_box_index
     initial_counts = collection.box_counts
     current_room = collection.box_capacity - initial_counts[initial_box]
-    if current_room != 0 or observation.immediate_capture_slots != 0:
+    # Capture compositions preserve one spare slot after the selected catch.
+    # Let the model choose storage relief when only that final slot remains;
+    # waiting for a completely full box removes capture from the next menu.
+    if current_room > 1 or observation.immediate_capture_slots > 1:
         return bindings
     targets = [
-        index for index, count in enumerate(initial_counts)
+        index
+        for index, count in enumerate(initial_counts)
         if index != initial_box and count < collection.box_capacity
     ]
     if not targets:
@@ -103,7 +108,7 @@ def bind_routed_storage_relief(
             or current.collection_observation.current_box_index != initial_box
             or current.collection_observation.box_counts != initial_counts
             or dependency_specimen_ledger(current.collection_observation) != initial_ledger
-            or current.immediate_capture_slots != 0
+            or current.immediate_capture_slots > 1
             or current.raw.bag_items != initial_bag
             or current.raw.player_money != initial_money
         ):
@@ -113,52 +118,62 @@ def bind_routed_storage_relief(
         frame_start = runtime.emulator.frame_count
         prepare_center_departure(router.actions, runtime.reader)
         interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
-            router.actions, runtime.reader, maximum_flees=16, maximum_trainer_battles=8,
-            stabilization_frames=180, route_name="bounded standalone storage PC access",
+            router.actions,
+            runtime.reader,
+            maximum_flees=16,
+            maximum_trainer_battles=8,
+            stabilization_frames=180,
+            route_name="bounded standalone storage PC access",
         )
         if getattr(router, "routed_recovery", False):
             from pokemon_red_completion.red_routed_recovery import (
                 guarded_collection_route_handler,
             )
+
             interruption_handler = guarded_collection_route_handler(
-                router.actions, runtime.reader,
+                router.actions,
+                runtime.reader,
                 route_name="guarded standalone storage PC access",
             )
         transport = execute_route(
-            route, router.actions, traversal, interruption_handler=interruption_handler,
-            replanner=router._replan, limits=_ROUTE_LIMITS,
+            route,
+            router.actions,
+            traversal,
+            interruption_handler=interruption_handler,
+            replanner=router._replan,
+            limits=_ROUTE_LIMITS,
         )
         at_pc = runtime.adapter.observe()
         if (
             not transport.passed
             or (at_pc.raw.map_id, at_pc.raw.player_y, at_pc.raw.player_x)
             != (route.terminal_map, 4, 13)
-            or at_pc.raw.battle_state or not at_pc.input_ready
+            or at_pc.raw.battle_state
+            or not at_pc.input_ready
             or at_pc.collection_observation.current_box_index != initial_box
             or at_pc.collection_observation.box_counts != initial_counts
             or dependency_specimen_ledger(at_pc.collection_observation) != initial_ledger
             or at_pc.raw.bag_items != initial_bag
             or at_pc.raw.player_money != initial_money
         ):
-            raise RedRoutedStorageReliefError(
-                "routed storage transport changed protected state"
-            )
+            raise RedRoutedStorageReliefError("routed storage transport changed protected state")
 
         face_pc_boundary(router.actions, runtime.reader, "up")
         provider = RedBoxSwitchGoalProvider(
             target_box_index=target,
             pc_boundary=lambda fresh: (
                 fresh.raw.map_id == route.terminal_map
-                and fresh.raw.player_y == 4 and fresh.raw.player_x == 13
+                and fresh.raw.player_y == 4
+                and fresh.raw.player_x == 13
             ),
-            actions=router.actions, reader=runtime.reader, emulator=runtime.emulator,
+            actions=router.actions,
+            reader=runtime.reader,
+            emulator=runtime.emulator,
             adapter=runtime.adapter,
         )
         offer = provider.offer(runtime.adapter.observe())
         if offer.binding is None:
-            raise RedRoutedStorageReliefError(
-                "box switch unavailable at routed PC boundary"
-            )
+            raise RedRoutedStorageReliefError("box switch unavailable at routed PC boundary")
         report = offer.binding.execute()
         executed.append((offer.binding, report))
         return GoalExecutionReport(
@@ -179,9 +194,7 @@ def bind_routed_storage_relief(
 
     def verify(report: GoalExecutionReport) -> GoalVerification:
         if len(executed) != 1:
-            raise RedRoutedStorageReliefError(
-                "storage relief has no completed box switch"
-            )
+            raise RedRoutedStorageReliefError("storage relief has no completed box switch")
         selected, selected_report = executed[0]
         underlying = selected.verify(selected_report)
         if underlying.status.value != "succeeded":
@@ -193,8 +206,10 @@ def bind_routed_storage_relief(
             or fresh.collection_observation.box_counts != initial_counts
             or dependency_specimen_ledger(fresh.collection_observation) != initial_ledger
             or fresh.immediate_capture_slots <= 0
-            or fresh.raw.bag_items != initial_bag or fresh.raw.player_money != initial_money
-            or fresh.raw.battle_state or not fresh.input_ready
+            or fresh.raw.bag_items != initial_bag
+            or fresh.raw.player_money != initial_money
+            or fresh.raw.battle_state
+            or not fresh.input_ready
             or report.actions_executed <= 0
             or not isinstance(relief, dict)
             or relief.get("collection_preserved") is not True
@@ -202,9 +217,13 @@ def bind_routed_storage_relief(
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
 
-    binding_digest = canonical_sha256({
-        "target_map": route.terminal_map, "target_box": target, "steps": len(route.steps),
-    })
+    binding_digest = canonical_sha256(
+        {
+            "target_map": route.terminal_map,
+            "target_box": target,
+            "steps": len(route.steps),
+        }
+    )
     binding = ExecutableGoalBinding(
         binding_ref=f"pokemon.red:storage:routed-box-switch:{binding_digest}",
         kind=GoalKind.MANAGE_STORAGE,
@@ -213,11 +232,12 @@ def bind_routed_storage_relief(
         execute=execute,
         verify=verify,
     )
-    has_opportunity = any(item.kind is GoalKind.MANAGE_STORAGE
-                          for item in bindings.opportunities)
+    has_opportunity = any(item.kind is GoalKind.MANAGE_STORAGE for item in bindings.opportunities)
     return GoalBindingSet(
-        tuple(binding.opportunity if item.kind is GoalKind.MANAGE_STORAGE else item
-              for item in bindings.opportunities)
+        tuple(
+            binding.opportunity if item.kind is GoalKind.MANAGE_STORAGE else item
+            for item in bindings.opportunities
+        )
         + (() if has_opportunity else (binding.opportunity,)),
         (*bindings.bindings, binding),
     )

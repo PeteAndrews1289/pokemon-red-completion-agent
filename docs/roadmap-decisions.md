@@ -1,5 +1,277 @@
 # Roadmap baseline and deviations
 
+## September 19 — Battle lifecycle closes; preserve the funding failure
+
+The separately declared continuation from the exact failed endpoint completed five model
+decisions and a verified natural loss/blackout. The original no-faint funding contract and
+failed verdict remain unchanged. No new fit, collection registration or full-player promotion.
+Return to useful main-save choices; qualify six-member scope only when the actual next
+playing task requires it. The detailed roadmap now lists all 28 native registration gaps.
+
+The completion-contract paragraph still carried the superseded September 13 all-local-
+dependencies requirement. It now reflects the already-adopted September 15 mission: 124 native
+registrations in the fresh model-directed save, with unavailable external dependencies deferred.
+No stage ID, exit criterion, denominator or fresh-run gate was changed by this correction.
+
+## September19 — demonstrate learning, not perfect wins
+
+Pete authorized two bounded independent natural starts and clarified that the
+battler must demonstrate learning, not win every battle. The policy-bound
+experiment declared its learning gate before fitting/testing J: retain numerical
+TRAIN competence, win more unused paired battles than H and incur no more faints.
+Teacher superiority is not a learning gate. Historical failures retain their
+original verdicts; no final-player, Red or later-generation exit changed.
+
+[J passed](evidence/red-battler-policy-learning-result-2026-09-19.json):9/24wins
+versus7/24 and fewer faints, plus improved early natural attacks across two
+genuinely booted origins. The generated cohort is not statistically conclusive.
+Six timing trials are not six roots; one own Pokemon cannot prove switching.
+Freeze J, retain losses, obtain natural full-party evidence, then qualify one
+earned-state integration. No further blind refit or standing review gate.
+
+## September 17 — four-context trainer pipeline works; ancestry still gates qualification
+
+Three prospectively captured Celadon Gym trainer starts have different saved-state hashes
+and slot labels, but share a closely related historical catalog context and player
+trainer ID. They are useful correlated TRAIN material, not evidence of three new
+independent origins. The qualified trainer-fit gate now rejects multiple aliases
+from this unresolved family. Do not lower the four-origin-by-four-scenario gate or
+count timing offsets and assisted configurations as new roots.
+
+The [four-context rehearsal](evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
+added same-root TRAIN contrasts for depleted-attack switching, optional prompts
+and forced replacements, with 10, 15 and 10 complete branches respectively.
+One deliberately exploratory fit used four scenarios from one authenticated
+upstream root, updated move/control/switch heads, and won three short live
+smokes without teacher queries or invalid actions, but lost a different
+full-party TRAIN diagnostic. Scaling that unchanged model to 11 scenarios still
+lost: shared state features canceled in the linear attack-versus-switch ranker.
+Action-by-state control features repaired this structural limit. A new 11-case
+fit won the reused full-party diagnostic and another same-root full-party case,
+plus all three edge smokes without teacher queries or invalid actions. These
+are diagnostic, previously explored TRAIN configurations, not independent
+DEVELOPMENT evidence. The unmodified Celadon Gym Lass TRAIN diagnostic then
+exposed a natural transfer failure: after a stat-rich manifest bridge and a
+bounded pre-move-menu faint repair, the model completed 33 logged decisions
+with no invalid actions or teacher input but lost; the frozen attack-only
+comparator won the same capture in 24 decisions. Both outcomes are retained,
+and this capture must not be replay-tuned into the next fit. The next data step is an
+ancestry audit of unused authentic starts and replication across three further
+genuinely disjoint TRAIN roots, each with four admitted scenarios. Natural
+DEVELOPMENT comparison remains the promotion gate. The unsupported Struggle
+boundary is an explicit limit of this initial battle segment, not a hidden
+teacher fallback. The Red-before-ROM-hack, Crystal and Emerald order is unchanged.
+
+## September 16 — stop static battle-capture sampling; collect model-directed episodes
+
+The [action-free supply audit](evidence/red-natural-battle-supply-audit-2026-09-16.json)
+found 18 natural train battle starts across 14 upstream roots, with at most two
+starts on any root and four starts offering only one supported attack. The
+ordinary four-roots/four-examples-per-root fit gate cannot be met from this
+materialized bank. The 81 authenticated source saves have richer parties, but
+after historical materializations and account claims only six untouched train
+and four untouched development roots remain; the train roots span just two
+goal families. The older 20-example development comparison gave the fitted
+battle model zero wins and two losses against the fixed heuristic. The recent
+assisted pilot only tied that heuristic.
+
+Do not lower the gate again or manufacture independence by resetting one
+snapshot. The next capability is a bounded model-directed training episode:
+the model owns real attack choices across naturally encountered battles,
+pre-choice states and actual outcomes are retained, and only isolated
+train-side branches provide comparable candidate outcomes. Separate upstream
+development episodes test both the frozen model and fixed heuristic. This
+changes the immediate data strategy, not the Red completion gate, stage IDs,
+or the order of ROM hack, Crystal and Emerald. No root was claimed, no game
+input was sent and no model was fitted in this audit.
+
+## September 16 — bounded live battle authority, without blanket promotion
+
+The next earned-state experiment connects the existing frozen expected-utility
+battle ranker to one fresh natural wild encounter. Teacher setup declares the
+lead and venue before the encounter; the ranker then chooses attacks from at
+least two supported candidates. Persist each query and selected physical slot
+before input, settle each turn before re-observation, retain failures and the
+actual terminal, and stop after at most eight decisions. There is no attack
+fallback, hidden switch, development fitting or replay of a consumed trial.
+
+The earlier shadow-only restriction still bars promotion *from those old
+results*. This separately recorded development test grants temporary explicit
+move authority only inside its bounded runner. It does not change the ordinary
+collection controller, claim independent advantage, or open the fresh-run gate.
+Stage IDs, completion criteria and the Red-before-ROM-hack order are unchanged.
+
+## September 16 — expose evolution targets; separate ties from learned preference
+
+The [action-free inventory](evidence/red-model134-multi-evolution-menu-2026-09-16.json)
+found five feasible stone targets hidden by deterministic catalog selection. Their native
+executors and per-target quotes are now exposed, but all five have identical policy vectors.
+The current feature-distinction falsifier fired before any query, input or fit. Counters,
+stage exits, fresh-Red acceptance and later-title order remain unchanged.
+
+Next qualify explicit equivalent-target exploration rather than inventing identity-derived
+features just to pass a contrast gate. Preserve model scoring when real resource/effort contrasts
+exist, label a tie honestly, persist the sampled target before input and retain only its actual
+outcome. Any subsequent one-goal continuation needs a new plan, not a replay. This next contract
+is not yet implemented and the current guard still blocks all-identical menus.
+
+## September 15 — connect model choices to an autonomous development loop
+
+Pete explicitly directed work toward autonomous model decision making. The next experiment
+is a bounded continuation from the retained 89-registration development save: up to three
+model-selected goals, automatic reconstruction of the next menu from each earned terminal,
+and real cartridge-derived capture destinations exposed to the model. Evolution target
+derivation and battle moves remain deterministic and must be reported as such.
+
+The failed Model123 query with seed123091501 remains an unretained historical choice and
+never supplies a selected arm, outcome or training row. Under this new development direction,
+a new run may start from the same unchanged save with a prospectively recorded random seed.
+This is correlated development continuation, not an independent experiment or recovery of
+the old answer. The earlier instruction to abandon the entire save after an instrumentation
+failure is superseded; consumed gameplay and historical benchmark/sealed identities stay closed.
+
+Mission check: reusable capability is observe/choose/persist/execute/reobserve; learned
+authority covers goal and capture destination choice; transfer testing uses multiple menu
+shapes and changed terminal states in ROM-free tests; the cheapest falsifier is failure to
+persist or execute the chosen binding; time box is two hours; stop on unsafe control, failed
+execution/verification, no state progress, or the declared decision/action/frame limits.
+The live cap is three decisions,30000 actions,3000000 frames and1800 seconds for admitting
+further decisions. Persist each choice before execution and retain every actual terminal.
+No teacher fallback action is allowed. The fresh Red gate, later-title order and user-controlled
+GitHub publication remain unchanged.
+
+## September 15 — consume campaign B and repair one generic battle contingency
+
+The [durable campaign](work-sessions/2026-09-15-durable-battle-cartridge-campaign.md)
+bound a new epoch to exact source, CI, ROM, state and plan identities. Its first Route11 control
+failed after 893 actions / 80,081 frames. V2 retained the exact `battle` / `battle_failed` /
+`policy_selection` boundary: the active battler's PP reached zero while opponent HP remained
+unchanged. Three later cases never opened. Campaign B is consumed without replay or replacement.
+
+This validates the new evidence path under a real falsifier but does not qualify battle settlement
+or create learned authority. The immediate roadmap becomes one Astra High, ROM-free architecture
+session for a generic observable no-progress/no-usable-PP switch contingency. It may reuse existing
+switch mechanics but may not depend on species, map, route or case identities. Only after that
+passes may Sol High freeze a distinct campaign C. The heterogeneous lesson, full Red acceptance,
+ROM hack, Crystal and Emerald remain in their prior order.
+
+## September 15 — stop the cartridge campaign on incomplete failure evidence
+
+The [bounded qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md)
+passed its synthetic reopen prerequisite and settled three correlated Route11 cases, but the first
+cross-venue setup failure retained only its exception class. The missing semantic phase and exact
+action/frame cost violate the frozen gate, so the campaign stopped without retry or replacement.
+
+This does not reverse the shared PP-vector repair and does not create learning credit. It changes
+the immediate roadmap from cartridge execution to one V2 cross-component journal: phase, bounded
+reason and cumulative cost must survive failures outside the decorated battle runtime as well as
+inside it. Use Astra High for that contract work, then Sol High for new bounded identities. Official
+collection, the full Red run, ROM hack, Crystal and Emerald remain in their existing order.
+
+## September 15 — qualify battle execution before more collection
+
+The user challenged the repeated run/fail/patch loop and authorized a systematic refocus.
+The [audit](work-sessions/2026-09-15-battle-runtime-refocus.md) found seven reproducible
+false-success cases, strengthened shared PP verification and added bounded failure traces.
+This is maintenance for the Model121 heterogeneous collection lesson, not learned progress.
+The prior recovery succeeded; current entry points now reflect its stable terminal.
+
+Next use a fixed, disposable cartridge campaign with durable diagnostics. Its caps and stop
+conditions are recorded in the session report. Synthetic coverage does not authorize a full
+run or establish the old failure's cause. Preserve all stage IDs and exit criteria, the
+151-entry Red requirement, consumed identities and protected sources. No ROM hack or Crystal.
+
+## September 15 — retain the partial evolution; recover the exact terminal before continuing
+
+The [safe singleton session](work-sessions/2026-09-15-safe-singleton-evolution.md) verified that
+Tentacool-to-Tentacruel is an ordinary item-free level transition with one unprotected precursor,
+then executed it exactly once through the production route. Sixty-one verified quanta advanced the
+precursor from level5 to24 before `BattleRuntimeError`. The exact mid-battle terminal is retained;
+registrations, living species and specimens remain86/66/70.
+
+The consumed identity may not retry, and the partial run supplies no model query, training row, fit,
+authority or Tentacruel registration. The planned fresh-menu rebuild is deferred because a
+mid-battle terminal is not a valid decision boundary. Next authenticate and diagnose that state
+action-free, then freeze one recovery-only settlement if existing mechanics preserve the collection.
+Do not automatically resume evolution, substitute another source or weaken the full fresh-Red gate.
+
+## September 14 — reject a fourth blind source; use a correlated registered reset
+
+The [supply/admission audit](work-sessions/2026-09-14-full-pokedex-supply-admission.md)
+found that the current metadata-only selector cannot know whether an unopened root exposes both
+capture and evolution. The claim and payload open precede that gate, so another one-family state
+could consume source four without a model query or outcome. Three direct sources already produced
+no lesson. Preserve all nine remaining sources and keep the two-family gate strict.
+
+Do not inspect multiple unclaimed payloads and choose the first passing menu. That would bypass the
+claim-first anti-cherry-picking boundary. Instead, add an explicit registered correlated-reset
+contract for the authenticated Model121 terminal. It must remain training-only and non-independent,
+bind the exact parent and reset identity before sampling, retain every selected outcome and cost,
+and authorize no fallback, redraw, consumed-source reopen or new upstream-lineage claim.
+
+This is the second consecutive session without learning, so the anti-drift alarm fires. The next
+session must target the correlated-reset bridge and one retained capture/evolution lesson rather
+than another finite-source audit. Full Red, ROM-hack and later-title gates do not change.
+
+## September 14 — consume the unretained Model120 sample and repair the next freeze
+
+The [Model120 freeze failure](work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md)
+reconstructed the exact routed-restore-versus-trainer-resupply menu action-free and invoked the
+model once. A wrapper attribute error occurred after the result returned but before the selected
+index was persisted. The answer is unknown. Seed120091401 is consumed without redraw, inference,
+gameplay, label or fit.
+
+This triggers the one-session no-learning alarm but does not change the Red-first sequence. The next
+session gets a new V2 identity whose pre-query tombstone prevents ambiguous requery and whose
+write-ahead receipt authenticates the selected option by content hash. Run that identity once; only
+a durably retained choice may execute or fit. The fresh-run full-Red/full-local-Pokédex gate and the
+ban on ROM-hack or Crystal progression remain unchanged.
+
+## September 13 — retain the resource purchase and follow the changed-state restoration choice
+
+The [Model118 purchase session](work-sessions/2026-09-13-model118-frozen-purchase.md) executed
+Model117's exact frozen resupply once. One verified Fly led to a three-Ultra-Ball purchase for1800;
+cash changed2146 to346, registrations stayed85, and the measured success became row118 without a
+retry, teacher label or execution-time policy query.
+
+The zero-input restart then exposed one fishing acquisition and restoration. Model118 froze
+restoration candidate1 at probability0.6782507836. Execute that exact changed-state choice next and
+retain its real result. This advances sustainable resource learning, not the Red stage exit: the
+fresh-run story/full local Pokédex gate, version/trade/event dependencies and no-ROM-hack boundary
+remain unchanged.
+
+## September 13 — preserve goal choice as fishing opportunities collapse
+
+The [sparse-fishing qualification](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
+closed the one/zero-destination blocker without inventing another target. One fishing destination
+now remains an identity-free supplement beside ordinary goals; zero omits fishing cleanly.
+Standalone destination learning still requires two distinguishable choices. A fixed1000-step scale
+prevents singleton travel effort from saturating while the historical multi-destination path remains
+unchanged.
+
+The actual Model117 terminal exposed one fishing supplement and three ordinary candidates. Model117
+froze resupply candidate0 at probability0.2577685686 with zero controller actions, emulator frames,
+teacher labels or training examples. The choice remains unexecuted. This closes a maintenance
+unblock, not a learning or authority milestone; counters remain117 examples /79 successes and85
+registrations.
+
+Next, execute that exact frozen resupply once and retain the real resource outcome. Do not redraw,
+retry, consult a teacher, or progress to a ROM hack or Crystal. The fresh-run Red/full local Pokédex
+gate and all stage exit criteria remain unchanged.
+
+## September 13 — degrade fishing inventory instead of forcing another target
+
+The [Model117 acquisition session](work-sessions/2026-09-13-model117-frozen-acquisition.md)
+completed Model116's exact frozen acquisition and added registration85. Model117's next menu then
+failed closed before selection because fewer than two reachable productive fishing destinations
+remain, while the reusable fishing inventory requires at least two.
+
+The next bounded task is therefore an action-free option-construction contract for one or zero
+destinations. It may omit unavailable fishing supplements or expose one executable supplement, but
+must not invent another species target, consult a teacher, leak identity or issue controller input.
+This changes only the immediate work order. The fresh-run Red/full local Pokédex gate, no-ROM-hack
+boundary and all consumed-choice identities remain unchanged.
+
 ## September 12 — end the funding detour and broaden acquisition families
 
 The [funded model104 continuation](work-sessions/2026-09-12-funded-model104-collection.md)
@@ -663,7 +935,7 @@ Speed, Special, Accuracy and Evasion reductions remain closed. The retained term
 the compound mechanics falsifier without advancing model103, collection, or battle authority.
 Await exact-source green CI before one separately identified development successor; never retry
 either consumed League attempt.
-# September 9 — distinguish ordinary combat risk from strict item-turn proof
+## September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure
 and read-only worst-critical analysis do not justify another unchanged attempt.
@@ -685,3 +957,409 @@ handoff are complete. The integration ranker was explicitly unlearned and every 
 singleton; model99 and all learning counters remain unchanged. The next bounded task is the
 post-Brock-to-Celadon join, followed immediately by measured model99 collection learning. This
 prevents fresh-start plumbing from becoming another long substitute for learner outcomes.
+
+## September 13 — full fresh-run Red before any ROM hack
+
+Pete explicitly requires a complete, non-walkthrough, model-directed Red run from a fresh game,
+with story completion and the full local Red Pokédex, before any ROM hack. Adopt
+`red-first-v3-full-run`; retain V1 and V2 unchanged as historical baselines and keep stage IDs.
+The V2 checkpoint-story result remains valid supporting evidence, but the strengthened fresh-run
+story exit is unproved and returns to planned. This is a stronger acceptance requirement, not a
+loss or retroactive relabeling of measured results.
+
+The current 40-entry remaining counter covers the existing 124-entry native-availability scope;
+it is not the full Red Pokédex finish line. Version, trade and event dependencies stay explicit
+and must be legitimately resolved in the final Red save. Global credit cannot stand in for a
+local owned flag. Supporting version/trade work does not authorize moving the main curriculum
+away from Red. Unresolved dependencies keep the hack gate closed.
+
+After complete Red, test a compatible unfamiliar Red modification, then learn Crystal and
+continue the shared registered Pokédex through at least Emerald. The existing full-run readiness
+conditions still apply: train and qualify reusable decisions in bounded scenarios before the
+fresh-run final exam. No new clean-power teacher replay is authorized by this clarification.
+
+## September 13 — account for opponent Pay Day without rewriting failures
+
+Pinned cartridge source explains Model114's extra58 as Pay Day used by a level29 opponent Meowth:
+ordinary income2030 plus Pay Day58 equals the observed2088. Preserve Model114 as failed under its
+original frozen verifier. The exact Model115 continuation also remains consumed: it stopped after27
+actions/864frames because the first repaired guard rejected that retained accumulator before the
+next battle initialized.
+
+Adopt the source-backed lifetime contract instead of a payout tolerance. A stale prior accumulator
+may exist before interaction; the next battle must clear it at initialization; its own accumulator
+must remain readable after victory and exactly reconcile terminal cash. Fit the retained Model115
+failure once as row116. Freeze Model116's selected acquisition for the next session; no retry or
+resampling. The full Red-before-hack sequence and exit criteria do not change.
+
+## September 13 — keep a sole acquisition outside learned-choice training
+
+Model118's exact frozen restoration fully recovered HP/PP once and became successful row119. The
+action-free Model119 successor then exposed exactly one executable candidate: a supplemental fishing
+acquisition. Preserve the mixed-option contract's rejection; one option is not a ranking decision.
+
+The next bridge must use the already established forced-singleton semantics while authenticating
+the supplemental binding. It records zero model and teacher queries, remains excluded from the
+option-value fit, and retains its one actual outcome without retry. Do not invent a second candidate
+or weaken multi-option training invariants. The full fresh-run Red story and local Pokédex gate
+still precedes every ROM hack.
+
+## September 13 — consume the forced bridge, return to genuine model choice
+
+The separately labelled Model119 bridge passed exact-source CI and an action-free freeze, then
+executed its sole fishing acquisition once. It captured national species061 and advanced collection
+to86 registrations/66 living species/70 specimens. Because no alternative existed, the step used
+forced-singleton authority and created zero model queries, teacher labels, training examples or fit.
+
+Preserve the successful terminal and forbid retry. A zero-input audit corrected a private summary
+field that confused the checkpoint document hash with the sealed-record hash; the original result
+remains preserved, and the corrected sealed checkpoint reopened. Its action-free successor exposes
+two ordinary candidates, resupply and restore. Return to the normal model-choice loop: freeze,
+sample once, execute once and fit only eligible measured evidence. The full Red-before-hack gate is
+unchanged.
+
+## September 13 — admit the measured field restore, preserve the wrapper failure
+
+Model119's exact resupply-versus-restore menu selected restoration once at probability0.5524737204.
+The selected single-field-item binding consumed one Full Heal and cured one party status in58
+actions/4776 frames. Preserve the generic runner's failure receipt: it incorrectly applied the
+routed-Center requirements of unchanged inventory and whole-party restoration.
+
+Accept one zero-input correction only because it reconstructed the exact original binding and
+passed that binding's existing verifier against the retained terminal. It issued zero actions or
+frames, did not retry or redraw, and changed no historical receipt. Admit that one verified result
+as row120. Model120's action-free successor exposes routed full-team restoration and trainer-funded
+resupply with no fishing supplement; stop before sampling. The full fresh-run Red story and local
+Pokédex gate still precedes every ROM hack.
+
+## September14 — qualify shared departure through the existing router
+
+The previous action-free result tested only source-local providers. Its conclusion that capture
+and boxed evolution were structurally location-incompatible was too broad: the existing resource
+router already supplies travel. Reuse it rather than build another route engine or search menus.
+
+The corrected player connection exposes both acquisition families on the same historical state
+with zero actions/frames and unchanged bytes. ROM-free tests cover Center departure as well.
+Use an explicit local151 completion scope across policy, checkpoints, rewards and recovery while
+preserving historical shared124 serialization and all three registration/stock views.
+
+This is engineering qualification, not a new learned outcome or a milestone promotion. Historical
+catalog identity is not proof of disjoint upstream lineage or permission to reuse consumed trials.
+Next is one prospectively eligible model-selected training outcome with durable cost/failure/state
+retention. Keep the mixed-acquisition learned-choice milestone open until measured; the full Red
+fresh-run, local151, legitimate dependency and Red-before-hack gates are unchanged.
+
+[Qualification](evidence/red-full-pokedex-shared-departure-2026-09-14.json).
+
+## September14 — select training supply by provenance before opening state
+
+The last handoff overstated direct-start readiness. The registered collector requires a completed
+continuation, while the fixed catalog freezer cannot enroll a new source. A metadata-only claim
+census nevertheless found12 unclaimed training sources among54 entries. The previous two-family
+diagnostic is claimed. Freeze the first unclaimed source by slot order, without using menu quality
+or opening game state; do not select another after a conflict or failed gate.
+
+The selected configuration has no capture/evolution declarations. This is a configuration gap,
+not a finding that the state cannot support acquisition. Next implement a versioned direct catalog
+origin and registration anchor, plus declarations derived from semantic inventory using existing
+adapters. Preserve old contracts, authenticate and claim the exact frozen source before opening it,
+and require actual two-family availability before a query. No fictitious predecessor, teacher
+factory, new catalog, source substitution, learning counter or stage exit is authorized by this
+engineering result. The full model-directed Red story/local151 gate remains unchanged.
+
+[Evidence](evidence/red-full-local-training-source-2026-09-14.json).
+
+## September14 — direct catalog origins without invented parents
+
+The registered bounded player now distinguishes an original catalog start from a saved
+continuation. New direct completion and registered schemas bind the catalog, exact state/envelope,
+root lineage, original and derived profiles, model and current source without predecessor fields.
+A separate registration session anchors its policy to that exact catalog origin. Legacy schemas
+and checkpoint requirements remain unchanged.
+
+Full-local mode derives a missing boxed canonical level evolution and a missing ordinary wild
+source from a read-only semantic observation, with the encounter corridor derived from cartridge
+geometry. Caller species and routes are rejected. This is engineering qualification only: the
+frozen selected source remains unclaimed and unopened, and Model121 remains at121 examples,
+83 successes and86 local registrations.
+
+The runner now enforces an already-published account-wide pair claim before game-payload access,
+verifies the opened state/envelope pair against it, and retains its digest in the direct plan.
+Publish and green this exact bridge, then create that claim through a controller-capable boundary
+for only the frozen payload. Require two real executable families before a model query; retain a conflict or
+one-family failure without selecting a substitute. Only a measured, durably retained choice may
+advance the learner.
+
+[Evidence](evidence/red-direct-catalog-origin-bridge-2026-09-14.json).
+
+## September14 — retain the consumed direct-source preparation failure
+
+The exact frozen source received one valid claim after its bridge passed exact-head CI. Preparation
+then exposed two generic defects before any action-free family gate: a null parser default, followed
+by a v4 model selecting economy behavior before the economy schema and supply contract existed.
+Preserve both failure records. The same-claim recovery opened only the selected payload; no query,
+input, frame, registration session, outcome, example or fit occurred.
+
+The source is consumed and may not be retried, reclaimed or replaced in this session. Repair only
+the generic boundaries: normalize an omitted regional list without discarding legacy wild-source
+callers, and map supported v4 models to the ordinary recovery behavior until a separately valid
+economy promotion. Unsupported future versions still fail closed; old continuation/economy schemas
+remain unchanged.
+
+After exact-head publication, a later session may freeze a distinct unused source prospectively.
+It must still pass exact claim and expose two real acquisition families action-free before any
+model query. This maintenance changes no learned authority, Red gate, ROM-hack order or stage exit.
+
+[Evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json).
+
+## September15 — locally qualify the cross-component journal before new cartridge work
+
+The prior disposable campaign remains failed and consumed; its missing Diglett phase/cost cannot
+be reconstructed as fact. V2 now records phase, bounded semantic reason, attempted/completed actions
+and actual frames across setup and battle, enforces prospective shared caps and requires exact
+durable reopening. Partial ticks, storage errors and interrupts fail closed. 371 focused tests
+and whole-source type checking pass; no cartridge, learning row, fit or registration occurred.
+
+Close architecture maintenance here. Next prospectively freeze distinct cartridge identities and
+exact inputs for a short V2 campaign, including cross-venue setup. No in-campaign retry or replacement,
+protected-source expansion, full run, ROM hack or Crystal. Gaps remain gaps, not partial successes.
+Only then resume the Model121 heterogeneous acquisition lesson. Model counters and checklist
+denominators are unchanged. The omitted prior battle-runtime-refocus review was restored from Git.
+
+[Evidence](evidence/red-cartridge-journal-v2-2026-09-15.json) ·
+[Detailed roadmap](work-sessions/2026-09-15-cartridge-journal-v2.md).
+
+## September15 — close the generic live-battler stall contingency session
+
+Campaign B remains consumed. Its all-PP-exhausted failure motivated a single opt-in contingency,
+not a route/species exception: one live-battler switch after four observed PP-spending turns without
+enemy HP decrease, or no usable move. Shared reserve screening, the original runtime pulse budget,
+the same metered executor and durable pre-input claims preserve the bounded contract.
+
+537 focused ROM-free tests pass, including 46 new cases; no cartridge, query, example, fit or
+registration occurred. Flash 3.8 High completed a contract review through Antigravity. Attribution
+and survival warnings are explicit; no Run fallback or learned-authority promotion was added.
+
+Correct the prior roadmap's "forced-switch case" wording: this is voluntary switching while alive,
+not fainted-party handling. Fainted switching, move learning, same-battler move replacement and
+cross-venue cartridge settlement remain unqualified. No stage ID or exit criterion changed.
+
+Next prospectively freeze a distinct campaign C with the new policy and declared varied/cross-venue
+coverage. Credit a contingency only if observed and settled; missing coverage never permits replay
+or replacement. Only a passing required gate opens the heterogeneous acquisition lesson.
+
+[Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
+[Session](work-sessions/2026-09-15-battle-stall-contingency.md).
+
+## September 15 — end the disposable cartridge gate after Campaign C
+
+Campaign C settled one Route 11 battle, then stopped with exact accounting when player-owned Wrap
+continued automatically without exposing a move menu; its third case never opened. The generic
+observable repair passes ROM-free regression and compatibility checks, but has no post-repair
+cartridge result and creates no learner or collection credit.
+
+Repeated isolated campaigns are now diminishing the only outcome that matters: a player that
+finishes Red and registers all 151 local entries. Retire the separate cartridge gate rather than
+creating Campaign D by default. The next bounded work returns to one authenticated heterogeneous
+collection choice; actual play may supply battle evidence while retained acquisition progress is
+the primary output. This changes the immediate development tactic, not the Red-first stage order,
+full fresh-run/full-Pokedex exit criterion, ROM-hack prohibition or later Crystal/Emerald sequence.
+
+[Evidence](evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json).
+## September 15 — defer unavailable species without cheating
+
+Pete revised the pre-hack Red gate after confirming the long-term objective is one legitimate
+shared collection across titles. Red must still pass one fresh, non-walkthrough, model-directed
+start-to-finish run with concurrent Champion and Hall-of-Fame evidence. Its collection gate is now
+the declared 124-species selected native route, currently 88/124, rather than local 151/151.
+
+Mew is deferred until a later legitimate source. Version exclusives and link evolutions remain
+explicit dependencies. After model completeness, test simultaneous Red/Blue emulators and a normal
+link trade if the emulator stack supports it; if not, retain the gaps and earn those species in a
+later game. Shared credit never fabricates a Red save flag, and no save editing or cheating is
+authorized. Adopt `red-first-v4-legitimate-native`; retain V1 through V3 unchanged as historical
+baselines. The ROM-hack, Crystal and at-least-Emerald sequence remains unchanged.
+
+## September 16 — permit isolated training interventions, not final-player cheats
+
+Pete clarified that the no-cheating rule governs the final model and its official run, not the
+teacher or training process. A training harness may override money in an in-memory copy to isolate
+Safari admission and capture mechanics. Preserve and authenticate the source state, mark the
+assisted state and every result, and exclude these runs from ordinary goal-value/economy fitting,
+legitimate funding claims and the fresh-run 124-species gate. The final model receives no state-edit
+capability. The collection scenario curriculum remains useful, but a funded training copy cannot
+prove the model knows how to earn money; that requires a separate unassisted outcome.
+
+The next action-free check used a 198-money, 96/124 post-Marowak source and injected exactly 500
+money in emulator memory. It produced two genuine option kinds (evolution and metered Safari
+acquisition), zero inputs or frames, and no model query. The authenticated source file remained
+unchanged. This qualifies a bounded Safari training probe, not a legitimate earning result or
+collection registration. Story/battle authority remains a separate prerequisite for final Red.
+
+[Evidence](evidence/red-assisted-safari-admission-qualification-2026-09-16.json).
+
+## September 16 — close the assisted Safari probe and return to learned authority
+
+One explicitly marked, teacher-selected Safari attempt spent the injected 500
+on real admission and reached the area. It stopped safely at the declared
+66-semantic-action search limit after431 controller actions/53,700 frames,
+without capture or registration gain. Model137 was not queried or fitted; the
+earned 96/124 save was unchanged. This validates paid transport and a bounded
+survey attempt, but does not justify widening the same consumed trial or
+claiming the player learned funding, Safari choice or capture.
+
+The immediate development tactic now returns to a genuine model-controlled
+decision on an earned Red state. If collection has no executable alternatives,
+the next bounded qualification targets story/battle authority rather than
+another Safari patch. The Red-first stage IDs, full fresh-run/124-species gate,
+ROM-hack prohibition and later Crystal/Emerald order are unchanged.
+
+[Evidence](evidence/red-assisted-safari-mechanics-probe-2026-09-16.json).
+
+## September 16 — stop near-duplicate battle sampling without a corrective signal
+
+Two additional authentic Red train captures yielded non-tied move outcomes in
+four completed timing trials, yet the frozen battle ranker chose an observed
+best attack in both. They share one upstream root. The older natural bank's
+only baseline regret was about 0.025 utility, so more adjacent snapshots are
+unlikely to justify a meaningful fit or an unseen promotion claim. A separate
+consumed timing-mismatch capture began asleep; sleep suppression is a specific
+plausible cause, but its historical per-candidate counts cannot be recovered.
+
+The immediate tactic changes from sampling nearby natural states to freezing
+a small, diverse, consequential train curriculum with a distinct-root
+development comparison. Teacher-only interventions may be proposed and marked
+under Pete's training rule, never offered to the final actor. A fit requires
+actual correctable train error; development outcomes require a prospectively
+frozen challenger and predictions. This changes no Red-first stage, fresh
+start/124-species exit criterion, ROM-hack gate or later Crystal/Emerald order.
+
+[Evidence](evidence/red-battle-timing-and-contrast-2026-09-16.json).
+
+## September 17 — use isolated teacher-generated battles for varied practice
+
+Pete confirmed that teacher cheating is allowed in training and asked us to
+build a controllable battle-practice environment that can serve later games.
+This changes the immediate battle-data tactic: scarce natural Red roots are no
+longer the only source of training choices. A title-neutral practice request
+now feeds a teacher-only Red adapter. Its verified first slice edits actor
+moves/PP and opponent current HP in a private battle copy, reopens a standard
+capture, and measures cartridge outcomes. One generated four-way menu produced
+a real Tackle-versus-knockout contrast; the frozen model chose a move that
+succeeded at that single RNG timing. There was no fit or promotion.
+
+The factory does not yet control species, levels, stats, status or opponent
+moves. These axes must be implemented as coherent game states and tested
+against the cartridge before claiming arbitrary-battle support. All generated
+variants retain the originating root identity and assisted provenance; they
+cannot manufacture independent evaluation roots. Natural unedited battles
+remain the held-out truth test. The Red fresh-start/124-species gate, ROM-hack
+prohibition, and Crystal-to-Emerald sequence do not change.
+
+[Evidence](evidence/red-teacher-battle-practice-factory-2026-09-17.json).
+
+## September 17 — separate exploratory battle fitting from promotion qualification
+
+Pete authorized the bounded work needed to get the trainer learning loop moving.
+The trainer inventory contains one authenticated upstream TRAIN battle root; its
+assisted variants and timing siblings cannot create independent roots. The
+retired clean-power supply campaign produced zero roots from twelve assignments,
+so we will not revive it or relabel its failures.
+
+Introduce a lower, explicitly **correlated exploratory TRAIN** tier: exactly
+four prospectively declared generated trainer scenarios from the existing
+authenticated root, each admitted at the same five timing offsets, covering
+at least three distinct actor/opponent matchup profiles. This tier may fit a
+diagnostic three-head model and let it choose in bounded TRAIN practice. Its
+receipt must say one root, no independent training qualification, no natural
+advantage, and no promotion eligibility. It is not a replacement for Astra's
+four-root-by-four-scenario qualified-fit gate; that gate and independent
+natural DEVELOPMENT comparison remain necessary before battle authority is
+promoted. Retain failed scenarios without replacement or replay.
+
+The Red fresh-start/124-species gate, no-final-player-cheats rule, ROM-hack
+prohibition, and Crystal-to-Emerald order do not change. No full-game run,
+DEVELOPMENT opening, or GitHub publication is authorized by this decision.
+
+## September 17 — repair invalid trainer reserves and extend exploratory coverage
+
+The first four-scenario exploratory fit is superseded: its synthetic reserves
+had an owner ID of zero and could disobey. The cartridge probe reproduced a
+selected Water Gun with no PP spent; copying the source player's owner ID into
+each reserve restored an executed attack. The repaired four-scenario fit is a
+new diagnostic learner from the same one root. On a prospectively frozen,
+different TRAIN matchup, it tied the attack-only baseline at five wins each but
+made zero voluntary switches and lost more party HP in every matched timing.
+This falsifies any present claim that learned switching has transferred.
+
+Authorize one eight-scenario correlated TRAIN successor: retain the four
+repaired, admitted examples and prospectively add four distinct matchups
+designed to contrast attacking with switching. Use five declared timing trials
+per new configuration and a new, untouched TRAIN holdout. The exploratory fit
+gate accepts only four or eight cases; the eight-case tier requires at least
+six distinct opening matchup profiles. Failed declared cases remain retained,
+not replaced, and neither the earlier holdout nor DEVELOPMENT may be fit.
+This is curriculum expansion after a measured failure, not independent-root
+qualification. Astra's balanced four-root gate and natural DEVELOPMENT
+advantage remain unchanged; no authority promotion, full run or GitHub push.
+
+The eight-case fit passed admission with four openings favoring a switch and
+four favoring an attack, but its first unseen holdout failed all five timings:
+the model repeatedly switched and then reached an optional replacement prompt
+with no living reserve, where its policy incorrectly attempted target
+projection. Preserve those failed trials and their logs. The next controller
+revision declines targetless optional prompts and masks a second voluntary
+switch against the same opponent until the model has attempted an attack.
+This is a disclosed safety constraint against an unsupported post-switch
+context, not a learned improvement or a replay of the failed holdout. A fresh
+declared TRAIN matchup must test it once before any broader claim.
+
+## September19 — retain numeric competence, distinguish continuation policies
+
+The [readiness work](evidence/red-battler-readiness-result-2026-09-19.json)
+replaced exact-old-choice freezing with unchanged numeric regret budgets so
+measured old mistakes could improve. It added138 fitted contexts, bringing the
+trainer to318. Opening-only coverage was expanded to replacements and endgames.
+No original retention limit, stage exit or final-Red acceptance criterion changed.
+
+H improved one new TRAIN comparison14wins versus11 but remained below the
+teacher's17. I corrected saturated TRAIN rankings yet regressed7wins versus H14
+on a distinct cohort; I is rejected. Lower fitting regret is not readiness.
+
+A prospectively selected four-root,120-branch diagnostic found4/4 best-action
+changes when H, rather than the teacher, continued after the tested first action.
+Next learning work must explicitly bind continuation policy/model and decide
+target migration before fitting. Do not silently merge these alternate values,
+erase old teacher measurements, replay consumed comparisons or loosen gates.
+The trainer is operational; the battler is not fully qualified. Independent
+natural full-party tests and bounded player integration remain outstanding.
+Pete's permission for bounded fresh natural source preparation is still pending.
+No new framework, standing review gate, full-game run or GitHub publication.
+
+## September19 — close supported battler v1; return to main-player integration
+
+The [earned-state probe](evidence/red-battler-earned-switch-result-2026-09-19.json)
+demonstrated two voluntary switches and two natural trainer wins, with33learned
+decisions and verified in-place field handoff. No weights changed. Earlier failed
+coverage gates remain recorded; these were new encounters from earned states.
+
+Freeze the supported small-party battler v1 package. The next work explicitly
+connects it to a main-player trainer call site and one bounded saved-state goal;
+ordinary collection controllers have not already been replaced. Do not add another
+general trainer review, fit or perfect-win gate. Unsupported moves, six-member
+reliability and natural forced-target coverage remain explicit limitations, not
+silent claims. No stage exit or fresh-Red acceptance criterion changes.
+
+## September19 — explicit player binding; retain the failed funding integration
+
+Pete authorized integration, a full refresh of current documents and a GitHub checkpoint.
+Frozen J is now opt-in at ordinary trainer funding, sharing action/frame budgets and outer
+verification. The [single new goal](evidence/red-player-battler-integration-2026-09-19.json)
+made four learned decisions but failed after one faint. The unchanged funding contract stopped
+the unfinished battle. No fit, reset, payout or collection progress occurred.
+
+Keep the trainer package frozen. Next separate general battle lifecycle/recovery from strict
+no-faints funding acceptance, preserving the actual failed endpoint and verdict. Do not confuse
+this direct prepared-entry test with high-level model-selected funding or broad player promotion.
+No stage exit, Red denominator or fresh-start acceptance criterion changes. Future publication
+still requires Pete's instruction. Historical receipts remain unchanged.

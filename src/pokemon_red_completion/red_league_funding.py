@@ -51,17 +51,22 @@ class RedLeagueBattleQuote:
         risk = self.recovery_controller == "bounded-critical-risk"
         healing = self.recovery_controller == "ordinary-bounded-healing"
         if (
-            self.recovery_controller not in {
-                "damage-bounded-zero-item", "bounded-critical-risk",
+            self.recovery_controller
+            not in {
+                "damage-bounded-zero-item",
+                "bounded-critical-risk",
                 "ordinary-bounded-healing",
             }
             or type(self.maximum_full_restores) is not int
             or type(self.maximum_critical_exposures) is not int
-            or (risk and (
-                self.objective_id != "defeat_lance"
-                or self.maximum_critical_exposures != 2
-                or self.maximum_full_restores != 0
-            ))
+            or (
+                risk
+                and (
+                    self.objective_id != "defeat_lance"
+                    or self.maximum_critical_exposures != 2
+                    or self.maximum_full_restores != 0
+                )
+            )
             or (not risk and self.maximum_critical_exposures != 0)
             or (healing != (self.maximum_full_restores == 1))
         ):
@@ -129,6 +134,11 @@ class RedLeagueFundingQualification:
     battles: tuple[RedLeagueBattleQuote, ...]
     supported_attack_pp: int
     opponent_attack_demands: int
+    reset_stale_league_events: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.reset_stale_league_events) is not bool:  # noqa: E721
+            raise TypeError("League event reset projection must be a boolean")
 
     @property
     def expected_gross_income(self) -> int:
@@ -145,7 +155,7 @@ class RedLeagueFundingQualification:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.repeatable-league-funding-qualification.v3",
+            "schema": "pokemon.red.repeatable-league-funding-qualification.v4",
             "status": "ready_for_bounded_executor",
             "exit_steps": 0 if self.exit_plan is None else len(self.exit_plan.steps),
             "fly_town": self.fly_town,
@@ -168,6 +178,7 @@ class RedLeagueFundingQualification:
             "expected_net_income": self.expected_net_income,
             "supported_attack_pp": self.supported_attack_pp,
             "opponent_attack_demands": self.opponent_attack_demands,
+            "pre_entry_league_reset": self.reset_stale_league_events,
             "minimum_one_attack_allocation": True,
             "battles": [
                 {
@@ -212,6 +223,53 @@ _RENEWABLE_LIQUIDITY = (
     (ItemId.X_ACCURACY, 475),
     (ItemId.X_ATTACK, 250),
 )
+
+_LEAGUE_EVENTS = (
+    EventFlag.BEAT_LORELEI,
+    EventFlag.BEAT_BRUNO,
+    EventFlag.BEAT_AGATHA,
+    EventFlag.BEAT_LANCES_ROOM_TRAINER,
+    EventFlag.BEAT_LANCE,
+    EventFlag.BEAT_CHAMPION_RIVAL,
+)
+# Indigo lobby clears both each defeated-trainer event and the adjacent room
+# script/door events. These are the exact changed bits observed from the pinned
+# Red cartridge when re-entering after a post-Lance blackout.
+_LEAGUE_RESET_EVENT_INDICES = (
+    2273,
+    2278,
+    2281,
+    2286,
+    2289,
+    2294,
+    2297,
+    2302,
+    2303,
+    2305,
+)
+
+
+def projected_fresh_league_events(events: bytes) -> tuple[bytes, bool]:
+    """Project Indigo lobby's reset for one exact blackout-retained prefix.
+
+    A loss after Lance returns the player to a Center while the five Elite Four
+    flags remain set. Entering Indigo Plateau's lobby clears that completed
+    prefix before the next challenge. Accept only the complete pre-Champion
+    prefix observed after that cartridge-native loss; arbitrary partial event
+    combinations remain ineligible.
+    """
+
+    if type(events) is not bytes:  # noqa: E721
+        raise RedLeagueFundingError("League funding requires immutable event flags")
+    consumed = tuple(event_flag_is_set(events, flag) for flag in _LEAGUE_EVENTS)
+    if not any(consumed):
+        return events, False
+    if consumed != (True, True, True, True, True, False):
+        raise RedLeagueFundingError("save is not at a fresh postgame League boundary")
+    projected = bytearray(events)
+    for event in _LEAGUE_RESET_EVENT_INDICES:
+        projected[event // 8] &= ~(1 << (event % 8))
+    return bytes(projected), True
 
 
 def _room_quote(
@@ -292,9 +350,11 @@ def _plan_supply(
             needs_slot = False
     if shortfall > 0:
         raise RedLeagueFundingError("renewable inventory cannot fund Champion recovery")
-    projected_slots = len(inventory) - sum(
-        inventory[int(sale.item)] == sale.quantity for sale in sales
-    ) + (purchase > 0 and int(ItemId.FULL_RESTORE) not in inventory)
+    projected_slots = (
+        len(inventory)
+        - sum(inventory[int(sale.item)] == sale.quantity for sale in sales)
+        + (purchase > 0 and int(ItemId.FULL_RESTORE) not in inventory)
+    )
     if needs_slot or projected_slots > 20:
         raise RedLeagueFundingError("League recovery purchase lacks a bag slot")
     return RedLeagueSupplyPlan(route, tuple(sales), purchase)
@@ -428,19 +488,9 @@ def qualify_red_league_funding(
         or raw.battle_state != 0
         or not observation.input_ready
         or "story:victory_road_cleared" not in observation.game_state.facts
-        or any(
-            event_flag_is_set(raw.event_flags, flag)
-            for flag in (
-                EventFlag.BEAT_LORELEI,
-                EventFlag.BEAT_BRUNO,
-                EventFlag.BEAT_AGATHA,
-                EventFlag.BEAT_LANCES_ROOM_TRAINER,
-                EventFlag.BEAT_LANCE,
-                EventFlag.BEAT_CHAMPION_RIVAL,
-            )
-        )
     ):
         raise RedLeagueFundingError("save is not at a fresh postgame League boundary")
+    projected_events, reset_stale_events = projected_fresh_league_events(raw.event_flags)
     if not int(raw.badge_bits or 0) & int(Badge.THUNDER):
         raise RedLeagueFundingError("League funding requires observed Fly permission")
     try:
@@ -490,14 +540,16 @@ def qualify_red_league_funding(
         occupied=world.object_blockers[_INDIGO_TOWN],
         hazards=(),
     )
-    arrival = trainer_room_arrival(rom, int(MapId.LORELEIS_ROOM), raw.event_flags)
+    arrival = trainer_room_arrival(rom, int(MapId.LORELEIS_ROOM), projected_events)
     entry_world = replace(
         world,
         macro_graph=with_scripted_trainer_arrival(world.macro_graph, arrival),
     )
     try:
         supply_route = world.plan_feasible_to_map(
-            indigo, int(MapId.INDIGO_PLATEAU_LOBBY), goal_at=_INDIGO_CLERK_AT,
+            indigo,
+            int(MapId.INDIGO_PLATEAU_LOBBY),
+            goal_at=_INDIGO_CLERK_AT,
         )
     except RoutePlanningError as error:
         raise RedLeagueFundingError("no bounded route from Indigo landing to its clerk") from error
@@ -519,17 +571,21 @@ def qualify_red_league_funding(
         raise RedLeagueFundingError("League entry is not a bounded walk")
 
     room_quotes = tuple(
-        _room_quote(rom, raw.event_flags, objective, room, event, final_class)
+        _room_quote(rom, projected_events, objective, room, event, final_class)
         for objective, room, event, final_class in _ROOMS
     )
     champion = champion_script_binding(rom, reader.read_rival_starter())
     champion_quote = trainer_party_quote(
-        rom, champion.opponent, champion.trainer_set, allow_final_class=True,
+        rom,
+        champion.opponent,
+        champion.trainer_set,
+        allow_final_class=True,
     )
     quotes = (*room_quotes, champion_quote)
     _require_party_coverage(observation.party, quotes)
     supported_attack_pp, opponent_attack_demands = _minimum_attack_allocation(
-        observation.party, quotes,
+        observation.party,
+        quotes,
     )
     objectives = (*[row[0] for row in _ROOMS], "defeat_champion")
     battles = tuple(
@@ -548,13 +604,24 @@ def qualify_red_league_funding(
     )
     if raw.player_money + supply.sale_proceeds - supply.purchase_cost < 0:
         raise RedLeagueFundingError("League supply plan is not affordable")
-    if raw.player_money + supply.sale_proceeds - supply.purchase_cost + sum(
-        battle.expected_money for battle in battles
-    ) > 999_999:
+    if (
+        raw.player_money
+        + supply.sale_proceeds
+        - supply.purchase_cost
+        + sum(battle.expected_money for battle in battles)
+        > 999_999
+    ):
         raise RedLeagueFundingError("save lacks money headroom for the quoted League gross")
     return RedLeagueFundingQualification(
-        exit_plan, _INDIGO_TOWN, landing, supply, entry, battles,
-        supported_attack_pp, opponent_attack_demands,
+        exit_plan,
+        _INDIGO_TOWN,
+        landing,
+        supply,
+        entry,
+        battles,
+        supported_attack_pp,
+        opponent_attack_demands,
+        reset_stale_events,
     )
 
 
@@ -564,5 +631,6 @@ __all__ = [
     "RedLeagueFundingQualification",
     "RedLeagueSupplyPlan",
     "RedLeagueSupplySale",
+    "projected_fresh_league_events",
     "qualify_red_league_funding",
 ]

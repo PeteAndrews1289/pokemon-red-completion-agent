@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon.red.trainer-forced-successor-plan.v1",
+  "status": "prospective_not_executed",
+  "partition": "train",
+  "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+  "independence_claim": false,
+  "prior_pilot": {
+    "configuration_sha256": "dfb67c74e655895e0e789366fd0fa69ad4bdfc6b0889e4d679d4733bc013f095",
+    "status": "retained_failed_no_retry",
+    "reason": "The Charmander forced state was reached and retained, but the episode loader incorrectly projected it as an ordinary attack menu before any branch executed."
+  },
+  "scenario": {
+    "actor": "Pikachu level 5 at 1 HP",
+    "living_reserves": ["Vaporeon level 35", "Bulbasaur level 35"],
+    "opponent": "Vaporeon level 30 with Water Gun",
+    "expected_boundary": "Vaporeon's first attack faints Pikachu and opens forced replacement"
+  },
+  "execution_bound": {
+    "materializations": 1,
+    "baseline_runs": 1,
+    "forced_choices": ["switch:2", "switch:3"],
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "player_turn_horizon": 1,
+    "maximum_frames_per_episode": 120000,
+    "maximum_decisions_per_episode": 80,
+    "no_retry_after_failure": true
+  },
+  "success_criteria": [
+    "The first attempted attack reaches an observable forced-replacement boundary.",
+    "All ten branches have complete decision/event proof and comparable measured returns.",
+    "The target is same-root TRAIN only, with no independent-root or promotion claim."
+  ]
+}

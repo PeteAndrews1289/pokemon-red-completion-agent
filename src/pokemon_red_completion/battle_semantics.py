@@ -255,6 +255,7 @@ class BattleFeatureProjector:
     """Project one semantic battle snapshot into shared candidate vectors."""
 
     catalog: BattleMechanicsCatalog
+    mask_counter_without_prior_damage: bool = False
 
     def project(
         self,
@@ -363,7 +364,12 @@ class BattleFeatureProjector:
                 and move_ref == policy_context.required_move_ref
             )
             required_move_matched = required_move_matched or bool(matches_required_move)
-            if current_pp > 0 and "counter" in move.effect_flags:
+            counter_unsupported = "counter" in move.effect_flags
+            if (
+                current_pp > 0
+                and counter_unsupported
+                and not self.mask_counter_without_prior_damage
+            ):
                 raise BattleFeatureError("Counter requires prior-turn received-damage semantics")
             stab = float(move.type_name in player_species.types)
             effectiveness = self.catalog.type_effectiveness(
@@ -413,7 +419,9 @@ class BattleFeatureProjector:
                 (
                     slot_index,
                     current_pp,
-                    bool(disabled),
+                    bool(
+                        disabled or (self.mask_counter_without_prior_damage and counter_unsupported)
+                    ),
                     (
                         *state_values,
                         *move_values,
@@ -433,9 +441,7 @@ class BattleFeatureProjector:
         return BattleFeatureBatch(
             feature_names=FEATURE_NAMES,
             candidate_vectors=tuple(candidate[3] for candidate in candidates),
-            legal_mask=tuple(
-                candidate[1] > 0 and not candidate[2] for candidate in candidates
-            ),
+            legal_mask=tuple(candidate[1] > 0 and not candidate[2] for candidate in candidates),
             current_pp=tuple(candidate[1] for candidate in candidates),
             slot_indices=tuple(candidate[0] for candidate in candidates),
         )

@@ -1,0 +1,64 @@
+{
+  "schema": "pokemon.red.battle-runtime-refocus.v1",
+  "status": "rom_free_qualification_only",
+  "baseline_commit": "bf241d192492cdadbecde084256763bf14ac81a5",
+  "qualification": {
+    "baseline_adversarial_cases": 9,
+    "baseline_false_successes_reproduced": 7,
+    "transition_matrix_cases": 108,
+    "focused_tests_passed": 604,
+    "focused_tests_skipped": 1,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "cartridge_soak_executed": false
+  },
+  "broad_local_validation": {
+    "passed": 11875,
+    "xfailed": 1,
+    "warnings": 1,
+    "seconds": 1076.63,
+    "integration_tests_selected": false,
+    "excluded_test": "test_exact_local_mac_runtime_identity_qualification",
+    "excluded_failure_reproduced_on_baseline": true,
+    "unqualified_full_suite_pass": false
+  },
+  "contracts": [
+    "Check the original battler's entire PP vector before accepting effects or exit.",
+    "Do not interpret a forced switch as selected-move replacement.",
+    "Accept a verified no-effect MAIN boundary after the last bounded settlement pulse.",
+    "Retain bounded phase, selection, observation, action and exception-location diagnostics.",
+    "An optional failure sink can persist diagnostics before outer exception handling.",
+    "Recorder failures do not replace actor failures or add game input."
+  ],
+  "limitations": [
+    "The exact historical BattleRuntimeError cause remains unknown.",
+    "The existing same-battler move-replacement heuristic is not exact PP-execution proof.",
+    "Off-slot move learning changes PP and is currently rejected by the strict vector guard; extended-training qualification remains open.",
+    "A semantic effect is not necessarily a fully settled next decision boundary.",
+    "The prospective cartridge runner must bind and verify durable diagnostic storage.",
+    "Synthetic timing coverage does not establish cartridge or learned reliability."
+  ],
+  "learning": {
+    "model_queries": 0,
+    "training_examples": 0,
+    "fits": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0
+  },
+  "gameplay": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "official_gameplay_running": false,
+    "consumed_identity_retries": 0
+  },
+  "preserved_progress": {
+    "model_examples": 121,
+    "model_successes": 83,
+    "local_registered": 86,
+    "full_red_pokedex_total": 151,
+    "expanded_collection_checklist_complete": 25,
+    "expanded_collection_checklist_total": 26,
+    "final_fresh_red_gate_complete": 0,
+    "final_fresh_red_gate_total": 5
+  }
+}

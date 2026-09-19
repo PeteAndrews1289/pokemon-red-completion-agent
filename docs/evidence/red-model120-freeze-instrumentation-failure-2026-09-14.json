@@ -1,0 +1,134 @@
+{
+  "schema": "pokemon.red.registered-player-freeze-failure-session.v1",
+  "session_id": "2026-09-14-model120-freeze-instrumentation-failure",
+  "status": "consumed_after_unretained_sample",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "sampled_choice_recoverable": false
+  },
+  "starting_boundary": {
+    "source_commit": "42cb6089ef4e07c3c8be13dbcc500117372ffb7d",
+    "source_bundle_sha256": "18585b3f2189bd66280139d085f49e39020d969f8aac39aa36a01d996e768971",
+    "qualification_ci_run_id": 34805919445,
+    "qualification_ci_status": "passed",
+    "model_sha256": "624945c9ce74658c8032dec88604725ad5d8345d5da624b41bb8fdd400324e29",
+    "parent_checkpoint_sha256": "024d833eea4b1bbf6b58549def2bbfe0c46fed4aa09399bb19e4d8c71b5d5683",
+    "parent_state_sha256": "a71a95af83f904a02b81d42df6e0dd2798977bda1d81a2e1933bcde4326ebd0d",
+    "menu_sha256": "c9388ff6042149bec1f6db8cd64c9464cbd5ba80872cf2e727d3503b0cc636d9",
+    "ordinary_candidate_count": 2,
+    "supplemental_candidate_count": 0,
+    "candidate_kinds": [
+      "restore",
+      "resupply"
+    ]
+  },
+  "failure": {
+    "selection_seed": 120091401,
+    "model_query_attempts": 1,
+    "failure_stage": "post_sample_wrapper_validation",
+    "reason": "The wrapper accessed a nonexistent RedLiveOptionChoice.menu_sha256 attribute after selection returned but before the decision was persisted.",
+    "sampled_choice_retained": false,
+    "selected_candidate_index": null,
+    "selected_kind": null,
+    "retry_authorized": false,
+    "redraw_authorized": false,
+    "inference_authorized": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "gameplay_started": false,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "fit_performed": false
+  },
+  "collection": {
+    "registered_species": 86,
+    "living_species": 66,
+    "total_living_specimens": 70,
+    "cash": 346,
+    "capture_items": 4,
+    "required_native_registrations_remaining": 38
+  },
+  "learning": {
+    "model": "Model120",
+    "settled_examples": 120,
+    "successful_examples": 82,
+    "new_examples": 0,
+    "new_successes": 0,
+    "authority_promotions": 0
+  },
+  "repair": {
+    "status": "prepared_not_executed",
+    "new_identity_required": true,
+    "new_seed_required": true,
+    "pre_query_tombstone": true,
+    "write_ahead_decision_receipt": true,
+    "selected_option_content_hash": true,
+    "receipt_only_recovery_without_model_query": true,
+    "observation_and_receipt_finalization_without_model_query": true,
+    "repaired_private_script_sha256": "13359c4e97d4d678d88547a12301fdfb0526e22db2aeba7b49970f8ee732a0c7",
+    "executed_this_session": false
+  },
+  "private_receipts": {
+    "action_free_observation_sha256": "c8e5cc08932f48fdc64a0f0c99d2deb9a058938119c633430b65cece992fe643",
+    "failed_freeze_script_sha256": "18e361476dcd5acb75d7715a59af10626acc387a5cd447f5eed5ae878e692f2a",
+    "failure_receipt_sha256": "6977d6f3378cb66d1acbdc8909bef0b6355f802065276626ae6f1db52a80c05d",
+    "failure_audit_script_sha256": "5e4c10788d8a9c510695a008d1cc93ef7892e771c360ce4ce7186d5a0f81f61f"
+  },
+  "audits": {
+    "claude": {
+      "model": "claude-sonnet",
+      "effort": "high",
+      "status": "completed",
+      "actual_contribution": "Confirmed the consumed-seed and no-redraw adjudication, then identified the need for a structurally enforced pre-query gate and a content hash for the retained option.",
+      "accepted": "The repaired next-session script now writes an exclusive, durable query-intent tombstone before selection and authenticates the selected option by content hash during recovery.",
+      "cli_access": "Noninteractive direct CLI access returned CLAUDE_CLI_READY and completed this review.",
+      "quota": "Direct percentage unavailable because the interactive usage view requested a fresh login after the print-mode review."
+    },
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "effort": "high",
+      "status": "completed",
+      "actual_contribution": "Approved the no-redraw stop and independently identified the crash window between query processing and receipt fsync.",
+      "accepted": "Added a pre-query pending tombstone and retained-menu content verification before the repaired script was frozen for the next session.",
+      "quota": "Antigravity reported 100% five-hour and 65% weekly Gemini quota remaining; the separate Claude/GPT pool reported 100% five-hour and weekly remaining."
+    }
+  },
+  "verification": {
+    "failure_receipt_audit": "passed",
+    "failure_audit_script_ruff": "passed",
+    "failure_audit_script_compile": "passed",
+    "repaired_script_ruff": "passed",
+    "repaired_script_compile": "passed",
+    "repaired_script_executed": false,
+    "focused_product_and_roadmap_tests": "152 passed",
+    "complete_local_gate": "11592 passed, 3 skipped and 1 expected xfail; the two reported failures were a corrected strategic-registry golden and the known Mac-only PyBoy metadata identity mismatch",
+    "corrected_strategic_registry_test": "1 passed",
+    "local_runtime_identity": "blocked by host PyBoy metadata digest; exact starting-head hosted CI passed"
+  },
+  "boundaries": {
+    "menu_redraw": false,
+    "sample_reconstruction_claimed": false,
+    "automatic_retry": false,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "next_choice_executed": false
+  },
+  "next": {
+    "decision": "In a new session, run the repaired V2 identity once. Its pre-query tombstone must make any ambiguous interruption consumed; if it retains a valid decision, execute only that binding and fit only an eligible measured result.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on any source, model, checkpoint, state, menu, candidate, tombstone or receipt mismatch; ambiguous query consumption; controller activity during freeze; teacher fallback; redraw; retry; or ROM-hack/Crystal progression before the full Red gate."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish non-deterministic model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

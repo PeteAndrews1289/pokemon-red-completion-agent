@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon.red.model122-heterogeneous-evolution-evidence.v1",
+  "status": "verified_registration_pending_fit",
+  "source_commit": "77eca5b38b1c62636fce77010fba1a1ec76ae7d4",
+  "source_bundle_sha256": "ca56b2b56fe25e997547f31002d284491202c6e0c8840078cc580e1c5f876083",
+  "model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+  "parent_state_sha256": "c82228f5e2b46665c59e7f4afd3e3cbb6ad725593eb18c674b8837f288d09c5e",
+  "menu_sha256": "27a79320bfe05cceab9ed4e80c0c7de18a393de16327799e9784eb464b5a1a46",
+  "available_option_kinds": [
+    "acquire",
+    "evolve"
+  ],
+  "choice": {
+    "selected_option_kind": "evolve",
+    "selected_candidate_index": 0,
+    "selected_probability": 0.8526630332370512,
+    "alternative_probability": 0.14733696676294883,
+    "model_queries": 1,
+    "teacher_labels": 0
+  },
+  "outcome": {
+    "verification_status": "succeeded",
+    "controller_actions": 11623,
+    "emulator_frames": 1050627,
+    "registered_species_before": 87,
+    "registered_species_after": 88,
+    "living_species_after": 67,
+    "total_living_specimens_after": 71,
+    "cash_before": 206,
+    "cash_after": 206,
+    "field_moves": {
+      "cuts": 0,
+      "flights": 1,
+      "surfs": 0
+    }
+  },
+  "terminal": {
+    "episode_id": "red-model122-heterogeneous-evolution-terminal-20260915",
+    "checkpoint_record_sha256": "10e1f29eef8beea403c083400a1c95c5f86ec3c35d1ee8b3bd78c7938dc4cb0a",
+    "trajectory_manifest_sha256": "0b89c21aa3d9fd757613b508161d49bf83d368a343765f3f5ab417731d9d0b6e",
+    "state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b",
+    "registration_sequence": 178,
+    "settled": true
+  },
+  "capture_item_support": {
+    "action_free_candidates": 4,
+    "qualified_sources": [
+      "wild:PokemonTower3F:grass",
+      "wild:PokemonTower4F:grass",
+      "wild:PokemonTower5F:grass",
+      "wild:PokemonTower6F:grass"
+    ],
+    "executed": false,
+    "reason": "Model122 selected evolution from the genuine mixed-family menu."
+  },
+  "fit": {
+    "eligible_measured_examples": 1,
+    "completed": false,
+    "settled_examples_before": 122,
+    "successful_examples_before": 83
+  },
+  "publication": {
+    "github_pushed": false,
+    "user_controls_publication": true
+  }
+}

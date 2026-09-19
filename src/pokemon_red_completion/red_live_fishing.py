@@ -37,7 +37,7 @@ from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_fishing_acquisition import (
     RedFishingDestinationOffer,
-    red_fishing_destination_menu,
+    red_fishing_destination_candidates,
     red_super_rod_destination_offers,
 )
 from pokemon_red_completion.red_fishing_capture import (
@@ -60,6 +60,10 @@ from pokemon_red_completion.surge import DEFAULT_SURGE_TIMING, LiveWildEncounter
 
 class RedLiveFishingError(RuntimeError):
     """Fishing option construction or execution crossed its declared boundary."""
+
+
+_SINGLE_DESTINATION_ROUTE_STEP_NORMALIZATION = 1_000
+_MAXIMUM_ALTERNATE_SHORELINE_PLANS = 4
 
 
 class RedLiveFishingEmulator(Protocol):
@@ -116,9 +120,18 @@ class RedLiveFishingInventory:
     supplements: tuple[RedLiveSupplementalOption, ...]
 
     def __post_init__(self) -> None:
+        if not isinstance(self.destinations, tuple) or any(
+            not isinstance(item, RedReachableFishingDestination)
+            for item in self.destinations
+        ):
+            raise TypeError("live fishing destinations must be immutable")
+        if not isinstance(self.supplements, tuple) or any(
+            not isinstance(item, RedLiveSupplementalOption)
+            for item in self.supplements
+        ):
+            raise TypeError("live fishing supplements must be immutable")
         if (
-            len(self.destinations) < 2
-            or len(self.destinations) != len(self.supplements)
+            len(self.destinations) != len(self.supplements)
             or any(
                 supplement.binding.kind is not GoalKind.ACQUIRE_SPECIES
                 for supplement in self.supplements
@@ -146,8 +159,8 @@ def discover_reachable_red_fishing_destinations(
 ) -> tuple[RedReachableFishingDestination, ...]:
     """Find bounded productive fishing terminals without controller input."""
 
-    if type(maximum_candidates) is not int or maximum_candidates < 2:
-        raise ValueError("fishing inventory needs at least two candidate slots")
+    if type(maximum_candidates) is not int or maximum_candidates < 1:
+        raise ValueError("fishing inventory needs at least one candidate slot")
     if not isinstance(traversal, TraversalSnapshot):
         raise TypeError("fishing inventory needs an observed traversal snapshot")
     offers = red_super_rod_destination_offers(rom, registered_species_numbers)
@@ -188,30 +201,37 @@ def discover_reachable_red_fishing_destinations(
             for stance in stances
             if (path := paths.get((stance.at, None))) is not None
         )
-        if not local:
-            continue
-        _local_cost, _local_steps, stance = min(
-            local,
-            key=lambda row: (row[0], row[1], row[2].at, row[2].direction.value),
-        )
-        try:
-            terminal_route = world.plan_feasible_to_map(
-                traversal,
-                offer.map_id,
-                goal_at=stance.at,
+        terminals: tuple[ShorelineStance, ...]
+        if local:
+            _local_cost, _local_steps, best = min(
+                local,
+                key=lambda row: (row[0], row[1], row[2].at, row[2].direction.value),
             )
-        except RoutePlanningError:
-            continue
-        if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
-            continue
-        executable.append(
-            RedReachableFishingDestination(
-                offer,
-                stance,
-                len(terminal_route.steps),
-                terminal_route.cost,
+            terminals = (best,)
+        else:
+            # The cheapest map entry may be in another connected component.
+            # An exact terminal route can leave/re-enter through a building or
+            # another passage. Lack of a local path is not proof of no route.
+            # Bound the fallback; never claim exhaustive reachability.
+            by_coordinate: dict[tuple[int, int], ShorelineStance] = {}
+            for stance in sorted(stances, key=lambda s: (s.at, s.direction.value)):
+                by_coordinate.setdefault(stance.at, stance)
+            terminals = tuple(by_coordinate.values())[:_MAXIMUM_ALTERNATE_SHORELINE_PLANS]
+        for stance in terminals:
+            try:
+                terminal_route = world.plan_feasible_to_map(
+                    traversal, offer.map_id, goal_at=stance.at,
+                )
+            except RoutePlanningError:
+                continue
+            if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
+                continue
+            executable.append(
+                RedReachableFishingDestination(
+                    offer, stance, len(terminal_route.steps), terminal_route.cost,
+                )
             )
-        )
+            break
     executable.sort(
         key=lambda row: (
             row.route_steps,
@@ -245,15 +265,21 @@ def build_red_live_fishing_supplements(
         not isinstance(item, RedReachableFishingDestination) for item in destinations
     ):
         raise TypeError("live fishing destinations must be immutable")
+    if not isinstance(context, LivingDexOptionContext):
+        raise TypeError("live fishing needs an option-value context")
     if type(maximum_casts) is not int or maximum_casts <= 0:
         raise ValueError("live fishing cast bound must be positive")
-    if len(destinations) < 2:
-        raise RedLiveFishingError("live fishing needs at least two reachable destinations")
-    menu = red_fishing_destination_menu(
-        context,
+    if not destinations:
+        return ()
+    maximum_route_steps = (
+        _SINGLE_DESTINATION_ROUTE_STEP_NORMALIZATION
+        if len(destinations) == 1
+        else max(1, max(item.route_steps for item in destinations))
+    )
+    candidates = red_fishing_destination_candidates(
         tuple(item.offer for item in destinations),
         route_steps=tuple(item.route_steps for item in destinations),
-        maximum_route_steps=max(1, max(item.route_steps for item in destinations)),
+        maximum_route_steps=maximum_route_steps,
         free_storage_slots=free_storage_slots,
     )
     return tuple(
@@ -269,7 +295,7 @@ def build_red_live_fishing_supplements(
                 emulator=emulator,
                 maximum_casts=maximum_casts,
             ),
-            menu.candidates[index],
+            candidates[index],
         )
         for index, destination in enumerate(destinations)
     )
