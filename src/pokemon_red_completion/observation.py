@@ -4774,6 +4774,16 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
         )
 
+    def read_party_original_trainer_ids(self) -> tuple[int, ...]:
+        """Read provenance-only party OT IDs; never include them in actor features."""
+        count = self._memory.read_u8(int(RamAddress.PARTY_COUNT))
+        if not 0 <= count <= 6:
+            raise ValueError("party count cannot identify original trainers")
+        return tuple(
+            self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 12)
+            for index in range(count)
+        )
+
     def read_active_trainer_identity(self) -> tuple[int, int, int]:
         """Stable opponent, normalized class and trainer number; require battle2.
 
