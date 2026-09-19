@@ -1,4 +1,4 @@
-"""Capture the predeclared Bruno, Agatha and Lance DEVELOPMENT battles.
+"""Capture predeclared League DEVELOPMENT battles, never choose a battle action.
 
 Each source is an authenticated historical progression checkpoint. All share
 one unresolved ancestral Red run. Only legal field controls lead to the first
@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_scenario_capture import (
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.bruno import BRUNO_APPROACH, BRUNO_PARTY
+from pokemon_red_completion.champion import CHAMPION_PARTY, CHAMPION_RNG_DELAY_FRAMES
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
 from pokemon_red_completion.lance import LANCE_APPROACH, LANCE_PARTY
@@ -45,6 +46,17 @@ LINEAGE_ID = "red-goal-root-portable-loop-legacy"
 MAX_ACTIONS = 600
 MAX_FRAMES = 180_000
 SOURCES = {
+    "champion": {
+        "file": "portable-loop-post-lance.state",
+        "sha256": "153b4f43807e3bffe402a7451769bdbbd4d590ad8f84e6242bb91cbce6ca78c7",
+        "map": MapId.CHAMPIONS_ROOM,
+        "position": (4, 3),
+        "required_event": EventFlag.BEAT_LANCE,
+        "unplayed_event": EventFlag.BEAT_CHAMPION_RIVAL,
+        "route": (),
+        "party": CHAMPION_PARTY,
+        "trigger": "automatic_dialogue",
+    },
     "bruno": {
         "file": "portable-loop-post-lorelei.state",
         "sha256": "cbc7a2d68593e4a3b113793ec918fc51868e804d3c8d120586c91971d643660f",
@@ -138,14 +150,16 @@ def run(stage: str, rom_path: Path, source_path: Path, output: Path) -> dict[str
                 _settle_confirm(actions, reader, 200)
                 if (reader.read().player_x, reader.read().player_y) != (6, 11):
                     raise ValueError("Lance entrance autowalk did not settle")
+            elif stage == "champion":
+                actions.execute(MacroAction(MacroActionKind.WAIT, repeat=CHAMPION_RNG_DELAY_FRAMES))
             else:
                 actions.execute(MacroAction(MacroActionKind.WAIT, repeat=180))
-            if not reader.read_input_readiness().ready:
+            if stage != "champion" and not reader.read_input_readiness().ready:
                 raise ValueError("League checkpoint did not settle to field input")
             if spec["trigger"] == "interact":
                 _move(actions, reader, spec["route"], f"{stage} approach")
                 _pulse(actions, MacroActionKind.INTERACT)
-            else:
+            elif spec["trigger"] == "sight_line":
                 _move(actions, reader, spec["route"][:-1], f"{stage} approach")
                 _pulse(actions, MacroActionKind.MOVE, spec["route"][-1], 240)
             for _ in range(60):

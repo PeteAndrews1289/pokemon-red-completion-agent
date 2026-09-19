@@ -24,6 +24,43 @@ ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 
 
+def qualified_fit_receipt(fit: Path) -> dict[str, object]:
+    """Admit the retention successor without inventing a legacy fit receipt."""
+    if (fit / "result.json").is_file():
+        from run_red_trainer_retention import admitted_cache, gates
+
+        result = json.loads((fit / "result.json").read_bytes())
+        plan = json.loads((fit / "plan.json").read_bytes())
+        if (
+            _binding(fit / "model.json") != result.get("model")
+            or not all(gates(result["before"], result["after"]).values())
+            or result.get("train_qualified") is not True
+            or result.get("fits") != 1
+        ):
+            raise ValueError("retention challenger failed its unchanged TRAIN gates")
+        manifest = Path(plan["manifest"]["path"])
+        if _binding(manifest) != plan["manifest"]:
+            raise ValueError("retention corpus manifest differs")
+        ancestor, targets = admitted_cache(manifest.parent)
+        model = TrainerPracticeThreeHeadModel.from_dict(
+            json.loads((fit / "model.json").read_bytes())
+        )
+        if (
+            set(model.train_capture_ids) != {t["capture_id"] for t in targets}
+            or set(model.train_root_ids) != set(ancestor.train_root_ids)
+            or len(set(model.train_root_ids)) != 4
+        ):
+            raise ValueError("retention challenger TRAIN ancestry differs")
+        return {
+            "qualification_tier": "independent_root_train",
+            "independent_train_supply_gate_passed": True,
+            "distinct_upstream_train_roots": 4,
+            "scenario_count": len(targets),
+            "model_sha256": _binding(fit / "model.json")["sha256"],
+        }
+    return json.loads((fit / "receipt.json").read_bytes())
+
+
 def _binding(path: Path) -> dict[str, str]:
     return {"path": str(path.resolve()), "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
 
@@ -72,7 +109,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     if rom["sha256"] != ROM_SHA256:
         raise ValueError("natural trainer comparison Red cartridge differs")
     model_path = args.fit / "model.json"
-    fit_receipt = json.loads((args.fit / "receipt.json").read_bytes())
+    fit_receipt = qualified_fit_receipt(args.fit)
     if (
         fit_receipt.get("qualification_tier") != "independent_root_train"
         or fit_receipt.get("independent_train_supply_gate_passed") is not True
@@ -86,12 +123,9 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     state = args.capture / "source.state"
     manifest = args.capture / "source.state.json"
     opened = open_battle_scenario_capture(state, manifest)
-    if (
-        opened.manifest.partition is not ScenarioPartition.DEVELOPMENT
-        or trainer_origin_cluster(opened.manifest.root_lineage_id) in {
-            trainer_origin_cluster(root) for root in model.train_root_ids
-        }
-    ):
+    if opened.manifest.partition is not ScenarioPartition.DEVELOPMENT or trainer_origin_cluster(
+        opened.manifest.root_lineage_id
+    ) in {trainer_origin_cluster(root) for root in model.train_root_ids}:
         raise ValueError("natural trainer DEVELOPMENT overlaps TRAIN ancestry")
     args.output.mkdir(parents=True, mode=0o700, exist_ok=False)
     bound_state, bound_manifest = _binding(state), _binding(manifest)
@@ -105,18 +139,21 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     }
     plans = {
         "fixed": {
-            **common, "schema": baseline.SCHEMA,
+            **common,
+            "schema": baseline.SCHEMA,
             "baseline_policy": "first-legal-attack",
             "output": str(args.output / "fixed"),
         },
         "frozen": {
-            **common, "schema": baseline.SCHEMA,
+            **common,
+            "schema": baseline.SCHEMA,
             "baseline_policy": "frozen-attack",
             "model": _binding(args.frozen_model),
             "output": str(args.output / "frozen"),
         },
         "challenger": {
-            **common, "schema": challenger.OUTCOME_SCHEMA,
+            **common,
+            "schema": challenger.OUTCOME_SCHEMA,
             "outcome_model": _binding(model_path),
             "output": str(args.output / "challenger"),
         },
@@ -137,12 +174,15 @@ def run(args: argparse.Namespace) -> dict[str, object]:
                 baseline.run(args.output / f"{name}-plan.json")
             results[name] = _result(args.output / name)
     except Exception as error:
-        _write(args.output / "failure.json", {
-            "schema": "pokemon.red.trainer-natural-comparison-failure.v1",
-            "stage": stage,
-            "completed_arms": list(results),
-            "error_type": type(error).__name__,
-        })
+        _write(
+            args.output / "failure.json",
+            {
+                "schema": "pokemon.red.trainer-natural-comparison-failure.v1",
+                "stage": stage,
+                "completed_arms": list(results),
+                "error_type": type(error).__name__,
+            },
+        )
         raise
     summary: dict[str, object] = {
         "schema": "pokemon.red.trainer-natural-comparison.v1",

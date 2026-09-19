@@ -33,13 +33,16 @@ def _setup(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Namespace:
     )
     model = tmp_path / "fit" / "model.json"
     _write(model, {})
-    _write(model.parent / "receipt.json", {
-        "qualification_tier": "independent_root_train",
-        "independent_train_supply_gate_passed": True,
-        "distinct_upstream_train_roots": 4,
-        "scenario_count": 16,
-        "model_sha256": hashlib.sha256(model.read_bytes()).hexdigest(),
-    })
+    _write(
+        model.parent / "receipt.json",
+        {
+            "qualification_tier": "independent_root_train",
+            "independent_train_supply_gate_passed": True,
+            "distinct_upstream_train_roots": 4,
+            "scenario_count": 16,
+            "model_sha256": hashlib.sha256(model.read_bytes()).hexdigest(),
+        },
+    )
     monkeypatch.setattr(
         comparison.TrainerPracticeThreeHeadModel,
         "from_dict",
@@ -84,34 +87,44 @@ def test_natural_comparison_freezes_all_arms_before_development_execution(
             assert (args.output / f"{arm}-plan.json").is_file()
         output = args.output / name
         output.mkdir()
-        _write(output / "outcome.json", {
-            "battle_won": True,
-            "stop_reason": "battle_won",
-            "decision_count": 2,
-            "action_counts": {"attack": 2},
-            "teacher_queries": 0,
-            "metrics": {
-                "invalid_action_failures": 0,
-                "opponent_faints": 1,
-                "party_faints": 0,
-                "party_hp_lost": 0,
-                "attack_turn_utility_sum": 3.0,
-                "policy_latency_ns_mean": 100,
+        _write(
+            output / "outcome.json",
+            {
+                "battle_won": True,
+                "stop_reason": "battle_won",
+                "decision_count": 2,
+                "action_counts": {"attack": 2},
+                "teacher_queries": 0,
+                "metrics": {
+                    "invalid_action_failures": 0,
+                    "opponent_faints": 1,
+                    "party_faints": 0,
+                    "party_hp_lost": 0,
+                    "attack_turn_utility_sum": 3.0,
+                    "policy_latency_ns_mean": 100,
+                },
             },
-        })
-        _write(output / "event-log-verification.json", {
-            "complete": True,
-            "failed_runs": 0,
-            "incomplete_decisions": 0,
-            "event_count": 8,
-        })
+        )
+        _write(
+            output / "event-log-verification.json",
+            {
+                "complete": True,
+                "failed_runs": 0,
+                "incomplete_decisions": 0,
+                "event_count": 8,
+            },
+        )
 
     monkeypatch.setattr(comparison.baseline, "run", run_arm)
     monkeypatch.setattr(comparison.challenger, "run", run_arm)
     summary = comparison.run(args)
     assert calls == [
-        ("fixed", True), ("frozen", True), ("challenger", True),
-        ("fixed", False), ("frozen", False), ("challenger", False),
+        ("fixed", True),
+        ("frozen", True),
+        ("challenger", True),
+        ("fixed", False),
+        ("frozen", False),
+        ("challenger", False),
     ]
     assert summary["model_updates"] == 0
     assert summary["authority_promotions"] == 0
@@ -125,10 +138,12 @@ def test_natural_comparison_rejects_train_overlap_before_creating_output(
     monkeypatch.setattr(
         comparison,
         "open_battle_scenario_capture",
-        lambda *_args: SimpleNamespace(manifest=SimpleNamespace(
-            partition=ScenarioPartition.DEVELOPMENT,
-            root_lineage_id="fresh-1",
-        )),
+        lambda *_args: SimpleNamespace(
+            manifest=SimpleNamespace(
+                partition=ScenarioPartition.DEVELOPMENT,
+                root_lineage_id="fresh-1",
+            )
+        ),
     )
     with pytest.raises(ValueError, match="overlaps TRAIN ancestry"):
         comparison.run(args)
@@ -151,3 +166,31 @@ def test_natural_comparison_rejects_unqualified_fit_before_opening_development(
     with pytest.raises(ValueError, match="not TRAIN-qualified"):
         comparison.run(args)
     assert not args.output.exists()
+
+
+def test_retention_result_cannot_bypass_qualification_with_true_boolean(tmp_path, monkeypatch):
+    args = _setup(tmp_path, monkeypatch)
+    _write(args.fit / "plan.json", {})
+    _write(args.fit / "result.json", {"model": {"sha256": "wrong"}, "train_qualified": True})
+    monkeypatch.setattr(
+        comparison,
+        "open_battle_scenario_capture",
+        lambda *_: pytest.fail("unqualified DEVELOPMENT access"),
+    )
+    with pytest.raises(ValueError, match="unchanged TRAIN gates"):
+        comparison.run(args)
+
+
+def test_champion_capture_is_separate_natural_boundary_not_consumed_lance():
+    from capture_red_league_development_sources import SOURCES
+
+    from pokemon_red_completion.observation import EventFlag, MapId
+
+    champion = SOURCES["champion"]
+    assert champion["file"] == "portable-loop-post-lance.state"
+    assert champion["map"] == MapId.CHAMPIONS_ROOM
+    assert champion["required_event"] == EventFlag.BEAT_LANCE
+    assert champion["unplayed_event"] == EventFlag.BEAT_CHAMPION_RIVAL
+    assert champion["trigger"] == "automatic_dialogue"
+    assert len(champion["party"]) == 6
+    assert champion["sha256"] != SOURCES["lance"]["sha256"]
