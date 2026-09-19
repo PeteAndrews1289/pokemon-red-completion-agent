@@ -1098,7 +1098,8 @@ def _preserve_moves_at_learning_prompt(
         action = MacroAction(MacroActionKind.CANCEL)
     elif kind == "abandon_learning" and selected in {0, 1}:
         action = (
-            MacroAction(MacroActionKind.CONFIRM) if selected == 0
+            MacroAction(MacroActionKind.CONFIRM)
+            if selected == 0
             else MacroAction(MacroActionKind.MOVE, "up")
         )
     else:
@@ -2011,6 +2012,65 @@ def _await_selected_turn_effect(
     raise BattleRuntimeError(f"{label} never exposed the selected turn's semantic effect.")
 
 
+def _automatic_level_up_move_allocation(
+    initial: RawGameState, current: RawGameState, index: int
+) -> bool:
+    """Recognize newly allocated PP, never spending or replacing an existing move.
+
+    Red fills an empty move slot automatically after experience is awarded. No
+    input can decline this. Require the same leveled-up battler, a defeated foe,
+    an empty zero-PP slot, a new known move and exactly its unboosted base PP.
+    Every existing move's PP remains subject to the ordinary exact-spend proof.
+    """
+    from pokemon_red_completion.red_battle_catalog import (
+        PokemonRedBattleCatalog,
+        RedBattleCatalogError,
+    )
+
+    before, after = initial.battler_moves, current.battler_moves
+    old_pp, new_pp = initial.battler_pp, current.battler_pp
+    if (
+        initial.active_party_index is None
+        or current.active_party_index != initial.active_party_index
+        or initial.active_party_species_id is None
+        or current.active_party_species_id != initial.active_party_species_id
+        or initial.battler_level is None
+        or current.battler_level is None
+        or current.battler_level <= initial.battler_level
+        or not (
+            current.enemy_hp == 0
+            or current.battle_state == 0
+            or (
+                initial.enemy_party_position is not None
+                and current.enemy_party_position is not None
+                and current.enemy_party_position > initial.enemy_party_position
+            )
+        )
+        or before is None
+        or after is None
+        or old_pp is None
+        or new_pp is None
+        or len(before) != 4
+        or len(after) != 4
+        or len(old_pp) != 4
+        or len(new_pp) != 4
+        or before[index] != 0
+        or old_pp[index] != 0
+        or after[index] == 0
+        or after[index] in before
+        or after.count(after[index]) != 1
+        or any(move == 0 for move in after[:index])
+    ):
+        return False
+    try:
+        move = PokemonRedBattleCatalog().resolve_move(
+            f"pokemon.red.gb.us.rev0:move:{after[index]:03d}"
+        )
+    except RedBattleCatalogError:
+        return False
+    return new_pp[index] == move.max_pp
+
+
 def _verify_selected_turn_pp(
     initial: RawGameState,
     current: RawGameState,
@@ -2032,6 +2092,8 @@ def _verify_selected_turn_pp(
     replaced = _selected_move_identity_replaced(initial, current, slot=slot)
     for index, (old, new) in enumerate(zip(before, after, strict=True)):
         if index == slot - 1 and replaced:
+            continue
+        if index != slot - 1 and _automatic_level_up_move_allocation(initial, current, index):
             continue
         expected = (old & _CURRENT_PP_MASK) - (index == slot - 1)
         if new & _CURRENT_PP_MASK != expected:

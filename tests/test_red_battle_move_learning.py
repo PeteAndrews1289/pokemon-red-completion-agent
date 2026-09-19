@@ -82,3 +82,54 @@ def test_unexpected_unselected_move_replacement_still_fails_pp_proof():
     after = replace(before, first_party_moves=(80, 71, 15, 72), first_party_pp=(20, 17, 30, 0))
     with pytest.raises(BattleRuntimeError, match="PP accounting"):
         _verify_selected_turn_pp(before, after, slot=2, label="regression")
+
+
+def automatic_learning_states():
+    before = replace(
+        _raw(moves=(72, 15, 71, 0), pp=(8, 30, 20, 0)),
+        active_party_index=0,
+        active_party_species_id=185,
+        active_party_level=16,
+        enemy_party_position=0,
+    )
+    after = replace(
+        before,
+        active_party_level=17,
+        enemy_hp=0,
+        first_party_moves=(72, 15, 71, 78),
+        first_party_pp=(7, 30, 20, 30),
+    )
+    return before, after
+
+
+def test_level_up_empty_slot_allocation_preserves_exact_existing_move_accounting():
+    before, after = automatic_learning_states()
+    _verify_selected_turn_pp(before, after, slot=1, label="automatic learning")
+    _verify_selected_turn_pp(
+        before,
+        replace(after, enemy_hp=50, enemy_party_position=1),
+        slot=1,
+        label="next foe after learning",
+    )
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"active_party_level": 16},
+        {"active_party_species_id": 1},
+        {"enemy_hp": 50},
+        {"first_party_pp": (7, 30, 20, 29)},
+        {"first_party_pp": (7, 30, 20, 94)},
+        {"first_party_pp": (6, 30, 20, 30)},
+        {"first_party_pp": (7, 29, 20, 30)},
+        {"first_party_pp": (7, 30, 19, 30)},
+        {"first_party_moves": (72, 15, 71, 255)},
+    ],
+)
+def test_learning_allocation_does_not_excuse_unexplained_changes(changes):
+    before, after = automatic_learning_states()
+    with pytest.raises(BattleRuntimeError, match="PP accounting"):
+        _verify_selected_turn_pp(
+            before, replace(after, **changes), slot=1, label="strict allocation"
+        )
