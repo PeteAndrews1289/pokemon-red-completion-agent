@@ -12,6 +12,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 import run_fresh_red_trainer_curriculum as common
+from run_red_trainer_broad_fit import BROADER_MODEL_SHA
 from run_red_trainer_broad_probe import CANDIDATE_SHA, run
 from run_red_trainer_terminal_curriculum import StatDamageTeacher
 
@@ -73,20 +74,22 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("rom", "batch", "candidate", "frozen", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--late", action="store_true")
     args = parser.parse_args()
     receipt = json.loads((args.candidate.parent / "result.json").read_bytes())
     plan = json.loads((args.candidate.parent / "plan.json").read_bytes())
     if (
         not receipt["train_qualified"]
-        or plan["initial"]["sha256"] != CANDIDATE_SHA
+        or plan["initial"]["sha256"] != (BROADER_MODEL_SHA if args.late else CANDIDATE_SHA)
+        or (args.late and plan.get("profile") != "late")
         or receipt["new_contexts"] < 24
     ):
         raise ValueError("a qualified broader-data candidate is required")
     run(
         args,
         candidate_sha=receipt["model"]["sha256"],
-        frozen_sha=CANDIDATE_SHA,
-        seed=2026091903,
+        frozen_sha=BROADER_MODEL_SHA if args.late else CANDIDATE_SHA,
+        seed=2026091905 if args.late else 2026091903,
         teacher_reference=True,
     )
 

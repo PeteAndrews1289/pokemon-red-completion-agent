@@ -63,3 +63,30 @@ def test_final_gates_independently_recheck_switch_retention():
     after = deepcopy(before)
     after["retained52"]["switch"]["model_mean_train_regret"] = 0.021
     assert not broad_gates(before, after, broad_before, broad_after)["retained52_switch_retained"]
+
+
+def test_late_supply_cannot_relabel_earlier_opening_supply(tmp_path, monkeypatch):
+    import run_red_trainer_broad_fit as module
+
+    plan = {
+        "profile": "late",
+        "supply_seed": 2026091904,
+        "frozen_model": {"sha256": module.BROADER_MODEL_SHA},
+        "capture_decisions": [2, 4],
+    }
+    (tmp_path / "plan.json").write_text(json.dumps(plan))
+    (tmp_path / "targets.json").write_text("[]")
+    (tmp_path / "collection.json").write_text(
+        json.dumps(
+            {
+                "status": "terminal_collection_complete_train_only",
+                "fits": 0,
+                "plan": module.common._binding(tmp_path / "plan.json"),
+                "targets": module.common._binding(tmp_path / "targets.json"),
+            }
+        )
+    )
+    with pytest.raises(ValueError, match="semantic boundary"):
+        admitted_supply(tmp_path, set(), set(), late=True)
+    with pytest.raises(ValueError, match="recipe or trajectory"):
+        admitted_supply(tmp_path, set(), set())

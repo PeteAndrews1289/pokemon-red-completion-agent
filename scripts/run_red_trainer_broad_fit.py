@@ -27,9 +27,10 @@ from pokemon_red_completion.red_trainer_practice_fit import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+BROADER_MODEL_SHA = "f8d9be1a76dd1475e23db1080609b8318a052e1f7fa26ee4201d7f489dd9d241"
 
 
-def admitted_supply(supply, roots, old_ids):
+def admitted_supply(supply, roots, old_ids, *, late=False):
     receipt = json.loads((supply / "collection.json").read_bytes())
     if receipt["status"] != "terminal_collection_complete_train_only" or receipt["fits"] != 0:
         raise ValueError("supply is not an unfitted terminal collection")
@@ -40,11 +41,17 @@ def admitted_supply(supply, roots, old_ids):
         raise ValueError("supply binding differs")
     plan = json.loads((supply / "plan.json").read_bytes())
     if (
-        plan.get("profile") != "broad"
-        or plan.get("supply_seed") != 2026091902
-        or plan["frozen_model"]["sha256"] != CANDIDATE_SHA
+        plan.get("profile") != ("late" if late else "broad")
+        or plan.get("supply_seed") != (2026091904 if late else 2026091902)
+        or plan["frozen_model"]["sha256"] != (BROADER_MODEL_SHA if late else CANDIDATE_SHA)
     ):
         raise ValueError("supply recipe or trajectory differs")
+    if late and (
+        plan.get("capture_decisions") != []
+        or plan.get("capture_semantics")
+        != ["first_forced_switch", "first_switch_prompt", "first_last_opponent", "first_last_ally"]
+    ):
+        raise ValueError("late supply does not declare semantic boundary coverage")
     declared = json.loads((supply / "targets.json").read_bytes())
     ids = {t["capture_id"] for t in declared}
     if (
@@ -91,18 +98,29 @@ def broad_gates(before, after, before_broad, after_broad):
 
 
 def run(args):
+    late = getattr(args, "late", False)
     if (
         args.output.exists()
         or subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip()
     ):
         raise ValueError("broad fit needs committed code and a new output")
     _, retained = admitted_cache(args.audit)
-    if common._binding(args.initial)["sha256"] != CANDIDATE_SHA:
+    if common._binding(args.initial)["sha256"] != (BROADER_MODEL_SHA if late else CANDIDATE_SHA):
         raise ValueError("broad fit initial candidate differs")
     model = TrainerPracticeThreeHeadModel.from_dict(json.loads(args.initial.read_bytes()))
-    if set(model.train_capture_ids) != {t["capture_id"] for t in retained}:
+    prior_broad = (
+        admitted_supply(
+            args.prior_supply, set(model.train_root_ids), {t["capture_id"] for t in retained}
+        )
+        if late
+        else []
+    )
+    anchors = retained + prior_broad
+    if set(model.train_capture_ids) != {t["capture_id"] for t in anchors}:
         raise ValueError("initial model TRAIN inventory differs")
-    added = admitted_supply(args.supply, set(model.train_root_ids), set(model.train_capture_ids))
+    added = admitted_supply(
+        args.supply, set(model.train_root_ids), set(model.train_capture_ids), late=late
+    )
     print(json.dumps({"authenticated_new_contexts": len(added)}), flush=True)
     catalog = PokemonRedBattleCatalog()
     before = reports(retained, model, catalog)
@@ -110,6 +128,13 @@ def run(args):
         added, model, catalog=catalog, initial_move_model=model.move
     )
     initial = model
+    before_prior = (
+        summarize_trainer_practice_training(
+            prior_broad, model, catalog=catalog, initial_move_model=model.move
+        )
+        if late
+        else None
+    )
     args.output.mkdir(parents=True, mode=0o700)
     common._write(
         args.output / "plan.json",
@@ -118,20 +143,25 @@ def run(args):
             .decode()
             .strip(),
             "initial": common._binding(args.initial),
+            "profile": "late" if late else "broad",
+            "prior_supply": common._binding(args.prior_supply / "collection.json")
+            if late
+            else None,
             "supply": common._binding(args.supply / "collection.json"),
             "audit": common._binding(args.audit / "manifest.json"),
             "epochs_per_head": 2400,
             "learning_rate": 0.005,
             "head_order": ["move", "switch", "control"],
             "fits": 1,
-            "loss": "equal-group weight retained180 and new broad TRAIN; measured expected regret",
+            "loss": "equal-group weight all prior TRAIN and new TRAIN; measured expected regret",
             "selection": (
                 "feasible minimum broad selected regret, then broad expected regret, "
                 "then earliest epoch"
             ),
             "budgets": (
                 "unchanged original44/retained52; retain initial narrow128 move/switch/composed "
-                "and new80 composed; old52 switch no regression"
+                "and new80 composed; old52 switch no regression; for late supply also retain "
+                "all prior broad move, switch and composed regret"
             ),
             "gate": (
                 "all retention checks, at least10% lower broad composed regret, "
@@ -152,6 +182,7 @@ def run(args):
                 ("terminal128", retained[52:]),
                 ("new80", retained[100:]),
                 ("retained180", retained),
+                ("anchors", anchors),
                 ("broad", added),
             )
         }
@@ -194,8 +225,15 @@ def run(args):
                     ),
                 )
             )
+        if late:
+            prior_rows = tuple(examples(prior_broad, model, catalog)[name])
+            limit = before_prior["composed_action" if name == "control" else name][
+                "model_mean_train_regret"
+            ]
+            offset = composed_offset(prior_broad, prior_rows) if name == "control" else 0.0
+            budgets += (RegretBudget("prior_broad_" + name, prior_rows, limit + 1e-9, offset),)
         fitted, receipt = fit_budgeted_head(
-            getattr(model, name), tuple(groups["broad"]), tuple(groups["retained180"]), budgets
+            getattr(model, name), tuple(groups["broad"]), tuple(groups["anchors"]), budgets
         )
         common._write(args.output / f"{name}-optimizer.json", receipt)
         print(
@@ -210,19 +248,33 @@ def run(args):
             return
         model = replace(model, **{name: fitted})
         common._write(args.output / f"after-{name}-model.json", model.to_dict())
-    model = replace(model, train_capture_ids=tuple(t["capture_id"] for t in retained + added))
+    model = replace(model, train_capture_ids=tuple(t["capture_id"] for t in anchors + added))
     after = reports(retained, model, catalog)
     after_broad = summarize_trainer_practice_training(
         added, model, catalog=catalog, initial_move_model=initial.move
     )
 
     checks = broad_gates(before, after, before_broad, after_broad)
+    after_prior = None
+    if late:
+        after_prior = summarize_trainer_practice_training(
+            prior_broad, model, catalog=catalog, initial_move_model=initial.move
+        )
+        checks.update(
+            {
+                "prior_broad_" + name + "_retained": after_prior[name]["model_mean_train_regret"]
+                <= before_prior[name]["model_mean_train_regret"] + 1e-9
+                for name in ("move", "switch", "composed_action")
+            }
+        )
     common._write(args.output / "model.json", model.to_dict())
     result = {
         "before": before,
         "after": after,
         "before_broad": before_broad,
         "after_broad": after_broad,
+        "before_prior_broad": before_prior,
+        "after_prior_broad": after_prior,
         "gates": checks,
         "train_qualified": all(checks.values()),
         "natural_qualified": False,
@@ -243,4 +295,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("audit", "initial", "supply", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
+    parser.add_argument("--late", action="store_true")
+    parser.add_argument("--prior-supply", type=Path)
     run(parser.parse_args())
