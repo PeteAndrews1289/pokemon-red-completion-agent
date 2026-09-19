@@ -90,3 +90,17 @@ def test_late_supply_cannot_relabel_earlier_opening_supply(tmp_path, monkeypatch
         admitted_supply(tmp_path, set(), set(), late=True)
     with pytest.raises(ValueError, match="recipe or trajectory"):
         admitted_supply(tmp_path, set(), set())
+
+
+def test_late_retention_gate_rechecks_each_head_and_requires_measurements():
+    from run_red_trainer_broad_fit import prior_broad_gates
+
+    before = {
+        name: {"model_mean_train_regret": 0.5} for name in ("move", "switch", "composed_action")
+    }
+    assert all(prior_broad_gates(before, before).values())
+    for head in before:
+        after = {**before, head: {"model_mean_train_regret": 0.6}}
+        assert not prior_broad_gates(before, after)["prior_broad_" + head + "_retained"]
+    with pytest.raises(ValueError, match="lacks prior"):
+        prior_broad_gates(None, before)

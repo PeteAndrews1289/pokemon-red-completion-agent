@@ -97,6 +97,16 @@ def broad_gates(before, after, before_broad, after_broad):
     }
 
 
+def prior_broad_gates(before, after):
+    if not isinstance(before, dict) or not isinstance(after, dict):
+        raise ValueError("late fit lacks prior broad retention measurements")
+    return {
+        "prior_broad_" + name + "_retained": after[name]["model_mean_train_regret"]
+        <= before[name]["model_mean_train_regret"] + 1e-9
+        for name in ("move", "switch", "composed_action")
+    }
+
+
 def run(args):
     late = getattr(args, "late", False)
     if (
@@ -260,13 +270,7 @@ def run(args):
         after_prior = summarize_trainer_practice_training(
             prior_broad, model, catalog=catalog, initial_move_model=initial.move
         )
-        checks.update(
-            {
-                "prior_broad_" + name + "_retained": after_prior[name]["model_mean_train_regret"]
-                <= before_prior[name]["model_mean_train_regret"] + 1e-9
-                for name in ("move", "switch", "composed_action")
-            }
-        )
+        checks.update(prior_broad_gates(before_prior, after_prior))
     common._write(args.output / "model.json", model.to_dict())
     result = {
         "before": before,

@@ -38,12 +38,19 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
         ):
             raise ValueError("retention challenger failed its unchanged TRAIN gates")
         broader = "before_broad" in result
+        late = plan.get("profile") == "late"
         if broader:
-            from run_red_trainer_broad_fit import broad_gates
+            from run_red_trainer_broad_fit import broad_gates, prior_broad_gates
 
             checks = broad_gates(
                 result["before"], result["after"], result["before_broad"], result["after_broad"]
             )
+            if late:
+                checks.update(
+                    prior_broad_gates(
+                        result.get("before_prior_broad"), result.get("after_prior_broad")
+                    )
+                )
         else:
             checks = gates(result["before"], result["after"])
         if not all(checks.values()):
@@ -59,6 +66,15 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
         if broader:
             from run_red_trainer_broad_fit import admitted_supply
 
+            if late:
+                prior_receipt = Path(plan["prior_supply"]["path"])
+                if _binding(prior_receipt) != plan["prior_supply"]:
+                    raise ValueError("prior broad supply receipt differs")
+                targets += admitted_supply(
+                    prior_receipt.parent,
+                    set(ancestor.train_root_ids),
+                    {t["capture_id"] for t in targets},
+                )
             supply_receipt = Path(plan["supply"]["path"])
             if _binding(supply_receipt) != plan["supply"]:
                 raise ValueError("broader supply receipt differs")
@@ -66,6 +82,7 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
                 supply_receipt.parent,
                 set(ancestor.train_root_ids),
                 {t["capture_id"] for t in targets},
+                late=late,
             )
             if len(extra) != result["new_contexts"]:
                 raise ValueError("broader supply count differs")
