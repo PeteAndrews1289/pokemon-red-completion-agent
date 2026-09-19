@@ -15,52 +15,48 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 ## Where we stand
 
 Model137 has137 fitted examples/92 successes/58 economy-qualified outcomes.
-The development save is96/124 registrations,74 specimens and198 cash.
+The collection development save is96/124 registrations,74 specimens and198 cash.
 These are not whole-project completion percentages. Fresh-Red acceptance remains0/5.
-Collection choices and actual failures are retained; ordinary collection battles
-and mechanical travel still use existing controllers. No full Red run is open.
+Ordinary collection battles and mechanical travel still use existing controllers.
+No full Red run is open.
 
-The battle trainer constructs authenticated species, move, level, stat and team
-variations from the cartridge, runs real trainer AI and logs actions, timing,
-resources and failures. Four fresh TRAIN origins support318 fitted contexts.
-This session added138 contexts and3265 complete matched branches, including
-replacement and endgame decisions. Generated teams and timing variants do not
-create independent natural evaluation origins.
+The battle trainer now demonstrates learning, not just successful execution.
+The [policy-bound experiment](evidence/red-battler-policy-learning-result-2026-09-19.json)
+measured16 existing situations under frozen learner continuation, using400complete
+branches. There remain318 unique TRAIN contexts across four independent origins.
+One successor J retained all15 numerical TRAIN checks and improved an unused
+generated3v3 comparison to9/24wins versus H7/24, with fewer faints. This modest
+descriptive result is not statistically conclusive or universal improvement.
 
-The [latest work](evidence/red-battler-readiness-result-2026-09-19.json) retained
-all numeric retention limits. Candidate H improved one fresh TRAIN comparison
-to14/24wins versus11/24 for its predecessor, but the separate teacher won17.
-A pairwise-loss successor I fitted TRAIN much better yet regressed to7/24wins
-versus H14/24 on another new cohort. I is rejected; H is an unqualified reference,
-not deployed authority. Win totals across different cohorts are not a trend.
+Two separately booted, unedited natural starts supplied early attack tests:
+J6/6wins, H5/6, first-legal0/6, across three timings per origin. They establish
+early natural attack-transfer evidence, not six independent roots or full-party
+switching qualification. All trials are consumed. J is frozen and packaged;
+the collection player's authority has not changed.
 
-A120-branch, four-root TRAIN diagnostic found that the best opening action
-changed in4/4 tested states when the learner continued instead of the teacher.
-Next work must address this policy-dependent target meaning before another fit.
-This is a measured mismatch, not proof that it alone explains all generalization
-failures. The existing trainer remains in use; another framework/review is not
-the milestone.
+Pete's learning criterion does not require perfect wins or teacher superiority.
+Old teacher-reference failures and rejected I retain their historical verdicts.
+The new learning criterion was declared before J's test. No new review/refit gate.
 
 ## Next bounded work
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Continuation-aware training | Bind exact continuation policy/model; collect at least16 useful contexts over four roots with the frozen learner continuing, without silently mixing target meanings | Astra High;30–60minutes bounded implementation/collection |
-| Battle qualification | One declared retention-preserving candidate completes unused paired battles without fallback and passes the frozen predecessor/teacher-reference gates | Astra High for judgment; Sol High for execution |
-| Independent natural evidence | Meaningful full-party tests from genuinely independent origins; no artificial state edits during tests | Source preparation needs Pete's pending approval |
-| Player integration | Qualified learned battle choices complete a bounded earned-state objective with retained failures and no teacher substitution | After battle qualification only |
-| Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; obtain the remaining28 native registrations | Sol High |
-| Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | After all prerequisite gates |
+| Policy-conditioned learning | Completed: retained fit, positive unused-team learning signal, packaged J | No more fitting on consumed tests |
+| Natural full-party evidence | Legitimate independent origins with multiple usable own Pokemon; frozen J attacks and switches without fallback | Sol High;45–60minutes bounded source/test work |
+| Player integration | One earned-state objective, final snapshot and fresh ledger; retain failures | Sol High; after full-party evidence |
+| Collection and funding | Legitimate repeatable earnings, supported Safari/search goals, remaining28 native registrations | Sol High |
+| Fresh Red acceptance | Fresh origin, model-directed story, Champion/Hall of Fame,124/124 and verified dependency ledger | After prerequisite gates |
 
-No honest whole-project percentage or completion date follows from TRAIN fit
-quality. Unsupported status/recovery/boost, Counter, self-destruct and all-party
-Struggle remain outside the current attack/switch segment. Early one-Pokemon
-natural tests cannot substitute for full-party switching qualification.
+The two authorized early test starts are complete, not permission for an unlimited
+teacher factory. Their evaluation runner retained outcomes, not final state bytes;
+do not reconstruct or replay them into player restarts. Unsupported status/recovery/
+boost, Counter, self-destruct and all-party Struggle remain segment exclusions.
 
-Teachers may use disclosed training assistance; final-player cheats remain forbidden.
+Teachers may use disclosed TRAIN assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
-Consumed DEVELOPMENT encounters never become fitting material. ROM-hack and
-Crystal work stay closed until fresh Red acceptance. Pete decides GitHub pushes.
+Consumed DEVELOPMENT never becomes fitting material. ROM-hack and Crystal work
+stay closed until fresh Red acceptance. Pete decides GitHub pushes.
 
-[Latest evidence](evidence/red-battler-readiness-result-2026-09-19.json) ·
+[Latest evidence](evidence/red-battler-policy-learning-result-2026-09-19.json) ·
 [Development infographic](development-roadmap.md)

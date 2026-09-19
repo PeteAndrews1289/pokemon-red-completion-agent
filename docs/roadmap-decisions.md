@@ -1,5 +1,21 @@
 # Roadmap baseline and deviations
 
+## September19 — demonstrate learning, not perfect wins
+
+Pete authorized two bounded independent natural starts and clarified that the
+battler must demonstrate learning, not win every battle. The policy-bound
+experiment declared its learning gate before fitting/testing J: retain numerical
+TRAIN competence, win more unused paired battles than H and incur no more faints.
+Teacher superiority is not a learning gate. Historical failures retain their
+original verdicts; no final-player, Red or later-generation exit changed.
+
+[J passed](evidence/red-battler-policy-learning-result-2026-09-19.json):9/24wins
+versus7/24 and fewer faints, plus improved early natural attacks across two
+genuinely booted origins. The generated cohort is not statistically conclusive.
+Six timing trials are not six roots; one own Pokemon cannot prove switching.
+Freeze J, retain losses, obtain natural full-party evidence, then qualify one
+earned-state integration. No further blind refit or standing review gate.
+
 ## September 17 — four-context trainer pipeline works; ancestry still gates qualification
 
 Three prospectively captured Celadon Gym trainer starts have different saved-state hashes

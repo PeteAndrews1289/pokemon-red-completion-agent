@@ -3,22 +3,18 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-[Current evidence](evidence/red-battler-readiness-result-2026-09-19.json):
-318 fitted TRAIN contexts, four existing fresh roots. Candidate H improved
-one new team cohort14wins versus11, but teacher won17. Candidate I greatly
-improved TRAIN regret and then regressed7wins versus H14 on a different cohort.
-Neither is qualified for final-player integration. No more blind refits.
+[Current evidence](evidence/red-battler-policy-learning-result-2026-09-19.json):
+318unique TRAIN contexts;16new frozen-learner value measurements,400branches.
+One J fit passed15retention/learning checks. Unused generated-team cohort:
+J9/24wins versus H7/24,54versus56faints. Modest descriptive improvement, not
+statistical significance. Two natural origins at three timings: J6/6wins,
+H5/6, first-legal0/6. These test early attacks, not full-party switching.
 
-A120-branch diagnostic on four preselected TRAIN openings found4/4 best-action
-reversals when frozen H replaced the teacher as continuation policy.
-Next work is policy-bound learner-continuation targets, not another broad
-review or a new trainer framework. Do not silently mix target semantics,
-relax retention limits, or fit/replay consumed evaluation cases.
+J is packaged and frozen. No refit, replay, perfect-win or teacher-superiority
+requirement. Prior I rejection and older failed gates remain unchanged.
+Next: independent natural full-party evidence, then one bounded earned-state
+integration with durable final-state capture. Do not reconstruct consumed tests
+into restarts; their final state bytes were not retained.
 
-Claude Opus4.8 completed one read-only review this session; explicit final
-switch-retention assertions were accepted. Pulse caps stayed unchanged.
-Service quota unavailable. Flash not used. No standing external-review gate.
-
-Independent natural full-party evidence remains missing. A pending request
-asks Pete to authorize bounded fresh-source preparation; no preparation ran.
-No full-game run, authority promotion, ROM hack, Crystal or GitHub push.
+No Flash/Claude session or pending review gate. No final-player promotion,
+full-game run, ROM hack, Crystal or GitHub push. Review only a concrete boundary.

@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze H as reference and preserve I rejection. Bind learner-continuation value targets and declare four-root supply before fitting. Do not mix target policies silently, relax retention or replay consumed comparisons.
+- Next decision: Freeze packaged J after its positive descriptive learning signal and early natural attack tests. Obtain legitimate independent natural full-party evidence, then one bounded earned-state integration. No more fitting on consumed comparisons or perfect-win gate.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose attacks, voluntary switches, replacement-prompt answers and forced replacements from semantic observations in bounded full-party trainer battles, then improve outcomes on separate natural battles. |
-| Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
+| Authority now | Model137 remains137examples/92successes/58economy-qualified; Red96/124. Separate battle J controlled327 generated-test decisions and29 natural attacks without fallback. No final-player promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | One model-directed full-party trainer battle loses despite a fitted opening preference, or a prospective terminal curriculum cannot produce useful intermediate choices from distinct TRAIN origins. |
+| Cheapest falsifier | The frozen learner fails to improve aggregate unused-battle outcomes while retaining trained skills, or cannot execute an independent natural full-party test without fallback; a single random loss is not failure by itself. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-19-battler-readiness-v1** · status **closed** · evidence [qualification](docs/evidence/red-battler-readiness-result-2026-09-19.json)
+**2026-09-19-battler-policy-learning-v1** · status **closed** · evidence [qualification](docs/evidence/red-battler-policy-learning-result-2026-09-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Real learner/data improvements and rejected regressions distinguish an operational trainer from a final-player-ready battler. Independent natural full-party evidence remains required. |
-| Learning output | Added138 fitted TRAIN contexts from3265 complete matched branches;318 total. Four bounded fits. A separate120-branch learner-continuation diagnostic is retained but not fitted or merged. |
-| Authority delta | None. H remains an unqualified battle reference; I is rejected. Model137 and fresh Red acceptance are unchanged. |
-| Transfer result | H improves its same-cohort predecessor comparison but not the teacher baseline; I regresses in a distinct cohort. All are assisted TRAIN diagnostics, not independent natural transfer. |
-| Blocker | H wins14/24 versus predecessor11/24 but teacher17/24. I fits TRAIN better yet regresses7/24 versus H14/24. Four-root audit changes best action in4/4 states when learner replaces teacher continuation. |
-| Decision | Keep the operational trainer and H reference. Reject I promotion; bind continuation-policy target semantics before any new fit. Preserve all failed cohorts. |
-| Next session | Astra High, Fast off: continuation-aware target contract and at least16 useful learner-continuation contexts before one declared fit; no new framework or standing review gate. |
-| Next falsifier | A policy-bound four-root learner-continuation curriculum must supply useful measured targets without silently mixing teacher values; then an unused full-battle comparison must pass. |
-| Stop condition | Declared fits and comparisons are complete. No blind fit after I regression. Next campaign requires an explicit continuation-aware target plan; fresh natural source preparation still awaits Pete. No full game or push. |
+| Product alignment | Measured learning and early natural attack transfer now distinguish the operational trainer from an unqualified final full-party player. |
+| Learning output | One fit on318physical TRAIN contexts, with16new policy-bound value measurements from400branches. All15retention/learning checks pass; new composed TRAIN regret1.115307346 to0. |
+| Authority delta | J owned327 generated-test decisions and29 natural attacks; the main collection player and final-player authority are unchanged. |
+| Transfer result | J9/24wins versus H7/24 and fewer faints in unused generated teams; descriptive, not statistically conclusive. Two independent natural origins at three timings: J6/6, H5/6, first-legal0/6; attack-only, not full-party transfer. |
+| Blocker | Natural tests had one own Pokemon and do not qualify full-party switching. Evaluation did not retain final state bytes, so player integration still needs durable final-state capture. |
+| Decision | Freeze and package J. Learning is demonstrated modestly; no further fit/review cycle or perfect-win requirement. Preserve previous failures. |
+| Next session | Sol High, Fast off: bounded legitimate natural full-party source/test work, then earned-state integration with durable final snapshots; estimate45–60minutes for the source/test slice. |
+| Next falsifier | Frozen J must handle meaningful attacks and replacements on independently sourced natural full-party battles without assistance; evaluate aggregate outcomes rather than demanding every win. |
+| Stop condition | One fit and all declared comparisons completed. Both authorized natural starts and all18root/timing/arm cells are consumed. No replay, fit on tests, reconstructed restart, unlimited teacher factory, full game or push. |
 
 ### Stop conditions
 

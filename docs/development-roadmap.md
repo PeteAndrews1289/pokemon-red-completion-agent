@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-readiness-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-policy-learning-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battler-policy-learning-v1
+
+One J fit preserves15 TRAIN checks after16 policy-bound measurements/400branches. Unused generated teams:9/24wins versus H7/24, fewer faints. Two natural boot origins at three timings: J6/6, H5/6, first-legal0/6. J frozen and packaged; no final-player promotion.
+
+**Deviation:** Pete clarified learning rather than perfect wins and authorized two bounded natural starts. Prospective learning gate does not require teacher superiority; historical failures retain their verdicts. Small descriptive cohorts, attack-only natural evidence, no stage/checklist exit changes.
+
+**Next:** Sol High, Fast off: legitimate independent natural full-party tests, then bounded earned-state integration with durable final-state capture. Keep J fixed; no consumed-test fitting/replay or new review cycle.
 
 ### 2026-09-19-battler-readiness-v1
 

@@ -5,45 +5,25 @@ implementation, verification and handoffs. Read [MISSION.md](MISSION.md),
 [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md)
 and [HANDOFF.md](HANDOFF.md).
 
-- No push or other publication without Pete's explicit instruction.
+- No push or publication without Pete's explicit instruction.
 - Use Gemini3.8 Flash High through Antigravity, not the Flash CLI.
 - Flash and Claude are bounded read-only reviewers, not standing execution gates.
 
 ## Current assignment
 
-The trainer practice framework has four separately booted clean-power TRAIN
-roots, 28 admitted contexts, a qualified three-head fit, and two natural
-DEVELOPMENT comparisons with complete action logs. The historical goal bank
-remains one unresolved ancestry cluster, not independent supply. Both natural
-comparisons favored frozen and fixed controls despite challenger wins; there
-was no advantageous voluntary switch. See the [latest evidence](docs/evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
-and [handoff](HANDOFF.md). Red stays 96/124 and fresh acceptance 0/5.
+The [latest experiment](docs/evidence/red-battler-policy-learning-result-2026-09-19.json)
+demonstrated modest learning. One policy-bound successor J passed15 TRAIN checks,
+won9/24 unused generated-team battles versus H7/24 and won6/6 early natural trials
+versus H5/6 across two boot origins. These are one-Pokemon attack tests, not
+full-party switching qualification.
 
-The [Astra review](docs/reviews/red-trainer-astra-review-2026-09-17.md) is complete.
-Next: Sol High, Fast off for identity-aware damage scoring, training/live history
-parity, same-species opponent identity and consistent move-support admission.
-Then build distinct paired TRAIN inputs with uncertainty-aware targets before
-a larger fit. Do not fit on or replay the two consumed DEVELOPMENT battles,
-promote the policy, run a full game, or publish to GitHub.
+Freeze packaged J. No more fitting/replay on these comparisons. Next: legitimate
+independent natural full-party testing, then bounded earned-state integration
+with durable final-state capture. No perfect-win requirement.
+Model137, Red96/124 and fresh acceptance0/5 remain unchanged; no final-player
+promotion, full game, ROM hack, Crystal or GitHub publication.
 
-## Reviewer contribution
+No external reviewer was used this session. Historical reviews do not approve
+the new package. No pending review gate; request only a focused consequential review.
 
-Flash 3.8 High made a bounded read-only ancestry audit and agreed that the old
-goal-bank labels do not establish independent physical starts. Claude Opus
-could not review because its CLI returned "Not logged in"; do not count a
-Claude review. Refreshed service quotas are unavailable. Neither review is a
-standing execution gate. The final Astra review used source and retained data;
-Flash and Claude were not invoked again.
-
-[Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
-[OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·
-[Natural battle evidence](docs/evidence/red-natural-battle-boundary-2026-09-16.json) ·
-[Live faint evidence](docs/evidence/red-live-faint-outcome-2026-09-16.json) ·
-[Timing and contrast evidence](docs/evidence/red-battle-timing-and-contrast-2026-09-16.json) ·
-[Choice-rich pilot evidence](docs/evidence/red-choice-rich-battle-pilot-2026-09-16.json) ·
-[Natural supply audit](docs/evidence/red-natural-battle-supply-audit-2026-09-16.json) ·
-[Mansion train pilot](docs/evidence/red-model-battle-train-mansion-pilot-2026-09-17.json) ·
-[Retained train alternatives](docs/evidence/red-retained-train-battle-alternatives-2026-09-17.json) ·
-[Teacher battle factory](docs/evidence/red-teacher-battle-practice-factory-2026-09-17.json) ·
-[Level/stat qualification](docs/evidence/red-teacher-battle-level-stats-2026-09-17.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

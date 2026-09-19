@@ -9,23 +9,28 @@ evidence and the declared124-species legitimate native route. Unavailable versio
 link and event dependencies stay explicit. Then come a compatible unfamiliar
 Red hack, Crystal and Emerald.
 
-## Latest chapter: real control exposes weak judgment
+## Latest chapter: learning under its own continuation
 
-The frozen battle model now controlled every attack in one newly generated
-encounter. Teacher setup placed Kingler28 in front of Spearow15; thereafter
-six recorded model choices selected the actual moves, without fallback.
+The trainer's old labels measured a first action followed by a strong teacher.
+But the deployed model had to finish the battle itself. A four-state diagnostic
+showed that replacing the teacher could change which opening was best.
 
-The victory was inefficient: Guillotine spent all five PP without damage.
-Once unavailable, the model chose Vicegrip and knocked out the opponent.
-Kingler survived at59/76 HP. Exact move-use records distinguish this from
-a teacher choosing the winning move behind the scenes.
+We measured16 training situations again with frozen learner continuation and
+kept the two kinds of labels separate. One new candidate J preserved the old
+numeric skill checks and won9of24 unused generated-team battles versus its
+predecessor's7. It still lost15 and took more decisions overall. This is a
+modest learning signal, not perfect play or statistically conclusive mastery.
 
-This is a control-integration result, not newly learned weights or general mastery.
-Model137 remains137 examples/92 successes; development registrations remain96/124.
-The five-part fresh-start gate is still unpassed. The next lesson should improve
-attack reliability/value with separate training examples and untouched comparisons,
-not memorize this encounter or hardcode an exception for Guillotine.
+Two independent natural starts reached Brock through ordinary gameplay.
+Across three timings each, J won6/6, its predecessor5/6 and first-legal attack0/6.
+These are two origins and one own Pokemon: evidence of early attack transfer,
+not qualification of the whole party-switching system.
 
-[Latest evidence](evidence/red-earned-learned-battle-2026-09-16.json) ·
+The package is frozen. Next: natural full-party tests and bounded player
+integration, not another blind fit or a requirement to win every battle.
+Model137 remains137examples/92successes; collection registrations remain96/124.
+The five-part fresh-start Red gate remains unpassed.
+
+[Latest evidence](evidence/red-battler-policy-learning-result-2026-09-19.json) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)
