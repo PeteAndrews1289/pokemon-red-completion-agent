@@ -203,7 +203,8 @@ def run(args):
             state = path.parent / (
                 "materialized/assisted.state" if index == 0 else f"intermediate-{index:02d}.state"
             )
-            refs = row["heads"].get("control", row["heads"].get("switch", {}))["choice_refs"]
+            heads = row["heads"]
+            refs = (heads.get("control") or heads.get("move") or heads["switch"])["choice_refs"]
             if len(refs) >= 2:
                 rows.append(
                     {
