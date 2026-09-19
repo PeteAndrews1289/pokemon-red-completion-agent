@@ -12,10 +12,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The first integrated funding goal failed after Wartortle fainted. J made four decisions;
-the existing no-faints guard stopped the unfinished battle. The exact state was retained
-without reset or teacher fallback. This is verified wiring, not successful autonomous funding.
-See [integration evidence](docs/evidence/red-player-battler-integration-2026-09-19.json),
+The first integrated funding goal failed after Wartortle fainted. A separate continuation
+from its retained state let J choose a replacement and four attacks. The party lost; normal
+blackout restored field control and halved cash. Both the loss and recovery are verified,
+without reset or teacher fallback. This proves battle lifecycle handling, not profitable funding.
+See [continuation evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json),
 [earlier battler qualification](docs/evidence/red-battler-earned-switch-result-2026-09-19.json)
 and the [current handoff](HANDOFF.md).
 

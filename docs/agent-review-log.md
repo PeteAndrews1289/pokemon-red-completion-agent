@@ -1,5 +1,15 @@
 # Agent review and adjudication log
 
+## September 19 — retained-state lifecycle continuation
+
+Codex accepted the narrow lifecycle repair, preserving the strict funding verifier and its
+original failure. The single continuation produced five J choices, a natural battle loss and
+verified normal blackout/field handoff. No reset, fit, new collection credit or six-member
+promotion. The forced replacement had only one living option; no multi-reserve ranking claim.
+The public roadmap enumerates all 28 remaining native registrations and separates actor scope,
+funding, collection, fresh-run acceptance and transfer. No external review or quota query was used.
+[Checkpoint](work-sessions/2026-09-19-battle-lifecycle-continuation.md).
+
 ## September19 — player integration and publication checkpoint
 
 Codex implemented and locally tested the explicit frozen-J trainer binding. The live probe

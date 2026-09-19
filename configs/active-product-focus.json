@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Invoke a frozen learned battler from the main player with shared action/frame limits, retained decisions and independent goal verification.",
-      "cheapest_falsifier": "The learned battle cannot complete or hand back a verifiable earned state under the player goal contract without teacher substitution.",
+      "capability": "Complete learned trainer battles through faint/replacement and verified field handoff without conflating a battle outcome with strict funding acceptance.",
+      "cheapest_falsifier": "A useful main-save goal cannot be offered or completed from real resources without replay, hidden teacher substitution or exceeding qualified battle scope.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "J owned4decisions through the main-player prepared trainer seam:1voluntary switch and3attacks. No high-level goal-model selection or full-player promotion.",
-        "blocker": "Wartortle fainted; the unchanged funding no-faints guard stopped before replacement. Integration goal failed and battle remains unfinished. A successful earned funding handoff is not established.",
-        "decision": "Retain the failure and freeze J. Separate general battle lifecycle/recovery from conservative funding acceptance before further gameplay. Refresh current documents and publish only this user-authorized checkpoint.",
+        "authority_delta": "J chose one forced replacement and four attacks; natural loss then automatic cartridge blackout. No teacher fallback, high-level goal selection or full-player promotion.",
+        "blocker": "Main-save options remain constrained by 198 cash and paid Safari access; its six-member party is outside J one-to-three-member qualification. Profitable learned funding is not established.",
+        "decision": "Close the lifecycle seam and retain the loss. Return to useful model-selected collection/resource work; preserve the original funding failure. Publish and merge the explicitly authorized checkpoint only after checks pass.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-player-battler-integration-2026-09-19.json",
-          "sha256": "37f6f7b540eb8e83a39343bc1e1ecaec0ef64b92a3cf625ccdc063f65a641636"
+          "path": "docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json",
+          "sha256": "b5c99fcdfbc2508db6c1a57b6d0113036310909cb46a47dc256161dad255ce43"
         },
-        "learning_output": "Four new DEVELOPMENT decisions; no examples or fit.318TRAIN contexts and all collection counters unchanged.",
-        "next_falsifier": "A prospectively declared continuation cannot preserve exact state, model-only choices, recovery costs and a fresh typed outcome after a faint.",
-        "next_session_goal": "Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run.",
-        "product_alignment": "The learner now reaches a main-player call site and exposes a concrete lifecycle mismatch instead of another trainer-only exercise.",
-        "session_id": "2026-09-19-player-battler-integration",
+        "learning_output": "Five retained DEVELOPMENT decisions; zero new fit examples or fits. J remains 318 TRAIN contexts and all main collection counters are unchanged.",
+        "next_falsifier": "The exact main-save terminal cannot expose a genuinely executable useful choice under available resources and qualified actor scope.",
+        "next_session_goal": "Astra High, Fast off: authenticate main Model137 terminal, rebuild useful funding/admission or non-Safari options, and retain one model-selected goal outcome. Qualify six-member J scope if needed before its use. Estimate 45\u201390 minutes; no full run.",
+        "product_alignment": "A faint no longer strands general learned battle completion. The retained loss restores ordinary field control without laundering failed funding into success.",
+        "session_id": "2026-09-19-battle-lifecycle-continuation",
         "status": "closed",
-        "stop_condition": "One declared goal consumed and failed;247actions/19284frames, no reset/replay/fallback. Gameplay stopped. User authorized this GitHub checkpoint, not a full run or blanket promotion.",
-        "transfer_result": "Same boot3100 natural origin, new trainer. Three earned Potions restored the party;78-step route.1faint, no payout, final HP28/0 and1706cash. Exact final state and fresh ledger reopened read-only."
+        "stop_condition": "One declared continuation consumed: 55 actions / 5424 frames, cumulative 302 / 24708 with parent. Natural loss, exact endpoint reopened, no reset or fit. Gameplay stopped.",
+        "transfer_result": "Same boot3100 origin, newly exercised natural forced replacement; no independent root. Verified normal blackout to map15, HP28/51, cash853, target undefeated, registrations preserved. Main save reopened read-only at96/124, six members,198cash."
       },
       "learned_authority": {
-        "current": "Model137 remains137examples/92successes/58economy-qualified; Red96/124. Frozen J is opt-in at ordinary trainer funding and owned4new live decisions. The goal failed at one faint; no blanket controller replacement or promotion.",
+        "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified; Red 96/124. J owned five continuation decisions including forced replacement; verified loss and normal blackout. No full-player promotion; main six-member party exceeds J small-party scope.",
         "target": "Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Main-player battle wiring is implemented and exercised. Resolve the general-battle versus no-faints funding contract boundary; preserve the actual unfinished battle. No refit/review cycle.",
+      "next_decision": "Return to Model137 main-save collection/resource choices. Battle lifecycle is verified by a retained natural loss; no broad trainer refit/review cycle.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

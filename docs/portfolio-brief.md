@@ -18,11 +18,13 @@ development, not a finished autonomous player.
 
 The first main-entry goal failed after Wartortle fainted. The old funding guard stopped the
 unfinished battle; four decisions and the exact state were retained without reset or teacher
-substitution. This establishes integration and honest failure handling, not successful funding.
+substitution. A separate retained-state continuation then completed five J decisions and a natural
+loss/blackout, restoring field control with the expected cash loss. This establishes battle
+lifecycle handling, not successful funding or six-member mastery.
 
 ## Remaining work
 
-General battle lifecycle/recovery, sustainable resource planning,28 remaining native registrations
+Broader qualified battle scope, sustainable resource planning,28 remaining native registrations
 and a fresh model-directed Red run. Fresh-run acceptance remains0/5. ROM-hack transfer, Crystal
 and Emerald follow Red acceptance. Prior checkpoint-based Champion/Hall-of-Fame work used
 deterministic battle mechanics and is not the required fresh-game completion.
@@ -34,5 +36,5 @@ and Antigravity have contributed implementation or reviews; authorship is explic
 Python, PyBoy, NumPy, SQLite, typed skills, hash-linked evidence, pytest, Ruff and mypy.
 Coding assistants are not secretly choosing the gameplay actions.
 
-[Evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
 [Architecture](architecture.md) · [Interview handoff](ai-systems-specialist-interview-handoff.md)

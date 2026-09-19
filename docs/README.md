@@ -17,8 +17,9 @@ valuable evidence without remaining an instruction.
 Model137 remains137examples/92successes/58economy-qualified; its main save is96/124 native
 registrations,74specimens and198cash. Frozen battler J is now opt-in at the main-player ordinary
 trainer entry. Its first integration goal failed after one faint; four decisions and the exact
-unfinished-battle state are retained. No fit, collection gain or fresh-run acceptance occurred.
-See the [checkpoint report](work-sessions/2026-09-19-player-battler-integration.md).
+unfinished-battle state were retained. A separate continuation completed five J decisions and a
+verified loss/blackout, returning field control without reset. No fit, collection gain or fresh-run
+acceptance occurred. See the [checkpoint report](work-sessions/2026-09-19-battle-lifecycle-continuation.md).
 
 ## Reader-facing summaries
 

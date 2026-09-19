@@ -1,0 +1,369 @@
+{
+  "action_counts": {
+    "attack": 4,
+    "forced_switch": 1,
+    "switch_prompt": 0,
+    "voluntary_switch": 0
+  },
+  "actions": 55,
+  "authority_promotions": 0,
+  "classification": "correlated_development_battle_loss_with_verified_lifecycle",
+  "completion": {
+    "fainted_party_slots": [
+      1,
+      2
+    ],
+    "field_ready": true,
+    "final_map": 15,
+    "final_party_hp": [
+      28,
+      51
+    ],
+    "funding_success": false,
+    "funding_verdict": "not_assessed_by_battle_completion",
+    "money_delta": -853,
+    "no_faint_constraint_met": false,
+    "outcome": "lost",
+    "recovery_required": false,
+    "schema": "pokemon.red.learned-trainer-completion.v1"
+  },
+  "cumulative_actions": 302,
+  "cumulative_frames": 24708,
+  "decision_count": 5,
+  "episode_metrics": {
+    "attack_turn_utility_sum": -2.869565217391304,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 1,
+    "opponent_faints": 0,
+    "party_faints": 1,
+    "party_hp_lost": 28,
+    "party_pp_spent": 3,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 1258167,
+    "policy_latency_ns_mean": 715416.8,
+    "policy_latency_ns_min": 475500,
+    "teacher_interventions": 0
+  },
+  "failure": null,
+  "final_ledger": {
+    "battle_state": 0,
+    "cash": 853,
+    "champion_event": false,
+    "full_game_complete": false,
+    "hall_of_fame_fact": false,
+    "hall_of_fame_mode": false,
+    "input_ready": true,
+    "next_trainer_defeated": true,
+    "party_hp": [
+      28,
+      51
+    ],
+    "party_levels": [
+      10,
+      17
+    ],
+    "party_national_ids": [
+      41,
+      8
+    ],
+    "registered": [
+      7,
+      8,
+      41
+    ],
+    "required_trainer_defeated": true
+  },
+  "final_state_sha256": "5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac",
+  "fits": 0,
+  "frames": 5424,
+  "frozen_training_contexts": 318,
+  "funding_success": false,
+  "log_verification": {
+    "complete": true,
+    "completed_decisions": 5,
+    "event_count": 22,
+    "event_counts": {
+      "choice_recorded": 5,
+      "decision_completed": 5,
+      "decision_started": 5,
+      "episode_started": 1,
+      "model_input_prepared": 4,
+      "run_finished": 1,
+      "run_identity": 1
+    },
+    "failed_runs": 0,
+    "incomplete_decisions": 0,
+    "last_record_sha256": "aaf4c391575b84c1d0d60b43ead03962eaa07edd67552e9229373369daf1bacf",
+    "schema": "pokemon.red.trainer-practice-log-verification.v1",
+    "started_decisions": 5,
+    "terminal_event": "run_finished"
+  },
+  "main_collection": {
+    "cash": 198,
+    "declared_route_total": 124,
+    "economy_qualified_examples": 58,
+    "model": 137,
+    "party_national_ids": [
+      105,
+      83,
+      87,
+      51,
+      9,
+      99
+    ],
+    "party_size": 6,
+    "prior_result_sha256": "436083af59713fde6a727a4277244c3615ea7586191b29c19be205938c16cadf",
+    "read_only_reopen": {
+      "actions": 0,
+      "cash": 198,
+      "frames": 0,
+      "map": 156,
+      "party_size": 6,
+      "position_yx": [
+        3,
+        4
+      ],
+      "registered": 96,
+      "state_unchanged": true
+    },
+    "registrations": 96,
+    "remaining_native_registrations": [
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:MoonStone",
+        "item": "pokemon:red:item:moon_stone",
+        "precursor": "pokemon:national:030",
+        "species_ref": "pokemon:national:031"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:MoonStone",
+        "item": "pokemon:red:item:moon_stone",
+        "precursor": "pokemon:national:033",
+        "species_ref": "pokemon:national:034"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:MoonStone",
+        "item": "pokemon:red:item:moon_stone",
+        "precursor": "pokemon:national:035",
+        "species_ref": "pokemon:national:036"
+      },
+      {
+        "catalog_kind": "wild",
+        "catalog_source": "wild:CeruleanCave2F:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:040"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:FireStone",
+        "item": "pokemon:red:item:fire_stone",
+        "precursor": "pokemon:national:058",
+        "species_ref": "pokemon:national:059"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:WaterStone",
+        "item": "pokemon:red:item:water_stone",
+        "precursor": "pokemon:national:061",
+        "species_ref": "pokemon:national:062"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:LeafStone",
+        "item": "pokemon:red:item:leaf_stone",
+        "precursor": "pokemon:national:102",
+        "species_ref": "pokemon:national:103"
+      },
+      {
+        "catalog_kind": "in_game_trade",
+        "catalog_source": "trade:Route18Gate2F:SlowbroForLickitung",
+        "item": null,
+        "precursor": "pokemon:national:080",
+        "species_ref": "pokemon:national:108"
+      },
+      {
+        "catalog_kind": "safari",
+        "catalog_source": "wild:SafariZoneCenter:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:111"
+      },
+      {
+        "catalog_kind": "wild",
+        "catalog_source": "wild:CeruleanCave2F:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:112"
+      },
+      {
+        "catalog_kind": "safari",
+        "catalog_source": "wild:SafariZoneCenter:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:113"
+      },
+      {
+        "catalog_kind": "safari",
+        "catalog_source": "wild:SafariZoneEast:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:115"
+      },
+      {
+        "catalog_kind": "fishing",
+        "catalog_source": "fishing:super_rod:FuchsiaCity",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:119"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:item:WaterStone",
+        "item": "pokemon:red:item:water_stone",
+        "precursor": "pokemon:national:120",
+        "species_ref": "pokemon:national:121"
+      },
+      {
+        "catalog_kind": "in_game_trade",
+        "catalog_source": "trade:Route2TradeHouse:AbraForMrMime",
+        "item": null,
+        "precursor": "pokemon:national:063",
+        "species_ref": "pokemon:national:122"
+      },
+      {
+        "catalog_kind": "safari",
+        "catalog_source": "wild:SafariZoneCenter:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:123"
+      },
+      {
+        "catalog_kind": "in_game_trade",
+        "catalog_source": "trade:CeruleanTradeHouse:PoliwhirlForJynx",
+        "item": null,
+        "precursor": "pokemon:national:061",
+        "species_ref": "pokemon:national:124"
+      },
+      {
+        "catalog_kind": "safari",
+        "catalog_source": "wild:SafariZoneWest:grass",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:128"
+      },
+      {
+        "catalog_kind": "gift",
+        "catalog_source": "gift:Silph7F:Lapras",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:131"
+      },
+      {
+        "catalog_kind": "prize",
+        "catalog_source": "prize:GameCorner:Porygon",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:137"
+      },
+      {
+        "catalog_kind": "fossil",
+        "catalog_source": "fossil:CinnabarLab:OldAmber",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:142"
+      },
+      {
+        "catalog_kind": "static",
+        "catalog_source": "static:SeafoamB4F:Articuno",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:144"
+      },
+      {
+        "catalog_kind": "static",
+        "catalog_source": "static:PowerPlant:Zapdos",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:145"
+      },
+      {
+        "catalog_kind": "static",
+        "catalog_source": "static:VictoryRoad2F:Moltres",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:146"
+      },
+      {
+        "catalog_kind": "prize",
+        "catalog_source": "prize:GameCorner:Dratini",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:147"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:level:30",
+        "item": null,
+        "precursor": "pokemon:national:147",
+        "species_ref": "pokemon:national:148"
+      },
+      {
+        "catalog_kind": "evolution",
+        "catalog_source": "evolution:level:55",
+        "item": null,
+        "precursor": "pokemon:national:148",
+        "species_ref": "pokemon:national:149"
+      },
+      {
+        "catalog_kind": "static",
+        "catalog_source": "static:CeruleanCaveB1F:Mewtwo",
+        "item": null,
+        "precursor": null,
+        "species_ref": "pokemon:national:150"
+      }
+    ],
+    "settled_examples": 137,
+    "specimens": 74,
+    "successful_examples": 92,
+    "terminal_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054"
+  },
+  "main_collection_delta": 0,
+  "memory_writes": 0,
+  "model_fit_delta": 0,
+  "model_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "new_independent_origins": 0,
+  "new_training_examples": 0,
+  "pressed_buttons": [],
+  "prior_funding_verdict": "failed",
+  "prior_result_sha256": "b5779065eebee9d47e49b5527bf4f7b4f3f19621bdbd9e852332355f6a549a0c",
+  "private_result_sha256": "dbf997230b9e518847549bf6643759910a98b455ad6bce0c5ef80fb2cf488210",
+  "private_run_name": "red-player-battler-continuation-20260919-v1",
+  "reopened": {
+    "actions": 0,
+    "final_state_sha256": "5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac",
+    "frames": 0,
+    "matches": true
+  },
+  "resets_after_start": 0,
+  "schema": "pokemon.red.learned-trainer-continuation-result.v1",
+  "scope": {
+    "continuation_source_consumed": true,
+    "default_controllers_changed": false,
+    "fresh_red_acceptance": "0/5",
+    "full_player_promoted": false,
+    "funding_contract_weakened": false,
+    "no_retry": true,
+    "original_funding_attempt_still_failed": true,
+    "six_member_support": false,
+    "training_on_development": false
+  },
+  "session": "2026-09-19-battle-lifecycle-continuation",
+  "source_commit": "2ead10a2b578d4437482c5fa4f8270db380cf3c0",
+  "source_state_sha256": "e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024",
+  "status": "verified_battle_terminal",
+  "target_defeated": false,
+  "teacher_queries": 0
+}

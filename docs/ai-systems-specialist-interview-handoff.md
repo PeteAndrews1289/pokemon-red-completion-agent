@@ -19,12 +19,14 @@ present this as wholly hand-written or already completed.
 | Unused generated3v3 | J9/24 wins; H7/24 | Descriptive, not statistically conclusive |
 | Natural Brock | J6/6; H5/6; first-legal0/6 | Two origins × three timings; one own Pokémon |
 | Earned natural switching | Two wins, two voluntary switches,33 decisions | Same two origins; not six-member mastery |
-| Main-player battle entry | Four J decisions; exact failure retained | Funding goal failed; battle unfinished |
+| Main-player battle lifecycle | Four initial decisions, then five continuation decisions; loss and blackout verified | Original funding goal failed; no six-member promotion |
 | Fresh Red acceptance |0/5 | No fresh start-to-finish model-directed completion |
 
 The main-entry probe used three earned Potions and a new trainer. J switched once and selected
 three attacks. Wartortle fainted; the existing no-faints funding guard stopped before replacement.
-It earned no payout. This verifies wiring/failure handling, not reliable autonomous funding.
+It earned no payout. A separate exact-state continuation produced one forced replacement and four
+attacks, followed by loss and normal blackout. Party, cash loss and field return were verified.
+This establishes lifecycle handling, not reliable autonomous funding.
 
 ## Architecture and stack
 
@@ -68,12 +70,13 @@ A first action followed by a strong teacher is not equivalent to one followed by
 Measuring16 training contexts under learner continuation produced J and a limited unused-team gain.
 
 A no-faints funding goal can fail while a battle still has a living reserve and a valid replacement
-decision. The checkpoint preserves this contract mismatch; it does not label the unfinished battle
-a win or a completed loss. General battle completion and strict funding acceptance must be separated.
+decision. The first checkpoint retained the unfinished battle honestly. The subsequent continuation
+separated general completion from funding acceptance and verified a natural loss/blackout without
+rewriting that original failed-goal verdict.
 
 ## Remaining product sequence
 
-1. Resolve that lifecycle/recovery boundary with a bounded retained-state test.
+1. Qualify broader party/move scope where required by the next actual playing task.
 2. Resume useful model-selected collection and sustainable legitimate income.
 3. Complete fresh model-directed Red with Champion/Hall of Fame and124 native registrations.
 4. Verify the deferred-dependency ledger, then test an unfamiliar compatible Red modification.

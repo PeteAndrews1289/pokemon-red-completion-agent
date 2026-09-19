@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## September 19 — Battle lifecycle closes; preserve the funding failure
+
+The separately declared continuation from the exact failed endpoint completed five model
+decisions and a verified natural loss/blackout. The original no-faint funding contract and
+failed verdict remain unchanged. No new fit, collection registration or full-player promotion.
+Return to useful main-save choices; qualify six-member scope only when the actual next
+playing task requires it. The detailed roadmap now lists all 28 native registration gaps.
+
+The completion-contract paragraph still carried the superseded September 13 all-local-
+dependencies requirement. It now reflects the already-adopted September 15 mission: 124 native
+registrations in the fresh model-directed save, with unavailable external dependencies deferred.
+No stage ID, exit criterion, denominator or fresh-run gate was changed by this correction.
+
 ## September19 — demonstrate learning, not perfect wins
 
 Pete authorized two bounded independent natural starts and clarified that the

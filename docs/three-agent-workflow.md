@@ -15,7 +15,7 @@ review history; their “latest” labels are relative to that archived sequence
 
 ### Current checkpoint — September19
 
-Pete authorized the frozen-battler integration, current-document refresh and GitHub checkpoint.
+Pete authorized the frozen-battler lifecycle continuation, detailed roadmap and GitHub merge.
 Codex owns implementation and verification; no external reviewer was used or is pending.
 The actual next task is the battle-lifecycle/funding-contract boundary in the current handoff.
 The dated assignments below are history, not pending work. Future pushes still require Pete's

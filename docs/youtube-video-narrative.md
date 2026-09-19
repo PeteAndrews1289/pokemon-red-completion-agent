@@ -18,16 +18,18 @@ payout or completed-battle claim.
 
 ## Meaning and next chapter
 
-The learned component is connected and observable. General battle completion/recovery now needs
-to be separated from strict no-faints funding acceptance. Do not replay the footage until it wins
-or turn this into another blind refit cycle.
+Continue the story honestly: from the retained faint, J chose Zubat and four attacks, then lost.
+Normal blackout restored the party and field control, costing half its cash. All five decisions
+and the exact state were retained; the original funding failure still stands. General completion
+is now separate from funding acceptance. Do not replay the footage until it wins or turn this
+into another blind refit cycle.
 
 Show saved-state verification alongside the decision log; do not label recorded frames as live.
 Main collection remains96/124 and Model137 remains137 examples/92 successes. This early battle
 lineage is not additional progress in that collection save.
 
-Resolve the lifecycle boundary, then return to collection/resource goals. Fresh model-directed Red
+Return to useful collection/resource goals, qualifying broader battle scope when needed. Fresh model-directed Red
 completion and124 native registrations precede a ROM hack, Crystal and Emerald.
 
-[Evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

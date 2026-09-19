@@ -34,20 +34,23 @@ This entry supports one to three own party members, not arbitrary six-member tea
 and Elite Four controllers remain unchanged. Healing-item decisions and unsupported moves are not
 enabled. Default plans retain their historical controllers.
 
-## Verified boundary and open mismatch
+## Verified battle lifecycle and separate funding contract
 
 The first live integration used an earned two-member save, three ordinary Potions and a78-step
 route to a new trainer. J made four decisions through the main-player prepared battle seam.
 Wartortle fainted; the unchanged no-faints funding guard stopped before replacement. The goal
-failed, the battle remains unfinished, and no payout was earned.
+failed, leaving the battle unfinished at that checkpoint; no payout was earned.
 
 This verifies invocation, budgets, logging and failure retention—not successful autonomous funding.
 The probe called the main-player battle entry directly; it did not run Model137's high-level
 selector or bypass its conservative funding-offer eligibility.
 
-Next, separate general battle completion/recovery from no-faint funding acceptance. A faint is
-not a destroyed specimen, but the funding contract still forbids it. Do not silently weaken that
-contract or replay the failed encounter.
+A separate exact-state continuation now uses `continue_learned_trainer_battle` and the bridge's
+`continue_battle` entry. A faint/prompt starts at its owned boundary without driving toward MAIN.
+J chose one forced replacement and four attacks, then lost. Bounded terminal dialogue completed
+normal blackout; the verifier proved restored party, recorded recovery map, half cash and field
+control. Typed outcomes are won/lost/unresolved and never issue a funding-success verdict.
+The strict funding verifier is unchanged. No consumed source was replayed.
 
 ## Learning and claims
 

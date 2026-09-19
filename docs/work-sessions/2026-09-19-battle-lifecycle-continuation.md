@@ -31,4 +31,57 @@ depending on a developer's PYTHONPATH. The original failed hosted result remains
 Pete authorized publication and merging the existing GitHub work after this session.
 No force merge, bypass of failed checks, release or unrelated branch deletion is intended.
 
-Results and the detailed return-to-game roadmap will be recorded after the single continuation.
+## Single consumed continuation: verified loss and field return
+
+Execution source: 2ead10a2b578d4437482c5fa4f8270db380cf3c0.
+Private run: red-player-battler-continuation-20260919-v1.
+[Machine-readable evidence](../evidence/red-battle-lifecycle-continuation-2026-09-19.json).
+
+J chose the only living reserve, Zubat, then move slot 1 four times. Three attacks executed,
+reducing opponent HP from 18 to 12. Zubat fainted before the fourth selected move executed.
+This is one naturally constrained replacement, not evidence of choosing optimally among several
+living reserves. The battle was lost, not censored or rerun.
+
+| Measurement | Result |
+| --- | --- |
+| Learned decisions | 5: one forced replacement, four attacks |
+| Invalid action failures / teacher interventions | 0 / 0 |
+| Mean / maximum policy latency | 0.715 / 1.258 ms |
+| Continuation cost | 55 actions / 5,424 frames |
+| Including the failed parent | 302 actions / 24,708 frames |
+| Battle outcome | Lost; target trainer still undefeated |
+| Native blackout cost | 853 cash lost; 1,706 to 853 |
+| Final control | Field-ready, map 15, party HP 28/51 restored |
+| Decision log | 22 verified events, five complete decisions |
+| Reopening | Exact final bytes and fresh ledger match; zero actions/frames |
+| Resets / memory writes / fits / new training examples | 0 / 0 / 0 / 0 |
+
+Final state: 5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac.
+The original funding verdict remains failed. Both consumed input states are closed to replay.
+The continuation demonstrates lifecycle completion, not profitable funding or increased strength.
+
+The independent main collection save was reopened read-only: 96 registrations, six party members,
+198 cash, map 156 at (3,4), zero frames and identical state bytes. Its exact terminal remains
+27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054.
+The evidence enumerates all 28 missing native registrations from the retained ledger and catalog.
+The [detailed roadmap](../model-first-roadmap.md) separates these gaps, resource work, actual
+party scope, required battle mechanics, fresh-run acceptance and later generations.
+
+## Publication verification
+
+The focused pre-execution run passed 130 tests; lint and mypy (543 files) passed.
+Documentation/roadmap checks passed 174 tests. Documentation links, product focus, public-artifact
+safety and exact collection-registry regeneration checks passed.
+
+One broad local diagnostic was interrupted after 11,888 passes, 19 failures and two errors:
+removing PYTHONPATH from the relocated, non-installed environment broke project imports in
+subprocesses. All 21 affected checks then passed with the normal project environment in 66 seconds.
+The interrupted diagnostic is not a full-suite pass. The pre-existing exact-machine qualification
+was excluded from that local diagnostic; its relocated runtime fingerprint was not relaxed.
+The existing hosted suite, using its installed supported environment, must pass on the published
+head before the authorized merge. No safety assertion or workflow gate was weakened.
+
+Gameplay stopped. Model137 remains 137 examples / 92 successes / 58 economy-qualified; main
+Red remains 96/124 with 74 specimens and 198 cash. J remains 318 TRAIN contexts; fresh gate 0/5.
+No Flash or Claude was used. Next: Astra High, Fast off; 45–90 minutes for useful main-save
+options and one bounded model-selected result, subject to actual scope/resource constraints.

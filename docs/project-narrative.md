@@ -40,13 +40,16 @@ save, three ordinary Potions and a new trainer. J switched once and attacked thr
 times; Wartortle fainted, and the old no-faints funding guard stopped the unfinished
 battle before replacement. No payout, reset or hidden teacher rescue occurred.
 
-The wiring and retained failure are verified. Successful funding is not. The next
-task separates general battle completion/recovery from conservative funding
-acceptance, rather than starting another fit or broad audit. This is not six-member
-mastery, complete move support or full-player promotion.
+A separate declared continuation then let J choose Zubat as the forced replacement
+and select four attacks. It lost. Normal blackout halved cash and restored the party;
+the exact field state and all five choices were retained and verified without reset.
+Battle completion is now separate from funding acceptance: the original funding
+failure remains failed. Next comes useful main-save collection/resource progress,
+not another broad trainer audit. Six-member qualification, complete move support
+and full-player promotion remain open.
 Model137 remains137examples/92successes; collection registrations remain96/124.
 The five-part fresh-start Red gate remains unpassed.
 
-[Latest evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Latest evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

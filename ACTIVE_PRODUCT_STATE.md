@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Main-player battle wiring is implemented and exercised. Resolve the general-battle versus no-faints funding contract boundary; preserve the actual unfinished battle. No refit/review cycle.
+- Next decision: Return to Model137 main-save collection/resource choices. Battle lifecycle is verified by a retained natural loss; no broad trainer refit/review cycle.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Invoke a frozen learned battler from the main player with shared action/frame limits, retained decisions and independent goal verification. |
-| Authority now | Model137 remains137examples/92successes/58economy-qualified; Red96/124. Frozen J is opt-in at ordinary trainer funding and owned4new live decisions. The goal failed at one faint; no blanket controller replacement or promotion. |
+| Reusable capability | Complete learned trainer battles through faint/replacement and verified field handoff without conflating a battle outcome with strict funding acceptance. |
+| Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified; Red 96/124. J owned five continuation decisions including forced replacement; verified loss and normal blackout. No full-player promotion; main six-member party exceeds J small-party scope. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The learned battle cannot complete or hand back a verifiable earned state under the player goal contract without teacher substitution. |
+| Cheapest falsifier | A useful main-save goal cannot be offered or completed from real resources without replay, hidden teacher substitution or exceeding qualified battle scope. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-19-player-battler-integration** · status **closed** · evidence [qualification](docs/evidence/red-player-battler-integration-2026-09-19.json)
+**2026-09-19-battle-lifecycle-continuation** · status **closed** · evidence [qualification](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner now reaches a main-player call site and exposes a concrete lifecycle mismatch instead of another trainer-only exercise. |
-| Learning output | Four new DEVELOPMENT decisions; no examples or fit.318TRAIN contexts and all collection counters unchanged. |
-| Authority delta | J owned4decisions through the main-player prepared trainer seam:1voluntary switch and3attacks. No high-level goal-model selection or full-player promotion. |
-| Transfer result | Same boot3100 natural origin, new trainer. Three earned Potions restored the party;78-step route.1faint, no payout, final HP28/0 and1706cash. Exact final state and fresh ledger reopened read-only. |
-| Blocker | Wartortle fainted; the unchanged funding no-faints guard stopped before replacement. Integration goal failed and battle remains unfinished. A successful earned funding handoff is not established. |
-| Decision | Retain the failure and freeze J. Separate general battle lifecycle/recovery from conservative funding acceptance before further gameplay. Refresh current documents and publish only this user-authorized checkpoint. |
-| Next session | Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run. |
-| Next falsifier | A prospectively declared continuation cannot preserve exact state, model-only choices, recovery costs and a fresh typed outcome after a faint. |
-| Stop condition | One declared goal consumed and failed;247actions/19284frames, no reset/replay/fallback. Gameplay stopped. User authorized this GitHub checkpoint, not a full run or blanket promotion. |
+| Product alignment | A faint no longer strands general learned battle completion. The retained loss restores ordinary field control without laundering failed funding into success. |
+| Learning output | Five retained DEVELOPMENT decisions; zero new fit examples or fits. J remains 318 TRAIN contexts and all main collection counters are unchanged. |
+| Authority delta | J chose one forced replacement and four attacks; natural loss then automatic cartridge blackout. No teacher fallback, high-level goal selection or full-player promotion. |
+| Transfer result | Same boot3100 origin, newly exercised natural forced replacement; no independent root. Verified normal blackout to map15, HP28/51, cash853, target undefeated, registrations preserved. Main save reopened read-only at96/124, six members,198cash. |
+| Blocker | Main-save options remain constrained by 198 cash and paid Safari access; its six-member party is outside J one-to-three-member qualification. Profitable learned funding is not established. |
+| Decision | Close the lifecycle seam and retain the loss. Return to useful model-selected collection/resource work; preserve the original funding failure. Publish and merge the explicitly authorized checkpoint only after checks pass. |
+| Next session | Astra High, Fast off: authenticate main Model137 terminal, rebuild useful funding/admission or non-Safari options, and retain one model-selected goal outcome. Qualify six-member J scope if needed before its use. Estimate 45–90 minutes; no full run. |
+| Next falsifier | The exact main-save terminal cannot expose a genuinely executable useful choice under available resources and qualified actor scope. |
+| Stop condition | One declared continuation consumed: 55 actions / 5424 frames, cumulative 302 / 24708 with parent. Natural loss, exact endpoint reopened, no reset or fit. Gameplay stopped. |
 
 ### Stop conditions
 

@@ -1,62 +1,64 @@
 # Current development handoff
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September19,2026.
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 19, 2026.
 
-## Frozen J is connected; first funding goal failed
+## Battle lifecycle is verified; return to useful game goals
 
-[Checkpoint report](docs/work-sessions/2026-09-19-player-battler-integration.md) ·
-[Evidence](docs/evidence/red-player-battler-integration-2026-09-19.json).
+[Session report](docs/work-sessions/2026-09-19-battle-lifecycle-continuation.md) ·
+[Evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
+[Detailed next steps and all 28 gaps](docs/model-first-roadmap.md).
 
-Frozen J SHA256:260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
-Its318TRAIN contexts and prior qualification are unchanged. No fit or added examples.
+Frozen J SHA256: 260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
+318 TRAIN contexts, no new fit. Small-party scope remains one to three members.
 
-The autonomous collection plan now supports an explicit trainer_battler binding.
-red_learned_trainer.FrozenTrainerBattler.run connects it to ordinary trainer funding.
-Player action/frame budgets, outer identity/resource checks and durable decision logs
-remain active. Wild captures and Elite Four controllers are not replaced.
-One-to-three own party members only; no blanket player promotion or teacher fallback.
+The original funding attempt failed after Wartortle fainted. Its strict verifier is unchanged.
+A separate declared continuation from that exact endpoint allowed J to replace the fainted
+member and finish the battle. J chose Zubat and four attacks; the party lost.
+Three attacks executed; the last selected attack was prevented by Zubat fainting.
 
-## Consumed live integration
+Normal cartridge blackout then restored HP to 28/51 and returned field control on map 15.
+Cash fell from 1,706 to 853; trainer event 1405 remains unset. Party and registrations retained.
+Five complete decisions, 22 hash-chained events, zero invalid actions or teacher intervention.
+55 new actions / 5,424 frames; cumulative 302 actions / 24,708 frames including the failed parent.
+The final state reopened exactly with zero actions/frames. This is a completed battle loss and
+verified lifecycle, not successful funding, independent reliability or a new fit.
 
-Source e676847010a61953372a4200dbe5d7aa07380cb2.
-Private run name:red-player-battler-checkpoint-20260919-v1.
-Source was the earned boot3100 Super Nerd endpoint, not the Model137 collection save.
-Three earned Potions healed HP12/12 to28/51; a78-step cartridge route reached a new trainer.
-The probe invoked the main-player prepared battle entry directly, not high-level model selection
-or a bypass of the normal conservative funding-offer eligibility rule.
+## Exact private continuation
 
-J made4decisions:1voluntary switch,3attacks. Wartortle fainted; the unchanged funding
-no-faints guard stopped before replacement. Goal FAILED, battle UNFINISHED, payout0.
-Total247actions/19284frames. No reset, retry, teacher battle query, memory edit or fit.
-The19-event chain has4complete decisions and a failed terminal.
-Both final saves match and reopen read-only with the same fresh ledger,0actions/0frames.
+Private run: red-player-battler-continuation-20260919-v1.
+Execution source: 2ead10a2b578d4437482c5fa4f8270db380cf3c0.
+Consumed input: e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024.
+Retained field endpoint: 5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac.
+Original parent result: b5779065eebee9d47e49b5527bf4f7b4f3f19621bdbd9e852332355f6a549a0c.
 
-Exact retained endpoint:
-e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024.
-Current battle:partyHP28/0, enemyHP18,1706cash, registrations7/8/41, no buttons held.
-Input-ready byte does NOT mean field control; battle_state remains2 and menu phase unknown.
-The consumed source bcfb5c9d must not be replayed or fitted as TRAIN.
+Never replay either consumed input or relabel its DEVELOPMENT experience as TRAIN.
+No reset, cheat, automatic retry, new source factory or broad trainer refit is authorized.
+
+## Main collection: separate save, unchanged
+
+Model137 remains 137 examples / 92 successes / 58 economy-qualified.
+Main save: 96/124 registrations, 74 specimens, 198 cash, six party members.
+Exact terminal: 27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054.
+Private run: goal-manager-v1/model139-post-marowak-choice-20260916-v1/step-000/terminal.state.
+Fresh read-only reopening confirmed the hash, 96 flags, six members, 198 cash and map 156
+at (3,4), zero frames and identical bytes. Main party national IDs: 105/83/87/51/9/99.
+
+The earlier fishing choice is consumed. Paid Safari admission must not be treated as a walking
+edge; the 500 admission price exceeds current cash by 302 before supplies. The corrected
+offer set lacks two distinct executable choices. Do not rerun its old choice or pick a hidden
+teacher substitute.
 
 ## Next bounded objective
 
-Separate general learned-battle lifecycle/recovery from strict no-faint funding acceptance.
-The actor supports replacements, but this conservative caller aborts first. Preserve that
-failure; do not silently weaken its contract, relabel it as a completed loss, or refit J.
-A new prospectively declared continuation may start from the exact failed endpoint and
-retain all prior costs; it must not reset the encounter or reissue the failed funding trial.
-Then return to useful collection and legitimate income rather than another trainer review cycle.
+Rebuild useful executable options from the exact main-save terminal: legitimate funding and
+metered admission, or a distinct non-Safari acquisition family. Retain one genuinely
+model-selected result and actual costs. Only fit admissible actual goal outcomes.
+J cannot silently run the six-member party; qualify broader scope if the selected work needs it.
+Wild capture and Elite Four remain explicitly separate controllers.
 
-Estimate45–60minutes for the contract/continuation work, subject to the actual faint boundary.
-No fresh-source factory, full Red run, six-member promotion, sealed evaluation or Crystal.
-Status/recovery/boost moves, Counter, self-destruct and all-party Struggle remain exclusions.
-
-## Main collection and publication
-
-Model137 remains137examples/92successes/58economy-qualified.
-Its separate save remains96/124 registrations,74specimens/198cash; fresh acceptance0/5.
-No registration or learned-goal counter increases this session.
-Gameplay stopped. No Flash/Claude used; no pending external review.
-Pete explicitly authorized this integration/documentation GitHub checkpoint.
-Future pushes remain Pete's decision. Verification details belong in the checkpoint report.
-Next session:Astra High, Fast off; lifecycle judgment and saved-state validation.
+The roadmap lists every missing species, its current catalog method and dependency, plus the
+remaining battle-scope and fresh-run gates. Fresh acceptance remains 0/5; no full run is open.
+Gameplay stopped. No Flash/Claude was used or is pending.
+Pete explicitly authorized this checkpoint's publication and merge; later publication is his decision.
+Next: Astra High, Fast off; 45–90 minutes for main-save options and one bounded result.

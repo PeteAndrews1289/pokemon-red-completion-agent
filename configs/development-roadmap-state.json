@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-19-player-battler-integration",
+  "as_of_session": "2026-09-19-battle-lifecycle-continuation",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -485,7 +485,7 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
     },
@@ -1009,7 +1009,7 @@
       "session": "2026-09-11-economy-runtime-connection",
       "result": "Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.",
       "deviation": "Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.",
-      "next": "Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
+      "next": "Continue exact AM01 with initialized v4 model6cd88d0f\u2026837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
     },
     {
       "session": "2026-09-11-economy-live-qualification",
@@ -1399,13 +1399,13 @@
       "session": "2026-09-14-full-pokedex-family-diagnostics",
       "result": "Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.",
       "deviation": "None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.",
-      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software."
+      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1\u2013V3 or spend another source only to validate software."
     },
     {
       "session": "2026-09-14-full-pokedex-supply-admission",
       "result": "Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.",
       "deviation": "The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.",
-      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation."
+      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1\u2013V3 or claim independent evaluation."
     },
     {
       "session": "2026-09-14-registered-correlated-reset",
@@ -1880,6 +1880,13 @@
       "result": "Frozen J is connected to ordinary trainer funding. One new earned-state goal exercised4model decisions but failed after Wartortle fainted; strict funding guard stopped the unfinished battle. Exact final state retained and reopened. Model137/Red96of124 unchanged.",
       "deviation": "No stage exit, fit or fresh-run gate changed. Direct prepared-entry probe, not high-level model-selected funding. Current docs refreshed and this checkpoint authorized for GitHub; earlier evidence remains unchanged.",
       "next": "Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run."
+    },
+    {
+      "session": "2026-09-19-battle-lifecycle-continuation",
+      "next": "Return to the exact Model137 main-save terminal; rebuild useful funding/admission or non-Safari options and retain one model-selected result. Qualify six-member battle scope if needed; no blind refit or full run.",
+      "result": "Frozen J continued the retained faint with one forced replacement and four attacks. Natural loss, normal blackout and field control verified; cash1706 to853, party restored. Original funding goal remains failed.",
+      "deviation": "No reset, teacher rescue, fit, six-member promotion or collection gain. All28 native registration gaps enumerated; return to useful main-save choices. Existing September15 native-route/deferred-dependency requirement restored in stale completion-contract prose; stage criteria unchanged.",
+      "evidence": "docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json"
     }
   ],
   "closed_milestones": [

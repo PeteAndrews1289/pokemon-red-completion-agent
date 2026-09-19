@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-player-battler-integration**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battle-lifecycle-continuation**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battle-lifecycle-continuation
+
+Frozen J continued the retained faint with one forced replacement and four attacks. Natural loss, normal blackout and field control verified; cash1706 to853, party restored. Original funding goal remains failed.
+
+**Deviation:** No reset, teacher rescue, fit, six-member promotion or collection gain. All28 native registration gaps enumerated; return to useful main-save choices. Existing September15 native-route/deferred-dependency requirement restored in stale completion-contract prose; stage criteria unchanged.
+
+**Next:** Return to the exact Model137 main-save terminal; rebuild useful funding/admission or non-Safari options and retain one model-selected result. Qualify six-member battle scope if needed; no blind refit or full run.
 
 ### 2026-09-19-player-battler-integration
 
