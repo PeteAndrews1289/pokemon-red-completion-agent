@@ -28,6 +28,25 @@ def selected_regret(model: TrainerHeadModel, cases: tuple[TrainerHeadExample, ..
     return float(regret[np.arange(len(cases)), scores.argmax(axis=1)].mean())
 
 
+def pairwise_loss_gradient(model: TrainerHeadModel, cases: tuple[TrainerHeadExample, ...]):
+    """Measured-return-weighted ranking loss with a nonvanishing wrong-margin signal."""
+    x, mask, regret = _batch(cases)
+    hidden, scores, _ = _forward(x, mask, model.weights1, model.bias1, model.weights2)
+    scores = np.where(mask, scores, 0.0)
+    gap = regret[:, None, :] - regret[:, :, None]
+    valid = mask[:, :, None] & mask[:, None, :] & (gap > 0)
+    weights = np.where(valid, gap, 0.0) / np.maximum(1, valid.sum(axis=(1, 2)))[:, None, None]
+    wrong_margin = scores[:, None, :] - scores[:, :, None]
+    loss = (weights * np.logaddexp(0.0, wrong_margin)).sum(axis=(1, 2)).mean()
+    pair_derivative = weights * np.exp(-np.logaddexp(0.0, -wrong_margin))
+    residual = (pair_derivative.sum(axis=1) - pair_derivative.sum(axis=2)) / len(cases)
+    dh = residual[..., None] * model.weights2 * (1.0 - hidden * hidden)
+    g1 = np.einsum("ncf,nch->fh", x, dh)
+    gb = dh.sum(axis=(0, 1))
+    g2 = np.einsum("nch,nc->h", hidden, residual)
+    return float(loss), np.concatenate((g1.ravel(), gb, g2))
+
+
 def fit_budgeted_head(
     initial: TrainerHeadModel,
     terminal: tuple[TrainerHeadExample, ...],
@@ -36,6 +55,7 @@ def fit_budgeted_head(
     *,
     epochs: int = 2400,
     learning_rate: float = 0.005,
+    objective: str = "expected_regret",
 ):
     """One Adam trajectory; best feasible actual-regret checkpoint, no restart.
 
@@ -52,6 +72,11 @@ def fit_budgeted_head(
         raise ValueError("invalid budgeted schedule")
     if not budgets or len({b.name for b in budgets}) != len(budgets):
         raise ValueError("unique nonempty regret budgets required")
+    if objective not in {"expected_regret", "pairwise_regret"}:
+        raise ValueError("unknown budgeted objective")
+    loss_gradient = (
+        pairwise_loss_gradient if objective == "pairwise_regret" else batch_loss_gradient
+    )
     for budget in budgets:
         if not np.isfinite(budget.maximum) or not np.isfinite(budget.offset):
             raise ValueError("finite regret budgets required")
@@ -69,15 +94,18 @@ def fit_budgeted_head(
     history = []
     feasible = 0
     for epoch in range(epochs + 1):
-        loss, gradient = batch_loss_gradient(current, terminal)
-        old_loss, old_gradient = batch_loss_gradient(current, anchors)
+        loss, gradient = loss_gradient(current, terminal)
+        old_loss, old_gradient = loss_gradient(current, anchors)
+        expected_loss = (
+            batch_loss_gradient(current, terminal)[0] if objective == "pairwise_regret" else loss
+        )
         actual = selected_regret(current, terminal)
         measured = {
             budget.name: selected_regret(current, budget.cases) + budget.offset
             for budget in budgets
         }
         admitted = all(measured[b.name] <= b.maximum for b in budgets)
-        key = (actual, loss)
+        key = (actual, expected_loss)
         improved = admitted and key < best_key
         if admitted:
             feasible += 1
@@ -87,9 +115,13 @@ def fit_budgeted_head(
             history.append(
                 {
                     "epoch": epoch,
-                    "terminal_expected_regret": loss,
+                    "terminal_expected_regret": expected_loss,
+                    "terminal_objective_loss": loss,
                     "terminal_selected_regret": actual,
-                    "anchor_expected_regret": old_loss,
+                    "anchor_expected_regret": batch_loss_gradient(current, anchors)[0]
+                    if objective == "pairwise_regret"
+                    else old_loss,
+                    "anchor_objective_loss": old_loss,
                     "budgets": measured,
                     "feasible": admitted,
                     "selected": improved,
@@ -110,9 +142,10 @@ def fit_budgeted_head(
             weights1=packed[:size].reshape(initial.weights1.shape).copy(),
             bias1=packed[size : size + width].copy(),
             weights2=packed[size + width :].copy(),
-            training_objective="expected_regret",
+            training_objective=objective,
         )
     receipt = {
+        "objective": objective,
         "epochs": epochs,
         "learning_rate": learning_rate,
         "feasible_checkpoints": feasible,

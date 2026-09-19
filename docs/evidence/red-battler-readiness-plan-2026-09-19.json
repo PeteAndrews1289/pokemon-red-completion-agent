@@ -24,5 +24,16 @@
     "acceptance": "All unchanged old gates, at least10% improvement versus initial in both terminal128 move and composed selected-action regret, and no new80 move or composed regression",
     "development": "No DEVELOPMENT observations enter optimization, checkpoint selection or fit. Consumed Champion remains failed and unavailable for reuse. Freeze broader TRAIN qualification recipes separately before emulator execution."
   },
+  "saturation_successor": {
+    "initial_model_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+    "diagnosis": "On late90 TRAIN, all24 control errors and all12 switch errors have >99% predicted confidence. Best measured alternatives can have probability below1e-30; control expected-regret gradient norm is0.0000126858. New-team comparison improved14wins versus11 but teacher won17; its cases are excluded from fitting.",
+    "fits": 1,
+    "new_labels": 0,
+    "corpus": "Same authenticated318 TRAIN contexts; prior228 and late90 get equal group weight.",
+    "loss": "Measured-return-gap weighted pairwise logistic ranking. Confidently inverted preferences retain a correction gradient. No teacher preference labels or hand-coded inference scores.",
+    "schedule": "Same move/switch/control warm-start heads,2400Adam epochs each,learning rate0.005; no restart or sweep.",
+    "selection": "Actual selected-action regret first, expected regret second, earliest feasible checkpoint; all existing numerical retention gates remain.",
+    "qualification": "Only after TRAIN acceptance, freeze candidate against its predecessor and separate teacher on24new recipes with seed2026091908. No replay of earlier cohorts or natural DEVELOPMENT."
+  },
   "github_publication": false
 }

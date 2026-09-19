@@ -28,6 +28,7 @@ from pokemon_red_completion.red_trainer_practice_fit import (
 
 ROOT = Path(__file__).resolve().parents[1]
 BROADER_MODEL_SHA = "f8d9be1a76dd1475e23db1080609b8318a052e1f7fa26ee4201d7f489dd9d241"
+LATE_MODEL_SHA = "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b"
 
 
 def admitted_supply(supply, roots, old_ids, *, late=False, late_main=False):
@@ -119,13 +120,18 @@ def prior_broad_gates(before, after):
 
 def run(args):
     late = getattr(args, "late", False)
+    pairwise = getattr(args, "pairwise", False)
+    if pairwise and not late:
+        raise ValueError("pairwise successor requires the frozen late curriculum")
     if (
         args.output.exists()
         or subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip()
     ):
         raise ValueError("broad fit needs committed code and a new output")
     _, retained = admitted_cache(args.audit)
-    if common._binding(args.initial)["sha256"] != (BROADER_MODEL_SHA if late else CANDIDATE_SHA):
+    if common._binding(args.initial)["sha256"] != (
+        LATE_MODEL_SHA if pairwise else BROADER_MODEL_SHA if late else CANDIDATE_SHA
+    ):
         raise ValueError("broad fit initial candidate differs")
     model = TrainerPracticeThreeHeadModel.from_dict(json.loads(args.initial.read_bytes()))
     prior_broad = (
@@ -136,19 +142,21 @@ def run(args):
         else []
     )
     anchors = retained + prior_broad
-    if set(model.train_capture_ids) != {t["capture_id"] for t in anchors}:
+    if not pairwise and set(model.train_capture_ids) != {t["capture_id"] for t in anchors}:
         raise ValueError("initial model TRAIN inventory differs")
     added = admitted_supply(
-        args.supply, set(model.train_root_ids), set(model.train_capture_ids), late=late
+        args.supply, set(model.train_root_ids), {t["capture_id"] for t in anchors}, late=late
     )
     if late:
         added += admitted_supply(
             args.late_move_supply,
             set(model.train_root_ids),
-            set(model.train_capture_ids) | {t["capture_id"] for t in added},
+            {t["capture_id"] for t in anchors + added},
             late=True,
             late_main=True,
         )
+    if pairwise and set(model.train_capture_ids) != {t["capture_id"] for t in anchors + added}:
+        raise ValueError("pairwise successor TRAIN inventory differs")
     print(json.dumps({"authenticated_new_contexts": len(added)}), flush=True)
     catalog = PokemonRedBattleCatalog()
     before = reports(retained, model, catalog)
@@ -172,6 +180,7 @@ def run(args):
             .strip(),
             "initial": common._binding(args.initial),
             "profile": "late" if late else "broad",
+            "optimizer_objective": "pairwise_regret" if pairwise else "expected_regret",
             "prior_supply": common._binding(args.prior_supply / "collection.json")
             if late
             else None,
@@ -184,7 +193,9 @@ def run(args):
             "learning_rate": 0.005,
             "head_order": ["move", "switch", "control"],
             "fits": 1,
-            "loss": "equal-group weight all prior TRAIN and new TRAIN; measured expected regret",
+            "loss": "equal weight prior228/late90; measured-return-weighted pairwise logistic"
+            if pairwise
+            else "equal-group weight all prior TRAIN and new TRAIN; measured expected regret",
             "selection": (
                 "feasible minimum broad selected regret, then broad expected regret, "
                 "then earliest epoch"
@@ -264,7 +275,11 @@ def run(args):
             offset = composed_offset(prior_broad, prior_rows) if name == "control" else 0.0
             budgets += (RegretBudget("prior_broad_" + name, prior_rows, limit + 1e-9, offset),)
         fitted, receipt = fit_budgeted_head(
-            getattr(model, name), tuple(groups["broad"]), tuple(groups["anchors"]), budgets
+            getattr(model, name),
+            tuple(groups["broad"]),
+            tuple(groups["anchors"]),
+            budgets,
+            objective="pairwise_regret" if pairwise else "expected_regret",
         )
         common._write(args.output / f"{name}-optimizer.json", receipt)
         print(
@@ -321,6 +336,7 @@ if __name__ == "__main__":
     for name in ("audit", "initial", "supply", "output"):
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--late", action="store_true")
+    parser.add_argument("--pairwise", action="store_true")
     parser.add_argument("--prior-supply", type=Path)
     parser.add_argument("--late-move-supply", type=Path)
     run(parser.parse_args())

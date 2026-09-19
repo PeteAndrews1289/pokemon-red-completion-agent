@@ -63,7 +63,7 @@ class TrainerHeadModel:
     training_objective: str = "cross_entropy"
 
     def __post_init__(self) -> None:
-        if self.training_objective not in {"cross_entropy", "expected_regret"}:
+        if self.training_objective not in {"cross_entropy", "expected_regret", "pairwise_regret"}:
             raise TrainerHeadError("head training objective differs")
         if (
             not self.schema_id
