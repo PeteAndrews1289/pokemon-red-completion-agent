@@ -58,12 +58,32 @@ their assertions. The historical dashboard receipt remains135examples, not the c
 its measured-fit projection does not invent a native action trace or policy replay.
 The timing golden was refreshed for the already-tested faint/sleep/move-learning changes.
 The old exact-runtime qualification remains unchanged and unavailable in this relocated setup.
-Final stable-source verification is recorded in the publication closeout below.
+Final stable-source verification is recorded below.
 
 Pete explicitly authorized this integration/documentation GitHub checkpoint. Current README,
 handoffs, architecture, roadmap, narratives, portfolio/interview material and setup guidance
 were refreshed. Historical reports and training evidence were not rewritten. No ROM, state,
 model, dataset or private machine path is published. Future pushes remain user-controlled.
+
+### Final stable-source verification
+
+On commit eee30ee1, the ROM-free suite completed with **12,562 passed,1expected failure**
+in19minutes38seconds. The only explicit test-name exclusion was
+test_exact_local_mac_runtime_identity_qualification; its obsolete local environment
+fingerprint still fails in this installation, and its assertion was not changed.
+The private-ROM integration marker was excluded as usual. One SDL2 library warning
+was emitted. This is a passing scoped suite, not a claim that the excluded qualification passes.
+
+Ruff passed; mypy passed across542source files. Documentation, product-focus, public-artifact
+and generated-registry checks passed. The86-test targeted documentation/registry/integration
+run also passed. Unpublished Git history was scanned for private artifact suffixes, home paths
+and recognized secret patterns with no findings; this is not a universal secret-detection claim.
+
+Registry SHA256:ec01c9ecf9a178f169c55d38dcbb26ca372d97f4c058ca0a47d6d3c5d8f2069d.
+Executable source bundle:8c7847db6f9801f7461950392eb2eba64617a8a126c6a7d7f56737d6eef308f5.
+The subsequent closeout change is documentation only. Publication target is the existing
+codex/model115-frozen-resupply-20260913 branch and its open pull request244, not a merge or release.
+Local results do not claim that the newly triggered hosted CI has completed.
 
 ## Next step, not another trainer review
 
