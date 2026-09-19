@@ -3,6 +3,7 @@ from copy import deepcopy
 import pytest
 from capture_fresh_red_brock_development import check_independence
 from fit_red_trainer_learner_continuation import learning_checks, retention_limits
+from run_red_trainer_learning_probe import learning_summary
 
 from pokemon_red_completion.observation import PokemonRedStateReader
 
@@ -49,3 +50,36 @@ def test_policy_learning_keeps_old_numeric_limits_and_requires_real_improvement(
     bad = deepcopy(before)
     bad["late90"]["switch"]["model_mean_train_regret"] = 0.04
     assert not all(learning_checks(new_before, new_after, bad, limits).values())
+
+
+def test_learning_accepts_losses_but_not_ties_duplicates_or_assistance():
+    rows = [
+        {
+            "case": i,
+            "arm": arm,
+            "battle_won": i < (12 if arm == "candidate" else 8),
+            "stop_reason": "battle_won"
+            if i < (12 if arm == "candidate" else 8)
+            else "party_defeated",
+            "teacher_queries": 0,
+            "memory_write_actions": 0,
+            "decision_count": 10,
+            "metrics": {"party_faints": 0, "party_hp_lost": 20, "invalid_action_failures": 0},
+        }
+        for i in range(24)
+        for arm in ("frozen", "candidate")
+    ]
+    result = learning_summary(rows)
+    assert result["learning_signal_observed"]
+    assert result["totals"]["candidate"]["wins"] == 12
+    assert result["candidate_only_wins"] == 4
+    assert not result["final_player_ready"]
+    bad = deepcopy(rows)
+    bad[1]["teacher_queries"] = 1
+    assert not learning_summary(bad)["learning_signal_observed"]
+    with pytest.raises(ValueError, match="exactly one"):
+        learning_summary(rows[:-1] + [rows[0]])
+    for row in rows:
+        row["battle_won"] = row["case"] < 8
+        row["stop_reason"] = "battle_won" if row["battle_won"] else "party_defeated"
+    assert not learning_summary(rows)["learning_signal_observed"]
