@@ -23,11 +23,15 @@ from .battle_scenario_capture import (
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
-from .observation import PokemonRedStateReader, RawGameState
+from .observation import BattleMenuPhase, PokemonRedStateReader, RawGameState
 from .provenance import canonical_sha256
 from .red_autonomous_player import _record, _write
 from .red_battle_scenario import prepare_red_battle_scenario
-from .red_trainer_practice_episode import LiveTrainerSession, run_live_red_trainer_practice_episode
+from .red_trainer_practice_episode import (
+    LiveTrainerSession,
+    RedTrainerPracticeEpisode,
+    run_live_red_trainer_practice_episode,
+)
 from .red_trainer_practice_fit import TrainerPracticeThreeHeadModel
 from .red_trainer_practice_log import TrainerPracticeEventLog
 from .red_trainer_practice_outcome_policy import RedTrainerPracticeOutcomePolicy
@@ -72,6 +76,44 @@ class FrozenTrainerBattler:
         # The old policy is deliberately never queried, including on failure.
         if consume_battle_start_schedule or intent.battle_plan_id != "ordinary-trainer-funding":
             raise ValueError("frozen battler is enabled only for ordinary trainer funding")
+        self._play(
+            reader, executor, expected_map=expected_map, timing=timing, label=label,
+            decision_guard=move_decision_guard, resume=False, require_win=True,
+        )
+        return reader.read()
+
+    def continue_battle(
+        self,
+        reader: PokemonRedStateReader,
+        executor: BattleActionExecutor,
+        *,
+        expected_map: int,
+        timing: BattleRuntimeTiming,
+        decision_guard: Callable[[RawGameState], None],
+    ) -> RedTrainerPracticeEpisode:
+        """Continue an already-owned MAIN, switch-prompt or faint boundary.
+
+        This returns a battle outcome, not a funding receipt. A caller must
+        settle and independently verify the field handoff, including a loss.
+        """
+        return self._play(
+            reader, executor, expected_map=expected_map, timing=timing,
+            label="learned trainer continuation", decision_guard=decision_guard,
+            resume=True, require_win=False,
+        )
+
+    def _play(
+        self,
+        reader: PokemonRedStateReader,
+        executor: BattleActionExecutor,
+        *,
+        expected_map: int,
+        timing: BattleRuntimeTiming,
+        label: str,
+        decision_guard: Callable[[RawGameState], None],
+        resume: bool,
+        require_win: bool,
+    ) -> RedTrainerPracticeEpisode:
         self.calls += 1
         directory = self.output / f"battle-{self.calls:04d}"
         directory.mkdir(parents=True, mode=0o700, exist_ok=False)
@@ -80,31 +122,48 @@ class FrozenTrainerBattler:
             "source_commit": self.source_commit,
             "root_lineage_id": self.root_lineage_id,
             "parent_state_sha256": self.source_state_sha256,
-            "authority": "frozen-J-ordinary-trainer",
+            "authority": "frozen-J-trainer-continuation" if resume else "frozen-J-ordinary-trainer",
         })
         report: dict[str, object] | None = None
         try:
             raw = reader.read()
             if raw.party_count is None or not 1 <= raw.party_count <= 3:
                 raise ValueError("frozen battler v1 supports one to three own party members")
-            move_decision_guard(raw)
-            advance_battle_to_policy_boundary(
-                reader, executor, expected_map=expected_map, expected_battle_state=2,
-                timing=timing, label=label,
-            )
+            decision_guard(raw)
+            if resume:
+                if raw.battle_state != 2 or raw.map_id != expected_map:
+                    raise ValueError("continuation requires the retained active trainer battle")
+                special_boundary = (
+                    raw.battler_hp == 0 or reader.trainer_switch_prompt_visible(raw)
+                )
+                if not special_boundary and (
+                    reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+                ):
+                    raise ValueError("continuation lacks an owned policy boundary")
+            else:
+                special_boundary = False
+                advance_battle_to_policy_boundary(
+                    reader, executor, expected_map=expected_map, expected_battle_state=2,
+                    timing=timing, label=label,
+                )
             raw = reader.read()
             encoder = PokemonRedObservationEncoder.from_state_reader(
                 reader, include_battle_stats=True,
                 public_species_base_stats=self.public_species_base_stats,
             )
-            prepared = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
+            observation_sha256 = (
+                canonical_sha256(encoder.snapshot_from_raw(raw).to_dict())
+                if special_boundary else prepare_red_battle_scenario(
+                    encoder, raw, allow_no_attack=True,
+                ).initial_observation_sha256
+            )
             state = self.session.save_state_bytes()
             manifest = build_battle_scenario_capture_payload(
                 capture_id=f"player-trainer-{self.calls:04d}",
                 root_lineage_id=self.root_lineage_id,
                 partition=ScenarioPartition.DEVELOPMENT,
                 state_bytes=state,
-                initial_observation_sha256=prepared.initial_observation_sha256,
+                initial_observation_sha256=observation_sha256,
                 source_state_sha256=self.source_state_sha256,
                 source_commit=self.source_commit,
                 expected_map=expected_map, expected_battle_state=2,
@@ -123,13 +182,13 @@ class FrozenTrainerBattler:
                 ),
                 max_decisions=80, event_sink=log.emit,
                 public_species_base_stats=self.public_species_base_stats,
-                action_executor=executor, decision_guard=move_decision_guard,
+                action_executor=executor, decision_guard=decision_guard,
             )
             report = episode.public_dict()
             _record(directory / "outcome.json", report)
-            if not episode.battle_won:
+            if require_win and not episode.battle_won:
                 raise RuntimeError(f"learned trainer stopped: {episode.stop_reason}")
-            return reader.read()
+            return episode
         except BaseException as error:
             log.fail(error)
             raise

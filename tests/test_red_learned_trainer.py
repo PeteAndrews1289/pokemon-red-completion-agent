@@ -121,3 +121,49 @@ def test_unsupported_party_is_not_offered_a_learned_funding_route(monkeypatch):
     state.raw = replace(state.raw, party_count=4, party_hp=(20, 20, 20, 20))
     assert funding.bind_local_trainer_funding(router, bindings, state) is bindings
     assert calls == []
+
+
+def test_retained_faint_reaches_model_without_advancing_to_main(monkeypatch, tmp_path):
+    raw = SimpleNamespace(party_count=2, battler_hp=0, battle_state=2, map_id=61)
+    reader = SimpleNamespace(read=lambda: raw)
+    session = SimpleNamespace(save_state_bytes=lambda: b"retained faint")
+    encoder = SimpleNamespace(snapshot_from_raw=lambda r: SimpleNamespace(
+        to_dict=lambda: {"active_hp": 0},
+    ))
+    monkeypatch.setattr(learned.PokemonRedObservationEncoder, "from_state_reader",
+                        lambda *a, **k: encoder)
+
+    def forbidden(*a, **k):
+        pytest.fail("a forced boundary must not advance to MAIN or prepare an attack")
+
+    monkeypatch.setattr(learned, "advance_battle_to_policy_boundary", forbidden)
+    monkeypatch.setattr(learned, "prepare_red_battle_scenario", forbidden)
+    manifests = []
+
+    def manifest(**kwargs):
+        manifests.append(kwargs)
+        return b"manifest"
+
+    monkeypatch.setattr(learned, "build_battle_scenario_capture_payload", manifest)
+    capture = SimpleNamespace(manifest=SimpleNamespace(capture_id="forced"))
+    monkeypatch.setattr(learned, "open_battle_scenario_capture", lambda *a: capture)
+    monkeypatch.setattr(learned, "RedTrainerPracticeOutcomePolicy", lambda **k: None)
+    result = SimpleNamespace(battle_won=False, stop_reason="party_defeated",
+                             public_dict=lambda: {"battle_won": False})
+    executor = object()
+
+    def episode(_capture, **kwargs):
+        assert kwargs["action_executor"] is executor
+        kwargs["decision_guard"](raw)
+        return result
+
+    monkeypatch.setattr(learned, "run_live_red_trainer_practice_episode", episode)
+    checks = []
+    battler = learned.FrozenTrainerBattler(session, None, tmp_path, "a" * 40, "root", "b" * 64, {})
+    assert battler.continue_battle(
+        reader, executor, expected_map=61, timing=BattleRuntimeTiming(),
+        decision_guard=lambda state: checks.append(state),
+    ) is result
+    assert checks == [raw, raw]
+    assert manifests[0]["initial_observation_sha256"] == learned.canonical_sha256({"active_hp": 0})
+    assert (tmp_path / "battle-0001/final.state").read_bytes() == b"retained faint"
