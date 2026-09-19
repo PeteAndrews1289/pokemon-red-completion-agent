@@ -1,0 +1,291 @@
+{
+  "schema": "pokemon.red.trainer-return-objective-result.v1",
+  "date": "2026-09-17",
+  "partition": "TRAIN_ONLY",
+  "source_commit": "bcac1cd6",
+  "model_sha256": "df1182c3893715b9e4e4ea6c33bf2b6b59e2781664f683d0a8a9b9e7abb88957",
+  "summary_sha256": "c29a35b738539ec92566c96cecdf7d53f16fbc715e9dc86777495a83b9e2a129",
+  "reports": {
+    "inherited_terminal": {
+      "composed_action": {
+        "examples": 46,
+        "model_mean_train_regret": 0.119541038
+      },
+      "control": {
+        "conflicting_winner_groups": 0,
+        "examples": 46,
+        "final_cross_entropy": 0.606653473,
+        "final_expected_regret": 0.094230053,
+        "final_gradient_norm": 0.352853217,
+        "first_candidate_mean_train_regret": 0.447868512,
+        "initial_cross_entropy": 0.6908449,
+        "initial_expected_regret": 0.240306102,
+        "model_mean_train_regret": 0.075125107,
+        "repeated_input_groups": 0,
+        "unique_candidate_matrices": 46
+      },
+      "move": {
+        "conflicting_winner_groups": 0,
+        "examples": 37,
+        "final_cross_entropy": 1.908758022,
+        "final_expected_regret": 0.142751774,
+        "final_gradient_norm": 0.035320469,
+        "first_candidate_mean_train_regret": 0.131666841,
+        "initial_cross_entropy": 1.384362729,
+        "initial_expected_regret": 0.143667544,
+        "model_mean_train_regret": 0.134946736,
+        "repeated_input_groups": 0,
+        "unique_candidate_matrices": 37
+      },
+      "switch": {
+        "conflicting_winner_groups": 5,
+        "examples": 48,
+        "final_cross_entropy": 0.57756908,
+        "final_expected_regret": 0.112239783,
+        "final_gradient_norm": 0.030355332,
+        "first_candidate_mean_train_regret": 0.102611975,
+        "initial_cross_entropy": 0.693802968,
+        "initial_expected_regret": 0.241866885,
+        "model_mean_train_regret": 0.040916519,
+        "repeated_input_groups": 16,
+        "unique_candidate_matrices": 21
+      }
+    },
+    "new_terminal": {
+      "composed_action": {
+        "examples": 77,
+        "model_mean_train_regret": 0.676509887
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 77,
+        "final_cross_entropy": 0.987760016,
+        "final_expected_regret": 0.376118084,
+        "final_gradient_norm": 0.188426767,
+        "first_candidate_mean_train_regret": 0.54145594,
+        "initial_cross_entropy": 0.693153429,
+        "initial_expected_regret": 0.688527504,
+        "model_mean_train_regret": 0.344878343,
+        "repeated_input_groups": 1,
+        "unique_candidate_matrices": 76
+      },
+      "move": {
+        "conflicting_winner_groups": 6,
+        "examples": 74,
+        "final_cross_entropy": 1.181935874,
+        "final_expected_regret": 0.294115288,
+        "final_gradient_norm": 0.051527047,
+        "first_candidate_mean_train_regret": 0.227727513,
+        "initial_cross_entropy": 0.868141904,
+        "initial_expected_regret": 0.445323268,
+        "model_mean_train_regret": 0.227727513,
+        "repeated_input_groups": 7,
+        "unique_candidate_matrices": 61
+      },
+      "switch": {
+        "conflicting_winner_groups": 1,
+        "examples": 80,
+        "final_cross_entropy": 1.978390168,
+        "final_expected_regret": 0.946221347,
+        "final_gradient_norm": 0.136173799,
+        "first_candidate_mean_train_regret": 2.156219302,
+        "initial_cross_entropy": 1.368154326,
+        "initial_expected_regret": 1.623127105,
+        "model_mean_train_regret": 0.768740405,
+        "repeated_input_groups": 3,
+        "unique_candidate_matrices": 77
+      }
+    },
+    "original44": {
+      "composed_action": {
+        "examples": 36,
+        "model_mean_train_regret": 0.157302377
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 36,
+        "final_cross_entropy": 0.515214837,
+        "final_expected_regret": 0.142693916,
+        "final_gradient_norm": 0.52429389,
+        "first_candidate_mean_train_regret": 0.575501748,
+        "initial_cross_entropy": 0.695066081,
+        "initial_expected_regret": 0.705832534,
+        "model_mean_train_regret": 0.02239713,
+        "repeated_input_groups": 5,
+        "unique_candidate_matrices": 21
+      },
+      "move": {
+        "conflicting_winner_groups": 1,
+        "examples": 32,
+        "final_cross_entropy": 1.383379647,
+        "final_expected_regret": 0.252659214,
+        "final_gradient_norm": 0.075121559,
+        "first_candidate_mean_train_regret": 0.175005484,
+        "initial_cross_entropy": 0.866624288,
+        "initial_expected_regret": 0.258609289,
+        "model_mean_train_regret": 0.175005484,
+        "repeated_input_groups": 4,
+        "unique_candidate_matrices": 20
+      },
+      "switch": {
+        "conflicting_winner_groups": 2,
+        "examples": 42,
+        "final_cross_entropy": 0.665565507,
+        "final_expected_regret": 0.336932516,
+        "final_gradient_norm": 0.113933858,
+        "first_candidate_mean_train_regret": 0.801412164,
+        "initial_cross_entropy": 0.69381437,
+        "initial_expected_regret": 0.748904934,
+        "model_mean_train_regret": 0.134933859,
+        "repeated_input_groups": 7,
+        "unique_candidate_matrices": 19
+      }
+    },
+    "retained52": {
+      "composed_action": {
+        "examples": 44,
+        "model_mean_train_regret": 0.174618828
+      },
+      "control": {
+        "conflicting_winner_groups": 1,
+        "examples": 44,
+        "final_cross_entropy": 0.598768357,
+        "final_expected_regret": 0.147476584,
+        "final_gradient_norm": 0.21901615,
+        "first_candidate_mean_train_regret": 0.546854906,
+        "initial_cross_entropy": 0.694045126,
+        "initial_expected_regret": 0.570778268,
+        "model_mean_train_regret": 0.039950801,
+        "repeated_input_groups": 5,
+        "unique_candidate_matrices": 29
+      },
+      "move": {
+        "conflicting_winner_groups": 1,
+        "examples": 40,
+        "final_cross_entropy": 1.255777568,
+        "final_expected_regret": 0.199312311,
+        "final_gradient_norm": 0.045213987,
+        "first_candidate_mean_train_regret": 0.146977995,
+        "initial_cross_entropy": 0.868385719,
+        "initial_expected_regret": 0.218990505,
+        "model_mean_train_regret": 0.146977995,
+        "repeated_input_groups": 4,
+        "unique_candidate_matrices": 28
+      },
+      "switch": {
+        "conflicting_winner_groups": 3,
+        "examples": 50,
+        "final_cross_entropy": 0.930387066,
+        "final_expected_regret": 0.324692088,
+        "final_gradient_norm": 0.097053274,
+        "first_candidate_mean_train_regret": 0.705168392,
+        "initial_cross_entropy": 0.814192626,
+        "initial_expected_regret": 0.666824353,
+        "model_mean_train_regret": 0.137173295,
+        "repeated_input_groups": 11,
+        "unique_candidate_matrices": 23
+      }
+    }
+  },
+  "comparison": {
+    "frozen": {
+      "wins": 6,
+      "battles": 8,
+      "decisions": 172,
+      "party_faints": 13,
+      "party_hp_lost": 1239,
+      "party_pp_spent": 97,
+      "invalid_action_failures": 0
+    },
+    "candidate": {
+      "wins": 8,
+      "battles": 8,
+      "decisions": 165,
+      "party_faints": 9,
+      "party_hp_lost": 1120,
+      "party_pp_spent": 88,
+      "invalid_action_failures": 0
+    }
+  },
+  "regression": {
+    "battle_won": false,
+    "capture_id": "assisted-train-cc2d973c9d0279e9",
+    "decision_count": 28,
+    "metrics": {
+      "attack_turn_utility_sum": -2.9841224343649717,
+      "invalid_action_failures": 0,
+      "move_suppressed_or_failed": 1,
+      "opponent_faints": 3,
+      "party_faints": 5,
+      "party_hp_lost": 325,
+      "party_pp_spent": 13,
+      "party_status_changes": 0,
+      "policy_latency_ns_max": 1373459,
+      "policy_latency_ns_mean": 631741.25,
+      "policy_latency_ns_min": 159833,
+      "teacher_interventions": 0
+    },
+    "partition": "train",
+    "status": "trainer_model_episode_recorded",
+    "stop_reason": "party_defeated"
+  },
+  "verification": {
+    "outcomes": 17,
+    "battle_logs_complete": 17,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "focused_tests_passed": 121,
+    "integration_tests_skipped": 13,
+    "mypy_source_files_passed": 539,
+    "ruff_passed": true,
+    "full_suite": "Earlier full-suite run:12420 passed,9 pre-existing failures reproduced against the pre-session baseline. Full suite was not rerun after the two successor changes."
+  },
+  "plan": "docs/evidence/red-trainer-return-objective-plan-2026-09-17.json",
+  "retention_checks": [
+    {
+      "name": "original44_attack",
+      "value": 0.175005484,
+      "limit": 0.0554,
+      "passed": false
+    },
+    {
+      "name": "retained52_attack",
+      "value": 0.146977995,
+      "limit": 0.0648,
+      "passed": false
+    },
+    {
+      "name": "retained52_composed",
+      "value": 0.174618828,
+      "limit": 0.1609,
+      "passed": false
+    }
+  ],
+  "qualification_passed": false,
+  "training": {
+    "authenticated_contexts": 180,
+    "new_contexts": 0,
+    "new_collection_branches": 0,
+    "fits": 1,
+    "epochs": 1200,
+    "seed": 2026091804,
+    "objective": "expected_regret"
+  },
+  "interpretation": {
+    "measured_improvement": "Eight fresh TRAIN full-party wins versus six for the prior candidate, party faints13 to9, HP loss1239 to1120.",
+    "unresolved": "All three retained gates fail. Original44 attack regret0.175005484, all52 attack0.146977995 and composed0.174618828. The known harder battle still loses after28 decisions and three opponent faints.",
+    "limitations": "Assisted numeric variations share four TRAIN origins; no independent natural transfer or promotion. The objective correction shifts performance toward newer full-battle returns at the cost of older attack competence; mixed horizons/return scales are a plausible contributor, not an isolated causal proof.",
+    "next": "Stop fitting this sequence. Reuse the authenticated corpus for a retention-constrained learning objective that separates older short-horizon and newer terminal outcomes; freeze a single prospective successor only after its ROM-free feasibility check. No new trainer framework, data recollection, replay of consumed DEVELOPMENT, or full Red run."
+  },
+  "scope": {
+    "authority_promotions": 0,
+    "goal_model": "Model137:137 examples,92 successes,58 economy-qualified",
+    "red_registered_native": 96,
+    "red_native_target": 124,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_gates": 5,
+    "github_pushes": 0
+  },
+  "diagnostic_caveat": "Retained reports' initial move loss and initial expected regret describe a seeded random head, not the actual warm-start weights: the runner omitted initial_move_model. Final losses, final regrets, gates and played results are unaffected. Post-run source now passes the actual prior move head; old reports are preserved rather than rewritten. No fit or episode was repeated.",
+  "status": "completed_candidate_not_qualified"
+}

@@ -135,7 +135,7 @@ def run(args):
         model_path = args.output / "model.json"
         common._write(model_path, fitted.to_dict())
         reports = {
-            name: summarize_trainer_practice_training(rows, fitted)
+            name: summarize_trainer_practice_training(rows, fitted, initial_move_model=frozen.move)
             for name, rows in (
                 ("original44", old[:44]),
                 ("retained52", old),

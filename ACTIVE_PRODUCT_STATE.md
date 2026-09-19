@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Condition control on concrete child-selected actions and estimated finishing-hit margins in one bounded experiment using retained data. Resolve failed combined retention without erasing full-battle gains; require independent natural validation before promotion.
+- Next decision: Stop unconstrained fits. Test retention-constrained learning on the existing180 contexts before any single prospective successor; independent natural qualification remains required. No new trainer framework, corpus recollection, consumed DEVELOPMENT replay or full Red run.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-terminal-learning-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-terminal-learning-result-2026-09-17.json)
+**2026-09-17-trainer-return-objective-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-return-objective-result-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner now wins reserved assisted five-member TRAIN battles but still makes consequential switching errors in the original hard battle. Full Red authority has not advanced. |
-| Learning output | 128 new TRAIN contexts and 3755 complete matched branches; two fits. Reserved five-member wins improved 3/8 to 8/8, party faints 35 to 8. Attack retention passed; combined-control retention failed. |
-| Authority delta | None. Two TRAIN battle fits remain unpromoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No independent natural transfer. Reserved variants share four TRAIN origins; the known failure is an in-sample regression. |
-| Blocker | The new five-member candidate won eight reserved TRAIN variants, but lost the original hard battle after 17 decisions (five party faints, one opponent faint). Retained52 composed regret 0.436327925 exceeds its unchanged 0.1609 limit. |
-| Decision | Preserve measured full-battle improvement without promotion. Stop after the declared regression; no further fit or replay this session. |
-| Next session | Astra High, Fast off: one bounded control-input experiment using retained data and explicit full-battle and retention gates. No blind refit sweep or standing review gate. |
-| Next falsifier | Test control inputs conditioned on the actual proposed move and reserve, including estimated finishing-hit margins. Reuse authenticated data; require retained competence and separate natural-origin outcomes before promotion. |
-| Stop condition | Both curricula and one declared regression per candidate are complete. Preserve failures, logs and weights. No more fit or replay this session, promotion, full game or GitHub push. |
+| Product alignment | Measured complete-battle gains and diagnosed forgetting improve the path toward a learned player, but no final-player authority or fresh Red completion claim is justified. |
+| Learning output | 128 new contexts and3755 terminal branches supported two initial fits, followed by two180-context reuse fits. Concrete-action control fixed the observed 13-HP premature switch. The final comparison improved6/8 to8/8 wins and13 to9 party faints, but old attack knowledge regressed. |
+| Authority delta | None. Four battle fits in the extended session remain unpromoted. Model137, Red96/124 and fresh acceptance0/5 are unchanged. |
+| Transfer result | No independent natural transfer. All new comparisons used assisted numeric variations from four TRAIN origins; the original hard battle is a known TRAIN regression. |
+| Blocker | The final return-trained candidate won eight fresh assisted TRAIN variants versus six, but lost the known hard battle and failed all three retained gates. Earlier proposed-control training preserved attack competence but failed combined retention. |
+| Decision | Stop this fitting sequence. Preserve all four candidates and outcomes; do not promote any candidate or declare the autonomous player finished. |
+| Next session | Astra High, Fast off: one retention-constrained learning design and ROM-free feasibility check using existing data, not another trainer build or unconstrained fit. |
+| Next falsifier | A retention-constrained objective must improve terminal decisions without violating the unchanged older attack/control gates. Test feasibility on retained TRAIN data before another declared fit; independent natural battles remain required. |
+| Stop condition | The final declared fit, original TRAIN regression and eight fresh paired TRAIN variants completed. No more fit or replay in this sequence, no promotion, full game or GitHub push. |
 
 ### Stop conditions
 

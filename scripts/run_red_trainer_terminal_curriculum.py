@@ -715,13 +715,19 @@ def run(args):
         model_path = args.output / "model.json"
         original._write(model_path, fitted.to_dict())
         reports = {
-            "original44": summarize_trainer_practice_training(old_targets[:44], fitted),
-            "retained52": summarize_trainer_practice_training(old_targets, fitted),
-            "new_terminal": summarize_trainer_practice_training(targets, fitted),
+            "original44": summarize_trainer_practice_training(
+                old_targets[:44], fitted, initial_move_model=frozen.move
+            ),
+            "retained52": summarize_trainer_practice_training(
+                old_targets, fitted, initial_move_model=frozen.move
+            ),
+            "new_terminal": summarize_trainer_practice_training(
+                targets, fitted, initial_move_model=frozen.move
+            ),
         }
         if inherited_targets:
             reports["inherited_terminal"] = summarize_trainer_practice_training(
-                inherited_targets, fitted
+                inherited_targets, fitted, initial_move_model=frozen.move
             )
         original._write(
             args.output / "fit-receipt.json",

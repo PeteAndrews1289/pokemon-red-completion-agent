@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-terminal-learning-v1",
+  "as_of_session": "2026-09-17-trainer-return-objective-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1838,6 +1838,12 @@
       "result": "Two battle fits added 128 contexts and 3755 complete branches. Reserved five-member TRAIN wins improved 3/8 to 8/8; party faints 35 to 8. Original hard battle still lost; composed retention failed. No promotion or Red acceptance progress.",
       "deviation": "One known TRAIN regression per candidate was prospectively authorized; both failures remain retained. Same-origin assisted variation is not independent natural transfer. No further fit or replay this session; stage and checklist exits are unchanged.",
       "next": "One bounded concrete-action-conditioned control experiment using retained data, then independent natural validation after qualification. No blind refit sweep, full-game replay or GitHub push."
+    },
+    {
+      "session": "2026-09-17-trainer-return-objective-v1",
+      "result": "Concrete-action control fixed the observed 13-HP premature switch and improved reserved TRAIN play. A return-based successor won8/8 versus6/8 on harder fresh variants, but lost the known battle and failed all three retained gates. Four fits total in the extended session; none promoted.",
+      "deviation": "Pete's explicit added-credit finish request reopened bounded work. The one-fit control experiment closed before a separately declared objective successor. Preserve every failure; assisted TRAIN variants do not establish natural transfer, and no stage or Red completion criteria change.",
+      "next": "Stop this fitting sequence. Use the retained180-context corpus for a retention-constrained learning feasibility check; no new trainer infrastructure or data recollection, and no consumed DEVELOPMENT replay."
     }
   ],
   "closed_milestones": [

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-terminal-learning-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-return-objective-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-return-objective-v1
+
+Concrete-action control fixed the observed 13-HP premature switch and improved reserved TRAIN play. A return-based successor won8/8 versus6/8 on harder fresh variants, but lost the known battle and failed all three retained gates. Four fits total in the extended session; none promoted.
+
+**Deviation:** Pete's explicit added-credit finish request reopened bounded work. The one-fit control experiment closed before a separately declared objective successor. Preserve every failure; assisted TRAIN variants do not establish natural transfer, and no stage or Red completion criteria change.
+
+**Next:** Stop this fitting sequence. Use the retained180-context corpus for a retention-constrained learning feasibility check; no new trainer infrastructure or data recollection, and no consumed DEVELOPMENT replay.
 
 ### 2026-09-17-trainer-terminal-learning-v1
 

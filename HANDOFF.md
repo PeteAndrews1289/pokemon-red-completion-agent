@@ -3,50 +3,60 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Complete-battle learning improved; candidate is not qualified
+## Battle learning improved; no candidate is qualified
 
-The [session result](docs/evidence/red-trainer-terminal-learning-result-2026-09-17.json)
-records two bounded terminal curricula: 128 new TRAIN contexts, 3755 complete
-matched branches and two fits. Control targets compare measured returns for
-actual fitted attack/switch components. Authenticated intermediate snapshots,
-resumable collection and inherited-anchor retention are working.
+The extended session collected 128 new TRAIN contexts and 3755 complete matched
+branches, then made four declared fits: two terminal curricula, one control-only
+successor and one expected-return successor. All candidates/logs remain retained.
+No additional fit or replay follows the last successor in this sequence.
 
-Eight reserved five-member TRAIN comparisons improved from 3/8 wins to 8/8.
-Party faints fell 35 to 8; decisions 268 to 161. These assisted variants share
-four TRAIN origins, so this is not independent natural transfer. All sixteen
-comparison outcomes report zero teacher queries or memory edits.
+[Terminal curricula](docs/evidence/red-trainer-terminal-learning-result-2026-09-17.json):
+five-member reserved TRAIN wins improved3/8 to8/8, party faints35 to8. The hard
+original battle still lost. Short opening labels were replaced with complete
+branches and authenticated intermediate learner states.
 
-The original harder battle still failed: 17 decisions, five party faints, one
-opponent faint, zero teacher queries or memory edits. After opening with
-Thunderbolt, it later switched away from Bulbasaur with the opponent at 13 HP.
-An attack might have finished it; that counterfactual was not tested.
-Preserve both failed regressions. No further fit or replay this session.
+[Concrete-action control](docs/evidence/red-trainer-proposed-control-result-2026-09-17.json):
+control now compares the actual proposed move/reserve with a public-stat damage
+estimate. The original13-HP premature switch was fixed: Bulbasaur attacked and
+finished the opponent. The battle still lost after27 decisions/three opponent
+faints. Fresh paired wins7/8 to8/8; party faints16 to9. Attack retention passes,
+combined retained52 regret0.340996420 fails the unchanged0.1609 gate.
 
-Attack retention passes (0.008849232 and 0.021896675 regret). Combined retained52
-regret is 0.436327925, failing the unchanged 0.1609 gate. Do not promote this
-candidate or describe the trainer/player as finished.
+[Expected-return successor](docs/evidence/red-trainer-return-objective-result-2026-09-17.json):
+all three heads now support an opt-in measured expected-regret loss, with a
+numerically verified gradient and legacy serialization preserved. One180-context
+fit won8/8 fresh harder TRAIN variants versus6/8 for the previous candidate:
+165 versus172 decisions,9 versus13 party faints,1120 versus1239 HP lost.
+The original hard battle still lost after28 decisions and three opponent faints.
 
-Next: one prospective control-input experiment using retained data. Control
-pools a best-move summary and highest-HP reserve rather than exact child-selected
-actions. Test concrete-action-conditioned inputs and estimated finishing-hit
-margins; this is a hypothesis, not a proven cure. Reconcile short-horizon
-retention with full-battle outcomes without blind optimizer sweeps or waiving
-the failed gate. Natural-origin validation and final-player integration remain.
+The final successor failed ALL retained gates: original44 attack0.175005484
+(limit0.0554), all52 attack0.146977995 (limit0.0648), and all52 composed0.174618828
+(limit0.1609). It improved newer full-battle choices while forgetting older
+attacks. Do not promote it, waive gates or claim the model/player is finished.
+The control-only predecessor preserves attacks but also remains unqualified.
 
-Private candidate: red-trainer-learner-five-20260917-v1/model.json.
-SHA256: 2d944149bf2c61b6e498ff677222414e59f131b4adc53065e737b26e8f7b81d6.
-Its candidate-verdict.json records qualification failure. Preserve branch logs
-and both original-failure regression directories.
+Private final candidate: red-trainer-return-objective-20260917-v1/model.json;
+SHA256 df1182c3893715b9e4e4ea6c33bf2b6b59e2781664f683d0a8a9b9e7abb88957.
+Predecessor: red-trainer-proposed-control-20260917-v1/model.json.
+Both have explicit candidate-verdict.json qualification failures.
+All34 new successor evaluation logs completed with zero teacher queries,
+memory edits or invalid actions. These assisted variants share four TRAIN
+origins; none is independent natural transfer.
 
-Verification: 108 focused/docs tests passed, 13 integration skips; mypy passed
-538 source files. Full suite: 12420 passed, nine pre-existing failures whose
-causes were reproduced on the pre-session baseline (seven dashboard receipt
-projections, one timing golden hash, one local runtime fingerprint).
-Do not claim a green full suite.
+Next: retention-constrained learning with a ROM-free feasibility check on the
+existing180 contexts. Do not recollect the corpus or rebuild the trainer.
+Mixed short-horizon and full-battle return scales are a plausible contributor,
+not an isolated causal proof. Natural-origin qualification and final-player
+integration remain after an actually qualified candidate.
 
-Model137 remains 137 examples / 92 successes / 58 economy-qualified.
-Red remains 96/124; fresh acceptance remains 0/5. No full game, ROM hack,
-Crystal work or GitHub push occurred. Pete decides publication.
+Checks:121 focused/docs tests passed,13 integration skips; mypy539 source files.
+The earlier full-suite result was12420 passed with9 pre-existing failures
+(dashboard receipt projections7, timing golden hash1, local runtime fingerprint1).
+That full suite was not rerun after the two successor changes.
 
-Recommended next session: Astra High, Fast off for control-input and
-qualification judgment. No standing Astra review gate is required.
+Model137 remains137 examples/92 successes/58 economy-qualified. Red96/124;
+fresh acceptance0/5. Gameplay stopped. No full game, ROM hack, Crystal or GitHub
+push. Pete decides publication. No Flash or Claude review was used this turn.
+
+Recommended next session: Astra High, Fast off for the retention-constrained
+objective and qualification judgment. No standing extra review gate.
