@@ -40,3 +40,26 @@ def test_supply_rejects_changed_bytes_before_admission(tmp_path):
     (tmp_path / "plan.json").write_text("{}")
     with pytest.raises(ValueError, match="binding differs"):
         admitted_supply(tmp_path, set(), set())
+
+
+def test_final_gates_independently_recheck_switch_retention():
+    from copy import deepcopy
+
+    from run_red_trainer_broad_fit import broad_gates
+
+    before = {
+        group: {
+            head: {"model_mean_train_regret": 0.02}
+            for head in ("move", "switch", "composed_action")
+        }
+        for group in ("original44", "retained52", "terminal128", "new80")
+    }
+    after = deepcopy(before)
+    broad_before = {head: {"model_mean_train_regret": 1.0} for head in ("move", "composed_action")}
+    broad_after = {head: {"model_mean_train_regret": 0.5} for head in ("move", "composed_action")}
+    assert all(broad_gates(before, after, broad_before, broad_after).values())
+    after["terminal128"]["switch"]["model_mean_train_regret"] = 0.021
+    assert not broad_gates(before, after, broad_before, broad_after)["narrow_switch_retained"]
+    after = deepcopy(before)
+    after["retained52"]["switch"]["model_mean_train_regret"] = 0.021
+    assert not broad_gates(before, after, broad_before, broad_after)["retained52_switch_retained"]

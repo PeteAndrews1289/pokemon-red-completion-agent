@@ -63,6 +63,33 @@ def admitted_supply(supply, roots, old_ids):
     return targets
 
 
+def broad_gates(before, after, before_broad, after_broad):
+    def regret(report, group, head):
+        return report[group][head]["model_mean_train_regret"]
+
+    return {
+        "retained52_switch_retained": regret(after, "retained52", "switch")
+        <= regret(before, "retained52", "switch"),
+        "narrow_switch_retained": regret(after, "terminal128", "switch")
+        <= regret(before, "terminal128", "switch"),
+        "original44_move": regret(after, "original44", "move") <= 0.0554,
+        "retained52_move": regret(after, "retained52", "move") <= 0.0648,
+        "retained52_composed": regret(after, "retained52", "composed_action") <= 0.1609,
+        "narrow_move_retained": regret(after, "terminal128", "move")
+        <= regret(before, "terminal128", "move"),
+        "narrow_composed_retained": regret(after, "terminal128", "composed_action")
+        <= regret(before, "terminal128", "composed_action"),
+        "new80_composed_retained": regret(after, "new80", "composed_action")
+        <= regret(before, "new80", "composed_action"),
+        "broad_move_no_regression": after_broad["move"]["model_mean_train_regret"]
+        <= before_broad["move"]["model_mean_train_regret"],
+        "broad_composed_improves_ten_percent": after_broad["composed_action"][
+            "model_mean_train_regret"
+        ]
+        < 0.9 * before_broad["composed_action"]["model_mean_train_regret"],
+    }
+
+
 def run(args):
     if (
         args.output.exists()
@@ -189,26 +216,7 @@ def run(args):
         added, model, catalog=catalog, initial_move_model=initial.move
     )
 
-    def regret(report, group, head):
-        return report[group][head]["model_mean_train_regret"]
-
-    checks = {
-        "original44_move": regret(after, "original44", "move") <= 0.0554,
-        "retained52_move": regret(after, "retained52", "move") <= 0.0648,
-        "retained52_composed": regret(after, "retained52", "composed_action") <= 0.1609,
-        "narrow_move_retained": regret(after, "terminal128", "move")
-        <= regret(before, "terminal128", "move"),
-        "narrow_composed_retained": regret(after, "terminal128", "composed_action")
-        <= regret(before, "terminal128", "composed_action"),
-        "new80_composed_retained": regret(after, "new80", "composed_action")
-        <= regret(before, "new80", "composed_action"),
-        "broad_move_no_regression": after_broad["move"]["model_mean_train_regret"]
-        <= before_broad["move"]["model_mean_train_regret"],
-        "broad_composed_improves_ten_percent": after_broad["composed_action"][
-            "model_mean_train_regret"
-        ]
-        < 0.9 * before_broad["composed_action"]["model_mean_train_regret"],
-    }
+    checks = broad_gates(before, after, before_broad, after_broad)
     common._write(args.output / "model.json", model.to_dict())
     result = {
         "before": before,

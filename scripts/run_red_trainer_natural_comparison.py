@@ -33,18 +33,43 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
         plan = json.loads((fit / "plan.json").read_bytes())
         if (
             _binding(fit / "model.json") != result.get("model")
-            or not all(gates(result["before"], result["after"]).values())
             or result.get("train_qualified") is not True
             or result.get("fits") != 1
         ):
             raise ValueError("retention challenger failed its unchanged TRAIN gates")
-        manifest = Path(plan["manifest"]["path"])
-        if _binding(manifest) != plan["manifest"]:
+        broader = "before_broad" in result
+        if broader:
+            from run_red_trainer_broad_fit import broad_gates
+
+            checks = broad_gates(
+                result["before"], result["after"], result["before_broad"], result["after_broad"]
+            )
+        else:
+            checks = gates(result["before"], result["after"])
+        if not all(checks.values()):
+            raise ValueError("retention challenger failed its unchanged TRAIN gates")
+        manifest_binding = plan["audit"] if broader else plan["manifest"]
+        manifest = Path(manifest_binding["path"])
+        if _binding(manifest) != manifest_binding:
             raise ValueError("retention corpus manifest differs")
         ancestor, targets = admitted_cache(manifest.parent)
         model = TrainerPracticeThreeHeadModel.from_dict(
             json.loads((fit / "model.json").read_bytes())
         )
+        if broader:
+            from run_red_trainer_broad_fit import admitted_supply
+
+            supply_receipt = Path(plan["supply"]["path"])
+            if _binding(supply_receipt) != plan["supply"]:
+                raise ValueError("broader supply receipt differs")
+            extra = admitted_supply(
+                supply_receipt.parent,
+                set(ancestor.train_root_ids),
+                {t["capture_id"] for t in targets},
+            )
+            if len(extra) != result["new_contexts"]:
+                raise ValueError("broader supply count differs")
+            targets = targets + extra
         if (
             set(model.train_capture_ids) != {t["capture_id"] for t in targets}
             or set(model.train_root_ids) != set(ancestor.train_root_ids)
