@@ -92,7 +92,9 @@ def run(args):
             )
             checkpoints = []
 
-            def progress(event, checkpoints=checkpoints, directory=directory, boot_frames=boot_frames):
+            def progress(
+                event, checkpoints=checkpoints, directory=directory, boot_frames=boot_frames
+            ):
                 checkpoints.append(
                     {"checkpoint": event.checkpoint_id, "frames": event.frames_executed}
                 )
