@@ -55,6 +55,103 @@ def learning_checks(before_new, after_new, after_old, limits):
     return checks
 
 
+def qualified_policy_fit_receipt(directory):
+    """Recompute qualification from authenticated TRAIN inputs, without a refit."""
+    plan = json.loads((directory / "plan.json").read_bytes())
+    result = json.loads((directory / "result.json").read_bytes())
+
+    def bound(binding):
+        path = Path(binding["path"])
+        if common._binding(path) != binding:
+            raise ValueError("policy fit input binding differs")
+        return path
+
+    if (
+        plan.get("policy_id") != POLICY
+        or plan.get("initial", {}).get("sha256") != LATE_MODEL_SHA
+        or plan.get("fits") != 1
+        or result.get("fits") != 1
+        or plan.get("objective") != "pairwise_regret"
+        or result.get("train_qualified") is not True
+        or result.get("model") != common._binding(directory / "model.json")
+    ):
+        raise ValueError("policy fit is not the declared TRAIN-qualified successor")
+    initial = TrainerPracticeThreeHeadModel.from_dict(
+        json.loads(bound(plan["initial"]).read_bytes())
+    )
+    model = TrainerPracticeThreeHeadModel.from_dict(
+        json.loads((directory / "model.json").read_bytes())
+    )
+    sources = [bound(binding).parent for binding in plan["retention_sources"]]
+    if len(sources) != 4:
+        raise ValueError("policy fit lacks retention sources")
+    _, retained = admitted_cache(sources[0])
+    roots = set(initial.train_root_ids)
+    prior = admitted_supply(sources[1], roots, {r["capture_id"] for r in retained})
+    late = admitted_supply(
+        sources[2], roots, {r["capture_id"] for r in retained + prior}, late=True
+    )
+    late += admitted_supply(
+        sources[3],
+        roots,
+        {r["capture_id"] for r in retained + prior + late},
+        late=True,
+        late_main=True,
+    )
+    added = admitted_policy_supply(bound(plan["policy_supply"]).parent)
+    physical_ids = {r["capture_id"] for r in retained + prior + late}
+    if (
+        len(physical_ids) != 318
+        or set(model.train_capture_ids) != physical_ids
+        or set(initial.train_capture_ids) != physical_ids
+        or set(model.train_root_ids) != roots
+        or len(roots) != 4
+        or not {r["capture_id"] for r in added} <= physical_ids
+    ):
+        raise ValueError("policy fit TRAIN ancestry differs")
+    groups = {
+        "original44": retained[:44],
+        "retained52": retained[:52],
+        "terminal128": retained[52:],
+        "new80": retained[100:],
+        "prior48": prior,
+        "late90": late,
+    }
+    catalog = PokemonRedBattleCatalog()
+
+    def report(rows, candidate):
+        return summarize_trainer_practice_training(
+            rows, candidate, catalog=catalog, initial_move_model=initial.move
+        )
+
+    before = {key: report(rows, initial) for key, rows in groups.items()}
+    after = {key: report(rows, model) for key, rows in groups.items()}
+    before_new, after_new = report(added, initial), report(added, model)
+    limits = retention_limits(before)
+    checks = learning_checks(before_new, after_new, after, limits)
+    if (
+        plan["limits"] != {f"{group}:{head}": value for (group, head), value in limits.items()}
+        or result["before"] != before
+        or result["after"] != after
+        or result["before_policy_bound"] != before_new
+        or result["after_policy_bound"] != after_new
+        or result["gates"] != checks
+        or not all(checks.values())
+    ):
+        raise ValueError("policy fit receipt differs from recomputed TRAIN measurements")
+    return {
+        "qualification_tier": "independent_root_train",
+        "independent_train_supply_gate_passed": True,
+        "distinct_upstream_train_roots": 4,
+        "scenario_count": 318,
+        "policy_conditioned_measurements": 16,
+        "continuation_policy_id": POLICY,
+        "model_sha256": common._binding(directory / "model.json")["sha256"],
+        "final_player_ready": False,
+        "authority_promotions": 0,
+    }
+
+
 def run(args):
     if (
         args.output.exists()

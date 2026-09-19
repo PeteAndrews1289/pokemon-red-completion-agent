@@ -31,6 +31,10 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
 
         result = json.loads((fit / "result.json").read_bytes())
         plan = json.loads((fit / "plan.json").read_bytes())
+        if "policy_id" in plan:
+            from fit_red_trainer_learner_continuation import qualified_policy_fit_receipt
+
+            return qualified_policy_fit_receipt(fit)
         if (
             _binding(fit / "model.json") != result.get("model")
             or result.get("train_qualified") is not True

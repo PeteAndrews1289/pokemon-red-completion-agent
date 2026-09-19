@@ -83,3 +83,31 @@ def test_learning_accepts_losses_but_not_ties_duplicates_or_assistance():
         row["battle_won"] = row["case"] < 8
         row["stop_reason"] = "battle_won" if row["battle_won"] else "party_defeated"
     assert not learning_summary(rows)["learning_signal_observed"]
+
+
+def test_natural_admission_dispatches_policy_receipt_without_legacy_relabel(tmp_path, monkeypatch):
+    import json
+
+    import fit_red_trainer_learner_continuation as policy_fit
+    from run_red_trainer_natural_comparison import qualified_fit_receipt
+
+    (tmp_path / "plan.json").write_text(json.dumps({"policy_id": "frozen-learner"}))
+    (tmp_path / "result.json").write_text("{}")
+    expected = {"qualification_tier": "independent_root_train", "final_player_ready": False}
+    monkeypatch.setattr(
+        policy_fit,
+        "qualified_policy_fit_receipt",
+        lambda path: expected if path == tmp_path else None,
+    )
+    assert qualified_fit_receipt(tmp_path) == expected
+
+
+def test_policy_fit_receipt_rejects_unqualified_or_unknown_continuation(tmp_path):
+    import json
+
+    from fit_red_trainer_learner_continuation import qualified_policy_fit_receipt
+
+    (tmp_path / "plan.json").write_text(json.dumps({"policy_id": "teacher"}))
+    (tmp_path / "result.json").write_text("{}")
+    with pytest.raises(ValueError, match="declared"):
+        qualified_policy_fit_receipt(tmp_path)
