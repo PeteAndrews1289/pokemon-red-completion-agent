@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-19-battler-policy-learning-v1",
+  "as_of_session": "2026-09-19-battler-natural-team-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -485,7 +485,7 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
     },
@@ -1009,7 +1009,7 @@
       "session": "2026-09-11-economy-runtime-connection",
       "result": "Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.",
       "deviation": "Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.",
-      "next": "Continue exact AM01 with initialized v4 model6cd88d0f\u2026837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
+      "next": "Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
     },
     {
       "session": "2026-09-11-economy-live-qualification",
@@ -1399,13 +1399,13 @@
       "session": "2026-09-14-full-pokedex-family-diagnostics",
       "result": "Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.",
       "deviation": "None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.",
-      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1\u2013V3 or spend another source only to validate software."
+      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software."
     },
     {
       "session": "2026-09-14-full-pokedex-supply-admission",
       "result": "Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.",
       "deviation": "The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.",
-      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1\u2013V3 or claim independent evaluation."
+      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation."
     },
     {
       "session": "2026-09-14-registered-correlated-reset",
@@ -1862,6 +1862,12 @@
       "result": "One J fit preserves15 TRAIN checks after16 policy-bound measurements/400branches. Unused generated teams:9/24wins versus H7/24, fewer faints. Two natural boot origins at three timings: J6/6, H5/6, first-legal0/6. J frozen and packaged; no final-player promotion.",
       "deviation": "Pete clarified learning rather than perfect wins and authorized two bounded natural starts. Prospective learning gate does not require teacher superiority; historical failures retain their verdicts. Small descriptive cohorts, attack-only natural evidence, no stage/checklist exit changes.",
       "next": "Sol High, Fast off: legitimate independent natural full-party tests, then bounded earned-state integration with durable final-state capture. Keep J fixed; no consumed-test fitting/replay or new review cycle."
+    },
+    {
+      "session": "2026-09-19-battler-natural-team-v1",
+      "result": "Frozen J and H each won6/6 natural two-member battles. J37decisions/90HP lost versus H42/102. Neither used a reserve: switching coverage remains missing. All12earned endpoints retained and reopened read-only; no fit or player integration.",
+      "deviation": "No stage or checklist change. Retained the failed coverage gate rather than counting starter-only wins as switching proof. Current-source consistency check requires this session record and regenerated projection.",
+      "next": "Astra High, Fast off per Pete: bounded new-encounter reserve-use probe from earned saves with normal menu lead changes, then one player objective/ledger. No fresh-source factory, refit or replay."
     }
   ],
   "closed_milestones": [

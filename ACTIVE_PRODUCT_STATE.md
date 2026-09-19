@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze packaged J after its positive descriptive learning signal and early natural attack tests. Obtain legitimate independent natural full-party evidence, then one bounded earned-state integration. No more fitting on consumed comparisons or perfect-win gate.
+- Next decision: Keep J frozen. Natural two-member trials passed battles but did not exercise reserve use. Prospectively test a new encounter from retained earned endpoints, then player integration; no fresh-start factory, refit or replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose attacks, voluntary switches, replacement-prompt answers and forced replacements from semantic observations in bounded full-party trainer battles, then improve outcomes on separate natural battles. |
-| Authority now | Model137 remains137examples/92successes/58economy-qualified; Red96/124. Separate battle J controlled327 generated-test decisions and29 natural attacks without fallback. No final-player promotion. |
+| Authority now | Model137 remains137examples/92successes/58economy-qualified; Red96/124. Frozen J added37 natural decisions (31attacks/6prompt declines) without fallback. No final-player promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The frozen learner fails to improve aggregate unused-battle outcomes while retaining trained skills, or cannot execute an independent natural full-party test without fallback; a single random loss is not failure by itself. |
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-19-battler-policy-learning-v1** · status **closed** · evidence [qualification](docs/evidence/red-battler-policy-learning-result-2026-09-19.json)
+**2026-09-19-battler-natural-team-v1** · status **closed** · evidence [qualification](docs/evidence/red-battler-natural-team-result-2026-09-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Measured learning and early natural attack transfer now distinguish the operational trainer from an unqualified final full-party player. |
-| Learning output | One fit on318physical TRAIN contexts, with16new policy-bound value measurements from400branches. All15retention/learning checks pass; new composed TRAIN regret1.115307346 to0. |
-| Authority delta | J owned327 generated-test decisions and29 natural attacks; the main collection player and final-player authority are unchanged. |
-| Transfer result | J9/24wins versus H7/24 and fewer faints in unused generated teams; descriptive, not statistically conclusive. Two independent natural origins at three timings: J6/6, H5/6, first-legal0/6; attack-only, not full-party transfer. |
-| Blocker | Natural tests had one own Pokemon and do not qualify full-party switching. Evaluation did not retain final state bytes, so player integration still needs durable final-state capture. |
-| Decision | Freeze and package J. Learning is demonstrated modestly; no further fit/review cycle or perfect-win requirement. Preserve previous failures. |
-| Next session | Sol High, Fast off: bounded legitimate natural full-party source/test work, then earned-state integration with durable final snapshots; estimate45–60minutes for the source/test slice. |
-| Next falsifier | Frozen J must handle meaningful attacks and replacements on independently sourced natural full-party battles without assistance; evaluate aggregate outcomes rather than demanding every win. |
-| Stop condition | One fit and all declared comparisons completed. Both authorized natural starts and all18root/timing/arm cells are consumed. No replay, fit on tests, reconstructed restart, unlimited teacher factory, full game or push. |
+| Product alignment | Frozen battle decisions now retain verified usable endpoints for player continuation; natural switching transfer remains unproved. |
+| Learning output | No fit or training-example delta;318TRAIN contexts unchanged. J won6new natural trials with37decisions/90HP lost versus H42/102. |
+| Authority delta | J owned37 additional natural decisions:31attacks/6prompt declines. No reserve use or collection-player authority change. |
+| Transfer result | Two fresh origins at three timings: J6/6 and H6/6, no faints or invalid actions. J31attacks/6declines; H36attacks/6declines. No reserve use. All12endpoints reopened read-only and matched observations/logs;0frames/actions. |
+| Blocker | Both two-member parties won with the starter alone. Durable endpoints now exist; actual switching coverage remains missing. |
+| Decision | Keep J frozen and preserve the failed coverage gate. No refit, replay or perfect-win requirement. Conditional player integration did not execute. |
+| Next session | Astra High, Fast off: bounded new-encounter reserve-use probe from retained earned saves using normal party-menu mechanics, then one player objective with fresh ledger. Estimate30-45minutes if existing mechanics suffice. |
+| Next falsifier | A new earned-state natural encounter must exercise meaningful reserve use without fallback or invalid actions; prompt declines are not switching coverage. |
+| Stop condition | Both sources and all12root/timing/arm cells completed. Missing reserve coverage stops the declared integration. No replacement, replay, fitting, full run or push. |
 
 ### Stop conditions
 

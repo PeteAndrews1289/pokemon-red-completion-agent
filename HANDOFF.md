@@ -3,82 +3,67 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September19,2026.
 
-## Learning demonstrated; freeze J and move to natural full-party evidence
+## Frozen J wins natural team trials; switching coverage still missing
 
-[Evidence](docs/evidence/red-battler-policy-learning-result-2026-09-19.json) ·
-[Prospective plan](docs/evidence/red-battler-policy-learning-plan-2026-09-19.json).
-Pete clarified that learning, not perfect wins, is the criterion and authorized
-two bounded independent natural starts. Historical teacher-reference failures
-and rejected I remain unchanged.
+[Current evidence](docs/evidence/red-battler-natural-team-result-2026-09-19.json) ·
+[Prospective plan](docs/evidence/red-battler-natural-team-plan-2026-09-19.json) ·
+[Prior learning/package](docs/evidence/red-battler-policy-learning-result-2026-09-19.json).
 
-One frozen-H continuation collection measured16 existing TRAIN contexts:
-8openings,4replacement prompts,4endgame MAIN decisions across four roots.
-400complete branches,3787decisions,4697512frames;294wins/106losses.
-325suppressed/unexecuted attacks were recorded, but zero invalid actions or
-teacher continuation queries. No new forced-replacement context in this slice.
+No refit this session. J remains the packaged policy-bound learner:
+SHA256 260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
+H SHA256 ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b.
+Prior J retained15 TRAIN checks across318 physical contexts and improved the
+unused generated3v3 comparison9/24 versus H7/24. That modest learning result
+stands; perfect wins and teacher superiority are not requirements.
 
-Policy wrappers bind continuation model, policy ID, fresh-at-capture history,
-horizon and timings. Teacher measurements are immutable. The fit optimizes
-302teacher-value contexts plus16learner-value contexts; the16old counterparts
-remain retention tests. **318unique physical contexts**, not334.
+Two new fresh boots2900/3100 reached the Mt. Moon required Rocket before any
+actor selection, using existing ordinary opening/errand/Pewter/Cerulean mechanics.
+Both naturally caught Zubat. No memory edits, source loads, route repair or
+substituted roots. Disclosed teacher preparation included normal item sales,
+purchases and move teaching; those are not learned funding outcomes.
+Own levels15/6 and15/10; both members usable. These are not balanced six-member teams.
 
-Candidate J passed all15 TRAIN checks, recomputed from authenticated branches.
-New16 composed regret1.115307346→0; move1.301452293→0;
-switch0.248188852→0.026773374. One2400-epoch-per-head pairwise fit.
-Zero TRAIN regret is not perfect play. No further fit is scheduled.
+All12 plans were frozen first: two origins × timings0/4/8 × H/J.
+J6/6wins,37decisions,90HP lost; H6/6wins,42decisions,102HP lost.
+No faints, invalid actions, teacher queries, memory-write actions or runtime failures.
+J31attacks/6prompt declines; H36attacks/6declines. Neither used its reserve.
+The declared switching-coverage gate **did not pass**. Do not turn correct
+declines into bad labels or claim natural switching qualification from party size.
+Two origins, not six; same trainer archetype. No statistical-significance claim.
 
-J SHA256:260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
-H SHA256:ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b.
+## Earned endpoints now retained
 
-## Unused comparisons completed
+The existing model runner saves actual final emulator bytes before close on
+normal return and exception; failed snapshots do not imply successful outcomes.
+Successful reports bind source, model, final snapshot and receipt into the event log.
+Exclusive durable writes prevent overwrites. All12 saved endpoints were reopened
+read-only, matched final observations/enemy rosters and log bindings, and were
+released/input-ready. Verification executed0actions/0frames.
+No completed player goal or fresh completion-ledger integration occurred.
 
-Generated3v3 cohort seed2026091910: J9/24wins versus H7/24,54versus56faints,
-5757versus5782HP lost,327versus313decisions. Three J-only wins, one H-only win.
-J used232attacks,26voluntary switches,39forced replacements and30prompts.
-Mean actor inference0.881ms/decision. All48episodes terminal and unassisted.
-This passes the descriptive learning gate, not statistical significance
-(paired sign p=.625) or independent natural full-party qualification.
+Source commit4ca4423f; comparison eebfefb3.
+Private directories: red-fresh-team-development-20260919-v1 and
+red-trainer-natural-team-20260919-v1.
+Each trial directory contains outcome.json, final.state, final-state.json and events.
+The first J earned endpoint is boot2900-timing0-J (level16 starter/level6 Zubat).
+Earlier Brock2500/2700 outcomes still have no retained final bytes; never reconstruct them.
 
-Fresh boots2500/2700 reached Brock through ordinary gameplay, without edits
-or route repairs. Distinct origin hashes/trainer IDs; level9Squirtle.
-Each tested at offsets0/4/8 with all plans frozen first:
+## Next bounded objective
 
-| Arm | Wins | Faints | HP lost | Decisions |
-| --- | ---: | ---: | ---: | ---: |
-| First-legal attack | 0/6 | 6 | 168 | 41 |
-| H | 5/6 | 1 | 72 | 38 |
-| J | 6/6 | 0 | 43 | 29 |
+Keep J frozen. Prospectively declare a new encounter reached from retained earned
+saves, using normal party-menu lead changes to expose a meaningful reserve decision.
+No new Pallet factory, memory edit, consumed-battle replay or outcome-driven refit.
+This is a new earned-state probe, not an independent root or a retry of the Rocket.
+Stop rather than harden a fixed route. After actual natural switching coverage,
+connect one bounded semantic player objective and verify its final snapshot/ledger.
+Estimate30–45minutes if existing mechanics suffice; current conditional integration
+did not execute because the coverage prerequisite was unmet.
 
-Two origins, not six independent roots. One own Pokemon does not test switching.
-First-legal is a weak baseline. J was less efficient in one individual trial.
-All18cells are consumed. No fitting, replay or outcome-state reconstruction.
-The evaluation runner did not retain final state bytes: no earned restart exists.
-
-## Package and next boundary
-
-Private directories: red-trainer-learner-continuation-20260919-v1,
-red-trainer-policy-fit-20260919-v1, red-trainer-policy-probe-20260919-v1,
-red-fresh-brock-development-20260919-v1, red-trainer-policy-natural-20260919-v1,
-red-battler-learning-package-20260919-v1.
-Package SHA256:794499068fb1b2bdb8c385bc84b4748a047ed595521c05443874f755ca4801ee.
-
-Existing actor entry point: scripts/run_red_trainer_practice_model.py.
-Natural admission now understands policy-bound fits and recomputes TRAIN gates.
-No legacy-target relabel or weight update during packaging.
-
-Next: declare legitimate independent natural full-party sources with multiple
-usable own Pokemon, then compare frozen J without fitting. Estimate45–60minutes
-if existing mechanics suffice; stop rather than harden another fixed route.
-The two-source authorization completed here is not an unlimited teacher factory.
-After full-party evidence, connect one earned-state objective and retain its
-final snapshot/ledger. Do not repeat final-review/refit cycles or require100%wins.
-
-1171focused/documentation tests pass;13optional integration skips. Mypy527source
-files passes. Full suite not rerun; historical9failures remain unclaimed.
-Expanded focus checks:173pass/1pre-existing Model135 dashboard projection failure,
-reproduced before these documentation edits.27documentation/roadmap tests pass.
-No Flash or Claude this session. All gameplay stopped; no GitHub push.
-Model137 remains137examples/92successes/58economy-qualified; Red96/124,
-fresh acceptance0/5. No final-player promotion, full game, ROM hack or Crystal.
+1184 focused tests passed;13optional integration skips. Full suite not rerun;
+previous unrelated dashboard/timing/fingerprint failures remain unclaimed.
+No Flash/Claude or standing external-review gate. Gameplay stopped; no GitHub push.
+Model137 unchanged:137examples/92successes/58economy-qualified; Red96/124,
+74specimens/198cash; fresh acceptance0/5. No final-player promotion/full run.
 Unsupported status/recovery/boost, Counter, self-destruct and all-party Struggle
-remain excluded. Next: Sol High, Fast off for bounded source/integration work.
+remain exclusions. Pete now requests Astra, superseding older Sol recommendations:
+next session Astra High, Fast off for integration judgment and local emulator work.

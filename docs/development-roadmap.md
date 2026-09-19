@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-policy-learning-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-natural-team-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battler-natural-team-v1
+
+Frozen J and H each won6/6 natural two-member battles. J37decisions/90HP lost versus H42/102. Neither used a reserve: switching coverage remains missing. All12earned endpoints retained and reopened read-only; no fit or player integration.
+
+**Deviation:** No stage or checklist change. Retained the failed coverage gate rather than counting starter-only wins as switching proof. Current-source consistency check requires this session record and regenerated projection.
+
+**Next:** Astra High, Fast off per Pete: bounded new-encounter reserve-use probe from earned saves with normal menu lead changes, then one player objective/ledger. No fresh-source factory, refit or replay.
 
 ### 2026-09-19-battler-policy-learning-v1
 

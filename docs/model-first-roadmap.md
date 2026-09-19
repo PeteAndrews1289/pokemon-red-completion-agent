@@ -43,14 +43,17 @@ The new learning criterion was declared before J's test. No new review/refit gat
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
 | Policy-conditioned learning | Completed: retained fit, positive unused-team learning signal, packaged J | No more fitting on consumed tests |
-| Natural full-party evidence | Legitimate independent origins with multiple usable own Pokemon; frozen J attacks and switches without fallback | Sol High;45–60minutes bounded source/test work |
-| Player integration | One earned-state objective, final snapshot and fresh ledger; retain failures | Sol High; after full-party evidence |
-| Collection and funding | Legitimate repeatable earnings, supported Safari/search goals, remaining28 native registrations | Sol High |
+| Natural switching evidence | Two-member J/H trials each6/6wins, but no reserve use; next a new encounter from earned saves with normal lead changes | Astra High;30–45minutes bounded probe |
+| Player integration | One earned-state objective, final snapshot and fresh ledger; retain failures | Astra High; after switching evidence |
+| Collection and funding | Legitimate repeatable earnings, supported Safari/search goals, remaining28 native registrations | Astra per Pete's preference |
 | Fresh Red acceptance | Fresh origin, model-directed story, Champion/Hall of Fame,124/124 and verified dependency ledger | After prerequisite gates |
 
-The two authorized early test starts are complete, not permission for an unlimited
-teacher factory. Their evaluation runner retained outcomes, not final state bytes;
-do not reconstruct or replay them into player restarts. Unsupported status/recovery/
+The [new natural team test](evidence/red-battler-natural-team-result-2026-09-19.json)
+retained12verified earned endpoints. J used37decisions/90HP lost versus H42/102,
+but neither used its reserve; the declared coverage gate did not pass.
+No fit or player-integration execution followed. Next use a new encounter from
+earned state, not another source factory. The earlier Brock test endpoints were
+not retained; do not reconstruct or replay those. Unsupported status/recovery/
 boost, Counter, self-destruct and all-party Struggle remain segment exclusions.
 
 Teachers may use disclosed TRAIN assistance; final-player cheats remain forbidden.
