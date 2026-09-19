@@ -23,7 +23,7 @@ from pokemon_red_completion.battle_switch_target_model import BattleSwitchTarget
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameBudgetController
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_autonomous_player import _record
+from pokemon_red_completion.red_autonomous_player import _record, _write
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
@@ -61,8 +61,7 @@ def retained_session(emulator, *, maximum_frames: int, output: Path):
         if not isinstance(payload, bytes) or not payload:
             raise ValueError("trainer endpoint snapshot is empty")
         # Never replace an endpoint from a previous invocation.
-        with (output / "final.state").open("xb") as stream:
-            stream.write(payload)
+        _write(output / "final.state", payload)
         _record(
             output / "final-state.json",
             {
