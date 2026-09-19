@@ -44,6 +44,39 @@ OUTCOME_SCHEMA = "pokemon.red.trainer-practice-outcome-model-plan.v1"
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 
 
+@contextmanager
+def retained_session(emulator, *, maximum_frames: int, output: Path):
+    """Export the actual endpoint before emulator close, including failed episodes.
+
+    This snapshot alone is NOT a successful or continuation-qualified outcome.
+    A normal episode report must bind it before downstream use.
+    """
+    session = FrameBudgetController(emulator, maximum_frames=maximum_frames)
+    returned = False
+    try:
+        yield session
+        returned = True
+    finally:
+        payload = session.save_state_bytes()
+        if not isinstance(payload, bytes) or not payload:
+            raise ValueError("trainer endpoint snapshot is empty")
+        # Never replace an endpoint from a previous invocation.
+        with (output / "final.state").open("xb") as stream:
+            stream.write(payload)
+        _record(
+            output / "final-state.json",
+            {
+                "schema": "pokemon.red.trainer-endpoint.v1",
+                "state_sha256": hashlib.sha256(payload).hexdigest(),
+                "byte_count": len(payload),
+                "frames": session.frame_count,
+                "episode_returned": returned,
+                "pressed_buttons": sorted(session.pressed_buttons),
+                "continuation_qualified": False,
+            },
+        )
+
+
 def _bound_file(value: object, label: str) -> bytes:
     if not isinstance(value, dict) or set(value) != {"path", "sha256"}:
         raise ValueError(f"{label} binding differs")
@@ -67,9 +100,10 @@ def _authenticate(plan: object):
     rom = _bound_file(plan.get("rom"), "ROM")
     if hashlib.sha256(rom).hexdigest() != ROM_SHA256:
         raise ValueError("trainer model Red ROM differs")
-    model: TrainerPracticeThreeHeadModel | tuple[
-        MaskedMLPMoveRanker, BattleControlMLP, BattleSwitchTargetMLP
-    ]
+    model: (
+        TrainerPracticeThreeHeadModel
+        | tuple[MaskedMLPMoveRanker, BattleControlMLP, BattleSwitchTargetMLP]
+    )
     if plan["schema"] == OUTCOME_SCHEMA:
         model = TrainerPracticeThreeHeadModel.from_dict(
             json.loads(_bound_file(plan.get("outcome_model"), "outcome model"))
@@ -101,9 +135,8 @@ def _authenticate(plan: object):
     if (
         isinstance(model, TrainerPracticeThreeHeadModel)
         and capture.manifest.partition is ScenarioPartition.DEVELOPMENT
-        and trainer_origin_cluster(capture.manifest.root_lineage_id) in {
-            trainer_origin_cluster(root) for root in model.train_root_ids
-        }
+        and trainer_origin_cluster(capture.manifest.root_lineage_id)
+        in {trainer_origin_cluster(root) for root in model.train_root_ids}
     ):
         raise ValueError("DEVELOPMENT root overlaps outcome-model training lineage")
     max_decisions, maximum_frames = plan.get("max_decisions"), plan.get("maximum_frames")
@@ -111,12 +144,13 @@ def _authenticate(plan: object):
     # Complete TRAIN team fights need room for attacks, prompts and replacements.
     # DEVELOPMENT retains its existing shorter promotion/evaluation boundary.
     decision_cap, frame_cap = (
-        (160, 240000) if capture.manifest.partition is ScenarioPartition.TRAIN
-        else (80, 120000)
+        (160, 240000) if capture.manifest.partition is ScenarioPartition.TRAIN else (80, 120000)
     )
     if (
-        type(max_decisions) is not int or not 1 <= max_decisions <= decision_cap
-        or type(maximum_frames) is not int or not 1 <= maximum_frames <= frame_cap
+        type(max_decisions) is not int
+        or not 1 <= max_decisions <= decision_cap
+        or type(maximum_frames) is not int
+        or not 1 <= maximum_frames <= frame_cap
         or type(opening_idle_frames) is not int
         or not 0 <= opening_idle_frames <= 12
     ):
@@ -128,9 +162,7 @@ def _authenticate(plan: object):
 
 
 def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
-    plan, capture, model = _authenticate(
-        json.loads(plan_path.read_bytes())
-    )
+    plan, capture, model = _authenticate(json.loads(plan_path.read_bytes()))
     if check_only:
         return {
             "status": "action_free_trainer_model_preflight_passed",
@@ -150,8 +182,13 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
 
     @contextmanager
     def session_factory():
-        with PyBoyAdapter(Path(rom["path"]), watch=False, speed=None) as emulator:
-            yield FrameBudgetController(emulator, maximum_frames=maximum_frames)
+        with (
+            PyBoyAdapter(Path(rom["path"]), watch=False, speed=None) as emulator,
+            retained_session(
+                emulator, maximum_frames=maximum_frames, output=output
+            ) as session,
+        ):
+            yield session
 
     policy: RedTrainerPracticeOutcomePolicy | RedTrainerPracticeModelPolicy
     if isinstance(model, TrainerPracticeThreeHeadModel):
@@ -181,25 +218,31 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     assert isinstance(output_path, str)
     output = Path(output_path)
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
-    _record(output / "execution-started.json", {
-        "source_commit": plan["source_commit"],
-        "capture_manifest_sha256": capture.manifest_sha256,
-        "policy_id": policy.policy_id,
-        "partition": capture.manifest.partition.value,
-        "opening_idle_frames": opening_idle_frames,
-    })
-    log = TrainerPracticeEventLog(output / "events", run_identity={
-        "source_commit": plan["source_commit"],
-        "capture_id": capture.manifest.capture_id,
-        "root_lineage_id": capture.manifest.root_lineage_id,
-        "partition": capture.manifest.partition.value,
-        "capture_manifest_sha256": capture.manifest_sha256,
-        "policy_id": policy.policy_id,
-        **model_identity,
-        "max_decisions": max_decisions,
-        "maximum_frames": maximum_frames,
-        "opening_idle_frames": opening_idle_frames,
-    })
+    _record(
+        output / "execution-started.json",
+        {
+            "source_commit": plan["source_commit"],
+            "capture_manifest_sha256": capture.manifest_sha256,
+            "policy_id": policy.policy_id,
+            "partition": capture.manifest.partition.value,
+            "opening_idle_frames": opening_idle_frames,
+        },
+    )
+    log = TrainerPracticeEventLog(
+        output / "events",
+        run_identity={
+            "source_commit": plan["source_commit"],
+            "capture_id": capture.manifest.capture_id,
+            "root_lineage_id": capture.manifest.root_lineage_id,
+            "partition": capture.manifest.partition.value,
+            "capture_manifest_sha256": capture.manifest_sha256,
+            "policy_id": policy.policy_id,
+            **model_identity,
+            "max_decisions": max_decisions,
+            "maximum_frames": maximum_frames,
+            "opening_idle_frames": opening_idle_frames,
+        },
+    )
     try:
         episode = run_red_trainer_practice_episode(
             capture,
@@ -210,35 +253,48 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             event_sink=log.emit,
             public_species_base_stats=public_stats,
         )
+        endpoint = json.loads((output / "final-state.json").read_bytes())
+        if endpoint["episode_returned"] is not True or endpoint["pressed_buttons"]:
+            raise ValueError("trainer endpoint is not released and normally returned")
     except Exception as error:
         log.fail(error)
-        _record(output / "failure.json", {
-            "schema": "pokemon.red.trainer-practice-model-failure.v1",
-            "error_type": type(error).__name__,
-            "partition": capture.manifest.partition.value,
-        })
+        _record(
+            output / "failure.json",
+            {
+                "schema": "pokemon.red.trainer-practice-model-failure.v1",
+                "error_type": type(error).__name__,
+                "partition": capture.manifest.partition.value,
+            },
+        )
         _record(
             output / "event-log-verification.json",
             verify_trainer_practice_event_log(log.directory),
         )
         raise
     report = episode.public_dict()
-    report.update({
-        "partition": capture.manifest.partition.value,
-        "root_lineage_id": capture.manifest.root_lineage_id,
-        "source_commit": plan["source_commit"],
-        "opening_idle_frames": opening_idle_frames,
-        "model_updates": 0,
-        "authority_promotions": 0,
-    })
+    report.update(
+        {
+            "partition": capture.manifest.partition.value,
+            "root_lineage_id": capture.manifest.root_lineage_id,
+            "source_commit": plan["source_commit"],
+            "opening_idle_frames": opening_idle_frames,
+            "model_updates": 0,
+            "authority_promotions": 0,
+            "final_state_sha256": endpoint["state_sha256"],
+            "final_state_receipt_sha256": canonical_sha256(endpoint),
+            **model_identity,
+        }
+    )
     _record(output / "outcome.json", report)
-    log.finish({
-        "battle_won": episode.battle_won,
-        "stop_reason": episode.stop_reason,
-        "decision_count": len(episode.decisions),
-        "elapsed_ns": episode.elapsed_ns,
-        "outcome_sha256": canonical_sha256(report),
-    })
+    log.finish(
+        {
+            "battle_won": episode.battle_won,
+            "stop_reason": episode.stop_reason,
+            "decision_count": len(episode.decisions),
+            "elapsed_ns": episode.elapsed_ns,
+            "outcome_sha256": canonical_sha256(report),
+        }
+    )
     _record(
         output / "event-log-verification.json",
         verify_trainer_practice_event_log(log.directory),

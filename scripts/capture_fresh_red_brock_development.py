@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_scenario_capture import (
     open_battle_scenario_capture,
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
+from pokemon_red_completion.cerulean import run_cerulean_chapter
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import (
     CountingExecutor,
@@ -40,6 +41,8 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 ROOT = Path(__file__).resolve().parents[1]
 BOOT_FRAMES = (2500, 2700)
 MAX_FRAMES = 600000
+TEAM_BOOT_FRAMES = (2900, 3100)
+TEAM_MAX_FRAMES = 1000000
 
 
 class BoundaryReached(Exception):
@@ -53,6 +56,11 @@ def check_independence(reports):
 
 
 def run(args):
+    team = getattr(args, "team", False)
+    boots = TEAM_BOOT_FRAMES if team else BOOT_FRAMES
+    maximum_frames = TEAM_MAX_FRAMES if team else MAX_FRAMES
+    boundary = "required_rocket" if team else "brock_battle"
+    expected_map = MapId.MT_MOON_B2F if team else MapId.PEWTER_GYM
     if (
         args.output.exists()
         or subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip()
@@ -66,10 +74,11 @@ def run(args):
         args.output / "plan.json",
         {
             "source_commit": commit,
-            "boot_frames": list(BOOT_FRAMES),
-            "max_frames_per_start": MAX_FRAMES,
+            "boot_frames": list(boots),
+            "max_frames_per_start": maximum_frames,
             "partition": "development",
-            "boundary": "Brock before first battle decision",
+            "boundary": boundary + " before first battle decision",
+            "preparation": "existing chapters; team mode includes item sales and Zubat capture",
             "memory_writes": 0,
             "model_queries": 0,
             "source_loads": 0,
@@ -80,12 +89,12 @@ def run(args):
     )
     stats = RedPracticeCartridge(args.rom.read_bytes()).public_base_stats
     reports = []
-    for boot_frames in BOOT_FRAMES:
-        source_id = f"fresh-red-brock-development-boot{boot_frames}"
+    for boot_frames in boots:
+        source_id = f"fresh-red-{'team' if team else 'brock'}-development-boot{boot_frames}"
         directory = args.output / source_id
         directory.mkdir(mode=0o700)
         with PyBoyAdapter(args.rom, watch=False, speed=None) as emulator:
-            session = FrameBudgetController(emulator, maximum_frames=MAX_FRAMES)
+            session = FrameBudgetController(emulator, maximum_frames=maximum_frames)
             reader = PokemonRedStateReader(session)
             actions = CountingExecutor(
                 FrameSafeExecutor(session, DEFAULT_NEW_GAME_TIMING.controller_timing())
@@ -100,7 +109,7 @@ def run(args):
                 )
                 common._write(directory / "progress.json", {"checkpoints": checkpoints})
                 print(json.dumps({"boot_frames": boot_frames, **checkpoints[-1]}), flush=True)
-                if event.checkpoint_id == "brock_battle":
+                if event.checkpoint_id == boundary:
                     raise BoundaryReached
 
             try:
@@ -121,7 +130,7 @@ def run(args):
                     raise ValueError("natural start did not verify errand")
                 common._write(directory / "errand.json", errand.public_dict())
                 try:
-                    run_pewter_chapter(
+                    pewter = run_pewter_chapter(
                         session,
                         reader,
                         actions,
@@ -130,6 +139,11 @@ def run(args):
                             errand.rival_evidence, saw_trainer_battle=errand.saw_trainer_battle
                         ),
                     )
+                    if team:
+                        if not pewter.passed:
+                            raise ValueError("natural team preparation did not verify Brock")
+                        common._write(directory / "pewter.json", pewter.public_dict())
+                        run_cerulean_chapter(session, reader, actions, progress=progress)
                 except BoundaryReached:
                     pass
                 else:
@@ -146,14 +160,15 @@ def run(args):
                 else:
                     raise ValueError("natural source did not reach MAIN")
                 if (
-                    raw.map_id != MapId.PEWTER_GYM
+                    raw.map_id != expected_map
                     or raw.enemy_party_count != 2
                     or raw.enemy_party_position != 0
-                    or raw.party_count != 1
+                    or raw.party_count != (2 if team else 1)
+                    or (team and (raw.party_hp is None or any(hp <= 0 for hp in raw.party_hp)))
                     or session.pressed_buttons
                     or (raw.enemy_hp or 0) <= 0
                 ):
-                    raise ValueError("natural Brock boundary differs")
+                    raise ValueError("natural trainer boundary differs")
                 prepared = prepare_red_battle_scenario(
                     PokemonRedObservationEncoder.from_state_reader(
                         reader, include_battle_stats=True, public_species_base_stats=stats
@@ -171,7 +186,7 @@ def run(args):
                     source_state_sha256=origin_sha,
                     initial_observation_sha256=prepared.initial_observation_sha256,
                     source_commit=commit,
-                    expected_map=int(MapId.PEWTER_GYM),
+                    expected_map=int(expected_map),
                     expected_battle_state=2,
                     observation_schema=OBSERVATION_SCHEMA_V2,
                 )
@@ -195,6 +210,7 @@ def run(args):
                     "party_count": raw.party_count,
                     "party_levels": raw.party_levels,
                     "party_moves": raw.party_moves,
+                    "party_hp": raw.party_hp,
                     "model_queries": 0,
                     "memory_writes": 0,
                     "full_game_runs": 0,
@@ -235,4 +251,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--team", action="store_true", help="Use the declared fresh natural team sources"
+    )
     run(parser.parse_args())
