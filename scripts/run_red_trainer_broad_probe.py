@@ -210,7 +210,11 @@ def run(args):
                     "output": str(directory / arm),
                 },
             )
-            outcome = player.run(path)
+            player.run(path)
+            outcome = json.loads((directory / arm / "outcome.json").read_bytes())
+            outcome = {
+                k: v for k, v in outcome.items() if k not in ("decisions", "final_observation")
+            }
             evaluations.append({"case": index, "arm": arm, **outcome})
             print(
                 json.dumps(

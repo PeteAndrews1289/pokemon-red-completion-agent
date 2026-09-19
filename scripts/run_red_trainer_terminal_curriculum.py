@@ -353,12 +353,31 @@ def compatible_resume_declaration(previous, declaration):
 
 def run(args):
     resume = getattr(args, "resume", False)
-    hard = getattr(args, "profile", "terminal") == "learner-five"
+    broad = getattr(args, "profile", "terminal") == "broad"
+    collect_only = getattr(args, "collect_only", False)
+    if broad and not collect_only:
+        raise ValueError("broad supply must be collected before a separately declared fit")
+    hard = getattr(args, "profile", "terminal") in {"learner-five", "broad"}
     recipes = hard_curriculum_cases if hard else curriculum_cases
+    if broad:
+        from run_red_trainer_broad_probe import broad_recipes
+
+        cartridge = RedPracticeCartridge(args.rom.read_bytes())
+
+        def recipes(templates, *, reserved=False):
+            if reserved:
+                return []
+            return [
+                (index % 4, index, recipe)
+                for index, recipe in enumerate(broad_recipes(cartridge, seed=2026091902, count=16))
+            ]
+
     horizon = 40 if hard else HORIZON
     max_decisions = 160 if hard else MAX_DECISIONS
     maximum_frames = 240000 if hard else 120000
     capture_decisions = (2, 4, 6, 8) if hard else (2, 3)
+    if broad:
+        capture_decisions = (2, 4)
     fit_seed = 2026091802 if hard else 2026091801
     if (
         args.output.exists() != resume
@@ -371,16 +390,27 @@ def run(args):
         raise ValueError("terminal curriculum cartridge differs")
     sources = original._source_rows(args.batch)
     prior = json.loads(args.prior_plan.read_bytes())
-    old_targets = retained_targets(prior)
+    retained_cache = getattr(args, "retained_cache", None)
+    cache_targets = None
+    if retained_cache is not None:
+        from run_red_trainer_retention import admitted_cache
+
+        _, cache_targets = admitted_cache(retained_cache)
+    old_targets = cache_targets[:52] if cache_targets is not None else retained_targets(prior)
     if len(old_targets) != 52:
         raise ValueError("terminal curriculum needs the retained 52-context anchor")
     frozen = TrainerPracticeThreeHeadModel.from_dict(json.loads(args.frozen_model.read_bytes()))
     if set(frozen.train_root_ids) != {row[1]["source_id"] for row in sources}:
         raise ValueError("terminal curriculum model roots differ")
     inherited_ids = set(frozen.train_capture_ids) - {target["capture_id"] for target in old_targets}
-    inherited_targets = (
-        terminal_anchor_targets(args.frozen_model, inherited_ids) if inherited_ids else []
-    )
+    if cache_targets is not None:
+        inherited_targets = cache_targets[52:]
+        if inherited_ids != {t["capture_id"] for t in inherited_targets}:
+            raise ValueError("cached terminal anchor inventory differs")
+    else:
+        inherited_targets = (
+            terminal_anchor_targets(args.frozen_model, inherited_ids) if inherited_ids else []
+        )
     templates = []
     for index in (0, 4, 8, 12):
         path = _bound_path(prior["scenarios"][index]["state"], "template state")
@@ -420,6 +450,13 @@ def run(args):
         )
     if inherited_ids:
         declaration["retained_terminal_anchor_ids"] = sorted(inherited_ids)
+    if broad or collect_only:
+        declaration["profile"] = "broad" if broad else getattr(args, "profile", "terminal")
+        declaration["collect_only"] = collect_only
+        declaration["epochs"] = 0 if collect_only else declaration["epochs"]
+        declaration["supply_seed"] = 2026091902 if broad else None
+    if retained_cache is not None:
+        declaration["retained_cache_manifest"] = original._binding(retained_cache / "manifest.json")
     if resume:
         previous = json.loads((args.output / "plan.json").read_bytes())
         if not compatible_resume_declaration(previous, declaration):
@@ -702,6 +739,22 @@ def run(args):
             )
         if len(targets) < 24:
             raise ValueError("terminal curriculum lacks intermediate decision supply")
+        if collect_only:
+            original._write(args.output / "targets.json", targets)
+            result = {
+                "status": "terminal_collection_complete_train_only",
+                "new_terminal_contexts": len(targets),
+                "fits": 0,
+                "authority_promotions": 0,
+                "targets": original._binding(args.output / "targets.json"),
+                "target_sources": [
+                    original._binding(p) for p in sorted(args.output.glob("train/*/target-*.json"))
+                ],
+                "plan": original._binding(args.output / "plan.json"),
+                "traces": traces,
+            }
+            original._write(args.output / "collection.json", result)
+            return result
         all_targets = old_targets + inherited_targets + targets
         fitted = fit_trainer_practice_three_heads(
             all_targets,
@@ -799,7 +852,11 @@ def main():
     for name in ("rom", "batch", "prior-plan", "frozen-model", "output"):
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--profile", choices=("terminal", "learner-five"), default="terminal")
+    parser.add_argument(
+        "--profile", choices=("terminal", "learner-five", "broad"), default="terminal"
+    )
+    parser.add_argument("--collect-only", action="store_true")
+    parser.add_argument("--retained-cache", type=Path)
     result = run(parser.parse_args())
     print(
         json.dumps(

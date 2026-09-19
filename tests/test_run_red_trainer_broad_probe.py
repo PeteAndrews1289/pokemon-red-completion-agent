@@ -32,3 +32,37 @@ def test_empty_probe_cannot_pass_or_claim_natural_qualification():
     report = summarize([])
     assert not report["probe_passed"]
     assert not report["natural_qualified"]
+
+
+def test_complete_but_worse_candidate_fails_probe():
+    rows = [
+        {
+            "case": i,
+            "arm": arm,
+            "battle_won": arm == "frozen",
+            "stop_reason": "battle_won" if arm == "frozen" else "party_defeated",
+            "teacher_queries": 0,
+            "memory_write_actions": 0,
+            "decision_count": 5,
+            "metrics": {
+                "party_faints": 0 if arm == "frozen" else 3,
+                "party_hp_lost": 10,
+                "invalid_action_failures": 0,
+            },
+        }
+        for i in range(24)
+        for arm in ("frozen", "candidate")
+    ]
+    report = summarize(rows)
+    assert report["gates"]["all_terminal_unassisted"]
+    assert not report["probe_passed"]
+    rows[0]["teacher_queries"] = 1
+    assert not summarize(rows)["gates"]["all_terminal_unassisted"]
+
+
+def test_broad_collection_cannot_silently_run_legacy_fit():
+    import pytest
+    from run_red_trainer_terminal_curriculum import run
+
+    with pytest.raises(ValueError, match="separately declared fit"):
+        run(SimpleNamespace(profile="broad", collect_only=False))
