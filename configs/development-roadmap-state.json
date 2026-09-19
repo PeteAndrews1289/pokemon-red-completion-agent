@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-19-battler-live-v1",
+  "as_of_session": "2026-09-19-player-battler-integration",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1874,6 +1874,12 @@
       "result": "Frozen J won two new earned-state trainer encounters with two voluntary switches and33decisions. Both returned verified live field state without reset or assistance. Supported small-party battler v1 is packaged; main-player call-site integration is next.",
       "deviation": "No fit or stage/checklist exit change. The previous reserve-coverage failure remains historical. These are same-origin continuations, not new independent roots or six-member mastery. Recovery needs persist in the earned states.",
       "next": "Astra High, Fast off: explicitly connect J to one supported main-player trainer boundary and verify one bounded saved-state goal. No new trainer refit/review cycle or full run."
+    },
+    {
+      "session": "2026-09-19-player-battler-integration",
+      "result": "Frozen J is connected to ordinary trainer funding. One new earned-state goal exercised4model decisions but failed after Wartortle fainted; strict funding guard stopped the unfinished battle. Exact final state retained and reopened. Model137/Red96of124 unchanged.",
+      "deviation": "No stage exit, fit or fresh-run gate changed. Direct prepared-entry probe, not high-level model-selected funding. Current docs refreshed and this checkpoint authorized for GitHub; earlier evidence remains unchanged.",
+      "next": "Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run."
     }
   ],
   "closed_milestones": [

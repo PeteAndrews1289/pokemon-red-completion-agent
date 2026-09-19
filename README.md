@@ -8,22 +8,16 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
 - The collection development save has **96/124 native registrations**. Model137 has **137 settled examples / 92 successes**; this is not fresh-game completion.
-- A separate frozen battler has demonstrated learning and won two natural small-party encounters with voluntary switches and verified live-game handoff. Its supported v1 interface is ready for explicit main-player integration, not automatically enabled everywhere.
+- Frozen battler J has demonstrated learning and natural small-party switching wins. It is now explicitly connected to the main-player trainer-funding entry, with shared budgets and retained decision logs.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [current battle evidence](docs/evidence/red-battler-earned-switch-result-2026-09-19.json) and
-[current handoff](HANDOFF.md) describe the active boundary. Historical reports include the
-[safe evolution session](docs/work-sessions/2026-09-15-safe-singleton-evolution.md),
-[source-selection report](docs/work-sessions/2026-09-14-full-local-training-source.md),
-[latest learning report](docs/work-sessions/2026-09-14-model121-frozen-resupply.md),
-[prior forced continuation report](docs/work-sessions/2026-09-13-model119-forced-singleton-fishing.md),
-[automatic failure report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
-[cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
-[latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),
-[route-capability report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md),
-[prior fishing report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) and
-[story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The first integrated funding goal failed after Wartortle fainted. J made four decisions;
+the existing no-faints guard stopped the unfinished battle. The exact state was retained
+without reset or teacher fallback. This is verified wiring, not successful autonomous funding.
+See [integration evidence](docs/evidence/red-player-battler-integration-2026-09-19.json),
+[earlier battler qualification](docs/evidence/red-battler-earned-switch-result-2026-09-19.json)
+and the [current handoff](HANDOFF.md).
 
 ## What is not solved
 
@@ -35,7 +29,7 @@ Fresh-game autonomy, broad battle reliability and move support, complete Pokéde
 
 **Observe → choose a goal → execute a bounded skill → verify the result → save → learn.**
 
-Python and PyBoy provide game observation and control. A small NumPy-based goal-value model ranks available choices. Deterministic code handles navigation, menus and capture/evolution mechanics; the qualified learned battler is a separate opt-in component, while existing collection battle controllers remain unchanged. A SQLite-backed shared registration ledger keeps global credit separate from each save's Pokédex and physical inventory. LLM coding assistants help develop the software; they are not secretly choosing each live action.
+Python and PyBoy provide observation and control. A small NumPy goal-value model ranks choices. Deterministic code handles navigation, menus and capture/evolution mechanics. Frozen J can own supported ordinary trainer battles through an explicit per-run setting; wild captures and Elite Four controllers remain unchanged. SQLite-backed registration memory separates global credit, local flags and physical specimens. LLM coding assistants develop the software; they are not secretly choosing each live action.
 
 [Architecture and code map](docs/architecture.md) · [Development roadmap](docs/development-roadmap.md) · [Dashboard guide](docs/progress-dashboard.md)
 

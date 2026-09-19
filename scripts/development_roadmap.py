@@ -177,7 +177,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(
         50,
         215,
-        f"{samples} goal-value examples  /  {story_label}: {story_status}",
+        f"Historical receipt: {samples} goal-value examples  /  {story_label}: {story_status}",
         "small",
     )
     parts.append(
@@ -263,8 +263,9 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
         result.append(f"- [{'x' if item['done'] else ' '}] {item['label']}{link}")
     result += [
         "",
-        f"Current model: **{evidence['fit']['model']['settled_examples']} examples**. "
-        "This is a small goal-value learner, not a demonstrated full-game player.",
+        f"Pinned historical learning receipt: **{evidence['fit']['model']['settled_examples']} "
+        "examples**. The current model and integration boundary are reported below in the "
+        "latest review and active state; this older chart receipt is not full-game competence.",
         "",
         "## Stable goals and exit criteria",
         "",

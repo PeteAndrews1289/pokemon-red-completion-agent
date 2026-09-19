@@ -26,6 +26,11 @@ The dashboard must show that distinction rather than combining numbers from diff
 Private operational records and game assets are not part of the public checkout. See
 [setup](getting-started.md).
 
+At the September19 checkpoint, the pinned training chart remains the historical135-example
+measured fit. Its receipt now projects without inventing a native action trace or policy replay.
+The active handoff reports the newer Model137 and the separate learned-battler integration.
+Do not combine those lineages or treat the old chart as the current model or live training.
+
 ## Update engineering status
 
 ```bash

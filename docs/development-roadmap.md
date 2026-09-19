@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-live-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-player-battler-integration**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **135 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Pinned historical learning receipt: **135 examples**. The current model and integration boundary are reported below in the latest review and active state; this older chart receipt is not full-game competence.
 
 ## Stable goals and exit criteria
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-player-battler-integration
+
+Frozen J is connected to ordinary trainer funding. One new earned-state goal exercised4model decisions but failed after Wartortle fainted; strict funding guard stopped the unfinished battle. Exact final state retained and reopened. Model137/Red96of124 unchanged.
+
+**Deviation:** No stage exit, fit or fresh-run gate changed. Direct prepared-entry probe, not high-level model-selected funding. Current docs refreshed and this checkpoint authorized for GitHub; earlier evidence remains unchanged.
+
+**Next:** Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run.
 
 ### 2026-09-19-battler-live-v1
 

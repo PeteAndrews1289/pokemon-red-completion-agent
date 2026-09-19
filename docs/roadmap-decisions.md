@@ -1336,3 +1336,17 @@ ordinary collection controllers have not already been replaced. Do not add anoth
 general trainer review, fit or perfect-win gate. Unsupported moves, six-member
 reliability and natural forced-target coverage remain explicit limitations, not
 silent claims. No stage exit or fresh-Red acceptance criterion changes.
+
+## September19 — explicit player binding; retain the failed funding integration
+
+Pete authorized integration, a full refresh of current documents and a GitHub checkpoint.
+Frozen J is now opt-in at ordinary trainer funding, sharing action/frame budgets and outer
+verification. The [single new goal](evidence/red-player-battler-integration-2026-09-19.json)
+made four learned decisions but failed after one faint. The unchanged funding contract stopped
+the unfinished battle. No fit, reset, payout or collection progress occurred.
+
+Keep the trainer package frozen. Next separate general battle lifecycle/recovery from strict
+no-faints funding acceptance, preserving the actual failed endpoint and verdict. Do not confuse
+this direct prepared-entry test with high-level model-selected funding or broad player promotion.
+No stage exit, Red denominator or fresh-start acceptance criterion changes. Future publication
+still requires Pete's instruction. Historical receipts remain unchanged.

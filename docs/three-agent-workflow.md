@@ -13,6 +13,14 @@ review history; their “latest” labels are relative to that archived sequence
 
 ## Roles
 
+### Current checkpoint — September19
+
+Pete authorized the frozen-battler integration, current-document refresh and GitHub checkpoint.
+Codex owns implementation and verification; no external reviewer was used or is pending.
+The actual next task is the battle-lifecycle/funding-contract boundary in the current handoff.
+The dated assignments below are history, not pending work. Future pushes still require Pete's
+explicit instruction; routine sessions do not require three-agent review or presentation updates.
+
 ### September 14 — full-Red denominator and anti-loop refocus
 
 Gemini 3.8 Flash High completed one read-only review of the new 151-target classifier. Its initial

@@ -1,95 +1,76 @@
-# Architecture: a learned planner with deterministic game skills
+# Architecture: learned choices, bounded game-control skills
 
-This is a hierarchical player, not an end-to-end visual neural network. The active learner selects semantic goals and destinations; existing skills translate those choices into game actions.
+This is a hierarchical player, not an end-to-end visual network or an LLM choosing buttons.
 
-## Active Red collection loop
+## Runtime
 
-```text
-PyBoy game state
-  → Red observation adapter
-  → semantic state + collection memory + available goals
-  → learned goal/destination choice, with declared safety overrides
-  → deterministic skill and controller executor
-  → independent outcome checks
-  → saved state + recorded costs/results
-  → fit the goal-value model from eligible real outcomes
-```
+Observe coherent emulator state → propose semantic goals → learned selection → bounded skill
+execution → independent verification → durable saves and actual-outcome learning.
 
-A failed skill remains a failed outcome even if it made partial collection progress. A safety-driven or single-option action is not automatically an additional learned choice.
-
-## Components and technology
-
-| Component | Current implementation and responsibility |
+| Component | Responsibility |
 | --- | --- |
-| Runtime | Python3.11+; PyBoy2.7.0 for the private Red cartridge. |
-| Observation | Title-specific readers decode location, party, inventory, battle and Pokédex state. High-level policy receives semantic features rather than memory addresses. |
-| Knowledge and routing | Cartridge-derived Gen1 map, terrain, encounter and acquisition data; deterministic route planning and execution. Access restrictions and unsupported mechanics still limit coverage. |
-| Goal model | NumPy-based option-value learning with a regularized multi-outcome regression objective. Ranks available goals or destinations; not a language model controlling buttons. |
-| Exploration | Eligible choices mix25% uniform exploration with75% model softmax. Deterministic safety support remains identified separately. |
-| Skills | Navigation, battle/menu control, capture, supported evolution, resources and storage. Their availability and completion are checked against actual state. |
-| Shared memory | SQLite-backed registration ledger plus separate per-save owned flags and physical party/box inventory. A global credit is not a local specimen. |
-| Persistence | Private episode streams, exact state checkpoints and model/corpus records linked by hashes. Continuation authenticates the recorded history. |
-| Viewer | Local, read-only HTTP dashboard with HTML/CSS/JavaScript; live frames, saved evidence, training and engineering status are distinct. |
-| Verification | pytest, Ruff, mypy, documentation/publication checks and GitHub Actions. Tests are engineering evidence, not model training. |
+| Python3.11+ / PyBoy2.7.0 | Runtime and private cartridge execution |
+| Observation adapters | Party, inventory, battle, map and Pokédex facts; raw addresses stay below policy |
+| Goal learner | NumPy multi-outcome option-value model; semantic goals and destinations |
+| Frozen battler J | Three small learned heads for moves, attack/switch control and replacement targets |
+| Cartridge routing and skills | Navigation, menus, capture, evolution, storage and recovery |
+| Executor | Sole controller-input owner; action and frame budgets |
+| Referee | Verifies outcomes without choosing an alternative action |
+| Shared memory | SQLite registrations; global credits, local flags and specimens stay distinct |
+| Persistence | Hash-linked choices, model identities, exact saves and resource costs |
+| Dashboard | Read-only saved evidence, live runtime and engineering status |
 
-## Who decides what?
+## Learned trainer integration
 
-The goal selector owns eligible high-level alternatives. Safety gates may constrain or override a choice, and those interventions must be visible. The executor owns controller input. The verifier checks what actually happened; it must not quietly choose a better action for the player.
+An authenticated private collection plan may declare a `trainer_battler` model binding.
+The loader requires frozen J's qualified digest. The runtime passes an explicit per-run controller
+into ordinary trainer funding; there is no module-global replacement or teacher fallback.
 
-LLMs are used as development and review assistants. They are not the active goal-value model and are not called to supply each battle move. Historical research includes other learned components, but those experiments do not imply live authority in today's collection loop.
+The bridge advances the introduction, captures the live boundary, and borrows the running emulator
+without loading or closing it. Actor actions use the player's counted, limited executor. The outer
+preservation guard runs at each decision. Logs record choices/timings; failures retain final saves.
 
-The source-level boundaries prevent accidental misuse; Python interfaces are not a security sandbox against malicious code.
+This entry supports one to three own party members, not arbitrary six-member teams. Wild captures
+and Elite Four controllers remain unchanged. Healing-item decisions and unsupported moves are not
+enabled. Default plans retain their historical controllers.
 
-## Learning and evidence
+## Verified boundary and open mismatch
 
-Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
+The first live integration used an earned two-member save, three ordinary Potions and a78-step
+route to a new trainer. J made four decisions through the main-player prepared battle seam.
+Wartortle fainted; the unchanged no-faints funding guard stopped before replacement. The goal
+failed, the battle remains unfinished, and no payout was earned.
 
-The active registered-objective model has116 settled examples from related development states,
-including successful choices and retained failures. Those are not115 independent games. In-sample
-fit quality and bounded collection gains cannot establish generalization.
+This verifies invocation, budgets, logging and failure retention—not successful autonomous funding.
+The probe called the main-player battle entry directly; it did not run Model137's high-level
+selector or bypass its conservative funding-offer eligibility.
 
-Champion and Hall-of-Fame evidence exists for checkpoint-based hierarchical story integration. It does not prove that the present collection model can start from the title screen and independently complete the game.
+Next, separate general battle completion/recovery from no-faint funding acceptance. A faint is
+not a destroyed specimen, but the funding contract still forbids it. Do not silently weaken that
+contract or replay the failed encounter.
+
+## Learning and claims
+
+Model137 has137 examples,92 successes and58 economy-qualified outcomes from related development
+states, not independent games. Its collection save remains96/124 registrations.
+
+J has318 physical TRAIN contexts from four origins. Its unused generated-team comparison was9/24
+wins versus H7/24: descriptive learning evidence, not statistically conclusive mastery.
+Natural attack/switching probes provide additional scoped evidence. DEVELOPMENT is not fitting data.
+LLMs develop and review software; they do not secretly supply live model choices.
 
 ## Code map
 
-All module paths below are under [the Python package](../src/pokemon_red_completion).
-
-| Concern | Starting points |
+| Concern | Starting points under the Python package |
 | --- | --- |
-| Semantic observation | `observation.py`, `red_player_observer.py`, `red_party.py` |
-| Cartridge knowledge | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py`, `gen1_acquisition.py` |
-| Learned choice | `living_dex_option_value.py`, `living_dex_player_exploration.py`, `red_player_model.py` |
-| Runtime and routing | `red_bounded_player.py`, `red_resource_goal_router.py`, `gen1_route_runtime.py`, `red_routed_semantic_goal.py`, `red_travel_capture.py` |
-| Registration | `registration_memory.py`, `registered_collection.py`, `registered_checkpoint.py` |
-| Training | `red_player_incremental_fit.py`, `red_player_training_dataset.py` |
-| Evidence and recovery | `private_artifacts.py`, `red_player_checkpoint.py`, `provenance.py` |
-| Orchestration | [Regional learning-cycle runner](../scripts/run_red_regional_learning_cycle.py) |
+| Goal runtime | `red_goal_context.py`, `red_autonomous_collection.py`, `red_resource_goal_router.py` |
+| Trainer binding | `red_learned_trainer.py`, `red_routed_trainer_funding.py` |
+| Actor and learning | `red_trainer_practice_episode.py`, `red_trainer_practice_outcome_policy.py`, `red_trainer_practice_fit.py` |
+| Decision logs | `red_trainer_practice_log.py` |
+| Resource verifier | `red_trainer_funding_battle.py` |
+| Registration | `registration_memory.py`, `registered_collection.py` |
+| Main entry | [Bounded collection runner](../scripts/run_red_autonomous_collection.py) |
 
-ROMs, states, recordings, datasets and model artifacts are private. Public summaries contain selected metrics and hashes, not enough material to reproduce every private run.
-
-Resource-route eligibility now has an explicit fail-closed seam: before a route becomes a model
-candidate, the configured handler must declare finite support for wild encounters, trainer
-engagement/battles and scripted dialogue. Recovery and travel-capture wrappers must preserve the
-same declaration. This prevents a deterministic execution deficit from masquerading as a viable
-learned choice.
-
-Capture preparation now inventories all twelve verified boxes, selects a helper by usable
-sleep/paralysis capability and capacity, switches through the existing PC primitive, protects the
-complete specimen multiset and last field-move carriers, then rebinds the selected acquisition
-without another policy query. Helper species identity remains outside learned features.
-
-Automatic candidate assembly now derives productive reachable fishing destinations and combines
-them with ordinary goals in an identity-free menu. When no ordinary goal remains, it can also expose
-at least two authenticated supplemental choices without weakening storage-pressure or recovery
-safety. Model113's exact frozen fishing choice then added one registration and produced Model114.
-Model114's next resupply attempt failed payout verification despite positive cash; it became row115.
-The next action-free menu again selected income. Diagnose the accounting boundary before executing
-that exact frozen choice. Neither a retry nor a post-hoc successful-payout label is permitted.
-Assembly still relies on private run orchestration and therefore does not establish a general
-fresh-game player.
-
-A complete fresh-start model-directed Red run and full local Red Pokédex must precede any
-ROM hack. Global credit, local owned flags and physical stock remain separate; legitimate
-version/trade/event dependencies cannot be silently excluded. Crystal and at least Emerald follow.
-
-[Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)
+[Integration evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Setup](getting-started.md) · [Roadmap](model-first-roadmap.md) ·
+[Historical architecture](history/architecture-through-2026-09-10.md)

@@ -1,32 +1,33 @@
-# Video narrative: a model-controlled win, with a visible weakness
+# Video narrative: the learned battler enters the player
 
 This is an AI-assisted engineering project directed by Pete Andrews.
 
-## Latest episode
+## The story to show
 
-Show the teacher setup separately: Kingler28 leads into one natural Route11
-encounter with Spearow15. Then show six saved model choices controlling the
-actual attack slots. Every choice is recorded before input and checked by PP use.
+Separate the teacher from the actor. The teacher can construct training situations; the model
+must make its own choices. J's modest unused-team improvement and natural switching wins
+established a supported small-party battler, not perfect battle knowledge.
 
-The interesting result is not just the victory. Five Guillotine attempts dealt
-zero damage and consumed all its PP. Only then did the model choose Vicegrip
-and knock out the opponent. Kingler finished at59/76 HP, safely back in the field.
+Then show an earned two-member save, three ordinary Potions, a cartridge-derived route and a new
+trainer. The player invokes J through its trainer-funding entry. The log records one voluntary
+switch and three attacks: four real model decisions.
 
-Label this frozen-model control, not online training or a new fit. It took149
-controller actions/13,177 frames including setup. Red remains96/124 registrations;
-Model137 remains137 examples/92 successes/58 economy-qualified.
-Flash reviewed the control boundary and training direction; Codex rejected its
-suggestion to fit development captures.301 targeted ROM-free checks passed.
+Keep the actual ending. Wartortle faints, and the conservative funding guard stops before a
+replacement. Zubat is still alive. The exact state is retained without reset, hidden teacher rescue,
+payout or completed-battle claim.
 
-## Next concrete step
+## Meaning and next chapter
 
-Train reliability/value on separate permitted scenarios, then measure old/new
-decisions on untouched encounters. Do not fix the footage with a hidden teacher,
-a hardcoded Guillotine ban, or a replay presented as a new result.
+The learned component is connected and observable. General battle completion/recovery now needs
+to be separated from strict no-faints funding acceptance. Do not replay the footage until it wins
+or turn this into another blind refit cycle.
 
-Fresh model-directed Red completion, Champion/Hall of Fame and all124 native
-registrations still precede any ROM hack. Deferred legitimate dependencies stay
-explicit; Crystal and at least Emerald follow.
+Show saved-state verification alongside the decision log; do not label recorded frames as live.
+Main collection remains96/124 and Model137 remains137 examples/92 successes. This early battle
+lineage is not additional progress in that collection save.
 
-[Evidence](evidence/red-earned-learned-battle-2026-09-16.json) ·
+Resolve the lifecycle boundary, then return to collection/resource goals. Fresh model-directed Red
+completion and124 native registrations precede a ROM hack, Crystal and Emerald.
+
+[Evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

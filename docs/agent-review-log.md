@@ -1,5 +1,19 @@
 # Agent review and adjudication log
 
+## September19 — player integration and publication checkpoint
+
+Codex implemented and locally tested the explicit frozen-J trainer binding. The live probe
+exercised four choices and retained a failed no-faints funding goal, not a completed battle.
+Accepted finding: battle lifecycle/recovery and conservative funding acceptance are different
+contracts. Deferred: any prospective contract change or continuation until a new bounded plan;
+the failed source was not replayed. No trainer refit or universal readiness claim.
+
+The broad tests also exposed the live bridge's primitive forwarding outside the executor and
+the older dashboard receipt mismatch. Both were corrected without removing safety assertions.
+Current documents were refreshed at Pete's explicit checkpoint request; old evidence remains.
+No Flash/Claude review was used, no external quota was queried, and no external gate is pending.
+[Checkpoint](work-sessions/2026-09-19-player-battler-integration.md).
+
 ## September 7 — Flash survey summary and live integration audit
 
 Flash3.8High used its isolated branch only; reviewed draft f76cc46d. Codex accepted

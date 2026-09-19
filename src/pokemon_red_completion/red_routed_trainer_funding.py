@@ -383,6 +383,10 @@ def bind_local_trainer_funding(
         or not raw.party_hp
         or len(raw.party_hp) != observation.party.size
         or any(hp <= 0 for hp in raw.party_hp)
+        or (
+            router.runtime.trainer_battle_runner is not None
+            and not 1 <= observation.party.size <= 3
+        )
     ):
         return bindings
     proactive_shortfall = target_cash is not None and raw.player_money < target_cash

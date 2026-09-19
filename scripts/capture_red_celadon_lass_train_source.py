@@ -37,17 +37,23 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     event_flag_is_set,
 )
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
-from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 SOURCE_SHA256 = {
-    "red-goal-v1-001-advance_story-train-01": "7d9ce6d351ca87ea83b6038e35c953a9e0f5f648f722d82ca252f87110b0a80e",
-    "red-goal-v1-002-advance_story-train-02": "1a4452bce3c704bcb50bb441cbe6885d3e0bf9556294d9c3c407513ebe9edc9f",
-    "red-goal-v1-003-advance_story-train-03": "3734daa5dfecb8534b9ee0141459e9032d04d9612d0e6b2a085da0e75748dd9f",
+    "red-goal-v1-001-advance_story-train-01": (
+        "7d9ce6d351ca87ea83b6038e35c953a9e0f5f648f722d82ca252f87110b0a80e"
+    ),
+    "red-goal-v1-002-advance_story-train-02": (
+        "1a4452bce3c704bcb50bb441cbe6885d3e0bf9556294d9c3c407513ebe9edc9f"
+    ),
+    "red-goal-v1-003-advance_story-train-03": (
+        "3734daa5dfecb8534b9ee0141459e9032d04d9612d0e6b2a085da0e75748dd9f"
+    ),
 }
 MAX_ACTIONS = 600
 MAX_FRAMES = 180_000
@@ -106,9 +112,7 @@ def _model_ready_observation(reader: PokemonRedStateReader, rom: bytes, raw):
     )
 
 
-def run(
-    rom_path: Path, source_path: Path, source_id: str, output_root: Path
-) -> dict[str, object]:
+def run(rom_path: Path, source_path: Path, source_id: str, output_root: Path) -> dict[str, object]:
     rom, source, output = _validate_request(rom_path, source_path, source_id, output_root)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
     output.mkdir(parents=True, mode=0o700, exist_ok=False)
@@ -147,8 +151,13 @@ def run(
                 _move(actions, reader, emulator, ("up",), timing, "Gym entry")
                 _check_budget(actions, emulator)
                 _move(
-                    actions, reader, emulator, ("up",) * 6, timing,
-                    "Lass trigger", allow_trigger=True,
+                    actions,
+                    reader,
+                    emulator,
+                    ("up",) * 6,
+                    timing,
+                    "Lass trigger",
+                    allow_trigger=True,
                 )
                 _enter_battle(actions, reader, timing, "Celadon Gym Lass")
                 for _ in range(45):

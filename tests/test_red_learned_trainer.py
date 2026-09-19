@@ -105,3 +105,19 @@ def test_routed_funding_passes_explicit_runtime_override(monkeypatch):
     assert report.evidence["battle_authority"] == "frozen_learned_trainer"
     assert report.evidence["battle_model_sha256"] == learned.FROZEN_J_SHA256
     assert bound.verify(report).status.value == "succeeded"
+
+
+def test_unsupported_party_is_not_offered_a_learned_funding_route(monkeypatch):
+    import test_red_routed_trainer_funding as fixtures
+
+    from pokemon_red_completion import red_routed_trainer_funding as funding
+
+    router, state, _, bindings, calls = fixtures.fixture(monkeypatch)
+    router.runtime.trainer_battle_runner = object()
+    router.runtime.trainer_battle_model_sha256 = learned.FROZEN_J_SHA256
+    state.party = SimpleNamespace(size=4)
+    from dataclasses import replace
+
+    state.raw = replace(state.raw, party_count=4, party_hp=(20, 20, 20, 20))
+    assert funding.bind_local_trainer_funding(router, bindings, state) is bindings
+    assert calls == []

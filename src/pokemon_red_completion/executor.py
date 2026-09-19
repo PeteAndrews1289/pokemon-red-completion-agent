@@ -19,6 +19,36 @@ class ControllerPort(Protocol):
     def tick(self, frames: int) -> None: ...
 
 
+class BorrowedLiveController:
+    """Forward controls without giving a nested skill reset or close authority."""
+
+    def __init__(self, session: Any, *, error_type: type[Exception] = RuntimeError) -> None:
+        self.session = session
+        self.error_type = error_type
+        self.initialized = False
+
+    def load_state_bytes(self, payload: bytes) -> None:
+        if self.initialized or self.session.save_state_bytes() != payload:
+            raise self.error_type("live trainer state differs or reset attempted")
+        self.initialized = True
+
+    @property
+    def frame_count(self) -> int:
+        return self.session.frame_count
+
+    def press(self, button: str) -> None:
+        self.session.press(button)
+
+    def release(self, button: str) -> None:
+        self.session.release(button)
+
+    def tick(self, frames: int) -> None:
+        self.session.tick(frames)
+
+    def read_u8(self, address: int) -> int:
+        return self.session.read_u8(address)
+
+
 class JournaledController(CausallyMeteredEmulator):
     """Keep primitive control here while a caller owns durable costs.
 

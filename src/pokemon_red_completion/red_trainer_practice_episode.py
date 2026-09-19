@@ -28,7 +28,11 @@ from pokemon_red_completion.battle_scenario_capture import (
     OBSERVATION_SCHEMA_V2,
     BattleScenarioCapture,
 )
-from pokemon_red_completion.executor import ControllerTiming, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    BorrowedLiveController,
+    ControllerTiming,
+    FrameSafeExecutor,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
@@ -83,33 +87,8 @@ class LiveTrainerSession(TrainerPracticeSession, Protocol):
     def frame_count(self) -> int: ...
 
 
-class _BorrowedTrainerSession:
-    """The battle executor may act, but cannot reset or close the player's game."""
-
-    def __init__(self, session: LiveTrainerSession) -> None:
-        self.session = session
-        self.initialized = False
-
-    def load_state_bytes(self, payload: bytes) -> None:
-        if self.initialized or self.session.save_state_bytes() != payload:
-            raise RedTrainerPracticeEpisodeError("live trainer state differs or reset attempted")
-        self.initialized = True
-
-    @property
-    def frame_count(self) -> int:
-        return self.session.frame_count
-
-    def press(self, button: str) -> None:
-        self.session.press(button)
-
-    def release(self, button: str) -> None:
-        self.session.release(button)
-
-    def tick(self, frames: int) -> None:
-        self.session.tick(frames)
-
-    def read_u8(self, address: int) -> int:
-        return self.session.read_u8(address)
+def _BorrowedTrainerSession(session: LiveTrainerSession) -> BorrowedLiveController:
+    return BorrowedLiveController(session, error_type=RedTrainerPracticeEpisodeError)
 
 
 def run_live_red_trainer_practice_episode(

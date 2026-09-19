@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Choose attacks, voluntary switches, replacement-prompt answers and forced replacements from semantic observations in bounded full-party trainer battles, then improve outcomes on separate natural battles.",
-      "cheapest_falsifier": "The frozen learner fails to improve aggregate unused-battle outcomes while retaining trained skills, or cannot execute an independent natural full-party test without fallback; a single random loss is not failure by itself.",
+      "capability": "Invoke a frozen learned battler from the main player with shared action/frame limits, retained decisions and independent goal verification.",
+      "cheapest_falsifier": "The learned battle cannot complete or hand back a verifiable earned state under the player goal contract without teacher substitution.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "J owned33 in-place decisions:27attacks,2voluntary switches and4prompt declines. Two predeclared story objectives succeeded; no learned high-level goal choices or blanket player promotion.",
-        "blocker": "Trainer v1 qualification is complete for its supported small-party scope. Remaining main-player wiring must explicitly call the live bridge and preserve recovery/resource limits; collection controllers are still unchanged.",
-        "decision": "Freeze packaged J and close trainer-build/refit work. Return to a bounded main-player encounter, not broader curriculum or generic review.",
+        "authority_delta": "J owned4decisions through the main-player prepared trainer seam:1voluntary switch and3attacks. No high-level goal-model selection or full-player promotion.",
+        "blocker": "Wartortle fainted; the unchanged funding no-faints guard stopped before replacement. Integration goal failed and battle remains unfinished. A successful earned funding handoff is not established.",
+        "decision": "Retain the failure and freeze J. Separate general battle lifecycle/recovery from conservative funding acceptance before further gameplay. Refresh current documents and publish only this user-authorized checkpoint.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-battler-earned-switch-result-2026-09-19.json",
-          "sha256": "fe9cd78e70dccc3d75b64c364de65d5567b45441d6312a5868a6c16e5b73ec38"
+          "path": "docs/evidence/red-player-battler-integration-2026-09-19.json",
+          "sha256": "37f6f7b540eb8e83a39343bc1e1ecaec0ef64b92a3cf625ccdc063f65a641636"
         },
-        "learning_output": "No new fit or examples;318TRAIN contexts unchanged. Two new natural encounters from earned saves demonstrated voluntary switching and live handoff.",
-        "next_falsifier": "The first supported main-player call site cannot preserve learned battle authority, typed outcomes, exact earned state or fresh completion ledger without fallback.",
-        "next_session_goal": "Astra High, Fast off: explicitly wire frozen J into one supported main-player trainer call site and run one bounded saved-state goal. Estimate45-60minutes if existing boundaries fit; no full-game authorization.",
-        "product_alignment": "The learned battler can now run inside a live game without reset and return a verified earned state; trainer v1 can leave the lab.",
-        "session_id": "2026-09-19-battler-live-v1",
+        "learning_output": "Four new DEVELOPMENT decisions; no examples or fit.318TRAIN contexts and all collection counters unchanged.",
+        "next_falsifier": "A prospectively declared continuation cannot preserve exact state, model-only choices, recovery costs and a fresh typed outcome after a faint.",
+        "next_session_goal": "Astra High, Fast off: separate general learned-battle completion and recovery from strict no-faint funding acceptance. Use the retained failed state only under a new prospective continuation, never replay its source or fit this DEVELOPMENT outcome. Estimate45-60minutes; no full run.",
+        "product_alignment": "The learner now reaches a main-player call site and exposes a concrete lifecycle mismatch instead of another trainer-only exercise.",
+        "session_id": "2026-09-19-player-battler-integration",
         "status": "closed",
-        "stop_condition": "Both declared new encounters completed once. No replay, replacement source, fit, full run or push. Unsupported mechanics and broad six-member reliability remain outside v1 scope.",
-        "transfer_result": "Same two natural origins, new Super Nerd encounter with normal-menu weak lead: J2/2wins,2voluntary switches,0faints/invalid actions/teacher queries. Both final ledgers and battle endpoints reopened read-only. First endpoint has poisoned Wartortle and low HP; recovery must remain explicit."
+        "stop_condition": "One declared goal consumed and failed;247actions/19284frames, no reset/replay/fallback. Gameplay stopped. User authorized this GitHub checkpoint, not a full run or blanket promotion.",
+        "transfer_result": "Same boot3100 natural origin, new trainer. Three earned Potions restored the party;78-step route.1faint, no payout, final HP28/0 and1706cash. Exact final state and fresh ledger reopened read-only."
       },
       "learned_authority": {
-        "current": "Model137 remains137examples/92successes/58economy-qualified; Red96/124. Frozen J added33 in-place natural decisions including2voluntary switches, winning both new encounters. Main collection controllers are not automatically replaced.",
+        "current": "Model137 remains137examples/92successes/58economy-qualified; Red96/124. Frozen J is opt-in at ordinary trainer funding and owned4new live decisions. The goal failed at one faint; no blanket controller replacement or promotion.",
         "target": "Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Wrap and freeze supported battler v1. Return to main-player integration: explicitly bind J at one supported trainer boundary and execute one bounded saved-state goal with recovery and fresh-ledger verification. No more trainer refit/review cycle.",
+      "next_decision": "Main-player battle wiring is implemented and exercised. Resolve the general-battle versus no-faints funding contract boundary; preserve the actual unfinished battle. No refit/review cycle.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -294,7 +294,7 @@
         "Model120 freeze seed120091401 is consumed without a retained choice and seed120091402 is consumed by its retained resupply success; never retry, replay, infer, substitute or re-execute either identity.",
         "All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.",
         "Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.",
-        "The collection player's battle controller remains fixed; old shadow results do not promote it. A separately recorded bounded development encounter may give the frozen battle ranker explicit move authority, without teacher fallback, fitting on development, full-player promotion or a full run.",
+        "Frozen J may own explicitly bound ordinary trainer battles in bounded development; default wild-capture and Elite Four controllers remain unchanged. No teacher fallback, DEVELOPMENT fitting, consumed replay, full-player promotion or full run.",
         "Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.",
         "Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.",
         "Authenticated train roots may reset only under a prospectively bounded curriculum. The four retired training roots and all eight reset trials are now consumed under their exact plan; preserve provenance, exclusions and terminals. Already-opened development, sealed Red and benchmark roots may never be relabeled for fitting.",

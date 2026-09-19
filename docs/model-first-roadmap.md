@@ -1,69 +1,63 @@
 # Model-first development roadmap
 
 Build a player that actually plays Pokémon. The [mission](../MISSION.md),
-[North Star](../NORTH_STAR.md) and [active state](../ACTIVE_PRODUCT_STATE.md) govern the work.
+[North Star](../NORTH_STAR.md) and [active state](../ACTIVE_PRODUCT_STATE.md) govern work.
 
 ## Required sequence
 
-1. Train reusable decisions through bounded Red scenarios and retain failures.
-2. Qualify model choices across story, battles, navigation, resources and collection.
-3. Finish a fresh model-directed Red run with Champion/Hall-of-Fame evidence
-   and all124 registrations in the declared legitimate native route; record legitimate gaps.
+1. Train reusable decisions through bounded Red scenarios, retaining failures.
+2. Qualify model authority across story, battles, navigation, resources and collection.
+3. Complete fresh model-directed Red with Champion/Hall of Fame and124 native registrations;
+   verify the explicit legitimate deferred-dependency ledger.
 4. Test a compatible unfamiliar Red ROM modification.
 5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
-## Where we stand
+## Current position
 
-Model137 has137 fitted examples/92 successes/58 economy-qualified outcomes.
-The collection development save is96/124 registrations,74 specimens and198 cash.
-These are not whole-project completion percentages. Fresh-Red acceptance remains0/5.
-Ordinary collection battles and mechanical travel still use existing controllers.
-No full Red run is open.
+Model137:137 fitted examples,92 successes,58 economy-qualified outcomes.
+Main collection save:96/124 registrations,74specimens,198cash. Fresh-run acceptance:0/5.
+These are not whole-project percentages. No full Red run is open.
 
-The battle trainer now demonstrates learning, not just successful execution.
-The [policy-bound experiment](evidence/red-battler-policy-learning-result-2026-09-19.json)
-measured16 existing situations under frozen learner continuation, using400complete
-branches. There remain318 unique TRAIN contexts across four independent origins.
-One successor J retained all15 numerical TRAIN checks and improved an unused
-generated3v3 comparison to9/24wins versus H7/24, with fewer faints. This modest
-descriptive result is not statistically conclusive or universal improvement.
+Frozen battler J retained15TRAIN checks after a policy-continuation-aware fit. Its318physical
+TRAIN contexts cover four origins. An unused generated3v3 comparison produced J9/24wins versus
+H7/24, a modest descriptive learning signal, not statistically conclusive mastery.
+Natural Brock tests gave J6/6,H5/6,first-legal0/6 across two origins and three timings each.
 
-Two separately booted, unedited natural starts supplied early attack tests:
-J6/6wins, H5/6, first-legal0/6, across three timings per origin. They establish
-early natural attack-transfer evidence, not six independent roots or full-party
-switching qualification. All trials are consumed. J is frozen and packaged;
-the collection player's authority has not changed.
+Two later natural team trials initially failed switching coverage despite winning. New earned
+encounters then demonstrated two voluntary switches and two wins,33decisions total.
+Those earlier verdicts stand. J is frozen; no further trainer refit/review gate is needed.
 
-Pete's learning criterion does not require perfect wins or teacher superiority.
-Old teacher-reference failures and rejected I retain their historical verdicts.
-The new learning criterion was declared before J's test. No new review/refit gate.
+## Main-player integration checkpoint
 
-## Next bounded work
+The collection runner can now bind J explicitly to ordinary trainer funding. Default wild
+capture and Elite Four controllers are unchanged; supported own-party size is one to three.
+The first probe called the same prepared battle entry directly, not Model137's goal selector.
 
-| Work | Concrete completion test | Setting |
-| --- | --- | --- |
-| Policy-conditioned learning | Completed: retained fit, positive unused-team learning signal, packaged J | No more fitting on consumed tests |
-| Natural switching and live bridge | Completed: two new encounters, two voluntary switches, two wins and verified no-reset field handoff | Freeze supported battler v1 |
-| Main-player integration | Explicitly invoke J at one supported trainer boundary, then verify one bounded saved-state goal and fresh ledger | Astra High;45–60minutes if existing boundaries fit |
-| Collection and funding | Legitimate repeatable earnings, supported Safari/search goals, remaining28 native registrations | Astra per Pete's preference |
-| Fresh Red acceptance | Fresh origin, model-directed story, Champion/Hall of Fame,124/124 and verified dependency ledger | After prerequisite gates |
+Three earned Potions and a78-step route led to a new trainer. J switched once and attacked
+three times. Wartortle fainted, and the existing no-faints funding guard stopped before replacement.
+Goal failed; battle unfinished; no payout. Exact state and all247actions/19284frames were retained.
+This proves invocation and failure handling, not successful funding.
 
-The [new natural team test](evidence/red-battler-natural-team-result-2026-09-19.json)
-retained12verified earned endpoints. J used37decisions/90HP lost versus H42/102,
-but neither used its reserve; the declared coverage gate did not pass.
-The [earned-state follow-up](evidence/red-battler-earned-switch-result-2026-09-19.json)
-then won2/2new Super Nerd encounters after normal-menu lead reversal, making two
-voluntary switches and33decisions without assistance. The live bridge handed back
-verified field state without reset. Supported battler v1 is frozen; main-player
-call-site wiring remains explicit, not an automatic controller replacement.
-No refit or additional trainer-build gate. The earlier Brock test endpoints were
-not retained; do not reconstruct or replay those. Unsupported status/recovery/
-boost, Counter, self-destruct and all-party Struggle remain segment exclusions.
+## Next few bounded steps
 
-Teachers may use disclosed TRAIN assistance; final-player cheats remain forbidden.
-Mew and unavailable version/link dependencies remain legitimate later-game targets.
-Consumed DEVELOPMENT never becomes fitting material. ROM-hack and Crystal work
-stay closed until fresh Red acceptance. Pete decides GitHub pushes.
+| Work | Completion evidence |
+| --- | --- |
+| General battle lifecycle | Explicitly separate battle completion/recovery from no-faint funding acceptance; preserve existing verifier obligations |
+| Retained-state continuation | Under a new declaration, finish or lose from the actual failed endpoint, with model-only choices and fresh ledger; no replay |
+| Collection/resource return | Resume useful goals from the separate Model137 save, including legitimate earnings and supported searches |
+| Remaining native registrations | Earn the remaining28, retaining unavailable dependencies and real costs |
+| Fresh Red acceptance | Pass all five recorded criteria before any ROM hack |
 
-[Latest evidence](evidence/red-battler-earned-switch-result-2026-09-19.json) ·
+Use Astra High, Fast off for the next45–60minute lifecycle session. No broad review, new source
+factory, blind fit, full-game replay or inflated authority claim. A random loss is not by itself
+evidence that the learner cannot learn; an unfinished guarded battle must remain distinct.
+
+Six-member reliability, natural forced-target coverage and complete move support remain open.
+Status/recovery/boost moves, Counter, self-destruct and all-party Struggle remain exclusions.
+TRAIN assistance is allowed; final-player cheating and DEVELOPMENT fitting are not.
+
+Pete authorized this GitHub checkpoint. Future publication remains his decision.
+
+[Latest evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Checkpoint report](work-sessions/2026-09-19-player-battler-integration.md) ·
 [Development infographic](development-roadmap.md)

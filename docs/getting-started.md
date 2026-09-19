@@ -34,4 +34,19 @@ Private gameplay requires lawfully obtained compatible game assets, a configured
 
 Do not download or commit ROMs, saves, models, datasets or credentials. Do not run sealed evaluations or a full-game teacher replay merely to test installation.
 
+## Opt-in learned trainer
+
+The authenticated private plan for `scripts/run_red_autonomous_collection.py` may include
+`trainer_battler` with `path`, the qualified frozen J `sha256`, and the actual development
+`root_lineage_id`. The model stays private. Omit this binding to preserve existing controllers.
+
+This setting covers ordinary trainer-funding battles with one to three own party members,
+not wild captures or Elite Four fights. Decisions, timings, failures and final states are
+retained under the run's private `trainer-battles` directory. Player budgets and strict
+funding preservation checks remain active; a faint can fail the goal before battle completion.
+
+The first live integration failed that no-faints check. Read the
+[checkpoint report](work-sessions/2026-09-19-player-battler-integration.md) before use.
+Do not rerun its consumed one-shot probe or mistake the setting for full-player qualification.
+
 [Architecture](architecture.md) · [Contributor instructions](../AGENTS.md)

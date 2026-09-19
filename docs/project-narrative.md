@@ -34,12 +34,19 @@ ran inside the existing emulator without reset; fresh ledgers verified the story
 events and preserved registrations. One party ended poisoned and low on HP:
 successful combat still leaves real recovery decisions.
 
-Supported small-party battler v1 is now frozen and ready for explicit main-player
-wiring. That is the next game-work step, not another fit or general audit.
-This is not six-member mastery, complete move support or a full-player promotion.
+Supported small-party battler v1 is now frozen and explicitly connected to the
+main player's ordinary trainer-funding entry. The first integration used an earned
+save, three ordinary Potions and a new trainer. J switched once and attacked three
+times; Wartortle fainted, and the old no-faints funding guard stopped the unfinished
+battle before replacement. No payout, reset or hidden teacher rescue occurred.
+
+The wiring and retained failure are verified. Successful funding is not. The next
+task separates general battle completion/recovery from conservative funding
+acceptance, rather than starting another fit or broad audit. This is not six-member
+mastery, complete move support or full-player promotion.
 Model137 remains137examples/92successes; collection registrations remain96/124.
 The five-part fresh-start Red gate remains unpassed.
 
-[Latest evidence](evidence/red-battler-earned-switch-result-2026-09-19.json) ·
+[Latest evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

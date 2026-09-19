@@ -1,307 +1,97 @@
-# AI Systems Specialist interview handoff: transferable Pokémon agent
+# AI systems interview handoff
 
-Updated: 2026-09-13
+Current checkpoint: September19,2026. Historical reports remain evidence, not instructions.
 
-Repository: [PeteAndrews1289/pokemon-red-completion-agent](https://github.com/PeteAndrews1289/pokemon-red-completion-agent)
+## Product and authorship
 
-This handoff describes only the active completion-agent repository. It does not use claims from the
-concluded predecessor project.
+Build a transferable Pokémon player, beginning with Red, that finishes stories and accumulates
+one shared verified registered Pokédex. Pete Andrews owns the product, priorities, acceptance
+criteria and validation. AI coding assistants contributed implementation and review. Do not
+present this as wholly hand-written or already completed.
 
-## Interview-safe summary
+## Verified capabilities
 
-> I am directing an AI-assisted systems project to build a hierarchical Pokémon player. A learned
-> planner chooses useful semantic goals—such as where to search, whether to develop the team, or how
-> to restore resources—while deterministic, verified skills handle exact movement, menus, battles,
-> captures and safety. Pokémon Red is the first curriculum, not the final product. The current
-> model has 114 settled training examples and its latest durable save has 84 verified Pokédex
-> registrations. Model113's frozen fishing choice added one registration as row114 without a
-> teacher label. Model114 then selected resupply/income from six choices across three goal families.
-> That choice remains unexecuted. A deterministic teacher has completed Red, but the learned
-> player has not yet independently completed the game, finished the Pokédex, or transferred to
-> another title.
-
-Status terms in this document:
-
-- **Working** means implemented and supported by current evidence.
-- **Partial** means real bounded behavior exists but does not establish end-product competence.
-- **Planned** means designed or represented in the roadmap but not demonstrated.
-
-## 1. Objective and current status
-
-The objective is a model that can enter a Pokémon game, finish its story, respond to changed state,
-and accumulate one shared, verified registered Pokédex across runs, versions, legitimate trades and
-legitimate event inputs. A species needs global credit once; the system still keeps global credit,
-each save's local Pokédex flags, and physical party/box specimens separate.
-
-The delivery sequence is Red, Blue/shared-ledger integration, an unfamiliar compatible Red ROM
-modification as the first adaptation test, then Crystal and later titles. Crystal is currently on
-the backburner so the project can first establish sustained model-directed Red play.
-
-| Layer | Status | Current evidence boundary |
+| Evidence | Result | Limitation |
 | --- | --- | --- |
-| Red teacher, mechanics and verification | **Working** | Deterministic checkpoint-based runs reached Champion and Hall of Fame under semantic verification. |
-| Bounded learned Red goal selection | **Partial** | Model114 has 114 settled training-only examples; models have selected real resource, recovery, evolution, capture and destination goals. |
-| Current retained Red state | **Partial** | 84 registered species, 64 living species and 68 specimens reopen at an authenticated input-ready Model114 checkpoint. |
-| Sustained autonomous Red player | **Partial / unfinished** | The hierarchy can execute bounded chains. Route eligibility now fails closed on undeclared interruption support, but empty/forced menus and deterministic support still prevent an independent start-to-finish claim. |
-| Modified-Red, Blue and Crystal transfer | **Planned** | Contracts and some adapters exist, but no transfer result is claimed. |
+| Collection development |96/124 registrations,74 specimens,198 cash | Not a fresh run |
+| Goal model137 |137 examples,92 successes,58 economy-qualified | Related development states |
+| Battle training |318 TRAIN contexts, four origins | Supported small battle domain |
+| Unused generated3v3 | J9/24 wins; H7/24 | Descriptive, not statistically conclusive |
+| Natural Brock | J6/6; H5/6; first-legal0/6 | Two origins × three timings; one own Pokémon |
+| Earned natural switching | Two wins, two voluntary switches,33 decisions | Same two origins; not six-member mastery |
+| Main-player battle entry | Four J decisions; exact failure retained | Funding goal failed; battle unfinished |
+| Fresh Red acceptance |0/5 | No fresh start-to-finish model-directed completion |
 
-Automatic reachable-fishing assembly and cross-box capture preparation are now integrated. The
-first five-choice execution stopped at a scripted dialogue after 228 actions and retained that
-failure as row112 with no teacher label or retry. Its exact checkpoint recovered in eight actions
-with zero learning credit. Model112's frozen restore then succeeded once and became row113.
-Model113's frozen fishing choice added registration84. Model114 then selected resupply/income from
-the next six-choice menu; execution of that frozen resource choice is next.
+The main-entry probe used three earned Potions and a new trainer. J switched once and selected
+three attacks. Wartortle fainted; the existing no-faints funding guard stopped before replacement.
+It earned no payout. This verifies wiring/failure handling, not reliable autonomous funding.
 
-## 2. What the system can demonstrably do now
+## Architecture and stack
 
-### Working
+Observe coherent state → semantic goals → learned selection → bounded skills → independent
+verification → saved evidence → eligible outcome learning.
 
-- Observe Red through PyBoy and project emulator state into typed semantic objects covering
-  location, party, battle, inventory, capabilities, events, storage and Pokédex state.
-- Decode cartridge-derived maps, terrain, warps, ledges, encounters, fishing, evolutions and
-  in-game trades.
-- Route and execute supported movement, field actions, menus, battles, captures, training,
-  evolution, storage and resource recovery with bounded deterministic skills.
-- Verify outcomes independently, preserve exact save/model lineage, and recover after process or
-  power interruption without silently replaying consumed choices.
-- Keep shared registrations separate from locally owned flags and physical specimens.
-- Fit a small option-value model incrementally from eligible selected outcomes, including failures
-  and measured resource cost.
-- Show saved evidence, training state, live frames when a runner is attached, and engineering work
-  in a read-only local dashboard.
-
-### Partial
-
-- The learned planner has made bounded live choices among identity-free semantic candidates. It
-  does not choose raw coordinates or button sequences.
-- The latest successful choice selected one of four fishing destinations, used 542 controller
-  actions and 31,464 frames, made five casts, and changed the registered count from 82 to 83.
-- The latest five-way choice used 228 actions and 16,668 frames before a scripted dialogue stopped
-  the route. It made no collection gain and was retained as training row112 without retry.
-- The exact failed state recovered input-ready control in 8 actions and 576 frames with zero
-  teacher labels. Model112's frozen restore then succeeded in 87 actions / 3,996 frames and became
-  row113. Model113's next fishing choice added registration84 as row114. Model114 selected
-  resupply/income from the next three-family menu; that exact choice is unexecuted.
-- Model-selected collection, evolution, recovery, supply and income chains have run in related
-  development states. They are useful curriculum evidence, not independent generalization.
-- A shared-Pokédex planner can account for acquisition dependencies and blockers, but it cannot yet
-  autonomously finish the complete campaign.
-
-### Planned
-
-- Independent, sustained model-directed play from a fresh game through story completion.
-- Completion of all legitimate Red registration targets, followed by shared-ledger Blue work.
-- Measured initial performance and adaptation on an unfamiliar compatible Red modification.
-- Crystal and later-title adaptation, cross-save trades and legitimate event integration.
-
-## 3. Architecture and technology stack
-
-```text
-Private cartridge + PyBoy
-        -> title-specific observer
-        -> title-neutral semantic state and memory
-        -> dependency planner and available-goal generator
-        -> legality/capability masks
-        -> learned option-value ranker
-        -> deterministic typed skill
-        -> single controller executor
-        -> independent outcome checks
-        -> checkpoint, evidence and incremental fit
-```
-
-| Area | Technology |
+| Layer | Technology / responsibility |
 | --- | --- |
-| Core | Python 3.11+, dataclasses, protocols, enums and explicit state machines |
-| Emulator | PyBoy 2.7.0 |
-| Learning | NumPy-based regularized multi-outcome option-value models |
-| Knowledge | Direct Generation I cartridge decoding plus pinned disassembly-derived authority |
-| Memory | SQLite shared-registration ledger, per-save state and hash-linked JSON/JSONL artifacts |
-| Integrity | SHA-256 identities, create-once records, atomic writes, locks, `fsync` and source/runtime/ROM binding |
-| Quality | pytest, Ruff, mypy, publication checks and GitHub Actions |
-| Observability | Loopback-only Python HTTP dashboard with HTML, CSS and JavaScript |
-| Development | Git/GitHub; Codex implementation; Claude and Antigravity independent review |
+| Runtime | Python3.11+, PyBoy2.7.0 |
+| Observation | Revision-specific readers; semantic policy-facing state |
+| Goal learner | NumPy regularized multi-outcome option values with declared exploration |
+| Battler | Three learned heads: move, attack/switch control, replacement target |
+| Mechanics | Cartridge maps/encounters; deterministic navigation and menu execution |
+| Memory | SQLite shared registrations; separate local flags and physical inventory |
+| Persistence | SHA-256 bindings, create-once records, exact endpoints and decision logs |
+| Verification | pytest, Ruff, mypy, documentation/private-artifact guards |
+| Viewer | Read-only dashboard distinguishing live runtime from saved evidence |
 
-There is no LLM in the gameplay runtime and no claim that a language model is visually playing the
-game. The current learner is intentionally small and interpretable.
+No LLM supplies each gameplay action. Coding agents are development collaborators. Source
+interfaces prevent accidental misuse, not malicious-code access in a security sandbox.
 
-## 4. How the agent observes and controls the game
+## Authority and integrity
 
-The Red adapter reads revision-specific emulator memory and frames, validates coherent state, and
-emits semantic observations. Higher layers see facts such as available field capabilities, party
-condition, money, capture supplies, collection pressure and legal goals rather than raw addresses.
+- The model selects declared semantic alternatives; only executors issue controller inputs.
+- The referee verifies outcomes and cannot substitute a better action.
+- J is bound per run, not installed as a global controller replacement.
+- Wild-capture and Elite Four controllers are unchanged.
+- Learned trainer actions share player action/frame budgets and resource checks.
+- Failures preserve real costs and saves rather than resetting into success.
+- Disclosed teacher assistance is allowed in TRAIN scaffolding, not the final actor.
+- DEVELOPMENT is never silently fitted; timing variants are not independent origins.
 
-Only the executor may issue controller input. It turns a typed action into button presses, advances
-bounded frames, releases controls, re-observes, and checks that the expected state change occurred.
-Moving NPCs, menus, encounters, story dialogue and failed movement can interrupt execution; the
-runner either handles a declared interruption or stops with the exact failure retained.
+## Difficult problems and lessons
 
-The teacher and referee do not share action authority. The teacher can create curriculum states,
-demonstrate mechanics or provide declared safety support. The referee observes postconditions but
-cannot substitute a better action. The dashboard is read-only.
+The central challenge is composing learned authority with reliable mechanics without counting
+teacher success, test coverage or infrastructure as model competence. Coherent observation,
+changing geometry, dialogue, crash continuation, outcome labels, evaluation leakage and shared
+registration accounting are major engineering concerns.
 
-## 5. Planning quests, battles, captures, leveling, inventory and Pokédex completion
+A first action followed by a strong teacher is not equivalent to one followed by the learner.
+Measuring16 training contexts under learner continuation produced J and a limited unused-team gain.
 
-| Domain | Approach | Status |
-| --- | --- | --- |
-| Story and quests | Dependency graph exposes currently achievable semantic objectives. | Teacher path works; model composition is partial. |
-| Navigation | Cartridge-derived graph search computes exact geometry; live gates and capabilities constrain execution. | Strong Red mechanics; current dialogue capability mismatch is open. |
-| Battles | Legal moves and switches are filtered from live state and PP; tactical execution is bounded. | Deterministic support works; learned general battle authority is unfinished. |
-| Captures | Search, encounter, weaken/status where supported, throw, verify and preserve state under supply/storage bounds. | Bounded Red captures work. |
-| Leveling/evolution | Choose useful missing evolutionary lines and train only as far as a needed registration or team role requires. | Several chains work; general scheduling remains partial. |
-| Inventory/economy | Track prices, reserves, healing, capture items and legitimate income options. | Bounded supply and income paths work; sustainable general policy is unfinished. |
-| Pokédex | Shared registration demand combines encounters, fishing, evolutions, gifts, fossils, trades, version differences and blockers. | Accounting works; autonomous completion is planned. |
+A no-faints funding goal can fail while a battle still has a living reserve and a valid replacement
+decision. The checkpoint preserves this contract mismatch; it does not label the unfinished battle
+a win or a completed loss. General battle completion and strict funding acceptance must be separated.
 
-The system does not require every Pokémon to reach level 100 or every form to remain simultaneously
-stored. After story completion it should catch a missing line, evolve only for missing registrations,
-deposit when practical, and continue. Duplicates are allowed but do not earn repeated novelty credit.
+## Remaining product sequence
 
-## 6. Memory, state tracking and recovery
+1. Resolve that lifecycle/recovery boundary with a bounded retained-state test.
+2. Resume useful model-selected collection and sustainable legitimate income.
+3. Complete fresh model-directed Red with Champion/Hall of Fame and124 native registrations.
+4. Verify the deferred-dependency ledger, then test an unfamiliar compatible Red modification.
+5. Learn Crystal and continue through at least Emerald.
 
-- Working memory is the current semantic emulator observation.
-- Task memory tracks objectives, capabilities, resources, owned specimens and collection demand.
-- Shared memory records globally verified species registrations across runs without fabricating a
-  local specimen or local Pokédex flag.
-- Episodic memory records the candidate menu, selected probability, chosen action, intervention,
-  result, cost and model identity.
-- Durable checkpoints bind save state, model, corpus, code and evidence by hashes.
+Mew and unavailable version/link/event dependencies await legitimate later sources. Registration
+is required, not level100 or simultaneous living forms. Red/Blue linking is desirable later,
+not permission to fabricate owned flags.
 
-Consumed model choices are not retried simply because they failed. Interrupted or incomplete work
-remains distinguishable from success and failure. After a crash, the system authenticates the last
-durable checkpoint and continues only through an allowed recovery boundary. Public receipts omit
-ROM bytes, saves, private paths and private training artifacts.
+## Pete's interview-safe role
 
-## 7. Trades, version exclusives and special events
+“I defined the product and acceptance criteria, directed AI coding and review agents, challenged
+shortcuts and focus drift, and validated outcomes against preserved gameplay evidence.
+My contribution is systems direction and evaluation, including deciding what evidence establishes.”
 
-The catalog derives what each cartridge can supply and labels what requires another source. It
-recognizes version exclusives, four link-trade evolutions, mutually exclusive starters/fossils/gifts,
-ten in-game NPC trades, static and legendary encounters, and event-only species such as Mew.
+[Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) · [Handoff](../HANDOFF.md) ·
+[Integration evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Architecture](architecture.md) · [Roadmap](model-first-roadmap.md)
 
-The product plan is to run Red and Blue against the shared registry, perform legitimate cross-save
-or cross-version trades where required, and award global credit only after verified acquisition.
-Later generations add time, friendship, breeding, held items, roaming encounters and title-specific
-puzzles behind new adapters. A missing event input remains an explicit blocker; the system must not
-fabricate availability or edit the save to set a Pokédex flag.
-
-Repeatable link-trade execution, multi-save consolidation and event workflows are not yet complete.
-Legendary prerequisite graphs and one-shot risk handling exist as design requirements, but every
-special puzzle has not been autonomously solved.
-
-## 8. Where LLM reasoning is used versus deterministic code
-
-Deterministic runtime code owns observation, cartridge mechanics, pathfinding, legal actions,
-safety, controller input, postcondition checks, persistence and evaluation boundaries. The small
-NumPy learner ranks bounded semantic alternatives using recorded outcomes.
-
-LLMs are engineering collaborators:
-
-- Codex performs the primary implementation, integration, testing, documentation and publication.
-- Claude reviews statistics, leakage, claim language and experimental design at useful gates.
-- Antigravity reviews architecture, portability, abstention and broader implementation concerns.
-- Pete defines the product and constraints, directs the agents, reviews trade-offs, observes runs
-  and accepts or rejects results.
-
-An LLM review is not gameplay evidence. Reviewer suggestions are adjudicated against executable
-tests, preserved results and the mission rather than accepted automatically.
-
-## 9. Validation, logging, guardrails and failure handling
-
-- Public CI runs ROM-free tests, linting, typing, documentation and private-artifact guards.
-- Private runs bind the cartridge, source, runtime, state, corpus and model identities.
-- Model menus omit title-specific identity fields and record selection probability.
-- Actual selected outcomes—including zero-gain failures and cost—enter the eligible dataset; no
-  unobserved alternative receives an invented target.
-- Forced support, safety overrides and teacher actions remain separate from learned choices.
-- Controller actions, frames, attempts, resources and interventions are bounded and logged.
-- Checkpoints and terminals are create-once or hash-linked so a crash cannot erase an inconvenient
-  result.
-- Independent evaluation and authority promotion remain separate from in-sample fitting.
-- The dashboard reconstructs claims from evidence and cannot control the emulator.
-
-CI verifies engineering integrity; it is not model training and does not prove the player is good.
-The project now batches meaningful changes before CI instead of treating repeated workflow runs as
-progress.
-
-## 10. Most difficult engineering problems solved so far
-
-1. Separating deterministic teacher completion from learned competence.
-2. Turning raw emulator and cartridge state into stable, typed, title-neutral semantics.
-3. Preserving one truthful lineage across model choice, controller execution, outcome, fit and
-   restart—even through power loss or reporter failure.
-4. Preventing outcome leakage, invented counterfactual labels and retries of consumed choices.
-5. Building a shared registry without confusing global credit, local flags and physical specimens.
-6. Composing learned high-level judgment with deterministic low-level skills and explicit safety
-   boundaries.
-7. Retaining partial progress and failure costs instead of discarding an episode because its final
-   goal failed.
-8. Identifying focus drift: a reliable teacher, green CI and more infrastructure are not substitutes
-   for new model-controlled decisions.
-
-## 11. Concrete metrics and verified milestones
-
-| Milestone | Verified result | What it establishes |
-| --- | --- | --- |
-| Deterministic Red integration | Champion and Hall of Fame reached under semantic verification | Teacher, mechanics and referee can compose; not learned autonomy. |
-| Current collection state | 84 registrations, 64 living species, 68 specimens | Real retained Red progress; not Pokédex completion. |
-| Current learner | 114 settled training-only examples, 78 successful | Incremental selected-outcome training works; not 114 independent games. |
-| Latest successful choice | Four candidates; probability 0.087610; 542 actions; 31,464 frames; five casts; registrations 82→83 | A model-selected destination produced a verified gain. |
-| Latest retained failure | Five candidates; selected acquisition; 228 actions; 16,668 frames; no gain | Failure and cost survived and became row112; no retry. |
-| Latest fit | Model111→112; all 111 prior examples retained | One actual selected-arm failure was added; no independent advantage claim. |
-| Latest acquisition and menu | Frozen fishing: 513 actions / 30,804 frames / 0 labels, one registration. Model114 then selected resupply with probability 0.438695. | Durable continuation and measured updating work; the next resource choice has not executed. |
-| Latest loop boundaries | 0 teacher labels, 0 authority promotions, 0 sealed/Crystal accesses | The result stayed inside bounded Red development. |
-
-The current model artifact is identified publicly by SHA-256
-`8fa20f5b5e8889fa7340c8cc8113cc5407768306dfba7797cfeb4364c90d0cbc`.
-
-## 12. Pete's role
-
-Pete's accurate role is product owner and AI-systems director. He did not claim to hand-write every
-line. He repeatedly defined the end product, rejected shortcuts that optimized only a fixed Red
-route, required collection/evolution/resource/version/trade behavior, chose the agent workflow,
-challenged focus drift, reviewed architecture decisions, supplied and observed the local runtime,
-and validated whether results matched what appeared in the game and dashboard.
-
-An interview-safe description is:
-
-> I defined the product, acceptance criteria and evidence boundaries; decomposed the system into
-> observer, planner, learner, skills, executor, referee and memory; directed Codex as the primary
-> implementation agent; used Claude and Antigravity as independent reviewers; and adjudicated the
-> trade-offs. My contribution was systems direction and validation—making AI-assisted engineering
-> produce testable, honest artifacts rather than treating generated code as proof.
-
-## 13. Current limitations and unfinished work
-
-- No learned model has independently played Red from title screen through Hall of Fame.
-- The current 113 examples are related development outcomes, not 113 independent games.
-- The latest fit has no independent evaluation or promoted authority.
-- Capture preparation searches all twelve verified boxes and preserves the complete
-  specimen/resource state. Automatic multi-source fishing now works, but the latest selected route
-  stopped at dialogue. The retained checkpoint recovered and Model112's restore succeeded once.
-  Model114 selected the next resupply/income goal, but that exact choice has not executed.
-- Low-level navigation, battle, capture and menu control remain primarily deterministic.
-- Red registrations are incomplete: 41 required Red registrations remain in the current contract.
-- The system has not autonomously completed the shared Pokédex.
-- Blue integration, link trades, legitimate event inputs and modified-Red adaptation are unfinished.
-- Crystal has not been used as transfer evidence; later-generation mechanics need adapters.
-- Generalization to random starts, changed timing/RNG, unseen ROM modifications and new games is
-  still a research goal, not a demonstrated capability.
-
-## 14. Concise repository and file overview
-
-| Area | Starting points |
-| --- | --- |
-| Product truth | `MISSION.md`, `NORTH_STAR.md`, `ACTIVE_PRODUCT_STATE.md` |
-| Immediate restart | `HANDOFF.md`, `docs/current-agent-handoffs.md` |
-| Current plan | `docs/model-first-roadmap.md`, `docs/development-roadmap.md` |
-| Architecture | `docs/architecture.md`, `src/pokemon_red_completion/` |
-| Observation/control | `observation.py`, `red_player_observer.py`, `red_bounded_player.py`, executor and referee modules |
-| Learning | `living_dex_option_value.py`, `red_player_model.py`, `red_player_incremental_fit.py`, training-dataset modules |
-| Collection/memory | registration, collection, acquisition, evolution, storage and SQLite ledger modules |
-| Crystal boundary | `src/pokemon_crystal_completion/`, `docs/crystal-transfer-benchmark.md` |
-| Operations | `scripts/`, `configs/` |
-| Proof | `tests/`, `docs/evidence/`, `docs/work-sessions/`, `.github/workflows/ci.yml` |
-
-The exact current restart and evidence are in the
-[Model114 frozen fishing learning session](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
-Historical receipts
-remain immutable; the [documentation map](README.md) explains which files are current instructions
-and which are preserved history.
+Private ROMs, saves, datasets and fitted models are not distributed. Superseded interview details
+remain in Git and the [historical archive](history/README.md).

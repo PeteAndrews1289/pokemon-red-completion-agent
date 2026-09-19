@@ -3,17 +3,16 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-[Current evidence](evidence/red-battler-earned-switch-result-2026-09-19.json):
-J won2/2new natural encounters from retained earned saves after normal-menu lead
-reversal.33decisions,2voluntary switches,0faints/invalid actions/teacher queries.
-Live borrowed-session bridge forbids reset/close; fresh ledgers verify two story
-outcomes. Both battle/final snapshots reopened read-only with matching evidence.
-First endpoint is low-HP/poisoned, not silently healed.
-Same two natural origins and one trainer archetype; not broad six-member reliability.
+Frozen J's main-player ordinary-trainer entry is implemented and exercised. Four model decisions
+ended at a faint; strict funding preservation stopped the unfinished battle before replacement.
+The exact failed save,19-event chain, costs and fresh ledger are retained.
+[Evidence](evidence/red-player-battler-integration-2026-09-19.json).
 
-Prior learning/package unchanged:318TRAIN contexts and15retention checks,
-generated3v3 J9/24 versus H7/24. No new fit, examples or high-level learned choices.
-Close supported battler v1 build. Next explicitly bind J into one main-player
-trainer boundary and verify a bounded game goal; collection controllers remain
-unchanged until that opt-in. No generic review gate, factory, replay or full run.
-No Flash/Claude this session. Pete requests Astra.
+This is wiring/failure-path evidence, not a successful funding goal, high-level learned selection,
+new independent root or full-player promotion. No fit or collection counter changed.
+
+Next bounded question: separate general learned-battle completion/recovery from conservative
+no-faints funding acceptance. Do not waive specimen, payout, identity or resource checks.
+Do not replay the consumed source or fit its DEVELOPMENT outcome.
+No broad trainer review, factory or full run. Pete requests Astra.
+No Flash/Claude used this session and no external-review gate is pending.

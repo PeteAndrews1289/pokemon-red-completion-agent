@@ -1,0 +1,141 @@
+{
+  "battle": {
+    "attacks": 3,
+    "decisions": 4,
+    "forced_replacements": 0,
+    "log_verification": {
+      "complete": true,
+      "completed_decisions": 4,
+      "event_count": 19,
+      "event_counts": {
+        "choice_recorded": 4,
+        "decision_completed": 4,
+        "decision_started": 4,
+        "episode_started": 1,
+        "model_input_prepared": 4,
+        "run_failed": 1,
+        "run_identity": 1
+      },
+      "failed_runs": 1,
+      "incomplete_decisions": 0,
+      "last_record_sha256": "f447de5fd66e5263a984577ee42a0e4866b194a2b7f1b4ddf1347f82f3742d41",
+      "schema": "pokemon.red.trainer-practice-log-verification.v1",
+      "started_decisions": 4,
+      "terminal_event": "run_failed"
+    },
+    "mean_policy_ms": 1.160094,
+    "opponent_hp_remaining": 18,
+    "party_faints": 1,
+    "voluntary_switches": 1
+  },
+  "classification": "engineering_integration_with_retained_failed_development_goal",
+  "counter_deltas": {
+    "authority_promotions": 0,
+    "fits": 0,
+    "registrations": 0,
+    "training_examples": 0
+  },
+  "failure_interpretation": "The existing funding no-faints guard stopped after Wartortle fainted. This is a failed funding goal and an unfinished battle, not a completed battle loss or wiring success falsely scored as gameplay success.",
+  "final_state_sha256": "e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024",
+  "goal": {
+    "actions": 247,
+    "failure": {
+      "error": "party HP missing, truncated, or fainted during battle",
+      "error_type": "TrainerFundingBattleError"
+    },
+    "final_ledger": {
+      "battle_state": 2,
+      "cash": 1706,
+      "champion_event": false,
+      "full_game_complete": false,
+      "hall_of_fame_fact": false,
+      "hall_of_fame_mode": false,
+      "input_ready": true,
+      "next_trainer_defeated": true,
+      "party_hp": [
+        28,
+        0
+      ],
+      "party_levels": [
+        10,
+        17
+      ],
+      "party_national_ids": [
+        41,
+        8
+      ],
+      "registered": [
+        7,
+        8,
+        41
+      ],
+      "required_trainer_defeated": true
+    },
+    "final_state_sha256": "e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024",
+    "fits": 0,
+    "frames": 19284,
+    "goal_kind": "resupply",
+    "learned_battle_calls": 1,
+    "memory_writes": 0,
+    "model_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+    "payout": null,
+    "pressed_buttons": [],
+    "resets_after_start": 0,
+    "selection": "predeclared_integration_not_goal_model",
+    "source_commit": "e676847010a61953372a4200dbe5d7aa07380cb2",
+    "source_state_sha256": "bcfb5c9df52a3c21527cc31df449a42dcf4fee3ebf4df6b4312768828f815f88",
+    "status": "failed"
+  },
+  "main_collection": {
+    "cash": 198,
+    "declared_route_total": 124,
+    "economy_qualified": 58,
+    "examples": 137,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_total": 5,
+    "model": 137,
+    "registrations": 96,
+    "specimens": 74,
+    "successes": 92
+  },
+  "mission_check": {
+    "capability": "Invoke the frozen learned battler from the main player ordinary-trainer funding seam.",
+    "cheapest_falsifier": "The main-player goal cannot preserve resources, learned authority and a fresh terminal ledger.",
+    "learned_authority": "J owns attacks and voluntary switches; the teacher is never queried.",
+    "stop_condition": "Stop after the single declared goal; retain success or failure without replay.",
+    "time_box": "One session, two hours maximum.",
+    "transfer_test": "A new natural trainer from an earned boot3100 endpoint, not a new independent root."
+  },
+  "model_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "next_step": "Separate general learned-battle lifecycle and recovery from conservative no-faint funding acceptance. Preserve this exact in-battle endpoint; do not replay the initial source or fit on this development encounter.",
+  "preparation": {
+    "autonomous_collection_runner_executed": false,
+    "fully_healed_hp": [
+      28,
+      51
+    ],
+    "money_edits": 0,
+    "payout_earned": 0,
+    "potions_spent": 3,
+    "prepared_main_player_battle_entry_executed": true,
+    "quoted_payout": 480,
+    "same_map_route_steps": 78,
+    "target_selection": "predeclared_development_objective_not_goal_model_selection"
+  },
+  "private_run_name": "red-player-battler-checkpoint-20260919-v1",
+  "qualification": {
+    "battle_completed": false,
+    "default_controller_replaced": false,
+    "fresh_final_ledger_reopened_read_only": true,
+    "full_player_promotion": false,
+    "goal_succeeded": false,
+    "read_only_verification_actions": 0,
+    "read_only_verification_frames": 0,
+    "six_member_qualification": false,
+    "wiring_exercised": true
+  },
+  "schema": "pokemon.red.player-battler-integration.v1",
+  "session_id": "2026-09-19-player-battler-integration",
+  "source_commit": "e676847010a61953372a4200dbe5d7aa07380cb2",
+  "source_state_sha256": "bcfb5c9df52a3c21527cc31df449a42dcf4fee3ebf4df6b4312768828f815f88"
+}

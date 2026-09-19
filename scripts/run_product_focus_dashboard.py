@@ -304,6 +304,8 @@ def _native_training_projection(
     evidence: Mapping[str, object],
 ) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
     """Display native player fitting without laundering it into a setup campaign."""
+    if evidence.get("status") == "seven_choices_one_incomplete_evolution_fitted":
+        return _autonomous_training_projection(evidence)
     fit = _mapping(evidence, "fit")
     model = _mapping(fit, "model")
     report = _mapping(fit, "fit_report")
@@ -413,6 +415,81 @@ def _native_training_projection(
         baseline_correct=None,
         model_sha256=_text(model, "model_sha256"),
         independent_validation_units=0,
+    )
+    return training, component
+
+
+def _autonomous_training_projection(
+    evidence: Mapping[str, object],
+) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
+    """Project the retained autonomous receipt without inventing native traces.
+
+    This format records a measured selected-arm failure and fit directly, not a
+    native completed_episode or an in-sample policy replay. Keep that distinction.
+    """
+    fit = _mapping(evidence, "fit")
+    model = _mapping(fit, "model")
+    report = _mapping(fit, "fit_report")
+    outcome = _mapping(evidence, "autonomous_outcome")
+    choice = _mapping(outcome, "choice")
+    boundaries = _mapping(evidence, "boundaries")
+    total = _count(model, "settled_examples")
+    added = _count(fit, "new_settled_examples")
+    prior = _mapping(fit, "prior_train_error")
+    updated = _mapping(fit, "updated_train_error")
+    if (
+        evidence.get("schema") != "pokemon.red.registered-player-learning-session.v1"
+        or model.get("schema") != "pokemon.red.registered-player-model.v1"
+        or model.get("objective") != "pokemon.registered-collection.v1"
+        or model.get("authority") != "bounded_development_only"
+        or model.get("independent_evaluation") is not False
+        or model.get("source_commit") != evidence.get("execution_source_commit")
+        or model.get("source_bundle_sha256") != evidence.get("source_bundle_sha256")
+        or choice.get("model_sha256") != model.get("prior_model_sha256")
+        or choice.get("mode") != "model_exploration"
+        or _count(choice, "teacher_labels") != 0
+        or _count(choice, "actions_executed") != 0
+        or _count(choice, "emulator_frames") != 0
+        or _count(choice, "candidate_count") < 2
+        or outcome.get("learning_eligible") is not True
+        or outcome.get("safe_terminal") is not True
+        or not outcome.get("error_type")
+        or outcome.get("verification") is not None
+        or _count(outcome, "actions") <= 0
+        or added != 1 or _count(fit, "new_measured_source_examples") != added
+        or fit.get("historical_rewards_reused") is not False
+        or fit.get("parameter_warm_start") is not False
+        or fit.get("in_sample_only") is not True
+        or fit.get("prior_rows_retained") is not True
+        or _count(fit, "authority_promotions") != 0
+        or _count(fit, "controller_actions") != 0
+        or fit.get("measured_evidence_action_trace_available") is not False
+        or _count(fit, "measured_evidence_authority_promotions") != 0
+        or _count(fit, "measured_evidence_independent_evaluations") != 0
+        or boundaries.get("independent_evaluation") is not False
+        or _count(boundaries, "authority_promotions") != 0
+        or any(_count(document, "settled_examples") != total for document in (
+            report, prior, updated,
+        ))
+        or _count(report, "total_examples") != total
+        or _count(report, "counterfactual_targets") != 0
+        or _count(report, "unselected_action_targets") != 0
+    ):
+        raise ProgressDashboardError("dashboard autonomous measured-fit boundary differs")
+    training = DashboardTrainingState(
+        samples_before=total-added, samples_after=total, newly_collected=added,
+        previously_unfitted=0, successful_examples=_count(report, "successful_examples"),
+        terminal_lessons=added, total_lessons=added, setup_censors=0, fit_count=1,
+        weighted_mse_before=cast(float, prior["weighted_mse"]),
+        weighted_mse_after=cast(float, updated["weighted_mse"]),
+        training_choice_changes=None,
+    )
+    component = DashboardLearningComponent(
+        name="Registered-Pokédex goal scorer",
+        scope="Historical measured fit; no native action trace or independent evaluation",
+        status="shadow", authority="shadow_only", train_examples=total,
+        validation_examples=0, validation_correct=0, baseline_correct=None,
+        model_sha256=_text(model, "model_sha256"), independent_validation_units=0,
     )
     return training, component
 
