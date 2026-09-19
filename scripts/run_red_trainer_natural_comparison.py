@@ -84,6 +84,17 @@ def qualified_fit_receipt(fit: Path) -> dict[str, object]:
                 {t["capture_id"] for t in targets},
                 late=late,
             )
+            if late:
+                move_receipt = Path(plan["late_move_supply"]["path"])
+                if _binding(move_receipt) != plan["late_move_supply"]:
+                    raise ValueError("late move supply receipt differs")
+                extra += admitted_supply(
+                    move_receipt.parent,
+                    set(ancestor.train_root_ids),
+                    {t["capture_id"] for t in targets + extra},
+                    late=True,
+                    late_main=True,
+                )
             if len(extra) != result["new_contexts"]:
                 raise ValueError("broader supply count differs")
             targets = targets + extra

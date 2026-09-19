@@ -16,6 +16,19 @@ def test_late_capture_covers_progress_without_outcome_selection():
     assert late_capture_reasons(event, expected) == {"switch_prompt"}
 
 
+def test_late_attack_capture_waits_past_singleton_replacement():
+    event = {
+        "event": "decision_started",
+        "decision_index": 9,
+        "mode": "forced_switch",
+        "state_before": {"party_hp": [0, 0, 50], "opponent_party_position": 2},
+    }
+    seen = set()
+    assert late_capture_reasons(event, seen, main_only=True) == set()
+    event["mode"] = "main"
+    assert late_capture_reasons(event, seen, main_only=True) == {"last_ally", "last_opponent"}
+
+
 def test_late_capture_skips_initial_and_early_main_and_nondecision_events():
     assert late_capture_reasons({"event": "run_completed"}, set()) == set()
     event = {

@@ -351,11 +351,13 @@ def compatible_resume_declaration(previous, declaration):
     )
 
 
-def late_capture_reasons(event, seen, *, opponent_count=3):
+def late_capture_reasons(event, seen, *, opponent_count=3, main_only=False):
     """Prospective state coverage, never selected by eventual return or outcome."""
     if event.get("event") != "decision_started" or event.get("decision_index", 0) < 2:
         return set()
     state = event["state_before"]
+    if main_only and event["mode"] != "main":
+        return set()
     reasons = set()
     if event["mode"] in {"forced_switch", "switch_prompt"}:
         reasons.add(event["mode"])
@@ -369,13 +371,14 @@ def late_capture_reasons(event, seen, *, opponent_count=3):
 
 def run(args):
     resume = getattr(args, "resume", False)
-    late = getattr(args, "profile", "terminal") == "late"
-    broad = getattr(args, "profile", "terminal") in {"broad", "late"}
+    late_main = getattr(args, "profile", "terminal") == "late-main"
+    late = getattr(args, "profile", "terminal") in {"late", "late-main"}
+    broad = getattr(args, "profile", "terminal") in {"broad", "late", "late-main"}
     collect_only = getattr(args, "collect_only", False)
     if broad and not collect_only:
         raise ValueError("broad supply must be collected before a separately declared fit")
-    hard = getattr(args, "profile", "terminal") in {"learner-five", "broad", "late"}
-    supply_seed = 2026091904 if late else 2026091902
+    hard = getattr(args, "profile", "terminal") in {"learner-five", "broad", "late", "late-main"}
+    supply_seed = 2026091906 if late_main else 2026091904 if late else 2026091902
     recipes = hard_curriculum_cases if hard else curriculum_cases
     if broad:
         from run_red_trainer_broad_probe import broad_recipes
@@ -396,6 +399,8 @@ def run(args):
     capture_decisions = (2, 4, 6, 8) if hard else (2, 3)
     if broad:
         capture_decisions = (2, 4, 8, 12) if late else (2, 4)
+        if late_main:
+            capture_decisions = (8, 12)
     fit_seed = 2026091802 if hard else 2026091801
     if (
         args.output.exists() != resume
@@ -492,6 +497,8 @@ def run(args):
             "first_last_opponent",
             "first_last_ally",
         ]
+        if late_main:
+            declaration["capture_semantics"] = ["first_main_last_opponent", "first_main_last_ally"]
         declaration["retained_broad_supply"] = original._binding(
             args.retained_broad_supply / "collection.json"
         )
@@ -612,7 +619,9 @@ def run(args):
                 seen_late=seen_late,
             ):
                 log.emit(event)
-                reasons = late_capture_reasons(event, seen_late) if late else set()
+                reasons = (
+                    late_capture_reasons(event, seen_late, main_only=late_main) if late else set()
+                )
                 if (
                     event.get("event") != "decision_started"
                     or (
@@ -905,7 +914,9 @@ def main():
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument(
-        "--profile", choices=("terminal", "learner-five", "broad", "late"), default="terminal"
+        "--profile",
+        choices=("terminal", "learner-five", "broad", "late", "late-main"),
+        default="terminal",
     )
     parser.add_argument("--collect-only", action="store_true")
     parser.add_argument("--retained-cache", type=Path)

@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BROADER_MODEL_SHA = "f8d9be1a76dd1475e23db1080609b8318a052e1f7fa26ee4201d7f489dd9d241"
 
 
-def admitted_supply(supply, roots, old_ids, *, late=False):
+def admitted_supply(supply, roots, old_ids, *, late=False, late_main=False):
     receipt = json.loads((supply / "collection.json").read_bytes())
     if receipt["status"] != "terminal_collection_complete_train_only" or receipt["fits"] != 0:
         raise ValueError("supply is not an unfitted terminal collection")
@@ -41,15 +41,25 @@ def admitted_supply(supply, roots, old_ids, *, late=False):
         raise ValueError("supply binding differs")
     plan = json.loads((supply / "plan.json").read_bytes())
     if (
-        plan.get("profile") != ("late" if late else "broad")
-        or plan.get("supply_seed") != (2026091904 if late else 2026091902)
+        plan.get("profile") != ("late-main" if late_main else "late" if late else "broad")
+        or plan.get("supply_seed")
+        != (2026091906 if late_main else 2026091904 if late else 2026091902)
         or plan["frozen_model"]["sha256"] != (BROADER_MODEL_SHA if late else CANDIDATE_SHA)
     ):
         raise ValueError("supply recipe or trajectory differs")
     if late and (
         plan.get("capture_decisions") != []
         or plan.get("capture_semantics")
-        != ["first_forced_switch", "first_switch_prompt", "first_last_opponent", "first_last_ally"]
+        != (
+            ["first_main_last_opponent", "first_main_last_ally"]
+            if late_main
+            else [
+                "first_forced_switch",
+                "first_switch_prompt",
+                "first_last_opponent",
+                "first_last_ally",
+            ]
+        )
     ):
         raise ValueError("late supply does not declare semantic boundary coverage")
     declared = json.loads((supply / "targets.json").read_bytes())
@@ -131,6 +141,14 @@ def run(args):
     added = admitted_supply(
         args.supply, set(model.train_root_ids), set(model.train_capture_ids), late=late
     )
+    if late:
+        added += admitted_supply(
+            args.late_move_supply,
+            set(model.train_root_ids),
+            set(model.train_capture_ids) | {t["capture_id"] for t in added},
+            late=True,
+            late_main=True,
+        )
     print(json.dumps({"authenticated_new_contexts": len(added)}), flush=True)
     catalog = PokemonRedBattleCatalog()
     before = reports(retained, model, catalog)
@@ -158,6 +176,9 @@ def run(args):
             if late
             else None,
             "supply": common._binding(args.supply / "collection.json"),
+            "late_move_supply": common._binding(args.late_move_supply / "collection.json")
+            if late
+            else None,
             "audit": common._binding(args.audit / "manifest.json"),
             "epochs_per_head": 2400,
             "learning_rate": 0.005,
@@ -301,4 +322,5 @@ if __name__ == "__main__":
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--late", action="store_true")
     parser.add_argument("--prior-supply", type=Path)
+    parser.add_argument("--late-move-supply", type=Path)
     run(parser.parse_args())
