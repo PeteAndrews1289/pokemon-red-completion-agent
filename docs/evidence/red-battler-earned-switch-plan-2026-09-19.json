@@ -1,0 +1,20 @@
+{
+  "schema": "pokemon.red.earned-switch-plan.v1",
+  "mission_check": {
+    "capability": "Use the learned battler inside an already-running game and continue from its actual earned state.",
+    "learned_authority": "Frozen J owns every battle attack, voluntary switch, replacement prompt and forced replacement. Field preparation is disclosed setup, not learned navigation.",
+    "transfer_test": "One new Super Nerd encounter per retained boot2900/3100 J timing0 endpoint, after normal-menu lead reversal. These retain the existing two origins and are not new independent roots.",
+    "cheapest_falsifier": "A two-member battle fails to exercise an actual learned reserve decision, requires assistance, or cannot hand back verifiable field state.",
+    "time_box": "45 minutes for probe, up to two hours including integration and verification.",
+    "stop_condition": "At most two encounters; no resets after initial endpoint load, replay, replacement source, state edit, fit, route hardening, full run or push. Retain failures."
+  },
+  "candidate_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "sources": ["boot2900-timing0-J", "boot3100-timing0-J"],
+  "source_batch": "red-trainer-natural-team-20260919-v1",
+  "selection": "Timing0 J endpoints declared by source order, not best outcomes; both already verified prior session.",
+  "setup": "Reuse the existing short Rocket-to-Super-Nerd traversal. Swap slots0/1 with the existing normal field-party menu at the trigger origin. Incidental setup wild encounters use existing bounded flee mechanics. No teacher trainer decisions.",
+  "budgets": {"maximum_frames_per_episode": 160000, "maximum_battle_decisions": 80, "opening_idle_frames": 0, "max_sources": 2},
+  "probe_gate": "Both episodes terminate unassisted with at least one model-selected actual switch each; at least one verified story victory. Random losses are retained and not alone a rejection.",
+  "integration": "Execute each model battle in the same live emulator without a capture reset. Observe a fresh outcome ledger after success or exception. On the first qualifying winner only, use the existing post-battle control-settle mechanic, retain the exact endpoint and verify readable field control and preserved registrations/specimens. No further trainer battle or learned goal-selection claim.",
+  "completion_scope": "Supported small-party trainer-battle integration v1, not universal mechanics, six-member mastery, autonomous navigation or a full Red run."
+}

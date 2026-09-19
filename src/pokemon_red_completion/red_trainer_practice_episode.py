@@ -7,8 +7,8 @@ attack, voluntary switch, replacement prompt, and forced replacement choice.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
-from contextlib import AbstractContextManager
+from collections.abc import Callable, Iterator, Mapping
+from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass, replace
 from time import perf_counter_ns
 from typing import Protocol, cast
@@ -73,6 +73,72 @@ class TrainerPracticePolicy(Protocol):
         forced: bool,
         may_decline: bool,
     ) -> int | None: ...
+
+
+class LiveTrainerSession(TrainerPracticeSession, Protocol):
+    def save_state_bytes(self) -> bytes: ...
+
+    @property
+    def frame_count(self) -> int: ...
+
+
+class _BorrowedTrainerSession:
+    """The battle executor may act, but cannot reset or close the player's game."""
+
+    def __init__(self, session: LiveTrainerSession) -> None:
+        self.session = session
+        self.initialized = False
+
+    def load_state_bytes(self, payload: bytes) -> None:
+        if self.initialized or self.session.save_state_bytes() != payload:
+            raise RedTrainerPracticeEpisodeError("live trainer state differs or reset attempted")
+        self.initialized = True
+
+    @property
+    def frame_count(self) -> int:
+        return self.session.frame_count
+
+    def press(self, button: str) -> None:
+        self.session.press(button)
+
+    def release(self, button: str) -> None:
+        self.session.release(button)
+
+    def tick(self, frames: int) -> None:
+        self.session.tick(frames)
+
+    def read_u8(self, address: int) -> int:
+        return self.session.read_u8(address)
+
+
+def run_live_red_trainer_practice_episode(
+    capture: BattleScenarioCapture,
+    *,
+    session: LiveTrainerSession,
+    policy: TrainerPracticePolicy,
+    max_decisions: int = 80,
+    event_sink: Callable[[Mapping[str, object]], None] | None = None,
+    public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
+) -> RedTrainerPracticeEpisode:
+    """Use the existing actor in-place; caller retains the game even on failure.
+
+    Capture bytes must be the exact current live state, not a reset target.
+    The caller owns frame limits, durable endpoint capture and fresh verification.
+    """
+    borrowed = _BorrowedTrainerSession(session)
+
+    @contextmanager
+    def session_factory() -> Iterator[TrainerPracticeSession]:
+        yield borrowed
+
+    return run_red_trainer_practice_episode(
+        capture,
+        session_factory=session_factory,
+        policy=policy,
+        max_decisions=max_decisions,
+        event_sink=event_sink,
+        public_species_base_stats=public_species_base_stats,
+    )
 
 
 class RedTrainerPracticeEpisodeError(RuntimeError):
