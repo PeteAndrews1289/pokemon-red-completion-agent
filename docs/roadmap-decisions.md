@@ -1322,3 +1322,17 @@ The trainer is operational; the battler is not fully qualified. Independent
 natural full-party tests and bounded player integration remain outstanding.
 Pete's permission for bounded fresh natural source preparation is still pending.
 No new framework, standing review gate, full-game run or GitHub publication.
+
+## September19 — close supported battler v1; return to main-player integration
+
+The [earned-state probe](evidence/red-battler-earned-switch-result-2026-09-19.json)
+demonstrated two voluntary switches and two natural trainer wins, with33learned
+decisions and verified in-place field handoff. No weights changed. Earlier failed
+coverage gates remain recorded; these were new encounters from earned states.
+
+Freeze the supported small-party battler v1 package. The next work explicitly
+connects it to a main-player trainer call site and one bounded saved-state goal;
+ordinary collection controllers have not already been replaced. Do not add another
+general trainer review, fit or perfect-win gate. Unsupported moves, six-member
+reliability and natural forced-target coverage remain explicit limitations, not
+silent claims. No stage exit or fresh-Red acceptance criterion changes.

@@ -3,67 +3,66 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September19,2026.
 
-## Frozen J wins natural team trials; switching coverage still missing
+## Supported battler v1 qualified; return to main-player work
 
-[Current evidence](docs/evidence/red-battler-natural-team-result-2026-09-19.json) ·
-[Prospective plan](docs/evidence/red-battler-natural-team-plan-2026-09-19.json) ·
+[Current evidence](docs/evidence/red-battler-earned-switch-result-2026-09-19.json) ·
+[Prospective plan](docs/evidence/red-battler-earned-switch-plan-2026-09-19.json) ·
 [Prior learning/package](docs/evidence/red-battler-policy-learning-result-2026-09-19.json).
 
-No refit this session. J remains the packaged policy-bound learner:
-SHA256 260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
-H SHA256 ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b.
-Prior J retained15 TRAIN checks across318 physical contexts and improved the
-unused generated3v3 comparison9/24 versus H7/24. That modest learning result
-stands; perfect wins and teacher superiority are not requirements.
+Frozen J remains SHA256
+260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
+No new fit, examples or weight changes;318physical TRAIN contexts.
+Prior15TRAIN checks, generated3v3 J9/24 versus H7/24 and natural attack evidence stand.
+The preceding two-member Rocket trials did not exercise reserves; their failed
+coverage gate remains historical, not retroactively passed.
 
-Two new fresh boots2900/3100 reached the Mt. Moon required Rocket before any
-actor selection, using existing ordinary opening/errand/Pewter/Cerulean mechanics.
-Both naturally caught Zubat. No memory edits, source loads, route repair or
-substituted roots. Disclosed teacher preparation included normal item sales,
-purchases and move teaching; those are not learned funding outcomes.
-Own levels15/6 and15/10; both members usable. These are not balanced six-member teams.
+## New earned-state switching and live handoff
 
-All12 plans were frozen first: two origins × timings0/4/8 × H/J.
-J6/6wins,37decisions,90HP lost; H6/6wins,42decisions,102HP lost.
-No faints, invalid actions, teacher queries, memory-write actions or runtime failures.
-J31attacks/6prompt declines; H36attacks/6declines. Neither used its reserve.
-The declared switching-coverage gate **did not pass**. Do not turn correct
-declines into bad labels or claim natural switching qualification from party size.
-Two origins, not six; same trainer archetype. No statistical-significance claim.
+Declared parents: boot2900-timing0-J and boot3100-timing0-J from
+red-trainer-natural-team-20260919-v1. Same two origins, not new independent roots.
+Existing short traversal reached a new Super Nerd encounter; normal party menus
+put Zubat first. Setup was disclosed, not learned navigation or a teacher attack.
+One initial load each, no battle reset, memory edit, healing cheat or replay.
 
-## Earned endpoints now retained
+J won2/2, defeated6opponents, made33decisions:27attacks,2voluntary switches,
+4prompt declines. No faints, invalid actions, suppressed attacks or teacher queries.
+Boot2900 switched on decision3 after two attacks; boot3100 switched immediately.
+Decisions18/15; HP lost34/23; battle frames20262/16442; total frames26082/21206.
+Mean actor inference1.098ms. Two typed predeclared ADVANCE_STORY objectives succeeded;
+these are not learned high-level goal choices or a full-player promotion.
 
-The existing model runner saves actual final emulator bytes before close on
-normal return and exception; failed snapshots do not imply successful outcomes.
-Successful reports bind source, model, final snapshot and receipt into the event log.
-Exclusive durable writes prevent overwrites. All12 saved endpoints were reopened
-read-only, matched final observations/enemy rosters and log bindings, and were
-released/input-ready. Verification executed0actions/0frames.
-No completed player goal or fresh completion-ledger integration occurred.
+The live entry point is
+pokemon_red_completion.red_trainer_practice_episode.run_live_red_trainer_practice_episode.
+It borrows the player's running emulator, verifies capture bytes, refuses reset
+and leaves the actual state intact on success or exception. Caller owns budgets,
+durable endpoint capture and fresh verification. The standalone runner still works.
+Both battle-final and final endpoints reopened read-only with matching observations,
+enemy rosters, event chains and fresh completion ledgers;0actions/0frames.
+First winner also passed the existing field-control continuation in the same emulator.
 
-Source commit4ca4423f; comparison eebfefb3.
-Private directories: red-fresh-team-development-20260919-v1 and
-red-trainer-natural-team-20260919-v1.
-Each trial directory contains outcome.json, final.state, final-state.json and events.
-The first J earned endpoint is boot2900-timing0-J (level16 starter/level6 Zubat).
-Earlier Brock2500/2700 outcomes still have no retained final bytes; never reconstruct them.
+Private run: red-trainer-earned-switch-20260919-v1, source bfe9a440.
+Private package: red-battler-live-v1-20260919/package.json, SHA256
+d5e4a79c5b2baf19e91445ca1a9cbef4e858e104e2d8d4589b85119437e67fb4.
+Each boot directory retains battle/final snapshots, logs, ledgers and typed outcomes.
+Boot2900 ends HP10/10, Wartortle poisoned; boot3100 HP12/12, no status.
+Preserve these real recovery needs; field-ready does not mean healed.
 
-## Next bounded objective
+## Next: one main-player integration session, not more trainer refits
 
-Keep J frozen. Prospectively declare a new encounter reached from retained earned
-saves, using normal party-menu lead changes to expose a meaningful reserve decision.
-No new Pallet factory, memory edit, consumed-battle replay or outcome-driven refit.
-This is a new earned-state probe, not an independent root or a retry of the Rocket.
-Stop rather than harden a fixed route. After actual natural switching coverage,
-connect one bounded semantic player objective and verify its final snapshot/ledger.
-Estimate30–45minutes if existing mechanics suffice; current conditional integration
-did not execute because the coverage prerequisite was unmet.
+The existing main collection controllers were NOT automatically replaced.
+Explicitly connect frozen J at one supported main-player trainer boundary, then
+execute one bounded saved-state goal with resource/recovery and fresh-ledger checks.
+Estimate45–60minutes if the existing boundary fits. Use the existing Model137
+collection restart and its provenance; do not count these early-game test saves
+as additional registrations in the96/124 collection save.
+No new trainer factory, fit, generic review gate, full Red run or push.
+Six-member reliability and natural forced-target choice remain unqualified.
+Status/recovery/boost moves, Counter, self-destruct and all-party Struggle remain
+excluded. This is a scoped v1 delivery, not universal battle knowledge.
 
-1184 focused tests passed;13optional integration skips. Full suite not rerun;
-previous unrelated dashboard/timing/fingerprint failures remain unclaimed.
-No Flash/Claude or standing external-review gate. Gameplay stopped; no GitHub push.
+1194focused tests passed;13optional integration skips. Mypy527source files passes.
+Full suite not rerun; old unrelated dashboard/timing/fingerprint failures unclaimed.
+No Flash/Claude. Gameplay stopped; no GitHub push.
 Model137 unchanged:137examples/92successes/58economy-qualified; Red96/124,
-74specimens/198cash; fresh acceptance0/5. No final-player promotion/full run.
-Unsupported status/recovery/boost, Counter, self-destruct and all-party Struggle
-remain exclusions. Pete now requests Astra, superseding older Sol recommendations:
-next session Astra High, Fast off for integration judgment and local emulator work.
+74specimens/198cash; fresh acceptance0/5.
+Next session: Astra High, Fast off per Pete; main-player integration judgment.

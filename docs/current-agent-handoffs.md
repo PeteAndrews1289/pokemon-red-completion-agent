@@ -3,17 +3,17 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-[Current evidence](evidence/red-battler-natural-team-result-2026-09-19.json):
-J and H each won6/6 natural two-member Mt. Moon trials, across two fresh origins.
-J37decisions/90HP lost versus H42/102. No invalid actions or assistance.
-Both declined all6replacement prompts and never used a reserve. The declared
-coverage gate failed; this does not establish that the declines were wrong.
-All12actual final states retained and reopened read-only, observations/logs matched.
+[Current evidence](evidence/red-battler-earned-switch-result-2026-09-19.json):
+J won2/2new natural encounters from retained earned saves after normal-menu lead
+reversal.33decisions,2voluntary switches,0faints/invalid actions/teacher queries.
+Live borrowed-session bridge forbids reset/close; fresh ledgers verify two story
+outcomes. Both battle/final snapshots reopened read-only with matching evidence.
+First endpoint is low-HP/poisoned, not silently healed.
+Same two natural origins and one trainer archetype; not broad six-member reliability.
 
-Prior J learning/package stands:318TRAIN contexts,15retention/learning checks,
-generated3v3 J9/24 versus H7/24. No new fit or training-example delta this session.
-Keep J frozen. Next: a prospectively bounded new-encounter reserve-use probe from
-earned saves with normal menu lead changes, then player integration/ledger.
-No replay, fresh-source factory, memory edit or full-player promotion.
-Earlier Brock endpoints were not retained; only the new team endpoints exist.
-No Flash/Claude or pending review gate. Pete requests Astra, superseding Sol.
+Prior learning/package unchanged:318TRAIN contexts and15retention checks,
+generated3v3 J9/24 versus H7/24. No new fit, examples or high-level learned choices.
+Close supported battler v1 build. Next explicitly bind J into one main-player
+trainer boundary and verify a bounded game goal; collection controllers remain
+unchanged until that opt-in. No generic review gate, factory, replay or full run.
+No Flash/Claude this session. Pete requests Astra.

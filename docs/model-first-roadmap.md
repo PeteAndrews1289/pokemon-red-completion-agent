@@ -43,16 +43,20 @@ The new learning criterion was declared before J's test. No new review/refit gat
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
 | Policy-conditioned learning | Completed: retained fit, positive unused-team learning signal, packaged J | No more fitting on consumed tests |
-| Natural switching evidence | Two-member J/H trials each6/6wins, but no reserve use; next a new encounter from earned saves with normal lead changes | Astra High;30–45minutes bounded probe |
-| Player integration | One earned-state objective, final snapshot and fresh ledger; retain failures | Astra High; after switching evidence |
+| Natural switching and live bridge | Completed: two new encounters, two voluntary switches, two wins and verified no-reset field handoff | Freeze supported battler v1 |
+| Main-player integration | Explicitly invoke J at one supported trainer boundary, then verify one bounded saved-state goal and fresh ledger | Astra High;45–60minutes if existing boundaries fit |
 | Collection and funding | Legitimate repeatable earnings, supported Safari/search goals, remaining28 native registrations | Astra per Pete's preference |
 | Fresh Red acceptance | Fresh origin, model-directed story, Champion/Hall of Fame,124/124 and verified dependency ledger | After prerequisite gates |
 
 The [new natural team test](evidence/red-battler-natural-team-result-2026-09-19.json)
 retained12verified earned endpoints. J used37decisions/90HP lost versus H42/102,
 but neither used its reserve; the declared coverage gate did not pass.
-No fit or player-integration execution followed. Next use a new encounter from
-earned state, not another source factory. The earlier Brock test endpoints were
+The [earned-state follow-up](evidence/red-battler-earned-switch-result-2026-09-19.json)
+then won2/2new Super Nerd encounters after normal-menu lead reversal, making two
+voluntary switches and33decisions without assistance. The live bridge handed back
+verified field state without reset. Supported battler v1 is frozen; main-player
+call-site wiring remains explicit, not an automatic controller replacement.
+No refit or additional trainer-build gate. The earlier Brock test endpoints were
 not retained; do not reconstruct or replay those. Unsupported status/recovery/
 boost, Counter, self-destruct and all-party Struggle remain segment exclusions.
 
@@ -61,5 +65,5 @@ Mew and unavailable version/link dependencies remain legitimate later-game targe
 Consumed DEVELOPMENT never becomes fitting material. ROM-hack and Crystal work
 stay closed until fresh Red acceptance. Pete decides GitHub pushes.
 
-[Latest evidence](evidence/red-battler-policy-learning-result-2026-09-19.json) ·
+[Latest evidence](evidence/red-battler-earned-switch-result-2026-09-19.json) ·
 [Development infographic](development-roadmap.md)

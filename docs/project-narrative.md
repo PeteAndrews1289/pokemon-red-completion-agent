@@ -26,11 +26,20 @@ Across three timings each, J won6/6, its predecessor5/6 and first-legal attack0/
 These are two origins and one own Pokemon: evidence of early attack transfer,
 not qualification of the whole party-switching system.
 
-The package is frozen. Next: natural full-party tests and bounded player
-integration, not another blind fit or a requirement to win every battle.
+The next natural two-member trials were won without ever using the reserve,
+so they did not prove switching. We retained their earned saves, used normal
+menus to put the weaker member first, and reached a new trainer encounter.
+J voluntarily switched in both, won both and kept the party alive. Its33decisions
+ran inside the existing emulator without reset; fresh ledgers verified the story
+events and preserved registrations. One party ended poisoned and low on HP:
+successful combat still leaves real recovery decisions.
+
+Supported small-party battler v1 is now frozen and ready for explicit main-player
+wiring. That is the next game-work step, not another fit or general audit.
+This is not six-member mastery, complete move support or a full-player promotion.
 Model137 remains137examples/92successes; collection registrations remain96/124.
 The five-part fresh-start Red gate remains unpassed.
 
-[Latest evidence](evidence/red-battler-policy-learning-result-2026-09-19.json) ·
+[Latest evidence](evidence/red-battler-earned-switch-result-2026-09-19.json) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

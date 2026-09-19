@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-19-battler-natural-team-v1",
+  "as_of_session": "2026-09-19-battler-live-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1868,6 +1868,12 @@
       "result": "Frozen J and H each won6/6 natural two-member battles. J37decisions/90HP lost versus H42/102. Neither used a reserve: switching coverage remains missing. All12earned endpoints retained and reopened read-only; no fit or player integration.",
       "deviation": "No stage or checklist change. Retained the failed coverage gate rather than counting starter-only wins as switching proof. Current-source consistency check requires this session record and regenerated projection.",
       "next": "Astra High, Fast off per Pete: bounded new-encounter reserve-use probe from earned saves with normal menu lead changes, then one player objective/ledger. No fresh-source factory, refit or replay."
+    },
+    {
+      "session": "2026-09-19-battler-live-v1",
+      "result": "Frozen J won two new earned-state trainer encounters with two voluntary switches and33decisions. Both returned verified live field state without reset or assistance. Supported small-party battler v1 is packaged; main-player call-site integration is next.",
+      "deviation": "No fit or stage/checklist exit change. The previous reserve-coverage failure remains historical. These are same-origin continuations, not new independent roots or six-member mastery. Recovery needs persist in the earned states.",
+      "next": "Astra High, Fast off: explicitly connect J to one supported main-player trainer boundary and verify one bounded saved-state goal. No new trainer refit/review cycle or full run."
     }
   ],
   "closed_milestones": [

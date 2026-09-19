@@ -1,9 +1,18 @@
+import hashlib
+import json
 from types import SimpleNamespace
 
 import pytest
-from run_red_trainer_earned_switch import has_actual_switch, verify_story_outcome
+from run_red_trainer_earned_switch import (
+    MODEL_SHA,
+    authenticated_endpoint,
+    has_actual_switch,
+    verify_story_outcome,
+)
 
 from pokemon_red_completion import red_trainer_practice_episode as runtime
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_trainer_practice_log import TrainerPracticeEventLog
 
 
 @pytest.mark.parametrize("fail", [False, True])
@@ -94,3 +103,44 @@ def test_prompt_decline_does_not_count_as_real_switch():
     )
     for kind in ("voluntary_switch", "forced_switch", "switch_prompt"):
         assert has_actual_switch(SimpleNamespace(decisions=[{"kind": kind, "party_slot": 2}]))
+
+
+@pytest.mark.parametrize("corrupt", [None, "state", "outcome", "receipt", "model"])
+def test_earned_endpoint_requires_bound_state_model_receipt_and_terminal(tmp_path, corrupt):
+    state = b"earned battle endpoint"
+    digest = hashlib.sha256(state).hexdigest()
+    endpoint = {"episode_returned": True, "pressed_buttons": [], "state_sha256": digest}
+    report = {
+        "stop_reason": "battle_won",
+        "battle_won": True,
+        "outcome_model_sha256": MODEL_SHA["J"],
+        "manifest_sha256": "a" * 64,
+        "final_state_sha256": digest,
+        "final_state_receipt_sha256": canonical_sha256(endpoint),
+        "teacher_queries": 0,
+        "memory_write_actions": 0,
+    }
+    log = TrainerPracticeEventLog(
+        tmp_path / "events",
+        run_identity={
+            "outcome_model_sha256": MODEL_SHA["J"],
+            "capture_manifest_sha256": "a" * 64,
+        },
+    )
+    log.finish({"outcome_sha256": canonical_sha256(report)})
+    if corrupt == "state":
+        state = b"different state"
+    elif corrupt == "outcome":
+        report["battle_won"] = False
+    elif corrupt == "receipt":
+        endpoint["pressed_buttons"] = ["a"]
+    elif corrupt == "model":
+        report["outcome_model_sha256"] = "b" * 64
+    (tmp_path / "final.state").write_bytes(state)
+    (tmp_path / "outcome.json").write_text(json.dumps(report))
+    (tmp_path / "final-state.json").write_text(json.dumps(endpoint))
+    if corrupt is None:
+        assert authenticated_endpoint(tmp_path) == (state, report)
+    else:
+        with pytest.raises(ValueError, match="authentication"):
+            authenticated_endpoint(tmp_path)

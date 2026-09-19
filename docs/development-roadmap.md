@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-natural-team-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-live-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battler-live-v1
+
+Frozen J won two new earned-state trainer encounters with two voluntary switches and33decisions. Both returned verified live field state without reset or assistance. Supported small-party battler v1 is packaged; main-player call-site integration is next.
+
+**Deviation:** No fit or stage/checklist exit change. The previous reserve-coverage failure remains historical. These are same-origin continuations, not new independent roots or six-member mastery. Recovery needs persist in the earned states.
+
+**Next:** Astra High, Fast off: explicitly connect J to one supported main-player trainer boundary and verify one bounded saved-state goal. No new trainer refit/review cycle or full run.
 
 ### 2026-09-19-battler-natural-team-v1
 
