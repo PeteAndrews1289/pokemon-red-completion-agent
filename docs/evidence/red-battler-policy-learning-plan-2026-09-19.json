@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon.red.battler-policy-learning-plan.v1",
+  "status": "declared_before_collection",
+  "mission_check": {
+    "reusable_capability": "Learn attacks and party switching from measured outcomes under the learner's own continuation policy.",
+    "learned_authority": "One frozen H successor experiment; no final-player promotion or teacher fallback.",
+    "transfer_test": "Unused generated full-party battles against frozen H; two independently booted natural DEVELOPMENT sources test early attack transfer only.",
+    "cheapest_falsifier": "Policy-bound labels cannot improve retained TRAIN decisions, or the one successor regresses against H on the unused paired cohort.",
+    "time_box": "Two hours starting 2026-09-19 17:47 UTC.",
+    "stop_condition": "One declared collection, fit and comparison; retain failures without a successor sweep. Stop natural preparation at two bounded sources or its declared setup failure. No full game or push."
+  },
+  "user_clarification": "Demonstrated learning is required, not perfect battle wins. Fresh independent bounded test-source preparation is now authorized.",
+  "reference_model_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+  "collection": {
+    "partition": "train",
+    "minimum_contexts": 16,
+    "roots": 4,
+    "selection": "Per root: lowest two opening capture IDs, lowest useful replacement capture ID, lowest endgame MAIN capture ID; metadata-only, no return-based selection.",
+    "continuation": "Frozen H, recorded policy ID and exact model hash; no teacher continuation.",
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "player_turn_horizon": 40,
+    "max_decisions": 160,
+    "max_frames_per_branch": 240000,
+    "target_migration": "Keep teacher and learner targets separate and policy-bound; count new measurements separately from unique physical contexts. Old labels are immutable retention tests, not conflicting optimization labels for the same state."
+  },
+  "fit": {
+    "count": 1,
+    "epochs_per_head": 2400,
+    "learning_rate": 0.005,
+    "objective": "pairwise_regret",
+    "order": ["move", "switch", "control"],
+    "retention": "Original44 move <=0.0554; retained52 move <=0.0648 and composed <=0.1609. Preserve H narrow128 move/switch/composed, new80 composed, retained52 switch, prior48 broad move/switch/composed and late90 move/switch/composed.",
+    "learning_gate": "At least10% lower learner-continuation composed TRAIN regret and every declared retention check passes."
+  },
+  "paired_comparison": {
+    "seed": 2026091910,
+    "battles": 24,
+    "arms": ["frozen_H", "candidate"],
+    "teacher_is_reference_not_learning_gate": true,
+    "learning_signal": "Candidate wins strictly more than H with no increase in total party faints; all episodes terminal with no invalid action or teacher fallback. Report paired win discordances and limitations, not significance or perfect-play claims.",
+    "failure_handling": "Keep zero improvement, regression, losses and runtime failures; no same-cohort fitting or replacement."
+  },
+  "natural_sources": {
+    "count": 2,
+    "boot_frames": [2500, 2700],
+    "boundary": "Brock battle before first decision, using existing bounded opening/errand/Pewter preparation only.",
+    "state_edits": false,
+    "claim_limit": "One-Pokemon sources are attack tests, not full-party switching qualification; independent boot origins and trainer IDs required."
+  },
+  "authority_promotions": 0,
+  "full_game_runs": 0,
+  "github_publication": false
+}
