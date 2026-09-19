@@ -768,6 +768,8 @@ def _await_next_battle_decision(
             return
         if raw.battle_state != expected_battle_state:
             raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        if _preserve_moves_at_learning_prompt(reader, executor, raw, timing=timing):
+            continue
         if expected_battle_state == _TRAINER_BATTLE_STATE and _trainer_switch_prompt_visible(
             reader, raw
         ):
@@ -1073,6 +1075,37 @@ def run_adaptive_trainer_battle(
     raise BattleRuntimeTimeoutError(
         f"{label} exceeded {timing.max_runtime_pulses} bounded runtime pulses."
     )
+
+
+def _preserve_moves_at_learning_prompt(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    raw: RawGameState,
+    *,
+    timing: BattleRuntimeTiming,
+) -> bool:
+    """Settlement may decline learning, never choose a move to overwrite.
+
+    Moveset acquisition is outside this attack/switch actor's authority. The
+    adapter must prove a live prompt; unknown dialogue keeps its existing path.
+    """
+    detector = getattr(reader, "read_move_learning_prompt", None)
+    prompt = detector(raw) if callable(detector) else None
+    if prompt is None:
+        return False
+    kind, selected = prompt
+    if kind in {"replace_move", "forget_move"}:
+        action = MacroAction(MacroActionKind.CANCEL)
+    elif kind == "abandon_learning" and selected in {0, 1}:
+        action = (
+            MacroAction(MacroActionKind.CONFIRM) if selected == 0
+            else MacroAction(MacroActionKind.MOVE, "up")
+        )
+    else:
+        raise BattleRuntimeError("invalid move-learning semantic prompt")
+    trace_phase("preserve_moves_at_learning_prompt")
+    _pulse(executor, action, timing.dialogue_wait_frames)
+    return True
 
 
 def _trainer_switch_prompt_visible(

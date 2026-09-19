@@ -128,15 +128,22 @@ def summarize(evaluations):
     }
 
 
-def run(args):
+def run(
+    args,
+    *,
+    candidate_sha=CANDIDATE_SHA,
+    frozen_sha=FROZEN_SHA,
+    seed=2026091901,
+    teacher_reference=False,
+):
     if (
         args.output.exists()
         or subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip()
     ):
         raise ValueError("broad probe requires new output and committed code")
     for path, digest in (
-        (args.candidate, CANDIDATE_SHA),
-        (args.frozen, FROZEN_SHA),
+        (args.candidate, candidate_sha),
+        (args.frozen, frozen_sha),
         (args.rom, player.ROM_SHA256),
     ):
         if common._binding(path)["sha256"] != digest:
@@ -145,12 +152,12 @@ def run(args):
     if not result["train_qualified"] or result["model"] != common._binding(args.candidate):
         raise ValueError("candidate is not TRAIN qualified")
     sources = common._source_rows(args.batch)
-    recipes = broad_recipes(RedPracticeCartridge(args.rom.read_bytes()))
+    recipes = broad_recipes(RedPracticeCartridge(args.rom.read_bytes()), seed=seed)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
     args.output.mkdir(mode=0o700, parents=True)
     declaration = {
         "source_commit": commit,
-        "seed": 2026091901,
+        "seed": seed,
         "candidate": common._binding(args.candidate),
         "frozen": common._binding(args.frozen),
         "recipes": recipes,
@@ -160,6 +167,7 @@ def run(args):
         "partition": "train",
         "natural_qualification": False,
         "authority_promotions": 0,
+        "teacher_reference": teacher_reference,
         "gates": (
             "all runs terminal, candidate wins >= frozen, candidate faints <= frozen; "
             "no fitting on probe"
@@ -167,6 +175,7 @@ def run(args):
     }
     common._write(args.output / "plan.json", declaration)
     evaluations = []
+    teacher_results = []
     for index, unbound in enumerate(recipes):
         directory = args.output / f"case-{index:02d}"
         directory.mkdir(mode=0o700)
@@ -228,7 +237,24 @@ def run(args):
                 flush=True,
             )
         common._write(args.output / "progress.json", {"evaluations": evaluations})
+        if teacher_reference:
+            from run_red_trainer_broad_qualification import run_teacher_reference
+
+            teacher_results.append(
+                run_teacher_reference(state, args.rom, directory / "teacher", commit)
+            )
+            common._write(args.output / "teacher-progress.json", {"evaluations": teacher_results})
     summary = summarize(evaluations)
+    if teacher_reference:
+        teacher_wins = sum(r["battle_won"] for r in teacher_results)
+        summary["teacher_reference_wins"] = teacher_wins
+        summary["gates"]["teacher_reference_complete"] = len(teacher_results) == 24 and all(
+            r["stop_reason"] in {"battle_won", "party_defeated"} for r in teacher_results
+        )
+        summary["gates"]["wins_at_least_teacher_reference"] = (
+            summary["totals"]["candidate"]["wins"] >= teacher_wins
+        )
+        summary["probe_passed"] = all(summary["gates"].values())
     common._write(args.output / "summary.json", {"evaluations": evaluations, **summary})
     print(json.dumps(summary), flush=True)
 

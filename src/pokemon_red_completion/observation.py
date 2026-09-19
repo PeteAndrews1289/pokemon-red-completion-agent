@@ -4717,6 +4717,40 @@ class PokemonRedStateReader:
             and self._active_menu_cursor()
         )
 
+    def read_move_learning_prompt(self, raw: RawGameState) -> tuple[str, int] | None:
+        """Recognize live Red move-learning input, not stale dialogue text.
+
+        Pinned pokered engine/pokemon/learn_move.asm and data/text/text_4.asm
+        distinguish replacing a move from confirming abandonment. Both use
+        the same yes/no menu, so a cursor signature alone is insufficient.
+        This adapter reads visible text; no species or route-specific policy.
+        """
+        if raw.battle_state not in {1, 2} or raw.enemy_hp != 0 or not self._active_menu_cursor():
+            return None
+        signature = tuple(self._memory.read_u8(address) for address in (
+            RamAddress.TOP_MENU_ITEM_Y, RamAddress.TOP_MENU_ITEM_X,
+            RamAddress.MAX_MENU_ITEM, RamAddress.MENU_WATCHED_KEYS,
+        ))
+        selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if signature not in {(8, 15, 1, 3), (8, 5, 3, 3)} or selected > signature[2]:
+            return None
+        letters = []
+        for offset in range(20 * 12, TILE_MAP_SIZE):
+            tile = self._memory.read_u8(int(RamAddress.TILE_MAP) + offset)
+            letters.append(
+                chr(ord("A") + tile - 0x80) if 0x80 <= tile <= 0x99
+                else chr(ord("a") + tile - 0xA0) if 0xA0 <= tile <= 0xB9 else " "
+            )
+        visible = " ".join("".join(letters).split())
+        if signature == (8, 15, 1, 3):
+            if "Abandon learning" in visible:
+                return "abandon_learning", selected
+            if "move to make room" in visible:
+                return "replace_move", selected
+        elif "Which move should" in visible and "be forgotten" in visible:
+            return "forget_move", selected
+        return None
+
     def _active_menu_cursor(self) -> bool:
         cursor_address = self._memory.read_u8(RamAddress.MENU_CURSOR_LOCATION)
         cursor_address |= self._memory.read_u8(int(RamAddress.MENU_CURSOR_LOCATION) + 1) << 8
