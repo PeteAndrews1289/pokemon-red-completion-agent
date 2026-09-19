@@ -1284,3 +1284,25 @@ switch against the same opponent until the model has attempted an attack.
 This is a disclosed safety constraint against an unsupported post-switch
 context, not a learned improvement or a replay of the failed holdout. A fresh
 declared TRAIN matchup must test it once before any broader claim.
+
+## September19 — retain numeric competence, distinguish continuation policies
+
+The [readiness work](evidence/red-battler-readiness-result-2026-09-19.json)
+replaced exact-old-choice freezing with unchanged numeric regret budgets so
+measured old mistakes could improve. It added138 fitted contexts, bringing the
+trainer to318. Opening-only coverage was expanded to replacements and endgames.
+No original retention limit, stage exit or final-Red acceptance criterion changed.
+
+H improved one new TRAIN comparison14wins versus11 but remained below the
+teacher's17. I corrected saturated TRAIN rankings yet regressed7wins versus H14
+on a distinct cohort; I is rejected. Lower fitting regret is not readiness.
+
+A prospectively selected four-root,120-branch diagnostic found4/4 best-action
+changes when H, rather than the teacher, continued after the tested first action.
+Next learning work must explicitly bind continuation policy/model and decide
+target migration before fitting. Do not silently merge these alternate values,
+erase old teacher measurements, replay consumed comparisons or loosen gates.
+The trainer is operational; the battler is not fully qualified. Independent
+natural full-party tests and bounded player integration remain outstanding.
+Pete's permission for bounded fresh natural source preparation is still pending.
+No new framework, standing review gate, full-game run or GitHub publication.

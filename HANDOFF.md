@@ -1,79 +1,86 @@
 # Current development handoff
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 19, 2026.
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September19,2026.
 
-## Retention passes; natural advantage and integration do not
+## Trainer works; battler still fails qualification
 
-[Session evidence](docs/evidence/red-trainer-retention-result-2026-09-19.json).
-Pete requested all next steps. Completed the interrupted local checkpoint,
-authenticated all180 existing TRAIN contexts, ran one constrained fit, then
-one frozen three-arm natural Champion comparison. No new TRAIN collection.
+[Session evidence](docs/evidence/red-battler-readiness-result-2026-09-19.json)
+and [declared plan](docs/evidence/red-battler-readiness-plan-2026-09-19.json).
+Four bounded fits followed specific TRAIN diagnoses, not a hyperparameter sweep.
+All candidates and failed comparisons are retained. No player promotion or push.
 
-The new candidate preserves all134 old head decisions. All three unchanged
-regret gates pass: original44 attack0.008849232≤0.0554; all52 attack0.035435587
-≤0.0648; all52 composed0.098488040≤0.1609. Terminal128 composed regret improves
-0.829764698→0.478781094 (42.3%); newer80 improves1.274601178→0.709266719.
-The five prospective TRAIN checks pass. This is actual offline learned progress.
+Added138 fitted contexts to the previous180:318 total, across four existing
+fresh TRAIN roots. Three collections completed3265 matched terminal branches,
+31752decisions and37904062frames; observed active/opponent union111species.
+Five timing offsets per context. New data includes openings, forced/prompt
+switches, final-opponent attacks and last-survivor attacks. These are generated
+TRAIN battles, not independent natural qualification or species mastery.
 
-Natural Champion: candidate wins22decisions/1party faint/389HP lost; frozen wins
-16decisions/0faints/156HP; fixed wins29decisions/2faints/345HP. All67decisions and
-259event records complete, zero teacher queries, memory edits or invalid actions.
-The natural comparison FAILS. Player integration is deliberately blocked.
-The unused Champion encounter shares historical ancestry with prior League
-sources; it is not independent replication or a fresh full-game completion.
-Do not tune to/replay it or any consumed earlier DEVELOPMENT battle.
+Reference candidate H passed all13 TRAIN/retention checks. New late90 composed
+regret fell1.241603499→0.636730179. In its new24-battle comparison H won14 versus
+G11, with47 versus50faints and5888 versus6121HP lost. Teacher reference won17.
+H therefore remains unqualified, despite its useful within-cohort improvement.
+Private directory: red-trainer-late-fit-20260919-v1.
+H SHA256: ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b.
 
-## Retained implementation and private artifacts
+Candidate I fixed vanishing gradients for confidently wrong return rankings
+using a finite-difference-tested pairwise loss. Same318 examples; no new labels.
+Late90 attack regret fell0.172015109→0.000602133, control regret to0, composed
+to0.046204062. Switch head retained epoch0 because alternatives failed retention.
+But its fresh comparison regressed to7/24wins versus H14/24 and teacher17/24;
+58 versus49faints. Reject I, not its failure logs. No further blind fit.
+Private directories: red-trainer-pairwise-fit-20260919-v1 and
+red-trainer-pairwise-qualification-20260919-v1.
 
-`red_trainer_retention.py`: algebraic score-preserving control-schema bridge,
-vectorized expected-regret gradients, projected steps and nonlinear backtracking.
-All constraints apply only in training; inference remains the ordinary three-head
-neural policy. No lookup table or teacher selects final actions.
+## Important diagnosis and next work
 
-`audit_red_trainer_retention.py` authenticated original states, manifests, plans
-and branch logs once. Private directory red-trainer-retention-20260919-v1 holds
-targets.json, manifest.json and audit.json; use the bound cache, not recollection.
-No identical-input winner conflict crosses old/new groups; this does not prove
-network learnability or isolate reward scale as a cause.
+The labels measure first actions followed by a strong teacher, not the deployed
+learner. Existing matched-first-action TRAIN traces: G wins18/32; teacher
+continuation wins27/32. This alone does not prove the action ranking changes.
 
-`run_red_trainer_retention.py` made its sole fit from the frozen100-context
-terminal ancestor. Private directory red-trainer-retention-fit-20260919-v1 holds
-model.json, all three optimizer traces, intermediate models and result.json.
-Candidate SHA256:
-9f2aa62d01b72217931a3fab4b60e69522734f69b7eeab43b90e46498c34cbbc.
+A separately declared four-root audit then executed every opening action at
+five timings with frozen H continuing:120 complete branches. The best measured
+action changed in4/4 preselected contexts (including switch→attack reversals).
+The audit is diagnostic, not an admitted fit or independent transfer result.
+Do not merge its four alternate-continuation target sets into the teacher corpus.
+Private directory: red-trainer-continuation-audit-20260919-v1.
+Reusable runner: scripts/audit_red_trainer_continuation.py.
 
-Natural capture/comparison directories:
-red-trainer-retention-champion-capture-20260919-v1 and
-red-trainer-retention-champion-comparison-20260919-v1.
-The latter includes candidate-verdict.json: natural comparison false,
-final-player readiness false. One post-fit evaluation, no retries or refits.
-Earlier candidates and failures remain intact.
+Next bounded objective,30–60minutes: bind continuation policy/model in the
+target contract and declare a useful four-root learner-continuation curriculum
+(at least16 contexts, with openings/replacements/endgames) before another fit.
+Freeze the learner during collection. Decide target migration explicitly;
+preserve old measurements and numeric retention gates. Then one declared fit
+and unused paired full-battle comparison with a separate teacher reference.
+This is not another final-review gate or a mandate to rebuild the framework.
 
-## Concrete remaining issue
+Independent natural full-party qualification and bounded player integration
+still remain. Pete has been asked for permission to prepare two bounded,
+genuinely separate fresh-start natural test saves; no answer yet, no execution.
+Early one-Pokemon tests alone would not qualify full-party switching.
+Never replay/fit consumed Champion, League, Celadon, Fuchsia or Cinnabar tests.
+No routine clean-power teacher factory, full Red run, ROM hack or Crystal.
 
-The move head's terminal128 argmax regret slightly worsens0.275556666→0.279465267
-despite lower expected loss. Move/control stop after152/113accepted updates at
-the stronger exact-old-choice constraints; switch completes1200updates.
-This is not convergence evidence. The first natural divergence is an attack:
-move005 against Alakazam does zero damage, then the learner takes127HP, switches,
-and later loses that replacement. Randomness prevents a causal optimality claim.
+## Runtime, verification and status
 
-Next bounded objective: audit the attack optimizer's active constraints and
-supported move/stat coverage on TRAIN only. Preserve the original regret limits;
-do not automatically freeze every old mistake forever or blindly refit. Declare
-a successor only after that diagnosis, then require unused natural and independent
-origin evidence. Do not rebuild the trainer or enable unqualified player authority.
-Estimate one60–90minute diagnosis/implementation session; qualification timing
-depends on the result. Unsupported status/recovery/boost, Counter, self-destruct
-and all-party Struggle remain outside the attack/switch segment.
+Fixed two actual cartridge learning transitions: decline replacement prompts
+to preserve the existing moveset; account for automatic learning into an empty
+slot after level-up while keeping exact PP checks on every existing move.
+The interrupted H qualification remains failed/incomplete. Its one mechanic
+regression is separate; the later comparison used a new seed with no refit.
 
-Checks:135focused/documentation tests passed,13integration skips; Ruff passed.
-Mypy540source files passes. Registry, focus, documentation and public checks pass.
-Earlier full suite12420passed/9known failures/16skips/1xfail was not rerun.
-Known failures: dashboard projections7, timing golden1, runtime fingerprint1.
+1159focused/documentation tests pass;13optional integration skips. Mypy541
+source files passes. Full suite not rerun; historical9failures remain unclaimed.
+Final registry/focus/documentation/public checks must accompany this handoff.
 
-Model137 stays137examples/92successes/58economy-qualified; Red96/124 and fresh
-acceptance0/5. Gameplay stopped. No full game, ROM hack, Crystal or GitHub push.
-No Flash/Claude contribution this session. Recommended next: Astra High, Fast
-off for constrained-learning and generalization judgment, not another final review.
+Claude Opus4.8 High completed a bounded read-only review. Accepted explicit
+final switch-retention assertions; did not loosen pulse budgets. Reported
+cost$0.6042975; remaining service quota unavailable. Flash not used.
+
+Model137 remains137examples/92successes/58economy-qualified; Red96/124 and
+fresh acceptance0/5. No full-player authority gained. All gameplay stopped.
+Unsupported status/recovery/boost, Counter, self-destruct and all-party
+Struggle remain explicit exclusions. Trainer operational does not mean
+battler fully ready. Next: Astra High, Fast off for target-policy semantics;
+Sol High suffices for already-declared execution.

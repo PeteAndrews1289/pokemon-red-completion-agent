@@ -3,24 +3,22 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The [Astra findings](reviews/red-trainer-astra-review-2026-09-17.md) were
-implemented and measured in the [remediation evidence](evidence/red-trainer-astra-remediation-2026-09-17.json).
-TRAIN now has 44 contexts from four fresh origins and 20 distinct attack-input
-matrices. The frozen challenger learns two of three clear type reversals,
-uses its own attack/switch choices in natural full-party battles, and never
-calls the teacher during evaluation.
+[Current evidence](evidence/red-battler-readiness-result-2026-09-19.json):
+318 fitted TRAIN contexts, four existing fresh roots. Candidate H improved
+one new team cohort14wins versus11, but teacher won17. Candidate I greatly
+improved TRAIN regret and then regressed7wins versus H14 on a different cohort.
+Neither is qualified for final-player integration. No more blind refits.
 
-Promotion is blocked by the prospective natural League result: Bruno improves,
-Agatha and Lance regress against the older frozen control. Agatha first found
-a sleeping-faint runtime defect; the mechanics fix was regression-tested and
-the subsequent complete Agatha comparison is descriptive, not a restored
-cohort pass. All natural captures share unresolved historical ancestry.
-Neither these evaluations nor the earlier Celadon/Fuchsia battles are TRAIN
-material. No authority promotion or GitHub publication occurred.
+A120-branch diagnostic on four preselected TRAIN openings found4/4 best-action
+reversals when frozen H replaced the teacher as continuation policy.
+Next work is policy-bound learner-continuation targets, not another broad
+review or a new trainer framework. Do not silently mix target semantics,
+relax retention limits, or fit/replay consumed evaluation cases.
 
-Next review, only after new independent TRAIN supply and a frozen challenger:
-check return arithmetic, distinct input coverage, switch overuse and
-prospectively declared natural outcome vectors. A clean independent-origin
-natural source is needed before a stronger generalization claim. Flash and
-Claude were not used during this implementation session; Astra's completed
-review supplied the findings.
+Claude Opus4.8 completed one read-only review this session; explicit final
+switch-retention assertions were accepted. Pulse caps stayed unchanged.
+Service quota unavailable. Flash not used. No standing external-review gate.
+
+Independent natural full-party evidence remains missing. A pending request
+asks Pete to authorize bounded fresh-source preparation; no preparation ran.
+No full-game run, authority promotion, ROM hack, Crystal or GitHub push.

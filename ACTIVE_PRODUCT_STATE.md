@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Retain the TRAIN-qualified checkpoint; integration is blocked by natural performance. Diagnose attack optimization and coverage on TRAIN only, preserving old gates. No consumed DEVELOPMENT replay or blind refit.
+- Next decision: Freeze H as reference and preserve I rejection. Bind learner-continuation value targets and declare four-root supply before fitting. Do not mix target policies silently, relax retention or replay consumed comparisons.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-19-trainer-retention-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-retention-result-2026-09-19.json)
+**2026-09-19-battler-readiness-v1** · status **closed** · evidence [qualification](docs/evidence/red-battler-readiness-result-2026-09-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Real retention-preserving learning and an unassisted natural Champion win advance the battle learner, but comparison costs reject final-player readiness. |
-| Learning output | Reused180 authenticated contexts, one fit, no new TRAIN collection. Terminal128 composed regret improves42.3% with all134 older head decisions preserved; all five prospective TRAIN checks pass. |
-| Authority delta | None. One new battle fit is TRAIN-qualified but failed its natural comparison; Model137 and Red acceptance remain unchanged. |
-| Transfer result | New descriptive natural Champion encounter: all arms win, frozen is better. Historical source is disjoint from four TRAIN boots but correlated with previous League evaluation ancestry. |
-| Blocker | All retention gates pass, but the natural Champion challenger needs22 decisions/1party faint/389HP versus frozen16/0/156. Integration is blocked by unfavorable natural performance. |
-| Decision | Keep the retention learner and fitted checkpoint. Reject player promotion; preserve the consumed Champion evaluation without tuning or replay. |
-| Next session | Astra High, Fast off: one TRAIN-only attack-optimization/coverage diagnosis, then prospectively bounded improvement only if justified; no new framework or consumed DEVELOPMENT replay. |
-| Next falsifier | Diagnose constrained attack-head optimization and move/stat coverage on TRAIN only before declaring any successor. Original numeric retention limits remain unchanged. |
-| Stop condition | One declared fit and one three-arm natural comparison completed; unfavorable natural result stops integration. No additional fit or replay in this sequence, no full game or push. |
+| Product alignment | Real learner/data improvements and rejected regressions distinguish an operational trainer from a final-player-ready battler. Independent natural full-party evidence remains required. |
+| Learning output | Added138 fitted TRAIN contexts from3265 complete matched branches;318 total. Four bounded fits. A separate120-branch learner-continuation diagnostic is retained but not fitted or merged. |
+| Authority delta | None. H remains an unqualified battle reference; I is rejected. Model137 and fresh Red acceptance are unchanged. |
+| Transfer result | H improves its same-cohort predecessor comparison but not the teacher baseline; I regresses in a distinct cohort. All are assisted TRAIN diagnostics, not independent natural transfer. |
+| Blocker | H wins14/24 versus predecessor11/24 but teacher17/24. I fits TRAIN better yet regresses7/24 versus H14/24. Four-root audit changes best action in4/4 states when learner replaces teacher continuation. |
+| Decision | Keep the operational trainer and H reference. Reject I promotion; bind continuation-policy target semantics before any new fit. Preserve all failed cohorts. |
+| Next session | Astra High, Fast off: continuation-aware target contract and at least16 useful learner-continuation contexts before one declared fit; no new framework or standing review gate. |
+| Next falsifier | A policy-bound four-root learner-continuation curriculum must supply useful measured targets without silently mixing teacher values; then an unused full-battle comparison must pass. |
+| Stop condition | Declared fits and comparisons are complete. No blind fit after I regression. Next campaign requires an explicit continuation-aware target plan; fresh natural source preparation still awaits Pete. No full game or push. |
 
 ### Stop conditions
 

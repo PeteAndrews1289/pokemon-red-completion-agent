@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-19-trainer-retention-v1",
+  "as_of_session": "2026-09-19-battler-readiness-v1",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -485,7 +485,7 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
     },
@@ -1009,7 +1009,7 @@
       "session": "2026-09-11-economy-runtime-connection",
       "result": "Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.",
       "deviation": "Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.",
-      "next": "Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
+      "next": "Continue exact AM01 with initialized v4 model6cd88d0f\u2026837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
     },
     {
       "session": "2026-09-11-economy-live-qualification",
@@ -1399,13 +1399,13 @@
       "session": "2026-09-14-full-pokedex-family-diagnostics",
       "result": "Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.",
       "deviation": "None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.",
-      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software."
+      "next": "Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1\u2013V3 or spend another source only to validate software."
     },
     {
       "session": "2026-09-14-full-pokedex-supply-admission",
       "result": "Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.",
       "deviation": "The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.",
-      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation."
+      "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1\u2013V3 or claim independent evaluation."
     },
     {
       "session": "2026-09-14-registered-correlated-reset",
@@ -1850,6 +1850,12 @@
       "result": "One retention-constrained fit on180 existing contexts passes all old gates and improves terminal128 composed regret42.3%. Natural Champion wins22decisions/1faint/389HP, but frozen wins16/0/156. No new TRAIN data or player promotion.",
       "deviation": "The natural performance gate stops integration. Champion is an unused encounter for this trainer but shares historical League ancestry; no independent replication or fresh completion is claimed. Stage and checklist exits unchanged.",
       "next": "Astra High, Fast off: TRAIN-only attack optimizer/coverage diagnosis. Preserve the candidate and failed natural comparison; no framework rebuild, blind refit, consumed DEVELOPMENT replay or GitHub push."
+    },
+    {
+      "session": "2026-09-19-battler-readiness-v1",
+      "result": "318 fitted battle TRAIN contexts,138 added through3265 complete matched branches. H improves14wins versus11 but teacher17; I fits TRAIN better yet regresses7wins versus H14. No final-player readiness.",
+      "deviation": "Four-root120-branch audit changes best action in4/4 states under learner continuation. Next work addresses policy-dependent target semantics; no gate relaxation, consumed evaluation reuse, stage/checklist exit change or new framework.",
+      "next": "Astra High, Fast off: explicit learner-continuation target contract and bounded four-root supply, then one declared fit and unused comparison. Independent natural full-party qualification still needs source preparation approval."
     }
   ],
   "closed_milestones": [

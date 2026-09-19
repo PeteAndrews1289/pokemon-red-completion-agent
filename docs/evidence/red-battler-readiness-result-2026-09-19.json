@@ -1,0 +1,827 @@
+{
+  "schema": "pokemon.red.battler-readiness-result.v1",
+  "session": "2026-09-19-battler-readiness-v1",
+  "status": "trainer_operational_battler_unqualified_continuation_target_shift_measured",
+  "plan": "docs/evidence/red-battler-readiness-plan-2026-09-19.json",
+  "readiness_scope": "Attack and party-switch segment; not universal move support, final-player promotion or a fresh Red completion.",
+  "reference_candidate": "H",
+  "reference_model_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+  "latest_candidate": "I",
+  "latest_candidate_rejected": true,
+  "collection": {
+    "previous_fitted_contexts": 180,
+    "new_fitted_contexts": 138,
+    "total_fitted_contexts": 318,
+    "fresh_origin_roots": 4,
+    "new_complete_teacher_continuation_branches": 3265,
+    "branch_decisions": 31752,
+    "branch_frames": 37904062,
+    "branch_wins": 2331,
+    "branch_losses": 934,
+    "observed_species_union": 111,
+    "active_species": 73,
+    "observed_opponent_species": 76,
+    "contexts": {
+      "main": 98,
+      "forced": 16,
+      "prompt": 24
+    },
+    "batches": {
+      "broad": {
+        "contexts": 48,
+        "branches": 1350,
+        "main": 45,
+        "forced": 2,
+        "prompt": 1
+      },
+      "late": {
+        "contexts": 53,
+        "branches": 920,
+        "main": 16,
+        "forced": 14,
+        "prompt": 23
+      },
+      "late_main": {
+        "contexts": 37,
+        "branches": 995,
+        "main": 37,
+        "last_opponent": 18,
+        "last_ally": 8
+      }
+    },
+    "limitations": "The three collections reuse four authenticated TRAIN origins. Timing variants and generated teams do not create independent natural evaluation origins. Species coverage is observed union, not mastery of111 species or all moves."
+  },
+  "fits": {
+    "F": {
+      "train_qualified": true,
+      "fits": 1,
+      "elapsed_seconds": 25.33351962501183,
+      "gates": {
+        "new80_composed_no_regression": true,
+        "new80_move_no_regression": true,
+        "original44_move": true,
+        "retained52_composed": true,
+        "retained52_move": true,
+        "terminal128_composed_improves_ten_percent": true,
+        "terminal128_move_improves_ten_percent": true
+      },
+      "model_sha256": "36a141fb456e81412d47f9d167f34a7a05ef401f8be583b6a6888b4f4ae9eda5",
+      "before": {
+        "new80": {
+          "composed_action": 0.709266719,
+          "control": 0.361213451,
+          "move": 0.37851662,
+          "switch": 0.624204788
+        },
+        "original44": {
+          "composed_action": 0.087278642,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.134933859
+        },
+        "retained52": {
+          "composed_action": 0.09848804,
+          "control": 0.000476946,
+          "move": 0.035435587,
+          "switch": 0.137173295
+        },
+        "terminal128": {
+          "composed_action": 0.478781094,
+          "control": 0.244671568,
+          "move": 0.279465267,
+          "switch": 0.407653527
+        }
+      },
+      "after": {
+        "new80": {
+          "composed_action": 0.307702209,
+          "control": 0.075039167,
+          "move": 0.08372108,
+          "switch": 0.624204788
+        },
+        "original44": {
+          "composed_action": 0.087278642,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.134933859
+        },
+        "retained52": {
+          "composed_action": 0.097735244,
+          "control": 0.002034439,
+          "move": 0.014052994,
+          "switch": 0.137173295
+        },
+        "terminal128": {
+          "composed_action": 0.209017446,
+          "control": 0.049574655,
+          "move": 0.064581153,
+          "switch": 0.407653527
+        }
+      }
+    },
+    "G": {
+      "train_qualified": true,
+      "fits": 1,
+      "new_contexts": 48,
+      "elapsed_seconds": 38.511680791154504,
+      "gates": {
+        "broad_composed_improves_ten_percent": true,
+        "broad_move_no_regression": true,
+        "narrow_composed_retained": true,
+        "narrow_move_retained": true,
+        "narrow_switch_retained": true,
+        "new80_composed_retained": true,
+        "original44_move": true,
+        "retained52_composed": true,
+        "retained52_move": true,
+        "retained52_switch_retained": true
+      },
+      "model_sha256": "f8d9be1a76dd1475e23db1080609b8318a052e1f7fa26ee4201d7f489dd9d241",
+      "before": {
+        "new80": {
+          "composed_action": 0.307702209,
+          "control": 0.075039167,
+          "move": 0.08372108,
+          "switch": 0.624204788
+        },
+        "original44": {
+          "composed_action": 0.087278642,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.134933859
+        },
+        "retained52": {
+          "composed_action": 0.097735244,
+          "control": 0.002034439,
+          "move": 0.014052994,
+          "switch": 0.137173295
+        },
+        "terminal128": {
+          "composed_action": 0.209017446,
+          "control": 0.049574655,
+          "move": 0.064581153,
+          "switch": 0.407653527
+        }
+      },
+      "after": {
+        "new80": {
+          "composed_action": 0.240991519,
+          "control": 0.076946051,
+          "move": 0.083451295,
+          "switch": 0.489831751
+        },
+        "original44": {
+          "composed_action": 0.05512355,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.107372351
+        },
+        "retained52": {
+          "composed_action": 0.086212417,
+          "control": 0.002034439,
+          "move": 0.014052994,
+          "switch": 0.13537924
+        },
+        "terminal128": {
+          "composed_action": 0.167882952,
+          "control": 0.059769125,
+          "move": 0.062355572,
+          "switch": 0.335559032
+        }
+      },
+      "before_broad": {
+        "composed_action": 1.370728068,
+        "control": 0.503862308,
+        "move": 1.013867501,
+        "switch": 0.839359652
+      },
+      "after_broad": {
+        "composed_action": 0.269212545,
+        "control": 0.098086286,
+        "move": 0.042408444,
+        "switch": 0.516995119
+      }
+    },
+    "H": {
+      "train_qualified": true,
+      "fits": 1,
+      "new_contexts": 90,
+      "elapsed_seconds": 49.90336399991065,
+      "gates": {
+        "broad_composed_improves_ten_percent": true,
+        "broad_move_no_regression": true,
+        "narrow_composed_retained": true,
+        "narrow_move_retained": true,
+        "narrow_switch_retained": true,
+        "new80_composed_retained": true,
+        "original44_move": true,
+        "prior_broad_composed_action_retained": true,
+        "prior_broad_move_retained": true,
+        "prior_broad_switch_retained": true,
+        "retained52_composed": true,
+        "retained52_move": true,
+        "retained52_switch_retained": true
+      },
+      "model_sha256": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+      "before": {
+        "new80": {
+          "composed_action": 0.240991519,
+          "control": 0.076946051,
+          "move": 0.083451295,
+          "switch": 0.489831751
+        },
+        "original44": {
+          "composed_action": 0.05512355,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.107372351
+        },
+        "retained52": {
+          "composed_action": 0.086212417,
+          "control": 0.002034439,
+          "move": 0.014052994,
+          "switch": 0.13537924
+        },
+        "terminal128": {
+          "composed_action": 0.167882952,
+          "control": 0.059769125,
+          "move": 0.062355572,
+          "switch": 0.335559032
+        }
+      },
+      "after": {
+        "new80": {
+          "composed_action": 0.196970918,
+          "control": 0.076946051,
+          "move": 0.082885151,
+          "switch": 0.398233057
+        },
+        "original44": {
+          "composed_action": 0.05512355,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.107372351
+        },
+        "retained52": {
+          "composed_action": 0.073787632,
+          "control": 0,
+          "move": 0.014052994,
+          "switch": 0.124445428
+        },
+        "terminal128": {
+          "composed_action": 0.140079536,
+          "control": 0.059769125,
+          "move": 0.061705764,
+          "switch": 0.278309849
+        }
+      },
+      "before_broad": {
+        "composed_action": 1.241603499,
+        "control": 0.821407211,
+        "move": 1.218242278,
+        "switch": 0.679557792
+      },
+      "after_broad": {
+        "composed_action": 0.636730179,
+        "control": 0.481024489,
+        "move": 0.172015109,
+        "switch": 0.477320704
+      },
+      "before_prior_broad": {
+        "composed_action": 0.269212545,
+        "control": 0.098086286,
+        "move": 0.042408444,
+        "switch": 0.516995119
+      },
+      "after_prior_broad": {
+        "composed_action": 0.251524286,
+        "control": 0.098086286,
+        "move": 0.015750521,
+        "switch": 0.507899881
+      }
+    },
+    "I": {
+      "train_qualified": true,
+      "fits": 1,
+      "new_contexts": 90,
+      "elapsed_seconds": 72.2612783331424,
+      "gates": {
+        "broad_composed_improves_ten_percent": true,
+        "broad_move_no_regression": true,
+        "narrow_composed_retained": true,
+        "narrow_move_retained": true,
+        "narrow_switch_retained": true,
+        "new80_composed_retained": true,
+        "original44_move": true,
+        "prior_broad_composed_action_retained": true,
+        "prior_broad_move_retained": true,
+        "prior_broad_switch_retained": true,
+        "retained52_composed": true,
+        "retained52_move": true,
+        "retained52_switch_retained": true
+      },
+      "model_sha256": "9332f09581386fee434369c15d23eaec380a3f2d5e1010097c30c8ad8d3dabf4",
+      "before": {
+        "new80": {
+          "composed_action": 0.196970918,
+          "control": 0.076946051,
+          "move": 0.082885151,
+          "switch": 0.398233057
+        },
+        "original44": {
+          "composed_action": 0.05512355,
+          "control": 0,
+          "move": 0.008849232,
+          "switch": 0.107372351
+        },
+        "retained52": {
+          "composed_action": 0.073787632,
+          "control": 0,
+          "move": 0.014052994,
+          "switch": 0.124445428
+        },
+        "terminal128": {
+          "composed_action": 0.140079536,
+          "control": 0.059769125,
+          "move": 0.061705764,
+          "switch": 0.278309849
+        }
+      },
+      "after": {
+        "new80": {
+          "composed_action": 0.106917332,
+          "control": 0.019395791,
+          "move": 0.036564704,
+          "switch": 0.398233057
+        },
+        "original44": {
+          "composed_action": 0.053358993,
+          "control": 0,
+          "move": 0.006864106,
+          "switch": 0.107372351
+        },
+        "retained52": {
+          "composed_action": 0.072343903,
+          "control": 0,
+          "move": 0.005491285,
+          "switch": 0.124445428
+        },
+        "terminal128": {
+          "composed_action": 0.072412581,
+          "control": 0.012364926,
+          "move": 0.025485291,
+          "switch": 0.278309849
+        }
+      },
+      "before_broad": {
+        "composed_action": 0.636730179,
+        "control": 0.481024489,
+        "move": 0.172015109,
+        "switch": 0.477320704
+      },
+      "after_broad": {
+        "composed_action": 0.046204062,
+        "control": 0,
+        "move": 0.000602133,
+        "switch": 0.477320704
+      },
+      "before_prior_broad": {
+        "composed_action": 0.251524286,
+        "control": 0.098086286,
+        "move": 0.015750521,
+        "switch": 0.507899881
+      },
+      "after_prior_broad": {
+        "composed_action": 0.145013705,
+        "control": 0,
+        "move": 0.007139019,
+        "switch": 0.507899881
+      }
+    }
+  },
+  "fit_accounting": {
+    "total_fits": 4,
+    "new_labels_by_candidate": {
+      "F": 0,
+      "G": 48,
+      "H": 90,
+      "I": 0
+    },
+    "I_note": "The private I receipt's new_contexts90 is the reused terminal group, not90 additional examples. I uses the same318-context corpus as H."
+  },
+  "comparisons": {
+    "F": {
+      "authority_promotions": 0,
+      "gates": {
+        "all_terminal_unassisted": true,
+        "faints_no_regression": true,
+        "wins_no_regression": false
+      },
+      "natural_qualified": false,
+      "probe_passed": false,
+      "totals": {
+        "candidate": {
+          "battles": 24,
+          "decisions": 314,
+          "faints": 54,
+          "hp_lost": 5567,
+          "wins": 8
+        },
+        "frozen": {
+          "battles": 24,
+          "decisions": 320,
+          "faints": 54,
+          "hp_lost": 5946,
+          "wins": 10
+        }
+      }
+    },
+    "G": {
+      "authority_promotions": 0,
+      "gates": {
+        "all_terminal_unassisted": true,
+        "faints_no_regression": false,
+        "teacher_reference_complete": true,
+        "wins_at_least_teacher_reference": false,
+        "wins_no_regression": true
+      },
+      "natural_qualified": false,
+      "probe_passed": false,
+      "teacher_reference_wins": 18,
+      "totals": {
+        "candidate": {
+          "battles": 24,
+          "decisions": 308,
+          "faints": 43,
+          "hp_lost": 4594,
+          "wins": 14
+        },
+        "frozen": {
+          "battles": 24,
+          "decisions": 309,
+          "faints": 41,
+          "hp_lost": 4574,
+          "wins": 14
+        }
+      }
+    },
+    "H": {
+      "authority_promotions": 0,
+      "gates": {
+        "all_terminal_unassisted": true,
+        "faints_no_regression": true,
+        "teacher_reference_complete": true,
+        "wins_at_least_teacher_reference": false,
+        "wins_no_regression": true
+      },
+      "natural_qualified": false,
+      "probe_passed": false,
+      "teacher_reference_wins": 17,
+      "totals": {
+        "candidate": {
+          "battles": 24,
+          "decisions": 325,
+          "faints": 47,
+          "hp_lost": 5888,
+          "wins": 14
+        },
+        "frozen": {
+          "battles": 24,
+          "decisions": 321,
+          "faints": 50,
+          "hp_lost": 6121,
+          "wins": 11
+        }
+      }
+    },
+    "I": {
+      "authority_promotions": 0,
+      "gates": {
+        "all_terminal_unassisted": true,
+        "faints_no_regression": false,
+        "teacher_reference_complete": true,
+        "wins_at_least_teacher_reference": false,
+        "wins_no_regression": false
+      },
+      "natural_qualified": false,
+      "probe_passed": false,
+      "teacher_reference_wins": 17,
+      "totals": {
+        "candidate": {
+          "battles": 24,
+          "decisions": 332,
+          "faints": 58,
+          "hp_lost": 5675,
+          "wins": 7
+        },
+        "frozen": {
+          "battles": 24,
+          "decisions": 307,
+          "faints": 49,
+          "hp_lost": 5342,
+          "wins": 14
+        }
+      }
+    }
+  },
+  "comparison_limitations": "Each F/G/H/I comparison uses a different predeclared TRAIN recipe seed. Compare arms within a cohort, not raw win rates across cohorts. All completed comparisons remain consumed and excluded from fitting. No natural qualification or statistical power claim.",
+  "mechanics_repairs": [
+    {
+      "issue": "Level-up replacement prompt accepted an unselected move overwrite.",
+      "change": "Recognize actual move-learning prompt and decline replacement without memory edits; preserve every existing PP-spend invariant.",
+      "verification": "One separately declared TRAIN regression completed24decisions and won; original Oddish moves preserved after level33. Initial failed branch group archived recoverably; only incomplete TRAIN group rerun."
+    },
+    {
+      "issue": "Automatic learning into an empty slot mistaken for extra PP spending.",
+      "change": "Allow only same leveled-up battler, defeated/progressed opponent, empty zero-PP slot, new known move and exact base PP. Every existing move still obeys exact selected-turn spending.",
+      "verification": "Original qualification stopped at frozen arm case0 before the challenger played. One disclosed mechanic regression completed18decisions with party defeat and zero invalid actions. Old qualification remains failed/incomplete; no refit before the distinct seed2026091907 cohort."
+    }
+  ],
+  "optimizer_diagnosis": {
+    "old_constraint_problem": "Exact old choices froze a measured attack mistake; replace with unchanged numeric regret budgets, never relax original44<=0.0554,old52move<=0.0648,old52composed<=0.1609.",
+    "saturation": {
+      "late90_move_errors": 16,
+      "move_errors_confident_over_99_percent": 15,
+      "control_errors": 24,
+      "control_errors_confident_over_99_percent": 24,
+      "switch_errors": 12,
+      "switch_errors_confident_over_99_percent": 12,
+      "control_gradient_norm": 0.00001268581368248792
+    },
+    "pairwise_result": "Finite-difference-tested measured-return-weighted pairwise logistic loss corrected TRAIN rankings; I achieved late composed regret0.046204062 versus H0.636730179, but generalization regressed7wins versus14. This does not qualify the optimizer/model for promotion."
+  },
+  "continuation_diagnosis": {
+    "existing_matched_first_action": {
+      "learner": "G",
+      "cases": 32,
+      "learner_wins": 18,
+      "teacher_continuation_wins": 27,
+      "teacher_wins_where_learner_loses": 9,
+      "interpretation": "Descriptive comparison from existing TRAIN logs; the same first action does not imply the same subsequent policy or final outcome."
+    },
+    "prospective_four_root_audit": {
+      "authority_promotions": 0,
+      "changed_best_sets": 4,
+      "comparisons": [
+        {
+          "best_sets_disjoint": true,
+          "capture_id": "assisted-train-4cecf4e96394fd21",
+          "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:move:3",
+            "pokemon.core:battle:move:4",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3"
+          ],
+          "learner_best": [
+            "pokemon.core:battle:move:1"
+          ],
+          "learner_returns": [
+            -2.122464495,
+            -2.302410115,
+            -3.49902684,
+            -3.983853446,
+            -4.206848155,
+            -2.182885549
+          ],
+          "teacher_best": [
+            "pokemon.core:battle:switch:3"
+          ],
+          "teacher_returns": [
+            2.661946032,
+            6.218166234,
+            6.016161039,
+            6.239537662,
+            6.14184935,
+            6.434838961
+          ]
+        },
+        {
+          "best_sets_disjoint": true,
+          "capture_id": "assisted-train-954ca0f6b6d1ac61",
+          "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:move:3",
+            "pokemon.core:battle:move:4",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3"
+          ],
+          "learner_best": [
+            "pokemon.core:battle:move:3"
+          ],
+          "learner_returns": [
+            -2.257536906,
+            -0.912903492,
+            -0.604000282,
+            -2.598531215,
+            -3.0394118,
+            -1.358475564
+          ],
+          "teacher_best": [
+            "pokemon.core:battle:move:2"
+          ],
+          "teacher_returns": [
+            3.672764398,
+            5.606561181,
+            3.588771033,
+            3.782992657,
+            1.945446396,
+            5.220432161
+          ]
+        },
+        {
+          "best_sets_disjoint": true,
+          "capture_id": "assisted-train-98b6e8c56c8d5e5d",
+          "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:move:3",
+            "pokemon.core:battle:move:4",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3"
+          ],
+          "learner_best": [
+            "pokemon.core:battle:switch:2"
+          ],
+          "learner_returns": [
+            4.609877242,
+            6.253854888,
+            6.256105131,
+            6.269753581,
+            7.017138889,
+            4.630781567
+          ],
+          "teacher_best": [
+            "pokemon.core:battle:switch:3"
+          ],
+          "teacher_returns": [
+            6.16932353,
+            4.224720101,
+            6.159820262,
+            6.161363475,
+            5.897542484,
+            7.42846732
+          ]
+        },
+        {
+          "best_sets_disjoint": true,
+          "capture_id": "assisted-train-bd7001c35e1cfb8e",
+          "choice_refs": [
+            "pokemon.core:battle:move:1",
+            "pokemon.core:battle:move:2",
+            "pokemon.core:battle:move:3",
+            "pokemon.core:battle:move:4",
+            "pokemon.core:battle:switch:2",
+            "pokemon.core:battle:switch:3"
+          ],
+          "learner_best": [
+            "pokemon.core:battle:move:4"
+          ],
+          "learner_returns": [
+            6.720360451,
+            6.24524466,
+            6.216309215,
+            6.942992441,
+            5.945405088,
+            6.125272498
+          ],
+          "teacher_best": [
+            "pokemon.core:battle:switch:2"
+          ],
+          "teacher_returns": [
+            6.30799388,
+            6.260156827,
+            6.271060835,
+            6.315723062,
+            7.119823614,
+            6.199953204
+          ]
+        }
+      ],
+      "fits": 0,
+      "independent_qualification": false,
+      "branches": 120,
+      "terminal_outcomes": {
+        "battle_won": 70,
+        "party_defeated": 50
+      },
+      "decisions": 1638
+    },
+    "interpretation": "Changing continuation to frozen H changes the best measured action in4/4 preselected TRAIN openings at five timings each. This establishes policy-dependent action values in this sample, not a complete causal explanation of I's unrelated evaluation regression.",
+    "new_fitted_examples": 0,
+    "teacher_and_learner_targets_merged": false
+  },
+  "verification": {
+    "focused_tests": "1159 passed,13 optional integration skips",
+    "mypy": "541 source files passed",
+    "full_suite": "Not rerun. Historical9 failures remain unclaimed as fixed.",
+    "required_closeout_checks": "Registry, focus, documentation, public artifacts and diff checks."
+  },
+  "external_review": {
+    "provider": "Claude CLI",
+    "requested_model": "opus",
+    "actual_model": "claude-opus-4-8",
+    "effort": "high",
+    "status": "completed",
+    "session_id": "61a19b15-e7b4-469c-9cc1-b228a70ef5f9",
+    "reported_cost_usd": 0.6042975,
+    "accepted": "Add explicit final switch-retention assertions; implemented and tested.",
+    "not_adopted": "Pulse-budget observation did not justify weakening/increasing runtime caps.",
+    "remaining_quota": "unavailable",
+    "flash_used": false
+  },
+  "private_artifact_hashes": {
+    "red-trainer-budgeted-fit-20260919-v1": {
+      "model.json": "36a141fb456e81412d47f9d167f34a7a05ef401f8be583b6a6888b4f4ae9eda5",
+      "plan.json": "79eab5009ba81daffba12acabacbd5b0bcea9344050fc78ebad5dac57fc9bee8",
+      "result.json": "5a4b7dac77a90602d8aae3b85cba249416e0f6bdbcbcb2be4b34592e3e44c4f8"
+    },
+    "red-trainer-broad-probe-20260919-v1": {
+      "plan.json": "a550112318a1a9317592fefadb115826d8e27041d627fa7e914a5e844dd92b8d",
+      "summary.json": "22855997930f54756bc16251dbc2185c845b13cff5dc06a4daf019dbe90d34b2"
+    },
+    "red-trainer-broad-supply-20260919-v1": {
+      "plan.json": "50651d69969e23adb373e78c0ef748f5f83750d7b801860e67c823bb62026588",
+      "collection.json": "4dc1dd126c6b72e47de813ec6f80d6c5d4ab1dc29aaa72197f59c2ba9c4be59a",
+      "targets.json": "20d795d01a01b3c4f9e317678a421e139f36d1eb460cf52ceffe71c09d86e546",
+      "failure.json": "4d3168507493775b5002f1b88412d366a5b82013f1e57352239f81ebc2b94c50"
+    },
+    "red-trainer-broad-fit-20260919-v1": {
+      "plan.json": "3a2cd9b2c47310514d51695e50c53bdbe0c6a5e4a3af0b809e5c04bd011d0a60",
+      "result.json": "bc72a1d5ba75bd1aca71678977819970d1c2327b9d6682c7b41428619a6855d7",
+      "model.json": "f8d9be1a76dd1475e23db1080609b8318a052e1f7fa26ee4201d7f489dd9d241"
+    },
+    "red-trainer-broad-qualification-20260919-v1": {
+      "plan.json": "fd4b339154373cd10487384f7b8fd29d722d5069d7aacff2b2dd71fa9950a803",
+      "summary.json": "2fc3000fac50ac06e4ac3ad966c76f6d1791d47bce6d60dd69f1f862bfea3362"
+    },
+    "red-trainer-late-supply-20260919-v1": {
+      "plan.json": "b24ea8afc1c2e8fed2aaf43d1705d477cb74258edd286d9fcf196f132324ea4c",
+      "collection.json": "2bbab39e336b6b3dfebe4759ccbc96054f58e44d19c55afb147641a2edb4f61e",
+      "targets.json": "a0c48586d32b0a53c72dbe232a48c7e4161a54b99882310db83a4cd85b6d42b6"
+    },
+    "red-trainer-late-main-supply-20260919-v1": {
+      "plan.json": "8ef186309ca6a902632b8b9f82af535eb1dc6d4e32bdc8969194ec76104d5cfc",
+      "collection.json": "edcd2dc5b2adbf3f3972445353a9ab1cb1bc9a6b358ed0f0f1173ab981c6719a",
+      "targets.json": "e291b3fde683e1e98f9c19225c482825549eaa6fceea086742c5a7ad7d9a1dfd"
+    },
+    "red-trainer-late-fit-20260919-v1": {
+      "model.json": "ca8728daf4182fc712a4d6713a85a241398e0be376b54c2d6fd986fda084574b",
+      "plan.json": "eaa01875188a6c03174300fa3c55bf679ffe16306162e12caf3a2480cb618456",
+      "result.json": "bf9ff58d84749118f42a7b47e1a8c19424c0760156d2859c2a6b2b45fe1d20fe"
+    },
+    "red-trainer-late-qualification-20260919-v1": {
+      "plan.json": "3288c301d63539cdceb0e5054e64c86c6a46c032e63409955800eb04e88a35d6",
+      "interruption.json": "da9afa5cbfa3addc616e9e716b118ef0fdf4d0eb2c35f80c6d53ad9fdf9bd235"
+    },
+    "red-trainer-late-qualification-20260919-v2": {
+      "plan.json": "b9f781ef1911581a4e21fa1e8cae1436e29049014873f65141095c8be9930247",
+      "summary.json": "9c6a9ac2f609e619d0450f448477f2ddde79e1faac2ef69b40098c730bdf4dc1"
+    },
+    "red-trainer-pairwise-fit-20260919-v1": {
+      "model.json": "9332f09581386fee434369c15d23eaec380a3f2d5e1010097c30c8ad8d3dabf4",
+      "plan.json": "f9abda1f7ea7b86ded449b9834d82949f3c23aba73455d504632f8da9de36709",
+      "result.json": "bb825cd48b91abe9e50b8fb26d0446d20aa0becdaa6c65e97d708ef7098fee33"
+    },
+    "red-trainer-pairwise-qualification-20260919-v1": {
+      "plan.json": "b3661a93080b1cccf2684f0f179dae577a46df6e4610ec3c7e19ceea47a44b7f",
+      "summary.json": "557c94bb7c7d1079414fa3f8f41a0a6b9c2166fffd835cf9f987367db98d7414"
+    },
+    "red-trainer-continuation-audit-20260919-v1": {
+      "plan.json": "2b91fdcd52157645bda7cd630625c43dccca0035937a70f6b44797e304084d2d",
+      "result.json": "ae5221e2d27cc5d2d5b7fa2184ed9c6bfdb52c1d525bcbc8efb0141a70d5140c"
+    },
+    "red-trainer-automatic-learning-regression-20260919-v1": {
+      "plan.json": "3bb5e1dcd597552bcc121a0d1107de1989763e98ab88307cb3c852adb8d1b57c",
+      "declaration.json": "a02239041602167497f7d8c3393d3a13560d205bb549a03f830ee1bc19ad84e7"
+    }
+  },
+  "product_counters": {
+    "model137_examples": 137,
+    "model137_successes": 92,
+    "model137_economy_qualified": 58,
+    "red_registrations": 96,
+    "red_native_target": 124,
+    "fresh_acceptance_passed": 0,
+    "fresh_acceptance_total": 5,
+    "authority_promotions": 0,
+    "full_game_runs": 0,
+    "github_pushes": 0
+  },
+  "next": {
+    "objective": "One policy-bound learner-continuation curriculum and target-contract decision before another fit.",
+    "steps": [
+      "Keep H as reference and I rejected; preserve all cohorts.",
+      "Bind continuation policy ID and exact model hash in the target contract. Do not silently mix teacher-continuation values and learner-continuation values or erase old measurements.",
+      "Declare at least16 useful learner-continuation contexts across four TRAIN roots, with opening, replacement and endgame choices; freeze learner during collection. No evaluation states enter fitting.",
+      "Only after authenticating that supply, declare one retention-preserving fit and an unused paired full-battle comparison with a separate teacher reference.",
+      "Final-player qualification still requires meaningful independent-origin natural battles and a bounded integration test; fresh-start source preparation requires Pete's pending approval. Early single-Pokemon tests alone do not qualify full-party switching."
+    ],
+    "estimate": "30–60minutes for a bounded continuation-aware TRAIN implementation/collection; final readiness cannot be honestly dated before its comparison passes.",
+    "recommendation": "Astra High, Fast off for policy-conditioned value-target design and admission; Sol High for already-declared execution."
+  },
+  "gameplay_running": false,
+  "fully_ready": false
+}

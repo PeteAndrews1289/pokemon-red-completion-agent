@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-trainer-retention-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battler-readiness-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-19-battler-readiness-v1
+
+318 fitted battle TRAIN contexts,138 added through3265 complete matched branches. H improves14wins versus11 but teacher17; I fits TRAIN better yet regresses7wins versus H14. No final-player readiness.
+
+**Deviation:** Four-root120-branch audit changes best action in4/4 states under learner continuation. Next work addresses policy-dependent target semantics; no gate relaxation, consumed evaluation reuse, stage/checklist exit change or new framework.
+
+**Next:** Astra High, Fast off: explicit learner-continuation target contract and bounded four-root supply, then one declared fit and unused comparison. Independent natural full-party qualification still needs source preparation approval.
 
 ### 2026-09-19-trainer-retention-v1
 
