@@ -43,6 +43,44 @@ def _terminal() -> RawGameState:
     )
 
 
+def test_erika_owned_healing_is_bounded_and_status_cures_take_priority(monkeypatch):
+    from types import SimpleNamespace
+
+    raw = replace(_terminal(), battle_state=2, active_party_index=0,
+        active_party_hp=30, active_party_max_hp=100, active_party_status=3,
+        party_hp=(30, 47, 40))
+    reader = SimpleNamespace(read=lambda: raw)
+    used = []
+    monkeypatch.setattr(erika_module, "_bag",
+        lambda _: {ItemId.AWAKENING: 2, ItemId.SUPER_POTION: 5})
+
+    def cure(*args, **kwargs):
+        nonlocal raw
+        used.append(kwargs["item"])
+        raw = replace(raw, active_party_status=0)
+
+    def heal(reader, actions, emulator, ledger, timing, label):
+        nonlocal raw
+        used.append(ItemId.SUPER_POTION)
+        ledger.potions_used += 1
+        raw = replace(raw, active_party_hp=80)
+
+    def battle(reader, actions, policy, **kwargs):
+        try:
+            policy(raw)
+        except (erika_module._PauseForErikaHealing, erika_module._PauseForErikaStatus) as error:
+            raise erika_module.BattleRuntimeError("control request") from error
+        return raw
+
+    monkeypatch.setattr(erika_module, "_use_battle_status_item", cure)
+    monkeypatch.setattr(erika_module, "_use_battle_super_potion", heal)
+    monkeypatch.setattr(erika_module, "run_adaptive_trainer_battle", battle)
+    erika_module._battle(reader, None, None, MapId.CELADON_GYM, DEFAULT_ERIKA_TIMING,
+        "Erika", "test", move_selector=lambda _: 3,
+        maximum_super_potions=1, maximum_status_items=1)
+    assert used == [ItemId.AWAKENING, ItemId.SUPER_POTION]
+
+
 def test_erika_timing_is_positive_and_bounded() -> None:
     assert MOVEMENT_RETRY_WAIT_FRAMES == 12
     assert DEFAULT_ERIKA_TIMING.movement_retries == 16
@@ -55,6 +93,28 @@ def test_erika_timing_is_positive_and_bounded() -> None:
     for field in fields(ErikaTiming):
         with pytest.raises(ValueError, match=field.name):
             replace(DEFAULT_ERIKA_TIMING, **{field.name: 0})
+
+
+def test_erika_reserves_last_status_item_and_rejects_invalid_budget(monkeypatch):
+    from types import SimpleNamespace
+
+    raw = replace(_terminal(), battle_state=2, active_party_index=0,
+                  active_party_status=3, party_hp=(100, 47, 40))
+    reader = SimpleNamespace(read=lambda: raw)
+    monkeypatch.setattr(erika_module, "_bag", lambda _: {ItemId.AWAKENING: 1})
+    selected = []
+
+    def battle(reader, actions, policy, **kwargs):
+        selected.append(policy(raw))
+        assert kwargs["intent"].recovery_capabilities
+
+    monkeypatch.setattr(erika_module, "run_adaptive_trainer_battle", battle)
+    args = (reader, None, None, MapId.CELADON_GYM, DEFAULT_ERIKA_TIMING, "Erika", "test")
+    erika_module._battle(*args, move_selector=lambda _: 3, maximum_status_items=1)
+    assert selected == [3]
+    for invalid in (-1, True, 1.5):
+        with pytest.raises(ValueError, match="item budget"):
+            erika_module._battle(*args, maximum_status_items=invalid)
 
 
 def test_erika_report_qualifies_tm40_move_learning_and_terminal() -> None:
@@ -305,11 +365,12 @@ def test_erika_battle_fails_closed_after_a_party_wipe(
         )
 
 
-def test_early_erika_report_requires_exact_badge_transition() -> None:
+@pytest.mark.parametrize("extra", [(), (0x68,), (0x84, 0x2B, 0x2C)])
+def test_early_erika_report_requires_exact_badge_transition(extra) -> None:
     initial = replace(
         _terminal(),
         badge_bits=0x07,
-        party_species_ids=(0xB3, 0x40, 0x3B),
+        party_species_ids=(0xB3, 0x40, 0x3B, *extra),
         first_party_level=36,
         first_party_moves=(0x2C, 0x27, 0x3D, 0x37),
         first_party_pp=(25, 30, 20, 25),
@@ -364,6 +425,11 @@ def test_early_erika_report_requires_exact_badge_transition() -> None:
     ).passed
     assert not replace(report, badge_bits_after=0x1F).passed
     assert not replace(report, tm13_transfer_before_event=False).passed
+    if extra:
+        assert not replace(report, final_raw=replace(final,
+            party_species_ids=final.party_species_ids[:-1])).passed
+        assert not replace(report, final_raw=replace(final,
+            party_species_ids=(*final.party_species_ids[:3], *reversed(extra), 1))).passed
 
 
 def test_early_erika_report_accepts_the_exact_post_surf_lineage() -> None:

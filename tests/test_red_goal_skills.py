@@ -308,6 +308,30 @@ def test_center_restore_reaches_nurse_and_verifies_whole_party_recovery() -> Non
     assert reader.raw.party_hp == reader.raw.party_max_hp
 
 
+@pytest.mark.parametrize('pp', [(24, 0, 0, 0), (25, 0, 0, 0), (0, 0, 0, 0), (0x40 | 29, 0, 0, 0)])
+def test_full_center_mode_restores_nonempty_pp_and_preserves_legacy_mode(pp):
+    from pokemon_red_completion.red_goal_skills import _raw_party_fully_restored
+    reader = _Reader(raw=replace(_raw(), map_id=MapId.LAVENDER_POKECENTER,
+        player_x=3, player_y=7, party_moves=((55, 0, 0, 0),), party_pp=(pp,)), ready=True)
+    reader.raw = replace(reader.raw, party_hp=reader.raw.party_max_hp, party_status=(0,))
+
+    class FullCenterPort(_CenterPort):
+        def execute(self, action):
+            result = super().execute(action)
+            if action.kind is MacroActionKind.CONFIRM:
+                full = (0x40 | 30) if pp[0] & 0x40 else 25
+                reader.raw = replace(reader.raw, party_pp=((full, 0, 0, 0),))
+            return result
+
+    port = FullCenterPort(reader)
+    offer = RedCenterRestoreGoalProvider(CountingExecutor(port), reader, port, _adapter(reader),
+        settle_frames=1, require_full_pp_restore=True).offer(_adapter(reader).observe())
+    assert offer.binding is not None
+    report = offer.binding.execute()
+    assert offer.binding.verify(report).status.value == 'succeeded'
+    assert _raw_party_fully_restored(reader.raw) and reader.raw.player_y == 3
+
+
 @pytest.mark.parametrize("pages", [1, 3, 7])
 def test_center_healing_does_not_complete_while_farewell_is_visible(pages):
     reader = _Reader(

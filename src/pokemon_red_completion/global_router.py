@@ -107,6 +107,9 @@ class MacroGraph:
     #: Explicit title-qualified settled arrivals, in raw warp order. None is
     #: the legacy metadata-free contract; an empty/missing entry is not a guess.
     warp_arrivals: Mapping[int, tuple[Coordinate, ...]] | None = None
+    #: Active trigger coordinates are distinct from raw destination-index rows.
+    #: None preserves legacy graphs whose coordinates are all treated as triggers.
+    warp_triggers: Mapping[int, tuple[Coordinate, ...]] | None = None
 
     def neighbors(self, node: int) -> tuple[MacroEdge, ...]:
         return tuple(self.edges.get(node, ()))

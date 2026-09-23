@@ -386,8 +386,9 @@ def test_field_port_rejects_closed_or_unknown_macros_before_pressing_buttons() -
     assert world.actions == []
 
 
-def test_field_port_cut_requires_exact_live_block_and_tile_acknowledgement() -> None:
-    world = CutMenuWorld()
+@pytest.mark.parametrize("holder_hp", [25, 0])
+def test_field_port_cut_requires_exact_live_block_and_tile_acknowledgement(holder_hp) -> None:
+    world = CutMenuWorld(raw=cut_state(hp=(holder_hp,)))
     port = Gen1FieldMovePort(
         cast(RouteActionPort, world),
         cast(PokemonRedStateReader, world),

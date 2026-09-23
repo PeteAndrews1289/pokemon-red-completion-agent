@@ -26,6 +26,52 @@ from .route_executor import (
 )
 from .route_plan import RoutePlan
 
+
+def safari_departure_within_steps(plan: RoutePlan, reader: PokemonRedStateReader) -> bool:
+    """Do not advertise an exit that the paid-session timer will interrupt."""
+    session = reader.read_safari_session_state()
+    if not session.in_safari_zone:
+        return True
+    steps = 0
+    for step in plan.steps:
+        if step.source_map == SAFARI_GATE_MAP_ID:
+            break
+        steps += 1
+    # The existing Safari escape controller also needs sixteen steps of headroom.
+    return not session.safari_game_over and steps + 16 < session.safari_steps
+
+
+@dataclass
+class RedSafariDepartureInterruptionHandler:
+    """Use Safari RUN in the park, ordinary recovery only after departure."""
+
+    controller: object
+    executor: RouteActionPort
+    reader: PokemonRedStateReader
+    fallback: InterruptionHandler
+    safari_handler: object = field(init=False)
+
+    def __post_init__(self):
+        from .red_safari_fishing import SafariFishingInterruptionHandler
+
+        self.safari_handler = SafariFishingInterruptionHandler(
+            self.controller, self.executor, self.reader
+        )
+
+    @property
+    def handled_hazard_kinds(self):
+        return getattr(self.fallback, "handled_hazard_kinds", frozenset())
+
+    @property
+    def handled_interruption_kinds(self):
+        return getattr(self.fallback, "handled_interruption_kinds", frozenset())
+
+    def handle(self, interruption):
+        if (interruption.interruption == "wild_battle"
+                and self.reader.read_safari_session_state().in_safari_zone):
+            return self.safari_handler.handle(interruption)
+        return self.fallback.handle(interruption)
+
 SAFARI_CENTER_MAP_ID = int(MapId.SAFARI_ZONE_CENTER)
 SAFARI_GATE_MAP_ID = int(MapId.SAFARI_ZONE_GATE)
 SAFARI_CENTER_EXIT_Y = 25

@@ -26,10 +26,13 @@ The dashboard must show that distinction rather than combining numbers from diff
 Private operational records and game assets are not part of the public checkout. See
 [setup](getting-started.md).
 
-At the September19 checkpoint, the pinned training chart remains the historical135-example
-measured fit. Its receipt now projects without inventing a native action trace or policy replay.
-The active handoff reports the newer Model137 and the separate learned-battler integration.
-Do not combine those lineages or treat the old chart as the current model or live training.
+The pinned training chart is the historical135-example measured fit; it must not be relabeled
+as the current Model141 or live training. The handoff reports141fitted outcomes and the primary
+109/124collection save separately from the seven-badge earned story lineage. Latest story
+stage283 is stopped before Giovanni; its preparation earned XP, not new model weights.
+Do not combine those saves or infer that starting this viewer starts the game. See the
+[latest story evidence](evidence/red-giovanni-readiness-2026-09-22.json) and
+[research record](research-retrospective.md) for metric and time-accounting boundaries.
 
 ## Update engineering status
 

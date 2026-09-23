@@ -344,3 +344,40 @@ def test_direct_profile_refuses_to_invent_evolution_without_boxed_precursor(
             replace(observed, collection_observation=collection),
             _world(),
         )
+
+
+def test_optional_evolution_exhaustion_preserves_capture_and_other_providers(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 13, map_id=MapId.ROUTE_2)
+    derived = derive_direct_full_pokedex_profile(
+        runtime.profile, observed, _route_2_world(), require_evolution=False,
+    )
+    kinds = {spec.kind for spec in derived.providers}
+    assert GoalKind.EVOLVE_SPECIES not in kinds
+    assert GoalKind.ACQUIRE_SPECIES in kinds
+    assert {spec.kind for spec in runtime.profile.providers} - {
+        GoalKind.EVOLVE_SPECIES, GoalKind.ACQUIRE_SPECIES,
+    } <= kinds
+
+
+def test_optional_evolution_does_not_swallow_missing_capture_geometry(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 72)
+    with pytest.raises(RedFullPokedexDirectProfileError, match="wild corridor"):
+        derive_direct_full_pokedex_profile(
+            runtime.profile, observed, _world(), require_evolution=False,
+        )
+
+
+def test_optional_evolution_does_not_swallow_unexpected_inventory_error(tmp_path, monkeypatch):
+    runtime, _, _ = bound_fixture(tmp_path)
+    def invalid_inventory(observed):
+        raise RuntimeError("invalid inventory")
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._level_evolution",
+        invalid_inventory,
+    )
+    with pytest.raises(RuntimeError, match="invalid inventory"):
+        derive_direct_full_pokedex_profile(
+            runtime.profile, runtime.adapter.observe(), _world(), require_evolution=False,
+        )

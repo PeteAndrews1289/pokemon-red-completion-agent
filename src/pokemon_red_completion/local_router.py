@@ -27,6 +27,7 @@ class LocalEdge:
     required_mode: str | None = None
     result_mode: str | None = None
     transient: Coordinate | None = None
+    via: tuple[Coordinate, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -45,6 +46,8 @@ class LocalEdge:
                 raise ValueError(f"{label} cannot be empty")
         if self.transient == self.target:
             raise ValueError("a local edge transient cannot equal its target")
+        if self.via and (self.kind != "forced_motion" or self.target in self.via):
+            raise ValueError("only forced motion declares intermediate path coordinates")
 
     @property
     def macro_action(self) -> MacroAction:
@@ -105,7 +108,8 @@ def without_coordinates(
         return graph
     return LocalGraph(
         {
-            source: tuple(edge for edge in outgoing if edge.target not in unavailable)
+            source: tuple(edge for edge in outgoing if edge.target not in unavailable
+                          and not unavailable.intersection(edge.via))
             for source, outgoing in graph.edges.items()
             if source not in unavailable
         }

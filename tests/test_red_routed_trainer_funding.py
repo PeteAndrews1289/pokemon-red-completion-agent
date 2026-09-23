@@ -475,6 +475,40 @@ def test_funding_binding_preserves_alternatives_and_earns_not_buys(monkeypatch):
     assert calls == ["escort", "route", "face", "battle"]
 
 
+@pytest.mark.parametrize("reserve_level,admitted", [(66, True), (30, False)])
+def test_roster_preparation_keeps_ten_level_margin_on_actual_planned_lead(
+    monkeypatch, reserve_level, admitted,
+):
+    router, state, _, bindings, calls = fixture(monkeypatch)
+    original = state.party.members[0]
+    state.party = PartyObservation((replace(original, level=28),
+                                    replace(original, slot=2, level=reserve_level)))
+    state.raw = replace(state.raw, party_count=2, party_species_ids=(28, 28),
+                        party_hp=(213, 213))
+    assert funding.bind_local_trainer_funding(router, bindings, state) is bindings
+    router.runtime.trainer_funding_roster_preparation = True
+    result = funding.bind_local_trainer_funding(router, bindings, state)
+    assert any(b.kind is GoalKind.RESUPPLY for b in result.bindings) is admitted
+    assert calls == []
+
+
+def test_roster_funding_executes_declared_preparation_not_capture_escort(monkeypatch):
+    import pokemon_red_completion.red_trainer_party as party
+
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    router.runtime.trainer_funding_roster_preparation = True
+    def prepare(runtime, actions, plan, *, current_quote):
+        plan.require_current(state.party, current_quote)
+        assert current_quote == target.quote
+        calls.append("roster_preparation")
+    monkeypatch.setattr(party, "prepare_trainer_lead", prepare)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    report = bound.execute()
+    assert calls == ["roster_preparation", "route", "face", "battle"]
+    assert report.evidence["party_preparation"]["authority"] == "deterministic-matchup-preparation"
+    assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
 @pytest.mark.parametrize("mismatch", [None, "battle", "class", "facing", "defeated", "ambiguous"])
 def test_active_recovery_identifies_only_exact_adjacent_cartridge_trainer(monkeypatch, mismatch):
     router, state, target, _bindings, calls = fixture(monkeypatch)
@@ -699,3 +733,52 @@ def test_checkpoint_funding_mode_is_explicit_and_old_headers_stay_legacy():
     for bad in (1, "true", None, []):
         with pytest.raises(runner.PairedRedBoundedPlayerRunError):
             runner._checkpoint_trainer_funding({"metadata": {"trainer_funding": bad}})
+
+
+def test_j_bound_six_member_party_remains_unavailable_for_trainer_funding(monkeypatch):
+    router, state, _, bindings, _ = fixture(monkeypatch)
+    # Set J trainer battle runner
+    router.runtime.trainer_battle_runner = lambda *a, **k: None
+    from pokemon_red_completion.red_learned_trainer import FROZEN_J_SHA256
+    router.runtime.trainer_battle_model_sha256 = FROZEN_J_SHA256
+
+    # Supported small party (size 1) receives trainer funding
+    bound_small = funding.bind_local_trainer_funding(router, bindings, state)
+    assert any(b.kind is GoalKind.RESUPPLY for b in bound_small.bindings)
+
+    # 6-member party (like the main save) is rejected under J's 1-3 member limit
+    six_party_members = tuple(
+        PartyMemberObservation(
+            slot=i + 1,
+            species_id=28,
+            level=66,
+            hp=213,
+            max_hp=213,
+            status=StatusCondition.HEALTHY,
+            moves=(MoveObservation(57, 10, 15),),
+        )
+        for i in range(6)
+    )
+    six_state = SimpleNamespace(
+        raw=replace(
+            state.raw,
+            party_count=6,
+            party_species_ids=(28,) * 6,
+            party_hp=(213,) * 6,
+        ),
+        party=PartyObservation(six_party_members),
+        input_ready=True,
+        collection_observation=state.collection_observation,
+    )
+    bound_six = funding.bind_local_trainer_funding(router, bindings, six_state)
+    assert bound_six is bindings
+    assert not any(b.kind is GoalKind.RESUPPLY for b in bound_six.bindings)
+    from pokemon_red_completion.red_learned_trainer import (
+        FROZEN_K_SHA256,
+        K_QUALIFICATION_SHA256,
+    )
+    router.runtime.trainer_battle_model_sha256 = FROZEN_K_SHA256
+    assert funding.bind_local_trainer_funding(router, bindings, six_state) is bindings
+    router.runtime.trainer_battle_qualification_sha256 = K_QUALIFICATION_SHA256
+    qualified = funding.bind_local_trainer_funding(router, bindings, six_state)
+    assert any(b.kind is GoalKind.RESUPPLY for b in qualified.bindings)

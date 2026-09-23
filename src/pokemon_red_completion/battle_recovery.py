@@ -72,20 +72,29 @@ def switch_active_battler(
     label: str,
     wait_frames: int = 180,
     allow_faint_outcome: bool = False,
+    resume_forced_switch: bool = False,
 ) -> None:
     """Switch to one living party member through a fully observed battle-menu gate."""
 
     raw = reader.read()
     party = raw.party_hp or _party_hp(emulator)
+    if type(resume_forced_switch) is not bool:
+        raise ValueError("forced-switch continuation must be explicit")
+    if resume_forced_switch and (
+        reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.UNKNOWN
+        or not _forced_party_menu_ready(emulator, len(party))
+        or not any(hp == 0 for hp in party)
+    ):
+        raise ProtectedRecoveryError(f"{label} lacks a live retained forced-party menu.")
     if (
         not 0 <= party_index < len(party)
         or party[party_index] <= 0
         or raw.battle_state != expected_battle_state
     ):
         raise ProtectedRecoveryError(f"{label} lacks a living in-battle switch target.")
-    if raw.active_party_index == party_index:
+    if raw.active_party_index == party_index and not resume_forced_switch:
         return
-    if (raw.battler_hp or 0) <= 0:
+    if (raw.battler_hp or 0) <= 0 or resume_forced_switch:
         _switch_forced_fainted_battler(
             actions,
             reader,
@@ -181,7 +190,25 @@ def resolve_trainer_switch_prompt(
             raise ProtectedRecoveryError(f"{label} did not expose the SWITCH command.")
         _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
     else:
-        _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
+        # The visible cursor can precede HandleMenuInput becoming receptive.
+        # Reassert only the already-chosen decline, only while that same live
+        # prompt remains, never CONFIRM into an unacknowledged Yes default.
+        for _ in range(4):
+            _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
+            pending = reader.read()
+            if pending.battle_state != 2:
+                raise ProtectedRecoveryError(f"{label} left its trainer battle.")
+            if not reader.trainer_switch_prompt_visible(pending):
+                break
+            if any(getattr(pending, key, None) != getattr(before, key, None) for key in (
+                "party_hp", "party_pp", "active_party_index", "player_money",
+                "enemy_party_position", "enemy_species_id",
+            )):
+                raise ProtectedRecoveryError(
+                    f"{label} changed state before decline acknowledgement."
+                )
+        else:
+            raise ProtectedRecoveryError(f"{label} did not acknowledge the bounded decline.")
 
     for _ in range(48):
         after = reader.read()
@@ -193,7 +220,11 @@ def resolve_trainer_switch_prompt(
             pass
         elif reader.read_battle_menu_state(after).phase is BattleMenuPhase.MAIN:
             return
-        _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
+        # A confirm arriving as text finishes can enter FIGHT; a second one
+        # would select an unowned attack. B advances battle text and backs out
+        # of a transient move menu, but cannot choose an attack. The intended
+        # switch (if any) has already been committed above.
+        _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
     raise ProtectedRecoveryError(f"{label} did not return to the next MAIN decision.")
 
 
@@ -227,21 +258,34 @@ def _switch_forced_fainted_battler(
             and reader.read_battle_menu_state(settled).phase is BattleMenuPhase.MAIN
         ):
             return
+        if settled.active_party_index == party_index and (settled.battler_hp or 0) > 0:
+            # ChooseNextMon loads this index/HP only after accepting the target.
+            # Further A presses can reopen POKEMON as MAIN appears. B finishes
+            # text or closes that menu without selecting a second battle action.
+            _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
+            continue
+        menu_phase = reader.read_battle_menu_state(settled).phase
+        # A model-owned forced switch implies YES at the preceding wild faint
+        # prompt. Never interpret that two-option cursor as a party slot.
+        read_prompt = getattr(reader, "read_wild_next_mon_prompt", None)
+        next_mon = read_prompt(settled) if callable(read_prompt) else None
+        if next_mon is not None:
+            _pulse(actions, MacroActionKind.CONFIRM if next_mon == 0 else MacroActionKind.MOVE,
+                   None if next_mon == 0 else "up", wait_frames=wait_frames)
+            continue
+        # Read the live party cursor, never stale cursor bytes during faint text.
+        if menu_phase is BattleMenuPhase.UNKNOWN and _forced_party_menu_ready(emulator, len(party)):
+            cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
+            _pulse(actions,
+                MacroActionKind.CONFIRM if cursor == party_index else MacroActionKind.MOVE,
+                None if cursor == party_index else ("down" if cursor < party_index else "up"),
+                wait_frames=wait_frames)
+            continue
         if (settled.battler_hp or 0) <= 0:
-            menu_phase = reader.read_battle_menu_state(settled).phase
             if menu_phase is not BattleMenuPhase.UNKNOWN:
                 actions.execute(MacroAction(MacroActionKind.WAIT, repeat=wait_frames))
                 continue
-            if not _forced_party_menu_ready(emulator, len(party)):
-                _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
-                continue
-            cursor = emulator.read_u8(RamAddress.CURRENT_MENU_ITEM)
-            _pulse(
-                actions,
-                MacroActionKind.CONFIRM if cursor == party_index else MacroActionKind.MOVE,
-                None if cursor == party_index else ("down" if cursor < party_index else "up"),
-                wait_frames=wait_frames,
-            )
+            _pulse(actions, MacroActionKind.CONFIRM, wait_frames=wait_frames)
             continue
         _pulse(
             actions,

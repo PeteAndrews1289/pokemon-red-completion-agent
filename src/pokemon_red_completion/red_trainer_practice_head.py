@@ -142,14 +142,14 @@ class TrainerHeadModel:
         feature_names: tuple[str, ...],
     ) -> TrainerHeadModel:
         if (
-            value.get("format_version") != 1
+            value.get("format_version") != (2 if "auxiliary_effect" in value else 1)
             or value.get("model_id") != "pokemon.core.battle.trainer-head.v1"
             or value.get("schema_id") != schema_id
             or value.get("feature_names") != list(feature_names)
         ):
             raise TrainerHeadError("head checkpoint schema is incompatible")
         try:
-            return cls(
+            head = cls(
                 schema_id=schema_id,
                 feature_names=feature_names,
                 weights1=np.asarray(value["weights1"], dtype=np.float64),
@@ -158,6 +158,10 @@ class TrainerHeadModel:
                 training_seed=value["training_seed"],  # type: ignore[arg-type]
                 training_objective=value.get("training_objective", "cross_entropy"),  # type: ignore[arg-type]
             )
+            if "auxiliary_effect" in value:
+                from .red_effect_selector_head import restore_effect
+                return restore_effect(head, value["auxiliary_effect"])
+            return head
         except (KeyError, TypeError, ValueError) as error:
             raise TrainerHeadError("head checkpoint parameters are invalid") from error
 

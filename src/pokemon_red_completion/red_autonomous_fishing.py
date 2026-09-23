@@ -16,6 +16,7 @@ from .red_goal_skills import _ORDINARY_CAPTURE_ITEMS
 from .red_live_fishing import build_red_live_fishing_inventory
 from .red_live_option_menu import RedLiveSupplementalOption
 from .red_resource_goal_router import collection_field_capabilities
+from .red_safari_fishing import SAFARI_FISHING_MAPS, SafariFishingError, require_safari_session
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -32,11 +33,20 @@ def autonomous_fishing_options(
     bounded capture and verifies its actual registration result.
     """
     bag = dict(observation.raw.bag_items or ())
+    safari_steps = None
+    if getattr(observation.raw, "map_id", None) in SAFARI_FISHING_MAPS:
+        try:
+            safari_steps = require_safari_session(runtime.reader).safari_steps
+        except SafariFishingError:
+            return ()
     if (
         observation.raw.battle_state
         or not observation.input_ready
         or bag.get(int(ItemId.SUPER_ROD), 0) < 1
-        or not any(bag.get(int(item), 0) > 0 for item in _ORDINARY_CAPTURE_ITEMS)
+        or (
+            safari_steps is None
+            and not any(bag.get(int(item), 0) > 0 for item in _ORDINARY_CAPTURE_ITEMS)
+        )
         or observation.immediate_capture_slots < 1
     ):
         return ()
@@ -48,11 +58,16 @@ def autonomous_fishing_options(
         runtime.reader,
         hazard_projector=Gen1TrainerSightProjector(world.rom, runtime.reader),
         capability_projector=partial(
-            collection_field_capabilities, controller, allow_cut=True, allow_surf=True,
+            collection_field_capabilities,
+            controller,
+            allow_cut=True,
+            allow_surf=True,
         ),
     )
     field = Gen1FieldMovePort(
-        actions, runtime.reader, controller,
+        actions,
+        runtime.reader,
+        controller,
         cut_block_swaps={s.before: s.after for s in world.rules.cut_block_swaps},
     )
     registered = runtime.registration_policy.goal_registered(observation.collection_observation)
@@ -72,10 +87,13 @@ def autonomous_fishing_options(
             emulator=controller,
             maximum_candidates=4,
             maximum_casts=24,
+            safari_session_steps=safari_steps,
         )
     finally:
         if before != (
-            actions.actions_executed, runtime.emulator.frame_count, runtime.reader.read(),
+            actions.actions_executed,
+            runtime.emulator.frame_count,
+            runtime.reader.read(),
         ):
             raise ValueError("autonomous fishing inventory changed the game")
     return inventory.supplements

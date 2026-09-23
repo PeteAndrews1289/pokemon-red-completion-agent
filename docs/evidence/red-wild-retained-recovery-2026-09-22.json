@@ -1,0 +1,66 @@
+{
+  "actions": 157,
+  "battle_terminal_sha256": "3e5093a3fd74af8e600b2d4cb3930554e226f5e85448d69d66df8e69c5619daf",
+  "battle_won": true,
+  "carry_xp": 0,
+  "cash_delta": 0,
+  "envelope_sha256": "559395b6830071a198996f7d126157aed9455ed79d2974dc86bac84c2c5c5dfa",
+  "fits": 0,
+  "frames": 8724,
+  "healed": false,
+  "new_encounter": {
+    "hp": 41,
+    "level": 16,
+    "map_id": 17,
+    "species_id": 185
+  },
+  "new_model_choices": 2,
+  "original_failures_preserved": true,
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "hp_after": 0,
+      "level": 24,
+      "species_id": 59,
+      "xp_gained": 0
+    },
+    {
+      "hp_after": 140,
+      "level": 45,
+      "species_id": 28,
+      "xp_gained": 0
+    },
+    {
+      "hp_after": 27,
+      "level": 25,
+      "species_id": 64,
+      "xp_gained": 115
+    },
+    {
+      "hp_after": 63,
+      "level": 26,
+      "species_id": 104,
+      "xp_gained": 77
+    }
+  ],
+  "pending_choice_completed": true,
+  "registrations_delta": 0,
+  "replacement_queries": 0,
+  "reserve_xp": 192,
+  "return_error": "Red observed ground transition flee lost its protected encounter boundary.",
+  "schema": "pokemon.red.wild-retained-recovery.v1",
+  "seconds": 2.182448084000498,
+  "source_sha256": "fa1cd694734bcf5893cb9a6e8cc571173de4ddeb46f15f3723f41f6950631ddb",
+  "story_delta": 0,
+  "terminal_sha256": "2eb59f43bad59eb788ecc629b97bda8b40b39daea89e16bd38f9c804cfe3f8e1",
+  "verified_predictions": {
+    "attacks": 1,
+    "controls": 1,
+    "switches": 2
+  },
+  "private_audit_sha256": "799e8185decc5911ee36ef2695474b537c327908e5267c41888acb1e8571713e",
+  "source_commit": "bbf0608a",
+  "targeted_tests_passed": 86,
+  "scope": "Native forced-switch fix verified; full recovered outing remains unqualified.",
+  "next": "Party-aware incidental wild recovery, including fainted slot1 and unsettled battle entry; continue stage68 without replay. No new grinding."
+}

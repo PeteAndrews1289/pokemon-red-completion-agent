@@ -132,11 +132,23 @@ class _PayDayMoneyTracker:
 battle_runner: Callable[..., RawGameState] = run_adaptive_trainer_battle
 
 
+def _valid_party_hp(raw, count, allow_faints=False):
+    hp = raw.party_hp
+    return (
+        hp is not None and len(hp) == count
+        and all(type(value) is int and value >= 0 for value in hp)
+        and any(value > 0 for value in hp)
+        and (allow_faints or all(value > 0 for value in hp))
+    )
+
+
 def _check_postbattle_fatal(
     st: RawGameState,
     init: RawGameState,
     tgt: TrainerFundingCandidate,
     maximum_full_restores: int = 0,
+    allow_faints: bool = False,
+    evolution_guard=None,
 ) -> None:
     if st.battle_state != 0:
         raise TrainerFundingBattleError(f"unsupported post-battle state {st.battle_state}")
@@ -152,13 +164,12 @@ def _check_postbattle_fatal(
         raise TrainerFundingBattleError(
             f"player position {(st.player_y, st.player_x)} lost terminal {tgt.approach.terminal_at}"
         )
-    if st.party_count != init.party_count or st.party_species_ids != init.party_species_ids:
-        raise TrainerFundingBattleError("party species changed after battle")
-    if (
-        st.party_hp is None
-        or len(st.party_hp) != init.party_count
-        or any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in st.party_hp)
+    if st.party_count != init.party_count or not (
+        evolution_guard.matches(init, st) if evolution_guard is not None
+        else st.party_species_ids == init.party_species_ids
     ):
+        raise TrainerFundingBattleError("party species changed after battle")
+    if not _valid_party_hp(st, init.party_count, allow_faints):
         raise TrainerFundingBattleError("party HP missing, truncated, or fainted during battle")
     if not trainer_bag_within_budget(init, st, maximum_full_restores):
         raise TrainerFundingBattleError("bag items mutated during battle")
@@ -171,6 +182,8 @@ def _is_settled(
     tgt: TrainerFundingCandidate,
     exp_money: int,
     maximum_full_restores: int = 0,
+    allow_faints: bool = False,
+    evolution_guard=None,
 ) -> bool:
     if st.battle_state != 0:
         return False
@@ -180,13 +193,10 @@ def _is_settled(
         return False
     if (st.player_y, st.player_x) != tgt.approach.terminal_at:
         return False
-    if st.party_species_ids != init.party_species_ids:
+    if not (evolution_guard.matches(init, st) if evolution_guard is not None
+            else st.party_species_ids == init.party_species_ids):
         return False
-    if (
-        st.party_hp is None
-        or len(st.party_hp) != init.party_count
-        or any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in st.party_hp)
-    ):
+    if not _valid_party_hp(st, init.party_count, allow_faints):
         return False
     if not trainer_bag_within_budget(init, st, maximum_full_restores):
         return False
@@ -206,8 +216,10 @@ def _raise_settle_failure(
     tgt: TrainerFundingCandidate,
     exp_money: int,
     maximum_full_restores: int = 0,
+    allow_faints: bool = False,
+    evolution_guard=None,
 ) -> None:
-    _check_postbattle_fatal(st, init, tgt, maximum_full_restores)
+    _check_postbattle_fatal(st, init, tgt, maximum_full_restores, allow_faints, evolution_guard)
     if not event_flag_is_set(st.event_flags, tgt.trainer.event_flag):
         raise TrainerFundingBattleError(f"defeated event flag {tgt.trainer.event_flag} was not set")
     if st.player_money != exp_money:
@@ -240,6 +252,8 @@ def run_prepared_trainer_funding(
     battle_runner_override: Callable[..., RawGameState] | None = None,
     maximum_full_restores: int = 0,
     prospective_story_recovery: bool = False,
+    story_income_recovery: bool = False,
+    preparation_evolution_guard=None,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared trainer with shared identity/resource/victory checks.
 
@@ -308,6 +322,43 @@ def run_prepared_trainer_funding(
     if target.trainer.defeated:
         raise TrainerFundingBattleError("target trainer is already marked defeated")
 
+    # Faint recovery requires an explicit qualified League or story-income contract.
+    from .red_learned_league import FrozenLeagueController
+    from .red_learned_trainer import (
+        FROZEN_K_SHA256,
+        K_QUALIFICATION_SHA256,
+        FrozenTrainerBattler,
+    )
+
+    owner = getattr(battle_runner_override, "__self__", None)
+    allow_faints = (
+        isinstance(owner, FrozenLeagueController)
+        and owner.recovery_contract == "league-profit-recovery-v1"
+    )
+    if allow_faints:
+        owner.require_identity()
+        if intent is None or intent.battle_plan_id != "cartridge-trainer-story":
+            raise ValueError("faint recovery requires the explicit League story intent")
+    if type(story_income_recovery) is not bool or (story_income_recovery and (
+        not isinstance(owner, FrozenTrainerBattler)
+        or owner.model_sha256 != FROZEN_K_SHA256
+        or owner.qualification_sha256 != K_QUALIFICATION_SHA256
+        or intent is not None and intent.battle_plan_id != "ordinary-trainer-funding"
+        or maximum_full_restores or resume_active_battle
+    )):
+        raise ValueError("story income recovery requires explicit qualified K ordinary combat")
+    # Separate opt-in contract: native faints are recoverable, not free money.
+    # Strict historical funding remains unchanged; victory, identity, inventory
+    # and exact payout are still required. Caller owns the healed return proof.
+    allow_faints = allow_faints or story_income_recovery
+
+    if preparation_evolution_guard is not None:
+        from .red_trainer_evolution import RedTrainerEvolutionGuard
+        if (not isinstance(preparation_evolution_guard, RedTrainerEvolutionGuard)
+                or not story_income_recovery or maximum_full_restores or resume_active_battle
+                or resume_pending_dialogue or validate_scripted_dialogue is not None):
+            raise ValueError("level evolution requires explicit qualified K preparation")
+
     validate_target()
 
     initial = reader.read()
@@ -364,7 +415,7 @@ def run_prepared_trainer_funding(
         raise TrainerFundingBattleError("initial party_species_ids is missing or length mismatch")
     if initial.party_hp is None or len(initial.party_hp) != initial.party_count:
         raise TrainerFundingBattleError("initial party_hp is missing or length mismatch")
-    if any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in initial.party_hp):
+    if not _valid_party_hp(initial, initial.party_count, allow_faints):
         raise TrainerFundingBattleError("initial party contains fainted or non-positive HP pokemon")
     if initial.bag_items is None:
         raise TrainerFundingBattleError("initial bag_items is missing")
@@ -449,11 +500,7 @@ def run_prepared_trainer_funding(
         )
     if state.party_species_ids != initial.party_species_ids:
         raise TrainerFundingBattleError("party species changed before battle runner")
-    if (
-        state.party_hp is None
-        or len(state.party_hp) != initial.party_count
-        or any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in state.party_hp)
-    ):
+    if not _valid_party_hp(state, initial.party_count, allow_faints):
         raise TrainerFundingBattleError(
             "party HP missing, truncated, or fainted before battle runner"
         )
@@ -476,14 +523,7 @@ def run_prepared_trainer_funding(
             or current_raw.party_species_ids != initial.party_species_ids
         ):
             raise TrainerFundingBattleError("party species changed during battle")
-        if (
-            current_raw.party_hp is None
-            or len(current_raw.party_hp) != initial.party_count
-            or any(
-                type(hp) is not int or isinstance(hp, bool) or hp <= 0
-                for hp in current_raw.party_hp
-            )
-        ):
+        if not _valid_party_hp(current_raw, initial.party_count, allow_faints):
             raise TrainerFundingBattleError("party HP missing, truncated, or fainted during battle")
 
     def _wrapped_policy(current_raw: RawGameState) -> int:
@@ -529,17 +569,23 @@ def run_prepared_trainer_funding(
         initial.player_money + target.quote.expected_victory_money + pay_day_tracker.money,
     )
     state = battle_final
-    _check_postbattle_fatal(state, initial, target, maximum_full_restores)
+    _check_postbattle_fatal(state, initial, target, maximum_full_restores, allow_faints,
+                           preparation_evolution_guard)
 
     settle_count = 0
-    while not _is_settled(state, reader, initial, target, expected_money, maximum_full_restores):
+    while not _is_settled(
+        state, reader, initial, target, expected_money, maximum_full_restores, allow_faints,
+        preparation_evolution_guard,
+    ):
         if settle_count >= maximum_settle_pulses:
             _raise_settle_failure(
-                state, reader, initial, target, expected_money, maximum_full_restores,
+                state, reader, initial, target, expected_money, maximum_full_restores, allow_faints,
+                preparation_evolution_guard,
             )
         if not reader.read_bottom_dialogue_box_visible() and reader.read_input_readiness().ready:
             _raise_settle_failure(
-                state, reader, initial, target, expected_money, maximum_full_restores,
+                state, reader, initial, target, expected_money, maximum_full_restores, allow_faints,
+                preparation_evolution_guard,
             )
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         executor.execute(
@@ -547,7 +593,8 @@ def run_prepared_trainer_funding(
         )
         settle_count += 1
         state = reader.read()
-        _check_postbattle_fatal(state, initial, target, maximum_full_restores)
+        _check_postbattle_fatal(state, initial, target, maximum_full_restores, allow_faints,
+                               preparation_evolution_guard)
 
     final_money = state.player_money
     if final_money is None:

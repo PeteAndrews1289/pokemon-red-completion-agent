@@ -56,6 +56,7 @@ class RouteStep:
     source_mode: TraversalMode
     expected_mode: TraversalMode
     transient_at: Coordinate | None = None
+    via: tuple[Coordinate, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -66,6 +67,9 @@ class RouteStep:
             raise TypeError("a route step action kind must be a MacroActionKind")
         if self.transient_at in {self.source_at, self.expected_at}:
             raise ValueError("a route-step transient must differ from both endpoints")
+        if self.via and (self.kind != "forced_motion"
+                         or {self.source_at, self.expected_at}.intersection(self.via)):
+            raise ValueError("forced-motion path must exclude both endpoints")
 
     @property
     def macro_action(self) -> MacroAction:
@@ -188,6 +192,7 @@ class RoutePlan:
                         source_mode=modes[index],
                         expected_mode=modes[index + 1],
                         transient_at=(None if triggers_passage else edge.transient),
+                        via=(() if triggers_passage else edge.via),
                     )
                 )
             if not segment.transition_action_in_approach:
@@ -405,7 +410,9 @@ def _find_composed_route(
             continue
         local = without_warp_transit(
             local,
-            graph.warp_locations.get(state.map_id, ()),
+            (graph.warp_locations if graph.warp_triggers is None else graph.warp_triggers).get(
+                state.map_id, ()
+            ),
             start_at=state.at,
         )
         cache_key = (state.map_id, state.at, state.mode)
@@ -721,6 +728,7 @@ def _local_steps(map_id: int, path: LocalPath) -> tuple[RouteStep, ...]:
             source_mode=path.modes[index],
             expected_mode=path.modes[index + 1],
             transient_at=edge.transient,
+            via=edge.via,
         )
         for index, edge in enumerate(path.edges)
     )

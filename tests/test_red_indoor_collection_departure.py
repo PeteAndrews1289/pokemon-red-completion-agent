@@ -245,6 +245,59 @@ def test_indoor_departure_qualification_is_action_free_and_projection_never_exec
     assert indoor_scene.provider_calls == []
 
 
+def test_walking_departure_does_not_advertise_unsupported_surf_shortcut(indoor_scene):
+    scene = indoor_scene
+    original = scene.router.world.plan_feasible_to_map
+    observed = scene.observer.observe
+    scene.observer.observe = lambda: replace(
+        observed(), capabilities=frozenset({"move:surf", "move:cut", "event:open"})
+    )
+    departures = []
+
+    def walking_only(start, target, **kwargs):
+        if start.map_id == 89:
+            departures.append(start)
+            assert start.capabilities == frozenset({"event:open"})
+        return original(start, target, **kwargs)
+
+    scene.router.world.plan_feasible_to_map = walking_only
+    binding = scene.bind()
+    assert binding is not None and len(departures) == 1
+    assert "move:surf" in scene.observer.observe().capabilities
+    assert not scene.game.actions
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+
+
+def test_walking_departure_replans_with_the_same_executor_capabilities(indoor_scene, monkeypatch):
+    import pokemon_red_completion.red_indoor_collection_departure as departure
+    from pokemon_red_completion.route_executor import ReplanRequest
+
+    original = departure.RedSemanticTransportRoute
+    captured = []
+
+    def transport(**kwargs):
+        captured.append(kwargs["replanner"])
+        return original(**kwargs)
+
+    monkeypatch.setattr(departure, "RedSemanticTransportRoute", transport)
+    received = []
+
+    def replan(request):
+        received.append(request)
+        return indoor_scene.exit_plan
+
+    indoor_scene.router.world.replanner = lambda: replan
+    assert indoor_scene.bind() is not None
+    current = replace(indoor_scene.observer.observe(),
+                      capabilities=frozenset({"move:surf", "event:open"}))
+    request = ReplanRequest(current, 0, (6, 9), {}, 1)
+    assert captured[0](request) == indoor_scene.exit_plan
+    assert received[0].current.capabilities == frozenset({"event:open"})
+    assert request.current.capabilities == frozenset({"move:surf", "event:open"})
+    assert not indoor_scene.game.actions
+
+
 def test_indoor_departure_binds_the_shared_scripted_dialogue_cap(
     indoor_scene, monkeypatch,
 ):

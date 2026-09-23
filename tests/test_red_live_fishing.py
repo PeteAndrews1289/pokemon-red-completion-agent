@@ -38,6 +38,37 @@ def _context() -> LivingDexOptionContext:
     return LivingDexOptionContext(0.8, 0.2, 0.5, 0.4, 0.1, 0.3, 0.7)
 
 
+@pytest.mark.parametrize("map_id", sorted(live_fishing._SAFARI_FISHING_MAPS))
+@pytest.mark.parametrize("blocked", ["origin", "destination"])
+def test_ordinary_fishing_never_offers_safari_controls(monkeypatch, map_id, blocked):
+    monkeypatch.setattr(
+        live_fishing, "red_super_rod_destination_offers",
+        lambda *_: (_offer(map_id, (147,)),),
+    )
+    traversal = TraversalSnapshot(map_id, (0, 0), True) if blocked == "origin" else _traversal()
+    # No world access is needed: rule out incompatible battle semantics first.
+    assert live_fishing.discover_reachable_red_fishing_destinations(
+        b"rom", set(), world=SimpleNamespace(), traversal=traversal,
+    ) == ()
+
+
+@pytest.mark.parametrize("blocked", ["origin", "destination"])
+def test_ordinary_fishing_rechecks_safari_boundary_before_input(blocked):
+    safari_map = min(live_fishing._SAFARI_FISHING_MAPS)
+    destination = live_fishing.RedReachableFishingDestination(
+        _offer(safari_map if blocked == "destination" else 23, (147,)), _stance(), 1, 1,
+    )
+    origin = TraversalSnapshot(safari_map, (0, 0), True) if blocked == "origin" else _traversal()
+    options = live_fishing.build_red_live_fishing_supplements(
+        _context(), (destination,), free_storage_slots=2, world=SimpleNamespace(),
+        observer=SimpleNamespace(observe=lambda: origin), field=SimpleNamespace(),
+        controller=SimpleNamespace(), actions=SimpleNamespace(actions_executed=0),
+        reader=SimpleNamespace(), emulator=SimpleNamespace(frame_count=0),
+    )
+    with pytest.raises(live_fishing.RedLiveFishingError, match="Safari battle controls"):
+        options[0].binding.execute()
+
+
 def test_discovery_is_action_free_filters_unreachable_and_sorts_by_effort(monkeypatch):
     offers = (_offer(23, (116,)), _offer(24, (117, 118)), _offer(25, (119,)))
     monkeypatch.setattr(

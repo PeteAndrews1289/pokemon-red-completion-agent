@@ -1,0 +1,81 @@
+{
+  "schema": "pokemon.red.larger-party-J-comparison-result.v1",
+  "session": "2026-09-20-larger-party-j-comparison",
+  "status": "measurement_complete_single_fit_rejected",
+  "execution_commit": "543dc7d45edadabc893f1ebc5a9e122ec1cecd06",
+  "baseline_and_candidate_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "protocol": {
+    "partition": "train", "existing_physical_contexts": 16, "existing_origin_clusters": 4,
+    "own_party_size": 5, "timing_offsets": [0, 2, 4, 6, 8], "branches": 485,
+    "selection": "Two openings and two later decisions per root, selected by metadata before outcomes; forced/prompt where available, otherwise second later MAIN context.",
+    "first_action": "Each declared legal first action prescribed once per timing; frozen J owns continuation with fresh history at capture.",
+    "maximum_player_turns": 80, "maximum_decisions": 160, "maximum_frames": 240000,
+    "maximum_controller_macros": 5000, "maximum_branch_wall_seconds": 45,
+    "maximum_collection_wall_seconds": 2700, "maximum_fits": 1,
+    "fit_heads": ["switch", "control"], "move_head_frozen": true,
+    "epochs_per_head": 2400, "learning_rate": 0.005, "development_used": false
+  },
+  "integration_failure": {
+    "description": "Runner declared three timings; existing TRAIN aggregation requires five. Rejected after24 completed terminal branches. Integration error, not battle failure.",
+    "original_maximum_branches": 291, "original_failure_retained": true,
+    "completed_branches_replayed": 0, "subsequent_execution_failures": 0,
+    "correction": "Separate bound amendment added timings2/6 and preserved all24results. Same16cases, J, actions, per-branch limits and one-fit gates. Original plan/claim immutable; aggregation guard unchanged."
+  },
+  "aggregate": {
+    "branches": 485, "wins": 387, "losses": 98, "decisions": 11274,
+    "prescribed_first_actions": 485, "model_continuation_decisions": 10789,
+    "attacks": 6683, "voluntary_switches": 2024, "forced_switches": 902,
+    "opponent_switch_prompts": 1665, "own_faints": 980, "opponent_faints": 2008,
+    "observed_party_hp_lost": 92610, "observed_party_pp_spent": 6053,
+    "move_suppressed_or_failed": 243, "invalid_actions": 0,
+    "teacher_queries": 0, "model_episode_memory_writes": 0,
+    "frames": 13710256, "controller_macros": 161404,
+    "summed_episode_wall_seconds": 722.836076,
+    "continuation_collection_wall_seconds": 742.574594,
+    "maximum_branch_frames": 56878, "maximum_branch_macros": 677,
+    "maximum_branch_decisions": 48, "maximum_branch_wall_seconds": 2.999328,
+    "maximum_policy_latency_ms": 7.674208
+  },
+  "fit": {
+    "attempts": 1, "elapsed_seconds": 41.744702,
+    "selected_switch_epoch": 0, "selected_control_epoch": 0,
+    "switch_feasible_checkpoints": 2, "control_feasible_checkpoints": 1,
+    "before_composed_regret": 1.17423927, "after_composed_regret": 1.17423927,
+    "before_switch_regret": 1.048813593, "after_switch_regret": 1.048813593,
+    "composed_examples": 15, "switch_examples": 16,
+    "all_fourteen_retention_gates_passed": true, "new_switch_nonregression_passed": true,
+    "required_ten_percent_composed_improvement_passed": false,
+    "candidate_byte_identical_to_J": true, "accepted_new_weights": 0,
+    "train_qualified": false, "natural_qualified": false
+  },
+  "read_only_diagnosis": {
+    "method": "Saved optimizer history and old/new target best sets with unchanged0.02 tie tolerance; no further fit, episode or emulation.",
+    "switch_old_new_disjoint_best_sets": "10/16",
+    "control_action_old_new_disjoint_best_sets": "11/15",
+    "move_old_new_disjoint_best_sets": "5/13",
+    "best_logged_unaccepted_switch_regret": 0.07536472531249994,
+    "switch_blocking_retention_groups": ["new80", "terminal128"],
+    "best_logged_unaccepted_control_regret": 0.0,
+    "control_blocking_retention_groups": ["late90", "new80", "original44", "prior48", "retained52", "terminal128"],
+    "conclusion": "Fixed trajectories improve new choices only at rejected checkpoints. Many same-capture old/new best labels conflict. This supports checking continuation/target consistency, not a claim that overlap explains every regression. No changed thresholds or second fit. Logged control regret is not composed-action regret."
+  },
+  "hashes": {
+    "original_plan": "7430e46c4e6e8ddde088533a6c0cbddbe086c219146efc42956dddb1ac3bfde6",
+    "amended_plan": "fec73aa3bece64f97524bde62d5ebf771cfe97127682a9346592364ab187cc53",
+    "original_failure": "42d0d82249b727b986bb578ae9fa2d5e1871e3c1bae7fa57f4c4405d175b30db",
+    "collection": "ed7963b8df0291d2116c9c9aa3957c873c20bb61ab7d2b216a181b2526d70e49",
+    "policy_targets": "220bf91cc46ee2f1348d55620ca930e4b6818e92f2e15727ee8385418c9e8c63",
+    "fit_result": "4eaa69ae1d482ad8ae6c1b5789942c4ba4dea5a2351e6ac736c3a3c8ab2f317e"
+  },
+  "verification": {
+    "targeted_rom_free_tests": 128, "mypy_source_files": 544,
+    "full_suite_run": false, "registry_check": "passed",
+    "retained_evidence": "Every target reconstructed from authenticated captures, choices and event chains before fitting. Every terminal hash verified. Separate read-only tally matched485episode files to choice bundles and checked endpoint hashes and released buttons.",
+    "limitations": "Correlated TRAIN branches, not485independent evaluations or natural win rate. No candidate gameplay.16existing captures remeasured, not16new physical scenarios. Lab recovery can undercount final-turn HP/PP costs; no economic qualification."
+  },
+  "new_policy_conditioned_train_measurements": 16, "new_physical_contexts": 0,
+  "new_origins": 0, "authority_promotions": 0, "new_registrations": 0,
+  "main_save_changed": false, "gameplay_running": false,
+  "next": "Close the one-fit packet. Audit continuation/return compatibility on16overlaps; propose one canonical current-policy target per capture while preserving original evidence and unrelated retention. Freeze any successor before fitting; no campaign replay, broad redesign or automatic natural qualification. Then unused natural full-party workload, earned-and-spent funding and renewable League income.",
+  "publication": "Local only; no GitHub push."
+}

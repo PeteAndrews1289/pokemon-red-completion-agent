@@ -17,17 +17,22 @@ from .executor import CountingExecutor, FrameSafeExecutor, WindowedFrameBudgetCo
 from .gen1_field_moves import Gen1FieldMovePort, Gen1FlyReceipt
 from .gen1_route_runtime import Gen1TraversalObserver
 from .gen1_scripted_arrival import trainer_room_arrival
+from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
+from .goal_manager_runtime import ExecutableGoalBinding, GoalVerification
+from .goal_resource_quote import GoalResourceQuote
 from .hideout import DEFAULT_HIDEOUT_TIMING
 from .lavender import DEFAULT_LAVENDER_TIMING, _buy_mart_item, _close_menus
 from .observation import RED_FLY_TOWN_NAMES, EventFlag, ItemId, MapId, event_flag_is_set
 from .red_champion_story import RedCartridgeChampionSkill
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
+from .red_faint_recovery import RedFaintAwareFieldRestoreGoalProvider
 from .red_league_funding import (
     RedLeagueFundingQualification,
     projected_fresh_league_events,
     qualify_red_league_funding,
 )
+from .red_learned_league import learned_league_controller
 from .red_pc_storage import face_pc_boundary
 from .red_resource_goal_router import _ROUTE_LIMITS
 from .red_trainer_story import RedCartridgeLoreleiSkill
@@ -72,7 +77,8 @@ def bind_red_league_funding_execution(
 ) -> RedLeagueFundingExecutionBinding:
     """Bind the complete observed origin without advancing the emulator."""
     origin = runtime.adapter.observe()
-    qualification = qualify_red_league_funding(world.rom, origin, runtime.reader, world)
+    kwargs = {"learned_development": True} if learned_league_controller(runtime) else {}
+    qualification = qualify_red_league_funding(world.rom, origin, runtime.reader, world, **kwargs)
     if expected_qualification is not None and qualification != expected_qualification:
         raise RedLeagueFundingExecutionError("League funding qualification changed while binding")
     return RedLeagueFundingExecutionBinding(origin, qualification)
@@ -157,6 +163,9 @@ class RedLeagueFundingExecution:
     purchase_cost: int
     full_restores_purchased: int
     full_restores_spent: int
+    learned_battle_authority: bool = False
+    field_items_spent: tuple[tuple[int, int], ...] = ()
+    field_item_replacement_cost: int = 0
 
     @property
     def observed_gross_income(self) -> int:
@@ -186,9 +195,15 @@ class RedLeagueFundingExecution:
             "battles": [battle.public_dict() for battle in self.battles],
             "battle_count": len(self.battles),
             "learned_goal_authority": False,
-            "learned_battle_authority": False,
+            "learned_battle_authority": self.learned_battle_authority,
             "forced_support_step": True,
             "training_examples": 0,
+            "field_items_spent": [list(row) for row in self.field_items_spent],
+            "field_item_replacement_cost": self.field_item_replacement_cost,
+            "net_after_field_item_replacement": (
+                self.observed_net_income - self.field_item_replacement_cost
+            ),
+            "replacement_value_is_cash_spent": False,
             "concurrent_champion_and_hall_of_fame": True,
             "postgame_reset_proven": False,
             "capture_supply_restored": False,
@@ -275,12 +290,46 @@ def _run_battle(
             maximum_critical_exposures=maximum_critical_exposures,
             rematch=True,
         )
-    availability = skill.availability(runtime.adapter.observe().game_state)
-    if not availability.executable:
-        raise RedLeagueFundingExecutionError(
-            f"{objective_id} became unavailable: {availability.reason}"
+    learned = learned_league_controller(runtime)
+    field_recovery = learned.field_recovery if learned is not None else None
+    if field_recovery is None:
+        availability = skill.availability(runtime.adapter.observe().game_state)
+        if not availability.executable:
+            raise RedLeagueFundingExecutionError(
+                f"{objective_id} became unavailable: {availability.reason}"
+            )
+        report = skill.execute()
+    else:
+        def next_goal(observation):
+            if not skill.availability(observation.game_state).executable:
+                return None
+            def verify(_report):
+                after = runtime.adapter.observe()
+                return (GoalVerification.succeeded()
+                        if after.raw.player_money == before_money + expected_money
+                        and after.raw.battle_state == 0
+                        else GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED))
+            return ExecutableGoalBinding(
+                binding_ref="pokemon.red:league-income:" + objective_id,
+                kind=GoalKind.RESUPPLY, estimated_effort=0.5, estimated_risk=0.5,
+                execute=skill.execute, verify=verify,
+                resource_quote=GoalResourceQuote(before_money, 0, (),
+                                                 expected_income=expected_money),
+            )
+        recovery = RedFaintAwareFieldRestoreGoalProvider(
+            actions, runtime.reader, runtime.emulator, runtime.adapter,
         )
-    report = skill.execute()
+        selected = field_recovery.choose(recovery, next_goal)
+        # Battle accounting excludes separately recorded field recovery. Both still
+        # consume the caller's same campaign action/frame limits.
+        before_actions = actions.actions_executed
+        before_frames = runtime.emulator.frame_count
+        before_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
+            int(ItemId.FULL_RESTORE), 0,
+        )
+        report = selected.execute()
+        if selected.verify(report).status.value != "succeeded":
+            raise RedLeagueFundingExecutionError("selected next battle failed verification")
     after_money = _money(runtime)
     after_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
         int(ItemId.FULL_RESTORE),
@@ -408,7 +457,12 @@ def execute_red_league_funding(
     before = runtime.adapter.observe()
     if before != binding.origin:
         raise RedLeagueFundingExecutionError("League funding exact origin changed before input")
-    repeated = qualify_red_league_funding(world.rom, before, runtime.reader, world)
+    learned = learned_league_controller(runtime)
+    field_recovery = learned.field_recovery if learned is not None else None
+    if field_recovery is not None:
+        field_recovery.claim()
+    kwargs = {"learned_development": True} if learned else {}
+    repeated = qualify_red_league_funding(world.rom, before, runtime.reader, world, **kwargs)
     if repeated != qualification:
         raise RedLeagueFundingExecutionError("League funding qualification changed before input")
     if runtime.emulator.pressed_buttons:
@@ -430,6 +484,7 @@ def execute_red_league_funding(
     if qualification.reset_stale_league_events:
         expected_supply_events, reset_required = projected_fresh_league_events(
             before.raw.event_flags,
+            challenge_started=runtime.reader.read_league_challenge_started() if learned else None,
         )
         if not reset_required:
             raise RedLeagueFundingExecutionError(
@@ -466,6 +521,8 @@ def execute_red_league_funding(
     results: list[RedLeagueFundingBattleResult] = []
 
     def fail(phase: str, reason: str, cause: BaseException | None = None) -> NoReturn:
+        if field_recovery is not None:
+            field_recovery.failed = True
         error = RedLeagueFundingExecutionError(
             reason,
             progress=_progress(
@@ -637,6 +694,8 @@ def execute_red_league_funding(
             if (remaining := quantity - (restore_spent if item == int(ItemId.FULL_RESTORE) else 0))
             > 0
         )
+        if field_recovery is not None:
+            expected_bag = field_recovery.expected_bag(supplied_bag, restore_spent)
         if after.raw.bag_items != expected_bag:
             fail("terminal", "League funding terminal bag differs from supplied use")
         if after.raw.badge_bits != starting_badges:
@@ -662,6 +721,9 @@ def execute_red_league_funding(
             qualification.supply.purchase_cost,
             qualification.supply.full_restores_purchased,
             restore_spent,
+            learned is not None,
+            tuple(sorted(field_recovery.consumed.items())) if field_recovery else (),
+            field_recovery.replacement_cost if field_recovery else 0,
         )
     except RedLeagueFundingExecutionError as error:
         if error.progress is not None:

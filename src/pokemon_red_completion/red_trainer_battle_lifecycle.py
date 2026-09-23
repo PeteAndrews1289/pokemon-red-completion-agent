@@ -12,7 +12,7 @@ from typing import Literal
 from .actions import MacroAction, MacroActionKind
 from .battle_runtime import BattleActionExecutor, BattleRuntimeTiming
 from .observation import PokemonRedStateReader, RawGameState, event_flag_is_set
-from .red_learned_trainer import FrozenTrainerBattler
+from .red_learned_trainer import FrozenTrainerBattler, qualified_party_limit, story_party_limit
 from .red_trainer_practice_episode import RedTrainerPracticeEpisode
 
 
@@ -57,6 +57,10 @@ def continue_learned_trainer_battle(
     ordinary_victory_money: int,
     timing: BattleRuntimeTiming,
     maximum_settle_pulses: int = 128,
+    remaining_decisions: int = 80,
+    story_authority: bool = False,
+    victory_items: tuple[tuple[int, int], ...] = (),
+    victory_badge_bits: int = 0,
 ) -> TrainerBattleCompletion:
     """Own one continuation; never reload, select teacher moves or retry.
 
@@ -73,14 +77,27 @@ def continue_learned_trainer_battle(
         or ordinary_victory_money < 0
         or type(maximum_settle_pulses) is not int
         or not 1 <= maximum_settle_pulses <= 128
+        or type(remaining_decisions) is not int or not 1 <= remaining_decisions <= 80
+        or type(story_authority) is not bool
+        or type(victory_badge_bits) is not int or not 0 <= victory_badge_bits <= 255
+        or type(victory_items) is not tuple
+        or any(type(row) is not tuple or len(row) != 2
+               or type(row[0]) is not int or not 1 <= row[0] <= 255
+               or type(row[1]) is not int or not 1 <= row[1] <= 99 for row in victory_items)
+        or len(dict(victory_items)) != len(victory_items)
+        or ((victory_items or victory_badge_bits) and not story_authority)
     ):
         raise ValueError("invalid learned trainer completion contract")
     initial = reader.read()
+    party_limit = story_party_limit if story_authority else qualified_party_limit
     if (
         initial.battle_state != 2
         or initial.map_id is None
         or initial.party_count is None
-        or not 1 <= initial.party_count <= 3
+        or not 1 <= initial.party_count <= party_limit(
+            getattr(battler, "model_sha256", None),
+            getattr(battler, "qualification_sha256", None),
+        )
         or initial.party_species_ids is None
         or len(initial.party_species_ids) != initial.party_count
         or initial.bag_items is None
@@ -96,12 +113,21 @@ def continue_learned_trainer_battle(
     blackout_map = reader.read_last_blackout_map()
     fainted: set[int] = set()
 
-    def preserve(raw: RawGameState) -> None:
+    def preserve(raw: RawGameState, *, victory: bool = False) -> None:
+        rewards_allowed = (victory and raw.battle_state == 0 and raw.event_flags is not None
+                           and event_flag_is_set(raw.event_flags, defeated_event))
+        rewarded_bag = dict(initial.bag_items)
+        for item, count in victory_items:
+            rewarded_bag[item] = rewarded_bag.get(item, 0) + count
+        inventory_ok = raw.bag_items == initial.bag_items or (
+            rewards_allowed and dict(raw.bag_items or ()) == rewarded_bag)
+        badge_ok = raw.badge_bits == initial.badge_bits or (
+            rewards_allowed and raw.badge_bits == initial.badge_bits | victory_badge_bits)
         if (
             raw.party_count != initial.party_count
             or raw.party_species_ids != initial.party_species_ids
-            or raw.bag_items != initial.bag_items
-            or raw.badge_bits != initial.badge_bits
+            or not inventory_ok
+            or not badge_ok
             or raw.party_hp is None
             or len(raw.party_hp) != initial.party_count
             or raw.party_max_hp is None
@@ -133,10 +159,12 @@ def continue_learned_trainer_battle(
         expected_map=initial.map_id,
         timing=timing,
         decision_guard=guard,
+        maximum_decisions=remaining_decisions,
+        **({"story_authority": True} if story_authority else {}),
     )
     raw = reader.read()
-    preserve(raw)
     won = episode.battle_won and episode.stop_reason == "battle_won"
+    preserve(raw, victory=won)
     lost = not episode.battle_won and episode.stop_reason == "party_defeated"
     if lost and any(raw.party_hp or ()):
         raise TrainerBattleLifecycleError("loss lacks an observed defeated party")
@@ -160,7 +188,7 @@ def continue_learned_trainer_battle(
     )
     for pulse in range(maximum_settle_pulses + 1):
         raw = reader.read()
-        preserve(raw)
+        preserve(raw, victory=won)
         if raw.battle_state not in {0, 2}:
             raise TrainerBattleLifecycleError("unsupported settlement battle state")
         if raw.battle_state == 2:

@@ -233,6 +233,8 @@ def derive_direct_full_pokedex_profile(
     profile: RedGoalContextProfile,
     observation: RedGoalObservation,
     world: StrategicScenarioRouteWorld,
+    *,
+    require_evolution: bool = True,
 ) -> RedGoalContextProfile:
     """Replace target-bearing declarations with deterministic observed ones."""
     if not isinstance(profile, RedGoalContextProfile):
@@ -241,16 +243,25 @@ def derive_direct_full_pokedex_profile(
         raise TypeError("direct full-Pokédex profile needs a Red observation")
     if not isinstance(world, StrategicScenarioRouteWorld):
         raise TypeError("direct full-Pokédex profile needs cartridge route geometry")
+    if type(require_evolution) is not bool:
+        raise TypeError("require_evolution must be an explicit boolean")
+    evolution_mechanic = None
+    evolution_parameters: dict[str, object] = {}
     try:
         source, target, level = _level_evolution(observation)
     except RedFullPokedexDirectProfileError:
-        source, target, item_id = _item_evolution(observation)
-        evolution_mechanic = RedGoalMechanic.TARGETED_ITEM_EVOLUTION
-        evolution_parameters: dict[str, object] = {
-            "source_species_ref": red_species_ref(source),
-            "target_species_ref": red_species_ref(target),
-            "item_id": item_id,
-        }
+        try:
+            source, target, item_id = _item_evolution(observation)
+        except RedFullPokedexDirectProfileError:
+            if require_evolution:
+                raise
+        else:
+            evolution_mechanic = RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+            evolution_parameters = {
+                "source_species_ref": red_species_ref(source),
+                "target_species_ref": red_species_ref(target),
+                "item_id": item_id,
+            }
     else:
         evolution_mechanic = RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
         evolution_parameters = {
@@ -276,11 +287,12 @@ def derive_direct_full_pokedex_profile(
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         capture_parameters,
     )
-    providers[GoalKind.EVOLVE_SPECIES] = (
-        GoalKind.EVOLVE_SPECIES,
-        evolution_mechanic,
-        evolution_parameters,
-    )
+    if evolution_mechanic is not None:
+        providers[GoalKind.EVOLVE_SPECIES] = (
+            GoalKind.EVOLVE_SPECIES,
+            evolution_mechanic,
+            evolution_parameters,
+        )
     return parse_red_goal_context_profile(
         build_red_goal_context_profile_payload(
             profile_id=profile.profile_id,

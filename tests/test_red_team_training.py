@@ -481,7 +481,10 @@ def test_evolution_controls_cannot_change_non_evolution_training(options):
         run(FakeMemory(), FakeReader([state()]), **options)
 
 
-def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(monkeypatch):
+@pytest.mark.parametrize("reserve_stop", [False, True])
+def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(
+    monkeypatch, reserve_stop,
+):
     from types import SimpleNamespace
 
     memory = FakeMemory()
@@ -521,9 +524,27 @@ def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(mon
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             allow_direct_evolution=True,
             evolution_battle_quantum=1,
+            evolution_stop_requested=(lambda: True) if reserve_stop else None,
         )
     assert fights == [DIGLETT_SPECIES_ID]
     assert paused.value.battles == 1
+    assert paused.value.healing_trips == 0
+    assert isinstance(
+        paused.value, red_team_training.EvolutionSettlementReserveReached,
+    ) == reserve_stop
+    assert not memory.swaps
+
+
+def test_evolution_reserve_stops_at_field_before_any_action():
+    from types import SimpleNamespace
+    memory = FakeMemory()
+    memory.set_party([(DIGLETT_SPECIES_ID, 30), (BLASTOISE_SPECIES_ID, 63)])
+    reader = FakeReader([state()])
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    with pytest.raises(red_team_training.EvolutionSettlementReserveReached) as paused:
+        run(memory, reader, evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            evolution_stop_requested=lambda: True)
+    assert paused.value.battles == 0
     assert paused.value.healing_trips == 0
     assert not memory.swaps
 

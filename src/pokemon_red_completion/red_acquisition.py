@@ -696,6 +696,7 @@ def run_red_area_survey(
     catalog: RedAcquisitionCatalog | None = None,
     safety_check: Callable[[], bool] | None = None,
     capture_resources_available: Callable[[], bool] | None = None,
+    resource_stop_reason: Callable[[], str | None] | None = None,
 ) -> RedAreaExecutionReport:
     """Execute one bounded source survey through a semantic game adapter."""
 
@@ -763,10 +764,18 @@ def run_red_area_survey(
                 if type(available) is not bool:
                     raise TypeError("capture resource check must return a bool")
                 if not available:
+                    reason = (
+                        resource_stop_reason()
+                        if resource_stop_reason is not None
+                        else None
+                    )
+                    if reason is not None and not _is_failure_reason_code(reason):
+                        raise ValueError("resource stop reason must be a typed reason code")
                     return RedAreaExecutionReport(
                         source_id, initial.missing_species_refs, survey.missing_species_refs,
                         action_count, encounters_seen, captures, flees, box_switches,
                         capture_items_exhausted=True,
+                        search_stop_reason=reason,
                     )
             try:
                 executor.seek_encounter()

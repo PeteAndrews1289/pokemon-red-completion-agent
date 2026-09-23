@@ -9,6 +9,7 @@ The executor cannot manufacture its own successful label.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from types import MappingProxyType
@@ -225,6 +226,7 @@ class ExecutableGoalBinding:
     resource_quote: GoalResourceQuote | None = None
     search_history: GoalSearchHistory | None = None
     search_source_ref: str | None = None
+    search_objective_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if self.search_source_ref is not None and (
@@ -232,6 +234,12 @@ class ExecutableGoalBinding:
             or self.kind is not GoalKind.ACQUIRE_SPECIES
         ):
             raise GoalManagerRuntimeError("search source must bind an acquisition")
+        if self.search_objective_sha256 is not None and (
+            not isinstance(self.search_objective_sha256, str)
+            or re.fullmatch(r"[0-9a-f]{64}", self.search_objective_sha256) is None
+            or self.kind is not GoalKind.ACQUIRE_SPECIES
+        ):
+            raise GoalManagerRuntimeError("search objective must bind an acquisition SHA256")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise GoalManagerRuntimeError("goal binding reference must be non-empty")
         if not isinstance(self.kind, GoalKind):

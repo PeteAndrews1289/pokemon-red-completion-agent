@@ -330,7 +330,7 @@ def test_surf_requires_the_badge_and_a_living_observed_move_holder() -> None:
     )
 
 
-def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
+def test_cut_requires_the_badge_and_a_complete_observed_holder() -> None:
     def observed(
         *,
         badges: Badge = Badge.CASCADE,
@@ -351,7 +351,7 @@ def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
 
     assert cut_capabilities(observed()) == frozenset({CUT_CAPABILITY})
     assert not cut_capabilities(observed(badges=Badge.SOUL))
-    assert not cut_capabilities(observed(hp=(0,)))
+    assert cut_capabilities(observed(hp=(0,))) == frozenset({CUT_CAPABILITY})
     assert not cut_capabilities(observed(moves=((SURF_MOVE_ID,),)))
     assert not cut_capabilities(observed(hp=(20, 20), moves=((CUT_MOVE_ID,),)))
 

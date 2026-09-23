@@ -28,6 +28,8 @@ from pokemon_red_completion.gen1_traversal import (
 from pokemon_red_completion.observation import (
     RED_FLY_TOWN_NAMES,
     Badge,
+    EventFlag,
+    MapId,
     OverworldMovementMode,
     PokemonRedStateReader,
     RamAddress,
@@ -174,7 +176,7 @@ def gen1_field_capabilities(
     """Project only field moves that the observed party may legally execute.
 
     Route construction and field-move execution must see the same capability
-    boundary.  Cut and Strength derive their badge and living-holder checks
+    boundary. Cut derives its badge/holder check; Strength retains a living-holder check
     from the party observation; Surf additionally requires the live title
     restriction check above.  Keeping this composition here prevents callers
     from silently building a land-only graph for a party that can cross water.
@@ -195,9 +197,9 @@ def surf_menu_indices(raw: RawGameState) -> tuple[int, int]:
 
 
 def cut_menu_indices(raw: RawGameState) -> tuple[int, int]:
-    """Return a living Cut holder and Cut's row among its field moves."""
+    """Return a Cut holder (including fainted) and its observed field-move row."""
 
-    return _field_move_menu_indices(raw, CUT_MOVE_ID, "Cut")
+    return _field_move_menu_indices(raw, CUT_MOVE_ID, "Cut", require_living=False)
 
 
 def strength_menu_indices(raw: RawGameState) -> tuple[int, int]:
@@ -215,17 +217,20 @@ def _field_move_menu_indices(
     raw: RawGameState,
     move_id: int,
     label: str,
+    *,
+    require_living: bool = True,
 ) -> tuple[int, int]:
     hp = raw.party_hp or ()
     moves = raw.party_moves or ()
     if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
         raise Gen1FieldMoveError(f"{label} menu selection lacks a complete observed party")
     for party_index, (current_hp, known) in enumerate(zip(hp, moves, strict=True)):
-        if current_hp <= 0 or move_id not in known:
+        if (require_living and current_hp <= 0) or move_id not in known:
             continue
         field_moves = tuple(move for move in known if move in GEN1_FIELD_MOVE_IDS)
         return party_index, field_moves.index(move_id)
-    raise Gen1FieldMoveError(f"no living party member knows {label}")
+    qualifier = "living " if require_living else ""
+    raise Gen1FieldMoveError(f"no {qualifier}party member knows {label}")
 
 
 @dataclass(slots=True)
@@ -330,9 +335,8 @@ class Gen1FieldMovePort:
                     "party_levels",
                     "player_money",
                     "badge_bits",
-                    "event_flags",
                 )
-            ):
+            ) or not fly_story_events_preserved(before, after, destination, departure=departure):
                 raise Gen1FieldMoveError("Fly changed protected party or story resources")
             if after.battle_state != 0:
                 raise Gen1FieldMoveError("Fly entered an unexpected battle")
@@ -617,6 +621,35 @@ class Gen1FieldMovePort:
     def _pulse(self, action: MacroAction, frames: int) -> None:
         self.delegate.execute(action)
         self.delegate.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
+
+
+def fly_story_events_preserved(
+    before: RawGameState, after: RawGameState, destination: int, *, departure: bool
+) -> bool:
+    """Permit only the native seven-badge Viridian arrival unlock.
+
+    pret/pokered 1e960340, ViridianCityCheckGymOpenScript sets this single
+    event on map entry iff the badge byte is exactly all except Earth.
+    Departure, other towns, event clearing and unrelated changes stay closed.
+    """
+    if before.event_flags == after.event_flags:
+        return before.event_flags is not None
+    if (
+        departure
+        or destination != MapId.VIRIDIAN_CITY
+        or after.map_id != destination
+        or before.badge_bits != 0xFF ^ int(Badge.EARTH)
+        or after.badge_bits != before.badge_bits
+        or before.event_flags is None
+        or after.event_flags is None
+    ):
+        return False
+    expected = bytearray(before.event_flags)
+    event = int(EventFlag.VIRIDIAN_GYM_OPEN)
+    if len(expected) <= event // 8 or expected[event // 8] & (1 << (event % 8)):
+        return False
+    expected[event // 8] |= 1 << (event % 8)
+    return bytes(expected) == after.event_flags
 
 
 def _require_overworld(raw: RawGameState, label: str) -> tuple[int, tuple[int, int]]:

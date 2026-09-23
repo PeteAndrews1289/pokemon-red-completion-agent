@@ -50,8 +50,10 @@ from pokemon_red_completion.red_goal_skills import (
 from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_team_training import (
     COLLECTION_UNSUPPORTED_MOVE_EFFECTS,
+    EvolutionSettlementReserveReached,
     EvolutionTrainingPaused,
     collection_finisher,
+    evolution_reserve_requested,
 )
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
@@ -178,6 +180,13 @@ def native_training_move_guard(state: RawGameState) -> None:
     native_training_move_slot(state)
 
 
+def validate_native_evolution_quanta(value: object) -> int:
+    """Bound declared work size; action/frame reserves and wall limit still apply."""
+    if type(value) is not int or not 1 <= value <= 512:
+        raise ValueError("native evolution quantum limit differs")
+    return value
+
+
 def bind_native_boxed_evolution(
     runtime: context.RedGoalContextRuntime,
     world: StrategicScenarioRouteWorld,
@@ -187,8 +196,7 @@ def bind_native_boxed_evolution(
     allow_cross_box: bool = False,
 ) -> context.RedGoalContextRuntime:
     """Return an isolated runtime; do not mutate a saved observer's old profile."""
-    if type(maximum_quanta) is not int or not 1 <= maximum_quanta <= 128:
-        raise ValueError("native evolution quantum limit differs")
+    maximum_quanta = validate_native_evolution_quanta(maximum_quanta)
     if type(allow_cross_box) is not bool:
         raise ValueError("native evolution cross-box mode differs")
     runtime = replace(runtime, boxed_level_evolution_cross_box=allow_cross_box)
@@ -271,11 +279,19 @@ def bind_native_boxed_evolution(
             )
         return context.RedGoalSkillAvailability.available()
 
+    def check_settlement_reserve(battles: int = 0, heals: int = 0) -> None:
+        if evolution_reserve_requested(runtime.evolution_stop_requested):
+            if (runtime.reader.read().battle_state
+                    or not runtime.reader.read_input_readiness().ready):
+                raise context.RedGoalContextError("evolution reserve requires a safe boundary")
+            raise EvolutionSettlementReserveReached(battles, heals)
+
     def train_quantum(
         actions: CountingExecutor,
         source_id: int,
         target_id: int,
     ) -> BoundedEvolutionTrainingResult:
+        check_settlement_reserve()
         prepare_native_training_center(runtime, world, actions)
         initial_heals = restore_native_center_party(runtime, actions)
         trainee = next(
@@ -318,6 +334,7 @@ def bind_native_boxed_evolution(
             collection_shared_experience=True,
             collection_encounters={venue.map_id: tables[venue.map_id] for venue in venues},
             evolution_battle_quantum=4,
+            evolution_stop_requested=runtime.evolution_stop_requested,
             report_label="native bounded collection evolution",
             checkpoint_count=1,
         )
@@ -348,6 +365,7 @@ def bind_native_boxed_evolution(
         started = time.monotonic()
         battles = heals = 0
         for _ in range(maximum_quanta):
+            check_settlement_reserve(battles, heals)
             if time.monotonic() - started >= 600:
                 raise context.RedGoalContextError("complete evolution wall limit reached")
             previous = next(
@@ -359,6 +377,10 @@ def bind_native_boxed_evolution(
                 result = train_quantum(actions, source_id, target_id)
                 battles += result.battles_completed
                 heals += result.healing_trips
+            except EvolutionSettlementReserveReached as paused:
+                raise EvolutionSettlementReserveReached(
+                    battles + paused.battles, heals + paused.healing_trips,
+                ) from paused
             except EvolutionTrainingPaused as paused:
                 battles += paused.battles
                 heals += paused.healing_trips
@@ -406,6 +428,7 @@ def bind_native_boxed_evolution(
             {
                 "bounded": True,
                 "evolution_partial": True,
+                "settlement_reserve_reached": isinstance(paused, EvolutionSettlementReserveReached),
                 "completed_training_battles": paused.battles,
                 "healing_trips": paused.healing_trips,
             },

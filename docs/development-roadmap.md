@@ -3,44 +3,19 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-19-battle-lifecycle-continuation**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-22-forced-motion-gym**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 29/29 acceptance items (100%).**
+**Model-directed play after setbacks: 4/4 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
-- [x] Build a multi-destination fishing menu without map or species identities ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
-- [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
-- [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
-- [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
-- [x] Expose a useful choice across more than one acquisition family ([evidence](../docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json))
-- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
-- [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
-- [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
-- [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
-- [x] Recover the qualified route interruption without a learning label ([evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json))
-- [x] Derive and bind multiple reachable fishing choices automatically ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
-- [x] Retain and fit the automatic runtime's actual selected-arm result ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
-- [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
-- [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
-- [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
-- [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
-- [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
-- [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
-- [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
-- [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
-- [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
-- [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
-- [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
-- [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
-- [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
-- [x] Bound regional route inventory without weakening full verification ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
-- [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
-- [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
+- [x] Map model versus controller ownership and fresh-story gaps ([evidence](../docs/evidence/red-integrated-player-2026-09-21.json))
+- [x] Test retained failure, fresh choice, history and cost boundaries ([evidence](../docs/evidence/red-integrated-player-2026-09-21.json))
+- [x] Execute at least five model decisions including setback and useful success ([evidence](../docs/evidence/red-integrated-player-2026-09-21.json))
+- [x] Independently verify each native boundary and close the episode ([evidence](../docs/evidence/red-integrated-player-2026-09-21.json))
 
 Pinned historical learning receipt: **135 examples**. The current model and integration boundary are reported below in the latest review and active state; this older chart receipt is not full-game competence.
 
@@ -76,7 +51,7 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — planned
+### 04. Finish Red with the model — current
 
 Choose progression from a fresh game through the Champion.
 
@@ -84,7 +59,9 @@ Choose progression from a fresh game through the Champion.
 
 Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
-### 05. Complete Red's legitimate native route — current
+[Current evidence](../docs/evidence/red-forced-motion-gym-2026-09-22.json)
+
+### 05. Complete Red's legitimate native route — planned
 
 Register the declared 124-species Red route in the same fresh-run save.
 
@@ -92,7 +69,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model137-fishing-route-drift-2026-09-16.json)
+[Current evidence](../docs/evidence/red-npc-trade-bridge-2026-09-21.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +96,566 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-22-forced-motion-gym
+
+Shared forced-motion routing and hazard-aware feasibility repaired;294targeted tests passed. One earned gym win in9model choices earned1365cash;one faint recovered,Viridian anchor1 verified. Stage285 safe,26627cash,seven badges. No fits, registrations or authority promotion.
+
+**Deviation:** Stage284 precombat route failure retained and resumed forward. Routing, trainer choice and recovery remain support. One-battle packet consumed; native spinner coverage is not universal transfer qualification.
+
+**Next:** Prospectively bound forward gym clearance from stage285, reassess Giovanni after wins, preserve existing overall caps and completed preparation. No replay, refit or publication.
+
+### 2026-09-22-giovanni-readiness
+
+Three reserves reached39 in40earned outings:160encounters/153wins/496learned choices. Two faints and32status changes recovered,25262cash preserved. Stage283 safe in ViridianGym; Giovanni not fought. Zero new fits/goals/registrations.
+
+**Deviation:** Three support failures retained. Narrow native Fly event rule repaired without replay; spinner geometry remains unresolved. Read-only audit corrected a false Viridian-anchor support label: actual anchor is Celadon. Venue/targets/healing were support, not learned goals. Owner-requested retrospective sync changes no gates/counters.
+
+**Next:** Test shared cartridge-derived forced-motion edges for chains/stops/cycles/hazards, reconcile no-battle interruptions and verify actual recovery anchor. Resume retained stage283 toward Giovanni;60-120minutes then reassess. No preparation-budget refill, replay, refit, save edits or publication.
+
+### 2026-09-22-learned-blaine
+
+Learned battler won8/8Cinnabar gym battles including Blaine,48choices,zero faints/illegal actions. Seven badges,28/36story objectives,25262cash and fullHP/PP. No registration gain or fit.
+
+**Deviation:** Native shared Dig/Fly escaped Mansion instead of another switch-route repair. Navigation, accessible trainer selection and healing remain support; one development lineage, no broad promotion or final-gate change.
+
+**Next:** Reversibly store TM38, Fly to Viridian, review observed preparation and gym approach, then bounded learned Giovanni. Astra High, Fast off;60-120minutes, no default grinding/refit/replay.
+
+### 2026-09-22-return-to-story-development
+
+Additive comparison audited:72wins versusK66,349decisions versus276,zero illegal/flagged choices. Original efficiency criterion remains failed.
+
+**Deviation:** Explicit owner acceptance permits bounded exact-model story DEVELOPMENT rather than further selector fitting. No final-run or broad qualification gate changed.
+
+**Next:** Bind story dispatch, restore legitimate cash reserve, then retained Silph progression with actual-party results and costs.
+
+### 2026-09-22-randomized-outcome-training
+
+Readout fit passed TRAIN but failed128fresh pairs:56wins versusK73,501decisions versus290; no promotion. RNG diagnostic completed256episodes, all four contexts varied,651K choices audited.
+
+**Deviation:** Move from small timing samples to32paired TRAIN-only RNG seeds per context and conservative learned preferences. Native rewards/182retention constraints/outcome acceptance stay unchanged; RNG is never a player action.
+
+**Next:** Complete64-start randomized collection and independent audit, then the prospective staged fit and128fresh unedited comparisons. Natural-party qualification remains required.
+
+### 2026-09-22-outcome-value-broad-training
+
+V2produced30measured targets and one fit; TRAIN regret0.86153 to0.00404,182preferences retained. Fresh screen rejected12/32wins versusK14 and98decisions versus71.560episodes retained.
+
+**Deviation:** Standing owner authorization replaces per-step permission requests. No acceptance changes or campaign writes. Broad V3collects all8families and later on-policy decisions before one fit and a fresh screen.
+
+**Next:** Finish broad V3and audit model choices and outcomes; no automatic promotion or fitting on screen cases.
+
+### 2026-09-22-outcome-value-pilot
+
+Owner approved prospective outcome readiness. Fresh value packet completed11episodes/120learned choices, then planner offset13violated existing12frame bound. No complete target or fit.
+
+**Deviation:** Readiness revision recorded, old failures unchanged. Timing preflight repaired without widening executor. Fresh corrected successor prepared, separate approval pending; all V1costs retained.
+
+**Next:** Await approval for one corrected outcome-value successor. Eight offsets0,1,2,3,5,7,11,12 satisfy the unchanged executor bound; fresh seeds2026092233/34 and consumed-state exclusions are prepared. Preserve V1failure and all costs. Same one-fit/182preference/outcome gates,90minute cap. No replay, widened timing guard, old128comparison or campaign access.
+
+### 2026-09-22-selector-value-audit
+
+Read-only24branch audit reproduces four flagged TRAIN targets: three timing-sign reversals, zero consistent damage advantages above0.05. Two raw Rest flags were suppressed. No new learning or authority.
+
+**Deviation:** No stage or acceptance change. Raw-flag diagnostic treatment proposed to Pete, awaiting explicit decision; current candidate remains rejected independently on201>192.5decisions.
+
+**Next:** Await explicit owner adjudication of prospective outcome-based readiness; keep all raw flags and old rejected outcomes. If approved, freeze one fresh bounded on-policy value curriculum and untouched screen. No additional fit, gameplay, reward rewrite or silent gate change in this audit.
+
+### 2026-09-22-native-later-selector
+
+Later-effect qualification passes10observed/9correct,Brier0.042024 and all five cells. One fit preserves182preferences. Native TRAIN candidate38/64wins versusK32, but13concerns and201versus154decisions fail readiness.
+
+**Deviation:** No acceptance or stage change.148episodes/355learned choices audited; candidate1de5e6a2 retained unqualified. Two Rest flags were suppressed while asleep; four flagged inputs match measured targets, two favor the flagged move. No reserved or story access.
+
+**Next:** Resolve measured-value versus raw-concern conflict before another fit. Audit four exact matching targets; predeclare a small on-policy TRAIN packet for redundant sleep/paralysis/confusion and suppressed Rest. Retain182preferences and failures. No repeated312context fit, auxiliary refit, automatic alarm exemption, reserved comparison or story input. Budget60-90minutes; request explicit adjudication if readiness must change.
+
+### 2026-09-22-battler-finish-preparation
+
+Implemented bounded qualification/fit/screen preparation, independent audit and guarded128case reserved-comparison runner. Twelve native turns yielded7observed later effects,6/7correct,Brier0.056345<=0.125;585targeted tests pass/13private skips.
+
+**Deviation:** Qualification coverage failed:7<8observed effects and no occupied-confusion observations because both actors fainted before acting. Retained suppression and all failures; zero fits/screens/reserved comparisons or promotions. New fresh-native mode prepared, awaiting Pete's explicit decision.
+
+**Next:** Await Pete's decision on one new prospectively complete native later-turn qualification. Prepared --fresh-native mode freezes ten setup/diagnostic pairs, excludes22consumed identities, retains8ac8c2d5 without refit and keeps>=8observed/all-five-cell/Brier<=0.125 thresholds. If approved and passing, one182constraint selector fit then64case paired TRAIN screen run automatically. Reserved comparison runner remains blocked until independent passing audit; no story/save changes. Budget90minutes.
+
+### 2026-09-22-timing-effect-learning
+
+One timing-aware72label fit/24unique vectors;12unused configurations pass11/12correct,Brier0.034718<=0.125 versus0.222222constant. Both orderings and conditions observed per root.84turns/588events/111648frames independently audited; no actor promotion.
+
+**Deviation:** No stage or acceptance change. Assisted first-turn TRAIN generalization only; one actor-first full-HP Recover prediction52.22%is wrong and retained. Old failures, raw-concern gate, saves/K/Model141 and128unopened comparisons unchanged.
+
+**Next:** Freeze revised effect predictor8ac8c2d5; qualify it on prospectively selected unused later-turn TRAIN states, excluding the12consumed checks. If that gate passes, perform one existing constrained selector-combination fit retaining182preferences/rewardv2, then a bounded native TRAIN screen under unchanged readiness. No refits on these reserved labels, silent raw-concern exemptions, campaign input or old128comparison access. Budget60-90minutes.
+
+### 2026-09-22-effect-selector-combination
+
+Scoring/checkpoint composition implemented with exact zero-weight equivalence on312contexts. Later qualification12turns/84events/18492frames;8/10awake predictions correct but Brier0.19013>0.125. Two full-HP Recover choices each healed55after opposing damage. Stopped before fit.
+
+**Deviation:** No stage or acceptance change. Prior effect fitting covered actor-first only; native timing falsifies broad application. Two sleeping Rest outcomes remain suppression, not negative labels. Raw-concern gate unchanged;128comparisons unopened.
+
+**Next:** Freeze a bounded timing-aware effect curriculum crossing full/injured HP with both move orderings on fitting roots and unused configurations. Require actual support before one auxiliary fit. Preserve failed qualification, original182preferences/rewardv2/readiness and128unopened comparisons. Budget60-90minutes; no silent gate changes.
+
+### 2026-09-21-measured-effect-learning
+
+One auxiliary predictor fit on36native labels/12unique feature vectors. Six withheld configurations all classified correctly; Brier0.00079751versus0.25constant. Six native Disable paired states match with two applications.54turns/378events/63200frames audited.
+
+**Deviation:** No stage or acceptance change. Conditional effect prediction on assisted first-turn TRAIN cases, not battle-value learning, natural transfer or actor promotion. Prior rejected players and128unopened comparisons preserved.
+
+**Next:** Bounded learned selector-combination design and later-turn support, retaining182preferences/rewardv2 and unchanged readiness. Use learned input, never veto; distinguish execution from application. Budget60-90minutes before subsequent unused battle/natural-party qualification.
+
+### 2026-09-21-status-coverage-and-effect-trace
+
+Engineering checkpoint: explicit mechanics/root assignments implemented. Eight paired native effect checks matched exact states across16turns/112events/18812frames. Recover, Rest and confusion applied/no-effect observed; Disable positive still open. No learned choices or fit.
+
+**Deviation:** No stage, acceptance or player authority change. Pre-execution custom-stat setup rejected and retained; guard unchanged.224crossed recipes are prospective only; original128battle comparisons unopened.
+
+**Next:** Verify a positive native Disable transition in a new capped contrast, then bounded authenticated effect-label collection and one coverage-checked learning design. Keep hidden telemetry out of actor features, retain182preferences/rewardv2 and unchanged battle readiness. Budget60-90minutes; no live promotion.
+
+### 2026-09-21-status-effect-observability
+
+Authenticated936retained branches;392observable labels,71suppressed,473unknown. One diagnostic fit converged40iterations but excluded TRAIN-root Brier0.38335 was worse than0.25341constant.392predictions rechecked; zero player/gameplay changes.
+
+**Deviation:** No acceptance or stage change. Root/condition confounding leaves all36observed immunity examples outside fitting; unknown effects remain unknown. Closed split not tuned;128comparisons unopened.
+
+**Next:** Correct root/condition coupling with a mechanics-by-root coverage preflight, then add narrowly verified training-only effect telemetry for healing/Rest/Disable/confusion ambiguity. Budget60-90minutes. No second fit on the closed probe, broad recollection, runtime action bans or live promotion. Preserve182preferences, rewardv2 and unchanged battle acceptance.
+
+### 2026-09-21-status-reward-correction
+
+Rewardv2 authenticated/rescored1872branches/312contexts and corrected7earlier-loss preferences. Candidate TRAIN38/64wins vs32K,flags13to8,182retained; still fails8flags and196vs154decisions.128episodes/350choices audited.
+
+**Deviation:** Versioned training reward correction, not weaker battle acceptance. Original outcomes/rewards/candidates preserved; full-game stage and authority unchanged.128comparisons unopened.
+
+**Next:** Assess separate measured immediate-effect learning from existing TRAIN transitions; distinguish no-change, suppression and unknown effects before freezing another learner. Rewardv2 is corrected; no coefficient/optimizer sweep, broad recollection, runtime bans or live promotion. Preserve182preferences and the unchanged behavior gate. Budget45-60minutes.
+
+### 2026-09-21-status-feature-readout
+
+Learned-feature convex fit passed; TRAIN37/64wins vsK32/64,but13concerns and197vs154decisions reject integration.128episodes/351choices independently audited; saves unchanged.
+
+**Deviation:** No acceptance or stage change.12TRAIN targets favor concerning status choices,7all-loss pairs; objective/readiness mismatch now blocks useful promotion.128comparisons remain unopened.
+
+**Next:** Design and test a versioned training objective aligned with battle readiness: separate useful immediate effects from noisy later outcomes and remove incentives for shorter losses. Audit existing TRAIN traces first; preserve old rewards, gates, candidates and182retained preferences. No blind refit, new collection or integration before the design is frozen. Budget45-60minutes.
+
+### 2026-09-21-status-readout-learning
+
+Convex readout converged in103iterations/0.029seconds;182preferences retained. Later regret improved20.521%but failed25%gate;oldest group slightly regressed. Zero native evaluation or authority.
+
+**Deviation:** No stage or acceptance change. Numerical convergence solved; fixed basis/objective insufficient. Next assess existing richer TRAIN features without changing original retention/reference.
+
+**Next:** Assess frozen0734686a TRAIN features with the convex readout solver; keep0734686a output anchor separate fromfc4098a6 retention/reference. Preserve182original preferences and baseline,then separately freeze one fit/evaluation. Budget30-45minutes; no new collection,nonlinear refit,closed-packet retry or live promotion.
+
+### 2026-09-21-status-execution-learning
+
+Execution eligibility corrected;126new awake contexts,820episodes/3516decisions audited. Fit retained182preferences,reduced high-cost errors27->3,but hit numerical cap. No evaluation,promotion or save change.
+
+**Deviation:** No acceptance or stage change. Stop repeated nonlinear cap extensions; next assess a simpler fixed-hidden learning design. Capacity message did not stop the local run.
+
+**Next:** Assess a fixed-hidden,anchored final-layer learner so retention constraints are linear and fitting is convex. Check representation adequacy,then separately freeze one update/evaluation. Budget45-60minutes; no numerical continuation,closed-packet refit,heldout tuning or live promotion.
+
+### 2026-09-21-status-retention-fit
+
+Converged fit retained109preferences and removed17high-cost TRAIN errors; full battles35/64vs32/64failed19flags and59.7%turn overhead.128episodes/400decisions audited. Zero promotion/save change.
+
+**Deviation:** No stage or acceptance change. Three numeric invocations retained; stopped after TRAIN failure.12flags were unexecuted asleep selections;7awake concerns remain. Correct label semantics and on-policy coverage,not optimizer sweeps.
+
+**Next:** Reconcile selected versus executed action semantics in TRAIN labels/diagnostics; then freeze a new on-policy coverage/update packet with paired awake-redundancy outcomes. Budget60-90minutes for the smallest correction/falsifier. No repeated numeric fits,heldout tuning or live promotion.
+
+### 2026-09-21-status-trajectory-coverage
+
+Later-turn TRAIN capture qualified:97contexts,646episodes/2197decisions. All64action sequences unchanged;27measured policy errors,20timing-sensitive contexts. No fit,promotion or save changes.
+
+**Deviation:** No stage or acceptance change. Completed the planned collector/target qualification; no broad presentation refresh needed.
+
+**Next:** Freeze one retention-aware fit using the new later-turn TRAIN targets; account for continuation differences and timing uncertainty. Require high-cost improvement and retention of measured negative preferences, then full TRAIN trajectories before fresh heldout comparison. Budget60-90minutes; no consumed replay or live promotion.
+
+### 2026-09-21-closed-loop-status-learning
+
+Three status fits rejected after1550episodes/5699decisions. Fewer repeats did not prevent18/32versus20/32withheld regression; cost-sensitive fit restored18late redundancy flags. Saves unchanged.
+
+**Deviation:** No stage or acceptance change. Closed-loop credit improved; objective-only correction failed. Stop optimizer sweeps and address visited TRAIN states and negative-preference retention.
+
+**Next:** Design authenticated trajectory-wide TRAIN snapshots and contrast labels, inspect aliasing and negative-preference retention before another fit. No consumed-holdout reuse or live promotion.
+
+### 2026-09-21-balanced-status-learning
+
+Balanced status fit:80new TRAIN contexts,560episodes. Withheld13/32versusK12/32, but44redundancy flags and196versus76decisions reject the candidate. Protected models/saves unchanged.
+
+**Deviation:** One frozen comparison consumed without replay or refit. Reorient from more opening examples to measured learner-continuation credit and turn/resource costs. Stage exits remain unchanged.
+
+**Next:** Verify closed-loop TRAIN targets distinguish stopping from repetition before another bounded fit and fresh withheld comparison. No live promotion or campaign action.
+
+### 2026-09-21-status-battler-learning
+
+Status learning:44TRAIN contexts,390lab episodes, two fits. Lower fitting regret did not generalize:4/8vs4/8, then3/8vs5/8. Both rejected; K, Model141 and saves unchanged.
+
+**Deviation:** User-authorized status learning after rival losses. Separate sequence correction preserved damage ranking. Neither heldout fitted or replayed; no stage or final-run gate changed.
+
+**Next:** Freeze a balanced TRAIN-only status curriculum covering beneficial, redundant, immune, already-afflicted, imminent-KO and recovery choices, including native post-action states. One fit and a new withheld comparison; only then consider disjoint-origin multi-party qualification. Do not tune or replay consumed holdouts, overwrite K, resume unchanged rival attempts, change protected saves or publish.
+
+### 2026-09-21-learned-silph-completion
+
+K won3F Rocket/opened door, then lost three rival attempts;95model decisions. Native recovery retained all13344cash losses. Safe Center1906cash; Giovanni incomplete.878targeted tests pass.
+
+**Deviation:** Disabled Tackle with legal Sand-Attack exposed narrow unsupported-action boundary; repaired in place. Last rival attempt used two disclosed boost items and still lost. No fit, registration or stage promotion.
+
+**Next:** Stop unchanged rematches; choose a bounded TRAIN-side attrition/accuracy/Disable/recovery lesson or explicitly broader recovery support. Preserve actual stage047/35feb8fa and DEVELOPMENT exclusion.
+
+### 2026-09-21-learned-story-battle
+
+Shared explicit story interface connected K to required Silph5F Rocket: two attacks,990earned,Card Key,zero damage/faints/items/native errors. Actual partial terminal58b4f6b0 at14410cash;657targeted tests pass.
+
+**Deviation:** User approved learned story combat before restart or scripted chapter continuation. One overlevelled DEVELOPMENT encounter is not boss/gym mastery or independent transfer. No fitting, new goal queries, registration or gate advancement.
+
+**Next:** Resume actual Card Key partial state to required3F Rocket with shared K interface; verify door/heal boundary, then prepare separate bounded rival. No source replay or pristine full-chapter entry.
+
+### 2026-09-21-story-trainer-funding
+
+K connected to story funding:31recorded choices, six eventual native wins,5140earned, one faint/no blackouts. FullHP/PP Saffron entry at13420cash admits11550Silph supply plan. Story19/36/local15 and primary109/124unchanged.
+
+**Deviation:** Seven outer stage errors and two failed actor logs retained. Explicit K recoverable-faint contract, forced-menu settlement and full-PP healing required. Prior11200quote corrected to11550. No fit or acceptance gate advanced.
+
+**Next:** Execute the sole admitted Silph prerequisite from actual healed2938855c, verify stock-aware purchases, party/Lapras and chapter events. Chapter combat remains scripted; then expose real alternatives to Model141. No replay, DEVELOPMENT fit or publication.
+
+### 2026-09-21-earned-story-campaign
+
+Erika and Fuji complete:19/36story,15registrations,8280cash, four preserved healed members. One model goal choice; four blackouts cost9073.649targeted tests pass. Full game remains unfinished.
+
+**Deviation:** Retained-state DEVELOPMENT continuation, not fresh-run acceptance or learned battle qualification. No fit, item sale, source replay or stage promotion; primary save and Model141 unchanged.
+
+**Next:** Qualify no-sale funding/restocking and Fuchsia/Silph resource admission from exact healed stage025, then resume the requested story campaign.
+
+### 2026-09-21-saffron-retained-goal
+
+Existing Saffron goal completed from retained partial terminal:552actions,63183frames,200spent. Independently verified open guard and safe Saffron Center;17/36story,14registrations,10692cash.145targeted tests pass.
+
+**Deviation:** Maintenance, no stage promotion or new model choice. Original failed preparation and2300total goal cost preserved; source consumed, primary save and Model141 unchanged.
+
+**Next:** Qualify executable Fuji/Erika support from earned Saffron: relocation, party/move contracts and actual costs before a new model choice. No automatic launch, fit, replay or full run.
+
+### 2026-09-21-story-frontier-continuation
+
+Model141 chose Saffron among3costed options. Preparation verifier rejected Wartortle core after846actions and2100spent. Safe terminal retains Jolteon;16/36story,14registrations,10892cash. Independent audit and141targeted tests pass; goal failed.
+
+**Deviation:** No stage or milestone promotion. Preserve failed source, partial progress and costs. Future admission now rejects the incompatible preparation before spending; legacy verifier and main save unchanged.
+
+**Next:** Continue the already-selected Saffron goal from34086644with200-cost direct access; no new draw, gift/evolution replay, fit or full run.
+
+### 2026-09-21-story-branch-development
+
+One native Model141 story choice selected Hideout from two options and passed: 1061actions, +5481cash, Silph Scope, safe return.84targeted tests; weights and primary109/124save unchanged.
+
+**Deviation:** User approved story-versus-story because healing was unnecessary. Five battles remained scripted; near-even probabilities prove no strategic superiority. No stage or fresh-run exit changed.
+
+**Next:** Preflight the earned01fff089terminal for genuine story alternatives and truthful chapter costs. Keep native learned healing open; no source replay, fit, full run or publication.
+
+### 2026-09-21-story-authority-history
+
+Story artifacts audited: none current-graph compatible; early conductor is singleton-only. Source-specific Safari history now survives unrelated registrations.691targeted tests pass. Frozen-model diagnostics confirm history affects scores; synthetic critical healing remains safety-owned. No native gameplay, new fit or registration.
+
+**Deviation:** Engineering closeout only. Preserve existing milestone and final-gate counters; no learning or native qualification promotion.
+
+**Next:** Authenticate an unused bounded story/recovery context and test the resource-aware Model141 with genuine alternatives; distinguish safety overrides from learned healing. Preserve consumed trials, use isolated TRAIN only if native outcomes expose a learning gap; no full run or publication.
+
+### 2026-09-21-integrated-player
+
+7continuous native model decisions: 1verified success, 5normal unsuccessful searches and one retained search-limit stop; +1registration, 3000cash spent. No reset, teacher choice, code/model change or intervention. Every before/after save independently audited with zero input. Current 109/124,78specimens,11968cash; terminalbf603930.
+
+**Deviation:** User-approved short integrated-play gate closed, not full-player readiness. Historical29/29 checklist retained; no stage promotion, fit, full run, replay or final-gate change.
+
+**Next:** Audit and reuse the existing objective-ranker artifacts and story skills; qualify a short story/resource choice with genuine alternatives and a trained authenticated ranker. Do not rebuild the teacher or finish the development dex as a prerequisite. Train only an observed bottleneck; no full run or publication.
+
+### 2026-09-21-npc-exchange-learning
+
+Four new native teacher TRAIN outcomes and four distinct vectors admitted. One five-ridge selection rejected: best new-TRAIN error85.59%lower, old error+2.00699%exceeds2%. Zero adopted examples; Model141 unchanged.400targeted tests pass. Earned108/124,78specimens,14968cash.
+
+**Deviation:** Retention rejected; both heldout cases remain unopened. No new model, threshold relaxation, stage promotion, replay or DEVELOPMENT fitting. New lessons use one historical TRAIN opening, not independent roots.
+
+**Next:** Keep Model141 and the actual earned 1c42fd3d endpoint. Add prospectively declared native TRAIN examples of boxed-source preparation and transport costs, rather than repeat adjacent trades or tune this closed four-case fit. Preserve the four admitted lessons and all old retention rows. Do not use more paid searches to obtain a desired choice. No full run or publication.
+
+### 2026-09-21-npc-trade-bridge
+
+Default-off stationary NPC trades added. Two direct native trades and a recovered boxed PC/Cut/exchange chain pass;386targeted tests pass. One ordinary five-option earned draw selected Safari and failed safely after500spent:108/124,78specimens,15468cash. Model141 unchanged; no earned NPC registration or learning delta.
+
+**Deviation:** Preserved reporting, fixture and Cut failures and continued only unstarted cases or actual terminals. No replay, forced target, stage promotion or weakened guards. Recovered boxed chain is not an uninterrupted pass.
+
+**Next:** Continue from earned Fuchsia cbb877dc, whose action-free five-option menu includes the boxed Abra trade. Seek model-owned acquisition; no paid rerolls, DEVELOPMENT fitting or publication. NPC learner admission still needs a typed exchange contract.
+
+### 2026-09-21-gift-model-qualification
+
+Gift integration PASSED. Model141:141fitted/96successes/58economy-qualified; four authenticated teacher TRAIN outcomes retained. Old error+1.7267% below2%; heldout error80.82%lower. Ranked and selected Lapras from five real choices; native receipt verified.108/124,78specimens,15968cash.415targeted tests pass.
+
+**Deviation:** Full-player unit-weight teacher admission, not invented comparative choices. Fixed TRAIN-only tuning and unopened heldout; deterministic publication matched frozen weights. Earlier rejection preserved; no stage or final-run gate change.
+
+**Next:** Continue ordinary collection from earned Silph7F59d8ab24 with Model141; inspect actual prerequisites for16remaining registrations. Gift exhausted. No consumed replay, DEVELOPMENT fitting, forced target, battler refit, full run or publication.
+
+### 2026-09-21-gift-learning-result
+
+Six isolated gifts/departures pass; four teacher TRAIN outcomes fitted with137prior rows. Heldout error78.93%lower, but old error+2.1966% exceeds2%: candidate REJECTED.387targeted tests. Model137 and earned107/124 unchanged.
+
+**Deviation:** Candidate rejected: old-row error+2.1966% exceeds2%. Acquisition-only teacher context differs from ordinary registered-player context/reward normalization; no genuine mixed menu in these fixtures. No production admission or promotion.
+
+**Next:** Implement the ordinary registered-player TRAIN bridge with matching context/reward scope and authenticated teacher provenance, then a retention-qualified fit and genuinely mixed-menu qualification. Do not repeat verified gift mechanics, reopen v1/v2, fit DEVELOPMENT, force a gift or spend paid admissions until selected.
+
+### 2026-09-21-gift-native-qualification
+
+Native party/box gift receipt and corrected55-step approach independently pass. General inert-warp filter repaired;362targeted tests. Main save107/124,77specimens,15968cash and Model137 unchanged. Zero admitted rows/fits or model choices.
+
+**Deviation:** Gift section remains incomplete. The first curriculum approach failed and its schedule closed before fitting. A mechanics-only exact-terminal continuation acquired the gift; departure reached safe Saffron but failed exact arrival because the artificial fixture retained a guard. All failures preserved.
+
+**Next:** Reassess fixture coherence before further native input, then separately declare admissible acquisition TRAIN evidence and heldout/mixed-menu gates. No consumed replay, DEVELOPMENT fitting, forced target or automatic pilot promotion.
+
+### 2026-09-21-scripted-gift-menu
+
+Silph gift enters the five-choice menu;440targeted tests pass. Model137 ranked it last and chose Safari West:500spent,18encounters,0captures, safe automatic return. Native endpoint audit and five-choice reinspection pass.107/124,77specimens,15968cash.
+
+**Deviation:** Engineering/menu connection only: gift native execution remains unqualified. No new registration, fit or learned advantage. Preserve the failed choice rather than forcing a target or repeatedly sampling paid admissions.
+
+**Next:** Prospectively declare an isolated mechanics-only gift qualification, then identify admissible TRAIN evidence for scripted acquisition. No DEVELOPMENT fitting, earned-state replay, forced singleton or publication.
+
+### 2026-09-21-paid-safari-lifecycle
+
+Legacy North exit connected; one fresh Model137 choice searched West and returned automatically.19encounters, zero captures; failed outcome retained.107/124,77specimens,16468cash. Two native audits and next ordinary four-choice menu pass;509targeted tests.
+
+**Deviation:** Engineering lifecycle qualification, not rare-capture reliability, a new fit or a stage promotion. Explicit lifecycle option preserves legacy training probes. No reset, teacher target, authority expansion or publication.
+
+**Next:** Connect one authenticated NPC-trade or gift acquisition family to the ordinary multi-choice menu from earned de8c4e96. Verify physical prerequisites and native resource/registration changes; reuse existing mechanics where possible. No repeated Safari grinding, consumed replay, DEVELOPMENT fitting, battler refit, full run or publication.
+
+### 2026-09-21-two-earned-collection-sessions
+
+Four Model137 choices across two sessions: Dragonite55 earned after two partial failures, then a paid Safari failure.107/124,77specimens,16968cash. All four terminals audited;388targeted tests passed.
+
+**Deviation:** Outer budget expansion exposed a128-quantum work-size cap. Default unchanged; explicit512cap passed native Dragonite execution under unchanged wall/resource guards. Paid continuation is still operator-managed and not a generic parent; no promotion.
+
+**Next:** Admit exact paid-search terminal f9ee826e with original failure, reserve and remaining budgets intact; preserve24Safari balls/129steps without repayment or replay. Then expose one authenticated NPC-trade or gift family to real model choice. Dragonite is complete. No arbitrary growth, DEVELOPMENT fitting, battler refit, full run or publication.
+
+### 2026-09-21-earned-endpoint-connection
+
+Endpoint connected. Two Model137 choices and two deterministic storage operations: Dratini15→27 partial failure preserved, then Dragonair30 verified. Earned106/124,77specimens,17468cash;421 targeted tests passed.
+
+**Deviation:** Repaired inactive same-town Safari menu after a zero-input block. New paid gate walk was not selected in native play. DEVELOPMENT outcomes not fitted; no stage promotion.
+
+**Next:** Continue ordinary model-directed collection from the earned Dragonair terminal70b31fba:106/124 registrations,77specimens,17468cash. Inspect without input, then execute a bounded fresh choice with metered recovery/storage support. No consumed replays, forced Dragonite target, DEVELOPMENT fitting, experimental promotion, League prerequisite or publication.
+
+### 2026-09-21-safari-semantic-context
+
+Fixed prospective cost units;16new native TRAIN outcomes and one153-row experimental fit. Held-out candidate1/4captures versus Model137 0/4; old-row fitting error+5.42%. No promotion, main105/124unchanged.
+
+**Deviation:** V1 pilot cost scales were incompatible with recent registered rows; preserved but excluded its8rows from this successor. Context assistance is isolated, disclosed and excluded from legitimate funding/completion. No stage change.
+
+**Next:** Return to earned collection with Model137 and existing17468cash; inspect the current paid-session menu before bounded continuation. Do not keep refitting these consumed experiments.
+
+### 2026-09-21-safari-learning-pilot
+
+Pilot complete:8new native TRAIN outcomes, one145-row experimental fit and four held-out pairs. Both models4/4; candidate51.5%more frames. Model137 and105/124 preserved.
+
+**Deviation:** Exact-terminal recoveries retained initial failures and costs. Same-recipe fresh parents and correlated reset cases do not establish statistical independence. Candidate not promoted; no stage or final-gate change.
+
+**Next:** Diagnose TRAIN-only destination utility/cost calibration before a small semantically diverse curriculum. No consumed held-out reuse, candidate refit or broad setup factory.
+
+### 2026-09-20-safari-assisted-setup-pilot
+
+One short fresh setup passed opening and disclosed assistance but stopped at the lab doorway. Failure retained; exact-doorway correction ROM-free tested, not natively verified. Model137 and105/124 unchanged.
+
+**Deviation:** First-source stop condition fired before a model query or TRAIN recording.105targeted tests are engineering evidence, not learning; no stage or acceptance change.
+
+**Next:** Declare a bounded exact-terminal recovery without replaying the opening, then qualify assisted-origin native TRAIN recording and separate held-out supply before any batch or fit.
+
+### 2026-09-20-destination-training-preparation
+
+Local registered TRAIN batch fitting added; retained Model137 history authenticated.106targeted tests. Five catalog revisions yield8unclaimed TRAIN and5validation captures, but no verified independent Safari packet.0fits/gameplay.
+
+**Deviation:** The conditional two-session training estimate lacks established source prerequisites. No stage exits or learning counters changed; new data remain blocked rather than reclassifying DEVELOPMENT.
+
+**Next:** Seek bounded isolated teacher-assisted Safari setup authority; trace source ancestry/exposure and qualify local native TRAIN recording before collecting or fitting. No full-game factory, retired-source retry or publication.
+
+### 2026-09-20-safari-fishing-connection
+
+Safari route/interruption/fishing connected; one fresh Model137 goal completed through exact-state continuation and caught Dratini.105/124 registrations,77specimens,17468cash.406targeted tests;0fits.
+
+**Deviation:** Initial private telemetry serialization failed; endpoint retained and missing counts remain censored. Later intro-readiness failure repaired without replay or repayment. Stage exits unchanged; broad unattended continuation remains closed.
+
+**Next:** Astra High, Fast off: prepare eligible disjoint TRAIN/held-out destination-choice sources and audit local fit admission. No DEVELOPMENT fitting or replay. Plan one preparation session then one collection/fit/comparison session if sources exist; remaining19registrations are not prerequisites.
+
+### 2026-09-20-safari-area-choice
+
+Four real Safari area alternatives exposed; model selected one and caught Kangaskhan.104/124 registrations,76specimens,17468cash. Two model choices, one success, one fishing failure, zero fits.1398actions/149664frames including safe defensive escape.
+
+**Deviation:** Ordinary fishing was falsely offered within an active Safari session and failed at incompatible battle controls. Failed state preserved and safely settled with all resources retained.295targeted tests passed; no replay or ordinary-fishing Safari qualification.
+
+**Next:** Astra High, Fast off: bounded Safari-aware active-session continuation from cd3840bb with29balls/129steps. Authenticate selected-goal and reserve lineage, retain failure costs; no rewind, hidden repayment, fit or full run. Reassess45-90minutes.
+
+### 2026-09-20-rhydon-settlement
+
+Rhydon completed after exact-state defensive escape. Red 103/124 registrations, 75 specimens, 17968 cash. Rhyhorn level35 to42; one original model goal completed, no new query or fit.
+
+**Deviation:** Recovery and continuation operator-dispatched; all earlier costs retained. 350 targeted tests passed. Native completion preceded the reserve threshold, so forced reserve crossing remains ROM-free tested only. No broad automatic restart or battle promotion.
+
+**Next:** Astra Medium, Fast off: inspect the safe earned menu, then up to3model collection choices with genuine alternatives. No teacher target substitution, League prerequisite, fit, replay or publication. Reassess45–90minutes.
+
+### 2026-09-20-post-seaking-collection
+
+Exeggutor registered; Rhyhorn25to35 retained before action-budget exhaustion.102/124registrations,75specimens,17968cash;2model choices,1success,1incomplete goal,0fits.30000actions/2541318frames.
+
+**Deviation:** One pre-choice menu failure repaired generically;211targeted tests and native zero-input inspection passed. Operator process restart retained all earlier state and costs. Latest terminal is mid-wild-battle, not safe for ordinary restart.
+
+**Next:** Astra High, Fast off: settle exact retained battle, then qualify a long-evolution settlement reserve. No rewind, DEVELOPMENT fit, League prerequisite or publication. Reassess45–90minutes.
+
+### 2026-09-20-celadon-collection
+
+Three consecutive model goals succeeded:Arcanine,Starmie,Seaking.101/124registrations,75specimens,20068cash.0failures/operator recovery/fits;20119actions/1766645frames.
+
+**Deviation:** Existing deterministic navigation/storage and heuristic wild-battle execution remain. One earned development chain, not fresh-run or independent generalization.
+
+**Next:** Continue up to3model-selected collection goals from the exact earned map22 endpoint and20068cash.23native registrations remain; no League prerequisite, reset or fit. Reassess45-90minutes and retain level-evolution throughput costs.
+
+### 2026-09-20-recovery-connection-and-collection
+
+Shared-budget League recovery/earning composition and exact item replacement accounting implemented;422targeted tests pass. Two model collection choices added Poliwrath:98/124registrations,75specimens,24268cash in Celadon. No fits.
+
+**Deviation:** No native League attempt or profitability promotion. Safari search and all three failed Scyther capture attempts retained; two operator-started exact-state continuations are not unattended restart qualification. Total2600cash spent, zero earned.
+
+**Next:** Astra High, Fast off: continue existing-resource collection from the earned Celadon endpoint, up to three bounded goals and reassess45–90minutes.26native registrations remain. No League prerequisite or battle-trainer refit.
+
+### 2026-09-20-recovery-integration
+
+Opt-in K escape selected, survived and dealt damage in one TRAIN pair; both arms won.8model decisions/2prescribed openings. Native Revive0to61HP and Potion61to81HP verified.358targeted tests;0fits and0newregistrations.
+
+**Deviation:** Disclosed assisted TRAIN item fixture and two retained setup/menu failures; exact-state continuations only. No independent generalization, legitimate fixture income or main-save change. League intermission is a tested component, not integrated live authority.
+
+**Next:** Astra High, Fast off: shared-budget recovery/earning intermission with exact item and replacement-cost accounting, followed by one next-trainer composition. League0/2clean profitable cycles; reassess60–90minutes.
+
+### 2026-09-20-league-skill-learning
+
+One TRAIN capture,30branches/five timing offsets, yielded candidate L with69.1%lower composed TRAIN regret and44retention checks passed over318old captures. Reserved K/L games both lost in6decisions/3faints.426targeted tests passed; no broad win or League qualification.
+
+**Deviation:** Original eight-case plan closed incomplete; reporting and minimum-five-offset errors retained, completed branches reused without replay. One-case completion stayed within original96branch ceiling. Three prior immune attacks were forced by the repeat-switch guard; new bounded opt-in recovery is disabled by default and not live-qualified. No DEVELOPMENT fit or main-save change.
+
+**Next:** Astra High, Fast off: qualify one-extra immune switch recovery in a short prospectively declared TRAIN scenario, then expose ordinary between-battle healing choices. Keep K/L frozen; no consumed-case replay, blind League repeat or publication. Reassess60–90minutes.
+
+### 2026-09-20-k-league-recovery
+
+152new K choices demonstrated Agatha faint recovery through Champion and Hall of Fame. Native Continue/free healing verified. Repeat lost Champion; blackout penalty26868, cycle net-3504. Final26868cash,97/124registrations,75specimens.0clean profitable cycles; no fit.
+
+**Deviation:** Pete prospectively approved recoverable faints. Historical failed cycles stay failed. All-party loss ended the probe; ordinary blackout settled without reset. Deterministic recovery is not learned strategy; all costs retained.
+
+**Next:** Astra High, Fast off: diagnose immunity handling, switch survival and between-battle recovery; declare one bounded admissible TRAIN contrast with retention/transfer gates. Reassess60–90minutes. No DEVELOPMENT fitting or blind League repeat.
+
+### 2026-09-20-k-league-qualification
+
+League DEVELOPMENT qualification failed:31K choices,11286actual cash gained, but an unowned Surf disqualified the cycle and Agatha's Goldeen faint stopped the unchanged guard.97/124registrations,75specimens,11859cash;0complete clean cycles. No fit or default promotion.
+
+**Deviation:** Operator-selected qualification used deterministic travel/lead preparation. Controller spillover repaired prospectively; all failures retained. No reset, teacher battle takeover, or changed faint criterion.
+
+**Next:** User decision: retain strict no-faints or approve prospective profit-after-recovery qualification. Gameplay stopped at exact Agatha state; still need postgame recovery, two clean profitable cycles and model-selected League income. Astra High, Fast off.
+
+### 2026-09-20-k-player-integration
+
+Qualified K ordinary integration and both ledge approaches earned875cash; the model chose healing and a500-cost Safari acquisition. A same-paid-session continuation caught Rhyhorn:97/124registrations,75specimens,573cash. Frozen weights; all failed searches/evolution budgets retained. Unattended recovery remains open.
+
+**Deviation:** Explicit K scope only for supported ordinary funding. Operator-initiated continuations preserved exact earned states and no second fee; no League/wild promotion, fit or fresh-run gate change.
+
+**Next:** Package paid-session continuation in normal restart, reusing403steps/28balls; then renewable League partial-prefix income and27remaining registrations. Astra High, Fast off.
+
+### 2026-09-20-natural-six-qualification
+
+Natural six-member execution gate passed: J/K4wins each, K actual late-slot use on both origins,210model choices and841verified events. K99vsJ111decisions and30vs41PP, but16vs15faints; no automatic production promotion.
+
+**Deviation:** Both originally declared roots reached six through ordinary resources;3700continued and3900started once. Same opponent roster across roots. Before queries, budgets tightened to existing80decision/120000frame limits. Post-battle null-slot reporting error corrected read-only; outcomes and failures immutable.
+
+**Next:** Astra High, Fast off: one90minute explicit supported K integration and ledge-approach packet, then one model-selected earned-and-spent funding opportunity. Preserve no-faints/resource guards; no replay, old-bank refit or silent League promotion.
+
+### 2026-09-20-natural-k-continuation
+
+Exact-state recovery reached one natural K victory:28model decisions,360cash, Wartortle evolution; one faint and repeated weak-reserve switching.113event log entries verified. Three retained stages cost54204frames/603macros, with no rewind.
+
+**Deviation:** Six balls could not produce six members after the first catch cost four; used the smaller-party fallback declared before input. No six-member or no-faints funding pass. Earlier species107/Geodude prose corrected to Zubat. Future terminal HP scorer fixed without rewriting this log or fitting outcomes.
+
+**Next:** Bound ordinary recovery/resupply from the earned endpoint and actual1201cash before remaining natural full-party qualification. Keep J/K frozen and all acceptance gates unchanged; no opening replay or automatic3900dispatch.
+
+### 2026-09-20-natural-six-preparation-stop
+
+Natural3700setup stopped before six-member preparation: wild Geodude interrupted optional TM01 pickup facing. Exact endpoint retained after440150frames/6073macros;3900unstarted. Zero model queries or learning;106targeted tests passed.
+
+**Deviation:** Declared setup stop honored. No route repair, replay, replacement origin or main-save mutation. Partial natural state authenticated read-only against ten prior origins; not a completed trainer source.
+
+**Next:** Request separately bounded exact-state continuation that bypasses the optional TM detour using observed mechanics. Keep K frozen; no repeat opening or automatic3900dispatch. Natural party qualification, funding and final Red gates unchanged.
+
+### 2026-09-20-battler-k-control-result
+
+Canonical target reconciliation enabled one accepted control-head update K:32.64%lower composed TRAIN regret,20retention checks passed. Paired whole-battle TRAIN test: J/K8wins each, faints11/5, decisions180/165, PP101/92, observed HP loss1419/1437;345model-owned choices with no invalid actions.
+
+**Deviation:** Only16exact-capture targets replaced;302unaffected contexts protected separately. Eight non-fitted variations still share four TRAIN origins, not independent natural qualification. Production scope, main save, stage and final-run gates unchanged.
+
+**Next:** Freeze K. One60–90minute bounded fresh natural six-member source/qualification packet, then scope-qualified funding integration and renewable League income. No repeat fits or diagnostics on consumed inputs.
+
+### 2026-09-20-larger-party-j-comparison
+
+485TRAIN branches on16existing five-member captures:387wins/98losses,10789J continuation decisions, zero invalid actions. One switch/control fit rejected; both heads selected epoch0 and candidate is byte-identical to J.
+
+**Deviation:** Runner three-timing mistake corrected by explicit five-timing amendment;24completed branches retained without replay.16new policy-conditioned measurements, no new physical contexts, accepted weights or stage/authority changes.
+
+**Next:** Audit old/current target compatibility on16overlaps; propose canonical targets and unchanged unrelated retention before any separately frozen successor. No new source bank, broad redesign, replay or second fit in this completed packet. Then unused natural full-party qualification and funding.
+
+### 2026-09-20-six-party-assisted-result
+
+Frozen J completed six assisted4/5/6-member battles across two origins: six wins,107 decisions,55 confirmed switches,14 forced replacements and no invalid actions.128 targeted ROM-free tests pass.
+
+**Deviation:** Actual held-out execution result, not production promotion or natural qualification.14 own faints and433HP lost during voluntary switches expose cost. Both setup failures and the pre-inference enemy reserve PP amendment retained; no source/model replay or changed final gate.
+
+**Next:** One bounded separate-TRAIN switching-cost comparison if needed, retaining J; then prospectively frozen unused natural full-party workload, ordinary earning/spending and renewable League income. No fitting/replaying these DEVELOPMENT cases or broad redesign.
+
+### 2026-09-20-six-party-assisted-preparation
+
+Separate assisted DEVELOPMENT interface and fixed six-case pilot implemented. First fresh source retained in31284frames; legacy optional-parent metadata bug stopped setup before construction/inference, then was corrected without replay.
+
+**Deviation:** User approved controlled held-out construction and requested the Red roadmap. Assisted sources are not natural qualification; all learning counters, stage criteria and five final-run acceptance gates remain unchanged.
+
+**Next:** Request exact-state continuation using retained boot3300 and the original unstarted boot3500, with unchanged conditions. Then assisted pilot, natural full-party qualification, earned-and-spent funding, renewable League income,28registrations, story/recovery coverage and fresh Red exam.
+
+### 2026-09-20-six-party-budget-integration
+
+Six-slot checks and action/time admission limits verified; compound cleanup diagnostics corrected. 610 ROM-free tests and 14 independent cases pass. No gameplay or learning delta.
+
+**Deviation:** Foreground correction authorized after overnight rejection. All milestone criteria and learning counters unchanged; session metadata only.
+
+**Next:** Authenticate unused DEVELOPMENT origins and bind the six-episode pilot with no retry and global stop. Six-party cartridge performance and profitable League income remain unqualified.
+
+### 2026-09-20-observed-resource-departure
+
+Read-only actual-runtime and projected exit/Fly probes falsified departure-only integration. Local ledge support reveals two diagnostic trainer approaches; no executable funding offer or learned outcome.
+
+**Deviation:** No production edits, gameplay, learning, registration or authority delta. Preserve main six-member party and stop at battle-scope boundary. Session metadata only; no milestone changes.
+
+**Next:** Request direction for bounded six-member learned-battle qualification and explicit binding, then ledge-safe funding composition. League partial-prefix and renewable earnings remain separately unqualified.
+
+### 2026-09-19-safari-session-lifecycle-correction
+
+Safari lifecycle and metered approach corrected;613 targeted ROM-free tests and one isolated assisted cartridge admission pass. Exact500 fee,30 balls/500 steps; main save unchanged.
+
+**Deviation:** Engineering qualification only; no learner milestone, registration, authority or full-run gate movement. Retain first no-input graph-requirement rejection. Session metadata only.
+
+**Next:** Astra High: qualify generic observed indoor resource departure from the main gate and inspect executable earning/collection alternatives. Preserve J party scope; qualify the partial League event prefix separately. 45-90 minutes; no gate refit, full run or Sol substitution.
+
+### 2026-09-19-safari-gate-cartridge-check
+
+Read-only cartridge qualification stopped: inactive gate retains28 balls/473 steps and is rejected by the counter-only session predicate. Main bytes unchanged; no money override or entry attempted.
+
+**Deviation:** No learner milestone, gameplay, refit or full-run gate changed. Only required session metadata is refreshed. Retain failed qualification and corrected diagnostic logger evidence.
+
+**Next:** Astra High: correct inactive Safari session semantics and preserve residual counters across approach, then declare one assisted mechanics qualification. Keep the main save unchanged; generic indoor funding departure and partial League-reset support remain separate. 45-60 minutes; no refit, full run or Sol substitution.
+
+### 2026-09-19-safari-gate-integration
+
+Codex completed the partial Flash gate-entry implementation locally.570 ROM-free tests pass; two greeting regressions reject the deliberately restored facing defect.
+
+**Deviation:** Engineering only; no learner or collection delta, milestone movement, full-run promotion or GitHub publication. Close the Flash experiment; savings unmeasured. Session metadata only.
+
+**Next:** Codex: qualify the local gate observation/entry on authenticated private development inputs, keeping the main save unchanged until a legitimate resource choice is executable; 30-60 minutes. No repeated ROM-free refit, six-member J bypass or Flash assignment.
+
+### 2026-09-19-flash-safari-funding-integration
+
+Integrated the reviewed Flash paid-admission funding quote locally. Expanded ROM-free verification passed280 tests; disabling real eligibility caused10 expected failures. Source registry refreshed.
+
+**Deviation:** Engineering only: no gameplay, fit, learning or collection delta; stage criteria and full-run gates unchanged. Roadmap metadata synchronized solely for the existing documentation consistency check.
+
+**Next:** One isolated Flash3.8High unpaid Safari gate-entry implementation draft,60-90minutes, reusing existing paid admission, followed by Codex audit. No party-size workaround or live run.
 
 ### 2026-09-19-battle-lifecycle-continuation
 

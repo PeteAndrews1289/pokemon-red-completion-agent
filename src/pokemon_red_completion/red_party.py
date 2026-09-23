@@ -15,6 +15,7 @@ future edit to either cannot silently drift.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from hashlib import sha256
 
 from .observation import PARTY_LIMIT, RamAddress, RawGameState, ReadOnlyMemory
 from .party import (
@@ -35,6 +36,8 @@ HP_OFFSET = 1
 STATUS_OFFSET = 4
 MOVES_OFFSET = 8
 EXPERIENCE_OFFSET = 14
+ORIGINAL_TRAINER_OFFSET = 12
+DETERMINANT_VALUES_OFFSET = 27
 PP_OFFSET = 29
 LEVEL_OFFSET = 33
 MAX_HP_OFFSET = 34
@@ -174,6 +177,29 @@ class PokemonRedPartyReader:
     """Projects Red's party memory into the game-neutral contract."""
 
     memory: ReadOnlyMemory
+
+    def preparation_specimen_refs(self) -> tuple[str, ...]:
+        """Session-local identity bindings, stable across swaps and evolution.
+
+        Red has no unique specimen ID. OT ID plus DVs is only a fingerprint,
+        not proof of global uniqueness. Reject collisions before preparation;
+        the closed block also forbids catches, trades, storage and replacement.
+        These private bindings must never become model features.
+        """
+        count = self.memory.read_u8(RamAddress.PARTY_COUNT)
+        if not 1 <= count <= PARTY_LIMIT:
+            raise PartyReadError("preparation party count is invalid")
+        refs = tuple(
+            "red-preparation:" + sha256(bytes(
+                self._read_u8(index, offset)
+                for offset in (ORIGINAL_TRAINER_OFFSET, ORIGINAL_TRAINER_OFFSET + 1,
+                               DETERMINANT_VALUES_OFFSET, DETERMINANT_VALUES_OFFSET + 1)
+            )).hexdigest()
+            for index in range(count)
+        )
+        if len(set(refs)) != count:
+            raise PartyReadError("ambiguous preparation specimen fingerprints")
+        return refs
 
     def _read_u8(self, index: int, offset: int) -> int:
         return self.memory.read_u8(member_field_address(index, offset))

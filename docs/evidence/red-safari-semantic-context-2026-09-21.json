@@ -1,0 +1,231 @@
+{
+  "schema": "pokemon.red.safari-semantic-context-result.v2",
+  "session_id": "2026-09-21-safari-semantic-context",
+  "status": "completed_experimental_not_promoted",
+  "source_commit": "a60664481a70ebf31a76745656372bf23c49cd2f",
+  "diagnosis": {
+    "v1_train_unique_menus": 1,
+    "v1_candidates_vary_only_travel": true,
+    "v1_action_frame_cost_scale_relative_to_recent_registered_rows": 10,
+    "v1_success_prediction_center": 0.7867217772906792,
+    "v1_success_prediction_west": 0.9308411604258473,
+    "interpretation": "Travel-success confounding and incompatible cost scales; utility weights unchanged. Diagnosis used TRAIN only."
+  },
+  "changes": {
+    "episode_schema": "pokemon.red.assisted-safari-pilot-episode.v2",
+    "action_learning_denominator": 30000,
+    "frame_learning_denominator": 3000000,
+    "execution_action_ceiling": 3000,
+    "execution_frame_ceiling": 300000,
+    "teacher_context_only": "Disclosed owned/seen additions and cash assignment on isolated gate sources, never actor actions or earned completion/income.",
+    "v1_records_and_candidate_preserved": true,
+    "v1_rows_excluded_from_successor_fit": 8,
+    "prior_137_rows_unchanged": true
+  },
+  "artifacts": {
+    "plan.json": "c369ed7628a963d6327d4089df3ddfe5887533f1d965e6c461370cc32d25266f",
+    "fit-claim.json": "fd3a311a1465430c2f01f2fe5484eac14857f3a80a8e10671aa095681a577371",
+    "fit.json": "27172a727cbfa5f28896a708c5c25d8eeea425451f038f0f2090484e57042683",
+    "candidate.json": "d347dc87d5759114e579bb94199b092205c20f153bf8dfe51b3871f74b070989",
+    "summary.json": "bb8b351785be9528168c4f5758b9d4e17aa45d63424672fee41e4e4d45045d6c"
+  },
+  "training": {
+    "scheduled": 16,
+    "settled": 16,
+    "censored": 0,
+    "successes": 6,
+    "failed_searches": 10,
+    "contexts": 4,
+    "fresh_parent_groups": 2,
+    "variants_correlated": true,
+    "frames": 902760,
+    "actions": 7330,
+    "balls_used": 46,
+    "unique_terminals": 14,
+    "cash_spent": 8000
+  },
+  "fit": {
+    "candidate_model_sha256": "2be7b0ccf0f967985cf8ab9bb97ecc6d7015788b6d864c3373ccd132429dbba0",
+    "examples": 153,
+    "successes": 98,
+    "retained_examples": 137,
+    "economy_examples_unchanged": 58,
+    "updates": 1,
+    "new_train_mse_baseline": 0.05490247276640507,
+    "new_train_mse_candidate": 0.01755005019439848,
+    "new_train_mse_relative_reduction": 0.6803413524001165,
+    "old_train_mse_baseline": 0.012485698579722444,
+    "old_train_mse_candidate": 0.013162809287068844,
+    "old_train_mse_relative_increase": 0.05423090290246724,
+    "training_error_not_behavioral_retention": true,
+    "development_rows_fitted": 0
+  },
+  "held_out": {
+    "paired_cases": 4,
+    "other_fresh_parents": 2,
+    "semantically_unfitted_contexts": 2,
+    "baseline": {
+      "actions": 2242,
+      "balls_used": 0,
+      "censored": 0,
+      "frames": 277944,
+      "outcomes": [
+        {
+          "actions": 304,
+          "balls_used": 0,
+          "boot": 5300,
+          "context": 1,
+          "error": null,
+          "frames": 36168,
+          "manifest_sha256": "5cfc92028e1464d44fdc84ad4802efaec90dfa46309a62e8cd8325f539d050e6",
+          "money": 300,
+          "selected": 1,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "810eea0cf7e8a6403026915e2803969242a0b80e6b2188af9a5fe02ac64e1983"
+        },
+        {
+          "actions": 702,
+          "balls_used": 0,
+          "boot": 5300,
+          "context": 2,
+          "error": null,
+          "frames": 87624,
+          "manifest_sha256": "ad1381eee903e0fe0d359506ad3596aee299613f5dd3909a3fbc17b3955decdf",
+          "money": 1700,
+          "selected": 3,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "68d6252e734a12bd4727880cce3f20f1e58b2a3b0127024fb5365daf2aae8376"
+        },
+        {
+          "actions": 510,
+          "balls_used": 0,
+          "boot": 5500,
+          "context": 1,
+          "error": null,
+          "frames": 62820,
+          "manifest_sha256": "462da00499cc86a43bbf0d65d5e893b1e5f4237866fdc6da5e36897b7d3f3122",
+          "money": 300,
+          "selected": 2,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "a8590fce191c412a24209e9f22c81e1264e057921a80d417952cd2b9fc598e60"
+        },
+        {
+          "actions": 726,
+          "balls_used": 0,
+          "boot": 5500,
+          "context": 2,
+          "error": null,
+          "frames": 91332,
+          "manifest_sha256": "b070827f8ec0c50a0078d237cab870d25f06c435b3ebcaf336a715f0e8035892",
+          "money": 1700,
+          "selected": 3,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "a2f6a2ff694cbe6ad6792c52ad95f28a78a94bce91aaaa2146686316a0bc391c"
+        }
+      ],
+      "successes": 0
+    },
+    "candidate": {
+      "actions": 2532,
+      "balls_used": 4,
+      "censored": 0,
+      "frames": 317304,
+      "outcomes": [
+        {
+          "actions": 594,
+          "balls_used": 4,
+          "boot": 5300,
+          "context": 1,
+          "error": null,
+          "frames": 75528,
+          "manifest_sha256": "ae5190da2c3faedb4f46c79f189cd0ee521e9d46a16774c9e2f4a14e1781dcb8",
+          "money": 300,
+          "selected": 0,
+          "settled": true,
+          "success": true,
+          "terminal_sha256": "17d0bc3e746ea6405198f039db788d40e10b3deca78104e80f3aef1db2dab69e"
+        },
+        {
+          "actions": 702,
+          "balls_used": 0,
+          "boot": 5300,
+          "context": 2,
+          "error": null,
+          "frames": 87624,
+          "manifest_sha256": "1c8ac525c63426295a333ae4dc1eef0f687ea56acdf99610c0d07d39afa88544",
+          "money": 1700,
+          "selected": 3,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "68d6252e734a12bd4727880cce3f20f1e58b2a3b0127024fb5365daf2aae8376"
+        },
+        {
+          "actions": 510,
+          "balls_used": 0,
+          "boot": 5500,
+          "context": 1,
+          "error": null,
+          "frames": 62820,
+          "manifest_sha256": "8fddbd54e95d730f0b944db14599f218b5aee57349f4f762afb6094e5c46609f",
+          "money": 300,
+          "selected": 2,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "a8590fce191c412a24209e9f22c81e1264e057921a80d417952cd2b9fc598e60"
+        },
+        {
+          "actions": 726,
+          "balls_used": 0,
+          "boot": 5500,
+          "context": 2,
+          "error": null,
+          "frames": 91332,
+          "manifest_sha256": "0e78f893b6bb3d821e6c38e808990f1f579cbfe0d86e5fe2792463c74a88bfa2",
+          "money": 1700,
+          "selected": 3,
+          "settled": true,
+          "success": false,
+          "terminal_sha256": "a2f6a2ff694cbe6ad6792c52ad95f28a78a94bce91aaaa2146686316a0bc391c"
+        }
+      ],
+      "successes": 1
+    },
+    "cash_spent_per_arm": 2000,
+    "changed_choice_pairs": 1,
+    "statistical_superiority_claim": false,
+    "independence_claim": false,
+    "cross_game_transfer_claim": false
+  },
+  "failures": {
+    "preinput_schedule_construction": "Wrong model-record attribute prevented plan creation; follow-on prepare stopped on missing plan. Empty directory retained with failure receipt; zero source claims, frames or model queries. Corrected before schedule freeze.",
+    "native_harness_failures": 0,
+    "all_failed_searches_retained": true,
+    "post_evaluation_refits": 0
+  },
+  "protected": {
+    "earned_state_sha256": "31d3cc4ebb21745c36a9504121412c9358c39f54b46508117c11ffd94d964a65",
+    "model137_record_sha256": "af817d4e583000711cffc7e409d6d43642de7dcc6446a6ed87af3bede91f402f",
+    "rehash_unchanged": true,
+    "registrations": 105,
+    "target": 124,
+    "registration_delta": 0,
+    "cash": 17468,
+    "specimens": 77,
+    "production_examples": 137,
+    "production_successes": 92,
+    "battle_models_unchanged": true
+  },
+  "decision": "Retain153-row candidate experimentally: one observed held-out capture gain, insufficient broad qualification and5.42%higher old-row fitting error. No replacement of Model137. Close this batch; next resume earned collection with existing resources under Model137, keeping experimental weights isolated.",
+  "verification": {
+    "targeted_code_tests": 155,
+    "related_learner_regressions": 114,
+    "full_suite": false,
+    "gameplay_running": false,
+    "publication": false,
+    "external_agents": false
+  }
+}

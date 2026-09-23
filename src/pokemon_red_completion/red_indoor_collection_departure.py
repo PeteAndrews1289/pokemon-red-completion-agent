@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import TYPE_CHECKING
 
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
 from pokemon_red_completion.goal_manager import (
     GoalUnavailableReason,
 )
@@ -31,7 +32,7 @@ from pokemon_red_completion.red_living_dex_setup_source import (
 from pokemon_red_completion.red_resource_goal_router import (
     _MAX_ROUTE_SCRIPTED_DIALOGUES,
     _ROUTE_LIMITS,
-    _walking_plan,
+    _supported_plan,
 )
 from pokemon_red_completion.red_routed_recovery import (
     guarded_collection_route_handler,
@@ -43,8 +44,10 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedSemanticTransportRoute,
 )
 from pokemon_red_completion.red_safari_exit import (
+    RedSafariDepartureInterruptionHandler,
     RedSafariExitDialogueHandler,
     normalize_active_safari_exit_plan,
+    safari_departure_within_steps,
 )
 from pokemon_red_completion.route_executor import InterruptionHandler, TraversalObserver
 from pokemon_red_completion.route_plan import RoutePlanningError
@@ -117,8 +120,23 @@ def bind_indoor_collection_departure(
     ):
         return None
 
+    allow_surf = (
+        getattr(runtime, "safari_departure_surf", False) is True
+        and reader.read_safari_session_state().in_safari_zone
+        and "move:surf" in start.capabilities
+    )
+
+    def executable_start(snapshot):
+        return replace(snapshot, capabilities=frozenset(
+            c for c in snapshot.capabilities
+            if not c.startswith("move:") or (allow_surf and c == "move:surf")
+        ))
+
     try:
-        plan = router.world.plan_feasible_to_map(start, start.last_outside_map)
+        # Advertise only wired actions: walking by default, plus explicitly
+        # opted-in live Surf for a timed Safari departure. Cut stays excluded.
+        walking_start = executable_start(start)
+        plan = router.world.plan_feasible_to_map(walking_start, start.last_outside_map)
     except RoutePlanningError:
         return None
 
@@ -128,12 +146,15 @@ def bind_indoor_collection_departure(
 
     if (
         not plan.steps
-        or not _walking_plan(plan)
+        or not _supported_plan(plan, allow_surf=allow_surf)
         or plan.terminal_map != start.last_outside_map
         or not (0 <= plan.terminal_map <= 0x24)
         or plan.terminal_map == 0x0B
         or (plan.terminal_mode is not None and plan.terminal_mode != "land")
     ):
+        return None
+
+    if safari_exit_plan is not None and not safari_departure_within_steps(plan, reader):
         return None
 
     terminal_y, terminal_x = plan.terminal_at
@@ -183,12 +204,19 @@ def bind_indoor_collection_departure(
     )
     if safari_exit_plan is not None:
         route_handler = RedSafariExitDialogueHandler(actions, reader, route_handler)
+        route_handler = RedSafariDepartureInterruptionHandler(
+            runtime.emulator, actions, reader, route_handler
+        )
 
     def replan(request):
-        replacement = router._replan(request)
+        walking_request = replace(request, current=executable_start(request.current))
+        replacement = router._replan(walking_request, allow_surf=allow_surf)
         if safari_exit_plan is None:
             return replacement
-        return normalize_active_safari_exit_plan(replacement) or replacement
+        replacement = normalize_active_safari_exit_plan(replacement) or replacement
+        if not safari_departure_within_steps(replacement, reader):
+            raise RoutedSemanticGoalError("Safari exit exceeds remaining paid steps")
+        return replacement
 
     transport = RedSemanticTransportRoute(
         binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
@@ -209,6 +237,7 @@ def bind_indoor_collection_departure(
             route_handler,
         ),
         replanner=replan,
+        field_actions=Gen1FieldMovePort(actions, reader, runtime.emulator) if allow_surf else None,
         route_limits=_ROUTE_LIMITS,
         prepare_departure=lambda: prepare_center_departure(actions, reader),
     )

@@ -61,10 +61,13 @@ def test_first_choice_owns_initial_action_and_then_defers_to_fresh_continuation(
 
 
 @pytest.mark.parametrize("budget", [8, 160])
-def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch, budget):
+@pytest.mark.parametrize("bounded", [False, True])
+def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch, budget, bounded):
     capture = _capture(tmp_path)
     policies = []
     retained = []
+    executor = object() if bounded else None
+    guard = (lambda _raw: None) if bounded else None
 
     def policy_factory():
         policy = Continuation()
@@ -72,7 +75,10 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         return policy
 
     def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns,
-                 event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
+                 event_sink=None, public_species_base_stats=None, opening_idle_frames=0,
+                 action_executor=None, decision_guard=None):
+        assert action_executor is executor
+        assert decision_guard is guard
         assert max_decisions == budget
         assert max_player_turns == 2
         assert session_factory() is None
@@ -97,6 +103,8 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         session_factory=lambda: None,
         continuation_policy_factory=policy_factory,
         max_decisions=budget,
+        action_executor=executor,
+        decision_guard=guard,
         first_choices=(
             counterfactual.TrainerPracticeFirstChoice(BattleAction.move(1)),
             counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)),
@@ -141,7 +149,8 @@ def test_failed_branch_retains_selected_choice_and_typed_failure(tmp_path, monke
     retained = []
 
     def crash(_capture, *, session_factory, policy, max_decisions, max_player_turns,
-              event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
+              event_sink=None, public_species_base_stats=None, opening_idle_frames=0,
+              action_executor=None, decision_guard=None):
         assert event_sink is not None
         event_sink({"event": "episode_started"})
         event_sink({"event": "decision_started"})

@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from functools import partial
 from typing import TYPE_CHECKING
 
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
@@ -26,6 +28,12 @@ from pokemon_red_completion.red_goal_skills import (
     prepare_center_departure,
 )
 from pokemon_red_completion.red_pc_storage import face_pc_boundary
+from pokemon_red_completion.red_safari_exit import (
+    RedSafariDepartureInterruptionHandler,
+    RedSafariExitDialogueHandler,
+    normalize_active_safari_exit_plan,
+    safari_departure_within_steps,
+)
 from pokemon_red_completion.route_executor import InterruptionHandler, execute_route
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
@@ -72,18 +80,49 @@ def bind_routed_storage_relief(
     target = min(targets, key=lambda index: (initial_counts[index], index))
     target_room = collection.box_capacity - initial_counts[target]
 
-    from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS, _walking_plan
+    from pokemon_red_completion.red_resource_goal_router import (
+        _ROUTE_LIMITS,
+        _supported_plan,
+        _walking_plan,
+        collection_field_capabilities,
+    )
 
     runtime = router.runtime
-    traversal = Gen1TraversalObserver(runtime.reader)
+    surf_requested = getattr(runtime, "safari_departure_surf", False) is True
+    active_safari = (
+        runtime.reader.read_safari_session_state().in_safari_zone if surf_requested else False
+    )
+    traversal = (
+        Gen1TraversalObserver(runtime.reader)
+        if not active_safari
+        else Gen1TraversalObserver(
+            runtime.reader,
+            capability_projector=(
+                partial(
+                    collection_field_capabilities,
+                    runtime.emulator,
+                    allow_cut=False,
+                    allow_surf=True,
+                )
+                if surf_requested
+                else None
+            ),
+        )
+    )
     start = traversal.observe()
+    allow_surf = active_safari and "move:surf" in start.capabilities
     routes: list[RoutePlan] = []
     for center in sorted(_POKEMON_CENTER_MAPS):
         try:
             route = router.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
         except RoutePlanningError:
             continue
-        if _walking_plan(route):
+        if active_safari:
+            normalized = normalize_active_safari_exit_plan(route)
+            if normalized is None or not safari_departure_within_steps(normalized, runtime.reader):
+                continue
+            route = normalized
+        if _supported_plan(route, allow_surf=True) if allow_surf else _walking_plan(route):
             routes.append(route)
     if not routes:
         return bindings
@@ -94,6 +133,14 @@ def bind_routed_storage_relief(
     initial_money = observation.raw.player_money
     executed: list[tuple[ExecutableGoalBinding, GoalExecutionReport]] = []
     claimed = False
+
+    def replan(request):
+        replacement = router._replan(request, allow_surf=allow_surf)
+        if active_safari:
+            replacement = normalize_active_safari_exit_plan(replacement) or replacement
+            if not safari_departure_within_steps(replacement, runtime.reader):
+                raise RedRoutedStorageReliefError("Safari exit exceeds remaining paid steps")
+        return replacement
 
     def execute() -> GoalExecutionReport:
         nonlocal claimed
@@ -135,12 +182,24 @@ def bind_routed_storage_relief(
                 runtime.reader,
                 route_name="guarded standalone storage PC access",
             )
+        if active_safari:
+            interruption_handler = RedSafariDepartureInterruptionHandler(
+                runtime.emulator,
+                router.actions,
+                runtime.reader,
+                RedSafariExitDialogueHandler(router.actions, runtime.reader, interruption_handler),
+            )
+        route_actions = (
+            Gen1FieldMovePort(router.actions, runtime.reader, runtime.emulator)
+            if allow_surf
+            else router.actions
+        )
         transport = execute_route(
             route,
-            router.actions,
+            route_actions,
             traversal,
             interruption_handler=interruption_handler,
-            replanner=router._replan,
+            replanner=replan,
             limits=_ROUTE_LIMITS,
         )
         at_pc = runtime.adapter.observe()

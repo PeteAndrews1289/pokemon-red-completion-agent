@@ -1,0 +1,92 @@
+{
+  "schema": "pokemon.red.outcome-value-pilot-evidence.v1",
+  "session": "2026-09-22-outcome-value-pilot",
+  "classification": "infrastructure_configuration_failure_corrected_before_successor",
+  "source_commit": "43ecdb95",
+  "private_packet": "red-outcome-value-pilot-20260922-v1",
+  "plan_sha256": "f43ad4c306e88610c58b9b8a03b64851977fa7822b8f97b68f67dd1672446eb2",
+  "failure_sha256": "53f29a85791bf367b1fab8d983159df022f057869e73f9c0f1da85c5d4eee502",
+  "readiness_revision": {
+    "approved": true,
+    "raw_flags": "diagnostic_only",
+    "wins_at_least_baseline": true,
+    "maximum_decision_ratio": 1.25,
+    "zero_illegal_actions": true,
+    "measured_won_status_improvement": true,
+    "retroactive_promotion": false
+  },
+  "failure": {
+    "kind": "planner_offset_configuration",
+    "requested_offset": 13,
+    "executor_maximum": 12,
+    "before_emulator_session": true,
+    "infrastructure_failures": 1,
+    "retired_offsets": [
+      0,
+      3,
+      5,
+      7,
+      11,
+      13,
+      17,
+      23
+    ]
+  },
+  "native": {
+    "completed_episodes": 11,
+    "decision_records": 130,
+    "learned_choices": 120,
+    "prescribed_choices": 10,
+    "event_records": 570,
+    "frames": 147850,
+    "wins": 3,
+    "losses": 8,
+    "completed_episode_illegal_actions": 0,
+    "actor_memory_writes": 0,
+    "complete_new_targets": 0,
+    "all_completed_event_and_terminal_hashes_verified": true
+  },
+  "implementation": {
+    "fresh_recipe_runner": true,
+    "eight_sample_readout_fit": true,
+    "retained_preferences": 182,
+    "versioned_outcome_gate": true,
+    "preflight_before_rom_or_output": true,
+    "prepared_offsets": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      7,
+      11,
+      12
+    ],
+    "prepared_seeds": [
+      2026092233,
+      2026092234
+    ],
+    "successor_executed": false,
+    "successor_approval": "pending",
+    "retired_state_exclusion": true
+  },
+  "tests": {
+    "targeted_passed": 629,
+    "private_integration_skipped": 13,
+    "ruff": true,
+    "registry_unchanged": true
+  },
+  "fits": 0,
+  "screen_battles": 0,
+  "collection_delta": 0,
+  "actor_promotions": 0,
+  "gameplay_stopped": true,
+  "publication": false,
+  "external_agents": false,
+  "protected": {
+    "story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "next": "Await approval for one corrected outcome-value successor. Eight offsets0,1,2,3,5,7,11,12 satisfy the unchanged executor bound; fresh seeds2026092233/34 and consumed-state exclusions are prepared. Preserve V1failure and all costs. Same one-fit/182preference/outcome gates,90minute cap. No replay, widened timing guard, old128comparison or campaign access."
+}

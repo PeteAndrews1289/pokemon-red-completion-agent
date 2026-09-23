@@ -65,6 +65,7 @@ def bind_autonomous_league_funding(
             or report.evidence.get("league_funding") != completed.public_dict()
             or current.raw.player_money != completed.ending_money
             or completed.observed_net_income != income
+            or completed.observed_net_income - completed.field_item_replacement_cost <= 0
             or current.raw.battle_state != 0
             or not current.input_ready
         ):

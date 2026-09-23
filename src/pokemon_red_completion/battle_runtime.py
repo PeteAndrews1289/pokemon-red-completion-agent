@@ -438,6 +438,7 @@ class BattleRuntimeTiming:
     max_post_attack_transition_pulses: int = 12
     max_sleep_recovery_pulses: int = 48
     max_sleep_reapplications: int = 2
+    max_sleep_turns_per_decision: int = 21
     required_ready_reads: int = 2
 
     def __post_init__(self) -> None:
@@ -797,7 +798,16 @@ def _await_next_battle_decision(
         if pulse == timing.max_post_attack_transition_pulses:
             break
         if menu.phase is BattleMenuPhase.UNKNOWN:
-            _pulse(executor, MacroAction(MacroActionKind.CONFIRM), timing.attack_wait_frames)
+            # The chosen attack already completed. B advances remaining text,
+            # but cannot enter FIGHT if its MAIN signature is still transient.
+            # A wild opponent with zero HP has no next opponent/attack choice.
+            # B here can cancel the player's post-KO evolution; A preserves it.
+            action_kind = (
+                MacroActionKind.CONFIRM
+                if expected_battle_state == 1 and raw.enemy_hp == 0
+                else MacroActionKind.CANCEL
+            )
+            _pulse(executor, MacroAction(action_kind), timing.attack_wait_frames)
         elif menu.phase is BattleMenuPhase.MOVE:
             raise BattleRuntimeError(f"{label} reached a second move selection before settlement.")
         else:
@@ -1801,6 +1811,7 @@ def _recover_sleep_transition(
     previous_count = sleep_count
     sleep_reapplications = 0
     saw_decrease = False
+    sleep_turns = 0
     # Gen I stores the remaining sleep duration as a three-bit turn counter.
     # Give each observed sleeping turn the configured transition allowance
     # instead of making every turn share one allowance.  Long move animations
@@ -1846,6 +1857,11 @@ def _recover_sleep_transition(
             raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
 
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+        if (menu.phase is BattleMenuPhase.MAIN
+                and sleep_turns >= timing.max_sleep_turns_per_decision):
+            # Return control at a verified action boundary, not halfway through
+            # dialogue. Recovery policies can now react between suppressed turns.
+            return True
         if menu.phase is BattleMenuPhase.MAIN:
             for _ in range(timing.max_main_navigation_pulses + 1):
                 command = menu.selected_main_command
@@ -1945,6 +1961,8 @@ def _recover_sleep_transition(
             if sleep_reapplications > timing.max_sleep_reapplications:
                 raise BattleRuntimeError(f"{label} exceeded its bounded sleep reapplications.")
         saw_decrease = saw_decrease or current_count < previous_count
+        if current_count != previous_count:
+            sleep_turns += 1
         previous_count = current_count
 
     if not saw_decrease:

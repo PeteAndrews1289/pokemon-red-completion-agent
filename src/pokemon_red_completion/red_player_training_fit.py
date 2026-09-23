@@ -26,6 +26,13 @@ from pokemon_red_completion.red_development_measured_choice import (
     RedDevelopmentMeasuredChoiceInput,
     load_red_development_measured_choice_example,
 )
+from pokemon_red_completion.red_native_curriculum import (
+    CONTRACT as NATIVE_CURRICULUM_CONTRACT,
+)
+from pokemon_red_completion.red_native_curriculum import (
+    NativeCurriculumInput,
+    retained_native_curriculum,
+)
 from pokemon_red_completion.red_player_model import (
     PLAYER_MODEL_SCHEMA,
     REGISTERED_PLAYER_MODEL_SCHEMA,
@@ -58,6 +65,8 @@ def fit_red_player_update(
     regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
     measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...] = (),
     registered_objective: bool = False,
+    native_curriculum: tuple[NativeCurriculumInput, ...] = (),
+    retention_search: bool = False,
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
 
@@ -70,7 +79,7 @@ def fit_red_player_update(
     explicit objective schema and reconstruct their actual terminal outcome.
     Measured choices without an action trace are training-only and survive all fits.
     """
-    if (not episodes and not measured_choices) or len(
+    if (not episodes and not measured_choices and not native_curriculum) or len(
         {item.episode_id for item in episodes}
     ) != len(episodes):
         raise ValueError("native training episode inventory differs")
@@ -86,6 +95,10 @@ def fit_red_player_update(
     if type(registered_objective) is not bool:
         raise ValueError("registered fitting requires explicit opt-in")
     prior_registered = isinstance(prior, RedPlayerModelRecord) and prior.objective is not None
+    if native_curriculum and (not registered_objective or not prior_registered):
+        raise ValueError("native curriculum requires an existing registered player")
+    if type(retention_search) is not bool or (retention_search and not native_curriculum):
+        raise ValueError("retention search requires explicit new native curriculum")
     if (
         isinstance(prior, RedPlayerModelRecord)
         and prior_registered
@@ -124,6 +137,7 @@ def fit_red_player_update(
     incoming_measured = {item.choice_id: item for item in measured_choices}
     prior_measured: list[RedDevelopmentMeasuredChoiceInput] = []
     prior_measured_ids: set[str] = set()
+    corpus_data = {}
     if prior_registered:
         assert isinstance(prior, RedPlayerModelRecord)
         corpus_rec = store.find_sealed_record(
@@ -199,6 +213,9 @@ def fit_red_player_update(
             prior_measured.append(
                 RedDevelopmentMeasuredChoiceInput(cid, record_sha, behavior_record)
             )
+    native_inputs, native_rows = retained_native_curriculum(store, corpus_data, native_curriculum)
+    old_native_count = len(native_rows) - len(native_curriculum)
+    curriculum = (*curriculum, *native_rows)
     all_measured_choices = (*prior_measured, *measured_choices)
     measured_rows = tuple(
         load_red_development_measured_choice_example(store, item, objective=objective)
@@ -265,7 +282,10 @@ def fit_red_player_update(
     corpus_sha = canonical_sha256(corpus)
     if curriculum:
         corpus["curriculum_examples"] = [row.public_dict() for row in curriculum]
-        corpus["curriculum_contract"] = "forced-singleton-story-outcome-unit-weight-v1"
+        corpus["curriculum_contract"] = (NATIVE_CURRICULUM_CONTRACT if native_inputs
+                                        else "forced-singleton-story-outcome-unit-weight-v1")
+        if native_inputs:
+            corpus["native_curriculum"] = [item.public_dict() for item in native_inputs]
         corpus_sha = canonical_sha256(corpus)
     if regional_choices:
         corpus["regional_choices"] = [
@@ -295,16 +315,27 @@ def fit_red_player_update(
             "trust_tier": "development_measured_without_action_trace",
         }
         corpus_sha = canonical_sha256(corpus)
-    corpus_record = store.publish_sealed_record(
-        f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
-    )
     feature_version = max(
         prior.model.feature_version,
         *(row.menu.feature_version for row in rows),
         *(row.feature_version for row in curriculum),
     )
-    fit = fit_living_dex_option_value(
-        rows, feature_version=feature_version, curriculum_examples=curriculum
+    selection_report = None
+    if retention_search:
+        from .living_dex_retention_fit import fit_retaining_prior
+        fit, selection_report = fit_retaining_prior(
+            prior.model, rows, native_rows[old_native_count:],
+            retained_curriculum=native_rows[:old_native_count],
+        )
+        if fit is None:
+            return {"status": "rejected_retention", "model_fitted": False,
+                    "retention_selection": selection_report, "authority_promotions": 0}
+    else:
+        fit = fit_living_dex_option_value(
+            rows, feature_version=feature_version, curriculum_examples=curriculum
+        )
+    corpus_record = store.publish_sealed_record(
+        f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
     baseline_model = (
         upgrade_option_value_model_for_economy(prior.model)
@@ -367,6 +398,7 @@ def fit_red_player_update(
             else {}
         ),
         "controller_actions": 0,
+        **({"retention_selection": selection_report} if selection_report else {}),
         "authority_promotions": 0,
         **(
             {

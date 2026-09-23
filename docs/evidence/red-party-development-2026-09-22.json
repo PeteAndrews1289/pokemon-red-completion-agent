@@ -1,0 +1,270 @@
+{
+  "actions": 2429,
+  "cash_after": 4583,
+  "cash_before": 2398,
+  "envelope_sha256": "21c0f789dd06cc1b907eac5c7218f0bdad10749778f31bf531dc9872f2ad8566",
+  "episodes": [
+    {
+      "actions": {
+        "attack": 4,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 2
+      },
+      "decisions": 8,
+      "metrics": {
+        "attack_turn_utility_sum": 8.950819672131148,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 6,
+        "party_pp_spent": 4,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4641292,
+        "policy_latency_ns_mean": 1190099.25,
+        "policy_latency_ns_min": 498042,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "bcf71b6a1918e70e3d89f6fa4f6991f1c3a7703300be8925a1b3b6bb0c8d8d91",
+      "stage": 57
+    },
+    {
+      "actions": {
+        "attack": 1,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 1
+      },
+      "decisions": 2,
+      "metrics": {
+        "attack_turn_utility_sum": 2.864864864864865,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 10,
+        "party_pp_spent": 1,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1374125,
+        "policy_latency_ns_mean": 978917,
+        "policy_latency_ns_min": 583709,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "59258d4fc1f08664b310a47a0f1dcaa0ea2ccef12b8a9eaab457a5416921c103",
+      "stage": 58
+    },
+    {
+      "actions": {
+        "attack": 5,
+        "forced_switch": 0,
+        "switch_prompt": 1,
+        "voluntary_switch": 3
+      },
+      "decisions": 9,
+      "metrics": {
+        "attack_turn_utility_sum": 5.72972972972973,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 43,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1988250,
+        "policy_latency_ns_mean": 966328.6666666666,
+        "policy_latency_ns_min": 509417,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "1f93bad5b137a4e5331ca928e399fe0fdd54d0246d97b6ddacfbbae1cede4f4d",
+      "stage": 59
+    },
+    {
+      "actions": {
+        "attack": 4,
+        "forced_switch": 0,
+        "switch_prompt": 1,
+        "voluntary_switch": 4
+      },
+      "decisions": 9,
+      "metrics": {
+        "attack_turn_utility_sum": 5.73015873015873,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 42,
+        "party_pp_spent": 4,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1328750,
+        "policy_latency_ns_mean": 814962.8888888889,
+        "policy_latency_ns_min": 465958,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "d4144037094615562cd69e1748c88c426f7aee018f962b33742ccc0ce255e2d6",
+      "stage": 60
+    },
+    {
+      "actions": {
+        "attack": 7,
+        "forced_switch": 1,
+        "switch_prompt": 2,
+        "voluntary_switch": 5
+      },
+      "decisions": 15,
+      "metrics": {
+        "attack_turn_utility_sum": 5.394110275689223,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 1,
+        "party_hp_lost": 103,
+        "party_pp_spent": 7,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1372458,
+        "policy_latency_ns_mean": 715908.4,
+        "policy_latency_ns_min": 204084,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "c6d7fd9f90b415577fe7e0e18572ec9aac1c487d79eee0ad96fce6b7a89702bd",
+      "stage": 61
+    },
+    {
+      "actions": {
+        "attack": 5,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 2
+      },
+      "decisions": 9,
+      "metrics": {
+        "attack_turn_utility_sum": 8.757598220904374,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 24,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1256542,
+        "policy_latency_ns_mean": 852648.2222222222,
+        "policy_latency_ns_min": 465584,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "fbb6162e04ef2035d452edc921440c33cc4aceefb5c0de1d09e1ae9503c4b4d6",
+      "stage": 62
+    }
+  ],
+  "faints": 1,
+  "fits": 0,
+  "frames": 168996,
+  "learned_preparation": false,
+  "model_decisions": 52,
+  "native_audit_frames": 0,
+  "net_income": 2185,
+  "origin_sha256": "8620309ea3a41fe491a779278e85510175ce578f7da8a7872d4229200972a3bb",
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 28,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 24,
+      "level_before": 23,
+      "species_id": 64,
+      "xp_gained": 2121
+    },
+    {
+      "level_after": 23,
+      "level_before": 22,
+      "species_id": 59,
+      "xp_gained": 2122
+    },
+    {
+      "level_after": 26,
+      "level_before": 25,
+      "species_id": 104,
+      "xp_gained": 674
+    }
+  ],
+  "purchases": 0,
+  "sales": 0,
+  "schema": "pokemon.red.party-development-native.v1",
+  "stages": [
+    {
+      "actions": 378,
+      "cash": 2558,
+      "frames": 28236,
+      "seconds": 2.645702499896288,
+      "sha256": "46490c73dc33ad25e80148e204de006e5c1d39554b739530d86e555c69cdcf60",
+      "stage": 57
+    },
+    {
+      "actions": 247,
+      "cash": 2873,
+      "frames": 15180,
+      "seconds": 1.9671823750250041,
+      "sha256": "18023c83b263804a1ab2b17c4cf1eaa24455aaf409489ea0730098dce20d56e7",
+      "stage": 58
+    },
+    {
+      "actions": 416,
+      "cash": 3158,
+      "frames": 30216,
+      "seconds": 2.7259875829331577,
+      "sha256": "b37cabd25ee724167518ee42c9f59848ea979f04c839b04785833acfa124c287",
+      "stage": 59
+    },
+    {
+      "actions": 383,
+      "cash": 3428,
+      "frames": 25668,
+      "seconds": 2.4108049580827355,
+      "sha256": "9dd9a835a2ab30aacaeded877181583ea36d5d94632daea36f5b8d3a43384657",
+      "stage": 60
+    },
+    {
+      "actions": 531,
+      "cash": 3683,
+      "frames": 37884,
+      "seconds": 2.9478399171493948,
+      "sha256": "b0356579f4adcfa1982a7c68f9993f1dc2373eac9a24f95a4070e64d52a77844",
+      "stage": 61
+    },
+    {
+      "actions": 474,
+      "cash": 4583,
+      "frames": 31812,
+      "seconds": 2.619107374921441,
+      "sha256": "b22dd2ddc260efb875f1a5e64cb54a3b12c71681328b75ec485f871e9ab6a303",
+      "stage": 62
+    }
+  ],
+  "teacher_battle_choices": 0,
+  "terminal_sha256": "b22dd2ddc260efb875f1a5e64cb54a3b12c71681328b75ec485f871e9ab6a303",
+  "trainees_rotated": 3,
+  "trainer_wins": 6,
+  "verified": {
+    "attacks_reprojected": 26,
+    "controls_recomputed": 28,
+    "switches_recomputed": 24
+  },
+  "whole_excursion_seconds": 15.316624708008021,
+  "targeted_tests_passed": 340,
+  "private_native_audit_sha256": "3818b0583cf212ec4b639d380855542481167e4f92839dbe9029b5195874e2ec",
+  "audit_tooling_corrections": "Read-only payout check corrected from trainer to quote field; immutable first report preserved and strengthened audit recorded as v2. No gameplay replay.",
+  "native_run_source_commit": "c336902e",
+  "stop_reason": "no_eligible_local_trainer",
+  "all_twelve_pre_post_states_full_hp_status_pp": true,
+  "story_objectives_delta": 0,
+  "registrations_delta": 0,
+  "natural_evolutions_observed": 0,
+  "limitations": [
+    "Teacher selects trainees and venues; no learned strategic preparation or model fit.",
+    "Local eligible trainers exhausted before provisional targets34 or ThunderShock31.",
+    "Evolution verifier and settlement covered by tests; no native evolution occurred."
+  ]
+}

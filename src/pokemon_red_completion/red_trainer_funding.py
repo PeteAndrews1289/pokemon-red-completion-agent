@@ -33,6 +33,18 @@ class TrainerFundingCandidate:
     interaction_facing: TrainerFacing
 
 
+def valid_funding_ledge(source, target, transient, action: str) -> bool:
+    """Only a two-square directional jump with its exact intermediate square."""
+    directions = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
+    if action not in directions:
+        return False
+    dy, dx = directions[action]
+    return transient == (source[0] + dy, source[1] + dx) and target == (
+        source[0] + 2 * dy,
+        source[1] + 2 * dx,
+    )
+
+
 def local_trainer_funding_candidates(
     rom: bytes,
     world: TrainerApproachWorld,
@@ -40,6 +52,7 @@ def local_trainer_funding_candidates(
     trainers: tuple[TrainerSightZone, ...],
     *,
     maximum_steps: int = 256,
+    allow_ledges: bool = False,
 ) -> tuple[TrainerFundingCandidate, ...]:
     """Quote reachable undefeated local trainers without issuing any action.
 
@@ -87,9 +100,19 @@ def local_trainer_funding_candidates(
                     or step.expected_map != start.map_id
                     or step.source_at != previous
                     or step.expected_at in blocked
+                    or step.transient_at in blocked
                     or step.action_kind is not MacroActionKind.MOVE
                     or step.action not in {"up", "down", "left", "right"}
-                    or step.kind != "walk"
+                    or not (
+                        step.kind == "walk"
+                        or (
+                            allow_ledges is True
+                            and step.kind == "ledge"
+                            and valid_funding_ledge(
+                                step.source_at, step.expected_at, step.transient_at, step.action
+                            )
+                        )
+                    )
                     or step.source_mode != "land"
                     or step.expected_mode != "land"
                 ):

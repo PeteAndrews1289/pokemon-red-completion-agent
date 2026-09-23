@@ -17,7 +17,7 @@ from .goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from .observation import MapId, OverworldMovementMode
+from .observation import MapId, OverworldMovementMode, PokemonRedStateReader, RawGameState
 from .provenance import canonical_sha256
 from .red_collection_fly import red_fly_landings
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
@@ -36,6 +36,16 @@ class RedDigRecoveryError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class DigEscapePlan:
+    origin_map: int
+    origin_at: tuple[int, int]
+    anchor: int
+    landing: tuple[int, int]
+    holder: int
+    tileset: int
+
+
+@dataclass(frozen=True)
 class DigRecoveryPlan:
     anchor: int
     landing: tuple[int, int]
@@ -45,16 +55,17 @@ class DigRecoveryPlan:
     steps: int
 
 
-def plan_dig_recovery(
-    router: RedResourceGoalRouter, observation: RedGoalObservation, start: TraversalSnapshot,
-) -> DigRecoveryPlan | None:
-    from .red_resource_goal_router import _walking_plan
+def plan_dig_escape(world, reader: PokemonRedStateReader, raw: RawGameState,
+                    start: TraversalSnapshot) -> DigEscapePlan | None:
+    """Quote legal native escape independently of the caller's goal profile.
 
-    if not any(s.kind is GoalKind.RESTORE_TEAM and s.parameters.get("dig_recovery") is True
-               for s in router.runtime.profile.providers):
-        return None
-    reader, raw = router.runtime.reader, observation.raw
-    if (not observation.input_ready or raw.battle_state or not start.ready
+    Recovery and story navigation share this mechanic. Its destination comes
+    from the observed healing anchor and cartridge landing, not a town list
+    attached to the chapter that requested escape.
+    """
+    if (raw.battle_state != 0 or not start.ready
+            or (raw.map_id, raw.player_y, raw.player_x) != (start.map_id, *start.at)
+            or not reader.read_input_readiness().ready
             or start.interruption is not None or start.mode != "land"
             or reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
             or reader.read_bottom_dialogue_box_visible()
@@ -71,14 +82,67 @@ def plan_dig_recovery(
     holder = next((i for i, known in enumerate(moves) if DIG_MOVE_ID in known), None)
     if holder is None or hp[holder] <= 0:
         return None
-    landings = dict(red_fly_landings(router.world.rom))
+    landings = dict(red_fly_landings(world.rom))
     if anchor not in landings or anchor == start.map_id:
         return None
     landing = landings[anchor]
-    graph = router.world.local_graphs.get(anchor)
+    graph = world.local_graphs.get(anchor)
     if (graph is None or landing not in graph.edges
-            or landing in router.world.object_blockers[anchor]):
+            or landing in world.object_blockers[anchor]):
         return None
+    return DigEscapePlan(start.map_id, start.at, anchor, landing, holder, tileset)
+
+
+def execute_dig_escape(world, reader, emulator, actions, plan: DigEscapePlan) -> dict:
+    """Execute one quoted escape and verify landing, party and resources.
+
+    The enclosing stage owns the frame/time budget and failure persistence.
+    This primitive also caps every controller dispatch, including settlement.
+    """
+    before = reader.read()
+    start = Gen1TraversalObserver(reader).observe()
+    if plan_dig_escape(world, reader, before, start) != plan:
+        raise RedDigRecoveryError("escape origin or healing anchor changed before input")
+    bounded = HardCompositionActionLimiter(
+        actions, maximum_actions_per_decision=128, maximum_episode_actions=128,
+    )
+    frames = emulator.frame_count
+    _field_dig(bounded, reader, emulator, expected_map=MapId(plan.anchor))
+    for _ in range(60):
+        if (reader.read_input_readiness().ready
+                and not reader.read_bottom_dialogue_box_visible()
+                and reader.read_overworld_movement_mode() is OverworldMovementMode.WALKING):
+            break
+        bounded.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
+    after = reader.read()
+    landed = Gen1TraversalObserver(reader).observe()
+    protected = (
+        "party_count", "party_species_ids", "party_levels", "party_hp", "party_max_hp",
+        "party_stats", "party_status", "party_moves", "party_pp", "bag_items",
+        "player_money", "badge_bits",
+    )
+    if (landed.map_id != plan.anchor or landed.at != plan.landing or not landed.ready
+            or landed.interruption is not None or landed.mode != "land"
+            or after.battle_state != 0 or reader.read_bottom_dialogue_box_visible()
+            or any(getattr(before, key) != getattr(after, key) for key in protected)):
+        raise RedDigRecoveryError("escape did not preserve its exact safe landing and party")
+    return {"anchor_map": plan.anchor, "landing": list(plan.landing),
+            "escape_actions": bounded.attempted_actions,
+            "escape_frames": emulator.frame_count - frames, "verified_escape": True}
+
+
+def plan_dig_recovery(
+    router: RedResourceGoalRouter, observation: RedGoalObservation, start: TraversalSnapshot,
+) -> DigRecoveryPlan | None:
+    from .red_resource_goal_router import _walking_plan
+
+    if not any(s.kind is GoalKind.RESTORE_TEAM and s.parameters.get("dig_recovery") is True
+               for s in router.runtime.profile.providers) or not observation.input_ready:
+        return None
+    escape = plan_dig_escape(router.world, router.runtime.reader, observation.raw, start)
+    if escape is None:
+        return None
+    anchor, landing = escape.anchor, escape.landing
     projected = replace(start, map_id=anchor, at=landing, last_outside_map=anchor,
                         occupied=frozenset(), hazards=())
     routes = []
@@ -92,7 +156,8 @@ def plan_dig_recovery(
     if not routes:
         return None
     route = min(routes, key=lambda r: (len(r.steps), r.terminal_map))
-    return DigRecoveryPlan(anchor, landing, holder, tileset, route.terminal_map, len(route.steps))
+    return DigRecoveryPlan(anchor, landing, escape.holder, escape.tileset,
+                           route.terminal_map, len(route.steps))
 
 
 def bind_dig_recovery(
@@ -120,18 +185,9 @@ def bind_dig_recovery(
             raise RedDigRecoveryError("escape origin or healing anchor changed before input")
         action_start, frame_start = actions.actions_executed, emulator.frame_count
 
-        # The enclosing player owns the hard frame budget. Reserve every Dig
-        # dispatch before delegation so even a partially failed input counts.
-        bounded = HardCompositionActionLimiter(
-            actions, maximum_actions_per_decision=128, maximum_episode_actions=128,
-        )
-        _field_dig(bounded, reader, emulator, expected_map=MapId(plan.anchor))
-        for _ in range(60):
-            if (reader.read_input_readiness().ready
-                    and not reader.read_bottom_dialogue_box_visible()
-                    and reader.read_overworld_movement_mode() is OverworldMovementMode.WALKING):
-                break
-            bounded.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
+        escape = DigEscapePlan(start.map_id, start.at, plan.anchor, plan.landing,
+                               plan.holder, plan.tileset)
+        execute_dig_escape(router.world, reader, emulator, actions, escape)
         after = router.runtime.adapter.observe()
         landed = Gen1TraversalObserver(reader).observe()
         if (landed.map_id != plan.anchor or landed.at != plan.landing or not landed.ready

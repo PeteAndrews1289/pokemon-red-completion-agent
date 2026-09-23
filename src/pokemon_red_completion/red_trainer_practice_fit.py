@@ -7,6 +7,7 @@ from collections import Counter
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from statistics import fmean
+from typing import cast
 
 import numpy as np
 
@@ -18,6 +19,7 @@ from pokemon_red_completion.battle_semantics import (
     BattleFeatureBatch,
 )
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
+from pokemon_red_completion.red_status_battle_features import move_schema
 from pokemon_red_completion.red_trainer_practice_features import (
     CONTROL_FEATURE_NAMES_V2,
     CONTROL_SCHEMA_ID,
@@ -80,10 +82,11 @@ class TrainerPracticeThreeHeadModel:
     train_capture_ids: tuple[str, ...]
     train_root_ids: tuple[str, ...]
     control_target_mode: str = "best_component"
+    damage_reference: TrainerHeadModel | None = None
 
     def __post_init__(self) -> None:
         expected = (
-            (self.move, MOVE_SCHEMA_ID, MOVE_FEATURE_NAMES),
+            (self.move, *move_schema(self.move.schema_id)),
             (self.control, *control_schema(self.control.schema_id)),
             (self.switch, SWITCH_SCHEMA_ID, SWITCH_FEATURE_NAMES_V2),
         )
@@ -94,6 +97,14 @@ class TrainerPracticeThreeHeadModel:
             raise TrainerPracticeFitError("three-head schemas are incompatible")
         if not self.train_capture_ids or not self.train_root_ids:
             raise TrainerPracticeFitError("three-head training lineage is missing")
+        if self.damage_reference is not None and (
+            self.damage_reference.schema_id != MOVE_SCHEMA_ID
+            or self.damage_reference.feature_names != MOVE_FEATURE_NAMES
+            or self.move.schema_id == MOVE_SCHEMA_ID
+        ):
+            raise TrainerPracticeFitError(
+                "status selector requires a frozen legacy damage reference"
+            )
         if self.control_target_mode not in {"best_component", "fitted_components"}:
             raise TrainerPracticeFitError("control target mode differs")
         if (
@@ -110,6 +121,8 @@ class TrainerPracticeThreeHeadModel:
             "switch": self.switch.to_dict(),
             "train_capture_ids": list(self.train_capture_ids),
             "train_root_ids": list(self.train_root_ids),
+            **({"damage_reference": self.damage_reference.to_dict()}
+               if self.damage_reference is not None else {}),
             **(
                 {"control_target_mode": self.control_target_mode}
                 if self.control_target_mode != "best_component"
@@ -121,6 +134,8 @@ class TrainerPracticeThreeHeadModel:
     def from_dict(cls, value: Mapping[str, object]) -> TrainerPracticeThreeHeadModel:
         if value.get("schema") != "pokemon.red.trainer-practice-three-head-model.v1":
             raise TrainerPracticeFitError("three-head model schema differs")
+        if "damage_reference" in value and not isinstance(value["damage_reference"], Mapping):
+            raise TrainerPracticeFitError("damage reference checkpoint differs")
         move_data, control_data, switch_data = (
             value.get("move"),
             value.get("control"),
@@ -134,8 +149,8 @@ class TrainerPracticeThreeHeadModel:
         try:
             move = TrainerHeadModel.from_dict(
                 move_data,
-                schema_id=MOVE_SCHEMA_ID,
-                feature_names=MOVE_FEATURE_NAMES,
+                schema_id=move_schema(move_data.get("schema_id"))[0],
+                feature_names=move_schema(move_data.get("schema_id"))[1],
             )
             control = TrainerHeadModel.from_dict(
                 control_data,
@@ -163,6 +178,9 @@ class TrainerPracticeThreeHeadModel:
                 tuple(capture_ids),
                 tuple(root_ids),
                 control_target_mode,
+                (TrainerHeadModel.from_dict(cast(Mapping[str, object], value["damage_reference"]),
+                    schema_id=MOVE_SCHEMA_ID, feature_names=MOVE_FEATURE_NAMES)
+                 if isinstance(value.get("damage_reference"), Mapping) else None),
             )
         except (KeyError, TypeError, ValueError) as error:
             if isinstance(error, TrainerPracticeFitError):

@@ -632,6 +632,19 @@ class PyBoyAdapter:
         self._require_backend().button_release(normalized)
         self._pressed_buttons.remove(normalized)
 
+    def release_restored_inputs(self) -> tuple[str, ...]:
+        """Queue key-up events for saved backend input unknown to the host ledger.
+
+        Explicit recovery only: loading or inspecting a save remains untouched.
+        No frame is advanced and no game-memory value is written.
+        """
+        buttons = tuple(sorted(SUPPORTED_BUTTONS))
+        backend = self._require_backend()
+        for button in buttons:
+            backend.button_release(button)
+        self._pressed_buttons.clear()
+        return buttons
+
     def tick(self, frames: int) -> None:
         if not isinstance(frames, int) or isinstance(frames, bool) or frames <= 0:
             raise ValueError("frames must be a positive integer")

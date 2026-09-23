@@ -313,6 +313,30 @@ def test_adapter_loads_already_authenticated_state_bytes(
             emulator.load_state_bytes(b"")
 
 
+def test_explicit_restore_recovery_queues_only_key_up_events(
+    tmp_path: Path,
+    accept_test_rom: None,
+    recording_factory: RecordingFactory,
+) -> None:
+    from pokemon_red_completion.emulator import SUPPORTED_BUTTONS
+    from pokemon_red_completion.executor import ReadOnlyController
+
+    rom_path = tmp_path / "fixture.gb"
+    rom_path.write_bytes(b"fixture")
+    with PyBoyAdapter(rom_path) as emulator:
+        emulator.load_state_bytes(b"state with backend-held keys")
+        backend = recording_factory.backend
+        assert backend is not None
+        before = list(backend.events)
+        with pytest.raises(RuntimeError, match="read-only"):
+            FrameSafeExecutor(ReadOnlyController(emulator)).release_restored_inputs()
+        assert backend.events == before
+        released = FrameSafeExecutor(emulator).release_restored_inputs()
+        assert released == tuple(sorted(SUPPORTED_BUTTONS))
+        assert backend.events[len(before) :] == [("release", key) for key in released]
+        assert emulator.frame_count == 0 and not emulator.pressed_buttons
+
+
 def test_watch_mode_uses_safe_visible_backend_and_renders_each_frame(
     tmp_path: Path,
     accept_test_rom: None,

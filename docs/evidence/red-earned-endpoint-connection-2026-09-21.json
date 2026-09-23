@@ -1,0 +1,217 @@
+{
+  "schema": "pokemon.red.earned-endpoint-connection-evidence.v1",
+  "session": "2026-09-21-earned-endpoint-connection",
+  "classification": "development_integration_not_model_fit",
+  "source_commits": [
+    "1bce1427",
+    "76a267c8"
+  ],
+  "objective": "Reconnect completed specialized Safari recovery to the normal collection player and execute model-owned goals from retained earned terminals.",
+  "mission_check": {
+    "capability": "Resume normal collection after specialized recovery without losing reserves or failed-attempt costs.",
+    "learned_authority": "Unchanged Model137 chooses among real feasible collection/development alternatives; forced storage safety stays explicitly nonlearned.",
+    "transfer_test": "Changed synthetic ancestry/goal/resource rejection tests and earned-state native continuation; not independent or cross-game transfer.",
+    "cheapest_falsifier": "Corrupted lineage is admitted, menu discovery changes the game, departure exceeds paid steps, or exact selected goal cannot continue.",
+    "time_box": "One two-hour session; bounded earned-state chunks only.",
+    "stop_condition": "Stop at retained unsafe/unverifiable terminal, unsupported recovery, or declared bounded completion; never rewind or replace actor choices."
+  },
+  "connection": {
+    "specialized_parent_schema": "pokemon.red.safari-fishing-exact-continuation.v1",
+    "authenticated_ancestor_records": 11,
+    "original_state_sha256": "31d3cc4ebb21745c36a9504121412c9358c39f54b46508117c11ffd94d964a65",
+    "reserve_origin_sha256": "d24d3ee7b1a59a1b52b2aba08d1ded9445fd1f3b3c825d0fc2367155b27ae416",
+    "historical_censored_costs": "Unknown actions/frames remain unknown, not inferred or included as known totals.",
+    "repairs": [
+      "Exact completed-Safari ancestry adapter plus fresh terminal-resource equality.",
+      "Executor-aware indoor departure with explicit timed-Safari Surf opt-in, step headroom, correct Safari flee and gate-exit controls.",
+      "Same-town indoor Safari approach through the existing unpaid gate, without a flight to the current town."
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "model137-post-dratini-collection-20260921-v1",
+      "artifacts": {
+        "plan.json": "a13072ca97122f7dda7a8820d193c63aaaf52fa2cce04e62034bf893ee7ddfb2",
+        "result.json": "94a1496cd69fcd0ae7f740779e2600aa95243981d2dae54f66429ebe505a8b6f",
+        "terminal-native-audit.json": "f36d1a65de0c08a766a986ce706445459357459942e7874911b360958e10d41e"
+      },
+      "stop_reason": "menu_unavailable",
+      "model_decisions": 0,
+      "support_decisions": 1,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "before_state_sha256": "31d3cc4ebb21745c36a9504121412c9358c39f54b46508117c11ffd94d964a65",
+          "terminal_state_sha256": "4ef99cbc257ca021d396f6c5f1383466f7381e27af13b6381fd8087a2172e5ad",
+          "selected_kind": "manage_storage",
+          "verification": "succeeded",
+          "failure_reason": null,
+          "error_type": null,
+          "safe_terminal": true,
+          "support_role": "deterministic_storage_safety",
+          "mode": "deterministic_safety",
+          "candidate_count": 2,
+          "outcome_sha256": "d651dec4215a2c2f9369469b64d7edfd79120f189bcc1bf61b849409ae47b4f2",
+          "actions": 245,
+          "frames": 12528,
+          "new_registrations": []
+        }
+      ],
+      "total_actions": 245,
+      "total_frames": 12528
+    },
+    {
+      "run_id": "model137-post-safari-storage-collection-20260921-v1",
+      "artifacts": {
+        "plan.json": "07766d4fa50148ee3d697621c8231f583b985011240310d5856a55ff252cbf38",
+        "result.json": "fd16745dbc83c11daaade5f848234fcead28fef9607a1c0ca372fa747ce89f95",
+        "terminal-native-audit.json": "5da4753e758caaa9ba27f40107b83e7dab14a4df21902bdea69d363fa1ef548b"
+      },
+      "stop_reason": "verification_failed",
+      "model_decisions": 1,
+      "support_decisions": 0,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "before_state_sha256": "4ef99cbc257ca021d396f6c5f1383466f7381e27af13b6381fd8087a2172e5ad",
+          "terminal_state_sha256": "7d87dcd1cca8c112e21b59d002c5fb89cc4c0df799cebd440e3bffc13e6d676d",
+          "selected_kind": "evolve_species",
+          "verification": "failed",
+          "failure_reason": "outcome_not_verified",
+          "error_type": null,
+          "safe_terminal": true,
+          "support_role": null,
+          "mode": "model_exploration",
+          "candidate_count": 5,
+          "outcome_sha256": "f751f8171b3102e2b91c666404a3880c4fc97b21040f0f67f718c4b8412d1ed2",
+          "actions": 29001,
+          "frames": 2466310,
+          "new_registrations": []
+        }
+      ],
+      "total_actions": 29001,
+      "total_frames": 2466310
+    },
+    {
+      "run_id": "model137-post-dratini-training-collection-20260921-v1",
+      "artifacts": {
+        "plan.json": "47fe0f432c31a12c903dc807ca988d898f07cae0134e8496e8c58eba16993bc5",
+        "result.json": "f55dd53f1d0404bffe7ec203941356161104b2134e50385090519a3a044ee39f",
+        "terminal-native-audit.json": "abcf67f49d3c67393d793918a53d27e9017b3e439d787c0af8929d5647de9da2"
+      },
+      "stop_reason": "decision_budget",
+      "model_decisions": 1,
+      "support_decisions": 1,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "before_state_sha256": "7d87dcd1cca8c112e21b59d002c5fb89cc4c0df799cebd440e3bffc13e6d676d",
+          "terminal_state_sha256": "a7d2be5744de07cee86bc4f2be85704f26d64e017b953b34f4d4f886faa9fe3f",
+          "selected_kind": "manage_storage",
+          "verification": "succeeded",
+          "failure_reason": null,
+          "error_type": null,
+          "safe_terminal": true,
+          "support_role": "deterministic_storage_safety",
+          "mode": "deterministic_safety",
+          "candidate_count": 7,
+          "outcome_sha256": "f287d873ca7171c314d95b76a416c8f495297d25a6cf738db3af7e9c2fda8eb1",
+          "actions": 111,
+          "frames": 7488,
+          "new_registrations": []
+        },
+        {
+          "ordinal": 1,
+          "before_state_sha256": "a7d2be5744de07cee86bc4f2be85704f26d64e017b953b34f4d4f886faa9fe3f",
+          "terminal_state_sha256": "70b31fba91747e23d49dfeeac07f4bd77560cac3a572fe585289143ede75cd23",
+          "selected_kind": "evolve_species",
+          "verification": "succeeded",
+          "failure_reason": null,
+          "error_type": null,
+          "safe_terminal": true,
+          "support_role": null,
+          "mode": "model_exploration",
+          "candidate_count": 6,
+          "outcome_sha256": "4a1e6d8624ad4f273ac7acc6b4a960a87274ac94fab86b62dbf14bb03e8f968b",
+          "actions": 7835,
+          "frames": 666478,
+          "new_registrations": [
+            "pokemon:national:148"
+          ]
+        }
+      ],
+      "total_actions": 7946,
+      "total_frames": 673966
+    }
+  ],
+  "totals": {
+    "model_decisions": 2,
+    "deterministic_storage_supports": 2,
+    "model_goal_successes": 1,
+    "model_goal_partial_failures": 1,
+    "new_registrations": 1,
+    "registered_before": 105,
+    "registered_after": 106,
+    "native_route_target": 124,
+    "remaining_native_registrations": 18,
+    "specimens_before": 77,
+    "specimens_after": 77,
+    "cash_before": 17468,
+    "cash_after": 17468,
+    "actions": 37192,
+    "frames": 3152804
+  },
+  "growth": {
+    "source": "Dratini",
+    "before_level": 15,
+    "partial_level": 27,
+    "partial_experience": 27213,
+    "completed_form": "Dragonair",
+    "completed_level": 30,
+    "completed_experience": 33792,
+    "national_registration": 148
+  },
+  "final": {
+    "state_sha256": "70b31fba91747e23d49dfeeac07f4bd77560cac3a572fe585289143ede75cd23",
+    "safe": true,
+    "independent_native_audit_frames": 0,
+    "active_safari_session": false,
+    "gameplay_running": false
+  },
+  "failures_retained": [
+    "Initial zero-input menu rejected: unsupported Surf shortcut for walking-only departure.",
+    "Walking-only alternative exceeded the remaining paid Safari step budget and was not played.",
+    "First normal chunk stopped after successful storage support: same-town Safari approach absent, next menu unavailable; failed-menu terminal exactly equals last safe terminal.",
+    "First learned evolution attempt stopped safely at the soft action reserve after 29001 actions and 2466310 frames, Dratini level27; original outcome remains failed/outcome_not_verified. A later fresh model decision from changed earned state completed evolution, not a rewritten success."
+  ],
+  "qualification": {
+    "targeted_tests_passed": 421,
+    "includes_documentation_surface": true,
+    "full_suite_run": false,
+    "held_out_evaluation": false,
+    "training_rows_added": 0,
+    "fit_performed": false,
+    "production_model": "Model137",
+    "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "model_record_sha256": "af817d4e583000711cffc7e409d6d43642de7dcc6446a6ed87af3bede91f402f",
+    "fitted_rows": 137,
+    "prior_fitted_successes": 92,
+    "economy_qualified": 58,
+    "battle_models_changed": false,
+    "experimental_candidates_promoted": false,
+    "original_inputs_unchanged": true,
+    "league_income_qualified_cycles": 0,
+    "fresh_red_acceptance_passed": 0,
+    "fresh_red_acceptance_total": 5,
+    "github_publication": false,
+    "external_agents_used": false
+  },
+  "limitations": [
+    "Local development collection is not the fresh Red final exam.",
+    "Deterministic storage, travel and underlying development battle controls are not additional learned authority.",
+    "Same-town Safari approach is ROM-free and zero-input qualified; the learner chose evolution, so its paid native gate walk remains unexecuted.",
+    "Growth currently needs substantial real actions; one successful line does not establish efficient long-horizon play.",
+    "No sealed evaluation, training/refit, full run, or renewed League-income qualification."
+  ],
+  "next": "Continue the normal mixed menu from authenticated 70b31fba with Model137 and existing cash. Let the model choose Dragonite growth, remaining Safari captures or other genuinely executable goals; preserve all costs, budget-limited progress and exact terminals. No training refit or connection re-audit."
+}

@@ -12,8 +12,12 @@ def _inputs():
         bag_items=((int(ItemId.SUPER_ROD), 1), (int(ItemId.GREAT_BALL), 6)),
     )
     observation = SimpleNamespace(
-        raw=raw, input_ready=True, immediate_capture_slots=2,
-        free_storage_slots=99, collection_observation=object(), situation=object(),
+        raw=raw,
+        input_ready=True,
+        immediate_capture_slots=2,
+        free_storage_slots=99,
+        collection_observation=object(),
+        situation=object(),
     )
     runtime = SimpleNamespace(
         reader=SimpleNamespace(read=lambda: raw),
@@ -39,7 +43,8 @@ def test_fishing_requires_observed_resources_and_safe_input(monkeypatch, blocked
     else:
         observation.input_ready = False
     monkeypatch.setattr(
-        fishing, "build_red_live_fishing_inventory",
+        fishing,
+        "build_red_live_fishing_inventory",
         lambda *a, **k: pytest.fail("ineligible fishing must not search routes"),
     )
     assert fishing.autonomous_fishing_options(runtime, observation, actions, world) == ()
@@ -47,10 +52,19 @@ def test_fishing_requires_observed_resources_and_safe_input(monkeypatch, blocked
 
 
 @pytest.mark.parametrize("mutation", (None, "actions", "frames", "observation"))
+@pytest.mark.parametrize("safari", (False, True))
 def test_fishing_reuses_budget_chain_and_goal_registration_and_rejects_mutation(
-    monkeypatch, mutation,
+    monkeypatch,
+    mutation,
+    safari,
 ):
     runtime, observation, actions, world = _inputs()
+    if safari:
+        observation.raw.map_id = 217
+        observation.raw.bag_items = ((int(ItemId.SUPER_ROD), 1),)
+        monkeypatch.setattr(
+            fishing, "require_safari_session", lambda _: SimpleNamespace(safari_steps=129)
+        )
     context, traversal, field = object(), object(), object()
     supplements = (object(), object())
     observed = {}
@@ -65,7 +79,9 @@ def test_fishing_reuses_budget_chain_and_goal_registration_and_rejects_mutation(
     monkeypatch.setattr(fishing, "Gen1TrainerSightProjector", lambda *a: object())
     monkeypatch.setattr(fishing, "Gen1FieldMovePort", lambda *a, **k: field)
     monkeypatch.setattr(
-        fishing, "living_dex_option_context_from_goal_situation", lambda _: context,
+        fishing,
+        "living_dex_option_context_from_goal_situation",
+        lambda _: context,
     )
 
     def inventory(rom, registered, passed_context, **kwargs):
@@ -94,6 +110,7 @@ def test_fishing_reuses_budget_chain_and_goal_registration_and_rejects_mutation(
     assert observed["field"] is field
     assert observed["free_storage_slots"] == 2  # Not total remote-box capacity.
     assert observed["maximum_candidates"] == 4 and observed["maximum_casts"] == 24
+    assert observed["safari_session_steps"] == (129 if safari else None)
 
 
 def test_fishing_rejects_legacy_completion_policy():

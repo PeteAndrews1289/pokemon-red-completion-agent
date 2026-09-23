@@ -1,0 +1,920 @@
+# Raw narrative section directory
+
+Generated from the two immutable September10 archives during the September22 reconstruction.
+These are source locators, not a chronological retelling or current instructions.
+Line numbers refer to the archive bodies identified in [the source inventory](SOURCE_INDEX.md).
+Use the archive's text search for a heading; repeated headings are intentionally retained.
+
+## project-narrative-through-2026-09-10.md
+
+[Open archive](../history/project-narrative-through-2026-09-10.md). SHA256: `deb00db88115af0edca231c5c1aded958b52e3141472cc33b72e0649036e6b1e`.
+
+- Line 1: Historical archive — superseded September 10, 2026
+- Line 7: Current — collection learning; model54, 58 registrations
+- Line 17: Prior checkpoints
+- Line 19: Current — observed funding guard; model 38 unchanged
+- Line 27: Prior checkpoints
+- Line 29: Current — qualified recovery; model38/53 registrations
+- Line 38: Prior checkpoints
+- Line 40: Current — status-recovery audit; model36 retained
+- Line 49: Prior checkpoints
+- Line 51: Current —53 registrations, model35 retained
+- Line 60: Prior checkpoints
+- Line 62: Current —52 registrations, model31 retained
+- Line 71: Prior checkpoints
+- Line 73: Current —51 registrations, model28 retained
+- Line 82: Prior checkpoints
+- Line 84: Current —51 registrations, model27 retained
+- Line 93: Prior checkpoints
+- Line 95: Current —51 registrations, model26 retained
+- Line 104: Prior checkpoints
+- Line 106: Current —49 registrations, model23 retained
+- Line 115: Prior checkpoints
+- Line 117: Current — restore genuine indoor collection choices
+- Line 127: Previous checkpoints
+- Line 129: Current — native multi-copy evolution verified
+- Line 149: Historical checkpoints below — superseded where inconsistent
+- Line 151: Current — model-directed capture and owned evolution
+- Line 171: Historical checkpoints below — superseded where inconsistent
+- Line 173: Current — resource recovery and capture diagnostics
+- Line 193: Historical checkpoints below — superseded where inconsistent
+- Line 195: Current — measured planning and registered model12
+- Line 214: Historical checkpoints below — superseded where inconsistent
+- Line 216: Current — Transform repair and registered model7
+- Line 239: Historical checkpoints below — superseded where inconsistent
+- Line 241: Current — registered learning core connected
+- Line 257: Historical runtime binding
+- Line 259: Current — registered capture/evolution runtime binding
+- Line 272: Historical foundation
+- Line 274: Current — shared Pokédex memory and planning foundation
+- Line 289: Historical scope adoption
+- Line 291: Current — shared registered Pokédex; gameplay paused
+- Line 306: Historical state before registered-only scope
+- Line 308: Current — Fly-enabled collection: native114
+- Line 318: Prior package and Phase4 history
+- Line 320: Current — collection-planning package accepted
+- Line 330: Prior Phase4 closeout — unchanged gameplay evidence
+- Line 360: Historical checkpoint — native83 fitted; combined recovery before Champion
+- Line 382: Historical checkpoint — model-selected Lance victory; Champion next
+- Line 397: Historical — ordinary control with bounded healing; Lance-only test next
+- Line 412: Historical — make the recovery budget part of the decision
+- Line 422: Historical — recovery must happen while options still exist
+- Line 440: Historical — a drawn window is not a ready interaction
+- Line 463: Historical — learn from the misses, then remove the actual blocker
+- Line 483: Historical — learning what recovery is for
+- Line 518: Historical — Agatha shadow fit verified; changed-resource training probe next
+- Line 542: Historical — Agatha batch closed; all-attempt controller-return fit next
+- Line 567: Historical — the learner stops recommending and starts choosing
+- Line 582: Historical — learning the difference between successful actions and useful progress
+- Line 602: Historical — forward-goal learner qualified in a toy task; Red model82 unchanged
+- Line 631: Historical — model82; Champion failure retained; horizon reorientation, 2026-09-09
+- Line 659: Project Narrative: From a Completed Run to a Transferable Pokémon Agent
+- Line 661: Current — final Dragonite; explicit risk reorientation
+- Line 678: Current — Gyarados defeated; first Dragonair retained
+- Line 695: Current — Lance reached; introduction retained, not yet recovered
+- Line 709: Current — Agatha lesson completed and model79 verified
+- Line 747: Historical — prospective story outcomes engineering qualification
+- Line 778: Current — preparation led to a real story result
+- Line 797: Historical — a second useful heal exposes a story-data gap
+- Line 818: Historical — the learner chose preparation and learned its real cost
+- Line 842: Historical — Lorelei is finished, but the model has not learned this victory
+- Line 864: Historical — survival is a turn budget, not a health percentage
+- Line 884: Historical — a good attack matchup can still be a bad switch
+- Line 899: Historical — actual combat exposed the difference between coverage and survival
+- Line 915: Historical — an executable story option is not yet a learned decision
+- Line 930: Historical — replacing a party recipe with observed capabilities
+- Line 948: Historical — the collection supplied its own travel specialist
+- Line 966: Historical — travel by observed destination, not guessed cursor counts
+- Line 985: Historical — knowing a goal is next is not knowing how to execute it
+- Line 1007: Historical — income is reachable beyond the current map
+- Line 1032: Historical — earned resources reach the learning loop
+- Line 1056: Historical — the agent earns its next supplies
+- Line 1079: Historical — parallel coding still needs a real game test
+- Line 1099: Historical — learning needs a practical economy
+- Line 1115: Historical — two useful collection chains, not a complete game player
+- Line 1152: Historical — Arbok obtained, model72; repeat sustained collection next
+- Line 1173: Historical — chain03 retained, model70; PC continuation repair
+- Line 1190: September 8 — a recovery lesson, not an erased failure
+- Line 1203: September 8 — recovering progress without pretending the failure vanished
+- Line 1222: September 8 — choosing the useful goal exposed a recovery gap
+- Line 1246: September 8 — a useful duplicate, not another species tick
+- Line 1273: September 8 — preserving the point of failure
+- Line 1293: September 8 — more useful choices, then a travel limit exposed
+- Line 1318: September 8 — knowing when to stop catching, and finding another way
+- Line 1341: Earlier September 8 — the spare became a living evolution
+- Line 1367: September 7 — a useful duplicate, not a new species
+- Line 1387: September 7 live follow-through — recovery worked; capture is still uncertain
+- Line 1408: September 7 engineering update — faster drafts still need evidence
+- Line 1421: Historical — failed source choice retained; model63 fitted
+- Line 1454: Historical — model-selected Beedrill retained and model62 fitted
+- Line 1495: Historical — Butterfree retained; real collection prerequisites identified
+- Line 1527: Historical — optional recovery played and fitted; model61
+- Line 1556: Historical — V retrieved the precursor; recovery repair qualified
+- Line 1579: September7 — storage worked; sustainability did not
+- Line 1598: September7 — from Teleport-only to a new living species
+- Line 1620: September7 follow-up — changing the future without rewriting the past
+- Line 1635: September7 closeout — two productive steps without manual relaunching
+- Line 1649: September7 — learning from a failed continuation automatically
+- Line 1662: September7 — the next ball actually caught Abra
+- Line 1670: September7 — making the earned resources usable
+- Line 1679: September7 — a real capture, and an important qualification
+- Line 1692: Historical — model53; capture efficiency blocks the productive follow-up
+- Line 1701: September7 — the model wanted supplies
+- Line 1714: September7 — failures became useful only when their cause survived
+- Line 1729: Active — learned regional choices, September7
+- Line 1742: Active — regional continuation, September 7
+- Line 1752: September7 closeout — the learner finally chose a complete evolution
+- Line 1768: September7 — from working skills to actual retained learning
+- Line 1784: September7 — the collection finally gained Rapidash
+- Line 1797: September 7 — grinding was fast; changing state was the hard part
+- Line 1810: September 7 — the trainee finally earns its own experience
+- Line 1824: September 6 — a wall that was actually a conversation
+- Line 1838: September 6 — real learning returns; a skill fails at its last connection
+- Line 1851: September 6 — a learner that can use memory, not yet evidence that it does
+- Line 1866: A stable visual reference for the whole project
+- Line 1875: Historical — persisted search history; history-aware learner next
+- Line 1890: September 6 — the loop trains, but the choice did not improve
+- Line 1900: September 6 — not finding a Pokemon should not erase the session
+- Line 1909: Historical: make learned progress persist, then test adaptation
+- Line 1927: September 6: collecting survives a supply trip—but efficiency is still unfinished
+- Line 1946: September 6: the model catches one—and reveals the next missing link
+- Line 1960: September 6: successful tasks are not the same as collecting
+- Line 1978: September 6: moving the fitted model into actual decisions
+- Line 1991: September 6: a viewer that explains what is actually learning
+- Line 2010: September 6: real game outcomes reached the learner
+- Line 2039: September 6: close the gap between collecting lessons and updating the learner
+- Line 2087: September 6: preserve the work, then test the boundary between components
+- Line 2109: September 5: we chose a smaller exam to reach a real lesson sooner
+- Line 2131: September 5: the first targeted lessons found a bad classroom
+- Line 2153: September 5: training stopped pretending to be an exam
+- Line 2168: September 5: four successes exposed a model that was not ready
+- Line 2183: September 5: five real choices replaced another replay
+- Line 2205: September 5: two identical emulators had different packaging fingerprints
+- Line 2220: September 5: the model made two real choices—and confidence finally met reality
+- Line 2236: September 5: the first live launch failed before the game—and saved the experiment
+- Line 2252: September 5: the model finally has a bounded, observable doorway into Red
+- Line 2268: September 5: the five saved situations finally clear the repeatable doorway
+- Line 2282: September 5: the external drive crossed a deliberate trust boundary
+- Line 2297: September 5: the airlock rejected the launcher itself
+- Line 2310: September 5: the airlock caught its own missing runtime stage
+- Line 2323: September 4: five real exam cards finally reach one executable doorway
+- Line 2343: September 4: the binding gate finally produced a usable plan
+- Line 2360: September 4: correct checks can still make the system unusable
+- Line 2376: September 4: one missing filter jammed all 429 legal plans
+- Line 2393: September 4: 429 legal supplements move the bug from supply to binding
+- Line 2408: September 4: a failed freeze becomes a capacity measurement
+- Line 2423: September 4: the shopping list becomes an immutable three-root plan
+- Line 2436: September 4: the project counts the exam seats before building more classrooms
+- Line 2450: September 4: the exam runner stops rewriting the classroom
+- Line 2471: September 4: the model finally receives every collected causal lesson
+- Line 2492: September 4: the player catches twice and fails without falling over
+- Line 2508: September 4: two catches work, then a recorded failure still crashes composition
+- Line 2523: September 4: the first player comparison reveals that prerequisites are not decisions
+- Line 2538: September 4: the model finally learns from its own gameplay outcomes
+- Line 2558: September 3: the first real strategic outcome batch takes shape
+- Line 2574: September 3: the repaired choice worked; the reader misunderstood its timeline
+- Line 2592: September 3: the first frozen question caught an indexing assumption before it moved
+- Line 2607: September 3: four moments become nine controlled questions
+- Line 2627: September 3: eighty-one different save files were not eighty-one independent lessons
+- Line 2646: September 3: the model made the right kind of move, then the wrapper rejected reality
+- Line 2667: September 3: a trained living-Pokédex model finally reaches the player boundary
+- Line 2689: September 3: the pieces finally become a player loop
+- Line 2714: September 2: the audit found the benchmark the model still has to beat
+- Line 2736: September 2: the model finally learns from Red and takes an action
+- Line 2758: September 2: stop manufacturing classrooms and start measuring decisions
+- Line 2776: September 2: a pre-outcome algebra check prevented a meaningless execution
+- Line 2795: September 1: one capture pipeline now understands both sides of the experiment
+- Line 2809: September 1: the held-out classroom exists without borrowing from training
+- Line 2825: September 1: the compatibility check prevents another wasted campaign
+- Line 2838: September 1: seven files become one trustworthy classroom
+- Line 2853: September 1: the seven lesson boundaries finally exist
+- Line 2865: September 1: two new lesson seats are sealed
+- Line 2878: September 1: preserve the five, do not erase the two
+- Line 2894: September 1: five lessons survived, and the two failures exposed a real contract bug
+- Line 2914: September 1: the classroom matching test passes
+- Line 2928: September 1: let every student try every honest classroom
+- Line 2944: September 1: the PP hypothesis fails before healing anyone
+- Line 2958: September 1: ask whether the students are merely out of PP
+- Line 2972: September 1: the corrected census says the current classroom is empty
+- Line 2987: September 1: seven attempts, zero lessons—and the guardrail earned its keep
+- Line 3012: September 1: make a blackout cost evidence, not integrity
+- Line 3028: September 1: seven students are named before the lesson exists
+- Line 3060: August 31: the registrar passed, but there are only four new lessons
+- Line 3077: August 31: turn one useful lesson into a crash-safe curriculum contract
+- Line 3109: August 31: the first bounded lesson worked—and the model candidate did not improve
+- Line 3129: August 31: replace the failed factory with one observable learning loop
+- Line 3161: August 31: twelve expensive empty classrooms force the project back to learning
+- Line 3183: Previous August 31 checkpoint: turn the measured deficit into an independent-world factory
+- Line 3212: August 31: the census rejects the existing classroom
+- Line 3234: August 30: count independent classrooms before collecting another lesson
+- Line 3256: August 30: define an honest exam before buying more lessons
+- Line 3282: August 30: the bounded classroom is complete, and speed is no longer the excuse
+- Line 3305: August 30: six sealed lesson cards reveal the real bottleneck
+- Line 3329: August 30: the first authentic Red causal model is real
+- Line 3358: August 30: build the first fitter so it can only tell the truth
+- Line 3381: August 30: draw the whole bridge before taking the next step
+- Line 3413: August 30: eight honest lessons are enough to turn on the training machinery
+- Line 3435: August 30: the second successor card reaches the first integration floor
+- Line 3454: August 29: freeze the semester, then build the one key that cannot open the exam
+- Line 3476: August 29: count the empty classrooms, then build a larger semester once
+- Line 3497: August 29: the first classroom batch taught five lessons—and refused to fake three
+- Line 3518: August 29: the classroom finally has a key that cannot open the exam
+- Line 3542: August 29: the classroom addresses are finally locked
+- Line 3561: August 29: the classroom lock is built, but it has not been turned
+- Line 3577: August 29: the old bank is enough to start the first honest curriculum
+- Line 3592: August 29: the failed teacher gate changes the unit of learning
+- Line 3607: August 29: a second prospective population says the teacher is still not a classroom factory
+- Line 3629: August 28: the second repair closes four late, real-cartridge gaps
+- Line 3652: August 28: an exact 1/12 failure became a reusable capability repair
+- Line 3684: August 28: the compatibility graph turns an estimate into a generation brief
+- Line 3705: August 27: turning one honest failure into an experiment that can answer the question
+- Line 3733: August 27: the first authentic causal row is a measured failure
+- Line 3754: August 27: the last public gate closed; the next event must be data
+- Line 3771: August 27: the classroom finally has a trustworthy door to one real lesson
+- Line 3794: August 27: the doorway became a one-way lesson gate
+- Line 3816: Earlier August 27: the lesson finally became something a model can learn from
+- Line 3845: August 27: the first real inspection stopped at its own source tree
+- Line 3865: August 27: the wrapper can inspect one lesson without entering the game
+- Line 3887: August 27: the lesson claim became atomic and crash-safe
+- Line 3912: Earlier August 27: the classroom door finally opened without anyone entering
+- Line 3929: Earlier August 27: the safe bridge was pointed at the wrong vault
+- Line 3956: Earlier August 27: the green bridge was secretly entering the classroom
+- Line 4004: August 26: the authentic Red classroom is frozen—but the student has not entered it
+- Line 4033: August 26: a historical split nearly became a new experiment's label
+- Line 4060: August 26: the real classroom finally fits on the cartridge
+- Line 4085: August 26: the classroom stopped signing its own certificates
+- Line 4111: August 26: green tests met an untrusted witness
+- Line 4136: August 26: the project stopped inventing classrooms and learned to fork one state
+- Line 4170: August 26: the authentic source cable now has a real, tested socket
+- Line 4195: Previous August 26: the whole lesson plan can now freeze before the game moves
+- Line 4222: Previous August 26: a power loss can no longer turn one lesson into two
+- Line 4250: August 26: the doorway works; the classrooms still need addresses
+- Line 4274: August 26: the blueprint passed—and exposed the one abstraction Red is missing
+- Line 4296: August 26: design the classroom before walking back into the game
+- Line 4318: August 26: the final count ended the old classroom
+- Line 4340: Previous August 26: the counter can now finish the room without ignoring a broken card
+- Line 4359: August 26: one bad context stopped the counter before it saw the classroom
+- Line 4379: August 26: the diagnostic screen now has exact gauges
+- Line 4398: August 26: the silent census stopped safely, but threw away the reason
+- Line 4420: August 26: make the lesson survive the crash, then count the real classroom
+- Line 4452: August 26: Red gets an honest option classroom
+- Line 4483: August 25: stop grading the road not taken
+- Line 4513: Earlier August 25: teach the notebook to look, then budget for imperfect lessons
+- Line 4537: Earlier August 25: the first frozen lesson fails—and the observer looks away
+- Line 4564: Earlier August 25: the authentic classroom was finally sealed
+- Line 4588: Earlier August 25: the classroom exists, but the envelope refuses it
+- Line 4611: Earlier August 25: the first multi-family freeze fails for the right reason
+- Line 4641: Earlier August 25: one real choice becomes a reusable multi-family classroom
+- Line 4656: August 25: the model made its first authentic collection choice
+- Line 4681: Earlier August 25: the router could not see the party's legal field moves
+- Line 4691: Earlier August 25: stop designing the doorway and let the model make one real collection choice
+- Line 4715: August 21: the generic public evidence boundary qualified
+- Line 4732: Previous August 21 checkpoint: the one-shot V1 preflight failed before protected access
+- Line 4747: Previous August 21 checkpoint: the exact Red dual-capability preflight runner passed external review
+- Line 4763: Previous August 21 checkpoint: the semantic Red dual-capability runtime qualified
+- Line 4779: Previous August 21 checkpoint: the dual-capability curriculum design qualified without a route script
+- Line 4797: Previous August 21 checkpoint: the authentic preflight found no jointly executable decision
+- Line 4815: Previous August 21 checkpoint: the exact Red shadow runner qualified; one zero-action preflight was next
+- Line 4832: Previous August 21 checkpoint: the one-decision shadow contract qualified; runner implementation was next
+- Line 4846: Previous August 21 checkpoint: the Red observation adapter qualified without touching the game
+- Line 4861: Previous August 21 checkpoint: the V2 dependency ranker passed its held-out synthetic comparison
+- Line 4876: Previous August 21 checkpoint: the comparison mechanism was published; one exact-head execution remained
+- Line 4890: Previous August 21 checkpoint: the V2 comparison preflight passed without opening an answer
+- Line 4906: Previous August 20 checkpoint: a clean V2 replacement fit completed without opening the exam
+- Line 4923: Previous August 20 checkpoint: four fresh V2 evaluation openings were sealed once
+- Line 4940: Previous August 20 checkpoint: the fresh V2 evaluation implementation passed
+- Line 4957: Previous August 20 checkpoint: the fresh V2 dependency-evaluation design passed
+- Line 4975: Previous August 20 checkpoint: the reusable evaluation-integrity boundary passed
+- Line 4993: Previous August 20 checkpoint: the V1 evaluation boundary failed before comparison
+- Line 5020: Previous August 20 checkpoint: the comparison looked authenticated; later invalidated
+- Line 5032: Previous August 20 checkpoint: the first rootless dependency fit; sealing claim invalidated
+- Line 5047: Previous August 20 checkpoint: the fixed dataset was admitted; sealing claim invalidated
+- Line 5064: Previous August 20 checkpoint: the campaign was frozen; disclosure claim invalidated
+- Line 5080: Previous August 20 checkpoint: the rootless dependency lesson was qualified
+- Line 5097: Previous August 18 checkpoint: clean bootstrap qualified; rootless dependency design became the learning bridge
+- Line 5117: Previous August 18 checkpoint: DEVELOP_TEAM failed closed; bootstrap qualification protected the next curriculum
+- Line 5136: Previous August 18 checkpoint: canonical readiness qualified; DEVELOP_TEAM became the distinct causal question
+- Line 5153: Previous August 18 checkpoint: first-causal acquisition closed; canonical readiness was the repair
+- Line 5171: Previous August 18 checkpoint: the multiroot freeze closed; one causal example became the target
+- Line 5189: Previous August 18 checkpoint: context rollover was narrowed to exclusion evidence
+- Line 5207: Previous August 18 checkpoint: the root-diverse implementation qualifies; private readiness is next
+- Line 5223: Previous August 18 checkpoint: the one-target successor fails; the learning loop becomes root-diverse
+- Line 5242: August 18: the acquisition campaign closes; one acquisition outcome becomes the lesson
+- Line 5261: August 18: the private acquisition-replanning context plan builds
+- Line 5276: August 18: the portable choice gains a real Red executor
+- Line 5292: August 18: the portable post-capture choice seam passes
+- Line 5307: August 18: the replanning curriculum is frozen; a reusable choice seam is next
+- Line 5321: August 18: the first paired gameplay screen ties on acquisition
+- Line 5335: August 18: execution qualification passes; the frozen pair is ready
+- Line 5351: August 18: the paired design freezes one root without executing either arm
+- Line 5372: Previous August 18 checkpoint: one outcome update passes, and authority stays put
+- Line 5395: Previous August 18 checkpoint: V2 yields one composition and two fit-eligible outcomes
+- Line 5417: Previous August 18 checkpoint: replacement V2 reaches a clean starting line
+- Line 5436: Previous August 18 checkpoint: trial 0 invalidated the infrastructure, not the learning hypothesis
+- Line 5459: Previous August 18 checkpoint: the corrected campaign reached training readiness
+- Line 5479: Previous August 18 checkpoint: action-free inventory corrected the outcome strata
+- Line 5502: Previous August 17 checkpoint: repeatable-development candidate passes exact-byte review
+- Line 5520: Previous August 17 checkpoint: V4 fails safely; repeatable development replaces the fresh-root carousel
+- Line 5549: Previous August 17 checkpoint: V3 fails action-free; V4 tests story, recovery, and storage
+- Line 5573: Previous August 17 checkpoint: preclaim observability passes and V3 returns to the game boundary
+- Line 5592: Previous August 17 checkpoint: the V2 preflight fails closed and the root is retired
+- Line 5614: Previous August 17 checkpoint: V1 closes statically; both field-compatible V2 reviews are GO
+- Line 5639: Previous August 17 checkpoint: the composition core was published; the V1 runner was not qualified
+- Line 5660: August 17: the postmortem found ambiguity, not a projection repair
+- Line 5689: August 17: the representation failed before the optimizer ran
+- Line 5719: August 17: the architecture screen passed preflight—and its blind spot is explicit
+- Line 5754: August 17: lower training loss made all five confidence estimates worse
+- Line 5777: August 17: the recovery stopped where learning could begin
+- Line 5809: August 17: more training data did not automatically make a better model
+- Line 5835: August 17: the next dataset stopped confusing coverage with balance
+- Line 5858: August 17: the first real completion-aware model learned something
+- Line 5887: August 17: the model stopped asking weak Pokémon to prove they were already strong
+- Line 5920: August 16: the first fast loop finally produced data—and told us not to scale
+- Line 5947: August 16: we stopped mistaking experiment ceremony for learning progress
+- Line 5976: August 16: the first lane failed before the first button—and stayed failed
+- Line 6008: August 16: fourteen questions became fifty-five honest experiments
+- Line 6038: August 16: fourteen face-down questions survived reconstruction
+- Line 6072: August 16: the first completion-aware input catalog became immutable
+- Line 6092: August 16: both resource-pressure states exist; the input freezer is ready to publish
+- Line 6114: August 16: the first authentic resource-pressure state was accepted
+- Line 6134: August 16: v4 reached the owner-authorization line
+- Line 6154: August 16: the one-shot plan learned to re-derive its own premise
+- Line 6181: August 16: the missing resource-pressure lesson became an auditable protocol
+- Line 6202: August 16: one measurement became a second independent prior
+- Line 6223: August 16: the missing fact was measured once
+- Line 6248: August 15: count the choices the learner can actually make
+- Line 6278: August 15: the test suite approved two contracts that contradicted each other
+- Line 6309: August 15: the lock had to survive the power going out
+- Line 6329: August 15: the right state, under the wrong name
+- Line 6346: August 15: twelve real questions and one deliberately answerless run
+- Line 6373: August 15: fourteen places to ask—not fourteen answers
+- Line 6399: August 15: the first prior is real—and deliberately small
+- Line 6427: August 15: the helper behind the helper mattered
+- Line 6451: August 15: the proof had to survive a different Python
+- Line 6470: August 15: three agents, one keyboard, two kinds of doubt
+- Line 6485: August 15: a correct number can still have the wrong history
+- Line 6505: August 15: the audit saved us from rebuilding the project
+- Line 6538: August 15: the answer can no longer rewrite the question
+- Line 6566: August 15: the question and its evidence were frozen together
+- Line 6590: August 15: the curriculum became inspectable before it became expensive
+- Line 6626: August 15: the model finally received the problem we actually care about
+- Line 6654: August 14: the repaired walker met the game
+- Line 6671: August 14: thirty-nine Cave trips became one reproducible bug
+- Line 6698: August 14: the repaired counter changed the answer
+- Line 6712: August 14: party training became a controlled question—and answered it
+- Line 6742: August 14: the first navigation lesson reached the game
+- Line 6760: August 14: training finally ran—and the scoreboard was too easy
+- Line 6780: August 14: the first curve stopped on a real game mechanic
+- Line 6801: August 14: the shared abstraction got smaller, not larger
+- Line 6823: August 14: the first outcome lesson failed—and that was the result
+- Line 6852: August 14: the last audit found a transaction boundary
+- Line 6867: August 14: the reviewers audited the audit
+- Line 6883: August 14: the reviewers were instruments, not judges
+- Line 6912: August 14: two reviewers forced the project to count what was real
+- Line 6962: August 14: the project stopped mistaking a final exam for practice
+- Line 6998: August 14: training finally meant fitting, then risking a full run
+- Line 7030: August 14: Crystal became an experiment before it became another route
+- Line 7102: August 14: the answer finally controlled the game
+- Line 7129: August 14: the seventh card reached the fight and lost
+- Line 7145: August 14: different save files were still the same lesson
+- Line 7162: August 14: the sixth card stopped the run
+- Line 7190: August 14: 81 questions, and still zero labels
+- Line 7217: August 14: the hands are qualified; now we build the judgment curriculum
+- Line 7300: August 13: Red becomes the curriculum, not the product
+- Line 7359: August 13: the audit stopped us from spending the test on the wrong experiment
+- Line 7459: August 13: the first model-facing dataset finally became real
+- Line 7487: August 12: one winning route was not yet a curriculum
+- Line 7603: August 11: the poster Rocket was a trainer, but not that kind of trainer
+- Line 7635: August 11: two guards turned static maps into a changing world
+- Line 7663: August 11: the map was right, but the police officer had moved
+- Line 7729: August 11: the first useful label chose the route ten times longer
+- Line 7763: August 11: the first short run stopped before taking a step
+- Line 7782: August 11: forty-eight questions, zero answers observed
+- Line 7814: August 11: nine rows became three questions
+- Line 7834: August 11: the first six roots turned failure into an experiment
+- Line 7870: August 11: three choices made the rehearsal worth collecting
+- Line 7891: August 11: the cartridge closed the Pokédex arithmetic
+- Line 7918: August 11: stop teaching arrows and record decisions
+- Line 8014: August 10: the route outlived its Repel
+- Line 8040: August 10: open floor did not mean open world
+- Line 8067: August 10: the shortest route woke the trainer
+- Line 8097: August 10: the same boulder state survived three floors
+- Line 8125: August 11: the boulder made the state space move
+- Line 8157: August 10: owning Cut did not mean the tree was gone
+- Line 8205: August 10: the route looked before it walked
+- Line 8232: August 10: water became state, not scenery
+- Line 8266: August 10: the route noticed when the world disagreed
+- Line 8316: August 10: the map learned which way was down
+- Line 8337: August 10: the model completed a perturbed run; the teacher did not know how to lose
+- Line 8384: August 9: offline accuracy met causal reality
+- Line 8480: August 8: the evaluator rejected a win—and found the next real model gap
+- Line 8568: August 8: safe authority passed; useful strategy remains unproven
+- Line 8653: August 8: separating an answer checker from a player
+- Line 9010: August 5: the learned planner authorizes the fixed objective sequence
+- Line 9030: August 5: every typed battle action becomes teacher-free
+- Line 9050: August 5: recovery decisions become teacher-free
+- Line 9069: August 5: target resolution begins removing the teacher from execution
+- Line 9090: August 5: the full battle controller completes Red through typed execution
+- Line 9114: August 5: the full battle controller reaches live shadow qualification
+- Line 9142: August 5: the learner enters the game loop
+- Line 9206: Executive summary
+- Line 9248: The collection denominator is now explicit
+- Line 9369: The problem
+- Line 9387: Phase 1: establish a trustworthy reference solution
+- Line 9414: What the completed run gave us
+- Line 9426: What it did not prove
+- Line 9433: Phase 2: turn brittle assumptions into reusable capabilities
+- Line 9641: Current schedule-hardening work
+- Line 9700: Phase 3: from a single carry to a balanced team
+- Line 9702: Why the completed route is the wrong thing to imitate
+- Line 9729: The target policy
+- Line 9742: Reusable concepts, not Red coordinates
+- Line 9774: Empirical confirmation from the first clean-power run on this branch
+- Line 9801: What this phase does *not* yet claim
+- Line 9809: What is being built
+- Line 9825: Learning architecture
+- Line 9841: Current learned component
+- Line 9854: Evaluation discipline
+- Line 9877: Transfer to other Pokémon games
+- Line 9905: What worked
+- Line 9921: What did not work
+- Line 9938: Historical status and honest limitations
+- Line 9966: Historical qualification snapshots
+- Line 10156: V16 held-out finding and v17 response
+- Line 10185: V36 qualification, first counted finding, and V37 response
+- Line 10376: From scripted completion to planner training
+- Line 10429: Turning a carry route into a team curriculum
+- Line 10518: From learning when to switch to learning who should enter
+- Line 10564: Canonical target authority passes, then composition finds the next seam
+- Line 10793: The search only watched half of its own path
+- Line 10811: The hardest rehearsal failed one tile from its own prediction
+- Line 10847: Engineering and portfolio takeaways
+- Line 10878: Related documentation
+- Line 10889: Narrative checkpoint — from completed route to causal curriculum capacity
+- Line 10911: The teacher won the battle and still failed the test
+- Line 10940: The door opened without starting the game
+- Line 10956: August 30: 139 saves became a falsifiable statement
+- Line 10981: A capacity failure became a better experiment, not another route patch
+- Line 11013: The pipeline finally reached the verb “train”
+- Line 11033: Eight exam saves—and one honest stop before training
+- Line 11051: The guard that stopped training before the first button
+- Line 11069: The filename that stopped a training run
+- Line 11108: The exam inputs finished before the classroom inputs
+- Line 11128: The curriculum failed before the model could learn from it
+- Line 11142: The gate that refused to call weak inputs training — September 2, 2026
+- Line 11157: From a rejected syllabus to a cartridge-native classroom — September 3, 2026
+- Line 11179: The classroom finally reached the cartridge — September 3, 2026
+- Line 11201: The first authentic model learned—and the baseline still won — September 3, 2026
+- Line 11232: The experiment succeeded by telling us to stop — September 3, 2026
+- Line 11271: A causal collection model reached the player — September 3, 2026
+- Line 11292: A useful failure finally reached the learning boundary — September 3, 2026
+- Line 11307: The model made the better strategic choice — September 3, 2026
+- Line 11320: September 3: turning the census into an executable calibration plan
+- Line 11329: September 3: separating execution from belief
+- Line 11341: September 4: the cheapest new dataset was partly already there
+- Line 11360: September 5: the evaluator was ready before the training set
+- Line 11374: September 5: two Red states became a legitimate ten-lesson curriculum
+- Line 11394: September 5: the lesson plan became executable
+
+## video-narrative-through-2026-09-10.md
+
+[Open archive](../history/video-narrative-through-2026-09-10.md). SHA256: `5d24c947fffc936d97fa51d315c6760b3f20a0e17379bcbdf66ebbd198174e43`.
+
+- Line 1: Historical archive — superseded September 10, 2026
+- Line 7: Current — collection learning; model54, 58 registrations
+- Line 17: Prior checkpoints
+- Line 19: Current — observed funding guard; model 38 unchanged
+- Line 27: Prior checkpoints
+- Line 29: Current — qualified recovery; model38/53 registrations
+- Line 38: Prior checkpoints
+- Line 40: Current — status-recovery audit; model36 retained
+- Line 49: Prior checkpoints
+- Line 51: Current —53 registrations, model35 retained
+- Line 60: Prior checkpoints
+- Line 62: Current —52 registrations, model31 retained
+- Line 71: Prior checkpoints
+- Line 73: Current —51 registrations, model28 retained
+- Line 82: Prior checkpoints
+- Line 84: Current —51 registrations, model27 retained
+- Line 93: Prior checkpoints
+- Line 95: Current —51 registrations, model26 retained
+- Line 104: Prior checkpoints
+- Line 106: Current —49 registrations, model23 retained
+- Line 115: Prior checkpoints
+- Line 117: Current — restore genuine indoor collection choices
+- Line 127: Previous checkpoints
+- Line 129: Current — native multi-copy evolution verified
+- Line 149: Historical checkpoints below — superseded where inconsistent
+- Line 151: Current — model-directed capture and owned evolution
+- Line 171: Historical checkpoints below — superseded where inconsistent
+- Line 173: Current — resource recovery and capture diagnostics
+- Line 193: Historical checkpoints below — superseded where inconsistent
+- Line 195: Current — measured planning and registered model12
+- Line 214: Historical checkpoints below — superseded where inconsistent
+- Line 216: Current — Transform repair and registered model7
+- Line 239: Historical checkpoints below — superseded where inconsistent
+- Line 241: Current — registered learning core connected
+- Line 257: Historical runtime binding
+- Line 259: Current — registered capture/evolution runtime binding
+- Line 272: Historical foundation
+- Line 274: Current — shared Pokédex memory and planning foundation
+- Line 289: Historical scope adoption
+- Line 291: Current — shared registered Pokédex; gameplay paused
+- Line 306: Historical state before registered-only scope
+- Line 308: Current — Fly-enabled collection: native114
+- Line 318: Prior package and Phase4 history
+- Line 320: Current — collection-planning package accepted
+- Line 330: Prior Phase4 closeout — unchanged gameplay evidence
+- Line 360: Historical checkpoint — native83 fitted; combined recovery before Champion
+- Line 382: Historical checkpoint — model-selected Lance victory; Champion next
+- Line 397: Historical — ordinary control with bounded healing; Lance-only test next
+- Line 412: Historical — make the recovery budget part of the decision
+- Line 422: Historical — the fix worked; the battle exposed the next real problem
+- Line 436: Historical — show the decision, then show the honest failure
+- Line 456: Historical — learning what recovery is for
+- Line 491: Historical — Agatha shadow fit verified; changed-resource training probe next
+- Line 515: Historical — Agatha batch closed; all-attempt controller-return fit next
+- Line 540: Historical — show the decision changing the game
+- Line 556: Historical — the AI can do everything right locally and still miss the goal
+- Line 574: Historical — forward-goal learner qualified in a toy task; Red model82 unchanged
+- Line 603: Historical — model82; Champion failure retained; horizon reorientation, 2026-09-09
+- Line 631: YouTube narrative: teaching a model to actually play Pokémon
+- Line 633: Current — final Dragonite; explicit risk reorientation
+- Line 650: Current — Gyarados defeated; first Dragonair retained
+- Line 667: Current — Lance reached; introduction retained, not yet recovered
+- Line 681: Current — Agatha lesson completed and model79 verified
+- Line 719: Historical — prospective story outcomes engineering qualification
+- Line 750: Current — preparation led to a real story result
+- Line 769: Historical — a second useful heal exposes a story-data gap
+- Line 790: Historical — the learner chose preparation and learned its real cost
+- Line 814: Historical — Lorelei is finished, but the model has not learned this victory
+- Line 836: Historical — survival is a turn budget, not a health percentage
+- Line 856: Historical — a good attack matchup can still be a bad switch
+- Line 871: Historical — actual combat exposed the difference between coverage and survival
+- Line 887: Historical — an executable story option is not yet a learned decision
+- Line 902: Historical — replacing a party recipe with observed capabilities
+- Line 920: Historical — the collection supplied its own travel specialist
+- Line 938: Historical — travel by observed destination, not guessed cursor counts
+- Line 957: Historical — knowing a goal is next is not knowing how to execute it
+- Line 979: Historical — income is reachable beyond the current map
+- Line 1004: Historical — earned resources reach the learning loop
+- Line 1028: Historical — the agent earns its next supplies
+- Line 1051: Historical — parallel coding still needs a real game test
+- Line 1071: Historical — learning needs a practical economy
+- Line 1087: Historical — the collection loop earns two evolutions
+- Line 1116: Historical — Arbok obtained, model72; repeat sustained collection next
+- Line 1137: Historical — chain03 retained, model70; PC continuation repair
+- Line 1154: September 8 — a recovery lesson, not an erased failure
+- Line 1167: September 8 — recovering progress without pretending the failure vanished
+- Line 1186: September 8 — choosing the useful goal exposed a recovery gap
+- Line 1210: September 8 — a useful duplicate, not another species tick
+- Line 1237: September 8 — preserving the point of failure
+- Line 1257: September 8 — more useful choices, then a travel limit exposed
+- Line 1282: September 8 — knowing when to stop catching, and finding another way
+- Line 1305: Earlier September 8 — the spare became a living evolution
+- Line 1331: September 7 — a useful duplicate, not a new species
+- Line 1351: September 7 footage beat — a safe failure is different from a broken player
+- Line 1366: September 7 development beat — draft, challenge, repair
+- Line 1376: Historical — failed source choice retained; model63 fitted
+- Line 1409: Historical — model-selected Beedrill retained and model62 fitted
+- Line 1450: Historical — Butterfree retained; real collection prerequisites identified
+- Line 1482: Historical — optional recovery played and fitted; model61
+- Line 1511: Historical — V retrieved the precursor; recovery repair qualified
+- Line 1534: September7 scene — the empty bag is part of the lesson
+- Line 1551: September7 scene — the Pokémon that could not attack
+- Line 1569: September7 follow-up scene — the next goal has to be real
+- Line 1581: September7 final scene — the learner carries its own next step
+- Line 1592: September7 — the honest automatic-learning demonstration
+- Line 1604: September7 — show the earned Abra and the next training update
+- Line 1611: September7 follow-up — spend the money the save actually has
+- Line 1618: September7 segment — show the catch, disclose the cost
+- Line 1631: Historical — model53; capture efficiency blocks the productive follow-up
+- Line 1640: September7 scene — catching Ekans, then choosing supplies
+- Line 1651: September7 scene — the doorway was not the landing
+- Line 1663: Active — learned regional choices, September7
+- Line 1675: Active — regional continuation, September 7
+- Line 1684: Final chapter for this milestone — a learned-policy choice that finishes
+- Line 1697: Latest chapter — a model-selected catch, then an honest boundary
+- Line 1710: Latest chapter — Rapidash, without losing Ponyta
+- Line 1721: Latest chapter — the XP bar moved; the menu was the obstacle
+- Line 1733: Latest chapter — Tail Whip was not a training strategy
+- Line 1746: Latest chapter — it was not a wall; the nurse was still talking
+- Line 1760: Latest chapter — the model chose evolution, but the executor could not reach the PC
+- Line 1772: Latest chapter — memory is wired in; competence still needs evidence
+- Line 1787: Recurring visual chapter — where are we on the map?
+- Line 1804: Historical — persisted search history; history-aware learner next
+- Line 1819: Latest footage context — a fit is not a victory
+- Line 1829: September 6 scene — a useful failure, not a fake success
+- Line 1837: Continuation attempt: the search moved, but recovery failed
+- Line 1851: September 6: the player feeds its own experience back into learning
+- Line 1870: September 6: the first complete supply-and-collect sequence
+- Line 1886: September 6: one real model-chosen catch, then an honest stopping point
+- Line 1902: September 6 result: three successful goals, no new model-caught species
+- Line 1918: Next footage: the trained scorer makes a choice
+- Line 1927: September 6 spectator scene: make the decisions visible
+- Line 1943: September 6 result scene: a real model update, not another readiness check
+- Line 1967: September 6 scene: connect the lesson journal to the existing model
+- Line 2007: September 6 scene: the history survived, but readiness needed another look
+- Line 2024: Planned scene: spend four exam cards to build a better classroom
+- Line 2041: New scene: ten lessons reveal two different classrooms
+- Line 2059: New scene: training is allowed to reset; the exam is not
+- Line 2074: New scene: five choices, one new specimen, and confidence in both directions
+- Line 2091: New scene: same emulator code, two packaging fingerprints
+- Line 2106: New scene: 99.55% confidence meets a real failure
+- Line 2123: New scene: zero frames can still be a useful result
+- Line 2137: New scene: one model choice, one skill, one honest result
+- Line 2153: New scene: five green cards, controller still disconnected
+- Line 2165: New scene: one drive, two trust domains
+- Line 2180: New scene: the launcher never reached the airlock
+- Line 2194: New scene: the airlock says no
+- Line 2207: New scene: five exam cards, one locked airlock
+- Line 2227: New scene: 429 green bindings, then an honest connection gap
+- Line 2241: New scene: a busy processor is not progress
+- Line 2253: New scene: the wrong students were sent through the exam doorway
+- Line 2270: New scene: 429 legal envelopes point to one broken doorway
+- Line 2286: New scene: the envelope stays empty—and the counter explains why
+- Line 2303: New scene: turn the three blank cards into a sealed plan
+- Line 2320: New scene: count the untouched exam before making new levels
+- Line 2337: New scene: the exam gets its own one-shot controller
+- Line 2361: New scene: four green outcomes still failed the confidence test
+- Line 2379: New scene: the data was ahead of the model—and the model catches up
+- Line 2400: New scene: the same failure no longer kills the player
+- Line 2418: New scene: the model catches twice, then the composition layer drops the failure
+- Line 2435: New scene: a fair tie exposes the difference between choice and workflow
+- Line 2452: New scene: the first model update, then back into the game
+- Line 2478: New scene: failures have to survive too
+- Line 2497: New scene: the first repaired arm succeeds
+- Line 2521: New scene: choice zero was not the same choice
+- Line 2539: New scene: four saves, nine fair questions
+- Line 2556: New scene: 81 saves, one uncomfortable question
+- Line 2574: New scene: the level-up succeeded, but the experiment still turned red
+- Line 2592: New scene: same save, two players, no invented scoreboard
+- Line 2619: New scene: seven systems become one bounded player
+- Line 2637: New opening beat: the boring rule beat the neural network
+- Line 2652: New scene: stop sealing every rehearsal and let the model learn
+- Line 2680: New scene: the route factory finally gets switched off
+- Line 2700: New scene: the gate that refused impossible math
+- Line 2716: New scene: stop bad data before it becomes an experiment
+- Line 2733: New scene: the seven-input classroom authenticates
+- Line 2750: New scene: seven inputs, zero lessons scored
+- Line 2765: New scene: the last two seats lock in
+- Line 2780: New scene: build around failure instead of painting over it
+- Line 2800: New scene: five green cards and a useful red light
+- Line 2820: New scene: seven honest seats finally exist
+- Line 2839: New scene: the final old-save matching test
+- Line 2859: New scene: the PP dial barely moves the board
+- Line 2878: New scene: are the attacks missing, or merely exhausted?
+- Line 2897: New scene: the honest answer is zero
+- Line 2917: New scene: zero out of seven, and why that is a useful failure
+- Line 2946: New scene: a blackout cannot grant a second attempt
+- Line 2966: New scene: seven names sealed before the encounters exist
+- Line 2986: New scene: seven lessons frozen, no buttons pressed
+- Line 3007: New scene: the proof gate rejects its own squash commit
+- Line 3028: New scene: the second classroom opens
+- Line 3051: New scene: the obvious second classroom was locked
+- Line 3073: New scene: fifty-four keys, still one classroom
+- Line 3104: New scene: building the classroom factory
+- Line 3137: New scene: the empty desks were real
+- Line 3162: New scene: the attendance counter
+- Line 3183: August 30 scene: stop counting siblings as strangers
+- Line 3202: August 30 scene: close the sixteen-card classroom
+- Line 3221: August 30 scene: six cards separate speed from information
+- Line 3238: August 30 scene: the bridge from eight Red lessons to Crystal
+- Line 3260: August 30 scene: the first eight lessons clear the training gate
+- Line 3277: August 30 scene: card one makes eight lessons
+- Line 3294: August 29 scene: the semester is sealed; build a key that cannot open the exam
+- Line 3308: August 29 scene: inventory the classroom bank, then amortize the next gate
+- Line 3325: August 29 scene: five lessons, three honest empty desks
+- Line 3342: August 29 scene: the key cannot open the exam room
+- Line 3359: August 29 scene: freeze the classroom, then build the key
+- Line 3375: August 29 scene: build the lock before entering the classroom
+- Line 3390: August 29 scene: the classroom census passes
+- Line 3403: August 29 scene: change the unit of learning
+- Line 3416: August 28 scene: three late failures become observable contracts
+- Line 3434: August 28 scene: the exact gate fails before the repair earns 3/3
+- Line 3460: August 28 scene: the old saves face the real matching test
+- Line 3478: August 27 scene: the denominator becomes honest
+- Line 3501: August 27 scene: the first real lesson is a negative
+- Line 3523: August 27 scene: no more doors—draw one real sample
+- Line 3534: August 27 scene: the first lesson gets a clean-room launch rail
+- Line 3554: August 27 scene: build one door that cannot open twice
+- Line 3572: Earlier August 27 scene: one honest lesson, not another doorway
+- Line 3593: August 27 scene: the guard rejects a teammate
+- Line 3606: August 27 scene: inspect one lesson, touch nothing
+- Line 3619: August 27 scene: two keys turn once, even when the power dies
+- Line 3635: Earlier August 27 scene: the classroom authenticates, but the controller stays unplugged
+- Line 3648: Earlier August 27 scene: the right lock, the wrong vault
+- Line 3663: Earlier August 27 scene: the bridge crossed the line while the dashboard stayed at zero
+- Line 3692: August 26 scene: the classroom plan freezes once
+- Line 3711: August 26 scene: the wrong split made one real lesson disappear
+- Line 3733: August 26 scene: eight seals replace one self-signed witness
+- Line 3752: August 26 scene: the witness signs its own certificate
+- Line 3773: August 26 scene: one save, three honest futures
+- Line 3800: August 26 scene: plug the authentic Red map into a socket that cannot press a button
+- Line 3820: Previous August 26 scene: freeze every real classroom address before moving the game
+- Line 3842: Previous August 26 scene: the lock survives a power loss
+- Line 3863: August 26 scene: the doorway works, but no classroom address is forged
+- Line 3884: August 26 scene: the schedule passes, but fourteen doors are in different buildings
+- Line 3905: August 26 scene: publish the blueprint before building new Red lessons
+- Line 3926: August 26 scene: the final count says the classroom is too small
+- Line 3945: Previous August 26 scene: the conveyor can finish the classroom; count it once
+- Line 3962: Previous August 26 scene: one bad card stopped the classroom counter
+- Line 3981: Previous August 26 scene: the gauges are qualified; the classroom gets one reading
+- Line 3998: Previous August 26 scene: the safety lights stayed green, but the diagnostic screen went blank
+- Line 4020: August 26 scene: make one lesson crash-proof, then count the classroom before play
+- Line 4045: August 26 scene: build the honest Red classroom, then catch two ways it could cheat
+- Line 4075: August 25 scene: the model was being graded on a move it never made
+- Line 4099: Earlier August 25 scene: repair the observer, then freeze spare lessons before play
+- Line 4116: Earlier August 25 scene: spend the first lesson, then discover the observer looked away
+- Line 4138: Earlier August 25 scene: seal the real classroom, then point at the first lesson
+- Line 4160: Earlier August 25 scene: the full classroom exists, but the sealed envelope rejects it
+- Line 4180: Earlier August 25 scene: the silent freeze finds an honest missing concept
+- Line 4205: Earlier August 25 scene: build the multi-family classroom, then catch a green-test lie
+- Line 4218: August 25 scene: the first authentic collection choice lands
+- Line 4237: Earlier August 25 scene: the party knew the moves; the planner forgot to ask
+- Line 4247: Earlier August 25 scene: the first real collection decision
+- Line 4265: August 21 scene: rebuild the paperwork door, then stop
+- Line 4279: Previous August 21 scene: the silent inspector stops before the cartridge
+- Line 4292: Previous August 21 scene: the silent inspector passed review, then opened one classroom
+- Line 4307: Previous August 21 scene: build two real tools, then stop before the choice
+- Line 4321: Previous August 21 scene: remove the hidden walkthrough from the classroom
+- Line 4335: Previous August 21 scene: the first silent look finds no honest choice
+- Line 4350: Previous August 21 scene: the reader passes; one silent systems check remains
+- Line 4365: Previous August 21 scene: the silent-look blueprint passed; build the read-only bridge
+- Line 4378: Previous August 21 scene: translate Red into the student's language without pressing a button
+- Line 4392: Previous August 21 scene: four sealed answers, one real positive signal
+- Line 4405: Previous August 21 scene: publish the decision, then open the exam exactly once
+- Line 4418: Previous August 21 scene: authenticate the exam without opening an answer
+- Line 4432: Previous August 20 scene: fit cleanly, leave all four answers sealed
+- Line 4447: Previous August 20 scene: seal four questions once, then train without peeking
+- Line 4463: Previous August 20 scene: qualify the exam machinery, then seal four questions once
+- Line 4480: Previous August 20 scene: design a fresh exam and make guessing the envelopes impractical
+- Line 4497: Previous August 20 scene: build a lock that reads the envelope, not the answer
+- Line 4515: Previous August 20 scene: the envelope opened during inventory; cancel the exam
+- Line 4539: Previous August 20 scene: the exam looked authenticated; later invalidated
+- Line 4548: Previous August 20 scene: the first dependency head learned; sealing claim later invalidated
+- Line 4559: Previous August 20 scene: all eight lessons landed; sealing claim later invalidated
+- Line 4574: Previous August 20 scene: the experiment looked sealed; disclosure claim later invalidated
+- Line 4588: Previous August 20 scene: the dependency lesson existed; the experiment still needed sealing
+- Line 4602: Previous August 18 scene: the bootstrap is clean; build the living-Dex dependency lesson
+- Line 4620: Previous August 18 scene: DEVELOP_TEAM stopped at readiness; the next lesson moved off-root
+- Line 4638: Previous August 18 scene: public readiness qualified; DEVELOP_TEAM became the next causal question
+- Line 4654: Previous August 18 scene: first-causal acquisition closed; public readiness bindings took the frame
+- Line 4672: Previous August 18 scene: six-root freeze closed; one causal example was next
+- Line 4689: Previous August 18 scene: two readiness stops narrowed the rollover boundary
+- Line 4708: Previous August 18 scene: the multiroot machine passes review, then stops before play
+- Line 4724: Previous August 18 scene: the one-catch lesson fails; the curriculum gets wider
+- Line 4742: August 18 scene: one campaign closes; one real catch becomes the lesson
+- Line 4759: August 18 scene: the private plan changes; the scoreboard does not
+- Line 4771: August 18 scene: the interface is connected, but the model still has not acted
+- Line 4784: August 18 scene: the missing second choice gets a real interface
+- Line 4797: August 18 scene: the blueprint is ready; the second choice is not
+- Line 4809: August 18 scene: a real catch, and an honest tie
+- Line 4824: August 18 scene: the rails pass; the next cut is gameplay
+- Line 4839: August 18 scene: one root freezes; both arms stay still
+- Line 4861: Previous August 18 scene: the weights move once; the authority does not
+- Line 4884: Previous August 18 scene: twelve attempts leave two usable lessons
+- Line 4905: Previous August 18 scene: replacement V2 is ready; the next input is real
+- Line 4922: Previous August 18 scene: trial 0 stopped before the model moved
+- Line 4944: Previous August 18 scene: twelve trials were ready; none had started
+- Line 4961: Previous August 18 scene: story stayed selectable, but the quota changed
+- Line 4981: Previous August 17 scene: exact-byte review says GO; the campaign still had not started
+- Line 4997: Previous August 17 scene: V4 closes safely; twelve repeatable trials waited behind review
+- Line 5021: Previous August 17 scene: V3 closes at admission; V4 freezes three operational choices
+- Line 5041: Previous August 17 scene: four safe failure stages, then V3
+- Line 5056: Previous August 17 scene: the runner fails safely, and the root closes
+- Line 5073: Previous August 17 scene: V1 impossible, both V2 reviews GO
+- Line 5093: Previous August 17 scene: core published, V1 runner gates still closed
+- Line 5109: Previous August 17 scene: six exact clusters, then back to the game
+- Line 5133: Previous August 17 scene: the optimizer never gets a turn
+- Line 5158: August 17 scene: the missing squares on the board
+- Line 5187: August 17 scene: lower loss, worse confidence on every card
+- Line 5211: August 17 scene: stop fixing the teacher and test the learner
+- Line 5235: August 17 scene: the bigger model did not win
+- Line 5257: August 17 scene: both kinds is not the same as balanced
+- Line 5277: August 17 scene: the first learning curve moves
+- Line 5303: August 17 scene: let the trainee tag in, then let the team play
+- Line 5326: August 16 scene: the first dataset is small because the failures were informative
+- Line 5346: August 16 scene: “We built the perfect experiment and forgot to learn”
+- Line 5370: August 16 scene: lane one stays red
+- Line 5393: August 16 scene: fifty-five lanes, no reroll button
+- Line 5415: August 16 scene: verify the questions without turning over the cards
+- Line 5442: August 16 scene: turn two measurements into an honest menu
+- Line 5458: August 16 scene: run once, measure honestly, close the switch
+- Line 5480: August 15 scene: two inputs are not always two choices
+- Line 5498: August 15 scene: one option is not a decision
+- Line 5520: August 15 scene: make the one-shot lock survive a blackout
+- Line 5536: August 15 scene: two labels that looked identical
+- Line 5550: August 15 scene: the questions appear before the answers
+- Line 5570: August 15 scene: fourteen empty question cards
+- Line 5591: August 15 scene: the board finally moves by one
+- Line 5609: August 15 scene: follow the arrows all the way down
+- Line 5625: August 15 scene: one meaning, two Pythons
+- Line 5638: August 15 scene: one keyboard, two red teams
+- Line 5650: August 15 scene: the number was right; the timeline was not proved
+- Line 5672: August 15 scene: five red flags, one real hole
+- Line 5694: August 15 scene: make the answer present its receipt
+- Line 5719: August 15 scene: make every trainee stand on the same ground
+- Line 5738: August 15 scene: a progress bar that refuses to lie
+- Line 5768: August 15 scene: 99.9% accurate at the wrong job
+- Line 5796: August 14 live traversal scene: twelve steps, no return trip
+- Line 5808: August 14 traversal scene: explain thirty-nine trips with three moves
+- Line 5828: August 14 V2 party scene: the faster venue was not the higher-level venue
+- Line 5846: August 14 party-outcome scene: stop healing after every battle
+- Line 5874: August 14 navigation-outcome scene: same door, different route
+- Line 5886: August 14 curve-result scene: 4/4 is not always good news
+- Line 5902: August 14 curve-stop scene: the choice happened, the move did not
+- Line 5919: August 14 shared-boundary scene: stop calling battle fields universal
+- Line 5936: August 14 outcome-learning scene: lower loss, worse move
+- Line 5956: August 14 final-audit scene: one move, two counters
+- Line 5969: August 14 recheck scene: even the audit had a held-out test
+- Line 5982: August 14 audit scene: the missing thirteen and the experiment that erased transfer
+- Line 6022: August 14 pivot scene: 85 million frames were not learning
+- Line 6048: August 14 Red-training scene: four brains, one honest authority map
+- Line 6068: August 14 Crystal scene: a turn is not a step
+- Line 6078: August 14 Crystal scene: an empty box is not random memory
+- Line 6088: August 14 Crystal 1.1 scene: the revision changed, the rules did not
+- Line 6104: August 14 Crystal scene: the experiment cannot peek
+- Line 6118: August 14 promotion scene: the reference cable comes out
+- Line 6144: August 14 rehearsal scene: card seven makes it farther, then loses
+- Line 6157: August 14 duplicate-lesson scene: different bytes are not different experience
+- Line 6168: August 14 pilot scene: card six fails closed
+- Line 6188: August 14 freeze-gate scene: 81 ready, zero learned
+- Line 6206: August 14 catalog scene: the same menu needs a different answer
+- Line 6235: New framing scene: we built the hands before the executive brain
+- Line 6250: August 13 audit scene: stop before opening the envelope
+- Line 6320: August 13 scene: the counter finally leaves zero
+- Line 6340: August 12 scene: the party became the curriculum
+- Line 6381: New opening beat: the route was complete, the curriculum was not
+- Line 6426: Goal-manager training beat: the harness is not the model
+- Line 6470: Working title
+- Line 6479: One-sentence promise
+- Line 6485: Acquisition reveal: 108 was never the answer
+- Line 6501: Learning-boundary episode: do not train the shortest path
+- Line 6512: First live beat: zero steps was the correct result
+- Line 6522: Payoff: the ten-times-longer route was the lesson
+- Line 6536: Next obstacle: knowing Cut is not the same as planning through Cut
+- Line 6548: The map did not know the police officer had moved
+- Line 6595: Two guards, two story thresholds
+- Line 6615: The poster Rocket was a trainer, but not that kind of trainer
+- Line 6636: Twist: nine labels were only three questions
+- Line 6661: Payoff: six roots, three different kinds of truth
+- Line 6713: Route episode: the shortest route was the wrong objective
+- Line 6795: Resource episode: the route outlived its Repel
+- Line 6814: Story-gate episode: open floor, closed world
+- Line 6831: Trainer-sight episode: the route was open, but control was not
+- Line 6853: Full Victory Road follow-up: off-screen, hidden, and on another floor
+- Line 6877: August 11 Strength episode: the obstacle moved, and the player did not
+- Line 6898: August 10 Cut episode: the badge is not the bridge
+- Line 6918: August 11 route-pricing episode: the shortest map list was a dead end
+- Line 6938: August 10 visible-object episode: look before you press
+- Line 6956: August 10 navigation episode: delete 86 directions
+- Line 6984: August 10 episode: the AI won—then lost the first battle
+- Line 7026: August 9 episode: 98% accurate—and still wrong in four different ways
+- Line 7259: Latest episode payoff: the AI won, and the evaluator still said no
+- Line 7292: Story outline
+- Line 7294: Cold open — 0:00–0:35
+- Line 7304: Act I: making completion measurable — 0:35–2:00
+- Line 7311: Act II: the trap hidden inside a successful run — 2:00–3:25
+- Line 7320: Act III: letting the measurements embarrass us — 3:25–5:05
+- Line 7329: Act IV: turning six passengers into a team — 5:05–7:00
+- Line 7339: Act V: what actually learned — 7:00–8:35
+- Line 7349: Act VI: the architecture pivot — 8:35–10:10
+- Line 7607: Act VII: when a map becomes an action — 10:10–10:50
+- Line 7648: Act VIII: the goal manager and Crystal test — 10:50–11:30
+- Line 7704: Ending: why the Pokédex matters — 11:30–12:00
+- Line 7714: Required visuals and receipts
+- Line 7796: Honesty rules for the video
+- Line 7806: New sequence: “67 roots were not 67 lessons”
+- Line 7825: New sequence: “The preflight that did nothing”
+- Line 7838: New sequence: “139 saves are not automatically 139 experiments”
+- Line 7854: New sequence: “The same save can support more than one honest experiment”
+- Line 7871: New sequence: “The exam room is separate from the classroom”
+- Line 7886: New sequence: “Do not let the caller label the exam”
+- Line 7898: New sequence: “Training is a transaction, not a button”
+- Line 7911: New sequence: “The exam set passed; the syllabus did not”
+- Line 7922: New sequence: “The runtime guard stopped the first button”
+- Line 7934: New sequence: “The classroom reopened under the right runtime”
+- Line 7943: New sequence: “Eighty characters stopped the first record”
+- Line 7954: New sequence: “The clean classroom is finally sealed”
+- Line 7964: New sequence: “One candidate consumed the classroom”
+- Line 7975: New sequence: “Ask the ledger what survived”
+- Line 7984: New sequence: “The exam was ready before training was”
+- Line 7996: New sequence: “The syllabus failed before the first answer”
+- Line 8009: Scene: the model-training gate says no — September 2, 2026
+- Line 8021: New sequence: “Seventy-two battles, eight real roots”
+- Line 8036: New sequence: “Forty-five lessons reached the menu”
+- Line 8050: New sequence: “The model starts with mechanics, not answers”
+- Line 8061: New sequence: “The model learned, but the baseline kept the keys”
+- Line 8076: New sequence: “The same move, seven possible futures”
+- Line 8087: New sequence: “The baseline won, so the architecture moved up”
+- Line 8102: New sequence: “Look first, then hand over the controller”
+- Line 8116: New sequence: “Finishing matters more than merely moving”
+- Line 8127: New sequence: “The model chose the goal that actually finished”
+- Line 8137: Scene: from eighty-one saves to four useful experiments
+- Line 8145: Scene: the experiment does not grade itself
+- Line 8155: Scene: reuse the exam room instead of rebuilding the school
+- Line 8169: Scene: the exam exists, but the lesson set is eight states short
+- Line 8180: Scene: stop treating the classroom like the exam
+- Line 8196: Scene: the frozen board becomes a live observatory
+- Line 8210: September9 — why successful healing can still be a failed plan

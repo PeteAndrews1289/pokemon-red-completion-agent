@@ -413,6 +413,27 @@ def _execute_route(
             mode=step.source_mode,
         )
 
+        if step.kind == "forced_motion":
+            traversed = (*step.via, step.expected_at)
+            obstruction = next((at for at in traversed if at in current.occupied
+                                or _hazard_at(current, at) is not None), None)
+            if obstruction is not None:
+                # No opportunistic battle resolution inside an uncontrollable
+                # motion chain, even if a handler supports ordinary trainer sight.
+                if replanner is None or len(replans) >= limits.max_replans:
+                    raise RouteExecutionError("forced-motion path has a live obstruction")
+                constraints = dict(blocked)
+                constraints[current.map_id] = constraints.get(current.map_id, frozenset()) | (
+                    current.occupied | frozenset(h.at for h in current.hazards)
+                )
+                replacement, replan_receipt = _request_replacement(
+                    plan, current, constraints, len(replans) + 1,
+                    obstruction, "forced_motion_obstruction", replanner,
+                )
+                replans.append(replan_receipt)
+                pending = list(replacement.steps)
+                continue
+
         if (
             step.can_discover_blocker
             and step.expected_at in current.occupied
@@ -464,12 +485,46 @@ def _execute_route(
             else None
         )
         while True:
+            if step.kind == "forced_motion" and any(
+                at in current.occupied or _hazard_at(current, at) is not None
+                for at in (*step.via, step.expected_at)
+            ):
+                raise RouteExecutionError("forced-motion path acquired a live obstruction")
             _require_interruption_capacity(len(interruptions), limits)
             actions.execute(step.macro_action)
             trace.movement_requests += 1
             attempts += 1
             observed = observer.observe()
             trace.last_observation = observed
+
+            if step.kind == "forced_motion":
+                # The first arrow can briefly look input-ready before its map
+                # script starts. Wait at least once, never issue a second MOVE
+                # inside the chain, and require the exact settled endpoint.
+                entered = observed.at != step.source_at
+                for wait_index in range(limits.max_readiness_waits + 1):
+                    if observed.interruption is not None:
+                        raise RouteExecutionError(
+                            "forced motion entered an unexpected interruption",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                        )
+                    if observed.map_id != step.expected_map or (
+                        observed.at not in (step.source_at, *step.via, step.expected_at)
+                    ) or observed.mode != step.expected_mode:
+                        raise RouteExecutionError("forced motion left its declared path")
+                    if entered and observed.at == step.source_at:
+                        raise RouteExecutionError("forced motion returned to its source")
+                    entered = entered or observed.at != step.source_at
+                    if wait_index and observed.ready and observed.at in {
+                        step.source_at, step.expected_at,
+                    }:
+                        break
+                    if wait_index == limits.max_readiness_waits:
+                        raise RouteExecutionError("forced motion did not settle at its endpoint")
+                    _wait(actions, limits.readiness_wait_frames)
+                    trace.wait_actions += 1
+                    observed = observer.observe()
+                    trace.last_observation = observed
 
             if (
                 handled_hazard is not None
@@ -531,11 +586,14 @@ def _execute_route(
                 and observed.at == step.transient_at
                 and observed.mode == step.source_mode
             )
-            if crossed_map_before_coordinates or declared_transient:
+            same_map_warp = step.kind in {"warp", "return"} and step.stays_on_map
+            if crossed_map_before_coordinates or declared_transient or same_map_warp:
                 # A title adapter may declare an intermediate coordinate for a
                 # single input (Gen I ledges publish the jumped tile first).
                 # Map transitions can likewise publish the destination map
-                # before coordinates settle. Neither is an acknowledgement
+                # before coordinates settle. Same-map warps have no map-id
+                # change to announce that animation, but still need settling.
+                # Neither is an acknowledgement
                 # until one bounded wait exposes the exact terminal state.
                 _require_interruption_capacity(len(interruptions), limits)
                 _wait(actions, limits.transition_settle_frames)

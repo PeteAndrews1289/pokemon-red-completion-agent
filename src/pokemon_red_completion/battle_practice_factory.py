@@ -163,8 +163,7 @@ class BattlePracticeSpec:
             raise BattlePracticeError("practice source state hash differs")
         if _SAFE_ID.fullmatch(self.root_lineage_id) is None:
             raise BattlePracticeError("practice root lineage differs")
-        if self.partition is not ScenarioPartition.TRAIN:
-            raise BattlePracticeError("first practice factory is train-only")
+        self._validate_partition()
         if (
             not isinstance(self.actor_moves, tuple)
             or not 2 <= len(self.actor_moves) <= 4
@@ -250,6 +249,10 @@ class BattlePracticeSpec:
                 )
             ):
                 raise BattlePracticeError("trainer practice opponent reserves differ")
+
+    def _validate_partition(self) -> None:
+        if self.partition is not ScenarioPartition.TRAIN:
+            raise BattlePracticeError("first practice factory is train-only")
 
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
@@ -424,3 +427,23 @@ class BattlePracticeSpec:
         if self.opponent_national_number is not None:
             configuration["opponent_national_number"] = self.opponent_national_number
         return canonical_sha256(configuration)
+
+
+class AssistedDevelopmentPracticeSpec(BattlePracticeSpec):
+    """Explicit held-out construction; never admitted by the TRAIN entry point.
+
+    This does not create independent ancestry. The campaign must authenticate
+    fresh sources and freeze all conditions before any model evaluation.
+    """
+
+    def _validate_partition(self) -> None:
+        if self.partition is not ScenarioPartition.DEVELOPMENT:
+            raise BattlePracticeError("assisted held-out practice is development-only")
+        if (
+            self.battle_kind != "trainer"
+            or not isinstance(self.party_reserves, tuple)
+            or not 3 <= len(self.party_reserves) <= 5
+        ):
+            raise BattlePracticeError(
+                "assisted held-out practice needs four to six trainer members"
+            )

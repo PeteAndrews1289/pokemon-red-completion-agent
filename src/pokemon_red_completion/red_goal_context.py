@@ -236,6 +236,7 @@ class RedGoalContextRuntime:
         Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
     ) = None
     boxed_level_evolution_cross_box: bool = False
+    evolution_stop_requested: Callable[[], bool] | None = None
     boxed_item_evolution_executor: RedBoxedItemEvolutionGoalExecutor | None = None
     boxed_item_evolution_readiness: (
         Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
@@ -246,7 +247,18 @@ class RedGoalContextRuntime:
     trainer_story_world: StrategicScenarioRouteWorld | None = None
     registration_policy: RedRegistrationPolicy | None = None
     trainer_battle_runner: Callable[..., RawGameState] | None = None
+    league_battle_controller: object | None = None
     trainer_battle_model_sha256: str | None = None
+    trainer_battle_qualification_sha256: str | None = None
+    trainer_funding_ledges: bool = False
+    trainer_funding_indoor_departure: bool = False
+    safari_indoor_departure: bool = False
+    safari_departure_surf: bool = False
+    safari_complete_paid_session: bool = False
+    scripted_gifts: bool = False
+    npc_trades: bool = False
+    trainer_funding_roster_preparation: bool = False
+    trainer_funding_event_sink: Callable[[dict[str, object]], None] | None = None
 
     def bound_configuration_sha256(self, configuration_sha256: str) -> str:
         if self.registration_policy is None:
@@ -518,6 +530,12 @@ def _build_provider(
     }:
         return _team_provider(runtime, spec, actions)
     if mechanic is RedGoalMechanic.FIELD_RESTORE:
+        if spec.parameters.get("allow_fainted_recovery") is True:
+            from .red_faint_recovery import RedFaintAwareFieldRestoreGoalProvider
+
+            return RedFaintAwareFieldRestoreGoalProvider(
+                actions, runtime.reader, runtime.emulator, runtime.adapter,
+            )
         hp_provider = RedFieldRestoreGoalProvider(
             actions,
             runtime.reader,

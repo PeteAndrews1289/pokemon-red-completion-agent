@@ -1,0 +1,95 @@
+{
+  "actions": 1193,
+  "audit_frames": 0,
+  "cash_after": 7183,
+  "cash_before": 4583,
+  "decisions": 27,
+  "envelope_sha256": "f8a2a35f25ce20ad76ef621d36b4c140d5fa1b97f527bfce209633859345f88f",
+  "fits": 0,
+  "frames": 254064,
+  "fully_restored": true,
+  "giovanni_won": false,
+  "map_id": 212,
+  "metrics": {
+    "attack_turn_utility_sum": 14.149936819097707,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 5,
+    "party_faints": 1,
+    "party_hp_lost": 204,
+    "party_pp_spent": 19,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 6571500,
+    "policy_latency_ns_mean": 3582356.5185185187,
+    "policy_latency_ns_min": 286375,
+    "teacher_interventions": 0
+  },
+  "native_opponents": 5,
+  "new_registrations": 0,
+  "next_eleventh_preflight": true,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    73,
+    143,
+    91,
+    97
+  ],
+  "party_levels": [
+    34,
+    46,
+    35,
+    35
+  ],
+  "position": [
+    2,
+    3
+  ],
+  "purchases": 0,
+  "recovery": {
+    "cash": 7183,
+    "fits": 0,
+    "new_battles": 0,
+    "next_action": "continue_story",
+    "source_request_sha256": "78c75f4f0b13fa9b1cb943bb88ee6476c255ac5a7033b6a03bda63c1334310af",
+    "status": "recovered_and_ready"
+  },
+  "review": {
+    "attempt_budget_refilled": false,
+    "battle_outcome": "won",
+    "combat_levels": [
+      34,
+      46,
+      35,
+      35
+    ],
+    "helper_sha256": "65e2731520a101a68e3f871b2fa36debd0506899cd61774ed3b83acf7b0dab92",
+    "launches_training": false,
+    "learned_preparation": false,
+    "next_action": "recover",
+    "observed_opponents": 5,
+    "opposition_level": 37,
+    "reason": "level preparation not needed",
+    "resume_after": "existing bounded preparation targets and recovery verified",
+    "schema": "pokemon.story-preparation-review.v1",
+    "source_sha256": "eb87398d8df9d595ad43aada007c1f649d67e2914f283495bf50630123742323",
+    "targets": {}
+  },
+  "rival_won": true,
+  "sales": 0,
+  "schema": "pokemon.red.automatic-story-preparation.v1",
+  "scope": "Automatic disclosed preparation review and dispatch guard in connected Silph flow; not learned strategy or automatic unlimited training.",
+  "seconds": 10.977722125127912,
+  "terminal_sha256": "bcc84d41f6ae947d5fd480e6116f19d5cfa652c90112f07036e59d182e0b7cf8",
+  "terminal_stage": 150,
+  "tests_passed": 520,
+  "verified_choices": {
+    "attack": 19,
+    "control": 22,
+    "switch": 5
+  },
+  "private_audit_sha256": "28b205ae3792a555420f224fc46db84c48a586de248f9a8f169fb23597db0fc7",
+  "gameplay_running": false,
+  "primary_registrations": 109,
+  "primary_target": 124,
+  "fresh_red_gates_passed": 0
+}

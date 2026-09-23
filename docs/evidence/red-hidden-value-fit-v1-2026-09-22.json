@@ -1,0 +1,112 @@
+{
+  "schema": "pokemon.red.hidden-value-fit-evidence.v1",
+  "source_commit": "cebb6ac7",
+  "private_packet": "red-hidden-value-fit-20260922-v1",
+  "result_sha256": "ee93151a2c888758db3dbe5da120538e2dcf265a0a0174e77eece40dbd2bd652",
+  "actor_promotions": 0,
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": true,
+    "iterations": 500,
+    "minimum_slack": -0.0010004609661617564,
+    "new_group": {
+      "actor": {
+        "contexts": 145,
+        "errors": 20,
+        "high_cost_errors": 16,
+        "regret": 0.6070126459381285
+      },
+      "candidate": {
+        "contexts": 145,
+        "errors": 7,
+        "high_cost_errors": 0,
+        "regret": 0.005572429573370931
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 5,
+          "high_cost_errors": 0,
+          "regret": 0.007685406458880418
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 4,
+          "high_cost_errors": 0,
+          "regret": 0.005410896890167605
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.22454306129533402
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 0,
+          "regret": 0.007076163617855435
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      }
+    ],
+    "parameters": 482,
+    "passed": false,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "seconds": 2.5544836251065135,
+    "solver_message": "Iteration limit reached",
+    "solver_success": false
+  },
+  "fits": 1,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 0,
+    "episodes": 0,
+    "event_records": 0,
+    "frames": 0,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 0,
+    "new_target_contexts": 0,
+    "plan_sha256": "78e086f429e4ef014c46a531531dda54db0050c7f9fde9d905f637465280648f",
+    "prescribed_first_choices": 0,
+    "status_move_attempts_including_prescribed": 0,
+    "stops": {}
+  },
+  "new_train_contexts": 0,
+  "screen": null,
+  "seconds": 2.6287036668509245
+}

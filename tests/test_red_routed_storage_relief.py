@@ -152,6 +152,43 @@ def test_one_remaining_slot_offers_relief_before_capture_disappears(monkeypatch)
     assert f.observation.immediate_capture_slots == 20
 
 
+@pytest.mark.parametrize("enough_steps", [True, False])
+def test_opted_in_safari_storage_uses_metered_surf_and_checked_exit(monkeypatch, enough_steps):
+    from pokemon_red_completion.route_executor import TraversalSnapshot
+
+    f = fixture(monkeypatch)
+    runtime = f.router.runtime
+    runtime.safari_departure_surf = True
+    runtime.reader.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=True)
+    observer = SimpleNamespace(observe=lambda: TraversalSnapshot(
+        f.raw.map_id, (f.raw.player_y, f.raw.player_x), True,
+        mode="land", capabilities=frozenset({"move:surf"})))
+    monkeypatch.setattr(storage, "Gen1TraversalObserver", lambda *_a, **_k: observer)
+    monkeypatch.setattr(storage, "normalize_active_safari_exit_plan", lambda p: p)
+    monkeypatch.setattr(storage, "safari_departure_within_steps", lambda *_: enough_steps)
+    monkeypatch.setattr("pokemon_red_completion.red_resource_goal_router._supported_plan",
+                        lambda p, **kw: kw["allow_surf"] is True)
+    field_port = object()
+    monkeypatch.setattr(storage, "Gen1FieldMovePort", lambda actions, reader, emulator: field_port)
+    traveled = []
+
+    def travel(plan, port, traversal, **kwargs):
+        traveled.append((port, kwargs["interruption_handler"]))
+        return f.travel()
+
+    monkeypatch.setattr(storage, "execute_route", travel)
+    options = storage.bind_routed_storage_relief(f.router, f.bindings, f.observation)
+    if not enough_steps:
+        assert options is f.bindings and not traveled
+        return
+    selected = next(b for b in options.bindings if b.kind is GoalKind.MANAGE_STORAGE)
+    assert not traveled
+    report = selected.execute()
+    assert selected.verify(report).status.value == "succeeded"
+    assert traveled[0][0] is field_port
+    assert isinstance(traveled[0][1], storage.RedSafariDepartureInterruptionHandler)
+
+
 @pytest.mark.parametrize("condition", ["room", "no_target", "route", "existing"])
 def test_relief_is_not_fabricated(monkeypatch, condition):
     f = fixture(monkeypatch)

@@ -127,6 +127,153 @@ def make_state(
 TIMING = BattleRuntimeTiming(dialogue_wait_frames=5)
 
 
+@pytest.mark.parametrize("fault", [None, "late_settle", "wrong_species", "during_battle",
+                                   "strict", "unqualified", "bad_guard"])
+def test_preparation_evolution_stays_inside_qualified_postbattle_boundary(tmp_path, fault):
+    from types import MethodType
+
+    from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
+    from pokemon_red_completion.red_learned_trainer import (
+        FROZEN_K_SHA256,
+        K_QUALIFICATION_SHA256,
+        FrozenTrainerBattler,
+    )
+    from pokemon_red_completion.red_trainer_evolution import RedTrainerEvolutionGuard
+
+    old = PartyMemberObservation(1, 59, 25, 40, 50, experience=15000)
+    initial = replace(make_state(sp=(59,), hp=(40,)), party_levels=(25,))
+    env = ScriptedEnvironment(initial)
+    env.transitions = [(replace(initial, battle_state=2), False, True)]
+    party_reader = SimpleNamespace(
+        read=lambda: PartyObservation((replace(old, species_id=env.state.party_species_ids[0],
+            level=env.state.party_levels[0], experience=16000 if env.state.battle_state == 0
+            and env.state.player_money == 815 else 15000),)),
+        preparation_specimen_refs=lambda: ("same",))
+    guard = RedTrainerEvolutionGuard(party_reader, PartyObservation((old,)), ("same",),
+                                    frozenset({(59, 118, 26)}))
+    actor = FrozenTrainerBattler(None, None, tmp_path, 'a'*40, 'root', 'b'*64, {},
+        model_sha256=FROZEN_K_SHA256,
+        qualification_sha256=None if fault == "unqualified" else K_QUALIFICATION_SHA256)
+
+    def play(self, reader, actions, policy, **kwargs):
+        current = reader.read()
+        kwargs['move_decision_guard'](replace(current, party_species_ids=(118,))
+                                      if fault == "during_battle" else current)
+        final = replace(current, battle_state=0, party_species_ids=(99 if fault == "wrong_species"
+            else 118,), party_levels=(26,), player_money=815, event_flags=make_flag_bytes(1139))
+        env.state = final
+        if fault == "late_settle":
+            env.state = replace(final, party_species_ids=(59,))
+            env.dialogue, env.ready = True, False
+            env.transitions = [(final, False, True)]
+        return env.state
+
+    actor.run = MethodType(play, actor)
+    def run():
+        return run_prepared_trainer_funding(env, env, target=make_candidate(),
+            validate_target=lambda: None, move_slot_policy=lambda _: pytest.fail("teacher used"),
+            timing=TIMING, battle_runner_override=actor.run,
+            story_income_recovery=fault != "strict",
+            preparation_evolution_guard=object() if fault == "bad_guard" else guard)
+    if fault not in {None, "late_settle"}:
+        with pytest.raises((ValueError, TrainerFundingBattleError)):
+            run()
+        if fault in {"strict", "unqualified", "bad_guard"}:
+            assert not env.actions
+    else:
+        receipt = run()
+        assert receipt.initial_state.party_species_ids == (59,)
+        assert receipt.final_state.party_species_ids == (118,)
+        assert receipt.payout == 315
+
+
+@pytest.mark.parametrize('fault', [
+    None, 'strict', 'unqualified', 'wrong_model', 'all_fainted', 'bag', 'species',
+    'loss', 'payout', 'event',
+])
+def test_explicit_story_income_recovers_faints_without_weakening_victory(tmp_path, fault):
+    from types import MethodType
+
+    from pokemon_red_completion.red_learned_trainer import (
+        FROZEN_K_SHA256,
+        K_QUALIFICATION_SHA256,
+        FrozenTrainerBattler,
+    )
+    initial = make_state(hp=(50, 0))
+    env = ScriptedEnvironment(initial)
+    env.transitions = [(replace(initial, battle_state=2), False, True)]
+    actor = FrozenTrainerBattler(None, None, tmp_path, 'a'*40, 'root', 'b'*64, {},
+        model_sha256='c'*64 if fault == 'wrong_model' else FROZEN_K_SHA256,
+        qualification_sha256=None if fault == 'unqualified' else K_QUALIFICATION_SHA256)
+
+    def play(self, reader, actions, policy, **kwargs):
+        kwargs['move_decision_guard'](reader.read())
+        damaged = replace(reader.read(), party_hp=(0, 0) if fault == 'all_fainted' else (1, 0),
+            bag_items=() if fault == 'bag' else initial.bag_items,
+            party_species_ids=(1, 2) if fault == 'species' else initial.party_species_ids)
+        kwargs['move_decision_guard'](damaged)
+        env.state = replace(damaged, battle_state=0, battle_result=1 if fault == 'loss' else 0,
+            player_money=500 if fault == 'payout' else 815,
+            event_flags=initial.event_flags if fault == 'event' else make_flag_bytes(1139))
+        return env.state
+
+    actor.run = MethodType(play, actor)
+    def run():
+        return run_prepared_trainer_funding(env, env, target=make_candidate(),
+            validate_target=lambda: None, move_slot_policy=lambda _: pytest.fail('teacher used'),
+            timing=TIMING, battle_runner_override=actor.run,
+            story_income_recovery=fault != 'strict')
+    if fault:
+        with pytest.raises((TrainerFundingBattleError, ValueError)):
+            run()
+        if fault in {'strict', 'unqualified', 'wrong_model'}:
+            assert not env.actions
+    else:
+        assert run().payout == 315
+
+
+@pytest.mark.parametrize('fault', [
+    None, 'all_fainted', 'bag', 'species', 'loss', 'payout', 'strict',
+])
+def test_explicit_league_recovery_verifies_victory_with_fainted_reserves(fault):
+    from pokemon_red_completion.observation import MapId
+    from pokemon_red_completion.red_learned_league import FrozenLeagueController
+    from pokemon_red_completion.red_learned_trainer import FROZEN_K_SHA256, K_QUALIFICATION_SHA256
+
+    initial = make_state(map_id=MapId.LORELEIS_ROOM, hp=(50, 0))
+    env = ScriptedEnvironment(initial)
+    env.transitions = [(replace(initial, battle_state=2), False, True)]
+    candidate = make_candidate()
+    candidate = replace(candidate, trainer=replace(candidate.trainer, map_id=MapId.LORELEIS_ROOM))
+
+    def play(reader, actions, **kwargs):
+        kwargs['decision_guard'](reader.read())
+        damaged = replace(reader.read(), party_hp=(0, 0) if fault == 'all_fainted' else (1, 0),
+                          bag_items=() if fault == 'bag' else initial.bag_items,
+                          party_species_ids=(1, 2) if fault == 'species'
+                          else initial.party_species_ids)
+        kwargs['decision_guard'](damaged)
+        env.state = replace(damaged, battle_state=0, battle_result=1 if fault == 'loss' else 0,
+                            player_money=500 if fault == 'payout' else 815,
+                            event_flags=make_flag_bytes(1139))
+        return SimpleNamespace(decisions=({'kind': 'attack'},))
+
+    actor = FrozenLeagueController(SimpleNamespace(model_sha256=FROZEN_K_SHA256,
+        qualification_sha256=K_QUALIFICATION_SHA256, _play=play),
+        'strict-no-faint-v1' if fault == 'strict' else 'league-profit-recovery-v1')
+
+    def run():
+        return run_prepared_trainer_funding(env, env, target=candidate,
+            validate_target=lambda: None, move_slot_policy=lambda _: pytest.fail('teacher used'),
+            timing=TIMING, intent=BattleIntent('defeat_lorelei', 'cartridge-trainer-story'),
+            battle_runner_override=actor.run)
+    if fault:
+        with pytest.raises(TrainerFundingBattleError):
+            run()
+    else:
+        assert run().payout == 315
+
+
 @pytest.mark.parametrize('fault', [None, 'validator', 'money', 'wrong_pending', 'lost_text'])
 def test_explicit_prelatch_text_can_precede_battle_without_reinteraction(monkeypatch, fault):
     env = ScriptedEnvironment(make_state(), dialogue=True, ready=False)

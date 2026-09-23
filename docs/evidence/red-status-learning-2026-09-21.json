@@ -1,0 +1,109 @@
+{
+  "candidate_status": "both_rejected_for_live_use",
+  "collection_delta": 0,
+  "fits": 2,
+  "gameplay_running": false,
+  "giovanni_completed": false,
+  "independent_heldout_roots": 0,
+  "limits": [
+    "TRAIN-related generated holdouts, not independent natural transfer",
+    "Single-member laboratory battles, not multi-opponent attrition qualification",
+    "No learned item use or recovery switching qualification",
+    "Status timing still fails on unseen contexts; these packets allow no third fit"
+  ],
+  "new_train_contexts": 44,
+  "packets": {
+    "opening": {
+      "actor_memory_writes": 0,
+      "all_event_and_terminal_hashes_verified": true,
+      "candidate_sha256": "556880ba5a67f16636928ec08967968395761818a3f428ad4d09e0c7ad8c63bb",
+      "decision_records": 496,
+      "episodes": 229,
+      "event_records": 2955,
+      "fit_examples": 24,
+      "fit_sha256": "b9a6ec6f0a6f9251f316eb4e028749e987673914f63aadee8fda0dc10378e8fa",
+      "fits": 1,
+      "frames": 687490,
+      "heldout_capture_ids_excluded_from_fit": true,
+      "invalid_actions": 0,
+      "learned_continuation_or_evaluation_choices": 283,
+      "new_target_contexts": 24,
+      "plan_sha256": "c30c1e4e2017264e5f0afdbdb90f02322626510468f4c61e832c7516208174c6",
+      "prescribed_first_choices": 213,
+      "regret_after": 0.40063476136186155,
+      "regret_before": 1.2725925259453055,
+      "result_sha256": "36955598e006084bb6d02b9f3147077740b61b24807a9cae8bd4d2e85da991b9",
+      "status_move_attempts_including_prescribed": 81,
+      "stops": {
+        "battle_won": 103,
+        "party_defeated": 125,
+        "player_turn_budget": 1
+      },
+      "withheld_wins": {
+        "candidate": 4,
+        "frozen": 4
+      }
+    },
+    "pilot": {
+      "actor_memory_writes": 0,
+      "all_event_and_terminal_hashes_verified": true,
+      "decision_records": 11,
+      "episodes": 3,
+      "event_records": 53,
+      "frames": 13528,
+      "invalid_actions": 0,
+      "learned_continuation_or_evaluation_choices": 8,
+      "new_target_contexts": 1,
+      "plan_sha256": "fd11fe779a7e156bae59e30c4906a2a2550dca45ea6543f6ab7919917473094d",
+      "prescribed_first_choices": 3,
+      "status_move_attempts_including_prescribed": 1,
+      "stops": {
+        "battle_won": 1,
+        "party_defeated": 2
+      }
+    },
+    "sequence": {
+      "actor_memory_writes": 0,
+      "all_event_and_terminal_hashes_verified": true,
+      "candidate_sha256": "b9be795252ee0af182f20565084feffef5acdbcfdaaf08f3d877980977abbe36",
+      "decision_records": 308,
+      "episodes": 158,
+      "event_records": 1824,
+      "fit_examples": 44,
+      "fit_sha256": "3d87adfcce56b619ae64ba40618cc461fd1a639bc4efa051d7bf5c738ee954d7",
+      "fits": 1,
+      "frames": 422822,
+      "heldout_capture_ids_excluded_from_fit": true,
+      "invalid_actions": 0,
+      "learned_continuation_or_evaluation_choices": 166,
+      "new_target_contexts": 20,
+      "plan_sha256": "75dea8f1dc5ea7364265aee67f1453798368c9f17cda1aeff6cec801207c684e",
+      "prescribed_first_choices": 142,
+      "regret_after": 0.008308686012086302,
+      "regret_before": 0.3033706286285947,
+      "result_sha256": "01248b979a4b2e9ac8aae679a57367bb268966d66b3fc0a37b44d6c0ff6f9549",
+      "status_move_attempts_including_prescribed": 73,
+      "stops": {
+        "battle_won": 58,
+        "party_defeated": 80,
+        "player_turn_budget": 20
+      },
+      "withheld_wins": {
+        "candidate": 3,
+        "frozen": 5
+      }
+    }
+  },
+  "promotions": 0,
+  "schema": "pokemon.red.status-learning-audit.v1",
+  "total_decision_records": 815,
+  "total_episodes": 390,
+  "protected_artifacts_unchanged": true,
+  "protected_sha256": {
+    "earned_story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary_collection": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_record": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "frozen_k": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472"
+  },
+  "preflight_setup_failures_before_gameplay": 1
+}

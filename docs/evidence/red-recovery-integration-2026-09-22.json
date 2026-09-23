@@ -1,0 +1,111 @@
+{
+  "battle_authority": "exact frozen K DEVELOPMENT wild knockout",
+  "cash": 4583,
+  "engineering_ready_for_red_development": true,
+  "envelope_sha256": "b8a18a2aea0f165af7d15728de22cddd1fb8fb47a96a8b4d91235435b8f113e2",
+  "fitted_models": 0,
+  "healed_handoff": true,
+  "level_targets_met": false,
+  "native_fainted_lead_escape": {
+    "battle_result": 2,
+    "control_ready": true,
+    "enemy_level": 16,
+    "enemy_species_id": 185,
+    "expected_map": 17,
+    "final_battle_state": 0,
+    "final_hp": 230,
+    "hp_scope": "whole_party",
+    "initial_battle_state": 1,
+    "initial_hp": 230,
+    "level_preserved": true,
+    "map": 17,
+    "maximum_hp_preserved": true,
+    "party_preserved": true,
+    "position": [
+      10,
+      14
+    ],
+    "pp_preserved": true,
+    "run_attempts": 1,
+    "stabilization_frames": 24,
+    "status_preserved": true,
+    "verified": true
+  },
+  "new_model_choices": 1,
+  "new_training_wins": 0,
+  "new_training_xp": 0,
+  "observed_no_progress_outcome": true,
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "hp": 71,
+      "level": 26,
+      "species_id": 104
+    },
+    {
+      "hp": 140,
+      "level": 45,
+      "species_id": 28
+    },
+    {
+      "hp": 66,
+      "level": 25,
+      "species_id": 64
+    },
+    {
+      "hp": 40,
+      "level": 24,
+      "species_id": 59
+    }
+  ],
+  "registration_delta": 0,
+  "schema": "pokemon.red.recovery-integration.v1",
+  "stages": [
+    {
+      "actions": 91,
+      "frames": 5088,
+      "healed_return": true,
+      "original_error": null,
+      "seconds": 1.1675087921321392,
+      "source_commit": "603b4fcaf9afe0f9d0947e91f7817b41e623f003",
+      "stage": 69,
+      "terminal_sha256": "436cf7bd8fd28012bb715b0f025fff7fe1d6707f76d2090c875f5c7b239d8fc0"
+    },
+    {
+      "actions": 340,
+      "frames": 17676,
+      "healed_return": false,
+      "original_error": "wild preparation stopped: battle_exited_without_win",
+      "seconds": 9.961852750275284,
+      "source_commit": "0e82d7dbb4a311adbe95f333ac18373faa959b0e",
+      "stage": 70,
+      "terminal_sha256": "dfbf1d6c3f24dee693fe5c1c01dff141460167f714c5dfd1c88774b9919172b0"
+    },
+    {
+      "actions": 186,
+      "frames": 7788,
+      "healed_return": true,
+      "original_error": null,
+      "seconds": 2.0029617082327604,
+      "source_commit": "2568542189ce28cf61d44f79b425fd01156940f0",
+      "stage": 71,
+      "terminal_sha256": "32f2dcc8d0e937b4d70a5032258f5254aff57293c4d0fd8953dbb37df3e36380"
+    }
+  ],
+  "story_delta": 0,
+  "strategic_preparation_learned": false,
+  "sustained_grinding_performance_qualified": false,
+  "teacher_authority": [
+    "preparation",
+    "trainee",
+    "venue",
+    "navigation",
+    "transit_escape",
+    "healing"
+  ],
+  "terminal_sha256": "32f2dcc8d0e937b4d70a5032258f5254aff57293c4d0fd8953dbb37df3e36380",
+  "private_audit_sha256": "38b70fa985622b4a819a35e456b529d309469955ff50f9eaf5cda9438afd2445",
+  "targeted_tests_passed": 913,
+  "tests_skipped": 1,
+  "no_progress_return_integration": "ROM-free complete excursion tests pass; native stage70 nonwin retained, stage71 verified forward-only return. No replay of the consumed encounter."
+}

@@ -1,0 +1,458 @@
+{
+  "actor_memory_writes": 0,
+  "all_event_and_terminal_hashes_verified": true,
+  "authority_promotions": 0,
+  "basis_sha256": "0734686a10ffa0d231ea4b7456261f53b55d6e7762a1455fb3974af9118e5951",
+  "candidate_predictions_verified": 196,
+  "candidate_sha256": "a28b677431032887f52bc29ec775629e162e53eca6eaa6d43916be76f2a59207",
+  "collection_delta": 0,
+  "decision_records": 350,
+  "episodes": 128,
+  "event_records": 1784,
+  "fit": {
+    "groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 9,
+          "high_cost_errors": 0,
+          "regret": 0.012824219212990397
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 3,
+          "high_cost_errors": 0,
+          "regret": 0.006032544801185715
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 6,
+          "high_cost_errors": 3,
+          "regret": 0.22415591705271232
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      }
+    ],
+    "hidden_parameters_unchanged": true,
+    "original_return_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 4,
+          "high_cost_errors": 0,
+          "regret": 0.004151954209575978
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 11,
+          "high_cost_errors": 7,
+          "regret": 0.668523548768489
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 3,
+          "high_cost_errors": 0,
+          "regret": 0.005298191120018985
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.774339628106996
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.25334219438700195
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 15,
+          "high_cost_errors": 10,
+          "regret": 0.7172800121144663
+        }
+      }
+    ],
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_result": {
+      "anchor_l2": 0.001,
+      "iterations": 74,
+      "loss": 0.09713910053215735,
+      "message": "Optimization terminated successfully",
+      "minimum_constraint_slack": -1.7055801215803967e-14,
+      "parameter_distance": 0.8476477425860729,
+      "seconds": 0.05189633392728865,
+      "stationarity_residual": 8.661067537840461e-7,
+      "success": true
+    }
+  },
+  "frames": 483810,
+  "gameplay_running": false,
+  "independently_verified_stationarity": 8.661067539221707e-7,
+  "invalid_actions": 0,
+  "later_group_regret_reduction_fraction": 0.8486852999332475,
+  "learned_continuation_or_evaluation_choices": 350,
+  "new_target_contexts": 0,
+  "oldest_group_gate": true,
+  "plan_sha256": "0dba477d5ffa9bdc82dbd8c7e6b8d033469246cb5db88391e9cbc8fb23e05c72",
+  "prescribed_first_choices": 0,
+  "protected_sha256": {
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38"
+  },
+  "representation": {
+    "contrast_rank": 16,
+    "hidden_width": 16,
+    "high_cost_initial_errors": 27,
+    "individual_feasibility": [
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 13
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 31
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 34
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 36
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 55
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 84
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 88
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 123
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 126
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 127
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 130
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 132
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 136
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 156
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 159
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 160
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 162
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 187
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 228
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 230
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 231
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 233
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 234
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 237
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 244
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 270
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 273
+      }
+    ],
+    "individually_correctable_errors": 25,
+    "joint_learnability_claim": false
+  },
+  "result": {
+    "authority_promotions": 0,
+    "fit_gate": true,
+    "fits": 1,
+    "screen": {
+      "concerning_selections": 8,
+      "decisions": {
+        "candidate": 196,
+        "frozen": 154
+      },
+      "improved_won_status_cases": 7,
+      "passed": false,
+      "wins": {
+        "candidate": 38,
+        "frozen": 32
+      }
+    },
+    "withheld": null
+  },
+  "retention": {
+    "minimum_constraint_slack": -1.5279444376403717e-14,
+    "protected_preferences": 182,
+    "retention_regressions": 0
+  },
+  "reward_view": {
+    "authenticated_branches": 1872,
+    "changed_preferences": 29,
+    "contexts": 312,
+    "prior_flagged_preferences": [
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-balanced-confusion-0-0-005",
+        "concerns": [
+          "already_confused"
+        ],
+        "v1_status_gap": 0.013148148148147243,
+        "v2_status_gap": -0.06018518518518512
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-balanced-confusion-1-1-003",
+        "concerns": [
+          "already_confused"
+        ],
+        "v1_status_gap": 0.27979919678714893,
+        "v2_status_gap": -0.21686746987951722
+      },
+      {
+        "all_branches_lost": false,
+        "capture_id": "trajectory-balanced-paralysis-0-0-005",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 6.192045454545456,
+        "v2_status_gap": 6.715795454545454
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-balanced-poison-0-1-002",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 0.23585034013605544,
+        "v2_status_gap": -0.040816326530611846
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-confusion-1-0-002",
+        "concerns": [
+          "already_confused"
+        ],
+        "v1_status_gap": 0.008554216867468156,
+        "v2_status_gap": -0.028112449799197137
+      },
+      {
+        "all_branches_lost": false,
+        "capture_id": "trajectory-execution-balanced-confusion-1-0-003",
+        "concerns": [
+          "already_confused"
+        ],
+        "v1_status_gap": 0.08289156626506067,
+        "v2_status_gap": 0.0613082329317276
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-confusion-1-1-004",
+        "concerns": [
+          "already_confused"
+        ],
+        "v1_status_gap": 0.21590361445783124,
+        "v2_status_gap": -0.024096385542168974
+      },
+      {
+        "all_branches_lost": false,
+        "capture_id": "trajectory-execution-balanced-heal-1-0-005",
+        "concerns": [
+          "heal_full_hp"
+        ],
+        "v1_status_gap": 6.705084745762711,
+        "v2_status_gap": 6.882084745762713
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-paralysis-0-0-003",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 0.6106818181818188,
+        "v2_status_gap": -0.03598484848484951
+      },
+      {
+        "all_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-paralysis-0-0-005",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 0.8096969696969705,
+        "v2_status_gap": -0.11363636363636509
+      },
+      {
+        "all_branches_lost": false,
+        "capture_id": "trajectory-execution-balanced-paralysis-0-1-003",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 8.455075757575758,
+        "v2_status_gap": 6.849825757575757
+      },
+      {
+        "all_branches_lost": false,
+        "capture_id": "trajectory-execution-balanced-sleep-0-0-004",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "v1_status_gap": 0.03666666666666707,
+        "v2_status_gap": 0.0009166666666686751
+      }
+    ],
+    "v1_flagged_status_preferred": 12,
+    "v2_flagged_status_preferred": 11
+  },
+  "schema": "pokemon.red.status-readout-audit.v1",
+  "screen_coverage_v2": {
+    "affected_cases": 5,
+    "affected_decisions": 8,
+    "concerning_selections_not_executed": 2,
+    "concerns_by_kind": {
+      "already_confused": 2,
+      "heal_full_hp": 2,
+      "major_status_occupied": 4
+    },
+    "exact_training_input_matches": 3,
+    "first_affected_decision": 3,
+    "last_affected_decision": 8,
+    "matched_target_gaps": [
+      {
+        "case": "balanced-paralysis-0-0",
+        "decision": 3,
+        "selected_return_gap": 0.03598484848484951,
+        "target_capture_id": "trajectory-execution-balanced-paralysis-0-0-003"
+      },
+      {
+        "case": "balanced-confusion-1-0",
+        "decision": 3,
+        "selected_return_gap": 0,
+        "target_capture_id": "trajectory-execution-balanced-confusion-1-0-003"
+      },
+      {
+        "case": "balanced-confusion-1-1",
+        "decision": 4,
+        "selected_return_gap": 0.024096385542168974,
+        "target_capture_id": "trajectory-execution-balanced-confusion-1-1-004"
+      }
+    ],
+    "player_asleep_at_concerning_selection": 2
+  },
+  "source_commit": "9192ec42c4de2e6e372d7c323219dcd79f08da6f",
+  "status_move_attempts_including_prescribed": 42,
+  "stops": {
+    "battle_won": 70,
+    "party_defeated": 58
+  },
+  "training_contexts": 312
+}

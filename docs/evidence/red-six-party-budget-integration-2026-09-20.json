@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon.red-six-party-budget-integration.v1",
+  "session": "2026-09-20-six-party-budget-integration",
+  "status": "verified_local_package",
+  "classification": "engineering_not_learning",
+  "source_base_commit": "283627b622885f43eeacb5b90eca67c3769fa1be",
+  "retained_trial_commit": "1e6a28061a91cc2c2c3bbb849a1f3c69d89b94a5",
+  "corrections": {
+    "deadline_admission": "verified",
+    "absolute_opening_frames": "verified",
+    "compound_failure_records": "corrected_and_verified"
+  },
+  "verification": {
+    "rom_free_focused_tests_passed": 610,
+    "auditor_matrix_cases_passed": 14,
+    "permanent_new_regressions": 15,
+    "mypy_source_files": 544,
+    "private_rom_tests_run": 0
+  },
+  "initial_failures": [
+    "Before repair, permanent auditor matrix reproduced 8 failures and 6 passes; 19 unrelated cases deselected.",
+    "First broad regression: 609 passed and one added helper test failed from incorrect exception constructor arguments; fixture corrected, assertion preserved.",
+    "Initial Ruff check flagged formatting of ported diagnostic tests and recommended contextlib.suppress; corrected."
+  ],
+  "behavior": [
+    "Typed action/time budget cause survives executor and session cleanup errors; outer secondary exception still propagates.",
+    "Available post-cleanup input state retained independently of endpoint persistence.",
+    "No fabricated success outcome or qualified endpoint; failed hash chains verify.",
+    "Deadline and absolute-opening timing corrections retained.",
+    "Wall limit is cooperative admission, not preemptive cancellation of a hung call."
+  ],
+  "gameplay_actions": 0,
+  "training_runs": 0,
+  "new_train_examples": 0,
+  "new_registrations": 0,
+  "model_queries": 0,
+  "authority_promotions": 0,
+  "current": {
+    "model137_fitted": 137,
+    "model137_successes": 92,
+    "model137_economy_qualified": 58,
+    "red_native_registrations": 96,
+    "red_native_route_total": 124,
+    "j_train_contexts": 318,
+    "j_qualified_own_party_sizes": [
+      1,
+      2,
+      3
+    ]
+  },
+  "remaining": [
+    "Authenticate unused DEVELOPMENT origins for four/five/six-member cases; do not assume disjointness from filenames or RNG variants.",
+    "Bind at most six episodes (two per party size), consumed-origin checks, no retry, global stop, and complete diagnostics.",
+    "Run separately authorized bounded learned-battle pilot; retain losses and actual costs. No automatic scope promotion.",
+    "After scope qualification, explicitly bind J to resource goals; qualify ledge-safe approaches and League partial-prefix handling before claiming useful income."
+  ],
+  "limitations": [
+    "No cartridge run, model improvement, profitable earning or fresh-start completion demonstrated here.",
+    "Registry regeneration unchanged by final repair because this repair touches runner scripts/tests outside its src inventory; trial source metadata retained.",
+    "Historical trial rejection remains intact; this is a new user-authorized correction and integration session."
+  ],
+  "publication": "Local only; no GitHub push; overnight heartbeat remains paused."
+}

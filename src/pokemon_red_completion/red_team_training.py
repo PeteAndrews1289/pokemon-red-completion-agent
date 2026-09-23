@@ -526,7 +526,7 @@ def collection_escape_escort(
     return max(
         (
             member for member in party.members
-            if recipient_species_id is None or member.species_id != recipient_species_id
+            if (recipient_species_id is None or member.species_id != recipient_species_id)
             and enemy_level is not None
             and enemy_species is not None
             and enemy_level <= training_safety_ceiling(member, policy)
@@ -545,6 +545,19 @@ class EvolutionTrainingPaused(RuntimeError):
         super().__init__("bounded evolution experience quantum completed without evolution")
         self.battles = battles
         self.healing_trips = healing_trips
+
+
+class EvolutionSettlementReserveReached(EvolutionTrainingPaused):
+    """Pause at a safe field boundary before spending battle-settlement headroom."""
+
+
+def evolution_reserve_requested(callback: Callable[[], bool] | None) -> bool:
+    if callback is None:
+        return False
+    value = callback()
+    if type(value) is not bool:
+        raise TypeError("evolution reserve callback must return a boolean")
+    return value
 
 
 def trainee_should_fight_directly(
@@ -1061,6 +1074,7 @@ def run_red_team_balancing(
     collection_shared_experience: bool = False,
     collection_encounters: Mapping[int, Sequence[tuple[int, int]]] | None = None,
     evolution_battle_quantum: int | None = None,
+    evolution_stop_requested: Callable[[], bool] | None = None,
     development_target_species_id: int | None = None,
     venues: Sequence[TrainingVenue],
     report_label: str,
@@ -1087,6 +1101,7 @@ def run_red_team_balancing(
         allow_direct_evolution
         or evolution_battle_quantum is not None
         or collection_shared_experience
+        or evolution_stop_requested is not None
     ) and evolution_target is None:
         raise ValueError("evolution controls require an evolution target")
     if collection_shared_experience and evolution_battle_quantum is None:
@@ -1577,6 +1592,13 @@ def run_red_team_balancing(
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
                 break
+            if (
+                reader.read().battle_state == 0
+                and reader.read_input_readiness().ready
+                and evolution_reserve_requested(evolution_stop_requested)
+            ):
+                require_zero_faints(party_reader, "evolution settlement reserve")
+                raise EvolutionSettlementReserveReached(battles, healing_trips)
             if (
                 evolution_battle_quantum is not None
                 and battles >= evolution_battle_quantum

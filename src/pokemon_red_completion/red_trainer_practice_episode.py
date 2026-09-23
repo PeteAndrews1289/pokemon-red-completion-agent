@@ -47,6 +47,8 @@ from pokemon_red_completion.red_battle_scenario import (
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 
+from .scenario_lab import ScenarioPartition
+
 
 class TrainerPracticeSession(Protocol):
     def load_state_bytes(self, payload: bytes) -> None: ...
@@ -101,6 +103,9 @@ def run_live_red_trainer_practice_episode(
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
     action_executor: BattleActionExecutor | None = None,
     decision_guard: Callable[[RawGameState], None] | None = None,
+    allow_stranded_accuracy_move: bool = False,
+    allow_status_moves: bool = False,
+    wild_training: bool = False,
 ) -> RedTrainerPracticeEpisode:
     """Use the existing actor in-place; caller retains the game even on failure.
 
@@ -122,6 +127,9 @@ def run_live_red_trainer_practice_episode(
         public_species_base_stats=public_species_base_stats,
         action_executor=action_executor,
         decision_guard=decision_guard,
+        allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+        allow_status_moves=allow_status_moves,
+        wild_training=wild_training,
     )
 
 
@@ -211,12 +219,23 @@ def run_red_trainer_practice_episode(
     opening_idle_frames: int = 0,
     action_executor: BattleActionExecutor | None = None,
     decision_guard: Callable[[RawGameState], None] | None = None,
+    allow_stranded_accuracy_move: bool = False,
+    allow_status_moves: bool = False,
+    wild_training: bool = False,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
 
+    if type(wild_training) is not bool:
+        raise RedTrainerPracticeEpisodeError("wild training opt-in must be boolean")
+    expected_battle_state = 1 if wild_training else 2
+    if wild_training and (
+        not isinstance(capture, BattleScenarioCapture)
+        or capture.manifest.partition is not ScenarioPartition.DEVELOPMENT
+    ):
+        raise RedTrainerPracticeEpisodeError("wild training requires DEVELOPMENT capture")
     if (
         not isinstance(capture, BattleScenarioCapture)
-        or capture.manifest.expected_battle_state != 2
+        or capture.manifest.expected_battle_state != expected_battle_state
     ):
         raise RedTrainerPracticeEpisodeError(
             "trainer episode needs an authenticated trainer capture"
@@ -233,6 +252,10 @@ def run_red_trainer_practice_episode(
         raise RedTrainerPracticeEpisodeError("trainer episode player-turn budget is invalid")
     if type(opening_idle_frames) is not int or not 0 <= opening_idle_frames <= 12:  # noqa: E721
         raise RedTrainerPracticeEpisodeError("trainer opening timing is outside its bound")
+    if type(allow_status_moves) is not bool:
+        raise RedTrainerPracticeEpisodeError("status move opt-in must be boolean")
+    if allow_status_moves and capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2:
+        raise RedTrainerPracticeEpisodeError("status moves require rich battle observations")
     decisions: list[dict[str, object]] = []
     episode_started_ns = perf_counter_ns()
     player_turns = 0
@@ -249,8 +272,11 @@ def run_red_trainer_practice_episode(
             else PokemonRedObservationEncoder.from_state_reader(reader)
         )
         initial = reader.read()
+        if wild_training and (initial.enemy_hp is None or initial.enemy_hp <= 0):
+            raise RedTrainerPracticeEpisodeError("wild training needs a living opponent")
         _require_plausible_hp(initial)
-        if initial.map_id != capture.manifest.expected_map or initial.battle_state != 2:
+        if (initial.map_id != capture.manifest.expected_map
+                or initial.battle_state != expected_battle_state):
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
         initial_prompt = reader.trainer_switch_prompt_visible(initial)
         initial_forced = (
@@ -274,6 +300,7 @@ def run_red_trainer_practice_episode(
             and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
         ) or initial_sha256 != capture.manifest.initial_observation_sha256:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
+        actions = action_executor or FrameSafeExecutor(session, controller_timing)
         if opening_idle_frames:
             _emit(
                 event_sink,
@@ -283,13 +310,16 @@ def run_red_trainer_practice_episode(
                     "initial_observation_sha256": initial_sha256,
                 },
             )
-            FrameSafeExecutor(session).execute(
+            # Opening timing historically means an absolute number of frames for
+            # direct episode callers.  A supplied executor is the runner's
+            # shared, metered authority, so retain that path unchanged.
+            (action_executor or FrameSafeExecutor(session)).execute(
                 MacroAction(MacroActionKind.WAIT, repeat=opening_idle_frames)
             )
             settled = reader.read()
             _require_plausible_hp(settled)
             if (
-                settled.battle_state != 2
+                settled.battle_state != expected_battle_state
                 or canonical_sha256(encoder.snapshot_from_raw(settled).to_dict()) != initial_sha256
             ):
                 raise RedTrainerPracticeEpisodeError("opening timing changed the model observation")
@@ -301,7 +331,6 @@ def run_red_trainer_practice_episode(
                     "observation_sha256": initial_sha256,
                 },
             )
-        actions = action_executor or FrameSafeExecutor(session, controller_timing)
         _emit(
             event_sink,
             {
@@ -320,7 +349,8 @@ def run_red_trainer_practice_episode(
         for decision_index in range(1, max_decisions + 1):
             raw = reader.read()
             _require_plausible_hp(raw)
-            if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {0, 2}:
+            if (raw.map_id != capture.manifest.expected_map
+                    or raw.battle_state not in {0, expected_battle_state}):
                 raise RedTrainerPracticeEpisodeError("trainer episode left its authenticated map")
             if raw.battle_state == 0:
                 return _receipt(
@@ -328,7 +358,7 @@ def run_red_trainer_practice_episode(
                     policy.policy_id,
                     decisions,
                     raw,
-                    reader.read_enemy_party_roster_hp(),
+                    ((raw.enemy_hp,) if wild_training else reader.read_enemy_party_roster_hp()),
                     encoder.snapshot_from_raw(raw).to_dict(),
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
                     opening_idle_frames=opening_idle_frames,
@@ -342,7 +372,12 @@ def run_red_trainer_practice_episode(
                 raise RedTrainerPracticeEpisodeError("trainer player party is unavailable")
             if decision_guard is not None:
                 decision_guard(raw)
-            observation = encoder.snapshot_from_raw(raw).to_dict()
+            # Authenticate the old capture with its original projection. Augment
+            # only the new policy view; historical semantic hashes stay unchanged.
+            policy_encoder = (
+                replace(encoder, include_status_context=True) if allow_status_moves else encoder
+            )
+            observation = policy_encoder.snapshot_from_raw(raw).to_dict()
             observation_sha256 = canonical_sha256(observation)
             options = tuple(
                 index + 1
@@ -383,7 +418,13 @@ def run_red_trainer_practice_episode(
                 and not prompt
                 and (reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN)
             ):
-                prepared_main = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
+                prepared_main = prepare_red_battle_scenario(
+                    policy_encoder,
+                    raw,
+                    allow_no_attack=True,
+                    allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+                    allow_status_moves=allow_status_moves,
+                )
                 if not any(prepared_main.supported_candidate_mask) and not options:
                     _emit(
                         event_sink,
@@ -417,6 +458,8 @@ def run_red_trainer_practice_episode(
                 },
             )
             if forced or prompt:
+                if decision_guard is not None:
+                    decision_guard(raw)
                 policy_started_ns = perf_counter_ns()
                 chosen_slot = policy.choose_switch(
                     observation,
@@ -461,7 +504,7 @@ def run_red_trainer_practice_episode(
                         reader,
                         session,
                         chosen_slot - 1,
-                        expected_battle_state=2,
+                        expected_battle_state=expected_battle_state,
                         label="model trainer practice forced switch",
                     )
                     kind = "forced_switch"
@@ -498,7 +541,11 @@ def run_red_trainer_practice_episode(
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
                 raise RedTrainerPracticeEpisodeError("trainer episode has no model-owned decision")
             prepared = prepared_main or prepare_red_battle_scenario(
-                encoder, raw, allow_no_attack=True
+                policy_encoder,
+                raw,
+                allow_no_attack=True,
+                allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+                allow_status_moves=allow_status_moves,
             )
             _emit(
                 event_sink,
@@ -508,6 +555,8 @@ def run_red_trainer_practice_episode(
                     "model_input": _main_model_input(prepared),
                 },
             )
+            if decision_guard is not None:
+                decision_guard(raw)
             policy_started_ns = perf_counter_ns()
             action = policy.choose_main(observation, prepared)
             policy_elapsed_ns = perf_counter_ns() - policy_started_ns
@@ -537,7 +586,7 @@ def run_red_trainer_practice_episode(
                     reader,
                     session,
                     action.party_slot - 1,
-                    expected_battle_state=2,
+                    expected_battle_state=expected_battle_state,
                     label="model trainer practice voluntary switch",
                     allow_faint_outcome=True,
                 )
@@ -590,7 +639,7 @@ def run_red_trainer_practice_episode(
                 actions,
                 expected_map=capture.manifest.expected_map,
                 selected_slot=action.move_slot,
-                expected_battle_state=2,
+                expected_battle_state=expected_battle_state,
                 settle_to_next_decision=True,
                 timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=40),
                 label="model trainer practice attack",
@@ -641,12 +690,12 @@ def run_red_trainer_practice_episode(
                 policy.policy_id,
                 decisions,
                 final,
-                reader.read_enemy_party_roster_hp(),
+                ((final.enemy_hp,) if wild_training else reader.read_enemy_party_roster_hp()),
                 encoder.snapshot_from_raw(final).to_dict(),
                 elapsed_ns=perf_counter_ns() - episode_started_ns,
                 opening_idle_frames=opening_idle_frames,
             )
-        if final.battle_state != 2:
+        if final.battle_state != expected_battle_state:
             raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
         return RedTrainerPracticeEpisode(
             capture_id=capture.manifest.capture_id,
@@ -673,10 +722,11 @@ def _receipt(
     elapsed_ns: int = 0,
     opening_idle_frames: int = 0,
 ) -> RedTrainerPracticeEpisode:
-    if enemy_hp is None:
+    if enemy_hp is None or not enemy_hp or any(hp is None for hp in enemy_hp):
         raise RedTrainerPracticeEpisodeError("trainer terminal lacks authenticated roster HP")
     won = bool(
         all(hp == 0 for hp in enemy_hp)
+        and (capture.manifest.expected_battle_state != 1 or final.battle_result == 0)
         and final.party_hp is not None
         and any(hp > 0 for hp in final.party_hp)
     )

@@ -1,5 +1,151 @@
 # Agent review and adjudication log
 
+## September22 — earned reserve preparation audited; retrospective synchronized
+
+Codex retained the completed40-outing preparation and independently checked stage283:
+160wild encounters,153wins,496learned choices; three reserves39,fullHP/PP and25262cash.
+Two faints,32status changes, seven nonwinning exits and three failed support stages remain
+recorded. Giovanni was not fought. Spinner geometry remains unresolved; extra waiting is
+not a route repair. The read-only save audit corrected stage280's Viridian-anchor claim:
+the actual recovery anchor is Celadon. No replay, new fit or authority promotion.
+[Evidence](evidence/red-giovanni-readiness-2026-09-22.json).
+
+Pete requested an updated YouTube narrative and retrospective documentation. Current public
+summaries and generated roadmap now distinguish primary collection, earned story, TRAIN and
+final-run evidence. The [research record](research-retrospective.md) preserves negative
+results, privileged observations, owner admission despite the failed efficiency screen,
+reproducibility limits and missing controlled comparisons. No novelty or publication claim.
+216targeted tests belong to the preceding gameplay/code checkpoint, not this documentation
+refresh. No new gameplay, fitting, external Flash/Claude review, usage measurement or push.
+Refresh validation:12documentation tests, link/active-state checks, collection-registry check
+and whitespace checks passed; the regenerated roadmap was visually inspected. The public-
+artifact check still flags an unchanged home-directory-shaped privacy-test fixture in
+`tests/test_collection_continuation_adversarial.py`; verified present at the parent commit.
+That unrelated pre-existing finding is not reported as a pass or silently exempted.
+
+## September22 — later effects qualify; combined actor rejected by native screen
+
+Pete approved one fresh packet. Ten native later effects passed all five conditions,
+9/10correct,Brier0.042024. One fit preserved182preferences. Candidate1de5e6a2 won
+38/64versusK32, but13concerns/201decisions failed readiness.148episodes/1944events/
+518148frames and355learned choices independently verified;585tests pass/13skipped.
+Four flagged inputs match measured targets; two favor the flagged move. Two Rest
+flags were asleep/nonexecuted. Preserve raw alarms, targets and failure; no implicit
+exemptions, another unchanged fit, reserved access or promotion. Next reconcile
+value/readiness semantics. No external reviewer, save changes or publication.
+[Report](work-sessions/2026-09-22-native-later-selector.md).
+
+## September22 — finish pipeline prepared; native coverage still blocks fitting
+
+Codex implemented a bounded qualification/fit/screen runner, independent evidence
+auditor and guarded128-case reserved comparison. Two native setup turns plus ten
+diagnostics yielded seven observed effects:6/7correct,Brier0.056345 passes the error
+bound. Coverage fails:7<8 and both occupied-confusion actors fainted before acting.
+Those suppressions remain unknown; no relabeling or threshold change. Zero fits,
+screens, reserved comparisons or promotions. A new ten-pair native qualification
+is prepared but awaits Pete's explicit decision.585targeted tests pass/13private
+skips; actual failed-packet guard rejects before ROM access/output creation.
+No external reviewer, earned-save changes or publication.
+[Plan](battler-finish-plan.md) · [Evidence](evidence/red-battler-finish-preparation-2026-09-22.json).
+
+## September22 — timing-aware auxiliary passes; battle authority unchanged
+
+Codex froze84prospective native turns, then one72label fit using unchanged28visible
+features. Reserved12configurations opened after fit:11/12correct,Brier0.034718<=0.125;
+all family/order gates pass.24distinct fitting vectors,12distinct held vectors, zero
+overlap. Correct full-HP opponent-first healing; retain one actor-first Recover error
+at52.22%. No heldout tuning or replay. Accepted narrow auxiliary generalization, not
+natural-party transfer or live combat.84rows/588events/111648frames independently
+reauthenticated;553tests pass/13private skips. Old raw-concern gate unchanged.
+Next unused later-turn qualification, then one constrained selector fit/screen.
+No save changes, external reviewers or publication.
+[Evidence](evidence/red-timing-effect-learning-2026-09-22.json).
+
+## September22 — combination implemented; later-turn gate correctly stops fitting
+
+Codex verified serialization and exact zero-augmentation scores on312contexts,
+preserving182constraints/rewardv2.12preselected native checks yielded10awake labels
+and2sleep suppressions.8/10correct,Brier0.19013>0.125: no selector fit or battle screen.
+Two full-HP Recover selections each healed55HP after enemy damage; prior auxiliary
+training always made the actor faster. Accepted the turn-order coverage diagnosis;
+rejected broad auxiliary integration. Raw concern flags remain unchanged but are
+not causal evidence of wasted healing. Independently reauthenticated12rows/84events/
+18492frames;537tests pass/13private skips. No promotion, save change, external review
+or publication. [Evidence](evidence/red-effect-selector-combination-2026-09-22.json).
+
+## September21 — narrow measured-effect learner passes; actor integration stays closed
+
+Codex verified six new Disable trace/plain pairs with exact terminal equality and
+two positive applications, retaining four no-effects. One fixed31iteration predictor
+fit used36native labels/12distinct feature vectors; six configurations on a withheld
+TRAIN root were opened only after weights froze.6/6correct,Brier0.00079751versus0.25.
+Independent read-only audit reauthenticated42rows,54logs/378events and paired states.
+No hidden actor features, learned battle choices, live promotion or earned-save changes.
+Accepted only a small assisted first-turn diagnostic, not natural-party transfer or
+battle-value knowledge. Preserve old rejections and unchanged readiness; next is bounded
+selector composition/later-turn support.527targeted tests pass/13private skips.
+No external reviewer, quota action or publication. [Evidence](evidence/red-measured-effect-learning-2026-09-21.json).
+
+## September21 — bounded story destination dispatch verified
+
+Codex added opt-in plural story bindings, preserved legacy callers, and verified
+84targeted checks. One frozen Model141 choice selected Hideout over Saffron; the
+chapter passed1061actions/90473frames, earned5481cash and obtained the Silph Scope.
+Independent zero-input menu/draw and terminal audits pass. Five battles and healing
+were scripted. Near-even probabilities establish no strategic superiority; native
+learned healing remains open. No fit, source replay, main-save change, external agent,
+quota query or publication. [Evidence](evidence/red-story-branch-development-2026-09-21.json).
+
+## September21 — gift learning and earned model qualification passed
+
+Codex implemented authenticated full-player unit-weight teacher admission and
+future-fit retention. Fixed TRAIN-only five-ridge selection plus unopened heldout
+passed: old error+1.7267% below2%; heldout error80.82%lower. Deterministic publication
+reproduced the frozen Model141 exactly. Six native gift/audit pairs pass.
+Model141 then ranked/selected Lapras from five real options and acquired it into
+storage without teacher input or redraw. Independent terminal/gift audits pass:
+108/124,78specimens,15968cash; party/resources intact and offer exhausted.
+415targeted tests, not full suite. Previous rejection and every failure preserved;
+no heldout/earned fitting, broad transfer claim, external agent or quota query.
+[Evidence](evidence/red-gift-model-qualification-2026-09-21.json).
+
+## September21 — semantic Safari successor completed, retain production model
+
+Codex found V1's incompatible action/frame scale and travel-only feature contrast
+using TRAIN evidence. Accepted prospective V2 units and isolated context assistance;
+historical V1 unchanged.16native TRAIN outcomes admitted, one153-row fit, all8new
+held-out native outcomes authenticated. Candidate1/4captures versus0/4, with
+old-row fitting error+5.42%; no promotion/refit or statistical superiority claim.
+155targeted tests and114learner regressions pass. Main save/model rehashed unchanged.
+No external reviewer or quota query. Next reconnect the exact Safari receipt to
+strict collection reserve ancestry; do not weaken it. [Evidence](evidence/red-safari-semantic-context-2026-09-21.json).
+
+## September21 — completed Safari pilot, experimental candidate not promoted
+
+Codex authenticated all8TRAIN choices and all8held-out native episodes, fit once
+with137prior rows retained, and rehashed the protected save/model unchanged.
+Accepted corrections: exact paid-endpoint recovery, prospective bounded search
+dose, trace-prefix cost admission and explicit-dose binding identity.135targeted
+ROM-free tests pass, not the full suite. Both policies4/4captures; candidate
+51.5%more frames and0.35%higher old-row fit error. No superiority claim or
+promotion. Correlated resets and same-recipe fresh parents limit inference;
+all original failures are retained. No external reviewer or quota query was used.
+[Evidence](evidence/red-safari-learning-pilot-2026-09-21.json).
+
+## September20 — K ordinary integration and earned-to-capture audit
+
+Codex verified explicit K/receipt scope, both cartridge ledge approaches, two actual
+payouts, a model-selected heal and500-cost Safari acquisition. Fresh state reads and
+complete event pairs verified the eventual Rhyhorn:97registrations,75specimens,573cash.
+Accepted corrections: unchanged-margin roster preparation, connected multi-goal ancestry,
+explicit restored-input key release and actual indoor-exit/rebind before paid Safari.
+The first two evolution budgets, first neutral recovery, first Safari search and wrong-
+timing continuation remain failed with their costs. Correct8/16timing resumed the exact
+paid endpoint; no second fee or new choice. Do not count recovery as unattended play or
+these DEVELOPMENT outcomes as new fits.2958targeted tests pass/13skipped, not full-suite.
+No external agent, quota query or GitHub publication. Next package the proven paid-session
+restart, then renewable League scope. [Evidence](evidence/red-k-earned-spending-integration-2026-09-20.json).
+
 ## September 19 — retained-state lifecycle continuation
 
 Codex accepted the narrow lifecycle repair, preserving the strict funding verifier and its
@@ -1622,3 +1768,51 @@ Mission check for this planning task:
 - At closeout Antigravity reported100% five-hour and65% weekly Gemini quota remaining, plus100%
   five-hour and weekly in its separate Claude/GPT pool. Claude print mode worked, but its interactive
   usage view requested a fresh login, so no direct Claude percentage is claimed.
+
+## Candidate K exact-target and whole-battle verification (2026-09-20)
+
+- Codex authenticated old/new returns on16identical captures and preserved the original
+  rejected fit. The separate canonical-target protocol protects302unaffected contexts
+  independently; all20numeric retention checks passed. Only the control head changed.
+- K/J both won8/8 paired TRAIN battles; faints5/11 and PP92/101, but HP loss1437/1419.
+  All16event chains, terminal outcomes and saved-state hashes were independently checked
+  read-only. Zero invalid actions, teacher queries, prescribed first actions or replay.
+- 152targeted ROM-free tests and type checks across544source files passed. This is not
+  a full-suite pass, natural six-member qualification or production promotion.
+- No Flash or Claude invocation this session; no external review or quota reading claimed.
+  [Evidence](evidence/red-battler-k-control-result-2026-09-20.json).
+
+## Natural six-member qualification audit (2026-09-20)
+
+- Codex verified all17preparation parent/state/cumulative-cost links, keeping seven
+  failed stages and every earned resource change. Original3700continued;3900booted once.
+- All eight J/K cells won with210model choices,841hash-chained events and exact210cash
+  payouts. K used late slots on both origins. Null terminal-slot summary failure was
+  repaired through read-only reaggregation; original outcomes and failed summary retained.
+- Gate passes only measured natural six-member execution. Same enemy roster, two origins;
+  K16faints versus J15, so no funding-efficiency, superiority or League claim. No fit or
+  automatic production promotion.2403targeted tests pass,13integration tests skipped.
+- No Flash/Claude invocation or external review; service quotas unavailable.
+  [Evidence](evidence/red-natural-six-qualification-2026-09-20.json).
+
+## Status-learning independent artifact audit (2026-09-21)
+
+- Codex re-read all390terminal files and4,832hash-chained events, recomputed331
+  comparative branch returns and their actual observation vectors, and checked
+  heldout capture exclusion and frozen component identities. Zero invalid actions.
+-815decision records include358prescribed first choices and457learned choices.
+  Teacher-created initial states are not natural gameplay; neither candidate is promoted.
+- Two fits learned44TRAIN contexts; withheld4/8vs4/8then3/8vs5/8. Both rejected.
+  Protected K, Model141, earned story and primary collection hashes are unchanged.
+- No Flash/Claude or external review was used; service quotas unavailable.
+  [Evidence](evidence/red-status-learning-2026-09-21.json).
+
+## Balanced status artifact audit (2026-09-21)
+
+- Reconciled560terminals,9092event records,480branch targets and196candidate
+  predictions; frozen K components and both saves unchanged.804targeted tests pass.
+- Withheld13/32versus12/32 fails the frozen behavior gate:44applicability flags,
+  196versus76decisions. No live promotion. Label audit supports continuation-credit
+  mismatch as a hypothesis, not a proven sole cause. All losses remain.
+- No Flash/Claude or external reviewer; service quotas unavailable.
+  [Evidence](evidence/red-balanced-status-learning-2026-09-21.json).

@@ -1,0 +1,202 @@
+{
+  "schema": "pokemon.red.value-readout-finish-evidence.v1",
+  "session": "2026-09-22-randomized-outcome-training",
+  "source_commit": "cb9aa8a7",
+  "private_packet": "red-value-readout-finish-20260922-v1",
+  "result_sha256": "d13937c329718546a5faaaa4d102d4f7c2f6c7a5b1aec13698c3926b42195a04",
+  "audit_sha256": "88844670e74322c91cade02d414f0cbb2daffde7e88e251859163476fa5264bd",
+  "actor_promotions": 0,
+  "cohorts": {
+    "2026092271": {
+      "concerning_selections": 26,
+      "decisions": {
+        "candidate": 135,
+        "frozen": 74
+      },
+      "improved_won_status_cases": 1,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 14,
+        "frozen": 20
+      }
+    },
+    "2026092272": {
+      "concerning_selections": 37,
+      "decisions": {
+        "candidate": 137,
+        "frozen": 76
+      },
+      "improved_won_status_cases": 0,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 13,
+        "frozen": 21
+      }
+    },
+    "2026092273": {
+      "concerning_selections": 30,
+      "decisions": {
+        "candidate": 132,
+        "frozen": 69
+      },
+      "improved_won_status_cases": 2,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 16,
+        "frozen": 18
+      }
+    },
+    "2026092274": {
+      "concerning_selections": 18,
+      "decisions": {
+        "candidate": 97,
+        "frozen": 71
+      },
+      "improved_won_status_cases": 0,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 13,
+        "frozen": 14
+      }
+    }
+  },
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": false,
+    "iterations": 82,
+    "minimum_slack": -9.950373858202965e-15,
+    "new_group": {
+      "actor": {
+        "contexts": 145,
+        "errors": 20,
+        "high_cost_errors": 16,
+        "regret": 0.6070126459381285
+      },
+      "candidate": {
+        "contexts": 145,
+        "errors": 2,
+        "high_cost_errors": 0,
+        "regret": 0.0018207115933069
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 8,
+          "high_cost_errors": 0,
+          "regret": 0.012193383640954897
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 2,
+          "high_cost_errors": 0,
+          "regret": 0.0036811647227271162
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.22398293188881907
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 0,
+          "high_cost_errors": 0,
+          "regret": 0.0006362132352940956
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      }
+    ],
+    "passed": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_success": true
+  },
+  "fits": 1,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 791,
+    "episodes": 256,
+    "event_records": 3932,
+    "frames": 1032520,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 791,
+    "new_target_contexts": 0,
+    "plan_sha256": "0ec92b26cd29a97ff5c02d68b2d2a096365b6fdbc421c24b415f3311a4fb83e1",
+    "prescribed_first_choices": 0,
+    "status_move_attempts_including_prescribed": 261,
+    "stops": {
+      "battle_won": 129,
+      "party_defeated": 127
+    }
+  },
+  "new_train_contexts": 0,
+  "screen": {
+    "concerning_selections": 111,
+    "decisions": {
+      "candidate": 501,
+      "frozen": 290
+    },
+    "improved_won_status_cases": 3,
+    "invalid_actions": 0,
+    "original_zero_flag_passed": false,
+    "passed": false,
+    "raw_flags_are_diagnostic": true,
+    "schema": "pokemon.red.battler.outcome-readiness.v2",
+    "wins": {
+      "candidate": 56,
+      "frozen": 73
+    }
+  },
+  "seconds": 78.86643529171124,
+  "training_complete": false,
+  "collection_delta": 0
+}

@@ -130,12 +130,35 @@ def _scripted_arrival(monkeypatch):
     )
 
 
-def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
+@pytest.mark.parametrize("field_recovery", [False, True])
+def test_execution_composes_five_quoted_battles_without_training(
+    monkeypatch, tmp_path, field_recovery,
+):
     qualification = _qualification()
     runtime, observed = _runtime()
+    session = None
+    if field_recovery:
+        from test_red_live_option_menu import _model
+
+        from pokemon_red_completion.red_league_field_recovery import LeagueFieldRecovery
+        from pokemon_red_completion.red_learned_league import FrozenLeagueController
+        from pokemon_red_completion.red_learned_trainer import (
+            FROZEN_K_SHA256,
+            K_QUALIFICATION_SHA256,
+        )
+        model = _model()
+        session = LeagueFieldRecovery(model, model.model_sha256, tmp_path/'campaign',
+                                     lambda:b'test-state', 10000)
+        runtime.league_battle_controller = FrozenLeagueController(
+            SimpleNamespace(model_sha256=FROZEN_K_SHA256,
+                            qualification_sha256=K_QUALIFICATION_SHA256),
+            'league-profit-recovery-v1', field_recovery=session)
+        observed.raw.bag_items = ((1,2),(53,1))
     actions = _actions(runtime)
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
-    monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
+    monkeypatch.setattr(
+        execution, "qualify_red_league_funding", lambda *args, **kwargs: qualification,
+    )
     routes = []
 
     def route(plan, *args, **kwargs):
@@ -166,6 +189,10 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     )
 
     def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
+        if field_recovery and objective_id == 'defeat_bruno':
+            from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
+            session._accept(GoalExecutionReport(1,1,{'item_id':53,'owned_items_consumed':1}))
+            observed.raw.bag_items = ((1,2),)
         before = runtime.adapter.observe().raw.player_money
         runtime.adapter.observe().raw.player_money += expected_money
         if objective_id == "defeat_champion":
@@ -181,6 +208,11 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     assert result.observed_gross_income == 1_500
     assert result.public_dict()["training_examples"] == 0
     assert result.public_dict()["postgame_reset_proven"] is False
+    assert result.field_items_spent == (((53,1),) if field_recovery else ())
+    assert result.field_item_replacement_cost == (1500 if field_recovery else 0)
+    assert result.public_dict()['net_after_field_item_replacement'] == (
+        0 if field_recovery else 1500
+    )
     assert [row.objective_id for row in result.battles] == [
         quote.objective_id for quote in qualification.battles
     ]

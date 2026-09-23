@@ -1,5 +1,191 @@
 # Roadmap baseline and deviations
 
+## September22 — owner accepts bounded story use, ends selector tuning
+
+Pete accepted the additive candidate as capable enough and requested return to
+Red development. Independent audit confirms72/128wins versusK66,349decisions
+versus276,zero illegal/flagged choices and six improved winning status cases.
+The original25percent efficiency screen remains FAILED; no old result is rewritten.
+Explicit owner admission enables only exact-checkpoint story DEVELOPMENT with
+retained costs and recovery. Natural-party and broad qualification remain open.
+This trades an efficiency uncertainty for real-game integration evidence, not a
+claim of superiority, a perfect-win requirement or a relaxed final Red exam.
+No more status fits; no default funding/wild/League override. See the
+[bounded return plan](story-return-plan.md) and
+[exact admission](evidence/red-additive-story-admission-2026-09-22.json).
+
+## September22 — randomized TRAIN outcomes after failed generalization
+
+The hidden/readout candidate reduced TRAIN regret99.7%but lost56/128versusK73
+and used501decisions versus290. It remains rejected. Under standing training
+authorization, replace another blind refit with broader paired RNG outcomes from
+isolated TRAIN copies. Four-context diagnostic passed256episodes;651K continuation
+choices audited. All mutations remain teacher-only setup, never player actions.
+Use32seeds/context and keep correlated ancestry explicit. Prospectively specified
+conservative preference learning discounts uncertain apparent status benefits;
+native rewards,182retention margins and all outcome/final-run gates stay unchanged.
+Old failures/labels remain immutable. [Collection](randomized-training-collection-plan.md)
+and [fit](randomized-value-fit-plan.md). No production promotion from these packets.
+
+## September22 — prospective outcome-based battler readiness
+
+Pete answered “Continue” to the explicit proposal to retain raw concern flags as
+diagnostics rather than an automatic zero-count rejection. Apply only to the new
+outcome-value pilot and future explicitly bound experiments. Keep original gates,
+results and candidates unchanged;1de5e6a2 remains rejected on its independent cost gate.
+Wins≥K,decisions≤1.25K,zero illegal actions, audited model-only execution and measured
+won-status improvement remain required. Raw flags, suppressions, costs and failures
+must all remain reported. No actor mask, teacher override or warning-derived label.
+The24-branch audit showed timing-unstable preferences and two suppressed Rest flags;
+a warning alone does not establish failed effect or inferior outcome. The tradeoff
+is allowing flagged yet outcome-effective behavior, made visible for review rather
+than concealing it. Stage/final-run gates and natural-party requirements do not change.
+[Frozen pilot](outcome-value-pilot-plan.md).
+
+## September21 — correct TRAIN reward without revising battle acceptance
+
+Pete requested correction after the learned-feature candidate's failed screen and
+reward audit. The new win-conditioned-return.v2 removes efficiency penalties from
+nonwins and bounds/normalizes them on wins. Losing sooner cannot improve reward
+solely by avoiding future turn/PP/unchanged-effect costs. Original v1 targets,
+rewards, failed candidates and their admission results remain immutable.
+The new offline fit gate uses the declared v2 scale and original182v1 retention
+constraints; v1 fit metrics are reported alongside it. Actual battle acceptance
+continues to use the old v1 returns and unchanged win/concern/decision thresholds.
+No old rejection is reinterpreted, no state is promoted, and stage/final-run gates
+are unchanged. [Prospective design](work-sessions/2026-09-21-status-reward-correction.md).
+
+## September21 — accept a real story contrast without declaring healing solved
+
+Pete approved the retained Celadon story alternatives because the party needed
+neither HP nor PP recovery. A prospective one-choice packet used frozen Model141,
+both executable story bindings and Saffron's actual2300support cost. Hideout was
+selected and verified; no forced Saffron, retry, substitution or DEVELOPMENT fit.
+Five battles and automatic healing remained scripted. This is destination authority,
+not strategic superiority or full story autonomy; native learned healing stays open.
+Continue from the newly earned terminal only under a new bounded plan. Preserve all
+stage IDs, exits, main-save counters and five fresh-run gates.
+[Evidence](evidence/red-story-branch-development-2026-09-21.json).
+
+## September21 — prioritize an integrated player over isolated acquisition fits
+
+Pete approved the ownership audit and completion of its second item: a short native
+integrated-play episode. Recorded early-story ranker evidence is integration-only/untrained;
+the collection ranker does not close story authority. Archive29/29 historical component
+checks and track5–8continuous model choices, an ordinary setback followed by reassessment,
+useful success, measured costs/history and independent save verification. No forced
+destination, reset, teacher fallback or relaxed safety guard. This is development
+integration, not training or independent generalization. Development-save124/124 is
+not a prerequisite to story readiness. Stage IDs, final fresh Red criteria and the
+Red-before-hack gate stay unchanged. [Contract](player-ownership-and-integration.md).
+
+## September21 — admit native teacher outcomes without pretending they were choices
+
+The previous acquisition-only gift fit remains rejected and immutable. A new
+prospective bridge uses ordinary registered-player features/rewards and sealed
+unit-weight teacher outcomes; subsequent fits reauthenticate and retain them.
+Five predeclared TRAIN-only ridge candidates kept the2%retention limit fixed.
+The selected Model141 passed fresh heldout prediction checks, then genuinely
+ranked/selected/acquired Lapras from the five-option earned menu:108/124.
+This is bounded gift integration, not a full-player promotion or independent
+cross-title transfer. No final gate, stage ID, sampling rule or old result changed.
+Return to collection; do not reopen the consumed gift campaign.
+[Evidence](evidence/red-gift-model-qualification-2026-09-21.json).
+
+## September21 — fix reward units prospectively and close the semantic batch
+
+V1 used10xrecent registered action/frame cost scale; keep its historical8rows
+and candidate unchanged, but exclude them from a new registered-scale successor.
+Sixteen genuinely model-selected native TRAIN outcomes across four contexts yielded
+one153-row candidate. Four held-out pairs yielded1capture versus0baseline; old-row
+fit error+5.42%. No promotion or further fit. This small assisted learning signal
+does not change stage IDs or final gates. Return to earned collection usingModel137
+and17468cash; neither perfect Safari nor League income blocks other useful goals.
+[Evidence](evidence/red-safari-semantic-context-2026-09-21.json).
+
+## September21 — complete the assisted pilot, do not promote a cost regression
+
+User-authorized exact-terminal recovery completed setup and one failed search
+without erasing failures or costs. The frozen8TRAIN/4paired-case schedule and
+one145-row fit are complete. Candidate and baseline4/4captures; candidate
+51.5%more frames. Retain it experimentally, leave Model137 and105/124unchanged.
+Fresh parents share an opening recipe and within-parent resets are correlated;
+this is not independent statistical superiority. No held-out fitting or refit.
+Next diagnose TRAIN-only utility/cost calibration and semantic diversity, not
+another setup census or broad factory. Stage IDs, exit criteria and0/5final-Red
+gate are unchanged. [Evidence](evidence/red-safari-learning-pilot-2026-09-21.json).
+
+## September20 — narrow control learning, bounded recovery remains opt-in
+
+[L evidence](evidence/red-league-skill-learning-2026-09-20.json): one TRAIN capture,
+30branches,69.1%lower composed regret and44retention checks passed. Both reserved
+K/L games lost; this is not broad improvement or League qualification. Failed harness
+steps and the incomplete eight-case plan remain recorded; no consumed branch replay.
+The repeat-switch guard forced three observed immune attacks. An explicit opt-in now
+offers one extra model-owned switch choice, then stops if its budget is exhausted.
+Default behavior is unchanged; live survival qualification is next, then ordinary
+between-battle healing choices. No stage, final gate or integrated model promotion.
+
+## September20 — recoverable faints are normal play, not automatic failure
+
+Pete explicitly approved fainting provided the model can recover and still win.
+The prospective [League recovery contract](evidence/red-league-recovery-contract-2026-09-20.json)
+permits fainted teammates and model-selected forced replacements. All-party losses,
+resource costs and failures remain recorded. Renewable income still requires two
+complete clean model-owned profitable cycles including recovery and supply costs.
+The previous unowned Surf keeps the original cycle disqualified; old no-faint
+receipts and ordinary funding defaults remain historical/unchanged. No trainer
+fallback, DEVELOPMENT fitting, reset or broader model promotion is authorized.
+First falsifier: continue the exact Agatha faint and verify recovery and victory.
+Final Red acceptance and all stage IDs remain unchanged.
+
+[Outcome audit](evidence/red-league-recovery-2026-09-20.json): the exact faint recovered
+through Agatha, Lance and Champion. Native postgame Continue and free nurse healing
+passed. The inherited cycle remains disqualified by the old unowned attack; the next
+cycle lost to Champion, with26868blackout penalty and−3504net. Gameplay stopped fully
+healed in Viridian with26868cash. Recovery is verified; income is not qualified.
+Next diagnose immunity/switch survival and recovery planning on admissible TRAIN
+scenarios, not these DEVELOPMENT captures. No stage promotion or perfect-win gate.
+
+## September20 — explicit K integration earns and funds a new registration
+
+Pete authorized integration, approach qualification and model-selected earning/spending.
+Exact K plus its natural receipt now binds supported ordinary1–6member funding; J stays
+1–3, and wild/League defaults do not change. Both ledge approaches and two payouts passed
+the unchanged no-faints/net-cash guard, with disclosed deterministic roster preparation.
+The goal model chose healing and paid acquisition; one500fee ultimately produced Rhyhorn
+through exact paid-session continuation. The earlier search remains failed, not relabeled.
+
+[Evidence](evidence/red-k-earned-spending-integration-2026-09-20.json) records all budgets,
+input recovery, incorrect continuation timing and the successful retained endpoint.
+The larger collection budget was prospective; old600000frame failures remain unchanged.
+No new fit, independent-root claim or fresh-run acceptance. Native progress is97/124;
+all five final-run requirements and stage IDs remain unchanged. Next package the proven
+paid-session resume in the normal player, using existing403steps/28balls, then renewable
+League income and27remaining registrations. No new trainer audit/refit loop or publication.
+
+## September20 — natural six-member execution passes; funding remains separate
+
+Pete requested continuation until qualification, including recovery where possible.
+The original3700earned state continued; the previously declared unstarted3900boot
+ran once, stopping the existing teacher at Mt.Moon entrance before optional detours.
+Both reached six through legitimate resources. Legacy bootstrap TM34sales remained
+disclosed; new preparation sold nothing and changed no stats or cash synthetically.
+
+The [eight-cell comparison](evidence/red-natural-six-qualification-2026-09-20.json)
+passed its existing execution gate: valid retained terminals, K wins nonregression,
+a K win and actual late-slot use on each origin. Before queries, the proposed larger
+budgets failed preflight and were tightened to existing DEVELOPMENT80decisions/
+120000frames. No pass criterion was weakened. All eight battles won; a null-slot
+summary error was repaired from immutable logs with zero replay.
+
+Keep the measured limit: two natural origins, same level14Clefairy roster, and
+earlier smaller-party exposure on3700. K16faints versus J15 does not meet funding's
+separate no-faints contract or demonstrate superiority. No automatic production or
+League promotion. Next explicitly bind supported K and qualify useful player access;
+do not restart the trainer refit loop. Red stage IDs,124native target and five-part
+fresh-run acceptance remain unchanged.
+
 ## September 19 — Battle lifecycle closes; preserve the funding failure
 
 The separately declared continuation from the exact failed endpoint completed five model
@@ -1363,3 +1549,100 @@ no-faints funding acceptance, preserving the actual failed endpoint and verdict.
 this direct prepared-entry test with high-level model-selected funding or broad player promotion.
 No stage exit, Red denominator or fresh-start acceptance criterion changes. Future publication
 still requires Pete's instruction. Historical receipts remain unchanged.
+
+## September20 — bounded assisted held-out six-party setup
+
+Pete approved two fresh short origins and six assisted DEVELOPMENT cases after the
+[source inventory](evidence/red-six-party-source-inventory-2026-09-20.json) found no
+eligible unused captures. The [prospective protocol](red-six-party-assisted-pilot.md)
+permits a separate explicit held-out construction interface, while preserving the
+existing TRAIN-only API, disjoint ancestry, no-fit/no-retry rules and model-only
+battle choices. This is not permission to relabel TRAIN data, resume the retired
+full-game teacher-supply strategy, modify the main save or promote production scope.
+
+This trades natural encounter realism for a cheap, controlled full-party execution
+test. Report six cases as two independent origin clusters with assisted conditions;
+natural workload qualification still follows. Red's124registration denominator,
+all five fresh-run acceptance criteria and the existing stage exit criteria stay
+unchanged. Pete also requested the remaining Red completion roadmap be refreshed.
+
+## September20 — bounded current-J TRAIN comparison rejected
+
+[485branches on16existing captures](evidence/red-larger-party-J-comparison-2026-09-20.json)
+completed with zero invalid actions. The runner's three-timing aggregation error was
+corrected through a separate five-timing amendment, preserving the original24results
+without replay or weakened guards. One switch/control fit selected epoch0for both heads;
+candidate equals J and fails the declared10%gain. Reject, do not promote or keep fitting.
+
+Old/current best switch targets disagree on10/16same captures. Audit continuation and
+target compatibility before any separately frozen successor; preserve original evidence
+and unrelated retention protections. This is a hypothesis about the blocked fit, not
+proof that every regression is stale labeling. No new source bank or broad redesign.
+No stage exit, registered count, production scope or fresh-run criterion changes.
+
+## September20 — canonical current-policy targets and accepted candidate K
+
+The [target audit and paired gameplay](evidence/red-battler-k-control-result-2026-09-20.json)
+authenticate16identical observations/legal inventories with different continuation policies.
+The separate successor replaces only those labels and protects302unaffected contexts
+independently. One control-head fit passed all20retention checks with32.64%lower composed
+TRAIN regret. Original targets, rejected fit and branch outcomes remain immutable.
+
+Eight J/K whole-battle pairs passed declared TRAIN gates:8wins each, faints11/5,
+decisions180/165, PP101/92. HP loss worsened1419→1437; this is not uniform superiority.
+Accept K as a TRAIN candidate, freeze it and stop fitting this bank. Four TRAIN origins
+do not establish natural transfer; laboratory recovery does not establish profitable funding.
+Next prepare a short bounded fresh natural six-member workload, then qualify actual
+scope before funding integration. Main save, production J guard, stage exit criteria
+and all five fresh-Red acceptance gates stay unchanged. No GitHub publication authorized.
+
+## September21 — connect learned story combat before restarting
+
+Pete approved retaining the campaign and connecting the trained battler to required
+story/gym encounters. This supersedes immediate scripted full-Silph execution,
+not the Red completion gates. The [first explicit story phase](evidence/red-learned-story-battle-2026-09-21.json)
+won the required5F Rocket and acquired Card Key with K's two attacks, no items
+or damage. Resume actual partial progress toward further bounded encounters;
+one overlevelled battle does not qualify rival, Giovanni or gym badge handoffs.
+No new-game restart, DEVELOPMENT fitting, stage promotion or publication.
+
+## September21 — required rival workload rejects current readiness
+
+The [Silph continuation](evidence/red-learned-silph-continuation-2026-09-21.json)
+retains one Rocket win and three rival losses, including one item-supported
+attempt.95model decisions do not establish boss mastery; Giovanni remains open.
+Stop unchanged rematches at the declared attempt/reserve boundary and reorient
+to a bounded TRAIN-side preparation/attrition remedy or explicitly broader
+recovery support. Current DEVELOPMENT losses remain excluded from fitting.
+No readiness gate, stage exit or final-run requirement is weakened.
+
+## September21 — status decisions must be learned, not merely executable
+
+Pete authorized learned status reasoning in response to the battler/preparation
+gap. Two bounded packets added actual cartridge outcomes and native post-action
+training. Better fitting regret did not generalize: first withheld4/8versus4/8,
+then3/8versus5/8. Both candidates remain rejected; the next packet must improve
+balanced applicability and sequence coverage without fitting consumed holdouts.
+The second architecture preserves K's damaging-move ranking and learns status
+versus damage separately. No natural qualification, live integration, stage exit,
+final-run gate or save changed. [Evidence](evidence/red-status-learning-2026-09-21.json).
+
+## September21 — balanced status coverage exposes continuation-credit problems
+
+The prospective balanced packet completed80new contexts and one fit. Candidate
+13/32versusK12/32 still failed its behavior gate with44redundancy flags and longer
+battles. Preserve the candidate, all560episodes and original labels; no refit or
+holdout replay. Next test learner-continuation targets and observed turn/resource
+costs before another fit. This reorients learning, not the final acceptance criteria;
+no live promotion or stage exit. [Evidence](evidence/red-balanced-status-learning-2026-09-21.json).
+
+## September21 — closed-loop targets improve behavior, not yet acceptance
+
+Three new fits and1550episodes retained. Learner-continuation targets remove
+flagged repetitions but withheld18/32versus20/32 still fails. A separate fixed
+cost-sensitive fit reduces TRAIN regret74.1%but reintroduces18late concerns;
+its new holdout stays unopened. Both packets close without promotion or an
+optimizer sweep. Next investigate trajectory-wide TRAIN state coverage and
+retention of measured negative preferences, not more opening-only sampling.
+No stage exit, acceptance threshold or protected save changes.
+[Evidence](evidence/red-closed-loop-status-learning-2026-09-21.json).

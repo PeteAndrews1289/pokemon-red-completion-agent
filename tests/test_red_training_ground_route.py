@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
 
 from pokemon_red_completion import red_training_ground_route as ground_route
 from pokemon_red_completion.gen1_traversal import CUT_CAPABILITY, CUT_MOVE_ID
+from pokemon_red_completion.global_router import MacroEdge, MacroGraph
 from pokemon_red_completion.observation import Badge, MapId, RawGameState
 from pokemon_red_completion.route_executor import RouteExecutionError, TraversalSnapshot
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
@@ -19,9 +21,7 @@ def _world() -> StrategicScenarioRouteWorld:
         local_graphs={},
         rom=b"rom",
         terrain={},
-        rules=SimpleNamespace(
-            cut_block_swaps=(SimpleNamespace(before=7, after=9),)
-        ),  # type: ignore[arg-type]
+        rules=SimpleNamespace(cut_block_swaps=(SimpleNamespace(before=7, after=9),)),  # type: ignore[arg-type]
         tilesets={},
         water_tilesets=frozenset(),
         object_blockers={},
@@ -51,8 +51,55 @@ def test_ground_transition_decodes_its_world_before_execution(
     assert decoded == [b"immutable-red"]
 
 
+def test_ground_transition_excludes_unhandled_maps_before_planning(monkeypatch):
+    world = replace(_world(), macro_graph=MacroGraph({
+        1: (MacroEdge(2), MacroEdge(127)), 127: (MacroEdge(2),), 2: (),
+    }))
+    snapshot = TraversalSnapshot(map_id=1, at=(1, 1), ready=True)
+    monkeypatch.setattr(ground_route, "Gen1TraversalObserver", lambda *args, **kwargs:
+        SimpleNamespace(observe=lambda: snapshot))
+    monkeypatch.setattr(ground_route, "Gen1TrainerSightProjector", lambda *args: None)
+
+    def plan(self, *args, **kwargs):
+        assert 127 not in self.macro_graph.edges
+        assert self.macro_graph.neighbors(1) == (MacroEdge(2),)
+        raise RuntimeError("filtered before input")
+
+    monkeypatch.setattr(StrategicScenarioRouteWorld, "plan_to_map", plan)
+    with pytest.raises(RuntimeError, match="filtered before input"):
+        ground_route.RedVermilionGroundTransition(b"rom", world,
+            destination_map=2, excluded_maps=frozenset({127}))(
+                SimpleNamespace(execute=lambda _: pytest.fail("unexpected input")), None, None)
+    assert len(world.macro_graph.neighbors(1)) == 2
+
+
+@pytest.mark.parametrize("options", [
+    {"full_event_offsets": 1}, {"observe_terrain": "yes"}, {"excluded_maps": {127}},
+    {"excluded_maps": frozenset({-1})},
+    {"destination_map": 127, "excluded_maps": frozenset({127})},
+    {"maximum_readiness_waits": 0}, {"maximum_readiness_waits": 101},
+    {"maximum_readiness_waits": True},
+])
+def test_ground_transition_rejects_invalid_observation_or_exclusion_settings(options):
+    with pytest.raises((ValueError, TypeError)):
+        ground_route.RedVermilionGroundTransition(b"rom", _world(), **options)
+
+
+@pytest.mark.parametrize(
+    "destination",
+    [
+        (int(MapId.VERMILION_CITY), ground_route.VERMILION_TRAINING_EXTERIOR),
+        (int(MapId.CELADON_POKECENTER), (3, 3)),
+        (int(MapId.SAFFRON_POKECENTER), (3, 3)),
+    ],
+)
+@pytest.mark.parametrize("observed", [False, True])
+@pytest.mark.parametrize("readiness_waits", [16, 100])
 def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
     monkeypatch: pytest.MonkeyPatch,
+    destination,
+    observed,
+    readiness_waits,
 ) -> None:
     world = _world()
     start = TraversalSnapshot(
@@ -62,8 +109,8 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
         capabilities=frozenset({CUT_CAPABILITY}),
     )
     terminal = TraversalSnapshot(
-        map_id=int(MapId.VERMILION_CITY),
-        at=ground_route.VERMILION_TRAINING_EXTERIOR,
+        map_id=destination[0],
+        at=destination[1],
         ready=True,
     )
     observations = iter((start, terminal))
@@ -83,7 +130,7 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
     monkeypatch.setattr(
         ground_route,
         "Gen1TrainerSightProjector",
-        lambda _rom, _reader: hazard,
+        lambda _rom, _reader, **options: hazard,
     )
     plan = object()
     plan_calls: list[tuple[object, int, tuple[int, int]]] = []
@@ -92,7 +139,15 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
         plan_calls.append((observed, goal_map, goal_at))
         return plan
 
-    replanner = object()
+    def replanner(request):
+        return request
+
+    terrain_reads = []
+    monkeypatch.setattr(
+        StrategicScenarioRouteWorld,
+        "with_current_blocks",
+        lambda self, blocks: terrain_reads.append(blocks) or self,
+    )
     monkeypatch.setattr(StrategicScenarioRouteWorld, "plan_to_map", plan_to_map)
     monkeypatch.setattr(
         StrategicScenarioRouteWorld,
@@ -121,6 +176,8 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
     executions: list[dict[str, object]] = []
 
     def execute(plan_value, actions_value, observer_value, **kwargs) -> None:
+        if observed:
+            assert kwargs["replanner"]("request") == "request"
         executions.append(
             {
                 "plan": plan_value,
@@ -132,18 +189,25 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
 
     monkeypatch.setattr(ground_route, "execute_route", execute)
     actions = SimpleNamespace(execute=lambda _action: None)
-    reader = object()
+    reader = SimpleNamespace(read_current_map_blocks=lambda: "blocks")
     emulator = object()
 
-    ground_route.RedVermilionGroundTransition(b"rom", world)(
+    ground_route.RedVermilionGroundTransition(
+        b"rom",
+        world,
+        destination_map=destination[0],
+        destination_at=destination[1],
+        full_event_offsets=observed,
+        observe_terrain=observed,
+        maximum_readiness_waits=readiness_waits,
+    )(
         actions,  # type: ignore[arg-type]
         reader,  # type: ignore[arg-type]
         emulator,  # type: ignore[arg-type]
     )
 
-    assert plan_calls == [
-        (start, int(MapId.VERMILION_CITY), ground_route.VERMILION_TRAINING_EXTERIOR)
-    ]
+    assert plan_calls == [(start, *destination)]
+    assert executions[0]["limits"].max_readiness_waits == readiness_waits
     assert observer_bindings["hazard_projector"] is hazard
     capabilities = observer_bindings["capability_projector"]
     raw = RawGameState(
@@ -164,7 +228,9 @@ def test_ground_transition_plans_executes_and_proves_the_exact_terminal(
     assert executions[0]["actions"] is field_actions
     assert executions[0]["observer"] is observer
     assert executions[0]["interruption_handler"] is interruption_handler
-    assert executions[0]["replanner"] is replanner
+    assert terrain_reads == (["blocks", "blocks"] if observed else [])
+    if not observed:
+        assert executions[0]["replanner"] is replanner
     limits = executions[0]["limits"]
     assert limits.max_interruptions == 32
     assert limits.max_replans == 16

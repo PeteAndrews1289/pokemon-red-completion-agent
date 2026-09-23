@@ -181,6 +181,62 @@ def test_escape_dispatch_budget_stops_a_runaway_compiler(monkeypatch):
     assert s[-1] == []
 
 
+@pytest.mark.parametrize('anchor,landing', [(1, (7, 4)), (7, (13, 19)), (8, (12, 11))])
+def test_shared_escape_uses_observed_town_without_a_recovery_profile(monkeypatch, anchor, landing):
+    router, _, _, state, _, calls = scene(monkeypatch)
+    router.runtime.profile = _supply_transition_profile()
+    reader = router.runtime.reader
+    reader.read_last_blackout_map = lambda: anchor
+    monkeypatch.setattr(dig, 'red_fly_landings', lambda _rom: ((anchor, landing),))
+    router.world.local_graphs = {anchor: SimpleNamespace(edges={landing: ()})}
+    router.world.object_blockers = {anchor: frozenset()}
+    start = dig.Gen1TraversalObserver(reader).observe()
+    plan = dig.plan_dig_escape(router.world, reader, state['raw'], start)
+    assert plan.holder == 1 and plan.anchor == anchor and calls == []
+
+    def escape(actions, _reader, _emulator, *, expected_map):
+        assert expected_map == anchor
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        state['raw'] = replace(state['raw'], map_id=anchor,
+                               player_y=landing[0], player_x=landing[1])
+        calls.append('dig')
+
+    monkeypatch.setattr(dig, '_field_dig', escape)
+    result = dig.execute_dig_escape(router.world, reader, router.runtime.emulator,
+                                    router.actions, plan)
+    assert result['verified_escape'] is True and result['landing'] == list(landing)
+    assert result['escape_actions'] == 1 and calls == ['dig']
+
+
+def test_shared_escape_rejects_changed_origin_before_input(monkeypatch):
+    router, _, _, state, _, calls = scene(monkeypatch)
+    reader = router.runtime.reader
+    plan = dig.plan_dig_escape(router.world, reader, state['raw'],
+                               dig.Gen1TraversalObserver(reader).observe())
+    state['raw'] = replace(state['raw'], player_x=state['raw'].player_x + 1)
+    with pytest.raises(dig.RedDigRecoveryError, match='changed before input'):
+        dig.execute_dig_escape(router.world, reader, router.runtime.emulator,
+                               router.actions, plan)
+    assert calls == [] and router.actions.actions_executed == 0
+
+
+def test_shared_escape_rejects_pp_change_in_any_party_member(monkeypatch):
+    router, _, _, state, _, _ = scene(monkeypatch)
+    reader = router.runtime.reader
+    plan = dig.plan_dig_escape(router.world, reader, state['raw'],
+                               dig.Gen1TraversalObserver(reader).observe())
+    original = dig._field_dig
+
+    def corrupt(*args, **kwargs):
+        original(*args, **kwargs)
+        state['raw'] = replace(state['raw'], party_pp=((1, 1), (1, 1)))
+
+    monkeypatch.setattr(dig, '_field_dig', corrupt)
+    with pytest.raises(dig.RedDigRecoveryError, match='safe landing and party'):
+        dig.execute_dig_escape(router.world, reader, router.runtime.emulator,
+                               router.actions, plan)
+
+
 def test_dig_option_is_an_ordered_prospective_transition():
     import run_red_regional_learning_cycle as cycle
 

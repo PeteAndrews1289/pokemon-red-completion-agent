@@ -227,6 +227,17 @@ def test_pp_independent_escape_does_not_waive_defensive_guards(change):
     ) is None
 
 
+@pytest.mark.parametrize(
+    "change", [{"hp": 0}, {"hp": 1}, {"status": StatusCondition.POISON}, {"level": 10}]
+)
+def test_support_escape_cannot_bypass_health_status_or_level_guards(change):
+    active = member(0x76, 55, 1, pp=0)
+    assert training.collection_escape_escort(
+        PartyObservation((replace(active, **change),)), None, POLICY,
+        enemy_level=9, enemy_species=0x30,
+    ) is None
+
+
 def test_support_escape_can_reuse_safe_active_member_without_a_training_recipient():
     active = member(0x76, 55, 1, pp=0)
     assert training.collection_escape_escort(

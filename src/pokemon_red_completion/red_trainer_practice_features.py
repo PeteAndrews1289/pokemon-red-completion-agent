@@ -203,6 +203,15 @@ def _visible_stats(
     if not isinstance(members_value, list) or not members_value:
         raise TrainerStatFeatureError("party member view differs")
     members = tuple(_mapping(member, "party member") for member in members_value)
+    count = _integer(party.get("count"), 1, 6, "party count")
+    if len(members) != count:
+        raise TrainerStatFeatureError("party count differs from member view")
+    _integer(party.get("active_index"), 0, count - 1, "active index")
+    if any(
+        _integer(member.get("party_index"), 0, count - 1, "party index") != index
+        for index, member in enumerate(members)
+    ):
+        raise TrainerStatFeatureError("party index differs from member order")
     state = (
         *(value / 999.0 for value in player),
         *(value / 255.0 for value in bases),

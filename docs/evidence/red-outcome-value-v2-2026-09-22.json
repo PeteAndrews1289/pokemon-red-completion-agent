@@ -1,0 +1,133 @@
+{
+  "schema": "pokemon.red.outcome-value-pilot-evidence.v2",
+  "session": "2026-09-22-outcome-value-broad-training",
+  "source_commit": "bc5b7ce4",
+  "private_packet": "red-outcome-value-pilot-20260922-v2",
+  "candidate_sha256": "4e3f8bd73bafacc4bb1aa735c36732c1355ed67916302ce058e52ea308b5ad64",
+  "result_sha256": "600c39dcb4fdc36b4aa0ba8c44792107252d8e45c5b0c2fca5f0086cf72b6ddc",
+  "audit_sha256": "4a7b7b8a661bf17f4ff96f3fb52759d53951db2f980ea1cb2da2623670ea0f96",
+  "actor_promotions": 0,
+  "collection_gate": true,
+  "diagnostics": {
+    "conflicting_exact_input_groups": [],
+    "contexts": 30,
+    "duplicate_input_groups": 0,
+    "frozen_actor_errors": 4,
+    "high_cost_errors": 4,
+    "maximum_timing_gap_range": 41.233697802197796,
+    "status_better": 1,
+    "status_worse": 13,
+    "timing_sign_changes": 9,
+    "unique_compact_inputs": 30
+  },
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": false,
+    "iterations": 102,
+    "minimum_slack": -2.8449465006019636e-15,
+    "new_group": {
+      "actor": {
+        "contexts": 30,
+        "errors": 4,
+        "high_cost_errors": 4,
+        "regret": 0.861527815499374
+      },
+      "candidate": {
+        "contexts": 30,
+        "errors": 1,
+        "high_cost_errors": 0,
+        "regret": 0.004043189794550214
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 12,
+          "high_cost_errors": 3,
+          "regret": 0.3145891583614197
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 1,
+          "high_cost_errors": 0,
+          "regret": 0.0023848842501670723
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 6,
+          "high_cost_errors": 3,
+          "regret": 0.22323371670731917
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      }
+    ],
+    "passed": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_success": true
+  },
+  "fits": 1,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 2451,
+    "episodes": 560,
+    "event_records": 12338,
+    "frames": 3385052,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 1971,
+    "new_target_contexts": 0,
+    "plan_sha256": "cb44e9db0fccb3fe786a707eb9e8d477b275e897995f808377d7b3a2933cbcc7",
+    "prescribed_first_choices": 480,
+    "status_move_attempts_including_prescribed": 1094,
+    "stops": {
+      "battle_won": 307,
+      "party_defeated": 253
+    }
+  },
+  "screen": {
+    "concerning_selections": 23,
+    "decisions": {
+      "candidate": 98,
+      "frozen": 71
+    },
+    "improved_won_status_cases": 0,
+    "invalid_actions": 0,
+    "original_zero_flag_passed": false,
+    "passed": false,
+    "raw_flags_are_diagnostic": true,
+    "schema": "pokemon.red.battler.outcome-readiness.v2",
+    "wins": {
+      "candidate": 12,
+      "frozen": 14
+    }
+  },
+  "seconds": 229.16808541677892,
+  "collection_delta": 0,
+  "training_complete": false,
+  "standing_owner_authorization": "Continue training and corrective successors without per-step approval; unchanged success criteria and scope boundaries.",
+  "next": "Broad V3:64 TRAIN starts, all eight families, opening and decisions2/4/8; one fit and fresh32case screen. No campaign writes or publication."
+}

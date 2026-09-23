@@ -304,6 +304,27 @@ def test_both_cartridges_carry_the_same_world(record: dict) -> None:
     }
 
 
+@pytest.mark.parametrize('map_id', [181, 75, 199])
+def test_interior_warp_row_needs_native_trigger_not_just_walkable_coordinate(map_id):
+    inert = Passage(to_map=208, kind=PassageKind.WARP, at=(1, 1), arrival_at=(3, 27))
+    live = Passage(to_map=208, kind=PassageKind.WARP, at=(1, 2), arrival_at=(3, 27))
+    boundary = Passage(to_map=208, kind=PassageKind.WARP, at=(0, 1),
+                       exit_action='up', arrival_at=(3, 27))
+    returning = Passage(to_map=None, kind=PassageKind.RETURN, at=(2, 1), exit_action='down')
+    inert_return = Passage(to_map=None, kind=PassageKind.RETURN, at=(1, 1))
+    locations = ((1, 1), (1, 2), (0, 1), (2, 1))
+    node = MapNode(map_id=map_id, height=2, width=2, tileset=8,
+                   passages=(inert, live, boundary, returning, inert_return),
+                   warp_locations=locations)
+    graph = gen1_maps._without_inert_interior_warps({map_id: node},
+        {map_id: ((0, 0, 0), (0, 0x17, 0x54), (0, 0, 0))}, {8: frozenset({0x54})})
+    assert graph[map_id].passages == (live, boundary, returning)
+    assert graph[map_id].warp_locations == locations  # do not renumber destinations
+    macro = gen1_maps.macro_graph_from_nodes(graph)
+    assert (1, 1) not in macro.warp_triggers[map_id]
+    assert macro.warp_locations[map_id] == locations
+
+
 def test_the_hand_written_graph_had_an_edge_the_cartridge_denies(
     adjacency: dict[int, set[int]],
 ) -> None:

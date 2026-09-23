@@ -9,9 +9,9 @@ from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_control_features import BattleControlHistoryTracker
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
+from pokemon_red_completion.red_status_battle_features import project_for_head, status_choice_slots
 from pokemon_red_completion.red_trainer_practice_features import (
     project_trainer_control_features,
-    project_trainer_move_features,
     project_trainer_switch_features,
 )
 from pokemon_red_completion.red_trainer_practice_fit import (
@@ -35,12 +35,16 @@ class RedTrainerPracticeOutcomePolicy:
     model: TrainerPracticeThreeHeadModel
     catalog: PokemonRedBattleCatalog = field(default_factory=PokemonRedBattleCatalog)
     history: BattleControlHistoryTracker = field(default_factory=BattleControlHistoryTracker)
+    allow_immune_switch_recovery: bool = False
     last_decision_diagnostics: dict[str, object] = field(default_factory=dict, init=False)
     _unanswered_voluntary_switch_opponent: int | None = field(default=None, init=False)
+    _immune_switch_escape_opponent: int | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if not self.policy_id or not self.battle_plan_id:
             raise TrainerOutcomePolicyError("outcome policy identity is missing")
+        if type(self.allow_immune_switch_recovery) is not bool:
+            raise TrainerOutcomePolicyError("immune switch recovery must be explicit boolean")
 
     def observe_opponent_transition(self, before_position: int, after_position: int) -> None:
         """Consume an observed send-out event without exposing a hidden roster."""
@@ -75,10 +79,26 @@ class RedTrainerPracticeOutcomePolicy:
             )
             if legal
         )
+        damage_reference = getattr(self.model, "damage_reference", None)
+        if damage_reference is not None:
+            projected = project_for_head(observation, prepared.features, self.model.move)
+            legal_moves = status_choice_slots(projected, legal_moves, damage_reference)
         switch_masked = (
             bool(legal_moves)
             and self._unanswered_voluntary_switch_opponent == history.opponent_index
         )
+        immune_recovery_offered = (
+            self.allow_immune_switch_recovery
+            and switch_masked
+            and _has_living_reserve(observation)
+            and _all_supported_attacks_immune(prepared)
+        )
+        if immune_recovery_offered:
+            if self._immune_switch_escape_opponent == history.opponent_index:
+                raise TrainerOutcomePolicyError("immune switch recovery budget exhausted")
+            # Expose the normal learned choice once; do not select a target or
+            # replace the model's attack. The ordinary anti-loop guard is unchanged.
+            switch_masked = False
         switches = (
             project_trainer_switch_features(observation, self.catalog)
             if _has_living_reserve(observation) and not switch_masked
@@ -114,7 +134,7 @@ class RedTrainerPracticeOutcomePolicy:
                 )
                 control_candidates = proposal.candidate_vectors
             if switches is None or self.model.control.predict_index(control_candidates) == 0:
-                moves = project_trainer_move_features(observation, prepared.features)
+                moves = project_for_head(observation, prepared.features, self.model.move)
                 slots = tuple(slot for slot in moves.candidate_slots if slot in legal_moves)
                 rows = tuple(
                     moves.candidate_vectors[moves.candidate_slots.index(slot)] for slot in slots
@@ -158,6 +178,12 @@ class RedTrainerPracticeOutcomePolicy:
             self._unanswered_voluntary_switch_opponent = None
         elif action.kind is BattleActionKind.SWITCH:
             self._unanswered_voluntary_switch_opponent = history.opponent_index
+            if immune_recovery_offered:
+                self._immune_switch_escape_opponent = history.opponent_index
+        if self.allow_immune_switch_recovery:
+            self.last_decision_diagnostics["immune_switch_recovery_offered"] = (
+                immune_recovery_offered
+            )
         self.history.advance(action, observation)
         return action
 
@@ -248,6 +274,30 @@ class RedTrainerPracticeOutcomePolicy:
             "switch_probabilities": self.model.switch.probabilities(rows).tolist(),
         }
         return slots[index]
+
+
+def _all_supported_attacks_immune(prepared: PreparedRedBattleScenario) -> bool:
+    """Only ordinary damaging moves with explicit zero effectiveness qualify.
+
+    Fixed-damage/status/zero-power mechanics are deliberately not inferred here.
+    Unsupported or PP-depleted alternatives cannot falsely count as usable.
+    """
+    batch = prepared.features
+    names = batch.feature_names
+    relevant = tuple(
+        row
+        for row, allowed in zip(
+            batch.candidate_vectors, prepared.supported_candidate_mask, strict=True
+        )
+        if allowed
+    )
+    return bool(relevant) and all(
+        row[names.index("move.power_fraction")] > 0
+        and row[names.index("move.type_effectiveness_fraction")] == 0
+        and row[names.index("move.category.status")] == 0
+        and row[names.index("move.effect.fixed_damage")] == 0
+        for row in relevant
+    )
 
 
 def _has_living_reserve(observation: Mapping[str, object]) -> bool:

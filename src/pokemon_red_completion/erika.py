@@ -7,10 +7,12 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_plan import RedBattlePlanId
 from pokemon_red_completion.battle_recovery import ProtectedRecoveryError, switch_active_battler
 from pokemon_red_completion.battle_runtime import (
     BattleIntent,
+    BattleRecoveryCapability,
     BattleResourcePolicy,
     BattleRuntimeError,
     BattleRuntimeTiming,
@@ -37,6 +39,11 @@ from pokemon_red_completion.lavender import (
     _open_bag,
     _select_bag_item,
     _select_cursor,
+    _use_battle_status_item,
+    _use_battle_super_potion,
+)
+from pokemon_red_completion.lavender import (
+    _RunState as _HealingState,
 )
 from pokemon_red_completion.observation import (
     Badge,
@@ -89,6 +96,15 @@ EARLY_ERIKA_ICE_BEAM_LINEAGES = {
         (25, 30, 10, 15),
     ),
 }
+
+
+def early_erika_party_supported(party: tuple[int, ...] | None) -> bool:
+    """Keep the qualified lead/HM core while allowing retained extra members."""
+    return bool(party and 3 <= len(party) <= 6 and party[:3] in {
+        (0xB3, 0x40, 0x3B), (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
+    })
+
+
 MOVEMENT_RETRY_WAIT_FRAMES = 12
 GYM_EVENTS = tuple(
     EventFlag(int(EventFlag.BEAT_CELADON_GYM_TRAINER_0) + index) for index in range(7)
@@ -422,7 +438,7 @@ class EarlyErikaChapterReport:
         )
         return (
             len(self.records) == EARLY_ERIKA_CHECKPOINT_COUNT
-            and initial_species in EARLY_ERIKA_PARTIES
+            and early_erika_party_supported(initial_species)
             and final_species in allowed_final_species
             and lineage is not None
             and self.final_raw.first_party_moves == lineage[0]
@@ -517,7 +533,7 @@ def run_early_erika_chapter(
         )
     )
     if (
-        tuple(initial.party_species_ids or ()) not in EARLY_ERIKA_PARTIES
+        not early_erika_party_supported(initial.party_species_ids)
         or lineage is None
         or _party_hp(emulator) != _party_max_hp(emulator)
         or any(_party_status(emulator))
@@ -1540,6 +1556,14 @@ def _select_menu(actions, emulator, target, maximum, timing) -> None:
     raise ErikaChapterError("Menu cursor missed its semantic target.")
 
 
+class _PauseForErikaHealing(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
+class _PauseForErikaStatus(BattleControlRequest):
+    default_action = BattleAction.recovery()
+
+
 def _battle(
     reader,
     actions,
@@ -1550,19 +1574,38 @@ def _battle(
     battle_plan_id: str,
     *,
     move_selector: Callable[[RawGameState], int] | None = None,
+    maximum_super_potions: int = 0,
+    maximum_status_items: int = 0,
+    status_item_reserve: int = 1,
 ) -> None:
+    if any(type(value) is not int or value < 0 for value in
+           (maximum_super_potions, maximum_status_items, status_item_reserve)):
+        raise ValueError("battle recovery requires a nonnegative item budget")
     last_error: BattleRuntimeError | None = None
     selected_move = move_selector or _erika_move_slot
     initial_party = reader.read().party_hp or _party_hp(emulator)
     switch_limit = len(initial_party) - 1 if len(initial_party) > 1 else None
     forced_switches = 0
+    healing = _HealingState([], [])
+    status_items_used = 0
+    has_recovery = bool(maximum_super_potions or maximum_status_items)
 
     def active_move(raw: RawGameState) -> int:
+        status_item = (ItemId.AWAKENING if (raw.battler_status or 0) & 0x07 else
+                       ItemId.PARLYZ_HEAL if raw.battler_status == 0x40 else None)
+        if (status_items_used < maximum_status_items and status_item is not None
+                and _bag(emulator).get(status_item, 0) > status_item_reserve):
+            raise _PauseForErikaStatus
+        if (healing.potions_used < maximum_super_potions
+                and raw.battler_hp is not None and raw.battler_max_hp is not None
+                and 0 < raw.battler_hp <= raw.battler_max_hp * 3 // 4
+                and _bag(emulator).get(ItemId.SUPER_POTION, 0) > 0):
+            raise _PauseForErikaHealing
         if raw.active_party_index in {None, 0}:
             return selected_move(raw)
         return strongest_usable_move_slot(raw)
 
-    for _ in range(timing.battle_recoveries):
+    for _ in range(timing.battle_recoveries + maximum_super_potions + maximum_status_items):
         try:
             run_adaptive_trainer_battle(
                 reader,
@@ -1574,6 +1617,16 @@ def _battle(
                     battle_plan_id=battle_plan_id,
                     required_move_policy=RequiredMovePolicy.ANY_USABLE,
                     required_move_ref=None,
+                    resource_policy=(
+                        BattleResourcePolicy.BOUNDED_RECOVERY if has_recovery
+                        else BattleResourcePolicy.NO_ADDITIONAL_CONSTRAINT
+                    ),
+                    recovery_capabilities=(
+                        frozenset({BattleRecoveryCapability.RESTORE_HP,
+                                   BattleRecoveryCapability.CURE_SLEEP,
+                                   BattleRecoveryCapability.CURE_PARALYSIS})
+                        if has_recovery else frozenset()
+                    ),
                     switch_capabilities=(
                         frozenset({BattleSwitchCapability.DIRECT})
                         if switch_limit is not None
@@ -1582,13 +1635,27 @@ def _battle(
                     switch_limit=switch_limit,
                 ),
                 required_move_id=None,
-                timing=BattleRuntimeTiming(max_runtime_pulses=1600 if label == "Erika" else 960),
+                timing=BattleRuntimeTiming(
+                    max_runtime_pulses=1600 if label == "Erika" else 960,
+                    max_sleep_turns_per_decision=1 if has_recovery else 21,
+                ),
                 label=label,
                 unknown_cancel_interval=3,
             )
             return
         except BattleRuntimeError as error:
             last_error = error
+            if isinstance(error.__cause__, _PauseForErikaStatus):
+                status = reader.read().battler_status or 0
+                item = ItemId.AWAKENING if status & 0x07 else ItemId.PARLYZ_HEAL
+                _use_battle_status_item(reader, actions, emulator, LavenderTiming(), label,
+                    item=item, expected_status=status, reserve=status_item_reserve)
+                status_items_used += 1
+                continue
+            if isinstance(error.__cause__, _PauseForErikaHealing):
+                _use_battle_super_potion(reader, actions, emulator, healing,
+                    LavenderTiming(), label)
+                continue
             failed = reader.read()
             if failed.battle_state == 0:
                 return
@@ -1712,10 +1779,9 @@ def _require_identity(emulator, expected, label) -> None:
 
 def _require(raw, map_id, coordinate, label) -> None:
     species = tuple(raw.party_species_ids or ())
-    party_is_supported = party_core_intact(raw.party_species_ids) or species in {
-        (0xB3, 0x40, 0x3B),
-        (BLASTOISE_SPECIES_ID, 0x40, 0x3B),
-    }
+    party_is_supported = party_core_intact(raw.party_species_ids) or early_erika_party_supported(
+        species
+    )
     if (
         raw.map_id != map_id
         or (raw.player_x, raw.player_y) != coordinate

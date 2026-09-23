@@ -48,6 +48,24 @@ def test_opponent_mechanics_change_preference_without_chapter_rules():
     assert report["victory_predicted"] is report["battle_execution_qualified"] is False
 
 
+def test_explicit_recovery_keeps_fainted_reserves_without_selecting_them():
+    original = party()
+    observed = replace(original, members=(replace(original.members[0], hp=0),
+                                          replace(original.members[1], hp=1)))
+    enemy = quote((34, 95, 55))
+    with pytest.raises(RedTrainerPartyError):
+        plan_trainer_party(observed, enemy)
+    plan = plan_trainer_party(observed, enemy, minimum_hp_ratio=0.0,
+                              allow_fainted_reserves=True)
+    assert plan.lead.target_index == 1 and plan.party.size == 2
+    assert all(row.party_slot == 2 for row in plan.matchups[0])
+    plan.require_current(observed, enemy)
+    with pytest.raises(RedTrainerPartyError):
+        plan_trainer_party(replace(observed, members=tuple(replace(m, hp=0)
+                           for m in observed.members)), enemy, minimum_hp_ratio=0.0,
+                           allow_fainted_reserves=True)
+
+
 def test_party_permutation_follows_capability_not_slot():
     observed = party()
     moved = PartyObservation(tuple(

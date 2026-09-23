@@ -504,6 +504,22 @@ def bind_affordable_field_restore_profile(
     )
 
 
+def bind_faint_aware_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Expose one owned Revive/HP/status item; no default or PP fallback change."""
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers
+    }
+    providers[GoalKind.RESTORE_TEAM] = (
+        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
+        {"affordable_single_item": True, "allow_fainted_recovery": True},
+    )
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    ))
+
+
 def bind_combined_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Explicit affordable reserved HP recovery, retaining owned PP as fallback."""
     providers = {
@@ -948,6 +964,14 @@ def _parse_parameters(
             raise RedGoalContextProfileError("cartridge story objective is not supported")
         return row
     if mechanic is RedGoalMechanic.FIELD_RESTORE and row:
+        if "allow_fainted_recovery" in row:
+            _exact_keys(row, {"affordable_single_item", "allow_fainted_recovery"})
+            if (row["affordable_single_item"] is not True
+                    or row["allow_fainted_recovery"] is not True):
+                raise RedGoalContextProfileError(
+                    "faint recovery requires explicit single-item opt-in",
+                )
+            return row
         _exact_keys(
             row,
             {"affordable_single_item"}

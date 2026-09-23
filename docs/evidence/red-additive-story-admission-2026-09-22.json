@@ -1,0 +1,23 @@
+{
+  "schema": "pokemon.red.story-development-admission.v1",
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "plan_sha256": "05f03b3a84a52174b64d02996c7e7e64ecf52cf6abc083cdccddd7905ed58ce2",
+  "result_sha256": "3f953fc95db5dad0bb5e8157e220533c220e0b46a546aa75ec1fb51a5a4ad3e5",
+  "independent_audit_sha256": "e53bd6f06aa7146f118cabf428d51ae656203eebcf7c16992eb7c258a96c5a13",
+  "candidate_wins": 72,
+  "baseline_wins": 66,
+  "paired_cases": 128,
+  "candidate_decisions": 349,
+  "baseline_decisions": 276,
+  "candidate_choices_independently_recomputed": 349,
+  "invalid_actions": 0,
+  "concerning_selections": 0,
+  "improved_won_status_cases": 6,
+  "original_screen_passed": false,
+  "admission_basis": "Explicit owner acceptance for bounded story DEVELOPMENT despite efficiency-screen miss; not broad qualification.",
+  "natural_party_qualified": false,
+  "full_player_promoted": false,
+  "ordinary_funding_authorized": false,
+  "league_authorized": false,
+  "development_fitting_allowed": false
+}

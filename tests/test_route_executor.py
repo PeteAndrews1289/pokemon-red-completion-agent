@@ -100,6 +100,18 @@ class FakeWorld:
         )
 
 
+def test_same_map_warp_waits_for_animated_arrival():
+    edge = MacroEdge(1, kind="warp", at=(1, 1), arrival_at=(3, 3))
+    graph = MacroGraph({1: (edge,)}, warp_locations={1: ((1, 1),)})
+    local = LocalGraph({(1, 0): (LocalEdge((1, 1), "right"),), (1, 1): (), (3, 3): ()})
+    plan = plan_route(graph, {1: local}, 1, (1, 0), 1, goal_at=(3, 3))
+    world = FakeWorld(at=(1, 0),
+                      staged_transitions={(1, (1, 0), "right"): (1, (1, 1), (3, 3))})
+    execute_route(plan, world, world)
+    assert world.at == (3, 3) and world.wait_count >= 1
+    assert sum(a.kind is MacroActionKind.MOVE for a in world.actions) == 1
+
+
 @dataclass
 class FakeResourceManager:
     world: FakeWorld

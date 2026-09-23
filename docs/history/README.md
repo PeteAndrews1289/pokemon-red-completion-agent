@@ -20,3 +20,14 @@ These archives preserve accumulated reports that formerly occupied public entry 
 The original content is retained; relative Markdown links were adjusted for the new locations. The original pre-cleanup tree is also available in Git at commit `9e7c2e9c`.
 
 New detailed progress belongs in [dated work sessions](../work-sessions) and [audits](../audits), not another appended “Current” block. Historical results remain unchanged; do not combine their counts as though all used the same objective or independent dataset.
+
+## Read the history as a story
+
+The [chronological chronicle](../chronicle/README.md) reconstructs July28–September22
+from these archives and later reports without replacing the source bodies.
+Its [source inventory](../chronicle/SOURCE_INDEX.md) and
+[904-heading directory](../chronicle/ARCHIVE_SECTIONS.md) make the old material discoverable.
+
+The [pre-reconstruction project narrative](project-narrative-before-chronicle-2026-09-22.md)
+and [video outline](video-narrative-before-chronicle-2026-09-22.md) preserve the later
+September22 editions too. Keep future chapter history; do not replace it with current status.

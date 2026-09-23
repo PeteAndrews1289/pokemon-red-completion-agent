@@ -30,6 +30,35 @@ MEGA_PUNCH_MOVE_ID = 0x05
 SELFDESTRUCT_MOVE_ID = 0x78
 
 
+@pytest.mark.parametrize(
+    "enabled,disabled,reserve,expected",
+    [
+        (False, True, False, (False, False)),
+        (True, True, False, (False, True)),
+        (True, False, False, (True, False)),
+        (True, True, True, (False, False)),
+    ],
+)
+def test_explicit_stranded_accuracy_move_never_broadens_normal_combat(
+    enabled, disabled, reserve, expected
+):
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        party_count=2,
+        party_hp=(22, 20 if reserve else 0),
+        active_party_moves=(33, 28, 0, 0),
+        active_party_pp=(31, 15, 0, 0),
+        player_disabled_move_slot=1 if disabled else None,
+        player_disable_turns=3 if disabled else 0,
+    )
+    encoder = PokemonRedObservationEncoder.from_state_reader(Reader())
+    result = prepare_red_battle_scenario(
+        encoder, raw, allow_no_attack=True, allow_stranded_accuracy_move=enabled
+    )
+    assert result.supported_candidate_mask == expected
+
+
 class Reader:
     def read(self) -> RawGameState:
         return _raw()
@@ -269,6 +298,40 @@ def test_red_terminal_exit_with_living_opponent_is_not_scored_as_a_faint() -> No
     assert not outcome.opponent_fainted
     assert not outcome.player_fainted
     assert outcome.opponent_damage_fraction == 15 / 60
+
+
+@pytest.mark.parametrize("acting_hp,expected_faint", [(24, False), (0, True)])
+def test_terminal_reserve_outcome_uses_acting_member_not_field_leader(acting_hp, expected_faint):
+    before = replace(
+        _raw(),
+        party_count=3,
+        active_party_index=2,
+        active_party_hp=17,
+        active_party_max_hp=42,
+        party_hp=(0, 12, 17),
+        party_max_hp=(31, 21, 42),
+    )
+    after = replace(
+        before,
+        battle_state=0,
+        active_party_index=None,
+        active_party_hp=None,
+        active_party_max_hp=None,
+        first_party_hp=0,
+        first_party_max_hp=31,
+        party_hp=(0, 12, acting_hp),
+        party_max_hp=(31, 21, 49),
+        enemy_hp=0,
+    )
+    outcome = project_red_battle_turn_outcome(replace(_execution(after), initial_state=before))
+    assert outcome.player_fainted is expected_faint
+    assert outcome.player_damage_fraction == (17 / 42 if expected_faint else 0)
+
+
+def test_terminal_reserve_outcome_refuses_missing_party_evidence():
+    after = replace(_raw(), battle_state=0, active_party_index=None, party_hp=None)
+    with pytest.raises(RedBattleScenarioError, match="acting party member HP"):
+        project_red_battle_turn_outcome(_execution(after))
 
 
 def test_red_move_execution_does_not_depend_on_replacement_party_pp() -> None:

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 from pokemon_red_completion.actions import MacroAction
 from pokemon_red_completion.gen1_cut import (
@@ -12,6 +12,7 @@ from pokemon_red_completion.gen1_cut import (
     plan_cut_candidate_in_graphs,
     staged_cut_path,
 )
+from pokemon_red_completion.gen1_forced_motion import apply_forced_motion, spinner_sequences
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
 from pokemon_red_completion.gen1_story_routing import (
     GEN1_STORY_PASSAGE_REQUIREMENTS,
@@ -192,6 +193,9 @@ class StrategicScenarioRouteWorld:
     tilesets: Mapping[int, Tileset]
     water_tilesets: frozenset[int]
     object_blockers: Mapping[int, frozenset[tuple[int, int]]]
+    forced_movements: Mapping[int, Mapping[tuple[int, int], tuple[tuple[int, int], ...]]] = field(
+        default_factory=dict
+    )
 
     @classmethod
     def from_rom(cls, rom: bytes) -> StrategicScenarioRouteWorld:
@@ -209,12 +213,13 @@ class StrategicScenarioRouteWorld:
             )
             for map_id in terrain
         }
+        motion = {map_id: spinner_sequences(rom, map_id) for map_id in terrain}
         local_graphs = apply_gen1_story_requirements(
             {
-                map_id: surf_local_graph(
-                    local,
-                    rules,
-                    blocked=blockers[map_id],
+                map_id: apply_forced_motion(
+                    surf_local_graph(local, rules, blocked=blockers[map_id]),
+                    motion[map_id],
+                    forbidden=maps[map_id].warp_locations,
                 )
                 for map_id, local in terrain.items()
             }
@@ -228,6 +233,7 @@ class StrategicScenarioRouteWorld:
             sets,
             surf_sets,
             blockers,
+            motion,
         )
 
     def _graph_for_terrain(self, terrain: Terrain) -> LocalGraph:
@@ -249,7 +255,11 @@ class StrategicScenarioRouteWorld:
                 {map_id: graph},
                 requirements,
             )[map_id]
-        return apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
+        graph = apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
+        return apply_forced_motion(
+            graph, self.forced_movements.get(map_id, {}),
+            forbidden=self.macro_graph.warp_locations.get(map_id, ()),
+        )
 
     def with_current_blocks(self, blocks: CurrentMapBlocks) -> StrategicScenarioRouteWorld:
         """Overlay only an observed active map; preserve every traversal requirement.
@@ -553,6 +563,10 @@ class StrategicScenarioRouteWorld:
             raise TypeError("scenario relocation start must be a traversal snapshot")
         if type(goal_map) is not int or goal_map < 0:  # noqa: E721
             raise TypeError("scenario relocation goal must be a non-negative map ID")
+        # A prospective approach has no authority to resolve a trainer fight.
+        # Reserve the complete observed sight lanes, not only solid objects or
+        # the final interaction tile. Execution still rechecks changing hazards.
+        blocked = {start.map_id: start.occupied | frozenset(h.at for h in start.hazards)}
         try:
             return plan_route(
                 self.macro_graph,
@@ -560,7 +574,7 @@ class StrategicScenarioRouteWorld:
                 start.map_id,
                 start.at,
                 goal_map,
-                blocked={start.map_id: start.occupied},
+                blocked=blocked,
                 capabilities=start.capabilities,
                 last_outside=start.last_outside_map,
                 start_mode=start.mode,
@@ -583,6 +597,7 @@ class StrategicScenarioRouteWorld:
                     start,
                     goal_map,
                     goal_at=goal_at,
+                    blocked=blocked,
                     candidate_map_ids=frozenset(corridor.maps),
                 )
             except RoutePlanningError as error:

@@ -33,7 +33,7 @@ from pokemon_red_completion.goal_manager_runtime import (
 )
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionContext
 from pokemon_red_completion.local_router import find_local_paths, without_coordinates
-from pokemon_red_completion.observation import PokemonRedStateReader
+from pokemon_red_completion.observation import MapId, PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_fishing_acquisition import (
     RedFishingDestinationOffer,
@@ -50,6 +50,7 @@ from pokemon_red_completion.red_live_option_menu import (
     supplemental_live_option,
 )
 from pokemon_red_completion.red_resource_goal_router import _supported_plan
+from pokemon_red_completion.red_safari_fishing import run_safari_fishing, safari_route_supported
 from pokemon_red_completion.route_executor import TraversalSnapshot, execute_route
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
@@ -64,6 +65,20 @@ class RedLiveFishingError(RuntimeError):
 
 _SINGLE_DESTINATION_ROUTE_STEP_NORMALIZATION = 1_000
 _MAXIMUM_ALTERNATE_SHORELINE_PLANS = 4
+_SAFARI_FISHING_MAPS = frozenset(
+    {
+        int(MapId.SAFARI_ZONE_EAST),
+        int(MapId.SAFARI_ZONE_NORTH),
+        int(MapId.SAFARI_ZONE_WEST),
+        int(MapId.SAFARI_ZONE_CENTER),
+    }
+)
+
+
+def _ordinary_fishing_origin(map_id: int) -> bool:
+    # Safari uses BALL/BAIT/ROCK/RUN rather than the ordinary battle menu.
+    # Ordinary route interruptions and capture controls cannot operate there.
+    return map_id not in _SAFARI_FISHING_MAPS
 
 
 class RedLiveFishingEmulator(Protocol):
@@ -121,21 +136,16 @@ class RedLiveFishingInventory:
 
     def __post_init__(self) -> None:
         if not isinstance(self.destinations, tuple) or any(
-            not isinstance(item, RedReachableFishingDestination)
-            for item in self.destinations
+            not isinstance(item, RedReachableFishingDestination) for item in self.destinations
         ):
             raise TypeError("live fishing destinations must be immutable")
         if not isinstance(self.supplements, tuple) or any(
-            not isinstance(item, RedLiveSupplementalOption)
-            for item in self.supplements
+            not isinstance(item, RedLiveSupplementalOption) for item in self.supplements
         ):
             raise TypeError("live fishing supplements must be immutable")
-        if (
-            len(self.destinations) != len(self.supplements)
-            or any(
-                supplement.binding.kind is not GoalKind.ACQUIRE_SPECIES
-                for supplement in self.supplements
-            )
+        if len(self.destinations) != len(self.supplements) or any(
+            supplement.binding.kind is not GoalKind.ACQUIRE_SPECIES
+            for supplement in self.supplements
         ):
             raise RedLiveFishingError("live fishing inventory is not executable")
 
@@ -156,6 +166,7 @@ def discover_reachable_red_fishing_destinations(
     world: StrategicScenarioRouteWorld,
     traversal: TraversalSnapshot,
     maximum_candidates: int = 4,
+    safari_session_steps: int | None = None,
 ) -> tuple[RedReachableFishingDestination, ...]:
     """Find bounded productive fishing terminals without controller input."""
 
@@ -163,9 +174,16 @@ def discover_reachable_red_fishing_destinations(
         raise ValueError("fishing inventory needs at least one candidate slot")
     if not isinstance(traversal, TraversalSnapshot):
         raise TypeError("fishing inventory needs an observed traversal snapshot")
+    safari = safari_session_steps is not None
+    if safari and (type(safari_session_steps) is not int or safari_session_steps <= 0):
+        raise ValueError("Safari discovery requires observed positive remaining steps")
+    if safari == _ordinary_fishing_origin(traversal.map_id):
+        return ()
     offers = red_super_rod_destination_offers(rom, registered_species_numbers)
     executable: list[RedReachableFishingDestination] = []
     for offer in offers:
+        if (offer.map_id in _SAFARI_FISHING_MAPS) != safari:
+            continue
         terrain = world.terrain.get(offer.map_id)
         graph = world.local_graphs.get(offer.map_id)
         if terrain is None or graph is None:
@@ -179,9 +197,7 @@ def discover_reachable_red_fishing_destinations(
         blocked = set(world.object_blockers.get(offer.map_id, frozenset()))
         blocked.update(world.macro_graph.warp_locations.get(offer.map_id, ()))
         stances = tuple(
-            stance
-            for stance in fishable_shoreline_stances(terrain)
-            if stance.at not in blocked
+            stance for stance in fishable_shoreline_stances(terrain) if stance.at not in blocked
         )
         if not stances:
             continue
@@ -220,15 +236,22 @@ def discover_reachable_red_fishing_destinations(
         for stance in terminals:
             try:
                 terminal_route = world.plan_feasible_to_map(
-                    traversal, offer.map_id, goal_at=stance.at,
+                    traversal,
+                    offer.map_id,
+                    goal_at=stance.at,
                 )
             except RoutePlanningError:
                 continue
             if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
                 continue
+            if safari and not safari_route_supported(terminal_route, safari_session_steps):
+                continue
             executable.append(
                 RedReachableFishingDestination(
-                    offer, stance, len(terminal_route.steps), terminal_route.cost,
+                    offer,
+                    stance,
+                    len(terminal_route.steps),
+                    terminal_route.cost,
                 )
             )
             break
@@ -258,6 +281,7 @@ def build_red_live_fishing_supplements(
     reader: PokemonRedStateReader,
     emulator: RedLiveFishingEmulator,
     maximum_casts: int = 24,
+    safari_session: bool = False,
 ) -> tuple[RedLiveSupplementalOption, ...]:
     """Bind an action-free fishing menu to single-use live executors."""
 
@@ -269,6 +293,8 @@ def build_red_live_fishing_supplements(
         raise TypeError("live fishing needs an option-value context")
     if type(maximum_casts) is not int or maximum_casts <= 0:
         raise ValueError("live fishing cast bound must be positive")
+    if type(safari_session) is not bool:
+        raise ValueError("Fishing session mode must be an explicit boolean")
     if not destinations:
         return ()
     maximum_route_steps = (
@@ -294,6 +320,7 @@ def build_red_live_fishing_supplements(
                 reader=reader,
                 emulator=emulator,
                 maximum_casts=maximum_casts,
+                safari_session=safari_session,
             ),
             candidates[index],
         )
@@ -317,6 +344,7 @@ def build_red_live_fishing_inventory(
     emulator: RedLiveFishingEmulator,
     maximum_candidates: int = 4,
     maximum_casts: int = 24,
+    safari_session_steps: int | None = None,
 ) -> RedLiveFishingInventory:
     """Assemble reachable fishing candidates and executors without input."""
 
@@ -326,6 +354,7 @@ def build_red_live_fishing_inventory(
         world=world,
         traversal=traversal,
         maximum_candidates=maximum_candidates,
+        safari_session_steps=safari_session_steps,
     )
     supplements = build_red_live_fishing_supplements(
         context,
@@ -339,6 +368,7 @@ def build_red_live_fishing_inventory(
         reader=reader,
         emulator=emulator,
         maximum_casts=maximum_casts,
+        safari_session=safari_session_steps is not None,
     )
     return RedLiveFishingInventory(destinations, supplements)
 
@@ -354,6 +384,7 @@ def _live_fishing_binding(
     reader: PokemonRedStateReader,
     emulator: RedLiveFishingEmulator,
     maximum_casts: int,
+    safari_session: bool = False,
 ) -> ExecutableGoalBinding:
     attempt: dict[str, object] = {}
     claimed = False
@@ -363,56 +394,75 @@ def _live_fishing_binding(
         if claimed:
             raise RedLiveFishingError("live fishing binding was already consumed")
         claimed = True
+        origin = observer.observe()
+        if not safari_session and (
+            not _ordinary_fishing_origin(origin.map_id)
+            or destination.offer.map_id in _SAFARI_FISHING_MAPS
+        ):
+            raise RedLiveFishingError("ordinary fishing does not support Safari battle controls")
         before_actions = actions.actions_executed
         before_frames = emulator.frame_count
         before_registered = frozenset(reader.read_pokedex_state().owned_species)
-        try:
-            plan = world.plan_feasible_to_map(
-                observer.observe(),
-                destination.offer.map_id,
-                goal_at=destination.stance.at,
+        if safari_session:
+            result = run_safari_fishing(
+                destination,
+                world=world,
+                observer=observer,
+                controller=controller,
+                actions=actions,
+                reader=reader,
+                maximum_casts=maximum_casts,
             )
-        except RoutePlanningError as error:
-            raise RedLiveFishingError("selected fishing destination became unreachable") from error
-        if not _supported_plan(plan, allow_cut=True, allow_surf=True):
-            raise RedLiveFishingError("selected fishing route needs unsupported transport")
-        interruptions = Gen1RouteInterruptionHandler(
-            actions,
-            reader,
-            maximum_flees=16,
-            maximum_trainer_battles=0,
-            stabilization_frames=180,
-            route_name="model-directed fishing destination",
-            maximum_scripted_dialogues=4,
-        )
-        route = execute_route(
-            plan,
-            field,
-            observer,
-            interruption_handler=interruptions,
-            replanner=world.replanner(),
-        )
-        if not route.passed:
-            raise RedLiveFishingError("selected fishing route missed its shoreline")
-        encounters = LiveWildEncounterExecutor(
-            controller,
-            actions,
-            reader,
-            DEFAULT_SURGE_TIMING,
-            label="model-directed fishing capture",
-            capture_status_support=True,
-        )
-        port = LiveRedFishingCapturePort(
-            FishingCastExecutor(actions, reader, controller),
-            encounters,
-            reader,
-            destination.stance,
-        )
-        result = run_red_fishing_capture(
-            destination.offer,
-            port,
-            maximum_casts=maximum_casts,
-        )
+        else:
+            try:
+                plan = world.plan_feasible_to_map(
+                    origin,
+                    destination.offer.map_id,
+                    goal_at=destination.stance.at,
+                )
+            except RoutePlanningError as error:
+                raise RedLiveFishingError(
+                    "selected fishing destination became unreachable"
+                ) from error
+            if not _supported_plan(plan, allow_cut=True, allow_surf=True):
+                raise RedLiveFishingError("selected fishing route needs unsupported transport")
+            interruptions = Gen1RouteInterruptionHandler(
+                actions,
+                reader,
+                maximum_flees=16,
+                maximum_trainer_battles=0,
+                stabilization_frames=180,
+                route_name="model-directed fishing destination",
+                maximum_scripted_dialogues=4,
+            )
+            route = execute_route(
+                plan,
+                field,
+                observer,
+                interruption_handler=interruptions,
+                replanner=world.replanner(),
+            )
+            if not route.passed:
+                raise RedLiveFishingError("selected fishing route missed its shoreline")
+            encounters = LiveWildEncounterExecutor(
+                controller,
+                actions,
+                reader,
+                DEFAULT_SURGE_TIMING,
+                label="model-directed fishing capture",
+                capture_status_support=True,
+            )
+            port = LiveRedFishingCapturePort(
+                FishingCastExecutor(actions, reader, controller),
+                encounters,
+                reader,
+                destination.stance,
+            )
+            result = run_red_fishing_capture(
+                destination.offer,
+                port,
+                maximum_casts=maximum_casts,
+            )
         after_registered = frozenset(reader.read_pokedex_state().owned_species)
         attempt.update(
             before_registered=before_registered,
@@ -443,7 +493,9 @@ def _live_fishing_binding(
         return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
 
     return ExecutableGoalBinding(
-        binding_ref="pokemon.red:fishing-live:"
+        binding_ref=(
+            "pokemon.red:safari-fishing-live:" if safari_session else "pokemon.red:fishing-live:"
+        )
         + canonical_sha256(
             {
                 "map": destination.offer.map_id,

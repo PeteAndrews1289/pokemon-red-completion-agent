@@ -62,6 +62,41 @@ class RedTrainerFundingError(RuntimeError):
     """A trainer income opportunity or its retained state is no longer valid."""
 
 
+def _execute_recorded_route(router, label, plan, *args, **kwargs):
+    """Retain exact planned/acknowledged hops, including failed prefixes."""
+    sink = getattr(router.runtime, "trainer_funding_event_sink", None)
+    if sink is not None:
+        sink(
+            {
+                "phase": label,
+                "event": "route_started",
+                "steps": [asdict(step) for step in plan.steps],
+            }
+        )
+    try:
+        report = execute_route(plan, *args, **kwargs)
+    except BaseException as error:
+        if sink is not None:
+            failure = getattr(error, "failure", None)
+            sink(
+                {
+                    "phase": label,
+                    "event": "route_failed",
+                    "error": str(error),
+                    "acknowledged_steps": [asdict(r.step) for r in failure.executed_steps]
+                    if failure is not None
+                    else [],
+                    "movement_requests": failure.movement_requests if failure is not None else None,
+                }
+            )
+        raise
+    if sink is not None:
+        from .route_evidence import public_route_execution
+
+        sink({"phase": label, "event": "route_finished", "report": public_route_execution(report)})
+    return report
+
+
 def _face_trainer_boundary(
     actions: ActionExecutor,
     reader: PokemonRedStateReader,
@@ -135,6 +170,34 @@ def _execute_funding_flight(
 
     if selected not in funding_fly_candidates(router):
         raise RedTrainerFundingError("funding flight quote changed before input")
+    if selected.departure is not None:
+        from dataclasses import replace
+
+        from .red_resource_goal_router import _ROUTE_LIMITS
+
+        departure = selected.departure
+        report = _execute_recorded_route(
+            router,
+            "indoor_departure",
+            departure,
+            router.actions,
+            Gen1TraversalObserver(router.runtime.reader),
+            limits=_ROUTE_LIMITS,
+        )
+        raw = router.runtime.reader.read()
+        if (
+            not report.passed
+            or raw.battle_state != 0
+            or (raw.map_id, raw.player_y, raw.player_x)
+            != (departure.terminal_map, *departure.terminal_at)
+        ):
+            raise RedTrainerFundingError(
+                "funding indoor departure did not reach its observed outside"
+            )
+        # Rebind from the real outdoor state before executing any flight.
+        selected = replace(selected, departure=None)
+        if selected not in funding_fly_candidates(router):
+            raise RedTrainerFundingError("funding flight changed after indoor departure")
     actions = HardCompositionActionLimiter(
         router.actions,
         maximum_actions_per_decision=min(256, router.maximum_controller_actions),
@@ -297,6 +360,7 @@ def _candidates(
             start,
             zones,
             inventoried_maps=maps,
+            allow_ledges=getattr(router.runtime, "trainer_funding_ledges", False),
             indoor_exit_map=indoor_exit,
             static_blockers=(
                 {m: world.object_blockers[m] for m in maps}
@@ -304,7 +368,13 @@ def _candidates(
                 else None
             ),
         )
-    return local_trainer_funding_candidates(rom, world, start, zones)
+    return local_trainer_funding_candidates(
+        rom,
+        world,
+        start,
+        zones,
+        allow_ledges=getattr(router.runtime, "trainer_funding_ledges", False),
+    )
 
 
 def _indoor_funding_enabled(router: RedResourceGoalRouter) -> bool:
@@ -344,6 +414,8 @@ def bind_local_trainer_funding(
     observation: RedGoalObservation,
 ) -> GoalBindingSet:
     """Retain purchases; an explicit reserve mode may add a separate earning offer."""
+    from .red_learned_trainer import qualified_party_limit
+
     variants = any(
         s.kind is GoalKind.RESUPPLY and s.parameters.get("resource_choice_variants") is True
         for s in router.runtime.profile.providers
@@ -385,7 +457,12 @@ def bind_local_trainer_funding(
         or any(hp <= 0 for hp in raw.party_hp)
         or (
             router.runtime.trainer_battle_runner is not None
-            and not 1 <= observation.party.size <= 3
+            and not 1
+            <= observation.party.size
+            <= qualified_party_limit(
+                router.runtime.trainer_battle_model_sha256,
+                getattr(router.runtime, "trainer_battle_qualification_sha256", None),
+            )
         )
     ):
         return bindings
@@ -419,10 +496,27 @@ def bind_local_trainer_funding(
         from .red_funding_fly import funding_fly_candidates
 
         quoted.extend((flight.target, flight) for flight in funding_fly_candidates(router))
+
+    preparations = {}
+
+    def entry_level(candidate):
+        if getattr(router.runtime, "trainer_funding_roster_preparation", False) is not True:
+            return level
+        from .red_trainer_party import RedTrainerPartyError, plan_trainer_party
+
+        try:
+            preparation = plan_trainer_party(observation.party, candidate.quote)
+        except RedTrainerPartyError:
+            return -1
+        if pending_identity is not None and preparation.lead.requires_swap:
+            return -1  # An already-armed encounter cannot prepare a new lead.
+        preparations[(candidate.trainer.map_id, candidate.trainer.sprite_index)] = preparation
+        return preparation.lead.target_member.level
+
     candidates = tuple(
         (c, flight)
         for c, flight in quoted
-        if level >= max(m.level for m in c.quote.party) + 10
+        if entry_level(c) >= max(m.level for m in c.quote.party) + 10
         # Finite trainer rewards may need to compose before even one ball is
         # affordable.  Requiring every individual payout to cross the shop
         # threshold creates a deadlock when several safe, undefeated trainers
@@ -455,12 +549,18 @@ def bind_local_trainer_funding(
             pair[0].quote.expected_victory_money
             / (
                 len(pair[0].approach.steps)
+                + (
+                    len(pair[1].departure.steps)
+                    if pair[1] is not None and pair[1].departure is not None
+                    else 0
+                )
                 + 10 * len(pair[0].quote.party)
                 + (32 if pair[1] is not None else 0)
             )
         ),
     )
     runtime, actions = router.runtime, router.actions
+    preparation = preparations.get((target.trainer.map_id, target.trainer.sprite_index))
     ledger = dependency_specimen_ledger(observation.collection_observation)
     before_party, before_money, before_bag = observation.party, raw.player_money, raw.bag_items
     original_at = (raw.map_id, raw.player_y, raw.player_x)
@@ -560,7 +660,12 @@ def bind_local_trainer_funding(
             require_target(before_departure=True)
             if _indoor_funding_enabled(router):
                 prepare_center_departure(actions, runtime.reader)
-            prepare_capture_escort(runtime, actions)
+            if preparation is None:
+                prepare_capture_escort(runtime, actions)
+            else:
+                from .red_trainer_party import prepare_trainer_lead
+
+                prepare_trainer_lead(runtime, actions, preparation, current_quote=target.quote)
         prepared_raw = runtime.reader.read()
         final_party_species = tuple(prepared_raw.party_species_ids or ())
         guard = RecoveryRouteInterruptionHandler(
@@ -581,7 +686,9 @@ def bind_local_trainer_funding(
         from .red_resource_goal_router import _ROUTE_LIMITS
 
         if target.approach.steps:
-            route_result = execute_route(
+            route_result = _execute_recorded_route(
+                router,
+                "trainer_approach",
                 target.approach,
                 actions,
                 traversal,
@@ -632,11 +739,20 @@ def bind_local_trainer_funding(
                     "pay_day_money": receipt.pay_day_money,
                 },
                 "finite_income": True,
+                **(
+                    {"party_preparation": preparation.public_dict()}
+                    if preparation is not None
+                    else {}
+                ),
                 "battle_authority": (
-                    "frozen_learned_trainer" if runtime.trainer_battle_runner is not None
+                    "frozen_learned_trainer"
+                    if runtime.trainer_battle_runner is not None
                     else "existing_heuristic_controller"
                 ),
                 "battle_model_sha256": runtime.trainer_battle_model_sha256,
+                "battle_qualification_sha256": getattr(
+                    runtime, "trainer_battle_qualification_sha256", None
+                ),
                 "balls_purchased": 0,
                 **(
                     {"funding_transport": {"verified_flights": 1}}
@@ -703,11 +819,21 @@ def bind_local_trainer_funding(
                 "quote": asdict(target.quote),
                 "origin": original_at,
                 **(
-                    {"battle_model_sha256": runtime.trainer_battle_model_sha256}
-                    if runtime.trainer_battle_model_sha256 is not None else {}
+                    {"party_preparation": preparation.public_dict()}
+                    if preparation is not None
+                    else {}
                 ),
                 **(
-                    {"fly_town": selected_flight.town, "fly_landing": selected_flight.landing}
+                    {"battle_model_sha256": runtime.trainer_battle_model_sha256}
+                    if runtime.trainer_battle_model_sha256 is not None
+                    else {}
+                ),
+                **(
+                    {
+                        "fly_town": selected_flight.town,
+                        "fly_landing": selected_flight.landing,
+                        "indoor_departure": selected_flight.departure is not None,
+                    }
                     if selected_flight is not None
                     else {}
                 ),

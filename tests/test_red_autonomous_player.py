@@ -185,6 +185,76 @@ def test_goal_continuation_rejects_missing_or_duplicate_target():
         continuation_binding(SimpleNamespace(bindings=(binding, binding)), f"old:{suffix}")
 
 
+@pytest.mark.parametrize("reference", [
+    "pokemon.red:story:reach_saffron", "pokemon.red:story:rescue_fuji",
+])
+def test_story_continuation_preserves_exact_goal_without_new_draw(tmp_path, reference):
+    calls = []
+    binding = _binding(GoalKind.ADVANCE_STORY, binding_ref=reference, calls=calls)
+
+    def execute():
+        assert (tmp_path / "run/execution-started.json").exists()
+        calls.append("execute")
+        return GoalExecutionReport(1, 10, {"scripted_support": ["navigation"]})
+
+    binding = replace(binding, execute=execute, verify=lambda _: GoalVerification.succeeded())
+    result = run_autonomous_goal_continuation(
+        output=tmp_path / "run",
+        snapshot=lambda: AutonomousSnapshot(str(len(calls)).encode(), {}, True),
+        observe=lambda _: pytest.fail("no policy menu or new draw"),
+        targeted_observe=lambda: (binding,), prior_binding_ref=reference,
+        prior_outcome_sha256="b" * 64, provenance={"scripted_support": True},
+    )
+    marker = json.loads((tmp_path / "run/execution-started.json").read_text())
+    assert marker["binding_scope"] == "targeted_story"
+    assert result["status"] == "complete"
+    assert result["model_queries"] == result["model_decisions"] == 0
+    assert result["outcome"]["learning_eligible"] is False
+    assert calls == ["execute"]
+
+
+def test_story_continuation_rejects_other_goal_kind_duplicates_and_malformed_refs():
+    ref = "pokemon.red:story:reach_saffron"
+    binding = _binding(GoalKind.ADVANCE_STORY, binding_ref=ref, calls=[])
+    for inventory in ((), (binding, binding),
+                      (replace(binding, kind=GoalKind.EVOLVE_SPECIES),),
+                      (replace(binding, binding_ref="pokemon.red:story:rescue_fuji"),)):
+        with pytest.raises(ValueError, match="no unique"):
+            continuation_binding(inventory, ref)
+    for malformed in ("story:reach_saffron", "pokemon.red:story:", ref + ":extra", "old:xyz"):
+        with pytest.raises(ValueError, match="fingerprint"):
+            continuation_binding((binding,), malformed)
+
+
+def test_story_continuation_retains_failure_and_refuses_replay(tmp_path):
+    calls = []
+    reference = "pokemon.red:story:reach_saffron"
+    binding = _binding(GoalKind.ADVANCE_STORY, binding_ref=reference, calls=calls)
+
+    def execute():
+        calls.append("partial")
+        raise RuntimeError("partial progress must survive")
+
+    binding = replace(binding, execute=execute)
+    arguments = dict(
+        output=tmp_path / "run",
+        snapshot=lambda: AutonomousSnapshot(
+            str(len(calls)).encode(), {"actions": len(calls)}, True,
+        ),
+        observe=lambda _: pytest.fail("no redraw"), targeted_observe=lambda: (binding,),
+        prior_binding_ref=reference, prior_outcome_sha256="b" * 64, provenance={},
+    )
+    result = run_autonomous_goal_continuation(**arguments)
+    assert result["status"] == "stopped"
+    assert result["outcome"]["error_chain"][0]["error_type"] == "RuntimeError"
+    assert result["outcome"]["before"]["actions"] == 0
+    assert result["outcome"]["after"]["actions"] == 1
+    assert (tmp_path / "run/terminal.state").read_bytes() == b"1"
+    with pytest.raises(FileExistsError):
+        run_autonomous_goal_continuation(**arguments)
+    assert calls == ["partial"]
+
+
 def test_targeted_continuation_skips_full_menu_and_records_private_inventory(tmp_path):
     suffix = "a" * 64
     state = {"xp": 7095}

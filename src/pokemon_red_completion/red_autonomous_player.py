@@ -19,8 +19,17 @@ from typing import cast
 
 from .goal_manager import GoalDecisionOutcome, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding
+from .goal_search_memory import GoalSearchMemory
 from .living_dex_option_value import LivingDexOptionValueModel
 from .provenance import canonical_sha256
+from .red_integrated_play import (
+    measured_cost,
+    menu_with_search_history,
+    objective_key,
+    ordinary_paid_search_setback,
+    search_objective_key,
+    spending_bound,
+)
 from .red_live_option_menu import (
     RedLiveOptionSelectionMode,
     RedLiveOptionSet,
@@ -89,10 +98,19 @@ def continuation_binding(
     prior_binding_ref: str,
 ) -> ExecutableGoalBinding:
     """Rebind one privately authenticated goal across changed origin states."""
+    bindings = cast(tuple[ExecutableGoalBinding, ...], getattr(options, "bindings", options))
+    if re.fullmatch(r"pokemon\.red:story:[a-z][a-z0-9_]*", prior_binding_ref):
+        # Story references are stable objective identities, not origin-dependent
+        # evolution configurations. Never substitute another available objective.
+        matches = tuple(binding for binding in bindings
+                        if binding.kind is GoalKind.ADVANCE_STORY
+                        and binding.binding_ref == prior_binding_ref)
+        if len(matches) != 1:
+            raise ValueError("prior story goal has no unique live binding")
+        return matches[0]
     fingerprint = prior_binding_ref.rsplit(":", 1)[-1]
     if re.fullmatch(r"[0-9a-f]{64}", fingerprint) is None:
         raise ValueError("prior goal has no valid configuration fingerprint")
-    bindings = cast(tuple[ExecutableGoalBinding, ...], getattr(options, "bindings", options))
     matches = tuple(
         binding for binding in bindings
         if binding.kind is GoalKind.EVOLVE_SPECIES
@@ -155,7 +173,10 @@ def run_autonomous_goal_continuation(
                 binding.binding_ref for binding in targeted
             ])
         ),
-        "binding_scope": "targeted_evolution" if targeted is not None else "full_menu",
+        "binding_scope": (
+            "full_menu" if targeted is None else
+            "targeted_story" if selected.kind is GoalKind.ADVANCE_STORY else "targeted_evolution"
+        ),
     })
     report = None
     verification = None
@@ -332,6 +353,8 @@ def run_autonomous_options(
     maximum_decisions: int = 3,
     maximum_seconds: float = 1_800,
     provenance: Mapping[str, object],
+    integrated_play: bool = False,
+    maximum_cash_spent: int = 0,
 ) -> dict[str, object]:
     """Run up to N learned goals without a teacher action or resetting state.
 
@@ -346,6 +369,10 @@ def run_autonomous_options(
         raise ValueError("autonomous run requires one through ten decisions")
     if maximum_seconds <= 0:
         raise ValueError("autonomous run requires a positive time limit")
+    if type(integrated_play) is not bool or type(maximum_cash_spent) is not int or (
+        maximum_cash_spent < 0 or (not integrated_play and maximum_cash_spent != 0)
+    ):
+        raise ValueError("integrated play requires explicit scope and cash bound")
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     _record(
         output / "plan.json",
@@ -358,12 +385,16 @@ def run_autonomous_options(
             "exploration_mix": 0.25,
             "teacher_actions_allowed": False,
             "independent_evaluation": False,
+            "integrated_play": integrated_play,
+            "maximum_cash_spent": maximum_cash_spent,
             "provenance": dict(provenance),
         },
     )
     started = monotonic()
     outcomes: list[dict[str, object]] = []
     stop = "decision_budget"
+    memory = GoalSearchMemory()
+    cash_spent = 0
     for ordinal in range(maximum_decisions):
         if monotonic() - started >= maximum_seconds:
             stop = "wall_time_budget"
@@ -390,6 +421,17 @@ def run_autonomous_options(
                 raise ValueError("menu construction changed the game")
             if len(options.menu.available_indices) < 2:
                 raise ValueError("autonomous decision requires real alternatives")
+            if integrated_play:
+                objective = objective_key(before.facts)
+                options = menu_with_search_history(options, memory, objective)
+                _record(step / "search-memory-before.json", {
+                    "state_sha256": before.sha256, "objective_sha256": objective,
+                    "objectives_by_binding": {
+                        binding.binding_ref: search_objective_key(binding, objective)
+                        for binding in options.bindings
+                    },
+                    "memory": memory.private_dict(),
+                })
         except Exception as error:
             _record(
                 step / "admission-failure.json",
@@ -434,6 +476,12 @@ def run_autonomous_options(
             stop = "safety_boundary_requires_separate_recovery"
             break
         selected = choice.selected_binding
+        debit_bound = spending_bound(selected) if integrated_play else None
+        if integrated_play and (
+            debit_bound is None or cash_spent + debit_bound > maximum_cash_spent
+        ):
+            stop = "integrated_scope_or_spending_boundary"
+            break
         _record(
             step / "execution-started.json",
             {
@@ -454,6 +502,10 @@ def run_autonomous_options(
         finally:
             terminal = snapshot()
             _write(step / "terminal.state", terminal.state)
+            cost = measured_cost(before.facts, terminal.facts, report)
+            ordinary_setback = integrated_play and ordinary_paid_search_setback(
+                selected, before, terminal, report, verification, execution_error,
+            )
             outcome: dict[str, object] = {
                 "ordinal": ordinal,
                 "selected_kind": selected.kind.value,
@@ -480,6 +532,8 @@ def run_autonomous_options(
                 "error_type": None if execution_error is None else type(execution_error).__name__,
                 "error": None if execution_error is None else str(execution_error),
                 "error_chain": _exception_chain(execution_error),
+                "measured_cost": cost,
+                "ordinary_setback": ordinary_setback,
             }
             _record(step / "outcome.json", outcome)
             outcomes.append(outcome)
@@ -488,7 +542,9 @@ def run_autonomous_options(
                 raise execution_error
             stop = "execution_failed"
             break
-        if verification is None or verification.status is not GoalDecisionOutcome.SUCCEEDED:
+        if verification is None or (
+            verification.status is not GoalDecisionOutcome.SUCCEEDED and not ordinary_setback
+        ):
             stop = "verification_failed"
             break
         if not terminal.safe:
@@ -497,6 +553,21 @@ def run_autonomous_options(
         if terminal.state == before.state:
             stop = "no_state_progress"
             break
+        if integrated_play:
+            if cost is None or not 0 <= cost["cash_spent"] <= debit_bound:
+                stop = "unaccounted_integrated_cost"
+                break
+            cash_spent += cost["cash_spent"]
+            selected_objective = search_objective_key(selected, objective)
+            memory.record(selected.search_memory_source, selected_objective,
+                          exhausted=ordinary_setback,
+                          actions=cost["actions"], frames=cost["frames"])
+            _record(step / "search-memory-after.json", {
+                "state_sha256": terminal.sha256,
+                "outcome_sha256": canonical_sha256(outcome),
+                "objective_sha256": selected_objective, "memory": memory.private_dict(),
+                "cumulative_cash_spent": cash_spent,
+            })
     result: dict[str, object] = {
         "schema": "pokemon.red.autonomous-option-result.v1",
         "stop_reason": stop,
@@ -506,6 +577,9 @@ def run_autonomous_options(
         "model_decisions": sum(row["learning_eligible"] is True for row in outcomes),
         "support_decisions": sum(row["support_role"] is not None for row in outcomes),
         "model_sha256": model.model_sha256,
+        "integrated_play": integrated_play,
+        "accounted_cash_spent": cash_spent,
+        "ordinary_setbacks": sum(row["ordinary_setback"] for row in outcomes),
         "outcomes": outcomes,
     }
     _record(output / "result.json", result)

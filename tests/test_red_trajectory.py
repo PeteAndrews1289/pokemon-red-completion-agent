@@ -818,3 +818,63 @@ def test_versioned_battle_stat_view_exposes_only_public_opponent_mechanics() -> 
     }
     assert enriched["features"]["battle"]["opponent_public_base_stats"]["speed"] == 90
     assert enriched["features"]["battle"]["opponent_status"] == "paralysis"
+
+
+def test_versioned_battle_view_retains_all_six_own_members_and_resources() -> None:
+    species = (1, 2, 3, 4, 5, 6)
+    levels = (21, 22, 23, 24, 25, 26)
+    hp = (31, 32, 33, 34, 35, 36)
+    maximum = (41, 42, 43, 44, 45, 46)
+    stats = tuple((50 + i, 60 + i, 70 + i, 80 + i) for i in range(6))
+    moves = tuple((33 + i, 0, 0, 0) for i in range(6))
+    pp = tuple((10 + i, 0, 0, 0) for i in range(6))
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        party_count=6,
+        party_species_ids=species,
+        party_levels=levels,
+        party_hp=hp,
+        party_max_hp=maximum,
+        party_status=(0,) * 6,
+        party_stats=stats,
+        party_moves=moves,
+        party_pp=pp,
+        active_party_index=5,
+        active_party_species_id=species[5],
+        active_party_level=levels[5],
+        active_party_hp=hp[5],
+        active_party_max_hp=maximum[5],
+        active_party_stats=stats[5],
+        active_party_moves=moves[5],
+        active_party_pp=pp[5],
+        enemy_species_id=0x99,
+        enemy_level=30,
+        enemy_hp=20,
+        enemy_max_hp=40,
+    )
+    reader = _Reader(raw, BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0))
+    party = PokemonRedObservationEncoder(
+        reader,
+        include_battle_stats=True,
+        public_species_base_stats={0x99: (35, 55, 30, 90, 50)},
+    ).snapshot().to_dict()["features"]["party"]
+
+    assert party["count"] == 6
+    assert party["active_index"] == 5
+    assert len(party["members"]) == 6
+    for index, member in enumerate(party["members"]):
+        assert member["party_index"] == index
+        assert member["species_ref"].endswith(f":{species[index]:03d}")
+        assert member["hp"] == hp[index]
+        assert member["max_hp"] == maximum[index]
+        assert member["stats"] == dict(
+            zip(("attack", "defense", "speed", "special"), stats[index], strict=True)
+        )
+        assert member["moves"] == [
+            {
+                "slot_index": 0,
+                "move_ref": pokemon_red_move_ref(moves[index][0]),
+                "pp": pp[index][0],
+            }
+        ]

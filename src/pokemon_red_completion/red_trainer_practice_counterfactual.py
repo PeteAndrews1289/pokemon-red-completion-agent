@@ -13,7 +13,9 @@ from contextlib import AbstractContextManager
 from dataclasses import dataclass
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
+from pokemon_red_completion.battle_runtime import BattleActionExecutor
 from pokemon_red_completion.battle_scenario_capture import BattleScenarioCapture
+from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
 from pokemon_red_completion.red_trainer_practice_episode import (
@@ -154,6 +156,8 @@ def collect_trainer_practice_counterfactuals(
     | None = None,
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
     opening_idle_frames: int = 0,
+    action_executor: BattleActionExecutor | None = None,
+    decision_guard: Callable[[RawGameState], None] | None = None,
 ) -> TrainerPracticeCounterfactualSet:
     """Run matched branches from one TRAIN capture, preserving failures as outcomes."""
 
@@ -195,6 +199,8 @@ def collect_trainer_practice_counterfactuals(
                 event_sink=branch_log.emit if branch_log is not None else None,
                 public_species_base_stats=public_species_base_stats,
                 opening_idle_frames=opening_idle_frames,
+                action_executor=action_executor,
+                decision_guard=decision_guard,
             )
         except Exception as error:
             if branch_log is not None:

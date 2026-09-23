@@ -32,6 +32,7 @@ from pokemon_red_completion.red_regional_trainer_funding import (
     regional_trainer_funding_candidates,
 )
 from pokemon_red_completion.red_trainer_funding import TrainerFundingCandidate
+from pokemon_red_completion.route_plan import RoutePlan
 
 if TYPE_CHECKING:
     from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
@@ -42,6 +43,7 @@ class FundingFlyCandidate:
     town: int
     landing: tuple[int, int]
     target: TrainerFundingCandidate
+    departure: RoutePlan | None = None
 
 
 def _funding_fly_opted_in(router: RedResourceGoalRouter) -> bool:
@@ -84,7 +86,7 @@ def funding_fly_candidates(
     if (
         type(raw.map_id) is not int
         or isinstance(raw.map_id, bool)
-        or not (0 <= raw.map_id <= 0x24)
+        or raw.map_id < 0
         or raw.map_id == 0x0B
     ):
         return ()
@@ -114,12 +116,39 @@ def funding_fly_candidates(
         or start.mode != "land"
         or type(start.map_id) is not int
         or isinstance(start.map_id, bool)
-        or not (0 <= start.map_id <= 0x24)
+        or start.map_id < 0
         or start.map_id == 0x0B
     ):
         return ()
     if (start.map_id, *start.at) != (raw.map_id, raw.player_y, raw.player_x):
         raise CartridgeReadError("funding Fly origin changed during observation")
+
+    departure = None
+    if start.map_id >= 0x25:
+        if getattr(router.runtime, "trainer_funding_indoor_departure", False) is not True:
+            return ()
+        from .observation import MapId
+        from .red_indoor_departure_plan import bounded_indoor_departure
+
+        outside = start.last_outside_map
+        if type(outside) is not int or not 0 <= outside <= 0x24 or outside == 0x0B:
+            return ()
+        if start.map_id == int(MapId.SAFARI_ZONE_GATE) and (
+            reader.read_safari_session_state().has_active_session
+            or reader.read_safari_zone_gate_script() != 0
+        ):
+            return ()
+        departure = bounded_indoor_departure(start, router.world)
+        if departure is None:
+            return ()
+        start = replace(
+            start,
+            map_id=outside,
+            at=departure.terminal_at,
+            last_outside_map=outside,
+            occupied=frozenset(),
+            hazards=(),
+        )
 
     landings = dict(red_fly_landings(rom))
     destinations = reader.read_fly_destinations()
@@ -177,10 +206,13 @@ def funding_fly_candidates(
             tuple(zones),
             inventoried_maps=scope_maps,
             static_blockers={m: object_blockers_map[m] for m in scope_maps},
+            allow_ledges=getattr(router.runtime, "trainer_funding_ledges", False),
         )
 
         for target in candidates:
-            results.append(FundingFlyCandidate(town=town, landing=landing, target=target))
+            results.append(
+                FundingFlyCandidate(town=town, landing=landing, target=target, departure=departure)
+            )
 
     if reader.read() != raw or reader.read_fly_destinations() != destinations:
         raise CartridgeReadError("funding Fly origin or unlocks changed during planning")

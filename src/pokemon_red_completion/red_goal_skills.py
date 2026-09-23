@@ -991,10 +991,13 @@ class RedCenterRestoreGoalProvider:
     settle_frames: int = 120
     kind: GoalKind = GoalKind.RESTORE_TEAM
     require_pp_restore: bool = False
+    require_full_pp_restore: bool = False
 
     def __post_init__(self) -> None:
         if type(self.require_pp_restore) is not bool:
             raise ValueError("explicit Center PP recovery mode must be boolean")
+        if type(self.require_full_pp_restore) is not bool:
+            raise ValueError("explicit full Center PP recovery mode must be boolean")
         for name in ("movement_attempts", "dialogue_attempts", "settle_frames"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
@@ -1002,6 +1005,9 @@ class RedCenterRestoreGoalProvider:
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         start = observation.raw
+        restored = (
+            _raw_party_fully_restored if self.require_full_pp_restore else _raw_party_restored
+        )
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
@@ -1010,7 +1016,8 @@ class RedCenterRestoreGoalProvider:
                     GoalUnavailableReason.TEMPORARILY_BLOCKED
                 )
             if current.evidence.safety >= 1.0 and not (
-                self.require_pp_restore and not _raw_party_restored(raw)
+                (self.require_pp_restore or self.require_full_pp_restore) and not restored(raw)
+                or self.require_full_pp_restore and (raw.player_y, raw.player_x) != (3, 3)
             ):
                 return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if (
@@ -1051,7 +1058,7 @@ class RedCenterRestoreGoalProvider:
                 raw = self.reader.read()
                 if raw.map_id != start.map_id:
                     raise RedGoalSkillError("Center recovery changed maps")
-                if _raw_party_restored(raw) and self.reader.read_input_readiness().ready:
+                if restored(raw) and self.reader.read_input_readiness().ready:
                     break
             else:
                 raise RedGoalSkillError("Center recovery did not restore the party")
@@ -1067,13 +1074,15 @@ class RedCenterRestoreGoalProvider:
                 evidence={"bounded": True, "whole_party_restore": True},
             )
 
-        if self.require_pp_restore:
+        if self.require_pp_restore or self.require_full_pp_restore:
             def verify_restore(before, after, report):
                 if (
                     report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready
                     or after.raw.map_id != before.raw.map_id
-                    or not _raw_party_restored(after.raw)
-                    or _raw_party_restored(before.raw)
+                    or not restored(after.raw)
+                    or restored(before.raw) and not self.require_full_pp_restore
+                    or self.require_full_pp_restore
+                    and (after.raw.player_y, after.raw.player_x) != (3, 3)
                     or before.raw.bag_items != after.raw.bag_items
                     or before.raw.player_money != after.raw.player_money
                     or before.raw.party_species_ids != after.raw.party_species_ids
@@ -1803,3 +1812,18 @@ def _raw_party_restored(raw: RawGameState) -> bool:
         all((value & 0x3F) > 0 for move, value in zip(member_moves, member_pp, strict=True) if move)
         for member_moves, member_pp in zip(moves, pp, strict=True)
     )
+
+
+def _raw_party_fully_restored(raw: RawGameState) -> bool:
+    """Strict whole-party HP/status/PP, including packed PP Up capacities."""
+    from .red_party_pp import RedPartyPpError, decode_red_party_pp
+
+    try:
+        if not _raw_party_restored(raw):
+            return False
+        return all(
+            all(slot.current_pp == slot.maximum_pp for slot in decode_red_party_pp(moves, pp).moves)
+            for moves, pp in zip(raw.party_moves, raw.party_pp, strict=True)
+        )
+    except (ValueError, TypeError, RedPartyPpError):
+        return False

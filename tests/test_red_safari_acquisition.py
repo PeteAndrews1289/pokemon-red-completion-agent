@@ -12,15 +12,24 @@ from pokemon_red_completion.collection import (
     LivingSpecimen,
 )
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_story_routing import (
+    SAFARI_ADMISSION_SUPPORTED,
+    apply_gen1_safari_admission_requirement,
+)
 from pokemon_red_completion.gen1_terrain import Terrain
+from pokemon_red_completion.gen1_traversal import TraversalRules, surf_local_graph
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionContext
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     BattleMenuState,
+    EventFlag,
     MapId,
+    OverworldMovementMode,
+    PokemonRedStateReader,
     RamAddress,
     RawGameState,
+    RedSafariSessionState,
 )
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
@@ -28,9 +37,12 @@ from pokemon_red_completion.red_safari_acquisition import (
     LiveSafariAreaExecutor,
     LiveSafariPatrol,
     RedSafariAdmissionReport,
+    RedSafariGateContinuation,
     RedSafariPatrolPlan,
     RedSafariZoneOffer,
     derive_red_safari_patrol,
+    enter_red_safari_area_from_gate,
+    prepare_red_safari_gate_origin,
     red_safari_admission_route,
     red_safari_area_menu,
     red_safari_zone_offers,
@@ -383,6 +395,1119 @@ def test_safari_transport_rejects_wrong_fly_landing(
             timing=SafariTiming(wait_frames=1, movement_frames=1),
         )
     assert error.value.reason_code == "safari_transport_fly_failed"
+
+
+class _GateSimulation:
+    def __init__(
+        self,
+        *,
+        map_id: int = int(MapId.SAFARI_ZONE_GATE),
+        player_x: int = 3,
+        player_y: int = 4,
+        party: tuple[int, ...] = (99, 64, 120, 118, 28, 128),
+        battle_state: int = 0,
+        money: int = 500,
+        safari_balls: int = 0,
+        safari_steps: int = 0,
+        event_flags: bytes | None = b"\x00" * 320,
+        input_ready: bool = True,
+        movement_mode: OverworldMovementMode = OverworldMovementMode.WALKING,
+        dialogue_visible: bool = False,
+        pending_trainer: object = None,
+        tamper_admission_fee: int | None = None,
+        tamper_ball_grant: int | None = None,
+        owned_species: tuple[int, ...] = (99, 64, 120, 118, 28, 128),
+        mutate_party_after_confirm: bool = False,
+        mutate_pokedex_after_confirm: bool = False,
+        gate_script: int = 0,
+        player_facing: str = "down",
+        dialogue_kind: str | None = None,
+    ) -> None:
+        self.frame_count = 0
+        self.pressed_buttons: frozenset[str] = frozenset()
+        self.money = money
+        self.safari_balls = safari_balls
+        self.safari_steps = safari_steps
+        self.input_ready = input_ready
+        self.movement_mode = movement_mode
+        self.dialogue_visible = dialogue_visible
+        self.pending_trainer = pending_trainer
+        self.dialogue_confirms = 0
+        self.tamper_admission_fee = tamper_admission_fee
+        self.tamper_ball_grant = tamper_ball_grant
+        self.owned_species = owned_species
+        self.mutate_party_after_confirm = mutate_party_after_confirm
+        self.mutate_pokedex_after_confirm = mutate_pokedex_after_confirm
+        self.gate_script = gate_script
+        self.player_facing = player_facing
+        self.dialogue_kind = dialogue_kind
+        self.lateral_step_done = False
+        self.raw = RawGameState(
+            game_started=True,
+            map_id=map_id,
+            player_x=player_x,
+            player_y=player_y,
+            party_count=len(party),
+            battle_state=battle_state,
+            party_species_ids=party,
+            event_flags=event_flags,
+            player_money=money,
+        )
+
+    def read_u8(self, address: int) -> int:
+        if address == RamAddress.CURRENT_MAP:
+            return int(self.raw.map_id)
+        if address == RamAddress.TRAINER_TEXT_SPRITE_INDEX:
+            if self.dialogue_kind is not None:
+                return {"greeting": 3, "admission": 4}.get(self.dialogue_kind, 2)
+            return 3 if self.gate_script == 0 else 4
+        s = f"{max(0, min(999999, self.money)):06d}"
+        bcd = (int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16))
+        if address == int(RamAddress.PLAYER_MONEY):
+            return bcd[0]
+        if address == int(RamAddress.PLAYER_MONEY) + 1:
+            return bcd[1]
+        if address == int(RamAddress.PLAYER_MONEY) + 2:
+            return bcd[2]
+        if address == int(RamAddress.SAFARI_BALLS):
+            return self.safari_balls
+        if address == int(RamAddress.SAFARI_STEPS):
+            return (self.safari_steps >> 8) & 0xFF
+        if address == int(RamAddress.SAFARI_STEPS) + 1:
+            return self.safari_steps & 0xFF
+        if address == int(RamAddress.SAFARI_ZONE_GATE_SCRIPT):
+            return self.gate_script
+        if address == int(RamAddress.PLAYER_FACING_DIRECTION):
+            return {"down": 0, "up": 4, "left": 8, "right": 12}.get(self.player_facing, 0)
+        return 0
+
+    def execute(self, action: MacroAction) -> None:
+        if action.kind is MacroActionKind.WAIT:
+            self.frame_count += action.repeat
+            return
+        if action.kind is MacroActionKind.MOVE:
+            delta_y = {"up": -1, "down": 1}.get(str(action.value), 0)
+            delta_x = {"left": -1, "right": 1}.get(str(action.value), 0)
+            cur_x = int(self.raw.player_x or 0)
+            cur_y = int(self.raw.player_y or 0)
+            new_x = cur_x + delta_x
+            new_y = cur_y + delta_y
+            self.raw = replace(
+                self.raw,
+                player_x=new_x,
+                player_y=new_y,
+            )
+            if self.raw.map_id == MapId.SAFARI_ZONE_CENTER:
+                self.safari_steps = max(0, self.safari_steps - 1)
+            elif (
+                self.raw.map_id == MapId.SAFARI_ZONE_GATE
+                and (new_x, new_y) in {(3, 2), (4, 2)}
+            ):
+                self.dialogue_visible = True
+                self.input_ready = False
+                self.gate_script = 0
+                self.player_facing = str(action.value)
+        elif action.kind is MacroActionKind.CONFIRM:
+            self.dialogue_confirms += 1
+            if (
+                self.raw.map_id == MapId.SAFARI_ZONE_GATE
+                and (self.raw.player_x, self.raw.player_y) in {(3, 2), (4, 2)}
+            ):
+                if self.gate_script == 0:
+                    self.player_facing = "right"
+                    if (self.raw.player_x, self.raw.player_y) == (3, 2):
+                        self.lateral_step_done = True
+                        self.gate_script = 1
+                        self.raw = replace(self.raw, player_x=4, player_y=2)
+                    else:
+                        self.gate_script = 2
+                elif self.gate_script in {1, 2} or (
+                    not self.dialogue_visible and self.dialogue_confirms >= 2
+                ):
+                    fee = (
+                        self.tamper_admission_fee
+                        if self.tamper_admission_fee is not None
+                        else 500
+                    )
+                    balls = (
+                        self.tamper_ball_grant
+                        if self.tamper_ball_grant is not None
+                        else 30
+                    )
+                    self.money = max(0, self.money - fee)
+                    self.safari_balls = balls
+                    self.safari_steps = 500
+                    new_party = (
+                        (99,)
+                        if self.mutate_party_after_confirm
+                        else self.raw.party_species_ids
+                    )
+                    new_count = (
+                        1
+                        if self.mutate_party_after_confirm
+                        else self.raw.party_count
+                    )
+                    if self.mutate_pokedex_after_confirm:
+                        self.owned_species = ()
+                    self.gate_script = 3
+                    self.raw = replace(
+                        self.raw,
+                        map_id=MapId.SAFARI_ZONE_CENTER,
+                        player_x=15,
+                        player_y=25,
+                        player_money=self.money,
+                        party_species_ids=new_party,
+                        party_count=new_count,
+                    )
+                    self.dialogue_visible = False
+                    self.input_ready = True
+                    self.gate_script = 0
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_input_readiness(self) -> SimpleNamespace:
+        return SimpleNamespace(ready=self.input_ready)
+
+    def read_overworld_movement_mode(self) -> OverworldMovementMode:
+        return self.movement_mode
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        return self.dialogue_visible
+
+    def read_safari_zone_gate_script(self) -> int:
+        return self.gate_script
+
+    def read_safari_clerk_dialogue(self) -> str | None:
+        return PokemonRedStateReader(self).read_safari_clerk_dialogue()
+
+    def read_player_facing(self) -> str:
+        return self.player_facing
+
+    def read_pending_trainer_battle_identity(self) -> object:
+        return self.pending_trainer
+
+    def read_safari_session_state(self) -> RedSafariSessionState:
+        flag_byte = 0
+        byte_idx = int(EventFlag.IN_SAFARI_ZONE) // 8
+        if self.raw.event_flags and len(self.raw.event_flags) > byte_idx:
+            flag_byte = self.raw.event_flags[byte_idx]
+        in_safari = bool(flag_byte & (1 << (int(EventFlag.IN_SAFARI_ZONE) % 8)))
+        game_over = bool(flag_byte & (1 << (int(EventFlag.SAFARI_GAME_OVER) % 8)))
+        return RedSafariSessionState(
+            safari_balls=self.safari_balls,
+            safari_steps=self.safari_steps,
+            in_safari_zone=in_safari,
+            safari_game_over=game_over,
+        )
+
+    def read_pokedex_state(self) -> SimpleNamespace:
+        return SimpleNamespace(owned_species=self.owned_species)
+
+
+def _gate_world(*, blocked_coords: frozenset[tuple[int, int]] = frozenset()) -> SimpleNamespace:
+    walkable = tuple(tuple(2 <= y <= 5 and x in (3, 4) for x in range(10)) for y in range(10))
+    grass = tuple(tuple(False for _ in range(10)) for _ in range(10))
+    water = tuple(tuple(False for _ in range(10)) for _ in range(10))
+    tiles = tuple(tuple(0 for _ in range(10)) for _ in range(10))
+    terrain = Terrain(int(MapId.SAFARI_ZONE_GATE), 0, walkable, grass, water, tiles)
+    graph = surf_local_graph(terrain, TraversalRules((), (), (), (), ()))
+    return SimpleNamespace(
+        terrain={int(MapId.SAFARI_ZONE_GATE): terrain},
+        local_graphs=apply_gen1_safari_admission_requirement({int(MapId.SAFARI_ZONE_GATE): graph}),
+        object_blockers={int(MapId.SAFARI_ZONE_GATE): blocked_coords},
+    )
+
+
+def test_safari_gate_preparation_positive_reaches_clerk_with_zero_fly_receipts() -> None:
+    simulation = _GateSimulation(player_x=3, player_y=4, money=500)
+    world = _gate_world()
+
+    report = prepare_red_safari_gate_origin(
+        simulation,  # type: ignore[arg-type]
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        world,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+
+    assert report.passed
+    assert report.entry_mode == "gate"
+    assert report.verified_fly_receipts == 0
+    assert report.initial_map_id == int(MapId.SAFARI_ZONE_GATE)
+    assert report.initial_position == (3, 4)
+    assert report.final_map_id == int(MapId.SAFARI_ZONE_GATE)
+    assert report.final_position == (3, 2)
+    assert report.money_before == 500
+    assert report.money_after == 500
+    assert report.actions_executed == 4
+    assert report.controller_released
+    assert report.public_dict()["entry_mode"] == "gate"
+    assert report.public_dict()["verified_fly_receipts"] == 0
+
+
+def test_safari_gate_preparation_already_at_stance_executes_zero_actions() -> None:
+    simulation = _GateSimulation(player_x=3, player_y=2, money=500)
+    world = _gate_world()
+
+    report = prepare_red_safari_gate_origin(
+        simulation,  # type: ignore[arg-type]
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        world,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+
+    assert report.passed
+    assert report.actions_executed == 0
+    assert report.initial_position == (3, 2)
+    assert report.final_position == (3, 2)
+
+
+def test_safari_gate_preparation_rejects_unready_and_ambiguous_states() -> None:
+    world = _gate_world()
+
+    # Battle active
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(battle_state=1)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_origin_unready"
+
+    # Input not ready
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(input_ready=False)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_origin_unready"
+
+    # Dialogue box visible
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(dialogue_visible=True)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_origin_unready"
+
+    # Pending trainer
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(pending_trainer="trainer_1")
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_origin_unready"
+
+    # Outside corridor
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(player_x=1, player_y=1)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_corridor_invalid"
+
+    # Event flags None (ambiguous unpaid status)
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(event_flags=None)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_unpaid_status_ambiguous"
+
+    # Active Safari session flag set
+    flags_active = bytearray(320)
+    byte_idx, bit = divmod(int(EventFlag.IN_SAFARI_ZONE), 8)
+    flags_active[byte_idx] |= 1 << bit
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(event_flags=bytes(flags_active))
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_already_active"
+
+    # Active Safari game over flag set
+    flags_over = bytearray(320)
+    byte_idx, bit = divmod(int(EventFlag.SAFARI_GAME_OVER), 8)
+    flags_over[byte_idx] |= 1 << bit
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(event_flags=bytes(flags_over))
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_game_over_active"
+
+    # A leaving/transition script is not an inactive settled origin, even with clear flags.
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(safari_balls=5, gate_script=4)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_script_unsupported"
+
+    # Blocked approach path (both lanes blocked)
+    world_blocked = _gate_world(blocked_coords=frozenset({(3, 3), (3, 4)}))
+    with pytest.raises(RedAreaExecutionError) as err:
+        sim = _GateSimulation(player_x=3, player_y=4)
+        prepare_red_safari_gate_origin(
+            sim,  # type: ignore[arg-type]
+            CountingExecutor(sim),
+            sim,  # type: ignore[arg-type]
+            world_blocked,  # type: ignore[arg-type]
+        )
+    assert err.value.reason_code == "safari_gate_approach_blocked"
+
+
+def test_safari_gate_admission_positive_pays_500_and_enters_safari_center() -> None:
+    simulation = _GateSimulation(player_x=3, player_y=2, money=500)
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    report = enter_red_safari_area_from_gate(
+        simulation,  # type: ignore[arg-type]
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        offer,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+
+    assert report.passed
+    assert report.selected_source_id == "wild:SafariZoneCenter:grass"
+    assert report.selected_map_id == int(MapId.SAFARI_ZONE_CENTER)
+    assert report.selected_position == (15, 25)
+    assert report.money_before == 500
+    assert report.money_after == 0
+    assert report.safari_balls_remaining == 30
+    assert report.safari_steps_remaining == 500
+    assert report.controller_released
+
+
+def test_safari_gate_admission_rejects_insufficient_funds_and_wrong_boundary() -> None:
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # Insufficient funds (198 < 500)
+    simulation = _GateSimulation(player_x=3, player_y=2, money=198)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            offer,
+        )
+    assert err.value.reason_code == "safari_admission_funds_insufficient"
+
+    # Wrong position (not at clerk stance: e.g. 3, 4)
+    simulation = _GateSimulation(player_x=3, player_y=4, money=500)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            offer,
+        )
+    assert err.value.reason_code == "safari_gate_admission_boundary_invalid"
+
+    # In battle
+    simulation = _GateSimulation(player_x=3, player_y=2, money=500, battle_state=1)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            offer,
+        )
+    assert err.value.reason_code == "safari_admission_origin_unready"
+
+    # Direct entry with unready input, regardless of residual counters (Finding 4).
+    simulation_unready = _GateSimulation(
+        player_x=3, player_y=2, money=500, input_ready=False, safari_balls=5, safari_steps=10
+    )
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation_unready,  # type: ignore[arg-type]
+            CountingExecutor(simulation_unready),
+            simulation_unready,  # type: ignore[arg-type]
+            offer,
+        )
+    assert err.value.reason_code == "safari_admission_origin_unready"
+
+    # The semantic session observation must also reject activity independently.
+    simulation_active = _GateSimulation(
+        player_x=3, player_y=2, money=500, safari_balls=5
+    )
+    simulation_active.read_safari_session_state = lambda: RedSafariSessionState(5, 0, True, False)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation_active,  # type: ignore[arg-type]
+            CountingExecutor(simulation_active),
+            simulation_active,  # type: ignore[arg-type]
+            offer,
+        )
+    assert err.value.reason_code == "safari_admission_session_state_active"
+
+    # Zero-length center route with mutated party species/count (Finding 5)
+    simulation_mut_party = _GateSimulation(
+        player_x=3, player_y=2, money=500, mutate_party_after_confirm=True
+    )
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation_mut_party,  # type: ignore[arg-type]
+            CountingExecutor(simulation_mut_party),
+            simulation_mut_party,  # type: ignore[arg-type]
+            offer,
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert err.value.reason_code == "safari_admission_party_invalid"
+
+    # Zero-length center route with lost pokedex registrations (Finding 5)
+    simulation_mut_dex = _GateSimulation(
+        player_x=3, player_y=2, money=500, mutate_pokedex_after_confirm=True
+    )
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation_mut_dex,  # type: ignore[arg-type]
+            CountingExecutor(simulation_mut_dex),
+            simulation_mut_dex,  # type: ignore[arg-type]
+            offer,
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert err.value.reason_code == "safari_admission_pokedex_invalid"
+
+
+def test_safari_gate_admission_rejects_deviated_fee_or_balls() -> None:
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # Wrong fee deduction (e.g. only 400 charged)
+    simulation = _GateSimulation(player_x=3, player_y=2, money=500, tamper_admission_fee=400)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            offer,
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert err.value.reason_code == "safari_admission_resources_changed"
+
+    # Wrong ball grant (e.g. 20 balls granted instead of 30)
+    simulation = _GateSimulation(player_x=3, player_y=2, money=500, tamper_ball_grant=20)
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            offer,
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert err.value.reason_code == "safari_admission_resources_changed"
+
+
+@pytest.mark.parametrize("balls,steps", [(0, 0), (28, 473), (5, 0), (0, 10)])
+def test_real_prep_then_admission_left_lane_with_rightward_auto_walk(balls, steps) -> None:
+    simulation = _GateSimulation(
+        player_x=3, player_y=4, money=500, safari_balls=balls, safari_steps=steps
+    )
+    world = _gate_world()
+    actions = CountingExecutor(simulation)
+
+    report_prep = prepare_red_safari_gate_origin(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        world,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert report_prep.passed
+    assert report_prep.final_position == (3, 2)
+    assert report_prep.continuation is not None
+    assert not report_prep.continuation.consumed
+    assert (simulation.safari_balls, simulation.safari_steps) == (balls, steps)
+    assert simulation.money == 500
+
+    # On arrival at (3, 2), clerk greeting dialogue is automatically visible in script 0
+    assert simulation.dialogue_visible
+    assert not simulation.input_ready
+    assert simulation.gate_script == 0
+    assert simulation.read_player_facing() == "up"  # Greeting precedes the forced turn.
+
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    report_adm = enter_red_safari_area_from_gate(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        offer,
+        continuation=report_prep.continuation,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert report_adm.passed
+    assert report_adm.selected_map_id == int(MapId.SAFARI_ZONE_CENTER)
+    assert report_adm.money_before == 500
+    assert report_adm.money_after == 0
+    assert report_adm.safari_balls_remaining == 30
+    assert report_adm.safari_steps_remaining == 500
+    assert report_prep.continuation.consumed
+    assert simulation.lateral_step_done
+
+
+@pytest.mark.parametrize("balls,steps", [(0, 0), (28, 473), (5, 0), (0, 10)])
+def test_real_prep_then_admission_right_lane_without_lateral_movement(balls, steps) -> None:
+    simulation = _GateSimulation(
+        player_x=4, player_y=4, money=500, safari_balls=balls, safari_steps=steps
+    )
+    world = _gate_world()
+    actions = CountingExecutor(simulation)
+
+    report_prep = prepare_red_safari_gate_origin(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        world,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert report_prep.passed
+    assert report_prep.final_position == (4, 2)
+    assert report_prep.continuation is not None
+    assert (simulation.safari_balls, simulation.safari_steps) == (balls, steps)
+    assert simulation.money == 500
+
+    # On arrival at (4, 2), clerk greeting dialogue is automatically visible in script 0
+    assert simulation.dialogue_visible
+    assert not simulation.input_ready
+    assert simulation.gate_script == 0
+    assert simulation.read_player_facing() == "up"  # Greeting precedes the forced turn.
+
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    report_adm = enter_red_safari_area_from_gate(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        offer,
+        continuation=report_prep.continuation,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert report_adm.passed
+    assert not simulation.lateral_step_done
+    assert report_adm.selected_map_id == int(MapId.SAFARI_ZONE_CENTER)
+    assert report_adm.money_after == 0
+    assert report_adm.safari_balls_remaining == 30
+
+
+@pytest.mark.parametrize("phase", [1, 2, 3, 4, 5, 6, None, False, "0"])
+def test_gate_preparation_rejects_unsettled_or_invalid_script_without_inputs(phase) -> None:
+    sim = _GateSimulation(gate_script=phase, safari_balls=28, safari_steps=473)
+    actions = CountingExecutor(sim)
+    with pytest.raises(RedAreaExecutionError) as err:
+        prepare_red_safari_gate_origin(sim, actions, sim, _gate_world())
+    assert err.value.reason_code == "safari_gate_script_unsupported"
+    assert actions.actions_executed == sim.frame_count == 0
+
+
+@pytest.mark.parametrize("missing", [True, False])
+def test_gate_preparation_rejects_unreadable_script_without_inputs(missing) -> None:
+    sim = _GateSimulation(safari_balls=28, safari_steps=473)
+
+    def unreadable():
+        raise ValueError("unreadable phase")
+
+    sim.read_safari_zone_gate_script = None if missing else unreadable
+    actions = CountingExecutor(sim)
+    with pytest.raises(RedAreaExecutionError) as err:
+        prepare_red_safari_gate_origin(sim, actions, sim, _gate_world())
+    assert err.value.reason_code == "safari_gate_script_unreadable"
+    assert actions.actions_executed == sim.frame_count == 0
+
+
+@pytest.mark.parametrize("counter", ["safari_balls", "safari_steps"])
+def test_gate_preparation_rejects_counter_drift_before_payment(counter) -> None:
+    class DriftingSimulation(_GateSimulation):
+        def execute(self, action):
+            super().execute(action)
+            if action.kind is MacroActionKind.MOVE:
+                setattr(self, counter, getattr(self, counter) - 1)
+
+    sim = DriftingSimulation(player_x=4, player_y=3, safari_balls=28, safari_steps=473)
+    actions = CountingExecutor(sim)
+    with pytest.raises((RedAreaExecutionError, SafariChapterError)):
+        prepare_red_safari_gate_origin(
+            sim, actions, sim, _gate_world(), timing=SafariTiming(wait_frames=1, movement_frames=1)
+        )
+    assert sim.money == 500
+    assert sim.dialogue_confirms == 0
+
+
+def test_correction_a_continuation_cannot_be_reused_to_cause_second_payment() -> None:
+    simulation = _GateSimulation(player_x=3, player_y=4, money=500)
+    world = _gate_world()
+    actions = CountingExecutor(simulation)
+
+    report_prep = prepare_red_safari_gate_origin(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        world,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    continuation = report_prep.continuation
+    assert continuation is not None
+
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    enter_red_safari_area_from_gate(
+        simulation,  # type: ignore[arg-type]
+        actions,
+        simulation,  # type: ignore[arg-type]
+        offer,
+        continuation=continuation,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert continuation.consumed
+
+    # Re-using the same continuation must fail closed immediately
+    with pytest.raises(RedAreaExecutionError) as err:
+        enter_red_safari_area_from_gate(
+            simulation,  # type: ignore[arg-type]
+            actions,
+            simulation,  # type: ignore[arg-type]
+            offer,
+            continuation=continuation,
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert err.value.reason_code == "safari_continuation_consumed"
+
+
+def test_correction_a_rejects_stale_or_mismatched_continuation() -> None:
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # Mismatched position
+    simulation_mismatch = _GateSimulation(
+        player_x=4, player_y=2, money=500, dialogue_visible=True, input_ready=False, gate_script=1
+    )
+    mismatched_continuation = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),  # Target stance does not match player_x=4
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_mismatch:
+        enter_red_safari_area_from_gate(
+            simulation_mismatch,  # type: ignore[arg-type]
+            CountingExecutor(simulation_mismatch),
+            simulation_mismatch,  # type: ignore[arg-type]
+            offer,
+            continuation=mismatched_continuation,
+        )
+    assert err_mismatch.value.reason_code == "safari_continuation_mismatched"
+
+    # Stale actions count
+    simulation_stale = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=0,
+        player_facing="right",
+    )
+    actions = CountingExecutor(simulation_stale)
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+    stale_continuation = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,  # 1 action has executed since handoff
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_stale:
+        enter_red_safari_area_from_gate(
+            simulation_stale,  # type: ignore[arg-type]
+            actions,
+            simulation_stale,  # type: ignore[arg-type]
+            offer,
+            continuation=stale_continuation,
+        )
+    assert err_stale.value.reason_code == "safari_continuation_stale"
+
+    # Stale frames count (frames elapsed without actions)
+    simulation_stale_frames = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=0,
+        player_facing="right",
+    )
+    simulation_stale_frames.frame_count += 5
+    stale_frames_continuation = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_frames:
+        enter_red_safari_area_from_gate(
+            simulation_stale_frames,  # type: ignore[arg-type]
+            CountingExecutor(simulation_stale_frames),
+            simulation_stale_frames,  # type: ignore[arg-type]
+            offer,
+            continuation=stale_frames_continuation,
+        )
+    assert err_frames.value.reason_code == "safari_continuation_stale"
+
+
+def test_correction_a_rejects_unrelated_dialogue_or_unsupported_script() -> None:
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # 1. Unsupported script state (e.g. script 4: leaving/can't pay)
+    simulation_bad_script = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=4,
+        player_facing="right",
+    )
+    cont = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_script:
+        enter_red_safari_area_from_gate(
+            simulation_bad_script,  # type: ignore[arg-type]
+            CountingExecutor(simulation_bad_script),
+            simulation_bad_script,  # type: ignore[arg-type]
+            offer,
+            continuation=cont,
+        )
+    assert err_script.value.reason_code == "safari_admission_script_unsupported"
+    assert simulation_bad_script.money == 500
+
+    # 2. Missing phase observation (sim.read_safari_zone_gate_script = None)
+    simulation_missing_script = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=0,
+        player_facing="right",
+    )
+    simulation_missing_script.read_safari_zone_gate_script = None  # type: ignore[assignment]
+    cont2 = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_missing:
+        enter_red_safari_area_from_gate(
+            simulation_missing_script,  # type: ignore[arg-type]
+            CountingExecutor(simulation_missing_script),
+            simulation_missing_script,  # type: ignore[arg-type]
+            offer,
+            continuation=cont2,
+        )
+    assert err_missing.value.reason_code == "safari_admission_script_unreadable"
+    assert simulation_missing_script.money == 500
+
+    # 3. Raising phase observation (read_safari_zone_gate_script raises)
+    simulation_raising_script = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=0,
+        player_facing="right",
+    )
+    def _raising_script() -> int:
+        raise RuntimeError("bus error reading script")
+    simulation_raising_script.read_safari_zone_gate_script = _raising_script  # type: ignore[assignment]
+    cont3 = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_raising:
+        enter_red_safari_area_from_gate(
+            simulation_raising_script,  # type: ignore[arg-type]
+            CountingExecutor(simulation_raising_script),
+            simulation_raising_script,  # type: ignore[arg-type]
+            offer,
+            continuation=cont3,
+        )
+    assert err_raising.value.reason_code == "safari_admission_script_unreadable"
+    assert simulation_raising_script.money == 500
+
+    # 4. Facing does not authenticate text: reject a different dialogue identity.
+    simulation_unrelated_facing = _GateSimulation(
+        player_x=3,
+        player_y=2,
+        money=500,
+        dialogue_visible=True,
+        input_ready=False,
+        gate_script=0,
+        player_facing="up",
+        dialogue_kind="unrelated",
+    )
+    cont4 = RedSafariGateContinuation(
+        target_map_id=int(MapId.SAFARI_ZONE_GATE),
+        target_position=(3, 2),
+        actions_at_handoff=0,
+        frames_at_handoff=0,
+    )
+    with pytest.raises(RedAreaExecutionError) as err_unrelated:
+        enter_red_safari_area_from_gate(
+            simulation_unrelated_facing,  # type: ignore[arg-type]
+            CountingExecutor(simulation_unrelated_facing),
+            simulation_unrelated_facing,  # type: ignore[arg-type]
+            offer,
+            continuation=cont4,
+        )
+    assert err_unrelated.value.reason_code == "safari_admission_dialogue_unrelated"
+    assert simulation_unrelated_facing.money == 500
+
+
+def test_correction_a_direct_admission_without_continuation_rejects_unready() -> None:
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # Direct call without continuation when dialogue is visible
+    simulation_dialogue = _GateSimulation(
+        player_x=3, player_y=2, money=500, dialogue_visible=True, input_ready=True
+    )
+    with pytest.raises(RedAreaExecutionError) as err_diag:
+        enter_red_safari_area_from_gate(
+            simulation_dialogue,  # type: ignore[arg-type]
+            CountingExecutor(simulation_dialogue),
+            simulation_dialogue,  # type: ignore[arg-type]
+            offer,
+            continuation=None,
+        )
+    assert err_diag.value.reason_code == "safari_admission_origin_unready"
+
+    # Direct call without continuation when input is not ready
+    simulation_unready = _GateSimulation(
+        player_x=3, player_y=2, money=500, dialogue_visible=False, input_ready=False
+    )
+    with pytest.raises(RedAreaExecutionError) as err_unready:
+        enter_red_safari_area_from_gate(
+            simulation_unready,  # type: ignore[arg-type]
+            CountingExecutor(simulation_unready),
+            simulation_unready,  # type: ignore[arg-type]
+            offer,
+            continuation=None,
+        )
+    assert err_unready.value.reason_code == "safari_admission_origin_unready"
+
+
+def test_correction_a_real_prep_handoff_rejects_stale_frames_or_missing_phase() -> None:
+    world = _gate_world()
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)),
+        (30,),
+    )
+
+    # 1. Real prep followed by intervening frames fails closed
+    sim_frames = _GateSimulation(player_x=3, player_y=4, money=500)
+    actions_frames = CountingExecutor(sim_frames)
+    prep_frames = prepare_red_safari_gate_origin(
+        sim_frames,
+        actions_frames,
+        sim_frames,
+        world,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert prep_frames.passed
+    sim_frames.frame_count += 1  # Intervening frame
+    with pytest.raises(RedAreaExecutionError) as err_f:
+        enter_red_safari_area_from_gate(
+            sim_frames, actions_frames, sim_frames, offer, continuation=prep_frames.continuation
+        )
+    assert err_f.value.reason_code == "safari_continuation_stale"
+    assert sim_frames.money == 500
+
+    # 2. Real prep followed by missing gate script reader method fails closed
+    sim_missing = _GateSimulation(player_x=3, player_y=4, money=500)
+    actions_missing = CountingExecutor(sim_missing)
+    prep_missing = prepare_red_safari_gate_origin(
+        sim_missing,
+        actions_missing,
+        sim_missing,
+        world,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert prep_missing.passed
+    sim_missing.read_safari_zone_gate_script = None  # type: ignore[assignment]
+    with pytest.raises(RedAreaExecutionError) as err_m:
+        enter_red_safari_area_from_gate(
+            sim_missing, actions_missing, sim_missing, offer, continuation=prep_missing.continuation
+        )
+    assert err_m.value.reason_code == "safari_admission_script_unreadable"
+    assert sim_missing.money == 500
+
+    # 3. Real prep followed by a different text identity fails closed.
+    sim_facing = _GateSimulation(player_x=3, player_y=4, money=500)
+    actions_facing = CountingExecutor(sim_facing)
+    prep_facing = prepare_red_safari_gate_origin(
+        sim_facing,
+        actions_facing,
+        sim_facing,
+        world,
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert prep_facing.passed
+    sim_facing.dialogue_kind = "unrelated"
+    with pytest.raises(RedAreaExecutionError) as err_face:
+        enter_red_safari_area_from_gate(
+            sim_facing, actions_facing, sim_facing, offer, continuation=prep_facing.continuation
+        )
+    assert err_face.value.reason_code == "safari_admission_dialogue_unrelated"
+    assert sim_facing.money == 500
+
+
+
+@pytest.mark.parametrize("fault", ["missing", "raises", "unknown", "wrong_phase"])
+def test_gate_handoff_rejects_missing_or_wrong_observed_text(fault) -> None:
+    sim = _GateSimulation(player_x=3, player_y=4, money=500)
+    actions = CountingExecutor(sim)
+    prep = prepare_red_safari_gate_origin(
+        sim, actions, sim, _gate_world(),
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+    assert sim.player_facing == "up" and sim.gate_script == 0
+    before = actions.actions_executed, sim.frame_count, sim.money
+    if fault == "missing":
+        sim.read_safari_clerk_dialogue = None
+    elif fault == "raises":
+        def unreadable():
+            raise RuntimeError("unreadable retained text identity")
+        sim.read_safari_clerk_dialogue = unreadable
+    else:
+        sim.dialogue_kind = "unrelated" if fault == "unknown" else "admission"
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass", int(MapId.SAFARI_ZONE_CENTER),
+        tuple((25, 30) for _ in range(10)), (30,),
+    )
+    with pytest.raises(RedAreaExecutionError) as error:
+        enter_red_safari_area_from_gate(sim, actions, sim, offer, continuation=prep.continuation)
+    assert error.value.reason_code == "safari_admission_dialogue_unrelated"
+    assert (actions.actions_executed, sim.frame_count, sim.money) == before
+
+
+@pytest.mark.parametrize(
+    "edge",
+    [LocalEdge((2, 3), "up", kind="ledge"),
+     LocalEdge((2, 3), "up", action_kind=MacroActionKind.CONFIRM),
+     LocalEdge((2, 3), "up", required_mode="land", result_mode="water")],
+)
+def test_gate_plan_never_flattens_nonwalking_actions(edge) -> None:
+    from pokemon_red_completion.red_safari_acquisition import plan_red_safari_gate_approach
+
+    assert plan_red_safari_gate_approach(
+        LocalGraph({(3, 3): (edge,)}), (3, 3), (2, 3), frozenset(),
+    ) is None
+
+
+@pytest.mark.parametrize("lane", [3, 4])
+def test_only_metered_gate_planner_can_cross_admission_requirement(lane) -> None:
+    from pokemon_red_completion.local_router import LocalRouterError, find_local_path
+    from pokemon_red_completion.red_safari_acquisition import plan_red_safari_clerk_approach
+
+    start, goal = (3, lane), (2, lane)
+    graph = apply_gen1_safari_admission_requirement({
+        int(MapId.SAFARI_ZONE_GATE): LocalGraph({
+            (3, x): (LocalEdge((2, x), "up"),) for x in (3, 4)
+        }),
+    })[int(MapId.SAFARI_ZONE_GATE)]
+    assert graph.edges[start][0].requirements == frozenset({SAFARI_ADMISSION_SUPPORTED})
+    with pytest.raises(LocalRouterError):
+        find_local_path(graph, start, goal, start_mode="land")
+    assert plan_red_safari_clerk_approach(graph, start, frozenset()) is not None
+    # Other requirements remain barriers; the paid-service planner is not a general bypass.
+    guarded = LocalGraph({start: (
+        replace(graph.edges[start][0], requirements=frozenset({
+            SAFARI_ADMISSION_SUPPORTED, "unobserved:other_requirement",
+        })),
+    )})
+    assert plan_red_safari_clerk_approach(guarded, start, frozenset()) is None
 
 
 def test_safari_walk_exact_party_guard_accepts_growth_but_rejects_mutation() -> None:

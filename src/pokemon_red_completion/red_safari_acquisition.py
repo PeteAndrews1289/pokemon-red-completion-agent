@@ -22,7 +22,9 @@ from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.fly_resource import EmulatorState
 from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
+from pokemon_red_completion.gen1_story_routing import SAFARI_ADMISSION_SUPPORTED
 from pokemon_red_completion.gen1_terrain import Terrain
+from pokemon_red_completion.gen1_traversal import LAND_MODE
 from pokemon_red_completion.living_dex_goal_policy import DEFAULT_LIVING_DEX_GOAL_UTILITY
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
@@ -36,15 +38,20 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.local_router import (
     Coordinate,
     LocalGraph,
+    LocalPath,
     LocalRouterError,
     find_local_path,
     without_coordinates,
 )
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
+    EventFlag,
     MapId,
+    OverworldMovementMode,
     PokemonRedStateReader,
     RamAddress,
+    RedSafariSessionState,
+    event_flag_is_set,
 )
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import (
@@ -66,6 +73,9 @@ from pokemon_red_completion.safari import (
     _move,
     _pulse,
     _steps,
+)
+from pokemon_red_completion.strategic_navigation_scenario_runtime import (
+    StrategicScenarioRouteWorld,
 )
 
 SAFARI_ZONE_SOURCES: tuple[tuple[str, MapId], ...] = (
@@ -161,6 +171,7 @@ class RedSafariAdmissionReport:
     actions_executed: int
     frames_executed: int
     controller_released: bool
+    party_species_preserved: bool = True
 
     @property
     def passed(self) -> bool:
@@ -175,6 +186,7 @@ class RedSafariAdmissionReport:
             and self.actions_executed > 0
             and self.frames_executed > 0
             and self.controller_released
+            and self.party_species_preserved
         )
 
     def public_dict(self) -> dict[str, object]:
@@ -187,6 +199,7 @@ class RedSafariAdmissionReport:
             "safari_balls_remaining": self.safari_balls_remaining,
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
+            "party_species_preserved": self.party_species_preserved,
             "private_map_fields": 0,
             "private_source_fields": 0,
             "raw_teacher_direction_steps": 0,
@@ -243,6 +256,75 @@ class RedSafariTransportReport:
             "stable_fuchsia_center": (
                 self.final_map_id == int(MapId.FUCHSIA_POKECENTER) and self.final_position == (3, 3)
             ),
+            "money_spent": self.money_before - self.money_after,
+            "actions_executed": self.actions_executed,
+            "frames_executed": self.frames_executed,
+            "private_coordinate_fields": 0,
+            "private_map_fields": 0,
+            "raw_teacher_direction_steps": 0,
+        }
+
+
+@dataclass
+class RedSafariGateContinuation:
+    """Explicit continuation proof from gate preparation into clerk interaction."""
+
+    target_map_id: int
+    target_position: tuple[int, int]
+    actions_at_handoff: int
+    frames_at_handoff: int
+    consumed: bool = False
+
+    def consume(self) -> None:
+        if self.consumed:
+            raise RedAreaExecutionError(
+                "Safari gate continuation was already consumed",
+                reason_code="safari_continuation_consumed",
+            )
+        self.consumed = True
+
+
+@dataclass(frozen=True, slots=True)
+class RedSafariGatePreparationReport:
+    """Verified pre-clerk approach from an observed unpaid Safari gate boundary."""
+
+    entry_mode: str
+    initial_map_id: int
+    initial_position: tuple[int, int]
+    final_map_id: int
+    final_position: tuple[int, int]
+    party_species_before: tuple[int, ...]
+    party_species_after: tuple[int, ...]
+    verified_fly_receipts: int
+    money_before: int
+    money_after: int
+    actions_executed: int
+    frames_executed: int
+    controller_released: bool
+    continuation: RedSafariGateContinuation | None = None
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.entry_mode == "gate"
+            and self.initial_map_id == int(MapId.SAFARI_ZONE_GATE)
+            and self.final_map_id == int(MapId.SAFARI_ZONE_GATE)
+            and self.final_position in {(3, 2), (4, 2)}
+            and bool(self.party_species_before)
+            and self.party_species_after == self.party_species_before
+            and self.verified_fly_receipts == 0
+            and self.money_after == self.money_before
+            and self.actions_executed >= 0
+            and self.frames_executed >= 0
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "entry_mode": self.entry_mode,
+            "exact_party_preserved": self.party_species_after == self.party_species_before,
+            "verified_fly_receipts": self.verified_fly_receipts,
             "money_spent": self.money_before - self.money_after,
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
@@ -530,6 +612,131 @@ def relocate_red_safari_origin_to_fuchsia_center(
     return report
 
 
+def _admit_and_navigate_safari_area(
+    emulator: SafariControlPort,
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    offer: RedSafariZoneOffer,
+    *,
+    start_actions: int,
+    start_frames: int,
+    money_before: int,
+    initial_encounters: int = 0,
+    expected_party_species: tuple[int, ...],
+    timing: SafariTiming,
+) -> RedSafariAdmissionReport:
+    initial_pokedex = getattr(reader, "read_pokedex_state", None)
+    initial_owned = (
+        frozenset(initial_pokedex().owned_species)
+        if callable(initial_pokedex)
+        else None
+    )
+    for _ in range(timing.dialogue_pulses):
+        admitted = reader.read()
+        if admitted.map_id == MapId.SAFARI_ZONE_CENTER:
+            break
+        actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))
+    else:
+        raise RedAreaExecutionError(
+            "Safari clerk did not admit the player",
+            reason_code="safari_admission_dialogue_failed",
+        )
+    if money_before - _money(emulator) != SAFARI_ADMISSION_COST or _balls(emulator) != 30:
+        raise RedAreaExecutionError(
+            "Safari admission fee or ball grant differs",
+            reason_code="safari_admission_resources_changed",
+        )
+    route = red_safari_admission_route(offer)
+    encounters = initial_encounters + _move(
+        actions,
+        reader,
+        emulator,
+        route,
+        timing,
+        "selected Safari area",
+        expected_party_species_ids=expected_party_species,
+    )
+    final = reader.read()
+    final_party = tuple(final.party_species_ids or ())
+    party_preserved = (
+        final_party == expected_party_species
+        and final.party_count == len(expected_party_species)
+    )
+    if not party_preserved:
+        raise RedAreaExecutionError(
+            "Safari admission failed to preserve party species and count",
+            reason_code="safari_admission_party_invalid",
+        )
+    if initial_owned is not None:
+        final_pokedex = getattr(reader, "read_pokedex_state", None)
+        if not callable(final_pokedex) or not (
+            initial_owned <= frozenset(final_pokedex().owned_species)
+        ):
+            raise RedAreaExecutionError(
+                "Safari admission failed to preserve existing Pokédex registrations",
+                reason_code="safari_admission_pokedex_invalid",
+            )
+    read_input_readiness = getattr(reader, "read_input_readiness", None)
+    if callable(read_input_readiness) and not read_input_readiness().ready:
+        raise RedAreaExecutionError(
+            "Safari admission terminal is not input-ready",
+            reason_code="safari_admission_terminal_unready",
+        )
+    read_movement_mode = getattr(reader, "read_overworld_movement_mode", None)
+    if callable(read_movement_mode) and read_movement_mode() is not OverworldMovementMode.WALKING:
+        raise RedAreaExecutionError(
+            "Safari admission terminal is not in walking movement mode",
+            reason_code="safari_admission_terminal_movement_invalid",
+        )
+    read_dialogue = getattr(reader, "read_bottom_dialogue_box_visible", None)
+    if callable(read_dialogue) and read_dialogue():
+        raise RedAreaExecutionError(
+            "Safari admission terminal has active dialogue visible",
+            reason_code="safari_admission_terminal_dialogue_active",
+        )
+    read_pending_trainer = getattr(reader, "read_pending_trainer_battle_identity", None)
+    if callable(read_pending_trainer) and read_pending_trainer() is not None:
+        raise RedAreaExecutionError(
+            "Safari admission terminal has pending trainer battle",
+            reason_code="safari_admission_terminal_trainer_pending",
+        )
+    if emulator.pressed_buttons:
+        raise RedAreaExecutionError(
+            "Safari admission terminal has held controller buttons",
+            reason_code="safari_admission_controller_held",
+        )
+    expected_map, expected_position, expected_steps = _SAFARI_AREA_TERMINALS[offer.source_id]
+    report = RedSafariAdmissionReport(
+        offer.source_id,
+        -1 if final.map_id is None else int(final.map_id),
+        (
+            -1 if final.player_x is None else int(final.player_x),
+            -1 if final.player_y is None else int(final.player_y),
+        ),
+        len(route),
+        encounters,
+        money_before,
+        _money(emulator),
+        _steps(emulator),
+        _balls(emulator),
+        actions.actions_executed - start_actions,
+        emulator.frame_count - start_frames,
+        not emulator.pressed_buttons,
+        party_species_preserved=party_preserved,
+    )
+    if (final.map_id, (final.player_x, final.player_y), report.safari_steps_remaining) != (
+        expected_map,
+        expected_position,
+        expected_steps,
+    ) or not report.passed:
+        raise RedAreaExecutionError(
+            "Safari selected-area arrival failed its postconditions",
+            reason_code="safari_area_arrival_failed",
+        )
+    return report
+
+
 def enter_red_safari_area(
     emulator: SafariControlPort,
     actions: CountingExecutor,
@@ -587,61 +794,448 @@ def enter_red_safari_area(
         expected_party_species_ids=party_species,
         expected_safari_balls=safari_balls,
     )
-    for _ in range(timing.dialogue_pulses):
-        admitted = reader.read()
-        if admitted.map_id == MapId.SAFARI_ZONE_CENTER:
-            break
-        actions.execute(MacroAction(MacroActionKind.CONFIRM))
-        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))
-    else:
-        raise RedAreaExecutionError(
-            "Safari clerk did not admit the player",
-            reason_code="safari_admission_dialogue_failed",
-        )
-    if money_before - _money(emulator) != SAFARI_ADMISSION_COST or _balls(emulator) != 30:
-        raise RedAreaExecutionError(
-            "Safari admission fee or ball grant differs",
-            reason_code="safari_admission_resources_changed",
-        )
-    route = red_safari_admission_route(offer)
-    encounters += _move(
+    return _admit_and_navigate_safari_area(
+        emulator,
         actions,
         reader,
-        emulator,
-        route,
-        timing,
-        "selected Safari area",
-        expected_party_species_ids=party_species,
+        offer,
+        start_actions=start_actions,
+        start_frames=start_frames,
+        money_before=money_before,
+        initial_encounters=encounters,
+        expected_party_species=party_species,
+        timing=timing,
     )
-    final = reader.read()
-    expected_map, expected_position, expected_steps = _SAFARI_AREA_TERMINALS[offer.source_id]
-    report = RedSafariAdmissionReport(
-        offer.source_id,
-        -1 if final.map_id is None else int(final.map_id),
-        (
-            -1 if final.player_x is None else int(final.player_x),
-            -1 if final.player_y is None else int(final.player_y),
-        ),
-        len(route),
-        encounters,
-        money_before,
-        _money(emulator),
-        _steps(emulator),
-        _balls(emulator),
-        actions.actions_executed - start_actions,
-        emulator.frame_count - start_frames,
-        not emulator.pressed_buttons,
-    )
-    if (final.map_id, (final.player_x, final.player_y), report.safari_steps_remaining) != (
-        expected_map,
-        expected_position,
-        expected_steps,
-    ) or not report.passed:
+
+
+def plan_red_safari_gate_approach(
+    gate_graph: LocalGraph,
+    start: tuple[int, int],
+    goal: tuple[int, int],
+    blockers: Collection[tuple[int, int]],
+) -> LocalPath | None:
+    """Plan the metered admission skill's approach, not ordinary free traversal."""
+    blocked = frozenset(blockers)
+    if goal in blocked:
+        return None
+    available_graph = without_coordinates(gate_graph, blocked - {start})
+    try:
+        path = find_local_path(
+            available_graph,
+            start,
+            goal,
+            # This dedicated skill composes clerk interaction and verifies payment.
+            # Do not grant this capability to the general navigation planner.
+            capabilities=frozenset({SAFARI_ADMISSION_SUPPORTED}),
+            start_mode=LAND_MODE,
+        )
+    except LocalRouterError:
+        return None
+    if any(
+        edge.action_kind is not MacroActionKind.MOVE
+        or edge.kind != "walk"
+        or edge.next_mode(LAND_MODE) != LAND_MODE
+        for edge in path.edges
+    ):
+        return None
+    return path
+
+
+def plan_red_safari_clerk_approach(
+    gate_graph: LocalGraph,
+    start: Coordinate,
+    blockers: Collection[Coordinate],
+) -> LocalPath | None:
+    """Use the same lane preference for quoting and actual gate preparation."""
+    for x in (start[1], 3 if start[1] == 4 else 4):
+        path = plan_red_safari_gate_approach(gate_graph, start, (2, x), blockers)
+        if path is not None:
+            return path
+    return None
+
+
+def prepare_red_safari_gate_origin(
+    emulator: SafariControlPort,
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    world: StrategicScenarioRouteWorld,
+    *,
+    timing: SafariTiming = DEFAULT_SAFARI_TIMING,
+) -> RedSafariGatePreparationReport:
+    """Route from an observed unpaid gate origin to the gate clerk stance."""
+
+    start_actions = actions.actions_executed
+    start_frames = emulator.frame_count
+    if emulator.pressed_buttons:
         raise RedAreaExecutionError(
-            "Safari selected-area arrival failed its postconditions",
-            reason_code="safari_area_arrival_failed",
+            "Safari gate preparation requires clear controller inputs",
+            reason_code="safari_gate_controller_held",
+        )
+    money_before = _money(emulator)
+    initial = reader.read()
+    party_species = tuple(initial.party_species_ids or ())
+
+    if initial.map_id != MapId.SAFARI_ZONE_GATE:
+        raise RedAreaExecutionError(
+            "Safari gate preparation lacks gate map origin",
+            reason_code="safari_gate_map_invalid",
+        )
+    if initial.player_x is None or initial.player_y is None:
+        raise RedAreaExecutionError(
+            "Safari gate preparation lacks player coordinates",
+            reason_code="safari_gate_coordinates_invalid",
+        )
+    if (
+        initial.battle_state
+        or not reader.read_input_readiness().ready
+        or reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+        or reader.read_bottom_dialogue_box_visible()
+        or reader.read_pending_trainer_battle_identity() is not None
+    ):
+        raise RedAreaExecutionError(
+            "Safari gate preparation origin is unready or in dialogue/battle",
+            reason_code="safari_gate_origin_unready",
+        )
+    if not party_species or len(party_species) != initial.party_count:
+        raise RedAreaExecutionError(
+            "Safari gate preparation lacks a complete party observation",
+            reason_code="safari_gate_party_invalid",
+        )
+    if money_before < SAFARI_ADMISSION_COST or (initial.player_money or 0) < SAFARI_ADMISSION_COST:
+        raise RedAreaExecutionError(
+            "Safari gate preparation requires at least 500 cash",
+            reason_code="safari_gate_funds_insufficient",
+        )
+    if initial.event_flags is None or len(initial.event_flags) <= (
+        int(EventFlag.IN_SAFARI_ZONE) // 8
+    ):
+        raise RedAreaExecutionError(
+            "Safari gate preparation cannot verify unpaid status without event flags",
+            reason_code="safari_gate_unpaid_status_ambiguous",
+        )
+    if event_flag_is_set(initial.event_flags, int(EventFlag.IN_SAFARI_ZONE)):
+        raise RedAreaExecutionError(
+            "Safari gate preparation found active Safari session flag",
+            reason_code="safari_gate_already_active",
+        )
+    if event_flag_is_set(initial.event_flags, int(EventFlag.SAFARI_GAME_OVER)):
+        raise RedAreaExecutionError(
+            "Safari gate preparation found Safari game over flag",
+            reason_code="safari_gate_game_over_active",
+        )
+
+    read_session = getattr(reader, "read_safari_session_state", None)
+    if not callable(read_session):
+        raise RedAreaExecutionError(
+            "Safari gate preparation requires read_safari_session_state",
+            reason_code="safari_gate_session_state_unreadable",
+        )
+    try:
+        session = read_session()
+    except Exception as err:
+        raise RedAreaExecutionError(
+            f"Safari gate preparation failed reading session state: {err}",
+            reason_code="safari_gate_session_state_unreadable",
+        ) from err
+    if not isinstance(session, RedSafariSessionState) or session.has_active_session:
+        raise RedAreaExecutionError(
+            "Safari gate preparation found active or invalid session state",
+            reason_code="safari_gate_session_state_active",
+        )
+
+    read_gate_script = getattr(reader, "read_safari_zone_gate_script", None)
+    if not callable(read_gate_script):
+        raise RedAreaExecutionError(
+            "Safari gate preparation requires a settled script observation",
+            reason_code="safari_gate_script_unreadable",
+        )
+    try:
+        gate_script = read_gate_script()
+    except Exception as err:
+        raise RedAreaExecutionError(
+            "Safari gate preparation could not observe the script",
+            reason_code="safari_gate_script_unreadable",
+        ) from err
+    if type(gate_script) is not int or gate_script != 0:
+        raise RedAreaExecutionError(
+            "Safari gate preparation requires the settled default script",
+            reason_code="safari_gate_script_unsupported",
+        )
+
+    if initial.player_x not in {3, 4} or initial.player_y not in {2, 3, 4, 5}:
+        raise RedAreaExecutionError(
+            "Safari gate preparation origin is outside supported pre-clerk corridor",
+            reason_code="safari_gate_corridor_invalid",
+        )
+
+    gate_graph = getattr(world, "local_graphs", {}).get(int(MapId.SAFARI_ZONE_GATE))
+    gate_terrain = getattr(world, "terrain", {}).get(int(MapId.SAFARI_ZONE_GATE))
+    if gate_graph is None or gate_terrain is None:
+        raise RedAreaExecutionError(
+            "Safari gate preparation lacks gate terrain or graph",
+            reason_code="safari_gate_world_missing",
+        )
+
+    start = (int(initial.player_y), int(initial.player_x))
+    blockers = frozenset(
+        getattr(world, "object_blockers", {}).get(int(MapId.SAFARI_ZONE_GATE), frozenset())
+    )
+    path = plan_red_safari_clerk_approach(gate_graph, start, blockers)
+    if path is None:
+        raise RedAreaExecutionError(
+            "Safari gate preparation cannot find route to clerk stance",
+            reason_code="safari_gate_approach_blocked",
+        )
+
+    directions = tuple(edge.action for edge in path.edges)
+    if directions:
+        _move(
+            actions,
+            reader,
+            emulator,
+            directions,
+            timing,
+            "Safari gate clerk approach",
+            expected_party_species_ids=party_species,
+            expected_safari_balls=session.safari_balls,
+        )
+
+    try:
+        final_session = read_session()
+    except Exception as err:
+        raise RedAreaExecutionError(
+            "Safari gate preparation could not re-observe the session",
+            reason_code="safari_gate_session_state_unreadable",
+        ) from err
+    if final_session != session:
+        raise RedAreaExecutionError(
+            "Safari gate approach changed session flags or residual counters before payment",
+            reason_code="safari_gate_session_changed",
+        )
+
+    final = reader.read()
+    if (
+        final.map_id != MapId.SAFARI_ZONE_GATE
+        or final.player_x is None
+        or final.player_y is None
+        or (final.player_x, final.player_y) not in {(3, 2), (4, 2)}
+    ):
+        raise RedAreaExecutionError(
+            "Safari gate preparation missed clerk stance",
+            reason_code="safari_gate_approach_failed",
+        )
+
+    continuation = RedSafariGateContinuation(
+        target_map_id=int(final.map_id),
+        target_position=(int(final.player_x), int(final.player_y)),
+        actions_at_handoff=actions.actions_executed,
+        frames_at_handoff=emulator.frame_count,
+    )
+
+    report = RedSafariGatePreparationReport(
+        entry_mode="gate",
+        initial_map_id=int(initial.map_id),
+        initial_position=(int(initial.player_x), int(initial.player_y)),
+        final_map_id=int(final.map_id),
+        final_position=(int(final.player_x), int(final.player_y)),
+        party_species_before=party_species,
+        party_species_after=tuple(final.party_species_ids or ()),
+        verified_fly_receipts=0,
+        money_before=money_before,
+        money_after=_money(emulator),
+        actions_executed=actions.actions_executed - start_actions,
+        frames_executed=emulator.frame_count - start_frames,
+        controller_released=not emulator.pressed_buttons,
+        continuation=continuation,
+    )
+    if not report.passed:
+        raise RedAreaExecutionError(
+            "Safari gate preparation failed postconditions",
+            reason_code="safari_gate_preparation_failed",
         )
     return report
+
+
+def enter_red_safari_area_from_gate(
+    emulator: SafariControlPort,
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    offer: RedSafariZoneOffer,
+    *,
+    continuation: RedSafariGateContinuation | None = None,
+    timing: SafariTiming = DEFAULT_SAFARI_TIMING,
+) -> RedSafariAdmissionReport:
+    """Pay once and reach the already-selected area from the gate clerk stance."""
+
+    if continuation is not None and continuation.consumed:
+        raise RedAreaExecutionError(
+            "Safari gate continuation was already consumed",
+            reason_code="safari_continuation_consumed",
+        )
+    if emulator.pressed_buttons:
+        raise RedAreaExecutionError(
+            "Safari gate direct admission requires clear controller inputs",
+            reason_code="safari_admission_controller_held",
+        )
+    before = reader.read()
+    if (
+        before.map_id != MapId.SAFARI_ZONE_GATE
+        or (before.player_x, before.player_y) not in {(3, 2), (4, 2)}
+    ):
+        raise RedAreaExecutionError(
+            "Safari gate direct admission requires stance at (3, 2) or (4, 2)",
+            reason_code="safari_gate_admission_boundary_invalid",
+        )
+    read_gate_script = getattr(reader, "read_safari_zone_gate_script", None)
+    if not callable(read_gate_script):
+        raise RedAreaExecutionError(
+            "Safari gate admission requires read_safari_zone_gate_script observation",
+            reason_code="safari_admission_script_unreadable",
+        )
+    try:
+        gate_script = read_gate_script()
+    except Exception as err:
+        raise RedAreaExecutionError(
+            f"Safari gate admission failed reading gate script: {err}",
+            reason_code="safari_admission_script_unreadable",
+        ) from err
+    if type(gate_script) is not int or gate_script not in {0, 1, 2}:
+        raise RedAreaExecutionError(
+            f"Safari gate script state ({gate_script}) unsupported for clerk admission",
+            reason_code="safari_admission_script_unsupported",
+        )
+
+    if continuation is None:
+        if (
+            before.battle_state
+            or not reader.read_input_readiness().ready
+            or reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+            or reader.read_bottom_dialogue_box_visible()
+            or reader.read_pending_trainer_battle_identity() is not None
+        ):
+            raise RedAreaExecutionError(
+                "Safari gate direct admission origin is unready, in dialogue, or in battle",
+                reason_code="safari_admission_origin_unready",
+            )
+    else:
+        if continuation.consumed:
+            raise RedAreaExecutionError(
+                "Safari gate continuation was already consumed",
+                reason_code="safari_continuation_consumed",
+            )
+        if (
+            before.map_id is None
+            or before.player_x is None
+            or before.player_y is None
+            or int(before.map_id) != continuation.target_map_id
+            or (int(before.player_x), int(before.player_y)) != continuation.target_position
+        ):
+            raise RedAreaExecutionError(
+                "Safari gate continuation does not match current player location",
+                reason_code="safari_continuation_mismatched",
+            )
+        if (
+            actions.actions_executed != continuation.actions_at_handoff
+            or emulator.frame_count != continuation.frames_at_handoff
+        ):
+            raise RedAreaExecutionError(
+                "Safari gate continuation is stale; actions or frames elapsed since handoff",
+                reason_code="safari_continuation_stale",
+            )
+        continuation.consume()
+
+        if (
+            before.battle_state
+            or reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+            or reader.read_pending_trainer_battle_identity() is not None
+        ):
+            raise RedAreaExecutionError(
+                "Safari gate admission origin is in battle, pending trainer, or non-walking mode",
+                reason_code="safari_admission_origin_unready",
+            )
+
+        if reader.read_bottom_dialogue_box_visible():
+            read_dialogue = getattr(reader, "read_safari_clerk_dialogue", None)
+            if not callable(read_dialogue):
+                raise RedAreaExecutionError(
+                    "Safari gate admission lacks observed clerk text identity",
+                    reason_code="safari_admission_dialogue_unrelated",
+                )
+            try:
+                dialogue = read_dialogue()
+            except Exception as err:
+                raise RedAreaExecutionError(
+                    "Safari gate admission could not observe clerk text identity",
+                    reason_code="safari_admission_dialogue_unrelated",
+                ) from err
+            expected_dialogue = "greeting" if gate_script == 0 else "admission"
+            if dialogue != expected_dialogue:
+                raise RedAreaExecutionError(
+                    "Safari gate text identity does not match the observed clerk phase",
+                    reason_code="safari_admission_dialogue_unrelated",
+                )
+    party_species = tuple(before.party_species_ids or ())
+    if not party_species or len(party_species) != before.party_count:
+        raise RedAreaExecutionError(
+            "Safari gate direct admission lacks a complete party observation",
+            reason_code="safari_gate_admission_party_invalid",
+        )
+    money_before = _money(emulator)
+    if money_before < SAFARI_ADMISSION_COST or (before.player_money or 0) < SAFARI_ADMISSION_COST:
+        raise RedAreaExecutionError(
+            "Safari gate direct admission requires at least 500 cash",
+            reason_code="safari_admission_funds_insufficient",
+        )
+    if before.event_flags is None or len(before.event_flags) <= (
+        int(EventFlag.IN_SAFARI_ZONE) // 8
+    ):
+        raise RedAreaExecutionError(
+            "Safari gate direct admission lacks required event flag coverage",
+            reason_code="safari_admission_event_flags_invalid",
+        )
+    if event_flag_is_set(before.event_flags, int(EventFlag.IN_SAFARI_ZONE)):
+        raise RedAreaExecutionError(
+            "Safari gate direct admission found active Safari session flag",
+            reason_code="safari_admission_already_active",
+        )
+    if event_flag_is_set(before.event_flags, int(EventFlag.SAFARI_GAME_OVER)):
+        raise RedAreaExecutionError(
+            "Safari gate direct admission found Safari game over flag",
+            reason_code="safari_admission_game_over_active",
+        )
+    read_session = getattr(reader, "read_safari_session_state", None)
+    if not callable(read_session):
+        raise RedAreaExecutionError(
+            "Safari gate direct admission requires read_safari_session_state",
+            reason_code="safari_admission_session_state_unreadable",
+        )
+    try:
+        session = read_session()
+    except Exception as err:
+        raise RedAreaExecutionError(
+            f"Safari gate direct admission failed reading session state: {err}",
+            reason_code="safari_admission_session_state_unreadable",
+        ) from err
+    if not isinstance(session, RedSafariSessionState) or session.has_active_session:
+        raise RedAreaExecutionError(
+            "Safari gate direct admission found active or invalid session state",
+            reason_code="safari_admission_session_state_active",
+        )
+
+    start_actions = actions.actions_executed
+    start_frames = emulator.frame_count
+    return _admit_and_navigate_safari_area(
+        emulator,
+        actions,
+        reader,
+        offer,
+        start_actions=start_actions,
+        start_frames=start_frames,
+        money_before=money_before,
+        initial_encounters=0,
+        expected_party_species=party_species,
+        timing=timing,
+    )
 
 
 def red_safari_zone_offers(
@@ -1227,6 +1821,8 @@ __all__ = [
     "LiveSafariPatrol",
     "RedSafariAdmissionReport",
     "RedSafariAreaChoice",
+    "RedSafariGateContinuation",
+    "RedSafariGatePreparationReport",
     "RedSafariPatrolPlan",
     "RedSafariTransportReport",
     "RedSafariZoneOffer",
@@ -1236,6 +1832,9 @@ __all__ = [
     "derive_red_safari_patrol",
     "derive_red_safari_offer_patrol",
     "enter_red_safari_area",
+    "enter_red_safari_area_from_gate",
+    "plan_red_safari_gate_approach",
+    "prepare_red_safari_gate_origin",
     "red_safari_area_menu",
     "red_safari_admission_route",
     "red_safari_zone_offers",

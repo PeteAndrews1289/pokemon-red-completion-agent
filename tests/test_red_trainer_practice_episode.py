@@ -224,6 +224,233 @@ def test_episode_executes_exact_model_move_and_records_terminal(
     assert result.public_dict()["elapsed_ns"] > 0
 
 
+def test_opening_wait_uses_the_same_action_executor_as_battle_actions(
+    tmp_path, monkeypatch
+):
+    capture = _capture(tmp_path)
+    session = Session()
+    session.tick = lambda _frames: None
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
+
+    class Actions:
+        def __init__(self):
+            self.macros = []
+
+        def execute(self, action):
+            self.macros.append(action)
+            return SimpleNamespace(frames=action.repeat)
+
+    actions = Actions()
+
+    class Policy:
+        policy_id = "test-model"
+
+        def choose_main(self, *_args):
+            return BattleAction.move(1)
+
+    from pokemon_red_completion.executor import (
+        ControllerActionBudgetExhausted,
+        ControllerActionLimiter,
+    )
+
+    limited = ControllerActionLimiter(actions, maximum_actions=1)
+    monkeypatch.setattr(
+        episode,
+        "execute_bounded_battle_move_turn",
+        lambda _reader, action_executor, **_kwargs: action_executor.execute(
+            episode.MacroAction(episode.MacroActionKind.CONFIRM)
+        ),
+    )
+    with pytest.raises(ControllerActionBudgetExhausted):
+        episode.run_red_trainer_practice_episode(
+            capture,
+            session_factory=lambda: session,
+            policy=Policy(),
+            opening_idle_frames=4,
+            action_executor=limited,
+        )
+
+    assert [macro.kind for macro in actions.macros] == [episode.MacroActionKind.WAIT]
+    assert limited.attempted_actions == 1
+
+
+def test_decision_guard_expires_before_policy_choice(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
+
+    class Policy:
+        policy_id = "test-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("expired decision must not reach inference")
+
+    with pytest.raises(RuntimeError, match="deadline before choice"):
+        episode.run_red_trainer_practice_episode(
+            capture,
+            session_factory=lambda: session,
+            policy=Policy(),
+            decision_guard=lambda _raw: (_ for _ in ()).throw(
+                RuntimeError("deadline before choice")
+            ),
+        )
+
+
+@pytest.mark.parametrize("mode", ("main", "switch_prompt", "forced_switch"))
+def test_decision_guard_is_rechecked_after_pre_policy_logging(tmp_path, monkeypatch, mode):
+    capture = _capture(tmp_path)
+    session = Session()
+    if mode == "forced_switch":
+        session.raw = replace(session.raw, party_hp=(0, 35), active_party_hp=0)
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
+    if mode == "switch_prompt":
+        session.trainer_switch_prompt_visible = lambda _raw: True
+
+    class Policy:
+        policy_id = "test-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("deadline after preparation must not enter main policy")
+
+        def choose_switch(self, *_args, **_kwargs):
+            raise AssertionError("deadline after logging must not enter switch policy")
+
+    calls = 0
+
+    def guard(_raw):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise RuntimeError("deadline after pre-policy work")
+
+    with pytest.raises(RuntimeError, match="deadline after pre-policy work"):
+        episode.run_red_trainer_practice_episode(
+            capture,
+            session_factory=lambda: session,
+            policy=Policy(),
+            decision_guard=guard,
+        )
+    assert calls == 2
+
+
+def test_opening_wait_without_supplied_executor_keeps_absolute_frame_count(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    ticks = []
+    session.tick = ticks.append
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
+
+    class BoundaryReached(Exception):
+        pass
+
+    with pytest.raises(BoundaryReached):
+        episode.run_red_trainer_practice_episode(
+            capture,
+            session_factory=lambda: session,
+            policy=SimpleNamespace(policy_id="test-model"),
+            opening_idle_frames=4,
+            controller_timing=episode.ControllerTiming(wait_frames=3),
+            decision_guard=lambda _raw: (_ for _ in ()).throw(BoundaryReached()),
+        )
+    assert ticks == [4]
+
+
+def test_action_expiry_after_inference_prevents_dispatch(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    expired = False
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
+
+    class Actions:
+        calls = 0
+
+        def execute(self, _action):
+            self.calls += 1
+
+    actions = Actions()
+
+    class Policy:
+        policy_id = "test-model"
+
+        def choose_main(self, *_args):
+            nonlocal expired
+            expired = True
+            return BattleAction.move(1)
+
+    def admit():
+        if expired:
+            raise RuntimeError("deadline during inference")
+
+    from pokemon_red_completion.executor import ControllerActionLimiter
+
+    limited = ControllerActionLimiter(actions, maximum_actions=2, admit_action=admit)
+    monkeypatch.setattr(
+        episode,
+        "execute_bounded_battle_move_turn",
+        lambda _reader, action_executor, **_kwargs: action_executor.execute(
+            episode.MacroAction(episode.MacroActionKind.CONFIRM)
+        ),
+    )
+    with pytest.raises(RuntimeError, match="deadline during inference"):
+        episode.run_red_trainer_practice_episode(
+            capture,
+            session_factory=lambda: session,
+            policy=Policy(),
+            action_executor=limited,
+        )
+
+    assert limited.attempted_actions == 0
+    assert actions.calls == 0
+
+
 def test_terminal_party_defeat_is_retained_as_a_loss(tmp_path):
     capture = _capture(tmp_path)
     final = RawGameState(True, 120, 2, 2, 2, 0, party_hp=(0, 0))
@@ -431,3 +658,61 @@ def test_episode_accepts_authenticated_forced_switch_as_first_boundary(tmp_path,
     )
     assert result.decisions[0]["kind"] == "forced_switch"
     assert result.decisions[0]["party_slot"] == 2
+
+
+@pytest.mark.parametrize("target_slot", (4, 5, 6))
+def test_episode_preserves_one_based_late_slot_through_forced_execution(
+    tmp_path, monkeypatch, target_slot
+):
+    capture = _capture(tmp_path)
+    session = Session()
+    party_hp = tuple(35 if index == target_slot - 1 else 0 for index in range(6))
+    session.raw = replace(
+        session.raw,
+        party_count=6,
+        party_hp=party_hp,
+        active_party_index=0,
+        active_party_hp=0,
+    )
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(
+            snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {"six": True})
+        ),
+    )
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    monkeypatch.setattr(
+        episode,
+        "prepare_red_battle_scenario",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("not an attack menu")),
+    )
+    executed = []
+
+    def switch(_actions, _reader, _session, target_index, **_kwargs):
+        executed.append(target_index)
+        session.raw = replace(
+            session.raw,
+            active_party_index=target_index,
+            active_party_hp=party_hp[target_index],
+        )
+
+    monkeypatch.setattr(episode, "switch_active_battler", switch)
+
+    class Policy:
+        policy_id = "late-forced-unit-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("forced switch must come first")
+
+        def choose_switch(self, _observation, legal_slots, *, forced, may_decline):
+            assert forced and not may_decline and legal_slots == (target_slot,)
+            return target_slot
+
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy(), max_decisions=1
+    )
+    assert executed == [target_slot - 1]
+    assert result.decisions[0]["party_slot"] == target_slot
+    assert result.decisions[0]["legal_party_slots"] == [target_slot]

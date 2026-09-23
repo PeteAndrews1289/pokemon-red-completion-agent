@@ -1,55 +1,66 @@
 # Project story: learning to play Pokémon
 
-Pete's goal is a model that makes useful decisions, reacts when the game differs
-and carries skills into unfamiliar titles. This is an AI-assisted project;
-coding assistants build and review the system rather than secretly choose attacks.
+An AI-assisted project directed by Pete Andrews. This page introduces the story;
+the [full chronological chronicle](chronicle/README.md) preserves its history.
+It is not replaced each time the current game state changes.
 
-The first finish line is a fresh model-directed Red run with Champion/Hall-of-Fame
-evidence and the declared124-species legitimate native route. Unavailable version,
-link and event dependencies stay explicit. Then come a compatible unfamiliar
-Red hack, Crystal and Emerald.
+## The central question: who is actually playing?
 
-## Latest chapter: learning under its own continuation
+The project began by building a teacher that could complete Red. That solved
+control and verification, but not the eventual goal: a learner that makes useful
+choices, recovers from setbacks and carries knowledge into unfamiliar games.
 
-The trainer's old labels measured a first action followed by a strong teacher.
-But the deployed model had to finish the battle itself. A four-state diagnostic
-showed that replacing the teacher could change which opening was best.
+Early learned components could choose moves or authorize fixed objectives while
+much of the route remained scripted. High agreement scores and Hall-of-Fame
+screens did not settle how much strategic authority had moved to the model.
 
-We measured16 training situations again with frozen learner continuation and
-kept the two kinds of labels separate. One new candidate J preserved the old
-numeric skill checks and won9of24 unused generated-team battles versus its
-predecessor's7. It still lost15 and took more decisions overall. This is a
-modest learning signal, not perfect play or statistically conclusive mastery.
+## The whole development arc
 
-Two independent natural starts reached Brock through ordinary gameplay.
-Across three timings each, J won6/6, its predecessor5/6 and first-legal attack0/6.
-These are two origins and one own Pokemon: evidence of early attack transfer,
-not qualification of the whole party-switching system.
+1. [July 28–August 5](chronicle/01-teacher-and-first-learners.md):
+   native control, a complete deterministic teacher, assisted learning and typed
+   battle actions. Historical completions are not today's final fresh-run gate.
+2. [August 6–14](chronicle/02-evaluation-and-refocus.md):
+   observation gaps, action masks, changing maps and misleading evaluation.
+   An expensive supervised run drove the move to short authenticated scenarios.
+3. [August 15–September 5](chronicle/03-scenarios-and-strategic-learning.md):
+   curriculum supply, provenance, negative comparisons and the first measured
+   strategic advantage in a bounded native choice.
+4. [September 6–10](chronicle/04-continuous-collection.md):
+   continue from unsuccessful searches, connect evolution dependencies and adopt
+   shared registrations instead of simultaneous living specimens.
+5. [September 11–15](chronicle/05-economy-and-runtime.md):
+   money, reachable services and robust battle execution become real constraints.
+6. [September 16–20](chronicle/06-battle-classroom.md):
+   isolated assisted practice, continuation-aware learning, whole-party combat,
+   retained losses and the distinction between recovery and profitable funding.
+7. [September 21](chronicle/07-player-and-story.md):
+   gift selection, seven continued model decisions and a genuine story destination
+   choice connect components without overstating their authority.
+8. [September 22](chronicle/08-preparation-and-routing.md):
+   status experiments, an explicitly limited model admission, learned gym wins,
+   reserve preparation and a shared repair for forced motion and trainer hazards.
 
-The next natural two-member trials were won without ever using the reserve,
-so they did not prove switching. We retained their earned saves, used normal
-menus to put the weaker member first, and reached a new trainer encounter.
-J voluntarily switched in both, won both and kept the party alive. Its33decisions
-ran inside the existing emulator without reset; fresh ledgers verified the story
-events and preserved registrations. One party ended poisoned and low on HP:
-successful combat still leaves real recovery decisions.
+## Where this edition ends
 
-Supported small-party battler v1 is now frozen and explicitly connected to the
-main player's ordinary trainer-funding entry. The first integration used an earned
-save, three ordinary Potions and a new trainer. J switched once and attacked three
-times; Wartortle fainted, and the old no-faints funding guard stopped the unfinished
-battle before replacement. No payout, reset or hidden teacher rescue occurred.
+The earned story lineage has seven badges and is stopped safely in Viridian Gym
+before Giovanni. A separate collection save has 109/124 native registrations.
+Neither is the required fresh model-directed run; final Red acceptance remains 0/5.
 
-A separate declared continuation then let J choose Zubat as the forced replacement
-and select four attacks. It lost. Normal blackout halved cash and restored the party;
-the exact field state and all five choices were retained and verified without reset.
-Battle completion is now separate from funding acceptance: the original funding
-failure remains failed. Next comes useful main-save collection/resource progress,
-not another broad trainer audit. Six-member qualification, complete move support
-and full-player promotion remain open.
-Model137 remains137examples/92successes; collection registrations remain96/124.
-The five-part fresh-start Red gate remains unpassed.
+Small models choose supported goals and battle actions. Navigation, menus,
+several preparation choices and recovery still include deterministic support.
+The coding assistants are building the player, not secretly choosing its live attacks.
 
-[Latest evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
-[Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
-[Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)
+The next result should be earned progression toward Giovanni, not another
+unnecessary battle refit or a rewrite of the earlier failures.
+[Current handoff](../HANDOFF.md) gives the exact terminal and bounds.
+
+## Keep the past available
+
+The [source inventory](chronicle/SOURCE_INDEX.md) links retained archives, dated
+sessions and narrative revision history. The September 10 archives still contain
+11,413 project-narrative lines and 8,227 video-note lines; they were not discarded.
+
+Use the [video outline](youtube-video-narrative.md) and its detailed script for
+storytelling, and the [research retrospective](research-retrospective.md) for
+claim boundaries and potential-paper requirements. Earlier results and scope
+changes stay visible; future chapters extend the chronicle rather than overwrite it.

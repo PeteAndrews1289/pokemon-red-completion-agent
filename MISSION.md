@@ -34,6 +34,10 @@ save. A fixed walkthrough with random timing or a stitched checkpoint demonstrat
 satisfy this gate. Deterministic mechanics may support the player, but consequential progression
 and resource decisions must belong to the model under declared authority.
 
+An additional **Blue run is planned**, contributing missing species to the same shared registered
+Pokédex rather than repeating completed lines solely for global credit. Its scheduling is separate
+from Red's unchanged native-route gate. Species requiring unavailable trading, event access or
+other external means may instead be obtained legitimately in a later title; do not block Red on them.
 Version, cable-trade and event dependencies remain explicit legitimate gaps; shared credit never
 fabricates a local Red flag. Mew is deferred until a later legitimate source. Red/Blue link play
 may be attempted after model completeness, but an unavailable emulator link does not block the

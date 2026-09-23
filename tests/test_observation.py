@@ -51,6 +51,7 @@ from pokemon_red_completion.observation import (
     RedBoxCollectionState,
     RedCurrentBoxState,
     RedPokedexState,
+    RedSafariSessionState,
     SemanticStateError,
     SemanticStateTracker,
     SurgePhase,
@@ -2159,3 +2160,129 @@ def test_surge_progress_tracker_rejects_a_skipped_gate() -> None:
 def test_surge_progress_tracker_rejects_false_snapshot() -> None:
     with pytest.raises(SurgeProgressError, match="failed"):
         SurgeProgressTracker().observe(_surge_state(SurgePhase.HM01_READY, valid=False))
+
+
+def test_safari_session_state_clean_zero_session() -> None:
+    flag_byte_addr = int(RamAddress.EVENT_FLAGS) + (int(EventFlag.IN_SAFARI_ZONE) // 8)
+    memory = RecordingMemory(
+        {
+            int(RamAddress.SAFARI_BALLS): 0,
+            int(RamAddress.SAFARI_STEPS): 0,
+            int(RamAddress.SAFARI_STEPS) + 1: 0,
+            flag_byte_addr: 0x00,
+        }
+    )
+    reader = PokemonRedStateReader(memory)
+    state = reader.read_safari_session_state()
+    assert state.safari_balls == 0
+    assert state.safari_steps == 0
+    assert not state.in_safari_zone
+    assert not state.safari_game_over
+    assert not state.has_active_session
+
+
+def test_safari_session_state_active_session_flags_and_counters() -> None:
+    flag_byte_addr = int(RamAddress.EVENT_FLAGS) + (int(EventFlag.IN_SAFARI_ZONE) // 8)
+    in_zone_bit = 1 << (int(EventFlag.IN_SAFARI_ZONE) % 8)
+    game_over_bit = 1 << (int(EventFlag.SAFARI_GAME_OVER) % 8)
+
+    # In zone
+    reader1 = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                int(RamAddress.SAFARI_BALLS): 30,
+                int(RamAddress.SAFARI_STEPS): 1,
+                int(RamAddress.SAFARI_STEPS) + 1: 244,  # 500
+                flag_byte_addr: in_zone_bit,
+            }
+        )
+    )
+    state1 = reader1.read_safari_session_state()
+    assert state1.safari_balls == 30
+    assert state1.safari_steps == 500
+    assert state1.in_safari_zone
+    assert not state1.safari_game_over
+    assert state1.has_active_session
+
+    # Game over
+    reader2 = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                int(RamAddress.SAFARI_BALLS): 0,
+                int(RamAddress.SAFARI_STEPS): 0,
+                int(RamAddress.SAFARI_STEPS) + 1: 0,
+                flag_byte_addr: game_over_bit,
+            }
+        )
+    )
+    state2 = reader2.read_safari_session_state()
+    assert state2.safari_game_over
+    assert state2.has_active_session
+
+
+@pytest.mark.parametrize("balls,steps", [(0, 0), (28, 473), (5, 0), (0, 10)])
+def test_safari_session_activity_uses_flags_not_residual_counters(balls, steps) -> None:
+    assert not RedSafariSessionState(balls, steps, False, False).has_active_session
+    assert RedSafariSessionState(balls, steps, True, False).has_active_session
+    assert RedSafariSessionState(balls, steps, False, True).has_active_session
+
+
+def test_safari_session_state_validation() -> None:
+    with pytest.raises(SemanticStateError, match="byte counter"):
+        RedSafariSessionState(
+            safari_balls=-1,
+            safari_steps=0,
+            in_safari_zone=False,
+            safari_game_over=False,
+        )
+
+    with pytest.raises(SemanticStateError, match="16-bit counter"):
+        RedSafariSessionState(
+            safari_balls=0,
+            safari_steps=70000,
+            in_safari_zone=False,
+            safari_game_over=False,
+        )
+
+    with pytest.raises(SemanticStateError, match="boolean"):
+        RedSafariSessionState(  # type: ignore[arg-type]
+            safari_balls=0,
+            safari_steps=0,
+            in_safari_zone="yes",
+            safari_game_over=False,
+        )
+
+
+def test_read_safari_zone_gate_script() -> None:
+    reader = PokemonRedStateReader(
+        RecordingMemory(
+            {
+                int(RamAddress.SAFARI_ZONE_GATE_SCRIPT): 2,
+            }
+        )
+    )
+    assert reader.read_safari_zone_gate_script() == 2
+
+
+@pytest.mark.parametrize(
+    ("map_id", "text_id", "expected"),
+    [(156, 3, "greeting"), (156, 4, "admission"), (156, 0, None),
+     (156, 1, None), (156, 2, None), (156, 5, None), (156, 6, None), (7, 3, None)],
+)
+def test_safari_clerk_dialogue_retained_identity(map_id, text_id, expected) -> None:
+    memory = RecordingMemory({
+        int(RamAddress.CURRENT_MAP): map_id,
+        int(RamAddress.TRAINER_TEXT_SPRITE_INDEX): text_id,
+    })
+    assert PokemonRedStateReader(memory).read_safari_clerk_dialogue() == expected
+
+
+def test_safari_clerk_dialogue_does_not_hide_failed_memory_reads() -> None:
+    class BrokenMemory:
+        def read_u8(self, address):
+            if address == RamAddress.CURRENT_MAP:
+                return 156
+            raise RuntimeError("unavailable text observation")
+
+    with pytest.raises(RuntimeError, match="unavailable text"):
+        PokemonRedStateReader(BrokenMemory()).read_safari_clerk_dialogue()

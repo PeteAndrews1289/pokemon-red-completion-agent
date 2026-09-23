@@ -1,0 +1,120 @@
+{
+  "schema": "pokemon.red.story-branch-development.v1",
+  "date": "2026-09-21",
+  "status": "passed_bounded_dispatch",
+  "runtime_commit": "112b06f6dca9e766214a85d033a314832a0f06e6",
+  "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+  "source_state_sha256": "ae8b55ad07a742992be4c953f0622848b8515acf530cb2b527d26755bfb6b148",
+  "terminal_state_sha256": "01fff089bc9676c807347ba03c9c6acef398163b30d763ebae5630da46977b06",
+  "terminal_envelope_sha256": "92319e0b958b740e8379e9da8917f49d936a7cf32c425964000d61d3481747b0",
+  "claim_sha256": "82a1158b052e234f2dd94adc37d3055229527593fdf39649d6017f3b51446131",
+  "result_sha256": "6f2f4d4c7707d88e2b71b53bd77a8249f387f6a66683d631950d9d05e471f6b7",
+  "audit_sha256": "8f02b57570bfd55d1eb1f951c7dcadaf8eebbb65755414b8ab46b372a20a1475",
+  "chapter_report_sha256": "9dedb2c574c6335f7ba2174c6b613bbaef6274f047978907295d20caf08a94d6",
+  "partition": "development",
+  "fit_allowed": false,
+  "seed": 2026092101,
+  "source_ancestry": "Retained 14/36-objective fresh-conductor terminal; correlated development reuse, not a new independent or model-led fresh run.",
+  "selection": {
+    "available_options": [
+      "reach_saffron",
+      "clear_rocket_hideout"
+    ],
+    "selected": "clear_rocket_hideout",
+    "mode": "model_exploration",
+    "probabilities": [
+      0.49693173599600904,
+      0.503068264003991
+    ],
+    "scores": [
+      4.806518398568597,
+      4.822882838439554
+    ],
+    "model_decisions": 1,
+    "teacher_goal_choices": 0,
+    "redraws": 0,
+    "planned_saffron_spend": 2300
+  },
+  "outcome": {
+    "verified": true,
+    "completed_objectives_before": 14,
+    "completed_objectives_after": 16,
+    "new_facts": [
+      "story:rocket_hideout_cleared",
+      "item:silph_scope"
+    ],
+    "actions": 1061,
+    "frames": 90473,
+    "cash_before": 7511,
+    "cash_after": 12992,
+    "cash_delta": 5481,
+    "super_potions_used": 1,
+    "scripted_trainer_battles": 5,
+    "learned_battle_actions": 0,
+    "party_hp": [
+      98,
+      51,
+      37
+    ],
+    "party_max_hp": [
+      98,
+      51,
+      37
+    ],
+    "party_pp_restored": true,
+    "native_execution_failures": 0,
+    "safe_terminal": true,
+    "registrations_before": 12,
+    "registrations_after": 12
+  },
+  "audit": {
+    "zero_input": true,
+    "frames": 0,
+    "recorded_draw_reproduced": true,
+    "terminal_reloaded": true,
+    "raw_native_facts_verified": true,
+    "original_source_unchanged": true,
+    "model_file_unchanged": true,
+    "primary_collection_save_unchanged": true
+  },
+  "limits": {
+    "actions": 2000,
+    "frames": 2000000,
+    "wall_seconds": 3600,
+    "maximum_decisions": 1
+  },
+  "model_training": {
+    "new_fits": 0,
+    "new_training_examples": 0,
+    "total_fitted_outcomes": 141,
+    "successes": 96,
+    "economy_qualified": 58
+  },
+  "primary_collection": {
+    "registrations": 109,
+    "target": 124,
+    "specimens": 78,
+    "cash": 11968,
+    "state_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "unchanged": true
+  },
+  "verification": {
+    "targeted_tests_passed": 84,
+    "full_suite": false,
+    "ruff": true,
+    "registry_check": true,
+    "docs_check": true
+  },
+  "limitations": [
+    "Almost-even probabilities do not prove strategic preference or learned improvement.",
+    "Five battles, navigation and automatic healing are deterministic chapter support.",
+    "Healing contrast unavailable; no native learned-healing claim.",
+    "Saffron was not executed; no Saffron qualification.",
+    "Plural provider API is opt-in; legacy offer still picks first for historical callers.",
+    "Exact Saffron spending was added in the prospective harness, not a generic chapter cost provider.",
+    "Generic runner teacher_actions=0 denotes no teacher goal substitution, not absence of scripted primitive controls."
+  ],
+  "next": "Preflight the newly earned terminal for a bounded continuation; semantically available Erika, Saffron and Fuji require actual resource checks. Reuse plural bindings and publish truthful chapter costs. No replay of the consumed source, no fit, no full run.",
+  "gameplay_running": false,
+  "github_published": false
+}

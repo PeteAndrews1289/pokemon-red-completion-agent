@@ -34,6 +34,9 @@ class RamAddress(IntEnum):
     repository's exact ROM fingerprint gate passes.
     """
 
+    # HRAM follows the ten-byte OAM DMA routine in the pinned layout.link.
+    RANDOM_ADD = 0xFFD3
+    RANDOM_SUB = 0xFFD4
     SPRITE_STATE_DATA_1 = 0xC100
     SPRITE_STATE_DATA_2 = 0xC200
     TILE_MAP = 0xC3A0
@@ -163,6 +166,7 @@ class RamAddress(IntEnum):
     VIRIDIAN_MART_SCRIPT = 0xD60D
     CERULEAN_CITY_SCRIPT = 0xD60F
     VIRIDIAN_FOREST_SCRIPT = 0xD618
+    SAFARI_ZONE_GATE_SCRIPT = 0xD61F
     BILLS_HOUSE_SCRIPT = 0xD661
     VERMILION_CITY_SCRIPT = 0xD62A
     SS_ANNE_2F_SCRIPT = 0xD665
@@ -175,6 +179,7 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_4 = 0xD72E
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
+    ELITE_FOUR_FLAGS = 0xD734
     MOVEMENT_FLAGS = 0xD736
     WALK_BIKE_SURF_STATE = 0xD700
     TOWN_VISITED_FLAGS = 0xD70B
@@ -371,6 +376,7 @@ class EventFlag(IntEnum):
     BATTLED_RIVAL_IN_OAKS_LAB = 0x023
     GOT_POKEDEX = 0x025
     OAK_APPEARED_IN_PALLET = 0x027
+    VIRIDIAN_GYM_OPEN = 0x028
     OAK_GOT_PARCEL = 0x038
     GOT_OAKS_PARCEL = 0x039
     GOT_TM27 = 0x050
@@ -1063,6 +1069,30 @@ class RedCurrentBoxState:
 
 
 @dataclass(frozen=True, slots=True)
+class RedSafariSessionState:
+    """Revision-specific observed state for the Safari Zone session."""
+
+    safari_balls: int
+    safari_steps: int
+    in_safari_zone: bool
+    safari_game_over: bool
+
+    def __post_init__(self) -> None:
+        if type(self.safari_balls) is not int or not 0 <= self.safari_balls <= 255:
+            raise SemanticStateError("safari balls must be a valid byte counter")
+        if type(self.safari_steps) is not int or not 0 <= self.safari_steps <= 65535:
+            raise SemanticStateError("safari steps must be a valid 16-bit counter")
+        if type(self.in_safari_zone) is not bool or type(self.safari_game_over) is not bool:
+            raise SemanticStateError("safari session flags must be boolean")
+
+    @property
+    def has_active_session(self) -> bool:
+        # Early exit clears the event flags but leaves ball/step counters intact.
+        # Game-over still requires settlement; counters alone do not prove activity.
+        return self.in_safari_zone or self.safari_game_over
+
+
+@dataclass(frozen=True, slots=True)
 class RedBoxMoveMember:
     """Action-free current-box move inventory; not an active battle member."""
 
@@ -1189,6 +1219,10 @@ class RawGameState:
     enemy_defense_stage: int | None = None
     player_disabled_move_slot: int | None = None
     player_disable_turns: int | None = None
+    player_confused: bool | None = None
+    enemy_confused: bool | None = None
+    player_stat_stages: tuple[int, ...] | None = None
+    enemy_stat_stages: tuple[int, ...] | None = None
     enemy_using_trapping_move: bool | None = None
     active_party_index: int | None = None
     active_party_species_id: int | None = None
@@ -3752,6 +3786,42 @@ class PokemonRedStateReader:
         self._last_encounter: tuple[int | None, ...] | None = None
         self._encounter_log = encounter_log_path()
 
+    def read_silph_gift_received(self) -> bool:
+        """Pinned Red wStatusFlags4 BIT_GOT_LAPRAS; not inferred from owned flags."""
+        return bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_4) & 0x01)
+
+    def read_completed_npc_trades(self) -> frozenset[int]:
+        """The ten native one-shot trade bits, not inferred from Pokédex flags."""
+        bits = self._memory.read_u8(RamAddress.NPC_TRADE_FLAGS)
+        bits |= self._memory.read_u8(int(RamAddress.NPC_TRADE_FLAGS) + 1) << 8
+        return frozenset(index for index in range(10) if bits & (1 << index))
+
+    def read_npc_trade_input(self) -> tuple[str, int] | None:
+        """Visible menu plus active cursor; valid only inside an admitted trade.
+
+        Pinned home/pokemon.asm PartyMenuInit and the ordinary YesNoChoice
+        layout. Stale menu bytes without a rendered cursor never own input.
+        This does not identify the NPC or authorize beginning a trade.
+        """
+        if self._memory.read_u8(RamAddress.IS_IN_BATTLE) or not self._active_menu_cursor():
+            return None
+        menu = self.read_menu_cursor_state()
+        selected = menu.selected_visible_index
+        rows = self.read_screen_text_rows()
+        text = " ".join(" ".join(rows).split())
+        if ((menu.top_y, menu.top_x, menu.maximum_visible_index) == (8, 15, 1)
+                and selected in {0, 1} and "YES" in text and "NO" in text):
+            return "offer", selected
+        count = self._memory.read_u8(RamAddress.PARTY_COUNT)
+        if (
+            1 <= count <= 6
+            and (menu.top_y, menu.top_x, menu.maximum_visible_index) == (1, 0, count - 1)
+            and selected < count
+            and "Choose" in text
+        ):
+            return "party", selected
+        return None
+
     def read_pc_items(self) -> tuple[tuple[int, int], ...]:
         """Read Red's PC item box from its fixed revision-zero WRAM inventory."""
         count = self._memory.read_u8(RamAddress.NUM_PC_ITEMS)
@@ -3940,6 +4010,22 @@ class PokemonRedStateReader:
                 disabled_slot if battle_state and 1 <= disabled_slot <= 4 else None
             ),
             player_disable_turns=(disabled_move & 0x0F) if battle_state else None,
+            player_confused=(
+                bool(self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1) & 0x80)
+                if battle_state else None
+            ),
+            enemy_confused=(
+                bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & 0x80)
+                if battle_state else None
+            ),
+            player_stat_stages=(
+                tuple(self._memory.read_u8(int(RamAddress.PLAYER_ATTACK_STAGE) + i)
+                      for i in range(6)) if battle_state else None
+            ),
+            enemy_stat_stages=(
+                tuple(self._memory.read_u8(int(RamAddress.ENEMY_DEFENSE_STAGE) - 1 + i)
+                      for i in range(6)) if battle_state else None
+            ),
             enemy_using_trapping_move=(
                 bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & (1 << 5))
                 if battle_state
@@ -4065,6 +4151,63 @@ class PokemonRedStateReader:
             species_ids=species_ids,
             levels=levels,
         )
+
+    def read_safari_session_state(self) -> RedSafariSessionState:
+        """Read the player's current Safari Zone session counters and event flags."""
+        balls = self._memory.read_u8(RamAddress.SAFARI_BALLS)
+        steps_hi = self._memory.read_u8(RamAddress.SAFARI_STEPS)
+        steps_lo = self._memory.read_u8(int(RamAddress.SAFARI_STEPS) + 1)
+        steps = (steps_hi << 8) | steps_lo
+        flag_byte = self._memory.read_u8(
+            int(RamAddress.EVENT_FLAGS) + (int(EventFlag.IN_SAFARI_ZONE) // 8)
+        )
+        in_safari = bool(flag_byte & (1 << (int(EventFlag.IN_SAFARI_ZONE) % 8)))
+        game_over = bool(flag_byte & (1 << (int(EventFlag.SAFARI_GAME_OVER) % 8)))
+        return RedSafariSessionState(
+            safari_balls=balls,
+            safari_steps=steps,
+            in_safari_zone=in_safari,
+            safari_game_over=game_over,
+        )
+
+    def read_wild_special_damage_inputs(
+        self, expected: RawGameState,
+    ) -> tuple[int, int, tuple[str, ...], tuple[str, ...]]:
+        """Conservative special attack/defense and live types for capture support.
+
+        Ordinary battle-struct Special and unmodified party/enemy Special are
+        separate: critical hits ignore stat changes. Max attack/min defense is
+        deliberately an upper bound, not a damage prediction. No snapshot fields
+        or learned features change. Unsupported volatile/Transform states stop.
+        """
+        if (self.read() != expected or expected.battle_state != 1
+                or expected.active_party_index is None or expected.party_count is None
+                or not 0 <= expected.active_party_index < expected.party_count <= 6
+                or (expected.enemy_hp or 0) <= 0):
+            raise SemanticStateError("capture damage requires coherent live wild state")
+        identity = self.read_wild_capture_identity()
+        flags = tuple(self._memory.read_u8(int(RamAddress.PLAYER_BATTLE_STATUS_1) + i)
+                      for i in range(3))
+        if (identity is None or identity.transformed or flags[0] & 0xFF
+                or flags[1] & 0xF0 or flags[2] & 0x09):
+            raise SemanticStateError("capture damage has unsupported volatile mechanics")
+        base = int(RamAddress.PARTY_MON_1) + expected.active_party_index * PARTY_STRUCT_STRIDE
+        attack = max(self._read_u16_be(base + 42), self._read_u16_be(RamAddress.BATTLE_MON_SPECIAL))
+        defense = min(self._read_u16_be(RamAddress.ENEMY_SPECIAL),
+                      self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL))
+        try:
+            # battle_struct types at5/6 precede Attack at17; use live types
+            # rather than party types, which Conversion can change in battle.
+            own_types = tuple(dict.fromkeys(GEN1_TYPE_NAMES_BY_CODE[self._memory.read_u8(
+                int(RamAddress.BATTLE_MON_ATTACK) - 12 + i)] for i in (0, 1)))
+            enemy_types = tuple(dict.fromkeys(
+                GEN1_TYPE_NAMES_BY_CODE[t] for t in identity.type_ids))
+        except KeyError as error:
+            raise SemanticStateError("capture damage type bytes differ") from error
+        if (not 1 <= attack <= 1023 or not 1 <= defense <= 1023
+                or self.read() != expected or self.read_wild_capture_identity() != identity):
+            raise SemanticStateError("capture damage inputs changed or are invalid")
+        return attack, defense, own_types, enemy_types
 
     def read_enemy_capture_status(self) -> int | None:
         """Read target status only in a live wild battle; stale RAM is unknown.
@@ -4717,6 +4860,29 @@ class PokemonRedStateReader:
             and self._active_menu_cursor()
         )
 
+    def read_wild_next_mon_prompt(self, raw: RawGameState) -> int | None:
+        """Observe the wild faint YES/NO gate, not the subsequent party menu."""
+        if (raw.battle_state != 1 or raw.battler_hp != 0
+                or not raw.party_hp or not any(hp > 0 for hp in raw.party_hp)
+                or not self._active_menu_cursor()):
+            return None
+        signature = tuple(self._memory.read_u8(address) for address in (
+            RamAddress.TOP_MENU_ITEM_Y, RamAddress.TOP_MENU_ITEM_X,
+            RamAddress.MAX_MENU_ITEM, RamAddress.MENU_WATCHED_KEYS,
+        ))
+        selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+        if signature != (10, 14, 1, 3) or selected not in {0, 1}:
+            return None
+        letters = []
+        for offset in range(20 * 12, TILE_MAP_SIZE):
+            tile = self._memory.read_u8(int(RamAddress.TILE_MAP) + offset)
+            letters.append(
+                chr(ord("A") + tile - 0x80) if 0x80 <= tile <= 0x99
+                else chr(ord("a") + tile - 0xA0) if 0xA0 <= tile <= 0xB9 else " "
+            )
+        visible = " ".join("".join(letters).split())
+        return selected if "Use next POK MON" in visible else None
+
     def read_move_learning_prompt(self, raw: RawGameState) -> tuple[str, int] | None:
         """Recognize live Red move-learning input, not stale dialogue text.
 
@@ -4819,6 +4985,29 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
             bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )
+
+    def read_league_challenge_started(self) -> bool:
+        """Indigo's cartridge-owned lobby reset latch (wElite4Flags bit 1)."""
+        return bool(self._memory.read_u8(RamAddress.ELITE_FOUR_FLAGS) & 2)
+
+    def read_screen_text_rows(self) -> tuple[str, ...]:
+        """Decode Red's visible text buffer, retaining unknown tiles as spaces.
+
+        This is text observation, not permission to acknowledge an unknown menu.
+        Character codes follow the pinned cartridge's standard font table.
+        """
+        def character(tile: int) -> str:
+            if 0x80 <= tile <= 0x99:
+                return chr(ord('A') + tile - 0x80)
+            if 0xA0 <= tile <= 0xB9:
+                return chr(ord('a') + tile - 0xA0)
+            if 0xF6 <= tile <= 0xFF:
+                return str(tile - 0xF6)
+            return '>' if tile == FILLED_MENU_CURSOR_TILE else ' '
+
+        return tuple(''.join(character(self._memory.read_u8(
+            int(RamAddress.TILE_MAP) + row * 20 + column,
+        )) for column in range(20)) for row in range(18))
 
     def read_rival_starter(self) -> int:
         """Read the persistent rival starter selector outside room-local scripts."""
@@ -5166,6 +5355,22 @@ class PokemonRedStateReader:
     def read_current_map_tileset(self) -> int:
         """Observed tileset for legal field escape; not a policy feature."""
         return self._memory.read_u8(RamAddress.CURRENT_MAP_TILESET)
+
+    def read_safari_zone_gate_script(self) -> int:
+        """Read wSafariZoneGateCurScript ($D61F) for Safari Zone Gate clerk interaction phase."""
+        return self._memory.read_u8(RamAddress.SAFARI_ZONE_GATE_SCRIPT)
+
+    def read_safari_clerk_dialogue(self) -> str | None:
+        """Identify gate text retained in wSpriteIndex by DisplayTextID.
+
+        Entries 3 and 4 are the automatic greeting and admission prompt. Unlike
+        hTextID, this byte is not the scrolling arrow counter. Callers must still
+        bind visible dialogue, script and a fresh approach; facing is not identity.
+        """
+        if self._memory.read_u8(RamAddress.CURRENT_MAP) != MapId.SAFARI_ZONE_GATE:
+            return None
+        text_id = self._memory.read_u8(RamAddress.TRAINER_TEXT_SPRITE_INDEX)
+        return {3: "greeting", 4: "admission"}.get(text_id)
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""
@@ -5696,6 +5901,7 @@ class PokemonRedStateReader:
             MapId.ROUTE_25: RamAddress.ROUTE_25_SCRIPT,
             MapId.BILLS_HOUSE: RamAddress.BILLS_HOUSE_SCRIPT,
             MapId.VERMILION_CITY: RamAddress.VERMILION_CITY_SCRIPT,
+            MapId.SAFARI_ZONE_GATE: RamAddress.SAFARI_ZONE_GATE_SCRIPT,
             MapId.SS_ANNE_2F: RamAddress.SS_ANNE_2F_SCRIPT,
         }.get(map_id)
         return self._memory.read_u8(address) if address is not None else 0

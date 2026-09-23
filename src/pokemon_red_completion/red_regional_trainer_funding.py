@@ -18,7 +18,7 @@ from .gen1_trainer_parties import trainer_party_quote
 from .gen1_trainer_sight import TrainerFacing, TrainerSightZone
 from .global_router import MacroGraph
 from .local_router import LocalGraph
-from .red_trainer_funding import TrainerFundingCandidate
+from .red_trainer_funding import TrainerFundingCandidate, valid_funding_ledge
 from .route_executor import TraversalSnapshot
 from .route_plan import RoutePlanningError, plan_route
 
@@ -53,6 +53,7 @@ def regional_trainer_funding_candidates(
     maximum_steps: int = 256,
     indoor_exit_map: int | None = None,
     static_blockers: Mapping[int, frozenset[tuple[int, int]]] | None = None,
+    allow_ledges: bool = False,
 ) -> tuple[TrainerFundingCandidate, ...]:
     """Route only through inventoried maps, reserving bodies and all sight lanes.
 
@@ -94,11 +95,13 @@ def regional_trainer_funding_candidates(
                 for e in world.macro_graph.neighbors(m)
                 if (e.kind == "connection" and e.target_map in maps)
                 or (
-                    indoor_exit_map is not None and m == start.map_id
+                    indoor_exit_map is not None
+                    and m == start.map_id
                     and e.kind in {"warp", "return"}
-                    and (e.target_map == indoor_exit_map or (
-                        e.kind == "return" and e.target_map is None
-                    ))
+                    and (
+                        e.target_map == indoor_exit_map
+                        or (e.kind == "return" and e.target_map is None)
+                    )
                 )
             )
             for m in maps
@@ -110,7 +113,15 @@ def regional_trainer_funding_candidates(
                 at: tuple(
                     e
                     for e in edges
-                    if e.kind == "walk"
+                    if (
+                        e.kind == "walk"
+                        or (
+                            allow_ledges is True
+                            and e.kind == "ledge"
+                            and valid_funding_ledge(at, e.target, e.transient, e.action)
+                        )
+                    )
+                    and e.transient not in blocked[m]
                     and e.action_kind is MacroActionKind.MOVE
                     and e.action in {"up", "down", "left", "right"}
                     and e.required_mode in {None, "land"}
@@ -170,12 +181,23 @@ def regional_trainer_funding_candidates(
                     )
                     or step.action_kind is not MacroActionKind.MOVE
                     or step.action not in {"up", "down", "left", "right"}
-                    or (step.kind not in {"walk", "connection"} and not (
-                        indoor_exit_map is not None
-                        and step.source_map == start.map_id
-                        and step.expected_map == indoor_exit_map
-                        and step.kind in {"warp", "return"}
-                    ))
+                    or (
+                        step.kind not in {"walk", "connection"}
+                        and not (
+                            allow_ledges is True
+                            and step.kind == "ledge"
+                            and step.source_map == step.expected_map
+                            and valid_funding_ledge(
+                                step.source_at, step.expected_at, step.transient_at, step.action
+                            )
+                        )
+                        and not (
+                            indoor_exit_map is not None
+                            and step.source_map == start.map_id
+                            and step.expected_map == indoor_exit_map
+                            and step.kind in {"warp", "return"}
+                        )
+                    )
                     or step.source_mode != "land"
                     or step.expected_mode != "land"
                 ):
@@ -190,7 +212,10 @@ def regional_trainer_funding_candidates(
 
 
 def funding_scope(
-    graph: MacroGraph, start: TraversalSnapshot, *, indoor_exit_map: int | None = None,
+    graph: MacroGraph,
+    start: TraversalSnapshot,
+    *,
+    indoor_exit_map: int | None = None,
 ) -> frozenset[int]:
     """An explicit indoor exit adds only its outside map and immediate connections.
 
@@ -200,8 +225,10 @@ def funding_scope(
     if indoor_exit_map is None:
         return connected_funding_maps(graph, start.map_id)
     if (
-        type(indoor_exit_map) is not int or not 0 <= indoor_exit_map <= 0x24
-        or start.map_id < 0x25 or start.last_outside_map != indoor_exit_map
+        type(indoor_exit_map) is not int
+        or not 0 <= indoor_exit_map <= 0x24
+        or start.map_id < 0x25
+        or start.last_outside_map != indoor_exit_map
     ):
         raise ValueError("funding departure requires the observed indoor/outdoor boundary")
     return connected_funding_maps(graph, indoor_exit_map) | {start.map_id}

@@ -4,7 +4,11 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, Gen1FieldMovePort
+from pokemon_red_completion.gen1_field_moves import (
+    Gen1FieldMoveError,
+    Gen1FieldMovePort,
+    fly_story_events_preserved,
+)
 from pokemon_red_completion.observation import (
     OverworldMovementMode,
     PokemonRedStateReader,
@@ -202,6 +206,10 @@ class FlyWorld:
                     self.raw = replace(self.raw, player_x=None)
                 if self.fault == "unstarted":
                     self.raw = replace(self.raw, game_started=False)
+                if self.fault == "gym_unlock":
+                    events = bytearray(self.raw.event_flags)
+                    events[5] |= 1  # Independent cartridge EVENT_VIRIDIAN_GYM_OPEN=$28.
+                    self.raw = replace(self.raw, event_flags=bytes(events))
             else:
                 self.menu_steps.append((self.stage, self.cursor))
                 self.stage = {"start": "party", "party": "submenu", "submenu": "fly"}[self.stage]
@@ -210,6 +218,57 @@ class FlyWorld:
 
 def _port(world):
     return Gen1FieldMovePort(world, world, world)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("badges,allowed", [(127, True), (255, False), (63, False)])
+def test_fly_accepts_only_native_seven_badge_viridian_unlock(badges, allowed):
+    world = FlyWorld(
+        raw=replace(_raw(), badge_bits=badges), available=(1,), selected=1, fault="gym_unlock"
+    )
+    action = MacroAction(MacroActionKind.FIELD_MOVE, "fly:viridian_city")
+    if allowed:
+        assert _port(world).execute(action).destination_map == 1
+    else:
+        with pytest.raises(Gen1FieldMoveError, match="protected"):
+            _port(world).execute(action)
+    assert world.flight_confirms == 1
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "departure",
+        "other_destination",
+        "other_map",
+        "clear",
+        "extra",
+        "missing",
+        "badge_change",
+    ],
+)
+def test_arrival_event_allowance_cannot_hide_other_story_changes(fault):
+    before = replace(_raw(), badge_bits=127)
+    events = bytearray(before.event_flags)
+    events[5] = 1
+    after = replace(before, map_id=1, event_flags=bytes(events))
+    if fault == "other_map":
+        after = replace(after, map_id=3)
+    if fault == "clear":
+        before, after = (
+            replace(before, event_flags=bytes(events)),
+            replace(after, event_flags=bytes(320)),
+        )
+    if fault == "extra":
+        events[6] = 1
+        after = replace(after, event_flags=bytes(events))
+    if fault == "missing":
+        after = replace(after, event_flags=None)
+    if fault == "badge_change":
+        after = replace(after, badge_bits=255)
+    assert fly_story_events_preserved(
+        before, after, 3 if fault == "other_destination" else 1, departure=fault == "departure"
+    ) is (fault is None)
 
 
 def test_observed_fly_selects_holder_and_destination_and_confirms_only_once():

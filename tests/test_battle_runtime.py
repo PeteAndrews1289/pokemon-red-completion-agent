@@ -330,19 +330,21 @@ def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
 
 def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, first_party_hp=19)
             runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
 
@@ -361,24 +363,26 @@ def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None
     assert result.final_state.first_party_pp == (34, 30, 30, 11)
     assert result.actions_executed == 7
     assert result.frames_executed == 606
-    assert confirmations == 3
+    assert acknowledgements == 3
 
 
 def test_selected_spend_survives_post_battle_pp_restoration() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=0, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, battle_state=0, first_party_pp=(35, 30, 30, 11))
 
     runtime.on_action = advance
@@ -397,19 +401,21 @@ def test_selected_spend_survives_post_battle_pp_restoration() -> None:
 
 def test_selected_spend_still_rejects_in_battle_pp_restoration() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, first_party_pp=(35, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
 
@@ -1431,6 +1437,23 @@ def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
+
+
+def test_sleep_recovery_can_return_control_between_suppressed_turns() -> None:
+    runtime = MainMenuSleepRecoverySimulation()
+    observed = []
+
+    def policy(raw):
+        observed.append((raw.first_party_status, raw.first_party_pp))
+        assert runtime.menu.phase is BattleMenuPhase.MAIN
+        return 1
+
+    final = run_adaptive_trainer_battle(runtime, runtime, policy,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_sleep_turns_per_decision=1))
+    assert final.battle_state == 0
+    assert any(status in (1, 2) for status, _ in observed)
+    assert all(pp == (35, 30, 30, 11) for status, pp in observed if status)
 
 
 def test_adaptive_controller_recovers_sleep_applied_after_move_selection() -> None:

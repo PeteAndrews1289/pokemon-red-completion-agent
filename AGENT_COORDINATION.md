@@ -1,26 +1,20 @@
 # Agent roles and coordination
 
-Pete owns requirements, acceptance and GitHub publication. Codex owns local implementation,
-verification and handoffs. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
+Pete owns acceptance and GitHub publication; Codex owns the single active lane.
+No other worker is active. Read MISSION.md, NORTH_STAR.md,
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
-- Pete explicitly authorized the September 19 lifecycle checkpoint and GitHub merge.
-  This is not standing permission for future pushes, releases or merges.
-- Pete requests Astra; older Sol recommendations are superseded.
-- When useful and requested, Gemini3.8 Flash High uses Antigravity, not the Flash CLI.
-- Flash/Claude are bounded read-only reviewers, not mandatory execution gates.
+Earned DEVELOPMENT stage285/853a38dd is safe and fully healed at
+ViridianGym45,(y17,x16),seven badges,26627cash,story28/36,17local registrations.
+Gameplay stopped; next unused stage286. The one-battle routing packet is consumed.
+Cartridge-derived forced-motion paths and hazard-aware feasibility are implemented.
+Stage284's precombat failure is retained; stage285 won1365cash in9model choices,
+including one faint. Native healing restored the party and verified Viridian anchor1.
+[Evidence](docs/evidence/red-forced-motion-gym-2026-09-22.json).
 
-## Current assignment
-
-The separate retained-state continuation completed five J decisions and a natural loss,
-followed by verified blackout and field control. The original funding attempt remains failed;
-its no-faints verifier is unchanged. No reset, fit or collection gain.
-[Evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json).
-
-Next: return to useful Model137 collection/resource options at the exact main-save terminal.
-Its six-member party is outside J's current small-party scope; do not silently promote it.
-No blind refit, consumed replay, full run or source factory.
-Model137, Red 96/124 and fresh acceptance 0/5 unchanged. Gameplay stopped.
-No external reviewer used or pending review gate.
-
-[Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
+Giovanni is not yet safely reachable. Next: a prospectively bounded forward gym
+clearance packet, observing remaining trainers and reassessing the leader after wins.
+Preserve existing overall gym caps, frozen actor and80choices/battle.
+No more preparation: three reserves are39 and the automatic review requested only
+recovery, now completed. No replay, save edit, authority promotion, refit or cap refill.
+No GitHub push without Pete's explicit instruction.

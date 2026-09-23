@@ -1,0 +1,162 @@
+{
+  "actions": 2007,
+  "audit_frames": 0,
+  "battles": [
+    {
+      "decisions": 14,
+      "metrics": {
+        "attack_turn_utility_sum": 8.060156338506854,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 143,
+        "party_pp_spent": 7,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6840375,
+        "policy_latency_ns_mean": 2751476.1428571427,
+        "policy_latency_ns_min": 715458,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "7dcd3e877ef1f5c6439479f469d77e4e7d2b7fd26c7ebd1be05aa24239581ab6",
+      "payout": 960,
+      "review": {
+        "attempt_budget_refilled": false,
+        "battle_outcome": "won",
+        "combat_levels": [
+          34,
+          46,
+          35,
+          35
+        ],
+        "helper_sha256": "c295f5247996ca0d7ed584f6dabd9b504a1890d9a88603046e707619955e9497",
+        "launches_training": false,
+        "learned_preparation": false,
+        "next_action": "recover",
+        "observed_opponents": 3,
+        "opposition_level": 32,
+        "reason": "level preparation not needed",
+        "resume_after": "existing bounded preparation targets and recovery verified",
+        "schema": "pokemon.story-preparation-review.v1",
+        "source_sha256": "bcc84d41f6ae947d5fd480e6116f19d5cfa652c90112f07036e59d182e0b7cf8",
+        "targets": {}
+      },
+      "stage": 151
+    },
+    {
+      "decisions": 20,
+      "metrics": {
+        "attack_turn_utility_sum": 11.694305694305694,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 77,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7021417,
+        "policy_latency_ns_mean": 2880137.4,
+        "policy_latency_ns_min": 660750,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "1fe070c2d075467ecc3fd1e8da72cd7525b0389cc7d79e0a9e52c13e45caf8a5",
+      "payout": 4059,
+      "review": {
+        "attempt_budget_refilled": false,
+        "battle_outcome": "won",
+        "combat_levels": [
+          34,
+          46,
+          35,
+          35
+        ],
+        "helper_sha256": "6f2956e7d076341f7da81e2081babe116080e68d2938bdff7f96095b62535211",
+        "launches_training": false,
+        "learned_preparation": false,
+        "next_action": "recover",
+        "observed_opponents": 4,
+        "opposition_level": 37,
+        "reason": "level preparation not needed",
+        "resume_after": "existing bounded preparation targets and recovery verified",
+        "schema": "pokemon.story-preparation-review.v1",
+        "source_sha256": "491c638f4a59a0f04b7970e9160bc0e200bfa7314aca6bce220bf17375d9e351",
+        "targets": {}
+      },
+      "stage": 154
+    }
+  ],
+  "cash": 12202,
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "decisions": 34,
+  "envelope_sha256": "6025b65a76aabd7c6511c0125968a2c525940b010de72382424a9c9d9ea204e6",
+  "fits": 0,
+  "frames": 396720,
+  "fully_restored": true,
+  "giovanni_defeated": true,
+  "limitation": "Learned battle execution only; navigation, readiness and recovery remain disclosed support.",
+  "map_id": 235,
+  "net_income": 5019,
+  "new_registrations": 0,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    73,
+    143,
+    91,
+    97
+  ],
+  "party_levels": [
+    34,
+    46,
+    35,
+    35
+  ],
+  "position": [
+    12,
+    7
+  ],
+  "purchases": 0,
+  "recomputed_choices": {
+    "attack": 17,
+    "control": 20,
+    "switch": 14
+  },
+  "recovery_event_delta": {
+    "after": true,
+    "before": false,
+    "event": 919,
+    "name": "EVENT_SILPH_CO_RECEPTIONIST_AT_DESK"
+  },
+  "recovery_independently_verified": true,
+  "recovery_reference": "https://github.com/pret/pokered/blob/master/scripts/SilphCo1F.asm",
+  "replayed_battles": 0,
+  "retained_failed_approach": 153,
+  "retained_recovery_assertion": 155,
+  "sales": 0,
+  "schema": "pokemon.red.prepared-silph-finish.v1",
+  "seconds": 16.933409876190126,
+  "teacher_battle_choices": 0,
+  "terminal_sha256": "d244bc62392b73328745ee40301041e9da804b2d736e33f830f382c62239e0b4",
+  "terminal_stage": 155,
+  "tests_passed": 522
+}

@@ -105,7 +105,7 @@ def test_complete_option_checks_every_quantum(tmp_path, monkeypatch, source, tar
     assert retained == ([1, 2, 3] if mode in {"complete", "bounded"} else [])
 
 
-@pytest.mark.parametrize("limit", [0, 129, True, 1.0])
+@pytest.mark.parametrize("limit", [0, 513, True, 1.0])
 def test_complete_option_rejects_invalid_quantum_bounds(tmp_path, limit):
     runtime, _, _ = runtime_fixture(tmp_path)
     with pytest.raises(ValueError, match="quantum limit"):

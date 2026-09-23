@@ -1,10 +1,15 @@
 from types import SimpleNamespace
 
+import pytest
+
 import pokemon_red_completion.red_autonomous_league_funding as funding
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind
 
 
-def test_qualified_renewable_income_becomes_one_verified_model_option(monkeypatch):
+@pytest.mark.parametrize("replacement_cost", [0, 300, 1500, 3000])
+def test_qualified_renewable_income_becomes_one_verified_model_option(
+    monkeypatch, replacement_cost,
+):
     qualification = SimpleNamespace(
         expected_net_income=1500,
         public_dict=lambda: {"schema": "qualification"},
@@ -21,6 +26,7 @@ def test_qualified_renewable_income_becomes_one_verified_model_option(monkeypatc
         frames=500,
         ending_money=1728,
         observed_net_income=1500,
+        field_item_replacement_cost=replacement_cost,
         public_dict=lambda: {"schema": "execution"},
     )
     monkeypatch.setattr(funding, "bind_red_league_funding_execution", lambda *_: league)
@@ -40,7 +46,9 @@ def test_qualified_renewable_income_becomes_one_verified_model_option(monkeypatc
     report = binding.execute()
     assert report.actions_executed == 40
     assert report.frames_executed == 500
-    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    assert binding.verify(report).status is (
+        GoalDecisionOutcome.SUCCEEDED if replacement_cost < 1500 else GoalDecisionOutcome.FAILED
+    )
 
 
 def test_unqualified_league_income_is_not_advertised(monkeypatch):

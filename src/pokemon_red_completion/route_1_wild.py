@@ -119,6 +119,7 @@ class Route1WildFleeEvidence:
     control_ready: bool
     run_attempts: int
     stabilization_frames: int
+    hp_scope: str = "first_party_member"
 
     @property
     def verified(self) -> bool:
@@ -163,6 +164,7 @@ class Route1WildFleeEvidence:
             "stabilization_frames": self.stabilization_frames,
             "status_preserved": self.status_preserved,
             "verified": self.verified,
+            "hp_scope": self.hp_scope,
         }
 
 
@@ -592,6 +594,14 @@ def flee_wild(
 
     if encounter.battle_state != 1 or encounter.map_id != expected_map_id:
         raise error_type(f"{route_name} flee requires an active wild battle on its route.")
+    if encounter.first_party_hp == 0 and trainer_handoff is None:
+        from .wild_party_flee import flee_with_fainted_lead
+
+        return flee_with_fainted_lead(
+            executor, reader, encounter, expected_map_id=expected_map_id,
+            route_name=route_name, stabilization_frames=stabilization_frames,
+            error_type=error_type,
+        )
     expected_position = (encounter.player_x, encounter.player_y)
     expected_party = encounter.party_species_ids
     expected_level = encounter.first_party_level

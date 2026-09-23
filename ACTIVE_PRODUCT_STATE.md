@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Return to Model137 main-save collection/resource choices. Battle lifecycle is verified by a retained natural loss; no broad trainer refit/review cycle.
+- Next decision: Stage285/853a38dd safe fullHP/PP ViridianGym45,(17,16),26627cash,seven badges,story28/36,local17. One gym win/9choices/1365cash;one faint recovered,Viridian anchor1 verified. Spinner path and trainer-hazard feasibility repaired. Giovanni still needs gym clearance. Original one-battle packet consumed; prospectively bound next forward work without replay, refit or preparation refill. See docs/evidence/red-forced-motion-gym-2026-09-22.json.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Complete learned trainer battles through faint/replacement and verified field handoff without conflating a battle outcome with strict funding acceptance. |
-| Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified; Red 96/124. J owned five continuation decisions including forced replacement; verified loss and normal blackout. No full-player promotion; main six-member party exceeds J small-party scope. |
+| Reusable capability | Connect learned story combat and retained native recovery; identify the battle/preparation capability that blocks required bosses. |
+| Authority now | Additive selector independently audited:72/128wins versusK66,349decisions versus276,zero illegal/flagged choices. Original efficiency gate still failed. Pete explicitly accepts narrow story DEVELOPMENT use; no broad promotion or more status fits. Ordinary K/Model141 unchanged. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A useful main-save goal cannot be offered or completed from real resources without replay, hidden teacher substitution or exceeding qualified battle scope. |
+| Cheapest falsifier | A disjoint bounded TRAIN/development comparison still fails multi-opponent attrition despite the proposed smallest preparation or learned-policy change. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,26 +60,26 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-19-battle-lifecycle-continuation** · status **closed** · evidence [qualification](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json)
+**2026-09-22-forced-motion-gym** · status **closed** · evidence [outcome question](docs/evidence/red-forced-motion-gym-2026-09-22.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A faint no longer strands general learned battle completion. The retained loss restores ordinary field control without laundering failed funding into success. |
-| Learning output | Five retained DEVELOPMENT decisions; zero new fit examples or fits. J remains 318 TRAIN contexts and all main collection counters are unchanged. |
-| Authority delta | J chose one forced replacement and four attacks; natural loss then automatic cartridge blackout. No teacher fallback, high-level goal selection or full-player promotion. |
-| Transfer result | Same boot3100 origin, newly exercised natural forced replacement; no independent root. Verified normal blackout to map15, HP28/51, cash853, target undefeated, registrations preserved. Main save reopened read-only at96/124, six members,198cash. |
-| Blocker | Main-save options remain constrained by 198 cash and paid Safari access; its six-member party is outside J one-to-three-member qualification. Profitable learned funding is not established. |
-| Decision | Close the lifecycle seam and retain the loss. Return to useful model-selected collection/resource work; preserve the original funding failure. Publish and merge the explicitly authorized checkpoint only after checks pass. |
-| Next session | Astra High, Fast off: authenticate main Model137 terminal, rebuild useful funding/admission or non-Safari options, and retain one model-selected goal outcome. Qualify six-member J scope if needed before its use. Estimate 45–90 minutes; no full run. |
-| Next falsifier | The exact main-save terminal cannot expose a genuinely executable useful choice under available resources and qualified actor scope. |
-| Stop condition | One declared continuation consumed: 55 actions / 5424 frames, cumulative 302 / 24708 with parent. Natural loss, exact endpoint reopened, no reset or fit. Gameplay stopped. |
+| Product alignment | Connect earned preparation and learned battle execution to Red progression while retaining costs, failed routes and explicit support authority. |
+| Learning output | One earned gym win in9model choices,1365cash earned,one faint recovered,zero invalid actions or teacher combat choices. Native Viridian recovery anchor verified. Stage284 precombat failure retained;294targeted tests passed. Zero fits, goals or registrations. |
+| Authority delta | Nine new frozen additive battle choices; routing, opponent selection and healing remain support. No new goal authority, fit or promotion. |
+| Transfer result | ROM-free changed-layout motion/hazard tests and three-map cartridge decoding; no independent native transfer or complete spinner-chain execution qualification. One earned DEVELOPMENT battle is not generalization. |
+| Blocker | Giovanni remains unreachable under trainer-hazard constraints. Shared forced-motion routing is implemented and a forward gym win/recovery succeeded; further clearance is needed. |
+| Decision | Retain safe stage285 and completed preparation. Prospectively bound forward gym clearance with the frozen battler; reassess leader reachability after each win. No replay or refit. |
+| Next session | Resume stage285 under a new bounded gym-clearance packet, preserve existing total contract/loss caps, and reassess Giovanni after each earned win and recovery. |
+| Next falsifier | No safe route to another unbeaten trainer, a mismatched forced-motion endpoint, or unresolved loss/recovery stops forward clearance. Preserve the terminal without replay. |
+| Stop condition | Original one-fresh-battle packet consumed. Next prospective clearance budget30-60minutes with80choices per battle and existing overall caps; stop unsupported mechanics or unsafe unresolved recovery. No preparation refill, replay, fitting, save edits or publication. |
 
 ### Stop conditions
 
 - Model120 freeze seed120091401 is consumed without a retained choice and seed120091402 is consumed by its retained resupply success; never retry, replay, infer, substitute or re-execute either identity.
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
-- Frozen J may own explicitly bound ordinary trainer battles in bounded development; default wild-capture and Elite Four controllers remain unchanged. No teacher fallback, DEVELOPMENT fitting, consumed replay, full-player promotion or full run.
+- Frozen J (1-3 own members) or exact receipt-qualified K (1-6) may own explicitly bound supported ordinary trainer battles in bounded development. Default wild-capture and Elite Four controllers remain unchanged. No teacher battle fallback, DEVELOPMENT fitting, consumed replay, full-player promotion or full run.
 - Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.
 - Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.
 - Authenticated train roots may reset only under a prospectively bounded curriculum. The four retired training roots and all eight reset trials are now consumed under their exact plan; preserve provenance, exclusions and terminals. Already-opened development, sealed Red and benchmark roots may never be relabeled for fitting.

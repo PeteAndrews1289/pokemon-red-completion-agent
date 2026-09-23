@@ -385,6 +385,7 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         directional_tiles,
         automatic_tiles,
     )
+    graph = _without_inert_interior_warps(graph, terrain_tiles, automatic_tiles)
     graph = _with_warp_arrivals(graph, terrain_tiles, door_tiles(rom))
     verify_against_encounter_reads(
         reachable=set(graph),
@@ -393,6 +394,30 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         fishable=set(fishing_tables(rom).by_map),
     )
     return graph
+
+
+def _without_inert_interior_warps(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    automatic_tiles: Mapping[int, frozenset[int]],
+) -> dict[int, MapNode]:
+    """A header row on ordinary indoor floor is not an automatic teleporter.
+
+    Preserve directional boundary exits and raw destination indices. Only
+    remove proposed on-entry interior transitions whose underlying tile does
+    not satisfy the engine's automatic-warp/door table. No map identity list.
+    """
+    projected = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+        passages = tuple(
+            p for p in node.passages
+            if (p.kind not in {PassageKind.WARP, PassageKind.RETURN} or p.at is None
+                or node.tileset in OUTSIDE_TILESETS or p.exit_action is not None
+                or tiles[p.at[0]][p.at[1]] in automatic_tiles[node.tileset])
+        )
+        projected[map_id] = replace(node, passages=passages)
+    return projected
 
 
 def _with_warp_arrivals(
@@ -955,6 +980,9 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
         },
         outside_nodes=frozenset(map_id for map_id, node in graph.items() if node.is_outside),
         warp_locations={map_id: node.warp_locations for map_id, node in graph.items()},
+        warp_triggers={map_id: tuple(p.at for p in node.passages
+                                    if p.kind is not PassageKind.CONNECTION and p.at is not None)
+                       for map_id, node in graph.items()},
         warp_arrivals=(
             {map_id: node.warp_arrivals or () for map_id, node in graph.items()}
             if all(qualified)

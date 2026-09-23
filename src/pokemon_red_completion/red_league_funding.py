@@ -56,6 +56,7 @@ class RedLeagueBattleQuote:
                 "damage-bounded-zero-item",
                 "bounded-critical-risk",
                 "ordinary-bounded-healing",
+                "frozen-k-development",
             }
             or type(self.maximum_full_restores) is not int
             or type(self.maximum_critical_exposures) is not int
@@ -249,27 +250,48 @@ _LEAGUE_RESET_EVENT_INDICES = (
 )
 
 
-def projected_fresh_league_events(events: bytes) -> tuple[bytes, bool]:
-    """Project Indigo lobby's reset for one exact blackout-retained prefix.
+def projected_fresh_league_events(
+    events: bytes, *, challenge_started: bool | None = None,
+) -> tuple[bytes, bool]:
+    """Project a cartridge lobby reset, never modify live events.
 
     A loss after Lance returns the player to a Center while the five Elite Four
     flags remain set. Entering Indigo Plateau's lobby clears that completed
     prefix before the next challenge. Accept only the complete pre-Champion
-    prefix observed after that cartridge-native loss; arbitrary partial event
-    combinations remain ineligible.
+    prefix observed after that cartridge-native loss in the legacy interface.
+    Explicitly observed reset-latch callers also admit valid shorter prefixes.
+    Arbitrary partial event combinations remain ineligible.
     """
 
     if type(events) is not bytes:  # noqa: E721
         raise RedLeagueFundingError("League funding requires immutable event flags")
+    if challenge_started is not None and type(challenge_started) is not bool:
+        raise RedLeagueFundingError("League reset latch must be observed boolean")
     consumed = tuple(event_flag_is_set(events, flag) for flag in _LEAGUE_EVENTS)
-    if not any(consumed):
+    if not any(consumed) and challenge_started is None:
         return events, False
-    if consumed != (True, True, True, True, True, False):
+    # A truthful defeated prefix plus the observed cartridge reset latch is
+    # sufficient. No flag is written: the executor must observe the actual
+    # lobby reset and compare the complete event array before any battle.
+    prefixes = {
+        (True, False, False, False, False, False),
+        (True, True, False, False, False, False),
+        (True, True, True, False, False, False),
+        (True, True, True, True, True, False),
+    }
+    if any(consumed) and not (
+        (challenge_started is None and consumed == (True, True, True, True, True, False))
+        or (challenge_started is True and consumed in prefixes)
+    ):
         raise RedLeagueFundingError("save is not at a fresh postgame League boundary")
     projected = bytearray(events)
-    for event in _LEAGUE_RESET_EVENT_INDICES:
+    # Source: IndigoPlateauLobby_Script. Victory Road's boulder is always
+    # cleared; the inclusive 0x8e0..0x8ff range only with the reset latch.
+    indices = (_LEAGUE_RESET_EVENT_INDICES if challenge_started is None else
+               ((0x917,) + (tuple(range(0x8E0, 0x900)) if challenge_started else ())))
+    for event in indices:
         projected[event // 8] &= ~(1 << (event % 8))
-    return bytes(projected), True
+    return bytes(projected), bytes(projected) != events
 
 
 def _room_quote(
@@ -474,6 +496,8 @@ def qualify_red_league_funding(
     observation: RedGoalObservation,
     reader: PokemonRedStateReader,
     world: StrategicScenarioRouteWorld,
+    *,
+    learned_development: bool = False,
 ) -> RedLeagueFundingQualification:
     """Prove a rematch-ready save, an exit, Fly access, entry, and five quotes."""
 
@@ -490,7 +514,11 @@ def qualify_red_league_funding(
         or "story:victory_road_cleared" not in observation.game_state.facts
     ):
         raise RedLeagueFundingError("save is not at a fresh postgame League boundary")
-    projected_events, reset_stale_events = projected_fresh_league_events(raw.event_flags)
+    projected_events, reset_stale_events = projected_fresh_league_events(
+        raw.event_flags,
+        challenge_started=(reader.read_league_challenge_started()
+                           if learned_development else None),
+    )
     if not int(raw.badge_bits or 0) & int(Badge.THUNDER):
         raise RedLeagueFundingError("League funding requires observed Fly permission")
     try:
@@ -562,7 +590,10 @@ def qualify_red_league_funding(
         last_outside_map=_INDIGO_TOWN,
         occupied=world.object_blockers[supply_route.terminal_map],
     )
-    supply = _plan_supply(raw.player_money, raw.bag_items, supply_route)
+    # This actor exposes attack/switch only. No item purchase, liquidation or
+    # deterministic healing fallback may be smuggled into its qualification.
+    supply = (RedLeagueSupplyPlan(supply_route, (), 0) if learned_development
+              else _plan_supply(raw.player_money, raw.bag_items, supply_route))
     try:
         entry = entry_world.plan_feasible_to_map(supplied, int(MapId.LORELEIS_ROOM))
     except RoutePlanningError as error:
@@ -593,12 +624,15 @@ def qualify_red_league_funding(
             objective,
             quote,
             recovery_controller=(
+                "frozen-k-development" if learned_development else
                 "bounded-critical-risk"
                 if objective == "defeat_lance"
                 else "ordinary-bounded-healing"
             ),
-            maximum_full_restores=0 if objective == "defeat_lance" else 1,
-            maximum_critical_exposures=2 if objective == "defeat_lance" else 0,
+            maximum_full_restores=0 if learned_development or objective == "defeat_lance" else 1,
+            maximum_critical_exposures=(
+                2 if not learned_development and objective == "defeat_lance" else 0
+            ),
         )
         for index, (objective, quote) in enumerate(zip(objectives, quotes, strict=True))
     )

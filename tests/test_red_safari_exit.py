@@ -14,8 +14,10 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_safari_exit import (
+    RedSafariDepartureInterruptionHandler,
     RedSafariExitDialogueHandler,
     normalize_active_safari_exit_plan,
+    safari_departure_within_steps,
 )
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
@@ -23,6 +25,31 @@ from pokemon_red_completion.route_executor import (
     TraversalSnapshot,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
+
+
+@pytest.mark.parametrize("remaining,expected", [(19, False), (20, True), (0, False)])
+def test_departure_respects_paid_step_budget_and_escape_headroom(remaining, expected):
+    reader = SimpleNamespace(read_safari_session_state=lambda: SimpleNamespace(
+        in_safari_zone=True, safari_game_over=False, safari_steps=remaining))
+    plan = SimpleNamespace(steps=tuple(SimpleNamespace(source_map=m) for m in
+                                     (220, 220, 220, int(MapId.SAFARI_ZONE_GATE), 7)))
+    assert safari_departure_within_steps(plan, reader) is expected
+
+
+def test_departure_recovery_selects_safari_run_only_inside_paid_session():
+    active = [True]
+    reader = SimpleNamespace(read_safari_session_state=lambda: SimpleNamespace(
+        in_safari_zone=active[0]))
+    calls = []
+    fallback = SimpleNamespace(handle=lambda event: calls.append("ordinary"))
+    handler = RedSafariDepartureInterruptionHandler(object(), object(), reader, fallback)
+    handler.safari_handler = SimpleNamespace(handle=lambda event: calls.append("safari_run"))
+    wild = SimpleNamespace(interruption="wild_battle")
+    handler.handle(wild)
+    handler.handle(SimpleNamespace(interruption="scripted_dialogue"))
+    active[0] = False
+    handler.handle(wild)
+    assert calls == ["safari_run", "ordinary", "ordinary"]
 
 
 def _with_event(flags: bytes, event: EventFlag, enabled: bool) -> bytes:
@@ -271,4 +298,3 @@ def test_active_safari_exit_is_bounded_when_dialogue_never_settles():
     with pytest.raises(RouteExecutionError, match="within its bound"):
         scene.handler.handle(scene.interruption)
     assert len(scene.actions.actions) == 4  # one cursor correction, then three confirms
-

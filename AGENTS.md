@@ -54,6 +54,10 @@ Replace the relevant current handoff/roadmap sections in place. Keep current ent
 under200lines; put detailed measurements in one dated work-session report. Preserve old
 reports in `docs/history/` or Git, clearly labeled historical, with working relative links.
 Current counters belong to the active-state source and evidence, not copied daily logs.
+The enduring project history lives in `docs/chronicle/`, separately from replaceable
+status summaries. Preserve dated chapters and raw narrative archives; append a new
+chapter or explicit correction instead of replacing the history with the latest result.
+Before substantial video-narrative rewrites, preserve the prior edition in history.
 Run `tests/test_documentation_surface.py` with the existing documentation checks. Never
 weaken its size limits to accommodate another status dump. Documentation and CI are not
 model progress, and an archived report cannot authorize gameplay.

@@ -39,6 +39,19 @@ def native_encounter_tables(monkeypatch):
     )
 
 
+@pytest.mark.parametrize("limit", [1, 128, 129, 512])
+def test_declared_evolution_work_size_is_bounded(limit):
+    from pokemon_red_completion.red_native_boxed_evolution import validate_native_evolution_quanta
+
+    assert validate_native_evolution_quanta(limit) == limit
+
+
+@pytest.mark.parametrize("limit", [0, 513, True, 1.5, "512", None])
+def test_native_binder_rejects_invalid_work_size_before_runtime_access(limit):
+    with pytest.raises(ValueError, match="quantum limit"):
+        bind_native_boxed_evolution(None, None, maximum_quanta=limit)
+
+
 @pytest.mark.parametrize(
     "failure", [None, "unsupported_route", "transport", "position", "party", "money"]
 )
@@ -301,8 +314,9 @@ def test_native_execution_rechecks_finisher_capability_before_any_input(tmp_path
 
 
 @pytest.mark.parametrize("trainee_hp", [40, 1])
+@pytest.mark.parametrize("reserve_stop", [False, True, 512])
 def test_partial_evolution_resumes_in_party_without_repeating_storage(
-    tmp_path, monkeypatch, trainee_hp
+    tmp_path, monkeypatch, trainee_hp, reserve_stop
 ):
     from types import SimpleNamespace
 
@@ -349,14 +363,22 @@ def test_partial_evolution_resumes_in_party_without_repeating_storage(
         lambda **kwargs: pytest.fail("resume must not repeat storage"),
     )
     monkeypatch.setattr(module, "wild_tables", lambda rom: {int(MapId.ROUTE_11): [(10, 0x21)]})
-    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"test"))
+    runtime.evolution_stop_requested = (lambda: True) if reserve_stop else None
+    native = bind_native_boxed_evolution(
+        runtime, SimpleNamespace(rom=b"test"),
+        maximum_quanta=512 if reserve_stop == 512 else 128 if reserve_stop else 1,
+    )
     actions = CountingExecutor(_ActionDelegate())
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert offer.binding is not None
     report = offer.binding.execute()
     assert report.evidence["evolution_partial"] is True
-    assert report.actions_executed == (1 if trainee_hp == 40 else 2)
-    assert calls[0]["allow_direct_evolution"] is True
+    assert report.evidence["settlement_reserve_reached"] is bool(reserve_stop)
+    assert report.actions_executed == (0 if reserve_stop else 1 if trainee_hp == 40 else 2)
+    if reserve_stop:
+        assert not calls
+    else:
+        assert calls[0]["allow_direct_evolution"] is True
     assert offer.binding.verify(report).status.value == "failed"
     assert (
         native.provider_for(GoalKind.EVOLVE_SPECIES, actions)
@@ -412,6 +434,59 @@ def test_low_level_recipient_can_share_experience_without_a_direct_fighting_venu
         native.adapter.observe()
     )
     assert offer.binding is not None
+
+
+@pytest.mark.parametrize("stop", ["quanta", "reserve", "wall", "no_progress"])
+def test_extended_evolution_batch_keeps_progress_and_stop_guards(tmp_path, monkeypatch, stop):
+    import pokemon_red_completion.red_native_boxed_evolution as module
+    from pokemon_red_completion.red_team_training import EvolutionTrainingPaused
+
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    source = red_internal_species_id(77)
+    reader.raw = replace(
+        reader.raw, party_species_ids=(*reader.raw.party_species_ids[:5], source),
+        party_levels=(63, 55, 55, 55, 55, 33),
+    )
+    reader.boxes = replace(
+        reader.boxes,
+        boxes=(RedCurrentBoxState(0, (source,), (30,)), *reader.boxes.boxes[1:]),
+    )
+    calls = []
+
+    def train(*args, **kwargs):
+        calls.append(kwargs)
+        raise EvolutionTrainingPaused(4, 0)
+
+    monkeypatch.setattr(module.context, "run_red_team_balancing", train)
+    monkeypatch.setattr(module, "restore_native_center_party", lambda *args: 0)
+    monkeypatch.setattr(module, "prepare_native_training_center", lambda *args: None)
+    monkeypatch.setattr(module, "PokemonRedPartyReader", lambda _: SimpleNamespace(
+        read=lambda: SimpleNamespace(members=(SimpleNamespace(
+            species_id=source, experience=100 if stop == "no_progress" else 100 + len(calls),
+        ),)),
+    ))
+    monkeypatch.setattr(module, "time", SimpleNamespace(
+        monotonic=lambda: 601 if stop == "wall" and len(calls) >= 130 else 0,
+    ))
+    runtime.evolution_stop_requested = lambda: stop == "reserve" and len(calls) >= 130
+    native = bind_native_boxed_evolution(
+        runtime, SimpleNamespace(rom=b"test"), maximum_quanta=129 if stop == "quanta" else 512,
+    )
+    actions = CountingExecutor(_ActionDelegate())
+    if stop in {"wall", "no_progress"}:
+        with pytest.raises(module.context.RedGoalContextError, match=(
+            "wall limit" if stop == "wall" else "no verified XP progress"
+        )):
+            native.party_level_evolution_executor(source, red_internal_species_id(78), actions)
+        assert len(calls) == (130 if stop == "wall" else 1)
+    else:
+        report = native.party_level_evolution_executor(
+            source, red_internal_species_id(78), actions,
+        )
+        assert len(calls) == (129 if stop == "quanta" else 130)
+        assert report.evidence["evolution_partial"] is True
+        assert report.evidence["settlement_reserve_reached"] is (stop == "reserve")
+        assert report.evidence["completed_training_battles"] == 4 * len(calls)
 
 
 def test_profile_transition_preserves_every_other_skill_and_rejects_wrong_evolution(tmp_path):

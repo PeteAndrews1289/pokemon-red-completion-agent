@@ -1,0 +1,120 @@
+{
+  "schema": "pokemon.red.evolution-settlement-session.v1",
+  "session": "2026-09-20-rhydon-settlement",
+  "source_commits": [
+    "7e563eda",
+    "499fa73275a4e6fc7c1026575219ba5ddf2723f9"
+  ],
+  "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+  "start": {
+    "registered": 102,
+    "specimens": 75,
+    "cash": 17968,
+    "rhyhorn_level": 35,
+    "state_sha256": "e894d750581dbc9d6f64887c3bca4232e0646c26426f5fdf152f8db95f94b001",
+    "battle_state": 1
+  },
+  "end": {
+    "registered": 103,
+    "remaining_native": 21,
+    "specimens": 75,
+    "cash": 17968,
+    "rhydon_level": 42,
+    "state_sha256": "b85788b6f079ba91f057096d92d57390afc173add5fa652b501e7cda355e1fc6",
+    "map_id": 22,
+    "position_yx": [
+      6,
+      0
+    ],
+    "battle_state": 0,
+    "input_ready": true,
+    "held_inputs": 0,
+    "party_levels": [
+      42,
+      62,
+      37,
+      58,
+      85,
+      34
+    ],
+    "party_hp": [
+      168,
+      164,
+      131,
+      125,
+      287,
+      110
+    ]
+  },
+  "settlement": {
+    "run_id": "model137-evolution-battle-settlement-20260920-v1",
+    "outcome_sha256": "27d9e15c427e16d9518d3acae851d55f218b666d8e327a73f1a66390ca0b8063",
+    "plan_sha256": "12062bf0c800e164b1102c9e6190e75fa92ccc8c6a8c7ab3bb8105ebe5c1da6b",
+    "result_sha256": null,
+    "before": "e894d750581dbc9d6f64887c3bca4232e0646c26426f5fdf152f8db95f94b001",
+    "terminal": "38ae78c829ee7eddf2d70bd68b153a82826dbdcefd00736eacb75999f86cc65b",
+    "actions": 40,
+    "frames": 3540,
+    "verification": "defensive_escape",
+    "cash_spent": 0,
+    "party_hp_lost": 4,
+    "authority": "operator-authorized existing deterministic defensive escape",
+    "maximum_actions": 1000,
+    "maximum_frames": 120000
+  },
+  "continuation": {
+    "run_id": "model137-rhyhorn-reserve-continuation-20260920-v1",
+    "outcome_sha256": "1d1a5e979b72220080134f57fac3bc23e506c3614bf25df720b3c29382b6bf27",
+    "plan_sha256": "e3bba3d94d49aef710b17978a50f1c7c93e7adf48ea5eb02789eefcde750b891",
+    "result_sha256": "486558e4693f10c50227bbc874619ee1c3195f154bcd9897d2a81cf23bd8a00a",
+    "before": "38ae78c829ee7eddf2d70bd68b153a82826dbdcefd00736eacb75999f86cc65b",
+    "terminal": "b85788b6f079ba91f057096d92d57390afc173add5fa652b501e7cda355e1fc6",
+    "status": "complete",
+    "verification": "succeeded",
+    "actions": 23790,
+    "frames": 2001146,
+    "new_registration": "pokemon:national:112",
+    "new_model_queries": 0,
+    "maximum_actions": 30000,
+    "maximum_frames": 3000000,
+    "goal_configuration_fingerprint": "939792b9b64efd96fb65ee53e019c4ac316d5d9775f169e9f3d110193d5c1946"
+  },
+  "totals": {
+    "actions": 23830,
+    "frames": 2004686,
+    "cash_spent": 0,
+    "cash_earned": 0,
+    "new_model_decisions": 0,
+    "completed_prior_model_goals": 1,
+    "registrations_added": 1,
+    "fits": 0,
+    "failures": 0,
+    "operator_recovery_dispatches": 1,
+    "operator_continuation_dispatches": 1
+  },
+  "retained_previous_batch": {
+    "actions": 30000,
+    "frames": 2541318,
+    "failures": "Prior exhausted Rhyhorn goal and pre-choice menu failure remain unchanged.",
+    "combined_actions": 53830,
+    "combined_frames": 4546004
+  },
+  "engineering": {
+    "reserve": "Normal autonomous runtime retains1000actions/120000frames before new evolution work. Safe field-boundary checks propagate through the outer evolution loop; hard total/window/nested limits remain enforced.",
+    "escape_guard": "Parenthesized optional recipient exclusion so missing recipient cannot bypass health/status/level checks.",
+    "identity": "Original model goal plus exact failed and settled receipts required; state, resource, cost, choice and reserve-lineage mismatches rejected.",
+    "targeted_tests": 350,
+    "lint": "changed files passed",
+    "typing": "two changed evolution/training files passed with follow-imports=silent",
+    "registry": "regenerated and checked"
+  },
+  "verification": "Fresh read-only loads verified both earned terminals, exact local registrations, specimen counts, money, battle state, party levels/HP and no advanced frames or held inputs. All pinned inputs and original state hashes preserved.",
+  "limitations": [
+    "Native evolution completed before reserve threshold; forced reserve crossing is ROM-free tested, not yet native-qualified.",
+    "Defensive recovery and continuation were operator-dispatched; broad unattended restart remains disabled.",
+    "No new model fit, fresh-start acceptance, independent generalization or learned wild-battle promotion.",
+    "League income remains0/2clean profitable cycles; final Red acceptance0/5.",
+    "No cheats, rewind, substitute target, ROM/save edits, GitHub push or external agent use."
+  ],
+  "next": "Inspect the earned safe map22 menu at103/124 and17968cash, then allow up to3model-selected collection goals only if real alternatives exist. Preserve inherited reserve lineage and all costs. If offers are exhausted, identify the missing prerequisite capability without operator target substitution. No League prerequisite, fit or replay; reassess45–90minutes."
+}

@@ -276,6 +276,50 @@ def _report() -> SilphChapterReport:
     )
 
 
+@pytest.mark.parametrize("carried", [0, 3, 7, 12, 99])
+def test_silph_stock_aware_receipt_preserves_surplus_and_exact_cash(carried):
+    old = _report()
+    report = replace(old, hyper_potions_before_supply=carried,
+                     hyper_potions_remaining=max(7, carried),
+                     money_after=old.money_after + min(7, carried) * 1500)
+    assert report.passed
+    assert report.public_dict()["supply"]["hyper_potions_bought"] == max(0, 7-carried)
+    assert not replace(report, money_after=report.money_after + 1).passed
+    assert not replace(report, hyper_potions_remaining=report.hyper_potions_remaining-1).passed
+
+
+@pytest.mark.parametrize("carried", [0, 3, 7, 12])
+def test_silph_shop_buys_only_missing_potions(monkeypatch, carried):
+    bag = {ItemId.HYPER_POTION: carried} if carried else {}
+    monkeypatch.setattr(silph_module, "_bag", lambda _: bag)
+    monkeypatch.setattr(silph_module, "_money", lambda _: 20000)
+    pulses, purchases = [], []
+    monkeypatch.setattr(silph_module, "_pulse", lambda *a, **k: pulses.append(1))
+    monkeypatch.setattr(silph_module, "_close_menus", lambda *a: None)
+    monkeypatch.setattr(silph_module, "_buy_mart_item", lambda *a, **k: purchases.append(k))
+    addresses = {silph_module.RamAddress.PLAYER_FACING_DIRECTION: 8,
+                 silph_module.RamAddress.TOP_MENU_ITEM_X: 5,
+                 silph_module.RamAddress.TOP_MENU_ITEM_Y: 4}
+    reader = SimpleNamespace(read=lambda: SimpleNamespace(map_id=MapId.SAFFRON_MART,
+                                                         player_x=2, player_y=5))
+    emulator = SimpleNamespace(read_u8=lambda address: addresses[address])
+    silph_module._buy_supplies(None, reader, emulator, DEFAULT_SILPH_TIMING)
+    if carried >= 7:
+        assert not pulses and not purchases
+    else:
+        assert len(purchases) == 1
+        assert purchases[0]["quantity"] == 7-carried
+        assert purchases[0]["target_bag_quantity"] == 7
+
+
+def test_silph_surplus_boosters_do_not_invent_sale_income():
+    old = _report()
+    report = replace(old, x_special_before_supply=9, x_accuracy_before_supply=2,
+                     money_after=old.money_after+4*350+950)
+    assert report.passed
+    assert not replace(report, money_after=report.money_after+350).passed
+
+
 def test_silph_timing_is_positive_and_bounded() -> None:
     assert SILPH_PC_DEPOSIT_ITEMS == (
         ItemId.SS_TICKET,
@@ -306,8 +350,11 @@ def test_silph_mart_top_up_preserves_authenticated_carried_stock() -> None:
     assert _celadon_ice_beam_x_special_target(True) == X_SPECIAL_PURCHASE_QUANTITY
     assert _celadon_ice_beam_x_special_target(False) == 0
     assert _buy_silph_x_special.__kwdefaults__ == {
-        "x_special_target": SILPH_X_SPECIAL_SUPPLY_TARGET
+        "x_special_target": SILPH_X_SPECIAL_SUPPLY_TARGET,
+        "preserve_surplus": False,
     }
+    assert _mart_top_up_quantity(2, target=1, label="X Accuracy", preserve_surplus=True) == 0
+    assert _mart_top_up_quantity(9, target=4, label="X Special", preserve_surplus=True) == 0
 
 
 def test_celadon_ice_beam_capacity_reserves_supply_and_roof_slots() -> None:
@@ -370,6 +417,7 @@ def test_silph_money_contract_accounts_for_carried_x_accuracy() -> None:
     assert report.passed
     assert report.public_dict()["supply"] == {
         "hyper_potions_bought": 7,
+        "hyper_potions_carried_in": 0,
         "x_special_carried_in": 0,
         "x_accuracy_carried_in": 1,
         "used_by_rival_policy": 0,
@@ -1276,8 +1324,10 @@ def test_x_special_city_return_uses_verified_steps() -> None:
 
 def test_silph_first_floor_routes_delegate_the_doorway_step() -> None:
     assert SILPH_1F_TO_ELEVATOR[-1] == "right"
-    assert getsource(run_silph_chapter).count("_enter_silph_elevator(") >= 3
-    assert "Silph 1F elevator corridor" in getsource(run_silph_chapter)
+    navigation = getsource(run_silph_chapter) + getsource(silph_module._approach_first_silph_battle)
+    assert navigation.count("_enter_silph_elevator(") >= 3
+    assert "_approach_first_silph_battle(" in getsource(run_silph_chapter)
+    assert "Silph 1F elevator corridor" in navigation
     assert "return Silph 1F elevator corridor" in getsource(_return_center_to_seventh)
 
 
@@ -1507,6 +1557,7 @@ def test_silph_report_proves_required_story_and_terminal() -> None:
     assert report.passed
     assert report.public_dict()["supply"] == {
         "hyper_potions_bought": 7,
+        "hyper_potions_carried_in": 0,
         "x_special_carried_in": 0,
         "x_accuracy_carried_in": 0,
         "used_by_rival_policy": 0,

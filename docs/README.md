@@ -14,23 +14,28 @@ valuable evidence without remaining an instruction.
    Blue/shared memory, Crystal and later titles.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
-Model137 remains137examples/92successes/58economy-qualified; its main save is96/124 native
-registrations,74specimens and198cash. Frozen battler J is now opt-in at the main-player ordinary
-trainer entry. Its first integration goal failed after one faint; four decisions and the exact
-unfinished-battle state were retained. A separate continuation completed five J decisions and a
-verified loss/blackout, returning field control without reset. No fit, collection gain or fresh-run
-acceptance occurred. See the [checkpoint report](work-sessions/2026-09-19-battle-lifecycle-continuation.md).
+Current primary collection:109/124registrations,78specimens,11968cash; Model141 has
+141fitted outcomes/96successes/58economy-qualified outcomes. The separate earned story save
+has seven badges,28/36objectives and17local registrations. Its reserves are prepared; stage285
+is stopped healed inside Viridian Gym after routing repairs and one earned gym win.
+No fresh Red acceptance criterion has passed. Do not merge these saves or count game XP as
+a model fit. [Latest evidence](evidence/red-forced-motion-gym-2026-09-22.json).
 
 ## Reader-facing summaries
 
+- [Full chronological chronicle](chronicle/README.md) preserves the July-to-September
+  development arc in dated chapters; [source inventory](chronicle/SOURCE_INDEX.md) indexes
+  original archives, reports and revision-history availability.
 - [Architecture](architecture.md) explains the learned planner/battler and bounded skill hierarchy.
 - [Portfolio brief](portfolio-brief.md) is the short public explanation.
 - [AI Systems Specialist handoff](ai-systems-specialist-interview-handoff.md) is the detailed,
   interview-safe account of capabilities and limitations.
 - [Project narrative](project-narrative.md) and
-  [video outline](youtube-video-narrative.md) tell the development story without promoting planned
-  features to completed ones.
+  [video outline](youtube-video-narrative.md) introduce the story; the
+  [narration draft](chronicle/video-script-through-2026-09-22.md) tells it at greater length.
 - [Development infographic](development-roadmap.md) is the generated visual checklist.
+- [Research retrospective](research-retrospective.md) maps claims to evidence, negative results,
+  reproducibility limits and the controlled comparisons still needed for a possible paper.
 
 ## Evidence and history
 

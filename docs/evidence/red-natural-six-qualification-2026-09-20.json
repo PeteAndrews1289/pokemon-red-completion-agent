@@ -1,0 +1,476 @@
+{
+  "schema": "pokemon.red.natural-six-qualification.v1",
+  "session": "2026-09-20-natural-six-qualification",
+  "status": "passed_measured_natural_six_member_execution_gate",
+  "authorization": "Pete requested continuation until qualification and recovery where possible. Original 3700 retained; previously declared unstarted 3900 launched once. No replacement origins.",
+  "execution_commit": "72d814ce887fd1409f8e479c0246502d7ad6f78d",
+  "audit_commit": "a78a820f",
+  "verified_private_result_sha256": "fb278e6afcc3f7415f78b8272ea6ed1b9450b569b35ffec31586468e8eb623dd",
+  "models": {
+    "J": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+    "K": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472"
+  },
+  "qualified": true,
+  "checks": {
+    "K_late_slot_use_each_origin": true,
+    "K_win_each_origin": true,
+    "K_wins_no_regression": true,
+    "all_valid_retained_terminals": true
+  },
+  "totals": {
+    "J": {
+      "actions": {
+        "attack": 62,
+        "forced_switch": 15,
+        "switch_prompt": 0,
+        "voluntary_switch": 34
+      },
+      "cash_delta": 840,
+      "decisions": 111,
+      "faints": 15,
+      "hp_lost": 499,
+      "mean_attack_utility": -6.844998589552053,
+      "pp_spent": 41,
+      "wins": 4
+    },
+    "K": {
+      "actions": {
+        "attack": 49,
+        "forced_switch": 16,
+        "switch_prompt": 0,
+        "voluntary_switch": 34
+      },
+      "cash_delta": 840,
+      "decisions": 99,
+      "faints": 16,
+      "hp_lost": 497,
+      "mean_attack_utility": -6.377166682595722,
+      "pp_spent": 30,
+      "wins": 4
+    }
+  },
+  "sources": [
+    {
+      "boot": 3700,
+      "origin_sha256": "69c0a4cef85e2599da1285c65492dd22db402c8c3df9f70095f44563941eee20",
+      "first_party_ot_id": 31214,
+      "preparation_result_sha256": "0dfe5426acb73b88e23f1215ebf756851947f6596cf5eb14a2e39feb23a800e6",
+      "party": [
+        46,
+        41,
+        41,
+        74,
+        46,
+        8
+      ],
+      "levels": [
+        8,
+        6,
+        11,
+        8,
+        8,
+        16
+      ],
+      "hp": [
+        23,
+        21,
+        31,
+        24,
+        25,
+        49
+      ],
+      "cash": 1,
+      "preparation_cost": {
+        "frames": 119390,
+        "macros": 1700,
+        "seconds": 5.663451915141195
+      }
+    },
+    {
+      "boot": 3900,
+      "origin_sha256": "cfab4b26abe00934a61be22e3ec2802a373c4a8b801728a6f3db637cedbc5ecd",
+      "first_party_ot_id": 45646,
+      "preparation_result_sha256": "e5b8887e1e304f581b999549e7f7979fa354010d165dbc8e92cacc16b5f6ff22",
+      "party": [
+        41,
+        41,
+        41,
+        41,
+        41,
+        8
+      ],
+      "levels": [
+        10,
+        7,
+        6,
+        9,
+        8,
+        16
+      ],
+      "hp": [
+        29,
+        23,
+        20,
+        28,
+        26,
+        46
+      ],
+      "cash": 16,
+      "preparation_cost": {
+        "frames": 110904,
+        "macros": 1606,
+        "seconds": 5.6623814578633755
+      }
+    }
+  ],
+  "preparation": {
+    "origins": 2,
+    "prior3700_three_member_diagnostic_disclosed": true,
+    "preparation_rewinds": 0,
+    "new_boots_this_session": 1,
+    "memory_writes": 0,
+    "main_save_changes": 0,
+    "legacy_teacher_bootstrap": "Both origins retain disclosed teacher-directed short openings and one ordinary TM34 sale each. Only3900bootstrap ran this session. No sale in new preparation; not learned funding.",
+    "bootstrap3900": {
+      "frames": 340825,
+      "macros": 4715,
+      "seconds": 16.369767124997452
+    },
+    "continuation3700": {
+      "stages": 8,
+      "failed_stages": 3,
+      "frames": 119390,
+      "macros": 1700,
+      "purchased_balls": 6,
+      "spent_cash": 1200,
+      "catches": 3,
+      "balls_spent": 5,
+      "potions_spent": 6,
+      "cash_remaining": 1,
+      "balls_remaining": 3
+    },
+    "continuation3900": {
+      "stages": 9,
+      "failed_stages": 4,
+      "frames": 110904,
+      "macros": 1606,
+      "purchased_balls": 5,
+      "spent_cash": 1000,
+      "catches": 5,
+      "balls_spent": 14,
+      "cash_remaining": 16,
+      "balls_remaining": 0,
+      "encounters": 9,
+      "patrol_budget_charged": 323
+    },
+    "recovery": "All17stage parent receipts, final-state hashes and cumulative frame/action/time arithmetic independently authenticated; seven failed stages retained. Ordinary Centers healed actual HP/PP/status. No artificial money, levels or captures.",
+    "weakening_limitation": "Legacy wild weakening helper lost protected encounters during switch-back; observed incidental XP/evolution retained. Disabled on3900descendants; finished with ordinary balls. Conservative damage bound does not qualify the full helper. No deliberate extra leveling or claim of learned capture.",
+    "repairs": [
+      "Established field input timing",
+      "Leave arrival warp while reserving other warps and trainer lanes",
+      "Idempotent late-slot placement",
+      "Open shop before inspecting stale field cursor",
+      "Cumulative encounter/step accounting and disabling unreliable weakening"
+    ]
+  },
+  "evaluation": {
+    "cells": 8,
+    "independent_upstream_origins": 2,
+    "timings": [
+      0,
+      4
+    ],
+    "models": [
+      "J",
+      "K"
+    ],
+    "distinct_opponent_rosters": 1,
+    "opponent": {
+      "trainer_class": 203,
+      "trainer_set": 6,
+      "national_species": 35,
+      "level": 14
+    },
+    "cell_limits": {
+      "decisions": 80,
+      "frames": 120000,
+      "macros": 5000,
+      "seconds": 45
+    },
+    "prequery_amendment": "Initial160decision/240000frame plans failed action-free preflight; narrowed to existing DEVELOPMENT80/120000 limits before any query. Models, sources, schedule and pass criteria unchanged.",
+    "all_cells_consumed": true,
+    "replays": 0,
+    "source_loads": 8,
+    "model_decisions": 210,
+    "teacher_choices": 0,
+    "invalid_actions": 0,
+    "event_count": 841,
+    "completed_event_chains": 8,
+    "elapsed_seconds": 16.50842162501067,
+    "J": {
+      "frames": 160780,
+      "macros": 1880,
+      "wall_seconds": 7.973051209002733,
+      "mean_policy_ms": 0.8107657567567568
+    },
+    "K": {
+      "frames": 142414,
+      "macros": 1669,
+      "wall_seconds": 7.049814499914646,
+      "mean_policy_ms": 0.7333766868686868
+    },
+    "postprocessing": "Original summary failed on sorting null active slot after battle exit. Original eight outcomes, logs and endpoints unchanged. Read-only reaggregation ignores only null slot; preserves original failed summary separately.",
+    "original_failed_summary_sha256": "5e8d0dfc7d015728c890b48bb4fb02038e61e32881b6cbec1668cc766b6615f2",
+    "execution_freeze_sha256": "6a878225b3ebb3fea92f3f867fc4c5a326ac173fa4e1d428d9bf46e011f09958",
+    "audit_frames": 0,
+    "audit_actions": 0,
+    "postbattle_recovery_performed": false
+  },
+  "cells": [
+    {
+      "boot": 3700,
+      "timing": 0,
+      "arm": "J",
+      "outcome_sha256": "0e2c39ccc2a99fdb937edd14495c46a3cc3f7128bd373226cbef17738ba749f8",
+      "endpoint_sha256": "4b4d7c3852a764f7d9f02359c76963f33ca3dc21ffd65edd630e72cf7c46d603",
+      "events": 107,
+      "terminal_event_chain_sha256": "20bc7622fde13029760746c1828d7fbac4cd78c98663f78d7a99828d348042be",
+      "decisions": 27,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        0,
+        7,
+        0,
+        0,
+        43
+      ]
+    },
+    {
+      "boot": 3700,
+      "timing": 0,
+      "arm": "K",
+      "outcome_sha256": "32437e376694d3c08a82a9fb2fb47e1bd96af20a3b6ea1c71c7a2f1cff3cb4d3",
+      "endpoint_sha256": "e8dceab1af8725fcc6e53d861d47c6114cb45322a065e2f12123e8635c0251ca",
+      "events": 103,
+      "terminal_event_chain_sha256": "2d4e8e94b37a00fa6129e1cb872cf807991c73f9e3a92bbd5868e5382b92fb95",
+      "decisions": 26,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        0,
+        5,
+        0,
+        0,
+        43
+      ]
+    },
+    {
+      "boot": 3700,
+      "timing": 4,
+      "arm": "K",
+      "outcome_sha256": "5e547db70cee6590d9712d20309c0217b4323eaa9690bfc714cd308db64fed91",
+      "endpoint_sha256": "fbbca2aa6572b7475e2d16f6f7ef39b3c8154f77ce46ef3874910618ae1f4d79",
+      "events": 101,
+      "terminal_event_chain_sha256": "25657d625512235dbde0c4281c929dcfe12efe51dac99107d6eaf4fd4ee24d88",
+      "decisions": 25,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        0,
+        0,
+        12,
+        0,
+        49
+      ]
+    },
+    {
+      "boot": 3700,
+      "timing": 4,
+      "arm": "J",
+      "outcome_sha256": "dbf346a2e9134c0ddfe08ad79dea6f081e255767c227c81b29f97171b4be1536",
+      "endpoint_sha256": "3c7ac0dce7205231f07331fdd322fc4ddd425bce4b510f895865ccb4c97c0912",
+      "events": 146,
+      "terminal_event_chain_sha256": "4433385a6284405a6104b5faa4f41f8b0ee0f9c9fd66baefa22eabff60161f14",
+      "decisions": 36,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        5,
+        6,
+        0,
+        0,
+        49
+      ]
+    },
+    {
+      "boot": 3900,
+      "timing": 0,
+      "arm": "K",
+      "outcome_sha256": "78dbf1a392214d8f961961dc95ebff3d5931037d7fa0f495d2d10248fdba644c",
+      "endpoint_sha256": "74b6b923dbfa871aef8d79f9a6f5f5d30e021351dcd691ce978be9864e735af6",
+      "events": 75,
+      "terminal_event_chain_sha256": "ebcefdb3d30225cda9f4e36a9cccdcef0fb4908acb84663789c6a9f89007520e",
+      "decisions": 19,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        0,
+        0,
+        15,
+        0,
+        34
+      ]
+    },
+    {
+      "boot": 3900,
+      "timing": 0,
+      "arm": "J",
+      "outcome_sha256": "68614fef0feaee6194041095d3995a69c7ad3ed689ced03528a3c4c7a4a9fa5d",
+      "endpoint_sha256": "74b6b923dbfa871aef8d79f9a6f5f5d30e021351dcd691ce978be9864e735af6",
+      "events": 75,
+      "terminal_event_chain_sha256": "119ffd0170af5c0c088f689bccfda387d37e98b1f504ede8ac1bdabbf8518501",
+      "decisions": 19,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        0,
+        0,
+        0,
+        15,
+        0,
+        34
+      ]
+    },
+    {
+      "boot": 3900,
+      "timing": 4,
+      "arm": "J",
+      "outcome_sha256": "7915c88619c77c32fb3dbaf279099cc0ba805998ced8a0e4de657117019423ab",
+      "endpoint_sha256": "cdfb4f52e15305b65dfe9fb837ed87cfb6854241d1e0eb87f7fa8d9b4cf21ba3",
+      "events": 117,
+      "terminal_event_chain_sha256": "576b2e4c9f824488e2fa047c7fb90f547ad81a4c88a0715656b94e98ec342e09",
+      "decisions": 29,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        34
+      ]
+    },
+    {
+      "boot": 3900,
+      "timing": 4,
+      "arm": "K",
+      "outcome_sha256": "4aa953eaedb54d316e0261787b8272a11da5e44fa327a38a99cf2a69538c4405",
+      "endpoint_sha256": "cdfb4f52e15305b65dfe9fb837ed87cfb6854241d1e0eb87f7fa8d9b4cf21ba3",
+      "events": 117,
+      "terminal_event_chain_sha256": "702e7746c7bf2928fb5dbe0e3f9bdfacbffa0c2faf0ceb83896cee7c8406342b",
+      "decisions": 29,
+      "actual_slots": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cash_delta": 210,
+      "final_hp": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        34
+      ]
+    }
+  ],
+  "limitations": [
+    "Early-game own-six-member workload only; same level14 Clefairy opponent on both roots.",
+    "K4/4wins equals J4/4, not demonstrated superiority. K99vs111decisions and30vs41PP;16vs15faints and34voluntary switches each.",
+    "No no-faints funding pass; no profitable recovery cycle, League or fresh-run qualification.",
+    "Timing variants are clustered; source3700 previously had a smaller K diagnostic. No fitting DEVELOPMENT data.",
+    "No production promotion automatically follows this isolated execution result."
+  ],
+  "validation": {
+    "rom_free_battle_trainer_natural_tests_passed": 2403,
+    "integration_tests_skipped": 13,
+    "targeted_tests_passed": 134,
+    "counts_overlap": true,
+    "full_suite": false
+  },
+  "model_updates": 0,
+  "authority_promotions": 0,
+  "new_main_registrations": 0,
+  "main_model": 137,
+  "main_examples": 137,
+  "main_successes": 92,
+  "main_economy_qualified": 58,
+  "main_registrations": 96,
+  "native_target": 124,
+  "main_specimens": 74,
+  "main_cash": 198,
+  "main_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+  "main_save_changed": false,
+  "gameplay_running": false,
+  "github_pushed": false,
+  "next": "Close this qualification packet. No repeat cells or old-bank refits. Next90minute packet: bind exact K plus narrow qualification receipt to supported ordinary trainer execution; retain battle completion versus no-faints funding distinction, qualify required ledge approaches, then test one actual model-selected earning/spending opportunity. Do not silently promote to League or waive resource guards."
+}

@@ -1,0 +1,101 @@
+{
+  "admission_sha256": "15788e0395eb677b04f74f108d66277b8fdcce53e9058651051fb4bb063ad8ba",
+  "boss_attempts_launched": 0,
+  "cash_after": 4583,
+  "cash_before": 4583,
+  "envelope_sha256": "e9687ff827c5c61013e08395de6c0be3f4e5f4a219019a6e3c0e30e4277cb851",
+  "fits": 0,
+  "fully_restored": true,
+  "handoff": {
+    "actions": 199,
+    "frames": 6696,
+    "seconds": 0.5198240419849753
+  },
+  "learned_preparation": false,
+  "limitation": "Sequential development lineage; teacher owns preparation, venue, navigation and healing. XP is not a model fit or proof of boss victory.",
+  "native_audit_frames": 0,
+  "next_phase": "prepared-rival-center",
+  "origin_sha256": "32f2dcc8d0e937b4d70a5032258f5254aff57293c4d0fd8953dbb37df3e36380",
+  "outcomes": {
+    "nonwins": 10,
+    "wins": 349
+  },
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_after": 28,
+      "species_before": 28,
+      "specimen_ref": "red-preparation:adef77f9b5af6bb0d1c0cd30458270a543f97360875dde733f4016952ee0a377",
+      "xp_gained": 1188
+    },
+    {
+      "level_after": 35,
+      "level_before": 25,
+      "species_after": 64,
+      "species_before": 64,
+      "specimen_ref": "red-preparation:2331db8bb46d3e27884a90306334a1360398131419f821c3613fa6c0ff8125ff",
+      "xp_gained": 27176
+    },
+    {
+      "level_after": 34,
+      "level_before": 24,
+      "species_after": 118,
+      "species_before": 59,
+      "specimen_ref": "red-preparation:3d42aa81015287a9e3e445c9b1448e747270f3a538c1b0f29fe4b73eb8c57de4",
+      "xp_gained": 25192
+    },
+    {
+      "level_after": 34,
+      "level_before": 26,
+      "species_after": 104,
+      "species_before": 104,
+      "specimen_ref": "red-preparation:e9e995d42fd81f87197ea531ee82124de25b0250b1d1f02470b94da2f752946a",
+      "xp_gained": 23750
+    }
+  ],
+  "primary_collection_unchanged": true,
+  "prior_attempts_retained": 15,
+  "purchases": 0,
+  "ready_to_rejoin_story": true,
+  "sales": 0,
+  "schema": "pokemon.red.story-readiness-development.v1",
+  "story_objectives": 19,
+  "story_registrations_after": 16,
+  "story_registrations_before": 15,
+  "teacher_battle_choices": 0,
+  "terminal_sha256": "eb87398d8df9d595ad43aada007c1f649d67e2914f283495bf50630123742323",
+  "terminal_stage": 148,
+  "totals": {
+    "actions": 76975,
+    "attacks_reprojected": 718,
+    "battle_execution_elapsed_ns": 114442775223,
+    "controls_recomputed": 721,
+    "execution_seconds": 1258.996961293742,
+    "faints": 20,
+    "frames": 5012676,
+    "hp_lost": 6003,
+    "model_decisions": 1436,
+    "move_suppressed_or_failed": 13,
+    "outings": 75,
+    "policy_elapsed_ns": 1631113039,
+    "policy_latency_ns_max": 32888625,
+    "pp_spent": 705,
+    "recovered_execution_errors": 1,
+    "switches_recomputed": 718,
+    "thundershock_choices": 63
+  },
+  "private_audit_sha256": "a81029ff697c49bdda47b357be3b6a63036d99609cb9726d86b79bc4cdf88389",
+  "verification": {
+    "targeted_tests_passed": 1230,
+    "skipped": 1,
+    "old_rematches_rejected": 2,
+    "wrong_prepared_source_rejected": true,
+    "primary_registrations": 109,
+    "primary_target": 124,
+    "fresh_red_gates_passed": 0,
+    "fresh_red_gates_total": 5,
+    "gameplay_running": false
+  }
+}

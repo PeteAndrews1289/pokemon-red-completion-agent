@@ -1469,6 +1469,9 @@ def _run_wild_capture(
     expected_map: int,
     timing: FuchsiaTiming,
     party_before: tuple[int, ...],
+    *,
+    weakening_selector: Callable[[RawGameState], int | None] | None = None,
+    record_decision: Callable[[dict[str, object]], None] | None = None,
 ) -> tuple[RawGameState, int, int]:
     throws_used = 0
     recovery_items_used = 0
@@ -1531,6 +1534,20 @@ def _run_wild_capture(
                 _snorlax_capture_observation(raw, emulator, throws_used),
                 SNORLAX_CAPTURE_POLICY,
             )
+            selected = None
+            if (decision.directive is CaptureDirective.WEAKEN_TARGET
+                    and weakening_selector is not None):
+                selected = weakening_selector(raw)
+                if selected is None:
+                    # Opt-in capture guard abstains from potentially lethal damage.
+                    # Ordinary balls remain available; never substitute an attack.
+                    from .capture import CaptureDecision
+                    decision = CaptureDecision(
+                        CaptureDirective.THROW_BALL, "no proven nonlethal weakening move")
+            if record_decision is not None:
+                record_decision({"directive": str(decision.directive), "reason": decision.reason,
+                                 "throws_used": throws_used, "catcher_hp": raw.battler_hp,
+                                 "target_hp": raw.enemy_hp, "weakening_slot": selected})
             if decision.directive is CaptureDirective.WEAKEN_TARGET:
                 _navigate_battle_main(actions, menu.selected_main_command, 0)
                 _pulse(actions, MacroActionKind.CONFIRM, frames=120)
@@ -1551,7 +1568,11 @@ def _run_wild_capture(
                 raise FuchsiaChapterError(f"Snorlax capture stopped: {decision.reason}.")
             continue
         slot = menu.selected_move_slot
-        target_slot = _snorlax_move_slot(raw)
+        target_slot = (_snorlax_move_slot(raw) if weakening_selector is None
+                       else weakening_selector(raw))
+        if target_slot is None:
+            _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+            continue
         if slot == target_slot:
             _pulse(actions, MacroActionKind.CONFIRM, frames=timing.wait_frames)
         elif slot is None:

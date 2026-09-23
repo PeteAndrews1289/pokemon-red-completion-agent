@@ -6,6 +6,11 @@ import pytest
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleRuntimeTiming
 from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.red_learned_trainer import (
+    FROZEN_J_SHA256,
+    FROZEN_K_SHA256,
+    K_QUALIFICATION_SHA256,
+)
 from pokemon_red_completion.red_trainer_battle_lifecycle import (
     TrainerBattleLifecycleError,
     continue_learned_trainer_battle,
@@ -98,7 +103,60 @@ def fixture(outcome="won", fault=None):
             if fault == "blackout_money":
                 state.raw = replace(state.raw, player_money=1706)
 
-    return state, reader, SimpleNamespace(continue_battle=play), SimpleNamespace(execute=execute)
+    return state, reader, SimpleNamespace(continue_battle=play, model_sha256=FROZEN_J_SHA256,
+        qualification_sha256=None), SimpleNamespace(execute=execute)
+
+
+@pytest.mark.parametrize("count,qualified", [(3, True), (4, True), (6, True), (4, False)])
+def test_retained_k_party_scope_and_decision_remainder(count, qualified):
+    state, reader, battler, executor = fixture("unresolved")
+    state.raw = replace(state.raw, party_count=count, party_species_ids=(107,)*count,
+        party_hp=(28,)*(count-1)+(0,), party_max_hp=(28,)*count, party_status=(0,)*count)
+    battler.model_sha256 = FROZEN_K_SHA256
+    battler.qualification_sha256 = K_QUALIFICATION_SHA256 if qualified else None
+    calls = []
+    def play(_reader, _executor, **kwargs):
+        kwargs["decision_guard"](state.raw)
+        calls.append(kwargs["maximum_decisions"])
+        return SimpleNamespace(battle_won=False, stop_reason="decision_budget")
+    battler.continue_battle = play
+    kwargs = dict(trainer_identity=(230, 30, 4), defeated_event=8,
+        ordinary_victory_money=480, timing=BattleRuntimeTiming(), remaining_decisions=79)
+    if qualified:
+        result = continue_learned_trainer_battle(battler, reader, executor, **kwargs)
+        assert result.outcome == "unresolved" and calls == [79]
+    else:
+        with pytest.raises(TrainerBattleLifecycleError):
+            continue_learned_trainer_battle(battler, reader, executor, **kwargs)
+        assert not calls
+
+
+@pytest.mark.parametrize("fault", [None, "undeclared", "active", "event", "extra"])
+def test_story_rewards_only_after_verified_victory(fault):
+    state, reader, battler, executor = fixture()
+    battler.model_sha256 = FROZEN_K_SHA256
+    battler.qualification_sha256 = K_QUALIFICATION_SHA256
+    original = battler.continue_battle
+
+    def play(*a, **kw):
+        if fault == "active":
+            kw["decision_guard"](replace(state.raw, bag_items=((4, 3), (246, 1))))
+        result = original(*a, **kw)
+        state.raw = replace(state.raw, bag_items=((4, 3), (246, 2 if fault == "extra" else 1)),
+                            badge_bits=33,
+                            event_flags=bytes(4) if fault == "event" else state.raw.event_flags)
+        return result
+
+    battler.continue_battle = play
+    kwargs = dict(trainer_identity=(230, 30, 4), defeated_event=8,
+                  ordinary_victory_money=480, timing=BattleRuntimeTiming(), story_authority=True)
+    if fault != "undeclared":
+        kwargs.update(victory_items=((246, 1),), victory_badge_bits=32)
+    if fault:
+        with pytest.raises(TrainerBattleLifecycleError):
+            continue_learned_trainer_battle(battler, reader, executor, **kwargs)
+    else:
+        assert continue_learned_trainer_battle(battler, reader, executor, **kwargs).outcome == "won"
 
 
 def run(f):

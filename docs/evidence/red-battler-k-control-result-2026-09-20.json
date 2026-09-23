@@ -1,0 +1,88 @@
+{
+  "schema": "pokemon.red.battler-k-control-result.v1",
+  "session": "2026-09-20-battler-k-control-result",
+  "status": "accepted_train_candidate_and_paired_train_gameplay",
+  "fit_execution_commit": "e7cfd77d9e7dc61ad88d06767a4e02eb15c0b473",
+  "rollout_execution_commit": "57b2f74e0a76a1b94da342b0ad52c9ad9d9dab0b",
+  "baseline_J_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "candidate_K_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "target_audit": {
+    "existing_captures": 16,
+    "identical_observation_manifest_action_inventory_and_timing_schedule": true,
+    "old_continuation": "train-teacher-stat-damage-decline-optional-v1",
+    "new_continuation": "train-frozen-J-large-party-continuation-v1",
+    "old_turn_horizon": 40, "new_turn_horizon": 80,
+    "old_branches_terminal": 485, "old_max_observed_turns": 30,
+    "old_wins": 454, "old_losses": 31,
+    "new_branches_terminal": 485, "new_wins": 387, "new_losses": 98,
+    "whole_party_return_formula": "Unchanged v2 formula; both old and new targets reconstructed from authenticated executed branches with current extractor.",
+    "decision": "Teacher-continued and J-continued returns are different supervision questions for identical inputs. Supersede only these16labels in the new curriculum, preserving original targets and the rejected comparison as history. Different turn limits did not truncate either set; no sole-cause claim about continuation versus all runtime changes."
+  },
+  "retention": {
+    "policy": "Freeze J baseline plus1e-9 before fit. Unaffected groups keep exact old limits. Revised groups retain every case with16canonical targets, plus separately protected unchanged subsets; no masking unrelated regression with gains on replaced cases.",
+    "groups": {
+      "original44": 44, "retained52": 52, "prior48": 48, "late90": 90,
+      "policy16": 16, "new80-canonical": 80, "new80-nonoverlap": 64,
+      "terminal128-canonical": 128, "terminal128-nonoverlap": 112,
+      "all-nonoverlap": 302
+    },
+    "switch_and_composed_checks": 20, "all_passed": true,
+    "unrelated_cases_dropped": 0, "added_regret_slack": 0
+  },
+  "fit": {
+    "attempts": 1, "epochs_per_head": 2400, "learning_rate": 0.005,
+    "objective": "pairwise_regret", "head_order": ["switch", "control"],
+    "selected_switch_epoch": 0, "selected_control_epoch": 2400,
+    "move_head_changed": false, "switch_head_changed": false, "control_head_changed": true,
+    "before_composed_regret": 1.17423927, "after_composed_regret": 0.790966566,
+    "composed_regret_reduction_percent": 32.64008569565212,
+    "before_control_regret": 0.383272704, "after_control_regret": 0.0,
+    "unchanged_switch_regret": 1.048813593,
+    "unchanged_move_regret": 1.249199008,
+    "elapsed_seconds": 71.22040212503634,
+    "accepted_train_candidate": true,
+    "meaning": "Learns when to attack versus use the unchanged switch proposal. Zero control regret is on15measured TRAIN decisions under frozen-J continuation, not perfect battle knowledge."
+  },
+  "paired_gameplay_protocol": {
+    "classification": "TRAIN diagnostic, not independent or natural qualification",
+    "retained_five_member_variations": 8, "existing_train_origin_clusters": 4,
+    "exact_captures_in_fit": 0, "cells": 16,
+    "first_action_prescribed": false, "all_decisions_model_owned": true,
+    "arm_order": "J/K on even case indices, K/J on odd; all inputs frozen before any query",
+    "opening_idle_frames": 0, "maximum_decisions": 160, "maximum_frames": 240000,
+    "maximum_controller_macros": 5000, "maximum_cell_seconds": 45,
+    "maximum_campaign_seconds": 900, "fits_after_results": 0,
+    "gates": "All terminal and valid; K wins and mean return do not regress; strict gain in wins or faints or observed HP cost. Global stop on invalid/nonterminal/budget; no retries or substitutes."
+  },
+  "paired_gameplay": {
+    "J": {"wins": 8, "losses": 0, "decisions": 180, "faints": 11, "hp_lost": 1419,
+          "pp_spent": 101, "voluntary_switches": 29, "forced_switches": 11,
+          "frames": 227994, "mean_return": 8.609512953874999},
+    "K": {"wins": 8, "losses": 0, "decisions": 165, "faints": 5, "hp_lost": 1437,
+          "pp_spent": 92, "voluntary_switches": 28, "forced_switches": 5,
+          "frames": 210342, "mean_return": 9.29671894725},
+    "all_gates_passed": true, "invalid_actions": 0, "teacher_queries": 0,
+    "model_memory_writes": 0, "incomplete_decisions": 0,
+    "controller_macros": 5196, "summed_episode_wall_seconds": 23.25237337197177,
+    "campaign_elapsed_seconds": 25.87184474989772, "maximum_policy_latency_ms": 2.728125,
+    "cost_caveat": "Fewer faints, PP and decisions but18more observed HP lost. Not uniformly better: one case adds a faint. Laboratory terminal recovery can undercount final-turn resources; this is not sustainable-income evidence."
+  },
+  "verification": {
+    "targeted_rom_free_tests": 152, "mypy_source_files": 544, "full_suite_run": false,
+    "source_registry": "Unchanged source bundle verified; scripts do not change its src-only projection.",
+    "independent_read_only_audit": "Recomputed summary from all16episode files, verified event chains and terminal outcome digests, endpoint receipt digests and state hashes, released buttons, and exact head equality/difference against J. No replay or extra fit."
+  },
+  "hashes": {
+    "fit_plan": "bdea82c153a915c4392d40ac0942c261897cc555f08b688e7d3fbf9bba19ffed",
+    "audited_targets": "9e095beea9da94857ba2620c3965c1f51e874f0685fd18acd43629f0c8b76c1a",
+    "fit_result": "7e276a34f2658bc5fb5725e0b7b4010b5edbd26179fa7cf11cb7fa5dfe0176e0",
+    "rollout_plan": "26e32b445d7c781bfbe17e5706ea140dfdce0cc1c030a1162b28521dc3a35ddd",
+    "rollout_result": "c41eaf8f6080df871efa553aedc48adfcc1857fc58d30d8faf011d64b7ff46cc"
+  },
+  "accepted_weight_updates": 1, "new_physical_contexts": 0, "new_origins": 0,
+  "new_training_label_measurements": 0, "new_model_owned_gameplay_decisions": 345,
+  "production_authority_promotions": 0, "natural_full_party_qualified": false,
+  "new_registrations": 0, "main_save_changed": false, "gameplay_running": false,
+  "next": "Freeze K; no more fits or repeat diagnostics on these inputs. Prepare a bounded fresh natural six-member workload with real captures/levels/moves and unchanged cash, then predeclare J/K comparison and outcome/cost acceptance. Known retained DEVELOPMENT inventory was consumed; main-save provenance references a training acquisition checkpoint and cannot be relabeled as unused independent evaluation. Avoid full-game teacher replay. Then scope-qualified funding integration, ledge approaches, earned/spent funds and renewable League income.",
+  "publication": "Local only; no GitHub push."
+}

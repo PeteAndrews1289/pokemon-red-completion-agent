@@ -41,7 +41,7 @@ from pokemon_red_completion.goal_manager_state import (
     party_readiness_satisfaction,
     party_safety_satisfaction,
 )
-from pokemon_red_completion.objective_skills import ObjectiveSkillRegistry
+from pokemon_red_completion.objective_skills import ObjectiveSkill, ObjectiveSkillRegistry
 from pokemon_red_completion.observation import (
     InputReadiness,
     ItemId,
@@ -50,7 +50,7 @@ from pokemon_red_completion.observation import (
     RedPokedexState,
 )
 from pokemon_red_completion.party import PartyObservation
-from pokemon_red_completion.quest import QuestGraph, Specialist
+from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
 from pokemon_red_completion.red_acquisition import (
     RED_ACQUISITION_CATALOG,
     RedAcquisitionCatalog,
@@ -369,7 +369,11 @@ class CallableRedGoalBindingProvider:
 
 @dataclass(frozen=True, slots=True)
 class RedStoryGoalBindingProvider:
-    """Bind one dependency-legal story objective below the goal manager."""
+    """Bind dependency-legal story alternatives below the goal manager.
+
+    ``offer`` preserves the legacy single-kind interface. Branch-aware menus
+    must use ``offers`` so registry ordering does not choose the destination.
+    """
 
     graph: QuestGraph
     skills: ObjectiveSkillRegistry
@@ -405,7 +409,29 @@ class RedStoryGoalBindingProvider:
                     else GoalUnavailableReason.TEMPORARILY_BLOCKED
                 ),
             )
-        objective, skill = executable[0]
+        return self._bind(observation, *executable[0])
+
+    def offers(self, observation: RedGoalObservation) -> tuple[RedGoalBindingOffer, ...]:
+        """Return every executable story binding without acting or ranking.
+
+        No unavailable placeholder is returned: callers retain their ordinary
+        kind-level masks separately. Private objective identities are executor
+        references, never policy features. Each binding owns its own verifier.
+        """
+        if not isinstance(observation, RedGoalObservation):
+            raise TypeError("observation must be a RedGoalObservation")
+        offers = []
+        for objective in self.graph.available_objectives(observation.game_state):
+            if self.skills.get(objective.id) is None:
+                continue
+            skill = self.skills.require_for(objective)
+            if skill.availability(observation.game_state).executable:
+                offers.append(self._bind(observation, objective, skill))
+        return tuple(offers)
+
+    def _bind(
+        self, observation: RedGoalObservation, objective: Objective, skill: ObjectiveSkill,
+    ) -> RedGoalBindingOffer:
         completed_before = self.graph.completed_ids(observation.game_state)
         budget = getattr(skill, "maximum_full_restores", 0)
         quote = None

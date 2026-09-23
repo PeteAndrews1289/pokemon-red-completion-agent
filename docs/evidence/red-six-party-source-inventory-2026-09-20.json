@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon.red-six-party-source-inventory.v1",
+  "session": "2026-09-20-six-party-source-inventory",
+  "status": "blocked_before_cartridge_execution",
+  "classification": "maintenance_not_learning",
+  "source_commit": "fa2fd2e8ac1cb0e33fcbed6a15a12f100a13a2fb",
+  "private_inventory_sha256": "8815963794839d78455e67ee946bae4c08d557557813b08140f5d42130a4a45e",
+  "scope": "Metadata from 110 retained trainer, fresh-source and battle-v2 stores; not a global search or state-byte authentication.",
+  "inventory": {
+    "capture_manifests_parsed": 589,
+    "unique_declared_state_hashes": 588,
+    "train_manifests": 559,
+    "development_manifests": 30,
+    "runner_plans": 508,
+    "runner_plans_with_output": 506,
+    "development_manifests_without_identified_blockers": 0,
+    "development_manifests_in_previously_used_ancestry_clusters": 30,
+    "development_manifests_with_unresolved_legacy_ancestry": 24
+  },
+  "consumption_check": "All five DEVELOPMENT ancestry clusters have a prior referenced run with an existing event-log verification receipt reporting complete and run_finished. This corroborates prior use, not a gameplay success claim or a fresh verification of the entire event chain.",
+  "factory_blocker": {
+    "spec": "BattlePracticeSpec rejects every non-TRAIN partition.",
+    "receipt": "Red practice materialization labels its receipt TRAIN and assisted-train capture identities.",
+    "test": "Existing factory suite: 17 passed, including explicit DEVELOPMENT rejection.",
+    "consequence": "Existing factory cannot supply assisted DEVELOPMENT pilot cases without an explicit protocol and implementation change. Do not relabel TRAIN captures or remove the guard silently."
+  },
+  "gameplay_actions": 0,
+  "state_payloads_opened": 0,
+  "roms_opened": 0,
+  "model_queries": 0,
+  "new_train_examples": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "decision": "Stop speculative campaign implementation. Request a bounded fresh-source and explicitly assisted held-out construction protocol, or a separately scoped natural-source preparation. Preserve existing consumption and TRAIN/DEVELOPMENT boundaries.",
+  "proposed_scope_not_authorized": {
+    "independent_upstream_origins": 2,
+    "episodes_total": 6,
+    "own_party_sizes_per_origin": [4, 5, 6],
+    "interpretation": "Six engineered scenarios in two ancestry clusters, not six independent natural battles.",
+    "constraints": [
+      "Fresh origins must be disjoint from fitting and prior evaluated ancestry; new filenames or timing variants do not establish this.",
+      "Freeze construction and outcome criteria before model evaluation; no fitting on the held-out results.",
+      "Main save unchanged; no full teacher route, retired supply retry or automatic production promotion.",
+      "Retain every loss, failure, intervention and actual cost; no replacement or retry."
+    ]
+  },
+  "publication": "Local only; no GitHub push or resumed overnight automation."
+}

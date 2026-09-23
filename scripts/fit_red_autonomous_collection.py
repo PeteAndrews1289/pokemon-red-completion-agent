@@ -75,6 +75,8 @@ def _mapping(value: object, subject: str) -> Mapping[str, object]:
 def _require_unassisted_goal_fit(
     plan: Mapping[str, object], provenance: Mapping[str, object]
 ) -> None:
+    if plan.get("integrated_play") is True or provenance.get("integrated_play") is True:
+        raise ValueError("integrated DEVELOPMENT play cannot enter the goal-value fit")
     if provenance.get("training_assistance") is not None or plan.get(
         "assisted_training_money"
     ) is not None:

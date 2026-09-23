@@ -146,9 +146,13 @@ def prepare_red_battle_scenario(
     initial_state: RawGameState,
     *,
     allow_no_attack: bool = False,
+    allow_stranded_accuracy_move: bool = False,
+    allow_status_moves: bool = False,
 ) -> PreparedRedBattleScenario:
     """Project an active MAIN-menu state and admit observable attack moves only."""
 
+    if type(allow_stranded_accuracy_move) is not bool or type(allow_status_moves) is not bool:
+        raise ValueError("stranded accuracy move opt-in must be boolean")
     if not isinstance(initial_state, RawGameState) or initial_state.battle_state not in {1, 2}:
         raise RedBattleScenarioError("battle scenario requires an active wild or trainer battle")
     snapshot = encoder.snapshot_from_raw(initial_state)
@@ -170,10 +174,35 @@ def prepare_red_battle_scenario(
         if slot_index >= len(moves) or moves[slot_index] == 0:
             raise RedBattleScenarioError("battle move identities do not match projected candidates")
         reason = red_battle_move_unsupported_reason(moves[slot_index], pp, catalog=catalog)
+        if (
+            allow_status_moves
+            and reason == "status_or_non_damaging_outside_segment"
+            and catalog.status_move_supported(pokemon_red_move_ref(moves[slot_index]))
+        ):
+            reason = None
         if reason is None and not legal:
             reason = "disabled_or_mechanically_illegal"
         reasons.append(reason)
         supported_values.append(reason is None)
+    if (
+        allow_stranded_accuracy_move
+        and not any(supported_values)
+        and initial_state.party_hp is not None
+        and not any(
+            hp > 0
+            for i, hp in enumerate(initial_state.party_hp)
+            if i != initial_state.active_party_index
+        )
+    ):
+        # A disabled last attack is NOT necessarily cartridge Struggle. Admit
+        # the visible legal Sand-Attack only in this explicit DEVELOPMENT seam.
+        # The frozen head chooses the move; no teacher fallback or trained-status claim.
+        for i, (slot, legal, pp) in enumerate(
+            zip(projected.slot_indices, projected.legal_mask, projected.current_pp, strict=True)
+        ):
+            if moves[slot] == 28 and legal and pp > 0:
+                supported_values[i] = True
+                reasons[i] = None
     supported = tuple(supported_values)
     features = BattleFeatureBatch(
         feature_names=projected.feature_names,
@@ -224,16 +253,27 @@ def project_red_battle_turn_outcome(
 
     battle_exited = after.battle_state == 0
     player_changed = after.active_party_index != before.active_party_index
+    final_player_hp = after.battler_hp
+    if battle_exited and after.active_party_index is None:
+        # Outside battle the observation adapter's battler convenience fields
+        # describe the party leader, not necessarily the member that acted.
+        # In particular, a living reserve can win while the leader is fainted.
+        slot = before.active_party_index
+        if slot is None or after.party_hp is None or not 0 <= slot < len(after.party_hp):
+            raise RedBattleScenarioError("terminal outcome lacks the acting party member HP")
+        final_player_hp = _required_hp(
+            after.party_hp[slot], name="terminal acting member HP", positive=False
+        )
     player_fainted = bool(
-        (after.battler_hp == 0)
+        (final_player_hp == 0)
         or (not battle_exited and player_changed and before.active_party_index is not None)
     )
     if player_fainted:
         player_damage = before_player_hp / before_player_max
-    elif after.battler_hp is None:
+    elif final_player_hp is None:
         raise RedBattleScenarioError("outcome lacks final player HP")
     else:
-        player_damage = max(0, before_player_hp - after.battler_hp) / before_player_max
+        player_damage = max(0, before_player_hp - final_player_hp) / before_player_max
 
     # This is an action-value outcome rather than causal damage attribution.
     # If a faster opponent faints from recoil or Selfdestruct before the

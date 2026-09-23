@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from .battle_practice_factory import (
+    AssistedDevelopmentPracticeSpec,
     BattlePracticeError,
     BattlePracticeSpec,
     PracticeMove,
@@ -36,6 +37,7 @@ from .red_battle_practice_cartridge import RedPracticeCartridge, RedPracticeSpec
 from .red_battle_scenario import prepare_red_battle_scenario
 from .red_pokedex import NICKNAME_LENGTH, PARTY_NICKNAMES_BASE
 from .red_trajectory import PokemonRedObservationEncoder
+from .scenario_lab import ScenarioPartition
 
 _BATTLE_MOVES = 0xD01C  # pinned wBattleMonMoves, mirrored in active party struct
 _BATTLE_PP = 0xD02D  # pinned wBattleMonPP, mirrored in active party struct
@@ -161,12 +163,13 @@ class RedPracticeReceipt:
     opponent_party: tuple[dict[str, object], ...] | None = None
     battle_kind: str = "wild"
     player_party_count: int | None = None
+    partition: ScenarioPartition = ScenarioPartition.TRAIN
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "schema": "pokemon.red.teacher-battle-practice-receipt.v1",
             "assistance": "isolated_teacher_memory_intervention",
-            "partition": "train",
+            "partition": self.partition.value,
             "source_state_sha256": self.source_state_sha256,
             "root_lineage_id": self.root_lineage_id,
             "configuration_sha256": self.configuration_sha256,
@@ -207,10 +210,41 @@ class RedPracticeReceipt:
             result["schema"] = "pokemon.red.teacher-battle-practice-receipt.v2"
             result["battle_kind"] = "trainer"
             result["player_party_count"] = self.player_party_count
+        if self.partition is ScenarioPartition.DEVELOPMENT:
+            result["schema"] = "pokemon.red.assisted-development-practice-receipt.v1"
+            result["fit_allowed"] = False
+            result["natural_battle_qualification"] = False
         return result
 
 
 def materialize_red_train_practice(
+    reader: PokemonRedStateReader,
+    memory: WritableRedMemory,
+    spec: BattlePracticeSpec,
+    *,
+    cartridge: RedPracticeCartridge | None = None,
+) -> RedPracticeReceipt:
+    if not isinstance(spec, BattlePracticeSpec) or spec.partition is not ScenarioPartition.TRAIN:
+        raise BattlePracticeError("TRAIN materialization requires a train specification")
+    return _materialize_red_practice(reader, memory, spec, cartridge=cartridge)
+
+
+def materialize_red_assisted_development_practice(
+    reader: PokemonRedStateReader,
+    memory: WritableRedMemory,
+    spec: AssistedDevelopmentPracticeSpec,
+    *,
+    cartridge: RedPracticeCartridge,
+) -> RedPracticeReceipt:
+    if (
+        not isinstance(spec, AssistedDevelopmentPracticeSpec)
+        or spec.partition is not ScenarioPartition.DEVELOPMENT
+    ):
+        raise BattlePracticeError("held-out materialization requires explicit development spec")
+    return _materialize_red_practice(reader, memory, spec, cartridge=cartridge)
+
+
+def _materialize_red_practice(
     reader: PokemonRedStateReader,
     memory: WritableRedMemory,
     spec: BattlePracticeSpec,
@@ -905,6 +939,7 @@ def materialize_red_train_practice(
         ),
         battle_kind=spec.battle_kind,
         player_party_count=after.party_count,
+        partition=spec.partition,
         party_reserves=(
             tuple(
                 {

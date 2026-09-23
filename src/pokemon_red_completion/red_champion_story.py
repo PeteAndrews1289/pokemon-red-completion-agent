@@ -36,6 +36,7 @@ from .observation import (
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
+from .red_learned_league import learned_league_controller
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
 from .red_trainer_healing import bag_after_full_restores, require_story_recovery_stock
@@ -100,6 +101,7 @@ class RedCartridgeChampionSkill:
     _prepared_budget: int | None = field(default=None, init=False)
     _prepared_controller: str = field(default="critical-inclusive", init=False)
     _prepared_rematch: bool = field(default=False, init=False)
+    _prepared_learned_controller: object | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if type(self.rematch) is not bool:  # noqa: E721
@@ -113,8 +115,14 @@ class RedCartridgeChampionSkill:
         before = self.runtime.adapter.observe()
         if self.recovery_controller not in {
             "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
+            "frozen-k-development",
         }:
             raise RedChampionStoryError("unsupported recovery controller")
+        learned = learned_league_controller(self.runtime)
+        if (self.recovery_controller == "frozen-k-development") != (learned is not None):
+            raise RedChampionStoryError("explicit learned League binding differs")
+        if learned is not None and self.maximum_full_restores:
+            raise RedChampionStoryError("learned League qualification is zero-item")
         require_story_recovery_stock(before.raw, self.maximum_full_restores)
         reader = self.runtime.reader
         historical_boundary = (
@@ -144,6 +152,10 @@ class RedCartridgeChampionSkill:
             raise RedChampionStoryError("final-story event is mismatched or already consumed")
         quote = trainer_party_quote(self.world.rom, script.opponent, script.trainer_set)
         party = (
+            plan_trainer_party(before.party, quote, minimum_hp_ratio=0.0,
+                               allow_fainted_reserves=True)
+            if learned is not None and learned.recovery_contract == "league-profit-recovery-v1"
+            else
             plan_trainer_party(before.party, quote, minimum_hp_ratio=0.0)
             if self.recovery_controller == "damage-bounded-zero-item"
             else plan_trainer_party(before.party, quote)
@@ -192,6 +204,7 @@ class RedCartridgeChampionSkill:
         self._prepared_budget = self.maximum_full_restores
         self._prepared_controller = self.recovery_controller
         self._prepared_rematch = self.rematch
+        self._prepared_learned_controller = learned_league_controller(self.runtime)
         return ObjectiveSkillAvailability(
             True, "Qualified final scene with observed party controls."
         )
@@ -209,6 +222,7 @@ class RedCartridgeChampionSkill:
             or self._prepared_budget != self.maximum_full_restores
             or self._prepared_controller != self.recovery_controller
             or self._prepared_rematch != self.rematch
+            or self._prepared_learned_controller is not learned_league_controller(runtime)
             or battle_policy_override_active()
             or reader.read_current_map_blocks() != prepared.blocks
             or runtime.emulator.pressed_buttons
@@ -243,11 +257,16 @@ class RedCartridgeChampionSkill:
         )
         prepare_trainer_lead(runtime, actions, prepared.party, current_quote=quote)
         baseline = reader.read()
+        recovery = (
+            self._prepared_learned_controller is not None
+            and self._prepared_learned_controller.recovery_contract == "league-profit-recovery-v1"
+        )
         guard = RecoveryRouteInterruptionHandler(
             actions,
             reader,
             tuple(baseline.party_species_ids or ()),
-            tuple(range(baseline.party_count or 0)),
+            tuple(i for i, hp in enumerate(baseline.party_hp or ()) if hp > 0)
+            if recovery else tuple(range(baseline.party_count or 0)),
             maximum_flees=0,
             maximum_trainer_battles=0,
         )
@@ -289,9 +308,13 @@ class RedCartridgeChampionSkill:
             controller = RedTrainerPartyController(
                 reader, runtime.emulator, maximum_full_restores=self.maximum_full_restores,
             )
+        controller = learned_league_controller(runtime) or controller
 
         def preserve(raw: RawGameState) -> None:
-            guard._require_preserved_living_slots(raw)
+            if recovery:
+                controller.require_party_hp(raw)
+            else:
+                guard._require_preserved_living_slots(raw)
             spent = (
                 controller.heals_claimed
                 if self.maximum_full_restores else 0
@@ -400,8 +423,11 @@ class RedCartridgeChampionSkill:
                     self.actions.actions_executed - initial_actions,
                     runtime.emulator.frame_count - initial_frames,
                     {
-                        "authority": "deterministic-trainer-controls",
-                        "learned_battle_authority": False,
+                        "authority": (
+                            "frozen-k-league-development" if self._prepared_learned_controller
+                            else "deterministic-trainer-controls"
+                        ),
+                        "learned_battle_authority": self._prepared_learned_controller is not None,
                         "rematch": self.rematch,
                         "concurrent_champion_and_hall_of_fame": True,
                         "bag_items_spent": (
@@ -410,6 +436,7 @@ class RedCartridgeChampionSkill:
                         ),
                         "maximum_full_restores": self.maximum_full_restores,
                         "battle_controller": (
+                            "frozen-k-development" if self._prepared_learned_controller else
                             "ordinary-bounded-healing"
                             if self.maximum_full_restores
                             and self.recovery_controller == "ordinary-bounded-healing"

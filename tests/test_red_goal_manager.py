@@ -13,6 +13,7 @@ from pokemon_red_completion.goal_manager import (
 )
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
+    ObjectiveSkillError,
     ObjectiveSkillExecution,
     ObjectiveSkillRegistry,
 )
@@ -188,6 +189,121 @@ class _Skill:
     def execute(self) -> ObjectiveSkillExecution:
         self.observer.state = self.observer.state.with_facts("story:second")
         return ObjectiveSkillExecution(4, 400, {"verified": True})
+
+
+@dataclass
+class _BranchSkill(_Skill):
+    blocked: bool = False
+    calls: int = 0
+
+    def availability(self, state: GameState) -> ObjectiveSkillAvailability:
+        return ObjectiveSkillAvailability(
+            not self.blocked and not self.expected_facts.issubset(state.facts), "branch boundary",
+        )
+
+    def execute(self) -> ObjectiveSkillExecution:
+        self.calls += 1
+        self.observer.state = self.observer.state.with_facts(*self.expected_facts)
+        return ObjectiveSkillExecution(4, 400, {"verified": True})
+
+
+def _branches(names=("second", "third"), reverse=False):
+    observer = _Observer()
+    branches = tuple(
+        Objective(name, name, frozenset({f"story:{name}"}), specialist,
+                  prerequisites=frozenset({"first"}), priority=index + 1)
+        for index, (name, specialist) in enumerate(zip(
+            names, (Specialist.BATTLE, Specialist.NAVIGATION), strict=True,
+        ))
+    )
+    graph = QuestGraph((tuple(_graph())[0], *branches))
+    skills = tuple(_BranchSkill(
+        observer, objective_id=obj.id, specialist=obj.specialist,
+        expected_facts=obj.completion_facts, max_actions=(index + 1) * 20,
+    ) for index, obj in enumerate(branches))
+    provider = RedStoryGoalBindingProvider(
+        graph, ObjectiveSkillRegistry(skills[::-1] if reverse else skills), observer,
+    )
+    observation = PokemonRedGoalStateAdapter(_Reader(), observer, graph).observe()
+    return observer, observation, provider, skills
+
+
+@pytest.mark.parametrize("names", [("second", "third"), ("west", "east")])
+@pytest.mark.parametrize("reverse", [False, True])
+def test_plural_story_bindings_execute_only_selected_branch(names, reverse):
+    observer, observation, provider, skills = _branches(names, reverse)
+    offers = provider.offers(observation)
+    assert [o.binding.binding_ref for o in offers] == [
+        f"pokemon.red:story:{name}" for name in names
+    ]
+    assert [skill.calls for skill in skills] == [0, 0]
+    assert provider.offer(observation).binding.binding_ref == offers[0].binding.binding_ref
+    execution = offers[1].binding.execute()
+    assert offers[1].binding.verify(execution).status.value == "succeeded"
+    assert offers[0].binding.verify(execution).status.value == "failed"
+    assert [skill.calls for skill in skills] == [0, 1]
+    assert f"story:{names[1]}" in observer.state.facts
+    # Completing one branch leaves the other, rather than an unavailable placeholder.
+    assert len(provider.offers(replace(observation, game_state=observer.state))) == 1
+    observer.state = GameState(GameMode.OVERWORLD, skills[1].expected_facts, "boundary")
+    assert offers[1].binding.verify(execution).status.value == "failed"  # lost prerequisite
+
+
+def test_plural_story_bindings_mask_prerequisites_availability_and_missing_capabilities():
+    observer, observation, provider, skills = _branches()
+    skills[0].blocked = True
+    assert len(provider.offers(observation)) == 1
+    skills[1].blocked = True
+    assert provider.offers(observation) == ()
+    assert (provider.offer(observation).unavailable_reason
+            is GoalUnavailableReason.TEMPORARILY_BLOCKED)
+    missing = replace(provider, skills=ObjectiveSkillRegistry())
+    assert missing.offers(observation) == ()
+    assert missing.offer(observation).unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    unstarted = replace(observation, game_state=GameState(GameMode.OVERWORLD, frozenset()))
+    assert provider.offers(unstarted) == ()
+    skills[0].blocked = False
+    skills[0].expected_facts = frozenset({"story:wrong"})
+    with pytest.raises(ObjectiveSkillError, match="contract"):
+        provider.offers(observation)
+    with pytest.raises(TypeError):
+        provider.offers(None)
+
+
+def test_plural_story_candidates_are_identity_free_and_non_equivalent():
+    from pokemon_red_completion.goal_manager_runtime import GoalBindingSet
+    from pokemon_red_completion.living_dex_goal_policy import project_living_dex_goal_candidate
+    from pokemon_red_completion.red_live_option_menu import (
+        build_red_live_option_set,
+        supplemental_live_option,
+    )
+
+    menus = []
+    for names, reverse in ((('second', 'third'), False), (('west', 'east'), True)):
+        _, observation, provider, _ = _branches(names, reverse)
+        observation = replace(observation, raw=replace(observation.raw, player_money=7511))
+        empty = RedGoalOpportunityEnumerator(()).enumerate(observation)
+        supplements = []
+        for offer in provider.offers(observation):
+            binding = offer.binding
+            opportunities = (binding.opportunity, *(o for o in empty.opportunities
+                                                    if o.kind is not binding.kind))
+            question = GoalBindingSet(opportunities, (binding,)).question(observation.situation)
+            candidate = project_living_dex_goal_candidate(
+                question, 0, feature_version=4, binding_ref=binding.binding_ref,
+            )
+            supplements.append(supplemental_live_option(binding, candidate))
+        options = build_red_live_option_set(
+            situation=observation.situation, binding_set=empty, supplements=tuple(supplements),
+            model_feature_version=4, ordering_seed_sha256="a" * 64,
+            economy_snapshot=observation.economy_snapshot(), target_cash=2300,
+        )
+        menus.append(options.menu)
+    assert len(menus[0].available_indices) == 2
+    first = tuple(c.features for c in menus[0].candidates)
+    second = tuple(c.features for c in menus[1].candidates)
+    assert first == second
+    assert first[0] != first[1]
 
 
 def test_red_enumerator_hard_masks_missing_skills_and_binds_story() -> None:

@@ -15,9 +15,10 @@ review history; their “latest” labels are relative to that archived sequence
 
 ### Current checkpoint — September19
 
-Pete authorized the frozen-battler lifecycle continuation, detailed roadmap and GitHub merge.
-Codex owns implementation and verification; no external reviewer was used or is pending.
-The actual next task is the battle-lifecycle/funding-contract boundary in the current handoff.
+Pete authorized bounded Flash implementation drafts in isolated worktrees, with Codex
+audit/integration afterward. The paid-admission funding draft is integrated locally after
+one correction; the next task is unpaid-gate entry in the current handoff. No live access
+or new publication is authorized by the draft loop; its exact task packet defines writes.
 The dated assignments below are history, not pending work. Future pushes still require Pete's
 explicit instruction; routine sessions do not require three-agent review or presentation updates.
 

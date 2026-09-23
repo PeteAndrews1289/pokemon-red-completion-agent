@@ -128,7 +128,8 @@ def trainer_matchup_candidates(
                    "opponent_level": opponent_level},
     }}, RED_BATTLE_CATALOG)
     return tuple(sorted(
-        (profile for profile in profiles if profile.hp_ratio >= minimum_hp_ratio
+        (profile for profile in profiles if profile.hp_ratio > 0
+         and profile.hp_ratio >= minimum_hp_ratio
          and not profile.has_status
          and profile.level_margin >= -0.05 and profile.offensive_power > 0),
         key=PartyMatchupProfile.switch_rank, reverse=True,
@@ -141,6 +142,7 @@ class RedTrainerPartyPlan:
     quote: TrainerPartyQuote
     matchups: tuple[tuple[PartyMatchupProfile, ...], ...]
     minimum_hp_ratio: float = 0.5
+    allow_fainted_reserves: bool = False
 
     @property
     def lead(self) -> RedCaptureLeadPlan:
@@ -150,6 +152,7 @@ class RedTrainerPartyPlan:
         """Recompute, so neither a stale roster nor a forged plan may swap."""
         if self != plan_trainer_party(
             party, quote, minimum_hp_ratio=self.minimum_hp_ratio,
+            allow_fainted_reserves=self.allow_fainted_reserves,
         ):
             raise RedTrainerPartyError("trainer party, roster or preparation plan changed")
 
@@ -163,6 +166,7 @@ class RedTrainerPartyPlan:
             "preferred_party_slots": [candidates[0].party_slot for candidates in self.matchups],
             "requires_lead_swap": self.lead.requires_swap,
             "minimum_hp_ratio": self.minimum_hp_ratio,
+            "allow_fainted_reserves": self.allow_fainted_reserves,
             "victory_predicted": False,
             "battle_execution_qualified": False,
             "training_examples": 0,
@@ -174,6 +178,7 @@ def plan_trainer_party(
     quote: TrainerPartyQuote,
     *,
     minimum_hp_ratio: float = 0.5,
+    allow_fainted_reserves: bool = False,
 ) -> RedTrainerPartyPlan:
     """Require at least one observed matchup per quoted opponent, then plan the lead.
 
@@ -182,7 +187,10 @@ def plan_trainer_party(
     """
     if not isinstance(quote, TrainerPartyQuote) or not 1 <= len(quote.party) <= 6:
         raise RedTrainerPartyError("trainer preparation requires a nonempty bounded roster")
-    if not isinstance(party, PartyObservation) or not party.members or party.fainted_count:
+    if type(allow_fainted_reserves) is not bool:
+        raise RedTrainerPartyError("fainted-reserve allowance must be boolean")
+    if (not isinstance(party, PartyObservation) or not party.members
+            or (party.fainted_count and not allow_fainted_reserves)):
         raise RedTrainerPartyError("trainer preparation requires a fully living party")
     matchups = tuple(
         trainer_matchup_candidates(
@@ -197,7 +205,7 @@ def plan_trainer_party(
         raise RedTrainerPartyError(
             f"no qualified offensive matchup for roster positions {uncovered}"
         )
-    return RedTrainerPartyPlan(party, quote, matchups, minimum_hp_ratio)
+    return RedTrainerPartyPlan(party, quote, matchups, minimum_hp_ratio, allow_fainted_reserves)
 
 
 def prepare_trainer_lead(

@@ -24,6 +24,19 @@ def line(*coordinates: tuple[int, int]) -> LocalGraph:
     return LocalGraph(edges)
 
 
+def test_inert_destination_row_does_not_block_local_transit():
+    local = line((1, 1), (1, 2), (1, 3))
+    graph = MacroGraph({1: ()}, warp_locations={1: ((1, 2),)}, warp_triggers={1: ()})
+    result = plan_route(graph, {1: local}, 1, (1, 1), 1, goal_at=(1, 3))
+    assert result.terminal_at == (1, 3)
+    assert graph.warp_locations[1] == ((1, 2),)
+    for triggers in (None, {1: ((1, 2),)}):
+        with pytest.raises(RoutePlanningError):
+            plan_route(MacroGraph({1: ()}, warp_locations=graph.warp_locations,
+                                  warp_triggers=triggers),
+                       {1: local}, 1, (1, 1), 1, goal_at=(1, 3))
+
+
 def test_a_connection_selects_a_reachable_exact_endpoint() -> None:
     unreachable = MacroTransition((0, 9), (7, 9), "up")
     reachable = MacroTransition((0, 2), (7, 2), "up")
