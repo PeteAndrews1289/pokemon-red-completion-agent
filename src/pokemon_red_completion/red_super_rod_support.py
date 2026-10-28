@@ -8,6 +8,7 @@ publishing no route identity or learner label.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import partial
 from typing import Protocol
@@ -28,7 +29,7 @@ from .observation import (
     ReadOnlyMemory,
 )
 from .red_resource_goal_router import _supported_plan, collection_field_capabilities
-from .route_executor import RouteExecutionLimits, execute_route
+from .route_executor import InterruptionHandler, RouteExecutionLimits, execute_route
 from .route_plan import RoutePlan, RoutePlanningError
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
@@ -257,7 +258,11 @@ class RedSuperRodSupportExecutor:
                 raise RedSuperRodSupportError("Super Rod interaction left its dialogue boundary")
             if self.actions.actions_executed - before_actions >= 1 + self.maximum_confirm_pulses:
                 break
-            self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
+            # Once the item is native-owned, B settles the remaining text
+            # without immediately speaking to the same NPC again at exit.
+            self.actions.execute(MacroAction(
+                MacroActionKind.CANCEL if observation.acquired else MacroActionKind.CONFIRM
+            ))
         raise RedSuperRodSupportError("Super Rod dialogue exceeded its confirmation bound")
 
     def _frame_count(self) -> int:
@@ -488,11 +493,18 @@ class RedRoutedSuperRodSupport:
     maximum_controller_actions: int = 6_000
     maximum_emulator_frames: int = 600_000
     route_limits: RouteExecutionLimits = SUPER_ROD_ROUTE_LIMITS
+    interruption_handler_wrapper: Callable[[InterruptionHandler], InterruptionHandler] | None = None
+    maximum_gift_confirm_pulses: int = 12
 
     def __post_init__(self) -> None:
+        if self.interruption_handler_wrapper is not None and not callable(
+            self.interruption_handler_wrapper
+        ):
+            raise TypeError("Super Rod interruption wrapper must be callable")
         if not isinstance(self.actions, CountingExecutor):
             raise TypeError("routed Super Rod support needs a CountingExecutor")
-        for name in ("maximum_controller_actions", "maximum_emulator_frames"):
+        for name in ("maximum_controller_actions", "maximum_emulator_frames",
+                     "maximum_gift_confirm_pulses"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:
                 raise ValueError(f"{name} must be a positive integer")
@@ -555,7 +567,7 @@ class RedRoutedSuperRodSupport:
                 allow_surf=True,
             ),
         )
-        interruptions = Gen1RouteInterruptionHandler(
+        interruptions: InterruptionHandler = Gen1RouteInterruptionHandler(
             self.actions,
             self.reader,
             maximum_flees=128,
@@ -563,6 +575,10 @@ class RedRoutedSuperRodSupport:
             stabilization_frames=180,
             route_name="Super Rod support transport",
         )
+        if self.interruption_handler_wrapper is not None:
+            interruptions = self.interruption_handler_wrapper(interruptions)
+            if not callable(getattr(interruptions, "handle", None)):
+                raise RedSuperRodSupportError("Super Rod wrapper returned no interruption handler")
         safari_exit = _SafariExitReceipt(0, 0, 0)
         if recovering_gate_transition:
             self._settle_active_safari_gate(initial_raw)
@@ -629,6 +645,7 @@ class RedRoutedSuperRodSupport:
             self.actions,
             self.reader,
             self.emulator,
+            maximum_confirm_pulses=self.maximum_gift_confirm_pulses,
         ).execute()
         actions = self.actions.actions_executed - before_actions
         frames = self.emulator.frame_count - before_frames
@@ -674,7 +691,7 @@ class RedRoutedSuperRodSupport:
         onward_plan: RoutePlan,
         field_actions: Gen1FieldMovePort,
         observer: Gen1TraversalObserver,
-        interruptions: Gen1RouteInterruptionHandler,
+        interruptions: InterruptionHandler,
     ) -> _SafariExitReceipt:
         """Accept Red's observed leave-early prompt before ordinary routing.
 

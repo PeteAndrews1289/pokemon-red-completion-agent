@@ -14,7 +14,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from pokemon_red_completion.local_router import LocalGraph, LocalPath
+from pokemon_red_completion.local_router import LocalEdge, LocalGraph, LocalPath
 from pokemon_red_completion.red_goal_context_profile import (
     bind_capture_fly_profile,
     bind_evolution_fly_profile,
@@ -204,6 +204,7 @@ def indoor_scene():
         plan_feasible_to_map=plan_feasible_to_map,
         replanner=lambda: lambda req: exit_plan if req.start.map_id == 89 else onward_plan,
     )
+    world.with_current_observation = lambda _reader: world
 
     runtime = SimpleNamespace(reader=game, emulator=game, adapter=adapter, profile=profile)
     router = RedResourceGoalRouter(
@@ -243,6 +244,325 @@ def test_indoor_departure_qualification_is_action_free_and_projection_never_exec
     assert indoor_scene.game.flight_confirms == 0
     assert indoor_scene.game.walk_calls == 0
     assert indoor_scene.provider_calls == []
+
+
+def test_walking_exit_quote_rejects_live_closed_passage_despite_static_route(indoor_scene):
+    scene = indoor_scene
+    static = scene.router.world
+    observed = SimpleNamespace(**vars(static))
+
+    def no_live_exit(*args, **kwargs):
+        raise RoutePlanningError("observed indoor passage is closed")
+
+    observed.plan_feasible_to_map = no_live_exit
+    observed.with_current_observation = lambda reader: observed
+    static.with_current_observation = lambda reader: observed
+
+    assert scene.bind() is None
+    assert scene.game.actions == []
+    assert scene.game.indoor_walk_calls == scene.game.flight_confirms == 0
+    assert scene.provider_calls == []
+
+
+def test_walking_exit_quote_uses_live_open_passage_despite_stale_closed_map(indoor_scene):
+    scene = indoor_scene
+    static = scene.router.world
+    observed = SimpleNamespace(**vars(static))
+    observed.with_current_observation = lambda reader: observed
+
+    def stale_closed_exit(*args, **kwargs):
+        raise RoutePlanningError("stale indoor passage is closed")
+
+    static.plan_feasible_to_map = stale_closed_exit
+    static.with_current_observation = lambda reader: observed
+
+    binding = scene.bind()
+    assert binding is not None
+    assert scene.game.actions == []
+    assert binding.verify(binding.execute()) == GoalVerification.succeeded()
+    assert scene.game.flight_confirms == 1
+    assert len(scene.provider_calls) == 1
+
+
+def _dig_scene(scene, monkeypatch, *, available=True, fault=None):
+    from pokemon_red_completion import red_indoor_collection_departure as departure
+    from pokemon_red_completion.red_dig_recovery import DigEscapePlan, RedDigRecoveryError
+
+    scene.router.runtime.collection_dig_departure = True
+    escape = DigEscapePlan(89, (6, 3), 0, (6, 9), 0, 22)
+    quotes, executions = [], []
+
+    def quote(world, reader, raw, start):
+        quotes.append((raw.map_id, start.at))
+        return escape if available else None
+
+    def execute(world, reader, emulator, actions, plan):
+        assert plan is escape
+        executions.append(plan)
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        if fault == "primitive":
+            raise RedDigRecoveryError("native escape resource check failed")
+        scene.game.stage = "field"
+        scene.game.raw = replace(
+            scene.game.raw, map_id=0, player_y=6, player_x=10 if fault == "landing" else 9,
+        )
+        if fault == "unavailable":
+            scene.game.available = ()
+        return {"verified_escape": True, "anchor_map": 0, "landing": [6, 9]}
+
+    scene.game.save_state_bytes = lambda: repr((scene.game.raw, scene.game.stage)).encode()
+    monkeypatch.setattr(departure, "plan_dig_escape", quote)
+    monkeypatch.setattr(departure, "execute_dig_escape", execute)
+    return quotes, executions
+
+
+def test_opted_in_dig_composes_only_the_selected_flight_and_fresh_destination(
+    indoor_scene, monkeypatch,
+):
+    scene = indoor_scene
+    quotes, executions = _dig_scene(scene, monkeypatch)
+    original = scene.router.world.plan_feasible_to_map
+
+    def no_indoor_walking(start, target, **kwargs):
+        assert start.map_id != 89, "escape must not quote the blocked door route"
+        return original(start, target, **kwargs)
+
+    scene.router.world.plan_feasible_to_map = no_indoor_walking
+    binding = scene.bind()
+    assert quotes == [(89, (6, 3))] and not executions and not scene.game.actions
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+    assert len(executions) == 1 and scene.game.indoor_walk_calls == 0
+    assert scene.game.flight_confirms == 1 and scene.provider_calls == [(89, 3, 3)]
+    assert report.actions_executed == scene.router.actions.actions_executed
+    assert report.frames_executed == scene.game.frame_count
+    with pytest.raises(RoutedSemanticGoalError, match="already executed"):
+        binding.execute()
+
+
+def test_unavailable_opted_in_escape_retains_ordinary_walking(indoor_scene, monkeypatch):
+    quotes, executions = _dig_scene(indoor_scene, monkeypatch, available=False)
+    binding = indoor_scene.bind()
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+    assert quotes and not executions and indoor_scene.game.indoor_walk_calls == 1
+
+
+def test_default_off_departure_does_not_even_quote_dig(indoor_scene, monkeypatch):
+    from pokemon_red_completion import red_indoor_collection_departure as departure
+
+    def unexpected(*args):
+        raise AssertionError("Dig is not authorized by this runtime")
+
+    monkeypatch.setattr(departure, "plan_dig_escape", unexpected)
+    assert indoor_scene.bind() is not None
+    assert not indoor_scene.game.actions
+
+
+@pytest.mark.parametrize("fault", ["landing", "unavailable", "primitive", "budget", "stale"])
+def test_dig_departure_failure_never_executes_flight_or_replacement_goal(
+    indoor_scene, monkeypatch, fault,
+):
+    from pokemon_red_completion.red_dig_recovery import RedDigRecoveryError
+
+    quotes, executions = _dig_scene(indoor_scene, monkeypatch, fault=fault)
+    if fault == "budget":
+        indoor_scene.router.maximum_controller_actions = 1
+    binding = indoor_scene.bind()
+    if fault == "stale":
+        indoor_scene.game.raw = replace(indoor_scene.game.raw, player_money=1)
+        with pytest.raises(RoutedSemanticGoalError, match="origin changed"):
+            binding.execute()
+        assert not executions and not indoor_scene.game.actions
+    elif fault == "primitive":
+        with pytest.raises(RedDigRecoveryError, match="resource"):
+            binding.execute()
+        assert indoor_scene.router.actions.actions_executed == 2
+    else:
+        report = binding.execute()
+        assert binding.verify(report).status.value == "failed"
+        assert report.actions_executed == indoor_scene.router.actions.actions_executed == 2
+        assert report.frames_executed == indoor_scene.game.frame_count == 14
+    assert quotes and not indoor_scene.provider_calls
+    assert indoor_scene.game.flight_confirms == indoor_scene.game.indoor_walk_calls == 0
+
+
+def test_walking_departure_does_not_advertise_unsupported_surf_shortcut(indoor_scene):
+    scene = indoor_scene
+    original = scene.router.world.plan_feasible_to_map
+    observed = scene.observer.observe
+    scene.observer.observe = lambda: replace(
+        observed(), capabilities=frozenset({"move:surf", "move:cut", "event:open"})
+    )
+    departures = []
+
+    def walking_only(start, target, **kwargs):
+        if start.map_id == 89:
+            departures.append(start)
+            assert start.capabilities == frozenset({"event:open"})
+        return original(start, target, **kwargs)
+
+    scene.router.world.plan_feasible_to_map = walking_only
+    binding = scene.bind()
+    assert binding is not None and len(departures) == 1
+    assert "move:surf" in scene.observer.observe().capabilities
+    assert not scene.game.actions
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+
+
+def test_walking_departure_replans_with_the_same_executor_capabilities(indoor_scene, monkeypatch):
+    import pokemon_red_completion.red_indoor_collection_departure as departure
+    from pokemon_red_completion.route_executor import ReplanRequest
+
+    original = departure.RedSemanticTransportRoute
+    captured = []
+
+    def transport(**kwargs):
+        captured.append(kwargs["replanner"])
+        return original(**kwargs)
+
+    monkeypatch.setattr(departure, "RedSemanticTransportRoute", transport)
+    received = []
+
+    def replan(request):
+        received.append(request)
+        return indoor_scene.exit_plan
+
+    indoor_scene.router.world.replanner = lambda: replan
+    assert indoor_scene.bind() is not None
+    current = replace(indoor_scene.observer.observe(),
+                      capabilities=frozenset({"move:surf", "event:open"}))
+    request = ReplanRequest(current, 0, (6, 9), {}, 1)
+    assert captured[0](request) == indoor_scene.exit_plan
+    assert received[0].current.capabilities == frozenset({"event:open"})
+    assert request.current.capabilities == frozenset({"move:surf", "event:open"})
+    assert not indoor_scene.game.actions
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+@pytest.mark.parametrize("known", [False, True])
+@pytest.mark.parametrize("in_safari", [False, True])
+def test_ordinary_surf_departure_requires_opt_in_and_never_enables_paid_safari(
+    indoor_scene, enabled, known, in_safari,
+):
+    scene = indoor_scene
+    scene.router.runtime.collection_surf_departure = enabled
+    scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=in_safari)
+    original_observe, original_plan = scene.observer.observe, scene.router.world.plan_feasible_to_map
+    scene.observer.observe = lambda: replace(original_observe(), capabilities=frozenset(
+        {"move:cut", "event:open"} | ({"move:surf"} if known else set())))
+    starts = []
+
+    def require_live_surf(start, target, **kwargs):
+        if start.map_id == 89:
+            starts.append(start)
+            assert "move:cut" not in start.capabilities
+            if "move:surf" not in start.capabilities:
+                raise RoutePlanningError("ordinary route requires real Surf")
+        return original_plan(start, target, **kwargs)
+
+    scene.router.world.plan_feasible_to_map = require_live_surf
+    binding = scene.bind()
+    expected = enabled and known and not in_safari
+    assert (binding is not None) is expected
+    assert bool(starts) and not scene.game.actions
+    if binding is not None:
+        report = binding.execute()
+        assert binding.verify(report).status.value == "succeeded"
+
+
+def test_surf_departure_replan_preserves_same_explicit_capabilities(indoor_scene, monkeypatch):
+    import pokemon_red_completion.red_indoor_collection_departure as departure
+    from pokemon_red_completion.route_executor import ReplanRequest
+
+    scene = indoor_scene
+    scene.router.runtime.collection_surf_departure = True
+    scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=False)
+    observed = scene.observer.observe
+    scene.observer.observe = lambda: replace(observed(), capabilities=frozenset(
+        {"move:surf", "move:cut", "event:open"}))
+    original_transport, replanners, received = departure.RedSemanticTransportRoute, [], []
+
+    def transport(**kwargs):
+        replanners.append(kwargs["replanner"])
+        return original_transport(**kwargs)
+
+    def replan(request):
+        received.append(request)
+        return scene.exit_plan
+
+    monkeypatch.setattr(departure, "RedSemanticTransportRoute", transport)
+    scene.router.world.replanner = lambda: replan
+    assert scene.bind() is not None
+    request = ReplanRequest(scene.observer.observe(), 0, (6, 9), {}, 1)
+    assert replanners[0](request) == scene.exit_plan
+    assert received[0].current.capabilities == frozenset({"move:surf", "event:open"})
+    assert "move:cut" in request.current.capabilities and not scene.game.actions
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+@pytest.mark.parametrize("known", [False, True])
+@pytest.mark.parametrize("in_safari", [False, True])
+def test_retained_indoor_water_quotes_only_an_opted_in_ordinary_land_departure(
+    indoor_scene, monkeypatch, enabled, known, in_safari,
+):
+    import pokemon_red_completion.red_collection_fly as fly
+    from pokemon_red_completion.observation import OverworldMovementMode
+
+    scene = indoor_scene
+    scene.router.runtime.collection_surf_departure = enabled
+    scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=in_safari)
+    scene.game.read_overworld_movement_mode = lambda: OverworldMovementMode.SURFING
+    original_observe = scene.observer.observe
+    scene.observer.observe = lambda: replace(original_observe(), mode="water",
+        capabilities=frozenset({"move:surf"} if known else ()))
+    # Quote a genuine mode-continuous water-to-shore path, not the fixture's
+    # default land-start route. Native execution remains separately guarded.
+    water_exit = replace(scene.exit_plan, start_mode="water", segments=(
+        replace(scene.exit_plan.segments[0],
+            approach=LocalPath(((6, 3), (6, 4)), (LocalEdge((6, 4), "right"),),
+                               ("water", "land")),
+            transition=MacroTransition((6, 4), (6, 9), "down")),))
+    original_plan = scene.router.world.plan_feasible_to_map
+    scene.router.world.plan_feasible_to_map = lambda start, target, **kwargs: (
+        water_exit if start.map_id == 89 and target == 0 else original_plan(start, target, **kwargs))
+    original, previews = fly.bind_collection_fly, []
+
+    def quote(*args, **kwargs):
+        previews.append((args[3].traversal.mode, kwargs.get("land_departure_projection")))
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(fly, "bind_collection_fly", quote)
+    binding = scene.bind()
+    expected = enabled and known and not in_safari
+    assert (binding is not None) is expected
+    assert previews == ([("land", True)] if expected else [])
+    assert not scene.game.actions and scene.game.frame_count == 0
+
+
+def test_prospective_land_flight_cannot_be_executed_or_replace_actual_water_guard(indoor_scene):
+    from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError
+    from pokemon_red_completion.observation import OverworldMovementMode
+    from pokemon_red_completion.red_collection_fly import bind_collection_fly
+
+    scene = indoor_scene
+    scene.router.runtime.collection_surf_departure = True
+    scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=False)
+    scene.game.read_overworld_movement_mode = lambda: OverworldMovementMode.SURFING
+    projected = FreshRedGoalObservation("0" * 64,
+        replace(scene.adapter.observe(), raw=replace(scene.game.raw,
+            map_id=0, player_y=6, player_x=9)),
+        replace(scene.observer.observe(), map_id=0, at=(6, 9), mode="land"))
+    assert bind_collection_fly(scene.router, scene.spec, scene.provider,
+        projected, scene.observer) is None
+    preview = bind_collection_fly(scene.router, scene.spec, scene.provider,
+        projected, scene.observer, land_departure_projection=True)
+    assert preview is not None
+    with pytest.raises(Gen1FieldMoveError, match="quotation-only"):
+        preview.execute()
+    assert not scene.game.actions and scene.game.frame_count == 0
 
 
 def test_indoor_departure_binds_the_shared_scripted_dialogue_cap(
@@ -331,6 +651,48 @@ def test_qualification_rejects_when_no_exit_route(indoor_scene):
     indoor_scene.router.world.plan_feasible_to_map = no_exit
     assert indoor_scene.bind() is None
     assert indoor_scene.game.actions == []
+
+
+@pytest.mark.parametrize("enabled,departure_count,onward_count", [
+    (False, 2, 6), (True, 0, 6), (True, 2, 6),
+])
+def test_indoor_capture_quotes_both_walking_legs_without_projecting_live_objects(
+    indoor_scene, monkeypatch, enabled, departure_count, onward_count
+):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+    import pokemon_red_completion.red_resource_goal_router as routing
+
+    scene = indoor_scene
+    profile = bind_indoor_fly_departure_profile(bind_capture_fly_profile(_local_discovery_profile()))
+    spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
+    target, goal = spec.parameters["map_id"], (spec.parameters["player_y"], spec.parameters["player_x"])
+    scene.provider.kind = GoalKind.ACQUIRE_SPECIES
+    scene.router.quote_capture_route_work = enabled
+    onward = replace(scene.onward_plan, macro_path=MacroPath((5, target), (MacroEdge(target),)),
+        segments=(replace(scene.onward_plan.segments[0], target_map=target,
+            transition=MacroTransition((6, 9), goal, "down")),), terminal_at=goal)
+    scene.router.world.macro_graph = MacroGraph({89: (MacroEdge(0),), 5: (MacroEdge(target),)})
+    scene.router.world.plan_feasible_to_map = lambda start, _map, **_kw: (
+        scene.exit_plan if start.map_id == 89 else onward)
+    diagnostics, quoted = [], []
+    scene.router.actions.record_diagnostic_event = lambda kind, payload: diagnostics.append((kind, payload))
+
+    def quote(plan, observed, _rom, reader):
+        assert observed.raw.map_id == reader.read().map_id == 89
+        quoted.append(plan)
+        return dict(ordinary_trainers_crossed=(departure_count if plan is scene.exit_plan else onward_count))
+
+    monkeypatch.setattr(routing, "ordinary_route_work_quote", quote)
+    fresh = FreshRedGoalObservation("0"*64, scene.adapter.observe(), scene.observer.observe())
+    binding = bind_indoor_collection_departure(scene.router, spec, scene.provider, fresh, scene.observer)
+    base = .42 + (len(onward.steps) + len(scene.exit_plan.steps))/1000
+    count = onward_count + departure_count if enabled else 0
+    assert binding.estimated_effort == pytest.approx(min(1.0, base + count/16))
+    assert binding.estimated_risk == pytest.approx(min(1.0, .18 + count/8))
+    assert quoted == ([onward, scene.exit_plan] if enabled else [])
+    assert [payload["transport_leg"] for _kind, payload in diagnostics] == (
+        ["post_fly_walking", "indoor_departure"] if enabled else [])
+    assert scene.game.actions == [] and scene.router.actions.actions_executed == 0
 
 
 def test_qualification_rejects_when_projected_flight_unavailable(indoor_scene):

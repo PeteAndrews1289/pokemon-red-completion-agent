@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon.red.player-source-supply-review.v1",
+  "classification": "metadata-audit-not-learning",
+  "status": "new_source_protocol_required_for_independent_comparison",
+  "private_audit_sha256": "23dfcc9788253b1b9bc2eff40a665a14fe3a8f180e7d0be9f0ccbb9ba901a401",
+  "scope": "Known 81-entry general-player catalog and two gift/one NPC campaign plans; not a global census of every private artifact",
+  "catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+  "registry_sha256": "7f2208345403e7293d5fe69a8d99b39f7a5e3c5a4ca8675fbc3ffb99acf2db0b",
+  "catalog_source_commit": "74922cc9faa793bae4f9daf03627e8621297b038",
+  "claim_census_under_shared_lease": true,
+  "train_total": 54,
+  "validation_total": 27,
+  "unique_state_hashes": 81,
+  "identical_state_hashes_crossing_partitions": 0,
+  "train_consumed": 46,
+  "validation_consumed": 22,
+  "train_open": 8,
+  "validation_open": 5,
+  "open_families": {
+    "train": {"advance_story": 3, "recover_control": 5},
+    "validation": {"advance_story": 2, "recover_control": 2, "explore": 1}
+  },
+  "independent_upstream_ancestry_proven_by_catalog": false,
+  "prior_lineage_audit": "docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json",
+  "gift_plans": [
+    {"plan_sha256": "699da491d443ea1de2c726eddb7e44f5e34a866cb7f81455abd7c65d95a85c83", "claimed_cases": 6, "declared_cases": 6, "closed": true},
+    {"plan_sha256": "118bff95e6ec296af4e231a641877a93fc994f543727a2118bfe45a2eb916d9e", "claimed_cases": 6, "declared_cases": 6, "closed": true}
+  ],
+  "npc_plan": {
+    "plan_sha256": "040f6175102e6bf7c565ce524f3d0b55664bfa4e492bc5a9ac2523d003d2d307",
+    "claimed_train_cases": 4,
+    "planned_development_cases": 2,
+    "claimed_development_cases": 0,
+    "heldout_queries_in_retained_report": 0,
+    "closed_after_train_retention_failure": true,
+    "reuses_train_origin_for_all_cases": true,
+    "independent_evaluation_supply": false
+  },
+  "state_payloads_opened": 0,
+  "evaluation_payloads_opened": 0,
+  "roms_opened": 0,
+  "root_claims_created": 0,
+  "controller_actions": 0,
+  "production_fits": 0,
+  "authority_promotions": 0,
+  "decision": "Request a prospectively partitioned assisted source-preparation protocol; do not replay consumed campaigns, relabel roots or claim unseen transfer from this catalog. Keep the whole pre-campaign goal open."
+}

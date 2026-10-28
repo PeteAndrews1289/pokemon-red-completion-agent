@@ -53,6 +53,13 @@ BUYABLE_EVOLUTION_STONES = {
     )
 }
 
+# Resource identities do not imply a procurement source. In particular the
+# finite Moon Stone deliberately has no entry in BUYABLE_EVOLUTION_STONES.
+EVOLUTION_STONE_ITEMS = {
+    item: (offer.acquisition_source_id, offer.catalog_item_ref)
+    for item, offer in BUYABLE_EVOLUTION_STONES.items()
+} | {int(ItemId.MOON_STONE): ("evolution:item:MoonStone", "pokemon:red:item:moon_stone")}
+
 
 def buyable_evolution_stone(item_id: int) -> RedEvolutionStoneOffer:
     """Return the exact Celadon offer or fail closed for finite/non-Mart stones."""
@@ -66,6 +73,7 @@ def buyable_evolution_stone(item_id: int) -> RedEvolutionStoneOffer:
 __all__ = (
     "BUYABLE_EVOLUTION_STONES",
     "EVOLUTION_STONE_PRICE",
+    "EVOLUTION_STONE_ITEMS",
     "RedEvolutionStoneOffer",
     "buyable_evolution_stone",
 )

@@ -1,0 +1,63 @@
+{
+  "actor_memory_writes": 0,
+  "all_event_and_terminal_hashes_verified": true,
+  "authority_promotions": 0,
+  "baseline_train_regret": 0.4135042353092938,
+  "bounded_screen_passed": false,
+  "candidate_sha256": "7df8772dab6329df13b65afe2f9bfab2205e98c4f9be84750916a5d627df6f62",
+  "candidate_train_regret": 0.15209268827014427,
+  "censored_preparations": [],
+  "collection_delta": 0,
+  "concern_counts": {
+    "already_confused": 4,
+    "major_status_occupied": 40
+  },
+  "concerning_status_selections": 44,
+  "decision_records": 1693,
+  "episodes": 560,
+  "event_records": 9092,
+  "fits": 1,
+  "frames": 2205782,
+  "frozen_damage_control_switch_preserved": true,
+  "gameplay_running": false,
+  "giovanni_completed": false,
+  "holdout_capture_ids_excluded": true,
+  "improved_won_cases_with_status": 1,
+  "independent_heldout_roots": 0,
+  "invalid_actions": 0,
+  "label_diagnostics": {
+    "concern_train_contexts": 24,
+    "explanation": "One prescribed action then K continuation; soft labels give nearly tied returns nearly equal probabilities. This is evidence of a credit/continuation mismatch, not a proven sole cause.",
+    "near_tie_within_005": 10,
+    "status_advantage_above_005": 3
+  },
+  "learned_continuation_or_evaluation_choices": 1197,
+  "legacy_feature_weights_zero": true,
+  "new_target_contexts": 80,
+  "plan_sha256": "0c31fa9ae2c2df6c12e0cab27e2b4220781ad515720aed5902ae07f2f7e593be",
+  "prescribed_first_choices": 496,
+  "protected_hashes": {
+    "earned_campaign": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "frozen_battler": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "goal_model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "primary_collection": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032"
+  },
+  "schema": "pokemon.red.balanced-status-learning-audit.v1",
+  "source_commit": "d8782e4d3664afeeb16e7718af5edae326bdf1e3",
+  "status_move_attempts_including_prescribed": 376,
+  "stops": {
+    "battle_won": 228,
+    "party_defeated": 312,
+    "player_turn_budget": 20
+  },
+  "verified_candidate_move_predictions": 196,
+  "withheld_decisions": {
+    "candidate": 196,
+    "frozen": 76
+  },
+  "withheld_pairs": 32,
+  "withheld_wins": {
+    "candidate": 13,
+    "frozen": 12
+  }
+}

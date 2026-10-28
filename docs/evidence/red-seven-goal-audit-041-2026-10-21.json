@@ -1,0 +1,155 @@
+{
+  "active_goal_continues": true,
+  "all7complete": false,
+  "component_gates_met": 3,
+  "costs": {
+    "S_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/native-preparation-readiness-20261021-0727/CLOSEOUT.json",
+    "S_since040": {
+      "frames": 144,
+      "full_root_holds": 780,
+      "inputs": 2,
+      "measured_native_preflight_root_seconds": 190.43243258499996,
+      "physical_emulators": 3,
+      "state_loads": 3
+    },
+    "T_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/cave-cost-choice-learning-20261021-0857/CLOSEOUT.json",
+    "T_closeout_sha256": "7410c33e21a22afc7cc272d476acba2d30785fa5c584a3a7fd4d4ce039fc3f73",
+    "T_totals": {
+      "actual_registration_delta": 0,
+      "completed_new_fits": 0,
+      "fit_attempts": 1,
+      "fit_preflight_full_root_holds": 330,
+      "frames": 4852502,
+      "heals": 92,
+      "inputs": 51363,
+      "measured_fit_preflight_root_seconds": 98.66902905100001,
+      "measured_native_preflight_root_seconds": 1063.8739957420003,
+      "native_preflight_full_root_holds": 4050,
+      "new_weights": 0,
+      "operator_costs_not_fully_measured": true,
+      "physical_emulators": 8,
+      "state_loads": 8
+    },
+    "U_inventory": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/execution-fault-and-source-inventory-20261021-0949/ORIGINAL-TRAIN-PARENT-INVENTORY-CORRECTED.json",
+    "U_tests": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/execution-fault-and-source-inventory-20261021-0949/CURRENT-FOCUSED-CHECKS.json",
+    "all_prior_actual_diagnostic_failures_partial_costs_retained": true,
+    "since_audit040": {
+      "actual_registration_delta": 0,
+      "completed_new_fits": 0,
+      "frames": 4852646,
+      "full_root_holds": 5160,
+      "inputs": 51365,
+      "measured_native_preflight_and_fit_root_seconds": 1352.9754573780003,
+      "new_fit_attempts": 1,
+      "new_weights": 0,
+      "operator_offline_overhead_not_fully_measured": true,
+      "physical_emulators": 11,
+      "state_loads": 11
+    }
+  },
+  "current_process_state": {
+    "actual_actors": 0,
+    "all_known_current_controls_released": true,
+    "exclusive_source_writer": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/execution-fault-and-source-inventory-20261021-0949/SOURCE-WRITER-CLAIM.json",
+    "fit_processes": 0,
+    "fresh_actors": 0,
+    "native_diagnostics": 0
+  },
+  "goals": [
+    {
+      "id": "funding_recovery",
+      "status": "in_progress",
+      "title": "Repair preserved-save funding/recovery"
+    },
+    {
+      "id": "execution_boundaries",
+      "status": "in_progress",
+      "title": "Harden related execution boundaries"
+    },
+    {
+      "id": "menu_performance",
+      "status": "complete",
+      "title": "Reduce menu and package overhead"
+    },
+    {
+      "id": "training_efficiency",
+      "status": "in_progress",
+      "title": "Improve useful training/evolution efficiency"
+    },
+    {
+      "id": "two_worker_capacity",
+      "status": "complete",
+      "title": "Qualify two isolated workers"
+    },
+    {
+      "id": "model_decision_quality",
+      "status": "complete",
+      "title": "Improve one demonstrated model weakness"
+    },
+    {
+      "id": "autonomous_acceptance",
+      "status": "in_progress",
+      "title": "Prove frozen autonomous Red completion and reliability"
+    }
+  ],
+  "limitations": [
+    "3/7componentgates arenot anoverallcompletionpercentage.",
+    "0newweights/actualprogress;fiveevolutionsarediagnostic.",
+    "263focusedchecks arenot fullsuite orfullnativequalification.",
+    "Oneparent’sXPconditions arenotindependentgeneralization.",
+    "No staleactualrevival,publication,scheduler oragents."
+  ],
+  "limits": {
+    "T_closed": true,
+    "T_fit_calls_consumed": 1,
+    "U_caps": {
+      "archive_parts_read": 1,
+      "emulators": 0,
+      "fits": 0,
+      "frames": 0,
+      "inputs": 0,
+      "metadata_entries": 256,
+      "new_weights": 0,
+      "offline_script_seconds": 360,
+      "state_loads": 0
+    },
+    "U_deadline_utc": "2026-10-21T10:49:15.336582+00:00",
+    "U_mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/execution-fault-and-source-inventory-20261021-0949/MISSION.json",
+    "all_actual_cutoffs_passed_and_sealed": true,
+    "current_actual_badges": 7,
+    "current_actual_registrations": 92,
+    "official_fresh_successes": 0,
+    "official_reliability_starts": 0,
+    "total_completed_fits": 13,
+    "total_fit_attempts": 17
+  },
+  "next_due_utc": "2026-10-21T12:00:19.773019+00:00",
+  "next_sequence": [
+    "Finish Uerror-boundary qualification andsourceinventory under original10:49UTCdeadline,0actors/fits.",
+    "Inspect existingmatchup risk for theobservedfull-healthDiglettfaint;separatereproducedfaultfrominference. No modelorwildbattleoverride.",
+    "Select genuineunconsumedTRAINcontextfamilies usingregistry/state/aliaschecks,thenfreezeprospectiveroles andactual-offer falsifierbeforeanylaternativeorfitmission. NoTretry orrootrenaming.",
+    "Combine usefultraining/funding/execution evidence before another longfresh trial;preserve exacttails. FinalfreshChampion/concurrentHOF+124then8/10heldoutremainunproved."
+  ],
+  "not_completion_percentage": true,
+  "number": 41,
+  "observed_at_utc": "2026-10-21T10:00:24.815925+00:00",
+  "outcomes": {
+    "S": "Closed8copies;exactTRAINcontractscopeproved0input but fullhelperrouteunqualified. Remaining3copies/2inputs/144frames andallcosts added since040;no S revival.",
+    "T": "6measured alternatives onONEoriginalTRAIN049parent,3postnursingmenus;5evolutions/1faint. Cave645869vs1133720frames originalXP and684156vs1133755midXP. NearCavefainted;existingexacttailescape19inputs/1776frames retainedXP/custody andfailure. Singleupdatercall rejected repeatedroot beforeweights;closednoTfitretry. Reserved051unopened.",
+    "U": "Existingevolutionexecutor nowpreserves originaltrainingfault anddefersPCcustody onlyatunsettledauthenticerror.263currentfocusedchecks/19newcontrols pass;no newfrozen/nativequalification. Readonly83entryinventory proves54originalTRAINregistryassignments plus1PPentryrequiringitsownregistry;55distinctTRAINstatehashes. No currentFly/route/noveltyproof.",
+    "learning": "Global13completedfits/17attempts. Thisinterval1failedattempt,0newweights/actualgains. No roots relabeled,noDEVELOPMENTfit,allformerfailedfits/costspreserved.",
+    "runtime": "R10.17%useful8goalpair remainsqualified,scopeunchanged. No new campaign performance claim."
+  },
+  "scheduled_anchor_utc": "2026-10-21T10:00:19.773019+00:00",
+  "scheduled_automation_created": false,
+  "schema": "pokemon.windows.seven-goal-self-audit.v1",
+  "time_losses_and_pivots": [
+    "Cave can materially reduce frames,butoneconditionfaints;nativeguardcoverage andsafeexecution matter morethan an average speed number. Preserve the negative.",
+    "Most avoidable delay was harness/protocol work:wrong supportclass,fractional integerlimit,omittedqualificationworkerpin andlearnerroot-uniqueness missedbeforecall. First2native-recoveryattempts did0inputs;finalexistingrecoveryused19. Compile/import/exactconstructorandwholebatch learner-contract probes must precede furtheremulation/fits.",
+    "ThreeXPconditions ofoneparent arecorrelateddata,notroot-unique batchrows. Do not bypass thevalidator or resetfitlimits. AuthenticateoriginalTRAINfamilies andpostnursingnovelty before newlessons.",
+    "The all-purpose cleanup maskedtheoriginalfaint. Existingexecutorpatch deferscustody without input andkeepsoriginalerror;this is a reusable boundaryfix,not a policyperformanceclaim.",
+    "Readonlysourceinventory has55TRAINstatehashes butmanyparty/contextaliases;54matchthegoalregistry and1requiresanotherregistry. Missingmoves/location mean no route/Flyclaim. Avoid expensivecovariate-only source factories."
+  ],
+  "total_goals": 7,
+  "why_this_advances_autonomy": "We measured the venue speed-versus-safety tradeoff,provedexistingexacttailrecovery,preservedfailedcosts,andrepairedamaskederrorboundary. Thelearningfailureexposesacontractthatcanbecheckedwithoutanothergameplayrun. Fourcomponentgatesremainopen."
+}

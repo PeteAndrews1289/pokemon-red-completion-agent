@@ -5,7 +5,10 @@ from __future__ import annotations
 from collections import Counter, deque
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from .red_one_off_capture import OneOffCaptureBudget, OneOffCaptureRequest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import (
@@ -62,7 +65,7 @@ from pokemon_red_completion.red_acquisition import (
     RedAreaExecutionReport,
     run_red_area_survey,
 )
-from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+from pokemon_red_completion.red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
 from pokemon_red_completion.red_collection import (
     red_collection_observation,
     red_internal_species_number,
@@ -2273,6 +2276,8 @@ class LiveWildEncounterExecutor:
         *,
         label: str,
         capture_status_support: bool = False,
+        capture_weakening_support: bool = False,
+        capture_level_evolution_edges: frozenset[tuple[int, int, int]] = frozenset(),
     ) -> None:
         if not label.strip():
             raise ValueError("live wild encounter label must not be empty")
@@ -2283,9 +2288,23 @@ class LiveWildEncounterExecutor:
         self._label = label
         if type(capture_status_support) is not bool:
             raise ValueError("capture status support must be boolean")
+        if type(capture_weakening_support) is not bool or (
+            capture_weakening_support and not capture_status_support
+        ):
+            raise ValueError("capture weakening needs explicit status support")
         self._capture_status_support = capture_status_support
+        self._capture_weakening_support = capture_weakening_support
+        if not isinstance(capture_level_evolution_edges, frozenset) or any(
+            not isinstance(edge, tuple) or len(edge) != 3
+            or any(type(value) is not int for value in edge)
+            or not (1 <= edge[0] <= 255 and 1 <= edge[1] <= 255 and 1 <= edge[2] <= 100)
+            for edge in capture_level_evolution_edges
+        ):
+            raise ValueError("capture evolution needs validated cartridge level edges")
+        self._capture_level_evolution_edges = capture_level_evolution_edges
         self.capture_status_reports: list[dict[str, object]] = []
         self.capture_throw_preparations: list[dict[str, object]] = []
+        self.capture_weakening_reports: list[dict[str, object]] = []
         self.capture_escape_bypasses = 0
         self._party_reader = PokemonRedPartyReader(emulator)
 
@@ -2339,11 +2358,44 @@ class LiveWildEncounterExecutor:
                 self._emulator, self._executor, self._reader,
                 expected_original_species_id=raw.enemy_species_id,
             )
+            weakened = False
+
+            def before_throw():
+                nonlocal weakened
+                if not prepare():
+                    return False
+                if (
+                    self._capture_weakening_support
+                    and not weakened and not prepare.bypassed_for_escape
+                ):
+                    from dataclasses import asdict
+
+                    from .red_capture_weakening_runtime import prepare_nonlethal_capture
+                    from .red_party import decode_status
+
+                    settled = self._reader.read()
+                    result = prepare_nonlethal_capture(
+                        self._reader, self._executor,
+                        internal_species=raw.enemy_species_id,
+                        level=settled.enemy_level, maximum_attempts=3,
+                    )
+                    self.capture_weakening_reports.append(asdict(result))
+                    weakened = True  # One finite preparation, not three hits per ball.
+                    after = self._reader.read()
+                    status = self._reader.read_enemy_capture_status()
+                    # This row describes the boundary immediately before the
+                    # ball, not the earlier status/switch or damage prediction.
+                    prepare.throw_preparations[-1].update(
+                        target_hp=after.enemy_hp, target_max_hp=after.enemy_max_hp,
+                        target_status=None if status is None else decode_status(status).value,
+                    )
+                return True
+
             try:
                 return _try_catch_wild(
                     self._emulator, self._executor, self._reader, raw.enemy_species_id,
                     self._label, max_throws=WILD_CAPTURE_THROWS_PER_ENCOUNTER,
-                    before_throw=prepare,
+                    before_throw=before_throw,
                 )
             finally:
                 self.capture_status_reports.extend(prepare.reports)
@@ -2355,6 +2407,28 @@ class LiveWildEncounterExecutor:
                 f"{self._label} capture lacks enemy HP evidence",
                 reason_code="capture_hp_evidence_missing",
             )
+        moves = self._reader.read_enemy_capture_moves()
+        if moves is None:
+            raise RedAreaExecutionError(
+                f"{self._label} capture lacks live target moves",
+                reason_code="capture_moves_evidence_missing",
+            )
+        escape_prone = any(
+            RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+            for move in moves if move
+        )
+        # Switching or weakening gives Teleport/Roar/Whirlwind a free escape turn.
+        # Reuse status preparation's live-move rule, not a species allowlist.
+        # The ordinary throw verifier still requires exact ball and census proof.
+        self.capture_escape_bypasses += int(escape_prone)
+        if escape_prone:
+            from .capture_survey import record_capture_diagnostic
+
+            record_capture_diagnostic(
+                self._executor, "capture_preparation_bypassed", raw,
+                source="ordinary_wild", throw=None, ball=None, ball_quantity=None,
+                outcome="live_target_can_end_encounter",
+            )
         weakening_budget = _wild_capture_weakening_budget(
             raw.enemy_species_id,
             raw.enemy_hp,
@@ -2365,7 +2439,7 @@ class LiveWildEncounterExecutor:
             party = self._party_reader.read()
             helper = (
                 None
-                if raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
+                if escape_prone or raw.enemy_species_id in WILD_CAPTURE_DIRECT_THROW_SPECIES
                 else _select_wild_capture_helper(
                     party,
                     minimum_hp_ratio=(
@@ -2414,6 +2488,7 @@ class LiveWildEncounterExecutor:
                 helper_index,
                 move_index,
                 self._label,
+                level_evolution_edges=self._capture_level_evolution_edges,
             ):
                 return False
         return _try_catch_wild(
@@ -2462,6 +2537,9 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         starting_endpoint: str,
         max_legs: int,
         capture_status_support: bool = False,
+        capture_weakening_support: bool = False,
+        capture_level_evolution_edges: frozenset[tuple[int, int, int]] = frozenset(),
+        observe_search_conditions: Callable[[RawGameState], dict[str, object]] | None = None,
     ) -> None:
         if not forward_directions:
             raise ValueError("live wild corridor requires movement directions")
@@ -2472,6 +2550,8 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         super().__init__(
             emulator, executor, reader, timing, label=label,
             capture_status_support=capture_status_support,
+            capture_weakening_support=capture_weakening_support,
+            capture_level_evolution_edges=capture_level_evolution_edges,
         )
         self._forward_directions = forward_directions
         self._starting_endpoint = starting_endpoint
@@ -2479,6 +2559,33 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         self._endpoint = starting_endpoint
         self._directions: deque[str] = deque()
         self._completed_legs = 0
+        if observe_search_conditions is not None and not callable(observe_search_conditions):
+            raise TypeError("search diagnostics need a read-only observer")
+        self._observe_search_conditions = observe_search_conditions
+        self._search_requests = self._search_movement_steps = self._eligible_search_steps = 0
+        self._unknown_search_steps = self._non_displacing_encounters = 0
+        self._search_recoveries = 0
+        self._last_search_conditions = None
+        self._field_faint_settlements: list[dict[str, object]] = []
+
+    def search_diagnostics(self) -> dict[str, object]:
+        return dict(
+            schema="pokemon.red.corridor-search-exposure.v1", diagnostic_only=True,
+            search_requests=self._search_requests, movement_steps=self._search_movement_steps,
+            eligible_search_steps=(
+                self._eligible_search_steps
+                if self._observe_search_conditions is not None
+                and not self._unknown_search_steps and not self._search_recoveries else None
+            ),
+            known_eligible_tile_steps=self._eligible_search_steps,
+            unknown_tile_steps=self._unknown_search_steps,
+            non_displacing_encounters=self._non_displacing_encounters,
+            recovery_requests=self._search_recoveries,
+            native_field_faint_settlements=list(self._field_faint_settlements),
+            conditions=self._last_search_conditions,
+            eligible_steps_are_tile_exposures_not_rng_rolls=True,
+            normalization_steps_excluded=True,
+        )
 
     def seek_encounter(self) -> None:
         if self.encountered_species_ref() is not None:
@@ -2488,7 +2595,8 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
             )
         if not self._directions:
             self._start_leg()
-        self._advance_one_direction()
+        self._search_requests += 1
+        self._advance_one_direction(record_search=True)
 
     def finish_at_starting_endpoint(self) -> None:
         """Normalize an early successful stop to the corridor's starting end."""
@@ -2520,11 +2628,22 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         )
         self._directions.extend(directions)
 
-    def _advance_one_direction(self) -> RawGameState:
+    def _advance_one_direction(self, *, record_search: bool = False) -> RawGameState:
         """Consume a route step only when its tile movement actually completed."""
 
         before = self._reader.read()
         direction = self._directions[0]
+        faint_handler = None
+        if before.party_status and any(status & 0x08 for status in before.party_status):
+            from .gen1_route_runtime import Gen1WildFleeHandler
+
+            # Remember the pre-walk poison boundary. Only the existing strict
+            # handler may dismiss a newly fainted member's native message.
+            faint_handler = Gen1WildFleeHandler(
+                self._executor, self._reader, maximum_flees=0,
+                stabilization_frames=self._timing.wait_frames, route_name=self._label,
+                allow_party_faints=True, allow_field_faint_dialogue=True,
+            )
         try:
             raw = _survey_step(
                 self._executor,
@@ -2536,11 +2655,41 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
         except SurgeChapterError:
             if not _is_route_1_walker_gate(self._label, before, direction):
                 raise
+            if record_search:
+                self._search_recoveries += 1
             raw = self._yield_to_route_1_walker(direction)
+        if (faint_handler is not None and raw.battle_state == 0
+                and self._reader.read_bottom_dialogue_box_visible()):
+            from .route_executor import TraversalSnapshot
+
+            receipt = faint_handler.handle(TraversalSnapshot(
+                raw.map_id, (raw.player_y, raw.player_x), False, "scripted_dialogue",
+            ))
+            self._field_faint_settlements.append(dict(
+                **receipt.details, source_map=raw.map_id,
+                source_at=(raw.player_y, raw.player_x), resumed_map=receipt.resumed_map,
+                resumed_at=receipt.resumed_at, protected_resources_unchanged=True,
+            ))
+            raw = self._reader.read()
         moved = raw.map_id != before.map_id or (raw.player_x, raw.player_y) != (
             before.player_x,
             before.player_y,
         )
+        if record_search:
+            conditions = (
+                None if self._observe_search_conditions is None
+                else self._observe_search_conditions(raw)
+            )
+            self._last_search_conditions = conditions
+            if moved:
+                self._search_movement_steps += 1
+                eligible = None if conditions is None else conditions.get("eligible_encounter_tile")
+                if eligible is True and raw.map_id == before.map_id:
+                    self._eligible_search_steps += 1
+                elif eligible is not False:
+                    self._unknown_search_steps += 1
+            elif raw.battle_state:
+                self._non_displacing_encounters += 1
         if moved:
             self._directions.popleft()
             if not self._directions:
@@ -2707,7 +2856,11 @@ def _switch_wild_capture_party_slot(
     expected_enemy_hp: int,
     label: str,
 ) -> RawGameState:
-    """Switch wild-battle battlers without changing the protected target."""
+    """Switch battlers while retaining the live target, not its old HP.
+
+    The opponent gets a turn and may heal (for example, with Absorb). Once the
+    requested member is active at MAIN, do not keep confirming an old HP quote.
+    """
 
     _navigate_main(executor, reader, 2)
     before = reader.read()
@@ -2743,12 +2896,13 @@ def _switch_wild_capture_party_slot(
     else:
         raise SurgeChapterError(f"{label} party submenu did not select SWITCH.")
     _pulse(executor, MacroActionKind.CONFIRM, frames=240)
-    for pulse in range(48):
+    for _ in range(48):
         switched = reader.read()
         if (
             switched.battle_state == 1
             and switched.enemy_species_id == expected_species_id
-            and switched.enemy_hp == expected_enemy_hp
+            and type(switched.enemy_hp) is int and switched.enemy_hp > 0
+            and switched.party_species_ids == party
             and switched.active_party_index == party_index
             and (switched.battler_hp or 0) > 0
             and reader.read_battle_menu_state(switched).phase is BattleMenuPhase.MAIN
@@ -2763,20 +2917,25 @@ def _switch_wild_capture_party_slot(
             )
             if protected_index is None:
                 raise SurgeChapterError(f"{label} switching left no living catcher.")
+            if (switched.enemy_species_id != expected_species_id
+                    or type(switched.enemy_hp) is not int or switched.enemy_hp <= 0
+                    or switched.party_species_ids != party):
+                raise SurgeChapterError(f"{label} switch faint changed its protected target.")
+            # The committed voluntary switch gave the opponent a turn. Its live
+            # HP can change before the incoming catcher faints; bind forced
+            # replacement to that observed target, not the pre-turn HP quote.
             return _force_switch_wild_capture_to_lead(
                 emulator,
                 executor,
                 reader,
                 expected_species_id,
-                expected_enemy_hp,
+                switched.enemy_hp,
                 label,
                 party_index=protected_index,
             )
-        _pulse(
-            executor,
-            MacroActionKind.CANCEL if (pulse + 1) % 4 == 0 else MacroActionKind.CONFIRM,
-            frames=120,
-        )
+        # Only settle/cancel after committing SWITCH. A confirm at the returned
+        # MAIN/MOVE gate can issue an unrequested attack while waiting for HP.
+        _pulse(executor, MacroActionKind.CANCEL, frames=120)
     raise SurgeChapterError(f"{label} party switch did not return to MAIN.")
 
 
@@ -2832,6 +2991,19 @@ def _force_switch_wild_capture_to_lead(
     return restored
 
 
+def _verify_wild_capture_knockout(current, before_party, pp_spent, evolution_guard, label):
+    """A knockout is a failed capture, even when its earned XP evolves a helper."""
+    if not pp_spent or (evolution_guard is None and current.party_species_ids != before_party):
+        raise SurgeChapterError(f"{label} weakening knockout changed protected state.")
+    if evolution_guard is not None:
+        try:
+            evolution_guard.verify_active_roster_restored()
+        except ValueError as error:
+            raise SurgeChapterError(
+                f"{label} weakening knockout lacks retained earned-evolution proof."
+            ) from error
+
+
 def _weaken_wild_capture_once(
     emulator: EmulatorState,
     executor: CountingExecutor,
@@ -2839,6 +3011,8 @@ def _weaken_wild_capture_once(
     party_index: int,
     move_index: int,
     label: str,
+    *,
+    level_evolution_edges: frozenset[tuple[int, int, int]] = frozenset(),
 ) -> bool:
     """Switch to a qualified helper and attempt exactly one weakening attack."""
 
@@ -2880,6 +3054,25 @@ def _weaken_wild_capture_once(
 
     party_before_attack = PokemonRedPartyReader(emulator).read()
     helper_before = party_before_attack.members[party_index]
+    evolution_guard = None
+    if level_evolution_edges:
+        from .red_player_party_guard import RedPlayerPartyGuard
+
+        party_reader = PokemonRedPartyReader(emulator)
+        evolution_guard = RedPlayerPartyGuard(
+            party_reader, party_before_attack, party_reader.preparation_specimen_refs(),
+            level_evolution_edges,
+        )
+        evolution_guard.verify_active_roster_restored()
+    # SWITCH gives the opponent a turn. Sleep and Gen1 trapping can bypass MOVE
+    # entirely even when the helper is still alive with usable PP. Abstain before
+    # FIGHT, using the same bounded escape as a newly unqualified status helper.
+    if (
+        helper_before.status is not StatusCondition.HEALTHY
+        or before.enemy_using_trapping_move is True
+    ):
+        _flee(emulator, executor, reader, before)
+        return False
     pp_before = helper_before.moves[move_index].current_pp
     _navigate_main(executor, reader, 0)
     _pulse(executor, MacroActionKind.CONFIRM, frames=120)
@@ -2904,10 +3097,13 @@ def _weaken_wild_capture_once(
     for pulse in range(48):
         current = reader.read()
         helper_after = PokemonRedPartyReader(emulator).read().members[party_index]
-        pp_spent = helper_after.moves[move_index].current_pp == pp_before - 1
+        pp_spent = (
+            helper_after.moves[move_index].move_id == helper_before.moves[move_index].move_id
+            and helper_after.moves[move_index].current_pp == pp_before - 1
+        )
         if current.battle_state == 0:
-            if current.party_species_ids != before_party or not pp_spent:
-                raise SurgeChapterError(f"{label} weakening knockout changed protected state.")
+            _verify_wild_capture_knockout(current, before_party, pp_spent,
+                                          evolution_guard, label)
             return False
         phase = reader.read_battle_menu_state(current).phase
         turn_result = _wild_weakening_turn_result(
@@ -2985,7 +3181,23 @@ def _try_catch_wild(
     *,
     max_throws: int,
     before_throw: Callable[[], bool] | None = None,
+    one_off_request: OneOffCaptureRequest | None = None,
+    record_decision: Callable[[dict[str, object]], None] | None = None,
+    one_off_budget: OneOffCaptureBudget | None = None,
+    select_replacement: Callable[[RawGameState], int] | None = None,
 ) -> bool:
+    if one_off_request is not None:
+        from .red_one_off_capture import run_one_off_capture
+
+        if species_id != one_off_request.internal_species:
+            raise ValueError("one-off request differs from capture target")
+        return run_one_off_capture(
+            emulator, executor, reader, one_off_request, max_throws=max_throws,
+            before_throw=before_throw, record_decision=record_decision,
+            budget=one_off_budget, select_replacement=select_replacement,
+        )
+    if one_off_budget is not None or select_replacement is not None:
+        raise ValueError("capture continuation/replacement requires an explicit one-off request")
     if species_id is None:
         raise SurgeChapterError(f"{label} capture received no target species.")
     if type(max_throws) is not int or max_throws <= 0:
@@ -2997,6 +3209,7 @@ def _try_catch_wild(
         raise SurgeChapterError(f"{label} capture has no live encounter to exit.")
     if raw.battle_state != 1:
         raise SurgeChapterError(f"{label} capture requires a live wild encounter to exit.")
+    from .capture_survey import capture_execution_counters, record_capture_diagnostic
     from .red_capture_access import is_unidentified_ghost_encounter
 
     if is_unidentified_ghost_encounter(raw):
@@ -3027,10 +3240,27 @@ def _try_catch_wild(
             ):
                 raise SurgeChapterError(f"{label} preparation exit changed collection or balls.")
             return False
-        if is_unidentified_ghost_encounter(reader.read()):
+        throw_start = reader.read()
+        if is_unidentified_ghost_encounter(throw_start):
             raise SurgeChapterError(
                 f"{label} capture lost its required Silph Scope before a throw.")
-        ball = _next_ordinary_capture_ball(_bag(emulator))
+        throw_bag = _bag(emulator)
+        ball = _next_ordinary_capture_ball(throw_bag)
+        throw_counters = capture_execution_counters(emulator, executor)
+        record_capture_diagnostic(
+            executor, "capture_throw_started", throw_start, source="ordinary_wild",
+            throw=throws_used, ball=ball, ball_quantity=throw_bag.get(ball, 0),
+        )
+
+        def finish_throw(outcome, state, *, throws_used=throws_used, ball=ball,
+                         throw_counters=throw_counters):
+            record_capture_diagnostic(
+                executor, "capture_throw_completed", state, source="ordinary_wild",
+                throw=throws_used, ball=ball, ball_quantity=_bag(emulator).get(ball, 0),
+                outcome=outcome, before_counters=throw_counters,
+                counters=capture_execution_counters(emulator, executor),
+            )
+
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)
         _select_bag_item(emulator, executor, ball)
@@ -3047,6 +3277,7 @@ def _try_catch_wild(
                             raise SurgeChapterError(
                                 f"{label} capture changed ordinary balls by an invalid quantity."
                             )
+                        finish_throw("specimen_retained", reader.read())
                         return True
                     if ending_specimens != starting_specimens:
                         raise SurgeChapterError(
@@ -3061,13 +3292,25 @@ def _try_catch_wild(
                     )
                 # Roar, Teleport and similar wild exits can end battle after a
                 # failed throw.  Battle termination is not capture evidence.
+                finish_throw("encounter_ended_without_retention", reader.read())
                 return False
             if (
                 raw.battle_state == 1
                 and reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
             ):
+                if _ordinary_capture_ball_total(_bag(emulator)) != starting_balls - throws_used:
+                    raise SurgeChapterError(
+                        f"{label} failed throw changed ordinary-ball accounting."
+                    )
+                finish_throw("not_caught_live_encounter", raw)
                 break
-            _pulse(executor, MacroActionKind.CONFIRM)
+            # A can enter ITEM and throw again while the command menu becomes
+            # live between observations. B settles dialogue without selecting
+            # another command, as in the early and one-off capture executors.
+            _pulse(executor, BALL_THROW_SETTLE_ACTION)
+        else:
+            finish_throw("unsettled_after_limit", raw)
+            raise SurgeChapterError(f"{label} ball throw did not reach a settled boundary.")
     raw = reader.read()
     if raw.battle_state == 2:
         raise SurgeChapterError(f"{label} capture cannot flee a trainer battle.")

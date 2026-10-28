@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon.red.status.coverage-and-effect-trace-evidence.v1",
+  "session": "2026-09-21-status-coverage-and-effect-trace",
+  "classification": "maintenance_unblocking_measured_effect_learning",
+  "source_commit": "e857cfec",
+  "private_packet": "red-status-effect-trace-20260921-v2",
+  "plan_sha256": "8f7986d712b2f2d40255f9c94ee7410a4628f2fc2e8849354d2e5ff0ada1ba95",
+  "result_sha256": "6bfc48325e4ff932278a06424e7bd30eb7d02b2098c738daebbf39a27c52ed47",
+  "retained_pre_execution_failure": {
+    "packet": "red-status-effect-trace-20260921-v1",
+    "failure_sha256": "dfde7f7f9499225b0f2cd707702e2f31957b6daa02f2216089f16381f45d4742",
+    "reason": "Trainer factory rejects custom stats that native level-up or send-out would replace.",
+    "factory_ram_writes": 0,
+    "gameplay_actions": 0,
+    "completed_pairs": 0,
+    "guard_weakened": false
+  },
+  "prospective_coverage": {
+    "recipes": 224, "fitting_roots": 3, "fitting_recipes": 192,
+    "reserved_train_roots": 1, "reserved_recipes": 32,
+    "family_contrast_cells_per_root": 32,
+    "source_assignment": "explicit_root_not_list_position_modulo",
+    "prior_confounded_observed_inventory_rejected": true,
+    "training_collection_started": false,
+    "reserved_recipes_executed": 0,
+    "independent_natural_roots": 0
+  },
+  "native_qualification": {
+    "instrumentation_passed": true,
+    "distinct_contrast_cases": 8,
+    "paired_episodes": 16,
+    "forced_diagnostic_actions": 16,
+    "learned_choices": 0,
+    "event_records": 112,
+    "frames": 18812,
+    "invalid_actions": 0,
+    "exact_terminal_state_equal_pairs": 8,
+    "actions_and_frames_equal_pairs": 8,
+    "hooks_removed_before_endpoint_save": true,
+    "actor_features_added": 0,
+    "observed_labels": {
+      "heal": {"applied": 1, "no_effect": 1},
+      "rest": {"applied": 1, "no_effect": 1},
+      "confusion": {"applied": 1, "no_effect": 1},
+      "disable": {"applied": 0, "no_effect": 2}
+    },
+    "disable_positive_native_example_verified": false,
+    "scope": "Assisted single-turn diagnostic contrasts, same opponent species; not battle performance or transfer."
+  },
+  "fits": 0,
+  "authority_promotions": 0,
+  "collection_delta": 0,
+  "old_reserved_battle_comparisons_opened": 0,
+  "protected": {
+    "story_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "tests": {"targeted_passed": 513, "integration_skipped": 13},
+  "next": "Verify positive Disable telemetry in a new bounded contrast, then freeze coverage-checked measured-effect collection and learning. Do not refit the rejected probe, infer battle value from effect success or promote this observer into an actor."
+}

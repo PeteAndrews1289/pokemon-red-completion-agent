@@ -1,0 +1,17 @@
+{
+  "schema": "pokemon.red.bruno-story-development-admission.v1",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "source_state_sha256": "365af4747021049aaeb17d433b9c6696ad056a7a6d78ea6ea93dc333600700f7",
+  "copy_evidence_sha256": "d905c4c45203c7346d3f870679b8214e868b186771d71eb3b73bcee53c12eff8",
+  "objective": "defeat_bruno",
+  "mode": "earned_first_challenge_development",
+  "basis": "User requested the next earned recovery/Bruno dispatch after the audited isolated-copy victory. Requires a fresh source-bound prospective packet and durable outcome; the copy is never promoted into campaign state.",
+  "recovery_selection": "owner_directed_support_not_learned",
+  "battle_items_allowed": false,
+  "teacher_fallback_allowed": false,
+  "later_rooms_allowed": false,
+  "rematch_allowed": false,
+  "league_income_allowed": false,
+  "fit_allowed": false,
+  "default_promotion_allowed": false
+}

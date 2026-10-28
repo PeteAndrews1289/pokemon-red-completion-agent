@@ -1,0 +1,194 @@
+{
+  "decision": "Retain and close the r12 attempt at this real unsupported execution blocker, as requested. Do not patch, resume, refit or silently restart it. Diagnose step31 on copies using the existing route observer/scripted-rival/cartridge-party/local-battler components; no whole-Red replay or new learner. Decide a successor launch only after the exact capture approach/handoff passes strict checks.",
+  "deltas": {
+    "assistance_classes": 0,
+    "fits": 0,
+    "fresh_attempt_registration_gain_after_starter": 1,
+    "fresh_attempt_registrations": 2,
+    "parameter_updates": 0,
+    "protected_primary_registrations": 0,
+    "training_examples": 0
+  },
+  "final_frozen_gates_passed": 0,
+  "final_frozen_gates_total": 5,
+  "frozen_run": {
+    "automatic_renewal_exercised": false,
+    "blocker": {
+      "battle_state": 0,
+      "error": "scripted dialogue disappeared without restoring input readiness",
+      "error_type": "RouteExecutionError",
+      "first_rival_handoff_inference": true,
+      "input_ready": false,
+      "location": {
+        "map_id": 33,
+        "map_name": "Route22",
+        "x": 29,
+        "y": 4
+      },
+      "ordinal": 31,
+      "ordinary_setback": false,
+      "phase": "route_execution",
+      "reason_code": "world_state_diverged",
+      "selected_kind": "acquire_species",
+      "source_audit": "Generic dialogue dismissal rejects text disappearance without ready control. The existing decoded Route22 rival contract only admits the second rival after all eight badges; it cannot serve this early prefix. A first-rival/scripted-handoff coverage gap is indicated, not a completed battle loss. Exact native latch should be inspected on a diagnostic copy before repair."
+    },
+    "champion": false,
+    "completed_objectives": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex"
+    ],
+    "configuration_sha256": "491dc00c7d64f1903c198c7127bd09e8aebeb1c5a93b1b2d4dc73ea04ac1d9a0",
+    "context_sha256": "9f22d8e8a15779a8f42f392ca3b66d178beee2b4cd518bc9cff7db33474af20e",
+    "diagnostic_events": 2205,
+    "dirty_worktree_sha256": "d044934a8963b59af23d4426dc0eb312c4aaf7d441a2b51802cd612ec733d962",
+    "episode": {
+      "executed_decisions": 32,
+      "model_decisions": 30,
+      "ordinary_setbacks": 1,
+      "stop_reason": "execution_failed",
+      "successful_decisions": 30,
+      "support_decisions": 2,
+      "teacher_actions": 0
+    },
+    "extra_boot_frames": 1213,
+    "family": "red-fresh-autonomous-run-20261011-v3",
+    "fits": 0,
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "hall_of_fame": false,
+    "in_run_source_config_model_changes": false,
+    "isolation_receipt_sha256": "155e8dfd61d1f222e26bc0e8e1cac59fa7458dccc9f90a16df6ad1d5fd41e020",
+    "manifest_sha256": "41c5f2003ad925e483488d4800bcc73ea506873c91cae4367a3f2eae3039b595",
+    "matching_player_processes_absent": true,
+    "native_facts": {
+      "badge_bits": 0,
+      "badges": 0,
+      "bag_stock": [
+        [
+          4,
+          5
+        ]
+      ],
+      "cash": 1175,
+      "party_levels": [
+        13,
+        14
+      ],
+      "registrations": 2,
+      "whole_party_restored": true
+    },
+    "opening_receipt_sha256": "83a13ea0ce0a63e7aef9147814b7422a9b476a51158734cb9b4a5b98b01bb698",
+    "package": "frozen-r12",
+    "plan_sha256": "27ab0e8e9f5abb4200344c3e650c4331318bbb75dca4a4a5aff98b4a703c2dc5",
+    "power_on_sha256": "019e0896bd669981bfafa1ba13dab4e7ef2b915ea723ac1956548d851f0520fb",
+    "progress_copied_from_diagnostics": false,
+    "released": true,
+    "root_result_sha256": "dba0f0aabc87966be2620580939d192b12a422694aa5261dcea0a5f0c0888d38",
+    "root_seconds": 209.48843966703862,
+    "runtime_llm_calls": 0,
+    "seed": 2026101101,
+    "segment_result_sha256": "f195b54cf1b961da46a3b3b539ab732dfc13f1a31e9951982dba8a25f8ba3e1b",
+    "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+    "spent": {
+      "actions": 13707,
+      "cash_debits": 2000,
+      "decisions": 32,
+      "frames": 997777,
+      "heals": 26,
+      "seconds": 207.45417241705582
+    },
+    "startup_actions": 223,
+    "startup_frames": 28477,
+    "state_loads": 0,
+    "teacher_actions": 0,
+    "terminal_sha256": "5b3fe902bfd536ffeb4e3fa4eaf7e466019b4d8af2a4060c64a5185f43b08244",
+    "training": 0,
+    "trial_identity": "red-fresh-autonomy-candidate-20261011-v3",
+    "worker_stopped": true
+  },
+  "github_published": false,
+  "monitor_automation_created": false,
+  "official_acceptance": false,
+  "partition": "development",
+  "previous_completed124_unchanged": true,
+  "repairs": {
+    "assistance_classes_changed": false,
+    "early_venue": "Before verified receive_pokedex, Route1 training remains available but blocked Route2 does not. Post-errand/Brock venue availability is preserved; goals and trainee/dose remain model-selected.",
+    "fresh_runtime": "Store the actual runtime returned by the initial bootstrap in the shared holder; corrected mock no longer invents this side effect.",
+    "models_changed": false,
+    "route_guards_weakened": false,
+    "source_import": "Authenticated source loader precedes guard bootstrap; no Python project cache bytes execute. Existing optional unpinned cache reads remain denied; declared data/source/environment, mutable-read, write and subprocess restrictions remain."
+  },
+  "retained_attempts": [
+    {
+      "failure": "KeyError runtime before the first model chunk after ordinary starter setup",
+      "family": "red-fresh-autonomous-run-20261011-v2",
+      "manifest_sha256": "0f3f325b78a9dd72a5087bed8dee39696b96ddcb3a9147867a3a6dbf76367e86",
+      "model_decisions": 0,
+      "package": "frozen-r10",
+      "plan_sha256": "9eac7623b95ebe05a3be9dc33080d8d9ae022d898f86d8a68fca4fad0b9b6123",
+      "result_sha256": "49a825d13ce0fa2d8ce7ad3327770d27a92ec3f6f827f0d5a0569a4266bb4e19",
+      "resumed": false,
+      "startup_actions": 223,
+      "startup_frames": 28477,
+      "terminal_sha256": "b890d7057ce8b2e48a21a23b21d55b9a9682dfa8c950851f283765d52b05e5e9",
+      "worker_stopped": true
+    },
+    {
+      "copied_progress": false,
+      "failure": "Model-selected Route2 training was advertised before receive_pokedex; stopped at blocked Viridian exit. Strict poison-faint dialogue guard was unchanged.",
+      "family": "red-fresh-launch-handoff-check-20261011-v1",
+      "learned_lab_rival_won": true,
+      "manifest_sha256": "560192dd29c6f327577f4691f21677691b5380b291d4bd2a217b64bff16091fd",
+      "model_decisions": 1,
+      "native_actions": 496,
+      "native_frames": 46537,
+      "package": "frozen-r11",
+      "plan_sha256": "45ce6a3ccfc7eae5d3041a3e46d39c38475111533858ca27c829f83ed0a8b046",
+      "purpose": "separate finite real fresh-handoff diagnostic, not a completion trial",
+      "registrations": 1,
+      "result_sha256": "b07b114b6c694bd67697d6c14e758e57cd9f37a2481d0a3fc03438e21e2ddec3",
+      "resumed": false,
+      "support_decisions": 1,
+      "terminal_sha256": "19ba051885e0fcb7345be453081c49319d1bb1db73157c51ce69a344ca9a97ea",
+      "worker_stopped": true
+    }
+  ],
+  "schema": "pokemon.red.source-only-frozen-launch-session.v1",
+  "session": "2026-10-11-source-only-frozen-launch",
+  "verdict": "source_only_launcher_verified_new_frozen_run_retained_at_early_route22_blocker",
+  "verification": {
+    "actual_fresh_import_checks": [
+      {
+        "controller_inputs": 0,
+        "modules": 297,
+        "package": "frozen-r10",
+        "unpinned_project_cache_reads": 0
+      },
+      {
+        "controller_inputs": 0,
+        "modules": 297,
+        "package": "frozen-r12",
+        "unpinned_project_cache_reads": 0
+      }
+    ],
+    "broader_private_tests": {
+      "failed": 10,
+      "note": "Ten unrelated pre-existing private AST/mocked integration tests fail identically against frozen-r11 on the same selected nodes (38 pass,10 fail). A whole-file copied comparison was invalid because neighboring private fixtures were absent. No assertions or guards were relaxed, and no full-suite/CI pass is claimed.",
+      "passed": 114
+    },
+    "environment_pins_verified_after_stop": 4512,
+    "focused_rom_free_tests_passed": 164,
+    "focused_ruff": "passed",
+    "module_isolation_error": null,
+    "native_loaded_project_modules": 641,
+    "native_unpinned_project_cache_reads": 0,
+    "private_existing_hazard_quote_tests_passed": 3,
+    "private_venue_prerequisite_cases_passed": 8,
+    "protected_endpoint_files_verified_unchanged": 9,
+    "runtime_pins_verified_after_stop": 7871
+  },
+  "why_trials_missed_it": "Actual fresh guarded import, shared bootstrap holder and pre-Pokedex optional venue availability were not established by retained-state continuation copies. This new model-selected early Route22 capture path additionally meets a scripted rival transition for which the qualified Route22 adapter admits only the second rival with eight badges. Component/continuation success is not fresh end-to-end readiness."
+}
+

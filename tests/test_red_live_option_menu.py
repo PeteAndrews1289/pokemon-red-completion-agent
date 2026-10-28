@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import random
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -125,6 +126,59 @@ def _no_ordinary_bindings() -> GoalBindingSet:
         ),
         (),
     )
+
+
+@pytest.mark.parametrize("partial_is_ordinary", [False, True])
+def test_approach_prior_is_scope_based_and_equal_for_both_menu_seams(partial_is_ordinary):
+    from pokemon_red_completion.living_dex_goal_policy import project_living_dex_goal_candidate
+
+    calls = []
+    partial = replace(_binding(GoalKind.ADVANCE_STORY, binding_ref="opaque-one", calls=calls),
+                      story_objective_ref="hidden-first", story_approach_only=True)
+    terminal = replace(_binding(GoalKind.ADVANCE_STORY, binding_ref="opaque-two", calls=calls),
+                       story_objective_ref="hidden-second")
+    primary, extra = (partial, terminal) if partial_is_ordinary else (terminal, partial)
+    mask = GoalOpportunity("masked", GoalKind.EXPLORE, GoalAvailability.UNAVAILABLE,
+                           unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET)
+    ordinary = GoalBindingSet((primary.opportunity, mask), (primary,))
+    question = GoalBindingSet((extra.opportunity, mask), (extra,)).question(
+        _situation(resources=0.1),
+    )
+    candidate = project_living_dex_goal_candidate(
+        question, 0, feature_version=5, binding_ref=extra.binding_ref,
+    )
+    options = build_red_live_option_set(
+        situation=_situation(resources=0.1), binding_set=ordinary,
+        supplements=(supplemental_live_option(extra, candidate),),
+        model_feature_version=5, ordering_seed_sha256="a" * 64,
+        economy_snapshot=EconomySnapshot(58, ()), target_cash=0,
+    )
+    by_ref = {c.binding_ref: c for c in options.menu.candidates}
+    assert by_ref[partial.binding_ref].features.dependency_unlock_gain == 0.5
+    assert by_ref[terminal.binding_ref].features.dependency_unlock_gain == 1.0
+    assert partial.opportunity == replace(partial, story_approach_only=False).opportunity
+    public = json.dumps(options.public_dict())
+    assert all(private not in public for private in (
+        "opaque-one", "opaque-two", "hidden-first", "hidden-second", "story_approach_only",
+    ))
+    assert calls == []
+
+
+@pytest.mark.parametrize("value", [None, 0, 1, "yes"])
+def test_approach_scope_requires_boolean(value):
+    from pokemon_red_completion.goal_manager_runtime import GoalManagerRuntimeError
+
+    with pytest.raises(GoalManagerRuntimeError, match="story approach"):
+        replace(_binding(GoalKind.ADVANCE_STORY, binding_ref="opaque", calls=[]),
+                story_approach_only=value)
+
+
+def test_nonstory_cannot_claim_approach_scope():
+    from pokemon_red_completion.goal_manager_runtime import GoalManagerRuntimeError
+
+    with pytest.raises(GoalManagerRuntimeError, match="story approach"):
+        replace(_binding(GoalKind.ACQUIRE_SPECIES, binding_ref="opaque", calls=[]),
+                story_approach_only=True)
 
 
 def test_private_target_variants_with_equal_features_sample_without_model_query(monkeypatch):
@@ -549,6 +603,73 @@ def test_critical_resupply_remains_a_hard_safety_choice() -> None:
     assert calls == []
 
 
+def test_explicit_model_resource_authority_preserves_options_and_uses_scores():
+    calls=[]
+    original=_mixed(calls)
+    options=replace(original,force_resource_safety=False)
+    choice=select_red_live_option(_model(),options,seed=7,greedy_selection=True)
+    assert options.menu is original.menu and options.bindings is original.bindings
+    assert choice.mode is RedLiveOptionSelectionMode.MODEL_GREEDY
+    assert all(score is not None for score in choice.scores)
+    assert choice.public_dict()['resource_authority']=='model'
+    assert options.public_dict()['resource_authority']=='model'
+    assert calls==[]
+
+
+def test_model_resource_authority_does_not_remove_emergency_restoration():
+    calls=[]
+    options=replace(_mixed(calls),force_resource_safety=False,
+                    situation=_situation(resources=1.,safety=1.))
+    choice=select_red_live_option(_model(),options,seed=7)
+    assert choice.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
+    assert choice.selected_binding.kind is GoalKind.RESTORE_TEAM
+    assert calls==[]
+
+
+def _pp_only_mixed(*, storage=0.2):
+    options = replace(_mixed([]), force_resource_safety=False,
+                      situation=_situation(resources=1., safety=1., storage=storage))
+    bindings = tuple(replace(b, health_safety_recovery=False)
+                     if b.kind is GoalKind.RESTORE_TEAM else b for b in options.bindings)
+    original = replace(options.original_bindings, bindings=tuple(
+        next(b for b in bindings if b.binding_ref == old.binding_ref)
+        for old in options.original_bindings.bindings))
+    return replace(options, bindings=bindings, original_bindings=original)
+
+
+def test_pp_only_recovery_does_not_consume_item_due_to_unrelated_health_pressure():
+    options = _pp_only_mixed()
+    vectors = tuple(options.menu.candidate_vector(i) for i in options.menu.available_indices)
+    choice = select_red_live_option(_model(), options, seed=7, greedy_selection=True)
+    assert choice.mode is RedLiveOptionSelectionMode.MODEL_GREEDY
+    assert all(score is not None for score in choice.scores)
+    assert vectors == tuple(options.menu.candidate_vector(i)
+                            for i in options.menu.available_indices)
+    assert any(b.kind is GoalKind.RESTORE_TEAM for b in options.bindings)
+    assert 'health_safety_recovery' not in json.dumps(options.public_dict())
+
+
+@pytest.mark.parametrize('value', [None, 0, 1, 'yes'])
+def test_private_health_safety_purpose_requires_boolean(value):
+    from pokemon_red_completion.goal_manager_runtime import GoalManagerRuntimeError
+    binding = _binding(GoalKind.RESTORE_TEAM, binding_ref='restore', calls=[])
+    with pytest.raises(GoalManagerRuntimeError, match='health-safety'):
+        replace(binding, health_safety_recovery=value)
+
+
+def test_non_recovery_binding_cannot_claim_pp_safety_exclusion():
+    from pokemon_red_completion.goal_manager_runtime import GoalManagerRuntimeError
+    binding = _binding(GoalKind.ADVANCE_STORY, binding_ref='story', calls=[])
+    with pytest.raises(GoalManagerRuntimeError, match='health-safety'):
+        replace(binding, health_safety_recovery=False)
+
+
+@pytest.mark.parametrize('permission',[None,0,1,'yes'])
+def test_resource_authority_cannot_be_coerced(permission):
+    with pytest.raises(TypeError,match='explicit boolean'):
+        replace(_mixed([]),force_resource_safety=permission)
+
+
 def test_control_recovery_cannot_enter_learned_mixed_authority() -> None:
     calls: list[str] = []
     original = _ordinary_bindings(calls)
@@ -772,3 +893,62 @@ def test_model_exploration_restore_probability_replays_exactly() -> None:
     assert replay.selected_candidate_index == first.selected_candidate_index
     assert first.probabilities[first.selected_candidate_index] > 0.0
     assert calls == []
+
+
+@pytest.mark.parametrize("copies", [1, 2, 8, 32])
+@pytest.mark.parametrize("mix", [0.0, 0.25, 1.0])
+def test_baseline_family_sampling_does_not_reward_duplicate_variants(monkeypatch, copies, mix):
+    import math
+
+    original = replace(_mixed([]), force_resource_safety=False,
+                       situation=_situation(resources=0.1))
+    exemplar = original.menu.candidates[0]
+    candidates, bindings = [], []
+    for candidate, binding in zip(original.menu.candidates, original.bindings, strict=True):
+        count = copies if candidate.features.kind == exemplar.features.kind else 1
+        for ordinal in range(count):
+            ref = f"opaque-{len(candidates)}-{ordinal}"
+            candidates.append(replace(candidate, binding_ref=ref))
+            bindings.append(replace(binding, binding_ref=ref))
+    options = replace(original, menu=replace(original.menu, candidates=tuple(candidates)),
+                      bindings=tuple(bindings), ordinary_binding_refs=frozenset())
+    # Known non-identical scores; the model is queried exactly once, not bypassed.
+    queries = []
+    def scores(self, menu, utility):
+        queries.append(menu)
+        return tuple(1.0 if c.features.kind == exemplar.features.kind else 0.0
+                     for c in menu.candidates)
+    monkeypatch.setattr(LivingDexOptionValueModel, "scores", scores)
+    choice = select_red_live_option(_model(), options, seed=31, exploration_mix=mix)
+    kinds = {c.features.kind for c in candidates}
+    expected = (1.0 - mix) * math.e / (math.e + len(kinds) - 1) + mix / len(kinds)
+    actual = sum(p for c, p in zip(candidates, choice.probabilities, strict=True)
+                 if c.features.kind == exemplar.features.kind)
+    assert actual == pytest.approx(expected)
+    assert len(queries) == 1
+    assert choice.kind_balanced_exploration is True
+    assert choice.public_dict()["policy_id"] == "red-live-kind-balanced-option-v1"
+    assert all(p > 0 for p in choice.probabilities)
+    assert "opaque-" not in json.dumps(choice.public_dict())
+
+
+@pytest.mark.parametrize("value", [None, 0, 1, "yes"])
+def test_kind_balancing_rejects_nonboolean_authority(value):
+    with pytest.raises(TypeError, match="kind-balanced"):
+        select_red_live_option(_model(), _mixed([]), seed=1, kind_balanced_exploration=value)
+
+
+def test_legacy_sampler_remains_explicitly_reproducible():
+    import math
+
+    options = replace(_mixed([]), force_resource_safety=False)
+    choice = select_red_live_option(_model(), options, seed=17, kind_balanced_exploration=False)
+    concrete = [v for v in choice.scores if v is not None]
+    peak = max(concrete)
+    total = sum(math.exp(v - peak) for v in concrete)
+    expected = tuple(0.0 if v is None else 0.75 * math.exp(v - peak) / total + 0.25 / len(concrete)
+                     for v in choice.scores)
+    assert choice.probabilities == pytest.approx(expected)
+    assert choice.kind_balanced_exploration is False
+    assert "sampling_rule" not in choice.public_dict()
+    assert choice.public_dict()["policy_id"] == "red-live-mixed-option-v1"

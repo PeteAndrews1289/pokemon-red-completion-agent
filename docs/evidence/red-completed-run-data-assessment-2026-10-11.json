@@ -1,0 +1,414 @@
+{
+  "schema": "pokemon.red.completed-run-data-assessment.v1",
+  "session_id": "2026-10-11-completed-red-data-assessment",
+  "assessment_started_utc": "2026-10-11T06:14:23Z",
+  "status": "closed",
+  "assessment_only": true,
+  "report": "docs/work-sessions/2026-10-11-completed-red-data-assessment.md",
+  "new_gameplay_inputs": 0,
+  "new_gameplay_frames": 0,
+  "new_train_examples": 0,
+  "new_fits": 0,
+  "new_parameter_updates": 0,
+  "new_registration_gains": 0,
+  "official_frozen_autonomy_passed": false,
+  "final_fresh_red_gates": {
+    "passed": 0,
+    "total": 5,
+    "unchanged": true
+  },
+  "sources": {
+    "scripts/run_fresh_red_player.py": "3a83e0340acdb32b57cacc9518244c0ee186473b66ca180f155ae8cac2b7fa9c",
+    "scripts/run_configured_red_player.py": "abdf3e76f4923360b6ad493cd046183565f6771db127efd055e735e16a9f431a",
+    "src/pokemon_red_completion/red_player_configuration.py": "86132f13fdfd35395fd495b53bc914e3ce7c5d5e6ba828c32343986941aaef2e",
+    "src/pokemon_red_completion/living_dex_option_value.py": "f01ba412e950f4e3baf76c31e66290a53feefddc9c7d3473d8ae66dfc1e6a7c4",
+    "src/pokemon_red_completion/red_native_boxed_evolution.py": "6dd0dccc35a54c502c06231f4b137b8580032323818c80865bfe74c36fd59e70",
+    "docs/evidence/red-fresh-frozen-player-run-2026-10-09.json": "11cc5fcd14e1af6754614bfdba1660990f4ff8018d547f83fa95c665207189db",
+    "docs/evidence/red-eight-hour-earned-league-2026-10-10.json": "ca0a3aefbbfb108ef64938fed45cddd23e884c07cc96e18fc2c9a2e2fd3c4581",
+    "docs/evidence/red-two-hour-champion-recovery-2026-10-10.json": "52dcd3c2f13b885ad47cd8283aa3207a27b5124038e1de6b173fabd29cc65c30",
+    "docs/evidence/red-earned-collection-completion-2026-10-09.json": "19eb585011ce0e2af2e9f92307ac8a24c71c38afb8e4c5c5d8c791043eaddf8c",
+    "docs/evidence/red-same-save-run-completion-2026-10-10.json": "5a062b94845594104aaf8371210131795d8ec69cc9c81cf217fa23fc6ba7c006"
+  },
+  "checkpoint_json_content_fingerprint": {
+    "files": 403,
+    "digest": "6db43a4677ead969626eebae48e037d3fb0cbefab6696997385625ad61fa9a7a",
+    "recipe": "sha256 of sorted relative path UTF8, NUL, and binary sha256 of each retained checkpoint JSON"
+  },
+  "ancestry_scope": {
+    "ancestry_segment_records": 135,
+    "primary_segments": 133,
+    "prefix_goals": 34,
+    "canonical_completed_outcomes_match_perstep": true,
+    "charged_attempts": 1569,
+    "non_completed_or_non_episode_charges": 27
+  },
+  "retained_endpoint": {
+    "segment": 133,
+    "required_registrations": 124,
+    "required_total": 124,
+    "cash": 2077,
+    "original_individuals_returned_and_restored": true,
+    "legendary_specimens_retained": 4,
+    "party_order_levels": [
+      89,
+      66,
+      74,
+      60,
+      64,
+      100
+    ],
+    "state_sha256": "62e04ec2ab7c68f669a04ea5b92553db6cb780a7d2271294b39d951abbdb4315",
+    "context_sha256": "1fa2196b146d57a2e0f36d6f2aa8716150f76e5e2042dec2f060d97a35f9b231",
+    "result_sha256": "af6f0370a9113ee51142e798425be62e981f06443e8bbd03a51ffa4793c03745",
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "champion_hall_of_fame_segment": 94,
+    "prior_closeout_declared_pins": 649,
+    "cold_proofs_are_prior_closeout_evidence_not_new_review_emulation": true,
+    "native_workers_stopped": true
+  },
+  "outcomes": {
+    "outcomes": 1542,
+    "model": 1082,
+    "verification:succeeded": 1369,
+    "support": 460,
+    "verification:None": 47,
+    "verification:failed": 126,
+    "ordinary_setbacks": 120,
+    "registration_gains_after_initial_starter": {
+      "model_owned_goal": 120,
+      "support_goal": 3
+    },
+    "selection_modes": {
+      "model_exploration": 661,
+      "model_greedy": 421
+    },
+    "typed_error_counts": {
+      "RedAreaExecutionError": 1,
+      "RouteExecutionError": 20,
+      "SurgeChapterError": 1,
+      "ControllerWallTimeBudgetExhausted": 12,
+      "ValueError": 1,
+      "LoreleiStoryBattleStopped": 5,
+      "RedLeagueFundingExecutionError": 3,
+      "RedGoalSkillError": 1,
+      "PrivateArtifactError": 1,
+      "AssertionError": 1,
+      "KeyboardInterrupt": 1
+    },
+    "outcome_error_total": 47,
+    "classification_counters_overlap": true
+  },
+  "selection": {
+    "menus": 908,
+    "candidate_rows": 8534,
+    "bounded_success_one": 8013,
+    "raw_success_above_one": 8013,
+    "raw_success_below_zero": 153,
+    "selected_not_top": 378,
+    "selected_top": 530,
+    "success_comparisons": 878,
+    "squared_error": 107.48729239622989,
+    "success_explanations_are_not_calibrated_probabilities": true,
+    "success_above_one_fraction": 0.9389500820248418,
+    "other_scoped_model_owned_formats": 174,
+    "primary_family_selected_max_abs_standardized_coordinate": {
+      "median": 21.01344623656469,
+      "maximum": 97.9053122644456
+    }
+  },
+  "goal_model": {
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "record_sha256": "738d4d274a436daa2d4ded883a5db7a753ae302d872af9a8fdeedaf8e9862572",
+    "settled_examples": 151,
+    "feature_dimensions": 356,
+    "nonzero_weighted_dimensions": 60,
+    "recent_loss_dimensions": 9,
+    "recent_loss_weighted_dimensions": 0,
+    "recent_opponent_gap_dimensions": 9,
+    "recent_opponent_gap_weighted_dimensions": 0,
+    "preparation_hp_and_pp_dimensions_weighted": 0,
+    "earlier_same_corpus_weighted_design_columns": 61,
+    "earlier_same_corpus_weighted_design_rank": 37
+  },
+  "associated_training": {
+    "league_block": {
+      "registered_contexts": 18,
+      "measured_contexts": 12,
+      "executed_branches": 295,
+      "demonstration_contexts": 6,
+      "demonstration_actions": 29,
+      "demonstration_head_labels": 34,
+      "fits": 5,
+      "provisional_adoptions": 3
+    },
+    "readiness_block": {
+      "new_settled_outcomes": 8,
+      "retained_settled_outcomes": 36,
+      "examples": 44,
+      "fits": 1,
+      "generic_reserved_readiness_qualification_passed": false,
+      "provisional_only": true
+    },
+    "objects_and_roots_not_independent": true,
+    "last_collection_goal": {
+      "new_train": 0,
+      "new_fits": 0,
+      "new_weights": 0
+    }
+  },
+  "battle_journals": {
+    "trainer": {
+      "episodes": 350,
+      "decisions": 7200,
+      "stop_counts": {
+        "party_defeated": 32,
+        "battle_won": 305,
+        "decision_budget": 12,
+        "battle_exited_without_win": 1
+      },
+      "policy_ns": 25249850044
+    },
+    "wild": {
+      "episodes": 1869,
+      "decisions": 6619,
+      "stop_counts": {
+        "battle_won": 1827,
+        "battle_exited_without_win": 42
+      },
+      "policy_ns": 26420418608
+    },
+    "episodes_total": 2219,
+    "decisions_total": 13819,
+    "policy_seconds_total": 51.670268652,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "main_family_invalid_action_failures": 0,
+    "main_family_suppressed_or_failed_moves": 866,
+    "suppression_does_not_imply_software_bug": true,
+    "related_repeated_episodes_not_independent": true,
+    "supplied_immunity_filter_decisions_in_main_family": 581
+  },
+  "diagnostics": {
+    "files": 130,
+    "events": 218851,
+    "bytes": 1180821108,
+    "main_family_capture": {
+      "started": 353,
+      "completed": 353,
+      "incomplete": 0
+    },
+    "main_family_throw_sources": {
+      "ordinary_wild": 247,
+      "one_off": 23,
+      "safari": 83
+    },
+    "main_family_throw_outcomes": {
+      "specimen_retained": 52,
+      "not_caught_live_encounter": 255,
+      "specimen_and_registration_verified": 5,
+      "encounter_ended_retention_unverified": 39,
+      "encounter_ended_without_retention": 2
+    },
+    "main_family_fishing": {
+      "no_bites": 20,
+      "observed_casts": 46,
+      "selected_target_sightings": 16
+    },
+    "main_family_search": {
+      "observed_operations": 8422,
+      "known_tile_exposure": 0,
+      "operations_with_known_tile_exposure": 4,
+      "files_unknown:actual_rng_checks": 128,
+      "files_unknown:step_probability": 128,
+      "files_unknown:total_eligible_search_steps": 128
+    },
+    "capture_event_names_do_not_prove_retention": true,
+    "actions_and_frames_are_not_search_trials": true
+  },
+  "timing": {
+    "completed_receipt_phase_seconds": {
+      "execution": 33686.707302629016,
+      "menu_and_boundary_observation": 23327.88595592545,
+      "outcome_diagnostics": 11.87814451358281,
+      "selection_and_receipt": 14.259890298824757,
+      "selection_diagnostics": 15.23528327816166,
+      "terminal_observation": 81.64150921721011,
+      "verification": 24.827194559853524
+    },
+    "cumulative_native_accounted_seconds": 57828.56063655426,
+    "menu_share_of_execution_plus_menu": 0.40915640404792913,
+    "categories_not_all_wall_clock_or_additive_with_nested_battle_journals": true
+  },
+  "last_collection_block": {
+    "segments": [
+      115,
+      133
+    ],
+    "initial_registrations": 51,
+    "final_registrations": 124,
+    "new_registrations": 73,
+    "model_owned_goal_gains": 70,
+    "support_goal_gains": 3,
+    "goal_receipts": 244,
+    "model_goal_receipts": 217,
+    "support_goal_receipts": 27,
+    "verified_evolution_completions": 39,
+    "ordinary_setbacks": 37,
+    "income_cycles": 15,
+    "income_room_wins": 75,
+    "income_gross": 446985,
+    "actual_entry_purchases": 169500,
+    "actual_net_cash_income": 277485,
+    "singleton_income_cycles": 2
+  },
+  "financial_limitations": {
+    "generic_attribution_gaps_latest_goal": 9,
+    "verified_ball_purchase_gaps": [
+      118800,
+      8400,
+      4800
+    ],
+    "positive_associated_trainer_income_gap": 2000,
+    "remaining_positive_gap_total": 4810,
+    "original_records_not_rewritten": true,
+    "native_debit_ledger_retained": true
+  },
+  "code_findings": [
+    {
+      "source": "scripts/run_fresh_red_player.py",
+      "finding": "Native loop hardcodes greedy selection while continuation accepts declared exploration."
+    },
+    {
+      "source": "scripts/run_fresh_red_player.py",
+      "finding": "Fresh loop does not forward the configured entry's validated consequence-refinement arguments."
+    },
+    {
+      "source": "scripts/run_fresh_red_player.py",
+      "finding": "Fresh cost accumulation uses net before/after cash instead of configured native observed-debit helper."
+    },
+    {
+      "source": "scripts/run_configured_red_player.py",
+      "finding": "Working component, loan, recovery and refinement declarations must remain pinned through automatic renewal, not selected by an operator between stages."
+    }
+  ],
+  "decision": {
+    "immediateObstacle": "fresh-start entry does not yet persist the same successful selection/readiness/recovery/accounting wiring as configured continuations",
+    "nextOutcome": "one frozen declared policy survives normal loss and automatic renewal while retaining costs and earning new story/collection progress on diagnostic copies",
+    "defer": [
+      "battler redesign",
+      "sequence planner",
+      "another supported full-game coverage replay",
+      "hack or Crystal",
+      "publication"
+    ],
+    "nextHours": 3,
+    "RedEstimate": {
+      "activeEngineeringHours": [
+        40,
+        120
+      ],
+      "oneFrozenAttemptHours": [
+        10,
+        24
+      ],
+      "calendarWeeks": [
+        1,
+        3
+      ],
+      "contingencyWeeks": [
+        3,
+        6
+      ]
+    },
+    "largerGoalMonths": [
+      4,
+      9
+    ]
+  },
+  "forecast": {
+    "is_conditional_engineering_judgment": true,
+    "productive_development_hours_per_day": 8,
+    "first_red": {
+      "active_hours": [
+        40,
+        120
+      ],
+      "attempt_runtime_hours": [
+        10,
+        24
+      ],
+      "calendar_weeks": [
+        1,
+        3
+      ],
+      "contingency_weeks": [
+        3,
+        6
+      ]
+    },
+    "repeatability_optional": {
+      "extra_active_hours": [
+        20,
+        60
+      ],
+      "ten_attempt_runtime_hours": [
+        100,
+        240
+      ],
+      "extra_calendar_weeks": [
+        1,
+        3
+      ]
+    },
+    "compatible_hack": {
+      "extra_active_hours": [
+        40,
+        160
+      ],
+      "extra_calendar_weeks": [
+        2,
+        6
+      ],
+      "confidence": "low"
+    },
+    "crystal": {
+      "extra_active_hours": [
+        120,
+        360
+      ],
+      "extra_calendar_weeks": [
+        4,
+        12
+      ],
+      "confidence": "very_low"
+    },
+    "emerald_after_crystal": {
+      "extra_active_hours": [
+        200,
+        500
+      ],
+      "extra_calendar_weeks": [
+        8,
+        20
+      ],
+      "confidence": "very_low"
+    },
+    "overall_through_emerald_calendar_months": [
+      4,
+      9
+    ],
+    "no_transfer_prototype_or_measured_cross_title_rate": true,
+    "not_a_deadline_or_guarantee": true
+  },
+  "limitations": [
+    "assisted DEVELOPMENT completion is not frozen autonomy",
+    "no causal or independent win-rate comparison",
+    "same-corpus older training audit reused with unchanged model identity",
+    "standard explanation metrics exclude other scoped formats",
+    "historical malformed or missing receipts not repaired by assessment",
+    "partial financial attribution is unknown rather than zero",
+    "no whole-codebase full-suite or CI claim",
+    "no new run, fit, source implementation, publication or external-agent assignment"
+  ]
+}
+

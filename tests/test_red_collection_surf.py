@@ -197,11 +197,31 @@ def test_replan_and_retarget_preserve_only_declared_surf():
         derive_red_living_dex_wild_corridor,
         retarget_red_wild_profile,
     )
-    world = SimpleNamespace(replanner=lambda: lambda _: surf_plan())
-    router = RedResourceGoalRouter(None, None, world)
+    from pokemon_red_completion.route_executor import ReplanRequest, TraversalSnapshot
+
+    received = []
+    def replan(request):
+        received.append(request)
+        return surf_plan()
+    reader = object()
+    refreshed = []
+    world = SimpleNamespace(replanner=lambda: replan)
+    def observe_current(actual_reader):
+        assert actual_reader is reader
+        refreshed.append(actual_reader)
+        return world
+    world.with_current_observation = observe_current
+    router = RedResourceGoalRouter(SimpleNamespace(reader=reader), None, world)
+    request = ReplanRequest(TraversalSnapshot(21, (4, 5), True,
+        capabilities=frozenset({"move:surf", "move:cut"}), mode="land"),
+        15, (3, 4), {}, 1)
     with pytest.raises(RedResourceGoalRoutingError, match="unsupported"):
-        router._replan(None, allow_cut=True)
-    assert router._replan(None, allow_surf=True) == surf_plan()
+        router._replan(request, allow_cut=True)
+    assert received[-1].current.capabilities == frozenset({"move:cut"})
+    assert router._replan(request, allow_surf=True) == surf_plan()
+    assert received[-1].current.capabilities == frozenset({"move:surf"})
+    assert refreshed == [reader, reader]
+    assert request.current.capabilities == frozenset({"move:surf", "move:cut"})
     corridor = derive_red_living_dex_wild_corridor(
         RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
     )

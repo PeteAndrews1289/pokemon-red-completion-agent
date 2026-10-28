@@ -1,0 +1,88 @@
+{
+  "schema": "pokemon.red.joint-ranking-fit.v1",
+  "session_id": "2026-09-24-joint-ranking",
+  "status": "fit_rejected_composed_handoff_infeasible",
+  "source_commit": "d41fa17b",
+  "hashes": {
+    "plan": "6ca2aa2ffc564a28928c4b33caceb106d24fb6e7c9645f98f37b5ca3d5ecc42b",
+    "fit": "99347b32ab70f6159c5fad90e224c6ebf80696968e6969833298bb5d7b9c311c",
+    "fit_audit": "5937621519cc2d3d0e7da6b2261b4efbae3dd33985ea37f0d4a05c51fd469ac3",
+    "result": "cecb47b0a918e1a4425ad367a6528bd84cab3cce4cd8526f38b775574d7c9c3b",
+    "closure": "9dde78b8a874c951ecfec46c3fa662ec76e3f88bd30b22ae6f79fc0e94450274",
+    "handoff_diagnosis": "512afb336d93a421b6e9b0bfbdec50994ceaf6539ece9a0c1be923789700f366"
+  },
+  "method": {
+    "name": "joint_ranking_v1",
+    "direction_attempt_limit_per_head": 600,
+    "parameter_trust_radius": 0.05,
+    "trust_reductions": 8,
+    "accepted_focus_limit": 40,
+    "solver": "HiGHS joint margin maximum then minimum L1 displacement",
+    "acceptance": "exact numeric retained budgets and nonincreasing fresh selected regret",
+    "checkpoints_saved": true
+  },
+  "fit": {
+    "attempts": 1,
+    "passed": false,
+    "seconds": 148.730047250001,
+    "new_targets": 0,
+    "retained_recent_contexts": 45,
+    "retained_groups": 18,
+    "switch": {
+      "before": 0.5313747160857142,
+      "after": 0.49524459485714273,
+      "accepted_steps": 58,
+      "selected_epoch": 46,
+      "correct_choices_before": 1,
+      "correct_choices_after": 2,
+      "cases": 7,
+      "stop": "no_accepted_local_correction"
+    },
+    "control": {
+      "accepted_steps": 0,
+      "stop": "initial_budget_infeasible"
+    },
+    "candidate_written": false
+  },
+  "coupling": {
+    "old_control_groups_violated": 7,
+    "old_control_groups_with_irreducible_proposal_violation": 6,
+    "new_full_control_floor": 0.8891855907000004,
+    "required_full_control_maximum": 0.8839050658650002,
+    "saved_switch_checkpoints": 59,
+    "checkpoints_with_feasible_current_control": 15,
+    "all_saved_checkpoints_same_new_proposal_floor": true
+  },
+  "verification": {
+    "focused_tests_passed": 222,
+    "full_suite": false,
+    "checkpoints_independently_recomputed": 60,
+    "lint_passed": true,
+    "documentation_checks_passed": true,
+    "mypy": "No new-module errors; two pre-existing imported errors in red_damage_interaction_head.py prevent a clean invocation."
+  },
+  "deltas": {
+    "new_training_targets": 0,
+    "correct_fresh_switch_decisions": 1,
+    "complete_qualified_models": 0,
+    "native_episodes": 0,
+    "story": 0,
+    "registrations": 0,
+    "authority_promotions": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "state": "359a96aa",
+    "envelope": "36dbc835",
+    "deployed": "4ea4cfde",
+    "unused_stage": 462,
+    "unopened_comparison_teams": 24
+  },
+  "next": "Correct the two-head training objective/constraint seam: account for measured downstream control proposal quality while training and selecting switch checkpoints. Prove on synthetic coupled cases before another prospective experiment. No control-only repeat or threshold change.",
+  "limitations": [
+    "One improved TRAIN decision is not native or transfer qualification.",
+    "Every saved switch checkpoint leaves the required new-control threshold unreachable with its proposals.",
+    "Local guarded search failure is not a proof of global neural infeasibility.",
+    "The original one-fit packet is closed; no comparison, promotion or campaign occurred."
+  ]
+}

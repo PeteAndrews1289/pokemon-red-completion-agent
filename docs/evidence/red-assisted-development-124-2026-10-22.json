@@ -1,0 +1,358 @@
+{
+  "actor_counts": {
+    "execution_errors": 0,
+    "model": 15,
+    "ordinary_setbacks": 0,
+    "retained_route_recovery_certificates": 0,
+    "support": 23
+  },
+  "all_original_processes_exited": true,
+  "assistance_class": "restored assisted DEVELOPMENT with scoped repairs;not fresh frozen acceptance",
+  "badges": 8,
+  "case": "autonomous120-v118-diagnostic-20261022-080544",
+  "cash": 27194,
+  "completed_at_utc": "2026-10-22T08:25:24.087931+00:00",
+  "completed_save_must_not_be_resumed": true,
+  "concurrent_champion_hall_of_fame_receipts": [
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "28fd18abd6c4bb1f78be1984c669409c4e077ec1c92c162db575d6da5fd8567b",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-000/outcome.json",
+      "sha256": "6d173dcd1bf68dac83200b83a8092ab51d2c5739f537e633b3d664145639b43f"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "12cba0e8c5b5804663519a3b9f311388015b7292a3ef6aad864d8b774343b293",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-003/outcome.json",
+      "sha256": "c8296aaecd30bfd10b1d86669b5ca38971769c317306337f34b96c9e0b546c75"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "7cc8d58ed4197d2bc41f16aca959d94cebe631bef077fe55eab5758b672a6098",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-006/outcome.json",
+      "sha256": "7c4cdf6ba4d296167a14639b1576da1e82347b2c4cb2becd3358687a363736c4"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "763a6d7f36f0ccd10706ebef45d28dd260018352cac2b7575d6e769d9359a9fa",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-009/outcome.json",
+      "sha256": "bf5c56f5d3d5c4c472ea171b72e2a113758aceaf3e734bb730d6ea61d108db11"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "d69ba2d46caeea1c872fd7fdac79a13fcf74e547c94e99444c451c2f3518e930",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-012/outcome.json",
+      "sha256": "64c9f43b003f322a805a9808191bd895dc2a32f8d88045692eacf297f3df7396"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "5455b21072f4dcaa62d8027fc398769dfb9c6120c5724f3db7b4c90a7099df0a",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-014/outcome.json",
+      "sha256": "71dbef435bcc5a276642b0eeaf1417024661ba72d5761c9e11a123925e689909"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "25e9492d6958288200322e38a541e24b15b7c2ddb510553cc1c0830e24a0d5b7",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-016/outcome.json",
+      "sha256": "5554d21b587a7e75314dfeb68bcd25b7cc08a6a5dea4d6d776ae799511c9ce2b"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "fef78f574b6a9739b0e09310074c7e44523e235f55c8f75dd25f9b624038e997",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-018/outcome.json",
+      "sha256": "699416acb4b18ba8309da5e32b384d1a8fd74aaae1d88268cae905a888285263"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "ee5b06721e1ffb543aa25d15f01bdcc3ab0228010f1d9eff28c7bbcc8a946d16",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-020/outcome.json",
+      "sha256": "a942e621faa147fa6b98c0744ede4144fd2606a541924af8a74151c2cf95e9d2"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "22958aa180c3f1fcd28dacd6ebf5ab5cddc0e6d0aace7d7583ad505b11b2e557",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-022/outcome.json",
+      "sha256": "e68a7204dae21d88d316e336f8f20927027b397428ff438184d4683366716b94"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "06d13947098d475400c48b0b4bce874454cfa18a82e811ba6d93c4575a470c08",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-024/outcome.json",
+      "sha256": "64d73630b356906c9669f45da7f388ea9aaaeac28bd93797c27f7008530eb86c"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "e4aefb82b82d207b2005004896d4090a05226e645c54d0fa17a6a47bbe371f3f",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-027/outcome.json",
+      "sha256": "f12d5fa814e2246a97b18dcf69d03023201864730d227510d94a3a8b755c541e"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "addae161e2f97b7702eff486a099f25f7a20229ea64cf3f05bb9d9aa7aa1dcf3",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-029/outcome.json",
+      "sha256": "61134f27553451c5e1e1386ec0f930f0186c5e2edd793102971eb68190295045"
+    },
+    {
+      "battle_count": 5,
+      "concurrent_champion_and_hall_of_fame": true,
+      "controller": "scoped-assisted-champion-development",
+      "hall_state_sha256": "7a18523ef7a8807aa3f4e8674ab7c4e17e51e8086b225bed935c7110cf5b0a4d",
+      "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "native_postgame_return": true,
+      "receipt": "runs/segment-001/native/episode/step-032/outcome.json",
+      "sha256": "fb2f400f507f931a0ac6a551d8b54f43b533f29ba1e1a8de3a8abdb0ac6f84fa"
+    }
+  ],
+  "context_sha256": "f156bd88d1ecc6b7711540cc0ca4499c52273e5454e7c1e8b0de1a18c54a7e5f",
+  "controls_released": true,
+  "cost_scope": "Paired lineage meter,not total engineering/copy cost. Every qualification,failed attempt,partial cost and fullhold stays separately charged.",
+  "current_continuation_native_delta": {
+    "actions": 53917,
+    "cash_debits": 404000,
+    "decisions": 38,
+    "frames": 4513692,
+    "heals": 17,
+    "seconds": 954.0520136480009
+  },
+  "current_continuation_root_seconds": 1037.825168607,
+  "declared_denominator": 124,
+  "failed_fresh_attempts": 6,
+  "frozen_package_sha256": "491176c1564242a1e4cc05903f574d0ed91eccbb57d4ae7bb69aa689372b0209",
+  "heldout_starts": 0,
+  "inherited_metered_lineage_spent": {
+    "actions": 1387620,
+    "cash_debits": 816983,
+    "decisions": 1262,
+    "frames": 115119979,
+    "heals": 1062,
+    "seconds": 25068.296583697007
+  },
+  "last_registration": "Articuno",
+  "latest_concurrent_proof": {
+    "battle_count": 5,
+    "concurrent_champion_and_hall_of_fame": true,
+    "controller": "scoped-assisted-champion-development",
+    "hall_state_sha256": "7a18523ef7a8807aa3f4e8674ab7c4e17e51e8086b225bed935c7110cf5b0a4d",
+    "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+    "native_postgame_return": true,
+    "receipt": "runs/segment-001/native/episode/step-032/outcome.json",
+    "sha256": "fb2f400f507f931a0ac6a551d8b54f43b533f29ba1e1a8de3a8abdb0ac6f84fa"
+  },
+  "local_native_registrations": 124,
+  "master_ball": 0,
+  "native_first_source_byte_exact": true,
+  "native_terminal_reason": "curriculum_complete",
+  "new_fits": 0,
+  "new_registrations_this_continuation": [
+    {
+      "receipt": "runs/segment-001/native/episode/step-026/outcome.json",
+      "registrations": [
+        "pokemon:national:137"
+      ],
+      "sha256": "e253e6593b89ddb8aa6eec16e4db3307febb51f28412d28f514a0cd48a71483f",
+      "verification": "succeeded"
+    },
+    {
+      "receipt": "runs/segment-001/native/episode/step-031/outcome.json",
+      "registrations": [
+        "pokemon:national:145"
+      ],
+      "sha256": "00bd3df62bec7a415c20efa25dbd8bdddcb441926b109dcc59231b18a3131c5e",
+      "verification": "succeeded"
+    },
+    {
+      "receipt": "runs/segment-001/native/episode/step-035/outcome.json",
+      "registrations": [
+        "pokemon:national:146"
+      ],
+      "sha256": "ecac68e53420cbea5bed8ed432dbe73898406188f2fa749b3d4063ad2c2569ab",
+      "verification": "succeeded"
+    },
+    {
+      "receipt": "runs/segment-001/native/episode/step-037/outcome.json",
+      "registrations": [
+        "pokemon:national:144"
+      ],
+      "sha256": "6612dcd654f3ee7e84872017d3148c15d2698da3d26f563284929015c41644ea",
+      "verification": "succeeded"
+    }
+  ],
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-22T08:44:39.881997+00:00",
+  "official_fresh_successes": 0,
+  "parent_state_cost_authentication_chain": [
+    {
+      "case": "autonomous120-v118-diagnostic-20261022-080544",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous119-v115-diagnostic-20261022-072120",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "fd6076c41bce874178bad0778834b3250896e70ae3e7dc62ba08085cb97f5301"
+    },
+    {
+      "case": "autonomous119-v115-diagnostic-20261022-072120",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous116-v114-diagnostic-20261022-055738",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "e711e05f1cfecfa61a38023d8205eccc624903c11d2a263841ecd24d7245130d"
+    },
+    {
+      "case": "autonomous116-v114-diagnostic-20261022-055738",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous116-v112-diagnostic-20261022-045414",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "306258d55e7d38c909e03e68890b268284ed8f6a07bc7f25370a13c2f5c0d2e9"
+    },
+    {
+      "case": "autonomous116-v112-diagnostic-20261022-045414",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous116-v109-diagnostic-20261022-041250",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "d137e451a4891160cc17ac7329944e8eb6cdcb8b68263659d8bcd103c82b926b"
+    },
+    {
+      "case": "autonomous116-v109-diagnostic-20261022-041250",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous116-v107-diagnostic-20261022-030259",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "ed2f7f4d8aabc408f67a31dbcabd39143a22100918e3b10ab211edaa0f2cbd53"
+    },
+    {
+      "case": "autonomous116-v107-diagnostic-20261022-030259",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous102-v105-long-diagnostic-20261022-015246",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "a06cc11d4a4841ce7de31e113321e3477366d22388152c08e6391fec1a91f125"
+    },
+    {
+      "case": "autonomous102-v105-long-diagnostic-20261022-015246",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous102-v105-diagnostic-20261022-014057",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "5458ab3e36dfc52a134c703fb9eaef325732ae4592e59b26ac9682518ec067e1"
+    },
+    {
+      "case": "autonomous102-v105-diagnostic-20261022-014057",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous95-v102-diagnostic-20261022-010737",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "8f0ea42c64b9361b30f302bfe75c7e406bca079ff1e94308ccf1879265f81edb"
+    },
+    {
+      "case": "autonomous95-v102-diagnostic-20261022-010737",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous92-v102-diagnostic-20261022-004657",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "c77a23c0dddcb5cb8ea65194c48fce25aaac3c7f93c7101200d7bd25b1298593"
+    },
+    {
+      "case": "autonomous92-v102-diagnostic-20261022-004657",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous91-v101-diagnostic-20261022-000209",
+      "qualification_copy": false,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "91214af2e8435729e70424c8ca80c8efdeba825d4720075565fea8990ed5d165"
+    },
+    {
+      "case": "autonomous91-v101-diagnostic-20261022-000209",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous83-v98-diagnostic-20261021-225902",
+      "qualification_copy": null,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "02ce04c9b95e56e98745f1b81ea6e7c0caff260485d56bc81ec45fe2c5bfe40d"
+    },
+    {
+      "case": "autonomous83-v98-diagnostic-20261021-225902",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous78-v97-r1-diagnostic-20261021-223855",
+      "qualification_copy": null,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "0c5291597938a55ff96423c3591d74df7dbeb4773b3c9a31bf6f113c768358d8"
+    },
+    {
+      "case": "autonomous78-v97-r1-diagnostic-20261021-223855",
+      "inherited_costs_match": true,
+      "parent_case": "autonomous69-v95-diagnostic-r1-20261021-215738",
+      "qualification_copy": null,
+      "source_matches_parent_terminal": true,
+      "source_sha256": "a04a6ecea106bd8d0f5e321035c7af9716a35cab10254a908867d5491a450bfd"
+    },
+    {
+      "case": "autonomous69-v95-diagnostic-r1-20261021-215738",
+      "parent_case": "restored-fresh006-v95-a9-20261021-005",
+      "qualification_copy": null,
+      "source_sha256": "d301f39bcc3a16568d0588f0c6f582cd36db151a0d9daeb3360f6c1331ba2694"
+    }
+  ],
+  "qualification_gains_imported_in_this_continuation": false,
+  "runtime_LLM_calls": 0,
+  "same_retained_development_ancestry": true,
+  "schema": "pokemon.red.assisted-development-completion-audit.v1",
+  "scope_limits": [
+    "This is the restored fresh006 development ancestry,not the separate October14reference or sealed October17actual117 save.",
+    "Restores,scoped repairs,forced medicine/funding and deterministic capture/puzzle support prevent an official autonomy claim.",
+    "P118 native repeat of the repaired loss branch was not observed;17strict frozen bridge checks and8choice postloss native copy passed.",
+    "No Crystal or heldout evaluation gate closes from this completion."
+  ],
+  "terminal_state_sha256": "d68c411743cd0e104591a9b15178208c2d7e51c47fe540922ec8c096c0339560"
+}

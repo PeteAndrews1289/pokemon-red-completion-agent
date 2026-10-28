@@ -33,7 +33,12 @@ from pokemon_red_completion.objective_skills import (
     ObjectiveSkillExecution,
     ObjectiveSkillRegistry,
 )
-from pokemon_red_completion.observation import PokemonRedStateReader, semantic_facts
+from pokemon_red_completion.observation import (
+    SQUIRTLE_SPECIES_ID,
+    OpeningPhase,
+    PokemonRedStateReader,
+    semantic_facts,
+)
 from pokemon_red_completion.opening import (
     DEFAULT_OPENING_TIMING,
     OpeningChapterReport,
@@ -145,6 +150,7 @@ class EarlyGameSemanticStageSkill:
     observer: EarlyGameObserver
     max_actions: int
     max_frames: int
+    native_boundary: Callable[[], bool] | None = None
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         facts_ready = self.required_facts.issubset(state.facts)
@@ -154,6 +160,8 @@ class EarlyGameSemanticStageSkill:
             self.required_location is None or state.location == self.required_location
         )
         executable = facts_ready and effects_absent and mode_ready and location_ready
+        native_ready = self.native_boundary is None or self.native_boundary()
+        executable = executable and native_ready
         if executable:
             reason = "Observed the semantic boundary for this bounded chapter."
         elif not facts_ready:
@@ -162,11 +170,15 @@ class EarlyGameSemanticStageSkill:
             reason = "The objective is already complete."
         elif not mode_ready:
             reason = f"Requires {self.required_mode.value} mode."
-        else:
+        elif not location_ready:
             reason = f"Requires the {self.required_location} chapter boundary."
+        else:
+            reason = "Native chapter entry prerequisites are absent or unsettled."
         return ObjectiveSkillAvailability(executable, reason)
 
     def execute(self) -> ObjectiveSkillExecution:
+        if self.native_boundary is not None and not self.native_boundary():
+            raise EarlyGameCompositeError("Native chapter entry is absent or stale")
         report = self.run_chapter()
         if not report.passed:
             raise EarlyGameCompositeError(
@@ -368,6 +380,42 @@ class EarlyGameThroughCeladonObjectiveSkill:
             frames_executed=report.frames_executed,
             evidence=report.public_dict(),
         )
+
+
+def build_red_oaks_errand_skill(emulator, reader, executor, observer):
+    """Expose only the existing starter-to-Pokedex chapter, not a campaign.
+
+    Its deterministic battle decisions are teacher support and must be disclosed
+    by training callers. This does not silently substitute a learned battler.
+    """
+    def native_boundary():
+        raw = reader.read()
+        opening = reader.read_opening_control_state(raw)
+        errand = reader.read_oaks_errand_state(raw)
+        return bool(
+            raw.game_started and raw.battle_state == 0
+            and opening.phase is OpeningPhase.STARTER_OBTAINED
+            and opening.all_controls_allowed
+            and opening.first_party_species == SQUIRTLE_SPECIES_ID
+            and not any((errand.battled_rival, errand.got_oaks_parcel,
+                         errand.oak_got_parcel, errand.got_pokedex, errand.parcel_in_bag))
+            and reader.read_input_readiness().ready
+            and not reader.read_bottom_dialogue_box_visible()
+            and not emulator.pressed_buttons
+            and raw.party_hp and all(raw.party_hp)
+        )
+
+    objective = COMPLETION_QUEST.objective("receive_pokedex")
+    return EarlyGameSemanticStageSkill(
+        objective_id=objective.id, specialist=objective.specialist,
+        expected_facts=objective.completion_facts, additional_effect_facts=frozenset(),
+        required_facts=frozenset(fact for name in ("power_on", "begin_adventure", "choose_starter")
+            for fact in COMPLETION_QUEST.objective(name).completion_facts),
+        required_mode=GameMode.OVERWORLD, required_location="oaks_lab",
+        run_chapter=lambda: run_oaks_errand_chapter(emulator, reader, CountingExecutor(executor)),
+        observer=observer, max_actions=10_000, max_frames=3_000_000,
+        native_boundary=native_boundary,
+    )
 
 
 def build_red_early_game_semantic_skill_registry(

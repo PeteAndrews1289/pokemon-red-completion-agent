@@ -8311,7 +8311,7 @@ whether recovery or supplies justify the detour, and how to revise that destinat
 interruption. The next layer is Surf as a real movement mode, followed separately by Cut, Strength
 and story gates. The [control receipt](../evidence/pallet-viridian-composed-route-probe-2026-08-10.json),
 [replanning receipt](../evidence/pallet-viridian-mart-closed-loop-replan-probe-2026-08-10.json), and
-[navigation audit](../traversal-audit-2026-08-10.md) keep those boundaries explicit.
+[navigation audit](retired-plans-2026-10-07/traversal-audit-2026-08-10.md) keep those boundaries explicit.
 
 ## August 10: the map learned which way was down
 
@@ -8378,8 +8378,8 @@ game outcome. The system refused to reroll, separated model error from teacher e
 failure into a precisely bounded next lesson. See the
 [passing receipt](../evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
 the [failure receipt](../evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json),
-and the [August 10 audit](../current-audit-2026-08-10.md). The superseding capability view is the
-[August 11 audit](../current-audit-2026-08-11.md).
+and the [August 10 audit](retired-plans-2026-10-07/current-audit-2026-08-10.md). The superseding capability view is the
+[August 11 audit](retired-plans-2026-10-07/current-audit-2026-08-11.md).
 
 ## August 9: offline accuracy met causal reality
 

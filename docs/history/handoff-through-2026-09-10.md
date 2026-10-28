@@ -4505,7 +4505,7 @@ envelope and zero initialization. Supported-mechanic abstentions count as failur
 abstention is correct only on prospectively declared unsupported mechanics. The old Crystal V3
 goal-manager protocol is therefore retired unopened for this living-Dex test. Red's 124-target
 solo acquisition graph remains a subplan beneath a new 151-target version/trade/event blocker
-catalog. See the [review adjudication](../../docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
+catalog. See the [review adjudication](retired-plans-2026-10-07/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
 
 ## 2026-08-30: the first authentic causal model fit completed — R0 is closed
 
@@ -5801,7 +5801,7 @@ option's independently observed consequence. The Red adapter, collector, calibra
 durable materializer now form one complete ROM-free boundary; read the
 [adapter design](../../docs/red-living-dex-observed-arm-adapter.md),
 [shared contract](../../docs/living-dex-option-value-contract.md), and
-[redesign audit](../../docs/living-dex-option-value-redesign-audit-2026-08-25.md) before touching it.
+[redesign audit](retired-plans-2026-10-07/living-dex-option-value-redesign-audit-2026-08-25.md) before touching it.
 
 The materializer was published from source
 `98cfa01096e16b36c3f6b9a829d05ffa7293af36` through
@@ -7295,7 +7295,7 @@ clients are independent. No execution, fitting, sealed Red, Crystal, or full rep
 by this section. Complete local qualification is green: **3,961 passed · 3 skipped integration
 tests · 1 expected xfail**, plus Ruff, mypy across 236 source files, documentation, privacy, product
 focus, and generated source-bound registries. See the
-[dated audit](../../docs/current-audit-2026-08-17.md).
+[dated audit](retired-plans-2026-10-07/current-audit-2026-08-17.md).
 
 ## First repeatable pilot produced learner outcomes and blocked unsafe scaling — 2026-08-16
 
@@ -7355,7 +7355,7 @@ requires per-case owner authorization and no retry. The view-only focus dashboar
 port 8768 and shows only evidence-backed learning counters. Next: build the repeatable scenario
 generator and collect the first diverse outcomes within two sessions / sixteen hours. Stop if the
 scenarios are not diverse or the resulting model cannot beat the frozen baseline unseen.
-See the [current focus audit](../../docs/current-audit-2026-08-16.md) for the enforced failure modes and
+See the [current focus audit](retired-plans-2026-10-07/current-audit-2026-08-16.md) for the enforced failure modes and
 review-role adjudication. The complete ROM-free gate passes 3,939 tests, with three integration
 deselections and one expected xfail; lint, typing, privacy, documentation, focus, and generated
 registry checks are green.
@@ -9410,7 +9410,7 @@ Current plan: 13,979 bytes, SHA-256
 `4185db1272142f2311cbe7ba33568ad78922553a469c865108a0cc2f121e15ba`; teacher execution
 `2fcfca2a9e0a5a21f4075b5c7ef3a2e9faf1baa762027e0ffd28bf6735049c19`. The model, cases, order,
 endpoint and one-shot policy are unchanged. See the [v9 freeze](../../docs/evidence/strategic-sealed-evaluation-plan-v9-freeze-2026-08-13.json)
-and [v9 audit handoff](../../docs/claude-sealed-hard-relocation-v9-audit-handoff-2026-08-13.md).
+and [v9 audit handoff](retired-plans-2026-10-07/claude-sealed-hard-relocation-v9-audit-handoff-2026-08-13.md).
 
 Next: publish this exact source, require green exact-commit CI, then rerun scenario 046 through the
 official qualifier. Only a typed `passed` receipt bound to v9, its source bundle and exact commit can
@@ -9447,7 +9447,7 @@ Current plan: 13,262 bytes, SHA-256
 amendment preserves schema-v6 digest
 `9df65487806d80b7d37e074c6f1ecf0ddf615e9853f7615e5681975e461ff440` as superseded. See the
 [v7 freeze](../../docs/evidence/strategic-sealed-evaluation-plan-v7-freeze-2026-08-13.json) and the
-[authorization-readiness audit handoff](../../docs/claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md).
+[authorization-readiness audit handoff](retired-plans-2026-10-07/claude-sealed-authorization-readiness-audit-handoff-2026-08-13.md).
 
 The final local gate is 2,887 passed, three integration tests deselected and one expected failure.
 The 93-test focused protocol/adapter gate, all three generated identity checks, Ruff and mypy across
@@ -9496,7 +9496,7 @@ protocol/catalog/adapter tests are 124 passed. The final repository gate is 2,87
 integration tests deselected, one expected failure, Ruff clean and mypy clean across 168 source
 files. Test remains **0/12 opened**; no actual catalog or owner receipt exists.
 
-Next, give Claude [the adapter audit handoff](../../docs/claude-sealed-adapter-audit-handoff-2026-08-13.md)
+Next, give Claude [the adapter audit handoff](retired-plans-2026-10-07/claude-sealed-adapter-audit-handoff-2026-08-13.md)
 and keep every actual test capture closed. The audit and live non-test qualification must each
 produce a stable receipt whose digest can enter the final authorization. After findings are
 resolved, publish the exact source and require green CI. There is then a separate
@@ -9538,7 +9538,7 @@ integration tests deselected, one expected failure, Ruff clean and mypy clean ac
 Test remains **0/12 opened**, and no owner authorization receipt was created.
 
 This checkpoint is the ROM-free protocol core, not the live cartridge adapter. Next: independently
-audit [the executor/scorer handoff](../../docs/claude-sealed-executor-audit-handoff-2026-08-13.md), then
+audit [the executor/scorer handoff](retired-plans-2026-10-07/claude-sealed-executor-audit-handoff-2026-08-13.md), then
 build and authenticate the cartridge-facing runner and exact case catalog behind the audited
 interface, test that adapter only on non-test fixtures, publish the exact commit and require green
 CI. Explicit owner authorization comes last. Do not open, preflight or inspect a private test input
@@ -9566,7 +9566,7 @@ The prior digest
 is not executable authority. Eighteen endpoint mutations were all killed without using the fixed
 digest test as the oracle; the restored full gate is 2,821 passed. Test remains **0/12 opened**.
 
-Next: audit [the endpoint amendment handoff](../../docs/claude-sealed-endpoint-amendment-handoff-2026-08-13.md),
+Next: audit [the endpoint amendment handoff](retired-plans-2026-10-07/claude-sealed-endpoint-amendment-handoff-2026-08-13.md),
 then build and independently audit the fail-closed sealed executor/result scorer. Explicit owner
 authorization comes only after both gates; do not open or preflight a private test input sooner.
 
@@ -9618,7 +9618,7 @@ engineering pre-test gate but is not a statistically significant final claim. Se
 [model receipt](../../docs/evidence/strategic-navigation-model-development-2026-08-13.json).
 
 Claude's next job is review, not retraining. Start with
-[the pre-test audit handoff](../../docs/claude-pre-test-audit-handoff-2026-08-13.md), attack the feature
+[the pre-test audit handoff](retired-plans-2026-10-07/claude-pre-test-audit-handoff-2026-08-13.md), attack the feature
 projection, partition guards, assignment reconstruction, model selection and evidence claims, and
 leave all test scenarios sealed. If that review is clean, freeze the exact model digest and define
 the one-shot sealed-test execution before opening any test capture. Do not tune against test,
@@ -9931,7 +9931,7 @@ absent, but today's Koga skill starts Surf-ready and today's Strength skill gets
 the Surf chapter. Scenario 023 requires Erika while Koga is absent, but today's Erika skill starts
 post-Koga/post-Strength. These are missing teacher curricula, not impossible cartridge states. See
 the [order audit](../../docs/evidence/strategic-curriculum-order-audit-2026-08-12.json) and
-[current audit](../../docs/current-audit-2026-08-12.md).
+[current audit](retired-plans-2026-10-07/current-audit-2026-08-12.md).
 
 Ordered next work: qualify early Erika; split a Gold-Teeth-only Safari resource path from Surf and
 qualify Koga-before-Surf; add Cinnabar-before-Sabrina; then construct scenarios 019 and 023 and
@@ -10320,7 +10320,7 @@ above. After that, build the 36-situation train/validation rehearsal and require
 audit—not the registry—to prove 24/12 unique contexts and six validation baseline disagreements.
 Do not open counted train or validation before the rehearsal passes, and keep test sealed until
 final evaluation. See the
-[scenario audit](../../docs/strategic-scenario-registry-audit-2026-08-11.md) and
+[scenario audit](retired-plans-2026-10-07/strategic-scenario-registry-audit-2026-08-11.md) and
 [design receipt](../../docs/evidence/strategic-scenario-registry-design-2026-08-11.json).
 
 Working prospective identities after this source change are scenario registry
@@ -10346,7 +10346,7 @@ also helps only when the extra destinations are genuine; it does not create inde
 
 The repair rehearsal at `5ba39cf` remains qualified engineering evidence. Its source and private
 episode are not changed or relabeled. The next work is the context-diverse experiment redesign in
-[the design audit](../../docs/strategic-experiment-design-audit-2026-08-11.md): permutation-invariant
+[the design audit](retired-plans-2026-10-07/strategic-experiment-design-audit-2026-08-11.md): permutation-invariant
 fingerprints that fail train/validation overlap, a preregistered scenario/context split, genuine
 three-to-five-way choices, at least 24 distinct train/12 validation/12 sealed-test contexts, and an
 exact paired primary endpoint. Short authenticated scenario episodes must replace repeated
@@ -11112,7 +11112,7 @@ not the alignment needed to determine the next map's arrival coordinate. Initial
 are not current NPC or boulder positions. The next gate is complete passage geometry plus one
 closed-loop Pallet → Route 1 → Viridian → Pokémon Center route, not Surf or another fixed-route Red
 replay. The full ranked review is
-[knowledge-to-action audit](../../docs/traversal-audit-2026-08-10.md). Counted v95 remains sealed at 0/10.
+[knowledge-to-action audit](retired-plans-2026-10-07/traversal-audit-2026-08-10.md). Counted v95 remains sealed at 0/10.
 
 ## The first cartridge-computed live route — 2026-08-10
 
@@ -11403,7 +11403,7 @@ fresh uncounted root. Do not open v95. It remains **0/10**.
 `c2aeb12`. Public-artifact and documentation checks, regenerated registry, Ruff, mypy over 128
 source modules, and 2,217 tests pass; three integration tests are deselected and one expected
 failure remains expected. The complete audit is
-[current-audit-2026-08-10.md](../../docs/current-audit-2026-08-10.md).
+[current-audit-2026-08-10.md](retired-plans-2026-10-07/current-audit-2026-08-10.md).
 
 ## Reading the cartridge instead of typing it — 2026-08-09
 

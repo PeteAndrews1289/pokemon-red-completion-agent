@@ -16,10 +16,14 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from pokemon_red_completion.local_router import LocalGraph
+from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.observation import CurrentMapBlocks, MapId
-from pokemon_red_completion.red_goal_context_profile import bind_observed_local_capture_profile
-from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.red_goal_context_profile import (
+    bind_capture_fly_profile,
+    bind_indoor_fly_departure_profile,
+    bind_observed_local_capture_profile,
+)
+from pokemon_red_completion.route_executor import TraversalHazard, TraversalSnapshot
 
 
 @dataclass
@@ -46,6 +50,8 @@ class Router:
     def enumerate(self, observation):
         capture = self.runtime.profile.providers[0]
         assert 'observed_local_capture' not in capture.parameters
+        assert 'fly_transport' not in capture.parameters
+        assert 'indoor_fly_departure' not in capture.parameters
         assert not self.prepare_capture_party and not self.prepare_capture_storage
         assert not self.prepare_capture_escort and not self.include_recovery_offers
         self.calls.append(('qualified', capture.parameters, self.world))
@@ -91,7 +97,8 @@ def scene(monkeypatch):
 
     world = SimpleNamespace(with_current_blocks=overlay, rom=live.rom)
     runtime = Runtime(bind_observed_local_capture_profile(_local_discovery_profile()),
-        reader, SimpleNamespace(observe=lambda: state.observation),
+        reader, SimpleNamespace(observe=lambda: state.observation,
+            semantic_observer=SimpleNamespace(observe_raw=lambda _: None)),
         SimpleNamespace(frame_count=0), object())
     actions = CountingExecutor(SimpleNamespace(execute=lambda action: None))
     router = Router(runtime, world, actions, [])
@@ -124,6 +131,24 @@ def test_unreachable_canonical_patch_is_replaced_only_inside_the_same_source(sce
     assert [x[0] for x in scene.router.calls] == ['qualified', 'executed', 'verified']
     with pytest.raises(local.RedObservedLocalCaptureError, match='already'):
         binding.execute()
+
+
+def test_qualified_local_walk_does_not_leave_its_source_for_another_flight(scene):
+    profile = bind_indoor_fly_departure_profile(bind_capture_fly_profile(scene.runtime.profile))
+    scene.runtime.profile = profile
+    assert profile.providers[0].parameters['fly_transport'] is True
+    assert profile.providers[0].parameters['indoor_fly_departure'] is True
+    binding = scene.bind()
+    assert binding is not None and scene.router.actions.actions_executed == 0
+    assert scene.runtime.profile is profile
+    params = scene.router.calls[0][1]
+    assert params['source_id'] == profile.providers[0].parameters['source_id']
+    assert params['maximum_encounters'] == profile.providers[0].parameters['maximum_encounters']
+    assert 'fly_transport' not in params and 'indoor_fly_departure' not in params
+    assert profile.providers[0].parameters['fly_transport'] is True
+    report = binding.execute()
+    assert binding.verify(report).status.value == 'succeeded'
+    assert report.actions_executed == 1
 
 
 @pytest.mark.parametrize('available', [False, True])
@@ -195,7 +220,8 @@ def test_profile_rejects_non_boolean_observed_capture(invalid):
 
 
 @pytest.mark.parametrize('barrier', ['disconnected', 'one_way', 'occupied', 'object', 'warp',
-                                     'requirement', 'water', 'transient'])
+                                     'requirement', 'water', 'transient', 'hazard',
+                                     'hazard_transient'])
 def test_unavailable_current_patch_never_falls_back_across_the_barrier(scene, barrier):
     graph = scene.live.local_graphs[scene.map_id]
     edges = dict(graph.edges)
@@ -216,12 +242,43 @@ def test_unavailable_current_patch_never_falls_back_across_the_barrier(scene, ba
                                for e in edges[(3, 4)])
     elif barrier == 'water':
         edges[(3, 4)] = tuple(replace(e, result_mode='water') for e in edges[(3, 4)])
+    elif barrier == 'hazard':
+        scene.state.traversal = replace(scene.state.traversal,
+            hazards=(TraversalHazard((2, 4), 'trainer_sight'),))
+    elif barrier == 'hazard_transient':
+        edges[(3, 4)] = tuple(replace(e, transient=(1, 4)) for e in edges[(3, 4)])
+        scene.state.traversal = replace(scene.state.traversal,
+            hazards=(TraversalHazard((1, 4), 'trainer_sight'),))
     else:
         edges[(3, 4)] = tuple(replace(e, transient=(1, 4)) for e in edges[(3, 4)])
         scene.state.traversal = replace(scene.state.traversal, occupied=frozenset({(1, 4)}))
     scene.live.local_graphs[scene.map_id] = LocalGraph(edges)
     assert scene.bind() is None
     assert scene.router.calls == [] and scene.router.actions.actions_executed == 0
+
+
+@pytest.mark.parametrize('hazard_at', [(2, 1), (3, 2)])
+def test_observed_capture_chooses_reachable_safe_corridor_not_hazardous_approach(scene, hazard_at):
+    edges = dict(scene.live.local_graphs[scene.map_id].edges)
+    for x in (1, 2, 3):
+        left, right = (3, x), (3, x + 1)
+        edges[left] = (*edges.get(left, ()), LocalEdge(right, 'right',
+            required_mode='land', action_kind=MacroActionKind.MOVE))
+        edges[right] = (*edges.get(right, ()), LocalEdge(left, 'left',
+            required_mode='land', action_kind=MacroActionKind.MOVE))
+    scene.live.local_graphs[scene.map_id] = LocalGraph(edges)
+    scene.state.traversal = replace(scene.state.traversal,
+        hazards=(TraversalHazard(hazard_at, 'trainer_sight'),))
+    binding = scene.bind()
+    assert binding is not None and scene.router.actions.actions_executed == 0
+    params = scene.router.calls[0][1]
+    assert (params['player_y'], params['player_x']) == (3, 4)
+    original = scene.runtime.profile.providers[0].parameters
+    for name in ('source_id', 'maximum_encounters', 'maximum_seek_steps', 'maximum_legs'):
+        assert params[name] == original[name]
+    assert scene.state.traversal.hazards == (TraversalHazard(hazard_at, 'trainer_sight'),)
+    report = binding.execute()
+    assert binding.verify(report).status.value == 'succeeded'
 
 
 @pytest.mark.parametrize('change', ['blocks', 'observation'])

@@ -1,0 +1,213 @@
+{
+  "Misty_payoff_won": true,
+  "NativePlayer_loads": 12,
+  "actual_registration_delta": 0,
+  "aggregate_native_costs": {
+    "actions": 15261,
+    "cash_debits": 13500,
+    "decisions": 41,
+    "frames": 1199580,
+    "heals": 18,
+    "seconds": 270.592079699
+  },
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "audit_2h": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/AUDIT-2H-20261028-0500.json",
+    "sha256": "60f1068dcfc3f32d5e8d2dd0a56d3c28acf1aaedc0f6cbfa8d149510d4e09a43"
+  },
+  "audit_2h_lateness_seconds": 205.477256,
+  "audit_4h": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/AUDIT-4H-20261028-0700.json",
+    "sha256": "dd7470c05fc3575b8e491a12ca5cd414787612a2b73f09ef65bb484a20135b53"
+  },
+  "audit_4h_lateness_seconds": 40.508629,
+  "audit_due_utc": [
+    "2026-10-28T05:00:37+00:00",
+    "2026-10-28T07:00:37+00:00"
+  ],
+  "battle_only_cash_unknown": true,
+  "battle_only_costs_separate": {
+    "cash_accounting_complete": false,
+    "frames": 809664,
+    "input_presses": 4215,
+    "loads": 38,
+    "retained_session_wall_seconds": 30.886325406
+  },
+  "cached_audit_new_model_queries": 0,
+  "cached_audit_new_native_loads": 0,
+  "cached_forecasts_authenticated": 24,
+  "cached_postdose_forecast_audit": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/proposals/student-timing/cached-postdose-menu-audit-v1/AUDIT.json",
+    "sha256": "de955e1ad5d023a1527ed7618dbc844ff180102790a1962c6cb29b2c46d11fea"
+  },
+  "changed_parameters": 0,
+  "complete_engineering_cost_metering": false,
+  "corrected_Claude_assessment": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/claude-feedback-20261028-0247/ROOT-ASSESSMENT.json",
+    "sha256": "889984d6d7680e594db5659fbf8b8283a7591a1969ddbc851674a9d6e5171517"
+  },
+  "cost_calibration_audit": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/proposals/learning/current-cost-calibration-v1/COST-CALIBRATION-AUDIT.json",
+    "sha256": "6f11a0ec85dc3679d708297f10883994a1169bffc2e3079f55e54a9418200281"
+  },
+  "deadline_utc": "2026-10-28T09:00:37+00:00",
+  "distinct_focused_main_checks_passed": 419,
+  "expected_grid_closed_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/EXPECTED-PROMPT-GRID-v2-CLOSED-BOUNDARY.json",
+    "sha256": "f79e81383f6a882ca7ffc8eabb914a15f1c7613eb9543eda0fec918c2bf9ce5f"
+  },
+  "expected_grid_decision": "NO_FIT_FINITE_GRID_MEAN_GATE_NOT_MET_IN_BOTH_CONTEXTS",
+  "expected_grid_new_loads": 32,
+  "expected_grid_reused_offset0_branches": 4,
+  "expected_return_supported_scope": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/EXPECTED-PROMPT-RETURN-SUPPORTED-RANGE-AMENDMENT.json",
+    "sha256": "ba8ac49461df78f710ee3ff855b095a011dce82a38e96ddda77d34df7b64d204"
+  },
+  "focused_subtests_passed": 87,
+  "global_models_adopted": 0,
+  "headed_timing_results": [
+    "opening4_WIN",
+    "opening12_LOSS"
+  ],
+  "inference_mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/TRAIN-INFERENCE-REPAIR-MISSION.json",
+    "sha256": "9a0759a4b9e0b45376a2740ce0b5c679710f3072711e4a3fee3ff3fd5970b197"
+  },
+  "information": {
+    "baseline_paired_deltas": {
+      "12": -0.5127308029609574,
+      "4": -0.5127308029609574
+    },
+    "classification": "BASELINE_AGREES_NO_MEASURED_DEFECT",
+    "fit_authorized": false,
+    "fit_information_supported": false,
+    "independent_IID_replication": false,
+    "matched_average_delta": -0.013233525423728826,
+    "native_authorized": false,
+    "observed_paired_deltas": {
+      "12": -0.007056915254237281,
+      "4": -0.01941013559322037
+    },
+    "requires_strict_root_admission": true,
+    "rows_retained": 4,
+    "within_study_cell_weight": 0.25
+  },
+  "known_scoped_Root_resource_seconds": 876.506806673,
+  "local_prepare_stop_payoff_proven": true,
+  "mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/MISSION.json",
+    "sha256": "31e70b2cf19c338be5c6410877669946483044bc34ea3bd29731a446e141b5d1"
+  },
+  "model_owned_preparation_then_stop": true,
+  "models_adopted": 0,
+  "native_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/FOUR-ARM-v2-CLOSED-BOUNDARY.json",
+    "sha256": "2c1e907a25a77e5a5fa56f7726f190663782d6eb3f7206449205e74631863332"
+  },
+  "native_same_specimen_evolution": "Rat19toRaticate20",
+  "new_TRAIN_rows": 8,
+  "new_actual_TRAIN_fits": 0,
+  "new_feedback_channels": 72,
+  "new_native_loads": 50,
+  "new_public_forecasts": 75,
+  "new_story297_head_score_method_calls": 2316,
+  "next_dose_protocol": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/proposals/learning/rat-dose-next-protocol-v1/PROSPECTIVE-RAT-DOSE-PROTOCOL.disabled.json",
+    "sha256": "e63bd0a283c2a1ad0c5e57ca8b8a617523c4f610235be5acde85673c22624edc"
+  },
+  "next_reuse_mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/RAT-DOSE-COLLECTOR-REUSE-MISSION.json",
+    "sha256": "4435a1b386a0bbe92c2e1fb3c10df4cb1daf629741bd00a10e998c6b68a8458f"
+  },
+  "no_independence_or_heldout_claim": true,
+  "no_measured_menu_or_normalization_defect": true,
+  "not_full_suite": true,
+  "observed_at_utc": "2026-10-28T08:43:52.684788+00:00",
+  "optimizer_rows_admitted": 0,
+  "original_actor_cutoff_unchanged": true,
+  "paid_forecasts_reused_cells": 4,
+  "partition": "train",
+  "path_reader_focused_tests_passed": 28,
+  "path_reader_hardening": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/EVENT-LOG-PATH-BOUNDARY-ROOT-QUALIFICATION.json",
+    "sha256": "766dfb93534315f62565887b6814b58db1dac2582c0ee76e1eb281e7a4aa0e17"
+  },
+  "prefix_failed_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/CURRENT-RAT20-PREFIX-v1-FAILED-CLOSED-BOUNDARY.json",
+    "sha256": "5d93dc5eb4c83327103466e10f847c1e131dbdf209bc752b63179c49ad72b52d"
+  },
+  "prefix_recovery_qualification": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/CURRENT-RAT20-PREFIX-CACHED-RECOVERY-ROOT-QUALIFICATION.json",
+    "sha256": "8bbb807caddc51434312955b1253f736397da9e63e70496f4145d168ead53f56"
+  },
+  "prefix_scope": "The separate earned Rat20 prefix is qualified by cached readback; its failed closeout and costs remain preserved.",
+  "prefix_source_qualified": true,
+  "previous_cost_ledger": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/FINAL-COST-LEDGER-v2.json",
+    "sha256": "09eb4a1193fd4ff8330ce763f03597088ddca6b82df982136b3d1bc62f8eb61f"
+  },
+  "previous_source_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/SESSION-CLOSEOUT.json",
+    "sha256": "8e665c2d121e24eb5649d3c48a300215bb6641b25c5f5c9882cbd4419f03ddef"
+  },
+  "prior_errors_costs_and_statuses_preserved": true,
+  "proposed_unique_physical_rows": 25,
+  "rat_dose_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/RAT-DOSE-v1-CLOSED-BOUNDARY.json",
+    "sha256": "535dfcbc02f0451b00f4bf03d9ab4d50795e0444250f0c0757abcfece16cf951"
+  },
+  "rat_no_fit_qualification": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/RAT-DOSE-ROOT-DATA-AND-NO-FIT-QUALIFICATION.json",
+    "sha256": "0bd6d08ccc7e83807ded4ab8c20d31ee0b1053a9d38f8aab34785622887f1212"
+  },
+  "reliable_or_heldout_payoff_proven": false,
+  "reserved_validation_offsets_unexecuted": [
+    9,
+    10,
+    11,
+    12
+  ],
+  "root_data_qualification": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/FOUR-ARM-ROOT-DATA-AND-NO-FIT-QUALIFICATION.json",
+    "sha256": "ef2fef103d5b44f427affbef1297b82a7a56ed058bc6d9ef81eeafba2d537d43"
+  },
+  "same_input_nonprompt_isolation_proof": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/proposals/story297-prompt-row-isolation-v1/PROOF.json",
+    "sha256": "178d4a21cf2a2fb76b4367370ae773b555e5f18bba9d719a3728d1cc1c1eb528"
+  },
+  "schema": "pokemon.matched-train-preparation-session-evidence.v1",
+  "session_id": "2026-10-28-matched-train-preparation",
+  "source_context_sha256": "688a6016e7cdc8ab97a66873421b27fe0913327ac8aa59ce9d00ff71747cb5da",
+  "source_only_live_argv_gap": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/STUDENT-TIMING-CLOSEOUT-SAMPLING-LIMITATION.json",
+    "sha256": "2467d0f8afd6d1c32db250044b3cf52ce4dc49371a6c9d44f6dc2a6f955ea989"
+  },
+  "source_state_sha256": "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d",
+  "started_at_utc": "2026-10-28T03:00:37+00:00",
+  "status": "native_experiments_closed_no_fit_final_source_closeout",
+  "stopping_margins_over_best_remaining_preparation": [
+    0.6046723467,
+    0.6043824593
+  ],
+  "story297_CONTROL_targets": 2,
+  "story297_closed_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/STORY-297-PROMPT-v1-CLOSED-BOUNDARY.json",
+    "sha256": "cc1c774faf6e074525f348293d41fb695a828bdc603d1f670d9ebe1f2d9fb24e"
+  },
+  "story297_decision": "NO_FIT_MIXED_MATCHED_CONTROL_RETURNS",
+  "story297_fresh_branch_measurements": 4,
+  "strict_new_TRAIN_rows": 8,
+  "student_closed_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/ORIGINAL-STUDENT-v4-CLOSED-BOUNDARY.json",
+    "sha256": "13fe0631c2e073b38b8a66243a3292496e5e7b8d199a46e1f3295e3df5372abd"
+  },
+  "student_timing_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/STUDENT-TIMING-v1-CLOSED-BOUNDARY.json",
+    "sha256": "178bf08f2e4012ccad9ab66cf3e6eb063a2d0842900ea5542dc3603f7eed5074"
+  },
+  "total_finite_grid_measurements": 36,
+  "unresolved_skips": 0,
+  "whole_process_NN_metering_complete": false
+}

@@ -1,0 +1,63 @@
+{
+  "actual_registration_delta": 0,
+  "admission_errors": 0,
+  "all_native_and_fit_workers_closed": true,
+  "all_seven_full_goals_complete": false,
+  "badge_count": [
+    1,
+    2
+  ],
+  "boundary_sha256": [
+    "b817bc8340726d75ceaa79647a0f51e96a4601a0e3938f7d51eca7281305323e",
+    "8924f2e0f0aa28315845c4135a899611964f266d95bad2945fb0e0b87022a39e"
+  ],
+  "cash_after": 2759,
+  "cash_before": 604,
+  "cash_gross_credits": 4144,
+  "cash_gross_debits": 1989,
+  "cash_net": 2155,
+  "changed_parameters": 0,
+  "controls_released": true,
+  "execution_errors": 0,
+  "final_cost_ledger_sha256": "198588c20824670718475c88c6d3b4334f6f98fb1d998981e20ecd4e15cdbd69",
+  "frozen_package_sha256": "41e3c0155136c2c51e611cee0ded042e4fb7f370fb679aa55397ebd36b4874bc",
+  "help_bill_complete": false,
+  "interpretation": "Same exposed DEVELOPMENT lineage resumed once across two loads. Core P28/models stayed fixed; diagnostic source binding and stopping harness changed and were qualified. Collection, permanent trainer/Nugget progress and XP preceded Misty victory; no wild preparation dose selected. Not one uninterrupted load, online learning, independent transfer or frozen fresh acceptance.",
+  "models_adopted": 0,
+  "native_costs": {
+    "actions": 5171,
+    "cash_debits": 1989,
+    "decisions": 29,
+    "frames": 366276,
+    "heals": 8,
+    "seconds": 115.52293272200006
+  },
+  "new_TRAIN_rows": 0,
+  "new_capture_national_numbers": [
+    43,
+    11,
+    16
+  ],
+  "new_choices": 29,
+  "new_fits": 0,
+  "new_native_loads": 2,
+  "new_primary_objective": "defeat_misty",
+  "next": "New finite Bill objective then Surge readiness/actor-scope assessment through existing player; do not replay BE9, refit identical17rows or reuse expired block plans.",
+  "observed_at_utc": "2026-10-28T17:24:43.344760+00:00",
+  "ordinary_setbacks": {
+    "Misty_losses": 3,
+    "acquisition_resource_lost": 1
+  },
+  "permanent_development_no_fit": true,
+  "private_evidence_root": "windows-seven-goal-implementation-20261017/review-followthrough-20261028-1623",
+  "registrations_after": 10,
+  "registrations_before": 7,
+  "schema": "pokemon.red.review-followthrough-development-evidence.v1",
+  "semantic_audit_sha256": [
+    "6554cf57e97def31845609bb0bab19711a09d52f55089d0f1a8158e1ad3c8c65",
+    "a549a248f40807398fac77dc808f040fc1db78f1a83cdc612312d8c4f93dff26"
+  ],
+  "session": "2026-10-28-review-followthrough",
+  "source_view_sha256": "8c46c5cad276eb800116eab4fae811655716a6e0ace3b8cffe8873d4282b5692",
+  "status": "outcome_met_native_workers_closed"
+}

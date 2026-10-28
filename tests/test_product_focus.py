@@ -54,19 +54,16 @@ def test_current_dashboard_receipt_passes_the_real_native_training_boundary():
 
 
 BATTLE_OUTCOME_CYCLE_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"
+    PROJECT_ROOT / "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"
 )
 PAIRED_BOUNDED_PLAYER_RESULT = (
     PROJECT_ROOT / "docs/evidence/red-paired-bounded-player-result-2026-09-03.json"
 )
 CALIBRATION_PLAYER_PARTIAL_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json"
+    PROJECT_ROOT / "docs/evidence/red-calibration-player-pair-005-partial-result-2026-09-04.json"
 )
 CALIBRATION_PLAYER_RECOVERY_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json"
+    PROJECT_ROOT / "docs/evidence/red-calibration-player-pair-006-result-2026-09-04.json"
 )
 REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT = (
     PROJECT_ROOT
@@ -84,23 +81,19 @@ REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT = (
     / "red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json"
 )
 MODEL106_MEASURED_FISHING_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
+    PROJECT_ROOT / "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
 )
 MODEL107_MEASURED_FISHING_FAILURE = (
-    PROJECT_ROOT
-    / "docs/evidence/red-model107-measured-fishing-failure-2026-09-12.json"
+    PROJECT_ROOT / "docs/evidence/red-model107-measured-fishing-failure-2026-09-12.json"
 )
 MODEL108_ADAPTIVE_FISHING_LOOP = (
     PROJECT_ROOT / "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json"
 )
 MODEL112_AUTOMATIC_FISHING_FAILURE = (
-    PROJECT_ROOT
-    / "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+    PROJECT_ROOT / "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
 )
 MODEL123_HETEROGENEOUS_EVOLUTION_FIT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json"
+    PROJECT_ROOT / "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -260,8 +253,7 @@ TRACKED_PUBLIC_EVIDENCE_READER_ANTIGRAVITY_AUDIT = (
     / "tracked-public-evidence-reader-antigravity-audit-v1-2026-08-21.json"
 )
 RED_LIVING_DEX_OPTION_DEVELOPMENT_RESULT = (
-    PROJECT_ROOT
-    / "docs/evidence/red-living-dex-option-development-result-v1-2026-08-25.json"
+    PROJECT_ROOT / "docs/evidence/red-living-dex-option-development-result-v1-2026-08-25.json"
 )
 ROOTLESS_DEPENDENCY_V2_PUBLIC_DESIGN = (
     PROJECT_ROOT / "configs/rootless-living-dex-dependency-evaluation-v2.json"
@@ -385,7 +377,525 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    # Scoped learning/reuse does not retire the lane or claim final autonomy.
+    # Current learning is separate from the unchanged protected earned baseline.
+    # Isolated packaging/startup does not imply a new fitted-model advantage.
+    # The completed collection and all original diagnostic receipts stay closed.
+    assert state.active_lane["time_box"] == {"maximum_hours": 3, "maximum_sessions": 1}
+    assert state.active_lane["next_decision"].strip()
+    reorientation = state.active_lane["latest_reorientation"]
+    # The human-authorized seven-goal mission remains active after local repairs.
+    assert reorientation["status"] == "active"
+    assert reorientation["next_session_goal"].strip()
+    assert reorientation["stop_condition"].strip()
+    assert reorientation["decision"].strip()
+    # Engineering qualification may support this learning lane without being
+    # mislabeled as a newly executed or fitted learning episode.
+    assert reorientation["evidence"]["kind"] in {"development_episode", "qualification"}
+    latest = json.loads((PROJECT_ROOT / reorientation["evidence"]["path"]).read_bytes())
+    if reorientation["evidence"]["kind"] == "qualification":
+        assert latest["native_episode"] is False
+        assert latest["fit_allowed"] is False
+        assert latest["models_adopted"] == latest["new_fits"] == 0
+    assert latest["session"] == reorientation["session_id"]
+    assert latest["partition"] == "development"
+
+
+def test_koga_fly_checkpoint_separates_comparative_choices_support_and_learning() -> None:
+    evidence = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-koga-fly-continuation-2026-10-13.json").read_bytes()
+    )
+    assert evidence["status"] == "closed_all_requested_outcomes_complete"
+    assert evidence["partition"] == "development"
+    assert evidence["worker_stopped"] and evidence["released"] and evidence["field_ready"]
+    assert evidence["original_six_restored"] and evidence["whole_party_restored"]
+    assert evidence["no_restart"] and not evidence["copied_progress_imported"]
+    assert evidence["manual_actual_goal_substitutions"] == 0
+    assert evidence["actual_model_comparative_choices"] == 58
+    assert evidence["automatic_singleton_support"] == 46
+    assert evidence["flat_outcomes"] == evidence["new_actual_costs"]["decisions"] == 104
+    assert sum(evidence["goal_modes"].values()) == 104
+    assert evidence["registrations_before"] == 64 and evidence["registrations_after"] == 71
+    added = {s for row in evidence["new_registrations"] for s in row["species"]}
+    assert len(added) == 7
+    assert evidence["badges_before"] == 5 and evidence["badges_after"] == 6
+    assert (
+        evidence["cash_before"]
+        + evidence["cash_rewards"]
+        - evidence["new_actual_costs"]["cash_debits"]
+        == evidence["cash_after"]
+        == 460
+    )
+    assert evidence["native_execution_errors"] == []
+    assert evidence["training_rows_added"] == evidence["fits"] == evidence["parameter_updates"] == 0
+    assert evidence["goal_model_unchanged"] and evidence["runtime_llm_calls"] == 0
+    assert (
+        evidence["fly_obtained_and_taught"] and evidence["native_flight_verified_on_related_copy"]
+    )
+    assert evidence["actual_ancestry_flights"] == 0
+    assert evidence["cold_proof"]["inputs"] == evidence["cold_proof"]["frames"] == 0
+    assert evidence["final_fresh_completion_gates"] == "0/5"
+
+
+def test_historical_isolated_package_keeps_original_acceptance_and_failures() -> None:
+    # The October9 packet remains frozen evidence, not today's dispatch target.
+    # Preserve every detailed assertion below against that original artifact.
+    state = load_product_focus()
+    latest = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-isolated-player-package-2026-10-09.json").read_bytes()
+    )
+    assert latest["status"] == "closed_isolated_package_and_fresh_handoff_verified"
+    assert latest["partition"] == "development" and not latest["independent_evaluation"]
+    assert latest["model_examples"] == 151
+    assert set(latest["learning"].values()) == {0}
+    package = latest["package"]
+    assert package["version"] == "v8" and package["frozen_files"] == 7158
+    assert package["private_helper_files"] == 170 and package["private_data_inputs"] == 6231
+    assert package["shared_environment_pins"] == 4512
+    assert (
+        package["private_data_bytes_unchanged"]
+        and package["path_relocation_ast_equivalence_verified"]
+    )
+    assert package["mutable_checkout_imports"] == 0
+    assert package["shared_environment_not_independently_distributed"]
+    assert not package["untrusted_code_security_sandbox_claimed"]
+    inspection = latest["inspection"]
+    assert inspection["inputs"] == inspection["frames"] == 0
+    assert inspection["menu_json_equal"] and inspection["choice_json_equal"]
+    assert inspection["state_configuration_model_cost_search_and_party_equal"]
+    assert inspection["ordered_mechanic_profiles_equal"]
+    assert not inspection["raw_binding_refs_identical"]
+    assert inspection["original_binding_refs_sha256"] != inspection["frozen_binding_refs_sha256"]
+    outcome, rows = latest["outcome"], latest["native_rows"]
+    assert outcome["fresh_power_on"] and outcome["one_live_emulator"]
+    assert outcome["native_segments"] == 2
+    assert outcome["goal_attempts"] == outcome["successful_verifications"] == len(rows) == 4
+    assert outcome["model_selected"] == sum(row["model_selected"] for row in rows) == 3
+    assert outcome["support_selected"] == sum(row["support_role"] is not None for row in rows) == 1
+    assert all(row["verification"] == "succeeded" and row["error_type"] is None for row in rows)
+    assert outcome["learned_battle_decisions"] == sum(row["battle_decisions"] for row in rows) == 8
+    assert rows[0]["support_role"] == "forced_singleton" and rows[0]["battle_outcome"] == "won"
+    assert outcome["pokedex_received"] and rows[1]["objective_completed"]
+    assert not outcome["reach_pewter_completed"]
+    assert all(not row["objective_completed"] for row in rows[2:])
+    assert (
+        outcome["costs"]["actions"]
+        == outcome["startup_actions"] + sum(row["actions"] for row in rows)
+        == 664
+    )
+    assert (
+        outcome["costs"]["frames"]
+        == outcome["startup_frames"] + sum(row["frames"] for row in rows)
+        == 56005
+    )
+    assert outcome["state_loads"] == outcome["unexpected_execution_errors"] == 0
+    assert (
+        outcome["fresh_registrations"] == 1
+        and outcome["stop_reason"] == "declared_budget_exhausted"
+    )
+    battle = latest["battle_log"]
+    assert battle["complete"] and battle["events"] == 35
+    assert battle["started_decisions"] == battle["completed_decisions"] == 8
+    assert battle["incomplete_decisions"] == battle["failed_runs"] == 0
+    assert battle["invalid_actions"] == battle["failed_move_executions"] == 0
+    assert (
+        battle["teacher_queries"] == battle["teacher_interventions"] == battle["memory_writes"] == 0
+    )
+    verification = latest["verification"]
+    assert set(verification["readiness"].values()) == {True}
+    assert verification["protected_pins_verified"] == 38
+    assert verification["baseline_main_registrations"] == 32
+    assert verification["completed_reference_registrations"] == 124
+    assert (
+        not verification["native_worker_running"] and verification["fresh_process_returncode"] == 0
+    )
+    assert verification["adapter_closed"] and verification["buttons_released"]
+    attempts = latest["attempt_treatment"]
+    assert (
+        attempts["fresh_smoke_versions"] == [4, 5, 8]
+        and attempts["accepted_readiness_version"] == 8
+    )
+    assert (
+        attempts["version4_false_positive_original_retained"]
+        and attempts["version5_partial_progress_retained"]
+    )
+    assert not attempts["failed_receipts_rewritten"]
+    next_launch = latest["next_launch"]
+    assert next_launch["prepared"] and not next_launch["claimed"] and not next_launch["launched"]
+    assert (
+        not next_launch["official_campaign_allowed"] and next_launch["partition"] == "development"
+    )
+    assert not latest["scope"]["development_fitting"] and latest["scope"]["runtime_llm_calls"] == 0
+    assert latest["scope"]["save_edits"] == latest["scope"]["teacher_combat_decisions"] == 0
+    assert not latest["scope"]["copy_back"] and not latest["scope"]["full_game_campaign_started"]
+    assert latest["scope"]["fresh_red_gates_advanced"] == 0
+    # Preserve the preceding durable recovery/capture proof, not overwrite it.
+    latest = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-durable-route-recovery-2026-10-09.json").read_bytes()
+    )
+    assert (
+        latest["status"] == "closed_durable_quote_recovery_and_useful_dependency_capture_verified"
+    )
+    assert latest["partition"] == "development" and not latest["independent_evaluation"]
+    assert latest["model_examples"] == 151
+    assert set(latest["learning"].values()) == {0}
+    engineering = latest["engineering"]
+    assert engineering["version1_identity_preserved"] and engineering["version2_explicit_quote"]
+    assert engineering["indoor_and_fly_quote_connected"]
+    assert engineering["source_binding_before_import"] and engineering["loaded_source_path_checks"]
+    assert engineering["private_source_files"] == 170
+    assert engineering["private_source_basis"] == "conservative_static_import_superset"
+    assert latest["configuration_sha256"] != latest["previous_configuration_sha256"]
+    outcome, rows = latest["outcome"], latest["native_rows"]
+    assert outcome["native_segments"] == 4
+    assert outcome["goal_attempts"] == len(rows) == 8
+    assert outcome["model_selected"] == sum(row["model_selected"] for row in rows) == 7
+    assert outcome["support_selected"] == sum(row["support_role"] is not None for row in rows) == 1
+    assert outcome["successful"] == sum(row["verification"] == "succeeded" for row in rows) == 7
+    assert (
+        outcome["intentional_interruptions"] == 1
+        and outcome["unexpected_native_execution_errors"] == 0
+    )
+    interrupted = [row for row in rows if row["error_type"] is not None]
+    assert len(interrupted) == 1
+    assert interrupted[0]["kind"] == "restore_team" and interrupted[0]["model_selected"]
+    assert interrupted[0]["error_type"] == "ControllerActionBudgetExhausted"
+    assert (
+        interrupted[0]["verification"] is None and interrupted[0]["observed_cost"]["actions"] == 1
+    )
+    assert outcome["registrations_before"] == outcome["registrations_after"] == 32
+    assert outcome["registration_delta"] == 0 and outcome["physical_dependency_delta"] == 1
+    capture = outcome["capture"]
+    assert capture["model_selected"] and capture["verification"] == "succeeded"
+    assert capture["new_registrations"] == []
+    assert capture["physical_gloom_before"] == 1 and capture["physical_gloom_after"] == 2
+    assert capture["capture_survey"]["captures"] == 1
+    assert (
+        outcome["costs"]["actions"] == sum(row["observed_cost"]["actions"] for row in rows) == 2419
+    )
+    assert (
+        outcome["costs"]["frames"] == sum(row["observed_cost"]["frames"] for row in rows) == 127494
+    )
+    assert outcome["costs"]["decisions"] == 8 and outcome["costs"]["cash_debits"] == 1000
+    terminal = latest["terminal"]
+    assert terminal["exact_reload"] and terminal["reload_inputs"] == terminal["reload_frames"] == 0
+    assert terminal["all_originals_active"] and terminal["whole_party_restored"]
+    assert terminal["master_balls"] == 1 and terminal["search_memory_entries"] == 1
+    assert terminal["earlier_search_history_unknown"]
+    assert len(latest["inspections"]) == 5
+    quotes = latest["inspections"][1]["quotes"]
+    assert any(
+        row["source_id"] == "wild:Route11:grass" and row["ordinary_trainers_crossed"] == 3
+        for row in quotes
+    )
+    assert all(
+        not row["enemy_rosters_used"]
+        and not row["scripted_battles_quoted"]
+        and not row["risk_is_probability"]
+        for row in quotes
+    )
+    assert latest["verification"]["protected_pins_verified"] == 34
+    assert latest["verification"]["baseline_main_registrations"] == 32
+    assert latest["verification"]["completed_reference_registrations"] == 124
+    assert not latest["verification"]["native_worker_running"]
+    assert not latest["scope"]["development_fitting"] and latest["scope"]["runtime_llm_calls"] == 0
+    assert latest["scope"]["save_edits"] == latest["scope"]["full_game_replays"] == 0
+    assert not latest["scope"]["copy_back"] and latest["scope"]["fresh_red_gates_advanced"] == 0
+    # Preserve the preceding rejected163 fit and native tie as historical evidence.
+    latest = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-route-combat-learning-2026-10-09.json").read_bytes()
+    )
+    assert (
+        latest["status"] == "closed_route_information_useful_parameter_advantage_not_demonstrated"
+    )
+    learning = latest["learning"]
+    assert (
+        learning["parent_examples"] + learning["admitted_train_delta"]
+        == learning["candidate_examples"]
+        == 163
+    )
+    assert (
+        learning["actual_train_attempts"]
+        == learning["admitted_train_delta"] + learning["quarantined_train_attempts"]
+        == 14
+    )
+    assert (
+        learning["admitted_train_delta"]
+        == sum(
+            learning[key]
+            for key in (
+                "successful_admitted_captures",
+                "successful_admitted_restorations",
+                "failed_admitted_captures",
+            )
+        )
+        == 12
+    )
+    assert learning["retained_all151_fingerprints"] and learning["fit_delta"] == 1
+    assert (
+        not learning["deployed"]
+        and learning["adoption_delta"] == learning["authority_promotions"] == 0
+    )
+    assert learning["new_train_mse_after"] < learning["new_train_mse_before"]
+    assert learning["actual_train_actions"] == sum(row["actions"] for row in latest["train_arms"])
+    assert learning["actual_train_frames"] == sum(row["frames"] for row in latest["train_arms"])
+    quote = latest["engineering"]["prospective_ordinary_sight_quote"]
+    assert quote["wild:Route4:grass"]["ordinary_trainers_crossed"] == 0
+    assert quote["wild:Route24:grass"]["ordinary_trainers_crossed"] == 6
+    assert quote["wild:Route25:grass"]["ordinary_trainers_crossed"] == 5
+    assert all(
+        not row["enemy_rosters_used"]
+        and not row["scripted_battles_quoted"]
+        and not row["risk_is_probability"]
+        for row in quote.values()
+    )
+    comparison = latest["comparison"]
+    assert len(comparison["arms"]) == 4 and comparison["all_four_terminal_bytes_identical"]
+    assert (
+        comparison["all_four_choices_identical"]
+        and comparison["all_four_action_frame_costs_identical"]
+    )
+    assert not comparison["accepted_model_improvement"]
+    assert (
+        comparison["successful_selected_capture_goals"] == 8
+        and comparison["useful_capture_in_each_arm"]
+    )
+    assert comparison["unique_related_target_registrations"] == [21, 23]
+    assert not comparison["partial_evolution_is_registration"]
+    assert len({row["terminal_sha256"] for row in comparison["arms"]}) == 1
+    for row in comparison["arms"]:
+        assert row["source_unchanged"] and row["field_ready"] and row["buttons_released"]
+        assert row["learned_battles"] == 0 and row["new_registrations"] == [21, 23]
+        assert row["successful_selected_capture_goals"] == 2
+        assert row["stop_reason"] == "verification_failed"
+        assert row["costs"]["actions_attempted"] == 5356 and row["costs"]["frames"] == 355064
+        partial = row["partial_evolution"]
+        assert partial["evolution_partial"] and partial["completed_training_battles"] == 32
+        xp = partial["retained_xp_and_level_changes"][0]["experience"]
+        assert xp["after"] - xp["before"] == 2001
+    assert latest["verification"]["protected_pins_verified"] == 29
+    assert latest["verification"]["main_registrations"] == 32
+    assert latest["verification"]["completed_registrations"] == 124
+    assert not latest["verification"]["native_worker_running"]
+    assert not latest["scope"]["development_fitting"] and latest["scope"]["runtime_llm_calls"] == 0
+    # Preserve the preceding rejected162 batch as independent historical evidence.
+    latest = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence/red-informative-collection-learning-2026-10-09.json"
+        ).read_bytes()
+    )
+    assert latest["status"] == "closed_useful_choice_improvement_not_demonstrated"
+    learning = latest["learning"]
+    assert (
+        learning["parent_examples"] + learning["admitted_train_delta"]
+        == learning["candidate_examples"]
+        == 162
+    )
+    assert (
+        learning["actual_train_attempts"]
+        == learning["admitted_train_delta"] + learning["quarantined_train_attempts"]
+        == 16
+    )
+    assert (
+        learning["admitted_train_delta"]
+        == sum(
+            learning[key]
+            for key in (
+                "successful_admitted_captures",
+                "successful_admitted_restorations",
+                "failed_admitted_captures",
+            )
+        )
+        == 11
+    )
+    assert learning["retained_all151_fingerprints"] and learning["fit_delta"] == 1
+    assert (
+        not learning["deployed"]
+        and learning["adoption_delta"] == learning["authority_promotions"] == 0
+    )
+    assert learning["new_train_mse_after"] < learning["new_train_mse_before"]
+    assert learning["actual_train_actions"] == sum(row["actions"] for row in latest["train_arms"])
+    assert learning["actual_train_frames"] == sum(row["frames"] for row in latest["train_arms"])
+    comparison = latest["comparison"]
+    assert len(comparison["arms"]) == 4 and comparison["all_four_terminal_bytes_identical"]
+    assert not comparison["accepted_model_improvement"]
+    assert comparison["successful_selected_capture_goals"] == 0
+    assert not comparison["incidental_raticate_is_capture_success"]
+    assert len({row["terminal_sha256"] for row in comparison["arms"]}) == 1
+    for row in comparison["arms"]:
+        assert row["source_unchanged"] and row["field_ready"] and row["buttons_released"]
+        assert row["learned_battles"] == 7 and row["capture_attempts"] == 0
+        assert row["capture_stop"] == "safety_check_failed"
+    assert latest["verification"]["protected_pins_verified"] == 26
+    assert latest["verification"]["main_registrations"] == 32
+    assert latest["verification"]["completed_registrations"] == 124
+    assert not latest["verification"]["native_worker_running"]
+    assert not latest["scope"]["development_fitting"] and latest["scope"]["runtime_llm_calls"] == 0
+    # Preserve the preceding zero-input instrumentation closure separately.
+    diagnostic = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-player-data-gap-completion-2026-10-09.json").read_bytes()
+    )
+    assert diagnostic["status"] == "closed_rom_free_observational_wiring_no_new_run"
+    assert diagnostic["verification"][
+        "recording_parity_in_fixture_choices_inputs_verdicts_and_costs"
+    ]
+    assert diagnostic["verification"]["action_free_menu_state_guard_preserved"]
+    assert diagnostic["verification"]["protected_pins_verified"] == 21
+    assert diagnostic["verification"]["protected_pin_mismatches"] == 0
+    assert not diagnostic["verification"]["completed_terminal_changed"]
+    assert not diagnostic["verification"]["protected_main_changed"]
+    assert not diagnostic["verification"]["native_worker_running"]
+    assert not diagnostic["scope"]["native_cartridge_qualification_this_session"]
+    assert not diagnostic["scope"]["new_logging_subsystem"]
+    assert not diagnostic["scope"]["new_policy_privileged_features"]
+    assert diagnostic["learning"]["native_gameplay_inputs"] == 0
+    assert diagnostic["learning"]["native_gameplay_frames"] == 0
+    assert diagnostic["learning"]["registration_delta"] == 0
+    assert diagnostic["learning"]["admitted_train_delta"] == 0
+    assert diagnostic["learning"]["fit_delta"] == 0
+    assert diagnostic["learning"]["model_adoption_delta"] == 0
+    assert not diagnostic["learning"]["development_fitting"]
+    assert diagnostic["retained_terminal"]["registrations"] == 124
+    assert diagnostic["retained_terminal"]["model_examples"] == 151
+    assert diagnostic["retained_terminal"]["protected_main_registrations"] == 32
+    # Completed earned coverage is not fresh autonomous acceptance or training.
+    # The prior eight-hour receipt stays historical and its costs remain carried.
+    block = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence/red-earned-collection-completion-2026-10-09.json"
+        ).read_bytes()
+    )
+    assert block["status"] == "closed_earned_native_collection_and_data_audit"
+    assert block["partition"] == "development"
+    assert block["correlated_continuation"] and not block["independent_evaluation"]
+    assert not block["final_autonomy"]
+    delta = block["registration_delta"]
+    assert delta["total"] == delta["during_model_owned_goals"] + delta["during_singleton_support"]
+    assert (
+        block["source"]["initial_registrations"] + delta["total"]
+        == block["terminal"]["registrations"]
+    )
+    assert (
+        block["terminal"]["registrations"]
+        + block["terminal"]["remaining_native_route_registrations"]
+        == 124
+    )
+    assert block["terminal"]["registrations"] == 124
+    combined = delta["combined_previous_and_current_blocks"]
+    assert combined["total"] == 91
+    assert combined["during_model_owned_goals"] + combined["during_singleton_support"] == 91
+    assert delta["physical_poliwhirl_reacquisition"]["new_registrations"] == 0
+    assert delta["physical_poliwhirl_reacquisition"]["physical_acquisitions"] == 1
+    counts = block["outcomes"]
+    assert counts["executed_goals"] == counts["model_owned_goals"] + counts["support_goals"]
+    assert counts["executed_goals"] == sum(
+        counts[key]
+        for key in (
+            "successes",
+            "ordinary_failed_verifications",
+            "other_failed_verifications",
+            "execution_errors",
+        )
+    )
+    assert counts["all_original_failures_and_costs_retained"]
+    assert block["terminal"]["worker_stopped"] and block["terminal"]["controls_released"]
+    assert block["verification"]["exact_terminal_reload_passed"]
+    assert block["verification"]["reload_inputs"] == block["verification"]["reload_frames"] == 0
+    assert not block["verification"]["protected_main_changed"]
+    assert not block["verification"]["copy_back"]
+    assert block["verification"]["all_four_physical_legendary_specimens"]
+    assert block["verification"]["original_roster_retained_and_restored"]
+    assert block["verification"]["protected_main_registrations"] == 32
+    ancestry = block["verification"]["champion_hof_ancestry"]
+    assert ancestry["authenticated_nodes"] == ancestry["verified_parent_links"] + 1 == 90
+    assert ancestry["concurrent_champion_and_hall_of_fame"]
+    assert ancestry["all_source_states_match_authenticated_parent"]
+    assert ancestry["all_lifetime_costs_monotonic"]
+    assert block["audit"]["combined_goal_outcomes"] == 434
+    assert block["audit"]["current_acquisition_selected_arm"][
+        "scores_are_not_calibrated_probabilities"
+    ]
+    assert block["learning"]["admitted_train_delta"] == block["learning"]["fit_delta"] == 0
+    assert (
+        block["learning"]["runtime_llm_calls"]
+        == block["learning"]["official_authority_promotions"]
+        == 0
+    )
+    assert not block["learning"]["development_fitting"]
+    # Preserve the prior learning evidence rather than relabeling new gameplay.
+    evidence = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence/red-checkpoint-recovery-learning-2026-10-08.json"
+        ).read_bytes()
+    )
+    assert evidence["status"] == "closed_scoped_native_improvement_and_durable_development_reuse"
+    assert evidence["checkpoint_inventory"]["count"] == 4
+    assert evidence["checkpoint_inventory"]["zero_input_reloads"] == 4
+    assert evidence["checkpoint_inventory"]["development_copies_are_train"] is False
+    assert evidence["model"]["settled_examples"] == 151
+    assert evidence["model"]["retained_prior_examples"] == 147
+    assert evidence["model"]["retained_all_prior_fingerprints"] is True
+    assert evidence["model"]["admitted_train_delta"] == 4
+    assert evidence["model"]["fit_delta"] == 1
+    assert evidence["model"]["battler_fit_delta"] == 0
+    assert evidence["model"]["development_inputs"] == 0
+    assert evidence["model"]["configured_development_artifact_selected"] is True
+    assert evidence["model"]["protected_main_model_replaced"] is False
+    assert evidence["model"]["official_authority_promotions"] == 0
+    assert evidence["model"]["runtime_llm_calls"] == 0
+    assert evidence["reserved_conditions"]["original_failures_preserved"] is True
+    assert evidence["reserved_conditions"]["pure_paired_model_improvement_claim"] is False
+    assert evidence["adaptive_early_continuation"]["useful_model_selected_captures"] == [16, 43]
+    assert evidence["adaptive_early_continuation"]["original_comparison_stays_failed"] is True
+    assert (
+        evidence["adaptive_early_continuation"]["incidental_registration_is_capture_success"]
+        is False
+    )
+    assert evidence["adaptive_early_continuation"]["worker_stopped"] is True
+    copy = evidence["configured_development_copy"]
+    assert (copy["initial_registrations"], copy["final_registrations"]) == (32, 33)
+    assert copy["new_registrations"] == [78]
+    assert copy["failed_partial_third_goal_preserved"] is True
+    assert copy["zero_input_reloads"] == 2
+    assert copy["reload_inputs"] == copy["reload_frames"] == 0
+    assert copy["inherited_spent_retained"] and copy["original_roster_restored"]
+    assert copy["worker_stopped"] and copy["copy_back"] is False
+    assert evidence["protected_earned_save"]["registrations"] == 32
+    assert evidence["protected_earned_save"]["registration_delta"] == 0
+    assert evidence["protected_earned_save"]["unchanged"] is True
+    assert evidence["protected_earned_save"]["copy_back"] is False
+    # Preserve the preceding zero-fit diagnostic's exact historical claims.
+    prior = json.loads(
+        (PROJECT_ROOT / "docs/evidence/red-player-data-observability-2026-10-08.json").read_bytes()
+    )
+    assert prior["status"] == "closed_diagnostics_verified_native_capture_not_demonstrated"
+    assert prior["model"]["settled_examples"] == 147
+    assert prior["model"]["admitted_train_delta"] == prior["model"]["fit_delta"] == 0
+    assert prior["diagnostic_episode"]["survey_captures"] == 0
+    assert prior["diagnostic_episode"]["incidental_registration_is_capture_success"] is False
+    # The earlier genuine TRAIN pilot remains historical evidence; diagnostics
+    # must neither erase those lessons nor count them again as today's learning.
+    evidence = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence/red-teacher-assisted-collection-2026-10-08.json"
+        ).read_bytes()
+    )
+    assert evidence["status"] == "closed_native_improvement_not_demonstrated"
+    assert evidence["learning"]["admitted_train_examples"] == 6
+    assert evidence["learning"]["model_fits"] == 2
+    assert evidence["learning"]["retained_prior_examples"] == 141
+    assert evidence["learning"]["child_settled_examples"] == 147
+    assert evidence["learning"]["retained_all_prior_row_hashes"] is True
+    assert evidence["learning"]["deployed_models"] == 0
+    assert evidence["learning"]["runtime_llm_calls"] == 0
+    assert evidence["comparison"]["paired_improvement_accepted"] is False
+    assert evidence["comparison"]["successful_selected_goal_arms"] == 0
+    assert evidence["adaptive_execution_repair"]["new_registrations"] == 0
+    assert evidence["adaptive_execution_repair"]["worker_stopped"] is True
+    assert evidence["earned_save"]["registrations"] == 32
+    assert evidence["earned_save"]["unchanged"] is True
+    assert evidence["earned_save"]["copy_back"] is False
+    assert "| Time box | 1 session / 3 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == "cross-title-authenticated-scenario-curriculum-v1"
@@ -396,12 +906,28 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     assert "unmeasured_action_target" in prohibited
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
+    assert {"full_game_replay", "teacher_choice_or_fallback", "promotion_from_pilot"}.isdisjoint(
+        prohibited
+    )
+    assert set(state.active_lane["development_permissions"].values()) == {True}
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "registered_train_example", "partition": "train", "minimum": 12}
+        {"kind": "registered_train_example", "minimum": 4, "partition": "train"},
+        {"kind": "model_fit", "minimum": 1, "partition": "train"},
+        {"kind": "unseen_comparison", "minimum": 1, "partition": "development"},
     ]
     assert len(state.retired_lanes) == 60
+    # This legacy fraction is not pilot acceptance or full-product completion.
+    # The unchanged historical counters exclude this pilot's new corpus.
     assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Registered Train Example · train", 135, 12),)
+    assert focus_scorecard(state) == (
+        ("Registered Train Example · train", 135, 4),
+        ("Model Fit · train", 16, 1),
+        ("Unseen Comparison · development", 9, 1),
+    )
+    rendered = render_product_focus_markdown(state)
+    assert "### Historical cross-family counter snapshot" in rendered
+    assert "Legacy minimum, not current acceptance" in rendered
+    assert "excludes newer native-player batches" in rendered
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
     assert state.progress["model_fits"] == 16
     assert state.progress["composition_attempts"] == 6
@@ -455,9 +981,7 @@ def test_measured_fishing_projection_rejects_claim_drift(field: str) -> None:
     ),
 )
 def test_measured_fishing_failure_projection_rejects_claim_drift(field: str) -> None:
-    receipt = json.loads(
-        MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii")
-    )
+    receipt = json.loads(MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii"))
     _validate_model107_measured_fishing_failure_projection(receipt)
 
     changed = deepcopy(receipt)
@@ -468,9 +992,7 @@ def test_measured_fishing_failure_projection_rejects_claim_drift(field: str) -> 
 
 
 def test_measured_fishing_failure_recovery_cannot_claim_learning() -> None:
-    receipt = json.loads(
-        MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii")
-    )
+    receipt = json.loads(MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii"))
     changed = deepcopy(receipt)
     changed["recovery"]["training_examples"] = 1
     with pytest.raises(ProductFocusError, match="failure recovery"):
@@ -520,9 +1042,7 @@ def test_adaptive_fishing_projection_rejects_claim_drift(field: str) -> None:
 def test_automatic_fishing_failure_projection_rejects_claim_drift(
     section: str | None, field: str
 ) -> None:
-    receipt = json.loads(
-        MODEL112_AUTOMATIC_FISHING_FAILURE.read_text(encoding="ascii")
-    )
+    receipt = json.loads(MODEL112_AUTOMATIC_FISHING_FAILURE.read_text(encoding="ascii"))
     _validate_model112_automatic_fishing_failure_projection(receipt)
 
     changed = deepcopy(receipt)
@@ -550,9 +1070,7 @@ def test_automatic_fishing_failure_projection_rejects_claim_drift(
 def test_model123_heterogeneous_fit_projection_rejects_claim_drift(
     section: str | None, field: str
 ) -> None:
-    receipt = json.loads(
-        MODEL123_HETEROGENEOUS_EVOLUTION_FIT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(MODEL123_HETEROGENEOUS_EVOLUTION_FIT.read_text(encoding="ascii"))
     _validate_model123_heterogeneous_evolution_fit_projection(receipt)
 
     changed = deepcopy(receipt)
@@ -573,9 +1091,7 @@ def test_paired_player_projection_rejects_counter_or_arm_drift() -> None:
 
 
 def test_calibration_player_partial_projection_rejects_false_comparison() -> None:
-    receipt = json.loads(
-        CALIBRATION_PLAYER_PARTIAL_RESULT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(CALIBRATION_PLAYER_PARTIAL_RESULT.read_text(encoding="ascii"))
 
     _validate_calibration_player_partial_projection(receipt)
     encoded = json.dumps(receipt, sort_keys=True)
@@ -599,9 +1115,7 @@ def test_calibration_player_partial_projection_rejects_false_comparison() -> Non
 
 
 def test_calibration_player_recovery_projection_binds_progress_and_typed_stop() -> None:
-    receipt = json.loads(
-        CALIBRATION_PLAYER_RECOVERY_RESULT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(CALIBRATION_PLAYER_RECOVERY_RESULT.read_text(encoding="ascii"))
 
     _validate_calibration_player_recovery_projection(receipt)
     encoded = json.dumps(receipt, sort_keys=True)
@@ -619,17 +1133,13 @@ def test_calibration_player_recovery_projection_binds_progress_and_typed_stop() 
         _validate_calibration_player_recovery_projection(changed_counter)
 
     changed_arm = deepcopy(receipt)
-    changed_arm["arms"]["calibration_model"]["decisions"][2][
-        "failure_reason"
-    ] = None
+    changed_arm["arms"]["calibration_model"]["decisions"][2]["failure_reason"] = None
     with pytest.raises(ProductFocusError, match="recovery decisions differ"):
         _validate_calibration_player_recovery_projection(changed_arm)
 
 
 def test_repeatable_living_dex_first_two_projection_binds_both_outcomes() -> None:
-    receipt = json.loads(
-        REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(REPEATABLE_LIVING_DEX_FIRST_TWO_RESULT.read_text(encoding="ascii"))
 
     _validate_repeatable_living_dex_first_two_projection(receipt)
     encoded = json.dumps(receipt, sort_keys=True)
@@ -653,9 +1163,7 @@ def test_repeatable_living_dex_first_two_projection_binds_both_outcomes() -> Non
 
 
 def test_repeatable_living_dex_supplement_projection_binds_three_outcomes() -> None:
-    receipt = json.loads(
-        REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(REPEATABLE_LIVING_DEX_SUPPLEMENT_RESULT.read_text(encoding="ascii"))
 
     _validate_repeatable_living_dex_supplement_projection(receipt)
     encoded = json.dumps(receipt, sort_keys=True)
@@ -679,9 +1187,7 @@ def test_repeatable_living_dex_supplement_projection_binds_three_outcomes() -> N
 
 
 def test_repeatable_living_dex_calibration_audit_binds_metrics_and_boundary() -> None:
-    receipt = json.loads(
-        REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT.read_text(encoding="ascii")
-    )
+    receipt = json.loads(REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT.read_text(encoding="ascii"))
 
     _validate_repeatable_living_dex_calibration_audit_projection(receipt)
     encoded = json.dumps(receipt, sort_keys=True)
@@ -699,16 +1205,12 @@ def test_repeatable_living_dex_calibration_audit_binds_metrics_and_boundary() ->
         _validate_repeatable_living_dex_calibration_audit_projection(changed_effect)
 
     changed_control = deepcopy(receipt)
-    changed_control["post_hoc_constant_rate_diagnostic"][
-        "eligible_for_advantage_claim"
-    ] = True
+    changed_control["post_hoc_constant_rate_diagnostic"]["eligible_for_advantage_claim"] = True
     with pytest.raises(ProductFocusError, match="post-hoc comparator differs"):
         _validate_repeatable_living_dex_calibration_audit_projection(changed_control)
 
     changed_gate = deepcopy(receipt)
-    changed_gate["next_gate"]["evaluation"][
-        "timing_or_rng_siblings_create_independence"
-    ] = True
+    changed_gate["next_gate"]["evaluation"]["timing_or_rng_siblings_create_independence"] = True
     with pytest.raises(ProductFocusError, match="calibration next gate differs"):
         _validate_repeatable_living_dex_calibration_audit_projection(changed_gate)
 
@@ -1874,14 +2376,40 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    # Only actual new-objective outcomes advance this separate counter.
-    assert rows == ("Registered Train Example · train: 135/12",)
+    # Learning restores a scorecard, without rewriting historical counters or
+    # presenting their completed quota as this pilot's acceptance.
+    assert rows == (
+        "Registered Train Example · train: 135/4",
+        "Model Fit · train: 16/1",
+        "Unseen Comparison · development: 9/1",
+    )
+    assert "Legacy minimum, not current acceptance" in DEFAULT_FOCUS_DOCUMENT.read_text(
+        encoding="utf-8"
+    )
 
 
-@pytest.mark.parametrize("goal", [
-    "Build a living Pokedex across mainline games.",
-    "Build a registered Pokedex in Red alone.",
-])
+def test_maintenance_page_does_not_show_a_stale_learning_quota() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["kind"] = "maintenance"
+    lane["maintenance_unblocks"] = "red-readiness-consequence-learning"
+    lane["measurable_outputs"] = []
+    state = validate_product_focus_document(document)
+    text = render_product_focus_markdown(state)
+    assert state.progress["registered_train_examples"] == 135
+    assert "This maintenance block has no lesson-count quota" in text
+    assert "Minimum for the next decision" not in text
+    assert "Legacy minimum, not current acceptance" not in text
+    assert "| Registered Train Example" not in text
+
+
+@pytest.mark.parametrize(
+    "goal",
+    [
+        "Build a living Pokedex across mainline games.",
+        "Build a registered Pokedex in Red alone.",
+    ],
+)
 def test_product_rejects_superseded_or_single_game_objective(goal: str) -> None:
     document = _document()
     document["product"]["goal"] = goal
@@ -2116,14 +2644,15 @@ def test_maintenance_must_name_the_learning_experiment_it_unblocks() -> None:
     "protected_action",
     (
         "cloned_or_rehashed_root_independence",
-        "consumed_trial_retry",
+        "retired_frozen_trial_reissue",
         "crystal_execution",
-        "full_game_replay",
+        "assisted_completion_as_autonomous",
+        "final_actor_cheat",
         "model_fit_on_development",
         "routine_clean_power_teacher_factory",
         "sealed_red_evaluation",
-        "teacher_choice_or_fallback",
         "teacher_route_hardening",
+        "unauthorized_publication",
         "unexecuted_counterfactual_target",
         "unmeasured_action_target",
     ),
@@ -2147,7 +2676,6 @@ def test_development_cannot_silently_open_a_protected_action(
     (
         "Launch a clean-power factory for more rows.",
         "Perform teacher route hardening before training.",
-        "Run one full-game replay to see whether the local skill works.",
     ),
 )
 def test_active_forward_plan_cannot_schedule_its_prohibited_maintenance(
@@ -2161,11 +2689,68 @@ def test_active_forward_plan_cannot_schedule_its_prohibited_maintenance(
         validate_product_focus_document(document)
 
 
+def test_development_contract_allows_batches_assistance_and_exploratory_campaigns() -> None:
+    document = _document()
+    lane = _active(document)
+    lane["next_decision"] = (
+        "Run one exploratory full-game replay for the sustained integration question, "
+        "with disclosed assistance and several lesson/fit iterations."
+    )
+    state = validate_product_focus_document(document)
+    assert state.active_lane["development_permissions"] == {
+        "adaptive_preparation": True,
+        "batch_lessons_and_fits": True,
+        "compact_verification": True,
+        "development_campaigns": True,
+        "provisional_integration": True,
+        "teacher_controlled_fixtures": True,
+    }
+    assert len(state.retired_lanes) == 60
+    rendered = render_product_focus_markdown(state)
+    assert "## Development permissions" in rendered
+    assert "All60retired lane identities remain closed" in rendered
+    assert "mandatory user pauses" in rendered
+
+
+@pytest.mark.parametrize(
+    "contradiction",
+    ("full_game_replay", "teacher_choice_or_fallback", "promotion_from_pilot"),
+)
+def test_development_permissions_reject_conflicting_prohibitions(contradiction: str) -> None:
+    document = _document()
+    lane = _active(document)
+    lane["prohibited_actions"].append(contradiction)
+    with pytest.raises(ProductFocusError, match="permissions conflict"):
+        validate_product_focus_document(document)
+
+
+def test_development_permissions_do_not_authorize_benchmark_execution() -> None:
+    document = _document()
+    _active(document)["rigor"] = "benchmark"
+    with pytest.raises(ProductFocusError, match="cannot authorize evaluation"):
+        validate_product_focus_document(document)
+
+
+@pytest.mark.parametrize("value", (1, "yes", None))
+def test_development_permissions_require_explicit_booleans(value: object) -> None:
+    document = _document()
+    _active(document)["development_permissions"]["provisional_integration"] = value
+    with pytest.raises(ProductFocusError):
+        validate_product_focus_document(document)
+
+
+def test_superseded_focus_schema_is_not_silently_used_as_current_authority() -> None:
+    document = _document()
+    document["schema"] = "pokemon.product-focus.v4"
+    with pytest.raises(ProductFocusError, match="schema is unsupported"):
+        validate_product_focus_document(document)
+
+
 @pytest.mark.parametrize(
     ("section", "key", "value", "match"),
     (
         ("alarms", "maximum_sessions_without_measured_learning_output", 2, "one session"),
-        ("alarms", "maximum_full_replays_during_active_lane", 1, "full replay"),
+        ("alarms", "maximum_redundant_full_replays_for_local_question", 1, "redundant full replay"),
         ("session_budget_percent", "maintenance_and_docs", 30, "sum to 100"),
     ),
 )
@@ -2369,8 +2954,11 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
     # This is the historical 29-to-31 fixture, not whichever model the live
     # dashboard happens to reference after the next real training session.
-    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
-        "red-native-player-learning-result-2026-09-06.json").read_text())
+    evidence = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence" / "red-native-player-learning-result-2026-09-06.json"
+        ).read_text()
+    )
     public = DASHBOARD["product_focus_dashboard_snapshot"](state, evidence=evidence).public_dict()
     assert public["run_status"] == "waiting"
     assert public["actions"] == 0
@@ -2402,10 +2990,14 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
 
 
 def test_dashboard_projects_saved_negative_search_fit_without_a_gameplay_claim() -> None:
-    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
-        "red-saved-endpoint-learning-result-2026-09-06.json").read_text())
+    evidence = json.loads(
+        (
+            PROJECT_ROOT / "docs/evidence" / "red-saved-endpoint-learning-result-2026-09-06.json"
+        ).read_text()
+    )
     public = DASHBOARD["product_focus_dashboard_snapshot"](
-        load_product_focus(), evidence=evidence,
+        load_product_focus(),
+        evidence=evidence,
     ).public_dict()
     assert public["training"]["samples_before"] == 31
     assert public["training"]["samples_after"] == 32

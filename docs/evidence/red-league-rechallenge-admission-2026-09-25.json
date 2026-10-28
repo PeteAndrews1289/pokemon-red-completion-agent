@@ -1,0 +1,19 @@
+{
+  "schema": "pokemon.red.earned-league-chain-admission.v1",
+  "authority": "frozen-risk-cost-league-chain-development",
+  "partition": "development",
+  "root_stage": 465,
+  "root_sha256": "303cc6841d71a3a1cee219f387f041948814daf42e59066c692d15d3cdc3992d",
+  "root_envelope_sha256": "4abd3b57fdaee6ee0167ac2f167207164714cacfd860da208620c48992ce1cb0",
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "model_content_sha256": "905b7e5a8943278bee14d7cb1e55361c1bdb2445dd35e943382f24b2df39e3f4",
+  "maximum_battles": 5,
+  "maximum_decisions_per_battle": 80,
+  "maximum_actions": 15000,
+  "maximum_frames": 2500000,
+  "maximum_runtime_seconds": 300,
+  "maximum_owned_field_items": 15,
+  "owner_direction": "Begin: one stocked source-chained League rechallenge with native healing between rooms and retained losses.",
+  "failed_broad_qualification_retained": true,
+  "prohibited": ["retry", "copy-back", "fit", "teacher combat", "battle items", "save edits", "purchases", "sales", "default promotion", "second challenge"]
+}

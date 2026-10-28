@@ -1,0 +1,231 @@
+{
+  "schema": "pokemon.red.npc-exchange-learning-session.v1",
+  "date": "2026-09-21",
+  "status": "native_lessons_admitted_fit_rejected",
+  "source_commit": "f7265b42640075ee45d56bfd697e8e7fee0c954a",
+  "source_bundle_sha256": "b93ea438b17dda135a1a51dccc8f688cfca32b9184d4330f232c0802b6cdb91a",
+  "learning": {
+    "campaign_sha256": "040f6175102e6bf7c565ce524f3d0b55664bfa4e492bc5a9ac2523d003d2d307",
+    "driver_sha256": "32553bc9ccd3dc5fec5cb8d80ccc95f62bbe7a26b91650f8e303c7b20188c4df",
+    "fit_report_sha256": "cc7cc85ec60ddb71e046a1ce52beee9e9199188f0d8d68bb673336a81c7cd497",
+    "source_origin_sha256": "8461a43ddefb219be25fd43e728ca2b4fa0e42e638698deb81033932eb79dcdf",
+    "train_outcomes": 4,
+    "unique_feature_vectors": 4,
+    "retained_old_examples": 137,
+    "retained_old_teacher_lessons": 4,
+    "retained_model_examples": 141,
+    "retained_model_successes": 96,
+    "retained_economy_qualified": 58,
+    "new_adopted_examples": 0,
+    "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "baseline_new_train_mse": 0.10641800571039567,
+    "fit": {
+      "candidates": [
+        {
+          "model_sha256": "c4102ffdb3f5169dc40ea563b45e049e052a6e22c8c4fcdbee16c20ff4816b55",
+          "new_train_mse": 0.015333507568215114,
+          "old_mse": 0.012943095440124695,
+          "retained": false,
+          "ridge": 0.0625
+        },
+        {
+          "model_sha256": "9fa4ad4e2025347cf16672d3add1c07556976675819754ee438e568b56cb7b73",
+          "new_train_mse": 0.01533850547048053,
+          "old_mse": 0.012951857475206604,
+          "retained": false,
+          "ridge": 0.125
+        },
+        {
+          "model_sha256": "de20d7355a2d8f1305bd9a4cd3d6b7272c9bcbbbed1a73ba9bac22b574713893",
+          "new_train_mse": 0.01540143825432156,
+          "old_mse": 0.012971029350661925,
+          "retained": false,
+          "ridge": 0.25
+        },
+        {
+          "model_sha256": "af8ade8cf6fe5d602a1aa34f7e84b358e22b3cde4a1333edc4e8f09e6133a2ba",
+          "new_train_mse": 0.01564651124285303,
+          "old_mse": 0.013012564914993422,
+          "retained": false,
+          "ridge": 0.5
+        },
+        {
+          "model_sha256": "c29e30d8c33267eed81375e675acdf7787b043feaf3214e7bd98377e655408e4",
+          "new_train_mse": 0.01630488693561224,
+          "old_mse": 0.013097242008368296,
+          "retained": false,
+          "ridge": 1
+        }
+      ],
+      "economy_head_changed": false,
+      "heldout_queries": 0,
+      "maximum_old_error_ratio": 1.02,
+      "prior_mse": 0.012688439924879953,
+      "retention_passed": false,
+      "schema": "pokemon.core.train-only-retention-selection.v1"
+    },
+    "heldout_started": 0,
+    "heldout_planned": 2,
+    "development_fitted": false,
+    "comparative_choices": 0,
+    "independent_upstream_roots": 1,
+    "cases": [
+      {
+        "assignment": {
+          "history": 0,
+          "id": 0,
+          "level": 10,
+          "partition": "train",
+          "size": 1,
+          "trade": 1
+        },
+        "actions": 38,
+        "frames": 3720,
+        "terminal_sha256": "8e240fc29a19057da9827676c3f1653c9b0749527c79b85b4e5a8f1569492b54",
+        "audit_sha256": "544d78ab7edb2c6823df14467f1b4458d11984dfd7d80fffd6f42b5ca38fbd01",
+        "manifest_sha256": "b5a983c50eb5c84818001fce8f486b2bf5ab1c992d0f56e18a0cb4553ffcd134",
+        "admission": {
+          "declaration_sha256": "a0f112a0c468cfbe0f58a01fa5a420c2edc638e9d5d1a653e0efac3449ce5f60",
+          "outcome_sha256": "052d7110663618e2911b34ce0da35221adeea2a98a54fdd3aaebb72c4df7bf29"
+        }
+      },
+      {
+        "assignment": {
+          "history": 100,
+          "id": 1,
+          "level": 30,
+          "partition": "train",
+          "size": 6,
+          "trade": 6
+        },
+        "actions": 49,
+        "frames": 5232,
+        "terminal_sha256": "bcf6dde8ba03175c71eecd8b4b9a90b6594019d1de94f381400e136f2f343fc5",
+        "audit_sha256": "203a05ee653b17e2330256a1eadcd92d7403de339cb686821ab989da52c02ada",
+        "manifest_sha256": "f4f0c4e3537f54a103aca310b9e979e4777eca04e4d85d433c9dfa16dd397482",
+        "admission": {
+          "declaration_sha256": "d5f720d7accbf85c26930f705b2a3a5dbab03c2ca0ad5c0f2f484a42a871f32e",
+          "outcome_sha256": "0f84985523b0ada08e6128172b8508390ab427cb04c7e518dd385f5d17c68751"
+        }
+      },
+      {
+        "assignment": {
+          "history": 100,
+          "id": 2,
+          "level": 30,
+          "partition": "train",
+          "size": 6,
+          "trade": 1
+        },
+        "actions": 56,
+        "frames": 5556,
+        "terminal_sha256": "8f5b37c06f477e13fb0c1be1ab168167f93f61850933bb982d10a4b55cd625e3",
+        "audit_sha256": "c2713d0c272c77f01fc8ce66d52f2c82435ee9c858d30e5f45a8e65d02609a53",
+        "manifest_sha256": "43c57009c62237e23361a5b603d7a422280ca419255d1d94069784c40f57966f",
+        "admission": {
+          "declaration_sha256": "84d016ae1f65c17fcd21f988e979722b80104f993679c07c225fc5f8293d40b6",
+          "outcome_sha256": "c5097f241588fb90b7eb5fb26d3deee526841100cd9961557ee55338fdc013d0"
+        }
+      },
+      {
+        "assignment": {
+          "history": 0,
+          "id": 3,
+          "level": 10,
+          "partition": "train",
+          "size": 1,
+          "trade": 6
+        },
+        "actions": 39,
+        "frames": 4212,
+        "terminal_sha256": "6be74de276b06ca25248ffef7febf6c00dc7aca7e8452067a6d58a1dba40ffc0",
+        "audit_sha256": "779a9d46bce0b2f61b334de4b15224598509fa687363ae9f59f8f1d64486e21c",
+        "manifest_sha256": "2023f7f5303510f66fa6099b7a0c8c5a1b4eccd01bfc87659c0af188a0e0d55b",
+        "admission": {
+          "declaration_sha256": "ee5cb95581671b4b3d52add40ae236a0941e0d4b8fdb8191ea41137b5bfc3317",
+          "outcome_sha256": "e63738ae0ddb9123414a94388d3615a179d180edcab62292486682e86b81e143"
+        }
+      }
+    ],
+    "best_rejected_old_error_ratio": 1.0200698838275148,
+    "best_new_train_error_reduction": 0.8559124702078755,
+    "campaign_closed": true,
+    "heldout_status": "Both unopened; no authorization to execute after failed TRAIN retention.",
+    "setup": "Disclosed party/source/level/XP/stats/history and native room placement before declaration; no actor memory writes. Shared historical TRAIN origin; no fresh power-on or old mechanics relabeling."
+  },
+  "earned_attempt": {
+    "run_id": "model141-npc-exchange-continuation-20260921-v1",
+    "plan_sha256": "84a95c67b3aa3ab55d83a977cc9ca276400747ed33569f5e72a0bbff36da43b7",
+    "result_sha256": "8dd853aed89f2b41fdf85dd03cf333b5970022340aaa0976e60306b62d75ee5e",
+    "outcome_sha256": "32d8d6d10900e5a6611083dc68caaa1f9f74420682f054ac826a72d7e483800f",
+    "audit_sha256": "4632a6798bac65bfca50c2d30821118dd605230a1216b8a901f30fda40b926bb",
+    "before_sha256": "cbb877dcb31a1426836f6774739f0feb7a78972f9b0216cfacf9d557057b1dcc",
+    "terminal_sha256": "1c42fd3da5f790401667dca4e8165b7b5c200b2c8e2fbd017665eb42b4888c91",
+    "candidate_count": 5,
+    "selected_probability": 0.1750135155523907,
+    "selected_index": 0,
+    "model_decisions": 1,
+    "verification": "failed",
+    "failure_reason": "search_exhausted",
+    "safe_terminal": true,
+    "actions": 1606,
+    "frames": 187632,
+    "registrations": 108,
+    "specimens": 78,
+    "cash_before": 15468,
+    "cash_after": 14968,
+    "terminal_map": 7,
+    "terminal_yx": [
+      4,
+      18
+    ],
+    "safari_active": false,
+    "reserve_origin_sha256": "d24d3ee7b1a59a1b52b2aba08d1ded9445fd1f3b3c825d0fc2367155b27ae416",
+    "selected_capability": "paid_safari_acquisition"
+  },
+  "mission": {
+    "capability": "Learn verified resource-preserving NPC exchanges in ordinary player coordinates.",
+    "learned_authority": "Model141 still chooses earned goals; four prospectively declared native teacher lessons are now admissible, not comparative choices.",
+    "transfer_test": "Two stationary trades and one/six-member parties; four distinct vectors from one reused TRAIN opening. No independent heldout or cross-title claim.",
+    "cheapest_falsifier": "An exchange receipt admits unrelated stock loss, false flags, changed levels, protected loss or DEVELOPMENT data.",
+    "timebox_minutes": 90,
+    "stop_condition": "One earned draw; four TRAIN cases; one predeclared five-ridge selection. Stop on failed retention without opening heldout."
+  },
+  "implementation": {
+    "native_curriculum_schema": "v2 opt-in typed exchange; v1 immutable",
+    "generic_capture_loss_guard": "unchanged",
+    "checks": [
+      "cartridge-derived full offer descriptor hash",
+      "exact species/level stock exchange",
+      "unused native flag plus exact new flag",
+      "old local/global credit preserved",
+      "protected counts retained",
+      "money and bag unchanged",
+      "same registration binding and objective",
+      "native zero-input before/terminal audit",
+      "TRAIN-only prospective declaration and actual trace",
+      "incremental fit reauthenticates and retains native lessons"
+    ],
+    "failure_admission": "Exchange-v2 requires exact completed exchange; failed/censored cases remain retained and forbid this all-four-required fit."
+  },
+  "verification": {
+    "targeted_tests_passed": 400,
+    "full_suite": false,
+    "independent_zero_input_native_audits": 5,
+    "lint": "passed",
+    "registry": "regenerated and checked",
+    "github_publication": false,
+    "external_agents_used": false
+  },
+  "retained_operational_failures": [
+    "First training command started before plan serialization completed and exited with missing-plan error before case creation, input or claim. Freeze completed; the four then-unstarted cases executed once."
+  ],
+  "remaining": {
+    "native_registrations": 16,
+    "earned_npc_trade": false,
+    "uninterrupted_boxed_earned_trade": false,
+    "league_income": "0/2",
+    "fresh_red": "0/5"
+  },
+  "next": "Keep Model141 and the actual earned 1c42fd3d endpoint. Add prospectively declared native TRAIN examples of boxed-source preparation and transport costs, rather than repeat adjacent trades or tune this closed four-case fit. Preserve the four admitted lessons and all old retention rows. Do not use more paid searches to obtain a desired choice. No full run or publication."
+}

@@ -1,0 +1,270 @@
+{
+  "actor_settings_sha256": "d9308fc23288fd41554bf513bac9f81eb0a80668eced715473d960437a1d8f35",
+  "aggregate_development_cutoff": null,
+  "all_copy_receipts": [
+    {
+      "actions": 9769,
+      "cash_debits": 4200,
+      "frames": 790392,
+      "heals": 9,
+      "loads": 1,
+      "model_queries": 4,
+      "name": "baseline-composed-v1",
+      "native_failure_reproduced": true,
+      "native_sha256": "158410b25e071944a84cedf48793bb9389d90557d62cb90aa0fac16093159f25",
+      "passed": false,
+      "postprocess_tooling_error": true,
+      "receipt_sha256": "493a8addedbde8228192169ad65bb8a4e366829bf0a1ae4346e6c138de4da3f1",
+      "support_steps": 0
+    },
+    {
+      "actions": 13032,
+      "cash_debits": 4200,
+      "frames": 981900,
+      "heals": 9,
+      "loads": 1,
+      "model_queries": 8,
+      "name": "corrected-composed-v1",
+      "native_failure_reproduced": false,
+      "native_sha256": "3487e138248dd6895cd23b12928b5b41bee8c77a7f04478013ae0b5f1e565378",
+      "passed": true,
+      "postprocess_tooling_error": false,
+      "receipt_sha256": "6f780d018bdf80a9e98d5c928dc325f8145f80022a74f1710145b5dc176dc8ee",
+      "support_steps": 0
+    }
+  ],
+  "all_emulators_stopped": true,
+  "at_utc": "2026-10-16T10:59:18.364483+00:00",
+  "baseline_manifest_sha256": "fa09ed2aeffbcf112438169c71581e9b86af830e9cfbf3d533b381b507c557bc",
+  "candidate": "evolution-return-package-v1",
+  "changed_runtime_sources": [
+    "src/pokemon_red_completion/red_player_party_loan.py"
+  ],
+  "composed_chain": {
+    "actions": 13032,
+    "arcanine_registered": true,
+    "cash_debits": 4200,
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "copy_back": false,
+    "crossed_evolution_return": true,
+    "export_verified": true,
+    "fit_allowed": false,
+    "frames": 981900,
+    "fresh_loads_allowed_only_on_related_copy": true,
+    "goal_attempts": 8,
+    "goal_summary": [
+      {
+        "error": null,
+        "index": 0,
+        "kind": "develop_team",
+        "mode": "model_exploration",
+        "new_owned": [],
+        "verdict": "failed"
+      },
+      {
+        "error": null,
+        "index": 1,
+        "kind": "evolve_species",
+        "mode": "model_exploration",
+        "new_owned": [
+          "pokemon:national:045"
+        ],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 2,
+        "kind": "acquire_species",
+        "mode": "model_exploration",
+        "new_owned": [
+          "pokemon:national:100"
+        ],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 3,
+        "kind": "evolve_species",
+        "mode": "model_exploration",
+        "new_owned": [
+          "pokemon:national:059"
+        ],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 4,
+        "kind": "advance_story",
+        "mode": "model_exploration",
+        "new_owned": [],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 5,
+        "kind": "acquire_species",
+        "mode": "model_exploration",
+        "new_owned": [],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 6,
+        "kind": "acquire_species",
+        "mode": "model_exploration",
+        "new_owned": [
+          "pokemon:national:029"
+        ],
+        "verdict": "succeeded"
+      },
+      {
+        "error": null,
+        "index": 7,
+        "kind": "acquire_species",
+        "mode": "model_exploration",
+        "new_owned": [],
+        "verdict": "failed"
+      }
+    ],
+    "heals": 9,
+    "independent_origin": false,
+    "initial_copy_registrations": 29,
+    "later_actual_model_choices": 4,
+    "live_occupancy_return_verified": true,
+    "model_queries": 8,
+    "original_roster_returned": true,
+    "passed": true,
+    "related_copy": true,
+    "released": true,
+    "seconds": 178.70221000001766,
+    "source_sha256": "c03e1430e58706b6a7bc826cc276e20daa3976ac06c31216e3dfc2fb10027534",
+    "state_loads": 1,
+    "stop_reason": "decision_budget",
+    "supplied_strategic_goal": false,
+    "support_steps": 0,
+    "terminal_bag": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        48,
+        1
+      ]
+    ],
+    "terminal_cash": 22491,
+    "terminal_copy_registrations": 33,
+    "terminal_sha256": "6b83acffc041de89d20f437bb9097d5009db62d82c1b6104149f45a4e7557aac",
+    "worker_stopped": true
+  },
+  "copied_back_progress": false,
+  "environment_pins": 4512,
+  "failed_actual": "red-frozen-autonomous-run-20261016-silph-poison-v1",
+  "fits": 0,
+  "focused_rom_free_tests": 478,
+  "focused_test_receipt_sha256": "492c0cf613ad9a2fb321aefdd9d93a180a94e8b9b7e19ff83a295c532ac0dd25",
+  "forecast_output_bytes": 19517046089,
+  "full_suite_or_ci_claimed": false,
+  "headroom_after_forecast_and_reserve": 20161467063,
+  "helper_changes": 0,
+  "interpretation": "Scoped execution repair, not parameter learning or fresh-run completion. Arcanine was registered and the original roster returned before stale NPC occupancy blocked the nurse walk. Each replan now refreshes live geometry, retaining blocked tiles, exact endpoint and walking-only legality. No data, model or helper changes. Baseline native failure and its separate postprocessing error are retained.",
+  "isolated_inputs": 0,
+  "isolated_loads": 0,
+  "isolated_modules": 301,
+  "isolated_plan_sha256": "5ab00198b0622f065c723275fd786c78a3edd37cd43d82879ecb5cf1c4f7b7d9",
+  "isolated_writes": 0,
+  "main_registration_delta": 0,
+  "manifest_sha256": "c8adf1eacbf6ccc7537b432c8991fc62202c661d20ae6172dfd01e6eb84fc44e",
+  "model_and_data_changes": 0,
+  "new_weights": 0,
+  "next_action": "Launch one distinct fresh sixteen-hour dashboard actor under continuing human authorization after exclusive preflight; review every two hours.",
+  "output_free_bytes": 42899738624,
+  "package_pins": 7878,
+  "passed": true,
+  "private_closeout_sha256": "6b6f583a45ef15f2196808a0614325eee60d59568da941753f3fd708be40dd5e",
+  "protected_pins": 855,
+  "reserve_bytes": 3221225472,
+  "schema": "pokemon.red.evolution-pc-return-repair-acceptance.v1",
+  "scoped_style_passed": true,
+  "scoped_whitespace_passed": true,
+  "session_started_at_utc": "2026-10-16T10:52:37.022088+00:00",
+  "total_copy_loads": 2,
+  "total_diagnostic_actions": 22801,
+  "total_diagnostic_cash_debits": 8400,
+  "total_diagnostic_frames": 1772292,
+  "total_diagnostic_heals": 18,
+  "train_examples": 0,
+  "zero_input_probes": []
+}

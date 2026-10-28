@@ -1,0 +1,98 @@
+{
+  "schema": "pokemon.red.switch-control-prompt-supply-result.v1",
+  "session_id": "2026-09-24-switch-control-prompt-supply",
+  "status": "closed_missing_zero_faint_prompt",
+  "source_commit": "a0a9ce1906f20c384e0da1542d022612202af136",
+  "preparation": {
+    "setups": 39,
+    "retained_contexts_reaudited": 21,
+    "controller_inputs": 0,
+    "frames": 0,
+    "sha256": "2951ce2e0810438ffa5cd4d144525a8f0b125251e55b79d6a60a29179b4384f9"
+  },
+  "plan_sha256": "88b0b8395527cee1c0866acd4914f97771f34694876b133a69790dcfc22b2ed0",
+  "result_sha256": "a984c1cfd69e67232058562840f8536f48bde03f1c8dd49270d722bf9a6a07ed",
+  "independent_audit_sha256": "2887b311ebf94c0c3be4187ed4e4a7b5293f9b0fc88fec1389f5b29dd13f4a00",
+  "partial_target_audit_sha256": "39e351775de8faa5925b2e69cd425e7992d9acc01f5ed6fbc1d78ddc943e621b",
+  "contexts_complete": 23,
+  "contexts_required": 36,
+  "retained_contexts": 21,
+  "new_complete_contexts": 2,
+  "complete_target_branches": 600,
+  "new_run": {
+    "actions": 22960,
+    "complete_episode_files": 67,
+    "completed_decisions": 1585,
+    "forced_mechanics": 0,
+    "frames": 1957521,
+    "invalid_action_failures": 0,
+    "native_episodes": 67,
+    "opponent_faints": 98,
+    "party_faints": 372,
+    "party_pp_spent": 555,
+    "prescribed_first_choices": 65,
+    "selected_choices": 1585,
+    "teacher_interventions": 0
+  },
+  "new_wins": 3,
+  "new_losses": 64,
+  "new_censored_episodes": 0,
+  "native_packet_seconds": 110.73498637508601,
+  "replacement": {
+    "case": "train-3-sleep-03",
+    "old_case": "train-3-03",
+    "change": "Same composition, initial sleep2 instead of poison; not an independent team",
+    "branches_completed": 40,
+    "old_failure_retained": true
+  },
+  "failure": {
+    "case": "train-5-03",
+    "kind": "missing_required_phase_not_executor_failure",
+    "terminal": "party_defeated",
+    "decisions": 44,
+    "prompt_decisions": [
+      9,
+      13,
+      20,
+      30,
+      37
+    ],
+    "prompt_faint_counts": [
+      1,
+      2,
+      3,
+      3,
+      4
+    ],
+    "required_faint_count": 0,
+    "first_prompt_legal_reserves": 4,
+    "training_target_admitted": false
+  },
+  "audits": {
+    "all_new_choices_reproduced": true,
+    "all_67_endpoints_reobserved_zero_input": true,
+    "all_23_targets_independently_reextracted": true,
+    "branch_decisions": 14279,
+    "trajectory_decisions": 146,
+    "full_curriculum_complete": false,
+    "fit_authorized": false
+  },
+  "new_fits": 0,
+  "comparison_episodes": 0,
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "actual_stage": 461,
+  "actual_462_unused": true,
+  "protected_actor_unchanged": true,
+  "actual_state_unchanged": true,
+  "collection": "109/124 unchanged",
+  "tests": {
+    "passed": 378,
+    "full_suite": false
+  },
+  "next": "Approval requested: retain23, prospectively accept first valid optional prompt regardless of faints in remaining prompt cases, declare one replacement input, finish13 then unchanged single fit/144comparison. No successor dispatched.",
+  "gameplay_running": false,
+  "publication": false,
+  "external_agents": false
+}

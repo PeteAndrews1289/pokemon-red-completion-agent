@@ -10,7 +10,7 @@ from pokemon_red_completion.party_development_catalog import (
 )
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
-    PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+    party_development_feature_names,
     EvolutionRouteKind,
     PartyDevelopmentGoal,
 )
@@ -188,14 +188,16 @@ def audit_party_development_outcome_catalog(
         raise TypeError(
             "prospective_catalog must be a PartyDevelopmentProspectiveCatalog"
         )
+    schema_id = prospective_catalog.bindings[0].feature_schema_id
+    expected_names = party_development_feature_names(schema_id)
     for example in examples:
         if not isinstance(example, ScenarioOutcomeExample):
             raise ScenarioOutcomeError("party-development catalog example is invalid")
         if example.family is not ScenarioFamily.PARTY_DEVELOPMENT:
             raise ScenarioOutcomeError("party-development catalog contains another family")
         if (
-            example.feature_schema_id != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
-            or example.feature_names != PARTY_DEVELOPMENT_FEATURE_NAMES
+            example.feature_schema_id != schema_id
+            or example.feature_names != expected_names
         ):
             raise ScenarioOutcomeError(
                 "party-development catalog feature schema is incompatible"

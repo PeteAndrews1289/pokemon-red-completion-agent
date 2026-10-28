@@ -1,0 +1,1116 @@
+{
+  "battler_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "claims": {
+    "J_own_party_limit": 3,
+    "deterministic_navigation_and_preparation": "Disclosed support; existing matchup preparation opted in for second funding goal; evolution and Safari mechanics are not K-owned battle choices",
+    "fresh_run_acceptance": "0/5",
+    "funding_margin_levels": 10,
+    "funding_no_faints_guard_preserved": true,
+    "github_push": false,
+    "goal_selection": "Frozen learned scores with existing 25 percent exploration; genuine alternatives and consumed seeds retained",
+    "league_promotion": false,
+    "ledge_approaches_live_verified": 2,
+    "new_fit": false,
+    "new_fitted_examples": 0,
+    "ordinary_trainer_K_explicit_binding": true,
+    "qualified_K_own_party_limit": 6,
+    "wild_battler_promotion": false
+  },
+  "classification": "Frozen-model development integration; inherited training-origin lineage, not independent evaluation",
+  "corrections": [
+    "Explicit receipt-pinned K scope; opt-in cartridge ledges and observed indoor departure/rebind",
+    "Existing deterministic roster preparation, retaining the same +10 level/no-faint/net-cash guard",
+    "Authenticate later goal terminals through their complete recorded result chain",
+    "Explicit executor-owned release of restored backend inputs; second neutral recovery succeeded in 6 frames with unchanged resources",
+    "V4 uses existing larger collection budget (30000 actions/3000000 frames); previous failed budgets and choices remain unchanged",
+    "V5 opts into paid Safari indoor departure using the same bounded exit geometry as funding, a projected availability check and actual outdoor rebind before spending"
+  ],
+  "field_settlements": [
+    {
+      "outcome": {
+        "actions": 61,
+        "before_state_sha256": "345ed07d4f929fa5605d2598fb341e00cfcb42a063b070a58c0a3ff4c602cd69",
+        "error": {
+          "message": "neutral field settlement crossed its safe boundary",
+          "type": "ValueError"
+        },
+        "model_queries": 0,
+        "neutral_frames": 61,
+        "preserved_resources": false,
+        "readiness": {
+          "joy_ignore": 0,
+          "movement_flags": 0,
+          "npc_movement_script_table": 0,
+          "player_moving_direction": 2,
+          "simulated_joypad_index": 0,
+          "status_flags_5": 0,
+          "walk_counter": 0
+        },
+        "safe_terminal": false,
+        "terminal_state_sha256": "84a6d13bfd88d664fcb47c2bf3e0a8a62a403b03f0d555e6004fb0142c74902b",
+        "verification": null
+      },
+      "outcome_sha256": "c940fd2a4f89531cf908fd003d690796eec346c5f6b3f61f39de55f383b54bd1",
+      "plan": {
+        "provenance": {
+          "input_plan_sha256": "a97af6102bbec9b3795997e9445b7d0c9678ab8dfccb552934d10a5514ee5536",
+          "parent_state_sha256": "345ed07d4f929fa5605d2598fb341e00cfcb42a063b070a58c0a3ff4c602cd69",
+          "prior_outcome_sha256": "19091da75b67e90a9c70a3d7ee0e52cc2f6f38a622709b5aa89d04fbf9c405f1",
+          "reserve_origin_state_sha256": "123a5a4d7880942a292bf6fc6a1136eb74a17bcf4883f4a34d71457ee82ad355",
+          "source_commit": "425fd20c8b3b370a5483ec7b0da40d401bd30003"
+        },
+        "schema": "pokemon.red.field-settlement.v1"
+      },
+      "run_id": "model137-k-field-settlement-20260920-v1"
+    },
+    {
+      "outcome": {
+        "actions": 6,
+        "before_state_sha256": "84a6d13bfd88d664fcb47c2bf3e0a8a62a403b03f0d555e6004fb0142c74902b",
+        "error": null,
+        "model_queries": 0,
+        "neutral_frames": 6,
+        "preserved_resources": true,
+        "readiness": {
+          "joy_ignore": 0,
+          "movement_flags": 0,
+          "npc_movement_script_table": 0,
+          "player_moving_direction": 0,
+          "simulated_joypad_index": 0,
+          "status_flags_5": 0,
+          "walk_counter": 0
+        },
+        "released_inputs": [
+          "a",
+          "b",
+          "down",
+          "left",
+          "right",
+          "select",
+          "start",
+          "up"
+        ],
+        "safe_terminal": true,
+        "terminal_state_sha256": "48472cdf726c4967ed5c6787ab161e02ef400af53a56ff53a46966313802f07b",
+        "verification": "field_ready"
+      },
+      "outcome_sha256": "9d7781eaace6720bd98e255cb2a24d58dfc74aba11c459e6ff02bfa87eac1472",
+      "plan": {
+        "provenance": {
+          "input_plan_sha256": "3c9a99f7efdead67e803d67fe3522622ecb5c5918c71331668318af223462ee5",
+          "parent_state_sha256": "84a6d13bfd88d664fcb47c2bf3e0a8a62a403b03f0d555e6004fb0142c74902b",
+          "prior_outcome_sha256": "c940fd2a4f89531cf908fd003d690796eec346c5f6b3f61f39de55f383b54bd1",
+          "reserve_origin_state_sha256": "123a5a4d7880942a292bf6fc6a1136eb74a17bcf4883f4a34d71457ee82ad355",
+          "source_commit": "72b83657090b1d4266d1bde791130bd1ed41eb2f"
+        },
+        "schema": "pokemon.red.field-settlement.v1"
+      },
+      "run_id": "model137-k-field-settlement-20260920-v2"
+    }
+  ],
+  "goal_model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+  "paid_search_continuations": [
+    {
+      "event_pair_continuity_verified": true,
+      "plan": {
+        "area_source": "wild:SafariZoneCenter:grass",
+        "before_state_sha256": "e47789c2b6a055a0f21b117fbddef01dfeec1d481d8d36a7af5dc1c4c2e67f92",
+        "harness_sha256": "3a3f0a250699bb92255c56f365dc5c9cbe1de05b6486bbe9560e441247bbb242",
+        "input_plan_sha256": "45f8d9f7e8fa181d328ad6f454df93443c3a0ba63fe6b16c9209c8fba928f914",
+        "maximum_encounters": 32,
+        "maximum_frames": 300000,
+        "maximum_macros": 5000,
+        "maximum_semantic_actions": 200,
+        "minimum_steps_to_seek": 100,
+        "model_queries": 0,
+        "original_goal_outcome_sha256": "6ffa058ab825bd4f74041100f762d5d3ae760b71615143fb4e83ed8c4fed79e7",
+        "original_selected_binding": "red-indoor-safari:251e709a6c091bc8a70c27730625cc34ed385ddebf4afbddedae043a942bb3e3",
+        "patrol": {
+          "approach_steps": 4,
+          "bidirectional_walk_edges": 2,
+          "cartridge_derived": true,
+          "encounter_tiles": 1,
+          "private_coordinate_fields": 0,
+          "private_map_fields": 0,
+          "private_source_fields": 0,
+          "provider_local_direction_steps": 1,
+          "raw_teacher_direction_steps": 0
+        },
+        "schema": "pokemon.red.paid-safari-continuation.v1",
+        "source_commit": "e7985b37c7dff4080a6b869efe8bda3d7b83f23d"
+      },
+      "result": {
+        "after": {
+          "cash": 573,
+          "encounter": null,
+          "frames": 4840,
+          "macros": 40,
+          "position": [
+            220,
+            23,
+            13
+          ],
+          "registrations": 96,
+          "session": {
+            "in_safari_zone": true,
+            "safari_balls": 30,
+            "safari_game_over": false,
+            "safari_steps": 434
+          }
+        },
+        "before_state_sha256": "e47789c2b6a055a0f21b117fbddef01dfeec1d481d8d36a7af5dc1c4c2e67f92",
+        "error": {
+          "message": "Safari patrol step did not traverse its reversible edge",
+          "reason_code": "safari_patrol_step_blocked",
+          "type": "RedAreaExecutionError"
+        },
+        "event_count": 2,
+        "extra_payment": 0,
+        "model_queries": 0,
+        "preserved_resources": true,
+        "registered_gains": [],
+        "report": null,
+        "safe_terminal": true,
+        "schema": "pokemon.red.paid-safari-continuation-result.v1",
+        "specimens_after": 74,
+        "specimens_before": 74,
+        "terminal_state_sha256": "77fb223dbed25eeac02827302f304be0d8961af2e744fbbc3ba696ba6f5cf07f"
+      },
+      "result_sha256": "e333a85ce9c4afcc9ae2cfd7a1c3b806f0a127fb2cd93be428e0e6b3a4015be3",
+      "run_id": "model137-k-paid-safari-continuation-20260920-v1",
+      "semantic_action_counts": {
+        "seek_encounter": 2
+      }
+    },
+    {
+      "event_pair_continuity_verified": true,
+      "plan": {
+        "area_source": "wild:SafariZoneCenter:grass",
+        "before_state_sha256": "77fb223dbed25eeac02827302f304be0d8961af2e744fbbc3ba696ba6f5cf07f",
+        "controller_timing": {
+          "press_frames": 8,
+          "release_frames": 16,
+          "wait_frames": 1
+        },
+        "harness_sha256": "3684209bd3e4f695256d27a5dd15a99ffbb1babecfa21c01574329fbe8383bd3",
+        "input_plan_sha256": "b7cd2959d95b51522f65c22879aea0d4fd77ec43b79fe306b3adbffc2a9730b2",
+        "maximum_encounters": 32,
+        "maximum_frames": 300000,
+        "maximum_macros": 5000,
+        "maximum_semantic_actions": 200,
+        "minimum_steps_to_seek": 100,
+        "model_queries": 0,
+        "original_goal_outcome_sha256": "6ffa058ab825bd4f74041100f762d5d3ae760b71615143fb4e83ed8c4fed79e7",
+        "original_selected_binding": "red-indoor-safari:251e709a6c091bc8a70c27730625cc34ed385ddebf4afbddedae043a942bb3e3",
+        "patrol": {
+          "approach_steps": 4,
+          "bidirectional_walk_edges": 2,
+          "cartridge_derived": true,
+          "encounter_tiles": 1,
+          "private_coordinate_fields": 0,
+          "private_map_fields": 0,
+          "private_source_fields": 0,
+          "provider_local_direction_steps": 1,
+          "raw_teacher_direction_steps": 0
+        },
+        "prior_continuation_sha256": "e333a85ce9c4afcc9ae2cfd7a1c3b806f0a127fb2cd93be428e0e6b3a4015be3",
+        "schema": "pokemon.red.paid-safari-continuation.v1",
+        "source_commit": "e7985b37c7dff4080a6b869efe8bda3d7b83f23d"
+      },
+      "result": {
+        "after": {
+          "cash": 573,
+          "encounter": null,
+          "frames": 17844,
+          "macros": 152,
+          "position": [
+            220,
+            22,
+            13
+          ],
+          "registrations": 97,
+          "session": {
+            "in_safari_zone": true,
+            "safari_balls": 28,
+            "safari_game_over": false,
+            "safari_steps": 403
+          }
+        },
+        "before_state_sha256": "77fb223dbed25eeac02827302f304be0d8961af2e744fbbc3ba696ba6f5cf07f",
+        "error": null,
+        "event_count": 37,
+        "extra_payment": 0,
+        "model_queries": 0,
+        "preserved_resources": true,
+        "registered_gains": [
+          "pokemon:national:111"
+        ],
+        "report": {
+          "actions_executed": 37,
+          "box_switches": 0,
+          "capture_items_exhausted": false,
+          "captures": 1,
+          "encounters_seen": 4,
+          "final_missing_species_refs": [
+            "pokemon:national:113",
+            "pokemon:national:123"
+          ],
+          "flees": 3,
+          "initial_missing_species_refs": [
+            "pokemon:national:111",
+            "pokemon:national:113",
+            "pokemon:national:123"
+          ],
+          "safety_stopped": false,
+          "search_exhausted": false,
+          "search_stop_reason": null,
+          "source_id": "wild:SafariZoneCenter:grass"
+        },
+        "safe_terminal": true,
+        "schema": "pokemon.red.paid-safari-continuation-result.v1",
+        "specimens_after": 75,
+        "specimens_before": 74,
+        "terminal_state_sha256": "8f41a0350ddb7d6dd5da388de33792cd8d8e9ce75089f5d3725296af4bf1306f"
+      },
+      "result_sha256": "6d23f7bffee144bb71d535a7b0574db044f1585e15e63f9f58c3512ce8053d5b",
+      "run_id": "model137-k-paid-safari-continuation-20260920-v2",
+      "semantic_action_counts": {
+        "capture_encounter": 1,
+        "flee_encounter": 3,
+        "seek_encounter": 33
+      }
+    }
+  ],
+  "qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+  "retained_failures": [
+    "V1 next-menu admission lacked distinct executable alternatives; no second query or input",
+    "V2 and V3 evolution choices exhausted the original 600000-frame run cap; XP and full costs retained without evolution success credit",
+    "First neutral recovery stopped after 61 frames and one poison HP lost because a restored backend direction remained held; no rewind",
+    "V4 model-selected team restoration succeeded, then next menu lacked distinct executable alternatives inside the Center; no second query",
+    "V5 selected paid acquisition and successfully paid500; its first66-semantic-action search stopped without registration. Original goal verdict remains failed",
+    "First same-paid-session continuation used incorrect1/1-frame default taps and stopped after40macros/4840frames with one step consumed. Corrected8/16-frame continuation starts from that endpoint, not a replay"
+  ],
+  "root_lineage_id": "red-goal-v1-010-acquire_species-train-01",
+  "runs": [
+    {
+      "audit_frames": 0,
+      "audit_inputs": 0,
+      "battles": [
+        {
+          "action_counts": {
+            "attack": 1,
+            "forced_switch": 0,
+            "switch_prompt": 0,
+            "voluntary_switch": 1
+          },
+          "decisions": 2,
+          "log": {
+            "complete": true,
+            "completed_decisions": 2,
+            "event_count": 11,
+            "event_counts": {
+              "choice_recorded": 2,
+              "decision_completed": 2,
+              "decision_started": 2,
+              "episode_started": 1,
+              "model_input_prepared": 2,
+              "run_finished": 1,
+              "run_identity": 1
+            },
+            "failed_runs": 0,
+            "incomplete_decisions": 0,
+            "last_record_sha256": "ce9878eeb75a95faaa16de1733eb678998eee02ea842a4c77e11c5d116a00d91",
+            "schema": "pokemon.red.trainer-practice-log-verification.v1",
+            "started_decisions": 2,
+            "terminal_event": "run_finished"
+          },
+          "metrics": {
+            "attack_turn_utility_sum": 3,
+            "invalid_action_failures": 0,
+            "move_suppressed_or_failed": 0,
+            "opponent_faints": 1,
+            "party_faints": 0,
+            "party_hp_lost": 0,
+            "party_pp_spent": 1,
+            "party_status_changes": 0,
+            "policy_latency_ns_max": 3542750,
+            "policy_latency_ns_mean": 2102646,
+            "policy_latency_ns_min": 662542,
+            "teacher_interventions": 0
+          },
+          "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+          "outcome_sha256": "ba351785426ef31a8330fe7a25f187b52fa44184b1359aaaa90b18fef1fabcd4",
+          "terminal_sha256": "87d822013e898c680c8c210168bdf6189c4d4889bb3269b28b4817f6fcaceb9f",
+          "won": true
+        }
+      ],
+      "result_sha256": "4334daf7b6a565c1a00491e817204a42a0f6c916af9677aa1276e909b9ac2ce3",
+      "result_status": "menu_unavailable",
+      "routes": [
+        {
+          "acknowledged_steps": 3,
+          "ledges": [],
+          "phase": "indoor_departure",
+          "sha256": "377e091524e4d65758f206b94859e951ed0f14e0ce605b656e8c12f8cd5900b8"
+        },
+        {
+          "acknowledged_steps": 64,
+          "ledges": [
+            {
+              "action": "down",
+              "expected_map_id": 14,
+              "expected_yx": [
+                8,
+                18
+              ],
+              "interruption_count": 0,
+              "kind": "ledge",
+              "movement_requests": 1,
+              "source_map_id": 14,
+              "source_yx": [
+                6,
+                18
+              ],
+              "transient_yx": [
+                7,
+                18
+              ]
+            }
+          ],
+          "phase": "trainer_approach",
+          "sha256": "c76a4ed9c97cee4ede94c85d68afd252e745a2768a13f4bff465327b0b55ee6f"
+        }
+      ],
+      "rows": [
+        {
+          "actions": 158,
+          "bag_quantity_changes": {},
+          "before_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+          "cash_after": 408,
+          "cash_before": 198,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 2,
+            "emulator_frames": 0,
+            "menu_sha256": "a9ea653b683f2404b1f7f5e742e0c318bead6e98a8ba93d162e3300f6b0a45b8",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.7308009565717802,
+              0.26919904342821976
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              4.098078927439881,
+              2.6627220410082315
+            ],
+            "selected_candidate_index": 0,
+            "selected_option_kind": "resupply",
+            "teacher_labels": 0
+          },
+          "error": null,
+          "evidence": {
+            "balls_purchased": 0,
+            "battle_authority": "frozen_learned_trainer",
+            "battle_model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+            "battle_qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+            "finite_income": true,
+            "funding_transport": {
+              "verified_flights": 1
+            },
+            "trainer_funding": {
+              "event_flag": 999,
+              "final_money": 408,
+              "initial_money": 198,
+              "map_id": 14,
+              "ordinary_victory_money": 210,
+              "pay_day_money": 0,
+              "payout": 210,
+              "quote": {
+                "base_money": 15,
+                "expected_victory_money": 210,
+                "opponent_id": 201,
+                "party": [
+                  {
+                    "internal_species": 5,
+                    "level": 14,
+                    "species": 21
+                  }
+                ],
+                "trainer_set": 2
+              },
+              "sprite_index": 7
+            }
+          },
+          "frames": 10800,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 408,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": true,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              83,
+              160,
+              120,
+              120,
+              271,
+              76
+            ],
+            "party_levels": [
+              28,
+              61,
+              34,
+              56,
+              80,
+              28
+            ],
+            "party_national_ids": [
+              105,
+              83,
+              87,
+              51,
+              9,
+              99
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 0,
+          "outcome_sha256": "e35039c92e6fd43f81f50026b02c8ee405128c7bd29aa7d6884963a31de5ce0e",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "resupply",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "87d822013e898c680c8c210168bdf6189c4d4889bb3269b28b4817f6fcaceb9f",
+          "verification": "succeeded"
+        }
+      ],
+      "run_id": "model137-k-earned-spending-20260920-v1",
+      "source_commit": "70cd9dd7bbd0ed0595a1311e7abf077c7e10ce07"
+    },
+    {
+      "audit_frames": 0,
+      "audit_inputs": 0,
+      "battles": [
+        {
+          "action_counts": {
+            "attack": 2,
+            "forced_switch": 0,
+            "switch_prompt": 1,
+            "voluntary_switch": 0
+          },
+          "decisions": 3,
+          "log": {
+            "complete": true,
+            "completed_decisions": 3,
+            "event_count": 14,
+            "event_counts": {
+              "choice_recorded": 3,
+              "decision_completed": 3,
+              "decision_started": 3,
+              "episode_started": 1,
+              "model_input_prepared": 2,
+              "run_finished": 1,
+              "run_identity": 1
+            },
+            "failed_runs": 0,
+            "incomplete_decisions": 0,
+            "last_record_sha256": "d54bd33ea365f1a07a9b050322730aad08ce8faec77837fb880a553ca7f59160",
+            "schema": "pokemon.red.trainer-practice-log-verification.v1",
+            "started_decisions": 3,
+            "terminal_event": "run_finished"
+          },
+          "metrics": {
+            "attack_turn_utility_sum": 6,
+            "invalid_action_failures": 0,
+            "move_suppressed_or_failed": 0,
+            "opponent_faints": 2,
+            "party_faints": 0,
+            "party_hp_lost": 0,
+            "party_pp_spent": 2,
+            "party_status_changes": 0,
+            "policy_latency_ns_max": 54014167,
+            "policy_latency_ns_mean": 18917500.333333332,
+            "policy_latency_ns_min": 966292,
+            "teacher_interventions": 0
+          },
+          "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+          "outcome_sha256": "92e5e239b2f86dc05cf0905d291a524fdc62fbbc708a1bdc441643e8d01fad15",
+          "terminal_sha256": "1fd74051f39b2770b96e891a769a8dfb4035cdaf21f23fa4468d302153d934b2",
+          "won": true
+        }
+      ],
+      "result_sha256": "523bad350d1818e379d80adcf1dcfefec5d1450d42211f68f1d6b656244e65f8",
+      "result_status": "execution_failed",
+      "routes": [
+        {
+          "acknowledged_steps": 59,
+          "ledges": [
+            {
+              "action": "down",
+              "expected_map_id": 21,
+              "expected_yx": [
+                60,
+                2
+              ],
+              "interruption_count": 0,
+              "kind": "ledge",
+              "movement_requests": 1,
+              "source_map_id": 21,
+              "source_yx": [
+                58,
+                2
+              ],
+              "transient_yx": [
+                59,
+                2
+              ]
+            }
+          ],
+          "phase": "trainer_approach",
+          "sha256": "4498745286c0aeb48e14518938490d25a7f81b80a06098f1cab145d57745c056"
+        }
+      ],
+      "rows": [
+        {
+          "actions": 191,
+          "bag_quantity_changes": {},
+          "before_sha256": "87d822013e898c680c8c210168bdf6189c4d4889bb3269b28b4817f6fcaceb9f",
+          "cash_after": 1073,
+          "cash_before": 408,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 2,
+            "emulator_frames": 0,
+            "menu_sha256": "adc3903c49b4a00098b966c0b3b9a495347bcabbb0ecd45c4b6c2633f81f9730",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.6573314988572534,
+              0.3426685011427465
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              3.5572078498113755,
+              2.662914704861921
+            ],
+            "selected_candidate_index": 0,
+            "selected_option_kind": "resupply",
+            "teacher_labels": 0
+          },
+          "error": null,
+          "evidence": {
+            "balls_purchased": 0,
+            "battle_authority": "frozen_learned_trainer",
+            "battle_model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+            "battle_qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+            "finite_income": true,
+            "funding_transport": {
+              "verified_flights": 1
+            },
+            "party_preparation": {
+              "authority": "deterministic-matchup-preparation",
+              "battle_execution_qualified": false,
+              "candidate_counts": [
+                6,
+                6
+              ],
+              "minimum_hp_ratio": 0.5,
+              "opening_party_slot": 5,
+              "opponent_count": 2,
+              "preferred_party_slots": [
+                5,
+                5
+              ],
+              "requires_lead_swap": true,
+              "schema": "pokemon.red.trainer-party-preparation.v1",
+              "training_examples": 0,
+              "victory_predicted": false
+            },
+            "trainer_funding": {
+              "event_flag": 1109,
+              "final_money": 1073,
+              "initial_money": 408,
+              "map_id": 21,
+              "ordinary_victory_money": 665,
+              "pay_day_money": 0,
+              "payout": 665,
+              "quote": {
+                "base_money": 35,
+                "expected_victory_money": 665,
+                "opponent_id": 209,
+                "party": [
+                  {
+                    "internal_species": 34,
+                    "level": 19,
+                    "species": 95
+                  },
+                  {
+                    "internal_species": 39,
+                    "level": 19,
+                    "species": 75
+                  }
+                ],
+                "trainer_set": 8
+              },
+              "sprite_index": 5
+            }
+          },
+          "frames": 14352,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 1073,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": true,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              271,
+              160,
+              120,
+              120,
+              83,
+              76
+            ],
+            "party_levels": [
+              80,
+              61,
+              34,
+              56,
+              28,
+              28
+            ],
+            "party_national_ids": [
+              9,
+              83,
+              87,
+              51,
+              105,
+              99
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 0,
+          "outcome_sha256": "932df75b4cc100ab857091e6efd8cd6a5f59b6164ae3919bfa36fe38f0a6eb39",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "resupply",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "1fd74051f39b2770b96e891a769a8dfb4035cdaf21f23fa4468d302153d934b2",
+          "verification": "succeeded"
+        },
+        {
+          "actions": 6585,
+          "bag_quantity_changes": {},
+          "before_sha256": "1fd74051f39b2770b96e891a769a8dfb4035cdaf21f23fa4468d302153d934b2",
+          "cash_after": 1073,
+          "cash_before": 1073,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 2,
+            "emulator_frames": 0,
+            "menu_sha256": "1a44a9c65f4ca35c1f35e4db6418eb8fc0bada529440a201e3a499fa6df523cd",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.20562124164269013,
+              0.7943787583573098
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              0.5495449703376669,
+              2.66613286750511
+            ],
+            "selected_candidate_index": 1,
+            "selected_option_kind": "evolve",
+            "teacher_labels": 0
+          },
+          "error": "controller exhausted its hard windowed frame budget",
+          "evidence": null,
+          "frames": 585505,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 1073,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": true,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              49,
+              160,
+              120,
+              120,
+              83,
+              274
+            ],
+            "party_levels": [
+              19,
+              61,
+              34,
+              56,
+              28,
+              81
+            ],
+            "party_national_ids": [
+              118,
+              83,
+              87,
+              51,
+              105,
+              9
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 1,
+          "outcome_sha256": "5a819cadd25435ef6cb7c45844e36ed1182e8e88ac11484c85310a884b969e37",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "evolve_species",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "1e36401df91d03b82bd358562c7175275572a84bada10d5c847c292b8f795dd6",
+          "verification": null
+        }
+      ],
+      "run_id": "model137-k-earned-spending-20260920-v2",
+      "source_commit": "c90318548ae6bf31c5a5734598392df3fa779393"
+    },
+    {
+      "audit_frames": 0,
+      "audit_inputs": 0,
+      "battles": [],
+      "result_sha256": "af5d70d20bce2e19b919bdff83f09177ebe71c02b90e3df1ee4d147296cb4811",
+      "result_status": "execution_failed",
+      "routes": [],
+      "rows": [
+        {
+          "actions": 6411,
+          "bag_quantity_changes": {},
+          "before_sha256": "1e36401df91d03b82bd358562c7175275572a84bada10d5c847c292b8f795dd6",
+          "cash_after": 1073,
+          "cash_before": 1073,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 2,
+            "emulator_frames": 0,
+            "menu_sha256": "41ac880368c0c0c6c527519fa7d93857e6bc4f4a749f47f596043195eda93673",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.18851677169254746,
+              0.8114832283074526
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              0.05976862718844633,
+              2.4400464292060002
+            ],
+            "selected_candidate_index": 1,
+            "selected_option_kind": "evolve",
+            "teacher_labels": 0
+          },
+          "error": "controller exhausted its hard windowed frame budget",
+          "evidence": null,
+          "frames": 599998,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 1073,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": false,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              50,
+              160,
+              120,
+              120,
+              83,
+              266
+            ],
+            "party_levels": [
+              22,
+              61,
+              34,
+              56,
+              28,
+              81
+            ],
+            "party_national_ids": [
+              118,
+              83,
+              87,
+              51,
+              105,
+              9
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 0,
+          "outcome_sha256": "19091da75b67e90a9c70a3d7ee0e52cc2f6f38a622709b5aa89d04fbf9c405f1",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "evolve_species",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "345ed07d4f929fa5605d2598fb341e00cfcb42a063b070a58c0a3ff4c602cd69",
+          "verification": null
+        }
+      ],
+      "run_id": "model137-k-earned-spending-20260920-v3",
+      "source_commit": "4f57d011111c50ee7469ce05fa8bb0df3b6566c3"
+    },
+    {
+      "audit_frames": 0,
+      "audit_inputs": 0,
+      "battles": [],
+      "result_sha256": "da05f421098614b4c5a567667a9b9ea670afecd672c4628eadf52906c3871054",
+      "result_status": "menu_unavailable",
+      "routes": [],
+      "rows": [
+        {
+          "actions": 131,
+          "bag_quantity_changes": {},
+          "before_sha256": "48472cdf726c4967ed5c6787ab161e02ef400af53a56ff53a46966313802f07b",
+          "cash_after": 1073,
+          "cash_before": 1073,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 3,
+            "emulator_frames": 0,
+            "menu_sha256": "c9db6cc515d809276283f6b7c856aec7d842d8fa0e3051af30d7bd1883643afb",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.21442466181527337,
+              0.0954883295017622,
+              0.6900870086829645
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              2.437922578925841,
+              0.05976862718844633,
+              3.9701512366712564
+            ],
+            "selected_candidate_index": 2,
+            "selected_option_kind": "restore",
+            "teacher_labels": 0
+          },
+          "error": null,
+          "evidence": {
+            "bounded": true,
+            "routed_recovery": {
+              "actions_executed": 131,
+              "center_map_id": 89,
+              "escort_prepared": true,
+              "frames_executed": 7956
+            },
+            "whole_party_restore": true
+          },
+          "frames": 7956,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 1073,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": true,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              274,
+              160,
+              120,
+              120,
+              83,
+              56
+            ],
+            "party_levels": [
+              81,
+              61,
+              34,
+              56,
+              28,
+              22
+            ],
+            "party_national_ids": [
+              9,
+              83,
+              87,
+              51,
+              105,
+              118
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 0,
+          "outcome_sha256": "3ff6678c429d618ad66512e82b0eee714c96a25d3834aad0a174d8306d054e85",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "restore_team",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "47b1c21e618e6c49573e8c2e6c86b5a630ae2911acb9c83bf5bfe901bd8bf4db",
+          "verification": "succeeded"
+        }
+      ],
+      "run_id": "model137-k-earned-spending-20260920-v4",
+      "source_commit": "72b83657090b1d4266d1bde791130bd1ed41eb2f"
+    },
+    {
+      "audit_frames": 0,
+      "audit_inputs": 0,
+      "battles": [],
+      "result_sha256": "6b8e19ab69bdf7aa2f7c8de962d3da6e3b9fa3b8476ed5bbf3b8b1fc9c8eb970",
+      "result_status": "execution_failed",
+      "routes": [
+        {
+          "acknowledged_steps": 5,
+          "ledges": [],
+          "phase": "safari_indoor_departure",
+          "sha256": "bf36a8649cfb32b2db16154479f20bc73855e1267c96e88b41dc07b2912430b6"
+        }
+      ],
+      "rows": [
+        {
+          "actions": 425,
+          "bag_quantity_changes": {},
+          "before_sha256": "47b1c21e618e6c49573e8c2e6c86b5a630ae2911acb9c83bf5bfe901bd8bf4db",
+          "cash_after": 573,
+          "cash_before": 1073,
+          "choice": {
+            "actions_executed": 0,
+            "candidate_count": 2,
+            "emulator_frames": 0,
+            "menu_sha256": "e53099303ea7735cdcf4620f08589ade13f24d030d36dcebd7f01b46d4403be0",
+            "mode": "model_exploration",
+            "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+            "policy_id": "red-live-mixed-option-v1",
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+            "probabilities": [
+              0.18835848554389822,
+              0.8116415144561017
+            ],
+            "schema": "pokemon.red.live-mixed-option-choice.v1",
+            "scores": [
+              0.06931174737518553,
+              2.4523152455670596
+            ],
+            "selected_candidate_index": 0,
+            "selected_option_kind": "acquire",
+            "teacher_labels": 0
+          },
+          "error": "wild:SafariZoneCenter:grass exceeded 66 semantic actions",
+          "evidence": null,
+          "frames": 52116,
+          "learning_eligible": true,
+          "ledger": {
+            "battle_state": 0,
+            "cash": 573,
+            "champion_event": false,
+            "full_game_complete": false,
+            "hall_of_fame_fact": false,
+            "hall_of_fame_mode": false,
+            "input_ready": true,
+            "next_trainer_defeated": true,
+            "party_hp": [
+              274,
+              160,
+              120,
+              120,
+              83,
+              56
+            ],
+            "party_levels": [
+              81,
+              61,
+              34,
+              56,
+              28,
+              22
+            ],
+            "party_national_ids": [
+              9,
+              83,
+              87,
+              51,
+              105,
+              118
+            ],
+            "required_trainer_defeated": true
+          },
+          "ordinal": 0,
+          "outcome_sha256": "6ffa058ab825bd4f74041100f762d5d3ae760b71615143fb4e83ed8c4fed79e7",
+          "registrations_after": 96,
+          "registrations_before": 96,
+          "selected_kind": "acquire_species",
+          "specimens_after": 74,
+          "specimens_before": 74,
+          "terminal_sha256": "e47789c2b6a055a0f21b117fbddef01dfeec1d481d8d36a7af5dc1c4c2e67f92",
+          "verification": null
+        }
+      ],
+      "run_id": "model137-k-earned-spending-20260920-v5",
+      "source_commit": "e7985b37c7dff4080a6b869efe8bda3d7b83f23d"
+    }
+  ],
+  "schema": "pokemon.red.k-earned-spending-integration.v1",
+  "session": "2026-09-20-k-player-integration",
+  "summary": {
+    "K_battle_choices": 5,
+    "admission_spend": 500,
+    "capture_completed_via_operator_initiated_exact_state_continuation": true,
+    "cash_after": 573,
+    "cash_before": 198,
+    "earning_goals_succeeded": 2,
+    "fully_unattended_recovery_qualified": false,
+    "gameplay_stopped": true,
+    "model_goal_choices": 6,
+    "native_registration_denominator": 124,
+    "native_registrations_after": 97,
+    "native_registrations_before": 96,
+    "new_species": "Rhyhorn",
+    "paid_admissions": 1,
+    "paid_session_remaining_balls": 28,
+    "paid_session_remaining_steps": 403,
+    "specimens_after": 75,
+    "specimens_before": 74,
+    "targeted_tests_passed": 2958,
+    "targeted_tests_skipped": 13,
+    "terminal_sha256": "8f41a0350ddb7d6dd5da388de33792cd8d8e9ce75089f5d3725296af4bf1306f",
+    "total_frames": 1293478,
+    "total_macros": 14160,
+    "trainer_income": 875
+  }
+}

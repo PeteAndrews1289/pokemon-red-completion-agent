@@ -1,0 +1,199 @@
+{
+  "actual_registration_delta": 0,
+  "all799_existing_caps_retained": true,
+  "all801_declared_caps_retained": true,
+  "all_seven_goals_complete": false,
+  "broader_trainer_nonregression_passed": false,
+  "cached258_reused": true,
+  "candidate_model_sha256": "3b187fc6bfb46dd0fd062f0d14ff5fadffe353347d4e94a2124bdbaba988c4b3",
+  "contexts": [
+    {
+      "all_party_xp_deltas": [
+        [
+          0,
+          198,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          99,
+          99,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "current_chosen_ref": "pokemon.core:battle:switch:2",
+      "current_selected_regret": 0.0,
+      "fit_features_or_reward_changed": false,
+      "fitting_partition": "train",
+      "identity": "train-medium-sandshrew-critical-v1",
+      "returns": [
+        3.463022477,
+        4.441071258
+      ],
+      "switch_minus_attack": 0.978048781,
+      "trainee_xp_attack": 0,
+      "trainee_xp_switch": 99
+    },
+    {
+      "all_party_xp_deltas": [
+        [
+          0,
+          298,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          149,
+          149,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "current_chosen_ref": "pokemon.core:battle:move:1",
+      "current_selected_regret": 0.9853142850000003,
+      "fit_features_or_reward_changed": false,
+      "fitting_partition": "train",
+      "identity": "train-medium-psyduck-critical-v1",
+      "returns": [
+        3.485514286,
+        4.470828571
+      ],
+      "switch_minus_attack": 0.9853142850000003,
+      "trainee_xp_attack": 0,
+      "trainee_xp_switch": 149
+    }
+  ],
+  "continuation_model_sha256": "4eab8e399d40ca477528d3a71258f7520fa6012faede424ad798d8ec1db36019",
+  "control_parameter_changes": 1052,
+  "deadline_utc": "2026-10-27T00:40:28+00:00",
+  "first_readback_supervisor_seconds_unknown": true,
+  "fit_allowed": false,
+  "fresh_acceptance": false,
+  "full_suite_pass": false,
+  "global_adoption": false,
+  "healthy4_exact_endpoints_retained": true,
+  "independent_generalization": false,
+  "initial_six_projection_failures_repaired": true,
+  "known_trainer729": {
+    "both_win": true,
+    "identical_frames": 21720,
+    "identical_party_faints": 2,
+    "no_trainer_deployment_claim": true
+  },
+  "models_adopted": 0,
+  "native_costs": {
+    "controller_actions_attempted": 8467,
+    "controller_actions_completed": 8467,
+    "frames": 747084,
+    "seconds": 83.79203100800004
+  },
+  "native_costs_are_lower_bounds": true,
+  "native_episode": true,
+  "new_fits": 1,
+  "new_native_loads": 48,
+  "new_train_control_examples": 2,
+  "next_TRAIN_checkpoint": {
+    "actual_leader": "Blaine",
+    "battles": 0,
+    "global_or_actual_credit": false,
+    "labels": 0,
+    "model_queries": 0,
+    "paired_export_verified": true,
+    "source_group": "original049_TRAIN",
+    "teacher_actions": 272,
+    "teacher_frames": 19692,
+    "teacher_phases": 7,
+    "training_admission": false
+  },
+  "no_DEV_fit_inputs": true,
+  "observed_at_utc": "2026-10-27T00:33:14.800107+00:00",
+  "optimizer_internal_forward_count_unknown": true,
+  "partition": "development",
+  "psyduck_native": {
+    "first_after": "voluntary_switch",
+    "first_before": "attack",
+    "frames_after": 5592,
+    "frames_before": 3348,
+    "not_speedup": true,
+    "party_faints_after": 0,
+    "party_faints_before": 1,
+    "trainee_xp_after": 149,
+    "trainee_xp_before": 0
+  },
+  "same_candidate_causal": {
+    "after_hashes_absent_in_both": 19,
+    "all34_before_observation_hashes_equal": true,
+    "available_after_hashes_equal": 15,
+    "cap_waivers": 0,
+    "case269d": {
+      "continuation_effect": 0.048961424,
+      "first_action_effect": -0.144658754,
+      "total": -0.09569733
+    },
+    "case6ef": {
+      "continuation_effect": -2.107152795,
+      "first_action_effect": 2.051514812,
+      "total": -0.055637983
+    },
+    "matching_bridges_passed": true,
+    "non_latency_metrics_and_returns_equal": true,
+    "permanent_no_fit": true,
+    "zero_offset_only": true
+  },
+  "sand_nidoran_exact_endpoints_retained": true,
+  "schema": "pokemon.current-control-lesson-public.v1",
+  "serialized_numeric_choices": 1602,
+  "session": "2026-10-26-current-control-lesson",
+  "six_trainer_results": {
+    "faints_after": 6,
+    "faints_before": 7,
+    "frames_after": 166080,
+    "frames_before": 153828,
+    "new_outcomes_never_fit": true,
+    "returns_lower_in_cases": 2,
+    "wins_after": 5,
+    "wins_before": 5
+  },
+  "status": "closed_local_control_gain_and_TRAIN_source_ready",
+  "stopping_readback": {
+    "TRAIN_direct_views": 5,
+    "TRAIN_level_views": 7,
+    "TRAIN_machine_views": 0,
+    "TRAIN_views": 12,
+    "both_heads_same_unique_direct_choice": true,
+    "head_score_calls": 4,
+    "native_benefit_verified": false,
+    "row_predictions": 28
+  },
+  "switch_move_damage_bit_frozen": true,
+  "trainer_deployment_qualified": false,
+  "two_hour_audit_due_utc": "2026-10-26T23:40:28+00:00",
+  "two_hour_audit_observed_utc": "2026-10-26T23:40:51.425530+00:00",
+  "unused_configuration": {
+    "exact_endpoint_retained": true,
+    "faints_both": 0,
+    "independent_origin_credit": 0,
+    "permanent_no_fit": true,
+    "trainee_xp_both": 149
+  },
+  "whole_preparation": {
+    "actions": 1282,
+    "changed_wild_switch_executions": 0,
+    "exact_native_state_retained": true,
+    "frames": 94428,
+    "misty_completed": true,
+    "party_faints": 2,
+    "restores": 3,
+    "trainee_xp": 1993
+  },
+  "wild_preparation_component_native_qualified": true
+}

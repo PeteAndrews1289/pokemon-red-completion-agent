@@ -310,10 +310,10 @@ def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() ->
         "6a5e45df1a9b79636ead10f94c287567bce3808d895a60b0cf4cd0c2113debfc"
     )
     assert attestation.current_elements_sha256 == (
-        "f038a3f9cfbe897569e6852a29a90ecf7e88768e68ecbf601ad171018f149741"
+        "8c043ab60eef5baea3a8fef551182806c2a93fd9f64e1ecda226c32f8d359e06"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "63c0bd15569d11e4f9ba8455853edfc8c10d7109e192599952a1ef7e96b76d6e"
+        "84f13652a6c36833fa2b32ea96a347c3c1609c8eec95f5969bf030b5c6d728c7"
     )
 
 
@@ -747,19 +747,26 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "1688a2fc5dd62acd9e3bb0832b9daf0aec44bb14789a742a36644ee28cd6d83a"
+        "409ea80f855f8b4dbab6b76a5f791a4a85597acb93c0724df80f259af2109fb4"
     )
     assert contract.recovery_execution_sha256 == (
-        "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
+        "0ecb1620a2b15cae1ce74fd6626acd4c3ca3edbdb62590cf645f55d981b1699b"
     )
-    # Reviewed September19: the whole-module identity includes trainer faint,
-    # sleep and automatic move-learning settlement (through69cf57c3). This
-    # refresh does not change the policy/recovery/accounting golden contracts.
+    # Reviewed September30 working sources: recovery additionally hashes Blaine's
+    # default-disabled correct-only quiz guard; battle timing additionally hashes
+    # the authenticated send-out wait. Neither changes this venue's policy,
+    # encounter or accounting identities. Historical evidence is not rewritten.
+    # Reviewed September25 through3863e0ad: the whole-module identity includes
+    # bounded sleep-turn yielding, unspent send-out/trapping boundaries, wild
+    # double-KO/evolution settlement and the default-disabled reserve hook.
+    # Accounting also hashes the entire training
+    # function/module, so its fingerprint includes the reviewed disabled hook;
+    # budgeted phases and cleanup accounting themselves have not changed.
     assert contract.battle_timing_sha256 == (
-        "f95c96b4fe6f51ec53bbee8c36daa11c8f2ce3e865fd14e8693e8593622047b2"
+        "9eb9e60b13ed869b4c01bd6f13bf2226056788df63b91340de6ff8c24dd8bbf8"
     )
     assert contract.accounting_sha256 == (
-        "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"
+        "0a8849ecc330b6fcab4f62c0a3c5ca8f9e35b640c2f8c6289f4372e16918322b"
     )
 
 

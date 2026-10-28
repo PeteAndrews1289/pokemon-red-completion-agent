@@ -1,0 +1,705 @@
+{
+  "BE9_native_composition": {
+    "all_controls_and_workers_closed": true,
+    "badges": 1,
+    "baseline_payoff_rerun": false,
+    "cash_lost": 519,
+    "child_score_calls": 1,
+    "execution_errors": 0,
+    "field_ready_and_all_party_restored": true,
+    "final_cash": 519,
+    "frames": 39528,
+    "game_outcome": "Misty loss; automatic blackout and full-party native recovery",
+    "genuine_global_parent_used": true,
+    "genuine_stopping_child_used": true,
+    "global_parent_scores": 1,
+    "inputs": 436,
+    "memory_peak_bytes": 1028399104,
+    "narrow_battle_method_scores": {
+      "score_call_intents": 104,
+      "score_calls_completed": 104
+    },
+    "native_loads": 1,
+    "native_policy_improvement_proved": false,
+    "native_seconds": 9.016255761000139,
+    "new_TRAIN_rows": 0,
+    "new_badges": 0,
+    "opponent_faints": 1,
+    "ordinary_setbacks": 1,
+    "party_faints": 6,
+    "passed_execution": true,
+    "passed_game_objective": false,
+    "permanent_no_fit": true,
+    "public_linear_forecasts": 13,
+    "registration_delta": 0,
+    "registrations": 7,
+    "resource_seconds": 42.602738343000055,
+    "root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/BE9-CANDIDATE-NATIVE-ROOT-QUALIFICATION.json",
+      "sha256": "42202657ef12feac67787f20df47bd4ede13cc1a05a5d038f3cc57d4078731aa"
+    }
+  },
+  "BE9_readback": {
+    "baseline_candidate_same_choice": true,
+    "changed_child_scores": true,
+    "changed_decisions": 0,
+    "child_candidate_count": 13,
+    "child_score_calls": 2,
+    "choice": "DIRECT_MISTY",
+    "controls_and_workers_closed": true,
+    "frames": 0,
+    "full_fresh_inventory_exact": true,
+    "genuine_global_parent_used": true,
+    "genuine_stopping_child_used": true,
+    "global_binding_count": 16,
+    "global_parent_scores": 2,
+    "inputs": 0,
+    "native_loads": 1,
+    "native_payoff_executed": false,
+    "native_policy_benefit_proved": false,
+    "passed": true,
+    "permanent_no_fit": true,
+    "public_linear_forecasts": 26,
+    "related_exposed_DEVELOPMENT": true,
+    "root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/BE9-ZERO-INPUT-ROOT-QUALIFICATION.json",
+      "sha256": "37393017a0267a3c181f4e7cb45aaf82aa517511bc3acca90275827c41b23866"
+    },
+    "source_pair_unchanged": true
+  },
+  "K_repaired_native_composition": {
+    "actual_model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "actual_registration_delta": 0,
+    "cash_lost": 519,
+    "child_score_calls": 1,
+    "comparison_battle_initial_state_byte_equal": true,
+    "comparison_extra_frames": 9936,
+    "comparison_extra_inputs": 105,
+    "execution_errors": 0,
+    "final_cash": 519,
+    "frames": 49464,
+    "full16_inventory": true,
+    "game_outcome": "Misty loss; automatic blackout/full-party recovery",
+    "global_parent_scores": 1,
+    "inputs": 541,
+    "model_adoption": false,
+    "narrow_battler_scores": 144,
+    "native_seconds": 10.303421725,
+    "opponent_faints": 1,
+    "party_faints": 6,
+    "passed_execution": true,
+    "passed_game_objective": false,
+    "permanent_no_fit": true,
+    "public_linear_forecasts": 13,
+    "resource_seconds": 43.825491584,
+    "root_authentication_status": "AUTHENTICATED",
+    "root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/K-MISTY-V2-ROOT-CLOSEOUT.json",
+      "sha256": "58c25495a7998dc7718b8e774516ec5d4bdea812ba892460b1c696050a6bc61c"
+    },
+    "root_closeout_path_expected": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/K-MISTY-V2-ROOT-CLOSEOUT.json",
+    "same_c89_head": true,
+    "single_exposed_case_battler_improvement": false,
+    "source_legacy_model_sha256": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad",
+    "stopping_head_improvement_proved": false
+  },
+  "K_setup_failure": {
+    "execution_errors": 1,
+    "failed_before_first_policy_query": true,
+    "frames_reported": null,
+    "input_and_frame_costs_unknown": true,
+    "inputs_reported": null,
+    "native_error_chain_preserved": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/retained-fit15-k-misty-one-choice-20261027-1309-v1/RESULT.json",
+      "sha256": "92997a392f875c6713b4ed1702591c578c3d5ea8b65d2b1425f9003f183a7ae1"
+    },
+    "native_loads": 1,
+    "new_exported_context_exists": false,
+    "observed_zero_policy_calls": true,
+    "passed_execution": false,
+    "primary_native_error": "payload must be bytes",
+    "primary_native_error_type": "TypeError",
+    "released_state_equals_source": true,
+    "resource_seconds": 33.1512141459998,
+    "root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/K-MISTY-V1-FAILED-ROOT-CLOSEOUT.json",
+      "sha256": "9ac03986fbfce9c626d8b29a06fe2478724762c17ead486487831077908ce7c2"
+    }
+  },
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "all_native_and_fit_workers_closed": true,
+  "all_seven_goals_complete": false,
+  "audit_due_utc": "2026-10-27T15:09:00+00:00",
+  "audit_observed_at_utc": "2026-10-27T15:12:56.222448+00:00",
+  "audit_status": "OBSERVED_LATE_NOT_BACKDATED",
+  "block_closed": false,
+  "candidate": {
+    "model_sha256": "c89b4184537a94c3fff1c28c3116de5240b587effc7c2fde9ea34201e37b88a7",
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/fit15-nullspace-v1/CONSEQUENCE-HEAD.json",
+    "sha256": "9494947e8bc31b001ff1c8aa3901088977270772e71c1a35c1994e1bfaf0125a"
+  },
+  "current_block_costs": {
+    "BE9_child_score_calls": 2,
+    "BE9_global_parent_scores": 2,
+    "BE9_public_linear_forecasts": 26,
+    "K_native_public_linear_forecasts": 13,
+    "actual_TRAIN_fits": 2,
+    "actual_affine_nullspace_fits": 1,
+    "actual_default_ordinary_fits": 1,
+    "additional_TRAIN_battle_method_query_total_unknown": true,
+    "candidate_native_public_linear_forecasts": 13,
+    "closed_fit_job_memory_peak_bytes": 946266112,
+    "closed_fit_job_resource_seconds": 52.555401931000006,
+    "closed_resource_jobs": 9,
+    "closed_resource_seconds": 483.821724211,
+    "current_child_score_calls": 4,
+    "current_global_parent_scores": 4,
+    "failed_K_input_frame_costs_unknown": true,
+    "fit_public_linear_predictions": 54,
+    "fit_resource_total_is_not_whole_engineering_cost": true,
+    "known_native_controller_frame_lower_bound": 352452,
+    "known_native_controller_input_lower_bound": 4485,
+    "known_pre_pair_narrow_battler_score_completion_lower_bound": 248,
+    "known_pre_pair_narrow_battler_score_intent_lower_bound": 248,
+    "narrow_TRAIN_battle_method_query_total_unclaimed": true,
+    "narrow_native_battler_score_call_intents": null,
+    "narrow_native_battler_score_calls_completed": null,
+    "native_controller_frames": null,
+    "native_controller_inputs": null,
+    "native_diagnostic_loads": 6,
+    "native_input_frame_totals_complete": false,
+    "native_loads_for_input_build_preflight_and_fit": 0,
+    "new_admitted_TRAIN_rows": 1,
+    "new_admitted_scalar_target_channels": 9,
+    "new_sealed_TRAIN_rows_not_optimizer_admitted": 2,
+    "ordinary_fit_public_linear_predictions": 15,
+    "prediction_schedule": {
+      "baseline15_pre_fit": 15,
+      "candidate15_readback": 15,
+      "internal_fit_retention": 24
+    },
+    "prior_block_and_every_actual_diagnostic_failure_costs_additional": true,
+    "public_linear_prediction_intents": 121,
+    "public_linear_predictions_completed": 121,
+    "resource_total_scope": "Nine authenticated closed resource jobs; excludes unmetered engineering/staging/tests. Failed K loaded-copy input/frame totals remain unknown.",
+    "whole_process_NN_metering_complete": false
+  },
+  "deadline_utc": "2026-10-27T16:09:00+00:00",
+  "fresh_acceptance": false,
+  "full_suite": false,
+  "global_adoption": false,
+  "informative_gate": {
+    "absolute_normalized_utility_error": 0.34714246498932794,
+    "informative": true,
+    "observed_level_minus_direct_margin": -0.013168666666666606,
+    "predicted_level_minus_direct_margin": -0.3559225978715995,
+    "sum_four_cost_squared_normalized_errors": 13.966449506442114,
+    "wrong_preference_with_sufficient_margin": false
+  },
+  "interpretation": {
+    "K_comparison": "Same exposed BE9 choice/source/caps; both legacy297 and canonicalK lose. K uses more inputs/frames. No stopping-head gain, K adoption or generalization.",
+    "heldout_success": false,
+    "independent_generalization": false,
+    "level_direct_baseline_margin": -0.3559225978715995,
+    "level_direct_candidate_margin": -0.029444330872501867,
+    "level_direct_observed_margin": -0.013168666666666606,
+    "level_preference_already_correct_before_fit": true,
+    "new_level_native_data": "Previously closed P20 TRAIN source049403XP target,456actual traineeXP20to21,731actions50256frames and fullBlainewin. This is existing sealed data; no new native run in this fit phase.",
+    "new_level_native_unit_forecasts": {
+      "candidate": {
+        "actions": 995.8540625129613,
+        "attempted": 1.0,
+        "cash_credits": 4965.262783742427,
+        "cash_debits": 0.0,
+        "challenge_progress": 1.0,
+        "completed": 1.0,
+        "frames": 70488.60541562202,
+        "initial_goal_failed": 0.0,
+        "restorations": 0.6601826765216923
+      },
+      "d658": {
+        "actions": 6534.053247972238,
+        "attempted": 1.0,
+        "cash_credits": 12929.88303440895,
+        "cash_debits": 0.0,
+        "challenge_progress": 1.0,
+        "completed": 1.0,
+        "frames": 492684.66695228557,
+        "initial_goal_failed": 0.0,
+        "restorations": 14.134943975819443
+      },
+      "observed": {
+        "actions": 731.0,
+        "attempted": 1.0,
+        "cash_credits": 4653.0,
+        "cash_debits": 0.0,
+        "challenge_progress": 1.0,
+        "completed": 1.0,
+        "frames": 50256.0,
+        "initial_goal_failed": 0.0,
+        "restorations": 0.0
+      }
+    },
+    "next_train_actor_alignment_required": true,
+    "no_same_data_retry_authority": true,
+    "owned_move_margin_scope": "Fitting-pair ordering can improve; tiny observed margin and unpriced TM240 are not robust native strategy evidence.",
+    "owned_move_train_pair_margins": {
+      "candidate": 0.0013132465840011154,
+      "d658": -0.0022785283751192154,
+      "observed": 0.0006980000000000874
+    },
+    "related_actor_mix": "Old12 production297/720, new3K; no actor-invariant outcome claim.",
+    "training_only": true
+  },
+  "models_adopted": 0,
+  "native_policy_benefit_proved": false,
+  "next": {
+    "do_not": "No automatic fit/admission, same15-row repeats, K win seeking, DEV target fitting, forced preparation or retrospective cap waiver.",
+    "experiment": "Exact party-view/custody admission and dedup, then useful benefit/behavior-retention experiment",
+    "new_execution_requires": "Exact scoped prospective source/partition/actor/plan/admission and finite mission qualification before data collection or another fit.",
+    "retention": "Prospectively distinguish validated useful behavior from known incorrect forecasts; no retrospective waiver of the paid c89 experiment or current frozen caps.",
+    "scope": "Independently authenticated direct/plain-level TRAIN pair under legacy297/wild720 is a costly negative-benefit contrast. Complete exact party-view/custody admission/dedup without duplicating direct controls, then assess informativeness and design useful benefit discrimination with prospective behavior retention. No all-forecast lock retaining known bad behavior; no retrospective waiver or automatic fit.",
+    "status": "SEALED_PAIR_AUTHENTICATED_OPTIMIZER_ADMISSION_PENDING"
+  },
+  "observed_at_utc": "2026-10-27T16:03:00.342109+00:00",
+  "ordinary_full15_falsifier": {
+    "candidate": {
+      "model_sha256": "f6de53ca4613001346734c0c0fa9bc41f01962f4a9b9e62b410b795a1fe577b3",
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/ordinary-fit15-v1/CONSEQUENCE-HEAD.json",
+      "sha256": "3fbc00a8a8f94cca1ebea679926cfbe5f3c9371b9fc20541a66b639e4bab8da2"
+    },
+    "candidate_qualified": false,
+    "candidate_quality_rejected": true,
+    "execution_errors": 0,
+    "four_correct_pairs": [
+      {
+        "baseline_gap": -0.005957817544530321,
+        "candidate_gap": 0.06661608062490959,
+        "left": 3,
+        "observed_gap": -0.10970733333333334,
+        "passed": false,
+        "right": 4
+      },
+      {
+        "baseline_gap": -0.6682397098084852,
+        "candidate_gap": -0.5773772287758723,
+        "left": 3,
+        "observed_gap": -1.3277277966101695,
+        "passed": true,
+        "right": 7
+      },
+      {
+        "baseline_gap": -0.662281892263955,
+        "candidate_gap": -0.6439933094007818,
+        "left": 4,
+        "observed_gap": -1.2180204632768363,
+        "passed": true,
+        "right": 7
+      },
+      {
+        "baseline_gap": -0.6202704348620134,
+        "candidate_gap": -0.4790657475176187,
+        "left": 10,
+        "observed_gap": -1.671527661016949,
+        "passed": true,
+        "right": 11
+      }
+    ],
+    "native_loads": 0,
+    "new_fits": 1,
+    "new_public_linear_forecasts": 15,
+    "passed_execution": true,
+    "quality_checks": {
+      "four_correct_orders_retained": false,
+      "new3_MSE_retained": true,
+      "new3_utility_retained": true,
+      "two_wrong_orders_corrected": false
+    },
+    "reason": "Breaks correct3/4 order; fails to correct5/6 and8/9 despite improved new3 calibration.",
+    "resource_seconds": 51.72135745200012,
+    "root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/ORDINARY-FIT15-ROOT-CLOSEOUT.json",
+      "sha256": "de3043bc293d7e8b3c8ad664e744ee9930d5f5b983754421c03ce244ab7cf7b3"
+    },
+    "summary": {
+      "all15": {
+        "c89": {
+          "normalized_MSE": 0.05204572215046962,
+          "utility_MAE": 0.3275763542284219
+        },
+        "candidate": {
+          "normalized_MSE": 0.06516669441250271,
+          "utility_MAE": 0.3749408480970086
+        }
+      },
+      "new2": {
+        "c89": {
+          "normalized_MSE": 0.0001522937154235402,
+          "utility_MAE": 0.0005446687634948863
+        },
+        "candidate": {
+          "normalized_MSE": 1.3476744116683628e-07,
+          "utility_MAE": 0.00011342755185202794
+        }
+      },
+      "new3": {
+        "c89": {
+          "normalized_MSE": 0.0028297748933509715,
+          "utility_MAE": 0.005709318753776872
+        },
+        "candidate": {
+          "normalized_MSE": 0.000379456500784902,
+          "utility_MAE": 0.004464000330898357
+        }
+      },
+      "new_level": {
+        "c89": {
+          "normalized_MSE": 0.008184737249205834,
+          "utility_MAE": 0.016038618734340846
+        },
+        "candidate": {
+          "normalized_MSE": 0.0011380999674723722,
+          "utility_MAE": 0.013165145888991016
+        }
+      },
+      "old12": {
+        "c89": {
+          "normalized_MSE": 0.06434970896474929,
+          "utility_MAE": 0.40804311309708313
+        },
+        "candidate": {
+          "normalized_MSE": 0.08136350389043215,
+          "utility_MAE": 0.4675600600385362
+        }
+      }
+    },
+    "two_correction_pairs": [
+      {
+        "candidate_gap": 0.3551029402312815,
+        "left": 5,
+        "observed_gap": -0.044659830508474566,
+        "passed": false,
+        "required_sign": -1,
+        "right": 6
+      },
+      {
+        "candidate_gap": -0.13227034688521705,
+        "left": 8,
+        "observed_gap": 0.8331749378531073,
+        "passed": false,
+        "required_sign": 1,
+        "right": 9
+      }
+    ]
+  },
+  "package": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-stopping-correction-20261027-0429/native-candidate20/frozen-runtime/PLAYER-PACKAGE.json",
+    "sha256": "710358965dc69b11796f070c10501b6043f1bbcb113dd240ffeea793a492bd6c"
+  },
+  "plain_level_TRAIN_pair": {
+    "actor_aligned": true,
+    "actor_scope": "legacy297story/wild720/P20",
+    "comparison": {
+      "extra_frames": 192540,
+      "extra_heals": 8,
+      "extra_inputs": 2728,
+      "learned_policy_improvement": false,
+      "preparation_minus_direct_feedback2_utility": -0.17543802259887004,
+      "same_game_loss": true,
+      "small_battle_progress_increment_approx": 0.008474576271186418,
+      "useful_negative_benefit_lesson": true
+    },
+    "direct": {
+      "battle_progress": 0.6016949153,
+      "cash_debits": 1500,
+      "frames": 35460,
+      "game_outcome": "Misty loss",
+      "heals": 0,
+      "inputs": 390,
+      "native_seconds": 7.88710783,
+      "passed_execution": true,
+      "resource_seconds": 73.081064798,
+      "root_closeout": {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-DIRECT-ROOT-CLOSEOUT.json",
+        "sha256": "28c4337e186255c0a7e60bb249f8e12e3a4924331226b77059c48a03fc72b11a"
+      }
+    },
+    "equal_native_caps": true,
+    "independent_admission_pending": false,
+    "independent_comparison": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/audit-proposal/PLAIN-LEVEL-PAIR-INDEPENDENT-CACHED-COMPARISON.json",
+      "sha256": "cf73caa0a620d37127b26b4637842f9dc563629386cf2d46ddcb5cc1638d7c9f"
+    },
+    "independent_native_readback_passed": true,
+    "new_fits": 0,
+    "no_duplicate_direct_control_admission": true,
+    "optimizer_admission_pending": true,
+    "optimizer_rows_admitted": 0,
+    "preparation": {
+      "actual_trainee_XP": 742,
+      "battle_progress": 0.61016949,
+      "cash_debits": 1500,
+      "decisions": 4,
+      "end_XP": 3862,
+      "execution_errors": 0,
+      "frames": 228000,
+      "game_outcome": "Misty loss",
+      "heals": 8,
+      "health_limited_returns": 7,
+      "inputs": 3118,
+      "native_seconds": 49.685113176,
+      "no_evolution": true,
+      "preparation_subdoses": 8,
+      "resource_seconds": 121.937391444,
+      "root_authentication_status": "AUTHENTICATED",
+      "root_closeout": {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PREPARATION-ROOT-CLOSEOUT.json",
+        "sha256": "f75560ad43d255f5972c40f6829e3273b3fb6f6b18bde5c6f613b25cb10c1b80"
+      },
+      "root_closeout_path_expected": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PREPARATION-ROOT-CLOSEOUT.json",
+      "selected_goal": "plain Wartortle17to18 plus full Misty payoff",
+      "source_XP": 3120,
+      "source_level": 17,
+      "strict_native_row_sealed": true,
+      "target_level": 18,
+      "wild_battles": 15
+    },
+    "root_comparison": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PAIR-ROOT-COMPARISON.json",
+      "sha256": "4e75cadb704d521a9ebbce69e4fcf422ddae6da16de09016105631fc89b275d6"
+    },
+    "same_source": true,
+    "same_source_context_origin_roles_actors_seed": true,
+    "sealed_rows": 2,
+    "source_context_sha256_prefix": "688",
+    "source_preflight_no_guests_queries_fits": true,
+    "source_state_sha256_prefix": "0e69",
+    "teacher_selected_first_goals_not_model_selected": true
+  },
+  "qualification": {
+    "artifact_and_retention": {
+      "all_external_forecasts_finite": true,
+      "all_six_known_orders": true,
+      "codec_exact": true,
+      "evidence_exact": true,
+      "examples15": true,
+      "intercept_bits": true,
+      "mean_bits": true,
+      "old12_affine_atol": true,
+      "old12_public_atol": true,
+      "old12_utility_atol": true,
+      "scale_bits": true
+    },
+    "calibration": {
+      "new2_MSE_nonforgetting": true,
+      "new2_utility_nonforgetting": true,
+      "new3_MSE_improves": true,
+      "new3_utility_improves": true
+    },
+    "known_matched_order_pairs": [
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        8,
+        9
+      ],
+      [
+        10,
+        11
+      ]
+    ],
+    "known_retained_wrong_orders": [
+      [
+        5,
+        6
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    "old12_raw_affine_and_public_atol": 1e-10,
+    "old12_utility_atol": 1e-06,
+    "old_d658_bit_exact_experiment_unchanged": true,
+    "rows0_1_2_are_not_matched_contexts": true,
+    "rtol": 0.0
+  },
+  "receipt_references": {
+    "BE9_native_root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/BE9-CANDIDATE-NATIVE-ROOT-QUALIFICATION.json",
+      "sha256": "42202657ef12feac67787f20df47bd4ede13cc1a05a5d038f3cc57d4078731aa"
+    },
+    "BE9_root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/BE9-ZERO-INPUT-ROOT-QUALIFICATION.json",
+      "sha256": "37393017a0267a3c181f4e7cb45aaf82aa517511bc3acca90275827c41b23866"
+    },
+    "K_failed_v1_root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/K-MISTY-V1-FAILED-ROOT-CLOSEOUT.json",
+      "sha256": "9ac03986fbfce9c626d8b29a06fe2478724762c17ead486487831077908ce7c2"
+    },
+    "K_independent_comparison": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/audit-proposal/K-MISTY-V2-INDEPENDENT-CACHED-COMPARISON.json",
+      "sha256": "3d922e54f8812076aa7dfeede91c7ad975f039792f79c129f55b37f618416bb2"
+    },
+    "K_repaired_root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/K-MISTY-V2-ROOT-CLOSEOUT.json",
+      "sha256": "58c25495a7998dc7718b8e774516ec5d4bdea812ba892460b1c696050a6bc61c"
+    },
+    "active273_historical_claim_snapshot": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/ACTIVE273-HISTORICAL-CUSTODY-SNAPSHOT.json",
+      "sha256": "f8cb01d3d978b7adf41fcb2c653bddbd67b40e0a6cd05038c4216c942fbc3976"
+    },
+    "builder_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/BUILDER-R4-ROOT-CLOSEOUT.json",
+      "sha256": "3f74f480aa73060c063e80dedad3274b5cd57f3980b58c356f3a88ae3f9475d4"
+    },
+    "independent_cached_review": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/cached-metric-review/INDEPENDENT-CACHED-METRIC-REVIEW.json",
+      "sha256": "cbcdeffba1d5e1789b742a899ca842902a904bf19c7cc9605b822d03e3af548f"
+    },
+    "mission": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/MISSION.json",
+      "sha256": "dc1dd7dd46a6f44d53fbcc622c2f61ddef3ac2f5602446e1acdd43eec4733b33"
+    },
+    "ordinary_full15_root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/ORDINARY-FIT15-ROOT-CLOSEOUT.json",
+      "sha256": "de3043bc293d7e8b3c8ad664e744ee9930d5f5b983754421c03ce244ab7cf7b3"
+    },
+    "paid_fit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/fit15-nullspace-v1/FIT.json",
+      "sha256": "ac6149592bdc9599a917ee69ccce46f6a714ab057c6449e9b79b44a736a200db"
+    },
+    "plain_level_direct_root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-DIRECT-ROOT-CLOSEOUT.json",
+      "sha256": "28c4337e186255c0a7e60bb249f8e12e3a4924331226b77059c48a03fc72b11a"
+    },
+    "plain_level_dispatch_timing_addendum": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PREPARATION-DISPATCH-TIMING-ADDENDUM.json",
+      "sha256": "810b45181f63979035b71a0bb5bf8c376a3b4618af40075df7fca9ebbf6f2efd"
+    },
+    "plain_level_independent_comparison": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/audit-proposal/PLAIN-LEVEL-PAIR-INDEPENDENT-CACHED-COMPARISON.json",
+      "sha256": "cf73caa0a620d37127b26b4637842f9dc563629386cf2d46ddcb5cc1638d7c9f"
+    },
+    "plain_level_pair_root_comparison": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PAIR-ROOT-COMPARISON.json",
+      "sha256": "4e75cadb704d521a9ebbce69e4fcf422ddae6da16de09016105631fc89b275d6"
+    },
+    "plain_level_preparation_root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/PLAIN-LEVEL-PREPARATION-ROOT-CLOSEOUT.json",
+      "sha256": "f75560ad43d255f5972c40f6829e3273b3fb6f6b18bde5c6f613b25cb10c1b80"
+    },
+    "previous_block_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-stopping-correction-20261027-0429/SESSION-CLOSEOUT.json",
+      "sha256": "5e7f9fe5be8deb0a6c4e581a9914dd100907507cf019b5b11d39879b5a43da4e"
+    },
+    "root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/FIT15-ROOT-QUALIFICATION.json",
+      "sha256": "9c3d667af4b675b7ca73f63da2df693376f85bf093ef207b88ddc001e148dd49"
+    },
+    "strict_admission": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/FIT15-STRICT-ROOT-ADMISSION.json",
+      "sha256": "a12e6f29a1d1694c15cf0a81f0f7d83b088546f85dc55f92322e337ffc2ee963"
+    },
+    "two_hour_audit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/TWO-HOUR-AUDIT.json",
+      "sha256": "85d81aa511079c0b83efd589fc69a510d39139dedcaf574eb870c6489482299d"
+    }
+  },
+  "schema": "pokemon.red.development-evidence.v1",
+  "session": "2026-10-27-fit15-admission",
+  "source_custody": {
+    "DEVELOPMENT_rows": 0,
+    "TRAIN_source_group_unchanged": true,
+    "active273_historical_snapshot": {
+      "grants_future_authority": false,
+      "historical_data_only": true,
+      "original_path": "private-artifact://117c02b60632/PokemonMigration-20261016/WINDOWS-REPAIR-CLAIM.json",
+      "original_sha256": "2b36348ba94190d34ae9aa54d1494ba1f2d5b824db1086b82dad11667e83a169",
+      "qualification": {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/ACTIVE273-HISTORICAL-CUSTODY-SNAPSHOT.json",
+        "sha256": "f8cb01d3d978b7adf41fcb2c653bddbd67b40e0a6cd05038c4216c942fbc3976"
+      },
+      "snapshot": {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-fit15-20261027-1309/immutable-input-snapshots/2b36348ba94190d34ae9aa54d1494ba1f2d5b824db1086b82dad11667e83a169--WINDOWS-REPAIR-CLAIM-active273-historical.json",
+        "sha256": "2b36348ba94190d34ae9aa54d1494ba1f2d5b824db1086b82dad11667e83a169"
+      }
+    },
+    "cached_direct12_reused_once": true,
+    "historical_claim_alias_is_data_only": true,
+    "new_live_writer_authority_separate": true,
+    "new_row14_unique_weight1": true,
+    "old14_exact_prefix": true,
+    "old14_weights_targets_order_unchanged": true
+  },
+  "source_writer_closeout_pending": true,
+  "started_at_utc": "2026-10-27T13:09:00+00:00",
+  "status": "CALIBRATION_QUALIFIED_NATIVE_READINESS_UNPROVED_PLAIN_LEVEL_TRAIN_PAIR_SEALED",
+  "summary": {
+    "all15": {
+      "candidate": {
+        "normalized_MSE": 0.05204572215046962,
+        "utility_MAE": 0.3275763542284219
+      },
+      "d658": {
+        "normalized_MSE": 0.41835963305507645,
+        "utility_MAE": 0.35036089453988234
+      }
+    },
+    "new2": {
+      "candidate": {
+        "normalized_MSE": 0.0001522937154235402,
+        "utility_MAE": 0.0005446687634948863
+      },
+      "d658": {
+        "normalized_MSE": 0.28415938536454277,
+        "utility_MAE": 0.005876797971954577
+      }
+    },
+    "new3": {
+      "candidate": {
+        "normalized_MSE": 0.0028297748933509715,
+        "utility_MAE": 0.005709318753776872
+      },
+      "d658": {
+        "normalized_MSE": 1.8343993294163852,
+        "utility_MAE": 0.11963202031107904
+      }
+    },
+    "new_level": {
+      "candidate": {
+        "normalized_MSE": 0.008184737249205834,
+        "utility_MAE": 0.016038618734340846
+      },
+      "d658": {
+        "normalized_MSE": 4.934879217520071,
+        "utility_MAE": 0.347142464989328
+      }
+    },
+    "old12": {
+      "candidate": {
+        "normalized_MSE": 0.06434970896474929,
+        "utility_MAE": 0.40804311309708313
+      },
+      "d658": {
+        "normalized_MSE": 0.06434970896474929,
+        "utility_MAE": 0.4080431130970832
+      }
+    }
+  }
+}

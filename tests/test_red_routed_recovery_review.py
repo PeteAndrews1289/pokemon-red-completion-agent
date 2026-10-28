@@ -10,6 +10,48 @@ from pokemon_red_completion.red_routed_recovery import (
     RedRoutedRecoveryError,
     bind_routed_center_recovery,
 )
+from pokemon_red_completion.route_executor import InterruptionReceipt, TraversalSnapshot
+import pokemon_red_completion.red_routed_recovery as recovery
+
+
+@pytest.mark.parametrize("income,verified,battle_started,accepted", (
+    (725, True, True, True), (725, False, True, False),
+    (725, True, False, False), (-10, True, True, False),
+))
+def test_only_verified_trainer_income_can_change_recovery_money(
+    monkeypatch, income, verified, battle_started, accepted
+):
+    router, bindings, observe, state, _collection, _calls = make_fixture(monkeypatch)
+    def route(_plan, _actions, _observer, *, interruption_handler, **_kwargs):
+        snapshot = TraversalSnapshot(
+            map_id=state["raw"].map_id,
+            at=(state["raw"].player_y, state["raw"].player_x),
+            ready=False, interruption="battle:2",
+        )
+        class Trainer:
+            def handle(self, interruption):
+                state["raw"] = replace(state["raw"], player_money=209 + income)
+                return InterruptionReceipt(
+                    kind="trainer_engagement", resumed_map=interruption.map_id,
+                    resumed_at=interruption.at,
+                    details={"verified": verified, "battle_started": battle_started},
+                )
+        interruption_handler.inner = Trainer()
+        interruption_handler.handle(snapshot)
+        state["raw"] = replace(state["raw"], map_id=64, player_x=3, player_y=7)
+        return type("Result", (), {"passed": True})()
+    monkeypatch.setattr(recovery, "execute_route", route)
+    offered = bind_routed_center_recovery(router, bindings, observe(), prepare_escort=lambda: None)
+    binding = next(b for b in offered.bindings if b.kind is GoalKind.RESTORE_TEAM)
+    if not accepted:
+        with pytest.raises(RedRoutedRecoveryError, match="unverified money"):
+            binding.execute()
+        return
+    report = binding.execute()
+    assert report.evidence["routed_recovery"]["verified_trainer_income"] == income
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    state["raw"] = replace(state["raw"], player_money=state["raw"].player_money + 1)
+    assert binding.verify(report).status is GoalDecisionOutcome.FAILED
 
 
 def offer(monkeypatch, prepare=None):

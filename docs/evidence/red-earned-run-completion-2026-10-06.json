@@ -1,0 +1,159 @@
+{
+  "schema": "pokemon.red.earned-run-completion-summary.v1",
+  "session": "2026-10-05-earned-run-completion",
+  "closed_date_utc": "2026-10-06",
+  "partition": "development",
+  "passed": true,
+  "pass_scope": "Assisted same-save story and declared legitimate native Red registration route",
+  "official_exam": false,
+  "fresh_autonomous_red_gates_passed": 0,
+  "source": {
+    "family": "red-earned-run-completion-20261005-v1",
+    "terminal": "fresh-pilot/runs/segment-278",
+    "state_sha256": "5a81496cc3be86d330593f0b00d92e71945e334b2b6068eb39dbb9e0ca20febe",
+    "context_sha256": "f1161ee16070c1eae3569e7165a72b8c48c2c2df09db348ff0f2a24eb7c23a9f",
+    "origin_sha256": "019e0896bd669981bfafa1ba13dab4e7ef2b915ea723ac1956548d851f0520fb",
+    "context_bearing_forward_nodes": 271,
+    "same_earned_ancestry": true
+  },
+  "completion": {
+    "badges": 8,
+    "story_objectives_completed": 36,
+    "story_objectives_required": 36,
+    "registered_native_route": 124,
+    "required_native_route": 124,
+    "local_registration_delta_this_goal": 114,
+    "additional_save_external_dependencies": 27,
+    "exact_native_target_set_verified": true,
+    "concurrent_champion_hall_of_fame_terminal": "segment-176",
+    "concurrent_champion_hall_of_fame_sha256": "6ae1c933b44b23d86745a074d47e5b23bac643e6984fdca2a24d71a52ee18df0",
+    "hall_of_fame_native_read_only_reopened": true,
+    "unique_captures": [
+      "Mewtwo",
+      "Articuno",
+      "Zapdos",
+      "Moltres"
+    ],
+    "unique_specimens_boxed": true,
+    "original_six_returned": true,
+    "full_hp_status_pp": true,
+    "terminal_location": "Cerulean Pokemon Center",
+    "native_cash": 21398,
+    "ultra_balls": 64,
+    "great_balls": 12,
+    "party": [
+      {
+        "species": "Blastoise",
+        "level": 100,
+        "hp": 331
+      },
+      {
+        "species": "Snorlax",
+        "level": 46,
+        "hp": 221
+      },
+      {
+        "species": "Gloom",
+        "level": 30,
+        "hp": 84
+      },
+      {
+        "species": "Primeape",
+        "level": 30,
+        "hp": 91
+      },
+      {
+        "species": "Pidgeot",
+        "level": 51,
+        "hp": 179
+      },
+      {
+        "species": "Fearow",
+        "level": 30,
+        "hp": 90
+      }
+    ]
+  },
+  "authority": {
+    "complete_episode_model_decisions": 274,
+    "complete_episode_support_decisions": 433,
+    "complete_episode_executed_decisions": 707,
+    "decision_count_scope": "Available complete episode payloads only; censored outcomes and native prefixes are not invented",
+    "new_train_examples": 0,
+    "new_fits": 0,
+    "new_weights": 0,
+    "authority_promotions": 0,
+    "supplied_support": [
+      "story phase order",
+      "readiness and preparation targets",
+      "field lead allocation",
+      "routing and puzzles",
+      "capture mechanics",
+      "many quantities and sole-option goals",
+      "tactical screens",
+      "repair relaunches"
+    ],
+    "strategic_autonomy_claim": false,
+    "shared_registration_credit_delta": 0
+  },
+  "accounting": {
+    "recorded_lineage": {
+      "actions": 1151390,
+      "frames": 99497654,
+      "decisions": 1087,
+      "heals": 348,
+      "seconds": 42625.91417104291,
+      "cash_debits": 675746
+    },
+    "reconciled_lineage_cash_debits": 704630,
+    "cash_debit_metric": "Sum of positive per-goal/preface net cash deltas; not gross lifetime shopping",
+    "additive_correction": {
+      "segment": "segment-181",
+      "cash_debits": 28884,
+      "reason": "Native blackout preface omitted by historical censored retention",
+      "original_receipts_rewritten": false,
+      "native_cash_edited": false
+    },
+    "goal_deltas": {
+      "actions": 1048003,
+      "frames": 89598711,
+      "decisions": 736,
+      "heals": 203,
+      "seconds": 32848.91478358081,
+      "reconciled_cash_debits": 661915
+    },
+    "copy_checks_separate_from_native_lineage": true
+  },
+  "audit": {
+    "sha256": "5e61f1c469b8a6ee673d9b1d4f2047c98ee984351818fb8e0c402d595d47de42",
+    "native_proof_sha256": "89d31b98a6fba530b17e24e57bb1753c524fb056de8c8524a7804608f454c359",
+    "reconciliation_sha256": "6ad11790b44be93cea582ca5af4beb348364bc537b7b9419cca83cf915e5e3b7",
+    "protected_ancestors_models_saves_authenticated": true,
+    "audit_inputs": 0,
+    "audit_frames": 0,
+    "fully_sealed_trace_claim": false,
+    "limitations": [
+      "210 final 240-frame WAIT lacks sealed completion trace",
+      "232 complete episode outcome unavailable",
+      "233/234 original aftermath unavailable; separate native return bridges audited",
+      "181 old cash omission reconciled additively"
+    ],
+    "adaptive_copies_are_independent": false,
+    "copy_progress_adopted": 0,
+    "gameplay_stopped": true,
+    "scoped_native_worker_exits_confirmed": true,
+    "numeric_save_edits": 0,
+    "new_initializations_this_goal": 0,
+    "save_progress_stitching": false,
+    "item_sales": false,
+    "github_publication": false
+  },
+  "verification": {
+    "focused_rom_free_tests": 1078,
+    "scoped_ruff_f_passed": true,
+    "full_suite_claim": false,
+    "hosted_ci_claim": false
+  },
+  "evidence_report": "docs/work-sessions/2026-10-05-earned-run-completion.md",
+  "next": "Paused for user evaluation; proposed existing-stack authority audit, not another completed collection replay"
+}

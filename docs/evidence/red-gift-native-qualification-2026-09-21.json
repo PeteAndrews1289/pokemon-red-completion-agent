@@ -1,0 +1,257 @@
+{
+  "schema": "pokemon.red.gift-native-qualification-evidence.v1",
+  "session": "2026-09-21-gift-native-qualification",
+  "classification": "partial_engineering_qualification_not_completed_learning",
+  "source_commits": [
+    "ac838963655716b85bf5f3deee7dad97460701d2",
+    "2c21de5436d56d2f300588e97a170a8053c1096b",
+    "2c7a595e17770f0140692d648281950add52e446"
+  ],
+  "scope": {
+    "main_save_gameplay": false,
+    "main_save_edits": 0,
+    "earned_registrations_added": 0,
+    "model_queries": 0,
+    "new_admitted_train_rows": 0,
+    "fits": 0,
+    "promotions": 0,
+    "github_publications": 0,
+    "external_agents_used": false
+  },
+  "verified": {
+    "native_party_delivery": true,
+    "native_box_delivery": true,
+    "exact_one_registration_and_specimen": true,
+    "existing_party_money_items_preserved": true,
+    "exhausted_gift_masked": true,
+    "full_approach_after_exact_state_continuation": true,
+    "approach_route_steps": 55,
+    "continuation_actions": 90,
+    "continuation_frames": 4944,
+    "combined_failed_and_continued_actions": 103,
+    "combined_failed_and_continued_frames": 5256,
+    "native_zero_input_audits": true,
+    "rom_free_targeted_tests_passed": 362,
+    "full_suite_claim": false,
+    "generic_inert_indoor_warp_filter": true,
+    "outside_gift_access_door_guard": true,
+    "curriculum_accounting_implemented_not_used_for_fit": true
+  },
+  "failures": [
+    {
+      "case": "fixture-5700",
+      "stage": "post_acquisition_report",
+      "cause": "Generic dataclass serialization cannot copy a mappingproxy; original failed result retained, transition independently verified without replay."
+    },
+    {
+      "case": "fixture-5900-route-continuation",
+      "stage": "departure",
+      "cause": "Initial isolated setup omitted native door2 prerequisite; no route out of 3F. No rewind or replacement."
+    },
+    {
+      "case": "case-6100-0",
+      "stage": "approach",
+      "cause": "Map decoder treated unused interior warp record on ordinary floor as automatic;13actions/312frames retained. General tile-table filter repaired; exact terminal continued once for mechanics only."
+    },
+    {
+      "case": "completed-approach-departure",
+      "stage": "exterior_arrival",
+      "cause": "Reached safe Saffron21,18 instead of declared22,18; artificially retained guard occupies expected doorway step. Exact route verification FAILED; no success relabel."
+    }
+  ],
+  "learning": {
+    "experiment_closed_before_fit": true,
+    "planned_train_cases": 4,
+    "attempted_train_cases": 1,
+    "settled_admitted_cases": 0,
+    "planned_heldout_cases": 2,
+    "heldout_cases_opened": 0,
+    "unopened_source_boots": [
+      6300,
+      6500,
+      6700
+    ],
+    "unexecuted_second_6100_branch": true,
+    "teacher_selected_mechanics_not_observed_policy_choices": true,
+    "model137_diagnostic": {
+      "train_rows": 137,
+      "train_acquisitions": 55,
+      "gift_predicted_success": 0,
+      "gift_predicted_completion": 0,
+      "gift_predicted_resource_cost": 0.036430555833855134,
+      "gift_predicted_cash_loss": 1,
+      "gift_score": -1.0101421795752683,
+      "interpretation": "Frozen model extrapolates poorly for this free acquisition; nearest TRAIN rows are mostly failed acquisitions. Diagnostic only, not causal proof or permission to tune on DEVELOPMENT."
+    },
+    "production_model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "production_fitted_examples": 137,
+    "production_successes": 92,
+    "economy_qualified": 58
+  },
+  "earned_endpoint": {
+    "terminal_sha256": "b49e682a227bce571f2d62fd0290d0bfe0adf7964220a69bc5c502f64962a712",
+    "registrations": 107,
+    "target": 124,
+    "specimens": 77,
+    "cash": 15968,
+    "unchanged": true
+  },
+  "remaining": [
+    "Complete a coherent isolated full-transport fixture including real missable-object visibility; no repeated teacher route patching or earned-save replay.",
+    "Prospectively collect admissible native acquisition TRAIN outcomes, retaining failures; this closed campaign cannot silently restart or lower its denominator.",
+    "Fit once, evaluate on unopened heldout lineages and preserve old-row performance; no automatic assisted-pilot promotion.",
+    "Demonstrate a real model-selected gift from a mixed menu and verify the earned registration and safe continuation."
+  ],
+  "next": "Reassess fixture construction as one coherent post-story state contract before any more native dispatch. Keep the general warp fix and verified gift mechanics; do not rebuild them. Then a separately declared bounded acquisition learning experiment, not paid Safari sampling to force selection.",
+  "artifacts": {
+    "gift-mechanics-20260921-v1/completed-approach-departure/native-audit.json": {
+      "sha256": "1762a3d5332050486b4aeba9068f99f6bb715b0099cc1d0f486217023f133972",
+      "status": "safe_native_endpoint_route_failure_preserved",
+      "frames": 0
+    },
+    "gift-mechanics-20260921-v1/prediction-diagnostic.json": {
+      "sha256": "a4b3f4da9675b99c444948e122fa05bfe24358b82b755264cfd8b4db5d97e4d0"
+    },
+    "gift-mechanics-20260921-v1/approach-continuation/result.json": {
+      "sha256": "0d2ab048537f8a5f4f865d9330fde1f1730d9ea392f2010ea456d4f251dead46",
+      "actions": 90,
+      "combined_actions": 103,
+      "combined_frames": 5256,
+      "frames": 4944,
+      "report": {
+        "actions_executed": 90,
+        "evidence": {
+          "fly_used": false,
+          "mechanic": "scripted_gift",
+          "route_steps": 55
+        },
+        "frames_executed": 4944
+      },
+      "status": "native_mechanics_passed",
+      "terminal_sha256": "d33c43f40e564338af13a1862f852ab8bc4296e70ba6f108a2d2b757a4a84646",
+      "wall_seconds": 2.684671666007489
+    },
+    "gift-mechanics-20260921-v1/approach-continuation/native-audit.json": {
+      "sha256": "e2eb70dbe5421b1619a14c2892786396ae2cf0125f2634f09494a5304fe3313f",
+      "frames": 0,
+      "status": "passed",
+      "terminal_sha256": "d33c43f40e564338af13a1862f852ab8bc4296e70ba6f108a2d2b757a4a84646"
+    },
+    "gift-mechanics-20260921-v1/approach-continuation/claim.json": {
+      "sha256": "9ef982d496e41ea75e9abe747da0e255278368cca1464c82ab64abb2f6e2eaa6"
+    },
+    "gift-mechanics-20260921-v1/fixture-5900/result.json": {
+      "sha256": "57ef54145fb66740ac6f79dc5a19ad5eb764afb09cedc0c5eadb194dce7eaaf2",
+      "actions": 60,
+      "before_sha256": "de27f16bd0a09c45fad82c23988418ccabf9823ee902207b8f7c5526474debd7",
+      "frames": 30344,
+      "origin_sha256": "c4ebe4d70d7d8bf1a9974767926539fda063aded0b06880d46171ad932acf440",
+      "report": {
+        "actions_executed": 47,
+        "evidence": {
+          "fly_used": false,
+          "mechanic": "scripted_gift",
+          "route_steps": 5
+        },
+        "frames_executed": 4404
+      },
+      "stage": "verified",
+      "status": "native_mechanics_passed",
+      "terminal_sha256": "a737f3ff253a615ee7b47f487d7ee3d1ddb4bb1fec7e6cf2c28b7826eff05960",
+      "wall_seconds": 1.846682959003374
+    },
+    "gift-mechanics-20260921-v1/fixture-5900/native-audit.json": {
+      "sha256": "cdbf39eb08e88ffadeac22f534b69a3a011ba3c54c2b35ba75f3822f3aad4d85",
+      "before_sha256": "de27f16bd0a09c45fad82c23988418ccabf9823ee902207b8f7c5526474debd7",
+      "frames": 0,
+      "status": "passed",
+      "terminal_sha256": "a737f3ff253a615ee7b47f487d7ee3d1ddb4bb1fec7e6cf2c28b7826eff05960"
+    },
+    "gift-mechanics-20260921-v1/fixture-5900/claim.json": {
+      "sha256": "778796a1f0d77caca34c5f16f1f61c3fabcabd6074aefe46126d8442522b506c"
+    },
+    "gift-mechanics-20260921-v1/completed-approach-departure/result.json": {
+      "sha256": "2b3727db88ca64398f7b967af49810250ef2ce7260e8a9b76acb6eaadc5ec53f",
+      "actions": 70,
+      "error": "route drifted after down: expected (10, (22, 18)), observed (10, (21, 18))",
+      "frames": 2064,
+      "stage": "departure",
+      "status": "failed",
+      "terminal_sha256": "4b918693c1c5947b7b47975804440ada7e417e297c122299848fe44b6059abf7",
+      "wall_seconds": 1.402328290976584
+    },
+    "gift-mechanics-20260921-v1/completed-approach-departure/claim.json": {
+      "sha256": "61fb401dc172c72baa335e050becdec26806c0e5f8e9c2ea366f9d2279e73482",
+      "stage": "outdoor_departure_and_approach"
+    },
+    "gift-mechanics-20260921-v1/fixture-5700/result.json": {
+      "sha256": "ede036a439e434ab707053376c6b22e5713c2c3c3506981581b8479a423527a6",
+      "actions": 50,
+      "before_sha256": "52950cfa7fcd3ca653fb73d030543e60894734bec324d1156c70a677f33202a4",
+      "error": "cannot pickle 'mappingproxy' object",
+      "frames": 29124,
+      "origin_sha256": "3811e2625610e1b9e860cace1a4e7dc9579deb3166b5a99eb8e6ae8d1aa24b33",
+      "stage": "gift",
+      "status": "failed",
+      "terminal_sha256": "2ab5895e4bf11bc62ec65e94df5fe7462815c77f4d3d72d2e5a24a02e6ccb1c7",
+      "wall_seconds": 1.899918416980654
+    },
+    "gift-mechanics-20260921-v1/fixture-5700/native-audit.json": {
+      "sha256": "24af199bed90ead2e1f2faa3b1db2691a287017401791274efad07467915833a",
+      "before_sha256": "52950cfa7fcd3ca653fb73d030543e60894734bec324d1156c70a677f33202a4",
+      "frames": 0,
+      "status": "native_transition_verified_logger_failed",
+      "terminal_sha256": "2ab5895e4bf11bc62ec65e94df5fe7462815c77f4d3d72d2e5a24a02e6ccb1c7"
+    },
+    "gift-mechanics-20260921-v1/fixture-5700/claim.json": {
+      "sha256": "2b446e1e2418d38147d07ce6b29f15a3e83e6cfffad29f0575f868c4190b59b3"
+    },
+    "gift-mechanics-20260921-v1/route-continuation/result.json": {
+      "sha256": "422371e3acbdaf11862dea604d486c62988a959196696437e482bf9b9002c019",
+      "actions": 40,
+      "error": "route replanning found no candidate",
+      "frames": 1056,
+      "stage": "departure",
+      "status": "failed",
+      "terminal_sha256": "92ccf8a3870dd02a73c450b688bc8535adac81d8e0b2e635e713ddedb51548d4",
+      "wall_seconds": 1.427722749998793
+    },
+    "gift-mechanics-20260921-v1/route-continuation/claim.json": {
+      "sha256": "101c4b6223b3672b3fa990292d8dd7263d973b62f123897dfd64817e10630b14",
+      "stage": "outdoor_departure_and_approach"
+    },
+    "gift-curriculum-20260921-v1/plan.json": {
+      "sha256": "d82ead25bc3a9f12badbc85ed4f1dd0cf5182523dc766ec8ccfdf50fadf66792"
+    },
+    "gift-curriculum-20260921-v1/case-6100-0/prospective.json": {
+      "sha256": "17430b88b34230f679c3bca0f9e46973d7f9d45f8a5c78709c5962913faa2cde",
+      "actions": 0,
+      "before_sha256": "7d6dc3bdd0ce959bc61fa718b966ad2c17a0e4bb681100c0a452096b286cc408",
+      "frames": 0
+    },
+    "gift-curriculum-20260921-v1/case-6100-0/result.json": {
+      "sha256": "b6a95df521d8b926ebcc13ddd50f1a8e7340b9f7cdcda2e8f07f8d21aeeabc0f",
+      "actions": 13,
+      "before_sha256": "7d6dc3bdd0ce959bc61fa718b966ad2c17a0e4bb681100c0a452096b286cc408",
+      "error": "route drifted after right: expected (208, (3, 27)), observed (181, (10, 16))",
+      "frames": 312,
+      "status": "failed",
+      "terminal_sha256": "b5113ecda238e85047f1ddb18bac9b9c5f8ea095f624ba28c2d58e4f21a1d715",
+      "wall_seconds": 1.4586394168436527
+    },
+    "gift-curriculum-20260921-v1/case-6100-0/claim.json": {
+      "sha256": "60f361f456cb03ae74090457d1d7f9995cd58e38c78edb81906c70a00628a611"
+    },
+    "gift-curriculum-20260921-v1/source-6100/result.json": {
+      "sha256": "2cdaa4c38ea033b236eb9f9fe194d66bb5bd5fd3160953f3d8b5a578fd1f8fcf",
+      "frames": 26140,
+      "origin_sha256": "711eea5ffaa08e66729d8c229912d0b5c0006b70d9d08bb680af6d133cd19de8",
+      "status": "prepared",
+      "terminal_sha256": "7d6dc3bdd0ce959bc61fa718b966ad2c17a0e4bb681100c0a452096b286cc408",
+      "wall_seconds": 1.7465670420788229
+    },
+    "gift-curriculum-20260921-v1/source-6100/claim.json": {
+      "sha256": "8442823ff9f1257231ebade27c263d0af5bd92c10406e4e6874d4d3328998918"
+    }
+  }
+}

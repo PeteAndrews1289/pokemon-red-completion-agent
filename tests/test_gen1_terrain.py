@@ -22,7 +22,6 @@ import pytest
 
 from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_cut import (
-    CutTraversalError,
     plan_cut_candidate,
     plan_cut_candidate_in_graphs,
     plan_nearest_cut_candidate,
@@ -350,16 +349,11 @@ def test_cut_candidate_stages_approach_before_a_predicted_block_replacement() ->
     assert staged.edges[1].target == graph_candidate.source_at
     assert staged.edges[1].requirements == frozenset({CUT_CAPABILITY})
 
-    with pytest.raises(CutTraversalError, match="living move holder"):
-        plan_cut_candidate(
-            rom,
-            current,
-            rules,
-            sets,
-            (0, 0),
-            (0, 4),
-            replace(raw, party_hp=(0,)),
-        )
+    # Cut's field consumer does not require a conscious holder; capability
+    # remains observable even when that holder needs Center recovery.
+    assert plan_cut_candidate(
+        rom, current, rules, sets, (0, 0), (0, 4), replace(raw, party_hp=(0,))
+    ) == candidate
 
 
 def test_nearest_cut_candidate_requires_a_fresh_grid_between_two_trees() -> None:

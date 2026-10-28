@@ -40,6 +40,40 @@ from pokemon_red_completion.observation import MapId
 RECORD = Path("docs/evidence/map-graph-2026-08-10.json")
 
 
+@pytest.mark.parametrize(
+    "border,retained", [(None, False), (((1, 1), (1, 1)), True), (((4, 4), (4, 4)), False)]
+)
+def test_ship_exit_checks_padded_border_tile(border, retained):
+    passage = Passage(to_map=94, kind=PassageKind.WARP, at=(0, 1), exit_action="up")
+    node = MapNode(map_id=95, height=1, width=1, passages=(passage,), tileset=13)
+    result = gen1_maps._without_inert_directional_warps(
+        {95: node},
+        {95: ((4, 4), (4, 4))},
+        {"up": frozenset({1})},
+        {13: frozenset()},
+        border_tiles={} if border is None else {95: border},
+    )
+    assert bool(result[95].passages) is retained
+
+
+def test_border_block_decoder_uses_connection_struct_size_and_feet_tiles():
+    from types import SimpleNamespace
+
+    rom = bytearray(0x10000)
+    rom[gen1_maps.MAP_HEADER_BANKS + 1] = 1
+    rom[gen1_maps.MAP_HEADER_POINTERS + 2 : gen1_maps.MAP_HEADER_POINTERS + 4] = (0x4100).to_bytes(
+        2, "little"
+    )
+    rom[0x4109] = 8
+    rom[0x4115:0x4117] = (0x4200).to_bytes(2, "little")
+    rom[0x4200] = 2
+    for offset, value in ((4, 10), (6, 11), (12, 12), (14, 13)):
+        rom[0x5020 + offset] = value
+    assert gen1_maps._border_step_tiles(
+        bytes(rom), 1, SimpleNamespace(bank=1, blockset=0x5000)
+    ) == ((10, 11), (12, 13))
+
+
 @pytest.fixture(scope="module")
 def record() -> dict:
     if not RECORD.exists():  # pragma: no cover - the record is committed
@@ -164,7 +198,25 @@ def test_cartridge_tile_semantics_override_geometric_warp_guess() -> None:
     assert projected[9].passages[1].exit_action == "up"
 
 
-def test_outdoor_directional_tile_adds_the_required_second_warp_input() -> None:
+@pytest.mark.parametrize(
+    "map_id,tileset,expected",
+    [
+        (16, 0, "down"),
+        (94, 14, "down"),
+        (95, 13, "down"),
+        (5, 23, "down"),
+        (97, 13, None),
+        (75, 8, None),
+        (199, 22, "down"),
+        (200, 22, "down"),
+        (202, 22, "down"),
+        (82, 17, "down"),
+        (201, 22, None),
+    ],
+)
+def test_outdoor_directional_tile_adds_the_required_second_warp_input(
+    map_id, tileset, expected
+) -> None:
     passage = Passage(
         to_map=70,
         kind=PassageKind.WARP,
@@ -172,12 +224,12 @@ def test_outdoor_directional_tile_adds_the_required_second_warp_input() -> None:
         arrival_at=(0, 4),
     )
     graph = {
-        16: MapNode(
-            map_id=16,
+        map_id: MapNode(
+            map_id=map_id,
             height=2,
             width=2,
             passages=(passage,),
-            tileset=0,
+            tileset=tileset,
         )
     }
     tiles = (
@@ -189,7 +241,7 @@ def test_outdoor_directional_tile_adds_the_required_second_warp_input() -> None:
 
     projected = gen1_maps._with_directional_warp_actions(
         graph,
-        {16: tiles},
+        {map_id: tiles},
         {
             "up": frozenset(),
             "down": frozenset({0x12}),
@@ -198,7 +250,26 @@ def test_outdoor_directional_tile_adds_the_required_second_warp_input() -> None:
         },
     )
 
-    assert projected[16].passages[0].exit_action == "down"
+    assert projected[map_id].passages[0].exit_action == expected
+    assert frozenset({0, 23}) == gen1_maps.OUTSIDE_TILESETS
+    if expected:
+        retained = gen1_maps._without_inert_interior_warps(
+            projected, {map_id: tiles}, {tileset: frozenset()}
+        )
+        assert retained[map_id].passages == projected[map_id].passages
+
+
+def test_hideout_lift_second_input_must_collide_not_walk_off_warp():
+    door = Passage(to_map=203, kind=PassageKind.WARP, at=(1, 1), arrival_at=(1, 2))
+    node = MapNode(map_id=200, height=2, width=2, passages=(door,), tileset=22)
+    tiles = ((1, 1, 1, 1), (1, 66, 1, 1), (1, 51, 1, 1), (1, 1, 1, 1))
+    result = gen1_maps._with_directional_warp_actions(
+        {200: node},
+        {200: tiles},
+        {"up": frozenset({1}), "down": frozenset({51}), "left": frozenset(), "right": frozenset()},
+        walkable_tiles={22: frozenset({1, 66})},
+    )
+    assert result[200].passages[0].exit_action == "down"
 
 
 def test_inert_gate_row_is_removed_by_directional_tile_in_front() -> None:
@@ -302,6 +373,34 @@ def test_both_cartridges_carry_the_same_world(record: dict) -> None:
         "return": 242,
         "scripted": 2,
     }
+
+
+@pytest.mark.parametrize("map_id", [181, 75, 199])
+def test_interior_warp_row_needs_native_trigger_not_just_walkable_coordinate(map_id):
+    inert = Passage(to_map=208, kind=PassageKind.WARP, at=(1, 1), arrival_at=(3, 27))
+    live = Passage(to_map=208, kind=PassageKind.WARP, at=(1, 2), arrival_at=(3, 27))
+    boundary = Passage(
+        to_map=208, kind=PassageKind.WARP, at=(0, 1), exit_action="up", arrival_at=(3, 27)
+    )
+    returning = Passage(to_map=None, kind=PassageKind.RETURN, at=(2, 1), exit_action="down")
+    inert_return = Passage(to_map=None, kind=PassageKind.RETURN, at=(1, 1))
+    locations = ((1, 1), (1, 2), (0, 1), (2, 1))
+    node = MapNode(
+        map_id=map_id,
+        height=2,
+        width=2,
+        tileset=8,
+        passages=(inert, live, boundary, returning, inert_return),
+        warp_locations=locations,
+    )
+    graph = gen1_maps._without_inert_interior_warps(
+        {map_id: node}, {map_id: ((0, 0, 0), (0, 0x17, 0x54), (0, 0, 0))}, {8: frozenset({0x54})}
+    )
+    assert graph[map_id].passages == (live, boundary, returning)
+    assert graph[map_id].warp_locations == locations  # do not renumber destinations
+    macro = gen1_maps.macro_graph_from_nodes(graph)
+    assert (1, 1) not in macro.warp_triggers[map_id]
+    assert macro.warp_locations[map_id] == locations
 
 
 def test_the_hand_written_graph_had_an_edge_the_cartridge_denies(

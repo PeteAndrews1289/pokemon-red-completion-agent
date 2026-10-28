@@ -97,3 +97,39 @@ def test_insufficient_money_is_unavailable_without_a_sale(fixture):
     assert f.actions.actions_executed == 0
     with pytest.raises(ValueError, match='no sale'):
         replace(provider, funding_sale=RedMartSurplusSale(ItemId.HYPER_POTION, 3, 8))
+
+
+@pytest.mark.parametrize('at_clerk', [True, False])
+def test_ball_only_purchase_works_with_no_medicine_and_keeps_master_ball(fixture,at_clerk):
+    f=fixture
+    provider=enable(f)
+    f.reader.raw=replace(f.reader.raw,bag_items=((int(ItemId.MASTER_BALL),1),))
+    if at_clerk: f.reader.raw=replace(f.reader.raw,player_x=4)
+    observation=f.adapter.observe()
+    assert observation.recovery_item_count==0
+    assert not replace(provider,affordable_ball_purchase=False).resource_availability(observation).executable
+    fixed=provider.affordable_provider(observation)
+    assert fixed.reserve_targets==((ItemId.POKE_BALL,5),)
+    assert fixed.resource_availability(observation).executable
+    offered=_supply(f.router.enumerate(observation))
+    assert offered.resource_quote.purchase_cost==1000
+    assert [(r.available,r.target,r.purchased) for r in offered.resource_quote.reserves]==[(0,5,5)]
+    assert f.actions.actions_executed==0
+    bindings=f.router.enumerate(observation)
+    binding=bindings.require(offered.binding_ref)
+    report=binding.execute()
+    assert binding.verify(report).status.value=='succeeded'
+    assert f.reader.raw.player_money==109
+    assert dict(f.reader.raw.bag_items)=={int(ItemId.MASTER_BALL):1,int(ItemId.POKE_BALL):5}
+
+
+def test_affordable_purchase_masks_satisfied_ordinary_reserve_without_input(fixture):
+    f=fixture
+    provider=enable(f)
+    target=f.adapter.config.desired_capture_items
+    f.reader.raw=replace(f.reader.raw,bag_items=((int(ItemId.GREAT_BALL),target),))
+    observation=f.adapter.observe()
+    assert provider.affordable_provider(observation) is None
+    assert not provider.resource_availability(observation).executable
+    assert provider.offer(observation).binding is None
+    assert f.actions.actions_executed==0

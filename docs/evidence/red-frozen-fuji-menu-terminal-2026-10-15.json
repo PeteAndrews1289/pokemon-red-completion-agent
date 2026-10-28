@@ -1,0 +1,239 @@
+{
+  "schema": "pokemon.red.frozen-fresh-terminal.v1",
+  "run_id": "red-frozen-autonomous-run-20261015-fuji-menu-v1",
+  "status": "failed_stopped",
+  "partition": "development",
+  "recorded_at_utc": "2026-10-16T03:43:10.429204+00:00",
+  "started_at_utc": "2026-10-16T01:24:44.856619+00:00",
+  "exited_at_utc": "2026-10-16T03:32:13.772528+00:00",
+  "wall_seconds": 7648.787991417106,
+  "plan_sha256": "b6c4ed3bdfdb6489432e8b5d3d86f05844d0e222f4124728d5d13c73027dc236",
+  "manifest_sha256": "e1e60bc6d227fc5acd8b3714669bb1e7117d0f4ad7734ebab126afd918a9977b",
+  "actor_settings_sha256": "a4342c29d4320a97e4ecf247ddbdf9f580c8e05a90239736eb440fb75a61aeb4",
+  "acceptance_sha256": "df23d35e3e389cb16fe1495ab5fe8ea2baa54acf4c2242430e5c27c33cca74b2",
+  "private_retained_sha256": "b1a527bb4a4e5e43b369bff6801a5a05ac9c9190c5722f1509cc6c4aeaf148cf",
+  "root_result_sha256": "4dad842b6bf1f5f7e018128213b73dfc547f2bf6b6dbc709b0be60e33ac9e13f",
+  "process_exit_sha256": "3345cc9b1ec63808d7bbb4c25797b2cf5a20efb698026ace51f6b2194c5182cc",
+  "full_isolated_io_sha256": "a87019df03bd7d417120e183c1c040d1e294c856cd00d73579b578b7569c0be8",
+  "terminal_state_sha256": "7cd4203a2cdc8728dd0f0987bbd2f42531f46c0ec54d068fe41a86afdaf52738",
+  "terminal_context_sha256": "6689d7b7d37b36faf4fdb3510f4d089e5f1f53a5bfad8225067553f046407891",
+  "failure_record": "runs/segment-038/RESULT.json",
+  "failure_record_sha256": "788982066f131ff6e789e32fa66ea15a3d5896aee1c23c61c5ffc90cf77a0ed2",
+  "failure_json_pointer": "/episode/outcomes/8",
+  "terminal_reason": "verification_failed",
+  "native_error": null,
+  "failure_reason": "outcome_not_verified",
+  "terminal_action": "develop_team",
+  "terminal_goal_ordinary_setback": false,
+  "terminal_goal_safe": true,
+  "training_settlement": {
+    "battles": 50,
+    "encounters": 64,
+    "aggregate_party_xp": 9797,
+    "last_dose_party_xp": 0,
+    "selected_level_before": 31,
+    "selected_level_after": 32,
+    "target_level": 34,
+    "target_met": false,
+    "status": "no_progress",
+    "stop_reason": "encounter_limit",
+    "health_limited_return": false,
+    "repeat_health_limited_zero_progress": true,
+    "final_consecutive_no_progress": 1,
+    "no_progress_limit": 3
+  },
+  "diagnosis": "Observed partial-training settlement/continuation gap: aggregate progress was retained, but the unmet target and zero-XP final dose were not admitted as an ordinary setback. The exact faulty code path is not yet qualified. No repair performed.",
+  "native_facts": {
+    "badge_bits": 15,
+    "badges": 4,
+    "bag_stock": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        48,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "cash": 235,
+    "party_levels": [
+      44,
+      32,
+      34,
+      35,
+      32,
+      40
+    ],
+    "registrations": 38,
+    "whole_party_restored": true
+  },
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "registration_delta_from_initial_starter": 37,
+  "episode_counts": {
+    "executed_decisions": 656,
+    "model_decisions": 369,
+    "ordinary_setbacks": 32,
+    "successful_decisions": 622,
+    "support_decisions": 287,
+    "teacher_actions": 0
+  },
+  "cumulative_spent": {
+    "actions": 367737,
+    "cash_debits": 47710,
+    "decisions": 657,
+    "frames": 30913261,
+    "heals": 509,
+    "seconds": 7475.833426834084
+  },
+  "native_meter_totals": {
+    "actions_attempted": 367559,
+    "actions_completed": 367559,
+    "frames": 30891048,
+    "goal_attempts": 657,
+    "nested_restore_attempts": 167,
+    "observed_cash_debits": 47710,
+    "observed_cash_rewards": 44945,
+    "restore_attempts": 509,
+    "training_healing_attempts": 255
+  },
+  "compulsory_prefaces": 1,
+  "compulsory_prefaces_not_new_goal_model_choices": true,
+  "earlier_automatically_recovered_execution_errors": 1,
+  "completed_segments": 38,
+  "no_unclosed_segment": true,
+  "all_gameplay_pids_absent": true,
+  "buttons_released": true,
+  "terminal_field_ready": true,
+  "fresh_power_on": true,
+  "actual_state_loads": 0,
+  "runtime_llm_calls": 0,
+  "train_examples": 0,
+  "fits": 0,
+  "new_weights": 0,
+  "copied_gains": false,
+  "pins_verified": {
+    "environment": 4512,
+    "package": 7878,
+    "protected": 493
+  },
+  "imported_project_module_count": 644,
+  "module_isolation_verified": true,
+  "completed_reference_and_prior_failures_unchanged": true,
+  "repaired_fuji_handoff_verified": true,
+  "monitor_status": "PAUSED",
+  "no_repair_restart_successor": true,
+  "final_fresh_gates_passed": 0,
+  "final_fresh_gates_total": 5,
+  "frozen_completion_proved": false,
+  "storage_or_deadline_stop": false,
+  "free_bytes_at_closeout": 72767418368,
+  "selected_review_findings": {
+    "preparation_aggregates": {
+      "battles": 569,
+      "encounters": 618,
+      "party_xp": 79337
+    },
+    "preparation_aggregate_count": 27,
+    "preparation_scope": "27 wild-preparation goal summaries; not every battle in the run.",
+    "new_registrations_by_goal": {
+      "acquire_species": 21,
+      "evolve_species": 12,
+      "develop_team": 4
+    },
+    "menu_and_boundary_seconds": 2393.2778880053665,
+    "reported_phase_seconds": 7413.978343975497,
+    "menu_and_boundary_share": 0.32280616114155675,
+    "evolution_goal_elapsed_seconds": 2677.094971708255,
+    "evolution_goals": 19,
+    "evolution_goals_unverified": 7,
+    "unreported_phase_timings": {
+      "verification": 1
+    },
+    "resources": "One Silph rival loss cost 17240; subsequent supplies/evolutions consumed most remaining cash. Final cash235. Model selected preparation after that loss; no proof that its stopping/resource choices are optimal."
+  },
+  "limitations": [
+    "Exposed DEVELOPMENT timing, not independent held-out transfer.",
+    "Hybrid execution support remains disclosed; model scores are uncalibrated.",
+    "Game XP and registrations are not parameter learning.",
+    "Available-space change is not a run-only allocated-size measurement.",
+    "Clean process exit does not make the failed outcome a success."
+  ],
+  "next_work": "Propose a two-hour copy-only examination of partial wild-preparation settlement and recoverable classification. Reuse current executor, outcome verifier and continuation; keep target unmet and costs retained. Test aggregate-progress/zero-last-dose case, true no-progress, wrong-party, unreleased/in-battle and corrupt evidence negatives. Then test assembled continuation on copies. Do not add budgets, force success, change weights or resume this frozen actual."
+}

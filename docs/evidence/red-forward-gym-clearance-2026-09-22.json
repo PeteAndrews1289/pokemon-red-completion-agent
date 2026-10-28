@@ -1,0 +1,288 @@
+{
+  "action_counts": {
+    "attack": 33,
+    "forced_switch": 5,
+    "switch_prompt": 4,
+    "voluntary_switch": 19
+  },
+  "actions": 2024,
+  "audit_frames": 0,
+  "authority_promotions": 0,
+  "badges": 7,
+  "bag_unchanged": true,
+  "battles": [
+    {
+      "actions": 470,
+      "claim_sha256": "e2b850c1afedbe516d031faac5856c06f22653cc7c0cc91a6ede2f1484832d56",
+      "decisions": 16,
+      "defeated_event": 88,
+      "final_sha256": "041245180b5fdd92556f75ef1cc83d56497844f8e18b8ce6d924b2f2d321a9ce",
+      "frames": 34296,
+      "full_recovery": true,
+      "income": 1560,
+      "metrics": {
+        "attack_turn_utility_sum": 2.6470588235294117,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 1,
+        "party_hp_lost": 170,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 8012375,
+        "policy_latency_ns_mean": 3467992.375,
+        "policy_latency_ns_min": 298666,
+        "teacher_interventions": 0
+      },
+      "native_seconds": 3.166320917196572,
+      "outcome": "won",
+      "outcome_sha256": "fc1ff0bb048dfe5f62171b358d4bd7d4b26b2486a3f632588dd2db91f289d0ce",
+      "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+      "source_sha256": "853a38dd809fad5be73d9e3874775e6da4e04e0d7fb16f542461b5720afbfcf7",
+      "stage": 286,
+      "trainer_identity": [
+        222,
+        22,
+        4
+      ]
+    },
+    {
+      "actions": 374,
+      "claim_sha256": "4fc03a03b07edd0599d8eec6c4a117d03af138673b4c33ccb3a9b54c540a854c",
+      "decisions": 12,
+      "defeated_event": 83,
+      "final_sha256": "6ce14c67c7c1da1d09661d8631989d279a3249f8d68d3a54bf2c9381386f0b7d",
+      "frames": 30012,
+      "full_recovery": true,
+      "income": 1000,
+      "metrics": {
+        "attack_turn_utility_sum": 4.55796164619694,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 1,
+        "party_hp_lost": 254,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7974042,
+        "policy_latency_ns_mean": 3111486,
+        "policy_latency_ns_min": 300583,
+        "teacher_interventions": 0
+      },
+      "native_seconds": 2.9076804583892226,
+      "outcome": "won",
+      "outcome_sha256": "c785719473a2036a92f8ba1eb8dfcc6cc388454215de7beed0cd7938ebc3f4a5",
+      "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+      "source_sha256": "041245180b5fdd92556f75ef1cc83d56497844f8e18b8ce6d924b2f2d321a9ce",
+      "stage": 287,
+      "trainer_identity": [
+        224,
+        24,
+        6
+      ]
+    },
+    {
+      "actions": 365,
+      "claim_sha256": "377fbc3ec34b67dac1d691aed9a37c1b0726d50c93f330f3ecfc0189ee61e0ab",
+      "decisions": 9,
+      "defeated_event": 85,
+      "final_sha256": "865e13037f8fde94e0a59b3b7fca8140d094cbb04df0559b9a7539cc208b31bc",
+      "frames": 24612,
+      "full_recovery": true,
+      "income": 1075,
+      "metrics": {
+        "attack_turn_utility_sum": -0.27380952380952395,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 1,
+        "party_hp_lost": 171,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6267292,
+        "policy_latency_ns_mean": 3442893.3333333335,
+        "policy_latency_ns_min": 325875,
+        "teacher_interventions": 0
+      },
+      "native_seconds": 2.6062521673738956,
+      "outcome": "won",
+      "outcome_sha256": "48ee449cde9d0a581c522de1e7f19d68e3fd8309c790b9d87c580cb9523d427e",
+      "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+      "source_sha256": "6ce14c67c7c1da1d09661d8631989d279a3249f8d68d3a54bf2c9381386f0b7d",
+      "stage": 288,
+      "trainer_identity": [
+        224,
+        24,
+        7
+      ]
+    },
+    {
+      "actions": 459,
+      "claim_sha256": "86e83d06d92192104a8146b8065c4f3ba4589463c0d67bc42c357597668d613b",
+      "decisions": 13,
+      "defeated_event": 87,
+      "final_sha256": "07784b25222de496797e09b398313f813f559d7c42d5026da1b4bf3345627dc1",
+      "frames": 33432,
+      "full_recovery": true,
+      "income": 950,
+      "metrics": {
+        "attack_turn_utility_sum": 8.343891402714933,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 1,
+        "party_hp_lost": 203,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 11180750,
+        "policy_latency_ns_mean": 2842676.3076923075,
+        "policy_latency_ns_min": 341083,
+        "teacher_interventions": 0
+      },
+      "native_seconds": 3.0759314578026533,
+      "outcome": "won",
+      "outcome_sha256": "b69bad5d376c151aee43d6234eedc98e2aa25347f7ba4d0a9a02969554eb1dc1",
+      "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+      "source_sha256": "865e13037f8fde94e0a59b3b7fca8140d094cbb04df0559b9a7539cc208b31bc",
+      "stage": 289,
+      "trainer_identity": [
+        224,
+        24,
+        8
+      ]
+    },
+    {
+      "actions": 356,
+      "claim_sha256": "8867a454d37af9a8cd434bd33d6820c705b6d2fa4504d385ee24bdb35151fac5",
+      "decisions": 11,
+      "defeated_event": 84,
+      "final_sha256": "7e8b46a6cf8120288c77bd7ed4f9ed16ac914762310ba470e392ec59eb8cc482",
+      "frames": 27936,
+      "full_recovery": true,
+      "income": 1720,
+      "metrics": {
+        "attack_turn_utility_sum": 2.312271062271062,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 1,
+        "party_hp_lost": 189,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4796000,
+        "policy_latency_ns_mean": 2785829.4545454546,
+        "policy_latency_ns_min": 315375,
+        "teacher_interventions": 0
+      },
+      "native_seconds": 2.8405981669202447,
+      "outcome": "won",
+      "outcome_sha256": "70f4a70c451adba9105e5ca628e1e88e1464eafd8a207ec28233c6a51d245ddd",
+      "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+      "source_sha256": "07784b25222de496797e09b398313f813f559d7c42d5026da1b4bf3345627dc1",
+      "stage": 290,
+      "trainer_identity": [
+        222,
+        22,
+        3
+      ]
+    }
+  ],
+  "cash": 32932,
+  "cash_before": 26627,
+  "diagnostic": "Disabling hazards only for read-only geometric comparison reveals routes, not executable permission. Remaining sight lines block every safe adjacent approach. Intended trainer-sight engagement is not connected to the frozen story actor.",
+  "envelope_sha256": "f4711022fb77075cb2010a7d297a1bbd3969a067a45865b5fc316bd143fdd3df",
+  "frames": 150288,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "leader_defeated": false,
+  "leader_losses": 0,
+  "limitations": [
+    "Five forward DEVELOPMENT battles, not independent evaluation or transfer.",
+    "Routing, trainer selection and healing are support; only combat choices are learned.",
+    "Giovanni and final fresh-Red gates remain unfinished; no new fit or authority promotion."
+  ],
+  "local_registrations": 17,
+  "losses": 0,
+  "map_id": 45,
+  "maximum_total_gym_contracts": 10,
+  "metrics": {
+    "attack_turn_utility_sum": 17.58737341090282,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 9,
+    "party_faints": 5,
+    "party_hp_lost": 987,
+    "party_pp_spent": 33,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 11180750,
+    "policy_latency_ns_mean": 3137879.770491803,
+    "policy_latency_ns_min": 298666,
+    "teacher_interventions": 0
+  },
+  "model_decisions": 61,
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "native_seconds": 14.596783167682588,
+  "net_income": 6305,
+  "new_fits": 0,
+  "new_goal_choices": 0,
+  "new_registrations": 0,
+  "next_unused_stage": 291,
+  "next_work": "Implement exact-target trainer-sight engagement with a hazard-safe prefix, identity verification before combat and no blanket hazard bypass. Preserve the one remaining overall contract; additional future contracts require explicit re-budgeting, not silent refill.",
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    108,
+    105,
+    156,
+    84,
+    156
+  ],
+  "party_levels": [
+    39,
+    40,
+    50,
+    39,
+    33
+  ],
+  "plan_sha256": "3f6c8b43575f0091a24f23c83fe6cf43f86727294ce812c777d3ecc20eb9133f",
+  "position": [
+    17,
+    16
+  ],
+  "preclaim_stop": "No safely reachable unbeaten gym trainer; no stage291 claim or gameplay.",
+  "preparation_refills": 0,
+  "primary_unchanged": true,
+  "publication": false,
+  "qualification_sha256": "4e68390900853e1213a540d0a044cca379d8700926f3a784c65de1819e3b56bd",
+  "recomputed_heads": {
+    "attack": 33,
+    "control": 34,
+    "switch": 27
+  },
+  "recovery_anchor_map": 1,
+  "remaining_trainers": [
+    {
+      "event": 81,
+      "object_index": 1
+    },
+    {
+      "event": 86,
+      "object_index": 6
+    },
+    {
+      "event": 89,
+      "object_index": 9
+    }
+  ],
+  "safe_adjacent_candidates": 0,
+  "save_edits": 0,
+  "schema": "pokemon.red.forward-gym-clearance.v1",
+  "source_commit": "8a72d491cd08fba45b94bb303c73c64a88d3b627",
+  "source_replays": 0,
+  "source_stage": 285,
+  "story_objectives": 28,
+  "targeted_tests_passed": 149,
+  "terminal_sha256": "7e8b46a6cf8120288c77bd7ed4f9ed16ac914762310ba470e392ec59eb8cc482",
+  "terminal_stage": 290,
+  "total_gym_contracts_used": 9,
+  "wins": 5
+}

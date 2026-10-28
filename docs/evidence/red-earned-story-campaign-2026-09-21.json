@@ -1,0 +1,388 @@
+{
+  "blackout_cash_lost": 9073,
+  "blackout_losses": [
+    4839,
+    2419,
+    1210,
+    605
+  ],
+  "blackouts_recovered": 4,
+  "blocker": "Next graph goals lack resource-aware execution admission. Legacy Fuchsia mandates sales and an unaffordable 29-32 Great Ball/seven Super Potion capture reserve; preinstalled-Ice-Beam Silph requires11200 cash from this stock. No forced teacher destination or unsafe chapter launch.",
+  "cash_after": 8280,
+  "cash_before": 10692,
+  "cash_ledger": {
+    "early_gym_trainers": 1185,
+    "ending": 8280,
+    "erika_preparation": -2200,
+    "erika_reward": 2871,
+    "native_blackouts": -9073,
+    "ordinary_funding_trainer": 1680,
+    "six_super_potions": -4200,
+    "starting": 10692,
+    "tower_trainers": 7325
+  },
+  "classification": "DEVELOPMENT correlated earned-state continuation; partial story progress, not final-player qualification",
+  "envelope_sha256": "93dc4167d57bb910a528cedb3974597c9f15ac3435bd31d436264b5143d2e5c4",
+  "erika_encounters": 5,
+  "final_hp": [
+    125,
+    59,
+    37,
+    68
+  ],
+  "final_levels": [
+    40,
+    22,
+    22,
+    25
+  ],
+  "final_party": [
+    28,
+    64,
+    59,
+    104
+  ],
+  "final_run_eligible": false,
+  "fit_allowed": false,
+  "fully_healed": true,
+  "gameplay_running": false,
+  "independent_roots": 0,
+  "learned_choice": {
+    "candidates": [
+      "rescue_fuji",
+      "defeat_erika"
+    ],
+    "eventually_completed": true,
+    "model": "Model141",
+    "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "original_failed_dispatch_relabelled": false,
+    "probabilities": [
+      0.4969354936723441,
+      0.503064506327656
+    ],
+    "redraws": 0,
+    "selected": "defeat_erika",
+    "selection_mode": "model_exploration"
+  },
+  "limitations": [
+    "Only one new model high-level choice; no learned battle/healing promotion or fit.",
+    "One correlated lineage and changing disclosed support code, not a frozen independent evaluation.",
+    "Early attempts retain exceptions and terminals; detailed battle-turn diagnostics were added at stage013.",
+    "Full research/comparative audit deferred; native event, state-chain and protected-save checks completed."
+  ],
+  "model_economy_qualified": 58,
+  "model_fits": 0,
+  "model_fitted_outcomes": 141,
+  "model_queries": 1,
+  "model_successes": 96,
+  "native_audit_frames": 0,
+  "native_audit_inputs": 0,
+  "native_audit_sha256": "d17fc55200e8966c6ca87c498fe79c97b04c70cecaed2b7c0a6ae7f7ec6448d4",
+  "next_unadmitted": [
+    "reach_fuchsia",
+    "liberate_silph"
+  ],
+  "original_failed_erika_episode_sha256": "18ff911877ddb01b50aea6e04933b3d69db867df21cee6612a5bf89f2ec97803",
+  "party_audit_sha256": "7889cd28a8ca90f7a5f04616507800706ad4fce17bffd480a9abb068c8d5d30f",
+  "poke_flute": true,
+  "primary_cash": 11968,
+  "primary_registrations": 109,
+  "primary_specimens": 78,
+  "primary_target": 124,
+  "protected_model_and_primary_unchanged": true,
+  "publication": false,
+  "rainbow_badge": true,
+  "registrations_after": 15,
+  "registrations_before": 14,
+  "sales": 0,
+  "save_edits": 0,
+  "schema": "pokemon.red.earned-story-campaign-result.v1",
+  "scripted_support": [
+    "chapter navigation and battle policies",
+    "native blackout settlement",
+    "ordinary trainer funding",
+    "exact medicine purchase",
+    "single graph-legal Tower prerequisite"
+  ],
+  "serialization_failure_retained": "stage-025 chapter succeeded; outer result serialization failed; no chapter replay",
+  "singleton_prerequisite": "rescue_fuji",
+  "source_replays": 0,
+  "source_sha256": "aff3fd8157cc4e03291713fd6933c9af3ce786354a7db62a3044952e41e3e998",
+  "stages": [
+    {
+      "actions": 74,
+      "cash_delta": 0,
+      "error": null,
+      "frames": 2352,
+      "mode": "relocate",
+      "safe": true,
+      "sha256": "9c35b4f9771570017bdc8a4e82b910fbe6926b82e34f740b4d671f64a02f6204",
+      "stage": "stage-000"
+    },
+    {
+      "actions": 1896,
+      "cash_delta": -1015,
+      "error": null,
+      "frames": 312874,
+      "mode": "play",
+      "safe": false,
+      "sha256": "bac4e0782cc4652f2fa25f083c74512cec15fed0644ffb144ba81b51daf7af1d",
+      "stage": "stage-001"
+    },
+    {
+      "actions": 8,
+      "cash_delta": -4839,
+      "error": null,
+      "frames": 576,
+      "mode": "recover",
+      "safe": true,
+      "sha256": "01992906f0d30781559533962d42cd4da16a94a52dff9bf4ace3167c29a634e8",
+      "stage": "stage-002"
+    },
+    {
+      "actions": 0,
+      "cash_delta": 0,
+      "error": "no staged Cut route from map 6 to map 134",
+      "frames": 0,
+      "mode": "resume_erika",
+      "safe": true,
+      "sha256": "01992906f0d30781559533962d42cd4da16a94a52dff9bf4ace3167c29a634e8",
+      "stage": "stage-003"
+    },
+    {
+      "actions": 138,
+      "cash_delta": 0,
+      "error": "route replanning found no candidate",
+      "frames": 5784,
+      "mode": "resume_erika",
+      "safe": true,
+      "sha256": "922c13934eb20143d48e9edc63d0956cea433f4e6a2062d6218f6da07a29d78d",
+      "stage": "stage-004"
+    },
+    {
+      "actions": 0,
+      "cash_delta": 0,
+      "error": "no staged Cut route from map 134 to map 134",
+      "frames": 0,
+      "mode": "resume_erika",
+      "safe": true,
+      "sha256": "922c13934eb20143d48e9edc63d0956cea433f4e6a2062d6218f6da07a29d78d",
+      "stage": "stage-005"
+    },
+    {
+      "actions": 86,
+      "cash_delta": 0,
+      "error": "Erika retained goal did not enter battle.",
+      "frames": 10920,
+      "mode": "resume_erika",
+      "safe": true,
+      "sha256": "8a20189e927125786b6e3d3d49bde2efa8d77c770b9dda218d2a4a0a85fda4d2",
+      "stage": "stage-006"
+    },
+    {
+      "actions": 330,
+      "cash_delta": 0,
+      "error": "Erika left no bounded living reserve.",
+      "frames": 33924,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "272e7498a23e7215bc6e15a25840df1cc97f9fb9074c351fc9152f31efeab653",
+      "stage": "stage-007"
+    },
+    {
+      "actions": 6,
+      "cash_delta": -2419,
+      "error": null,
+      "frames": 432,
+      "mode": "recover",
+      "safe": true,
+      "sha256": "f311dc9e401f009a50bc24e1725e205f19d8c95af00c10e13097f27022b429e4",
+      "stage": "stage-008"
+    },
+    {
+      "actions": 180,
+      "cash_delta": 0,
+      "error": "Erika exceeded bounded battle recoveries: Erika move-slot policy rejected the current MAIN-menu turn..",
+      "frames": 10656,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "e5fabaccb2d7e3fb30c8698077bd98633b1cc54b0b6c84feabfc92cd983aa6c2",
+      "stage": "stage-009"
+    },
+    {
+      "actions": 0,
+      "cash_delta": 0,
+      "error": "retained active Erika battle identity mismatch: (237, 37, 67, 7).",
+      "frames": 0,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "e5fabaccb2d7e3fb30c8698077bd98633b1cc54b0b6c84feabfc92cd983aa6c2",
+      "stage": "stage-010"
+    },
+    {
+      "actions": 408,
+      "cash_delta": 0,
+      "error": "Erika left no bounded living reserve.",
+      "frames": 40332,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "e5fb2e07e45122d193536bb916b5b56b43ba578e47ba7544ef40faeb1c646e8e",
+      "stage": "stage-011"
+    },
+    {
+      "actions": 6,
+      "cash_delta": -1210,
+      "error": null,
+      "frames": 432,
+      "mode": "recover",
+      "safe": true,
+      "sha256": "67812bcd98b37d8d6861b3af34c7b79d1709f879b0a332e7d8c69f162889786b",
+      "stage": "stage-012"
+    },
+    {
+      "actions": 346,
+      "cash_delta": 0,
+      "error": "Erika status cure lacks its stable supported gate.",
+      "frames": 20193,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "881ec47f2c7ebaecbacb8bda2cac487600ec4a4203c3102b5fc1cc29358d0961",
+      "stage": "stage-013"
+    },
+    {
+      "actions": 296,
+      "cash_delta": 0,
+      "error": "Erika left no bounded living reserve.",
+      "frames": 29400,
+      "mode": "resume_erika",
+      "safe": false,
+      "sha256": "75ac9b395e2c9ea71f0740e7df160618d3bddf457473123eccdc63bfffee0731",
+      "stage": "stage-014"
+    },
+    {
+      "actions": 8,
+      "cash_delta": -605,
+      "error": null,
+      "frames": 576,
+      "mode": "recover",
+      "safe": true,
+      "sha256": "b3113f26951e9ed474311669f55c47071aed8efe4f7820e8087cc1f9593a96aa",
+      "stage": "stage-015"
+    },
+    {
+      "actions": 446,
+      "cash_delta": 2871,
+      "error": null,
+      "frames": 30649,
+      "mode": "resume_erika",
+      "safe": true,
+      "sha256": "f9e598dee425201eb4ba1821163a3f604f020b7e7fd172f296407f1b20e96188",
+      "stage": "stage-016"
+    },
+    {
+      "actions": 115,
+      "cash_delta": 0,
+      "error": "No conservatively level-admitted local funding candidate",
+      "frames": 3984,
+      "mode": "fund_tower",
+      "safe": true,
+      "sha256": "53e1cce899d6db69cd3cfecb99f6a6a63f47e51618beaf4e56561efd5e423439",
+      "stage": "stage-017"
+    },
+    {
+      "actions": 181,
+      "cash_delta": 0,
+      "error": "trainer approach violates reserved walking corridor",
+      "frames": 6240,
+      "mode": "fund_tower",
+      "safe": true,
+      "sha256": "df51aecced29ffd1b7f9c90d586b789a5e3e858b13ec08a805f203aa5460fc1a",
+      "stage": "stage-018"
+    },
+    {
+      "actions": 0,
+      "cash_delta": 0,
+      "error": "Object of type frozenset is not JSON serializable",
+      "frames": 0,
+      "mode": "fund_tower",
+      "safe": true,
+      "sha256": "df51aecced29ffd1b7f9c90d586b789a5e3e858b13ec08a805f203aa5460fc1a",
+      "stage": "stage-019"
+    },
+    {
+      "actions": 290,
+      "cash_delta": 1680,
+      "error": null,
+      "frames": 15169,
+      "mode": "fund_tower",
+      "safe": true,
+      "sha256": "4bbac3879d10510fa0585e43ba920d9c71721835ebd59e05f58224b50be793fd",
+      "stage": "stage-020"
+    },
+    {
+      "actions": 64,
+      "cash_delta": 0,
+      "error": "Observed shop purchase unavailable",
+      "frames": 1824,
+      "mode": "stock_tower",
+      "safe": true,
+      "sha256": "e2efe8f2a49023edfafc5baa700ca2511812748ce28b017300478cb0bda7eb49",
+      "stage": "stage-021"
+    },
+    {
+      "actions": 46,
+      "cash_delta": -4200,
+      "error": "route drifted after down: expected (122, (2, 1)), observed (123, (3, 1))",
+      "frames": 3648,
+      "mode": "stock_tower",
+      "safe": false,
+      "sha256": "1b199ec58512729869c45d58a94fd9a68e25e1921d721a33ec617152b041645a",
+      "stage": "stage-022"
+    },
+    {
+      "actions": 4,
+      "cash_delta": 0,
+      "error": null,
+      "frames": 48,
+      "mode": "settle_field",
+      "safe": true,
+      "sha256": "7926dbc63e78d12a064989035224a3c4d577459efb0528f8f441c1191ced9b59",
+      "stage": "stage-023"
+    },
+    {
+      "actions": 71,
+      "cash_delta": 0,
+      "error": null,
+      "frames": 1992,
+      "mode": "relocate",
+      "safe": true,
+      "sha256": "5cab8721b2a2def8128384487946cd9a6f436a9dbfc9d0892439ffa259a94acd",
+      "stage": "stage-024"
+    },
+    {
+      "actions": 2462,
+      "cash_delta": 7325,
+      "error": "cannot pickle 'mappingproxy' object",
+      "frames": 160865,
+      "mode": "prerequisite",
+      "safe": true,
+      "sha256": "5fda9babbb1f6c80601c3af6ebbacf3780e23193a2a14f5cd10e72685d93d536",
+      "stage": "stage-025"
+    }
+  ],
+  "status": "verified_partial_not_game_completion",
+  "story_after": 19,
+  "story_before": 17,
+  "story_total": 36,
+  "super_potions_remaining": 4,
+  "tail_members_moves_and_order_preserved": true,
+  "terminal_sha256": "5fda9babbb1f6c80601c3af6ebbacf3780e23193a2a14f5cd10e72685d93d536",
+  "tests": {
+    "full_suite": false,
+    "targeted_passed": 649
+  },
+  "total_actions": 7461,
+  "total_frames": 692870,
+  "tower_battles_verified": 10,
+  "tower_chapter_sha256": "6fde6af6b9f53572f82737597187ff5075d789ae7fd6ccb1853443b7acdf5e61"
+}

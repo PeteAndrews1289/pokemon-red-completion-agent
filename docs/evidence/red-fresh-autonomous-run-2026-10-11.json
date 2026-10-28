@@ -1,0 +1,73 @@
+{
+  "schema": "pokemon.red.frozen-prelaunch-failure.v1",
+  "session": "2026-10-11-fresh-autonomous-red-run",
+  "partition": "development",
+  "verdict": "blocked_before_emulator_import",
+  "official_acceptance": false,
+  "final_frozen_gates_passed": 0,
+  "final_frozen_gates_total": 5,
+  "trial_identity": "red-fresh-autonomy-candidate-20261011-v1",
+  "counts": {
+    "launches": 1,
+    "fresh_games_started": 0,
+    "gameplay_terminals": 0,
+    "model_decisions": 0,
+    "controller_actions": 0,
+    "frames": 0,
+    "state_loads": 0,
+    "runtime_llm_calls": 0,
+    "training_examples_added": 0,
+    "fits": 0,
+    "parameter_updates": 0,
+    "registrations_added": 0
+  },
+  "worker": {
+    "exit_code": 1,
+    "stopped": true,
+    "live_driver_running": false,
+    "claim_exists": false
+  },
+  "identity": {
+    "package": "fresh-player-continuity/frozen-r9",
+    "manifest_sha256": "fc2433fa995e912096f509cd5a3b4c52bc732eab480f46f7c5872be14c2d6a09",
+    "authorized_plan_sha256": "ff00c9fc3695a89e736d748279bbeefabfe6ee52b73d9246ac7a0e14a312ec02",
+    "prepared_plan_sha256": "ddcc1d82b09a306b6ea46055fd869d83fb0ccde7a61a4a2666a034e4332b4f64",
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "seed": 2026101101,
+    "extra_boot_frames": 1213,
+    "maximum_native_seconds": 86400,
+    "required_native_registrations": 124
+  },
+  "blocker": {
+    "phase": "fresh_driver_import_before_plan_run_and_claim",
+    "error_type": "ValueError",
+    "error": "frozen player attempted an undeclared package read",
+    "package_relative_file": "checkout/scripts/__pycache__/run_configured_red_player.cpython-314.pyc",
+    "sha256": "f4524858cab6ea89532944b5c4fade7572a43af7f9a5c09bc59beb7be22c113a",
+    "bytes": 79283,
+    "cache_predates_launch": true,
+    "cache_is_pinned": false,
+    "existing_cache_read_not_disabled_by_dont_write_bytecode": true,
+    "source_and_environment_pins_match": true
+  },
+  "retention": {
+    "private_family": "red-fresh-autonomous-run-20261011-v1",
+    "launch_failure_receipt": "LAUNCH-FAILURE.json",
+    "isolation_receipt_sha256": "68920acc0a5e7a2f97ddec815c58a73a18e50032cc2d4e4586c8ae6361e00e74",
+    "no_gameplay_terminal_reason": "Fresh driver import failed before its run function, CLAIM or emulator creation.",
+    "failed_launch_retained": true,
+    "relaunched": false,
+    "code_models_package_or_policy_changed": false,
+    "protected_save_overwrite": false
+  },
+  "diagnostic": {
+    "method": "guarded SourceFileLoader.get_code without executing the returned code",
+    "reproduced": true,
+    "emulator_created": false,
+    "model_executed": false,
+    "module_executed": false,
+    "reads": [],
+    "writes": []
+  },
+  "next_decision": "Between attempts, make source-only imports bypass unpinned caches while preserving pin/read/write restrictions, test the real fresh-entry import with existing caches present, then freeze and declare one new attempt. No current frozen retry authorized by this record."
+}

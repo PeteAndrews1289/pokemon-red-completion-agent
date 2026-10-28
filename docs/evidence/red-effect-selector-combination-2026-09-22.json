@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon.red.effect-selector-combination-evidence.v1",
+  "session": "2026-09-22-effect-selector-combination",
+  "classification": "failed_later_turn_generalization_before_selector_fit",
+  "source_commit": "9f9560a42ca326e1c3bffc3182e5a018ed41f1b3",
+  "private_packet": "red-effect-selector-combination-20260922-v1",
+  "plan_sha256": "e788f80fe6f5046498cb9a32a44e0a25eb1fb2a11cbe6b4f6c768b59c825338c",
+  "qualification_sha256": "9abb1b88c42fb3f1293c520d97ba1dfe3277347970b501bc56903742012b06fb",
+  "result_sha256": "a3b62c68397e144ef8f1881469dcbdd84f1a04f246a24e4a88c02c4f4cb26368",
+  "frozen_effect_sha256": "cad523f4e23e513e281a807603bf6a52315328291b96916b759e427699efab02",
+  "implementation": {
+    "auxiliary_features": ["supported_effect", "conditional_application_probability"],
+    "scope": ["heal", "rest", "confusion"],
+    "zero_readout_preserves_prior_scores_contexts": 312,
+    "checkpoint_format_version": 2,
+    "legacy_reader_cannot_silently_drop_augmentation": true,
+    "runtime_action_bans_added": 0,
+    "original_protected_preferences": 182,
+    "reward_version": 2
+  },
+  "later_turn_qualification": {
+    "episodes": 12, "observed_awake": 10, "applied": 8, "no_effect": 2,
+    "suppressed_sleeping_rest": 2, "unknown": 0,
+    "correct_at_half": 8,
+    "brier": 0.19013157799002656, "required_maximum_brier": 0.125,
+    "passed": false,
+    "frames": 18492, "event_records": 84, "invalid_actions": 0,
+    "learned_battle_choices": 0, "forced_diagnostic_choices": 12,
+    "reauthenticated_rows": 12, "verified_event_chains": 12,
+    "packet_seconds": 25.882455291226506,
+    "coverage_limit": "Awake full-HP later Rest absent; ten awake cases cover five prospective family/condition cells. Two sleeping Rest selections are suppression, never negative application labels.",
+    "counterexamples": [
+      {
+        "case": "later-effect-06", "family": "heal",
+        "hp_when_selected": 111, "maximum_hp": 111,
+        "hp_at_effect_entry": 45, "hp_at_effect_return": 100,
+        "hp_restored": 55, "predicted_application_probability": 0.026881922157288147,
+        "visible_speed_margin": -0.21666666666666667
+      },
+      {
+        "case": "later-effect-07", "family": "heal",
+        "hp_when_selected": 111, "maximum_hp": 111,
+        "hp_at_effect_entry": 43, "hp_at_effect_return": 98,
+        "hp_restored": 55, "predicted_application_probability": 0.02723766134373117,
+        "visible_speed_margin": -0.21666666666666667
+      }
+    ],
+    "cause": "Prior auxiliary fitting deliberately used actor-first opponents; every fitted visible speed margin was positive. Full HP at decision does not imply full HP when healing executes after enemy damage. The two missed later cases have negative visible speed margins."
+  },
+  "fits": 0,
+  "native_battle_screen_episodes": 0,
+  "old_reserved_battle_comparisons_opened": 0,
+  "authority_promotions": 0,
+  "collection_delta": 0,
+  "gameplay_stopped": true,
+  "protected": {
+    "story_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "tests": {"targeted_passed": 537, "integration_skipped": 13, "typed_modules": 3},
+  "next": "Predeclare a new bounded effect curriculum crossing full/injured HP with actor-first/opponent-first timing on fitting roots and unused configurations. Preserve this failed transfer and the old predictor; no fit on these consumed qualification labels. Do not change the raw-concern gate silently: full-HP-at-selection is not proof of a wasted heal, but successful healing alone does not prove strategic value."
+}

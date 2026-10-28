@@ -1,0 +1,19 @@
+{
+  "schema": "pokemon.red.later-league-story-admission.v1",
+  "partition": "DEVELOPMENT",
+  "authorization": "Owner-authorized two-hour earned campaign continuation, sequential protected-copy checks and earned executions.",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "root_state_sha256": "8d074419042e1f08ccdd0ff9b1c5eaf72c830cb9014f42645ca4cbeeb6ea9960",
+  "objectives": ["defeat_agatha", "defeat_lance"],
+  "source_binding": "Each dispatch must pin its exact source, authenticated descendant lineage, cartridge contract, code, and bounded one-use plan before inputs.",
+  "combat": "Frozen learned attacks and switches; existing status and loss-settlement lifecycle; no teacher fallback or battle items.",
+  "support": "Declared cartridge navigation, opening lead preparation and owned field recovery only.",
+  "limits": {"battles_per_dispatch": 1, "maximum_decisions": 80},
+  "copy_first": true,
+  "fit_allowed": false,
+  "rematches": false,
+  "default_promotion": false,
+  "league_income_admission": false,
+  "fresh_run_qualification": false,
+  "limitations": ["This prospectively permits a bounded development test, not a claim of demonstrated later-room success.", "Matching copy and earned results are correlated evidence, not independent wins."]
+}

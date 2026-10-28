@@ -1,0 +1,84 @@
+{
+  "actual_registration_delta": 0,
+  "actual_registrations": 63,
+  "adopted_models": 0,
+  "all_native_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "costs": {
+    "actions": 3643,
+    "actual_credit": 0,
+    "fits": 0,
+    "frames": 326484,
+    "goal_attempts": 15,
+    "native_loads": 9,
+    "native_root_seconds": 340.08767374899975,
+    "native_seconds": 51.612134712000056,
+    "new_weights": 0,
+    "preflight_root_seconds": 30.006625652000025,
+    "preflights": 1
+  },
+  "decision": "Do not refit the same weak preparation hypotheses. Execute the preregistered bounded A9 local choice integration, then a separate full-menu DEVELOPMENT composition. Preserve these9originalTRAIN rows for future prospective learning.",
+  "focused_tests": 648,
+  "full_suite": false,
+  "independent_generalization_proved": false,
+  "limitations": [
+    "Teacher-assigned TRAIN arms, ordinary learned K battle decisions; deterministic lead change is part of Submission treatment",
+    "Three offsets from one related source do not establish win rates or independent transfer",
+    "Full task costs include teaching and battle; common approach, all earlier failures and preflights retained separately",
+    "Actual63/124 unchanged; no campaign progress or acceptance credit"
+  ],
+  "mission_fit_calls": 12,
+  "mission_new_models": 12,
+  "native_feedback_byte_exact_qualified": true,
+  "new_fits": 0,
+  "new_native_TRAIN_rows": 9,
+  "observed_at_utc": "2026-10-23T09:03:09.044829+00:00",
+  "official_acceptance": false,
+  "private_closeout_sha256": "35a9b6aa4d17e3be10f42f85e5dbf00027d8e71e09fa8d1c19cdf2bae6ae859b",
+  "related_contexts": 1,
+  "schema": "pokemon.red.original-train048-preparation-panel.v1",
+  "semantic_treatments": 3,
+  "summary": {
+    "direct": {
+      "cases": 3,
+      "cash_debits": 0,
+      "mean_actions": 272,
+      "mean_frames": 24937.333333333332,
+      "total_actions": 816,
+      "total_frames": 74812,
+      "wins": 3
+    },
+    "replace-ice-beam": {
+      "cases": 3,
+      "cash_debits": 0,
+      "extra_actions_versus_direct": 843,
+      "extra_frames_versus_direct": 74172,
+      "mean_actions": 553,
+      "mean_frames": 49661.333333333336,
+      "paired_extra_actions": [
+        134,
+        78,
+        631
+      ],
+      "total_actions": 1659,
+      "total_frames": 148984,
+      "wins": 3
+    },
+    "replace-submission": {
+      "cases": 3,
+      "cash_debits": 0,
+      "extra_actions_versus_direct": 352,
+      "extra_frames_versus_direct": 27876,
+      "mean_actions": 389.3333333333333,
+      "mean_frames": 34229.333333333336,
+      "paired_extra_actions": [
+        122,
+        102,
+        128
+      ],
+      "total_actions": 1168,
+      "total_frames": 102688,
+      "wins": 3
+    }
+  }
+}

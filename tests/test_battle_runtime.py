@@ -38,6 +38,8 @@ from pokemon_red_completion.battle_runtime import (
     recovery_action_due,
     run_adaptive_trainer_battle,
     run_adaptive_wild_battle,
+    settle_trainer_double_knockout,
+    settle_wild_double_knockout,
 )
 from pokemon_red_completion.battle_schedule import (
     BattleScheduleError,
@@ -246,6 +248,52 @@ def test_policy_boundary_returns_existing_main_without_controller_input() -> Non
     assert runtime.actions == []
 
 
+def test_policy_intro_waits_for_native_sendout_from_fainted_lead() -> None:
+    runtime = MeasuredTurnRuntime()
+    runtime.raw = replace(runtime.raw, active_party_hp=0, party_hp=(0, 42))
+    runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+    def advance(action):
+        assert action.kind is MacroActionKind.WAIT
+        runtime.raw = replace(runtime.raw, active_party_hp=42)
+        runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    runtime.on_action = advance
+    boundary = advance_battle_to_policy_boundary(
+        runtime, runtime, expected_map=MapId.CERULEAN_CITY, expected_battle_state=2,
+    )
+    assert boundary.state.battler_hp == 42
+    assert len(runtime.actions) == 1
+
+
+def test_policy_intro_never_confirms_a_persistent_faint() -> None:
+    runtime = MeasuredTurnRuntime()
+    runtime.raw = replace(runtime.raw, active_party_hp=0, party_hp=(0, 42))
+    runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+    with pytest.raises(BattleRuntimeTimeoutError):
+        advance_battle_to_policy_boundary(
+            runtime, runtime, expected_map=MapId.CERULEAN_CITY, expected_battle_state=2,
+            timing=replace(BattleRuntimeTiming(), max_runtime_pulses=3),
+        )
+    assert len(runtime.actions) == 3
+    assert all(a.kind is MacroActionKind.WAIT for a in runtime.actions)
+
+
+def test_policy_intro_can_acknowledge_observed_trainer_announcement() -> None:
+    runtime = MeasuredTurnRuntime()
+    runtime.raw = replace(runtime.raw, active_party_hp=0, party_hp=(0, 42))
+    runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+    runtime.trainer_introduction_visible = lambda raw: True
+    def advance(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, active_party_hp=42)
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    runtime.on_action = advance
+    boundary = advance_battle_to_policy_boundary(
+        runtime, runtime, expected_map=MapId.CERULEAN_CITY, expected_battle_state=2,
+    )
+    assert boundary.state.battler_hp == 42
+    assert len(runtime.actions) == 2
+
+
 def test_bounded_move_turn_executes_once_and_stops_at_observed_effect() -> None:
     runtime = MeasuredTurnRuntime()
     confirmations = 0
@@ -330,19 +378,21 @@ def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
 
 def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, first_party_hp=19)
             runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
 
@@ -361,24 +411,26 @@ def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None
     assert result.final_state.first_party_pp == (34, 30, 30, 11)
     assert result.actions_executed == 7
     assert result.frames_executed == 606
-    assert confirmations == 3
+    assert acknowledgements == 3
 
 
 def test_selected_spend_survives_post_battle_pp_restoration() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=0, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, battle_state=0, first_party_pp=(35, 30, 30, 11))
 
     runtime.on_action = advance
@@ -397,19 +449,21 @@ def test_selected_spend_survives_post_battle_pp_restoration() -> None:
 
 def test_selected_spend_still_rejects_in_battle_pp_restoration() -> None:
     runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
-    confirmations = 0
+    acknowledgements = 0
 
     def advance(action: MacroAction) -> None:
-        nonlocal confirmations
-        if action.kind is not MacroActionKind.CONFIRM:
+        nonlocal acknowledgements
+        if action.kind not in {MacroActionKind.CONFIRM, MacroActionKind.CANCEL}:
             return
-        confirmations += 1
-        if confirmations == 1:
+        acknowledgements += 1
+        assert action.kind is (MacroActionKind.CONFIRM if acknowledgements < 3
+                               else MacroActionKind.CANCEL)
+        if acknowledgements == 1:
             runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-        elif confirmations == 2:
+        elif acknowledgements == 2:
             runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
-        elif confirmations == 3:
+        elif acknowledgements == 3:
             runtime.raw = replace(runtime.raw, first_party_pp=(35, 30, 30, 11))
             runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
 
@@ -529,6 +583,164 @@ def test_bounded_move_turn_records_faint_as_an_outcome(
     assert result.final_state.battler_hp == 0
     assert result.move_executed is selected_move_spent
     assert confirmations == 2
+
+
+@pytest.mark.parametrize("battle_state", [1, 2])
+@pytest.mark.parametrize("enemy_hp", [0, 10])
+@pytest.mark.parametrize("reserve_hp", [0, 35])
+def test_double_ko_settles_only_terminal_wild_encounter(battle_state, enemy_hp, reserve_hp):
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=battle_state, party_count=2), party_hp=(26, reserve_hp),
+    ))
+    confirmations = 0
+    terminal = battle_state == 1 and enemy_hp == 0 and reserve_hp > 0
+
+    def advance(action):
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif confirmations == 2:
+            runtime.raw = replace(runtime.raw, first_party_hp=0, party_hp=(0, reserve_hp),
+                                  enemy_hp=enemy_hp, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        else:
+            assert terminal, "must not advance a replacement or defeat boundary"
+            runtime.raw = replace(runtime.raw, battle_state=0)
+
+    runtime.on_action = advance
+    result = execute_bounded_battle_move_turn(
+        runtime, runtime, selected_slot=1, expected_map=MapId.CERULEAN_CITY,
+        expected_battle_state=battle_state, settle_to_next_decision=True,
+    )
+    assert result.move_executed
+    assert result.final_state.battle_state == (0 if terminal else battle_state)
+    assert confirmations == (3 if terminal else 2)
+
+
+@pytest.mark.parametrize("settles", [True, False])
+def test_wild_double_ko_after_switch_settles_without_new_choice(settles):
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=1, hp=0, enemy_hp=0, party_count=2), party_hp=(0, 35),
+    ), menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    def advance(action):
+        if settles and action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+    runtime.on_action = advance
+    timing = replace(BattleRuntimeTiming(), max_post_attack_transition_pulses=2)
+    if settles:
+        final = settle_wild_double_knockout(
+            runtime, runtime, expected_map=MapId.CERULEAN_CITY, timing=timing)
+        assert final.battle_state == 0 and final.first_party_pp == (35, 30, 30, 11)
+    else:
+        with pytest.raises(BattleRuntimeError, match="next decision boundary"):
+            settle_wild_double_knockout(
+                runtime, runtime, expected_map=MapId.CERULEAN_CITY, timing=timing)
+    assert all(a.kind in {MacroActionKind.CONFIRM, MacroActionKind.WAIT} for a in runtime.actions)
+
+
+@pytest.mark.parametrize("roster", [(0,), (0, 0), (0, 12), (), (0, None), (False,)])
+def test_trainer_double_ko_requires_whole_defeated_roster(roster):
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=2, hp=0, enemy_hp=0, party_count=2), party_hp=(0, 35)),
+        menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    runtime.read_enemy_party_roster_hp = lambda: roster
+    def advance(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+    runtime.on_action = advance
+    valid = bool(roster) and all(type(hp) is int and hp == 0 for hp in roster)
+    if valid:
+        assert settle_trainer_double_knockout(runtime, runtime,
+            expected_map=MapId.CERULEAN_CITY).battle_state == 0
+    else:
+        with pytest.raises(BattleRuntimeError, match="defeated roster"):
+            settle_trainer_double_knockout(runtime, runtime, expected_map=MapId.CERULEAN_CITY)
+        assert not runtime.actions
+    assert all(a.kind in {MacroActionKind.CONFIRM, MacroActionKind.WAIT} for a in runtime.actions)
+
+
+def test_trainer_double_ko_dialogue_remains_bounded():
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=2, hp=0, enemy_hp=0, party_count=2), party_hp=(0, 35)),
+        menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    runtime.read_enemy_party_roster_hp = lambda: (0,)
+    timing = replace(BattleRuntimeTiming(), max_post_attack_transition_pulses=2)
+    with pytest.raises(BattleRuntimeError, match="dialogue bound"):
+        settle_trainer_double_knockout(
+            runtime, runtime, expected_map=MapId.CERULEAN_CITY, timing=timing
+        )
+    assert sum(a.kind is MacroActionKind.CONFIRM for a in runtime.actions) == 2
+
+
+@pytest.mark.parametrize("roster,index,valid", [
+    ((0, 57), 1, True), ((57, 0), 0, True), ((0, 0), 1, True),
+    ((12, 57), 1, False), ((0, 57), 0, False), ((0, None), 1, False),
+    ((0, True), 1, False), ((0, -1), 1, False), ((), 0, False),
+    ((0, 57), None, False), ((0, 57), True, False), ((0, 57), 2, False),
+])
+def test_pending_active_trainer_hp_needs_exact_last_opponent(roster, index, valid):
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=2, hp=0, enemy_hp=0, party_count=2),
+        party_hp=(0, 35), enemy_party_position=index),
+        menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    observed = list(roster)
+    runtime.read_enemy_party_roster_hp = lambda: tuple(observed)
+    def advance(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            observed[:] = [0] * len(observed)
+            runtime.raw = replace(runtime.raw, battle_state=0)
+    runtime.on_action = advance
+    if valid:
+        result = settle_trainer_double_knockout(runtime, runtime,
+            expected_map=MapId.CERULEAN_CITY, allow_pending_active_hp=True)
+        assert result.battle_state == 0
+        assert sum(a.kind is MacroActionKind.CONFIRM for a in runtime.actions) == 1
+    else:
+        with pytest.raises(BattleRuntimeError, match="defeated roster"):
+            settle_trainer_double_knockout(runtime, runtime,
+                expected_map=MapId.CERULEAN_CITY, allow_pending_active_hp=True)
+        assert not runtime.actions
+
+
+@pytest.mark.parametrize(
+    "change", ["index", "roster_count", "another_opponent", "exit_without_flush", "stuck"]
+)
+def test_pending_trainer_double_ko_keeps_terminal_and_input_guards(change):
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=2, hp=0, enemy_hp=0, party_count=2),
+        party_hp=(0, 35), enemy_party_position=1),
+        menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    observed = [0, 57]
+    runtime.read_enemy_party_roster_hp = lambda: tuple(observed)
+    def advance(action):
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        if change == "index":
+            runtime.raw = replace(runtime.raw, enemy_party_position=0)
+        elif change == "roster_count":
+            observed.append(0)
+        elif change == "another_opponent":
+            observed[0] = 12
+        elif change == "exit_without_flush":
+            runtime.raw = replace(runtime.raw, battle_state=0)
+    runtime.on_action = advance
+    with pytest.raises(BattleRuntimeError, match="boundary|flush|dialogue bound"):
+        settle_trainer_double_knockout(runtime, runtime,
+            expected_map=MapId.CERULEAN_CITY, allow_pending_active_hp=True,
+            timing=replace(BattleRuntimeTiming(), max_post_attack_transition_pulses=2))
+    assert sum(a.kind is MacroActionKind.CONFIRM for a in runtime.actions) <= 2
+
+
+def test_pending_trainer_double_ko_opt_in_requires_boolean():
+    runtime = MeasuredTurnRuntime(raw=_raw(), menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    runtime.read_enemy_party_roster_hp = lambda: (0,)
+    with pytest.raises(BattleRuntimeError, match="boolean"):
+        settle_trainer_double_knockout(runtime, runtime,
+            expected_map=MapId.CERULEAN_CITY, allow_pending_active_hp=1)
+    assert not runtime.actions
 
 
 def test_bounded_turn_accepts_unspent_faint_before_move_menu() -> None:
@@ -1433,6 +1645,23 @@ def test_adaptive_controller_recovers_a_decreasing_sleep_counter() -> None:
     assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
 
 
+def test_sleep_recovery_can_return_control_between_suppressed_turns() -> None:
+    runtime = MainMenuSleepRecoverySimulation()
+    observed = []
+
+    def policy(raw):
+        observed.append((raw.first_party_status, raw.first_party_pp))
+        assert runtime.menu.phase is BattleMenuPhase.MAIN
+        return 1
+
+    final = run_adaptive_trainer_battle(runtime, runtime, policy,
+        expected_map=MapId.CERULEAN_CITY,
+        timing=BattleRuntimeTiming(max_sleep_turns_per_decision=1))
+    assert final.battle_state == 0
+    assert any(status in (1, 2) for status, _ in observed)
+    assert all(pp == (35, 30, 30, 11) for status, pp in observed if status)
+
+
 def test_adaptive_controller_recovers_sleep_applied_after_move_selection() -> None:
     runtime = PostSelectionSleepSimulation()
 
@@ -1516,6 +1745,55 @@ def test_sleep_recovery_reenters_fight_after_each_suppressed_turn() -> None:
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert MacroAction(MacroActionKind.MOVE, "up") in runtime.actions
+
+
+@pytest.mark.parametrize("transition", ["ignored", "suppressed", "woke"])
+def test_sleep_recovery_accepts_main_after_fight_without_spending_pp(transition):
+    from pokemon_red_completion.battle_runtime import _recover_sleep_transition
+
+    class SameMain(MainMenuSleepRecoverySimulation):
+        def __init__(self):
+            super().__init__()
+            self.sleep_started = True
+            self.raw = replace(self.raw, first_party_status=2)
+            self.pending = True
+
+        def execute(self, action):
+            if self.pending and action.kind is MacroActionKind.CONFIRM:
+                self.pending = False
+                self.actions.append(action)
+                count = {"ignored": 2, "suppressed": 1, "woke": 0}[transition]
+                self.raw = replace(self.raw, first_party_status=count)
+                self.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+                return
+            super().execute(action)
+
+    runtime = SameMain()
+    assert _recover_sleep_transition(runtime, runtime, expected_map=MapId.CERULEAN_CITY,
+        slot=1, initial_pp=35, initial_pp_vector=runtime.raw.battler_pp,
+        timing=BattleRuntimeTiming(), label="test sleep", allow_player_faint=True)
+    assert runtime.raw.battler_status == 0
+    assert runtime.raw.battler_pp == (35, 30, 30, 11)
+    assert runtime.raw.battle_state == 2  # no extra waking attack
+
+
+@pytest.mark.parametrize("changed_pp", [False, True])
+def test_sleep_recovery_same_main_remains_bounded_and_rejects_pp_changes(changed_pp):
+    from pokemon_red_completion.battle_runtime import _recover_sleep_transition
+
+    runtime = FakeRuntime(raw=replace(_raw(), first_party_status=1))
+    def advance(action):
+        if changed_pp and action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, first_party_pp=(35, 30, 30, 10))
+    runtime.on_action = advance
+    with pytest.raises(
+        BattleRuntimeError, match="off-slot PP" if changed_pp else "never decreased"
+    ):
+        _recover_sleep_transition(runtime, runtime, expected_map=MapId.CERULEAN_CITY,
+            slot=1, initial_pp=35, initial_pp_vector=(35, 30, 30, 11),
+            timing=BattleRuntimeTiming(max_sleep_recovery_pulses=1),
+            label="test sleep", allow_player_faint=True)
+    assert len(runtime.actions) <= 40
 
 
 def test_sleep_recovery_accepts_bounded_immediate_reapplications() -> None:
@@ -2596,6 +2874,45 @@ def test_stale_main_after_pp_decrement_uses_cancel_without_spending_twice() -> N
     assert sum(action.kind is MacroActionKind.CONFIRM for action in non_wait) == 3
 
 
+@pytest.mark.parametrize("move", [19, 91, TACKLE_MOVE_ID])
+@pytest.mark.parametrize("charge", ["settled", "charging", "inactive", "missing", "double_spend"])
+def test_pp_proven_no_effect_turn_requires_live_settled_charge_evidence(move, charge) -> None:
+    runtime = MeasuredTurnRuntime(
+        raw=_raw(moves=(move, 33, 0, 0), pp=(2, 10, 0, 0)),
+        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1),
+    )
+    initial = runtime.raw
+    if charge != "missing":
+        runtime.read_battle_charge_state = lambda raw: {
+            "active": charge != "inactive",
+            "player_charging": charge == "charging",
+            "player_invulnerable": charge == "charging",
+        }
+
+    def advance(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(
+                runtime.raw, first_party_pp=(1, 9 if charge == "double_spend" else 10, 0, 0)
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = advance
+    kwargs = dict(expected_map=MapId.CERULEAN_CITY, initial_raw=initial, slot=1,
+                  initial_pp=2, timing=BattleRuntimeTiming(), label="unchanged turn")
+    if charge == "settled":
+        assert _confirm_attack_with_pp_gate(runtime, runtime, **kwargs)
+        assert runtime.raw.enemy_hp == initial.enemy_hp
+        assert runtime.raw.battler_hp == initial.battler_hp
+        assert runtime.raw.battler_pp == (1, 10, 0, 0)
+        assert sum(a.kind is MacroActionKind.CONFIRM for a in runtime.actions) == 1
+        assert sum(a.kind is MacroActionKind.CANCEL for a in runtime.actions) == 1
+    else:
+        with pytest.raises(BattleRuntimeError, match=(
+            "PP accounting" if charge == "double_spend" else "semantic effect"
+        )):
+            _confirm_attack_with_pp_gate(runtime, runtime, **kwargs)
+
+
 def test_main_menu_requires_live_enemy_hp_evidence() -> None:
     runtime = FakeRuntime(raw=_raw(enemy_hp=None))
 
@@ -3467,6 +3784,51 @@ def test_status_suppressed_turn_can_return_without_spending_pp() -> None:
 
     assert final.battle_state == 0
     assert final.first_party_pp == (35, 30, 30, 11)
+
+
+@pytest.mark.parametrize("battle_state", [1, 2])
+@pytest.mark.parametrize("still_trapped", [False, True])
+@pytest.mark.parametrize("changed_pp", [False, True])
+def test_trapping_damage_returns_at_first_main_without_second_fight(
+    battle_state, still_trapped, changed_pp,
+) -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(
+        _raw(battle_state=battle_state), enemy_using_trapping_move=True,
+    ))
+    confirmations = 0
+
+    def suppressed_turn(action):
+        nonlocal confirmations
+        if action.kind is MacroActionKind.CONFIRM:
+            confirmations += 1
+            if confirmations > 1:
+                runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+                return
+            runtime.raw = replace(
+                runtime.raw, first_party_hp=23, enemy_using_trapping_move=still_trapped,
+                first_party_pp=(34, 30, 30, 11) if changed_pp else (35, 30, 30, 11),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif action.kind is MacroActionKind.WAIT and confirmations:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = suppressed_turn
+    def execute():
+        return execute_bounded_battle_move_turn(
+            runtime, runtime, selected_slot=4, expected_map=MapId.CERULEAN_CITY,
+            expected_battle_state=battle_state, settle_to_next_decision=True,
+        )
+
+    if changed_pp:
+        with pytest.raises(BattleRuntimeError, match="PP during a suppressed trapping turn"):
+            execute()
+    else:
+        result = execute()
+        assert not result.move_executed
+        assert result.final_state.battler_hp == 23
+        assert result.final_state.battler_pp == result.initial_state.battler_pp
+        assert runtime.menu.phase is BattleMenuPhase.MAIN
+    assert confirmations == 1
 
 
 def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -> None:

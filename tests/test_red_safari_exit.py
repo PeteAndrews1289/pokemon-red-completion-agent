@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroEdge, MacroPath, MacroTransition
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import (
@@ -14,8 +15,11 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.red_safari_exit import (
+    RedSafariDepartureInterruptionHandler,
     RedSafariExitDialogueHandler,
     normalize_active_safari_exit_plan,
+    retained_safari_exit_binding,
+    safari_departure_within_steps,
 )
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
@@ -23,6 +27,31 @@ from pokemon_red_completion.route_executor import (
     TraversalSnapshot,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
+
+
+@pytest.mark.parametrize("remaining,expected", [(19, False), (20, True), (0, False)])
+def test_departure_respects_paid_step_budget_and_escape_headroom(remaining, expected):
+    reader = SimpleNamespace(read_safari_session_state=lambda: SimpleNamespace(
+        in_safari_zone=True, safari_game_over=False, safari_steps=remaining))
+    plan = SimpleNamespace(steps=tuple(SimpleNamespace(source_map=m) for m in
+                                     (220, 220, 220, int(MapId.SAFARI_ZONE_GATE), 7)))
+    assert safari_departure_within_steps(plan, reader) is expected
+
+
+def test_departure_recovery_selects_safari_run_only_inside_paid_session():
+    active = [True]
+    reader = SimpleNamespace(read_safari_session_state=lambda: SimpleNamespace(
+        in_safari_zone=active[0]))
+    calls = []
+    fallback = SimpleNamespace(handle=lambda event: calls.append("ordinary"))
+    handler = RedSafariDepartureInterruptionHandler(object(), object(), reader, fallback)
+    handler.safari_handler = SimpleNamespace(handle=lambda event: calls.append("safari_run"))
+    wild = SimpleNamespace(interruption="wild_battle")
+    handler.handle(wild)
+    handler.handle(SimpleNamespace(interruption="scripted_dialogue"))
+    active[0] = False
+    handler.handle(wild)
+    assert calls == ["safari_run", "ordinary", "ordinary"]
 
 
 def _with_event(flags: bytes, event: EventFlag, enabled: bool) -> bytes:
@@ -162,6 +191,105 @@ def _handler(*, fault=None, settle_limit=16):
     )
 
 
+def _retained_exit_runtime(*, fault=None):
+    reader = SafariReader()
+    emulator = SimpleNamespace(frame_count=0, save_state_bytes=lambda: repr(
+        (reader.raw, reader.ready, reader.dialogue, reader.dex, reader.boxes)).encode())
+
+    class MeteredActions(SafariActions):
+        def execute(self, action):
+            emulator.frame_count += 24 * action.repeat
+            return super().execute(action)
+
+    delegate = MeteredActions(reader, fault=fault)
+    actions = CountingExecutor(delegate)
+    guards = []
+    runtime = SimpleNamespace(reader=reader, emulator=emulator, safari_departure_recovery=True,
+        adapter=SimpleNamespace(party_guard=SimpleNamespace(
+            verify_active_roster_restored=lambda: guards.append(True))))
+    return runtime, actions, delegate, guards
+
+
+@pytest.mark.parametrize("missing", ("opt_in", "map", "row", "lane", "battle",
+                                     "active", "game_over", "ready", "text"))
+def test_retained_exit_never_initiates_a_new_departure_or_handles_lookalikes(missing):
+    rt, actions, delegate, _ = _retained_exit_runtime()
+    if missing == "opt_in":
+        rt.safari_departure_recovery = False
+    elif missing in {"map", "row", "lane", "battle"}:
+        key, value = {"map": ("map_id", 7), "row": ("player_y", 1),
+                      "lane": ("player_x", 5), "battle": ("battle_state", 1)}[missing]
+        rt.reader.raw = replace(rt.reader.raw, **{key: value})
+    elif missing in {"active", "game_over"}:
+        event = EventFlag.IN_SAFARI_ZONE if missing == "active" else EventFlag.SAFARI_GAME_OVER
+        rt.reader.raw = replace(rt.reader.raw, event_flags=_with_event(
+            rt.reader.raw.event_flags, event, missing == "game_over"))
+    elif missing == "ready":
+        rt.reader.ready = True
+    else:
+        rt.reader.dialogue = False
+    assert retained_safari_exit_binding(rt, actions) is None
+    assert actions.actions_executed == rt.emulator.frame_count == 0
+    assert not delegate.actions
+
+
+def test_retained_exit_reuses_verified_yes_prompt_without_new_resource_choice():
+    from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind
+    from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
+
+    rt, actions, delegate, guards = _retained_exit_runtime()
+    binding = retained_safari_exit_binding(rt, actions)
+    assert binding.kind is GoalKind.RECOVER_CONTROL
+    assert binding.verify(GoalExecutionReport(0, 0, {})).status is GoalDecisionOutcome.FAILED
+    report = binding.execute()
+    assert report.actions_executed == 3 and report.frames_executed == 72
+    assert report.evidence["completed_committed_exit"]
+    assert report.evidence["training_examples"] == 0 and guards == [True]
+    assert [kind for kind, _, _ in delegate.actions] == [
+        MacroActionKind.MOVE, MacroActionKind.CONFIRM, MacroActionKind.CONFIRM]
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    assert binding.verify(replace(report)).status is GoalDecisionOutcome.FAILED
+    with pytest.raises(ValueError, match="stale or consumed"):
+        binding.execute()
+    assert retained_safari_exit_binding(rt, actions) is None
+    rt.reader.raw = replace(rt.reader.raw, player_money=0)
+    assert binding.verify(report).status is GoalDecisionOutcome.FAILED
+
+
+def test_stale_retained_exit_sends_no_input_and_native_resource_faults_stay_failed():
+    rt, actions, delegate, _ = _retained_exit_runtime()
+    binding = retained_safari_exit_binding(rt, actions)
+    rt.reader.raw = replace(rt.reader.raw, player_money=0)
+    with pytest.raises(ValueError, match="stale or consumed"):
+        binding.execute()
+    assert not delegate.actions
+    for fault in ("party", "money", "collection", "wrong_landing", "never_settles"):
+        rt, actions, _, _ = _retained_exit_runtime(fault=fault)
+        with pytest.raises(RouteExecutionError):
+            retained_safari_exit_binding(rt, actions).execute()
+
+
+@pytest.mark.parametrize("enabled,kind,wrapped", ((False, "resupply", False),
+                                                (True, "evolve_species", False),
+                                                (True, "resupply", True)))
+def test_resource_departure_wraps_opted_in_supply_only(enabled, kind, wrapped):
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.red_resource_goal_router import _safari_resource_departure_handler
+
+    rt, actions, delegate, _ = _retained_exit_runtime()
+    rt.safari_departure_recovery = enabled
+    fallback = Fallback()
+    selected = _safari_resource_departure_handler(rt, actions, fallback, GoalKind(kind))
+    if wrapped:
+        assert isinstance(selected, RedSafariDepartureInterruptionHandler)
+        assert isinstance(selected.fallback, RedSafariExitDialogueHandler)
+        assert selected.fallback.fallback is fallback
+        assert "scripted_dialogue" in selected.handled_interruption_kinds
+    else:
+        assert selected is fallback
+    assert not delegate.actions and actions.actions_executed == 0
+
+
 def _safari_plan(*, lane=3):
     source_x = lane + 11
     first = RouteSegment(
@@ -271,4 +399,3 @@ def test_active_safari_exit_is_bounded_when_dialogue_never_settles():
     with pytest.raises(RouteExecutionError, match="within its bound"):
         scene.handler.handle(scene.interruption)
     assert len(scene.actions.actions) == 4  # one cursor correction, then three confirms
-

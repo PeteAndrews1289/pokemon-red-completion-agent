@@ -1,0 +1,880 @@
+{
+  "schema": "pokemon.red.native-capture-fossil-development.v1",
+  "source_start_commit": "0ee38950",
+  "implementation_commits": [
+    "0599e084",
+    "8b3efe62",
+    "35fd4a2a9e30bff15d16da527f7d0ebe55a65e9e"
+  ],
+  "partition": "development",
+  "fits": 0,
+  "new_train_examples": 0,
+  "independent_roots": 0,
+  "teacher_memory_writes": 0,
+  "actual_campaign_unchanged": true,
+  "shared_collection_unchanged": true,
+  "gameplay_running": false,
+  "audit": {
+    "sha256": "8b423720280f8a74a9437585936dc5914e129886658c9c2ce8ee440905d4b9eb",
+    "inputs": 0,
+    "frames": 516156,
+    "packets": 38,
+    "states": 145,
+    "receipts": 29,
+    "actions": 8442,
+    "learned_choices": 6,
+    "verified_choice_successes": 4,
+    "reload_frames": 0,
+    "frames_meaning": "recorded gameplay frames across all retained packets, not audit reload frames"
+  },
+  "journal_native_volume_audit_sha256": "ce78ba96fc3afa0ee7a652455eb9fec78cd135fdd9b829dd198b03256514bd7b",
+  "model": {
+    "sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "file_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "weights_unchanged": true,
+    "development_choices": 6,
+    "verified_choice_successes": 4,
+    "failed_searches": 2
+  },
+  "protected": {
+    "stage": 471,
+    "state_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+    "envelope_sha256": "2075e2c5b7160e12aaa8aaa69b9bd8cc75fa438c425bbe4e9b9789e876c89c65",
+    "next_stage_absent": true,
+    "owned": 17,
+    "money": 30620,
+    "remaining_campaign_actions": 13838
+  },
+  "separate_collection": {
+    "registered": 109,
+    "declared_route": 124,
+    "specimens": 78,
+    "cash": 11968,
+    "unchanged": true
+  },
+  "retained_development_terminal": {
+    "sha256": "c68e010c93406bd516a06ad20957c7207355eddd506e57429ad7a75aa72d6bab",
+    "map": 170,
+    "at": [
+      3,
+      6
+    ],
+    "money": 30620,
+    "bag": [
+      [
+        11,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        15,
+        5
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        46,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        3,
+        10
+      ],
+      [
+        198,
+        1
+      ],
+      [
+        199,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        43,
+        1
+      ],
+      [
+        52,
+        1
+      ]
+    ],
+    "party": [
+      28,
+      104,
+      64,
+      132,
+      118,
+      6
+    ],
+    "hp": [
+      206,
+      156,
+      144,
+      250,
+      121,
+      47
+    ],
+    "status": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "pp": [
+      [
+        25,
+        15,
+        10,
+        15
+      ],
+      [
+        20,
+        15,
+        30,
+        30
+      ],
+      [
+        35,
+        15,
+        30,
+        15
+      ],
+      [
+        15,
+        20,
+        10,
+        15
+      ],
+      [
+        35,
+        40,
+        10,
+        15
+      ],
+      [
+        35,
+        40,
+        20,
+        0
+      ]
+    ],
+    "owned": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      14,
+      16,
+      19,
+      21,
+      25,
+      41,
+      50,
+      51,
+      83,
+      100,
+      133,
+      135,
+      138,
+      142,
+      143,
+      145,
+      150
+    ],
+    "specimen_counts": {
+      "6": 1,
+      "28": 1,
+      "36": 1,
+      "64": 1,
+      "75": 1,
+      "84": 1,
+      "98": 1,
+      "104": 1,
+      "107": 1,
+      "113": 2,
+      "118": 1,
+      "123": 1,
+      "124": 2,
+      "131": 1,
+      "132": 1,
+      "165": 1,
+      "171": 1
+    },
+    "field_ready": true
+  },
+  "episodes": [
+    {
+      "candidate_count": 2,
+      "decision_sha256": "0001ebf053f828230f1ad0c670bc2926794d7fef7ed10724c4712d04229c2951",
+      "kind": "explore",
+      "measured_cost": null,
+      "outcome_sha256": "6af9d3841f8f8ff47898f2ac93bd0508ef83c3a609cfb08edf68e03eddee3545",
+      "owned_gain": [],
+      "packet": "red-native-capture-model-pilot-20260925-v2",
+      "probabilities": [
+        0.7673406215839466,
+        0.23265937841605336
+      ],
+      "selected_index": 0,
+      "verification": null,
+      "error_type": "RedAreaExecutionError",
+      "reason_code": "survey_leg_limit_exceeded",
+      "audited_action_journal_cost": {
+        "actions": 444,
+        "frames": 16980
+      }
+    },
+    {
+      "candidate_count": 2,
+      "decision_sha256": "095dfa482304c6deb960da27334cef51b18156ca572ad1f0fed5e91c773f45c7",
+      "kind": "explore",
+      "measured_cost": null,
+      "outcome_sha256": "71337dda9fa91cd8fd8fbac50e1fe49ab55af09454fed5f4da5a764249dffa96",
+      "owned_gain": [],
+      "packet": "red-native-capture-three-option-pilot-20260925-v1",
+      "probabilities": [
+        0.8292587518403742,
+        0.17074124815962582
+      ],
+      "selected_index": 0,
+      "verification": null,
+      "error_type": "RedAreaExecutionError",
+      "reason_code": "survey_leg_limit_exceeded",
+      "audited_action_journal_cost": {
+        "actions": 504,
+        "frames": 23196
+      }
+    },
+    {
+      "candidate_count": 2,
+      "decision_sha256": "28707002df1ee315e4dcc3dc8d80b8954ec891f7b64ec07d74608462be72a95f",
+      "kind": "acquire_species",
+      "measured_cost": {
+        "actions": 428,
+        "cash_spent": 0,
+        "frames": 32184
+      },
+      "outcome_sha256": "a4aab513fea38c9bc31943f64153c1d3535af3069a5ac815aa1c3d662f304fe3",
+      "owned_gain": [
+        "pokemon:national:100"
+      ],
+      "packet": "red-native-acquisition-choice-20260925-v1",
+      "probabilities": [
+        0.37012598358747106,
+        0.6298740164125289
+      ],
+      "selected_index": 1,
+      "verification": "succeeded"
+    },
+    {
+      "candidate_count": 2,
+      "decision_sha256": "102d0e98d8dde465ef9ba809d0a9bdad80695573410d06c64ff7c86b9d366d3d",
+      "kind": "acquire_species",
+      "measured_cost": {
+        "actions": 62,
+        "cash_spent": 0,
+        "frames": 5124
+      },
+      "outcome_sha256": "e6c7b5c179a71526152b9ffe2b8ba8bf1d34cfd9754c5e3396e8999d09889120",
+      "owned_gain": [
+        "pokemon:national:150"
+      ],
+      "packet": "red-native-mewtwo-acquisition-choice-20260925-v1",
+      "probabilities": [
+        0.49781837979622945,
+        0.5021816202037706
+      ],
+      "selected_index": 0,
+      "verification": "succeeded"
+    },
+    {
+      "candidate_count": 2,
+      "decision_sha256": "7f41e8b43582742e6a10e951c7325221a2a4da12780556fe8e23a8f0fe82d1e1",
+      "kind": "acquire_species",
+      "measured_cost": {
+        "actions": 170,
+        "cash_spent": 0,
+        "frames": 10584
+      },
+      "outcome_sha256": "acd74424dda3737b81c89e35ba76d82cf0d068e9c0b995fca739f08b4c007084",
+      "owned_gain": [
+        "pokemon:national:142"
+      ],
+      "packet": "red-native-fossil-acquisition-choice-20260925-v2",
+      "probabilities": [
+        0.6997507142835862,
+        0.30024928571641385
+      ],
+      "selected_index": 0,
+      "verification": "succeeded"
+    },
+    {
+      "candidate_count": 2,
+      "decision_sha256": "d68ff28c0a1a5d3dc1cb01926e40b83e85115258f78e2b57f507a9672cd29825",
+      "kind": "acquire_species",
+      "measured_cost": {
+        "actions": 370,
+        "cash_spent": 0,
+        "frames": 18456
+      },
+      "outcome_sha256": "6831f52c8a3ce1b6059f1917b348cef89fd1065baf97f7c14cee3660d04b5511",
+      "owned_gain": [
+        "pokemon:national:142"
+      ],
+      "packet": "red-native-whole-fossil-acquisition-choice-20260925-v1",
+      "probabilities": [
+        0.6918595221622102,
+        0.3081404778377897
+      ],
+      "selected_index": 0,
+      "verification": "succeeded"
+    }
+  ],
+  "packets": [
+    {
+      "name": "red-capture-legitimate-tm-20260925-v1",
+      "plan_sha256": "db10559146dda9a2f31344a54d054332e59cc0d6352d938fe34408aab3cfe5f7",
+      "source_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+      "source_packet": "stage-471",
+      "final_sha256": "175c53af5ec3b0168199b052aeeab30d02b5010ca39f6337aa5c6af6569d3d42",
+      "actions": 199,
+      "frames": 10872,
+      "result_sha256": "b35ff7b153dc3b573846bf8e2807c87fe90d296e013452dac403d70faeb24b8f",
+      "error_type": null
+    },
+    {
+      "name": "red-native-static-zapdos-20260925-v1",
+      "plan_sha256": "3dbddeb936270ce687427da6179432c8fd868b81fc07516159725075d1feaeb2",
+      "source_sha256": "175c53af5ec3b0168199b052aeeab30d02b5010ca39f6337aa5c6af6569d3d42",
+      "source_packet": "red-capture-legitimate-tm-20260925-v1",
+      "final_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "actions": 1289,
+      "frames": 71772,
+      "result_sha256": null,
+      "error_type": "known_logging_failure"
+    },
+    {
+      "name": "red-native-static-zapdos-20260925-v2",
+      "plan_sha256": "fa56900c03522e8b8a359fd52ffde5c4029a4bd6b6164d3f4e043f62e2c92540",
+      "source_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "source_packet": "red-native-static-zapdos-20260925-v1",
+      "final_sha256": "de2d22f1ad3cd4fc97dc6f499de9c7a6dfdec694c4c6f5ead18e5aafd4375c72",
+      "actions": 4,
+      "frames": 288,
+      "result_sha256": "e671b102085cec8d8bdf6683cb69de8dbbd6491f6027f779eee0364bfb969bdc",
+      "error_type": "RuntimeError"
+    },
+    {
+      "name": "red-native-static-zapdos-20260925-v3",
+      "plan_sha256": "607e49120322bf2ee8bee7b429ca6036ac7e4a63568027022be1a0ee020f1a75",
+      "source_sha256": "de2d22f1ad3cd4fc97dc6f499de9c7a6dfdec694c4c6f5ead18e5aafd4375c72",
+      "source_packet": "red-native-static-zapdos-20260925-v2",
+      "final_sha256": "52fb0cd89ce6d53e1890947dd6fe0e5bc07253c0ac1908521bdb32ebfeaef1ff",
+      "actions": 338,
+      "frames": 29076,
+      "result_sha256": "4e182222841d5ce8f189759522da15f712e51b3ea1ce1378d84f9bc2852bf4ae",
+      "error_type": "RedCaptureStatusError"
+    },
+    {
+      "name": "red-native-static-zapdos-20260925-v4",
+      "plan_sha256": "b0784262ffdd0338fb36509c909da186feb7238304bf5396a68da5e9603e37ea",
+      "source_sha256": "52fb0cd89ce6d53e1890947dd6fe0e5bc07253c0ac1908521bdb32ebfeaef1ff",
+      "source_packet": "red-native-static-zapdos-20260925-v3",
+      "final_sha256": "08b806282db12dadcf39f067939712db06583dc53827589243ecc6f04c7454bb",
+      "actions": 84,
+      "frames": 7848,
+      "result_sha256": "3e21d5d7e2f504529b9fe29dc693d228cbbb8313c48c7cb354286e4b9df50de3",
+      "error_type": "OneOffCapturePaused"
+    },
+    {
+      "name": "red-native-static-zapdos-master-20260925-v1",
+      "plan_sha256": "94a0997a368df0481f2ba4aba912c448397eab8afd0db860f50978d916b48503",
+      "source_sha256": "08b806282db12dadcf39f067939712db06583dc53827589243ecc6f04c7454bb",
+      "source_packet": "red-native-static-zapdos-20260925-v4",
+      "final_sha256": "ab74d2ccb72fe68bb227a7da28515c6d8ee22cfd9ca929bd6ff577e32d64c7c9",
+      "actions": 58,
+      "frames": 4476,
+      "result_sha256": "85bea53a17e72145fc9560585aed969ddefae223169ea32615a936e7b7d53eda",
+      "error_type": null
+    },
+    {
+      "name": "red-native-static-provider-20260925-v1",
+      "plan_sha256": "caead3a2a4f0f2f47dba310af38b73033b43f29653bcbef803c3c5fdb40cf415",
+      "source_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "source_packet": "red-native-static-zapdos-20260925-v1",
+      "final_sha256": "122bbe53a6ca39b852addb64abe96b7c8e6af77c896b1de85fed0e79424ffe98",
+      "actions": 56,
+      "frames": 4572,
+      "result_sha256": "7370314fa455f56e95de0c7b6bba498728c968c3fbeb14402ee37b56a892cfcd",
+      "error_type": null
+    },
+    {
+      "name": "red-native-capture-model-pilot-20260925-v1",
+      "plan_sha256": "c62e650d0ce828dca9be8fd49b967112d9fe92e5fa43c7ffa8bca358033ccbe2",
+      "source_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "source_packet": "red-native-static-zapdos-20260925-v1",
+      "final_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "actions": 0,
+      "frames": 0,
+      "result_sha256": "64a41a9e5e3d492be3d68e6302c0c67813857ee5bbc5b22ee278dc0d0ecdf258",
+      "error_type": null
+    },
+    {
+      "name": "red-native-capture-model-pilot-20260925-v2",
+      "plan_sha256": "57d0a559f1eb7d185c2580cd95e9cd283b3af36593c4a4cc8a76851c7555138e",
+      "source_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "source_packet": "red-native-capture-model-pilot-20260925-v1",
+      "final_sha256": "ffd7501c6b867fb0b7c78d0c2e310512544fe225bbd7f6adae555eda6e304473",
+      "actions": 444,
+      "frames": 16980,
+      "result_sha256": "b1eb8b53fbae8e254e92645e0a5e5ab6447de1f5e54b29ee56602f7f5ed29244",
+      "error_type": null
+    },
+    {
+      "name": "red-native-capture-three-option-pilot-20260925-v1",
+      "plan_sha256": "d65f2d6d12514bbc3deff9c52cb55868f09b171ba1e327198006e54c9e700e8d",
+      "source_sha256": "ffd7501c6b867fb0b7c78d0c2e310512544fe225bbd7f6adae555eda6e304473",
+      "source_packet": "red-native-capture-model-pilot-20260925-v2",
+      "final_sha256": "4c22057cac94f2d9dc5fe8da272348a93e55f59b9c8efa2e4b55c381390fa960",
+      "actions": 504,
+      "frames": 23196,
+      "result_sha256": "702c23638ec5d69d12ab91d75f32823748a2191d7f919e3a0e8678e1dde567df",
+      "error_type": null
+    },
+    {
+      "name": "red-native-capture-weakening-20260925-v1",
+      "plan_sha256": "588e78e734f57d477af4842d5d6f77fd079af98f1597c850410526401deaaed4",
+      "source_sha256": "de2d22f1ad3cd4fc97dc6f499de9c7a6dfdec694c4c6f5ead18e5aafd4375c72",
+      "source_packet": "red-native-static-zapdos-20260925-v2",
+      "final_sha256": "2d3ed1c5239a196ca99c27f792a275f9f1c98a9451449894267210ce46be024a",
+      "actions": 243,
+      "frames": 22560,
+      "result_sha256": "3fed7f913401045c57c0c1ee4755470baf506c372a5d7599e573e6ef14a26011",
+      "error_type": null
+    },
+    {
+      "name": "red-native-prepared-provider-20260925-v1",
+      "plan_sha256": "1feb9ea5ade07e80b926afec1811cf5a7a878cd53883d4b303b2ef5680dba853",
+      "source_sha256": "f05f4c480c660edd0d7e4fc486dd5165f527a28a2c4a34644ba7d8c003248777",
+      "source_packet": "red-native-static-zapdos-20260925-v1",
+      "final_sha256": "2d3ed1c5239a196ca99c27f792a275f9f1c98a9451449894267210ce46be024a",
+      "actions": 247,
+      "frames": 22848,
+      "result_sha256": "184bfa2e39ef47682a481ba75bc3f952d25c04477cacacfa04d5c482f90570a8",
+      "error_type": null
+    },
+    {
+      "name": "red-native-mewtwo-after-zapdos-20260925-v1",
+      "plan_sha256": "0071b8a57c8f5c8d0ca8862444a621c01aea6ac2f2f9ab6a5d6d77af54ee41b8",
+      "source_sha256": "2d3ed1c5239a196ca99c27f792a275f9f1c98a9451449894267210ce46be024a",
+      "source_packet": "red-native-prepared-provider-20260925-v1",
+      "final_sha256": "9b14d7c62f40fd1cdd1d79d8d9316013a0f27adff9fdc41b4884e172b39ed918",
+      "actions": 885,
+      "frames": 43380,
+      "result_sha256": "4c16b7dc37b4a0f389ff082da6cf47d53ca92e552c8af147763f9558fe3be6d9",
+      "error_type": "RoutePlanningError"
+    },
+    {
+      "name": "red-native-cerulean-access-20260925-v1",
+      "plan_sha256": "2827689536fe7a85dfa0fdef82fa4d87ff51c0130b59384e5e174bb6ad38dfee",
+      "source_sha256": "9b14d7c62f40fd1cdd1d79d8d9316013a0f27adff9fdc41b4884e172b39ed918",
+      "source_packet": "red-native-mewtwo-after-zapdos-20260925-v1",
+      "final_sha256": "6dda52b4fc9871d5c0afe416bafc2face3f44420ff46bdb1d6b9625ea4026158",
+      "actions": 6,
+      "frames": 240,
+      "result_sha256": "1f5b56469f95f70b2bdb4dbffae7ab17f5f3f1ecbc211d70aba65c01d7363b03",
+      "error_type": null
+    },
+    {
+      "name": "red-native-mewtwo-after-zapdos-20260925-v2",
+      "plan_sha256": "3efbb43573205cc87ce9218ed4192ecf0bbbfc7cb152bdd8c245b0749d228fd4",
+      "source_sha256": "6dda52b4fc9871d5c0afe416bafc2face3f44420ff46bdb1d6b9625ea4026158",
+      "source_packet": "red-native-cerulean-access-20260925-v1",
+      "final_sha256": "87d4cef5fffe6c516a5c06cb5e440c92a13ac9c196c4bb9f51c125d4dd9e2f75",
+      "actions": 697,
+      "frames": 43620,
+      "result_sha256": "2ccde83548772ff7a1f6bfd56bf126d84b482293ed38bad4407c96da0f3cd8eb",
+      "error_type": "RouteExecutionError"
+    },
+    {
+      "name": "red-native-mewtwo-after-zapdos-20260925-v3",
+      "plan_sha256": "ba26b331f7996094a8333ec215d69c262028bac8a77c883193b183c882586da7",
+      "source_sha256": "87d4cef5fffe6c516a5c06cb5e440c92a13ac9c196c4bb9f51c125d4dd9e2f75",
+      "source_packet": "red-native-mewtwo-after-zapdos-20260925-v2",
+      "final_sha256": "69893ce7244614c16aa1381358380d8868e7b0d90418f580cf21565a942c9ace",
+      "actions": 106,
+      "frames": 8448,
+      "result_sha256": null,
+      "error_type": "known_logging_failure"
+    },
+    {
+      "name": "red-native-mewtwo-transfer-settlement-20260925-v1",
+      "plan_sha256": "ff71f127038ff6e7a0a14107a352f494e7be45c1d1947c563e98a4607a4498ac",
+      "source_sha256": "69893ce7244614c16aa1381358380d8868e7b0d90418f580cf21565a942c9ace",
+      "source_packet": "red-native-mewtwo-after-zapdos-20260925-v3",
+      "final_sha256": "7942f57a42653569dfdbdc57b8356589aa32305276736a35c5424fb85e22a4a1",
+      "actions": 8,
+      "frames": 576,
+      "result_sha256": "697f77e0a92c8de41d0c176d069526f2b6ae46e9db1c8e339d07ec9f2991b673",
+      "error_type": null
+    },
+    {
+      "name": "red-native-capture-resupply-20260925-v1",
+      "plan_sha256": "18493504ecb92ebf2e2a4fedacd114812be01a223878fb9e18ff760cd2718788",
+      "source_sha256": "7942f57a42653569dfdbdc57b8356589aa32305276736a35c5424fb85e22a4a1",
+      "source_packet": "red-native-mewtwo-transfer-settlement-20260925-v1",
+      "final_sha256": "433d5aef7c6698410da34468acad1164b702250f9749d61e1fb2f158a1cc314a",
+      "actions": 132,
+      "frames": 10632,
+      "result_sha256": "a03e1d952364e3af08ddf390af81b54bba08d94b57f8b057ddf7a42cd9f659d6",
+      "error_type": null
+    },
+    {
+      "name": "red-native-moltres-region-20260925-v1",
+      "plan_sha256": "0a6f0fb12d49c87a552c6395aa7b122fa04338ad159821c6e87793d930040ab0",
+      "source_sha256": "433d5aef7c6698410da34468acad1164b702250f9749d61e1fb2f158a1cc314a",
+      "source_packet": "red-native-capture-resupply-20260925-v1",
+      "final_sha256": "16730c569bc32d99501dafd98e2f0d650b941027a6a18f2620784f576babd7ac",
+      "actions": 82,
+      "frames": 3660,
+      "result_sha256": "89eb364648e1f92f8e22c00c5a85e4d21478b6076c27be7aa09655afeb39c516",
+      "error_type": null
+    },
+    {
+      "name": "red-native-moltres-goal-inventory-20260925-v1",
+      "plan_sha256": "7a177708d3ec282b239dcf3fdd0ff077106ab32cc00ae2041c03b430e0ee623a",
+      "source_sha256": "16730c569bc32d99501dafd98e2f0d650b941027a6a18f2620784f576babd7ac",
+      "source_packet": "red-native-moltres-region-20260925-v1",
+      "final_sha256": "16730c569bc32d99501dafd98e2f0d650b941027a6a18f2620784f576babd7ac",
+      "actions": 0,
+      "frames": 0,
+      "result_sha256": "1a9be7fc3b3293126ee285b234db76cac64083ed00bc56b7dd8cbb516c05b284",
+      "error_type": null
+    },
+    {
+      "name": "red-native-moltres-boulder-access-20260925-v1",
+      "plan_sha256": "76c8a12f6352804a0fc3e1a774f14a4658c5949258bf3fb70edcb3b0a717fcb6",
+      "source_sha256": "16730c569bc32d99501dafd98e2f0d650b941027a6a18f2620784f576babd7ac",
+      "source_packet": "red-native-moltres-region-20260925-v1",
+      "final_sha256": "cbb43823afaabe554c791948a1980a68d9571a419ccc99878dc8cc80909e4ca6",
+      "actions": 105,
+      "frames": 9288,
+      "result_sha256": "446851a5c4e94a32efb7ecbf615595ca929ce594e8ebfdfdb842632f4c42a83d",
+      "error_type": null
+    },
+    {
+      "name": "red-native-moltres-switch-20260925-v1",
+      "plan_sha256": "e77cfbfa645d4125d3029b6485e2fe84e00b8f619f082e72d7aa88c2e7517270",
+      "source_sha256": "cbb43823afaabe554c791948a1980a68d9571a419ccc99878dc8cc80909e4ca6",
+      "source_packet": "red-native-moltres-boulder-access-20260925-v1",
+      "final_sha256": "cbb43823afaabe554c791948a1980a68d9571a419ccc99878dc8cc80909e4ca6",
+      "actions": 0,
+      "frames": 0,
+      "result_sha256": "a33462a33a10805d49a2b8326b0a7c3f30fa1836edd120323e77d7b44278e773",
+      "error_type": "AssertionError"
+    },
+    {
+      "name": "red-native-moltres-switch-20260925-v2",
+      "plan_sha256": "9b2b7fbc0f2d7b075d8d4fb5f4983e93454ed2285aedaa5faaf56b85f2156c39",
+      "source_sha256": "cbb43823afaabe554c791948a1980a68d9571a419ccc99878dc8cc80909e4ca6",
+      "source_packet": "red-native-moltres-switch-20260925-v1",
+      "final_sha256": "03d2bc4288a8634c8aecbf065f158d5494a61255b4aac5f726ec06f952452066",
+      "actions": 9,
+      "frames": 504,
+      "result_sha256": "8da21c20070b95a58086eef83296da56af71e357d522f533b65a5d7b554be38e",
+      "error_type": "RoutePlanningError"
+    },
+    {
+      "name": "red-native-moltres-switch-20260925-v3",
+      "plan_sha256": "f8cb22540ff60537d0567b921495589197dafee92c02fc832aedfe7126401e0b",
+      "source_sha256": "03d2bc4288a8634c8aecbf065f158d5494a61255b4aac5f726ec06f952452066",
+      "source_packet": "red-native-moltres-switch-20260925-v2",
+      "final_sha256": "0766fe3eb19033da3853b817b5308fea456fcdbd5933b408de7d08f627e7e0b5",
+      "actions": 24,
+      "frames": 2040,
+      "result_sha256": "c44c3fd7325b59063321e885b91d2d8d65a8ff5fe451f647ae14a58708de27c5",
+      "error_type": "AssertionError"
+    },
+    {
+      "name": "red-native-moltres-third-access-20260925-v1",
+      "plan_sha256": "15164f5a671e8b1136a65d225d1ffc55941c433fe625d8efe3ba0b45d9d82a35",
+      "source_sha256": "0766fe3eb19033da3853b817b5308fea456fcdbd5933b408de7d08f627e7e0b5",
+      "source_packet": "red-native-moltres-switch-20260925-v3",
+      "final_sha256": "79e85eca39cba0295efacbce921992eabbae1a79ea865a2fc7eef00fdc62f328",
+      "actions": 3,
+      "frames": 168,
+      "result_sha256": "18fdc0da407b67aeaf35358edd45e565c219472f535ef4bc13ec96be49bda819",
+      "error_type": "StrengthPlanningError"
+    },
+    {
+      "name": "red-native-moltres-third-access-20260925-v2",
+      "plan_sha256": "e5cd454d5a0658a6a079a40ce8230ee1b2bdb39a803d878f3b4ea12c3e8baee6",
+      "source_sha256": "79e85eca39cba0295efacbce921992eabbae1a79ea865a2fc7eef00fdc62f328",
+      "source_packet": "red-native-moltres-third-access-20260925-v1",
+      "final_sha256": "79e85eca39cba0295efacbce921992eabbae1a79ea865a2fc7eef00fdc62f328",
+      "actions": 0,
+      "frames": 0,
+      "result_sha256": "76cb394053e2ba53876c0294e41de2535d10ccf37143c304dd35814b387ed16b",
+      "error_type": "StrengthPlanningError"
+    },
+    {
+      "name": "red-native-acquisition-choice-20260925-v1",
+      "plan_sha256": "c5e3947dac63bfd2afae54a976574913d84a0600f5bda68aabccdd07d8ac371e",
+      "source_sha256": "4c22057cac94f2d9dc5fe8da272348a93e55f59b9c8efa2e4b55c381390fa960",
+      "source_packet": "red-native-capture-three-option-pilot-20260925-v1",
+      "final_sha256": "50f6f0bfff4212205e393cdae98709da4f7c63ff26aca1e8a66fa2e806c10574",
+      "actions": 428,
+      "frames": 32184,
+      "result_sha256": "788d7cd06aae77ed8969525bca1760ddfd2374397f6a599366e62dc8201d4c0f",
+      "error_type": null
+    },
+    {
+      "name": "red-native-routed-static-20260925-v1",
+      "plan_sha256": "26e34c2a513096c244702e7d37229e273857a09a881b2fa4e271618f049ac749",
+      "source_sha256": "50f6f0bfff4212205e393cdae98709da4f7c63ff26aca1e8a66fa2e806c10574",
+      "source_packet": "red-native-acquisition-choice-20260925-v1",
+      "final_sha256": "76ada5e24949e2608488905ff1cddd54933070654c34d47247df257271e790b0",
+      "actions": 177,
+      "frames": 14676,
+      "result_sha256": "74417274f936499c2d82eb69a0ea9ccac66ba16a60b084d6d10b4599e9ab7e44",
+      "error_type": null
+    },
+    {
+      "name": "red-native-mewtwo-choice-preparation-20260925-v1",
+      "plan_sha256": "4597bddde347172b63ecac500f7ae3ef1b10c17f87bee830dc5b1015f918bc85",
+      "source_sha256": "76ada5e24949e2608488905ff1cddd54933070654c34d47247df257271e790b0",
+      "source_packet": "red-native-routed-static-20260925-v1",
+      "final_sha256": "1baa6a21a38ba7bafd0ac89dd7836264fdc0c3408c5961efce95c9d7817be7bb",
+      "actions": 819,
+      "frames": 52680,
+      "result_sha256": "661c9b124a78e67b60fe4f2a92ae8936daab11e784bd30c4e08aa87c88b37e6c",
+      "error_type": null
+    },
+    {
+      "name": "red-native-mewtwo-acquisition-choice-20260925-v1",
+      "plan_sha256": "704f3a4b634c2c262085654cf52b30e0608633a9a4878eca1b5a9d2ba552c806",
+      "source_sha256": "1baa6a21a38ba7bafd0ac89dd7836264fdc0c3408c5961efce95c9d7817be7bb",
+      "source_packet": "red-native-mewtwo-choice-preparation-20260925-v1",
+      "final_sha256": "cb9cd560dbf6baf8b0bfcb294c50a236220640945ddd2d6306555a18aa6cc360",
+      "actions": 62,
+      "frames": 5124,
+      "result_sha256": "eaba15b3e1172a10c22300cf8af6e16eacb0494f4d9ce25eedd5915735e9b4b5",
+      "error_type": null
+    },
+    {
+      "name": "red-native-held-fossil-20260925-v1",
+      "plan_sha256": "3f40fe932afc0db8ecfa37c403e3f26e91fba96e6bfb2b8c083faff45bccacea",
+      "source_sha256": "cb9cd560dbf6baf8b0bfcb294c50a236220640945ddd2d6306555a18aa6cc360",
+      "source_packet": "red-native-mewtwo-acquisition-choice-20260925-v1",
+      "final_sha256": "52da45b2ea54d564687fbd2c977591969681d4161229a162712e637cbdc4bd65",
+      "actions": 191,
+      "frames": 12720,
+      "result_sha256": "03c8610d5e207b8895a009ff1f7c3210f96d432e481a9ae0270a45bfc09e0809",
+      "error_type": null
+    },
+    {
+      "name": "red-native-old-amber-20260925-v1",
+      "plan_sha256": "f016912ab92ad686921c0653dbea9ecf384d998e18229c2ceaa6b4c1ab0b3d6d",
+      "source_sha256": "52da45b2ea54d564687fbd2c977591969681d4161229a162712e637cbdc4bd65",
+      "source_packet": "red-native-held-fossil-20260925-v1",
+      "final_sha256": "0a66f41a1d77f4c1077e6efc34b0d89cfac4b034da1a347ca56dbe085bcca3a2",
+      "actions": 142,
+      "frames": 7500,
+      "result_sha256": "68977589086972a0860a9b89047b28e74304e2c0a2f598218659ea2d3aa78c9e",
+      "error_type": null
+    },
+    {
+      "name": "red-native-fossil-choice-preparation-20260925-v1",
+      "plan_sha256": "9fba10b24105a69ea57955e27dbe53bef6511eefe2659733a0fd1d42db4865cd",
+      "source_sha256": "0a66f41a1d77f4c1077e6efc34b0d89cfac4b034da1a347ca56dbe085bcca3a2",
+      "source_packet": "red-native-old-amber-20260925-v1",
+      "final_sha256": "5599bdc0672028125c65ccac188bc20ba27303e20b696990fe3918389d83b134",
+      "actions": 76,
+      "frames": 2208,
+      "result_sha256": "6e248c1f116d9b26b5cb60007061f66951bf6a37091e4724a7ef2f0c97f3222b",
+      "error_type": null
+    },
+    {
+      "name": "red-native-fossil-acquisition-choice-20260925-v1",
+      "plan_sha256": "363e55da7d2ab7fa642c9439252226bb680ccc42d1f0f3fdae247e4b56d65036",
+      "source_sha256": "5599bdc0672028125c65ccac188bc20ba27303e20b696990fe3918389d83b134",
+      "source_packet": "red-native-fossil-choice-preparation-20260925-v1",
+      "final_sha256": "5599bdc0672028125c65ccac188bc20ba27303e20b696990fe3918389d83b134",
+      "actions": 0,
+      "frames": 0,
+      "result_sha256": "c0d710a615d3fcb4587a4cffc3d1d8bc5674750e6da9821f830a0002353cee4d",
+      "error_type": null
+    },
+    {
+      "name": "red-native-fossil-acquisition-choice-20260925-v2",
+      "plan_sha256": "508273847c63ecb4f1b356ed93129f6c30e6fb4dac7ad6fcd92d109b7b071b60",
+      "source_sha256": "5599bdc0672028125c65ccac188bc20ba27303e20b696990fe3918389d83b134",
+      "source_packet": "red-native-fossil-acquisition-choice-20260925-v1",
+      "final_sha256": "0080d006304cc9b576f3350c59f6d0ae94840efeb3881f6d34369b39900086a3",
+      "actions": 170,
+      "frames": 10584,
+      "result_sha256": "4d262816a5de6cd6f1c5eae447f2f2975b3b95b94911b1ecf3d7382f96669e00",
+      "error_type": null
+    },
+    {
+      "name": "red-native-ingredient-goal-preparation-20260925-v1",
+      "plan_sha256": "eebcba9e86f293ba3f0788bea5b3c0ceb4727f0138127b7124bfdccb17539455",
+      "source_sha256": "52da45b2ea54d564687fbd2c977591969681d4161229a162712e637cbdc4bd65",
+      "source_packet": "red-native-held-fossil-20260925-v1",
+      "final_sha256": "7fed7691bc46717a9f48de3b117968dd9a8fbb382ab53e80e0178f74da7a6708",
+      "actions": 114,
+      "frames": 4524,
+      "result_sha256": "fadee9c83c8d555237aa7d104c35273575d5cb57d2671ba9f9758a6dccf5dd2a",
+      "error_type": null
+    },
+    {
+      "name": "red-native-ingredient-goal-qualification-20260925-v1",
+      "plan_sha256": "c2c662e5d359746284ebdc5489a18ecf94889e1055555a757bbbff7d6ca115ac",
+      "source_sha256": "7fed7691bc46717a9f48de3b117968dd9a8fbb382ab53e80e0178f74da7a6708",
+      "source_packet": "red-native-ingredient-goal-preparation-20260925-v1",
+      "final_sha256": "c68e010c93406bd516a06ad20957c7207355eddd506e57429ad7a75aa72d6bab",
+      "actions": 370,
+      "frames": 18456,
+      "result_sha256": "ea3f5ec7a64df285f3b89e384105be100ac23002dd6bc6f4ee2f569bc1dced3b",
+      "error_type": null
+    },
+    {
+      "name": "red-native-whole-fossil-acquisition-choice-20260925-v1",
+      "plan_sha256": "f02830f5686f969bf214b3e1775ebf878e8f23866d650084f234581b099d65c2",
+      "source_sha256": "7fed7691bc46717a9f48de3b117968dd9a8fbb382ab53e80e0178f74da7a6708",
+      "source_packet": "red-native-ingredient-goal-preparation-20260925-v1",
+      "final_sha256": "c68e010c93406bd516a06ad20957c7207355eddd506e57429ad7a75aa72d6bab",
+      "actions": 370,
+      "frames": 18456,
+      "result_sha256": "788aa981cd017542f3a67235a9a0523ca42063ac2bdcef6b5b3dcc5d10094344",
+      "error_type": null
+    }
+  ],
+  "tests": {
+    "targeted": 655,
+    "changed_file_lint": true,
+    "focused_typing": true,
+    "full_suite_passed": false,
+    "broad_run": {
+      "passed": 3678,
+      "failed": 3,
+      "xfailed": 1,
+      "integration_deselected": 16,
+      "stopped_after_failures": true
+    },
+    "known_failures": [
+      "historical Route11 source attestation: red.run-team-balancing",
+      "historical Vermilion timing receipt comparison",
+      "Cut candidate test expects living move holder refusal",
+      "historical Cave source-drift expectation: red_party.py",
+      "Cut route capability test expects fainted holder refusal",
+      "Cut capability test excludes fainted move holder",
+      "Route11 ratio composition refuses historical source drift",
+      "Route11 registry round-trip refuses historical source drift"
+    ],
+    "diagnostic_remainder": {
+      "passed": 10022,
+      "failed": 3,
+      "skipped": 1,
+      "xfailed": 1,
+      "deselected": 19,
+      "interrupted": true,
+      "seconds": 1439.84,
+      "private_output_sha256": "7feb9c1eb61909c77385024a7298da10905cd95b9f1ccb21ab0eb94a8ac20150"
+    },
+    "baseline": {
+      "commit": "0ee389504f7147598129a3327885e55a3395a7de",
+      "same_three_failures_reproduced": true,
+      "private_report_sha256": "f2a22da47849cf937d09cac010baf10799aa6a04822385fe776e4d7ea6814d28",
+      "additional_three_failures_reproduced": true,
+      "additional_private_report_sha256": "4b648e1e502d68b5aef464bd6acccb35cfc247c44040d8e1a39326ef7feea7d0",
+      "tail_two_failures_reproduced": true,
+      "tail_private_report_sha256": "5126def6f05da0f09db26873b5cb350427af04247cb5162d626d7d17ccd89944",
+      "all_eight_observed_failures_reproduced": true
+    },
+    "documentation": 174,
+    "final_changed_file_rerun": 277,
+    "diagnostic_tail": {
+      "passed": 879,
+      "failed": 2,
+      "seconds": 589.87,
+      "interrupted": true,
+      "overlaps_previous_runs": true,
+      "private_report_sha256": "e681cf50f9184177d1cca6a041b89a2f29fe985880cf0ca1ce0a7bfb4c0f727a",
+      "selection": "files from zero-based collected non-integration node index10024 onward"
+    },
+    "final_related_routing_revival_rerun": 75
+  },
+  "claims": {
+    "model_selected_voltorb": true,
+    "model_selected_mewtwo": true,
+    "model_selected_held_fossil_revival": true,
+    "model_selected_whole_ingredient_revival": true,
+    "learned_ball_allocation": false,
+    "learned_preparation_strategy": false,
+    "default_profile_promoted": false,
+    "final_fresh_red_criteria_met": 0
+  },
+  "limits": [
+    "Every model menu contained two alternatives. The three-option-named packet actually offered two.",
+    "Four successful choices include two related Aerodactyl diagnostics, not four unique global registrations.",
+    "Copies inherit known earned-story DEVELOPMENT lineage and cannot be fitted or counted as independent roots.",
+    "The full-HP paralyzed Zapdos diagnostic exhausted its original twenty Great Balls. The later Master Ball diagnostic was separately declared, not a fallback within that allocation.",
+    "Ball-turn replacement is qualified; status-helper or weakening-turn faint, medicine use and unresolved interrupted throws still pause.",
+    "Capture journals authenticate exact bytes and allocations using caller-retained latest references; no global antirollback or power-loss guarantee.",
+    "Moltres Strength heuristic exhausted the original search limit and was rejected; production Strength unchanged. Articuno current-control access unqualified.",
+    "No favorable copy was substituted for either protected campaign or collection endpoint; no GitHub publication.",
+    "Two early native logger failures retained final states and action journals but lack RESULT files; costs were independently reconstructed.",
+    "Broad battler win/cost qualification remains failed; these acquisition integrations do not revise it."
+  ],
+  "puzzle_readonly_inventory": {
+    "sha256": "f92ae1014e0c76e8dead1e744832780723e95d189c9744bec804a84133da6ee0",
+    "retained_states_reread": 17,
+    "inputs": 0,
+    "frames": 0,
+    "searches": 0,
+    "drop_event": 1638,
+    "drop_reset_on_third_floor_reentry": true,
+    "switch_events": [
+      1336,
+      1343,
+      1632
+    ],
+    "qualification_passed": false
+  },
+  "retrospective_policy_audit": {
+    "sha256": "af33e226296a32eb99227bdc9151ac66541baf7c9a8d5b855601908f25962c50",
+    "saved_menus": 6,
+    "score_probability_absolute_tolerance": 1e-12,
+    "all_sampled_indices_match": true,
+    "seed_derivation_mix_and_mode_checked": true,
+    "executed_new_decisions": 0,
+    "emulator_inputs": 0,
+    "emulator_frames": 0,
+    "fits": 0,
+    "scope": "Recorded policy-only inputs and frozen weights; does not establish strategic quality or new independent outcomes."
+  },
+  "work_window": {
+    "start_utc": "2026-09-25T15:04:37Z",
+    "cutoff_utc": "2026-09-25T18:04:37Z"
+  }
+}

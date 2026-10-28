@@ -1,0 +1,660 @@
+{
+  "closed_utc": "2026-10-09T17:02:36.248351+00:00",
+  "comparison": {
+    "accepted_model_improvement": false,
+    "all_four_terminal_bytes_identical": true,
+    "arms": [
+      {
+        "actor": "baseline",
+        "buttons_released": true,
+        "capture_attempts": 0,
+        "capture_stop": "safety_check_failed",
+        "choices": [
+          "restore_team",
+          "acquire_species",
+          "restore_team"
+        ],
+        "condition": "dev-healthy",
+        "costs": {
+          "actions_attempted": 1112,
+          "actions_completed": 1112,
+          "automatic_fit": false,
+          "buttons_released": true,
+          "control_recovery_cash_debits": 0,
+          "diagnostic_events": 214,
+          "diagnostic_journal_seconds": 0.6431058290181682,
+          "frames": 92688,
+          "goal_attempts": 3,
+          "nested_restore_attempts": 0,
+          "promotions": 0,
+          "restore_attempts": 2,
+          "schema": "pokemon.red.native-player-costs.v1",
+          "seconds": 26.28689704206772,
+          "training_healing_attempts": 0
+        },
+        "field_ready": true,
+        "learned_battles": 7,
+        "new_registrations": [
+          20
+        ],
+        "original_wrapper_report_recovered": true,
+        "registrations": 6,
+        "result_sha256": "6d8962f7e68e3e06d2fb5fe763b98434ef1edfec0c03d3ca38b538eb06c1ba62",
+        "source_sha256": "44d8381b784559669a1d3dfa19040c0f37872f97cce8ffe2e0648e8d6551d73f",
+        "source_unchanged": true,
+        "stop_reason": "decision_budget",
+        "terminal_sha256": "732381409ee5bf614de446528737962a0d5751ddff54d947c78f66b07f20cd48",
+        "verifications": [
+          "succeeded",
+          "failed",
+          "succeeded"
+        ]
+      },
+      {
+        "actor": "student",
+        "buttons_released": true,
+        "capture_attempts": 0,
+        "capture_stop": "safety_check_failed",
+        "choices": [
+          "restore_team",
+          "acquire_species",
+          "restore_team"
+        ],
+        "condition": "dev-healthy",
+        "costs": {
+          "actions_attempted": 1112,
+          "actions_completed": 1112,
+          "automatic_fit": false,
+          "buttons_released": true,
+          "control_recovery_cash_debits": 0,
+          "diagnostic_events": 214,
+          "diagnostic_journal_seconds": 0.6364341654116288,
+          "frames": 92688,
+          "goal_attempts": 3,
+          "nested_restore_attempts": 0,
+          "promotions": 0,
+          "restore_attempts": 2,
+          "schema": "pokemon.red.native-player-costs.v1",
+          "seconds": 26.285873582935892,
+          "training_healing_attempts": 0
+        },
+        "field_ready": true,
+        "learned_battles": 7,
+        "new_registrations": [
+          20
+        ],
+        "original_wrapper_report_recovered": true,
+        "registrations": 6,
+        "result_sha256": "784220e1c9f4162adb9349472c985a457f26ef51c29a167e1cae2d2944e5da41",
+        "source_sha256": "44d8381b784559669a1d3dfa19040c0f37872f97cce8ffe2e0648e8d6551d73f",
+        "source_unchanged": true,
+        "stop_reason": "decision_budget",
+        "terminal_sha256": "732381409ee5bf614de446528737962a0d5751ddff54d947c78f66b07f20cd48",
+        "verifications": [
+          "succeeded",
+          "failed",
+          "succeeded"
+        ]
+      },
+      {
+        "actor": "baseline",
+        "buttons_released": true,
+        "capture_attempts": 0,
+        "capture_stop": "safety_check_failed",
+        "choices": [
+          "restore_team",
+          "acquire_species",
+          "restore_team"
+        ],
+        "condition": "dev-depleted",
+        "costs": {
+          "actions_attempted": 1112,
+          "actions_completed": 1112,
+          "automatic_fit": false,
+          "buttons_released": true,
+          "control_recovery_cash_debits": 0,
+          "diagnostic_events": 214,
+          "diagnostic_journal_seconds": 0.5323617543326691,
+          "frames": 92688,
+          "goal_attempts": 3,
+          "nested_restore_attempts": 0,
+          "promotions": 0,
+          "restore_attempts": 2,
+          "schema": "pokemon.red.native-player-costs.v1",
+          "seconds": 20.86020108393859,
+          "training_healing_attempts": 0
+        },
+        "field_ready": true,
+        "learned_battles": 7,
+        "new_registrations": [
+          20
+        ],
+        "original_wrapper_report_recovered": false,
+        "registrations": 6,
+        "result_sha256": "051426e157e9167536d4701078971554ff75b0830aadcc053770f3c011cb2e1c",
+        "source_sha256": "2debdc86f351be27bfb288fd60189af4f481297fa3f121885dbc6db1ff698c24",
+        "source_unchanged": true,
+        "stop_reason": "decision_budget",
+        "terminal_sha256": "732381409ee5bf614de446528737962a0d5751ddff54d947c78f66b07f20cd48",
+        "verifications": [
+          "succeeded",
+          "failed",
+          "succeeded"
+        ]
+      },
+      {
+        "actor": "student",
+        "buttons_released": true,
+        "capture_attempts": 0,
+        "capture_stop": "safety_check_failed",
+        "choices": [
+          "restore_team",
+          "acquire_species",
+          "restore_team"
+        ],
+        "condition": "dev-depleted",
+        "costs": {
+          "actions_attempted": 1112,
+          "actions_completed": 1112,
+          "automatic_fit": false,
+          "buttons_released": true,
+          "control_recovery_cash_debits": 0,
+          "diagnostic_events": 214,
+          "diagnostic_journal_seconds": 0.5179747830843553,
+          "frames": 92688,
+          "goal_attempts": 3,
+          "nested_restore_attempts": 0,
+          "promotions": 0,
+          "restore_attempts": 2,
+          "schema": "pokemon.red.native-player-costs.v1",
+          "seconds": 20.870863917050883,
+          "training_healing_attempts": 0
+        },
+        "field_ready": true,
+        "learned_battles": 7,
+        "new_registrations": [
+          20
+        ],
+        "original_wrapper_report_recovered": false,
+        "registrations": 6,
+        "result_sha256": "a077c76656d3767cbbb01546bcfe40294a923fcea24e3210fd56421f5c2a5db5",
+        "source_sha256": "2debdc86f351be27bfb288fd60189af4f481297fa3f121885dbc6db1ff698c24",
+        "source_unchanged": true,
+        "stop_reason": "decision_budget",
+        "terminal_sha256": "732381409ee5bf614de446528737962a0d5751ddff54d947c78f66b07f20cd48",
+        "verifications": [
+          "succeeded",
+          "failed",
+          "succeeded"
+        ]
+      }
+    ],
+    "condition_collapse_after_healing": true,
+    "incidental_raticate_is_capture_success": false,
+    "original_failures_retained": true,
+    "rankings": {
+      "baseline": {
+        "capture_rows": [
+          {
+            "bounded_success": 1.0,
+            "effort": 0.5509999999999999,
+            "index": 0,
+            "party_risk": 0.18,
+            "raw_success": 1.2406317193929826,
+            "score": 2.662087251662201
+          },
+          {
+            "bounded_success": 1.0,
+            "effort": 0.563,
+            "index": 3,
+            "party_risk": 0.18,
+            "raw_success": 1.2463380300247193,
+            "score": 2.662574055553224
+          },
+          {
+            "bounded_success": 1.0,
+            "effort": 0.503,
+            "index": 4,
+            "party_risk": 0.18,
+            "raw_success": 1.2178064768660357,
+            "score": 2.6601400360981096
+          }
+        ],
+        "margin": 0.00048680389102306876,
+        "selected_feature_differences": [
+          {
+            "compared": 0.5509999999999999,
+            "feature": "execution_effort",
+            "selected": 0.563
+          }
+        ],
+        "selected_index": 3
+      },
+      "student": {
+        "capture_rows": [
+          {
+            "bounded_success": 1.0,
+            "effort": 0.5509999999999999,
+            "index": 0,
+            "party_risk": 0.18,
+            "raw_success": 1.001648743962235,
+            "score": 2.691562593250196
+          },
+          {
+            "bounded_success": 1.0,
+            "effort": 0.563,
+            "index": 3,
+            "party_risk": 0.18,
+            "raw_success": 1.0072837912842612,
+            "score": 2.692063481328068
+          },
+          {
+            "bounded_success": 0.9791085546741298,
+            "effort": 0.503,
+            "index": 4,
+            "party_risk": 0.18,
+            "raw_success": 0.9791085546741298,
+            "score": 2.6059932596352264
+          }
+        ],
+        "margin": 0.0005008880778722968,
+        "selected_feature_differences": [
+          {
+            "compared": 0.5509999999999999,
+            "feature": "execution_effort",
+            "selected": 0.563
+          }
+        ],
+        "selected_index": 3
+      }
+    },
+    "successful_selected_capture_goals": 0
+  },
+  "date": "2026-10-09",
+  "diagnosis": {
+    "cash_distinction_learned": false,
+    "native_route25_capture_started": false,
+    "native_route25_safety_stop": true,
+    "next": "Expose existing prospective route combat/work in portable risk/effort; then matched actual TRAIN contrasts and one useful retained test. Do not repeat this fit or another Red campaign.",
+    "route25_native_trainers": 7,
+    "route_candidates_differ_mainly_in_effort": true,
+    "same_projected_party_risk": 0.18,
+    "success_scores_are_calibrated_probabilities": false
+  },
+  "engineering": {
+    "eight_connected_action_free_probes": true,
+    "existing_ball_stock_now_reaches_resource_cost": true,
+    "existing_scoped_train_actor_resolved": true,
+    "existing_search_world_connected": true,
+    "non_clock_feature_parity": true,
+    "original_censored_attempts_unchanged": true,
+    "original_two_report_errors_recovered_without_inputs": true,
+    "sampled_wall_budget_variance_retained": true,
+    "search_coverage": {
+      "automatic_fit": false,
+      "capture": {
+        "by_source": {
+          "ordinary_wild": 1
+        },
+        "completed": 1,
+        "incomplete": 0,
+        "started": 1,
+        "throws": [
+          {
+            "ball_id": 4,
+            "event_ordinal": 95,
+            "measured_cost": {
+              "actions": 36,
+              "frames": 3792,
+              "seconds": 0.41031966696027666
+            },
+            "outcome": "specimen_retained",
+            "source": "ordinary_wild"
+          }
+        ]
+      },
+      "diagnostic_only": true,
+      "event_counts": {
+        "capture_throw_completed": 1,
+        "capture_throw_started": 1,
+        "capture_verified": 1,
+        "ordinary_goal_inventory": 1,
+        "player_boundary": 1,
+        "regional_source_evaluation_started": 8,
+        "regional_source_excluded": 6,
+        "regional_source_offered": 3,
+        "regional_source_topology": 51,
+        "regional_sources_unexamined": 1,
+        "survey_action_returned": 12,
+        "survey_decision": 12
+      },
+      "fishing": {
+        "no_bites": 0,
+        "observed_casts": 0,
+        "selected_target_sightings": 0
+      },
+      "schema": "pokemon.red.player-diagnostic-coverage.v1",
+      "search": {
+        "actual_rng_checks": null,
+        "known_tile_exposure": 11,
+        "observed_operations": 11,
+        "operations_with_known_tile_exposure": 11,
+        "step_probability": null,
+        "total_eligible_search_steps": 11
+      },
+      "training_admission": false
+    }
+  },
+  "learning": {
+    "actual_train_actions": 4134,
+    "actual_train_attempts": 16,
+    "actual_train_frames": 333372,
+    "admitted_train_delta": 11,
+    "adoption_delta": 0,
+    "authority_promotions": 0,
+    "candidate_examples": 162,
+    "candidate_model_sha256": "893215a3fd31b9bafac4c8e4f835d7eb28b4ba22142c4294a66e5741aa16f788",
+    "deployed": false,
+    "failed_admitted_captures": 2,
+    "fit_delta": 1,
+    "new_train_mse_after": 0.014440856934857884,
+    "new_train_mse_before": 0.04420726717574592,
+    "old_train_mse_after": 0.012689520860474078,
+    "old_train_mse_before": 0.012646456991376821,
+    "parent_examples": 151,
+    "parent_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "quarantined_train_attempts": 5,
+    "retained_all151_fingerprints": true,
+    "successful_admitted_captures": 6,
+    "successful_admitted_restorations": 3
+  },
+  "schema": "pokemon.red.informative-collection-learning-evidence.v1",
+  "scope": {
+    "actor_memory_writes": false,
+    "completed_save_changes": false,
+    "copy_back": false,
+    "development_fitting": false,
+    "independent_evaluation": false,
+    "main_changes": false,
+    "new_battler": false,
+    "new_feature_schema": false,
+    "new_subsystems": false,
+    "published": false,
+    "related_reserved_development": true,
+    "related_train_variants": true,
+    "runtime_llm_calls": 0,
+    "teacher_only_health_pp_ball_cash_edits": true
+  },
+  "session_id": "2026-10-09-informative-collection-learning",
+  "session_start_utc": "2026-10-09T16:18:47Z",
+  "status": "closed_useful_choice_improvement_not_demonstrated",
+  "train_arms": [
+    {
+      "actions": 175,
+      "admitted": true,
+      "arm": "healthy-short-capture",
+      "battle_calls": 0,
+      "condition": "train-healthy",
+      "field_ready": true,
+      "frames": 11820,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "94fd073b2ad3c3291cbf9651a7494515d61966ca5233d7f1c2ac5d726f16b516",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 46,
+      "admitted": false,
+      "arm": "healthy-long-capture",
+      "battle_calls": 0,
+      "condition": "train-healthy",
+      "field_ready": false,
+      "frames": 1260,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": "collection lesson requires matching settled TRAIN execution",
+      "result_sha256": "0e331b1bfdc18295070db16138c659b448299b098a1ab4b18f0269ec958f9beb",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 175,
+      "admitted": true,
+      "arm": "high-pp-short-capture",
+      "battle_calls": 0,
+      "condition": "train-high-pp",
+      "field_ready": true,
+      "frames": 11820,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "216d01fae331992d2d5de6a7adba42b6d45859bdf63cc281b3d6dcc0fbfed2a5",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 46,
+      "admitted": false,
+      "arm": "high-pp-long-capture",
+      "battle_calls": 0,
+      "condition": "train-high-pp",
+      "field_ready": false,
+      "frames": 1260,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": "collection lesson requires matching settled TRAIN execution",
+      "result_sha256": "b21e6513df063e7fa263ad6bcdf1086ee3f6a6aff9b4499c624b1f59e376390a",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 153,
+      "admitted": true,
+      "arm": "hp-depleted-capture",
+      "battle_calls": 0,
+      "condition": "train-hp-depleted",
+      "field_ready": true,
+      "frames": 10896,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "ac14b38794b5cd502693ebffcbdfedb5c8a4b68e77ce484f2a539edf60cf4aa8",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 22,
+      "admitted": true,
+      "arm": "hp-depleted-restore",
+      "battle_calls": 0,
+      "condition": "train-hp-depleted",
+      "field_ready": true,
+      "frames": 1584,
+      "kind": "restore_team",
+      "new_registrations": [],
+      "reason": null,
+      "result_sha256": "5dfc8c83a5c2f26ed8f070fa2a95631c8347411846873f67c26d095fbbb1c96e",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 175,
+      "admitted": true,
+      "arm": "pp-depleted-capture",
+      "battle_calls": 0,
+      "condition": "train-pp-depleted",
+      "field_ready": true,
+      "frames": 11820,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "84af95689fa685f175a172578c1e7d20262329af0dabd4d419556f51ea318d81",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 22,
+      "admitted": true,
+      "arm": "pp-depleted-restore",
+      "battle_calls": 0,
+      "condition": "train-pp-depleted",
+      "field_ready": true,
+      "frames": 1584,
+      "kind": "restore_team",
+      "new_registrations": [],
+      "reason": null,
+      "result_sha256": "4462f98dced9d52e74a18250b5f07e122ffb9d49508676387153ada31f6f3539",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 175,
+      "admitted": true,
+      "arm": "scarce-short-capture",
+      "battle_calls": 0,
+      "condition": "train-scarce-balls",
+      "field_ready": true,
+      "frames": 11820,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "86a58ad8ceb10b9d9077bd546ea0bdc5f6fb120d39f41f8014c9108ec43257f0",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 46,
+      "admitted": false,
+      "arm": "scarce-long-capture",
+      "battle_calls": 0,
+      "condition": "train-scarce-balls",
+      "field_ready": false,
+      "frames": 1260,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": "collection lesson requires matching settled TRAIN execution",
+      "result_sha256": "349aa4875cfb21c0f6a8d7e88660854397685e9b63a2422588025bda7406e8d6",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 159,
+      "admitted": true,
+      "arm": "depleted-scarce-capture",
+      "battle_calls": 0,
+      "condition": "train-depleted-scarce",
+      "field_ready": true,
+      "frames": 10128,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": null,
+      "result_sha256": "4cd947c1e882867aa65170a6e2c2a3477167ff14e951d76eadf447af91b92fba",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 22,
+      "admitted": true,
+      "arm": "depleted-scarce-restore",
+      "battle_calls": 0,
+      "condition": "train-depleted-scarce",
+      "field_ready": true,
+      "frames": 1584,
+      "kind": "restore_team",
+      "new_registrations": [],
+      "reason": null,
+      "result_sha256": "84b9edbf9264cac922f3cad0d462f06237fb17117eea847a6bc8f1e060862de9",
+      "succeeded": true,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 817,
+      "admitted": false,
+      "arm": "connected-healthy-long",
+      "battle_calls": 4,
+      "condition": "train-healthy",
+      "field_ready": true,
+      "frames": 73404,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": "collection lesson requires matching settled TRAIN execution",
+      "result_sha256": "388ed6deeeacca175696d2116a557c8c0c6e592725dfdc8093a7df258e639526",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 878,
+      "admitted": true,
+      "arm": "connected-high-pp-long",
+      "battle_calls": 4,
+      "condition": "train-high-pp",
+      "field_ready": true,
+      "frames": 79044,
+      "kind": "acquire_species",
+      "new_registrations": [],
+      "reason": null,
+      "result_sha256": "578ac73f2f3beba7427e281cae69931cd3aaa6b1b62be53fe2141c27ada0980d",
+      "succeeded": false,
+      "verified_native_loss": true
+    },
+    {
+      "actions": 1048,
+      "admitted": false,
+      "arm": "connected-scarce-long",
+      "battle_calls": 7,
+      "condition": "train-scarce-balls",
+      "field_ready": true,
+      "frames": 92268,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:020"
+      ],
+      "reason": "registered collection lost an undeclared specimen",
+      "result_sha256": "7e5c8877d62965f7edb1ff94f2e637ae863d731581ee2a3878e46445754c664e",
+      "succeeded": false,
+      "verified_native_loss": false
+    },
+    {
+      "actions": 175,
+      "admitted": true,
+      "arm": "connected-scarce-short",
+      "battle_calls": 0,
+      "condition": "train-scarce-balls",
+      "field_ready": true,
+      "frames": 11820,
+      "kind": "acquire_species",
+      "new_registrations": [
+        "pokemon:national:021"
+      ],
+      "reason": null,
+      "result_sha256": "8b78bdcc49695f1316864465c581fc4d21a0762b6febb6342d3a2ef4ab782963",
+      "succeeded": true,
+      "verified_native_loss": false
+    }
+  ],
+  "verification": {
+    "completed_model_examples": 151,
+    "completed_registrations": 124,
+    "focused_behavior_tests_passed": 381,
+    "focused_undefined_names_passed": true,
+    "full_suite_claim": false,
+    "hosted_ci_claim": false,
+    "main_registrations": 32,
+    "native_worker_running": false,
+    "no_fresh_red_gate_advanced": true,
+    "protected_pin_mismatches": 0,
+    "protected_pins_verified": 26
+  }
+}

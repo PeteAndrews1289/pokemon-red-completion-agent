@@ -23,6 +23,15 @@ merely because a link/event source is unavailable. Mew is deferred. Global ledge
 substitutes for a local owned flag. This aligns the contract with the existing mission and
 North Star, not a new relaxation. Earlier story-only results retain their original scope.
 
+## Development is not official evaluation
+
+This contract freezes official evaluation,not ordinary development. Under the
+current North Star,development may use controlled TRAIN fixtures,disclosed teacher
+assistance,repeated copies,live repairs and reversible provisional candidates.
+Exploratory campaigns need not pass every formal component gate before running.
+They are never counted as frozen unassisted evaluations or fresh-Red acceptance.
+An official run still requires all conditions below and the same-save124-species gate.
+
 ## Clean power-on
 
 The supported runtime starts PyBoy with its packaged DMG-compatible boot ROM, immutable verified
@@ -82,7 +91,15 @@ Results from different actors and assistance conditions are never pooled:
    timing/RNG schedules from clean power-on. Teacher/oracle fallback is disabled; the actor chooses
    from semantic observations.
 
-Every full-game attempt in every lane starts clean, counts toward its declared denominator, and
+Pete's October6temporary exception permits an automated, disclosed medicine-reserve
+rule before an uninterrupted League challenge in lane3. It uses normal game inputs
+and actually earned money;its purchases/healing are counted as rule-based support,
+not model-learned procurement. Declare and freeze the rule with the evaluated stack.
+No operator intervention or other teacher/oracle fallback is authorized. Replacing
+this stopgap with learned anticipation remains explicit future work. Earlier
+supported runs do not become official evaluations under this prospective permission.
+
+Every official full-game attempt in every evaluation lane starts clean, counts toward its declared denominator, and
 forbids save restoration, rollback, or cross-run memory. Training-only snapshot suites may test
 targeted nearby positions, menu states, encounters, damage, status, and recovery, but they are
 component evidence and cannot be reported as clean-run completion.

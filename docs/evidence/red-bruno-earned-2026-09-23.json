@@ -1,0 +1,138 @@
+{
+  "action_counts": {
+    "attack": 7,
+    "forced_switch": 0,
+    "switch_prompt": 4,
+    "voluntary_switch": 0
+  },
+  "actions": 484,
+  "all_choices_recomputed": true,
+  "audit_frames": 0,
+  "audit_source_sha256": "8066b9ccd529d5eadcbb56c531f4719c9e43eb4b6fdafe4fca2af917dae27db5",
+  "audited_behavior": {
+    "active_slot_1": 8,
+    "active_slot_3": 3,
+    "attack": 7,
+    "decisions": 11,
+    "main_with_legal_status": 2,
+    "opponents_defeated": 5,
+    "own_faints": 0,
+    "policy_nanoseconds": 30132876,
+    "pp_spent": 7,
+    "status_choices": 0,
+    "suppressed_or_failed": 0,
+    "switch_prompt": 4
+  },
+  "battle_losses": 0,
+  "battle_wins": 1,
+  "battle_xp": [
+    {
+      "level_after": 55,
+      "level_before": 54,
+      "species_id": 28,
+      "xp_gained": 6557
+    },
+    {
+      "level_after": 41,
+      "level_before": 41,
+      "species_id": 132,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 46,
+      "level_before": 46,
+      "species_id": 64,
+      "xp_gained": 2475
+    },
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 118,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 46,
+      "level_before": 46,
+      "species_id": 104,
+      "xp_gained": 0
+    }
+  ],
+  "battle_xp_total": 9032,
+  "battler_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "campaign_retries": 0,
+  "candy_xp": 1522,
+  "copy_state_loaded": false,
+  "default_promotions": 0,
+  "envelope_sha256": "27692891f1b27c8562fb6e074b005e1b6200091cc5d3d387db6a50247c50139e",
+  "event_records": 43,
+  "execution_commit": "ba85490cc681fd7e8ffc990e8531efb11e67c6bf",
+  "frames": 46560,
+  "gameplay_running": false,
+  "items_consumed": {
+    "19": 4,
+    "20": 4,
+    "40": 1,
+    "82": 1
+  },
+  "limitations": [
+    "Recovery target/items and opening lead are declared deterministic support, not learned resource selection.",
+    "Execution reproduced the copy endpoint from the same source/timing. Not two independent wins or a win-rate estimate.",
+    "No fit, later-room, League-income or fresh-run qualification. Three members remain fainted."
+  ],
+  "local_registrations": 17,
+  "memory_writes": 0,
+  "metrics": {
+    "attack_turn_utility_sum": 14.636363636363637,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 5,
+    "party_faints": 0,
+    "party_hp_lost": 44,
+    "party_pp_spent": 7,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 7085458,
+    "policy_latency_ns_mean": 2739352.3636363638,
+    "policy_latency_ns_min": 437917,
+    "selected_move_pp_spends": 7,
+    "teacher_interventions": 0
+  },
+  "model_decisions": 11,
+  "money": 24959,
+  "money_delta": 5742,
+  "native_execution_failures": 0,
+  "new_fits": 0,
+  "new_registrations": 0,
+  "new_train_examples": 0,
+  "next_unused_stage": 371,
+  "outcome_sha256": "f00a38100409f7eae5ed992a7525637685cf4f77fa2a5e51a46554cf83280d99",
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    172,
+    0,
+    77,
+    0,
+    0
+  ],
+  "party_levels": [
+    55,
+    41,
+    46,
+    45,
+    46
+  ],
+  "plan_sha256": "3ae69bed5921658c926ca15eb7a48022b00b93eb77862e3d319cec4a5f1ab30b",
+  "protected_sources_unchanged": true,
+  "remaining_super_potions": 3,
+  "same_terminal_as_copy": true,
+  "schema": "pokemon.red.bruno-earned.v1",
+  "seconds": 2.710045333020389,
+  "source_sha256": "365af4747021049aaeb17d433b9c6696ad056a7a6d78ea6ea93dc333600700f7",
+  "source_stage": 369,
+  "story_objective_delta": 1,
+  "story_objectives": 32,
+  "surf_pp": 5,
+  "teacher_combat": 0,
+  "terminal_sha256": "8d074419042e1f08ccdd0ff9b1c5eaf72c830cb9014f42645ca4cbeeb6ea9960",
+  "terminal_stage": 370,
+  "verification_failures": 0
+}

@@ -1,0 +1,3277 @@
+{
+  "actual": {
+    "actual_registration_delta": 12,
+    "administrative_wrapper_interrupts": 1,
+    "all_processes_exited": true,
+    "automatic_restart": false,
+    "badges": 6,
+    "budget_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/CAMPAIGN-BUDGET-CLOSEOUT.json",
+    "cash": 27760,
+    "completed_model_choices": 71,
+    "completed_support_choices": 14,
+    "controls_released": true,
+    "costs": {
+      "actions": 735664,
+      "cash_debits": 48815,
+      "decisions": 790,
+      "frames": 61190994,
+      "heals": 742,
+      "seconds": 13043.741444688
+    },
+    "costs_are_lower_bounds": false,
+    "current_goal": null,
+    "dashboard": "http://127.0.0.1:8777/watch",
+    "execution_errors": 0,
+    "first_source_byte_exact": true,
+    "id": "restored-fresh006-v95-a9-20261021-005",
+    "launch": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/LAUNCH.json",
+    "master_ball": 1,
+    "native_boundary_support_recoveries": 1,
+    "native_error_chain": [
+      {
+        "error": "",
+        "error_type": "KeyboardInterrupt"
+      }
+    ],
+    "observed_at_utc": "2026-10-21T21:35:44.029111+00:00",
+    "official_acceptance": false,
+    "ordinary_setbacks": 19,
+    "original_cutoff_utc": "2026-10-22T00:08:15.503715+00:00",
+    "paired_checkpoint": {
+      "context_sha256": "2ac3daea7f37f66466e3c5cdadf79b6f7645a01b1e1a20f240b9217198ecb23d",
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/runs/segment-005",
+      "state_sha256": "d301f39bcc3a16568d0588f0c6f582cd36db151a0d9daeb3360f6c1331ba2694"
+    },
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005",
+    "plan": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/PLAN.json",
+    "registration_denominator": 124,
+    "registrations": 69,
+    "restored_DEVELOPMENT": true,
+    "running": false,
+    "source_registrations": 57,
+    "source_state_sha256": "13bdd0a3ef0bfeae0a1605a45b71be3f5699585ec7bae216a1e237d27067450c",
+    "status": "stopped_at_safe_boundary_for_campaign_budget",
+    "terminal_authentication": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/TERMINAL-AUTHENTICATION.json"
+  },
+  "all_actors_stopped": false,
+  "audit": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/audits/AUDIT-050-20261022-0349.json",
+  "campaign_budget": {
+    "all_costs_and_full_holds_retained": true,
+    "cap_extended": false,
+    "remaining_allowance_frozen": {
+      "actions": 1727696,
+      "decisions": 5048,
+      "frames": 126438698,
+      "heals": 97804,
+      "seconds": 158.30136342200421
+    }
+  },
+  "collection_field_faint_repair": {
+    "focused_checks": {
+      "all_project_modules_frozen": true,
+      "emulators": 0,
+      "fits": 0,
+      "full_suite": false,
+      "inputs": 0,
+      "loads": 0,
+      "module_count": 323,
+      "native_qualified": false,
+      "new_weights": 0,
+      "observed_at_utc": "2026-10-21T23:37:53.074837+00:00",
+      "package_sha256": "d8f45f82b8d1a20c7538e2761bd6226587223771038e798667b6fb19fe01d1b4",
+      "passed": true,
+      "seconds": 3.9254067589999977,
+      "tests": 849
+    },
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/field-poison-faint-repair/MISSION.json",
+    "native_qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/field-poison-faint-repair/P100-NATIVE-QUALIFICATION.json",
+    "new_fits": 0,
+    "new_weights": 0,
+    "original_failure": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/field-poison-faint-repair/ORIGINAL-FAILURE.json",
+    "original_failure_retained": true,
+    "scope": "Selected collection Fly route reuses strict native field-poison-faint settlement; metered native certificate crosses route composition and continuous setback validation without executing its destination."
+  },
+  "current_TRAIN_comparison": {
+    "admitted_rows": 1,
+    "arm": "prepare",
+    "native_preinput": {
+      "assigned_preparation": [
+        "red-preparation:7b7fd7344a8bcea52652c61dd92f9baa157a579f5af1fdd6f82f7ccf49f9bb7d",
+        21
+      ],
+      "both_alternatives_legal": true,
+      "consequence_preflight": {
+        "before": {
+          "actions": 0,
+          "cash": 20362,
+          "completed_actions": 0,
+          "endpoint": {
+            "at": [
+              17,
+              4
+            ],
+            "events": [
+              false
+            ],
+            "map_id": 134
+          },
+          "frames": 0,
+          "heals": 0,
+          "lesson": {
+            "completed_objectives": [
+              "begin_adventure",
+              "choose_starter",
+              "clear_rocket_hideout",
+              "defeat_brock",
+              "defeat_misty",
+              "defeat_surge",
+              "help_bill",
+              "obtain_cut",
+              "obtain_silph_scope",
+              "power_on",
+              "reach_celadon",
+              "reach_cerulean",
+              "reach_lavender",
+              "reach_pewter",
+              "reach_vermilion",
+              "receive_pokedex",
+              "rescue_fuji"
+            ],
+            "in_battle": false,
+            "objective_catalog": [
+              "begin_adventure",
+              "choose_starter",
+              "clear_rocket_hideout",
+              "cross_victory_road",
+              "defeat_agatha",
+              "defeat_blaine",
+              "defeat_brock",
+              "defeat_bruno",
+              "defeat_champion",
+              "defeat_erika",
+              "defeat_giovanni",
+              "defeat_koga",
+              "defeat_lance",
+              "defeat_lorelei",
+              "defeat_misty",
+              "defeat_sabrina",
+              "defeat_surge",
+              "enter_hall_of_fame",
+              "help_bill",
+              "liberate_silph",
+              "obtain_cut",
+              "obtain_secret_key",
+              "obtain_silph_scope",
+              "obtain_strength",
+              "obtain_surf",
+              "power_on",
+              "reach_celadon",
+              "reach_cerulean",
+              "reach_cinnabar",
+              "reach_fuchsia",
+              "reach_lavender",
+              "reach_pewter",
+              "reach_saffron",
+              "reach_vermilion",
+              "receive_pokedex",
+              "rescue_fuji"
+            ],
+            "party": [
+              {
+                "experience": 55169,
+                "hp": 121,
+                "level": 39,
+                "max_hp": 121,
+                "moves": [
+                  [
+                    44,
+                    25
+                  ],
+                  [
+                    39,
+                    30
+                  ],
+                  [
+                    61,
+                    20
+                  ],
+                  [
+                    55,
+                    25
+                  ]
+                ],
+                "species_id": 28,
+                "specimen_ref": "red-preparation:adef77f9b5af6bb0d1c0cd30458270a543f97360875dde733f4016952ee0a377",
+                "status": "healthy"
+              },
+              {
+                "experience": 9168,
+                "hp": 53,
+                "level": 20,
+                "max_hp": 53,
+                "moves": [
+                  [
+                    64,
+                    35
+                  ],
+                  [
+                    28,
+                    15
+                  ],
+                  [
+                    15,
+                    30
+                  ],
+                  [
+                    31,
+                    20
+                  ]
+                ],
+                "species_id": 64,
+                "specimen_ref": "red-preparation:7b7fd7344a8bcea52652c61dd92f9baa157a579f5af1fdd6f82f7ccf49f9bb7d",
+                "status": "healthy"
+              },
+              {
+                "experience": 11035,
+                "hp": 37,
+                "level": 22,
+                "max_hp": 37,
+                "moves": [
+                  [
+                    10,
+                    35
+                  ],
+                  [
+                    45,
+                    40
+                  ],
+                  [
+                    91,
+                    10
+                  ],
+                  [
+                    0,
+                    0
+                  ]
+                ],
+                "species_id": 59,
+                "specimen_ref": "red-preparation:bda03ab4fa954ad33821657703bfba5e34aa8eeb42967bcfbfdbda0baa32b2fc",
+                "status": "healthy"
+              }
+            ],
+            "schema": "pokemon.red.player-lesson-snapshot.v1"
+          },
+          "observation": {
+            "registration": {
+              "allowed_evolutions": [
+                [
+                  "pokemon:national:001",
+                  "pokemon:national:002"
+                ],
+                [
+                  "pokemon:national:002",
+                  "pokemon:national:003"
+                ],
+                [
+                  "pokemon:national:004",
+                  "pokemon:national:005"
+                ],
+                [
+                  "pokemon:national:005",
+                  "pokemon:national:006"
+                ],
+                [
+                  "pokemon:national:007",
+                  "pokemon:national:008"
+                ],
+                [
+                  "pokemon:national:008",
+                  "pokemon:national:009"
+                ],
+                [
+                  "pokemon:national:010",
+                  "pokemon:national:011"
+                ],
+                [
+                  "pokemon:national:011",
+                  "pokemon:national:012"
+                ],
+                [
+                  "pokemon:national:013",
+                  "pokemon:national:014"
+                ],
+                [
+                  "pokemon:national:014",
+                  "pokemon:national:015"
+                ],
+                [
+                  "pokemon:national:016",
+                  "pokemon:national:017"
+                ],
+                [
+                  "pokemon:national:017",
+                  "pokemon:national:018"
+                ],
+                [
+                  "pokemon:national:019",
+                  "pokemon:national:020"
+                ],
+                [
+                  "pokemon:national:021",
+                  "pokemon:national:022"
+                ],
+                [
+                  "pokemon:national:023",
+                  "pokemon:national:024"
+                ],
+                [
+                  "pokemon:national:025",
+                  "pokemon:national:026"
+                ],
+                [
+                  "pokemon:national:027",
+                  "pokemon:national:028"
+                ],
+                [
+                  "pokemon:national:029",
+                  "pokemon:national:030"
+                ],
+                [
+                  "pokemon:national:030",
+                  "pokemon:national:031"
+                ],
+                [
+                  "pokemon:national:032",
+                  "pokemon:national:033"
+                ],
+                [
+                  "pokemon:national:033",
+                  "pokemon:national:034"
+                ],
+                [
+                  "pokemon:national:035",
+                  "pokemon:national:036"
+                ],
+                [
+                  "pokemon:national:037",
+                  "pokemon:national:038"
+                ],
+                [
+                  "pokemon:national:039",
+                  "pokemon:national:040"
+                ],
+                [
+                  "pokemon:national:041",
+                  "pokemon:national:042"
+                ],
+                [
+                  "pokemon:national:043",
+                  "pokemon:national:044"
+                ],
+                [
+                  "pokemon:national:044",
+                  "pokemon:national:045"
+                ],
+                [
+                  "pokemon:national:046",
+                  "pokemon:national:047"
+                ],
+                [
+                  "pokemon:national:048",
+                  "pokemon:national:049"
+                ],
+                [
+                  "pokemon:national:050",
+                  "pokemon:national:051"
+                ],
+                [
+                  "pokemon:national:052",
+                  "pokemon:national:053"
+                ],
+                [
+                  "pokemon:national:054",
+                  "pokemon:national:055"
+                ],
+                [
+                  "pokemon:national:056",
+                  "pokemon:national:057"
+                ],
+                [
+                  "pokemon:national:058",
+                  "pokemon:national:059"
+                ],
+                [
+                  "pokemon:national:060",
+                  "pokemon:national:061"
+                ],
+                [
+                  "pokemon:national:061",
+                  "pokemon:national:062"
+                ],
+                [
+                  "pokemon:national:063",
+                  "pokemon:national:064"
+                ],
+                [
+                  "pokemon:national:066",
+                  "pokemon:national:067"
+                ],
+                [
+                  "pokemon:national:069",
+                  "pokemon:national:070"
+                ],
+                [
+                  "pokemon:national:070",
+                  "pokemon:national:071"
+                ],
+                [
+                  "pokemon:national:072",
+                  "pokemon:national:073"
+                ],
+                [
+                  "pokemon:national:074",
+                  "pokemon:national:075"
+                ],
+                [
+                  "pokemon:national:077",
+                  "pokemon:national:078"
+                ],
+                [
+                  "pokemon:national:079",
+                  "pokemon:national:080"
+                ],
+                [
+                  "pokemon:national:081",
+                  "pokemon:national:082"
+                ],
+                [
+                  "pokemon:national:084",
+                  "pokemon:national:085"
+                ],
+                [
+                  "pokemon:national:086",
+                  "pokemon:national:087"
+                ],
+                [
+                  "pokemon:national:088",
+                  "pokemon:national:089"
+                ],
+                [
+                  "pokemon:national:090",
+                  "pokemon:national:091"
+                ],
+                [
+                  "pokemon:national:092",
+                  "pokemon:national:093"
+                ],
+                [
+                  "pokemon:national:096",
+                  "pokemon:national:097"
+                ],
+                [
+                  "pokemon:national:098",
+                  "pokemon:national:099"
+                ],
+                [
+                  "pokemon:national:100",
+                  "pokemon:national:101"
+                ],
+                [
+                  "pokemon:national:102",
+                  "pokemon:national:103"
+                ],
+                [
+                  "pokemon:national:104",
+                  "pokemon:national:105"
+                ],
+                [
+                  "pokemon:national:109",
+                  "pokemon:national:110"
+                ],
+                [
+                  "pokemon:national:111",
+                  "pokemon:national:112"
+                ],
+                [
+                  "pokemon:national:116",
+                  "pokemon:national:117"
+                ],
+                [
+                  "pokemon:national:118",
+                  "pokemon:national:119"
+                ],
+                [
+                  "pokemon:national:120",
+                  "pokemon:national:121"
+                ],
+                [
+                  "pokemon:national:129",
+                  "pokemon:national:130"
+                ],
+                [
+                  "pokemon:national:133",
+                  "pokemon:national:134"
+                ],
+                [
+                  "pokemon:national:133",
+                  "pokemon:national:135"
+                ],
+                [
+                  "pokemon:national:133",
+                  "pokemon:national:136"
+                ],
+                [
+                  "pokemon:national:138",
+                  "pokemon:national:139"
+                ],
+                [
+                  "pokemon:national:140",
+                  "pokemon:national:141"
+                ],
+                [
+                  "pokemon:national:147",
+                  "pokemon:national:148"
+                ],
+                [
+                  "pokemon:national:148",
+                  "pokemon:national:149"
+                ]
+              ],
+              "binding_sha256": "f8072c549fc51e8b9327cc22774650dbb529ddae46d1acf29a34ae93fae882f0",
+              "completion_contract_sha256": "4df1cdd8bd7a20e9daa8207df3eed7d9adf58c49999d78d159c45a85829477ea",
+              "completion_scope": "local_red",
+              "global_species": [
+                "pokemon:national:007",
+                "pokemon:national:008",
+                "pokemon:national:009",
+                "pokemon:national:010",
+                "pokemon:national:011",
+                "pokemon:national:014",
+                "pokemon:national:016",
+                "pokemon:national:019",
+                "pokemon:national:021",
+                "pokemon:national:025",
+                "pokemon:national:041",
+                "pokemon:national:050",
+                "pokemon:national:083"
+              ],
+              "living_species": 10,
+              "local_registered_species": 13,
+              "local_species": [
+                "pokemon:national:007",
+                "pokemon:national:008",
+                "pokemon:national:009",
+                "pokemon:national:010",
+                "pokemon:national:011",
+                "pokemon:national:014",
+                "pokemon:national:016",
+                "pokemon:national:019",
+                "pokemon:national:021",
+                "pokemon:national:025",
+                "pokemon:national:041",
+                "pokemon:national:050",
+                "pokemon:national:083"
+              ],
+              "objective": "pokemon.registered-collection.v1",
+              "protected_counts": [],
+              "registered_species": 13,
+              "required_registrations_remaining": 138,
+              "required_registrations_sha256": "239792b1174c882e039c0aa28ac195037f358c9bec92400c8c569f9ad0b6a06c",
+              "schema": "pokemon.core.registered-collection-checkpoint.v2",
+              "specimen_counts": [
+                [
+                  "pokemon:national:009",
+                  1
+                ],
+                [
+                  "pokemon:national:010",
+                  1
+                ],
+                [
+                  "pokemon:national:011",
+                  2
+                ],
+                [
+                  "pokemon:national:014",
+                  2
+                ],
+                [
+                  "pokemon:national:016",
+                  1
+                ],
+                [
+                  "pokemon:national:019",
+                  1
+                ],
+                [
+                  "pokemon:national:025",
+                  1
+                ],
+                [
+                  "pokemon:national:041",
+                  1
+                ],
+                [
+                  "pokemon:national:050",
+                  1
+                ],
+                [
+                  "pokemon:national:083",
+                  1
+                ]
+              ],
+              "specimen_ledger_sha256": "063403239607e49ade6dbac64ef5be36f9185eae577803aeef769d9aa0791284",
+              "storage_headroom": 14,
+              "target_species": [
+                "pokemon:national:001",
+                "pokemon:national:002",
+                "pokemon:national:003",
+                "pokemon:national:004",
+                "pokemon:national:005",
+                "pokemon:national:006",
+                "pokemon:national:007",
+                "pokemon:national:008",
+                "pokemon:national:009",
+                "pokemon:national:010",
+                "pokemon:national:011",
+                "pokemon:national:012",
+                "pokemon:national:013",
+                "pokemon:national:014",
+                "pokemon:national:015",
+                "pokemon:national:016",
+                "pokemon:national:017",
+                "pokemon:national:018",
+                "pokemon:national:019",
+                "pokemon:national:020",
+                "pokemon:national:021",
+                "pokemon:national:022",
+                "pokemon:national:023",
+                "pokemon:national:024",
+                "pokemon:national:025",
+                "pokemon:national:026",
+                "pokemon:national:027",
+                "pokemon:national:028",
+                "pokemon:national:029",
+                "pokemon:national:030",
+                "pokemon:national:031",
+                "pokemon:national:032",
+                "pokemon:national:033",
+                "pokemon:national:034",
+                "pokemon:national:035",
+                "pokemon:national:036",
+                "pokemon:national:037",
+                "pokemon:national:038",
+                "pokemon:national:039",
+                "pokemon:national:040",
+                "pokemon:national:041",
+                "pokemon:national:042",
+                "pokemon:national:043",
+                "pokemon:national:044",
+                "pokemon:national:045",
+                "pokemon:national:046",
+                "pokemon:national:047",
+                "pokemon:national:048",
+                "pokemon:national:049",
+                "pokemon:national:050",
+                "pokemon:national:051",
+                "pokemon:national:052",
+                "pokemon:national:053",
+                "pokemon:national:054",
+                "pokemon:national:055",
+                "pokemon:national:056",
+                "pokemon:national:057",
+                "pokemon:national:058",
+                "pokemon:national:059",
+                "pokemon:national:060",
+                "pokemon:national:061",
+                "pokemon:national:062",
+                "pokemon:national:063",
+                "pokemon:national:064",
+                "pokemon:national:065",
+                "pokemon:national:066",
+                "pokemon:national:067",
+                "pokemon:national:068",
+                "pokemon:national:069",
+                "pokemon:national:070",
+                "pokemon:national:071",
+                "pokemon:national:072",
+                "pokemon:national:073",
+                "pokemon:national:074",
+                "pokemon:national:075",
+                "pokemon:national:076",
+                "pokemon:national:077",
+                "pokemon:national:078",
+                "pokemon:national:079",
+                "pokemon:national:080",
+                "pokemon:national:081",
+                "pokemon:national:082",
+                "pokemon:national:083",
+                "pokemon:national:084",
+                "pokemon:national:085",
+                "pokemon:national:086",
+                "pokemon:national:087",
+                "pokemon:national:088",
+                "pokemon:national:089",
+                "pokemon:national:090",
+                "pokemon:national:091",
+                "pokemon:national:092",
+                "pokemon:national:093",
+                "pokemon:national:094",
+                "pokemon:national:095",
+                "pokemon:national:096",
+                "pokemon:national:097",
+                "pokemon:national:098",
+                "pokemon:national:099",
+                "pokemon:national:100",
+                "pokemon:national:101",
+                "pokemon:national:102",
+                "pokemon:national:103",
+                "pokemon:national:104",
+                "pokemon:national:105",
+                "pokemon:national:106",
+                "pokemon:national:107",
+                "pokemon:national:108",
+                "pokemon:national:109",
+                "pokemon:national:110",
+                "pokemon:national:111",
+                "pokemon:national:112",
+                "pokemon:national:113",
+                "pokemon:national:114",
+                "pokemon:national:115",
+                "pokemon:national:116",
+                "pokemon:national:117",
+                "pokemon:national:118",
+                "pokemon:national:119",
+                "pokemon:national:120",
+                "pokemon:national:121",
+                "pokemon:national:122",
+                "pokemon:national:123",
+                "pokemon:national:124",
+                "pokemon:national:125",
+                "pokemon:national:126",
+                "pokemon:national:127",
+                "pokemon:national:128",
+                "pokemon:national:129",
+                "pokemon:national:130",
+                "pokemon:national:131",
+                "pokemon:national:132",
+                "pokemon:national:133",
+                "pokemon:national:134",
+                "pokemon:national:135",
+                "pokemon:national:136",
+                "pokemon:national:137",
+                "pokemon:national:138",
+                "pokemon:national:139",
+                "pokemon:national:140",
+                "pokemon:national:141",
+                "pokemon:national:142",
+                "pokemon:national:143",
+                "pokemon:national:144",
+                "pokemon:national:145",
+                "pokemon:national:146",
+                "pokemon:national:147",
+                "pokemon:national:148",
+                "pokemon:national:149",
+                "pokemon:national:150",
+                "pokemon:national:151"
+              ],
+              "total_living_specimens": 12
+            },
+            "schema": "pokemon.red.registered-goal-observation.v1",
+            "semantic_observation": {
+              "capture_item_count": 1,
+              "collection": {
+                "level_cap": 0,
+                "level_cap_target": 0,
+                "living": 0,
+                "living_target": 0,
+                "registered": 13,
+                "registered_target": 151
+              },
+              "free_storage_slots": 231,
+              "immediate_capture_slots": 14,
+              "input_ready": true,
+              "party_size": 3,
+              "pp_restoration": {
+                "item_count": 1,
+                "party_slots": [
+                  [
+                    [
+                      25,
+                      25
+                    ],
+                    [
+                      30,
+                      30
+                    ],
+                    [
+                      20,
+                      20
+                    ],
+                    [
+                      25,
+                      25
+                    ]
+                  ],
+                  [
+                    [
+                      35,
+                      35
+                    ],
+                    [
+                      15,
+                      15
+                    ],
+                    [
+                      30,
+                      30
+                    ],
+                    [
+                      20,
+                      20
+                    ]
+                  ],
+                  [
+                    [
+                      35,
+                      35
+                    ],
+                    [
+                      40,
+                      40
+                    ],
+                    [
+                      10,
+                      10
+                    ],
+                    [
+                      0,
+                      0
+                    ]
+                  ]
+                ],
+                "schema": "pokemon.red.pp-resource-observation.v1"
+              },
+              "private_path_fields": 0,
+              "raw_address_fields": 0,
+              "recovery_item_count": 28,
+              "schema": "pokemon.red.goal-observation.v2",
+              "situation": {
+                "need_pressures": {
+                  "collection_progress": 0.9139072847682119,
+                  "control_recovery": 0.0,
+                  "evolution_progress": 0.9411764705882353,
+                  "resources": 0.9,
+                  "safety": 0.0,
+                  "storage_capacity": 0.0,
+                  "story_progress": 0.5277777777777778,
+                  "team_readiness": 0.775,
+                  "world_knowledge": 0.564516129032258
+                },
+                "schema": "pokemon.core.goal-situation.v1"
+              },
+              "story": {
+                "completed": 17,
+                "target": 36
+              }
+            }
+          },
+          "settled": true,
+          "state_sha256": "1954743b6a3ad91b95c3be56fb573d665629502b0be1f356626970aaf00393e8"
+        },
+        "binding_ref": "pokemon.red:member-preparation:222a87f30f2ef32047f0453ae6ce0f90a7c1f4d50b9a5b8ba09b1753aa9b96df",
+        "consequence_schema": "pokemon.player.challenge-consequence.v2",
+        "execution": {
+          "arm_id": "teacher-assigned-train",
+          "model_sha256": "a9c97388fdaad0c74d578dd705c74a71a3c698423abd3c008cafc4c3e0031c7e",
+          "run_id": "train005-ready-benefit-v110-arrival-prepare-20261022-050353",
+          "seed": 202610220211
+        },
+        "feature_version": 9,
+        "menu": {
+          "candidates": [
+            {
+              "availability": "available",
+              "challenge": {
+                "combat_required": true,
+                "maximum_level_deficit": 0.07,
+                "median_level_deficit": 0.07,
+                "opponent_fraction": 0.5,
+                "opposition_known": true,
+                "schema": "pokemon.core.option-challenge.v1"
+              },
+              "economy_offer": {
+                "conditional_income": 0,
+                "mode": "other",
+                "planned_spend": 0
+              },
+              "features": {
+                "feature_names": [
+                  "kind.acquire",
+                  "kind.evolve",
+                  "kind.trade",
+                  "kind.develop",
+                  "kind.manage_storage",
+                  "kind.resupply",
+                  "kind.unlock_access",
+                  "kind.explore",
+                  "completion_gain",
+                  "dependency_unlock_gain",
+                  "travel_effort",
+                  "execution_effort",
+                  "resource_cost",
+                  "storage_cost",
+                  "party_risk",
+                  "irreversibility_risk",
+                  "uncertainty",
+                  "collection_pressure_x_completion_gain",
+                  "dependency_pressure_x_dependency_unlock_gain",
+                  "access_pressure_x_travel_effort",
+                  "resource_pressure_x_resource_cost",
+                  "storage_pressure_x_storage_cost",
+                  "party_pressure_x_party_risk",
+                  "knowledge_pressure_x_uncertainty"
+                ],
+                "kind": "develop",
+                "normalization": "pokemon.core.living-dex-option-normalization.v1",
+                "schema": "pokemon.core.living-dex-option-features.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.25,
+                  0.0,
+                  0.16333333333333333,
+                  0.0,
+                  0.0,
+                  0.2,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.23529411764705882,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.15500000000000003,
+                  0.0
+                ]
+              },
+              "level_workload": {
+                "current_level": 22,
+                "remaining_xp": 1132,
+                "schema": "pokemon.core.option-level-workload.v1",
+                "target_level": 23
+              },
+              "preparation": {
+                "current_level": 22,
+                "evolution_level": 26,
+                "existing_combat_intent": true,
+                "hp_fraction": 1.0,
+                "pp_fraction": null,
+                "remaining_xp": 1132,
+                "schema": "pokemon.core.option-preparation.v1",
+                "target_level": 23,
+                "undecided_intent": false
+              },
+              "readiness": {
+                "names": [
+                  "recent.won",
+                  "recent.lost",
+                  "recent.unresolved",
+                  "recent.opposition_coverage",
+                  "recent.defeated_fraction",
+                  "recent.engaged_level_gap",
+                  "recent.fainted_fraction",
+                  "recent.hp_fraction",
+                  "recent.pp_spent_fraction",
+                  "recent.exhausted_move_fraction",
+                  "recent.voluntary_switch_fraction",
+                  "recent.suppressed_attack_fraction",
+                  "recent.last_opponent_hp_known",
+                  "recent.last_opponent_hp_fraction",
+                  "current.median_combat_level_gap",
+                  "current.lowest_combat_level_gap",
+                  "current.combat_level_spread",
+                  "current.hp_fraction",
+                  "current.fainted_fraction",
+                  "current.status_fraction",
+                  "current.pp_known",
+                  "current.pp_fraction",
+                  "budget.attempts",
+                  "budget.actions",
+                  "budget.frames",
+                  "budget.seconds",
+                  "budget.heals"
+                ],
+                "schema": "pokemon.core.player-readiness-no-history.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.19,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.9999028420416667,
+                  1.0
+                ]
+              },
+              "unavailable_reason": null
+            },
+            {
+              "availability": "available",
+              "challenge": {
+                "combat_required": true,
+                "maximum_level_deficit": 0.07,
+                "median_level_deficit": 0.07,
+                "opponent_fraction": 0.5,
+                "opposition_known": true,
+                "schema": "pokemon.core.option-challenge.v1"
+              },
+              "economy_offer": {
+                "conditional_income": 0,
+                "mode": "other",
+                "planned_spend": 0
+              },
+              "features": {
+                "feature_names": [
+                  "kind.acquire",
+                  "kind.evolve",
+                  "kind.trade",
+                  "kind.develop",
+                  "kind.manage_storage",
+                  "kind.resupply",
+                  "kind.unlock_access",
+                  "kind.explore",
+                  "completion_gain",
+                  "dependency_unlock_gain",
+                  "travel_effort",
+                  "execution_effort",
+                  "resource_cost",
+                  "storage_cost",
+                  "party_risk",
+                  "irreversibility_risk",
+                  "uncertainty",
+                  "collection_pressure_x_completion_gain",
+                  "dependency_pressure_x_dependency_unlock_gain",
+                  "access_pressure_x_travel_effort",
+                  "resource_pressure_x_resource_cost",
+                  "storage_pressure_x_storage_cost",
+                  "party_pressure_x_party_risk",
+                  "knowledge_pressure_x_uncertainty"
+                ],
+                "kind": "unlock_access",
+                "normalization": "pokemon.core.living-dex-option-normalization.v1",
+                "schema": "pokemon.core.living-dex-option-features.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.20633333333333334,
+                  0.0,
+                  0.0,
+                  0.4,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.9411764705882353,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.31000000000000005,
+                  0.0
+                ]
+              },
+              "readiness": {
+                "names": [
+                  "recent.won",
+                  "recent.lost",
+                  "recent.unresolved",
+                  "recent.opposition_coverage",
+                  "recent.defeated_fraction",
+                  "recent.engaged_level_gap",
+                  "recent.fainted_fraction",
+                  "recent.hp_fraction",
+                  "recent.pp_spent_fraction",
+                  "recent.exhausted_move_fraction",
+                  "recent.voluntary_switch_fraction",
+                  "recent.suppressed_attack_fraction",
+                  "recent.last_opponent_hp_known",
+                  "recent.last_opponent_hp_fraction",
+                  "current.median_combat_level_gap",
+                  "current.lowest_combat_level_gap",
+                  "current.combat_level_spread",
+                  "current.hp_fraction",
+                  "current.fainted_fraction",
+                  "current.status_fraction",
+                  "current.pp_known",
+                  "current.pp_fraction",
+                  "budget.attempts",
+                  "budget.actions",
+                  "budget.frames",
+                  "budget.seconds",
+                  "budget.heals"
+                ],
+                "schema": "pokemon.core.player-readiness-no-history.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.19,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.9999028420416667,
+                  1.0
+                ]
+              },
+              "unavailable_reason": null
+            },
+            {
+              "availability": "available",
+              "challenge": {
+                "combat_required": true,
+                "maximum_level_deficit": 0.07,
+                "median_level_deficit": 0.07,
+                "opponent_fraction": 0.5,
+                "opposition_known": true,
+                "schema": "pokemon.core.option-challenge.v1"
+              },
+              "economy_offer": {
+                "conditional_income": 0,
+                "mode": "other",
+                "planned_spend": 0
+              },
+              "features": {
+                "feature_names": [
+                  "kind.acquire",
+                  "kind.evolve",
+                  "kind.trade",
+                  "kind.develop",
+                  "kind.manage_storage",
+                  "kind.resupply",
+                  "kind.unlock_access",
+                  "kind.explore",
+                  "completion_gain",
+                  "dependency_unlock_gain",
+                  "travel_effort",
+                  "execution_effort",
+                  "resource_cost",
+                  "storage_cost",
+                  "party_risk",
+                  "irreversibility_risk",
+                  "uncertainty",
+                  "collection_pressure_x_completion_gain",
+                  "dependency_pressure_x_dependency_unlock_gain",
+                  "access_pressure_x_travel_effort",
+                  "resource_pressure_x_resource_cost",
+                  "storage_pressure_x_storage_cost",
+                  "party_pressure_x_party_risk",
+                  "knowledge_pressure_x_uncertainty"
+                ],
+                "kind": "develop",
+                "normalization": "pokemon.core.living-dex-option-normalization.v1",
+                "schema": "pokemon.core.living-dex-option-features.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.25,
+                  0.0,
+                  0.16333333333333333,
+                  0.0,
+                  0.0,
+                  0.2,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.23529411764705882,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.15500000000000003,
+                  0.0
+                ]
+              },
+              "level_workload": {
+                "current_level": 20,
+                "remaining_xp": 93,
+                "schema": "pokemon.core.option-level-workload.v1",
+                "target_level": 21
+              },
+              "preparation": {
+                "current_level": 20,
+                "evolution_level": null,
+                "existing_combat_intent": true,
+                "hp_fraction": 1.0,
+                "pp_fraction": null,
+                "remaining_xp": 93,
+                "schema": "pokemon.core.option-preparation.v1",
+                "target_level": 21,
+                "undecided_intent": false
+              },
+              "readiness": {
+                "names": [
+                  "recent.won",
+                  "recent.lost",
+                  "recent.unresolved",
+                  "recent.opposition_coverage",
+                  "recent.defeated_fraction",
+                  "recent.engaged_level_gap",
+                  "recent.fainted_fraction",
+                  "recent.hp_fraction",
+                  "recent.pp_spent_fraction",
+                  "recent.exhausted_move_fraction",
+                  "recent.voluntary_switch_fraction",
+                  "recent.suppressed_attack_fraction",
+                  "recent.last_opponent_hp_known",
+                  "recent.last_opponent_hp_fraction",
+                  "current.median_combat_level_gap",
+                  "current.lowest_combat_level_gap",
+                  "current.combat_level_spread",
+                  "current.hp_fraction",
+                  "current.fainted_fraction",
+                  "current.status_fraction",
+                  "current.pp_known",
+                  "current.pp_fraction",
+                  "budget.attempts",
+                  "budget.actions",
+                  "budget.frames",
+                  "budget.seconds",
+                  "budget.heals"
+                ],
+                "schema": "pokemon.core.player-readiness-no-history.v1",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.19,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  0.9999028420416667,
+                  1.0
+                ]
+              },
+              "unavailable_reason": null
+            }
+          ],
+          "context": {
+            "access_pressure": 0.564516129032258,
+            "collection_pressure": 0.9139072847682119,
+            "dependency_pressure": 0.9411764705882353,
+            "economy_cash": 20362,
+            "knowledge_pressure": 0.564516129032258,
+            "party_pressure": 0.775,
+            "resource_pressure": 0.9,
+            "schema": "pokemon.core.living-dex-option-context.v2",
+            "storage_pressure": 0.0,
+            "target_cash": 0
+          },
+          "schema": "pokemon.core.living-dex-option-menu.v9"
+        },
+        "partition": "train",
+        "prospective": true,
+        "schema": "pokemon.red.challenge-consequence-plan.v6",
+        "selected_index": 2,
+        "source": {
+          "campaign_eligible": false,
+          "experiment_sha256": "df1bacccf31b73ddc343397202e4cbef542c5327efc76ed660bb71c823604e86",
+          "historical_train_source": {
+            "checkpoint_id": "red-goal-v1-005-advance_story-train-05",
+            "origin_sha256": "69ce9a7cbf2690b72fa4d987d9919344afc6ecabe0b90b9acab4ab0693286f30",
+            "partition": "train",
+            "source_envelope_sha256": "4665b24aba23f80251446c633ace4c9d63cdc65c8a8fb67e3a5fce572bf84f13",
+            "state_sha256": "5147627212cfa8cc1af75473679093f99451d16a311ae010dfd7086f0db95cd2"
+          },
+          "origin_sha256": "69ce9a7cbf2690b72fa4d987d9919344afc6ecabe0b90b9acab4ab0693286f30",
+          "partition": "train",
+          "setup_receipt_sha256": "f628ba29dcff4846452930550cef0b10861e2b91e52b2993d033da8c8a872824",
+          "source_bundle_sha256": "b866c4b9539d1f3bdde20c4312cb9bbc876125d6f3cf98320e81178e4d62c730",
+          "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+          "state_sha256": "1954743b6a3ad91b95c3be56fb573d665629502b0be1f356626970aaf00393e8"
+        },
+        "spec": {
+          "challenge_target": {
+            "events": [
+              425
+            ],
+            "kind": "events",
+            "map_id": 134
+          },
+          "evolution_contract": null,
+          "feedback_version": 2,
+          "include_challenge_arrival": true,
+          "initial_kind": "develop_team",
+          "maximum_phases": 4,
+          "preparation_target": {
+            "level": 21,
+            "specimen_ref": "red-preparation:7b7fd7344a8bcea52652c61dd92f9baa157a579f5af1fdd6f82f7ccf49f9bb7d"
+          },
+          "schema": "pokemon.red.challenge-consequence-spec.v5"
+        }
+      },
+      "feature_version": 9,
+      "feature_width": 370,
+      "frames": 0,
+      "inputs": 0,
+      "level_workload": {
+        "current_level": 20,
+        "remaining_xp": 93,
+        "schema": "pokemon.core.option-level-workload.v1",
+        "target_level": 21
+      },
+      "model_queries": 0,
+      "passed": true,
+      "preparation": {
+        "current_level": 20,
+        "evolution_level": null,
+        "existing_combat_intent": true,
+        "hp_fraction": 1.0,
+        "pp_fraction": null,
+        "remaining_xp": 93,
+        "schema": "pokemon.core.option-preparation.v1",
+        "target_level": 21,
+        "undecided_intent": false
+      },
+      "selected_kind": "develop_team",
+      "source_bytes_exact": true,
+      "source_partition": "train",
+      "source_state_sha256": "1954743b6a3ad91b95c3be56fb573d665629502b0be1f356626970aaf00393e8",
+      "story_partition": "train",
+      "teacher_assigned": true,
+      "wild_partition": "train"
+    },
+    "new_fits": 0,
+    "observed_at_utc": "2026-10-22T05:07:58.107610+00:00",
+    "original_partition": "train",
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/train005-ready-benefit-v110-arrival-prepare-20261022-050353",
+    "related_ancestry": true,
+    "result": {
+      "actions": 648,
+      "admitted": true,
+      "campaign_progress": false,
+      "condition": "original-train005",
+      "controls_released": true,
+      "copy_back": false,
+      "declaration_sha256": "95fec4d29ea19d17af3cb0af25670a4f3285f6fe18eab277b686e3ea3e92e746",
+      "field_ready": true,
+      "finished_at_utc": "2026-10-22T05:06:51.955779+00:00",
+      "frames": 43368,
+      "goal_attempts": 4,
+      "goal_policy_queries": 0,
+      "heals": 1,
+      "native_seconds": 9.309735606000004,
+      "new_fits": 0,
+      "new_weights": 0,
+      "outer_seconds": 42.41222371699996,
+      "passed": true,
+      "physical_emulator_accounting": {
+        "construction_attempts": 1,
+        "emulators_constructed": 1,
+        "load_attempts": 1,
+        "state_loads": 1
+      },
+      "result_sha256": "2dbb48adcf24008f4a8f07cdce726952eeb634792df9a3344bf4e2dc885a2534",
+      "role": "train_sampling",
+      "schema": "pokemon.red.prospective-v9-train-preparation-arm.v1",
+      "started_at_utc": "2026-10-22T05:06:10.420844+00:00",
+      "story_battles": 1,
+      "teacher_selected": true,
+      "terminal_sha256": "1928acb1b334447617aa15d4230f9cb96f31af3258948a13f246d657c8051be5",
+      "training_admission": true,
+      "verified_data_cache_release": {
+        "checked_bytes": 6080355562,
+        "data_files": 74984,
+        "every_pin_authenticated": true,
+        "file_contents_changed": false
+      },
+      "wild_battles": 1
+    },
+    "running": false,
+    "terminal_authenticated": true
+  },
+  "current_blocker": {
+    "classification": "New route-exit faint recovery boundary; not proven identical to the retained poison-dialogue defect.",
+    "costs": {
+      "actions": 18474,
+      "cash_debits": 26560,
+      "decisions": 51,
+      "frames": 1443732,
+      "heals": 24,
+      "seconds": 394.51126147000105
+    },
+    "error_chain": [
+      {
+        "error": "verified route exit needs native faint recovery",
+        "error_type": "GoalRecoveryRequired"
+      }
+    ],
+    "native_facts": {
+      "after_buttons_released": true,
+      "after_hp": [
+        0,
+        167,
+        253,
+        141,
+        158,
+        190
+      ],
+      "after_input_ready": true,
+      "after_route": {
+        "at": [
+          2,
+          9
+        ],
+        "interruption": null,
+        "map_id": 227,
+        "mode": "land",
+        "ready": true
+      },
+      "after_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "before_hp": [
+        131,
+        167,
+        253,
+        141,
+        158,
+        190
+      ],
+      "before_route": {
+        "at": [
+          3,
+          3
+        ],
+        "interruption": null,
+        "map_id": 41,
+        "mode": "land",
+        "ready": true
+      },
+      "before_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "next": "Trace existing GoalRecoveryRequired admission/certificate path; retain failure and qualify exact tail on a copy before successor.",
+    "observed_at_utc": "2026-10-22T04:31:06.149207+00:00",
+    "paired_checkpoint": {
+      "context_sha256": "48efe1448ac14e5138d908afd581902a6683ed951c69fbb48494c9f96118f187",
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous116-v109-diagnostic-20261022-041250/runs/segment-001",
+      "spent": {
+        "actions": 1116623,
+        "cash_debits": 162475,
+        "decisions": 1179,
+        "frames": 92039322,
+        "heals": 964,
+        "seconds": 21766.376161656004
+      },
+      "state_sha256": "d137e451a4891160cc17ac7329944e8eb6cdcb8b68263659d8bcd103c82b926b"
+    },
+    "safe_terminal": true,
+    "source": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous116-v109-diagnostic-20261022-041250/runs/segment-001/native/episode/step-049/outcome.json",
+    "source_sha256": "899226e89b91ffccccbf04bafc2db037f6d1c2015a5b5a69039d6e837daf1fa5"
+  },
+  "current_diagnostic": {
+    "all_actors_stopped": true,
+    "badges": 8,
+    "candidate": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/cave-return-and-readiness-20261022-0551/frozen-player-v118/PLAYER-PACKAGE.json",
+    "candidate_focused_checks": 488,
+    "cash": 12008,
+    "controls_released": true,
+    "last_paired_checkpoint": {
+      "context_sha256": "5562d6fd59266eae2a8c29af4ae165f6e7d5e4bcc0dd75d188505ddc600d1e89",
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous119-v115-diagnostic-20261022-072120/runs/segment-001",
+      "spent": {
+        "actions": 1333703,
+        "cash_debits": 412983,
+        "decisions": 1224,
+        "frames": 110606287,
+        "heals": 1045,
+        "seconds": 24114.244570049006
+      },
+      "state_sha256": "fd6076c41bce874178bad0778834b3250896e70ae3e7dc62ba08085cb97f5301"
+    },
+    "master_ball": 0,
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/funding-loss-and-move-readiness-20261022-075108/MISSION.json",
+    "native_qualified": false,
+    "new_fits": 0,
+    "new_weights": 0,
+    "next": "Qualify frozenP118 funding-loss bridge including medicine composition;then continue exact120fd607lineage. No copy-gain import.",
+    "observed_at_utc": "2026-10-22T07:51:08.030757+00:00",
+    "original_case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous119-v115-diagnostic-20261022-072120",
+    "registrations": 120
+  },
+  "current_mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/funding-loss-and-move-readiness-20261022-075108/MISSION.json",
+  "current_qualification": {
+    "actual_credit": 0,
+    "copy_back": false,
+    "native_loss_branch_exercised": false,
+    "native_review": {
+      "actual_progress_credit": 0,
+      "actual_running": false,
+      "closed_paths": [
+        "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-000/outcome.json",
+        "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-001/outcome.json",
+        "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-002/outcome.json"
+      ],
+      "code_pins_rechecked": 1242,
+      "counts": {
+        "execution_errors": 0,
+        "model": 2,
+        "ordinary_setbacks": 0,
+        "retained_route_recovery_certificates": 0,
+        "support": 1
+      },
+      "diagnostic_running": true,
+      "first_source_byte_exact": true,
+      "last_paired_checkpoint": {
+        "context_sha256": "5562d6fd59266eae2a8c29af4ae165f6e7d5e4bcc0dd75d188505ddc600d1e89",
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/diagnostic-source",
+        "spent": {
+          "actions": 1333703,
+          "cash_debits": 412983,
+          "decisions": 1224,
+          "frames": 110606287,
+          "heals": 1045,
+          "seconds": 24114.244570049006
+        },
+        "state_sha256": "fd6076c41bce874178bad0778834b3250896e70ae3e7dc62ba08085cb97f5301"
+      },
+      "latest_closed": {
+        "badges": 8,
+        "cash": 8707,
+        "error": null,
+        "error_chain": null,
+        "kind": "resupply",
+        "master_ball": 0,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-002/outcome.json",
+        "recoverable_route_setback": null,
+        "registrations": 120,
+        "safe_terminal": true,
+        "sha256": "8da7e9089367c9eca065fbb44dc9743a449da40423b2e3341d723bf73d4e7e0c",
+        "state_sha256": "14a15ca1f9fce9678b882c6763fd05a4ee929e36d18405713ff28915528dd2fc",
+        "verification": "succeeded"
+      },
+      "native_first_source_pending": false,
+      "newly_closed": [
+        {
+          "badges": 8,
+          "cash": 30707,
+          "error": null,
+          "error_chain": null,
+          "kind": "resupply",
+          "master_ball": 0,
+          "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-000/outcome.json",
+          "recoverable_route_setback": null,
+          "registrations": 120,
+          "safe_terminal": true,
+          "sha256": "d0af36c9297e017e6e6669e0877dc6926101baf4aea195d15fd65feaee948851",
+          "state_sha256": "b7f66284523a6260ffde2a2e494df145db16fe3450cdaaef0723c6321a2294ff",
+          "verification": "succeeded"
+        },
+        {
+          "badges": 8,
+          "cash": 30707,
+          "error": null,
+          "error_chain": null,
+          "kind": "restore_team",
+          "master_ball": 0,
+          "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-001/outcome.json",
+          "recoverable_route_setback": null,
+          "registrations": 120,
+          "safe_terminal": true,
+          "sha256": "3630db34754e80e305b682975bbcd0d89195d3ac9d070817bca32de4f782f632",
+          "state_sha256": "86bdbf5bb3bf7db312c3b313904b0fd88bb70eccf1a667d207c64e4973dc2a10",
+          "verification": "succeeded"
+        },
+        {
+          "badges": 8,
+          "cash": 8707,
+          "error": null,
+          "error_chain": null,
+          "kind": "resupply",
+          "master_ball": 0,
+          "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-002/outcome.json",
+          "recoverable_route_setback": null,
+          "registrations": 120,
+          "safe_terminal": true,
+          "sha256": "8da7e9089367c9eca065fbb44dc9743a449da40423b2e3341d723bf73d4e7e0c",
+          "state_sha256": "14a15ca1f9fce9678b882c6763fd05a4ee929e36d18405713ff28915528dd2fc",
+          "verification": "succeeded"
+        }
+      ],
+      "no_fit": true,
+      "observed_at_utc": "2026-10-22T07:59:17.111945+00:00",
+      "official_acceptance": false,
+      "open_step": {
+        "execution_started": true,
+        "kind": "resupply",
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/runs/segment-001/native/episode/step-003"
+      },
+      "original_actual_lineage_source_registrations": 69,
+      "original_linux_identities": [
+        {
+          "current": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6759,
+            "start_ticks": 14276,
+            "uid": 1000
+          },
+          "original": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6759,
+            "pid": 6764,
+            "start_ticks": 14276,
+            "uid": 1000
+          },
+          "original_identity_alive": true
+        },
+        {
+          "current": {
+            "command": [
+              "runuser",
+              "--user",
+              "pokemon",
+              "--",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6663,
+            "start_ticks": 14276,
+            "uid": 0
+          },
+          "original": {
+            "command": [
+              "runuser",
+              "--user",
+              "pokemon",
+              "--",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6663,
+            "pid": 6759,
+            "start_ticks": 14276,
+            "uid": 0
+          },
+          "original_identity_alive": true
+        },
+        {
+          "current": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py",
+              "--plan",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/RESOURCE-COMMAND.json",
+              "--plan-sha256",
+              "ae46fa0ade128c2c139b33073be2ecd1bdbd67dcc68589b4ff2008dec9feeb6d",
+              "--expected-script",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6662,
+            "start_ticks": 14220,
+            "uid": 0
+          },
+          "original": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py",
+              "--plan",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/RESOURCE-COMMAND.json",
+              "--plan-sha256",
+              "ae46fa0ade128c2c139b33073be2ecd1bdbd67dcc68589b4ff2008dec9feeb6d",
+              "--expected-script",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py"
+            ],
+            "parent_pid": 6662,
+            "pid": 6663,
+            "start_ticks": 14220,
+            "uid": 0
+          },
+          "original_identity_alive": true
+        }
+      ],
+      "package_sha256": "491176c1564242a1e4cc05903f574d0ed91eccbb57d4ae7bb69aa689372b0209",
+      "partition": "development",
+      "plan_sha256": "0e2f8c96c351a5f0090ba546da9fae0aeb9365a6e13ba0285cd45fb418e0bbf2",
+      "review_path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/reviews/review-20261022-075917-111945",
+      "schema": "pokemon.red.compact-autonomous-diagnostic-review.v1",
+      "settled_budget_stops": [],
+      "source_registrations": 120,
+      "terminal": null,
+      "windows_parent": {
+        "actual_process": {
+          "CommandLine": "\"C:\\Windows\\System32\\wsl.exe\" -d PokemonRedUbuntu-20261016 -u root --cd private-artifact://117c02b60632/PokemonMigration-20261016 -- private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python -I -B private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py --plan private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/RESOURCE-COMMAND.json --plan-sha256 ae46fa0ade128c2c139b33073be2ecd1bdbd67dcc68589b4ff2008dec9feeb6d --expected-script private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py",
+          "CreationDate": "2026-10-22T03:56:26.323145-04:00",
+          "ParentProcessId": 29672,
+          "ProcessId": 23156
+        },
+        "observed_at_utc": "2026-10-22T07:59:17.0378696Z",
+        "original_absent": false,
+        "original_live": true,
+        "original_process": {
+          "CommandLine": "\"C:\\Windows\\System32\\wsl.exe\" -d PokemonRedUbuntu-20261016 -u root --cd private-artifact://117c02b60632/PokemonMigration-20261016 -- private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python -I -B private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py --plan private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/RESOURCE-COMMAND.json --plan-sha256 ae46fa0ade128c2c139b33073be2ecd1bdbd67dcc68589b4ff2008dec9feeb6d --expected-script private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459/launch_diagnostic.py",
+          "CreationDate": "2026-10-22T03:56:26.323145-04:00",
+          "ParentProcessId": 29672,
+          "ProcessId": 23156
+        },
+        "pid_reused": false
+      }
+    },
+    "package_sha256": "491176c1564242a1e4cc05903f574d0ed91eccbb57d4ae7bb69aa689372b0209",
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/funding120-v118-qualification-20261022-075459",
+    "phase": "native",
+    "plan_sha256": "0e2f8c96c351a5f0090ba546da9fae0aeb9365a6e13ba0285cd45fb418e0bbf2",
+    "qualification_copy": true,
+    "running": true,
+    "source_sha256": "fd6076c41bce874178bad0778834b3250896e70ae3e7dc62ba08085cb97f5301"
+  },
+  "current_repair": {
+    "candidate_delta_proof": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capture-status-rest-recovery-20261021-2000/V95-DELTA-QUALIFICATION.json",
+    "copy_gains_imported": false,
+    "costs": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capture-status-rest-recovery-20261021-2000/COSTS-FIVE-CLOSED-COPIES.json",
+    "diagnostic_full_holds_seconds": 2280,
+    "frozen_tests": 656,
+    "full_suite": false,
+    "native_copies": 5,
+    "native_qualified": true,
+    "native_tail_admission_errors": 0,
+    "native_tail_execution_errors": 0,
+    "native_tail_model_choices": 5,
+    "native_tail_ordinary_setbacks": 1,
+    "original_route_proof": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capture-status-rest-recovery-20261021-2000/CLOSED-ROUTE-CAPABILITY-QUALIFICATION.json",
+    "package_sha256": "f114f41f49104c86d83dde4c3ff0d86ae8d3b87f019ba614ea6e5e1674db883b",
+    "qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v95-a9-20261021-005/CONTINUATION-QUALIFICATION.json",
+    "retained_failures": [
+      "Recorded replay differed only in independently located renderer bytes;whole-byte gate remained failed.",
+      "V94tail lacked configured retained-capture inventory and stopped before inputs.",
+      "V94route completed32goals;wrapper tried an undeclared receipt read. Independent closed review qualified capability without rewriting failure.",
+      "V95tail captured successfully;test wrapper mishandled the consumed preface decision. Corrected V95r2 passed."
+    ]
+  },
+  "first_menu_budget_repair": {
+    "focused_frozen_checks": {
+      "all_project_modules_frozen": true,
+      "emulators": 0,
+      "fits": 0,
+      "full_suite": false,
+      "inputs": 0,
+      "loads": 0,
+      "module_count": 317,
+      "native_qualified": false,
+      "new_weights": 0,
+      "observed_at_utc": "2026-10-21T23:58:15.515855+00:00",
+      "package_sha256": "2efc4807f4aa2ee03aaa7426eac3da8357ff62b6e4c5d153c9c86512d770601c",
+      "passed": true,
+      "seconds": 14.486244610000028,
+      "tests": 684
+    },
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/field-poison-faint-repair/REMAINDER-BUDGET-MISSION.json",
+    "native_qualified": true,
+    "prior_reproduction_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/field-poison-faint-repair/P100-REPRODUCTION-CLOSED.json"
+  },
+  "headroom_closed_costs": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/V98-COSTS-CLOSED.json",
+  "headroom_cost_totals": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/FACTS-AND-TOTALS.json",
+  "headroom_mission_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/CLOSEOUT.json",
+  "headroom_native_qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/NATIVE-HEADROOM-QUALIFICATION.json",
+  "headroom_repair": {
+    "delta": "P97 plus post-menu settlement reserve check for settled DEVELOPMENT collection chunks with prior native decisions; reuse existing typed budget stop and renewal.",
+    "failure_analysis": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/ORIGINAL-FAILURE-ANALYSIS.json",
+    "frozen_checks": {
+      "all_project_modules_frozen": true,
+      "emulators": 0,
+      "fits": 0,
+      "full_suite": false,
+      "inputs": 0,
+      "loads": 0,
+      "module_count": 316,
+      "native_qualified": false,
+      "new_weights": 0,
+      "observed_at_utc": "2026-10-21T22:58:11.820327+00:00",
+      "package_sha256": "ecfe1a4f357f8d5cffbc3394b026439544de941a6a1376cbf16ccc9614e41158",
+      "passed": true,
+      "seconds": 13.851836442999968,
+      "tests": 658
+    },
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/budget-headroom-recovery-20261021-2250/MISSION.json",
+    "native_budget_stop_observed": true,
+    "new_fits": 0,
+    "new_weights": 0,
+    "unchanged_models": true
+  },
+  "latest_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-and-play-20261022-0151/CLOSEOUT.json",
+  "latest_failed_qualification": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840",
+    "qualified_for_lineage": false,
+    "review": {
+      "actual_progress_credit": 0,
+      "actual_running": false,
+      "closed_paths": [
+        "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001/native/episode/step-000/outcome.json"
+      ],
+      "code_pins_rechecked": 1231,
+      "counts": {
+        "execution_errors": 0,
+        "ordinary_setbacks": 0,
+        "retained_route_recovery_certificates": 0,
+        "support": 1
+      },
+      "diagnostic_running": false,
+      "first_source_byte_exact": true,
+      "last_paired_checkpoint": {
+        "context_sha256": "2a70e35bc488fcebed9f746524e773d753f8f3f186bf05a630bd1099184dff30",
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001",
+        "spent": {
+          "actions": 1118731,
+          "cash_debits": 170475,
+          "decisions": 1191,
+          "frames": 92170902,
+          "heals": 968,
+          "seconds": 21811.420886752006
+        },
+        "state_sha256": "cead3a231562b80a63ee751d6b1f7b479d702a9100511d8bfe41b93baa219841"
+      },
+      "latest_closed": {
+        "badges": 8,
+        "cash": 22559,
+        "error": null,
+        "error_chain": null,
+        "kind": "resupply",
+        "master_ball": 1,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001/native/episode/step-000/outcome.json",
+        "recoverable_route_setback": null,
+        "registrations": 116,
+        "safe_terminal": true,
+        "sha256": "3e9027b475665a8c846cdf5c81e666c1349b093487b8529f13be24d308d96d7d",
+        "state_sha256": "cead3a231562b80a63ee751d6b1f7b479d702a9100511d8bfe41b93baa219841",
+        "verification": "succeeded"
+      },
+      "native_first_source_pending": false,
+      "newly_closed": [
+        {
+          "badges": 8,
+          "cash": 22559,
+          "error": null,
+          "error_chain": null,
+          "kind": "resupply",
+          "master_ball": 1,
+          "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001/native/episode/step-000/outcome.json",
+          "recoverable_route_setback": null,
+          "registrations": 116,
+          "safe_terminal": true,
+          "sha256": "3e9027b475665a8c846cdf5c81e666c1349b093487b8529f13be24d308d96d7d",
+          "state_sha256": "cead3a231562b80a63ee751d6b1f7b479d702a9100511d8bfe41b93baa219841",
+          "verification": "succeeded"
+        }
+      ],
+      "no_fit": true,
+      "observed_at_utc": "2026-10-22T05:14:04.707232+00:00",
+      "official_acceptance": false,
+      "open_step": {
+        "execution_started": false,
+        "kind": null,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001/native/episode/step-001"
+      },
+      "original_actual_lineage_source_registrations": 69,
+      "original_linux_identities": [
+        {
+          "current": null,
+          "original": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/launch_diagnostic.py"
+            ],
+            "parent_pid": 6913,
+            "pid": 6914,
+            "start_ticks": 1233,
+            "uid": 1000
+          },
+          "original_identity_alive": false
+        },
+        {
+          "current": null,
+          "original": {
+            "command": [
+              "runuser",
+              "--user",
+              "pokemon",
+              "--",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/launch_diagnostic.py"
+            ],
+            "parent_pid": 6834,
+            "pid": 6913,
+            "start_ticks": 1230,
+            "uid": 0
+          },
+          "original_identity_alive": false
+        },
+        {
+          "current": null,
+          "original": {
+            "command": [
+              "private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python",
+              "-I",
+              "-B",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py",
+              "--plan",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/RESOURCE-COMMAND.json",
+              "--plan-sha256",
+              "6a43c135b8927f80a4d57c943f3fb13af4783ea3ac7ab6bf722cc27d65375c26",
+              "--expected-script",
+              "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/launch_diagnostic.py"
+            ],
+            "parent_pid": 6833,
+            "pid": 6834,
+            "start_ticks": 1200,
+            "uid": 0
+          },
+          "original_identity_alive": false
+        }
+      ],
+      "package_sha256": "325fe448cd3dc9ac5ade1e2f6f342d0d8d5f0c5d8c06380ce769f90deae02ab6",
+      "partition": "development",
+      "plan_sha256": "00e42e0eec715e5ba4a1a5158d7bc9ad019d51e0099ef367463ed95baa37b654",
+      "review_path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/reviews/review-20261022-051404-707232",
+      "schema": "pokemon.red.compact-autonomous-diagnostic-review.v1",
+      "settled_budget_stops": [],
+      "source_registrations": 116,
+      "terminal": {
+        "all_original_processes_exited": true,
+        "controls_released": true,
+        "diagnostic_native_delta": {
+          "actions": 18,
+          "cash_debits": 0,
+          "decisions": 2,
+          "frames": 1872,
+          "heals": 0,
+          "seconds": 2.6667732230016554
+        },
+        "driver": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/DRIVER-RESULT-001.json",
+        "error": "mixed live menu needs distinct executable candidates: count=0, bindings=()",
+        "error_chain": [
+          {
+            "error": "mixed live menu needs distinct executable candidates: count=0, bindings=()",
+            "error_type": "RedLiveOptionMenuError"
+          }
+        ],
+        "error_type": "RedLiveOptionMenuError",
+        "field_ready": true,
+        "native_facts": {
+          "badge_bits": 255,
+          "badges": 8,
+          "bag_stock": [
+            [
+              49,
+              1
+            ],
+            [
+              196,
+              1
+            ],
+            [
+              197,
+              1
+            ],
+            [
+              72,
+              1
+            ],
+            [
+              40,
+              1
+            ],
+            [
+              73,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              198,
+              1
+            ],
+            [
+              199,
+              1
+            ],
+            [
+              238,
+              1
+            ],
+            [
+              69,
+              1
+            ],
+            [
+              78,
+              1
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              16,
+              1
+            ]
+          ],
+          "cash": 22559,
+          "event_flags_hex": "01000000af0100030000ff030002c40000000001800000cc0000000000c00804008c8e000001000000000000df0000000000000000ff010200000000010000000000000000000003000000ff00000000000000ff017e00000000000000000000000000000000000000007f00ff010000000080000000000000000000fc03040000007e000000fe0302027ef20000fe07fc807e03fe07fe0500c000000e000600b202460360007f00ff00dbf810002c860000000000000000000000001f0000000000000000000000000000000000000000000000fc00000000000000000000000402000004000000010000000000000010a10000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000760100000000000000",
+          "party_levels": [
+            47,
+            59,
+            73,
+            46,
+            52,
+            56
+          ],
+          "registrations": 116,
+          "whole_party_restored": false
+        },
+        "paired_checkpoint": {
+          "context_sha256": "2a70e35bc488fcebed9f746524e773d753f8f3f186bf05a630bd1099184dff30",
+          "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/runs/segment-001",
+          "spent": {
+            "actions": 1118731,
+            "cash_debits": 170475,
+            "decisions": 1191,
+            "frames": 92170902,
+            "heals": 968,
+            "seconds": 21811.420886752006
+          },
+          "state_sha256": "cead3a231562b80a63ee751d6b1f7b479d702a9100511d8bfe41b93baa219841"
+        },
+        "reason": "native_admission_error",
+        "root_cgroup_empty": true,
+        "root_exit_code": 0,
+        "root_seconds": 85.901363843,
+        "spent": {
+          "actions": 1118731,
+          "cash_debits": 170475,
+          "decisions": 1191,
+          "frames": 92170902,
+          "heals": 968,
+          "seconds": 21811.420886752006
+        },
+        "timed_out": false
+      },
+      "windows_parent": {
+        "actual_process": null,
+        "observed_at_utc": "2026-10-22T05:14:03.5484443Z",
+        "original_absent": true,
+        "original_live": false,
+        "original_process": {
+          "CommandLine": "\"C:\\Windows\\System32\\wsl.exe\" -d PokemonRedUbuntu-20261016 -u root --cd private-artifact://117c02b60632/PokemonMigration-20261016 -- private-artifact://117c02b60632/PokemonMigration-20261016/runtime/bin/python -I -B private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/fresh-duration-supervisor-v4-20261019/scoped_cgroup_command.py --plan private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/RESOURCE-COMMAND.json --plan-sha256 6a43c135b8927f80a4d57c943f3fb13af4783ea3ac7ab6bf722cc27d65375c26 --expected-script private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v113-tail-qualification-20261022-050840/launch_diagnostic.py",
+          "CreationDate": "2026-10-22T01:11:25.780029-04:00",
+          "ParentProcessId": 94600,
+          "ProcessId": 20320
+        },
+        "pid_reused": false
+      }
+    }
+  },
+  "latest_frozen_checks": {
+    "all_project_modules_frozen": true,
+    "emulators": 0,
+    "fits": 0,
+    "full_suite": false,
+    "inputs": 0,
+    "loads": 0,
+    "module_count": 314,
+    "native_qualified": false,
+    "new_weights": 0,
+    "observed_at_utc": "2026-10-22T07:46:54.484928+00:00",
+    "package_sha256": "491176c1564242a1e4cc05903f574d0ed91eccbb57d4ae7bb69aa689372b0209",
+    "passed": true,
+    "seconds": 12.714935792999999,
+    "tests": 488
+  },
+  "latest_seven_goal_audit": {
+    "anchor_due_utc": "2026-10-22T08:00:19.773019+00:00",
+    "closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/cave-return-and-readiness-20261022-0551/CLOSEOUT.json",
+    "closeout_sha256": "485ef1c58846630886cd4f3a78b3ef29fc269044f7acec11249cdc2dad9e36da",
+    "costs": {
+      "all_old_costs_and_holds_retained": true,
+      "allocated_full_holds_seconds": 8070,
+      "charged_possible_emulator_loads": 9,
+      "closed_native_root_seconds": 3219.960783316,
+      "closed_preflight_root_seconds": 298.4223336419998,
+      "new_fits": 0,
+      "new_heads": 0,
+      "partial_native_costs_not_zeroed": true
+    },
+    "decision": "Qualify frozenP118 funding-loss bridge including medicine composition;then continue exact120fd607lineage. No copy-gain import.",
+    "observed_at_utc": "2026-10-22T07:51:08.030757+00:00",
+    "schema": "pokemon.red.seven-goal-audit.v1",
+    "seven_goals": {
+      "execution": "incomplete;P114 cave/P115Mansion qualified;120lineage now fundingloss bridge",
+      "fresh_reliability": "0success/6failed/0heldout",
+      "funding_recovery": "incomplete;P118488focused checks,native copy pending",
+      "menu_performance": "boundedpass",
+      "model_decision_quality": "narrowgain;3related TRAINlosses,2row consequenceheadunadopted;prospective descriptors missmovequality",
+      "training_efficiency": "bounded component pass;Mansion27fights22heals231.604seconds for final level shows remainingwaste",
+      "two_worker_capacity": "boundedpass"
+    },
+    "time_sinks": [
+      "Mansion safety escapes and escort recovery:13completedfights/80excluded-or-volatileflees/7heals in qualification;original finallevel27fights/22heals. Not matched baseline speed proof.",
+      "Two optional TRAIN reporter failures consumedloads with0inputs;forecast movedoffline.",
+      "P115wide test selection included23absent-staged-bootstrap failures;423affected checks pass.",
+      "P116check4successstub compatibility failures fixed and34missingtest-evidence failures repaired;P117487/P118488pass. Every failed artifact preserved.",
+      "Package74984pins/startup dominates shortcopies;no weakeningprovenance."
+    ]
+  },
+  "matched_training_comparison": {
+    "Cave": {
+      "complete": true,
+      "frames": 766337,
+      "native_seconds": 81.98840415700067,
+      "progress": {
+        "battles_completed": 67,
+        "faints": 0,
+        "healing_trips": 14,
+        "steps_taken": 0
+      }
+    },
+    "Cave_fewer_frames_than_Mansion_partial_percent": 65.95263810996728,
+    "Cave_less_native_time_than_Mansion_partial_percent": 59.65059897946992,
+    "Mansion": {
+      "complete": false,
+      "frames_lower_bound": 2250797,
+      "native_seconds_lower_bound": 203.19608738500068,
+      "progress": {
+        "battles_completed": 29,
+        "faints": 0,
+        "healing_trips": 50,
+        "steps_taken": 0
+      }
+    },
+    "Mansion_completion_censored": true,
+    "actual_gains": 0,
+    "decision": "Existing Cave choice supported in this one related TRAINcase. Mansion executor safely retains partial XP but is not a demonstrated efficiency improvement. Do not expand live scope or fit unknown complete-cost labels.",
+    "existing_model_preferred_Cave": true,
+    "fit_allowed_from_this_pair": false,
+    "independent_origin_claim": false,
+    "model_scores": [
+      9.606975914625593,
+      13.20673873408903,
+      11.639291775091237
+    ],
+    "new_fit": false,
+    "observed_at_utc": "2026-10-21T21:53:06.587072+00:00",
+    "same_source_seed_package_mode_guards": true,
+    "schema": "pokemon.red.helper-only-venue-comparison.v1",
+    "source_sha256": "127b09cdea37f3e3767b10a80bf88fea7320401b56708cd54782a163a9badaae"
+  },
+  "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capture-status-rest-recovery-20261021-2000/MISSION.json",
+  "model_switch_status": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retained-boundary-recovery-20261022-0349/MODEL-SWITCH-STATUS-20261022-0430.json",
+  "native_retained_faint_qualification": {
+    "actual_credit": 0,
+    "all_costs_retained": true,
+    "all_processes_controls_released": true,
+    "case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v109-tail-qualification-20261022-040810",
+    "case_terminal_authentication_sha256": "fb38849fd40e50c3f3d04533364e6aa619bcee7d554fe70389e35cb050bac9b0",
+    "counts": {
+      "execution_errors": 0,
+      "model": 2,
+      "ordinary_setbacks": 0,
+      "retained_route_recovery_certificates": 0,
+      "support": 1
+    },
+    "frozen_package_sha256": "cc6037da67068e355de7ee3e791873570b453ab9b312d07a7a95f7c76a8bdd54",
+    "full_hold_seconds": 330,
+    "native_delta": {
+      "actions": 499,
+      "cash_debits": 3000,
+      "decisions": 4,
+      "frames": 23832,
+      "heals": 1,
+      "seconds": 27.9886673660003
+    },
+    "native_preface": {
+      "actions": 4,
+      "cash_spent": 0,
+      "evidence": {
+        "directional_inputs": 0,
+        "healing_performed_by_handler": false,
+        "individual_xp_box_dex_custody_verified": true,
+        "learned_recovery": false,
+        "mechanic": "native_retained_field_faint_settlement",
+        "model_queries": 0,
+        "prior_native_outcome_authenticated": true,
+        "route_details": {
+          "cancel_pulses": 2,
+          "declared_native_warp": false,
+          "learned_recovery": false,
+          "model_queries": 0,
+          "native_field_faint": true,
+          "new_fainted_slots": [
+            1
+          ],
+          "pending_native_poison_tick_slots": [],
+          "position_changed": false,
+          "verified": true
+        },
+        "verified": true
+      },
+      "failure_reason": null,
+      "frames": 288,
+      "learned": false,
+      "operator_relaunch": false,
+      "ordinary_setback": false,
+      "source_sha256": "ed2f7f4d8aabc408f67a31dbcabd39143a22100918e3b10ab211edaa0f2cbd53",
+      "terminal_sha256": "316979824bdd3577c33c0fc69cada6852d8c89ca9a53910c357fb9fbc4e6a313",
+      "verification": "succeeded"
+    },
+    "new_fits": 0,
+    "observed_at_utc": "2026-10-22T04:12:50.117702+00:00",
+    "preflight_seconds": 35.975506903999985,
+    "qualification_terminal_excluded": true,
+    "qualified_for_provisional_development": true,
+    "resume_source": "original failed ed2f7f4d8aabc408f67a31dbcabd39143a22100918e3b10ab211edaa0f2cbd53",
+    "root_seconds": 104.412784633,
+    "source_byte_exact": true
+  },
+  "native_route_repair": {
+    "baseline_reproduction": "Original step acknowledgement failure and terminal state reproduced byte-for-byte with recorded timing.",
+    "candidate": "P97 activates the existing strict safe-route classifier in native DEVELOPMENT and preserves recoverable errors across driver chunks.",
+    "closed_costs": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/autonomous-69-development-20261021-2154/indoor-route-repair/COSTS-CLOSED.json",
+    "error_chain_and_costs_retained": true,
+    "frozen_checks": {
+      "all_project_modules_frozen": true,
+      "emulators": 0,
+      "fits": 0,
+      "full_suite": false,
+      "inputs": 0,
+      "loads": 0,
+      "module_count": 316,
+      "native_qualified": false,
+      "new_weights": 0,
+      "observed_at_utc": "2026-10-21T22:37:43.567525+00:00",
+      "package_sha256": "96662adaff6ad5b7350fff1d77ae9bf89d7bd881d3321aac633732f586b122f0",
+      "passed": true,
+      "seconds": 13.421069081999988,
+      "tests": 636
+    },
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/autonomous-69-development-20261021-2154/indoor-route-repair/MISSION.json",
+    "models_unchanged": true,
+    "native_qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/autonomous-69-development-20261021-2154/indoor-route-repair/NATIVE-ROUTE-QUALIFICATION.json",
+    "native_qualification_pending": false,
+    "reassessment": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/autonomous-69-development-20261021-2154/indoor-route-repair/REASSESSMENT.json",
+    "rejected_candidate": "P96 replanning cannot route through the closed Mansion passage. Preserved and not promoted."
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "next": "Qualify frozenP118 funding-loss bridge including medicine composition;then continue exact120fd607lineage. No copy-gain import.",
+  "observed_at_utc": "2026-10-22T07:59:52.627906+00:00",
+  "performance": {
+    "all793_replay_routes_equal": true,
+    "closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/trainer-faint-recovery-20261021-1555/route-goal-feasibility-20261021-1928/CLOSEOUT.json",
+    "full_holds_seconds": 1200,
+    "measured_root_seconds": 337.58665097399944,
+    "native_copies": 4,
+    "native_gain_fraction": -0.005705747286351981,
+    "native_public_menu_equal": true,
+    "offline_gain_fraction": 0.2685713180836161,
+    "own_edit_reverted": true,
+    "promoted": false
+  },
+  "preceding_repair": "P90r3 qualified nested trainer-faint recovery and earned5registrations/1badge before a different capture error.",
+  "preparation": {
+    "deferred_for_actual_repair": true,
+    "frozen_tests": 583,
+    "full_hold_retained": 450,
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-context-005-20261021-1952/MISSION.json",
+    "native_emulators": 0,
+    "new_outcomes": 0,
+    "preflight_qualified": true,
+    "preflight_root_seconds": 33.73856193000029
+  },
+  "previous_block_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/cave-return-and-readiness-20261022-0551/CLOSEOUT.json",
+  "readiness_contrast": {
+    "censored_rows_excluded": [
+      "train005-ready-benefit-v110-prepare-20261022-045702"
+    ],
+    "completed_difference": 0,
+    "extra_actions": 399,
+    "extra_cash_debits": 0,
+    "extra_frames": 20424,
+    "extra_healing": 1,
+    "feature_differences": [
+      {
+        "direct": 0.0,
+        "index": 3,
+        "name": "kind.develop",
+        "prepared": 1.0
+      },
+      {
+        "direct": 1.0,
+        "index": 6,
+        "name": "kind.unlock_access",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 9,
+        "name": "dependency_unlock_gain",
+        "prepared": 0.25
+      },
+      {
+        "direct": 0.20633333333333334,
+        "index": 11,
+        "name": "execution_effort",
+        "prepared": 0.16333333333333333
+      },
+      {
+        "direct": 0.4,
+        "index": 14,
+        "name": "party_risk",
+        "prepared": 0.2
+      },
+      {
+        "direct": 0.9411764705882353,
+        "index": 18,
+        "name": "dependency_pressure_x_dependency_unlock_gain",
+        "prepared": 0.23529411764705882
+      },
+      {
+        "direct": 0.31000000000000005,
+        "index": 22,
+        "name": "party_pressure_x_party_risk",
+        "prepared": 0.15500000000000003
+      },
+      {
+        "direct": 0.0,
+        "index": 121,
+        "name": "readiness.develop_x_observed",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 138,
+        "name": "readiness.develop_x_current.combat_level_spread",
+        "prepared": 0.19
+      },
+      {
+        "direct": 0.0,
+        "index": 139,
+        "name": "readiness.develop_x_current.hp_fraction",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 144,
+        "name": "readiness.develop_x_budget.attempts",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 145,
+        "name": "readiness.develop_x_budget.actions",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 146,
+        "name": "readiness.develop_x_budget.frames",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 147,
+        "name": "readiness.develop_x_budget.seconds",
+        "prepared": 0.9999028420416667
+      },
+      {
+        "direct": 0.0,
+        "index": 148,
+        "name": "readiness.develop_x_budget.heals",
+        "prepared": 1.0
+      },
+      {
+        "direct": 1.0,
+        "index": 205,
+        "name": "readiness.unlock_access_x_observed",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.19,
+        "index": 222,
+        "name": "readiness.unlock_access_x_current.combat_level_spread",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 223,
+        "name": "readiness.unlock_access_x_current.hp_fraction",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 228,
+        "name": "readiness.unlock_access_x_budget.attempts",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 229,
+        "name": "readiness.unlock_access_x_budget.actions",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 230,
+        "name": "readiness.unlock_access_x_budget.frames",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.9999060983229167,
+        "index": 231,
+        "name": "readiness.unlock_access_x_budget.seconds",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 232,
+        "name": "readiness.unlock_access_x_budget.heals",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.0,
+        "index": 307,
+        "name": "challenge.develop_x_present",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 308,
+        "name": "challenge.develop_x_combat_required",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 309,
+        "name": "challenge.develop_x_opposition_known",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 310,
+        "name": "challenge.develop_x_opponent_fraction",
+        "prepared": 0.5
+      },
+      {
+        "direct": 0.0,
+        "index": 311,
+        "name": "challenge.develop_x_maximum_level_deficit",
+        "prepared": 0.07
+      },
+      {
+        "direct": 0.0,
+        "index": 312,
+        "name": "challenge.develop_x_median_level_deficit",
+        "prepared": 0.07
+      },
+      {
+        "direct": 1.0,
+        "index": 325,
+        "name": "challenge.unlock_access_x_present",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 326,
+        "name": "challenge.unlock_access_x_combat_required",
+        "prepared": 0.0
+      },
+      {
+        "direct": 1.0,
+        "index": 327,
+        "name": "challenge.unlock_access_x_opposition_known",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.5,
+        "index": 328,
+        "name": "challenge.unlock_access_x_opponent_fraction",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.07,
+        "index": 329,
+        "name": "challenge.unlock_access_x_maximum_level_deficit",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.07,
+        "index": 330,
+        "name": "challenge.unlock_access_x_median_level_deficit",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.0,
+        "index": 343,
+        "name": "preparation.present",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 344,
+        "name": "preparation.current_level",
+        "prepared": 0.2
+      },
+      {
+        "direct": 0.0,
+        "index": 345,
+        "name": "preparation.target_level",
+        "prepared": 0.21
+      },
+      {
+        "direct": 0.0,
+        "index": 346,
+        "name": "preparation.level_gain",
+        "prepared": 0.01
+      },
+      {
+        "direct": 0.0,
+        "index": 347,
+        "name": "preparation.remaining_xp",
+        "prepared": 0.08508691674290943
+      },
+      {
+        "direct": 0.0,
+        "index": 348,
+        "name": "preparation.hp_fraction",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 351,
+        "name": "preparation.existing_combat_intent",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 359,
+        "name": "execution_effort_x_kind.develop",
+        "prepared": 0.16333333333333333
+      },
+      {
+        "direct": 0.20633333333333334,
+        "index": 362,
+        "name": "execution_effort_x_kind.unlock_access",
+        "prepared": 0.0
+      },
+      {
+        "direct": 0.0,
+        "index": 365,
+        "name": "level_workload.present",
+        "prepared": 1.0
+      },
+      {
+        "direct": 0.0,
+        "index": 366,
+        "name": "level_workload.current_level",
+        "prepared": 0.2
+      },
+      {
+        "direct": 0.0,
+        "index": 367,
+        "name": "level_workload.target_level",
+        "prepared": 0.21
+      },
+      {
+        "direct": 0.0,
+        "index": 368,
+        "name": "level_workload.level_gain",
+        "prepared": 0.01
+      },
+      {
+        "direct": 0.0,
+        "index": 369,
+        "name": "level_workload.remaining_xp",
+        "prepared": 4.65e-05
+      }
+    ],
+    "feature_width": 370,
+    "first_audit_invocation_error": "Incorrect codec import;0loads/0fits,corrected after reading actual module imports.",
+    "fit_called": false,
+    "limitation": "One related TRAIN origin,one seed;no independent reliability or universal preparation claim.",
+    "native_gains_are_not_actual_progress": true,
+    "new_uncensored_TRAIN_rows": 2,
+    "new_weights": 0,
+    "observed_at_utc": "2026-10-22T05:12:46.133713+00:00",
+    "original_origins": 1,
+    "pair": [
+      {
+        "atomic_model_prediction": {
+          "action_cost": 0.002171847920430979,
+          "completion_gain": 0.0,
+          "dependency_unlock_gain": 0.0,
+          "frame_cost": 0.0022214069196541675,
+          "irreversible_loss": 0.0,
+          "party_cost": 0.0,
+          "resource_cost": 0.0,
+          "storage_cost": 0.000496533461419247,
+          "verified_success": 0.0
+        },
+        "atomic_model_targets_are_not_eventual_challenge_outcomes": true,
+        "case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/train005-ready-benefit-v110-direct-20261022-045000",
+        "native_seconds": 3.50057407099996,
+        "observed_consequence_utility": -1.6399925185185185,
+        "outcome": {
+          "actions": 249,
+          "attempted": true,
+          "cash_credits": 0,
+          "cash_debits": 10181,
+          "challenge_progress": 0.25925925925925924,
+          "completed": false,
+          "frames": 22944,
+          "initial_goal_failed": false,
+          "restorations": 0
+        },
+        "root_seconds": 40.00781643800008,
+        "source_origin_sha256": "69ce9a7cbf2690b72fa4d987d9919344afc6ecabe0b90b9acab4ab0693286f30"
+      },
+      {
+        "atomic_model_prediction": {
+          "action_cost": 0.06888126260068211,
+          "completion_gain": 0.00011810663071741383,
+          "dependency_unlock_gain": 0.0008257970180884045,
+          "frame_cost": 0.05114360972061196,
+          "irreversible_loss": 0.0,
+          "party_cost": 0.29233225080047004,
+          "resource_cost": 0.0,
+          "storage_cost": 0.00020718794420871497,
+          "verified_success": 0.09647219925456496
+        },
+        "atomic_model_targets_are_not_eventual_challenge_outcomes": true,
+        "case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/train005-ready-benefit-v110-arrival-prepare-20261022-050353",
+        "native_seconds": 9.309735606000004,
+        "observed_consequence_utility": -1.6597687407407407,
+        "outcome": {
+          "actions": 648,
+          "attempted": true,
+          "cash_credits": 0,
+          "cash_debits": 10181,
+          "challenge_progress": 0.27037037037037037,
+          "completed": false,
+          "frames": 43368,
+          "initial_goal_failed": false,
+          "restorations": 1
+        },
+        "root_seconds": 43.330113242999914,
+        "source_origin_sha256": "69ce9a7cbf2690b72fa4d987d9919344afc6ecabe0b90b9acab4ab0693286f30"
+      }
+    ],
+    "progress_difference": 0.011111111111111127
+  },
+  "readiness_fit": {
+    "TRAIN_examples": 2,
+    "adoption": "UNADOPTED_SCOPED_CANDIDATE",
+    "all_project_imports_frozen": true,
+    "automatic_adoption": false,
+    "development_inputs": 0,
+    "emulators": 0,
+    "evidence_sha256": "f7536cf6ba63cea0cdbbafcabfff3ca28575d4c8ed5c78d8468217271208b3cc",
+    "finished_at_utc": "2026-10-22T05:20:13.359982+00:00",
+    "fit_calls": 1,
+    "frames": 0,
+    "independent_generalization_proved": false,
+    "inputs": 0,
+    "learns_exact_context_cheaper_direct_order": true,
+    "limitation": "Two related TRAIN outcomes,one seed,both losses. This is fitted prediction evidence,not a gameplay improvement or a general preparation policy.",
+    "model_file_sha256": "c91df7bb8b9126c79d558462cd2b272dd6b655621ed35ed16a2dd17507e5c08c",
+    "model_sha256": "997931d23fbc9d79e0f3fd50802a57ac48c5dd31457c75b4b9d29f55613b2ee3",
+    "native_evaluation": false,
+    "new_models": 1,
+    "observed_utility": [
+      -1.6399925185185185,
+      -1.6597687407407407
+    ],
+    "original_goal_and_battle_models_changed": false,
+    "original_origins": 1,
+    "passed": true,
+    "predicted_outcomes": [
+      [
+        1.0,
+        0.0,
+        0.041835858585858594,
+        0.0384119191919192,
+        6.787333333333334,
+        0.0,
+        0.0012626262626262708,
+        0.0,
+        0.2593153759820427
+      ],
+      [
+        1.0,
+        0.0,
+        0.1076641414141414,
+        0.07210808080808082,
+        6.787333333333334,
+        0.0,
+        0.24873737373737376,
+        0.0,
+        0.270314253647587
+      ]
+    ],
+    "predicted_utility": [
+      -1.640092398428732,
+      -1.6596688608305277
+    ],
+    "reserved_inputs": 0,
+    "seconds": 2.0507507560000002,
+    "state_loads": 0
+  },
+  "regional_access_and_trade_partial": {
+    "baseline_menu_seconds": 32.733254835,
+    "candidate_menu_seconds": 16.688396624000006,
+    "exact_feature_equality": false,
+    "failed_P104_retained": true,
+    "feature_difference": "Elapsed budget.seconds readiness only;all11legal candidates and other features match.",
+    "focused_tests": 378,
+    "full_suite": false,
+    "native_access_comparison": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/story-travel-efficiency-20261022-0019/P103-NATIVE-COMPARISON.json",
+    "new_fits": 0,
+    "new_weights": 0,
+    "one_correlated_pair": true,
+    "package_sha256": "bc237d1256f9c18a4d4c2a18451d38e0dc288acbf5f3a1669808ca6515f72b64",
+    "trade_partial_recovery_native_coverage": "Inspect current receipts;focused tests alone do not establish native exercise."
+  },
+  "retained_P95_diagnostic": {
+    "actual_credit": 0,
+    "counts": {
+      "execution_errors": 1,
+      "model": 36,
+      "ordinary_setbacks": 14,
+      "support": 4
+    },
+    "diagnostic_delta": 9,
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous69-v95-diagnostic-r1-20261021-215738",
+    "registrations": 78,
+    "source_registrations": 69,
+    "terminal": {
+      "all_original_processes_exited": true,
+      "controls_released": true,
+      "diagnostic_native_delta": {
+        "actions": 60781,
+        "cash_debits": 9800,
+        "decisions": 40,
+        "frames": 5387374,
+        "heals": 23,
+        "seconds": 824.6471966000008
+      },
+      "driver": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous69-v95-diagnostic-r1-20261021-215738/DRIVER-RESULT-002.json",
+      "error": null,
+      "error_chain": [
+        {
+          "error": "route step right at (5, 8) exceeded 8 attempts",
+          "error_type": "RouteExecutionError",
+          "reason_code": "step_acknowledgement_exhausted"
+        }
+      ],
+      "error_type": null,
+      "field_ready": true,
+      "native_facts": {
+        "badge_bits": 63,
+        "badges": 6,
+        "bag_stock": [
+          [
+            234,
+            1
+          ],
+          [
+            42,
+            1
+          ],
+          [
+            49,
+            1
+          ],
+          [
+            211,
+            1
+          ],
+          [
+            228,
+            1
+          ],
+          [
+            196,
+            1
+          ],
+          [
+            224,
+            1
+          ],
+          [
+            197,
+            1
+          ],
+          [
+            221,
+            1
+          ],
+          [
+            72,
+            1
+          ],
+          [
+            40,
+            1
+          ],
+          [
+            73,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            246,
+            1
+          ],
+          [
+            198,
+            1
+          ],
+          [
+            199,
+            1
+          ],
+          [
+            206,
+            1
+          ],
+          [
+            3,
+            6
+          ]
+        ],
+        "cash": 21590,
+        "event_flags_hex": "01000000af000003000000000000c40000000001800000cc0000000000c00804008c8e000001000000000000df0000000000000000ff010200000000000000000000000000000003000000ff0000000100000000000000000000000000000000000000000000000000000000ff0100000000800000000000000000007c030000000070000000800202021af200000000fc806e00a802000000c00000000000003002400020000000ff00dbf810002c860000000000000000000000001f0000000000000000000000000000000000000000000000fc00000000000000000000000402000004000000010000000000000010a10000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000760100000000000000",
+        "party_levels": [
+          35,
+          46,
+          38,
+          53,
+          63,
+          43
+        ],
+        "registrations": 78,
+        "whole_party_restored": true
+      },
+      "paired_checkpoint": {
+        "context_sha256": "4957e5ac5a61d4c742da2b6f5844ff84d62546e5f24d814f556f6aba08f7731c",
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/autonomous69-v95-diagnostic-r1-20261021-215738/runs/segment-002",
+        "spent": {
+          "actions": 796445,
+          "cash_debits": 58615,
+          "decisions": 830,
+          "frames": 66578368,
+          "heals": 765,
+          "seconds": 13868.388641288
+        },
+        "state_sha256": "a04a6ecea106bd8d0f5e321035c7af9716a35cab10254a908867d5491a450bfd"
+      },
+      "reason": "native_execution_error",
+      "root_cgroup_empty": true,
+      "root_exit_code": 0,
+      "root_seconds": 909.2077213360001,
+      "spent": {
+        "actions": 796445,
+        "cash_debits": 58615,
+        "decisions": 830,
+        "frames": 66578368,
+        "heals": 765,
+        "seconds": 13868.388641288
+      },
+      "timed_out": false
+    }
+  },
+  "schema": "pokemon.red.capture-status-repair-progress.v1",
+  "story_travel_efficiency": {
+    "comparison": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/story-travel-efficiency-20261022-0019/NATIVE-COMPARISON-DECLARATION.json",
+    "focused_checks": {
+      "all_project_modules_frozen": true,
+      "emulators": 0,
+      "fits": 0,
+      "full_suite": false,
+      "inputs": 0,
+      "loads": 0,
+      "module_count": 318,
+      "native_qualified": false,
+      "new_weights": 0,
+      "observed_at_utc": "2026-10-22T00:31:59.785137+00:00",
+      "package_sha256": "88f8728d616c6b847669fcd2742e9dacc135167336378b816e01a9f31138e082",
+      "passed": true,
+      "seconds": 2.2855563059999895,
+      "tests": 419
+    },
+    "mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/story-travel-efficiency-20261022-0019/MISSION.json",
+    "native_qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/story-travel-efficiency-20261022-0019/P102-NATIVE-QUALIFICATION.json",
+    "native_qualified": true,
+    "new_fits": 0,
+    "new_weights": 0,
+    "scope": "Existing strict native Fly prefix toward same selected story objective,visited cartridge landing,shorter topology and real onward quote."
+  },
+  "training_mode_audit": {
+    "complete_direct_enabled_outcomes": 2,
+    "evidence": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-context-005-20261021-1952/TRAINING-MODE-PARITY-AUDIT.json",
+    "fit_performed": false,
+    "helper_only_fit_eligible_rows": 0
+  },
+  "two_cut_frozen_checks": {
+    "all_project_modules_frozen": true,
+    "emulators": 0,
+    "fits": 0,
+    "full_suite": false,
+    "inputs": 0,
+    "loads": 0,
+    "module_count": 244,
+    "native_qualified": false,
+    "new_weights": 0,
+    "observed_at_utc": "2026-10-22T04:16:37.100441+00:00",
+    "package_sha256": "b30d29fdbf006399f401116203da5ce519aea1620c02f1972185ce9681bee8ff",
+    "passed": true,
+    "seconds": 1.5050411170000189,
+    "tests": 324
+  },
+  "two_cut_native_qualification": {
+    "all_costs_retained": true,
+    "case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/train005-retained-setup-v110-20261022-041836",
+    "full_hold_seconds": 690,
+    "leader_available_without_execution": true,
+    "live_preinput_quote": {
+      "at": [
+        6,
+        5
+      ],
+      "capabilities": [
+        "move:cut",
+        "story:cerulean_robbed_house_open",
+        "story:pewter_east_exit_open",
+        "story:silph_entrance_open"
+      ],
+      "cut_steps": [
+        {
+          "action": "cut:down",
+          "at": [
+            6,
+            5
+          ],
+          "map": 134
+        },
+        {
+          "action": "cut:up",
+          "at": [
+            33,
+            35
+          ],
+          "map": 6
+        }
+      ],
+      "frames": 0,
+      "inputs": 0,
+      "last_outside_map": 6,
+      "map_id": 134,
+      "occupied": [
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          10,
+          7
+        ]
+      ],
+      "source_sha256": "7bf24817c73202383fb4ac639dc0e796ebb4f59d53ce5b1d948a8cb2eb4b62dc",
+      "steps": 97,
+      "terminal_at": [
+        3,
+        3
+      ],
+      "terminal_map": 133
+    },
+    "native_result": {
+      "actions": 268,
+      "admitted": false,
+      "campaign_progress": false,
+      "condition": "original-train005",
+      "controls_released": true,
+      "copy_back": false,
+      "field_ready": true,
+      "finished_at_utc": "2026-10-22T04:19:56.287354+00:00",
+      "frames": 11376,
+      "goal_attempts": 2,
+      "goal_policy_queries": 0,
+      "heals": 1,
+      "leader_not_executed": true,
+      "native_seconds": 5.6403543979999995,
+      "native_setup_phases": 2,
+      "new_fits": 0,
+      "new_weights": 0,
+      "outer_seconds": 38.6428296439999,
+      "passed": true,
+      "physical_emulator_accounting": {
+        "construction_attempts": 1,
+        "emulators_constructed": 1,
+        "load_attempts": 1,
+        "state_loads": 1
+      },
+      "role": "train_sampling",
+      "schema": "pokemon.red.prospective-v9-train-preparation-arm.v1",
+      "setup_only": true,
+      "started_at_utc": "2026-10-22T04:19:18.275854+00:00",
+      "story_battles": 0,
+      "teacher_selected": true,
+      "terminal_sha256": "1954743b6a3ad91b95c3be56fb573d665629502b0be1f356626970aaf00393e8",
+      "training_admission": false,
+      "verified_data_cache_release": {
+        "checked_bytes": 6080355562,
+        "data_files": 74984,
+        "every_pin_authenticated": true,
+        "file_contents_changed": false
+      },
+      "wild_battles": 0
+    },
+    "observed_at_utc": "2026-10-22T04:24:01.373710+00:00",
+    "preflight_seconds": 27.997829236999905,
+    "qualified_native_two_cut_return": true,
+    "root_seconds": 39.630871956999954,
+    "terminal_authentication_sha256": "2d471ada6734940fab5b84580396d2ab8f6f74727b900bc0fd15ad28d974f44f",
+    "whole_party_healed": true
+  },
+  "wild_route_recovery_qualification": {
+    "actual_credit": 0,
+    "all_processes_controls_released": true,
+    "execution_errors": 0,
+    "failed_goal_stays_failed": true,
+    "frozen_package_sha256": "4f950a6bb9799df8c6fb065a903ba6f541159ac27ba7db7387d46e51df613d37",
+    "full_hold_seconds": 330,
+    "loads": 1,
+    "model_choices": 4,
+    "native_certificate": {
+      "actions": 43,
+      "cash_after": 30559,
+      "cash_before": 30559,
+      "frames": 4764,
+      "learned_recovery": false,
+      "model_queries": 0,
+      "new_fainted_slots": [
+        1
+      ],
+      "party_hp": [
+        0,
+        167,
+        253,
+        141,
+        158,
+        190
+      ],
+      "party_hp_before": [
+        65,
+        167,
+        253,
+        141,
+        158,
+        190
+      ],
+      "protected_resources_verified": true,
+      "schema": "pokemon.red.settled-route-wild-recovery.v1",
+      "source_sha256": "6a756c7d6d1564e2dab5e4711252d45df20ee96079b2e12ac48bc5827b855952",
+      "support": "native_whole_party_wild_escape",
+      "terminal_sha256": "ceb07fcb4f0e1a61144f9f7877965c15cc0b46c12a68193e9723d915adcfc9c1",
+      "verified": true,
+      "wild_escape": {
+        "battle_result": 2,
+        "control_ready": true,
+        "enemy_level": 64,
+        "enemy_species_id": 85,
+        "expected_map": 227,
+        "faint_prompt_exit": false,
+        "final_battle_state": 0,
+        "final_hp": 909,
+        "forced_switch_slots": [
+          2
+        ],
+        "hp_scope": "whole_party",
+        "initial_battle_state": 1,
+        "initial_hp": 974,
+        "learned_replacement": false,
+        "level_preserved": true,
+        "map": 227,
+        "maximum_hp_preserved": true,
+        "native_status_changes": [],
+        "new_fainted_slots": [
+          1
+        ],
+        "party_faints_allowed": true,
+        "party_preserved": true,
+        "position": [
+          9,
+          10
+        ],
+        "pp_preserved": true,
+        "run_attempts": 3,
+        "stabilization_frames": 180,
+        "status_changes_allowed": true,
+        "status_preserved": true,
+        "verified": true
+      }
+    },
+    "native_seconds": 12.828747530998953,
+    "native_wild_recovery_observed": true,
+    "new_fits": 0,
+    "new_weights": 0,
+    "next_model_recovery_and_resupply_observed": true,
+    "observed_at_utc": "2026-10-22T04:53:55.768412+00:00",
+    "old_actual_caps_unchanged": true,
+    "ordinary_setbacks": 1,
+    "plan_sha256": "5403e7df35e3f4b9eefc7bff686d4225f2bcb08cb2a48823cf19999032d06953",
+    "preflight_seconds": 33.56615783699999,
+    "qualification_case": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v112-tail-qualification-20261022-045037",
+    "qualification_only": true,
+    "qualification_terminal_must_not_be_imported": true,
+    "qualified_for_provisional_development": true,
+    "receipt": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/faint116-v112-tail-qualification-20261022-045037/runs/segment-001/native/episode/step-001/outcome.json",
+    "receipt_sha256": "09b149e8ebd393b7c44331ac45f7a741dc1a06e07036c5607cff25723b46b3d2",
+    "root_seconds": 93.762910756,
+    "source_original_failed_tail": "d137e451a4891160cc17ac7329944e8eb6cdcb8b68263659d8bcd103c82b926b"
+  }
+}

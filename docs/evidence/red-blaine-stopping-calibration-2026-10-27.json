@@ -1,0 +1,381 @@
+{
+  "P17": {
+    "focused_checks": 263,
+    "full_suite": false,
+    "owned_machine_parent_witness_version": 2,
+    "private_fixture_skips": 39,
+    "raw_menu_and_outcomes_unchanged": true,
+    "strict_readback_recomputes_conditioned_features": true
+  },
+  "P18": {
+    "default_document_and_model_sha_compatibility_checked": true,
+    "focused_checks": 332,
+    "full_suite": false,
+    "new_actual_TRAIN_fits": 0,
+    "optional_reference_fitter_implemented": true,
+    "package_sha256": "9d334a48ce7528d630e59821dbe7e8b8abf89b29b6a7090189f3362b9b9b2acf",
+    "reference_mode_model_qualified": false,
+    "retained_synthetic_raw_affine_and_public_forecasts_bit_checked": true,
+    "runtime_inference_and_existing_model_bits_unchanged": true,
+    "skipped_checks": 0,
+    "source_only_qualified": true
+  },
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "all_native_and_fit_workers_stopped": true,
+  "all_native_controls_released": true,
+  "all_seven_goals_complete": false,
+  "block_closed": true,
+  "closure_scope": "Experimental and source-editing work complete; authenticate source-writer release separately in the platform SESSION-CLOSEOUT.",
+  "composition_readback": {
+    "already_exposed": true,
+    "conditional_child_predictions": 0,
+    "conditional_child_score_calls": 0,
+    "controller_inputs": 0,
+    "frames": 0,
+    "global_A9_score_calls": 4,
+    "native_loads": 2,
+    "passed": true,
+    "permanent_no_fit": true,
+    "resource_root_seconds": 32.542708830000265,
+    "selected_same_owned_move_per_source": true,
+    "sources": [
+      "near-erika-003",
+      "near-erika-005"
+    ],
+    "stopping_head_bypassed": true,
+    "stopping_head_improvement_established": false,
+    "whole_process_NN_forward_metering_complete": false
+  },
+  "costs": {
+    "all_six_closed_resource_jobs_seconds": 211.292412122001,
+    "closed_resource_jobs": [
+      {
+        "job": "blaine-baseline-readback-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 903065600,
+        "receipt_sha256": "f50d862f94351132d9b8b682c631fe851b05846e088ca455e1e58ed388128c9f",
+        "remaining_pids": [],
+        "root_seconds": 29.665898666999965,
+        "timed_out": false
+      },
+      {
+        "job": "blaine-direct-move-train-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 924213248,
+        "receipt_sha256": "4c51f233b4931ab1b4ebf1c614657df48eb960f2348e9f51cd010c81a8449ed4",
+        "remaining_pids": [],
+        "root_seconds": 42.11905588100012,
+        "timed_out": false
+      },
+      {
+        "job": "blaine-fit14-input-build-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 881876992,
+        "receipt_sha256": "6440e58f6e6b651f104fae28e62e7f7d19884a61ead9ef734303629e7a8d410b",
+        "remaining_pids": [],
+        "root_seconds": 28.60193435600013,
+        "timed_out": false
+      },
+      {
+        "job": "blaine-stopping-fit14-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 1026498560,
+        "receipt_sha256": "00e0b2093bcdbb641a7bc69b5933032486624c9afea59bd9a0c1fa7b3de9e13a",
+        "remaining_pids": [],
+        "root_seconds": 50.84840404400029,
+        "timed_out": false
+      },
+      {
+        "job": "blaine-fit14-numerical-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 906719232,
+        "receipt_sha256": "2991145d5c1a5c2ca0c6f27783c029ce99410f96db7cb05ab015c149b2ea71ae",
+        "remaining_pids": [],
+        "root_seconds": 27.514410344000225,
+        "timed_out": false
+      },
+      {
+        "job": "current-erika-global-parent-readback-20261027-0054-v1",
+        "native_exit_code": 0,
+        "peak_bytes": 865185792,
+        "receipt_sha256": "6ac6ae2572a3e20797ba008838e8be95c1b9fd291e40169f5b5b7e8eba39e127",
+        "remaining_pids": [],
+        "root_seconds": 32.542708830000265,
+        "timed_out": false
+      }
+    ],
+    "earlier_costs_additional": true,
+    "failed_first_closeout_retained": true,
+    "failed_first_junit_retained": true,
+    "not_total_engineering_time": true,
+    "scope": "All six closed scoped jobs in this block; excludes unscoped preflights, tests, authentication and engineering time. Earlier costs are additional."
+  },
+  "deadline_utc": "2026-10-27T03:54:30+00:00",
+  "fit": {
+    "TRAIN_rows": 14,
+    "calls": 1,
+    "candidate_content_sha256": "529e93822daa48a4968133eb07e0cc5030a08ffe71abe58c9ab799a0c06b5069",
+    "candidate_model_sha256": "c1e92c08b858152aaae7bfb1fe2d1f711cde558d28a970ce08606ae2bc5f8b6a",
+    "context_projection": "prospective_preparation_party_context_v1",
+    "feedback_version": 2,
+    "new2_data_actor_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "new_direct_rows": 1,
+    "new_owned_machine_rows": 1,
+    "no_DEV_inputs": true,
+    "numerical_seconds": 0.0058573659998728544,
+    "old12_data_actors": "production297/720",
+    "old_direct_rows": 5,
+    "old_level_rows": 7,
+    "old_rows_preserved": 12,
+    "resource_root_seconds": 50.84840404400029,
+    "ridge": 1.0,
+    "scalar_labels": 126,
+    "unit_weights": true
+  },
+  "fresh_acceptance": false,
+  "full_suite_pass": false,
+  "future_reference_fit": {
+    "consumed_claim": null,
+    "deadline": null,
+    "disabled": true,
+    "eligible_semantic_columns": 36,
+    "exact_old12_normalized_zero_basis": true,
+    "existing14_labels_unchanged": true,
+    "fit_authorized": false,
+    "future_mission": null,
+    "immutable_manifest_sha256": "35ff41bbb9d372b7df67a19914dc3b2709e83d4bae8c2f75c179b2a8288a01c6",
+    "new2_basis_rank": 2,
+    "new_labels": 0,
+    "output": null,
+    "source019_model_faithful_prefix_feasibility": "blocked_before_load_missing_original_roles_complete_context_and_inherited_spend",
+    "writer": null
+  },
+  "global_adoption": false,
+  "independent_generalization": false,
+  "limitations": [
+    "Two fitting payoffs from one related original TRAIN group are not independent generalization.",
+    "The unchanged feedback-v2 utility does not price the consumed TM240 opportunity cost.",
+    "New2 calibration improves sharply while old12 normalized MSE and utility MAE worsen; all14 utility MAE also worsens. No overall candidate quality pass.",
+    "Experimental work is complete. The two-hour audit was observed at02:54:43UTC; source-writer release is authenticated separately. Historical cross-family counters135/16/9 remain unchanged.",
+    "The genuine Erika composition readbacks closed with four A9 calls and zero conditional-child calls/inputs. They provide no stopping-head decision benefit.",
+    "c1e92 reverses a known useful old TRAIN direct-versus-extra-level preference and remains rejected for gameplay. This is not proof of a current global choice or current-K payoff.",
+    "P18 qualifies source, synthetic fixtures and unchanged model bits only. No reference-mode actual TRAIN fit or model qualification has happened.",
+    "The future retained-reference plan remains disabled with no fresh mission/writer/deadline/claim/output. This block still contains exactly one actual TRAIN fit."
+  ],
+  "models_adopted": 0,
+  "native_TRAIN_payoffs": [
+    {
+      "actions": 232,
+      "arm": "direct",
+      "cash_credits": 4653,
+      "completed_K_choices": 11,
+      "consumed_TM240": 0,
+      "frames": 21144,
+      "restorations": 0,
+      "won": true
+    },
+    {
+      "actions": 214,
+      "arm": "owned_move",
+      "cash_credits": 4653,
+      "completed_K_choices": 7,
+      "consumed_TM240": 1,
+      "frames": 18756,
+      "restorations": 0,
+      "won": true
+    }
+  ],
+  "native_accounting_note": "84 is a structural reconstruction of completed recorded policy paths, not a separately instrumented whole-process counter. Preserve the frozen narrow method-counter receipts and corrective audit.",
+  "native_costs": {
+    "actions": 446,
+    "completed_K_choices": 18,
+    "completed_path_static_head_forwards": 84,
+    "frames": 39900,
+    "incremental_controller_seconds": 9.826409521999949,
+    "narrow_zero_counter_is_not_zero_NN_inference": true,
+    "new_native_loads": 2,
+    "resource_root_seconds": 42.11905588100012,
+    "whole_process_NN_forwards": null,
+    "whole_process_NN_metering_complete": false
+  },
+  "native_episode": true,
+  "new_actual_TRAIN_fits": 1,
+  "new_native_loads": 4,
+  "numerical": {
+    "linear_predictions": 28,
+    "marginal_new_pair": {
+      "baseline": {
+        "absolute_marginal_error": 0.13066567480369362,
+        "observed_move_minus_direct_utility": 0.0006980000000000874,
+        "observed_preference": "owned_move",
+        "predicted_move_minus_direct_utility": -0.12996767480369353,
+        "predicted_preference": "direct",
+        "preference_matches": false
+      },
+      "candidate": {
+        "absolute_marginal_error": 9.118127531060338e-05,
+        "observed_move_minus_direct_utility": 0.0006980000000000874,
+        "observed_preference": "owned_move",
+        "predicted_move_minus_direct_utility": 0.0006068187246894841,
+        "predicted_preference": "owned_move",
+        "preference_matches": true
+      }
+    },
+    "native_benefit_verified": false,
+    "old12_regression_observed": true,
+    "overall_policy_improvement_proved": false,
+    "status": "MIXED_TRAIN_RESULT_ZERO_INPUT_DIAGNOSTICS_ONLY",
+    "summary": {
+      "all14": {
+        "baseline": {
+          "normalized_MSE": 0.41871348463032165,
+          "rows": 14,
+          "scalar_labels": 126,
+          "utility_MAE": 0.36018163572957673
+        },
+        "candidate": {
+          "normalized_MSE": 0.07000478945858372,
+          "rows": 14,
+          "scalar_labels": 126,
+          "utility_MAE": 0.4013860492414268
+        }
+      },
+      "new2": {
+        "baseline": {
+          "normalized_MSE": 2.544896138623756,
+          "rows": 2,
+          "scalar_labels": 18,
+          "utility_MAE": 0.073012771524538
+        },
+        "candidate": {
+          "normalized_MSE": 5.592826528378826e-07,
+          "rows": 2,
+          "scalar_labels": 18,
+          "utility_MAE": 4.559063765530169e-05
+        }
+      },
+      "old12": {
+        "baseline": {
+          "normalized_MSE": 0.06434970896474929,
+          "rows": 12,
+          "scalar_labels": 108,
+          "utility_MAE": 0.4080431130970832
+        },
+        "candidate": {
+          "normalized_MSE": 0.0816721611545722,
+          "rows": 12,
+          "scalar_labels": 108,
+          "utility_MAE": 0.4682761256753887
+        }
+      }
+    }
+  },
+  "observed_at_utc": "2026-10-27T03:37:50.528298+00:00",
+  "partition": "development",
+  "private_evidence_root_id": "blaine-direct-move-20261027-0054",
+  "receipt_references": {
+    "BLAINE-PAIR-ROOT-CLOSEOUT-R2.json": {
+      "receipt": "BLAINE-PAIR-ROOT-CLOSEOUT-R2.json",
+      "sha256": "5a8fb53a969b59071794f8451da825a83a200dda2ac5c36bb04ad38856243001"
+    },
+    "ERIKA-GLOBAL-PARENT-READBACK-ROOT-CLOSEOUT.json": {
+      "receipt": "ERIKA-GLOBAL-PARENT-READBACK-ROOT-CLOSEOUT.json",
+      "sha256": "b202a973e7a9c1b32576298307eb24e474cab14d5983f49f7620fa8aab7232af"
+    },
+    "FINAL-COST-LEDGER.json": {
+      "receipt": "FINAL-COST-LEDGER.json",
+      "sha256": "e09fb49071b26f26ec1f2598548345ec111e8ca5e07021bfccc56992385e11a4"
+    },
+    "FINAL-SOURCE-SCOPE.json": {
+      "receipt": "FINAL-SOURCE-SCOPE.json",
+      "sha256": "4a91c7beaf0921a765ed6cd2639cd8dc3ce457fc27787fde876757af44ddfe88"
+    },
+    "FIT14-IMMUTABLE-CUSTODY-QUALIFICATION.json": {
+      "receipt": "FIT14-IMMUTABLE-CUSTODY-QUALIFICATION.json",
+      "sha256": "0f558e689b0c26dade5fbe03a6f26e7ef95896498f0d9eb8e2808064b23174ca"
+    },
+    "FIT14-IMMUTABLE-ROOT-ADMISSION.json": "91554932f7fed35234a49f50b8fce93d43c4516d5777d3620d5c7b1190e40782",
+    "FIT14-NUMERICAL-QUALIFICATION.json": {
+      "receipt": "FIT14-NUMERICAL-QUALIFICATION.json",
+      "sha256": "84dc3b901263dfafd3691d1f6dadaf142fd8005f5ec54331bfd0126c979d7168"
+    },
+    "FIT14-ROOT-QUALIFICATION.json": {
+      "receipt": "FIT14-ROOT-QUALIFICATION.json",
+      "sha256": "3c6d07f8900c7c9ea54654aef81c730e268eeae3dfe5e29344b427f81874c62b"
+    },
+    "INFORMATIVE-GATE.json": {
+      "receipt": "INFORMATIVE-GATE.json",
+      "sha256": "0cacf421566770765a0de4b715e572d2bac16aa6e1126aa9452e0cf07a3042d8"
+    },
+    "PARENT-MACHINE-SOURCE-INTEGRATION.json": {
+      "receipt": "PARENT-MACHINE-SOURCE-INTEGRATION.json",
+      "sha256": "90df95af47fa8b990245e93074f654c697c00e213d41acffc4f12e9e73df3ae5"
+    },
+    "RETENTION-FITTER-SOURCE-INTEGRATION.json": {
+      "receipt": "RETENTION-FITTER-SOURCE-INTEGRATION.json",
+      "sha256": "e8b5e34c3115e8abc0f5e9c26f59fcbbd78a74b14e4894b7aeaa3c38fb6fb841"
+    },
+    "TWO-HOUR-AUDIT.json": "f1b674951e7a461ac66bfa5c091b2602324d51517054a875ec595807f9b2d77c",
+    "audit-proposal/BLAINE-PAIR-QUERY-INSTRUMENTATION-CORRECTIVE-AUDIT.json": {
+      "receipt": "audit-proposal/BLAINE-PAIR-QUERY-INSTRUMENTATION-CORRECTIVE-AUDIT.json",
+      "sha256": "dd6fc20f68885cdd0cd248677620894cbfd058159b1d805f53d557d9497596d1"
+    },
+    "audit-proposal/FIT14-MATCHED-TRAIN-RETENTION-REGRESSION.json": {
+      "receipt": "audit-proposal/FIT14-MATCHED-TRAIN-RETENTION-REGRESSION.json",
+      "sha256": "3b8417c61d8061c0b28b6ec506b2a611a0f2187a2c4226781c702224579ca572"
+    },
+    "audit-proposal/PREFIT-NATIVE-RAW-AND-PROJECTED-FEATURE-EQUIVALENCE.json": {
+      "receipt": "audit-proposal/PREFIT-NATIVE-RAW-AND-PROJECTED-FEATURE-EQUIVALENCE.json",
+      "sha256": "eb4150aa4568dc9cdaeb3833a63bc3c8a9a867ad2b36312f96bd2e3ad96efa92"
+    },
+    "future-collector-query-meter-proposal/FAKE-TEST-RESULT.json": "b66c6fcbaac47dea1fb249933b220eb4e9c0774a73b33c1736a25b15c99d812a",
+    "native-candidate18/FREEZE-CLOSEOUT.json": {
+      "receipt": "native-candidate18/FREEZE-CLOSEOUT.json",
+      "sha256": "c9113f9fda0a277200ce2bce01a0a35386078e6078b7ab5bc9828384e184d300"
+    },
+    "retained-next-experiment-proposal/STAGING.json": {
+      "receipt": "retained-next-experiment-proposal/STAGING.json",
+      "sha256": "ce2060d52727f3e1594c13bab70cccab8ea79fc87b0c782f968fae8ff2c03afc"
+    },
+    "retention-feasibility-proposal/FEASIBILITY.json": {
+      "receipt": "retention-feasibility-proposal/FEASIBILITY.json",
+      "sha256": "823c434a7b36591f01b9c3f9a7a14b99642aa023194e5a4f41b0c92d4b32ddb8"
+    },
+    "source019-model-prefix-feasibility/FEASIBILITY.json": "f58e23802f0d1754538a2e63ce98b9c178118ad02229f75e895ba845afbf08f9"
+  },
+  "reference_mode_actual_TRAIN_fits": 0,
+  "retention_falsifier": {
+    "baseline_prediction": -0.005957817544531063,
+    "both_complete_settled_wins": true,
+    "candidate_prediction": 0.06307639991978975,
+    "candidate_rejected_for_gameplay": true,
+    "current_K_counterfactual_reproduction_claim": false,
+    "observed_extra_level_minus_direct_utility": -0.10970733333333338,
+    "old_TRAIN_ordinals": [
+      3,
+      4
+    ],
+    "same_source_actor_context_seed_challenge_join": true,
+    "status": "AUTHENTICATED_OLD_TRAIN_ORDERING_REGRESSION",
+    "unequal_prospective_caps_disclosed": true
+  },
+  "schema": "pokemon.blaine-stopping-calibration-public.v1",
+  "session": "2026-10-27-blaine-stopping-calibration",
+  "source": {
+    "group_reassigned": false,
+    "human_origin_sha256": "9bca54dc07a8ddd72cfcff75d58df223cf895c47775e6ccb64d12f84080b5def",
+    "id": "source049",
+    "original_context_sha256": "88d05ef7b1f79f164ec4664c85330d2006ddad34991ece75bba7a98548b4c23e",
+    "original_group_sha256": "50f2540576ffc27621e9d6dabee9a44b0fadb843df0dc2bc8ce7c970131cc2db",
+    "paired_state_sha256": "d4d5dc054420548214abfe4716bc6e0eaece112148cb944d1c4789a8db29b36c",
+    "partition": "train",
+    "shared_prefix_cost_additional": true,
+    "shared_teacher_prefix_actions": 272,
+    "shared_teacher_prefix_frames": 19692
+  },
+  "started_at_utc": "2026-10-27T00:54:30+00:00",
+  "status": "bounded_experiment_complete_candidate_rejected_retention_implementation_qualified",
+  "two_hour_audit_due_utc": "2026-10-27T02:54:30+00:00",
+  "two_hour_audit_observed_utc": "2026-10-27T02:54:43.101183+00:00"
+}

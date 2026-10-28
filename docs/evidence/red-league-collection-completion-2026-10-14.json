@@ -1,0 +1,165 @@
+{
+  "schema": "pokemon.red.completed-development-continuation.v1",
+  "session_id": "2026-10-14-league-and-collection-continuation",
+  "run_family": "red-r29-league-collection-continuation-20261014-v1",
+  "partition": "development",
+  "status": "champion_and_collection_complete",
+  "terminal_state_sha256": "41846e7698706ab243d53fd134cd16267050c8c5d873aba3bb168e2a7357187c",
+  "terminal_context_sha256": "7a7aecf11ef34e54c311e33338ec23798f33d009fd903f7faaba4b3fbdca215e",
+  "source_state_sha256": "4b860c10a8c9ad613dbad50a2acf63c53ece226eae8ff99b8fcade4d0c46ad51",
+  "actual_segment": "segment-028",
+  "runtime_package_sha256": "961164263b6a2d8ee920e1e3b5791a38dbb3f32f719f097c13f4046d51eab9d1",
+  "verification_result_sha256": "dd020955b6dfe04668e43730cd7eb3060730c6fd2ea64e3b3891a23a633401b5",
+  "retained_outcome_audit_sha256": "3f6ac46338dadba2ce4dc6d598ae08ca2788c1196188c3c141f69312d49c053c",
+  "native_champion_event": true,
+  "concurrent_native_hall_of_fame": true,
+  "champion_checkpoint_sha256": "ef2573fc9f77278ef3f8ec758bab1faebcf2112c746a0f09fe986f96c9233b7e",
+  "registrations_before": 82,
+  "registrations_after": 124,
+  "required_native_registrations": 124,
+  "registrations_added": 42,
+  "missing_species": [],
+  "owned_flags_monotonic": true,
+  "registration_attribution": {
+    "equivalent_exploration": 1,
+    "forced_singleton": 2,
+    "model_exploration": 39
+  },
+  "attribution_limit": "Registration during a model-owned goal does not make its capture/navigation subactions learned.",
+  "original_six_preserved": true,
+  "whole_party_restored": true,
+  "physical_legendary_counts": {
+    "pokemon:national:144": 1,
+    "pokemon:national:145": 1,
+    "pokemon:national:146": 1,
+    "pokemon:national:150": 1
+  },
+  "master_ball_use": {
+    "destination": "pokemon:national:150",
+    "balls_used": 1,
+    "ending_stock": 0,
+    "capture_checkpoint_sha256": "0c4cf108437c2527c60251b670f50e8091de19ca6a2500cf9af3d94ac29606d9",
+    "choice_learned": false,
+    "user_preference_disclosed": true
+  },
+  "ending_cash": 16239,
+  "ending_native_party_levels": [
+    79,
+    75,
+    75,
+    65,
+    60,
+    89
+  ],
+  "stopped_terminal": {
+    "map_id": 227,
+    "at": [
+      9,
+      9
+    ],
+    "battle_state": 0,
+    "worker_stopped": true,
+    "live_driver_running": false,
+    "released": true
+  },
+  "cold_verification": {
+    "actions": 0,
+    "frames": 0,
+    "state_unchanged": true,
+    "checksum_verified_box_census": true,
+    "full_ancestry_within_current_block_authenticated": true
+  },
+  "outcome_count": 293,
+  "choice_modes": {
+    "deterministic_control_recovery": 2,
+    "deterministic_safety": 4,
+    "equivalent_exploration": 1,
+    "forced_singleton": 87,
+    "model_exploration": 199
+  },
+  "outcomes_by_status": {
+    "error": 12,
+    "failed": 29,
+    "succeeded": 252
+  },
+  "outcomes_by_kind": {
+    "acquire_species": 55,
+    "advance_story": 26,
+    "develop_team": 7,
+    "evolve_species": 18,
+    "manage_storage": 2,
+    "recover_control": 2,
+    "restore_team": 56,
+    "resupply": 127
+  },
+  "actual_costs_this_block": {
+    "actions": 498223,
+    "cash_debits": 701616,
+    "decisions": 297,
+    "frames": 40427547,
+    "heals": 456,
+    "seconds": 14898.500954292951
+  },
+  "gross_actual_rewards": 717742,
+  "gross_actual_cash_debits": 701616,
+  "completed_outcome_phase_seconds": {
+    "execution": 7585.021842876682,
+    "menu_and_boundary_observation": 7096.309186461847,
+    "outcome_diagnostics": 1.7951360461302102,
+    "selection_and_receipt": 1.4839690285734832,
+    "selection_diagnostics": 2.553932163864374,
+    "terminal_observation": 19.24560478911735,
+    "verification": 5.412965866504237
+  },
+  "missing_phase_values": {
+    "verification": 12
+  },
+  "menu_share_of_menu_plus_execution_percent": 48.336,
+  "diagnostic_costs_including_final_inspection": {
+    "actions": 57199,
+    "frames": 5015923,
+    "seconds": 3885.839085121872,
+    "heals": 41,
+    "result_count": 55
+  },
+  "learning": {
+    "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+    "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+    "existing_goal_train_examples": 161,
+    "new_train_rows": 0,
+    "new_fits": 0,
+    "new_parameter_versions": 0,
+    "runtime_llm_calls": 0
+  },
+  "tests": {
+    "public_focused_passed": 580,
+    "private_focused_passed": 60,
+    "changed_source_lint_passed": true,
+    "full_suite_claimed": false,
+    "ci_claimed": false
+  },
+  "original_eight_hour_cutoff_utc": "2026-10-14T13:32:47Z",
+  "prospective_follow_through_cutoff_utc": "2026-10-14T15:32:47Z",
+  "opening_restart_in_current_block": false,
+  "copied_progress_imported": false,
+  "development_data_fitted": false,
+  "support_disclosures": [
+    "Existing deterministic routes, menus, capture/status support, PC loans, evolutions and nursing.",
+    "User-preferred Master Ball use on Mewtwo, not learned destination or ball selection.",
+    "Declared League-first ordering and target-neutral DEVELOPMENT exploration 0.75.",
+    "Normally purchased medicine reserves and owned-stock DEVELOPMENT income exceptions.",
+    "Copy-qualified mid-run runtime repairs; related copies never supply actual gains."
+  ],
+  "final_fresh_unmodified_acceptance_passed": false,
+  "final_fresh_exit_gates_passed": 0,
+  "final_fresh_exit_gates_required": 5,
+  "limitations": [
+    "This assisted DEVELOPMENT ancestry is not a frozen unassisted Red acceptance run or cross-game transfer result.",
+    "Registration during a model-selected goal does not make deterministic capture and navigation support learned.",
+    "Serial losses and improving earned party levels are not a controlled causal comparison or a reliability estimate.",
+    "Timing includes recorded completed-outcome phases, not every operator/tool wait; twelve verification timings are unavailable.",
+    "Failed copy assertions, accounting corrections and zero-input verification-helper failures remain retained.",
+    "Episode summary model counts omit some error-ending chunks; complete decision receipts own attribution."
+  ],
+  "next_decision": "Prepare one corrected frozen candidate using retained boundary copies and launch parity; do not repeat another assisted full-game replay."
+}

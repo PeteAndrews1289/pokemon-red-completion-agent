@@ -1,0 +1,66 @@
+{
+  "P145_native_qualified": false,
+  "actual_registration_delta": 0,
+  "adopted_weights": 0,
+  "all_seven_goals_complete": false,
+  "all_workers_stopped": true,
+  "cash_diagnosis_sha256": "135a065804c5e2e1f46a5f555e013441b7c9f65deee18a42ad89bd8a7c7ea587",
+  "cash_prediction_contract_issue": "Preparation predictions omit the existing certified cash exposure: local expected debit exceeds the one-loss bound of 407 by 8\u201317 times. V10 has no wallet/exposure feature; cash_shortfall is zero in these contexts. Correct arm ranking alone is insufficient. The 26-row model stays rejected.",
+  "costs": {
+    "actions": 8940,
+    "adopted_models": 0,
+    "all_allocated_hold_seconds": 25020,
+    "allocated_hold_seconds": 24690,
+    "closed_roots": 40,
+    "emulators": 26,
+    "fit_calls": 1,
+    "frames": 816475,
+    "native_allocations": 53,
+    "native_failed_cases": 4,
+    "native_seconds": 128.87388173699992,
+    "new_models": 1,
+    "new_native_TRAIN_rows": 19,
+    "root_seconds": 1343.1781926550004,
+    "state_loads": 26,
+    "unlaunched_allocations": 13,
+    "unlaunched_hold_seconds": 7800
+  },
+  "fits": 1,
+  "focused_tests": 358,
+  "full_suite": false,
+  "guard_construction_seconds_saved": 2.5711737186666896,
+  "independent_generalization_proved": false,
+  "local_cash_loss_bound": 407,
+  "new_context_summary": [
+    {
+      "arm": "direct",
+      "observed_utility": 0.4593370437710438,
+      "predicted_utility": -1.0878628404974484,
+      "samples": 3,
+      "wins": 1
+    },
+    {
+      "arm": "replace-tail-whip",
+      "observed_utility": 1.240996888888889,
+      "predicted_utility": -0.23659834916436526,
+      "samples": 3,
+      "wins": 3
+    },
+    {
+      "arm": "replace-water-gun",
+      "observed_utility": 1.237224,
+      "predicted_utility": -0.4191212864261122,
+      "samples": 3,
+      "wins": 3
+    }
+  ],
+  "new_models": 1,
+  "new_native_TRAIN_rows": 19,
+  "observed_at_utc": "2026-10-23T01:26:18.950947+00:00",
+  "official_acceptance": false,
+  "private_closeout_sha256": "2fc83e117abab24952adc310086132b25437bff7075d49c1125cab359861443e",
+  "registrations": 63,
+  "sampled_timings_are_win_rate_estimates": false,
+  "schema": "pokemon.red.matched-preparation-controls-progress.v1",
+  "whole_game_speedup_measured": false
+}

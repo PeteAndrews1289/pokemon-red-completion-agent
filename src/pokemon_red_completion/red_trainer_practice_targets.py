@@ -2,6 +2,7 @@
 
 All targets use the same executed whole-party return. They are not inferred
 labels for unplayed alternatives, and sibling choices count as one scenario.
+The explicit wild switch-selection role emits only a measured switch head.
 """
 
 from __future__ import annotations
@@ -20,10 +21,59 @@ class TrainerPracticeTargetError(ValueError):
 
 
 def extract_trainer_practice_targets(
-    admission: Mapping[str, object], document: Mapping[str, object]
+    admission: Mapping[str, object], document: Mapping[str, object],
+    *, train_wild_diagnostic: bool = False,
+    train_wild_limits: tuple[int, int] | None = None,
+    train_wild_choice_scope: str | None = None,
 ) -> dict[str, object]:
+    if type(train_wild_diagnostic) is not bool:
+        raise TrainerPracticeTargetError("explicit TRAIN wild target opt-in must be boolean")
+    if train_wild_limits is not None and (
+        not train_wild_diagnostic or type(train_wild_limits) is not tuple
+        or len(train_wild_limits) != 2
+        or any(type(value) is not int for value in train_wild_limits)
+        or train_wild_limits != (8, 32)
+    ):
+        raise TrainerPracticeTargetError("explicit TRAIN wild limits must be (8, 32)")
+    if train_wild_choice_scope is not None and (
+        type(train_wild_choice_scope) is not str
+        or train_wild_choice_scope != "switch_selection"
+        or train_wild_diagnostic is not True or train_wild_limits != (8, 32)
+    ):
+        raise TrainerPracticeTargetError("switch-selection scope requires explicit TRAIN wild (8, 32)")
+    if any(value.get("train_wild_choice_scope") != train_wild_choice_scope
+           for value in (admission, document)):
+        raise TrainerPracticeTargetError("declared TRAIN wild choice scope differs")
+    limits_metadata = (None if train_wild_limits is None else
+                       {"player_turn_horizon": 8, "max_decisions": 32})
+    if any(value.get("train_wild_limits") != limits_metadata or (
+        limits_metadata is not None and (
+            type(value["train_wild_limits"].get("player_turn_horizon")) is not int
+            or type(value["train_wild_limits"].get("max_decisions")) is not int
+        )
+    ) for value in (admission, document)):
+        raise TrainerPracticeTargetError("declared TRAIN wild limits metadata differs")
+    wild_horizon = 2 if train_wild_limits is None else train_wild_limits[0]
+    if train_wild_diagnostic and (
+        admission.get("train_wild_diagnostic") is not True
+        or admission.get("expected_battle_state") != 1
+        or document.get("schema") != "pokemon.red.wild-practice-counterfactual-set.v1"
+        or document.get("wild_training") is not True
+        or document.get("train_wild_diagnostic") is not True
+        or document.get("expected_battle_state") != 1
+        or document.get("player_turn_horizon") != wild_horizon
+        or (train_wild_limits is not None and (
+            type(document.get("player_turn_horizon")) is not int
+            or type(admission.get("player_turn_horizon")) is not int
+            or admission.get("player_turn_horizon") != wild_horizon))
+        or document.get("branch_count") != 2
+    ):
+        raise TrainerPracticeTargetError("TRAIN wild control target scope differs")
     if (
-        admission.get("schema") != "pokemon.red.trainer-practice-admission.v1"
+        admission.get("schema") != (
+            "pokemon.red.wild-practice-admission.v1" if train_wild_diagnostic
+            else "pokemon.red.trainer-practice-admission.v1"
+        )
         or admission.get("partition") != "train"
         or admission.get("execution_proof_complete") is not True
         or admission.get("return_proof_complete") is not True
@@ -67,11 +117,22 @@ def extract_trainer_practice_targets(
         if initial_observation is None:
             initial_observation = first.get("observation")
             initial_model_input = first.get("model_input")
-        elif first.get("observation") != initial_observation:
+        elif first.get("observation") != initial_observation or (
+            train_wild_choice_scope == "switch_selection"
+            and first.get("model_input") != initial_model_input
+        ):
             raise TrainerPracticeTargetError("branches start from different observations")
         kind = first.get("kind")
         if kind not in {"attack", "voluntary_switch", "switch_prompt", "forced_switch"}:
             raise TrainerPracticeTargetError("first action is unsupported")
+        if train_wild_choice_scope == "switch_selection" and (
+            kind != "voluntary_switch" or type(first.get("party_slot")) is not int
+            or not 1 <= first["party_slot"] <= 6
+            or choice != f"pokemon.core:battle:switch:{first['party_slot']}"
+            or not isinstance(first.get("legal_party_slots"), list)
+            or first["party_slot"] not in first["legal_party_slots"]
+        ):
+            raise TrainerPracticeTargetError("switch-selection first action is not a legal switch")
         refs.append(choice)
         values.append(float(details["value"]))
         kinds.append(kind)
@@ -113,6 +174,14 @@ def extract_trainer_practice_targets(
         groups["control"] = (*attack, *switches)
     elif decline and switches:
         groups["control"] = (*decline, *switches)
+    if train_wild_diagnostic and (
+        context != "main" or len(refs) != 2 or (
+            (len(attack) != 0 or len(switches) != 2 or set(groups) != {"switch"})
+            if train_wild_choice_scope == "switch_selection"
+            else (len(attack) != 1 or len(switches) != 1 or set(groups) != {"control"})
+        )
+    ):
+        raise TrainerPracticeTargetError("wild target requires exact observed move/switch pair")
     if not groups:
         raise TrainerPracticeTargetError("contrast has no trainable action comparison")
     heads = {}
@@ -125,6 +194,11 @@ def extract_trainer_practice_targets(
         }
     return {
         "schema": "pokemon.red.trainer-practice-three-head-targets.v1",
+        **({"train_wild_diagnostic": True, "expected_battle_state": 1,
+            "new_independent_upstream_roots": 0} if train_wild_diagnostic else {}),
+        **({"train_wild_limits": dict(limits_metadata)} if limits_metadata is not None else {}),
+        **({"train_wild_choice_scope": train_wild_choice_scope}
+           if train_wild_choice_scope is not None else {}),
         "capture_id": admission["capture_id"],
         "manifest_sha256": admission["manifest_sha256"],
         "source_commit": admission["source_commit"],
@@ -159,6 +233,8 @@ def aggregate_trainer_timing_targets(
         or tuple(target.get("timing_offset_frames") for target in targets) != expected_offsets
     ):
         raise TrainerPracticeTargetError("timing schedule differs from prospective offsets")
+    if any(target.get("train_wild_choice_scope") is not None for target in targets):
+        raise TrainerPracticeTargetError("switch-selection timing aggregation is not supported")
     first = targets[0]
     expected_identity = (
         first.get("capture_id"),

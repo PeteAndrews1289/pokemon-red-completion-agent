@@ -1,0 +1,139 @@
+{
+  "schema": "pokemon.red-safari-session-lifecycle-correction.v1",
+  "session": "2026-09-19-safari-session-lifecycle-correction",
+  "status": "passed_assisted_admission",
+  "classification": "assisted_engineering_qualification_not_learning",
+  "source_base_commit": "3d626b8b29f010a964300ce8551c2b7cc0786531",
+  "source_bundle_sha256": "385c79376a028af3aaacace4caf584bda8d8f063ad9c0ec1b44ea87edd11f87f",
+  "source_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+  "assisted_state_sha256": "c535a48409c02021f8dfd03dba5bde2d3e47e999a75373cecb0c6eaf0ad2b8c3",
+  "terminal_state_sha256": "02fd9b864694a58bec87f419f1ee349d4fe64e5561a63dcf161d80603f3ca2cc",
+  "pinned_disassembly_commit": "1e96034092686d006e863cace09e87273051a3d8",
+  "corrections": [
+    "Session event flags, not leftover counters, determine active/game-over state.",
+    "Eligibility and preparation require observed settled default gate script.",
+    "Approach preserves observed ball and step counters before admission.",
+    "Only the dedicated metered clerk-approach planner supplies SAFARI_ADMISSION_SUPPORTED; ordinary traversal and unrelated barriers remain unchanged."
+  ],
+  "blocked_preflight": {
+    "actions": 0,
+    "frames": 0,
+    "money_writes": 0,
+    "reason": "Production graph required the dedicated admission capability, omitted by the local planner.",
+    "plan_sha256": "950f943f2680e5b460b3452c3a45c86173d0151c43e0af2736a4eaf189a96eca",
+    "result_sha256": "3bcb7f7dfe499b8ddbb26e4cb3d7ca92e9def4e4bb25e90196ca5e11094f219f",
+    "retained": true
+  },
+  "private_record_sha256": {
+    "plan.json": "e2748f96fc7de0b490b7bed1bf17af081402d165810f64e5d4dda22e0f8942be",
+    "read-only.json": "a8b592f0309c163509a41c4b5c5ef9637dde1f41cd0a26e9cb8e73af48b3668d",
+    "assistance.json": "65d04e09151f6cde0f216f2191ec5a56a59966458520ef6ca58157c9cb5a33f3",
+    "preparation.json": "d023cba73e808f749da46e5e4e3019c3287259fc0aa067c9d9cbfd785695a0c4",
+    "actions.jsonl": "5616ed09b514702349854e83854ec8aa35344775809f0e8f69e4afb667520195",
+    "result.json": "6c62eae472ea0bb7ff41c6e42cd5f3609ccf1f477a097cae37f5881db158b033"
+  },
+  "main_state": {
+    "map": 156,
+    "position_xy": [
+      4,
+      3
+    ],
+    "cash": 198,
+    "registered": 96,
+    "registered_target": 124,
+    "party_count": 6,
+    "source_file_unchanged": true
+  },
+  "read_only": {
+    "entry_mode": "gate",
+    "eligible_areas": 4,
+    "affordable_areas": 0,
+    "admission_cost": 500,
+    "shortfall": 302,
+    "unfunded_rejection": "safari_gate_funds_insufficient",
+    "actions": 0,
+    "frames": 0,
+    "state_bytes_unchanged": true
+  },
+  "assistance": {
+    "type": "isolated_money_override",
+    "before": 198,
+    "after": 500,
+    "attempts": 1,
+    "resets": 0,
+    "goal_fit_eligible": false,
+    "final_run_eligible": false,
+    "funding_credit": false
+  },
+  "preparation": {
+    "actions": 2,
+    "frames": 264,
+    "money_spent": 0,
+    "balls_before": 28,
+    "balls_after": 28,
+    "steps_before": 473,
+    "steps_after": 473,
+    "clerk_text": "greeting",
+    "script": 0
+  },
+  "admission": {
+    "actions": 24,
+    "frames": 2448,
+    "money_spent": 500,
+    "balls": 30,
+    "steps": 500,
+    "final_map": 220,
+    "final_position_xy": [
+      15,
+      25
+    ],
+    "ready": true,
+    "in_safari_zone": true,
+    "game_over": false,
+    "single_admission": true
+  },
+  "execution": {
+    "actions": 26,
+    "attempted_actions": 26,
+    "frames": 2712,
+    "seconds": 0.19292020797729492,
+    "controller_released": true,
+    "party_unchanged": true,
+    "bag_unchanged": true,
+    "boxes_unchanged": true,
+    "registered_unchanged": true,
+    "log_rows": 26
+  },
+  "verification": {
+    "rom_free_targeted_tests": 613,
+    "domain_test_files": 14,
+    "mypy_source_files": 544,
+    "ruff_passed": true,
+    "registry_check_passed": true,
+    "lifecycle_pre_fix_failing_tests": 26,
+    "process_only_routing_mutation_failing_tests": 10,
+    "full_suite_run": false
+  },
+  "deltas": {
+    "model_queries": 0,
+    "model_fits": 0,
+    "new_examples": 0,
+    "new_registrations": 0,
+    "authority_promotions": 0,
+    "github_publications": 0
+  },
+  "limitations": [
+    "One assisted right-lane cartridge admission; both lanes covered ROM-free.",
+    "No paid capture/search or legitimate funding demonstrated.",
+    "Main mixed-menu funding/departure and League partial-prefix blockers remain separate.",
+    "J remains qualified only for one-to-three own party members; no six-member bypass."
+  ],
+  "next": "Qualify generic observed indoor resource departure from the main gate, preserve J scope, and inspect genuinely executable earning versus collection choices; separately qualify the actual League partial-prefix lifecycle.",
+  "model_preference": {
+    "model": "Astra",
+    "effort": "high",
+    "fast": false,
+    "source": "explicit_user_preference"
+  }
+}
+

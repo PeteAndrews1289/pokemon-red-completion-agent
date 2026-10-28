@@ -2311,3 +2311,21 @@ def test_incremental_measured_choice_and_registered_results(tmp_path, monkeypatc
                 source_commit="b" * 40,
                 source_bundle_sha256="c" * 64,
             )
+
+
+def test_measured_machine_rounding_preserves_frozen_receipt_without_redraw(tmp_path, monkeypatch):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    import pokemon_red_completion.red_development_measured_choice as admission
+
+    class Behavior:
+        objective = REGISTERED_OBJECTIVE
+        model = _live_model()
+
+    monkeypatch.setattr(admission, "RedPlayerModelRecord", Behavior)
+    monkeypatch.setattr(admission.random, "Random", lambda *_: pytest.fail("second draw"))
+    original = choice.public_dict()
+    rounded = replace(choice, scores=tuple(x + 1e-15 for x in choice.scores))
+    _validate_behavior(rounded, Behavior())
+    assert choice.public_dict() == original
+    with pytest.raises(ValueError, match="does not replay"):
+        _validate_behavior(replace(choice, scores=tuple(x + 1e-8 for x in choice.scores)), Behavior())

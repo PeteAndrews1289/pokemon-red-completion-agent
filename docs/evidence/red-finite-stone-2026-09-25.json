@@ -1,0 +1,85 @@
+{
+  "schema": "pokemon.red.finite-stone-qualification.v1",
+  "session_id": "2026-09-25-finite-stone",
+  "status": "inventory_complete_first_finite_method_qualified",
+  "classification": "engineering_unblocking_model_selected_finite_resource_evolution",
+  "base_commit": "6a3abb80",
+  "partition": "development",
+  "mission": {
+    "capability": "Finite evolution resource handling and held-stone executable alternatives.",
+    "learned_authority": "No new model choices or fits; enables existing model-facing evolution enumeration with held Moon Stones.",
+    "transfer_test": "ROM-free changed stock, family, stale origin and exact-consumption checks; native known-lineage mechanics only.",
+    "cheapest_falsifier": "Actual prerequisite inventory, reject missing finite stock, verify exactly one consumed stone.",
+    "timebox_minutes": 90,
+    "stop_condition": "First finite-item pickup and evolution qualified; retain setup failure and stop gameplay. No exhaustive collection replay."
+  },
+  "inventory": {
+    "primary_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "owned": 109,
+    "target": 124,
+    "physical_specimens": 78,
+    "cash": 11968,
+    "moon_stones_in_bag": 0,
+    "moon_stones_in_pc": 0,
+    "physical_prerequisites": {"Nidorina": 16, "Nidorino": 16, "Clefairy": 10, "Jigglypuff": 5, "Slowbro": 37, "Poliwag": 15},
+    "physical_poliwhirl": false,
+    "porygon_cartridge_coin_price": 9999,
+    "actual_coin_balance": null,
+    "coin_observer_and_executor_connected": false,
+    "moving_lickitung_trader_supported": false,
+    "inventory_document": "docs/remaining-acquisition-methods.md"
+  },
+  "native": {
+    "audit_sha256": "48b2fe71b5fa3158dc1611b0884161af44478bc680b3b005fe584503f23e2a16",
+    "packets": [
+      {"purpose": "initial_pickup_setup", "status": "retained_harness_route_failure", "actions": 21, "frames": 2220, "terminal_sha256": "8adc3b101f4d81fbae4141cdb558594df8c3937d797df8944990b930713a3c21"},
+      {"purpose": "continue_retained_endpoint_and_pickup", "status": "passed", "actions": 275, "frames": 13032, "terminal_sha256": "39a47644cc8d82cc742b25f9a168287d7f3bfcd628e79f3d94263729b5403748"},
+      {"purpose": "pc_preparation_and_finite_item_evolution", "status": "passed", "actions": 184, "frames": 19092, "terminal_sha256": "ac455b47e8fdc0da796f8d89af80ed9490576b8a279dcadea81647d560b5394e"}
+    ],
+    "actions_total": 480,
+    "frames_total": 34344,
+    "audit_states": 7,
+    "audit_inputs": 0,
+    "audit_frames": 0,
+    "cash_spent": 0,
+    "moon_stones_picked_up": 1,
+    "moon_stones_consumed": 1,
+    "evolution": "Nidorina level16 to Nidoqueen level16",
+    "copy_owned_before": 109,
+    "copy_owned_after": 110,
+    "copy_specimens_before": 78,
+    "copy_specimens_after": 78,
+    "primary_owned_after": 109,
+    "source_unchanged": true,
+    "actual471_unchanged": true,
+    "stage472_absent": true,
+    "protected_models_unchanged": true,
+    "gameplay_running": false
+  },
+  "implementation": {
+    "supported_finite_families": ["Nidorina/Nidoqueen", "Nidorino/Nidoking", "Clefairy/Clefable"],
+    "finite_shop_offer": false,
+    "held_stone_stack_supported": true,
+    "exact_one_stone_consumption_required": true,
+    "profile_parser_and_enumerator_and_direct_derivation_connected": true,
+    "whole_procurement_evolution_model_binding_native_qualified": false,
+    "wigglytuff_alternative_evolution_profile_connected": false
+  },
+  "verification": {
+    "focused_tests_passed": 262,
+    "full_suite": false,
+    "scoped_typecheck_files": 5,
+    "lint": "passed"
+  },
+  "learning": {"new_goal_choices": 0, "new_combat_choices": 0, "new_train": 0, "new_fits": 0, "model_outcomes": 141, "model_successes": 96, "economy_qualified": 58, "legacy_train": 135, "independent_transfer": false, "authority_promotion": false},
+  "limitations": [
+    "Initial private route probe omitted the existing Cut capability projector. The first packet stopped safely; corrected harness continued from its terminal without replaying the flight.",
+    "Native proof covers the existing visible-item, PC and party-evolution mechanics. The new held-stone menu/profile/boxed wrapper is ROM-free tested, not an independently executed whole-goal native model trial.",
+    "A zero-input attempt to use an empty story envelope was rejected for incomplete history. No envelope or story guard was weakened; native mechanic qualification uses direct collection observations instead.",
+    "Three visible cartridge Moon Stone locations are not proof all three remain available. Hidden-item retrieval is not implemented by the visible-item decoder.",
+    "One stone is spent once. Remaining finite allocation, moving NPC interaction, coins/prizes and strategic ownership remain open. No same-save or fresh-Red completion claim."
+  ],
+  "next": "Bind observed finite-stone procurement and its target evolution into a complete selectable goal, then test a genuine alternative under the frozen model. Reuse qualified mechanics and an authenticated complete story envelope; no further operator-selected collection loop.",
+  "publication": false,
+  "external_agents": false
+}

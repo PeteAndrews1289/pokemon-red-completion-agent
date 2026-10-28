@@ -1,4 +1,4 @@
-"""Materialize one assisted train battle in a private Red emulator copy."""
+"""Materialize one TRAIN or explicitly assisted held-out battle in a private copy."""
 
 from __future__ import annotations
 
@@ -9,7 +9,10 @@ import subprocess
 from pathlib import Path
 from typing import cast
 
-from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
+from pokemon_red_completion.battle_practice_factory import (
+    AssistedDevelopmentPracticeSpec,
+    BattlePracticeSpec,
+)
 from pokemon_red_completion.battle_scenario_capture import (
     OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
@@ -22,6 +25,7 @@ from pokemon_red_completion.red_autonomous_player import _record, _write
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_practice_factory import (
     WritableRedMemory,
+    materialize_red_assisted_development_practice,
     materialize_red_train_practice,
 )
 from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
@@ -30,6 +34,7 @@ from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.teacher-battle-practice-plan.v1"
 TRAINER_SCHEMA = "pokemon.red.teacher-battle-practice-plan.v2"
+DEVELOPMENT_SCHEMA = "pokemon.red.assisted-development-battle-practice-plan.v1"
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 
 
@@ -48,10 +53,13 @@ def _bound_file(value: object, label: str) -> bytes:
 def _authenticate(
     plan: object, plan_bytes: bytes
 ) -> tuple[dict[str, object], BattlePracticeSpec, bytes, bytes]:
-    if not isinstance(plan, dict) or plan.get("schema") not in {SCHEMA, TRAINER_SCHEMA}:
+    if not isinstance(plan, dict) or plan.get("schema") not in {
+        SCHEMA, TRAINER_SCHEMA, DEVELOPMENT_SCHEMA
+    }:
         raise ValueError("teacher battle practice plan differs")
     if plan.get("observation_schema") not in {None, OBSERVATION_SCHEMA_V2} or (
-        plan.get("observation_schema") is not None and plan.get("schema") != TRAINER_SCHEMA
+        plan.get("observation_schema") is not None
+        and plan.get("schema") not in {TRAINER_SCHEMA, DEVELOPMENT_SCHEMA}
     ):
         raise ValueError("teacher battle observation version differs")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
@@ -63,7 +71,17 @@ def _authenticate(
     if hashlib.sha256(rom).hexdigest() != ROM_SHA256:
         raise ValueError("teacher factory Red ROM differs")
     source = _bound_file(plan.get("source_state"), "source state")
-    spec = BattlePracticeSpec.from_dict(plan.get("practice"))
+    spec = (
+        AssistedDevelopmentPracticeSpec.from_dict(plan.get("practice"))
+        if plan["schema"] == DEVELOPMENT_SCHEMA
+        else BattlePracticeSpec.from_dict(plan.get("practice"))
+    )
+    if plan["schema"] == DEVELOPMENT_SCHEMA and (
+        plan.get("observation_schema") != OBSERVATION_SCHEMA_V2
+        or plan.get("fit_allowed") is not False
+        or plan.get("natural_battle_qualification") is not False
+    ):
+        raise ValueError("assisted DEVELOPMENT needs rich observations and explicit exclusions")
     if plan["schema"] == SCHEMA:
         query = json.loads(_bound_file(plan.get("source_query"), "source query"))
         episode = json.loads(_bound_file(plan.get("source_episode"), "source episode"))
@@ -109,7 +127,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         emulator.load_state_bytes(source)
         before_frame = emulator.frame_count
         reader = PokemonRedStateReader(emulator)
-        if plan["schema"] == TRAINER_SCHEMA:
+        if plan["schema"] in {TRAINER_SCHEMA, DEVELOPMENT_SCHEMA}:
             source_manifest = parse_battle_scenario_capture_manifest(
                 _bound_file(plan.get("source_capture_manifest"), "source capture manifest")
             )
@@ -137,12 +155,14 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 raise ValueError("source trainer semantic observation differs from capture")
         backend = emulator._require_backend()  # isolated teacher-only write surface
         cartridge = RedPracticeCartridge(rom)
-        receipt = materialize_red_train_practice(
-            reader,
-            cast(WritableRedMemory, backend.memory),
-            spec,
-            cartridge=cartridge,
-        )
+        if isinstance(spec, AssistedDevelopmentPracticeSpec):
+            receipt = materialize_red_assisted_development_practice(
+                reader, cast(WritableRedMemory, backend.memory), spec, cartridge=cartridge
+            )
+        else:
+            receipt = materialize_red_train_practice(
+                reader, cast(WritableRedMemory, backend.memory), spec, cartridge=cartridge
+            )
         if emulator.frame_count != before_frame:
             raise ValueError("teacher materialization advanced emulator frames")
         rich_observation_sha256 = None
@@ -172,7 +192,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         generated_map = reader.read().map_id
         if type(generated_map) is not int:  # noqa: E721
             raise ValueError("assisted battle map is unavailable")
-        capture_id = f"assisted-train-{spec.configuration_sha256[:16]}"
+        capture_id = f"assisted-{spec.partition.value}-{spec.configuration_sha256[:16]}"
         source_commit = plan["source_commit"]
         assert isinstance(source_commit, str)
         manifest = build_battle_scenario_capture_payload(

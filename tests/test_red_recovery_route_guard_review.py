@@ -28,6 +28,11 @@ def make_handler(raw, ready=True, exc=None):
     reader = SimpleNamespace(
         read=lambda: raw,
         read_input_readiness=lambda: SimpleNamespace(ready=ready),
+        trainer_engagement_active=lambda: False,
+        read_bottom_dialogue_box_visible=lambda: False,
+        read_overworld_movement_mode=lambda: SimpleNamespace(traversal_mode="land"),
+        read_visible_object_coordinates=lambda: frozenset(),
+        read_retained_outside_map=lambda: 1,
     )
     handler = RecoveryRouteInterruptionHandler(
         executor=SimpleNamespace(execute=lambda a: None),

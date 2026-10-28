@@ -1,0 +1,70 @@
+{
+  "schema": "pokemon.red-safari-gate-integration.v1",
+  "session": "2026-09-19-safari-gate-integration",
+  "status": "rom_free_local_integration",
+  "base_commit": "a872729bc832762b45ca3b807d4c6d8bbd9efdf6",
+  "files_sha256": {
+    "src/pokemon_red_completion/observation.py": "4b382a92e7697ca5c7a948ae53517628c588c60e8344ce2b15e7944968029f80",
+    "src/pokemon_red_completion/red_live_safari.py": "381ad9693843af30e4bacae5632a146825c4b9523188df0c5915ef348c2f0bc7",
+    "src/pokemon_red_completion/red_safari_acquisition.py": "3150b6b58e29b093458e850de00f319c4bc72a4a633ecab3dbf2da6495454b3f",
+    "tests/test_observation.py": "2edee3582cd14fb5b50105b558ee7c6fed65ca726ee482c079c33344fcbf2fc0",
+    "tests/test_red_live_safari.py": "212e3395a6b441ce2caec7de25a435d917169e63e2487a58dea9e125c217d32d",
+    "tests/test_red_safari_acquisition.py": "f8659ec437c433755d6cf1f78a0b72a9b57f947277d2c7be667d3db6a94cb8aa",
+    "tests/test_red_safari_funding_budget.py": "c0a2831904e0003c528bcfb08278bf1f1ba46ade6f151941430a0fd30bce7d97"
+  },
+  "verification": {
+    "domain_tests_passed": 570,
+    "domain_test_files": 14,
+    "ruff": "passed",
+    "mypy_source_files": 544,
+    "mypy": "passed",
+    "right_facing_mutation": {
+      "expected_failures": 2,
+      "actual_failures": 2,
+      "test_names": [
+        "test_real_prep_then_admission_left_lane_with_rightward_auto_walk",
+        "test_real_prep_then_admission_right_lane_without_lateral_movement"
+      ],
+      "in_process_only": true
+    },
+    "full_suite_run": false,
+    "private_cartridge_qualified": false
+  },
+  "contribution": {
+    "flash": "Partial seven-file draft: gate eligibility, observed approach, paid admission reuse, bound origin, single-use fresh continuation and regression coverage. Original preserved; revision03 incomplete at quota exhaustion.",
+    "codex": "Source-supported clerk text observation; greeting-before-turn fix; shared lane planning; nonwalking-path rejection; unknown-mode rejection; corrected source lane fixtures and additional negative tests; independent integration.",
+    "flash_quota": "Exhausted in submitted log; no refreshed service query.",
+    "measured_primary_usage_savings": null,
+    "experiment": "Closed; no further Flash assignment."
+  },
+  "source_references": [
+    "https://raw.githubusercontent.com/pret/pokered/master/scripts/SafariZoneGate.asm",
+    "https://raw.githubusercontent.com/pret/pokered/master/home/text_script.asm",
+    "https://raw.githubusercontent.com/pret/pokered/master/home/map_objects.asm"
+  ],
+  "deltas": {
+    "model_queries": 0,
+    "game_actions": 0,
+    "model_fits": 0,
+    "train_examples": 0,
+    "registrations": 0,
+    "authority_promotions": 0,
+    "github_publications": 0
+  },
+  "retained": {
+    "model": "Model137",
+    "examples": 137,
+    "successes": 92,
+    "economy_qualified": 58,
+    "registered": 96,
+    "native_target": 124,
+    "cash": 198,
+    "party_count": 6
+  },
+  "limitations": [
+    "Source-informed synthetic transitions are not private-cartridge qualification.",
+    "Main save still needs 302 additional cash; no income opportunity created.",
+    "J remains qualified for one-to-three-party ordinary trainer battles; no six-member bypass.",
+    "No new learned decisions, transfer result or fresh full-run acceptance."
+  ]
+}

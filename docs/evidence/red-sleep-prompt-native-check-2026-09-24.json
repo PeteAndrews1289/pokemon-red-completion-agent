@@ -1,0 +1,116 @@
+{
+  "schema": "pokemon.red.sleep-prompt-native-check.v1",
+  "session_id": "2026-09-24-sleep-prompt-native-check",
+  "status": "partial_native_success_closed_checker_error",
+  "source_commit": "26826087aaa707ad160f8b591bc8b888e76ec17f",
+  "hashes": {
+    "plan": "7caf28fac82dfb1be625d79815492b6264f28ba3a3a4bcb6fee29f0bc825e5b1",
+    "original_failed_result": "90c8f029307170f460bc03fa24bb376dde775e53485c961a702c8775d9d47cf9",
+    "readonly_corrected_audit": "ac7f8bb8d6039e45a834b30ddf2286efb6c2812582287379afd4aa2d2aee4ca2",
+    "episode": "891369140cb5c17613a8e1ffee159b25b2979e80cede28bd1608730ffe52fde2",
+    "guard": "b93e7f485785b5a0bcb5ab24df4f9f73eadbed370b3a57f3c75feee618828f6f",
+    "endpoint": "19a70307b264161a022fbe81e9c480b16b5e714aac83447e3e568a8f8ebe9aa2"
+  },
+  "mission_check": {
+    "classification": "maintenance",
+    "capability": "Preserve model-owned send-out prompts during sleep recovery",
+    "authority": "No new weights; executor yields choice to frozen model",
+    "transfer": "Two conditioned TRAIN teams/two roots/two offsets declared; only one played",
+    "cheapest_falsifier": "First native unspent attack must yield semantic prompt with unchanged PP",
+    "time_box": "20 minutes native;4episodes;per5000actions/240000frames/45seconds/160decisions/80turns",
+    "stop": "First native or audit error closes packet;no replay"
+  },
+  "setup": {
+    "teacher_conditions": {
+      "player_sleep": 2,
+      "first_opponent_poison": 8,
+      "first_opponent_hp": 1
+    },
+    "zero_input_setups": 2,
+    "prescribed_opening_attacks": 1,
+    "subsequent_choice_authority": "frozen experimental parent b106108e",
+    "qualification_not_training_labels": true
+  },
+  "native": {
+    "episodes": 1,
+    "decisions": 21,
+    "model_decisions": 20,
+    "win": true,
+    "stop": "battle_won",
+    "actions": 284,
+    "frames": 24864,
+    "wall_seconds": 2.448258333373815,
+    "party_faints": 2,
+    "opponent_faints": 3,
+    "party_pp_spent": 8,
+    "selected_move_pp_spends": 9,
+    "prompts": 2,
+    "prompt_choices": [
+      "decline",
+      "decline"
+    ],
+    "phases": {
+      "attack": 12,
+      "switch_prompt": 2,
+      "voluntary_switch": 5,
+      "forced_switch": 2
+    },
+    "invalid_action_failures": 0,
+    "logged_teacher_interventions": 0,
+    "median_model_latency_ns": 2296417,
+    "maximum_model_latency_ns": 12728708
+  },
+  "native_handoff": {
+    "verified": true,
+    "caller": "_recover_sleep_transition",
+    "sleep_count": 1,
+    "attack_index": 1,
+    "prompt_index": 2,
+    "pp_unchanged": true,
+    "observer_inputs": 0,
+    "uncommanded_in_battle_switches": 0,
+    "all_policy_choices_reproduced": true,
+    "endpoint_reobserved_without_frames": true
+  },
+  "failure": {
+    "kind": "private qualification checker off-by-one",
+    "required_incorrectly": "second decision index1",
+    "actual": "native records use1based identifiers;second decision is2",
+    "native_execution_failed": false,
+    "original_result_preserved": true,
+    "corrected_audit_is_posthoc": true,
+    "full_matrix_passed": false,
+    "completed_cells": 1,
+    "unplayed_cells": 3
+  },
+  "repair": {
+    "public_semantic_auditor": "scripts/audit_red_trainer_prompt_handoff.py",
+    "new_rom_free_tests": 20,
+    "focused_tests_passed": 541,
+    "full_suite": false,
+    "remaining_runner_prepared_not_dispatched": true
+  },
+  "deltas": {
+    "new_targets": 0,
+    "new_fits": 0,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "retained": {
+    "complete_targets": 41,
+    "previously_fitted_targets": 36,
+    "late_targets_unfitted": 5,
+    "campaign_stage": 461,
+    "deployed_actor": "4ea4cfde",
+    "experimental_actor": "b106108e",
+    "campaign_unchanged": true
+  },
+  "next": "Only three originally declared unplayed cells, with corrected auditor;preserve completed cell and original failure. Then propose unused late-state TRAIN recipes under a separate bounded plan.",
+  "limitations": [
+    "One native boundary is verified,not the four-cell gate or broad battle quality.",
+    "Teacher-conditioned scenario and prescribed opening;not ordinary autonomous gameplay.",
+    "No labels,fit,comparison,promotion or campaign input.",
+    "Reported endpoint healing belongs to inherited TRAIN trainer source,not recovery skill."
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "schema": "pokemon.red.outcome-value-pilot-evidence.v3",
+  "session": "2026-09-22-outcome-value-broad-training",
+  "source_commit": "04e3f1f7",
+  "private_packet": "red-outcome-value-pilot-20260922-v3",
+  "candidate_sha256": "377160be3ac38c52a595da456c6b36abe65b4aac02f8472815869020944426a8",
+  "result_sha256": "3e81f0d4ef4487f90af5486d563cf6be8df33712aecff66159cf7b313f9f6123",
+  "actor_promotions": 0,
+  "collection_gate": true,
+  "diagnostics": {
+    "conflicting_exact_input_groups": [],
+    "contexts": 145,
+    "duplicate_input_groups": 0,
+    "frozen_actor_errors": 39,
+    "high_cost_errors": 30,
+    "maximum_timing_gap_range": 41.820605263157894,
+    "status_better": 27,
+    "status_worse": 64,
+    "timing_sign_changes": 57,
+    "unique_compact_inputs": 145
+  },
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": false,
+    "iterations": 73,
+    "minimum_slack": -1.8041124150158794e-16,
+    "new_group": {
+      "actor": {
+        "contexts": 145,
+        "errors": 39,
+        "high_cost_errors": 30,
+        "regret": 1.4886276410443409
+      },
+      "candidate": {
+        "contexts": 145,
+        "errors": 20,
+        "high_cost_errors": 16,
+        "regret": 0.6070126459381284
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 17,
+          "high_cost_errors": 7,
+          "regret": 0.6145817422574119
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 11,
+          "high_cost_errors": 9,
+          "regret": 0.7370394837781161
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 11,
+          "regret": 0.7136483359457275
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 0,
+          "regret": 0.005327004219409245
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      }
+    ],
+    "passed": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_success": true
+  },
+  "fits": 1,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 8254,
+    "episodes": 2448,
+    "event_records": 44504,
+    "frames": 10439250,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 5934,
+    "new_target_contexts": 0,
+    "plan_sha256": "962cdf2823de2d7785daac094ab0f05c105bb164b9eabf98cd2ec0d8aed2f60d",
+    "prescribed_first_choices": 2320,
+    "status_move_attempts_including_prescribed": 3422,
+    "stops": {
+      "battle_won": 1003,
+      "party_defeated": 1445
+    }
+  },
+  "screen": {
+    "concerning_selections": 1,
+    "decisions": {
+      "candidate": 114,
+      "frozen": 74
+    },
+    "improved_won_status_cases": 1,
+    "invalid_actions": 0,
+    "original_zero_flag_passed": false,
+    "passed": false,
+    "raw_flags_are_diagnostic": true,
+    "schema": "pokemon.red.battler.outcome-readiness.v2",
+    "wins": {
+      "candidate": 15,
+      "frozen": 15
+    }
+  },
+  "seconds": 764.6991256251931,
+  "independent_recomputed_learned_attacks": 5860,
+  "training_complete": false,
+  "collection_delta": 0,
+  "next": "One prospective empirical timing-preference fit and128fresh comparison pairs; unchanged native rewards/182constraints/outcome gates."
+}

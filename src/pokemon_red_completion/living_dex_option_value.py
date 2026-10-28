@@ -15,7 +15,7 @@ from __future__ import annotations
 import math
 import re
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from enum import StrEnum
 from typing import cast
 
@@ -24,6 +24,28 @@ from numpy.typing import NDArray
 
 from pokemon_red_completion.goal_manager import GoalSituation
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
+from pokemon_red_completion.player_option_challenge import (
+    OptionChallenge,
+    challenge_feature_names,
+    challenge_vector,
+)
+from pokemon_red_completion.player_option_preparation import OptionPreparation, preparation_vector
+from pokemon_red_completion.player_option_level_workload import (
+    OptionLevelWorkload, level_workload_feature_names, level_workload_vector,
+)
+from pokemon_red_completion.player_option_move_change import (
+    OptionMoveChange, move_change_feature_names, move_change_vector,
+    move_context_feature_names, move_context_from_v10,
+)
+from pokemon_red_completion.player_option_capture_invocation import (
+    OptionCaptureInvocation, capture_invocation_feature_names, capture_invocation_vector,
+    complete_paid_capture_feature_names, complete_paid_capture_vector,
+    complete_paid_density_feature_names, complete_paid_density_vector,
+)
+from pokemon_red_completion.player_option_matchup import (
+    OptionMatchup, MATCHUP_NAMES, matchup_feature_names, matchup_vector,
+)
+from pokemon_red_completion.player_readiness import PlayerReadiness, readiness_vector
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.resource_economy_observation import (
     ECONOMY_FEATURE_NAMES,
@@ -43,6 +65,55 @@ LIVING_DEX_OPTION_MODEL_SCHEMA = "pokemon.core.living-dex-option-value-model.v1"
 LIVING_DEX_OPTION_FIT_SCHEMA = "pokemon.core.living-dex-option-value-fit.v1"
 LIVING_DEX_OPTION_EVALUATION_SCHEMA = "pokemon.core.living-dex-option-value-evaluation.v1"
 LIVING_DEX_OPTION_OBJECTIVE = "selected-arm-capped-ips-multioutcome-ridge-v1"
+LIVING_DEX_PARTY_COST_RESIDUAL_OBJECTIVE = "selected-arm-ips-unit-curriculum-party-cost-residual-ridge-v1"
+LIVING_DEX_PARTY_COST_RETAINED_OUTPUT_OBJECTIVE = (
+    "selected-arm-ips-unit-curriculum-party-cost-output-retained-residual-ridge-v1"
+)
+_PARTY_COST_RESIDUAL_OBJECTIVES = frozenset((
+    LIVING_DEX_PARTY_COST_RESIDUAL_OBJECTIVE, LIVING_DEX_PARTY_COST_RETAINED_OUTPUT_OBJECTIVE,
+))
+_PARTY_COST_RETENTION_ABSOLUTE_TOLERANCE = 1e-10
+LIVING_DEX_SUCCESS_RESIDUAL_OBJECTIVE = "selected-arm-ips-unit-curriculum-success-residual-ridge-v1"
+LIVING_DEX_STORY_SUCCESS_RETAINED_OBJECTIVE = (
+    "selected-arm-ips-unit-curriculum-story-context-success-retained-ridge-v1"
+)
+_STORY_SUCCESS_FEATURE_GROUP = "complete-story-context-v1"
+LIVING_DEX_BOUNDED_STORY_SUCCESS_OBJECTIVE = (
+    "selected-arm-ips-unit-curriculum-bounded-story-success-retained-ridge-v1"
+)
+LIVING_DEX_BOUNDED_STORY_SUCCESS_HEAD_SCHEMA = "pokemon.core.bounded-story-success-head.v1"
+LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_OBJECTIVE = (
+    "selected-arm-ips-unit-curriculum-bounded-matchup-story-success-retained-ridge-v2"
+)
+LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_HEAD_SCHEMA = "pokemon.core.bounded-story-success-head.v2"
+_BOUNDED_MATCHUP_NORMALIZATION_SCHEMA = "pokemon.core.weighted-story-input-normalization.v1"
+_BOUNDED_MATCHUP_SCALE_FLOOR = 1e-6
+_BOUNDED_MATCHUP_CONSTANT_MULTIPLIER = 64.
+
+
+
+class CompletePaidSuccessBasis(StrEnum):
+    """Prespecified local residual basis, not a model-selection instruction."""
+
+    CONSTANT = "constant"
+    HORIZON = "horizon"
+    DENSITY = "density"
+    HORIZON_DENSITY = "horizon_density"
+
+
+_COMPLETE_PAID_SUCCESS_OBJECTIVES = {
+    basis: f"selected-arm-ips-unit-curriculum-complete-paid-{basis.value}-success-residual-ridge-v1"
+    for basis in CompletePaidSuccessBasis
+}
+_RETAINED_SUCCESS_OBJECTIVES = frozenset((
+    LIVING_DEX_SUCCESS_RESIDUAL_OBJECTIVE, LIVING_DEX_STORY_SUCCESS_RETAINED_OBJECTIVE,
+    LIVING_DEX_BOUNDED_STORY_SUCCESS_OBJECTIVE,
+    LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_OBJECTIVE,
+    *_COMPLETE_PAID_SUCCESS_OBJECTIVES.values(),
+))
+
+_RETAINED_HEAD_OBJECTIVES = frozenset((*_RETAINED_SUCCESS_OBJECTIVES, *_PARTY_COST_RESIDUAL_OBJECTIVES))
+
 LIVING_DEX_OPTION_NORMALIZATION = "pokemon.core.living-dex-option-normalization.v1"
 LIVING_DEX_ECONOMY_HEAD_SCHEMA = "pokemon.core.living-dex-economy-head.v1"
 LIVING_DEX_ECONOMY_NORMALIZATION = "pokemon.core.living-dex-economy-normalization.v1"
@@ -162,14 +233,144 @@ LIVING_DEX_HISTORY_FEATURE_NAMES = (
 
 
 def option_feature_names(version: int) -> tuple[str, ...]:
-    if type(version) is not int or version not in (1, 2, 3, 4):
+    from .player_option_preparation import preparation_feature_names
+    from .player_readiness import readiness_feature_names
+
+    if type(version) is not int or version not in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
         raise LivingDexOptionValueError("living-Dex feature version differs")
     return (
         LIVING_DEX_OPTION_FEATURE_NAMES
         + (LIVING_DEX_HISTORY_FEATURE_NAMES if version >= 2 else ())
         + (LIVING_DEX_RECOVERY_FEATURE_NAMES if version >= 3 else ())
         + (ECONOMY_FEATURE_NAMES if version >= 4 else ())
+        + (readiness_feature_names(LivingDexOptionKind) if version >= 5 else ())
+        + (challenge_feature_names(LivingDexOptionKind) if version >= 6 else ())
+        + (preparation_feature_names() if version >= 7 else ())
+        + (kind_execution_effort_feature_names() if version >= 8 else ())
+        + (level_workload_feature_names() if version >= 9 else ())
+        + (move_change_feature_names() if version >= 10 else ())
+        + (move_context_feature_names() if version >= 11 else ())
+        + (capture_invocation_feature_names() if version >= 12 else ())
+        + (complete_paid_capture_feature_names() if version >= 13 else ())
+        + (complete_paid_density_feature_names() if version >= 14 else ())
+        + (matchup_feature_names() if version >= 15 else ())
     )
+
+
+
+def project_complete_paid_capture_features(prefix: Sequence[float]) -> tuple[float, ...]:
+    """Derive V13 only from a prospectively authenticated V12 input vector."""
+    values = tuple(prefix)
+    if len(values) != len(option_feature_names(12)):
+        raise LivingDexOptionValueError("complete-paid projection requires the V12 prefix")
+    names = option_feature_names(12)
+    acquire = values[names.index("kind.acquire")]
+    descriptor = values[-len(capture_invocation_feature_names()):]
+    if any(descriptor):
+        kind_values = tuple(v for n, v in zip(names, values, strict=True)
+                            if n.startswith("kind."))
+        if acquire != 1. or any(v not in (0., 1.) for v in kind_values) or sum(kind_values) != 1.:
+            raise LivingDexOptionValueError("capture invocation requires an acquisition input")
+    try:
+        suffix = complete_paid_capture_vector(descriptor, acquire=bool(acquire == 1.))
+    except (TypeError, ValueError):
+        raise LivingDexOptionValueError("complete-paid invocation projection differs") from None
+    return (*values, *suffix)
+
+
+
+def project_complete_paid_density_features(prefix: Sequence[float]) -> tuple[float, ...]:
+    """Derive V14 from the exact V13 invocation and existing uncertainty input."""
+    values = tuple(prefix)
+    if len(values) != len(option_feature_names(13)):
+        raise LivingDexOptionValueError("complete-paid density requires the V13 prefix")
+    v12_width = len(option_feature_names(12))
+    if values != project_complete_paid_capture_features(values[:v12_width]):
+        raise LivingDexOptionValueError("complete-paid suffix differs from its V12 input")
+    try:
+        suffix = complete_paid_density_vector(
+            values[v12_width:], uncertainty=values[option_feature_names(13).index("uncertainty")])
+    except (TypeError, ValueError):
+        raise LivingDexOptionValueError("complete-paid density projection differs") from None
+    return (*values, *suffix)
+
+
+def _matchup_from_vector(values: Sequence[float]) -> OptionMatchup | None:
+    # Raw prediction arrays contain NumPy scalars; public descriptor parsing stays strict.
+    values = tuple(v.item() if isinstance(v, np.generic) else v for v in values)
+    if len(values) != len(MATCHUP_NAMES):
+        raise LivingDexOptionValueError("matchup suffix width differs")
+    if values[0] == 0.:
+        if any(values):
+            raise LivingDexOptionValueError("unobserved matchup suffix must be zero")
+        return None
+    if values[0] != 1.:
+        raise LivingDexOptionValueError("matchup presence differs")
+    try:
+        return OptionMatchup(tuple(values[1:]))
+    except (TypeError, ValueError):
+        raise LivingDexOptionValueError("matchup suffix differs") from None
+
+
+def project_matchup_features(
+    prefix: Sequence[float], matchup: OptionMatchup | None = None,
+) -> tuple[float, ...]:
+    """Append only truthful current-combat observations to an exact V14 prefix."""
+    values = tuple(prefix)
+    if len(values) != len(option_feature_names(14)):
+        raise LivingDexOptionValueError("matchup projection requires the V14 prefix")
+    v13_width = len(option_feature_names(13))
+    if values != project_complete_paid_density_features(values[:v13_width]):
+        raise LivingDexOptionValueError("matchup V14 prefix differs")
+    if matchup is not None:
+        names = option_feature_names(14)
+        kinds = tuple(v for n, v in zip(names, values, strict=True) if n.startswith("kind."))
+        if (not isinstance(matchup, OptionMatchup)
+                or values[names.index("kind.unlock_access")] != 1.
+                or any(k not in (0., 1.) for k in kinds) or sum(kinds) != 1.
+                or values[names.index("challenge.unlock_access_x_present")] != 1.
+                or values[names.index("challenge.unlock_access_x_combat_required")] != 1.):
+            raise LivingDexOptionValueError("matchup requires a current combat story option")
+    if matchup is not None and matchup.values[2] == 1.:
+        names = option_feature_names(14)
+        known = values[names.index("challenge.unlock_access_x_opposition_known")] == 1.
+        empty_own = matchup.values[0] == 1. and matchup.values[4] == matchup.values[5] == 0.
+        if ((not known and not empty_own)
+                or (known and values[names.index("challenge.unlock_access_x_opponent_fraction")] != matchup.values[6])):
+            raise LivingDexOptionValueError("matchup roster differs from the current challenge")
+    return (*values, *matchup_vector(matchup))
+
+
+def complete_paid_success_columns(basis: CompletePaidSuccessBasis) -> tuple[int, ...]:
+    """Indices within the explicit local suffix, never inferred from array tails."""
+    if not isinstance(basis, CompletePaidSuccessBasis):
+        raise LivingDexOptionValueError("complete-paid basis must be typed")
+    return {
+        CompletePaidSuccessBasis.CONSTANT: (0,),
+        CompletePaidSuccessBasis.HORIZON: (0, 1),
+        CompletePaidSuccessBasis.DENSITY: (0, 2),
+        CompletePaidSuccessBasis.HORIZON_DENSITY: (0, 1, 2, 3),
+    }[basis]
+
+
+def complete_paid_success_version(basis: CompletePaidSuccessBasis) -> int:
+    return 14 if max(complete_paid_success_columns(basis)) >= 2 else 13
+
+
+def kind_execution_effort_feature_names() -> tuple[str, ...]:
+    """Derived semantic products; no title, target or private identity."""
+    return tuple(f"execution_effort_x_kind.{kind.value}" for kind in LivingDexOptionKind)
+
+
+def _kind_execution_effort_from_original(
+    features: tuple[float, ...], version: int,
+) -> tuple[float, ...]:
+    # Every product uses already observed columns. Missing recovery/readiness
+    # fields stay absent/zero; original records and fingerprints are untouched.
+    values = dict(zip(option_feature_names(version), features, strict=True))
+    effort = values["execution_effort"]
+    return tuple(effort * values.get(f"kind.{kind.value}", 0.0)
+                 for kind in LivingDexOptionKind)
 
 
 def _history_vector(history: GoalSearchHistory | None) -> tuple[float, ...]:
@@ -508,15 +709,60 @@ class LivingDexOptionCandidate:
     unavailable_reason: LivingDexOptionUnavailableReason | None = None
     search_history: GoalSearchHistory | None = None
     economy_offer: EconomyOffer | None = None
+    readiness: PlayerReadiness | None = None
+    challenge: OptionChallenge | None = None
+    preparation: OptionPreparation | None = None
+    level_workload: OptionLevelWorkload | None = None
+    move_change: OptionMoveChange | None = None
+    capture_invocation: OptionCaptureInvocation | None = None
+    matchup: OptionMatchup | None = None
 
     def __post_init__(self) -> None:
+        if self.matchup is not None and (
+            not isinstance(self.matchup, OptionMatchup)
+            or not isinstance(self.features, LivingDexOptionFeatures)
+            or self.features.kind is not LivingDexOptionKind.UNLOCK_ACCESS
+            or not isinstance(self.challenge, OptionChallenge)
+            or not self.challenge.combat_required
+        ):
+            raise LivingDexOptionValueError("matchup requires a current combat story option")
+        if self.matchup is not None and self.matchup.values[2] == 1.:
+            assert self.challenge is not None
+            empty_own = (self.matchup.values[0] == 1.
+                         and self.matchup.values[4] == self.matchup.values[5] == 0.)
+            if ((not self.challenge.opposition_known and not empty_own)
+                    or (self.challenge.opposition_known
+                        and self.challenge.opponent_fraction != self.matchup.values[6])):
+                raise LivingDexOptionValueError("matchup roster differs from the current challenge")
+        if self.capture_invocation is not None and (
+            not isinstance(self.capture_invocation, OptionCaptureInvocation)
+            or self.features.kind is not LivingDexOptionKind.ACQUIRE
+        ):
+            raise LivingDexOptionValueError("capture invocation requires an acquisition option")
+        if self.move_change is not None and (
+            not isinstance(self.move_change, OptionMoveChange)
+            or self.features.kind is not LivingDexOptionKind.DEVELOP
+        ):
+            raise LivingDexOptionValueError("move change requires a development option")
+        if self.level_workload is not None and (
+            not isinstance(self.level_workload, OptionLevelWorkload)
+            or self.features.kind not in (LivingDexOptionKind.EVOLVE, LivingDexOptionKind.DEVELOP)
+        ):
+            raise LivingDexOptionValueError("level workload requires a level-training option")
+        if self.preparation is not None and (
+            not isinstance(self.preparation, OptionPreparation)
+            or self.features.kind is not LivingDexOptionKind.DEVELOP
+        ):
+            raise LivingDexOptionValueError("preparation descriptor requires a development option")
+        if self.challenge is not None and not isinstance(self.challenge, OptionChallenge):
+            raise LivingDexOptionValueError("living-Dex challenge differs")
+        if self.readiness is not None and not isinstance(self.readiness, PlayerReadiness):
+            raise LivingDexOptionValueError("living-Dex readiness differs")
         if self.search_history is not None and not isinstance(
             self.search_history, GoalSearchHistory
         ):
             raise LivingDexOptionValueError("living-Dex search history differs")
-        if self.economy_offer is not None and not isinstance(
-            self.economy_offer, EconomyOffer
-        ):
+        if self.economy_offer is not None and not isinstance(self.economy_offer, EconomyOffer):
             raise LivingDexOptionValueError("living-Dex economy offer differs")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise LivingDexOptionValueError("living-Dex option needs a binding reference")
@@ -536,6 +782,29 @@ class LivingDexOptionCandidate:
         self, context: LivingDexOptionContext, *, feature_version: int = 1
     ) -> tuple[float, ...]:
         option_feature_names(feature_version)
+        if feature_version == 15:
+            return project_matchup_features(
+                replace(self, matchup=None).vector(context, feature_version=14), self.matchup)
+        if self.matchup is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore matchup")
+        if feature_version == 14:
+            return project_complete_paid_density_features(
+                self.vector(context, feature_version=13))
+        if feature_version == 13:
+            return project_complete_paid_capture_features(
+                self.vector(context, feature_version=12))
+        if feature_version < 12 and self.capture_invocation is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore capture invocation")
+        if feature_version < 10 and self.move_change is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore move change")
+        if feature_version < 9 and self.level_workload is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore level workload")
+        if feature_version < 7 and self.preparation is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore preparation")
+        if feature_version < 6 and self.challenge is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore challenge")
+        if feature_version < 5 and self.readiness is not None:
+            raise LivingDexOptionValueError("legacy scorer cannot ignore readiness")
         if feature_version == 1 and self.search_history is not None:
             raise LivingDexOptionValueError("legacy scorer cannot ignore search history")
         if feature_version < 4 and self.economy_offer is not None:
@@ -571,6 +840,26 @@ class LivingDexOptionCandidate:
             + history_part
             + recovery_part
             + economy_part
+            + (
+                readiness_vector(self.readiness, self.features.kind, LivingDexOptionKind)
+                if feature_version >= 5
+                else ()
+            )
+            + (
+                challenge_vector(self.challenge, self.features.kind, LivingDexOptionKind)
+                if feature_version >= 6
+                else ()
+            )
+            + (preparation_vector(self.preparation) if feature_version >= 7 else ())
+            + (
+                tuple(self.features.execution_effort * float(self.features.kind is kind)
+                      for kind in LivingDexOptionKind)
+                if feature_version >= 8 else ()
+            )
+            + (level_workload_vector(self.level_workload) if feature_version >= 9 else ())
+            + (move_change_vector(self.move_change) if feature_version >= 10 else ())
+            + (move_context_from_v10(move_change_vector(self.move_change)) if feature_version >= 11 else ())
+            + (capture_invocation_vector(self.capture_invocation) if feature_version >= 12 else ())
         )
 
     def policy_dict(self, context: LivingDexOptionContext) -> dict[str, object]:
@@ -583,6 +872,20 @@ class LivingDexOptionCandidate:
         }
         if self.search_history is not None:
             result["search_history"] = self.search_history.public_dict()
+        if self.readiness is not None:
+            result["readiness"] = self.readiness.public_dict()
+        if self.challenge is not None:
+            result["challenge"] = self.challenge.public_dict()
+        if self.preparation is not None:
+            result["preparation"] = self.preparation.public_dict()
+        if self.level_workload is not None:
+            result["level_workload"] = self.level_workload.public_dict()
+        if self.move_change is not None:
+            result["move_change"] = self.move_change.public_dict()
+        if self.capture_invocation is not None:
+            result["capture_invocation"] = self.capture_invocation.public_dict()
+        if self.matchup is not None:
+            result["matchup"] = self.matchup.public_dict()
         if self.economy_offer is not None:
             result["economy_offer"] = {
                 "conditional_income": self.economy_offer.conditional_income,
@@ -635,6 +938,20 @@ class LivingDexOptionMenu:
 
     @property
     def feature_version(self) -> int:
+        if any(row.matchup is not None for row in self.candidates):
+            return 15
+        if any(row.capture_invocation is not None for row in self.candidates):
+            return 12
+        if any(row.move_change is not None for row in self.candidates):
+            return 10
+        if any(row.level_workload is not None for row in self.candidates):
+            return 9
+        if any(row.preparation is not None for row in self.candidates):
+            return 7
+        if any(row.challenge is not None for row in self.candidates):
+            return 6
+        if any(row.readiness is not None for row in self.candidates):
+            return 5
         if (
             any(row.economy_offer is not None for row in self.candidates)
             or self.context.economy_snapshot is not None
@@ -1005,9 +1322,7 @@ class LivingDexPredictedEconomyOutcome:
         object.__setattr__(
             self,
             "useful_liquidity_gain",
-            _unit_interval(
-                self.useful_liquidity_gain, subject="predicted useful_liquidity_gain"
-            ),
+            _unit_interval(self.useful_liquidity_gain, subject="predicted useful_liquidity_gain"),
         )
         object.__setattr__(
             self,
@@ -1049,12 +1364,8 @@ class LivingDexEconomyHead:
         coefficients = _validate_numeric_matrix(
             self.coefficients, (width, targets), subject="coefficients"
         )
-        intercept = _validate_numeric_vector(
-            self.intercept, targets, subject="intercept"
-        )
-        mean = _validate_numeric_vector(
-            self.feature_mean, width, subject="feature_mean"
-        )
+        intercept = _validate_numeric_vector(self.intercept, targets, subject="intercept")
+        mean = _validate_numeric_vector(self.feature_mean, width, subject="feature_mean")
         scale = _validate_numeric_vector(
             self.feature_scale, width, subject="feature_scale", positive_only=True
         )
@@ -1088,9 +1399,7 @@ class LivingDexEconomyHead:
             or not isinstance(self.cash_loss_weight, (int, float))
             or float(self.cash_loss_weight) != 1.0
         ):
-            raise LivingDexOptionValueError(
-                "cash_loss_weight must be 1.0 for this schema"
-            )
+            raise LivingDexOptionValueError("cash_loss_weight must be 1.0 for this schema")
         object.__setattr__(self, "useful_liquidity_gain_weight", 1.0)
         object.__setattr__(self, "cash_loss_weight", 1.0)
         for name, value in (
@@ -1117,11 +1426,25 @@ class LivingDexEconomyHead:
                 "living-Dex economy prediction requires economy context"
             )
         vector = np.asarray(
-            candidate.vector(context, feature_version=4), dtype=np.float64
+            replace(candidate, readiness=None, challenge=None, preparation=None, level_workload=None, move_change=None, capture_invocation=None, matchup=None).vector(
+                context, feature_version=4
+            ),
+            dtype=np.float64,
         )
         normalized = (vector - self.feature_mean) / self.feature_scale
         raw = self.intercept + normalized @ self.coefficients
-        clipped = np.clip(raw, 0.0, 1.0)
+        # The label is capped by the pre-action shortfall and available cash.
+        # Preserve the fitted estimate inside that analytically feasible range.
+        scale = max(1, context.target_cash)
+        cash = context.economy_snapshot.cash
+        upper = np.asarray(
+            (
+                min(1.0, max(0, context.target_cash - cash) / scale),
+                min(1.0, cash / scale),
+            ),
+            dtype=np.float64,
+        )
+        clipped = np.clip(raw, 0.0, upper)
         return LivingDexPredictedEconomyOutcome(
             useful_liquidity_gain=float(clipped[0]),
             cash_loss=float(clipped[1]),
@@ -1207,9 +1530,7 @@ class LivingDexEconomyHead:
         coefficients = _validate_numeric_matrix(
             value.get("coefficients"), (width, targets), subject="coefficients"
         )
-        intercept = _validate_numeric_vector(
-            value.get("intercept"), targets, subject="intercept"
-        )
+        intercept = _validate_numeric_vector(value.get("intercept"), targets, subject="intercept")
         feature_mean = _validate_numeric_vector(
             value.get("feature_mean"), width, subject="feature_mean"
         )
@@ -1272,9 +1593,7 @@ def fit_living_dex_economy_head(
         or not isinstance(useful_liquidity_gain_weight, (int, float))
         or float(useful_liquidity_gain_weight) != 1.0
     ):
-        raise LivingDexOptionValueError(
-            "useful_liquidity_gain_weight must be 1.0 for this schema"
-        )
+        raise LivingDexOptionValueError("useful_liquidity_gain_weight must be 1.0 for this schema")
     if (
         isinstance(cash_loss_weight, bool)
         or not isinstance(cash_loss_weight, (int, float))
@@ -1295,7 +1614,16 @@ def fit_living_dex_economy_head(
     )
     features = np.asarray(
         [
-            row.menu.candidate_vector(row.selected_candidate_index, feature_version=4)
+            replace(
+                row.menu.candidates[row.selected_candidate_index],
+                readiness=None,
+                challenge=None,
+                preparation=None,
+                level_workload=None,
+                move_change=None,
+                capture_invocation=None,
+                matchup=None,
+            ).vector(row.menu.context, feature_version=4)
             for row in sorted_rows
         ],
         dtype=np.float64,
@@ -1350,6 +1678,174 @@ def fit_living_dex_economy_head(
 
 
 @dataclass(frozen=True, slots=True)
+class LivingDexBoundedStorySuccessHead:
+    """Explicit learned correction to bounded parent success, gated to story options."""
+
+    coefficients: NDArray[np.float64]
+    intercept: float
+    parent_model_sha256: str
+    feature_version: int = 9
+
+    def __post_init__(self):
+        supplied = np.asarray(self.coefficients, dtype=object)
+        if (supplied.shape != (len(option_feature_names(9)),)
+                or any(isinstance(v, (bool, np.bool_)) or not isinstance(v, (int, float, np.integer, np.floating))
+                       for v in supplied)):
+            raise LivingDexOptionValueError("bounded story head coefficients must be numeric")
+        coefficients = np.asarray(self.coefficients, dtype=np.float64)
+        if (type(self.feature_version) is not int or self.feature_version != 9
+                or coefficients.shape != (len(option_feature_names(9)),)
+                or not np.all(np.isfinite(coefficients))
+                or isinstance(self.intercept, (bool, np.bool_))
+                or not isinstance(self.intercept, (int, float, np.floating))
+                or not math.isfinite(self.intercept)
+                or type(self.parent_model_sha256) is not str
+                or _SHA256.fullmatch(self.parent_model_sha256) is None):
+            raise LivingDexOptionValueError("bounded story head parameters differ")
+        coefficients = coefficients.copy()
+        coefficients.setflags(write=False)
+        object.__setattr__(self, "coefficients", coefficients)
+        object.__setattr__(self, "intercept", float(self.intercept))
+
+    def to_dict(self):
+        return dict(schema=LIVING_DEX_BOUNDED_STORY_SUCCESS_HEAD_SCHEMA,
+                    feature_version=9, feature_names=list(option_feature_names(9)),
+                    kind="unlock_access", parent_model_sha256=self.parent_model_sha256,
+                    coefficients=self.coefficients.tolist(), intercept=self.intercept)
+
+    @classmethod
+    def from_dict(cls, value):
+        keys = {"schema", "feature_version", "feature_names", "kind",
+                "parent_model_sha256", "coefficients", "intercept"}
+        if (not isinstance(value, Mapping) or set(value) != keys
+                or value.get("schema") != LIVING_DEX_BOUNDED_STORY_SUCCESS_HEAD_SCHEMA
+                or value.get("kind") != "unlock_access"
+                or value.get("feature_names") != list(option_feature_names(9))):
+            raise LivingDexOptionValueError("bounded story head document differs")
+        return cls(value["coefficients"], value["intercept"],
+                   value["parent_model_sha256"], value["feature_version"])
+
+
+def bounded_matchup_story_feature_indices() -> tuple[int, ...]:
+    """Fixed semantic V15 basis; never select coordinates from labels or DEV."""
+    names = option_feature_names(15)
+    selected = tuple(i for i, name in enumerate(names)
+                     if not (name.startswith("readiness.") and "_x_budget." in name))
+    if len(names) != 506 or len(selected) != 461:
+        raise LivingDexOptionValueError("declared V15 non-budget basis changed")
+    return selected
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexBoundedMatchupStorySuccessHead:
+    """V2 bounded correction with independent TRAIN-story normalization."""
+    coefficients: NDArray[np.float64]
+    intercept: float
+    parent_model_sha256: str
+    feature_mean: NDArray[np.float64]
+    feature_scale: NDArray[np.float64]
+    constant_mask: NDArray[np.bool_]
+    normalization_evidence_sha256: str
+    feature_indices: tuple[int, ...] = field(default_factory=bounded_matchup_story_feature_indices)
+    feature_version: int = 15
+
+    def __post_init__(self):
+        expected = bounded_matchup_story_feature_indices()
+        if (type(self.feature_version) is not int or self.feature_version != 15
+                or type(self.feature_indices) is not tuple or self.feature_indices != expected
+                or any(type(i) is not int for i in self.feature_indices)):
+            raise LivingDexOptionValueError("bounded matchup head requires its exact V15 semantic basis")
+        width = len(expected)
+        arrays = []
+        for name in ("coefficients", "feature_mean", "feature_scale"):
+            supplied = np.asarray(getattr(self, name), dtype=object)
+            if (supplied.shape != (width,) or any(
+                    isinstance(v, (bool, np.bool_)) or not isinstance(v, (int, float, np.integer, np.floating))
+                    for v in supplied)):
+                raise LivingDexOptionValueError("bounded matchup head requires numeric arrays")
+            value = np.asarray(getattr(self, name), dtype=np.float64)
+            if not np.all(np.isfinite(value)):
+                raise LivingDexOptionValueError("bounded matchup head contains nonfinite measurements")
+            arrays.append(value)
+        coefficients, mean, scale = arrays
+        supplied_mask = np.asarray(self.constant_mask, dtype=object)
+        if (supplied_mask.shape != (width,)
+                or any(not isinstance(v, (bool, np.bool_)) for v in supplied_mask)):
+            raise LivingDexOptionValueError("bounded matchup constant mask must be boolean")
+        constant = np.asarray(self.constant_mask, dtype=bool)
+        if (np.any(scale < _BOUNDED_MATCHUP_SCALE_FLOOR)
+                or np.any(scale[constant] != 1.) or np.any(coefficients[constant] != 0.)
+                or isinstance(self.intercept, (bool, np.bool_))
+                or not isinstance(self.intercept, (int, float, np.floating))
+                or not math.isfinite(self.intercept)):
+            raise LivingDexOptionValueError("bounded matchup normalization or constant coefficients differ")
+        for digest in (self.parent_model_sha256, self.normalization_evidence_sha256):
+            if type(digest) is not str or _SHA256.fullmatch(digest) is None:
+                raise LivingDexOptionValueError("bounded matchup head lacks immutable provenance")
+        for name, value in zip(("coefficients", "feature_mean", "feature_scale", "constant_mask"),
+                               (*arrays, constant), strict=True):
+            detached = value.copy(); detached.setflags(write=False)
+            object.__setattr__(self, name, detached)
+        object.__setattr__(self, "intercept", float(self.intercept))
+
+    @property
+    def feature_names(self):
+        names = option_feature_names(15)
+        return tuple(names[i] for i in self.feature_indices)
+
+    def to_dict(self):
+        return dict(schema=LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_HEAD_SCHEMA,
+            feature_version=15, feature_names=list(self.feature_names), feature_indices=list(self.feature_indices),
+            kind="unlock_access", parent_model_sha256=self.parent_model_sha256,
+            coefficients=self.coefficients.tolist(), intercept=self.intercept,
+            normalization=dict(schema=_BOUNDED_MATCHUP_NORMALIZATION_SCHEMA,
+                feature_mean=self.feature_mean.tolist(), feature_scale=self.feature_scale.tolist(),
+                constant_mask=self.constant_mask.tolist(), scale_floor=_BOUNDED_MATCHUP_SCALE_FLOOR,
+                constant_threshold_multiplier=_BOUNDED_MATCHUP_CONSTANT_MULTIPLIER,
+                training_input_sha256=self.normalization_evidence_sha256))
+
+    @classmethod
+    def from_dict(cls, value):
+        keys = {"schema","feature_version","feature_names","feature_indices","kind",
+                "parent_model_sha256","coefficients","intercept","normalization"}
+        indices = bounded_matchup_story_feature_indices()
+        if (not isinstance(value, Mapping) or set(value) != keys
+                or value.get("schema") != LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_HEAD_SCHEMA
+                or value.get("kind") != "unlock_access" or value.get("feature_indices") != list(indices)
+                or any(type(i) is not int for i in value["feature_indices"])
+                or value.get("feature_names") != [option_feature_names(15)[i] for i in indices]):
+            raise LivingDexOptionValueError("bounded matchup head document differs")
+        norm = value["normalization"]
+        if (not isinstance(norm, Mapping) or set(norm) != {"schema","feature_mean","feature_scale",
+                "constant_mask","scale_floor","constant_threshold_multiplier","training_input_sha256"}
+                or norm.get("schema") != _BOUNDED_MATCHUP_NORMALIZATION_SCHEMA
+                or type(norm.get("scale_floor")) not in (int, float)
+                or norm["scale_floor"] != _BOUNDED_MATCHUP_SCALE_FLOOR
+                or type(norm.get("constant_threshold_multiplier")) not in (int, float)
+                or norm["constant_threshold_multiplier"] != _BOUNDED_MATCHUP_CONSTANT_MULTIPLIER):
+            raise LivingDexOptionValueError("bounded matchup normalization contract differs")
+        return cls(value["coefficients"], value["intercept"], value["parent_model_sha256"],
+            norm["feature_mean"], norm["feature_scale"], norm["constant_mask"], norm["training_input_sha256"],
+            tuple(value["feature_indices"]), value["feature_version"])
+
+
+def _restore_bounded_story_success_head(value):
+    if isinstance(value, Mapping) and value.get("schema") == LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_HEAD_SCHEMA:
+        return LivingDexBoundedMatchupStorySuccessHead.from_dict(value)
+    return LivingDexBoundedStorySuccessHead.from_dict(value)
+
+
+def _bounded_story_mask(values):
+    """Reject ambiguous public kind encodings before applying the runtime gate."""
+    names = option_feature_names(9)
+    kinds = [i for i, name in enumerate(names) if name.startswith("kind.")]
+    columns = values[..., kinds]
+    if np.any((columns != 0.) & (columns != 1.)) or np.any(columns.sum(axis=-1) != 1.):
+        raise LivingDexOptionValueError("bounded story prediction requires an exact one-hot kind")
+    return values[..., names.index("kind.unlock_access")] == 1.
+
+
+@dataclass(frozen=True, slots=True)
 class LivingDexOptionValueModel:
     """Multi-outcome linear value model fitted only on selected arms."""
 
@@ -1365,13 +1861,29 @@ class LivingDexOptionValueModel:
     feature_version: int = 1
     objective: str = LIVING_DEX_OPTION_OBJECTIVE
     economy_head: LivingDexEconomyHead | None = None
+    bounded_story_success_head: LivingDexBoundedStorySuccessHead | LivingDexBoundedMatchupStorySuccessHead | None = None
 
     def __post_init__(self) -> None:
         if self.objective not in {
             LIVING_DEX_OPTION_OBJECTIVE,
             "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+            *_RETAINED_HEAD_OBJECTIVES,
         }:
             raise LivingDexOptionValueError("living-Dex regression objective differs")
+        if (self.objective in _PARTY_COST_RESIDUAL_OBJECTIVES
+                and self.feature_version < 9):
+            raise LivingDexOptionValueError("party cost retained models require feature version9 or a zero extension")
+        if (self.objective == LIVING_DEX_STORY_SUCCESS_RETAINED_OBJECTIVE
+                and self.feature_version < 9):
+            raise LivingDexOptionValueError("story success retained models require V9 or a zero extension")
+        headed_v1 = self.objective == LIVING_DEX_BOUNDED_STORY_SUCCESS_OBJECTIVE
+        headed_v2 = self.objective == LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_OBJECTIVE
+        if ((headed_v1 or headed_v2) != (self.bounded_story_success_head is not None)
+                or (headed_v1 and (not isinstance(self.bounded_story_success_head, LivingDexBoundedStorySuccessHead)
+                                   or self.feature_version not in (9, 10)))
+                or (headed_v2 and (not isinstance(self.bounded_story_success_head, LivingDexBoundedMatchupStorySuccessHead)
+                                   or self.feature_version != 15))):
+            raise LivingDexOptionValueError("bounded story objective, head or qualified prefix differs")
         width = len(option_feature_names(self.feature_version))
         targets = len(LIVING_DEX_OPTION_OUTCOME_NAMES)
         arrays = tuple(
@@ -1422,18 +1934,106 @@ class LivingDexOptionValueModel:
             detached.setflags(write=False)
             object.__setattr__(self, name, detached)
         if self.economy_head is not None:
-            if self.feature_version != 4:
+            if self.feature_version not in (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
                 raise LivingDexOptionValueError(
-                    "only feature_version 4 can carry an economy head"
+                    "only feature_version 4 through 15 can carry an economy head"
                 )
             if not isinstance(self.economy_head, LivingDexEconomyHead):
-                raise LivingDexOptionValueError(
-                    "economy_head must be a LivingDexEconomyHead"
-                )
-            if self.economy_head.qualified_examples > self.settled_examples:
+                raise LivingDexOptionValueError("economy_head must be a LivingDexEconomyHead")
+            # A retained economy head describes its original dataset, while
+            # settled_examples counts only this explicitly retained-head update.
+            if (self.objective not in _RETAINED_HEAD_OBJECTIVES
+                    and self.economy_head.qualified_examples > self.settled_examples):
                 raise LivingDexOptionValueError(
                     "living-Dex economy head qualified examples exceed settled examples"
                 )
+
+        if self.objective in _COMPLETE_PAID_SUCCESS_OBJECTIVES.values():
+            prefix = len(option_feature_names(12))
+            success = LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")
+            basis = next(b for b, objective in _COMPLETE_PAID_SUCCESS_OBJECTIVES.items()
+                         if objective == self.objective)
+            allowed = complete_paid_success_columns(basis)
+            forbidden = tuple(i for i in range(len(self.coefficients) - prefix) if i not in allowed)
+            if (self.feature_version not in (13, 14, 15)
+                    or self.feature_version < complete_paid_success_version(basis)
+                    or np.any(self.feature_mean[prefix:] != 0.)
+                    or np.any(self.feature_scale[prefix:] != 1.)
+                    or np.any(np.delete(self.coefficients[prefix:], success, axis=1) != 0.)
+                    or any(np.any(self.coefficients[prefix + i] != 0.) for i in forbidden)):
+                raise LivingDexOptionValueError("complete-paid residual model parameters differ")
+
+    def story_success_components(self, vectors) -> dict[str, NDArray[np.float64]]:
+        """Report actual bounded-head inputs and outputs; never fit or select."""
+        head = self.bounded_story_success_head
+        if head is None:
+            raise LivingDexOptionValueError("model has no bounded story success head")
+        values = np.asarray(vectors, dtype=np.float64)
+        raw = self._base_raw_predictions(values)
+        prefix = len(option_feature_names(9))
+        story = _bounded_story_mask(values[..., :prefix])
+        if isinstance(head, LivingDexBoundedMatchupStorySuccessHead):
+            selected = values[..., head.feature_indices]
+            normalized = (selected - head.feature_mean) / head.feature_scale
+            normalized[..., head.constant_mask] = 0.
+            contributions = np.zeros_like(values)
+            contributions[..., head.feature_indices] = normalized * head.coefficients
+        else:
+            normalized = (values[..., :prefix] - self.feature_mean[:prefix]) / self.feature_scale[:prefix]
+            contributions = normalized * head.coefficients
+        delta = np.where(story, head.intercept + normalized @ head.coefficients, 0.)
+        success = LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")
+        base = raw[..., success]
+        bounded = np.clip(base, 0., 1.)
+        preclip = np.where(story, bounded + delta, base)
+        return dict(base_raw=base, bounded_base=bounded, learned_delta=delta,
+                    preclip=preclip, final=np.clip(preclip, 0., 1.), story_mask=story,
+                    correction_feature_contributions=np.where(story[..., None], contributions, 0.),
+                    correction_intercept=np.where(story, head.intercept, 0.))
+
+    def raw_predictions(self, vectors) -> NDArray[np.float64]:
+        raw = self._base_raw_predictions(vectors)
+        if self.bounded_story_success_head is not None:
+            components = self.story_success_components(vectors)
+            raw[..., LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")] = components["preclip"]
+        return raw
+
+    def _base_raw_predictions(self, vectors) -> NDArray[np.float64]:
+        """Use one raw calculation for scoring, fit diagnostics and evaluation.
+
+        V13 computes the frozen V12 prefix with its original width. Adding zero
+        suffix columns must not change its floating-point reduction order.
+        """
+        values = np.asarray(vectors, dtype=np.float64)
+        if (values.ndim not in (1, 2)
+                or values.shape[-1] != len(self.feature_mean)
+                or not np.all(np.isfinite(values))):
+            raise LivingDexOptionValueError("raw prediction input shape or values differ")
+        if self.feature_version not in (13, 14, 15):
+            return self.intercept + ((values - self.feature_mean) / self.feature_scale) @ self.coefficients
+        prefix = len(option_feature_names(12))
+        for row in values.reshape(-1, values.shape[-1]):
+            expected = project_complete_paid_capture_features(row[:prefix])
+            if self.feature_version >= 14:
+                expected = project_complete_paid_density_features(expected)
+            if self.feature_version == 15:
+                expected = project_matchup_features(
+                    expected, _matchup_from_vector(row[len(option_feature_names(14)):]))
+            if tuple(row) != expected:
+                raise LivingDexOptionValueError("complete-paid suffix differs from its V12 input")
+        normalized_prefix = (values[..., :prefix] - self.feature_mean[:prefix]) / self.feature_scale[:prefix]
+        raw = self.intercept + normalized_prefix @ np.ascontiguousarray(self.coefficients[:prefix])
+        # Preserve V13's two-term reduction before adding new V14 density terms.
+        prior_width = len(option_feature_names(14)) if self.feature_version == 15 else len(self.feature_mean)
+        spans = ((prefix, prefix + 2), (prefix + 2, prior_width))
+        if self.feature_version == 15:
+            spans += ((prior_width, len(self.feature_mean)),)
+        for start, stop in spans:
+            if start == stop:
+                continue
+            delta = ((values[..., start:stop] - self.feature_mean[start:stop]) / self.feature_scale[start:stop]) @ np.ascontiguousarray(self.coefficients[start:stop])
+            np.add(raw, delta, out=raw, where=delta != 0.)
+        return raw
 
     @property
     def model_sha256(self) -> str:
@@ -1451,8 +2051,7 @@ class LivingDexOptionValueModel:
         vector = np.asarray(
             candidate.vector(context, feature_version=self.feature_version), dtype=np.float64
         )
-        normalized = (vector - self.feature_mean) / self.feature_scale
-        raw = self.intercept + normalized @ self.coefficients
+        raw = self.raw_predictions(vector)
         return LivingDexPredictedOutcome.from_vector(np.clip(raw, 0.0, 1.0).tolist())
 
     def predict_economy_candidate(
@@ -1464,7 +2063,7 @@ class LivingDexOptionValueModel:
             raise TypeError("context must be a LivingDexOptionContext")
         if not isinstance(candidate, LivingDexOptionCandidate):
             raise TypeError("candidate must be a LivingDexOptionCandidate")
-        if self.economy_head is None or self.feature_version != 4:
+        if self.economy_head is None or self.feature_version not in (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
             return None
         if context.economy_snapshot is None or context.target_cash is None:
             return None
@@ -1506,6 +2105,312 @@ class LivingDexOptionValueModel:
 
         return max(menu.available_indices, key=key)
 
+    def diagnose_menu(
+        self,
+        menu: LivingDexOptionMenu,
+        utility: LivingDexOptionUtility,
+        *,
+        selected_index: int | None = None,
+    ) -> dict[str, object]:
+        """Explain this frozen linear head without selecting, sampling or fitting.
+
+        Outputs are regression estimates, not calibrated success probabilities.
+        Contributions explain the raw regression before clipping; utility terms
+        explain its bounded score. This receipt is not part of the policy menu.
+        """
+        if not isinstance(menu, LivingDexOptionMenu) or not isinstance(
+            utility, LivingDexOptionUtility
+        ):
+            raise TypeError("diagnostics require a typed menu and utility")
+        scores: dict[int, float] = {}
+        if selected_index is not None and selected_index not in menu.available_indices:
+            raise LivingDexOptionValueError("diagnostic selection is unavailable")
+        names = option_feature_names(self.feature_version)
+        weights = (
+            utility.success_weight,
+            utility.completion_gain_weight,
+            utility.dependency_unlock_weight,
+            -utility.action_cost_weight,
+            -utility.frame_cost_weight,
+            -utility.resource_cost_weight,
+            -utility.party_cost_weight,
+            -utility.storage_cost_weight,
+            -utility.irreversible_loss_weight,
+        )
+        # Menus may be projected at an older feature version than this model.
+        vectors = [
+            c.vector(menu.context, feature_version=self.feature_version) for c in menu.candidates
+        ]
+        varying = [
+            name for i, name in enumerate(names) if len({vector[i] for vector in vectors}) > 1
+        ]
+        rows = []
+        for index, candidate in enumerate(menu.candidates):
+            vector = np.asarray(vectors[index], dtype=np.float64)
+            row: dict[str, object] = dict(
+                candidate_index=index,
+                kind=candidate.features.kind.value,
+                available=index in menu.available_indices,
+                input_vector=vector.tolist(),
+            )
+            if index not in menu.available_indices:
+                row["score"] = None
+                rows.append(row)
+                continue
+            normalized = (vector - self.feature_mean) / self.feature_scale
+            contributions = normalized[:, None] * self.coefficients
+            raw = self.raw_predictions(vector)
+            bounded = np.clip(raw, 0.0, 1.0)
+            scores[index] = utility.score(LivingDexPredictedOutcome.from_vector(bounded.tolist()))
+            row.update(
+                normalized_input_vector=normalized.tolist(),
+                raw_predictions=dict(
+                    zip(LIVING_DEX_OPTION_OUTCOME_NAMES, raw.tolist(), strict=True)
+                ),
+                bounded_predictions=dict(
+                    zip(LIVING_DEX_OPTION_OUTCOME_NAMES, bounded.tolist(), strict=True)
+                ),
+                clipped_outputs=[
+                    name
+                    for name, value in zip(LIVING_DEX_OPTION_OUTCOME_NAMES, raw, strict=True)
+                    if value < 0 or value > 1
+                ],
+                boundary_outputs=[
+                    name
+                    for name, value in zip(LIVING_DEX_OPTION_OUTCOME_NAMES, bounded, strict=True)
+                    if value in (0, 1)
+                ],
+                utility_terms=dict(
+                    zip(
+                        LIVING_DEX_OPTION_OUTCOME_NAMES,
+                        [float(v * w) for v, w in zip(bounded, weights, strict=True)],
+                        strict=True,
+                    )
+                ),
+                top_raw_contributions={
+                    name: [
+                        dict(feature=names[i], contribution=float(contributions[i, j]))
+                        for i in sorted(
+                            range(len(names)), key=lambda i: (-abs(contributions[i, j]), i)
+                        )[:8]
+                        if contributions[i, j] != 0
+                    ]
+                    for j, name in enumerate(LIVING_DEX_OPTION_OUTCOME_NAMES)
+                },
+                score=scores[index],
+                economy=None,
+            )
+            if self.bounded_story_success_head is not None:
+                components = self.story_success_components(vector)
+                row["bounded_story_success"] = {
+                    key: value.tolist() for key, value in components.items()
+                }
+                row["raw_contribution_scope"] = "base_linear_parameters_only"
+                row["bounded_story_success"]["feature_names"] = list(option_feature_names(15 if isinstance(self.bounded_story_success_head, LivingDexBoundedMatchupStorySuccessHead) else 9))
+            economy = self.predict_economy_candidate(menu.context, candidate)
+            if economy is not None:
+                head = self.economy_head
+                assert head is not None
+                econ_vector = np.asarray(
+                    replace(
+                        candidate,
+                        readiness=None,
+                        challenge=None,
+                        preparation=None,
+                        level_workload=None,
+                        move_change=None,
+                        capture_invocation=None,
+                        matchup=None,
+                    ).vector(menu.context, feature_version=4),
+                    dtype=np.float64,
+                )
+                econ_raw = (
+                    head.intercept
+                    + ((econ_vector - head.feature_mean) / head.feature_scale) @ head.coefficients
+                )
+                row["economy"] = dict(
+                    raw_predictions=dict(
+                        zip(LIVING_DEX_ECONOMY_OUTCOME_NAMES, econ_raw.tolist(), strict=True)
+                    ),
+                    bounded_predictions=dict(
+                        zip(LIVING_DEX_ECONOMY_OUTCOME_NAMES, economy.vector(), strict=True)
+                    ),
+                    score_adjustment=(
+                        head.useful_liquidity_gain_weight * economy.useful_liquidity_gain
+                        - head.cash_loss_weight * economy.cash_loss
+                    ),
+                    qualified_train_examples=head.qualified_examples,
+                )
+                scores[index] += (
+                    head.useful_liquidity_gain_weight * economy.useful_liquidity_gain
+                    - head.cash_loss_weight * economy.cash_loss
+                )
+                row["score"] = scores[index]
+            rows.append(row)
+        ranked = sorted(menu.available_indices, key=lambda i: (-scores[i], i))
+        best = ranked[0]
+        runner_up = ranked[1] if len(ranked) > 1 else None
+        comparison = runner_up if selected_index == best else best
+        differences = (
+            []
+            if selected_index is None or comparison is None
+            else [
+                dict(
+                    feature=name,
+                    selected=vectors[selected_index][i],
+                    compared=vectors[comparison][i],
+                )
+                for i, name in enumerate(names)
+                if vectors[selected_index][i] != vectors[comparison][i]
+            ]
+        )
+        diagnostic = dict(
+            schema="pokemon.core.option-value-diagnostics.v1",
+            diagnostic_only=True,
+            prediction_is_calibrated_probability=False,
+            model_sha256=self.model_sha256,
+            feature_version=self.feature_version,
+            feature_names=list(names),
+            feature_mean=self.feature_mean.tolist(),
+            feature_scale=self.feature_scale.tolist(),
+            intercept=self.intercept.tolist(),
+            settled_train_examples=self.settled_examples,
+            weighted_feature_count=int(np.count_nonzero(np.any(self.coefficients != 0, axis=1))),
+            varying_features=varying,
+            candidates=rows,
+            best_candidate_index=best,
+            runner_up_candidate_index=runner_up,
+            best_runner_up_score_margin=(
+                None if runner_up is None else scores[best] - scores[runner_up]
+            ),
+            selected_candidate_index=selected_index,
+            compared_candidate_index=comparison,
+            selected_feature_differences=differences,
+            score_margin_is_confidence=False,
+        )
+        if self.bounded_story_success_head is not None:
+            diagnostic["weighted_feature_count_scope"] = "base_linear_parameters_only"
+            diagnostic["bounded_head_weighted_feature_count"] = int(np.count_nonzero(self.bounded_story_success_head.coefficients))
+        return diagnostic
+
+    def diagnose_training_coverage(
+        self,
+        examples: Iterable[LivingDexObservedArmExample],
+        *,
+        curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample] = (),
+    ) -> dict[str, object]:
+        """Inspect admitted TRAIN coverage and residuals; never produce a fit.
+
+        Constant/nonzero features are not proof of independent coverage. Censored
+        rows count as attempts, but do not become successful or failed targets.
+        """
+        rows = _validated_examples(examples, expected_partition="train")
+        curriculum = _validated_curriculum(curriculum_examples, rows)
+        dataset_sha256 = living_dex_option_train_dataset_sha256(
+            rows,
+            curriculum_examples=curriculum,
+        )
+        combined: list[LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample] = [
+            *rows,
+            *curriculum,
+        ]
+        settled = [row for row in combined if row.outcome.status is LivingDexOutcomeStatus.SETTLED]
+        if not settled:
+            raise LivingDexOptionValueError("coverage requires settled TRAIN observations")
+        feature_rows = [
+            curriculum_features(row, self.feature_version)
+            if isinstance(row, LivingDexCurriculumOutcomeExample)
+            else row.menu.candidate_vector(
+                row.selected_candidate_index, feature_version=self.feature_version
+            )
+            for row in settled
+        ]
+        vectors = np.asarray(feature_rows, dtype=np.float64)
+        targets = np.asarray([row.outcome.target_vector for row in settled], dtype=np.float64)
+        raw = self.raw_predictions(vectors)
+        predicted = np.clip(raw, 0, 1)
+        by_kind: dict[str, dict[str, int]] = {}
+        for row in rows:
+            kind = row.menu.candidates[row.selected_candidate_index].features.kind.value
+            counts = by_kind.setdefault(kind, dict(attempts=0, successes=0, failures=0, censored=0))
+            counts["attempts"] += 1
+            if row.outcome.status is LivingDexOutcomeStatus.CENSORED:
+                counts["censored"] += 1
+            else:
+                counts["successes" if row.outcome.verified_success else "failures"] += 1
+        unit_by_kind: dict[str, dict[str, int]] = {}
+        for unit in curriculum:
+            kind_names = [
+                name.removeprefix("kind.")
+                for name, value in zip(
+                    option_feature_names(unit.feature_version), unit.features, strict=True
+                )
+                if name.startswith("kind.") and value == 1
+            ]
+            kind = kind_names[0] if len(kind_names) == 1 else "unresolved"
+            counts = unit_by_kind.setdefault(
+                kind, dict(attempts=0, successes=0, failures=0, censored=0)
+            )
+            counts["attempts"] += 1
+            if unit.outcome.status is LivingDexOutcomeStatus.CENSORED:
+                counts["censored"] += 1
+            else:
+                counts["successes" if unit.outcome.verified_success else "failures"] += 1
+        names = option_feature_names(self.feature_version)
+        coverage = dict(
+            schema="pokemon.core.option-train-coverage.v1",
+            diagnostic_only=True,
+            automatic_fit=False,
+            independent_coverage_not_established=True,
+            model_sha256=self.model_sha256,
+            inspected_dataset_sha256=dataset_sha256,
+            matches_model_train_dataset=dataset_sha256 == self.train_dataset_sha256,
+            comparative_attempts=len(rows),
+            unit_curriculum_attempts=len(curriculum),
+            settled_examples=len(settled),
+            censored_examples=len(rows) + len(curriculum) - len(settled),
+            successful_examples=sum(row.outcome.verified_success is True for row in settled),
+            unsuccessful_examples=sum(row.outcome.verified_success is False for row in settled),
+            comparative_outcomes_by_kind=by_kind,
+            unit_curriculum_outcomes_by_kind=unit_by_kind,
+            features=[
+                dict(
+                    feature=name,
+                    nonzero_examples=int(np.count_nonzero(vectors[:, i])),
+                    minimum=float(vectors[:, i].min()),
+                    maximum=float(vectors[:, i].max()),
+                    variance=float(vectors[:, i].var()),
+                    distinct_values=len(set(vectors[:, i].tolist())),
+                    weighted=bool(np.any(self.coefficients[i] != 0)),
+                )
+                for i, name in enumerate(names)
+            ],
+            in_sample_mean_squared_error=dict(
+                zip(
+                    LIVING_DEX_OPTION_OUTCOME_NAMES,
+                    ((predicted - targets) ** 2).mean(axis=0).tolist(),
+                    strict=True,
+                )
+            ),
+            clipped_example_counts=dict(
+                zip(
+                    LIVING_DEX_OPTION_OUTCOME_NAMES,
+                    ((raw < 0) | (raw > 1)).sum(axis=0).tolist(),
+                    strict=True,
+                )
+            ),
+            in_sample_errors_are_not_unseen_performance=True,
+        )
+        if self.bounded_story_success_head is not None:
+            coverage["weighted_feature_scope"] = "base_linear_parameters_only"
+            head = self.bounded_story_success_head
+            head_indices = (head.feature_indices if isinstance(head, LivingDexBoundedMatchupStorySuccessHead)
+                            else tuple(range(len(head.coefficients))))
+            weighted_head_indices = {i for i, coefficient in zip(head_indices, head.coefficients, strict=True) if coefficient != 0.}
+            for i, feature in enumerate(coverage["features"]):
+                feature["bounded_story_head_weighted"] = i in weighted_head_indices
+        return coverage
+
     def to_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "censored_examples": self.censored_examples,
@@ -1533,6 +2438,8 @@ class LivingDexOptionValueModel:
         }
         if self.economy_head is not None:
             result["economy_head"] = self.economy_head.to_dict()
+        if self.bounded_story_success_head is not None:
+            result["bounded_story_success_head"] = self.bounded_story_success_head.to_dict()
         return result
 
     @classmethod
@@ -1542,14 +2449,16 @@ class LivingDexOptionValueModel:
         version = next(
             (
                 v
-                for v in (1, 2, 3, 4)
+                for v in (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
                 if value.get("schema") == f"pokemon.core.living-dex-option-value-model.v{v}"
             ),
             1,
         )
         has_economy_head = "economy_head" in value
-        if has_economy_head and version != 4:
-            raise LivingDexOptionValueError("only feature_version 4 can carry an economy head")
+        if has_economy_head and version not in (4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15):
+            raise LivingDexOptionValueError(
+                "only feature_version 4 through 15 can carry an economy head"
+            )
         expected_keys = {
             "censored_examples",
             "coefficients",
@@ -1568,6 +2477,8 @@ class LivingDexOptionValueModel:
         }
         if has_economy_head:
             expected_keys = expected_keys | {"economy_head"}
+        if "bounded_story_success_head" in value:
+            expected_keys = expected_keys | {"bounded_story_success_head"}
         if set(value) != expected_keys:
             raise LivingDexOptionValueError("living-Dex model document differs")
         feature_names = value.get("feature_names")
@@ -1588,6 +2499,7 @@ class LivingDexOptionValueModel:
             not in {
                 LIVING_DEX_OPTION_OBJECTIVE,
                 "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+                *_RETAINED_HEAD_OBJECTIVES,
             }
             or value.get("normalization")
             != (
@@ -1614,7 +2526,8 @@ class LivingDexOptionValueModel:
             if not isinstance(economy_head_val, Mapping):
                 raise LivingDexOptionValueError("living-Dex economy head document differs")
             economy_head = LivingDexEconomyHead.from_dict(economy_head_val)
-            if economy_head.qualified_examples > cast(int, settled_examples):
+            if (value.get("objective") not in _RETAINED_HEAD_OBJECTIVES
+                    and economy_head.qualified_examples > cast(int, settled_examples)):
                 raise LivingDexOptionValueError(
                     "living-Dex economy head qualified examples exceed settled examples"
                 )
@@ -1632,6 +2545,8 @@ class LivingDexOptionValueModel:
                 feature_version=version,
                 objective=str(value["objective"]),
                 economy_head=economy_head,
+                bounded_story_success_head=(_restore_bounded_story_success_head(value["bounded_story_success_head"])
+                    if "bounded_story_success_head" in value else None),
             )
         except (KeyError, TypeError, ValueError):
             raise LivingDexOptionValueError("living-Dex model document is invalid") from None
@@ -1650,6 +2565,17 @@ class LivingDexOptionValueFitReport:
     feature_version: int = 1
     objective: str = LIVING_DEX_OPTION_OBJECTIVE
     economy_qualified_examples: int | None = None
+    frozen_parent_model_sha256: str | None = None
+    complete_paid_success_basis: CompletePaidSuccessBasis | None = None
+    complete_paid_settled_examples: int | None = None
+    complete_paid_distinct_horizons: int | None = None
+    complete_paid_distinct_uncertainties: int | None = None
+    complete_paid_design_rank: int | None = None
+    party_cost_weighted_mse_before: float | None = None
+    party_cost_weighted_mse_after: float | None = None
+    party_cost_retention: Mapping[str, object] | None = None
+    story_success_retention: Mapping[str, object] | None = None
+    bounded_story_success_retention: Mapping[str, object] | None = None
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -1672,6 +2598,32 @@ class LivingDexOptionValueFitReport:
             result["missing_history"] = "unknown_not_unattempted"
         if self.economy_qualified_examples is not None and self.economy_qualified_examples > 0:
             result["economy_qualified_examples"] = self.economy_qualified_examples
+        if self.frozen_parent_model_sha256 is not None:
+            party_only = self.objective in _PARTY_COST_RESIDUAL_OBJECTIVES
+            result.update(frozen_parent_model_sha256=self.frozen_parent_model_sha256,
+                          fitted_outcome_names=["party_cost" if party_only else "verified_success"],
+                          normalization_retained=True, economy_head_retained=True,
+                          outcome_balance_required=not party_only)
+            if party_only:
+                result.update(party_cost_weighted_mse_before=self.party_cost_weighted_mse_before,
+                              party_cost_weighted_mse_after=self.party_cost_weighted_mse_after)
+        if self.party_cost_retention is not None:
+            result["party_cost_retention"] = dict(self.party_cost_retention)
+        if self.story_success_retention is not None:
+            result["story_success_retention"] = dict(self.story_success_retention)
+        if self.bounded_story_success_retention is not None:
+            result["bounded_story_success_retention"] = dict(self.bounded_story_success_retention)
+        if self.complete_paid_success_basis is not None:
+            result.update(
+                complete_paid_success_basis=self.complete_paid_success_basis.value,
+                complete_paid_settled_examples=self.complete_paid_settled_examples,
+                complete_paid_distinct_horizons=self.complete_paid_distinct_horizons,
+                global_intercept_retained=True, parent_feature_coefficients_retained=True,
+                scope_gate="known-acquire-paid-finite-search-complete",
+            )
+        if self.complete_paid_distinct_uncertainties is not None:
+            result.update(complete_paid_distinct_uncertainties=self.complete_paid_distinct_uncertainties,
+                          complete_paid_design_rank=self.complete_paid_design_rank)
         return result
 
 
@@ -1774,6 +2726,238 @@ def upgrade_option_value_model_for_economy(
     )
 
 
+def upgrade_option_value_model_for_readiness(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Append unknown readiness with zero influence; retain every prior prediction."""
+    model = upgrade_option_value_model_for_economy(model)
+    if model.feature_version >= 5:
+        return model
+    width = len(option_feature_names(5)) - len(option_feature_names(4))
+    return replace(
+        model,
+        feature_version=5,
+        coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
+def upgrade_option_value_model_for_challenge(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Zero-influence compatibility bridge, not trained challenge understanding."""
+    model = upgrade_option_value_model_for_readiness(model)
+    if model.feature_version >= 6:
+        return model
+    width = len(option_feature_names(6)) - len(option_feature_names(5))
+    return replace(
+        model,
+        feature_version=6,
+        coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
+def upgrade_option_value_model_for_preparation(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Append zero-influence member facts, not trained preparation understanding."""
+    model = upgrade_option_value_model_for_challenge(model)
+    if model.feature_version >= 7:
+        return model
+    width = len(option_feature_names(7)) - len(option_feature_names(6))
+    return replace(
+        model,
+        feature_version=7,
+        coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
+
+def upgrade_option_value_model_for_kind_effort(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Append zero influence; this compatibility bridge is not fitted learning."""
+    model = upgrade_option_value_model_for_preparation(model)
+    if model.feature_version >= 8:
+        return model
+    width = len(kind_execution_effort_feature_names())
+    return replace(
+        model,
+        feature_version=8,
+        coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
+def upgrade_option_value_model_for_level_workload(model: LivingDexOptionValueModel) -> LivingDexOptionValueModel:
+    """Append zero influence; compatibility is not fitted learning."""
+    model = upgrade_option_value_model_for_kind_effort(model)
+    if model.feature_version >= 9:
+        return model
+    width = len(level_workload_feature_names())
+    return replace(model, feature_version=9,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def upgrade_option_value_model_for_move_change(model: LivingDexOptionValueModel) -> LivingDexOptionValueModel:
+    """Append zero influence; preserve predictions, counts and all prior evidence."""
+    model = upgrade_option_value_model_for_level_workload(model)
+    if model.feature_version >= 10:
+        return model
+    width = len(move_change_feature_names())
+    return replace(model, feature_version=10,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def project_move_context_features(features: tuple[float, ...]) -> tuple[float, ...]:
+    """Append V11 products from a recorded V10 vector; preserve its exact prefix."""
+    if len(features) != len(option_feature_names(10)):
+        raise LivingDexOptionValueError("move context projection requires an exact V10 vector")
+    return (*features, *move_context_from_v10(features[-len(move_change_feature_names()):]))
+
+
+def upgrade_option_value_model_for_move_context(model: LivingDexOptionValueModel) -> LivingDexOptionValueModel:
+    """Append zero influence without changing earlier predictions or evidence."""
+    model = upgrade_option_value_model_for_move_change(model)
+    if model.feature_version >= 11:
+        return model
+    width = len(move_context_feature_names())
+    return replace(model, feature_version=11,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def upgrade_option_value_model_for_capture_invocation(model: LivingDexOptionValueModel) -> LivingDexOptionValueModel:
+    """Explicit zero-influence projection; it does not fit or promote a model."""
+    model = upgrade_option_value_model_for_move_context(model)
+    if model.feature_version >= 12:
+        return model
+    width = len(capture_invocation_feature_names())
+    return replace(model, feature_version=12,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def upgrade_option_value_model_for_complete_paid_capture(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Explicit derived-feature extension; no fitting or adoption."""
+    model = upgrade_option_value_model_for_capture_invocation(model)
+    if model.feature_version >= 13:
+        return model
+    width = len(complete_paid_capture_feature_names())
+    return replace(model, feature_version=13,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+
+def upgrade_option_value_model_for_complete_paid_density(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Append zero density influence while retaining every V13 parameter."""
+    model = upgrade_option_value_model_for_complete_paid_capture(model)
+    if model.feature_version >= 14:
+        return model
+    width = len(complete_paid_density_feature_names())
+    return replace(model, feature_version=14,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def upgrade_option_value_model_for_matchup(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Append zero observation influence; never merge a bounded correction head."""
+    if not isinstance(model, LivingDexOptionValueModel):
+        raise TypeError("model must be a LivingDexOptionValueModel")
+    if isinstance(model.bounded_story_success_head, LivingDexBoundedMatchupStorySuccessHead) and model.feature_version == 15:
+        return model
+    if model.bounded_story_success_head is not None:
+        raise LivingDexOptionValueError("bounded story head has no V15 compatibility proof")
+    model = upgrade_option_value_model_for_complete_paid_density(model)
+    if model.feature_version == 15:
+        return model
+    width = len(matchup_feature_names())
+    return replace(model, feature_version=15,
+                   coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(width))))
+
+
+def curriculum_features(row: LivingDexCurriculumOutcomeExample, version: int) -> tuple[float, ...]:
+    """Project old rows while preserving original evidence and unknown fields.
+
+    V8 products derive only from original kind and execution-effort columns.
+    Dataset fingerprints still hash the originals, never this explicit view.
+    """
+    option_feature_names(version)
+    if version == 15:
+        if row.feature_version > 15:
+            raise LivingDexOptionValueError("curriculum feature version differs from fitter")
+        if row.feature_version == 15:
+            prefix = len(option_feature_names(14))
+            return project_matchup_features(row.features[:prefix], _matchup_from_vector(row.features[prefix:]))
+        # No old matchup observations are manufactured from outcomes or identities.
+        return project_matchup_features(curriculum_features(row, 14), None)
+    if version == 14:
+        prefix = len(option_feature_names(13))
+        if row.feature_version > 14:
+            raise LivingDexOptionValueError("curriculum feature version differs from fitter")
+        original = row.features[:prefix] if row.feature_version == 14 else curriculum_features(row, 13)
+        projected = project_complete_paid_density_features(original)
+        if row.feature_version == 14 and row.features != projected:
+            raise LivingDexOptionValueError("complete-paid density suffix differs from its V13 input")
+        return projected
+    if version == 13:
+        prefix = len(option_feature_names(12))
+        if row.feature_version > 13:
+            raise LivingDexOptionValueError("curriculum feature version differs from fitter")
+        original = row.features[:prefix] if row.feature_version == 13 else curriculum_features(row, 12)
+        projected = project_complete_paid_capture_features(original)
+        if row.feature_version == 13 and row.features != projected:
+            raise LivingDexOptionValueError("complete-paid suffix differs from its V12 input")
+        return projected
+    if row.feature_version == version:
+        return row.features
+    if version == 12 and row.feature_version < 12:
+        # Historical invocation was not observed. Never reconstruct it from outcomes.
+        return (*curriculum_features(row, 11), *capture_invocation_vector(None))
+    if version == 11 and row.feature_version < 11:
+        return project_move_context_features(curriculum_features(row, 10))
+    if version == 10 and row.feature_version < 10:
+        # No historical move facts are reconstructed from labels or identities.
+        return (*curriculum_features(row, 9), *((0.0,) * len(move_change_feature_names())))
+    if version == 9 and row.feature_version < 9:
+        # Historical XP was not recorded. Keep it unknown, never reconstruct labels.
+        return (*curriculum_features(row, 8), *((0.0,) * len(level_workload_feature_names())))
+    if version == 8 and row.feature_version < 8:
+        historical = (
+            *row.features,
+            *((0.0,) * (len(option_feature_names(7)) - len(row.features))),
+        )
+        return (*historical, *_kind_execution_effort_from_original(
+            row.features, row.feature_version,
+        ))
+    if version in (5, 6, 7) and row.feature_version < version:
+        return (*row.features, *((0.0,) * (len(option_feature_names(version)) - len(row.features))))
+    raise LivingDexOptionValueError("curriculum feature version differs from fitter")
+
+
 def living_dex_option_train_dataset_sha256(
     examples: Iterable[LivingDexObservedArmExample],
     *,
@@ -1788,11 +2972,13 @@ def living_dex_option_train_dataset_sha256(
 
     rows = tuple(
         sorted(
-            _validated_examples(examples, expected_partition="train"),
+            _validated_examples(examples, expected_partition="train", allow_empty=True),
             key=lambda row: row.decision_sha256,
         )
     )
     curriculum = _validated_curriculum(curriculum_examples, rows)
+    if not rows and not curriculum:
+        raise LivingDexOptionValueError("living-Dex option evidence is empty")
     if curriculum:
         return canonical_sha256(
             {
@@ -1810,6 +2996,432 @@ def living_dex_option_train_dataset_sha256(
     )
 
 
+def _fit_level_workload_cost_residuals(features, targets, weights, base, ridge):
+    """Fit cost residuals while retaining the existing seven other heads.
+
+    The residual design is zero for unknown workloads. A V9 warm start retains
+    its learned costs and normalization; centered workload features receive an
+    intercept correction so unknown-workload forecasts remain unchanged.
+    """
+    if not isinstance(base, LivingDexOptionValueModel) or base.feature_version > 9:
+        raise LivingDexOptionValueError("workload cost retention requires a supported baseline")
+    baseline = upgrade_option_value_model_for_level_workload(base)
+    prefix = len(option_feature_names(8))
+    new = features[:, prefix:]
+    present = new[:, 0] == 1.
+    if (np.count_nonzero(present) < 2
+            or len({tuple(row) for row in new[present]}) < 2):
+        raise LivingDexOptionValueError("workload cost fit needs distinct observed TRAIN workloads")
+    if np.any(new[~present] != 0.):
+        raise LivingDexOptionValueError("unknown workload rows must have no inferred measurements")
+    mean = baseline.feature_mean.copy()
+    scale = baseline.feature_scale.copy()
+    if base.feature_version < 9:
+        scale_new = np.sqrt(np.average(new[present] ** 2, axis=0, weights=weights[present]))
+        scale_new[scale_new == 0.] = 1.
+        mean[prefix:] = 0.
+        scale[prefix:] = scale_new
+    else:
+        scale_new = scale[prefix:]
+    design = new / scale_new
+    raw_before = baseline.intercept + ((features - baseline.feature_mean) / baseline.feature_scale) @ baseline.coefficients
+    cost_columns = tuple(LIVING_DEX_OPTION_OUTCOME_NAMES.index(name)
+                         for name in ("action_cost", "frame_cost"))
+    residual = targets[:, cost_columns] - raw_before[:, cost_columns]
+    left = design.T @ (design * weights[:, np.newaxis]) + ridge * np.eye(design.shape[1])
+    right = design.T @ (weights[:, np.newaxis] * residual)
+    try:
+        fitted = np.linalg.solve(left, right)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("workload cost Ridge fit is singular") from None
+    coefficients = baseline.coefficients.copy()
+    intercept = baseline.intercept.copy()
+    for column, outcome in enumerate(cost_columns):
+        coefficients[prefix:, outcome] += fitted[:, column]
+        intercept[outcome] += (mean[prefix:] / scale_new) @ fitted[:, column]
+    predictions = np.clip(intercept + ((features - mean) / scale) @ coefficients, 0., 1.)
+    before = _weighted_mse(targets, np.clip(raw_before, 0., 1.), weights)
+    after = _weighted_mse(targets, predictions, weights)
+    return mean, scale, intercept, coefficients, before, after
+
+
+def _fit_success_residuals(features, targets, weights, base, ridge):
+    """Retain bounded success regression and its observed class-balance guard."""
+    column = LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")
+    if set(targets[:, column]) != {0., 1.}:
+        raise LivingDexOptionValueError("success residual fit needs observed TRAIN successes and failures")
+    return _fit_single_outcome_residuals(features, targets, weights, base, ridge, "verified_success")
+
+
+def _fit_single_outcome_residuals(features, targets, weights, base, ridge, outcome_name):
+    """Fit one measured outcome; every other learned coordinate stays exact."""
+    column = LIVING_DEX_OPTION_OUTCOME_NAMES.index(outcome_name)
+    mean, scale = base.feature_mean.copy(), base.feature_scale.copy()
+    normalized = (features - mean) / scale
+    design = np.column_stack((np.ones(len(features), dtype=np.float64), normalized))
+    raw_before = base.intercept + normalized @ base.coefficients
+    residual = targets[:, column] - raw_before[:, column]
+    penalty = np.eye(design.shape[1], dtype=np.float64)
+    penalty[0, 0] = 0.
+    left = design.T @ (design * weights[:, np.newaxis]) + ridge * penalty
+    right = design.T @ (weights * residual)
+    try:
+        fitted = np.linalg.solve(left, right)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError(f"{outcome_name} residual Ridge fit is singular") from None
+    coefficients, intercept = base.coefficients.copy(), base.intercept.copy()
+    intercept[column] += fitted[0]
+    coefficients[:, column] += fitted[1:]
+    predictions = np.clip(intercept + normalized @ coefficients, 0., 1.)
+    before = _weighted_mse(targets, np.clip(raw_before, 0., 1.), weights)
+    after = _weighted_mse(targets, predictions, weights)
+    return mean, scale, intercept, coefficients, before, after
+
+
+def _fit_party_cost_with_retained_outputs(
+    features, targets, weights, base, ridge, protected_indices, protected_ids,
+):
+    # Preserve the original unrestricted party solver and its report exactly.
+    return _fit_outcome_with_retained_outputs(
+        features, targets, weights, base, ridge, protected_indices, protected_ids)
+
+
+def _story_success_feature_columns(features, version):
+    """Fixed complete semantic group; reject forged raw curriculum gates."""
+    names = option_feature_names(version)
+    if (version != 9 or features.ndim != 2 or features.shape[1] != len(names)
+            or not np.all(np.isfinite(features))):
+        raise LivingDexOptionValueError("story success requires finite V9 inputs")
+    kind_columns = tuple(names.index(f"kind.{kind.value}") for kind in LivingDexOptionKind)
+    kinds = features[:, kind_columns]
+    if np.any((kinds != 0.) & (kinds != 1.)) or np.any(kinds.sum(axis=1) != 1.):
+        raise LivingDexOptionValueError("story success requires one-hot option kinds")
+    for k, kind in enumerate(LivingDexOptionKind):
+        off_kind = kinds[:, k] == 0.
+        context = tuple(i for i, name in enumerate(names) if name.startswith((
+            f"readiness.{kind.value}_x_", f"challenge.{kind.value}_x_")))
+        if np.any(features[off_kind][:, context] != 0.):
+            raise LivingDexOptionValueError("story success context escapes its option kind")
+        effort = names.index(f"execution_effort_x_kind.{kind.value}")
+        if not np.array_equal(features[:, effort], features[:, names.index("execution_effort")] * kinds[:, k]):
+            raise LivingDexOptionValueError("story success effort interaction differs")
+        known = features[:, names.index(f"readiness.{kind.value}_x_current.pp_known")]
+        fraction = features[:, names.index(f"readiness.{kind.value}_x_current.pp_fraction")]
+        if np.any((known != 0.) & (known != 1.)) or np.any((fraction < 0.) | (fraction > 1.)) or np.any(fraction[known == 0.] != 0.):
+            raise LivingDexOptionValueError("story success cannot invent unknown PP")
+    columns = tuple(i for i, name in enumerate(names) if name in (
+        "kind.unlock_access", "execution_effort_x_kind.unlock_access") or name.startswith((
+        "readiness.unlock_access_x_", "challenge.unlock_access_x_")))
+    if len(columns) != 36:
+        raise LivingDexOptionValueError("complete story feature group differs")
+    return columns
+
+
+def _fit_story_success_with_retained_outputs(
+    features, targets, weights, base, ridge, protected_indices, protected_ids,
+):
+    columns = _story_success_feature_columns(features, base.feature_version)
+    story = features[:, option_feature_names(9).index("kind.unlock_access")] == 1.
+    if not np.all(story[np.asarray(protected_indices, dtype=int)]):
+        raise LivingDexOptionValueError("story success anchors must be settled story rows")
+    success = LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")
+    if set(targets[story, success]) != {0., 1.}:
+        raise LivingDexOptionValueError("story success needs observed TRAIN story successes and failures")
+    result = _fit_outcome_with_retained_outputs(
+        features, targets, weights, base, ridge, protected_indices, protected_ids,
+        outcome_name="verified_success", feature_columns=columns)
+    mean, scale, intercept, coefficients, before, after, metadata = result
+    normalized = (features - mean) / scale
+    old = base.intercept + normalized @ base.coefficients
+    new = intercept + normalized @ coefficients
+    error = float(np.max(np.abs(new[~story, success] - old[~story, success]))) if np.any(~story) else 0.
+    if not math.isfinite(error) or error > _PARTY_COST_RETENTION_ABSOLUTE_TOLERANCE:
+        raise LivingDexOptionValueError("story success nonstory raw-output tolerance exceeded")
+    metadata.update(nonstory_rows=int(np.count_nonzero(~story)), story_rows=int(np.count_nonzero(story)),
+        maximum_nonstory_raw_output_error=error, nonstory_raw_output_absolute_tolerance=_PARTY_COST_RETENTION_ABSOLUTE_TOLERANCE,
+        all_other_outcomes_retained=True, nonstory_retention="algebraic plus numerical tolerance, not bitwise")
+    return mean, scale, intercept, coefficients, before, after, metadata
+
+
+def _fit_outcome_with_retained_outputs(
+    features, targets, weights, base, ridge, protected_indices, protected_ids,
+    *, outcome_name="party_cost", feature_columns=None,
+):
+    """Minimize the existing residual objective subject to retained raw outputs.
+
+    SVD is used only to represent the nullspace of the protected input design.
+    The original coefficient penalty is transformed into that basis; the global
+    intercept remains unpenalized. No source identity enters a model feature.
+    """
+    column = LIVING_DEX_OPTION_OUTCOME_NAMES.index(outcome_name)
+    subject = "party cost" if outcome_name == "party_cost" else "story success"
+    mean, scale = base.feature_mean.copy(), base.feature_scale.copy()
+    normalized = (features - mean) / scale
+    design = np.column_stack((np.ones(len(features), dtype=np.float64), normalized))
+    transform = None
+    if feature_columns is not None:
+        selected = np.asarray(feature_columns, dtype=int)
+        transform = np.zeros((design.shape[1], len(selected)), dtype=np.float64)
+        transform[0] = mean[selected] / scale[selected]
+        transform[selected + 1, np.arange(len(selected))] = 1.
+        # Raw gated inputs are exactly zero off-kind; never center them here.
+        design = features[:, selected] / scale[selected]
+    protected = design[np.asarray(protected_indices, dtype=int)]
+    raw_before = base.intercept + normalized @ base.coefficients
+    try:
+        _, singular, right = np.linalg.svd(
+            protected, full_matrices=protected.shape[0] < protected.shape[1])
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError(f"{subject} retention SVD did not converge") from None
+    tolerance = float(max(protected.shape) * np.finfo(np.float64).eps * singular[0])
+    rank = int(np.count_nonzero(singular > tolerance))
+    basis = right[rank:].T
+    projected = design @ basis
+    projected_tolerance = float(
+        max(design.shape) * np.finfo(np.float64).eps * max(1., np.linalg.norm(design)))
+    try:
+        projected_singular = np.linalg.svd(projected, compute_uv=False)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError(f"{subject} projected SVD did not converge") from None
+    projected_rank = int(np.count_nonzero(projected_singular > projected_tolerance))
+    correction = np.zeros(design.shape[1], dtype=np.float64)
+    if projected_rank:
+        residual = targets[:, column] - raw_before[:, column]
+        # P = diag(0, 1, ...): use Z.T @ P @ Z, never identity in reduced space.
+        parameter_basis = basis if transform is None else transform @ basis
+        penalty = parameter_basis[1:].T @ parameter_basis[1:]
+        left = projected.T @ (projected * weights[:, None]) + ridge * penalty
+        right_target = projected.T @ (weights * residual)
+        try:
+            correction = basis @ np.linalg.solve(left, right_target)
+        except np.linalg.LinAlgError:
+            raise LivingDexOptionValueError(f"retained {subject} Ridge fit is singular") from None
+    if not np.all(np.isfinite(correction)):
+        raise LivingDexOptionValueError(f"retained {subject} correction is nonfinite")
+    coefficients, intercept = base.coefficients.copy(), base.intercept.copy()
+    parameter_correction = correction if transform is None else transform @ correction
+    intercept[column] += parameter_correction[0]
+    coefficients[:, column] += parameter_correction[1:]
+    raw_after = intercept + normalized @ coefficients
+    maximum_error = float(np.max(np.abs(
+        raw_after[np.asarray(protected_indices), column]
+        - raw_before[np.asarray(protected_indices), column])))
+    if not math.isfinite(maximum_error) or maximum_error > _PARTY_COST_RETENTION_ABSOLUTE_TOLERANCE:
+        raise LivingDexOptionValueError(f"retained {subject} raw-output tolerance exceeded")
+    metadata = {
+        "protected_count": len(protected_ids),
+        "protected_decision_sha256": canonical_sha256({
+            "schema": ("pokemon.core.party-cost-retained-decisions.v1"
+                       if outcome_name == "party_cost" else
+                       "pokemon.core.story-success-retained-decisions.v1"),
+            "decision_sha256s": sorted(protected_ids),
+        }),
+        "design_rank": rank,
+        "design_columns": design.shape[1],
+        "nullspace_dimension": basis.shape[1],
+        "svd_absolute_tolerance": tolerance,
+        "svd_tolerance_rule": "max(protected.shape) * float64_epsilon * largest_singular_value",
+        "projected_design_rank": projected_rank,
+        "projected_absolute_tolerance": projected_tolerance,
+        "projected_tolerance_rule": "max(design.shape) * float64_epsilon * max(1, frobenius_norm(design))",
+        "projected_largest_singular_value": float(projected_singular[0]) if len(projected_singular) else 0.,
+        "projected_smallest_retained_singular_value": float(projected_singular[projected_rank - 1]) if projected_rank else None,
+        "projected_condition_number": float(projected_singular[0] / projected_singular[projected_rank - 1]) if projected_rank else None,
+        "maximum_raw_output_error": maximum_error,
+        "raw_output_absolute_tolerance": _PARTY_COST_RETENTION_ABSOLUTE_TOLERANCE,
+        "correction_l2_norm": float(np.linalg.norm(correction)),
+        "intercept_penalized": False,
+        "scope": "Retained TRAIN input outputs only; not a generalization or policy-quality guarantee.",
+    }
+    if feature_columns is not None:
+        metadata.update(feature_group=_STORY_SUCCESS_FEATURE_GROUP,
+            trainable_feature_indices=list(feature_columns),
+            trainable_feature_names=[option_feature_names(base.feature_version)[i] for i in feature_columns],
+            independent_global_intercept=False, intercept_compensation="sum(mean/scale * coefficient_delta)",
+            parameter_correction_l2_norm=float(np.linalg.norm(parameter_correction)))
+    return (mean, scale, intercept, coefficients,
+            _weighted_mse(targets, np.clip(raw_before, 0., 1.), weights),
+            _weighted_mse(targets, np.clip(raw_after, 0., 1.), weights), metadata)
+
+
+def _fit_complete_paid_success_residuals(features, targets, weights, base, ridge, basis):
+    """Fit only declared local success coordinates, anchored to raw V12 outputs."""
+    version = complete_paid_success_version(basis)
+    baseline = (upgrade_option_value_model_for_complete_paid_density(base) if version == 14
+                else upgrade_option_value_model_for_complete_paid_capture(base))
+    prefix = len(option_feature_names(12))
+    column = LIVING_DEX_OPTION_OUTCOME_NAMES.index("verified_success")
+    new = features[:, prefix:]
+    # Also validates an already-V13 row; finite-width curriculum alone is not proof.
+    raw_before = baseline.raw_predictions(features)
+    active = new[:, 0] == 1.
+    if np.count_nonzero(active) < 2 or set(targets[active, column]) != {0., 1.}:
+        raise LivingDexOptionValueError(
+            "complete-paid fit needs gate-positive TRAIN successes and failures")
+    if (basis is CompletePaidSuccessBasis.HORIZON
+            and len(set(new[active, 1])) < 2):
+        raise LivingDexOptionValueError("complete-paid horizon fit needs distinct horizons")
+    columns = complete_paid_success_columns(basis)
+    design = new[active][:, columns]
+    width = len(columns)
+    if version == 14:
+        if len(set(new[active, 2])) < 2:
+            raise LivingDexOptionValueError("complete-paid density fit needs distinct uncertainty inputs")
+        if np.linalg.matrix_rank(design) != width:
+            raise LivingDexOptionValueError("complete-paid density design lacks full declared rank")
+    weighted = weights[active]
+    residual = targets[active, column] - raw_before[active, column]
+    left = design.T @ (design * weighted[:, None]) + ridge * np.eye(width)
+    right = design.T @ (weighted * residual)
+    try:
+        fitted = np.linalg.solve(left, right)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("complete-paid residual Ridge fit is singular") from None
+    coefficients = baseline.coefficients.copy()
+    coefficients[np.asarray(columns) + prefix, column] = fitted
+    raw_after = raw_before.copy()
+    for start, stop in ((0, 2), (2, new.shape[1])):
+        if start == stop:
+            continue
+        delta = new[:, start:stop] @ coefficients[prefix + start:prefix + stop, column]
+        np.add(raw_after[:, column], delta, out=raw_after[:, column], where=delta != 0.)
+    return (
+        baseline.feature_mean.copy(), baseline.feature_scale.copy(),
+        baseline.intercept.copy(), coefficients,
+        _weighted_mse(targets, np.clip(raw_before, 0., 1.), weights),
+        _weighted_mse(targets, np.clip(raw_after, 0., 1.), weights),
+    )
+
+
+def _fit_bounded_story_success(features, targets, weights, base, ridge, indices, ids):
+    """Fit a separate full-context head in the exact anchor nullspace."""
+    _story_success_feature_columns(features, 9)  # Existing typed context/PP guards.
+    story = _bounded_story_mask(features)
+    if (not all(story[i] for i in indices)
+            or set(targets[story, 0].tolist()) != {0., 1.}):
+        raise LivingDexOptionValueError("bounded story anchors/classes differ")
+    design = np.column_stack((np.ones(len(features)),
+                              (features - base.feature_mean) / base.feature_scale))
+    design[~story] = 0.
+    constraint = design[list(indices)]
+    _, singular, vt = np.linalg.svd(constraint, full_matrices=True)
+    tolerance = max(constraint.shape) * np.finfo(np.float64).eps * (singular[0] if len(singular) else 0.)
+    rank = int(np.count_nonzero(singular > tolerance))
+    null = vt[rank:].T
+    if not null.shape[1]:
+        raise LivingDexOptionValueError("bounded story anchors leave no correction space")
+    projected = design @ null
+    penalty = null[1:].T @ null[1:]  # The explicit head bias is unpenalized.
+    raw = base.raw_predictions(features)
+    bounded_base = np.clip(raw[:, 0], 0., 1.)
+    residual = targets[:, 0] - bounded_base
+    left = projected.T @ (weights[:, None] * projected) + ridge * penalty
+    right = projected.T @ (weights * residual)
+    try:
+        parameters = null @ np.linalg.solve(left, right)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("bounded story correction fit is singular") from None
+    head = LivingDexBoundedStorySuccessHead(parameters[1:], float(parameters[0]), base.model_sha256)
+    delta = design @ parameters
+    anchor_error = float(np.max(np.abs(delta[list(indices)])))
+    if not np.all(np.isfinite(parameters)) or anchor_error > 1e-10:
+        raise LivingDexOptionValueError("bounded story correction violated retained forecasts")
+    after_raw = raw.copy()
+    after_raw[story, 0] = bounded_base[story] + delta[story]
+    before = _weighted_mse(targets, np.clip(raw, 0., 1.), weights)
+    after = _weighted_mse(targets, np.clip(after_raw, 0., 1.), weights)
+    report = dict(schema="pokemon.core.bounded-story-success-retention.v1",
+        protected_count=len(indices), protected_decision_sha256=canonical_sha256(dict(
+            schema="pokemon.core.bounded-story-success-retained-decisions.v1", decision_sha256s=sorted(ids))),
+        protected_decision_sha256s=sorted(ids), maximum_bounded_forecast_error=anchor_error,
+        feature_group="complete-v9-prefix-plus-bias", trainable_feature_indices=list(range(features.shape[1])),
+        trainable_feature_names=list(option_feature_names(9)), bias_unpenalized=True,
+        protected_design_rank=rank, projected_design_rank=int(np.linalg.matrix_rank(projected)),
+        story_rows=int(story.sum()), nonstory_rows=int((~story).sum()),
+        parent_raw_success_mse=float(np.average((raw[:, 0]-targets[:, 0])**2, weights=weights)),
+        corrected_preclip_success_mse=float(np.average((after_raw[:, 0]-targets[:, 0])**2, weights=weights)),
+        base_parameters_retained=True, target="observed_success_minus_bounded_parent_success",
+        normalizer_retained=True, parent_model_sha256=base.model_sha256)
+    return head, before, after, report
+
+
+def _fit_bounded_matchup_story_success(features, targets, weights, base, ridge, indices, ids, decision_ids):
+    """V15 correction: TRAIN-input normalization, no budget features or target tuning."""
+    _story_success_feature_columns(features[:, :len(option_feature_names(9))], 9)
+    raw = base.raw_predictions(features)  # Also authenticates all V15 input contracts.
+    story = _bounded_story_mask(features)
+    if (not all(story[i] for i in indices) or set(targets[story, 0].tolist()) != {0., 1.}
+            or len(decision_ids) != len(features) or len(set(decision_ids)) != len(decision_ids)
+            or tuple(decision_ids) != tuple(sorted(decision_ids))
+            or not np.all(np.isfinite(weights)) or np.any(weights <= 0.)):
+        raise LivingDexOptionValueError("bounded matchup TRAIN anchors/classes/weights differ")
+    selected = bounded_matchup_story_feature_indices()
+    x = features[:, selected]
+    story_x, story_weights = x[story], weights[story]
+    mean = np.average(story_x, axis=0, weights=story_weights)
+    centered = story_x - mean
+    threshold = _BOUNDED_MATCHUP_CONSTANT_MULTIPLIER * np.finfo(np.float64).eps * np.maximum(1., np.max(np.abs(story_x), axis=0))
+    constant = np.max(np.abs(centered), axis=0) <= threshold
+    std = np.sqrt(np.average(centered ** 2, axis=0, weights=story_weights))
+    scale = np.maximum(std, _BOUNDED_MATCHUP_SCALE_FLOOR)
+    scale[constant] = 1.
+    normalized = (x - mean) / scale
+    normalized[:, constant] = 0.
+    active = np.flatnonzero(~constant)
+    design = np.column_stack((np.ones(len(features)), normalized[:, active]))
+    design[~story] = 0.
+    constraint = design[list(indices)]
+    try:
+        _, singular, vt = np.linalg.svd(constraint, full_matrices=True)
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("bounded matchup anchor SVD did not converge") from None
+    tolerance = max(constraint.shape) * np.finfo(np.float64).eps * (singular[0] if len(singular) else 0.)
+    rank = int(np.count_nonzero(singular > tolerance)); null = vt[rank:].T
+    if not null.shape[1]:
+        raise LivingDexOptionValueError("bounded matchup anchors leave no nonconstant correction space")
+    projected = design @ null
+    penalty = null[1:].T @ null[1:]
+    bounded_base = np.clip(raw[:, 0], 0., 1.)
+    residual = targets[:, 0] - bounded_base
+    left = projected.T @ (weights[:, None] * projected) + ridge * penalty
+    right = projected.T @ (weights * residual)
+    try:
+        reduced = np.linalg.solve(left, right)
+        parameters = null @ reduced
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("bounded matchup correction fit is singular") from None
+    coefficients = np.zeros(len(selected)); coefficients[active] = parameters[1:]
+    evidence = canonical_sha256(dict(schema="pokemon.core.bounded-matchup-normalizer-inputs.v1",
+        feature_indices=list(selected), rows=[dict(decision_sha256=decision_ids[i], features=x[i].tolist(), weight=float(weights[i]))
+            for i in range(len(features)) if story[i]]))
+    head = LivingDexBoundedMatchupStorySuccessHead(coefficients, float(parameters[0]), base.model_sha256,
+        mean, scale, constant, evidence)
+    delta = design @ parameters
+    anchor_error = float(np.max(np.abs(delta[list(indices)])))
+    if not np.all(np.isfinite(parameters)) or anchor_error > 1e-10:
+        raise LivingDexOptionValueError("bounded matchup correction violated retained forecasts")
+    after_raw = raw.copy(); after_raw[story, 0] = bounded_base[story] + delta[story]
+    before = _weighted_mse(targets, np.clip(raw, 0., 1.), weights)
+    after = _weighted_mse(targets, np.clip(after_raw, 0., 1.), weights)
+    report = dict(schema="pokemon.core.bounded-story-success-retention.v2", protected_count=len(indices),
+        protected_decision_sha256=canonical_sha256(dict(schema="pokemon.core.bounded-story-success-retained-decisions.v1", decision_sha256s=sorted(ids))),
+        protected_decision_sha256s=sorted(ids), maximum_bounded_forecast_error=anchor_error,
+        feature_group="complete-v15-excluding-readiness-budget-plus-bias",
+        trainable_feature_indices=list(selected), trainable_feature_names=list(head.feature_names),
+        excluded_feature_indices=[i for i in range(features.shape[1]) if i not in selected],
+        bias_unpenalized=True, protected_design_rank=rank, projected_design_rank=int(np.linalg.matrix_rank(projected)),
+        story_rows=int(story.sum()), nonstory_rows=int((~story).sum()),
+        parent_raw_success_mse=float(np.average((raw[:, 0]-targets[:, 0])**2, weights=weights)),
+        corrected_preclip_success_mse=float(np.average((after_raw[:, 0]-targets[:, 0])**2, weights=weights)),
+        base_parameters_retained=True, target="observed_success_minus_bounded_parent_success",
+        parent_normalizer_retained=True, correction_normalizer=head.to_dict()["normalization"],
+        nonconstant_correction_columns=len(active), constant_coefficients_exact_zero=bool(np.all(coefficients[constant] == 0.)),
+        reduced_normal_equation_max_abs_residual=float(np.max(np.abs(left @ reduced - right))),
+        budget_invariance_scope="learned correction only; frozen parent budget dependence retained",
+        parent_model_sha256=base.model_sha256)
+    return head, before, after, report
+
+
 def fit_living_dex_option_value(
     examples: Iterable[LivingDexObservedArmExample],
     *,
@@ -1817,8 +3429,101 @@ def fit_living_dex_option_value(
     maximum_importance_weight: float = DEFAULT_MAX_IMPORTANCE_WEIGHT,
     feature_version: int = 1,
     curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample] = (),
+    frozen_level_workload_base: LivingDexOptionValueModel | None = None,
+    frozen_success_base: LivingDexOptionValueModel | None = None,
+    frozen_party_cost_base: LivingDexOptionValueModel | None = None,
+    party_cost_retention_decision_sha256s: Sequence[str] | None = None,
+    story_success_retention_decision_sha256s: Sequence[str] | None = None,
+    complete_paid_success_basis: CompletePaidSuccessBasis | None = None,
+    bounded_story_success_retention_decision_sha256s: Sequence[str] | None = None,
+    bounded_matchup_story_success_retention_decision_sha256s: Sequence[str] | None = None,
 ) -> LivingDexOptionValueFit:
-    """Fit all outcome heads using only settled selected-arm train evidence."""
+    """Fit settled TRAIN evidence; optional retention modes preserve other heads."""
+
+    for parent in (frozen_success_base, frozen_party_cost_base, frozen_level_workload_base):
+        if isinstance(parent, LivingDexOptionValueModel) and parent.bounded_story_success_head is not None:
+            raise LivingDexOptionValueError("fitting an already corrected parent is unsupported")
+    bounded_ids = None
+    bounded_v2 = bounded_matchup_story_success_retention_decision_sha256s is not None
+    if bounded_v2:
+        supplied = bounded_matchup_story_success_retention_decision_sha256s
+        if (not isinstance(frozen_success_base, LivingDexOptionValueModel)
+                or type(feature_version) is not int or feature_version != 15
+                or frozen_success_base.feature_version != 15
+                or frozen_party_cost_base is not None or frozen_level_workload_base is not None
+                or story_success_retention_decision_sha256s is not None
+                or party_cost_retention_decision_sha256s is not None or complete_paid_success_basis is not None
+                or bounded_story_success_retention_decision_sha256s is not None
+                or isinstance(supplied, (str, bytes)) or not isinstance(supplied, Sequence)):
+            raise LivingDexOptionValueError("bounded matchup fit requires an uncorrected V15 success parent and anchors")
+        bounded_ids = tuple(supplied)
+        if (not bounded_ids or any(type(v) is not str or _SHA256.fullmatch(v) is None for v in bounded_ids)
+                or len(set(bounded_ids)) != len(bounded_ids)):
+            raise LivingDexOptionValueError("bounded matchup anchors must be unique SHA256 decisions")
+    if bounded_story_success_retention_decision_sha256s is not None:
+        supplied = bounded_story_success_retention_decision_sha256s
+        if (not isinstance(frozen_success_base, LivingDexOptionValueModel)
+                or type(feature_version) is not int or feature_version != 9
+                or frozen_success_base.feature_version != 9
+                or frozen_party_cost_base is not None or frozen_level_workload_base is not None
+                or story_success_retention_decision_sha256s is not None
+                or party_cost_retention_decision_sha256s is not None
+                or complete_paid_success_basis is not None
+                or isinstance(supplied, (str, bytes)) or not isinstance(supplied, Sequence)):
+            raise LivingDexOptionValueError("bounded story fit requires an uncorrected V9 success parent and anchors")
+        bounded_ids = tuple(supplied)
+        if (not bounded_ids or any(type(v) is not str or _SHA256.fullmatch(v) is None for v in bounded_ids)
+                or len(set(bounded_ids)) != len(bounded_ids)):
+            raise LivingDexOptionValueError("bounded story anchors must be unique SHA256 decisions")
+    success_protected_ids = None
+    if story_success_retention_decision_sha256s is not None:
+        if (not isinstance(frozen_success_base, LivingDexOptionValueModel)
+                or type(feature_version) is not int or feature_version != 9
+                or frozen_success_base.feature_version != 9
+                or frozen_party_cost_base is not None or frozen_level_workload_base is not None
+                or complete_paid_success_basis is not None
+                or isinstance(story_success_retention_decision_sha256s, (str, bytes))
+                or not isinstance(story_success_retention_decision_sha256s, Sequence)):
+            raise LivingDexOptionValueError("story success retention requires an exact V9 success parent and decision sequence")
+        success_protected_ids = tuple(story_success_retention_decision_sha256s)
+        if (not success_protected_ids
+                or any(type(v) is not str or _SHA256.fullmatch(v) is None for v in success_protected_ids)
+                or len(set(success_protected_ids)) != len(success_protected_ids)):
+            raise LivingDexOptionValueError("story success retention decisions must be nonempty unique SHA256s")
+    protected_ids = None
+    if party_cost_retention_decision_sha256s is not None:
+        if (frozen_party_cost_base is None
+                or isinstance(party_cost_retention_decision_sha256s, (str, bytes))
+                or not isinstance(party_cost_retention_decision_sha256s, Sequence)):
+            raise LivingDexOptionValueError("party output retention requires a party baseline and decision sequence")
+        protected_ids = tuple(party_cost_retention_decision_sha256s)
+        if (not protected_ids
+                or any(type(value) is not str or _SHA256.fullmatch(value) is None for value in protected_ids)
+                or len(set(protected_ids)) != len(protected_ids)):
+            raise LivingDexOptionValueError("party output retention decisions must be nonempty unique SHA256s")
+    if frozen_party_cost_base is not None:
+        if (frozen_level_workload_base is not None or frozen_success_base is not None
+                or complete_paid_success_basis is not None):
+            raise LivingDexOptionValueError("party cost and other retention modes are exclusive")
+        if (not isinstance(frozen_party_cost_base, LivingDexOptionValueModel)
+                or type(feature_version) is not int or feature_version != 9
+                or frozen_party_cost_base.feature_version != 9):
+            raise LivingDexOptionValueError("party cost retention requires an exact-version V9 baseline")
+    if complete_paid_success_basis is not None:
+        if (not isinstance(complete_paid_success_basis, CompletePaidSuccessBasis)
+                or not isinstance(frozen_success_base, LivingDexOptionValueModel)
+                or frozen_success_base.feature_version != 12
+                or feature_version != complete_paid_success_version(complete_paid_success_basis)
+                or frozen_level_workload_base is not None):
+            raise LivingDexOptionValueError(
+                "complete-paid fit requires a typed basis and frozen V12 parent with its exact declared projection")
+    if frozen_success_base is not None:
+        if frozen_level_workload_base is not None:
+            raise LivingDexOptionValueError("success and workload retention modes are exclusive")
+        if (not isinstance(frozen_success_base, LivingDexOptionValueModel)
+                or (complete_paid_success_basis is None
+                    and frozen_success_base.feature_version != feature_version)):
+            raise LivingDexOptionValueError("success retention requires an exact-version baseline")
 
     ridge_value = _positive_finite(ridge, subject="ridge")
     cap = _positive_finite(
@@ -1829,7 +3534,10 @@ def fit_living_dex_option_value(
         raise LivingDexOptionValueError("maximum importance weight must be at least one")
     rows = tuple(
         sorted(
-            _validated_examples(examples, expected_partition="train"),
+            _validated_examples(
+                examples, expected_partition="train",
+                allow_empty=frozen_success_base is not None,
+            ),
             key=lambda row: row.decision_sha256,
         )
     )
@@ -1839,19 +3547,37 @@ def fit_living_dex_option_value(
         *curriculum,
     )
     settled = tuple(row for row in combined if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
+    if bounded_v2:
+        settled = tuple(sorted(settled, key=lambda row: row.decision_sha256))
     if len(settled) < 2:
         raise LivingDexOptionValueError(
-            "living-Dex option fit needs two settled selected-arm examples"
+            "living-Dex option fit needs two settled observed examples"
         )
+    protected_indices = ()
+    if protected_ids is not None:
+        settled_ids = {row.decision_sha256 for row in settled}
+        if not set(protected_ids).issubset(settled_ids):
+            raise LivingDexOptionValueError("party output retention must identify settled TRAIN rows in this fit")
+        protected_indices = tuple(i for i, row in enumerate(settled) if row.decision_sha256 in protected_ids)
+    success_protected_indices = ()
+    if success_protected_ids is not None:
+        if not set(success_protected_ids).issubset({row.decision_sha256 for row in settled}):
+            raise LivingDexOptionValueError("story success retention must identify settled TRAIN rows in this fit")
+        success_protected_indices = tuple(i for i, row in enumerate(settled) if row.decision_sha256 in success_protected_ids)
+    bounded_indices = ()
+    if bounded_ids is not None:
+        if not set(bounded_ids).issubset({row.decision_sha256 for row in settled}):
+            raise LivingDexOptionValueError("bounded story anchors must identify settled TRAIN rows")
+        bounded_indices = tuple(i for i, row in enumerate(settled) if row.decision_sha256 in bounded_ids)
     dataset_sha256 = living_dex_option_train_dataset_sha256(rows, curriculum_examples=curriculum)
     option_feature_names(feature_version)
     if any(row.menu.feature_version > feature_version for row in rows):
         raise LivingDexOptionValueError("legacy fitter cannot ignore search history")
-    if any(row.feature_version != feature_version for row in curriculum):
-        raise LivingDexOptionValueError("curriculum feature version differs from fitter")
+    for row in curriculum:
+        curriculum_features(row, feature_version)
     features = np.asarray(
         [
-            row.features
+            curriculum_features(row, feature_version)
             if isinstance(row, LivingDexCurriculumOutcomeExample)
             else row.menu.candidate_vector(
                 row.selected_candidate_index, feature_version=feature_version
@@ -1873,30 +3599,74 @@ def fit_living_dex_option_value(
         ],
         dtype=np.float64,
     )
-    mean = np.average(features, axis=0, weights=weights)
-    centered = features - mean
-    scale = np.sqrt(np.average(centered**2, axis=0, weights=weights))
-    scale[scale == 0.0] = 1.0
-    normalized = (features - mean) / scale
-    design = np.column_stack((np.ones(len(settled), dtype=np.float64), normalized))
-    penalty = np.eye(design.shape[1], dtype=np.float64)
-    penalty[0, 0] = 0.0
-    weighted_design = design * weights[:, np.newaxis]
-    left = design.T @ weighted_design + ridge_value * penalty
-    right = design.T @ (weights[:, np.newaxis] * targets)
-    try:
-        parameters = cast(NDArray[np.float64], np.linalg.solve(left, right))
-    except np.linalg.LinAlgError:
-        raise LivingDexOptionValueError("living-Dex option fit is singular") from None
-    intercept = parameters[0]
-    coefficients = parameters[1:]
-    baseline = np.average(targets, axis=0, weights=weights)
-    predictions = np.clip(intercept + normalized @ coefficients, 0.0, 1.0)
-    before = _weighted_mse(targets, np.broadcast_to(baseline, targets.shape), weights)
-    after = _weighted_mse(targets, predictions, weights)
+    party_retention = None
+    story_retention = None
+    bounded_retention = None
+    bounded_head = None
+    if bounded_ids is not None:
+        if bounded_v2:
+            bounded_head, before, after, bounded_retention = _fit_bounded_matchup_story_success(
+                features, targets, weights, frozen_success_base, ridge_value, bounded_indices, bounded_ids,
+                tuple(row.decision_sha256 for row in settled))
+        else:
+            bounded_head, before, after, bounded_retention = _fit_bounded_story_success(
+                features, targets, weights, frozen_success_base, ridge_value, bounded_indices, bounded_ids)
+        mean, scale = frozen_success_base.feature_mean, frozen_success_base.feature_scale
+        intercept, coefficients = frozen_success_base.intercept, frozen_success_base.coefficients
+    elif success_protected_ids is not None:
+        mean, scale, intercept, coefficients, before, after, story_retention = _fit_story_success_with_retained_outputs(
+            features, targets, weights, frozen_success_base, ridge_value,
+            success_protected_indices, success_protected_ids)
+    elif complete_paid_success_basis is not None:
+        mean, scale, intercept, coefficients, before, after = _fit_complete_paid_success_residuals(
+            features, targets, weights, frozen_success_base, ridge_value, complete_paid_success_basis)
+    elif frozen_success_base is not None:
+        mean, scale, intercept, coefficients, before, after = _fit_success_residuals(
+            features, targets, weights, frozen_success_base, ridge_value)
+    elif frozen_party_cost_base is not None:
+        if protected_ids is None:
+            mean, scale, intercept, coefficients, before, after = _fit_single_outcome_residuals(
+                features, targets, weights, frozen_party_cost_base, ridge_value, "party_cost")
+        else:
+            mean, scale, intercept, coefficients, before, after, party_retention = _fit_party_cost_with_retained_outputs(
+                features, targets, weights, frozen_party_cost_base, ridge_value,
+                protected_indices, protected_ids)
+    elif frozen_level_workload_base is not None:
+        if feature_version != 9:
+            raise LivingDexOptionValueError("workload cost retention requires feature version9")
+        mean, scale, intercept, coefficients, before, after = _fit_level_workload_cost_residuals(
+            features, targets, weights, frozen_level_workload_base, ridge_value)
+    else:
+        mean = np.average(features, axis=0, weights=weights)
+        centered = features - mean
+        scale = np.sqrt(np.average(centered**2, axis=0, weights=weights))
+        scale[scale == 0.0] = 1.0
+        normalized = (features - mean) / scale
+        design = np.column_stack((np.ones(len(settled), dtype=np.float64), normalized))
+        penalty = np.eye(design.shape[1], dtype=np.float64)
+        penalty[0, 0] = 0.0
+        weighted_design = design * weights[:, np.newaxis]
+        left = design.T @ weighted_design + ridge_value * penalty
+        right = design.T @ (weights[:, np.newaxis] * targets)
+        try:
+            parameters = cast(NDArray[np.float64], np.linalg.solve(left, right))
+        except np.linalg.LinAlgError:
+            raise LivingDexOptionValueError("living-Dex option fit is singular") from None
+        intercept = parameters[0]
+        coefficients = parameters[1:]
+        baseline = np.average(targets, axis=0, weights=weights)
+        predictions = np.clip(intercept + normalized @ coefficients, 0.0, 1.0)
+        before = _weighted_mse(targets, np.broadcast_to(baseline, targets.shape), weights)
+        after = _weighted_mse(targets, predictions, weights)
     economy_head: LivingDexEconomyHead | None = None
     qualified_econ_rows = qualified_economy_rows(rows)
-    if feature_version == 4 and len(qualified_econ_rows) >= 2:
+    if frozen_success_base is not None:
+        economy_head = frozen_success_base.economy_head
+    elif frozen_party_cost_base is not None:
+        economy_head = frozen_party_cost_base.economy_head
+    elif frozen_level_workload_base is not None:
+        economy_head = frozen_level_workload_base.economy_head
+    elif feature_version >= 4 and len(qualified_econ_rows) >= 2:
         economy_head = fit_living_dex_economy_head(
             rows,
             ridge=ridge_value,
@@ -1914,11 +3684,20 @@ def fit_living_dex_option_value(
         maximum_importance_weight=cap,
         feature_version=feature_version,
         objective=(
+            LIVING_DEX_BOUNDED_MATCHUP_STORY_SUCCESS_OBJECTIVE if bounded_v2 else
+            LIVING_DEX_BOUNDED_STORY_SUCCESS_OBJECTIVE if bounded_ids is not None else
+            LIVING_DEX_STORY_SUCCESS_RETAINED_OBJECTIVE if success_protected_ids is not None else
+            _COMPLETE_PAID_SUCCESS_OBJECTIVES[complete_paid_success_basis]
+            if complete_paid_success_basis is not None else
+            LIVING_DEX_SUCCESS_RESIDUAL_OBJECTIVE if frozen_success_base is not None else
+            LIVING_DEX_PARTY_COST_RETAINED_OUTPUT_OBJECTIVE if protected_ids is not None else
+            LIVING_DEX_PARTY_COST_RESIDUAL_OBJECTIVE if frozen_party_cost_base is not None else
             "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1"
             if curriculum
             else LIVING_DEX_OPTION_OBJECTIVE
         ),
         economy_head=economy_head,
+        bounded_story_success_head=bounded_head,
     )
     report = LivingDexOptionValueFitReport(
         train_dataset_sha256=dataset_sha256,
@@ -1931,9 +3710,38 @@ def fit_living_dex_option_value(
         weighted_mse_after=after,
         feature_version=feature_version,
         objective=model.objective,
+        frozen_parent_model_sha256=(
+            frozen_success_base.model_sha256 if frozen_success_base is not None else
+            frozen_party_cost_base.model_sha256 if frozen_party_cost_base is not None else None
+        ),
+        party_cost_weighted_mse_before=(
+            _weighted_mse(targets[:, [LIVING_DEX_OPTION_OUTCOME_NAMES.index("party_cost")]],
+                np.clip(frozen_party_cost_base.raw_predictions(features), 0., 1.)[:, [LIVING_DEX_OPTION_OUTCOME_NAMES.index("party_cost")]], weights)
+            if frozen_party_cost_base is not None else None),
+        party_cost_weighted_mse_after=(
+            _weighted_mse(targets[:, [LIVING_DEX_OPTION_OUTCOME_NAMES.index("party_cost")]],
+                np.clip(model.raw_predictions(features), 0., 1.)[:, [LIVING_DEX_OPTION_OUTCOME_NAMES.index("party_cost")]], weights)
+            if frozen_party_cost_base is not None else None),
+        party_cost_retention=party_retention,
+        story_success_retention=story_retention,
+        bounded_story_success_retention=bounded_retention,
+        complete_paid_success_basis=complete_paid_success_basis,
+        complete_paid_settled_examples=(
+            int(np.count_nonzero(features[:, len(option_feature_names(12))] == 1.))
+            if complete_paid_success_basis is not None else None),
+        complete_paid_distinct_horizons=(
+            len(set(features[features[:, len(option_feature_names(12))] == 1., len(option_feature_names(12)) + 1]))
+            if complete_paid_success_basis is not None else None),
+        complete_paid_distinct_uncertainties=(
+            len(set(features[features[:, len(option_feature_names(12))] == 1., len(option_feature_names(12)) + 2]))
+            if complete_paid_success_basis is not None and feature_version == 14 else None),
+        complete_paid_design_rank=(
+            int(np.linalg.matrix_rank(features[features[:, len(option_feature_names(12))] == 1.][:,
+                np.asarray(complete_paid_success_columns(complete_paid_success_basis)) + len(option_feature_names(12))]))
+            if complete_paid_success_basis is not None and feature_version == 14 else None),
         economy_qualified_examples=(
             len(qualified_econ_rows)
-            if feature_version == 4 and len(qualified_econ_rows) > 0
+            if feature_version >= 4 and len(qualified_econ_rows) > 0
             else None
         ),
     )
@@ -1955,7 +3763,13 @@ def evaluate_living_dex_option_value(
     curriculum = _validated_curriculum(curriculum_examples, rows)
     if curriculum and (
         expected_partition != "train"
-        or any(row.feature_version != model.feature_version for row in curriculum)
+        or any(
+            row.feature_version != model.feature_version
+            and not (
+                model.feature_version in (5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15) and row.feature_version < model.feature_version
+            )
+            for row in curriculum
+        )
     ):
         raise LivingDexOptionValueError("curriculum is training-only with exact feature version")
     combined: tuple[LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample, ...] = (
@@ -1974,9 +3788,7 @@ def evaluate_living_dex_option_value(
             tuple(
                 float(value)
                 for value in np.clip(
-                    model.intercept
-                    + ((np.asarray(row.features) - model.feature_mean) / model.feature_scale)
-                    @ model.coefficients,
+                    model.raw_predictions(curriculum_features(row, model.feature_version)),
                     0.0,
                     1.0,
                 )
@@ -2030,11 +3842,12 @@ def _validated_examples(
     examples: Iterable[LivingDexObservedArmExample],
     *,
     expected_partition: str,
+    allow_empty: bool = False,
 ) -> tuple[LivingDexObservedArmExample, ...]:
     if expected_partition not in _PARTITIONS:
         raise LivingDexOptionValueError("living-Dex expected partition differs")
     rows = tuple(examples)
-    if not rows:
+    if not rows and not allow_empty:
         raise LivingDexOptionValueError("living-Dex option evidence is empty")
     if any(not isinstance(row, LivingDexObservedArmExample) for row in rows):
         raise TypeError("living-Dex option evidence rows differ")
@@ -2055,6 +3868,9 @@ def _weighted_mse(
 
 
 __all__ = [
+    "CompletePaidSuccessBasis",
+    "project_complete_paid_capture_features",
+    "upgrade_option_value_model_for_complete_paid_capture",
     "DEFAULT_MAX_IMPORTANCE_WEIGHT",
     "DEFAULT_OPTION_VALUE_RIDGE",
     "LIVING_DEX_ECONOMY_EVIDENCE_SCHEMA",
@@ -2065,6 +3881,8 @@ __all__ = [
     "LIVING_DEX_OPTION_FEATURE_NAMES",
     "LIVING_DEX_OPTION_NORMALIZATION",
     "LIVING_DEX_OPTION_OBJECTIVE",
+    "LIVING_DEX_PARTY_COST_RESIDUAL_OBJECTIVE",
+    "LIVING_DEX_PARTY_COST_RETAINED_OUTPUT_OBJECTIVE",
     "LIVING_DEX_OPTION_OUTCOME_NAMES",
     "LivingDexCensorReason",
     "LivingDexEconomyHead",
@@ -2096,3 +3914,6 @@ __all__ = [
     "uniform_behavior_probabilities",
     "upgrade_option_value_model_for_economy",
 ]
+
+
+

@@ -1,0 +1,289 @@
+{
+  "schema": "pokemon.red.lorelei-story-integration.v1",
+  "partition": "DEVELOPMENT",
+  "implementation_only": true,
+  "source_stage": 367,
+  "source_sha256": "a485290a10e6c2f259e3cd049429b8951831ed0eefd37ab21fbf829636b9cfd6",
+  "envelope_sha256": "52590630ddb08cb86a191f16539a7fa9da972d308cfd14269517284412720f09",
+  "candidate_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "story_admission_sha256": "d513b0fd3df081a86a6353ed74447e705e457395fbedf8a752b6b9af53717a29",
+  "lorelei_admission_sha256": "fb3899664a3dc386c5f1fbd821f7178c0a713e80ba2b67fbedab211eea02df83",
+  "scope": "Exact damage candidate, opt-in first-challenge Lorelei only; separate native packet required.",
+  "native_preflight": {
+    "availability": {
+      "executable": true,
+      "reason": "Bounded cartridge trainer with observed party control."
+    },
+    "approach_steps": 19,
+    "contract": {
+      "battle_plan_id": "cartridge-trainer-story",
+      "defeated_event": 2273,
+      "map_id": 245,
+      "objective_id": "defeat_lorelei",
+      "trainer_identity": [
+        244,
+        44,
+        1
+      ],
+      "victory_badge_bits": 0,
+      "victory_items": [],
+      "victory_money": 5544
+    },
+    "actions": 0,
+    "frames": 0,
+    "predictions": 0,
+    "state_bytes_unchanged": true,
+    "stage368_exists": false
+  },
+  "party": [
+    {
+      "species": 64,
+      "level": 45,
+      "moves": [
+        {
+          "id": 64,
+          "pp": 35,
+          "type": "flying",
+          "power": 35
+        },
+        {
+          "id": 28,
+          "pp": 15,
+          "type": "normal",
+          "power": 0
+        },
+        {
+          "id": 15,
+          "pp": 30,
+          "type": "normal",
+          "power": 50
+        },
+        {
+          "id": 19,
+          "pp": 15,
+          "type": "flying",
+          "power": 70
+        }
+      ]
+    },
+    {
+      "species": 132,
+      "level": 41,
+      "moves": [
+        {
+          "id": 29,
+          "pp": 15,
+          "type": "normal",
+          "power": 70
+        },
+        {
+          "id": 133,
+          "pp": 20,
+          "type": "psychic",
+          "power": 0
+        },
+        {
+          "id": 156,
+          "pp": 10,
+          "type": "psychic",
+          "power": 0
+        },
+        {
+          "id": 34,
+          "pp": 15,
+          "type": "normal",
+          "power": 85
+        }
+      ]
+    },
+    {
+      "species": 28,
+      "level": 53,
+      "moves": [
+        {
+          "id": 44,
+          "pp": 25,
+          "type": "normal",
+          "power": 60
+        },
+        {
+          "id": 70,
+          "pp": 15,
+          "type": "normal",
+          "power": 80
+        },
+        {
+          "id": 58,
+          "pp": 10,
+          "type": "ice",
+          "power": 95
+        },
+        {
+          "id": 57,
+          "pp": 15,
+          "type": "water",
+          "power": 95
+        }
+      ]
+    },
+    {
+      "species": 118,
+      "level": 45,
+      "moves": [
+        {
+          "id": 10,
+          "pp": 35,
+          "type": "normal",
+          "power": 40
+        },
+        {
+          "id": 45,
+          "pp": 40,
+          "type": "normal",
+          "power": 0
+        },
+        {
+          "id": 91,
+          "pp": 10,
+          "type": "ground",
+          "power": 100
+        },
+        {
+          "id": 28,
+          "pp": 15,
+          "type": "normal",
+          "power": 0
+        }
+      ]
+    },
+    {
+      "species": 104,
+      "level": 45,
+      "moves": [
+        {
+          "id": 33,
+          "pp": 35,
+          "type": "normal",
+          "power": 35
+        },
+        {
+          "id": 28,
+          "pp": 15,
+          "type": "normal",
+          "power": 0
+        },
+        {
+          "id": 98,
+          "pp": 30,
+          "type": "normal",
+          "power": 40
+        },
+        {
+          "id": 84,
+          "pp": 30,
+          "type": "electric",
+          "power": 40
+        }
+      ]
+    }
+  ],
+  "opponent": {
+    "base_money": 99,
+    "expected_victory_money": 5544,
+    "opponent_id": 244,
+    "party": [
+      {
+        "internal_species": 120,
+        "level": 54,
+        "species": 87
+      },
+      {
+        "internal_species": 139,
+        "level": 53,
+        "species": 91
+      },
+      {
+        "internal_species": 8,
+        "level": 54,
+        "species": 80
+      },
+      {
+        "internal_species": 72,
+        "level": 56,
+        "species": 124
+      },
+      {
+        "internal_species": 19,
+        "level": 56,
+        "species": 131
+      }
+    ],
+    "trainer_set": 1
+  },
+  "cash": 27346,
+  "fully_healed": true,
+  "thunderbolt_item_id": 224,
+  "thunderbolt_bag_count": 0,
+  "thunderbolt_pc_count": 0,
+  "readiness_assessment": {
+    "executable": true,
+    "victory_predicted": false,
+    "initial_51_targets_are_provisional": true,
+    "risks": [
+      "Lorelei roster53-56 versus reserves41-45; Blastoise53 is closest in level.",
+      "Jolteon45 has only40-power ThunderShock; stronger Electric TM absent from bag and PC.",
+      "No native candidate Lorelei result. Plan lead uses disclosed support, not a learned strategic choice.",
+      "After-switch wild double-KO qualification remains open and unrelated to this trainer bridge."
+    ],
+    "decision": "Prefer one prospectively bounded Lorelei DEVELOPMENT test with the improved battler over automatic66-outing grinding. Retain all losses; no replay or additional room without separate admission."
+  },
+  "verification": {
+    "targeted_tests_passed": 563,
+    "new_bridge_tests": 33,
+    "test_files": [
+      "tests/test_red_league_funding.py",
+      "tests/test_red_damage_story_admission.py",
+      "tests/test_red_goal_context_profile.py",
+      "tests/test_red_learned_league.py",
+      "tests/test_red_trainer_story.py",
+      "tests/test_red_learned_trainer.py",
+      "tests/test_red_trainer_funding_battle.py",
+      "tests/test_red_league_field_recovery.py",
+      "tests/test_red_goal_context.py",
+      "tests/test_red_lorelei_story.py",
+      "tests/test_red_champion_story.py",
+      "tests/test_red_league_continuation.py",
+      "tests/test_red_story_battle.py",
+      "tests/test_red_trainer_battle_lifecycle.py",
+      "tests/test_red_league_funding_execution.py"
+    ],
+    "full_suite_run": false,
+    "ruff_new_files_passed": true,
+    "registry_sha256": "157efcc47265cfa32c643cbe811568b48c9d395c55b460074431fae0e77060b4",
+    "source_bundle_sha256": "02600178cc66394bafeffe71b4c56f5d4488d2732e298701fd4caf8d1b25eeb4"
+  },
+  "boundaries": {
+    "teacher_fallback": false,
+    "league_funding_changed": false,
+    "later_rooms_open": false,
+    "rematches_open": false,
+    "ordinary_k_changed": false,
+    "old_story_receipt_changed": false,
+    "model_fits": 0,
+    "model_predictions": 0,
+    "new_registrations": 0,
+    "native_inputs": 0,
+    "gameplay_running": false,
+    "github_publication": false
+  },
+  "next_packet": {
+    "source_stage": 367,
+    "next_unused_stage": 368,
+    "maximum_fresh_battles": 1,
+    "maximum_decisions": 80,
+    "proposed_actions": 6000,
+    "proposed_frames": 600000,
+    "proposed_native_seconds": 180,
+    "stop": "First verified win/loss/unresolved outcome or cap. Record last_completion on adapter exception, final state and actual money. No auto-entry to Bruno, replay, reset or refit."
+  }
+}

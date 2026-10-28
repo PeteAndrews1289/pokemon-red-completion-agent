@@ -47,6 +47,19 @@ def test_scripted_entry_prefix_stops_before_dialogue_without_weakening_route_suc
             story._before_scripted_interaction(plan, triggers, facing)
 
 
+@pytest.mark.parametrize('kwargs', [
+    {'allow_scripted_reentry': 1},
+    {'allow_scripted_reentry': True},
+    {'allow_scripted_reentry': True, 'recovery_controller': 'frozen-damage-lorelei-development',
+     'rematch': True},
+    {'allow_scripted_reentry': True, 'recovery_controller': 'frozen-damage-lorelei-development',
+     'objective_id': 'defeat_bruno'},
+])
+def test_reentry_does_not_widen_default_or_other_story_scope(kwargs):
+    with pytest.raises(story.RedTrainerStoryError, match='reentry'):
+        story.RedCartridgeLoreleiSkill(None, None, None, **kwargs)
+
+
 def _with_events(*events):
     flags = bytearray(320)
     for event in events:
@@ -85,6 +98,23 @@ def test_lance_rematch_completion_requires_both_script_events():
     partial = _with_events(EventFlag.BEAT_AGATHA, EventFlag.BEAT_LANCES_ROOM_TRAINER)
     assert not story._live_rematch_boundary(partial, "defeat_lance")
     assert not story._live_rematch_completed(partial, "defeat_lance")
+
+
+@pytest.mark.parametrize('verified', [False,True,1,None])
+def test_post_loss_reentry_verification_requires_actual_exact_lobby_reset(verified):
+    from pokemon_red_completion.red_league_funding import projected_fresh_league_events
+    before=replace(_with_events(EventFlag.BEAT_LORELEI,EventFlag.BEAT_BRUNO,
+        EventFlag.BEAT_AGATHA,EventFlag.BEAT_LANCES_ROOM_TRAINER,EventFlag.BEAT_LANCE),
+        map_id=MapId.INDIGO_PLATEAU)
+    projected,_=projected_fresh_league_events(before.event_flags,challenge_started=True)
+    after=replace(_with_events(EventFlag.BEAT_LORELEI),map_id=MapId.LORELEIS_ROOM)
+    assert not story._rematch_entry_verified(before,after,'defeat_lorelei')
+    assert story._rematch_entry_verified(before,after,'defeat_lorelei',
+        projected_events=projected,lobby_reset_verified=verified) is (verified is True)
+    assert not story._rematch_entry_verified(before,replace(after,event_flags=projected),
+        'defeat_lorelei',projected_events=projected,lobby_reset_verified=True)
+    assert not story._rematch_entry_verified(replace(before,map_id=MapId.VIRIDIAN_CITY),
+        after,'defeat_lorelei',projected_events=projected,lobby_reset_verified=True)
 
 
 def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
@@ -154,6 +184,16 @@ def test_changed_prepared_controller_refuses_without_input(fixture):
     assert skill.availability(observe().game_state).executable
     skill.recovery_controller = 'ordinary-bounded-healing'
     with pytest.raises(story.RedTrainerStoryError, match='before input'):
+        skill.execute()
+    assert not inputs
+
+
+def test_changed_prepared_lobby_latch_refuses_before_party_preparation(fixture):
+    skill, reader, inputs, observe, _ = fixture
+    assert skill.availability(observe().game_state).executable
+    skill._lobby_reset_latch = True
+    reader.read_league_challenge_started = lambda: False
+    with pytest.raises(story.RedTrainerStoryError, match='lobby reset latch'):
         skill.execute()
     assert not inputs
 
@@ -597,6 +637,7 @@ def test_stale_selected_story_refuses_before_input(fixture):
 
 
 @pytest.mark.parametrize("fault", [None, "route", "target", "bag", "event", "specimen"])
+@pytest.mark.parametrize("arrival_wrapper", [False, True])
 @pytest.mark.parametrize("rematch", [False, True])
 @pytest.mark.parametrize("recovery_budget,mode", [
     (0, 'critical-inclusive'), (1, 'critical-inclusive'), (2, 'critical-inclusive'),
@@ -604,7 +645,7 @@ def test_stale_selected_story_refuses_before_input(fixture):
     (1, 'ordinary-bounded-healing'), (2, 'ordinary-bounded-healing'),
 ])
 def test_selected_story_composes_existing_operators_and_verifies_result(
-    fixture, monkeypatch, fault, rematch, recovery_budget, mode,
+    fixture, monkeypatch, fault, rematch, recovery_budget, mode, arrival_wrapper,
 ):
     skill, reader, inputs, observe, zone = fixture
     if recovery_budget:
@@ -627,12 +668,23 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         skill.runtime.adapter.observe = historical
         skill.rematch = True
     assert skill.availability(skill.runtime.adapter.observe().game_state).executable
+    if arrival_wrapper:
+        # The real wrapper deliberately exposes only the interruption protocol.
+        import pokemon_red_completion.gen1_arrival_runtime as arrival_runtime
+        skill._arrival = SimpleNamespace(reentry_text_id=1, map_id=246)
+        monkeypatch.setattr(arrival_runtime, 'trainer_room_arrival',
+                            lambda *_a, **_k: skill._arrival)
     stages = []
     def prepare(_runtime, actions, plan, *, current_quote):
         plan.require_current(observe().party, current_quote)
         stages.append("prepare")
         actions.execute(MacroAction(MacroActionKind.WAIT))
     def route(plan, actions, _observer, **_kwargs):
+        if arrival_wrapper:
+            from pokemon_red_completion.gen1_arrival_runtime import (
+                ScriptedArrivalInterruptionHandler,
+            )
+            assert isinstance(_kwargs['interruption_handler'], ScriptedArrivalInterruptionHandler)
         stages.append("route")
         actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
         reader.raw = replace(reader.raw, map_id=245, player_y=3, player_x=5)
@@ -641,6 +693,9 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert direction == "up"
         stages.append("face")
     def battle(rdr, actions, *, target, validate_target, intent, battle_runner_override, **_kwargs):
+        assert isinstance(
+            _kwargs['move_slot_policy'].__self__, story.RecoveryRouteInterruptionHandler,
+        )
         assert intent.objective_id == "defeat_lorelei"
         assert battle_runner_override.__self__.maximum_switches == 6
         controller = battle_runner_override.__self__

@@ -1,0 +1,170 @@
+{
+  "active_goal_continues": true,
+  "all7complete": false,
+  "component_gates_met": 2,
+  "costs": {
+    "N_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/varied-preparation-study-20261021-0343/CLOSEOUT.json",
+    "N_closeout_sha256": "549568409d3f75618d5f4e78b299ddc1afb44954324344d20de79e887cce7b79",
+    "N_cumulative": {
+      "actual_registration_delta": 0,
+      "completed_evolutions": 1,
+      "frames": 3383989,
+      "full_root_holds_seconds": 4170,
+      "heals": 69,
+      "inputs": 32039,
+      "measured_bounded_negative_outcomes": 1,
+      "measured_root_seconds": 1186.7098817029998,
+      "native_task_outcomes": 2,
+      "new_fits": 0,
+      "new_goal_manager_TRAIN_rows": 0,
+      "new_party_venue_TRAIN_outcomes": 2,
+      "new_weights": 0,
+      "official_fresh_successes": 0,
+      "official_reliability_starts": 0,
+      "paired_TRAIN_feature_groups": 1,
+      "physical_emulators": 13,
+      "preflights_without_emulators": 13,
+      "state_loads": 13
+    },
+    "O_closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/observation-route-query-reuse-20261021-0535/CLOSEOUT.json",
+    "O_closeout_sha256": "df918e9fd52ec7591bf485a4f214408d38505a6271adbb0cae99f038cafccec5",
+    "O_totals": {
+      "actual_registration_delta": 0,
+      "fits": 0,
+      "frames": 0,
+      "full_root_holds_seconds": 780,
+      "goal_executions": 0,
+      "inputs": 0,
+      "measured_root_seconds": 393.42026601599997,
+      "new_weights": 0,
+      "partial_native_menu_seconds_lower_bound": 259.255427715,
+      "physical_emulators": 2,
+      "preflights_without_emulators": 2,
+      "state_loads": 2
+    },
+    "all_prior_caps_failures_partial_costs_preserved": true,
+    "new_Q_allocations": 0,
+    "since_audit038": {
+      "actual_registration_delta": 0,
+      "frames": 3383989,
+      "full_root_holds_seconds": 3480,
+      "heals": 69,
+      "inputs": 32039,
+      "measured_root_seconds": 1108.7929204369998,
+      "new_fits": 0,
+      "new_weights": 0,
+      "physical_emulators": 8,
+      "state_loads": 8
+    }
+  },
+  "current_process_state": {
+    "actual_actors": 0,
+    "all_known_current_controls_released": true,
+    "exclusive_source_writer": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/native-routing-workload-replay-20261021-0558/SOURCE-WRITER-CLAIM.json",
+    "fit_processes": 0,
+    "fresh_actors": 0,
+    "native_diagnostics": 0
+  },
+  "goals": [
+    {
+      "id": "funding_recovery",
+      "status": "in_progress",
+      "title": "Repair preserved-save funding/recovery"
+    },
+    {
+      "id": "execution_boundaries",
+      "status": "in_progress",
+      "title": "Harden related execution boundaries"
+    },
+    {
+      "id": "menu_performance",
+      "status": "in_progress",
+      "title": "Reduce menu and package overhead"
+    },
+    {
+      "id": "training_efficiency",
+      "status": "in_progress",
+      "title": "Improve useful training/evolution efficiency"
+    },
+    {
+      "id": "two_worker_capacity",
+      "status": "complete",
+      "title": "Qualify two isolated workers"
+    },
+    {
+      "id": "model_decision_quality",
+      "status": "complete",
+      "title": "Improve one demonstrated model weakness"
+    },
+    {
+      "id": "autonomous_acceptance",
+      "status": "in_progress",
+      "title": "Prove frozen autonomous Red completion and reliability"
+    }
+  ],
+  "limitations": [
+    "Twoexistingcomponentgates are not a completionpercentage.",
+    "Shortexposedcopiedcontexts andsame-boundarytiming,notindependentfullgames.",
+    "Noactualgain ornewparameterlearningthisreview.",
+    "No full-suiteclaim,defaultpromotion,all-hardwarecapacity/GPUorpublicationclaim."
+  ],
+  "limits": {
+    "Q_caps": {
+      "capture_cases": 1,
+      "capture_preflight_root_seconds": 90,
+      "capture_root_seconds": 150,
+      "conditional_final_validation_cases": 1,
+      "final_preflight_root_seconds": 90,
+      "final_root_seconds": 300,
+      "fits": 0,
+      "native_and_preflight_full_root_holds": 630,
+      "native_frames": 0,
+      "native_inputs": 0,
+      "new_weights": 0,
+      "offline_benchmark_batches": 12,
+      "offline_replay_root_seconds": 600,
+      "physical_emulators": 2,
+      "state_loads": 2,
+      "workload_artifact_bytes": 536870912,
+      "workload_queries": 4096
+    },
+    "Q_deadline_utc": "2026-10-21T07:58:43.104460+00:00",
+    "Q_mission": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/native-routing-workload-replay-20261021-0558/MISSION.json",
+    "actual_badges": 7,
+    "actual_campaign_stays_cutoff_sealed": true,
+    "actual_registrations": 92,
+    "current_actual": "restored-fresh005-v62-a9-20261020-002",
+    "official_fresh_successes": 0,
+    "official_reliability_starts": 0
+  },
+  "next_due_utc": "2026-10-21T08:00:19.773019+00:00",
+  "next_sequence": [
+    "Qcapturehookcontrols beforeone0inputP74nativeobservation fromexactOzero-inputfailedterminal;alloldfailedtail/costsretained.",
+    "Export boundedactualgraph/query/fullroute-errorworkload andproveunmodifiedP74replay matches everyresult offline.",
+    "Measurehotpaths/reuseopportunity onthatworkload;onlythen changeexistingplanner. Requireexactparityand>=15percentoffline gain before the singleconditionalnativevalidation.",
+    "KeepNtransport/nativeadmission blocker scoped;do not fituntil genuineprospectivepairedTRAINgroupsqualify. Do not weakenNfitgate or reusewithdrawnallocations.",
+    "Retainfunding/execution/preparation/fullfreshacceptance gates. No expiredactorrevival. Fullfrozen124+Champion/concurrentHOFand8/10heldoutreliability remainunproved."
+  ],
+  "number": 39,
+  "observed_at_utc": "2026-10-21T06:02:56.678106+00:00",
+  "outcomes": {
+    "baseline": "P74selectedsource/model/configremainbaseline. CurrentCodecontainsretainedunqualifiedP75/P76/P77WIP;neverfreezeallCodeorlaunchunqualifieddefault. No checkoutreset or publication.",
+    "learning": "0newfits/weights. 2newnativeparty-venueTRAINoutcomes,0newgoal-managerTRAINrows. All reservedDEVoutcomesremainunopened forN. Global13completedfits/16attempts;onepreviousbattleweaknesscomponentis not fullLeague/generalplayerproof.",
+    "performance": "Ocompletequerycache155current/132frozenchecks,18new;fullnativemenu/quotes/guards/vectorsparitypassed,but25.732414391vs25.224080098secondsmedian,2.0152738614percentslower. Rejected. P75earlier5.458percentslowerremainsrejected. No candidatepromotion.",
+    "preparation": "NclosednoFit. SevenauthenticatedoriginalTRAINsources yielded2settledboundedvenueoutcomes/1pairedactualpostnursingcontext;3required. Route11completedDiglett1,133,720frames/120.134seconds/19heals;Mansionpartial2,250,269frames/198.422seconds/50heals. Partialboundsare noteventualcompletiontime. Bothrepairreservesconsumed;unusedslotswithdrawn.",
+    "source_qualification": "P76opt-inWartortleescort:471current/471frozenchecks,23new;nativebootstrapnotqualifiedbecause003transport133to5failsbeforeinput. Diagnosticv3GoalBindingSetarityfailurefixed;v4passes4ROM-freeconstructor/callbackcontrols. Source005alreadyBlastoise39inLavender,correctingearlierdiagnosis."
+  },
+  "scheduled_anchor_utc": "2026-10-21T06:00:19.773019+00:00",
+  "scheduled_automation_created": false,
+  "schema": "pokemon.windows.seven-goal-self-audit.v1",
+  "time_losses_and_pivots": [
+    "Sevenearly0inputsourceinspectionscheckedfeature/recoverabilityprojectionswithoutfullnativeoffer/transportreadiness. That wasinsufficientadmissionqualification;requireactuallegalofferedbindingandrecoverableroutebeforecostlylessons.",
+    "Wrongnative-species/mapinterpretation brieflymisdiagnosed005asWartortle/Cerulean. NativeID28isBlastoise;map141isLavender. Correctedfromnativefacts;do not infer title IDsfrommemory.",
+    "A newdiagnosticclassroomsingletonomittedmandatoryunavailablemask,consumingone0inputnativefailure. ActualconstructorandcallbackcontrolsnowexecuteagainstfrozenAPIs beforedispatch.",
+    "Current-source155checksare notfrozen132checks. R1frozen128pass/4missingpublicfixturefailureswere retained;R2added4testfixtureswithoutsource/modelchange. PrevalidationmustseparateCodeWIPandselectedsourcehashes.",
+    "Two differentroutecachehypotheses improvedsyntheticwork butfailednativeelapsed gates. Aggregatefunctioncounts didnotproveidenticalqueryreuse. Stopcacheguessing;captureactualgraph/queryworkloadanddo faithfuloffline replay first.",
+    "Engineeringglue,repeatedfixturequalification and speculativeoptimization have consumedtimewithoutactualprogress. Shiftcomparisons offlinewithnative-derivedinputs;nativeallocationsremainfiniteandprospective."
+  ],
+  "total_goals": 7,
+  "why_this_advances_autonomy": "Unsafeorineffectivechangeswereblockedbeforeactualactivation;nativevenuecosts demonstrate whyhigherencounterlevels alone canwastetime. A faithfulpure-routingworkload shouldallowcheapfalsifiers of thedominantmenuoverhead before anothernativeexperiment."
+}

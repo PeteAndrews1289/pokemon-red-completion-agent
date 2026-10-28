@@ -1,0 +1,36 @@
+{
+  "schema": "pokemon.red.player-continuity-engineering.v1",
+  "scope": "First integration slice of audit steps 3-4; neither step is complete",
+  "rom_free_tests_passed": 180,
+  "full_suite_run": false,
+  "verified_engineering": [
+    "Live V5 option menus and native TRAIN lessons share one observed readiness/resource boundary",
+    "Continuous opt-in retains settled failure then supports labeled safety recovery and changed-state selection",
+    "Partial execution, unverified outcomes, invalid verifier responses and missing boundary facts stop",
+    "Known spending admission and observed per-goal cash debits remain recorded",
+    "Legacy autonomous and paid-search behavior remains tested"
+  ],
+  "source_metadata_recheck": {
+    "train_open": 8,
+    "train_consumed": 46,
+    "validation_open": 5,
+    "validation_consumed": 22,
+    "independent_upstream_ancestry_established": false,
+    "state_files_opened": 0,
+    "evaluation_payloads_opened": 0,
+    "root_claims_created": 0
+  },
+  "native_gameplay": 0,
+  "production_fits": 0,
+  "new_train_examples": 0,
+  "new_model_choices": 0,
+  "authority_promotions": 0,
+  "registration_delta": 0,
+  "remaining": [
+    "Bind a current native runtime, cumulative hard input budgets and actual settled snapshots to the continuous loop",
+    "Connect observed aftermath and combat-role changes after execution; handle singleton/control boundaries without claiming learned choice",
+    "Qualify the connected runtime and native recorder on eligible isolated sources",
+    "Authenticate independently eligible comparison supply before the one-fit pilot comparison",
+    "Collect bounded TRAIN lessons, fit once with retention and compare once under frozen limits"
+  ]
+}

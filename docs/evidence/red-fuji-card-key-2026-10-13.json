@@ -1,0 +1,195 @@
+{
+  "schema": "pokemon.red.fuji-card-key-session.v1",
+  "session": "2026-10-13-fuji-card-key",
+  "partition": "development",
+  "status": "completed_session",
+  "start_utc": "2026-10-13T04:06:54Z",
+  "cutoff_utc": "2026-10-13T07:06:54Z",
+  "gameplay_stopped_confirmed_utc": "2026-10-13T04:48:50Z",
+  "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+  "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+  "configuration_sha256": "a61bb2fa730e3f80555b9896d470545cee7d35a8d7752fbba19ad0a38c9f4c68",
+  "new_train_examples": 0,
+  "new_fits": 0,
+  "new_parameter_updates": 0,
+  "all_6941_data_inputs_unchanged": true,
+  "all_174_private_helpers_unchanged": true,
+  "environment_unchanged": true,
+  "final_package_sha256": "4922ed7f61995fd3ae24a45cca5f41998007857865267eda513c68d0801ba769",
+  "primary": {
+    "family": "red-r29-fuji-cardkey-session-20261013-v1",
+    "terminal": "exploration-continuation/runs/segment-001",
+    "terminal_sha256": "3b8db626ce379481f7b94e28a54ae6baa4d0101b40e4f52b05dd33fcd794897c",
+    "terminal_context_sha256": "2d1166154e6960445f6ee1c0955ec99b0062f172ff4285423ade06844deaa22d",
+    "terminal_result_sha256": "0b3bbcf0b5cf0e8a21c9ca91df85e693f4094c422fae966bd7ac8e23038dc8e8",
+    "stopped_driver_sha256": "14a690de852c96bbf3e5c5ba3d69a0ee76f9e56b1ffdc5d1a7234b60aadf5d98",
+    "requested_player_targets_met": true,
+    "fuji_rescued": true,
+    "poke_flute_quantity": 1,
+    "silph_card_key_quantity": 1,
+    "silph_scope_retained": true,
+    "badges_before": 4,
+    "badges_after": 4,
+    "registrations_before": 28,
+    "registrations_after": 31,
+    "new_registrations": [
+      "pokemon:national:045",
+      "pokemon:national:056",
+      "pokemon:national:075"
+    ],
+    "new_registration_names": [
+      "Vileplume",
+      "Mankey",
+      "Graveler"
+    ],
+    "initial_registrations_preserved": true,
+    "original_six_preserved": true,
+    "originals_reordered": true,
+    "whole_party_restored": true,
+    "party_levels": [
+      25,
+      42,
+      19,
+      19,
+      38,
+      38
+    ],
+    "location": {
+      "map_id": 22,
+      "at": [
+        6,
+        0
+      ]
+    },
+    "cash_before": 24787,
+    "cash_after": 30815,
+    "cash_debits": 7500,
+    "gross_rewards": 13528,
+    "cash_delta": 6028,
+    "cumulative_costs": {
+      "actions": 292628,
+      "cash_debits": 15651,
+      "decisions": 547,
+      "frames": 23794460,
+      "heals": 363,
+      "seconds": 7248.26279308286
+    },
+    "new_costs": {
+      "goals": 158,
+      "actions": 19726,
+      "frames": 1493330,
+      "seconds": 627.7254260012414,
+      "cash_debits": 7500,
+      "rewards": 13528,
+      "heals": 11
+    },
+    "metered_decisions": 158,
+    "model_goal_choices": 156,
+    "model_greedy_choices": 142,
+    "model_exploration_choices": 14,
+    "deterministic_support_choices": 2,
+    "successful_goal_outcomes": 156,
+    "execution_error_outcomes": 1,
+    "collection_safety_stop_outcomes": 1,
+    "total_goal_outcomes": 158,
+    "stopped_intentionally_for_loop": true,
+    "coordinator_interruption": "KeyboardInterrupt after completed travel goals; original attempt passedfalse and source retained",
+    "in_flight_intervention_batches": 2,
+    "source_repair_relaunch_batches": 1,
+    "choice_mode_redeployment_batches": 1,
+    "final_fixed_sampling_interval": {
+      "metered_decisions": 15,
+      "model_choices": 14,
+      "deterministic_support_choices": 1,
+      "successes": 14,
+      "collection_safety_stop": 1,
+      "execution_errors": 0,
+      "operator_interventions_after_launch": 0,
+      "card_key_earned": true,
+      "new_registrations": 3
+    },
+    "worker_stopped": true,
+    "live_driver_running": false,
+    "released": true,
+    "field_ready": true,
+    "driver_authority_note": "The segment RESULT records live_driver_running=true when written inside the live driver. The matching final DRIVER-RESULT, completed process and zero-input inspection establish actual stop; original bytes remain unchanged.",
+    "red_restarted": false,
+    "progress_rollback": false,
+    "copied_gains_imported": false,
+    "manual_strategic_choices": 0,
+    "manual_battle_choices": 0,
+    "runtime_llm_calls": 0,
+    "unchanged_original_regional_attempt_passed": false,
+    "full_fresh_autonomy_passed": false
+  },
+  "repairs": {
+    "prospective_completion_wiring": {
+      "changed_file": "scripts/run_configured_red_player.py",
+      "before_gameplay": true,
+      "reason": "obtain_silph_card_key is not a story objective; reuse existing physical-stock curriculum with rescue_fuji and items48/73",
+      "focused_tests": 169
+    },
+    "ghost_handoff": {
+      "changed_file": "src/pokemon_red_completion/red_player_tower.py",
+      "failure_terminal": "a926d0d9c786e73a4c06a5108ecea159970f1373ebd0a546aaec26ec13fec1b6",
+      "failure_context": "6079e87f133f19d1eec7c9861ece779726075e7185655b44e725f665ad9993e2",
+      "error": "ordinary encounter before Marowak escape boundary changed",
+      "reproduced_identical_terminal": true,
+      "diagnosis": "Ordinary Gastly21 escape result2 precedes a native level30 Marowak introduction before field control; the original RUN settlement continued into the new battle.",
+      "qualification": "Exact pre-error and retained-terminal copies independently verify native Marowak victory with the same K actor; related copies,not independent origins.",
+      "free_field_receipt_fabricated": false,
+      "unique_ghost_identity_and_victory_checks_preserved": true,
+      "general_flee_changed": false
+    }
+  },
+  "choice_mode": {
+    "greedy_loop": "Repeated10-transition travel cycle through Fuchsia approach and Saffron Center entrance; four completed20-goal chunks leave cash,inventory,levels and events unchanged.",
+    "retained_stop_terminal": "b600a03d882690a7e47c42a52ef068b6b6f432c70590da3232da5cc17723b8d5",
+    "retained_stop_context": "6f5062ec4e28661b6579943ea61ecc6f1b0a934b179a82d85aa503d2b51040f5",
+    "final_mode": "exploration",
+    "source_change": false,
+    "weights_changed": false,
+    "base_seed": 2026101101,
+    "seed_shopping": false,
+    "legal_menu_filtered": false,
+    "related_copy": {
+      "model_choices": 5,
+      "all_goals_succeeded": true,
+      "ordinary_great_balls_bought": 8,
+      "cash_spent": 4800,
+      "card_key_earned": false,
+      "new_registrations": 0
+    },
+    "sampling_cures_global_ranking": false,
+    "scope": "Useful resource progress and a completed15-goal actual fixed sampling interval; not a learned ranking improvement."
+  },
+  "diagnostics": {
+    "separate_costs": {
+      "actions": 711,
+      "frames": 59088,
+      "decisions": 9,
+      "seconds": 42.68537287507206,
+      "heals": 0
+    },
+    "goals": 9,
+    "progress_imported": false,
+    "model_training": false
+  },
+  "checks": {
+    "focused_and_related_tests_passed": 306,
+    "scoped_ruff_passed": true,
+    "full_test_suite_run": false,
+    "hosted_ci_run": false,
+    "final_zero_input_inspection_passed": true,
+    "final_original_six_comparison_passed": true,
+    "native_full_hp_status_pp_restoration_verified": true,
+    "next_inspection_selected": "reach_fuchsia"
+  },
+  "limitations": [
+    "Related copies are not independent transfer evidence.",
+    "No new fitted learning,calibrated readiness stopping or full fresh autonomous acceptance.",
+    "One original execution failure,one coordinator-requested greedy-loop interruption and one collection safety stop remain.",
+    "Final completion gates remain0/5; this is not an overall project percentage."
+  ],
+  "next_decision": "Continue this actual restored31-entry save with package-v2,f86,battlers and fixed model-weighted exploration toward Silph liberation and Sabrina. The next inspection selects Fuchsia travel;retain the full legal menu rather than force Silph. Allow up to3hours after the human begins,review20decisions and reassess15 stalled minutes/two equivalent failures. No restart,copied gains,new subsystem or DEVELOPMENT fit."
+}

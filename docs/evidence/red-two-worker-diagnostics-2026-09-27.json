@@ -1,0 +1,310 @@
+{
+  "schema": "pokemon.red.two-worker-development-diagnostics.v1",
+  "session": "2026-09-27-two-worker-diagnostics",
+  "audit_frames": 0,
+  "cases": [
+    {
+      "action_counts": {
+        "attack": 13,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 1
+      },
+      "actions": 224,
+      "decisions": 18,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 18876,
+      "identity": "misty-current-0",
+      "metrics": {
+        "attack_turn_utility_sum": -9,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 110,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6331083,
+        "policy_latency_ns_mean": 3025388.888888889,
+        "policy_latency_ns_min": 148792,
+        "selected_move_pp_spends": 10,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 1.0704087080084719,
+      "result_sha256": "77355fdd0b2e3cbdc091a36f82eb2b0c5fb97546cc07292c032c0ca2b0a5a0a8",
+      "terminal_sha256": "1f713cf684c1a9bb49e3de855274aaad642ac227a37366b61a4a83a6146fa9b9",
+      "won": false
+    },
+    {
+      "action_counts": {
+        "attack": 12,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 2
+      },
+      "actions": 236,
+      "decisions": 18,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 20028,
+      "identity": "misty-prepared-0",
+      "metrics": {
+        "attack_turn_utility_sum": -5.762711864406779,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 147,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6357541,
+        "policy_latency_ns_mean": 2571717.5555555555,
+        "policy_latency_ns_min": 155875,
+        "selected_move_pp_spends": 10,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 1.080646957969293,
+      "result_sha256": "b7312bb13eb72bbca96fe8761a6fdadb1c2b84ecca74f1e899ec0a7a99f0fbba",
+      "terminal_sha256": "e37fc08da436b84db943e35b4c71fea68319c0040a7ee9ec1ff52ff1ad5c963e",
+      "won": false
+    },
+    {
+      "action_counts": {
+        "attack": 12,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 3
+      },
+      "actions": 251,
+      "decisions": 19,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 21066,
+      "identity": "misty-current-4",
+      "metrics": {
+        "attack_turn_utility_sum": -4.811594202898551,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 110,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4697917,
+        "policy_latency_ns_mean": 2839772.052631579,
+        "policy_latency_ns_min": 12334,
+        "selected_move_pp_spends": 10,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 1.1410203329869546,
+      "result_sha256": "cc6da237f3b0737e56fcb93a2071cb87801612a7af4d3ccdf39def88e35063e0",
+      "terminal_sha256": "9f1f3085322c889c437334840127c24b76316826bb6fd2d5bb099e3d0cbc67e9",
+      "won": false
+    },
+    {
+      "action_counts": {
+        "attack": 13,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 1
+      },
+      "actions": 213,
+      "decisions": 18,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 17968,
+      "identity": "misty-prepared-4",
+      "metrics": {
+        "attack_turn_utility_sum": -8.641319285387082,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 147,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4718959,
+        "policy_latency_ns_mean": 2832907.5,
+        "policy_latency_ns_min": 136500,
+        "selected_move_pp_spends": 10,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 0.9790308750234544,
+      "result_sha256": "49f6174188f03abdfdbdb6d8567e22d03d57895366c3fdd83580f02a96119fc0",
+      "terminal_sha256": "7c40833de17c8529e02c82d909e2f63b7f7378940465d8633890039bd82339e8",
+      "won": false
+    },
+    {
+      "action_counts": {
+        "attack": 13,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 2
+      },
+      "actions": 245,
+      "decisions": 19,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 20702,
+      "identity": "misty-current-8",
+      "metrics": {
+        "attack_turn_utility_sum": -2.9491525423728815,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 110,
+        "party_pp_spent": 11,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4760375,
+        "policy_latency_ns_mean": 2863096.4736842103,
+        "policy_latency_ns_min": 139792,
+        "selected_move_pp_spends": 11,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 1.1176129580126144,
+      "result_sha256": "888e290da75b8e5686d5699cc7b6a4f7d84a097b782389c77e8c5e28252da9ce",
+      "terminal_sha256": "76475e318da4cc67cfe387ce6d0c5af843ad432c16f06a1a47aaa6d97b4a622e",
+      "won": false
+    },
+    {
+      "action_counts": {
+        "attack": 13,
+        "forced_switch": 3,
+        "switch_prompt": 1,
+        "voluntary_switch": 2
+      },
+      "actions": 229,
+      "decisions": 19,
+      "enemy_hp": [
+        0,
+        59
+      ],
+      "frames": 19368,
+      "identity": "misty-prepared-8",
+      "metrics": {
+        "attack_turn_utility_sum": -8.825,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 1,
+        "party_faints": 4,
+        "party_hp_lost": 147,
+        "party_pp_spent": 10,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4682791,
+        "policy_latency_ns_mean": 2844870.5263157897,
+        "policy_latency_ns_min": 166709,
+        "selected_move_pp_spends": 10,
+        "teacher_interventions": 0
+      },
+      "native_wall_seconds": 1.055886875023134,
+      "result_sha256": "084184b19eced30a1c51fd1aff4e064f1401a1d74db95359fdf94a7f0d7eabe2",
+      "terminal_sha256": "7f7635cf5ff5c9f6830a17cfd289af8435f65a48b139f2a0da4f929221e20f47",
+      "won": false
+    },
+    {
+      "actions": 322,
+      "frames": 36569,
+      "identity": "fresh-257",
+      "model_queries": 0,
+      "native_wall_seconds": 2.186588375014253,
+      "party_levels": [
+        6
+      ],
+      "result_sha256": "600081efa63d403eda46fb8d32e7ebfd14eaf54ae53b0ddaae91379703aab439",
+      "rival_won": true,
+      "teacher": true,
+      "terminal_cash": 3175,
+      "terminal_sha256": "18e73bcab37ceea5efa6808672cd48512bc32341b211344d2a8b5651bd77e3bc"
+    },
+    {
+      "actions": 308,
+      "frames": 35177,
+      "identity": "fresh-293",
+      "model_queries": 0,
+      "native_wall_seconds": 2.0984466249938123,
+      "party_levels": [
+        6
+      ],
+      "result_sha256": "78bdba85b8d627ee2259246d59257ab70a661d2a70389d51a5d3a6d2662ab29a",
+      "rival_won": true,
+      "teacher": true,
+      "terminal_cash": 3175,
+      "terminal_sha256": "1163fe94d37c86e92a71aad92bc4b6258085093ad39bdba6912150e5bba9e8a8"
+    }
+  ],
+  "choices_replayed": 111,
+  "fits": 0,
+  "original_sources_unchanged": true,
+  "passed": true,
+  "plan_sha256": "e6764f1ad27689571db936ad976b966b1065527b8df35365a01744783340e7d5",
+  "policy_latency_ms": {
+    "maximum": 6.357541,
+    "mean": 2.8301557927927927
+  },
+  "process_summaries": [
+    {
+      "all_exits_observed": true,
+      "batch_wall_seconds": 8.632573083974421,
+      "jobs": 6,
+      "mode": "battle",
+      "peak_workers": 2
+    },
+    {
+      "all_exits_observed": true,
+      "batch_wall_seconds": 3.7990102500189096,
+      "jobs": 2,
+      "mode": "fresh_smoke",
+      "peak_workers": 2
+    }
+  ],
+  "promotions": 0,
+  "registrations": 0,
+  "story_progress": 0,
+  "totals": {
+    "battle_actions": 1398,
+    "battle_decisions": 111,
+    "battle_frames": 118008,
+    "battle_losses": 6,
+    "battle_wins": 0,
+    "fresh_actions": 630,
+    "fresh_frames": 71746,
+    "fresh_starts": 2
+  },
+  "training_rows": 0,
+  "scope": "Maintenance and frozen-model diagnosis only; not learner qualification or a campaign.",
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "original_screen_preserved": true,
+  "source_partitions": {
+    "battle": "TRAIN ancestry; no admitted training rows",
+    "fresh": "DEVELOPMENT teacher smoke; no model queries"
+  },
+  "tactics": {
+    "voluntary_switches": 11,
+    "switch_party_hp_cost": 126,
+    "immediate_switch_faints": 4,
+    "current_last_turn_starmie_hp": [
+      59,
+      59,
+      56
+    ],
+    "prepared_last_turn_starmie_hp": [
+      45,
+      49,
+      59
+    ],
+    "note": "Roster HP in endpoint records may retain the active member's stored value; last-turn active HP shows damage. Switching costs alone do not establish a winning counterfactual."
+  },
+  "next": "Inspect existing attack/switch scores and declare one short-horizon counterfactual lesson using the existing collector. No automatic refit or deployment."
+}

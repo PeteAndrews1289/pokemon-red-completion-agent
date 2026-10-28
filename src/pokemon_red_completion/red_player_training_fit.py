@@ -16,8 +16,13 @@ from pokemon_red_completion.living_dex_option_value import (
     evaluate_living_dex_option_value,
     fit_living_dex_option_value,
     living_dex_option_train_dataset_sha256,
+    upgrade_option_value_model_for_challenge,
     upgrade_option_value_model_for_economy,
     upgrade_option_value_model_for_optional_recovery,
+    upgrade_option_value_model_for_preparation,
+    upgrade_option_value_model_for_kind_effort,
+    upgrade_option_value_model_for_level_workload,
+    upgrade_option_value_model_for_readiness,
     upgrade_option_value_model_for_search_history,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
@@ -25,6 +30,13 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_development_measured_choice import (
     RedDevelopmentMeasuredChoiceInput,
     load_red_development_measured_choice_example,
+)
+from pokemon_red_completion.red_native_curriculum import (
+    CONTRACT as NATIVE_CURRICULUM_CONTRACT,
+)
+from pokemon_red_completion.red_native_curriculum import (
+    NativeCurriculumInput,
+    retained_native_curriculum,
 )
 from pokemon_red_completion.red_player_model import (
     PLAYER_MODEL_SCHEMA,
@@ -37,6 +49,11 @@ from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPla
 from pokemon_red_completion.red_regional_choice_learning import (
     RedRegionalChoiceInput,
     load_red_regional_choice_example,
+)
+
+from .red_collection_teacher_learning import (
+    CollectionTeacherLessonInput,
+    retained_collection_teacher_lessons,
 )
 
 
@@ -58,6 +75,10 @@ def fit_red_player_update(
     regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
     measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...] = (),
     registered_objective: bool = False,
+    native_curriculum: tuple[NativeCurriculumInput, ...] = (),
+    collection_teacher_lessons: tuple[CollectionTeacherLessonInput, ...] = (),
+    retention_search: bool = False,
+    frozen_level_workload_base=None,
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
 
@@ -70,9 +91,10 @@ def fit_red_player_update(
     explicit objective schema and reconstruct their actual terminal outcome.
     Measured choices without an action trace are training-only and survive all fits.
     """
-    if (not episodes and not measured_choices) or len(
-        {item.episode_id for item in episodes}
-    ) != len(episodes):
+    if (
+        not episodes and not measured_choices and not native_curriculum
+        and not collection_teacher_lessons
+    ) or len({item.episode_id for item in episodes}) != len(episodes):
         raise ValueError("native training episode inventory differs")
     if len({item.choice_id for item in measured_choices}) != len(measured_choices):
         raise ValueError("measured training choice inventory is duplicated")
@@ -86,6 +108,14 @@ def fit_red_player_update(
     if type(registered_objective) is not bool:
         raise ValueError("registered fitting requires explicit opt-in")
     prior_registered = isinstance(prior, RedPlayerModelRecord) and prior.objective is not None
+    if native_curriculum and (not registered_objective or not prior_registered):
+        raise ValueError("native curriculum requires an existing registered player")
+    if collection_teacher_lessons and (not registered_objective or not prior_registered):
+        raise ValueError("collection teachers require an existing registered player")
+    if collection_teacher_lessons and retention_search:
+        raise ValueError("collection teacher pilot uses one fit, not retention search")
+    if type(retention_search) is not bool or (retention_search and not native_curriculum):
+        raise ValueError("retention search requires explicit new native curriculum")
     if (
         isinstance(prior, RedPlayerModelRecord)
         and prior_registered
@@ -124,6 +154,7 @@ def fit_red_player_update(
     incoming_measured = {item.choice_id: item for item in measured_choices}
     prior_measured: list[RedDevelopmentMeasuredChoiceInput] = []
     prior_measured_ids: set[str] = set()
+    corpus_data = {}
     if prior_registered:
         assert isinstance(prior, RedPlayerModelRecord)
         corpus_rec = store.find_sealed_record(
@@ -199,6 +230,13 @@ def fit_red_player_update(
             prior_measured.append(
                 RedDevelopmentMeasuredChoiceInput(cid, record_sha, behavior_record)
             )
+    native_inputs, native_rows = retained_native_curriculum(store, corpus_data, native_curriculum)
+    old_native_count = len(native_rows) - len(native_curriculum)
+    collection_inputs, collection_rows = retained_collection_teacher_lessons(
+        store,corpus_data,collection_teacher_lessons)
+    if collection_inputs and retention_search:
+        raise ValueError("collection teacher lessons require the complete single-fit curriculum")
+    curriculum = (*curriculum, *native_rows, *collection_rows)
     all_measured_choices = (*prior_measured, *measured_choices)
     measured_rows = tuple(
         load_red_development_measured_choice_example(store, item, objective=objective)
@@ -265,7 +303,10 @@ def fit_red_player_update(
     corpus_sha = canonical_sha256(corpus)
     if curriculum:
         corpus["curriculum_examples"] = [row.public_dict() for row in curriculum]
-        corpus["curriculum_contract"] = "forced-singleton-story-outcome-unit-weight-v1"
+        corpus["curriculum_contract"] = (NATIVE_CURRICULUM_CONTRACT if native_inputs
+                                        else "forced-singleton-story-outcome-unit-weight-v1")
+        if native_inputs:
+            corpus["native_curriculum"] = [item.public_dict() for item in native_inputs]
         corpus_sha = canonical_sha256(corpus)
     if regional_choices:
         corpus["regional_choices"] = [
@@ -278,6 +319,10 @@ def fit_red_player_update(
             for item in regional_choices
         ]
         corpus_sha = canonical_sha256(corpus)
+    if collection_inputs:
+        corpus["collection_teacher_lessons"]=[item.public_dict() for item in collection_inputs]
+        corpus["collection_teacher_contract"]="native-trace-menu-outcome-unit-weight-v1"
+        corpus_sha=canonical_sha256(corpus)
     if all_measured_choices:
         corpus["measured_choices"] = [
             {
@@ -295,25 +340,42 @@ def fit_red_player_update(
             "trust_tier": "development_measured_without_action_trace",
         }
         corpus_sha = canonical_sha256(corpus)
-    corpus_record = store.publish_sealed_record(
-        f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
-    )
     feature_version = max(
         prior.model.feature_version,
         *(row.menu.feature_version for row in rows),
         *(row.feature_version for row in curriculum),
     )
-    fit = fit_living_dex_option_value(
-        rows, feature_version=feature_version, curriculum_examples=curriculum
-    )
     baseline_model = (
-        upgrade_option_value_model_for_economy(prior.model)
-        if feature_version == 4
-        else upgrade_option_value_model_for_optional_recovery(prior.model)
-        if feature_version == 3
-        else upgrade_option_value_model_for_search_history(prior.model)
-        if feature_version == 2
+        upgrade_option_value_model_for_level_workload(prior.model) if feature_version == 9
+        else upgrade_option_value_model_for_kind_effort(prior.model) if feature_version == 8
+        else upgrade_option_value_model_for_preparation(prior.model) if feature_version == 7
+        else upgrade_option_value_model_for_challenge(prior.model) if feature_version == 6
+        else upgrade_option_value_model_for_readiness(prior.model) if feature_version == 5
+        else upgrade_option_value_model_for_economy(prior.model) if feature_version == 4
+        else upgrade_option_value_model_for_optional_recovery(prior.model) if feature_version == 3
+        else upgrade_option_value_model_for_search_history(prior.model) if feature_version == 2
         else prior.model
+    )
+    if frozen_level_workload_base is not None and retention_search:
+        raise ValueError("workload cost retention cannot also run retention search")
+    selection_report = None
+    if retention_search:
+        from .living_dex_retention_fit import fit_retaining_prior
+        fit, selection_report = fit_retaining_prior(
+            baseline_model, rows, native_rows[old_native_count:],
+            retained_curriculum=native_rows[:old_native_count],
+        )
+        if fit is None:
+            return {"status": "rejected_retention", "model_fitted": False,
+                    "retention_selection": selection_report, "authority_promotions": 0}
+    else:
+        fit = fit_living_dex_option_value(
+            rows, feature_version=feature_version, curriculum_examples=curriculum,
+            **({"frozen_level_workload_base": frozen_level_workload_base}
+               if frozen_level_workload_base is not None else {}),
+        )
+    corpus_record = store.publish_sealed_record(
+        f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
     prior_error = evaluate_living_dex_option_value(
         baseline_model, rows, expected_partition="train", curriculum_examples=curriculum
@@ -360,14 +422,30 @@ def fit_red_player_update(
         **(
             {
                 "historical_rewards_reused": False,
-                "parameter_warm_start": False,
+                "parameter_warm_start": frozen_level_workload_base is not None,
                 "prior_model_role": "behavior_and_in_sample_comparison_only",
             }
             if registered_objective
             else {}
         ),
         "controller_actions": 0,
+        **({"workload_cost_retention": {
+            "baseline_model_sha256": frozen_level_workload_base.model_sha256,
+            "unchanged_feature_prefix": 365,
+            "updated_outcome_heads": ["action_cost", "frame_cost"],
+            "unknown_workload_predictions_exact": True,
+            "new_feature_mean_zero": True,
+            "existing_ridge_objective_with_frozen_parameters": True,
+        }} if frozen_level_workload_base is not None else {}),
+        **({"retention_selection": selection_report} if selection_report else {}),
         "authority_promotions": 0,
+        **(
+            {
+                "collection_teacher_outcomes": len(collection_rows),
+                "new_collection_teacher_outcomes": len(collection_teacher_lessons),
+            }
+            if collection_inputs else {}
+        ),
         **(
             {
                 "curriculum_outcomes": len(curriculum),

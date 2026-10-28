@@ -1,0 +1,126 @@
+{
+  "actual_actor_running": false,
+  "actual_registration_delta": 0,
+  "actual_space_recovered": 0,
+  "all_four_volumes_observed": true,
+  "archives_written": 0,
+  "audit_complete": true,
+  "current_runtime_changed": false,
+  "data_volume_snapshots_listed": false,
+  "duplicate_subset": {
+    "allocated": 1480298496,
+    "files": 59,
+    "not_additional_savings": true
+  },
+  "excluded_broad_survey_files": 38,
+  "files_deleted": 0,
+  "first_batch": {
+    "archive_required": true,
+    "by_volume": {
+      "Pok\u00e9mon Runs": {
+        "files": 13,
+        "measured_gzip_bytes": 626813541,
+        "original_allocated": 5225762816,
+        "projected_file_allocation_saving_before_catalog_metadata_and_clone_sharing": 4598923264
+      },
+      "Pok\u00e9mon Runs 2": {
+        "files": 0,
+        "measured_gzip_bytes": 0,
+        "original_allocated": 0,
+        "projected_file_allocation_saving_before_catalog_metadata_and_clone_sharing": 0
+      },
+      "T7": {
+        "files": 0,
+        "measured_gzip_bytes": 0,
+        "original_allocated": 0,
+        "projected_file_allocation_saving_before_catalog_metadata_and_clone_sharing": 0
+      },
+      "T7 Developer": {
+        "files": 565,
+        "measured_gzip_bytes": 939491282,
+        "original_allocated": 15222255616,
+        "projected_file_allocation_saving_before_catalog_metadata_and_clone_sharing": 14281531392
+      }
+    },
+    "current_pin_matches": 0,
+    "files": 578,
+    "full_payload_roundtrip": true,
+    "isolation_reports": 18,
+    "legacy_replay_files": 560,
+    "measured_gzip_payload": 1566304823,
+    "original_allocated": 20448018432,
+    "projected_file_allocation_saving": 18880454656
+  },
+  "goal_status": "blocked",
+  "journals_inventoried": 90,
+  "later_runs2_story_journals": [
+    {
+      "allocation_estimate": 3233021952,
+      "run": "red-r29-silph-sabrina-continuation-20261013-v2"
+    },
+    {
+      "allocation_estimate": 2942500864,
+      "run": "red-r29-giovanni-continuation-20261013-v1"
+    },
+    {
+      "allocation_estimate": 2205237248,
+      "run": "red-r29-koga-fly-continuation-20261013-v1"
+    }
+  ],
+  "later_six_journals": {
+    "allocation_estimate": 38498156544,
+    "archive_required": true,
+    "name_census_complete": true,
+    "payload_or_physical_block_census_complete": false,
+    "records": 4699482,
+    "runs": [
+      "red-fresh-autonomous-run-20261012-v5",
+      "red-fresh-autonomous-run-20261012-v3",
+      "red-fresh-autonomous-run-20261012-v2",
+      "red-fresh-autonomous-run-20261012-v1",
+      "red-fresh-autonomous-run-20261011-v11",
+      "red-fresh-autonomous-run-20261011-v10"
+    ]
+  },
+  "legacy_goal_manager_estimate": {
+    "action_trace_allocation_estimate": 75642134528,
+    "new_full_payload_census": false,
+    "prior_oct13_counts": true
+  },
+  "legacy_roots_audited": 93,
+  "legacy_roots_du_gib": 14.199691772460938,
+  "limits": [
+    "Retain all models/TRAIN labels/corpora/fit provenance/saves/outcomes/failed evidence and current pins.",
+    "No recursive whole-run deletion is cleared; historical raw readers need restoration first.",
+    "APFS clone sharing and metadata are not included in projected file-allocation savings.",
+    "No gameplay, publication, account/quota/volume change or new live storage backend."
+  ],
+  "model_fits": 0,
+  "monitor_status": "PAUSED",
+  "new_volume_approved": false,
+  "new_volume_created": false,
+  "new_weights": 0,
+  "partition": "development",
+  "physical_reclaim_guaranteed": false,
+  "private_packet": "red-run-retention-audit-20261015-v1",
+  "proposal_sha256": "f269bcb084011671ae1bf23c7756ee4473cc4484c785f9136e4e8f80652db46f",
+  "protected": {
+    "controller_inputs": 0,
+    "environment_pins": 4512,
+    "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+    "model_fits": 0,
+    "package_pins": 7877,
+    "passed": true,
+    "pins": 12701,
+    "protected_pins": 312,
+    "seconds": 10.186728250002488,
+    "state_loads": 0
+  },
+  "schema": "pokemon.red.run-retention-audit.v1",
+  "session": "2026-10-15-run-retention-audit",
+  "source_proposal_not_authorization": true,
+  "status": "audit_complete_cleanup_not_authorized",
+  "training_examples_added": 0,
+  "whole_drive_block_census_complete": false,
+  "whole_game_completion": false
+}

@@ -1,0 +1,166 @@
+{
+  "schema": "pokemon.red.paid-safari-lifecycle-evidence.v1",
+  "session": "2026-09-21-paid-safari-lifecycle",
+  "classification": "engineering_with_one_development_model_choice",
+  "source_commits": {
+    "legacy_admission_and_native_exit": "224fac492efe2cc72acce192b31e7a2f034a740e",
+    "bounded_search_and_automatic_return": "6f2ff87c833ce7682aa8369b290d427bde86dbaf"
+  },
+  "scope": {
+    "original_failures_preserved": true,
+    "save_or_money_edits": 0,
+    "rewinds": 0,
+    "teacher_target_choices": 0,
+    "new_train_rows": 0,
+    "fits": 0,
+    "authority_promotions": 0,
+    "github_publications": 0,
+    "external_agents_used": false
+  },
+  "legacy_exit": {
+    "run_id": "model137-paid-safari-departure-20260921-v1",
+    "before_sha256": "f9ee826ef9aea56799244f99d48cd007fbc0a6a72bec7403c08bac06c1f7f39d",
+    "terminal_sha256": "ded4d706154ccc3c924668147e2994a8bfb6db7d95311655a62b5398dd7e98da",
+    "result_sha256": "af8273bf205c9c56b9e6a0a057dd202815d3567b2cb499396700963575b686af",
+    "native_audit_sha256": "13d46c950e5c1dcf434132bc926254f14bf16c96d7c09ce4d747da4becb58e04",
+    "model_queries": 0,
+    "extra_payment": 0,
+    "actions": 110,
+    "frames": 6180,
+    "route": {
+      "acknowledged_steps": 51,
+      "field_moves": {
+        "cuts": 0,
+        "flights": 0,
+        "surfs": 1
+      },
+      "interruptions": 2,
+      "movement_requests": 51,
+      "passed": true,
+      "private_route_fields": 0,
+      "replans": 0,
+      "resource_renewals": 0,
+      "schema": "pokemon.red.routed-semantic-route-report.v1",
+      "semantic_router_authenticated": true,
+      "transport_is_policy_kind": false,
+      "verified_cuts": 0,
+      "verified_surfs": 1,
+      "wait_actions": 3
+    },
+    "registrations_preserved": 107,
+    "specimens_preserved": 77,
+    "cash_preserved": 16968,
+    "session_ended": true,
+    "unused_session_counters": {
+      "balls": 24,
+      "steps": 83
+    },
+    "unused_counters_are_not_reusable_admission": true
+  },
+  "ordinary_cycle": {
+    "run_id": "model137-post-paid-exit-collection-20260921-v1",
+    "before_sha256": "ded4d706154ccc3c924668147e2994a8bfb6db7d95311655a62b5398dd7e98da",
+    "terminal_sha256": "de8c4e963a1254060c6c7fbbb4c9d3b8591ce782d6255e5b337fe6829f9bcda1",
+    "result_sha256": "7c53435654e2ff1ddc665e8ecf1f89cc51f84679646fa13e220b42df6f976bfd",
+    "outcome_sha256": "343a8c92ee0a21fa05064b26189d4d6c95c4958fba141641d7249c246dbc594e",
+    "native_audit_sha256": "43cbf54fa7c650eb07a4de047e8b8d239cf5b73a755ef5e309766ce5d53e60c5",
+    "model_queries": 1,
+    "choice_mode": "model_exploration",
+    "candidate_count": 4,
+    "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "teacher_labels": 0,
+    "selected_area": "Safari West",
+    "payments": 1,
+    "cash_spent": 500,
+    "actions": 1384,
+    "frames": 159420,
+    "search_actions": 214,
+    "encounters": 19,
+    "captures": 0,
+    "flees": 19,
+    "reserved_exit_steps": 96,
+    "automatic_exit": {
+      "acknowledged_steps": 77,
+      "field_moves": {
+        "cuts": 0,
+        "flights": 0,
+        "surfs": 1
+      },
+      "interruptions": 2,
+      "movement_requests": 77,
+      "passed": true,
+      "private_route_fields": 0,
+      "replans": 0,
+      "resource_renewals": 0,
+      "schema": "pokemon.red.routed-semantic-route-report.v1",
+      "semantic_router_authenticated": true,
+      "transport_is_policy_kind": false,
+      "verified_cuts": 0,
+      "verified_surfs": 1,
+      "wait_actions": 3
+    },
+    "ending_session_counters": {
+      "in_safari_zone": false,
+      "safari_balls": 30,
+      "safari_game_over": false,
+      "safari_steps": 24
+    },
+    "verification": "failed",
+    "failure_reason": "search_exhausted",
+    "error": null,
+    "capture_failure_is_preserved": true
+  },
+  "final": {
+    "terminal_sha256": "de8c4e963a1254060c6c7fbbb4c9d3b8591ce782d6255e5b337fe6829f9bcda1",
+    "registered": 107,
+    "native_route_target": 124,
+    "specimens": 77,
+    "cash": 16468,
+    "location": "Fuchsia City",
+    "active_safari_session": false,
+    "safe": true,
+    "party_hp_pp_items_and_training_preserved": true,
+    "gameplay_running": false
+  },
+  "next_menu": {
+    "inspection_sha256": "1d039b039175dfea58215ab9c7e34bd6a9de33408301a82f73d379e5afa6c174",
+    "available_choices": 4,
+    "distinct_semantic_candidates": 4,
+    "model_queries": 0,
+    "actions": 0,
+    "frames": 0,
+    "ordinary_parent_admitted": true,
+    "execution_authorized_by_inspection": false
+  },
+  "totals": {
+    "actions": 1494,
+    "frames": 165600,
+    "registration_delta": 0,
+    "specimen_delta": 0,
+    "cash_delta": -500,
+    "model_queries": 1
+  },
+  "model": {
+    "production": "Model137",
+    "fitted_examples": 137,
+    "successes": 92,
+    "economy_qualified": 58,
+    "battlers_K_L": "unchanged",
+    "league_profit_cycles": 0,
+    "fresh_red_gate": "0/5"
+  },
+  "verification": {
+    "targeted_tests": 509,
+    "full_suite_run": false,
+    "registry_regenerated_and_checked": true,
+    "independent_zero_input_native_audits": 2
+  },
+  "limitations": [
+    "One paid lifecycle qualified natively, not all areas or rare-capture reliability.",
+    "Unexpected native failure still stops and retains its endpoint; no automatic retries.",
+    "Lifecycle is explicitly enabled with safari_complete_paid_session; legacy training probes are unchanged.",
+    "No new acquisition registration, model fit, cross-game transfer or full-run qualification.",
+    "At least ten remaining native registrations depend on acquisition families absent from the ordinary executable menu."
+  ],
+  "next": "Expose one authenticated NPC-trade or gift acquisition family, using observed physical prerequisites and the ordinary multi-choice menu. No repeated Safari grinding or battler refit."
+}

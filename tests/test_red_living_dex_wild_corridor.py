@@ -72,6 +72,134 @@ def test_search_budget_is_prospective_and_survives_real_source_retargeting():
         ] == 64
 
 
+def test_capture_weakening_is_explicit_idempotent_and_preserved_on_retarget():
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_weakening_profile,
+    )
+    original = _local_discovery_profile()
+    bound = bind_red_capture_weakening_profile(original)
+    assert "capture_weakening_support" not in original.providers[0].parameters
+    assert bound.providers[0].parameters["capture_weakening_support"] is True
+    assert bound.providers[0].parameters["capture_status_support"] is True
+    assert bound.providers[1:] == original.providers[1:]
+    assert bind_red_capture_weakening_profile(bound) == bound
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph())
+    moved = retarget_red_wild_profile(bound, corridor)
+    assert moved.providers[0].parameters["capture_weakening_support"] is True
+
+
+def test_coupled_search_v2_is_explicit_idempotent_and_survives_retargeting():
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    original = _local_discovery_profile()
+    legacy = bind_red_capture_search_budget_profile(original)
+    bound = bind_red_capture_search_budget_profile(legacy, maximum_legs=320)
+    assert bound.providers[0].parameters["capture_search_budget"] == "bounded-search-v2"
+    assert tuple(bound.providers[0].parameters[k] for k in (
+        "maximum_legs", "maximum_seek_steps", "maximum_encounters",
+    )) == (320, 512, 64)
+    assert bind_red_capture_search_budget_profile(bound) == bound
+    assert bind_red_capture_search_budget_profile(bound, maximum_legs=320) == bound
+    assert bind_red_capture_search_budget_profile(bound, maximum_legs=160) == legacy
+    assert bound.providers[1:] == original.providers[1:]
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph())
+    moved = retarget_red_wild_profile(bound, corridor)
+    assert moved.providers[0].parameters["capture_search_budget"] == "bounded-search-v2"
+    for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
+        assert moved.providers[0].parameters[key] == bound.providers[0].parameters[key]
+    assert moved.providers[2].parameters["maximum_legs"] == 64
+    assert "capture_search_budget" not in moved.providers[2].parameters
+    assert legacy.providers[0].parameters["maximum_seek_steps"] == 256
+    assert original.providers[0].parameters["maximum_legs"] == 64
+
+
+@pytest.mark.parametrize("key,value", [
+    ("maximum_seek_steps", 257), ("maximum_encounters", 33),
+])
+def test_default_search_binding_rejects_oversized_unmarked_legacy_caps(key, value):
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    original = _local_discovery_profile()
+    providers = [(spec.kind, spec.mechanic, _thaw(spec.parameters))
+                 for spec in original.providers]
+    providers[0][2][key] = value
+    unmarked = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="oversized-unmarked-legacy", providers=tuple(providers)))
+    with pytest.raises(RedGoalContextProfileError, match="capture search budget"):
+        bind_red_capture_search_budget_profile(unmarked)
+
+
+@pytest.mark.parametrize("value", [True, False, 321, 319, "320", 320.0, -1])
+def test_search_binding_rejects_undeclared_or_malformed_allowance(value):
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    with pytest.raises(RedLivingDexWildCorridorError, match="160or320"):
+        bind_red_capture_search_budget_profile(_local_discovery_profile(), maximum_legs=value)
+
+
+@pytest.mark.parametrize("key,value", [
+    ("capture_search_budget", True), ("capture_search_budget", "unlimited"),
+    ("capture_search_budget", []), ("maximum_legs", 322), ("maximum_legs", 319),
+    ("maximum_legs", True), ("maximum_seek_steps", 513),
+    ("maximum_seek_steps", 400), ("maximum_encounters", 65),
+    ("maximum_encounters", True),
+])
+def test_search_v2_rejects_malformed_over_limit_or_uncoupled_budget(key, value):
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    bound = bind_red_capture_search_budget_profile(_local_discovery_profile(), maximum_legs=320)
+    parameters = _thaw(bound.providers[0].parameters)
+    parameters[key] = value
+    with pytest.raises(RedGoalContextProfileError):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id="invalid-v2-budget", providers=((
+                GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, parameters,
+            ), (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+                (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {})),
+        ))
+
+
+def test_search_v2_retarget_does_not_expand_tighter_prospectively_declared_caps():
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    bound = bind_red_capture_search_budget_profile(_local_discovery_profile(), maximum_legs=320)
+    parameters = _thaw(bound.providers[0].parameters)
+    parameters.update(maximum_legs=80, maximum_seek_steps=200, maximum_encounters=16)
+    providers = [(bound.providers[0].kind, bound.providers[0].mechanic, parameters)]
+    providers += [(s.kind, s.mechanic, _thaw(s.parameters)) for s in bound.providers[1:]]
+    tight = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="tight-v2-budget", providers=tuple(providers)))
+    assert bind_red_capture_search_budget_profile(tight) == tight
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph())
+    moved = retarget_red_wild_profile(tight, corridor)
+    for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
+        assert moved.providers[0].parameters[key] == tight.providers[0].parameters[key]
+
+
+@pytest.mark.parametrize("value,status", [(1, True), (None, True), ("true", True), (True, False)])
+def test_capture_weakening_profile_refuses_implicit_or_malformed_support(value, status):
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    original = _local_discovery_profile()
+    parameters = _thaw(original.providers[0].parameters)
+    parameters.update(capture_weakening_support=value, capture_status_support=status)
+    providers = [(original.providers[0].kind, original.providers[0].mechanic, parameters)]
+    providers += [(s.kind, s.mechanic, _thaw(s.parameters)) for s in original.providers[1:]]
+    with pytest.raises(RedGoalContextProfileError, match="explicit status support"):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id="invalid-weakening", providers=tuple(providers)))
+
+
 @pytest.mark.parametrize("key,value", [
     ("capture_search_budget", True), ("capture_search_budget", "unlimited"),
     ("maximum_legs", 161), ("maximum_legs", True),
@@ -160,6 +288,41 @@ def test_noncanonical_corridor_requires_matching_cartridge_encounters(monkeypatc
                         lambda rom, *, medium: {int(MapId.ROUTE_11): [(10, 1)]})
     with pytest.raises(RedLivingDexWildCorridorError, match="authenticated ordinary"):
         derive_red_living_dex_wild_corridor(target, terrain, _graph(), cartridge=b"fixture")
+
+
+def test_current_component_prevents_quoting_an_unreachable_clearance_winner():
+    target = RedEncounterSourceTarget("wild:Route2:grass")
+    original = derive_red_living_dex_wild_corridor(target, _terrain(), _graph())
+    assert original.origin_at == (3, 1)
+    actual = derive_red_living_dex_wild_corridor(
+        target, _terrain(), _graph(), reachable_from=(3, 4))
+    assert actual.origin_at == (3, 4) and actual.terminal_at == (2, 4)
+    assert derive_red_living_dex_wild_corridor(target, _terrain(), _graph()) == original
+
+
+@pytest.mark.parametrize("edge", [
+    LocalEdge((3, 1), "left", requirements=frozenset({"unearned_gate"})),
+    LocalEdge((3, 1), "left", kind="surf", required_mode="water"),
+    LocalEdge((3, 1), "left", action_kind=MacroActionKind.INTERACT),
+])
+def test_current_component_does_not_cross_unearned_or_nonwalking_edges(edge):
+    graph = _graph()
+    graph = LocalGraph({**graph.edges, (3, 4): graph.neighbors((3, 4)) + (edge,)})
+    actual = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), graph,
+        reachable_from=(3, 4))
+    assert actual.origin_at == (3, 4)
+
+
+def test_current_component_refuses_no_reachable_pair_and_excluded_origin():
+    target = RedEncounterSourceTarget("wild:Route2:grass")
+    with pytest.raises(RedLivingDexWildCorridorError, match="unobstructed reversible"):
+        derive_red_living_dex_wild_corridor(
+            target, _terrain(), _graph(), reachable_from=(0, 0))
+    for origin in ((True, 1), (6, 1), [3, 4], (3, 4)):
+        with pytest.raises(RedLivingDexWildCorridorError, match="origin"):
+            derive_red_living_dex_wild_corridor(
+                target, _terrain(), _graph(), reachable_from=origin, excluded={(3, 4)})
 
 
 def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():

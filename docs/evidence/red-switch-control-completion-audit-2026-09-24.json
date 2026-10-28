@@ -1,0 +1,101 @@
+{
+  "schema": "pokemon.red.switch-control-completion-audit.v1",
+  "session_id": "2026-09-24-switch-control-completion-audit",
+  "outcome": "Experiment rejected before labels/fitting; implementation corrections and whole-project audit completed. Battle-learning objective remains unfinished.",
+  "classification": "Engineering and audit, not learner improvement",
+  "gameplay_running": false,
+  "source_commit": "f8b67755aacd6152d58b5ac19f0f7e9d7308aea2",
+  "new_fits": 0,
+  "new_train_examples": 0,
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "new_goal_choices": 0,
+  "authority_promotions": 0,
+  "story_controller_inputs": 0,
+  "inventory": {
+    "canonical_train_capture_identities": 318,
+    "status_train_capture_identities": 591,
+    "status_group_sizes": [
+      92,
+      94,
+      126,
+      30,
+      145,
+      104
+    ],
+    "model_train_capture_identities": 909,
+    "planned_fit_contexts": 36,
+    "planned_comparison_teams": 24,
+    "excluded_species_pairs": 945,
+    "native_contexts_materialized": 1,
+    "complete_five_timing_contexts": 0,
+    "comparison_episodes": 0
+  },
+  "failure": {
+    "stage": "train-0-00-measure",
+    "cause": "Assistant configured100turns while admission permits at most80; collector previously allowed up to160.",
+    "configured_turn_horizon": 100,
+    "admission_maximum": 80,
+    "branches": 4,
+    "wins": 0,
+    "losses": 4,
+    "decisions": 39,
+    "prescribed_first_choices": 4,
+    "learner_continuation_choices": 35,
+    "actions": 509,
+    "frames": 43764,
+    "party_faints": 12,
+    "opponents_defeated": 4,
+    "pp_spent": 13,
+    "policy_ns": 43744294,
+    "native_seconds": 2.924276249948889,
+    "illegal_actions": 0,
+    "actor_memory_writes": 0,
+    "combat_teacher_interventions": 0,
+    "synthetic_train_setup": true
+  },
+  "source_bindings": {
+    "plan_sha256": "f771934b44841f0300d113aaaa6ae79d4ab5f1eab399c4c760166a6fd250ada3",
+    "result_sha256": "404cd1ae207f4c3a6cd181a3a5cda32704709b13f33c2ea946b3a7cdee7366dd",
+    "independent_audit_sha256": "405161308b63263c660c3156c8c514dbb7f3511879a3724aa08b02c5cf6e818f"
+  },
+  "corrections": [
+    "Reject horizons above80 before creating branch policy/log/runtime;80acceptance and81/100/160zero-effect rejection tested.",
+    "Measure composed control regret against the entire measured legal action inventory, including cost of excluded child proposals; apply the same offset to retained budgets.",
+    "Implement tested144episode comparison summary retaining losses, common-win decision/PP costs, diagnostic risk rates, invalid actions and intervention gates."
+  ],
+  "verification": {
+    "all39choices_independently_recomputed": true,
+    "all_events_and_endpoints_verified": true,
+    "focused_tests_passed": 381,
+    "private_integration_skipped": 13,
+    "full_suite_rerun": false,
+    "changed_component_type_checks_passed": true,
+    "consumed_code_versions_preserved": true
+  },
+  "protected": {
+    "actual_stage": 461,
+    "state_sha256": "359a96aa317019a8a4d3627711a8faab668091eaa6c48e7485c81d4c17211719",
+    "envelope_sha256": "36dbc835178d9fc6cca3fe7b0f896b6e508fdeb5030cab02fa787d82ec9e03c8",
+    "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+    "next_stage_unused": 462,
+    "story_objectives": 32,
+    "story_objective_total": 36,
+    "local_registrations": 17,
+    "cash": 11765,
+    "campaign_actions": 281525,
+    "campaign_action_cap": 300000,
+    "separate_collection_registrations": 109,
+    "separate_collection_route_total": 124
+  },
+  "audit_findings": [
+    "No new learned improvement since the frozen damage candidate; training infrastructure must not be counted as model readiness.",
+    "Learned combat is connected, but training/preparation targets and item recovery remain support rules.",
+    "First-badge story-ranker evidence is explicitly zero-weight/untrained; bounded collection goal choices do not establish learned fresh-story strategy.",
+    "Story and collection endpoints are separate; neither satisfies the fresh-run gate.",
+    "Private runner configuration escaped unit checks; next dispatch requires a tested end-to-end budget/admission contract and full-action regret gate."
+  ],
+  "next": "Close this consumed packet without replay, fitting or candidate promotion. Consolidate/test the execution contract; prospectively declare corrected80turn collection using untouched contexts, then one fit and fresh comparison. Audit strategic preparation/story ownership before a full run.",
+  "publication": false,
+  "external_agents_used": false
+}

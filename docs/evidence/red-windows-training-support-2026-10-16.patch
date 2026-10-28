@@ -1,0 +1,37 @@
+--- a/helpers/red_whole_player_inventory_20261006.py
++++ b/helpers/red_whole_player_inventory_20261006.py
+@@ -2261,10 +2261,15 @@
+         # Reuse the prior native vertical Cave entry/return adapter. Highest
+         # band alone does not certify an executable Mansion transition.
+         geometry = route.route_world.with_current_observation(rt.reader)
+-        if earned_eight_badges:
+-            from red_mixed_static_options_20261009 import observed_cave_entrance_world
+-            geometry=observed_cave_entrance_world(rt,geometry)
+-        venues = local_collection_evolution_venues(rt,geometry) if earned_eight_badges else None
++        from red_mixed_static_options_20261009 import observed_cave_entrance_world
++        geometry=observed_cave_entrance_world(rt,geometry)
++        venues = local_collection_evolution_venues(rt,geometry)
++        if not earned_eight_badges:
++            # Keep the original lower-band fallback if a trainee/helper cannot
++            # safely cover the declared Cave encounters. Admission remains in
++            # the native evolution referee, with the same loan and HP/PP guards.
++            from pokemon_red_completion.red_goal_context import ROUTE_11_TRAINING_VENUE
++            venues = (*venues, ROUTE_11_TRAINING_VENUE)
+         def fishing_transport_handler(inner):
+             return EngagedStoryRouteHandler(inner, rt.reader,
+                 lambda: retained_early_trainer_binding(
+@@ -2274,12 +2279,12 @@
+               if earned_eight_badges else nullcontext()):
+             rows = player_collection_supplements(rt,actions,observed,world=geometry,
+                 quote_capture_route_work=quote_capture_route_work,
+-                prefer_highest_evolution_venue=earned_eight_badges,
++                prefer_highest_evolution_venue=True,
+                 maximum_evolution_quanta=512 if earned_eight_badges else 64,
+                 maximum_evolution_actions=120000 if earned_eight_badges else None,
+                 maximum_evolution_frames=12000000 if earned_eight_badges else None,
+                 maximum_evolution_seconds=1800 if earned_eight_badges else None,
+-                allow_guarded_evolution_escapes=earned_eight_badges,
++                allow_guarded_evolution_escapes=True,
+                 evolution_training_venues=venues, include_fossil_acquisition=earned_eight_badges,
+                 capture_interruption_handler_wrapper=(
+                     (lambda inner, spec: fishing_transport_handler(inner))

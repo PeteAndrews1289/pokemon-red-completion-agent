@@ -25,23 +25,91 @@ class TrainerPracticeAdmissionError(ValueError):
     """The proposed choice contrast is unsafe to use as training evidence."""
 
 
+def _valid_status_stages(value: object) -> bool:
+    return (
+        isinstance(value, list)
+        and len(value) == 6
+        and all(type(v) is int and -6 <= v <= 6 for v in value)
+    )
+
+
 def inspect_trainer_practice_choices(
     capture: BattleScenarioCapture,
     document: Mapping[str, object],
     *,
     expected_choice_refs: tuple[str, ...],
     continuation_policy_id: str,
-    branch_event_logs: Mapping[str, Path] | None = None,
+    branch_event_logs: Mapping[str, Path | str] | None = None,
     plan_sha256: str | None = None,
     model_sha256: str | None = None,
     max_decisions: int | None = None,
     expected_opening_idle_frames: int = 0,
+    expected_status_context: Mapping[str, object] | None = None,
+    allow_forced_struggle: bool = False,
+    train_wild_diagnostic: bool = False,
+    train_wild_limits: tuple[int, int] | None = None,
+    train_wild_choice_scope: str | None = None,
 ) -> dict[str, object]:
     """Verify a complete equal-horizon TRAIN set and expose raw outcomes only."""
+    if type(train_wild_diagnostic) is not bool or train_wild_diagnostic and allow_forced_struggle:
+        raise TrainerPracticeAdmissionError("TRAIN wild diagnostic authority differs")
+    if train_wild_limits is not None and (
+        not train_wild_diagnostic or type(train_wild_limits) is not tuple
+        or len(train_wild_limits) != 2
+        or any(type(value) is not int for value in train_wild_limits)
+        or train_wild_limits != (8, 32)
+    ):
+        raise TrainerPracticeAdmissionError("explicit TRAIN wild limits must be (8, 32)")
+    if train_wild_choice_scope is not None and (
+        type(train_wild_choice_scope) is not str
+        or train_wild_choice_scope != "switch_selection"
+        or train_wild_diagnostic is not True or train_wild_limits != (8, 32)
+    ):
+        raise TrainerPracticeAdmissionError("switch-selection scope requires explicit TRAIN wild (8, 32)")
+    if document.get("train_wild_choice_scope") != train_wild_choice_scope:
+        raise TrainerPracticeAdmissionError("declared TRAIN wild choice scope differs")
+    if train_wild_choice_scope == "switch_selection" and (
+        not isinstance(expected_choice_refs, tuple) or len(expected_choice_refs) != 2
+        or any(type(ref) is not str or ref not in {
+            f"pokemon.core:battle:switch:{slot}" for slot in range(1, 7)
+        } for ref in expected_choice_refs)
+    ):
+        raise TrainerPracticeAdmissionError("switch-selection requires two exact switch refs")
+    limits_metadata = (None if train_wild_limits is None else
+                       {"player_turn_horizon": 8, "max_decisions": 32})
+    if document.get("train_wild_limits") != limits_metadata or (
+        limits_metadata is not None and (
+            type(document["train_wild_limits"].get("player_turn_horizon")) is not int
+            or type(document["train_wild_limits"].get("max_decisions")) is not int
+        )
+    ):
+        raise TrainerPracticeAdmissionError("declared TRAIN wild limits metadata differs")
+    wild_horizon, wild_decisions = (2, 8) if train_wild_limits is None else train_wild_limits
+    expected_battle_state = 1 if train_wild_diagnostic else 2
+    if type(allow_forced_struggle) is not bool:
+        raise TrainerPracticeAdmissionError("forced Struggle opt-in must be boolean")
+    if expected_status_context is not None and (
+        not isinstance(expected_status_context, Mapping)
+        or expected_status_context.get("schema") != "pokemon.core.battle.status-context.v1"
+        or any(
+            type(expected_status_context.get(k)) is not bool
+            for k in ("player_confused", "opponent_confused")
+        )
+        or any(
+            not _valid_status_stages(expected_status_context.get(k))
+            for k in ("player_stages", "opponent_stages")
+        )
+    ):
+        raise TrainerPracticeAdmissionError("prospective native status context differs")
     if (
         not isinstance(capture, BattleScenarioCapture)
         or capture.manifest.partition is not ScenarioPartition.TRAIN
-        or document.get("schema") != "pokemon.red.trainer-practice-counterfactual-set.v1"
+        or capture.manifest.expected_battle_state != expected_battle_state
+        or document.get("schema") != ("pokemon.red.wild-practice-counterfactual-set.v1" if train_wild_diagnostic
+                                      else "pokemon.red.trainer-practice-counterfactual-set.v1")
+        or document.get("wild_training", False) is not train_wild_diagnostic
+        or document.get("train_wild_diagnostic", False) is not train_wild_diagnostic
+        or (train_wild_diagnostic and document.get("expected_battle_state") != 1)
         or document.get("partition") != "train"
         or document.get("capture_id") != capture.manifest.capture_id
         or document.get("manifest_sha256") != capture.manifest_sha256
@@ -65,6 +133,17 @@ def inspect_trainer_practice_choices(
         or not 0 <= expected_opening_idle_frames <= 12
     ):
         raise TrainerPracticeAdmissionError("choice inventory or horizon differs")
+    if train_wild_diagnostic and (
+        horizon != wild_horizon or len(branches) != 2
+        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:move:")]) != (
+            0 if train_wild_choice_scope == "switch_selection" else 1)
+        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:switch:")]) != (
+            2 if train_wild_choice_scope == "switch_selection" else 1)
+        or (max_decisions is not None and max_decisions > wild_decisions)
+        or (train_wild_limits is not None and
+            (type(max_decisions) is not int or max_decisions != wild_decisions))
+    ):
+        raise TrainerPracticeAdmissionError("wild diagnostic contrast or horizon differs")
     rows: list[dict[str, object]] = []
     return_proof_complete = True
     seen: set[str] = set()
@@ -86,7 +165,7 @@ def inspect_trainer_practice_choices(
             ):
                 raise TrainerPracticeAdmissionError("choice lacks prospective execution evidence")
             _verify_branch_log(
-                branch_event_logs[choice],
+                Path(branch_event_logs[choice]),
                 capture,
                 choice,
                 episode,
@@ -96,6 +175,10 @@ def inspect_trainer_practice_choices(
                 model_sha256,
                 max_decisions,
                 expected_opening_idle_frames,
+                expected_status_context,
+                allow_forced_struggle,
+                train_wild_diagnostic,
+                train_wild_choice_scope,
             )
         decisions = episode.get("decisions")
         policy_id = episode.get("policy_id")
@@ -118,10 +201,12 @@ def inspect_trainer_practice_choices(
         first = decisions[0]
         if (
             not isinstance(first, dict)
-            or first.get("observation_sha256") != capture.manifest.initial_observation_sha256
+            or not _matches_initial_observation(capture, first, expected_status_context)
             or not _matches_first_choice(first, choice)
         ):
             raise TrainerPracticeAdmissionError("first executed action differs")
+        if train_wild_choice_scope == "switch_selection" and first.get("kind") != "voluntary_switch":
+            raise TrainerPracticeAdmissionError("switch-selection requires native MAIN switches")
         if first_resources is None:
             first_resources = first.get("state_before")
         elif first.get("state_before") != first_resources:
@@ -150,7 +235,9 @@ def inspect_trainer_practice_choices(
             for name in ("state_before", "state_after"):
                 if not _plausible_resources(decision.get(name)):
                     raise TrainerPracticeAdmissionError("choice has impossible HP resources")
-            if not _valid_action(decision):
+            if (
+                decision.get("kind") == "forced_struggle" and not allow_forced_struggle
+            ) or not _valid_action(decision):
                 raise TrainerPracticeAdmissionError("choice contains an illegal action")
             if branch_event_logs is not None and not _actor_observation_matches(decision):
                 raise TrainerPracticeAdmissionError(
@@ -160,7 +247,11 @@ def inspect_trainer_practice_choices(
             if type(step_frames) is not int or step_frames < 0:  # noqa: E721
                 raise TrainerPracticeAdmissionError("choice step frames differ")
             counted_frames += step_frames
-            counted_turns += decision.get("kind") in {"attack", "voluntary_switch"}
+            counted_turns += decision.get("kind") in {
+                "attack",
+                "voluntary_switch",
+                "forced_struggle",
+            }
             prior = decision
         if set(seen) - set(expected_choice_refs):
             raise TrainerPracticeAdmissionError("choice inventory differs from declared plan")
@@ -188,7 +279,7 @@ def inspect_trainer_practice_choices(
         elif stop == "party_defeated":
             if any(value > 0 for value in decisions[-1]["state_after"]["party_hp"]):
                 raise TrainerPracticeAdmissionError("choice defeat lacks terminal proof")
-        elif episode.get("final_battle_state") != 2:
+        elif episode.get("final_battle_state") != expected_battle_state:
             raise TrainerPracticeAdmissionError("choice horizon left its trainer battle")
         final_observation = episode.get("final_observation")
         if not isinstance(final_observation, dict) or (
@@ -257,7 +348,12 @@ def inspect_trainer_practice_choices(
     if branch_event_logs is not None and set(branch_event_logs) != seen:
         raise TrainerPracticeAdmissionError("branch log inventory differs from declared plan")
     return {
-        "schema": "pokemon.red.trainer-practice-admission.v1",
+        "schema": ("pokemon.red.wild-practice-admission.v1" if train_wild_diagnostic
+                   else "pokemon.red.trainer-practice-admission.v1"),
+        **({"train_wild_diagnostic": True, "expected_battle_state": 1} if train_wild_diagnostic else {}),
+        **({"train_wild_limits": dict(limits_metadata)} if limits_metadata is not None else {}),
+        **({"train_wild_choice_scope": train_wild_choice_scope}
+           if train_wild_choice_scope is not None else {}),
         "capture_id": capture.manifest.capture_id,
         "manifest_sha256": capture.manifest_sha256,
         "source_commit": capture.manifest.source_commit,
@@ -288,6 +384,10 @@ def _verify_branch_log(
     model_sha256: str,
     max_decisions: int,
     opening_idle_frames: int,
+    status_context: Mapping[str, object] | None = None,
+    allow_forced_struggle: bool = False,
+    train_wild_diagnostic: bool = False,
+    train_wild_choice_scope: str | None = None,
 ) -> None:
     try:
         result = verify_trainer_practice_event_log(directory)
@@ -316,15 +416,30 @@ def _verify_branch_log(
             "model_sha256": model_sha256,
             "max_decisions": max_decisions,
             "opening_idle_frames": opening_idle_frames,
+            **(
+                {"allow_status_moves": True, "native_status_context": dict(status_context)}
+                if status_context is not None
+                else {}
+            ),
         }
         if any(bound.get(key) != value for key, value in expected.items()):
             raise TrainerPracticeAdmissionError("branch log identity differs from plan")
+        if (bound.get("wild_training", False) is not train_wild_diagnostic
+                or bound.get("train_wild_diagnostic", False) is not train_wild_diagnostic):
+            raise TrainerPracticeAdmissionError("branch wild authority differs from plan")
+        if bound.get("train_wild_choice_scope") != train_wild_choice_scope:
+            raise TrainerPracticeAdmissionError("branch choice scope differs from plan")
+        if bound.get("allow_forced_struggle", False) is not allow_forced_struggle:
+            raise TrainerPracticeAdmissionError("branch Struggle authority differs from plan")
         starts = [event for event in payloads if event.get("event") == "episode_started"]
         completed = [event for event in payloads if event.get("event") == "decision_completed"]
         choices = [event for event in payloads if event.get("event") == "choice_recorded"]
         decisions = episode.get("decisions")
         if (
             len(starts) != 1
+            or starts[0].get("wild_training", False) is not train_wild_diagnostic
+            or starts[0].get("train_wild_diagnostic", False) is not train_wild_diagnostic
+            or starts[0].get("allow_forced_struggle", False) is not allow_forced_struggle
             or starts[0].get("manifest_sha256") != capture.manifest_sha256
             or starts[0].get("policy_id") != f"{continuation_policy_id}:first={choice}"
             or starts[0].get("max_player_turns") != horizon
@@ -360,6 +475,28 @@ def _verify_branch_log(
         raise TrainerPracticeAdmissionError("branch execution log cannot be verified") from error
 
 
+def _matches_initial_observation(capture, first, status_context):
+    if status_context is None:
+        return first.get("observation_sha256") == capture.manifest.initial_observation_sha256
+    from copy import deepcopy
+
+    from .battle_scenario_capture import OBSERVATION_SCHEMA_V2
+
+    if capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2:
+        return False
+    observation = first.get("observation")
+    if not isinstance(observation, dict) or canonical_sha256(observation) != first.get(
+        "observation_sha256"
+    ):
+        return False
+    legacy = deepcopy(observation)
+    features = legacy.get("features")
+    battle = features.get("battle") if isinstance(features, dict) else None
+    if not isinstance(battle, dict) or battle.pop("status_context", None) != status_context:
+        return False
+    return canonical_sha256(legacy) == capture.manifest.initial_observation_sha256
+
+
 def _matches_first_choice(first: Mapping[str, object], choice: str) -> bool:
     if choice == "pokemon.core:battle:decline-switch":
         return first.get("kind") == "switch_prompt" and first.get("party_slot") is None
@@ -381,6 +518,13 @@ def _choice_log_matches_decision(
 ) -> bool:
     kind = decision.get("kind")
     action = event.get("selected_action")
+    if kind == "forced_struggle":
+        return (
+            action == "forced_struggle"
+            and event.get("authority") == "forced_mechanic"
+            and event.get("policy_elapsed_ns") == 0
+            and event.get("model_diagnostics") == {}
+        )
     if kind == "attack":
         return (
             isinstance(action, dict)
@@ -425,6 +569,19 @@ def _actor_observation_matches(decision: Mapping[str, object]) -> bool:
     ]  # noqa: E721
     if decision.get("legal_party_slots") != options:
         return False
+    if decision.get("kind") == "forced_struggle":
+        moves = party.get("lead", {}).get("moves")
+        return (
+            not options
+            and type(hp[active]) is int
+            and hp[active] > 0
+            and isinstance(moves, list)
+            and bool(moves)
+            and all(
+                isinstance(m, Mapping) and type(m.get("pp")) is int and m["pp"] == 0 for m in moves
+            )
+            and _valid_forced_struggle(decision)
+        )
     if decision.get("kind") not in {"attack", "voluntary_switch"}:
         return True
     model_input = decision.get("model_input")
@@ -488,6 +645,8 @@ def _valid_action(decision: Mapping[str, object]) -> bool:
         for slot in legal_party  # noqa: E721
     ):
         return False
+    if kind == "forced_struggle":
+        return _valid_forced_struggle(decision)
     if kind == "attack":
         legal_moves = decision.get("legal_move_slots")
         return (
@@ -500,6 +659,97 @@ def _valid_action(decision: Mapping[str, object]) -> bool:
     if kind == "switch_prompt":
         return decision.get("party_slot") is None or decision.get("party_slot") in legal_party
     return False
+
+
+def _valid_forced_struggle(decision: Mapping[str, object]) -> bool:
+    """Verify a singleton mechanic, never authorize an unobserved policy choice."""
+    before = decision.get("state_before")
+    after = decision.get("state_after")
+    outcome = decision.get("outcome")
+    if (
+        not isinstance(before, Mapping)
+        or not isinstance(after, Mapping)
+        or not isinstance(outcome, Mapping)
+    ):
+        return False
+    hp, slot, pp = (before.get(k) for k in ("party_hp", "active_party_slot", "active_pp"))
+    terminal_roster = outcome.get("terminal_enemy_roster_hp")
+    observation = decision.get("observation", {})
+    if not isinstance(observation, Mapping):
+        return False
+    features = observation.get("features", {})
+    if not isinstance(features, Mapping):
+        return False
+    party, battle = features.get("party", {}), features.get("battle", {})
+    if not isinstance(party, Mapping) or not isinstance(battle, Mapping):
+        return False
+    lead = party.get("lead", {})
+    if not isinstance(lead, Mapping):
+        return False
+    status, trapped = lead.get("status"), battle.get("opponent_using_trapping_move")
+    suppressed = (
+        outcome.get("execution_claim") == "suppressed_before_selection"
+        and outcome.get("selected_move_ref") is None
+        and outcome.get("cartridge_selection_observed") is False
+        and (
+            (
+                outcome.get("suppression") in ("sleep", "freeze")
+                and status == outcome.get("suppression")
+            )
+            or (outcome.get("suppression") == "trapping" and trapped is True)
+        )
+    )
+    selected = (
+        outcome.get("execution_claim") == "attempt_only"
+        and outcome.get("selected_move_ref") == "pokemon.red.gb.us.rev0:move:165"
+        and outcome.get("cartridge_selection_observed") is True
+        and outcome.get("suppression") is None
+    )
+    terminal = (
+        outcome.get("final_battle_state") == 0
+        and isinstance(terminal_roster, list)
+        and bool(terminal_roster)
+        and all(type(v) is int and v == 0 for v in terminal_roster)
+        and isinstance(after.get("party_hp"), list)
+        and any(type(v) is int and v > 0 for v in after["party_hp"])
+        and after.get("opponent_hp") == 0
+        and after.get("active_party_slot") is None
+    )
+    return (
+        decision.get("authority") == "forced_mechanic"
+        and decision.get("legal_party_slots") == []
+        and decision.get("model_diagnostics") == {}
+        and decision.get("policy_elapsed_ns") == 0
+        and decision.get("move_slot") is None
+        and isinstance(hp, list)
+        and type(slot) is int
+        and 1 <= slot <= len(hp)
+        and type(hp[slot - 1]) is int
+        and hp[slot - 1] > 0
+        and all(v == 0 for i, v in enumerate(hp) if i != slot - 1)
+        and isinstance(pp, list)
+        and len(pp) == 4
+        and all(type(v) is int and 0 <= v <= 255 and v & 63 == 0 for v in pp)
+        and (
+            terminal
+            or (
+                outcome.get("final_battle_state") == 2
+                and after.get("active_pp") == pp
+                and after.get("active_party_slot") == slot
+            )
+        )
+        and outcome.get("schema") == "pokemon.red.forced-struggle-turn.v1"
+        and outcome.get("authority") == "forced_mechanic"
+        and outcome.get("move_slot") is None
+        and (selected or suppressed)
+        and outcome.get("departed_main_menu") is True
+        and outcome.get("pp_spent") == 0
+        and type(outcome.get("actions_executed")) is int
+        and outcome["actions_executed"] > 0
+        and type(outcome.get("frames_executed")) is int
+        and outcome["frames_executed"] > 0
+        and outcome["frames_executed"] == decision.get("frames_executed")
+    )
 
 
 def _plausible_observation(observation: Mapping[str, object]) -> bool:

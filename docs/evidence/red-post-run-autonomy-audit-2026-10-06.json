@@ -1,0 +1,358 @@
+{
+  "schema": "pokemon.red.post-run-autonomy-audit.v1",
+  "session_id": "2026-10-06-post-run-autonomy-audit",
+  "audit_date_utc": "2026-10-06",
+  "scope": "Read-only runtime/source audit and retained planning documentation; not gameplay, training or implementation",
+  "current_source": {
+    "git_head": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+    "branch": "work/current-player",
+    "working_tree_entries_at_start": 439,
+    "tracked_files_changed_at_start": 234,
+    "head_is_not_complete_current_player_snapshot": true,
+    "audited_source_sha256": {
+      "src/pokemon_red_completion/red_native_player.py": "97201474b686e1fb46cece33a2630d553e2c0e3ab065047e2adcea12b51cc75a",
+      "src/pokemon_red_completion/red_player_story_menu.py": "180be233c8f273332d600455a3e5941fbfda1c9bfb43aeb27faf43ee73df3f89",
+      "src/pokemon_red_completion/red_player_member_preparation.py": "b941f1af8a519f9cddf6356e915c41fbb3eb171fe66f630e5659c05c18acda4b",
+      "src/pokemon_red_completion/red_consequence_choice.py": "fe7c84b1360252db916c05e160ae519d0ab8f635b23d8d6f9de3d0a35832426b",
+      "src/pokemon_red_completion/living_dex_option_value.py": "4c7ca901ba894bab2139ec88652e0b36663e1b569b70e86c61da5b0991898590"
+    }
+  },
+  "completed_run": {
+    "family": "red-earned-run-completion-20261005-v1",
+    "terminal": "fresh-pilot/runs/segment-278",
+    "state_sha256": "5a81496cc3be86d330593f0b00d92e71945e334b2b6068eb39dbb9e0ca20febe",
+    "context_sha256": "f1161ee16070c1eae3569e7165a72b8c48c2c2df09db348ff0f2a24eb7c23a9f",
+    "closing_evidence_path": "docs/evidence/red-earned-run-completion-2026-10-06.json",
+    "closing_evidence_sha256": "ff947351af41103f01f1e5753cfb65c21fd733c51235cfd1041ae9e7675530c2",
+    "native_audit_sha256": "5e61f1c469b8a6ee673d9b1d4f2047c98ee984351818fb8e0c402d595d47de42",
+    "closed_report_sha256": "6f2d5b362583f63f2231bd4a46451a6bcfefc985d544ba9d7cfa39e520d75fcc",
+    "badges": 8,
+    "story_objectives": 36,
+    "native_route_registrations": 124,
+    "additional_save_external_dependencies": 27,
+    "autonomous_acceptance_gates_passed": 0,
+    "scope": "Assisted same-save DEVELOPMENT completion",
+    "recorded_net_positive_cash_debits": 675746,
+    "reconciled_net_positive_cash_debits": 704630,
+    "historical_records_rewritten": false
+  },
+  "decision_recount": {
+    "ancestry_nodes": 271,
+    "complete_episodes": 264,
+    "executed_decisions": 707,
+    "model_decisions": 274,
+    "support_decisions": 433,
+    "selection_modes": {
+      "support": 417,
+      "model_exploration": 217,
+      "deterministic_safety": 16,
+      "model_greedy": 57
+    },
+    "model_goal_kinds": {
+      "acquire_species": 126,
+      "resupply": 72,
+      "restore_team": 18,
+      "evolve_species": 47,
+      "advance_story": 11
+    },
+    "support_goal_kinds": {
+      "acquire_species": 20,
+      "manage_storage": 10,
+      "resupply": 53,
+      "develop_team": 33,
+      "restore_team": 76,
+      "evolve_species": 7,
+      "recover_control": 86,
+      "advance_story": 148
+    },
+    "support_roles": {
+      "forced_singleton": 331,
+      "deterministic_player_safety": 9,
+      "deterministic_control_recovery": 86,
+      "deterministic_storage_safety": 7
+    },
+    "verified_outcome_verdicts": {
+      "succeeded": 583,
+      "null": 71,
+      "failed": 53
+    },
+    "episode_stop_reasons": {
+      "decision_budget": 148,
+      "menu_unavailable": 35,
+      "execution_failed": 71,
+      "verification_failed": 4,
+      "curriculum_complete": 4,
+      "unsafe_decision_boundary": 2
+    },
+    "outcome_exception_counts": {
+      "TypeError": 2,
+      "RuntimeError": 2,
+      "RedLeagueFundingExecutionError": 2,
+      "RedGoalSkillError": 1,
+      "RouteExecutionError": 28,
+      "RedGoalContextError": 2,
+      "ProtectedRecoveryError": 1,
+      "RoutedSemanticGoalError": 2,
+      "RedCaptureLeadError": 2,
+      "SurgeChapterError": 2,
+      "RoutePlanningError": 4,
+      "StopIteration": 5,
+      "FileExistsError": 2,
+      "ControllerWallTimeBudgetExhausted": 4,
+      "RedSuperRodSupportError": 1,
+      "ValueError": 1,
+      "TrainerFundingBattleError": 2,
+      "LoreleiStoryBattleStopped": 4,
+      "TrainerOutcomePolicyError": 1,
+      "AssertionError": 1,
+      "Gen1FieldMoveError": 1,
+      "OneOffCapturePaused": 1
+    },
+    "nodes_without_complete_episode": [
+      "native-loan-return-234-v3",
+      "native-loan-return-233-v2",
+      "segment-232",
+      "segment-56",
+      "segment-09",
+      "segment-04",
+      "segment-03"
+    ],
+    "model_choice_ratio_is_not_an_autonomy_percentage": true
+  },
+  "deployed_learning": {
+    "model141_v7_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "fitted_examples": 141,
+    "original_feature_version": 4,
+    "original_features": 37,
+    "projected_features": 356,
+    "outcome_heads": 9,
+    "new_feature_groups": [
+      {
+        "group": "readiness",
+        "features": 252,
+        "coefficient_cells": 2268,
+        "nonzero_coefficient_cells": 0
+      },
+      {
+        "group": "challenge",
+        "features": 54,
+        "coefficient_cells": 486,
+        "nonzero_coefficient_cells": 0
+      },
+      {
+        "group": "preparation",
+        "features": 13,
+        "coefficient_cells": 117,
+        "nonzero_coefficient_cells": 0
+      }
+    ],
+    "selected_story_train_examples_in_model141": 0,
+    "selected_develop_train_examples_in_model141": 0,
+    "new_features_total": 319,
+    "new_coefficient_cells_total": 2871,
+    "completion_goal_train_examples_added": 0,
+    "completion_goal_fits": 0,
+    "completion_goal_weight_updates": 0,
+    "existing_recovery_head": {
+      "examples": 36,
+      "recorded_rows_including_censored": 39,
+      "feedback_version": 2,
+      "provenance": "native_train",
+      "model_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+      "file_sha256": "525de6c4ff5ff8fed0e4882387f749baa4f62688e0d6422cc093b566b84a9366",
+      "last_demonstrated_scope": "Exposed Misty DEVELOPMENT recovery and Cerulean composition",
+      "used_in_latest_full_run": false,
+      "general_readiness_qualified": false
+    }
+  },
+  "verification": {
+    "environment": {
+      "python": "3.14.3",
+      "pytest": "9.1.1",
+      "numpy": "2.5.2",
+      "pytest_xdist": "3.8.0"
+    },
+    "full_eligible_tests_collected": 20349,
+    "integration_tests_deselected": 16,
+    "broad_full_suite_pass_claim": false,
+    "serial_prefix": {
+      "passed": 11287,
+      "failed": 6,
+      "skipped": 1,
+      "xfailed": 1,
+      "seconds": 1450.78,
+      "exit_code": 2,
+      "status": "Interrupted during slow legacy curriculum checks"
+    },
+    "parallel_tail": {
+      "passed": 8522,
+      "failed": 1,
+      "seconds": 510.87,
+      "exit_code": 2,
+      "status": "Interrupted with one remaining busy worker; all workers exited"
+    },
+    "boundary_overlap_present": true,
+    "aggregate_unique_pass_count_claimed": false,
+    "focused_next_work_tests": {
+      "passed": 898,
+      "failed": 0,
+      "seconds": 7.65,
+      "exit_code": 0,
+      "files": [
+        "tests/test_red_native_player.py",
+        "tests/test_red_native_player_continuation.py",
+        "tests/test_red_player_story_menu.py",
+        "tests/test_red_player_member_preparation.py",
+        "tests/test_red_consequence_choice.py",
+        "tests/test_red_autonomous_player.py",
+        "tests/test_challenge_consequence.py",
+        "tests/test_progress_consequence.py",
+        "tests/test_red_player_preparation_binding.py",
+        "tests/test_red_player_preparation_lesson.py",
+        "tests/test_red_player_lesson_runtime.py",
+        "tests/test_red_player_training_fit.py",
+        "tests/test_red_development_story_scope.py",
+        "tests/test_red_scoped_training_battlers.py",
+        "tests/test_registered_runtime_binding.py",
+        "tests/test_registered_capture_demand.py",
+        "tests/test_native_challenge_consequence.py",
+        "tests/test_red_wild_preparation.py",
+        "tests/test_player_option_preparation.py",
+        "tests/test_player_readiness.py",
+        "tests/test_red_scoped_lorelei.py"
+      ]
+    },
+    "ruff": {
+      "findings": 106,
+      "by_code": {
+        "E501": 64,
+        "I001": 18,
+        "E701": 17,
+        "E702": 6,
+        "B905": 1
+      },
+      "fixed": false
+    },
+    "mypy": {
+      "errors": 34,
+      "files_with_errors": 15,
+      "source_files_checked": 728,
+      "legacy_ignore_error_modules": 44,
+      "fixed": false
+    },
+    "documentation_surface_tests_passed": 13,
+    "observed_distinct_regression_failures": 7,
+    "failures": [
+      {
+        "tests": [
+          "test_committed_loader_reads_head_not_a_modified_working_file",
+          "test_committed_loader_rejects_executable_changes_but_accepts_docs_only_commit",
+          "test_registry_generator_check_mode_rebuilds_the_exact_tracked_bytes"
+        ],
+        "file": "tests/test_collection_protocol.py",
+        "classification": "Stale prospective executable-source registry",
+        "resolved": false
+      },
+      {
+        "tests": [
+          "test_replans_keep_cut_scope_without_allowing_surf"
+        ],
+        "file": "tests/test_red_collection_cut.py",
+        "classification": "None request in outdated typed-interface test fixture; no live None request demonstrated",
+        "resolved": false
+      },
+      {
+        "tests": [
+          "test_replan_and_retarget_preserve_only_declared_surf"
+        ],
+        "file": "tests/test_red_collection_surf.py",
+        "classification": "None request in outdated typed-interface test fixture; capability restrictions must remain",
+        "resolved": false
+      },
+      {
+        "tests": [
+          "test_operational_contract_has_independent_golden_coverage"
+        ],
+        "file": "tests/test_red_party_development_venue_priors.py",
+        "classification": "Current battle-timing source fingerprint differs from older golden expectation; review before prospective update",
+        "resolved": false
+      },
+      {
+        "tests": [
+          "test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migration"
+        ],
+        "file": "tests/test_product_focus.py",
+        "classification": "Next3h wording convention addressed in refreshed plan; no counter or authority change",
+        "resolved_by_documentation_update": true
+      }
+    ],
+    "no_runtime_or_test_source_changes": true,
+    "documentation_closeout": {
+      "documentation_links_passed": true,
+      "active_product_focus_passed": true,
+      "documentation_surface_and_product_focus_tests_passed": 169,
+      "seconds": 2.15,
+      "all_scoped_audit_test_processes_stopped": true
+    },
+    "protected_closed_run_hashes_rechecked": true
+  },
+  "decision": {
+    "immediate_bottleneck": "Supplied strategic option filtering plus unused learned readiness and noncanonical whole-game composition",
+    "sequence_learner": "Defer",
+    "broad_battler_refit": "Defer unless actual battle trace establishes a specific defect",
+    "reuse": "Model141 parent, existing V2 consequence child, fresh native mixed menu, member preparation, ordinary recovery, scoped K/e189 and native verifiers",
+    "next_experiment": "Up to four DEVELOPMENT baseline/composed-head arms on retained Lorelei-loss and prepared sources; no fits",
+    "question": "Can the existing composed learner choose useful preparation/recovery and a rematch beyond Misty without a supplied threshold?",
+    "head_scope": "New exact provisional DEVELOPMENT cross-challenge scope, not global promotion",
+    "loss_source": {
+      "segment": 112,
+      "state_sha256": "627b430eedecd58b6f088df991814779d393f4976cddcf513b397e2e550c341c",
+      "context_sha256": "fc49cddf627caeed5a495a16c77995587f4f200a520630fb7650e55de05c1f87"
+    },
+    "prepared_source": {
+      "segment": 162,
+      "state_sha256": "c08db1c92769c0a55703f4f8b5594a508c95405689d9d13f8c375ae405f01332",
+      "context_sha256": "3d77254c71d1f940a5a387f7c5c31dad2a22d695884def84b5d9216ab47f06dc"
+    },
+    "source_partition": "development",
+    "source_independence_claim": false,
+    "required_small_changes": [
+      "Connect optional preparation callbacks and existing parent/child arguments",
+      "Only if confirmed necessary, development-only optional training above opponent reference after observed defeat",
+      "Normalize verified ordinary loss through existing recovery if needed"
+    ],
+    "maximum_hours": 3,
+    "maximum_arms": 4,
+    "first_reassessment_minutes": 20,
+    "unproductive_reassessment_minutes": 15,
+    "same_approach_failures_before_pivot": 2,
+    "per_arm_caps": {
+      "consequential_decisions": 12,
+      "wild_battles": 64,
+      "restorations": 12,
+      "inputs": 30000,
+      "frames": 2500000,
+      "native_seconds": 900
+    },
+    "parent_resource_alternatives_preserved": true,
+    "incomparable_score_blending": false,
+    "experiment_launched": false,
+    "fit_authorized_by_this_audit": false,
+    "new_subsystem_requires_explanation": true,
+    "work_order": "docs/work-sessions/2026-10-06-post-run-autonomy-audit.md"
+  },
+  "audit_delta": {
+    "game_inputs": 0,
+    "game_frames": 0,
+    "train_examples": 0,
+    "fits": 0,
+    "weight_updates": 0,
+    "authority_promotions": 0,
+    "registrations": 0,
+    "protected_state_edits": 0,
+    "publication": 0,
+    "external_agents": 0
+  },
+  "private_paths_included": false,
+  "work_order_sha256": "352b9670712ad5f54f79b178a836deeee3ac7c92d5f26eb50d4ac43d07aa0635"
+}

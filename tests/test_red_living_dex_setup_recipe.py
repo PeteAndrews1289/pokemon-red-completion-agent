@@ -642,6 +642,9 @@ class _Reader:
     def read(self) -> RawGameState:
         boundary = self.arm.boundary
         species, levels = _recipe_party(self.arm.recipe)
+        # These setup roots declare completed early story, including Oak's errand.
+        events = bytearray(0x140)
+        events[7] = 1  # OAK_GOT_PARCEL (bit 0x038).
         return RawGameState(
             game_started=True,
             map_id=boundary.map_id,
@@ -649,6 +652,7 @@ class _Reader:
             player_y=boundary.at[0],
             party_count=6,
             battle_state=0,
+            event_flags=bytes(events),
             bag_item_ids=(int(ItemId.POKE_BALL), int(ItemId.HYPER_POTION)),
             bag_items=(
                 (int(ItemId.POKE_BALL), 20),

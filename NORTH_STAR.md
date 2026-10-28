@@ -1,211 +1,132 @@
-# North star and anti-drift contract
+# North Star and development contract
 
-Read this after [MISSION.md](MISSION.md) and before any roadmap, handoff, issue, or dated
-checkpoint.
+This is the operating contract for the product in [MISSION.md](MISSION.md).
+It contains enduring rules, not a running history of game checkpoints.
 
-## The product
+## Authority and current work
 
-Build a transferable hierarchical agent that can enter a mainline Pokémon game, learn its
-game-specific details, finish its story, solve its mechanics and puzzles, and build the declared
-shared registered Pokédex across the versions, trades, and event inputs that completion requires.
+Latest explicit user direction takes precedence over repository documents.
+Within the repository, follow MISSION.md, this contract, generated
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), then [HANDOFF.md](HANDOFF.md).
+The handoff owns the current save and executable next work.
+[The roadmap](docs/model-first-roadmap.md) owns the longer delivery sequence;
+[AGENT_COORDINATION.md](AGENT_COORDINATION.md) owns current roles.
 
-Pokémon Red is the first curriculum and evaluation environment. It is not the product.
+Historical reports, old review prompts, Flash packets, closed goals and private
+experiment declarations do not authorize work. Their frozen limits and results
+remain true for those experiments, not as new-session approval gates.
 
-An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
-Collection development must be practical to complete, preserve verified registration and useful specimens, and ultimately
-support a measured model-selected lesson. Keep partial progress, final goal success and learned
-advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
+## Final product boundary
 
-The deterministic teacher is an oracle, demonstrator, verifier, and emergency safety authority.
-It is not the final player. A fixed route completing Red does not count as learned progress unless
-the work also increases model authority or produces evidence needed to do so.
+The first delivery is one fresh model-directed Red story and 124 same-save native
+registrations, with concurrent Champion/Hall-of-Fame proof. Blue/later titles may
+supply deferred dependencies; a compatible unfamiliar hack, Crystal and Emerald
+follow Red. Registered credit, local flags and specimens stay distinct.
 
-Destination selection is learned authority only when real alternatives are exposed and the
-selected destination controls the played attempt. Preserve failed searches and their resource
-costs; fitting failures alone does not establish practical collection competence. Resource
-recovery must use legitimate game mechanics, not resets that conceal unsustainable spending.
+The final actor cannot cheat or edit a save. Deterministic execution is allowed
+when disclosed, not substituted strategic choices. Pete's temporary League
+medicine-reserve safeguard uses ordinary earned-money purchases and healing.
+It remains explicitly unlearned support, frozen before official evaluation.
+No other manual fallback or supplied strategic ordering follows from that exception.
 
-## Registered completion — September 9, 2026
+## Outcome-based development
 
-The current user-authorized objective is one shared registered Pokédex, not simultaneous living
-forms and not level100. Catch/evolve only as needed for missing global entries, current story
-capability or genuine dependencies; deposit completed specimens when practical. Duplicate catches
-carry no intrinsic penalty and no repeated novelty credit. Actual costs remain measured.
+Default work blocks are up to 3 hours unless Pete explicitly specifies otherwise.
+The approved unit is a useful player outcome, not one command, lesson, fit or retry.
 
-Maintain three separate views: shared verified registrations, each save's actual owned flags,
-and current physical specimens. A global entry never fabricates a local flag or transferable
-specimen. Protect story/HM carriers and needed branches, but do not require a spare base form
-merely to preserve a living Dex. This is not permission to release specimens or edit saves.
+Before implementing, state:
+1. The reusable player capability being improved.
+2. Which decision belongs to the model and which mechanics remain support.
+3. The relevant transfer or reuse check, without claiming independent evidence from copies.
+4. The cheapest observation or test that could disprove the proposed fix.
+5. The aggregate time allowance.
+6. The actual stopping or reassessment condition.
 
-Keep historical contracts and fitted outcomes unchanged. Migrate completion, demand, evolution,
-rewards, checkpoint metadata and reporting together before new registered-only training. Old
-living-Dex and level100 predicates remain legacy evidence, not the current product gate.
-See [the explicit revision](docs/roadmap-decisions.md) and
-[shared-ledger plan](docs/shared-pokedex-registration-plan.md).
+Triage a local issue after 10 minutes. After 15 minutes or two equivalent failures,
+reassess the objective and change tactics. These are not automatic stops or new
+approval gates. Ordinary in-scope repairs, recovery, diagnostic copies, informative
+TRAIN lessons, fits and reversible DEVELOPMENT integration are already allowed.
 
-## Authority order
+Keep finite input/frame/time, stuck-loop and save-safety guards. Ordinary runtime
+segments are resumable checkpoints, not the end of the user's work block. Carry
+every prior loss and cost. Artificial administrative ceilings, including counts of
+free nursing visits, must not cause an unattended approval pause; adjust them
+prospectively when needed and record the change.
 
-When documents disagree, use this order:
+Stop for a user pause, the applicable aggregate boundary, unrecoverable or
+unverifiable state, unavailable prerequisites, or work needing materially broader
+authority. Explain a new subsystem, major architecture change or different product
+outcome before proceeding. Do not reset budgets by renaming a bug.
 
-1. [MISSION.md](MISSION.md) — permanent product definition.
-2. This anti-drift contract — permanent operating rules.
-3. [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) — the one active lane, counters, time box,
-   stop conditions, rigor tier, and prohibited actions.
-4. [docs/model-first-roadmap.md](docs/model-first-roadmap.md) — broader development strategy.
-5. [AGENT_COORDINATION.md](AGENT_COORDINATION.md) — current ownership.
-6. [HANDOFF.md](HANDOFF.md) and dated checkpoints — evidence and historical state.
+Use existing cash and ordinary trainer income before conditional League earning.
+Do not make item sales the default funding strategy. Ordinary fainting and losses
+are game outcomes to recover from, not reasons to demand a perfect win rate.
 
-A newer date does not overrule a higher-authority document. A checkpoint that asks for work
-contrary to the mission is stale by definition.
+## Learning and preparation
 
-## Mandatory mission check
+Offer useful preparation based on known opponents, survivability, useful moves and
+party roles. Modest preparation beyond an opponent's median is allowed. Do not
+train every new capture to the carry's level or substitute blanket overleveling for
+decision learning.
 
-Before implementation, every active task must record:
+Measure whether preparation improves useful outcomes and when the model stops.
+Winning matters; 100% battle wins are not required. A single stochastic loss does
+not prove a plausible fix useless. Raw XP, teacher agreement or reaching a battle
+alone does not establish learned readiness.
 
-1. **Capability:** what reusable playing ability this adds.
-2. **Learned authority:** which choice moves from fixed code or teacher control to the model.
-3. **Transfer test:** how the result is tested outside the exact state that produced it.
-4. **Cheapest falsifier:** the shortest scenario that can prove the idea wrong.
-5. **Time box:** when to stop investigating and reassess.
-6. **Stop condition:** the observation that ends the lane without another patch or replay.
+Do not repeatedly fit the same uninformative failures. Use targeted contrasts
+through the existing learner before proposing another planner or battler redesign.
+Parameter changes, runtime integration and native gameplay gains are separate claims.
 
-If learned authority and transfer both remain unchanged, classify the task as maintenance. Perform
-maintenance only when it unblocks an already-named learned experiment, and keep it to the smallest
-repair that does so.
+## Teachers, copies and provisional use
 
-The tracked source for the active state is `configs/active-product-focus.json`. CI validates it and
-requires [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) to be its exact generated projection.
-Inputs, preflights, CI passes, and teacher runs never advance its learning counters.
+Teachers may manipulate isolated TRAIN fixtures through existing tools, including
+party, levels, stats, moves, PP and money. Record interventions and actual legal
+outcomes. The referee verifies; it never secretly replaces the actor's choice.
 
-## Default development loop
+Never fit DEVELOPMENT, benchmark or sealed data, invent native counterfactual
+labels, cherry-pick only wins or relabel sibling snapshots as independent origins.
+Teacher resources are not earned game progress.
 
-### User-controlled publication — September 15, 2026
+Ordinary DEVELOPMENT copies and repeatable diagnostics need no per-copy approval.
+Record source, partition, candidate, purpose, results and costs. Preserve original
+trial identities and failures. Do not copy a winning diagnostic terminal into the
+current ancestry. Prefer a relevant checkpoint over restarting at Pallet Town.
 
-Pete decides when to push to GitHub; publication requires his explicit instruction, not merely
-a completed session. Local implementation, testing and recoverable checkpoints may continue.
-A possible future paper is secondary to completing the player. Preserve original experiment
-configurations, model/code identities, outcomes, failures and intervention records as the work
-happens; do not reconstruct missing evidence later or turn paper preparation into a development gate.
-Keep current handoffs concise, replacing stale summaries and linking to retained evidence rather
-than copying the project's history into every handoff.
+After relevant legality and save-safety checks, a promising candidate may be used
+provisionally in DEVELOPMENT before formal broad qualification. Pin its identity
+and scope, retain the baseline and roll back regressions. This is not an official
+acceptance result. Do not make research-grade experimental controls a gate to
+ordinary development play.
 
-### Fixed visual roadmap and session closeout
+## Verification and records
 
-Use the [development infographic](docs/development-roadmap.md) and its
-[stable baseline](configs/development-roadmap-baseline-v4.json) to locate each substantial task
-within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
-full Red registration and a fresh-start model-directed Red completion run, a compatible Red
-modification, Crystal, then at least Emerald. Version/trade support serves Red's explicit gate.
-This baseline is subordinate to the mission and this contract; it does not authorize execution.
+Use targeted tests and native checks proportionate to the change. Broader checks
+belong at integration boundaries or publication. Never describe a focused pass as
+a full-suite pass. Preserve typed failures, legality, provenance and actual costs.
 
-After an ordinary completed work session, replace the concise handoff and retain one factual
-evidence record. Refresh the active state when the blocker or next decision changes. Update the
-[roadmap status](configs/development-roadmap-state.json), infographic, review log and
-YouTube/project narrative only after a material learner milestone, a stage/strategy/requirements
-change, or Pete's explicit request. This keeps the eventual research record intact without making
-presentation maintenance a gate on the player.
+Keep one concise dated session record and replace the current handoff. Update the
+generated active state when the decision changes. Narrative and infographic work
+is batched at material milestones or Pete's request. Preserve unique history and
+raw evidence; do not create another reporting or scheduling framework.
 
-When those milestone surfaces do change, preserve earlier reviews, regenerate the infographic with
-`python scripts/development_roadmap.py --write`, inspect visual changes, and run the existing
-documentation check. Refresh summaries in place; do not prepend accumulating “Current” blocks.
-The public README explains the project to a new reader, not to another agent. Detailed reports and
-superseded directions belong in dated history. Update this North Star only when requirements,
-operating rules or the agreed sequence change; never rewrite its goals merely to make a session
-look successful. No extra CI workflow, mandatory outside audit, timed wakeup or minute-by-minute
-documentation loop is required.
+Keep roadmap stage IDs and final exits stable. A percentage must name its
+denominator. Final-run gates are not an overall engineering completion percentage.
+Record material strategy changes in [roadmap decisions](docs/roadmap-decisions.md).
 
-At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
-or recommendation. Do not manufacture feedback or confuse it with measured progress.
+## Official evaluation and publication
 
-End every session report with a recommendation for the **next session's model and thinking
-effort**, plus whether Fast mode is worthwhile and a brief task-specific reason. Pete's current
-priority is verified progress while conserving the primary Codex allowance: use bounded isolated
-Flash drafts, Codex integration and occasional Claude review where they reduce duplicate work.
-Do not trade away outcome verification merely for cheaper drafting. A recommendation is not permission to consume
-a reset or change the selected model. Reassess this guidance if Pete changes the budget priority.
+An official run needs an authenticated fresh start, frozen model/source/config,
+declared assistance and limits, appropriate skill checks, failure diagnostics and
+explicit launch authorization under [the completion contract](docs/completion-contract.md).
+No mid-run fixes, rollback or hidden assistance can count as that frozen evaluation.
 
-Stage exit criteria stay stable. Material changes require an explicit entry in
-[roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
-the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
-a difficult milestone with an easier one or count teacher completion as learned completion.
-Any percentage must name its checklist and denominator; do not report a whole-project percentage
-or turn equal checklist weights into a remaining-time estimate. Progress without a new learning
-result must remain visibly classified as engineering or documentation.
+Pete alone authorizes GitHub publication. “Continue” and passing tests are not
+publication requests. Preserve unrelated work; recoverable local checkpoints are
+allowed. External agents and quota checks require a current assignment, not an
+old collaboration document.
 
-### Runtime learning loop
-
-Use authenticated development checkpoints and short randomized scenarios:
-
-1. restore a relevant state;
-2. let the model choose and act;
-3. let the teacher intervene only at a declared safety boundary;
-4. retain the state, choice, intervention, and outcome;
-5. refit or update from audited evidence;
-6. evaluate on unseen scenario instances;
-7. promote authority only after outcome-based gates pass.
-
-Do not replay Pallet Town to test a Saffron navigation change or a Cinnabar training policy.
-
-## Full-run gate
-
-Pete's September 15 acceptance requirement is a fresh start-to-finish model-directed Red run
-with story completion and the **declared 124-species legitimate native Red route before any ROM
-hack**. Checkpoint story demonstrations do not meet that requirement. Version-, cable-trade- and
-event-dependent entries remain explicit deferred gaps rather than fabricated local flags. Mew is
-deferred until a later legitimate source. A simultaneous Red/Blue link experiment is desirable
-after model completeness, but inability to link the available emulators does not block the hack;
-the shared registry may earn those species in a later title. This changes the dependency gate,
-not the readiness conditions below, and authorizes neither cheating nor another teacher factory.
-
-Pete's September 16 clarification allows a teacher or training harness to intervene in an
-isolated development copy, including overriding money to exercise Safari mechanics. The final
-actor, official run and native registration gate remain unassisted. Retain the original state,
-mark assisted provenance, and exclude synthetic liquidity from ordinary economy-goal fits and
-legitimate funding claims. This is training scaffolding, not a second route to Red acceptance.
-
-A new clean-power full-game run is prohibited unless all of these are recorded first:
-
-- the integration question cannot be answered by a shorter authenticated scenario;
-- every component under test passed its unseen bounded gate;
-- the run changes a named promotion or rejection decision;
-- expected frame, action, and wall-time cost is recorded;
-- failure diagnostics will retain the exact bounded cause;
-- the active roadmap explicitly authorizes the run.
-
-Full runs are final exams. They are not the training loop.
-
-## Metrics that matter
-
-Prefer outcomes that can expose failure:
-
-- navigation success, path overhead, collision rate, displacement recovery;
-- battle wins, objective satisfaction, HP/PP efficiency, interventions, illegal choices;
-- experience per frame, wins per heal, blackouts, party rotation, level/evolution progress;
-- multi-step goal completion and recovery from changed resources or state;
-- new global Pokédex registrations, dependency-plan success, recognized version/trade/event blockers;
-- zero-shot and post-adaptation performance in another title.
-
-Teacher agreement is diagnostic. It is never sufficient evidence by itself.
-
-## Anti-drift alarms
-
-Stop and reassess when any of these occur:
-
-- a second full replay is proposed for the same local question;
-- a fixed direction string, cursor exception, or species-specific patch becomes the main work;
-- CI is repeatedly repaired while no model authority is increasing;
-- an overleveled party removes the decisions the model is supposed to learn;
-- a teacher preference is copied without comparing outcomes;
-- a failure receipt loses the information needed to explain the failure;
-- more than one work session passes without a new learned decision or generalization result.
-
-## Active decision — 2026-08-14
-
-Red player v1 stopped safely during its first full teacher-supervised shadow run after 1,250
-balanced-team battles. The run demonstrated that full replays are too costly, fixed Saffron
-movement is visibly brittle, recovery is excessively conservative, and high offline accuracy can
-hide concentrated live disagreement. No further full Red replay is authorized.
-
-The active strategy is the scenario-based, model-first roadmap. Red sealed destination captures
-and all frozen Crystal transfer contexts remain unopened until their existing protocols explicitly
-authorize access.
+At closeout, report what changed, model/support ownership, learning and registration
+deltas, whether workers stopped, limitations and the next decision. Include the
+ordered next-session work directly in chat, with acceptance, reassessment, scope
+and a model/effort/Fast recommendation. Do not claim to have changed the setting.

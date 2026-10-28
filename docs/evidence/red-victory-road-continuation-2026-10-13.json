@@ -1,0 +1,880 @@
+{
+  "acquisitions": [
+    {
+      "kind": "acquire_species",
+      "path": "runs/segment-001/native/episode/step-000",
+      "species": [
+        "pokemon:national:083"
+      ]
+    },
+    {
+      "kind": "evolve_species",
+      "path": "runs/segment-001/native/episode/step-006",
+      "species": [
+        "pokemon:national:040"
+      ]
+    },
+    {
+      "kind": "evolve_species",
+      "path": "runs/segment-001/native/episode/step-007",
+      "species": [
+        "pokemon:national:091"
+      ]
+    },
+    {
+      "kind": "acquire_species",
+      "path": "runs/segment-002/native/episode/step-008",
+      "species": [
+        "pokemon:national:133"
+      ]
+    },
+    {
+      "kind": "evolve_species",
+      "path": "runs/segment-004/native/episode/step-001",
+      "species": [
+        "pokemon:national:034"
+      ]
+    },
+    {
+      "kind": "evolve_species",
+      "path": "runs/segment-004/native/episode/step-008",
+      "species": [
+        "pokemon:national:036"
+      ]
+    },
+    {
+      "kind": "evolve_species",
+      "path": "runs/segment-004/native/episode/step-010",
+      "species": [
+        "pokemon:national:031"
+      ]
+    }
+  ],
+  "actual_model_comparative_choices": 48,
+  "actual_stop_utc": "2026-10-14T05:12:04.661114+00:00",
+  "at": [
+    7,
+    7
+  ],
+  "at_indigo_plateau": true,
+  "automatic_singleton_support": 27,
+  "badge_bits": 255,
+  "badges_after": 8,
+  "badges_before": 8,
+  "bag_slots_after": 15,
+  "bag_slots_before": 14,
+  "bag_stock": [
+    [
+      42,
+      1
+    ],
+    [
+      49,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      72,
+      1
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      198,
+      1
+    ],
+    [
+      199,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      197,
+      1
+    ],
+    [
+      206,
+      1
+    ],
+    [
+      227,
+      1
+    ],
+    [
+      82,
+      1
+    ],
+    [
+      69,
+      1
+    ],
+    [
+      78,
+      1
+    ]
+  ],
+  "cash_after": 113,
+  "cash_before": 5268,
+  "certified_failed_field_deliveries": [
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 14,
+      "path": "runs/segment-002/native/episode/step-010",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 16,
+      "path": "runs/segment-002/native/episode/step-012",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 13,
+      "path": "runs/segment-002/native/episode/step-015",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 10,
+      "path": "runs/segment-003/native/episode/step-000",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 4,
+      "path": "runs/segment-003/native/episode/step-004",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 3,
+      "path": "runs/segment-003/native/episode/step-007",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 6,
+      "path": "runs/segment-004/native/episode/step-003",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 17,
+      "path": "runs/segment-004/native/episode/step-006",
+      "verification": "failed"
+    },
+    {
+      "acquired": false,
+      "complete": false,
+      "item": 16,
+      "navigation_transitions": 14,
+      "path": "runs/segment-004/native/episode/step-011",
+      "verification": "failed"
+    }
+  ],
+  "cold_proof": {
+    "frames": 0,
+    "inputs": 0,
+    "path": "diagnostics/cold-closeout-v2/RESULT.json",
+    "sha256": "a341e6bf9b3f3b98f0e6a5d6451e532c363e3ae78d507448835220dac27efbe3"
+  },
+  "completed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "cross_victory_road",
+    "defeat_blaine",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_giovanni",
+    "defeat_koga",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_secret_key",
+    "obtain_silph_scope",
+    "obtain_strength",
+    "obtain_surf",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_cinnabar",
+    "reach_fuchsia",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+  "confirmed_stop_utc": "2026-10-14T05:15:03.288483+00:00",
+  "context_sha256": "869cbee9c7ebde4f2ba211ec761fd328fbd5820855549878b26995d6055b3ce3",
+  "copied_progress_imported": false,
+  "cumulative_spent": {
+    "actions": 1089944,
+    "cash_debits": 96551,
+    "decisions": 1145,
+    "frames": 86677399,
+    "heals": 1273,
+    "seconds": 23379.972410868428
+  },
+  "cutoff_utc": "2026-10-14T06:06:48Z",
+  "deterministic_safety_support": 1,
+  "diagnostic_results": [
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/cold-closeout-v1/RESULT.json",
+      "seconds": 0.764523166930303,
+      "sha256": "3fe11b13e86e839789386dfb598ca70ee5946f37bd88b847dd9c58c42cc6609d"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/cold-closeout-v2/RESULT.json",
+      "seconds": 0.8036563748028129,
+      "sha256": "a341e6bf9b3f3b98f0e6a5d6451e532c363e3ae78d507448835220dac27efbe3"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/complete-delivery-copy-v1/RESULT.json",
+      "seconds": 14.207299333065748,
+      "sha256": "3333eab114d20df94b9bf9dbd9229a3d17007e906a22f766955d06b1eb895336"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/delivery-quote-v1/RESULT.json",
+      "seconds": 19.214608458103612,
+      "sha256": "97633286ac3a3d9431b19f4fdb803c6b19cad89410091792e5beda44aa64760c"
+    },
+    {
+      "actions": 0,
+      "error": "",
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": false,
+      "path": "diagnostics/fly-return-copy-v1/RESULT.json",
+      "seconds": 9.724971875082701,
+      "sha256": "ed42a153d7f674134bed6d623a0e97e973db925c33d6b1f842f935f5f86a1eef"
+    },
+    {
+      "actions": 0,
+      "error": "",
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": false,
+      "path": "diagnostics/fly-return-copy-v2/RESULT.json",
+      "seconds": 9.485041457926854,
+      "sha256": "d8d2634484eb73daa8764d99fa78423cb1056c5a8f3a85813ae909197667f35f"
+    },
+    {
+      "actions": 0,
+      "error": "",
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": false,
+      "path": "diagnostics/fly-return-copy-v3/RESULT.json",
+      "seconds": 9.839870416093618,
+      "sha256": "f418dfd73b66c3388691e53ca08e7424a808ab1b3fb6ff72798179913e884503"
+    },
+    {
+      "actions": 47,
+      "error": null,
+      "frames": 2844,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/fly-return-copy-v4/RESULT.json",
+      "seconds": 18.298079957952723,
+      "sha256": "67229b7c6a5e1cc50d1b16525a755c59833a1ee09c403a4534c7b241f468e85d"
+    },
+    {
+      "actions": 1712,
+      "error": null,
+      "frames": 114012,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/hole-wild-copy-v1/RESULT.json",
+      "seconds": 172.04832641617395,
+      "sha256": "07cdc15c5515723f9d9c21fa4c84240cdfca6877e369e077701572f1bd9f5eaf"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/indigo-anchor-inspection-v1/RESULT.json",
+      "seconds": 0.5299113329965621,
+      "sha256": "ebb80b45d04789cbe04ed71ff174817bba537e3f2b3d77cdb6e5059d4513d706"
+    },
+    {
+      "actions": 33,
+      "error": "",
+      "frames": 1848,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": false,
+      "path": "diagnostics/indigo-nurse-copy-v1/RESULT.json",
+      "seconds": 0.7972116670571268,
+      "sha256": "a8fd7e287121e51cbba20827365b87e8cd2b45724e5961553da4e73d06fb75d4"
+    },
+    {
+      "actions": 43,
+      "error": null,
+      "frames": 2568,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/indigo-nurse-copy-v2/RESULT.json",
+      "seconds": 0.8614804169628769,
+      "sha256": "f73aed738abd8a2e47d5d861140c894fdedd66f913f9274c6db298499ead921f"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "model_queries": 1,
+      "native_failed_delivery_branch_exercised": false,
+      "passed": true,
+      "path": "diagnostics/route-stop-copy-v1/RESULT.json",
+      "seconds": 15.663748166058213,
+      "sha256": "a280d29b7c0ea6bde6780906435d545497e197b10bd1c6c353f1d6b5fa1f8234"
+    },
+    {
+      "actions": 76,
+      "error": null,
+      "frames": 5280,
+      "model_queries": 0,
+      "native_failed_delivery_branch_exercised": null,
+      "passed": true,
+      "path": "diagnostics/strength-copy-v1/RESULT.json",
+      "seconds": 22.44948483281769,
+      "sha256": "cd8d043552691967c78c994270b7d9e1a2420371575f5c8327c386794a4e03bb"
+    }
+  ],
+  "endpoint_nursing_support": true,
+  "field_ready": true,
+  "final_fresh_exit_gates": {
+    "completed": 0,
+    "total": 5
+  },
+  "fits": 0,
+  "flat_outcomes": 76,
+  "goal_kinds": {
+    "acquire_species": 3,
+    "advance_story": 43,
+    "develop_team": 2,
+    "evolve_species": 5,
+    "manage_storage": 1,
+    "restore_team": 1,
+    "resupply": 21
+  },
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_unchanged": true,
+  "goal_modes": {
+    "deterministic_safety": 1,
+    "model_exploration": 48,
+    "support:forced_singleton": 27
+  },
+  "initial_exterior_checkpoint_anchor": 15,
+  "known_field_moves": {
+    "cut": true,
+    "fly": true,
+    "strength": true,
+    "surf": true
+  },
+  "last_blackout_map": 9,
+  "limitations": [
+    "Assisted DEVELOPMENT ancestry,not final unchanged frozen fresh acceptance",
+    "Navigation,badge gates,Strength recipient/replacement,boulder puzzles,nursing and finite failed-delivery continuation are disclosed support",
+    "Gameplay XP,machine lessons and registrations are not parameter learning",
+    "Failed-delivery branch is covered by strict ROM-free tests;native zero-input copy does not replay it",
+    "Inherited exploration support remains0.75;no model,seed,configuration or legal guard change",
+    "Original failure and all costs retained;no copied progress,restart,publication or title advance"
+  ],
+  "local_repairs": [
+    "Only a measured unchanged-state free-delivery dead end yields a FAILED report and allows fresh neural selection;unknown errors remain fatal",
+    "Connect a verified same-map water exit and existing earned Fly to the already selected post-rival Route22 return;no strategic or battle substitution",
+    "Optional whole-player free deliveries require complete guarded endpoint quotes;unproven prefixes are omitted without a forced replacement goal",
+    "An acknowledged hole-follow step may settle only its specific typed ordinary-wild interruption through the existing verified escape;unknown,trainer and one-off errors remain fatal",
+    "An explicit Indigo nursing request must establish native blackout anchor9 even when health/PP are already full;all defaults and ordinary service controls remain unchanged"
+  ],
+  "mandatory_control_prefaces": [
+    {
+      "actions": 13,
+      "frames": 1464,
+      "kind": "supplied_wild_escape_preface",
+      "learned": false,
+      "model_queries": 0,
+      "segment": "segment-006",
+      "verification": "succeeded"
+    },
+    {
+      "actions": 43,
+      "frames": 2568,
+      "kind": "supplied_indigo_nurse_preface",
+      "learned": false,
+      "model_queries": 0,
+      "segment": "segment-007",
+      "verification": "succeeded"
+    }
+  ],
+  "manual_actual_goal_substitutions": 0,
+  "map_id": 174,
+  "master_ball_present": true,
+  "metered_units": 78,
+  "native_execution_errors": [
+    {
+      "error": "field resource delivery has no fresh legal route",
+      "error_type": "RuntimeError",
+      "path": "runs/segment-001/native/episode/step-009"
+    },
+    {
+      "error": "",
+      "error_type": "KeyboardInterrupt",
+      "path": "runs/segment-003/native/episode/step-010"
+    },
+    {
+      "error": "",
+      "error_type": "KeyboardInterrupt",
+      "path": "runs/segment-004/native/episode/step-015"
+    },
+    {
+      "error": "verified dropped-boulder follow entered an unexpected battle.",
+      "error_type": "VictoryRoadChapterError",
+      "path": "runs/segment-005/native/episode/step-012"
+    }
+  ],
+  "native_gross_cash_rewards": 3445,
+  "native_route22_rival_defeated": true,
+  "new_actual_costs": {
+    "actions": 15357,
+    "cash_debits": 8600,
+    "decisions": 78,
+    "frames": 981388,
+    "heals": 3,
+    "seconds": 2093.0801070004236
+  },
+  "no_opening_restart": true,
+  "normal_indigo_nurse_verified": true,
+  "original_six_restored": true,
+  "outcome_counts": {
+    "None": 4,
+    "failed": 10,
+    "succeeded": 62
+  },
+  "owned_machine_lessons": [
+    {
+      "cash_debit": 0,
+      "lesson": {
+        "before_moves": [
+          106,
+          31,
+          116,
+          15
+        ],
+        "item_id": 221,
+        "move_id": 72,
+        "party_slot": 3,
+        "replace_slot": 2,
+        "species_id": 114
+      },
+      "path": "runs/segment-001/native/episode/step-005"
+    },
+    {
+      "cash_debit": 0,
+      "lesson": {
+        "before_moves": [
+          116,
+          85,
+          98,
+          158
+        ],
+        "item_id": 211,
+        "move_id": 61,
+        "party_slot": 1,
+        "replace_slot": 1,
+        "species_id": 166
+      },
+      "path": "runs/segment-001/native/episode/step-008"
+    },
+    {
+      "learned_recipient_selection": false,
+      "lesson": {
+        "before_moves": [
+          126,
+          91,
+          88,
+          120
+        ],
+        "item_id": 199,
+        "move_id": 70,
+        "party_slot": 5,
+        "replace_slot": 1,
+        "species_id": 39
+      },
+      "path": "runs/segment-005/native/episode/step-005",
+      "phase": "teach-strength"
+    }
+  ],
+  "parameter_updates": 0,
+  "partition": "development",
+  "party_hp": [
+    153,
+    186,
+    154,
+    131,
+    150,
+    181
+  ],
+  "party_levels": [
+    52,
+    52,
+    50,
+    50,
+    53,
+    53
+  ],
+  "party_max_hp": [
+    153,
+    186,
+    154,
+    131,
+    150,
+    181
+  ],
+  "party_moves": [
+    [
+      61,
+      85,
+      98,
+      158
+    ],
+    [
+      97,
+      28,
+      98,
+      19
+    ],
+    [
+      106,
+      72,
+      116,
+      15
+    ],
+    [
+      84,
+      45,
+      86,
+      98
+    ],
+    [
+      70,
+      91,
+      88,
+      120
+    ],
+    [
+      110,
+      39,
+      145,
+      57
+    ]
+  ],
+  "party_pp_current": [
+    [
+      20,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      10,
+      30,
+      30
+    ],
+    [
+      30,
+      40,
+      20,
+      30
+    ],
+    [
+      15,
+      10,
+      15,
+      5
+    ],
+    [
+      40,
+      30,
+      30,
+      15
+    ]
+  ],
+  "party_pp_maximum": [
+    [
+      20,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      10,
+      30,
+      30
+    ],
+    [
+      30,
+      40,
+      20,
+      30
+    ],
+    [
+      15,
+      10,
+      15,
+      5
+    ],
+    [
+      40,
+      30,
+      30,
+      15
+    ]
+  ],
+  "party_species_ids": [
+    166,
+    151,
+    114,
+    84,
+    39,
+    28
+  ],
+  "party_status": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "party_total_level_gain": 3,
+  "process_notes": {
+    "path": "PROCESS-NOTES.json",
+    "sha256": "8f8adc76cdb9bda06172c88cde70533c7ffcd9040c32b142918cd8051cd63d1a"
+  },
+  "qualified_complete_delivery_repair": {
+    "candidate_availability_repaired": true,
+    "copied_progress_imported": false,
+    "forced_goal": null,
+    "proof": "diagnostics/complete-delivery-copy-v1/RESULT.json",
+    "proof_sha256": "3333eab114d20df94b9bf9dbd9229a3d17007e906a22f766955d06b1eb895336",
+    "runtime_package_sha256": "987a7c00accd3f1b844dd341e392a0deda98c2908b5c059be0db6023da865db1",
+    "zero_input": true
+  },
+  "qualified_fly_return_repair": {
+    "copied_progress_imported": false,
+    "learned_navigation": false,
+    "normal_controller_inputs": true,
+    "proof": "diagnostics/fly-return-copy-v4/RESULT.json",
+    "proof_sha256": "67229b7c6a5e1cc50d1b16525a755c59833a1ee09c403a4534c7b241f468e85d",
+    "runtime_package_sha256": "15cb51742af948a118264ea5ac5650a05d050c67fade9f904091dbfa9e1d251a"
+  },
+  "qualified_hole_wild_repair": {
+    "copied_progress_imported": false,
+    "native_hole_wild_branch_exercised": true,
+    "normal_controller_inputs": true,
+    "proof": "diagnostics/hole-wild-copy-v1/RESULT.json",
+    "proof_sha256": "07cdc15c5515723f9d9c21fa4c84240cdfca6877e369e077701572f1bd9f5eaf",
+    "runtime_package_sha256": "d65b01621f4bc1b5fefadd043d20c5a489a93c9f3f2b4760a7a1ba7013965263"
+  },
+  "qualified_nurse_checkpoint_repair": {
+    "copied_progress_imported": false,
+    "last_blackout_map": 9,
+    "normal_controller_inputs": true,
+    "proof": "diagnostics/indigo-nurse-copy-v2/RESULT.json",
+    "proof_sha256": "f73aed738abd8a2e47d5d861140c894fdedd66f913f9274c6db298499ead921f",
+    "runtime_package_sha256": "26b73260a1d70a8d6f63812fa4d6b60b24e106c0036d6f5d7814824f4860632f"
+  },
+  "qualified_route_stop_repair": {
+    "copied_progress_imported": false,
+    "native_failed_delivery_branch_exercised": false,
+    "proof": "diagnostics/route-stop-copy-v1/RESULT.json",
+    "proof_sha256": "a280d29b7c0ea6bde6780906435d545497e197b10bd1c6c353f1d6b5fa1f8234",
+    "runtime_package_sha256": "b7c732349ae30046eeb729cf1efd792da272ae0d8c928c40be58ae6b672839f6",
+    "zero_input": true
+  },
+  "registrations_added": 7,
+  "registrations_after": 82,
+  "registrations_before": 75,
+  "released": true,
+  "result_sha256": "4594a2f805f825e792483f0c70fbe0fa1dbfa05b1646310033162130f155f3e6",
+  "runtime_llm_calls": 0,
+  "runtime_package_sha256": "26b73260a1d70a8d6f63812fa4d6b60b24e106c0036d6f5d7814824f4860632f",
+  "schema": "pokemon.red.victory-road-continuation.v1",
+  "secret_key_conserved_in_pc": true,
+  "selection_support": {
+    "default_mix": 0.25,
+    "forced_goal": null,
+    "inherited_development_mix": 0.75,
+    "model_weights_unchanged": true,
+    "seed_unchanged": true,
+    "unchanged_this_session": true
+  },
+  "separate_diagnostic_costs": {
+    "actions": 1911,
+    "cash_debits": 0,
+    "decisions": 15,
+    "frames": 126552,
+    "heals": 2,
+    "seconds": 294.6882138720248
+  },
+  "session": "2026-10-13-victory-road-continuation",
+  "source_session_result_sha256": "ec6732754adfce565e8afbd1db88f187d36c6a592125726feb7e321a89a2354b",
+  "started_utc": "2026-10-14T03:06:48Z",
+  "state_sha256": "4b860c10a8c9ad613dbad50a2acf63c53ece226eae8ff99b8fcade4d0c46ad51",
+  "status": "closed_all_requested_outcomes_complete",
+  "story_battles": [
+    {
+      "action_counts": {
+        "attack": 18,
+        "forced_switch": 2,
+        "switch_prompt": 5,
+        "voluntary_switch": 5
+      },
+      "decisions": 30,
+      "memory_writes": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 9.518359153444809,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 6,
+        "party_faints": 2,
+        "party_hp_lost": 379,
+        "party_pp_spent": 17,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 10044041,
+        "policy_latency_ns_mean": 3233723.6,
+        "policy_latency_ns_min": 284875,
+        "selected_move_pp_spends": 17,
+        "teacher_interventions": 0
+      },
+      "objective": "cross_victory_road",
+      "outcome": "won",
+      "path": "runs/segment-002/native/episode/step-007",
+      "teacher_queries": 0,
+      "won": true
+    }
+  ],
+  "story_phases": {
+    "badge-corridor": 2,
+    "boulder-drop": 1,
+    "final-switch": 1,
+    "first-switch": 1,
+    "follow-dropped-boulder": 1,
+    "reach-indigo": 4,
+    "route22-approach": 5,
+    "route22-approach-fly": 1,
+    "route22-land-before-fly": 4,
+    "route22-return": 14,
+    "route22-return-fly": 2,
+    "second-switch": 1,
+    "stairs-second-switch": 1,
+    "stairs-third-switch": 1,
+    "teach-strength": 1,
+    "third-switch": 1
+  },
+  "strength_known": true,
+  "terminal": "runs/segment-007",
+  "training_rows_added": 0,
+  "verification": {
+    "ci": false,
+    "focused_runtime_tests_passed": 1108,
+    "full_suite": false
+  },
+  "victory_road_crossed": true,
+  "whole_party_restored": true,
+  "worker_stopped": true,
+  "zero_input_inspections": [
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 1,
+      "path": "inspections/inspect-031015474230/RESULT.json",
+      "sha256": "3614e88e53b03e1ca1075cf6e0ed3b3976fc756a0223de70e9ddd30cf893d09f"
+    }
+  ]
+}

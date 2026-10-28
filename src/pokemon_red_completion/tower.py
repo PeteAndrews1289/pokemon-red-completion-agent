@@ -73,6 +73,13 @@ ROCKET = (0xE6, 0x1E)
 MAROWAK = 0x91
 TOWER_FINAL_PARTY = (0x1C, PROTECTED_PARTY[1], PROTECTED_PARTY[2])
 TOWER_START_PARTIES = (PROTECTED_PARTY, TOWER_FINAL_PARTY)
+
+
+def tower_party_supported(party: tuple[int, ...] | None) -> bool:
+    """The qualified leading core with up to three preserved extra members."""
+    return bool(party and 3 <= len(party) <= 6 and party[:3] in TOWER_START_PARTIES)
+
+
 DUGTRIO_SPECIES_ID = 0x76
 TOWER_RIVAL_FIELD_RECOVERY_HP_THRESHOLD = 55
 TOWER_5F_MIN_SUPER_POTION_RESERVE = 1
@@ -290,8 +297,8 @@ class TowerChapterReport:
     rare_candy_used_for_evolution: bool
     elixir_carried: bool
     poke_flute_carried: bool
-    evolution_before: tuple[int, int, int]
-    evolution_after: tuple[int, int, int]
+    evolution_before: tuple[int, ...]
+    evolution_after: tuple[int, ...]
     evolution_moves_preserved: bool
     purified_zone_event: bool
     purified_heals: int
@@ -321,8 +328,8 @@ class TowerChapterReport:
             and self.x_accuracy_carried
             and self.elixir_carried
             and self.poke_flute_carried
-            and self.evolution_before in TOWER_START_PARTIES
-            and self.evolution_after == TOWER_FINAL_PARTY
+            and tower_party_supported(self.evolution_before)
+            and self.evolution_after == (*TOWER_FINAL_PARTY, *self.evolution_before[3:])
             and self.evolution_moves_preserved
             and self.purified_zone_event
             and self.purified_heals == 3
@@ -342,7 +349,9 @@ class TowerChapterReport:
             )
             and self.final_raw.map_id == MapId.LAVENDER_POKECENTER
             and (self.final_raw.player_x, self.final_raw.player_y) == (3, 3)
-            and self.final_raw.party_species_ids == TOWER_FINAL_PARTY
+            and self.final_raw.party_species_ids == self.evolution_after
+            and len(self.party_hp) == len(self.party_max_hp) == len(self.party_status)
+            == len(self.evolution_after)
             and self.party_hp == self.party_max_hp
             and all(status == 0 for status in self.party_status)
             and self.money_before >= 0
@@ -415,14 +424,18 @@ class _RunState:
     purified_zone_event_seen: bool = False
     evolved: bool = False
     potion_inventory: list[int] = field(default_factory=list)
+    initial_party: tuple[int, ...] = PROTECTED_PARTY
 
 
 def _observe_protected_party(run: _RunState, state: RawGameState) -> bool:
     """Accept the qualified lineage and remember a natural mid-chapter evolution."""
 
-    if state.party_species_ids == TOWER_FINAL_PARTY:
+    evolved = (*TOWER_FINAL_PARTY, *run.initial_party[3:])
+    if state.party_species_ids == evolved:
         run.evolved = True
-    return state.party_species_ids in TOWER_START_PARTIES and (state.first_party_hp or 0) > 0
+    return state.party_species_ids in (run.initial_party, evolved) and (
+        state.first_party_hp or 0
+    ) > 0
 
 
 def _qualified_tower_special_move(state: RawGameState) -> int:
@@ -456,7 +469,8 @@ def run_tower_chapter(
     start_frames = emulator.frame_count
     actions = CountingExecutor(executor)
     start = reader.read()
-    run = _RunState(evolved=start.party_species_ids == TOWER_FINAL_PARTY)
+    run = _RunState(evolved=tuple(start.party_species_ids or ())[:3] == TOWER_FINAL_PARTY,
+                    initial_party=tuple(start.party_species_ids or ()))
     records: list[TowerCheckpoint] = []
     battles: list[TowerBattleEvidence] = []
     _require(start, MapId.CELADON_POKECENTER, (3, 3), "Scope boundary")
@@ -807,7 +821,7 @@ def run_tower_chapter(
         MapId.MR_FUJIS_HOUSE,
         (3, 7),
         "Fuji rescue warp",
-        TOWER_FINAL_PARTY,
+        (*TOWER_FINAL_PARTY, *run.initial_party[3:]),
     )
     if not _event(emulator, EventFlag.RESCUED_MR_FUJI) or not _event(
         emulator, EventFlag.RESCUED_MR_FUJI_WORLD
@@ -831,7 +845,7 @@ def run_tower_chapter(
         MapId.LAVENDER_POKECENTER,
         (3, 3),
         "stable Flute boundary",
-        TOWER_FINAL_PARTY,
+        (*TOWER_FINAL_PARTY, *run.initial_party[3:]),
     )
     for checkpoint_id, label in (
         ("tower_cleared", "Pokémon Tower cleared"),
@@ -1683,7 +1697,7 @@ def _heal_center(
         MapId.LAVENDER_POKECENTER,
         (3, 7),
         "Lavender Center",
-        TOWER_FINAL_PARTY,
+        (*TOWER_FINAL_PARTY, *run.initial_party[3:]),
     )
     _move(actions, reader, emulator, run, ("up",) * 4, timing, "Lavender nurse")
     for _ in range(16):
@@ -1713,27 +1727,29 @@ def _qualify_evolution(
     emulator: EmulatorState,
     run: _RunState,
     before: RawGameState,
-) -> tuple[tuple[int, int, int], tuple[int, int, int], bool, bool]:
-    if before.party_species_ids not in TOWER_START_PARTIES or before.first_party_moves is None:
+) -> tuple[tuple[int, ...], tuple[int, ...], bool, bool]:
+    if not tower_party_supported(before.party_species_ids) or before.first_party_moves is None:
         raise TowerChapterError("Evolution did not start from the qualified starter lineage.")
-    if before.party_species_ids == TOWER_FINAL_PARTY:
+    initial_party = tuple(before.party_species_ids)
+    final_party = (*TOWER_FINAL_PARTY, *initial_party[3:])
+    if initial_party == final_party:
         if (before.first_party_hp or 0) <= 0:
             raise TowerChapterError("Natural pre-Tower evolution lacks a living workhorse.")
         run.evolved = True
-        return TOWER_FINAL_PARTY, TOWER_FINAL_PARTY, True, False
+        return initial_party, final_party, True, False
     after = reader.read()
     for _ in range(32):
-        if after.party_species_ids == TOWER_FINAL_PARTY:
+        if after.party_species_ids == final_party:
             break
         _pulse(actions, MacroActionKind.CONFIRM, frames=180)
         after = reader.read()
     rare_candy_used = False
-    if after.party_species_ids == PROTECTED_PARTY:
+    if after.party_species_ids == initial_party:
         _use_rare_candy_for_evolution(actions, reader, emulator)
         after = reader.read()
         rare_candy_used = True
     if (
-        after.party_species_ids != TOWER_FINAL_PARTY
+        after.party_species_ids != final_party
         or after.first_party_moves != before.first_party_moves
         or (after.first_party_hp or 0) <= 0
     ):
@@ -1746,7 +1762,7 @@ def _qualify_evolution(
             f"after_hp={after.first_party_hp!r}, after_status={after.first_party_status!r}."
         )
     run.evolved = True
-    return PROTECTED_PARTY, TOWER_FINAL_PARTY, True, rare_candy_used
+    return initial_party, final_party, True, rare_candy_used
 
 
 def _use_rare_candy_for_evolution(
@@ -1759,7 +1775,8 @@ def _use_rare_candy_for_evolution(
     before = reader.read()
     before_quantity = _bag(emulator).get(ItemId.RARE_CANDY, 0)
     if (
-        before.party_species_ids != PROTECTED_PARTY
+        not tower_party_supported(before.party_species_ids)
+        or tuple(before.party_species_ids or ())[:3] != PROTECTED_PARTY
         or before.first_party_level != 35
         or before_quantity != 1
         or not reader.read_input_readiness().ready
@@ -1786,7 +1803,7 @@ def _use_rare_candy_for_evolution(
     for _ in range(96):
         current = reader.read()
         if (
-            current.party_species_ids == TOWER_FINAL_PARTY
+            current.party_species_ids == (*TOWER_FINAL_PARTY, *before.party_species_ids[3:])
             and current.first_party_level == 36
             and _bag(emulator).get(ItemId.RARE_CANDY, 0) == before_quantity - 1
         ):
@@ -1838,10 +1855,10 @@ def _require(
     map_id: int,
     coordinate: tuple[int, int],
     label: str,
-    party: tuple[int, int, int] | None = None,
+    party: tuple[int, ...] | None = None,
 ) -> None:
     party_valid = (
-        raw.party_species_ids in TOWER_START_PARTIES
+        tower_party_supported(raw.party_species_ids)
         if party is None
         else raw.party_species_ids == party
     )

@@ -73,6 +73,11 @@ def _strip_observed_local_capture_flag(
         assert isinstance(parameters, dict)
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
             parameters.pop("observed_local_capture", None)
+            # This quote already proves a reachable walking corridor in the
+            # observed current map. Do not prefer a second flight/indoor escape
+            # over that local walk when the real router binds the child skill.
+            parameters.pop("fly_transport", None)
+            parameters.pop("indoor_fly_departure", None)
         providers.append((spec.kind, spec.mechanic, parameters))
     return parse_red_goal_context_profile(
         build_red_goal_context_profile_payload(
@@ -156,7 +161,11 @@ def bind_observed_local_capture(
     capabilities = start_snapshot.capabilities
     object_blockers = frozenset(live_world.object_blockers.get(source_map, ()))
     warp_locations = frozenset(live_world.macro_graph.warp_locations.get(source_map, ()))
-    blocked_tiles = frozenset(start_occupied) | object_blockers | warp_locations
+    # The downstream walking router excludes live trainer sight lanes. Derive
+    # the corridor from that same safe reachable region, including its approach;
+    # otherwise a geometrically reachable first choice can never be rebound.
+    hazard_tiles = frozenset(hazard.at for hazard in start_snapshot.hazards)
+    blocked_tiles = frozenset(start_occupied) | object_blockers | warp_locations | hazard_tiles
 
     walking_edges: dict[Coordinate, list[LocalEdge]] = {}
     for source, outgoing in raw_graph.edges.items():

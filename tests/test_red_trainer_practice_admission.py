@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
 
 import pytest
 
 from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
@@ -51,7 +53,7 @@ def _inspect(capture, document):
     )
 
 
-def _capture(tmp_path):
+def _capture(tmp_path, *, status=False):
     state = b"synthetic trainer state"
     path = tmp_path / "train.state"
     manifest = tmp_path / "train.state.json"
@@ -66,6 +68,7 @@ def _capture(tmp_path):
             source_commit="c" * 40,
             expected_map=120,
             expected_battle_state=2,
+            **({"observation_schema": OBSERVATION_SCHEMA_V2} if status else {}),
         )
     )
     return open_battle_scenario_capture(path, manifest)
@@ -220,9 +223,28 @@ def test_admission_rejects_mutated_outcome_evidence(tmp_path, mutation):
         _inspect(capture, document)
 
 
-def test_branch_logs_bind_prospectively_declared_executions(tmp_path):
-    capture = _capture(tmp_path)
+@pytest.mark.parametrize("status", [False, True])
+@pytest.mark.parametrize("serialized_paths", [False, True])
+def test_branch_logs_bind_prospectively_declared_executions(tmp_path, status, serialized_paths):
+    capture = _capture(tmp_path, status=status)
     document = _document(capture)
+    context = (
+        {
+            "schema": "pokemon.core.battle.status-context.v1",
+            "player_confused": False,
+            "opponent_confused": True,
+            "player_stages": [0] * 6,
+            "opponent_stages": [0] * 6,
+        }
+        if status
+        else None
+    )
+    if status:
+        for branch in document["branches"]:
+            first = branch["episode"]["decisions"][0]
+            first["observation"] = deepcopy(first["observation"])
+            first["observation"]["features"]["battle"]["status_context"] = deepcopy(context)
+            first["observation_sha256"] = canonical_sha256(first["observation"])
     plan_sha = "a" * 64
     logs = {}
     for index, branch in enumerate(document["branches"]):
@@ -244,6 +266,9 @@ def test_branch_logs_bind_prospectively_declared_executions(tmp_path):
                 "model_sha256": "b" * 64,
                 "max_decisions": 8,
                 "opening_idle_frames": 0,
+                **(
+                    {"allow_status_moves": True, "native_status_context": context} if status else {}
+                ),
             },
         )
         log.emit(
@@ -278,6 +303,8 @@ def test_branch_logs_bind_prospectively_declared_executions(tmp_path):
             }
         )
         logs[choice] = directory
+    if serialized_paths:
+        logs = json.loads(json.dumps({choice: str(path) for choice, path in logs.items()}))
     admitted = inspect_trainer_practice_choices(
         capture,
         document,
@@ -287,8 +314,21 @@ def test_branch_logs_bind_prospectively_declared_executions(tmp_path):
         plan_sha256=plan_sha,
         model_sha256="b" * 64,
         max_decisions=8,
+        expected_status_context=context,
     )
     assert admitted["execution_proof_complete"] is True
+    if status:
+        wrong = {**context, "opponent_confused": False}
+        with pytest.raises(TrainerPracticeAdmissionError):
+            inspect_trainer_practice_choices(
+                capture,
+                document,
+                expected_choice_refs=_CHOICES,
+                continuation_policy_id="unit",
+                expected_status_context=wrong,
+            )
+        with pytest.raises(TrainerPracticeAdmissionError):
+            _inspect(capture, document)
     altered = deepcopy(document)
     altered["branches"][1]["episode"]["decisions"][0]["frames_executed"] = 101
     altered["branches"][1]["episode"]["frames_executed"] = 101
@@ -302,4 +342,5 @@ def test_branch_logs_bind_prospectively_declared_executions(tmp_path):
             plan_sha256=plan_sha,
             model_sha256="b" * 64,
             max_decisions=8,
+            expected_status_context=context,
         )

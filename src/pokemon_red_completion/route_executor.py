@@ -39,9 +39,7 @@ class RouteExecutionError(RuntimeError):
         self,
         message: str,
         *,
-        reason: RouteExecutionFailureReason = (
-            RouteExecutionFailureReason.WORLD_STATE_DIVERGED
-        ),
+        reason: RouteExecutionFailureReason = (RouteExecutionFailureReason.WORLD_STATE_DIVERGED),
     ) -> None:
         super().__init__(message)
         self.reason = reason
@@ -51,6 +49,20 @@ class RouteExecutionError(RuntimeError):
         if self.failure is not None:
             raise RuntimeError("route execution failure evidence is already attached")
         self.failure = failure
+
+
+class RouteActionInterrupted(RuntimeError):
+    """A compound action yielded to a live interruption, not a failed step.
+
+    The observer must independently confirm the exact interruption kind. The
+    route's existing handler, budgets and coordinate proof retain authority.
+    """
+
+    def __init__(self, interruption: str) -> None:
+        if not isinstance(interruption, str) or not interruption:
+            raise ValueError("a compound interruption needs its observed kind")
+        super().__init__(f"compound route action entered {interruption}")
+        self.interruption = interruption
 
 
 @dataclass(frozen=True, slots=True)
@@ -108,10 +120,24 @@ class InterruptionReceipt:
     resumed_map: int
     resumed_at: Coordinate
     details: Mapping[str, object] = field(default_factory=dict)
+    allows_relocation: bool = False
+    allows_map_transition: bool = False
 
     def __post_init__(self) -> None:
         if not self.kind:
             raise ValueError("an interruption receipt needs a kind")
+        if type(self.allows_relocation) is not bool:
+            raise ValueError("interruption relocation permission must be boolean")
+        if type(self.allows_map_transition) is not bool:
+            raise ValueError("interruption map transition permission must be boolean")
+        if self.allows_map_transition and (
+            not self.allows_relocation
+            or self.details.get("verified") is not True
+            or type(self.details.get("source_map")) is not int
+            or self.details["source_map"] < 0
+            or self.details["source_map"] == self.resumed_map
+        ):
+            raise ValueError("map transition requires a verified declared relocation")
 
 
 class RouteActionPort(Protocol):
@@ -124,6 +150,25 @@ class TraversalObserver(Protocol):
 
 class InterruptionHandler(Protocol):
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt: ...
+
+
+class FieldBoundaryObserver(Protocol):
+    """Optional stateful-handler contract; every composing wrapper forwards it.
+
+    Call only after a verified mechanic returns settled native field control.
+    Reading a traversal observation alone must never replace pre-event evidence.
+    Stateless adapters need no implementation. Stateful owners validate readiness
+    before replacing their baseline; forwarding must not bypass those checks.
+    """
+
+    def observe_native_field_boundary(self) -> None: ...
+
+
+def observe_native_field_boundary(handler: InterruptionHandler) -> None:
+    """Notify a stateful owner through the same chain that handles interruptions."""
+    observe = getattr(handler, "observe_native_field_boundary", None)
+    if callable(observe):
+        observe()
 
 
 @dataclass(frozen=True, slots=True)
@@ -413,6 +458,38 @@ def _execute_route(
             mode=step.source_mode,
         )
 
+        if step.kind == "forced_motion":
+            traversed = (*step.via, step.expected_at)
+            obstruction = next(
+                (
+                    at
+                    for at in traversed
+                    if at in current.occupied or _hazard_at(current, at) is not None
+                ),
+                None,
+            )
+            if obstruction is not None:
+                # No opportunistic battle resolution inside an uncontrollable
+                # motion chain, even if a handler supports ordinary trainer sight.
+                if replanner is None or len(replans) >= limits.max_replans:
+                    raise RouteExecutionError("forced-motion path has a live obstruction")
+                constraints = dict(blocked)
+                constraints[current.map_id] = constraints.get(current.map_id, frozenset()) | (
+                    current.occupied | frozenset(h.at for h in current.hazards)
+                )
+                replacement, replan_receipt = _request_replacement(
+                    plan,
+                    current,
+                    constraints,
+                    len(replans) + 1,
+                    obstruction,
+                    "forced_motion_obstruction",
+                    replanner,
+                )
+                replans.append(replan_receipt)
+                pending = list(replacement.steps)
+                continue
+
         if (
             step.can_discover_blocker
             and step.expected_at in current.occupied
@@ -464,12 +541,99 @@ def _execute_route(
             else None
         )
         while True:
+            relocation_receipt = None
+            if step.kind == "forced_motion" and any(
+                at in current.occupied or _hazard_at(current, at) is not None
+                for at in (*step.via, step.expected_at)
+            ):
+                raise RouteExecutionError("forced-motion path acquired a live obstruction")
             _require_interruption_capacity(len(interruptions), limits)
-            actions.execute(step.macro_action)
+            yielded_interruption = None
+            try:
+                actions.execute(step.macro_action)
+            except RouteActionInterrupted as interrupted:
+                yielded_interruption = interrupted.interruption
             trace.movement_requests += 1
             attempts += 1
             observed = observer.observe()
             trace.last_observation = observed
+            if (yielded_interruption is not None
+                    and observed.interruption != yielded_interruption):
+                raise RouteExecutionError(
+                    "compound action interruption lacks matching live observation",
+                    reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                )
+
+            if (
+                step.kind == "water_exit"
+                and step.stays_on_map
+                and step.source_mode == "water"
+                and step.expected_mode == "land"
+                and observed.map_id == step.source_map
+                and observed.at == step.source_at
+                and observed.mode == step.expected_mode
+                and not observed.ready
+                and observed.interruption is None
+            ):
+                # Red publishes walking mode before its dismount animation
+                # advances the coordinate. This is not an acknowledged step
+                # or a new MOVE. Wait finitely on the declared two endpoints;
+                # the ordinary exact terminal check below still owns success.
+                for _ in range(limits.max_readiness_waits):
+                    _wait(actions, limits.readiness_wait_frames)
+                    trace.wait_actions += 1
+                    observed = observer.observe()
+                    trace.last_observation = observed
+                    if (
+                        observed.map_id != step.expected_map
+                        or observed.at not in {step.source_at, step.expected_at}
+                        or observed.mode != step.expected_mode
+                        or observed.interruption is not None
+                    ):
+                        raise RouteExecutionError("water exit left its declared animation")
+                    if observed.ready:
+                        break
+
+            if step.kind == "forced_motion":
+                # The first arrow can briefly look input-ready before its map
+                # script starts. Wait at least once, never issue a second MOVE
+                # inside the chain, and require the exact settled endpoint.
+                entered = observed.at != step.source_at
+                # A decoded chain spans several ordinary tile transitions.
+                # Keep the per-tile wait bound and the enclosing route budgets,
+                # rather than timing a long spinner as one short walk.
+                motion_wait_limit = limits.max_readiness_waits * max(1, len(step.via))
+                for wait_index in range(motion_wait_limit + 1):
+                    if observed.interruption is not None:
+                        raise RouteExecutionError(
+                            "forced motion entered an unexpected interruption",
+                            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+                        )
+                    if (
+                        observed.map_id != step.expected_map
+                        or (observed.at not in (step.source_at, *step.via, step.expected_at))
+                        or observed.mode != step.expected_mode
+                    ):
+                        raise RouteExecutionError("forced motion left its declared path")
+                    if entered and observed.at == step.source_at:
+                        raise RouteExecutionError("forced motion returned to its source")
+                    entered = entered or observed.at != step.source_at
+                    if (
+                        wait_index
+                        and observed.ready
+                        and observed.at
+                        in {
+                            step.source_at,
+                            step.expected_at,
+                        }
+                    ):
+                        break
+                    if wait_index == motion_wait_limit:
+                        raise RouteExecutionError("forced motion did not settle at its endpoint")
+                    _wait(actions, limits.readiness_wait_frames)
+                    trace.wait_actions += 1
+                    observed = observer.observe()
+                    trace.last_observation = observed
 
             if (
                 handled_hazard is not None
@@ -492,7 +656,7 @@ def _execute_route(
                 observed = observer.observe()
                 trace.last_observation = observed
 
-            if observed.interruption is not None:
+            while observed.interruption is not None:
                 if len(interruptions) >= limits.max_interruptions:
                     raise RouteExecutionError(
                         "route exceeded its interruption budget",
@@ -504,11 +668,14 @@ def _execute_route(
                         reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                     )
                 receipt = interruption_handler.handle(observed)
+                relocation_receipt = receipt
                 interruptions.append(receipt)
                 step_interruptions += 1
                 observed = observer.observe()
                 trace.last_observation = observed
-                if observed.interruption is not None:
+                if observed.interruption is not None and not _pending_verified_interruption(
+                    receipt, observed
+                ):
                     raise RouteExecutionError(
                         "interruption handler did not restore traversal",
                         reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
@@ -525,24 +692,40 @@ def _execute_route(
             crossed_map_before_coordinates = (
                 not step.stays_on_map and observed.map_id == step.expected_map
             )
+            crossed_coordinates_before_map = (
+                not step.stays_on_map
+                and not observed.ready
+                and observed.map_id == step.source_map
+                and observed.at == step.expected_at
+                and (step.source_mode is None or observed.mode == step.source_mode)
+            )
             declared_transient = (
                 step.transient_at is not None
                 and observed.map_id == step.source_map
                 and observed.at == step.transient_at
                 and observed.mode == step.source_mode
             )
-            if crossed_map_before_coordinates or declared_transient:
+            same_map_warp = step.kind in {"warp", "return"} and step.stays_on_map
+            if (
+                crossed_map_before_coordinates
+                or crossed_coordinates_before_map
+                or declared_transient
+                or same_map_warp
+            ):
                 # A title adapter may declare an intermediate coordinate for a
                 # single input (Gen I ledges publish the jumped tile first).
                 # Map transitions can likewise publish the destination map
-                # before coordinates settle. Neither is an acknowledgement
+                # before coordinates settle, or destination coordinates before
+                # the map id while control is still blocked. Same-map warps have no map-id
+                # change to announce that animation, but still need settling.
+                # Neither is an acknowledgement
                 # until one bounded wait exposes the exact terminal state.
                 _require_interruption_capacity(len(interruptions), limits)
                 _wait(actions, limits.transition_settle_frames)
                 trace.wait_actions += 1
                 observed = observer.observe()
                 trace.last_observation = observed
-                if observed.interruption is not None:
+                while observed.interruption is not None:
                     if len(interruptions) >= limits.max_interruptions:
                         raise RouteExecutionError(
                             "route exceeded its interruption budget",
@@ -554,11 +737,14 @@ def _execute_route(
                             reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                         )
                     receipt = interruption_handler.handle(observed)
+                    relocation_receipt = receipt
                     interruptions.append(receipt)
                     step_interruptions += 1
                     observed = observer.observe()
                     trace.last_observation = observed
-                    if observed.interruption is not None:
+                    if observed.interruption is not None and not _pending_verified_interruption(
+                        receipt, observed
+                    ):
                         raise RouteExecutionError(
                             "interruption handler did not restore traversal",
                             reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
@@ -571,6 +757,20 @@ def _execute_route(
                             "interruption receipt disagrees with resumed observation",
                             reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
                         )
+
+            if declared_transient and not observed.ready and observed.interruption is None:
+                # A declared ledge/transition may still be animating after the
+                # first settle (for example alongside a native poison flash).
+                # Only WAIT until readiness; exact destination acknowledgement
+                # below remains mandatory and no movement is retried mid-step.
+                observed, new_receipts, waits = _wait_until_ready(
+                    observed, actions, observer, interruption_handler, limits,
+                    used_interruptions=len(interruptions), trace=trace,
+                )
+                trace.last_observation = observed
+                interruptions.extend(new_receipts)
+                step_interruptions += len(new_receipts)
+                trace.wait_actions += waits
 
             if _matches(
                 observed,
@@ -595,6 +795,43 @@ def _execute_route(
                 step.source_at,
                 mode=step.source_mode,
             ):
+                # Only an explicitly declared, observed interruption landing may
+                # invalidate the coordinate of a step. Do not acknowledge that
+                # step or invent a permanent blocker: replan to the SAME goal.
+                # Unexplained drift, cross-map/mode changes, stale receipts and
+                # exhausted budgets still fail closed.
+                if (
+                    relocation_receipt is not None
+                    and relocation_receipt.allows_relocation
+                    and (relocation_receipt.resumed_map, relocation_receipt.resumed_at)
+                    == (observed.map_id, observed.at)
+                    and observed.ready
+                    and observed.interruption is None
+                    and (
+                        observed.map_id == step.expected_map
+                        or (
+                            relocation_receipt.allows_map_transition
+                            and relocation_receipt.details.get("source_map") == step.expected_map
+                        )
+                    )
+                    and observed.mode == step.expected_mode
+                    and replanner is not None
+                    and len(replans) < limits.max_replans
+                ):
+                    current = observed
+                    replacement, replan_receipt = _request_replacement(
+                        plan,
+                        current,
+                        _with_live_constraints(blocked, current, interruption_handler),
+                        len(replans) + 1,
+                        step.expected_at,
+                        "declared_interruption_landing",
+                        replanner,
+                    )
+                    replans.append(replan_receipt)
+                    pending = list(replacement.steps)
+                    replaced = True
+                    break
                 raise RouteExecutionError(
                     f"route drifted after {step.action}: expected "
                     f"{(step.expected_map, step.expected_at)}, observed "
@@ -720,9 +957,7 @@ def _execute_route(
                 raise RouteExecutionError(
                     f"route step {step.action} at {step.source_at} exceeded "
                     f"{limits.max_step_attempts} attempts",
-                    reason=(
-                        RouteExecutionFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED
-                    ),
+                    reason=(RouteExecutionFailureReason.STEP_ACKNOWLEDGEMENT_EXHAUSTED),
                 )
 
         if replaced:
@@ -826,7 +1061,8 @@ def _with_live_constraints(
     # Occupied squares and measured durable blockers are never relaxed.
     combined = dict(durable)
     current_constraints = current.occupied | frozenset(
-        item.at for item in current.hazards
+        item.at
+        for item in current.hazards
         if not _handler_resolves_hazard(interruption_handler, item)
     )
     if current_constraints:
@@ -904,6 +1140,22 @@ def _require_interruption_capacity(used: int, limits: RouteExecutionLimits) -> N
         )
 
 
+def _pending_verified_interruption(
+    receipt: InterruptionReceipt,
+    observed: TraversalSnapshot,
+) -> bool:
+    """Allow only a successor explicitly observed by the mechanic adapter.
+
+    Every successor still needs its own bounded handler receipt and identical
+    observed landing. Unclaimed interruption types retain the old failure.
+    """
+    return (
+        observed.interruption is not None
+        and receipt.details.get("verified") is True
+        and receipt.details.get("pending_interruption_kind") == observed.interruption
+    )
+
+
 def _wait_until_ready(
     initial: TraversalSnapshot,
     actions: RouteActionPort,
@@ -933,7 +1185,9 @@ def _wait_until_ready(
                 receipt = interruption_handler.handle(current)
                 receipts.append(receipt)
                 current = observer.observe()
-                if current.interruption is not None:
+                if current.interruption is not None and not _pending_verified_interruption(
+                    receipt, current
+                ):
                     raise RouteExecutionError(
                         "interruption handler did not restore traversal",
                         reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,

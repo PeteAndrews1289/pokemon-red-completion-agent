@@ -11,6 +11,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 
 from pokemon_red_completion.battle_semantics import BattleFeatureBatch, BattleMechanicsCatalog
+from pokemon_red_completion.red_status_battle_features import project_for_head
 from pokemon_red_completion.red_trainer_practice_features import (
     CONTROL_FEATURE_NAMES_V2,
     MOVE_FEATURE_NAMES,
@@ -19,7 +20,6 @@ from pokemon_red_completion.red_trainer_practice_features import (
     _mapping,
     _visible_stats,
     project_trainer_control_features,
-    project_trainer_move_features,
     project_trainer_switch_features,
 )
 from pokemon_red_completion.red_trainer_practice_head import TrainerHeadModel
@@ -87,7 +87,7 @@ def proposed_control(
     if move_slots:
         if move_batch is None or len(set(move_slots)) != len(move_slots):
             raise ValueError("proposed control move inventory differs")
-        moves = project_trainer_move_features(observation, move_batch)
+        moves = project_for_head(observation, move_batch, move_head)
         rows = tuple(
             moves.candidate_vectors[moves.candidate_slots.index(slot)] for slot in move_slots
         )
@@ -133,7 +133,7 @@ def estimated_finishing_features(
     """Approximate neutral-stat noncritical damage; unusual effects stay unknown."""
     if move_row is None:
         return (0.0, 0.0, 0.0)
-    values = dict(zip(MOVE_FEATURE_NAMES, move_row, strict=True))
+    values = dict(zip(MOVE_FEATURE_NAMES, move_row[:len(MOVE_FEATURE_NAMES)], strict=True))
     if values["move.category.status"] or any(
         values[f"move.effect.{flag}"]
         for flag in (

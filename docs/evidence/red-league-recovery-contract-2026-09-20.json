@@ -1,0 +1,19 @@
+{
+  "schema": "pokemon.red.league-recovery-contract.v1",
+  "date": "2026-09-20",
+  "status": "authorized_not_qualified",
+  "contract": "league-profit-recovery-v1",
+  "user_direction": "Fainting for Pokemon is fine, that’s part of the game. The important thing is to able to recover and still win",
+  "recoverable_faints_allowed": true,
+  "required_clean_profitable_cycles": 2,
+  "recovery_and_supply_costs_counted": true,
+  "battle_choices_model_owned": true,
+  "old_unowned_attack_disqualifies_original_cycle": true,
+  "old_receipts_unchanged": true,
+  "model_fit_authorized": false,
+  "default_funding_contract_changed": false,
+  "starting_state_sha256": "aa5deb175cd9a7e28c1769f851604cd19fbe2b74587a951634c228e1a1cd4b15",
+  "first_probe": "exact Agatha forced replacement and battle completion",
+  "stop_conditions": ["all-party loss", "unsupported boundary", "budget exhaustion", "provenance failure"],
+  "qualified": false
+}

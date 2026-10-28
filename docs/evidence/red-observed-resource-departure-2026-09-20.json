@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon.red-observed-resource-departure.v1",
+  "session": "2026-09-20-observed-resource-departure",
+  "status": "exit_only_integration_falsified",
+  "classification": "read_only_diagnostic_not_learning",
+  "source_base_commit": "7f0226385a473bb59d66521fc388da2fbee461cc",
+  "source_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+  "source_file_unchanged": true,
+  "emulator_state_bytes_unchanged": true,
+  "actions": 0,
+  "frames": 0,
+  "money_writes": 0,
+  "model_queries": 0,
+  "new_train_examples": 0,
+  "new_registrations": 0,
+  "production_source_edits": 0,
+  "actual_runtime": {
+    "learned_trainer_runner_bound": false,
+    "party_count": 6,
+    "cash": 198,
+    "ordinary_bindings": 0,
+    "supplements": 1,
+    "supplement_kind": "evolve_species",
+    "stop": "mixed live menu needs distinct executable candidates",
+    "league_stop": "save is not at a fresh postgame League boundary"
+  },
+  "counterfactuals": {
+    "classification": "diagnostic_only_not_executed_or_offered",
+    "exit_steps": 3,
+    "exit_only_funding_candidates": 0,
+    "nearby_undefeated_trainers": 18,
+    "other_unlocked_fly_towns_examined": 10,
+    "projected_outdoor_fly_funding_candidates": 0,
+    "restored_local_edges_paths": [
+      {"origin_map": 2, "target_map": 14, "steps": 64, "kinds": ["connection", "ledge", "walk"]},
+      {"origin_map": 4, "target_map": 21, "steps": 59, "kinds": ["connection", "ledge", "walk"]}
+    ],
+    "paths_are_qualified_funding_candidates": false,
+    "actual_j_loaded_or_qualified": false
+  },
+  "limitations": [
+    "Initial private logger serialization failure corrected without gameplay.",
+    "Initial outside:null field reflects a diagnostic accessor mismatch, not missing game state; traversal observer verifies outside map7.",
+    "Restriction comparisons sample the first attempted target per origin; they do not exhaust all legal routes.",
+    "J's qualified one-to-three-party scope remains unchanged. Six-party guard is not the baseline rejection because J is not bound.",
+    "No full-game, income, transfer, learning or collection success claimed."
+  ],
+  "private_record_sha256": {
+    "resource-departure-inspection-20260920-v1.json": "1960e344a3e0673d634524119d9bbc336e1fccdda6f49f2c7ab38303ea06f972",
+    "resource-departure-scope-probe-20260920-v1.json": "8b40b8d610b533fcfaac2d8484813d40647ede46663c732b6eb1d3eebac7ad96",
+    "resource-departure-scope-probe-20260920-v2.json": "c512669c546d0ee28386f27431afe371cefd4c9a34f669cdbc7b518818dd21e1",
+    "resource-departure-scope-probe-20260920-v3.json": "a2fb807c9277b1444766d4834eeaa508405fa7c9833123531bc2346a3c4a801c",
+    "resource-departure-scope-probe-20260920-v4.json": "09e01e66464dc804c26cf66f65d27b5d5f11063b0ccf1866d9aca04c08b437d5",
+    "resource-departure-scope-probe-20260920-v5.json": "b3ee11f4829d829d251feaf81c8d877e0b6ea596d0f6398a3c93c3b4f9341d18"
+  }
+}

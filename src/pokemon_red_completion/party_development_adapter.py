@@ -31,6 +31,7 @@ from pokemon_red_completion.party_development_catalog import (
 )
 from pokemon_red_completion.party_development_outcomes import (
     PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
+    PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE,
 )
 from pokemon_red_completion.party_development_rank import (
     CandidateCompletionSemantics,
@@ -40,12 +41,14 @@ from pokemon_red_completion.party_development_rank import (
     PartyDevelopmentGoal,
     VenueOperationalPrior,
     VenuePriorFeatureMode,
+    VenueTrainingWorkload,
     augment_training_candidate_set,
 )
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.player_option_level_workload import OptionLevelWorkload
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
@@ -363,6 +366,45 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
             )
 
 
+def observe_party_development_context(
+    *, goal: PartyDevelopmentGoal, party: PartyObservation, policy: BalancedTeamPolicy,
+    member_profiles: tuple[PartyDevelopmentMemberProfile, ...],
+    registration_owned_count: int, registration_target_count: int,
+    living_unique_count: int, living_target_count: int,
+    role_coverage_count: int, role_target_count: int,
+) -> PartyDevelopmentContext:
+    """Project the same observed party semantics for fixtures and live inference."""
+    profiles = member_profiles
+    return PartyDevelopmentContext(
+        goal=goal,
+        party_size=party.size,
+        below_floor_count=sum(
+            member_needs_training(item.member, policy) for item in profiles
+        ),
+        evolution_needed_count=sum(item.evolution.required for item in profiles),
+        registration_needed_count=sum(item.registration_needed for item in profiles),
+        living_needed_count=sum(item.living_target_needed for item in profiles),
+        role_gap_count=min(party.size, role_target_count - role_coverage_count),
+        registration_completion_ratio=(
+            registration_owned_count / registration_target_count
+        ),
+        living_completion_ratio=(living_unique_count / living_target_count),
+        role_coverage_ratio=role_coverage_count / role_target_count,
+        healthy_trainable_count=sum(
+            item.member.is_trainable and item.member.status is StatusCondition.HEALTHY
+            for item in profiles
+        ),
+        exhausted_count=sum(
+            not item.member.is_fainted
+            and item.member.level < MAX_LEVEL
+            and not item.member.usable_moves
+            for item in profiles
+        ),
+        fainted_count=party.fainted_count,
+    )
+
+
+
 @dataclass(frozen=True, slots=True)
 class PartyDevelopmentSemanticSnapshot:
     """One coherent title-neutral state from which menus may be projected."""
@@ -388,6 +430,9 @@ class PartyDevelopmentSemanticSnapshot:
     active_conditions: tuple[str, ...] = ()
     venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED
     execution_protocol_id: str = "legacy-adaptive-v1"
+    include_workload: bool = False
+    level_workloads_by_member: tuple[OptionLevelWorkload | None, ...] = ()
+    venue_workloads_by_member: tuple[tuple[VenueTrainingWorkload | None, ...], ...] = ()
 
     def __post_init__(self) -> None:
         if (
@@ -479,6 +524,23 @@ class PartyDevelopmentSemanticSnapshot:
                 raise PartyDevelopmentAdapterError(
                     f"party-development {subject} counts are invalid"
                 )
+        if type(self.include_workload) is not bool:
+            raise PartyDevelopmentAdapterError("workload projection requires a boolean")
+        if not self.include_workload and (
+            self.level_workloads_by_member or self.venue_workloads_by_member
+        ):
+            raise PartyDevelopmentAdapterError("workload observations require explicit opt-in")
+        levels = self.level_workloads_by_member
+        venues = self.venue_workloads_by_member
+        if (not isinstance(levels, tuple) or (levels and len(levels) != self.party.size)
+                or any(value is not None and not isinstance(value, OptionLevelWorkload)
+                       for value in levels)):
+            raise PartyDevelopmentAdapterError("level workloads must align with observed party")
+        if (not isinstance(venues, tuple) or (venues and len(venues) != self.party.size)
+                or any(not isinstance(row, tuple) or len(row) != len(self.areas)
+                       or any(value is not None and not isinstance(value, VenueTrainingWorkload)
+                              for value in row) for row in venues)):
+            raise PartyDevelopmentAdapterError("venue workloads must align with party and venues")
         conditions = self.active_conditions
         if (
             not isinstance(conditions, tuple)
@@ -529,39 +591,31 @@ class PartyDevelopmentSemanticSnapshot:
                 "active_conditions": list(self.active_conditions),
                 "venue_prior_feature_mode": self.venue_prior_feature_mode.value,
                 "execution_protocol_id": self.execution_protocol_id,
+                **({
+                    "include_workload": True,
+                    "level_workloads_by_member": [
+                        None if work is None else work.public_dict()
+                        for work in self.level_workloads_by_member
+                    ],
+                    "venue_workloads_by_member": [
+                        [None if work is None else asdict(work) for work in row]
+                        for row in self.venue_workloads_by_member
+                    ],
+                } if self.include_workload else {}),
             }
         )
 
     @property
     def context(self) -> PartyDevelopmentContext:
-        profiles = self.member_profiles
-        party = self.party
-        return PartyDevelopmentContext(
-            goal=self.goal,
-            party_size=party.size,
-            below_floor_count=sum(
-                member_needs_training(item.member, self.policy) for item in profiles
-            ),
-            evolution_needed_count=sum(item.evolution.required for item in profiles),
-            registration_needed_count=sum(item.registration_needed for item in profiles),
-            living_needed_count=sum(item.living_target_needed for item in profiles),
-            role_gap_count=min(party.size, self.role_target_count - self.role_coverage_count),
-            registration_completion_ratio=(
-                self.registration_owned_count / self.registration_target_count
-            ),
-            living_completion_ratio=(self.living_unique_count / self.living_target_count),
-            role_coverage_ratio=self.role_coverage_count / self.role_target_count,
-            healthy_trainable_count=sum(
-                item.member.is_trainable and item.member.status is StatusCondition.HEALTHY
-                for item in profiles
-            ),
-            exhausted_count=sum(
-                not item.member.is_fainted
-                and item.member.level < MAX_LEVEL
-                and not item.member.usable_moves
-                for item in profiles
-            ),
-            fainted_count=party.fainted_count,
+        return observe_party_development_context(
+            goal=self.goal, party=self.party, policy=self.policy,
+            member_profiles=self.member_profiles,
+            registration_owned_count=self.registration_owned_count,
+            registration_target_count=self.registration_target_count,
+            living_unique_count=self.living_unique_count,
+            living_target_count=self.living_target_count,
+            role_coverage_count=self.role_coverage_count,
+            role_target_count=self.role_target_count,
         )
 
     def trainee_menu(
@@ -610,6 +664,11 @@ class PartyDevelopmentSemanticSnapshot:
             self.context,
             semantics,
             venue_priors=repeated_prior,
+            include_workload=self.include_workload,
+            level_workloads=(tuple(self.level_workload_for(item) for item in bindings)
+                             if self.include_workload else None),
+            venue_workloads=(tuple(self.venue_workload_for(item, venue_index) for item in bindings)
+                             if self.include_workload else None),
         )
         if sum(item.available for item in capabilities) < 2:
             return None
@@ -667,6 +726,11 @@ class PartyDevelopmentSemanticSnapshot:
             self.context,
             semantics,
             venue_priors=priors,
+            include_workload=self.include_workload,
+            level_workloads=((self.level_workload_for(trainee),) * len(bindings)
+                             if self.include_workload else None),
+            venue_workloads=(tuple(self.venue_workload_for(trainee, index) for index in indexes)
+                             if self.include_workload else None),
         )
         availability = tuple(
             capability.available
@@ -745,11 +809,18 @@ class PartyDevelopmentSemanticSnapshot:
         ),
         *,
         scenario_id: str,
+        total_task_efficiency: bool = False,
     ) -> PartyDevelopmentProspectiveBinding:
         """Bind one adapter menu after proving prior/candidate independence."""
 
         if not isinstance(menu, BoundPartyDevelopmentMenu):
             raise TypeError("menu must be a BoundPartyDevelopmentMenu")
+        if type(total_task_efficiency) is not bool or (
+            total_task_efficiency and self.goal is not PartyDevelopmentGoal.EVOLUTION
+        ):
+            raise PartyDevelopmentAdapterError("total task objective requires an evolution goal")
+        objective = (PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE if total_task_efficiency
+                     else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE)
         if menu.semantic_snapshot_sha256 != self.semantic_snapshot_sha256:
             raise PartyDevelopmentAdapterError("menu belongs to a different semantic snapshot")
         self.venue_prior_registry.require_scenario_is_independent(
@@ -769,10 +840,26 @@ class PartyDevelopmentSemanticSnapshot:
             shared_venue_prior=menu.shared_venue_prior,
             venue_prior_feature_mode=menu.venue_prior_feature_mode,
             venue_prior_registry_sha256=self.venue_prior_registry.registry_sha256,
-            outcome_objective_sha256=(PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256),
+            outcome_objective_sha256=objective.objective_sha256,
             candidate_available=menu.candidate_available,
             candidate_unavailable_reasons=menu.candidate_unavailable_reasons,
         )
+
+    def level_workload_for(self, member: PartyMemberObservation) -> OptionLevelWorkload | None:
+        self._profile_for_member(member)
+        if not self.level_workloads_by_member:
+            return None
+        return self.level_workloads_by_member[self.party.members.index(member)]
+
+    def venue_workload_for(
+        self, member: PartyMemberObservation, venue_index: int,
+    ) -> VenueTrainingWorkload | None:
+        self._profile_for_member(member)
+        if type(venue_index) is not int or not 0 <= venue_index < len(self.areas):
+            raise PartyDevelopmentAdapterError("venue workload index is outside observed inventory")
+        if not self.venue_workloads_by_member:
+            return None
+        return self.venue_workloads_by_member[self.party.members.index(member)][venue_index]
 
     def _profile_for_member(self, member: PartyMemberObservation) -> PartyDevelopmentMemberProfile:
         if not isinstance(member, PartyMemberObservation):

@@ -1,0 +1,207 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_final_goals_complete": false,
+  "audit_observed_at_utc": "2026-10-25T21:29:33.426359+00:00",
+  "authorized_block_utc": [
+    "2026-10-25T19:29:23+00:00",
+    "2026-10-25T22:29:23+00:00"
+  ],
+  "checks": [
+    {
+      "passed": 206,
+      "scope": "Quantum/configuration/preparation"
+    },
+    {
+      "passed": 73,
+      "scope": "TRAIN six-party fixture"
+    },
+    {
+      "passed": 112,
+      "scope": "PP party observation"
+    },
+    {
+      "deselected": 2,
+      "passed": 246,
+      "scope": "Additive count compatibility"
+    },
+    {
+      "passed": 30,
+      "scope": "New count projection/runtime"
+    },
+    {
+      "passed": 72,
+      "scope": "Packed PP witness and recorder/readback"
+    },
+    {
+      "passed": 51,
+      "scope": "Fit and matched native worker contracts"
+    },
+    {
+      "native_qualified": false,
+      "passed": 7,
+      "scope": "Four-party bootstrap repair"
+    },
+    {
+      "passed": 13,
+      "scope": "Prospective prefix cost pairing"
+    }
+  ],
+  "current_block_counters": {
+    "actual_inputs": 0,
+    "configured_model_choices": 34,
+    "diagnostic_dispatches": 14,
+    "emulator_construction_attempts": 14,
+    "emulators_constructed": 13,
+    "failed_control_root_seconds": 64.64838199399674,
+    "failed_direct_root_seconds": 33.91707074599981,
+    "failed_p10_package_binding_root_seconds": 29.95969298199998,
+    "failed_preparation_root_seconds": 35.761397536000004,
+    "failed_setup_root_seconds": 56.46500500499678,
+    "fit_root_seconds": 23.41810774899932,
+    "native_costs": {
+      "actions": 42646,
+      "cash_debits": 2384,
+      "decisions": 34,
+      "frames": 3165828,
+      "heals": 109,
+      "seconds": 624.467221844996
+    },
+    "new_fits": 1,
+    "new_unknown_native_seconds_tails": 4,
+    "resource_only_probes": 1,
+    "state_loads": 13,
+    "training_rows_admitted": 2
+  },
+  "evidence_sha256": {
+    "TRAIN_direct": "5864a5c75379af5f60cb828ad412ad7a0196d1168c823ef4f524369de1e15656",
+    "TRAIN_preparation": "59ee822f8e7142f7ae8052d8556d0a6c80b7c9c66fae6301f89341b8130c31e4",
+    "fit": "3649323040e51c553d5ff377055da8d7e1f009e55c637f55c2dfa4ab82320a5d",
+    "matched_pair": "d5d4567219239de39d6da5ca6383f0bbcf1809c81e9cdfafad0b3a588cf76209",
+    "native_TRAIN_trace": "8110d3c752be9373ef3a29f888d19c63375e118b1652f99ea76006f39d27f474",
+    "native_calibration": "9e59eec05b4d53c04acb3732513df76e61a8f2371c0166f931e613bb4be179fd",
+    "prefix_closeout": "9be7ba72e8d4c533d2e0c5f892de7e86479071d9a20d9c18236fbc38274c06ab",
+    "prefix_pointer": "29bcd3e638e598be6a74bb6a33bf192e0fa0b7bd2b3178b985991772a9bcf1a7",
+    "quantum_pair": "555415283ec2f056a6a71fe2f74dd0b8f3fd69d8a22f42e70d97a0b62ca1e9e1",
+    "two_hour_audit": "2f69bb48da1fe333ec218a416210b463896f59a1d5ff10bd75a6b318a31e2755",
+    "two_hour_independent": "d8d89f0460b1ec9125d9341a82be98ba17c848b7410aabfc7c58d913a3ecaef7"
+  },
+  "forecasts": {
+    "A202_rounded": {
+      "actions": 2049,
+      "frames": 160390,
+      "heals": 2.78
+    },
+    "new_head_rounded": {
+      "actions": 8982,
+      "frames": 679083,
+      "heals": 20.79
+    },
+    "relative_errors_percent_rounded": {
+      "actions": [
+        72.3,
+        21.6
+      ],
+      "frames": [
+        70.0,
+        27.2
+      ],
+      "heals": [
+        86.8,
+        1.0
+      ]
+    },
+    "selected_cycle_actual": {
+      "actions": 7387,
+      "frames": 533832,
+      "heals": 21
+    }
+  },
+  "full_campaigns_paused": true,
+  "head": {
+    "TRAIN_rows": 10,
+    "adopted": false,
+    "content_sha256": "8a8f15721836b24d4856a4c72d0c93a47b9c58322b280cc6ffec310c7b1672fb",
+    "projection_width": 321,
+    "raw_width": 506,
+    "recipe": "ridge1/unit/independent cash",
+    "semantic_sha256": "1ff05bbbb5c7af0185e2ae6e366158debf8c276a21c1988f86bfa0b3d703f9c2"
+  },
+  "independent_origins": 1,
+  "inherited_readiness_counters": {
+    "actual_inputs": 0,
+    "completed_teacher_pairs": 1,
+    "configured_model_choices": 128,
+    "diagnostic_dispatches": 33,
+    "emulators_constructed": 39,
+    "native_costs": {
+      "actions": 75767,
+      "cash_debits": 16159,
+      "decisions": 172,
+      "frames": 5641084,
+      "heals": 126,
+      "seconds": 1090.980568584012
+    },
+    "new_fits": 3,
+    "standalone_battle_decisions": 23,
+    "standalone_battle_diagnostic_root_seconds": 57.17567677199986,
+    "state_loads": 39,
+    "unknown_native_cost_tails": 2
+  },
+  "limits": [
+    "Focused suites overlap; not full-suite or CI success. Earlier full ROM-free baseline has59failures/29errors/17045collected.",
+    "Current four-party PP-known control failed twice before inputs; both loaded tails and all costs retained. New PP/count effects remain confounded.",
+    "Two new genuine TRAIN outcomes, one fixed fit, one exposed related DEV pair; one ancestry is not independent generalization.",
+    "Four new incomplete native-second tails remain lower bounds, separately from two inherited unknown tails; root durations retained.",
+    "Short8 quote made model skip preparation and lose twice; no native short-dose qualification or adoption.",
+    "Cost forecasting improved on selected related case, while choices and game costs stayed identical. No model adoption, fresh acceptance or goal completion.",
+    "Prefix is censored source preparation, not another completed challenge lesson. Old actual cutoffs and cumulative failed costs remain sealed.",
+    "At most two bounded isolated development workers under previous capacity guards; current P10 comparison used one live emulator at a time. No3+ qualification."
+  ],
+  "matched_DEV": {
+    "behavior_improvement": false,
+    "both_Misty_wins": true,
+    "cost_consumer_sensitivity_verified": true,
+    "per_arm_actions": 7501,
+    "per_arm_frames": 540504,
+    "per_arm_goals": 6,
+    "per_arm_heals": 22,
+    "per_arm_policy_queries": 8,
+    "terminal_and_all_goal_boundary_states_identical": true,
+    "throughput_improvement": false
+  },
+  "models_adopted": 0,
+  "observed_at_utc": "2026-10-25T22:16:42.249280+00:00",
+  "packages": {
+    "P10": "a175811204a5d7fd19cd5a31f7d21d7d1e15d9d4707029efc74dcc932c505741",
+    "P8": "f9887afc200a858c789d5bfbb3fbe447cf11c6ec4b3cd1e0e9b4819a596d24ba",
+    "P9": "031350df09d7d07d0dad55ea91016eedad5e2198dbc474ec49d90082a6b4a71a"
+  },
+  "prefix": {
+    "censored": true,
+    "child_experiment_launched": false,
+    "context_sha256": "5598a8fb32331ede927aef2ea004618af5587f71753e57b81a2902f8d0a0fda2",
+    "earned_actual_progress": false,
+    "fitted": false,
+    "proof_sha256": "4fb8c8c2a5be31ad12cb589a2b6e9745eb3e10662a362dcd4a170f85202eae1e",
+    "source_sha256": "4a83256bad3a8ee32f365fd2004ce1818acae949d232f4f75663d7b7db848869"
+  },
+  "schema": "pokemon.red.preparation-cost-stopping-session.v1",
+  "status": "forecast_improved_behavior_unchanged",
+  "time_loss": {
+    "early_nurse_returns": 20,
+    "forced_switches": 12,
+    "genuine_TRAIN_wild_wins": 45,
+    "party_XP": 3168,
+    "preparation_frames": 660648,
+    "switch_frames": 274776,
+    "switches_to_added_reserves": 154,
+    "target_overshoot_XP": 12,
+    "trainee_XP": 1153,
+    "voluntary_switches": 162
+  },
+  "total_current_family_train_rows": 10,
+  "total_saved_current_family_fits": 4
+}

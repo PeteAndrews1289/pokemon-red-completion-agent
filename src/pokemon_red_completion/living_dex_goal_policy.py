@@ -53,6 +53,8 @@ from pokemon_red_completion.resource_economy_observation import (
     EconomySnapshot,
 )
 
+from .player_readiness import PlayerReadiness
+
 
 class LivingDexGoalPolicyError(ValueError):
     """A semantic question cannot cross the living-Dex shadow boundary."""
@@ -94,7 +96,7 @@ def living_dex_option_kind_for_goal(
 
     if not isinstance(kind, GoalKind):
         raise TypeError("kind must be a GoalKind")
-    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4}:
+    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15}:
         raise LivingDexGoalPolicyError("living-Dex feature version differs")
     if kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
         return LivingDexOptionKind.RESTORE
@@ -147,9 +149,11 @@ def economy_offer_from_opportunity(opportunity: GoalOpportunity) -> EconomyOffer
 
 def project_living_dex_goal_candidate(
     question: GoalManagerQuestion, index: int, *, feature_version: int,
-    binding_ref: str,
+    binding_ref: str, readiness: PlayerReadiness | None = None,
 ) -> LivingDexOptionCandidate | None:
     """Project one executable semantic option without scoring it or inventing a menu."""
+    if readiness is not None and feature_version < 5:
+        raise LivingDexGoalPolicyError("readiness requires feature version 5")
     if type(index) is not int or index not in question.available_indices:
         raise LivingDexGoalPolicyError("projected goal is unavailable")
     opportunity = question.opportunities[index]
@@ -175,6 +179,7 @@ def project_living_dex_goal_candidate(
         availability=LivingDexOptionAvailability.AVAILABLE,
         search_history=opportunity.search_history,
         economy_offer=economy_offer,
+        readiness=readiness,
     )
 
 
@@ -315,6 +320,7 @@ class LivingDexGoalShadowPolicy:
     allow_earning_exploration: bool = False
     economy_snapshot: EconomySnapshot | None = None
     target_cash: int | None = None
+    readiness: PlayerReadiness | None = None
     decisions: int = field(default=0, init=False)
     model_decisions: int = field(default=0, init=False)
     deterministic_decisions: int = field(default=0, init=False)
@@ -330,6 +336,9 @@ class LivingDexGoalShadowPolicy:
     def __post_init__(self) -> None:
         if not isinstance(self.model, LivingDexOptionValueModel):
             raise TypeError("living-Dex shadow policy needs an option-value model")
+        if self.readiness is not None and (not isinstance(self.readiness, PlayerReadiness)
+                                          or self.model.feature_version < 5):
+            raise LivingDexGoalPolicyError("readiness requires a compatible V5 policy")
         if not isinstance(self.utility, LivingDexOptionUtility):
             raise TypeError("living-Dex shadow policy needs a utility contract")
         if not isinstance(self.safety, CompletionFirstGoalTeacher):
@@ -442,6 +451,7 @@ class LivingDexGoalShadowPolicy:
             candidate = project_living_dex_goal_candidate(
                 question, index, feature_version=self.model.feature_version,
                 binding_ref=f"policy-row-{len(projected)}",
+                readiness=self.readiness,
             )
             if candidate is None:
                 continue

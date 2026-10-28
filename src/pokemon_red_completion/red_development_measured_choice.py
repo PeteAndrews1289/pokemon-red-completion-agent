@@ -54,6 +54,10 @@ from pokemon_red_completion.red_live_option_menu import (
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_economy import restore_snapshot, snapshot_document
 from pokemon_red_completion.red_player_model import RedPlayerModelRecord
+from pokemon_red_completion.red_player_training_dataset import (
+    _replay_probabilities_match,
+    _replay_scores_match,
+)
 from pokemon_red_completion.red_registered_observation import REGISTERED_OBSERVATION_SCHEMA
 from pokemon_red_completion.red_registered_outcome import red_registered_outcome_from_observations
 from pokemon_red_completion.red_safari_acquisition import SAFARI_AREA_CHOICE_POLICY
@@ -1352,11 +1356,8 @@ def _validate_behavior(
     )
     if (
         (not frozen_receipt and selected != choice.selected_candidate_index)
-        or scores != choice.scores
-        or any(
-            not math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-12)
-            for actual, expected in zip(choice.behavior_probabilities, probabilities, strict=True)
-        )
+        or not _replay_scores_match(choice.scores, scores)
+        or not _replay_probabilities_match(choice.behavior_probabilities, probabilities)
     ):
         raise ValueError("measured choice behavior selection does not replay")
 

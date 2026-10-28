@@ -20,6 +20,40 @@ class Memory:
         return self.values.get(int(address), 0)
 
 
+@pytest.mark.parametrize("species", (141, 131))
+def test_retained_fainted_wild_identity_does_not_offer_a_capture(monkeypatch, species):
+    memory = Memory({int(RamAddress.ENEMY_SPECIES_2): species,
+                     int(RamAddress.ENEMY_SPECIES): species,
+                     int(RamAddress.ENEMY_TYPE_1): 0,
+                     int(RamAddress.ENEMY_TYPE_2): 0})
+    reader = PokemonRedStateReader(memory)
+    raw = RawGameState(True, 227, 3, 4, 6, 1, enemy_hp=0, enemy_species_id=species)
+    monkeypatch.setattr(reader, "read", lambda: raw)
+    assert reader.read_wild_capture_identity() is None and memory.reads == []
+    identity = reader.read_retained_wild_identity()
+    assert identity.original_species_id == species and not identity.transformed
+    for state in (replace(raw, battle_state=0), replace(raw, battle_state=2),
+                  replace(raw, enemy_hp=None)):
+        memory.reads.clear()
+        monkeypatch.setattr(reader, "read", lambda state=state: state)
+        assert reader.read_retained_wild_identity() is None and memory.reads == []
+
+
+def test_retained_wild_identity_preserves_transform_and_rejects_stale_state(monkeypatch):
+    memory = Memory({int(RamAddress.ENEMY_SPECIES_2): 131,
+                     int(RamAddress.ENEMY_SPECIES): 141,
+                     int(RamAddress.ENEMY_BATTLE_STATUS_3): 8})
+    reader = PokemonRedStateReader(memory)
+    raw = RawGameState(True, 227, 3, 4, 6, 1, enemy_hp=0)
+    monkeypatch.setattr(reader, "read", lambda: raw)
+    identity = reader.read_retained_wild_identity()
+    assert identity.original_species_id == 131 and identity.transformed
+    states = iter((raw, replace(raw, enemy_hp=1)))
+    monkeypatch.setattr(reader, "read", lambda: next(states))
+    with pytest.raises(SemanticStateError, match="changed while reading"):
+        reader.read_retained_wild_identity()
+
+
 def test_enemy_status_uses_pinned_battle_struct_offset_without_snapshot_change(monkeypatch):
     memory = Memory({0xCFE9: 0x40, 0xCFE8: 7, 0xCFEA: 3})
     reader = PokemonRedStateReader(memory)

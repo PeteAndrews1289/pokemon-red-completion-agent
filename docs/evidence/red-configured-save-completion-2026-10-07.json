@@ -1,0 +1,1867 @@
+{
+  "schema": "pokemon.red.configured-save-completion.v1",
+  "kind": "development",
+  "date": "2026-10-07",
+  "status": "active",
+  "work_order": "docs/work-sessions/2026-10-07-complete-configured-save.md",
+  "source": {
+    "family": "red-configured-player-giovanni-20261007-v1",
+    "node": "runs/segment-004",
+    "state_sha256": "69a48cc3eee826607b89b2ab0c19c1f500d594e21b9bcff07d5f746e8c422649",
+    "context_sha256": "8103f67591a898c2a740739dd8ceba714a35c7236f0098ab4ce668835b1e224a",
+    "badges": 8,
+    "badge_bits": 255,
+    "completed_story_objectives": 29,
+    "total_story_objectives": 36,
+    "registered_species": 13,
+    "cash": 20747,
+    "map_id": 41,
+    "at_y_x": [
+      3,
+      3
+    ],
+    "party_levels": [
+      29,
+      39,
+      31,
+      26,
+      39,
+      17
+    ],
+    "native_defeat_event": 81,
+    "native_reward_event": 80,
+    "giovanni_flags_verified": true,
+    "reward_item": 227,
+    "reward_item_quantity": 1,
+    "master_balls": 1,
+    "fully_restored": true,
+    "controls_released": true,
+    "worker_stopped": true,
+    "process_exit_code": 0
+  },
+  "configuration_sha256": "adb64a49dc130e2b11d49013ff384912043ead4cf337b958c5e891cb3c92d343",
+  "completion_contract": {
+    "same_save": true,
+    "remaining_story": [
+      "cross_victory_road",
+      "defeat_lorelei",
+      "defeat_bruno",
+      "defeat_agatha",
+      "defeat_lance",
+      "defeat_champion",
+      "enter_hall_of_fame"
+    ],
+    "target_registrations": 124,
+    "scope": "declared legitimate Red native route",
+    "additional_save_dependencies": 27,
+    "living_dex_required": false,
+    "level100_required": false
+  },
+  "progress": {
+    "family": "red-configured-save-completion-20261007-v1",
+    "latest_stopped_node": "runs/segment-064",
+    "state_sha256": "f9f505b4f119e1628f579c9f41e9568978bed693d7e9fe0404fbe55387958fbd",
+    "context_sha256": "a1cf8b4210f1da5c2b4d017fe8a7401df4e5587363c65fddf2ce89f6f5a424d4",
+    "completed_story_objectives": 36,
+    "registered_species": 32,
+    "cash": 20086,
+    "map_id": 89,
+    "at_y_x": [
+      3,
+      3
+    ],
+    "party_levels": [
+      55,
+      57,
+      60,
+      57,
+      82,
+      53
+    ],
+    "field_ready": true,
+    "fully_restored": false,
+    "controls_released": true,
+    "worker_stopped": true,
+    "native_rival_losses": 8,
+    "selected_preparation": {
+      "trainee": "Blastoise",
+      "latest_completed_target_level": 45,
+      "completed_target_node": "runs/segment-010",
+      "completed_encounters": 46,
+      "completed_party_xp": 7538,
+      "verification": "succeeded",
+      "original_failed_targets_retained": true,
+      "league_targets": [
+        {
+          "trainee": "Raticate",
+          "target_level": 44,
+          "source_node": "runs/segment-018",
+          "encounters": 26,
+          "retained_sub_doses": 18,
+          "verified": true
+        },
+        {
+          "trainee": "Blastoise",
+          "target_level": 54,
+          "source_node": "runs/segment-019",
+          "verified": true
+        }
+      ],
+      "stop_preparing_then_challenge_verified": true
+    },
+    "same_save_spending": {
+      "actions": 708341,
+      "cash_debits": 264255,
+      "decisions": 1461,
+      "frames": 59625969,
+      "heals": 838,
+      "seconds": 60846.38254025206
+    },
+    "active_next_node": "runs/segment-065",
+    "native_rival_victory": {
+      "source_node": "runs/segment-010",
+      "actor_sha256": "05a7afb42bfdf8b5d416782a516e78ae82d7a6d4cd72eea77134b484822c7333",
+      "new_experimental_heads_deployed": false,
+      "battle_won": true,
+      "opponents_defeated": 6,
+      "opponents_total": 6,
+      "battle_choices": 56,
+      "player_turns": 49,
+      "own_faints": 2,
+      "voluntary_switch_fraction": 0,
+      "native_defeat_event": 1318,
+      "native_defeat_verified": true,
+      "prior_eight_losses_retained": true,
+      "progress_copy_back": false
+    },
+    "post_victory_recovery": "Story046 remains retained. Ordinary same-save captures/evolutions now reach32flags. Actual063model-selects native HM02 acquisition, a compatible Dodrio lesson and real flight for another selected evolution. Partial XP and all costs/losses remain; no diagnostic gains adopted.",
+    "victory_road": {
+      "source_node": "runs/segment-013",
+      "completed": true,
+      "native_indigo_arrival": true,
+      "normal_strength_teaching": true,
+      "story_objectives": 30
+    },
+    "league": {
+      "first_lorelei_outcome": "lost",
+      "source_node": "runs/segment-013",
+      "actor_sha256": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad",
+      "model_selected_post_loss_preparation": true,
+      "completed_target_level": 47,
+      "native_champion_completed": true,
+      "return_binding_repaired": true,
+      "no_premature_league_credit": true,
+      "latest_source_node": "runs/segment-046",
+      "native_lorelei_losses": 14,
+      "properly_restored_lorelei_losses": 4,
+      "each_properly_restored_opponents_defeated": 4,
+      "opponents_total": 5,
+      "approved_pre_entry_healing_native_verified": true,
+      "healing_weight_change": false,
+      "preparation_child_objective": "defeat_lance",
+      "latest_native_blastoise_level": 80,
+      "native_lorelei_wins": 15,
+      "native_bruno_losses": 1,
+      "native_bruno_wins": 14,
+      "native_agatha_losses": 11,
+      "native_agatha_wins": 3,
+      "first_lorelei_victory_node": "runs/segment-019",
+      "first_bruno_victory_node": "runs/segment-021",
+      "historical_room_credit_is_not_uninterrupted_completion": true,
+      "native_lance_losses": 2,
+      "native_lance_wins": 1,
+      "first_agatha_victory_node": "runs/segment-039",
+      "first_agatha_victory_step": 9,
+      "native_champion_wins": 1,
+      "preparation_child_deferred": true
+    },
+    "collection_progress": {
+      "source_node": "runs/segment-013",
+      "new_captures": [
+        41,
+        111,
+        32
+      ],
+      "new_gifts": [
+        131
+      ],
+      "native_flags_verified": true,
+      "selected_evolution_completed": false,
+      "selected_evolution_battles": 60,
+      "selected_evolution_party_xp": 4032,
+      "selected_evolution_nurses": 3,
+      "wall_checkpoint_retained": true,
+      "weights_changed_by_xp": false,
+      "incidental_evolutions": [
+        {
+          "source_node": "runs/segment-022",
+          "national_number": 85,
+          "species": "Dodrio",
+          "weights_changed": false
+        },
+        {
+          "source_node": "runs/segment-023",
+          "national_number": 18,
+          "species": "Pidgeot",
+          "weights_changed": false
+        }
+      ],
+      "latest_verified_owned_flags": 32,
+      "model_selected_segment_033_registrations": [
+        {
+          "step": 0,
+          "national_number": 48,
+          "species": "Venonat",
+          "mechanism": "capture"
+        },
+        {
+          "step": 1,
+          "national_number": 56,
+          "species": "Mankey",
+          "mechanism": "capture"
+        },
+        {
+          "step": 2,
+          "national_number": 42,
+          "species": "Golbat",
+          "mechanism": "evolution"
+        },
+        {
+          "step": 3,
+          "national_number": 33,
+          "species": "Nidorino",
+          "mechanism": "evolution"
+        },
+        {
+          "step": 5,
+          "national_number": 58,
+          "species": "Growlithe",
+          "mechanism": "capture"
+        }
+      ],
+      "partial_evolution_033": {
+        "step": 10,
+        "completed_training_battles": 44,
+        "healing_trips": 15,
+        "wall_limit_reached": true,
+        "retained_active_roster_restored": true,
+        "earned_xp_retained": true,
+        "registration_credited": false
+      },
+      "partial_evolution_034": {
+        "completed_training_battles": 88,
+        "healing_trips": 2,
+        "wall_limit_reached": true,
+        "retained_active_roster_restored": true,
+        "registration_credited": false,
+        "observed_box_levels": {
+          "Ekans": 17,
+          "Rhyhorn": 27,
+          "Venonat": 27,
+          "Mankey": 22
+        },
+        "qualified_venue": "Digletts Cave",
+        "trainer_move_authority": "mechanics damage heuristic,not learned battler"
+      },
+      "model_selected_segment_048_registrations": [
+        {
+          "step": 2,
+          "national_number": 114,
+          "species": "Tangela",
+          "mechanism": "capture",
+          "native_flag_verified": true
+        }
+      ],
+      "model_selected_segment_058_registrations": [
+        {
+          "step": 0,
+          "national_number": 109,
+          "species": "Koffing",
+          "mechanism": "capture",
+          "native_flag_verified": true
+        }
+      ],
+      "model_selected_segment_060_registrations": [
+        {
+          "step": 0,
+          "national_number": 110,
+          "species": "Weezing",
+          "mechanism": "evolution",
+          "native_flag_verified": true
+        }
+      ],
+      "model_selected_segment_062_registrations": [
+        {
+          "step": 0,
+          "national_number": 24,
+          "species": "Arbok",
+          "mechanism": "evolution",
+          "native_flag_verified": true
+        }
+      ],
+      "model_selected_segment_063_registrations": [
+        {
+          "step": 0,
+          "national_number": 57,
+          "species": "Primeape",
+          "mechanism": "evolution",
+          "native_flag_verified": true
+        }
+      ]
+    },
+    "existing_head_reuse": {
+      "original_logical_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+      "current_logical_sha256": "f80807f9fc66d16ac0514df18b0862b75b536ebf7f39a26352a858d9e50f5c0b",
+      "existing_variants_inspected": 4,
+      "new_fits": 0,
+      "exposed_development_inspections": true,
+      "independent_comparison": false,
+      "objective_ref": "defeat_lance",
+      "prospective_source_node": "runs/segment-021",
+      "zero_input_real_options": 1,
+      "zero_input_selected_kind": "advance_story",
+      "zero_input_model_queries": 0,
+      "first_lorelei_scope": {
+        "prospective_source_node": "runs/segment-017",
+        "zero_input_real_options": 13,
+        "zero_input_selected_kind": "develop_team",
+        "zero_input_model_queries": 2
+      },
+      "reason": "Only the existing unfinished story binding is legal inside this exhausted locked room;no medicine was yet owned. No invented recovery option.",
+      "active": false,
+      "deferred_from_node": "runs/segment-044",
+      "defer_reason": "Repeated levels-only preparation despite retained move/PP bottleneck; parent141 now directly explores all real ordinary goals."
+    },
+    "execution_repair": "Original64 encounters/63 metered recoveries now include the existing zero-XP health-retreat retry, bounded by the same plan's max_no_progress. Failed targets and every cost remain; no tactical override.",
+    "route_search_reuse": {
+      "opt_in_only": true,
+      "bounded_one_read_only_inventory": true,
+      "exact_menu_parity": true,
+      "exact_choice_parity": true,
+      "inputs": 0,
+      "frames": 0,
+      "local_hits": 117031,
+      "local_misses": 2758,
+      "unprofiled_menu_seconds": 20.554780500009656,
+      "instrumented_baseline_seconds": 244.888,
+      "like_for_like_speed_ratio": false
+    },
+    "route21_venue": {
+      "decoded_geometry_verified": true,
+      "full_route_from_actual007_rejected": true,
+      "unavailable_not_forced": true
+    },
+    "registration": {
+      "species": "Fearow",
+      "national_number": 22,
+      "mechanism": "native evolution of original Spearow",
+      "source_node": "runs/segment-009",
+      "native_flag_verified": true
+    },
+    "rival_actor_diagnostic": {
+      "source_node": "runs/segment-009",
+      "candidate_sha256": "720e9db864f3fefe2edfa27889203bd7c0fcbbd6968a65b960adcf1d57392161",
+      "supplied_goal": true,
+      "copyback": false,
+      "battle_won": false,
+      "opponents_defeated": 4,
+      "opponents_total": 6,
+      "actions": 432,
+      "frames": 36000,
+      "seconds": 60.46929254103452,
+      "independent": false
+    },
+    "active_training": "Six completed isolated native TRAIN contexts;86 admitted counterfactual branches. All copies stopped;new heads are not deployed. Real rival win uses the existing actor after model-selected earned preparation.",
+    "preparation_actor_reuse": {
+      "candidate_sha256": "720e9db864f3fefe2edfa27889203bd7c0fcbbd6968a65b960adcf1d57392161",
+      "source_node": "runs/segment-009",
+      "goal_model_selected": true,
+      "target_level": 45,
+      "copy_target_reached": true,
+      "encounters": 46,
+      "wins": 35,
+      "heals": 13,
+      "actions": 6331,
+      "frames": 480192,
+      "seconds": 607.8597120830091,
+      "copy_back": false,
+      "independent": false,
+      "deployment": "actual010also reaches selected45normally;goal,trainee,target and venue remain learned"
+    },
+    "trained_rival_copies": {
+      "switch_control_sha256": "5700c99818b03ab29b49040d3cb23a5cdf4a815fc20449f12852075d04ca1303",
+      "interaction_combination_sha256": "e90de300ed908e6ec7aeef5f5a05b85e2d4e637849362084c99a6a1ccf2913b4",
+      "each_opponents_defeated": 4,
+      "opponents_total": 6,
+      "each_battle_won": false,
+      "deployed_for_route22": false,
+      "independent": false,
+      "copy_back": false
+    },
+    "new_damage_lesson": {
+      "candidate_sha256": "7c3a7d7ba8b9e820dd4fb81719cca5009a33d408f0e51b7ec7548168c6aaac02",
+      "contexts": 3,
+      "timings_per_context": 5,
+      "native_branches": 60,
+      "fits": 1,
+      "initial_measured_regret": 0.21299329493333338,
+      "candidate_measured_regret": 0,
+      "retained_measured_examples": 1011,
+      "deployed_for_route22": false,
+      "campaign_inputs": 0,
+      "new_gameplay_win_claimed": false,
+      "damage_only_copy_defeated": 4,
+      "new_switch_damage_copy_defeated": 4,
+      "existing_risk_damage_copy_defeated": 4,
+      "each_opponents_total": 6,
+      "each_battle_won": false,
+      "all_copies_stopped": true
+    },
+    "evolution_venue_reuse": {
+      "prospective_from_node": "runs/segment-018",
+      "highest_supported_venue_opt_in": true,
+      "guarded_escapes_opt_in": true,
+      "declared_native_cave_entry_return_reused": true,
+      "new_native_effectiveness_proven": false,
+      "focused_tests_passed": 195,
+      "excluded_profiles_preserved": true
+    },
+    "field_faint_corridor": {
+      "source_node": "runs/segment-016",
+      "recovered_node": "runs/segment-017",
+      "ordinary_recovery_verified": true,
+      "existing_route_faint_delegate_connected": true,
+      "focused_tests_passed": 111,
+      "no_supplied_healing_or_relocation": true
+    },
+    "league_copy_diagnostics": [
+      {
+        "composition_sha256": "88e09b67b209c87f0824020fc6bb01d6960f813ab165a14145cf5c59f376897d",
+        "source_node": "runs/segment-017",
+        "battle_won": false,
+        "opponents_defeated": 1,
+        "opponents_total": 5,
+        "actions": 1016,
+        "frames": 95028,
+        "seconds": 98.681,
+        "controls_released": true,
+        "worker_stopped": true,
+        "deployed": false,
+        "independent": false,
+        "copy_back": false
+      },
+      {
+        "composition_sha256": "53fcbd8ff42708b8a061816ca70441e41347d98c14d53d39e25c1e5c94144831",
+        "source_node": "runs/segment-018",
+        "battle_won": false,
+        "opponents_defeated": 4,
+        "opponents_total": 5,
+        "actions": 1072,
+        "frames": 100740,
+        "seconds": 105.98731283308007,
+        "controls_released": true,
+        "worker_stopped": true,
+        "deployed": false,
+        "independent": false,
+        "copy_back": false
+      },
+      {
+        "composition_sha256": "05a7afb42bfdf8b5d416782a516e78ae82d7a6d4cd72eea77134b484822c7333",
+        "source_node": "runs/segment-022/league-defeat_lorelei/battle-0002",
+        "source_sha256": "7e71a2b11561bea779444645ada5335b431366c1c7bcf8bcad012e554f769db2",
+        "battle_won": true,
+        "opponents_defeated": 5,
+        "opponents_total": 5,
+        "choices": 76,
+        "own_faints": 5,
+        "party_pp_spent": 53,
+        "terminal_surf_pp": 0,
+        "actions": 1174,
+        "frames": 101328,
+        "seconds": 6.169823667034507,
+        "controls_released": true,
+        "worker_stopped": true,
+        "source_unchanged": true,
+        "deployed": false,
+        "reason": "Win is not useful PP-endurance improvement;all Surf is spent before Bruno. Only damage reference differs from baseline;no further arm or refit.",
+        "independent": false,
+        "copy_back": false
+      }
+    ],
+    "running_progress": {
+      "source_node": "runs/segment-022",
+      "worker_stopped": true,
+      "native_bruno_win": true,
+      "native_agatha_loss": true,
+      "medicine_capacity": {
+        "verified": true,
+        "bag_slots_before": 20,
+        "bag_slots_after": 18,
+        "stored_item_ids": [
+          43,
+          234
+        ],
+        "items_conserved": true,
+        "cash_unchanged": true,
+        "sales": 0,
+        "learned_item_selection": false
+      },
+      "medicine_purchase": {
+        "verified": true,
+        "cash_before": 6393,
+        "cash_after": 393,
+        "cash_debit": 6000,
+        "item_id": 16,
+        "quantity": 2
+      },
+      "selected_preparation": {
+        "trainee": "Fearow",
+        "latest_target_level": 28,
+        "model_queries": 2,
+        "verified_complete": true
+      },
+      "native_full_restore_use": {
+        "verified": true,
+        "step": 13,
+        "hp_before": 31,
+        "hp_after": 203,
+        "pp_unchanged": true,
+        "model_selected": false,
+        "selection_mode": "deterministic_safety"
+      },
+      "native_bruno_after_healing": {
+        "verified": true,
+        "step": 14,
+        "opponents_defeated": 5,
+        "blastoise_level": 63,
+        "hp": 206,
+        "surf_pp": 1
+      },
+      "native_agatha_after_healing": {
+        "won": false,
+        "step": 15,
+        "surf_pp_at_start": 1
+      },
+      "final_lorelei_win": {
+        "step": 23,
+        "opponents_defeated": 5,
+        "blastoise_level": 64,
+        "hp": 93,
+        "surf_pp": 13,
+        "strength_pp": 5
+      },
+      "balanced_reserve_opt_in": {
+        "targeted_tests_passed": 180,
+        "historical_defaults_unchanged": true,
+        "prospective_from_node": "runs/segment-023",
+        "native_effectiveness_verified": true,
+        "native_source_node": "runs/segment-025",
+        "native_purchase": {
+          "cash_before": 6363,
+          "cash_after": 363,
+          "cash_debit": 6000,
+          "full_restores": 1,
+          "revives": 2,
+          "purchases": 3,
+          "learned_procurement": false
+        }
+      }
+    },
+    "latest_checkpoint": {
+      "source_node": "runs/segment-064",
+      "worker_stopped": true,
+      "controls_released": true,
+      "native_story": 36,
+      "native_flags": 32,
+      "cash": 20086,
+      "party_levels": [
+        55,
+        57,
+        60,
+        57,
+        82,
+        53
+      ],
+      "party_order": [
+        "Gloom",
+        "Dodrio",
+        "Raticate",
+        "Pidgeot",
+        "Blastoise",
+        "Fearow"
+      ],
+      "at_indigo_nurse": false,
+      "all_costs_retained": true,
+      "stop_reason": "verification_failed",
+      "error_type": null,
+      "error": null,
+      "field_ready": true,
+      "fully_restored": false,
+      "censored_battle": false,
+      "censored_battle_evidence": null,
+      "spent": {
+        "actions": 708341,
+        "cash_debits": 264255,
+        "decisions": 1461,
+        "frames": 59625969,
+        "heals": 838,
+        "seconds": 60846.38254025206
+      },
+      "zero_input_reload_passed": true,
+      "zero_input_queries": 1,
+      "zero_input_inputs": 0,
+      "zero_input_frames": 0,
+      "owned_elixirs": 0,
+      "pending_loan": false,
+      "partial_evolution": {
+        "bounded": true,
+        "completed_training_battles": 256,
+        "healing_trips": 4,
+        "evolution_partial": true,
+        "retained_active_roster_restored": true,
+        "settlement_reserve_reached": false,
+        "wall_limit_reached": false
+      },
+      "state_sha256": "f9f505b4f119e1628f579c9f41e9568978bed693d7e9fe0404fbe55387958fbd",
+      "context_sha256": "a1cf8b4210f1da5c2b4d017fe8a7401df4e5587363c65fddf2ce89f6f5a424d4",
+      "lead_hp": null,
+      "bag_stacks": 13,
+      "known_start_menu_open": false,
+      "map_id": 89,
+      "at_y_x": [
+        3,
+        3
+      ]
+    },
+    "finite_pp_resupply": {
+      "source_node": "runs/segment-025",
+      "inputs": 0,
+      "frames": 0,
+      "registrations": 20,
+      "source_unchanged": true,
+      "controls_released": true,
+      "elixir_still_available": true,
+      "bag_slots": 20,
+      "field_resource_item_id": 82,
+      "field_map_id": 145,
+      "native_toggle_index": 58,
+      "focused_tests_passed": 281,
+      "no_native_pickup_yet": false,
+      "free_purchase_quote_invented": false,
+      "learner_cannot_yet_refine_free_pickup": true,
+      "broader_supplied_pp_safeguard_unapproved": true,
+      "complete_delivery_required": true,
+      "bounded_quoted_navigation_transitions": 32,
+      "full_native_route_quoted": false,
+      "first_native_frontier_quoted": true,
+      "native_route_quote_source": "runs/segment-027",
+      "native_route_quote_inputs": 0,
+      "surf_projection_did_not_resolve_route": true,
+      "victory_road_checks_passed": 116,
+      "checks_overlap": true,
+      "first_frontier_map_id": 34,
+      "first_frontier_at_y_x": [
+        0,
+        10
+      ],
+      "first_frontier_cost": 1,
+      "native_probe_source_preserved": true,
+      "native_probe_controls_released": true,
+      "native_probe_worker_stopped": true,
+      "qualified_badge_gate_adapter_reused": true,
+      "full_world_and_gate_requirements_preserved": true,
+      "latest_actual_bag_slots": 19,
+      "latest_capacity_node": "runs/segment-032",
+      "no_main_pickup_yet": false,
+      "focused_return_passage_checks_passed": 231,
+      "native_copy": {
+        "source_node": "runs/segment-030/native/episode/step-000",
+        "source_sha256": "ea0fe4467a55f9e278ced873592a4278c01b8299d5214b01cb2c5c5d5d128826",
+        "source_partition": "development",
+        "independent": false,
+        "copy_back": false,
+        "supplied_goal_selection": true,
+        "model_queries": 0,
+        "fits": 0,
+        "passed": true,
+        "stock_before": 0,
+        "stock_after": 1,
+        "cash_before": 1474,
+        "cash_after": 1474,
+        "party_species_preserved": true,
+        "native_object_removed": true,
+        "transitions": 10,
+        "passages": [
+          "third-switch",
+          "second-switch",
+          "first-switch"
+        ],
+        "actions": 1843,
+        "frames": 104604,
+        "seconds": 39.86868075001985,
+        "worker_stopped": true,
+        "controls_released": true,
+        "source_preserved": true,
+        "terminal_sha256": "2a9ddb7413c6c5ab8ee89af53d635240eb602f3c2076d15363ca3eee58792472",
+        "map_id": 145,
+        "at_y_x": [
+          10,
+          13
+        ]
+      },
+      "prior_failed_delivery_copies_retained": true,
+      "return_passage_connection": "Existing observed Strength contracts/executor/verifier reopen reset cave barriers only within a selected resource delivery. No edited flags,new planner,unchecked prefix credit or main copied stock.",
+      "complete_native_delivery_proven": true,
+      "main_pickup": {
+        "source_node": "runs/segment-032/native/episode/step-011",
+        "source_sha256": "158cd1cb5a1befd72f96fd0b3ad80824ec74eb12c9a818788d624c813f095ede",
+        "terminal_sha256": "5b09fa562012dcfe83e3d1435efbdc45d543dc40a3adc3d993d82223a77f4158",
+        "partition": "development",
+        "verification": "succeeded",
+        "selection_mode": "model_exploration",
+        "teacher_labels": 0,
+        "supplied_goal_selection": false,
+        "item_id": 82,
+        "quantity_acquired": 1,
+        "complete_delivery": true,
+        "cash_before": 309,
+        "cash_after": 309,
+        "passages": [
+          "third-switch",
+          "second-switch",
+          "first-switch"
+        ],
+        "actions": 1890,
+        "frames": 110052,
+        "seconds": 186.29917245800607,
+        "next_model_kind": "advance_story",
+        "weights_changed": false,
+        "pp_use_verified": false,
+        "league_benefit_verified": false
+      },
+      "focused_documentation_checks_passed": 177,
+      "changed_source_test_lint_passed": true,
+      "owned_elixirs_at_stopped_source": 1
+    },
+    "healing_attribution_correction": {
+      "source_nodes": [
+        "runs/segment-022",
+        "runs/segment-023",
+        "runs/segment-026"
+      ],
+      "verified_native_items": [
+        "full_restore",
+        "revive"
+      ],
+      "actual_mode": "deterministic_safety",
+      "learned_item_choice": false,
+      "learned_recipient_choice": false,
+      "previous_model_selected_wording_superseded": true
+    },
+    "exploration_trial": {
+      "prospective_source_node": "runs/segment-026",
+      "next_node": "runs/segment-027",
+      "mode": "existing_model_exploration",
+      "parent_weights_changed": false,
+      "child_weights_changed": false,
+      "seed_changed": false,
+      "forced_target": false,
+      "new_origin": false,
+      "maximum_goal_decisions": 48,
+      "maximum_native_seconds": 1200,
+      "focused_tests_passed": 229,
+      "nurse_empty_route_cash_fix": true,
+      "native_zero_input_reload_passed": true,
+      "completed_first_chunk": {
+        "node": "runs/segment-027",
+        "model_decisions": 3,
+        "support_decisions": 2,
+        "model_selected_dodrio_level": 38,
+        "lorelei_lost": true,
+        "pc_or_pp_selected": false,
+        "interrupted_preparation_safe_field_boundary": true,
+        "new_fit": false
+      },
+      "next_continuation": {
+        "source_node": "runs/segment-064",
+        "next_node": "runs/segment-065",
+        "parent_mode": "exploration",
+        "maximum_goal_decisions": 64,
+        "maximum_native_seconds": 1800,
+        "maximum_actions": 30000,
+        "maximum_frames": 2500000,
+        "seed_changed": false,
+        "weights_changed": false,
+        "forced_target": false,
+        "lifetime_costs_retained": true,
+        "readiness_refinement_after_verified_settlement": false,
+        "readiness_refinement_deferred": true,
+        "next_input_recording": "gitless_fast_path_v1",
+        "reason": "Existing model141 directly chooses real preparation/resource/story peers; feasible cave exits precede replaying reset puzzle flags."
+      },
+      "completed_second_chunk": {
+        "node": "runs/segment-028",
+        "model_decisions": 4,
+        "support_decisions": 9,
+        "successful_goals": 11,
+        "executed_goals": 13,
+        "model_selected_raticate_level": 49,
+        "gloom_38_completed": true,
+        "gloom_39_interrupted": true,
+        "lorelei_won": true,
+        "bruno_won": true,
+        "agatha_won": false,
+        "pc_or_pp_selected": false,
+        "new_fit": false
+      },
+      "completed_third_chunk": {
+        "node": "runs/segment-029",
+        "model_decisions": 3,
+        "support_decisions": 2,
+        "mandatory_prefaces": 1,
+        "model_selected_completed_gloom_level": 41,
+        "model_selected_fearow_target": 36,
+        "retained_fearow_level": 34,
+        "fearow_drill_peck_not_yet_owned": true,
+        "selected_pc_capacity": {
+          "before_bag_stacks": 20,
+          "after_bag_stacks": 18,
+          "stored_item_ids": [
+            246,
+            227
+          ],
+          "selection_mode": "model_exploration",
+          "items_conserved": true,
+          "sales": 0
+        },
+        "pp_selected": false,
+        "league_attempted": false,
+        "new_fit": false,
+        "readiness_child_used": false
+      },
+      "completed_fourth_chunk": {
+        "node": "runs/segment-030",
+        "model_decisions": 6,
+        "support_decisions": 4,
+        "mandatory_prefaces": 1,
+        "completed_doses": [
+          "Gloom42",
+          "Dodrio42",
+          "Raticate50",
+          "Dodrio43"
+        ],
+        "interrupted_fearow_target": 38,
+        "retained_fearow_level": 35,
+        "readiness_child_available": true,
+        "readiness_child_used": false,
+        "pp_selected": false,
+        "league_attempted": false,
+        "new_fit": false,
+        "recoverable_interrupt": true,
+        "actual_stop_verified": true
+      },
+      "completed_greedy_reassessment": {
+        "node": "runs/segment-031",
+        "parent_mode": "greedy",
+        "model_decisions": 9,
+        "support_decisions": 19,
+        "mandatory_prefaces": 1,
+        "strategic_policy_queries": 17,
+        "readiness_child_used": true,
+        "lorelei_wins": 2,
+        "bruno_wins": 2,
+        "agatha_losses": 2,
+        "agatha_defeated_counts": [
+          2,
+          4
+        ],
+        "no_new_fit": true,
+        "field_ready_at_close": true,
+        "no_censored_battle": true
+      },
+      "completed_native_pp_chunk": {
+        "node": "runs/segment-032",
+        "model_decisions": 6,
+        "support_decisions": 9,
+        "strategic_policy_queries": 7,
+        "lorelei_wins": 1,
+        "bruno_wins": 1,
+        "agatha_losses": 1,
+        "agatha_defeated_counts": [
+          4
+        ],
+        "pp_model_selected": true,
+        "pp_normally_acquired": true,
+        "pp_use_not_yet_verified": true,
+        "selected_evolution_interrupted_before_loan": true,
+        "no_new_fit": true
+      },
+      "completed_registration_chunk": {
+        "node": "runs/segment-033",
+        "model_decisions": 11,
+        "support_decisions": 0,
+        "strategic_policy_queries": 11,
+        "successful_goals": 10,
+        "executed_goals": 11,
+        "new_native_registrations": 5,
+        "partial_evolution_safely_settled": true,
+        "league_attempted": false,
+        "no_new_fit": true
+      },
+      "completed_preparation_036": {
+        "stop_reason": "execution_failed",
+        "executed_decisions": 14,
+        "model_decisions": 7,
+        "support_decisions": 7,
+        "strategic_policy_queries": 8,
+        "ordinary_setbacks": 2,
+        "node": "runs/segment-036",
+        "cave_return_verified": true,
+        "indigo_arrival_verified": true,
+        "partial_targets": [
+          {
+            "trainee": "Dodrio",
+            "initial_level": 46,
+            "target_level": 49,
+            "terminal_level": 48,
+            "completed_encounters": 64,
+            "retained_doses": 19
+          },
+          {
+            "trainee": "Raticate",
+            "initial_level": 51,
+            "target_level": 54,
+            "terminal_level": 53,
+            "completed_encounters": 64,
+            "retained_doses": 21
+          }
+        ],
+        "last_interrupted_dose_dodrio_level": 49,
+        "terminal_levels": [
+          74,
+          53,
+          47,
+          49,
+          44,
+          39
+        ],
+        "league_attempted": false,
+        "new_fit": false,
+        "new_registrations": 0,
+        "owned_elixirs": 1,
+        "zero_input_reload_passed": true,
+        "ordinary_progress_retained": true
+      },
+      "completed_preparation_037": {
+        "stop_reason": "execution_failed",
+        "executed_decisions": 9,
+        "model_decisions": 5,
+        "support_decisions": 4,
+        "strategic_policy_queries": 6,
+        "ordinary_setbacks": 1,
+        "node": "runs/segment-037",
+        "completed_selected_targets": [
+          "Fearow40",
+          "Fearow43",
+          "Raticate54"
+        ],
+        "incomplete_selected_target": "Dodrio52from49",
+        "retained_final_dodrio_level": 52,
+        "terminal_levels": [
+          52,
+          54,
+          49,
+          74,
+          45,
+          43
+        ],
+        "league_attempted": false,
+        "new_fit": false,
+        "new_registrations": 0,
+        "owned_elixirs": 1,
+        "zero_input_reload_passed": true,
+        "ordinary_progress_retained": true
+      }
+    },
+    "party_order": [
+      "Dodrio",
+      "Gloom",
+      "Blastoise",
+      "Raticate",
+      "Pidgeot",
+      "Fearow"
+    ],
+    "status_cure_recipient_repair": {
+      "default_off": true,
+      "prospective_node": "runs/segment-029",
+      "disclosed_unlearned_support": true,
+      "new_weights": false,
+      "native_copy": {
+        "source_node": "runs/segment-028/native/episode/step-003/before.state",
+        "source_sha256": "d6925ea6a0f95ba09facd35926ceb1140763bb83d235cee970a60c4db16d0fd8",
+        "passed": true,
+        "baseline_recipient_index": 1,
+        "corrected_recipient_index": 0,
+        "before_hp": [
+          180,
+          53,
+          0,
+          0,
+          0,
+          0
+        ],
+        "after_hp": [
+          223,
+          53,
+          0,
+          0,
+          0,
+          0
+        ],
+        "cured_paralysis": true,
+        "owned_full_restores_consumed": 1,
+        "cash_preserved": true,
+        "pp_preserved": true,
+        "source_preserved": true,
+        "copy_back": false,
+        "actions": 56,
+        "frames": 4016,
+        "seconds": 1.853940875036642,
+        "worker_stopped": true,
+        "controls_released": true
+      },
+      "focused_tests_passed": 250,
+      "checks_overlap": true
+    },
+    "settlement_refinement_connection": {
+      "default_off": true,
+      "prospective_node": "runs/segment-030",
+      "head_sha256": "f80807f9fc66d16ac0514df18b0862b75b536ebf7f39a26352a858d9e50f5c0b",
+      "previous_whole_chunk_suspension_verified": true,
+      "requires_actual_verified_preface": true,
+      "queries_before_verified_settlement": 0,
+      "bad_scope_and_failed_settlement_rejected": true,
+      "focused_connection_checks_passed": 250,
+      "combined_recovery_resource_connection_checks_passed": 500,
+      "checks_overlap_prior_sets": true,
+      "new_fit": false,
+      "zero_input_source_reload_verified": true,
+      "native_activation_not_yet_claimed": false,
+      "native_activation_node": "runs/segment-031",
+      "native_first_child_query_step": 1,
+      "native_subsequent_story_choice_step": 3,
+      "native_model_queries_at_refined_choices": 2
+    },
+    "parent_exploration_distribution": {
+      "source_node": "runs/segment-029/native/episode/step-002",
+      "kind_mass": {
+        "develop": 0.7838373720847837,
+        "resupply": 0.1032722902035963,
+        "unlock_access": 0.11289033771161985
+      },
+      "kind_variants": {
+        "develop": 10,
+        "resupply": 2,
+        "unlock_access": 1
+      },
+      "sampler_changed": false
+    },
+    "nurse_cost_boundary_repair": {
+      "prospective_node": "runs/segment-033",
+      "before_cost_baseline": "offer",
+      "after_cost_baseline": "execute",
+      "strict_cost_equality_preserved": true,
+      "focused_tests_passed": 357,
+      "changed_file_lint_passed": true,
+      "native_copy": {
+        "source_node": "runs/segment-032/native/restoration-005/before",
+        "source_sha256": "04f6e807efb5b5c9fc16d035425d407c8da1a25f9351e6bbaaf24cc8013b9955",
+        "partition": "development",
+        "independent": false,
+        "supplied_diagnostic_goal": true,
+        "model_queries": 0,
+        "fits": 0,
+        "copy_back": false,
+        "passed": true,
+        "external_support_actions": 1,
+        "external_support_frames": 120,
+        "nurse_actions": 22,
+        "nurse_frames": 1584,
+        "actions": 23,
+        "frames": 1704,
+        "seconds": 1.1826552919810638,
+        "stock_preserved": true,
+        "cash_preserved": true,
+        "party_identities_levels_preserved": true,
+        "source_preserved": true,
+        "worker_stopped": true,
+        "controls_released": true,
+        "terminal_sha256": "7fd0d909264625471488323702aa3bc20dc119c2abc71ca030e8edd8113963a0"
+      }
+    },
+    "strength_wild_damage_repair": {
+      "purpose": "Resume normal verified flee damage without crediting corruption or resetting the save",
+      "default_conservation_unchanged": true,
+      "opt_in_native_puzzles": true,
+      "ordinary_flee_lead_damage_only": true,
+      "healing_faints_status_pp_inventory_identity_changes_still_rejected": true,
+      "focused_strength_resource_checks_passed": 158,
+      "focused_route_native_restoration_checks_passed": 251,
+      "changed_source_test_lint_passed": true,
+      "copy": {
+        "source_state_sha256": "18031bc817ad72b16497eec0a647c9d8e83a66de04ecf3dcb6d514341c71bc34",
+        "terminal_state_sha256": "7e06b357e199fd18d62945a009a8a2dc2eb8431d13f6948e8f5007cda44120e3",
+        "verification": "succeeded",
+        "phase": "third-switch",
+        "actions": 236,
+        "frames": 21204,
+        "seconds": 8.961285417084582,
+        "lead_hp_before": 113,
+        "lead_hp_after": 23,
+        "verified_wild_hp_loss": 90,
+        "wild_escapes": 4,
+        "protected_resources_preserved": true,
+        "cash_unchanged": true,
+        "field_ready": true,
+        "worker_stopped": true,
+        "controls_released": true,
+        "copy_back": false,
+        "model_queries": 0,
+        "fits": 0,
+        "objective_completed": false
+      },
+      "main_continuation": {
+        "source_node": "runs/segment-035",
+        "next_node": "runs/segment-036",
+        "retains_actual_damaged_source": true,
+        "third_switch_verified": true,
+        "remaining_cave_puzzles_verified": true,
+        "reached_indigo": true,
+        "league_benefit_not_yet_verified": true
+      }
+    },
+    "input_recording_throughput": {
+      "prospective_from_node": "runs/segment-037",
+      "next_node": "runs/segment-038",
+      "default_unchanged": true,
+      "isolation_reobserved_each_call": true,
+      "stale_cache": false,
+      "original_git_fallback_for_ambiguity": true,
+      "durable_records_and_fsyncs_preserved": true,
+      "focused_checks_passed": 147,
+      "changed_source_test_lint_passed": true,
+      "benchmark": {
+        "macros_per_arm": 24,
+        "ordinary_seconds": 1.8097421249840409,
+        "fast_seconds": 0.07170325005427003,
+        "speed_ratio": 25.239331879856234,
+        "control_and_trace_parity": true,
+        "sealed_record_and_manifest_bytes_parity": true,
+        "actual_game_inputs": 0,
+        "actual_game_frames": 0,
+        "model_queries": 0,
+        "fits": 0,
+        "copy_back": false,
+        "worker_stopped": true,
+        "controls_released": true
+      },
+      "native_effectiveness_not_yet_verified": false,
+      "whole_game_speed_ratio_unproven": true,
+      "actual_fragment": {
+        "node": "runs/segment-039",
+        "first_lorelei_battle_seconds": 8.200443709,
+        "first_bruno_battle_seconds": 2.533145625,
+        "first_agatha_battle_seconds": 2.995404875,
+        "durable_inputs_retained": true,
+        "new_fit": false,
+        "whole_game_speed_ratio_unproven": true
+      }
+    },
+    "start_menu_recovery": {
+      "source_node": "runs/segment-038",
+      "actual_failed_route_actions": 8,
+      "actual_failed_route_frames": 192,
+      "readiness_registers_were_menu_ready_not_field_ready": true,
+      "semantic_live_cursor_and_labels_required": true,
+      "field_gate_corrected": true,
+      "default_no_strategic_substitution": true,
+      "never_confirm_start_menu_during_recovery": true,
+      "focused_observation_control_field_launcher_checks": 498,
+      "focused_native_options_checks": 267,
+      "checks_overlap": true,
+      "lint_passed": true,
+      "copy": {
+        "source_sha256": "f7a3efa7b5fa290703d07bd8f50f7ed021a0eb6cf4c4362a2eb1d3a387206bfd",
+        "terminal_sha256": "9aa68231f4afddce9c614911286caddf05ff305c7398c888c8c376af7f034484",
+        "passed": true,
+        "actions": 98,
+        "frames": 3822,
+        "seconds": 13.894279750064015,
+        "heals": 1,
+        "model_queries": 0,
+        "fits": 0,
+        "source_preserved": true,
+        "protected_resources_preserved": true,
+        "cash": 594,
+        "position": [
+          174,
+          7,
+          7
+        ],
+        "whole_pp_restored": true,
+        "copy_back": false,
+        "worker_stopped": true,
+        "controls_released": true
+      },
+      "main_node": "runs/segment-039",
+      "main_effectiveness_pending": false,
+      "main_verified": {
+        "node": "runs/segment-039",
+        "control_step": 0,
+        "nurse_step": 1,
+        "model_queries": 0,
+        "controls_recovered": true,
+        "native_nurse_reached": true
+      }
+    },
+    "actual_pp_use": {
+      "node": "runs/segment-039",
+      "step": 7,
+      "selection_mode": "deterministic_safety",
+      "model_selected": false,
+      "party_index": 0,
+      "item_id": 82,
+      "restored_pp": 6,
+      "strength": [
+        14,
+        15
+      ],
+      "surf": [
+        10,
+        15
+      ],
+      "main_stock_consumed": true,
+      "late_endurance_not_proven": true
+    },
+    "pp_authority_repair": {
+      "focused_checks_passed": 122,
+      "lint_passed": true,
+      "private_health_safety_recovery_metadata": true,
+      "no_policy_feature_identity": true,
+      "hp_control_storage_safety_preserved": true,
+      "probe": {
+        "node": "diagnostics/pp-authority-039-01",
+        "source_sha256": "94dd230af14d528f51a2f7b020d77318a3a31c3d766fb0c0d87d13e65cd68ab2",
+        "passed": true,
+        "source_unchanged": true,
+        "actions": 0,
+        "frames": 0,
+        "seconds": 16.0433937079506,
+        "model_queries": 1,
+        "selected_kind": "advance_story",
+        "selection_mode": "model_greedy",
+        "pp_option_retained": true,
+        "worker_stopped": true,
+        "controls_released": true,
+        "fit": false,
+        "copy_back": false
+      },
+      "prospective_main_node": "runs/segment-041"
+    },
+    "owned_machine_connection": {
+      "prospective_node": "runs/segment-041",
+      "default_off": true,
+      "configuration_unchanged": true,
+      "model_unchanged": true,
+      "feature_version": 7,
+      "feature_width": 356,
+      "fit": false,
+      "manual_main_teaching": false,
+      "normal_inputs_only": true,
+      "inventory_authority": "All compatible owned direct-damage TM/member/replacement bundles with positive disclosed current-PP attack-capacity change; HM replacements prohibited.",
+      "proxy_limit": "PP times power/accuracy/STAB is not expected damage,matchup utility or win probability.",
+      "focused_tests_passed": 174,
+      "checks_overlap": true,
+      "lint_passed": true,
+      "zero_input": {
+        "source_node": "runs/segment-041",
+        "passed": true,
+        "inputs": 0,
+        "frames": 0,
+        "machine_alternatives": 9,
+        "level_alternatives": 9,
+        "other_alternatives": 2,
+        "model_queries": 2,
+        "selected_kind": "develop_team"
+      },
+      "main_machine_taught": true,
+      "main_lance_victory": true,
+      "first_main_return": {
+        "node": "runs/segment-041",
+        "actions": 38,
+        "frames": 1008,
+        "seconds": 16.227093084016815,
+        "model_queries": 1,
+        "verified": true
+      },
+      "initial_interface_failures_retained": true,
+      "level_head_scope": "Unchanged 36-row level-dose child is retained but deferred prospectively from044; parent141 directly explores all real options.",
+      "diagnostic": {
+        "node": "diagnostics/owned-move-lance-039-02",
+        "source_node": "runs/segment-039/native/episode/step-010",
+        "source_sha256": "093ebc8563d43c2c729c2d018c6fb73805249f1f925d39b3c8b1f0b7c17add3b",
+        "terminal_sha256": "872e2f2c13886625045d8419d433d10d0d67a8611a26b10f4c7bb3fa8efc1488",
+        "teacher_selected": true,
+        "fit": false,
+        "model_queries": 0,
+        "copy_back": false,
+        "independent": false,
+        "passed": true,
+        "lance_won": true,
+        "owned_tm_consumed": 1,
+        "move_id": 61,
+        "before_moves": [
+          70,
+          39,
+          145,
+          57
+        ],
+        "after_moves": [
+          70,
+          61,
+          145,
+          57
+        ],
+        "before_pp": [
+          15,
+          30,
+          30,
+          1
+        ],
+        "after_teaching_pp": [
+          15,
+          20,
+          30,
+          1
+        ],
+        "cash_hp_levels_conserved_by_teaching": true,
+        "actions": 454,
+        "frames": 42168,
+        "seconds": 18.063887874945067,
+        "source_preserved": true,
+        "worker_stopped": true,
+        "controls_released": true,
+        "prior_setup_failure_retained": "diagnostics/owned-move-lance-039-01"
+      },
+      "main_teaching_node": "runs/segment-043",
+      "main_uses": [
+        {
+          "step": 0,
+          "item_id": 228,
+          "move_id": 91,
+          "recipient": "Blastoise",
+          "replace_slot": 2,
+          "replaced_move": 39
+        },
+        {
+          "step": 1,
+          "item_id": 221,
+          "move_id": 72,
+          "recipient": "Gloom",
+          "replace_slot": 4,
+          "replaced_move": 78
+        },
+        {
+          "step": 2,
+          "item_id": 211,
+          "move_id": 61,
+          "recipient": "Raticate",
+          "replace_slot": 2,
+          "replaced_move": 39
+        },
+        {
+          "step": 3,
+          "item_id": 224,
+          "move_id": 85,
+          "recipient": "Raticate",
+          "replace_slot": 2,
+          "replaced_move": 61
+        }
+      ],
+      "main_selection_mode": "model_exploration",
+      "main_inputs_normal": true,
+      "main_supplied_selection": false,
+      "main_teaching_conservation_verified": true,
+      "retained_new_moves": [
+        91,
+        72,
+        85
+      ],
+      "inefficient_immediate_tm_overwrite_retained": true
+    },
+    "pre_capture_checkpoint_repair": {
+      "node": "runs/segment-043",
+      "typed_budget_error_prospective": true,
+      "original_legacy_runtime_error_retained": true,
+      "original_export_error_retained": true,
+      "closed_prefix_battles": 218,
+      "censored_entry": 219,
+      "initial_capture_invented": false,
+      "model_query_in_censored_entry": false,
+      "source_preserved": true,
+      "copy_back": false,
+      "reconciliation_node": "reconciliations/export-043-01",
+      "inputs": 0,
+      "frames": 0,
+      "focused_checks_passed": 386,
+      "lint_passed": true
+    },
+    "cave_return_repair": {
+      "node": "runs/segment-045",
+      "original_empty_menu_failure_retained": true,
+      "observed_feasible_exit_before_reset_puzzles": true,
+      "original_blocked_puzzle_fallback_preserved": true,
+      "league_credit": false,
+      "focused_checks_passed": 177,
+      "lint_passed": true,
+      "zero_input_reload_passed": true,
+      "zero_input_queries": 0,
+      "zero_input_inputs": 0,
+      "zero_input_frames": 0,
+      "copy": {
+        "node": "diagnostics/cave-return-045-01",
+        "source_sha256": "cb44be83727d073ccc133a652077cd47d7ffa05d095a4ab63eabe28e26011158",
+        "terminal_sha256": "eb89d5b811d6c891218675afd0529a568fb0fae4a3b843ecd2ef97362d6958db",
+        "passed": true,
+        "actions": 3,
+        "frames": 168,
+        "seconds": 8.850104874931276,
+        "source_preserved": true,
+        "resources_preserved": true,
+        "before_map": 198,
+        "after_map": 194,
+        "copy_back": false,
+        "supplied_goal_selection": true,
+        "model_queries": 0,
+        "fits": 0,
+        "worker_stopped": true,
+        "controls_released": true
+      },
+      "actual_continuation": "runs/segment-046",
+      "main_arrival_verified": true,
+      "main_arrival_node": "runs/segment-046",
+      "main_arrival_step": 2,
+      "main_arrival_at": [
+        9,
+        17,
+        10
+      ]
+    },
+    "champion_and_hall_of_fame": {
+      "node": "runs/segment-046",
+      "step": 15,
+      "state_sha256": "79a057796d8c960bbe418b188e29f1a4b98b0ecc01732e6087490bfaa75b4e04",
+      "context_sha256": "bbfdfb3a414617f931a4267b8dfb27a6bdaf07e18570dda2ea3292c8b2d73aee",
+      "native_map_id": 118,
+      "native_champion_event": true,
+      "concurrent": true,
+      "verified": true,
+      "same_save": true,
+      "uninterrupted_five_room_wins": true,
+      "copy_back": false,
+      "partition": "development",
+      "adaptive": true,
+      "final_frozen_evaluation": false,
+      "new_fit": false,
+      "lance": {
+        "turns": 41,
+        "own_faints": 3,
+        "pp_spent": 24,
+        "invalid_actions": 0,
+        "teacher_interventions": 0
+      },
+      "champion": {
+        "turns": 10,
+        "own_faints": 1,
+        "pp_spent": 9,
+        "invalid_actions": 0,
+        "teacher_interventions": 0
+      }
+    },
+    "native_postgame_return": {
+      "node": "runs/segment-047",
+      "step": 0,
+      "verified": true,
+      "normal_continue": true,
+      "new_game_selected": false,
+      "model_queries": 0,
+      "new_story_credit": false,
+      "source_preserved": true,
+      "native_temporary_league_flags_reset": true,
+      "hof_proof_retained_node": "runs/segment-046",
+      "focused_checks_passed": 256,
+      "lint_passed": true,
+      "copy": {
+        "node": "diagnostics/postgame-return-046-01",
+        "passed": true,
+        "source_sha256": "79a057796d8c960bbe418b188e29f1a4b98b0ecc01732e6087490bfaa75b4e04",
+        "terminal_sha256": "91f2b0131cf49311d7d39f7685e02fb65c9090849aedcf3f58af3ce805b1d728",
+        "actions": 167,
+        "frames": 12072,
+        "seconds": 9.470352542004548,
+        "cash_preserved": true,
+        "native_registrations": 25,
+        "copy_back": false,
+        "worker_stopped": true,
+        "controls_released": true
+      }
+    },
+    "postgame_ball_supply": {
+      "original_failed_capture_node": "runs/segment-047",
+      "original_failed_capture_step": 2,
+      "original_failure": "capture_items_exhausted",
+      "cash": 29886,
+      "ordinary_balls": 0,
+      "protected_master_balls": 1,
+      "fixed_midgame_shop_unreachable": true,
+      "early_qualified_shop_peer_connected": true,
+      "manual_main_choice": false,
+      "fits": 0,
+      "focused_checks_passed": 107,
+      "lint_passed": true,
+      "copy": {
+        "node": "diagnostics/ball-supply-047-01",
+        "passed": true,
+        "source_sha256": "a5620cf38d0976716cb43a28faccc8f38941067733edcba231a43782a16b5c79",
+        "terminal_sha256": "7a15e06cccacb322d91b2dd75a510fd4a0b9348b0f5cfd40e245515f9e7bc1d2",
+        "actions": 468,
+        "frames": 20892,
+        "seconds": 10.884506292059086,
+        "cash_debit": 1000,
+        "ordinary_balls_acquired": 5,
+        "master_ball_preserved": true,
+        "native_registrations": 25,
+        "copy_back": false,
+        "supplied_goal_selection": true,
+        "model_queries": 0,
+        "fits": 0,
+        "worker_stopped": true,
+        "controls_released": true
+      },
+      "main_spending_pending": false,
+      "main_purchase": {
+        "source_node": "runs/segment-048",
+        "purchases": 2,
+        "cash_debit": 2000,
+        "ordinary_balls_acquired": 10,
+        "model_selected_second_purchase": true,
+        "mandatory_first_singleton_purchase": true,
+        "native_registrations": 26
+      },
+      "local_cinnabar_peer_connected": true,
+      "local_peer_checks_passed": 64,
+      "local_main_purchases": [
+        {
+          "node": "runs/segment-055",
+          "great_balls_acquired": 8,
+          "cash_debit": 4800,
+          "model_selected": true
+        },
+        {
+          "node": "runs/segment-058",
+          "cash_debit": 3000,
+          "model_selected": true
+        }
+      ]
+    },
+    "mansion_corridor_repair": {
+      "source_node": "runs/segment-048",
+      "observed_current_map_component": true,
+      "focused_checks_passed": 109,
+      "copy": {
+        "node": "diagnostics/mansion-corridor-048-01",
+        "route_verified": true,
+        "capture_verified": false,
+        "ordinary_balls_consumed": 8,
+        "registrations_gained": 0,
+        "actions": 330,
+        "frames": 22692,
+        "seconds": 16.349612083053216,
+        "terminal_sha256": "7b82a9252536bf7b7b96a017532f960a83bc6a6aeddd8d6a2e0afadbb94d7b71",
+        "copy_back": false,
+        "worker_stopped": true
+      }
+    },
+    "interrupted_loan_return": {
+      "source_node": "runs/segment-049",
+      "main_return_node": "runs/segment-050",
+      "authenticated_immediate_preloan_guard": true,
+      "all_individuals_and_resources_preserved": true,
+      "queries": 0,
+      "focused_checks_passed": 145,
+      "copy": {
+        "node": "diagnostics/loan-return-049-01",
+        "passed": true,
+        "actions": 94,
+        "frames": 9540,
+        "seconds": 9.842751750024036,
+        "cash_debit": 0,
+        "terminal_sha256": "d846b0a900ebfe69a0f1698ce5d3846935da7eb15f8819847b9d602c1f4a86e9",
+        "copy_back": false,
+        "worker_stopped": true
+      }
+    },
+    "local_collection_training_repair": {
+      "source_node": "runs/segment-050",
+      "census_inputs": 0,
+      "census_frames": 0,
+      "rare_muk_only_rejected": true,
+      "muk_attack_prohibition_retained": true,
+      "defensive_escape_checks_retained": true,
+      "declared_escape_horizon": 32,
+      "zero_xp_exits_do_not_count_wins": true,
+      "focused_checks_passed": 308,
+      "main_effectiveness_pending": false,
+      "failed_copies": [
+        {
+          "node": "diagnostics/local-evolution-050-01",
+          "error_type": "RoutePlanningError",
+          "actions": 192,
+          "frames": 19092,
+          "seconds": 12.4727877919795
+        },
+        {
+          "node": "diagnostics/local-evolution-050-02",
+          "error_type": "RuntimeError",
+          "reason": "eight avoided encounters, zero wins",
+          "actions": 978,
+          "frames": 102564,
+          "seconds": 13.96354133298155
+        },
+        {
+          "node": "diagnostics/local-evolution-050-03",
+          "error_type": "RuntimeError",
+          "reason": "native battle ended without recipient XP",
+          "actions": 3451,
+          "frames": 373706,
+          "seconds": 23.036351708113216
+        }
+      ],
+      "all_copies_stopped": true,
+      "copy_back": false,
+      "fits": 0,
+      "main_effectiveness": {
+        "source_nodes": [
+          "runs/segment-051",
+          "runs/segment-052",
+          "runs/segment-055",
+          "runs/segment-058",
+          "runs/segment-060"
+        ],
+        "actual_wins": 148,
+        "actual_nurses": 84,
+        "new_registrations": 2,
+        "species_number": 49,
+        "partial_xp_retained": true,
+        "copy_back": false,
+        "count_basis": "Only wins/nurses explicitly retained in returned native outcome evidence;059's failed long outing is not inferred into this total.",
+        "species_numbers": [
+          49,
+          110
+        ]
+      }
+    },
+    "held_fossil_connection": {
+      "enabled_explicitly": true,
+      "focused_checks_passed": 80,
+      "local_route_required": true,
+      "main_revival_pending": true,
+      "copy": {
+        "node": "diagnostics/held-fossil-051-01",
+        "passed": true,
+        "source_preserved": true,
+        "state_sha256": "d382fee16d91368c4243bfad2ca991994587ea7ee28196310c8297c4d830b40e",
+        "actions": 158,
+        "frames": 8988,
+        "seconds": 10.498627958004363,
+        "copy_back": false,
+        "worker_stopped": true
+      }
+    },
+    "ordinary_ball_settlement": {
+      "original_node": "runs/segment-053",
+      "original_error_retained": true,
+      "independent_stock_reconciliation": {
+        "node": "inspections/stock-053-02",
+        "source_preserved": true,
+        "inputs": 0,
+        "frames": 0,
+        "registered_before": 27,
+        "registered_after": 28,
+        "new_species_number": 77,
+        "physical_specimens_added": 1,
+        "original_party_xp_conserved": true,
+        "other_stock_conserved": true,
+        "ordinary_balls_before": 8,
+        "ordinary_balls_after": 2,
+        "master_balls_before": 1,
+        "master_balls_after": 1
+      },
+      "repair": "non-selecting cancel settlement with exact retry accounting and finite timeout",
+      "focused_checks_passed": 130,
+      "lint_passed": true,
+      "copy": {
+        "node": "diagnostics/ordinary-ball-052-01",
+        "passed": true,
+        "terminal_sha256": "294ff3b9c9867d69365ef14c087d6d43be467998f537f16684eb99359e26a400",
+        "actions": 334,
+        "frames": 26040,
+        "seconds": 12.693351250025444,
+        "ordinary_balls_spent": 8,
+        "master_ball_preserved": true,
+        "supplied_goal_selection": true,
+        "model_queries": 0,
+        "fits": 0,
+        "copy_back": false,
+        "worker_stopped": true
+      },
+      "main_capture_verified_node": "runs/segment-058"
+    },
+    "moving_pc_approach": {
+      "focused_checks_passed": 136,
+      "static_blockers_preserved": true,
+      "max_live_waits": 16,
+      "maximum_frames_per_wait": 120,
+      "copy": {
+        "node": "diagnostics/pc-wait-056-02",
+        "actions": 3,
+        "frames": 264,
+        "seconds": 8.969283749931492,
+        "terminal_sha256": "a963564a94a2217bfec37d9d477cde2bcaa926572453029dbf3c617e19d83202",
+        "copy_back": false,
+        "worker_stopped": true,
+        "source_preserved": true
+      },
+      "first_zero_input_quote_failure_retained": true
+    },
+    "local_cinnabar_map_consistency": {
+      "focused_checks_passed": 46,
+      "native_floor_maps": [
+        165,
+        214,
+        215,
+        216
+      ],
+      "local_training_and_shop_peers_reused": true
+    },
+    "mansion_remote_entry_capability": {
+      "focused_checks_passed": 115,
+      "unsupported_remote_map": 216,
+      "already_local_capture_available": true,
+      "all_six_species_have_upper_floor_sources": true,
+      "target_denominator": 124,
+      "main_alternate_capture_verified_node": "runs/segment-058",
+      "source_node": "runs/segment-057",
+      "original_failed_route_and_costs_retained": true
+    },
+    "fly_dependency_connection": {
+      "explicit_eight_badge_assembly_opt_in": true,
+      "shared_defaults_unchanged": true,
+      "focused_checks_passed": 182,
+      "checks_overlap": true,
+      "earlier_failed_copy_retained": true,
+      "shore_animation_wait_exact_endpoint_required": true,
+      "copy": {
+        "node": "diagnostics/fly-dependency-058-02",
+        "passed": true,
+        "actions": 1642,
+        "frames": 72960,
+        "seconds": 228.3242454159772,
+        "terminal_sha256": "155c9f88400068f344e6aabbb789c5f2ba834816ffffb781555d64737477ccd9",
+        "model_queries": 0,
+        "fits": 0,
+        "supplied_goal_and_bundle": true,
+        "copy_back": false,
+        "worker_stopped": true,
+        "source_preserved": true
+      },
+      "main": {
+        "node": "runs/segment-063",
+        "acquisition": {
+          "step": 1,
+          "model_selected": true,
+          "actions": 1524,
+          "frames": 64332,
+          "normal_transitions": 17,
+          "item_id": 197,
+          "quantity": 1
+        },
+        "lesson": {
+          "step": 2,
+          "model_selected": true,
+          "actions": 82,
+          "frames": 5904,
+          "recipient": "Dodrio",
+          "replace_slot": 3,
+          "move_id": 19,
+          "hm_consumed": false
+        },
+        "actual_transport_used_step": 3,
+        "navigation_or_teaching_inputs_learned": false,
+        "weights_changed": false,
+        "registrations_gained_by_fly": 0
+      }
+    },
+    "additional_acquisition_connection": {
+      "eight_badge_private_opt_in": true,
+      "providers_reused": [
+        "native_eevee_gift",
+        "native_amber_ingredient_and_revival",
+        "native_game_corner"
+      ],
+      "supplied_order": false,
+      "coin_case_is_resupply": true,
+      "only_actual_affordable_prizes": true,
+      "held_fossil_blocks_amber": true,
+      "focused_checks_passed": 127,
+      "focused_correctness_lint_passed": true,
+      "broad_private_lint_warnings_retained": 57,
+      "zero_input_menu": {
+        "source_node": "runs/segment-064",
+        "passed": true,
+        "inputs": 0,
+        "frames": 0,
+        "queries": 1,
+        "source_preserved": true,
+        "registered_species": 32,
+        "options": 14,
+        "eevee_present": true,
+        "coin_case_present": true,
+        "amber_correctly_absent": true
+      },
+      "main_executions_pending": true
+    }
+  },
+  "preflight": {
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "real_alternatives": 5,
+    "selected_objective": "cross_victory_road",
+    "retained_individual_guard": true,
+    "loan_settlement_present": true,
+    "baseline_configuration_and_lifetime_costs_carried": true
+  },
+  "learning_delta": {
+    "new_train_examples": 9,
+    "new_train_contexts": 6,
+    "new_fits": 4,
+    "weight_changes": 3,
+    "counting_basis": "Six unique classroom contexts compile six switch/control and three damage head examples. Four fit attempts change three heads across separate provisional candidates;not all are deployed and no new rival win is claimed.",
+    "registrations": 19
+  },
+  "decision": "Continue065from64 through92remaining registrations. Main Fly is earned;existing gift/Amber/GameCorner composition and exact64zero-input menu pass. Native64retains256training wins but adds no entry,so do not count it as registration success.",
+  "diagnostic_copyback": false,
+  "publication": false,
+  "final_autonomous_red_completed": false
+}

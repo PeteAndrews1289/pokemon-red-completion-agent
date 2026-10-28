@@ -1,0 +1,37 @@
+{
+  "schema": "pokemon.red.player-lesson-contract-qualification.v1",
+  "classification": "engineering-only",
+  "native_declaration_schema": "pokemon.red.native-curriculum-declaration.v3",
+  "families": ["advance_story", "develop_team", "restore_team"],
+  "feature_version": 4,
+  "teacher_examples_are_comparative_choices": false,
+  "focused_tests_passed": 201,
+  "new_lesson_fit_retention_families_tested": 3,
+  "frozen_corpus_sha256": "b640143289143999b6d6865fc17c906849da46e84a4703a14d845dfae0628a79",
+  "frozen_native_rows_reconstructed_exactly": 4,
+  "retained_native_row_sha256": [
+    "e6d159f916ea61d6c3ae95a227742a79923671587a21b557a6c03b9856458148",
+    "b03b491758b3c363c52672cbe3fdc9808fbc4db7a9ce8fe9f38d89758e07dda7",
+    "1d1b9c01e87a0876cf1626e2aa8b479164d155dadf0f128499e826c292ed0f6a",
+    "71498de88685c3d76d7ef3c91fcc4c3197aae2f61edf5b14af9998d313831a56"
+  ],
+  "gameplay_actions": 0,
+  "new_native_training_examples": 0,
+  "production_fits": 0,
+  "model_decisions": 0,
+  "primary_save_writes": 0,
+  "publication": false,
+  "source_eligibility_census_complete": false,
+  "independent_transfer_proven": false,
+  "live_lesson_recorder_qualification_complete": false,
+  "whole_player_contract_complete": false,
+  "remaining": [
+    "eligible TRAIN and independent evaluation metadata census",
+    "native lesson recorder qualification and execution binding",
+    "richer readiness, finite-resource and currency features",
+    "earning/spending lesson evidence and economy-head admission",
+    "Game Corner execution and trade composite native qualification",
+    "prospective collection, fitting and frozen comparison",
+    "sustained autonomous qualification; no full campaign"
+  ]
+}

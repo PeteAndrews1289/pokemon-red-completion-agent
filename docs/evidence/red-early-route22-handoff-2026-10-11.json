@@ -1,0 +1,424 @@
+{
+  "schema": "pokemon.red.early-route22-handoff-session.v1",
+  "session": "2026-10-11-early-route22-handoff",
+  "partition": "development",
+  "verdict": "first_route22_handoff_qualified_new_frozen_run_retained_at_pewter_scripted_walk",
+  "repairs": {
+    "first_rival_script": "Decode the authenticated native first-rival starter branch, shared trigger and its own victory event. The existing second-rival eight-badge availability guard remains unchanged.",
+    "retained_handoff": "Authenticate the already-engaged first-rival phase, position, pending or active identity and protected observations; reuse the existing learned combat controller, trainer quote and native referee.",
+    "capture_connection": "Connect the existing engaged-story interruption handler to early capture routing. No strategic destination, goal choice, replacement move policy or capture-success waiver is added.",
+    "changed_executable_files": [
+      "src/pokemon_red_completion/gen1_route22_script.py",
+      "src/pokemon_red_completion/red_player_engaged_story.py",
+      "src/pokemon_red_completion/red_player_route22_rival.py"
+    ],
+    "changed_private_helpers": [
+      "red_whole_player_inventory_20261006.py"
+    ],
+    "route_guards_weakened": false,
+    "models_changed": false,
+    "assistance_classes_changed": false,
+    "new_subsystem": false
+  },
+  "copied_checks": {
+    "correlated_copies": true,
+    "fit_allowed": false,
+    "copy_back": false,
+    "model_goal_choices": 0,
+    "before_capture_source_sha256": "71b9d075ae07fdc010db1f1c4ea8a72b1b921091cab92caae283c07aae6dbd21",
+    "failed_source_sha256": "5b3fe902bfd536ffeb4e3fa4eaf7e466019b4d8af2a4060c64a5185f43b08244",
+    "retained_phase": {
+      "map_id": 33,
+      "position": [
+        4,
+        29
+      ],
+      "phase": 2,
+      "input_ready": false,
+      "battle_state": 0,
+      "first_active": true,
+      "second_active": false,
+      "wants_battle": true,
+      "starter": 153,
+      "party_levels": [
+        13,
+        14
+      ],
+      "cash": 1175
+    },
+    "discarded_bypass": "Reserving first-rival triggers removes every currently executable path to Route22 grass. The action-free rejection is retained; this bypass was removed and not shipped.",
+    "retained_diagnostic_failures": [
+      {
+        "family": "red-route22-capture-handoff-20261011-v1",
+        "failure": "Diagnostic executor lacked the production shared restoration port.",
+        "actions": 0,
+        "frames": 0
+      },
+      {
+        "family": "red-route22-capture-handoff-20261011-v2",
+        "failure": "Strict menu could not quote Route22 grass with first-rival chokepoints reserved.",
+        "actions": 0,
+        "frames": 0
+      },
+      {
+        "family": "red-route22-capture-handoff-20261011-v3",
+        "failure": "After native execution, diagnostic reporting could not serialize MappingProxyType. Inputs, diagnostics, battle result and terminal remain retained.",
+        "actions": 1417,
+        "frames": 93936,
+        "seconds": null,
+        "result_file_available": false
+      },
+      {
+        "family": "red-route22-capture-handoff-20261011-v5",
+        "failure": "NameError in diagnostic reporting after native execution and verification; original failed receipt retained.",
+        "result_sha256": "cf04468b0f38aa0c1fe307c8bb2351a17b00faffcb49f6a4cd5f43aa0df3261e",
+        "independent_verification_sha256": "eea0f99b7d3b5d7f9eb5a388772a3b7771619b2e4755939401a3945fc954d6e8"
+      }
+    ],
+    "original_selected_capture": {
+      "family": "red-route22-capture-handoff-20261011-v4",
+      "result_sha256": "8f605b7a61d83f657adf95192909569690c6e29395003d226121e627e7756b4a",
+      "passed": false,
+      "verification": "failed",
+      "failure_reason": "search_exhausted",
+      "route_verified": true,
+      "destination_bound": true,
+      "destination_executed": true,
+      "budget_reconciled": true,
+      "within_budget": true,
+      "handoff_passed": true,
+      "first_rival_defeated": true,
+      "second_rival_credited": false,
+      "original_individuals_verified": true,
+      "field_ready": true,
+      "actions": 1417,
+      "frames": 93936,
+      "seconds": 16.646925042034127,
+      "cash_debits": 0,
+      "cash_rewards": 280,
+      "heals": 0,
+      "battle_calls": 1,
+      "diagnostic_events": 485,
+      "cash_before": 1175,
+      "cash_after": 1455,
+      "registrations_before": 2,
+      "registrations_after": 2,
+      "party_levels": [
+        15,
+        15
+      ],
+      "phase": 0,
+      "encounters_seen": 24,
+      "capture_attempts": 24,
+      "failed_capture_attempts": 24,
+      "captures": 0,
+      "flees": 24,
+      "search_stop_reason": "survey_leg_limit_exceeded",
+      "semantic_actions": 196,
+      "terminal_sha256": "bbaf4d8ba34aa865600728140e36dadd413b7e43540c7d69f93013a0aebd8609",
+      "capture_success_claimed": false
+    },
+    "authoritative_retained_handoff": {
+      "battle_outcome_sha256": "6d9edb29b94142bdb8c4b1429cbae1c749ec0902360064e410564d69f2021879",
+      "cash_debits": 0,
+      "cash_rewards": 280,
+      "copy_back": false,
+      "correlated_copy": true,
+      "defeated_event": 1317,
+      "field_ready": true,
+      "first_rival_only": true,
+      "fit_allowed": false,
+      "map_id": 33,
+      "model_combat_decisions": 15,
+      "native_actions": 227,
+      "native_frames": 22176,
+      "native_seconds": 3.420833708019927,
+      "original_individuals_verified": true,
+      "original_result_sha256": "cf04468b0f38aa0c1fe307c8bb2351a17b00faffcb49f6a4cd5f43aa0df3261e",
+      "parameter_changes": 0,
+      "partition": "development",
+      "passed": true,
+      "phase": 0,
+      "position": [
+        4,
+        29
+      ],
+      "released": true,
+      "reporting_error": "NameError after native execution and verification",
+      "reporting_error_retained": true,
+      "schema": "pokemon.red.first-route22-retained-handoff-verification.v1",
+      "source_sha256": "5b3fe902bfd536ffeb4e3fa4eaf7e466019b4d8af2a4060c64a5185f43b08244",
+      "terminal_sha256": "0bbf9ab2a82ba522144fc862ea2d06c81ebbb1260834281ac6819e8decd16119",
+      "trainer_identity": [
+        225,
+        25,
+        5
+      ],
+      "verification_frames": 0,
+      "verification_inputs": 0,
+      "victory_money": 280,
+      "worker_stopped": true,
+      "verification_sha256": "eea0f99b7d3b5d7f9eb5a388772a3b7771619b2e4755939401a3945fc954d6e8"
+    },
+    "native_totals": {
+      "actions": 3061,
+      "frames": 210048,
+      "seconds": null,
+      "seconds_note": "v3 reporting failed after execution; do not invent a complete wall-time total."
+    }
+  },
+  "verification": {
+    "focused_public_tests": 479,
+    "existing_private_venue_and_hazard_tests": 11,
+    "focused_ruff_passed": true,
+    "full_suite_or_ci_claimed": false,
+    "later_rival_contract_preserved": true,
+    "wrong_state_rejection_preserved": true,
+    "fresh_import_check": {
+      "project_modules": 297,
+      "inputs": 0,
+      "frames": 0,
+      "writes": 0,
+      "project_cache_reads": 0,
+      "module_isolation_error": null,
+      "receipt_sha256": "0e21bd23a7d9478bcbad4fa0ee1584e7a5d38b874be9ec3b754c7c37c1055924"
+    },
+    "fresh_gameplay_import": {
+      "project_modules": 641,
+      "project_cache_reads": 0,
+      "module_isolation_error": null
+    }
+  },
+  "frozen_run": {
+    "status": "stopped_at_retained_real_blocker",
+    "family": "red-fresh-autonomous-run-20261011-v4",
+    "trial_identity": "red-fresh-autonomy-candidate-20261011-v4",
+    "package": "frozen-r13",
+    "manifest_sha256": "779fd0aaf473ac710fadbe1c678211bc990bbba51f740a1b916270244daddb20",
+    "plan_sha256": "6bbe588dc606b0c00e4637a8cf45a7b27bc660de9406ed028d14234494d7d1cf",
+    "freeze_receipt_sha256": "62ad5a18c3e6d6b9fb86d04fbe7557c2b16efc42e115be56c1fcdb8e47ce744f",
+    "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+    "dirty_worktree_sha256": "8822be982a13154675f936dd03f791ddb00cad54c96209e9ce208f795fd9de98",
+    "launch_utc": "2026-10-11 16:34:26 UTC",
+    "seed": 2026101101,
+    "extra_boot_frames": 1213,
+    "required_species": 124,
+    "runtime_pins": 7871,
+    "environment_pins": 4512,
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "models_unchanged": true,
+    "in_run_source_config_model_changes": false,
+    "no_emulator_state_restoration": true,
+    "progress_copied_from_diagnostics": false,
+    "required_terminal": "Champion/concurrent Hall of Fame plus all124 same-save native registrations, or a retained unsupported blocker/declared aggregate limit.",
+    "passed": false,
+    "ready": false,
+    "worker_stopped": true,
+    "released": true,
+    "matching_player_processes_absent": true,
+    "execution_session_exit_code": 0,
+    "runtime_pins_verified_after_stop": 7871,
+    "environment_pins_verified_after_stop": 4512,
+    "automatic_renewal_exercised": true,
+    "segments": 2,
+    "root_result_sha256": "d79734304b2df64ccfd490310545f56b42c0d84c06ae3c10fe86b7c92591b629",
+    "terminal_sha256": "685fe2d6a6950ef8c4bbcc2a44a4c6d17d640e033c3efdf9b5d56776eba22a90",
+    "configuration_sha256": "11924373c212e23b91c2758d306a10473e41255245fba9cd2ef86acaa4d30095",
+    "context_sha256_by_segment": [
+      "9912939955410bcc0dd59cee9c0dd53e834a7639ab5caca80434df86e9f3ae8d",
+      "373c60b60d161b4408048a17bd0dfea38fe549d9ac3cf71dd69b7701ac15ae70"
+    ],
+    "isolation_receipt_sha256": "581e37ea6ad6791d37250167f9cdb0a9ff63e446a37abf34808921af4b041694",
+    "root_seconds": 418.41649558302015,
+    "spent": {
+      "actions": 24818,
+      "cash_debits": 3000,
+      "decisions": 62,
+      "frames": 1676545,
+      "heals": 30,
+      "seconds": 413.21643716818653
+    },
+    "episode_totals": {
+      "executed_decisions": 62,
+      "successful_decisions": 46,
+      "model_decisions": 60,
+      "support_decisions": 2,
+      "ordinary_setbacks": 15,
+      "unsupported_errors": 1,
+      "teacher_actions": 0
+    },
+    "decisions_by_kind": [
+      {
+        "kind": "acquire_species",
+        "total": 11,
+        "succeeded": 2,
+        "ordinary_setbacks": 8,
+        "unsupported_errors": 1
+      },
+      {
+        "kind": "advance_story",
+        "total": 20,
+        "succeeded": 20,
+        "ordinary_setbacks": 0,
+        "unsupported_errors": 0
+      },
+      {
+        "kind": "develop_team",
+        "total": 8,
+        "succeeded": 8,
+        "ordinary_setbacks": 0,
+        "unsupported_errors": 0
+      },
+      {
+        "kind": "explore",
+        "total": 7,
+        "succeeded": 0,
+        "ordinary_setbacks": 7,
+        "unsupported_errors": 0
+      },
+      {
+        "kind": "restore_team",
+        "total": 13,
+        "succeeded": 13,
+        "ordinary_setbacks": 0,
+        "unsupported_errors": 0
+      },
+      {
+        "kind": "resupply",
+        "total": 3,
+        "succeeded": 3,
+        "ordinary_setbacks": 0,
+        "unsupported_errors": 0
+      }
+    ],
+    "diagnostic_events": 7767,
+    "diagnostic_events_by_segment": [
+      5363,
+      2404
+    ],
+    "fresh_power_on": true,
+    "state_loads": 0,
+    "training": 0,
+    "fits": 0,
+    "runtime_llm_calls": 0,
+    "startup_actions": 223,
+    "startup_frames": 28477,
+    "power_on_sha256": "019e0896bd669981bfafa1ba13dab4e7ef2b915ea723ac1956548d851f0520fb",
+    "native_facts": {
+      "badge_bits": 0,
+      "badges": 0,
+      "bag_stock": [
+        [
+          4,
+          4
+        ]
+      ],
+      "cash": 545,
+      "event_flags_hex": "01000000af0000030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "party_levels": [
+        18,
+        15,
+        4
+      ],
+      "registrations": 3,
+      "whole_party_restored": false,
+      "owned_species": [
+        7,
+        16,
+        19
+      ]
+    },
+    "completed_objectives": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex"
+    ],
+    "champion": false,
+    "hall_of_fame": false,
+    "former_route22_blocker_passed": true,
+    "first_route22_victory_event_verified": true,
+    "second_route22_victory_event_unset": true,
+    "blocker": {
+      "global_ordinal": 61,
+      "segment": 2,
+      "segment_ordinal": 13,
+      "selected_kind": "acquire_species",
+      "phase": "execution",
+      "ordinary_setback": false,
+      "error_type": "RouteExecutionError",
+      "error": "scripted dialogue disappeared without restoring input readiness",
+      "reason_code": "world_state_diverged",
+      "before_state_sha256": "9b147895bee23c87ce66b9ced944e10156a0a055ee6344ac19442a7ea6fbffac",
+      "location": {
+        "map_id": 2,
+        "map_name": "PewterCity",
+        "x": 28,
+        "y": 18
+      },
+      "input_ready": false,
+      "battle_state": 0,
+      "bottom_dialogue_visible": false,
+      "local_script": 4,
+      "current_map_script": 0,
+      "input_readiness": {
+        "joy_ignore": 240,
+        "movement_flags": 0,
+        "npc_movement_script_table": 3,
+        "player_moving_direction": 2,
+        "simulated_joypad_index": 31,
+        "status_flags_5": 128,
+        "walk_counter": 4
+      },
+      "trainer_engagement_active": false,
+      "pending_trainer_identity": null,
+      "party_hp": [
+        43,
+        43,
+        0
+      ],
+      "party_status": [
+        0,
+        0,
+        0
+      ],
+      "evidence": "Zero-input observation authenticates a scripted NPC/player movement queue still owning input after the text box closes. This is a different nonbattle control handoff, not the defeated first Route22 rival. Exact Pewter grammar, trigger and landing require next-session authentication before a repair.",
+      "combat_loss_as_cause_claimed": false,
+      "poison_as_cause_claimed": false,
+      "repaired_in_attempt": false,
+      "resumed": false,
+      "silently_retried": false
+    },
+    "terminal_inspection": {
+      "receipt_sha256": "463bf4d3779800aecc690096021275fc105edf06478f9ff1ddc49230b25f8552",
+      "inputs": 0,
+      "frames": 0,
+      "source_bytes_preserved": true,
+      "inspection_passed": true,
+      "gameplay_passed": false,
+      "setup_issues": [
+        "Map-scoped Route22 reader correctly rejects a different map; restrict diagnostic call to Route22.",
+        "Owned flags require the existing Pokédex semantic reader, not RawGameState."
+      ]
+    }
+  },
+  "deltas": {
+    "training_examples": 0,
+    "fits": 0,
+    "parameter_updates": 0,
+    "assistance_classes": 0,
+    "protected_primary_registrations": 0,
+    "diagnostic_registration_gain": 0,
+    "fresh_attempt_registrations": 3,
+    "fresh_attempt_registration_gain_after_starter": 2
+  },
+  "protected_completed124_unchanged": true,
+  "old_frozen_attempts_remain_closed": true,
+  "monitor_automation_created": false,
+  "github_published": false,
+  "official_acceptance": false,
+  "final_frozen_gates_passed": 0,
+  "final_frozen_gates_total": 5,
+  "decision": "Retain and close r13 at its real Pewter scripted-walk/control blocker as requested; no in-attempt patch, continuation or fresh retry. The exact Route22 repair is qualified and exercised, but same-run Champion/HOF plus124 are not completed. Next diagnose only the retained Pewter boundary and its route admission on copies using existing control/navigation support.",
+  "protected_endpoint_files_verified": 9
+}

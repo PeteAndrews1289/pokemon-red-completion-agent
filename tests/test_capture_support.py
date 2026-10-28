@@ -97,6 +97,32 @@ def test_choose_active_then_accuracy_without_species_ranking():
                                  target_status=StatusCondition.SLEEP) is None
 
 
+def test_equal_accuracy_same_helper_prefers_sleep_not_earlier_paralysis_slot():
+    party = PartyObservation((member(moves=(78, 79)),))
+    chosen = choose_capture_status(
+        party, red_capture_status_options(party),
+        target_status=StatusCondition.HEALTHY, attempts_used=0, active_party_slot=1,
+    )
+    assert (chosen.party_slot, chosen.move_slot, chosen.condition) == (1, 2, StatusCondition.SLEEP)
+
+
+def test_sleep_tie_cannot_override_active_helper_accuracy_or_usable_pp():
+    party = PartyObservation((member(moves=(78,)), member(2, moves=(79,))))
+    chosen = choose_capture_status(
+        party, red_capture_status_options(party),
+        target_status=StatusCondition.HEALTHY, attempts_used=0, active_party_slot=1,
+    )
+    assert (chosen.party_slot, chosen.condition) == (1, StatusCondition.PARALYSIS)
+    party = PartyObservation((replace(member(moves=(78, 79)), moves=(
+        MoveObservation(78, 5), MoveObservation(79, 0),
+    )),))
+    chosen = choose_capture_status(
+        party, red_capture_status_options(party),
+        target_status=StatusCondition.HEALTHY, attempts_used=0,
+    )
+    assert chosen.move_slot == 1
+
+
 @pytest.mark.parametrize("condition", list(StatusCondition))
 def test_already_statused_target_never_gets_relabelled(condition):
     party = PartyObservation((member(),))

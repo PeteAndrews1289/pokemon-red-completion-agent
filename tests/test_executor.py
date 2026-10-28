@@ -7,12 +7,16 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import (
+    ControllerActionBudgetExhausted,
+    ControllerActionLimiter,
     ControllerFrameBudgetError,
     ControllerFrameBudgetExhausted,
     ControllerInputForbiddenError,
     ControllerTiming,
+    ControllerWallTimeBudgetExhausted,
     FrameBudgetController,
     FrameSafeExecutor,
+    MonotonicWallTimeBudgetController,
     ReadOnlyController,
     UnsupportedMacroActionError,
     WindowedFrameBudgetController,
@@ -118,6 +122,66 @@ def test_executor_releases_button_when_emulator_tick_fails() -> None:
         FrameSafeExecutor(controller).execute(MacroAction(MacroActionKind.CONFIRM))
 
     assert controller.events[-1] == ("release", "a")
+
+
+def test_controller_action_limiter_reserves_attempt_before_delegate() -> None:
+    controller = RecordingController(fail_tick=True)
+    limited = ControllerActionLimiter(FrameSafeExecutor(controller), maximum_actions=1)
+
+    with pytest.raises(RuntimeError, match="emulator failed"):
+        limited.execute(MacroAction(MacroActionKind.CONFIRM))
+    with pytest.raises(ControllerActionBudgetExhausted):
+        limited.execute(MacroAction(MacroActionKind.CONFIRM))
+
+    assert limited.attempted_actions == 1
+    assert limited.completed_actions == 0
+    assert controller.events == [("press", "a"), ("tick", 1), ("release", "a")]
+
+
+def test_controller_action_limiter_allows_n_and_blocks_n_plus_one() -> None:
+    controller = RecordingController()
+    limited = ControllerActionLimiter(FrameSafeExecutor(controller), maximum_actions=1)
+
+    limited.execute(MacroAction(MacroActionKind.WAIT))
+    with pytest.raises(ControllerActionBudgetExhausted):
+        limited.execute(MacroAction(MacroActionKind.WAIT))
+
+    assert limited.attempted_actions == limited.completed_actions == 1
+    assert controller.events == [("tick", 1)]
+
+
+def test_monotonic_deadline_between_press_and_tick_releases_without_tick() -> None:
+    readings = iter((10.0, 14.999, 15.0, 16.0))
+    controller = RecordingController()
+    bounded = MonotonicWallTimeBudgetController(
+        controller,
+        maximum_wall_seconds=5,
+        monotonic_clock=lambda: next(readings),
+    )
+
+    with pytest.raises(ControllerWallTimeBudgetExhausted) as caught:
+        FrameSafeExecutor(bounded).execute(MacroAction(MacroActionKind.CONFIRM))
+
+    assert caught.value.maximum_wall_seconds == 5
+    assert caught.value.elapsed_seconds == 5.0
+    assert controller.events == [("press", "a"), ("release", "a")]
+    assert bounded.elapsed_seconds == 6.0
+
+
+def test_monotonic_deadline_allows_before_and_rejects_at_deadline() -> None:
+    readings = iter((100.0, 104.999, 105.0, 106.0))
+    bounded = MonotonicWallTimeBudgetController(
+        RecordingController(),
+        maximum_wall_seconds=5,
+        monotonic_clock=lambda: next(readings),
+    )
+
+    bounded.check_wall_time_budget()
+    with pytest.raises(ControllerWallTimeBudgetExhausted) as caught:
+        bounded.check_wall_time_budget()
+
+    assert caught.value.elapsed_seconds == 5.0
+    assert bounded.elapsed_seconds == 6.0
 
 
 def test_wait_ticks_without_pressing_and_unqualified_macros_fail_closed() -> None:

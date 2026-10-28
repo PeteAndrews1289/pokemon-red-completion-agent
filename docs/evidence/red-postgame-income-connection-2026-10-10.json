@@ -1,0 +1,621 @@
+{
+  "schema": "pokemon.red.postgame-income-connection.v1",
+  "status": "completed",
+  "partition": "development",
+  "session_start_utc": "2026-10-10T15:34:16+00:00",
+  "cutoff_utc": "2026-10-10T17:34:16+00:00",
+  "source_segment": 99,
+  "source_state_sha256": "f0cdc7ba3221c129c1332d5184b3e07c7920846de9b0674a4c32b38cef1df2a5",
+  "source_context_sha256": "248a28dcd0e6c1d5b070e192e8f9c9cf5c6c2e11794f8b31d66b3f317a2a6346",
+  "starting_spent": {
+    "actions": 447192,
+    "cash_debits": 298622,
+    "decisions": 1185,
+    "frames": 34871762,
+    "heals": 577,
+    "seconds": 21943.391803010018
+  },
+  "starting_registrations": 27,
+  "current_registrations": 35,
+  "registration_delta": 8,
+  "training_examples": 0,
+  "fits": 0,
+  "parameter_updates": 0,
+  "copy_back": false,
+  "new_origin": false,
+  "save_edits": false,
+  "runtime_llm_calls": 0,
+  "development_fit": false,
+  "actual_native_worker": {
+    "segment": 106,
+    "status": "stopped",
+    "exit_code": 0,
+    "released": true,
+    "actual_process_absent": true,
+    "copy_back": false
+  },
+  "recovery": {
+    "segment": 100,
+    "passed": true,
+    "whole_party_restored": true,
+    "field_ready": true,
+    "state_sha256": "feb9a33b9671595dcfd1bff0339cc5f73bb7f789cb4d8a34fa4069cc8b25df46",
+    "context_sha256": "be94ad4de6c31e986659f9602335b704728dcbe5f0c27acb4c2b90ab87fa3a81",
+    "cash": 28808,
+    "actual_cash_debit": 28809,
+    "actions": 6,
+    "frames": 432,
+    "model_queries": 0,
+    "authority": "Compulsory normal native blackout support",
+    "worker_stopped": true,
+    "released": true,
+    "registrations": 27,
+    "spent": {
+      "actions": 447198,
+      "cash_debits": 327431,
+      "decisions": 1186,
+      "frames": 34872194,
+      "heals": 577,
+      "seconds": 21943.95769017702
+    }
+  },
+  "income_connection": "native_qualified_development",
+  "prior_champion_hof_proof_preserved": true,
+  "official_frozen_autonomy": false,
+  "targeted_tests_passed": 803,
+  "ruff_passed": true,
+  "targeted_test_batches": {
+    "initial_changed_surface": 547,
+    "additional_scoped": 207,
+    "income_same_town": 78,
+    "native_cash_and_postgame": 230,
+    "counts_overlap": true,
+    "combined_targeted_unique": 803,
+    "dialogue_and_income": 181,
+    "dialogue_native_funding_options": 474,
+    "final_changed_surface": 721
+  },
+  "diagnostic_copy": {
+    "same_original100_copy_chain": true,
+    "no_copied_progress": true,
+    "fresh_reset": false,
+    "scoped_model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+    "first_copy_wins": 3,
+    "retained_lance_won": true,
+    "retained_champion_lost": true,
+    "retained_blackout_debit": 26086,
+    "reserve_purchases": {
+      "revives": 6,
+      "full_restores": 4,
+      "cash_debit": 21000
+    },
+    "toxic_conserved_in_pc": true,
+    "final_related_cycle": {
+      "five_battles_won": true,
+      "gross_before_credits": 29799,
+      "owned_full_restores_spent": 4,
+      "owned_full_heals_spent": 1,
+      "replacement_cost": 12600,
+      "net_before_return": 17199,
+      "return_verified": false,
+      "result_passed": false,
+      "retained_terminal_sha256": "bef2c3bd1e235108c0042eddfd35f096efe4567d839da212ff2696f85a286c8c",
+      "diagnostic_cash_observer_error": "Cash is unobserved at native title reset; diagnostic custom observer and final serializer rejected None. NativePlayerActions already guards None; regression test added.",
+      "actions": 2101,
+      "frames": 188994,
+      "conservative_seconds": 67.619452
+    }
+  },
+  "repairs": [
+    "Exact scoped111 income-room reuse instead of silently running older K",
+    "Disclosed existing medicine reserve and owned-item field recovery support",
+    "Pass existing declared level screen through income battle skill",
+    "Conserve unused Toxic in PC at eight badges and quote actual reserve stack needs",
+    "Quote actual Indigo walking pose instead of impossible same-town Fly",
+    "Retain positive rewards and actual cash debits independently; unobserved title cash is not a loss",
+    "Opt in existing cancel/settle control recovery for already-won League room closing text; exact native medicine/party/cash preserved"
+  ],
+  "earned_income_attempts": [
+    {
+      "segment": 101,
+      "model_selected_goal": "resupply",
+      "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+      "battle_model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+      "wins": 4,
+      "champion_won": false,
+      "champion_opponents_defeated": 5,
+      "normal_blackout_recovered": true,
+      "gross": 23364,
+      "reserve_purchases": 18000,
+      "blackout_debit": 17086,
+      "actual_cash_debits": 35086,
+      "ending_cash": 17086,
+      "net_cash_delta": -11722,
+      "field_ready": true,
+      "worker_stopped": true,
+      "released": true,
+      "registrations": 27,
+      "state_sha256": "f16dbed2644c9d583af9c561d9b9ee5e59dd4c3029d0780e55294b5c79483cdf",
+      "context_sha256": "099467f4e348d5e020e9d3dd1f6c1d8784d6d8441ca666d24e56bc41e7ac6b2b",
+      "goal_success": false,
+      "passed_continuation_capture": true
+    }
+  ],
+  "earned_income_qualification": {
+    "segment": 102,
+    "goal_step": 0,
+    "verification": "succeeded",
+    "model_selected": true,
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "battle_model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+    "model_choices": 85,
+    "battles_won": 5,
+    "gross": 29799,
+    "purchase_cost": 12600,
+    "owned_item_replacement_cost_not_already_purchased": 1500,
+    "net_cash_income": 17199,
+    "net_after_purchases_and_owned_replacement": 15699,
+    "ending_cash": 34285,
+    "concurrent_champion_and_hof": true,
+    "native_postgame_return_verified": true,
+    "party_cash_bag_dex_boxes_pc_preserved": true,
+    "new_game_selected": false,
+    "medicine_learned": false,
+    "return_learned": false,
+    "outcome_sha256": "26246888547c5442a5c3aa022939f879620b6972f56f3cd7c4d640fae29205d8"
+  },
+  "income_completed_cycles": 12,
+  "latest_stopped": {
+    "at": [
+      9,
+      23
+    ],
+    "cash": 201374,
+    "censored_battle_checkpoint": null,
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "context_sha256": "3deef620b805162e4fd379aa7fe8af2091e13de2a2e5e7ab71370d26e5854101",
+    "error": null,
+    "field_ready": true,
+    "fits": 0,
+    "levels": [
+      99,
+      55,
+      55,
+      63,
+      63,
+      53
+    ],
+    "map_id": 26,
+    "new_origin": false,
+    "passed": true,
+    "released": true,
+    "spent": {
+      "actions": 501402,
+      "cash_debits": 535817,
+      "decisions": 1243,
+      "frames": 40019288,
+      "heals": 598,
+      "seconds": 25224.8211950931
+    },
+    "state_sha256": "2bb506ab99dd05d6b526f67b1949c312f8cd132b8c8f4e1bd5f67487333c4447",
+    "training": 0,
+    "worker_stopped": true,
+    "segment": 106
+  },
+  "closing_dialogue_recovery": {
+    "zero_input_check_segment": 103,
+    "zero_inputs": true,
+    "native_win_preserved": true,
+    "resource_changes": 0,
+    "recovery_segment": 104,
+    "verification": "succeeded",
+    "scope": "Explicit already-beaten native League room only; default control-recovery semantics unchanged.",
+    "attempts": 5,
+    "lance_gross": 6138,
+    "champion_gross": 6435,
+    "cash_before": 64609,
+    "cash_after": 77182,
+    "registration_delta": 0
+  },
+  "closed_utc": "2026-10-10T17:33:20+00:00",
+  "protected_pins_verified": 295,
+  "completed_session_objectives": [
+    "normal_blackout_recovery",
+    "winning111_positive_net_income_and_native_return",
+    "same_save_model_selected_collection"
+  ],
+  "funded_terminal105": {
+    "at": [
+      6,
+      5
+    ],
+    "cash": 209374,
+    "censored_battle_checkpoint": null,
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "context_sha256": "0ee2133a13ae6649e317b8e0dce6619b98f1e9c49861f8270e2dd7c572bd249a",
+    "error": null,
+    "field_ready": true,
+    "fits": 0,
+    "levels": [
+      99,
+      55,
+      55,
+      63,
+      63,
+      53
+    ],
+    "map_id": 0,
+    "new_origin": false,
+    "passed": true,
+    "released": true,
+    "spent": {
+      "actions": 480674,
+      "cash_debits": 527817,
+      "decisions": 1219,
+      "frames": 37831964,
+      "heals": 594,
+      "seconds": 23966.338374843122
+    },
+    "state_sha256": "34afe77ddd2c6eb65a65c36bf117ba5c8f15b455013290679cdc03e36f76b36d",
+    "training": 0,
+    "worker_stopped": true,
+    "segment": 105
+  },
+  "additional_income105": {
+    "income_cycles": [
+      {
+        "step": "step-001",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 13500,
+        "old_owned_replacement": 3600,
+        "net_value": 12699,
+        "normal_return": true
+      },
+      {
+        "step": "step-003",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 12600,
+        "old_owned_replacement": 2100,
+        "net_value": 15099,
+        "normal_return": true
+      },
+      {
+        "step": "step-005",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 14100,
+        "old_owned_replacement": 0,
+        "net_value": 15699,
+        "normal_return": true
+      },
+      {
+        "step": "step-007",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 12000,
+        "old_owned_replacement": 1500,
+        "net_value": 16299,
+        "normal_return": true
+      },
+      {
+        "step": "step-009",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 13500,
+        "old_owned_replacement": 0,
+        "net_value": 16299,
+        "normal_return": true
+      },
+      {
+        "step": "step-011",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 12000,
+        "old_owned_replacement": 3000,
+        "net_value": 14799,
+        "normal_return": true
+      },
+      {
+        "step": "step-013",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 15000,
+        "old_owned_replacement": 1500,
+        "net_value": 13299,
+        "normal_return": true
+      },
+      {
+        "step": "step-015",
+        "verified": "succeeded",
+        "gross": 29799,
+        "purchases": 13500,
+        "old_owned_replacement": 0,
+        "net_value": 16299,
+        "normal_return": true
+      }
+    ],
+    "phase_seconds": {
+      "execution": 518.0497805011692,
+      "menu_and_boundary_observation": 684.5111739153508,
+      "outcome_diagnostics": 0.0074262910056859255,
+      "selection_and_receipt": 0.29713091696612537,
+      "selection_diagnostics": 0.5438745862338692,
+      "terminal_observation": 0.6915232458850369,
+      "verification": 0.2497081250185147
+    },
+    "unobserved_phase_counts": {
+      "verification": 1
+    }
+  },
+  "collection106": {
+    "starting_registrations": 27,
+    "ending_registrations": 35,
+    "new_flags": [
+      "pokemon:national:117",
+      "pokemon:national:048",
+      "pokemon:national:049",
+      "pokemon:national:102",
+      "pokemon:national:128",
+      "pokemon:national:115",
+      "pokemon:national:132",
+      "pokemon:national:044"
+    ],
+    "goals": [
+      {
+        "step": "step-000",
+        "kind": "restore_team",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 27
+      },
+      {
+        "step": "step-001",
+        "kind": "resupply",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 27
+      },
+      {
+        "step": "step-002",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 28
+      },
+      {
+        "step": "step-003",
+        "kind": "resupply",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 28
+      },
+      {
+        "step": "step-004",
+        "kind": "restore_team",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 28
+      },
+      {
+        "step": "step-005",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 29
+      },
+      {
+        "step": "step-006",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 30
+      },
+      {
+        "step": "step-007",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 31
+      },
+      {
+        "step": "step-008",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-009",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-010",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-011",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-012",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-013",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-014",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-015",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-016",
+        "kind": "acquire_species",
+        "verification": "failed",
+        "ordinary": true,
+        "error": null,
+        "error_type": null,
+        "failure_reason": "search_exhausted",
+        "registered": 31
+      },
+      {
+        "step": "step-017",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 32
+      },
+      {
+        "step": "step-018",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 33
+      },
+      {
+        "step": "step-019",
+        "kind": "manage_storage",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 33
+      },
+      {
+        "step": "step-020",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 34
+      },
+      {
+        "step": "step-021",
+        "kind": "restore_team",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 34
+      },
+      {
+        "step": "step-022",
+        "kind": "acquire_species",
+        "verification": "succeeded",
+        "ordinary": false,
+        "error": null,
+        "error_type": null,
+        "failure_reason": null,
+        "registered": 35
+      },
+      {
+        "step": "step-023",
+        "kind": "restore_team",
+        "verification": null,
+        "ordinary": false,
+        "error": "controller reached its hard monotonic wall-time admission deadline",
+        "error_type": "ControllerWallTimeBudgetExhausted",
+        "failure_reason": null,
+        "registered": 35
+      }
+    ],
+    "normal_safari_search_misses": 9,
+    "actual_cash_debits": 8000,
+    "storage_verified": true,
+    "source_reset": false
+  },
+  "reassessment": {
+    "search_history_reaches_policy": true,
+    "rare_safari_scores_remain_high_after_repeated_misses": true,
+    "later_tauros_and_kangaskhan_caught": true,
+    "calibrated_probability": false,
+    "do_not_refit_development": true,
+    "fee_attribution_gap": "Actual native cash meter charges500 per paid Safari admission; generic diagnostic resource attribution does not yet recognize that nested fee. Not lost native accounting.",
+    "next": "Reuse exact106/151/111 and current collection skills. Review real rare-source exposure/cost before altering priorities; ordinary misses alone do not justify a new learner."
+  }
+}

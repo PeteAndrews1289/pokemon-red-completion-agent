@@ -1,0 +1,30 @@
+{
+  "schema": "pokemon.red.player-audit-wiring.v1",
+  "classification": "engineering-and-synthetic-diagnostic-not-learning",
+  "audit": "docs/audits/red-player-code-audit-2026-09-25.md",
+  "authorized_steps": [1, 2],
+  "feature_version": 5,
+  "native_declaration_version": 4,
+  "legacy_rows_rewritten": false,
+  "native_execution_binding_qualified": false,
+  "source_independence_established": false,
+  "single_all_green_full_invocation": false,
+  "verification": {
+    "implementation_commit": "3863e0ad",
+    "completed_full_sweep": {"passed": 16904, "failed": 2, "errors": 0, "skipped": 1, "xfailed": 1},
+    "correction_confirmation": {"passed": 327, "failed": 0},
+    "changes_after_sweep": "Test expectations and documentation only",
+    "unresolved_failures": 0,
+    "repository_lint_passed": true,
+    "repository_typing_passed": true,
+    "steps_1_and_2_complete": true
+  },
+  "gameplay_actions": 0,
+  "production_fits": 0,
+  "new_train_examples": 0,
+  "model_decisions": 0,
+  "registration_delta": 0,
+  "primary_save_changed": false,
+  "whole_campaign_started": false,
+  "next": "Stop for user stocktake before step 3 continuous player integration"
+}

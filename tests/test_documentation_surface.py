@@ -6,8 +6,15 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT_PAGES = (
+    "AGENTS.md",
+    "MISSION.md",
+    "NORTH_STAR.md",
+    "ACTIVE_PRODUCT_STATE.md",
     "HANDOFF.md",
     "AGENT_COORDINATION.md",
+    "docs/README.md",
+    "docs/development-roadmap.md",
+    "docs/three-agent-workflow.md",
     "docs/current-agent-handoffs.md",
     "docs/model-first-roadmap.md",
     "docs/architecture.md",
@@ -47,3 +54,24 @@ def test_historical_entry_points_are_explicitly_superseded() -> None:
     for path in paths:
         first = path.read_text().splitlines()[0]
         assert first == "# Historical archive — superseded September 10, 2026"
+
+
+def test_current_instruction_chain_retires_micro_packet_approval_requests() -> None:
+    for relative in (
+        "AGENTS.md",
+        "NORTH_STAR.md",
+        "HANDOFF.md",
+        "AGENT_COORDINATION.md",
+        "docs/current-agent-handoffs.md",
+    ):
+        text = (ROOT / relative).read_text()
+        assert "NORTH_STAR.md" in text or relative == "NORTH_STAR.md"
+        assert "Next proposal needs approval" not in text
+        assert "extra lesson/fit approval" not in text
+        assert "Default" in text or "default" in text or "authoritative handoff" in text
+    north_star = (ROOT / "NORTH_STAR.md").read_text()
+    assert "Latest explicit user direction takes precedence" in north_star
+    assert "up to 3 hours" in north_star
+    assert "not automatic stops" in north_star
+    archive = ROOT / "docs/history/2026-09-30-north-star-before-development-contract.md"
+    assert "Not current instructions" in archive.read_text()

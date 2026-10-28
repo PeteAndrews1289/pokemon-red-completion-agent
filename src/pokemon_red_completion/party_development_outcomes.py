@@ -68,6 +68,19 @@ PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE = OutcomeObjective(
 )
 
 
+# Preserve the historical objective exactly. New full-evolution comparisons
+# prospectively commit to complete-task cost before rewarding surplus XP.
+PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE = OutcomeObjective(
+    objective_id="party-development.complete-task-efficiency.v3",
+    family=ScenarioFamily.PARTY_DEVELOPMENT,
+    criteria=(
+        *PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.criteria[:9],
+        OutcomeCriterion("party.completed-task-frames", OutcomeDirection.MINIMIZE, 0),
+        *PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.criteria[9:],
+    ),
+)
+
+
 @dataclass(frozen=True, slots=True)
 class PartyCompletionSnapshot:
     """Title-neutral completion counters at one bounded execution boundary."""
@@ -192,11 +205,18 @@ def adapt_party_development_outcomes_v2(
     initial_state_sha256: str,
     partition: ScenarioPartition,
     prospective_binding: PartyDevelopmentProspectiveBinding,
+    total_task_efficiency: bool = False,
 ) -> ScenarioOutcomeExample:
     """Join cloned v2 candidate executions to completion-aware preferences."""
 
     if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
         raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
+    if type(total_task_efficiency) is not bool:
+        raise ScenarioOutcomeError("total task efficiency requires an explicit boolean")
+    if total_task_efficiency and candidate_set.goal is not PartyDevelopmentGoal.EVOLUTION:
+        raise ScenarioOutcomeError("complete task cost requires a declared evolution goal")
+    objective = (PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE if total_task_efficiency
+                 else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE)
     if not isinstance(prospective_binding, PartyDevelopmentProspectiveBinding):
         raise TypeError("prospective_binding must be a PartyDevelopmentProspectiveBinding")
     if len(prospective_binding.candidate_available) != len(candidate_set.candidates):
@@ -248,7 +268,9 @@ def adapt_party_development_outcomes_v2(
         outcomes.append(
             CandidateOutcome(
                 status=OutcomeEvidenceStatus.MEASURED,
-                criterion_values=_criterion_values(candidate_set.goal, trial),
+                criterion_values=_criterion_values(
+                    candidate_set.goal, trial, total_task_efficiency=total_task_efficiency
+                ),
                 actions_executed=_semantic_actions(trial),
                 frames_executed=trial.frames_executed,
                 evidence_sha256=evidence_sha256,
@@ -259,9 +281,9 @@ def adapt_party_development_outcomes_v2(
         root_lineage_id=root_lineage_id,
         initial_state_sha256=initial_state_sha256,
         partition=partition,
-        objective=PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE,
-        feature_schema_id=PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
-        feature_names=PARTY_DEVELOPMENT_FEATURE_NAMES,
+        objective=objective,
+        feature_schema_id=candidate_set.feature_schema_id,
+        feature_names=candidate_set.feature_names,
         candidates=candidates,
         outcomes=tuple(outcomes),
         prospective_binding_sha256=prospective_binding.binding_sha256,
@@ -296,6 +318,8 @@ def _require_shared_start(
 def _criterion_values(
     goal: PartyDevelopmentGoal,
     trial: PartyDevelopmentOutcomeTrialV2,
+    *,
+    total_task_efficiency: bool = False,
 ) -> tuple[float, ...]:
     before = trial.completion_before
     after = trial.completion_after
@@ -322,7 +346,7 @@ def _criterion_values(
     battles = trial.progress_after.battles_completed - trial.progress_before.battles_completed
     center_visits = trial.progress_after.healing_trips - trial.progress_before.healing_trips
     faints = trial.progress_after.faints - trial.progress_before.faints
-    return (
+    values = (
         float(not trial.after_party.is_wiped_out),
         float(no_regression),
         float(primary_progress),
@@ -339,6 +363,12 @@ def _criterion_values(
         float(faints),
         float(trial.frames_executed),
     )
+    if total_task_efficiency:
+        if trial.evolution_completed and evolution_reduction <= 0:
+            raise ScenarioOutcomeError("completed evolution lacks measured completion progress")
+        return (*values[:9], float(trial.frames_executed) if trial.evolution_completed else 0.0,
+                *values[9:])
+    return values
 
 
 def _experience_gained(before: PartyObservation, after: PartyObservation) -> int:

@@ -30,6 +30,57 @@ MEGA_PUNCH_MOVE_ID = 0x05
 SELFDESTRUCT_MOVE_ID = 0x78
 
 
+@pytest.mark.parametrize(
+    "enabled,disabled,reserve,expected",
+    [
+        (False, True, False, (False, False)),
+        (True, True, False, (False, True)),
+        (True, False, False, (True, False)),
+        (True, True, True, (False, False)),
+    ],
+)
+def test_explicit_stranded_accuracy_move_never_broadens_normal_combat(
+    enabled, disabled, reserve, expected
+):
+    raw = replace(
+        _raw(),
+        battle_state=2,
+        party_count=2,
+        party_hp=(22, 20 if reserve else 0),
+        active_party_moves=(33, 28, 0, 0),
+        active_party_pp=(31, 15, 0, 0),
+        player_disabled_move_slot=1 if disabled else None,
+        player_disable_turns=3 if disabled else 0,
+    )
+    encoder = PokemonRedObservationEncoder.from_state_reader(Reader())
+    result = prepare_red_battle_scenario(
+        encoder, raw, allow_no_attack=True, allow_stranded_accuracy_move=enabled
+    )
+    assert result.supported_candidate_mask == expected
+
+
+@pytest.mark.parametrize("enabled,reserve,attack_pp,expected", [
+    (False, False, 0, (False, False, False)),
+    (True, True, 0, (False, False, False)),
+    (True, False, 1, (True, False, False)),
+    (True, False, 0, (False, True, True)),
+])
+def test_stranded_known_status_moves_are_not_misclassified_as_forced_struggle(
+    enabled, reserve, attack_pp, expected
+):
+    raw = replace(
+        _raw(), battle_state=2, party_count=2,
+        party_hp=(22, 20 if reserve else 0),
+        active_party_moves=(71, 77, 78, 0),
+        active_party_pp=(attack_pp, 35, 30, 0),
+    )
+    encoder = PokemonRedObservationEncoder.from_state_reader(Reader())
+    result = prepare_red_battle_scenario(
+        encoder, raw, allow_no_attack=True, allow_stranded_accuracy_move=enabled
+    )
+    assert result.supported_candidate_mask == expected
+
+
 class Reader:
     def read(self) -> RawGameState:
         return _raw()
@@ -271,6 +322,40 @@ def test_red_terminal_exit_with_living_opponent_is_not_scored_as_a_faint() -> No
     assert outcome.opponent_damage_fraction == 15 / 60
 
 
+@pytest.mark.parametrize("acting_hp,expected_faint", [(24, False), (0, True)])
+def test_terminal_reserve_outcome_uses_acting_member_not_field_leader(acting_hp, expected_faint):
+    before = replace(
+        _raw(),
+        party_count=3,
+        active_party_index=2,
+        active_party_hp=17,
+        active_party_max_hp=42,
+        party_hp=(0, 12, 17),
+        party_max_hp=(31, 21, 42),
+    )
+    after = replace(
+        before,
+        battle_state=0,
+        active_party_index=None,
+        active_party_hp=None,
+        active_party_max_hp=None,
+        first_party_hp=0,
+        first_party_max_hp=31,
+        party_hp=(0, 12, acting_hp),
+        party_max_hp=(31, 21, 49),
+        enemy_hp=0,
+    )
+    outcome = project_red_battle_turn_outcome(replace(_execution(after), initial_state=before))
+    assert outcome.player_fainted is expected_faint
+    assert outcome.player_damage_fraction == (17 / 42 if expected_faint else 0)
+
+
+def test_terminal_reserve_outcome_refuses_missing_party_evidence():
+    after = replace(_raw(), battle_state=0, active_party_index=None, party_hp=None)
+    with pytest.raises(RedBattleScenarioError, match="acting party member HP"):
+        project_red_battle_turn_outcome(_execution(after))
+
+
 def test_red_move_execution_does_not_depend_on_replacement_party_pp() -> None:
     replacement_unchanged = replace(
         _raw(),
@@ -294,3 +379,24 @@ def test_red_move_execution_does_not_depend_on_replacement_party_pp() -> None:
 
     assert executed.move_executed
     assert not suppressed.move_executed
+
+
+@pytest.mark.parametrize("retained_hp", [0, 7, 20])
+def test_terminal_trainer_uses_authenticated_roster_after_live_roster_is_cleared(retained_hp):
+    before = replace(
+        _raw(), battle_state=2, enemy_party_count=2, enemy_party_position=1,
+        enemy_party_hp=(0, 20), enemy_hp=20,
+    )
+    after = replace(
+        before, battle_state=0, enemy_hp=0,
+        enemy_party_position=None, enemy_party_hp=None,
+    )
+    execution = BattleTurnExecution(
+        initial_state=before, final_state=after, selected_slot=1,
+        actions_executed=2, frames_executed=48, move_executed=True,
+        terminal_enemy_roster_hp=(0, retained_hp),
+    )
+    result = project_red_battle_turn_outcome(execution)
+    assert result.battle_exited is True
+    assert result.opponent_fainted is (retained_hp == 0)
+    assert result.opponent_damage_fraction == pytest.approx((20 - retained_hp) / 60)

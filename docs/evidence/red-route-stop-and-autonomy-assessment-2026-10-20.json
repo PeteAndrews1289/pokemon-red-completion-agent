@@ -1,0 +1,68 @@
+{
+  "actor_root_seconds": 8053.434147676,
+  "actual_badges": 7,
+  "actual_cash": 27,
+  "actual_error_chain": [
+    {
+      "error": "route replanning found no candidate",
+      "error_type": "RouteExecutionError",
+      "reason_code": "planner_no_route"
+    },
+    {
+      "error": "no staged Cut route from map 22 to map 45",
+      "error_type": "RoutePlanningError"
+    }
+  ],
+  "actual_execution_errors": 2,
+  "actual_id": "restored-fresh005-v62-a9-20261020-002",
+  "actual_master_ball": 1,
+  "actual_model_choices": 210,
+  "actual_native_exit_utc": "2026-10-20T16:18:06.026902+00:00",
+  "actual_ordinary_setbacks": 41,
+  "actual_registrations": 92,
+  "actual_running": false,
+  "actual_spent": {
+    "actions": 747275,
+    "cash_debits": 91972,
+    "decisions": 989,
+    "frames": 58011642,
+    "heals": 789,
+    "seconds": 17935.434408033998
+  },
+  "actual_support_choices": 81,
+  "all_original_processes_absent": true,
+  "autonomy_goal": "Frozen fresh start through Champion/concurrent Hall of Fame plus124same-save registrations without operator repair;then8of10held-out reliability.",
+  "badges_since_actor_source": 3,
+  "completed_component_goals": 2,
+  "controls_released": true,
+  "diagnostic_gains_imported": false,
+  "fresh_failed_attempts": 5,
+  "full_suite": false,
+  "native_helper_pass_is_not_game_success": true,
+  "new_fits": 0,
+  "new_root_overhead_seconds": 97.13588957800312,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-20T16:41:37.217307+00:00",
+  "official_fresh_successes": 0,
+  "official_reliability_starts": 0,
+  "original_actor_cutoff_utc": "2026-10-20T17:12:07.547460+00:00",
+  "performance_integration_native_withheld": true,
+  "planning_estimate_confidence": "low_subjective_engineering_estimate_not_statistical_forecast",
+  "planning_estimate_first_clean_completion_weeks": [
+    2,
+    6
+  ],
+  "registrations_since_actor_source": 36,
+  "repair_within_existing_mission_caps": true,
+  "repeated_reliability_estimate": "May take longer;no defensible completion date from current evidence.",
+  "restored_DEVELOPMENT_not_fresh_acceptance": true,
+  "root_cgroup_empty": true,
+  "schema": "pokemon.red.authenticated-route-stop-and-autonomy-assessment.v1",
+  "terminal_authentication_sha256": "f2a1f5b6ea88b696e83db553b520d17087a3b0969d15c4cdcadae3a2f320de39",
+  "terminal_context_sha256": "5b93145fdf29ab7c3289b0d79357f0a5bca5ff63e3fbaebfe0eb1f8e2fddb692",
+  "terminal_state_sha256": "49ff53756343ee5f1fbcd04a44f47aa9ce9c12fc2597ad61da20d7bfe7115813",
+  "total_component_goals": 7,
+  "total_fit_attempts": 13,
+  "total_fits": 11
+}

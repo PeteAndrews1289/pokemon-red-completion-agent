@@ -373,6 +373,7 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         graph,
         terrain_tiles,
         directional_tiles,
+        walkable_tiles={key: value.walkable for key, value in sets.items()},
     )
     graph = _with_automatic_warp_triggers(
         graph,
@@ -384,7 +385,13 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         terrain_tiles,
         directional_tiles,
         automatic_tiles,
+        border_tiles={
+            m: _border_step_tiles(rom, m, sets[n.tileset])
+            for m, n in graph.items()
+            if _uses_directional_warp_check(n)
+        },
     )
+    graph = _without_inert_interior_warps(graph, terrain_tiles, automatic_tiles)
     graph = _with_warp_arrivals(graph, terrain_tiles, door_tiles(rom))
     verify_against_encounter_reads(
         reachable=set(graph),
@@ -393,6 +400,35 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         fishable=set(fishing_tables(rom).by_map),
     )
     return graph
+
+
+def _without_inert_interior_warps(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    automatic_tiles: Mapping[int, frozenset[int]],
+) -> dict[int, MapNode]:
+    """A header row on ordinary indoor floor is not an automatic teleporter.
+
+    Preserve directional boundary exits and raw destination indices. Only
+    remove proposed on-entry interior transitions whose underlying tile does
+    not satisfy the engine's automatic-warp/door table. No map identity list.
+    """
+    projected = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+        passages = tuple(
+            p
+            for p in node.passages
+            if (
+                p.kind not in {PassageKind.WARP, PassageKind.RETURN}
+                or p.at is None
+                or node.tileset in OUTSIDE_TILESETS
+                or p.exit_action is not None
+                or tiles[p.at[0]][p.at[1]] in automatic_tiles[node.tileset]
+            )
+        )
+        projected[map_id] = replace(node, passages=passages)
+    return projected
 
 
 def _with_warp_arrivals(
@@ -416,12 +452,25 @@ def _with_warp_arrivals(
     return result
 
 
+def _uses_directional_warp_check(node: MapNode) -> bool:
+    # ExtraWarpCheck uses the tile in front for SHIP/SHIP_PORT as well as
+    # outdoors. This is distinct from wLastMap's outside-tileset rule.
+    # SS_ANNE_3F is explicitly dispatched to the map-edge check instead.
+    # ExtraWarpCheck explicitly dispatches these indoor maps before checking
+    # the tileset: Hideout B1/B2/B4 elevator doors and Rock Tunnel 1F.
+    return node.map_id in {199, 200, 202, 82} or (
+        node.map_id != 97 and node.tileset in {0, 13, 14, 23}
+    )
+
+
 def _with_directional_warp_actions(
     graph: Mapping[int, MapNode],
     tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
     directional_tiles: Mapping[str, frozenset[int]],
+    *,
+    walkable_tiles: Mapping[int, frozenset[int]] | None = None,
 ) -> dict[int, MapNode]:
-    """Derive a second input from the outdoor tile immediately beyond a warp."""
+    """Derive a second input from the engine's directional tile check."""
 
     delta = {
         "up": (-1, 0),
@@ -436,14 +485,15 @@ def _with_directional_warp_actions(
         def derive(
             passage: Passage,
             *,
-            source_tileset: int = node.tileset,
+            directional_check: bool = _uses_directional_warp_check(node),
             source_tiles: tuple[tuple[int, ...], ...] = tiles,
+            walkable: frozenset[int] = (walkable_tiles or {}).get(node.tileset, frozenset()),
         ) -> Passage:
             if (
                 passage.kind is not PassageKind.WARP
                 or passage.exit_action is not None
                 or passage.at is None
-                or source_tileset not in OUTSIDE_TILESETS
+                or not directional_check
             ):
                 return passage
             actions = tuple(
@@ -453,8 +503,14 @@ def _with_directional_warp_actions(
                 and 0 <= passage.at[1] + dx < len(source_tiles[passage.at[0] + dy])
                 and source_tiles[passage.at[0] + dy][passage.at[1] + dx]
                 in directional_tiles[action]
+                # A second input must collide to invoke CheckWarpsCollision;
+                # an ordinary walk would leave this warp coordinate first.
+                and source_tiles[passage.at[0] + dy][passage.at[1] + dx] not in walkable
             )
-            return replace(passage, exit_action=actions[0]) if len(actions) == 1 else passage
+            # More than one direction can satisfy the cartridge table (for
+            # example the Hideout lift has wall above and carpet below).
+            # Any admitted direction is executable; ambiguity is not inertia.
+            return replace(passage, exit_action=actions[0]) if actions else passage
 
         projected[map_id] = replace(
             node,
@@ -486,11 +542,28 @@ def _with_automatic_warp_triggers(
     return projected
 
 
+def _border_step_tiles(rom, map_id, tileset):
+    """The repeating border block's collision tiles,including beyond map edges."""
+    bank = rom[MAP_HEADER_BANKS + map_id]
+    offset = MAP_HEADER_POINTERS + 2 * map_id
+    header = bank_offset(bank, int.from_bytes(rom[offset : offset + 2], "little"))
+    flags = rom[header + CONNECTION_FLAGS_OFFSET]
+    pointer = header + CONNECTION_FLAGS_OFFSET + 1 + flags.bit_count() * CONNECTION_STRUCT_BYTES
+    address = int.from_bytes(rom[pointer : pointer + 2], "little")
+    if not 0x4000 <= address <= 0x7FFF:
+        raise CartridgeReadError("directional warp lacks a readable border block")
+    block = rom[bank_offset(bank, address)]
+    start = bank_offset(tileset.bank, tileset.blockset) + 16 * block
+    return tuple(tuple(rom[start + 4 * (2 * y + 1) + 2 * x] for x in range(2)) for y in range(2))
+
+
 def _without_inert_directional_warps(
     graph: Mapping[int, MapNode],
     tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
     directional_tiles: Mapping[str, frozenset[int]],
     automatic_tiles: Mapping[int, frozenset[int]],
+    *,
+    border_tiles: Mapping[int, tuple[tuple[int, ...], ...]] | None = None,
 ) -> dict[int, MapNode]:
     """Drop outdoor warp rows whose tile in front fails the engine table.
 
@@ -508,18 +581,17 @@ def _without_inert_directional_warps(
     projected: dict[int, MapNode] = {}
     for map_id, node in graph.items():
         tiles = tile_grids[map_id]
+        border = (border_tiles or {}).get(map_id)
 
         def executable(
             passage: Passage,
             *,
             source_tileset: int = node.tileset,
+            directional_check: bool = _uses_directional_warp_check(node),
             source_tiles: tuple[tuple[int, ...], ...] = tiles,
+            source_border=border,
         ) -> bool:
-            if (
-                passage.kind is not PassageKind.WARP
-                or passage.at is None
-                or source_tileset not in OUTSIDE_TILESETS
-            ):
+            if passage.kind is not PassageKind.WARP or passage.at is None or not directional_check:
                 return True
             if source_tiles[passage.at[0]][passage.at[1]] in automatic_tiles[source_tileset]:
                 return True
@@ -527,6 +599,13 @@ def _without_inert_directional_warps(
                 return False
             dy, dx = delta[passage.exit_action]
             y, x = passage.at[0] + dy, passage.at[1] + dx
+            if not (0 <= y < len(source_tiles) and 0 <= x < len(source_tiles[0])):
+                # Off-map is not an absent tile: the engine reads its padded
+                # border block. Unknown borders remain non-executable.
+                return (
+                    source_border is not None
+                    and source_border[y % 2][x % 2] in directional_tiles[passage.exit_action]
+                )
             return (
                 0 <= y < len(source_tiles)
                 and 0 <= x < len(source_tiles[y])
@@ -955,6 +1034,14 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
         },
         outside_nodes=frozenset(map_id for map_id, node in graph.items() if node.is_outside),
         warp_locations={map_id: node.warp_locations for map_id, node in graph.items()},
+        warp_triggers={
+            map_id: tuple(
+                p.at
+                for p in node.passages
+                if p.kind is not PassageKind.CONNECTION and p.at is not None
+            )
+            for map_id, node in graph.items()
+        },
         warp_arrivals=(
             {map_id: node.warp_arrivals or () for map_id, node in graph.items()}
             if all(qualified)

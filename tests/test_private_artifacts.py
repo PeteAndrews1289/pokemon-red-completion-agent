@@ -801,6 +801,54 @@ def test_sealed_record_is_canonical_private_idempotent_and_immutable(
     )
 
 
+@pytest.mark.parametrize("kind", ["red_challenge_consequence_result", "red_collection_teacher_outcome"])
+def test_large_native_consequence_record_roundtrips_without_generic_size_expansion(
+    tmp_path: Path, kind: str,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    record = {"schema": "native-consequence-size-test", "evidence": "z" * (1024 * 1024)}
+    published = store.publish_sealed_record("large-native-result", kind=kind, record=record)
+    assert published.summary.total_bytes > 1024 * 1024
+    assert store.find_sealed_record("large-native-result", expected_kind=kind).read() == record
+    metadata = store.inspect_sealed_record_metadata(
+        "large-native-result", expected_kind=kind
+    )
+    assert metadata.declared_total_bytes == published.summary.total_bytes
+    assert metadata.declared_record_sha256 == published.summary.record_sha256
+    assert metadata.manifest_sha256 == published.summary.manifest_sha256
+    with pytest.raises(PrivateArtifactError, match="exceeds the allowed size"):
+        store.publish_sealed_record("large-generic-result", kind="collection_seal", record=record)
+    with pytest.raises(PrivateArtifactError, match="kind does not match"):
+        store.find_sealed_record("large-native-result", expected_kind="collection_seal")
+
+
+@pytest.mark.parametrize("kind", ["red_challenge_consequence_result", "red_collection_teacher_outcome"])
+def test_native_consequence_size_bound_applies_to_writer_and_both_readers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, kind: str,
+) -> None:
+    _, _, store = _make_store(tmp_path)
+    store.publish_sealed_record("bounded-native-result", kind=kind, record={"evidence": "z" * 200})
+    monkeypatch.setattr(private_artifacts_module, "_MAX_JSONL_LINE_BYTES", 100)
+    with pytest.raises(PrivateArtifactError, match="exceeds the allowed size"):
+        store.publish_sealed_record(
+            "oversized-native-result", kind=kind, record={"evidence": "z" * 200}
+        )
+    with pytest.raises(PrivateArtifactError, match="size is invalid"):
+        store.find_sealed_record("bounded-native-result", expected_kind=kind)
+    with pytest.raises(PrivateArtifactError, match="size is invalid"):
+        store.inspect_sealed_record_metadata("bounded-native-result", expected_kind=kind)
+
+
+@pytest.mark.parametrize("kind", ["red_challenge_consequence_result", "red_collection_teacher_outcome"])
+def test_native_consequence_expanded_envelope_still_rejects_unsafe_content(
+    tmp_path: Path, kind: str,
+) -> None:
+    root, _, store = _make_store(tmp_path)
+    with pytest.raises(PrivateArtifactError, match="filesystem path"):
+        store.publish_sealed_record("unsafe-native-result", kind=kind,
+            record={"evidence": "z" * (1024 * 1024), "private_path": str(root)})
+
+
 def test_sealed_record_metadata_inspection_never_opens_payload(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

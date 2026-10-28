@@ -128,7 +128,7 @@ def test_real_field_macro_expands_into_counted_inputs_then_walks_and_verifies():
 
 
 @pytest.mark.parametrize("change", [
-    {"badge_bits": 0}, {"party_hp": (0,)}, {"party_moves": ((33,),)},
+    {"badge_bits": 0}, {"party_hp": ()}, {"party_moves": ((33,),)},
     {"party_moves": ()},
 ])
 def test_lost_capability_after_binding_rejects_before_any_input(change):
@@ -153,7 +153,7 @@ def test_cut_capability_uses_holder_not_species_or_unrelated_fainted_member():
     raw = replace(cut_state(), party_count=2, party_hp=(0, 10),
                   party_moves=((33,), (15,)))
     assert cut_capabilities(raw) == frozenset({"move:cut"})
-    assert cut_capabilities(replace(raw, party_hp=(10, 0))) == frozenset()
+    assert cut_capabilities(replace(raw, party_hp=(10, 0))) == frozenset({"move:cut"})
 
 
 def test_expanded_cut_inputs_cannot_bypass_primitive_action_budget():
@@ -219,11 +219,19 @@ def test_replans_keep_cut_scope_without_allowing_surf():
         RedResourceGoalRouter,
         RedResourceGoalRoutingError,
     )
-    world = SimpleNamespace(replanner=lambda: lambda _: cut_plan())
-    router = RedResourceGoalRouter(None, None, world)
+    from pokemon_red_completion.route_executor import ReplanRequest
+    request = ReplanRequest(TraversalSnapshot(0, (0, 1), True, capabilities=frozenset({"move:cut", "move:surf"})), 0, (0, 3), {}, 1)
+    observed = []
+    def replan(current):
+        observed.append(current)
+        return cut_plan()
+    world = SimpleNamespace(replanner=lambda: replan)
+    world.with_current_observation = lambda reader: world
+    router = RedResourceGoalRouter(SimpleNamespace(reader=object()), None, world)
     with pytest.raises(RedResourceGoalRoutingError, match="unsupported"):
-        router._replan(None)
-    assert router._replan(None, allow_cut=True) == cut_plan()
+        router._replan(request)
+    assert router._replan(request, allow_cut=True) == cut_plan()
+    assert observed[-1].current.capabilities == frozenset({"move:cut"})
     world.replanner = lambda: lambda _: cut_plan("surf:right")
     with pytest.raises(RedResourceGoalRoutingError, match="unsupported"):
-        router._replan(None, allow_cut=True)
+        router._replan(request, allow_cut=True)

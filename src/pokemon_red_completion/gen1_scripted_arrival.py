@@ -1,8 +1,9 @@
 """Opt-in decoding of the cartridge's one-shot trainer-room entrance walk.
 
 This recognizes one bounded Gen I script grammar, not arbitrary machine code.
-Unknown revisions, visited entrances or different scripts fail closed. It only
-supplies an exact settled coordinate; the route executor still rejects drift.
+Unknown revisions and different scripts fail closed. Visited entrances require
+an explicit reentry opt-in and qualified dialogue settlement. The route executor
+still rejects drift from the decoded endpoint.
 """
 
 from __future__ import annotations
@@ -25,6 +26,8 @@ class ScriptedTrainerArrival:
     event_flag: int
     direction_runs: tuple[tuple[tuple[int, int], int], ...] = ()
     interaction_coordinates: tuple[tuple[int, int], ...] = ()
+    reentry_text_id: int | None = None
+    reentry_triggers: tuple[tuple[int, int], ...] = ()
 
     def settled_at(self, coordinate: tuple[int, int]) -> tuple[int, int]:
         if coordinate not in self.entrance_coordinates:
@@ -40,7 +43,9 @@ class ScriptedTrainerArrival:
         )
 
 
-def trainer_room_arrival(rom: bytes, map_id: int, events: bytes) -> ScriptedTrainerArrival:
+def trainer_room_arrival(
+    rom: bytes, map_id: int, events: bytes, *, allow_reentry: bool = False,
+) -> ScriptedTrainerArrival:
     """Qualify critical engine callees with the existing exact Red revision pin.
 
     The local grammar alone cannot prove what arbitrary CALL targets do. A ROM
@@ -49,6 +54,10 @@ def trainer_room_arrival(rom: bytes, map_id: int, events: bytes) -> ScriptedTrai
     verify_rom_bytes(rom)
     if type(events) is not bytes:
         raise CartridgeReadError("arrival qualification requires observed immutable event bytes")
+    if type(allow_reentry) is not bool:
+        raise CartridgeReadError("reentry allowance must be explicit boolean")
+    if allow_reentry:
+        return _decode_trainer_room_arrival(rom, map_id, events, allow_reentry=True)
     return _decode_trainer_room_arrival(rom, map_id, events)
 
 
@@ -59,7 +68,7 @@ def trainer_room_interaction_coordinates(rom: bytes, map_id: int) -> tuple[tuple
 
 
 def _decode_trainer_room_arrival(
-    rom: bytes, map_id: int, events: bytes | None,
+    rom: bytes, map_id: int, events: bytes | None, *, allow_reentry: bool = False,
 ) -> ScriptedTrainerArrival:
     """Follow script-table/default/relative-walk pointers, then check its event."""
 
@@ -107,7 +116,8 @@ def _decode_trainer_room_arrival(
     event_index = event_address - EVENT_FLAGS_START
     require(isinstance(events, bytes) and 0 <= event_index < len(events))
     assert events is not None
-    require(not bool(events[event_index] & (1 << bit)))
+    consumed = bool(events[event_index] & (1 << bit))
+    require(not consumed or allow_reentry is True)
     delta = int.from_bytes(code[35:36], "little", signed=True)
     walk_at = default + 36 + delta
     walk = read(walk_at, 48)
@@ -139,6 +149,38 @@ def _decode_trainer_room_arrival(
     result = ScriptedTrainerArrival(
         map_id, entrance, directions[walk[4]], count, event_index * 8 + bit
     )
+    if consumed:
+        # The consumed branch prints a non-trainer text, queues ONE direction,
+        # and returns to default after movement. Derive the number of repeated
+        # pushes from its trigger coordinates, not from the initial walk.
+        push = read(default + 36, 29)
+        require(push[0] == 0x3E and push[1] > 0)
+        require(push[2:8] == bytes.fromhex("e0 8c cd 20 29 3e"))
+        require(push[8] in directions)
+        require(push[9:23] == bytes.fromhex("ea d3 cc 3e 01 ea 38 cd cd 86 34 3e 03 ea"))
+        require(push[23:25] == entry[13:15] and push[25:] == bytes.fromhex("ea 39 da c9"))
+        moving = read(bank_offset(bank, word(table + 6)), 19)
+        require(moving[:13] == bytes.fromhex("fa 38 cd a7 c0 cd d7 3d af ea 6b cd ea"))
+        require(moving[13:15] == entry[13:15] and moving[15:] == bytes.fromhex("ea 39 da c9"))
+        text_table = bank_offset(bank, word(header + 5))
+        read(text_table, push[1] * 2)
+        text = read(bank_offset(bank, word(text_table + (push[1] - 1) * 2)), 5)
+        require(text[0] == 0x17 and text[4] == 0x50)  # text_far, text_end; no ASM
+        require(0x4000 <= int.from_bytes(text[1:3], "little") < 0x8000)
+        require(0 < text[3] < len(rom) // 0x4000)
+        triggers = tuple((coordinates[i], coordinates[i + 1]) for i in range(0, 8, 2))
+        require(len(set(triggers)) == 4)
+        direction = directions[push[8]]
+        counts = []
+        for at in entrance:
+            n = 0
+            while at in triggers and n < 5:
+                at = (at[0] + direction[0], at[1] + direction[1])
+                n += 1
+            require(n == 2 and min(at) >= 0 and at not in triggers)
+            counts.append(n)
+        result = replace(result, direction=direction, steps=counts[0],
+                         reentry_text_id=push[1], reentry_triggers=triggers)
     require(all(min(result.settled_at(at)) >= 0 for at in entrance))
     return result
 

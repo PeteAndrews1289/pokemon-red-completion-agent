@@ -14,7 +14,8 @@ future edit to either cannot silently drift.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from hashlib import sha256
 
 from .observation import PARTY_LIMIT, RamAddress, RawGameState, ReadOnlyMemory
 from .party import (
@@ -35,6 +36,8 @@ HP_OFFSET = 1
 STATUS_OFFSET = 4
 MOVES_OFFSET = 8
 EXPERIENCE_OFFSET = 14
+ORIGINAL_TRAINER_OFFSET = 12
+DETERMINANT_VALUES_OFFSET = 27
 PP_OFFSET = 29
 LEVEL_OFFSET = 33
 MAX_HP_OFFSET = 34
@@ -58,6 +61,45 @@ SNORLAX_SPECIES_ID = 0x84
 
 class PartyReadError(RuntimeError):
     """Raised when observed party memory cannot describe a coherent party."""
+
+
+def _move_observations(move_ids, packed_pp):
+    """Expose exact PP capacity within the Red adapter, preserving unknowns.
+
+    Import lazily because the shared decoder imports this adapter's PP mask.
+    Legacy semantic callers may supply fewer than four slots; padding is only
+    for the title decoder and never adds moves to their returned observation.
+    """
+    from .red_battle_catalog import RedBattleCatalogError
+    from .red_party_pp import RedPartyPpError, decode_red_party_pp
+
+    move_ids, packed_pp = tuple(move_ids), tuple(packed_pp)
+    if len(move_ids) != len(packed_pp) or len(move_ids) > MOVE_SLOT_LIMIT:
+        raise PartyReadError("Red move and PP slot counts differ")
+    padding = (0,) * (MOVE_SLOT_LIMIT - len(move_ids))
+    try:
+        try:
+            decoded = decode_red_party_pp(move_ids + padding, packed_pp + padding).moves
+            return tuple(
+                MoveObservation(item.move_id, item.current_pp,
+                                item.maximum_pp if item.move_id else None)
+                for item in decoded[:len(move_ids)]
+            )
+        except RedBattleCatalogError:
+            # Preserve an unrecognized move as unknown capacity, never a
+            # guessed maximum. Known siblings still receive exact capacities.
+            result = []
+            for move_id, packed in zip(move_ids, packed_pp, strict=True):
+                try:
+                    item = decode_red_party_pp((move_id, 0, 0, 0), (packed, 0, 0, 0)).moves[0]
+                except RedBattleCatalogError:
+                    result.append(MoveObservation(move_id, packed & PP_VALUE_MASK))
+                else:
+                    result.append(MoveObservation(item.move_id, item.current_pp,
+                                                  item.maximum_pp if item.move_id else None))
+            return tuple(result)
+    except RedPartyPpError as error:
+        raise PartyReadError("Red party carries incoherent move PP") from error
 
 
 def party_observation_from_raw(raw: RawGameState) -> PartyObservation:
@@ -104,14 +146,7 @@ def party_observation_from_raw(raw: RawGameState) -> PartyObservation:
             hp=raw.party_hp[index],
             max_hp=raw.party_max_hp[index],
             status=decode_status(raw.party_status[index]),
-            moves=tuple(
-                MoveObservation(move_id=move_id, current_pp=pp & PP_VALUE_MASK)
-                for move_id, pp in zip(
-                    raw.party_moves[index],
-                    raw.party_pp[index],
-                    strict=True,
-                )
-            ),
+            moves=_move_observations(raw.party_moves[index], raw.party_pp[index]),
         )
         for index in range(count)
     )
@@ -175,6 +210,41 @@ class PokemonRedPartyReader:
 
     memory: ReadOnlyMemory
 
+    def read_with_level_progress(self, cartridge) -> PartyObservation:
+        """Add observed XP-curve facts without exposing RAM to the learner."""
+        party = self.read()
+        members = []
+        for member in party.members:
+            species = cartridge.species(member.species_id)
+            members.append(replace(member,
+                experience_floor=species.experience_at_level(member.level),
+                experience_next=(species.experience_at_level(member.level + 1)
+                                 if member.level < 100 else None)))
+        return replace(party, members=tuple(members))
+
+    def preparation_specimen_refs(self) -> tuple[str, ...]:
+        """Session-local identity bindings, stable across swaps and evolution.
+
+        Red has no unique specimen ID. OT ID plus DVs is only a fingerprint,
+        not proof of global uniqueness. Reject collisions before preparation;
+        the closed block also forbids catches, trades, storage and replacement.
+        These private bindings must never become model features.
+        """
+        count = self.memory.read_u8(RamAddress.PARTY_COUNT)
+        if not 1 <= count <= PARTY_LIMIT:
+            raise PartyReadError("preparation party count is invalid")
+        refs = tuple(
+            "red-preparation:" + sha256(bytes(
+                self._read_u8(index, offset)
+                for offset in (ORIGINAL_TRAINER_OFFSET, ORIGINAL_TRAINER_OFFSET + 1,
+                               DETERMINANT_VALUES_OFFSET, DETERMINANT_VALUES_OFFSET + 1)
+            )).hexdigest()
+            for index in range(count)
+        )
+        if len(set(refs)) != count:
+            raise PartyReadError("ambiguous preparation specimen fingerprints")
+        return refs
+
     def _read_u8(self, index: int, offset: int) -> int:
         return self.memory.read_u8(member_field_address(index, offset))
 
@@ -190,12 +260,11 @@ class PokemonRedPartyReader:
         return value
 
     def _read_moves(self, index: int) -> tuple[MoveObservation, ...]:
-        moves: list[MoveObservation] = []
+        move_ids, packed_pp = [], []
         for slot in range(MOVE_SLOT_LIMIT):
-            move_id = self._read_u8(index, MOVES_OFFSET + slot)
-            current_pp = self._read_u8(index, PP_OFFSET + slot) & PP_VALUE_MASK
-            moves.append(MoveObservation(move_id=move_id, current_pp=current_pp))
-        return tuple(moves)
+            move_ids.append(self._read_u8(index, MOVES_OFFSET + slot))
+            packed_pp.append(self._read_u8(index, PP_OFFSET + slot))
+        return _move_observations(move_ids, packed_pp)
 
     def _read_member(self, index: int) -> PartyMemberObservation:
         species_id = self._read_u8(index, SPECIES_OFFSET)

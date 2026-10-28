@@ -1,64 +1,39 @@
-# Current development handoff
+# Current handoff — project audit and publication
 
-Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 19, 2026.
+[Active state](ACTIVE_PRODUCT_STATE.md) · [Audit lessons](docs/project-lessons-2026-10-28.md) ·
+[Native scoreboard](docs/work-sessions/2026-10-28-play-first.md).
 
-## Battle lifecycle is verified; return to useful game goals
+Pete explicitly authorized this source publication after the audit. All game
+runs stay paused. No native execution, model queries, fitting or new progress
+is authorized by this documentary/publication session.
 
-[Session report](docs/work-sessions/2026-09-19-battle-lifecycle-continuation.md) ·
-[Evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
-[Detailed next steps and all 28 gaps](docs/model-first-roadmap.md).
+The last preserved DEVELOPMENT checkpoint is native-v9/segment-001 in the private
+play-first-20261028-1858 index: state61cc02ebe88468460854eede15a7fb089f912fe1b6dcf6df291c37d6222c5445,
+contextd0a50b221c802b2341d51315cb5d61ccf3b45a361d8064a1463f7049e83dd0ab.
+It has2badges,12registrations,cash1446,no balls and a healed party in Cerulean.
+The original actual campaign remains sealed at its October17 cutoff.
 
-Frozen J SHA256: 260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
-318 TRAIN contexts, no new fit. Small-party scope remains one to three members.
+Pending supplier v10 is frozen and UNRUN, with165 focused checks. The capture
+audit identifies9 knockout signatures among14 failed operations, owned by the
+deterministic Rattata/Tackle fallback. Reuse existing nonlethal capture support
+before proposing a learner correction. The live-Teleport guard has91 focused
+checks; its new positive path remains unverified in exported v9 goal receipts.
 
-The original funding attempt failed after Wartortle fainted. Its strict verifier is unchanged.
-A separate declared continuation from that exact endpoint allowed J to replace the fainted
-member and finish the battle. J chose Zubat and four attacks; the party lost.
-Three attacks executed; the last selected attack was prevented by Zubat fainting.
+Next game block, up to3hours:
 
-Normal cartridge blackout then restored HP to 28/51 and returned field control on map 15.
-Cash fell from 1,706 to 853; trainer event 1405 remains unset. Party and registrations retained.
-Five complete decisions, 22 hash-chained events, zero invalid actions or teacher intervention.
-55 new actions / 5,424 frames; cumulative 302 actions / 24,708 frames including the failed parent.
-The final state reopened exactly with zero actions/frames. This is a completed battle loss and
-verified lifecycle, not successful funding, independent reliability or a new fit.
+1. Natively qualify v10 suppliers from the exact retained Cerulean pair. Require
+   legal affordable offers, a verified purchase and retained costs.
+2. Test existing nonlethal capture support on one paid copied case. Preserve
+   every knockout/miss and declare the support change. Never import its terminal.
+3. Continue the preserved player toward45 uninterrupted native minutes. Reassess
+   after15minutes or two equivalent failures. Fit only informative separate TRAIN
+   evidence for an actual model-owned gap.
 
-## Exact private continuation
+Use existing player,battlers,router,capture executors and recorder. Keep fresh
+starts and parallel actors off; no manual strategic targets/inputs,save edits,
+DEVELOPMENT fitting or revised historical limits. Later titles remain gated.
 
-Private run: red-player-battler-continuation-20260919-v1.
-Execution source: 2ead10a2b578d4437482c5fa4f8270db380cf3c0.
-Consumed input: e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024.
-Retained field endpoint: 5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac.
-Original parent result: b5779065eebee9d47e49b5527bf4f7b4f3f19621bdbd9e852332355f6a549a0c.
-
-Never replay either consumed input or relabel its DEVELOPMENT experience as TRAIN.
-No reset, cheat, automatic retry, new source factory or broad trainer refit is authorized.
-
-## Main collection: separate save, unchanged
-
-Model137 remains 137 examples / 92 successes / 58 economy-qualified.
-Main save: 96/124 registrations, 74 specimens, 198 cash, six party members.
-Exact terminal: 27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054.
-Private run: goal-manager-v1/model139-post-marowak-choice-20260916-v1/step-000/terminal.state.
-Fresh read-only reopening confirmed the hash, 96 flags, six members, 198 cash and map 156
-at (3,4), zero frames and identical bytes. Main party national IDs: 105/83/87/51/9/99.
-
-The earlier fishing choice is consumed. Paid Safari admission must not be treated as a walking
-edge; the 500 admission price exceeds current cash by 302 before supplies. The corrected
-offer set lacks two distinct executable choices. Do not rerun its old choice or pick a hidden
-teacher substitute.
-
-## Next bounded objective
-
-Rebuild useful executable options from the exact main-save terminal: legitimate funding and
-metered admission, or a distinct non-Safari acquisition family. Retain one genuinely
-model-selected result and actual costs. Only fit admissible actual goal outcomes.
-J cannot silently run the six-member party; qualify broader scope if the selected work needs it.
-Wild capture and Elite Four remain explicitly separate controllers.
-
-The roadmap lists every missing species, its current catalog method and dependency, plus the
-remaining battle-scope and fresh-run gates. Fresh acceptance remains 0/5; no full run is open.
-Gameplay stopped. No Flash/Claude was used or is pending.
-Pete explicitly authorized this checkpoint's publication and merge; later publication is his decision.
-Next: Astra High, Fast off; 45–90 minutes for main-save options and one bounded result.
+Weights/configuration flags remain fixed; support capability changes are declared.
+Source publication has known lint/type debt and excludes private runtime assets
+and the complete external helper bundle. Inspect GitHub checks for validation,
+not just the existence of a commit. All seven final delivery goals remain open.

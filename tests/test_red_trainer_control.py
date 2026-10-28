@@ -294,6 +294,38 @@ def test_missing_incoming_moves_never_authorize_a_switch():
         subject.choose(state, lambda _: pytest.fail("unsafe attack"))
 
 
+@pytest.mark.parametrize("bound,allowed", [(189, True), (190, False), (191, False)])
+def test_trapping_switch_requires_positive_hp_after_complete_commitment(monkeypatch, bound, allowed):
+    state = raw(enemy=34, hp=(79, 190))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (128, 0, 0, 0)  # Clamp
+    seen = []
+    subject.reader.read_trainer_damage_observation = lambda observed: seen.append(observed) or observed
+    monkeypatch.setattr(control, "incoming_damage_bounds", lambda observed: (300, bound))
+    with pytest.raises(control._SwitchRequest if allowed else RedTrainerControlError):
+        subject.choose(state, lambda _: pytest.fail("unfit lead attacked"))
+    assert seen == [state] and not subject.switches and subject.moves_selected == 0
+
+
+def test_changed_trapping_commitment_blocks_the_switch_before_input(monkeypatch):
+    state = raw(enemy=34, hp=(79, 190))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (128, 0, 0, 0)
+    subject.reader.read_trainer_damage_observation = lambda observed: observed
+    bounds = iter(((300, 189), (300, 190)))
+    monkeypatch.setattr(control, "incoming_damage_bounds", lambda observed: next(bounds))
+    def battle(reader, actions, policy, **kwargs):
+        try:
+            policy(reader.read())
+        except control._SwitchRequest as request:
+            raise BattleRuntimeError("switch boundary") from request
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler", lambda *_a, **_k: pytest.fail("input"))
+    with pytest.raises(RedTrainerControlError, match="entry screen"):
+        run(subject, object())
+    assert not subject.switches and subject.moves_selected == 0
+
+
 def test_good_active_does_not_require_privileged_reserve_observation():
     subject = controller(raw())
     subject.reader.read_trainer_entry_moves = lambda _: pytest.fail("unneeded entry read")

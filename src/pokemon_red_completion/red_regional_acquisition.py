@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import math
 import random
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
+from time import monotonic
+from typing import TypedDict
 
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
+from pokemon_red_completion.gen1_regional_access import closed_remote_cave_entry
 from pokemon_red_completion.global_router import GlobalRouterError, find_macro_path
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_qualification import (
@@ -65,6 +68,11 @@ TARGET_SOURCE_CANDIDATES = 4
 MAXIMUM_ROUTED_SOURCE_EVALUATIONS = 8
 
 
+class _CorridorInputs(TypedDict, total=False):
+    cartridge: bytes
+    reachable_from: tuple[int, int]
+
+
 def _rank_regional_sources(
     sources: tuple[str, ...],
     world: StrategicScenarioRouteWorld,
@@ -72,6 +80,7 @@ def _rank_regional_sources(
     current_map: int,
     last_outside_map: int | None,
     fly_origins: tuple[int, ...] = (),
+    record_diagnostic_event=None,
 ) -> tuple[tuple[str, int], ...]:
     """Put topology-near sources first without claiming they are executable.
 
@@ -85,8 +94,23 @@ def _rank_regional_sources(
         try:
             map_id = int(map_id_for_wild_source(source))
         except RedLivingDexMultifamilyError:
+            if record_diagnostic_event is not None:
+                record_diagnostic_event(
+                    "regional_source_excluded",
+                    dict(source_id=source, reason="source_map_unavailable", phase="topology"),
+                )
             continue
         if map_id not in world.terrain or map_id not in world.local_graphs:
+            if record_diagnostic_event is not None:
+                record_diagnostic_event(
+                    "regional_source_excluded",
+                    dict(
+                        source_id=source,
+                        map_id=map_id,
+                        reason="terrain_or_local_graph_unavailable",
+                        phase="topology",
+                    ),
+                )
             continue
         estimates: list[tuple[int, int]] = []
         for origin, retained, overhead in (
@@ -111,12 +135,20 @@ def _rank_regional_sources(
                     overhead + len(topology.edges),
                 )
             )
-        rank = (
-            (0, *min(estimates), map_id, source)
-            if estimates
-            else (1, 0, 0, map_id, source)
-        )
+        rank = (0, *min(estimates), map_id, source) if estimates else (1, 0, 0, map_id, source)
         ranked.append((rank, source, map_id))
+        if record_diagnostic_event is not None:
+            record_diagnostic_event(
+                "regional_source_topology",
+                dict(
+                    source_id=source,
+                    map_id=map_id,
+                    topology_route_known=bool(estimates),
+                    topology_cost=None if not estimates else min(estimates)[0],
+                    topology_edges=None if not estimates else min(estimates)[1],
+                    executability_not_yet_verified=True,
+                ),
+            )
     ranked.sort(key=lambda item: item[0])
     return tuple((source, map_id) for _rank, source, map_id in ranked)
 
@@ -174,6 +206,9 @@ def enumerate_red_regional_acquisitions(
     maximum_frames: int,
     routed_recovery: bool = False,
     prepare_capture_storage: bool = False,
+    unsupported_remote_maps: frozenset[int] = frozenset(),
+    interruption_handler_wrapper=None,
+    quote_capture_route_work: bool = False,
 ) -> tuple[RedRegionalAcquisitionCandidate, ...]:
     """Return up to four nearby, fully verified ordinary-grass options.
 
@@ -182,7 +217,21 @@ def enumerate_red_regional_acquisitions(
     demand still require supplies, space and a verified route. A fixed expensive-
     evaluation bound avoids a global route scan; every transition is verified live.
     """
+    if not isinstance(unsupported_remote_maps, frozenset) or any(
+        type(m) is not int or not 0 <= m <= 255 for m in unsupported_remote_maps
+    ):
+        raise ValueError("unsupported capture entries must be explicit native map IDs")
+    if interruption_handler_wrapper is not None and not callable(interruption_handler_wrapper):
+        raise TypeError("capture interruption wrapper must be callable")
+    if type(quote_capture_route_work) is not bool:
+        raise TypeError("capture route-work quote permission must be boolean")
     before = actions.actions_executed, runtime.emulator.frame_count
+    record = getattr(actions, "record_diagnostic_event", None)
+
+    def audit(kind, **payload):
+        if callable(record):
+            record(kind, dict(selection_authority="deterministic_candidate_compiler", **payload))
+
     sources = sorted(
         {
             method.source_id
@@ -198,6 +247,7 @@ def enumerate_red_regional_acquisitions(
         sources = sorted(set(sources) | set(cartridge_grass_sources(world.rom)))
     raw_map = observation.raw.map_id
     if raw_map is None:
+        audit("regional_inventory_unavailable", reason="current_map_unknown")
         return ()
     last_outside_map = runtime.reader.read_retained_outside_map()
     fly_origins: tuple[int, ...] = ()
@@ -211,10 +261,7 @@ def enumerate_red_regional_acquisitions(
             or type(last_outside_map) is int  # noqa: E721
             and 0 <= last_outside_map <= 0x24
         )
-        if (
-            int(observation.raw.badge_bits or 0) & int(Badge.THUNDER)
-            and indoor_departure_is_known
-        ):
+        if int(observation.raw.badge_bits or 0) & int(Badge.THUNDER) and indoor_departure_is_known:
             fly_origins = tuple(runtime.reader.read_fly_destinations())
     ranked_sources = _rank_regional_sources(
         tuple(sources),
@@ -222,32 +269,73 @@ def enumerate_red_regional_acquisitions(
         current_map=int(raw_map),
         last_outside_map=last_outside_map,
         fly_origins=fly_origins,
+        record_diagnostic_event=(lambda kind, payload: audit(kind, **payload)),
     )
     candidates: list[RedRegionalAcquisitionCandidate] = []
     routed_source_evaluations = 0
     route_plan_cache: dict[
         tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
     ] = {}
-    for source, map_id in ranked_sources:
+    for source_ordinal, (source, map_id) in enumerate(ranked_sources):
+        source_started = monotonic()
+        # A current local corridor does not need the unavailable entry skill.
+        # This declares execution capability, never a species/goal preference.
+        if map_id in unsupported_remote_maps and map_id != raw_map:
+            audit(
+                "regional_source_excluded",
+                source_id=source,
+                map_id=map_id,
+                reason="unsupported_remote_entry",
+                phase="capability",
+            )
+            continue
+        if closed_remote_cave_entry(
+            world.rom, runtime.reader, current_map=raw_map, target_map=map_id
+        ):
+            audit(
+                "regional_source_excluded", source_id=source, map_id=map_id,
+                reason="native_entry_guard_visible", phase="capability",
+            )
+            continue
         if (
             len(candidates) >= TARGET_SOURCE_CANDIDATES
             or routed_source_evaluations >= MAXIMUM_ROUTED_SOURCE_EVALUATIONS
         ):
+            audit(
+                "regional_sources_unexamined",
+                reason=(
+                    "candidate_cap"
+                    if len(candidates) >= TARGET_SOURCE_CANDIDATES
+                    else "route_evaluation_cap"
+                ),
+                sources=[source_id for source_id, _ in ranked_sources[source_ordinal:]],
+                candidate_count=len(candidates),
+                routed_evaluations=routed_source_evaluations,
+            )
             break
         try:
             excluded = world.object_blockers[map_id]
+            corridor_inputs: _CorridorInputs = {}
             if registered:
                 # A reversible local edge can still land on an automatic map
                 # warp. Such coordinates are not valid survey endpoints.
                 excluded = frozenset(excluded) | frozenset(
                     world.macro_graph.warp_locations.get(map_id, ())
                 )
+                corridor_inputs["cartridge"] = world.rom
+                if map_id == raw_map:
+                    y, x = observation.raw.player_y, observation.raw.player_x
+                    if y is None or x is None:
+                        raise RedLivingDexWildCorridorError(
+                            "wild corridor origin is invalid or excluded"
+                        )
+                    corridor_inputs["reachable_from"] = (y, x)
             corridor = derive_red_living_dex_wild_corridor(
                 RedEncounterSourceTarget(source),
                 world.terrain[map_id],
                 world.local_graphs[map_id],
                 excluded=excluded,
-                **({"cartridge": world.rom} if registered else {}),
+                **corridor_inputs,
             )
             profile = bind_red_local_discovery_profile(
                 retarget_red_wild_profile(runtime.profile, corridor, rom=world.rom),
@@ -260,12 +348,34 @@ def enumerate_red_regional_acquisitions(
                 # encounters at every alternative source so its capture provider
                 # can quote availability without inventing a catalog entry.
                 profile = bind_red_opportunistic_capture_profile(profile, world.rom)
-        except (RedLivingDexMultifamilyError, RedLivingDexWildCorridorError):
+        except (RedLivingDexMultifamilyError, RedLivingDexWildCorridorError) as error:
+            audit(
+                "regional_source_excluded",
+                source_id=source,
+                map_id=map_id,
+                reason="corridor_or_profile_unavailable",
+                phase="corridor",
+                error_type=type(error).__name__,
+                error=str(error),
+            )
             continue
         source_runtime = replace(runtime, profile=profile)
         if not _source_has_acquisition_demand(source_runtime, observation, actions):
+            audit(
+                "regional_source_excluded",
+                source_id=source,
+                map_id=map_id,
+                reason="no_acquisition_demand",
+                phase="demand",
+            )
             continue
         routed_source_evaluations += 1
+        audit(
+            "regional_source_evaluation_started",
+            source_id=source,
+            map_id=map_id,
+            routed_evaluation_ordinal=routed_source_evaluations,
+        )
         routed = RedResourceGoalRouter(
             source_runtime,
             actions,
@@ -273,11 +383,13 @@ def enumerate_red_regional_acquisitions(
             maximum_controller_actions=maximum_actions,
             maximum_emulator_frames=maximum_frames,
             quote_resource_costs=True,
+            quote_capture_route_work=quote_capture_route_work,
             routed_recovery=routed_recovery,
             prepare_capture_items=registered,
             prepare_capture_storage=prepare_capture_storage,
             include_recovery_offers=False,
             route_plan_cache=route_plan_cache,
+            interruption_handler_wrapper=interruption_handler_wrapper,
         ).enumerate_routed_kinds(
             observation,
             frozenset({GoalKind.ACQUIRE_SPECIES}),
@@ -289,6 +401,37 @@ def enumerate_red_regional_acquisitions(
             raise ValueError("regional source supplied multiple capture bindings")
         if bindings:
             candidates.append(RedRegionalAcquisitionCandidate(source, profile, bindings[0]))
+            audit(
+                "regional_source_offered",
+                source_id=source,
+                map_id=map_id,
+                estimated_effort=bindings[0].estimated_effort,
+                estimated_risk=bindings[0].estimated_risk,
+                maximum_cash_debit=bindings[0].maximum_cash_debit,
+                resource_quote=(
+                    None
+                    if bindings[0].resource_quote is None
+                    else asdict(bindings[0].resource_quote)
+                ),
+                source_evaluation_seconds=monotonic() - source_started,
+            )
+        else:
+            audit(
+                "regional_source_excluded",
+                source_id=source,
+                map_id=map_id,
+                reason="no_executable_capture_binding",
+                phase="route_and_resources",
+                opportunities=[
+                    dict(
+                        kind=o.kind.value,
+                        availability=o.availability.value,
+                        reason=None if o.unavailable_reason is None else o.unavailable_reason.value,
+                    )
+                    for o in getattr(routed, "opportunities", ())
+                ],
+                source_evaluation_seconds=monotonic() - source_started,
+            )
     if before != (actions.actions_executed, runtime.emulator.frame_count):
         raise ValueError("regional source enumeration changed the game")
     # Returned bindings already hold their selected plans. Do not retain the
@@ -304,11 +447,13 @@ def cartridge_grass_sources(rom: bytes) -> tuple[str, ...]:
     from pokemon_red_completion.observation import MapId
 
     known = {int(item): item for item in MapId}
-    return tuple(sorted(
-        "wild:" + "".join(part.title() for part in known[map_id].name.split("_")) + ":grass"
-        for map_id, slots in wild_tables(rom, medium="grass").items()
-        if slots and map_id in known and "SAFARI" not in known[map_id].name
-    ))
+    return tuple(
+        sorted(
+            "wild:" + "".join(part.title() for part in known[map_id].name.split("_")) + ":grass"
+            for map_id, slots in wild_tables(rom, medium="grass").items()
+            if slots and map_id in known and "SAFARI" not in known[map_id].name
+        )
+    )
 
 
 def regional_acquisition_menu(

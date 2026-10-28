@@ -22,6 +22,7 @@ from pokemon_red_completion.red_pc_storage import (
     open_reds_pc,
     switch_box,
     withdraw_box_member,
+    withdraw_pc_item_quantity,
     withdraw_single_pc_item,
 )
 
@@ -555,3 +556,136 @@ def test_single_pc_item_withdrawal_proves_exact_item_only_transition() -> None:
     assert report.pc_after == reader.pc_items
     assert dict(report.bag_after)[int(ItemId.SILPH_SCOPE)] == 1
     assert reader.raw.player_money == 206
+
+
+def _quantity_fixture(*, stored=7, owned=0, fault=None, swallowed=0):
+    reader = _Reader()
+    reader.raw = replace(reader.raw, bag_items=((4, 1),) + (((20, owned),) if owned else ()),
+                         player_money=11921)
+    reader.pc_items = ((72, 1), (20, stored), (48, 1))
+    reader.read_pc_items = lambda: reader.pc_items
+    reader.collection = _collection()
+    reader.read_all_box_states = lambda: reader.collection
+    reader.menu = MenuCursorState(0, 0, 3, 1, 2)
+    reader.quantity = 1
+    reader.read_item_quantity_selection = lambda: (
+        21 if fault == "wrong_item" else 20,
+        0 if fault == "invalid_quantity" else reader.quantity,
+    )
+
+    class Port:
+        def __init__(self):
+            self.actions = []
+            self.phase = "red"
+            self.swallowed = swallowed
+            self.confirmed_quantities = []
+
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.WAIT:
+                return
+            if action.kind is MacroActionKind.MOVE:
+                if self.phase == "quantity":
+                    if self.swallowed:
+                        self.swallowed -= 1
+                        return
+                    if fault != "stuck_quantity":
+                        reader.quantity += 1 if action.value == "up" else -1
+                else:
+                    reader.menu = replace(reader.menu, selected_visible_index=
+                        reader.menu.selected_visible_index + (1 if action.value == "down" else -1))
+            elif action.kind is MacroActionKind.CONFIRM:
+                if self.phase == "red":
+                    self.phase = "items"
+                    reader.menu = MenuCursorState(0, 0, 3, 1, 2)
+                elif self.phase == "items":
+                    assert reader.menu.selected_absolute_index == 1
+                    self.phase = "quantity"
+                elif self.phase == "quantity":
+                    self.confirmed_quantities.append(reader.quantity)
+                    self.phase = "done"
+                    if fault == "no_transfer":
+                        return
+                    quantity = reader.quantity + (1 if fault == "wrong_delta" else 0)
+                    bag = ((4, 1), (20, owned + quantity))
+                    reader.raw = replace(reader.raw, bag_items=bag)
+                    reader.pc_items = ((72, 1),) + (
+                        ((20, stored - quantity),) if stored > quantity else ()) + ((48, 1),)
+                    if fault == "money":
+                        reader.raw = replace(reader.raw, player_money=1)
+                    elif fault == "party":
+                        reader.raw = replace(reader.raw, party_species_ids=(1,))
+                    elif fault == "boxes":
+                        reader.collection = None
+                    elif fault == "other_item":
+                        reader.raw = replace(reader.raw, bag_items=((4, 2), (20, owned + quantity)))
+                else:
+                    raise AssertionError("must not confirm again after withdrawal")
+    return reader, Port()
+
+
+@pytest.mark.parametrize("stored,owned,quantity", [(7, 0, 7), (7, 0, 3), (7, 5, 4),
+                                                   (1, 0, 1), (99, 0, 99), (7, 92, 7)])
+@pytest.mark.parametrize("swallowed", [0, 2])
+def test_quantity_withdrawal_full_partial_merge_and_swallowed_inputs(
+    stored, owned, quantity, swallowed,
+):
+    reader, port = _quantity_fixture(stored=stored, owned=owned, swallowed=swallowed)
+    report = withdraw_pc_item_quantity(port, reader, item_id=20, quantity=quantity,
+                                      timing=RedPCStorageTiming(wait_frames=1))
+    assert report.passed and report.quantity == quantity
+    assert dict(report.bag_after)[20] == owned + quantity
+    assert dict(report.pc_after).get(20, 0) == stored - quantity
+    assert port.confirmed_quantities == [quantity]
+    assert not replace(report, quantity=quantity + 1).passed
+    assert not replace(report, bag_after=((20, 99),)).passed
+
+
+@pytest.mark.parametrize("quantity", [0, -1, 100, True, 1.5, "7"])
+def test_quantity_rejects_invalid_request_without_input(quantity):
+    reader, port = _quantity_fixture()
+    with pytest.raises(ValueError):
+        withdraw_pc_item_quantity(port, reader, item_id=20, quantity=quantity)
+    assert not port.actions
+
+
+@pytest.mark.parametrize("fault", ["short", "full", "overflow", "duplicate", "battle"])
+def test_quantity_rejects_inventory_preconditions_without_input(fault):
+    reader, port = _quantity_fixture(owned=93 if fault == "overflow" else 0)
+    if fault == "short":
+        reader.pc_items = ((20, 6),)
+    elif fault == "full":
+        reader.raw = replace(reader.raw, bag_items=tuple((i, 1) for i in range(30, 50)))
+    elif fault == "duplicate":
+        reader.pc_items = ((20, 7), (20, 7))
+    elif fault == "battle":
+        reader.raw = replace(reader.raw, battle_state=2)
+    with pytest.raises(RedPCStorageError):
+        withdraw_pc_item_quantity(port, reader, item_id=20, quantity=7)
+    assert not port.actions
+
+
+def test_singleton_contract_still_rejects_stacks_and_existing_bag_item():
+    for stored, owned in [(7, 0), (1, 1)]:
+        reader, port = _quantity_fixture(stored=stored, owned=owned)
+        with pytest.raises(RedPCStorageError):
+            withdraw_single_pc_item(port, reader, item_id=20)
+        assert not port.actions
+
+
+@pytest.mark.parametrize("fault", ["wrong_item", "invalid_quantity", "stuck_quantity",
+    "no_transfer", "wrong_delta", "money", "party", "boxes", "other_item"])
+def test_quantity_faults_stop_without_repeat_transaction(fault):
+    reader, port = _quantity_fixture(fault=fault)
+    with pytest.raises(RedPCStorageError):
+        withdraw_pc_item_quantity(port, reader, item_id=20, quantity=4,
+                                  timing=RedPCStorageTiming(wait_frames=1))
+    assert len(port.confirmed_quantities) <= 1
+    assert len(port.actions) < 300
+
+
+def test_quantity_reader_keeps_revision_specific_reads_inside_adapter():
+    class Memory:
+        def read_u8(self, address):
+            return {RamAddress.SHOP_SELECTED_ITEM: 20, RamAddress.SHOP_QUANTITY: 7}[address]
+    assert PokemonRedStateReader(Memory()).read_item_quantity_selection() == (20, 7)

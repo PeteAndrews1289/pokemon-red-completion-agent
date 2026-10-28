@@ -5,6 +5,7 @@ from types import SimpleNamespace
 import pytest
 from test_red_goal_context import _ActionDelegate
 from test_registered_runtime_binding import bound_fixture
+from synthetic_evolution_cartridge import synthetic_evolution_cartridge
 
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import GoalKind
@@ -23,7 +24,7 @@ def test_registered_native_stock_respects_actual_reserve_without_input(
         lambda _: {22: [(10, 0x21), (15, 0x6C)]},
     )
     runtime, _, _ = bound_fixture(tmp_path, count=copies, reserve=reserve)
-    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"fixture"))
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=synthetic_evolution_cartridge()))
     actions = CountingExecutor(_ActionDelegate())
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert (offer.binding is not None) is available
@@ -36,7 +37,7 @@ def test_globally_registered_target_is_not_reoffered_with_extra_local_stock(tmp_
         lambda _: {22: [(10, 0x21), (15, 0x6C)]},
     )
     runtime, _, _ = bound_fixture(tmp_path, count=3, inherited=(78,))
-    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"fixture"))
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=synthetic_evolution_cartridge()))
     actions = CountingExecutor(_ActionDelegate())
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert offer.binding is None
