@@ -59,6 +59,62 @@ def test_empty_endpoint_fails_closed(tmp_path):
     assert not (tmp_path / "final.state").exists()
 
 
+def test_endpoint_cleanup_releases_held_input_before_save(tmp_path):
+    calls = []
+
+    class Emulator:
+        frame_count = 0
+
+        def __init__(self):
+            self.pressed_buttons = {"a"}
+
+        def release(self, button):
+            calls.append(("release", button))
+            self.pressed_buttons.remove(button)
+
+        def save_state_bytes(self):
+            calls.append(("save", tuple(sorted(self.pressed_buttons))))
+            return b"released-final-state"
+
+    emulator = Emulator()
+    with (
+        pytest.raises(RuntimeError, match="actor failed"),
+        retained_session(emulator, maximum_frames=10, output=tmp_path),
+    ):
+        raise RuntimeError("actor failed")
+
+    assert calls == [("release", "a"), ("save", ())]
+    receipt = json.loads((tmp_path / "final-state.json").read_bytes())
+    assert receipt["pressed_buttons_before_cleanup"] == ["a"]
+    assert receipt["pressed_buttons"] == []
+
+
+def test_endpoint_cleanup_release_failure_prevents_save(tmp_path):
+    calls = []
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = {"a"}
+
+        def release(self, button):
+            calls.append(("release", button))
+            raise RuntimeError("release failed")
+
+        def save_state_bytes(self):
+            calls.append("save")
+            return b"must-not-be-written"
+
+    with (
+        pytest.raises(RuntimeError, match="release failed"),
+        retained_session(Emulator(), maximum_frames=10, output=tmp_path),
+    ):
+        pass
+
+    assert calls == [("release", "a")]
+    assert not (tmp_path / "final.state").exists()
+    assert not (tmp_path / "final-state.json").exists()
+
+
 def test_new_team_source_plan_does_not_reuse_consumed_brock_boots():
     assert TEAM_BOOT_FRAMES == (2900, 3100)
     assert not set(BOOT_FRAMES) & set(TEAM_BOOT_FRAMES)

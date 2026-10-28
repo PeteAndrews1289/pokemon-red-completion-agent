@@ -1,0 +1,101 @@
+{
+  "audit_helper_sha256": "6185a32ccf9bd26a2906a03148087c7af641a63d9f84a2f4506242cc5101098b",
+  "authority_promotions": 0,
+  "battle_choices": 0,
+  "campaign_next_unused_stage": 369,
+  "campaign_unchanged": true,
+  "cases": [
+    {
+      "actions": 0,
+      "case": 1,
+      "error": "max_replans must be a positive integer",
+      "final_record_sha256": "64f4dc92097b4b32447cd911b8618aed0678b25daf839a7d4dba6ab436a1c454",
+      "frames": 0,
+      "plan_sha256": "e2e1dbdc5340f4daf97e7229c3e60a1760f7c6fea445da825f63fbc5944f108e",
+      "resources_preserved": true,
+      "seconds": 0.04333112481981516,
+      "terminal_sha256": "5bf49331533816a5b827ba0ecc01522adde8ae38d02da14e48a35144aaeb7159"
+    },
+    {
+      "actions": 23,
+      "case": 2,
+      "error": "route drifted after up: expected (245, (9, 4)), observed (245, (5, 4))",
+      "final_record_sha256": "df410539a538f5be5f7dacada533e21f90bd3d703a163c1053dcff88a370adfd",
+      "frames": 864,
+      "plan_sha256": "7ec8e4ac9ba0fdd7ff9bed79e0d8c78147741b61d97cd8cb2da2ead02b58416b",
+      "resources_preserved": true,
+      "seconds": 0.09153483295813203,
+      "terminal_sha256": "baa6dbef40cdff691002e372d6b2d51ce2ec52ba66a0672c1352f20a5ec73d19"
+    },
+    {
+      "actions": 23,
+      "case": 3,
+      "error": null,
+      "final_record_sha256": "88e6fa250289d345235db3d2bf683cd13a6778216b992c8848b544664a02b57e",
+      "frames": 1032,
+      "plan_sha256": "811bb02e76c1a60bb07eda348116348629284357b1c325851938427de7656d01",
+      "resources_preserved": true,
+      "seconds": 0.10658762510865927,
+      "terminal_sha256": "3bc30173b1b29fa3570493af033aaefda3d43ecca35eb6fa48defd67d02990e6"
+    }
+  ],
+  "collection_ledger_preserved": true,
+  "envelope_sha256": "dbd7cb35d6ec5a1e1e8c17e4ff9f8b0b3f6a779712ebf1a4ca847b1387d26c88",
+  "exact_event_projection_verified": true,
+  "party_including_xp_preserved": true,
+  "passed": true,
+  "read_only_audit_frames": 0,
+  "registrations": 0,
+  "schema": "pokemon.red.post-loss-copy-qualification.v1",
+  "source_sha256": "5bf49331533816a5b827ba0ecc01522adde8ae38d02da14e48a35144aaeb7159",
+  "terminal_fit_allowed": false,
+  "training_examples": 0,
+  "classification": "maintenance_unblocking_learned_preparation_choice",
+  "result": "native_lobby_reset_and_six_step_entry_verified_on_retained_development_copy",
+  "private_audit_sha256": "20a84b96a9611d8a397af86c9bb17ea8eca151e4fd62ce0c35147c98bfc35fae",
+  "two_offer_preflight_sha256": "c88a3fec8ee003050a33263a6aa79cf7c7b214c8f671f2e40acbbfff90265a46",
+  "tests": {
+    "focused_passed": 486,
+    "new_cases": 7,
+    "full_suite_run": false
+  },
+  "source_files": {
+    "red_trainer_story_py": "3fb0099d14a98131f5faf02fbcb4c209dad2098da81e1cbc56d5f4c2f0e7c65c",
+    "red_league_entry_py": "3a2e45b2ed2a55fa30ad9af404d2b83be1b481380dc76230dd06f789bda2cc5b"
+  },
+  "correction": "The outside save's consumed auto-walk event is cleared natively by the intervening lobby. Reuse existing projected_fresh_league_events with observed latch, validate exact live lobby reset before entry. No RAM edits.",
+  "scope": {
+    "partition": "DEVELOPMENT",
+    "independent_root": false,
+    "train_eligible": false,
+    "campaign_promotion": false,
+    "battles": 0,
+    "first_entry_six_step_qualified": true,
+    "two_push_warning_branch_native_qualified": false,
+    "full_provider_dispatch_qualified": false
+  },
+  "available_kinds": [
+    "advance_story",
+    "develop_team"
+  ],
+  "route_steps": {
+    "entry_only": 21,
+    "story_approach": 24,
+    "preparation_outward": 69,
+    "preparation_return": 69
+  },
+  "campaign": {
+    "stage": 368,
+    "next_unused_stage": 369,
+    "map": 9,
+    "position": [
+      6,
+      9
+    ],
+    "cash": 13673,
+    "story_objectives": 30,
+    "local_registrations": 17,
+    "gameplay_running": false
+  },
+  "next": "Disjoint TRAIN preparation/continuation consequences and compatible strategy learning; no more schema-only rounds. Preserve campaign and all copy outcomes."
+}

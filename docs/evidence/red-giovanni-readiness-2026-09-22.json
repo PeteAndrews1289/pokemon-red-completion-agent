@@ -1,0 +1,502 @@
+{
+  "action_counts": {
+    "attack": 252,
+    "forced_switch": 2,
+    "switch_prompt": 0,
+    "voluntary_switch": 242
+  },
+  "attempt_cap": 40,
+  "audit_frames": 0,
+  "authority_promotions": 0,
+  "badges": 7,
+  "cash_after": 25262,
+  "cash_before": 25262,
+  "current_blocker": "Forced-motion destination is absent from route planning; longer waits alone do not repair spinner paths.",
+  "envelope_sha256": "3df9352c11f42c5883f45780a9f6bff9c910faf96923d7eb9ebc8a41ec79a64c",
+  "excursion_stop_reasons": {
+    "battle_exited_without_win": 7,
+    "encounter_limit": 11,
+    "party_fainted": 2,
+    "party_status": 19,
+    "trainee_target_reached": 1
+  },
+  "failed_gameplay_stages": 3,
+  "final_sha256": "4b451a4d850ecc7fa3204bfd9c9ce751e714428913d6f57a00df96004094d72d",
+  "final_stage": 283,
+  "fits": 0,
+  "full_recovery": true,
+  "gameplay_running": false,
+  "goal_choices": 0,
+  "gym_battles": 0,
+  "leader_defeated": false,
+  "limitations": [
+    "One earned DEVELOPMENT lineage; not independent transfer or a fresh-run exam.",
+    "Preparation targets, trainees, venue, navigation and healing are support, not model-selected goals.",
+    "XP is earned game progression, not model-weight training. No fit or authority promotion.",
+    "Route15 incurred frequent status and nonwinning exits; Route16 revision preserved original costs/cap.",
+    "Giovanni contract has ROM-free checks but has not yet been exercised in native gameplay.",
+    "Preparation completed, but Giovanni was not fought. Three retained support failures include the unresolved spinner route.",
+    "Native Fly was not replayed after repair; real retained event delta and ROM-free full Fly tests verify the narrow event rule."
+  ],
+  "local_registrations": 17,
+  "map_id": 45,
+  "measurements": {
+    "actions": 22579,
+    "battles": 160,
+    "decisions": 496,
+    "excursions": 40,
+    "frames": 1617792,
+    "no_progress_excursions": 3,
+    "nonwinning_exits": 7,
+    "party_faints": 2,
+    "party_hp_lost": 2028,
+    "party_pp_spent": 239,
+    "party_status_changes": 32,
+    "selected_trainee_xp": 17885,
+    "wins": 153
+  },
+  "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "native_execution_seconds": 415.50226529780775,
+  "native_giovanni_contract": {
+    "defeated_event": 81,
+    "trainer_identity": [
+      229,
+      29,
+      3
+    ],
+    "victory_badge_bits": 128,
+    "victory_items": [
+      [
+        227,
+        1
+      ]
+    ],
+    "victory_money": 4950
+  },
+  "next_stage": 284,
+  "next_work": "Model native forced-motion edges from cartridge terrain, test blocked routes, then resume the retained gym state without replay.",
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    108,
+    102,
+    156,
+    84,
+    156
+  ],
+  "party_levels": [
+    39,
+    39,
+    50,
+    39,
+    33
+  ],
+  "party_progress": [
+    {
+      "level_after": 50,
+      "level_before": 50,
+      "species_id": 28,
+      "xp_gained": 82
+    },
+    {
+      "level_after": 39,
+      "level_before": 38,
+      "species_id": 118,
+      "xp_gained": 4130
+    },
+    {
+      "level_after": 39,
+      "level_before": 36,
+      "species_id": 64,
+      "xp_gained": 12644
+    },
+    {
+      "level_after": 39,
+      "level_before": 36,
+      "species_id": 104,
+      "xp_gained": 11332
+    },
+    {
+      "level_after": 33,
+      "level_before": 30,
+      "species_id": 132,
+      "xp_gained": 10437
+    }
+  ],
+  "position": [
+    11,
+    18
+  ],
+  "preparation_audit_sha256": "475402980719d9f2a99588d6f746a45394c7ab964ec8faef68dd0dfaab3cb1de",
+  "preparation_complete": true,
+  "preparation_terminal_stage": 278,
+  "qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+  "recovered_interruptions": 2,
+  "recovery_anchor_map": 6,
+  "registration_delta": 0,
+  "sales": 0,
+  "save_edits": 0,
+  "schema": "pokemon.red.giovanni-readiness-session.v1",
+  "source_commit": "fa57e4738e211e97d154a802b12f7d03021fa403",
+  "source_reference": "https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/scripts/ViridianCity.asm",
+  "source_replays": 0,
+  "source_sha256": "551dc9fd521fc28622bfad9c064d1b61f561897f9f7f82afcca7a309fa6dfda9",
+  "source_stage": 236,
+  "stages": [
+    {
+      "attempt_sha256": "61f26ea2557379024674cb7aaaee0ef271f031c55f329002988a1cb653d7c437",
+      "final_sha256": "1fe3dafedbbb733cfcb5410fbbafda841e1eccea69b0219925ff58111adf7fd9",
+      "source_sha256": "0a8c240f54b6a1c7dc3ea132306a385f56b0a635396252c8b6dc42d88e4fde77",
+      "stage": 238,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "24f11d5defa29abfc53fa833db718692900f709eb5fc016b2f595394b2b4cfbb",
+      "final_sha256": "a278888c6e9a5deb390f84823fed298feded7f52f94a488af5d4d6d9a1d3c206",
+      "source_sha256": "1fe3dafedbbb733cfcb5410fbbafda841e1eccea69b0219925ff58111adf7fd9",
+      "stage": 239,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "f9166e3eee4365500bd99f625db8e6b1891ce3a7916c4c89d2244447ab501bbb",
+      "final_sha256": "511ee965b781dc219b65ed85b2271b32f101a58fee5462dfd34c6e120dd56416",
+      "source_sha256": "a278888c6e9a5deb390f84823fed298feded7f52f94a488af5d4d6d9a1d3c206",
+      "stage": 240,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "66905f557bf5eb5344808b47fd72945de2e304367a093140ea87ddff72fbd826",
+      "final_sha256": "7e7f0fef32d18f0626ee40632c30595b497d818bded926e954be799fc9a1a939",
+      "source_sha256": "511ee965b781dc219b65ed85b2271b32f101a58fee5462dfd34c6e120dd56416",
+      "stage": 241,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "81ef30615298adfd987363ebc1e1bd5b1bfdcd1e628d60faaf23cba97afb43ef",
+      "final_sha256": "d4fb19b31498c6d04397256b90838ac81651d74239c436033a2662441c2518b2",
+      "source_sha256": "7e7f0fef32d18f0626ee40632c30595b497d818bded926e954be799fc9a1a939",
+      "stage": 242,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "b96f6231ca11c2c2b0f520ac0229ddb25c12e4fd6ed50c3da40b39967f5e70a6",
+      "final_sha256": "94bf722890d09fd1c266bfb2661f44f0ccf35fef5c68bdd81dc025ce2866da54",
+      "source_sha256": "d4fb19b31498c6d04397256b90838ac81651d74239c436033a2662441c2518b2",
+      "stage": 243,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "cfb616a3b9f41fef4c0d26e1fb31a597ba56851c4dda068bc082ac54753a975f",
+      "final_sha256": "1c1252cd1999e6eeb4cc6b4359b85e01548f2b6c04183a04d2f4fcbc810f660d",
+      "source_sha256": "94bf722890d09fd1c266bfb2661f44f0ccf35fef5c68bdd81dc025ce2866da54",
+      "stage": 244,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "07fba013c00655e995479e3a1e54b3a0848ec4a7c7aeff301f76734200ece33a",
+      "final_sha256": "91b9d45794c7280065c0f60427ded09ea5a7ef03342b9b2d35c997b33ebc40e6",
+      "source_sha256": "1c1252cd1999e6eeb4cc6b4359b85e01548f2b6c04183a04d2f4fcbc810f660d",
+      "stage": 245,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "209262b89792e6ad7c6ad01937f59339b6656379717d81f6c2b866a73b189e52",
+      "final_sha256": "6444229c33f3162be3caa4fd9716261eba250fbf2d2993d7d3f627ceae8ff167",
+      "source_sha256": "91b9d45794c7280065c0f60427ded09ea5a7ef03342b9b2d35c997b33ebc40e6",
+      "stage": 246,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "cd9581ddfbceedf0e9575d4783dfbe3540919156b084fa22e01c8c79756b834b",
+      "final_sha256": "fb95503cdf277ac997e9c62e8203673f61fdc62f260419eaf9fc0fe156757f3e",
+      "source_sha256": "6444229c33f3162be3caa4fd9716261eba250fbf2d2993d7d3f627ceae8ff167",
+      "stage": 247,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "cc045cae8520116f7b9824e150c33ba5f16f34ddcb7c0e3cba3517ab0dbc3dbc",
+      "final_sha256": "27220f10a36c678e84b701e1a5ec69ef3e85f55e16f2702dfe765cffca2efd9a",
+      "source_sha256": "fb95503cdf277ac997e9c62e8203673f61fdc62f260419eaf9fc0fe156757f3e",
+      "stage": 248,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "6991881852d0ac142159808fb44cb0d22e660ddd1c15707039f26d8aeac0ceaa",
+      "final_sha256": "69dc2bb89a631e1e4a0dca3566ae7e8853231293778e6920d8c695faa7ee4b94",
+      "source_sha256": "27220f10a36c678e84b701e1a5ec69ef3e85f55e16f2702dfe765cffca2efd9a",
+      "stage": 249,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "082dd758bb679739b0675559cbb12efcb09ed2e208220e12d7003fa3c4a8d7cd",
+      "final_sha256": "ef24df1be3a6a8915969ddfbd5b64c192e1253c39a8a6675e5949132c15e59ed",
+      "source_sha256": "69dc2bb89a631e1e4a0dca3566ae7e8853231293778e6920d8c695faa7ee4b94",
+      "stage": 250,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "a73dd0839318c37cdd3ba2e29946f661f9fea2c66a6e5438f04f3d9fd129e1a0",
+      "final_sha256": "3680d5e3bc37108f6c05437edd3a3dc02ae57b8a7dd614ba2a8e71158dcb7c51",
+      "source_sha256": "ef24df1be3a6a8915969ddfbd5b64c192e1253c39a8a6675e5949132c15e59ed",
+      "stage": 251,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "59bde173c303d8b362babf045ad9bfa72583a6cc5b154434839dd293cec1bdbb",
+      "final_sha256": "e72ba8f31f5bb9b2701f46c60578f1d7fdc0119bc03497906b6d253d8630757b",
+      "source_sha256": "3680d5e3bc37108f6c05437edd3a3dc02ae57b8a7dd614ba2a8e71158dcb7c51",
+      "stage": 252,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "b0d1777bb80136439035199628cc58ad0c1d196236885e2214d6200fd82442e6",
+      "final_sha256": "6e808daf507f9ad5dc0cc8333a6487607c0bf64d01b07fa6c5f1abea3bdd6f02",
+      "source_sha256": "e72ba8f31f5bb9b2701f46c60578f1d7fdc0119bc03497906b6d253d8630757b",
+      "stage": 253,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "e4e15e4e29ff1b15e9078f817ac96a72151cb0580b59869154e2ae363e837d48",
+      "final_sha256": "2ceb64a76111f1de2fbae54fcd4db4f502d7f1fb62da17d623dcafe7cd6d235f",
+      "source_sha256": "6e808daf507f9ad5dc0cc8333a6487607c0bf64d01b07fa6c5f1abea3bdd6f02",
+      "stage": 254,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "7477a8dfaf95686044a66457dbefe944e2fef93980f9b0c94b5115aae9f4abb0",
+      "final_sha256": "fce70f727d8a9b143d613dbb6e8ef508f922136a5d726c889b5ac8bf8e0d15f5",
+      "source_sha256": "2ceb64a76111f1de2fbae54fcd4db4f502d7f1fb62da17d623dcafe7cd6d235f",
+      "stage": 255,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "f0d0c03ae39498dfceaea79c11654994ff5a3e4bbb18f852f6340840cd511405",
+      "final_sha256": "797592ee453f39ff594f685e2521460650d71601ee81152c5da6e55294684c1f",
+      "source_sha256": "fce70f727d8a9b143d613dbb6e8ef508f922136a5d726c889b5ac8bf8e0d15f5",
+      "stage": 256,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "9379af8da5b7c32cae18ab950cf350f7971e8982cd0cb424fedab8bc331de25e",
+      "final_sha256": "54e8e56cb381b6d94e26328405d1c24909f5fdc116360a86e5b0b29b969b96de",
+      "source_sha256": "797592ee453f39ff594f685e2521460650d71601ee81152c5da6e55294684c1f",
+      "stage": 257,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "725da2a20f80bde8fbc78389bd3c92c9632d7bf35d3947012965e76c182afbc9",
+      "final_sha256": "daf09e72a0cfce67f28f2feb7610ed695a2cef32e5eb29306bfe7cb6e0c94d7b",
+      "source_sha256": "54e8e56cb381b6d94e26328405d1c24909f5fdc116360a86e5b0b29b969b96de",
+      "stage": 258,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "1af3e2bcddb871f73361b496393ff3432cb1c9d08c9c804dc750838ca8debb64",
+      "final_sha256": "ec0bbbd82000a85f42ec4f6f63366104f966c4fdbfd6d510be43e6d1bc7e7c6f",
+      "source_sha256": "daf09e72a0cfce67f28f2feb7610ed695a2cef32e5eb29306bfe7cb6e0c94d7b",
+      "stage": 259,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "aead4d799a6f6cb2e600ab1b77adf83a63aca53d62e829181f2937954a8669ba",
+      "final_sha256": "6998130a71579a63a49b4122897160a83144b5176f786f16f96baf4798c24739",
+      "source_sha256": "ec0bbbd82000a85f42ec4f6f63366104f966c4fdbfd6d510be43e6d1bc7e7c6f",
+      "stage": 260,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "23d8168f3f0d2d485a9d1919c4a855663f4c4b8b911850f39244293286f016db",
+      "final_sha256": "05f6e4105449138786816ba11f74e6a5396fbe6de59da79e9bd51edd06d363bf",
+      "source_sha256": "6998130a71579a63a49b4122897160a83144b5176f786f16f96baf4798c24739",
+      "stage": 261,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "cdfc2024e3f8dd455c393a36ccca0868bdf1e70e95ffdf2ca17f97576cb3765e",
+      "final_sha256": "6a435eb9839f71408ecf6d2af63230dd4cb61549cd14c6b5b0671e6261237db1",
+      "source_sha256": "05f6e4105449138786816ba11f74e6a5396fbe6de59da79e9bd51edd06d363bf",
+      "stage": 262,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "2e278237859476e8b2e189bf6416f292a9031cff27e126e51f8e4eb3ae706e3c",
+      "final_sha256": "f698fa550a65e0127d070469636cc2ea980c9b292553bbae444112722648357a",
+      "source_sha256": "6a435eb9839f71408ecf6d2af63230dd4cb61549cd14c6b5b0671e6261237db1",
+      "stage": 263,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "190edcb8de062918de72777026c86682a1c0c5e7caba268d9fdf647d6c505ae1",
+      "final_sha256": "ea5cde133a8b5111f697fed6c8412511fcf53aa1695ba35efcdd39e0b924ab92",
+      "source_sha256": "f698fa550a65e0127d070469636cc2ea980c9b292553bbae444112722648357a",
+      "stage": 264,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "e0217eb0c6086e09511ea6e11d661f5ecf7ec4a959a9f4b0ec676883bf992f14",
+      "final_sha256": "857d061dd54a7caf01ae1dbaf84341f4b2f14f42ba04109da5b3c5181c7c65b0",
+      "source_sha256": "ea5cde133a8b5111f697fed6c8412511fcf53aa1695ba35efcdd39e0b924ab92",
+      "stage": 265,
+      "venue": "wild:route_15:grass"
+    },
+    {
+      "attempt_sha256": "2c0d4c0c6c65beb4dd65e221f350bc0ebcc6171e80845cc49f27f32b47d7b35d",
+      "final_sha256": "aac8c8e6702880ddcc67a3ea24a55ea426d651a6ac34ca526f319d6c36548a4e",
+      "source_sha256": "617b70f702354da2a2e03b8a0aed185c1cb70b81a8fc185e3008c344a234c150",
+      "stage": 267,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "7ccda738d4b256d3c8ed17cb31962ce76cc760f8eff04e3d5020e5527f3fa318",
+      "final_sha256": "926e9f324b955fe5de2621fe9415866992f7f8450ab32c060ab228237b0a8322",
+      "source_sha256": "aac8c8e6702880ddcc67a3ea24a55ea426d651a6ac34ca526f319d6c36548a4e",
+      "stage": 268,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "da424bf9bb44463dfd5ad4ac664202bdea5da73dfdc95656e2650d385d38c110",
+      "final_sha256": "81a1e5d7e0e902ed45fda0d07eb57c1c8d22c701f3219438e1a483b12ea293ef",
+      "source_sha256": "926e9f324b955fe5de2621fe9415866992f7f8450ab32c060ab228237b0a8322",
+      "stage": 269,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "6774a3667e238aaeb0e8cbb4528e850a2021b81a42f6a154ff2be150d170929a",
+      "final_sha256": "1d78ffe20f7892e201ba3a56b5a117c7569753bb108e0a8bb6abdb32de00e4d1",
+      "source_sha256": "81a1e5d7e0e902ed45fda0d07eb57c1c8d22c701f3219438e1a483b12ea293ef",
+      "stage": 270,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "fa9cda8691a350d989b43c092ffd1e111f3b33e32c3231d60e4f656a1b3a6fe0",
+      "final_sha256": "eb7044e9c5e7c1eb1b40523385879ca3f131193fad4d201125dfc8ec74a0bc2f",
+      "source_sha256": "1d78ffe20f7892e201ba3a56b5a117c7569753bb108e0a8bb6abdb32de00e4d1",
+      "stage": 271,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "380a55fa567d1af0aa7c739db199288edcb814eacb36c47837b346ec07973bc4",
+      "final_sha256": "bb6a59b1daa6f3a8964203fd11d4ad52b4469d2fe45effc0a4590dd25a386677",
+      "source_sha256": "eb7044e9c5e7c1eb1b40523385879ca3f131193fad4d201125dfc8ec74a0bc2f",
+      "stage": 272,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "e7570752f8e409369c8fa496b38519cc4489b59bd8d7eddfce818585b5872804",
+      "final_sha256": "be5503779f2a7744a414a7d6e5221b69b939ddf8371be860a6d17036541a6307",
+      "source_sha256": "bb6a59b1daa6f3a8964203fd11d4ad52b4469d2fe45effc0a4590dd25a386677",
+      "stage": 273,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "e9d9082e1f966e8b1a9854043f19ffbd23cd0f70ce40bbf532737608e7c33f43",
+      "final_sha256": "4f6a4f33c704fcaf4a38cd7d524ba5f0ac5ebfeebb312ed8370ebf15f3bc09ec",
+      "source_sha256": "be5503779f2a7744a414a7d6e5221b69b939ddf8371be860a6d17036541a6307",
+      "stage": 274,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "9153ed84ae3f6a2bd0b6d4d9192e81a2381ff2e860bbbddbef88a31f7a8da4ef",
+      "final_sha256": "1d70ca4b4b17a29bd20bde12046e8cbf30882dd2bf7c16f0761e1d4aebff8fc2",
+      "source_sha256": "4f6a4f33c704fcaf4a38cd7d524ba5f0ac5ebfeebb312ed8370ebf15f3bc09ec",
+      "stage": 275,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "4b7419cd37b8e5f07940812c2e0f166e598a8fee6e51a825d13f238c9a786010",
+      "final_sha256": "ef308bbfa282ed44e913e929f978ba1d0a443a154e1d2e0a689e28c53a3e24c0",
+      "source_sha256": "1d70ca4b4b17a29bd20bde12046e8cbf30882dd2bf7c16f0761e1d4aebff8fc2",
+      "stage": 276,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "e5f710865a7d4144c89fe3133eca0846a078e048e3cba822ef6ea38a0c088f71",
+      "final_sha256": "8d7cea38267c33653afc4e38388e33b5ebde336c55f8d2e720cd6658dd6efdc0",
+      "source_sha256": "ef308bbfa282ed44e913e929f978ba1d0a443a154e1d2e0a689e28c53a3e24c0",
+      "stage": 277,
+      "venue": "wild:route_16:grass"
+    },
+    {
+      "attempt_sha256": "268bc5c5795830c07f4fed0c776e3d89ded9fad6d95de34241665a88e4e7779d",
+      "final_sha256": "8f35260fad8e1317bdadf8155a0b025658e1749e0038071fbe0a07558d3faa45",
+      "source_sha256": "8d7cea38267c33653afc4e38388e33b5ebde336c55f8d2e720cd6658dd6efdc0",
+      "stage": 278,
+      "venue": "wild:route_16:grass"
+    }
+  ],
+  "story_objectives": 28,
+  "support_reporting_correction": "Stage280 claimed anchor registration, but the full-party healing helper skipped interaction. Read-only terminal observation proves the native anchor remains Celadon6, not Viridian.",
+  "support_stages": [
+    {
+      "actions": 21,
+      "error": "Fly changed protected party or story resources",
+      "final_sha256": "6b212cdef2d78164265d7047a9bf93b8efb219f76867f4ecf0f1d614c75e35af",
+      "frames": 1848,
+      "safe": true,
+      "source_sha256": "8f35260fad8e1317bdadf8155a0b025658e1749e0038071fbe0a07558d3faa45",
+      "stage": 279
+    },
+    {
+      "actions": 79,
+      "error": null,
+      "final_sha256": "bfc88acfb2f4f35d0808cd5c7e8a511c443387e625d25e045134a5bc935e1803",
+      "frames": 3144,
+      "safe": true,
+      "source_sha256": "6b212cdef2d78164265d7047a9bf93b8efb219f76867f4ecf0f1d614c75e35af",
+      "stage": 280
+    },
+    {
+      "actions": 34,
+      "error": "route never regained input readiness",
+      "final_sha256": "b876bdf8b8be3d71d77c1f784a72f167c85b0b9ab93d7a2c706e4c840ff737bd",
+      "frames": 816,
+      "safe": false,
+      "source_sha256": "bfc88acfb2f4f35d0808cd5c7e8a511c443387e625d25e045134a5bc935e1803",
+      "stage": 281
+    },
+    {
+      "actions": 1,
+      "error": null,
+      "final_sha256": "695302b07fba077fd7014299dc87438ea8a317314ee7c2ded11f0476fcd6b3a1",
+      "frames": 120,
+      "safe": true,
+      "source_sha256": "b876bdf8b8be3d71d77c1f784a72f167c85b0b9ab93d7a2c706e4c840ff737bd",
+      "stage": 282
+    },
+    {
+      "actions": 27,
+      "error": "ready step source expected (45, (2, 18), 'land'), observed (45, (11, 18), 'land')",
+      "final_sha256": "4b451a4d850ecc7fa3204bfd9c9ce751e714428913d6f57a00df96004094d72d",
+      "frames": 648,
+      "safe": true,
+      "source_sha256": "695302b07fba077fd7014299dc87438ea8a317314ee7c2ded11f0476fcd6b3a1",
+      "stage": 283
+    }
+  ],
+  "teacher_battle_queries": 0,
+  "unmet_targets": [],
+  "venues": {
+    "wild:route_15:grass": {
+      "actions": 13512,
+      "battles": 69,
+      "excursions": 28,
+      "frames": 925200,
+      "party_xp": 18709,
+      "selected_trainee_xp": 8029,
+      "wins": 62
+    },
+    "wild:route_16:grass": {
+      "actions": 8702,
+      "battles": 91,
+      "excursions": 12,
+      "frames": 667128,
+      "party_xp": 19916,
+      "selected_trainee_xp": 9856,
+      "wins": 91
+    }
+  },
+  "verification": {
+    "targeted_tests_passed": 216,
+    "full_suite_run": false,
+    "publication": false
+  }
+}

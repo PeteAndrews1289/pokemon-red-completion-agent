@@ -5,14 +5,16 @@ likely to produce a transferable player and shared verified registered Pokédex 
 evaluation contract. Improving a fixed Red route is maintenance unless it unblocks a named learned
 decision or verification result.
 
-Before opening a change:
+Follow the current North Star's development contract;historical packets do not add
+per-edit approval or full-suite requirements. Before opening a change:
 
 1. Keep ROMs, saves, snapshots, recordings, datasets, checkpoints, credentials, and private paths
    outside the repository.
 2. Preserve the separation between actor decisions and read-only verification.
 3. Give every new quest objective a machine-checkable completion condition.
 4. Give every specialist bounded outcomes: `success`, `retry`, `replan`, or `fatal`.
-5. Add ROM-free tests and run:
+5. Add relevant ROM-free tests and run targeted verification during development.
+   Run broader checks when integration risk warrants them or before publication:
 
    ```bash
    python scripts/check_public_artifacts.py
@@ -22,7 +24,8 @@ Before opening a change:
    pytest -m "not integration"
    ```
 
-Private runtime changes should also pass:
+Private runtime changes need the relevant marked integration checks when a native
+claim is made;do not run every private suite for each exploratory edit:
 
 ```bash
 POKEMON_RED_ROM="/absolute/path/to/Pokemon Red.gb" pytest -m integration

@@ -16,14 +16,16 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, replace
 
 from pokemon_red_completion.collection import (
     CollectionContract,
     CollectionLocation,
     summarize_collection,
 )
-from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
+from pokemon_red_completion.gen1_cartridge import (
+    Evolution, EvolutionMethod, evolution_graph, wild_encounter_tables,
+)
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
 from pokemon_red_completion.party_development_adapter import (
@@ -32,6 +34,7 @@ from pokemon_red_completion.party_development_adapter import (
     PartyDevelopmentExecutionCapability,
     PartyDevelopmentMemberProfile,
     PartyDevelopmentSemanticSnapshot,
+    observe_party_development_context,
 )
 from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
@@ -44,7 +47,11 @@ from pokemon_red_completion.party_development_question_reservations import (
 from pokemon_red_completion.party_development_rank import (
     EvolutionRouteKind,
     EvolutionSemantics,
+    PartyDevelopmentGoal,
+    VenueOperationalPrior,
     VenuePriorFeatureMode,
+    VenueTrainingWorkload,
+    augment_training_candidate_set,
 )
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
@@ -56,6 +63,8 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.player_option_level_workload import OptionLevelWorkload
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     RED_BALANCED_ROSTER,
@@ -78,8 +87,11 @@ from pokemon_red_completion.team_training import (
     member_can_train_at,
     training_safety_ceiling,
 )
-from pokemon_red_completion.training_candidate_rank import TrainingChoiceKind
+from pokemon_red_completion.training_candidate_rank import (
+    TrainingChoiceKind, TrainingCandidate, TrainingCandidateSet, _candidate_features,
+)
 from pokemon_red_completion.training_venue import TrainingVenue
+from pokemon_red_completion.provenance import canonical_sha256
 
 RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY = BalancedTeamPolicy(
     minimum_level=60,
@@ -235,9 +247,18 @@ def build_red_party_development_snapshot(
     current_map_tileset: int | None = None,
     venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED,
     switch_assisted_battle_credit: bool = False,
+    include_workload: bool = False,
+    cartridge: RedPracticeCartridge | None = None,
+    venue_workloads_by_member: tuple[tuple[VenueTrainingWorkload | None, ...], ...] = (),
 ) -> PartyDevelopmentSemanticSnapshot:
     """Derive the shared snapshot from one coherent, action-free Red read."""
 
+    if type(include_workload) is not bool:
+        raise TypeError("include_workload must be boolean")
+    if cartridge is not None and not isinstance(cartridge, RedPracticeCartridge):
+        raise TypeError("workload cartridge must be a RedPracticeCartridge")
+    if not include_workload and (cartridge is not None or venue_workloads_by_member):
+        raise ValueError("workload inputs require explicit feature opt-in")
     if not isinstance(reservation, PartyDevelopmentQuestionReservation):
         raise TypeError("reservation must be a PartyDevelopmentQuestionReservation")
     if not isinstance(observation, RedGoalObservation):
@@ -352,6 +373,12 @@ def build_red_party_development_snapshot(
         role_target_count=len(roster.slots),
         active_conditions=active_conditions,
         venue_prior_feature_mode=venue_prior_feature_mode,
+        include_workload=include_workload,
+        level_workloads_by_member=(tuple(
+            observe_red_evolution_workload(profile.member, profile.evolution, cartridge)
+            for profile in profiles
+        ) if include_workload else ()),
+        venue_workloads_by_member=venue_workloads_by_member,
         execution_protocol_id=(
             "switch-assisted-fixed-dose-v1"
             if switch_assisted_battle_credit
@@ -384,6 +411,10 @@ def preflight_red_party_development_question(
     current_map_tileset: int | None = None,
     venue_prior_feature_mode: VenuePriorFeatureMode = VenuePriorFeatureMode.CALIBRATED,
     switch_assisted_battle_credit: bool = False,
+    include_workload: bool = False,
+    cartridge: RedPracticeCartridge | None = None,
+    venue_workloads_by_member: tuple[tuple[VenueTrainingWorkload | None, ...], ...] = (),
+    total_task_efficiency: bool = False,
 ) -> RedPartyDevelopmentQuestionPreflight:
     """Build one exact question without selecting an answer or acting."""
 
@@ -408,6 +439,9 @@ def preflight_red_party_development_question(
         current_map_tileset=current_map_tileset,
         venue_prior_feature_mode=venue_prior_feature_mode,
         switch_assisted_battle_credit=switch_assisted_battle_credit,
+        include_workload=include_workload,
+        cartridge=cartridge,
+        venue_workloads_by_member=venue_workloads_by_member,
     )
     menu: (
         BoundPartyDevelopmentMenu[PartyMemberObservation]
@@ -430,7 +464,9 @@ def preflight_red_party_development_question(
         raise RedPartyDevelopmentAdapterError(
             "reserved Red state does not produce a multi-candidate question"
         )
-    binding = snapshot.freeze_binding(menu, scenario_id=reservation.scenario_id)
+    binding = snapshot.freeze_binding(
+        menu, scenario_id=reservation.scenario_id, total_task_efficiency=total_task_efficiency
+    )
     return RedPartyDevelopmentQuestionPreflight(
         reservation=reservation,
         source_root_lineage_id=source_root_lineage_id,
@@ -524,6 +560,176 @@ def red_party_completion_snapshot(
         level_floor_deficit=sum(
             max(0, policy.minimum_level - member.level) for member in observation.party.members
         ),
+    )
+
+
+def build_native_evolution_venue_menu(
+    observation: RedGoalObservation,
+    *, rom: bytes, trainee: PartyMemberObservation, target_species_id: int,
+    policy: BalancedTeamPolicy, venues: tuple[TrainingVenue, ...],
+    excluded_helper_species: frozenset[int] = frozenset(),
+    allow_guarded_escapes: bool = False, resources: bool = True,
+) -> BoundPartyDevelopmentMenu[GrindingArea]:
+    """Bind the executor's safe shared-XP inventory to the existing V3 scorer.
+
+    Native inference calls this after mandatory nursing. Read-only discovery may
+    explicitly inspect recoverability instead; it is not the live resource gate.
+    Identities remain private bindings and never enter the scorer's feature rows.
+    """
+    from pokemon_red_completion.red_native_boxed_evolution import native_evolution_encounter_supported
+    from pokemon_red_completion.red_team_training import collection_finisher, collection_escape_escort
+    from pokemon_red_completion.red_safari_acquisition import _RED_ENCOUNTER_SLOT_WEIGHTS
+    from pokemon_red_completion import red_goal_context as native_context
+
+    if type(resources) is not bool or type(allow_guarded_escapes) is not bool:
+        raise RedPartyDevelopmentAdapterError("native venue gates require explicit booleans")
+    if (not isinstance(venues, tuple) or len(venues) < 2
+            or any(not isinstance(venue, TrainingVenue) for venue in venues)
+            or len({venue.band.identity for venue in venues}) != len(venues)):
+        raise RedPartyDevelopmentAdapterError("native venue menu needs distinct executable choices")
+    if trainee not in observation.party.members:
+        raise RedPartyDevelopmentAdapterError("native venue trainee differs from observed party")
+    if observation.raw.battle_state != 0 or not observation.input_ready:
+        raise RedPartyDevelopmentAdapterError("native venue choice requires ready field control")
+    _require_party_matches_raw(observation)
+    _require_collection_matches_party(observation)
+    graph = evolution_graph(rom)
+    _require_evolution_graph(graph)
+    source_national = red_internal_species_number(trainee.species_id)
+    target_national = red_internal_species_number(target_species_id)
+    selected_edges = tuple(edge for edge in graph.get(source_national, ())
+                           if edge.to_species == target_national and edge.method is EvolutionMethod.LEVEL)
+    if len(selected_edges) != 1:
+        raise RedPartyDevelopmentAdapterError("native venue goal has no unique cartridge level evolution")
+    cartridge = RedPracticeCartridge(rom)
+    decoded = wild_encounter_tables(rom)
+    escaped = native_context.MANSION_VOLATILE_ENEMY_SPECIES | native_context.MANSION_ESCORT_ENEMY_SPECIES
+    workloads = []
+    for venue in venues:
+        if (venue.native_transport_ready is not None
+                and venue.native_transport_ready(observation.party) is not True):
+            raise RedPartyDevelopmentAdapterError("native venue transport is unavailable")
+        blocks = tuple(table for table in decoded.get(venue.map_id, ()) if table.medium == "grass")
+        if len(blocks) != 1 or len(blocks[0].slots) != len(_RED_ENCOUNTER_SLOT_WEIGHTS):
+            raise RedPartyDevelopmentAdapterError("native venue lacks one complete grass encounter table")
+        useful_weight = 0
+        weighted_xp = 0
+        for (level, species), weight in zip(blocks[0].slots, _RED_ENCOUNTER_SLOT_WEIGHTS, strict=True):
+            if not native_evolution_encounter_supported(
+                observation.party, trainee.species_id, policy, level, species,
+                allow_guarded_escapes=allow_guarded_escapes,
+                excluded_helper_species=excluded_helper_species,
+            ):
+                raise RedPartyDevelopmentAdapterError("native venue inventory failed existing encounter safety")
+            helper = collection_escape_escort if species in escaped else collection_finisher
+            if helper(observation.party, trainee.species_id, policy, enemy_level=level,
+                      enemy_species=species, resources=resources,
+                      excluded_helper_species=excluded_helper_species) is None:
+                raise RedPartyDevelopmentAdapterError("native venue lost its qualified helper resources")
+            if species in escaped:
+                continue
+            useful_weight += weight
+            # Nominal unboosted two-participant projection, not an outcome label.
+            # Gen I divides base XP before multiplication; direct wins/traded
+            # bonuses can change actual gains. All measured task costs stay native.
+            # https://github.com/pret/pokered/blob/master/engine/battle/experience.asm
+            nominal_xp = (cartridge.species(species).base_experience // 2) * level // 7
+            weighted_xp += weight * nominal_xp
+        denominator = sum(_RED_ENCOUNTER_SLOT_WEIGHTS)
+        workloads.append(VenueTrainingWorkload(useful_weight / denominator, weighted_xp / denominator))
+
+    collection = observation.collection_observation
+    owned = set(collection.owned_species)
+    counts = Counter(item.species_ref for item in collection.specimens)
+    contract = RED_SOLO_COLLECTION_CONTRACT
+    living = set(contract.resolved_living_target_species)
+    missing_registration = {red_species_number(ref) for ref in set(contract.target_species) - owned}
+    missing_living = {red_species_number(ref) for ref in living if counts[ref] == 0}
+    roster = RED_BALANCED_ROSTER
+    roster_internal = set(roster.species_ids)
+    present = {red_internal_species_number(member.species_id) for member in observation.party.members}
+    missing_roles = {red_internal_species_number(species) for species in roster_internal} - present
+    inventory = dict(observation.raw.bag_items or ())
+    areas = tuple(venue.band for venue in venues)
+    unknown = PartyDevelopmentCapabilityState.UNKNOWN
+    capabilities = (PartyDevelopmentExecutionCapability(unknown, unknown, unknown),) * len(areas)
+    profiles = tuple(_member_profile(
+        member, execution_capabilities_by_venue=capabilities,
+        party=observation.party.members, evolutions=graph, policy=policy, areas=areas,
+        inventory=inventory, missing_registration=missing_registration,
+        missing_living=missing_living, missing_roles=missing_roles, living_targets=living,
+        specimen_counts=counts, roster_internal=roster_internal,
+        trade_available=False, active_conditions=(),
+    ) for member in observation.party.members)
+    report = summarize_collection(contract, collection)
+    context = observe_party_development_context(
+        goal=PartyDevelopmentGoal.EVOLUTION, party=observation.party, policy=policy,
+        member_profiles=profiles, registration_owned_count=report.pokedex_owned_count,
+        registration_target_count=report.target_count, living_unique_count=report.living_count,
+        living_target_count=report.living_target_count,
+        role_coverage_count=len(roster_internal & set(observation.party.species_ids())),
+        role_target_count=len(roster.slots),
+    )
+    profile = profiles[observation.party.members.index(trainee)]
+    evolution = _evolution_semantics(
+        trainee, national_species=source_national, evolutions=graph,
+        required_targets={target_national}, inventory=inventory, trade_available=False,
+    )
+    level_workload = observe_red_evolution_workload(trainee, evolution, cartridge)
+    semantics = tuple(replace(profile.semantics_for_venue(index), evolution=evolution,
+                              registration_needed=red_species_ref(target_national) not in owned)
+                      for index in range(len(areas)))
+    # The native referee has checked shared-XP helpers; the historical direct-
+    # trainee mask would incorrectly remove a safe assisted training venue.
+    base = TrainingCandidateSet(TrainingChoiceKind.VENUE, tuple(
+        TrainingCandidate(index, _candidate_features(kind=TrainingChoiceKind.VENUE,
+            party=observation.party, policy=policy, trainee=trainee, areas=areas, venue=area))
+        for index, area in enumerate(areas)
+    ))
+    candidates = augment_training_candidate_set(
+        base, context, semantics, include_workload=True,
+        level_workloads=(level_workload,) * len(areas), venue_workloads=tuple(workloads),
+    )
+    snapshot_sha256 = canonical_sha256(dict(
+        schema="pokemon.red.native-evolution-venue-menu.v1", party=asdict(observation.party),
+        target=target_species_id, venues=[venue.band.identity for venue in venues],
+        excluded_helpers=sorted(excluded_helper_species), resources_checked=resources,
+        candidates=candidates.public_dict(), nominal_yield="unboosted-two-participant-wild-v1",
+    ))
+    return BoundPartyDevelopmentMenu(
+        candidate_set=candidates, semantic_snapshot_sha256=snapshot_sha256, bindings=areas,
+        candidate_available=(True,) * len(areas), candidate_unavailable_reasons=(None,) * len(areas),
+        venue_priors=(VenueOperationalPrior(),) * len(areas),
+        venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
+    )
+
+
+def observe_red_evolution_workload(
+    member: PartyMemberObservation,
+    evolution: EvolutionSemantics,
+    cartridge: RedPracticeCartridge | None,
+) -> OptionLevelWorkload | None:
+    """Observe remaining XP from this exact party read and cartridge growth data.
+
+    Missing XP or growth data stays unknown. An overdue evolution needs one more
+    ordinary level-up; no save edit, controller input or cost forecast occurs.
+    """
+    if (not evolution.required or evolution.route_kind is not EvolutionRouteKind.LEVEL
+            or evolution.levels_to_next is None or member.level >= 100
+            or member.experience is None or cartridge is None):
+        return None
+    species = cartridge.species(member.species_id)
+    floor = species.experience_at_level(member.level)
+    ceiling = species.experience_at_level(member.level + 1)
+    if (type(member.experience) is not int or ceiling <= floor
+            or not floor <= member.experience < ceiling):
+        raise RedPartyDevelopmentAdapterError("observed evolution XP differs from observed level")
+    target_level = member.level + max(1, evolution.levels_to_next)
+    if target_level > 100:
+        raise RedPartyDevelopmentAdapterError("observed evolution target exceeds legal levels")
+    return OptionLevelWorkload(
+        member.level, target_level,
+        species.experience_at_level(target_level) - member.experience,
     )
 
 

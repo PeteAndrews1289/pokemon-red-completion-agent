@@ -1,0 +1,812 @@
+{
+  "schema": "pokemon.red.selector-value-audit-evidence.v1",
+  "session": "2026-09-22-selector-value-audit",
+  "classification": "read_only_adjudication_preparation_no_learning",
+  "execution_base": "c7a5dd9a",
+  "private_packet": "red-native-later-effect-qualification-20260922-v1",
+  "private_audit_sha256": "da49b2d0ee989582b10bf17bc2dbc27055cb0a43de67bd6c4c55c0a093797579",
+  "audit": {
+    "actor_promotions": 0,
+    "authenticated_branch_count": 24,
+    "automatic_adjudication": false,
+    "findings": [
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 4,
+        "matched_targets": [
+          "trajectory-execution-balanced-sleep-0-0-004"
+        ],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 5,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 6,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 7,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 9,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-1",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 7,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-sleep-0-1",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 8,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-paralysis-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 3,
+        "matched_targets": [
+          "trajectory-execution-balanced-paralysis-0-0-003"
+        ],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-paralysis-0-0",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "decision": 5,
+        "matched_targets": [],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-confusion-1-0",
+        "concerns": [
+          "already_confused"
+        ],
+        "decision": 3,
+        "matched_targets": [
+          "trajectory-execution-balanced-confusion-1-0-003"
+        ],
+        "move_executed": true
+      },
+      {
+        "actor_status": null,
+        "case": "balanced-confusion-1-1",
+        "concerns": [
+          "already_confused"
+        ],
+        "decision": 4,
+        "matched_targets": [
+          "trajectory-execution-balanced-confusion-1-1-004"
+        ],
+        "move_executed": true
+      },
+      {
+        "actor_status": "sleep",
+        "case": "balanced-rest-0-0",
+        "concerns": [
+          "heal_full_hp"
+        ],
+        "decision": 6,
+        "matched_targets": [],
+        "move_executed": false
+      },
+      {
+        "actor_status": "sleep",
+        "case": "balanced-rest-0-0",
+        "concerns": [
+          "heal_full_hp"
+        ],
+        "decision": 8,
+        "matched_targets": [],
+        "move_executed": false
+      }
+    ],
+    "fits": 0,
+    "gate_changes": 0,
+    "matched_targets": {
+      "trajectory-execution-balanced-confusion-1-0-003": {
+        "arms": {
+          "damage": [
+            {
+              "decisions": 6,
+              "episode_sha256": "68e2cd4739db1cb238901953ad3aaa179c17d645f618d0564a9482a900c6f900",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.3192771084337349,
+                  "decision_cost": -0.015000000000000003,
+                  "pp_cost": -0.00125,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.025
+                },
+                "total": 10.778027108433735
+              },
+              "slot": 3,
+              "state_sha256": "b4d699f651f834b2b6701c9d536696cd7677147fff442993c062e4b92970b640",
+              "stop": "battle_won",
+              "terminal_event_sha256": "296af2a6aa9db9c82a3808480e5e9da5a5f69295d918dca1d4ab94173bbaf09e"
+            },
+            {
+              "decisions": 3,
+              "episode_sha256": "173cf1a71091eaf454e200e43a05fd4df6e0ed787c406e6ed6d4f0cfcaca0e94",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.05421686746987952,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.94578313253012
+              },
+              "slot": 3,
+              "state_sha256": "932af763b777a4d80972fa12ab557c9a0d5dc49f631a4a50b538687ba7d49a39",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "3dbe207efe6d83c5ed602769bf2da7ebaabbc0de07a791d16f6c291c41b2756c"
+            },
+            {
+              "decisions": 5,
+              "episode_sha256": "440694289d7af1f8b3448db0b0b7bca0adb2b75e6ed1f37501db25cef1e0a558",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.1746987951807229,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.825301204819278
+              },
+              "slot": 3,
+              "state_sha256": "b7113a1cdfc4b72c25367a6c0d38bbf013b1b688031abe1da01473a705ba275f",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "5c6bf95d18f44d9d786070a066fe0691287576cfd98f51a4f7643f0a7ba70bc5"
+            }
+          ],
+          "status": [
+            {
+              "decisions": 5,
+              "episode_sha256": "a8ba3c15de31f47b30b1743c0502f62203d3e2edd66bedc97ee30dac95c33320",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.25903614457831325,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.740963855421686
+              },
+              "slot": 1,
+              "state_sha256": "1b03893dcccb4f45788bdb105212af5b89452c1589d3155828ad25c1c5324084",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "c5e1fe745c8a7d0906417cd2663cc778f4aaa6d49e964d12cf76fd841eb6a357"
+            },
+            {
+              "decisions": 3,
+              "episode_sha256": "8a44060089535e60a002bdf62c16a3bae14da4f75689a04a56cb39101106f561",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.13855421686746988,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.86144578313253
+              },
+              "slot": 1,
+              "state_sha256": "5501a8a870654e66495520398aa425448bdf161f9e800e2b273590a2d12962ab",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "4ffc6ec7eef45859d6d0c288b54e33ea650cbe08405ff1277cf3e0ea6b01c8ce"
+            },
+            {
+              "decisions": 5,
+              "episode_sha256": "066c64f1dc1ab34abeedbf8c37e37c51d872b4d0dbdb195d6629e10e7abf19f4",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.3192771084337349,
+                  "decision_cost": -0.0125,
+                  "pp_cost": -0.001,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.0125
+                },
+                "total": 10.793277108433735
+              },
+              "slot": 1,
+              "state_sha256": "97bc9673f2c94e6ce787759239fd73eabab7d9e4f8e092290b23050d5d8c9b9a",
+              "stop": "battle_won",
+              "terminal_event_sha256": "bda64fd403b567f6bdd40a100ab770fcc22bd2610ce8fca4d3a361664ade9768"
+            }
+          ]
+        },
+        "continuation_sha256": "27f68cd7bca3855d2fa370eb6aa62ead5b3da27929f6b5db8daafcb1b7c0ddf4",
+        "paired": {
+          "damage_better_by_original_margin_every_sample": false,
+          "damage_better_samples": 1,
+          "fit_label_created": false,
+          "maximum_gap": 20.61857831325301,
+          "mean_status_gap": 0.061308232931726415,
+          "minimum_gap": -20.518990963855423,
+          "paired_gaps": [
+            -20.518990963855423,
+            0.08433734939759141,
+            20.61857831325301
+          ],
+          "preference_changes_sign": true,
+          "statistical_confidence_claim": false,
+          "status_better_samples": 2,
+          "tied_samples": 0
+        },
+        "target_sha256": "2c9942a0d6ea6e87376eb03dc5efcd6865f35e9598f87c9b493a0332fb0bfab7"
+      },
+      "trajectory-execution-balanced-confusion-1-1-004": {
+        "arms": {
+          "damage": [
+            {
+              "decisions": 2,
+              "episode_sha256": "70f7a63db4b3b5519abcdede36812224d1cd4177921b767b92e810c539a1b412",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.10843373493975904,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.891566265060241
+              },
+              "slot": 3,
+              "state_sha256": "749c22fe099a1fb66ea4d0a34b17faa9c39ad0bf6667c06cca6c17fd70ccb830",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "2b38b4211c2d12db2e456b1ec31bc40d27e97f0a7d54ea20ecf9d8c0dcb4d0b4"
+            },
+            {
+              "decisions": 3,
+              "episode_sha256": "377606bcfe0966a7d0994387da82d62d7dba4039849f57e4c71733168af44cc1",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.12048192771084337,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.879518072289157
+              },
+              "slot": 3,
+              "state_sha256": "935681da79ec9fb2393e677cba5e7e901a5ab6c0e6dacccd780c188c460685ab",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "94d10b2f821d36a27611a7efe78b88f6cc14f6fbdc1c5d8b0bf755df572f7cf6"
+            },
+            {
+              "decisions": 3,
+              "episode_sha256": "a4e7a371b1c5fccdfa31d2e2f34d59a476dc0bc956a515a8f7851e6798662c8e",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.12048192771084337,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.879518072289157
+              },
+              "slot": 3,
+              "state_sha256": "fc2ac8a91a908467efe29e1d4b5116b6a88f7775eb83c086d274195632d34f73",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "b292f22968d1803a6f300710eadfed5b21ba2c93f4f90b0c0e5fad696ff74b3a"
+            }
+          ],
+          "status": [
+            {
+              "decisions": 2,
+              "episode_sha256": "77bc199ed8502a60c8206200973f201d6c6ce1a8eb9190812c4fdf963e9620dd",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.1686746987951807,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.831325301204819
+              },
+              "slot": 1,
+              "state_sha256": "8dfc5712b19760192f845a64484e293d32b25afbd3ea6e804e242fefb478c4bb",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "f64ba38367d99d565a23d6fc5ad07f9bde4802bd82ad904e9a565a7d6f91e28f"
+            },
+            {
+              "decisions": 2,
+              "episode_sha256": "a0c6d9c1c53e128ffbf43b2fde6154b97d7d4b7c0fd6733ea0c0fabf85cc9764",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.05421686746987952,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.94578313253012
+              },
+              "slot": 1,
+              "state_sha256": "75f1f17da88071026282403f1e278aa86869f4ffe47264fde499180dfad71761",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "c6d9d8eb7b588595b440f6be7a4e7f8cf2133466d548403c5bb99fe314d6f289"
+            },
+            {
+              "decisions": 2,
+              "episode_sha256": "9ea2da878c6c4f1214dafb434b56ef6d42007ce5dc7cf1ee8775c6607a0c2454",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.05421686746987952,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.94578313253012
+              },
+              "slot": 1,
+              "state_sha256": "f591c2ef6d87c9d50145f75240709f599965b962b345d5aec5ab6bb11d339587",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "ac6fdb38ba49208d11700e8f5954e330501ddd126aaab45e6c1a3c0591a50bd1"
+            }
+          ]
+        },
+        "continuation_sha256": "27f68cd7bca3855d2fa370eb6aa62ead5b3da27929f6b5db8daafcb1b7c0ddf4",
+        "paired": {
+          "damage_better_by_original_margin_every_sample": false,
+          "damage_better_samples": 2,
+          "fit_label_created": false,
+          "maximum_gap": 0.060240963855422436,
+          "mean_status_gap": -0.02409638554216838,
+          "minimum_gap": -0.06626506024096379,
+          "paired_gaps": [
+            0.060240963855422436,
+            -0.06626506024096379,
+            -0.06626506024096379
+          ],
+          "preference_changes_sign": true,
+          "statistical_confidence_claim": false,
+          "status_better_samples": 1,
+          "tied_samples": 0
+        },
+        "target_sha256": "7087f1fb5d4c3aff0cc19c50370caa535144df02af05fb391e4cfca6cce0f530"
+      },
+      "trajectory-execution-balanced-paralysis-0-0-003": {
+        "arms": {
+          "damage": [
+            {
+              "decisions": 5,
+              "episode_sha256": "ee38b4d6c0b7f186531f8c5fef535d9d4fc01b52a2752e8f88c2783a9075655d",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.09659090909090909,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.903409090909092
+              },
+              "slot": 3,
+              "state_sha256": "dd9b772fd1e73bfcabac681ce50e80e89dae88ad6256d48814697fb755ff929e",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "00322f6e012332c5d230bcbc0edb280c95dcfbbef1309e4b1f04fc917d5f1a78"
+            },
+            {
+              "decisions": 4,
+              "episode_sha256": "3b882d1628ac03a8d7a15137927a379f81d5ff69e8fa738e37dd9f53f5844bd8",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.0625,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.9375
+              },
+              "slot": 3,
+              "state_sha256": "5b58863685391c04d43ed046af3c07581614dab206a1b04fefbab01d8004d64c",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "7d70b68ea23de64ef03b5c37a1bcffca44843db306a2654a22d3787653e44769"
+            },
+            {
+              "decisions": 3,
+              "episode_sha256": "a08e0524730bbec3269fe7b5e12277a4514a4837b8a91896a142e036eccc4506",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.05113636363636364,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.948863636363637
+              },
+              "slot": 3,
+              "state_sha256": "d0910728e5d197bed93aada42840a8f0044c478f47cabf675fa312e9f7604583",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "b612f8864c4973ba68744e413762a485183366aca03335830ddb9a2d0d409df8"
+            }
+          ],
+          "status": [
+            {
+              "decisions": 4,
+              "episode_sha256": "de5a644eb53a2343b4d5615ec194c995b68008d2f1af99f984ed4529296c0586",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.05113636363636364,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.948863636363637
+              },
+              "slot": 2,
+              "state_sha256": "3471abd0b88741894d74be76e7aa6703bc30b5e44b9eab26af228060f2e8b47d",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "3b61942e9b938e47a955bb21ac7c7c8778b65aad877927c80506ffd83b9f9492"
+            },
+            {
+              "decisions": 2,
+              "episode_sha256": "668f01c2fd1b26a24e0804861d858427d003d2dc8464b7ebb5da8395d19449e2",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -10
+              },
+              "slot": 2,
+              "state_sha256": "29437d1cef68167f520ab8324bedb548c9a3155b72965653659708490d6c9312",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "5f565f339b468c3ee254930adf8b58931c2c1b4f2f43c19e2d8bd8b237cec9ea"
+            },
+            {
+              "decisions": 2,
+              "episode_sha256": "73b11f355a239b1684962e0e55c18016196f693c625e57f0f6a70c706d2b17b3",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.05113636363636364,
+                  "decision_cost": 0,
+                  "pp_cost": 0,
+                  "retained_hp": 0,
+                  "terminal": -10,
+                  "unchanged_status_cost": 0
+                },
+                "total": -9.948863636363637
+              },
+              "slot": 2,
+              "state_sha256": "83758e9995d5ffca1a192254664e02b58509306a4b615e9f5bd7397284547e3c",
+              "stop": "party_defeated",
+              "terminal_event_sha256": "a1877c8a87b57faf3abadf07c595f8ab3ed2cd2fcaa74d47bf009dafdcc70e9a"
+            }
+          ]
+        },
+        "continuation_sha256": "27f68cd7bca3855d2fa370eb6aa62ead5b3da27929f6b5db8daafcb1b7c0ddf4",
+        "paired": {
+          "damage_better_by_original_margin_every_sample": false,
+          "damage_better_samples": 2,
+          "fit_label_created": false,
+          "maximum_gap": 0,
+          "mean_status_gap": -0.03598484848484832,
+          "minimum_gap": -0.0625,
+          "paired_gaps": [
+            -0.04545454545454497,
+            -0.0625,
+            0
+          ],
+          "preference_changes_sign": false,
+          "statistical_confidence_claim": false,
+          "status_better_samples": 0,
+          "tied_samples": 1
+        },
+        "target_sha256": "b2dcc72f01487a7f08729e03e1a424953f8102501ef50c1f2b0439ade9ba69ea"
+      },
+      "trajectory-execution-balanced-sleep-0-0-004": {
+        "arms": {
+          "damage": [
+            {
+              "decisions": 5,
+              "episode_sha256": "02f3979215d4fd81f09890a308d8874a7bf949c7a088500c21a2dd8d9a756f98",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.0125,
+                  "pp_cost": -0.001,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": 0
+                },
+                "total": 10.87660989010989
+              },
+              "slot": 3,
+              "state_sha256": "8e9b7b26f50a5f6a011d159f97e49721c78fcddce8d052ce5dca7f6628cdd24a",
+              "stop": "battle_won",
+              "terminal_event_sha256": "9b295f96400b361dc9a64aeab41319dfc7366f541e71f0f6298af37dc01c60a6"
+            },
+            {
+              "decisions": 10,
+              "episode_sha256": "3d15aae2384b6e6ad24138c8a0e65f8cb0ac8f3f1063e2fbb09a1b7d2c649215",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.025,
+                  "pp_cost": -0.0022500000000000003,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.0375
+                },
+                "total": 10.82535989010989
+              },
+              "slot": 3,
+              "state_sha256": "25fbe02c629080d23afd5dbdf68a14b4a50b439af829bd3ad5dc7c6a0a339218",
+              "stop": "battle_won",
+              "terminal_event_sha256": "f4612e546563660848084569861b46a0844a64424aede9193c2f65abf996e1cb"
+            },
+            {
+              "decisions": 9,
+              "episode_sha256": "d9fbf5316dc2aa27c8474589f528e3125c5b544921e91bdca91514a42c1be568",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.0225,
+                  "pp_cost": -0.002,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.0125
+                },
+                "total": 10.85310989010989
+              },
+              "slot": 3,
+              "state_sha256": "c7d51411a99f6547e05236f6f446ed59281f36d1ae2022890b36edfbdfaedd6f",
+              "stop": "battle_won",
+              "terminal_event_sha256": "a0fd0802b8c00e76c8e832c07def50f8b5fda4fc6a13c32ddf3b5b8a6c74d8d1"
+            }
+          ],
+          "status": [
+            {
+              "decisions": 8,
+              "episode_sha256": "4e9185e247124f4786aca9d0d04c1a3d621fa79cdcc30a046841f1702925f528",
+              "first_move_executed": true,
+              "offset": 0,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.02,
+                  "pp_cost": -0.0017499999999999998,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.0125
+                },
+                "total": 10.85585989010989
+              },
+              "slot": 2,
+              "state_sha256": "e6959a92cffb8974df32e7ec8ef917f68dddc3ec59b39f801090f238c9d8186e",
+              "stop": "battle_won",
+              "terminal_event_sha256": "bcc32ee804995e7ae0e54e0f4afb9d9f974e0fa3027815fc98b4920e4dbecd1b"
+            },
+            {
+              "decisions": 8,
+              "episode_sha256": "0e62bc0cf033c5f249771eb79480b2677b919181e6f64e3163d6c251e61fc157",
+              "first_move_executed": true,
+              "offset": 11,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.02,
+                  "pp_cost": -0.0017499999999999998,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.025
+                },
+                "total": 10.843359890109891
+              },
+              "slot": 2,
+              "state_sha256": "ea480ad95ac9e90c9405f6fdedf3e644d38a01f4e60303733a28f63d77cc4e77",
+              "stop": "battle_won",
+              "terminal_event_sha256": "4cd0d0002a687120158594d5ab903d1d7a08dc378f37b17a7dc2b3144b6456ee"
+            },
+            {
+              "decisions": 7,
+              "episode_sha256": "7be2396b0560464aa9dde120f0891f5059cb31ba96dc4723847dd70cf5c89126",
+              "first_move_executed": true,
+              "offset": 12,
+              "reward": {
+                "terms": {
+                  "damage": 0.3901098901098901,
+                  "decision_cost": -0.0175,
+                  "pp_cost": -0.0015,
+                  "retained_hp": 0.5,
+                  "terminal": 10,
+                  "unchanged_status_cost": -0.0125
+                },
+                "total": 10.858609890109891
+              },
+              "slot": 2,
+              "state_sha256": "4131567966aaa33b2bf9ea683c867c20380459cff14970c202d4c59db7ee3ad3",
+              "stop": "battle_won",
+              "terminal_event_sha256": "87d239a36ef5427dd0701abcb5b5052c05a21d909ad2961d4a6d7eece0614bb6"
+            }
+          ]
+        },
+        "continuation_sha256": "27f68cd7bca3855d2fa370eb6aa62ead5b3da27929f6b5db8daafcb1b7c0ddf4",
+        "paired": {
+          "damage_better_by_original_margin_every_sample": false,
+          "damage_better_samples": 1,
+          "fit_label_created": false,
+          "maximum_gap": 0.018000000000000682,
+          "mean_status_gap": 0.0009166666666674909,
+          "minimum_gap": -0.020749999999999602,
+          "paired_gaps": [
+            -0.020749999999999602,
+            0.018000000000000682,
+            0.005500000000001393
+          ],
+          "preference_changes_sign": true,
+          "statistical_confidence_claim": false,
+          "status_better_samples": 2,
+          "tied_samples": 0
+        },
+        "target_sha256": "06cd0867ef57e1bbabb7ba7874ad6b0f9bf88caeff0e4e35868b727ce0606486"
+      }
+    },
+    "new_gameplay": 0,
+    "packet_bindings": {
+      "plan": "feec05a8b08782d3075b704942f5d6ad1c12be91dd83cd4b09589191b7fb5ff6",
+      "preparation": "24006f79b7940710f1ff747827ca65055ec149201a66fde8754e466fd14203e8",
+      "qualification": "e46bb64eafb3aad42914b155ebc67129b99bc700694e5288718b194c02d1872b",
+      "result": "151fd7d5f0f63dfe6c94a13c4bd7ffdfc793dbe4f0076fe0be2456503aca4fcd"
+    },
+    "raw_flags": 13,
+    "reward_changes": 0,
+    "schema": "pokemon.red.selector-value-conflict-audit.v1",
+    "suppressed_flagged_choices": 2,
+    "unmatched_flagged_choices": 9
+  },
+  "findings_summary": {
+    "matching_targets": 4,
+    "branches": 24,
+    "sign_changing_targets": 3,
+    "robust_damage_advantage_targets": 0,
+    "all_loss_targets": 2,
+    "positive_mean_status_gaps": [
+      0.0009166666666674909,
+      0.061308232931726415
+    ],
+    "raw_flags": 13,
+    "suppressed_flags": 2,
+    "unmatched_flags": 9
+  },
+  "tests": {
+    "passed": 605,
+    "private_integration_skipped": 13,
+    "ruff": true,
+    "registry_unchanged": true
+  },
+  "fits": 0,
+  "new_gameplay": 0,
+  "learned_choices": 0,
+  "collection_delta": 0,
+  "actor_promotions": 0,
+  "reward_changes": 0,
+  "gate_changes": 0,
+  "gameplay_stopped": true,
+  "publication": false,
+  "external_agents": false,
+  "decision": "Await Pete's explicit decision on prospective outcome-based evaluation. Raw flags retained as diagnostics; wins>=K,decisions<=1.25K,zero illegal actions and audited improvement would remain mandatory. Current candidate remains rejected; no old-result promotion."
+}

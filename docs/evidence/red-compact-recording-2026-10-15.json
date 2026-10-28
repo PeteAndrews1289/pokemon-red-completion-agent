@@ -1,0 +1,176 @@
+{
+  "acceptance_sha256": "e5640dce61896dd675f7c27836e4e6face686cdf5f16f120a11ef7b7955d59aa",
+  "actor_settings_sha256": "fb2ed64dba4b9c66346e5290165cf7c6e03e9c67d4b648b63b0096926e96a767",
+  "actual_actor_running": false,
+  "actual_inputs": 0,
+  "actual_loads": 0,
+  "actual_registration_delta": 0,
+  "candidate": "compact-recording-package-v3",
+  "capacity": {
+    "available_bytes": 23517102080,
+    "checked_at": "2026-10-15T15:30:49.750197+00:00",
+    "doubled_diagnostic_rate": true,
+    "forecast_bytes": 19517046089,
+    "full_limits_or_stochastic_completion_guaranteed": false,
+    "full_report_allowance_bytes": 1073741824,
+    "historical_receipts": 62,
+    "margin_after_forecast_and_reserve": 778830519,
+    "metadata_factor": 1.131297104323681,
+    "reference_actions": 1588167,
+    "reference_decisions": 1442,
+    "reference_forecast_fits": true,
+    "unchanged_stop_reserve_bytes": 3221225472,
+    "volume": "T7 Developer"
+  },
+  "completed_and_failed_saves_preserved": true,
+  "diagnostic_actions": 5229,
+  "diagnostic_frames": 352263,
+  "diagnostic_heals": 6,
+  "diagnostic_loads": 6,
+  "directory_sync_failure_prevents_controller_input": true,
+  "earlier_v2_withdrawal": {
+    "frozen_v3_regression_report_sha256": "59ffa554f48788992dd0d4e0949edfc97ceeadebf9465ff3a13fccd7bcb3c5dd",
+    "manifest_sha256": "5db48879aba885eff4a023aa69cc68e5a60acf2fff2451c916c22ac7e36ea058",
+    "negative_test_report_sha256": "6911f23b231f8d573e4208c772750a7c4d4eb6be24ed8eda21786582a625ea4d",
+    "reason": "A failed directory sync could be swallowed after rename. Exact test fails on v2; both exception variants pass on frozen v3. V2 never launched."
+  },
+  "earlier_v2_withdrawn": true,
+  "existing_data_reclaimed_this_session_bytes": 0,
+  "files_deleted": 0,
+  "focused_tests_passed": 548,
+  "fresh_run_dispatched": false,
+  "frozen_final_gates_passed": 0,
+  "frozen_final_gates_total": 5,
+  "full_suite_or_ci_claim": false,
+  "gameplay_launch_authorized_by_this_session": false,
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_train_examples": 161,
+  "guard_weakening": false,
+  "helper_source_changes": 0,
+  "isolated_import": {
+    "controller_inputs": 0,
+    "player_writes": 0,
+    "project_modules": 301
+  },
+  "isolation_report": {
+    "all_original_json_bytes_preserved": true,
+    "gzip_bytes": 2285033,
+    "original_bytes": 23617500,
+    "reads": 44222,
+    "writes": 61812
+  },
+  "journal": {
+    "all_original_payload_and_manifest_bytes_preserved": true,
+    "compact": {
+      "allocated": 20652032,
+      "directories": 1,
+      "files": 4961,
+      "logical": 3001251
+    },
+    "legacy": {
+      "allocated": 40951808,
+      "directories": 4958,
+      "files": 9917,
+      "logical": 3001166
+    },
+    "observed_compact_layout_volume_cost": 23363584,
+    "observed_layout_reduction": 0.4957121386261162,
+    "observed_legacy_layout_volume_cost": 46329856,
+    "records": 4958,
+    "reduction": 0.49569913982796554
+  },
+  "live_difference_explanation": "Elapsed source evaluation and remaining wall-time budget, plus changed source provenance. All stored values retained; copied selected goals and native state/costs match.",
+  "live_differences_retained": [
+    [
+      "red_native_player_diagnostic",
+      "/payload/source_evaluation_seconds",
+      160
+    ],
+    [
+      "red_native_player_diagnostic",
+      "/payload/readiness/values/25",
+      20
+    ],
+    [
+      "red_native_player_execution",
+      "/source/experiment_sha256",
+      1
+    ],
+    [
+      "red_native_player_execution",
+      "/source/source_bundle_sha256",
+      1
+    ]
+  ],
+  "live_native_action_trace_bytes_identical": 3484,
+  "lossless_proof_repeated_on_frozen_v3": true,
+  "manifest_sha256": "68cc18a8876a31d197918d99acad3f4db27b0d69924cfe080fe5b9cbd999a7cb",
+  "model_fits": 0,
+  "models_data_environment_unchanged": true,
+  "monitor_status": "PAUSED",
+  "native_copies": {
+    "interrupted": {
+      "actions_per_arm": 1,
+      "compared_equal_fields": [
+        "source_sha256",
+        "terminal_sha256",
+        "actions",
+        "frames",
+        "model_queries",
+        "trace",
+        "intent_readable_before_input",
+        "original_error_retained"
+      ],
+      "frames_per_arm": 1,
+      "model_queries_per_arm": 0,
+      "source_sha256": "7c5d89b3671b9c2796a21ca1660d50df6dd3f026180c0205b56e3ec6218aac90",
+      "terminal_sha256": "dc216bbd52803e9753c461f2db74b690683c10f2bdae0c46fecb9551f69b2062"
+    },
+    "normal": {
+      "actions_per_arm": 1742,
+      "compared_equal_fields": [
+        "source_sha256",
+        "terminal_sha256",
+        "actions",
+        "frames",
+        "model_queries",
+        "selected_kinds",
+        "selected_bindings",
+        "support_steps",
+        "heals",
+        "cash_debits",
+        "native_registrations",
+        "diagnostic_events"
+      ],
+      "frames_per_arm": 117420,
+      "model_queries_per_arm": 2,
+      "source_sha256": "7c5d89b3671b9c2796a21ca1660d50df6dd3f026180c0205b56e3ec6218aac90",
+      "terminal_sha256": "884fb5e95e7bd956d9ce67ecd126381837ddae8783453019b754a3aae41bcfed"
+    }
+  },
+  "new_weights": 0,
+  "partition": "development",
+  "physical_layout_measurement_reused": {
+    "candidate": "v2",
+    "reason": "V3 changes publication exception handling only; all 4958 records were reencoded on v3 with identical measured allocation."
+  },
+  "preexisting_audit_failures_also_on_untouched_baseline": [
+    "test_complete_trace_and_policy_replay_do_not_claim_native_truth",
+    "test_audit_formats_trace_and_unreported_input_lookups"
+  ],
+  "private_packet": "red-compact-recording-20261015-v1",
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.compact-recording-session.v1",
+  "session": "2026-10-15-compact-recording",
+  "source_files_changed": [
+    "scripts/launch_frozen_red_player.py",
+    "scripts/run_configured_red_player.py",
+    "scripts/run_fresh_red_player.py",
+    "src/pokemon_red_completion/private_artifacts.py"
+  ],
+  "staging_plan_sha256": "81f6e94220eec0bbbbfd5182489ad786abac720e9b632adb6d541d5697766b11",
+  "status": "qualified_candidate_prepared_not_launched",
+  "training_examples_added": 0,
+  "volumes_changed": 0
+}

@@ -13,7 +13,8 @@ reconciles their self-reports against one external action/frame meter.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Protocol, runtime_checkable
 
@@ -30,18 +31,73 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 
-ROUTED_SEMANTIC_GOAL_CONTRACT_SCHEMA = (
-    "pokemon.core.routed-semantic-goal-contract.v1"
-)
-ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA = (
-    "pokemon.core.routed-semantic-goal-report.v1"
-)
+ROUTED_SEMANTIC_GOAL_CONTRACT_SCHEMA = "pokemon.core.routed-semantic-goal-contract.v1"
+ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA = "pokemon.core.routed-semantic-goal-report.v1"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class RoutedSemanticGoalError(RuntimeError):
     """A composite binding crossed its route, destination, or budget boundary."""
+
+
+def _evolution_progress(evidence):
+    """Carry only typed outcome/cost facts, never a target or profile identity."""
+    result = {}
+    for name, expected in (
+        ("evolution_partial", bool),
+        ("settlement_reserve_reached", bool),
+        ("wall_limit_reached", bool),
+        ("quantum_limit_reached", bool),
+        ("completed_training_quanta", int),
+        ("maximum_training_quanta", int),
+        ("retained_active_roster_restored", bool),
+        ("completed_training_battles", int),
+        ("healing_trips", int),
+    ):
+        if name not in evidence:
+            continue
+        value = evidence[name]
+        if type(value) is not expected or (expected is int and value < 0):
+            raise RoutedSemanticGoalError("destination evolution progress has invalid typed costs")
+        result[name] = value
+    return result
+
+
+def _capture_diagnostics(evidence):
+    """Carry the observer payload separately from policy and success evidence."""
+    if "capture_diagnostics" not in evidence:
+        return {}
+    value = evidence["capture_diagnostics"]
+    if not isinstance(value, dict) or value.get("diagnostic_only") is not True:
+        raise RoutedSemanticGoalError("capture diagnostics must be explicitly observational")
+    return {"capture_diagnostics": deepcopy(value)}
+
+
+def _execution_diagnostics(evidence):
+    """Retain reported scalar costs, not route identities or success labels.
+
+    The composed verifier still owns admission. A cost is not automatically a
+    purchase, nor is reported work a measured outcome of an unchosen goal.
+    """
+    prior = evidence.get("execution_diagnostics", {})
+    prior = prior if isinstance(prior, dict) and prior.get("diagnostic_only") is True else {}
+    source = {**prior, **evidence}
+    fields = {}
+    for name in (
+        "money_spent", "sale_proceeds", "purchase_count", "quantity_purchased",
+        "cash_debit", "coins_before", "coins_after", "purchases",
+        "completed_training_battles", "healing_trips",
+    ):
+        if name in source:
+            value = source[name]
+            fields[name] = value if type(value) is int and value >= 0 else None
+    if type(source.get("procurement_executed")) is bool:
+        fields["procurement_executed"] = source["procurement_executed"]
+    mechanic = source.get("mechanic")
+    if isinstance(mechanic, str) and mechanic in {"game_corner", "game_corner_coin_procurement"}:
+        fields["mechanic"] = mechanic
+    return {} if not fields else dict(execution_diagnostics=dict(diagnostic_only=True, **fields))
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,9 +111,7 @@ class RoutedSemanticBudgetCheckpoint:
         for name in ("controller_actions", "emulator_frames"):
             value = getattr(self, name)
             if type(value) is not int or value < 0:  # noqa: E721
-                raise RoutedSemanticGoalError(
-                    f"routed semantic {name.replace('_', ' ')} differs"
-                )
+                raise RoutedSemanticGoalError(f"routed semantic {name.replace('_', ' ')} differs")
 
 
 @runtime_checkable
@@ -83,9 +137,7 @@ class RoutedSemanticRouteBinding:
         _require_sha256(self.origin_observation_sha256, "origin observation")
         _require_sha256(self.terminal_boundary_sha256, "terminal boundary")
         if not callable(self.execute) or not callable(self.verify):
-            raise RoutedSemanticGoalError(
-                "routed semantic route needs execution and verification"
-            )
+            raise RoutedSemanticGoalError("routed semantic route needs execution and verification")
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,17 +157,13 @@ class FreshDestinationGoalOffer:
             raise RoutedSemanticGoalError("routed destination kind differs")
         if self.binding is not None:
             if self.binding.kind is not self.kind:
-                raise RoutedSemanticGoalError(
-                    "routed destination binding kind differs"
-                )
+                raise RoutedSemanticGoalError("routed destination binding kind differs")
             if self.unavailable_reason is not None:
                 raise RoutedSemanticGoalError(
                     "available routed destination has an unavailable reason"
                 )
         elif not isinstance(self.unavailable_reason, GoalUnavailableReason):
-            raise RoutedSemanticGoalError(
-                "unavailable routed destination needs a reason"
-            )
+            raise RoutedSemanticGoalError("unavailable routed destination needs a reason")
 
     @classmethod
     def available(
@@ -163,9 +211,7 @@ class RoutedSemanticGoalLimits:
         for name in ("maximum_controller_actions", "maximum_emulator_frames"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
-                raise RoutedSemanticGoalError(
-                    f"routed semantic {name.replace('_', ' ')} differs"
-                )
+                raise RoutedSemanticGoalError(f"routed semantic {name.replace('_', ' ')} differs")
 
 
 @dataclass(slots=True)
@@ -206,9 +252,7 @@ class RoutedSemanticGoalComposer:
         if not isinstance(self.route, RoutedSemanticRouteBinding):
             raise TypeError("routed semantic goal needs a route binding")
         if not callable(self.bind_fresh_destination):
-            raise RoutedSemanticGoalError(
-                "routed semantic goal needs a fresh destination binder"
-            )
+            raise RoutedSemanticGoalError("routed semantic goal needs a fresh destination binder")
         if not isinstance(self.budget_meter, RoutedSemanticBudgetMeter):
             raise TypeError("routed semantic goal needs an independent budget meter")
         if not isinstance(self.limits, RoutedSemanticGoalLimits):
@@ -227,9 +271,7 @@ class RoutedSemanticGoalComposer:
         """Return the one learner-facing destination binding."""
 
         if self._binding_built:
-            raise RoutedSemanticGoalError(
-                "routed semantic binding was already constructed"
-            )
+            raise RoutedSemanticGoalError("routed semantic binding was already constructed")
         self._binding_built = True
         return ExecutableGoalBinding(
             binding_ref=self.binding_ref,
@@ -262,9 +304,7 @@ class RoutedSemanticGoalComposer:
 
     def _execute(self) -> GoalExecutionReport:
         if self._executed:
-            raise RoutedSemanticGoalError(
-                "routed semantic goal was already executed"
-            )
+            raise RoutedSemanticGoalError("routed semantic goal was already executed")
         self._executed = True
         before = self._checkpoint()
         route_execution = self.route.execute()
@@ -281,9 +321,7 @@ class RoutedSemanticGoalComposer:
         route_verification = self.route.verify(route_execution)
         _require_verification(route_verification, "route")
         after_route_verification = self._checkpoint()
-        route_verifier_was_action_free = (
-            after_route_verification == after_route_execution
-        )
+        route_verifier_was_action_free = after_route_verification == after_route_execution
         preliminary: GoalFailureReason | None = None
         within_budget = self._within_budget(route_actions, route_frames)
         if not route_accounted or not route_verifier_was_action_free:
@@ -308,9 +346,7 @@ class RoutedSemanticGoalComposer:
         before_binding = self._checkpoint()
         destination_offer = self.bind_fresh_destination()
         if not isinstance(destination_offer, FreshDestinationGoalOffer):
-            raise RoutedSemanticGoalError(
-                "fresh destination binder returned an invalid offer"
-            )
+            raise RoutedSemanticGoalError("fresh destination binder returned an invalid offer")
         destination_offer.__post_init__()
         after_binding = self._checkpoint()
         if after_binding != before_binding:
@@ -351,11 +387,9 @@ class RoutedSemanticGoalComposer:
         total_actions, total_frames = _checkpoint_delta(before, after_destination)
         sum_reconciled = (
             total_actions
-            == route_execution.actions_executed
-            + destination_execution.actions_executed
+            == route_execution.actions_executed + destination_execution.actions_executed
             and total_frames
-            == route_execution.frames_executed
-            + destination_execution.frames_executed
+            == route_execution.frames_executed + destination_execution.frames_executed
         )
         budget_reconciled = route_accounted and destination_accounted and sum_reconciled
         within_budget = self._within_budget(total_actions, total_frames)
@@ -376,24 +410,16 @@ class RoutedSemanticGoalComposer:
 
     def _verify(self, report: GoalExecutionReport) -> GoalVerification:
         if not self._executed or self._attempt is None:
-            raise RoutedSemanticGoalError(
-                "routed semantic goal cannot verify before execution"
-            )
+            raise RoutedSemanticGoalError("routed semantic goal cannot verify before execution")
         if self._verified:
-            raise RoutedSemanticGoalError(
-                "routed semantic goal was already verified"
-            )
+            raise RoutedSemanticGoalError("routed semantic goal was already verified")
         self._verified = True
         attempt = self._attempt
         if report is not attempt.report:
-            raise RoutedSemanticGoalError(
-                "routed semantic verifier received a different report"
-            )
+            raise RoutedSemanticGoalError("routed semantic verifier received a different report")
         if attempt.destination_execution is None:
             if self._checkpoint() != attempt.after_execution:
-                return GoalVerification.failed(
-                    GoalFailureReason.WORLD_STATE_DIVERGED
-                )
+                return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             if attempt.preliminary_failure is not None:
                 return GoalVerification.failed(attempt.preliminary_failure)
             return attempt.route_verification
@@ -403,15 +429,10 @@ class RoutedSemanticGoalComposer:
         destination_binding = destination_offer.binding
         assert destination_binding is not None
         before_verifier = self._checkpoint()
-        destination_verification = destination_binding.verify(
-            attempt.destination_execution
-        )
+        destination_verification = destination_binding.verify(attempt.destination_execution)
         _require_verification(destination_verification, "destination")
         after_verifier = self._checkpoint()
-        if (
-            before_verifier != attempt.after_execution
-            or after_verifier != before_verifier
-        ):
+        if before_verifier != attempt.after_execution or after_verifier != before_verifier:
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         if attempt.preliminary_failure is not None:
             return GoalVerification.failed(attempt.preliminary_failure)
@@ -437,32 +458,44 @@ class RoutedSemanticGoalComposer:
         from pokemon_red_completion.storage_preparation import StoragePreparationSummary
 
         capture_support = (
-            None if destination_execution is None
+            None
+            if destination_execution is None
             else CaptureSupportSummary.from_evidence(destination_execution.evidence)
         )
         capture_survey = (
-            None if destination_execution is None
+            None
+            if destination_execution is None
             else CaptureSurveySummary.from_evidence(destination_execution.evidence)
         )
-        storage = (None if destination_execution is None
-                   else StoragePreparationSummary.from_evidence(destination_execution.evidence))
+        storage = (
+            None
+            if destination_execution is None
+            else StoragePreparationSummary.from_evidence(destination_execution.evidence)
+        )
         route_fields = FieldMoveSummary.from_evidence(route_execution.evidence)
-        destination_fields = (None if destination_execution is None
-                              else FieldMoveSummary.from_evidence(destination_execution.evidence))
-        fields = ((route_fields or FieldMoveSummary()).plus(
-                    destination_fields or FieldMoveSummary())
-                  if route_fields is not None or destination_fields is not None else None)
+        destination_fields = (
+            None
+            if destination_execution is None
+            else FieldMoveSummary.from_evidence(destination_execution.evidence)
+        )
+        fields = (
+            (route_fields or FieldMoveSummary()).plus(destination_fields or FieldMoveSummary())
+            if route_fields is not None or destination_fields is not None
+            else None
+        )
+        route_setback = (
+            {"route_setback": dict(route_execution.evidence["route_setback"])}
+            if isinstance(route_execution.evidence.get("route_setback"), Mapping)
+            else _destination_route_setback(destination_execution)
+        )
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
             evidence={
                 "schema": ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA,
-                "route_verified": (
-                    route_verification.status is GoalDecisionOutcome.SUCCEEDED
-                ),
+                "route_verified": (route_verification.status is GoalDecisionOutcome.SUCCEEDED),
                 "destination_bound": (
-                    destination_offer is not None
-                    and destination_offer.binding is not None
+                    destination_offer is not None and destination_offer.binding is not None
                 ),
                 "destination_executed": destination_execution is not None,
                 "destination_kind": self.destination_kind.value,
@@ -471,14 +504,42 @@ class RoutedSemanticGoalComposer:
                 "route_is_policy_kind": False,
                 "private_binding_fields": 0,
                 "private_route_fields": 0,
-                **({"destination_unavailable": DestinationUnavailableSummary(
-                    destination_offer.unavailable_reason,
-                ).public_dict()} if destination_offer is not None
-                   and destination_offer.unavailable_reason is not None else {}),
-                **({"capture_support": capture_support.public_dict()}
-                   if capture_support is not None else {}),
-                **({"capture_survey": capture_survey.public_dict()}
-                   if capture_survey is not None else {}),
+                **route_setback,
+                **(
+                    _evolution_progress(destination_execution.evidence)
+                    if destination_execution is not None
+                    and self.destination_kind is GoalKind.EVOLVE_SPECIES
+                    else {}
+                ),
+                **(
+                    {
+                        "destination_unavailable": DestinationUnavailableSummary(
+                            destination_offer.unavailable_reason,
+                        ).public_dict()
+                    }
+                    if destination_offer is not None
+                    and destination_offer.unavailable_reason is not None
+                    else {}
+                ),
+                **(
+                    {"capture_support": capture_support.public_dict()}
+                    if capture_support is not None
+                    else {}
+                ),
+                **(
+                    {"capture_survey": capture_survey.public_dict()}
+                    if capture_survey is not None
+                    else {}
+                ),
+                **(
+                    _capture_diagnostics(destination_execution.evidence)
+                    if destination_execution is not None
+                    else {}
+                ),
+                **(
+                    _execution_diagnostics(destination_execution.evidence)
+                    if destination_execution is not None else {}
+                ),
                 **({"storage_preparation": storage.public_dict()} if storage is not None else {}),
                 **({"field_moves": fields.public_dict()} if fields is not None else {}),
             },
@@ -501,17 +562,13 @@ class RoutedSemanticGoalComposer:
         offer: FreshDestinationGoalOffer,
     ) -> None:
         if offer.observation_sha256 == self.route.origin_observation_sha256:
-            raise RoutedSemanticGoalError(
-                "routed destination reused the origin observation"
-            )
+            raise RoutedSemanticGoalError("routed destination reused the origin observation")
         if offer.terminal_boundary_sha256 != self.route.terminal_boundary_sha256:
             raise RoutedSemanticGoalError(
                 "routed destination boundary differs from the route terminal"
             )
         if offer.kind is not self.destination_kind:
-            raise RoutedSemanticGoalError(
-                "routed destination changed the declared goal kind"
-            )
+            raise RoutedSemanticGoalError("routed destination changed the declared goal kind")
         if offer.binding is not None and offer.binding.binding_ref == self.route.binding_ref:
             raise RoutedSemanticGoalError(
                 "routed transport cannot masquerade as the destination binding"
@@ -532,6 +589,34 @@ class RoutedSemanticGoalComposer:
         )
 
 
+def _destination_route_setback(report: GoalExecutionReport | None) -> dict:
+    """Retain a nested route stop without claiming the outer transport failed.
+
+    The destination verifier still owns its result. Each enclosing composition
+    keeps its truthful execution flags and measured cost; the referee can then
+    authenticate the complete path to the unexecuted semantic destination.
+    """
+    if report is None:
+        return {}
+    evidence = report.evidence
+    stop = evidence.get("route_setback")
+    chain = evidence.get("route_setback_destination_chain", ())
+    if (evidence.get("schema") != ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA
+        or not isinstance(stop, Mapping)
+        or not isinstance(chain, (tuple, list)) or len(chain) >= 8
+        or any(not isinstance(node, Mapping) for node in chain)):
+        return {}
+    node = {key: evidence.get(key) for key in (
+        "schema", "route_verified", "destination_bound", "destination_executed",
+        "destination_kind", "budget_reconciled", "within_budget",
+    )}
+    node.update(actions=report.actions_executed, frames=report.frames_executed)
+    return {
+        "route_setback": dict(stop),
+        "route_setback_destination_chain": [node, *(dict(item) for item in chain)],
+    }
+
+
 def _checkpoint_delta(
     before: RoutedSemanticBudgetCheckpoint,
     after: RoutedSemanticBudgetCheckpoint,
@@ -539,9 +624,7 @@ def _checkpoint_delta(
     actions = after.controller_actions - before.controller_actions
     frames = after.emulator_frames - before.emulator_frames
     if actions < 0 or frames < 0:
-        raise RoutedSemanticGoalError(
-            "routed semantic independent budget moved backwards"
-        )
+        raise RoutedSemanticGoalError("routed semantic independent budget moved backwards")
     return actions, frames
 
 
@@ -554,16 +637,12 @@ def _require_execution_report(value: object, stage: str) -> None:
 
 def _require_verification(value: object, stage: str) -> None:
     if not isinstance(value, GoalVerification):
-        raise RoutedSemanticGoalError(
-            f"routed semantic {stage} returned an invalid verification"
-        )
+        raise RoutedSemanticGoalError(f"routed semantic {stage} returned an invalid verification")
 
 
 def _require_sha256(value: str, subject: str) -> None:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RoutedSemanticGoalError(
-            f"routed semantic {subject} SHA-256 differs"
-        )
+        raise RoutedSemanticGoalError(f"routed semantic {subject} SHA-256 differs")
 
 
 __all__ = [

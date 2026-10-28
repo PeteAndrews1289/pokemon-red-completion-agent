@@ -109,6 +109,8 @@ def _prepared_binding(
     original: ExecutableGoalBinding, runtime: RedGoalContextRuntime,
     actions: CountingExecutor, observation: RedGoalObservation,
     rebind: Callable[[RedGoalObservation], ExecutableGoalBinding | None],
+    *, preparation: Callable[[], bool] | None = None,
+    evidence_key: str = "escort_preparation",
 ) -> ExecutableGoalBinding:
     executed: list[tuple[ExecutableGoalBinding, GoalExecutionReport]] = []
     claimed = False
@@ -123,7 +125,8 @@ def _prepared_binding(
             raise RedCaptureLeadError("capture preparation observation changed before input")
         require_capture_party(before)
         action_start, frame_start = actions.actions_executed, runtime.emulator.frame_count
-        swapped = prepare_capture_escort(runtime, actions)
+        swapped = (prepare_capture_escort(runtime, actions) if preparation is None
+                   else preparation())
         fresh = runtime.adapter.observe()
         require_capture_party(fresh)
         selected = rebind(fresh)
@@ -134,7 +137,7 @@ def _prepared_binding(
         return GoalExecutionReport(
             actions.actions_executed - action_start,
             runtime.emulator.frame_count - frame_start,
-            {**report.evidence, "escort_preparation": {
+            {**report.evidence, evidence_key: {
                 "qualified": True, "swapped": swapped, "setup_training_rows": 0,
             }},
         )
@@ -146,6 +149,91 @@ def _prepared_binding(
         return selected.verify(report)
 
     return replace(original, execute=execute, verify=verify)
+
+
+def status_prepared_static_offer(provider, runtime, actions, observation):
+    """Opt-in local capture support: place the observed status helper first.
+
+    Reuse the battle status selector and protected native party permutation.
+    This is mechanical preparation, not a learned lead or move decision.
+    Rebind the exact source after swapping; do not activate a stale offer.
+    """
+    from pokemon_red_completion.capture_support import choose_capture_status
+    from pokemon_red_completion.goal_manager import GoalUnavailableReason
+    from pokemon_red_completion.party import StatusCondition
+    from pokemon_red_completion.red_capture_support import red_capture_status_options
+    from pokemon_red_completion.red_static_capture_goal import RedStaticCaptureGoalProvider
+
+    if (not isinstance(provider, RedStaticCaptureGoalProvider)
+            or not provider.require_status_success):
+        raise ValueError("status lead support requires a status-enforcing static provider")
+    original = provider.offer(observation)
+    if original.binding is None:
+        return original
+    require_capture_party(observation)
+    option = choose_capture_status(
+        observation.party,
+        red_capture_status_options(
+            observation.party, enemy_species_id=provider.target.internal_species,
+        ),
+        target_status=StatusCondition.HEALTHY, attempts_used=0,
+        maximum_attempts=provider.maximum_status_attempts, active_party_slot=1,
+    )
+    if option is None:
+        return RedGoalBindingOffer.unavailable(
+            provider.kind, GoalUnavailableReason.MISSING_CAPABILITY,
+        )
+    plan = RedCaptureLeadPlan(option.party_slot - 1, observation.party)
+    return RedGoalBindingOffer.available(_prepared_binding(
+        original.binding, runtime, actions, observation,
+        lambda fresh: provider.offer(fresh).binding,
+        preparation=lambda: prepare_observed_lead(
+            runtime, actions, plan, label="observed capture status lead",
+        ),
+        evidence_key="status_lead_preparation",
+    ))
+
+
+def optional_status_static_offer(provider, runtime, actions, observation):
+    """Use an available status lead without making it a capture prerequisite.
+
+    The caller must explicitly declare optional status and live conservative
+    weakening. Missing status does not assert safe damage or capture success:
+    the original provider still admits the exact source, stock and storage,
+    and the live weakening guard may abstain. No goal is selected here.
+    """
+    from pokemon_red_completion.capture_support import choose_capture_status
+    from pokemon_red_completion.party import StatusCondition
+    from pokemon_red_completion.red_capture_support import red_capture_status_options
+    from pokemon_red_completion.red_static_capture_goal import RedStaticCaptureGoalProvider
+
+    if (not isinstance(provider, RedStaticCaptureGoalProvider)
+            or provider.require_status_success or not provider.prepare_status
+            or not provider.weaken_capture):
+        raise ValueError("optional status requires explicit live-weakening capture support")
+    original = provider.offer(observation)
+    if original.binding is None:
+        return original
+    require_capture_party(observation)
+    option = choose_capture_status(
+        observation.party,
+        red_capture_status_options(
+            observation.party, enemy_species_id=provider.target.internal_species,
+        ),
+        target_status=StatusCondition.HEALTHY, attempts_used=0,
+        maximum_attempts=provider.maximum_status_attempts, active_party_slot=1,
+    )
+    if option is None:
+        return original  # No status claim, swap, activation or weakening on offer.
+    plan = RedCaptureLeadPlan(option.party_slot - 1, observation.party)
+    return RedGoalBindingOffer.available(_prepared_binding(
+        original.binding, runtime, actions, observation,
+        lambda fresh: provider.offer(fresh).binding,
+        preparation=lambda: prepare_observed_lead(
+            runtime, actions, plan, label="optional observed capture status lead",
+        ),
+        evidence_key="optional_status_lead_preparation",
+    ))
 
 
 def bind_capture_escort(

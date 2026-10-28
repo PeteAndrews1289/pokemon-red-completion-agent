@@ -1,0 +1,77 @@
+{
+  "admitted_baseline_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "assignment": "damage-proposal-20260923-v1",
+  "audit": {
+    "event_logs_verified": 1728,
+    "failures": [],
+    "original_audit_failure_preserved": true,
+    "recomputed_targets": 144,
+    "rom_free_audit_classifier_repair_cycles": 1,
+    "terminal_hashes_verified": 1728
+  },
+  "baseline_K_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "candidate_sha256": "9e81faf572be5a8cf1de27ec7f7fe933b15efc71f87a8bc60a3722a4478fd31b",
+  "composition": {
+    "episodes": 0,
+    "status": "not_run_due_to_failed_holdout"
+  },
+  "disposition": "rejected",
+  "fit_attempts": 1,
+  "fit_completed": 1,
+  "fit_configurations": 96,
+  "fit_dataset_sha256": "224b38fd04258f4752742803c1b36fa2fcad8d2bc36f7ea13053557147f0910d",
+  "fit_families": 32,
+  "forced_native_branches": 1728,
+  "four_reused_TRAIN_origins_not_independent_evaluation": true,
+  "holdout": {
+    "absolute_improvement": 0.09209772882015445,
+    "baseline_empirical_best": 22,
+    "baseline_mean_regret": 0.16901381700271634,
+    "candidate_empirical_best": 36,
+    "candidate_mean_regret": 0.07691608818256189,
+    "changed_choices": 29,
+    "failed_gates": [
+      "coverage_slice_regression",
+      "family_regression"
+    ],
+    "family_cluster_bootstrap_absolute_improvement_95pct": [
+      -0.01626332700702804,
+      0.1867497190804875
+    ],
+    "gate_passed": false,
+    "paired_better": 22,
+    "paired_ties": 20,
+    "paired_worse": 6,
+    "regressed_families": {
+      "family-40": 0.5274431057563588
+    },
+    "regressed_slices": {
+      "level:31": 0.11476839670303182,
+      "stat_ratio:high": 0.0561276567840458
+    },
+    "relative_improvement": 0.5449124246372963
+  },
+  "holdout_configurations": 48,
+  "holdout_dataset_sha256": "b9397ff1c9507f8708e750db36bb8d9fe3a6423017ff47b01c02f3d86c42ce08",
+  "holdout_families": 16,
+  "learned_training_battle_actions": 0,
+  "plan_sha256": "d1b39215befe01637a573db6a6e96435284c6e55b09f8078a1f85477c7dd0749",
+  "protected": {
+    "actor_promotions": 0,
+    "collection_save_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "registration_delta": 0,
+    "stage329_absent": true,
+    "story_inputs": 0,
+    "story_save_sha256": "a8a6ecbfff5ca25dc8290a37a4be4132acafc05dded3cb80bbbf3c9ccf2ff941"
+  },
+  "publication": false,
+  "retention": {
+    "comparable_group_gate": "unmet_missing_comparable_damage_groups",
+    "historical_utility_groups_not_foe_hp_comparable": true,
+    "prior_opened_damage_baseline_regret": 0.06793647959331617,
+    "prior_opened_damage_candidate_regret": 0.05847441317783557,
+    "unsupported_mechanics_general_replacement_blocked": true
+  },
+  "schema": "pokemon.red.damage-proposal-overnight-public-result.v1",
+  "source_commit": "caa94a5ecc1cbbaad34f1681e38280848aacd7fa"
+}

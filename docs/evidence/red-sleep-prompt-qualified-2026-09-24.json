@@ -1,0 +1,106 @@
+{
+  "schema": "pokemon.red.sleep-prompt-qualified.v1",
+  "session_id": "2026-09-24-sleep-prompt-qualified",
+  "status": "narrow_runtime_qualification_passed",
+  "source_commit": "e9cfc577a2bdbcf72e03a99a26ebfd7eeea71ba6",
+  "hashes": {
+    "remaining_plan": "fb9027fed7652b399f948ec2b04e7ca38ce11887ec0492d966c1a5ee290150b5",
+    "remaining_result": "7b293126830f28ad07e48d5a826099e6e84f9a68a5a801a2d53d659c256db062",
+    "combined_independent_audit": "339fb5230f3085c678a4bab5d99fdddcb9d35ac26ef6ce22525c389e4deea3f0",
+    "next_preparation": "0626c754071179ba88272a16bb7ef0ce5ba03003dc1fad38a9726235f5169caf"
+  },
+  "new_native": {
+    "episodes": 3,
+    "decisions": 70,
+    "model_decisions": 67,
+    "prescribed_openings": 3,
+    "wins": 0,
+    "losses": 3,
+    "actions": 998,
+    "frames": 85738,
+    "seconds": 10.37870795885101
+  },
+  "combined": {
+    "cells": 4,
+    "train_roots": 2,
+    "decisions": 91,
+    "model_decisions": 87,
+    "prescribed_openings": 4,
+    "wins": 1,
+    "losses": 3,
+    "actions": 1282,
+    "frames": 110602,
+    "party_faints": 17,
+    "opponent_faints": 8,
+    "party_pp_spent": 30,
+    "selected_move_pp_spends": 31,
+    "invalid_action_failures": 0,
+    "logged_teacher_interventions": 0,
+    "prompt_accepts": 4,
+    "prompt_declines": 3,
+    "phases": {
+      "attack": 50,
+      "switch_prompt": 7,
+      "voluntary_switch": 20,
+      "forced_switch": 14
+    },
+    "median_model_latency_ns": 2541208,
+    "p95_model_latency_ns": 6800250
+  },
+  "verification": {
+    "all_four_sleep_handoffs_passed": true,
+    "all_choices_reconstructed": true,
+    "endpoints_reobserved": true,
+    "semantic_guard_no_input": true,
+    "uncommanded_in_battle_switches": 0,
+    "terminal_slot_clearings_verified": 1,
+    "original_checker_failure_preserved": true,
+    "no_replays": true,
+    "audit_controller_inputs": 0
+  },
+  "next_preparation": {
+    "setups": 29,
+    "train_scenarios": 5,
+    "comparison_teams": 24,
+    "controller_inputs": 0,
+    "frames": 0,
+    "retained_targets": 41,
+    "late_targets_retained": 5,
+    "previously_fitted": 36,
+    "minimum_late_targets": 8,
+    "minimum_main": 3,
+    "minimum_forced": 3,
+    "maximum_late_targets": 10,
+    "maximum_fits": 1,
+    "comparison_episodes_if_fit_passes": 216,
+    "frozen": false,
+    "execution_dispatched": false
+  },
+  "tests": {
+    "focused_passed": 541,
+    "full_suite": false
+  },
+  "deltas": {
+    "new_labels": 0,
+    "fits": 0,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "campaign_state": "359a96aa",
+    "campaign_envelope": "36dbc835",
+    "unused_stage": 462,
+    "deployed_actor": "4ea4cfde",
+    "experimental_actor": "b106108e",
+    "campaign_unchanged": true
+  },
+  "limitations": [
+    "Narrow runtime compatibility only;1win/3losses not a model-strength estimate.",
+    "Constructed teacher-conditioned TRAIN teams;four prescribed opening attacks,all later choices model-owned.",
+    "Two roots and timing siblings are correlated.",
+    "No new labels,fit,promotion,campaign inputs or publication.",
+    "Original first packet still checker-failed;explicit unplayed-cell continuation and corrective audit are retained."
+  ]
+}

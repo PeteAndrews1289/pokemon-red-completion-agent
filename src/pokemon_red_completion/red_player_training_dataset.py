@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+import math
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace
 from typing import cast
 
@@ -79,6 +80,51 @@ class RedPlayerTrainingDataset:
     plan_sha256: str
     curriculum_examples: tuple[LivingDexCurriculumOutcomeExample, ...] = ()
     objective: str | None = None
+
+
+def _replay_scores_match(
+    recorded: Sequence[float | None], replayed: Sequence[float | None]
+) -> bool:
+    """Validate bounded offline score rounding with exact unavailable support."""
+    if not recorded or len(recorded) != len(replayed):
+        return False
+    for left, right in zip(recorded, replayed, strict=True):
+        if left is None or right is None:
+            if left is not None or right is not None:
+                return False
+        elif (
+            isinstance(left, bool)
+            or isinstance(right, bool)
+            or not isinstance(left, (int, float))
+            or not isinstance(right, (int, float))
+            or not math.isfinite(left)
+            or not math.isfinite(right)
+            or not math.isclose(left, right, rel_tol=0.0, abs_tol=1e-12)
+        ):
+            return False
+    return True
+
+
+def _replay_probabilities_match(
+    recorded: Sequence[float], replayed: Sequence[float]
+) -> bool:
+    """Check offline replay rounding while preserving normalized legal support."""
+    if not recorded or len(recorded) != len(replayed):
+        return False
+    for values in (recorded, replayed):
+        if any(
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(value)
+            or not 0.0 <= value <= 1.0
+            for value in values
+        ) or not math.isclose(math.fsum(values), 1.0, rel_tol=0.0, abs_tol=1e-12):
+            return False
+    return all(
+        (left == 0.0) == (right == 0.0)
+        and math.isclose(left, right, rel_tol=0.0, abs_tol=1e-12)
+        for left, right in zip(recorded, replayed, strict=True)
+    )
 
 
 def load_red_player_training_episode(
@@ -357,8 +403,10 @@ def _audit_red_player_training_reader(
             expected_behavior = policy.selection_metadata()
             if (
                 selection.selected_index != decision.selected_candidate_index
-                or tuple(cast(list[float], expected_behavior["candidate_probabilities"]))
-                != decision.behavior_candidate_probabilities
+                or not _replay_probabilities_match(
+                    decision.behavior_candidate_probabilities,
+                    cast(list[float], expected_behavior["candidate_probabilities"]),
+                )
                 or expected_behavior["behavior_policy_id"] != decision.behavior_policy_id
             ):
                 raise ValueError("recorded choice does not replay from its declared behavior")
@@ -374,7 +422,9 @@ def _audit_red_player_training_reader(
             row = restore_living_dex_observed_arm_example(_mapping(payload.get("example")))
             if (
                 row.menu != policy.last_menu
-                or row.behavior_probabilities != policy.option_probabilities
+                or not _replay_probabilities_match(
+                    row.behavior_probabilities, policy.option_probabilities
+                )
                 or payload.get("option_indices") != list(policy.last_menu_indices)
                 or row.selected_candidate_index
                 != policy.last_menu_indices.index(selection.selected_index)

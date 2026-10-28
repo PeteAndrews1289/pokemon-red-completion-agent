@@ -156,6 +156,9 @@ def bind_capture_item_support(
                 runtime.reader,
                 route_name="guarded capture-item PC access",
             )
+        wrapper = getattr(router, "interruption_handler_wrapper", None)
+        if wrapper is not None:
+            interruption_handler = wrapper(interruption_handler, spec)
         transport = execute_route(
             pc_route,
             router.actions,
@@ -165,6 +168,10 @@ def bind_capture_item_support(
             limits=_ROUTE_LIMITS,
         )
         at_pc = runtime.adapter.observe()
+        trainer_income = getattr(interruption_handler, "verified_trainer_income", 0)
+        if type(trainer_income) is not int or trainer_income < 0 or type(initial_money) is not int:
+            raise RedCaptureItemSupportError("capture-item route lacks verified trainer proceeds")
+        earned_money = initial_money + trainer_income
         if (
             not transport.passed
             or (at_pc.raw.map_id, at_pc.raw.player_y, at_pc.raw.player_x)
@@ -172,7 +179,7 @@ def bind_capture_item_support(
             or at_pc.raw.battle_state
             or not at_pc.input_ready
             or at_pc.raw.bag_items != observation.raw.bag_items
-            or at_pc.raw.player_money != initial_money
+            or at_pc.raw.player_money != earned_money
             or runtime.reader.read_all_box_states() != initial_boxes
             or dependency_specimen_ledger(at_pc.collection_observation) != initial_ledger
         ):
@@ -189,7 +196,7 @@ def bind_capture_item_support(
         if (
             not withdrawal.passed
             or dict(prepared.raw.bag_items or ()).get(int(required_item)) != 1
-            or prepared.raw.player_money != initial_money
+            or prepared.raw.player_money != earned_money
             or runtime.reader.read_all_box_states() != initial_boxes
             or dependency_specimen_ledger(prepared.collection_observation) != initial_ledger
             or prepared.raw.battle_state
@@ -234,6 +241,7 @@ def bind_capture_item_support(
                     "capture_route_steps": len(capture_route.steps),
                     "collection_preserved_before_capture": True,
                     "setup_training_rows": 0,
+                    "verified_trainer_income": trainer_income,
                     "actions_executed": preparation_actions,
                     "frames_executed": preparation_frames,
                 },

@@ -15,7 +15,10 @@ from __future__ import annotations
 
 import heapq
 from collections.abc import Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
+from types import MappingProxyType
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.global_router import (
@@ -27,6 +30,7 @@ from pokemon_red_completion.global_router import (
     advance_macro_state,
 )
 from pokemon_red_completion.local_router import (
+    _IncrementalLocalPaths,
     LocalGoal,
     LocalGraph,
     LocalPath,
@@ -40,6 +44,186 @@ from pokemon_red_completion.local_router import (
 
 class RoutePlanningError(RuntimeError):
     """Raised when a map path cannot be turned into truthful actions."""
+
+
+_MAX_LOCAL_INVENTORY_SEARCHES = 256
+
+
+class _FrozenLocalRouteCache:
+    """Bounded query/frontier reuse, owned by one read-only inventory pass."""
+
+    def __init__(self):
+        self.graphs = {}
+        self.queries = {}
+        self.searches = {}
+        self.projections = {}
+        self.route_macro_graphs = {}
+        self.route_worlds = {}
+        self.routes = {}
+        self.route_invalidated = False
+        self.route_hits = 0
+        self.route_misses = 0
+        self.hits = 0
+        self.misses = 0
+        self.invalidated = False
+
+    def _retain_graph(self, graph):
+        identity = id(graph)
+        prior = self.graphs.get(identity)
+        if prior is not None and (prior[0] is not graph or graph.edges != prior[1]):
+            self.invalidated = True
+            raise RoutePlanningError("read-only route inventory changed a local graph")
+        if prior is None and len(self.graphs) < 2048:
+            self.graphs[identity] = (graph, dict(graph.edges))
+        return identity in self.graphs
+
+    def route_key(self, graph, local_graphs, start_map, start_at, goal_map,
+                  unavailable, capabilities, last_outside, start_mode, goal_at, goal_mode):
+        """Retain all input graphs before reusing one complete pure query."""
+        if self.invalidated:
+            raise RoutePlanningError("read-only route inventory was invalidated")
+        # Subclasses may compute neighbors dynamically; retain their old path.
+        if type(graph) is not MacroGraph or any(type(g) is not LocalGraph for g in local_graphs.values()):
+            return None
+        macro_id, world_id = id(graph), id(local_graphs)
+        state = (dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
+                 dict(graph.retained_outside_overrides),
+                 None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+                 None if graph.warp_triggers is None else dict(graph.warp_triggers))
+        previous = self.route_macro_graphs.get(macro_id)
+        if previous is not None and (previous[0] is not graph or previous[1] != state):
+            self.invalidated = self.route_invalidated = True
+            raise RoutePlanningError("read-only route inventory changed a macro graph")
+        if previous is None:
+            if len(self.route_macro_graphs) >= 128:
+                return None
+            self.route_macro_graphs[macro_id] = (graph, state)
+        previous_world = self.route_worlds.get(world_id)
+        if previous_world is not None and (
+            previous_world[0] is not local_graphs
+            or previous_world[1] != {m: id(g) for m, g in local_graphs.items()}
+        ):
+            self.invalidated = self.route_invalidated = True
+            raise RoutePlanningError("read-only route inventory changed a local map inventory")
+        if previous_world is None:
+            if len(self.route_worlds) >= 128:
+                return None
+            self.route_worlds[world_id] = (local_graphs, {m: id(g) for m, g in local_graphs.items()})
+        retained = True
+        for local in local_graphs.values():
+            retained = self._retain_graph(local) and retained
+        if not retained:
+            return None
+        return (macro_id, frozenset(self.route_worlds[world_id][1].items()),
+                start_map, start_at, goal_map,
+                frozenset((m, frozenset(at)) for m, at in unavailable.items()),
+                capabilities, last_outside, start_mode, goal_at, goal_mode)
+
+    def verify_routes(self):
+        for graph, state in self.route_macro_graphs.values():
+            current = (dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
+                       dict(graph.retained_outside_overrides),
+                       None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+                       None if graph.warp_triggers is None else dict(graph.warp_triggers))
+            if current != state:
+                self.invalidated = self.route_invalidated = True
+        for local_graphs, state in self.route_worlds.values():
+            if {m: id(g) for m, g in local_graphs.items()} != state:
+                self.invalidated = self.route_invalidated = True
+        if self.route_invalidated:
+            raise RoutePlanningError("read-only route inventory changed a route graph")
+
+    def project(self, graph, blocked):
+        """Share only an identical blocker projection within this observation."""
+        unavailable = frozenset(blocked)
+        if not unavailable:
+            return graph
+        retained = self._retain_graph(graph)
+        key = (id(graph), unavailable)
+        cached = self.projections.get(key)
+        if cached is not None:
+            self._retain_graph(cached)
+            return cached
+        projected = without_coordinates(graph, unavailable)
+        if retained and len(self.graphs) < 2048 and self._retain_graph(projected):
+            self.projections[key] = projected
+        return projected
+
+    def paths(self, graph, warps, start, goals, capabilities, mode):
+        warps, goals = frozenset(warps), frozenset(goals)
+        identity = id(graph)
+        retained = self._retain_graph(graph)
+        key = (identity, warps, start, goals, capabilities, mode)
+        if retained and key in self.queries:
+            value = self.queries[key]
+            self._retain_graph(value[0])
+            self.hits += 1
+            return value
+        self.misses += 1
+        search_key = (identity, warps, start, capabilities, mode)
+        entry = self.searches.get(search_key)
+        if entry is None:
+            projected = without_warp_transit(graph, warps, start_at=start)
+            projected_retained = self._retain_graph(projected)
+            search = None
+            if retained and projected_retained and len(self.searches) < _MAX_LOCAL_INVENTORY_SEARCHES:
+                search = _IncrementalLocalPaths(projected, start, capabilities=capabilities, start_mode=mode)
+                self.searches[search_key] = projected, search
+        else:
+            projected, search = entry
+            projected_retained = self._retain_graph(projected)
+        if search is None:
+            paths = find_local_paths(projected, start, goals, capabilities=capabilities, start_mode=mode)
+        else:
+            try:
+                paths = search.paths(goals)
+            except BaseException:
+                # A rejected query must not leave a partially advanced search.
+                self.searches.pop(search_key, None)
+                raise
+        value = projected, MappingProxyType(paths)
+        if retained and projected_retained and len(self.queries) < 4096:
+            self.queries[key] = value
+        return value
+
+    def verify(self):
+        self.verify_routes()
+        if self.invalidated or any(graph.edges != edges for graph, edges in self.graphs.values()):
+            raise RoutePlanningError("read-only route inventory changed a local graph")
+
+
+_FROZEN_LOCAL_ROUTE_CACHE: ContextVar[_FrozenLocalRouteCache | None] = ContextVar(
+    "frozen_local_route_inventory", default=None
+)
+
+
+@contextmanager
+def frozen_local_route_inventory():
+    """Reuse pure local searches only while constructing one immutable menu.
+
+    Capability, mode, goals, warp rules and graph contents remain exact. No
+    route, observation, world or answer survives the outermost scope.
+    Existing callers are unchanged unless explicitly opted into this context.
+    A changed graph invalidates the inventory even if a planner catches its error.
+    """
+    existing = _FROZEN_LOCAL_ROUTE_CACHE.get()
+    if existing is not None:
+        yield existing
+        return
+    cache = _FrozenLocalRouteCache()
+    token = _FROZEN_LOCAL_ROUTE_CACHE.set(cache)
+    try:
+        yield cache
+        cache.verify()
+    finally:
+        _FROZEN_LOCAL_ROUTE_CACHE.reset(token)
+        cache.searches.clear()
+        cache.routes.clear()
+        cache.route_macro_graphs.clear()
+        cache.route_worlds.clear()
+        cache.queries.clear()
+        cache.projections.clear()
+        cache.graphs.clear()
 
 
 @dataclass(frozen=True, slots=True)
@@ -56,6 +240,7 @@ class RouteStep:
     source_mode: TraversalMode
     expected_mode: TraversalMode
     transient_at: Coordinate | None = None
+    via: tuple[Coordinate, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -66,6 +251,11 @@ class RouteStep:
             raise TypeError("a route step action kind must be a MacroActionKind")
         if self.transient_at in {self.source_at, self.expected_at}:
             raise ValueError("a route-step transient must differ from both endpoints")
+        if self.via and (
+            self.kind != "forced_motion"
+            or {self.source_at, self.expected_at}.intersection(self.via)
+        ):
+            raise ValueError("forced-motion path must exclude both endpoints")
 
     @property
     def macro_action(self) -> MacroAction:
@@ -188,6 +378,7 @@ class RoutePlan:
                         source_mode=modes[index],
                         expected_mode=modes[index + 1],
                         transient_at=(None if triggers_passage else edge.transient),
+                        via=(() if triggers_passage else edge.via),
                     )
                 )
             if not segment.transition_action_in_approach:
@@ -333,22 +524,52 @@ def plan_route(
     """
 
     unavailable = {} if blocked is None else blocked
+    inventory_cache = _FROZEN_LOCAL_ROUTE_CACHE.get()
+    route_key = None
+    if inventory_cache is not None:
+        route_key = inventory_cache.route_key(
+            graph, local_graphs, start_map, start_at, goal_map, unavailable,
+            capabilities, last_outside, start_mode, goal_at, goal_mode,
+        )
+        if route_key is not None and route_key in inventory_cache.routes:
+            inventory_cache.route_hits += 1
+            inventory_cache.hits += 1
+            succeeded, value = inventory_cache.routes[route_key]
+            if succeeded:
+                return value
+            raise RoutePlanningError(*value)
+        inventory_cache.route_misses += 1
     projected = {
-        map_id: without_coordinates(local, unavailable.get(map_id, frozenset()))
+        map_id: (
+            without_coordinates(local, unavailable.get(map_id, frozenset()))
+            if inventory_cache is None else
+            inventory_cache.project(local, unavailable.get(map_id, frozenset()))
+        )
         for map_id, local in local_graphs.items()
     }
-    return _find_composed_route(
-        graph,
-        projected,
-        start_map,
-        start_at,
-        goal_map,
-        capabilities=capabilities,
-        last_outside=last_outside,
-        start_mode=start_mode,
-        goal_at=goal_at,
-        goal_mode=goal_mode,
-    )
+    try:
+        result = _find_composed_route(
+            graph,
+            projected,
+            start_map,
+            start_at,
+            goal_map,
+            capabilities=capabilities,
+            last_outside=last_outside,
+            start_mode=start_mode,
+            goal_at=goal_at,
+            goal_mode=goal_mode,
+        )
+    except RoutePlanningError as error:
+        # Preserve complex native exception chains instead of flattening them.
+        if (route_key is not None and len(inventory_cache.routes) < 1024
+            and type(error) is RoutePlanningError
+            and error.__cause__ is None and error.__context__ is None):
+            inventory_cache.routes[route_key] = (False, error.args)
+        raise
+    if route_key is not None and len(inventory_cache.routes) < 1024:
+        inventory_cache.routes[route_key] = (True, result)
+    return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -385,8 +606,24 @@ def _find_composed_route(
     best_goal: tuple[int, int, _ComposedState, LocalPath | None] | None = None
     local_path_cache: dict[
         tuple[int, Coordinate, TraversalMode],
-        dict[LocalGoal, LocalPath],
+        tuple[
+            LocalGraph,
+            dict[LocalGoal, LocalPath],
+            dict[tuple[int, int], tuple[tuple[RouteSegment, int], ...]],
+        ],
     ] = {}
+    path_costs: dict[int, tuple[LocalPath, int]] = {}
+
+    def path_cost(path: LocalPath) -> int:
+        # Outside-return histories and sibling exits reuse immutable paths.
+        # Retain the path with its price so object IDs cannot be recycled;
+        # neither survives this one composed search or a new observation.
+        priced = path_costs.get(id(path))
+        if priced is None:
+            priced = path, sum(edge.cost for edge in path.edges)
+            path_costs[id(path)] = priced
+        return priced[1]
+
     sequence = 1
 
     while frontier:
@@ -400,33 +637,46 @@ def _find_composed_route(
             best_goal = (cost, sequence, state, None)
             break
 
-        local = local_graphs.get(state.map_id)
-        if local is None:
-            continue
-        local = without_warp_transit(
-            local,
-            graph.warp_locations.get(state.map_id, ()),
-            start_at=state.at,
-        )
         cache_key = (state.map_id, state.at, state.mode)
-        local_paths = local_path_cache.get(cache_key)
-        if local_paths is None:
+        cached = local_path_cache.get(cache_key)
+        if cached is None:
+            local = local_graphs.get(state.map_id)
+            if local is None:
+                continue
+            warp_rules = (
+                graph.warp_locations if graph.warp_triggers is None else graph.warp_triggers
+            )
+            warps = warp_rules.get(state.map_id, ())
             goals = _local_goals(graph, state.map_id)
             if state.map_id == goal_map and goal_at is not None:
                 goals.add((goal_at, goal_mode))
-            local_paths = find_local_paths(
-                local,
-                state.at,
-                goals,
-                capabilities=capabilities,
-                start_mode=state.mode,
-            )
-            local_path_cache[cache_key] = local_paths
+            inventory_cache = _FROZEN_LOCAL_ROUTE_CACHE.get()
+            if inventory_cache is None:
+                local = without_warp_transit(local, warps, start_at=state.at)
+                local_paths = find_local_paths(
+                    local, state.at, goals, capabilities=capabilities, start_mode=state.mode
+                )
+            else:
+                local, local_paths = inventory_cache.paths(
+                    local, warps, state.at, goals, capabilities, state.mode
+                )
+            # The existing per-search path cache already assumes this observed
+            # map/start/mode is unchanged. Retain its identical projection too;
+            # outside-return variants must not rebuild the same graph. Neither
+            # graph nor paths survive a new observation. Explicit inventory
+            # reuse may share the same pure query with its sibling searches.
+            # Retained outside-map variants share this exact local state.
+            # Once advance_macro_state resolves a passage's target, its
+            # composition and price do not depend on the retained context.
+            passages: dict[tuple[int, int], tuple[tuple[RouteSegment, int], ...]] = {}
+            local_path_cache[cache_key] = local, local_paths, passages
+        else:
+            local, local_paths, passages = cached
 
         if state.map_id == goal_map and goal_at is not None:
             terminal = local_paths.get((goal_at, goal_mode))
             if terminal is not None:
-                terminal_cost = sum(edge.cost for edge in terminal.edges)
+                terminal_cost = path_cost(terminal)
                 candidate = (cost + terminal_cost, sequence, state, terminal)
                 if best_goal is None or candidate[:2] < best_goal[:2]:
                     best_goal = candidate
@@ -434,7 +684,7 @@ def _find_composed_route(
                 if terminal_cost == 0:
                     break
 
-        for edge in graph.neighbors(state.map_id):
+        for edge_ordinal, edge in enumerate(graph.neighbors(state.map_id)):
             advanced = advance_macro_state(
                 graph,
                 (state.map_id, state.last_outside),
@@ -443,21 +693,29 @@ def _find_composed_route(
             if advanced is None:
                 continue
             target_map, next_last_outside = advanced
-            try:
-                candidates = _compose_segment_candidates(
-                    graph,
-                    local,
-                    state,
-                    target_map,
-                    edge,
-                    capabilities=capabilities,
-                    local_paths=local_paths,
-                    target_local=local_graphs.get(target_map),
+            passage_key = edge_ordinal, target_map
+            candidates = passages.get(passage_key)
+            if candidates is None:
+                try:
+                    composed = _compose_segment_candidates(
+                        graph,
+                        local,
+                        state,
+                        target_map,
+                        edge,
+                        capabilities=capabilities,
+                        local_paths=local_paths,
+                        target_local=local_graphs.get(target_map),
+                    )
+                except RoutePlanningError:
+                    passages[passage_key] = ()
+                    continue
+                candidates = tuple(
+                    (segment, sum(local_edge.cost for local_edge in segment.approach.edges))
+                    for segment in composed
                 )
-            except RoutePlanningError:
-                continue
-            for segment in candidates:
-                segment_cost = sum(local_edge.cost for local_edge in segment.approach.edges)
+                passages[passage_key] = candidates
+            for segment, segment_cost in candidates:
                 candidate_cost = cost + segment_cost + edge.cost
                 following = _ComposedState(
                     target_map,
@@ -506,20 +764,8 @@ def without_warp_transit(
     absorbing = warps.difference({start_at})
     if not warps:
         return graph
-    max_y = max(source[0] for source in graph.edges)
-    max_x = max(source[1] for source in graph.edges)
-
-    def safe_start_departure(edge: object) -> bool:
-        if start_at not in warps:
-            return True
-        target = edge.target  # type: ignore[attr-defined]
-        if start_at[0] <= 1 and target[0] < start_at[0]:
-            return False
-        if start_at[0] >= max_y - 1 and target[0] > start_at[0]:
-            return False
-        if start_at[1] <= 1 and target[1] < start_at[1]:
-            return False
-        return not (start_at[1] >= max_x - 1 and target[1] > start_at[1])
+    if not graph.edges:
+        raise ValueError("max() iterable argument is empty")
 
     # Edge tuples are immutable: copy the mapping, not every unaffected tuple.
     # Never add absent coordinates or mutate the caller's graph. The projection
@@ -529,6 +775,21 @@ def without_warp_transit(
         if source in edges:
             edges[source] = ()
     if start_at in warps and start_at in edges:
+        # Boundary dimensions matter only when walking off the starting warp.
+        # Most connection arrivals need only the absorbing-warp projection.
+        max_y = max(source[0] for source in graph.edges)
+        max_x = max(source[1] for source in graph.edges)
+
+        def safe_start_departure(edge: object) -> bool:
+            target = edge.target  # type: ignore[attr-defined]
+            if start_at[0] <= 1 and target[0] < start_at[0]:
+                return False
+            if start_at[0] >= max_y - 1 and target[0] > start_at[0]:
+                return False
+            if start_at[1] <= 1 and target[1] < start_at[1]:
+                return False
+            return not (start_at[1] >= max_x - 1 and target[1] > start_at[1])
+
         edges[start_at] = tuple(edge for edge in edges[start_at] if safe_start_departure(edge))
     return LocalGraph(edges)
 
@@ -631,6 +892,7 @@ def _compose_segment_candidates(
             state.at,
             target_map,
             edge,
+            source_map=state.map_id,
             capabilities=capabilities,
             start_mode=state.mode,
             local_paths=local_paths,
@@ -721,6 +983,7 @@ def _local_steps(map_id: int, path: LocalPath) -> tuple[RouteStep, ...]:
             source_mode=path.modes[index],
             expected_mode=path.modes[index + 1],
             transient_at=edge.transient,
+            via=edge.via,
         )
         for index, edge in enumerate(path.edges)
     )
@@ -733,6 +996,7 @@ def _warp_transition(
     target_map: int,
     edge: MacroEdge,
     *,
+    source_map: int,
     capabilities: frozenset[str],
     start_mode: TraversalMode,
     local_paths: Mapping[LocalGoal, LocalPath] | None = None,
@@ -763,10 +1027,41 @@ def _warp_transition(
     # robbed-house top door fires on entry, while the Underground Path top edge
     # needs a second UP from the same coordinate.
     action_in_approach = edge.exit_action is None
-    if action_in_approach and not approach.edges:
-        raise RoutePlanningError(
-            "route begins on a warp trigger; moving away and re-entering is not planned yet"
-        )
+    if not approach.edges:
+        # A scripted arrival can also leave a directional door's collision
+        # trigger suppressed. Re-arm it when a safe ordinary cycle is known,
+        # then retain its decoded extra input. An automatic warp needs this
+        # cycle; a directional warp with no qualified cycle keeps its existing
+        # collision recipe. Never invent an edge to manufacture re-entry.
+        cycles = []
+        triggers = (
+            graph.warp_locations if graph.warp_triggers is None else graph.warp_triggers
+        ).get(source_map, ())
+        for outward in local.neighbors(start):
+            if outward.target in triggers:
+                continue
+            for inward in local.neighbors(outward.target):
+                if outward.target == start or inward.target != start:
+                    continue
+                if all(
+                    step.kind == "walk"
+                    and step.action_kind == MacroActionKind.MOVE
+                    and step.requirements <= capabilities
+                    and step.permits_mode(start_mode)
+                    and step.next_mode(start_mode) == start_mode
+                    for step in (outward, inward)
+                ):
+                    cycles.append(
+                        LocalPath(
+                            (start, outward.target, start),
+                            (outward, inward),
+                            (start_mode, start_mode, start_mode),
+                        )
+                    )
+        if not cycles and action_in_approach:
+            raise RoutePlanningError("route begins on a warp trigger without safe re-entry")
+        if cycles:
+            approach = min(cycles, key=lambda path: sum(step.cost for step in path.edges))
 
     arrival = edge.arrival_at
     if edge.kind == "return":

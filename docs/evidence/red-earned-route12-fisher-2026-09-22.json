@@ -1,0 +1,131 @@
+{
+  "actions": 603,
+  "bag_stacks": 18,
+  "battle_decisions": 7,
+  "cash": 17229,
+  "envelope_sha256": "fd86d7ddd92fdabdcf5871d6c313018c4f34c80382fac1b76e69c553f0437827",
+  "execution_seconds": 13.041409000288695,
+  "frames": 56496,
+  "gameplay_running": false,
+  "map_id": 141,
+  "metrics": {
+    "attack_turn_utility_sum": 8.993006993006993,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 3,
+    "party_faints": 0,
+    "party_hp_lost": 3,
+    "party_pp_spent": 4,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 6457542,
+    "policy_latency_ns_mean": 2868017.8571428573,
+    "policy_latency_ns_min": 728667,
+    "teacher_interventions": 0
+  },
+  "net_income": 770,
+  "new_fits": 0,
+  "new_registrations": 0,
+  "outcome_sha256": "ceb39e272a93bf63d60a9257acc9754186e9dcf30c8c55deec69ffdb575c8bf5",
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    75,
+    147,
+    91,
+    97
+  ],
+  "party_levels": [
+    35,
+    47,
+    35,
+    35
+  ],
+  "position": [
+    3,
+    3
+  ],
+  "preparation_review": {
+    "attempt_budget_refilled": false,
+    "battle_outcome": "won",
+    "combat_levels": [
+      35,
+      47,
+      35,
+      35
+    ],
+    "helper_sha256": "f340a66c67e3ea8ccf326ee0d4bece6d4e2e462e657fbd90b8c1067ac173ff99",
+    "launches_training": false,
+    "learned_preparation": false,
+    "next_action": "continue_story",
+    "observed_opponents": 3,
+    "opposition_level": 22,
+    "reason": "level preparation not needed",
+    "resume_after": "existing bounded preparation targets and recovery verified",
+    "schema": "pokemon.story-preparation-review.v1",
+    "source_sha256": "0e64de2c98b965929300c6669592b70d144a7686fb5bb7ae27dc6b78993da7c4",
+    "targets": {}
+  },
+  "primary_unchanged": true,
+  "purchases": 0,
+  "recomputed_choices": {
+    "attack": 4,
+    "control": 4,
+    "switch": 3
+  },
+  "sales": 0,
+  "schema": "pokemon.red.earned-route12-fisher.v1",
+  "snorlax_approach_preflight": {
+    "status": "reachable_without_input",
+    "steps": 131,
+    "target": [
+      23,
+      61,
+      10
+    ]
+  },
+  "storage": {
+    "bag_stacks_after": 18,
+    "bag_stacks_before": 20,
+    "cash_unchanged": true,
+    "model_queries": 0,
+    "pc_after": [
+      [
+        20,
+        7
+      ],
+      [
+        48,
+        1
+      ],
+      [
+        72,
+        1
+      ]
+    ],
+    "pc_before": [
+      [
+        20,
+        7
+      ]
+    ],
+    "status": "complete",
+    "stored_items": [
+      72,
+      48
+    ]
+  },
+  "story_objectives": 21,
+  "terminal_sha256": "0954e57e6a43106f8f324f001a6e30f10f0f22167a6032e185c2d3748ec97a55",
+  "terminal_stage": 164,
+  "mission_check": {
+    "capability": "Conserved native item storage and earned travel into a learned Route12 trainer encounter.",
+    "learned_authority": "Existing additive model owns combat. Navigation, storage, targeting and healing remain disclosed support; no fit or promotion.",
+    "transfer_test": "One previously unused natural Route12 roster; varied storage faults. Not independent broad generalization.",
+    "cheapest_falsifier": "Storage conservation and short travel before trainer input.",
+    "time_box": "Two-hour session ceiling; storage/travel2000actions300000frames600seconds; one trainer/recovery10000actions1500000frames600seconds80decisions.",
+    "stop_condition": "Stop on unsafe recovery, unqualified capture, exhausted budget or scripted combat fallback; no source replay."
+  },
+  "targeted_tests_passed": 182,
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "qualification_sha256": "4e68390900853e1213a540d0a044cca379d8700926f3a784c65de1819e3b56bd",
+  "limitation": "Frozen model execution, not a new fit or full-player gate. Snorlax not awakened/captured. Navigation, target, storage, preparation and recovery are disclosed support."
+}

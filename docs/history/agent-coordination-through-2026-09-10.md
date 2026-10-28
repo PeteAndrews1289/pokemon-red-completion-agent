@@ -2435,7 +2435,7 @@ or widen model authority. All older overrides below are historical when inconsis
 > powered collection scales, the stale 195-distinct-root schedule must be prospectively reconciled
 > with a cluster-aware lineage-level power design. Claude and Antigravity completed this roadmap
 > audit with conditional GO; Codex resolved the conditions in the
-> [review adjudication](../../docs/red-to-crystal-roadmap-review-adjudication-2026-08-30.md). The old
+> [review adjudication](retired-plans-2026-10-07/red-to-crystal-roadmap-review-adjudication-2026-08-30.md). The old
 > Crystal V3 protocol is retired unopened for this bundle. These horizon decisions do not block or
 > broaden the current R0 fit-engineering lane.
 
@@ -4145,7 +4145,7 @@ or widen model authority. All older overrides below are historical when inconsis
 > them. Their desktop windows are not required for command-line access. No reviewer executes,
 > grants authority or outvotes evidence. See the
 > [path-free receipt](../../docs/evidence/repeatable-party-switch-assisted-preflight-v1-2026-08-17.json)
-> and [current audit](../../docs/current-audit-2026-08-17.md). Local qualification is **3,961 passed · 3
+> and [current audit](retired-plans-2026-10-07/current-audit-2026-08-17.md). Local qualification is **3,961 passed · 3
 > skipped · 1 expected xfail**, plus lint, whole-source typing, docs, privacy, focus, and registries.
 
 > **Active product focus — authoritative current checkpoint:** Read
@@ -5174,7 +5174,7 @@ or widen model authority. All older overrides below are historical when inconsis
 > docs, privacy, and registry checks passes. Commit, push, then use a fresh root. Do
 > not add `990007` to fitting, rerun retired model-test roots, build a complete Crystal route, weaken
 > the curriculum lesson, or consume a counted v95 root. Counted status remains 0/10. See the
-> [current audit](../../docs/current-audit-2026-08-09.md).
+> [current audit](retired-plans-2026-10-07/current-audit-2026-08-09.md).
 
 **New here? Read [HANDOFF.md](../../HANDOFF.md) first** — it is the complete orientation, including what
 is unproven and how this codebase repeatedly fools people. Then [MISSION.md](../../MISSION.md) for why the

@@ -30,6 +30,7 @@ from .red_party import party_observation_from_raw
 from .red_trainer_damage import incoming_damage_bounds
 from .red_trainer_healing import bag_after_full_restores, use_active_full_restore
 from .red_trainer_party import trainer_entry_candidates, trainer_matchup_candidates
+from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
 
 
 class RedTrainerControlError(BattleRuntimeError):
@@ -126,12 +127,18 @@ class RedTrainerPartyController:
             incoming = self.reader.read_trainer_entry_moves(raw)
             if incoming is None:
                 raise RedTrainerControlError("incoming trainer moves are unavailable")
+            trapping = any(move and RED_BATTLE_CATALOG.resolve_move(
+                pokemon_red_move_ref(move)).effect_flags == frozenset({"trapping"})
+                for move in incoming)
+            commitment = (incoming_damage_bounds(self.reader.read_trainer_damage_observation(raw))
+                if trapping else None)
             reserves = trainer_entry_candidates(
                 party, reserves, incoming_moves=incoming, enemy_level=raw.enemy_level,
                 entry_speeds=self.reader.read_trainer_entry_speeds(raw)
                 if any(move in (12, 32, 90) for move in incoming) else None,
                 mirror_move_reset_qualified=self.reader.read_trainer_mirror_switch_ready(raw)
                 if 119 in incoming else False,
+                incoming_commitment_bounds=commitment,
             )
             if not reserves and active is None:
                 raise RedTrainerControlError("no reserve passes the incoming move entry screen")

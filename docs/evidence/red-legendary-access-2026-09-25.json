@@ -1,0 +1,94 @@
+{
+  "schema": "pokemon.red.legendary-access-development.v1",
+  "source_start_commit": "159f1db4f1e6ba773b47d8c5cbbba7cd6583fb8f",
+  "partition": "development",
+  "fits": 0,
+  "new_train_examples": 0,
+  "goal_choices": 0,
+  "battle_choices": 6,
+  "independent_roots": 0,
+  "teacher_memory_writes": 0,
+  "gameplay_running": false,
+  "both_requested_captures_complete": false,
+  "audit": {
+    "sha256": "d7a23112bbf7f768e7c4163068fa16ccf6abdedbdefd1d66b4108ceff4fcb8b9",
+    "packets": 29,
+    "states": 141,
+    "capture_receipts": 47,
+    "actions": 3061,
+    "gameplay_frames": 229812,
+    "reload_inputs": 0,
+    "reload_frames": 0
+  },
+  "moltres": {
+    "captured": true,
+    "source_removed": true,
+    "native_event": 1342,
+    "spent_ultra_balls": 20,
+    "spent_great_balls": 5,
+    "status_selections": 6,
+    "failed_original_allocation_retained": true,
+    "explicit_development_allocation_amendment": true,
+    "reset_encounter": false,
+    "terminal_sha256": "6e743ba8d52966e541c4ecfb5fd616fa5b090dadc8e8ce48d52b7a77374cdc27"
+  },
+  "seafoam": {
+    "native_drop_events": [1294, 1295, 2496, 2497, 2504, 2505, 2512, 2513],
+    "verified_drops": 8,
+    "current_control_observed": true,
+    "native_articuno_approach_passed": true,
+    "unintended_hole_fall_retained": true,
+    "script_hole_guard_added": true,
+    "b3f_toggle_sprites": [2, 3]
+  },
+  "articuno": {
+    "captured": false,
+    "spent_great_balls": 16,
+    "status_selections": 1,
+    "every_throw_observed_paralysis": true,
+    "live_encounter_preserved": true,
+    "ball_stock": 0,
+    "party_faints": 1,
+    "frozen_survivors": 1,
+    "terminal_sha256": "7a1eca70dd186546b6f1e3c40b22bd3d369cf01acd8e1a54e1b71452015bc4e8",
+    "recovery_choice": "Awaiting owner choice: separately declared legitimate copy, explicit training-only supply assistance, or retain failure and stop. No option executed."
+  },
+  "economy": {
+    "start_cash": 30620,
+    "ultra_ball_purchase": 24000,
+    "great_ball_purchase": 6600,
+    "native_trainer_payouts": [620, 155],
+    "end_cash": 795,
+    "item_sales": 0
+  },
+  "retained_development": {
+    "owned_before": 22,
+    "owned_after": 23,
+    "specimens_after": 20,
+    "copy_back": false
+  },
+  "protected": {
+    "stage": 471,
+    "state_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+    "envelope_sha256": "2075e2c5b7160e12aaa8aaa69b9bd8cc75fa438c425bbe4e9b9789e876c89c65",
+    "next_stage_absent": true,
+    "actual_owned": 17,
+    "separate_collection": "109/124;78specimens;11968cash;untouched",
+    "models_unchanged": true,
+    "fresh_red_gates_passed": 0
+  },
+  "verification": {
+    "focused_tests_passed": 508,
+    "full_suite_pass_claimed": false,
+    "native_trainer_receipt_disagreement_retained": true,
+    "original_strength_search_default_unchanged": true,
+    "macro_search_state_cap": 100000
+  },
+  "limits": [
+    "Mechanical route, puzzle and capture support are not learned strategic preparation.",
+    "Two native trainer wins independently confirmed by events and payouts; their original unresolved episode metrics are not rewritten.",
+    "Moltres needed an explicit prospective development budget amendment; no automatic budget refill was qualified.",
+    "Articuno capture failed its allocation and still needs a recovery decision.",
+    "No broad battle promotion, DEVELOPMENT fit, independent-root claim, main-save merge or GitHub publication."
+  ]
+}

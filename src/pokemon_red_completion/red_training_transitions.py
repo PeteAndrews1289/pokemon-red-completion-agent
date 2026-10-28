@@ -141,7 +141,8 @@ def red_vermilion_training_transition_available(
             and red_training_fly_available(raw)
         )
     if (
-        current_map_tileset not in RED_ESCAPE_WARP_TILESETS
+        raw.map_id == MapId.AGATHAS_ROOM
+        or current_map_tileset not in RED_ESCAPE_WARP_TILESETS
         or not _living_move_holder(raw, DIG_MOVE_ID)
     ):
         return False

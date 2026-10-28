@@ -20,7 +20,7 @@ from .goal_manager_context_catalog import GoalManagerContextCapture
 from .observation import PokemonRedStateReader
 from .red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
 from .red_collection import red_species_number, red_species_ref
-from .red_evolution_stones import BUYABLE_EVOLUTION_STONES
+from .red_evolution_stones import BUYABLE_EVOLUTION_STONES, EVOLUTION_STONE_ITEMS
 from .red_goal_context import build_red_goal_context_runtime
 from .red_goal_context_profile import (
     RedGoalContextProfile,
@@ -52,7 +52,9 @@ class RedFullPokedexDirectOriginError(ValueError):
 
 
 _CAPTURE_CAPABILITY_PARAMETERS = (
+    "capture_search_budget",
     "capture_status_support",
+    "capture_weakening_support",
     "cut_transport",
     "surf_transport",
     "fly_transport",
@@ -76,11 +78,18 @@ def _capture_capability_parameters(
             spec.kind is GoalKind.ACQUIRE_SPECIES
             and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
         ):
-            return {
+            capabilities = {
                 key: spec.parameters[key]
                 for key in _CAPTURE_CAPABILITY_PARAMETERS
                 if key in spec.parameters
             }
+            if capabilities.get("capture_search_budget") in (
+                "bounded-search-v1", "bounded-search-v2",
+            ):
+                capabilities.update({key: spec.parameters[key] for key in (
+                    "maximum_legs", "maximum_seek_steps", "maximum_encounters",
+                )})
+            return capabilities
     return {}
 
 
@@ -98,7 +107,10 @@ def _evolution_capability_parameters(
                 for key in _EVOLUTION_CAPABILITY_PARAMETERS
                 if key in spec.parameters
             }
-    return {}
+    # Mixed live profiles may have only a capture seed. Its explicit shared
+    # Fly opt-in also applies to newly enumerated evolution targets.
+    return {key: value for key, value in _capture_capability_parameters(profile).items()
+            if key in _EVOLUTION_CAPABILITY_PARAMETERS}
 
 
 def _level_evolution(
@@ -135,7 +147,7 @@ def _level_evolution(
 def _item_evolution(
     observation: RedGoalObservation,
 ) -> tuple[int, int, int]:
-    """Choose one missing boxed, buyable stone evolution from cartridge truth."""
+    """Choose a missing boxed evolution with a held or genuinely buyable stone."""
 
     owned = observation.collection_observation.owned_species
     boxed = {
@@ -153,17 +165,21 @@ def _item_evolution(
         ):
             continue
         matching = tuple(
-            offer
-            for offer in BUYABLE_EVOLUTION_STONES.values()
-            if method.source_id == offer.acquisition_source_id
-            and method.required_item_ref == offer.catalog_item_ref
+            item
+            for item, (source_id, item_ref) in EVOLUTION_STONE_ITEMS.items()
+            if method.source_id == source_id
+            and method.required_item_ref == item_ref
+            and (
+                item in BUYABLE_EVOLUTION_STONES
+                or dict(observation.raw.bag_items or ()).get(item, 0) > 0
+            )
         )
         if len(matching) == 1:
             candidates.append(
                 (
                     red_species_number(method.consumes_species_ref),
                     red_species_number(method.species_ref),
-                    int(matching[0].item_id),
+                    matching[0],
                 )
             )
     if not candidates:
@@ -233,6 +249,8 @@ def derive_direct_full_pokedex_profile(
     profile: RedGoalContextProfile,
     observation: RedGoalObservation,
     world: StrategicScenarioRouteWorld,
+    *,
+    require_evolution: bool = True,
 ) -> RedGoalContextProfile:
     """Replace target-bearing declarations with deterministic observed ones."""
     if not isinstance(profile, RedGoalContextProfile):
@@ -241,16 +259,25 @@ def derive_direct_full_pokedex_profile(
         raise TypeError("direct full-Pokédex profile needs a Red observation")
     if not isinstance(world, StrategicScenarioRouteWorld):
         raise TypeError("direct full-Pokédex profile needs cartridge route geometry")
+    if type(require_evolution) is not bool:
+        raise TypeError("require_evolution must be an explicit boolean")
+    evolution_mechanic = None
+    evolution_parameters: dict[str, object] = {}
     try:
         source, target, level = _level_evolution(observation)
     except RedFullPokedexDirectProfileError:
-        source, target, item_id = _item_evolution(observation)
-        evolution_mechanic = RedGoalMechanic.TARGETED_ITEM_EVOLUTION
-        evolution_parameters: dict[str, object] = {
-            "source_species_ref": red_species_ref(source),
-            "target_species_ref": red_species_ref(target),
-            "item_id": item_id,
-        }
+        try:
+            source, target, item_id = _item_evolution(observation)
+        except RedFullPokedexDirectProfileError:
+            if require_evolution:
+                raise
+        else:
+            evolution_mechanic = RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+            evolution_parameters = {
+                "source_species_ref": red_species_ref(source),
+                "target_species_ref": red_species_ref(target),
+                "item_id": item_id,
+            }
     else:
         evolution_mechanic = RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
         evolution_parameters = {
@@ -276,17 +303,19 @@ def derive_direct_full_pokedex_profile(
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         capture_parameters,
     )
-    providers[GoalKind.EVOLVE_SPECIES] = (
-        GoalKind.EVOLVE_SPECIES,
-        evolution_mechanic,
-        evolution_parameters,
-    )
-    return parse_red_goal_context_profile(
+    if evolution_mechanic is not None:
+        providers[GoalKind.EVOLVE_SPECIES] = (
+            GoalKind.EVOLVE_SPECIES,
+            evolution_mechanic,
+            evolution_parameters,
+        )
+    derived = parse_red_goal_context_profile(
         build_red_goal_context_profile_payload(
             profile_id=profile.profile_id,
             providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
         )
     )
+    return derived
 
 
 def derive_direct_full_pokedex_profile_from_capture(

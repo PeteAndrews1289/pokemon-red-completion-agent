@@ -1,0 +1,83 @@
+{
+  "schema": "pokemon.red.finite-whole-goal-qualification.v1",
+  "session_id": "2026-09-25-finite-whole-goal",
+  "status": "native_binding_qualified_real_alternative_selected",
+  "base_commit": "3bc4e82a",
+  "partition": "development",
+  "classification": "engineering_and_one_frozen_policy_choice_not_new_training",
+  "mission": {
+    "capability": "Compose observed finite-item acquisition, transport and boxed evolution as one executable goal.",
+    "learned_authority": "A frozen model policy chooses between two complete real goals; no operator-precollected ingredient.",
+    "transfer_test": "ROM-free resource, storage, route, stale-source and retained-failure checks; native copies share known lineage.",
+    "cheapest_falsifier": "Zero-input proof of visible item, physical precursor, supported evolution and both travel legs before the query.",
+    "timebox_minutes": 90,
+    "stop_condition": "One complete native qualification and one retained policy choice; no redraw, DEVELOPMENT fit or copy-back."
+  },
+  "native": {
+    "audit_sha256": "a923c6451257dd415ef40d783d35b991c089e18c108aac32f10951fa6eaf77fc",
+    "source_sha256": "e6b7f481da971b4273dfe2a7b347d7b5ae86554e2747f5d3277e606406d9392e",
+    "authenticated_history": "Original model141 integrated-collection input plan and pinned context checkpoint, not borrowed story-campaign history.",
+    "packets": [
+      {"purpose": "whole_finite_goal_executor_qualification", "status": "passed", "model_queries": 0, "actions": 192, "frames": 19692, "terminal_sha256": "c2a54410ab7454eee0c29304d9450720a9d79a18d220e61fe230a734d85a3312", "owned_after": 110, "specimens_after": 78, "registration_added": "Nidoqueen"},
+      {"purpose": "initial_model_menu_admission", "status": "retained_private_harness_failure", "model_queries": 0, "actions": 0, "frames": 0, "terminal_sha256": "e6b7f481da971b4273dfe2a7b347d7b5ae86554e2747f5d3277e606406d9392e"},
+      {"purpose": "continue_zero_input_endpoint_with_corrected_menu_call", "status": "passed", "model_queries": 1, "actions": 808, "frames": 36768, "terminal_sha256": "41bfdce95258f5853275da1baa4cead2be51f1d8593a9f8c97a733ef79f86caf", "owned_after": 110, "specimens_after": 79, "registration_added": "Aerodactyl"}
+    ],
+    "actions_total": 1000,
+    "frames_total": 56460,
+    "audit_states": 6,
+    "audit_inputs": 0,
+    "audit_frames": 0,
+    "cash_spent": 0,
+    "cash_preserved": 11968,
+    "primary_owned_after": 109,
+    "primary_target": 124,
+    "primary_registration_gain": 0,
+    "source_unchanged": true,
+    "actual471_unchanged": true,
+    "stage472_absent": true,
+    "prior_failures_retained": true,
+    "protected_models_unchanged": true,
+    "gameplay_running": false
+  },
+  "policy_choice": {
+    "seed": 2026092565,
+    "seed_changed_after_admission_failure": false,
+    "candidate_count": 2,
+    "candidates": ["complete Old Amber acquisition and revival", "complete visible Moon Stone procurement and Nidorina evolution"],
+    "scores": [-1.0087019393440193, 3.4231159059232845],
+    "probabilities": [0.13381480482888905, 0.8661851951711109],
+    "selected_index": 0,
+    "mode": "model_exploration",
+    "exploration_mix": 0.25,
+    "outcome": "succeeded",
+    "finite_goal_offered": true,
+    "finite_goal_selected": false,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "teacher_labels": 0,
+    "seed_redraws": 0
+  },
+  "implementation": {
+    "opt_in_only": true,
+    "current_outdoor_map_visible_item_only": true,
+    "boxed_precursor_and_registration_guard": true,
+    "native_fly_pc_and_evolution": true,
+    "exact_item_and_cash_verification": true,
+    "whole_goal_action_cap": 1600,
+    "whole_goal_route_step_cap": 400,
+    "whole_goal_native_qualified": true,
+    "learned_preparation_route_or_item_allocation": false
+  },
+  "verification": {"focused_tests_passed": 176, "new_provider_tests": 26, "full_suite": false, "scoped_typecheck_files": 1, "lint": "passed"},
+  "learning": {"new_goal_choices": 1, "successful_choices": 1, "new_fits": 0, "new_train": 0, "model_outcomes": 141, "model_successes": 96, "economy_qualified": 58, "legacy_train": 135, "independent_transfer": false, "authority_promotion": false},
+  "limitations": [
+    "The new finite goal passed full native execution and appeared in the model menu, but was not selected in this single sample. Do not redraw to obtain that claim.",
+    "The initial private harness omitted a required empty supplements argument. It stopped before any query or input; its unchanged terminal and original seed were retained for the corrected call.",
+    "Nidoqueen and Aerodactyl belong to sibling development copies. Neither is copied into the primary save, and they do not combine into111registrations.",
+    "Finite-item scarcity and one-off allocation are not learned by this change; the existing semantic projection treats this as an evolution with zero cash cost. Routes, PC preparation, target declaration and effort estimates remain mechanical support.",
+    "Off-map/hidden item discovery, moving Lickitung interaction, Poliwag/Jynx preparation and Game Corner currency/prizes remain outside this packet. Fresh-Red acceptance stays0/5."
+  ],
+  "next": "Close the moving Lickitung trade boundary using the actual boxed Slowbro and existing native exchange; qualify bounded identity-safe interaction, then expose a complete trade goal to the model. No fossil or finite-goal redraw.",
+  "publication": false,
+  "external_agents": false
+}

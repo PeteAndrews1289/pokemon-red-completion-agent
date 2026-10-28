@@ -1,0 +1,117 @@
+{
+  "schema": "pokemon.project-audit.v1",
+  "date": "2026-10-07",
+  "kind": "falsification",
+  "audit_scope": "risk-focused current-player integration, learning authority and documentation; not every function or full-suite",
+  "current_terminal": {
+    "family": "red-model-selected-silph-20261007-v1",
+    "node": "runs/segment-011",
+    "state_sha256": "08f7dc316e66d18595659ffe63ad283aa7628027a22b38a1e301015c89726d73",
+    "context_sha256": "846927c5c7bb7b405249c82d27801a74d4c0d9ed09486d4ec937b812d896ad74",
+    "badges": 6,
+    "completed_story_objectives": 27,
+    "total_story_objectives": 36,
+    "registered_species": 13,
+    "cash": 9085,
+    "map_id": 182,
+    "party_levels": [
+      28,
+      36,
+      31,
+      26,
+      37,
+      17
+    ],
+    "silph_flags_verified": true,
+    "master_balls": 1,
+    "fully_restored": true,
+    "controls_released": true,
+    "worker_stopped": true
+  },
+  "readonly_check": {
+    "native_inputs": 0,
+    "advanced_frames": 0,
+    "source_unchanged": true,
+    "protected_pins_verified": true,
+    "offline_model_selections": 2,
+    "successful_complete_menu_probes": 2,
+    "real_options": 11,
+    "selected_kind": "advance_story",
+    "selected_objective": "defeat_sabrina",
+    "broken_evolution_profile_reappears": true,
+    "broken_evolution_profile_sha256": "ccbbecd095f501884443967f49e22e20eb0040047327d9cd6e35b19301a7b501",
+    "party_guard_present": false,
+    "party_guard_owner_checked": "runtime.adapter",
+    "evolution_settlement_present": false,
+    "inspection_command_errors": [
+      "initial import typo",
+      "output-only owned_species attribute typo"
+    ],
+    "native_attempts": 0
+  },
+  "deployed_parent": {
+    "model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "settled_examples": 141,
+    "censored_examples": 0,
+    "feature_version": 7,
+    "feature_rows": 356,
+    "outcomes": 9,
+    "added_groups": {
+      "readiness": {
+        "rows": 252,
+        "nonzero_coefficients": 0,
+        "total_coefficients": 2268
+      },
+      "challenge": {
+        "rows": 54,
+        "nonzero_coefficients": 0,
+        "total_coefficients": 486
+      },
+      "preparation": {
+        "rows": 13,
+        "nonzero_coefficients": 0,
+        "total_coefficients": 117
+      }
+    },
+    "caveat": "Older coarse party-risk/resource features remain; zero added weights do not mean all party information is ignored."
+  },
+  "composition": {
+    "current_native_loop_has_repository_launcher": false,
+    "older_public_player_launchers_exist": true,
+    "static_private_import_closure": 168,
+    "longest_shortest_dependency_path_modules": 18,
+    "shared_inventory_lines": 1836,
+    "count_method": "AST reachable imports, including conditional imports; not executed module count"
+  },
+  "findings": [
+    "Known boxed-evolution quarantine and settlement do not survive ordinary shared composition.",
+    "Current integrated launcher remains session-specific and private.",
+    "The base model's 319 added readiness/challenge/preparation rows have zero coefficients.",
+    "Generic evolution wall timeout loses local battle/heal counters unless separately recovered.",
+    "Live instructions mixed completed and current work; old completed scoreboards were misleading."
+  ],
+  "tests": {
+    "focused_rom_free_passed": 278,
+    "documentation_focus_roadmap_passed": 192,
+    "combined_focused_passed": 470,
+    "documentation_links_passed": true,
+    "targeted_lint_passed": true,
+    "full_suite_run": false
+  },
+  "learning_delta": {
+    "new_train_examples": 0,
+    "new_fits": 0,
+    "weight_changes": 0,
+    "promotions": 0
+  },
+  "cleanup": {
+    "retired_documents": 38,
+    "archive": "docs/history/retired-plans-2026-10-07",
+    "recoverable_backup": true,
+    "deleted_game_assets": false,
+    "published": false
+  },
+  "decision": "Reuse the earned save and battler. Make one stable configured resume path, connect interrupted loan settlement/accounting, then test model-selected Sabrina. No fresh replay or sequence/battler redesign.",
+  "work_order": "docs/work-sessions/2026-10-07-project-audit-and-refocus.md",
+  "final_autonomous_red_completed": false
+}

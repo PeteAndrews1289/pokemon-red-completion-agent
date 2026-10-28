@@ -1,0 +1,247 @@
+{
+  "schema": "pokemon.red.two-earned-collection-sessions.v1",
+  "session": "2026-09-21-two-earned-collection-sessions",
+  "classification": "development_collection_and_bounded_execution_maintenance",
+  "mission_check": {
+    "capability": "Sustained model-selected collection from earned states; long evolution work sizes and paid-session recovery preserve exact progress.",
+    "learned_authority": "Four frozen Model137 choices; no teacher targets or new weights. Paid patrol continuation performs no model query.",
+    "transfer_test": "Correlated changed-state development composition; no independent or cross-game transfer claim.",
+    "cheapest_falsifier": "No usable next option, no verified XP, unsafe terminal or loss of conserved resources.",
+    "time_box": "Two user-authorized sessions, each at most90minutes; completed within the declared bounds.",
+    "stop_condition": "Both sessions closed; no further native run after final paid-patrol continuation."
+  },
+  "runs": [
+    {
+      "session": "session1",
+      "run_id": "model137-earned-collection-session1-20260921-v1",
+      "source_commit": "60acfe54ea99d3cdc560a63b85d3d9f8ec1c166c",
+      "plan_limits": {
+        "maximum_decisions": 4,
+        "maximum_actions": 30000,
+        "maximum_frames": 3000000,
+        "maximum_evolution_quanta": 128
+      },
+      "result_sha256": "85af7eb3151f0d9fe569a3486c0ad328956a8f55aed52f30aaa59f9ad5e8c34a",
+      "stop_reason": "verification_failed",
+      "model_decisions": 1,
+      "support_decisions": 0,
+      "native_audit": "verified_native_zero_input",
+      "actions": 29201,
+      "frames": 2472666,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "mode": "model_exploration",
+          "candidate_count": 5,
+          "kind": "evolve_species",
+          "verification": "failed",
+          "error_type": null,
+          "error": null,
+          "failure_reason": "outcome_not_verified",
+          "safe": true,
+          "before_sha256": "70b31fba91747e23d49dfeeac07f4bd77560cac3a572fe585289143ede75cd23",
+          "terminal_sha256": "d2df1d85b46602d183b8729d275ee2c11d3767cc7479c41ebed42ee8e0c728d7",
+          "outcome_sha256": "d695900c679fc53365b81afac82d0e4f36c135c30fe74a65f6687b58eab4acc5",
+          "registration_delta": 0,
+          "cash_delta": 0,
+          "trainee_xp_before": 33792,
+          "trainee_xp_after": 59572
+        }
+      ]
+    },
+    {
+      "session": "session2_first_chunk",
+      "run_id": "model137-earned-collection-session2-20260921-v1",
+      "source_commit": "60acfe54ea99d3cdc560a63b85d3d9f8ec1c166c",
+      "plan_limits": {
+        "maximum_decisions": 4,
+        "maximum_actions": 180000,
+        "maximum_frames": 18000000,
+        "maximum_evolution_quanta": 128
+      },
+      "result_sha256": "33372aa051a4384780d3a180d5d85f8aefedb14d77a839b1ad035587c136e0ac",
+      "stop_reason": "verification_failed",
+      "model_decisions": 1,
+      "support_decisions": 0,
+      "native_audit": "verified_native_zero_input",
+      "actions": 40937,
+      "frames": 3442784,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "mode": "model_exploration",
+          "candidate_count": 5,
+          "kind": "evolve_species",
+          "verification": "failed",
+          "error_type": null,
+          "error": null,
+          "failure_reason": "outcome_not_verified",
+          "safe": true,
+          "before_sha256": "d2df1d85b46602d183b8729d275ee2c11d3767cc7479c41ebed42ee8e0c728d7",
+          "terminal_sha256": "3b22125e73ba6896dd85a4c5acfe4be4e829e79012bf24e84ffc36015159d003",
+          "outcome_sha256": "50839e1c3309900a18b1ba29d147f403ab345eb45b8b7d03f138efc0841a70cd",
+          "registration_delta": 0,
+          "cash_delta": 0,
+          "trainee_xp_before": 59572,
+          "trainee_xp_after": 95120
+        }
+      ]
+    },
+    {
+      "session": "session2_large_chunk",
+      "run_id": "model137-earned-collection-session2-20260921-v2",
+      "source_commit": "271dc2dadf4422436d093462466cfa72c808708b",
+      "plan_limits": {
+        "maximum_decisions": 4,
+        "maximum_actions": 180000,
+        "maximum_frames": 18000000,
+        "maximum_evolution_quanta": 512
+      },
+      "result_sha256": "778be228ebb4d84f76001017fca5eca5b7fd51703a13ad71542d6842e8cf4f62",
+      "stop_reason": "execution_failed",
+      "model_decisions": 2,
+      "support_decisions": 0,
+      "native_audit": "verified_native_zero_input",
+      "actions": 140944,
+      "frames": 11814997,
+      "outcomes": [
+        {
+          "ordinal": 0,
+          "mode": "model_exploration",
+          "candidate_count": 6,
+          "kind": "evolve_species",
+          "verification": "succeeded",
+          "error_type": null,
+          "error": null,
+          "failure_reason": null,
+          "safe": true,
+          "before_sha256": "3b22125e73ba6896dd85a4c5acfe4be4e829e79012bf24e84ffc36015159d003",
+          "terminal_sha256": "6b436d8ab1529a29eb95695a16a39a9978831d1633673cb09a330fe459ba7cb8",
+          "outcome_sha256": "1dd9a936a29017df49a16059216ecaf86d21f2ca5a5863d439bf3b9deb55b4e6",
+          "registration_delta": 1,
+          "cash_delta": 0,
+          "trainee_xp_before": 95120,
+          "trainee_xp_after": 207988
+        },
+        {
+          "ordinal": 1,
+          "mode": "model_exploration",
+          "candidate_count": 4,
+          "kind": "acquire_species",
+          "verification": null,
+          "error_type": "RedAreaExecutionError",
+          "error": "wild:SafariZoneNorth:grass exceeded 66 semantic actions",
+          "failure_reason": null,
+          "safe": true,
+          "before_sha256": "6b436d8ab1529a29eb95695a16a39a9978831d1633673cb09a330fe459ba7cb8",
+          "terminal_sha256": "ca4f954471f57c04cb1a94b08f1b68cc080b093f2597aeee08678bf90f63e8e7",
+          "outcome_sha256": "7b17e3a32c84f7c02f5eb9134c7e02ba6fd496dc2c774846ed8dc3be3c69d805",
+          "registration_delta": 0,
+          "cash_delta": -500,
+          "trainee_xp_before": 207988,
+          "trainee_xp_after": 207988
+        }
+      ]
+    }
+  ],
+  "paid_continuation": {
+    "run_id": "model137-earned-collection-session2-safari-20260921-v1",
+    "source_commit": "271dc2dadf4422436d093462466cfa72c808708b",
+    "result_sha256": "4e2423bad910c1cf55a327e715361528f1cd3507e48c97721bc83161979a51ab",
+    "parent_sha256": "ca4f954471f57c04cb1a94b08f1b68cc080b093f2597aeee08678bf90f63e8e7",
+    "terminal_sha256": "f9ee826ef9aea56799244f99d48cd007fbc0a6a72bec7403c08bac06c1f7f39d",
+    "model_queries": 0,
+    "extra_payment": 0,
+    "actions": 684,
+    "frames": 81828,
+    "limits": {
+      "maximum_actions": 5000,
+      "maximum_frames": 300000,
+      "maximum_semantic_actions": 200,
+      "maximum_encounters": 32,
+      "remaining_original_actions": 39056,
+      "remaining_original_frames": 6185003,
+      "stop_seeking_at_steps": 100
+    },
+    "error": {
+      "message": "wild:SafariZoneNorth:grass exceeded 200 semantic actions",
+      "reason_code": "semantic_action_limit_exceeded",
+      "type": "RedAreaExecutionError"
+    },
+    "safe": true,
+    "preserved_resources": true,
+    "new_registrations": [],
+    "event_count": 200,
+    "event_kinds": {
+      "capture_encounter": 1,
+      "flee_encounter": 16,
+      "seek_encounter": 183
+    },
+    "capture_attempt_species": {
+      "pokemon:national:113": 1
+    },
+    "native_audit": "verified_native_zero_input",
+    "plan_sha256": "b70799ff6719bf13822f6d92d0a18addd5496533a6285dead2833a8a050e1483",
+    "harness_sha256": "684a5210b6cdf2bed08a7be99a8e0e8802f34baa42348c6c40222e38d20361df"
+  },
+  "totals": {
+    "model_decisions": 4,
+    "model_successes": 1,
+    "model_partial_outcomes": 2,
+    "model_execution_errors": 1,
+    "additional_paid_search_continuations": 1,
+    "new_train_rows": 0,
+    "new_fits": 0,
+    "actions": 211766,
+    "frames": 17812275,
+    "cash_spent": 500,
+    "registered_before": 106,
+    "registered_after": 107,
+    "specimens_before": 77,
+    "specimens_after": 77,
+    "paid_admissions": 1,
+    "continuation_extra_admissions": 0
+  },
+  "final": {
+    "terminal_sha256": "f9ee826ef9aea56799244f99d48cd007fbc0a6a72bec7403c08bac06c1f7f39d",
+    "cash": 16968,
+    "registered": 107,
+    "declared_native_route": 124,
+    "remaining": 17,
+    "specimens": 77,
+    "dragonite": {
+      "national_number": 149,
+      "level": 55,
+      "experience": 207988,
+      "starting_dragonair_level": 30,
+      "starting_experience": 33792,
+      "experience_gain": 174196
+    },
+    "safari": {
+      "in_safari_zone": true,
+      "safari_balls": 24,
+      "safari_game_over": false,
+      "safari_steps": 129
+    },
+    "safe": true,
+    "gameplay_running": false
+  },
+  "engineering": {
+    "source_commit": "271dc2dadf4422436d093462466cfa72c808708b",
+    "change": "Ordinary menu now honors explicit evolution work size. Default128quanta unchanged; opt-in cap512. Invalid types/bounds rejected before private inputs.600second wall, action/frame reserves, XP/collection verification remain.",
+    "native_result": "Extended batch completed Dragonite after140221actions,112868traineeXP and11724193frames; old partial records unchanged.",
+    "targeted_tests_passed": 388,
+    "full_suite_run": false,
+    "original_bound_test_updated": "Invalid upper-bound test moved129→513;129/512 acceptance and over128 execution, wall, reserve and no-progress rejection are covered.",
+    "registry_sha256": "a491a0cbd6525eed912e1c8642cab339e7e542ba23daf592620d89e691d415c5"
+  },
+  "limits": [
+    "Model137137fitted/92successes/58economy-qualified unchanged; K/L unchanged; no DEVELOPMENT fitting.",
+    "Safari continuation is operator-initiated and uses a private hashed harness; unattended paid-session restart is not qualified.",
+    "Final paid-continuation receipt is not yet an admitted ordinary-run parent; preserve f9ee826e and its original normal-result lineage, do not rewind to ca4f9544 or6b436d8a.",
+    "NPC trades, gifts, fossils, prizes and static encounters remain catalog entries without authenticated ordinary goal executors. At least10 of the remaining17 declared targets depend on those families.",
+    "Failed Safari search and both partial evolutions remain failed; no success-only filtering.",
+    "Fresh-start Red0/5, League0/2; no scope promotion, full run, ROM hack, external agent or GitHub publication."
+  ],
+  "next": "First connect the verified paid-search terminal through reusable admission/settlement without replay or extra admission; then implement a bounded model-owned NPC-trade or gift option. Stop treating the remaining17 as already executable. Dragonite growth is complete; no more arbitrary leveling."
+}

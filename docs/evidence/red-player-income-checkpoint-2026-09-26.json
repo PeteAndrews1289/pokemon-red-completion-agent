@@ -1,0 +1,170 @@
+{
+  "schema": "pokemon.red.player-income-checkpoint.v1",
+  "date": "2026-09-26",
+  "status": "connected-income-purchase-qualified-with-retained-repair",
+  "partition": "train",
+  "independent_train_origins": 1,
+  "source_commit": "45e79a0f838f6a227387fe28670a202560980782",
+  "final_source_code_sha256": "ce36c984a85d0c74f3d5ff2197a454d5f3b07e6c61e69ae691ed888e0f423948",
+  "audit_sha256": "dbbbdd62a390aa8a98f902974d0d54fa43a4c130e30cda4014ed128c31a911f7",
+  "source_setup": {
+    "disclosed": true,
+    "level": 19,
+    "cash": 550,
+    "poke_balls": 2,
+    "synthetic_income_credit": 0,
+    "synthetic_story_credit": 0,
+    "setup_actions": 13,
+    "setup_frames": 624,
+    "setup_native_seconds": 0.994008458,
+    "trainer_defeated_flags_edited": false,
+    "actor_state_editing": false,
+    "prepared_lead_margin_unchanged": 10
+  },
+  "primary": {
+    "initial_attempt_stop": "execution_failed",
+    "initial_failure": "TRAIN trainer funding unsupported by the frozen bridge",
+    "initial_actions": 54,
+    "initial_frames": 3408,
+    "original_failure_retained": true,
+    "reset": false,
+    "retained_same_trainer_finished": true,
+    "new_goal_draw_for_recovery": false,
+    "native_payout": 60,
+    "battle_model_choices": 4,
+    "battle_fit_allowed": false,
+    "purchase_quantity": 3,
+    "purchase_cost": 600,
+    "final_cash": 10,
+    "final_poke_balls": 5,
+    "fully_restored": true,
+    "spending_segment_stop": "curriculum_complete",
+    "clean_uninterrupted_run": false,
+    "genuine_goal_choices": 2,
+    "support_choices": 1,
+    "actions": 300,
+    "cash_spent": 600,
+    "frames": 18324,
+    "heals": 1,
+    "seconds": 16.05214962500031
+  },
+  "second_question": {
+    "source": "separate declared TRAIN fork of the actual postbattle Forest terminal",
+    "new_setup_edits": 0,
+    "target_poke_balls": 6,
+    "initial_cash": 610,
+    "initial_poke_balls": 2,
+    "stop": "menu_unavailable",
+    "initial_choice": "model sampled restoration among earning, purchasing and restoration",
+    "subsequent_purchase": "forced singleton",
+    "new_battles": 0,
+    "new_income": 0,
+    "final_cash": 10,
+    "final_poke_balls": 5,
+    "fully_restored": true,
+    "actions": 180,
+    "frames": 8232,
+    "seconds": 10.936668791982811,
+    "genuine_goal_choices": 1,
+    "support_choices": 1,
+    "finite_income_exhaustion_qualified": false
+  },
+  "learning": {
+    "new_admitted_unit_outcomes": 2,
+    "new_purchase_rows": 2,
+    "new_income_rows": 0,
+    "new_fit_calls": 0,
+    "prior_native_rows": 9,
+    "previous_unfitted_native_rows": 5,
+    "retained_native_rows": 16,
+    "total_unfitted_native_rows": 7,
+    "fitted_candidate_rows": 146,
+    "new_rows_comparative": false,
+    "new_rows_independent": false,
+    "model_advantage_demonstrated": false
+  },
+  "admitted_unit_outcomes": [
+    {
+      "case": "spending",
+      "cash_delta": -600,
+      "comparative_choice": false,
+      "declaration_sha256": "a5239e055a7cdffb8743751bec8b77ce95728195df864eed69988900f9f9d5b9",
+      "feature_version": 5,
+      "ordinal": 0,
+      "outcome_sha256": "64976e339053f1496250f5761560651fe9ffa1951ca582c3c4f41116f4c43320"
+    },
+    {
+      "case": "finite-income",
+      "cash_delta": -600,
+      "comparative_choice": false,
+      "declaration_sha256": "5922ff1a09854a7cad23b5d84be6b561cf4909c81b9f72a5aab7a23d0cd3ecfb",
+      "feature_version": 5,
+      "ordinal": 1,
+      "outcome_sha256": "8c434342b7795cc33f8a909292ce5e231166ed42c2e3637a2cf89d820372b95b"
+    }
+  ],
+  "native_code_identities": [
+    {
+      "case": "actor",
+      "source_bundle_sha256": "4701c50b6baf426021946f19bc8be5fa048f1474d121ce9c52b2cd89f06ca6a7"
+    },
+    {
+      "case": "spending",
+      "source_bundle_sha256": "724c4965a57ca1df72b2aabdce673ad583dff4e7bf87ba3d68c1f0975db0a76a"
+    },
+    {
+      "case": "finite-income",
+      "source_bundle_sha256": "2e23d3641c187334b86a3f8858394115c12086bd5684658205ce3b2a7e9689f3"
+    }
+  ],
+  "remaining_limitation": {
+    "available_goals": 0,
+    "declared_exit_map": 1,
+    "forest_in_scope": false,
+    "inventoried_maps": [
+      1,
+      12,
+      13,
+      33,
+      42
+    ],
+    "policy_queries": 0,
+    "source_map": 42,
+    "unbeaten_forest_trainers": 2
+  },
+  "independent_comparison": {
+    "new_origins": 0,
+    "policy_queries": 0,
+    "old_pairs_consumed": 4,
+    "new_tranche_approval": "pending",
+    "preparation_proposal": "docs/player-income-checkpoint-plan-2026-09-26.md"
+  },
+  "protected": {
+    "hashes_unchanged": true,
+    "story_checkpoint": 471,
+    "stage_472_exists": false,
+    "deployed_model": 141,
+    "main_collection": 109,
+    "declared_red_total": 124,
+    "separate_trade_collection": 111,
+    "legacy_train_counter": 135,
+    "registration_delta": 0,
+    "fresh_red_acceptance_passed": 0,
+    "fresh_red_acceptance_total": 5
+  },
+  "gameplay_stopped": true,
+  "publication": false,
+  "external_agents": false,
+  "promotions": 0,
+  "verification": {
+    "independent_readback": true,
+    "audit_input_frames": 0,
+    "zero_input_scope_gate_checked": true,
+    "affected_regression_passed": 1800,
+    "integration_tests_deselected": 13,
+    "late_guard_recheck": "included in final 1800-test affected suite",
+    "ruff_passed": true,
+    "mypy_source_files": 668,
+    "whole_suite_rerun": false
+  }
+}

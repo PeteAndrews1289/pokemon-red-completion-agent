@@ -75,6 +75,35 @@ from pokemon_red_completion.training_venue import TrainingVenue, WarpSafeVenueWa
 
 DIGLETT_SPECIES_ID = 0x3B
 TACKLE_MOVE_ID = 0x21
+
+
+@pytest.mark.parametrize("metered,has_hook", [(True, True), (True, False), (False, True)])
+def test_evolution_nursing_reuses_hook_or_legacy_port(metered, has_hook):
+    from types import SimpleNamespace
+
+    calls = []
+
+    def nurse(*ports):
+        calls.append(("nurse", ports))
+
+    actions = SimpleNamespace()
+    reader, emulator = object(), object()
+    if has_hook:
+        actions.execute_training_healing = lambda *ports: calls.append(("hook", ports))
+    red_team_training.execute_evolution_healing_trip(
+        actions,
+        reader,
+        emulator,
+        nurse,
+        metered=metered,
+    )
+    assert calls == (
+        [("hook", (nurse, reader, emulator))]
+        if metered and has_hook
+        else [("nurse", (actions, reader, emulator))]
+    )
+
+
 #: The fake gives every member one damaging move and no field moves.
 #:
 #: The member submenu is ordered moves, STATS, SWITCH, CANCEL -- measured from a
@@ -94,9 +123,7 @@ def legacy_curriculum_never_uses_collection_only_helpers(monkeypatch):
     algorithm is deliberately different and must not leak into old receipts.
     The separate shared-experience test module explicitly exercises that mode.
     """
-    parameter = inspect.signature(run_red_team_balancing).parameters[
-        "collection_shared_experience"
-    ]
+    parameter = inspect.signature(run_red_team_balancing).parameters["collection_shared_experience"]
     assert parameter.default is False
 
     def forbidden(*args, **kwargs):
@@ -108,6 +135,7 @@ def legacy_curriculum_never_uses_collection_only_helpers(monkeypatch):
         "collection_finisher",
     ):
         monkeypatch.setattr(red_team_training, name, forbidden)
+
 
 # The roster the Red adapter's own plan names, in the order it names it.
 FINAL_FORM_ROSTER = (
@@ -481,7 +509,11 @@ def test_evolution_controls_cannot_change_non_evolution_training(options):
         run(FakeMemory(), FakeReader([state()]), **options)
 
 
-def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(monkeypatch):
+@pytest.mark.parametrize("reserve_stop", [False, True])
+def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(
+    monkeypatch,
+    reserve_stop,
+):
     from types import SimpleNamespace
 
     memory = FakeMemory()
@@ -507,9 +539,13 @@ def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(mon
 
     reader = Reader()
     fights = []
+    observed_moves = []
+    move_sink = lambda raw, slot: observed_moves.append((raw, slot))
 
     def battle(*args, **kwargs):
         fights.append(PokemonRedPartyReader(memory).read().lead.species_id)
+        assert kwargs["move_decision_sink"] is move_sink
+        kwargs["move_decision_sink"](reader.raw, 1)
         reader.raw = state()
 
     monkeypatch.setattr(red_team_training, "training_attack_pp", lambda member: 40)
@@ -521,9 +557,39 @@ def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(mon
             evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
             allow_direct_evolution=True,
             evolution_battle_quantum=1,
+            move_decision_sink=move_sink,
+            evolution_stop_requested=(lambda: True) if reserve_stop else None,
         )
     assert fights == [DIGLETT_SPECIES_ID]
+    assert len(observed_moves) == 1
+    assert observed_moves[0][1] == 1
     assert paused.value.battles == 1
+    assert paused.value.healing_trips == 0
+    assert (
+        isinstance(
+            paused.value,
+            red_team_training.EvolutionSettlementReserveReached,
+        )
+        == reserve_stop
+    )
+    assert not memory.swaps
+
+
+def test_evolution_reserve_stops_at_field_before_any_action():
+    from types import SimpleNamespace
+
+    memory = FakeMemory()
+    memory.set_party([(DIGLETT_SPECIES_ID, 30), (BLASTOISE_SPECIES_ID, 63)])
+    reader = FakeReader([state()])
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    with pytest.raises(red_team_training.EvolutionSettlementReserveReached) as paused:
+        run(
+            memory,
+            reader,
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            evolution_stop_requested=lambda: True,
+        )
+    assert paused.value.battles == 0
     assert paused.value.healing_trips == 0
     assert not memory.swaps
 
@@ -2159,3 +2225,128 @@ def test_a_party_swap_observes_a_delayed_member_submenu_transition() -> None:
     assert memory.ignored_party_confirms == 1
     assert memory.party[0].species == DUX_SPECIES_ID
     assert memory.party[2].species == BLASTOISE_SPECIES_ID
+
+# The predecessor must earn its evolution through the same guarded state machine.
+def _bootstrap_fixture(level=36):
+    from dataclasses import replace
+    from pokemon_red_completion.red_collection import red_internal_species_id
+    from pokemon_red_completion.red_native_boxed_evolution import (
+        native_training_move_guard, native_training_move_slot,
+    )
+    memory = FakeMemory()
+    source = red_internal_species_id(8)
+    memory.set_party([(source, level), (DUX_SPECIES_ID, 20), (DIGLETT_SPECIES_ID, 22)])
+    band = GrindingArea(
+        area_id="route_11", minimum_encounter_level=13,
+        maximum_encounter_level=17, rare_maximum_encounter_level=17,
+        measured_samples=100,
+    )
+    venue = replace(_venue(band), move_slot=native_training_move_slot,
+                    move_guard=native_training_move_guard)
+    kwargs = dict(
+        policy=BalancedTeamPolicy(max_battles=4, max_healing_trips=3),
+        venues=[venue], evolution_target=(source, BLASTOISE_SPECIES_ID),
+        allow_direct_evolution=True, collection_shared_experience=False,
+        fixed_dose=None, development_target_species_id=None,
+        encounters=((13, 0x6C), (17, 0x60)),
+    )
+    return memory, source, kwargs
+
+
+@pytest.mark.parametrize("level", [36, 39])
+def test_native_bootstrap_accepts_observed_safe_predecessor(level):
+    memory, source, kwargs = _bootstrap_fixture(level)
+    assert red_team_training.qualified_bootstrap_evolution_escort(
+        PokemonRedPartyReader(memory).read(), **kwargs,
+    ) == source
+
+
+@pytest.mark.parametrize("change", [
+    {"allow_direct_evolution": False}, {"collection_shared_experience": True},
+    {"development_target_species_id": DIGLETT_SPECIES_ID},
+    {"evolution_target": (DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID)},
+    {"encounters": ()}, {"encounters": [(13, 0x6C)]},
+    {"encounters": ((True, 0x6C),)}, {"encounters": ((101, 0x6C),)},
+    {"encounters": ((13, 0),)}, {"encounters": ((13, 0x6C, 1),)},
+])
+def test_native_bootstrap_rejects_unsupported_modes_before_input(change):
+    memory, _, kwargs = _bootstrap_fixture()
+    kwargs.update(change)
+    with pytest.raises(ValueError, match="unsupported native"):
+        red_team_training.qualified_bootstrap_evolution_escort(
+            PokemonRedPartyReader(memory).read(), **kwargs,
+        )
+    assert not memory.swaps
+
+
+@pytest.mark.parametrize("problem", ["venue", "callback", "duplicate", "existing", "hp", "status", "pp", "matchup"])
+def test_native_bootstrap_requires_real_coverage_and_safe_unique_party(problem):
+    from dataclasses import replace
+    from pokemon_red_completion.party import StatusCondition
+    memory, source, kwargs = _bootstrap_fixture()
+    party = PokemonRedPartyReader(memory).read()
+    member = party.members[0]
+    if problem == "venue":
+        kwargs["venues"] = [_venue(replace(kwargs["venues"][0].band, area_id="other"))]
+    elif problem == "callback":
+        kwargs["venues"] = [replace(kwargs["venues"][0], move_slot=lambda raw: 1)]
+    elif problem == "duplicate":
+        party = replace(party, members=(*party.members, replace(member, slot=4)))
+    elif problem == "existing":
+        party = replace(party, members=(*party.members, replace(member, slot=4, species_id=BLASTOISE_SPECIES_ID)))
+    elif problem == "hp":
+        party = replace(party, members=(replace(member, hp=member.hp - 1), *party.members[1:]))
+    elif problem == "status":
+        party = replace(party, members=(replace(member, status=StatusCondition.POISON), *party.members[1:]))
+    elif problem == "pp":
+        party = replace(party, members=(replace(member, moves=tuple(replace(move, current_pp=0) for move in member.moves)), *party.members[1:]))
+    elif problem == "matchup":
+        kwargs["encounters"] = ((100, 0x6C),)
+    with pytest.raises(ValueError):
+        red_team_training.qualified_bootstrap_evolution_escort(party, **kwargs)
+
+
+def test_native_bootstrap_executes_evolution_preserves_roster_and_meters_nursing(monkeypatch):
+    memory, source, kwargs = _bootstrap_fixture()
+    reader = FakeReader([state(battle_state=1, enemy_level=13, enemy_species_id=0x6C)])
+    actions = FakeExecutor(memory)
+    nursing = []
+    actions.execute_training_healing = lambda healer, r, e: nursing.append((healer, r, e))
+    fights = []
+    def battle(*args, **kw):
+        fights.append(memory.party[0].species)
+        memory.party[0].species = BLASTOISE_SPECIES_ID
+        memory.party[0].level += 1
+        reader.states = [state()]
+    monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", battle)
+    options = {k: v for k, v in kwargs.items() if k not in {"encounters", "fixed_dose", "development_target_species_id"}}
+    result = run_red_team_balancing(actions, reader, memory,
+        **balancing_kwargs(**options, bootstrap_evolution_escort=True,
+                           bootstrap_encounters=kwargs["encounters"]))
+    assert fights == [source]
+    assert [m.species for m in memory.party] == [BLASTOISE_SPECIES_ID, DUX_SPECIES_ID, DIGLETT_SPECIES_ID]
+    assert result[1] == 1
+    assert result[2] == len(nursing) == 1
+    assert not memory.swaps
+
+
+def test_native_bootstrap_refuses_undeclared_live_encounter(monkeypatch):
+    memory, _, kwargs = _bootstrap_fixture()
+    monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", lambda *a, **k: pytest.fail("unsafe battle"))
+    options = {k: v for k, v in kwargs.items() if k not in {"encounters", "fixed_dose", "development_target_species_id"}}
+    with pytest.raises(RuntimeError, match="undeclared"):
+        run(memory, FakeReader([state(battle_state=1, enemy_level=13, enemy_species_id=0x21)]),
+            **options, bootstrap_evolution_escort=True, bootstrap_encounters=kwargs["encounters"])
+
+
+def test_native_bootstrap_is_opt_in_and_honors_existing_settlement_reserve():
+    memory, _, kwargs = _bootstrap_fixture()
+    options = {k: v for k, v in kwargs.items() if k not in {"encounters", "fixed_dose", "development_target_species_id"}}
+    with pytest.raises(RuntimeError, match="qualified Blastoise"):
+        run(memory, FakeReader([state()]), **options)
+    with pytest.raises(red_team_training.EvolutionSettlementReserveReached) as stopped:
+        run(memory, FakeReader([state()]), **options,
+            bootstrap_evolution_escort=True, bootstrap_encounters=kwargs["encounters"],
+            evolution_stop_requested=lambda: True)
+    assert stopped.value.battles == stopped.value.healing_trips == 0
+    assert not memory.swaps

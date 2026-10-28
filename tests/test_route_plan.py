@@ -24,6 +24,91 @@ def line(*coordinates: tuple[int, int]) -> LocalGraph:
     return LocalGraph(edges)
 
 
+def test_joint_search_reuses_projection_with_paths_but_not_across_calls(monkeypatch):
+    from pokemon_red_completion import route_plan as routes
+
+    graph = MacroGraph(
+        {
+            1: (MacroEdge(2, kind="warp", at=(0, 1), arrival_at=(0, 0)),
+                MacroEdge(3, kind="warp", at=(0, 1), arrival_at=(0, 0))),
+            2: (MacroEdge(4, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+            3: (MacroEdge(4, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+            4: (MacroEdge(5, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+            5: (),
+        },
+        outside_nodes=frozenset({1, 2, 3}),
+    )
+    local = {i: line((0, 0), (0, 1)) for i in range(1, 7)}
+    before = dict(local[4].edges)
+    original, projections = routes.without_warp_transit, []
+
+    def observed(value, warps, *, start_at):
+        projections.append((id(value), start_at))
+        return original(value, warps, start_at=start_at)
+
+    monkeypatch.setattr(routes, "without_warp_transit", observed)
+    for invocation in (1, 2):
+        with pytest.raises(RoutePlanningError, match="no locally composable route"):
+            plan_route(graph, local, 1, (0, 0), 6)
+        # Map4is reached with two outside-return histories but one local context.
+        assert projections.count((id(local[4]), (0, 0))) == invocation
+        assert projections.count((id(local[5]), (0, 0))) == invocation
+    assert plan_route(graph, local, 1, (0, 0), 5).macro_path.maps == (1, 2, 4, 5)
+    with pytest.raises(RoutePlanningError, match="no locally composable route"):
+        plan_route(graph, local, 1, (0, 0), 5, blocked={4: frozenset({(0, 1)})})
+    assert local[4].edges == before
+
+
+def test_inert_destination_row_does_not_block_local_transit():
+    local = line((1, 1), (1, 2), (1, 3))
+    graph = MacroGraph({1: ()}, warp_locations={1: ((1, 2),)}, warp_triggers={1: ()})
+    result = plan_route(graph, {1: local}, 1, (1, 1), 1, goal_at=(1, 3))
+    assert result.terminal_at == (1, 3)
+    assert graph.warp_locations[1] == ((1, 2),)
+    for triggers in (None, {1: ((1, 2),)}):
+        with pytest.raises(RoutePlanningError):
+            plan_route(
+                MacroGraph({1: ()}, warp_locations=graph.warp_locations, warp_triggers=triggers),
+                {1: local},
+                1,
+                (1, 1),
+                1,
+                goal_at=(1, 3),
+            )
+
+
+def test_shared_approach_keeps_weighted_prices_and_reobserved_routes():
+    graph = MacroGraph({
+        1: (MacroEdge(2, kind="warp", at=(0, 3), arrival_at=(0, 0)),
+            MacroEdge(3, kind="warp", at=(0, 3), arrival_at=(0, 0))),
+        2: (MacroEdge(4, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+        3: (MacroEdge(4, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+        4: (),
+    })
+    prefix = LocalGraph({
+        (0, 0): (LocalEdge((0, 1), action="right", cost=2),),
+        (0, 1): (LocalEdge((0, 2), action="right", cost=3),),
+        (0, 2): (LocalEdge((0, 3), action="right", cost=5),),
+        (0, 3): (),
+    })
+    for cheap_map in (3, 2, 3):
+        local = {1: prefix, 4: line((0, 0))}
+        for map_id in (2, 3):
+            local[map_id] = LocalGraph({
+                (0, 0): (LocalEdge((0, 1), action="right",
+                                   cost=1 if map_id == cheap_map else 9),),
+                (0, 1): (),
+            })
+        result = plan_route(graph, local, 1, (0, 0), 4)
+        assert result.macro_path.maps == (1, cheap_map, 4)
+        assert result.cost == 13
+        assert result.actions == ("right",) * 4
+        blocked = plan_route(graph, local, 1, (0, 0), 4,
+                             blocked={cheap_map: frozenset({(0, 1)})})
+        assert blocked.macro_path.maps == (1, 5 - cheap_map, 4)
+        assert blocked.cost == 21
+
+
 def test_a_connection_selects_a_reachable_exact_endpoint() -> None:
     unreachable = MacroTransition((0, 9), (7, 9), "up")
     reachable = MacroTransition((0, 2), (7, 2), "up")
@@ -382,6 +467,87 @@ def test_composition_refuses_to_invent_how_to_retrigger_a_warp() -> None:
             {1: line((0, 0), (0, 1))},
             (0, 0),
         )
+
+
+def test_arrival_warp_can_be_reentered_by_verified_reversible_walk():
+    edge = MacroEdge(2, kind="warp", at=(0, 0), arrival_at=(1, 1))
+    local = LocalGraph(
+        {(0, 0): (LocalEdge((0, 1), "right"),), (0, 1): (LocalEdge((0, 0), "left"),)}
+    )
+    result = compose_route(MacroGraph({1: (edge,)}), MacroPath((1, 2), (edge,)), {1: local}, (0, 0))
+    assert result.actions == ("right", "left")
+    assert result.steps[0].expected_map == 1
+    assert result.steps[1].expected_map == 2
+    assert result.terminal_at == (1, 1)
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        LocalEdge((0, 0), "left", kind="ledge"),
+        LocalEdge((0, 0), "left", requirements=frozenset({"missing"})),
+        LocalEdge((0, 0), "left", required_mode="surf"),
+        LocalEdge((0, 0), "left", result_mode="surf"),
+        LocalEdge((0, 0), "left", action_kind=MacroActionKind.INTERACT),
+    ],
+)
+def test_warp_reentry_does_not_invent_reverse_edge_permission(bad):
+    edge = MacroEdge(2, kind="warp", at=(0, 0), arrival_at=(1, 1))
+    local = LocalGraph({(0, 0): (LocalEdge((0, 1), "right"),), (0, 1): (bad,)})
+    with pytest.raises(RoutePlanningError, match="begins on a warp trigger"):
+        compose_route(MacroGraph({1: (edge,)}), MacroPath((1, 2), (edge,)), {1: local}, (0, 0))
+
+
+def test_directional_warp_origin_rearms_with_safe_walk_then_retains_exit_input():
+    edge = MacroEdge(None, kind="return", at=(7, 3), exit_action="down", destination_warp_index=0)
+    local = LocalGraph({
+        (7, 3): (LocalEdge((6, 3), "up"),),
+        (6, 3): (LocalEdge((7, 3), "down"),),
+    })
+    graph = MacroGraph({149: (edge,)}, warp_locations={149: ((7, 3),), 4: ((9, 7),)})
+    plan = compose_route(graph, MacroPath((149, 4), (edge,)), {149: local}, (7, 3))
+    assert plan.actions == ("up", "down", "down")
+    assert not plan.segments[0].transition_action_in_approach
+    assert [(s.source_map, s.source_at, s.expected_map, s.expected_at) for s in plan.steps] == [
+        (149, (7, 3), 149, (6, 3)),
+        (149, (6, 3), 149, (7, 3)),
+        (149, (7, 3), 4, (10, 7)),
+    ]
+    assert plan.cost == 3
+
+
+@pytest.mark.parametrize("bad", [
+    LocalEdge((7, 3), "down", kind="ledge"),
+    LocalEdge((7, 3), "down", requirements=frozenset({"missing"})),
+    LocalEdge((7, 3), "down", required_mode="surf"),
+    LocalEdge((7, 3), "down", result_mode="surf"),
+    LocalEdge((7, 3), "down", action_kind=MacroActionKind.INTERACT),
+])
+def test_directional_warp_reentry_never_invents_reverse_permission(bad):
+    edge = MacroEdge(None, kind="return", at=(7, 3), exit_action="down", destination_warp_index=0)
+    local = LocalGraph({(7, 3): (LocalEdge((6, 3), "up"),), (6, 3): (bad,)})
+    graph = MacroGraph({149: (edge,)}, warp_locations={149: ((7, 3),), 4: ((9, 7),)})
+    plan = compose_route(graph, MacroPath((149, 4), (edge,)), {149: local}, (7, 3))
+    assert plan.actions == ("down",)
+
+
+def test_directional_reentry_cannot_walk_through_another_warp():
+    edge = MacroEdge(None, kind="return", at=(7, 3), exit_action="down", destination_warp_index=0)
+    local = LocalGraph({
+        (7, 3): (LocalEdge((7, 2), "left"),),
+        (7, 2): (LocalEdge((7, 3), "right"),),
+    })
+    graph = MacroGraph({149: (edge,)}, warp_locations={149: ((7, 3), (7, 2)), 4: ((9, 7),)})
+    plan = compose_route(graph, MacroPath((149, 4), (edge,)), {149: local}, (7, 3))
+    assert plan.actions == ("down",)
+
+
+def test_directional_warp_with_existing_approach_does_not_add_a_cycle():
+    edge = MacroEdge(None, kind="return", at=(7, 3), exit_action="down", destination_warp_index=0)
+    local = LocalGraph({(7, 3): (LocalEdge((6, 3), "up"),), (6, 3): (LocalEdge((7, 3), "down"),)})
+    graph = MacroGraph({149: (edge,)}, warp_locations={149: ((7, 3),), 4: ((9, 7),)})
+    plan = compose_route(graph, MacroPath((149, 4), (edge,)), {149: local}, (6, 3))
+    assert plan.actions == ("down", "down")
 
 
 def test_a_live_blocker_changes_the_composed_local_approach() -> None:

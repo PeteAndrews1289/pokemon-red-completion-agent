@@ -1,0 +1,443 @@
+{
+  "schema": "pokemon.red.earned-fresh-league-continuation.v1",
+  "status": "closed",
+  "partition": "development",
+  "session_start_utc": "2026-10-10T01:42:26Z",
+  "cutoff_utc": "2026-10-10T04:42:26Z",
+  "final_autonomous_red_passed": false,
+  "runtime_llm_calls": 0,
+  "new_origin": false,
+  "save_edits": 0,
+  "save_merging": false,
+  "parameter_learning_delta": {
+    "train_rows": 0,
+    "fits": 0,
+    "adoptions": 0
+  },
+  "source_segment": 22,
+  "source_state_sha256": "c528d79e80f2da8e8cd51066856eac7127b59b05f139048cf2193f3ebff86465",
+  "source_context_sha256": "57abeaefc5d5d7cfb7712c80c6af0da6d4bd2336a4c0e8798858af32be2ea286",
+  "starting_registrations": 14,
+  "starting_badges": 3,
+  "starting_cash": 11592,
+  "starting_levels": [
+    36,
+    26,
+    24,
+    36,
+    26,
+    24
+  ],
+  "plan_revision": 18,
+  "active_segment": null,
+  "wild_training_diagnostics": {
+    "implemented": true,
+    "control_candidate_summary_sinks": true,
+    "validated_move_observer": true,
+    "journal": "existing native-player diagnostic journal",
+    "actor": "rule_based_support",
+    "authority_changed": false,
+    "move_execution_not_assumed": true,
+    "missing_facts_unknown": true
+  },
+  "targeted_checks": {
+    "training_runtime_launcher": 605,
+    "shared_member_restoration": 118,
+    "full_suite": false,
+    "ruff": true,
+    "restored_selection_native_launcher_logging": 402,
+    "keyed_exit_related": 362,
+    "shared_zone_related": 284,
+    "ghost_intake_related": 134,
+    "existing_highest_score_launcher": 123,
+    "optional_static_capture_status": 229,
+    "ordinary_transport_handoff": 287,
+    "silph_offer_admission": 375
+  },
+  "preflight": {
+    "inputs": 0,
+    "frames": 0,
+    "state_exact": true,
+    "protected_pins": 82,
+    "private_helpers": 170,
+    "public_seams": 12,
+    "pins_passed": true
+  },
+  "limitations": [
+    "Original frozen-v8 attempt failed; this is assisted DEVELOPMENT.",
+    "Actual024's partial preparation and actual025's operator interruption remain failures/censored where applicable.",
+    "Legacy inner evolution observers are connected; no native emissions are claimed before that path runs.",
+    "Gameplay XP/story progress is not parameter learning.",
+    "Revision13 explicitly switches existing exploration to highest-score selection;revision14 relaxes Snorlax status quality only. Neither is unchanged-policy evidence or parameter learning.",
+    "Revisions15/17/18 and native losses/loops remain assisted DEVELOPMENT;zero new TRAIN/fits/adoption or parameter change.",
+    "Koga,Strength,Silph liberation and League remain incomplete. Two original party members are fainted;four are alive. Actual legal battle/reward options exist,no generic full-health gate is inferred."
+  ],
+  "next_outcome": "Continue retained044,not Pallet:one explicit existing-exploration trial on actual Koga/Strength/restoration alternatives;reassess12choices/15minutes/two equivalent loops. Preserve costs and explain value blocker before new scope.",
+  "latest_stopped": {
+    "segment": 44,
+    "worker_stopped": true,
+    "released": true,
+    "passed": true,
+    "stop_reason": "decision_budget",
+    "executed_decisions": 12,
+    "successful_decisions": 12,
+    "model_decisions": 12,
+    "support_decisions": 0,
+    "ordinary_setbacks": 0,
+    "state_sha256": "42345975ce34b9d9750a3fa598c7f658189981251eb69adf8dd9ad972f9f9e33",
+    "context_sha256": "d4196da0dfa513b2049e2292d8f6a54078c5f14822cb4dc336064d7099d58828",
+    "badges": 4,
+    "registrations": 26,
+    "cash": 21854,
+    "levels": [
+      40,
+      32,
+      30,
+      38,
+      32,
+      30
+    ],
+    "new_story": [
+      "reach_lavender",
+      "reach_celadon",
+      "reach_saffron",
+      "defeat_erika",
+      "clear_rocket_hideout",
+      "obtain_silph_scope",
+      "rescue_fuji",
+      "reach_fuchsia",
+      "obtain_surf"
+    ],
+    "native_ghost_event": true,
+    "native_card_key_acquired": true,
+    "capture_registration_delta": 12,
+    "frontier": "Fuchsia city7(28,5);Koga/Strength travel-value loop. Actual Koga battle and Strength reward are offered at their real entry boundaries.",
+    "fuchsia_completed": true,
+    "goal_selection": "model_greedy",
+    "cumulative_spent": {
+      "actions": 224560,
+      "cash_debits": 25304,
+      "decisions": 675,
+      "frames": 17276658,
+      "heals": 292,
+      "seconds": 11195.995893338579
+    },
+    "field_ready": true,
+    "fully_restored": false,
+    "party_hp": [
+      92,
+      47,
+      0,
+      114,
+      0,
+      24
+    ],
+    "silph_liberated": false,
+    "koga_completed": false,
+    "strength_completed": false,
+    "surf_obtained": true,
+    "gold_teeth_obtained": true
+  },
+  "sampling_falsifier": {
+    "segment": 24,
+    "step": 2,
+    "candidates": 10,
+    "distinct_policy_vectors": 10,
+    "equal_preparation_scores": 8,
+    "sampler_changed": false
+  },
+  "latest_inspection": {
+    "revision": 18,
+    "inspection": "042337832859",
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "model_queries": 1,
+    "state_sha256": "c7dd20141e186f3476f043a094c95d5530e075b009e4403d373b896be2bfc83c",
+    "state_config_model_party_costs_preserved": true,
+    "unusable_silph_travel_removed": true,
+    "restoration_offered": true,
+    "model_chose_fuchsia": true
+  },
+  "mechanical_repairs": {
+    "keyed_hideout_exit": {
+      "existing_skill_reused": true,
+      "native_verified": true,
+      "no_heals_or_spending": true
+    },
+    "purified_zone": {
+      "shared_handler": true,
+      "positive_native_identity": true,
+      "native_verified_messages": 6,
+      "healing_injected": false,
+      "protected_state_preserved": true
+    },
+    "ghost_intake": {
+      "ordinary_gastly_diagnostic": true,
+      "strict_ghost_identity_unchanged": true,
+      "learned_ghost_win": true,
+      "ordinary_intro_branch_native_usage_claimed": false
+    },
+    "optional_snorlax_status": {
+      "source_segment": 37,
+      "native_blocker": "Source-adjacent capture is suppressed solely by required status support missing from the observed party.",
+      "status_required": false,
+      "live_conservative_weakening": true,
+      "weakening_may_abstain": true,
+      "actual_ball_stock_required": 8,
+      "optional_helper_native_swap": true,
+      "identity_one_off_and_native_outcome_guards_preserved": true,
+      "native_capture_result_pending": false
+    },
+    "ordinary_transport_trainer": {
+      "source_segment": 39,
+      "retained_control_segment": 40,
+      "existing_authenticated_handoff_reused": true,
+      "fresh_story_later_maps": true,
+      "ordinary_engagement_required": true,
+      "unique_undefeated_cartridge_identity_required": true,
+      "scripted_trainers_excluded": true,
+      "approach_or_destination_selected": false,
+      "chapter_credit_supplied": false,
+      "learned_combat": true,
+      "native_result_pending": false,
+      "native_result": {
+        "segment": 41,
+        "won": true,
+        "decisions": 6,
+        "turns": 5,
+        "failed_executions": 0,
+        "teacher_queries": 0,
+        "memory_write_actions": 0,
+        "income": 580
+      }
+    },
+    "silph_offer_admission": {
+      "revision": 18,
+      "existing_full_restoration_precondition_moved_before_travel": true,
+      "new_full_health_rule": false,
+      "forced_restoration": false,
+      "native_fuchsia_progress_verified": true,
+      "does_not_apply_to_koga": true
+    }
+  },
+  "current_pins": {
+    "protected": 82,
+    "helpers": 170,
+    "public_seams": 16,
+    "total": 268,
+    "passed": true,
+    "source_revision": 18,
+    "other_private_helpers_unchanged": 169
+  },
+  "retained_failures": [
+    {
+      "segment": 24,
+      "reason": "partial preparation at wall-time limit"
+    },
+    {
+      "segment": 25,
+      "reason": "operator interruption; sampler draft subsequently falsified and withdrawn"
+    },
+    {
+      "segment": 26,
+      "reason": "menu_unavailable after verified Hideout"
+    },
+    {
+      "segment": 27,
+      "reason": "dynamic elevator route drift"
+    },
+    {
+      "segment": 28,
+      "reason": "native purified-zone text rejected during onward travel"
+    },
+    {
+      "segment": 29,
+      "reason": "same message rejected during Center return"
+    },
+    {
+      "segment": 30,
+      "reason": "ordinary Gastly encountered on ghost trigger"
+    },
+    {
+      "segment": 31,
+      "reason": "normal escape landing differs from trigger; ready earned terminal retained"
+    },
+    {
+      "segment": 34,
+      "reason": "training target miss; capture safety stop with one faint and pending text"
+    },
+    {
+      "segment": 35,
+      "reason": "training target miss;disclosed operator interruption for selector reassessment"
+    },
+    {
+      "segment": 39,
+      "step": 3,
+      "stop_reason": "execution_failed",
+      "error_type": "RouteExecutionError",
+      "error": "resource trainer lacks an exact learned engagement",
+      "native_capture_not_relabelled": true
+    },
+    {
+      "segment": 40,
+      "stop_reason": "menu_unavailable",
+      "inputs": 0,
+      "decisions": 0,
+      "prior_state_preserved": true
+    }
+  ],
+  "observed_battle_journals": {
+    "segments": "023-032",
+    "count": 78,
+    "won": 76,
+    "nonwins": 2,
+    "nonwins_are_not_assumed_losses": true,
+    "decisions": 596,
+    "turns": 554,
+    "nonexecuted_move_attempts": 72,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "unbiased_win_rate_claim": false,
+    "policy_seconds": 6.343004462,
+    "execution_seconds": 281.449835593,
+    "observation_and_logging_seconds": 14.358351981
+  },
+  "selector_pivot": {
+    "source_segment": 35,
+    "step": 6,
+    "story_scores": [
+      4.66414712865096,
+      4.657311341832071
+    ],
+    "preparation_score": 4.137386374684482,
+    "distinct_preparation_choices": 10,
+    "preparation_collective_probability": 0.7427066605278085,
+    "mode_before": "existing_exploration",
+    "mode_after": "existing_greedy",
+    "same_parameters": true,
+    "same_configuration": true,
+    "same_sources": true,
+    "new_sampler": false,
+    "teacher_selects_quest": false,
+    "unchanged_policy_claim": false,
+    "initial_decisions": 12,
+    "actual_initial_successes": 12,
+    "actual_initial_story_choices": 12,
+    "independent_comparison": false
+  },
+  "wild_preparation_native": {
+    "segment": 34,
+    "step": 13,
+    "initial_level": 26,
+    "target_level": 28,
+    "actual_level": 28,
+    "selected_trainee_xp": 4384,
+    "party_xp": 10388,
+    "encounters": 62,
+    "won": 53,
+    "nonwinning_exits": 9,
+    "doses": 16,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "inner_scheduling_learned": false,
+    "member_and_target_model_selected": true,
+    "combat_actor": "existing_scoped_wild_model",
+    "native_legacy_observer_emissions_claimed": false
+  },
+  "native_snorlax_capture": {
+    "segment": 39,
+    "step": 0,
+    "verification": "succeeded",
+    "model_probability": 0.2481176224737639,
+    "score": 4.416377465040999,
+    "ball": "great_ball",
+    "throws": 8,
+    "native_registration_before": 25,
+    "native_registration_after": 26,
+    "status_attempts": 0,
+    "weakening_attempts": 0,
+    "weakening_damage": 0,
+    "weakening_stop_reason": "unsupported_enemy_reply",
+    "capture_guaranteed": false,
+    "no_save_edit": true,
+    "item_id": 3,
+    "reporting_correction": "Earlier prose called item3 PokeBall;actual native allocations/throws were Great Balls. Executed declarations retained with separate annotation."
+  },
+  "selector_reassessment_15": {
+    "source_segment": 38,
+    "step": 2,
+    "capture_score": 4.4144857847642,
+    "silph_score": 4.650521314508955,
+    "highest_score_detour_native_observed": true,
+    "existing_exploration_reused": true,
+    "new_sampler": false,
+    "seed_changed": false,
+    "teacher_selected_quest": false,
+    "native_selected_capture": true,
+    "controlled_policy_superiority_claimed": false
+  },
+  "prior_inspection_16": {
+    "revision": 16,
+    "inspection": "041327616964",
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "state_sha256": "2fd6484afbf024bfc6dae19795460012ce34aa061c4b13709f7ffbd9bec972f0",
+    "settlement_binding_present": true,
+    "state_config_model_party_costs_preserved": true
+  },
+  "observed_battle_journals_023_042": {
+    "segments": "023-042",
+    "count": 280,
+    "won": 249,
+    "nonwins": 31,
+    "decisions": 1326,
+    "turns": 1277,
+    "nonexecuted_move_attempts": 121,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "policy_seconds": 9.106825875,
+    "execution_seconds": 590.68336285,
+    "observation_and_logging_seconds": 24.064440342,
+    "all_session_battles_claim": false,
+    "unbiased_win_rate_claim": false,
+    "scope": "Available retained battle outcome files;related adaptive states and mixed battle scopes."
+  },
+  "selector_reassessment_17_18": {
+    "revision_17": "Existing highest-score mode after actual Snorlax and ordinary trainer settlement;models/configuration/seed unchanged.",
+    "revision_18": "Existing Silph phase prerequisite checked before offered travel;no new selector/model/learner.",
+    "native_42_no_event_travel_loop_retained": true,
+    "native_43_forward_fuchsia_route": true,
+    "native_44_fuchsia_surf_verified": true
+  },
+  "native_fuchsia_surf": {
+    "segment": 44,
+    "fuchsia_step": 1,
+    "surf_step": 3,
+    "verification": "succeeded",
+    "paid_safari_debit": 500,
+    "gold_teeth": true,
+    "surf_taught_through_normal_inputs": true,
+    "terminal_map": 154,
+    "terminal_at": [
+      3,
+      3
+    ],
+    "terminal_is_fuchsia_pokecenter": true,
+    "save_edits": false
+  },
+  "remaining_blocker": {
+    "type": "strategic_selection",
+    "segment": 44,
+    "actual_koga_battle_offered": true,
+    "actual_strength_reward_offered": true,
+    "koga_battle_score": 4.650825872151436,
+    "strength_travel_score": 4.6603721568132634,
+    "source_step": 5,
+    "selected_candidate_index": 8,
+    "new_health_gate_indicated": false,
+    "description": "Highest-score selection prefers Strength travel over Koga combat;at the Center it chooses Koga travel instead of the available Strength exchange."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "acceptance_sha256": "7004fad756a45b51a1ebcd60cda2ed55d8dd83a86c1c3107af72c759c5a8e1eb",
+  "actor_settings_sha256": "b6c82c3f10d9003ceb95f2b1619e90c3b2f0e50377c7918f3b0b60f2b512fb29",
+  "actual_state_loads": 0,
+  "all_gameplay_pids_absent": true,
+  "before_failure_state_sha256": "2f91579b19c7cef73635d8d2dc76bbcee301ce3cb6f67b7f0155716648a3c542",
+  "buttons_released": true,
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "defeat_brock",
+    "power_on",
+    "reach_pewter",
+    "receive_pokedex"
+  ],
+  "completed_reference_and_prior_failures_unchanged": true,
+  "copies_imported": false,
+  "cumulative_spent": {
+    "actions": 24265,
+    "cash_debits": 5712,
+    "decisions": 75,
+    "frames": 1616065,
+    "heals": 31,
+    "seconds": 523.2494313740171
+  },
+  "episode_counts": {
+    "executed_decisions": 75,
+    "model_decisions": 72,
+    "ordinary_setbacks": 8,
+    "successful_decisions": 66,
+    "support_decisions": 3,
+    "teacher_actions": 0
+  },
+  "failure_phase": "execution",
+  "final_fresh_gates_passed": 0,
+  "final_fresh_gates_total": 5,
+  "fits": 0,
+  "free_bytes": 86887723008,
+  "fresh_power_on": true,
+  "frozen_completion_proved": false,
+  "full_isolated_io_retained": true,
+  "full_isolated_io_sha256": "bd6b6f2e026aa06575ba388be60323ba7b7cab10d3b49a5e32655a17fcd93dd0",
+  "interpretation": "Execution stops at a PC-position preservation check during a model-selected story action; no combat-loss cause or underlying movement cause inferred from this receipt alone.",
+  "manifest_sha256": "0279731a044598395bb1ef5837573b5b061312af3bfadac2db952a792be137e2",
+  "monitor_status": "PAUSED",
+  "native_error": "PC facing did not preserve its bound position",
+  "native_error_type": "RedPCStorageError",
+  "native_facts": {
+    "badge_bits": 1,
+    "badges": 1,
+    "bag_stock": [
+      [
+        4,
+        5
+      ],
+      [
+        234,
+        1
+      ]
+    ],
+    "cash": 179,
+    "party_levels": [
+      17,
+      5,
+      9,
+      8,
+      3,
+      5
+    ],
+    "registrations": 13,
+    "whole_party_restored": false
+  },
+  "native_meter_totals": {
+    "actions_attempted": 24087,
+    "actions_completed": 24087,
+    "frames": 1593852,
+    "goal_attempts": 75,
+    "nested_restore_attempts": 16,
+    "observed_cash_debits": 5712,
+    "observed_cash_rewards": 2891,
+    "restore_attempts": 31,
+    "training_healing_attempts": 0
+  },
+  "new_weights": 0,
+  "next_work": "Copy-only diagnosis of the exact PC facing transition, reusing storage/navigation and the existing referee. No actor repair or successor authorized by the phone-view request.",
+  "no_repair_restart_successor": true,
+  "original_deadline_utc": "2026-10-16T13:07:50.887741+00:00",
+  "pins_verified": {
+    "environment": 4512,
+    "package": 7877,
+    "protected": 421
+  },
+  "plan_sha256": "43896c80da36e7e314ccd7beab816328da929dd765c7667157e25f6fe81be7bf",
+  "private_retention_sha256": "a9837fc11024c2527f7c0a6c102ce36a3b01170e6b683fb2ea20b58fefb05314",
+  "process_exit": {
+    "exit_code": 0,
+    "exited_at_utc": "2026-10-15T21:17:11.778523+00:00",
+    "no_restart": true,
+    "root_result_exists": true,
+    "safety_stop_reason": null,
+    "supervisor_seconds": 560.9032074159477,
+    "worker_exit_confirmed": true,
+    "worker_pid": 97795
+  },
+  "process_exit_sha256": "f56ca4315a8eb9687d7b11a021198d36b8d03e33f19083c678b2d31358d8d44b",
+  "recorded_at_utc": "2026-10-15T21:25:50.210878+00:00",
+  "registered_target": 124,
+  "registration_delta_from_initial_starter": 12,
+  "root_result_sha256": "d33ae6331e5925b7d28a4e14d8bdcc45f24f61440e46eae1db97a81a92b04d93",
+  "root_seconds": 532.8006220001262,
+  "run": "red-frozen-autonomous-run-20261015-escape-loan-v1",
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.frozen-fresh-terminal.v1",
+  "selected_kind": "advance_story",
+  "started_at_utc": "2026-10-15T21:07:50.887741+00:00",
+  "startup_actions": 178,
+  "startup_frames": 22213,
+  "status": "failed_stopped",
+  "storage_or_deadline_stop": false,
+  "terminal_at": [
+    16,
+    10
+  ],
+  "terminal_context_sha256": "eed6e266b60e480ba7901d949b8bf1252b0ad7ef677825d779d071be1be4afb5",
+  "terminal_field_ready": false,
+  "terminal_map_id": 61,
+  "terminal_reason": "native_execution_error",
+  "terminal_state_sha256": "73b10d520dc109f6292dd6f8311db1833016b55420541aa22d09c7ecbe661fde",
+  "train_examples": 0,
+  "unchanged_source_and_actor": true
+}

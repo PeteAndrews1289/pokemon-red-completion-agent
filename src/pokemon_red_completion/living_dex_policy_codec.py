@@ -17,6 +17,8 @@ the policy projection.
 
 from __future__ import annotations
 
+from pokemon_red_completion.player_option_capture_invocation import OptionCaptureInvocation
+
 import re
 from collections.abc import Mapping, Sequence
 from typing import cast
@@ -42,6 +44,13 @@ from pokemon_red_completion.resource_economy_observation import (
     EconomyOffer,
     EconomySnapshot,
 )
+
+from .player_option_challenge import OptionChallenge
+from .player_option_preparation import OptionPreparation
+from .player_option_move_change import OptionMoveChange
+from .player_option_level_workload import OptionLevelWorkload
+from .player_option_matchup import OptionMatchup
+from .player_readiness import PlayerReadiness
 
 LIVING_DEX_PRIVATE_MENU_SCHEMA = "pokemon.core.private-living-dex-option-menu.v1"
 
@@ -118,6 +127,13 @@ def restore_living_dex_policy_menu(
         "pokemon.core.living-dex-option-menu.v2",
         "pokemon.core.living-dex-option-menu.v3",
         "pokemon.core.living-dex-option-menu.v4",
+        "pokemon.core.living-dex-option-menu.v5",
+        "pokemon.core.living-dex-option-menu.v6",
+        "pokemon.core.living-dex-option-menu.v7",
+        "pokemon.core.living-dex-option-menu.v9",
+        "pokemon.core.living-dex-option-menu.v10",
+        "pokemon.core.living-dex-option-menu.v12",
+        "pokemon.core.living-dex-option-menu.v15",
     ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
@@ -125,7 +141,16 @@ def restore_living_dex_policy_menu(
     if document["schema"] == "pokemon.core.living-dex-option-menu.v4":
         if context.economy_snapshot is None or context.target_cash is None:
             raise LivingDexPolicyCodecError("v4 living-Dex policy menu requires economy context")
-    elif context.economy_snapshot is not None or context.target_cash is not None:
+    elif document["schema"] not in {
+        "pokemon.core.living-dex-option-menu.v5", "pokemon.core.living-dex-option-menu.v6",
+        "pokemon.core.living-dex-option-menu.v7",
+        "pokemon.core.living-dex-option-menu.v9",
+        "pokemon.core.living-dex-option-menu.v10",
+        "pokemon.core.living-dex-option-menu.v12",
+        "pokemon.core.living-dex-option-menu.v15",
+    } and (
+        context.economy_snapshot is not None or context.target_cash is not None
+    ):
         raise LivingDexPolicyCodecError("pre-v4 policy menu cannot include economy context")
     rows = _sequence(document["candidates"], subject="policy candidates")
     if binding_refs is None:
@@ -201,7 +226,14 @@ def _restore_candidate(
         document,
         {"availability", "features", "unavailable_reason"}
         | ({"search_history"} if "search_history" in document else set())
-        | ({"economy_offer"} if "economy_offer" in document else set()),
+        | ({"economy_offer"} if "economy_offer" in document else set())
+        | ({"readiness"} if "readiness" in document else set())
+        | ({"challenge"} if "challenge" in document else set())
+        | ({"preparation"} if "preparation" in document else set())
+        | ({"level_workload"} if "level_workload" in document else set())
+        | ({"move_change"} if "move_change" in document else set())
+        | ({"capture_invocation"} if "capture_invocation" in document else set())
+        | ({"matchup"} if "matchup" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -288,6 +320,20 @@ def _restore_candidate(
                 else None
             ),
             economy_offer=economy_offer,
+            readiness=(PlayerReadiness.from_public(document["readiness"])
+                       if "readiness" in document else None),
+            challenge=(OptionChallenge.from_public(document["challenge"])
+                       if "challenge" in document else None),
+            level_workload=(OptionLevelWorkload.from_public(document["level_workload"])
+                            if "level_workload" in document else None),
+            move_change=(OptionMoveChange.from_public(document["move_change"])
+                         if "move_change" in document else None),
+            capture_invocation=(OptionCaptureInvocation.from_public(document["capture_invocation"])
+                                if "capture_invocation" in document else None),
+            matchup=(OptionMatchup.from_public(document["matchup"])
+                     if "matchup" in document else None),
+            preparation=(OptionPreparation.from_public(document["preparation"])
+                         if "preparation" in document else None),
         )
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None

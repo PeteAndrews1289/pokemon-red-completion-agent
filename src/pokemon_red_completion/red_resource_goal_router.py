@@ -8,6 +8,7 @@ never fabricates a destination state or grants a successful outcome.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from functools import partial
 
@@ -22,8 +23,19 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
 )
-from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
-from pokemon_red_completion.gen1_traversal import cut_capabilities, surf_capabilities
+from pokemon_red_completion.gen1_trainer_sight import (
+    Gen1TrainerSightProjector,
+    static_trainer_sight_zones,
+    trainer_headers,
+    trainer_sight_zones,
+)
+from pokemon_red_completion.gen1_traversal import (
+    CUT_CAPABILITY,
+    SURF_CAPABILITY,
+    cut_capabilities,
+    map_object_events,
+    surf_capabilities,
+)
 from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
@@ -32,9 +44,22 @@ from pokemon_red_completion.goal_manager_runtime import (
 )
 from pokemon_red_completion.observation import MapId, RawGameState, ReadOnlyMemory
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
+from pokemon_red_completion.red_capture_readiness import (
+    CapturePreparationBudget,
+    capture_reserve_purchase,
+)
+from pokemon_red_completion.red_goal_context import (
+    RedGoalContextRuntime,
+    _ProfileBoundProvider,
+    _RedTeamGoalProvider,
+)
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
-from pokemon_red_completion.red_goal_manager import RedGoalBindingProvider, RedGoalObservation
+from pokemon_red_completion.red_goal_manager import (
+    CallableRedGoalBindingProvider,
+    RedGoalBindingOffer,
+    RedGoalBindingProvider,
+    RedGoalObservation,
+)
 from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedMartResupplyGoalProvider,
@@ -43,6 +68,7 @@ from pokemon_red_completion.red_goal_skills import (
 from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
 )
+from pokemon_red_completion.red_regional_trainer_funding import FundingGateTransit
 from pokemon_red_completion.red_routed_semantic_goal import (
     FreshRedGoalObservation,
     RedFreshGoalDestinationBinder,
@@ -76,7 +102,9 @@ _MECHANICS = frozenset(
 # chance to produce its target.  This remains finite and is covered by the route's
 # independent action/frame bounds.
 _MAX_ROUTE_FLEES = 128
-_MAX_ROUTE_TRAINER_BATTLES = 8
+_MAX_ROUTE_TRAINER_BATTLES = 32
+# Execution headroom must not rescale the learned effort/risk input.
+_ROUTE_TRAINER_WORK_SCALE = 8
 _MAX_ROUTE_SCRIPTED_DIALOGUES = 4
 _REQUIRED_ROUTE_INTERRUPTION_KINDS = frozenset(
     {"wild_battle", "trainer_engagement", "battle:2", "scripted_dialogue"}
@@ -105,6 +133,73 @@ def _supports_required_route_interruptions(handler: InterruptionHandler) -> bool
     return isinstance(kinds, frozenset) and kinds >= _REQUIRED_ROUTE_INTERRUPTION_KINDS
 
 
+def ordinary_route_work_quote(plan: RoutePlan, observation, rom: bytes, reader) -> dict:
+    """Quote sight-lane exposure, not battle outcomes or unseen enemy rosters.
+
+    Off-map geometry is a cartridge quote joined to observed defeated flags,
+    never a live visibility claim. Current engine positions override static
+    positions when available. Count each active ordinary trainer once even if
+    several route tiles cross its lane. Scripted battles are not covered.
+    """
+    raw = observation.raw
+    tiles = {plan.macro_path.maps[0]: {plan.start_at}}
+    for step in plan.steps:
+        tiles.setdefault(step.source_map, set()).add(step.source_at)
+        tiles.setdefault(step.expected_map, set()).add(step.expected_at)
+        tiles[step.source_map].update(step.via)
+        if step.transient_at is not None:
+            tiles[step.source_map].add(step.transient_at)
+    maps = set(tiles)
+    headers = trainer_headers(rom, maps, full_event_offsets=True)
+    objects = map_object_events(rom, maps)
+    static = static_trainer_sight_zones(headers, objects, raw.event_flags)
+    zones = {(z.map_id, z.sprite_index): z for z in static}
+    live = trainer_sight_zones(headers, objects, raw, reader.read_current_map_objects())
+    zones.update({(z.map_id, z.sprite_index): z for z in live})
+    crossings = [len(tiles[z.map_id].intersection(z.lane)) for z in zones.values()]
+    return dict(
+        schema="pokemon.red.ordinary-route-work.v1",
+        walking_steps=len(plan.steps),
+        ordinary_trainers_crossed=sum(n > 0 for n in crossings),
+        sight_lane_tiles_crossed=sum(crossings),
+        defeated_flags_observed=True,
+        current_live_overrides=len(live),
+        scripted_battles_quoted=False,
+        battle_count_guaranteed=False,
+        enemy_rosters_used=False,
+        risk_is_probability=False,
+    )
+
+
+def route_work_estimates(base_effort: float, ordinary_trainers: int) -> tuple[float, float]:
+    """Existing normalized work/risk proxies, not predicted win probabilities.
+
+    Exposure is scaled against the executor's eight-trainer finite guard. Each
+    quoted trainer contributes half a guard-share to work and one to risk.
+    Party readiness stays in its existing policy features; no outcome is invented.
+    """
+    if type(ordinary_trainers) is not int or ordinary_trainers < 0:
+        raise ValueError("route work needs a nonnegative ordinary trainer count")
+    exposure = ordinary_trainers / _ROUTE_TRAINER_WORK_SCALE
+    return min(1.0, base_effort + exposure / 2), min(1.0, 0.18 + exposure)
+
+
+def _safari_resource_departure_handler(
+    runtime: RedGoalContextRuntime, actions: CountingExecutor,
+    fallback: InterruptionHandler, kind: GoalKind,
+) -> InterruptionHandler:
+    """Let an opted-in selected supply route finish its paid-session exit."""
+    if (kind is not GoalKind.RESUPPLY
+            or getattr(runtime, "safari_departure_recovery", False) is not True):
+        return fallback
+    from .red_safari_exit import RedSafariDepartureInterruptionHandler, RedSafariExitDialogueHandler
+
+    return RedSafariDepartureInterruptionHandler(
+        runtime.emulator, actions, runtime.reader,
+        RedSafariExitDialogueHandler(actions, runtime.reader, fallback),
+    )
+
+
 @dataclass(slots=True)
 class RedResourceGoalRouter:
     """Reuse local skills, adding only feasible capture/supply walking routes."""
@@ -115,6 +210,9 @@ class RedResourceGoalRouter:
     maximum_controller_actions: int = 6_000
     maximum_emulator_frames: int = 600_000
     quote_resource_costs: bool = False
+    # Prospective ordinary sight geometry only. Old recorded menus retain their
+    # original estimates unless a new composition explicitly enables this.
+    quote_capture_route_work: bool = False
     prepare_capture_party: bool = True
     prepare_capture_items: bool = False
     prepare_capture_storage: bool = False
@@ -129,11 +227,68 @@ class RedResourceGoalRouter:
     # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
     # and escort preparation enabled without planning unused Center routes.
     include_recovery_offers: bool = True
+    # Opt-in reserve projection; never replace the runtime's funding provider.
+    capture_reserve: CapturePreparationBudget | None = None
+    funding_gate_transit: FundingGateTransit | None = None
+    # Explicit player composition may reuse a learned trainer continuation
+    # instead of the legacy transport attack policy. Enumeration sends no input.
+    interruption_handler_wrapper: (
+        Callable[[InterruptionHandler, RedGoalProviderSpec], InterruptionHandler] | None
+    ) = None
     # Shared only during one action-free candidate inventory. It is explicitly
     # cleared before returning so a later live observation cannot inherit it.
     route_plan_cache: (
         dict[tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str] | None
     ) = field(default=None, repr=False, compare=False)
+
+    def __post_init__(self):
+        if type(self.quote_capture_route_work) is not bool:
+            raise TypeError("capture route-work quote permission must be boolean")
+        if self.interruption_handler_wrapper is not None and not callable(
+            self.interruption_handler_wrapper
+        ):
+            raise TypeError("resource route interruption wrapper must be callable")
+        if self.funding_gate_transit is not None and (
+            not isinstance(self.funding_gate_transit, FundingGateTransit)
+            or not self.regional_trainer_funding
+            or not self.observed_trainer_funding
+        ):
+            raise ValueError("funding gate transit requires observed regional funding")
+        if self.capture_reserve is not None and (
+            not isinstance(self.capture_reserve, CapturePreparationBudget)
+            or not self.quote_resource_costs
+        ):
+            raise ValueError("routed capture reserve needs a typed budget and exact quotes")
+
+    def _local_inventory(self, observation):
+        enumerator = self.runtime.enumerator(self.actions)
+        purchase = None
+        if self.capture_reserve is not None:
+            mart = self.runtime.provider_for(GoalKind.RESUPPLY, self.actions)
+            purchase, quote = capture_reserve_purchase(observation, self.capture_reserve, mart)
+            reason = (
+                GoalUnavailableReason.NO_LEGAL_TARGET
+                if quote["unavailable_reason"] == "reserve_satisfied"
+                else GoalUnavailableReason.MISSING_RESOURCE
+            )
+            replacement = purchase or CallableRedGoalBindingProvider(
+                GoalKind.RESUPPLY,
+                lambda _: RedGoalBindingOffer.unavailable(GoalKind.RESUPPLY, reason),
+            )
+            providers = tuple(
+                (
+                    replace(p, provider=replacement)
+                    if isinstance(p, _ProfileBoundProvider)
+                    else replacement
+                )
+                if p.kind is GoalKind.RESUPPLY
+                else p
+                for p in enumerator.providers
+            )
+            if not any(p.kind is GoalKind.RESUPPLY for p in providers):
+                raise RedResourceGoalRoutingError("capture reserve lacks a declared Mart")
+            enumerator = replace(enumerator, providers=providers)
+        return enumerator.enumerate(observation), purchase
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         """Enumerate every local and routable goal in the active profile."""
@@ -167,11 +322,12 @@ class RedResourceGoalRouter:
         routed_kinds: frozenset[GoalKind] | None,
     ) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
-        local = self.runtime.enumerator(self.actions).enumerate(observation)
+        local, reserve_purchase = self._local_inventory(observation)
         if observation.raw.battle_state or not observation.input_ready:
             return local
         traversal = Gen1TraversalObserver(
             self.runtime.reader,
+            observe_progress=self.runtime.adapter.semantic_observer.observe_raw,
             hazard_projector=Gen1TrainerSightProjector(self.world.rom, self.runtime.reader),
             capability_projector=partial(
                 collection_field_capabilities,
@@ -183,7 +339,14 @@ class RedResourceGoalRouter:
         fresh = FreshRedGoalObservation("0" * 64, observation, traversal.observe())
         # New transports start on land and finish at a land encounter corridor.
         # Cut/Surf require explicit options and share the existing primitive meter.
-        if fresh.traversal.mode != "land":
+        indoor_water_departure = (
+            getattr(self.runtime, "collection_surf_departure", False) is True
+            and fresh.traversal.map_id >= 0x25
+            and fresh.traversal.mode == "water"
+            and SURF_CAPABILITY in fresh.traversal.capabilities
+            and not self.runtime.reader.read_safari_session_state().in_safari_zone
+        )
+        if fresh.traversal.mode != "land" and not indoor_water_departure:
             return local
         origin = red_living_dex_setup_fresh_observation_sha256(fresh)
         replacements: dict[str, ExecutableGoalBinding] = {}
@@ -245,7 +408,11 @@ class RedResourceGoalRouter:
                 or spec.mechanic not in _MECHANICS
             ):
                 continue
-            provider = self.runtime.provider_for(spec.kind, self.actions)
+            provider = (
+                reserve_purchase
+                if self.capture_reserve is not None and spec.kind is GoalKind.RESUPPLY
+                else self.runtime.provider_for(spec.kind, self.actions)
+            )
             if not isinstance(
                 provider,
                 (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider, _RedTeamGoalProvider),
@@ -320,6 +487,11 @@ class RedResourceGoalRouter:
             )
 
             interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
+            if self.interruption_handler_wrapper is not None:
+                interruption_handler = self.interruption_handler_wrapper(interruption_handler, spec)
+            interruption_handler = _safari_resource_departure_handler(
+                self.runtime, self.actions, interruption_handler, spec.kind,
+            )
             if not _supports_required_route_interruptions(interruption_handler):
                 continue
             transport = RedSemanticTransportRoute(
@@ -359,7 +531,9 @@ class RedResourceGoalRouter:
                 )
 
             destination_provider: RedGoalBindingProvider = provider
-            if self.routed_recovery and isinstance(provider, RedAreaSurveyGoalProvider):
+            if _observed_indoor_capture(spec):
+                destination_provider = _observed_capture_destination_provider(self, spec, provider)
+            elif self.routed_recovery and isinstance(provider, RedAreaSurveyGoalProvider):
                 from pokemon_red_completion.red_capture_preparation import (
                     EscortPreparedCaptureProvider,
                 )
@@ -383,21 +557,33 @@ class RedResourceGoalRouter:
                 observe_fresh=observe_fresh,
                 provider=destination_provider,
             )
+            base_effort = min(
+                1.0,
+                0.36 + len(plan.steps) / 1_000 + (
+                    provider.search_effort_surcharge
+                    if isinstance(provider, RedAreaSurveyGoalProvider) else 0.0
+                ),
+            )
+            estimated_effort, estimated_risk = base_effort, 0.18
+            work_quote = None
+            if self.quote_capture_route_work and isinstance(provider, RedAreaSurveyGoalProvider):
+                work_quote = ordinary_route_work_quote(
+                    plan, observation, self.world.rom, self.runtime.reader
+                )
+                estimated_effort, estimated_risk = route_work_estimates(
+                    base_effort, work_quote["ordinary_trainers_crossed"]
+                )
+                self.actions.record_diagnostic_event("capture_route_work_quote", dict(
+                    source_id=provider.source_id, **work_quote,
+                    estimated_effort=estimated_effort, estimated_risk=estimated_risk,
+                    policy_features="existing_normalized_effort_and_risk",
+                ))
             binding = build_red_routed_semantic_goal_composer(
                 binding_ref=f"red-resource-goal:{origin}:{spec.configuration_sha256}",
                 transport=transport,
                 destination=destination,
-                estimated_effort=min(
-                    1.0,
-                    0.36
-                    + len(plan.steps) / 1_000
-                    + (
-                        provider.search_effort_surcharge
-                        if isinstance(provider, RedAreaSurveyGoalProvider)
-                        else 0.0
-                    ),
-                ),
-                estimated_risk=0.18,
+                estimated_effort=estimated_effort,
+                estimated_risk=estimated_risk,
                 limits=RoutedSemanticGoalLimits(
                     self.maximum_controller_actions, self.maximum_emulator_frames
                 ),
@@ -454,7 +640,7 @@ class RedResourceGoalRouter:
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("recovery enumeration changed the game")
         if self.quote_resource_costs:
-            result = self._with_quotes(result, observation)
+            result = self._with_quotes(result, observation, purchase_provider=reserve_purchase)
         # Income is not a Mart purchase and must never inherit a spend quote.
         if self.trainer_funding:
             from pokemon_red_completion.red_routed_trainer_funding import bind_local_trainer_funding
@@ -465,13 +651,19 @@ class RedResourceGoalRouter:
         return result
 
     def _with_quotes(
-        self, bindings: GoalBindingSet, observation: RedGoalObservation
+        self,
+        bindings: GoalBindingSet,
+        observation: RedGoalObservation,
+        *,
+        purchase_provider: RedMartResupplyGoalProvider | None = None,
     ) -> GoalBindingSet:
         """Bind exact costs to the same opportunity and executable skill."""
         quoted = []
         for binding in bindings.bindings:
             if binding.kind is GoalKind.RESUPPLY:
-                provider = self.runtime.provider_for(binding.kind, self.actions)
+                provider = purchase_provider or self.runtime.provider_for(
+                    binding.kind, self.actions
+                )
                 if not isinstance(provider, RedMartResupplyGoalProvider):
                     raise RedResourceGoalRoutingError("resource-cost quote needs a Mart provider")
                 binding = self._quoted_binding(binding, provider, observation)
@@ -527,6 +719,15 @@ class RedResourceGoalRouter:
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
+        # A mixed inventory may expose field moves for capture while the Mart
+        # skill remains walking-only. Search under this skill's permissions;
+        # otherwise an unsupported short swim can hide a legal walking route.
+        unsupported = (set() if _cut_enabled(spec) else {CUT_CAPABILITY}) | (
+            set() if _surf_enabled(spec) else {SURF_CAPABILITY}
+        )
+        start = replace(
+            fresh.traversal, capabilities=fresh.traversal.capabilities.difference(unsupported)
+        )
         if spec.mechanic in {
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
             RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
@@ -540,7 +741,7 @@ class RedResourceGoalRouter:
             for center in centers:
                 try:
                     plan = self.plan_feasible_to_map(
-                        fresh.traversal,
+                        start,
                         int(center),
                         goal_at=(3, 3),
                     )
@@ -561,7 +762,12 @@ class RedResourceGoalRouter:
         if (fresh.traversal.map_id, fresh.traversal.at) == (target_map, (y, x)):
             return None
         try:
-            plan = self.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
+            # Match the existing Fly arrival contract: an indoor cartridge
+            # corridor is not a live door-layout witness. Arrive at the exact
+            # planned entry, then rebind reachable terrain in that same source.
+            plan = self.plan_feasible_to_map(
+                start, target_map, goal_at=None if _observed_indoor_capture(spec) else (y, x)
+            )
         except RoutePlanningError:
             return None
         if not plan.steps or not _supported_plan(
@@ -590,10 +796,53 @@ class RedResourceGoalRouter:
         allow_cut: bool = False,
         allow_surf: bool = False,
     ) -> RoutePlan:
-        plan = self.world.replanner()(request)
+        unsupported = (set() if allow_cut else {CUT_CAPABILITY}) | (
+            set() if allow_surf else {SURF_CAPABILITY}
+        )
+        request = replace(
+            request,
+            current=replace(
+                request.current, capabilities=request.current.capabilities.difference(unsupported)
+            ),
+        )
+        # A moving NPC must not occupy both its cartridge starting square and
+        # its observed square. Rebuild only the settled current map from the
+        # complete live object table, preserving story/field requirements and
+        # the executor's explicit blocked coordinates and selected endpoint.
+        world = self.world.with_current_observation(self.runtime.reader)
+        plan = world.replanner()(request)
         if not _supported_plan(plan, allow_cut=allow_cut, allow_surf=allow_surf):
             raise RedResourceGoalRoutingError("resource route requires an unsupported field action")
         return plan
+
+
+def _observed_indoor_capture(spec: RedGoalProviderSpec) -> bool:
+    return (
+        spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+        and spec.parameters.get("observed_local_capture") is True
+        and spec.parameters["map_id"] >= 0x25
+    )
+
+
+def _observed_capture_destination_provider(router, spec, provider):
+    """Rebind the selected source after authenticated walking arrival, not a peer."""
+    if not _observed_indoor_capture(spec):
+        return provider
+    from pokemon_red_completion.red_observed_local_capture import bind_observed_local_capture
+
+    def offer(observation):
+        child = bind_observed_local_capture(router, spec, observation)
+        if child is None:
+            return RedGoalBindingOffer.unavailable(
+                spec.kind, GoalUnavailableReason.MISSING_CAPABILITY
+            )
+        if child.search_source_ref != "pokemon.red:acquisition:" + str(
+            spec.parameters["source_id"]
+        ):
+            raise RedResourceGoalRoutingError("observed walking capture changed its source")
+        return RedGoalBindingOffer.available(child)
+
+    return CallableRedGoalBindingProvider(spec.kind, offer)
 
 
 def _cut_enabled(spec: RedGoalProviderSpec) -> bool:
@@ -634,7 +883,11 @@ def _supported_plan(
     *,
     allow_cut: bool = False,
     allow_surf: bool = False,
+    seafoam_state: RawGameState | None = None,
 ) -> bool:
+    from .gen1_seafoam import seafoam_currents_settled
+
+    settled = seafoam_state is not None and seafoam_currents_settled(seafoam_state)
     for step in plan.steps:
         if step.action_kind is MacroActionKind.MOVE and step.action in _WALK_ACTIONS:
             modes = {None, "land", "water"} if allow_surf else {None, "land"}
@@ -655,7 +908,7 @@ def _supported_plan(
                     step.source_mode != "land"
                     or step.expected_mode != "water"
                     or step.source_map != step.expected_map
-                    or step.source_map == SEAFOAM_ISLANDS_B4F_MAP_ID
+                    or (step.source_map == SEAFOAM_ISLANDS_B4F_MAP_ID and not settled)
                 ):
                     return False
             else:

@@ -1,0 +1,146 @@
+{
+  "schema": "pokemon.red-six-party-assisted-result.v1",
+  "session": "2026-09-20-six-party-assisted-result",
+  "status": "six_assisted_model_episodes_completed",
+  "classification": "bounded_assisted_generalization_not_natural_qualification",
+  "execution_source_commit": "ed99394eada2ec5edee23be1ca0e87b02b7141ac",
+  "model_sha256": "260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09",
+  "original_protocol_sha256": "a9c1de0af502cfc16551c7e7a2e58dc2a0e562124771d787085d70fe3a4b7607",
+  "amended_protocol_sha256": "3a093cce69f694c487820f0407a4e59def58ff9c55564182db0323f9a3a2b8de",
+  "freeze_sha256": "7e779397dd2ca4106414f8e418f7775d4bcdb80a34c42c97f15d1d9ec6f7afc1",
+  "private_result_sha256": "3ca09873683cbc171e1aa2bcf6cc459bc31756ae3e5e3c9229e0b8dec1195171",
+  "setup": {
+    "first_source_replayed": false,
+    "fresh_upstream_origins": 2,
+    "constructed_cases": 6,
+    "total_frames_across_both_original_starts": 56720,
+    "post_opening_macro_actions": 52,
+    "opening_macro_action_count": null,
+    "all_inputs_frozen_before_inference": true,
+    "original_metadata_failure_retained": true,
+    "metadata_failure_sha256": "be03369110c17b3d745d7fb22608018c5fdf942441dc4860044b136f37c045c6",
+    "construction_failure_retained": true,
+    "construction_failure_sha256": "39e36de85f3a62c3c25423ac8c39dea7e94bb9c08bb6964cc8cf66e753026736",
+    "pre_evaluation_amendment": "Factory rejected enemy reserve PP10/10 before persisting any constructed case or querying J. Corrected only enemy reserve Gust/Quick Attack to cartridge send-out PP35/30; retained both original sources, all player conditions and six-cell ceiling. Private amendment pins the construction driver and execution code; guards unchanged.",
+    "source_3300_state_sha256": "fab22a7a47b85abbb983e78620fb1197654fe120550de6c10438c0484e9cea1e",
+    "source_3500_state_sha256": "e7666776564493780ad46be412c8d7d9785aff42737f8862e66e28541f7bdb9d",
+    "source_3300_ot_id": 45762,
+    "source_3500_ot_id": 6348
+  },
+  "aggregate": {
+    "episodes": 6,
+    "upstream_origin_clusters": 2,
+    "variant_runs_beyond_origin_count": 4,
+    "wins": 6,
+    "losses": 0,
+    "invalid_action_failures": 0,
+    "incomplete_decisions": 0,
+    "model_owned_decisions": 107,
+    "attacks": 50,
+    "voluntary_switches": 37,
+    "forced_replacements": 14,
+    "between_opponent_switch_prompts": 6,
+    "accepted_switch_prompts": 4,
+    "confirmed_switch_transitions": 55,
+    "own_pokemon_faints": 14,
+    "observed_hp_lost_during_voluntary_switch_turns": 433,
+    "frames": 128026,
+    "attempted_controller_macros": 1514,
+    "summed_episode_wall_seconds": 6.359005,
+    "summed_runner_elapsed_ns": 6808161751,
+    "teacher_queries": 0,
+    "model_episode_memory_write_actions": 0,
+    "max_observed_policy_decision_latency_ns": 2280625
+  },
+  "cells": [
+    {
+      "boot": 3300, "party_count": 4, "win": true, "decisions": 20,
+      "active_slots_observed": [1, 2, 3, 4], "faints": 3,
+      "first_last_slot_use_decision": 16, "voluntary_switch_hp_loss": 73,
+      "frames": 21794, "controller_macros": 259,
+      "final_state_sha256": "a1c3a628180d7778af56d03187348b279d7089697870599c1ca73c586cf810f0",
+      "event_chain_sha256": "48162a7b639f6ef5b06b3738ae2bb60a1ee9d4c5d3bb5c040da7b3b49b69d88b"
+    },
+    {
+      "boot": 3300, "party_count": 5, "win": true, "decisions": 17,
+      "active_slots_observed": [1, 2, 3, 4, 5], "faints": 3,
+      "first_last_slot_use_decision": 16, "voluntary_switch_hp_loss": 60,
+      "frames": 20456, "controller_macros": 240,
+      "final_state_sha256": "912f7cf9dd9a536d1f16c8fc3d87e0129274bcb1192de1401c12471d3710b41e",
+      "event_chain_sha256": "3e9838723b4211382b1561f503f879749998f6e8c1c3dd240b4e840272b86e06"
+    },
+    {
+      "boot": 3300, "party_count": 6, "win": true, "decisions": 17,
+      "active_slots_observed": [1, 2, 3, 4, 6], "faints": 2,
+      "first_last_slot_use_decision": 15, "voluntary_switch_hp_loss": 80,
+      "frames": 20764, "controller_macros": 248,
+      "final_state_sha256": "cc91b93483a8d9cd552de3e2c7f44404da081d256c7c43adb9c47a85edd1de7d",
+      "event_chain_sha256": "46816b0f5ce5fff192fd0de3f290b171843d87bd03a20cf15891af4f4ede3754"
+    },
+    {
+      "boot": 3500, "party_count": 4, "win": true, "decisions": 17,
+      "active_slots_observed": [1, 2, 3, 4], "faints": 2,
+      "first_last_slot_use_decision": 16, "voluntary_switch_hp_loss": 95,
+      "frames": 19548, "controller_macros": 232,
+      "final_state_sha256": "6da88f1443b49e11289e11a5796d6e6e65b0b26f174015e110af941648303763",
+      "event_chain_sha256": "35b77e78871fb73ef8d98d4af90e77adc019ee84909f57caf6f9c28e6dd676c8"
+    },
+    {
+      "boot": 3500, "party_count": 5, "win": true, "decisions": 18,
+      "active_slots_observed": [1, 2, 3, 4, 5], "faints": 2,
+      "first_last_slot_use_decision": 17, "voluntary_switch_hp_loss": 65,
+      "frames": 22460, "controller_macros": 265,
+      "final_state_sha256": "68667e2370190be9a6cd4bc401ebce829eca7af5b53990b2c10bdfd1637ba39a",
+      "event_chain_sha256": "3b757ef9f9607f6b74769a12e1f6012beea999cd4ddfc860dc059a3af7b3ec02"
+    },
+    {
+      "boot": 3500, "party_count": 6, "win": true, "decisions": 18,
+      "active_slots_observed": [1, 2, 3, 4, 6], "faints": 2,
+      "first_last_slot_use_decision": 17, "voluntary_switch_hp_loss": 60,
+      "frames": 23004, "controller_macros": 270,
+      "final_state_sha256": "44fae34fdded8ac46f99cdd1eee67c4fb26eb4a9c2cc5e232a184795818e3f75",
+      "event_chain_sha256": "4025c562989119234b2faa5ed73749b5fd9a0ccaea88de473e6e063242816e82"
+    }
+  ],
+  "interpretation": {
+    "accepted": "Bounded assisted full-party execution: attacks, voluntary/forced switching, accepted/declined opponent-change prompts and actual late-slot transitions completed under frozen J.",
+    "not_established": "Natural trainer or League competence, efficient target selection, profitable income or general six-party production qualification. Six wins from two constructed origin clusters are not a population reliability estimate.",
+    "observed_weakness": "Every case first switched to slot3; the last-slot electric option was not used until decision15-17. Repeated switching and14 faints warrant a bounded TRAIN-only strategy comparison, not executor redesign or hand-selected policy actions.",
+    "coverage_gap": "Slot5 was exercised in both five-member cases but never activated in either six-member case. No claim that all slots were played within each six-member battle.",
+    "terminal_caveat": "The lab-rival script restored HP/PP at battle exit in all six cases. Full terminal HP does not erase in-battle faints or establish economic recovery. Observed boundary-delta HP/PP metrics can undercount final-turn use across that restoration.",
+    "funding_contract": "All six have in-battle faints and therefore do not satisfy the existing ordinary-funding no-faints contract. That guard is unchanged; no new universal no-faints requirement is imposed."
+  },
+  "read_only_train_support_audit": {
+    "authentication": "Verified the frozen fit plan's four retention-container and policy-supply bindings, then each bound target JSON digest. Parsed observations only; no new inference, emulation, labels or fitting.",
+    "bound_retention_target_rows": 318,
+    "retention_rows_by_own_party_size": {"2": 2, "3": 228, "5": 88},
+    "five_member_rows_with_five_living_members": 80,
+    "policy_conditioned_target_rows": 16,
+    "policy_conditioned_rows_by_own_party_size": {"3": 16},
+    "fit_plan_teacher_rows_after_policy_replacement": 302,
+    "six_member_rows": 0,
+    "retention_target_sha256s": [
+      "f5d041580ab4ea9401a0af34bab1092250aad1ca8687b27f8b5f955b4a1fdfb1",
+      "20d795d01a01b3c4f9e317678a421e139f36d1eb460cf52ceffe71c09d86e546",
+      "a0c48586d32b0a53c72dbe232a48c7e4161a54b99882310db83a4cd85b6d42b6",
+      "e291b3fde683e1e98f9c19225c482825549eaa6fceea086742c5a7ad7d9a1dfd"
+    ],
+    "policy_target_sha256": "ce597bc6e7f49cdb4038bd66d75e3cf651bc66e8bdaa77701e0360669809d432",
+    "conclusion": "J is not entirely untrained on larger parties:88 retained rows have five members. Its16 learner-continuation-conditioned measurements are all three-member. This motivates testing larger-party choices under J's own continuation before producing another source bank or assuming missing features; it does not establish the causal source of the observed weakness."
+  },
+  "verification": {
+    "targeted_rom_free_tests_passed": 128,
+    "full_suite_run": false,
+    "independent_read_only_audit": "Reauthenticated all six input/model/plan bindings and endpoint hashes; verified event chains and outcome terminal digests with the existing cohort analyzer; checked each selected switch against its legal slots and observed active slot. No inference replay.",
+    "new_resume_regressions": "Exact-state continuation accepts only original metadata failure and retained bytes; rejects condition/source/failure changes or an already started second source; mock integration captures only3500 and freezes all six."
+  },
+  "new_train_examples": 0,
+  "model_updates": 0,
+  "authority_promotions": 0,
+  "new_registrations": 0,
+  "main_save_changed": false,
+  "natural_full_party_qualified": false,
+  "gameplay_running": false,
+  "next": "Retain J and consumed DEVELOPMENT cases. One bounded switching-efficiency comparison on admissible separate TRAIN inputs, followed by prospectively frozen unused natural full-party workload qualification; no broad refit or automatic promotion.",
+  "publication": "Local only; no GitHub push."
+}

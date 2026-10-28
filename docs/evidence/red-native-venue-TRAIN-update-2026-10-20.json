@@ -1,0 +1,56 @@
+{
+  "DEVELOPMENT_inputs_fitted": 0,
+  "TRAIN_outcomes": [
+    {
+      "controller_inputs": 15758,
+      "evolution_completed": true,
+      "frames": 1489002,
+      "recorded_healing_calls": 27,
+      "seconds": 154.98774354,
+      "venue": "Route11"
+    },
+    {
+      "controller_inputs": 20029,
+      "evolution_completed": false,
+      "frames": 2259379,
+      "recorded_healing_calls": 53,
+      "safe_partial": true,
+      "seconds": 196.540277414,
+      "venue": "Mansion"
+    }
+  ],
+  "actual_actor_running": false,
+  "actual_registration_delta": 0,
+  "all_costs_retained": true,
+  "candidate_model_sha256": "d8385b90f571a62d2beae40d6a89dbf29bea998ab1a495d93c9b35196e458d04",
+  "changed_parameter_values": 880,
+  "current_focused_checks": 493,
+  "failed_external_prefix_task_retained_and_excluded": true,
+  "fitted_choice": "Route11",
+  "frozen_focused_checks": 493,
+  "frozen_package_sha256": "41ee97fe4c086a733ba81616b9bd6c0acbac927966e8c77253b5c7fbf6298ef1",
+  "full_suite": false,
+  "global_completed_fits": 13,
+  "global_fit_attempts": 16,
+  "loss_after": 0.09096378604278799,
+  "loss_before": 15.170214248527436,
+  "native_DEVELOPMENT_policy_benefit_proved": false,
+  "native_action_trace_witness_records": 71574,
+  "new_TRAIN_menus": 1,
+  "new_genuine_fits": 1,
+  "new_independent_origins": 0,
+  "new_measured_TRAIN_native_outcomes": 2,
+  "next": "Reserved related source030base/fitted native comparison. No actual activation or broad readiness claim.",
+  "observed_at_utc": "2026-10-20T23:27:42.278051+00:00",
+  "official_fresh_successes": 0,
+  "outer_goal_model_and_battlers_unchanged": true,
+  "parameters": {
+    "epochs": 200,
+    "learning_rate": 0.01,
+    "prior_l2": 0.1
+  },
+  "prior_choice": "Mansion",
+  "schema": "pokemon.red.native-venue-TRAIN-update.v1",
+  "scoped_component_gates_met": 2,
+  "total_component_gates": 7
+}

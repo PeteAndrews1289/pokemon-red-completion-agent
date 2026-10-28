@@ -38,6 +38,7 @@ class RedFishingDestinationOffer:
     map_id: int
     slots: tuple[FishingSlot, ...]
     missing_species_numbers: tuple[int, ...]
+    physical_species_numbers: tuple[int, ...] = ()
 
     def __post_init__(self) -> None:
         if (
@@ -56,6 +57,9 @@ class RedFishingDestinationOffer:
             or not set(self.missing_species_numbers) <= available
         ):
             raise ValueError("Red fishing destination lacks distinct missing species")
+        if (self.physical_species_numbers != tuple(sorted(set(self.physical_species_numbers)))
+                or not set(self.physical_species_numbers) <= set(self.missing_species_numbers)):
+            raise ValueError("physical fishing demand differs from its selected targets")
 
     @property
     def productive_slot_count(self) -> int:
@@ -83,22 +87,28 @@ class RedFishingDestinationOffer:
 def red_super_rod_destination_offers(
     rom: bytes,
     registered_species_numbers: Collection[int],
+    *,
+    physical_demand: Collection[int] = (),
 ) -> tuple[RedFishingDestinationOffer, ...]:
     """Return productive Super Rod map families from cartridge data and credit."""
 
     if not isinstance(rom, bytes):
         raise TypeError("Red fishing inventory needs immutable cartridge bytes")
     registered = frozenset(registered_species_numbers)
+    physical = frozenset(physical_demand)
     if any(type(number) is not int or not 1 <= number <= 151 for number in registered):
         raise ValueError("registered fishing credit must contain Pokédex numbers")
     targets = {
         red_species_number(reference)
         for reference in RED_SOLO_COLLECTION_CONTRACT.target_species
     }
+    if (any(type(n) is not int for n in physical)
+            or not physical <= registered & targets):
+        raise ValueError("physical fishing demand must retain actual registered credit")
     offers = []
     for map_id, slots in sorted(fishing_tables(rom).by_map.items()):
         missing = tuple(
-            sorted({slot.species for slot in slots} & targets - registered)
+            sorted({slot.species for slot in slots} & ((targets - registered) | physical))
         )
         if missing:
             offers.append(
@@ -107,6 +117,7 @@ def red_super_rod_destination_offers(
                     map_id,
                     tuple(slots),
                     missing,
+                    tuple(sorted(set(missing) & physical)),
                 )
             )
     return tuple(offers)
@@ -166,9 +177,10 @@ def red_fishing_destination_candidates(
             features=LivingDexOptionFeatures(
                 kind=LivingDexOptionKind.ACQUIRE,
                 completion_gain=min(
-                    1.0, len(offer.missing_species_numbers) / 7.0
+                    1.0, (len(offer.missing_species_numbers)
+                          - len(offer.physical_species_numbers)) / 7.0
                 ),
-                dependency_unlock_gain=0.0,
+                dependency_unlock_gain=min(1.0, len(offer.physical_species_numbers) / 7.0),
                 travel_effort=route_steps[index] / maximum_route_steps,
                 execution_effort=1.0
                 - offer.productive_slot_count / len(offer.slots),

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .observation import NativeWildTeleportWitness
+
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, replace
 from typing import Protocol, overload
@@ -48,7 +50,10 @@ class WildFleeStatusChange(RuntimeError):
     """
 
     def __init__(
-        self, before: RawGameState, after: RawGameState, evidence: Route1WildFleeEvidence,
+        self,
+        before: RawGameState,
+        after: RawGameState,
+        evidence: Route1WildFleeEvidence,
     ) -> None:
         if not _status_only_flee_change(before, after, evidence):
             raise ValueError("status recovery requires a fully qualified degraded exit")
@@ -58,7 +63,9 @@ class WildFleeStatusChange(RuntimeError):
 
 
 def _status_only_flee_change(
-    before: RawGameState, after: RawGameState, evidence: Route1WildFleeEvidence,
+    before: RawGameState,
+    after: RawGameState,
+    evidence: Route1WildFleeEvidence,
 ) -> bool:
     """Require complete party evidence, not just a living lead in the field."""
     count = before.party_count
@@ -85,8 +92,10 @@ def _status_only_flee_change(
         and after.first_party_hp == after.party_hp[0]
         and before.party_hp[1:] == after.party_hp[1:]
         and all(0 < new <= old for old, new in zip(before.party_hp, after.party_hp, strict=True))
-        and before.bag_items is not None and before.bag_items == after.bag_items
-        and before.player_money is not None and before.player_money == after.player_money
+        and before.bag_items is not None
+        and before.bag_items == after.bag_items
+        and before.player_money is not None
+        and before.player_money == after.player_money
         and before.badge_bits == after.badge_bits
         and before.event_flags == after.event_flags
     )
@@ -119,26 +128,76 @@ class Route1WildFleeEvidence:
     control_ready: bool
     run_attempts: int
     stabilization_frames: int
+    hp_scope: str = "first_party_member"
+    faint_prompt_exit: bool = False
+    party_faints_allowed: bool = False
+    new_fainted_slots: tuple[int, ...] = ()
+    forced_switch_slots: tuple[int, ...] = ()
+    status_changes_allowed: bool = False
+    native_status_changes: tuple[tuple[int, int, int], ...] = ()
+    ordinary_opponent_ko_exit: bool = False
+    native_purified_healing: object | None = None
+    native_opponent_teleport_exit: NativeWildTeleportWitness | None = None
 
     @property
     def verified(self) -> bool:
+        healed = False
+        if self.native_purified_healing is not None:
+            from .wild_party_flee import verified_purified_flee_receipt
+
+            healed = verified_purified_flee_receipt(self.native_purified_healing, self)
+            if not healed:
+                return False
+        witness = self.native_opponent_teleport_exit
+        teleported = (type(witness) is NativeWildTeleportWitness
+            and self.hp_scope == 'whole_party' and self.pp_preserved and self.status_preserved
+            and not self.new_fainted_slots and 1 <= self.run_attempts <= 16
+            and (self.map_id, self.player_x, self.player_y, self.enemy_species_id, self.enemy_level)
+                == (witness.map_id, witness.player_x, witness.player_y,
+                    witness.enemy_species_id, witness.enemy_level))
         return (
             self.initial_battle_state == 1
             and self.final_battle_state == 0
-            and self.battle_result == 2
+            and (
+                self.battle_result == 2
+                or (teleported and self.battle_result == 0)
+                or (self.ordinary_opponent_ko_exit and self.battle_result == 0
+                    and self.hp_scope == "whole_party")
+            )
             and self.map_id == self.expected_map_id
             and self.player_x >= 0
             and self.player_y >= 0
             and self.enemy_species_id > 0
             and self.enemy_level > 0
-            and 0 < self.final_hp <= self.initial_hp
+            and 0 < self.final_hp and (healed or self.final_hp <= self.initial_hp)
             and self.maximum_hp_preserved
             and self.party_preserved
             and self.level_preserved
-            and self.pp_preserved
-            and self.status_preserved
+            and (self.pp_preserved or healed)
+            and (
+                self.status_preserved or healed
+                or (
+                    self.status_changes_allowed
+                    and self.hp_scope == "whole_party"
+                    and bool(self.native_status_changes)
+                )
+            )
             and self.control_ready
-            and 1 <= self.run_attempts <= 16
+            and (not self.new_fainted_slots or self.party_faints_allowed)
+            and (
+                1 <= self.run_attempts <= 16
+                or (
+                    self.run_attempts == 0
+                    and self.faint_prompt_exit
+                    and self.hp_scope == "whole_party"
+                )
+                or (
+                    self.run_attempts == 0
+                    and self.ordinary_opponent_ko_exit
+                    and self.battle_result == 0
+                    and self.hp_scope == "whole_party"
+                )
+            )
             and self.stabilization_frames > 0
         )
 
@@ -163,6 +222,34 @@ class Route1WildFleeEvidence:
             "stabilization_frames": self.stabilization_frames,
             "status_preserved": self.status_preserved,
             "verified": self.verified,
+            "hp_scope": self.hp_scope,
+            "faint_prompt_exit": self.faint_prompt_exit,
+            **({"native_purified_healing": self.native_purified_healing}
+               if self.native_purified_healing is not None else {}),
+            **({"ordinary_opponent_ko_exit": True} if self.ordinary_opponent_ko_exit else {}),
+            **({'native_opponent_teleport_exit': self.native_opponent_teleport_exit.public_dict()}
+               if type(self.native_opponent_teleport_exit) is NativeWildTeleportWitness else {}),
+            **(
+                {"party_faints_allowed": True, "new_fainted_slots": list(self.new_fainted_slots)}
+                if self.party_faints_allowed
+                else {}
+            ),
+            **(
+                {
+                    "forced_switch_slots": list(self.forced_switch_slots),
+                    "learned_replacement": False,
+                }
+                if self.forced_switch_slots
+                else {}
+            ),
+            **(
+                {
+                    "native_status_changes": [list(row) for row in self.native_status_changes],
+                    "status_changes_allowed": True,
+                }
+                if self.status_changes_allowed
+                else {}
+            ),
         }
 
 
@@ -592,6 +679,18 @@ def flee_wild(
 
     if encounter.battle_state != 1 or encounter.map_id != expected_map_id:
         raise error_type(f"{route_name} flee requires an active wild battle on its route.")
+    if encounter.first_party_hp == 0 and trainer_handoff is None:
+        from .wild_party_flee import flee_with_fainted_lead
+
+        return flee_with_fainted_lead(
+            executor,
+            reader,
+            encounter,
+            expected_map_id=expected_map_id,
+            route_name=route_name,
+            stabilization_frames=stabilization_frames,
+            error_type=error_type,
+        )
     expected_position = (encounter.player_x, encounter.player_y)
     expected_party = encounter.party_species_ids
     expected_level = encounter.first_party_level
@@ -608,8 +707,7 @@ def flee_wild(
             if not reader.read_input_readiness().ready:
                 if exit_dismissals >= WILD_FLEE_MAX_EXIT_DISMISSALS:
                     raise error_type(
-                        f"{route_name} flee exceeded its bounded post-RUN control "
-                        "settlement."
+                        f"{route_name} flee exceeded its bounded post-RUN control settlement."
                     )
                 executor.execute(MacroAction(MacroActionKind.CANCEL))
                 _wait(executor, 24)

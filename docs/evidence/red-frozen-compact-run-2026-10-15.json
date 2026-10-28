@@ -1,0 +1,231 @@
+{
+  "acceptance_sha256": "e5640dce61896dd675f7c27836e4e6face686cdf5f16f120a11ef7b7955d59aa",
+  "actor_settings_sha256": "fb2ed64dba4b9c66346e5290165cf7c6e03e9c67d4b648b63b0096926e96a767",
+  "actual_attempts_this_session": 1,
+  "actual_input_and_game_xp_not_parameter_learning": true,
+  "actual_state_loads": 0,
+  "capacity": {
+    "forecast_output_bytes": 19517046089,
+    "free_before_bytes": 23515430912,
+    "full_stochastic_completion_capacity_guaranteed": false,
+    "margin_before_bytes": 777159351,
+    "reference_forecast_fit": true,
+    "stop_reserve_bytes": 3221225472,
+    "free_at_terminal_bytes": 19392552960
+  },
+  "closed_segment_counts": {
+    "executed_decisions": 582,
+    "model_decisions": 263,
+    "support_decisions": 319,
+    "ordinary_setbacks": 23
+  },
+  "closed_segment_spent": {
+    "actions": 235537,
+    "cash_debits": 7670,
+    "decisions": 583,
+    "frames": 19215582,
+    "heals": 353,
+    "seconds": 4552.502722293837
+  },
+  "closed_segment_spent_includes_initial_startup": true,
+  "completed_and_failed_saves_preserved": true,
+  "completed_segment_count": 32,
+  "dashboard": {
+    "connected": true,
+    "controller_endpoints": 0,
+    "frame_feed_connected": false,
+    "persistent_frame_archive": false,
+    "view_only": true
+  },
+  "deadline_utc": "2026-10-16T07:44:10.890362+00:00",
+  "environment_pins_verified": 4512,
+  "extra_boot_frames": 997,
+  "files_deleted": 0,
+  "final_fresh_gates_passed": 0,
+  "final_fresh_gates_total": 5,
+  "first_review_due_utc": "2026-10-15T17:44:10.890362+00:00",
+  "fits": 0,
+  "frozen_actor_changed": false,
+  "independent_heldout_claim": false,
+  "initial_actions": 178,
+  "initial_configuration_sha256": "182f14f19cb3f3bddfcf77ef77fe79a4ba16c38adb4453acc07c5672df410b29",
+  "initial_costs_separately_attributed_not_added_twice": true,
+  "initial_frames": 22213,
+  "initial_state_sha256": "77c361c1186bf7c3e7cdbe698ce13044c27c42f3c0a81f846e4c01ee417c807c",
+  "logging": {
+    "fields_dropped": false,
+    "isolation_report": "gzip_json_v1",
+    "native_input_storage": "flat_sealed_v1",
+    "sampling": false
+  },
+  "manifest_sha256": "68cc18a8876a31d197918d99acad3f4db27b0d69924cfe080fe5b9cbd999a7cb",
+  "milestones_observed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "monitor": {
+    "id": "frozen-red-r14-read-only-monitor",
+    "status": "PAUSED",
+    "duplicate_created": false
+  },
+  "native_chunk_costs_excluding_initial_startup": {
+    "actions": 235359,
+    "frames": 19193369,
+    "heals": 353,
+    "cash_debits": 7670
+  },
+  "new_train_examples": 0,
+  "new_volumes": 0,
+  "new_weights": 0,
+  "observed_badges": 4,
+  "observed_registrations": 21,
+  "package_pins_verified": 7877,
+  "party_levels": [
+    37,
+    31,
+    30,
+    32,
+    30,
+    37
+  ],
+  "plan_sha256": "6c89661a9616e14e12330d181ca3374f22d8eb39acd3ae885ec4d72ebdeea4d6",
+  "protected_pins_verified": 357,
+  "real_blocker": {
+    "category": "execution_navigation",
+    "selected_goal": "reach_fuchsia",
+    "error": "route replanning found no candidate",
+    "error_chain": [
+      {
+        "error": "route replanning found no candidate",
+        "error_type": "RouteExecutionError",
+        "reason_code": "planner_no_route"
+      },
+      {
+        "error": "no staged Cut route from map 23 to map 23",
+        "error_type": "RoutePlanningError"
+      }
+    ],
+    "map_id": 23,
+    "at": [
+      30,
+      13
+    ],
+    "safe_terminal": true,
+    "failed_goal_actions": 195,
+    "failed_goal_frames": 5448,
+    "failed_goal_seconds": 15.483551791170612
+  },
+  "recorded_at_utc": "2026-10-15T17:09:25.272818+00:00",
+  "required_registrations": 124,
+  "review_count_completed": 0,
+  "review_interval_seconds": 7200,
+  "run": "red-frozen-autonomous-run-20261015-compact-v1",
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.frozen-compact-dashboard-run.v1",
+  "seed": 2026101417,
+  "session": "2026-10-15-frozen-compact-run",
+  "sleep_prevention_pid": 60196,
+  "snapshot_limitation": "Closed failed actual:582episode choices=263model+319support;583budget units include one verified zero-input handoff. Cumulative costs include startup. Exact final tail retained. No live actor or successor.",
+  "started_at_utc": "2026-10-15T15:44:10.890362+00:00",
+  "startup_verification_sha256": "a8421d902b89956c216c0730b76e5c117c55432b95be64595b5e3fe480442bc1",
+  "status": "failed_stopped",
+  "stop_criteria": "Real blocker,complete proof,human pause,fixed16hours or low storage; retain actual exit/state/context/costs and pause same monitor. No repairs or successor dispatch.",
+  "storage_expansion_request": "Closed run; plan expansion separately. No disk changes.",
+  "success_criteria": "Unchanged authenticated fresh ancestry,zero actual loads/runtimeLLM,concurrent Champion/HOF and all124native registrations.",
+  "supervisor_pid": 60182,
+  "time_allowance_seconds": 57600,
+  "volume_quota_or_reserve_changes": 0,
+  "worker_pid": 60195,
+  "startup_snapshot": {
+    "recorded_at_utc": "2026-10-15T15:51:23.313607+00:00",
+    "observed_badges": 1,
+    "observed_registrations": 12,
+    "party_levels": [
+      17,
+      7,
+      8,
+      9,
+      7,
+      3
+    ],
+    "closed_segment_counts": {
+      "executed_decisions": 60,
+      "model_decisions": 56,
+      "ordinary_setbacks": 6,
+      "support_decisions": 4
+    },
+    "closed_segment_spent": {
+      "actions": 22490,
+      "cash_debits": 5767,
+      "decisions": 60,
+      "frames": 1560097,
+      "heals": 30,
+      "seconds": 352.43403499992564
+    },
+    "completed_segment_count": 3,
+    "milestones_observed": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock",
+      "power_on",
+      "reach_pewter",
+      "receive_pokedex"
+    ]
+  },
+  "worker_stopped": true,
+  "supervisor_stopped": true,
+  "sleep_prevention_stopped": true,
+  "buttons_released": true,
+  "process_exit": {
+    "exit_code": 0,
+    "exited_at_utc": "2026-10-15T17:02:24.587884+00:00",
+    "no_restart": true,
+    "root_result_exists": true,
+    "safety_stop_reason": null,
+    "supervisor_seconds": 4693.66082962486,
+    "worker_exit_confirmed": true,
+    "worker_pid": 60195
+  },
+  "terminal_sha256": "4e2358adade94d1d657cb69f9e6cbe18bb4864c3d9bc2cd1ec2a252df87331d3",
+  "context_sha256": "8f8ef8dfee183cb9f9243996a8dd358fdad131e0b8c1928b47f045f2da65309b",
+  "retained_record_sha256": "c7cb4e03afa6eb265004941674001c121f703d65909a4072948e4e71b5ee0eec",
+  "budget_decisions_include_one_automatic_handoff": 583,
+  "verified_zero_input_automatic_handoffs": 1,
+  "native_cost_meter_count": 32,
+  "native_meter_sums_exclude_initial_startup": {
+    "actions_attempted": 235359,
+    "actions_completed": 235359,
+    "frames": 19193369,
+    "goal_attempts": 583,
+    "observed_cash_debits": 7670,
+    "observed_cash_rewards": 35638,
+    "training_healing_attempts": 141,
+    "nested_restore_attempts": 137,
+    "restore_attempts": 353,
+    "diagnostic_events": 55083,
+    "diagnostic_journal_seconds": 217.75162672041915,
+    "seconds": 4548.414322084747
+  },
+  "registration_gain_since_startup_snapshot": 9,
+  "cash_final": 30968,
+  "all_six_healthy_at_terminal": true,
+  "terminal_before_first_due_review": true,
+  "diagnosis": "Tower passed through rescue_fuji; new same-map static-approach navigation failure,not a combat loss."
+}

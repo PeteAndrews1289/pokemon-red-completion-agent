@@ -1,0 +1,168 @@
+{
+  "actual_processes_absent": true,
+  "at_utc": "2026-10-16T15:29:50.158767+00:00",
+  "completed": false,
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "defeat_brock",
+    "power_on",
+    "reach_pewter",
+    "receive_pokedex"
+  ],
+  "context_sha256": "30e437bfff2d9b1c062315b98c2c0f10e411ce5e5e75a10b62b514fdab7fc770",
+  "copied_gains": 0,
+  "counts": {
+    "executed": 75,
+    "model": 72,
+    "setbacks": 6,
+    "support": 3
+  },
+  "environment_pins_verified": 4512,
+  "final_at": [
+    17,
+    21
+  ],
+  "final_field_ready": true,
+  "final_map": 61,
+  "final_menu_diagnostics": {
+    "additional_inputs_authorized": false,
+    "category": "unclassified_requires_evidence",
+    "diagnostic_only": true,
+    "error_chain": null,
+    "failure_reason": "binding_failed",
+    "resume_authorized": false,
+    "safe_terminal": true,
+    "schema": "pokemon.red.player-stop-diagnostics.v1",
+    "stop_reason": "verification_failed"
+  },
+  "fits": 0,
+  "isolated_io": {
+    "all_writes_in_failed_run": true,
+    "loaded_modules": 644,
+    "module_isolation_error": null,
+    "reads": 15762,
+    "sha256": "8cf9693ba2ad252a7bb331851d47b776e84a16c3c5cfaf15995bee3e50eacb2d",
+    "writes": 56675
+  },
+  "launch": {
+    "controller_inputs": 0,
+    "deadline_utc": "2026-10-17T07:20:34.555455+00:00",
+    "manifest_sha256": "176702d6f04ccb3d5e0d228f808f379ffc710a5c71737c9f3fec9e95ffc92fbf",
+    "native_seconds_budget": 57600,
+    "no_restart": true,
+    "plan_sha256": "4e78667bbb818308d0b081d05aa689f11e16b5e6cf3ea3ddd5d5b8e74f19dd9c",
+    "process_scoped_sleep_prevention": true,
+    "schema": "pokemon.red.frozen-launch-process.v1",
+    "sleep_prevention_pid": 25384,
+    "started_at_utc": "2026-10-16T15:20:34.555455+00:00",
+    "supervisor_pid": 25382,
+    "worker_pid": 25383
+  },
+  "native_facts": {
+    "badge_bits": 1,
+    "badges": 1,
+    "bag_stock": [
+      [
+        4,
+        4
+      ],
+      [
+        234,
+        1
+      ]
+    ],
+    "cash": 179,
+    "event_flags_hex": "01000000af000003000000000000c4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007c0300000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "party_levels": [
+      17,
+      5,
+      9,
+      8,
+      3,
+      5
+    ],
+    "registrations": 14,
+    "whole_party_restored": false
+  },
+  "native_failure": null,
+  "next_action": "Diagnose the selected routed capture destination missing_capability boundary on exact related copies; preserve binding availability, route legality, encounter identity, resources, custody and full original costs.",
+  "package_pins_verified": 7878,
+  "prior_recovered_error": "No automatic control recoveries in this attempt",
+  "process_exit": {
+    "exit_code": 0,
+    "exited_at_utc": "2026-10-16T15:27:44.888586+00:00",
+    "no_restart": true,
+    "root_result_exists": true,
+    "safety_stop_reason": null,
+    "supervisor_seconds": 430.33331237500533,
+    "worker_exit_confirmed": true,
+    "worker_pid": 25383
+  },
+  "protected_pins_verified": 1030,
+  "released": true,
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.frozen-terminal-retention.v1",
+  "segments": [
+    {
+      "context_sha256": "d54392e2165541fe9c2818ee061b75cd06cbb88688b79843fe5f4d17b2d719e9",
+      "executed": 20,
+      "model": 18,
+      "number": 1,
+      "result_sha256": "da70fdb06e4a997b6af2433f4d90717bfa81a447b01406dc2e2afe8aa9cf27c5",
+      "setbacks": 2,
+      "state_sha256": "65c4601c2a305f923197a72ca5b773d0fb12cb1714190d035363660297c3a118",
+      "stop_reason": "decision_budget",
+      "support": 2
+    },
+    {
+      "context_sha256": "c209ccddc8b976b73e0b3fa7ac1b59146564adcf79f415c0a575999e027bdabc",
+      "executed": 20,
+      "model": 19,
+      "number": 2,
+      "result_sha256": "f5d34139056376eaba319cb23b8a841b0c6866142f093d7f5c9c8f2989684a7d",
+      "setbacks": 0,
+      "state_sha256": "0de8fdd50983c6e8b45b26e17a20eaf55af5da19bfbff7e230ca50a0e8be5254",
+      "stop_reason": "decision_budget",
+      "support": 1
+    },
+    {
+      "context_sha256": "1558c3edc428c1099c21c9c5ebb536e5e6921d4349a875e3c5a4d53d04bc25c9",
+      "executed": 20,
+      "model": 20,
+      "number": 3,
+      "result_sha256": "1ff5db03eeefebe90aa1960d3c6582bf248a5301278bed14fa10fe648696e3a3",
+      "setbacks": 3,
+      "state_sha256": "e27d2ee3bd09e1427551b4ddfd027c12b3b7187193338e582c5dd790ea089e77",
+      "stop_reason": "decision_budget",
+      "support": 0
+    },
+    {
+      "context_sha256": "30e437bfff2d9b1c062315b98c2c0f10e411ce5e5e75a10b62b514fdab7fc770",
+      "executed": 15,
+      "model": 15,
+      "number": 4,
+      "result_sha256": "90082b75a3f668f1e3ca4471eea47ef3c0d44b671b5844a3a434f6ce493f26e7",
+      "setbacks": 1,
+      "state_sha256": "cac528df82e496a4aba7304a11711dde6e8e774680426ef3817910fc6d058088",
+      "stop_reason": "verification_failed",
+      "support": 0
+    }
+  ],
+  "spent": {
+    "actions": 23178,
+    "cash_debits": 5712,
+    "decisions": 75,
+    "frames": 1554841,
+    "heals": 32,
+    "seconds": 391.3358709178865
+  },
+  "state_loads": 0,
+  "terminal_reason": "verification_failed",
+  "terminal_sha256": "cac528df82e496a4aba7304a11711dde6e8e774680426ef3817910fc6d058088",
+  "training": 0,
+  "verified_automatic_control_recoveries": [],
+  "wall_seconds": 398.3989710418973,
+  "run_id": "red-frozen-autonomous-run-20261016-trade-escape-v1",
+  "retention_sha256": "2eb7a1c5f51a4cd27e4635ebc2efa42971e5a27ddc82e3e0e898b6526121856e"
+}

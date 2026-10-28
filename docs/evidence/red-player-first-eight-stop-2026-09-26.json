@@ -1,0 +1,172 @@
+{
+  "admitted": 3,
+  "attempts": 8,
+  "audit_input_frames": 0,
+  "cases": [
+    {
+      "actions": 0,
+      "admitted": false,
+      "error_type": "RedGoalContextProfileError",
+      "frames": 0,
+      "index": 0,
+      "outcome": null,
+      "result_sha256": "3e910b229e46c7b09eacb88f2a46df0e726a79c661f1d7af07bb323d2300893e",
+      "setup_actions": 13,
+      "setup_frames": 624,
+      "stage": "lesson_preflight",
+      "succeeded": false
+    },
+    {
+      "actions": 28,
+      "admitted": true,
+      "error_type": null,
+      "frames": 2016,
+      "index": 1,
+      "outcome": {
+        "declaration_sha256": "a1c94e8eafc053c88c71c34ebbb4f7f387741ba45a8f5c1de91081516cf8f64a",
+        "outcome_sha256": "8ea0b71493c419663b5d57a76fe2d5a2bc07efcc11ed6aa2cb71fba63d9e205b"
+      },
+      "result_sha256": "1e230982d9a045fe88bc75d11c6389624595eabeccc028674e38488f2255c34f",
+      "setup_actions": 0,
+      "setup_frames": 0,
+      "stage": "lesson",
+      "succeeded": true
+    },
+    {
+      "actions": 546,
+      "admitted": true,
+      "error_type": null,
+      "frames": 42816,
+      "index": 2,
+      "outcome": {
+        "declaration_sha256": "0a747b37fe77c36b6b698898473c22578780b63391945e2fc1bb6b753b055271",
+        "outcome_sha256": "c8d1ed8d795cf564baf5485143c1ae604e852296b7d0defacd0647a6506cfc4b"
+      },
+      "result_sha256": "0abea9aa64e956b25e9ea9b9d34ec6e051c60e27689e4263cef6444be9d5ed7d",
+      "setup_actions": 0,
+      "setup_frames": 0,
+      "stage": "lesson",
+      "succeeded": true
+    },
+    {
+      "actions": 0,
+      "admitted": false,
+      "error_type": "NameError",
+      "frames": 0,
+      "index": 3,
+      "outcome": null,
+      "result_sha256": "b643e5435772abd56ddba503e7c4b7857d3ebe22aa7ab39ccccd05ec382acff5",
+      "setup_actions": 0,
+      "setup_frames": 0,
+      "stage": "setup",
+      "succeeded": false
+    },
+    {
+      "actions": 0,
+      "admitted": false,
+      "error_type": "GoalManagerError",
+      "frames": 0,
+      "index": 4,
+      "outcome": null,
+      "result_sha256": "c52d8d3638b6e72822fe9cf90cd93d34598a4c289ffaf894f13022df0c6ead1c",
+      "setup_actions": 16,
+      "setup_frames": 696,
+      "stage": "preflight",
+      "succeeded": false
+    },
+    {
+      "actions": 0,
+      "admitted": false,
+      "error_type": "TypeError",
+      "frames": 0,
+      "index": 5,
+      "outcome": null,
+      "result_sha256": "86ef1123d588d6b835a04607eb71aae73341a4805ad4cbb81c773020ed69941a",
+      "setup_actions": 0,
+      "setup_frames": 0,
+      "stage": "preflight",
+      "succeeded": false
+    },
+    {
+      "actions": 28,
+      "admitted": true,
+      "error_type": "LavenderChapterError",
+      "frames": 2556,
+      "index": 6,
+      "outcome": {
+        "declaration_sha256": "8f18e857ca2c11a309089b956332827cb2935f6844f14797ff6727ae20baf674",
+        "outcome_sha256": "a09005c6121c86e13a06cf148f8fd4d8d76492183c640fb3616abadb0ac4c3ab"
+      },
+      "result_sha256": "7c32af00e75f6612769d00cdf2fd6f4efcdb8b11153a0c0dceb0f470ba39b113",
+      "setup_actions": 0,
+      "setup_frames": 0,
+      "stage": "lesson",
+      "succeeded": false
+    },
+    {
+      "actions": 0,
+      "admitted": false,
+      "error_type": "ResumedStateError",
+      "frames": 0,
+      "index": 7,
+      "outcome": null,
+      "result_sha256": "22f93381314d579a932b84c6b38e29865ee1317c16ce56ab84bcc4bc8073c021",
+      "setup_actions": 13,
+      "setup_frames": 624,
+      "stage": "preflight",
+      "succeeded": false
+    }
+  ],
+  "collection_stopped": true,
+  "comparison_policy_queries": 0,
+  "fits": 0,
+  "gift_preflight": "out_of_order_liberate_silph",
+  "high_level_model_choices": 0,
+  "minimum_admitted": 4,
+  "original_origins_unchanged": true,
+  "passed": true,
+  "pilot_gate_passed": false,
+  "resource_partial": {
+    "balls_gained": 5,
+    "cash_delta": -1000,
+    "dialogue_visible": false,
+    "input_ready": true,
+    "observed_second_item": 11,
+    "requested_second_item": 20,
+    "selected_shop_item": 11,
+    "shop_quantity": 1
+  },
+  "schema": "pokemon.red.player-first-eight-evidence.v1",
+  "successful": 2,
+  "private_audit_sha256": "d0aa7d8bc931c3d133a936c6c3312274001635945abf8121bbddde71d6dbb4f4",
+  "verification": {
+    "targeted_tests_passed": 375,
+    "ruff_passed": true,
+    "mypy_source_files": 663,
+    "full_suite_run": false
+  },
+  "family_attempts": {
+    "recovery_vs_continuation": 2,
+    "story_vs_development": 1,
+    "earning_vs_spending": 4,
+    "acquisition_vs_resources": 1
+  },
+  "source_identity": {
+    "case_04": {
+      "code_commit": "e3526185422b9d528a19c4e2a28d4ba4c8f1c970",
+      "source_bundle_sha256": "25d1f9207afda31701cc44adba52fd8a7fca1f6b25971bb42858ad0796709ea0",
+      "helper_sha256": "7fd1e20f78f5cb4d3969bad52693796ca875ba1a5892017fe44df624246cebd5"
+    },
+    "case_06": {
+      "code_commit": "e3526185422b9d528a19c4e2a28d4ba4c8f1c970",
+      "source_bundle_sha256": "3019be585732adf49d62e943ff42cac1addc7d87774f1cbc056510bdd734ce48",
+      "helper_sha256": "5f01cae1b238839818edaeccf5a9f34f031da2f8f94da947600d931551753aad"
+    },
+    "case_07": {
+      "code_commit": "e3526185422b9d528a19c4e2a28d4ba4c8f1c970",
+      "source_bundle_sha256": "3019be585732adf49d62e943ff42cac1addc7d87774f1cbc056510bdd734ce48",
+      "helper_sha256": "a5343e78b2b4bb1cfed9294c7de482affb6b2da46d12737bc9576f7df9a09b69"
+    }
+  }
+}
+

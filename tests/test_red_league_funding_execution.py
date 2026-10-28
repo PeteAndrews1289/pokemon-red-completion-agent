@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
@@ -105,7 +106,8 @@ def _runtime():
 
 def _binding(runtime, qualification):
     return execution.RedLeagueFundingExecutionBinding(
-        runtime.adapter.observe(), qualification,
+        runtime.adapter.observe(),
+        qualification,
     )
 
 
@@ -126,20 +128,70 @@ def _route_success(observed, qualification):
 @pytest.fixture(autouse=True)
 def _scripted_arrival(monkeypatch):
     monkeypatch.setattr(
-        execution, "trainer_room_arrival", lambda *args: SimpleNamespace(steps=6),
+        execution,
+        "trainer_room_arrival",
+        lambda *args: SimpleNamespace(steps=6),
     )
 
 
-def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
+@pytest.mark.parametrize("field_recovery", [False, True])
+@pytest.mark.parametrize("terminal_map", [118, 120])
+@pytest.mark.parametrize("already_at_indigo", [False, True])
+def test_execution_composes_five_quoted_battles_without_training(
+    monkeypatch,
+    tmp_path,
+    field_recovery,
+    terminal_map,
+    already_at_indigo,
+):
     qualification = _qualification()
     runtime, observed = _runtime()
+    if already_at_indigo:
+        qualification = replace(qualification, exit_plan=None, fly_required=False)
+        observed.raw.map_id = 9
+        observed.raw.player_y, observed.raw.player_x = qualification.fly_landing
+    session = None
+    if field_recovery:
+        from test_red_live_option_menu import _model
+
+        from pokemon_red_completion.red_league_field_recovery import LeagueFieldRecovery
+        from pokemon_red_completion.red_learned_league import FrozenLeagueController
+        from pokemon_red_completion.red_learned_trainer import (
+            FROZEN_K_SHA256,
+            K_QUALIFICATION_SHA256,
+        )
+
+        model = _model()
+        session = LeagueFieldRecovery(
+            model, model.model_sha256, tmp_path / "campaign", lambda: b"test-state", 10000
+        )
+        runtime.league_battle_controller = FrozenLeagueController(
+            SimpleNamespace(
+                model_sha256=FROZEN_K_SHA256, qualification_sha256=K_QUALIFICATION_SHA256
+            ),
+            "league-profit-recovery-v1",
+            field_recovery=session,
+        )
+        observed.raw.bag_items = ((1, 2), (53, 1))
     actions = _actions(runtime)
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
-    monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
+    monkeypatch.setattr(
+        execution,
+        "qualify_red_league_funding",
+        lambda *args, **kwargs: qualification,
+    )
     routes = []
 
     def route(plan, *args, **kwargs):
         routes.append((plan, kwargs.get("limits")))
+        if plan is qualification.exit_plan:
+            handler = kwargs["interruption_handler"]
+            assert isinstance(handler, execution.Gen1WildFleeHandler)
+            assert handler.executor is args[0]
+            assert handler.reader is runtime.reader
+            assert handler.maximum_flees == 16
+            assert handler.stabilization_frames == 120
+            assert not handler.allow_party_faints
         if plan is qualification.supply.route:
             observed.raw.map_id = 174
             observed.raw.player_y, observed.raw.player_x = (5, 2)
@@ -150,7 +202,7 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
 
     class Port:
         def __init__(self, *args):
-            pass
+            assert not already_at_indigo, "same-town walking must not invoke Fly"
 
         def execute(self, action):
             observed.raw.map_id = 9
@@ -166,28 +218,56 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     )
 
     def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
+        if field_recovery and objective_id == "defeat_bruno":
+            from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
+
+            session._accept(GoalExecutionReport(1, 1, {"item_id": 53, "owned_items_consumed": 1}))
+            observed.raw.bag_items = ((1, 2),)
         before = runtime.adapter.observe().raw.player_money
         runtime.adapter.observe().raw.player_money += expected_money
         if objective_id == "defeat_champion":
             runtime.adapter.observe().raw.party_species_ids = (64, 28)
+            runtime.adapter.observe().raw.map_id = terminal_map
         return execution.RedLeagueFundingBattleResult(
             objective_id, before, before + expected_money, expected_money, 0, 0
         )
 
     monkeypatch.setattr(execution, "_run_battle", run_battle)
+    if terminal_map != 118:
+        with pytest.raises(
+            execution.RedLeagueFundingExecutionError, match="current-cycle Hall-of-Fame arrival"
+        ) as caught:
+            execution.execute_red_league_funding(
+                runtime,
+                actions,
+                world,
+                _binding(runtime, qualification),
+            )
+        assert len(caught.value.progress.completed_battles) == 5
+        assert caught.value.progress.observed_money == 2000
+        return
     result = execution.execute_red_league_funding(
-        runtime, actions, world, _binding(runtime, qualification),
+        runtime,
+        actions,
+        world,
+        _binding(runtime, qualification),
     )
     assert result.observed_gross_income == 1_500
     assert result.public_dict()["training_examples"] == 0
     assert result.public_dict()["postgame_reset_proven"] is False
+    assert result.field_items_spent == (((53, 1),) if field_recovery else ())
+    assert result.field_item_replacement_cost == (1500 if field_recovery else 0)
+    assert result.public_dict()["net_after_field_item_replacement"] == (
+        0 if field_recovery else 1500
+    )
     assert [row.objective_id for row in result.battles] == [
         quote.objective_id for quote in qualification.battles
     ]
-    assert routes[0] == (qualification.exit_plan, None)
-    assert routes[1] == (qualification.supply.route, None)
-    assert routes[2][0] is qualification.entry_plan
-    assert routes[2][1].transition_settle_frames >= 6 * 24 + 120
+    if not already_at_indigo:
+        assert routes.pop(0) == (qualification.exit_plan, None)
+    assert routes[0] == (qualification.supply.route, None)
+    assert routes[1][0] is qualification.entry_plan
+    assert routes[1][1].transition_settle_frames >= 6 * 24 + 120
 
 
 def test_execution_allocates_one_restore_to_first_qualified_need(monkeypatch):
@@ -204,12 +284,8 @@ def test_execution_allocates_one_restore_to_first_qualified_need(monkeypatch):
                 if quote.objective_id == "defeat_lance"
                 else "ordinary-bounded-healing"
             ),
-            maximum_full_restores=(
-                0 if quote.objective_id == "defeat_lance" else 1
-            ),
-            maximum_critical_exposures=(
-                2 if quote.objective_id == "defeat_lance" else 0
-            ),
+            maximum_full_restores=(0 if quote.objective_id == "defeat_lance" else 1),
+            maximum_critical_exposures=(2 if quote.objective_id == "defeat_lance" else 0),
         )
         for quote in base.battles
     )
@@ -253,23 +329,28 @@ def test_execution_allocates_one_restore_to_first_qualified_need(monkeypatch):
     policies = []
 
     def run_battle(
-        runtime, actions, world, objective_id, expected_money,
-        recovery_controller, maximum_full_restores, maximum_critical_exposures,
+        runtime,
+        actions,
+        world,
+        objective_id,
+        expected_money,
+        recovery_controller,
+        maximum_full_restores,
+        maximum_critical_exposures,
     ):
         policies.append(
-            (objective_id, recovery_controller, maximum_full_restores,
-             maximum_critical_exposures)
+            (objective_id, recovery_controller, maximum_full_restores, maximum_critical_exposures)
         )
         before = observed.raw.player_money
         observed.raw.player_money += expected_money
         spent = int(objective_id == "defeat_lorelei")
         if spent:
             observed.raw.bag_items = tuple(
-                row for row in observed.raw.bag_items
-                if row[0] != int(ItemId.FULL_RESTORE)
+                row for row in observed.raw.bag_items if row[0] != int(ItemId.FULL_RESTORE)
             )
         if objective_id == "defeat_champion":
             observed.raw.party_species_ids = (64, 28)
+            observed.raw.map_id = 118
         return execution.RedLeagueFundingBattleResult(
             objective_id,
             before,
@@ -283,7 +364,10 @@ def test_execution_allocates_one_restore_to_first_qualified_need(monkeypatch):
 
     monkeypatch.setattr(execution, "_run_battle", run_battle)
     result = execution.execute_red_league_funding(
-        runtime, actions, world, _binding(runtime, qualification),
+        runtime,
+        actions,
+        world,
+        _binding(runtime, qualification),
     )
 
     assert policies == [
@@ -329,9 +413,7 @@ def test_nonempty_supply_faces_clerk_before_any_irreversible_sale(monkeypatch):
     monkeypatch.setattr(
         execution,
         "_sell_bag_stack",
-        lambda actual_actions, emulator, item, quantity: events.append(
-            ("sell", item, quantity)
-        ),
+        lambda actual_actions, emulator, item, quantity: events.append(("sell", item, quantity)),
     )
     monkeypatch.setattr(
         execution,
@@ -378,7 +460,9 @@ def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypa
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
     monkeypatch.setattr(
-        execution, "execute_route", _route_success(observed, qualification),
+        execution,
+        "execute_route",
+        _route_success(observed, qualification),
     )
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
 
@@ -410,7 +494,10 @@ def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypa
     monkeypatch.setattr(execution, "_run_battle", run_battle)
     with pytest.raises(execution.RedLeagueFundingExecutionError) as caught:
         execution.execute_red_league_funding(
-            runtime, actions, world, _binding(runtime, qualification),
+            runtime,
+            actions,
+            world,
+            _binding(runtime, qualification),
         )
     assert caught.value.reason == "defeat_agatha failed"
     assert caught.value.progress is not None
@@ -448,6 +535,49 @@ def test_execution_requalifies_before_any_input(monkeypatch):
     assert actions.actions_executed == 0
 
 
+def test_incidental_departure_damage_does_not_bypass_income_supply_guard(monkeypatch):
+    qualification = _qualification()
+    runtime, observed = _runtime()
+    actions = _actions(runtime)
+    world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
+    monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
+    monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
+    monkeypatch.setattr(execution, "dependency_specimen_ledger", lambda *args: ("same",))
+
+    def route(plan, bounded, *args, **kwargs):
+        if plan is qualification.exit_plan:
+            assert kwargs["interruption_handler"].executor is bounded
+            observed.raw.party_hp = (199, 180)
+        elif plan is qualification.supply.route:
+            observed.raw.map_id = 174
+            observed.raw.player_y, observed.raw.player_x = (5, 2)
+        return SimpleNamespace(passed=True)
+
+    class Port:
+        def __init__(self, *args):
+            pass
+
+        def execute(self, action):
+            observed.raw.map_id = 9
+            observed.raw.player_y, observed.raw.player_x = qualification.fly_landing
+            return Gen1FlyReceipt(5, 9, 0, 0, (9,))
+
+    monkeypatch.setattr(execution, "execute_route", route)
+    monkeypatch.setattr(execution, "Gen1FieldMovePort", Port)
+    monkeypatch.setattr(
+        execution, "_run_battle", lambda *args: pytest.fail("income battle before guard")
+    )
+    with pytest.raises(
+        execution.RedLeagueFundingExecutionError, match="changed its bound state"
+    ) as caught:
+        execution.execute_red_league_funding(
+            runtime, actions, world, _binding(runtime, qualification)
+        )
+    assert caught.value.progress.phase == "supply_route"
+    assert caught.value.progress.completed_battles == ()
+    assert observed.raw.party_hp == (199, 180)
+
+
 def test_exact_binding_is_action_free_and_changed_origin_is_consumed(monkeypatch):
     qualification = _qualification()
     runtime, observed = _runtime()
@@ -455,7 +585,9 @@ def test_exact_binding_is_action_free_and_changed_origin_is_consumed(monkeypatch
     world = SimpleNamespace(rom=b"rom")
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
     binding = execution.bind_red_league_funding_execution(
-        runtime, world, expected_qualification=qualification,
+        runtime,
+        world,
+        expected_qualification=qualification,
     )
     assert not binding.claimed
     assert actions.actions_executed == runtime.emulator.frame_count == 0
@@ -502,6 +634,8 @@ def test_execution_allows_historical_facts_when_current_cycle_requalifies(monkey
     def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
         before = runtime.adapter.observe().raw.player_money
         runtime.adapter.observe().raw.player_money += expected_money
+        if objective_id == "defeat_champion":
+            runtime.adapter.observe().raw.map_id = 118
         return execution.RedLeagueFundingBattleResult(
             objective_id, before, before + expected_money, expected_money, 0, 0
         )
@@ -525,7 +659,10 @@ def test_execution_allows_historical_facts_when_current_cycle_requalifies(monkey
     ],
 )
 def test_run_battle_forwards_exact_controller_budgets(
-    monkeypatch, objective, controller, risk_budget,
+    monkeypatch,
+    objective,
+    controller,
+    risk_budget,
 ):
     runtime, _ = _runtime()
     actions = CountingExecutor(_Delegate())
@@ -555,7 +692,14 @@ def test_run_battle_forwards_exact_controller_budgets(
     else:
         monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
     result = execution._run_battle(
-        runtime, actions, object(), objective, 100, controller, 0, risk_budget,
+        runtime,
+        actions,
+        object(),
+        objective,
+        100,
+        controller,
+        0,
+        risk_budget,
     )
     expected = {
         "recovery_controller": controller,
@@ -567,9 +711,7 @@ def test_run_battle_forwards_exact_controller_budgets(
         expected["maximum_critical_exposures"] = risk_budget
     assert seen == [expected]
     assert result.critical_exposures_claimed == (1 if risk_budget else 0)
-    assert result.public_dict()["critical_exposures_claimed"] == (
-        1 if risk_budget else 0
-    )
+    assert result.public_dict()["critical_exposures_claimed"] == (1 if risk_budget else 0)
 
 
 def test_run_battle_rejects_risk_receipt_beyond_bound(monkeypatch):
@@ -598,8 +740,14 @@ def test_run_battle_rejects_risk_receipt_beyond_bound(monkeypatch):
     monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
     with pytest.raises(execution.RedLeagueFundingExecutionError, match="accounting differs"):
         execution._run_battle(
-            runtime, actions, object(), "defeat_lance", 100,
-            "bounded-critical-risk", 0, 2,
+            runtime,
+            actions,
+            object(),
+            "defeat_lance",
+            100,
+            "bounded-critical-risk",
+            0,
+            2,
         )
 
 
@@ -647,6 +795,55 @@ def test_frame_boundary_failure_retains_structured_progress(monkeypatch):
     assert caught.value.progress.completed_battles == ()
 
 
+@pytest.mark.parametrize("frame_limit,passed", [(10, True), (5, False)])
+def test_native_recorder_stays_journaled_and_obeys_selected_goal_frame_window(frame_limit, passed):
+    from pokemon_red_completion.executor import (
+        ControllerFrameBudgetExhausted,
+        NativeLessonController,
+        WindowedFrameBudgetController,
+    )
+    from pokemon_red_completion.red_native_player import NativePlayerActions
+    from pokemon_red_completion.red_player_lesson_runtime import _RecordedActions
+
+    em = _Emulator()
+    controller = NativeLessonController(em, maximum_frames=100)
+    records = []
+    store = SimpleNamespace(publish_sealed_record=lambda *a, **k: records.append((a, k)))
+    recorder = _RecordedActions(controller, store, "a" * 64, 10)
+    recorder.enabled = True
+    caller = NativePlayerActions(recorder, lambda *_: None)
+    original = recorder.delegate
+    window = WindowedFrameBudgetController(
+        controller, maximum_frames_per_window=frame_limit, maximum_total_frames=frame_limit
+    )
+    compiler = execution._CampaignActionCompiler(
+        caller, FrameSafeExecutor(window), through_caller=True, recorded_caller=recorder
+    )
+    action = execution.MacroAction(execution.MacroActionKind.WAIT, repeat=6)
+    if passed:
+        compiler.execute(action)
+    else:
+        with pytest.raises(ControllerFrameBudgetExhausted):
+            compiler.execute(action)
+    assert recorder.delegate is original and not controller.input_enabled
+    assert len(recorder.trace) == 1 and recorder.trace[0]["succeeded"] is passed
+    assert caller.actions_executed == int(passed)
+    assert em.frame_count == (6 if passed else 0)
+    assert records and not em.pressed_buttons
+
+
+def test_opaque_recording_lookalike_is_rejected_before_claim_or_input():
+    runtime, _ = _runtime()
+    delegate = SimpleNamespace(
+        delegate=FrameSafeExecutor(runtime.emulator), controller=runtime.emulator
+    )
+    actions = CountingExecutor(delegate)
+    binding = _binding(runtime, _qualification())
+    with pytest.raises(TypeError, match="direct frame-safe"):
+        execution.execute_red_league_funding(runtime, actions, object(), binding)
+    assert not binding.claimed and runtime.emulator.frame_count == 0
+
+
 def test_progress_survives_a_reader_failure_while_reporting_the_original_fault(monkeypatch):
     qualification = _qualification()
     runtime, observed = _runtime()
@@ -666,6 +863,7 @@ def test_progress_survives_a_reader_failure_while_reporting_the_original_fault(m
             return Gen1FlyReceipt(5, 9, 0, 0, (9,))
 
     monkeypatch.setattr(execution, "Gen1FieldMovePort", Port)
+
     def lost_battle(*args):
         runtime.reader.read = lambda: (_ for _ in ()).throw(OSError("reader unavailable"))
         raise RuntimeError("lost")
@@ -673,7 +871,10 @@ def test_progress_survives_a_reader_failure_while_reporting_the_original_fault(m
     monkeypatch.setattr(execution, "_run_battle", lost_battle)
     with pytest.raises(execution.RedLeagueFundingExecutionError) as caught:
         execution.execute_red_league_funding(
-            runtime, actions, world, _binding(runtime, qualification),
+            runtime,
+            actions,
+            world,
+            _binding(runtime, qualification),
         )
     assert caught.value.reason == "defeat_lorelei failed"
     assert caught.value.progress is not None
@@ -716,7 +917,10 @@ def test_terminal_observation_failure_retains_all_five_completed_battles(monkeyp
     monkeypatch.setattr(execution, "_run_battle", battle)
     with pytest.raises(execution.RedLeagueFundingExecutionError) as caught:
         execution.execute_red_league_funding(
-            runtime, actions, world, _binding(runtime, qualification),
+            runtime,
+            actions,
+            world,
+            _binding(runtime, qualification),
         )
     assert caught.value.progress is not None
     assert caught.value.progress.phase == "terminal"

@@ -1,0 +1,318 @@
+{
+  "schema": "pokemon.red.switch-control-learned-comparison.v1",
+  "session_id": "2026-09-24-switch-control-learned-comparison",
+  "status": "closed_comparison_risk_gate_failed",
+  "source_commit": "662b3a1d2990532aacf26116f85dc102d2dfd719",
+  "candidate_sha256": "b106108e00c78595e1920b250d28c16720c4d05b610e70596ee7b22af28802f3",
+  "baseline_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "hashes": {
+    "plan": "a8594d7ab5d17a7353d8702f46bf4b24cd441811ae287e7b042c73b2881144d2",
+    "result": "44081a38e7fb76c4a6322c055aff50f0a467d5b2c1929c1d4cf536762833fa38",
+    "independent_audit": "e1564e49762c18c252240f38bf5f0a5fea52b5ee7ccf1a8bf04945cd8a07b995",
+    "training_audit": "ca729c91bf648ad7f6a44fda7a98dfe30c47db0a3cfb0d746f31933b534cb116",
+    "fit": "3dfd8355814cb6b3f68ef1426d5ef72742c72e0670a3c604ccc17a32c82f884a",
+    "fit_and_comparison_recomputation": "fe6879a1e2983e420eb5eb3cc75704c35f1b32e8e78283d06772522926c9165d",
+    "comparison_audit": "ec4ec1bdee2589649c42d1a47b6bb5bb77f756b7561a79aa64ceb1449a3a5761",
+    "posthoc_localization": "eb1785dca36fdf989de3790fe84ad53b88383ab84b8577e36654585f88a9c8ce",
+    "preparation": "2ffd8b4bfd5c02df751fd6218e41bc8f81b97fd15834583cd7c7af43c1d61b8e"
+  },
+  "preparation": {
+    "setups": 37,
+    "retained_contexts_reaudited": 23,
+    "controller_inputs": 0,
+    "frames": 0
+  },
+  "contexts_complete": 36,
+  "contexts_required": 36,
+  "retained_contexts": 23,
+  "new_complete_contexts": 13,
+  "training_audit": {
+    "contexts": 36,
+    "counts": {
+      "branches": 935,
+      "decisions": 22845,
+      "trajectory_decisions": 254,
+      "wins": 324
+    },
+    "passed": true
+  },
+  "new_run_counts": {
+    "actions": 178127,
+    "complete_episode_files": 484,
+    "completed_decisions": 11718,
+    "forced_mechanics": 0,
+    "frames": 15159525,
+    "invalid_action_failures": 0,
+    "native_episodes": 484,
+    "opponent_faints": 1431,
+    "party_faints": 1831,
+    "party_pp_spent": 4919,
+    "prescribed_first_choices": 335,
+    "selected_choices": 11718,
+    "teacher_interventions": 0
+  },
+  "new_stops": {
+    "battle_won": 165,
+    "party_defeated": 319
+  },
+  "new_phases": {
+    "attack": 6327,
+    "forced_switch": 1542,
+    "switch_prompt": 1339,
+    "voluntary_switch": 2510
+  },
+  "collection_episodes": 340,
+  "comparison_episodes": 144,
+  "native_packet_seconds": 1446.0761689166538,
+  "new_fits": 1,
+  "fit_passed": true,
+  "new_regret": {
+    "control": {
+      "after": 0.20717917286666665,
+      "before": 2.258799653213333,
+      "cases": 30
+    },
+    "switch": {
+      "after": 0.014737607283333374,
+      "before": 1.7450919095444444,
+      "cases": 36
+    }
+  },
+  "retention_regressions": 0,
+  "frozen_components_equal": true,
+  "retained_status_predictions_identical": 591,
+  "comparison": {
+    "authority_promotions": 0,
+    "common_win_costs": {
+      "decisions": {
+        "baseline": 253,
+        "candidate": 244
+      },
+      "pp_spent": {
+        "baseline": 127,
+        "candidate": 121
+      }
+    },
+    "common_wins": 13,
+    "constructed_teams": 24,
+    "gates": {
+      "common_win_costs_noninferior": true,
+      "risk_improved": false,
+      "wins_noninferior": true,
+      "zero_invalid_and_interventions": true
+    },
+    "independent_natural_roots": 0,
+    "passed": false,
+    "timing_pairs": 72,
+    "totals": {
+      "baseline": {
+        "decisions": 1571,
+        "forced_mechanics": 0,
+        "invalid": 0,
+        "learned_decisions": 1571,
+        "pp_spent": 623,
+        "risk_rate": 0.05410566518141311,
+        "teacher_interventions": 0,
+        "type_immune_attacks": 53,
+        "win": 20,
+        "zero_power_choices_with_covered_alternative": 32
+      },
+      "candidate": {
+        "decisions": 1473,
+        "forced_mechanics": 0,
+        "invalid": 0,
+        "learned_decisions": 1473,
+        "pp_spent": 604,
+        "risk_rate": 0.05974202308214528,
+        "teacher_interventions": 0,
+        "type_immune_attacks": 61,
+        "win": 27,
+        "zero_power_choices_with_covered_alternative": 27
+      }
+    }
+  },
+  "posthoc": {
+    "not_a_new_gate": true,
+    "paired_outcomes": {
+      "baseline_only": 7,
+      "both_loss": 38,
+      "both_win": 13,
+      "candidate_only": 14
+    },
+    "family_totals": {
+      "forced_replacement": {
+        "baseline": {
+          "decisions": 275,
+          "pp_spent": 104,
+          "type_immune_attacks": 0,
+          "win": 4,
+          "zero_power_choices_with_covered_alternative": 0
+        },
+        "candidate": {
+          "decisions": 254,
+          "pp_spent": 82,
+          "type_immune_attacks": 2,
+          "win": 2,
+          "zero_power_choices_with_covered_alternative": 2
+        }
+      },
+      "fragile_fast_durable_slow": {
+        "baseline": {
+          "decisions": 218,
+          "pp_spent": 75,
+          "type_immune_attacks": 0,
+          "win": 1,
+          "zero_power_choices_with_covered_alternative": 0
+        },
+        "candidate": {
+          "decisions": 197,
+          "pp_spent": 90,
+          "type_immune_attacks": 0,
+          "win": 6,
+          "zero_power_choices_with_covered_alternative": 0
+        }
+      },
+      "immune_active_covered_reserve": {
+        "baseline": {
+          "decisions": 288,
+          "pp_spent": 115,
+          "type_immune_attacks": 18,
+          "win": 3,
+          "zero_power_choices_with_covered_alternative": 15
+        },
+        "candidate": {
+          "decisions": 259,
+          "pp_spent": 104,
+          "type_immune_attacks": 25,
+          "win": 4,
+          "zero_power_choices_with_covered_alternative": 10
+        }
+      },
+      "optional_prompt": {
+        "baseline": {
+          "decisions": 246,
+          "pp_spent": 103,
+          "type_immune_attacks": 0,
+          "win": 6,
+          "zero_power_choices_with_covered_alternative": 0
+        },
+        "candidate": {
+          "decisions": 244,
+          "pp_spent": 115,
+          "type_immune_attacks": 0,
+          "win": 9,
+          "zero_power_choices_with_covered_alternative": 0
+        }
+      },
+      "status_attrition": {
+        "baseline": {
+          "decisions": 293,
+          "pp_spent": 114,
+          "type_immune_attacks": 0,
+          "win": 6,
+          "zero_power_choices_with_covered_alternative": 0
+        },
+        "candidate": {
+          "decisions": 281,
+          "pp_spent": 109,
+          "type_immune_attacks": 5,
+          "win": 2,
+          "zero_power_choices_with_covered_alternative": 8
+        }
+      },
+      "useful_active_immune_reserve": {
+        "baseline": {
+          "decisions": 251,
+          "pp_spent": 112,
+          "type_immune_attacks": 35,
+          "win": 0,
+          "zero_power_choices_with_covered_alternative": 17
+        },
+        "candidate": {
+          "decisions": 238,
+          "pp_spent": 104,
+          "type_immune_attacks": 29,
+          "win": 4,
+          "zero_power_choices_with_covered_alternative": 7
+        }
+      }
+    },
+    "immune_contexts": {
+      "baseline": {
+        "active_has_coverage": 0,
+        "all": 53,
+        "asleep": 0,
+        "switch_masked_until_attack": 28,
+        "with_covered_reserve": 28,
+        "without_covered_reserve": 25
+      },
+      "candidate": {
+        "active_has_coverage": 0,
+        "all": 61,
+        "asleep": 0,
+        "switch_masked_until_attack": 29,
+        "with_covered_reserve": 27,
+        "without_covered_reserve": 34
+      }
+    },
+    "risky_switch_phases": {
+      "baseline": {
+        "forced_switch": 7,
+        "voluntary_switch": 25
+      },
+      "candidate": {
+        "forced_switch": 10,
+        "voluntary_switch": 17
+      }
+    },
+    "largest_regression": {
+      "baseline": {
+        "decisions": 82,
+        "pp_spent": 33,
+        "type_immune_attacks": 0,
+        "win": 3,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "candidate": {
+        "decisions": 75,
+        "pp_spent": 24,
+        "type_immune_attacks": 5,
+        "win": 0,
+        "zero_power_choices_with_covered_alternative": 8
+      },
+      "case": "comparison-3-03",
+      "immune_delta": 5,
+      "reserve_delta": 8,
+      "win_delta": -3
+    },
+    "limitations": [
+      "Shared roots/timing siblings are correlated.",
+      "Risk flags are not proved counterfactual mistakes.",
+      "Opened comparison cases cannot be relabeled as TRAIN or reused for candidate selection."
+    ]
+  },
+  "audits": {
+    "all_new_choices_reproduced": true,
+    "all_484_endpoints_reobserved_zero_input": true,
+    "all_36_targets_independently_reextracted": true,
+    "saved_fit_metrics_recomputed": true,
+    "all_144_comparison_records_rebuilt_from_episodes": true
+  },
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "actual_stage": 461,
+  "actual_462_unused": true,
+  "actual_state_unchanged": true,
+  "protected_actor_unchanged": true,
+  "collection": "109/124 unchanged",
+  "tests": {
+    "passed": 403,
+    "full_suite": false,
+    "changed_file_lint_passed": true
+  },
+  "next": "Prospectively design a small fresh TRAIN later-state attrition/reserve-selection lesson with candidate continuation; retain full corpus and both actors. No automatic fit, old-comparison replay, Agatha dispatch or deployment.",
+  "gameplay_running": false,
+  "publication": false,
+  "external_agents": false
+}

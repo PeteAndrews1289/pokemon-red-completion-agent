@@ -1,0 +1,65 @@
+{
+  "schema": "pokemon.red.reserve-offer-check.v1",
+  "partition": "development",
+  "source_commit": "df8b2a4d",
+  "source_state_sha256": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e",
+  "context_sha256": "e4dc0e727235d1d29e1442311b99ef119a6752e916f35f4c78796a544bf55c3f",
+  "model_sha256": "422876890388dfe504a7a80489e8b0d110e21bd6029dae8f549b54d7bbea1ea7",
+  "plan_sha256": "3600afad026269b94ec020a76472fe90b0250085d195b1e599c56b5f4c40f04a",
+  "result_sha256": "8924d2e5d81dd08713c3484664da6b34a8a339d4d8a753b4000ba948bed7c611",
+  "party_levels": [
+    17,
+    7,
+    5,
+    7
+  ],
+  "party_roles": [
+    "combat",
+    "undecided",
+    "undecided",
+    "undecided"
+  ],
+  "original_target": {
+    "slot": 1,
+    "level": 17
+  },
+  "preparation_stop": "all preparation targets reached",
+  "native_training_offer": false,
+  "native_available_story_objectives": [
+    "defeat_misty",
+    "help_bill"
+  ],
+  "zero_input_choice": {
+    "selected": "defeat_misty",
+    "mode": "model_exploration",
+    "seed": 2026092761,
+    "scores": [
+      4.7952363068879515,
+      4.801006680687045
+    ],
+    "probabilities": [
+      0.4989180579148064,
+      0.5010819420851935
+    ],
+    "executed": false
+  },
+  "readiness_features": 252,
+  "readiness_nonzero_coefficients": 0,
+  "synthetic_regression_cases": 12,
+  "targeted_tests_passed": 151,
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "native_executor_calls": 0,
+  "originals_unchanged": true,
+  "roles_unchanged": true,
+  "targets_unchanged": true,
+  "production_code_changed": false,
+  "training_rows": 0,
+  "fits": 0,
+  "adoptions": 0,
+  "story_progress": 0,
+  "registrations": 0,
+  "gameplay_running": false,
+  "publication": false,
+  "decision": "No offer-layer defect demonstrated. Stop before changing role or target authority; separately scope member-specific preparation choices."
+}

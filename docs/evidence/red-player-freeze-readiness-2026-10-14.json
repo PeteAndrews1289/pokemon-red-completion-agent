@@ -1,0 +1,331 @@
+{
+  "actual_registration_delta": 0,
+  "all_workers_stopped": true,
+  "classification": "Frozen learned/hybrid DEVELOPMENT candidate, not a pure end-to-end learned policy.",
+  "cold_verification": {
+    "checks": 4,
+    "frames": 0,
+    "inputs": 0,
+    "original_false_wrappers_preserved": true,
+    "seconds": 79.1216564590577,
+    "unqualified_medicine_v1_failure_preserved": true
+  },
+  "copy_attempts": [
+    {
+      "actions": 2369,
+      "cash_debits": 0,
+      "error_type": "FileExistsError",
+      "frames": 114816,
+      "heals": 1,
+      "id": "cave-v2",
+      "passed": false,
+      "released": true,
+      "seconds": 120.40630970802158,
+      "worker_stopped": true
+    },
+    {
+      "actions": 720,
+      "cash_debits": 0,
+      "error_type": "TypeError",
+      "frames": 45912,
+      "heals": 1,
+      "id": "funding-v1",
+      "passed": false,
+      "released": true,
+      "seconds": 56.473008832894266,
+      "worker_stopped": true
+    },
+    {
+      "actions": 143,
+      "cash_debits": 0,
+      "error_type": "FileExistsError",
+      "frames": 10128,
+      "heals": 0,
+      "id": "loan-v2",
+      "passed": false,
+      "released": true,
+      "seconds": 17.508744666120037,
+      "worker_stopped": true
+    },
+    {
+      "actions": 3305,
+      "cash_debits": 11100,
+      "error_type": "TypeError",
+      "frames": 302640,
+      "heals": 0,
+      "id": "medicine-v1",
+      "passed": false,
+      "released": true,
+      "seconds": 77.70806458289735,
+      "worker_stopped": true
+    },
+    {
+      "actions": 3305,
+      "cash_debits": 11100,
+      "error_type": null,
+      "frames": 302640,
+      "heals": 0,
+      "id": "medicine-v2",
+      "passed": true,
+      "released": true,
+      "seconds": 90.21455487492494,
+      "worker_stopped": true
+    },
+    {
+      "actions": 2291,
+      "cash_debits": 0,
+      "error_type": null,
+      "frames": 207546,
+      "heals": 0,
+      "id": "post-coin-v2",
+      "passed": true,
+      "released": true,
+      "seconds": 58.022565374849364,
+      "worker_stopped": true
+    },
+    {
+      "actions": 815,
+      "cash_debits": 0,
+      "error_type": null,
+      "frames": 72504,
+      "heals": 0,
+      "id": "route16-v2",
+      "passed": true,
+      "released": true,
+      "seconds": 41.53574970806949,
+      "worker_stopped": true
+    }
+  ],
+  "copy_costs_including_original_failures": {
+    "actions": 12948,
+    "cash_debits": 22200,
+    "frames": 1056186,
+    "heals": 2,
+    "model_goal_queries": 2,
+    "seconds": 461.86899774777703
+  },
+  "final_red_gates_met": 0,
+  "final_red_gates_total": 5,
+  "formal_final_acceptance": false,
+  "fresh_launch_authorized": false,
+  "full_fresh_campaign_started": false,
+  "independent_transfer_claim": false,
+  "launch_audit": {
+    "fresh_continuation_fields_equal": 10,
+    "fresh_import": {
+      "emulator_started": false,
+      "modules": 297,
+      "reads": 378,
+      "writes": 0
+    },
+    "gameplay_launch_blocked": true,
+    "native_inspection": {
+      "current_model_and_custody_guards_verified": true,
+      "frames": 0,
+      "inputs": 0,
+      "model_queries": 1,
+      "modules": 647,
+      "reads": 12390,
+      "writes": 5
+    },
+    "native_inspection_source_is_historical_not_completed_save": true,
+    "source_model_config_support_frozen": true
+  },
+  "learning": {
+    "fits": 0,
+    "new_train_rows": 0,
+    "runtime_llm_calls": 0,
+    "weight_changes": 0
+  },
+  "legacy_productive_stay_override_active_on_tested_league_path": false,
+  "limitations": [
+    "Boundary copies are correlated DEVELOPMENT, not independent origins or whole-game reliability.",
+    "Three native successes require separate zero-input adjudication; original wrapper failures remain false.",
+    "The frozen manifest records qualification pending at creation; this acceptance sidecar binds its unchanged identity.",
+    "The declared actor retains unlearned tactical, resource and capture support; no pure learned-policy claim.",
+    "The fresh readiness declaration is blocked and grants no new campaign or publication authority."
+  ],
+  "observed_boundary_outcomes": {
+    "cave_model_selected_searches": 2,
+    "cave_observed_nurse_anchor": 9,
+    "cave_ordinary_misses": 2,
+    "copied_gains_imported": false,
+    "exact_guest_return_inputs": 143,
+    "medicine_purchase_cost": 11100,
+    "medicine_room_cycle_net_income": 18699,
+    "ordinary_trainer_income": 650,
+    "post_coin_owned_stock_net_income": 29799,
+    "route16_copy_snorlax_registered": true
+  },
+  "package": {
+    "actor_settings_sha256": "8d0c429b44a8a049f87a9726b4b5b33c886882f96a7ca2fee04f5102450d17ac",
+    "configuration_template_sha256": "627bf2ae6b6dea8f583502646212eb514c4606db87632b927b4a5798a97d1e2e",
+    "current_code_snapshot_matches": true,
+    "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+    "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+    "manifest_sha256": "6013bdc4ea57b7fe0d058602cf2588523e125d0f8be56cc7127389966057ea0d",
+    "native_source_helper_model_data_equivalence_verified": true,
+    "strategic_league_first_deferral": false,
+    "train_examples_reused": 161,
+    "version": "candidate-v3"
+  },
+  "partition": "development",
+  "passed": true,
+  "private_acceptance_sha256": "0203acb083ca94586350c33f877f8f45a91d503eaf28a4d9851a0c8f041b5f51",
+  "private_family": "red-r29-freeze-readiness-20261014-v1",
+  "private_proof_hashes": {
+    "LAUNCH-SETTINGS-AUDIT.json": "997df688e00c2730bfd30dab482d167d8eab9a91f3ea7ede42fc2b69714fbc93",
+    "PRE-FREEZE-CHECK-001.json": "9ad3de00b18a924a4d486d4fee87c46e6a8ad8f059572a640d88e464f49f1b2d",
+    "PROTECTED.json": "78e8d8ce84a9eca313feaff13344e855ddaf92b34e3fb8b837dddbe5f63c3a6a",
+    "SESSION.json": "c3d10ee343f2f7fd95164d0108c088c834a491e1a66b8db5ccb349f9e4ad9960",
+    "SUPPORT-AUDIT.json": "06075b4e6412ad96f256ffe2880e49adc88653d796b05968a11c8d6a51bdbe5a",
+    "TARGETED-VERIFICATION.json": "65ed83662efe2fdaa8618814c692f90dd74920234173607e96d58ff1e9ea0134",
+    "cold/cave-v2/RESULT.json": "32010d798af7f2f0194859904fdacb3cb5595f27022b373151e3142e19a39c0f",
+    "cold/funding-v1/RESULT.json": "bc68f82d799f9ed630626f4a5cf278eacb6b9ef8fe0acbb3d0eb9a27c4a26380",
+    "cold/loan-shared-guard-v2/RESULT.json": "2d3fd1e25f60e6d8b4a80135f4a54c0093859c31bffeb22800a85881fbcee495",
+    "cold/loan-v2/RESULT.json": "8e7389ce04a859b4b630f280ad0ae26720b7c986cde9dd571886e7eff92d9806",
+    "copies/cave-v2/RESULT.json": "fd8c977e5e6cb4db73739659064eb36b651872d687f2e3bacd6f0bab5198064f",
+    "copies/cave-v2/terminal.state": "ba36efb0a91df7779d8959d912c9e17ffe655f581dc23458e30e0b678c177f93",
+    "copies/funding-v1/RESULT.json": "ac58552abaf814aae3d6cf7bf766c7addebaf8c75cd5582065219a226ebac06a",
+    "copies/funding-v1/native/restoration-000/terminal.state": "c6c751b8ee32312d121b555ae506dbf5946018780c2b7afe6d2e1a4163825ef5",
+    "copies/loan-v2/RESULT.json": "c1ed09ce72acb9535e9a34f7c841fcf50d530f07d79a434b89df3f924d24e683",
+    "copies/loan-v2/terminal.state": "b00554710ee8adaab1b2b0ad04094b2fe9046a2a91a5fc0d468ce081bbda6453",
+    "copies/medicine-v1/RESULT.json": "eee534d6aea07e3a8c550025487d198aae19b2b58c1455d71cb23dfabfd93fa2",
+    "copies/medicine-v2/RESULT.json": "66497523bc4762fbf429d794628e3ba3131ae5760218c4f83460e7ca49de89cd",
+    "copies/medicine-v2/terminal.state": "24307c268b7610f6b87f79b66a67123941c855ca62c98b862a77d124132e45b2",
+    "copies/post-coin-v2/RESULT.json": "bbaa79a1f1792f00f3f059e5752a0d8e734d63675cd2dc18b3ed52a75a514ac5",
+    "copies/post-coin-v2/terminal.state": "345b391ae365dc3a01ec4b2740456c6acad94473ef9329a4ef15719b34097ff5",
+    "copies/route16-v2/RESULT.json": "98e8465a853b4e67db6eb9b4337a480d2efbf7204645650a5bdd8cab99337f58",
+    "copies/route16-v2/terminal.state": "4ee10ddec67fddf026288c4319fb9ba022fb9183e0f1e85b6dc046d09b20e75b",
+    "isolated-fresh-import-v3/ISOLATED-IO.json": "135f20d8fad9f0397dbbc5a54322954fa11a868b848388fc4ac4711040a99054",
+    "isolated-fresh-import-v3/PLAN.json": "bf935596d620435c095a4137efb7963c9852341e60b47fdbfebd1083f00e7b29",
+    "isolated-native-inspection-v3/ISOLATED-IO.json": "a33e231bc459c77b685edad56d9d4c4515b63b372df018bc67c566c649c6a5f6",
+    "isolated-native-inspection-v3/PLAN.json": "bc1d5c01f99b073ad4f68aa980c9f4647ea85938a2e8fa92b1c667ddf0ca1927",
+    "isolated-native-inspection-v3/inspections/inspect-165421435446/RESULT.json": "35186153b66959372cd7dbfeae2794ab79324d096f4920c1567a139616cc5ddc"
+  },
+  "protected_completed_save": {
+    "actual_segment": 28,
+    "all_original_six_restored": true,
+    "champion_and_concurrent_hall_of_fame_retained": true,
+    "context_sha256": "7a7aecf11ef34e54c311e33338ec23798f33d009fd903f7faaba4b3fbdca215e",
+    "four_legendary_specimens_retained": true,
+    "inputs": 0,
+    "native_registrations": 124,
+    "pins_unchanged": true,
+    "state_sha256": "41846e7698706ab243d53fd134cd16267050c8c5d873aba3bb168e2a7357187c"
+  },
+  "qualified_related_boundaries": {
+    "cave-v2": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": false,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "6ad4054193b8217f27f50b586406be4341f9cc8291a9e2bcd3b97c4f0304827b",
+      "terminal_sha256": "ba36efb0a91df7779d8959d912c9e17ffe655f581dc23458e30e0b678c177f93"
+    },
+    "funding-v1": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": false,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "134c3d1b5e637423083774db471ef826cbfe43373468db392dd605acc5098253",
+      "terminal_sha256": "c6c751b8ee32312d121b555ae506dbf5946018780c2b7afe6d2e1a4163825ef5"
+    },
+    "loan-v2": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": false,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "7328ca1533752121826b2e6fe507196d1c4364832b88fbaf623c40e1a5ea0f5d",
+      "terminal_sha256": "b00554710ee8adaab1b2b0ad04094b2fe9046a2a91a5fc0d468ce081bbda6453"
+    },
+    "medicine-v2": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": true,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "8f5b2728813891b381b7328b120c8f8ee7ee6b0e5991bd4cbf06cf929555c343",
+      "terminal_sha256": "24307c268b7610f6b87f79b66a67123941c855ca62c98b862a77d124132e45b2"
+    },
+    "post-coin-v2": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": true,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "67fbeb80bbb884b054f9d44602d8863b8db7cf0104c9b709a629b2d71ad44a7d",
+      "terminal_sha256": "345b391ae365dc3a01ec4b2740456c6acad94473ef9329a4ef15719b34097ff5"
+    },
+    "route16-v2": {
+      "copy_back": false,
+      "independent_origin": false,
+      "original_wrapper_passed": true,
+      "qualified": true,
+      "related_copy": true,
+      "source_sha256": "997d886c4742714fd897bb16cac0925512a4a43d890f4e8c6719545e5787abdf",
+      "terminal_sha256": "4ee10ddec67fddf026288c4319fb9ba022fb9183e0f1e85b6dc046d09b20e75b"
+    }
+  },
+  "schema": "pokemon.red.player-freeze-readiness.v1",
+  "session_id": "2026-10-14-freeze-readiness",
+  "status": "frozen_boundary_qualified",
+  "support_authority": [
+    {
+      "component": "Comparative goal selection",
+      "detail": "Current921/161 artifact; frozen kind-balanced sampling and exploration0.75. No runtime LLM or teacher goal replacement.",
+      "owner": "learned_local_model"
+    },
+    {
+      "component": "Battle move/control/switch ranking",
+      "detail": "Exact scoped111 component on all five observed League rooms. Other story, ordinary-trainer and wild scopes keep their pinned fitted actors. These are not newly fitted in this session.",
+      "owner": "learned_local_models_with_declared_tactical_masks"
+    },
+    {
+      "component": "PP, immunity, capped-status and attack-obligation restrictions",
+      "detail": "Mechanics-aware/PP reentry/capped-status screens and attack-obligation-v2 remain. They influence available battle choices and must not be described as entirely learned behavior.",
+      "owner": "unlearned_tactical_support"
+    },
+    {
+      "component": "Old productive-stay/prompt-stay/status-release adapter",
+      "detail": "Legacy code remains pinned, but observed111 story scopes disable productive-stay and do not emit its League-mechanics adapter records. Do not confuse static code presence with execution.",
+      "owner": "legacy_inactive_on_tested_scoped_path"
+    },
+    {
+      "component": "Medicine reserves and owned-stock fallback",
+      "detail": "Normal earned-money purchases and legal healing; fixed quantities and eligibility thresholds are disclosed, not learned procurement.",
+      "owner": "unlearned_resource_support"
+    },
+    {
+      "component": "Routes, menus, HMs, puzzles and mandatory settlement",
+      "detail": "Translate selected goals into normal inputs; exact source/custody checks and shared recovery qualification cannot choose an unrelated goal.",
+      "owner": "deterministic_execution_support"
+    },
+    {
+      "component": "Capture weakening, ball allocation and temporary helpers",
+      "detail": "Existing ordinary/static/Safari skills, user-preferred Master Ball Mewtwo, Mewtwo status helper and exact guarded loan/return. Collection-goal choice is distinct from these tactics.",
+      "owner": "unlearned_capture_execution_support"
+    },
+    {
+      "component": "Fresh starter initialization",
+      "detail": "Squirtle initialization only; deterministic rival/errand combat provider excluded before local model handoff.",
+      "owner": "declared_fixed_mechanics"
+    },
+    {
+      "component": "League-first goal deferral",
+      "detail": "Candidate declaration is null; do not copy the previous supported chronological task scope into the next player.",
+      "owner": "removed_from_candidate"
+    }
+  ],
+  "verification": {
+    "ci": false,
+    "focused_private_funding_tests": 60,
+    "focused_public_tests": 506,
+    "full_suite": false,
+    "lint_passed": true,
+    "verification_sha256": "65ed83662efe2fdaa8618814c692f90dd74920234173607e96d58ff1e9ea0134"
+  }
+}

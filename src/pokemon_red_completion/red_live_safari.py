@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Collection
 from dataclasses import dataclass, replace
+from enum import StrEnum
+from typing import TypeGuard
 
 from pokemon_red_completion.executor import CountingExecutor, FrameBudgetController
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
@@ -22,10 +25,14 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.observation import (
     Badge,
+    EventFlag,
     MapId,
     OverworldMovementMode,
     PokemonRedStateReader,
+    RedSafariSessionState,
+    event_flag_is_set,
 )
+from pokemon_red_completion.party import StatusCondition
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import (
     RED_ACQUISITION_CATALOG,
@@ -39,14 +46,20 @@ from pokemon_red_completion.red_live_option_menu import (
     RedLiveSupplementalOption,
     supplemental_live_option,
 )
+from pokemon_red_completion.red_party import decode_status
 from pokemon_red_completion.red_safari_acquisition import (
     SAFARI_ADMISSION_COST,
     LiveSafariAreaExecutor,
     LiveSafariPatrol,
+    RedSafariGatePreparationReport,
     RedSafariPatrolPlan,
+    RedSafariTransportReport,
     RedSafariZoneOffer,
     derive_red_safari_offer_patrol,
     enter_red_safari_area,
+    enter_red_safari_area_from_gate,
+    plan_red_safari_clerk_approach,
+    prepare_red_safari_gate_origin,
     red_safari_admission_route,
     red_safari_area_menu,
     red_safari_zone_offers,
@@ -55,6 +68,113 @@ from pokemon_red_completion.red_safari_acquisition import (
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
 )
+
+
+class RedSafariEntryMode(StrEnum):
+    OUTDOOR_FLY = "outdoor_fly"
+    GATE = "gate"
+
+
+def safari_health_stasis_available(raw) -> bool:
+    """Reject known walking poison in the existing unchanged-HP executor."""
+    return not any(
+        decode_status(status) is StatusCondition.POISON
+        for status in (getattr(raw, "party_status", None) or ())
+    )
+
+
+def _is_reader_ready(reader: PokemonRedStateReader) -> bool:
+    read_input_readiness = getattr(reader, "read_input_readiness", None)
+    if read_input_readiness is None or not read_input_readiness().ready:
+        return False
+    read_movement = getattr(reader, "read_overworld_movement_mode", None)
+    if read_movement is None or read_movement() is not OverworldMovementMode.WALKING:
+        return False
+    read_dialogue = getattr(reader, "read_bottom_dialogue_box_visible", None)
+    if read_dialogue is None or read_dialogue():
+        return False
+    read_trainer = getattr(reader, "read_pending_trainer_battle_identity", None)
+    return read_trainer is not None and read_trainer() is None
+
+
+def resolve_red_safari_entry_mode(
+    reader: PokemonRedStateReader,
+    world: StrategicScenarioRouteWorld | None = None,
+    *,
+    free_storage_slots: int = 1,
+) -> RedSafariEntryMode | None:
+    """Resolve the supported entry mode from semantic observations."""
+
+    raw = reader.read()
+    if not safari_health_stasis_available(raw):
+        return None
+    raw_map_id = getattr(raw, "map_id", None)
+    if (
+        raw_map_id is None
+        or getattr(raw, "battle_state", None)
+        or free_storage_slots <= 0
+        or not _is_reader_ready(reader)
+    ):
+        return None
+
+    if 0 <= raw_map_id <= 0x24 and raw_map_id not in {int(MapId.FUCHSIA_CITY), 0x0B}:
+        if not int(raw.badge_bits or 0) & int(Badge.THUNDER):
+            return None
+        fly_destinations = getattr(reader, "read_fly_destinations", None)
+        if fly_destinations is None or int(MapId.FUCHSIA_CITY) not in fly_destinations():
+            return None
+        try:
+            fly_menu_indices(raw)
+        except Gen1FieldMoveError:
+            return None
+        return RedSafariEntryMode.OUTDOOR_FLY
+
+    if raw.map_id == int(MapId.SAFARI_ZONE_GATE):
+        if raw.player_x not in {3, 4} or raw.player_y not in {2, 3, 4, 5}:
+            return None
+        if raw.event_flags is None or len(raw.event_flags) <= (int(EventFlag.IN_SAFARI_ZONE) // 8):
+            return None
+        if event_flag_is_set(raw.event_flags, int(EventFlag.IN_SAFARI_ZONE)):
+            return None
+        if event_flag_is_set(raw.event_flags, int(EventFlag.SAFARI_GAME_OVER)):
+            return None
+
+        read_session = getattr(reader, "read_safari_session_state", None)
+        if not callable(read_session):
+            return None
+        try:
+            session = read_session()
+        except Exception:
+            return None
+        if not isinstance(session, RedSafariSessionState) or session.has_active_session:
+            return None
+
+        read_gate_script = getattr(reader, "read_safari_zone_gate_script", None)
+        if not callable(read_gate_script):
+            return None
+        try:
+            gate_script = read_gate_script()
+        except Exception:
+            return None
+        if type(gate_script) is not int or gate_script != 0:
+            return None
+
+        if world is None:
+            return None
+        gate_graph = getattr(world, "local_graphs", {}).get(int(MapId.SAFARI_ZONE_GATE))
+        gate_terrain = getattr(world, "terrain", {}).get(int(MapId.SAFARI_ZONE_GATE))
+        if gate_graph is None or gate_terrain is None:
+            return None
+        start = (int(raw.player_y), int(raw.player_x))
+        blockers = frozenset(
+            getattr(world, "object_blockers", {}).get(int(MapId.SAFARI_ZONE_GATE), frozenset())
+        )
+        approach = plan_red_safari_clerk_approach(gate_graph, start, blockers)
+        if approach is None:
+            return None
+        return RedSafariEntryMode.GATE
+
+    return None
 
 
 class RedLiveSafariError(RuntimeError):
@@ -68,6 +188,7 @@ class RedReachableSafariArea:
     offer: RedSafariZoneOffer
     patrol: RedSafariPatrolPlan
     route_steps: int
+    paid_patrol_quote: dict[str, object] | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.offer, RedSafariZoneOffer) or not isinstance(
@@ -93,7 +214,7 @@ class RedReachableSafariArea:
 
 @dataclass(frozen=True, slots=True)
 class RedLiveSafariInventory:
-    """All action-free areas plus the single ranked top-level binding."""
+    """Action-free areas with either a legacy top binding or all area bindings."""
 
     areas: tuple[RedReachableSafariArea, ...]
     supplements: tuple[RedLiveSupplementalOption, ...]
@@ -107,9 +228,13 @@ class RedLiveSafariInventory:
             not isinstance(option, RedLiveSupplementalOption) for option in self.supplements
         ):
             raise TypeError("live Safari supplements must be immutable")
-        if len(self.supplements) not in {0, 1} or bool(self.areas) != bool(self.supplements):
-            raise RedLiveSafariError("Safari inventory needs at most one ranked binding")
-        if self.supplements and self.supplements[0].binding.kind is not GoalKind.ACQUIRE_SPECIES:
+        if (
+            len(self.supplements) not in {0, 1, len(self.areas)}
+            or bool(self.areas) != bool(self.supplements)
+            or len({s.binding.binding_ref for s in self.supplements}) != len(self.supplements)
+        ):
+            raise RedLiveSafariError("Safari inventory needs distinct aligned bindings")
+        if any(s.binding.kind is not GoalKind.ACQUIRE_SPECIES for s in self.supplements):
             raise RedLiveSafariError("Safari binding must be an acquisition")
 
     def public_dict(self) -> dict[str, object]:
@@ -122,39 +247,55 @@ class RedLiveSafariInventory:
         }
 
 
-def discover_reachable_red_safari_areas(
+def _is_valid_player_money(money: object) -> TypeGuard[int]:
+    return (
+        type(money) is int
+        and not isinstance(money, bool)
+        and 0 <= money <= 999_999
+    )
+
+
+def discover_eligible_red_safari_areas(
     rom: bytes,
     registered_species_numbers: Collection[int],
     *,
     free_storage_slots: int,
     world: StrategicScenarioRouteWorld,
     reader: PokemonRedStateReader,
+    required_capture_numbers: Collection[int] | None = None,
 ) -> tuple[RedReachableSafariArea, ...]:
-    """Inventory all productive areas only when one admission is executable."""
+    """Inventory all productive areas satisfying non-money entry prerequisites."""
 
-    raw = reader.read()
-    if (
-        raw.map_id is None
-        or not 0 <= raw.map_id <= 0x24
-        or raw.map_id in {int(MapId.FUCHSIA_CITY), 0x0B}
-        or raw.battle_state
-        or raw.player_money is None
-        or raw.player_money < SAFARI_ADMISSION_COST
-        or free_storage_slots <= 0
-        or not reader.read_input_readiness().ready
-        or reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
-        or reader.read_bottom_dialogue_box_visible()
-        or reader.read_pending_trainer_battle_identity() is not None
-        or not int(raw.badge_bits or 0) & int(Badge.THUNDER)
-        or int(MapId.FUCHSIA_CITY) not in reader.read_fly_destinations()
-    ):
+    mode = resolve_red_safari_entry_mode(
+        reader,
+        world,
+        free_storage_slots=free_storage_slots,
+    )
+    if mode is None:
         return ()
-    try:
-        fly_menu_indices(raw)
-    except Gen1FieldMoveError:
-        return ()
+
+    local_approach_steps = 0
+    if mode is RedSafariEntryMode.GATE:
+        raw = reader.read()
+        if raw.player_x is None or raw.player_y is None:
+            return ()
+        start = (int(raw.player_y), int(raw.player_x))
+        gate_graph = getattr(world, "local_graphs", {}).get(int(MapId.SAFARI_ZONE_GATE))
+        if gate_graph is None:
+            return ()
+        blockers = frozenset(
+            getattr(world, "object_blockers", {}).get(int(MapId.SAFARI_ZONE_GATE), frozenset())
+        )
+        approach = plan_red_safari_clerk_approach(gate_graph, start, blockers)
+        if approach is None:
+            return ()
+        local_approach_steps = len(approach.edges)
+
     areas: list[RedReachableSafariArea] = []
-    for offer in red_safari_zone_offers(rom, registered_species_numbers):
+    for offer in red_safari_zone_offers(rom, registered_species_numbers, **(
+        {} if required_capture_numbers is None else
+        {"required_capture_numbers": required_capture_numbers}
+    )):
         terrain = world.terrain.get(offer.map_id)
         graph = world.local_graphs.get(offer.map_id)
         if terrain is None or graph is None:
@@ -175,7 +316,9 @@ def discover_reachable_red_safari_areas(
             RedReachableSafariArea(
                 offer,
                 patrol,
-                len(red_safari_admission_route(offer)) + len(patrol.approach_directions),
+                local_approach_steps
+                + len(red_safari_admission_route(offer))
+                + len(patrol.approach_directions),
             )
         )
     areas.sort(
@@ -189,6 +332,31 @@ def discover_reachable_red_safari_areas(
     return tuple(areas)
 
 
+def discover_reachable_red_safari_areas(
+    rom: bytes,
+    registered_species_numbers: Collection[int],
+    *,
+    free_storage_slots: int,
+    world: StrategicScenarioRouteWorld,
+    reader: PokemonRedStateReader,
+    required_capture_numbers: Collection[int] | None = None,
+) -> tuple[RedReachableSafariArea, ...]:
+    """Inventory all productive areas only when one admission is executable."""
+
+    raw = reader.read()
+    if not _is_valid_player_money(raw.player_money) or raw.player_money < SAFARI_ADMISSION_COST:
+        return ()
+    return discover_eligible_red_safari_areas(
+        rom,
+        registered_species_numbers,
+        free_storage_slots=free_storage_slots,
+        world=world,
+        reader=reader,
+        **({} if required_capture_numbers is None else
+           {"required_capture_numbers": required_capture_numbers}),
+    )
+
+
 def build_red_live_safari_inventory(
     rom: bytes,
     registered_species_numbers: Collection[int],
@@ -199,9 +367,30 @@ def build_red_live_safari_inventory(
     controller: FrameBudgetController,
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
-    maximum_encounters: int = 32,
+    maximum_encounters: int | None = None,
+    expose_all_areas: bool = False,
+    complete_paid_session: bool = False,
+    include_capture_invocation: bool = False,
+    required_capture_numbers: Collection[int] | None = None,
+    acquisition_catalog: RedAcquisitionCatalog | None = None,
 ) -> RedLiveSafariInventory:
-    """Build one ranked Safari acquisition without controller input."""
+    """Build funded acquisition alternatives without controller input.
+
+    Legacy callers retain their single ranked binding. Autonomous callers expose
+    every genuinely distinct discovered area; each executes only its own patrol.
+    """
+    if type(include_capture_invocation) is not bool:
+        raise ValueError("Safari invocation observation must be an explicit boolean")
+    if type(expose_all_areas) is not bool:
+        raise ValueError("Safari area exposure must be an explicit boolean")
+    if type(complete_paid_session) is not bool:
+        raise ValueError("Safari lifecycle must be an explicit boolean")
+    if maximum_encounters is None:
+        # Complete visits are bounded by the cartridge's 500-step admission,
+        # ball allocation and reserved exit route, not the short probe dose.
+        maximum_encounters = 500 if complete_paid_session else 32
+    if type(maximum_encounters) is not int or maximum_encounters <= 0:
+        raise ValueError("Safari encounter bound must be a positive integer")
 
     areas = discover_reachable_red_safari_areas(
         rom,
@@ -209,20 +398,24 @@ def build_red_live_safari_inventory(
         free_storage_slots=free_storage_slots,
         world=world,
         reader=reader,
+        **({} if required_capture_numbers is None else
+           {"required_capture_numbers": required_capture_numbers}),
     )
     if not areas:
         return RedLiveSafariInventory((), ())
+    if complete_paid_session:
+        areas = _price_paid_patrol_alternatives(areas, world, controller, reader)
     maximum_route_steps = max(1, max(area.route_steps for area in areas))
     available_money = int(reader.read().player_money or 0)
     if len(areas) >= 2:
-        candidate = red_safari_area_menu(
+        candidates = red_safari_area_menu(
             context,
             tuple(area.offer for area in areas),
             route_steps=tuple(area.route_steps for area in areas),
             maximum_route_steps=maximum_route_steps,
             available_money=available_money,
             free_storage_slots=free_storage_slots,
-        ).candidates[0]
+        ).candidates
     else:
         offer = areas[0].offer
         candidate = LivingDexOptionCandidate(
@@ -232,39 +425,157 @@ def build_red_live_safari_inventory(
                 completion_gain=min(1.0, len(offer.missing_species_numbers) / 6.0),
                 dependency_unlock_gain=0.0,
                 travel_effort=areas[0].route_steps / maximum_route_steps,
-                execution_effort=1.0 - offer.productive_slot_count / len(offer.slots),
+                execution_effort=1.0 - offer.productive_encounter_fraction,
                 resource_cost=min(1.0, SAFARI_ADMISSION_COST / available_money),
                 storage_cost=min(1.0, 1.0 / free_storage_slots),
                 party_risk=0.0,
                 irreversibility_risk=0.0,
-                uncertainty=1.0 - offer.productive_slot_count / len(offer.slots),
+                uncertainty=1.0 - offer.productive_encounter_fraction,
             ),
             availability=LivingDexOptionAvailability.AVAILABLE,
         )
-    selected = areas[0]
-    binding = _live_safari_binding(
-        area=selected,
-        controller=controller,
-        actions=actions,
-        reader=reader,
-        maximum_encounters=maximum_encounters,
+        candidates = (candidate,)
+    if acquisition_catalog is not None:
+        credited = frozenset(registered_species_numbers)
+        candidates = tuple(replace(candidate, features=replace(
+            candidate.features,
+            completion_gain=min(1.0, len(set(area.offer.missing_species_numbers) - credited) / 6),
+            dependency_unlock_gain=min(
+                1.0, len(set(area.offer.missing_species_numbers) & credited) / 6
+            ),
+        )) for area, candidate in zip(areas, candidates, strict=True))
+    mode = resolve_red_safari_entry_mode(
+        reader, world, free_storage_slots=free_storage_slots
     )
-    return RedLiveSafariInventory(
-        areas,
-        (supplemental_live_option(binding, candidate),),
+    if mode is None:
+        return RedLiveSafariInventory((), ())
+    initial_raw = reader.read()
+    bound_map_id = getattr(initial_raw, "map_id", None)
+    initial_x = getattr(initial_raw, "player_x", None)
+    initial_y = getattr(initial_raw, "player_y", None)
+    bound_coords = (
+        (int(initial_x), int(initial_y))
+        if initial_x is not None and initial_y is not None
+        else None
     )
+    supplements = []
+    for selected, candidate in zip(
+        areas if expose_all_areas else areas[:1],
+        candidates if expose_all_areas else candidates[:1],
+        strict=True,
+    ):
+        binding = _live_safari_binding(
+            area=selected,
+            mode=mode,
+            bound_map_id=bound_map_id,
+            bound_coords=bound_coords,
+            free_storage_slots=free_storage_slots,
+            controller=controller,
+            actions=actions,
+            reader=reader,
+            world=world,
+            maximum_encounters=maximum_encounters,
+            complete_paid_session=complete_paid_session,
+            acquisition_catalog=acquisition_catalog,
+        )
+        if include_capture_invocation:
+            from .player_option_capture_invocation import OptionCaptureInvocation
+            candidate = replace(candidate, capture_invocation=OptionCaptureInvocation(
+                maximum_encounters, complete_paid_session))
+        supplements.append(supplemental_live_option(binding, candidate))
+    return RedLiveSafariInventory(areas, tuple(supplements))
+
+
+def _price_paid_patrol_alternatives(areas, world, controller, reader):
+    """Refine mechanics inside each offered area; never substitute an area."""
+    from .red_paid_safari_patrol import choose_paid_safari_patrol
+    from .red_paid_safari_departure import plan_paid_safari_exit_geometry
+    from .red_resource_goal_router import collection_field_capabilities
+    from .red_safari_acquisition import expected_safari_steps_after_admission
+    from .route_executor import TraversalSnapshot
+    from .route_plan import RoutePlanningError
+
+    try:
+        capabilities = collection_field_capabilities(
+            controller, reader.read(), allow_cut=False, allow_surf=True)
+    except (ValueError, TypeError, AttributeError):
+        return areas
+    result = []
+    for area in areas:
+        terrain = world.terrain.get(area.offer.map_id)
+        graph = world.local_graphs.get(area.offer.map_id)
+        if terrain is None or graph is None or area.patrol.encounter_tile_count == 2:
+            result.append(area)
+            continue
+        try:
+            alternative = derive_red_safari_offer_patrol(
+                area.offer, terrain, graph, minimum_encounter_tiles=2,
+                excluded=(frozenset(world.object_blockers.get(area.offer.map_id, ()))
+                          | frozenset(world.macro_graph.warp_locations.get(area.offer.map_id, ()))))
+        except ValueError:
+            result.append(area)
+            continue
+
+        def quote(patrol):
+            try:
+                return tuple(len(plan_paid_safari_exit_geometry(
+                    TraversalSnapshot(map_id=patrol.map_id, at=point, ready=True,
+                                      mode="land", capabilities=capabilities,
+                                      last_outside_map=int(MapId.FUCHSIA_CITY)), world).steps)
+                    for point in (patrol.first_at, patrol.second_at))
+            except RoutePlanningError:
+                return None
+
+        patrol, evidence = choose_paid_safari_patrol(
+            area.patrol, alternative, terrain=terrain,
+            steps_after_admission=expected_safari_steps_after_admission(area.offer),
+            quote_exit_steps=quote)
+        if patrol is area.patrol:
+            result.append(area)
+        else:
+            evidence["legal_capabilities"] = sorted(capabilities)
+            result.append(replace(area, patrol=patrol,
+                route_steps=area.route_steps + len(patrol.approach_directions)
+                            - len(area.patrol.approach_directions),
+                paid_patrol_quote=evidence))
+    return tuple(result)
 
 
 def _live_safari_binding(
     *,
     area: RedReachableSafariArea,
+    mode: RedSafariEntryMode | None,
+    bound_map_id: int | None = None,
+    bound_coords: tuple[int, int] | None = None,
+    free_storage_slots: int,
     controller: FrameBudgetController,
     actions: CountingExecutor,
     reader: PokemonRedStateReader,
+    world: StrategicScenarioRouteWorld | None = None,
     maximum_encounters: int,
+    maximum_search_actions: int | None = None,
+    complete_paid_session: bool = False,
+    acquisition_catalog: RedAcquisitionCatalog | None = None,
 ) -> ExecutableGoalBinding:
+    if type(complete_paid_session) is not bool or (
+        complete_paid_session and (world is None or maximum_search_actions is not None)
+    ):
+        raise ValueError("complete paid session requires native routing, not a training probe")
+    if maximum_search_actions is not None and (
+        type(maximum_search_actions) is not int or not 1 <= maximum_search_actions <= 256
+    ):
+        raise ValueError("explicit Safari search action bound differs")
     attempt: dict[str, object] = {}
     claimed = False
+
+    if bound_map_id is None or bound_coords is None:
+        construction_raw = reader.read()
+        if bound_map_id is None:
+            bound_map_id = getattr(construction_raw, "map_id", None)
+        cx = getattr(construction_raw, "player_x", None)
+        cy = getattr(construction_raw, "player_y", None)
+        if bound_coords is None and cx is not None and cy is not None:
+            bound_coords = (int(cx), int(cy))
 
     def execute() -> GoalExecutionReport:
         nonlocal claimed
@@ -273,36 +584,145 @@ def _live_safari_binding(
         claimed = True
         before_actions = actions.actions_executed
         before_frames = controller.frame_count
+
+        if controller.pressed_buttons:
+            raise RedLiveSafariError("Cannot execute Safari binding with pressed buttons")
+
+        current_raw = reader.read()
+        current_map_id = getattr(current_raw, "map_id", None)
+        cur_x = getattr(current_raw, "player_x", None)
+        cur_y = getattr(current_raw, "player_y", None)
+        current_coords = (
+            (int(cur_x), int(cur_y))
+            if cur_x is not None and cur_y is not None
+            else None
+        )
+        if bound_map_id is not None and current_map_id != bound_map_id:
+            raise RedLiveSafariError(
+                f"Player map ({current_map_id}) does not match bound origin map ({bound_map_id})",
+            )
+        if bound_coords is not None and current_coords != bound_coords:
+            raise RedLiveSafariError(
+                f"Player origin {current_coords} does not match bound origin {bound_coords}",
+            )
+        if (
+            current_raw.player_money is None
+            or current_raw.player_money < SAFARI_ADMISSION_COST
+        ):
+            raise RedLiveSafariError(
+                f"Player funds ({current_raw.player_money}) "
+                "insufficient for Safari admission (500)",
+            )
+
+        current_mode = resolve_red_safari_entry_mode(
+            reader, world, free_storage_slots=free_storage_slots
+        )
+        if current_mode is None or current_mode is not mode:
+            raise RedLiveSafariError(
+                f"Current entry mode ({current_mode}) does not match bound mode ({mode})",
+            )
         before_registered = frozenset(reader.read_pokedex_state().owned_species)
-        catalog = _registered_safari_catalog(area, before_registered)
-        transport = relocate_red_safari_origin_to_fuchsia_center(controller, actions, reader)
-        admission = enter_red_safari_area(controller, actions, reader, area.offer)
+        catalog = _registered_safari_catalog(area, before_registered, acquisition_catalog)
+        transport: RedSafariTransportReport | RedSafariGatePreparationReport
+        if current_mode is RedSafariEntryMode.OUTDOOR_FLY:
+            transport = relocate_red_safari_origin_to_fuchsia_center(controller, actions, reader)
+            admission = enter_red_safari_area(controller, actions, reader, area.offer)
+        elif current_mode is RedSafariEntryMode.GATE:
+            if world is None:
+                raise RedLiveSafariError("Safari gate execution requires route world")
+            transport = prepare_red_safari_gate_origin(controller, actions, reader, world)
+            admission = enter_red_safari_area_from_gate(
+                controller, actions, reader, area.offer, continuation=transport.continuation
+            )
+        else:
+            raise RedLiveSafariError(f"Unsupported Safari entry mode: {current_mode}")
         patrol = LiveSafariPatrol(controller, actions, reader, area.patrol)
         patrol.enter()
+        search_encounters = 0
+        minimum_exit_steps = 0
+        if complete_paid_session:
+            from .red_paid_safari_departure import paid_search_step_reserve
+
+            minimum_exit_steps = paid_search_step_reserve(controller, reader, world, area.patrol)
+            if area.paid_patrol_quote is not None:
+                from .red_resource_goal_router import collection_field_capabilities
+
+                quote = area.paid_patrol_quote
+                capabilities = collection_field_capabilities(
+                    controller, reader.read(), allow_cut=False, allow_surf=True)
+                expected_remaining = (quote["steps_after_admission"]
+                                      - len(area.patrol.approach_directions))
+                if (sorted(capabilities) != quote["legal_capabilities"]
+                        or reader.read_safari_session_state().safari_steps < expected_remaining
+                        or minimum_exit_steps != max(quote["two_grass"]["exit_steps"]) + 18):
+                    raise RedLiveSafariError("paid Safari patrol quote differs after admission")
+
+
+        def bounded_seek_step():
+            nonlocal search_encounters
+            patrol.seek_step()
+            if reader.read().battle_state:
+                search_encounters += 1
+
         port = LiveSafariAreaExecutor(
             controller,
             actions,
             reader,
             source_id=area.offer.source_id,
             map_id=area.offer.map_id,
-            seek_step=patrol.seek_step,
+            seek_step=(bounded_seek_step if maximum_search_actions is not None
+                       or complete_paid_session else patrol.seek_step),
         )
+        before_stock = (Counter(s.species_ref for s in port.read_collection().specimens)
+                        if acquisition_catalog is not None else None)
+        def search_resources():
+            if not complete_paid_session:
+                return port.safari_balls_available()
+            session = reader.read_safari_session_state()
+            # The area executor permits eight throws per encounter. Retain a
+            # ball so the cartridge cannot auto-expel the player mid-capture.
+            return (session.in_safari_zone and not session.safari_game_over
+                    and session.safari_balls > 8 and session.safari_steps > minimum_exit_steps)
+
         survey = run_red_area_survey(
             area.offer.source_id,
             port,
             policy=RedAreaExecutionPolicy(
-                max_actions=2 * maximum_encounters + 2,
+                max_actions=(2 * reader.read_safari_session_state().safari_steps
+                             + 2 * maximum_encounters + 2 if complete_paid_session else
+                             2 * maximum_encounters + 2
+                             if maximum_search_actions is None else maximum_search_actions),
                 max_encounters=maximum_encounters,
                 capture_quota=1,
             ),
             catalog=catalog,
-            capture_resources_available=port.safari_balls_available,
+            capture_resources_available=search_resources,
+            safety_check=(
+                lambda: search_encounters < maximum_encounters or bool(reader.read().battle_state)
+            ) if maximum_search_actions is not None or complete_paid_session else None,
         )
+        departure = None
+        resources_before_departure = None
+        if complete_paid_session:
+            from .red_paid_safari_departure import exit_paid_search
+
+            session = reader.read_safari_session_state()
+            resources_before_departure = {
+                "safari_steps": session.safari_steps,
+                "safari_balls": session.safari_balls,
+            }
+            departure = exit_paid_search(controller, actions, reader, world)
         after_registered = frozenset(reader.read_pokedex_state().owned_species)
         attempt.update(
             before_registered=before_registered,
             after_registered=after_registered,
             survey=survey,
+            stock_verified=(
+                _safari_capture_stock_verified(before_stock,
+                    Counter(s.species_ref for s in port.read_collection().specimens),
+                    area.offer.missing_species_numbers, survey.captures)
+                if acquisition_catalog is not None else True
+            ),
         )
         return GoalExecutionReport(
             actions.actions_executed - before_actions,
@@ -311,10 +731,23 @@ def _live_safari_binding(
                 "transport": transport.public_dict(),
                 "admission": admission.public_dict(),
                 "patrol": area.patrol.public_dict(),
+                **({"paid_patrol_quote": area.paid_patrol_quote}
+                   if area.paid_patrol_quote is not None else {}),
                 "encounters_seen": survey.encounters_seen,
                 "captures": survey.captures,
                 "flees": survey.flees,
+                "capture_attempts": survey.capture_attempts,
+                "failed_capture_attempts": survey.failed_capture_attempts,
+                "direct_flees": survey.direct_flees,
                 "search_exhausted": survey.search_exhausted,
+                **({"paid_session_departure": departure,
+                    "resources_before_departure": resources_before_departure,
+                    "maximum_encounters": maximum_encounters,
+                    "reserved_exit_steps": minimum_exit_steps,
+                    "search_actions": survey.actions_executed,
+                    "search_safety_stopped": survey.safety_stopped,
+                    "search_resource_stopped": survey.capture_items_exhausted}
+                   if complete_paid_session else {}),
             },
         )
 
@@ -327,7 +760,8 @@ def _live_safari_binding(
             or not isinstance(after, frozenset)
             or not isinstance(survey, RedAreaExecutionReport)
             or not before <= after
-            or len(after - before) != survey.captures
+            or (len(after - before) != survey.captures if acquisition_catalog is None
+                else len(after - before) > survey.captures or not attempt.get("stock_verified"))
             or controller.pressed_buttons
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
@@ -343,9 +777,17 @@ def _live_safari_binding(
                 "missing": area.offer.missing_species_numbers,
                 "patrol": area.patrol.public_dict(),
                 "maximum_encounters": maximum_encounters,
+                **({"complete_paid_session": True} if complete_paid_session else {}),
+                **({"maximum_search_actions": maximum_search_actions}
+                   if maximum_search_actions is not None else {}),
             }
         ),
         kind=GoalKind.ACQUIRE_SPECIES,
+        search_source_ref=f"pokemon.red:paid-safari:{area.offer.source_id}",
+        search_objective_sha256=canonical_sha256({
+            "schema": "pokemon.red.safari-remaining-targets.v1",
+            "missing_species": sorted(set(area.offer.missing_species_numbers)),
+        }),
         estimated_effort=min(1.0, 0.2 + area.route_steps / 1_000),
         estimated_risk=0.1,
         execute=execute,
@@ -356,11 +798,12 @@ def _live_safari_binding(
 def _registered_safari_catalog(
     area: RedReachableSafariArea,
     registered_species_numbers: Collection[int],
+    acquisition_catalog: RedAcquisitionCatalog | None = None,
 ) -> RedAcquisitionCatalog:
     """Restrict one live survey to the registration targets its offer promised."""
 
     return replace(
-        RED_ACQUISITION_CATALOG,
+        RED_ACQUISITION_CATALOG if acquisition_catalog is None else acquisition_catalog,
         remaining_demand=True,
         registered_species=frozenset(
             red_species_ref(number) for number in registered_species_numbers
@@ -374,10 +817,44 @@ def _registered_safari_catalog(
     )
 
 
+def _safari_capture_stock_verified(before, after, demanded, captures):
+    """An existing flag alone cannot verify a newly retained useful copy."""
+    delta = Counter(after)
+    delta.subtract(before)
+    actual = {species: quantity for species, quantity in delta.items() if quantity}
+    return (captures in (0, 1) and sum(actual.values()) == captures
+            and all(quantity == 1 and species in {red_species_ref(n) for n in demanded}
+                    for species, quantity in actual.items()))
+
+
+def quote_red_safari_funding(
+    rom: bytes,
+    registered_species_numbers: Collection[int],
+    *,
+    free_storage_slots: int,
+    world: StrategicScenarioRouteWorld,
+    reader: PokemonRedStateReader,
+):
+    """Quote one paid Safari entry if non-money eligibility is satisfied."""
+    from .red_safari_funding_budget import quote_red_safari_funding as _quote
+
+    return _quote(
+        rom,
+        registered_species_numbers,
+        free_storage_slots=free_storage_slots,
+        world=world,
+        reader=reader,
+    )
+
+
 __all__ = [
     "RedLiveSafariError",
     "RedLiveSafariInventory",
     "RedReachableSafariArea",
+    "RedSafariEntryMode",
     "build_red_live_safari_inventory",
+    "discover_eligible_red_safari_areas",
     "discover_reachable_red_safari_areas",
+    "quote_red_safari_funding",
+    "resolve_red_safari_entry_mode",
 ]

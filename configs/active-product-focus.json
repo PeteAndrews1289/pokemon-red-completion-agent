@@ -1,7 +1,7 @@
 {
   "alarms": {
     "maximum_consecutive_ci_only_repairs": 1,
-    "maximum_full_replays_during_active_lane": 0,
+    "maximum_redundant_full_replays_for_local_question": 0,
     "maximum_sessions_without_measured_learning_output": 1,
     "stop_on_repeated_fixed_route_patch": true,
     "stop_on_unmeasured_teacher_label_copy": true
@@ -28,42 +28,60 @@
       "status": "retired"
     },
     {
-      "capability": "Complete learned trainer battles through faint/replacement and verified field handoff without conflating a battle outcome with strict funding acceptance.",
-      "cheapest_falsifier": "A useful main-save goal cannot be offered or completed from real resources without replay, hidden teacher substitution or exceeding qualified battle scope.",
+      "capability": "Reliable and efficient local autonomous Red play using the existing model/execution stack,with measured Windows scaling and later cross-title reuse.",
+      "cheapest_falsifier": "A stale/illegal menu,unretained failed tail,unsafe custody,unmeasured speed claim or two-worker memory/throughput failure disproves readiness. Use paired native evidence,not copied wins or counts alone.",
+      "development_permissions": {
+        "adaptive_preparation": true,
+        "batch_lessons_and_fits": true,
+        "compact_verification": true,
+        "development_campaigns": true,
+        "provisional_integration": true,
+        "teacher_controlled_fixtures": true
+      },
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "J chose one forced replacement and four attacks; natural loss then automatic cartridge blackout. No teacher fallback, high-level goal selection or full-player promotion.",
-        "blocker": "Main-save options remain constrained by 198 cash and paid Safari access; its six-member party is outside J one-to-three-member qualification. Profitable learned funding is not established.",
-        "decision": "Close the lifecycle seam and retain the loss. Return to useful model-selected collection/resource work; preserve the original funding failure. Publish and merge the explicitly authorized checkpoint only after checks pass.",
+        "authority_delta": "No runtime authority change. Capture fallback is deterministic; pending suppliers remain unrun.",
+        "blocker": "Capture support causes avoidable target KOs; supplier coverage needs native qualification. Source lint/type debt and external private helpers limit publication reproducibility.",
+        "decision": "Keep runs paused for source publication. Next qualify suppliers and nonlethal capture support, then sustained play before more fitting or scale-up.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json",
-          "sha256": "b5c99fcdfbc2508db6c1a57b6d0113036310909cb46a47dc256161dad255ce43"
+          "kind": "development_episode",
+          "path": "docs/evidence/red-project-audit-2026-10-28.json",
+          "sha256": "9f3f07a1ae5012e9a6614cbe76ab0926ce101df92e9985773e7b2efdbabe1222"
         },
-        "learning_output": "Five retained DEVELOPMENT decisions; zero new fit examples or fits. J remains 318 TRAIN contexts and all main collection counters are unchanged.",
-        "next_falsifier": "The exact main-save terminal cannot expose a genuinely executable useful choice under available resources and qualified actor scope.",
-        "next_session_goal": "Astra High, Fast off: authenticate main Model137 terminal, rebuild useful funding/admission or non-Safari options, and retain one model-selected goal outcome. Qualify six-member J scope if needed before its use. Estimate 45\u201390 minutes; no full run.",
-        "product_alignment": "A faint no longer strands general learned battle completion. The retained loss restores ordinary field control without laundering failed funding into success.",
-        "session_id": "2026-09-19-battle-lifecycle-continuation",
+        "learning_output": "Audit only:0gameplay/TRAIN/fits/weights. Prior play-first gains remain10to12registrations with29strategic choices.",
+        "next_falsifier": "The existing capture-support hypothesis must improve actual retention without illegal actions or hidden model substitution.",
+        "next_session_goal": "New block up to3h: qualify pending suppliers on the retained Cerulean pair, test existing nonlethal capture support on a paid copy, then seek45native minutes. Reassess15min/two failures; no fresh starts or parallel actors.",
+        "product_alignment": "Attribute current failures to the correct layer and publish an honest source snapshot.",
+        "session_id": "2026-10-28-project-audit-publication",
         "status": "closed",
-        "stop_condition": "One declared continuation consumed: 55 actions / 5424 frames, cumulative 302 / 24708 with parent. Natural loss, exact endpoint reopened, no reset or fit. Gameplay stopped.",
-        "transfer_result": "Same boot3100 origin, newly exercised natural forced replacement; no independent root. Verified normal blackout to map15, HP28/51, cash853, target undefeated, registrations preserved. Main save reopened read-only at96/124, six members,198cash."
+        "stop_condition": "All game runs remain paused throughout audit/publication; native work requires a new finite block.",
+        "transfer_result": "No new independent evaluation, fresh acceptance or later-title transfer."
       },
       "learned_authority": {
-        "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified; Red 96/124. J owned five continuation decisions including forced replacement; verified loss and normal blackout. No full-player promotion; main six-member party exceeds J small-party scope.",
-        "target": "Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution."
+        "current": "Fixed local weights made 29 strategic choices in repaired DEVELOPMENT: Bill/rival/Cut,2badges,12registrations. Operator repairs disclosed; fresh acceptance and broad autonomous payoff unproved.",
+        "target": "The local student chooses collection and preparation actions without runtime LLM calls or teacher substitution. Existing executors translate selected goals into normal inputs."
       },
       "maintenance_unblocks": null,
       "measurable_outputs": [
         {
           "kind": "registered_train_example",
-          "minimum": 12,
+          "minimum": 4,
           "partition": "train"
+        },
+        {
+          "kind": "model_fit",
+          "minimum": 1,
+          "partition": "train"
+        },
+        {
+          "kind": "unseen_comparison",
+          "minimum": 1,
+          "partition": "development"
         }
       ],
-      "name": "Red shared-registration learning",
-      "next_decision": "Return to Model137 main-save collection/resource choices. Battle lifecycle is verified by a retained natural loss; no broad trainer refit/review cycle.",
+      "name": "Teacher-assisted local Red player",
+      "next_decision": "Keep runs paused for source publication. Next qualify suppliers and nonlethal capture support, then sustained play before more fitting or scale-up.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -265,9 +283,7 @@
       "prohibited_actions": [
         "unexecuted_counterfactual_target",
         "behavior_commitment_reissue",
-        "consumed_trial_retry",
         "crystal_execution",
-        "full_game_replay",
         "identity_bearing_policy_feature",
         "claim_first_preflight_v1_or_v2_retry",
         "strict_five_root_preflight_successor_retry",
@@ -277,35 +293,36 @@
         "outcome_balanced_row_selection",
         "sealed_or_benchmark_root_use",
         "synthetic_executor_fit_admission",
-        "promotion_from_pilot",
         "routine_clean_power_teacher_factory",
         "sealed_red_evaluation",
-        "teacher_choice_or_fallback",
         "teacher_route_hardening",
         "transfer_claim",
         "unpowered_model_quality_claim",
         "unmeasured_action_target",
         "v4_freeze_or_trial_execution",
-        "wrapper_only_successor"
+        "wrapper_only_successor",
+        "assisted_completion_as_autonomous",
+        "final_actor_cheat",
+        "retired_frozen_trial_reissue",
+        "unauthorized_publication"
       ],
       "rigor": "development",
       "status": "active",
       "stop_conditions": [
-        "Model120 freeze seed120091401 is consumed without a retained choice and seed120091402 is consumed by its retained resupply success; never retry, replay, infer, substitute or re-execute either identity.",
-        "All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.",
-        "Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.",
-        "Frozen J may own explicitly bound ordinary trainer battles in bounded development; default wild-capture and Elite Four controllers remain unchanged. No teacher fallback, DEVELOPMENT fitting, consumed replay, full-player promotion or full run.",
-        "Every player episode must begin from an authenticated snapshot, use semantic title-neutral goals, preserve typed component outcomes and verify one fresh completion ledger after execution or failure.",
-        "Stop on route-specific orchestration, coordinate-bearing policy features, swallowed component failures, unverifiable progress, or no independent development advantage; redesign the composition seam instead of patching a walkthrough.",
-        "Authenticated train roots may reset only under a prospectively bounded curriculum. The four retired training roots and all eight reset trials are now consumed under their exact plan; preserve provenance, exclusions and terminals. Already-opened development, sealed Red and benchmark roots may never be relabeled for fitting.",
-        "The completed batch met its unchanged factual gate: eight retained terminals, six settled rows across three roots, acquisition two and development three. Its schedule covered four train roots with at most two resets each. Both construction-route setup failures remain censored, and focus labels do not replace actual actions. No consumed trial may retry or be replaced by a reserve.",
-        "No routine clean-power teacher factory, teacher-route hardening, full replay, sealed Red evaluation, Crystal execution, or full-player authority promotion is permitted in this development lane."
+        "Model120 freeze seed120091401 and seed120091402 remain consumed;all retired/frozen causal and powered-supply identities retain their exact original exclusions,budgets and results. Never reissue or relabel them.",
+        "New ordinary development may repeat exposed-source checks under fresh exploratory records. Sibling snapshots remain correlated;do not claim they are independent evaluation roots or reopen an old consumed trial.",
+        "TRAIN fixtures may be teacher-controlled with disclosed interventions. DEVELOPMENT,benchmark and sealed material may not be relabeled for fitting;fixture edits are not earned XP,money,funding or native registration.",
+        "Reversible provisional candidates may own development choices after relevant safety checks;retain baseline,source/model identity,intervention log and regressions. This is not broad qualification or final acceptance.",
+        "Every native episode authenticates its source,uses semantic goals,retains typed outcomes and verifies the fresh ledger even after failure. Stop for unverifiable state,illegal actions,hidden substitution or swallowed failures.",
+        "Reassess at15minutes or two failures of the same tactic;change approach within scope instead of automatically stopping. Runtime chunks remain finite and resumable;aggregate costs and every loss remain.",
+        "No new subsystem,unrelated teacher-route hardening,redundant clean-power factory,Crystal,sealed evaluation,main-save overwrite,destructive cleanup or publication. Explain material expansion before implementing.",
+        "The audit-readiness phase closes after the qualified P7 two-worker pilot. Full campaigns remain paused; further development uses fresh finite plans and namespaces without reviving old trial identities or cutoffs."
       ],
       "time_box": {
-        "maximum_hours": 2,
+        "maximum_hours": 3,
         "maximum_sessions": 1
       },
-      "transfer_test": "Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet."
+      "transfer_test": "Two isolated P7 actors completed eight choices each with matching 2,000-action, 124,644-frame traces and terminal states. Peak memory: 1.743 GiB; minimum available Windows/WSL memory: 15.260/13.207 GiB. No OOM or swap. At most two finite development workers qualify. The older P4 1.812x throughput estimate is separate."
     },
     {
       "id": "red-living-dex-multifamily-option-value-curriculum-v4",
@@ -920,9 +937,9 @@
     },
     "development": {
       "exact_source_ci_binding": false,
-      "external_review": "design_freeze_or_promotion_only",
+      "external_review": "optional_when_useful_and_authorized",
       "owner_authorization_per_case": false,
-      "purpose": "Generate diverse outcomes, fit models, falsify ideas, and iterate quickly on non-sealed scenarios.",
+      "purpose": "Outcome-scoped batches,repeatable exploratory checks,controlled TRAIN fixtures and reversible provisional integration;final qualification remains separate.",
       "repeatable": true
     },
     "sealed": {
@@ -933,7 +950,7 @@
       "repeatable": false
     }
   },
-  "schema": "pokemon.product-focus.v4",
+  "schema": "pokemon.product-focus.v5",
   "session_budget_percent": {
     "data_and_scenarios": 70,
     "maintenance_and_docs": 10,

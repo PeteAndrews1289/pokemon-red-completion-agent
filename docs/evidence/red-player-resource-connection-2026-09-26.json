@@ -1,0 +1,188 @@
+{
+  "schema": "pokemon.red.player-resource-connection.v1",
+  "session": "2026-09-26-player-resource-connection",
+  "primary_connection_qualified": true,
+  "whole_player_qualified": false,
+  "qualification": {
+    "partition": "train",
+    "played_cases": 1,
+    "independent_train_origins": 1,
+    "source_edits": 0,
+    "origin_sha256": "fb501fe63c2af637775c237861fe851f720d7f07c9218a6bb612b2937d46e111",
+    "source_sha256": "5101b3571a536a96cbc7c0c6b6f41adcccab9e5076b04f15c39054392af5fa42",
+    "plan_sha256": "ea50aa3b4442f355400597d5842d11b462438cf1c1470ff42bd3ca47838d6526",
+    "native_source_sha256": "44f7f4592f9e980b210a4b2d1030f836d90adc9f8a847894128fda3df3400457",
+    "result_sha256": "01c42680c204b51ef06ead10cd3a5020fd21eaa167926f29fd3ac54bcb1bd154",
+    "terminal_sha256": "48dacdfea8e7f4c711d416d1a8334e827ae159f6a1e5d8017fb66965b5898f70",
+    "limits": {
+      "goal_and_support_selections": 6,
+      "actions": 3000,
+      "frames": 240000,
+      "seconds": 180,
+      "heals": 2,
+      "cash_at_risk": 3175
+    },
+    "actions": 639,
+    "frames": 45420,
+    "seconds": 40.594095375,
+    "model_choices": 2,
+    "support_selections": 4,
+    "cash_before": 3175,
+    "cash_after": 1175,
+    "cash_spent": 2000,
+    "heals": 1,
+    "new_registrations_on_train_copy": 2,
+    "terminal_owned_species": [
+      7,
+      16,
+      19
+    ],
+    "terminal_poke_balls": 5,
+    "stop_reason": "decision_budget",
+    "curriculum_complete": false,
+    "remaining_need": "full party restoration",
+    "goals": [
+      {
+        "ordinal": 0,
+        "goal": "buy five Poke Balls",
+        "mode": "forced singleton",
+        "cash_spent": 1000,
+        "actions": 55,
+        "frames": 3888,
+        "succeeded": true
+      },
+      {
+        "ordinal": 1,
+        "goal": "capture Pidgey",
+        "mode": "forced singleton",
+        "balls_spent": 4,
+        "actions": 146,
+        "frames": 12216,
+        "succeeded": true
+      },
+      {
+        "ordinal": 2,
+        "goal": "buy four Poke Balls",
+        "mode": "deterministic safety with three offers",
+        "cash_spent": 800,
+        "actions": 97,
+        "frames": 6228,
+        "succeeded": true
+      },
+      {
+        "ordinal": 3,
+        "goal": "restore party",
+        "mode": "model exploration versus acquisition",
+        "actions": 43,
+        "frames": 2184,
+        "succeeded": true
+      },
+      {
+        "ordinal": 4,
+        "goal": "capture Rattata",
+        "mode": "forced singleton",
+        "balls_spent": 1,
+        "actions": 207,
+        "frames": 15108,
+        "succeeded": true
+      },
+      {
+        "ordinal": 5,
+        "goal": "buy one Poke Ball",
+        "mode": "model exploration versus restoration",
+        "cash_spent": 200,
+        "actions": 91,
+        "frames": 5796,
+        "succeeded": true
+      }
+    ]
+  },
+  "learning": {
+    "new_verified_admitted_unit_outcomes": 5,
+    "new_purchases": 3,
+    "new_acquisitions": 2,
+    "new_native_failure_rows": 0,
+    "new_native_income_rows": 0,
+    "comparative_rows": 0,
+    "new_fits": 0,
+    "promotions": 0,
+    "previous_fitted_candidate_rows": 146,
+    "previous_native_rows": 9,
+    "reauthenticated_native_rows": 14,
+    "prior_native_rows_unchanged": true,
+    "admission_inventory_sha256": "84a2f781b16dea577b360eee2d93b77a74b8c7d415ec227bfce6d9fb1b8b596c",
+    "feature_version": 5,
+    "model_advantage_demonstrated": false,
+    "independent_comparison_executed": false,
+    "diagnostics": "TRAIN-only frozen-menu scores; no unselected counterfactual labels or policy replay"
+  },
+  "audit": {
+    "passed": true,
+    "sha256": "778917a4310ab67d05414fcde6d712d1702a0bd0053da1ad820b178818eec68b",
+    "input_frames": 0,
+    "checks": "Every raw source/terminal, sealed action and trace, per-goal cost, actual stock/cash/registration/specimen, immutable outcome, original limit and protected hash"
+  },
+  "income": {
+    "exact_reserve_deficit_connected": true,
+    "verification": "ROM-free only; correction made after native funded attempt",
+    "native_qualified": false,
+    "guard_unchanged": "prepared lead at least ten levels above opposing top level",
+    "source_gap": "Current authenticated level-8 opening source does not provide this qualified income context; no separate eligible source established",
+    "fixture_source_inspection": "Source-only review of player Center/Mart, gift/Safari setup and prior source audit did not identify a ready authenticated income fixture. No setup helper executed; no additional native source, claim or payload opened. Not a global absence claim."
+  },
+  "verification": {
+    "status": "passed: broad invocation plus final affected-tree regression; not a second final-tree full-suite replay",
+    "source_bundle_sha256": "1f4054d65ef7954274c8fa69ed429ac168ea715597fb2add665309fe0166c63a",
+    "registry_sha256": "cc0ff48f291cefe31a8a16744086b0b6a7c9a4d7c80f5fb6ad80cc634bd2d190",
+    "mypy_source_files": 667,
+    "prior_combined_tests": {
+      "passed": 1326,
+      "failed": 3,
+      "reason": "stale registry, regenerated; collection-specific rerun passed"
+    },
+    "collection_specific_tests": 45,
+    "full_suite": {
+      "passed": 17268,
+      "skipped": 17,
+      "xfailed": 1,
+      "warnings": 1,
+      "seconds": 2294.65,
+      "exit_code": 0,
+      "scope": "Invocation began before the late income correction and final test additions; these changes are covered by the final affected-tree suite."
+    },
+    "final_affected_tests": {
+      "passed": 272,
+      "seconds": 3.67
+    },
+    "final_documentation_surface_tests": {
+      "passed": 12,
+      "seconds": 0.1
+    },
+    "ruff_passed": true,
+    "registry_check_passed": true,
+    "documentation_check_passed": true,
+    "public_artifact_check_passed": true
+  },
+  "protected": {
+    "baseline_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "candidate_sha256": "3a495ecc51fb46f0fdb9526b66ba9ce1f6eaed9524149704606a5350ed263e5c",
+    "frozen_battler_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "campaign_state_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+    "campaign_envelope_sha256": "2075e2c5b7160e12aaa8aaa69b9bd8cc75fa438c425bbe4e9b9789e876c89c65",
+    "fit_result_sha256": "b5d59947be350dd62bd4576c351b11cd9551f23fa73c990edeb1de797d62bba1",
+    "stage472_absent": true,
+    "campaign_registration_delta": 0,
+    "primary_collection": 109,
+    "separate_trade_collection": 111,
+    "legacy_train_count": 135,
+    "fresh_red_acceptance_gates_passed": 0
+  },
+  "gameplay_stopped": true,
+  "github_publication": false,
+  "external_agents_used": false,
+  "remaining": [
+    "Authenticate a suitable finite-income TRAIN source before native shortfall qualification",
+    "Establish fresh genuinely independent comparison supply; four previous pairs remain consumed",
+    "Measure sustained integrated behavior and explicitly decide the deployed stack before the fresh Red exam"
+  ]
+}

@@ -1,6 +1,9 @@
 # AI systems interview handoff
 
-Current checkpoint: September19,2026. Historical reports remain evidence, not instructions.
+Historical capability brief: October 4 local / October 5 UTC, 2026.
+For current status use [the handoff](../HANDOFF.md) and
+[October 7 project audit](work-sessions/2026-10-07-project-audit-and-refocus.md).
+The dated claims below are evidence, not current instructions or a live checkpoint.
 
 ## Product and authorship
 
@@ -13,20 +16,32 @@ present this as wholly hand-written or already completed.
 
 | Evidence | Result | Limitation |
 | --- | --- | --- |
-| Collection development |96/124 registrations,74 specimens,198 cash | Not a fresh run |
-| Goal model137 |137 examples,92 successes,58 economy-qualified | Related development states |
+| Older collection development |109/124 registrations,78 specimens,11968 cash | Preserved separate save, not the latest earned ancestry |
+| Current earned coverage |36/36story objectives, Champion/Hall-of-Fame history and124/124native entries | Supplied preparation/targets/recovery; not fresh autonomous acceptance |
+| Prepared special-source choice | Frozen model chooses Articuno over Moltres; corrective copy completes capture/role return | Correlated122copy, original interruption retained; preparation/capture policy supplied |
+| Goal Model141 |141 fitted outcomes,96 successes,58 economy-qualified | Related development states; four teacher gift lessons are not sampled choices |
 | Battle training |318 TRAIN contexts, four origins | Supported small battle domain |
 | Unused generated3v3 | J9/24 wins; H7/24 | Descriptive, not statistically conclusive |
 | Natural Brock | J6/6; H5/6; first-legal0/6 | Two origins × three timings; one own Pokémon |
 | Earned natural switching | Two wins, two voluntary switches,33 decisions | Same two origins; not six-member mastery |
 | Main-player battle lifecycle | Four initial decisions, then five continuation decisions; loss and blackout verified | Original funding goal failed; no six-member promotion |
+| Natural six-member execution | J/K each4/4;210combined choices across two origins | Same enemy roster; K16faints versus J15 |
+| Continued goal selection | Seven decisions, boxed trade success, all3000spent retained | Five failed searches and final encounter-cap stop; not broad strategic superiority |
+| Earlier September22story combat | Seven badges; Blaine and seven trainers won with48learned choices | One prepared lineage; support navigation/healing; historical checkpoint |
+| Reserve preparation | Three level39targets;160encounters/153wins/496choices | Seven nonwinning exits; targets/venue/healing supported; no new fit |
 | Fresh Red acceptance |0/5 | No fresh start-to-finish model-directed completion |
 
-The main-entry probe used three earned Potions and a new trainer. J switched once and selected
+The historical September19 main-entry probe used three earned Potions and a new trainer. J switched once and selected
 three attacks. Wartortle fainted; the existing no-faints funding guard stopped before replacement.
 It earned no payout. A separate exact-state continuation produced one forced replacement and four
 attacks, followed by loss and normal blackout. Party, cash loss and field return were verified.
 This establishes lifecycle handling, not reliable autonomous funding.
+
+At historical September22stage283, forced-motion geometry blocked Giovanni rather
+than a demonstrated battle weakness; an audit corrected an optimistic recovery-anchor
+claim. Later earned story/collection completion does not erase that failure. Current
+gaps are consequential preparation/resource ownership and sustained fresh-run autonomy,
+including the strict League income/epilogue return seam, not that old spinner stop.
 
 ## Architecture and stack
 
@@ -36,7 +51,7 @@ verification → saved evidence → eligible outcome learning.
 | Layer | Technology / responsibility |
 | --- | --- |
 | Runtime | Python3.11+, PyBoy2.7.0 |
-| Observation | Revision-specific readers; semantic policy-facing state |
+| Observation | Revision-specific privileged emulator/cartridge readers; semantic state, not pixels alone |
 | Goal learner | NumPy regularized multi-outcome option values with declared exploration |
 | Battler | Three learned heads: move, attack/switch control, replacement target |
 | Mechanics | Cartridge maps/encounters; deterministic navigation and menu execution |
@@ -52,12 +67,14 @@ interfaces prevent accidental misuse, not malicious-code access in a security sa
 
 - The model selects declared semantic alternatives; only executors issue controller inputs.
 - The referee verifies outcomes and cannot substitute a better action.
-- J is bound per run, not installed as a global controller replacement.
-- Wild-capture and Elite Four controllers are unchanged.
+- Qualified J/K and narrowly admitted story actors are bound explicitly, not globally substituted.
+- Default wild-capture and Elite Four controllers are unchanged; K knockout preparation is separate.
 - Learned trainer actions share player action/frame budgets and resource checks.
 - Failures preserve real costs and saves rather than resetting into success.
 - Disclosed teacher assistance is allowed in TRAIN scaffolding, not the final actor.
 - DEVELOPMENT is never silently fitted; timing variants are not independent origins.
+- The additive actor won72/128versusK66 but required349decisions versus276. Its original
+  efficiency gate failed; owner-authorized story use does not turn that into a pass.
 
 ## Difficult problems and lessons
 
@@ -76,8 +93,8 @@ rewriting that original failed-goal verdict.
 
 ## Remaining product sequence
 
-1. Qualify broader party/move scope where required by the next actual playing task.
-2. Resume useful model-selected collection and sustainable legitimate income.
+1. Connect existing resource-choice/income-return/spending mechanics without supplied winning goals.
+2. Address demonstrated preparation-authority gaps and qualify sustained model-directed play.
 3. Complete fresh model-directed Red with Champion/Hall of Fame and124 native registrations.
 4. Verify the deferred-dependency ledger, then test an unfamiliar compatible Red modification.
 5. Learn Crystal and continue through at least Emerald.
@@ -93,7 +110,8 @@ shortcuts and focus drift, and validated outcomes against preserved gameplay evi
 My contribution is systems direction and evaluation, including deciding what evidence establishes.”
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) · [Handoff](../HANDOFF.md) ·
-[Integration evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
+[Latest evidence](work-sessions/2026-10-04-model-owned-special-acquisition.md) ·
+[Research retrospective](research-retrospective.md) ·
 [Architecture](architecture.md) · [Roadmap](model-first-roadmap.md)
 
 Private ROMs, saves, datasets and fitted models are not distributed. Superseded interview details

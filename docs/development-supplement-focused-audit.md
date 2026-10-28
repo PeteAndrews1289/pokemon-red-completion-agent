@@ -1,5 +1,10 @@
 # Focused supplement adapter audit — 2026-09-04
 
+> Documentation role: historical scoped plan. The original trial, budget and
+> results below retain their date-specific scope. For current work follow
+> [HANDOFF](../HANDOFF.md) and latest user direction; this page is not a dispatch.
+
+
 Reviewed source: `850f02f008e10c065e7b0522367fff31e5dc8353` (PR 214).
 This is Codex's summary and adjudication, not verbatim reviewer output.
 

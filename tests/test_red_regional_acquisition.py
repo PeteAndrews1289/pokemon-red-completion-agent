@@ -59,14 +59,106 @@ def _observation():
 def test_cartridge_source_inventory_includes_noncanonical_locations_and_roundtrips(monkeypatch):
     from pokemon_red_completion.observation import MapId
     from pokemon_red_completion.red_living_dex_multifamily_curriculum import map_id_for_wild_source
-    monkeypatch.setattr("pokemon_red_completion.gen1_cartridge.wild_tables",
-        lambda rom, *, medium: {int(MapId.ROUTE_15): [(20, 1)],
-            int(MapId.ROUTE_11): [(15, 2)], int(MapId.ROUTE_12): [], 9999: [(1, 1)]})
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.gen1_cartridge.wild_tables",
+        lambda rom, *, medium: {
+            int(MapId.ROUTE_15): [(20, 1)],
+            int(MapId.ROUTE_11): [(15, 2)],
+            int(MapId.ROUTE_12): [],
+            9999: [(1, 1)],
+        },
+    )
     sources = regional.cartridge_grass_sources(b"fixture")
     assert sources == ("wild:Route11:grass", "wild:Route15:grass")
     assert {int(map_id_for_wild_source(s)) for s in sources} == {
-        int(MapId.ROUTE_11), int(MapId.ROUTE_15),
+        int(MapId.ROUTE_11),
+        int(MapId.ROUTE_15),
     }
+
+
+@pytest.mark.parametrize("declared", [False, True])
+@pytest.mark.parametrize("already_local", [False, True])
+def test_declared_unconnected_entry_keeps_local_capture_and_other_peers(
+    monkeypatch,
+    declared,
+    already_local,
+):
+    first, second = _candidate(), _candidate("wild:Route11:grass")
+    observation = _observation()
+    current = 216 if already_local else observation.raw.map_id
+    observation = replace(observation, raw=replace(observation.raw, map_id=current))
+    monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=()))
+    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: ())
+    monkeypatch.setattr(
+        regional,
+        "_rank_regional_sources",
+        lambda *args, **kwargs: ((first.source_id, 216), (second.source_id, 1)),
+    )
+    monkeypatch.setattr(regional, "_source_has_acquisition_demand", lambda *args: True)
+    monkeypatch.setattr(
+        regional, "derive_red_living_dex_wild_corridor", lambda target, *args, **kwargs: target
+    )
+    monkeypatch.setattr(
+        regional,
+        "retarget_red_wild_profile",
+        lambda profile, target, **kwargs: (
+            first.profile if target.source_id == first.source_id else second.profile
+        ),
+    )
+    monkeypatch.setattr(regional, "bind_red_local_discovery_profile", lambda p, *args: p)
+    monkeypatch.setattr(regional, "bind_red_opportunistic_capture_profile", lambda p, *args: p)
+
+    class Router:
+        def __init__(self, runtime, *args, **kwargs):
+            self.profile = runtime.profile
+
+        def enumerate_routed_kinds(self, *args):
+            return SimpleNamespace(
+                bindings=(first.binding if self.profile == first.profile else second.binding,)
+            )
+
+    monkeypatch.setattr(regional, "RedResourceGoalRouter", Router)
+    runtime = _Runtime(
+        first.profile,
+        SimpleNamespace(frame_count=0),
+        object(),
+        SimpleNamespace(read_retained_outside_map=lambda: None),
+    )
+    world = SimpleNamespace(
+        rom=b"fixture",
+        terrain={1: None, 216: None},
+        local_graphs={1: None, 216: None},
+        object_blockers={1: frozenset(), 216: frozenset()},
+        macro_graph=SimpleNamespace(warp_locations={}),
+    )
+    diagnostics = []
+    actions = SimpleNamespace(
+        actions_executed=0,
+        record_diagnostic_event=lambda kind, payload: diagnostics.append((kind, payload)),
+    )
+    rows = regional.enumerate_red_regional_acquisitions(
+        runtime,
+        observation,
+        actions,
+        world,
+        maximum_actions=1000,
+        maximum_frames=100000,
+        unsupported_remote_maps=frozenset({216}) if declared else frozenset(),
+    )
+    assert {row.source_id for row in rows} == (
+        {second.source_id}
+        if declared and not already_local
+        else {first.source_id, second.source_id}
+    )
+    excluded = [payload for kind, payload in diagnostics if kind == "regional_source_excluded"]
+    assert bool(excluded) is (declared and not already_local)
+    if excluded:
+        assert excluded[0]["reason"] == "unsupported_remote_entry"
+    assert {
+        payload["source_id"] for kind, payload in diagnostics if kind == "regional_source_offered"
+    } == {row.source_id for row in rows}
+    assert actions.actions_executed == runtime.emulator.frame_count == 0
 
 
 def test_source_projection_excludes_identity_and_preserves_observed_history():
@@ -90,6 +182,20 @@ def test_source_projection_excludes_identity_and_preserves_observed_history():
     assert regional.regional_acquisition_menu(observation, renamed, memory).policy_dict() == (
         menu.policy_dict()
     )
+
+
+@pytest.mark.parametrize("wrapper", [True, 3, object()])
+def test_regional_capture_rejects_noncallable_wrapper_before_native_access(wrapper):
+    with pytest.raises(TypeError, match="wrapper must be callable"):
+        regional.enumerate_red_regional_acquisitions(
+            None,
+            None,
+            None,
+            None,
+            maximum_actions=1000,
+            maximum_frames=100000,
+            interruption_handler_wrapper=wrapper,
+        )
 
 
 def test_real_choice_needs_distinct_sources_and_distinguishable_features():
@@ -140,9 +246,13 @@ class _Runtime:
 
 
 @pytest.mark.parametrize("registered", [False, True])
+@pytest.mark.parametrize("with_wrapper", [False, True])
 def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
-    monkeypatch, registered,
+    monkeypatch,
+    registered,
+    with_wrapper,
 ):
+    wrapper = (lambda inner, spec: inner) if with_wrapper else None
     monkeypatch.setattr(regional, "_source_has_acquisition_demand", lambda *a: True)
     items = [
         _candidate("wild:Route2:grass", 0.7),
@@ -156,17 +266,19 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     methods.append(SimpleNamespace(source_id="safari:unsupported", kind=RedAcquisitionKind.SAFARI))
     monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=methods))
     monkeypatch.setattr(regional, "map_id_for_wild_source", lambda source: 1)
+
     def derive(target, *args, **kwargs):
         assert kwargs["excluded"] == ({(4, 4), (2, 3)} if registered else {(4, 4)})
         assert ("cartridge" in kwargs) is registered
         return target
+
     monkeypatch.setattr(regional, "derive_red_living_dex_wild_corridor", derive)
-    monkeypatch.setattr(
-        regional, "cartridge_grass_sources", lambda rom: (items[2].source_id,)
-    )
+    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: (items[2].source_id,))
+
     def retarget(profile, target, *, rom):
         assert rom == b"fixture"
         return next(i.profile for i in items if i.source_id == target.source_id)
+
     monkeypatch.setattr(regional, "retarget_red_wild_profile", retarget)
     monkeypatch.setattr(regional, "bind_red_local_discovery_profile", lambda profile, *a: profile)
     opportunistic = []
@@ -176,15 +288,14 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         opportunistic.append(profile)
         return profile
 
-    monkeypatch.setattr(
-        regional, "bind_red_opportunistic_capture_profile", bind_opportunistic
-    )
+    monkeypatch.setattr(regional, "bind_red_opportunistic_capture_profile", bind_opportunistic)
 
     class Router:
         def __init__(self, runtime, *a, **kw):
             assert kw["include_recovery_offers"] is False
             assert kw["routed_recovery"] is True
             assert kw["prepare_capture_items"] is registered
+            assert kw["interruption_handler_wrapper"] is wrapper
             self.profile = runtime.profile
 
         def enumerate_routed_kinds(self, observation, routed_kinds):
@@ -217,6 +328,7 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         maximum_actions=30000,
         maximum_frames=3000000,
         routed_recovery=True,
+        interruption_handler_wrapper=wrapper,
     )
     expected = [items[2].source_id, items[1].source_id, items[0].source_id]
     if not registered:
@@ -239,6 +351,7 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
             maximum_actions=30000,
             maximum_frames=3000000,
             routed_recovery=True,
+            interruption_handler_wrapper=wrapper,
         )
 
 
@@ -260,9 +373,11 @@ def test_topology_rank_is_nearby_first_and_keeps_unreachable_sources_last(monkey
         terrain={1: object(), 3: object(), 4: object()},
         local_graphs={1: object(), 3: object(), 4: object()},
     )
-    assert regional._rank_regional_sources(
-        sources, world, current_map=1, last_outside_map=7
-    ) == ((sources[2], 1), (sources[0], 3), (sources[1], 4))
+    assert regional._rank_regional_sources(sources, world, current_map=1, last_outside_map=7) == (
+        (sources[2], 1),
+        (sources[0], 3),
+        (sources[1], 4),
+    )
 
 
 def test_topology_rank_accounts_for_observed_fly_origins(monkeypatch):
@@ -294,7 +409,8 @@ def test_topology_rank_accounts_for_observed_fly_origins(monkeypatch):
 
 @pytest.mark.parametrize("completed_sources", [0, 10])
 def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
-    monkeypatch, completed_sources,
+    monkeypatch,
+    completed_sources,
 ):
     items = tuple(
         _candidate(f"wild:Route{number}:grass", effort=number / 40)
@@ -331,9 +447,7 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
             item.profile for item in items if item.source_id == target.source_id
         ),
     )
-    monkeypatch.setattr(
-        regional, "bind_red_local_discovery_profile", lambda profile, *a: profile
-    )
+    monkeypatch.setattr(regional, "bind_red_local_discovery_profile", lambda profile, *a: profile)
     evaluated = []
 
     class Router:
@@ -360,26 +474,35 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
         macro_graph=SimpleNamespace(warp_locations={}),
         rom=b"fixture",
     )
+    diagnostics = []
+    actions = SimpleNamespace(
+        actions_executed=0,
+        record_diagnostic_event=lambda kind, payload: diagnostics.append((kind, payload)),
+    )
     result = regional.enumerate_red_regional_acquisitions(
         runtime,
         _observation(),
-        SimpleNamespace(actions_executed=0),
+        actions,
         world,
         maximum_actions=30000,
         maximum_frames=3000000,
     )
     assert evaluated == [
-        source for source, _map_id in ranked[completed_sources:completed_sources + 4]
+        source for source, _map_id in ranked[completed_sources : completed_sources + 4]
     ]
-    assert demand_checked == [source for source, _map_id in ranked[:completed_sources + 4]]
+    assert demand_checked == [source for source, _map_id in ranked[: completed_sources + 4]]
     assert len(result) == regional.TARGET_SOURCE_CANDIDATES
+    unexamined = [payload for kind, payload in diagnostics if kind == "regional_sources_unexamined"]
+    assert len(unexamined) == 1 and unexamined[0]["reason"] == "candidate_cap"
+    assert unexamined[0]["sources"] == [source for source, _ in ranked[completed_sources + 4 :]]
 
     Router.include_bindings = False
     evaluated.clear()
+    diagnostics.clear()
     result = regional.enumerate_red_regional_acquisitions(
         runtime,
         _observation(),
-        SimpleNamespace(actions_executed=0),
+        actions,
         world,
         maximum_actions=30000,
         maximum_frames=3000000,
@@ -388,16 +511,25 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
     assert evaluated == [
         source
         for source, _map_id in ranked[
-            completed_sources:completed_sources + regional.MAXIMUM_ROUTED_SOURCE_EVALUATIONS
+            completed_sources : completed_sources + regional.MAXIMUM_ROUTED_SOURCE_EVALUATIONS
         ]
     ]
+    unexamined = [payload for kind, payload in diagnostics if kind == "regional_sources_unexamined"]
+    assert unexamined[0]["reason"] == "route_evaluation_cap"
 
     completed.update(source for source, _map_id in ranked)
     evaluated.clear()
-    assert regional.enumerate_red_regional_acquisitions(
-        runtime, _observation(), SimpleNamespace(actions_executed=0), world,
-        maximum_actions=30000, maximum_frames=3000000,
-    ) == ()
+    assert (
+        regional.enumerate_red_regional_acquisitions(
+            runtime,
+            _observation(),
+            SimpleNamespace(actions_executed=0),
+            world,
+            maximum_actions=30000,
+            maximum_frames=3000000,
+        )
+        == ()
+    )
     assert evaluated == []
 
 
@@ -414,7 +546,11 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
     ],
 )
 def test_source_prefilter_reuses_registered_precursor_demand(
-    missing, stock, protected, offered, expected,
+    missing,
+    stock,
+    protected,
+    offered,
+    expected,
 ):
     from test_red_acquisition import _observation as collection_observation
 
@@ -430,13 +566,86 @@ def test_source_prefilter_reuses_registered_precursor_demand(
         wild_source_species=((source, (red_species_ref(offered),)),),
     )
     provider = RedAreaSurveyGoalProvider(
-        source, None, None, None, None, catalog=catalog,
+        source,
+        None,
+        None,
+        None,
+        None,
+        catalog=catalog,
     )
     observation = replace(
         _observation(),
         collection_observation=replace(
-            collection_observation(*stock), owned_species=credited,
+            collection_observation(*stock),
+            owned_species=credited,
         ),
     )
     runtime = SimpleNamespace(provider_for=lambda _kind, _actions: provider)
     assert regional._source_has_acquisition_demand(runtime, observation, None) is expected
+
+
+def test_unknown_local_coordinates_are_excluded_and_recorded_without_routing(monkeypatch):
+    item = _candidate()
+    monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=()))
+    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: (item.source_id,))
+    monkeypatch.setattr(regional, "_rank_regional_sources", lambda *a, **kw: ((item.source_id, 1),))
+    monkeypatch.setattr(
+        regional,
+        "derive_red_living_dex_wild_corridor",
+        lambda *a, **kw: pytest.fail("unknown coordinates reached corridor derivation"),
+    )
+    rows = []
+    actions = SimpleNamespace(
+        actions_executed=0, record_diagnostic_event=lambda kind, row: rows.append((kind, row))
+    )
+    runtime = _Runtime(
+        item.profile,
+        SimpleNamespace(frame_count=0),
+        registration_policy=object(),
+        reader=SimpleNamespace(read_retained_outside_map=lambda: None),
+    )
+    world = SimpleNamespace(
+        terrain={1: object()},
+        local_graphs={1: object()},
+        object_blockers={1: set()},
+        macro_graph=SimpleNamespace(warp_locations={}),
+        rom=b"fixture",
+    )
+    observation = _observation()
+    observation = replace(observation, raw=replace(observation.raw, map_id=1, player_x=None))
+    assert (
+        regional.enumerate_red_regional_acquisitions(
+            runtime, observation, actions, world, maximum_actions=30, maximum_frames=3000
+        )
+        == ()
+    )
+    assert rows[-1][0] == "regional_source_excluded"
+    assert rows[-1][1]["reason"] == "corridor_or_profile_unavailable"
+    assert actions.actions_executed == runtime.emulator.frame_count == 0
+
+
+@pytest.mark.parametrize("closed", [False, True])
+def test_native_closed_entry_is_filtered_before_corridor_or_route_work(monkeypatch, closed):
+    first = _candidate()
+    observation = _observation()
+    monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=()))
+    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: ())
+    monkeypatch.setattr(regional, "_rank_regional_sources", lambda *a, **kw: ((first.source_id, 228),))
+    checks = []
+    monkeypatch.setattr(regional, "closed_remote_cave_entry", lambda *a, **kw: checks.append(kw) or closed)
+    def corridor(*args, **kwargs):
+        raise regional.RedLivingDexWildCorridorError("ordinary geometry check retained")
+    monkeypatch.setattr(regional, "derive_red_living_dex_wild_corridor", corridor)
+    runtime = _Runtime(first.profile, SimpleNamespace(frame_count=0), object(),
+                       SimpleNamespace(read_retained_outside_map=lambda: None))
+    world = SimpleNamespace(rom=b"fixture", terrain={228: None}, local_graphs={228: None},
+                            object_blockers={228: frozenset()}, macro_graph=SimpleNamespace(warp_locations={}))
+    events = []
+    actions = SimpleNamespace(actions_executed=0,
+        record_diagnostic_event=lambda kind, payload: events.append((kind, payload)))
+    assert regional.enumerate_red_regional_acquisitions(runtime, observation, actions, world,
+        maximum_actions=1000, maximum_frames=100000) == ()
+    assert checks == [dict(current_map=observation.raw.map_id, target_map=228)]
+    excluded = [p for kind, p in events if kind == "regional_source_excluded"]
+    assert excluded[0]["reason"] == ("native_entry_guard_visible" if closed else "corridor_or_profile_unavailable")
+    assert actions.actions_executed == runtime.emulator.frame_count == 0

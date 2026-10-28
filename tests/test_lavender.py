@@ -50,6 +50,40 @@ def _raw() -> RawGameState:
     )
 
 
+@pytest.mark.parametrize("reserve,stock", [(0, 1), (1, 2)])
+def test_status_item_spends_exactly_one_with_explicit_reserve(monkeypatch, reserve, stock):
+    from types import SimpleNamespace
+
+    raw = replace(_raw(), battle_state=2, active_party_index=0,
+                  active_party_hp=70, active_party_status=3)
+    quantity = stock
+    pulses = []
+    reader = SimpleNamespace(read=lambda: raw, read_battle_menu_state=lambda _:
+        BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=1))
+    monkeypatch.setattr(lavender_module, "_bag", lambda _: {ItemId.AWAKENING: quantity})
+    monkeypatch.setattr(lavender_module, "_party_status", lambda _: (raw.battler_status,))
+    monkeypatch.setattr(lavender_module, "_select_bag_item", lambda *args: None)
+    monkeypatch.setattr(lavender_module, "_select_cursor", lambda *args: None)
+
+    def pulse(*args, **kwargs):
+        nonlocal raw, quantity
+        pulses.append(args)
+        if len(pulses) == 3:
+            raw = replace(raw, active_party_status=0)
+            quantity -= 1
+
+    monkeypatch.setattr(lavender_module, "_pulse", pulse)
+    if stock == 1:
+        with pytest.raises(lavender_module.LavenderChapterError, match="stable supported gate"):
+            lavender_module._use_battle_status_item(reader, None, None,
+                DEFAULT_LAVENDER_TIMING, "test", item=ItemId.AWAKENING, expected_status=3)
+        assert not pulses
+    lavender_module._use_battle_status_item(reader, None, None,
+        DEFAULT_LAVENDER_TIMING, "test", item=ItemId.AWAKENING, expected_status=3,
+        reserve=reserve)
+    assert quantity == stock - 1 and raw.battler_status == 0 and len(pulses) == 3
+
+
 def _report() -> LavenderChapterReport:
     raw = _raw()
     records = tuple(

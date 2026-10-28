@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import pytest
 
@@ -20,6 +20,55 @@ from pokemon_red_completion.route_executor import (
     execute_route,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError, plan_route
+
+
+@pytest.mark.parametrize("fault", [None, "stuck", "drift", "mode", "map", "interruption",
+                                   "ready-source", "undeclared-walk"])
+def test_water_exit_waits_only_for_declared_unready_dismount(fault):
+    edge = LocalEdge((0, 1), "right",
+                     kind="walk" if fault == "undeclared-walk" else "water_exit",
+                     required_mode="water", result_mode="land")
+    local = LocalGraph({(0, 0): (edge,), (0, 1): ()})
+    plan = plan_route(MacroGraph({1: ()}), {1: local}, 1, (0, 0), 1,
+                      goal_at=(0, 1), start_mode="water")
+
+    @dataclass
+    class Dismount:
+        at: tuple = (0, 0)
+        mode: str = "water"
+        ready: bool = True
+        map_id: int = 1
+        interruption: str | None = None
+        actions: list = field(default_factory=list)
+
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                self.mode, self.ready = "land", fault == "ready-source"
+            elif fault != "stuck":
+                self.at, self.ready = (0, 1), True
+                if fault == "drift":
+                    self.at = (0, 2)
+                elif fault == "mode":
+                    self.mode = "water"
+                elif fault == "map":
+                    self.map_id = 2
+                elif fault == "interruption":
+                    self.interruption = "wild_battle"
+
+        def observe(self):
+            return TraversalSnapshot(self.map_id, self.at, ready=self.ready,
+                                     mode=self.mode, interruption=self.interruption)
+    world = Dismount()
+    limits = RouteExecutionLimits(max_readiness_waits=3)
+    if fault:
+        with pytest.raises(RouteExecutionError):
+            execute_route(plan, world, world, limits=limits)
+    else:
+        report = execute_route(plan, world, world, limits=limits)
+        assert report.passed and world.at == (0, 1) and world.mode == "land"
+    assert sum(a.kind is MacroActionKind.MOVE for a in world.actions) == 1
+    assert sum(a.kind is MacroActionKind.WAIT for a in world.actions) <= 3
 
 
 @dataclass
@@ -100,6 +149,18 @@ class FakeWorld:
         )
 
 
+def test_same_map_warp_waits_for_animated_arrival():
+    edge = MacroEdge(1, kind="warp", at=(1, 1), arrival_at=(3, 3))
+    graph = MacroGraph({1: (edge,)}, warp_locations={1: ((1, 1),)})
+    local = LocalGraph({(1, 0): (LocalEdge((1, 1), "right"),), (1, 1): (), (3, 3): ()})
+    plan = plan_route(graph, {1: local}, 1, (1, 0), 1, goal_at=(3, 3))
+    world = FakeWorld(at=(1, 0),
+                      staged_transitions={(1, (1, 0), "right"): (1, (1, 1), (3, 3))})
+    execute_route(plan, world, world)
+    assert world.at == (3, 3) and world.wait_count >= 1
+    assert sum(a.kind is MacroActionKind.MOVE for a in world.actions) == 1
+
+
 @dataclass
 class FakeResourceManager:
     world: FakeWorld
@@ -171,6 +232,71 @@ def test_each_requested_movement_needs_live_acknowledgement() -> None:
     assert report.movement_requests == 2
     assert report.wait_actions == 1, "the cross-map transition receives one settling wait"
     assert [receipt.movement_requests for receipt in report.executed_steps] == [1, 1]
+
+
+@pytest.mark.parametrize("entry", ("initial", "movement", "transition"))
+def test_explicit_pending_interruption_gets_its_own_bounded_receipt(entry: str) -> None:
+    plan, _, _ = connection_plan()
+    world = FakeWorld(transitions={
+        (1, (0, 0), "right"): (1, (0, 1)),
+        (1, (0, 1), "up"): (2, (5, 0)),
+    })
+    if entry == "initial":
+        world.interruption = "encounter"
+    elif entry == "movement":
+        world.interrupt_on[(1, (0, 0), "right")] = "encounter"
+    else:
+        world.interruptions_after_waits[1] = "encounter"
+
+    @dataclass
+    class PendingHandler:
+        calls: int = 0
+
+        def handle(self, interrupted: TraversalSnapshot) -> InterruptionReceipt:
+            self.calls += 1
+            world.interruption = "next_encounter" if self.calls == 1 else None
+            return InterruptionReceipt(
+                kind=str(interrupted.interruption), resumed_map=world.map_id,
+                resumed_at=world.at,
+                details={"verified": True, **(
+                    {"pending_interruption_kind": "next_encounter"}
+                    if self.calls == 1 else {})},
+            )
+
+    handler = PendingHandler()
+    report = execute_route(plan, world, world, interruption_handler=handler)
+    assert report.passed and handler.calls == 2
+    assert [r.kind for r in report.interruptions] == ["encounter", "next_encounter"]
+    assert (world.map_id, world.at) == (2, (5, 0))
+
+
+@pytest.mark.parametrize("claimed,budget", ((False, 4), (True, 1)))
+def test_pending_interruption_keeps_claim_and_aggregate_budget_guards(
+    claimed: bool, budget: int,
+) -> None:
+    plan, _, _ = connection_plan()
+    world = FakeWorld(interruption="encounter")
+
+    class StickyHandler:
+        calls = 0
+
+        def handle(self, interrupted: TraversalSnapshot) -> InterruptionReceipt:
+            self.calls += 1
+            world.interruption = "next_encounter"
+            return InterruptionReceipt(
+                kind=str(interrupted.interruption), resumed_map=world.map_id,
+                resumed_at=world.at, details={"verified": True, **(
+                    {"pending_interruption_kind": "next_encounter"} if claimed else {})},
+            )
+
+    handler = StickyHandler()
+    with pytest.raises(RouteExecutionError) as caught:
+        execute_route(plan, world, world, interruption_handler=handler,
+            limits=RouteExecutionLimits(max_interruptions=budget))
+    assert handler.calls == 1
+    assert caught.value.failure is not None
+    assert len(caught.value.failure.interruptions) == 1
+    assert not any(action.kind is MacroActionKind.MOVE for action in world.actions)
 
 
 def test_a_depleted_route_resource_is_renewed_before_the_next_input() -> None:
@@ -444,6 +570,32 @@ def test_a_map_change_waits_for_staggered_destination_coordinates() -> None:
     assert report.wait_actions == 1
 
 
+@pytest.mark.parametrize("fault", [None, "ready", "wrong_coordinates", "unsettled"])
+def test_cross_map_destination_coordinates_before_map_require_exact_settlement(fault) -> None:
+    plan, _, _ = connection_plan()
+
+    class CoordinatesFirstWorld(FakeWorld):
+        def execute(self, action):
+            if action.kind is MacroActionKind.MOVE and action.value == "up":
+                self.actions.append(action)
+                self.at = (9, 9) if fault == "wrong_coordinates" else (5, 0)
+                self.ready = fault == "ready"
+                if fault != "unsettled":
+                    self.pending_arrival = (2, (5, 0))
+                return action
+            return super().execute(action)
+
+    world = CoordinatesFirstWorld(transitions={(1, (0, 0), "right"): (1, (0, 1))})
+    if fault:
+        with pytest.raises(RouteExecutionError):
+            execute_route(plan, world, world)
+        assert world.wait_count == int(fault == "unsettled")
+    else:
+        report = execute_route(plan, world, world)
+        assert report.passed and (report.terminal.map_id, report.terminal.at) == (2, (5, 0))
+        assert report.wait_actions == 1 and report.movement_requests == 2
+
+
 def test_one_ledge_input_waits_for_its_declared_intermediate_coordinate() -> None:
     transition = MacroTransition((2, 0), (5, 0), "down")
     local = LocalGraph(
@@ -480,6 +632,42 @@ def test_one_ledge_input_waits_for_its_declared_intermediate_coordinate() -> Non
     assert report.movement_requests == 2
     assert report.wait_actions == 2
     assert (report.terminal.map_id, report.terminal.at) == (2, (5, 0))
+
+
+@pytest.mark.parametrize("settles,drifts", [(True, False), (False, False), (True, True)])
+def test_declared_transient_can_need_multiple_waits_without_another_move(settles, drifts):
+    local = LocalGraph({
+        (0, 0): (LocalEdge((2, 0), "down", kind="ledge", transient=(1, 0)),),
+        (2, 0): (),
+    })
+    plan = plan_route(MacroGraph({1: ()}), {1: local}, 1, (0, 0), 1, goal_at=(2, 0))
+
+    class SlowWorld(FakeWorld):
+        def execute(self, action):
+            if action.kind is MacroActionKind.WAIT and self.pending_arrival is not None:
+                self.actions.append(action)
+                self.wait_count += 1
+                if settles and self.wait_count == 3:
+                    self.map_id, self.at = self.pending_arrival
+                    if drifts:
+                        self.at = (3, 0)
+                    self.pending_arrival = None
+                    self.ready = True
+                return action
+            result = super().execute(action)
+            if self.pending_arrival is not None:
+                self.ready = False
+            return result
+
+    world = SlowWorld(staged_transitions={(1, (0, 0), "down"): (1, (1, 0), (2, 0))})
+    if settles and not drifts:
+        report = execute_route(plan, world, world)
+        assert report.passed and report.terminal.at == (2, 0)
+        assert report.wait_actions == 3
+    else:
+        with pytest.raises(RouteExecutionError):
+            execute_route(plan, world, world, limits=RouteExecutionLimits(max_readiness_waits=4))
+    assert sum(action.kind is MacroActionKind.MOVE for action in world.actions) == 1
 
 
 def test_an_interruption_does_not_consume_a_same_coordinate_step() -> None:
@@ -834,6 +1022,152 @@ def test_route_drift_fails_instead_of_becoming_a_replan() -> None:
     assert caught.value.failure.movement_requests == 1
     assert caught.value.failure.last_observation is not None
     assert caught.value.failure.last_observation.at == (9, 9)
+
+
+@pytest.mark.parametrize("transition", [False, True])
+@pytest.mark.parametrize("fault", [None, "not_allowed", "wrong_receipt", "other_map",
+                                  "not_ready", "changed_goal", "no_replanner"])
+def test_declared_script_landing_replans_without_acknowledging_wrong_step(transition, fault):
+    if transition:
+        plan, macro, local = connection_plan()
+        target_map, landing, goal = 2, (5, 1), (5, 0)
+        world = FakeWorld(transitions={
+            (1, (0, 0), "right"): (1, (0, 1)),
+            (1, (0, 1), "up"): (2, (5, 0)),
+            (2, landing, "left"): (2, goal),
+        }, interruptions_after_waits={1: "scripted_dialogue"})
+    else:
+        target_map, landing, goal = 1, (0, 2), (0, 1)
+        macro = MacroGraph({1: ()})
+        local = {1: LocalGraph({(0, 0): (LocalEdge(goal, "right"),), goal: ()})}
+        plan = plan_route(macro, local, 1, (0, 0), 1, goal_at=goal)
+        world = FakeWorld(interrupt_on={(1, (0, 0), "right"): "scripted_dialogue"},
+                          transitions={(1, landing, "left"): (1, goal)})
+    local[target_map] = LocalGraph({landing: (LocalEdge(goal, "left"),), goal: ()})
+    requests = []
+
+    class Handler:
+        def handle(self, interruption):
+            world.interruption = None
+            world.at = landing
+            world.map_id = 99 if fault == "other_map" else target_map
+            world.ready = fault != "not_ready"
+            return InterruptionReceipt("scripted_dialogue", world.map_id,
+                (9, 9) if fault == "wrong_receipt" else world.at,
+                allows_relocation=fault != "not_allowed")
+
+    def replan(request):
+        requests.append(request)
+        assert request.goal_map == target_map and request.goal_at == goal
+        assert request.current.at == landing and not request.blocked.get(target_map)
+        return plan_route(MacroGraph({target_map: ()}), local, target_map, landing,
+                          target_map, goal_at=landing if fault == "changed_goal" else goal)
+
+    if fault:
+        with pytest.raises(RouteExecutionError):
+            execute_route(plan, world, world, interruption_handler=Handler(),
+                          replanner=None if fault == "no_replanner" else replan)
+        assert not any(a.value == "left" for a in world.actions)
+    else:
+        report = execute_route(plan, world, world, interruption_handler=Handler(), replanner=replan)
+        assert report.passed and len(requests) == 1
+        assert [r.reason for r in report.replans] == ["declared_interruption_landing"]
+        assert report.movement_requests == 2 + int(transition)
+        assert len(report.executed_steps) == 1 + int(transition)
+
+
+def test_script_landing_cannot_exhaust_replan_budget_and_keep_moving():
+    goal = (0, 1)
+    macro = MacroGraph({1: ()})
+    local = {1: LocalGraph({(0, 0): (LocalEdge(goal, "right"),),
+                           (0, 2): (LocalEdge(goal, "left"),), goal: ()})}
+    plan = plan_route(macro, local, 1, (0, 0), 1, goal_at=goal)
+    world = FakeWorld(interrupt_on={(1, (0, 0), "right"): "scripted_dialogue",
+                                   (1, (0, 2), "left"): "scripted_dialogue"})
+
+    class Handler:
+        def handle(self, interruption):
+            world.at = (0, 2) if world.at == (0, 0) else (0, 3)
+            world.interruption = None
+            return InterruptionReceipt("scripted_dialogue", 1, world.at, allows_relocation=True)
+
+    def replan(request):
+        return plan_route(macro, local, 1, request.current.at, 1, goal_at=goal)
+
+    with pytest.raises(RouteExecutionError, match="drifted") as caught:
+        execute_route(plan, world, world, interruption_handler=Handler(), replanner=replan,
+                      limits=replace(RouteExecutionLimits(), max_replans=1))
+    assert len(caught.value.failure.replans) == 1 and len(world.actions) == 2
+
+
+@pytest.mark.parametrize("value", [1, None, "yes"])
+def test_interruption_relocation_requires_explicit_boolean(value):
+    with pytest.raises(ValueError, match="boolean"):
+        InterruptionReceipt("scripted_dialogue", 1, (0, 0), allows_relocation=value)
+
+
+@pytest.mark.parametrize("fault", [
+    None, "disabled", "wrong_source", "changed_goal", "no_replanner",
+])
+def test_verified_native_map_transition_replans_only_to_the_original_goal(fault):
+    goal, landing = (0, 1), (5, 1)
+    local = {
+        1: LocalGraph({(0, 0): (LocalEdge(goal, "right"),),
+                       goal: (LocalEdge((1, 1), "down"),),
+                       (1, 1): (LocalEdge(goal, "up"),)}),
+        2: LocalGraph({landing: (LocalEdge((5, 0), "left"),), (5, 0): ()}),
+    }
+    macro = MacroGraph({1: (), 2: (MacroEdge(1, coordinate_transitions=(
+        MacroTransition((5, 0), goal, "down"),)),)})
+    plan = plan_route(macro, local, 1, (0, 0), 1, goal_at=goal)
+    world = FakeWorld(interrupt_on={(1, (0, 0), "right"): "native_ship_departure"},
+                      transitions={(2, landing, "left"): (2, (5, 0)),
+                                   (2, (5, 0), "down"): (1, goal)})
+    requests = []
+
+    class Handler:
+        def handle(self, interruption):
+            world.map_id, world.at, world.interruption = 2, landing, None
+            return InterruptionReceipt("native_ship_departure", 2, landing,
+                dict(verified=True, source_map=99 if fault == "wrong_source" else 1),
+                allows_relocation=True, allows_map_transition=fault != "disabled")
+
+    def replan(request):
+        requests.append(request)
+        assert request.goal_map == 1 and request.goal_at == goal
+        return plan_route(macro, local, 2, landing,
+                          2 if fault == "changed_goal" else 1,
+                          goal_at=(5, 0) if fault == "changed_goal" else goal)
+
+    if fault:
+        with pytest.raises(RouteExecutionError):
+            execute_route(plan, world, world, interruption_handler=Handler(),
+                          replanner=None if fault == "no_replanner" else replan)
+        assert not any(a.value == "left" for a in world.actions)
+    else:
+        report = execute_route(plan, world, world, interruption_handler=Handler(), replanner=replan)
+        assert report.passed and world.map_id == 1 and world.at == goal
+        assert len(requests) == 1 and report.movement_requests == 3
+        assert len(report.executed_steps) == 2
+
+
+@pytest.mark.parametrize("value", [1, None, "yes"])
+def test_native_map_transition_permission_must_be_boolean(value):
+    with pytest.raises(ValueError, match="boolean"):
+        InterruptionReceipt("native_ship_departure", 2, (0, 0), allows_map_transition=value)
+
+
+@pytest.mark.parametrize("options", [dict(allows_relocation=False),
+    dict(details={"verified": False, "source_map": 1}), dict(details={"verified": True}),
+    dict(details={"verified": True, "source_map": True}),
+    dict(details={"verified": True, "source_map": -1}),
+    dict(details={"verified": True, "source_map": 2})])
+def test_native_map_transition_requires_a_verified_distinct_source(options):
+    kwargs = dict(allows_relocation=True, allows_map_transition=True,
+                  details={"verified": True, "source_map": 1})
+    kwargs.update(options)
+    with pytest.raises(ValueError, match="verified declared"):
+        InterruptionReceipt("native_ship_departure", 2, (0, 0), **kwargs)
 
 
 def test_replanner_failure_retains_the_acknowledged_prefix() -> None:

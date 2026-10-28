@@ -6,7 +6,7 @@ from pokemon_red_completion.observation import ItemId
 
 @pytest.mark.parametrize("item,expected", [
     (ItemId.POTION, 32), (ItemId.SUPER_POTION, 62), (ItemId.HYPER_POTION, 100),
-    (ItemId.FULL_RESTORE, 100), (ItemId.FULL_HEAL, 12),
+    (ItemId.FULL_RESTORE, 100), (ItemId.MAX_POTION, 100), (ItemId.FULL_HEAL, 12),
 ])
 def test_recovery_amounts_match_early_and_late_stock(item, expected):
     from pokemon_red_completion.field_recovery import recovery_item_hp
@@ -20,6 +20,14 @@ def test_unsupported_recovery_item_is_not_a_hyper_potion():
 
     with pytest.raises(FieldRecoveryError, match="unsupported"):
         recovery_item_hp(ItemId.POKE_BALL, 12, 100)
+
+
+def test_max_potion_recovers_more_than_hyper_potion():
+    from pokemon_red_completion.field_recovery import recovery_item_hp
+
+    assert int(ItemId.MAX_POTION) == 0x11
+    assert recovery_item_hp(ItemId.MAX_POTION, 1, 400) == 400
+    assert recovery_item_hp(ItemId.HYPER_POTION, 1, 400) == 201
 
 
 def test_party_recovery_targets_each_affected_member() -> None:

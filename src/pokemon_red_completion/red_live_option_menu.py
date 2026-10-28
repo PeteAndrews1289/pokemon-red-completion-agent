@@ -20,11 +20,14 @@ import random
 import re
 from dataclasses import dataclass, replace
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
     GoalKind,
     GoalSelectionMode,
     GoalSituation,
+    GoalUnavailableReason,
 )
 from pokemon_red_completion.goal_manager_runtime import (
     CompletionFirstGoalTeacher,
@@ -47,6 +50,15 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+
+if TYPE_CHECKING:
+    from .red_consequence_choice import BranchRecoveryDecision
+
+from .player_option_challenge import OptionChallenge
+from .player_option_preparation import OptionPreparation
+from .player_option_level_workload import OptionLevelWorkload
+from .player_readiness import PlayerReadiness
+from .player_sequence_policy import SequenceChoiceContext, SequencePolicy
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 RED_LIVE_MIXED_OPTION_POLICY = "red-live-mixed-option-v1"
@@ -101,7 +113,9 @@ class RedLiveOptionSelectionMode(StrEnum):
     """Which authority selected the private binding."""
 
     DETERMINISTIC_SAFETY = "deterministic_safety"
+    FORCED_SINGLETON_SUPPORT = "forced_singleton_support"
     MODEL_EXPLORATION = "model_exploration"
+    MODEL_GREEDY = "model_greedy"
     EQUIVALENT_EXPLORATION = "equivalent_exploration"
 
 
@@ -285,8 +299,16 @@ class RedLiveOptionSet:
     bindings: tuple[ExecutableGoalBinding, ...]
     ordinary_binding_refs: frozenset[str]
     ordering_seed_sha256: str
+    force_resource_safety: bool = True
+    preparation_party_witness: object | None = None
 
     def __post_init__(self) -> None:
+        if self.preparation_party_witness is not None:
+            from .player_preparation_party_context import PreparationPartyWitness
+            if type(self.preparation_party_witness) is not PreparationPartyWitness:
+                raise TypeError("private party witness must be typed")
+        if type(self.force_resource_safety) is not bool:
+            raise TypeError("resource safety authority must be an explicit boolean")
         if not isinstance(self.situation, GoalSituation):
             raise TypeError("live option set needs a goal situation")
         if not isinstance(self.original_bindings, GoalBindingSet):
@@ -329,6 +351,7 @@ class RedLiveOptionSet:
             "private_binding_fields": 0,
             "schema": "pokemon.red.live-mixed-option-set.v1",
             "supplemental_candidate_count": (len(self.bindings) - len(self.ordinary_binding_refs)),
+            **({} if self.force_resource_safety else {"resource_authority":"model"}),
         }
 
 
@@ -343,10 +366,58 @@ class RedLiveOptionChoice:
     probabilities: tuple[float, ...]
     seed: int
     model_sha256: str
+    sequence_policy: SequencePolicy | None = None
+    sequence_context: SequenceChoiceContext | None = None
+    consequence_head_sha256: str | None = None
+    branch_recovery: BranchRecoveryDecision | None = None
+    kind_balanced_exploration: bool = False
+    consequence_receipt_json: str | None = None
+    consequence_context_projection: str | None = None
+    consequence_cash_prediction: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.options, RedLiveOptionSet):
             raise TypeError("live mixed-family choice needs a RedLiveOptionSet")
+        if type(self.kind_balanced_exploration) is not bool or (
+            self.kind_balanced_exploration
+            and (
+                self.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
+                or self.sequence_policy is not None
+                or self.consequence_head_sha256 is not None
+                or self.branch_recovery is not None
+            )
+        ):
+            raise RedLiveOptionMenuError("kind-balanced baseline exploration authority differs")
+        if (self.sequence_policy is None) != (self.sequence_context is None):
+            raise RedLiveOptionMenuError("sequence policy and context must accompany each other")
+        if self.sequence_policy is not None:
+            if (
+                type(self.sequence_policy) is not SequencePolicy
+                or type(self.sequence_context) is not SequenceChoiceContext
+                or self.model_sha256 != self.sequence_policy.model_sha256
+            ):
+                raise RedLiveOptionMenuError("sequence choice identity differs")
+            self.sequence_context.vectors(self.options.menu)
+        if self.consequence_head_sha256 is not None and (
+            self.consequence_head_sha256 != self.model_sha256
+            or self.sequence_policy is not None
+            or self.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
+        ):
+            raise RedLiveOptionMenuError("consequence choice authority differs")
+        if self.consequence_context_projection is not None:
+            from .player_preparation_party_context import PARTY_PROJECTION
+            if (self.consequence_context_projection!=PARTY_PROJECTION
+                    or self.consequence_head_sha256 is None
+                    or self.consequence_receipt_json is None or self.branch_recovery is not None
+                    or self.consequence_cash_prediction not in {"independent","certified_single_trainer_v1"}):
+                raise RedLiveOptionMenuError("party-context choice requires explicit direct head receipt")
+        elif self.consequence_cash_prediction is not None:
+            raise RedLiveOptionMenuError("private cash mode marker requires the explicit party context")
+        if self.consequence_receipt_json is not None:
+            if self.consequence_head_sha256 is None or self.branch_recovery is not None:
+                raise RedLiveOptionMenuError("private consequence receipt lacks direct authority")
+            from .red_consequence_choice import validate_consequence_cash_receipt
+            validate_consequence_cash_receipt(self)
         count = len(self.options.menu.candidates)
         if (
             self.selected_candidate_index not in self.options.menu.available_indices
@@ -375,15 +446,28 @@ class RedLiveOptionChoice:
             or sum(value > 0.0 for value in self.probabilities) != 1
         ):
             raise RedLiveOptionMenuError("safety choice retained model authority")
+        if self.mode is RedLiveOptionSelectionMode.FORCED_SINGLETON_SUPPORT and (
+            any(value is not None for value in self.scores)
+            or sum(value > 0.0 for value in self.probabilities) != 1
+            or self.sequence_policy is not None or self.consequence_head_sha256 is not None
+        ):
+            raise RedLiveOptionMenuError("forced singleton parent retained model authority")
         if self.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION:
             available = self.options.menu.available_indices
             if (
                 len(available) < 2
                 or any(value is not None for value in self.scores)
-                or len({
-                    self.options.menu.candidate_vector(index)
-                    for index in available
-                }) != 1
+                or len(
+                    {
+                        (
+                            self.options.menu.candidate_vector(index)
+                            if self.sequence_context is None
+                            else self.sequence_context.vectors(self.options.menu)[index]
+                        )
+                        for index in available
+                    }
+                )
+                != 1
                 or any(
                     not math.isclose(
                         probability,
@@ -394,14 +478,38 @@ class RedLiveOptionChoice:
                 )
             ):
                 raise RedLiveOptionMenuError("equivalent exploration differs")
+        if self.mode is RedLiveOptionSelectionMode.MODEL_GREEDY:
+            available = self.options.menu.available_indices
+            if self.sequence_policy is not None or any(self.scores[i] is None for i in available):
+                raise RedLiveOptionMenuError("highest-score authority differs")
+            peak = max(self.scores[i] for i in available)
+            best = tuple(i for i in available if self.scores[i] == peak)
+            if any(p != (1.0 / len(best) if i in best else 0.0)
+                   for i, p in enumerate(self.probabilities)):
+                raise RedLiveOptionMenuError("highest-score probabilities differ")
+        if self.branch_recovery is not None:
+            from .red_consequence_choice import BranchRecoveryDecision
+
+            if type(self.branch_recovery) is not BranchRecoveryDecision:
+                raise RedLiveOptionMenuError("branch recovery requires a typed decision receipt")
+            self.branch_recovery.validate(self)
 
     @property
     def selected_binding(self) -> ExecutableGoalBinding:
         return self.options.binding(self.selected_candidate_index)
 
+    def private_consequence_receipt(self):
+        """Existing native recorder persists this before input; never a feature."""
+        if self.consequence_receipt_json is not None:
+            from .red_consequence_choice import validate_consequence_cash_receipt
+            return validate_consequence_cash_receipt(self)
+        if self.branch_recovery is not None and self.branch_recovery.child is not None:
+            return self.branch_recovery.child.private_consequence_receipt()
+        return None
+
     def public_dict(self) -> dict[str, object]:
         candidate = self.options.menu.candidates[self.selected_candidate_index]
-        return {
+        result: dict[str, object] = {
             "actions_executed": 0,
             "candidate_count": len(self.options.menu.candidates),
             "emulator_frames": 0,
@@ -418,6 +526,34 @@ class RedLiveOptionChoice:
             "selected_option_kind": candidate.features.kind.value,
             "teacher_labels": 0,
         }
+        if not self.options.force_resource_safety:
+            result["resource_authority"] = "model"
+        if self.kind_balanced_exploration:
+            result["policy_id"] = "red-live-kind-balanced-option-v1"
+            result["sampling_rule"] = "mean_exponential_weight_per_public_option_kind"
+        if self.sequence_policy is not None:
+            assert self.sequence_context is not None
+            result["policy_id"] = "red-live-mixed-sequence-option-v1"
+            result["sequence"] = dict(
+                baseline_sha256=self.sequence_policy.baseline_sha256,
+                head_sha256=self.sequence_policy.head.model_sha256,
+                context_sha256=canonical_sha256(self.sequence_context.document()),
+            )
+        if self.consequence_head_sha256 is not None:
+            result["policy_id"] = "red-live-challenge-consequence-v2"
+            result["consequence"] = dict(
+                head_sha256=self.consequence_head_sha256,
+                selection_rule="maximum_score_then_lowest_menu_index",
+                provisional=True,
+            )
+            if self.consequence_receipt_json is not None:
+                result["consequence"]["cash_accounting_receipt_sha256"] = (
+                    self.private_consequence_receipt()["choice_sha256"])
+
+        if self.branch_recovery is not None:
+            result["policy_id"] = "red-live-branch-recovery-v1"
+            result["branch_recovery"] = self.branch_recovery.document()
+        return result
 
 
 def build_red_live_option_set(
@@ -427,9 +563,14 @@ def build_red_live_option_set(
     supplements: tuple[RedLiveSupplementalOption, ...],
     model_feature_version: int,
     ordering_seed_sha256: str,
+    readiness: PlayerReadiness | None = None,
+    challenges=None,
+    preparations=None,
+    matchups=None,
     economy_snapshot: EconomySnapshot | None = None,
     target_cash: int | None = None,
     safety: CompletionFirstGoalTeacher | None = None,
+    force_resource_safety: bool = True,
 ) -> RedLiveOptionSet:
     """Compose ordinary goals and concrete mechanisms into one model menu."""
 
@@ -441,7 +582,7 @@ def build_red_live_option_set(
         not isinstance(item, RedLiveSupplementalOption) for item in supplements
     ):
         raise TypeError("mixed live menu supplements must be immutable")
-    if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4}:
+    if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15}:
         raise RedLiveOptionMenuError("mixed live menu feature version differs")
     if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(ordering_seed_sha256) is None:
         raise RedLiveOptionMenuError("mixed live menu ordering seed differs")
@@ -475,6 +616,7 @@ def build_red_live_option_set(
                 index,
                 feature_version=model_feature_version,
                 binding_ref=opportunity.binding_ref,
+                readiness=readiness,
             )
             if candidate is None:
                 continue
@@ -489,11 +631,101 @@ def build_red_live_option_set(
         )
         if expected_kind is None or supplement.candidate.features.kind is not expected_kind:
             raise RedLiveOptionMenuError("supplemental executor and portable option kind differ")
-        rows.append((supplement.binding, supplement.candidate, False))
+        if (
+            supplement.candidate.readiness is not None
+            and supplement.candidate.readiness != readiness
+        ):
+            raise RedLiveOptionMenuError("supplement readiness differs from live context")
+        rows.append((supplement.binding, replace(supplement.candidate, readiness=readiness), False))
 
+    # The generic setup prior assumes one selected phase grants access. A
+    # certified approach-only binding needs at least one further selected phase:
+    # retain potential access with a conservative two-phase prior instead of
+    # advertising the same gain as the native reward. This is disclosed support,
+    # not a success probability, learned weight, teacher label or goal override.
+    # Apply equally to ordinary and supplemental rows, without reading IDs.
+    rows = [
+        (
+            binding,
+            replace(candidate, features=replace(
+                candidate.features,
+                dependency_unlock_gain=candidate.features.dependency_unlock_gain / 2,
+            )) if binding.story_approach_only else candidate,
+            ordinary,
+        )
+        for binding, candidate, ordinary in rows
+    ]
     refs = tuple(binding.binding_ref for binding, _candidate, _ordinary in rows)
     if len(rows) < 2 or len(set(refs)) != len(refs):
-        raise RedLiveOptionMenuError("mixed live menu needs distinct executable candidates")
+        raise RedLiveOptionMenuError(
+            "mixed live menu needs distinct executable candidates: "
+            f"count={len(rows)}, bindings={refs!r}"
+        )
+    if challenges is not None:
+        if (
+            model_feature_version < 6
+            or not isinstance(challenges, dict)
+            or not challenges.keys() <= set(refs)
+            or any(not isinstance(v, OptionChallenge) for v in challenges.values())
+        ):
+            raise RedLiveOptionMenuError(
+                "challenge previews require V6 and live binding identities"
+            )
+        rows = [
+            (binding, replace(candidate, challenge=challenges.get(binding.binding_ref)), ordinary)
+            for binding, candidate, ordinary in rows
+        ]
+
+    if preparations is not None:
+        if (
+            model_feature_version < 7
+            or not isinstance(preparations, dict)
+            or not preparations.keys() <= set(refs)
+            or any(not isinstance(v, OptionPreparation) for v in preparations.values())
+        ):
+            raise RedLiveOptionMenuError("preparation previews require V7 and live bindings")
+        def with_preparation(candidate, descriptor):
+            workload = candidate.level_workload
+            if model_feature_version >= 9 and descriptor is not None:
+                observed = OptionLevelWorkload(
+                    descriptor.current_level, descriptor.target_level, descriptor.remaining_xp,
+                )
+                if workload is not None and workload != observed:
+                    raise RedLiveOptionMenuError("preparation workload contradicts measured intent")
+                workload = observed
+            return replace(candidate, preparation=descriptor, level_workload=workload)
+
+        rows = [
+            (
+                binding,
+                with_preparation(candidate, preparations.get(binding.binding_ref)),
+                ordinary,
+            )
+            for binding, candidate, ordinary in rows
+        ]
+
+    if matchups is not None:
+        from .player_option_matchup import OptionMatchup
+
+        if (
+            model_feature_version != 15
+            or not isinstance(matchups, dict)
+            or not matchups.keys() <= set(refs)
+            or any(not isinstance(value, OptionMatchup) for value in matchups.values())
+        ):
+            raise RedLiveOptionMenuError("matchup observations require V15 and live bindings")
+        for binding, candidate, _ordinary in rows:
+            if binding.binding_ref in matchups and (
+                binding.kind is not GoalKind.ADVANCE_STORY
+                or binding.story_approach_only
+                or candidate.challenge is None
+                or not candidate.challenge.combat_required
+            ):
+                raise RedLiveOptionMenuError("matchup observation needs current direct combat")
+        rows = [
+            (binding, replace(candidate, matchup=matchups.get(binding.binding_ref)), ordinary)
+            for binding, candidate, ordinary in rows
+        ]
 
     def ordering_key(index: int) -> str:
         return canonical_sha256(
@@ -526,6 +758,7 @@ def build_red_live_option_set(
         tuple(binding for binding, _candidate, _ordinary in ordered),
         frozenset(binding.binding_ref for binding, _candidate, ordinary in ordered if ordinary),
         ordering_seed_sha256,
+        force_resource_safety,
     )
 
 
@@ -538,6 +771,10 @@ def select_red_live_option(
     utility: LivingDexOptionUtility = DEFAULT_LIVING_DEX_GOAL_UTILITY,
     safety: CompletionFirstGoalTeacher | None = None,
     allow_earning_exploration: bool = False,
+    greedy_selection: bool = False,
+    kind_balanced_exploration: bool = True,
+    sequence_policy: SequencePolicy | None = None,
+    sequence_context: SequenceChoiceContext | None = None,
 ) -> RedLiveOptionChoice:
     """Select one private binding without executing it or creating a teacher label."""
 
@@ -561,74 +798,41 @@ def select_red_live_option(
         raise TypeError("mixed live selection needs a safety policy")
     if type(allow_earning_exploration) is not bool:
         raise TypeError("earning exploration opt-in must be boolean")
+    if type(greedy_selection) is not bool:
+        raise TypeError("highest-score selection opt-in must be boolean")
+    if type(kind_balanced_exploration) is not bool:
+        raise TypeError("kind-balanced exploration must be boolean")
+    if greedy_selection and (sequence_policy is not None or sequence_context is not None):
+        raise RedLiveOptionMenuError("highest-score selection cannot combine with sequence policy")
     if model.feature_version < options.menu.feature_version:
         raise RedLiveOptionMenuError("mixed live menu exceeds the fitted model")
+    if (sequence_policy is None) != (sequence_context is None):
+        raise RedLiveOptionMenuError("sequence policy and context must accompany each other")
+    model_sha256 = model.model_sha256
+    vectors = tuple(options.menu.candidate_vector(i) for i in range(len(options.bindings)))
+    if sequence_policy is not None:
+        if (
+            type(sequence_policy) is not SequencePolicy
+            or type(sequence_context) is not SequenceChoiceContext
+        ):
+            raise RedLiveOptionMenuError("sequence policy/context types differ")
+        sequence_policy.validate_selection(
+            model, options.menu, sequence_context, utility=utility, exploration_mix=exploration_mix
+        )
+        model_sha256 = sequence_policy.model_sha256
+        vectors = sequence_context.vectors(options.menu)
 
-    question = (
-        options.original_bindings.question(options.situation)
-        if options.original_bindings.bindings
-        else None
+    safety_choice = _red_live_option_safety_choice(
+        options, seed=seed, model_sha256=model_sha256, safety=safety,
+        allow_earning_exploration=allow_earning_exploration,
+        sequence_policy=sequence_policy, sequence_context=sequence_context,
     )
-    deterministic = None if question is None else safety.select(question)
-    relax_earning = False
-    if question is not None and deterministic is not None:
-        selected_opportunity = question.opportunities[deterministic.selected_index]
-        relax_earning = (
-            allow_earning_exploration
-            and selected_opportunity.kind is GoalKind.RESUPPLY
-            and selected_opportunity.resource_quote is not None
-            and selected_opportunity.resource_quote.expected_income > 0
-            and options.menu.context.economy_snapshot is not None
-            and options.menu.context.target_cash is not None
-            and options.menu.context.target_cash > options.menu.context.economy_snapshot.cash
-        )
-    safety_forced = deterministic is not None and (
-        deterministic.kind is GoalKind.RECOVER_CONTROL
-        or (
-            deterministic.kind is GoalKind.RESTORE_TEAM
-            and options.situation.safety_pressure >= safety.safety_gate
-        )
-        or (
-            deterministic.kind is GoalKind.MANAGE_STORAGE
-            and options.situation.storage_pressure >= safety.storage_gate
-        )
-        or (
-            deterministic.kind is GoalKind.RESUPPLY
-            and options.situation.resource_pressure >= safety.resource_gate
-            and not relax_earning
-        )
-    )
-    if safety_forced:
-        assert deterministic is not None
-        try:
-            selected_index = next(
-                index
-                for index, binding in enumerate(options.bindings)
-                if binding.binding_ref == deterministic.binding_ref
-            )
-        except StopIteration as error:
-            raise RedLiveOptionMenuError(
-                "safety-selected goal is absent from the mixed menu"
-            ) from error
-        probabilities = tuple(
-            1.0 if index == selected_index else 0.0 for index in range(len(options.bindings))
-        )
-        return RedLiveOptionChoice(
-            options,
-            selected_index,
-            RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY,
-            (None,) * len(options.bindings),
-            probabilities,
-            seed,
-            model.model_sha256,
-        )
+    if safety_choice is not None:
+        return safety_choice
 
     # Identical inputs cannot express a target preference. Sample uniformly
     # from the real options, with a separate mode and no model query.
-    if len({
-        options.menu.candidate_vector(i)
-        for i in options.menu.available_indices
-    }) < 2:
+    if len({vectors[i] for i in options.menu.available_indices}) < 2:
         available = options.menu.available_indices
         probabilities = tuple(
             1.0 / len(available) if index in available else 0.0
@@ -641,9 +845,15 @@ def select_red_live_option(
             (None,) * len(options.bindings),
             probabilities,
             seed,
-            model.model_sha256,
+            model_sha256,
+            sequence_policy,
+            sequence_context,
         )
-    raw_scores = model.scores(options.menu, utility)
+    if sequence_policy is None:
+        raw_scores = model.scores(options.menu, utility)
+    else:
+        assert sequence_context is not None
+        raw_scores = sequence_policy.scores(model, options.menu, sequence_context)
     if len(raw_scores) != len(options.bindings):
         raise RedLiveOptionMenuError("mixed live model score width differs")
     available = options.menu.available_indices
@@ -654,12 +864,36 @@ def select_red_live_option(
             raise RedLiveOptionMenuError("mixed live model returned invalid scores")
         concrete.append(value)
     peak = max(concrete)
+    if greedy_selection:
+        best = tuple(i for i in available if raw_scores[i] == peak)
+        return RedLiveOptionChoice(
+            options, random.Random(seed).choice(best), RedLiveOptionSelectionMode.MODEL_GREEDY,
+            tuple(None if value is None else float(value) for value in raw_scores),
+            tuple(1.0 / len(best) if i in best else 0.0 for i in range(len(options.bindings))),
+            seed, model_sha256,
+        )
     exponentials = [math.exp(value - peak) for value in concrete]
+    balanced = kind_balanced_exploration and sequence_policy is None
+    kind_counts = {
+        kind: sum(options.menu.candidates[i].features.kind == kind for i in available)
+        for kind in {options.menu.candidates[i].features.kind for i in available}
+    }
+    if balanced:
+        # A family with more legitimate variants should not gain sampling mass
+        # solely from its menu width. Use policy-visible kinds, never targets.
+        exponentials = [
+            weight / kind_counts[options.menu.candidates[index].features.kind]
+            for index, weight in zip(available, exponentials, strict=True)
+        ]
     total = sum(exponentials)
     mix = float(exploration_mix)
     probabilities_list = [0.0] * len(options.bindings)
     for index, weight in zip(available, exponentials, strict=True):
-        probabilities_list[index] = (1.0 - mix) * weight / total + mix / len(available)
+        exploration_weight = (
+            1.0 / (len(kind_counts) * kind_counts[options.menu.candidates[index].features.kind])
+            if balanced else 1.0 / len(available)
+        )
+        probabilities_list[index] = (1.0 - mix) * weight / total + mix * exploration_weight
     selected_index = random.Random(seed).choices(
         range(len(probabilities_list)),
         weights=probabilities_list,
@@ -673,7 +907,10 @@ def select_red_live_option(
         scores,
         tuple(probabilities_list),
         seed,
-        model.model_sha256,
+        model_sha256,
+        sequence_policy,
+        sequence_context,
+        kind_balanced_exploration=balanced,
     )
 
 
@@ -719,3 +956,95 @@ __all__ = [
     "select_red_live_option",
     "supplemental_live_option",
 ]
+
+
+def _red_live_option_safety_choice(options, *, seed, model_sha256, safety,
+                                   allow_earning_exploration, sequence_policy=None,
+                                   sequence_context=None):
+    """Shared existing safety shell. Never queries a model or selects a fallback."""
+    question = (
+        options.original_bindings.question(options.situation)
+        if options.original_bindings.bindings
+        else None
+    )
+    safety_question = question
+    if question is not None:
+        pp_only = {
+            b.binding_ref for b in options.original_bindings.bindings
+            if not b.health_safety_recovery
+        }
+        if pp_only:
+            # Mask only the health-safety override's inventory. The model still
+            # receives the identical actual PP option, feature vector and stock.
+            safety_question = replace(question, opportunities=tuple(
+                replace(o, availability=GoalAvailability.UNAVAILABLE,
+                        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                        estimated_effort=None, estimated_risk=None, resource_quote=None)
+                if o.binding_ref in pp_only else o for o in question.opportunities
+            ))
+    deterministic = None if safety_question is None else safety.select(safety_question)
+    relax_earning = False
+    if question is not None and deterministic is not None:
+        selected_opportunity = question.opportunities[deterministic.selected_index]
+        relax_earning = (
+            allow_earning_exploration
+            and selected_opportunity.kind is GoalKind.RESUPPLY
+            and selected_opportunity.resource_quote is not None
+            and selected_opportunity.resource_quote.expected_income > 0
+            and options.menu.context.economy_snapshot is not None
+            and options.menu.context.target_cash is not None
+            and options.menu.context.target_cash > options.menu.context.economy_snapshot.cash
+        )
+    safety_forced = deterministic is not None and (
+        deterministic.kind is GoalKind.RECOVER_CONTROL
+        or (
+            deterministic.kind is GoalKind.RESTORE_TEAM
+            and options.situation.safety_pressure >= safety.safety_gate
+        )
+        or (
+            deterministic.kind is GoalKind.MANAGE_STORAGE
+            and options.situation.storage_pressure >= safety.storage_gate
+        )
+        or (
+            deterministic.kind is GoalKind.RESUPPLY
+            and options.situation.resource_pressure >= safety.resource_gate
+            and not relax_earning
+            and options.force_resource_safety
+        )
+    )
+    if safety_forced:
+        assert deterministic is not None
+        try:
+            selected_index = next(
+                index
+                for index, binding in enumerate(options.bindings)
+                if binding.binding_ref == deterministic.binding_ref
+            )
+        except StopIteration as error:
+            raise RedLiveOptionMenuError(
+                "safety-selected goal is absent from the mixed menu"
+            ) from error
+        probabilities = tuple(
+            1.0 if index == selected_index else 0.0 for index in range(len(options.bindings))
+        )
+        return RedLiveOptionChoice(
+            options,
+            selected_index,
+            RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY,
+            (None,) * len(options.bindings),
+            probabilities,
+            seed,
+            model_sha256,
+            sequence_policy,
+            sequence_context,
+        )
+
+    return None
+
+
+def select_red_live_safety_option(model, options, *, seed, allow_earning_exploration=False):
+    """Observe the existing deterministic safety decision before parent deferral."""
+    if not isinstance(model, LivingDexOptionValueModel) or not isinstance(options, RedLiveOptionSet):
+        raise TypeError("live safety selection requires the existing typed model/menu")
+    return _red_live_option_safety_choice(options, seed=seed, model_sha256=model.model_sha256,
+        safety=CompletionFirstGoalTeacher(), allow_earning_exploration=allow_earning_exploration)

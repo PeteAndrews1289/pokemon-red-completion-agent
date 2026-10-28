@@ -1,14 +1,16 @@
 """Rebuild a mixed collection menu from each live state without a chosen route."""
 
+from collections.abc import Callable
 from dataclasses import replace
 
 from .executor import CountingExecutor
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
-from .goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
+from .goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet, GoalExecutionReport
 from .living_dex_goal_policy import project_living_dex_goal_candidate
+from .player_readiness import PlayerReadiness
 from .red_autonomous_fishing import autonomous_fishing_options
 from .red_autonomous_league_funding import bind_autonomous_league_funding
-from .red_autonomous_safari import autonomous_safari_options
+from .red_autonomous_safari import autonomous_safari_funding_quote, autonomous_safari_options
 from .red_bounded_player import RedBoundedPlayerObserver
 from .red_capture_funding_budget import red_capture_funding_budget
 from .red_full_pokedex_direct_profile import derive_direct_full_pokedex_profile
@@ -29,9 +31,14 @@ from .red_live_option_menu import (
 )
 from .red_native_boxed_evolution import bind_native_boxed_evolution
 from .red_native_boxed_item_evolution import bind_native_boxed_item_evolution
+from .red_npc_trade_options import npc_trade_bindings
+from .red_player_support import RedPlayerSupport
 from .red_regional_acquisition import enumerate_red_regional_acquisitions
+from .red_regional_trainer_funding import FundingGateTransit
 from .red_resource_economy import red_economy_snapshot
 from .red_resource_goal_router import RedResourceGoalRouter
+from .red_scripted_gift import scripted_gift_bindings
+from .red_trade_dependency_options import npc_trade_dependency_bindings
 from .resource_economy_observation import EconomySnapshot
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
@@ -98,13 +105,52 @@ def autonomous_collection_options(
     maximum_actions: int = 30_000,
     maximum_frames: int = 3_000_000,
     maximum_evolution_quanta: int = 128,
-) -> RedLiveOptionSet:
+    include_league_funding: bool = True,
+    include_game_corner: bool = False,
+    include_coin_procurement: bool = False,
+    allow_support: bool = False,
+    readiness: PlayerReadiness | None = None,
+    fishing_fast_transport: bool = False,
+    funding_gate_transit: FundingGateTransit | None = None,
+    additional_acquisitions: tuple[ExecutableGoalBinding, ...] = (),
+    league_postgame_return: Callable[[], GoalExecutionReport] | None = None,
+) -> RedLiveOptionSet | RedPlayerSupport:
     """Expose up to eight real capture destinations alongside ordinary goals.
 
     Capture destinations, stone targets and boxed level alternatives each retain
     their own executors. Mechanical execution remains deterministic support.
     No source/species identity is projected into policy features.
     """
+    if type(include_league_funding) is not bool:
+        raise ValueError("League funding scope must be an explicit boolean")
+    if league_postgame_return is not None and (
+        not include_league_funding or not callable(league_postgame_return)
+    ):
+        raise ValueError("League return requires explicit enabled funding and a callable")
+    if type(fishing_fast_transport) is not bool:
+        raise ValueError("fishing transport scope must be an explicit boolean")
+    if type(include_game_corner) is not bool:
+        raise ValueError("Game Corner scope must be an explicit boolean")
+    if type(include_coin_procurement) is not bool or (
+        include_coin_procurement and not include_game_corner
+    ):
+        raise ValueError("Coin procurement requires explicit enabled Game Corner scope")
+    if not isinstance(additional_acquisitions, tuple) or any(
+        not isinstance(binding, ExecutableGoalBinding)
+        or binding.kind is not GoalKind.ACQUIRE_SPECIES
+        for binding in additional_acquisitions
+    ):
+        raise ValueError("additional acquisitions require immutable acquisition bindings")
+    if len({b.binding_ref for b in additional_acquisitions}) != len(additional_acquisitions):
+        raise ValueError("additional acquisition bindings must be distinct")
+    if funding_gate_transit is not None and not isinstance(
+        funding_gate_transit, FundingGateTransit,
+    ):
+        raise ValueError("collection funding transit requires a typed bounded inventory")
+    if type(allow_support) is not bool or (
+        allow_support and not isinstance(readiness, PlayerReadiness)
+    ):
+        raise ValueError("explicit support scope requires actual player readiness")
     if runtime.registration_policy is None:
         raise ValueError("autonomous collection requires a registered objective")
     runtime = replace(
@@ -115,13 +161,22 @@ def autonomous_collection_options(
         ),
     )
     live = runtime.adapter.observe()
-    profile = derive_direct_full_pokedex_profile(runtime.profile, live, world)
+    # An exhausted evolution category must not gate independent collection goals.
+    # Keep the original transport declarations for per-target enumeration below.
+    evolution_runtime = runtime
+    profile = derive_direct_full_pokedex_profile(
+        runtime.profile, live, world, require_evolution=False,
+    )
     profile = bind_funding_fly_profile(
         bind_mart_funding_departure_profile(bind_composable_trainer_funding_profile(profile))
     )
     runtime = replace(runtime, profile=profile)
-    evolution = next(spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES)
-    if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+    evolution = next(
+        (spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES), None,
+    )
+    if evolution is None:
+        native = runtime
+    elif evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
         native = bind_native_boxed_item_evolution(runtime, world, allow_cross_box=True)
     else:
         native = bind_native_boxed_evolution(
@@ -134,6 +189,15 @@ def autonomous_collection_options(
     if economy is None:
         raise ValueError("autonomous collection requires observed resources")
     target_cash = autonomous_capture_funding_target_cash(native, actions, economy)
+    safari_quote = autonomous_safari_funding_quote(native, live, world)
+    if safari_quote is not None:
+        # Liquidity for either Mart capture items or single Safari admission.
+        # This is liquidity for either alternative, NOT a declaration that both
+        # purchases are jointly funded. Do not sum unrelated purchases.
+        target_cash = max(target_cash, safari_quote.admission_cost)
+    if include_coin_procurement:
+        from .red_game_corner_goals import game_corner_funding_target_cash
+        target_cash = max(target_cash, game_corner_funding_target_cash(native, world))
     router = RedResourceGoalRouter(
         native,
         actions,
@@ -147,6 +211,7 @@ def autonomous_collection_options(
         trainer_funding=True,
         regional_trainer_funding=True,
         observed_trainer_funding=True,
+        funding_gate_transit=funding_gate_transit,
         trainer_funding_target_cash=target_cash,
         include_recovery_offers=True,
     )
@@ -154,7 +219,13 @@ def autonomous_collection_options(
         native,
         actions,
         registered_objective=True,
-        enumerate_bindings=router.enumerate,
+        # Independent regional/target enumerators below replace these two
+        # legacy kinds. Keep the complete local safety inventory, but do not
+        # plan discarded capture/evolution transports first.
+        enumerate_bindings=lambda observation: router.enumerate_routed_kinds(
+            observation,
+            frozenset(GoalKind) - {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES},
+        ),
     )()
     regional = enumerate_red_regional_acquisitions(
         native,
@@ -165,7 +236,7 @@ def autonomous_collection_options(
         maximum_frames=maximum_frames,
     )
     evolutions = enumerate_red_item_evolutions(
-        runtime,
+        evolution_runtime,
         live,
         actions,
         world,
@@ -173,7 +244,7 @@ def autonomous_collection_options(
         maximum_frames=maximum_frames,
     )
     evolutions += enumerate_red_level_evolutions(
-        runtime, live, actions, world,
+        evolution_runtime, live, actions, world,
         maximum_actions=maximum_actions, maximum_frames=maximum_frames,
         maximum_quanta=maximum_evolution_quanta,
     )
@@ -196,8 +267,18 @@ def autonomous_collection_options(
         allow_resource_variants=observed.binding_set.allow_resource_variants,
     )
     supplements = []
-    for destination in regional:
-        binding = destination.binding
+    acquisitions = tuple(destination.binding for destination in regional)
+    acquisitions += scripted_gift_bindings(native, live, actions, world)
+    acquisitions += additional_acquisitions
+    acquisitions += npc_trade_dependency_bindings(
+        native, live, actions, world, maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames, maximum_quanta=maximum_evolution_quanta,
+    )
+    acquisitions += npc_trade_bindings(
+        native, live, actions, world,
+        include_moving=getattr(native, "moving_npc_trades", False),
+    )
+    for binding in acquisitions:
         question = GoalBindingSet(
             tuple(
                 binding.opportunity if op.kind is GoalKind.ACQUIRE_SPECIES else op
@@ -258,25 +339,42 @@ def autonomous_collection_options(
                 replace(candidate, economy_offer=target.economy_offer),
             )
         )
-    supplements.extend(autonomous_fishing_options(native, live, actions, world))
+    supplements.extend(autonomous_fishing_options(native, live, actions, world,
+        **({} if not fishing_fast_transport else {"allow_fast_transport": True})))
     supplements.extend(autonomous_safari_options(native, live, actions, world))
+    if include_game_corner:
+        from .red_game_corner_goals import game_corner_options
+        supplements.extend(game_corner_options(native,live,actions,world,
+            situation=observed.situation,model_feature_version=model_feature_version,
+            maximum_actions=maximum_actions,maximum_frames=maximum_frames))
+        if include_coin_procurement:
+            from .red_game_corner_goals import game_corner_coin_options
+            supplements.extend(game_corner_coin_options(native,live,actions,world,
+                situation=observed.situation,model_feature_version=model_feature_version,
+                maximum_actions=maximum_actions,maximum_frames=maximum_frames))
     league_funding = bind_autonomous_league_funding(
         native,
         actions,
         world,
         maximum_actions=maximum_actions,
         maximum_frames=maximum_frames,
-    )
+        **({} if league_postgame_return is None else {"postgame_return": league_postgame_return}),
+    ) if include_league_funding else None
     if league_funding is not None:
+        # Project this supplemental earning option in its own one-per-kind
+        # question. The ordinary inventory can already contain both a Mart
+        # purchase and finite trainer income; adding League income there would
+        # violate the established resource-variant boundary. Keep those exact
+        # ordinary executors for the final mixed menu and its safety checks.
         league_question = GoalBindingSet(
             tuple(
                 op
                 for op in ordinary.opportunities
-                if op.kind is not GoalKind.RESUPPLY or op.availability is GoalAvailability.AVAILABLE
+                if op.kind is not GoalKind.RESUPPLY
             )
             + (league_funding.opportunity,),
-            (*ordinary.bindings, league_funding),
-            allow_resource_variants=True,
+            (*tuple(b for b in ordinary.bindings if b.kind is not GoalKind.RESUPPLY),
+             league_funding),
         ).question(observed.situation)
         league_index = next(
             i
@@ -292,6 +390,18 @@ def autonomous_collection_options(
         if league_candidate is None:
             raise ValueError("renewable League funding lacks a portable projection")
         supplements.append(supplemental_live_option(league_funding, league_candidate))
+    executable = (*ordinary.bindings, *(s.binding for s in supplements))
+    if allow_support and len(executable) == 1:
+        binding = executable[0]
+        # Use the already enumerated executor. Re-enumerating an earlier profile
+        # can produce a different quote/fingerprint and is not the same offer.
+        return RedPlayerSupport(
+            GoalBindingSet(
+                tuple(o for o in ordinary.opportunities if o.binding_ref != binding.binding_ref)
+                + (binding.opportunity,),
+                (binding,), allow_resource_variants=ordinary.allow_resource_variants,
+            ), readiness,
+        )
     return build_red_live_option_set(
         situation=observed.situation,
         binding_set=ordinary,
@@ -300,4 +410,5 @@ def autonomous_collection_options(
         ordering_seed_sha256=ordering_seed_sha256,
         economy_snapshot=economy,
         target_cash=target_cash,
+        readiness=readiness,
     )

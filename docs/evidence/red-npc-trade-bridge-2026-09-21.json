@@ -1,0 +1,167 @@
+{
+  "schema": "pokemon.red.npc-trade-bridge-session.v1",
+  "date": "2026-09-21",
+  "status": "bounded_mechanics_verified_earned_trade_pending",
+  "source_commit": "fae0d8e6f732daddc5318adb07e0d6e126697adb",
+  "mission": {
+    "capability": "Observed prerequisite-aware NPC acquisition and multi-floor indoor departure.",
+    "learned_authority": "Unchanged Model141 owns the ordinary choice; no teacher selects an earned target.",
+    "transfer_test": "Two stationary NPCs, one/six-member parties and a recovered boxed source; Red-only mechanics, not independent learner evidence.",
+    "cheapest_falsifier": "Action-free offer discovery, false-exchange mutations, native input and exact physical accounting.",
+    "timebox_minutes": 90,
+    "stop_condition": "One earned draw consumed; no repeated paid searches, replay, DEVELOPMENT fitting, full run or publication."
+  },
+  "implementation": {
+    "opt_in_default": false,
+    "stationary_trade_indices": [
+      1,
+      6
+    ],
+    "species_and_offer_source": "Cartridge trade table, validated NPC text scripts and map objects.",
+    "learned_features": "Existing portable acquisition features; no NPC/map/species identity in actor inputs.",
+    "multi_floor_departure": "Continuous interior chain with one final outdoor boundary; unchanged 128-step and walking-only limit.",
+    "guards": [
+      "native one-shot flag plus exact physical exchange",
+      "registered flags preserved",
+      "protected stock preserved",
+      "other party records preserved",
+      "source level preserved",
+      "cash and bag preserved",
+      "pre-Pokedex boxed PC offers unavailable",
+      "stale origins and repeat calls rejected",
+      "cartridge Cut replacement table bound and receipt verified"
+    ],
+    "not_supported": [
+      "roaming NPC trades",
+      "link trades",
+      "registered NPC-exchange learning admission"
+    ]
+  },
+  "action_free_inspection": {
+    "before_fix": "Mixed menu unavailable after Lapras because indoor departure rejected intermediate floors.",
+    "after_departure_fix_candidates": 4,
+    "after_trade_integration_candidates": 5,
+    "model_queries": 0,
+    "actions": 0,
+    "frames": 0,
+    "before_earned_choice_sha256": "587902f23c0a6a377cd4de217c877978dc1c0220810f7a489c529bb4a70d6149",
+    "final_endpoint_sha256": "e6ceb49eade585edcb233436b402b133d75450c90b018302c6ddaea75742238d",
+    "final_endpoint_candidates": 5,
+    "final_endpoint_npc_available": true
+  },
+  "earned_attempt": {
+    "run_id": "model141-npc-trade-collection-20260921-v1",
+    "source_commit": "7406b479",
+    "model": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "before_sha256": "59d8ab24db02c841e4c4cb72737cf4b283fa2915569a75620b76f9230cd70486",
+    "terminal_sha256": "cbb877dcb31a1426836f6774739f0feb7a78972f9b0216cfacf9d557057b1dcc",
+    "plan_sha256": "0206d2ba04835dda91c3fc6256f440720bc12e68b91a95154df2a855175d3596",
+    "result_sha256": "026ab6f07a4f2a6a641222a21eed2cec071fa0dcc51b4290258d4bce2e19454b",
+    "outcome_sha256": "723497be45784a2d14caf19e3ac316c1b79393122ec6c6220ad76a1a7f825c78",
+    "native_audit_sha256": "eb26aba12940d9d65f499262898f54e82b4e3496f6440c396e4663d6d32789a3",
+    "candidate_count": 5,
+    "model_decisions": 1,
+    "selected_candidate_index": 1,
+    "selected_kind": "paid_safari_acquisition",
+    "selected_probability": 0.1690260167630083,
+    "npc_candidate_index": 2,
+    "npc_probability": 0.3428756915793005,
+    "npc_rank": 1,
+    "npc_identity_proof": "Unique exact feature-vector match between action-free authenticated same-state inventory and persisted run menu.",
+    "verification": "failed",
+    "reason": "search_exhausted",
+    "safe_terminal": true,
+    "actions": 1711,
+    "frames": 192720,
+    "registered_before": 108,
+    "registered_after": 108,
+    "physical_before": 78,
+    "physical_after": 78,
+    "cash_before": 15968,
+    "cash_after": 15468,
+    "paid_admissions": 1,
+    "terminal_map": 7,
+    "terminal_yx": [
+      4,
+      18
+    ],
+    "safari_active": false,
+    "reserve_origin_sha256": "d24d3ee7b1a59a1b52b2aba08d1ded9445fd1f3b3c825d0fc2367155b27ae416",
+    "model_fit": false,
+    "seed_retries": 0
+  },
+  "mechanics": {
+    "earned_progress": false,
+    "training_admission": false,
+    "independent_lineage_claim": false,
+    "source": "Authenticated historical TRAIN opening; isolated disclosed synthetic fixture setup, not the earned save.",
+    "source_sha256": "8461a43ddefb219be25fd43e728ca2b4fa0e42e638698deb81033932eb79dcdf",
+    "direct_plan_sha256": "a53916d82e303df68c385c0b837b320f44fabf82a1b271aa97cb3b4d0ca24a37",
+    "direct_cases": [
+      {
+        "trade_index": 1,
+        "source_species": 63,
+        "target_species": 122,
+        "party_count": 6,
+        "source_slot": 6,
+        "source_level": 10,
+        "actions": 56,
+        "frames": 5556,
+        "status": "passed",
+        "native_audit_sha256": "6387a67c163bbf27aeff3fc8215a015379551a074bc33f2c70fd040fb1ffed4b"
+      },
+      {
+        "trade_index": 6,
+        "source_species": 61,
+        "target_species": 124,
+        "party_count": 1,
+        "source_slot": 1,
+        "source_level": 10,
+        "status": "passed",
+        "native_audit_sha256": "91f1bbaff1fa8812e5bf9125d573470deb3ff38fc633eb677a7a93243942a33e"
+      }
+    ],
+    "boxed_chain": {
+      "status": "passed_recovered_chain",
+      "uninterrupted_pass": false,
+      "source_level": 12,
+      "protected_starter_count": 6,
+      "exact_container_delta": true,
+      "verified_cuts": 1,
+      "before_sha256": "f8e953b9b764df5d80fab7fb5b6e1bc34383a04b780cf014df5ec42488295ccc",
+      "terminal_sha256": "4292171b4d3d945c146fc51bf5a0515480a358b71318aaac89c61dcbdeb815a9",
+      "native_audit_sha256": "3f8c02a089587cfddd54f223d4a15a54d47905a0c4379922a5b5e11087199720"
+    },
+    "retained_failures": [
+      "Private case1 result serialization failed after successful trade; states, receipt and verification survived and independent zero-input audit passed; only unstarted case6 resumed.",
+      "Boxed fixture lacked the supported post-Pokedex PC menu; new preflight rejects that offer, fixture prerequisite disclosed before continuing from its retained terminal.",
+      "Synthetic source level10 disagreed with XP1000; native withdrawal normalized it to12 and preservation guard correctly failed. Native-only deposit/withdraw prepared a consistent new boundary without rewind.",
+      "New NPC field port omitted Cut replacement map. Fixed wiring and direct-route continuation; completed from actual tree endpoint without replay."
+    ]
+  },
+  "learning": {
+    "new_fitted_examples": 0,
+    "model_unchanged": true,
+    "model_fitted_examples": 141,
+    "model_successes": 96,
+    "economy_qualified_examples": 58,
+    "development_fitted": false,
+    "authority_promotion": false
+  },
+  "verification": {
+    "targeted_tests_passed": 386,
+    "full_suite": false,
+    "independent_native_audits": 4,
+    "lint": "passed",
+    "prospective_registry": "regenerated_and_checked",
+    "publication": false,
+    "external_agents_used": false
+  },
+  "remaining": {
+    "earned_native_registrations": 16,
+    "earned_npc_trade": false,
+    "uninterrupted_boxed_trade_not_claimed": true,
+    "league_profitability": "0/2",
+    "fresh_red_acceptance": "0/5"
+  }
+}

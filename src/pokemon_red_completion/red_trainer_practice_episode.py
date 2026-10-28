@@ -23,6 +23,9 @@ from pokemon_red_completion.battle_runtime import (
     DEFAULT_BATTLE_RUNTIME_TIMING,
     BattleActionExecutor,
     execute_bounded_battle_move_turn,
+    settle_trainer_double_knockout,
+    settle_wild_double_knockout,
+    trainer_double_knockout_roster_pending,
 )
 from pokemon_red_completion.battle_scenario_capture import (
     OBSERVATION_SCHEMA_V2,
@@ -46,6 +49,22 @@ from pokemon_red_completion.red_battle_scenario import (
     project_red_battle_turn_outcome,
 )
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
+
+from .red_forced_struggle import (
+    disabled_forced_struggle_available,
+    execute_disabled_forced_struggle_turn,
+    execute_forced_struggle_turn,
+    execute_model_struggle_turn,
+    forced_struggle_available,
+    model_struggle_available,
+)
+from .scenario_lab import ScenarioPartition
+
+
+def validate_opening_idle_frames(value: int) -> None:
+    """Shared action-free timing contract for native execution and preflight."""
+    if type(value) is not int or not 0 <= value <= 12:  # noqa: E721
+        raise RedTrainerPracticeEpisodeError("trainer opening timing is outside its bound")
 
 
 class TrainerPracticeSession(Protocol):
@@ -101,6 +120,12 @@ def run_live_red_trainer_practice_episode(
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
     action_executor: BattleActionExecutor | None = None,
     decision_guard: Callable[[RawGameState], None] | None = None,
+    allow_stranded_accuracy_move: bool = False,
+    allow_status_moves: bool = False,
+    include_status_context: bool = False,
+    wild_training: bool = False,
+    allow_forced_struggle: bool = False,
+    train_wild_diagnostic: bool = False,
 ) -> RedTrainerPracticeEpisode:
     """Use the existing actor in-place; caller retains the game even on failure.
 
@@ -122,6 +147,12 @@ def run_live_red_trainer_practice_episode(
         public_species_base_stats=public_species_base_stats,
         action_executor=action_executor,
         decision_guard=decision_guard,
+        allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+        allow_status_moves=allow_status_moves,
+        include_status_context=include_status_context,
+        wild_training=wild_training,
+        allow_forced_struggle=allow_forced_struggle,
+        train_wild_diagnostic=train_wild_diagnostic,
     )
 
 
@@ -169,6 +200,16 @@ class RedTrainerPracticeEpisode:
             "action_counts": {
                 kind: sum(step.get("kind") == kind for step in self.decisions)
                 for kind in ("attack", "voluntary_switch", "switch_prompt", "forced_switch")
+                + (
+                    ("forced_struggle",)
+                    if any(d.get("kind") == "forced_struggle" for d in self.decisions)
+                    else ()
+                )
+                + (
+                    ("model_struggle",)
+                    if any(d.get("kind") == "model_struggle" for d in self.decisions)
+                    else ()
+                )
             },
             "failed_move_executions": sum(
                 step.get("kind") == "attack"
@@ -178,7 +219,9 @@ class RedTrainerPracticeEpisode:
             ),
             "metrics": _episode_metrics(self.decisions),
             "player_turn_count": sum(
-                step.get("kind") in {"attack", "voluntary_switch"} for step in self.decisions
+                step.get("kind")
+                in {"attack", "voluntary_switch", "forced_struggle", "model_struggle"}
+                for step in self.decisions
             ),
             "battle_won": self.battle_won,
             "final_battle_state": self.final_battle_state,
@@ -211,12 +254,50 @@ def run_red_trainer_practice_episode(
     opening_idle_frames: int = 0,
     action_executor: BattleActionExecutor | None = None,
     decision_guard: Callable[[RawGameState], None] | None = None,
+    allow_stranded_accuracy_move: bool = False,
+    allow_status_moves: bool = False,
+    include_status_context: bool = False,
+    wild_training: bool = False,
+    allow_forced_struggle: bool = False,
+    train_wild_diagnostic: bool = False,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
 
+    if type(allow_forced_struggle) is not bool or (
+        allow_forced_struggle
+        and (
+            not isinstance(capture, BattleScenarioCapture)
+            or capture.manifest.partition
+            not in (ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT)
+            or wild_training
+        )
+    ):
+        raise RedTrainerPracticeEpisodeError(
+            "forced Struggle requires explicit trainer TRAIN/DEVELOPMENT opt-in"
+        )
+    if type(wild_training) is not bool:
+        raise RedTrainerPracticeEpisodeError("wild training opt-in must be boolean")
+    expected_battle_state = 1 if wild_training else 2
+    if type(train_wild_diagnostic) is not bool or (
+        train_wild_diagnostic
+        and (
+            not wild_training
+            or not isinstance(capture, BattleScenarioCapture)
+            or capture.manifest.partition is not ScenarioPartition.TRAIN
+        )
+    ):
+        raise RedTrainerPracticeEpisodeError("TRAIN wild diagnostic needs explicit TRAIN capture")
+    if wild_training and (
+        not isinstance(capture, BattleScenarioCapture)
+        or (
+            capture.manifest.partition is not ScenarioPartition.DEVELOPMENT
+            and not train_wild_diagnostic
+        )
+    ):
+        raise RedTrainerPracticeEpisodeError("wild training requires DEVELOPMENT capture")
     if (
         not isinstance(capture, BattleScenarioCapture)
-        or capture.manifest.expected_battle_state != 2
+        or capture.manifest.expected_battle_state != expected_battle_state
     ):
         raise RedTrainerPracticeEpisodeError(
             "trainer episode needs an authenticated trainer capture"
@@ -231,8 +312,15 @@ def run_red_trainer_practice_episode(
         or not 1 <= max_player_turns <= max_decisions
     ):
         raise RedTrainerPracticeEpisodeError("trainer episode player-turn budget is invalid")
-    if type(opening_idle_frames) is not int or not 0 <= opening_idle_frames <= 12:  # noqa: E721
-        raise RedTrainerPracticeEpisodeError("trainer opening timing is outside its bound")
+    validate_opening_idle_frames(opening_idle_frames)
+    if type(allow_status_moves) is not bool:
+        raise RedTrainerPracticeEpisodeError("status move opt-in must be boolean")
+    if type(include_status_context) is not bool:
+        raise RedTrainerPracticeEpisodeError("status observation opt-in must be boolean")
+    if (allow_status_moves or include_status_context) and (
+        capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2
+    ):
+        raise RedTrainerPracticeEpisodeError("status context requires rich battle observations")
     decisions: list[dict[str, object]] = []
     episode_started_ns = perf_counter_ns()
     player_turns = 0
@@ -249,8 +337,22 @@ def run_red_trainer_practice_episode(
             else PokemonRedObservationEncoder.from_state_reader(reader)
         )
         initial = reader.read()
+        # Keep capture authentication on its original schema, while all policy
+        # observations (including switch aftermath and terminals) use one view.
+        # Observing status/stages does not authorize selecting status moves.
+        # Keep original capture authentication and action masks unchanged.
+        policy_encoder = (
+            replace(encoder, include_status_context=True)
+            if allow_status_moves or include_status_context
+            else encoder
+        )
+        if wild_training and (initial.enemy_hp is None or initial.enemy_hp <= 0):
+            raise RedTrainerPracticeEpisodeError("wild training needs a living opponent")
         _require_plausible_hp(initial)
-        if initial.map_id != capture.manifest.expected_map or initial.battle_state != 2:
+        if (
+            initial.map_id != capture.manifest.expected_map
+            or initial.battle_state != expected_battle_state
+        ):
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
         initial_prompt = reader.trainer_switch_prompt_visible(initial)
         initial_forced = (
@@ -274,6 +376,7 @@ def run_red_trainer_practice_episode(
             and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
         ) or initial_sha256 != capture.manifest.initial_observation_sha256:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
+        actions = action_executor or FrameSafeExecutor(session, controller_timing)
         if opening_idle_frames:
             _emit(
                 event_sink,
@@ -283,13 +386,16 @@ def run_red_trainer_practice_episode(
                     "initial_observation_sha256": initial_sha256,
                 },
             )
-            FrameSafeExecutor(session).execute(
+            # Opening timing historically means an absolute number of frames for
+            # direct episode callers.  A supplied executor is the runner's
+            # shared, metered authority, so retain that path unchanged.
+            (action_executor or FrameSafeExecutor(session)).execute(
                 MacroAction(MacroActionKind.WAIT, repeat=opening_idle_frames)
             )
             settled = reader.read()
             _require_plausible_hp(settled)
             if (
-                settled.battle_state != 2
+                settled.battle_state != expected_battle_state
                 or canonical_sha256(encoder.snapshot_from_raw(settled).to_dict()) != initial_sha256
             ):
                 raise RedTrainerPracticeEpisodeError("opening timing changed the model observation")
@@ -301,7 +407,6 @@ def run_red_trainer_practice_episode(
                     "observation_sha256": initial_sha256,
                 },
             )
-        actions = action_executor or FrameSafeExecutor(session, controller_timing)
         _emit(
             event_sink,
             {
@@ -315,12 +420,52 @@ def run_red_trainer_practice_episode(
                 "max_player_turns": max_player_turns,
                 "opening_idle_frames": opening_idle_frames,
                 "state_before": _resource_state(initial),
+                **({"allow_forced_struggle": True} if allow_forced_struggle else {}),
+                **({"wild_training": True, "train_wild_diagnostic": True}
+                   if train_wild_diagnostic else {}),
             },
         )
         for decision_index in range(1, max_decisions + 1):
             raw = reader.read()
+            if (
+                wild_training
+                and raw.battle_state == 1
+                and raw.battler_hp == 0
+                and raw.enemy_hp == 0
+                and raw.party_hp is not None
+                and any(hp > 0 for hp in raw.party_hp)
+            ):
+                # A voluntary switch can also receive a simultaneous KO.
+                # This is terminal dialogue, not a new forced-switch choice.
+                raw = settle_wild_double_knockout(
+                    reader,
+                    actions,
+                    expected_map=capture.manifest.expected_map,
+                )
+            if (
+                not wild_training
+                and raw.battle_state == 2
+                and raw.battler_hp == 0
+                and raw.enemy_hp == 0
+                and raw.party_hp is not None
+                and any(hp > 0 for hp in raw.party_hp)
+            ):
+                enemy_roster = reader.read_enemy_party_roster_hp()
+                pending = trainer_double_knockout_roster_pending(raw, enemy_roster)
+                if pending or (
+                    enemy_roster and all(type(hp) is int and hp == 0 for hp in enemy_roster)
+                ):
+                    raw = settle_trainer_double_knockout(
+                        reader,
+                        actions,
+                        expected_map=capture.manifest.expected_map,
+                        **({"allow_pending_active_hp": True} if pending else {}),
+                    )
             _require_plausible_hp(raw)
-            if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {0, 2}:
+            if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {
+                0,
+                expected_battle_state,
+            }:
                 raise RedTrainerPracticeEpisodeError("trainer episode left its authenticated map")
             if raw.battle_state == 0:
                 return _receipt(
@@ -328,8 +473,8 @@ def run_red_trainer_practice_episode(
                     policy.policy_id,
                     decisions,
                     raw,
-                    reader.read_enemy_party_roster_hp(),
-                    encoder.snapshot_from_raw(raw).to_dict(),
+                    ((raw.enemy_hp,) if wild_training else reader.read_enemy_party_roster_hp()),
+                    policy_encoder.snapshot_from_raw(raw).to_dict(),
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
                     opening_idle_frames=opening_idle_frames,
                 )
@@ -340,9 +485,27 @@ def run_red_trainer_practice_episode(
                 or not 0 <= raw.active_party_index < len(raw.party_hp)
             ):
                 raise RedTrainerPracticeEpisodeError("trainer player party is unavailable")
+            if raw.party_hp and not any(raw.party_hp):
+                # This is an observed terminal, not another live choice. Preserve
+                # the loss before a living-party guard refuses further decisions;
+                # only the caller may subsequently settle native blackout input.
+                return RedTrainerPracticeEpisode(
+                    capture_id=capture.manifest.capture_id,
+                    manifest_sha256=capture.manifest_sha256,
+                    policy_id=policy.policy_id,
+                    decisions=tuple(decisions),
+                    battle_won=False,
+                    final_battle_state=raw.battle_state,
+                    stop_reason="party_defeated",
+                    final_observation=policy_encoder.snapshot_from_raw(raw).to_dict(),
+                    elapsed_ns=perf_counter_ns() - episode_started_ns,
+                    opening_idle_frames=opening_idle_frames,
+                )
             if decision_guard is not None:
                 decision_guard(raw)
-            observation = encoder.snapshot_from_raw(raw).to_dict()
+            # Authenticate the old capture with its original projection. Augment
+            # only the new policy view; historical semantic hashes stay unchanged.
+            observation = policy_encoder.snapshot_from_raw(raw).to_dict()
             observation_sha256 = canonical_sha256(observation)
             options = tuple(
                 index + 1
@@ -383,8 +546,20 @@ def run_red_trainer_practice_episode(
                 and not prompt
                 and (reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN)
             ):
-                prepared_main = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
-                if not any(prepared_main.supported_candidate_mask) and not options:
+                prepared_main = prepare_red_battle_scenario(
+                    policy_encoder,
+                    raw,
+                    allow_no_attack=True,
+                    allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+                    allow_status_moves=allow_status_moves,
+                )
+                if (
+                    not any(prepared_main.supported_candidate_mask)
+                    and not options
+                    and not (allow_forced_struggle and (
+                        forced_struggle_available(raw) or disabled_forced_struggle_available(raw)
+                    ))
+                ):
                     _emit(
                         event_sink,
                         {
@@ -416,7 +591,71 @@ def run_red_trainer_practice_episode(
                     "state_before": _resource_state(raw),
                 },
             )
+            if (
+                allow_forced_struggle
+                and not forced
+                and not prompt
+                and prepared_main is not None
+                and (forced_struggle_available(raw) or disabled_forced_struggle_available(raw))
+            ):
+                _emit(
+                    event_sink,
+                    {
+                        "event": "choice_recorded",
+                        "decision_index": decision_index,
+                        "selected_action": "forced_struggle",
+                        "authority": "forced_mechanic",
+                        "policy_elapsed_ns": 0,
+                        "model_diagnostics": {},
+                    },
+                )
+                execution_started_ns = perf_counter_ns()
+                frames_before = _frame_count(session)
+                struggle_executor = (
+                    execute_disabled_forced_struggle_turn
+                    if disabled_forced_struggle_available(raw) else execute_forced_struggle_turn
+                )
+                execution = struggle_executor(
+                    reader,
+                    actions,
+                    expected_map=capture.manifest.expected_map,
+                )
+                after = execution.final_state
+                decision = {
+                    "decision_index": decision_index,
+                    "observation": observation,
+                    "observation_sha256": observation_sha256,
+                    "kind": "forced_struggle",
+                    "authority": "forced_mechanic",
+                    "model_diagnostics": {},
+                    "legal_party_slots": [],
+                    "outcome": execution.public_dict(),
+                    **execution.terminal_referee_evidence(),
+                    "after_observation_sha256": canonical_sha256(
+                        policy_encoder.snapshot_from_raw(after).to_dict()
+                    ),
+                    "party_hp_before": list(raw.party_hp or ()),
+                    "party_hp_after": list(after.party_hp or ()),
+                    "opponent_hp_before": raw.enemy_hp,
+                    "opponent_hp_after": after.enemy_hp,
+                }
+                _complete_decision(
+                    decisions,
+                    decision,
+                    raw,
+                    after,
+                    0,
+                    execution_started_ns,
+                    session,
+                    frames_before,
+                    event_sink,
+                    policy,
+                )
+                player_turns += 1
+                continue
             if forced or prompt:
+                if decision_guard is not None:
+                    decision_guard(raw)
                 policy_started_ns = perf_counter_ns()
                 chosen_slot = policy.choose_switch(
                     observation,
@@ -461,8 +700,9 @@ def run_red_trainer_practice_episode(
                         reader,
                         session,
                         chosen_slot - 1,
-                        expected_battle_state=2,
+                        expected_battle_state=expected_battle_state,
                         label="model trainer practice forced switch",
+                        allow_trainer_prompt_outcome=expected_battle_state == 2,
                     )
                     kind = "forced_switch"
                 after_switch = reader.read()
@@ -475,7 +715,7 @@ def run_red_trainer_practice_episode(
                     "model_diagnostics": diagnostics,
                     "legal_party_slots": list(options),
                     "after_observation_sha256": canonical_sha256(
-                        encoder.snapshot_from_raw(after_switch).to_dict()
+                        policy_encoder.snapshot_from_raw(after_switch).to_dict()
                     ),
                     "party_hp_before": list(raw.party_hp or ()),
                     "party_hp_after": list(after_switch.party_hp or ()),
@@ -498,7 +738,11 @@ def run_red_trainer_practice_episode(
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
                 raise RedTrainerPracticeEpisodeError("trainer episode has no model-owned decision")
             prepared = prepared_main or prepare_red_battle_scenario(
-                encoder, raw, allow_no_attack=True
+                policy_encoder,
+                raw,
+                allow_no_attack=True,
+                allow_stranded_accuracy_move=allow_stranded_accuracy_move,
+                allow_status_moves=allow_status_moves,
             )
             _emit(
                 event_sink,
@@ -508,6 +752,8 @@ def run_red_trainer_practice_episode(
                     "model_input": _main_model_input(prepared),
                 },
             )
+            if decision_guard is not None:
+                decision_guard(raw)
             policy_started_ns = perf_counter_ns()
             action = policy.choose_main(observation, prepared)
             policy_elapsed_ns = perf_counter_ns() - policy_started_ns
@@ -526,6 +772,53 @@ def run_red_trainer_practice_episode(
             )
             if not isinstance(action, BattleAction):
                 raise RedTrainerPracticeEpisodeError("model returned no semantic battle action")
+            if action.kind is BattleActionKind.STRUGGLE:
+                if (
+                    not allow_forced_struggle
+                    or wild_training
+                    or capture.manifest.partition is not ScenarioPartition.DEVELOPMENT
+                    or not model_struggle_available(raw)
+                ):
+                    raise RedTrainerPracticeEpisodeError(
+                        "model Struggle lacks exact DEVELOPMENT zero-PP authority"
+                    )
+                execution_started_ns = perf_counter_ns()
+                frames_before = _frame_count(session)
+                execution = execute_model_struggle_turn(
+                    reader, actions, expected_map=capture.manifest.expected_map
+                )
+                after = execution.final_state
+                decision = {
+                    "decision_index": decision_index,
+                    "observation": observation,
+                    "observation_sha256": observation_sha256,
+                    "kind": "model_struggle",
+                    "authority": "learner",
+                    "semantic_action": action.public_dict(),
+                    "model_diagnostics": diagnostics,
+                    "legal_party_slots": list(options),
+                    "outcome": execution.public_dict(),
+                    **execution.terminal_referee_evidence(),
+                    "after_observation_sha256": canonical_sha256(
+                        policy_encoder.snapshot_from_raw(after).to_dict()
+                    ),
+                    "opponent_hp_before": raw.enemy_hp,
+                    "opponent_hp_after": after.enemy_hp,
+                }
+                _complete_decision(
+                    decisions,
+                    decision,
+                    raw,
+                    after,
+                    policy_elapsed_ns,
+                    execution_started_ns,
+                    session,
+                    frames_before,
+                    event_sink,
+                    policy,
+                )
+                player_turns += 1
+                continue
             if action.kind is BattleActionKind.SWITCH:
                 if action.party_slot not in options:
                     raise RedTrainerPracticeEpisodeError("model chose an illegal voluntary switch")
@@ -537,9 +830,10 @@ def run_red_trainer_practice_episode(
                     reader,
                     session,
                     action.party_slot - 1,
-                    expected_battle_state=2,
+                    expected_battle_state=expected_battle_state,
                     label="model trainer practice voluntary switch",
                     allow_faint_outcome=True,
+                    allow_trainer_prompt_outcome=True,
                 )
                 after_switch = reader.read()
                 decision = {
@@ -552,7 +846,7 @@ def run_red_trainer_practice_episode(
                     "legal_party_slots": list(options),
                     "model_input": _main_model_input(prepared),
                     "after_observation_sha256": canonical_sha256(
-                        encoder.snapshot_from_raw(after_switch).to_dict()
+                        policy_encoder.snapshot_from_raw(after_switch).to_dict()
                     ),
                     "party_hp_before": list(raw.party_hp or ()),
                     "party_hp_after": list(after_switch.party_hp or ()),
@@ -590,7 +884,7 @@ def run_red_trainer_practice_episode(
                 actions,
                 expected_map=capture.manifest.expected_map,
                 selected_slot=action.move_slot,
-                expected_battle_state=2,
+                expected_battle_state=expected_battle_state,
                 settle_to_next_decision=True,
                 timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=40),
                 label="model trainer practice attack",
@@ -641,12 +935,12 @@ def run_red_trainer_practice_episode(
                 policy.policy_id,
                 decisions,
                 final,
-                reader.read_enemy_party_roster_hp(),
-                encoder.snapshot_from_raw(final).to_dict(),
+                ((final.enemy_hp,) if wild_training else reader.read_enemy_party_roster_hp()),
+                policy_encoder.snapshot_from_raw(final).to_dict(),
                 elapsed_ns=perf_counter_ns() - episode_started_ns,
                 opening_idle_frames=opening_idle_frames,
             )
-        if final.battle_state != 2:
+        if final.battle_state != expected_battle_state:
             raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
         return RedTrainerPracticeEpisode(
             capture_id=capture.manifest.capture_id,
@@ -656,7 +950,7 @@ def run_red_trainer_practice_episode(
             battle_won=False,
             final_battle_state=final.battle_state,
             stop_reason="decision_budget",
-            final_observation=encoder.snapshot_from_raw(final).to_dict(),
+            final_observation=policy_encoder.snapshot_from_raw(final).to_dict(),
             elapsed_ns=perf_counter_ns() - episode_started_ns,
             opening_idle_frames=opening_idle_frames,
         )
@@ -673,10 +967,11 @@ def _receipt(
     elapsed_ns: int = 0,
     opening_idle_frames: int = 0,
 ) -> RedTrainerPracticeEpisode:
-    if enemy_hp is None:
+    if enemy_hp is None or not enemy_hp or any(hp is None for hp in enemy_hp):
         raise RedTrainerPracticeEpisodeError("trainer terminal lacks authenticated roster HP")
     won = bool(
         all(hp == 0 for hp in enemy_hp)
+        and (capture.manifest.expected_battle_state != 1 or final.battle_result == 0)
         and final.party_hp is not None
         and any(hp > 0 for hp in final.party_hp)
     )
@@ -714,6 +1009,16 @@ def _resource_state(raw: RawGameState) -> dict[str, object]:
         "opponent_hp": raw.enemy_hp,
         "opponent_species_id": raw.enemy_species_id,
         "opponent_party_position": raw.enemy_party_position,
+        "battle_state": raw.battle_state,
+        "active_status": raw.battler_status,
+        "opponent_status": raw.enemy_status if raw.battle_state in (1, 2) else None,
+        "player_disabled_move_slot": raw.player_disabled_move_slot,
+        "player_disable_turns": raw.player_disable_turns,
+        "player_confused": raw.player_confused,
+        "enemy_confused": raw.enemy_confused if raw.battle_state in (1, 2) else None,
+        "player_stat_stages": raw.player_stat_stages,
+        "enemy_stat_stages": raw.enemy_stat_stages if raw.battle_state in (1, 2) else None,
+        "enemy_using_trapping_move": raw.enemy_using_trapping_move,
     }
 
 
@@ -794,6 +1099,7 @@ def _complete_decision(
             ),
             "state_before": _resource_state(before),
             "state_after": _resource_state(after),
+            "failure_context": battle_failure_diagnostics(decision, before, after),
         }
     )
     decisions.append(decision)
@@ -805,6 +1111,49 @@ def _complete_decision(
         and type(after.enemy_party_position) is int
     ):
         transition(before.enemy_party_position, after.enemy_party_position)
+
+
+def battle_failure_diagnostics(decision, before, after):
+    """Observed status/Disable and endpoint damage, never inferred RNG causes."""
+    outcome = decision.get("outcome") or {}
+    same_battle = before.battle_state in (1, 2) and after.battle_state == before.battle_state
+    player_comparable = (
+        same_battle
+        and type(before.active_party_index) is int
+        and before.active_party_index == after.active_party_index
+    )
+    enemy_comparable = (
+        same_battle
+        and before.enemy_species_id == after.enemy_species_id
+        and before.enemy_party_position == after.enemy_party_position
+        and (before.battle_state == 1 or type(before.enemy_party_position) is int)
+    )
+
+    def decrease(a, b, comparable):
+        return max(0, a - b) if comparable and type(a) is int and type(b) is int else None
+
+    return dict(
+        schema="pokemon.red.battle-failure-context.v1",
+        diagnostic_only=True,
+        move_executed=outcome.get("move_executed"),
+        active_status_before=before.battler_status,
+        active_status_after=after.battler_status,
+        disabled_move_slot_before=before.player_disabled_move_slot,
+        disable_turns_before=before.player_disable_turns,
+        confused_before=before.player_confused,
+        opponent_trapping_before=before.enemy_using_trapping_move,
+        observed_player_hp_decrease=decrease(
+            before.battler_hp, after.battler_hp, player_comparable
+        ),
+        observed_enemy_hp_decrease=decrease(before.enemy_hp, after.enemy_hp, enemy_comparable),
+        endpoint_damage_is_not_causal_move_damage=True,
+        critical_hit_observed=None,
+        miss_observed=None,
+        immunity_message_observed=None,
+        unexecuted_move_reason=None,
+        unobserved_causes_not_inferred=True,
+        training_admission=False,
+    )
 
 
 def _emit(sink: Callable[[Mapping[str, object]], None] | None, event: Mapping[str, object]) -> None:
@@ -822,7 +1171,13 @@ def _policy_diagnostics(policy: TrainerPracticePolicy) -> dict[str, object] | No
 
 
 def _episode_metrics(decisions: tuple[dict[str, object], ...]) -> dict[str, object]:
-    """Outcome and cost measures that can compare policies without teacher labels."""
+    """Outcome and cost measures that can compare policies without teacher labels.
+
+    party_pp_spent is the historical positive endpoint depletion, which can hide
+    spending when a native post-battle script restores PP. selected_move_pp_spends
+    counts exact-spend proofs from the bounded executor, independently of healing.
+    Keep both measures explicit; do not rewrite historical outcome records.
+    """
     hp_lost = 0
     pp_spent = 0
     party_faints = 0
@@ -865,6 +1220,11 @@ def _episode_metrics(decisions: tuple[dict[str, object], ...]) -> dict[str, obje
         "party_faints": party_faints,
         "party_hp_lost": hp_lost,
         "party_pp_spent": pp_spent,
+        "selected_move_pp_spends": sum(
+            isinstance(outcome := step.get("outcome"), dict)
+            and outcome.get("move_executed") is True
+            for step in attacks
+        ),
         "party_status_changes": status_changes,
         "move_suppressed_or_failed": sum(
             isinstance(outcome := step.get("outcome"), dict)

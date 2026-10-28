@@ -1,0 +1,255 @@
+{
+  "acceptance_sha256": "66a5d0178110d176934c1f8b028156f1045e75467a7a88bc3f9fe6eb0aa3610e",
+  "actor_settings_sha256": "922252e542653cf06803aec555860ef625188df64afc362bb8b67f7f7980def0",
+  "actual_state_loads": 0,
+  "all_gameplay_pids_absent": true,
+  "before_last_successful_action_state_sha256": "a4381f26306f37538583ca6b0b84f9f0d4728d7a64d9f4ab9980636c8fdf9af4",
+  "buttons_released": true,
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex"
+  ],
+  "completed_reference_and_prior_failures_unchanged": true,
+  "compulsory_prefaces": [
+    {
+      "actions": 166,
+      "cash_spent": 0,
+      "failure_reason": null,
+      "frames": 15216,
+      "learned": false,
+      "operator_relaunch": false,
+      "ordinary_setback": false,
+      "segment": "segment-010",
+      "source_sha256": "5b4990a76c4416791cdf9549d87dcca7362a57d89d9dc89a5884334f980da946",
+      "terminal_sha256": "25d1a1f67a8aeb4c399bdeb862b767f80177dbc197df6f4b87fd20ecfb3ecd1c",
+      "verification": "succeeded"
+    }
+  ],
+  "compulsory_prefaces_not_new_goal_model_choices": true,
+  "cumulative_spent": {
+    "actions": 236420,
+    "cash_debits": 7670,
+    "decisions": 553,
+    "frames": 19283634,
+    "heals": 359,
+    "seconds": 4159.839749668725
+  },
+  "episode_counts": {
+    "executed_decisions": 552,
+    "model_decisions": 260,
+    "ordinary_setbacks": 23,
+    "successful_decisions": 528,
+    "support_decisions": 292,
+    "teacher_actions": 0
+  },
+  "failure_phase": "next_menu_admission",
+  "failure_record": "runs/segment-031/native/episode/step-012/admission-failure.json",
+  "failure_record_sha256": "55a2b48f8e67b044da014da75612b9061ca1eb04aae7acc343e079387920d8f8",
+  "final_fresh_gates_passed": 0,
+  "final_fresh_gates_total": 5,
+  "fits": 0,
+  "free_bytes": 80201052160,
+  "fresh_power_on": true,
+  "frozen_completion_proved": false,
+  "full_isolated_io_retained": true,
+  "full_isolated_io_sha256": "a0e2ac67bf2d367bf3f9f47a45781e79c6371c3c5442975090cd19d2e940fe7b",
+  "imported_project_module_count": 644,
+  "interpretation": "Four badges and Silph Scope earned; rescue_fuji remains incomplete. After a successful field boundary, the next live menu contains zero executable candidates. The team is restored and cash remains. Immediate blocker is option availability/execution coverage, not an observed combat loss or a model ranking decision. Underlying eligibility cause is not diagnosed by this monitor.",
+  "last_successful_action": {
+    "evidence": {
+      "automatic_objectives": [],
+      "intermediate_boundary": null,
+      "objective": "rescue_fuji",
+      "objective_completed": false,
+      "observed_map_boundary": 148,
+      "purchases": 0,
+      "source_sha256": "a4381f26306f37538583ca6b0b84f9f0d4728d7a64d9f4ab9980636c8fdf9af4",
+      "support": "observed_cartridge_route_and_wild_escape",
+      "terminal_sha256": "1c41aa63728ba1c8301d31d71fb9d0dbe27200399e49e79ebee3cad90b240240",
+      "trainer_battles": 0
+    },
+    "selected_kind": "advance_story",
+    "support_role": "forced_singleton"
+  },
+  "manifest_sha256": "491e32ce93e5d088905fe579109e3bb5593be628886dcc8c0fdda1be908aac0e",
+  "meter_restore_fields_mean": "Party-healing counters, not emulator state loads; nested meters are not added twice.",
+  "module_isolation_verified": true,
+  "native_error": "mixed live menu needs distinct executable candidates: count=0, bindings=()",
+  "native_error_type": "RedLiveOptionMenuError",
+  "native_facts": {
+    "badge_bits": 15,
+    "badges": 4,
+    "bag_stock": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ]
+    ],
+    "cash": 32650,
+    "party_levels": [
+      37,
+      31,
+      29,
+      32,
+      29,
+      37
+    ],
+    "registrations": 21,
+    "whole_party_restored": true
+  },
+  "native_meter_totals": {
+    "actions_attempted": 236242,
+    "actions_completed": 236242,
+    "frames": 19261421,
+    "goal_attempts": 553,
+    "nested_restore_attempts": 139,
+    "observed_cash_debits": 7670,
+    "observed_cash_rewards": 37320,
+    "restore_attempts": 359,
+    "training_healing_attempts": 145
+  },
+  "new_weights": 0,
+  "next_work": "Proposed two-hour copy-only diagnosis of the exact empty menu, reusing existing story inventory, Tower executor and referee. Test positive and invalid-state cases and an assembled copied handoff before preparing any successor. No repair or new actor dispatched by this monitor.",
+  "no_repair_restart_successor": true,
+  "no_unclosed_segment": true,
+  "original_deadline_utc": "2026-10-16T14:02:46.637152+00:00",
+  "pins_verified": {
+    "environment": 4512,
+    "package": 7878,
+    "protected": 458
+  },
+  "plan_sha256": "7c0bf50158bd6bb6478af6821ca7e69ced3ab2a38409dde9c8249b5742fd010e",
+  "private_native_receipt_count": 31,
+  "private_retained_sha256": "def64df45fd8247362f6989671fb23a9c064c1e70ae74123f86d8ec3cfd4bd02",
+  "process_exit": {
+    "exit_code": 0,
+    "exited_at_utc": "2026-10-15T23:14:20.739515+00:00",
+    "no_restart": true,
+    "root_result_exists": true,
+    "safety_stop_reason": null,
+    "supervisor_seconds": 4294.03526145895,
+    "worker_exit_confirmed": true,
+    "worker_pid": 1942
+  },
+  "process_exit_sha256": "f3b0efa92f31a3fb3b78ffcbbf82893577012ab9ca77f22137694d5ca93fef27",
+  "recorded_at_utc": "2026-10-15T23:25:13.192025+00:00",
+  "registration_delta_from_initial_starter": 20,
+  "root_result_sha256": "2d00f2fc693123f9e5ec9bc826662d25687fc4334138a65aeb3ce4cb5e127769",
+  "root_seconds": 4258.47067991714,
+  "run": "red-frozen-autonomous-run-20261015-story-facing-v1",
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.frozen-terminal-retention.v1",
+  "started_at_utc": "2026-10-15T22:02:46.637152+00:00",
+  "startup_actions": 178,
+  "startup_frames": 22213,
+  "status": "failed_stopped",
+  "stop_diagnostics": {
+    "additional_inputs_authorized": false,
+    "category": "missing_executable_option",
+    "diagnostic_only": true,
+    "error_chain": null,
+    "failure_reason": null,
+    "resume_authorized": false,
+    "safe_terminal": true,
+    "schema": "pokemon.red.player-stop-diagnostics.v1",
+    "stop_reason": "menu_unavailable"
+  },
+  "storage_or_deadline_stop": false,
+  "tail_has_episode": true,
+  "terminal_at": [
+    4,
+    10
+  ],
+  "terminal_context_sha256": "6bae0b4392f80ae5aae5172498b02e80bb5310e00f0a46386d0bc6448b58b910",
+  "terminal_field_ready": true,
+  "terminal_map_id": 148,
+  "terminal_reason": "menu_unavailable",
+  "terminal_state_sha256": "1c41aa63728ba1c8301d31d71fb9d0dbe27200399e49e79ebee3cad90b240240",
+  "terminal_tail": {
+    "actions_attempted": 749,
+    "actions_completed": 749,
+    "automatic_fit": false,
+    "buttons_released": true,
+    "control_recovery_cash_debits": 0,
+    "diagnostic_events": 956,
+    "diagnostic_journal_seconds": 3.971036188537255,
+    "frames": 56508,
+    "goal_attempts": 12,
+    "nested_restore_attempts": 0,
+    "observed_cash_changes": 1,
+    "observed_cash_debits": 0,
+    "observed_cash_rewards": 690,
+    "promotions": 0,
+    "restore_attempts": 1,
+    "schema": "pokemon.red.native-player-costs.v1",
+    "seconds": 34.5813325420022,
+    "training_healing_attempts": 0
+  },
+  "train_examples": 0,
+  "unchanged_source_and_actor": true,
+  "whole_party_restored": true
+}

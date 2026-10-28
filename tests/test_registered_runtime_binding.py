@@ -3,6 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 from test_red_native_boxed_evolution import runtime_fixture
+from synthetic_evolution_cartridge import synthetic_evolution_cartridge
 
 from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.executor import CountingExecutor
@@ -93,7 +94,7 @@ def test_native_offer_uses_registration_and_real_reserves(
     tmp_path, reserve, inherited, count, ready
 ):
     runtime, _, _ = bound_fixture(tmp_path, reserve=reserve, inherited=inherited, count=count)
-    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"fixture"))
+    native = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=synthetic_evolution_cartridge()))
     actions = CountingExecutor(SimpleNamespace(execute=lambda _: pytest.fail("unexpected input")))
     before = native.adapter.observe()
     offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(before)
@@ -235,7 +236,7 @@ def test_native_single_copy_training_requires_real_registration(
         return None, 1, 0
 
     monkeypatch.setattr(native.context, "run_red_team_balancing", train)
-    bound = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=b"fixture"), maximum_quanta=2)
+    bound = bind_native_boxed_evolution(runtime, SimpleNamespace(rom=synthetic_evolution_cartridge()), maximum_quanta=2)
     actions = CountingExecutor(SimpleNamespace(execute=lambda _: None))
     if not register_target:
         with pytest.raises(ValueError, match="physical stock lacks"):

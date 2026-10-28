@@ -11,8 +11,8 @@ from typing import Literal
 
 from .actions import MacroAction, MacroActionKind
 from .battle_runtime import BattleActionExecutor, BattleRuntimeTiming
-from .observation import PokemonRedStateReader, RawGameState, event_flag_is_set
-from .red_learned_trainer import FrozenTrainerBattler
+from .observation import EventFlag, MapId, PokemonRedStateReader, RawGameState, event_flag_is_set
+from .red_learned_trainer import FrozenTrainerBattler, qualified_party_limit, story_party_limit
 from .red_trainer_practice_episode import RedTrainerPracticeEpisode
 
 
@@ -53,10 +53,16 @@ def continue_learned_trainer_battle(
     executor: BattleActionExecutor,
     *,
     trainer_identity: tuple[int, int, int],
-    defeated_event: int,
+    defeated_event: int | None,
     ordinary_victory_money: int,
     timing: BattleRuntimeTiming,
     maximum_settle_pulses: int = 128,
+    remaining_decisions: int = 80,
+    story_authority: bool = False,
+    victory_items: tuple[tuple[int, int], ...] = (),
+    victory_badge_bits: int = 0,
+    copy_scope=None,
+    evolution_guard=None,
 ) -> TrainerBattleCompletion:
     """Own one continuation; never reload, select teacher moves or retry.
 
@@ -64,29 +70,106 @@ def continue_learned_trainer_battle(
     cartridge blackout, half cash, the recorded recovery map and restored HP.
     Unsupported/budget stops remain unresolved with no settlement inputs.
     """
+    from .red_eventless_trainer import (
+        admitted_eventless_identity,
+        eventless_battle_finished,
+        eventless_battle_ready,
+    )
+
     if (
         len(trainer_identity) != 3
         or any(type(value) is not int or not 0 <= value <= 255 for value in trainer_identity)
-        or type(defeated_event) is not int
-        or defeated_event < 0
+        or (defeated_event is not None and (type(defeated_event) is not int or defeated_event < 0))
+        or (
+            defeated_event is None
+            and (
+                not story_authority
+                or copy_scope is not None
+                or victory_items
+                or victory_badge_bits
+                or not admitted_eventless_identity(trainer_identity)
+            )
+        )
         or type(ordinary_victory_money) is not int
         or ordinary_victory_money < 0
         or type(maximum_settle_pulses) is not int
         or not 1 <= maximum_settle_pulses <= 128
+        or type(remaining_decisions) is not int
+        or not 1 <= remaining_decisions <= 80
+        or type(story_authority) is not bool
+        or type(victory_badge_bits) is not int
+        or not 0 <= victory_badge_bits <= 255
+        or type(victory_items) is not tuple
+        or any(
+            type(row) is not tuple
+            or len(row) != 2
+            or type(row[0]) is not int
+            or not 1 <= row[0] <= 255
+            or type(row[1]) is not int
+            or not 1 <= row[1] <= 99
+            for row in victory_items
+        )
+        or len(dict(victory_items)) != len(victory_items)
+        or ((victory_items or victory_badge_bits) and not story_authority)
     ):
         raise ValueError("invalid learned trainer completion contract")
+    if evolution_guard is not None:
+        from .red_trainer_evolution import RedTrainerEvolutionGuard
+
+        if not story_authority or type(evolution_guard) is not RedTrainerEvolutionGuard:
+            raise ValueError("level evolution requires a typed story guard")
+    if copy_scope is not None:
+        from .red_story_copy import StoryCopyBattler, StoryCopyScope
+
+        if (
+            type(battler) is not StoryCopyBattler
+            or type(copy_scope) is not StoryCopyScope
+            or (
+                story_authority
+                or victory_items
+                or victory_badge_bits
+                or remaining_decisions > copy_scope.maximum_decisions
+                or (trainer_identity, defeated_event, ordinary_victory_money)
+                != (
+                    copy_scope.contract.trainer_identity,
+                    copy_scope.contract.defeated_event,
+                    copy_scope.contract.victory_money,
+                )
+            )
+        ):
+            raise ValueError("invalid isolated copy lifecycle authority")
+        battler.require_scope(copy_scope)
     initial = reader.read()
+    party_limit = story_party_limit if story_authority else qualified_party_limit
     if (
         initial.battle_state != 2
         or initial.map_id is None
         or initial.party_count is None
-        or not 1 <= initial.party_count <= 3
+        or not 1
+        <= initial.party_count
+        <= (
+            6
+            if copy_scope is not None
+            else battler.story_limit() if (
+                story_authority and isinstance(battler, FrozenTrainerBattler)
+                and battler.development_story_scope is not None
+            ) else party_limit(
+                getattr(battler, "model_sha256", None),
+                getattr(battler, "qualification_sha256", None),
+            )
+        )
         or initial.party_species_ids is None
         or len(initial.party_species_ids) != initial.party_count
         or initial.bag_items is None
         or initial.event_flags is None
-        or defeated_event >= len(initial.event_flags) * 8
-        or event_flag_is_set(initial.event_flags, defeated_event)
+        or (
+            defeated_event is not None
+            and (
+                defeated_event >= len(initial.event_flags) * 8
+                or event_flag_is_set(initial.event_flags, defeated_event)
+            )
+        )
+        or (defeated_event is None and not eventless_battle_ready(reader, trainer_identity))
         or type(initial.player_money) is not int
         or not 0 <= initial.player_money <= 999999
     ):
@@ -96,12 +179,40 @@ def continue_learned_trainer_battle(
     blackout_map = reader.read_last_blackout_map()
     fainted: set[int] = set()
 
-    def preserve(raw: RawGameState) -> None:
+    def preserve(raw: RawGameState, *, victory: bool = False) -> None:
+        rewards_allowed = (
+            victory
+            and raw.battle_state == 0
+            and raw.event_flags is not None
+            and (
+                event_flag_is_set(raw.event_flags, defeated_event)
+                if defeated_event is not None
+                else eventless_battle_finished(reader, trainer_identity, won=True)
+            )
+        )
+        rewarded_bag = dict(initial.bag_items or ())
+        for item, count in victory_items:
+            rewarded_bag[item] = rewarded_bag.get(item, 0) + count
+        inventory_ok = raw.bag_items == initial.bag_items or (
+            rewards_allowed and dict(raw.bag_items or ()) == rewarded_bag
+        )
+        badge_ok = raw.badge_bits == initial.badge_bits or (
+            rewards_allowed
+            and initial.badge_bits is not None
+            and raw.badge_bits == initial.badge_bits | victory_badge_bits
+        )
         if (
             raw.party_count != initial.party_count
-            or raw.party_species_ids != initial.party_species_ids
-            or raw.bag_items != initial.bag_items
-            or raw.badge_bits != initial.badge_bits
+            or (
+                raw.party_species_ids != initial.party_species_ids
+                and not (
+                    victory
+                    and evolution_guard is not None
+                    and evolution_guard.matches(initial, raw)
+                )
+            )
+            or not inventory_ok
+            or not badge_ok
             or raw.party_hp is None
             or len(raw.party_hp) != initial.party_count
             or raw.party_max_hp is None
@@ -133,10 +244,25 @@ def continue_learned_trainer_battle(
         expected_map=initial.map_id,
         timing=timing,
         decision_guard=guard,
+        maximum_decisions=remaining_decisions,
+        **({"story_authority": True} if story_authority else {}),
     )
     raw = reader.read()
-    preserve(raw)
     won = episode.battle_won and episode.stop_reason == "battle_won"
+    # Field scripts reuse enemy-roster RAM. An episode may truthfully retain
+    # an unresolved HP-based summary after a native win. Admit only its exact
+    # battle-exit boundary to settlement; the event, result, payout, position,
+    # party, inventory and field checks below must still prove the outcome.
+    field_win_candidate = (
+        not episode.battle_won
+        and episode.stop_reason == "battle_exited_without_win"
+        and raw.battle_state == 0
+        and raw.battle_result == 0
+        and raw.party_hp is not None
+        and any(raw.party_hp)
+    )
+    won = won or field_win_candidate
+    preserve(raw, victory=won)
     lost = not episode.battle_won and episode.stop_reason == "party_defeated"
     if lost and any(raw.party_hp or ()):
         raise TrainerBattleLifecycleError("loss lacks an observed defeated party")
@@ -160,7 +286,7 @@ def continue_learned_trainer_battle(
     )
     for pulse in range(maximum_settle_pulses + 1):
         raw = reader.read()
-        preserve(raw)
+        preserve(raw, victory=won)
         if raw.battle_state not in {0, 2}:
             raise TrainerBattleLifecycleError("unsupported settlement battle state")
         if raw.battle_state == 2:
@@ -169,25 +295,63 @@ def continue_learned_trainer_battle(
                 raise TrainerBattleLifecycleError("settlement would take an unowned battle choice")
         ready = reader.read_input_readiness().ready
         dialogue = reader.read_bottom_dialogue_box_visible()
-        if raw.battle_state == 0 and ready and not dialogue and any(raw.party_hp or ()):
+        if (
+            raw.battle_state == 0
+            and ready
+            and not dialogue
+            and any(raw.party_hp or ())
+            and (
+                defeated_event is not None
+                or not won
+                or eventless_battle_finished(reader, trainer_identity, won=True)
+            )
+        ):
             break
         if pulse == maximum_settle_pulses:
             raise TrainerBattleLifecycleError("battle settlement exhausted its pulse budget")
         if raw.battle_state == 2 or dialogue:
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+    # Champion's native script can finish its escort before field readiness.
+    # Only that exact admitted story encounter may leave its battle coordinates;
+    # payout, inventory, party, result and live event checks below still apply.
+    champion_epilogue = (
+        won
+        and (story_authority or copy_scope is not None)
+        and initial.map_id == MapId.CHAMPIONS_ROOM
+        and defeated_event == int(EventFlag.BEAT_CHAMPION_RIVAL)
+        and trainer_identity in {(243, 43, 1), (243, 43, 2), (243, 43, 3)}
+        and raw.map_id == MapId.HALL_OF_FAME
+        and not victory_items
+        and not victory_badge_bits
+        and (
+            copy_scope is None
+            or (
+                copy_scope.contract.objective_id == "defeat_champion"
+                and copy_scope.contract.battle_plan_id == "cartridge-final-story"
+                and copy_scope.contract.map_id == int(MapId.CHAMPIONS_ROOM)
+            )
+        )
+    )
     if (
         raw.player_money != expected_money
         or not registrations <= frozenset(reader.read_pokedex_state().owned_species)
         or reader.read_last_blackout_map() != blackout_map
-        or raw.map_id != (initial.map_id if won else blackout_map)
+        or (not champion_epilogue and raw.map_id != (initial.map_id if won else blackout_map))
         or raw.event_flags is None
-        or event_flag_is_set(raw.event_flags, defeated_event) != won
+        or (
+            event_flag_is_set(raw.event_flags, defeated_event) != won
+            if defeated_event is not None
+            else not eventless_battle_finished(reader, trainer_identity, won=won)
+        )
         or (
             won
             and (
                 raw.battle_result != 0
-                or (raw.player_y, raw.player_x) != (initial.player_y, initial.player_x)
+                or (
+                    not champion_epilogue
+                    and (raw.player_y, raw.player_x) != (initial.player_y, initial.player_x)
+                )
             )
         )
         or (

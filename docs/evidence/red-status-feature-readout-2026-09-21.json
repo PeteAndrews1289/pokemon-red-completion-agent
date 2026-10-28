@@ -1,0 +1,438 @@
+{
+  "actor_memory_writes": 0,
+  "all_event_and_terminal_hashes_verified": true,
+  "authority_promotions": 0,
+  "basis_sha256": "0734686a10ffa0d231ea4b7456261f53b55d6e7762a1455fb3974af9118e5951",
+  "candidate_predictions_verified": 197,
+  "candidate_sha256": "9bec7380560f00489905e304782084dc4cfa0c35dbb8991924b883a47cd4be9f",
+  "collection_delta": 0,
+  "decision_records": 351,
+  "episodes": 128,
+  "event_records": 1788,
+  "fit": {
+    "groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 0,
+          "high_cost_errors": 0,
+          "regret": 0.0001270298585647104
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 11,
+          "high_cost_errors": 7,
+          "regret": 0.668523548768489
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 2,
+          "high_cost_errors": 0,
+          "regret": 0.00461430054251136
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.774339628106996
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.25334219438700195
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 15,
+          "high_cost_errors": 10,
+          "regret": 0.7172800121144663
+        }
+      }
+    ],
+    "hidden_parameters_unchanged": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_result": {
+      "anchor_l2": 0.001,
+      "iterations": 65,
+      "loss": 0.15093400613846292,
+      "message": "Optimization terminated successfully",
+      "minimum_constraint_slack": -6.3976601794024646e-15,
+      "parameter_distance": 0.9332437702947997,
+      "seconds": 0.025538082933053374,
+      "stationarity_residual": 0.00002099632345943842,
+      "success": true
+    }
+  },
+  "frames": 482048,
+  "gameplay_running": false,
+  "independently_verified_stationarity": 0.000020996323459404535,
+  "invalid_actions": 0,
+  "later_group_regret_reduction_fraction": 0.827062819519315,
+  "learned_continuation_or_evaluation_choices": 351,
+  "new_target_contexts": 0,
+  "oldest_group_gate": true,
+  "plan_sha256": "fbdd48d7a1a27049783297b160ba98c3be69801f0e35eead9275888500e0c46e",
+  "prescribed_first_choices": 0,
+  "protected_sha256": {
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38"
+  },
+  "representation": {
+    "contrast_rank": 16,
+    "hidden_width": 16,
+    "high_cost_initial_errors": 27,
+    "individual_feasibility": [
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 13
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 31
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 34
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 36
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 55
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 84
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 88
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 123
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 126
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 127
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 130
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 132
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 136
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 156
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 159
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 160
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 162
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 187
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 228
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 230
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 231
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 233
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 234
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 237
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 244
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 270
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 273
+      }
+    ],
+    "individually_correctable_errors": 25,
+    "joint_learnability_claim": false
+  },
+  "result": {
+    "authority_promotions": 0,
+    "fit_gate": true,
+    "fits": 1,
+    "screen": {
+      "concerning_selections": 13,
+      "decisions": {
+        "candidate": 197,
+        "frozen": 154
+      },
+      "improved_won_status_cases": 6,
+      "passed": false,
+      "wins": {
+        "candidate": 37,
+        "frozen": 32
+      }
+    },
+    "withheld": null
+  },
+  "retention": {
+    "minimum_constraint_slack": -1.0685896612017132e-15,
+    "protected_preferences": 182,
+    "retention_regressions": 0
+  },
+  "reward_alignment": {
+    "groups": [
+      {
+        "concern_contexts": 23,
+        "concerns_by_kind": {
+          "accuracy_floor": 2,
+          "already_confused": 2,
+          "electric_paralysis_type_immune": 2,
+          "heal_full_hp": 4,
+          "major_status_occupied": 11,
+          "poison_type_immune": 2
+        },
+        "contexts": 92,
+        "reward_favors_concerning_status": 0,
+        "reward_favors_concerning_status_all_branches_lost": 0
+      },
+      {
+        "concern_contexts": 50,
+        "concerns_by_kind": {
+          "accuracy_floor": 3,
+          "already_confused": 11,
+          "electric_paralysis_type_immune": 1,
+          "heal_full_hp": 1,
+          "major_status_occupied": 31,
+          "poison_type_immune": 3
+        },
+        "contexts": 94,
+        "reward_favors_concerning_status": 4,
+        "reward_favors_concerning_status_all_branches_lost": 3
+      },
+      {
+        "concern_contexts": 61,
+        "concerns_by_kind": {
+          "accuracy_floor": 4,
+          "already_confused": 7,
+          "electric_paralysis_type_immune": 1,
+          "heal_full_hp": 2,
+          "major_status_occupied": 44,
+          "poison_type_immune": 3
+        },
+        "contexts": 126,
+        "reward_favors_concerning_status": 8,
+        "reward_favors_concerning_status_all_branches_lost": 4
+      }
+    ],
+    "interpretation": "Flags are readiness diagnostics, not proof of causal inefficacy. Existing return can favor flagged choices, including shorter all-loss continuations. This diagnoses objective mismatch, not an authorized reward change or gate exemption.",
+    "matched_reward_decomposition": [
+      {
+        "all_six_branches_lost": false,
+        "capture_id": "trajectory-execution-balanced-confusion-1-0-003",
+        "concerns": [
+          "already_confused"
+        ],
+        "mean_components": {
+          "damage": {
+            "damage": 0.18273092369477908,
+            "pp_cost": -0.03333333333333333,
+            "remaining_hp": 0.16666666666666666,
+            "terminal": -3.3333333333333335,
+            "turn_cost": -0.46666666666666673,
+            "unchanged_status_cost": -0.6666666666666666
+          },
+          "status": {
+            "damage": 0.2389558232931727,
+            "pp_cost": -0.04,
+            "remaining_hp": 0.16666666666666666,
+            "terminal": -3.3333333333333335,
+            "turn_cost": -0.43333333333333335,
+            "unchanged_status_cost": -0.6666666666666666
+          }
+        },
+        "status_minus_damage_return": 0.08289156626506067,
+        "stops": {
+          "battle_won": 2,
+          "party_defeated": 4
+        }
+      },
+      {
+        "all_six_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-confusion-1-1-004",
+        "concerns": [
+          "already_confused"
+        ],
+        "mean_components": {
+          "damage": {
+            "damage": 0.11646586345381527,
+            "pp_cost": -0.02666666666666667,
+            "remaining_hp": 0,
+            "terminal": -10,
+            "turn_cost": -0.26666666666666666,
+            "unchanged_status_cost": -0.16666666666666666
+          },
+          "status": {
+            "damage": 0.09236947791164658,
+            "pp_cost": -0.02,
+            "remaining_hp": 0,
+            "terminal": -10,
+            "turn_cost": -0.20000000000000004,
+            "unchanged_status_cost": 0
+          }
+        },
+        "status_minus_damage_return": 0.21590361445783124,
+        "stops": {
+          "party_defeated": 6
+        }
+      },
+      {
+        "all_six_branches_lost": true,
+        "capture_id": "trajectory-execution-balanced-paralysis-0-0-003",
+        "concerns": [
+          "major_status_occupied"
+        ],
+        "mean_components": {
+          "damage": {
+            "damage": 0.07007575757575758,
+            "pp_cost": -0.04,
+            "remaining_hp": 0,
+            "terminal": -10,
+            "turn_cost": -0.4000000000000001,
+            "unchanged_status_cost": -1.5
+          },
+          "status": {
+            "damage": 0.034090909090909095,
+            "pp_cost": -0.02666666666666667,
+            "remaining_hp": 0,
+            "terminal": -10,
+            "turn_cost": -0.26666666666666666,
+            "unchanged_status_cost": -1
+          }
+        },
+        "status_minus_damage_return": 0.6106818181818188,
+        "stops": {
+          "party_defeated": 6
+        }
+      }
+    ],
+    "new_fits": 0,
+    "new_gameplay": 0,
+    "reward_changes": 0,
+    "schema": "pokemon.red.status-reward-alignment-audit.v1",
+    "screen_coverage": {
+      "affected_cases": 6,
+      "affected_decisions": 13,
+      "concerning_selections_not_executed": 2,
+      "concerns_by_kind": {
+        "already_confused": 2,
+        "heal_full_hp": 2,
+        "major_status_occupied": 9
+      },
+      "exact_training_input_matches": 3,
+      "first_affected_decision": 3,
+      "last_affected_decision": 9,
+      "matched_target_gaps": [
+        {
+          "case": "balanced-paralysis-0-0",
+          "decision": 3,
+          "selected_return_gap": 0,
+          "target_capture_id": "trajectory-execution-balanced-paralysis-0-0-003"
+        },
+        {
+          "case": "balanced-confusion-1-0",
+          "decision": 3,
+          "selected_return_gap": 0,
+          "target_capture_id": "trajectory-execution-balanced-confusion-1-0-003"
+        },
+        {
+          "case": "balanced-confusion-1-1",
+          "decision": 4,
+          "selected_return_gap": 0,
+          "target_capture_id": "trajectory-execution-balanced-confusion-1-1-004"
+        }
+      ],
+      "player_asleep_at_concerning_selection": 2
+    }
+  },
+  "schema": "pokemon.red.status-readout-audit.v1",
+  "source_commit": "e149e37020053827184cec7e33c34151adc32321",
+  "status_move_attempts_including_prescribed": 44,
+  "stops": {
+    "battle_won": 69,
+    "party_defeated": 59
+  },
+  "training_contexts": 312
+}

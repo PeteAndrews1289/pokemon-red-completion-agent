@@ -76,6 +76,26 @@ def test_cartridge_inventory_filters_registered_and_non_targets(monkeypatch):
     ]
 
 
+def test_physical_demand_preserves_registered_credit_and_cartridge_availability(monkeypatch):
+    monkeypatch.setattr(fishing, "fishing_tables", lambda _: SimpleNamespace(
+        by_map={23: (_slot(61), _slot(129)), 24: (_slot(118),)},
+    ))
+    registered = frozenset({61, 118, 129})
+    ordinary = fishing.red_super_rod_destination_offers(b"rom", registered)
+    assert ordinary == ()
+    offers = fishing.red_super_rod_destination_offers(b"rom", registered, physical_demand=(61,))
+    assert len(offers) == 1 and offers[0].map_id == 23
+    assert offers[0].missing_species_numbers == offers[0].physical_species_numbers == (61,)
+    features = fishing.red_fishing_destination_candidates(
+        offers, route_steps=(2,), maximum_route_steps=100, free_storage_slots=8,
+    )[0].features
+    assert features.completion_gain == 0
+    assert features.dependency_unlock_gain == 1 / 7
+    assert registered == frozenset({61, 118, 129})
+    with pytest.raises(ValueError, match="registered credit"):
+        fishing.red_super_rod_destination_offers(b"rom", registered, physical_demand=(60,))
+
+
 def test_menu_requires_two_executable_distinguishable_destinations():
     offers = (_offer(23, (116, 116)), _offer(24, (117, 118)))
     menu = fishing.red_fishing_destination_menu(

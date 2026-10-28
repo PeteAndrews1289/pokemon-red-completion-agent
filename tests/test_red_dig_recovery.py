@@ -10,9 +10,10 @@ import pokemon_red_completion.red_dig_recovery as dig
 import pokemon_red_completion.red_routed_recovery as recovery
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.observation import OverworldMovementMode
+from pokemon_red_completion.observation import MapId, OverworldMovementMode
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfileError,
+    RedGoalMechanic,
     _thaw,
     bind_dig_recovery_profile,
     build_red_goal_context_profile_payload,
@@ -24,9 +25,10 @@ from pokemon_red_completion.route_plan import RoutePlanningError
 
 def scene(monkeypatch):
     router, bindings, observe, state, ledger, calls = make_fixture(monkeypatch)
-    state['raw'] = replace(state['raw'], map_id=161, party_hp=(30, 15),
-                           party_moves=((1, 2), (91, 4)))
-    state['party'] = make_test_party(30, 15)
+    state["raw"] = replace(
+        state["raw"], map_id=161, party_hp=(30, 15), party_moves=((1, 2), (91, 4))
+    )
+    state["party"] = make_test_party(30, 15)
     router.runtime.profile = bind_dig_recovery_profile(_supply_transition_profile())
     reader = router.runtime.reader
     reader.read_overworld_movement_mode = lambda: OverworldMovementMode.WALKING
@@ -40,35 +42,42 @@ def scene(monkeypatch):
 
     def route(start, _map, goal_at):
         if start.map_id == 161:
-            raise RoutePlanningError('no walk out')
+            raise RoutePlanningError("no walk out")
         assert start.map_id == 5 and start.at == (6, 9)
         assert goal_at == (7, 3)
         return make_real_route()
 
     router.world.plan_feasible_to_map = route
-    traversal = SimpleNamespace(observe=lambda: TraversalSnapshot(
-        state['raw'].map_id, (state['raw'].player_y, state['raw'].player_x),
-        True, mode='land',
-    ))
-    monkeypatch.setattr(dig, 'Gen1TraversalObserver', lambda _: traversal)
-    monkeypatch.setattr(recovery, 'Gen1TraversalObserver', lambda _: traversal)
-    monkeypatch.setattr(dig, '_POKEMON_CENTER_MAPS', frozenset({64}))
-    monkeypatch.setattr(dig, 'dependency_specimen_ledger', lambda c: tuple(c.specimens))
+    traversal = SimpleNamespace(
+        observe=lambda: TraversalSnapshot(
+            state["raw"].map_id,
+            (state["raw"].player_y, state["raw"].player_x),
+            True,
+            mode="land",
+        )
+    )
+    monkeypatch.setattr(dig, "Gen1TraversalObserver", lambda _: traversal)
+    monkeypatch.setattr(recovery, "Gen1TraversalObserver", lambda _: traversal)
+    monkeypatch.setattr(dig, "_POKEMON_CENTER_MAPS", frozenset({64}))
+    monkeypatch.setattr(dig, "dependency_specimen_ledger", lambda c: tuple(c.specimens))
 
     def escape(actions, _reader, _emulator, *, expected_map):
         assert expected_map == 5
         actions.execute(MacroAction(MacroActionKind.WAIT))
-        state['raw'] = replace(state['raw'], map_id=5, player_y=6, player_x=9)
-        calls.append('dig')
+        state["raw"] = replace(state["raw"], map_id=5, player_y=6, player_x=9)
+        calls.append("dig")
 
-    monkeypatch.setattr(dig, '_field_dig', escape)
+    monkeypatch.setattr(dig, "_field_dig", escape)
     return router, bindings, observe, state, ledger, calls
 
 
 def bind(s):
     router, bindings, observe, *_ = s
     return recovery.bind_routed_center_recovery(
-        router, bindings, observe(), prepare_escort=lambda: None,
+        router,
+        bindings,
+        observe(),
+        prepare_escort=lambda: None,
     )
 
 
@@ -79,28 +88,28 @@ def test_escape_then_fresh_heal_retains_cost_and_does_not_execute_other_goal(mon
     assert calls == [] and router.actions.actions_executed == 0
     selected = next(b for b in offer.bindings if b.kind is GoalKind.RESTORE_TEAM)
     report = selected.execute()
-    assert calls == ['dig', 'transport']
-    assert report.evidence['dig_recovery']['escape_actions'] == 1
+    assert calls == ["dig", "transport"]
+    assert report.evidence["dig_recovery"]["escape_actions"] == 1
     assert report.actions_executed == router.actions.actions_executed > 1
-    assert selected.verify(report).status.value == 'succeeded'
-    assert state['raw'].party_hp == (30, 30)
-    with pytest.raises(dig.RedDigRecoveryError, match='consumed'):
+    assert selected.verify(report).status.value == "succeeded"
+    assert state["raw"].party_hp == (30, 30)
+    with pytest.raises(dig.RedDigRecoveryError, match="consumed"):
         selected.execute()
 
 
-@pytest.mark.parametrize('fault', ['flag', 'terrain', 'holder', 'anchor', 'pending', 'landing'])
+@pytest.mark.parametrize("fault", ["flag", "terrain", "holder", "anchor", "pending", "landing"])
 def test_unavailable_escape_remains_unavailable_without_input(monkeypatch, fault):
     s = scene(monkeypatch)
     router, _, _, state, _, calls = s
-    if fault == 'flag':
+    if fault == "flag":
         router.runtime.profile = _supply_transition_profile()
-    elif fault == 'terrain':
+    elif fault == "terrain":
         router.runtime.reader.read_current_map_tileset = lambda: 0
-    elif fault == 'holder':
-        state['raw'] = replace(state['raw'], party_hp=(30, 0))
-    elif fault == 'anchor':
+    elif fault == "holder":
+        state["raw"] = replace(state["raw"], party_moves=((1, 2), (3, 4)))
+    elif fault == "anchor":
         router.runtime.reader.read_last_blackout_map = lambda: 200
-    elif fault == 'pending':
+    elif fault == "pending":
         router.runtime.reader.read_pending_trainer_battle_identity = lambda: (1, 2)
     else:
         router.world.object_blockers[5] = frozenset({(6, 9)})
@@ -108,25 +117,74 @@ def test_unavailable_escape_remains_unavailable_without_input(monkeypatch, fault
     assert calls == [] and router.actions.actions_executed == 0
 
 
-@pytest.mark.parametrize('fault', ['anchor', 'hp', 'bag', 'ledger'])
+def test_fainted_dig_holder_is_legal_and_retained_until_center(monkeypatch):
+    s = scene(monkeypatch)
+    router, _, observe, state, _, calls = s
+    state["raw"] = replace(state["raw"], party_hp=(30, 0))
+    state["party"] = make_test_party(30, 0)
+    start = dig.Gen1TraversalObserver(router.runtime.reader).observe()
+    plan = dig.plan_dig_escape(router.world, router.runtime.reader, observe().raw, start)
+    assert plan is not None and plan.holder == 1
+    normal = dig._field_dig
+
+    def escape(*args, **kwargs):
+        assert state["raw"].party_hp == (30, 0)
+        normal(*args, **kwargs)
+        assert state["raw"].party_hp == (30, 0)
+
+    monkeypatch.setattr(dig, "_field_dig", escape)
+    selected = next(b for b in bind(s).bindings if b.kind is GoalKind.RESTORE_TEAM)
+    report = selected.execute()
+    assert calls == ["dig", "transport"]
+    assert report.evidence["dig_recovery"]["verified_escape"]
+    assert selected.verify(report).status.value == "succeeded"
+
+
+def test_agatha_room_rejects_dig_despite_escapable_tileset_without_input(monkeypatch):
+    s = scene(monkeypatch)
+    router, _, observe, state, _, calls = s
+    state["raw"] = replace(state["raw"], map_id=MapId.AGATHAS_ROOM)
+    router.runtime.reader.read_current_map_tileset = lambda: 15
+    def no_walk_out(*args, **kwargs):
+        raise RoutePlanningError("no walk out of retained League room")
+    router.world.plan_feasible_to_map = no_walk_out
+    start = dig.Gen1TraversalObserver(router.runtime.reader).observe()
+    assert dig.plan_dig_escape(router.world, router.runtime.reader, observe().raw, start) is None
+    assert not any(b.kind is GoalKind.RESTORE_TEAM for b in bind(s).bindings)
+    assert calls == [] and router.actions.actions_executed == 0
+
+
+def test_first_fainted_holder_matches_compiler_and_all_fainted_is_rejected(monkeypatch):
+    s = scene(monkeypatch)
+    router, _, observe, state, _, _ = s
+    state["raw"] = replace(state["raw"], party_hp=(0, 30), party_moves=((91, 2), (91, 4)))
+    start = dig.Gen1TraversalObserver(router.runtime.reader).observe()
+    assert (
+        dig.plan_dig_escape(router.world, router.runtime.reader, observe().raw, start).holder == 0
+    )
+    state["raw"] = replace(state["raw"], party_hp=(0, 0))
+    assert dig.plan_dig_escape(router.world, router.runtime.reader, observe().raw, start) is None
+
+
+@pytest.mark.parametrize("fault", ["anchor", "hp", "bag", "ledger"])
 def test_stale_origin_rejected_before_dig(monkeypatch, fault):
     s = scene(monkeypatch)
     router, _, _, state, ledger, calls = s
     selected = next(b for b in bind(s).bindings if b.kind is GoalKind.RESTORE_TEAM)
-    if fault == 'anchor':
+    if fault == "anchor":
         router.runtime.reader.read_last_blackout_map = lambda: 6
-    elif fault == 'hp':
-        state['raw'] = replace(state['raw'], party_hp=(30, 14))
-    elif fault == 'bag':
-        state['raw'] = replace(state['raw'], bag_items=())
+    elif fault == "hp":
+        state["raw"] = replace(state["raw"], party_hp=(30, 14))
+    elif fault == "bag":
+        state["raw"] = replace(state["raw"], bag_items=())
     else:
-        ledger.specimens = ('changed',)
-    with pytest.raises(dig.RedDigRecoveryError, match='changed before input'):
+        ledger.specimens = ("changed",)
+    with pytest.raises(dig.RedDigRecoveryError, match="changed before input"):
         selected.execute()
     assert calls == []
 
 
-@pytest.mark.parametrize('fault', ['map', 'position', 'bag', 'money', 'party', 'exception'])
+@pytest.mark.parametrize("fault", ["map", "position", "bag", "money", "party", "exception"])
 def test_bad_escape_never_runs_healing_or_hides_failure(monkeypatch, fault):
     s = scene(monkeypatch)
     router, _, _, state, _, calls = s
@@ -135,20 +193,24 @@ def test_bad_escape_never_runs_healing_or_hides_failure(monkeypatch, fault):
 
     def broken(*args, **kwargs):
         normal(*args, **kwargs)
-        if fault == 'exception':
-            raise RuntimeError('failed after input')
-        if fault == 'party':
-            state['party'] = make_test_party(30, 14)
+        if fault == "exception":
+            raise RuntimeError("failed after input")
+        if fault == "party":
+            state["party"] = make_test_party(30, 14)
         else:
-            changes = {'map': {'map_id': 6}, 'position': {'player_x': 8},
-                       'bag': {'bag_items': ()}, 'money': {'player_money': 210}}
-            state['raw'] = replace(state['raw'], **changes[fault])
+            changes = {
+                "map": {"map_id": 6},
+                "position": {"player_x": 8},
+                "bag": {"bag_items": ()},
+                "money": {"player_money": 210},
+            }
+            state["raw"] = replace(state["raw"], **changes[fault])
 
-    monkeypatch.setattr(dig, '_field_dig', broken)
+    monkeypatch.setattr(dig, "_field_dig", broken)
     with pytest.raises(RuntimeError):
         selected.execute()
-    assert calls == ['dig']
-    with pytest.raises(dig.RedDigRecoveryError, match='consumed'):
+    assert calls == ["dig"]
+    with pytest.raises(dig.RedDigRecoveryError, match="consumed"):
         selected.execute()
 
 
@@ -157,9 +219,43 @@ def test_opt_in_preserves_other_mechanics_and_old_identity():
     after = bind_dig_recovery_profile(before)
     assert before.profile_sha256 != after.profile_sha256
     assert before.providers[0] == after.providers[0] and before.providers[2] == after.providers[2]
-    assert after.providers[1].parameters['dig_recovery'] is True
+    assert after.providers[1].parameters["dig_recovery"] is True
     assert not before.providers[1].parameters
     assert bind_dig_recovery_profile(after) == after
+
+
+def test_existing_center_profile_can_opt_into_the_same_legal_escape():
+    source = _supply_transition_profile()
+    before = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=source.profile_id,
+        providers=tuple(
+            (spec.kind, RedGoalMechanic.CENTER_RESTORE, {})
+            if spec.kind is GoalKind.RESTORE_TEAM
+            else (spec.kind, spec.mechanic, _thaw(spec.parameters))
+            for spec in source.providers
+        ),
+    ))
+    after = bind_dig_recovery_profile(before)
+    assert after.providers[1].mechanic is RedGoalMechanic.CENTER_RESTORE
+    assert after.providers[1].parameters["dig_recovery"] is True
+    assert after.providers[0] == before.providers[0]
+    assert after.providers[2] == before.providers[2]
+    assert bind_dig_recovery_profile(after) == after
+
+
+@pytest.mark.parametrize("bad", (False, None, 1, "true"))
+def test_center_escape_needs_explicit_boolean_opt_in(bad):
+    source = _supply_transition_profile()
+    with pytest.raises(RedGoalContextProfileError, match="explicit opt-in"):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id=source.profile_id,
+            providers=tuple(
+                (spec.kind, RedGoalMechanic.CENTER_RESTORE, {"dig_recovery": bad})
+                if spec.kind is GoalKind.RESTORE_TEAM
+                else (spec.kind, spec.mechanic, _thaw(spec.parameters))
+                for spec in source.providers
+            ),
+        ))
 
 
 def test_escape_dispatch_budget_stops_a_runaway_compiler(monkeypatch):
@@ -174,28 +270,96 @@ def test_escape_dispatch_budget_stops_a_runaway_compiler(monkeypatch):
         for _ in range(129):
             actions.execute(MacroAction(MacroActionKind.WAIT))
 
-    monkeypatch.setattr(dig, '_field_dig', runaway)
+    monkeypatch.setattr(dig, "_field_dig", runaway)
     with pytest.raises(CompositionActionBudgetExhausted):
         selected.execute()
     assert s[0].actions.actions_executed == 128
     assert s[-1] == []
 
 
+@pytest.mark.parametrize("anchor,landing", [(1, (7, 4)), (7, (13, 19)), (8, (12, 11))])
+def test_shared_escape_uses_observed_town_without_a_recovery_profile(monkeypatch, anchor, landing):
+    router, _, _, state, _, calls = scene(monkeypatch)
+    router.runtime.profile = _supply_transition_profile()
+    reader = router.runtime.reader
+    reader.read_last_blackout_map = lambda: anchor
+    monkeypatch.setattr(dig, "red_fly_landings", lambda _rom: ((anchor, landing),))
+    router.world.local_graphs = {anchor: SimpleNamespace(edges={landing: ()})}
+    router.world.object_blockers = {anchor: frozenset()}
+    start = dig.Gen1TraversalObserver(reader).observe()
+    plan = dig.plan_dig_escape(router.world, reader, state["raw"], start)
+    assert plan.holder == 1 and plan.anchor == anchor and calls == []
+
+    def escape(actions, _reader, _emulator, *, expected_map):
+        assert expected_map == anchor
+        actions.execute(MacroAction(MacroActionKind.WAIT))
+        state["raw"] = replace(
+            state["raw"], map_id=anchor, player_y=landing[0], player_x=landing[1]
+        )
+        calls.append("dig")
+
+    monkeypatch.setattr(dig, "_field_dig", escape)
+    result = dig.execute_dig_escape(
+        router.world, reader, router.runtime.emulator, router.actions, plan
+    )
+    assert result["verified_escape"] is True and result["landing"] == list(landing)
+    assert result["escape_actions"] == 1 and calls == ["dig"]
+
+
+def test_shared_escape_rejects_changed_origin_before_input(monkeypatch):
+    router, _, _, state, _, calls = scene(monkeypatch)
+    reader = router.runtime.reader
+    plan = dig.plan_dig_escape(
+        router.world, reader, state["raw"], dig.Gen1TraversalObserver(reader).observe()
+    )
+    state["raw"] = replace(state["raw"], player_x=state["raw"].player_x + 1)
+    with pytest.raises(dig.RedDigRecoveryError, match="changed before input"):
+        dig.execute_dig_escape(router.world, reader, router.runtime.emulator, router.actions, plan)
+    assert calls == [] and router.actions.actions_executed == 0
+
+
+def test_shared_escape_rejects_pp_change_in_any_party_member(monkeypatch):
+    router, _, _, state, _, _ = scene(monkeypatch)
+    reader = router.runtime.reader
+    plan = dig.plan_dig_escape(
+        router.world, reader, state["raw"], dig.Gen1TraversalObserver(reader).observe()
+    )
+    original = dig._field_dig
+
+    def corrupt(*args, **kwargs):
+        original(*args, **kwargs)
+        state["raw"] = replace(state["raw"], party_pp=((1, 1), (1, 1)))
+
+    monkeypatch.setattr(dig, "_field_dig", corrupt)
+    with pytest.raises(dig.RedDigRecoveryError, match="safe landing and party"):
+        dig.execute_dig_escape(router.world, reader, router.runtime.emulator, router.actions, plan)
+
+
 def test_dig_option_is_an_ordered_prospective_transition():
     import run_red_regional_learning_cycle as cycle
 
     parser = cycle._parser()
-    action = next(a for a in parser._actions if '--dig-recovery' in a.option_strings)
-    assert action.dest == 'regional_transitions' and action.const == 'dig-recovery'
+    action = next(a for a in parser._actions if "--dig-recovery" in a.option_strings)
+    assert action.dest == "regional_transitions" and action.const == "dig-recovery"
 
 
-@pytest.mark.parametrize('bad', [False, 0, 1, 'true', None])
+@pytest.mark.parametrize("bad", [False, 0, 1, "true", None])
 def test_dig_flag_requires_literal_true(bad):
     before = _supply_transition_profile()
-    providers = [(s.kind, s.mechanic, {**_thaw(s.parameters), 'dig_recovery': bad}
-                  if s.kind is GoalKind.RESTORE_TEAM else _thaw(s.parameters))
-                 for s in before.providers]
+    providers = [
+        (
+            s.kind,
+            s.mechanic,
+            {**_thaw(s.parameters), "dig_recovery": bad}
+            if s.kind is GoalKind.RESTORE_TEAM
+            else _thaw(s.parameters),
+        )
+        for s in before.providers
+    ]
     with pytest.raises(RedGoalContextProfileError):
-        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-            profile_id=before.profile_id, providers=tuple(providers),
-        ))
+        parse_red_goal_context_profile(
+            build_red_goal_context_profile_payload(
+                profile_id=before.profile_id,
+                providers=tuple(providers),
+            )
+        )

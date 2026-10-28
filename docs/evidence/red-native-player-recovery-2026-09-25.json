@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon.red.native-player-recovery-engineering.v1",
+  "scope": "Partial audit step 3; step 4 not launched",
+  "classification": "same-lineage development mechanics qualification, not learned recovery",
+  "rom_free_tests_passed": 239,
+  "full_suite_run": false,
+  "private_audit_sha256": "f2c5204b5506a9b4667084cab1faa6011bf0a60b05cefc9ca4d3258cd6114c50",
+  "source_sha256": "da4c6ef3ed6c417e9e34a9e57d26b58f02656e6602866e59036723a73a999d03",
+  "attempts": [
+    {
+      "succeeded": false,
+      "actions": 66,
+      "frames": 4026,
+      "result_sha256": "f6790a9735b1fd5a86a33d701564c1f173fc50d21c096ac37d7834b79ad9dee2",
+      "terminal_sha256": "48cd1b1d3341929ebfcfa2e856b9ff21fecf86b8ab4293f7a1ffc63d2ec0030b",
+      "failure": "Default one-frame button timing did not complete Center restoration"
+    },
+    {
+      "succeeded": true,
+      "actions": 22,
+      "frames": 1584,
+      "result_sha256": "6871892a2daf8bde13d168d322d1396636b948af79ec656a2cc0d4c263fc1550",
+      "terminal_sha256": "a1d144e0dc203111c9995ed1a15ab475e44e765d5e3036f4b32aaee70df04d6a",
+      "source_is_actual_failed_endpoint": true,
+      "controller_press_release_frames": [8, 16],
+      "restoration_attempt_budget_amendment_disclosed": true
+    }
+  ],
+  "total_actions": 88,
+  "total_frames": 5610,
+  "before_hp": [16, 78, 72, 70, 0],
+  "after_hp": [206, 156, 144, 250, 121],
+  "full_hp_pp_and_status_restored": true,
+  "original_campaign_unchanged": true,
+  "campaign_stage_472_absent": true,
+  "audit_input_frames": 0,
+  "cash_spent": 0,
+  "items_spent": 0,
+  "memory_edits": 0,
+  "new_model_choices": 0,
+  "new_train_examples": 0,
+  "production_fits": 0,
+  "registration_delta": 0,
+  "authority_promotions": 0,
+  "qualification_limit": "Forced singleton support only; execution-time source pins retained. Subsequent phase-gate hardening has ROM-free regression coverage, not a native replay.",
+  "remaining": [
+    "Connect changing authenticated battle aftermath across actual multi-goal execution",
+    "Qualify learned story/preparation/resource choices and native TRAIN recording, beyond forced restoration",
+    "Authenticate comparison ancestry and exclusion from baseline/candidate training; catalog labels alone do not establish this",
+    "Collect at most 24 TRAIN lessons under first-eight stop, fit once with retention and run the frozen at-most-eight-pair comparison"
+  ]
+}

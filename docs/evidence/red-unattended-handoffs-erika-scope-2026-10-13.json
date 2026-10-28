@@ -1,0 +1,298 @@
+{
+  "schema": "pokemon.red.unattended-handoff-session.v1",
+  "session": "2026-10-13-unattended-handoffs-erika-scope",
+  "partition": "development",
+  "status": "completed_session",
+  "start_utc": "2026-10-13T02:00:47Z",
+  "cutoff_utc": "2026-10-13T05:00:47Z",
+  "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+  "package_sha256": "6bf0a783f062217f4efe30a7336af4a386812d5c640004ab742a47a64356e49e",
+  "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+  "new_train_examples": 0,
+  "new_fits": 0,
+  "new_weight_updates": 0,
+  "handoff_copy": {
+    "source_sha256": "f169f317a55f7d1ed8ecad06670e7f69cc495b47259ae3e2dcfb2a42ca0ad9e5",
+    "configuration_sha256": "bbd7256e4c57860efe13e8c21b3f7bf094c7c14359f2cbeffaac3685c785d7a8",
+    "passed": true,
+    "cases": [
+      {
+        "label": "nugget",
+        "failed_segment": 1,
+        "recovery_segment": 2,
+        "expected_source": "a06772f02c994a4dd8d459f682087fa78e9ed0500daf196d721f04e7d847aafc",
+        "result": {
+          "verification": "succeeded",
+          "operator_relaunch": false,
+          "ordinary_setback": false,
+          "failure_reason": null,
+          "source_sha256": "a06772f02c994a4dd8d459f682087fa78e9ed0500daf196d721f04e7d847aafc",
+          "terminal_sha256": "c388f6bfce42e8c15bb237408d46f14db7d4d25a54799fd6a39ba6e6b9bf6ded",
+          "actions": 111,
+          "frames": 10188,
+          "battle_evidence_keys": [
+            "episode",
+            "fainted_party_slots",
+            "field_ready",
+            "final_map",
+            "final_party_hp",
+            "funding_success",
+            "funding_verdict",
+            "money_delta",
+            "no_faint_constraint_met",
+            "outcome",
+            "recovery_required",
+            "schema"
+          ]
+        },
+        "passed": true
+      },
+      {
+        "label": "cerulean-thief",
+        "failed_segment": 3,
+        "recovery_segment": 4,
+        "expected_source": "d6d50652490f7c7fd3d8855589301f5a3a6f47a7fccaaf1d18e53190381bf409",
+        "result": {
+          "verification": "succeeded",
+          "operator_relaunch": false,
+          "ordinary_setback": false,
+          "failure_reason": null,
+          "source_sha256": "d6d50652490f7c7fd3d8855589301f5a3a6f47a7fccaaf1d18e53190381bf409",
+          "terminal_sha256": "de18879621478b63cb818c344588a84095723c1dea2aaf12b7b94376a43835ef",
+          "actions": 134,
+          "frames": 12480,
+          "battle_evidence_keys": [
+            "episode",
+            "fainted_party_slots",
+            "field_ready",
+            "final_map",
+            "final_party_hp",
+            "funding_success",
+            "funding_verdict",
+            "money_delta",
+            "no_faint_constraint_met",
+            "outcome",
+            "recovery_required",
+            "schema"
+          ]
+        },
+        "passed": true
+      }
+    ],
+    "correlated_copy": true,
+    "copy_back": false,
+    "source_loads": 1,
+    "state_restorations": 0,
+    "manual_goal_choices": 0,
+    "manual_relaunches": 0,
+    "code_changes": 0,
+    "new_costs": {
+      "actions": 4118,
+      "cash_debits": 0,
+      "decisions": 80,
+      "frames": 285144,
+      "heals": 2,
+      "seconds": 190.42169058369473
+    },
+    "completed_goal_outcomes": 78,
+    "model_selected_goals": 77,
+    "compulsory_prefaces": 2,
+    "original_failed_transports": 2,
+    "automatic_renewals": 6,
+    "worker_stopped": true,
+    "ready": true,
+    "fully_restored": false,
+    "terminal_sha256": "a7721a9445e616aa664c49dc236417e4bdce4905d10f0b070e04a31b310ba4a6",
+    "context_sha256": "ca13351c79d61c126993afb614bc8c92bde7afb18806cdc933aedf0d3ff76001",
+    "stop_reason": "declared_budget_exhausted"
+  },
+  "primary": {
+    "source_sha256": "4d018b17973a68d2a6243e11c07e03fcdda9783841a7735b7b6e2552ae6cc25f",
+    "context_sha256": "7fad13aebc0903e8ab0e90df2e859c00972c8bbc8d59a290f6f5ac9c1b54460d",
+    "configuration_sha256": "a61bb2fa730e3f80555b9896d470545cee7d35a8d7752fbba19ad0a38c9f4c68",
+    "badges_before": 3,
+    "registrations_before": 28,
+    "cash_before": 10165,
+    "objectives": [
+      "defeat_erika",
+      "obtain_silph_scope"
+    ],
+    "status": "completed_requested_objectives_after_two_local_repairs",
+    "terminal": "final-healing-continuation/runs/segment-001",
+    "terminal_sha256": "b115b2f0a05b645564457a44d0f40c4469e719107406744e363298aaa7aca976",
+    "terminal_context_sha256": "6d4f5c85b5934b2a8e4978fec85296c27e83d6808a82a1dc63869ab3dc0aa7aa",
+    "cumulative_costs": {
+      "actions": 272902,
+      "cash_debits": 8151,
+      "decisions": 389,
+      "frames": 22301130,
+      "heals": 352,
+      "seconds": 6620.537367081619
+    },
+    "new_costs": {
+      "actions": 7277,
+      "cash_debits": 200,
+      "decisions": 69,
+      "frames": 585160,
+      "heals": 4,
+      "seconds": 261.2168458737433
+    },
+    "successful_goals": 18,
+    "failed_goals": 1,
+    "new_registrations": 0,
+    "badges_after": 4,
+    "cash_after": 24787,
+    "manual_relaunches": 2,
+    "models_changed": false,
+    "unattended_regional_attempt_passed": false,
+    "family": "red-r29-erika-scope-handoff-session-20261013-v1",
+    "terminal_result_sha256": "d239c0602e43252e8a3d12c6fcac6fef19b87426153f9a6a642f0c9ecb6ba925",
+    "registrations_after": 28,
+    "gross_rewards": 14822,
+    "cash_debits": 200,
+    "party_levels": [
+      40,
+      19,
+      18,
+      19,
+      38,
+      37
+    ],
+    "all_six_originals_verified": true,
+    "fully_restored": true,
+    "ready": true,
+    "released": true,
+    "worker_stopped": true,
+    "live_driver_running": false,
+    "model_goal_choices": 59,
+    "model_goal_successes": 57,
+    "support_goal_outcomes": 9,
+    "compulsory_escape_trainer_prefaces": 1,
+    "total_metered_decisions": 69,
+    "total_goal_outcomes": 68,
+    "successful_goal_outcomes": 66,
+    "failed_goal_outcomes": 2,
+    "new_whole_party_losses": 0,
+    "manual_strategic_choices": 0,
+    "manual_battle_choices": 0,
+    "source_repair_batches": 2,
+    "configuration_unchanged": true,
+    "requested_player_targets_met": true,
+    "erika_verified": true,
+    "silph_scope_quantity": 1,
+    "location": {
+      "map_id": 133,
+      "at": [
+        3,
+        3
+      ]
+    },
+    "original_failures_retained": [
+      {
+        "kind": "advance_story",
+        "type": "SilphChapterError",
+        "error": "Scripted trainer battle did not start inside its bound."
+      },
+      {
+        "kind": "restore_team",
+        "type": "ValueError",
+        "error": "Hideout lift terminal or protected resources differ"
+      }
+    ]
+  },
+  "checks": {
+    "focused_and_related_tests_passed": 687,
+    "full_suite_run": false,
+    "hosted_ci_run": false,
+    "scoped_ruff_passed": true,
+    "scoped_diff_check_passed": true,
+    "final_source_inspection_zero_inputs": true,
+    "final_original_six_comparison_passed": true,
+    "native_full_party_restoration_verified": true,
+    "next_inspection_selected": "rescue_fuji"
+  },
+  "limits": [
+    "Regional targets completed in DEVELOPMENT with two retained errors and two qualified repair/relaunch interventions; no unchanged regional or full fresh autonomy pass.",
+    "All diagnostic states are related; identical copied and primary final bytes result from replayed legal inputs, not copy-back or independent evidence.",
+    "No TRAIN,fit,model parameter update,calibrated readiness stopping,global ranking qualification or cross-title transfer this session.",
+    "Final fresh Champion/concurrent Hall-of-Fame and124 contract remains0/5; this is not an overall project percentage."
+  ],
+  "repairs": {
+    "approach": {
+      "runtime_files": [
+        "silph.py",
+        "red_story_sight_entry.py",
+        "red_player_story_battle.py"
+      ],
+      "package_sha256": "e3b5d48bd1b4d716099980847d945106c1ef27bd7f6e0646bd8234bcd39fe11f",
+      "native_pre_error_copy_first_goal_verified": true,
+      "ordinary_escape_verified": true,
+      "two_trainers_won": true,
+      "copy_back": false,
+      "subsequent_healing_planner_failure_retained": true
+    },
+    "pending_trainer": {
+      "related_tests": 687,
+      "native_qualification": "verified_on_original_failed_wild_copy",
+      "ordinary_loss_preserved": true,
+      "source_sha256": "dfb7896a84b36bfa78a2615674d728662dfbf2e46d5bd08e69a897026697c357",
+      "copy_reached_lavender": true,
+      "code_or_config_changes_during_copy": 0
+    },
+    "setup_failures": {
+      "zero_input_export_attribute_error": 1,
+      "zero_input_backend_pin_filter_error": 1
+    },
+    "healing_navigation": {
+      "native_verified": true,
+      "source_sha256": "4dd2659cc2984b2765ac0a7e571e8a268772beb4e3386a1463024f92574f09a5",
+      "original_center": 141,
+      "actual_center": 81,
+      "goal_kind_unchanged": true,
+      "one_alternative_only": true,
+      "fully_restored": true,
+      "cash_preserved": true,
+      "inventory_preserved": true,
+      "copy_back": false,
+      "new_model_choice_credit": 0,
+      "purpose": "Replay original model-selected restoration on its exact diagnostic before-state; mechanical qualification, not a fresh policy comparison."
+    },
+    "poison_lift": {
+      "runtime_file": "red_player_hideout.py",
+      "source_sha256": "74d80a46efcf76c87b7133b98841f2235dee55fb9e5a0877c4d2a0e4789d9940",
+      "only_existing_poison_loss_allowed": true,
+      "levels_and_moves_guard_strengthened": true,
+      "native_copy_completed_curriculum": true,
+      "actual_primary_completed_curriculum": true,
+      "copy_back": false
+    },
+    "runtime_files": [
+      "silph.py",
+      "red_story_sight_entry.py",
+      "red_player_story_battle.py",
+      "red_player_wild_recovery.py",
+      "red_native_player.py",
+      "red_player_field_goals.py",
+      "red_player_hideout.py"
+    ],
+    "private_helper_files": [
+      "red_whole_player_inventory_20261006.py"
+    ]
+  },
+  "gameplay_stopped_confirmed_utc": "2026-10-13T03:40:31Z",
+  "final_package_sha256": "2e800fb3d1cabf61b6074b56d2ebd3127b7dcc3e64e89287e999ba8cb725a4d0",
+  "all_6941_data_inputs_unchanged": true,
+  "environment_unchanged": true,
+  "next_decision": {
+    "reuse_existing_save_and_package": true,
+    "objectives": [
+      "rescue_fuji",
+      "obtain_silph_card_key"
+    ],
+    "time_allowance_hours": 3,
+    "freeze_each_attempt": true,
+    "measure_manual_interventions": true,
+    "no_opening_replay": true,
+    "no_speculative_subsystem": true
+  }
+}

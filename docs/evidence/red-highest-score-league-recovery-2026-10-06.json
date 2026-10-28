@@ -1,0 +1,610 @@
+{
+  "schema": "pokemon.red.highest-score-league-recovery-result.v1",
+  "session_id": "2026-10-06-highest-score-league-recovery",
+  "status": "closed_scoped_integration_pass",
+  "partition": "development",
+  "independent": false,
+  "fit_allowed": false,
+  "started_at": "2026-10-06T14:22:39+00:00",
+  "native_finished_at": "2026-10-06T14:36:09.396285+00:00",
+  "original_cutoff": "2026-10-06T17:22:39+00:00",
+  "family": "red-highest-score-league-recovery-20261006-v1",
+  "private_audit_sha256": "52703abaf7a41c6ba574f1fc93e13434636f633a7b3a0fdc53d4fe8d14f3af58",
+  "initial_plan_sha256": "e29019055ef25bdbdeb7c1b10d174ebdebb3411706dfb470cd3e8a17b0dfa2f4",
+  "execution_finalization_sha256": "cf325523b913113db8173703c0aaec7b3957195bb266a6338269655713288023",
+  "policy_sha256": "c1e09db43f62ad42872bba2d594dc1f299eb9d95a010163d1542e88a6df031f2",
+  "components": {
+    "parent_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "recovery_head_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+    "wild_actor_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "scoped_story_actor_file_sha256": "e189983f79f7838f214e969f7cba19184c7392e546187b272bb61e40a76c8368"
+  },
+  "engineering": [
+    "Default-off DEVELOPMENT admission composes the existing highest-score V7 parent with the exact TRAIN V2 recovery child; defaults and other partitions remain protected.",
+    "Versioned identity records the parent decision rule; nested parent/child receipts count actual greedy queries. No score blending, new sampler, features or learned weights.",
+    "Actual Lorelei preview is derived from its cartridge contract; complete optional one/three-level member doses remain.",
+    "Authenticated new contexts carry original and previous-arm costs and latest actual battle history; older defeat-dose permission remains separate.",
+    "Initial zero-input helper API import failure was corrected prospectively; declaration-time helper and execution-finalization hashes are retained.",
+    "Post-native typing-only source-context cast fixed focused static errors without changing the stack during native execution."
+  ],
+  "prospective_limits_per_arm": {
+    "goal_attempts": 12,
+    "wild_battles": 64,
+    "inputs": 30000,
+    "frames": 2500000,
+    "native_seconds": 900,
+    "free_nurse_restores": 128
+  },
+  "arms": [
+    {
+      "arm": "112-head",
+      "result_sha256": "0d61462a50d03f8159434ea1eea2e5f4ba46e26661dd42994706d9d51db93bbf",
+      "plan_sha256": "fcfcbcbfd7e45ea2f4eec418d665685ba952633f796ceca2e78917caca794671",
+      "native_plan_sha256": "188c4de3314fd8d0f2bc296c12ae2034b6ee55ccdab0ce7281200e9d384658fc",
+      "source": {
+        "state_sha256": "45cb9e6c117965d4230499c79fbb7ac4d6e8457531ff3c3d8edd0b30abb8f1ee",
+        "cash": 300,
+        "levels": [
+          62,
+          28,
+          33,
+          22,
+          30,
+          35
+        ],
+        "owned": [
+          7,
+          8,
+          9,
+          16,
+          17,
+          21,
+          22,
+          43,
+          44,
+          56,
+          143
+        ],
+        "native_lorelei_won": false
+      },
+      "terminal": {
+        "state_sha256": "8d296284d7e8ff33f2bcf898a16db6e8ea535230a3bb43d91f552860f060e3f7",
+        "context_sha256": "f54d32730e4dcb8643fb7e9ea829ad85757d6a5f4947844058fa369cf6ce1960",
+        "cash": 5694,
+        "position": [
+          245,
+          3,
+          5
+        ],
+        "levels": [
+          64,
+          28,
+          33,
+          22,
+          30,
+          35
+        ],
+        "hp": [
+          129,
+          78,
+          98,
+          56,
+          90,
+          162
+        ],
+        "status": [
+          "healthy",
+          "healthy",
+          "healthy",
+          "healthy",
+          "healthy",
+          "healthy"
+        ],
+        "pp": [
+          [
+            13,
+            30,
+            0,
+            0
+          ],
+          [
+            20,
+            30,
+            35,
+            30
+          ],
+          [
+            35,
+            15,
+            30,
+            15
+          ],
+          [
+            35,
+            30,
+            25,
+            15
+          ],
+          [
+            35,
+            40,
+            30,
+            20
+          ],
+          [
+            15,
+            15,
+            10,
+            15
+          ]
+        ],
+        "owned": [
+          7,
+          8,
+          9,
+          16,
+          17,
+          21,
+          22,
+          43,
+          44,
+          56,
+          143
+        ],
+        "native_lorelei_won": true,
+        "input_ready": true,
+        "controls_released": true
+      },
+      "steps": [
+        {
+          "ordinal": 0,
+          "kind": "restore_team",
+          "parent_kind": "unlock_access",
+          "parent_mode": "model_greedy",
+          "child_consulted": true,
+          "policy_queries": 2,
+          "verification": "succeeded",
+          "ordinary_setback": false,
+          "cash_before": 300,
+          "cash_after": 300,
+          "cost": {
+            "actions": 22,
+            "cash_spent": 0,
+            "completed_actions": 22,
+            "frames": 1584
+          },
+          "candidate_count": 14,
+          "head_score_max": 1.1953947811135859
+        },
+        {
+          "ordinal": 1,
+          "kind": "advance_story",
+          "parent_kind": "unlock_access",
+          "parent_mode": "model_greedy",
+          "child_consulted": true,
+          "policy_queries": 2,
+          "verification": "failed",
+          "ordinary_setback": true,
+          "cash_before": 300,
+          "cash_after": 150,
+          "cost": {
+            "actions": 909,
+            "cash_spent": 150,
+            "completed_actions": 909,
+            "frames": 87168
+          },
+          "candidate_count": 13,
+          "head_score_max": 1.174982467183058
+        },
+        {
+          "ordinal": 2,
+          "kind": "advance_story",
+          "parent_kind": "unlock_access",
+          "parent_mode": "model_greedy",
+          "child_consulted": true,
+          "policy_queries": 2,
+          "verification": "succeeded",
+          "ordinary_setback": false,
+          "cash_before": 150,
+          "cash_after": 5694,
+          "cost": {
+            "actions": 514,
+            "cash_spent": -5544,
+            "completed_actions": 514,
+            "frames": 49092
+          },
+          "candidate_count": 13,
+          "head_score_max": 1.071143549149298
+        }
+      ],
+      "costs": {
+        "actions_attempted": 1445,
+        "actions_completed": 1445,
+        "automatic_fit": false,
+        "buttons_released": true,
+        "frames": 137844,
+        "goal_attempts": 3,
+        "nested_restore_attempts": 0,
+        "promotions": 0,
+        "restore_attempts": 1,
+        "schema": "pokemon.red.native-player-costs.v1",
+        "seconds": 122.96117370796856
+      },
+      "spent": {
+        "actions": 147934,
+        "cash_debits": 94967,
+        "decisions": 614,
+        "frames": 13311995,
+        "heals": 203,
+        "seconds": 14129.577006918902
+      },
+      "story_battles": [
+        {
+          "won": false,
+          "stop": "party_defeated",
+          "decision_count": 63,
+          "metrics": {
+            "attack_turn_utility_sum": -4.547317202028741,
+            "invalid_action_failures": 0,
+            "move_suppressed_or_failed": 7,
+            "opponent_faints": 4,
+            "party_faints": 6,
+            "party_hp_lost": 679,
+            "party_pp_spent": 47,
+            "party_status_changes": 0,
+            "policy_latency_ns_max": 8079708,
+            "policy_latency_ns_mean": 4277371.619047619,
+            "policy_latency_ns_min": 305625,
+            "selected_move_pp_spends": 47,
+            "teacher_interventions": 0
+          },
+          "teacher_queries": 0,
+          "memory_write_actions": 0,
+          "outcome_sha256": "66f20a6f5f0be52fac7a4443117619bb696510d7559e942f153b2a8e6cd31199",
+          "actor_model_sha256": "e189983f79f7838f214e969f7cba19184c7392e546187b272bb61e40a76c8368"
+        },
+        {
+          "won": true,
+          "stop": "battle_won",
+          "decision_count": 32,
+          "metrics": {
+            "attack_turn_utility_sum": 15.294309963540732,
+            "invalid_action_failures": 0,
+            "move_suppressed_or_failed": 1,
+            "opponent_faints": 5,
+            "party_faints": 0,
+            "party_hp_lost": 69,
+            "party_pp_spent": 27,
+            "party_status_changes": 0,
+            "policy_latency_ns_max": 17203417,
+            "policy_latency_ns_mean": 4834442.84375,
+            "policy_latency_ns_min": 1135750,
+            "selected_move_pp_spends": 27,
+            "teacher_interventions": 0
+          },
+          "teacher_queries": 0,
+          "memory_write_actions": 0,
+          "outcome_sha256": "a6c8a4fd9dbd62e4ba8548580110a011a9e65ff5d1f2b65d55106b60f3dca491",
+          "actor_model_sha256": "e189983f79f7838f214e969f7cba19184c7392e546187b272bb61e40a76c8368"
+        }
+      ],
+      "actual_history": {
+        "engaged_levels": [
+          63
+        ],
+        "exhausted_move_fraction": 0.08333333333333333,
+        "last_opponent_hp_fraction": null,
+        "opponent_count": 5,
+        "opponent_levels": [
+          54,
+          53,
+          54,
+          56,
+          56
+        ],
+        "opponents_defeated": 5,
+        "party_size": 6,
+        "pp_spent_fraction": 0.047787610619469026,
+        "result": "won",
+        "suppressed_attack_fraction": 0.03571428571428571,
+        "terminal_fainted_count": 0,
+        "terminal_hp_fraction": 0.8988269794721407,
+        "voluntary_switch_fraction": 0
+      },
+      "ended_at": "2026-10-06T14:34:48.824541+00:00",
+      "parent_queries": 3,
+      "child_queries": 3,
+      "registration_delta": 0,
+      "support_selections": 0,
+      "wild_battles": 0,
+      "model_selections": 3,
+      "interpretation": "earned_exposed_development_continuation"
+    },
+    {
+      "arm": "162-head",
+      "result_sha256": "fb105de1d834328a66e0a8363614afcd957a391cb181d0754bcc665c5f10b04f",
+      "plan_sha256": "4629764ed161861f5f0fd256f63e4cff8ba4a2ca1f031c8189cc5bf126be44e0",
+      "native_plan_sha256": "0a928a01008e8d4d3c633c4a7deadcc8f496a04f3d8a4be33cf22a0c1a34ffb3",
+      "source": {
+        "state_sha256": "bf03fcea73e53f3dad3cc603e5f2e385450f32f9ac87f876442536a8d1000100",
+        "cash": 804,
+        "levels": [
+          70,
+          28,
+          33,
+          21,
+          29,
+          35
+        ],
+        "owned": [
+          7,
+          8,
+          9,
+          16,
+          17,
+          21,
+          22,
+          43,
+          44,
+          56,
+          143
+        ],
+        "native_lorelei_won": false
+      },
+      "terminal": {
+        "state_sha256": "0f2b33a3cc31cdd99def611e71fa2e5b78f1d68bed51a553ffecf6a91fb47b72",
+        "context_sha256": "d55666de821999076ff263fc2d962262b46c11ef83981a9d8aeb5326097ebf4c",
+        "cash": 6348,
+        "position": [
+          245,
+          3,
+          5
+        ],
+        "levels": [
+          71,
+          28,
+          33,
+          21,
+          29,
+          35
+        ],
+        "hp": [
+          142,
+          64,
+          98,
+          0,
+          87,
+          162
+        ],
+        "status": [
+          "paralysis",
+          "healthy",
+          "healthy",
+          "healthy",
+          "healthy",
+          "healthy"
+        ],
+        "pp": [
+          [
+            15,
+            6,
+            0,
+            8
+          ],
+          [
+            19,
+            30,
+            35,
+            30
+          ],
+          [
+            35,
+            15,
+            30,
+            15
+          ],
+          [
+            35,
+            30,
+            25,
+            14
+          ],
+          [
+            35,
+            40,
+            30,
+            19
+          ],
+          [
+            15,
+            15,
+            10,
+            15
+          ]
+        ],
+        "owned": [
+          7,
+          8,
+          9,
+          16,
+          17,
+          21,
+          22,
+          43,
+          44,
+          56,
+          143
+        ],
+        "native_lorelei_won": true,
+        "input_ready": true,
+        "controls_released": true
+      },
+      "steps": [
+        {
+          "ordinal": 0,
+          "kind": "advance_story",
+          "parent_kind": "unlock_access",
+          "parent_mode": "model_greedy",
+          "child_consulted": true,
+          "policy_queries": 2,
+          "verification": "succeeded",
+          "ordinary_setback": false,
+          "cash_before": 804,
+          "cash_after": 6348,
+          "cost": {
+            "actions": 428,
+            "cash_spent": -5544,
+            "completed_actions": 428,
+            "frames": 40800
+          },
+          "candidate_count": 14,
+          "head_score_max": 1.2080065604301877
+        }
+      ],
+      "costs": {
+        "actions_attempted": 428,
+        "actions_completed": 428,
+        "automatic_fit": false,
+        "buttons_released": true,
+        "frames": 40800,
+        "goal_attempts": 1,
+        "nested_restore_attempts": 0,
+        "promotions": 0,
+        "restore_attempts": 0,
+        "schema": "pokemon.red.native-player-costs.v1",
+        "seconds": 36.48466133297188
+      },
+      "spent": {
+        "actions": 155186,
+        "cash_debits": 134903,
+        "decisions": 666,
+        "frames": 13876313,
+        "heals": 215,
+        "seconds": 14895.988704752875
+      },
+      "story_battles": [
+        {
+          "won": true,
+          "stop": "battle_won",
+          "decision_count": 26,
+          "metrics": {
+            "attack_turn_utility_sum": 15.91487780932417,
+            "invalid_action_failures": 0,
+            "move_suppressed_or_failed": 1,
+            "opponent_faints": 5,
+            "party_faints": 0,
+            "party_hp_lost": 81,
+            "party_pp_spent": 21,
+            "party_status_changes": 1,
+            "policy_latency_ns_max": 7700875,
+            "policy_latency_ns_mean": 4311730.884615385,
+            "policy_latency_ns_min": 1064959,
+            "selected_move_pp_spends": 21,
+            "teacher_interventions": 0
+          },
+          "teacher_queries": 0,
+          "memory_write_actions": 0,
+          "outcome_sha256": "0fb975d187686d7974c9e1a7b881dd182229069579669e149c28b9cafb7b6812",
+          "actor_model_sha256": "e189983f79f7838f214e969f7cba19184c7392e546187b272bb61e40a76c8368"
+        }
+      ],
+      "actual_history": {
+        "engaged_levels": [
+          70
+        ],
+        "exhausted_move_fraction": 0.041666666666666664,
+        "last_opponent_hp_fraction": null,
+        "opponent_count": 5,
+        "opponent_levels": [
+          54,
+          53,
+          54,
+          56,
+          56
+        ],
+        "opponents_defeated": 5,
+        "party_size": 6,
+        "pp_spent_fraction": 0.03874538745387454,
+        "result": "won",
+        "suppressed_attack_fraction": 0.045454545454545456,
+        "terminal_fainted_count": 1,
+        "terminal_hp_fraction": 0.7877492877492878,
+        "voluntary_switch_fraction": 0
+      },
+      "ended_at": "2026-10-06T14:36:09.396285+00:00",
+      "parent_queries": 1,
+      "child_queries": 1,
+      "registration_delta": 0,
+      "support_selections": 0,
+      "wild_battles": 0,
+      "model_selections": 1,
+      "interpretation": "earned_exposed_development_continuation"
+    }
+  ],
+  "totals": {
+    "model_selected_goals": 4,
+    "parent_queries": 4,
+    "child_queries": 4,
+    "strategic_policy_queries": 8,
+    "story_battle_wins": 2,
+    "story_battle_losses": 1,
+    "learned_combat_decisions": 121,
+    "wild_battles": 0,
+    "model_selected_grinding": 0,
+    "explicit_restore_attempts": 1,
+    "inputs_attempted": 1873,
+    "inputs_completed": 1873,
+    "frames": 178644,
+    "native_seconds": 159.44583504094044,
+    "blackout_cash_debit": 150,
+    "gross_native_victory_earnings": 11088,
+    "party_faints": 6,
+    "move_suppressed_or_failed": 9,
+    "invalid_action_failures": 0,
+    "teacher_queries": 0,
+    "teacher_interventions": 0,
+    "memory_write_actions": 0
+  },
+  "learning_delta": {
+    "train": 0,
+    "fits": 0,
+    "weights": 0,
+    "registrations": 0,
+    "promotions": 0
+  },
+  "remaining_support": [
+    "navigation",
+    "venue and dose inventory",
+    "transport preparation",
+    "ordinary blackout settlement",
+    "productive and prompt tactical screens",
+    "status and PP legality screens"
+  ],
+  "verification": {
+    "targeted_rom_free_tests": 534,
+    "focused_typing": true,
+    "focused_style": true,
+    "audit_inputs": 0,
+    "audit_frames": 0,
+    "choices_replayed": true,
+    "native_histories_and_continuations_verified": true,
+    "protected_sources_unchanged": true,
+    "all_native_workers_exited": true,
+    "full_suite_claim": false
+  },
+  "limitations": [
+    "No same-session greedy-alone control; this does not establish causal superiority of the child.",
+    "Earned sources share DEVELOPMENT ancestry; no independent transfer, efficient grinding, readiness anticipation or whole-player autonomy claim.",
+    "Both terminals are released and field-ready in Lorelei's room, not fully restored. Lower carry has Surf0/IceBeam0; stronger carry has Surf8/IceBeam0 and paralysis, with one previously fainted reserve.",
+    "High-level model choices do not erase remaining route, resource inventory or tactical support."
+  ],
+  "protected_completion": {
+    "story_objectives": 36,
+    "native_route_registrations": 124,
+    "fresh_red_gates_passed": 0,
+    "fresh_red_gates_total": 5,
+    "unchanged": true
+  },
+  "next_work_order": "docs/work-sessions/2026-10-06-highest-score-league-recovery.md#next-session-work-order",
+  "next_decision": "Reuse the passed composition in one configured native loop; verify genuine next-room PP/resources and alternatives, then one earned Bruno continuation if admitted. No new learner or automatic fit."
+}

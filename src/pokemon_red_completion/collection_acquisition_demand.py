@@ -7,6 +7,7 @@ may consume it, never clone it. This projection grants no route/skill authority.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from functools import lru_cache
 
 
 def useful_capture_counts(
@@ -117,8 +118,9 @@ def useful_registered_capture_counts(
     One specimen can register every missing species along one directed path,
     but cannot take two branches simultaneously. A min-cost flow assigns actual
     unreserved stock to paths, awarding each missing registration at most once.
-    Each capture candidate is evaluated independently and must be recomputed
-    after a real action. Declared edges do not prove executor/resource readiness.
+    Each capture candidate is evaluated independently. Exact immutable inputs
+    may reuse pure coverage math; a real stock/registration change gets a new
+    key. Declared edges do not prove executor/resource readiness.
     """
     # Reuse legacy graph/type validation only; never its living-copy demand.
     useful_capture_counts(targets | registered, counts, edges, capture_species)
@@ -131,9 +133,31 @@ def useful_registered_capture_counts(
         raise ValueError("cannot reserve nonexistent physical stock")
     if not {s for s, n in counts.items() if n} <= registered:
         raise ValueError("physical stock must have verified registration")
+    return dict(_registered_capture_demands(
+        frozenset(targets), frozenset(registered), tuple(sorted(counts.items())),
+        tuple(sorted(set(edges))), capture_species, tuple(sorted(protected.items())),
+    ))
+
+
+@lru_cache(maxsize=128)
+def _registered_capture_demands(
+    targets: frozenset[str],
+    registered: frozenset[str],
+    counted_stock: tuple[tuple[str, int], ...],
+    edges: tuple[tuple[str, str], ...],
+    capture_species: tuple[str, ...],
+    reserved_stock: tuple[tuple[str, int], ...],
+) -> tuple[tuple[str, int], ...]:
+    """Bounded pure math only; public validation still runs on every call.
+
+    Include the whole semantic stock/graph/registration contract, not a map ID,
+    object identity, outcome or presumed executor success. Cache no mutable
+    output and never grant readiness/permissions from a cached calculation.
+    """
+    counts, protected = dict(counted_stock), dict(reserved_stock)
     missing = targets - registered
     if not missing:
-        return dict.fromkeys(capture_species, 0)
+        return tuple((s, 0) for s in capture_species)
     species = sorted(targets | counts.keys() | set(capture_species)
                      | {s for edge in edges for s in edge})
     indices = {s: 2 * i for i, s in enumerate(species)}
@@ -203,4 +227,4 @@ def useful_registered_capture_counts(
             copies += 1
             current = new
         result[candidate] = copies
-    return result
+    return tuple(result.items())

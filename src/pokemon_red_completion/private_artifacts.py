@@ -38,6 +38,29 @@ _MAX_MANIFEST_BYTES = 1024 * 1024
 _MAX_SEALED_RECORD_BYTES = 1024 * 1024
 _MAX_JSONL_LINE_BYTES = 16 * 1024 * 1024
 _MAX_TYPED_ARTIFACT_STREAMS = 64
+_NATIVE_STORAGE_MARKER = ".native-input-storage.json"
+_FLAT_NATIVE_STORAGE = "flat_sealed_v1"
+_FLAT_NATIVE_SUFFIX = ".sealed.jsonl"
+_MAX_FLAT_NATIVE_HEADER_BYTES = 4096
+_NATIVE_INPUT_KINDS = {
+    "rnl-action-": "red_native_lesson_action",
+    "rnl-trace-": "red_native_lesson_trace",
+    "rnp-diagnostic-": "red_native_player_diagnostic",
+}
+
+
+def _sealed_record_maximum_bytes(kind: str) -> int:
+    # Native consequence and collection outcomes retain complete metered traces.
+    # Long battles and full evolutions exceed the generic one-MiB envelope.
+    # Reuse the bounded journal-line envelope only for these exact record kinds;
+    # all manifests, other records, integrity and admission checks stay intact.
+    return (
+        _MAX_JSONL_LINE_BYTES
+        if kind in {"red_challenge_consequence_result", "red_collection_teacher_outcome"}
+        else _MAX_SEALED_RECORD_BYTES
+    )
+
+
 _TYPED_ARTIFACT_IDENTITY = ".typed-artifact-identity.json"
 _TYPED_RECOVERY_MANIFEST = ".typed-artifact-recovery-manifest.partial"
 # The qualified balanced-team curriculum has measured just over 506 MB before
@@ -328,6 +351,7 @@ class PrivateArtifactRoot:
         "_allow_same_device",
         "_device_id",
         "_git_worktree_probe",
+        "_native_input_storage",
         "_repository_root",
         "_root",
     )
@@ -340,12 +364,16 @@ class PrivateArtifactRoot:
         allow_same_device: bool,
         device_id: DeviceId,
         git_worktree_probe: GitWorktreeProbe,
+        native_input_storage: str | None = None,
     ) -> None:
         self._root = root
         self._repository_root = repository_root
         self._allow_same_device = allow_same_device
         self._device_id = device_id
         self._git_worktree_probe = git_worktree_probe
+        self._native_input_storage = _read_native_input_storage(
+            root, expected=native_input_storage
+        )
 
     def __repr__(self) -> str:
         return "PrivateArtifactRoot(validated=True)"
@@ -379,7 +407,7 @@ class PrivateArtifactRoot:
         _validate_artifact_kind(kind)
         self._revalidate()
         payload = _canonical_record(record)
-        if len(payload) > _MAX_SEALED_RECORD_BYTES:
+        if len(payload) > _sealed_record_maximum_bytes(kind):
             raise PrivateArtifactError("sealed private record exceeds the allowed size")
 
         existing = self.find_sealed_record(record_id, expected_kind=kind)
@@ -395,6 +423,10 @@ class PrivateArtifactRoot:
                 raise PrivateArtifactError(
                     "sealed private record identity collides with another private artifact"
                 )
+
+        if (self._native_input_storage == _FLAT_NATIVE_STORAGE
+                and kind in _NATIVE_INPUT_KINDS.values()):
+            return _publish_flat_native_record(self._root, record_id, kind=kind, payload=payload)
 
         temporary = self._root / (f".{record_id}.sealed-{uuid.uuid4().hex}.partial")
         final = self._root / record_id
@@ -451,6 +483,12 @@ class PrivateArtifactRoot:
         if expected_kind is not None:
             _validate_artifact_kind(expected_kind)
         self._revalidate()
+        flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
+        if _lexists(flat):
+            if (self._native_input_storage != _FLAT_NATIVE_STORAGE
+                    or _lexists(self._root / record_id)):
+                raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+            return _open_flat_native_record(self._root, record_id, expected_kind=expected_kind)
         if not _lexists(self._root / record_id):
             return None
         return _open_private_sealed_record(
@@ -458,6 +496,65 @@ class PrivateArtifactRoot:
             record_id,
             expected_kind=expected_kind,
         )
+
+    def read_native_record_batch(
+        self, record_ids: Sequence[str], *, expected_kind: str,
+    ) -> tuple[PrivateSealedRecord, ...]:
+        """Verify a bounded immutable snapshot of native action or trace records.
+
+        A held directory descriptor anchors every read. Root policy is checked
+        before and after the batch; payloads keep the ordinary verifier. No
+        partial result is returned if any record or the root fails validation.
+        """
+        if expected_kind not in ("red_native_lesson_action", "red_native_lesson_trace"):
+            raise PrivateArtifactError("batch requires a native action or trace kind")
+        if isinstance(record_ids, (str, bytes)) or not 1 <= len(record_ids) <= 1024:
+            raise PrivateArtifactError("native record batch must contain 1 to 1024 records")
+        identifiers = tuple(record_ids)
+        for record_id in identifiers:
+            _validate_artifact_id(record_id)
+            _require_native_input_identity(record_id, expected_kind)
+        self._revalidate()
+        descriptor = -1
+        try:
+            descriptor = os.open(self._root, _directory_read_flags())
+            if not _same_file(self._root.lstat(), os.fstat(descriptor)):
+                raise PrivateArtifactError("native batch root changed while opening")
+            records: list[PrivateSealedRecord] = []
+            payload_bytes = 0
+            for record_id in identifiers:
+                flat = _entry_metadata(descriptor, record_id + _FLAT_NATIVE_SUFFIX)
+                directory = _entry_metadata(descriptor, record_id)
+                if flat is not None:
+                    if self._native_input_storage != _FLAT_NATIVE_STORAGE or directory is not None:
+                        raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+                    record = _read_flat_native_record(
+                        self._root, record_id, expected_kind=expected_kind,
+                        metadata_only=False, anchored_root_descriptor=descriptor,
+                    )
+                else:
+                    if directory is None:
+                        raise PrivateArtifactError("native batch record is absent")
+                    record = _open_private_sealed_record(
+                        self._root, record_id, expected_kind=expected_kind,
+                        anchored_root_descriptor=descriptor,
+                    )
+                payload_bytes += record.summary.total_bytes
+                if payload_bytes > 16 * 1024 * 1024:
+                    raise PrivateArtifactError("native record batch exceeds its byte bound")
+                records.append(record)
+            self._revalidate()
+            if not _same_file(self._root.lstat(), os.fstat(descriptor)):
+                raise PrivateArtifactError("native batch root changed during validation")
+            return tuple(records)
+        except PrivateArtifactError:
+            raise
+        except OSError:
+            raise PrivateArtifactError("unable to read the native record batch") from None
+        finally:
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
 
     def inspect_sealed_record_metadata(
         self,
@@ -478,6 +575,12 @@ class PrivateArtifactRoot:
         if expected_kind is not None:
             _validate_artifact_kind(expected_kind)
         self._revalidate()
+        flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
+        if _lexists(flat):
+            if (self._native_input_storage != _FLAT_NATIVE_STORAGE
+                    or _lexists(self._root / record_id)):
+                raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+            return _inspect_flat_native_record(self._root, record_id, expected_kind=expected_kind)
         if not _lexists(self._root / record_id):
             return None
         return _inspect_private_sealed_record_metadata(
@@ -509,19 +612,22 @@ class PrivateArtifactRoot:
                 "sealed record inventory bound must be a positive integer"
             )
         self._revalidate()
-        before = _inventory_digest_record_ids(self._root, record_id_prefix)
+        inventory_options = (
+            {"flat_native_inputs": True}
+            if self._native_input_storage == _FLAT_NATIVE_STORAGE else {}
+        )
+        before = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
         if len(before) > maximum_records:
             raise PrivateArtifactError("sealed record inventory exceeds its bound")
-        records = tuple(
-            _inspect_private_sealed_record_metadata(
-                self._root,
-                record_id,
-                expected_kind=expected_kind,
-            )
-            for record_id in before
-        )
+        rows = []
+        for record_id in before:
+            metadata = self.inspect_sealed_record_metadata(record_id, expected_kind=expected_kind)
+            if metadata is None:
+                raise PrivateArtifactError("sealed record disappeared during inventory")
+            rows.append(metadata)
+        records = tuple(rows)
         self._revalidate()
-        after = _inventory_digest_record_ids(self._root, record_id_prefix)
+        after = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
         if after != before:
             raise PrivateArtifactError("sealed record inventory changed during inspection")
         return records
@@ -786,6 +892,8 @@ class PrivateArtifactRoot:
             git_worktree_probe=self._git_worktree_probe,
         )
         _validate_sentinel(self._root)
+        if _read_native_input_storage(self._root) != self._native_input_storage:
+            raise PrivateArtifactError("native input storage declaration changed")
 
     def _recover_interrupted_episode(
         self,
@@ -1841,6 +1949,7 @@ def initialize_private_root(
     allow_same_device: bool = False,
     device_id: DeviceId | None = None,
     git_worktree_probe: GitWorktreeProbe | None = None,
+    native_input_storage: str | None = None,
 ) -> PrivateArtifactRoot:
     """Mark an explicit, existing directory as an isolated private-artifact root.
 
@@ -1868,12 +1977,14 @@ def initialize_private_root(
                 _validate_sentinel(validated_root)
             else:
                 raise
+    _initialize_native_input_storage(validated_root, native_input_storage)
     return PrivateArtifactRoot(
         validated_root,
         repository_root=validated_repository,
         allow_same_device=allow_same_device,
         device_id=device_id,
         git_worktree_probe=git_worktree_probe,
+        native_input_storage=native_input_storage,
     )
 
 
@@ -1884,6 +1995,7 @@ def open_private_root(
     allow_same_device: bool = False,
     device_id: DeviceId | None = None,
     git_worktree_probe: GitWorktreeProbe | None = None,
+    native_input_storage: str | None = None,
 ) -> PrivateArtifactRoot:
     """Open an initialized root, failing closed when its sentinel is absent or altered."""
     device_id = device_id or _default_device_id
@@ -1902,6 +2014,202 @@ def open_private_root(
         allow_same_device=allow_same_device,
         device_id=device_id,
         git_worktree_probe=git_worktree_probe,
+        native_input_storage=native_input_storage,
+    )
+
+
+def _native_input_storage_bytes() -> bytes:
+    return _canonical_json_line({
+        "schema": "pokemon.native-input-storage.v1",
+        "native_input_storage": _FLAT_NATIVE_STORAGE,
+    })
+
+
+def _read_native_input_storage(root: Path, *, expected: str | None = None) -> str | None:
+    if expected is not None and expected != _FLAT_NATIVE_STORAGE:
+        raise PrivateArtifactError("native input storage mode is unsupported")
+    marker = root / _NATIVE_STORAGE_MARKER
+    mode = None
+    if _lexists(marker):
+        descriptor = os.open(root, _directory_read_flags())
+        try:
+            data = _native_input_storage_bytes()
+            if _read_private_entry(
+                descriptor, _NATIVE_STORAGE_MARKER, subject="native input storage declaration",
+                maximum_bytes=len(data), expected_bytes=len(data),
+            ) != data:
+                raise PrivateArtifactError("native input storage declaration is invalid")
+        finally:
+            os.close(descriptor)
+        mode = _FLAT_NATIVE_STORAGE
+    if expected is not None and mode != expected:
+        raise PrivateArtifactError("native input storage declaration is missing or different")
+    return mode
+
+
+def _initialize_native_input_storage(root: Path, mode: str | None) -> None:
+    if mode is None:
+        _read_native_input_storage(root)
+        return
+    if mode != _FLAT_NATIVE_STORAGE:
+        raise PrivateArtifactError("native input storage mode is unsupported")
+    if _lexists(root / _NATIVE_STORAGE_MARKER):
+        _read_native_input_storage(root, expected=mode)
+        return
+    # This is prospective recording, never an in-place conversion of an old run.
+    with os.scandir(root) as entries:
+        if any(entry.name != PRIVATE_ROOT_SENTINEL for entry in entries):
+            raise PrivateArtifactError("flat native input recording requires a new empty journal")
+    _write_exclusive_file(root / _NATIVE_STORAGE_MARKER, _native_input_storage_bytes(), mode=0o600)
+    _fsync_directory(root)
+
+
+def _require_native_input_identity(record_id: str, kind: str) -> None:
+    if not any(record_id.startswith(prefix) and kind == value
+               for prefix, value in _NATIVE_INPUT_KINDS.items()):
+        raise PrivateArtifactError("flat native record identity or kind is invalid")
+
+
+def _publish_flat_native_record(
+    root: Path, record_id: str, *, kind: str, payload: bytes,
+) -> PrivateSealedRecord:
+    _require_native_input_identity(record_id, kind)
+    manifest = _canonical_json_line(dict(
+        bytes=len(payload), format=PRIVATE_SEALED_RECORD_FORMAT, kind=kind,
+        record_id=record_id, record_sha256=hashlib.sha256(payload).hexdigest(),
+        schema_version=PRIVATE_ARTIFACT_SCHEMA_VERSION, status="complete",
+    ))
+    if len(manifest) > _MAX_FLAT_NATIVE_HEADER_BYTES:
+        raise PrivateArtifactError("flat native record manifest exceeds its bound")
+    temporary = root / f".{record_id}.sealed-{uuid.uuid4().hex}.partial"
+    final = root / (record_id + _FLAT_NATIVE_SUFFIX)
+    try:
+        _write_exclusive_file(temporary, manifest + payload, mode=0o600)
+        _rename_no_replace(temporary, final)
+        _fsync_directory(root)
+    except FileExistsError:
+        # Only an actual competing publication may be adjudicated this way.
+        # A renamed file is not durable if the directory synchronization failed.
+        existing = _open_flat_native_record(root, record_id, expected_kind=kind)
+        if existing.read_bytes() == payload:
+            _fsync_directory(root)
+            return existing
+        raise PrivateArtifactError("flat native record already has different bytes") from None
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to publish the flat native record") from None
+    return _open_flat_native_record(root, record_id, expected_kind=kind)
+
+
+def _read_flat_native_record(
+    root: Path, record_id: str, *, expected_kind: str | None, metadata_only: bool,
+    anchored_root_descriptor: int | None = None,
+) -> PrivateSealedRecord | SealedRecordManifestMetadata:
+    """One file, two original canonical lines; metadata never reads payload bytes."""
+    root_descriptor = descriptor = -1
+    filename = record_id + _FLAT_NATIVE_SUFFIX
+    try:
+        root_descriptor = (os.open(root, _directory_read_flags())
+                           if anchored_root_descriptor is None
+                           else os.dup(anchored_root_descriptor))
+        if not _same_file(root.lstat(), os.fstat(root_descriptor)):
+            raise PrivateArtifactError("flat native root changed while opening")
+        before = _entry_metadata(root_descriptor, filename)
+        if before is None:
+            raise PrivateArtifactError("flat native record is absent")
+        _validate_sealed_payload_metadata(before, expected_bytes=before.st_size)
+        _require_current_owner(before, subject="flat native record")
+        if before.st_size > _MAX_FLAT_NATIVE_HEADER_BYTES + _MAX_SEALED_RECORD_BYTES:
+            raise PrivateArtifactError("flat native record exceeds its bound")
+        descriptor = os.open(filename, _regular_file_read_flags(), dir_fd=root_descriptor)
+        opened = os.fstat(descriptor)
+        if not _same_file(before, opened):
+            raise PrivateArtifactError("flat native record changed while opening")
+        _validate_sealed_payload_metadata(opened, expected_bytes=before.st_size)
+        _require_current_owner(opened, subject="flat native record")
+        header = bytearray()
+        # Metadata-only inventory must not read ahead into the payload. Full
+        # reads already authenticate the entire payload below, so their bounded
+        # header scan can batch I/O without changing the bytes we validate.
+        while len(header) < _MAX_FLAT_NATIVE_HEADER_BYTES:
+            amount = 1 if metadata_only else _MAX_FLAT_NATIVE_HEADER_BYTES - len(header)
+            chunk = os.read(descriptor, amount)
+            if not chunk:
+                raise PrivateArtifactError("flat native manifest is truncated")
+            header.extend(chunk)
+            newline = header.find(b"\n")
+            if newline >= 0:
+                del header[newline + 1:]
+                break
+        else:
+            raise PrivateArtifactError("flat native manifest exceeds its bound")
+        manifest_bytes = bytes(header)
+        kind, size, record_sha256 = _sealed_record_manifest_fields(
+            manifest_bytes, record_id=record_id, expected_kind=expected_kind,
+        )
+        _require_native_input_identity(record_id, kind)
+        if before.st_size != len(manifest_bytes) + size:
+            raise PrivateArtifactError("flat native payload size does not match its manifest")
+        payload = None
+        if not metadata_only:
+            combined = _read_private_entry(
+                root_descriptor, filename, subject="flat native record",
+                maximum_bytes=(
+                    _MAX_FLAT_NATIVE_HEADER_BYTES + _sealed_record_maximum_bytes(kind)
+                ),
+                expected_bytes=before.st_size,
+            )
+            if combined[:len(manifest_bytes)] != manifest_bytes:
+                raise PrivateArtifactError("flat native manifest changed during validation")
+            payload = combined[len(manifest_bytes):]
+            if hashlib.sha256(payload).hexdigest() != record_sha256:
+                raise PrivateArtifactError("flat native payload failed its integrity check")
+            value = _decode_canonical_json_object(
+                payload, subject="flat native payload",
+                maximum_bytes=_sealed_record_maximum_bytes(kind),
+            )
+            if _canonical_record(value) != payload:
+                raise PrivateArtifactError("flat native record contains unsafe values")
+        final = os.fstat(descriptor)
+        named = _entry_metadata(root_descriptor, filename)
+        _validate_sealed_payload_metadata(final, expected_bytes=before.st_size)
+        _require_current_owner(final, subject="flat native record")
+        if (named is None or not _same_file(opened, named) or not _same_file(opened, final)
+                or (opened.st_mtime_ns, opened.st_ctime_ns)
+                != (final.st_mtime_ns, final.st_ctime_ns)
+                or not _same_file(root.lstat(), os.fstat(root_descriptor))):
+            raise PrivateArtifactError("flat native record changed during validation")
+        if metadata_only:
+            return SealedRecordManifestMetadata(
+                record_id=record_id, kind=kind, declared_record_sha256=record_sha256,
+                manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+                declared_total_bytes=size,
+            )
+        return PrivateSealedRecord(payload=payload, summary=SealedRecordSummary(
+            record_id=record_id, kind=kind, record_sha256=record_sha256,
+            manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(), total_bytes=size,
+        ))
+    except PrivateArtifactError:
+        raise
+    except OSError:
+        raise PrivateArtifactError("unable to read the flat native record") from None
+    finally:
+        for fd in (descriptor, root_descriptor):
+            if fd >= 0:
+                with suppress(OSError):
+                    os.close(fd)
+
+
+def _open_flat_native_record(root, record_id, *, expected_kind):
+    return _read_flat_native_record(
+        root, record_id, expected_kind=expected_kind, metadata_only=False,
+    )
+
+
+def _inspect_flat_native_record(root, record_id, *, expected_kind):
+    return _read_flat_native_record(
+        root, record_id, expected_kind=expected_kind, metadata_only=True,
     )
 
 
@@ -1910,11 +2218,16 @@ def _open_private_sealed_record(
     record_id: str,
     *,
     expected_kind: str | None,
+    anchored_root_descriptor: int | None = None,
 ) -> PrivateSealedRecord:
     root_descriptor = -1
     record_descriptor = -1
     try:
-        root_descriptor = os.open(root, _directory_read_flags())
+        root_descriptor = (os.open(root, _directory_read_flags())
+                           if anchored_root_descriptor is None
+                           else os.dup(anchored_root_descriptor))
+        if not _same_file(root.lstat(), os.fstat(root_descriptor)):
+            raise PrivateArtifactError("sealed native root changed while opening")
         expected_directory = _entry_metadata(root_descriptor, record_id)
         if expected_directory is None:
             raise PrivateArtifactError("sealed private record is absent")
@@ -1956,7 +2269,7 @@ def _open_private_sealed_record(
             record_descriptor,
             "record.json",
             subject="sealed private record",
-            maximum_bytes=_MAX_SEALED_RECORD_BYTES,
+            maximum_bytes=_sealed_record_maximum_bytes(kind),
             expected_bytes=size,
         )
         if hashlib.sha256(payload).hexdigest() != record_sha256:
@@ -1964,7 +2277,7 @@ def _open_private_sealed_record(
         value = _decode_canonical_json_object(
             payload,
             subject="sealed private record",
-            maximum_bytes=_MAX_SEALED_RECORD_BYTES,
+            maximum_bytes=_sealed_record_maximum_bytes(kind),
         )
         if _canonical_record(value) != payload:
             raise PrivateArtifactError("sealed private record contains unsafe values")
@@ -1972,9 +2285,12 @@ def _open_private_sealed_record(
             record_descriptor,
             subject="sealed private record directory",
         )
-        if not _same_file(opened_directory, final_directory) or _directory_entries(
-            record_descriptor
-        ) != {"manifest.json", "record.json"}:
+        named_directory = _entry_metadata(root_descriptor, record_id)
+        if (named_directory is None
+                or not _same_file(opened_directory, named_directory)
+                or not _same_file(root.lstat(), os.fstat(root_descriptor))
+                or not _same_file(opened_directory, final_directory)
+                or _directory_entries(record_descriptor) != {"manifest.json", "record.json"}):
             raise PrivateArtifactError("sealed private record changed during validation")
         return PrivateSealedRecord(
             payload=payload,
@@ -2129,7 +2445,7 @@ def _sealed_record_manifest_fields(
     if expected_kind is not None and kind != expected_kind:
         raise PrivateArtifactError("sealed private record kind does not match")
     size = _manifest_integer(manifest, "bytes")
-    if size <= 0 or size > _MAX_SEALED_RECORD_BYTES:
+    if size <= 0 or size > _sealed_record_maximum_bytes(kind):
         raise PrivateArtifactError("sealed private record size is invalid")
     record_sha256 = manifest["record_sha256"]
     if not isinstance(record_sha256, str) or _SHA256.fullmatch(record_sha256) is None:
@@ -3821,7 +4137,9 @@ def _validate_record_id_digest_prefix(record_id_prefix: str) -> None:
         )
 
 
-def _inventory_digest_record_ids(root: Path, record_id_prefix: str) -> tuple[str, ...]:
+def _inventory_digest_record_ids(
+    root: Path, record_id_prefix: str, *, flat_native_inputs: bool = False,
+) -> tuple[str, ...]:
     try:
         entries = os.listdir(root)
     except OSError:
@@ -3832,11 +4150,17 @@ def _inventory_digest_record_ids(root: Path, record_id_prefix: str) -> tuple[str
     for entry in entries:
         if not entry.startswith(record_id_prefix):
             continue
+        if flat_native_inputs and entry.endswith(_FLAT_NATIVE_SUFFIX):
+            entry = entry.removesuffix(_FLAT_NATIVE_SUFFIX)
+            if not any(entry.startswith(prefix) for prefix in _NATIVE_INPUT_KINDS):
+                raise PrivateArtifactError("flat record inventory has a non-native identity")
         suffix = entry.removeprefix(record_id_prefix)
         if _SHA256.fullmatch(suffix) is None:
             raise PrivateArtifactError("sealed record inventory family is malformed")
         _validate_artifact_id(entry)
         matches.append(entry)
+    if len(set(matches)) != len(matches):
+        raise PrivateArtifactError("sealed record storage has duplicate identities")
     return tuple(sorted(matches))
 
 
@@ -4404,6 +4728,34 @@ def _fsync_directory(path: Path) -> None:
 
 def _default_device_id(path: Path) -> int:
     return path.stat().st_dev
+
+
+def gitless_fast_path_worktree_probe(path: Path) -> bool:
+    """Fresh negative discovery, with the ordinary Git probe for ambiguity.
+
+    This opt-in does not cache isolation. Git discovers an ancestor ``.git``
+    entry or a bare directory containing ``HEAD``. Only their proved absence
+    permits the cheap negative result. Environment overrides, unreadable paths,
+    symlinks and any possible marker retain the original subprocess check.
+    All root, sentinel, descriptor, record and durability checks stay in place.
+    """
+    if any(name.startswith("GIT_") and name != "GIT_PAGER" for name in os.environ):
+        return _default_git_worktree_probe(path)
+    if not path.is_absolute():
+        return _default_git_worktree_probe(path)
+    for ancestor in (path, *path.parents):
+        try:
+            if not stat.S_ISDIR(ancestor.lstat().st_mode):
+                return _default_git_worktree_probe(path)
+            for marker in (".git", "HEAD"):
+                try:
+                    (ancestor / marker).lstat()
+                except FileNotFoundError:
+                    continue
+                return _default_git_worktree_probe(path)
+        except OSError:
+            return _default_git_worktree_probe(path)
+    return False
 
 
 def _default_git_worktree_probe(path: Path) -> bool:

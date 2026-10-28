@@ -1,0 +1,83 @@
+{
+  "schema": "pokemon.red.coherent-player-integration.v1",
+  "session": "2026-09-26-player-coherent-comparison",
+  "bounded_steps_complete": true,
+  "whole_player_qualified": false,
+  "train": {
+    "native_rival_prefix_actions": 140,
+    "native_rival_prefix_frames": 14688,
+    "rival_won": true,
+    "state_edits": 0,
+    "real_alternatives": [
+      "advance_story",
+      "develop_team"
+    ],
+    "selected_goal": "advance_story",
+    "original_interruption_preserved": true,
+    "manual_continuation_declared": true,
+    "model_choices": 1,
+    "support_actions": 3,
+    "actions": 692,
+    "frames": 42774,
+    "seconds": 40.167258292,
+    "cash_spent": 0,
+    "pokedex": true,
+    "xp_after_setup": 47,
+    "terminal_level": 7,
+    "terminal_healthy": true,
+    "uninterrupted_autonomy": false,
+    "audit_sha256": "7582dba8f0d93addcf77c9af2435eb93c7d6345047bb5f41d55825cd75e0adfc"
+  },
+  "comparison": {
+    "plan_sha256": "155504864c0824d68855ce012886166b89414e4e8cf945ef96749d2c614ceaca",
+    "result_sha256": "b64c3bfa25f442df0511d452af6e62eb419d739bcfd332cd43a1c1df98d9425c",
+    "audit_sha256": "2b1eb9d6abca79ea71860d16061baaf6665a16cbcce6208d7cd43f8820f6b9df",
+    "origin_groups": 2,
+    "paired_cases": 4,
+    "arms": 8,
+    "paired_seeds_independent": false,
+    "completed_story_development_heal_pairs": 1,
+    "arrival_readiness_failure_pairs": 1,
+    "record_collision_invalid_pairs": 2,
+    "all_pairs_same_selected_goals": true,
+    "all_pairs_same_terminal_bytes": true,
+    "advantage_demonstrated": false,
+    "per_model": {
+      "model_choices": 4,
+      "support_actions": 3,
+      "verified_goals": 4,
+      "pokedex_endpoints": 2,
+      "developed_endpoints": 1,
+      "actions": 1469,
+      "frames": 90864,
+      "cash_spent": 0,
+      "xp": 39
+    },
+    "record_collision_cause": "All four native action declarations within each origin use execution_id continuous with identical source/limits/roles and omit arm/seed identity. Different action content eventually collides; immutable guard correctly rejects it.",
+    "declarations": [
+      "a06a4d24fa8883f798eda401a19664d47befd4e003cc2e9bd6bf9eca05f596b5",
+      "fae62501e620f46a46211f9f1684ecc3353d2d065b65ddefd2faae8abc6b018e"
+    ],
+    "invalid_pairs_excluded_from_capability_comparison": true,
+    "earning_spending_measured": false,
+    "acquisition_resource_preservation_measured": false,
+    "retries": 0
+  },
+  "models": {
+    "baseline": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "baseline_zero_readiness_bridge": "a26dc468d1be8e2d69b201dc08675b7144d757b1fffe3576ad945d5a9a8fcc0f",
+    "candidate": "3a495ecc51fb46f0fdb9526b66ba9ce1f6eaed9524149704606a5350ed263e5c",
+    "new_fits": 0,
+    "new_admitted_lessons": 0,
+    "authority_promotions": 0,
+    "deployed": "Model141"
+  },
+  "focused_tests_passed": 476,
+  "full_suite_run": false,
+  "protected_campaign_state_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+  "protected_campaign_envelope_sha256": "2075e2c5b7160e12aaa8aaa69b9bd8cc75fa438c425bbe4e9b9789e876c89c65",
+  "stage472_absent": true,
+  "campaign_registration_delta": 0,
+  "gameplay_stopped": true,
+  "publication": false
+}

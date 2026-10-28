@@ -11,7 +11,9 @@ from pokemon_red_completion.observation import (
     RawGameState,
     WildCaptureIdentity,
 )
-from pokemon_red_completion.party import MoveObservation, PartyMemberObservation, PartyObservation
+from pokemon_red_completion.party import (
+    MoveObservation, PartyMemberObservation, PartyObservation, StatusCondition,
+)
 from pokemon_red_completion.red_autonomous_player import _exception_chain
 
 
@@ -189,6 +191,99 @@ def test_already_settled_main_needs_no_introduction_input_or_full_hp(monkeypatch
     assert prepare.attempts == 0
 
 
+def test_preserved_frozen_catcher_can_throw_at_observed_status_without_switch(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    prepare.preserve_viable_active = True
+    world.status = 0x40
+    world.party = replace(world.party, members=(
+        replace(world.party.members[0], status=StatusCondition.FREEZE),
+        world.party.members[1],
+    ))
+
+    def forbidden(*_args, **_kwargs):
+        pytest.fail('a living frozen catcher can use the ball menu without a switch')
+
+    monkeypatch.setattr(runtime, 'switch_active_battler', forbidden)
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', forbidden)
+    assert prepare()
+    assert prepare.attempts == world.turns == 0
+    assert prepare.throw_preparations[0]['target_status'] == 'paralysis'
+    assert world.raw.enemy_hp == 25 and world.raw.bag_items == ((4, 4),)
+
+
+def test_frozen_catcher_preservation_does_not_override_default_switch_policy(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    world.status = 0x40
+    world.party = replace(world.party, members=(
+        replace(world.party.members[0], status=StatusCondition.FREEZE),
+        world.party.members[1],
+    ))
+    assert prepare()
+    assert world.raw.active_party_index == 1
+
+
+@pytest.mark.parametrize('floor,hp,level,status,expected_slot',[
+    (70,175,70,StatusCondition.PARALYSIS,0),
+    (None,175,70,StatusCondition.PARALYSIS,1),
+    (70,175,69,StatusCondition.PARALYSIS,1),
+    (70,117,70,StatusCondition.PARALYSIS,1),
+    (70,0,70,StatusCondition.PARALYSIS,1),
+    (70,175,70,StatusCondition.POISON,1),
+    (70,175,70,StatusCondition.BURN,1),
+])
+def test_prepared_paralyzed_catcher_can_throw_without_unnecessary_switch(
+    monkeypatch,floor,hp,level,status,expected_slot,
+):
+    world,prepare=setup(monkeypatch)
+    prepare.preserve_viable_active=True
+    prepare.minimum_prepared_helper_level=floor
+    world.status=0x40
+    world.party=PartyObservation((
+        PartyMemberObservation(1,131,level,hp,235,status=status,moves=(MoveObservation(86,19),)),
+        PartyMemberObservation(2,28,100,331,331,moves=(MoveObservation(57,10),)),
+    ))
+    assert prepare()
+    assert world.raw.active_party_index==expected_slot
+    assert world.turns==prepare.attempts==0
+    assert prepare.throw_preparations[-1]['target_status']=='paralysis'
+
+
+@pytest.mark.parametrize('floor,hp,level,pp,expected_slot',[
+    (None,138,56,10,1),(55,138,56,10,0),(55,95,56,10,1),
+    (55,138,30,10,1),(55,138,56,0,1),
+])
+def test_explicit_prepared_helper_avoids_sleep_wasting_switch_without_weakening_health_or_pp(
+    monkeypatch,floor,hp,level,pp,expected_slot,
+):
+    world,prepare=setup(monkeypatch)
+    prepare.preserve_viable_active=True
+    prepare.minimum_prepared_helper_level=floor
+    world.status=3
+    world.party=PartyObservation((
+        PartyMemberObservation(1,48,level,hp,190,moves=(MoveObservation(95,pp),)),
+        PartyMemberObservation(2,28,100,331,331,moves=(MoveObservation(57,10),)),
+    ))
+    assert prepare()
+    assert world.raw.active_party_index==expected_slot
+    assert world.turns==prepare.attempts==0
+
+
+def test_prepared_level_floor_excludes_unprepared_status_reserve(monkeypatch):
+    world,prepare=setup(monkeypatch)
+    prepare.preserve_viable_active=True
+    prepare.minimum_prepared_helper_level=55
+    assert prepare()
+    assert world.turns==prepare.attempts==0
+    assert prepare.throw_preparations[-1]['target_status']=='healthy'
+
+
+@pytest.mark.parametrize('floor',[0,101,True,55.0])
+def test_invalid_prepared_helper_floor_rejected_before_input(floor):
+    with pytest.raises(ValueError,match='prepared capture helper'):
+        runtime.RedCaptureStatusPreparer(object(),object(),object(),preserve_viable_active=True,
+            minimum_prepared_helper_level=floor)
+
+
 @pytest.mark.parametrize('hp', [24, 26])
 def test_setup_switch_still_rejects_any_target_hp_change(monkeypatch, hp):
     world, prepare = setup(monkeypatch)
@@ -351,3 +446,136 @@ def test_fainting_aborts_before_another_status_attempt(monkeypatch):
     with pytest.raises(runtime.RedCaptureStatusError, match='fainted'):
         prepare()
     assert world.turns == 1
+
+
+
+def configure_rest_target(monkeypatch, world):
+    world.raw = replace(world.raw, enemy_hp=47, enemy_max_hp=137)
+    monkeypatch.setattr(world, 'read_enemy_capture_moves', lambda: (29, 133, 156, 0))
+
+
+@pytest.mark.parametrize('status_move', [95, 78])
+def test_opponent_rest_healing_is_not_our_sleep_or_paralysis_success(monkeypatch, status_move):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    world.party = replace(world.party, members=(
+        replace(world.party.members[0], moves=(MoveObservation(status_move, 10),)),
+        world.party.members[1],
+    ))
+    def rest(*args, **kwargs):
+        turn = world.turn(*args, **kwargs)
+        world.raw = replace(world.raw, enemy_hp=137)
+        world.status = 2
+        return turn
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', rest)
+    assert prepare()
+    assert prepare.attempts == world.turns == 1
+    assert prepare.reports[0]['status_success'] is False
+    assert prepare.reports[0]['opponent_recovery_observed'] is True
+    assert prepare.reports[0]['target_hp_before'] == 47
+    assert prepare.reports[0]['target_hp_after'] == 137
+    assert prepare.opponent_recoveries[0]['phase'] == 'status_turn'
+    assert prepare.throw_preparations[-1]['target_status'] == 'sleep'
+    assert prepare.throw_preparations[-1]['target_hp'] == 137
+
+
+def test_opponent_rest_during_helper_switch_avoids_unneeded_status_move(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    world.raw = replace(world.raw, active_party_index=1)
+    def switch(_a, _r, _e, index, **kwargs):
+        world.raw = replace(world.raw, active_party_index=index, enemy_hp=137)
+        world.status = 2
+    monkeypatch.setattr(runtime, 'switch_active_battler', switch)
+    assert prepare()
+    assert world.turns == prepare.attempts == 0
+    assert prepare.reports == []
+    assert len(prepare.opponent_recoveries) == 1
+    assert prepare.opponent_recoveries[0]['phase'] == 'helper_switch'
+
+
+def test_opponent_rest_during_protective_switch_updates_throw_observation(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    world.status = 0x40
+    def switch(_a, _r, _e, index, **kwargs):
+        world.raw = replace(world.raw, active_party_index=index, enemy_hp=137)
+        world.status = 2
+    monkeypatch.setattr(runtime, 'switch_active_battler', switch)
+    assert prepare()
+    assert world.turns == prepare.attempts == 0
+    assert prepare.opponent_recoveries[0]['phase'] == 'catcher_switch'
+    assert prepare.throw_preparations[-1]['target_status'] == 'sleep'
+
+
+def test_opponent_rest_settlement_is_verified_before_next_input(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    def settle(*args, **kwargs):
+        world.boundaries += 1
+        if world.boundaries == 2:
+            world.raw = replace(world.raw, enemy_hp=137)
+            world.status = 2
+    monkeypatch.setattr(runtime, 'advance_battle_to_policy_boundary', settle)
+    assert prepare()
+    assert world.turns == 1
+    assert prepare.opponent_recoveries[0]['phase'] == 'status_settlement'
+    assert prepare.reports[0]['status_success'] is False
+
+
+@pytest.mark.parametrize('hp,max_hp,status,moves', [
+    (46,137,2,(29,133,156,0)),  # damage
+    (100,137,2,(29,133,156,0)), # unexplained partial healing
+    (137,137,0,(29,133,156,0)), # no observed sleep
+    (137,137,3,(29,133,156,0)), # not the Rest sleep counter
+    (137,137,2,(29,133,0,0)),   # no native recovery move
+    (138,138,2,(29,133,156,0)), # changed maximum HP
+])
+def test_rest_exception_still_rejects_unexplained_hp_transition(monkeypatch,hp,max_hp,status,moves):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    monkeypatch.setattr(world, 'read_enemy_capture_moves', lambda:moves)
+    def drift(*args, **kwargs):
+        turn = world.turn(*args, **kwargs)
+        world.raw = replace(world.raw, enemy_hp=hp, enemy_max_hp=max_hp)
+        world.status = status
+        return turn
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', drift)
+    with pytest.raises(runtime.RedCaptureStatusError) as stop:
+        prepare()
+    assert stop.value.reason_code == runtime.CaptureStatusDrift.TARGET_HP.value
+    assert not prepare.opponent_recoveries
+
+
+@pytest.mark.parametrize('change,reason', [
+    ({'bag_items': ((4,3),)}, runtime.CaptureStatusDrift.BAG_ITEMS),
+    ({'party_species_ids': (48,)}, runtime.CaptureStatusDrift.PARTY_SPECIES),
+    ({'enemy_species_id': 185}, runtime.CaptureStatusDrift.TARGET_HP),
+    ({'map_id': 99}, runtime.CaptureStatusDrift.MAP),
+])
+def test_rest_never_bypasses_capture_custody_guards(monkeypatch,change,reason):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    def drift(*args, **kwargs):
+        turn = world.turn(*args, **kwargs)
+        world.raw = replace(world.raw, enemy_hp=137, **change)
+        world.status = 2
+        return turn
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', drift)
+    with pytest.raises(runtime.RedCaptureStatusError) as stop:
+        prepare()
+    assert stop.value.reason_code == reason.value
+    assert not prepare.opponent_recoveries
+
+
+def test_rest_does_not_waive_owned_pp_proof(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    configure_rest_target(monkeypatch, world)
+    def rest_without_owned_pp(*args, **kwargs):
+        world.raw = replace(world.raw, enemy_hp=137)
+        world.status = 2
+        return SimpleNamespace(move_executed=True)
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', rest_without_owned_pp)
+    with pytest.raises(runtime.RedCaptureStatusError, match='PP differs'):
+        prepare()
+    assert not prepare.reports

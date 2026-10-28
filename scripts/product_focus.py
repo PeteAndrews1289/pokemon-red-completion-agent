@@ -18,7 +18,7 @@ from pathlib import Path, PurePosixPath
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FOCUS_CONFIG = PROJECT_ROOT / "configs" / "active-product-focus.json"
 DEFAULT_FOCUS_DOCUMENT = PROJECT_ROOT / "ACTIVE_PRODUCT_STATE.md"
-FOCUS_SCHEMA = "pokemon.product-focus.v4"
+FOCUS_SCHEMA = "pokemon.product-focus.v5"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _IDENTIFIER = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
@@ -45,17 +45,26 @@ _OUTPUT_KINDS = {
 _REORIENTATION_EVIDENCE_KINDS = _OUTPUT_KINDS | {"falsification", "qualification"}
 _OUTPUT_PARTITIONS = {"development", "none", "train", "transfer"}
 _REQUIRED_DEVELOPMENT_PROHIBITIONS = {
+    "assisted_completion_as_autonomous",
     "cloned_or_rehashed_root_independence",
-    "consumed_trial_retry",
     "crystal_execution",
-    "full_game_replay",
+    "final_actor_cheat",
     "model_fit_on_development",
+    "retired_frozen_trial_reissue",
     "routine_clean_power_teacher_factory",
     "sealed_red_evaluation",
-    "teacher_choice_or_fallback",
     "teacher_route_hardening",
+    "unauthorized_publication",
     "unexecuted_counterfactual_target",
     "unmeasured_action_target",
+}
+_DEVELOPMENT_PERMISSIONS = {
+    "adaptive_preparation",
+    "batch_lessons_and_fits",
+    "compact_verification",
+    "development_campaigns",
+    "provisional_integration",
+    "teacher_controlled_fixtures",
 }
 _REQUIRED_STATUS_FIELDS = {
     "active_lane",
@@ -487,16 +496,27 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
                 f"{time_box_hours} {time_box_hour_label} |"
             ),
             "",
-            ("### Registered-objective learning" if "registered_train_examples" in progress
-             else "### Historical cross-family counter snapshot"),
-            "",
-            "| Output | Current | Minimum for the next decision |",
-            "| --- | ---: | ---: |",
         ]
     )
-    lines.extend(
-        f"| {label} | {current} | {minimum} |" for label, current, minimum in focus_scorecard(state)
-    )
+    scorecard = focus_scorecard(state)
+    if scorecard:
+        lines.extend([
+            "### Historical cross-family counter snapshot",
+            "",
+            "| Output | Recorded historical count | Legacy minimum, not current acceptance |",
+            "| --- | ---: | ---: |",
+        ])
+        lines.extend(
+            f"| {label} | {current} | {minimum} |" for label, current, minimum in scorecard
+        )
+    else:
+        lines.extend([
+            "### Current integration work",
+            "",
+            "This maintenance block has no lesson-count quota. Any targeted TRAIN learning "
+            "is reported separately from integration and game progress.",
+            "The acceptance criteria are the player outcomes in HANDOFF.md.",
+        ])
     lines.extend(
         [
             "",
@@ -580,6 +600,22 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
     lines.extend(
         [
             "",
+            "## Development permissions",
+            "",
+            "These permissions apply to new ordinary development, not official evaluation.",
+            "Frozen experiment identities and their original limits remain unchanged.",
+            "",
+        ]
+    )
+    permissions = _mapping(lane, "development_permissions", subject="active lane")
+    lines.extend(
+        f"- {permission.replace('_', ' ')}: "
+        f"{_yes_no(_bool(permissions, permission, subject='development permissions'))}"
+        for permission in sorted(_DEVELOPMENT_PERMISSIONS)
+    )
+    lines.extend(
+        [
+            "",
             "## Rigor belongs to the risk",
             "",
             (
@@ -604,20 +640,21 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             "Development is the fast learning loop. Benchmark and sealed rigor are reserved for",
             "claims that justify their cost; they must not be copied into routine data generation.",
             "",
-            "## Session allocation and alarms",
+            "## Suggested allocation and reassessment",
             "",
             f"- **{data_budget}%** data and scenarios",
             f"- **{model_budget}%** model and evaluation",
             f"- **{maintenance_budget}%** maintenance and documentation",
             "",
             (
-                "Stop and reassess after **"
+                "Reassess and change tactics after **"
                 f"{session_alarm}"
                 "** session without a measured learning output, after **"
-                f"{ci_alarm}** consecutive CI-only repair, or before any full replay. Repeated "
+                f"{ci_alarm}** consecutive CI-only repair. These are pivot checkpoints, not "
+                "mandatory user pauses. Avoid full replays for local questions. Repeated "
                 "fixed-route patches"
             ),
-            "and unmeasured teacher-label copying are also hard alarms.",
+            "and unmeasured teacher-label copying also require reassessment.",
             "",
             "## Reviewer use",
             "",
@@ -625,16 +662,15 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             f"- **Claude:** {_text(roles, 'claude', subject='review roles')}",
             f"- **Antigravity:** {_text(roles, 'antigravity', subject='review roles')}",
             "",
-            "## Retired leading edges",
+            "## Retired experiments",
             "",
+            f"All{len(state.retired_lanes)}retired lane identities remain closed. "
+            "Their reasons and",
+            "evidence references are preserved in configs/active-product-focus.json; consult",
+            "them only when a proposed task may reuse an old identity. Historical limits",
+            "do not prohibit a newly declared exploratory development run.",
         ]
     )
-    for retired in state.retired_lanes:
-        lines.append(
-            f"- **{_text(retired, 'name', subject='retired lane')}:** "
-            f"{_text(retired, 'reason', subject='retired lane')} Evidence is preserved; retry is "
-            f"{_yes_no(_bool(retired, 'retry_allowed', subject='retired lane')).lower()}."
-        )
     lines.extend(
         [
             "",
@@ -686,6 +722,7 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
         {
             "capability",
             "cheapest_falsifier",
+            "development_permissions",
             "id",
             "kind",
             "latest_reorientation",
@@ -748,6 +785,22 @@ def _validate_active_lane(lane: Mapping[str, object]) -> None:
     prohibited = set(_text_sequence(lane, "prohibited_actions", subject="active lane"))
     if rigor == "development" and not prohibited >= _REQUIRED_DEVELOPMENT_PROHIBITIONS:
         raise ProductFocusError("development lane is missing a protected-action prohibition")
+    permissions = _mapping(lane, "development_permissions", subject="active lane")
+    _require_keys(permissions, _DEVELOPMENT_PERMISSIONS, subject="development permissions")
+    for permission in _DEVELOPMENT_PERMISSIONS:
+        if _bool(permissions, permission, subject="development permissions") and rigor != (
+            "development"
+        ):
+            raise ProductFocusError("development permissions cannot authorize evaluation")
+    if (
+        _bool(permissions, "development_campaigns", subject="development permissions")
+        and "full_game_replay" in prohibited
+        or _bool(permissions, "teacher_controlled_fixtures", subject="development permissions")
+        and "teacher_choice_or_fallback" in prohibited
+        or _bool(permissions, "provisional_integration", subject="development permissions")
+        and "promotion_from_pilot" in prohibited
+    ):
+        raise ProductFocusError("development permissions conflict with an active prohibition")
     _validate_forward_plan(lane, prohibited=prohibited)
     progress = _mapping(lane, "progress", subject="active lane")
     _validate_progress(progress)
@@ -3420,7 +3473,7 @@ def _validate_alarms(alarms: Mapping[str, object]) -> None:
         alarms,
         {
             "maximum_consecutive_ci_only_repairs",
-            "maximum_full_replays_during_active_lane",
+            "maximum_redundant_full_replays_for_local_question",
             "maximum_sessions_without_measured_learning_output",
             "stop_on_repeated_fixed_route_patch",
             "stop_on_unmeasured_teacher_label_copy",
@@ -3438,8 +3491,8 @@ def _validate_alarms(alarms: Mapping[str, object]) -> None:
         raise ProductFocusError("learning-output alarm cannot exceed one session")
     if _count(alarms, "maximum_consecutive_ci_only_repairs", subject="alarms") > 1:
         raise ProductFocusError("CI-only repair alarm cannot exceed one repair")
-    if _count(alarms, "maximum_full_replays_during_active_lane", subject="alarms") != 0:
-        raise ProductFocusError("active development lane cannot permit a full replay")
+    if _count(alarms, "maximum_redundant_full_replays_for_local_question", subject="alarms") != 0:
+        raise ProductFocusError("local-question alarm cannot permit a redundant full replay")
     if not _bool(alarms, "stop_on_repeated_fixed_route_patch", subject="alarms"):
         raise ProductFocusError("fixed-route drift alarm must remain enabled")
     if not _bool(alarms, "stop_on_unmeasured_teacher_label_copy", subject="alarms"):

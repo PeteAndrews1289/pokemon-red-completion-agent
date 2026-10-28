@@ -1,0 +1,80 @@
+{
+  "ball_stock": {
+    "final": 98,
+    "final_stock_purchase_value": 117600,
+    "initial": 0,
+    "limitation": "Unused stock cost is observed. A smaller reserve may increase future risk;no counterfactual speed,saving or capture success is claimed.",
+    "native_use": 5,
+    "original_reserve": 99,
+    "purchased": 103,
+    "rule_based_quantity": true
+  },
+  "cash": {
+    "all_positive_debits": 404000,
+    "balance_verified": true,
+    "coins_and_prize_debits": 107000,
+    "earned_league": 417186,
+    "final": 27194,
+    "initial": 12008,
+    "medicine_debits": 173400,
+    "other_native_reward": 2000,
+    "ultra_debits": 123600
+  },
+  "fit_allowed": false,
+  "league": {
+    "battles": 70,
+    "cycles": 14,
+    "fraction_of_native_seconds": 0.65877013059991,
+    "gross_cash": 417186,
+    "net_cash": 243786,
+    "pre_entry_medicine_cash": 173400,
+    "receipt_seconds": 628.50096963
+  },
+  "measured_menu_seconds": 203.58620034199913,
+  "observed_at_utc": "2026-10-22T09:47:09.156485+00:00",
+  "official_fresh_acceptance": false,
+  "receipt_families": {
+    "acquire_species": {
+      "actions": 6396,
+      "count": 4,
+      "frames": 457656,
+      "menu_seconds": 24.946159006999892,
+      "net_cash": -23000,
+      "seconds": 61.11647075399992
+    },
+    "coin_procurement": {
+      "actions": 3930,
+      "count": 4,
+      "frames": 203520,
+      "menu_seconds": 14.400327731000004,
+      "net_cash": -82000,
+      "seconds": 37.98913084399999
+    },
+    "league_funding": {
+      "actions": 41463,
+      "count": 14,
+      "frames": 3737724,
+      "menu_seconds": 73.75995019799979,
+      "net_cash": 243786,
+      "seconds": 628.50096963
+    },
+    "restore_team": {
+      "actions": 1744,
+      "count": 13,
+      "frames": 83952,
+      "menu_seconds": 72.45441972999953,
+      "net_cash": 0,
+      "seconds": 14.746196005000115
+    },
+    "ultra_procurement": {
+      "actions": 384,
+      "count": 3,
+      "frames": 30840,
+      "menu_seconds": 18.02534367599992,
+      "net_cash": -123600,
+      "seconds": 3.714257491000126
+    }
+  },
+  "schema": "pokemon.red.development-resource-cost.v1",
+  "source_completion_sha256": "583de47b13a5db030587de694b778251b786b2cabdabc5ce381fce7717d49566"
+}

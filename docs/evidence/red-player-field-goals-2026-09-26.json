@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon.red.player-field-goals-preflight.v1",
+  "session": "2026-09-26-player-field-goals",
+  "goal_complete": false,
+  "native_execution_qualified": false,
+  "source_sha256": "1149348f2c7accc9ad00df6c5391dac6e49e67427d1c5581311640be3968dbb9",
+  "private_preflight_sha256": "8550a2927957dc8453c69f567b9b9a2141805d9f1f3c9afaf66ca02137a377ac",
+  "available_goal_kinds": ["advance_story", "develop_team"],
+  "input_frames": 0,
+  "model_queries": 0,
+  "new_battle_choices": 0,
+  "new_fits": 0,
+  "new_admitted_lessons": 0,
+  "comparison_queries": 0,
+  "campaign_registration_delta": 0,
+  "authority_promotions": 0,
+  "prior_pilot_attempts": 12,
+  "prior_recovery_continuations": 1,
+  "focused_tests_passed": 307,
+  "typechecked_source_files": 665,
+  "lint_passed": true,
+  "gameplay_stopped": true,
+  "native_allowance_pending": true,
+  "proposed_qualification_limits": {
+    "attempts": 1,
+    "goals": 2,
+    "actions": 1800,
+    "frames": 180000,
+    "seconds": 120,
+    "cash_debits": 1500
+  },
+  "publication": false
+}

@@ -44,6 +44,7 @@ from .observation import (
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
+from .red_lorelei_story import story_league_controller
 from .red_pc_storage import face_pc_boundary
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
@@ -53,10 +54,11 @@ from .red_trainer_healing import bag_after_full_restores, require_story_recovery
 from .red_trainer_party import RedTrainerPartyPlan, plan_trainer_party, prepare_trainer_lead
 from .red_trainer_risk import RedTrainerRiskController
 from .red_trainer_survival import RedTrainerSurvivalController
-from .route_executor import execute_route
+from .route_executor import InterruptionHandler, TraversalObserver, execute_route
 from .route_plan import RoutePlan, RoutePlanningError
 
 if TYPE_CHECKING:
+    from .gen1_scripted_arrival import ScriptedTrainerArrival
     from .red_goal_context import RedGoalContextRuntime
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
@@ -97,6 +99,18 @@ def _live_rematch_completed(raw: RawGameState, objective_id: str) -> bool:
     )
 
 
+def _rematch_entry_verified(before, after, objective_id, *, projected_events=None,
+                            lobby_reset_verified=False):
+    """Use a forecast only after the native route observed the exact lobby reset."""
+    if projected_events is not None:
+        if (lobby_reset_verified is not True or before.map_id != MapId.INDIGO_PLATEAU
+                or type(projected_events) is not bytes):
+            return False
+        before = replace(before,event_flags=projected_events)
+    return (_live_rematch_boundary(before,objective_id)
+            and _live_rematch_completed(after,objective_id))
+
+
 def _before_scripted_interaction(
     plan: RoutePlan, triggers: tuple[tuple[int, int], ...], facing: TrainerFacing,
 ) -> RoutePlan:
@@ -134,6 +148,9 @@ class RedCartridgeLoreleiSkill:
     maximum_critical_exposures: int = 0
     recovery_controller: str = "critical-inclusive"
     rematch: bool = False
+    allow_scripted_reentry: bool = False
+    maximum_level_deficit: int = 5
+    development_retry_reentry: bool = False
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
         default=frozenset({"league:lorelei_defeated"}), init=False,
@@ -155,7 +172,14 @@ class RedCartridgeLoreleiSkill:
     _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
     _arrival_steps: int = field(default=0, init=False)
+    _arrival: ScriptedTrainerArrival | None = field(default=None, init=False)
+    _prepared_reentry: bool = field(default=False, init=False)
+    _prepared_level_deficit: int = field(default=5, init=False)
+    _lobby_events: bytes | None = field(default=None, init=False)
+    _lobby_reset_latch: bool | None = field(default=None, init=False)
     _scripted_triggers: tuple[tuple[int, int], ...] = field(default=(), init=False)
+    _prepared_learned_controller: object | None = field(default=None, init=False)
+    _prepared_story_binding: object | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if type(self.rematch) is not bool:  # noqa: E721
@@ -173,6 +197,80 @@ class RedCartridgeLoreleiSkill:
             self.expected_facts = frozenset({"league:lance_defeated"})
 
     def _require_controller_contract(self) -> None:
+        from .red_lorelei_story import (
+            ScopedAssistedLeagueRetryController,
+            ScopedAssistedLoreleiController,
+        )
+        from .scenario_lab import ScenarioPartition
+
+        if (
+            type(self.maximum_level_deficit) is not int
+            or not 0 <= self.maximum_level_deficit <= 100
+        ):
+            raise RedTrainerStoryError("invalid explicit preparation level deficit")
+        if self.maximum_level_deficit != 5:
+            # The five-level filter is a preparation heuristic, not battle
+            # legality. Only explicitly admitted DEVELOPMENT diagnostics relax it.
+            owner = story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
+            admitted_screen = (
+                self.objective_id == "defeat_lorelei"
+                and self.recovery_controller == "frozen-damage-lorelei-development"
+            ) or (
+                self.objective_id == "defeat_lorelei"
+                and self.recovery_controller == "scoped-assisted-lorelei-development"
+                and type(owner) is ScopedAssistedLoreleiController
+                and self.maximum_level_deficit == owner.declared_level_deficit
+            ) or (
+                self.objective_id == "defeat_agatha"
+                and self.recovery_controller == "scoped-assisted-agatha-development"
+                and self.maximum_level_deficit == 6
+            ) or (
+                self.objective_id == "defeat_lance"
+                and self.recovery_controller == "scoped-assisted-lance-development"
+                and self.maximum_level_deficit == 7
+            ) or (
+                self.recovery_controller == "scoped-assisted-league-retry-development"
+                and self.rematch is True
+                and (
+                    (self.objective_id, self.maximum_level_deficit)
+                    in {("defeat_agatha", 6), ("defeat_lance", 7), ("defeat_lance", 9)}
+                    or (
+                        type(owner) is ScopedAssistedLeagueRetryController
+                        and self.maximum_level_deficit == owner.declared_level_deficit
+                    )
+                )
+            )
+            if (
+                not admitted_screen
+                or owner is None
+                or owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+            ):
+                raise RedTrainerStoryError(
+                    "level-screen override requires admitted development scope"
+                )
+        if type(self.allow_scripted_reentry) is not bool or (
+            self.allow_scripted_reentry and (
+                self.objective_id != "defeat_lorelei" or self.rematch
+                or self.recovery_controller != "frozen-damage-lorelei-development"
+            )
+        ):
+            raise RedTrainerStoryError(
+                "reentry requires explicit first-Lorelei development binding"
+            )
+        if type(self.development_retry_reentry) is not bool:
+            raise RedTrainerStoryError("development retry reentry must be boolean")
+        if self.development_retry_reentry:
+            owner = story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
+            if (
+                self.objective_id != "defeat_lorelei" or self.rematch is not True
+                or type(owner) is not ScopedAssistedLeagueRetryController
+                or owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+                or self.recovery_controller != owner.controller_name
+            ):
+                raise RedTrainerStoryError(
+                    "retry reentry requires exact scoped DEVELOPMENT Lorelei"
+                )
+            owner.require_identity()
         risk_contract = (
             self.objective_id == "defeat_lance"
             and self.recovery_controller == "bounded-critical-risk"
@@ -208,11 +306,59 @@ class RedCartridgeLoreleiSkill:
         self._require_controller_contract()
         observation = self.runtime.adapter.observe()
         raw = observation.raw
+        planning_raw = raw
+        if self.development_retry_reentry and raw.map_id == MapId.INDIGO_PLATEAU:
+            from .red_league_entry import forecast_league_entry_events
+
+            planning_raw = replace(raw, event_flags=forecast_league_entry_events(
+                raw, development_retry_reentry=True,
+                challenge_started=self.runtime.reader.read_league_challenge_started(),
+            ))
         if self.recovery_controller not in {
             "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
-            "bounded-critical-risk",
+            "bounded-critical-risk", "frozen-k-development", "frozen-damage-lorelei-development",
+            "frozen-k-lorelei-train",
+            "scoped-assisted-lorelei-development",
+            "scoped-assisted-bruno-development",
+            "scoped-assisted-agatha-development",
+            "scoped-assisted-lance-development",
+            "scoped-assisted-league-retry-development",
+            "frozen-damage-bruno-copy-development",
+            "frozen-damage-bruno-development",
+            "frozen-damage-later-league-development",
+            "frozen-damage-league-challenge-development",
+            "isolated-story-copy-development",
+            "frozen-risk-cost-agatha-development",
+            "frozen-risk-cost-lance-development",
+            "frozen-risk-cost-league-chain-development",
         }:
             raise RedTrainerStoryError("unsupported recovery controller")
+        learned = story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
+        learned_mode = self.recovery_controller in {
+            "frozen-k-development", "frozen-damage-lorelei-development",
+            "frozen-k-lorelei-train",
+            "scoped-assisted-lorelei-development",
+            "scoped-assisted-bruno-development",
+            "scoped-assisted-agatha-development",
+            "scoped-assisted-lance-development",
+            "scoped-assisted-league-retry-development",
+            "frozen-damage-bruno-copy-development",
+            "frozen-damage-bruno-development",
+            "frozen-damage-later-league-development",
+            "frozen-damage-league-challenge-development",
+            "isolated-story-copy-development",
+            "frozen-risk-cost-agatha-development",
+            "frozen-risk-cost-lance-development",
+            "frozen-risk-cost-league-chain-development",
+        }
+        if (learned_mode != (learned is not None)
+                or (learned is not None and self.recovery_controller !=
+                    getattr(learned, "controller_name", "frozen-k-development"))):
+            raise RedTrainerStoryError("explicit learned League binding differs")
+        if learned is not None and (self.maximum_full_restores or self.maximum_critical_exposures):
+            raise RedTrainerStoryError(
+                "learned League qualification is zero-item without teacher risk control"
+            )
         require_story_recovery_stock(raw, self.maximum_full_restores)
         is_bruno = self.objective_id == "defeat_bruno"
         is_agatha = self.objective_id == "defeat_agatha"
@@ -237,7 +383,7 @@ class RedCartridgeLoreleiSkill:
             and not self.expected_facts.intersection(observation.game_state.facts)
         )
         rematch_boundary = (
-            _live_rematch_boundary(raw, self.objective_id)
+            _live_rematch_boundary(planning_raw, self.objective_id)
             and (
                 self.objective_id != "defeat_lorelei"
                 or "story:victory_road_cleared" in observation.game_state.facts
@@ -270,20 +416,50 @@ class RedCartridgeLoreleiSkill:
                 with_scripted_trainer_arrival,
             )
 
-            arrival = trainer_room_arrival(world.rom, int(target_map), raw.event_flags)
+            arrival_events = raw.event_flags
+            reentry = self.allow_scripted_reentry or self.development_retry_reentry
+            if reentry and raw.map_id == MapId.INDIGO_PLATEAU:
+                from .red_league_funding import projected_fresh_league_events
+
+                self._lobby_reset_latch = self.runtime.reader.read_league_challenge_started()
+                arrival_events, _ = projected_fresh_league_events(
+                    raw.event_flags, challenge_started=self._lobby_reset_latch,
+                )
+                self._lobby_events = arrival_events
+            arrival = (
+                trainer_room_arrival(
+                    world.rom, int(target_map), arrival_events, allow_reentry=True,
+                )
+                if reentry
+                else trainer_room_arrival(world.rom, int(target_map), raw.event_flags)
+            )
+            self._arrival = arrival
             self._arrival_steps = arrival.steps
             world = replace(world, macro_graph=with_scripted_trainer_arrival(
                 world.macro_graph, arrival,
             ))
         headers = trainer_headers(world.rom, {target_map}, full_event_offsets=True)
         objects = map_object_events(world.rom, {target_map})
-        zones = static_trainer_sight_zones(headers, objects, raw.event_flags)
+        if planning_raw.event_flags is None:
+            raise RedTrainerStoryError("planned entry requires observed event flags")
+        zones = static_trainer_sight_zones(headers, objects, planning_raw.event_flags)
         matches = tuple(z for z in zones if z.event_flag == target_event)
         if len(matches) != 1 or matches[0].defeated or matches[0].engage_distance != 0:
             raise RedTrainerStoryError("story trainer is not one undefeated interaction target")
         trainer = matches[0]
         quote = self._quote(trainer.trainer_class, trainer.trainer_set)
+        if learned is not None and hasattr(learned, "require_cartridge_target"):
+            learned.require_cartridge_target(trainer, quote)
         preparation = (
+            plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0,
+                               allow_fainted_reserves=True,
+                               allow_status=getattr(
+                                   getattr(getattr(learned, "battler", None),
+                                           "development_story_scope", None),
+                                   "diagnostic_status_entry", False),
+                               maximum_level_deficit=self.maximum_level_deficit)
+            if learned is not None and learned.recovery_contract == "league-profit-recovery-v1"
+            else
             plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0)
             if self.recovery_controller in {
                 "damage-bounded-zero-item", "bounded-critical-risk",
@@ -301,6 +477,10 @@ class RedCartridgeLoreleiSkill:
                 continue
             try:
                 plan = world.plan_feasible_to_map(start, int(trainer.map_id), goal_at=at)
+                if self._lobby_events is not None and plan.macro_path.maps != (
+                    int(MapId.INDIGO_PLATEAU), int(MapId.INDIGO_PLATEAU_LOBBY), int(target_map),
+                ):
+                    raise RedTrainerStoryError("projected entry must cross the bound reset lobby")
                 if self._scripted_triggers:
                     _before_scripted_interaction(plan, self._scripted_triggers, facing)
             except (RoutePlanningError, RedTrainerStoryError):
@@ -319,6 +499,8 @@ class RedCartridgeLoreleiSkill:
         self._prepared_objective_id = None
         self._prepared_world, self._prepared_blocks = None, None
         self._arrival_steps = 0
+        self._arrival = None
+        self._lobby_events, self._lobby_reset_latch = None, None
         self._scripted_triggers = ()
         if self._claimed:
             return ObjectiveSkillAvailability(False, "Story attempt already consumed.")
@@ -334,6 +516,14 @@ class RedCartridgeLoreleiSkill:
         self._prepared_controller = self.recovery_controller
         self._prepared_objective_id = self.objective_id
         self._prepared_rematch = self.rematch
+        self._prepared_reentry = self.allow_scripted_reentry or self.development_retry_reentry
+        self._prepared_level_deficit = self.maximum_level_deficit
+        self._prepared_learned_controller = story_league_controller(
+            self.runtime, self.objective_id, rematch=self.rematch,
+        )
+        self._prepared_story_binding = getattr(
+            self._prepared_learned_controller, "binding_identity", None,
+        )
         return ObjectiveSkillAvailability(
             True, "Bounded cartridge trainer with observed party control.",
         )
@@ -341,6 +531,9 @@ class RedCartridgeLoreleiSkill:
     def _battle_controller(
         self, reader: PokemonRedStateReader,
     ) -> RedTrainerSurvivalController | RedTrainerPartyController:
+        learned = story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
+        if learned is not None:
+            return learned
         if self.recovery_controller == "bounded-critical-risk":
             return RedTrainerRiskController(
                 reader,
@@ -362,6 +555,11 @@ class RedCartridgeLoreleiSkill:
             )
         return RedTrainerPartyController(reader, self.runtime.emulator)
 
+    @property
+    def prepared_lead_plan(self):
+        """Read the already-bound opening swap without planning or input."""
+        return None if self._prepared is None else self._prepared[2].lead
+
     def execute(self) -> ObjectiveSkillExecution:
         from .red_resource_goal_router import _ROUTE_LIMITS
 
@@ -375,12 +573,23 @@ class RedCartridgeLoreleiSkill:
                 or self._prepared_risk_budget != self.maximum_critical_exposures
                 or self._prepared_controller != self.recovery_controller
                 or self._prepared_objective_id != self.objective_id
-                or self._prepared_rematch != self.rematch):
+                or self._prepared_learned_controller is not story_league_controller(
+                    self.runtime, self.objective_id, rematch=self.rematch)
+                or self._prepared_story_binding != getattr(
+                    self._prepared_learned_controller, "binding_identity", None)
+                or self._prepared_rematch != self.rematch
+                or self._prepared_reentry != (
+                    self.allow_scripted_reentry or self.development_retry_reentry)):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
+        if self._prepared_level_deficit != self.maximum_level_deficit:
+            raise RedTrainerStoryError("prepared level-screen declaration changed before input")
         if self._prepared_blocks is not None and (
             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
         ):
             raise RedTrainerStoryError("story terrain changed before input")
+        if (self._lobby_reset_latch is not None and
+                self.runtime.reader.read_league_challenge_started() != self._lobby_reset_latch):
+            raise RedTrainerStoryError("lobby reset latch changed before input")
         assert self._prepared_world is not None
         world = self._prepared_world
         reader = self.runtime.reader
@@ -393,13 +602,30 @@ class RedCartridgeLoreleiSkill:
         quote = self._quote(target.trainer.trainer_class, target.trainer.trainer_set)
         prepare_trainer_lead(self.runtime, actions, preparation, current_quote=quote)
         prepared_raw = reader.read()
-        guard = RecoveryRouteInterruptionHandler(
-            actions, reader, tuple(prepared_raw.party_species_ids or ()),
-            tuple(range(prepared_raw.party_count or 0)), maximum_flees=0, maximum_trainer_battles=0,
+        recovery = (
+            self._prepared_learned_controller is not None
+            and self._prepared_learned_controller.recovery_contract == "league-profit-recovery-v1"
         )
-        traversal = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(
+        recovery_guard = RecoveryRouteInterruptionHandler(
+            actions, reader, tuple(prepared_raw.party_species_ids or ()),
+            tuple(i for i, hp in enumerate(prepared_raw.party_hp or ()) if hp > 0)
+            if recovery else tuple(range(prepared_raw.party_count or 0)),
+            maximum_flees=0, maximum_trainer_battles=0,
+        )
+        guard: InterruptionHandler = recovery_guard
+        traversal: TraversalObserver = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(
             world.rom, reader, full_event_offsets=True,
         ))
+        if self._lobby_events is not None:
+            from .red_league_entry import LeagueLobbyResetObserver
+
+            traversal = LeagueLobbyResetObserver(traversal, reader, self._lobby_events)
+        if self._arrival is not None and self._arrival.reentry_text_id is not None:
+            from .gen1_arrival_runtime import ScriptedArrivalInterruptionHandler
+
+            guard = ScriptedArrivalInterruptionHandler(
+                world.rom, self._arrival, reader, actions, guard,
+            )
         route_plan = target.approach
         if self._scripted_triggers:
             route_plan = _before_scripted_interaction(
@@ -430,9 +656,10 @@ class RedCartridgeLoreleiSkill:
                 or current.player_money != before.raw.player_money
             ):
                 raise RedTrainerStoryError("scripted trainer entry origin changed")
-            guard._require_preserved_living_slots(current)
+            recovery_guard._require_preserved_living_slots(current)
             qualified_dialogue = bind_scripted_trainer_dialogue(
                 world.rom, reader, target, current, final_event_flag=int(EventFlag.BEAT_LANCE),
+                allow_fainted_reserves=recovery,
             )
             actions.execute(target.approach.steps[-1].macro_action)
             expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
@@ -497,7 +724,7 @@ class RedCartridgeLoreleiSkill:
                 or self._quote(actual.trainer_class, actual.trainer_set) != target.quote
             ):
                 raise RedTrainerStoryError("story trainer identity or roster changed")
-            guard._require_preserved_living_slots(current)
+            recovery_guard._require_preserved_living_slots(current)
 
         require_target()
         if not self._scripted_triggers:
@@ -505,7 +732,7 @@ class RedCartridgeLoreleiSkill:
         controller = self._battle_controller(reader)
         receipt = run_prepared_trainer_funding(
             reader, actions, target=target, validate_target=require_target,
-            move_slot_policy=guard._safe_trainer_move,
+            move_slot_policy=recovery_guard._safe_trainer_move,
             timing=BattleRuntimeTiming(max_runtime_pulses=1600),
             intent=BattleIntent(
                 self.objective_id, battle_plan_id="cartridge-trainer-story",
@@ -529,8 +756,9 @@ class RedCartridgeLoreleiSkill:
         )
         after = self.runtime.adapter.observe()
         event_verified = (
-            _live_rematch_boundary(before.raw, self.objective_id)
-            and _live_rematch_completed(after.raw, self.objective_id)
+            _rematch_entry_verified(before.raw,after.raw,self.objective_id,
+                projected_events=self._lobby_events,
+                lobby_reset_verified=getattr(traversal,"verified",False))
         ) if self.rematch else self.expected_facts.issubset(after.game_state.facts)
         if (
             not after.input_ready or after.raw.battle_state
@@ -544,17 +772,26 @@ class RedCartridgeLoreleiSkill:
         return ObjectiveSkillExecution(
             self.actions.actions_executed - start_actions,
             self.runtime.emulator.frame_count - start_frames,
-            {"authority": "deterministic-trainer-controls", "story_event_verified": True,
+            {"authority": (
+                getattr(self._prepared_learned_controller, "controller_name",
+                        "frozen-k-league-development") if self._prepared_learned_controller
+                else "deterministic-trainer-controls"
+             ), "story_event_verified": True,
              "rematch": self.rematch,
              "route_steps": len(target.approach.steps), "switches": len(controller.switches),
              "moves_selected": controller.moves_selected, "victory_money": receipt.payout,
-             "bag_items_spent": spent, "learned_battle_authority": False,
+             "bag_items_spent": spent,
+             "learned_battle_authority": self._prepared_learned_controller is not None,
              "maximum_full_restores": self.maximum_full_restores,
              "maximum_critical_exposures": self.maximum_critical_exposures,
+             **({"maximum_level_deficit": self.maximum_level_deficit}
+                if self.maximum_level_deficit != 5 else {}),
              "critical_exposures_claimed": getattr(
                  controller, "critical_exposures_claimed", 0,
              ),
              "battle_controller": (
+                 getattr(self._prepared_learned_controller, "controller_name",
+                         "frozen-k-development") if self._prepared_learned_controller else
                  "bounded-critical-risk"
                  if self.recovery_controller == "bounded-critical-risk"
                  else

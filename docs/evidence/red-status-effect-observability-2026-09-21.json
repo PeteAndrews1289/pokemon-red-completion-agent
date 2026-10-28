@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon.red.status.effect-observability-evidence.v1",
+  "session": "2026-09-21-status-effect-observability",
+  "source_commit": "60750f9f",
+  "private_packet": "red-status-effect-probe-20260921-v1",
+  "plan_sha256": "4420ac910cba62be1568ac3fefe03ab42bd707d66e694dff90599b1f9b26f38f",
+  "inventory_sha256": "cefc97c00fbba439092e6bbf049ac3718b351232db017e85aa43b44fd3d92bb7",
+  "result_sha256": "2f3c9b20e3e49551234de681baf2013896572af6f38773fb8a45ba9186b60409",
+  "authenticated_existing_branches": 936,
+  "source_contexts": 312,
+  "observed_net_changes": 145,
+  "observed_no_net_changes": 247,
+  "suppressed": 71,
+  "unknown": 473,
+  "causal_success_labels": 0,
+  "diagnostic_fits": 1,
+  "player_fits": 0,
+  "solver": {"success": true, "finite": true, "iterations": 40},
+  "fit_subset": {
+    "roots": 3, "contexts": 116, "rows": 333,
+    "predictor_brier": 0.03252546463712337,
+    "constant_brier": 0.24929036696072698
+  },
+  "held_train_root": {
+    "roots": 1, "contexts": 23, "rows": 59,
+    "previously_used_by_other_battle_models": true,
+    "predictor_brier": 0.38334621657219276,
+    "constant_brier": 0.25341213403674434,
+    "false_positives": 38, "true_positives": 21,
+    "true_negatives": 0, "false_negatives": 0
+  },
+  "diagnostic_pass": false,
+  "unseen_condition_support": {
+    "poison_immunity": {"fit_rows": 0, "held_rows": 24, "learned_weight": 0.0},
+    "electric_paralysis_immunity": {"fit_rows": 0, "held_rows": 12, "learned_weight": 0.0}
+  },
+  "audit": {
+    "inventory_reauthenticated": true,
+    "whole_root_and_context_separation_verified": true,
+    "all_392_predictions_reproduced_without_refitting": true,
+    "unknowns_and_suppression_excluded_not_imputed": true,
+    "conditional_net_change_not_causal_effect_success": true
+  },
+  "gameplay_episodes": 0,
+  "new_collection": 0,
+  "collection_delta": 0,
+  "authority_promotions": 0,
+  "reserved_configurations_opened": 0,
+  "protected": {
+    "story_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "tests": {"targeted_passed": 497, "integration_skipped": 13},
+  "conclusion": "Closed rejected diagnostic. Missing fitting-root immunity coverage explains36of38held-root false positives; do not tune on this root or promote the predictor. Repair curriculum coverage and ambiguous effect observation before another policy fit."
+}

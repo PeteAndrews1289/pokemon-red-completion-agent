@@ -1,0 +1,255 @@
+{
+  "schema": "pokemon.red.checkpoint-recovery-learning-evidence.v1",
+  "date": "2026-10-08",
+  "status": "closed_scoped_native_improvement_and_durable_development_reuse",
+  "session_start_utc": "2026-10-08T19:52:54Z",
+  "allowed_minutes": 180,
+  "first_reassessment_completed_before_utc": "2026-10-08T20:37:54Z",
+  "checkpoint_inventory": {
+    "count": 4,
+    "zero_input_reloads": 4,
+    "state_unchanged": true,
+    "originals_unchanged": true,
+    "names": [
+      "post-league-center",
+      "post-league-current",
+      "early-train-nurse",
+      "capture-after-travel"
+    ],
+    "partitions": [
+      "development",
+      "development",
+      "train",
+      "development"
+    ],
+    "post_league_story_replay_required": false,
+    "development_copies_are_train": false,
+    "related_copies_are_independent": false
+  },
+  "model": {
+    "prior_sha256": "3254cc74d8affab37507e94151fdfc93712024d9444b2e013246f55e482e66e5",
+    "sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "corpus_sha256": "70f6971f82df7757f4ae6a2a607c2c0d729c796a52ff6b1d7a49abe03d6597ce",
+    "settled_examples": 151,
+    "retained_prior_examples": 147,
+    "retained_all_prior_fingerprints": true,
+    "admitted_train_delta": 4,
+    "fit_delta": 1,
+    "battler_fit_delta": 0,
+    "development_inputs": 0,
+    "automatic_fit": false,
+    "configured_development_artifact_selected": true,
+    "protected_main_model_replaced": false,
+    "official_authority_promotions": 0,
+    "runtime_llm_calls": 0,
+    "old_train_mse_before": 0.012787633737897736,
+    "old_train_mse_after": 0.012787815672204897,
+    "old_train_error_ratio": 1.0000142273630048,
+    "new_train_mse_before": 0.06601372417729044,
+    "new_train_mse_after": 2.06653659590915e-7,
+    "fit_seconds": 550.3908119159751,
+    "new_pp_readiness_interactions_nonzero": true,
+    "pp_train_fraction_bands": 1,
+    "recent_loss_learning_demonstrated": false,
+    "opponent_gap_learning_demonstrated": false
+  },
+  "lessons": [
+    {
+      "arm": "pp-short-restore",
+      "kind": "restore_team",
+      "succeeded": true,
+      "actions": 22,
+      "frames": 1584,
+      "seconds": 7.5294,
+      "new_registrations": []
+    },
+    {
+      "arm": "hp-pp-short-restore",
+      "kind": "restore_team",
+      "succeeded": true,
+      "actions": 22,
+      "frames": 1584,
+      "seconds": 7.7273,
+      "new_registrations": []
+    },
+    {
+      "arm": "pp-short-capture",
+      "kind": "acquire_species",
+      "succeeded": true,
+      "actions": 175,
+      "frames": 11820,
+      "seconds": 21.7377,
+      "new_registrations": [
+        21
+      ]
+    },
+    {
+      "arm": "hp-pp-short-capture",
+      "kind": "acquire_species",
+      "succeeded": true,
+      "actions": 189,
+      "frames": 13368,
+      "seconds": 22.9401,
+      "new_registrations": [
+        21
+      ]
+    }
+  ],
+  "reserved_conditions": {
+    "declared_before_fit": true,
+    "independent_origins": false,
+    "moderate_hp_fraction": 0.7,
+    "moderate_pp_fraction": 0.3,
+    "pp_only_hp_fraction": 1,
+    "pp_only_pp_fraction": 0.5,
+    "child_first_choice": "model_greedy_restore_team",
+    "child_trainer_wins_per_condition": 7,
+    "child_incidental_registration": [
+      20
+    ],
+    "child_selected_capture_initially_passed": false,
+    "initial_stop": "fainting health guard; incidental evolution differs from literal specimen census",
+    "pp_only_baseline_actual_trainer_loss": true,
+    "moderate_baseline_execution_mechanics_differ": true,
+    "pure_paired_model_improvement_claim": false,
+    "original_failures_preserved": true
+  },
+  "adaptive_early_continuation": {
+    "original_comparison_stays_failed": true,
+    "source_rewound": false,
+    "source_edited": false,
+    "teacher_queries": 0,
+    "new_fits": 0,
+    "useful_model_selected_captures": [
+      16,
+      43
+    ],
+    "initial_registration_count": 5,
+    "final_registration_count": 8,
+    "incidental_evolved_species": [
+      20
+    ],
+    "incidental_registration_is_capture_success": false,
+    "cumulative_native_costs": {
+      "actions": 2243,
+      "frames": 152412,
+      "seconds": 57.46503008401487,
+      "decisions": 8,
+      "heals": 4
+    },
+    "switching_error_retained": true,
+    "acknowledgment_repair_native_capture_passed": true,
+    "last_episode_model_decisions": 3,
+    "last_episode_successful_decisions": 3,
+    "last_episode_support_decisions": 0,
+    "terminal_sha256": "64755d3245391e8ac4547394c6b070fbde3097106c6f601348d6d27e728af248",
+    "field_ready": true,
+    "buttons_released": true,
+    "worker_stopped": true,
+    "copy_back": false,
+    "capture_moves_and_target_filter_are_execution_support": true
+  },
+  "actual_damaged_checkpoint_continuation": {
+    "model_selected_post_trip_recovery": true,
+    "ordinary_setbacks_retained": true,
+    "ball_exhaustion_retained": true,
+    "useful_capture": false,
+    "final_stop": "menu_unavailable; narrow classroom has no ordinary supply offer",
+    "field_ready": true,
+    "buttons_released": true,
+    "source_unchanged": true,
+    "worker_stopped": true,
+    "next_reuse": "Use the existing whole-player resource menu, not a new supply subsystem"
+  },
+  "configured_development_copy": {
+    "private_family": "red-recovery-capture-learning-20261008-v1",
+    "node": "configured-copy/runs/segment-001",
+    "source_node": "red-configured-save-completion-20261007-v1/runs/segment-065",
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "configuration_sha256": "0f0172bddc974b3619eb0e6cff29792ae7587aa51516549cca46ea21c476d974",
+    "state_sha256": "027a16e7459b0e3201ea3d0e8a336d0db5bcbf5986e70a63b26ca5ec943ce75a",
+    "context_sha256": "2e1fad2ad93fe473fb055d6ca4a13fbe90e222ffb6593093f3e3929fc82f1f0c",
+    "initial_registrations": 32,
+    "final_registrations": 33,
+    "new_registrations": [
+      78
+    ],
+    "cash": 20086,
+    "model_decisions": 3,
+    "support_decisions": 0,
+    "successful_decisions": 2,
+    "choices": [
+      "restore_team",
+      "evolve_species",
+      "evolve_species"
+    ],
+    "failed_partial_third_goal_preserved": true,
+    "third_goal_settlement_reserve_reached": true,
+    "third_goal_verification": "failed",
+    "third_goal_failure_reason": "outcome_not_verified",
+    "third_goal_stop": "verification_failed",
+    "nested_nursing_is_disclosed_support": true,
+    "native_costs": {
+      "actions": 7795,
+      "frames": 641400,
+      "seconds": 173.17018787492998,
+      "decisions": 3,
+      "heals": 5,
+      "cash_debits": 0
+    },
+    "inherited_spent_retained": true,
+    "original_roster_restored": true,
+    "field_ready": true,
+    "buttons_released": true,
+    "worker_stopped": true,
+    "copy_back": false,
+    "zero_input_reloads": 2,
+    "reload_inputs": 0,
+    "reload_frames": 0,
+    "loaded_child_after_actual_continuation": true,
+    "official_evaluation": false
+  },
+  "protected_earned_save": {
+    "family": "red-configured-save-completion-20261007-v1",
+    "node": "runs/segment-065",
+    "state_sha256": "b0a44ae04ab450adeb12be674d4a72572335fd2f25f66a226b5dcb6784064f50",
+    "context_sha256": "194e27203a0dd25991160663cc9f6424f939d09c3ae9e241cd4587ea447b2545",
+    "configuration_sha256": "adb64a49dc130e2b11d49013ff384912043ead4cf337b958c5e891cb3c92d343",
+    "registrations": 32,
+    "registration_delta": 0,
+    "unchanged": true,
+    "copy_back": false,
+    "worker_stopped": true
+  },
+  "accounting": {
+    "native_cost_files_reconciled": true,
+    "old_continuation_omitted_cost_fields_reconciled": true,
+    "original_receipts_rewritten": false,
+    "private_journal_same_existing_formats": true,
+    "historical_journal_migrated": false,
+    "gitless_probe_falls_back_when_isolation_ambiguous": true,
+    "save_progress_merged": false,
+    "all_native_workers_exited": true
+  },
+  "verification": {
+    "focused_behavior_and_private_safety_tests": 1040,
+    "targeted_lint_passed": true,
+    "changed_three_source_type_checks_passed_with_imports_silent": true,
+    "default_type_check_imported_errors": 16,
+    "default_type_check_imported_error_files": 9,
+    "full_suite_run": false,
+    "hosted_ci_run": false,
+    "external_review": false,
+    "github_publication": false,
+    "documentation_status_roadmap_tests": 194,
+    "documentation_links_and_active_focus_passed": true
+  },
+  "limitations": [
+    "Adaptive, correlated development; not an independent frozen campaign comparison.",
+    "One TRAIN PP band does not calibrate all readiness states.",
+    "Recent-loss, opponent-gap and general resource anticipation are not newly learned.",
+    "Initial failures and the configured partial third evolution remain failed.",
+    "Post-League copies retain their original DEVELOPMENT partition.",
+    "The final fresh Champion/Hall-of-Fame and124 same-run registration gate is unchanged."
+  ]
+}

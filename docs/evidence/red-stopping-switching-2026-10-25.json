@@ -1,0 +1,196 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_final_goals_complete": false,
+  "audit_observed_at_utc": "2026-10-26T00:41:27.697087+00:00",
+  "authorized_block_utc": [
+    "2026-10-25T22:40:12+00:00",
+    "2026-10-26T01:40:12+00:00"
+  ],
+  "consequence_TRAIN_family": {
+    "adoption_rejected": true,
+    "candidate": "f6edff29e9bae654af9f1a6099bb2839e00fbe7be58364249d1f175f6859cb32",
+    "new_fits": 1,
+    "new_rows": 2,
+    "rows": 12,
+    "saved_fits": 5
+  },
+  "control_TRAIN": {
+    "full720_policy_retention_verified": false,
+    "historical_control_vectors": 281,
+    "model_sha256": "4af67aa240a18a57afabd46956fb3988aa3a25c63d61ae949918a49344461627",
+    "new_contrasts": 2,
+    "new_fits": 1,
+    "new_rich_vectors": 2,
+    "noncontrol_heads_unchanged": true,
+    "old_per_vector_budgets_passed": true,
+    "old_source_captures": 318,
+    "selected_epoch": 356
+  },
+  "current_block_counters": {
+    "actual_inputs": 0,
+    "configured_model_choices": 43,
+    "control_fit_root_seconds": 42.48262034899926,
+    "diagnostic_dispatches": 12,
+    "emulator_construction_attempts": 18,
+    "emulators_constructed": 18,
+    "fit12_root_seconds": 26.92477589100008,
+    "native_costs": {
+      "actions": 25915,
+      "cash_debits": 2384,
+      "decisions": 38,
+      "frames": 1926200,
+      "heals": 68,
+      "seconds": 351.9053325519999
+    },
+    "new_fits": 2,
+    "new_unknown_native_cost_tails": 1,
+    "standalone_battle_decisions": 16,
+    "state_loads": 18,
+    "training_rows_admitted": 2,
+    "unknown_prelaunch_root_seconds": 1,
+    "wild_training_contrasts_admitted": 2
+  },
+  "evidence_sha256": {
+    "CONTROL-HEAD-ROOT-QUALIFICATION.json": "49f49388b117df501aa69ebb6a5c07e1ef746bc15b35bde9aec589f591f22f8b",
+    "DIRECT-v2-ROOT-CLOSEOUT.json": "59ab3bbeedce6a0b0cfcbceafd6fc8458705cc1be01d53cff7eebc7d98d02019",
+    "EVOLUTION-FALSIFIER-v1-FAILED-ROOT-CLOSEOUT.json": "5e32ab31fed4cedcf5142b310addc550d1b96480a40addf63755ba6e632e323f",
+    "EVOLUTION-FALSIFIER-v2-ROOT-CLOSEOUT.json": "3718cb6e4249dc5a05325041f5102d0505633d04beb8d8695f89a2527e784dae",
+    "PREPARATION-v1-ROOT-CLOSEOUT.json": "128b68ad5059c6ee9fb22c3a74a009a95cf968c080eab877beb0a0332ddd079d",
+    "PROTECTIVE-SWITCH-ROOT-CLOSEOUT.json": "949e046abf368869060027858583e231b031ddcd95386a934dbc068b7f791872",
+    "TWO-HOUR-ROOT-AUDIT.json": "6d646b192b9243264ff5ad6bf3a875f4b142bd8a1875de276f8a193b5f04e689",
+    "WILD-CONTROL-DEV-ROOT-CLOSEOUT.json": "64a5167af902578270474fb98f339962436070501b66b5d0b37878f6b3f12991",
+    "WILD-DANGER-PAIR-ROOT-CLOSEOUT.json": "93ee67b47239ab3ed806c2ee923e26b460ba3d320efdfad541a057f016ba5264",
+    "WILD-HEALTHY-v1-FAILED-ROOT-CLOSEOUT.json": "a672fc19ab8600db3759f6605e0101fc13b1d700a00fb2b5b5eb22ab4e248231",
+    "WILD-HEALTHY-v2-ROOT-CLOSEOUT.json": "596b957dd9eb173087049693e91650c9caadf50aca76a57cf7db5db2893abac1",
+    "closed-preparation-readback-v1/INDEPENDENT-NATIVE-BENEFIT-QUALIFICATION.json": "2af1214d2c87b7b53fda34f21d9ad431b6ede518722d90cb2b5659638fee6ab4",
+    "initial-review/CLOSED-CONTROL-NATIVE-PAIR-REVIEW.json": "e5834fed2c0417e4b5c56d3a5c08d90e0f5504c08f1e746a27b680769e75d87a"
+  },
+  "full_campaigns_paused": true,
+  "limits": [
+    "One exposed related DEVELOPMENT pair, not population reliability or fresh completion.",
+    "Historical281 retention uses original child projections; missing old status facts are not fabricated and full720 policy retention is unproved.",
+    "Both new battle TRAIN contrasts favor attacking; no causally switch-superior counterexample yet. Protective regression retains a switch but also one faint in both arms.",
+    "One new unknown native-cost tail remains, plus separately preserved four previous-block and two readiness tails. Root durations and every failed attempt remain charged.",
+    "Raw arm receipts retain live_driver_runningTrue alongside worker_stoppedTrue; later OS/cgroup/root exit evidence authenticates stopped status.",
+    "Prior full ROM-free baseline59failures/29errors/17045collected is not repaired or superseded by focused passes.",
+    "All seven final goals, fresh same-save Champion/HOF+124 and8/10heldout starts remain open. No actual run revival, publication, archive changes or external dispatch."
+  ],
+  "matched_DEV": {
+    "baseline": {
+      "actions": 7501,
+      "frames": 540504,
+      "heals": 22
+    },
+    "both_Misty_wins": true,
+    "both_evolve_target": true,
+    "candidate": {
+      "actions": 1282,
+      "frames": 94428,
+      "heals": 3
+    },
+    "cash_debits": [
+      0,
+      0
+    ],
+    "independent_generalization": false,
+    "losses": [
+      0,
+      0
+    ],
+    "only_preparation_battle_control_differs": true,
+    "rewards": [
+      2079,
+      2079
+    ],
+    "same_goal_and_consequence_models": true,
+    "savings_fraction": {
+      "actions_attempted": 0.8290894547393681,
+      "frames": 0.8252963900359664,
+      "restore_attempts": 0.8636363636363636
+    },
+    "source_exposed_related": true,
+    "source_menus_seed_caps_common": true
+  },
+  "models_adopted": 0,
+  "observed_at_utc": "2026-10-26T01:06:35.562845+00:00",
+  "preparation_only": {
+    "actions": [
+      7087,
+      941
+    ],
+    "forced_switches": [
+      10,
+      0
+    ],
+    "frames": [
+      508488,
+      68100
+    ],
+    "party_XP": [
+      2574,
+      1122
+    ],
+    "party_faints": [
+      10,
+      0
+    ],
+    "party_hp_lost": [
+      892,
+      34
+    ],
+    "party_pp_spent": [
+      106,
+      16
+    ],
+    "reserve_level_tradeoff": "Less incidental reserve XP; final reserve levels13/11 versus12/10. Same declared trainee evolution and story payoff.",
+    "trainee_XP": [
+      1089,
+      1122
+    ],
+    "trainee_share": [
+      0.4230769230769231,
+      1.0
+    ],
+    "voluntary_switches": [
+      120,
+      0
+    ],
+    "wild_wins": [
+      33,
+      14
+    ]
+  },
+  "protective_regression": {
+    "both_naturally_switch_slot3": true,
+    "both_party_faints": 1,
+    "both_party_hp_lost": 87,
+    "evaluation_role": "inference_only_exposed_TRAIN_fixture_regression",
+    "full_battle_safety_or_optimality_proved": false,
+    "native_partition": "train",
+    "return_delta": 0.0,
+    "source_id_absent_720_metadata": true
+  },
+  "rejected_stopping_DEV": {
+    "baseline_Misty_win": true,
+    "baseline_actions": 7501,
+    "candidate_Misty_win": false,
+    "candidate_actions": 1834,
+    "candidate_cash_debits": 884,
+    "candidate_losses": 2,
+    "savings_claim_allowed": false
+  },
+  "schema": "pokemon.red.stopping-switching-session.v1",
+  "source_checks": {
+    "P11_package": "cd4533e9ea19a12e35acc9ccce24a065cb4a1fd9f782d194379446021d7849dd",
+    "P12_package": "4011fd8e85c2fd4e056603393e473ec82452ba30db763e50d23fe25fae3b939d",
+    "counts_overlap": true,
+    "full_suite_or_CI_pass": false,
+    "native_comparison_contract_tests": 38,
+    "wild_collector_root_tests": 90,
+    "wild_target_root_tests": 49
+  },
+  "status": "local_control_efficiency_milestone_stopping_candidate_rejected"
+}

@@ -1,0 +1,205 @@
+{
+  "battle_fit": {
+    "accepted_train_candidate": true,
+    "after_composed_regret": 0.818194703,
+    "all_retention_passed": true,
+    "attempts": 1,
+    "before_composed_regret": 2.649030139,
+    "candidate_name": "L",
+    "elapsed_seconds": 73.65551033383235,
+    "epochs": 2400,
+    "head": "control",
+    "improvement_percent": 69.11342415647768,
+    "new_total_capture_count": 319,
+    "old_capture_count": 318,
+    "other_heads_unchanged": true,
+    "retention_checks": 44,
+    "selected_epoch": 2041
+  },
+  "clean_profitable_cycles": 0,
+  "collection": {
+    "cash": 26868,
+    "delta": 0,
+    "native_target": 124,
+    "registrations": 97,
+    "specimens": 75
+  },
+  "default_model_changed": false,
+  "development_fit": false,
+  "execution_source": "82b866cb",
+  "existing_upstream_roots_in_new_fit": 1,
+  "failures_retained": [
+    "Recipe v1 rejected empty opponent reserve list before emulator use.",
+    "Recipe v2 preflight rejected mismatched National identity; no gameplay. V3 derives IDs and HP bounds from cartridge.",
+    "First branch completed; reporting referenced a nonexistent episode field. Saved event/endpoint audited and reused without replay.",
+    "Original two-offset schedule could not satisfy existing five-offset target admission. Original collector closed; one-case completion added only unstarted offsets within original96branch ceiling.",
+    "Reserved K/L pair both lost; no live generalization advantage or player promotion claimed."
+  ],
+  "fit_after_reserved_pair": false,
+  "fresh_red_acceptance": "0/5",
+  "gameplay_stopped": true,
+  "github_publication": false,
+  "goal_model": {
+    "economy_qualified": 58,
+    "fitted_examples": 137,
+    "successes": 92,
+    "version": 137
+  },
+  "hashes": {
+    "baseline_K": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "candidate_L": "ac79f9a5a4095b3e5e204a08954ade264c289492d8b3b723ee33892eaa6bdde9",
+    "collection_plan": "d0329595e4534b483c63f917d44202ceb8c34964b4c031507e034465327bfa3c",
+    "completion_plan": "198ffb38e33bb2132da3fb0e39cd05ecb451768aade90acd9f8c7d042d723fa3",
+    "earned_terminal": "66bfd0e0f5d089526910687b40bd22b5e760d2911e4b2fecb6620ca22e459505",
+    "fit_plan": "24bf29c1a8c38d3ccb1add80ebfba5f6218ec1a72c2420b84f2e7ad4b90be51b",
+    "fit_result": "ed5180274014134f7eef99aab22c1087dba8852f852a4502ee99351dab878524",
+    "reserved_pair_plan": "aa5336d0b1856dfe59411bc725e6e3bfa77ea6860c69174620146c460ffc1812",
+    "reserved_pair_result": "ac680a826c7f4fa162eb8e5c9810bfc4a26e17abd148e2344c4be2aa3a68ee2f",
+    "targets": "affa6cfdcaeca4c780449bf71fd9325e91b981da925d4693113d2a964d568d42"
+  },
+  "independent_evaluation": false,
+  "league_income_qualified": false,
+  "league_log_diagnosis": {
+    "between_battle_item_use": 0,
+    "champion_start_hp": 115,
+    "champion_start_living_members": 1,
+    "champion_start_max_hp": 284,
+    "completed_decisions_audited": 151,
+    "immediate_switch_faints": 1,
+    "ineffective_attacks": 4,
+    "ineffective_attacks_with_effective_supported_move_alternative": 0,
+    "ineffective_attacks_with_switch_mask_forced_by_loop_guard": 3,
+    "name_correction": "Internal species120 is Dewgong (National87), not Seel. IDs in original evidence are unchanged.",
+    "voluntary_switch_hp_loss": 208,
+    "voluntary_switches": 15
+  },
+  "main_save_changed": false,
+  "measurement": {
+    "branches": 30,
+    "caveat": "Lab battle settlement may autoheal terminal resources; these are comparative TRAIN returns, never League profit.",
+    "decisions": 180,
+    "event_count": 804,
+    "frames": 204390,
+    "losses": 24,
+    "macros": 2417,
+    "model_continuation_decisions": 150,
+    "other_unstarted_recipes_not_claimed_complete": 7,
+    "per_offset_returns": [
+      {
+        "offset": 0,
+        "returns": [
+          4.282993126,
+          -6.557065217,
+          -6.557065217,
+          -6.389622059,
+          1.91567801,
+          -6.557065217
+        ]
+      },
+      {
+        "offset": 2,
+        "returns": [
+          -6.505293701,
+          2.059699749,
+          -6.516487731,
+          -6.557065217,
+          2.059699749,
+          -6.453054895
+        ]
+      },
+      {
+        "offset": 4,
+        "returns": [
+          -6.337383253,
+          -6.557065217,
+          -6.557065217,
+          -6.557065217,
+          -6.341114597,
+          -6.557065217
+        ]
+      },
+      {
+        "offset": 6,
+        "returns": [
+          -6.557532507,
+          -6.557065217,
+          4.293862691,
+          -6.557065217,
+          -6.222178901,
+          -6.557065217
+        ]
+      },
+      {
+        "offset": 8,
+        "returns": [
+          4.301547575,
+          -6.449323552,
+          -6.557065217,
+          -6.557065217,
+          -6.318726537,
+          -6.557065217
+        ]
+      }
+    ],
+    "prescribed_first_choices": 30,
+    "recipes_completed_for_fit": 1,
+    "recipes_originally_planned": 8,
+    "timing_offsets": [
+      0,
+      2,
+      4,
+      6,
+      8
+    ],
+    "wins": 6
+  },
+  "new_goal_examples": 0,
+  "new_origin_count": 0,
+  "new_train_capture_count": 1,
+  "next": "Qualify the opt-in bounded immune-switch recovery in a short TRAIN scenario; test actual replacement survival and preserve the no-loop bound. Then expose lawful between-battle recovery choices before another prospectively declared League attempt. Do not refit L on these consumed cases.",
+  "partition": "train",
+  "recovery_option": {
+    "enabled_by_default": false,
+    "extra_model_switches_per_opponent": 1,
+    "implemented": true,
+    "live_recovery_qualification": false,
+    "repeat_exhaustion_stops": true,
+    "static_observation_probes": 6,
+    "static_probes_selected_switch": 6,
+    "teacher_target_selection": false
+  },
+  "reserved_capture_excluded_from_fit": true,
+  "reserved_case_frozen_before_fit": true,
+  "reserved_train_pair": {
+    "K": {
+      "decisions": 6,
+      "event_count": 25,
+      "faints": 3,
+      "frames": 4980,
+      "hp_lost": 135,
+      "pp_spent": 0,
+      "return": -6.366847826,
+      "won": false
+    },
+    "L": {
+      "decisions": 6,
+      "event_count": 25,
+      "faints": 3,
+      "frames": 6130,
+      "hp_lost": 135,
+      "pp_spent": 1,
+      "return": -6.113592673,
+      "won": false
+    }
+  },
+  "schema": "pokemon.red.league-skill-learning-audit.v1",
+  "session": "2026-09-20-league-skill-learning",
+  "status": "narrow_train_improvement_no_reserved_win_gain",
+  "training_stopped": true,
+  "verification": {
+    "targeted_tests": 426,
+    "full_suite": false,
+    "old_training_retention_independently_recomputed": true,
+    "branch_event_and_endpoint_proofs_verified": true
+  }
+}

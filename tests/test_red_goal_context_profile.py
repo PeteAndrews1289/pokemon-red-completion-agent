@@ -134,6 +134,78 @@ def _supply_transition_profile(map_id=MapId.CINNABAR_MART, item=ItemId.GREAT_BAL
     )
 
 
+def _medicine_profile_parameters():
+    return dict(map_id=int(MapId.INDIGO_PLATEAU_LOBBY),player_x=2,player_y=5,
+        interaction_direction="left",
+        purchases=[dict(absolute_index=2,item_id=int(ItemId.FULL_RESTORE),
+                        quantity=2,unit_price=3000)],
+        reserve_targets=[dict(item_id=int(ItemId.FULL_RESTORE),quantity=3)])
+
+
+def _medicine_profile(parameters):
+    return parse_red_goal_context_profile(_payload(
+        _provider(GoalKind.RESTORE_TEAM,RedGoalMechanic.CENTER_RESTORE),
+        _provider(GoalKind.RESUPPLY,RedGoalMechanic.MART_RESUPPLY,parameters),
+        _provider(GoalKind.RECOVER_CONTROL,RedGoalMechanic.CONTROL_RECOVERY)))
+
+
+def test_exact_medicine_reserve_profile_reuses_real_mart_provider():
+    from types import SimpleNamespace
+
+    from test_red_goal_skills import _adapter, _MartPort, _raw, _Reader
+
+    from pokemon_red_completion.executor import CountingExecutor
+    from pokemon_red_completion.red_goal_context import _mart_provider
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+
+    profile=_medicine_profile(_medicine_profile_parameters())
+    params=profile.providers[1].parameters
+    assert params["reserve_targets"] == (
+        {"item_id":int(ItemId.FULL_RESTORE),"quantity":3},)
+    with pytest.raises(TypeError):
+        params["reserve_targets"][0]["quantity"]=4
+    reader=_Reader(raw=_raw(),ready=True)
+    port=_MartPort(reader)
+    actions=CountingExecutor(port)
+    provider=_mart_provider(SimpleNamespace(reader=reader,emulator=port,
+        adapter=_adapter(reader)),profile.providers[1],actions)
+    assert provider.reserve_targets == ((ItemId.FULL_RESTORE,3),)
+    assert provider.purchases[0].quantity == 2
+    assert provider.purchases[0].unit_price == 3000
+    assert not provider.affordable_ball_purchase
+    assert actions.actions_executed == 0 and port.frame_count == 100
+    rebuilt=build_red_goal_context_profile_payload(profile_id=profile.profile_id,
+        providers=tuple((s.kind,s.mechanic,_thaw(s.parameters)) for s in profile.providers))
+    assert parse_red_goal_context_profile(rebuilt).profile_sha256 == profile.profile_sha256
+
+
+@pytest.mark.parametrize("targets",[
+    [],{},None,[[16,3]],[dict(item_id=16,quantity=True)],
+    [dict(item_id=True,quantity=3)],[dict(item_id=16,quantity=0)],
+    [dict(item_id=16,quantity=100)],[dict(item_id=16,quantity=1)],
+    [dict(item_id=16,quantity=3,extra=1)],[dict(item_id=16)],
+    [dict(item_id=16,quantity=3),dict(item_id=16,quantity=3)],
+    [dict(item_id=int(ItemId.REVIVE),quantity=3)],
+    [dict(item_id=int(ItemId.BICYCLE),quantity=3)],
+])
+def test_exact_medicine_reserve_profile_rejects_invalid_targets(targets):
+    params=_medicine_profile_parameters()
+    params["reserve_targets"]=targets
+    with pytest.raises(RedGoalContextProfileError):
+        _medicine_profile(params)
+
+
+@pytest.mark.parametrize("field,value",[
+    ("funding_sale",dict(item_id=int(ItemId.HYPER_POTION),quantity=1,minimum_retained=8)),
+    ("affordable_ball_purchase",True),
+])
+def test_exact_reserve_profile_cannot_sell_or_use_affordable_ball_override(field,value):
+    params=_medicine_profile_parameters()
+    params[field]=value
+    with pytest.raises(RedGoalContextProfileError):
+        _medicine_profile(params)
+
+
 def test_resupply_transition_keeps_all_other_skills_and_contract():
     before = _supply_transition_profile()
     after = _supply_transition_profile(MapId.CERULEAN_MART, ItemId.POKE_BALL)
@@ -183,6 +255,56 @@ def test_mart_funding_transition_is_explicit_and_only_changes_supply():
         bind_mart_funding_departure_profile(
             bind_affordable_ball_supply_profile(_supply_transition_profile())
         )
+
+
+def test_ordinary_income_connection_preserves_quoted_order_and_other_skills():
+    from pokemon_red_completion.red_goal_context_profile import (
+        bind_ordinary_trainer_funding_profile,
+        bind_resource_choice_profile,
+    )
+
+    before = bind_resource_choice_profile(bind_affordable_ball_supply_profile(
+        _supply_transition_profile(MapId.VIRIDIAN_MART, ItemId.POKE_BALL)
+    ))
+    after = bind_ordinary_trainer_funding_profile(before)
+    added = {key: True for key in (
+        "indoor_funding_departure", "mart_funding_departure",
+        "composable_trainer_funding", "funding_fly_transport",
+    )}
+    assert after.providers[:2] == before.providers[:2]
+    assert after.manager_config == before.manager_config
+    assert after.profile_id == before.profile_id
+    assert after.providers[2].parameters == {**before.providers[2].parameters, **added}
+    assert all(key not in before.providers[2].parameters for key in added)
+    assert bind_ordinary_trainer_funding_profile(after) == after
+    require_resupply_only_profile_transition(before, after)
+
+
+@pytest.mark.parametrize("affordable", [False, True])
+def test_ordinary_income_connection_never_implicitly_enables_resource_choices(affordable):
+    from pokemon_red_completion.red_goal_context_profile import (
+        bind_ordinary_trainer_funding_profile,
+    )
+
+    before = _supply_transition_profile()
+    if affordable:
+        before = bind_affordable_ball_supply_profile(before)
+    with pytest.raises(RedGoalContextProfileError, match="explicit affordable"):
+        bind_ordinary_trainer_funding_profile(before)
+
+
+def test_ordinary_income_connection_requires_an_existing_mart():
+    from pokemon_red_completion.red_goal_context_profile import (
+        bind_ordinary_trainer_funding_profile,
+    )
+
+    before = parse_red_goal_context_profile(_payload(
+        _provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+        _provider(GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY),
+    ))
+    with pytest.raises(RedGoalContextProfileError, match="existing Mart"):
+        bind_ordinary_trainer_funding_profile(before)
 
 
 @pytest.mark.parametrize("flag", [1, "true", None])

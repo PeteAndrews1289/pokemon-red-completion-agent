@@ -1,4 +1,5 @@
 """One prospectively profiled, observed Elixir use; no new item supply or healing."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -49,7 +50,8 @@ class RedCombinedFieldRestoreGoalProvider:
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         hp = self.hp_provider.offer(observation)
         if hp.binding is not None or hp.unavailable_reason not in {
-            GoalUnavailableReason.NO_LEGAL_TARGET, GoalUnavailableReason.MISSING_RESOURCE,
+            GoalUnavailableReason.NO_LEGAL_TARGET,
+            GoalUnavailableReason.MISSING_RESOURCE,
         }:
             return hp
         return self.pp_provider.offer(observation)
@@ -62,17 +64,23 @@ class RedFieldPpRestoreGoalProvider:
     emulator: EmulatorState
     adapter: PokemonRedGoalStateAdapter
     kind: GoalKind = GoalKind.RESTORE_TEAM
+    allow_fainted_reserves: bool = False
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         if (
-            observation.pp_restoration is None or not observation.input_ready
-            or self.reader.read_bottom_dialogue_box_visible() or self.emulator.pressed_buttons
+            observation.pp_restoration is None
+            or not observation.input_ready
+            or self.reader.read_bottom_dialogue_box_visible()
+            or self.emulator.pressed_buttons
         ):
             return RedGoalBindingOffer.unavailable(
-                self.kind, GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                self.kind,
+                GoalUnavailableReason.TEMPORARILY_BLOCKED,
             )
         try:
-            plan = plan_field_elixir(observation.raw)
+            plan = plan_field_elixir(
+                observation.raw, allow_fainted_reserves=self.allow_fainted_reserves
+            )
         except RedElixirPlanError:
             return RedGoalBindingOffer.unavailable(self.kind, GoalUnavailableReason.NO_LEGAL_TARGET)
         claimed = False
@@ -88,6 +96,7 @@ class RedFieldPpRestoreGoalProvider:
             "target_selection": "deterministic_maximum_actual_pp_gain",
             "pp_gain_is_learned_target": False,
             "learned_authority": "goal_choice_only",
+            "allow_fainted_reserves": self.allow_fainted_reserves,
         }
 
         def execute() -> GoalExecutionReport:
@@ -96,7 +105,8 @@ class RedFieldPpRestoreGoalProvider:
                 raise RedFieldPpRestoreError("Elixir offer already consumed")
             claimed = True  # a stale/failed binding is never silently retried
             if (
-                self.adapter.observe() != observation or self.emulator.pressed_buttons
+                self.adapter.observe() != observation
+                or self.emulator.pressed_buttons
                 or self.reader.read_bottom_dialogue_box_visible()
                 or not self.reader.read_input_readiness().ready
             ):
@@ -104,7 +114,12 @@ class RedFieldPpRestoreGoalProvider:
             start_actions = self.actions.actions_executed
             start_frames = self.emulator.frame_count
             timing = DEFAULT_LAVENDER_TIMING
-            _open_bag(self.actions, self.emulator, timing)
+            if self.allow_fainted_reserves:
+                from .red_faint_recovery import _open_bag as open_observed_bag
+
+                open_observed_bag(self.actions, self.reader, self.emulator, timing)
+            else:
+                _open_bag(self.actions, self.emulator, timing)
             _select_bag_item(self.actions, self.emulator, ItemId.ELIXIR, timing)
             _pulse(self.actions, MacroActionKind.CONFIRM)
             _pulse(self.actions, MacroActionKind.CONFIRM, frames=240)
@@ -137,7 +152,9 @@ class RedFieldPpRestoreGoalProvider:
             except RedElixirPlanError:
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             if (
-                not claimed or report.actions_executed <= 0 or not after.input_ready
+                not claimed
+                or report.actions_executed <= 0
+                or not after.input_ready
                 or report.evidence != receipt
                 or self.emulator.pressed_buttons
                 or after.collection_observation != observation.collection_observation
@@ -147,8 +164,14 @@ class RedFieldPpRestoreGoalProvider:
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             return GoalVerification.succeeded()
 
-        return RedGoalBindingOffer.available(ExecutableGoalBinding(
-            binding_ref="pokemon.red:recovery:one-owned-elixir",
-            kind=self.kind, estimated_effort=0.08, estimated_risk=0.03,
-            execute=execute, verify=verify,
-        ))
+        return RedGoalBindingOffer.available(
+            ExecutableGoalBinding(
+                binding_ref="pokemon.red:recovery:one-owned-elixir",
+                kind=self.kind,
+                estimated_effort=0.08,
+                estimated_risk=0.03,
+                execute=execute,
+                verify=verify,
+                health_safety_recovery=False,
+            )
+        )

@@ -1,26 +1,28 @@
-"""Action-free enumeration of missing, executable buyable-stone targets.
+"""Action-free enumeration of missing, executable held or buyable stone targets.
 
 Catalog identities are private executor bindings, never policy features. Every
 candidate has its own immutable profile and freshly bound native readiness and
 executor; one catalog-selected evolution is not cloned into several menu rows.
 """
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 from typing import cast
 
+from .player_option_level_workload import OptionLevelWorkload
 from .collection import CollectionLocation
 from .executor import CountingExecutor
 from .goal_manager import GoalKind, GoalUnavailableReason
 from .goal_manager_runtime import ExecutableGoalBinding
 from .observation import MAX_BAG_ITEMS
 from .red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
-from .red_evolution_stones import BUYABLE_EVOLUTION_STONES
+from .red_evolution_stones import BUYABLE_EVOLUTION_STONES, EVOLUTION_STONE_ITEMS
 from .red_full_pokedex_direct_profile import _evolution_capability_parameters
 from .red_goal_context import RedGoalContextRuntime
 from .red_goal_context_profile import (
     RedGoalContextProfile,
     RedGoalMechanic,
+    RedGoalProviderSpec,
     _thaw,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
@@ -29,6 +31,7 @@ from .red_goal_manager import RedGoalObservation
 from .red_native_boxed_item_evolution import bind_native_boxed_item_evolution
 from .red_resource_goal_router import RedResourceGoalRouter
 from .resource_economy_observation import EconomyMode, EconomyOffer
+from .route_executor import InterruptionHandler
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -38,6 +41,7 @@ class RedEvolutionOption:
     binding: ExecutableGoalBinding
     economy_offer: EconomyOffer
     execution_effort: float | None = None
+    level_workload: OptionLevelWorkload | None = None
 
 
 def enumerate_red_item_evolutions(
@@ -48,6 +52,9 @@ def enumerate_red_item_evolutions(
     *,
     maximum_actions: int,
     maximum_frames: int,
+    interruption_handler_wrapper: (
+        Callable[[InterruptionHandler, RedGoalProviderSpec], InterruptionHandler] | None
+    ) = None,
 ) -> tuple[RedEvolutionOption, ...]:
     """Offer every supported missing boxed stone target, or none when blocked.
 
@@ -56,6 +63,8 @@ def enumerate_red_item_evolutions(
     the entire procurement path. Off-boundary targets additionally need a verified
     resource-router binding. Equal semantic vectors remain equal, not identity-coded.
     """
+    if interruption_handler_wrapper is not None and not callable(interruption_handler_wrapper):
+        raise TypeError("evolution interruption wrapper must be callable")
     if runtime.registration_policy is None:
         raise ValueError("item target enumeration requires a registration policy")
     before = actions.actions_executed, runtime.emulator.frame_count, runtime.reader.read()
@@ -75,49 +84,54 @@ def enumerate_red_item_evolutions(
             ):
                 continue
             stones = tuple(
-                stone
-                for stone in BUYABLE_EVOLUTION_STONES.values()
-                if method.source_id == stone.acquisition_source_id
-                and method.required_item_ref == stone.catalog_item_ref
+                item
+                for item, (source_id, item_ref) in EVOLUTION_STONE_ITEMS.items()
+                if method.source_id == source_id and method.required_item_ref == item_ref
             )
             if len(stones) != 1:
                 continue
-            stone = stones[0]
+            item_id = stones[0]
+            purchase = BUYABLE_EVOLUTION_STONES.get(item_id)
             bag = observation.raw.bag_items
             cash = observation.raw.player_money
-            held = dict(bag or ()).get(int(stone.item_id), 0)
+            held = dict(bag or ()).get(item_id, 0)
             # A route cannot repair absent purchasing resources. Avoid routing
             # these known blockers; native readiness still checks the full skill.
             if (
-                bag is None or cash is None or held > 1
-                or (not held and (cash < stone.price or len(bag) >= MAX_BAG_ITEMS))
+                bag is None
+                or cash is None
+                or not 0 <= held <= 99
+                or (
+                    not held
+                    and (purchase is None or cash < purchase.price or len(bag) >= MAX_BAG_ITEMS)
+                )
             ):
                 continue
             parameters = {
                 **_evolution_capability_parameters(runtime.profile),
                 "source_species_ref": method.consumes_species_ref,
                 "target_species_ref": method.species_ref,
-                "item_id": int(stone.item_id),
+                "item_id": item_id,
             }
+            providers = {
+                spec.kind: (spec.kind, spec.mechanic,
+                            cast(Mapping[str, object], _thaw(spec.parameters)))
+                for spec in runtime.profile.providers if spec.kind is not GoalKind.EVOLVE_SPECIES
+            }
+            providers[GoalKind.EVOLVE_SPECIES] = (
+                GoalKind.EVOLVE_SPECIES, RedGoalMechanic.TARGETED_ITEM_EVOLUTION, parameters,
+            )
             profile = parse_red_goal_context_profile(
                 build_red_goal_context_profile_payload(
                     profile_id=runtime.profile.profile_id,
-                    providers=tuple(
-                        (spec.kind, RedGoalMechanic.TARGETED_ITEM_EVOLUTION, parameters)
-                        if spec.kind is GoalKind.EVOLVE_SPECIES
-                        else (
-                            spec.kind,
-                            spec.mechanic,
-                            cast(Mapping[str, object], _thaw(spec.parameters)),
-                        )
-                        for spec in runtime.profile.providers
-                    ),
+                    providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
                 )
             )
             native = bind_native_boxed_item_evolution(
                 replace(runtime, profile=profile),
                 world,
                 allow_cross_box=True,
+                allow_move_learning_preservation=True,
             )
             offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(observation)
             binding = offer.binding
@@ -133,6 +147,8 @@ def enumerate_red_item_evolutions(
                     maximum_emulator_frames=maximum_frames,
                     quote_resource_costs=True,
                     include_recovery_offers=False,
+                    **({"interruption_handler_wrapper": interruption_handler_wrapper}
+                       if interruption_handler_wrapper is not None else {}),
                 ).enumerate_routed_kinds(observation, frozenset({GoalKind.EVOLVE_SPECIES}))
                 bindings = tuple(b for b in routed.bindings if b.kind is GoalKind.EVOLVE_SPECIES)
                 if len(bindings) > 1:
@@ -143,7 +159,10 @@ def enumerate_red_item_evolutions(
                     RedEvolutionOption(
                         profile,
                         binding,
-                        EconomyOffer(EconomyMode.OTHER, planned_spend=0 if held else stone.price),
+                        EconomyOffer(
+                            EconomyMode.OTHER,
+                            planned_spend=0 if held or purchase is None else purchase.price,
+                        ),
                     )
                 )
     finally:

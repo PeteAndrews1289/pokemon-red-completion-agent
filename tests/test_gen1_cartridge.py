@@ -54,6 +54,13 @@ def test_wild_medium_separates_grass_water_and_zero_rate_stride(monkeypatch) -> 
     assert checked[-1] == {7: grass + water, 8: water}
     assert cartridge.wild_tables(bytes(rom), medium="water") == {7: water, 8: water}
     assert cartridge.wild_tables(bytes(rom)) == {7: grass + water, 8: water}
+    decoded = cartridge.wild_encounter_tables(bytes(rom))
+    assert [(table.medium, table.rate_byte, table.slots) for table in decoded[7]] == [
+        ("grass", 25, tuple(grass)),
+        ("water", 10, tuple(water)),
+    ]
+    assert [(table.medium, table.rate_byte) for table in decoded[8]] == [("water", 10)]
+    assert not hasattr(decoded[7][0], "per_step_probability")
     with pytest.raises(CartridgeReadError, match="medium"):
         cartridge.wild_tables(bytes(rom), medium="fishing")
 

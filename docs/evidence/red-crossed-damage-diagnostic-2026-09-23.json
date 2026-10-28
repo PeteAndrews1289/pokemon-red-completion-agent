@@ -1,0 +1,41 @@
+{
+  "assignment": "red-crossed-damage-diagnostic-20260923-v1",
+  "disposition": "diagnostic_completed_no_admission",
+  "plan_sha256": "6a5339f4f6e0880eafe4f92e3924f0085d36793f6cbe2b9d4428c81bb097be60",
+  "result_sha256": "e6b7e70011a700647f98c6d11a999c81d3dd47e37944f4ed1620e9f3ff9ec0da",
+  "audit_sha256": "1696ae4d73e50aed79aa7cb1655d39fe341d7367c9e6a6742461d1a011ad5bee",
+  "families": 4,
+  "levels": [31, 37, 43, 49],
+  "reused_train_roots": 4,
+  "configurations": 64,
+  "forced_native_branches": 768,
+  "event_records_verified": 6400,
+  "reprojected_feature_width": 125,
+  "maximum_cross_root_feature_difference": 0.0,
+  "cross_root_choice_disagreements": 0,
+  "maximum_same_slot_damage_mean_spread_across_roots": 0.6666666666666666,
+  "baseline": {"mean_damage_regret": 0.13011857966943852, "strict_best": 35, "near_best_002": 37},
+  "rejected_candidate": {"mean_damage_regret": 0.00937247873394682, "strict_best": 54, "near_best_002": 56},
+  "category_shortcut": {
+    "original_train": {"configurations": 96, "picked_special": 96, "special_among_strict_best": 77},
+    "opened_original_holdout": {"configurations": 48, "picked_special": 48, "special_among_strict_best": 35},
+    "crossed_diagnostic": {"configurations": 64, "picked_special": 64, "special_among_strict_best": 54}
+  },
+  "costs": {"attempted_actions": 12860, "completed_actions": 12860, "frames": 1027838, "native_wall_seconds": 59.331205087248236, "packet_elapsed_seconds": 86.06720387469977},
+  "stops": {"player_turn_budget": 562, "party_defeated": 181, "battle_won": 25},
+  "integrity_failures": 0,
+  "fits": 0,
+  "learned_native_actions": 0,
+  "actor_promotions": 0,
+  "registration_delta": 0,
+  "story_inputs": 0,
+  "protected_inputs_unchanged": true,
+  "limitations": [
+    "Shared TRAIN origins and timing variants do not establish independent transfer.",
+    "Four input-selected families favor special damage; their aggregate cannot rehabilitate the rejected candidate.",
+    "Neutral single-turn damage only; status, full teams, Dig and Fly are not qualified.",
+    "Party defeats and wins are forced branch endpoints, not learner battle win rates.",
+    "Earlier overnight empirical-best counts22/36 used a0.02 tolerance; exact counts are21/34."
+  ],
+  "next": "One balanced outcome-fitted interaction damage proposal; no new-root factory or story action before further qualification."
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon.red.randomized-training-evidence.v1",
+  "session": "2026-09-22-randomized-outcome-training",
+  "source_commit": "3e47e8b6",
+  "private_packet": "red-rng-training-collection-20260922-v1",
+  "result_sha256": "5035540e606712f40f8484da31e001861d3a9dfe3149a97d62f3a9c0bd24bab8",
+  "audit_sha256": "3ca03ff0a62d81078f908fa723e3a2708115062166a5b52fe13971d11a83051d",
+  "actor_promotions": 0,
+  "coverage_passed": true,
+  "fits": 0,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 16486,
+    "episodes": 6720,
+    "event_records": 86144,
+    "frames": 22500976,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 9830,
+    "new_target_contexts": 0,
+    "plan_sha256": "d26b6d1e00b0991d52d3c9e494cf3b726036c48362f0176ecb2a96f00ab3faab",
+    "prescribed_first_choices": 6656,
+    "status_move_attempts_including_prescribed": 3328,
+    "stops": {
+      "battle_won": 2687,
+      "party_defeated": 4033
+    }
+  },
+  "seconds": 1703.2714548748918,
+  "split_half_sign_disagreements": 14,
+  "targets": 104,
+  "training_complete": false,
+  "collection_delta": 0
+}

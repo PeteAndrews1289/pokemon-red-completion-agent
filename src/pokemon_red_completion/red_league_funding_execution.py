@@ -9,25 +9,31 @@ evidence.  Credits and the postgame reset are intentionally a separate boundary.
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass, replace
-from typing import TYPE_CHECKING, NoReturn, cast
+from typing import TYPE_CHECKING, NoReturn
 
 from .actions import MacroAction, MacroActionKind
 from .executor import CountingExecutor, FrameSafeExecutor, WindowedFrameBudgetController
 from .gen1_field_moves import Gen1FieldMovePort, Gen1FlyReceipt
-from .gen1_route_runtime import Gen1TraversalObserver
+from .gen1_route_runtime import Gen1TraversalObserver, Gen1WildFleeHandler
 from .gen1_scripted_arrival import trainer_room_arrival
+from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
+from .goal_manager_runtime import ExecutableGoalBinding, GoalVerification
+from .goal_resource_quote import GoalResourceQuote
 from .hideout import DEFAULT_HIDEOUT_TIMING
 from .lavender import DEFAULT_LAVENDER_TIMING, _buy_mart_item, _close_menus
 from .observation import RED_FLY_TOWN_NAMES, EventFlag, ItemId, MapId, event_flag_is_set
 from .red_champion_story import RedCartridgeChampionSkill
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
+from .red_faint_recovery import RedFaintAwareFieldRestoreGoalProvider
 from .red_league_funding import (
     RedLeagueFundingQualification,
     projected_fresh_league_events,
     qualify_red_league_funding,
 )
+from .red_learned_league import learned_league_controller
 from .red_pc_storage import face_pc_boundary
 from .red_resource_goal_router import _ROUTE_LIMITS
 from .red_trainer_story import RedCartridgeLoreleiSkill
@@ -38,6 +44,7 @@ from .victory_road import _indigo_buy_entry_action, _pulse, _select_cursor, _sel
 if TYPE_CHECKING:
     from .red_goal_context import RedGoalContextRuntime
     from .red_goal_manager import RedGoalObservation
+    from .red_player_lesson_runtime import _RecordedActions
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -55,6 +62,74 @@ class RedLeagueFundingExecutionError(RuntimeError):
         self.progress = progress
 
 
+class RedLeagueFundingBattleLoss(RuntimeError):
+    """Exact settled native loss, never a completed income cycle."""
+
+    def __init__(self, certificate):
+        super().__init__("verified native League funding loss")
+        self.certificate = certificate
+
+
+def native_league_loss_certificate(runtime, before, completion, objective_id, *, prepared_party_species_ids=None):
+    """Authenticate the existing learned battle result against the live blackout."""
+    from hashlib import sha256
+    if completion is None or completion.outcome != "lost" or not completion.field_ready:
+        return None
+    expected_party = (before.party_species_ids if prepared_party_species_ids is None
+                      else prepared_party_species_ids)
+    outcome = completion.public_dict()
+    after = runtime.reader.read()
+    if (
+        outcome.get("schema") != "pokemon.red.learned-trainer-completion.v1"
+        or outcome.get("outcome") != "lost" or outcome.get("field_ready") is not True
+        or after.battle_state or not runtime.reader.read_input_readiness().ready
+        or runtime.emulator.pressed_buttons
+        or type(before.player_money) is not int or type(after.player_money) is not int
+        or after.player_money != before.player_money // 2
+        or outcome.get("money_delta") != after.player_money - before.player_money
+        or not isinstance(before.party_species_ids, tuple) or not 1 <= len(before.party_species_ids) <= 6
+        or type(before.badge_bits) is not int
+        or after.party_species_ids != expected_party
+        or after.badge_bits != before.badge_bits
+    ):
+        return None
+    return dict(schema="pokemon.red.league-funding-native-loss.v1",objective_id=objective_id,
+                money_before_battle=before.player_money,ending_money=after.player_money,
+                completion=outcome,
+                party_species_ids_before_preparation=list(before.party_species_ids),
+                prepared_party_species_ids=list(expected_party),
+                terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest())
+
+
+def run_retained_league_battle(runtime, call, *, battle_owner, objective_id):
+    """Run the existing battle and certify only its settled native loss."""
+    from .red_lorelei_story import LoreleiStoryBattleStopped
+    battle_before = runtime.reader.read()
+    # The selected story skill may first swap its planned lead in the field.
+    # Authenticate that exact frozen plan before input; never infer a permitted
+    # permutation from the terminal party after a failed battle.
+    lead_plan = getattr(getattr(call, "__self__", None), "prepared_lead_plan", None)
+    expected_party = battle_before.party_species_ids
+    if lead_plan is not None:
+        from .red_capture_lead import RedCaptureLeadPlan
+        if not isinstance(lead_plan, RedCaptureLeadPlan):
+            raise TypeError("funding battle requires a typed prepared lead")
+        lead_plan.require_current(runtime.adapter.observe().party)
+        if lead_plan.party.species_ids() != expected_party:
+            raise ValueError("funding battle raw party differs from prepared lead")
+        expected = list(expected_party)
+        target = lead_plan.target_index
+        expected[0], expected[target] = expected[target], expected[0]
+        expected_party = tuple(expected)
+    try:
+        return call()
+    except LoreleiStoryBattleStopped as error:
+        certificate = native_league_loss_certificate(runtime, battle_before, getattr(battle_owner, 'last_completion', None), objective_id, prepared_party_species_ids=expected_party)
+        if certificate is None:
+            raise
+        raise RedLeagueFundingBattleLoss(certificate) from error
+
+
 @dataclass(slots=True)
 class RedLeagueFundingExecutionBinding:
     """One action-free exact-origin binding for one claimed funding attempt."""
@@ -62,6 +137,63 @@ class RedLeagueFundingExecutionBinding:
     origin: RedGoalObservation
     qualification: RedLeagueFundingQualification
     claimed: bool = False
+
+
+@dataclass(frozen=True)
+class ScopedLeagueIncomeReuse:
+    """Explicit DEVELOPMENT reuse of the existing exact-room story controllers.
+
+    The K adapter still authenticates the original route/payout qualification;
+    this port binds the declared learned component to each actual battle. It
+    cannot replace the reader, action controller, party guard or native target.
+    """
+
+    model_sha256: str
+    work_order_sha256: str
+    bind_runtime: Callable
+    observe_battle: Callable | None = None
+
+    def __post_init__(self):
+        for value in (self.model_sha256, self.work_order_sha256):
+            if (type(value) is not str or len(value) != 64
+                    or any(c not in '0123456789abcdef' for c in value)):
+                raise ValueError('Scoped income reuse requires exact model/work-order hashes')
+        if not callable(self.bind_runtime) or (
+            self.observe_battle is not None and not callable(self.observe_battle)
+        ):
+            raise ValueError('Scoped income reuse requires explicit binding/observation ports')
+
+    def public_dict(self):
+        return dict(model_sha256=self.model_sha256, work_order_sha256=self.work_order_sha256,
+                    scope='existing-native-room-development', new_model=False)
+
+    def bind(self, runtime, actions, world, objective_id):
+        from .red_lorelei_story import (
+            ScopedAssistedChampionController,
+            ScopedAssistedLeagueRetryController,
+        )
+
+        before = runtime.emulator.save_state_bytes()
+        configured = self.bind_runtime(runtime, actions, world, objective_id)
+        owner = getattr(configured, 'league_story_battle_controller', None)
+        owner_type = (ScopedAssistedChampionController if objective_id == 'defeat_champion'
+                      else ScopedAssistedLeagueRetryController)
+        scope = getattr(getattr(owner, 'battler', None), 'development_story_scope', None)
+        if (
+            type(owner) is not owner_type
+            or configured.emulator is not runtime.emulator
+            or configured.reader is not runtime.reader
+            or configured.adapter is not runtime.adapter
+            or getattr(configured, 'league_battle_controller', None) is not None
+            or owner.contract.objective_id != objective_id
+            or owner.battler.model_sha256 != self.model_sha256
+            or getattr(scope, 'work_order_sha256', None) != self.work_order_sha256
+            or getattr(configured.trainer_battle_runner, '__self__', None) is not owner.battler
+            or runtime.emulator.save_state_bytes() != before
+        ):
+            raise ValueError('Income battle reuse changed its exact native actor/boundary')
+        owner.require_objective(objective_id, rematch=True)
+        return configured
 
 
 def bind_red_league_funding_execution(
@@ -72,7 +204,8 @@ def bind_red_league_funding_execution(
 ) -> RedLeagueFundingExecutionBinding:
     """Bind the complete observed origin without advancing the emulator."""
     origin = runtime.adapter.observe()
-    qualification = qualify_red_league_funding(world.rom, origin, runtime.reader, world)
+    kwargs = {"learned_development": True} if learned_league_controller(runtime) else {}
+    qualification = qualify_red_league_funding(world.rom, origin, runtime.reader, world, **kwargs)
     if expected_qualification is not None and qualification != expected_qualification:
         raise RedLeagueFundingExecutionError("League funding qualification changed while binding")
     return RedLeagueFundingExecutionBinding(origin, qualification)
@@ -88,6 +221,8 @@ class RedLeagueFundingBattleResult:
     frames: int
     full_restores_spent: int = 0
     critical_exposures_claimed: int = 0
+    controller_name: str | None = None
+    model_sha256: str | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -99,6 +234,8 @@ class RedLeagueFundingBattleResult:
             "frames": self.frames,
             "full_restores_spent": self.full_restores_spent,
             "critical_exposures_claimed": self.critical_exposures_claimed,
+            **({"controller_name": self.controller_name, "model_sha256": self.model_sha256}
+               if self.controller_name is not None else {}),
         }
 
 
@@ -134,8 +271,21 @@ class _CampaignActionCompiler:
     caller: CountingExecutor
     bounded: FrameSafeExecutor
     through_caller: bool = False
+    recorded_caller: _RecordedActions | None = None
 
     def execute(self, action: MacroAction) -> object:
+        if self.recorded_caller is not None:
+            # Keep the native player's durable input journal and its input gate
+            # while ALSO applying this selected League goal's frame window.
+            # Only the exact typed recorder is admitted below; no arbitrary
+            # delegate traversal or unrecorded controller bypass is permitted.
+            recorder = self.recorded_caller
+            original = recorder.delegate
+            recorder.delegate = self.bounded
+            try:
+                return self.caller.execute(action)
+            finally:
+                recorder.delegate = original
         if self.through_caller:
             return self.caller.execute(action)
         result = self.bounded.execute(action)
@@ -157,6 +307,9 @@ class RedLeagueFundingExecution:
     purchase_cost: int
     full_restores_purchased: int
     full_restores_spent: int
+    learned_battle_authority: bool = False
+    field_items_spent: tuple[tuple[int, int], ...] = ()
+    field_item_replacement_cost: int = 0
 
     @property
     def observed_gross_income(self) -> int:
@@ -186,9 +339,15 @@ class RedLeagueFundingExecution:
             "battles": [battle.public_dict() for battle in self.battles],
             "battle_count": len(self.battles),
             "learned_goal_authority": False,
-            "learned_battle_authority": False,
+            "learned_battle_authority": self.learned_battle_authority,
             "forced_support_step": True,
             "training_examples": 0,
+            "field_items_spent": [list(row) for row in self.field_items_spent],
+            "field_item_replacement_cost": self.field_item_replacement_cost,
+            "net_after_field_item_replacement": (
+                self.observed_net_income - self.field_item_replacement_cost
+            ),
+            "replacement_value_is_cash_spent": False,
             "concurrent_champion_and_hall_of_fame": True,
             "postgame_reset_proven": False,
             "capture_supply_restored": False,
@@ -242,6 +401,7 @@ def _run_battle(
     recovery_controller: str,
     maximum_full_restores: int,
     maximum_critical_exposures: int = 0,
+    development_reuse: ScopedLeagueIncomeReuse | None = None,
 ) -> RedLeagueFundingBattleResult:
     before_money = _money(runtime)
     before_actions = actions.actions_executed
@@ -250,37 +410,109 @@ def _run_battle(
         int(ItemId.FULL_RESTORE),
         0,
     )
-    skill: RedCartridgeChampionSkill | RedCartridgeLoreleiSkill
-    if objective_id == "defeat_champion":
-        if maximum_critical_exposures:
-            raise RedLeagueFundingExecutionError(
-                "Champion battle does not support a critical-exposure budget"
+    battle_owner = None
+    def make_skill():
+        nonlocal battle_owner
+        configured = (runtime if development_reuse is None else
+                      development_reuse.bind(runtime, actions, world, objective_id))
+        battle_owner = getattr(configured, "league_story_battle_controller", None)
+        mode = (recovery_controller if development_reuse is None else
+                configured.league_story_battle_controller.controller_name)
+        readiness = ({} if development_reuse is None else {
+            'maximum_level_deficit': (
+                configured.league_story_battle_controller.declared_level_deficit),
+        })
+        if objective_id == 'defeat_champion':
+            return RedCartridgeChampionSkill(configured, actions, world,
+                recovery_controller=mode, maximum_full_restores=maximum_full_restores,
+                rematch=True, **readiness)
+        return RedCartridgeLoreleiSkill(configured, actions, world,
+            objective_id=objective_id, recovery_controller=mode,
+            maximum_full_restores=maximum_full_restores,
+            maximum_critical_exposures=maximum_critical_exposures, rematch=True, **readiness)
+
+    def run_retained(call):
+        def observe():
+            if development_reuse is not None and development_reuse.observe_battle is not None:
+                development_reuse.observe_battle(objective_id)
+        try:
+            report = run_retained_league_battle(
+                runtime, call, battle_owner=battle_owner, objective_id=objective_id,
             )
-        skill = RedCartridgeChampionSkill(
-            runtime,
-            actions,
-            world,
-            recovery_controller=recovery_controller,
-            maximum_full_restores=maximum_full_restores,
-            rematch=True,
-        )
-    else:
-        skill = RedCartridgeLoreleiSkill(
-            runtime,
-            actions,
-            world,
-            objective_id=objective_id,
-            recovery_controller=recovery_controller,
-            maximum_full_restores=maximum_full_restores,
-            maximum_critical_exposures=maximum_critical_exposures,
-            rematch=True,
-        )
-    availability = skill.availability(runtime.adapter.observe().game_state)
-    if not availability.executable:
+        except BaseException as native_error:
+            try:
+                observe()
+            except BaseException as observation_error:
+                # An unfinished native battle has no completed outcome file.
+                # Preserve its actual error (or certified loss) as the cause.
+                native_error.add_note(
+                    "Battle-history observation also failed: "
+                    f"{type(observation_error).__name__}: {observation_error}"
+                )
+            raise
+        observe()  # A successful battle still requires valid history evidence.
+        return report
+
+    if objective_id == "defeat_champion" and maximum_critical_exposures:
         raise RedLeagueFundingExecutionError(
-            f"{objective_id} became unavailable: {availability.reason}"
+            "Champion battle does not support a critical-exposure budget"
         )
-    report = skill.execute()
+    learned = learned_league_controller(runtime)
+    field_recovery = learned.field_recovery if learned is not None else None
+    if field_recovery is None:
+        skill = make_skill()
+        availability = skill.availability(runtime.adapter.observe().game_state)
+        if not availability.executable:
+            raise RedLeagueFundingExecutionError(
+                f"{objective_id} became unavailable: {availability.reason}"
+            )
+        report = run_retained(skill.execute)
+    else:
+
+        def next_goal(observation):
+            skill = make_skill()
+            if not skill.availability(observation.game_state).executable:
+                return None
+
+            def verify(_report):
+                after = runtime.adapter.observe()
+                return (
+                    GoalVerification.succeeded()
+                    if after.raw.player_money == before_money + expected_money
+                    and after.raw.battle_state == 0
+                    else GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                )
+
+            return ExecutableGoalBinding(
+                binding_ref="pokemon.red:league-income:" + objective_id,
+                kind=GoalKind.RESUPPLY,
+                estimated_effort=0.5,
+                estimated_risk=0.5,
+                execute=skill.execute,
+                verify=verify,
+                resource_quote=GoalResourceQuote(
+                    before_money, 0, (), expected_income=expected_money
+                ),
+            )
+
+        recovery = RedFaintAwareFieldRestoreGoalProvider(
+            actions,
+            runtime.reader,
+            runtime.emulator,
+            runtime.adapter,
+        )
+        selected = field_recovery.choose(recovery, next_goal)
+        # Battle accounting excludes separately recorded field recovery. Both still
+        # consume the caller's same campaign action/frame limits.
+        before_actions = actions.actions_executed
+        before_frames = runtime.emulator.frame_count
+        before_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
+            int(ItemId.FULL_RESTORE),
+            0,
+        )
+        report = run_retained(selected.execute)
+        if selected.verify(report).status.value != "succeeded":
+            raise RedLeagueFundingExecutionError("selected next battle failed verification")
     after_money = _money(runtime)
     after_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
         int(ItemId.FULL_RESTORE),
@@ -310,6 +542,10 @@ def _run_battle(
         report.frames_executed,
         spent,
         critical_claimed,
+        (None if development_reuse is None else
+         ('scoped-assisted-champion-development' if objective_id == 'defeat_champion'
+          else 'scoped-assisted-league-retry-development')),
+        None if development_reuse is None else development_reuse.model_sha256,
     )
 
 
@@ -380,6 +616,7 @@ def execute_red_league_funding(
     *,
     maximum_actions: int = 40_000,
     maximum_frames: int = 15_000_000,
+    development_reuse: ScopedLeagueIncomeReuse | None = None,
 ) -> RedLeagueFundingExecution:
     """Consume one exact qualification and stop at verified Hall-of-Fame evidence.
 
@@ -388,15 +625,22 @@ def execute_red_league_funding(
     this claimed attempt.
     """
 
+    if development_reuse is not None and type(development_reuse) is not ScopedLeagueIncomeReuse:
+        raise TypeError('Income reuse requires the explicit exact-room DEVELOPMENT port')
     for name, value in (("maximum_actions", maximum_actions), ("maximum_frames", maximum_frames)):
         if type(value) is not int or value <= 0:  # noqa: E721
             raise ValueError(f"{name} must be a positive integer")
+    from .red_native_player import NativePlayerActions
+    from .red_player_lesson_runtime import _RecordedActions
+
     delegate = actions.delegate
+    recorded = isinstance(actions, NativePlayerActions) and isinstance(delegate, _RecordedActions)
     nested = isinstance(delegate, HardCompositionActionLimiter)
-    frame_safe = cast(HardCompositionActionLimiter, delegate).delegate if nested else delegate
+    frame_safe = delegate.delegate if recorded or nested else delegate
     if (
         not isinstance(frame_safe, FrameSafeExecutor)
         or frame_safe.controller is not runtime.emulator
+        or (recorded and delegate.controller is not runtime.emulator)
     ):
         raise TypeError("League funding requires one direct frame-safe controller chain")
     if not isinstance(binding, RedLeagueFundingExecutionBinding):
@@ -408,7 +652,14 @@ def execute_red_league_funding(
     before = runtime.adapter.observe()
     if before != binding.origin:
         raise RedLeagueFundingExecutionError("League funding exact origin changed before input")
-    repeated = qualify_red_league_funding(world.rom, before, runtime.reader, world)
+    learned = learned_league_controller(runtime)
+    if development_reuse is not None and learned is None:
+        raise ValueError('Scoped income reuse requires the existing learned route qualification')
+    field_recovery = learned.field_recovery if learned is not None else None
+    if field_recovery is not None:
+        field_recovery.claim()
+    kwargs = {"learned_development": True} if learned else {}
+    repeated = qualify_red_league_funding(world.rom, before, runtime.reader, world, **kwargs)
     if repeated != qualification:
         raise RedLeagueFundingExecutionError("League funding qualification changed before input")
     if runtime.emulator.pressed_buttons:
@@ -430,6 +681,7 @@ def execute_red_league_funding(
     if qualification.reset_stale_league_events:
         expected_supply_events, reset_required = projected_fresh_league_events(
             before.raw.event_flags,
+            challenge_started=runtime.reader.read_league_challenge_started() if learned else None,
         )
         if not reset_required:
             raise RedLeagueFundingExecutionError(
@@ -457,7 +709,8 @@ def execute_red_league_funding(
         _CampaignActionCompiler(
             actions,
             FrameSafeExecutor(frame_limiter, frame_safe.timing),
-            through_caller=nested,
+            through_caller=nested or recorded,
+            recorded_caller=delegate if recorded else None,
         ),
         maximum_actions_per_decision=maximum_actions,
         maximum_episode_actions=maximum_actions,
@@ -466,6 +719,8 @@ def execute_red_league_funding(
     results: list[RedLeagueFundingBattleResult] = []
 
     def fail(phase: str, reason: str, cause: BaseException | None = None) -> NoReturn:
+        if field_recovery is not None and not isinstance(cause, RedLeagueFundingBattleLoss):
+            field_recovery.failed = True
         error = RedLeagueFundingExecutionError(
             reason,
             progress=_progress(
@@ -483,10 +738,19 @@ def execute_red_league_funding(
 
     try:
         if qualification.exit_plan is not None:
+            # Indoor departures can cross real encounter tiles. Escaping is
+            # transport support, not an income battle or a replacement goal.
+            # Any HP/PP/resource change still fails the existing supply-boundary
+            # checks below; no payout or qualification is fabricated.
+            escape = Gen1WildFleeHandler(
+                bounded_actions, runtime.reader, maximum_flees=16,
+                stabilization_frames=120, route_name="League income indoor departure",
+            )
             route = execute_route(
                 qualification.exit_plan,
                 bounded_actions,
                 Gen1TraversalObserver(runtime.reader),
+                interruption_handler=escape,
                 replanner=world.replanner(),
             )
             if not route.passed:
@@ -498,16 +762,27 @@ def execute_red_league_funding(
     except Exception as error:
         fail("center_exit", "League funding exit route raised", error)
     try:
-        port = Gen1FieldMovePort(bounded_actions, runtime.reader, runtime.emulator)
-        town = RED_FLY_TOWN_NAMES[qualification.fly_town].lower().replace(" ", "_")
-        receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + town))
-        landed = runtime.reader.read()
-        if (
-            not isinstance(receipt, Gen1FlyReceipt)
-            or receipt.destination_map != qualification.fly_town
-            or (landed.player_y, landed.player_x) != qualification.fly_landing
-        ):
-            fail("fly", "League funding Fly landing changed")
+        if qualification.fly_required:
+            port = Gen1FieldMovePort(bounded_actions, runtime.reader, runtime.emulator)
+            town = RED_FLY_TOWN_NAMES[qualification.fly_town].lower().replace(" ", "_")
+            receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + town))
+            landed = runtime.reader.read()
+            if (
+                not isinstance(receipt, Gen1FlyReceipt)
+                or receipt.destination_map != qualification.fly_town
+                or (landed.player_y, landed.player_x) != qualification.fly_landing
+            ):
+                fail("fly", "League funding Fly landing changed")
+        else:
+            walking_origin = runtime.adapter.observe()
+            if (
+                walking_origin.raw.map_id != qualification.fly_town
+                or (walking_origin.raw.player_y, walking_origin.raw.player_x)
+                != qualification.fly_landing
+                or walking_origin.raw.battle_state
+                or not walking_origin.input_ready
+            ):
+                fail("fly", "League funding already-at-Indigo walking origin changed")
     except RedLeagueFundingExecutionError as error:
         if error.progress is not None:
             raise
@@ -600,6 +875,8 @@ def execute_red_league_funding(
                     recovery_controller,
                     battle_restore_budget,
                     quote.maximum_critical_exposures,
+                    **({'development_reuse': development_reuse}
+                       if development_reuse is not None else {}),
                 )
             )
             remaining_full_restores -= results[-1].full_restores_spent
@@ -611,6 +888,8 @@ def execute_red_league_funding(
         ending_money = _money(runtime)
         if len(results) != 5:
             fail("terminal", "League funding terminal has an incomplete battle sequence")
+        if after.raw.map_id != MapId.HALL_OF_FAME:
+            fail("terminal", "League funding terminal lacks current-cycle Hall-of-Fame arrival")
         if not CompletionReferee().inspect(after.game_state).complete:
             fail("terminal", "League funding terminal lacks concurrent completion")
         if after.raw.event_flags is None or not all(
@@ -637,6 +916,8 @@ def execute_red_league_funding(
             if (remaining := quantity - (restore_spent if item == int(ItemId.FULL_RESTORE) else 0))
             > 0
         )
+        if field_recovery is not None:
+            expected_bag = field_recovery.expected_bag(supplied_bag, restore_spent)
         if after.raw.bag_items != expected_bag:
             fail("terminal", "League funding terminal bag differs from supplied use")
         if after.raw.badge_bits != starting_badges:
@@ -662,6 +943,9 @@ def execute_red_league_funding(
             qualification.supply.purchase_cost,
             qualification.supply.full_restores_purchased,
             restore_spent,
+            learned is not None,
+            tuple(sorted(field_recovery.consumed.items())) if field_recovery else (),
+            field_recovery.replacement_cost if field_recovery else 0,
         )
     except RedLeagueFundingExecutionError as error:
         if error.progress is not None:
@@ -677,6 +961,7 @@ __all__ = [
     "RedLeagueFundingExecution",
     "RedLeagueFundingExecutionError",
     "RedLeagueFundingProgress",
+    "ScopedLeagueIncomeReuse",
     "bind_red_league_funding_execution",
     "execute_red_league_funding",
 ]

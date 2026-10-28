@@ -1,0 +1,30 @@
+{
+  "actual_registration_delta": 0,
+  "candidate_direct_fight_false": true,
+  "closed": [],
+  "component_gates_met": 3,
+  "default_direct_fight_true_unchanged": true,
+  "default_promoted": false,
+  "error_preservation_controls": 19,
+  "full_suite_claim": false,
+  "native_qualified": false,
+  "native_workers": [
+    "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/safe-shared-xp-00-20261021-101307"
+  ],
+  "new_fits": 0,
+  "new_mode_controls": 15,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-21T10:14:47.942828+00:00",
+  "package_sha256": "b433c1739d84493310246ddfb012d06cfdb3a0a09b8428e56223249be102d58a",
+  "schema": "pokemon.red.safe-shared-experience-qualification-progress.v1",
+  "source_delta": {
+    "src/pokemon_red_completion/red_level_evolution_options.py": "a8bdc44e664a883ee40cc2f5461dee0fb1007808131c65a4f325d743b7b7b296",
+    "src/pokemon_red_completion/red_native_boxed_evolution.py": "871b7458f836e15b8129c681e4ed0fe250035ade6aa15a97e327a68248a657e4"
+  },
+  "tests_current": 560,
+  "tests_frozen": 560,
+  "total_completed_fits": 13,
+  "total_fit_attempts": 17,
+  "total_goals": 7,
+  "unchanged_data_model_pins": 74983
+}

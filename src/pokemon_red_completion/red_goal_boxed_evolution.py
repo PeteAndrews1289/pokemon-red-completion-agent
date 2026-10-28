@@ -40,6 +40,7 @@ from pokemon_red_completion.red_living_dex_dependency_curriculum import (
     RedDualCapabilityScenarioSpec,
     red_dual_capability_scenario_specs,
 )
+from pokemon_red_completion.red_party import BLASTOISE_SPECIES_ID
 from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.route_executor import (
     DEFAULT_ROUTE_EXECUTION_LIMITS,
@@ -79,8 +80,12 @@ class RedGoalBoxedEvolutionExecutor:
     route_limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS
     pc_facing: str | None = None
     registration_policy: RedRegistrationPolicy | None = None
+    allow_declared_blastoise_loan: bool = False
+    escort_internal_species_id: int = BLASTOISE_SPECIES_ID
 
     def __post_init__(self) -> None:
+        if type(self.allow_declared_blastoise_loan) is not bool:
+            raise RedGoalBoxedEvolutionError("boxed goal loan permission differs")
         if not isinstance(self.reset_state_sha256, str) or len(self.reset_state_sha256) != 64:
             raise RedGoalBoxedEvolutionError("boxed goal reset identity differs")
         if not isinstance(
@@ -116,6 +121,8 @@ class RedGoalBoxedEvolutionExecutor:
         if not isinstance(actions, CountingExecutor):
             raise TypeError("boxed goal executor needs counted controller authority")
         request.__post_init__()
+        if request.declared_blastoise_loan and not self.allow_declared_blastoise_loan:
+            raise RedGoalBoxedEvolutionError("boxed goal has no declared lender permission")
         current_obs = self.observe_collection()
         before_ledger = dependency_specimen_ledger(current_obs)
         source_ref = red_species_ref(
@@ -163,6 +170,8 @@ class RedGoalBoxedEvolutionExecutor:
             route_to_training=self.route_to_training,
             training_binding_sha256=self.training_binding_sha256,
             pc_facing=self.pc_facing,
+            declared_blastoise_loan=request.declared_blastoise_loan,
+            escort_internal_species_id=self.escort_internal_species_id,
         )
         adapter = RedBoxedLevelEvolutionAdapter(
             plan=plan,

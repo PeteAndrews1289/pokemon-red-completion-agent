@@ -367,6 +367,74 @@ def patch_cartridge_derivations(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
 
+def test_opt_in_stone_prompt_declines_without_changing_any_existing_move(monkeypatch):
+    reader = MockReader(make_raw_state(
+        party=(EEVEE_INTERNAL,), party_moves=((33, 45, 39, 98),),
+    ))
+    policy, collection = make_policy_and_collection((EEVEE_DEX,), [(EEVEE_DEX, 25)])
+    rig = EvolutionTestRig(reader, collection)
+    rig.install(monkeypatch)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_party_item_evolution.level_up_learnsets",
+        lambda _: {JOLTEON_DEX: ((25, 84),)},
+    )
+    phase, selected, observed = None, 1, []
+
+    def detector(raw, *, allow_field=False):
+        assert allow_field and raw.battle_state == 0
+        return None if phase is None else (phase, selected)
+
+    def pulse(actions, kind, value=None, frames=180):
+        nonlocal phase, selected
+        if not rig.menu_prep_done:
+            return rig.fake_pulse(actions, kind, value, frames)
+        actions.execute(MacroAction(kind, value))
+        observed.append((phase, selected, kind, value))
+        if phase is None:
+            assert kind is MacroActionKind.CONFIRM
+            phase, selected = "replace_move", 0
+        elif phase == "replace_move":
+            assert kind is MacroActionKind.CANCEL
+            phase, selected = "abandon_learning", 1
+        elif selected == 1:
+            assert kind is MacroActionKind.MOVE and value == "up"
+            selected = 0
+        else:
+            assert phase == "abandon_learning" and kind is MacroActionKind.CONFIRM
+            rig.trigger_default_evolution()
+            phase = None
+
+    reader.read_move_learning_prompt = detector
+    monkeypatch.setattr("pokemon_red_completion.red_party_item_evolution._pulse", pulse)
+    result = RedPartyItemEvolutionExecutor(
+        reader, MockEmulator(), policy, rig.observe, allow_move_learning_preservation=True,
+    ).execute(CountingExecutor(MockChapterExecutor()), RedPartyItemEvolutionRequest(
+        TEST_ROM, 0, EEVEE_DEX, JOLTEON_DEX, THUNDER_STONE,
+    ))
+    assert result.success and reader.raw.party_moves == ((33, 45, 39, 98),)
+    assert [row[2] for row in observed] == [
+        MacroActionKind.CONFIRM, MacroActionKind.CANCEL,
+        MacroActionKind.MOVE, MacroActionKind.CONFIRM,
+    ]
+
+
+def test_stone_prompt_empty_slot_still_rejects_before_input(monkeypatch):
+    reader = MockReader(make_raw_state(party=(EEVEE_INTERNAL,)))
+    reader.read_move_learning_prompt = lambda *a, **k: None
+    policy, collection = make_policy_and_collection((EEVEE_DEX,), [(EEVEE_DEX, 25)])
+    monkeypatch.setattr("pokemon_red_completion.red_party_item_evolution.level_up_learnsets",
+                        lambda _: {JOLTEON_DEX: ((25, 84),)})
+    actions = CountingExecutor(MockChapterExecutor())
+    with pytest.raises(RedPartyItemEvolutionValidationError, match="four existing moves"):
+        RedPartyItemEvolutionExecutor(
+            reader, MockEmulator(), policy, lambda: collection,
+            allow_move_learning_preservation=True,
+        ).execute(actions, RedPartyItemEvolutionRequest(
+            TEST_ROM, 0, EEVEE_DEX, JOLTEON_DEX, THUNDER_STONE,
+        ))
+    assert actions.actions_executed == 0
+
+
 def test_cheapest_falsifier_wrong_item_emits_zero_actions() -> None:
     executor = MockChapterExecutor()
     actions = CountingExecutor(executor)

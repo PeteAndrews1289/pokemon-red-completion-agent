@@ -78,6 +78,35 @@ def memory_with(*members: dict[str, object], count: int | None = None) -> Record
     return RecordingMemory(values)
 
 
+def test_preparation_fingerprints_survive_evolution_and_reorder():
+    from pokemon_red_completion.red_party import (
+        DETERMINANT_VALUES_OFFSET,
+        ORIGINAL_TRAINER_OFFSET,
+    )
+    memory = RecordingMemory({int(RamAddress.PARTY_COUNT): 2})
+    for index in range(2):
+        memory.values[member_field_address(index, ORIGINAL_TRAINER_OFFSET)] = 10
+        memory.values[member_field_address(index, DETERMINANT_VALUES_OFFSET)] = index + 1
+    reader = PokemonRedPartyReader(memory)
+    original = reader.preparation_specimen_refs()
+    memory.values[member_field_address(0, SPECIES_OFFSET)] = 118
+    memory.values[member_field_address(0, LEVEL_OFFSET)] = 32
+    assert reader.preparation_specimen_refs() == original
+    for offset in range(PARTY_STRUCT_STRIDE):
+        a, b = member_field_address(0, offset), member_field_address(1, offset)
+        memory.values[a], memory.values[b] = memory.values.get(b, 0), memory.values.get(a, 0)
+    assert reader.preparation_specimen_refs() == original[::-1]
+
+
+def test_preparation_fingerprints_fail_closed_on_collision_or_bad_count():
+    memory = RecordingMemory({int(RamAddress.PARTY_COUNT): 2})
+    with pytest.raises(PartyReadError, match="ambiguous"):
+        PokemonRedPartyReader(memory).preparation_specimen_refs()
+    memory.values[int(RamAddress.PARTY_COUNT)] = 7
+    with pytest.raises(PartyReadError, match="count"):
+        PokemonRedPartyReader(memory).preparation_specimen_refs()
+
+
 BLASTOISE = {
     "species_id": 0x1C,
     "level": 55,

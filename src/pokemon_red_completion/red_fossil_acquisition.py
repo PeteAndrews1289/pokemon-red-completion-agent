@@ -42,14 +42,18 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_collection_fly import red_fly_landings
+from pokemon_red_completion.red_dig_recovery import execute_dig_escape, plan_dig_escape
 from pokemon_red_completion.red_goal_manager import (
     PokemonRedGoalStateAdapter,
     RedGoalObservation,
 )
 from pokemon_red_completion.red_resource_goal_router import (
+    _MAX_ROUTE_FLEES,
+    _ROUTE_LIMITS,
     _supported_plan,
     collection_field_capabilities,
 )
+from pokemon_red_completion.red_routed_recovery import RecoveryRouteInterruptionHandler
 from pokemon_red_completion.route_executor import (
     DEFAULT_ROUTE_EXECUTION_LIMITS,
     RouteExecutionLimits,
@@ -69,6 +73,13 @@ FOSSIL_REVIVAL_LEVEL = 30
 FOSSIL_ITEMS = frozenset(
     {int(ItemId.DOME_FOSSIL), int(ItemId.HELIX_FOSSIL), int(ItemId.OLD_AMBER)}
 )
+LOCAL_CINNABAR_MAPS = frozenset({
+    CINNABAR_ISLAND_MAP_ID, int(MapId.CINNABAR_POKECENTER), int(MapId.CINNABAR_MART),
+    int(MapId.CINNABAR_LAB), int(MapId.CINNABAR_LAB_TRADE_ROOM),
+    int(MapId.CINNABAR_LAB_METRONOME_ROOM), FOSSIL_ROOM_MAP_ID,
+    int(MapId.POKEMON_MANSION_1F), int(MapId.POKEMON_MANSION_2F),
+    int(MapId.POKEMON_MANSION_3F), int(MapId.POKEMON_MANSION_B1F),
+})
 
 
 class RedFossilAcquisitionError(RuntimeError):
@@ -292,6 +303,7 @@ class RedFossilExecution:
     fly_used: bool
     route_steps: int
     refresh_steps: int
+    dig_escape_used: bool = False
 
     @property
     def passed(self) -> bool:
@@ -331,6 +343,7 @@ class RedFossilExecution:
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
             "species_specific_route_steps": 0,
+            **({"dig_escape_used": True} if self.dig_escape_used else {}),
         }
 
 
@@ -344,6 +357,11 @@ class RedRoutedFossilRevival:
     world: StrategicScenarioRouteWorld
     timing: RedFossilTiming = DEFAULT_FOSSIL_TIMING
     route_limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS
+    allow_dig_departure: bool = False
+
+    def __post_init__(self):
+        if type(self.allow_dig_departure) is not bool:
+            raise ValueError("fossil Dig departure requires a boolean permission")
 
     def execute(self, target: RedFossilTarget) -> RedFossilExecution:
         before_actions = self.actions.actions_executed
@@ -352,6 +370,10 @@ class RedRoutedFossilRevival:
         if not initial.executable:
             raise RedFossilAcquisitionError("fossil target is not executable")
         field_actions, observer = self._ports()
+        escape = (plan_dig_escape(self.world, self.reader, self.reader.read(), observer.observe())
+                  if self.allow_dig_departure else None)
+        if escape is not None:
+            execute_dig_escape(self.world, self.reader, self.emulator, field_actions, escape)
         fly_used = self._reach_cinnabar(field_actions, observer)
         route_steps = self._route(
             field_actions,
@@ -398,6 +420,7 @@ class RedRoutedFossilRevival:
             fly_used=fly_used,
             route_steps=route_steps,
             refresh_steps=refresh_steps,
+            dig_escape_used=escape is not None,
         )
         if not result.passed:
             raise RedFossilAcquisitionError("fossil execution lacked its exact transition")
@@ -430,11 +453,7 @@ class RedRoutedFossilRevival:
         observer: Gen1TraversalObserver,
     ) -> bool:
         start = observer.observe()
-        if start.map_id in {
-            CINNABAR_ISLAND_MAP_ID,
-            int(MapId.CINNABAR_LAB),
-            FOSSIL_ROOM_MAP_ID,
-        }:
+        if start.map_id in LOCAL_CINNABAR_MAPS:
             return False
         raw = self.reader.read()
         if (
@@ -454,6 +473,18 @@ class RedRoutedFossilRevival:
         ):
             raise RedFossilAcquisitionError("Cinnabar Fly landing was not verified")
         return True
+
+    def _route_handler(self, actions: Gen1FieldMovePort) -> RecoveryRouteInterruptionHandler:
+        raw = self.reader.read()
+        return RecoveryRouteInterruptionHandler(
+            actions, self.reader,
+            post_prep_species=tuple(raw.party_species_ids or ()),
+            post_prep_living_slots=tuple(i for i, hp in enumerate(raw.party_hp or ()) if hp > 0),
+            maximum_flees=_MAX_ROUTE_FLEES,
+            maximum_trainer_battles=0,
+            maximum_scripted_dialogues=0,
+            route_name="fossil transport",
+        )
 
     def _route(
         self,
@@ -495,6 +526,7 @@ class RedRoutedFossilRevival:
             observer,
             replanner=self.world.replanner(),
             limits=self.route_limits,
+            interruption_handler=self._route_handler(actions),
         )
         if not report.passed:
             raise RedFossilAcquisitionError("fossil route did not reach its declared boundary")
@@ -605,6 +637,7 @@ class RedRoutedFossilRevival:
             observer,
             replanner=self.world.replanner(),
             limits=self.route_limits,
+            interruption_handler=self._route_handler(actions),
         )
         if not report.passed:
             raise RedFossilAcquisitionError("live scientist approach did not settle")
@@ -800,6 +833,99 @@ class RedFossilGoalProvider:
             verify=verify,
             search_source_ref=self.target.source_ref,
         )
+
+
+def fossil_acquisition_bindings(
+    runtime, observation, actions, world, *, maximum_actions=512, maximum_frames=180_000,
+) -> tuple[ExecutableGoalBinding, ...]:
+    """Quote item-derived local revival peers without choosing or moving.
+
+    Other regions keep their existing explicit Fly adapter; this composition
+    only exposes a fully quoted local laboratory route. It never makes a
+    fossil, chooses a species, replaces a capture, or copies a prior terminal.
+    """
+    from .red_player_field_goals import _field_ready
+
+    if any(type(n) is not int or n < 1 for n in (maximum_actions, maximum_frames)):
+        raise ValueError("fossil menu needs finite positive limits")
+    if observation != runtime.adapter.observe():
+        raise ValueError("fossil menu observation is stale")
+    if not _field_ready(runtime) or observation.raw.map_id not in LOCAL_CINNABAR_MAPS:
+        return ()
+    targets = available_red_fossil_targets(runtime.reader)
+    if not targets:
+        return ()
+    source = runtime.emulator.save_state_bytes()
+    counters = actions.actions_executed, runtime.emulator.frame_count
+    live_world = world.with_current_observation(runtime.reader)
+    executor = RedRoutedFossilRevival(
+        actions, runtime.reader, runtime.emulator, live_world,
+        timing=replace(DEFAULT_FOSSIL_TIMING,
+                       maximum_controller_actions=min(maximum_actions, 512),
+                       maximum_emulator_frames=min(maximum_frames, 180_000)),
+        allow_dig_departure=getattr(runtime, "collection_dig_departure", False),
+        route_limits=_ROUTE_LIMITS,
+    )
+    _, observer = executor._ports()
+    quoted_start = observer.observe()
+    if executor.allow_dig_departure:
+        escape = plan_dig_escape(live_world, runtime.reader, observation.raw, quoted_start)
+        if escape is not None:
+            if CINNABAR_ISLAND_MAP_ID not in runtime.reader.read_fly_destinations():
+                return ()
+            from .gen1_field_moves import Gen1FieldMoveError
+
+            try:
+                fly_menu_indices(observation.raw)
+            except Gen1FieldMoveError:
+                return ()
+            quoted_start = replace(
+                quoted_start, map_id=CINNABAR_ISLAND_MAP_ID,
+                at=dict(red_fly_landings(live_world.rom))[CINNABAR_ISLAND_MAP_ID],
+                last_outside_map=CINNABAR_ISLAND_MAP_ID, occupied=frozenset(), hazards=(),
+            )
+    try:
+        quote = live_world.plan_feasible_to_map(quoted_start, FOSSIL_ROOM_MAP_ID)
+    except RoutePlanningError:
+        return ()
+    if not _supported_plan(quote, allow_cut=True, allow_surf=True):
+        return ()
+    result = []
+    for target in targets:
+        native = RedFossilGoalProvider(
+            target, runtime.adapter, runtime.reader, executor,
+            estimated_effort=min(1.0, 0.24 + quote.cost / 3000),
+        ).binding(observation)
+        if native is None:
+            continue
+
+        def bind(native=native):
+            used, report = False, None
+
+            def execute():
+                nonlocal used, report
+                if (
+                    used or runtime.emulator.save_state_bytes() != source
+                    or not _field_ready(runtime)
+                ):
+                    raise RedFossilAcquisitionError("fossil acquisition is stale or consumed")
+                used = True
+                report = native.execute()
+                return report
+
+            def verify(candidate):
+                if not used or report is None or candidate is not report:
+                    return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                return native.verify(candidate)
+
+            return replace(native, execute=execute, verify=verify)
+
+        result.append(bind())
+    if runtime.emulator.save_state_bytes() != source or (
+        actions.actions_executed, runtime.emulator.frame_count
+    ) != counters:
+        raise RedFossilAcquisitionError("fossil discovery changed native state")
+    return tuple(result)
 
 
 def fossil_target_by_item(item_id: int) -> RedFossilTarget:

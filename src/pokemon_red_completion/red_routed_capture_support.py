@@ -57,6 +57,12 @@ def _capture_party_preparation(
     )
     if plan is None:
         return None
+    from pokemon_red_completion.red_player_party_guard import retained_party_slot_is_depositable
+
+    if plan.deposit_party_slot is not None and not retained_party_slot_is_depositable(
+        runtime.adapter, plan.deposit_party_slot
+    ):
+        raise RedCapturePartyError("capture helper would deposit a retained party individual")
     from pokemon_red_completion.red_resource_goal_router import _walking_plan
 
     traversal = Gen1TraversalObserver(runtime.reader)
@@ -234,6 +240,9 @@ def bind_capture_party_support(
             interruption_handler = guarded_collection_route_handler(
                 router.actions, runtime.reader, route_name="guarded capture-helper PC access",
             )
+        wrapper = getattr(router, "interruption_handler_wrapper", None)
+        if wrapper is not None:
+            interruption_handler = wrapper(interruption_handler, capture_spec)
         transport = execute_route(
             route, router.actions, traversal,
             interruption_handler=interruption_handler,
@@ -294,6 +303,7 @@ def bind_capture_party_support(
               for item in bindings.opportunities),
         tuple(supported if item.binding_ref == original.binding_ref else item
               for item in bindings.bindings),
+        allow_resource_variants=bindings.allow_resource_variants,
     )
 
 
@@ -306,4 +316,5 @@ def _without_capture(bindings: GoalBindingSet, original: ExecutableGoalBinding) 
               if item.binding_ref == original.binding_ref else item
               for item in bindings.opportunities),
         tuple(item for item in bindings.bindings if item.binding_ref != original.binding_ref),
+        allow_resource_variants=bindings.allow_resource_variants,
     )

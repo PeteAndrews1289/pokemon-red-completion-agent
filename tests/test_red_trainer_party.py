@@ -16,6 +16,7 @@ from pokemon_red_completion.red_trainer_party import (
     plan_trainer_party,
     prepare_trainer_lead,
     trainer_matchup_candidates,
+    trainer_entry_candidates,
 )
 
 
@@ -34,6 +35,27 @@ def quote(*opponents):
     return TrainerPartyQuote(244, 1, members, 100, 100 * members[-1].level)
 
 
+def test_type_only_trapping_entry_stays_closed_without_full_commitment():
+    from pokemon_red_completion.red_battle_catalog import RedBattleCatalogError
+    candidates = trainer_matchup_candidates(party(), opponent_species=34, opponent_level=55)
+    with pytest.raises(RedBattleCatalogError, match="entry type screen"):
+        trainer_entry_candidates(party(), candidates, incoming_moves=(128, 0, 0, 0))
+
+
+@pytest.mark.parametrize("bounds", [(), [1, 1], (1,), (1, 1, 1), (True, 1), (1, -1)])
+def test_trapping_commitment_requires_exact_typed_party_bounds(bounds):
+    candidates = trainer_matchup_candidates(party(), opponent_species=34, opponent_level=55)
+    with pytest.raises(RedTrainerPartyError, match="commitment bounds"):
+        trainer_entry_candidates(party(), candidates, incoming_moves=(128, 0, 0, 0),
+            incoming_commitment_bounds=bounds)
+
+
+def test_complete_trapping_bound_does_not_bypass_ordinary_coverage_screen():
+    candidates = trainer_matchup_candidates(party(), opponent_species=34, opponent_level=55)
+    assert not trainer_entry_candidates(party(), candidates, incoming_moves=(128, 85, 0, 0),
+        incoming_commitment_bounds=(1, 1))  # Blastoise still rejects Thunderbolt coverage.
+
+
 def test_opponent_mechanics_change_preference_without_chapter_rules():
     # Gyarados: electric is 4x; Onix: electric is immune, water is 4x.
     plan = plan_trainer_party(party(), quote((22, 130, 55), (34, 95, 55)))
@@ -46,6 +68,40 @@ def test_opponent_mechanics_change_preference_without_chapter_rules():
     report = reversed_opponents.public_dict()
     assert report["training_examples"] == 0
     assert report["victory_predicted"] is report["battle_execution_qualified"] is False
+
+
+def test_explicit_recovery_keeps_fainted_reserves_without_selecting_them():
+    original = party()
+    observed = replace(original, members=(replace(original.members[0], hp=0),
+                                          replace(original.members[1], hp=1)))
+    enemy = quote((34, 95, 55))
+    with pytest.raises(RedTrainerPartyError):
+        plan_trainer_party(observed, enemy)
+    plan = plan_trainer_party(observed, enemy, minimum_hp_ratio=0.0,
+                              allow_fainted_reserves=True)
+    assert plan.lead.target_index == 1 and plan.party.size == 2
+    assert all(row.party_slot == 2 for row in plan.matchups[0])
+    plan.require_current(observed, enemy)
+    with pytest.raises(RedTrainerPartyError):
+        plan_trainer_party(replace(observed, members=tuple(replace(m, hp=0)
+                           for m in observed.members)), enemy, minimum_hp_ratio=0.0,
+                           allow_fainted_reserves=True)
+
+
+def test_explicit_status_entry_does_not_claim_cure_or_override_default():
+    original = party()
+    observed = replace(original, members=tuple(
+        replace(m, status=StatusCondition.PARALYSIS) for m in original.members
+    ))
+    enemy = quote((34, 95, 55))
+    with pytest.raises(RedTrainerPartyError, match="no qualified"):
+        plan_trainer_party(observed, enemy)
+    plan = plan_trainer_party(observed, enemy, allow_status=True)
+    assert plan.party == observed and plan.public_dict()["status_cured"] is False
+    assert plan.public_dict()["allow_status"] is True
+    plan.require_current(observed, enemy)
+    with pytest.raises(RedTrainerPartyError, match="status allowance"):
+        plan_trainer_party(observed, enemy, allow_status=1)
 
 
 def test_party_permutation_follows_capability_not_slot():
@@ -119,6 +175,28 @@ def test_no_coverage_is_a_refusal_not_an_empty_or_status_move_choice():
     observed = replace(party(), members=(party().members[0],))
     with pytest.raises(RedTrainerPartyError, match="positions \\(2,\\)"):
         plan_trainer_party(observed, quote((22, 130, 55), (34, 95, 55)))
+
+def test_explicit_level_diagnostic_keeps_health_pp_and_immune_guards():
+    observed = replace(party(), members=(replace(party().members[0], level=20),))
+    enemy = quote((22, 130, 60))
+    with pytest.raises(RedTrainerPartyError, match="positions"):
+        plan_trainer_party(observed, enemy)
+    plan = plan_trainer_party(observed, enemy, maximum_level_deficit=100)
+    plan.require_current(observed, enemy)
+    assert plan.public_dict()["maximum_level_deficit"] == 100
+    assert plan.public_dict()["victory_predicted"] is False
+    for change in ({"hp": 0}, {"status": StatusCondition.PARALYSIS},
+                   {"moves": (MoveObservation(87, 0),)}):
+        with pytest.raises(RedTrainerPartyError):
+            plan_trainer_party(replace(observed, members=(replace(observed.members[0], **change),)),
+                               enemy, maximum_level_deficit=100)
+    with pytest.raises(RedTrainerPartyError):
+        plan_trainer_party(observed, quote((34, 95, 60)), maximum_level_deficit=100)
+
+@pytest.mark.parametrize("value", (True, -1, 101, 5.0, None))
+def test_invalid_preparation_level_override(value):
+    with pytest.raises(RedTrainerPartyError, match="level deficit"):
+        plan_trainer_party(party(), quote((22, 130, 55)), maximum_level_deficit=value)
 
 
 def test_fainted_passenger_refuses_trainer_preparation():

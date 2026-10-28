@@ -1,0 +1,120 @@
+{
+  "schema": "pokemon.red.constrained-replay.v1",
+  "session_id": "2026-09-24-constrained-replay",
+  "status": "fit_rejected",
+  "source_commit": "6612be1acda92cc50d6159c687fa4865304cd45f",
+  "hashes": {
+    "PLAN.json": "5740c4f0157b90b8a0f50049e4a17d3af396fc826929ea7fbf7a20fc7ec6f23f",
+    "RESULT.json": "6ba5b40f1a8f5dd70e9efecb8c94d4f3f0b349df482d26828b5a692ac146156f",
+    "fit.json": "566522d03f1b6499ebfed225de998160d179e2466eed4a61830a08f4e92f6cf5",
+    "FIT_INDEPENDENT_AUDIT.json": "41cd11672a2d57c767128737fa3d4630a159f5ade2b2f254e793722ed6e055e1",
+    "INDEPENDENT_AUDIT.json": "6e29828fce766c6d88979188c6efbe11beeb8027231aca40ad381d1f736a800d",
+    "READONLY_CONSTRAINED_DIAGNOSIS.json": "204e6a1008d6c4f6bd179444c6b5a3ea507cbb31fca4e655efa6e2861f8e7bde",
+    "PROPOSAL_FLOOR_DECOMPOSITION.json": "3c9cb3c2a34926db035ad1624a7ac38da166e55fa6de45fda288724cba1a29cc",
+    "candidate-model.json": "e7eb0e9ed0ee67fc3ccf0fba7c4c06841e671d13b85b02d235a2d2d15855a55e"
+  },
+  "implementation": {
+    "mode": "projected_budget_v1",
+    "retention_replay": "unique_budget_cases_v1",
+    "default_unchanged": true,
+    "inference_unchanged": true,
+    "maximum_projection_passes": 10,
+    "maximum_step_halvings": 13,
+    "acceptance": "Exact nonlinear numeric budgets and strict 50/50 fresh/replay objective descent. Rejected weights and moments never advance."
+  },
+  "training": {
+    "attempts": 1,
+    "maximum_iterations_per_head": 2400,
+    "learning_rate": 0.005,
+    "seconds": 76.26887579169124,
+    "late_targets": 9,
+    "prior_recent_targets": 36,
+    "new_targets": 0,
+    "retention_groups": 18,
+    "retention_checks": 35,
+    "retention_regressions": 0,
+    "identical_status_predictions": 591,
+    "frozen_damage_status": true,
+    "metrics": {
+      "switch": {
+        "before": 0.5313747160857142,
+        "after": 0.5313747160857142,
+        "cases": 7
+      },
+      "control": {
+        "before": 0.9821167398500001,
+        "after": 0.8891855907000004,
+        "cases": 4
+      }
+    },
+    "improvement_percent": 9.462332264511986,
+    "required_control_improvement_percent": 10,
+    "prior_best_improvement_percent": 9.462332264511986,
+    "switch": {
+      "accepted_steps": 34,
+      "selected_epoch": 0,
+      "feasible_checkpoints": 35
+    },
+    "control": {
+      "accepted_steps": 44,
+      "selected_epoch": 33,
+      "feasible_checkpoints": 45
+    },
+    "stop_reason_both_heads": "no_feasible_descent_step",
+    "comparison_opened": false
+  },
+  "diagnosis": {
+    "correct_new_control_choices_given_fixed_proposals": 4,
+    "changed_control_choices": 4,
+    "conditional_control_regret": 0,
+    "proposal_floor": 0.8891855907000004,
+    "qualification_ceiling": 0.8839050658650002,
+    "gap_beyond_floor": 0.005280524835000189,
+    "helpful_main_switch_cases": 2,
+    "hypothetical_best_switch_floor": 0.5871598704000004,
+    "hypothetical_best_switch_improvement_percent": 40.21485974369218,
+    "global_feasibility_proven": false,
+    "interpretation": "Control already chooses the best of its two proposals in each new case. Further control-only fitting cannot qualify. Two existing TRAIN cases contain better measured reserve proposals; their joint learnability under the retained budgets remains unproved. Three cases also exclude better measured moves from the frozen move proposal.",
+    "final_switch_rejection_groups": [
+      "complete36",
+      "complete36-optional_prompt"
+    ]
+  },
+  "verification": {
+    "focused_tests_passed": 196,
+    "full_suite": false,
+    "lint_passed": true,
+    "fit_metrics_recomputed": true,
+    "replay_inventory_reconstructed": true,
+    "step_bound_and_acceptance_logs_checked": true,
+    "all_intermediate_weights_saved": false,
+    "closure_audit_valid": true
+  },
+  "deltas": {
+    "fits": 1,
+    "new_targets": 0,
+    "native_episodes": 0,
+    "controller_inputs": 0,
+    "frames": 0,
+    "comparisons": 0,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "campaign_state": "359a96aa",
+    "campaign_envelope": "36dbc835",
+    "unused_stage": 462,
+    "deployed_actor": "4ea4cfde",
+    "parent_actor": "b106108e",
+    "unopened_comparison_teams": 24
+  },
+  "next": "Read-only ranking-feasibility audit of the two useful reserve proposals and the retained prompt constraints before designing any separately frozen fit. No more control-only fitting, blind step-count increase, labels or unchanged trial.",
+  "limitations": [
+    "Candidate rejected and not deployed. Improvement matches the earlier best, not a new performance high.",
+    "Conditional best-action bounds use existing measured TRAIN returns, not new native outcomes or independent transfer evidence.",
+    "The bounded local projected update stopping is not proof of global network or constraint infeasibility.",
+    "No second fit, reopened comparison, promotion, campaign input or publication."
+  ]
+}

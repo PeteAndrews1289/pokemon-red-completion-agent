@@ -528,6 +528,7 @@ def run_cerulean_chapter(
     *,
     timing: CeruleanTiming = DEFAULT_CERULEAN_TIMING,
     progress: ProgressSink | None = None,
+    before_required_rocket: Callable[[], None] | None = None,
 ) -> CeruleanChapterReport:
     """Continue one clean run from the verified Brock gate to Cerulean City."""
     start_frames = emulator.frame_count
@@ -878,6 +879,10 @@ def run_cerulean_chapter(
         expected_map_id=MapId.MT_MOON_B2F,
         ledger=mt_moon_ledger,
     )
+    if before_required_rocket is not None:
+        # Explicit preparation boundary, before any trainer engagement or choice.
+        # The ordinary chapter's historical path and verification remain unchanged.
+        before_required_rocket()
     _move(
         chapter_executor,
         reader,

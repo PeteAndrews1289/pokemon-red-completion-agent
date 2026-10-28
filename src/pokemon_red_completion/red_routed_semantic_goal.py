@@ -13,6 +13,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from hashlib import sha256
 from typing import Protocol
 
 from pokemon_red_completion.actions import MacroActionKind
@@ -239,6 +240,8 @@ class RedSemanticTransportRoute:
         init=False,
         repr=False,
     )
+    _settled_loss: object | None = field(default=None, init=False, repr=False)
+    _loss_terminal: TraversalSnapshot | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
@@ -351,15 +354,21 @@ class RedSemanticTransportRoute:
             self.prepare_departure()
             if not self._matches_start(self.traversal_observer.observe()):
                 raise RedRoutedSemanticGoalError("departure preparation changed the route origin")
-        route_report = execute_route(
-            self.plan,
-            self.field_actions if self.field_actions is not None else self.actions,
-            self.traversal_observer,
-            interruption_handler=self.interruption_handler,
-            replanner=self.replanner,
-            resource_manager=self.resource_manager,
-            limits=self.route_limits,
-        )
+        from .red_player_engaged_story import SettledNativeTrainerLoss, SettledNativeTrainerRecovery
+        from .red_routed_recovery import SettledNativeFieldRecovery
+
+        try:
+            route_report = execute_route(
+                self.plan,
+                self.field_actions if self.field_actions is not None else self.actions,
+                self.traversal_observer,
+                interruption_handler=self.interruption_handler,
+                replanner=self.replanner,
+                resource_manager=self.resource_manager,
+                limits=self.route_limits,
+            )
+        except (SettledNativeTrainerLoss, SettledNativeTrainerRecovery, SettledNativeFieldRecovery) as loss:
+            return self._retain_settled_loss(loss, before)
         after = self._checkpoint()
         actions = after.controller_actions - before.controller_actions
         frames = after.emulator_frames - before.emulator_frames
@@ -409,7 +418,9 @@ class RedSemanticTransportRoute:
         return report
 
     def _verify(self, report: GoalExecutionReport) -> GoalVerification:
-        if not self._executed or self._goal_report is None or self._route_report is None:
+        if not self._executed or self._goal_report is None or (
+            self._route_report is None and self._settled_loss is None
+        ):
             raise RedRoutedSemanticGoalError(
                 "Red semantic transport cannot verify before execution"
             )
@@ -427,6 +438,14 @@ class RedSemanticTransportRoute:
         after = self._checkpoint()
         if after != before:
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+        if self._settled_loss is not None:
+            if (
+                current != self._loss_terminal
+                or sha256(self.emulator.save_state_bytes()).hexdigest()
+                != self._settled_loss.evidence["terminal_sha256"]
+            ):
+                return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+            return GoalVerification.failed(self._settled_loss.failure_reason)
         if (
             not self._route_report.passed
             or not self.terminal_boundary.matches_traversal(
@@ -436,6 +455,44 @@ class RedSemanticTransportRoute:
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
+
+    def _retain_settled_loss(self, loss, before):
+        from .red_player_engaged_story import settled_route_trainer_stop_evidence
+        from .red_routed_recovery import settled_route_field_recovery_evidence
+
+        checkpoint = self._checkpoint()
+        terminal = self.traversal_observer.observe()
+        failure = loss.failure
+        actions = checkpoint.controller_actions - before.controller_actions
+        frames = checkpoint.emulator_frames - before.emulator_frames
+        if (
+            failure is None or failure.initial_plan is not self.plan
+            or not (settled_route_trainer_stop_evidence(loss.evidence)
+                    or settled_route_field_recovery_evidence(loss.evidence))
+            or self._checkpoint() != checkpoint
+            or not terminal.ready or terminal.interruption is not None
+            or sha256(self.emulator.save_state_bytes()).hexdigest()
+            != loss.evidence["terminal_sha256"]
+            or actions < loss.report.actions_executed
+            or frames < loss.report.frames_executed
+        ):
+            raise loss
+        report = GoalExecutionReport(actions, frames, {
+            "schema": RED_ROUTED_SEMANTIC_ROUTE_REPORT_SCHEMA,
+            "passed": False,
+            "acknowledged_steps": len(failure.executed_steps),
+            "movement_requests": failure.movement_requests,
+            "wait_actions": failure.wait_actions,
+            "interruptions": len(failure.interruptions),
+            "replans": len(failure.replans),
+            "resource_renewals": len(failure.resource_renewals),
+            "semantic_router_authenticated": True,
+            "transport_is_policy_kind": False,
+            "private_route_fields": 0,
+            "route_setback": dict(loss.evidence),
+        })
+        self._settled_loss, self._loss_terminal, self._goal_report = loss, terminal, report
+        return report
 
     def _checkpoint(self) -> RoutedSemanticBudgetCheckpoint:
         return RedRoutedSemanticBudgetMeter(self.actions, self.emulator).checkpoint()

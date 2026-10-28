@@ -33,7 +33,11 @@ from pokemon_red_completion.red_living_dex_setup_policy import (
 )
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_model import RedPlayerModelRecord
-from pokemon_red_completion.red_player_training_dataset import load_red_player_training_episode
+from pokemon_red_completion.red_player_training_dataset import (
+    _replay_probabilities_match,
+    _replay_scores_match,
+    load_red_player_training_episode,
+)
 from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
 from pokemon_red_completion.red_regional_acquisition import sample_regional_acquisition
 
@@ -65,6 +69,30 @@ def _mapping(value: object) -> Mapping[str, object]:
     if not isinstance(value, Mapping):
         raise ValueError("regional choice requires a mapping")
     return value
+
+
+def _replay_regional_selection_matches(
+    recorded: Mapping[str, object], replayed: Mapping[str, object]
+) -> bool:
+    """Keep discrete sampling identity exact; permit bounded machine rounding."""
+    numeric_keys = {"scores", "probabilities"}
+    if set(recorded) != set(replayed) or any(
+        recorded[key] != replayed[key] for key in set(recorded) - numeric_keys
+    ):
+        return False
+    recorded_probabilities = recorded.get("probabilities")
+    replayed_probabilities = replayed.get("probabilities")
+    if not isinstance(recorded_probabilities, list) or not isinstance(replayed_probabilities, list):
+        return False
+    if not _replay_probabilities_match(recorded_probabilities, replayed_probabilities):
+        return False
+    recorded_scores, replayed_scores = recorded.get("scores"), replayed.get("scores")
+    if not isinstance(recorded_scores, list) or not isinstance(replayed_scores, list):
+        return False
+    return (
+        len(recorded_scores) == len(recorded_probabilities)
+        and _replay_scores_match(recorded_scores, replayed_scores)
+    )
 
 
 def load_red_regional_choice_example(
@@ -148,7 +176,10 @@ def load_red_regional_choice_example(
         menu,
         seed=cast(int, selection.get("seed")),
     )
-    if replay != selection or selection["seed"] != plan.document["seed"]:
+    if (
+        not _replay_regional_selection_matches(selection, replay)
+        or selection["seed"] != plan.document["seed"]
+    ):
         raise ValueError("regional source sampling does not replay")
     candidates = choice["candidates"]
     if (
@@ -287,7 +318,9 @@ def load_red_regional_choice_example(
         or example.menu.policy_dict() != menu.policy_dict()
         or (
             example.selected_candidate_index != replay["selected_candidate_index"]
-            or example.behavior_probabilities != tuple(cast(list[float], replay["probabilities"]))
+            or not _replay_probabilities_match(
+                example.behavior_probabilities, cast(list[float], replay["probabilities"])
+            )
             or example.partition != "train"
             or example.decision_sha256
             != canonical_sha256(

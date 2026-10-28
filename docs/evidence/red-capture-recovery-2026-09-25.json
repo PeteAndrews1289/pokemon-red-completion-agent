@@ -1,0 +1,85 @@
+{
+  "schema": "pokemon.red.capture-recovery-development.v1",
+  "source_commit": "29c2639f",
+  "passed": true,
+  "audit_sha256": "1bd31854133b8f4c2d9bf751fce2373c6306ba1f2031f38b55e0fc73091beb88",
+  "plan_sha256": "993e3024b2853f275746d0b1f473d4345ba80e4e0b6c5c6c1181a10cde7d5543",
+  "partition": "development",
+  "assisted_origin": true,
+  "new_teacher_writes": 0,
+  "independent_roots": 0,
+  "audit_inputs": 0,
+  "states_reloaded_without_input": 8,
+  "actual_campaign_unchanged": true,
+  "actual_captures": 0,
+  "learning_delta": 0,
+  "fits": 0,
+  "gameplay_running": false,
+  "current_code_sha256": {
+    "src/pokemon_red_completion/red_one_off_capture.py": "e5abda7502640f39b5c467c96151ab1b91548961917918fe1128c297647c64ea",
+    "src/pokemon_red_completion/red_capture_status_runtime.py": "41a3fefd57badff62bb12fd512826328fe57ac205a935a3e9b14e65f30659299",
+    "src/pokemon_red_completion/surge.py": "e1d7bc18e80db575319c0d7d226bf3d1ce7d505592cdf00401e866a6dfee75f8"
+  },
+  "cases": [
+    {
+      "case": "zapdos-forward",
+      "source_sha256": "a7f9c4370479ea5d6c85ff0147891ee7227a84b297f3042ead9223d49437df89",
+      "prior_throws": 8,
+      "new_throws": 12,
+      "total_committed": 20,
+      "forced_replacements": 2,
+      "replacement_party_slots": [2, 5],
+      "new_status_attempts": 0,
+      "captured": false,
+      "outcome": "Budget exhausted; live encounter retained, no Run or Master Ball substitution.",
+      "actions": 162,
+      "frames": 15264,
+      "terminal_sha256": "3b5bdeab89711283f5d12bc84b3119fd20746a808746e1e1d4012c37d97cb332",
+      "result_sha256": "2bc175f1f697ab06bf65a7ba00d55e24e2a35da109fef245bf5cd5f1f232a4ac"
+    },
+    {
+      "case": "moltres-exhausted",
+      "prior_throws": 20,
+      "new_throws": 0,
+      "outcome": "Exhausted allocation refused before any input; identical retained state.",
+      "actions": 0,
+      "frames": 0,
+      "terminal_sha256": "092e004cd64b648e4f8a043e40a7c06a25ca01c1d56ffb0ccb370958033a79f2",
+      "result_sha256": "8aa5eff4a3eb3682f01558ea63a51a6e16e1dd74b110b97215c6eccd21cbbde6"
+    },
+    {
+      "case": "zapdos-status-baseline",
+      "throws": 2,
+      "status_attempts": 3,
+      "asleep_at_throws": 1,
+      "captured": false,
+      "actions": 142,
+      "frames": 11544,
+      "terminal_sha256": "c04283efae4ebe2d4b125c308f1e63bb5d5dd84f35c0cd7d3e9fc87f1360d665",
+      "result_sha256": "5f17b7bd7b1be00930e22c9a4674030149ea843ff7838187b40656ce4df69b09"
+    },
+    {
+      "case": "zapdos-status-preserved",
+      "throws": 2,
+      "status_attempts": 2,
+      "asleep_at_throws": 2,
+      "captured": true,
+      "original_party_hp_loss": 0,
+      "actions": 78,
+      "frames": 6696,
+      "terminal_sha256": "708d26a5eaeaec1869f2a69701c486044dca5dc3fb89f3a46d96f9f39926e239",
+      "result_sha256": "a5795af14bd9ea331d13a2d1531ffbaf159b5b5439e1950bba74b4b6b1fa2ebf"
+    }
+  ],
+  "totals": {"actions": 382, "frames": 33504, "diagnostic_captures": 1},
+  "tests": {"targeted": 254, "full_suite": false, "lint": true, "focused_typing": true},
+  "limits": [
+    "Support only: no model prediction, fit, authority promotion or actual-save acquisition.",
+    "All copies descend from assisted encounters with supplied Spore; no independent success-rate estimate.",
+    "Caller must persist and authenticate the encounter budget with its save; the budget object is not an authentication or autosave service.",
+    "Automatic replacement handles ball-turn faints and retained faint boundaries; status-helper exceptions still pause explicitly.",
+    "Capture medicine turns remain unwired; source had no HP medicine or Revives.",
+    "No actual static-object interaction, consumed-event lifecycle or acquisition-goal binding qualified."
+  ],
+  "next": "Verify a legitimate status helper and ball supply, then static-object interaction/capture/event settlement on a copy and source-bound acquisition-goal integration."
+}

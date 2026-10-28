@@ -1,5 +1,1291 @@
 # Agent review and adjudication log
 
+## October28: one whole model-owned payoff, paired failure retained
+
+Rootboundary178bf08f verifies two genuine headed TRAIN timings: both choose
+preparation/evolution and stopping, one winsMisty, one loses.0nativeerrors,
+2loads/50newforecasts, allprocesses/controls closed. Both matchedteacher studies
+are NOFIT. A missing live NoGuest argv sample is preserved as a monitoring gap;
+nativecollectorargv and dispatched exact job/results are authenticated.
+Noexternalreview dispatch, actualprogress/globaladoption or freshacceptance.
+[Evidence](evidence/red-matched-train-preparation-2026-10-28.json).
+
+## October28: actual student preparation and stopping, retained loss
+
+Internal static/actual-source reviews plus Root OS/native pairing authenticate
+fourmatched TRAINrows and one studenttrajectory. Fixed33 already ranks theWdose
+correctly, so nofit.419focused mainchecks+87subtests cover the default-off typed
+TRAINinference seam; notfullsuite. Student33 selectsRat20/evolution, thenMisty
+over11prep choices;MistyLOSS,0executionerrors. Allmetadatafailures/costs remain.
+No external reviewer was dispatched, no globaladoption or actualgain claimed.
+Auditobserved05:04:02.477256UTC,205.477256seconds late; remainingwork uses the
+workingcollector for dose contrasts and informative fitting only.
+[Evidence](evidence/red-matched-train-preparation-2026-10-28.json).
+
+## October27: retention fit versus native readiness
+
+Internal static/cached reviews plus Root process/pair authentication verify the
+17-row adapter, retained-utility constraint and all-gates joint FBB fit. Two failed
+fits and the runtime import-preflight failure remain charged.156focused main
+checks plus30subtests pass,0skips; no full-suite claim. One exposed native copy
+uses FBB but skips preparation and loses Misty twice, with zero execution errors.
+No learned stopping, independent transfer, global adoption or actual gain follows.
+Cachedgroup reporting reveals legacy13calibration regresses despite pooledold15
+retention. Feature/score audits locate a fragile training margin, with no observed
+wiring/actuator defect. Source-only pendingprefix remains unavailable for stopping.
+A focused local Claude packet is being prepared; no external review dispatched.
+[Evidence](evidence/red-retention-correction17-2026-10-27.json).
+
+## October27: retained forecasts, genuine child and shared route repair
+
+Internal static review and root closed-native receipts support d658old12bit
+retention, genuine parent/child use with unchanged scores, candidate Misty
+retention and a repaired level/Blaine TRAIN payoff.759focused shared-route
+checks and347separate nullspace-source checks have0skips; neither additive nor
+fullsuite. Onefit/61scoped forecasts,6native loads; all failures and costs stay.
+One9-channel row is sealed but unadmitted; fit15has static review only, no
+fake tests/build/admission/fit. No policy gain, actual gains or adoption.
+The06:29audit completed;08:29audit was missed during capacity interruption.
+The block ended and its writer auto-released10:29:18.690358UTC. No external
+review/publication was dispatched. [Evidence](evidence/red-retained-stopping-correction-2026-10-27.json).
+
+## October 26: focused review packet refresh
+
+Current entry points and the Windows Claude packet are reconciled. The user will submit a read-only review; no external reviewer was dispatched. Local learning/native gains, six control regressions, Psyduck zero-XP, scoped completion and preserved historical audit defects remain explicit.
+[Review brief](review-brief.md) · [Session](work-sessions/2026-10-26-documentation-refresh.md).
+
+> Historical entries below use their original dates and scopes. Their “current”
+> or “next” wording is not a live instruction. Use [HANDOFF](../HANDOFF.md),
+> [active state](../ACTIVE_PRODUCT_STATE.md) and [seven goals](seven-goals.md).
+
+
+## October22 local audit: Windows development reaches124/124
+
+The sole MAIN writer authenticated the final paired save,124native local flags,
+14concurrent Champion/Hall-of-Fame funding receipts and13exact parent-state/cost
+transitions to the retained69-registration anchor. Final P118 records15model and
+23support choices,0executionerrors,954.052native seconds;the actor exits and releases
+controls. State repairs/restores and scoped supplied mechanics remain disclosed.
+No new fit/weights/runtimeLLM or official fresh success is claimed. P118 loss
+bridging has488focused/17additional checks plus8clean copied choices;the same
+native loss branch was not repeated. One later TRAIN wrapper failed before loading,
+masked its caught error during cleanup, and retains its full450second allocation.
+No external agent or independent reviewer contributed to this local audit.
+[Completion evidence](evidence/red-assisted-development-124-2026-10-22.json).
+
+
+## October21 requested audit after the Cave repair
+
+Local inspection authenticated P87actual stopped39/124,3badges,cash12961,
+released controls and exact in-battle tail. Five reserves lived when the lead
+fainted;collection-route no-new-faint guards leave ordinary recovery unsupported.
+The prior832focusedchecks prove the Cave fix narrowly. Fourbounded component
+passes remain;0freshsuccesses and6failedfreshstarts.0newfits,loads orinputs in
+this audit. No external reviewer or agent was dispatched.
+[Findings and ordered tasks](evidence/red-requested-seven-goal-audit-2026-10-21.json).
+
+## October16 Windows same-save repair and efficiency qualification
+
+Codex local qualification preserves the native assertion, secondary export failure,
+every partial cost and the later ordinary Seafoam empty-menu stop. Exact battle
+replay repairs the assertion with identical48actions/4356frames/terminal bytes.
+V3 exposes existing guarded training, earned indoor Fly and empty ordinary-ball
+shop peers while models/configuration stay unchanged.1379focused checks,
+8bootstrap/10supervisor checks, eight strict copied model choices and zero-input
+initial/post-budget menu inspections pass. Two copied ordinary setbacks remain.
+
+One correlated copied comparison shows about59%more useful recipient XP/sec,
+with more healing and no whole-run speed claim. No TRAIN/fits/new weights/runtime
+LLM, external agents, publication, imported gains or fresh-game acceptance claim.
+The qualified actual resumes the paired75-registration save; dated receipts show
+six badges/78registrations. Original deadline/costs persist. Historical archive
+transfer remains incomplete and the deleted recurring monitor is not recreated.
+[Session and limitations](work-sessions/2026-10-16-windows-repair-efficiency.md).
+
+## October14 capture miss recovery and new frozen v3
+
+Existing native identity/evolution census explains Raticate's legal evolution
+during a failed Route22 search. Miss stays failed/zero credit. Completed operation
+receipts plus one final typed bounded seek reconcile only when that seek sent zero
+native actions/frames. Generic errors, lost flags/custody and unsafe/budget failure
+stay rejected.1,050public/60private tests,36regressions, ten exact-receipt negatives,
+native before/terminal copies and an isolated fresh7model-goal/1support smoke pass.
+All diagnostic failures/costs retained; no fit, model/helper or support change.
+
+New frozen package11f1bd8e starts fresh v3, seed2026101414, deadline October15,
+11:47:51UTC. Existing two-hour monitor begins21:47:51UTC; actor stays unchanged.
+Completed124save and both frozen failures rehash unchanged, no imported gains.
+Only red_goal_skills.py/red_integrated_play.py differ from v2. Final gates0/5
+pending full native completion; no pure-policy or reliability claim.
+[Current qualification and work](work-sessions/2026-10-14-capture-miss-recovery-and-retry.md).
+
+## October14 strict exclusion repair and frozen v2 launch
+
+Terminal adjudication: v2 stops19:03:18UTC after Brock/15entries and194model
+choices/4support steps/34accepted setbacks. Safe finite Route22 capture miss
+returns generic outcome_not_verified, not an ordinary capture-setback type.
+Six balls remain. No actor changes/restart; costs/terminal retained, actual exit
+and release confirmed, monitor paused before any review due. All package,
+environment and15protected files rehash unchanged. Next: narrow typed exhaustion
+connection on exact copies with negative guards; no generic bypass or new battler.
+
+Both exclusion lists validate independently with the unchanged configuration
+class; only exact overlaps across the two valid lists collapse.13regressions
+retain rejection of malformed/duplicate base or teacher inputs.519focused public/
+60private funding tests and lint pass. Actual native overlap preserves every
+restriction with0inputs; a separate fresh smoke executes7model goals/1support
+step,0loads/teacher actions and two native entries. Smoke gains stay separate.
+
+Only the fresh configuration join differs from the failed package; helpers,
+models/data and support are unchanged apart from paths. Retain a zero-input
+Unicode-path normalization preacceptance audit failure; it never alters the actor.
+Accepted packagec5e7e70b starts new v2 from fresh power-on, deadline October15,
+10:37:57UTC. Existing heartbeat performs two-hour read-only reviews; no duplicate
+worker, repair or restart. First failed run and completed124 save remain unchanged.
+
+Log forecast exceeds Runs2's remaining quota, so new logs use the existing
+T7 Developer private-data area; no old data, quotas or volumes change. No TRAIN,
+fits or new weights. Final gates0/5 until full native verification.
+[Current run and qualification](work-sessions/2026-10-14-fresh-exclusion-repair-and-retry.md).
+
+## October14 frozen fresh startup failure
+
+One authorized immutable16-hour attempt selects Squirtle normally, then fails
+before any local-model decision. The observed OAKS_ERRAND pair already appears
+in the template; fresh realization appends it and strict duplicate validation
+rejects it.178 inputs/22,213 frames, one startup-owned flag and the exact failed
+terminal remain. Worker exits1, released; no repair/restart or second attempt.
+Completed124 save and frozen source/model/environment pins remain unchanged.
+
+Cold zero-input diagnosis confirms actual profile overlap and reproduces the
+error without resuming the run. First cold setup omitted existing frozen-commit
+metadata and is retained as a diagnostic failure, not another player defect.
+Earlier import/disjoint-profile tests did not exercise the concrete fresh handoff.
+No new TRAIN/fit/weights; no two-hour review due; all workers stopped.
+
+Decision: small exact-exclusion addition repair with strict base validation,
+actual-overlap tests and a real local-model handoff, then a newly frozen candidate.
+No new battler/planner or full coverage replay. Final gates remain0/5.
+[Failed attempt and work order](work-sessions/2026-10-14-frozen-fresh-run.md).
+
+## October14 corrected player freeze readiness
+
+Codex verifies six repaired funding/loan/cave/static scenarios on related copies,
+root-to-actual parity across ten fields and real isolated fresh import/native menu
+inspection. Candidate-v3 is frozen; source matches the current checkout and the
+completed124-entry save remains byte-identical. Shared qualified control recovery
+fixes the fresh/continuation discrepancy without admitting unknown errors.
+
+Original funding/medicine serialization failures and loan/cave endpoint-collision
+wrappers stay false. Separate cold receipts qualify surviving exact native
+endpoints; the first medicine attempt remains unqualified. All seven attempts
+retain12,948 actions,1,056,186 frames and22,200 gross cash debits. No copied gains
+enter the completed save.506 focused public/60 private tests and lint pass,
+not the full suite or CI. All native workers stopped; zero TRAIN/fits/new weights.
+
+Five observed League room identity records and131 tactical diagnostics show
+scoped111 learned ranking and no active legacy productive-stay adapter. Tactical
+screens, resource/capture routines and deterministic execution remain unlearned
+support. League-first strategic collection deferral is removed. Classification
+is frozen learned/hybrid DEVELOPMENT, not pure-policy or official final acceptance.
+
+Decision:one separately authorized unchanged fresh attempt, proposed up to16hours
+with two-hour read-only reviews. No campaign launches in readiness work, no new
+subsystem or external review. A later repaired continuation cannot erase a failed
+frozen result. [Session and proof](work-sessions/2026-10-14-freeze-readiness.md).
+
+## October14 earned Champion/HOF and collection completed
+
+Actual009step004 verifiesChampion/concurrentHOF natively;all six originals,
+83entries,31,176cash andMaster Ball1 retain cold. Champion19attacks/11switches/
+noitems,learned battle authority.25teamlevels sinceIndigo areearnedXP,notweights.
+The failed custody diagnostic comparedsix members toone combat-role anchor;
+zero-input adjudication provesall six withoutreplay andretains thefailedreports.
+Krabby subsequently adds84. This isassisted DEVELOPMENT,not finalfresh0/5.
+
+Three NPC routeblocks remain;existing same-trainer boundedreplanning isconnected.
+OrdinaryElectrode55selfKO leavesGravelerfainted inCave227,notlostMewtwo. Typed
+ordinaryKO closure/normal nurse passes oncopy51inputs/4380frames;the originally
+unmetered nurse ischarged byexplicitzero-input accounting correction. Oneoff
+identity remainsprotected evenat0HP;capture availability stayspositiveHP only.
+Post-HOF initialization erroneouslyexpectedretiredf86;current921record/configuration
+areauthenticated andforwarded inactual-launch wiring.470focused recovery and
+205launcher/private checks pass,notfullsuite/CI. No copiedgain,newfit orpublication.
+[Checkpoint](evidence/red-league-champion-checkpoint-2026-10-14.json) ·
+[Session](work-sessions/2026-10-14-league-and-collection-continuation.md).
+
+Later in the same block, actual021 reaches116/124 with no dropped native owned
+flags across229 outcomes. Mewtwo uses one Master Ball legally; two of34 new
+entries are singleton support,32 comparative model-owned. The actual-launch
+bootstrap flag omission is fixed and checked without inputs before actual021
+earns29,799. Its subsequent minimal-stock Lance loss stays retained. A helper-only
+affordable reserve refinement uses the existing first-entry quantities and normal
+shop verification; the copy buys11,100 and earns18,699 net, with all originals,
+owned flags and Master0 retained.53 private reserve checks,501 current focused
+public checks and source lint pass, not full suite/CI. No external reviewer,
+new fit, copied progress or publication. Actual022 continues its own loss.
+
+Final actual028 completes124/124 and stops; cold verification authenticates
+all28 actual handoffs, concurrent Champion/HOF, original-six return/restoration
+and checksum-verified stock of Articuno/Zapdos/Moltres/Mewtwo.42 entries divide
+39 comparative model goals, two singleton support and one equivalent exploration.
+The corrected finance demand excludes owned Porygon; separate Route16 permission
+and exact cartridge decoding preserve bird-only scope. Observed Cave entrance
+geometry enables ordinary Raichu searches; two actual misses precede the catch.
+The no-capture copy assertion remains failed and its zero-query template field
+is explicitly adjudicated; no copied capture, income or XP enters actual.
+
+293complete receipts retain all252 successes,29failed verifications and12errors/
+censors. Zero new TRAIN/fits/weights. The cold closeout self-accounting/attribute
+errors remain zero-input failures, not hidden retries of gameplay.580focused
+public tests,60private finance checks and changed-source lint pass, not full CI.
+No external reviewers or publication. Next: up to3hours for retained-boundary
+checks, actual-launch parity and explicit support audit before one corrected
+freeze; no new assisted full-game replay or original-save inputs.
+[Final evidence](evidence/red-league-collection-completion-2026-10-14.json).
+
+## October13 block closes at the Indigo nurse
+
+Actual82entries/eight badges,originalsix fully restored,Master Ball1 andnative
+blackout9 verify cold. Rival wins30local choices/two faints,zero invalid/teacher
+actions.48comparative goals+27singletons+one safety choice are76outcomes;one
+mandatory wild escape andone explicit nurse endpoint make78units. No new weights.
+
+Nine failed deliveries justify complete guarded stock quotes;real Surf landing/
+post-rival Fly,typed hole-wild escape andrequired nurse checkpoint correct local
+execution. All losses,operator stops,copies andcosts remain. Singleton cave
+mechanics andnursing are not learned stopping. No copied gain or opening restart.
+Cash113 after6000coin spending requires pre-Champion funding/medicine feasibility,
+not a new battler. Reuse921/161;sequence stays deferred,stable stages/fresh0/5 stay.
+[Record](work-sessions/2026-10-13-victory-road-continuation.md).
+
+## October13 local final Giovanni closes
+
+Actual75entries/eight badges,cash5268,bag14/20,all originals healed and Master Ball
+verify cold. Existing battlers win three gym fights/41choices;Giovanni takes28
+choices/11voluntary switches,136HP loss,no faint or teacher action.69comparative
+goals,43singletons andtwo compulsory escapes total114units.19grinds andthree
+machine lessons add27levels/moves,not new TRAIN/fits/weights.
+
+Observed walking arrival,early guarded Safari recovery and real gym frontiers
+are repaired on related copies. Existing target-neutral exploration is wired,
+default0.25 unchanged;DEVELOPMENT uses0.75 with source/model/seed/costs intact.
+Final Giovanni is a singleton goal,not proof of learned stopping. Retain the
+earlier-party copy confounders,all errors,operator interruption and costs.
+1099focused runtime checks/Ruff pass,not full-suite/CI. No copied gain or restart.
+Next:Strength,Route22 rival,Victory Road and healed Indigo. Preserve stable
+stages/final fresh0/5,older lineages;no new subsystem,publication or title advance.
+[Record](work-sessions/2026-10-13-giovanni-continuation.md).
+
+## October13 local Secret Key and Blaine complete
+
+Actual71entries/sevenbadges,5113cash,originalsix healed and Master Ball intact
+verify cold withzero input. Existing battler switches to Blastoise and wins in
+8choices/four attacks/zero HP loss,no extra grinding or recorded teacher action.
+7comparative goals,28singletons andone mandatory escape account for36units.
+Two native errors and an empty-menu stop lead to four scoped Mansion repairs,
+not a new learner. Related nurse/next-menu and retained-wild/statue copies pass.
+All failures,costs and metadata mistakes remain,no imported gains or source reset.
+495focused runtime tests/Ruff pass,not full-suite/CI.0newTRAIN/fits/weights.
+Next:final Giovanni,bag19relief and observed readiness. Final fresh gates0/5,
+historical stages and older completed lineages stay separate.
+[Record](work-sessions/2026-10-13-blaine-continuation.md).
+
+## October13 Koga and Fly close with Cinnabar reached
+
+Actual64to71/5to6badges,Koga/Fly/Cinnabar and originalsix healed verify.
+58comparative neural choices plus46automatic singleton support total104units.
+Four Koga-path wins use50combat choices/two normal faints;zero recorded combat
+teacher interventions/invalid actions. No actual postlaunch execution repair,
+manual goal substitution,restart or copied gain occurs;ancestry remains assisted.
+The before-launch Fly gate reuses existing legal reward/lesson ports.121focused
+tests/Ruff and related native copies pass,not full-suite/CI. Actual walks/Surfs,
+not flight-selection proof. Earlier-party copied Koga wins while optional training
+and18paid Safari visits9000still delay story.0newTRAIN/fits/weights. Costs and
+copy/report failures remain. Next:Secret Key/Blaine,no new battler/opening replay.
+Final fresh exits0/5 and historical stages stay unchanged.
+[Record](work-sessions/2026-10-13-koga-fly-continuation.md).
+
+## October13 Silph, Lapras and Sabrina close on the same save
+
+All requested outcomes complete: Silph liberation/Master Ball, Lapras registration
+and Sabrina badge. Actual58to64/fourtofivebadges,4743cash; six originals are fully
+healed and cold-verified with zero input and exact source bytes unchanged.
+Five existing-battler story wins involve126combat choices and six normal faints;
+recorded combat teacher interventions and invalid action failures are zero.
+There are87model goal choices,one safety choice and one separately supplied
+native departure; original interruption/export reconstruction remain assistance.
+
+Exact complete staging, ordinary escort-onlyXP return, public-kind-balanced
+baseline exploration and known-poison resource-stasis admission are repaired.
+The existing model stays921/161; zero new TRAIN/fits/parameter updates.
+1167distinct focused documentation/route/Silph/menu/runner/preparation/Safari checks
+pass,not full-suite/CI. Keep all paid misses,failed target returns,unverified
+interruption and original runtime errors; do not count them as wins or training.
+No independent stopping/transfer or final frozen Red acceptance is claimed.
+Next: normal bag management,Koga and existing Fly support on this same ancestry;
+no new learner,restart,publication or title advance.
+[Record](work-sessions/2026-10-13-silph-staging-continuation.md).
+
+## October13 capture recovery and matched readiness learning
+
+Actual43to58registrations,four badges,8727cash and all originals verify.
+Approved exact Route12 retreat is recorded as missed;no reset/copied gains.
+Ten clean native TRAIN rows,two fits,151retained examples yield provisional921/161.
+Two infrastructure attempts remain excluded. Matched ranks improve,but unseen
+readiness transfer/native stopping remain unproved. A copied learned nurse and
+exact prompt/weakening/censor seams qualify;all workers stop.863targeted/related
+tests pass,not full-suite/CI. Silph/Sabrina incomplete:approach stops at(7,3),not
+phase entry(3,3),then collection interleaves. Keep guards/full legal menu.
+Approved50GBoverflowcreated;old quotas/dataunchanged. No publication/title advance.
+[Record](work-sessions/2026-10-13-capture-recovery-matched-readiness.md).
+
+## October13 staging recovery and recent-session audit
+
+Actual registrations31to43,four badges,15650cash and all six originals verify.
+104metered choices include102model and two control/safety units. No new TRAIN,
+fit or weights. One source repair/relaunch is retained;Silph/Sabrina incomplete.
+
+Exact zero-input cave quotes show progress through distinct stairs,not a proved
+planner cycle. Existing continuous travel reaches the one-off staging tile.
+Exact aggregate-frame checkpoint retention now preserves a closed unfinished
+battle;normal history and invalid-frame errors still refuse. Original failed
+retention and all costs remain.447focused/related tests pass,not full-suite/CI.
+
+The actual zero-ball Snorlax pause matches the related copied game bytes. The
+enabled weakening helper abstains on flinch,special-boost and healing replies.
+No escape/reset or copied gain occurs. Existing198challenge/recent/gap fields
+havezero fitted signal;some other readiness coefficients are active. Keep the
+sequence learner deferred. Resolve Pete's exact retreat choice,then qualify
+capture readiness and matched native TRAIN through existing components.
+[Record](work-sessions/2026-10-13-silph-staging-recent-audit.md).
+
+## October13 Fuji and Card Key with retained selection failure
+
+Codex earns actual Fuji/Poké Flute,Card Key and three flags,finishing with four
+badges,31entries,30815cash and the original six restored.156model choices and
+two deterministic support decisions produce156successes,one execution error
+and one zero-encounter collection safety-stop. All workers are stopped.
+
+Exact copies show ordinary Gastly exit immediately starts Marowak before field
+control;the RUN owner wrongly spans both. A Tower-local handoff preserves native
+ghost identity/victory checks and passes both copied victories. Greedy then loops
+through the legal Silph entrance and Fuchsia approach. The original intentional
+passedfalse interruption remains. Existing weighted exploration qualifies
+resource progress on a copy and completes the actual final15-choice interval.
+
+Two in-flight interventions remain,not whole-session frozen success.306targeted
+and related checks,Ruff,all-original/flag comparison and final zero-input inspection
+pass;not full-suite/CI. No new TRAIN,fit,weights,independent transfer or publication.
+Sampling is not a learned ranking cure. Continue actual3b8.../2d116... with fixed
+package-v2/weighted mode toward Silph/Sabrina without forcing the next Fuchsia
+choice. No new subsystem or external reviewer is assigned.
+[Full record](work-sessions/2026-10-13-fuji-card-key.md).
+
+## October13 trainer handoffs and the Erika Scope checkpoint
+
+Codex qualifies both known introductions on one live copy with zero manual
+relaunch or source/model/config changes,then continues the actual campaign.
+It earns Erika/Scope and closes with four badges,28entries,24787cash and the six
+originals healthy. The primary records59model choices,nine support outcomes,
+one compulsory preface,two errors and two qualified repair/relaunch interventions.
+
+Native copies verify existing wild-to-trainer composition,one declared alternate
+nursing destination and normal poison wear through the keyed lift. All failures
+and costs remain;no diagnostic gain enters the campaign. 687focused/related tests,
+Ruff and final zero-input identity checks pass,not full-suite/CI. No new TRAIN,
+fit,parameters,independent comparison or autonomous full-game result. Use actual
+b115b2f0.../6d4f5c85... with package-v3 for the next fixed Fuji/Card Key interval.
+No external reviewer or publication is assigned.
+[Full record](work-sessions/2026-10-13-unattended-handoffs-erika-scope.md).
+
+## October12 retained Cut Surge and readiness review
+
+Codex completes the user-approved three-hour packet without external reviewers.
+The primary gains Cut/Surge,three badges/28entries/10165cash and fully restored
+originals,with21successes,20model story goals/one singleton heal,no new loss/error.
+The separate diagnostic exposes a single-branch readiness connection gap and
+misclassified pre-battle trainer recovery. Existing components are connected;
+the parent still chooses the branch and every original error/cost remains.
+
+The reused36-example head selects25preparation doses;the unchanged battler later
+wins Misty in10choices and completes Bill. Stopping with an available training
+alternative is not proved. The all-four-member TRAIN versus single-combat-role
+deployment mismatch remains a data question,not authority for a role redesign.
+424focused/197related tests,scoped Ruff and native zero-input source checks pass.
+No new TRAIN,fit,parameter change,independent qualification or final acceptance.
+
+Use the healthy primary,not diagnostic gains,for the next Erika/Scope continuation.
+Final package-v5 matches the actual six-member source and selects Lavender at
+zero input. No worker remains live,publication occurs or old frozen source changes.
+[Full record](work-sessions/2026-10-12-r29-cut-surge-readiness.md).
+
+## October11 — Pewter passes; fresh-party evolution recovery gap retained
+
+The route offered Route3 before its native Brock prerequisite. Codex binds four
+cartridge-authenticated guide triggers to the actual event in shared static and
+live-rebuilt graphs.538 focused tests/Ruff and zero-input native copied gate/menu
+checks pass: Route3 is honestly absent, lawful captures and reach-Pewter remain,
+and earned Brock credit reopens the local gate. Two incomplete unit fixtures
+and two diagnostic setup failures are retained. No production guard is weakened.
+
+One separately pinned r14 fresh player starts after297-module isolated import
+checks. Existing models,174helpers,6940data inputs,seed,assistance and finite
+limits stay.0TRAIN/fits/weights or protected registration delta. This is a route
+availability repair,not new strategic learning,independent-origin evidence or
+full-game success. No external reviewer is assigned. Final r14 has7/124 entries,
+58model/2support in60outcomes,55successes,4ordinary setbacks and1verification
+stop.55Route3 exclusions,0premature offers,one live renewal and5856diagnostic
+events remain. The battler wins the early rival in11 choices and earns280cash.
+Weedle evolves,Kakuna faints,capture correctly declines;fresh snapshots lack
+the exact retained-party evolution-census proof. No guard is relaxed.
+
+Decision:close r14 without repair,resume or silent retry. Worker actually
+stopped/released;7871runtime/4512environment pins,9protected endpoints and prior
+r13 result/terminal verify unchanged. Monitor PAUSED. Next after Pete continues:
+one-hour copied-state fresh-party identity-evidence repair using existing guard,
+snapshot and recovery wiring,not a combat refit or forced heal. Reject lost/
+duplicated individuals,illegal evolution,incomplete routes and unready control.
+Require Champion/concurrent HOF plus124 before full completion;gates0/5 remain.
+[Session record](work-sessions/2026-10-11-pewter-handoff.md).
+
+## October11 — first Route22 handoff passes; Pewter walk remains unqualified
+
+Codex authenticates the exact first rival and connects existing learned combat
+to early capture. The eight-badge second contract and all guards stay strict.
+The retained phase2 copy wins with15 learned choices, native280 reward, verified
+originals/event and field control. Full capture copy reaches grass but fails24
+tries; reporting-only failures remain beside independent zero-input proof.
+479 focused public tests,11 private venue/hazard cases and focused Ruff pass.
+
+New immutable r13 exercises that repair and one live renewal, then retains62
+attempts/60 model choices,46 successes,15 ordinary setbacks and one unsupported
+Pewter scripted-walk/control error.3/124 entries,zero badges and7767 diagnostic
+events remain. Script4 still owns movement after text closes; no active trainer.
+No poison/combat cause is asserted merely because Rattata is fainted. No new
+TRAIN/fits/weights, runtime LLM, loads, in-run edits or copied gains. Worker is
+stopped/released;7871 runtime/4512 environment pins and9 protected files verify.
+
+Decision:retain r13, diagnose its exact Pewter admission/hand-off on copies using
+existing observer,cartridge navigation and interruption support. One hour,
+reassess15min/two failures; require authentic landing or honest route exclusion
+and wrong-state tests before another freeze. No external reviewer assigned,
+no full-Red diagnosis replay,new subsystem,save edits or publication. Gates0/5.
+[Session record](work-sessions/2026-10-11-early-route22-handoff.md).
+
+## October11 — source-only launch passes; early frozen capture remains blocked
+
+Codex verifies source-only imports before bootstrap and fixes the actual fresh
+runtime binding.164 focused public tests, eight prerequisite cases, three existing
+hazard-quote cases and Ruff pass. Ten older private AST/mock tests fail identically
+on unchanged baseline nodes; no full-suite/CI pass or relaxed assertion is claimed.
+The r10 startup failure and separate r11 pre-errand Route2 diagnostic stay retained.
+
+New immutable r12 has32attempts/30model choices,30verified successes,one ordinary
+setback and one real Route22 capture/scripted-control error. Pokedex and2entries
+are earned; Champion/HOF are not. The qualified Route22 adapter only admits the
+later eight-badge rival,not this early prefix. Source/continuation trials missed
+that optional path.0newTRAIN/fits/weights/LLM/state loads; no mid-run repair or
+fresh retry after the blocker. Actual stop,released buttons,7871runtime/4512env
+pins and9protected endpoints verify.2205diagnostic events and exact saves remain.
+
+Decision:one-hour exact copied-state approach/first-rival handoff repair using
+existing components. Reassess15min or two equivalent failures; require normal
+execution and wrong-state rejection before another freeze. No full-Red diagnosis
+replay,new learner,main-save edit,copied progress,publication or transfer.
+No external reviewer is assigned; frozen gates remain0/5.
+[Session record](work-sessions/2026-10-11-source-only-frozen-launch.md).
+
+## October11 — current earned run closes; review-ready, not final autonomy
+
+Codex verifies actual133 at124/124 with2077cash,all six original identities
+returned/fully restored and all four legendary specimens boxed. The exact
+user-approved Raticate bird loan is repaid. Actual worker exit0/PIDabsence is
+verified. Cold reload checks649 pins,zero frames,released buttons and unchanged
+bytes; an independent094 reload confirms concurrent Champion/Hall-of-Fame.
+No external reviewer is assigned; this is closeout verification,not Astra review.
+
+The goal adds73 entries from51:70 during model-owned goals,three singleton
+support(Zapdos,Kadabra,Nidoking).244 retained outcomes/39 verified evolutions/
+15 income cycles/75 wins remain,with37 ordinary setbacks and9 typed outcome
+failures/censors. Raw130's incomplete export and132's zero-input admission failure
+are retained separately. Original costs/partial XP and all prior losses survive.
+No new TRAIN,fit or parameter update occurs. No save edit or copied progress.
+
+94 connects existing level-acquisition edges and physical Safari demand. The
+initial9 legacy fixture failures are fixed in production;237 targeted tests and
+217 overlapping integration checks pass. Changed-source F checks pass,not full
+suite/CI. The initial roadmap regeneration rejects mismatched closeout session
+IDs; metadata is aligned with the same existing goal ID,not the validator weakened.
+
+Decision:stop gameplay for the user's in-depth retrospective. Audit existing
+selection/combat/execution/support evidence before choosing a smallest frozen
+player work order; do not launch another replay,fit,subsystem or transfer.
+Assisted DEVELOPMENT completion does not advance final frozen Red gates0/5.
+[Full record](work-sessions/2026-10-10-same-save-run-completion.md).
+
+## October10 — one readiness fit, useful stopping and an owned-medicine miss
+
+Codex retains8settled native TRAIN outcomes/6censors from four correlated
+level/resourceconditions. One ridge10fit retains36oldsettled/2censored examples;
+candidate29560has44settled examples. NewMSEfalls0.68452to0.30898,old rises
+0.06713to0.06975. Both reserved midpoint conditions stilltrain;later80-decision
+battles remain censored,not losses,and reserved/DEVELOPMENT data are never fitted.
+General qualification fails. Exact healthy086shadow and prepared TRAIN wins
+justify only a reversible scoped DEVELOPMENT trial with the baseline retained.
+
+Actual087winsall4Elite in4model choices/68.20s and earns23364cash.088uses3
+deterministic-safety Revives,then selectsChampion withcarry20/247HP/Surf0PP;
+4FullRestores remainunused. Native loss/debit13328/ordinaryblackout are preserved.
+Legal healing exists;bothnewhead andf808baseline rankbattle higher. No useful
+rollback is inferred,no hidden healing preference introduced.089returnsnormally,
+replenishes3Revives for4500,trainscarry79/nurses. Same-save play continues.
+Actual90–94winsallfiveLeaguebattles onthissameancestry with5modelgoals/9safety
+medicinegoals:6Revives/3FullRestores. Champion11learnedattacks/6switches,noitems
+and6435income verify concurrentHallofFame. 29799totalLeagueincome/142.40s/3130
+inputs;threefaints atvictory remainordinarygameplay. Timely learnedmedicine is
+stillunproved;moreRevives raisingaggregateHPbeforecriticalcarryhealing is a
+plausible,notcontrolled,explanation of088. No officialfrozenautonomy is claimed.
+Three narrow repairs pass234/118/149focused checkgroups;existingfresh-Gitless
+probe37checks/reuse is performance support,not another model or guard bypass.
+No external reviewer,fullsuite/CI,newsubsystem,DEVfit,saveedit,restart or publication.
+[Session and current native status](work-sessions/2026-10-10-two-hour-champion-recovery.md).
+
+## October10 — measured reuse reaches Lance; resource authority corrected
+
+Codex authenticates the existing same-save continuation:four new badges,Fly,
+late rival,VictoryRoad,Lorelei/Bruno/Agatha and074's76-choice Lance win. The
+Champion loss is ordinary and recoverable,not an execution crash;only Nidorina
+at25HP remains.75's next Lance fight is retained unresolved after80choices,
+not mislabeled a defeat. All losses/costs/native partial XP remain.
+
+18TRAINcontexts/295measuredbranches/29BCactions produce5fits/3provisional League
+adoptions. Relevant four-move screens do not erase failed broad retention.
+One fixed6copy screen recombines trained87switch/52control without a fit or
+main-state copyback;actual Agatha wins follow. Struggle's typed export repair
+authenticates exact058 with0inputs,not a replay. Narrative species/move/XP errata
+correct only prose,not native records. Detailed medicine receipts identify
+deterministic safety support rather than learned healing. The existing pre-entry
+reserve opts into two normal600cash FullHeals;273focused checks/Ruff/cold072 and
+actual purchases pass. No medicine benefit or final League/HOF win is claimed.
+No external reviewer,full-suite/CI,DEV fitting,new subsystem or publication.
+Later38 retained-prerequisite repair passes257checks/cold076;39's sixRevive
+coverage passes448checks and native purchases,butunusedstock/loss retain the
+selection gap.40 reuses existingf808,not a new fit.53verified weaker-member
+targets through085 improve levels without establishing useful stopping. Final
+Blastoise77/otherfive51–53;158851selected/332419partyXP,0furtherfits. Two wall-time
+partials retain separate evidence and are not completed targets. Correct roleflags
+remain unchanged;three exact menus reveal Leaguegap extrapolation from36TRAINrows.
+Next targeted stopping/healing lessons reuse existing recorder/head.
+509focusedchecks/eightfiles/Ruff pass. Final175protected/170backend/35public/
+1private-sourcepins match and42checkpoints044–085 authenticate.969wildepisodes/
+3045decisions retain159suppressed or unsuccessful moves,0invalid actions/teachers/
+memorywrites;no TRAIN admission. All four reviews complete,the finalone late.
+Actual085 exit0/release/no remaining player is verified. Three Champion losses
+remain losses,26flags remain26,and Champion/HOF remain open. No final gate passes.
+[Current record](work-sessions/2026-10-10-eight-hour-earned-league.md).
+
+## October10 earned fresh-player interfaces,not another battler
+
+Codex verifies same-save Erika/fourth badge,Hideout/Scope,learned Marowak,Fuji,
+Card Key and12native gains14to26. Wild observation ports join the existing
+journal;the original member26to28 preparation earns4384trainee XP/10388party XP.
+Scheduling/healing is support;gameplay XP is not parameter learning. Later failed
+targets,normal faints and censored/interrupted attempts remain in the record.
+
+Actual menus disprove identical-input grouping;that draft never runs. Explicit
+existing greedy/exploration changes expose a Snorlax admission/ranking detour.
+Optional-status repair keeps native identity/stock/one-off guards. The model
+samples Snorlax and captures it with8GreatBalls,no status or weakening damage;
+the live guard abstains. This single stochastic capture is not guaranteed odds.
+
+Later fresh-story resupply omits already-engaged Route12 trainers because its
+wrapper only admits early maps. Shared exact ordinary settlement native-verifies:
+6learned decisions/5turns,zero teacher/memory writes,580cash,then model-selected
+8GreatBalls/4800. A later capture faint/safe rejection remain failures.
+Repeated Silph/Center travel exposes a restoration prerequisite checked too
+late. Move that existing gate before advertising travel;375targeted checks pass.
+No new healing requirement,forced destination,learner,fit or parameter change.
+This is assisted DEVELOPMENT,not unchanged freshRed/full-suite/CI qualification.
+No external reviewer is assigned. Continue actual earned state,not another origin.
+Actual044 verifies Fuchsia and paid500cash Safari GoldTeeth/Surf/normal Surf lesson.
+It stops at26flags/four badges,21854cash,two fainted originals;all268pins match.
+The next Koga/Strength loop is strategic ranking,not missing executable offers:
+actual battle/exchange bindings are both present. No speculative gym-health gate.
+[Native record and retained failures](work-sessions/2026-10-09-earned-fresh-league-continuation.md).
+
+## October9 fresh-player execution and shared battle handoff
+
+Codex retains the unchanged frozen failure and every assisted loss/cost. Existing
+151/scoped actors and exploration earn Brock,Misty,Bill,Cut,Surge and14 native flags without
+a fit. Misty's native reward and27-decision learned battle verify; four faints
+receive normal nursing. Two legacy evolution-transport failures trigger the
+two-equivalent-failure reassessment: connect actual shared level/item constructors,
+not merely the base router and not another battler.1517 focused ROM-free checks
+and exact zero-input reload pass; unchanged protected references/models remain.
+The learned actor wins the retained Route6 engagement with a forced switch and
+no teacher/memory-write action. Actual routed evolution combat,boarding,Cut and
+Surge now verify. Surge final goal is singleton with learned8-decision combat.
+Actual022 exits0/releases,healthy Cerulean,three badges,48/48 goals,zero execution
+errors. Final7158 frozen/4512 environment/262 continuation pins pass. Preparation
+alias sampling overhead and aggregate-only wild logging remain disclosed.
+Full-suite,CI,parameter learning,independent transfer and final
+autonomy are not claimed. No external reviewer is assigned.
+[Record and attribution](work-sessions/2026-10-09-fresh-frozen-player-run.md).
+
+## October9 durable-player closure: package before another run
+
+Codex independently authenticates four native chunks/eight goals: seven model
+choices,one control support,seven verified successes and one deliberate one-input
+restoration interruption. Fresh-process recovery then earns supplies, Super Rod,
+additional Gloom and healing; Gloom supplies a missing evolution dependency, not
+a new registration. Five inspections and independent terminal reload preserve
+bytes,costs,search history,original identities and34 protected pins. All workers
+stopped; no fit,adoption,main change,copyback or runtime LLM. Keep151.
+Explicit V2 quote/source wiring passes focused checks; the certified route-search
+cost repair is guard-tested, not a native route-loss result in this family.
+The170-helper pin set is not full frozen runtime/data packaging. Next reuse the
+existing freezer/launcher, not another learner, coverage replay or broad migration.
+No external reviewer was dispatched; no full-suite/CI or final autonomy claim.
+[Result and executable order](work-sessions/2026-10-09-durable-route-recovery.md).
+
+## October9 informative learning: reject adoption, keep the evidence
+
+Codex verifies16 actual TRAIN attempts,11 authenticated lessons and one retained
+fit151to162. New-lesson loss falls67.3%; old loss rises0.34%. Five quarantines stay
+excluded, including incidental Raticate. Four related native comparisons make
+identical choices and reach identical terminals: seven K trainer wins, no capture
+attempt, then safety stop/recovery. Native summary recovery sends zero inputs.
+381 focused behavior checks/26 protected pins pass; workers stopped. Not full CI,
+independent generalization or a useful parameter-advantage claim. Keep162 staged,
+151 deployed and completed124/main32 unchanged. The actual router fixes risk0.18
+and prices walking/search, not approach battles; next correct supported prospective
+quote exposure before further lessons. No external reviewer was dispatched.
+[Result and reassessment](work-sessions/2026-10-09-informative-collection-learning.md).
+
+## October 9 eight-hour collection closeout
+
+Codex verifies exact040 at81/124,48 new since33:46 during model-owned goals and
+two singleton evolutions.278goals/236model/42support reconcile170successes/
+82ordinary misses/five other verification failures/21execution errors/nine menu
+admissions. Real Route13/14 income, buys, Lickitung trade and Ditto/Grimer captures
+pass; Mansion1F travel/capture passes. A later3F goal clips at its wall boundary,
+retained as failure with all costs, not broad third-floor skill qualification.
+The fully restored original party/four balls/cash0 terminal reloads unchanged
+with zero inputs/frames; all17 source/main/model pins pass and workers have exited.
+374 funding/supply and220 closeout fishing/collection checks pass; earlier234
+wiring checks overlap. Six fast-transport typing errors remain. Zero new TRAIN/
+fits/runtime LLM, no independent generalization or final fresh frozen Red claim.
+Next use a prospective up-to3h continuation from81, not a consumed-cutoff extension,
+replay, save merge or blind refit. The richer data explains actual failures; it
+does not automatically change weights. No external reviewer or full-suite CI.
+[Closeout evidence](evidence/red-model-directed-collection-block-2026-10-09.json) ·
+[Dated record](work-sessions/2026-10-08-eight-hour-model-directed-collection.md).
+
+## October 9 six hour collection review
+
+Codex review of the active October8 block: exact034 reaches75/124,42 new from33,
+with219 goals/185model/34support,133 successes/64 ordinary setbacks/four other
+verification failures/18 execution errors/eight separate menu-admission stops.
+An unchanged fourteen-model-choice stretch earns three flags with zero errors;
+the following sole Gyarados/storage actions remain support. Zero new TRAIN/fits,
+protected main32 unchanged, no runtime LLM/external reviewer/full-suite CI claim.
+Current diagnosis: real undefeated trainers exist but funding routes fail local
+composition. Reuse existing bounded gate transport before further learning.
+Native Mansion proof and final frozen fresh-Red acceptance remain open.
+[Session evidence](work-sessions/2026-10-08-eight-hour-model-directed-collection.md).
+
+## October8 overnight configured collection milestone
+
+Accept useful adaptive play from the retained33-entry copy:57 by the first three
+hours,24 new registrations and zero new TRAIN/fits. Actual ordinary income and
+purchases precede captures/evolutions/Eevee. The model selects the existing free
+rod, whose gift text then times out. Exact acquired-text support settles it;
+subsequent model choices catch Krabby and Kangaskhan. Do not relabel the original
+failure or call NPC controls learned. Costs, search history and roster stay live;
+protected main32 is unchanged. Native020's first ten consecutive model choices
+qualify useful continuity: six successes/four misses/zero execution errors, all
+field-ready, with income/purchases and Krabby/Kingler/Kangaskhan.58 flags now
+leave66.020 later stops safely at its frame limit; that new error remains.
+99 focused fishing/text/menu checks and192 status/documentation checks
+pass, not full-suite CI. No external review, save merge, fit or publication.
+Continue the unchanged player from its next authenticated terminal; retain inner
+nursing/control and later forced-singleton support separately from that stretch.
+[Active record](work-sessions/2026-10-08-eight-hour-model-directed-collection.md).
+
+## October 8 checkpoints, useful recovery/capture and stored-child reuse
+
+Codex verifies four reusable sources without inputs or story replay. Four actual
+TRAIN contrasts and one full-retention fit produce 151 examples. Both reserved
+conditions choose healing; existing K wins seven trainers. Retained continuations
+capture Pidgey/Oddish after narrow guard and acknowledgment repairs. Original
+failures and incidental Raticate are not relabeled as capture success. The early
+classroom's depleted-ball/missing-supply failure remains recorded.
+
+Accept scoped provisional DEVELOPMENT reuse, not independent model-effect or
+final-autonomy proof. Stored child151 reloads in the regular player; a post-League
+copy chooses healing/Rapidash and advances 32 to 33. Its partial third evolution
+stays failed; costs, individuals and prior losses survive. Protected main32/141
+is unchanged; all native workers exited. No battle fit, DEVELOPMENT training,
+external review, save merge, publication or deleted history. Focused behavior/
+private-safety tests: 1040 passed. Type-import limits and documentation checks are
+in the session evidence. Next: the retained 33-entry copy/full resource menu.
+[Record](work-sessions/2026-10-08-checkpoint-recovery-learning.md).
+
+## October 8 player-data observability
+
+Codex extends existing decision and survey records, not a second logger. The
+authenticated diagnostic copy wins seven trainers but stops capture on one faint;
+zero encounters and balls spent, incidental Raticate is not selected-goal success.
+The four acquisition vectors differ only in effort, and the newer PP/loss/gap
+channels have no nonzero TRAIN coverage. Read-only observation and the safety-stop
+component rehearsal preserve state and input counts. The first unavailable goal
+binding remains a setup failure, not a hidden bypass or native capture pass.
+No lessons, fits, adoption, earned-save changes, external review or publication.
+Next use informative TRAIN readiness contrasts and existing mixed-menu recovery
+to obtain useful native capture; no blind refit or new battler/logger.
+[Evidence and data guide](work-sessions/2026-10-08-player-data-observability.md).
+
+## October 8 teacher-assisted collection pilot
+
+Codex retains six actual TRAIN outcomes through the existing sealed journal and
+two local fits,all141 original fingerprints/147 settled examples. The first
+candidate ties native baseline choices and costs. The second changes both new
+reserved choices to capture,but initially fails execution;neither child is adopted.
+TRAIN error falls;this does not substitute for useful native outcome acceptance.
+
+The dialogue observer repair and existing exact trainer-engagement wrapper let
+the retained student resume a faint,win three trainers and retain a later loss.
+Native blackout and a new frozen-model choice then reach Route22,where20encounters
+are fled and no registration is earned. Original comparisons stay failed.
+Sources/main state/context/configuration remain unchanged;all workers exited.
+751 focused behavior tests, 172 documentation/status tests, targeted lint and
+documentation checks pass, not full-suite CI or an external audit.
+No battler fit,DEVELOPMENT training,main-save edit,third fit or publication.
+Next capture eligibility/search diagnosis and coherent TRAIN recovery,then one
+informative lesson batch/native comparison;no blind refit or full-game replay.
+[Record and next order](work-sessions/2026-10-08-teacher-assisted-collection.md).
+
+## October 7 same-player Giovanni and reserve/nurse qualification
+
+Accept actual configured004:all eight badges,TM27/native flags,29/36story,13entries,
+20,747cash,full party restoration and zero-input reload. Four model goals and34
+battler choices win all three Viridian battles. Three support attempts include
+one failed dialogue repair,two successes; the full-bag reward failure and zero-input
+menu failure remain. No rematch,save edits,tactical override,TRAIN,fit or publication.
+
+The production in-party reserve copy preserves24battles,one metered inner nurse,
+3,145XP and original individuals,then reloads context/costs. Partial evolution is
+still a failed goal. All five diagnostic attempts retain their costs; no copyback.
+Do not infer combined boxed-loan hard-interruption safety from these separate tests.
+Keep the exact failed profile excluded while progressing toward Victory Road.
+828 targeted runtime/configuration/loan/gym tests pass,not full CI. Three complete
+battle hash chains and all14 protected pins verify; all workers actually exited.
+This implements Astra's existing audit,not a newly commissioned external review.
+[Result and next work](work-sessions/2026-10-07-configured-giovanni.md).
+
+## October 7 configured player and Sabrina
+
+The verified October 7 audit fixes now support a stable repository-owned entry
+point, exact capability exclusion and retained-individual loan settlement. Actual
+Silph011 continues to Sabrina: two model goals, 22 learned combat choices, four
+ordinary faints and one support restoration. Native badge/reward flags, TM46,
+seven badges, 28/36 story objectives, 13 entries and full HP/PP/status verify.
+Fresh-process inspection uses zero inputs and selects Giovanni from ten choices.
+
+The actual failed-loan copy returns with stock and earned XP preserved; 121 inputs,
+7,536 frames, 12.405 seconds. Its first zero-input enum failure remains retained.
+No copyback, TRAIN, fit, promotion, save edits or publication. All 12 protected
+pins remain unchanged; 443 focused runtime/config/recovery tests pass, not full CI.
+Accept this milestone, not complete interruption safety: hard budget reserve and
+full inner nursing aggregation remain open, with the failed profile quarantined.
+Pete clarified that the intended review was Astra's existing October 7 audit,
+which is the basis of these repairs; no new external review is pending.
+All workers actually exited.
+[Result and next work](work-sessions/2026-10-07-configured-player-recovery.md).
+
+## October 7 project audit and documentation cleanup
+
+The independent read-only audit verifies healed Silph011, reward flags, protected
+pins and unchanged bytes. Its ordinary shared menu selects Sabrina from 11 choices
+but still exposes the previously failed boxed evolution without a settlement guard.
+The current private driver's static dependency closure has 168 helper modules.
+All 319 added base-model readiness/challenge/preparation feature rows are zero;
+older coarse features and the separate scoped consequence head remain available.
+
+Decision: durable existing-player configuration and loan recovery, then Sabrina
+without a session-specific helper. No new game, general battler/sequence redesign
+or automatic fit. 278 focused runtime tests and 192 documentation/focus/roadmap
+tests pass; all Markdown links and targeted lint pass. This is not full-suite CI.
+No gameplay, new weights, external reviewers, save edits or publication occurred.
+Thirty-eight obsolete plans were archived with backups and links preserved;
+current instructions and scoreboards now distinguish integration from learning.
+[Audit and executable work order](work-sessions/2026-10-07-project-audit-and-refocus.md).
+
+## October6UTC — stocked League closes;medicine learner not adopted
+
+Codex's zero-input audit verifies concurrent Champion/Hall of Fame93bd67bc,
+twelve stock/goal contexts,93learned combat choices and zero tactical overrides.
+Six genuine goals/12queries,eight support including normal15000purchases;
+four FullRestores/two Revives consumed,cash32230. All earlier losses/costs remain.
+Eight actual TRAIN consequences/one44-example fit improve error but not useful
+medicine choice;reject native adoption and keep36-row head. Pete permits a
+disclosed automated reserve as a temporary final-player exception,not learning.
+Public default-off inventory guard preserves control priority;actual zero-input
+checks return support when empty and13real alternatives when full.243public/
+seven private focused tests/style pass;workers exited. No external review,
+global promotion,registration or final fresh-Red credit. Next whole-player
+real-option composition,not League replay,more same-data refits or another learner.
+[Evidence/work order](work-sessions/2026-10-06-autonomous-red-completion-goal.md).
+
+## October5 UTC — selected copy reaches124;recovery remains supplied
+
+Codex's separate zero-input audit reopens10native attempt terminals and13goal
+before/after pairs,replays8genuine/5sole-option selections and reconciles journals,
+retained-terminal carry,currency,original specimens/moves and unique-source event.
+Moltres uses6Ultras;Porygon spends9999coins;124entries/85specimens verify.
+Original six fully restored,18920cash/41Ultras.18operations/16747inputs/1265377frames/
+143.34814416593872seconds/6nurses include every failed goal/support operation.
+
+Accept native forward collection outcome,not uninterrupted autonomy:failed Moltres
+return stays failed,native Dig recovery supplied;3partial League losses incur36995
+blackout penalties. All8genuine choices use exploration,6also highest-scoring.
+Porygon is sole-option.499K decisions and10supplied status-settlement turns stay
+separate.163focused tests/private compilation pass;native/audit workers exited.
+Zero TRAIN/fits/weights/promotion,protected actual124/main unchanged,freshRed0/5.
+Next connect actual history/readiness and existing recovery without operator
+relaunch,not another collection replay. No external review/independence claim.
+[Evidence and next work](work-sessions/2026-10-05-model-directed-collection-finish.md).
+
+## October5 UTC Second earned resource connection
+
+Codex's separate zero-input audit reproduces three actual Model141choices and
+reopens before/after snapshots,resources,original roles,9828journal rows and
+inherited costs. One worker earns59598through two five-room native League/
+Continue/nurse cycles,then buys60coin lots/60000:426cash/4720coins.
+124K choices,1faint/2failed moves and existing mechanics support remain disclosed.
+Native/audit exited0;36focused tests/private compilation pass,no public repair.
+
+Accept narrow native repeatability:combined three profitable Leagues/two earning-
+spending connections. Reject broader allocation/independence/farming promotion;
+all sampled choices use exploration,extra income not highest-scoring. Zero TRAIN/
+fits/weights,122/83unchanged,actual124/main protected,freshRed0/5. No outside
+review/quota probe. Next:sustained choices toward Moltres/Porygon,not more
+qualification-only funding. [Record](work-sessions/2026-10-05-second-earned-resource-cycle.md).
+
+## October5 UTC — one earning/return/spending connection passes
+
+Codex's separate read-only audit replays both saved choice seeds and verifies
+the five-room29799payout,current Champion/HOF,native credits/Continue/reset,
+original-six restoration and34000for34coin lots. Cash828/coins1720 reconcile;
+all6642journal rows/3321inputs/244362frames/one nurse carry into the context.
+88K choices,2faints/6failed move executions and mechanics support stay visible.
+
+Accept the opt-in connection,not broad farming or strategic mastery:both choices
+use exploration;income is not highest-scoring. Native/audit exited0,261focused
+tests/scoped Ruff pass;zero TRAIN/fits/weights,promotion or new registration.
+Actual124/main/old receipts stay protected;freshRed0/5. No external review or
+quota probe. Next test a second forward earned cycle,without forced income/reset.
+[Evidence and next work](work-sessions/2026-10-05-model-owned-resource-return.md).
+
+## October4 local / October5 UTC — prepared goal binding passes narrowly
+
+Codex's subsequent zero-input native audit reopens the corrective terminal,
+replays the persisted selected-goal seed, verifies exact121to122credit, Articuno
+source consumption, eight drops, stock and original-six/field-role return.
+8448journal rows and all4224inputs/329280frames/6nurse visits reconcile.
+The original interrupted attempt/export error and recovery remain unchanged;
+the later adaptive copy is correlated, not an independent study or outside review.
+
+Accept destination-choice binding only. Preparation, status, ball and return
+policy stay supplied; near-tied scores are not learned strategy evidence.
+265focused ROM-free tests/scoped Ruff pass, not full-suite/CI. Native and audit
+workers exited0. Actual124/main/models unchanged; zero new TRAIN/fits/promotion,
+freshRed0/5. No external agent, quota probe or publication. Next repair the
+existing resource-return seam and test a genuine choice, not forced farming.
+[Evidence and next work](work-sessions/2026-10-04-model-owned-special-acquisition.md).
+
+## October4 — actual124contract passes;assistance remains explicit
+
+Codex's separate zero-input Audit27verifies all124declared native-route entries,
+exact unchanged27exclusions,85specimens,original six/field roles restored and
+safe actual1464e577/context2c77fc77. It carries the pinned Audit26history,
+rechecks sealed hashes,then reopens the new native suffix without gameplay.
+242family operations/789669inputs/69891482frames and all retained losses/costs
+reconcile. Both actual cash penalties and200paid coin lots survive verification.
+A bound accounting successor charges one missed native nurse without rewriting
+the original receipt/context. No capture replay,source reset,cheat or copyback.
+
+Family49genuine goal choices;only6of this goal's22new registrations follow
+genuine choices. Birds/Porygon preparation and much League recovery remain
+supplied support. No new TRAIN/fits/weights/promotion;fresh autonomousRed0/5.
+894focused ROM-free tests pass,not full-suite/CI. Native/audit exit0;no external
+reviewer,quota probe or publication. Historical failed probes/copy nurse-count
+limitations remain disclosed. Next proposal is special-source goal ownership,
+not another exhaustive actual-save collection run.
+[Evidence and next work](work-sessions/2026-10-04-overnight-player-work-order.md).
+
+## October3 — overnight methods work;strict income remains unqualified
+
+Codex's zero-input audit reopens native journals,selection receipts,cumulative
+costs,original-individual/specimen guards and protected source/model pins.
+One earned ancestry14to59owned/10to54specimens;121model choices/77successes.
+80260inputs/6118447frames and182goals reconcile,including failures and three
+once-only nurse corrections. Native export/reload passes;workers exit,task pauses.
+1460focused checks and13documentation-surface checks pass,not full-suite/CI.
+No external review,new fit,parameter learning,main copyback or publication.
+Porygon mechanics are teacher-funded TRAIN-only;selected League fails despite
+supplied native recovery;slots stop net-59. Last fishing route-cap stop remains.
+Next measured existing execution/discovery repair,not another learner or battler.
+[Evidence](work-sessions/2026-10-03-overnight-red-collection.md) · [Next work](work-sessions/2026-10-03-collection-throughput-next-work-order.md).
+
+## October2 — useful moves and earned Silph completion
+
+Seven actual TRAIN contrasts/two fits plus existing status-selector reuse finish
+the rival,11F guard,Giovanni,Master Ball and healthy Saffron terminal3f27b05e.
+Five battles/194choices/three wins/two retained losses;94stay overrides remain
+supplied control. Strategic readiness coefficients and final freshRed0/5remain
+unchanged. No external reviewer,publication or main copyback. Native input/cost/
+history/choice replay and final state proof pass;no broad promotion.
+[Dated evidence and executable next work](work-sessions/2026-10-02-silph-useful-moves.md).
+
+## October1 — earned Tower closes with assistance disclosed
+
+Codex independently verifies the retained earned ancestry,all4630inputs,
+43goal attempts,232combat choices,native rescue/Flute flags and healthy Lavender.
+Eight wins/two losses;34model goals/9support and34switch overrides. One native
+developer-selected BubbleBeam lesson changes preparation,not frozen weights.
+Failed copy and exit-healing costs remain separate and counted;no copyback.
+529focused ROM-free tests pass,not full-suite or an outside-agent review.
+0TRAIN/fits/registrations;main,separate collection and final fresh-Red0/5unchanged.
+Native/audit stopped,no publication. [Evidence and next work order](work-sessions/2026-10-01-earned-tower.md).
+
+## September30 development contract and instruction audit
+
+Pete approved outcome-scoped batches,repeatable development,controlled TRAIN
+fixtures and reversible provisional integration. Codex reconciled the North Star,
+active-state source/checker and current handoffs;removed stale per-lesson approval
+requests and separated exploratory campaigns from official frozen evaluation.
+All60retired lanes,legacy counters,old failures and final124-species Red acceptance
+remain. Fit4/29usable-row candidate6a4a5df4 is still rejected;no native work here.
+184targeted policy/documentation/roadmap tests,changed-file Ruff and two-source
+type checks pass;not a broad suite or independent review. No outside agent or push.
+[Audit and next authorized work](work-sessions/2026-09-30-development-contract-audit.md).
+
+## September30 — retained target passes;connected loss response remains unqualified
+
+Gate1zero-input audit verifies654earnedXP/intact roster/settled return. All8paired
+arms areclosed:baseline0/4,candidate1/4and better frozen utility,but selection2/4.
+Connected native healing/preparation/challenge works and loses;one retained
+model-selected rematch also loses. No strategic goal substitution. All24TRAIN
+initial loss-history columns werezero. Pete approved4post-loss questions/onefit/
+one retained continuation within the original cutoff;Pallet-return preflight failed
+beforeinputs and was prospectively replaced by four distinct Cerulean questions.
+Original models/main saves/League protected;no promotion or whole-game claim.
+127behavioral and159focus/docs tests passed earlier,not a new full suite.
+[Current evidence and cutoff disposition](work-sessions/2026-09-30-preparation-three-gates.md).
+
+## September30 —preparation candidate learns healing but fails practical check
+
+Codex reopened2separate creationtranscripts,6atomic TRAIN outcomes,all141retained
+prior rows,8paired native phase/action ledgers and8settled endpoints with0inputs.
+Candidate147,d73c6a70,passes2%retention(old+0.3666%,new−99.9806%)but baseline/
+candidate each1/4wins and4500debits;902/1092actions,79248/94032frames. Candidate
+chooseshealing wheninjured,notgrindingwhenunderleveled. No practicaladvantage,
+deployment orstagepromotion. Both incomplete grassdoses staynegative;atomic
+no-internal-heal setup doesnot invalidateexisting continuousrecoverycapability.
+Two upstreamgroups/fourcorrelatedcontexts;fixedfollow-through,notfullautonomy.
+144focusedtests/changed-fileRuffpass;no full-suite claim,externalreview orpush.
+[Retained audit and next executable work](work-sessions/2026-09-30-learned-preparation-v1.md).
+
+## September27 — connected choices and independent branch rejection
+
+Codex audited6known-copy choices and8comparison arms from2new DEVELOPMENT origins.
+All source/step/action/battle receipts reopened with0inputs. Baseline/candidate:
+0/0quests,4/1trainer events,4/7blackouts,749/936cash debits. Reject candidate164;
+no refit or campaign promotion. One baseline rival win and595payout qualified.
+Retain one zero-input setup-context failure and one incomplete final history
+summary;the complete last battle was independently authenticated without replay.
+Single-starter/Pallet-return fixture limits disclosed. Immediate-unit horizon
+probe is diagnostic,not a causal proof.1406targeted tests,Ruff and type checks pass.
+No external review or publication. [Audit](work-sessions/2026-09-27-player-cerulean-branches.md).
+
+## September27 — bounded preparation and provisional branch fit
+
+Codex separately audited the Route4copy's645actions/47832frames,8wild wins,
+639XP and safe return with target20unfinished. No campaign/source substitution.
+One predeclared TRAIN-only selection retained141old+23new rows,including every
+Misty loss. Candidate164passes2%retention and lowers new TRAIN error92.395%;
+matched-known-menu predictions differ and preserve order equivariance.
+All164row hashes,corpus/model and selection reconstructed;no independent policy
+comparison,adoption,battle refit,external review or publication.2523targeted tests,
+Ruff and685-file type checks pass. [Audit](work-sessions/2026-09-27-player-cerulean-branches.md).
+
+## September27 — retained Cerulean and readiness authority audit
+
+Codex independently verified13native source/terminal chains,action traces,
+battle receipts,party identities and all paid costs through healthy Cerulean.
+40goal attempts,31successes/5failed/3execution errors/1uncredited missing original
+verification;10genuine goal choices,229learned combat choices,18wins/3losses.
+Packet11evolution observation failure remains preserved;separate zero-input
+reconciliation restores its cost/history context without replay or success credit.
+All252new baseline readiness weights are zero;no learned-anticipation claim.
+2242targeted tests,13optional skipped,Ruff/678-file types pass;not full suite.
+Misty/Bill branching deferred explicitly by Pete. No fit,promotion,main-save
+change,external review or publication. [Report](work-sessions/2026-09-27-player-cerulean.md).
+
+## September25 — pre-campaign dependencies and major training-contract gap
+
+Codex qualified native Lickitung and Poliwag-to-Jynx on one forward development copy:
+111owned,78specimens,11968cash;primary109unchanged.5failures retained,15reload checks,
+246focused tests. Shared post-trade settlement repaired after actual delayed prose.
+Composite dependency wrapper unit-tested;native child chain qualified before it.
+Authenticated Model141 corpus/118headers:one TRAIN lineage;137ordinary rows contain
+no selected story/development examples,plus4native acquisitions. Newer teacher path
+is acquisition-only. Pause before coordinated training-contract redesign per Pete's
+instruction;not a claim that all unused roots are exhausted.0fits/choices/promotion.
+No external reviewer or publication. [Result](work-sessions/2026-09-25-pre-campaign-dependency-audit.md).
+
+## September25 — model-selected capture preparation
+
+Codex verified the five-step bounded packet:readiness/exact affordable reserve,
+source and arrival guards,265focused tests,and one native frozen-model purchase
+over fossil acquisition.20UltraBalls/24000,67actions/5460frames;fresh reserve satisfied.
+Three packets/six states audited with0reload inputs/frames. Future trainer completion
+uses native event/result/payout verification rather than trusting reused roster RAM.
+Raw/historical episode labels remain unchanged. No external review,fit,registration,
+copy-back,stage promotion or publication. Ball type/quantity stay supported.
+[Result](work-sessions/2026-09-25-capture-readiness.md).
+
+## September25 — authorized Articuno Master Ball copy completes bird checkpoint
+
+Codex verified all13new source links,eight native drops,exact one-MasterBall debit,
+new slot6Articuno,event2522/object removal and healthy field settlement. Combined
+42packets/192states/50receipts reloaded with0inputs/frames. Both original failed
+captures and protected actual/models unchanged. New3combat choices,0goal queries/fits.
+No production code changed;no continuous two-bird/final-run promotion claim.
+Ultra Ball odds derived from native algorithm are theoretical,not new native wins.
+No external agents or publication. [Report](work-sessions/2026-09-25-articuno-master.md).
+
+## September25 — legendary access and exhausted Articuno allocation
+
+Codex audited29packets,141states and47capture receipts with0reload inputs/frames.
+Moltres captured after a disclosed same-encounter allocation amendment;all8Seafoam
+drops and Articuno approach verified. Articuno's16GreatBalls failed despite paralysis;
+live encounter retained,owner recovery choice pending. Original saves/models unchanged.
+508focused tests and8-file typing pass;notfullsuite. Two native trainer wins have
+unresolved old episode metrics;events/payout independently confirm them. Do not fit
+those bad terminal labels. No goal queries/fits/promotion/external review/publication.
+Flash/Claude not used;quotas unavailable. [Report](work-sessions/2026-09-25-legendary-access.md).
+
+## September25 — earned League finish independently audited
+
+Codex reconstructed87learned choices across five native wins and verified every
+item effect,predecessor,resource change and concurrent Champion/Hall-of-Fame flag.
+36/36development story;0illegal actions/teacher combat/save edits/fits. Previous
+loss and recovery costs remain;all466prior stages and both models unchanged.
+419targeted tests,not full-suite certification. Broad candidate screen stays failed;
+preparation/healing remain support;freshRed0/5unchanged. No external agents or push.
+[Report](work-sessions/2026-09-25-earned-league-finish.md). Next postgame/healing and
+ownership audit,not another battler refit solely to eliminate natural losses.
+
+## September25 — Lance native win and outer-verifier failure separated
+
+Codex independently reconstructed14choices/54events and verified all five foes,
+one faint,6138payout,both Lance flags and the copy envelope. Actual462 unchanged.
+The original outer guard wrongly applied no-faints to StoryCopyController. Its
+exact-type,source/model/target-bound repair passes366focused tests and a zero-input
+retained-terminal recheck. No native replay,fit,earned Lance or external agents.
+Original error and failed broad qualification remain. [Report](work-sessions/2026-09-25-lance-candidate-copy.md).
+
+## September25 — earned Agatha independently verified
+
+Codex reconstructed13candidate choices and diagnostics from51events,authenticated
+all462prior stage records,and verified actual victory,payout,party,inventory and
+the final progress envelope.33/36story,zero faints,7PP spent,5940earned.
+347focused tests;no broad promotion or independent-root claim. No external agents.
+Read-only resource audit supports a bounded Lance test without new grinding;
+Farfetch'd4HP and absent HP-healers remain explicit. All gameplay stopped.
+[Report](work-sessions/2026-09-25-earned-agatha.md).
+
+## September23 — model-selected Lorelei win independently reconstructed
+
+Zero-input audit reproduces Model141's selection from two actual offers and all53
+damage-actor battle decisions;207events, native Lorelei flag,5544payout,10471XP,
+unchanged bag/boxes/dex and retained source chain verified.161targeted tests pass.
+The original loss remains; no teacher battle, save edit, fit or default promotion.
+Legacy goal input does not include aftermath: the proposed loss-aware learner is
+deferred, not completed. Four fainted/Surf0PP make recovery the next question.
+No external reviewer or GitHub publication. [Session](work-sessions/2026-09-23-lorelei-model-goal-win.md).
+
+## September23 — recovery and Victory Road exit audited
+
+Zero-frame independent audits authenticated338/339 source, helper and protected-input
+identities, native recovery, cumulative push receipts, resource preservation and
+30/36story evidence at Indigo. No new model query/fit/registration or League entry.
+167targeted recovery/encounter/boulder/Strength tests passed, not the full suite.
+Cartridge preview exposes first-opponent53–56 against party38–52; Snorlax role and
+League actor binding remain next. No external reviewer, publication or gate change.
+[Session](work-sessions/2026-09-23-victory-road-exit.md).
+
+## September23 — balanced damage successor passes independent reconstruction
+
+Astra corrected the packet's invalid timing contract, an opponent move-level
+mismatch and missing failure/uncertainty checks. V1 remains failed and consumed.
+V2 completed one72-case fit and48fresh comparison cases: mean damage regret
+0.13965→0.00906,exact-best27→41,all group/family/root and old-damage retention
+guards passed.4320branches,37,920events and coefficients independently verified.
+Freeze candidate4ea4cfde for bounded full-battle composition. No story input,
+deployed actor change, external reviewer or GitHub publication. The later loader
+repair rejects boolean numeric fields and leaves the actual candidate identical.
+[Session](work-sessions/2026-09-23-interaction-damage-v2.md).
+
+## September22 — earned reserve preparation audited; retrospective synchronized
+
+Codex retained the completed40-outing preparation and independently checked stage283:
+160wild encounters,153wins,496learned choices; three reserves39,fullHP/PP and25262cash.
+Two faints,32status changes, seven nonwinning exits and three failed support stages remain
+recorded. Giovanni was not fought. Spinner geometry remains unresolved; extra waiting is
+not a route repair. The read-only save audit corrected stage280's Viridian-anchor claim:
+the actual recovery anchor is Celadon. No replay, new fit or authority promotion.
+[Evidence](evidence/red-giovanni-readiness-2026-09-22.json).
+
+Pete requested an updated YouTube narrative and retrospective documentation. Current public
+summaries and generated roadmap now distinguish primary collection, earned story, TRAIN and
+final-run evidence. The [research record](research-retrospective.md) preserves negative
+results, privileged observations, owner admission despite the failed efficiency screen,
+reproducibility limits and missing controlled comparisons. No novelty or publication claim.
+216targeted tests belong to the preceding gameplay/code checkpoint, not this documentation
+refresh. No new gameplay, fitting, external Flash/Claude review, usage measurement or push.
+Refresh validation:12documentation tests, link/active-state checks, collection-registry check
+and whitespace checks passed; the regenerated roadmap was visually inspected. The public-
+artifact check still flags an unchanged home-directory-shaped privacy-test fixture in
+`tests/test_collection_continuation_adversarial.py`; verified present at the parent commit.
+That unrelated pre-existing finding is not reported as a pass or silently exempted.
+
+## September22 — later effects qualify; combined actor rejected by native screen
+
+Pete approved one fresh packet. Ten native later effects passed all five conditions,
+9/10correct,Brier0.042024. One fit preserved182preferences. Candidate1de5e6a2 won
+38/64versusK32, but13concerns/201decisions failed readiness.148episodes/1944events/
+518148frames and355learned choices independently verified;585tests pass/13skipped.
+Four flagged inputs match measured targets; two favor the flagged move. Two Rest
+flags were asleep/nonexecuted. Preserve raw alarms, targets and failure; no implicit
+exemptions, another unchanged fit, reserved access or promotion. Next reconcile
+value/readiness semantics. No external reviewer, save changes or publication.
+[Report](work-sessions/2026-09-22-native-later-selector.md).
+
+## September22 — finish pipeline prepared; native coverage still blocks fitting
+
+Codex implemented a bounded qualification/fit/screen runner, independent evidence
+auditor and guarded128-case reserved comparison. Two native setup turns plus ten
+diagnostics yielded seven observed effects:6/7correct,Brier0.056345 passes the error
+bound. Coverage fails:7<8 and both occupied-confusion actors fainted before acting.
+Those suppressions remain unknown; no relabeling or threshold change. Zero fits,
+screens, reserved comparisons or promotions. A new ten-pair native qualification
+is prepared but awaits Pete's explicit decision.585targeted tests pass/13private
+skips; actual failed-packet guard rejects before ROM access/output creation.
+No external reviewer, earned-save changes or publication.
+[Plan](battler-finish-plan.md) · [Evidence](evidence/red-battler-finish-preparation-2026-09-22.json).
+
+## September22 — timing-aware auxiliary passes; battle authority unchanged
+
+Codex froze84prospective native turns, then one72label fit using unchanged28visible
+features. Reserved12configurations opened after fit:11/12correct,Brier0.034718<=0.125;
+all family/order gates pass.24distinct fitting vectors,12distinct held vectors, zero
+overlap. Correct full-HP opponent-first healing; retain one actor-first Recover error
+at52.22%. No heldout tuning or replay. Accepted narrow auxiliary generalization, not
+natural-party transfer or live combat.84rows/588events/111648frames independently
+reauthenticated;553tests pass/13private skips. Old raw-concern gate unchanged.
+Next unused later-turn qualification, then one constrained selector fit/screen.
+No save changes, external reviewers or publication.
+[Evidence](evidence/red-timing-effect-learning-2026-09-22.json).
+
+## September22 — combination implemented; later-turn gate correctly stops fitting
+
+Codex verified serialization and exact zero-augmentation scores on312contexts,
+preserving182constraints/rewardv2.12preselected native checks yielded10awake labels
+and2sleep suppressions.8/10correct,Brier0.19013>0.125: no selector fit or battle screen.
+Two full-HP Recover selections each healed55HP after enemy damage; prior auxiliary
+training always made the actor faster. Accepted the turn-order coverage diagnosis;
+rejected broad auxiliary integration. Raw concern flags remain unchanged but are
+not causal evidence of wasted healing. Independently reauthenticated12rows/84events/
+18492frames;537tests pass/13private skips. No promotion, save change, external review
+or publication. [Evidence](evidence/red-effect-selector-combination-2026-09-22.json).
+
+## September21 — narrow measured-effect learner passes; actor integration stays closed
+
+Codex verified six new Disable trace/plain pairs with exact terminal equality and
+two positive applications, retaining four no-effects. One fixed31iteration predictor
+fit used36native labels/12distinct feature vectors; six configurations on a withheld
+TRAIN root were opened only after weights froze.6/6correct,Brier0.00079751versus0.25.
+Independent read-only audit reauthenticated42rows,54logs/378events and paired states.
+No hidden actor features, learned battle choices, live promotion or earned-save changes.
+Accepted only a small assisted first-turn diagnostic, not natural-party transfer or
+battle-value knowledge. Preserve old rejections and unchanged readiness; next is bounded
+selector composition/later-turn support.527targeted tests pass/13private skips.
+No external reviewer, quota action or publication. [Evidence](evidence/red-measured-effect-learning-2026-09-21.json).
+
+## September21 — bounded story destination dispatch verified
+
+Codex added opt-in plural story bindings, preserved legacy callers, and verified
+84targeted checks. One frozen Model141 choice selected Hideout over Saffron; the
+chapter passed1061actions/90473frames, earned5481cash and obtained the Silph Scope.
+Independent zero-input menu/draw and terminal audits pass. Five battles and healing
+were scripted. Near-even probabilities establish no strategic superiority; native
+learned healing remains open. No fit, source replay, main-save change, external agent,
+quota query or publication. [Evidence](evidence/red-story-branch-development-2026-09-21.json).
+
+## September21 — gift learning and earned model qualification passed
+
+Codex implemented authenticated full-player unit-weight teacher admission and
+future-fit retention. Fixed TRAIN-only five-ridge selection plus unopened heldout
+passed: old error+1.7267% below2%; heldout error80.82%lower. Deterministic publication
+reproduced the frozen Model141 exactly. Six native gift/audit pairs pass.
+Model141 then ranked/selected Lapras from five real options and acquired it into
+storage without teacher input or redraw. Independent terminal/gift audits pass:
+108/124,78specimens,15968cash; party/resources intact and offer exhausted.
+415targeted tests, not full suite. Previous rejection and every failure preserved;
+no heldout/earned fitting, broad transfer claim, external agent or quota query.
+[Evidence](evidence/red-gift-model-qualification-2026-09-21.json).
+
+## September21 — semantic Safari successor completed, retain production model
+
+Codex found V1's incompatible action/frame scale and travel-only feature contrast
+using TRAIN evidence. Accepted prospective V2 units and isolated context assistance;
+historical V1 unchanged.16native TRAIN outcomes admitted, one153-row fit, all8new
+held-out native outcomes authenticated. Candidate1/4captures versus0/4, with
+old-row fitting error+5.42%; no promotion/refit or statistical superiority claim.
+155targeted tests and114learner regressions pass. Main save/model rehashed unchanged.
+No external reviewer or quota query. Next reconnect the exact Safari receipt to
+strict collection reserve ancestry; do not weaken it. [Evidence](evidence/red-safari-semantic-context-2026-09-21.json).
+
+## September21 — completed Safari pilot, experimental candidate not promoted
+
+Codex authenticated all8TRAIN choices and all8held-out native episodes, fit once
+with137prior rows retained, and rehashed the protected save/model unchanged.
+Accepted corrections: exact paid-endpoint recovery, prospective bounded search
+dose, trace-prefix cost admission and explicit-dose binding identity.135targeted
+ROM-free tests pass, not the full suite. Both policies4/4captures; candidate
+51.5%more frames and0.35%higher old-row fit error. No superiority claim or
+promotion. Correlated resets and same-recipe fresh parents limit inference;
+all original failures are retained. No external reviewer or quota query was used.
+[Evidence](evidence/red-safari-learning-pilot-2026-09-21.json).
+
+## September20 — K ordinary integration and earned-to-capture audit
+
+Codex verified explicit K/receipt scope, both cartridge ledge approaches, two actual
+payouts, a model-selected heal and500-cost Safari acquisition. Fresh state reads and
+complete event pairs verified the eventual Rhyhorn:97registrations,75specimens,573cash.
+Accepted corrections: unchanged-margin roster preparation, connected multi-goal ancestry,
+explicit restored-input key release and actual indoor-exit/rebind before paid Safari.
+The first two evolution budgets, first neutral recovery, first Safari search and wrong-
+timing continuation remain failed with their costs. Correct8/16timing resumed the exact
+paid endpoint; no second fee or new choice. Do not count recovery as unattended play or
+these DEVELOPMENT outcomes as new fits.2958targeted tests pass/13skipped, not full-suite.
+No external agent, quota query or GitHub publication. Next package the proven paid-session
+restart, then renewable League scope. [Evidence](evidence/red-k-earned-spending-integration-2026-09-20.json).
+
 ## September 19 — retained-state lifecycle continuation
 
 Codex accepted the narrow lifecycle repair, preserving the strict funding verifier and its
@@ -605,7 +1891,7 @@ blocker catalog, and rejected globally treating missing Crystal predictions as c
 Crystal V3 protocol is retired unopened for this mission; its replacement separates supported
 performance from unsupported-mechanic abstention. The corrected roadmap is GO for adoption, not
 execution. Full evidence and disposition are in the
-[review adjudication](red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
+[review adjudication](history/retired-plans-2026-10-07/red-to-crystal-roadmap-review-adjudication-2026-08-30.md).
 
 ## V2 terminal repair — Claude/Antigravity review and Codex adjudication 2026-08-29
 
@@ -1622,3 +2908,567 @@ Mission check for this planning task:
 - At closeout Antigravity reported100% five-hour and65% weekly Gemini quota remaining, plus100%
   five-hour and weekly in its separate Claude/GPT pool. Claude print mode worked, but its interactive
   usage view requested a fresh login, so no direct Claude percentage is claimed.
+
+## Candidate K exact-target and whole-battle verification (2026-09-20)
+
+- Codex authenticated old/new returns on16identical captures and preserved the original
+  rejected fit. The separate canonical-target protocol protects302unaffected contexts
+  independently; all20numeric retention checks passed. Only the control head changed.
+- K/J both won8/8 paired TRAIN battles; faints5/11 and PP92/101, but HP loss1437/1419.
+  All16event chains, terminal outcomes and saved-state hashes were independently checked
+  read-only. Zero invalid actions, teacher queries, prescribed first actions or replay.
+- 152targeted ROM-free tests and type checks across544source files passed. This is not
+  a full-suite pass, natural six-member qualification or production promotion.
+- No Flash or Claude invocation this session; no external review or quota reading claimed.
+  [Evidence](evidence/red-battler-k-control-result-2026-09-20.json).
+
+## Natural six-member qualification audit (2026-09-20)
+
+- Codex verified all17preparation parent/state/cumulative-cost links, keeping seven
+  failed stages and every earned resource change. Original3700continued;3900booted once.
+- All eight J/K cells won with210model choices,841hash-chained events and exact210cash
+  payouts. K used late slots on both origins. Null terminal-slot summary failure was
+  repaired through read-only reaggregation; original outcomes and failed summary retained.
+- Gate passes only measured natural six-member execution. Same enemy roster, two origins;
+  K16faints versus J15, so no funding-efficiency, superiority or League claim. No fit or
+  automatic production promotion.2403targeted tests pass,13integration tests skipped.
+- No Flash/Claude invocation or external review; service quotas unavailable.
+  [Evidence](evidence/red-natural-six-qualification-2026-09-20.json).
+
+## Status-learning independent artifact audit (2026-09-21)
+
+- Codex re-read all390terminal files and4,832hash-chained events, recomputed331
+  comparative branch returns and their actual observation vectors, and checked
+  heldout capture exclusion and frozen component identities. Zero invalid actions.
+-815decision records include358prescribed first choices and457learned choices.
+  Teacher-created initial states are not natural gameplay; neither candidate is promoted.
+- Two fits learned44TRAIN contexts; withheld4/8vs4/8then3/8vs5/8. Both rejected.
+  Protected K, Model141, earned story and primary collection hashes are unchanged.
+- No Flash/Claude or external review was used; service quotas unavailable.
+  [Evidence](evidence/red-status-learning-2026-09-21.json).
+
+## Balanced status artifact audit (2026-09-21)
+
+- Reconciled560terminals,9092event records,480branch targets and196candidate
+  predictions; frozen K components and both saves unchanged.804targeted tests pass.
+- Withheld13/32versus12/32 fails the frozen behavior gate:44applicability flags,
+  196versus76decisions. No live promotion. Label audit supports continuation-credit
+  mismatch as a hypothesis, not a proven sole cause. All losses remain.
+- No Flash/Claude or external reviewer; service quotas unavailable.
+  [Evidence](evidence/red-balanced-status-learning-2026-09-21.json).
+
+## Useful defeat recovery audit (September30–October1,2026UTC)
+
+- Codex verified four sealed native execution ledgers and three completed Misty
+  rewards on three exposed logical development contexts;20strategic choices and
+  126story-combat choices. All eight story battles retain3wins/5losses,zero invalid
+  actions,teacher queries,teacher interventions and memory-write actions.
+- Seven new usable actual TRAIN outcomes augment29older usable rows. Three fits
+  retain39records including3censored outcomes;no DEVELOPMENT fitting. New penalty
+  schema has no positive label;do not claim that penalty has been learned.
+- Scoped opt-in head is provisionally useful,not globally deployed. Protected
+  Model141,main,League,collection109/124and freshRed0/5are unchanged. Source ancestry,
+  preparation/healing/route/mechanics support and inefficient repeated losses remain
+  disclosed. This is not independent transfer or a battle-win-rate estimate.
+- 878targeted ROM-free tests,Ruff and focused static checks pass;not a full suite.
+  Private helper style debt remains. No Flash/Claude,external audit or quota reading.
+  [Report](work-sessions/2026-09-30-useful-defeat-recovery.md).
+
+## Connected Misty/Bill audit (October1,2026UTC)
+
+- Codex reopens nine sealed gameplay ledgers/all18618actions and three zero-input
+  constructor failures. Both native rewards,cumulative costs and protected sources
+  verify;teacher goal choices/combat queries/interventions,memory writes and invalid
+  actions are zero.59model choices(20rejected diagnostic,39protected branch),
+  19support/61policy queries/533combat decisions;all173battles won in this chain.
+- Existing branch selector and scoped recovery compose without score blending or
+  objective names as learned features.0new TRAIN/fits;protected models unchanged.
+  Rejected164component remains rejected after a declared earned-state pivot.
+- Controlled exposed ancestry,wild160action mask,over-preparation,prospective
+  40to80goal extension,route/dialogue support and failed goals are disclosed.
+  No efficient readiness,optimal branch order,independent transfer or freshRed
+  qualification claim. Separate109/124and final0/5remain unchanged.
+- 750focused ROM-free tests,focused lint and seven-module typing pass;not full-suite
+  qualification. No external reviewer/delegation or quota reading. Next:existing
+  Vermilion/S.S.Anne/Cut connection on the earned terminal,not a new planner.
+  [Report and ordered work](work-sessions/2026-09-30-learned-cerulean-ownership.md).
+
+## Overnight recovery/player audit (October5,2026UTC)
+
+- Codex independently reopens the retained native sources,controller traces,
+  model choices,battle histories,censuses,contexts and accumulated costs.
+  AUDIT-03passes frozen1–43with zero inputs/frames;DELTA-AUDIT-44adds the final
+  candidate trial.265genuine goal choices remain distinct from331attempts and
+  supplied phases. Source19's report debt closes;21's censored switch stays masked.
+- Four actual TRAIN contexts/80branches,one existing damage fit and eight paired
+  withheld episodes are separate from that original audit's TRAIN0projection.
+  Regret1.2849to0,no worsening among13old groups;withheld2/4wins each and higher
+  candidate mean return. Status/control/switch and protected Model141/Kunchanged.
+- Native candidate44loses after three foes. Logged Water Gun Disable plus Ice
+  Beam0PP explains unavailable coverage;do not infer confusion solely from PP.
+  Prepare useful owned coverage/reserves next rather than claim battle mastery.
+- Scoped ROM-free checks pass,not a full-suite/CI claim. All workers exit;no
+  final exam,promotion,copyback or publication. No Flash/Claude/external reviewer,
+  subagent dispatch or quota reading. [Evidence and work order](work-sessions/2026-10-04-overnight-recovery-player-work-order.md).
+
+## Frozen League preparation reuse audit (October6,2026UTC)
+
+- Four native arms retain21413attempted/21412completed inputs,62wild wins,
+  two Lorelei losses and22200cash debits across isolated copies;no copyback.
+  My wrong Erika preview quarantines112baseline/head strategically. The exact
+  driver is archived;prospective contract-derived Lorelei preview passes admission.
+- Corrected162baseline/head each makes four parent preparation selections,20wild
+  wins and zero child queries;identical terminals stop at the twelve-heal cap.
+  Twelve variants dominate exploration. No head/battler failure claim or promotion.
+- Read-only audit independently verifies source/model pins,battle receipts/native
+  terminals and unchanged protected completion/old audit.1103focused ROM-free
+  tests and five changed modules' typing pass;broader prior debt remains.
+- No new TRAIN,fit,weights,registrations,external reviewer,subagent,Flash/Claude or
+  publication. All native workers exited. Next reuse the existing highest-score
+  parent with a narrowly admitted DEVELOPMENT child,not a new planner or fit.
+  [Evidence and ordered next session](work-sessions/2026-10-06-league-preparation-ownership.md).
+
+## Highest score League recovery integration audit October6 2026UTC
+
+- Codex independently replays all four parent/four child selections with frozen
+  models and zero inputs/frames. Two earned continuations win Lorelei with one
+  retained loss;121combat choices,no wild battles/new grinding,1873inputs and
+  150actual blackout debit. Source/model/terminal/history/cost carry verify.
+- Default-off DEVELOPMENT admission/versioned parent-rule receipts preserve
+  defaults and other partitions. Complete preparation alternatives remain;
+  no new sampler,learner,TRAIN,fit,weights,registrations or global promotion.
+- Both winning terminals have depleted PP;stronger carry is paralyzed and one
+  reserve was already fainted. No greedy-alone control,independent transfer,
+  efficient readiness,full League mastery or fresh autonomousRed claim.
+- 534focused ROM-free tests,three-module typing and focused style pass;not full CI.
+  All native workers exited;protected completion/legacy counters unchanged.
+  Routes,resource inventory,tactical screens and ordinary blackout support stay
+  disclosed. No Flash/Claude,external reviewer,subagent,publication or quota reading.
+  [Evidence and next work](work-sessions/2026-10-06-highest-score-league-recovery.md).
+
+## Earned collection and data audit October9 2026UTC
+
+- Codex independently authenticates the124-entry terminal,all four legendary
+  specimens,restored originals and21 protected pins with zero inputs/frames.
+  Ninety checkpoints/eighty-nine parent links reach concurrent Champion/Hall-of-Fame
+  proof; source hashes and lifetime costs carry forward. Protected main32 is unchanged.
+- The two recent instrumented collection blocks retain434 goal receipts and146
+  verified battle event chains;91 new flags,87 during model-owned goals/four support.
+  Zero new TRAIN/fits/runtime LLM queries. Related ancestry,mechanical support,
+  operator resumptions,ordinary losses and all execution failures remain disclosed.
+- The audit reads the151-row corpus and live choice/encounter/battle/economy/timing
+  journals. Thin healthy high-PP coverage,rank37,clipped optimistic scores and broad
+  exploration make useful goal learning the next test. This is not a controlled
+  model-quality comparison,independent battle win-rate estimate or all-archive census.
+- 1083 focused ROM-free checks pass; not full-suite,full typing or hosted CI.
+  All native/analysis workers exited. No Flash,Claude,external reviewer or subagent.
+  No publication,save copyback or official fresh-Red promotion; finalRed0/5 unchanged.
+- Next check feature separation,collect one authentic small TRAIN batch and fit once;
+  require reserved/native useful improvement. Reuse existing K,teacher bridge and
+  checkpoints. Do not replay coverage or rebuild the battler/sequence learner.
+  [Full evidence,limits and work order](work-sessions/2026-10-09-earned-collection-completion-and-audit.md).
+
+## Route information and retained learning audit October9 2026UTC
+
+- Codex checks prospective ordinary sight exposure against observed flags/live
+  overrides. Seven zero-input probes separate supported routes; no unseen rosters,
+  scripted-battle counts,probability claim or exact-capture-verifier change.
+- Fourteen TRAIN attempts produce12 authenticated lessons/two quarantines and one
+  151to163 full-retention fit. Compact sealing retains raw diagnostics,exact labels
+  and every native trace row; no replay or relaxed artifact/admission guard.
+- Four related151/163 arms each capture Ekans/Spearow with zero approach trainer
+  battles. Six choices/action-frame costs/terminal bytes tie;163 stays undeployed.
+  Final evolution gains actual XP but fails completion. No independent transfer,
+  final autonomy or copied progression is claimed.
+- 242 focused behavior checks and29 protected pins pass; no native workers remain.
+  Keep151 and accept scoped route information; next close durable configuration/
+  recovery. No external reviewer,Flash,Claude,subagent,publication or save edits.
+
+## October10 earned fresh progression and readiness reuse
+
+Four additional badges/Silph/Fly are earned on the current fresh ancestry. Three
+late-rival losses remain. Scoped existing native-TRAIN V2 readiness chooses45to46
+and46to47 preparation; the latter earns4579selected/7666partyXP before a37-choice
+rival win with two party faints. No teacher queries or memory writes occur.
+194 focused Fly/VictoryRoad checks/Ruff and48 post-test-fixture checks pass; the
+real earned Fly return and VictoryRoad entry verify. Zero new TRAIN/fits/weights.
+This is provisional composition and disclosed navigation,not a causal comparison
+or unchanged frozen-autonomy acceptance. Wild wins replace recent challenge
+history in the current features; retain that limitation for the scheduled review.
+No external agent,quota operation,publication or protected-save change.
+  [Result and limitations](work-sessions/2026-10-09-route-combat-learning.md).
+
+## October10 second two-hour review and zero-PP action audit
+
+Review due08:54:44 completes08:59:45UTC through055. Current ancestry has all eight
+badges/Fly/late-rival/VictoryRoad and26flags. Three candidates from12TRAIN contexts/
+295branches retain two failed screens;third resource screen improves,but actual
+League remains unqualified. Four healing-pilot branches yield0targets/0fits and
+close. Cumulative damage later healed is diagnosed,not silently relabeled.
+056/057 subsequently earn two enemy faints with model-selected carry,then lose
+Blastoise. Three zero-PP survivors expose the no-model-Struggle gap. The existing
+action/control/executor seam is extended with DEVELOPMENT-only model-owned
+Struggle;TRAIN admission and forced singleton guard stay unchanged.611focused
+checks/Ruff and exact057zero-input inspection pass;native58is underway. No full
+suite,League victory,DEVfit,new origin,external reviewer or final acceptance claim.
+[Evidence and contract](work-sessions/2026-10-10-eight-hour-earned-league.md).
+
+## October10 Champion completion and postgame connection audit
+
+The two-hour block closes with actual 094 Champion and concurrent Hall-of-Fame
+proof on the original ancestry. All five League battles verify; the Champion
+uses 11 learned attacks and six switches. Six Revives and three Full Restores
+between rooms are disclosed safety support, not learned medicine timing.
+Eight settled TRAIN outcomes and one retention-preserving fit make 44 examples;
+both reserved readiness expectations fail, so no general promotion is claimed.
+The completed Champion-specific refinement is retired prospectively.
+
+Postgame earns Doduo (26 to 27 registrations); 097 verifies eight objectives,
+including Super Rod, Elixir, Coin Case and storage relief. Actual 098 income
+uses older frozen K, not the scoped winning 111 actor, and loses to Lance.
+Final 099 retains that pending blackout with zero inputs and byte-identical state.
+Its rejection is the one-decision allowance below the existing minimum of two,
+not evidence requiring another recovery subsystem. All workers exited/released;
+no gameplay launched after the cutoff. Cash before blackout is not settled income.
+
+Reuse normal recovery and the existing 111/income/medicine connections next,
+qualify one relevant DEVELOPMENT copy, then continue model-selected collection.
+No external review, save restart, DEVELOPMENT fitting, copied gain or publication.
+[Session evidence](work-sessions/2026-10-10-two-hour-champion-recovery.md).
+
+## October10 connected income and retained-loss verification
+
+Codex verifies scoped111 reuse in the existing income route,not another battle
+model or an external review. Recovery100 records the real28809blackout debit.
+The one related diagnostic chain retains all losses/errors;its five wins cannot
+donate resources. Actual101 loses Champion after four Elite wins,then recovers.
+Actual102step0 verifies all five native payouts,concurrentChampion/HOF and normal
+credits/CONTINUE:29799gross,12600purchases,1500incoming-owned replacement,15699net.
+151 selects earning;111 owns combat;medicine/menus/return remain disclosed support.
+803targeted checks,Ruff and documentation checks pass,not full-suite/CI or frozen
+autonomy.0newTRAIN/0fits/0parameter updates. Same-save collection continues under
+the existing menu;protected094 and separate124-reference remain untouched.
+The block closes with12verified income cycles and8newnative flags27to35 in106.
+151selects normalresource/capture/storage goals once funded;111is not retrained.
+NineSafari misses remain beforeTauros/Kangaskhan successes. Native cash accounting
+charges all14paidvisits;generic fee attribution has a narrow nested-receipt gap.
+721latest tests overlap the803priorchecks;295protectedpins/Ruff/docs verify.
+106exits0/releases,fieldready201374cash,finalnursing time-censored. No nativeworker.
+[Current session](work-sessions/2026-10-10-two-hour-postgame-income-and-collection.md).
+
+## October10 paid exposure and retained NPC preparation recovery
+
+Normal selected nursing restores all six; independent Safari admission receipts
+report500 once even on failure. Native spending and historical receipts remain.
+Actual rare-search stalls expose equal-slot quoting and short full-visit exposure.
+Conditional native slot weights and safe native resource boundaries now apply;
+three actual visits reach42/50/40 encounters and reserve26exit steps. Accurate
+inputs do not change the greedy ranking,so existing151 exploration is explicitly
+declared,not forced-target selection or a new learner. Eight flags35to43 include
+Mewtwo,Lapras and Zubat. No new TRAIN,fit or parameter update.
+
+110's NPCtrade preparation boxes a nonloanable original and stops before trade.
+Its raw43-entry terminal and full meter remain immutable. All six originals are
+located;111 performs97normalinputs to restore them while preserving all stock,
+cash and flags. The guarded baseline is not refreshed. A scoped restoration
+declaration grants no new strategic loan. Pre-input donor/deposit admission and
+required repayment are repaired.94changed-behavior checks/public Ruff pass;
+successful full NPCtrade completion is not claimed. Fresh inspection spends zero
+inputs/frames and authenticates the restored111.112continues under72.
+395Safari/reporting and115launcher checks are also targeted and partly overlapping,
+not full-suite/CI.315protected pins verify;094Champion/HOF and separate main32/
+completed124 remain untouched. Final autonomous acceptance stays0/5.
+[Current session](work-sessions/2026-10-10-two-hour-healing-safari-fee-and-collection.md).
+
+Final:114retains51/124flags,16new,1908cash and all six originals active. Actual
+Porygon redemption follows200000normal coin purchases;normal trainer earning
+bridges shortages without item sales. Retained Dojo handoff yields Hitmonlee.
+Tangela,Shellder,Clefairy,Krabby,Diglett/Eevee follow. Every nativeworker exits0/
+releases before cutoff;final storage goal remains wall-time-censored. Zero-input
+validation authenticates terminal/context/costs/key specimens. HP/PP is not fully
+restored;no new learning or official gate. Continue actual114,not an earlier save.
+
+## October11 fresh/continuation and automatic-recovery review
+
+Codex implements and verifies the existing player connection; no external Flash,
+Claude or independent subagent review occurs. The completed data assessment is
+followed by one bounded packet, not a new planner or training architecture.
+Shared declarations now retain policy/component forwarding and actual gross cash
+debits. Strict direct/routed partial certificates and reserve-aware renewal retain
+failed targets while returning control. Unknown and zero-dose errors remain failed.
+
+Early and late related copies each add3registrations without donating progress.
+Early charges its839blackout loss and renews11times. The final late r8 subsection
+renews8times without operator dispatch; all earlier repair-release failures and
+full costs remain. Late finishes57flags/25687cash, all six originals active.
+996focused tests/Ruff pass, not full-suite or CI. Both r9 cold inspections use
+zero inputs/frames and leave terminals/contexts unchanged. New semantic bird-loan
+eligibility is observed; no new bird capture under that rule is claimed.
+
+All17source/endpoint files verify unchanged. The primary124completion remains
+assisted; zero new TRAIN/fits/weights, no final0/5promotion. Accepted r9 plus its
+corrected readiness-only declaration are ready for one prospective frozen run.
+The generic44head remains failed/undeployed. Runtime, policy and support must stay
+immutable during that run; unsupported failure is retained, not silently repaired.
+[Session record](work-sessions/2026-10-11-fresh-player-continuity.md).
+
+## October11 native ship departure review
+
+Codex alone implements and verifies the narrow native departure repair;no
+external or independent review is claimed. Closed r19 earns Brock,Misty,Bill,
+Cut and34entries before selected healing stops under native input lock.
+The observer,finite wait and explicit verified cross-map receipt now qualify
+the original healing intent while protecting resources,individuals,all boxes,
+dex,event changes,readiness and costs. Wrong locks/landings still reject.
+
+Qualification followups are one model training choice and two singleton story
+actions,+0entries,not three model choices or fitted learning. All failed copy
+results and source costs stay.313focused,595player/regression and164package/
+launch tests plus Ruff pass,not full-suite/CI. Separately frozen r20/v11 passes
+isolated preflight/startup and actually plays fresh. Observe this worker;no
+new subsystem or refit follows from the ship defect. Full frozen completion
+remains unproved. [Goal record](work-sessions/2026-10-11-autonomous-completion-goal.md).
+
+## October12 original sleeping battler accounting review
+
+Closed r20 verifies its own passage through the former ship healing failure,
+then stops at254outcomes and34registrations on a false off-slot PP comparison.
+The original sleeping nonlead remains alive with unchanged33/40/18/30 PP;
+field-leader30/20/30/21 is unrelated. Codex reuses the existing original-battler
+identity proof in sleep recovery;real PP changes,missing evidence,fainting and
+wrong maps still reject. No external or independent review is claimed.
+
+The exact native encounter qualifies with four unchanged-model choices and
+authentic8/16 controller timing,all6originals/resources/dex and ready control.
+Its terminal exactly reproduces the closed source,now correctly verified.
+74actions/7236frames,stopped/released,no fit or copyback. The wrong-timing and
+zero-input reader-method fixture failures and all costs remain.344focused,
+604player/regression,98learned-battler/episode and164package/launch checks
+pass;13private integration cases skipped. Ruff passes,not full-suite/CI.
+
+Decision: separately freeze r21 with only battle_runtime.py changed. Models,
+limits,174helpers,6940data and4512environment inputs stay identical. The
+297module/378read isolated preflight haszero writes/errors/inputs. Fresh
+20261012-v1 startup and native outcomes verify actual play without loads or
+operator goals. Keep this same worker running;eleven qualified execution repairs
+do not prove Champion/concurrent HOF plus124 or parameter learning. All old
+frozen failures stay closed;ordinary narrow repairs need no repeated approval.
+[Goal record](work-sessions/2026-10-11-autonomous-completion-goal.md).
+
+## October12 Capture recovery connection
+
+Codex qualifies two further public connections after r26's original failed
+Route3 search. Native poison fainting remains an ordinary game event;known
+text settlement cannot revive a member or select a strategic goal. Completed
+uncaptured health stops require full action/evolution/native registration
+reconciliation. The initial unexplained-registration negative exposes a missing
+exact-owned condition;the corrected guard rejects it.426focused/591related
+checks and Ruff pass,with overlapping scopes,not full-suite/CI.
+
+The first cold full-binding setup refuses atzero input and stays failed. The
+same-recipe exact-native-source copy instead qualifies ready failed-capture
+settlement,retaining all five originals andseven entries. One next actual
+model_exploration choice restores normally,with unchanged stock/cash1356.
+No full warm-origin identity,independent evaluation,TRAIN or fit is claimed.
+All copies stop/release and keep their costs;no external reviewer contributes.
+
+Distinct immutable r27 passes297module/378read zero-input isolation and starts
+actual fresh play under session30637/PID17079. Models,helpers,limits and all
+other inputs remain unchanged. One native worker only;goal remains same-fresh-
+save Champion/concurrent HOF plus124,not launch or copied qualification.
+
+## October12 Earned capture helper evolution
+
+Fresh r27 naturally passes the exact prior poison-faint source and qualified
+terminal,then independently selects healing. No diagnostic state is loaded.
+Its later171-goal stop rejects earned Rattata19-to-Raticate20 after a missed
+wild knockout. Capture now reuses the existing cartridge/individual/evolution
+guard with exact selected-move PP debit. Unconfigured callers keep the old
+strict species check. Fourteen new cases cover missing identity,XP,level,edge,
+PP and invalid edge inputs;376focused/551related checks and Ruff pass,not CI.
+
+The correlated same-recipe source copy keeps the missed Jigglypuff and Raticate,
+then genuinely captures Spearow with all six originals/13entries/ready control.
+No full warm-origin replay,TRAIN,fit or copied fresh gain is claimed. The
+original and copy actually stop/release. Fresh r28 passes297module/378read
+zero-input isolation and actual startup under session25287/PID18854. Models,
+helpers,limits and all other inputs stay pinned. No external reviewer is used.
+
+## October12 repeated sleep decision handoff review
+
+r21 passes the previous PP failure from the exact same native encounter to
+the exact same terminal,then stops at257outcomes and34registrations when its
+latched move exceeds the sleep-application cap.243model choices,14support,
+229successes,27ordinary setbacks and all costs remain. The executor had earlier
+MAIN menus at which it could have returned the unspent choice to the model.
+
+Codex adds that unchanged application cap to the existing MAIN return condition.
+No limit is raised and no action is substituted.360focused,472player/battler/
+training and164package/launch checks pass;13private integration cases skip.
+Ruff passes,not full-suite/CI. The initial negative-test fixture's frame-evidence
+error is corrected without changing the gameplay guard.
+
+The exact native copy reproduces party4/move4,then yields alive,asleep and with
+unchanged35/30/30/13 PP. The unchanged model chooses another switch and wins in
+seven decisions.181actions/17100frames,all6originals/resources/dex,ready field
+control,copy stopped/released,no fit or copyback. No external review is claimed.
+
+Distinct r22/20261012-v2 starts fresh with only battle_runtime.py changed and
+all models,limits,174helpers,6940data and4512environment inputs unchanged.
+Its297module/378read preflight haszero writes/errors/inputs;exclusive CLAIM,
+startup and native receipts verify actual play. Keep this worker running.
+Twelve mechanical repairs and diagnostic wins are not parameter learning or
+completed autonomous Red. The overall goal has no administrative cutoff;
+each frozen attempt retains its finite24-hour envelope.
+[Goal record](work-sessions/2026-10-11-autonomous-completion-goal.md).
+
+## October12 actual fresh sleep-frontier passage
+
+Read-only verification of the live r22 confirms the exact0a0b3fb7... failed
+encounter is reached naturally and won in seven unchanged-model decisions.
+Its06dab07a... final is identical to the qualified diagnostic terminal,without
+loading it. Battle18cceff4... recordszero teacher queries,memory-write actions
+or authority promotions. The full selected development goal229d7898... succeeds
+with ready control at257outcomes/34registrations,two badges and7084cash.
+Its3533actions/276216frames remain distinct from the copied encounter's costs.
+The same frozen player continues;no external review,new TRAIN,fit,midrun change
+or final autonomous completion is claimed. Original r21 remains failed/closed.
+[Goal record](work-sessions/2026-10-11-autonomous-completion-goal.md).
+
+## October12 Route24 completed chapter connection
+
+r22 earns Surge and closes at438outcomes/34entries/three badges when collection
+backtracking requests only the completed Bill binding for an exact ordinary
+trainer. Zero-input native inspection authenticates205/5/2. Reuse the existing
+generic transport handler after Bill declines;do not add an approach or goal.
+Eight new cases,132private helper cases and188public engagement checks pass.
+
+The cold pre-intent harness refuses its original binding before inputs;retain
+that failure and costs. The narrower exact trainer-introduction copy wins with
+six unchanged-model choices,verified event1346/280payout,all six originals and
+ready control. Three subsequent actual model goals yield two successes and one
+ordinary ball-exhaustion setback. Copy stops/releases;no fit or copied gains.
+This is not a full capture-trip replay or independent evaluation.
+
+One-helper-only r23 starts fresh after297module/378read isolated preflight with
+zero writes/errors/inputs. Public source,models,other inputs,assistance and all
+finite limits stay unchanged. Exclusive CLAIM,passed startup,native receipts
+and live session83101/PID91000 confirm play. No external review is claimed.
+Keep that single immutable player moving toward Champion/concurrent HOF plus124;
+the full-trip and full-game result remain unproved. Closed r22 stays closed.
+[Goal record](work-sessions/2026-10-11-autonomous-completion-goal.md).
+
+## 2026-10-19 Windows history and capacity review
+
+Final transfer reconciliation and human-supplied native Mac release checks clear
+the prior transfer boundary. Corrected copied capacity evidence qualifies one
+parallel pair at1.805times throughput with10.8percent maximum worker slowdown,
+no swap and safe reserves. Full action/trace authentication and final bytes
+establish matched work. Raw interrupted/auditor-failed cases and costs remain;
+all native workers/controls released. One of seven engineering goals is complete.
+
+Original TRAIN replay now reconstructs all161retained rows from native sources
+with exact row/dataset fingerprints. Three demonstrated numerical reader faults
+were repaired offline with original evidence retained and295focused tests.
+No new production TRAIN examples,fits or weights. Fixture/partition eligibility
+and an informative prospective native contrast are the next falsifiers;neither
+restored124nor parameter learning is fresh autonomous acceptance.
+
+## 2026-10-19 native learning rejection review
+
+Native2TRAINevolutions admit,onefit retains all161priorfingerprints,total163.
+V28/V29 preserve strict source/environment/native guards;580and131focused groups
+pass,notfullsuite. DEVnativeRhydon succeeds with5255inputs/449432frames/80.46native
+seconds;candidate forecast errors worsen0.298/0.260 versus baseline0.143/0.099.
+Bothchooseidentically,so no second game replay. Reject activation;baseline921
+stays. Originalfailed176inputtail,reportingNameError,allpartial/nativecosts and
+allpackages remain. Actors/controls released;noactualgain/freshacceptance/DEVfit.
+
+
+## October22 story Fly native comparison
+
+Sole MAIN source writer reused the existing Fly compiler for same-objective
+transport.419focused frozen checks and two serial native arms passed;both exited
+with controls released. First three ground states matched byte-for-byte;first
+Cinnabar arrival fell68.31to38.35recorded phase seconds. Arrival tiles differ and
+only one correlated source was tested. No newweights,actual credit or fresh-success
+claim. Copies retain all costs and cannot enter the continuing lineage.
+[Evidence](evidence/red-story-fly-efficiency-2026-10-22.json).
+
+
+## October23 preparation and capture-transfer review
+
+The sole MAIN product writer accepted internal subagent checks of frozen source,
+retention, native custody/costs and residual identifiability. No external reviewer
+or publication is claimed. P168 passed431focused checks; the later active-only
+route change passed139routing checks. Neither count is full-suite verification.
+Audit068 completed after two hours. Nine loaded diagnostic/TRAIN executions are
+closed with released controls; seven were fixed/teacher choices and two model-owned.
+Two fits and two later admitted TRAIN labels are separate. The four reserved
+timing predictions improve, but both broad capture forecasts regress; candidate
+adoption stays rejected. Preserve every failure, partial cost and related-source
+limitation. Actual inputs/registration delta are0; official completion is unproved.
+[Evidence](evidence/red-preparation-capture-development-2026-10-23.json).
+
+## October23 density coverage and decision review
+
+The sole source writer used internal reviews of the frozen density basis, TRAIN
+coverage, exact parent replay, preparation value, custody and nonnested costs.
+No external agent or publication was used.571 focused checks and173 retained
+outputs support the scoped change, not a full-suite claim. Audit069 completed.
+All23 native loads/12 preflights closed; one D4 cap error and one ordinary miss
+remain. Three failed ordinary replay checks and the separate consequence replay
+failure remain costed. Final8 heals all made HP progress; no future no-op loop
+was observed. Capture prediction improved,52 model choices did not change, and
+no actual progress or official acceptance was claimed.
+[Evidence](evidence/red-density-and-recovery-development-2026-10-23.json).
+
+## 2026-10-25: audit-readiness closeout
+
+Human-supplied external audits were reconciled with the configured baseline and
+native evidence. Root and internal read-only reviewers qualify the P7 exact
+protected-catcher repair and two isolated workers, including retained costs and
+source custody. The failed P6 pilot remains preserved. No unresolved blocker
+prevents finite copy-only DEVELOPMENT with at most two workers. One expensive
+Misty win does not establish adoption or generalization; all seven final goals
+remain open and the historical broad suite remains failing.
+See [current evidence](evidence/red-audit-readiness-2026-10-25.json).
+
+
+## 2026-10-26: local switch and preparation milestone
+
+Root implementation and internal read-only reviews cover original TRAIN custody,
+full legal reserve selection, exact frozen non-switch bits, native event chains,
+paired checkpoints, cost accounting and the timing-alias reader correction.
+No Claude/Gemini review was dispatched. The235parameter correction passes291
+switch bounds, improves three related/exposed native cases and retains four
+healthy endpoints plus whole evolution/Misty preparation. Six older control views
+regress; no independent/fresh/general adoption claim. A focused later review of
+head coupling and conditional labels would be more useful than another full archive
+audit. [Evidence](evidence/red-masked-native-validation-2026-10-26.json).
+
+## October28: matched outcomes and closeout contracts
+
+Root and internal read-only reviews checked custody, exact frozen components,
+strict admission, deduplicated controls and finite-grid outcomes. External Claude
+or Gemini was not dispatched. The fixed prompt-return gate fails; no fit occurs.
+A real post-native .calls history-ABI error escaped private static checks. Keep
+that failure and costs, recover only from authenticated cached evidence, and add
+an actual history-type regression before any future use. Do not call the focused
+checks a full suite. [Session](work-sessions/2026-10-28-matched-train-preparation.md).
+
+## October28 continuous recovery and deep review
+
+Internalboundedpeers join bothOSclosures, all nativechoices/forecasts andcosts.
+TRAINoneepisode LOSSLOSSWIN isverified; exposedDEV matches all8priorFBBnative
+transitions exactly. Basee626BillwinsareseparatefromMisty297; supportoptionsdiffer.
+No externalreviewdispatched. The largehumanClaudepacket preserves contraryresults,
+readguardfailures and the1642.103410slateaudit. No fullsuite or completionclaim.
+
+## October28: Claude review adjudicated against native continuation
+
+Accepted narrowcoverage/duplicatedbinding/time-loss critique. Corrected absent evolution, constantXP and universalnonadaptation claims; source7da differsfrom2d, and old17-rowfit alreadyused2d. Restored31omittedrawreceipts and appended evolutionerratum. Two qualified DEVsegments yield3captures+MistyWIN; no fit/adoption/actualcredit. Internal peers checkedsourcebindings andsemanticattribution; no externaldispatch.
+
+## October28 frozen viability assessment
+
+Read-only peers authenticate exposed source pairs, locked fairness, exact measurement-only correction and qualification claim limits. First instrumentation failure remains separate. Both actual public calls fail assembly with0queries/loads. No external dispatch.

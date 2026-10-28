@@ -1,0 +1,38 @@
+{
+  "schema": "pokemon.red.player-learning-pilot-preflight.v1",
+  "classification": "engineering-and-synthetic-diagnostic-not-learning",
+  "authorization": "User approved bounded assisted curriculum aimed at eventual Crystal learning",
+  "plan": "docs/player-learning-pilot.md",
+  "focused_tests_passed": 122,
+  "scoped_lint_passed": true,
+  "scoped_typing_passed": true,
+  "feature_version": 4,
+  "projection": "existing-runtime-project_living_dex_goal_candidate",
+  "diagnostics": {
+    "team_pressure_zero_to_one_with_equal_story_develop_risks": {
+      "changed_inputs": ["party_pressure_x_party_risk"],
+      "changed_linear_contrasts": [],
+      "scope": "Constructed semantic inputs,not a native policy failure or proof all final choices are invariant"
+    },
+    "safety_pressure_zero_to_one_story_restore": {
+      "changed_linear_contrasts": ["party_pressure_x_restore"]
+    },
+    "private_binding_renaming": {
+      "changed_inputs": [],
+      "claim": "Identity invariance only,not actual Crystal transfer"
+    }
+  },
+  "historical_8_train_4_development_gate_changed": false,
+  "new_pilot_scope": "Small separately declared development screen,no generalization or full-player promotion",
+  "source_independence_established": false,
+  "native_execution_binding_qualified": false,
+  "gameplay_actions": 0,
+  "production_fits": 0,
+  "new_train_examples": 0,
+  "model_decisions": 0,
+  "registration_delta": 0,
+  "crystal_access": false,
+  "primary_save_changed": false,
+  "whole_campaign_started": false,
+  "next": "Implement target-aware readiness/resource representation and native lesson binding;authenticate pilot sources before collection and freeze comparison before evaluation access"
+}

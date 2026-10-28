@@ -1,0 +1,92 @@
+{
+  "schema": "pokemon.red.frozen-terminal-evidence.v1",
+  "run_id": "red-frozen-autonomous-run-20261016-silph-poison-v1",
+  "at_utc": "2026-10-16T10:52:36.257301+00:00",
+  "stopped": true,
+  "released": true,
+  "exited_at_utc": "2026-10-16T10:47:48.072041+00:00",
+  "terminal_reason": "native_execution_error",
+  "plan_sha256": "986030983033f26480c984458c670b259fa67f443ad48ccba671a8b3bd76bfa8",
+  "manifest_sha256": "fa09ed2aeffbcf112438169c71581e9b86af830e9cfbf3d533b381b507c557bc",
+  "terminal_sha256": "eeb4fde2870474fdd1e4e10ee80a0cb688d3b98bcf1fd5f27ec4cf409334b133",
+  "context_sha256": "c6e9cac7afca927c0d03d67fd1bd76765d996d40d43c32be8bc9830056ebbcb2",
+  "counts": {
+    "executed": 585,
+    "model": 294,
+    "setbacks": 21,
+    "support": 291
+  },
+  "spent": {
+    "actions": 289907,
+    "cash_debits": 23414,
+    "decisions": 587,
+    "frames": 23522842,
+    "heals": 388,
+    "seconds": 4803.265498627443
+  },
+  "wall_seconds": 4898.947400124976,
+  "supervisor_seconds": 4933.986564417137,
+  "badges": 4,
+  "registrations": 32,
+  "party_levels": [
+    41,
+    36,
+    32,
+    30,
+    35,
+    39
+  ],
+  "cash": 22491,
+  "state_loads": 0,
+  "runtime_llm_calls": 0,
+  "fits": 0,
+  "training": 0,
+  "completed": false,
+  "protected_pins_verified": 751,
+  "package_pins_verified": 7878,
+  "environment_pins_verified": 4512,
+  "isolated_io": {
+    "all_writes_in_failed_run": true,
+    "loaded_modules": 644,
+    "module_isolation_error": null,
+    "reads": 48327,
+    "sha256": "d29fa814e77e65efd7e6abd4f179e21f36bb8a2e0d96e95fd7fbc9b8ffdfd417",
+    "writes": 675519
+  },
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "native_error": "route replanning found no candidate",
+  "underlying_error": "the observed party cannot use Cut",
+  "diagnosis": "Arcanine registered and original roster returned; stale moving-NPC occupancy prevented a walking return to the nurse. The Cut message is a fallback planner error, not evidence that the party lost Cut.",
+  "native_boundary": {
+    "map_id": 133,
+    "at": [
+      4,
+      9
+    ],
+    "field_ready": true,
+    "whole_party_restored": true
+  },
+  "recovered_transport_errors_retained": 2,
+  "decision_accounting": "587 budget units = 585 executed choices plus 2 zero-input automatic battle-entry recoveries. Original failures remain.",
+  "scopes": "Related DEVELOPMENT; no completion, independent transfer, or weight-learning claim."
+}

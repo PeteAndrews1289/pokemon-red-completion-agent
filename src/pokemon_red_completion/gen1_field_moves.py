@@ -5,9 +5,9 @@ The route executor is intentionally game-neutral: it can request a semantic
 laid out.  This adapter owns that title-specific work and returns only after
 live RAM acknowledges the exact coordinate and locomotion-mode transition.
 
-Surf permission is deliberately conservative.  Forced Cycling Road state is
-observed directly, while Seafoam B4 remains closed until its two-boulder story
-predicate is modelled.  A topological water edge is never permission by itself.
+Surf permission is deliberately conservative. Forced Cycling Road state is
+observed directly; Seafoam requires both observed current-control systems.
+A topological water edge is never permission by itself.
 """
 
 from __future__ import annotations
@@ -28,6 +28,8 @@ from pokemon_red_completion.gen1_traversal import (
 from pokemon_red_completion.observation import (
     RED_FLY_TOWN_NAMES,
     Badge,
+    EventFlag,
+    MapId,
     OverworldMovementMode,
     PokemonRedStateReader,
     RamAddress,
@@ -72,8 +74,15 @@ STRENGTH_ACTIVE_MASK = 1 << 0
 STRENGTH_POST_FLAG_CONFIRMATIONS = 2
 
 
+from .route_executor import RouteActionInterrupted
+
+
 class Gen1FieldMoveError(RuntimeError):
     """Raised when a field macro cannot prove its requested state change."""
+
+
+class Gen1FieldMoveInterrupted(RouteActionInterrupted, Gen1FieldMoveError):
+    """Yield native battle ownership before sending another field-menu input."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,6 +142,11 @@ class Gen1SurfReceipt:
 
 @dataclass(frozen=True, slots=True)
 class Gen1CutReceipt:
+    """Exact native block mutation; tile values are the engine front-tile cache.
+
+    The cache can remain stale after a successful Cut. It is retained truthfully
+    as diagnostic evidence, never required to acknowledge the fresh block buffer.
+    """
     source_map: int
     source_at: tuple[int, int]
     target_at: tuple[int, int]
@@ -162,7 +176,9 @@ def surf_permission(memory: ReadOnlyMemory, raw: RawGameState) -> SurfPermission
 
     if memory.read_u8(RamAddress.STATUS_FLAGS_6) & ALWAYS_ON_BIKE_MASK:
         return SurfPermission(False, "forced_bicycle_state")
-    if raw.map_id == SEAFOAM_ISLANDS_B4F_MAP_ID:
+    from .gen1_seafoam import seafoam_currents_settled
+
+    if raw.map_id == SEAFOAM_ISLANDS_B4F_MAP_ID and not seafoam_currents_settled(raw):
         return SurfPermission(False, "seafoam_b4_story_gate_unmodelled")
     return SurfPermission(True, "no_observed_title_restriction")
 
@@ -174,17 +190,24 @@ def gen1_field_capabilities(
     """Project only field moves that the observed party may legally execute.
 
     Route construction and field-move execution must see the same capability
-    boundary.  Cut and Strength derive their badge and living-holder checks
+    boundary. Cut derives its badge/holder check; Strength retains a living-holder check
     from the party observation; Surf additionally requires the live title
     restriction check above.  Keeping this composition here prevents callers
     from silently building a land-only graph for a party that can cross water.
     """
 
     permission = surf_permission(memory, raw)
+    from .gen1_seafoam import seafoam_currents_settled
+    from .gen1_story_routing import SEAFOAM_CURRENT_CONTROL
+
+    current_control = (
+        frozenset({SEAFOAM_CURRENT_CONTROL}) if seafoam_currents_settled(raw) else frozenset()
+    )
     return (
         cut_capabilities(raw)
         .union(strength_capabilities(raw))
         .union(surf_capabilities(raw, surf_allowed=permission.allowed))
+        .union(current_control)
     )
 
 
@@ -195,9 +218,9 @@ def surf_menu_indices(raw: RawGameState) -> tuple[int, int]:
 
 
 def cut_menu_indices(raw: RawGameState) -> tuple[int, int]:
-    """Return a living Cut holder and Cut's row among its field moves."""
+    """Return a Cut holder (including fainted) and its observed field-move row."""
 
-    return _field_move_menu_indices(raw, CUT_MOVE_ID, "Cut")
+    return _field_move_menu_indices(raw, CUT_MOVE_ID, "Cut", require_living=False)
 
 
 def strength_menu_indices(raw: RawGameState) -> tuple[int, int]:
@@ -215,17 +238,20 @@ def _field_move_menu_indices(
     raw: RawGameState,
     move_id: int,
     label: str,
+    *,
+    require_living: bool = True,
 ) -> tuple[int, int]:
     hp = raw.party_hp or ()
     moves = raw.party_moves or ()
     if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
         raise Gen1FieldMoveError(f"{label} menu selection lacks a complete observed party")
     for party_index, (current_hp, known) in enumerate(zip(hp, moves, strict=True)):
-        if current_hp <= 0 or move_id not in known:
+        if (require_living and current_hp <= 0) or move_id not in known:
             continue
         field_moves = tuple(move for move in known if move in GEN1_FIELD_MOVE_IDS)
         return party_index, field_moves.index(move_id)
-    raise Gen1FieldMoveError(f"no living party member knows {label}")
+    qualifier = "living " if require_living else ""
+    raise Gen1FieldMoveError(f"no {qualifier}party member knows {label}")
 
 
 @dataclass(slots=True)
@@ -330,9 +356,8 @@ class Gen1FieldMovePort:
                     "party_levels",
                     "player_money",
                     "badge_bits",
-                    "event_flags",
                 )
-            ):
+            ) or not fly_story_events_preserved(before, after, destination, departure=departure):
                 raise Gen1FieldMoveError("Fly changed protected party or story resources")
             if after.battle_state != 0:
                 raise Gen1FieldMoveError("Fly entered an unexpected battle")
@@ -545,6 +570,8 @@ class Gen1FieldMovePort:
             raise Gen1FieldMoveError(
                 f"Cut target block {block_before:#04x} has no decoded replacement"
             )
+        if block_after == block_before:
+            raise Gen1FieldMoveError("Cut target has a non-mutating decoded replacement")
         expected_rows = [list(row) for row in blocks_before.rows]
         expected_rows[block_at[0]][block_at[1]] = block_after
         expected_blocks_after = tuple(tuple(row) for row in expected_rows)
@@ -565,10 +592,12 @@ class Gen1FieldMovePort:
                 raise Gen1FieldMoveError("Cut changed the player's planned source position")
             blocks_after = self.reader.read_current_map_blocks()
             target_tile_after = self.memory.read_u8(RamAddress.TILE_IN_FRONT_OF_PLAYER)
+            # wTileInFrontOfPlayer is an engine cache, not a refreshed map
+            # observation. The exact cartridge-derived block replacement below
+            # proves completion without sending extra confirmations into field.
             if (
                 blocks_after.map_id == source_map
                 and blocks_after.rows == expected_blocks_after
-                and target_tile_after != target_tile_before
                 and self.reader.read_input_readiness().ready
             ):
                 _require_protected_field_state("Cut", before, after)
@@ -595,10 +624,11 @@ class Gen1FieldMovePort:
             if confirmations == self.timing.max_confirmations:
                 break
             self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.settle_frames)
-        raise Gen1FieldMoveError("Cut did not acknowledge its exact block and tile mutation")
+        raise Gen1FieldMoveError("Cut did not acknowledge its exact block mutation")
 
     def _select_cursor(self, target: int, label: str) -> None:
         for _ in range(self.timing.max_menu_moves):
+            self._yield_live_battle()
             current = self.memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
             maximum = self.memory.read_u8(RamAddress.MAX_MENU_ITEM)
             if current <= maximum and target <= maximum:
@@ -614,9 +644,48 @@ class Gen1FieldMovePort:
             f"maximum={self.memory.read_u8(RamAddress.MAX_MENU_ITEM)}"
         )
 
+    def _yield_live_battle(self) -> None:
+        battle = self.reader.read().battle_state
+        if battle in (1, 2):
+            raise Gen1FieldMoveInterrupted(
+                "wild_battle" if battle == 1 else "trainer_battle"
+            )
+
     def _pulse(self, action: MacroAction, frames: int) -> None:
+        self._yield_live_battle()
         self.delegate.execute(action)
+        self._yield_live_battle()
         self.delegate.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
+        self._yield_live_battle()
+
+
+def fly_story_events_preserved(
+    before: RawGameState, after: RawGameState, destination: int, *, departure: bool
+) -> bool:
+    """Permit only the native seven-badge Viridian arrival unlock.
+
+    pret/pokered 1e960340, ViridianCityCheckGymOpenScript sets this single
+    event on map entry iff the badge byte is exactly all except Earth.
+    Departure, other towns, event clearing and unrelated changes stay closed.
+    """
+    if before.event_flags == after.event_flags:
+        return before.event_flags is not None
+    if (
+        departure
+        or destination != MapId.VIRIDIAN_CITY
+        or after.map_id != destination
+        or before.badge_bits != 0xFF ^ int(Badge.EARTH)
+        or after.badge_bits != before.badge_bits
+        or before.event_flags is None
+        or after.event_flags is None
+    ):
+        return False
+    expected = bytearray(before.event_flags)
+    event = int(EventFlag.VIRIDIAN_GYM_OPEN)
+    if len(expected) <= event // 8 or expected[event // 8] & (1 << (event % 8)):
+        return False
+    expected[event // 8] |= 1 << (event % 8)
+    return bytes(expected) == after.event_flags
 
 
 def _require_overworld(raw: RawGameState, label: str) -> tuple[int, tuple[int, int]]:

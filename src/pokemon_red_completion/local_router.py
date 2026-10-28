@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import heapq
+from collections import deque
 from collections.abc import Collection, Mapping
 from dataclasses import dataclass
 
@@ -27,6 +28,7 @@ class LocalEdge:
     required_mode: str | None = None
     result_mode: str | None = None
     transient: Coordinate | None = None
+    via: tuple[Coordinate, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.action:
@@ -45,6 +47,8 @@ class LocalEdge:
                 raise ValueError(f"{label} cannot be empty")
         if self.transient == self.target:
             raise ValueError("a local edge transient cannot equal its target")
+        if self.via and (self.kind != "forced_motion" or self.target in self.via):
+            raise ValueError("only forced motion declares intermediate path coordinates")
 
     @property
     def macro_action(self) -> MacroAction:
@@ -105,7 +109,8 @@ def without_coordinates(
         return graph
     return LocalGraph(
         {
-            source: tuple(edge for edge in outgoing if edge.target not in unavailable)
+            source: tuple(edge for edge in outgoing if edge.target not in unavailable
+                          and not unavailable.intersection(edge.via))
             for source, outgoing in graph.edges.items()
             if source not in unavailable
         }
@@ -158,6 +163,89 @@ def find_local_path(
     raise LocalRouterError(f"no permitted local route from {start} to {goal}")
 
 
+class _IncrementalLocalPaths:
+    """One Dijkstra frontier owned by a verified immutable inventory scope.
+
+    Settled paths and their tie order do not depend on which destination was
+    asked first. Keep the last matched node pending, because the stateless
+    search returns before expanding it; expand it before the next search.
+    """
+
+    def __init__(self, graph, start, *, capabilities, start_mode):
+        self.graph = graph
+        self.capabilities = capabilities
+        self.initial = (start, start_mode)
+        self.frontier = [(0, 0, start, start_mode)]
+        self.came_from = {}
+        self.best_cost = {self.initial: 0}
+        self.settled = {}
+        self.first_at = {}
+        self.path_cache = {}
+        self.sequence = 1
+        self.pending = None
+
+    def _state_for(self, goal):
+        coordinate, mode = goal
+        if mode is None:
+            return self.first_at.get(coordinate)
+        return goal if goal in self.settled else None
+
+    def _expand_pending(self):
+        if self.pending is None:
+            return
+        cost, current_state = self.pending
+        self.pending = None
+        current, current_mode = current_state
+        for edge in self.graph.neighbors(current):
+            if not edge.requirements.issubset(self.capabilities) or not edge.permits_mode(current_mode):
+                continue
+            candidate_cost = cost + edge.cost
+            following = (edge.target, edge.next_mode(current_mode))
+            if candidate_cost >= self.best_cost.get(following, candidate_cost + 1):
+                continue
+            self.came_from[following] = (current_state, edge)
+            self.best_cost[following] = candidate_cost
+            heapq.heappush(self.frontier, (candidate_cost, self.sequence, following[0], following[1]))
+            self.sequence += 1
+
+    def paths(self, goals):
+        requested = set(goals)
+        if not requested:
+            return {}
+        remaining = {goal for goal in requested if self._state_for(goal) is None}
+        if remaining:
+            self._expand_pending()
+        while self.frontier and remaining:
+            cost, _, current, current_mode = heapq.heappop(self.frontier)
+            current_state = (current, current_mode)
+            if cost != self.best_cost.get(current_state):
+                continue
+            self.settled[current_state] = len(self.settled)
+            self.first_at.setdefault(current, current_state)
+            remaining.difference_update({(current, None), current_state})
+            self.pending = (cost, current_state)
+            if remaining:
+                self._expand_pending()
+
+        # Emit in the stateless search's settlement order, including its set
+        # order when wildcard and exact-mode goals match the same state.
+        states = {state for goal in requested if (state := self._state_for(goal)) is not None}
+        found = {}
+        remaining = set(requested)
+        for state in sorted(states, key=self.settled.__getitem__):
+            matched = remaining.intersection({(state[0], None), state})
+            if not matched:
+                continue
+            path = self.path_cache.get(state)
+            if path is None:
+                path = _reconstruct(self.came_from, self.initial, state)
+                self.path_cache[state] = path
+            for goal in matched:
+                found[goal] = path
+            remaining.difference_update(matched)
+        return found
+
+
 def find_local_paths(
     graph: LocalGraph,
     start: Coordinate,
@@ -178,19 +266,29 @@ def find_local_paths(
     if not remaining:
         return {}
     initial = (start, start_mode)
-    frontier: list[tuple[int, int, Coordinate, TraversalMode]] = [(0, 0, start, start_mode)]
+    # Unit-cost movement has the same stable visitation order in a FIFO as in
+    # Dijkstra's heap. Promote the pending entries on the first useful weighted
+    # edge, retaining their costs and sequence numbers, so mixed graphs keep
+    # the exact weighted search without rescanning or caching a changing graph.
+    unit_frontier = deque([(0, 0, start, start_mode)])
+    frontier: list[tuple[int, int, Coordinate, TraversalMode]] = []
+    weighted = False
     came_from: dict[TraversalState, tuple[TraversalState, LocalEdge]] = {}
     best_cost = {initial: 0}
     found: dict[LocalGoal, LocalPath] = {}
     sequence = 1
 
-    while frontier and remaining:
-        cost, _, current, current_mode = heapq.heappop(frontier)
+    while remaining and (unit_frontier or frontier):
+        if weighted:
+            cost, _, current, current_mode = heapq.heappop(frontier)
+        else:
+            cost, _, current, current_mode = unit_frontier.popleft()
         current_state = (current, current_mode)
         if cost != best_cost.get(current_state):
             continue
-        matched = remaining.intersection({(current, None), current_state})
-        if matched:
+        wildcard = current_state if current_mode is None else (current, None)
+        if current_state in remaining or wildcard in remaining:
+            matched = remaining.intersection({wildcard, current_state})
             path = _reconstruct(came_from, initial, current_state)
             for goal in matched:
                 found[goal] = path
@@ -207,10 +305,16 @@ def find_local_paths(
                 continue
             came_from[following] = (current_state, edge)
             best_cost[following] = candidate_cost
-            heapq.heappush(
-                frontier,
-                (candidate_cost, sequence, following[0], following[1]),
-            )
+            entry = (candidate_cost, sequence, following[0], following[1])
+            if not weighted and edge.cost != 1:
+                frontier = list(unit_frontier)
+                unit_frontier.clear()
+                heapq.heapify(frontier)
+                weighted = True
+            if weighted:
+                heapq.heappush(frontier, entry)
+            else:
+                unit_frontier.append(entry)
             sequence += 1
     return found
 

@@ -183,7 +183,9 @@ def test_cannot_advance_beyond_red_with_incomplete_full_run_gate(project, stage)
     state["stages"][state["current_stage"]]["status"] = "planned"
     state["stages"][stage] = {
         "status": "current",
-        "evidence": state["milestone"]["items"][0]["evidence"],
+        # Use existing evidence so this probes the final-run gate even when
+        # the current implementation checklist is entirely unfinished.
+        "evidence": state["stages"]["red-story"]["evidence"],
     }
     state["current_stage"] = stage
     (project / STATE).write_text(json.dumps(state))

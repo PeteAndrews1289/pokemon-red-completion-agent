@@ -26,6 +26,7 @@ from pokemon_red_completion.field_recovery import (
     use_field_recovery_item,
 )
 from pokemon_red_completion.goal_manager import (
+    GoalDecisionOutcome,
     GoalFailureReason,
     GoalKind,
     GoalUnavailableReason,
@@ -44,15 +45,18 @@ from pokemon_red_completion.lavender import (
     _sell_mart_item_stack,
 )
 from pokemon_red_completion.observation import (
+    EventFlag,
     ItemId,
     MapId,
     PokemonRedStateReader,
     RamAddress,
     RawGameState,
+    event_flag_is_set,
 )
 from pokemon_red_completion.red_acquisition import (
     RED_ACQUISITION_CATALOG,
     RedAcquisitionCatalog,
+    RedAreaExecutionError,
     RedAreaExecutionPolicy,
     RedAreaExecutor,
     run_red_area_survey,
@@ -379,7 +383,8 @@ class RedFieldRestoreGoalProvider:
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         plan, unavailable = self._plan(
-            observation, affordable_single_item=self.affordable_single_item,
+            observation,
+            affordable_single_item=self.affordable_single_item,
             reserve_last_full_restore=self.reserve_last_full_restore,
         )
         if unavailable is not None:
@@ -436,7 +441,8 @@ class RedFieldRestoreGoalProvider:
         return RedGoalBindingOffer.available(
             ExecutableGoalBinding(
                 binding_ref=(
-                    "pokemon.red:recovery:single-field-item" if self.affordable_single_item
+                    "pokemon.red:recovery:single-field-item"
+                    if self.affordable_single_item
                     else "pokemon.red:recovery:field-items"
                 ),
                 kind=self.kind,
@@ -450,7 +456,8 @@ class RedFieldRestoreGoalProvider:
     @staticmethod
     def _plan(
         observation: RedGoalObservation,
-        *, affordable_single_item: bool = False,
+        *,
+        affordable_single_item: bool = False,
         reserve_last_full_restore: bool = False,
     ) -> tuple[
         tuple[tuple[int, ItemId], ...],
@@ -476,16 +483,24 @@ class RedFieldRestoreGoalProvider:
             # Prefer the narrow item when it suffices; reserve Full Restore as fallback.
             candidates = []
             for index, preferred in plan:
-                items = (preferred, ItemId.FULL_RESTORE)
+                items = (
+                    (preferred, ItemId.MAX_POTION, ItemId.FULL_RESTORE)
+                    if not status[index]
+                    else (preferred, ItemId.FULL_RESTORE)
+                )
                 for item in dict.fromkeys(items):
                     if inventory.get(int(item), 0) <= 0:
                         continue
                     # A prospective resource constraint, not a learned preference.
                     # Keep the final broad restorative for status or sub-readiness
                     # recovery; do not block narrower affordable items or emergencies.
-                    if (reserve_last_full_restore and item is ItemId.FULL_RESTORE
-                            and inventory[int(item)] == 1 and not status[index]
-                            and hp[index] * 2 >= maximum[index]):
+                    if (
+                        reserve_last_full_restore
+                        and item is ItemId.FULL_RESTORE
+                        and inventory[int(item)] == 1
+                        and not status[index]
+                        and hp[index] * 2 >= maximum[index]
+                    ):
                         continue
                     if item is ItemId.HYPER_POTION and maximum[index] - hp[index] > 200:
                         continue
@@ -493,9 +508,14 @@ class RedFieldRestoreGoalProvider:
                     break
             if not candidates:
                 return (), GoalUnavailableReason.MISSING_RESOURCE
-            selected = min(candidates, key=lambda pair: (
-                hp[pair[0]] / maximum[pair[0]], -int(bool(status[pair[0]])), pair[0],
-            ))
+            selected = min(
+                candidates,
+                key=lambda pair: (
+                    hp[pair[0]] / maximum[pair[0]],
+                    -int(bool(status[pair[0]])),
+                    pair[0],
+                ),
+            )
             return (selected,), None
         required = Counter(item for _, item in plan)
         if any(inventory.get(int(item), 0) < quantity for item, quantity in required.items()):
@@ -540,6 +560,7 @@ _RECOVERY_ITEMS = frozenset(
         ItemId.POTION,
         ItemId.SUPER_POTION,
         ItemId.HYPER_POTION,
+        ItemId.MAX_POTION,
         ItemId.FULL_RESTORE,
         ItemId.ANTIDOTE,
         ItemId.AWAKENING,
@@ -617,6 +638,9 @@ class RedMartResupplyGoalProvider:
     kind: GoalKind = GoalKind.RESUPPLY
     funding_sale: RedMartSurplusSale | None = None
     affordable_ball_purchase: bool = False
+    # Explicit inventory targets, not a bypass of the legacy aggregate reserve.
+    # An order must exactly fill each declared deficit; satisfied targets mask it.
+    reserve_targets: tuple[tuple[ItemId, int], ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.map_id, MapId):
@@ -639,15 +663,35 @@ class RedMartResupplyGoalProvider:
         if type(self.wait_frames) is not int or self.wait_frames <= 0:  # noqa: E721
             raise ValueError("Mart wait_frames must be a positive integer")
         if type(self.affordable_ball_purchase) is not bool or (
-            self.affordable_ball_purchase and (
-                len(self.purchases) != 1 or self.purchases[0].item not in _ORDINARY_CAPTURE_ITEMS
+            self.affordable_ball_purchase
+            and (
+                len(self.purchases) != 1
+                or self.purchases[0].item not in _ORDINARY_CAPTURE_ITEMS
                 or self.funding_sale is not None
             )
         ):
             raise ValueError("affordable Mart support needs one ordinary ball and no sale")
+        if type(self.reserve_targets) is not tuple:
+            raise ValueError("exact Mart reserves must be an immutable tuple")
+        if self.reserve_targets and (
+            any(type(row) is not tuple or len(row) != 2 for row in self.reserve_targets)
+            or any(
+                not isinstance(item, ItemId)
+                or item not in _CAPTURE_ITEMS | _RECOVERY_ITEMS
+                or type(target) is not int
+                or not 1 <= target <= 99
+                for item, target in self.reserve_targets
+            )
+            or len(dict(self.reserve_targets)) != len(self.reserve_targets)
+            or set(dict(self.reserve_targets)) != {p.item for p in self.purchases}
+            or self.funding_sale is not None
+            or self.affordable_ball_purchase
+        ):
+            raise ValueError("exact Mart reserves require unique supported targets and no sale")
 
     def affordable_provider(
-        self, observation: RedGoalObservation,
+        self,
+        observation: RedGoalObservation,
     ) -> RedMartResupplyGoalProvider | None:
         """Freeze an exact purchase before transport; never increase it on arrival."""
         if not self.affordable_ball_purchase:
@@ -658,27 +702,61 @@ class RedMartResupplyGoalProvider:
         if money is None:
             return None
         purchase = self.purchases[0]
+        deficit = self._ordinary_ball_deficit(observation)
+        if not deficit:
+            return None
         quantity = affordable_purchase_quantity(
-            available_funds=money, unit_price=purchase.unit_price,
+            available_funds=money,
+            unit_price=purchase.unit_price,
             maximum_quantity=purchase.quantity,
             current_stock=dict(observation.raw.bag_items or ()).get(int(purchase.item), 0),
             stack_limit=99,
         )
-        return None if not quantity else replace(
-            self, purchases=(replace(purchase, quantity=quantity),), affordable_ball_purchase=False,
+        return (
+            None
+            if not quantity
+            else replace(
+                self,
+                purchases=(replace(purchase, quantity=quantity),),
+                affordable_ball_purchase=False,
+                # A ball-only purchase must not depend on the aggregate minimum of
+                # capture AND medicine stock. Reuse the existing exact-target proof;
+                # do not relax the legacy non-opted-in provider or protected ball.
+                reserve_targets=(
+                    (
+                        purchase.item,
+                        dict(observation.raw.bag_items or ()).get(int(purchase.item), 0) + quantity,
+                    ),
+                ),
+            )
         )
+
+    def _ordinary_ball_deficit(self, observation: RedGoalObservation) -> int:
+        stock = sum(
+            n for item, n in (observation.raw.bag_items or ()) if item in _ORDINARY_CAPTURE_ITEMS
+        )
+        return max(0, self.adapter.config.desired_capture_items - stock)
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         if self.affordable_ball_purchase:
             fixed = self.affordable_provider(observation)
             return (
                 RedGoalBindingOffer.unavailable(self.kind, GoalUnavailableReason.MISSING_RESOURCE)
-                if fixed is None else fixed.offer(observation)
+                if fixed is None and self._ordinary_ball_deficit(observation)
+                else RedGoalBindingOffer.unavailable(
+                    self.kind, GoalUnavailableReason.NO_LEGAL_TARGET
+                )
+                if fixed is None
+                else fixed.offer(observation)
             )
         start = observation.raw
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
+            if raw.battle_state or not current.input_ready:
+                return RedGoalSkillAvailability.unavailable(
+                    GoalUnavailableReason.TEMPORARILY_BLOCKED
+                )
             if (
                 raw.map_id != self.map_id
                 or raw.player_x != self.player_x
@@ -699,6 +777,12 @@ class RedMartResupplyGoalProvider:
         def execute() -> GoalExecutionReport:
             if before_money is None:
                 raise RedGoalSkillError("Mart resupply lacks money evidence")
+            if not self._native_purchase_unlocked(self.reader.read()):
+                raise RedGoalSkillError("Mart native story prerequisite is incomplete")
+            if self.reserve_targets and (
+                self.reader.read() != start or not boundary(self.adapter.observe()).executable
+            ):
+                raise RedGoalSkillError("exact Mart reserve origin changed before input")
             if funding is not None:
                 fresh = self.reader.read()
                 if (
@@ -727,8 +811,13 @@ class RedMartResupplyGoalProvider:
                 ):
                     raise RedGoalSkillError("Mart funding resources changed before sale")
                 _sell_mart_item_stack(
-                    self.actions, self.reader, self.emulator, DEFAULT_LAVENDER_TIMING,
-                    funding.item, quantity=funding.quantity, expected_proceeds=funding.proceeds,
+                    self.actions,
+                    self.reader,
+                    self.emulator,
+                    DEFAULT_LAVENDER_TIMING,
+                    funding.item,
+                    quantity=funding.quantity,
+                    expected_proceeds=funding.proceeds,
                 )
                 sold = self.reader.read()
                 expected_sold = dict(before_inventory)
@@ -786,12 +875,60 @@ class RedMartResupplyGoalProvider:
                     "purchase_count": len(self.purchases),
                     "quantity_purchased": sum(purchase.quantity for purchase in self.purchases),
                     "money_spent": total_cost,
-                    **({"sale_proceeds": funding.proceeds, "surplus_units_sold": funding.quantity}
-                       if funding else {}),
+                    **(
+                        {"sale_proceeds": funding.proceeds, "surplus_units_sold": funding.quantity}
+                        if funding
+                        else {}
+                    ),
                 },
             )
 
         purchase_ref = "-".join(f"{int(item.item):02x}x{item.quantity}" for item in self.purchases)
+        if self.reserve_targets:
+            targets = dict(self.reserve_targets)
+
+            def verify_reserves(before, after, report):
+                expected = dict(before.raw.bag_items or ())
+                for purchase in self.purchases:
+                    expected[int(purchase.item)] = targets[purchase.item]
+                protected = (
+                    "map_id",
+                    "player_x",
+                    "player_y",
+                    "party_count",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_hp",
+                    "party_max_hp",
+                    "party_status",
+                    "party_moves",
+                    "party_pp",
+                )
+                if (
+                    report.actions_executed <= 0
+                    or after.raw.battle_state
+                    or not after.input_ready
+                    or dict(after.raw.bag_items or ()) != expected
+                    or after.raw.player_money != before.raw.player_money - total_cost
+                    or any(getattr(before.raw, key) != getattr(after.raw, key) for key in protected)
+                    or before.collection_observation != after.collection_observation
+                    or self.adapter.graph.completed_ids(before.game_state)
+                    != self.adapter.graph.completed_ids(after.game_state)
+                ):
+                    return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                return GoalVerification.succeeded()
+
+            target_ref = "-".join(f"{int(i):02x}to{n}" for i, n in self.reserve_targets)
+            return RedObservedGoalSkillProvider(
+                kind=self.kind,
+                binding_ref=f"pokemon.red:resupply:mart-{int(self.map_id):02x}-{purchase_ref}-{target_ref}",
+                adapter=self.adapter,
+                availability=boundary,
+                executor=execute,
+                verifier=verify_reserves,
+                estimated_effort=min(1.0, 0.04 + 0.02 * len(self.purchases)),
+                estimated_risk=0.02,
+            ).offer(observation)
         return RedProgressGoalProvider(
             kind=self.kind,
             binding_ref=(f"pokemon.red:resupply:mart-{int(self.map_id):02x}-{purchase_ref}"),
@@ -805,11 +942,16 @@ class RedMartResupplyGoalProvider:
     def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check actual resources without claiming the player is at the clerk."""
 
+        if not self._native_purchase_unlocked(observation.raw):
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         if self.affordable_ball_purchase:
             fixed = self.affordable_provider(observation)
             return (
                 RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
-                if fixed is None else fixed.resource_availability(observation)
+                if fixed is None and self._ordinary_ball_deficit(observation)
+                else RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+                if fixed is None
+                else fixed.resource_availability(observation)
             )
         inventory = dict(observation.raw.bag_items or ())
         new_slots = sum(purchase.item not in inventory for purchase in self.purchases)
@@ -820,6 +962,14 @@ class RedMartResupplyGoalProvider:
         proceeds = funding.proceeds if funding else 0
         if observation.raw.player_money is None or observation.raw.player_money + proceeds < cost:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_RESOURCE)
+        if self.reserve_targets:
+            targets = dict(self.reserve_targets)
+            if any(
+                targets[p.item] - inventory.get(int(p.item), 0) != p.quantity
+                for p in self.purchases
+            ):
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+            return RedGoalSkillAvailability.available()
         capture, recovery = self._projected_resources(observation)
         projected = min(
             headroom_satisfaction(
@@ -832,6 +982,13 @@ class RedMartResupplyGoalProvider:
         if projected <= observation.evidence.resources:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
         return RedGoalSkillAvailability.available()
+
+    def _native_purchase_unlocked(self, raw: RawGameState) -> bool:
+        # Viridian's clerk offers the parcel dialogue until Oak receives it.
+        # The destination fact is required before transport as well as at input.
+        return self.map_id is not MapId.VIRIDIAN_MART or event_flag_is_set(
+            raw.event_flags, EventFlag.OAK_GOT_PARCEL
+        )
 
     def resource_quote(self, observation: RedGoalObservation) -> GoalResourceQuote:
         """Quote the exact fixed purchase using fresh funds and reserve counts.
@@ -866,6 +1023,12 @@ class RedMartResupplyGoalProvider:
         ):
             purchased = sum(item.quantity for item in self.purchases if item.item in items)
             if purchased:
+                if self.reserve_targets:
+                    inventory = dict(observation.raw.bag_items or ())
+                    count = sum(
+                        inventory.get(int(i), 0) for i, _ in self.reserve_targets if i in items
+                    )
+                    target = sum(n for i, n in self.reserve_targets if i in items)
                 reserves.append(GoalResourceReserve(resource, count, target, purchased))
         funding = self._required_funding(observation)
         return GoalResourceQuote(
@@ -918,10 +1081,7 @@ class RedMartResupplyGoalProvider:
 def prepare_center_departure(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
     """Settle nurse/PC interactions before transport at their known boundaries."""
     raw = reader.read()
-    if (
-        raw.map_id in _POKEMON_CENTER_MAPS
-        and (raw.player_x, raw.player_y) == (13, 4)
-    ):
+    if raw.map_id in _POKEMON_CENTER_MAPS and (raw.player_x, raw.player_y) == (13, 4):
         from pokemon_red_completion.red_pc_storage import close_generic_pc_session
 
         close_generic_pc_session(actions, reader)
@@ -939,6 +1099,7 @@ def finish_center_dialogue(
     *,
     maximum_attempts: int = 16,
     settle_frames: int = 120,
+    include_indigo_lobby: bool = False,
 ) -> None:
     """Leave an already-healed nurse interaction without guessing walk inputs.
 
@@ -950,9 +1111,12 @@ def finish_center_dialogue(
     if maximum_attempts <= 0 or settle_frames <= 0:
         raise ValueError("Center dialogue bounds must be positive")
     start = reader.read()
+    if type(include_indigo_lobby) is not bool:
+        raise TypeError("Indigo recovery opt-in must be boolean")
+    indigo = include_indigo_lobby and start.map_id == MapId.INDIGO_PLATEAU_LOBBY
     if (
-        start.map_id not in _POKEMON_CENTER_MAPS
-        or (start.player_x, start.player_y) != (3, 3)
+        (start.map_id not in _POKEMON_CENTER_MAPS and not indigo)
+        or (start.player_y, start.player_x) != ((7, 7) if indigo else (3, 3))
         or start.battle_state != 0
         or not _raw_party_restored(start)
     ):
@@ -991,10 +1155,23 @@ class RedCenterRestoreGoalProvider:
     settle_frames: int = 120
     kind: GoalKind = GoalKind.RESTORE_TEAM
     require_pp_restore: bool = False
+    require_full_pp_restore: bool = False
+    include_indigo_lobby: bool = False
+    require_indigo_checkpoint: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.require_indigo_checkpoint) is not bool:
+            raise TypeError("Indigo checkpoint requirement must be boolean")
+        if self.require_indigo_checkpoint and not (
+            self.include_indigo_lobby and self.require_full_pp_restore
+        ):
+            raise ValueError("Indigo checkpoint requires explicit lobby and full-party recovery")
+        if type(self.include_indigo_lobby) is not bool:
+            raise TypeError("Indigo recovery opt-in must be boolean")
         if type(self.require_pp_restore) is not bool:
             raise ValueError("explicit Center PP recovery mode must be boolean")
+        if type(self.require_full_pp_restore) is not bool:
+            raise ValueError("explicit full Center PP recovery mode must be boolean")
         for name in ("movement_attempts", "dialogue_attempts", "settle_frames"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
@@ -1002,34 +1179,53 @@ class RedCenterRestoreGoalProvider:
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         start = observation.raw
+        indigo = self.include_indigo_lobby and start.map_id == MapId.INDIGO_PLATEAU_LOBBY
+        # Indigo's nurse is behind a counter: object(5,7), counter(6,7),
+        # player interaction boundary(7,7), not the adjacent counter tile.
+        nurse_y, nurse_x, entry_y = (7, 7, 11) if indigo else (3, 3, 7)
+        restored = (
+            _raw_party_fully_restored if self.require_full_pp_restore else _raw_party_restored
+        )
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
+            if self.require_indigo_checkpoint and not indigo:
+                return RedGoalSkillAvailability.unavailable(
+                    GoalUnavailableReason.MISSING_CAPABILITY
+                )
             if raw.battle_state or not current.input_ready:
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.TEMPORARILY_BLOCKED
                 )
             if current.evidence.safety >= 1.0 and not (
-                self.require_pp_restore and not _raw_party_restored(raw)
+                (self.require_pp_restore or self.require_full_pp_restore)
+                and not restored(raw)
+                or self.require_full_pp_restore
+                and (raw.player_y, raw.player_x) != (nurse_y, nurse_x)
+                or self.require_indigo_checkpoint
+                and self.reader.read_last_blackout_map() != int(MapId.INDIGO_PLATEAU)
             ):
                 return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if (
-                raw.map_id not in _POKEMON_CENTER_MAPS
-                or raw.player_x != 3
+                (raw.map_id not in _POKEMON_CENTER_MAPS and not indigo)
+                or raw.map_id != start.map_id
+                or raw.player_x != nurse_x
                 or raw.player_y is None
-                or not 3 <= raw.player_y <= 7
+                or not nurse_y <= raw.player_y <= entry_y
             ):
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
             return RedGoalSkillAvailability.available()
 
-        before_actions = self.actions.actions_executed
-        before_frames = self.emulator.frame_count
-
         def execute() -> GoalExecutionReport:
+            # A caller may perform separately metered facing support after
+            # quotation. Charge this receipt only for nursing execution;
+            # outer accounting still retains all earlier inputs.
+            before_actions = self.actions.actions_executed
+            before_frames = self.emulator.frame_count
             assert start.player_y is not None
-            for target_y in range(start.player_y - 1, 2, -1):
+            for target_y in range(start.player_y - 1, nurse_y - 1, -1):
                 for _ in range(self.movement_attempts):
                     before = self.reader.read()
                     self.actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
@@ -1039,19 +1235,41 @@ class RedCenterRestoreGoalProvider:
                         raise RedGoalSkillError("Center approach entered an unexpected battle")
                     if (
                         after.map_id == before.map_id
-                        and after.player_x == 3
+                        and after.player_x == nurse_x
                         and after.player_y == target_y
                     ):
                         break
                 else:
                     raise RedGoalSkillError("Center approach failed bounded movement")
+            # Routing can reach the interaction tile from either side. Being
+            # on that tile does not imply that the player faces the nurse.
+            if self.reader.read_player_facing() != "up":
+                before = self.reader.read()
+                self.actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
+                self._settle()
+                after = self.reader.read()
+                if (
+                    (after.map_id, after.player_y, after.player_x)
+                    != (start.map_id, nurse_y, nurse_x)
+                    or after.battle_state
+                    or self.reader.read_player_facing() != "up"
+                    or after.party_hp != before.party_hp
+                    or after.party_pp != before.party_pp
+                    or after.party_status != before.party_status
+                    or after.bag_items != before.bag_items
+                    or after.player_money != before.player_money
+                ):
+                    raise RedGoalSkillError("Center nurse facing changed its safe boundary")
             for _ in range(self.dialogue_attempts):
                 self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
                 self._settle()
                 raw = self.reader.read()
                 if raw.map_id != start.map_id:
                     raise RedGoalSkillError("Center recovery changed maps")
-                if _raw_party_restored(raw) and self.reader.read_input_readiness().ready:
+                if (restored(raw) and self.reader.read_input_readiness().ready
+                        and (not self.require_indigo_checkpoint
+                             or self.reader.read_last_blackout_map()
+                             == int(MapId.INDIGO_PLATEAU))):
                     break
             else:
                 raise RedGoalSkillError("Center recovery did not restore the party")
@@ -1060,6 +1278,7 @@ class RedCenterRestoreGoalProvider:
                 self.reader,
                 maximum_attempts=self.dialogue_attempts,
                 settle_frames=self.settle_frames,
+                include_indigo_lobby=self.include_indigo_lobby,
             )
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
@@ -1067,13 +1286,21 @@ class RedCenterRestoreGoalProvider:
                 evidence={"bounded": True, "whole_party_restore": True},
             )
 
-        if self.require_pp_restore:
+        if self.require_pp_restore or self.require_full_pp_restore:
+
             def verify_restore(before, after, report):
                 if (
-                    report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready
+                    report.actions_executed <= 0
+                    or after.raw.battle_state
+                    or not after.input_ready
                     or after.raw.map_id != before.raw.map_id
-                    or not _raw_party_restored(after.raw)
-                    or _raw_party_restored(before.raw)
+                    or not restored(after.raw)
+                    or restored(before.raw)
+                    and not self.require_full_pp_restore
+                    or self.require_full_pp_restore
+                    and (after.raw.player_y, after.raw.player_x) != (nurse_y, nurse_x)
+                    or self.require_indigo_checkpoint
+                    and self.reader.read_last_blackout_map() != int(MapId.INDIGO_PLATEAU)
                     or before.raw.bag_items != after.raw.bag_items
                     or before.raw.player_money != after.raw.player_money
                     or before.raw.party_species_ids != after.raw.party_species_ids
@@ -1087,9 +1314,14 @@ class RedCenterRestoreGoalProvider:
                 return GoalVerification.succeeded()
 
             return RedObservedGoalSkillProvider(
-                kind=self.kind, binding_ref="pokemon.red:recovery:pokemon-center-pp",
-                adapter=self.adapter, availability=boundary, executor=execute,
-                verifier=verify_restore, estimated_effort=0.04, estimated_risk=0.01,
+                kind=self.kind,
+                binding_ref="pokemon.red:recovery:pokemon-center-pp",
+                adapter=self.adapter,
+                availability=boundary,
+                executor=execute,
+                verifier=verify_restore,
+                estimated_effort=0.04,
+                estimated_risk=0.01,
             ).offer(observation)
 
         return RedProgressGoalProvider(
@@ -1119,8 +1351,11 @@ class RedControlRecoveryGoalProvider:
     confirm_attempts: int = 8
     settle_frames: int = 30
     kind: GoalKind = GoalKind.RECOVER_CONTROL
+    settle_dialogue: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.settle_dialogue) is not bool:
+            raise TypeError("dialogue settlement permission must be a boolean")
         for name in (
             "wait_attempts",
             "cancel_attempts",
@@ -1147,7 +1382,7 @@ class RedControlRecoveryGoalProvider:
                 self.kind,
                 GoalUnavailableReason.MISSING_CAPABILITY,
             )
-        if observation.input_ready:
+        if observation.input_ready and not self._dialogue_blocked():
             return RedGoalBindingOffer.unavailable(
                 self.kind,
                 GoalUnavailableReason.NO_LEGAL_TARGET,
@@ -1155,6 +1390,12 @@ class RedControlRecoveryGoalProvider:
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
         before_story = self.adapter.graph.completed_ids(observation.game_state)
+        preserved = {
+            name: getattr(observation.raw, name)
+            for name in ("player_money", "bag_items", "party_species_ids", "party_levels",
+                         "party_hp", "party_max_hp", "party_status", "party_moves", "party_pp",
+                         "badge_bits")
+        } if self.settle_dialogue else {}
 
         def execute() -> GoalExecutionReport:
             attempts = self._recover()
@@ -1171,7 +1412,11 @@ class RedControlRecoveryGoalProvider:
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             if observation.party.species_ids() != after.party.species_ids():
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
-            if report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready:
+            if (report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready
+                    or self._dialogue_blocked()
+                    or any(getattr(after.raw, name) != value for name, value in preserved.items())):
+                return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+            if self._start_menu_visible():
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             return GoalVerification.succeeded()
 
@@ -1188,8 +1433,11 @@ class RedControlRecoveryGoalProvider:
 
     def _recover(self) -> int:
         attempts = 0
+        start_menu_recovery = self._start_menu_visible()
         for _ in range(self.wait_attempts):
-            if self.reader.read_input_readiness().ready:
+            if self.reader.read().battle_state:
+                raise RedGoalSkillError("control recovery entered battle; learned handoff required")
+            if self._field_control_ready():
                 return attempts
             self._settle()
             attempts += 1
@@ -1197,13 +1445,34 @@ class RedControlRecoveryGoalProvider:
             (MacroActionKind.CANCEL, self.cancel_attempts),
             (MacroActionKind.CONFIRM, self.confirm_attempts),
         ):
+            if kind is MacroActionKind.CONFIRM and start_menu_recovery:
+                # Never choose an item/save entry while attempting to close Start.
+                break
             for _ in range(maximum):
-                if self.reader.read_input_readiness().ready:
+                if self.reader.read().battle_state:
+                    raise RedGoalSkillError(
+                        "control recovery entered battle; learned handoff required"
+                    )
+                if self._field_control_ready():
                     return attempts
                 self.actions.execute(MacroAction(kind))
                 self._settle()
                 attempts += 1
+        if self._field_control_ready():
+            return attempts
         raise RedGoalSkillError("bounded control recovery did not restore input")
+
+    def _start_menu_visible(self) -> bool:
+        return bool(getattr(self.reader, "read_overworld_start_menu_visible", lambda: False)())
+
+    def _field_control_ready(self) -> bool:
+        return (self.reader.read_input_readiness().ready and not self._start_menu_visible()
+                and not self._dialogue_blocked())
+
+    def _dialogue_blocked(self) -> bool:
+        return self.settle_dialogue and bool(
+            getattr(self.reader, "read_bottom_dialogue_box_visible", lambda: False)()
+        )
 
     def _settle(self) -> None:
         self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=self.settle_frames))
@@ -1236,8 +1505,10 @@ class RedEncounterDiscoveryGoalProvider:
         if self.source_species_numbers is not None and (
             not isinstance(self.source_species_numbers, tuple)
             or not self.source_species_numbers
-            or any(type(number) is not int or not 1 <= number <= 151
-                   for number in self.source_species_numbers)
+            or any(
+                type(number) is not int or not 1 <= number <= 151
+                for number in self.source_species_numbers
+            )
             or self.source_species_numbers != tuple(sorted(set(self.source_species_numbers)))
         ):
             raise RedGoalSkillError("encounter-discovery local species are invalid")
@@ -1269,16 +1540,37 @@ class RedEncounterDiscoveryGoalProvider:
 
         def execute() -> GoalExecutionReport:
             encounters = 0
+
+            def exhausted(reason: str) -> GoalExecutionReport:
+                return GoalExecutionReport(
+                    actions_executed=self.actions.actions_executed - before_actions,
+                    frames_executed=self.emulator.frame_count - before_frames,
+                    evidence={
+                        "bounded": True,
+                        "encounters_seen": encounters,
+                        "new_sighting_count": 0,
+                        "captures": 0,
+                        "search_exhausted": True,
+                        "search_stop_reason": reason,
+                    },
+                )
+
             for _ in range(self.maximum_seek_steps):
                 encountered = self.area_executor.encountered_species_ref()
                 if encountered is None:
-                    self.area_executor.seek_encounter()
+                    try:
+                        self.area_executor.seek_encounter()
+                    except RedAreaExecutionError as error:
+                        if (
+                            error.reason_code != "survey_leg_limit_exceeded"
+                            or self.area_executor.encountered_species_ref() is not None
+                        ):
+                            raise
+                        return exhausted(error.reason_code)
                     encountered = self.area_executor.encountered_species_ref()
                     if encountered is None:
                         continue
                 encounters += 1
-                if encounters > self.maximum_encounters:
-                    break
                 observed = self.adapter.observe()
                 newly_seen = frozenset(observed.collection.pokedex.seen_target_numbers).difference(
                     initially_seen
@@ -1300,11 +1592,11 @@ class RedEncounterDiscoveryGoalProvider:
                             "captures": 0,
                         },
                     )
-            raise RedGoalSkillError(
-                "encounter discovery exhausted its bounded search without a new sighting"
-            )
+                if encounters >= self.maximum_encounters:
+                    return exhausted("encounter_limit_reached")
+            return exhausted("seek_step_limit_reached")
 
-        return RedProgressGoalProvider(
+        offer = RedProgressGoalProvider(
             kind=self.kind,
             binding_ref=f"pokemon.red:explore:{self.source_id}",
             adapter=self.adapter,
@@ -1313,6 +1605,42 @@ class RedEncounterDiscoveryGoalProvider:
             estimated_effort=min(1.0, self.maximum_encounters / 500),
             estimated_risk=0.10,
         ).offer(observation)
+        if offer.binding is None:
+            return offer
+        binding = offer.binding
+
+        def verify(report: GoalExecutionReport) -> GoalVerification:
+            verdict = binding.verify(report)
+            if report.evidence.get("search_exhausted") is not True:
+                return verdict
+            after = self.adapter.observe()
+            if (
+                verdict.status is GoalDecisionOutcome.FAILED
+                and verdict.failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+                and report.evidence.get("bounded") is True
+                and type(report.evidence.get("new_sighting_count")) is int
+                and report.evidence["new_sighting_count"] == 0
+                and type(report.evidence.get("captures")) is int
+                and report.evidence["captures"] == 0
+                and report.evidence.get("search_stop_reason") in {
+                    "survey_leg_limit_exceeded",
+                    "encounter_limit_reached",
+                    "seek_step_limit_reached",
+                }
+                and report.actions_executed > 0
+                and report.frames_executed > 0
+                and not after.raw.battle_state
+                and after.input_ready
+                and not after.party.fainted_count
+                and frozenset(after.collection.pokedex.seen_target_numbers) == initially_seen
+            ):
+                return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
+            return (
+                GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                if verdict.status is GoalDecisionOutcome.SUCCEEDED else verdict
+            )
+
+        return replace(offer, binding=replace(binding, verify=verify))
 
 
 @dataclass(frozen=True, slots=True)
@@ -1339,8 +1667,10 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey boundary must be callable")
         if self.normalize_after_capture is not None and not callable(self.normalize_after_capture):
             raise RedGoalSkillError("area-survey normalizer must be callable")
-        if (type(self.search_effort_surcharge) not in (int, float)
-                or not 0 <= self.search_effort_surcharge <= 1):
+        if (
+            type(self.search_effort_surcharge) not in (int, float)
+            or not 0 <= self.search_effort_surcharge <= 1
+        ):
             raise RedGoalSkillError("area-survey search effort surcharge is invalid")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
@@ -1400,7 +1730,55 @@ class RedAreaSurveyGoalProvider:
         before_frames = self.emulator.frame_count
         before_story = self.adapter.graph.completed_ids(observation.game_state)
 
+        # Bind the existing native guard to the actual individuals at this
+        # source. A no-catch survey may still earn a legal level evolution.
+        # Species/count equality alone cannot explain that custody change.
+        from .red_player_party_guard import RedPlayerPartyGuard
+
+        guard = getattr(self.adapter, "party_guard", None)
+        survey_guard = (
+            replace(
+                guard, before=guard.reader.read(),
+                refs=guard.reader.preparation_specimen_refs(), loanable_refs=frozenset(),
+            )
+            if isinstance(guard, RedPlayerPartyGuard) else None
+        )
+
+        def evolution_census(observed):
+            if survey_guard is None:
+                return None
+            collection = observed.collection_observation
+            return {
+                "owned_species": sorted(collection.owned_species),
+                "specimen_counts": dict(Counter(s.species_ref for s in collection.specimens)),
+                "retained_party_continuation": survey_guard.continuation_evidence(
+                    collection, include_unreserved_additions=True,
+                ),
+            }
+
+        before_census = evolution_census(observation)
+
         def execute() -> GoalExecutionReport:
+            from .red_player_lesson_runtime import (
+                player_control_diagnostics,
+                player_diagnostic_state,
+            )
+
+            def observe_diagnostics():
+                counters = self.actions.actions_executed, self.emulator.frame_count
+                facts = player_diagnostic_state(self.adapter.observe())
+                facts.update(native_actions=counters[0], native_frames=counters[1])
+                search = getattr(self.area_executor, "search_diagnostics", None)
+                facts["search_exposure"] = search() if callable(search) else None
+                reader = getattr(self.adapter, "reader", None)
+                if reader is not None:
+                    facts["control"] = player_control_diagnostics(reader)
+                    mode = getattr(reader, "read_overworld_movement_mode", None)
+                    facts["movement_mode"] = mode() if callable(mode) else None
+                if counters != (self.actions.actions_executed, self.emulator.frame_count):
+                    raise RedGoalSkillError("capture diagnostics advanced native execution")
+                return facts
+
             report = run_red_area_survey(
                 self.source_id,
                 self.area_executor,
@@ -1413,10 +1791,29 @@ class RedAreaSurveyGoalProvider:
                     quantity > 0 and item in _ORDINARY_CAPTURE_ITEMS
                     for item, quantity in (self.adapter.observe().raw.bag_items or ())
                 ),
+                record_diagnostic_event=getattr(self.actions, "record_diagnostic_event", None),
+                observe_diagnostics=observe_diagnostics,
             )
-            if (report.captures and not report.safety_stopped
-                    and self.normalize_after_capture is not None):
-                self.normalize_after_capture()
+            source_normalized = False
+            if not report.safety_stopped and self.normalize_after_capture is not None:
+                normalize = bool(report.captures)
+                if not normalize and report.capture_items_exhausted:
+                    # An unsuccessful last-ball attempt still needs the same
+                    # exact source exit. Do not bypass that verifier or send
+                    # return-route input into combat/unsettled control.
+                    exhausted = self.adapter.observe()
+                    normalize = (
+                        not exhausted.raw.battle_state
+                        and exhausted.input_ready
+                        and all(member.hp > 0 for member in exhausted.party.members)
+                        and not any(
+                            dict(exhausted.raw.bag_items or ()).get(int(item), 0) > 0
+                            for item in _ORDINARY_CAPTURE_ITEMS
+                        )
+                    )
+                if normalize:
+                    self.normalize_after_capture()
+                    source_normalized = True
             final_survey = summarize_red_area_survey(
                 self.source_id,
                 self.area_executor.read_collection(),
@@ -1427,6 +1824,7 @@ class RedAreaSurveyGoalProvider:
                 getattr(self.area_executor, "capture_throw_preparations", ())
             )
             escape_bypasses = getattr(self.area_executor, "capture_escape_bypasses", 0)
+            weakening_reports = tuple(getattr(self.area_executor, "capture_weakening_reports", ()))
             survey_evidence = {
                 "semantic_actions": report.actions_executed,
                 "encounters_seen": report.encounters_seen,
@@ -1435,8 +1833,11 @@ class RedAreaSurveyGoalProvider:
                 "search_exhausted": report.search_exhausted,
                 "safety_stopped": report.safety_stopped,
                 **({"capture_items_exhausted": True} if report.capture_items_exhausted else {}),
-                **({"search_stop_reason": report.search_stop_reason}
-                   if report.search_stop_reason is not None else {}),
+                **(
+                    {"search_stop_reason": report.search_stop_reason}
+                    if report.search_stop_reason is not None
+                    else {}
+                ),
             }
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
@@ -1445,43 +1846,103 @@ class RedAreaSurveyGoalProvider:
                     "bounded": True,
                     **survey_evidence,
                     "capture_survey": survey_evidence,
-                    "source_normalized": bool(
-                        report.captures and not report.safety_stopped
-                        and self.normalize_after_capture is not None
+                    "capture_diagnostics": dict(
+                        schema="pokemon.red.capture-survey-diagnostics.v1",
+                        diagnostic_only=True,
+                        flees_includes_failed_capture_attempts=True,
+                        direct_flees=report.direct_flees,
+                        capture_attempts=report.capture_attempts,
+                        failed_capture_attempts=report.failed_capture_attempts,
+                        events=list(report.diagnostic_events),
                     ),
+                    "source_normalized": source_normalized,
                     "initial_missing": len(report.initial_missing_species_refs),
                     "final_missing": len(report.final_missing_species_refs),
                     "initial_missing_specimens": initial_missing_specimens,
                     "final_missing_specimens": final_survey.missing_specimen_count,
-                    **({"capture_throw_preparations": throw_preparations}
-                       if throw_preparations else {}),
-                    **({"capture_status_reports": status_reports, "capture_support": {
-                        "status_attempts": len(status_reports),
-                        "verified_status_observations": sum(
-                            row.get("status_success") is True for row in status_reports
-                        ),
-                        "party_preparations": 0,
-                        **({"escape_setup_bypasses": escape_bypasses} if escape_bypasses else {}),
-                        **({"prepared_throws": len(throw_preparations),
-                            "prepared_asleep": sum(
-                                row.get("target_status") == "sleep" for row in throw_preparations
-                            ),
-                            "prepared_paralyzed": sum(
-                                row.get("target_status") == "paralysis"
-                                for row in throw_preparations
-                            ),
-                            "prepared_full_hp": sum(
-                                type(row.get("target_hp")) is int
-                                and row["target_hp"] == row.get("target_max_hp")
-                                and row["target_hp"] > 0 for row in throw_preparations
-                            )} if throw_preparations else {}),
-                    }} if status_reports or escape_bypasses or throw_preparations else {}),
+                    **(
+                        {"capture_weakening_reports": weakening_reports}
+                        if weakening_reports
+                        else {}
+                    ),
+                    **(
+                        {"capture_throw_preparations": throw_preparations}
+                        if throw_preparations
+                        else {}
+                    ),
+                    **(
+                        {
+                            "capture_status_reports": status_reports,
+                            "capture_support": {
+                                "status_attempts": len(status_reports),
+                                "verified_status_observations": sum(
+                                    row.get("status_success") is True for row in status_reports
+                                ),
+                                "party_preparations": 0,
+                                **(
+                                    {
+                                        "weakening_attempts": sum(
+                                            row["attempts"] for row in weakening_reports
+                                        ),
+                                        "weakening_hp_removed": sum(
+                                            row["damage"] for row in weakening_reports
+                                        ),
+                                        "weakening_abstentions": sum(
+                                            row["attempts"] == 0 for row in weakening_reports
+                                        ),
+                                    }
+                                    if weakening_reports
+                                    else {}
+                                ),
+                                **(
+                                    {"escape_setup_bypasses": escape_bypasses}
+                                    if escape_bypasses
+                                    else {}
+                                ),
+                                **(
+                                    {
+                                        "prepared_throws": len(throw_preparations),
+                                        "prepared_asleep": sum(
+                                            row.get("target_status") == "sleep"
+                                            for row in throw_preparations
+                                        ),
+                                        "prepared_paralyzed": sum(
+                                            row.get("target_status") == "paralysis"
+                                            for row in throw_preparations
+                                        ),
+                                        "prepared_full_hp": sum(
+                                            type(row.get("target_hp")) is int
+                                            and row["target_hp"] == row.get("target_max_hp")
+                                            and row["target_hp"] > 0
+                                            for row in throw_preparations
+                                        ),
+                                    }
+                                    if throw_preparations
+                                    else {}
+                                ),
+                            },
+                        }
+                        if status_reports or escape_bypasses or throw_preparations
+                        else {}
+                    ),
                 },
             )
 
         initial_missing = set(survey.missing_species_refs)
         before_owned = observation.collection.collection.pokedex_owned_count
         before_living = observation.collection.collection.living_count
+
+        def verified_incidental_evolution(after):
+            from .red_integrated_play import _retained_evolution_census
+
+            after_census = evolution_census(after)
+            return (
+                before_census is not None
+                and after_census is not None
+                and _retained_evolution_census(
+                    before_census, after_census, require_exact_owned=True,
+                )
+            )
 
         def verify(report: GoalExecutionReport) -> GoalVerification:
             after = self.adapter.observe()
@@ -1512,16 +1973,33 @@ class RedAreaSurveyGoalProvider:
             remaining_specimens = after_survey.missing_specimen_count
             captures = report.evidence.get("captures")
             if (
-                (report.evidence.get("search_exhausted") is True
-                 or (report.evidence.get("capture_items_exhausted") is True
-                     and not any(dict(after.raw.bag_items or ()).get(int(item), 0) > 0
-                                 for item in _ORDINARY_CAPTURE_ITEMS)))
+                (
+                    report.evidence.get("search_exhausted") is True
+                    or (
+                        report.evidence.get("capture_items_exhausted") is True
+                        and not any(
+                            dict(after.raw.bag_items or ()).get(int(item), 0) > 0
+                            for item in _ORDINARY_CAPTURE_ITEMS
+                        )
+                    )
+                )
                 and type(captures) is int  # noqa: E721
                 and captures == 0
                 and remaining == initial_missing
                 and remaining_specimens == initial_missing_specimens
-                and after.collection.collection.pokedex_owned_count == before_owned
-                and after.collection.collection.living_count == before_living
+                and (
+                    (
+                        after.collection.collection.pokedex_owned_count == before_owned
+                        and after.collection.collection.living_count == before_living
+                        and after.collection_observation.owned_species
+                        == observation.collection_observation.owned_species
+                        and Counter(s.species_ref for s in after.collection_observation.specimens)
+                        == Counter(
+                            s.species_ref for s in observation.collection_observation.specimens
+                        )
+                    )
+                    or verified_incidental_evolution(after)
+                )
                 and report.actions_executed > 0
                 and not after.raw.battle_state
                 and after.input_ready
@@ -1531,8 +2009,10 @@ class RedAreaSurveyGoalProvider:
             ):
                 return GoalVerification.failed(
                     GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED
-                    if not any(dict(after.raw.bag_items or ()).get(int(item), 0) > 0
-                               for item in _ORDINARY_CAPTURE_ITEMS)
+                    if not any(
+                        dict(after.raw.bag_items or ()).get(int(item), 0) > 0
+                        for item in _ORDINARY_CAPTURE_ITEMS
+                    )
                     else GoalFailureReason.SEARCH_EXHAUSTED
                 )
             if (
@@ -1558,7 +2038,8 @@ class RedAreaSurveyGoalProvider:
                 binding_ref=f"pokemon.red:acquisition:{self.source_id}",
                 kind=self.kind,
                 estimated_effort=min(
-                    1.0, 0.12 * len(survey.missing_species_refs) + self.search_effort_surcharge,
+                    1.0,
+                    0.12 * len(survey.missing_species_refs) + self.search_effort_surcharge,
                 ),
                 estimated_risk=0.18,
                 execute=execute,
@@ -1803,3 +2284,20 @@ def _raw_party_restored(raw: RawGameState) -> bool:
         all((value & 0x3F) > 0 for move, value in zip(member_moves, member_pp, strict=True) if move)
         for member_moves, member_pp in zip(moves, pp, strict=True)
     )
+
+
+def _raw_party_fully_restored(raw: RawGameState) -> bool:
+    """Strict whole-party HP/status/PP, including packed PP Up capacities."""
+    from .red_party_pp import RedPartyPpError, decode_red_party_pp
+
+    try:
+        if not _raw_party_restored(raw):
+            return False
+        if raw.party_moves is None or raw.party_pp is None:
+            return False
+        return all(
+            all(slot.current_pp == slot.maximum_pp for slot in decode_red_party_pp(moves, pp).moves)
+            for moves, pp in zip(raw.party_moves, raw.party_pp, strict=True)
+        )
+    except (ValueError, TypeError, RedPartyPpError):
+        return False

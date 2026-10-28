@@ -1,0 +1,435 @@
+{
+  "schema": "pokemon.red-earned-league-finish.v1",
+  "session_id": "2026-09-25-earned-league-finish",
+  "source_commit": "9e21963c1b126c62fdcdd4d3fc936db2c550caab",
+  "execution_source": "Frozen plan pins executable file digests; implemented atop source_commit before this local integration.",
+  "private_audit_sha256": "e399af84adf4063a834263b6995e22bc4b582a114a8a7ffda0ade7491f222c5e",
+  "actions": 2303,
+  "admission_sha256": "b2a0c70689cf2770238215da07a45ba25bdc5005b2c66da819f6da23fce92aa8",
+  "all_choices_reconstructed": true,
+  "cash": 30620,
+  "choice_counts": {
+    "attack": 48,
+    "forced_switch": 5,
+    "party_faints": 5,
+    "pp_spent": 44,
+    "switch_prompt": 21,
+    "voluntary_switch": 13
+  },
+  "concurrent_champion_and_hall_of_fame": true,
+  "decisions": 87,
+  "fits": 0,
+  "frames": 212898,
+  "full_run_acceptance": false,
+  "gameplay_running": false,
+  "independent_roots": 0,
+  "items_spent": {
+    "18": 3,
+    "20": 7,
+    "53": 4
+  },
+  "latency_ns": {
+    "maximum": 7912750,
+    "median": 2741375,
+    "total": 244748584
+  },
+  "memory_edits": 0,
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "models_unchanged": true,
+  "new_registrations": 0,
+  "operator_preparation": true,
+  "partition": "development",
+  "passed": true,
+  "plan_sha256": "d62bb568afaefcbc80c3fc70861ddc60b51f2fc1db962b36e60cd9184c5e529f",
+  "previous466stages_unchanged": true,
+  "previous_blackout_and_shopping_cost_retained": 23022,
+  "registered": 17,
+  "remaining_campaign_actions": 14048,
+  "rooms": [
+    {
+      "actions": 389,
+      "choices": {
+        "attack": 11,
+        "forced_switch": 1,
+        "party_faints": 1,
+        "pp_spent": 11,
+        "switch_prompt": 4,
+        "voluntary_switch": 4
+      },
+      "decisions": 20,
+      "envelope_sha256": "bcaad444c12901e45a8f38e8601b2d2be34c68c98f69da9b3c2bc95d06fd54b6",
+      "final_party_hp": [
+        142,
+        118,
+        0,
+        74,
+        200
+      ],
+      "final_party_levels": [
+        55,
+        54,
+        54,
+        52,
+        63
+      ],
+      "final_sha256": "5cf837a15932255610e7f25b96ecde5f9ce5d18e2630498f746f7e6238f4b006",
+      "frames": 35964,
+      "index": 0,
+      "items_used": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 14.668496732026144,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 5,
+        "party_faints": 1,
+        "party_hp_lost": 334,
+        "party_pp_spent": 11,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7131791,
+        "policy_latency_ns_mean": 3154500.05,
+        "policy_latency_ns_min": 340917,
+        "selected_move_pp_spends": 11,
+        "teacher_interventions": 0
+      },
+      "money": 6365,
+      "objective": "defeat_lorelei",
+      "risk_counts": {
+        "attack": 11,
+        "attack_choices_while_asleep": 0,
+        "attacks_without_positive_power_coverage": 0,
+        "control_margins_within_0_05": 0,
+        "forced_switch": 1,
+        "status_move_choices": 0,
+        "switch_choices_below_quarter_hp": 0,
+        "switch_prompt": 4,
+        "type_immune_attacks": 0,
+        "voluntary_switch": 4,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "won": true
+    },
+    {
+      "actions": 539,
+      "choices": {
+        "attack": 6,
+        "party_faints": 0,
+        "pp_spent": 6,
+        "switch_prompt": 4,
+        "voluntary_switch": 1
+      },
+      "decisions": 11,
+      "envelope_sha256": "9d8cb70f84010060c9336c5223226616b28604c6f06f75fc7d585c95c2ca07e2",
+      "final_party_hp": [
+        200,
+        118,
+        144,
+        95,
+        156
+      ],
+      "final_party_levels": [
+        63,
+        54,
+        54,
+        52,
+        55
+      ],
+      "final_sha256": "77413c8dcbfa172b9dc951b1a9c7f82b579f6c17fe1be8602c4ae113b1d28697",
+      "frames": 51012,
+      "index": 1,
+      "items_used": 11,
+      "metrics": {
+        "attack_turn_utility_sum": 14.790055248618785,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 5,
+        "party_faints": 0,
+        "party_hp_lost": 155,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 5070125,
+        "policy_latency_ns_mean": 2882144,
+        "policy_latency_ns_min": 735458,
+        "selected_move_pp_spends": 6,
+        "teacher_interventions": 0
+      },
+      "money": 12107,
+      "objective": "defeat_bruno",
+      "risk_counts": {
+        "attack": 6,
+        "attack_choices_while_asleep": 0,
+        "attacks_without_positive_power_coverage": 0,
+        "control_margins_within_0_05": 0,
+        "status_move_choices": 0,
+        "switch_choices_below_quarter_hp": 0,
+        "switch_prompt": 4,
+        "type_immune_attacks": 0,
+        "voluntary_switch": 1,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "won": true
+    },
+    {
+      "actions": 337,
+      "choices": {
+        "attack": 8,
+        "party_faints": 0,
+        "pp_spent": 7,
+        "switch_prompt": 4,
+        "voluntary_switch": 3
+      },
+      "decisions": 15,
+      "envelope_sha256": "4cacfaf1c19a07294e1818f59cee873df64887597983ad0d3669dfafcdffc952",
+      "final_party_hp": [
+        71,
+        200,
+        144,
+        71,
+        156
+      ],
+      "final_party_levels": [
+        55,
+        63,
+        54,
+        52,
+        55
+      ],
+      "final_sha256": "53edecab649f73fab9274c83e71222b0986ffbd1aa8fd63a0de407091bbf620b",
+      "frames": 31584,
+      "index": 2,
+      "items_used": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 14.480271186440678,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 5,
+        "party_faints": 0,
+        "party_hp_lost": 74,
+        "party_pp_spent": 7,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 5759666,
+        "policy_latency_ns_mean": 3118772.1333333333,
+        "policy_latency_ns_min": 811250,
+        "selected_move_pp_spends": 7,
+        "teacher_interventions": 0
+      },
+      "money": 18047,
+      "objective": "defeat_agatha",
+      "risk_counts": {
+        "attack": 8,
+        "attack_choices_while_asleep": 0,
+        "attacks_without_positive_power_coverage": 0,
+        "control_margins_within_0_05": 0,
+        "status_move_choices": 0,
+        "switch_choices_below_quarter_hp": 0,
+        "switch_prompt": 4,
+        "type_immune_attacks": 0,
+        "voluntary_switch": 3,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "won": true
+    },
+    {
+      "actions": 465,
+      "choices": {
+        "attack": 12,
+        "forced_switch": 4,
+        "party_faints": 4,
+        "pp_spent": 9,
+        "switch_prompt": 4,
+        "voluntary_switch": 4
+      },
+      "decisions": 24,
+      "envelope_sha256": "7fe736a973c5c000bd7a8966d923c78609c1db14c10cf52f2cde1ab8bd5fc8c6",
+      "final_party_hp": [
+        0,
+        163,
+        0,
+        0,
+        0
+      ],
+      "final_party_levels": [
+        55,
+        64,
+        54,
+        52,
+        55
+      ],
+      "final_sha256": "201ae7a67c7efd63b3a7c020b49e7da6e328207fb15b968288b23328bc4717c1",
+      "frames": 44388,
+      "index": 3,
+      "items_used": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 6.213223140495868,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 5,
+        "party_faints": 4,
+        "party_hp_lost": 701,
+        "party_pp_spent": 9,
+        "party_status_changes": 2,
+        "policy_latency_ns_max": 4336833,
+        "policy_latency_ns_mean": 2008980.875,
+        "policy_latency_ns_min": 8167,
+        "selected_move_pp_spends": 9,
+        "teacher_interventions": 0
+      },
+      "money": 24185,
+      "objective": "defeat_lance",
+      "risk_counts": {
+        "attack": 12,
+        "attack_choices_while_asleep": 1,
+        "attacks_without_positive_power_coverage": 0,
+        "control_margins_within_0_05": 0,
+        "forced_switch": 4,
+        "status_move_choices": 1,
+        "switch_choices_below_quarter_hp": 0,
+        "switch_prompt": 4,
+        "type_immune_attacks": 0,
+        "voluntary_switch": 4,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "won": true
+    },
+    {
+      "actions": 573,
+      "choices": {
+        "attack": 11,
+        "party_faints": 0,
+        "pp_spent": 11,
+        "switch_prompt": 5,
+        "voluntary_switch": 1
+      },
+      "decisions": 17,
+      "envelope_sha256": "bb6a88022739c9011f5b30fae30f8b76986407f4cd29e4b9d486ae4b3650cfed",
+      "final_party_hp": [
+        16,
+        78,
+        72,
+        70,
+        0
+      ],
+      "final_party_levels": [
+        65,
+        55,
+        54,
+        52,
+        55
+      ],
+      "final_sha256": "5450b083b06c1ba15f5edb30268afc09c034df1b91d06a1762d1e700b69955f1",
+      "frames": 49950,
+      "index": 4,
+      "items_used": 3,
+      "metrics": {
+        "attack_turn_utility_sum": 17.19475721323012,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 6,
+        "party_faints": 0,
+        "party_hp_lost": 205,
+        "party_pp_spent": 11,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7912750,
+        "policy_latency_ns_mean": 3232816.2352941176,
+        "policy_latency_ns_min": 684416,
+        "selected_move_pp_spends": 11,
+        "teacher_interventions": 0
+      },
+      "money": 30620,
+      "objective": "defeat_champion",
+      "risk_counts": {
+        "attack": 11,
+        "attack_choices_while_asleep": 0,
+        "attacks_without_positive_power_coverage": 0,
+        "control_margins_within_0_05": 0,
+        "status_move_choices": 0,
+        "switch_choices_below_quarter_hp": 1,
+        "switch_prompt": 5,
+        "type_immune_attacks": 0,
+        "voluntary_switch": 1,
+        "zero_power_choices_with_covered_alternative": 0
+      },
+      "won": true
+    }
+  ],
+  "root_sha256": "303cc6841d71a3a1cee219f387f041948814daf42e59066c692d15d3cdc3992d",
+  "seconds": 15.716207083001791,
+  "story_objectives": 36,
+  "teacher_battle_interventions": 0,
+  "terminal_sha256": "5450b083b06c1ba15f5edb30268afc09c034df1b91d06a1762d1e700b69955f1",
+  "total_campaign_actions": 285952,
+  "actual_stages": [
+    466,
+    467,
+    468,
+    469,
+    470
+  ],
+  "terminal_envelope_sha256": "bb6a88022739c9011f5b30fae30f8b76986407f4cd29e4b9d486ae4b3650cfed",
+  "final_map_id": 118,
+  "room_wins": 5,
+  "foes_defeated": 26,
+  "illegal_actions": 0,
+  "items_spent_named": {
+    "potion": 7,
+    "hyper_potion": 3,
+    "revive": 4
+  },
+  "final_alive": 4,
+  "final_party": [
+    {
+      "species": "Blastoise",
+      "level": 65,
+      "hp": 16
+    },
+    {
+      "species": "Jolteon",
+      "level": 55,
+      "hp": 78
+    },
+    {
+      "species": "Farfetch'd",
+      "level": 54,
+      "hp": 72
+    },
+    {
+      "species": "Snorlax",
+      "level": 52,
+      "hp": 70
+    },
+    {
+      "species": "Dugtrio",
+      "level": 55,
+      "hp": 0
+    }
+  ],
+  "campaign_frames": 22572116,
+  "tests": {
+    "targeted_passed": 419,
+    "full_suite_run": false
+  },
+  "legacy_train": 135,
+  "shared_collection": {
+    "registrations": 109,
+    "target": 124,
+    "specimens": 78,
+    "cash": 11968,
+    "changed": false
+  },
+  "fresh_red_criteria_passed": 0,
+  "fresh_red_criteria_total": 5,
+  "authority_promotions": 0,
+  "limitations": [
+    "One known-lineage development challenge, not independent-root or fresh-run acceptance.",
+    "Destinations, opening leads and finite item recovery were support, not learned preparation.",
+    "All HP medicine was spent before Bruno; successful result does not establish optimal allocation.",
+    "Broad native candidate screen remains failed at29/72 vs30/72; default actor unchanged.",
+    "One new earned League win does not qualify repeatable League income.",
+    "Native postgame Continue and healing not yet verified from this terminal."
+  ],
+  "preclaim_corrections": [
+    "Frozen trainer payout and Bruno identity corrected from cartridge before any claim or input.",
+    "Read-only lobby final-scene query rejected unsupported map; no input or replay."
+  ],
+  "next": "Verify native postgame handoff/Continue and healing, then audit remaining player-ownership and collection gaps without merging save ledgers.",
+  "prize_cash_gained": 29799
+}

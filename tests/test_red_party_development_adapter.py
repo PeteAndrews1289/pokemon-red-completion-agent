@@ -512,6 +512,11 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
         22,
     )
     cave_source = replace(field_dig_source, map_id=MapId.DIGLETTS_CAVE)
+    assert not red_vermilion_training_transition_available(
+        replace(field_dig_source, map_id=MapId.AGATHAS_ROOM),
+        int(MapId.VERMILION_CITY),
+        15,
+    )
     assert not red_vermilion_training_transition_available(cave_source, 0, 17)
     assert red_vermilion_training_transition_available(
         cave_source,

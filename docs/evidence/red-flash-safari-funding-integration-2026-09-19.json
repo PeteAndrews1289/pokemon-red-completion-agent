@@ -1,0 +1,62 @@
+{
+  "schema": "pokemon.red.flash-safari-funding-integration.v1",
+  "classification": "engineering_not_learning",
+  "base_commit": "867f5ad468b5d071dea9c990f59fba87f19cccb9",
+  "contribution": {
+    "agent": "Flash 3.8 High",
+    "correction_passes": 1,
+    "integration": "byte_identical_to_reviewed_draft",
+    "file_sha256": {
+      "src/pokemon_red_completion/red_autonomous_collection.py": "93ed2028be32e48c71d58006f30cabca8feb086c467e851398c8585d0d04394b",
+      "src/pokemon_red_completion/red_autonomous_safari.py": "03651a4bd0fd16356d68a70ab73cfbf823c6e837ab99520113ba596d5ae6954d",
+      "src/pokemon_red_completion/red_live_safari.py": "0cad85c9c8fe29c4d6832457c7bbf23e7b926c740664646b2fb6934bdfe888a3",
+      "tests/test_red_autonomous_collection.py": "226bf40910f6eba0e1fb2799f4d887a1d94b2e0d05c9b90927137f946691b8dc",
+      "tests/test_red_autonomous_safari.py": "21311deab081435714cb8f321d37909c06e97f3e8304922630dce07740da5df3",
+      "tests/test_red_live_safari.py": "db24ed4ec634b81226b8977e5e67890810be9a3b8d640203b34e427d8bd21f6c",
+      "tests/test_red_routed_trainer_funding.py": "7d0c0ac40ad0bdc3c54bd5f3d04928222bc6928f0e29d9949b56f8b13b62e431",
+      "src/pokemon_red_completion/red_safari_funding_budget.py": "49566ebd7332751b21071082429937b826c6cb5ebfab09894884d63f2565bb3b",
+      "tests/test_red_safari_funding_budget.py": "a5944bda58978d8e15707048ff9ea2970c6700139665de84968c9e2f8eda99d6"
+    },
+    "service_quota": "unavailable",
+    "primary_usage_saving": "not_measured"
+  },
+  "verification": {
+    "focused_tests": 200,
+    "expanded_integration_tests": 280,
+    "mutation": {
+      "change": "real eligibility always returns no areas; process only",
+      "failed": 10,
+      "passed": 190,
+      "expected_failure": "missing admission quote and target cash 0 instead of 500"
+    },
+    "ruff": "passed",
+    "mypy": {
+      "status": "passed",
+      "files": 544
+    },
+    "full_suite": "not_run"
+  },
+  "changes": [
+    "separate non-money eligibility from executable affordability",
+    "quote one 500-cost admission only with qualified non-money prerequisites",
+    "combine with Mart liquidity target using max, not sum",
+    "retain all execution, trainer scope and minimum-choice guards"
+  ],
+  "retained_limits": [
+    "gate origin map 156 still unsupported",
+    "J ordinary trainer funding remains one-to-three party members",
+    "no demonstrated profitable J income",
+    "main-save executable choice set still unqualified"
+  ],
+  "deltas": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "fits": 0,
+    "new_training_examples": 0,
+    "registrations": 0,
+    "authority_promotions": 0
+  },
+  "next_task": "bounded Flash draft of origin-aware Safari entry from the unpaid gate; Codex audit and live qualification remain separate",
+  "publication": "local_only_no_push"
+}

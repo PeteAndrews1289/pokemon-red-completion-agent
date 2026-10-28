@@ -3,6 +3,8 @@ from __future__ import annotations
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
+from math import isfinite
+from time import monotonic
 from typing import Any, Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -84,6 +86,18 @@ class JournaledController(CausallyMeteredEmulator):
         self._tick_completed(frames)
 
 
+def release_pressed_buttons(controller: Any) -> tuple[str, ...]:
+    """Neutralize only held controls at teardown, with no press or game tick.
+
+    Cleanup callers retain their original error and account for all prior work.
+    This executor-owned operation is not a selected action or a recovery policy.
+    """
+    buttons = tuple(sorted(controller.pressed_buttons))
+    for button in buttons:
+        controller.release(button)
+    return buttons
+
+
 class UnsupportedMacroActionError(ValueError):
     """Raised when a specialist requests an action without a qualified compiler."""
 
@@ -92,8 +106,39 @@ class ControllerFrameBudgetError(RuntimeError):
     """Raised before controller time can exceed a declared frame budget."""
 
 
+class ControllerActionBudgetExhausted(RuntimeError):
+    """Raised before a macro dispatch can exceed its declared action budget."""
+
+    def __init__(self, *, maximum_actions: int, attempted_actions: int) -> None:
+        self.maximum_actions = maximum_actions
+        self.attempted_actions = attempted_actions
+        super().__init__("controller exhausted its hard macro-action budget")
+
+
+class ControllerWallTimeBudgetExhausted(RuntimeError):
+    """Raised when cooperative admission reaches a monotonic elapsed-time limit."""
+
+    def __init__(self, *, maximum_wall_seconds: int, elapsed_seconds: float) -> None:
+        self.maximum_wall_seconds = maximum_wall_seconds
+        self.elapsed_seconds = elapsed_seconds
+        super().__init__("controller reached its hard monotonic wall-time admission deadline")
+
+
 class GoalExecutionBudgetExhausted(RuntimeError):
     """Marker for an expected hard goal-execution budget terminal."""
+
+
+class RestorationBudgetExhausted(GoalExecutionBudgetExhausted):
+    """A native restoration was refused before spending another heal or input."""
+
+    def __init__(self, *, maximum_heals: int, restoration_attempts: int) -> None:
+        if (type(maximum_heals) is not int or maximum_heals < 0
+                or type(restoration_attempts) is not int
+                or restoration_attempts < maximum_heals):
+            raise ValueError("restoration exhaustion needs measured spent allowance")
+        self.maximum_heals = maximum_heals
+        self.restoration_attempts = restoration_attempts
+        super().__init__("native player restoration budget exhausted")
 
 
 class ControllerFrameBudgetExhausted(
@@ -136,6 +181,8 @@ class ReadOnlyController:
         return value
 
     def __getattr__(self, name: str) -> Any:
+        if name == "release_restored_inputs":
+            raise RuntimeError("read-only controller forbids restored-input release")
         return getattr(self._delegate, name)
 
 
@@ -214,6 +261,112 @@ class FrameBudgetController:
         return getattr(self._delegate, name)
 
 
+class NativeLessonController(FrameBudgetController):
+    """Input only within a recorded macro; no reset or memory-write capability.
+
+    This is a capability boundary for trusted adapters, not a Python sandbox.
+    Observers and verifiers receive the same port with input admission closed.
+    """
+
+    input_enabled = False
+
+    def press(self, button: str) -> None:
+        self._require_input()
+        self._delegate.press(button)
+
+    def release(self, button: str) -> None:
+        self._require_input()
+        self._delegate.release(button)
+
+    def tick(self, frames: int) -> None:
+        self._require_input()
+        super().tick(frames)
+
+    def _require_input(self) -> None:
+        if not self.input_enabled:
+            raise ControllerInputForbiddenError("native lesson input outside recorded action")
+
+    def __getattr__(self, name: str) -> Any:
+        if name not in {"read_u8", "save_state_bytes", "pressed_buttons", "fingerprint"}:
+            raise AttributeError("native lesson controller exposes no mutation or reset port")
+        return getattr(self._delegate, name)
+
+
+class MonotonicWallTimeBudgetController:
+    """Refuse new input or frames at a cooperative monotonic deadline.
+
+    Release and read-only endpoint operations remain available after expiry. This
+    is an admission boundary, not a preemptive watchdog for an already-entered
+    native, policy, or filesystem call.
+    """
+
+    __slots__ = (
+        "_delegate",
+        "_last_reading",
+        "_maximum_wall_seconds",
+        "_monotonic_clock",
+        "_started_at",
+    )
+
+    def __init__(
+        self,
+        delegate: ControllerPort,
+        *,
+        maximum_wall_seconds: int,
+        monotonic_clock: Callable[[], float] = monotonic,
+    ) -> None:
+        if type(maximum_wall_seconds) is not int or maximum_wall_seconds <= 0:  # noqa: E721
+            raise ValueError("maximum_wall_seconds must be a positive integer")
+        if not callable(monotonic_clock):
+            raise TypeError("monotonic_clock must be callable")
+        started_at = monotonic_clock()
+        if not isinstance(started_at, (int, float)) or not isfinite(started_at):
+            raise TypeError("monotonic_clock returned an invalid reading")
+        self._delegate = delegate
+        self._maximum_wall_seconds = maximum_wall_seconds
+        self._monotonic_clock = monotonic_clock
+        self._started_at = float(started_at)
+        self._last_reading = float(started_at)
+
+    @property
+    def maximum_wall_seconds(self) -> int:
+        return self._maximum_wall_seconds
+
+    @property
+    def elapsed_seconds(self) -> float:
+        reading = self._monotonic_clock()
+        if (
+            not isinstance(reading, (int, float))
+            or not isfinite(reading)
+            or reading < self._last_reading
+        ):
+            raise RuntimeError("monotonic_clock returned an invalid reading")
+        self._last_reading = float(reading)
+        return self._last_reading - self._started_at
+
+    def check_wall_time_budget(self) -> None:
+        elapsed = self.elapsed_seconds
+        if elapsed >= self._maximum_wall_seconds:
+            raise ControllerWallTimeBudgetExhausted(
+                maximum_wall_seconds=self._maximum_wall_seconds,
+                elapsed_seconds=elapsed,
+            )
+
+    def press(self, button: str) -> None:
+        self.check_wall_time_budget()
+        self._delegate.press(button)
+
+    def release(self, button: str) -> None:
+        self._delegate.release(button)
+
+    def tick(self, frames: int) -> None:
+        self.check_wall_time_budget()
+        self._delegate.tick(frames)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._delegate, name)
+
+
 class WindowedFrameBudgetController:
     """Refuse a tick before it exceeds either a resettable window or total cap."""
 
@@ -280,6 +433,15 @@ class WindowedFrameBudgetController:
     @property
     def frames_this_window(self) -> int:
         return self.frame_count - self._window_start
+
+    @property
+    def remaining_frames(self) -> int:
+        """Headroom under every live cap; a new window never refunds total use."""
+        return min(
+            self._maximum_total_frames - self.frames_executed,
+            self._maximum_frames_per_window - self.frames_this_window,
+            *(end - self.frame_count for end in self._nested_frame_deadlines),
+        )
 
     def begin_window(self) -> None:
         self._window_start = self.frame_count
@@ -373,6 +535,13 @@ class FrameSafeExecutor:
             frames += self._timing.release_frames
         return ExecutedAction(action, (button,) * action.repeat, frames)
 
+    def release_restored_inputs(self) -> tuple[str, ...]:
+        """Explicit key-up-only recovery; never synthesize a key press."""
+        release = getattr(self._controller, "release_restored_inputs", None)
+        if not callable(release):
+            raise UnsupportedMacroActionError("controller lacks restored-input release")
+        return release()
+
     @staticmethod
     def _button_for(action: MacroAction) -> str | None:
         if action.kind is MacroActionKind.WAIT:
@@ -397,6 +566,56 @@ class FrameSafeExecutor:
         )
 
 
+class ControllerActionLimiter:
+    """Reserve admitted macro attempts before delegation across one episode."""
+
+    __slots__ = (
+        "_admit_action",
+        "_completed_actions",
+        "_delegate",
+        "_maximum_actions",
+        "attempted_actions",
+    )
+
+    def __init__(
+        self,
+        delegate: ChapterExecutor,
+        *,
+        maximum_actions: int,
+        admit_action: Callable[[], None] | None = None,
+    ) -> None:
+        if type(maximum_actions) is not int or maximum_actions <= 0:  # noqa: E721
+            raise ValueError("maximum_actions must be a positive integer")
+        if admit_action is not None and not callable(admit_action):
+            raise TypeError("admit_action must be callable")
+        self._delegate = delegate
+        self._maximum_actions = maximum_actions
+        self._admit_action = admit_action
+        self.attempted_actions = 0
+        self._completed_actions = 0
+
+    @property
+    def completed_actions(self) -> int:
+        return self._completed_actions
+
+    @property
+    def maximum_actions(self) -> int:
+        return self._maximum_actions
+
+    def execute(self, action: MacroAction) -> object:
+        if self.attempted_actions >= self._maximum_actions:
+            raise ControllerActionBudgetExhausted(
+                maximum_actions=self._maximum_actions,
+                attempted_actions=self.attempted_actions,
+            )
+        if self._admit_action is not None:
+            self._admit_action()
+        self.attempted_actions += 1
+        result = self._delegate.execute(action)
+        self._completed_actions += 1
+        return result
+
+
 class ChapterExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
 
@@ -410,3 +629,9 @@ class CountingExecutor:
         result = self.delegate.execute(action)
         self.actions_executed += 1
         return result
+
+    def record_diagnostic_event(self, kind: str, payload: dict[str, object]) -> None:
+        """Forward read-only evidence separately from controller action counts."""
+        record = getattr(self.delegate, "record_diagnostic_event", None)
+        if callable(record):
+            record(kind, payload)

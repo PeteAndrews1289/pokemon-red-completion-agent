@@ -28,10 +28,12 @@ emulator = [
 ]
 learning = [
   "numpy>=2,<3",
+  "scipy>=1.15,<2",
 ]
 dev = [
   "mypy>=1.11",
   "numpy>=2,<3",
+  "scipy>=1.15,<2",
   "pytest>=8",
   "pytest-xdist>=3.8,<4",
   "ruff>=0.11",

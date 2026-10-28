@@ -1,0 +1,102 @@
+{
+  "schema": "pokemon.red.development-work-block-result.v1",
+  "status": "closed_scoped_development_collection",
+  "session_id": "2026-10-08-eight-hour-model-directed-collection",
+  "partition": "development",
+  "correlated_continuation": true,
+  "independent_evaluation": false,
+  "final_autonomy": false,
+  "source": {
+    "family": "red-model-directed-collection-8h-20261008-v1",
+    "initial_registrations": 33,
+    "initial_cash": 20086,
+    "state_sha256": "027a16e7459b0e3201ea3d0e8a336d0db5bcbf5986e70a63b26ca5ec943ce75a",
+    "plan_sha256": "7f371a2b27728a05cf570e99e62029ce582f6207325524a202301526a32ccca4"
+  },
+  "terminal": {
+    "segment": "segment-040",
+    "registrations": 81,
+    "remaining_native_route_registrations": 43,
+    "cash": 0,
+    "ordinary_balls": 4,
+    "protected_master_ball": 1,
+    "map_id": 215,
+    "map_name": "PokemonMansion3F",
+    "at_yx": [9, 7],
+    "party_levels": [63, 60, 86, 62, 60, 53],
+    "whole_party_restored": true,
+    "field_ready": true,
+    "worker_stopped": true,
+    "controls_released": true,
+    "state_sha256": "c1f8a701c8e12a105eb147331ef059e5765093cdce3e4ac205a9fadc87e24fa6",
+    "context_sha256": "e2bd31ace2aaad6140ff16f4dc76da2c5cf3087e4e33f5f8422402a8717a932f",
+    "result_sha256": "3abce3f7e9887a682cd43142e7d34ad1b8ecf94a57b84e5235cb748a8d4a807a",
+    "final_stop_reason": "execution_failed",
+    "final_error_type": "ControllerWallTimeBudgetExhausted"
+  },
+  "registration_delta": {
+    "total": 48,
+    "during_model_owned_goals": 46,
+    "during_singleton_support": 2,
+    "singleton_evolutions": [80, 130],
+    "latest_model_owned_additions": [108, 132, 88]
+  },
+  "outcomes": {
+    "executed_goals": 278,
+    "model_owned_goals": 236,
+    "support_goals": 42,
+    "successes": 170,
+    "model_owned_successes": 129,
+    "support_successes": 41,
+    "ordinary_failed_verifications": 82,
+    "other_failed_verifications": 5,
+    "execution_errors": 21,
+    "model_owned_execution_errors": 20,
+    "support_execution_errors": 1,
+    "separate_menu_admission_stops": 9,
+    "all_original_failures_and_costs_retained": true
+  },
+  "learning": {
+    "admitted_train_delta": 0,
+    "fit_delta": 0,
+    "model_examples": 151,
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "configuration_sha256": "0f0172bddc974b3619eb0e6cff29792ae7587aa51516549cca46ea21c476d974",
+    "automatic_online_weight_updates": false,
+    "development_fitting": false,
+    "runtime_llm_calls": 0,
+    "official_authority_promotions": 0
+  },
+  "block_costs": {
+    "actions": 351557,
+    "frames": 28830800,
+    "decision_attempts": 280,
+    "restore_attempts": 391,
+    "cash_debits": 62855,
+    "native_accounted_seconds": 13618.581787834875,
+    "native_seconds_are_not_total_block_wall_time": true
+  },
+  "verification": {
+    "exact_terminal_reload_passed": true,
+    "reload_inputs": 0,
+    "reload_frames": 0,
+    "reload_model_queries": 1,
+    "reload_result_sha256": "75da9721d673d792ce24617935ecf8af4ffe9017b05999800e1dd478e11d0626",
+    "protected_pins_verified": 17,
+    "protected_main_registrations": 32,
+    "protected_main_changed": false,
+    "save_progress_merged": false,
+    "copy_back": false,
+    "item_sales_or_injected_player_money": false,
+    "publication": false,
+    "full_suite_ci_claim": false
+  },
+  "limitations": [
+    "Adaptive source repairs and disclosed support prevent a final frozen-autonomy claim.",
+    "Forty-three registrations remain on this same DEVELOPMENT copy.",
+    "Mansion1F travel and Grimer capture pass; a later Mansion3F goal reaches its time limit without full goal verification.",
+    "Retained trainer recovery passes; the new future fishing-route battle callback still lacks native interruption proof.",
+    "Six existing fast-transport typing errors remain; focused behavior checks are not full typing or CI success.",
+    "New gameplay records are not TRAIN rows or automatic parameter learning."
+  ]
+}

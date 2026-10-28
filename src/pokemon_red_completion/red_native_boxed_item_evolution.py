@@ -15,12 +15,13 @@ from typing import cast
 from . import red_goal_context as context
 from .executor import CountingExecutor
 from .gen1_cartridge import EvolutionMethod, evolution_graph, level_up_learnsets
-from .gen1_route_runtime import Gen1TraversalObserver
+from .gen1_route_runtime import Gen1TraversalObserver, Gen1WildFleeHandler
 from .goal_manager import GoalKind, GoalUnavailableReason
 from .goal_manager_runtime import GoalExecutionReport
 from .observation import MAX_BAG_ITEMS, ItemId, MapId
-from .red_evolution_stones import buyable_evolution_stone
+from .red_evolution_stones import BUYABLE_EVOLUTION_STONES, EVOLUTION_STONE_ITEMS
 from .red_goal_skills import prepare_center_departure
+from .red_native_boxed_evolution import restore_native_center_party, settle_native_evolution
 from .red_party_item_evolution import (
     RedPartyItemEvolutionExecutor,
     RedPartyItemEvolutionRequest,
@@ -39,16 +40,56 @@ from .saffron import DEFAULT_SAFFRON_TIMING, purchase_celadon_evolution_stone
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
+def _withdrawn_precursor_slot(party, withdrawn, species_id):
+    """Bind the exact appended specimen, not another party member of its species."""
+    if (
+        not withdrawn.passed
+        or withdrawn.species_id != species_id
+        or len(withdrawn.party_before) != 5
+        or tuple(party) != withdrawn.party_after
+        or withdrawn.party_after != (*withdrawn.party_before, species_id)
+    ):
+        raise context.RedGoalContextError("item evolution lost its withdrawn precursor")
+    return len(withdrawn.party_before)
+
+
+def _native_item_transport(runtime, world, actions, traversal, destination, *, goal_at):
+    """Use live geometry and the existing blocked-step replan for Mart/PC walks."""
+    from .red_resource_goal_router import _ROUTE_LIMITS
+
+    current = world.with_current_observation(runtime.reader)
+    plan = current.plan_feasible_to_map(traversal.observe(), destination, goal_at=goal_at)
+    # Local Mart/PC walking can expose a native poison faint after a prior
+    # learned transport battle. Reuse the strict existing message handler;
+    # this allows no wild escape, arbitrary dialogue, healing or replacement.
+    handler = Gen1WildFleeHandler(
+        actions, runtime.reader, maximum_flees=0, stabilization_frames=120,
+        allow_party_faints=True, emulator=runtime.emulator,
+        allow_field_faint_dialogue=True, route_name="local item evolution transport",
+        field_faint_warps=tuple(
+            (segment.source_map, segment.transition.exit_at,
+             segment.target_map, segment.transition.arrival_at)
+            for segment in plan.segments if segment.passage_kind == "warp"
+            and segment.source_map != segment.target_map
+        ),
+    )
+    return execute_route(plan, actions, traversal,
+        limits=_ROUTE_LIMITS, replanner=current.replanner(), interruption_handler=handler)
+
+
 def bind_native_boxed_item_evolution(
     runtime: context.RedGoalContextRuntime,
     world: StrategicScenarioRouteWorld,
     *,
     allow_cross_box: bool = True,
+    allow_move_learning_preservation: bool = False,
 ) -> context.RedGoalContextRuntime:
-    """Bind a generic buyable-stone pipeline to one item-evolution profile."""
+    """Bind held-stone use, with procurement only for genuine shop offers."""
 
     if type(allow_cross_box) is not bool:
         raise TypeError("boxed item evolution cross-box mode differs")
+    if type(allow_move_learning_preservation) is not bool:
+        raise TypeError("boxed item move preservation mode differs")
     specs = tuple(
         spec
         for spec in runtime.profile.providers
@@ -63,7 +104,9 @@ def bind_native_boxed_item_evolution(
     source_ref = cast(str, spec.parameters["source_species_ref"])
     target_ref = cast(str, spec.parameters["target_species_ref"])
     item_id = cast(int, spec.parameters["item_id"])
-    offer = buyable_evolution_stone(item_id)
+    if item_id not in EVOLUTION_STONE_ITEMS:
+        raise context.RedGoalContextError("unsupported evolution stone")
+    offer = BUYABLE_EVOLUTION_STONES.get(item_id)
     source_national = context.red_species_number(source_ref)
     target_national = context.red_species_number(target_ref)
     edges = evolution_graph(world.rom).get(source_national, ())
@@ -149,15 +192,34 @@ def bind_native_boxed_item_evolution(
             for level, move in level_up_learnsets(world.rom).get(target_national, ())
             if level == request.precursor_level
         )
+        prompt_supported = not prompt_moves
+        if prompt_moves and allow_move_learning_preservation:
+            detector = getattr(runtime.reader, "read_move_learning_prompt", None)
+            box_reader = getattr(runtime.reader, "read_box_move_members", None)
+            members = box_reader(request.source_box_index) if callable(box_reader) else ()
+            source_moves = tuple(m for m in members if (
+                m.box_slot == request.precursor_box_slot
+                and m.species_id == request.precursor_internal_species_id
+                and m.level == request.precursor_level
+            ))
+            prompt_supported = (
+                callable(detector) and len(source_moves) == 1
+                and len(source_moves[0].moves) == 4
+                and all(1 <= move <= 165 for move in source_moves[0].moves)
+            )
         if (
             raw.bag_items is None
             or raw.player_money is None
-            or stone_count > 1
+            or not 0 <= stone_count <= 99
             or (
                 needs_shop
-                and (len(raw.bag_items) >= MAX_BAG_ITEMS or raw.player_money < offer.price)
+                and (
+                    offer is None
+                    or len(raw.bag_items) >= MAX_BAG_ITEMS
+                    or raw.player_money < offer.price
+                )
             )
-            or prompt_moves
+            or not prompt_supported
             or not plans_available(observation, needs_shop=needs_shop)
         ):
             return context.RedGoalSkillAvailability.unavailable(
@@ -183,17 +245,18 @@ def bind_native_boxed_item_evolution(
         bag_before = dict(before.raw.bag_items or ())
         needs_shop = bag_before.get(item_id, 0) == 0
         traversal = Gen1TraversalObserver(runtime.reader)
-        # A routed arrival can be at the nurse tile with an unhealed party and
-        # no dialogue. Departure handles an actual farewell, but must not
-        # require healing when the evolution skill does not restore the team.
+        # Transport battles can leave an unhealed party at the nurse stance.
+        # Preserve the existing dialogue guard, then reuse level evolution's
+        # counted free recovery. The unchanged independent outcome verifier
+        # requires a usable party; procurement never secretly skips that guard.
+        prepare_center_departure(actions, runtime.reader)
+        restorations = restore_native_center_party(runtime, actions)
         prepare_center_departure(actions, runtime.reader)
         if needs_shop:
-            to_mart = world.plan_feasible_to_map(
-                traversal.observe(),
-                int(MapId.CELADON_MART_4F),
-                goal_at=(2, 12),
-            )
-            if not execute_route(to_mart, actions, traversal).passed:
+            if offer is None:
+                raise context.RedGoalContextError("finite evolution stone has no shop")
+            if not _native_item_transport(runtime, world, actions, traversal,
+                    int(MapId.CELADON_MART_4F), goal_at=(2, 12)).passed:
                 raise context.RedGoalContextError("stone procurement route failed")
             purchase_celadon_evolution_stone(
                 actions,
@@ -204,12 +267,8 @@ def bind_native_boxed_item_evolution(
                 absolute_index=offer.mart_absolute_index,
                 price=offer.price,
             )
-        to_pc = world.plan_feasible_to_map(
-            traversal.observe(),
-            int(MapId.CELADON_POKECENTER),
-            goal_at=(4, 13),
-        )
-        if not execute_route(to_pc, actions, traversal).passed:
+        if not _native_item_transport(runtime, world, actions, traversal,
+                int(MapId.CELADON_POKECENTER), goal_at=(4, 13)).passed:
             raise context.RedGoalContextError("item evolution PC route failed")
         face_pc_boundary(actions, runtime.reader, "up")
         open_bills_pc(actions, runtime.reader)
@@ -231,23 +290,23 @@ def bind_native_boxed_item_evolution(
         )
         close_generic_pc_session(actions, runtime.reader)
         party = tuple(runtime.reader.read().party_species_ids or ())
-        source_slots = tuple(
-            index
-            for index, species in enumerate(party)
-            if species == request.precursor_internal_species_id
+        source_slot = _withdrawn_precursor_slot(
+            party,
+            withdrawn,
+            request.precursor_internal_species_id,
         )
-        if len(source_slots) != 1:
-            raise context.RedGoalContextError("item evolution lost its withdrawn precursor")
         result = RedPartyItemEvolutionExecutor(
             runtime.reader,
             runtime.emulator,
             registration,
             lambda: runtime.adapter.observe().collection_observation,
+            **({"allow_move_learning_preservation": True}
+               if allow_move_learning_preservation else {}),
         ).execute(
             actions,
             RedPartyItemEvolutionRequest(
                 rom=world.rom,
-                party_slot=source_slots[0],
+                party_slot=source_slot,
                 source_national=source_national,
                 target_national=target_national,
                 item_id=item_id,
@@ -258,8 +317,10 @@ def bind_native_boxed_item_evolution(
             not deposited.passed
             or not withdrawn.passed
             or not result.success
-            or after.raw.player_money != money_before - (offer.price if needs_shop else 0)
-            or dict(after.raw.bag_items or ()).get(item_id, 0) != 0
+            or after.raw.player_money
+            != money_before - (offer.price if needs_shop and offer is not None else 0)
+            or dict(after.raw.bag_items or ()).get(item_id, 0)
+            != max(0, bag_before.get(item_id, 0) - 1)
         ):
             raise context.RedGoalContextError("boxed item evolution pipeline failed verification")
         if registration is not None and not registration.verify_evolution(
@@ -282,14 +343,17 @@ def bind_native_boxed_item_evolution(
         expected[target_ref] += 1
         if after_counts != expected:
             raise context.RedGoalContextError("item evolution collection delta differs")
+        settlement = settle_native_evolution(runtime, actions)
         return GoalExecutionReport(
             actions_executed=actions.actions_executed - action_start,
             frames_executed=runtime.emulator.frame_count - frame_start,
             evidence={
+                **settlement,
                 "bounded": True,
                 "typed_stages": ("procurement", "storage", "item_use"),
                 "procurement_executed": needs_shop,
-                "money_spent": offer.price if needs_shop else 0,
+                "money_spent": offer.price if needs_shop and offer is not None else 0,
+                "healing_trips": restorations,
                 "storage_deposit_passed": deposited.passed,
                 "storage_box_switch_performed": switched,
                 "storage_withdraw_passed": withdrawn.passed,
