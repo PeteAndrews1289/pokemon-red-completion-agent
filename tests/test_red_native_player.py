@@ -28,18 +28,18 @@ from pokemon_red_completion.living_dex_option_value import upgrade_option_value_
 
 
 def test_native_cash_meter_retains_purchases_and_loss_despite_net_income():
-    cash=[100]
+    cash = [100]
 
     class Port:
         def execute(self, change):
-            cash[0]+=change
+            cash[0] += change
             if change == -65:
-                raise ValueError('retained native failure')
+                raise ValueError("retained native failure")
 
-    actions=native.NativePlayerActions(Port(),lambda: None,observe_cash=lambda: cash[0])
+    actions = native.NativePlayerActions(Port(), lambda: None, observe_cash=lambda: cash[0])
     actions.execute(-20)
     actions.execute(50)
-    with pytest.raises(ValueError,match='retained native failure'):
+    with pytest.raises(ValueError, match="retained native failure"):
         actions.execute(-65)
     assert cash[0] == 65
     assert actions.observed_cash_debits == 85
@@ -48,19 +48,20 @@ def test_native_cash_meter_retains_purchases_and_loss_despite_net_income():
 
 
 def test_native_cash_observer_is_optional_and_never_an_input():
-    calls=[]
-    actions=native.NativePlayerActions(NS(execute=lambda a:calls.append(a)),lambda: None)
-    actions.execute('normal')
-    assert calls == ['normal'] and actions.observed_cash_changes == 0
-    with pytest.raises(TypeError,match='callable'):
-        native.NativePlayerActions(None,None,observe_cash=True)
+    calls = []
+    actions = native.NativePlayerActions(NS(execute=lambda a: calls.append(a)), lambda: None)
+    actions.execute("normal")
+    assert calls == ["normal"] and actions.observed_cash_changes == 0
+    with pytest.raises(TypeError, match="callable"):
+        native.NativePlayerActions(None, None, observe_cash=True)
 
 
 def test_native_cash_meter_tolerates_unobserved_title_screen_cash():
     cash = [100]
     actions = native.NativePlayerActions(
         NS(execute=lambda value: cash.__setitem__(0, value)),
-        lambda: None, observe_cash=lambda: cash[0],
+        lambda: None,
+        observe_cash=lambda: cash[0],
     )
     actions.execute(None)
     actions.execute(100)
@@ -173,8 +174,9 @@ def test_acquisition_evolution_child_has_scoped_nurse_permission(tmp_path, fails
             raise RuntimeError("retained child failure")
         return GoalExecutionReport(1, 7, {})
 
-    binding = ExecutableGoalBinding("actual-evolution-child", GoalKind.EVOLVE_SPECIES,
-        .1, .1, child, lambda _: None)
+    binding = ExecutableGoalBinding(
+        "actual-evolution-child", GoalKind.EVOLVE_SPECIES, 0.1, 0.1, child, lambda _: None
+    )
     with pytest.raises(ValueError, match="guarded evolution port"):
         session.execute_training_healing(nurse, session.runtime.reader, session.controller)
     if fails:
@@ -197,9 +199,14 @@ def test_evolution_delegation_rejects_unselected_or_recursive_child(fault):
     session.recorder = NS(enabled=fault != "enabled")
     session.active_kind = GoalKind.RESUPPLY if fault == "parent" else GoalKind.ACQUIRE_SPECIES
     session._evolution_subgoal_active = fault == "nested"
-    binding = ExecutableGoalBinding("child", GoalKind.RESTORE_TEAM if fault == "child"
-        else GoalKind.EVOLVE_SPECIES, .1, .1,
-        lambda: pytest.fail("unowned child must not execute"), lambda _: None)
+    binding = ExecutableGoalBinding(
+        "child",
+        GoalKind.RESTORE_TEAM if fault == "child" else GoalKind.EVOLVE_SPECIES,
+        0.1,
+        0.1,
+        lambda: pytest.fail("unowned child must not execute"),
+        lambda _: None,
+    )
     with pytest.raises(ValueError, match="selected acquisition and typed child"):
         session.execute_evolution_subgoal(object() if fault == "type" else binding)
 
@@ -400,8 +407,22 @@ def test_native_development_loop_forwards_and_records_sampler_mix(tmp_path, monk
     assert plan["seed"] == args["seed"]
 
 
-@pytest.mark.parametrize("fault", ["evaluation", "greedy", "sequence", "consequence",
-    True, None, "0.75", -0.1, 1.1, float("nan"), float("inf")])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "evaluation",
+        "greedy",
+        "sequence",
+        "consequence",
+        True,
+        None,
+        "0.75",
+        -0.1,
+        1.1,
+        float("nan"),
+        float("inf"),
+    ],
+)
 def test_native_custom_mix_rejects_invalid_or_other_scope_before_inputs(
     tmp_path, monkeypatch, fault
 ):
@@ -427,7 +448,8 @@ def test_native_custom_mix_rejects_invalid_or_other_scope_before_inputs(
     "fault", [None, "wrong_kind", "failed_verifier", "unsettled", "trainer_loss"]
 )
 @pytest.mark.parametrize(
-    "wild", [False, True, "capture", "capture_from_wild", "trainer", "trainer_intro", "motion", "field"]
+    "wild",
+    [False, True, "capture", "capture_from_wild", "trainer", "trainer_intro", "motion", "field"],
 )
 @pytest.mark.parametrize("resume_refinement", [False, True])
 def test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
@@ -491,8 +513,11 @@ def test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
     def capture(runtime):
         observation, snapshot = capture0(runtime)
         observation.raw.battle_state = (
-            0 if recovered[0] or motion_mode or field_mode or trainer_intro_mode
-            else 1 if wild and not trainer_mode else 2
+            0
+            if recovered[0] or motion_mode or field_mode or trainer_intro_mode
+            else 1
+            if wild and not trainer_mode
+            else 2
         )
         observation.raw.party_hp = (
             (20,) if recovered[0] else (5,) if wild and not field_mode else (0,)
@@ -551,9 +576,12 @@ def test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
             else "pokemon.red:field-blackout:"
         )
         binding = replace(
-            _binding(kind, binding_ref=reference + (
-                "0" * 64 if fault == "wrong_ref" else session.snapshot().sha256
-            ), calls=[]),
+            _binding(
+                kind,
+                binding_ref=reference
+                + ("0" * 64 if fault == "wrong_ref" else session.snapshot().sha256),
+                calls=[],
+            ),
             execute=execute,
             verify=lambda _: (
                 GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
@@ -629,27 +657,55 @@ def test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
 @pytest.mark.parametrize("resume_refinement", [False, True])
 @pytest.mark.parametrize("fault", ["wrong_ref", "trainer_permission"])
 def test_trainer_introduction_requires_its_exact_binding_and_explicit_permission(
-    tmp_path, monkeypatch, fault, resume_refinement,
+    tmp_path,
+    monkeypatch,
+    fault,
+    resume_refinement,
 ):
     test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
-        tmp_path, monkeypatch, fault, "trainer_intro", resume_refinement,
+        tmp_path,
+        monkeypatch,
+        fault,
+        "trainer_intro",
+        resume_refinement,
     )
 
 
-@pytest.mark.parametrize("fault", [None, "train", "synthetic", "v1", "model_v5",
-                                  "missing_objective", "different_challenge", "no_preface",
-                                  "sequence", "recording", "not_bool"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "train",
+        "synthetic",
+        "v1",
+        "model_v5",
+        "missing_objective",
+        "different_challenge",
+        "no_preface",
+        "sequence",
+        "recording",
+        "not_bool",
+    ],
+)
 def test_settled_refinement_scope_is_explicit_and_preserves_historical_default(fault):
     from test_red_consequence_choice import head, progress_head
 
     from pokemon_red_completion.living_dex_option_value import (
         upgrade_option_value_model_for_preparation,
     )
-    args = dict(allow=True, source={"partition": "development"},
-                model=upgrade_option_value_model_for_preparation(_model()),
-                head=progress_head(), objective_ref="declared", challenge_ref="declared",
-                settlement_requested=True, sequence_horizon=None, sequence_policy=None,
-                consequence_spec=None)
+
+    args = dict(
+        allow=True,
+        source={"partition": "development"},
+        model=upgrade_option_value_model_for_preparation(_model()),
+        head=progress_head(),
+        objective_ref="declared",
+        challenge_ref="declared",
+        settlement_requested=True,
+        sequence_horizon=None,
+        sequence_policy=None,
+        consequence_spec=None,
+    )
     if fault == "train":
         args["source"] = {"partition": "train"}
     elif fault == "synthetic":
@@ -684,12 +740,17 @@ def test_absent_preface_cannot_activate_the_head_or_query_model(tmp_path, monkey
     from pokemon_red_completion.living_dex_option_value import (
         upgrade_option_value_model_for_preparation,
     )
+
     args, executed = setup(tmp_path, monkeypatch)
-    args.update(source={**args["source"], "partition": "development"},
-                model=upgrade_option_value_model_for_preparation(args["model"]),
-                consequence_head=progress_head(), consequence_objective_ref="declared",
-                consequence_challenge_ref="declared", settle_existing_wild=True,
-                resume_branch_refinement_after_settlement=True)
+    args.update(
+        source={**args["source"], "partition": "development"},
+        model=upgrade_option_value_model_for_preparation(args["model"]),
+        consequence_head=progress_head(),
+        consequence_objective_ref="declared",
+        consequence_challenge_ref="declared",
+        settle_existing_wild=True,
+        resume_branch_refinement_after_settlement=True,
+    )
     factory0 = args["runtime_factory"]
 
     def factory(controller):
@@ -698,8 +759,11 @@ def test_absent_preface_cannot_activate_the_head_or_query_model(tmp_path, monkey
         return runtime
 
     args["runtime_factory"] = factory
-    monkeypatch.setattr(native, "run_autonomous_options",
-                        lambda **_: pytest.fail("must not query without a verified preface"))
+    monkeypatch.setattr(
+        native,
+        "run_autonomous_options",
+        lambda **_: pytest.fail("must not query without a verified preface"),
+    )
     with pytest.raises(ValueError, match="no verified compulsory boundary"):
         native.run_native_continuous_player(**args)
     assert not executed and not (args["output"] / "settled-branch-refinement.json").exists()
@@ -714,11 +778,18 @@ def test_declared_branch_set_survives_compulsory_settlement_scope():
     from pokemon_red_completion.red_consequence_choice import branch_recovery_scope_ref
 
     scope = ("defeat_misty", "help_bill")
-    args = dict(allow=True, source={"partition": "development"},
-                model=upgrade_option_value_model_for_preparation(_model()),
-                head=progress_head(), objective_ref=scope,
-                challenge_ref=branch_recovery_scope_ref(scope), settlement_requested=True,
-                sequence_horizon=None, sequence_policy=None, consequence_spec=None)
+    args = dict(
+        allow=True,
+        source={"partition": "development"},
+        model=upgrade_option_value_model_for_preparation(_model()),
+        head=progress_head(),
+        objective_ref=scope,
+        challenge_ref=branch_recovery_scope_ref(scope),
+        settlement_requested=True,
+        sequence_horizon=None,
+        sequence_policy=None,
+        consequence_spec=None,
+    )
     assert native.validate_settlement_refinement_scope(**args)
     with pytest.raises(ValueError, match="settled branch refinement"):
         native.validate_settlement_refinement_scope(**{**args, "challenge_ref": "help_bill"})
@@ -1196,22 +1267,35 @@ def test_model_is_part_of_execution_identity():
 
 @pytest.mark.parametrize("receipt", [None, "bad", "g" * 64])
 def test_train_collection_nursing_requires_explicit_valid_setup_before_input(
-    tmp_path, monkeypatch, receipt,
+    tmp_path,
+    monkeypatch,
+    receipt,
 ):
-    args,_=setup(tmp_path,monkeypatch)
-    args.update(source=dict(args["source"],partition="train"),
-                allow_collection_restoration=True,resource_setup_receipt=receipt)
-    with pytest.raises(ValueError,match="TRAIN setup"):
+    args, _ = setup(tmp_path, monkeypatch)
+    args.update(
+        source=dict(args["source"], partition="train"),
+        allow_collection_restoration=True,
+        resource_setup_receipt=receipt,
+    )
+    with pytest.raises(ValueError, match="TRAIN setup"):
         native.run_native_continuous_player(**args)
-    assert args["emulator"].frame_count==0 and not args["output"].exists()
+    assert args["emulator"].frame_count == 0 and not args["output"].exists()
 
 
-@pytest.mark.parametrize("partition,receipt", [
-    ("train", "bad"), ("train", "g" * 64), ("train", True),
-    ("development", "a" * 64),
-])
+@pytest.mark.parametrize(
+    "partition,receipt",
+    [
+        ("train", "bad"),
+        ("train", "g" * 64),
+        ("train", True),
+        ("development", "a" * 64),
+    ],
+)
 def test_collection_teacher_receipt_cannot_expand_evaluation_or_accept_invalid_setup(
-    tmp_path, monkeypatch, partition, receipt,
+    tmp_path,
+    monkeypatch,
+    partition,
+    receipt,
 ):
     args, _ = setup(tmp_path, monkeypatch)
     args.update(
@@ -1225,8 +1309,16 @@ def test_collection_teacher_receipt_cannot_expand_evaluation_or_accept_invalid_s
 
 
 @pytest.mark.parametrize(
-    "fault", [None, "second_heal", "verification", "action_budget", "frame_budget",
-              "unknown_budget_text", "verifier_budget_marker"]
+    "fault",
+    [
+        None,
+        "second_heal",
+        "verification",
+        "action_budget",
+        "frame_budget",
+        "unknown_budget_text",
+        "verifier_budget_marker",
+    ],
 )
 @pytest.mark.parametrize(
     "selected_kind",
@@ -1283,6 +1375,7 @@ def test_nested_restoration_uses_the_original_budget_and_retains_failure(
         def verify(_):
             if fault == "verifier_budget_marker":
                 from pokemon_red_completion.executor import RestorationBudgetExhausted
+
                 raise RestorationBudgetExhausted(maximum_heals=1, restoration_attempts=1)
             return GoalVerification.succeeded()
 
@@ -1313,8 +1406,10 @@ def test_nested_restoration_uses_the_original_budget_and_retains_failure(
     assert costs["goal_attempts"] == 1 and result["model_decisions"] == 0
     assert continued == ([True] if fault in (None, "verifier_budget_marker") else [])
     expected_stop = (
-        "decision_budget" if fault is None
-        else "restoration_budget" if fault == "second_heal"
+        "decision_budget"
+        if fault is None
+        else "restoration_budget"
+        if fault == "second_heal"
         else "execution_failed"
     )
     assert result["stop_reason"] == expected_stop
@@ -1326,8 +1421,11 @@ def test_nested_restoration_uses_the_original_budget_and_retains_failure(
         assert outcome["evidence"] is None
     assert receipt["succeeded"] == (fault in (None, "second_heal", "verifier_budget_marker"))
     assert costs["frames"] == (
-        6 if fault in (None, "verifier_budget_marker")
-        else 2 if fault in ("action_budget", "frame_budget") else 4
+        6
+        if fault in (None, "verifier_budget_marker")
+        else 2
+        if fault in ("action_budget", "frame_budget")
+        else 4
     )
     assert receipt["model_queries"] == 0
 
@@ -1435,9 +1533,14 @@ def test_empty_menu_completes_only_the_explicit_observed_curriculum(tmp_path, mo
     )
 
 
-
 @pytest.mark.parametrize("resume_refinement", [False, True])
-def test_wild_capture_refinement_requires_exact_retained_binding(tmp_path, monkeypatch, resume_refinement):
+def test_wild_capture_refinement_requires_exact_retained_binding(
+    tmp_path, monkeypatch, resume_refinement
+):
     test_existing_blackout_preface_is_compulsory_metered_and_then_rejoins_model(
-        tmp_path, monkeypatch, "wrong_ref", "capture_from_wild", resume_refinement,
+        tmp_path,
+        monkeypatch,
+        "wrong_ref",
+        "capture_from_wild",
+        resume_refinement,
     )

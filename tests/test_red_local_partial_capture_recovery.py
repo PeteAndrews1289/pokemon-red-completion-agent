@@ -19,9 +19,12 @@ def local_partial(monkeypatch, **kwargs):
     survey = deepcopy(receipt.evidence["capture_survey"])
     captures = survey["captures"]
     evidence = dict(
-        bounded=True, source_normalized=False,
-        initial_missing=2, final_missing=1,
-        initial_missing_specimens=captures + 1, final_missing_specimens=1,
+        bounded=True,
+        source_normalized=False,
+        initial_missing=2,
+        final_missing=1,
+        initial_missing_specimens=captures + 1,
+        final_missing_specimens=1,
         capture_survey=survey,
         capture_diagnostics=deepcopy(receipt.evidence["capture_diagnostics"]),
         **survey,
@@ -31,10 +34,16 @@ def local_partial(monkeypatch, **kwargs):
     return before, after, replace(receipt, evidence=evidence)
 
 
-def accepted(before, after, receipt, *, ref=LOCAL, reason=GoalFailureReason.RESOURCE_LOST, error=None):
+def accepted(
+    before, after, receipt, *, ref=LOCAL, reason=GoalFailureReason.RESOURCE_LOST, error=None
+):
     return ordinary_player_setback(
         _binding(GoalKind.ACQUIRE_SPECIES, binding_ref=ref, calls=[]),
-        before, after, receipt, GoalVerification.failed(reason), error,
+        before,
+        after,
+        receipt,
+        GoalVerification.failed(reason),
+        error,
     )
 
 
@@ -42,26 +51,58 @@ def accepted(before, after, receipt, *, ref=LOCAL, reason=GoalFailureReason.RESO
 @pytest.mark.parametrize("captures", [1, 2])
 @pytest.mark.parametrize("evolve", [False, True])
 def test_verified_local_partial_capture_returns_to_model_without_success(
-    monkeypatch, in_party, captures, evolve,
+    monkeypatch,
+    in_party,
+    captures,
+    evolve,
 ):
     before, after, receipt = local_partial(
-        monkeypatch, in_party=in_party, captures=captures, evolve=evolve,
+        monkeypatch,
+        in_party=in_party,
+        captures=captures,
+        evolve=evolve,
     )
     assert accepted(before, after, receipt)
     assert GoalVerification.failed(GoalFailureReason.RESOURCE_LOST).status.value == "failed"
     assert receipt.evidence["final_missing"] == 1
 
 
-@pytest.mark.parametrize("fault", [
-    "unknown_binding", "missing_map", "boolean_map", "map_jump", "unbounded",
-    "boolean_bound", "missing_normalization", "unknown_normalization", "unknown_schema",
-    "count_mismatch", "boolean_count", "flag_mismatch", "missing_survey",
-    "no_remaining_target", "wrong_missing_delta", "wrong_source", "partial_input",
-    "unsafe", "unready", "unknown_reason", "exception", "changed_guard",
-])
-def test_native_local_partial_recovery_rejects_missing_or_inconsistent_authority(monkeypatch, fault):
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "unknown_binding",
+        "missing_map",
+        "boolean_map",
+        "map_jump",
+        "unbounded",
+        "boolean_bound",
+        "missing_normalization",
+        "unknown_normalization",
+        "unknown_schema",
+        "count_mismatch",
+        "boolean_count",
+        "flag_mismatch",
+        "missing_survey",
+        "no_remaining_target",
+        "wrong_missing_delta",
+        "wrong_source",
+        "partial_input",
+        "unsafe",
+        "unready",
+        "unknown_reason",
+        "exception",
+        "changed_guard",
+    ],
+)
+def test_native_local_partial_recovery_rejects_missing_or_inconsistent_authority(
+    monkeypatch, fault
+):
     before, after, receipt = local_partial(monkeypatch)
-    bf, af, evidence = deepcopy(dict(before.facts)), deepcopy(dict(after.facts)), deepcopy(dict(receipt.evidence))
+    bf, af, evidence = (
+        deepcopy(dict(before.facts)),
+        deepcopy(dict(after.facts)),
+        deepcopy(dict(receipt.evidence)),
+    )
     ref, reason, error = LOCAL, GoalFailureReason.RESOURCE_LOST, None
     if fault == "unknown_binding":
         ref = "unknown:local:capture"
@@ -108,6 +149,10 @@ def test_native_local_partial_recovery_rejects_missing_or_inconsistent_authority
     elif fault == "changed_guard":
         af["retained_party_continuation"]["guard_sha256"] = "f" * 64
     assert not accepted(
-        replace(before, facts=bf), replace(after, facts=af),
-        replace(receipt, evidence=evidence), ref=ref, reason=reason, error=error,
+        replace(before, facts=bf),
+        replace(after, facts=af),
+        replace(receipt, evidence=evidence),
+        ref=ref,
+        reason=reason,
+        error=error,
     )

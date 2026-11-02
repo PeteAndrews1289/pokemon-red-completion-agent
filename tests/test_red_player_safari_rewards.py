@@ -1,5 +1,5 @@
-from copy import deepcopy
 import json
+from copy import deepcopy
 from types import SimpleNamespace as N
 
 import pytest
@@ -195,6 +195,7 @@ def test_opted_in_center_approach_is_quoted_and_verified_before_paid_admission(m
         return quote(runtime, executor, **dict(kwargs, route="route"))
 
     monkeypatch.setattr(s, "story_travel_binding", routed_quote)
+
     def serializable_record(*row):
         json.dumps(row)
         recorded.append(row)
@@ -490,7 +491,9 @@ def test_strength_exchange_is_current_party_state_bound_and_verified(monkeypatch
 @pytest.mark.parametrize(
     "fault", [None, "unready", "outdoor", "no_teeth", "two_teeth", "no_surf", "already_owned"]
 )
-def test_strength_interaction_descriptor_requires_the_real_unfinished_reward_boundary(monkeypatch, fault):
+def test_strength_interaction_descriptor_requires_the_real_unfinished_reward_boundary(
+    monkeypatch, fault
+):
     bag = ((198, 1), (64, 1))
     if fault == "no_teeth":
         bag = ((198, 1),)
@@ -524,8 +527,11 @@ def test_outdoor_strength_offer_preserves_the_actual_movement_unit(monkeypatch):
     runtime = N(reader=N(read=lambda: deepcopy(raw)))
     actions = N(execute=lambda _: pytest.fail("offer enumeration sent input"))
     monkeypatch.setattr(s, "_field_ready", lambda _: True)
-    movement = N(story_objective_ref="obtain_strength",
-                 story_unit=OptionStoryUnit("movement", True), story_approach_only=True)
+    movement = N(
+        story_objective_ref="obtain_strength",
+        story_unit=OptionStoryUnit("movement", True),
+        story_approach_only=True,
+    )
     calls = []
 
     def travel(rt, executor, **kwargs):

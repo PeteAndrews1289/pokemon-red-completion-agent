@@ -33,8 +33,8 @@ def _capture(tmp_path, *, wild=False, status=False, partition=None):
         build_battle_scenario_capture_payload(
             capture_id="trainer-unit",
             root_lineage_id="train-root-unit",
-            partition=partition or (
-                ScenarioPartition.DEVELOPMENT if wild else ScenarioPartition.TRAIN),
+            partition=partition
+            or (ScenarioPartition.DEVELOPMENT if wild else ScenarioPartition.TRAIN),
             state_bytes=state,
             initial_observation_sha256="b" * 64,
             source_commit="c" * 40,
@@ -121,8 +121,9 @@ def test_wild_switch_double_ko_finishes_without_forced_switch_query(
 ):
     from pokemon_red_completion.actions import MacroActionKind
 
-    capture = _capture(tmp_path, wild=True,
-                       partition=ScenarioPartition.TRAIN if train_diagnostic else None)
+    capture = _capture(
+        tmp_path, wild=True, partition=ScenarioPartition.TRAIN if train_diagnostic else None
+    )
     session = Session()
     session.raw = replace(session.raw, battle_state=1, battle_result=0)
     snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "wild"}}})
@@ -169,7 +170,9 @@ def test_wild_switch_double_ko_finishes_without_forced_switch_query(
 
 
 @pytest.mark.parametrize("stale_roster", [False, True])
-def test_trainer_final_switch_double_ko_finishes_without_replacement_choice(tmp_path, monkeypatch, stale_roster):
+def test_trainer_final_switch_double_ko_finishes_without_replacement_choice(
+    tmp_path, monkeypatch, stale_roster
+):
     from pokemon_red_completion.actions import MacroActionKind
 
     capture = _capture(tmp_path)
@@ -178,14 +181,23 @@ def test_trainer_final_switch_double_ko_finishes_without_replacement_choice(tmp_
     session.read_enemy_party_roster_hp = lambda: tuple(roster)
     snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
     monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
-    monkeypatch.setattr(episode.PokemonRedObservationEncoder, "from_state_reader",
-        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot))
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
     monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_a, **_k: _prepared())
 
     def switch(_actions, _reader, _session, index, **_kwargs):
         assert index == 1
-        session.raw = replace(session.raw, active_party_index=1, active_party_hp=0,
-            party_hp=(40, 0), enemy_hp=0, enemy_party_position=len(roster)-1)
+        session.raw = replace(
+            session.raw,
+            active_party_index=1,
+            active_party_hp=0,
+            party_hp=(40, 0),
+            enemy_hp=0,
+            enemy_party_position=len(roster) - 1,
+        )
 
     monkeypatch.setattr(episode, "switch_active_battler", switch)
 
@@ -204,8 +216,9 @@ def test_trainer_final_switch_double_ko_finishes_without_replacement_choice(tmp_
         def choose_switch(self, *_args, **_kwargs):
             raise AssertionError("finished trainer fight has no replacement decision")
 
-    result = episode.run_red_trainer_practice_episode(capture, session_factory=lambda: session,
-        policy=Policy(), action_executor=Actions())
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy(), action_executor=Actions()
+    )
     assert result.battle_won and result.final_battle_state == 0
     assert [d["kind"] for d in result.decisions] == ["voluntary_switch"]
 
@@ -646,7 +659,9 @@ def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, mon
 
 
 @pytest.mark.parametrize("living_guard", [False, True])
-def test_episode_records_party_defeat_without_asking_for_impossible_switch(tmp_path, monkeypatch, living_guard):
+def test_episode_records_party_defeat_without_asking_for_impossible_switch(
+    tmp_path, monkeypatch, living_guard
+):
     capture = _capture(tmp_path)
     session = Session()
     session.raw = RawGameState(
@@ -675,8 +690,11 @@ def test_episode_records_party_defeat_without_asking_for_impossible_switch(tmp_p
 
     def guard(_raw):
         raise ValueError("no living member: another decision must not be attempted")
+
     result = episode.run_red_trainer_practice_episode(
-        capture, session_factory=lambda: session, policy=Policy(),
+        capture,
+        session_factory=lambda: session,
+        policy=Policy(),
         decision_guard=guard if living_guard else None,
     )
     assert not result.battle_won
@@ -751,6 +769,7 @@ def test_episode_accepts_authenticated_forced_switch_as_first_boundary(
     monkeypatch.setattr(
         episode, "canonical_sha256", lambda value: ("c" if value.get("status") else "b") * 64
     )
+
     def prepare(*_args, **kwargs):
         assert kwargs.get("allow_status_moves", False) is status or (
             "allow_status_moves" not in kwargs
@@ -795,9 +814,9 @@ def test_episode_accepts_authenticated_forced_switch_as_first_boundary(
     assert result.decisions[0]["kind"] == mode
     assert result.decisions[0]["party_slot"] == 2
     assert result.final_observation["status"] is (status or context)
-    assert result.decisions[0]["after_observation_sha256"] == (
-        "c" if status or context else "b"
-    ) * 64
+    assert (
+        result.decisions[0]["after_observation_sha256"] == ("c" if status or context else "b") * 64
+    )
 
 
 @pytest.mark.parametrize("context", [None, 1, "true"])
@@ -805,18 +824,24 @@ def test_status_context_requires_explicit_boolean(tmp_path, context):
     capture = _capture(tmp_path, status=True)
     with pytest.raises(episode.RedTrainerPracticeEpisodeError, match="observation opt-in"):
         episode.run_red_trainer_practice_episode(
-            capture, session_factory=Session, policy=SimpleNamespace(policy_id="test"),
+            capture,
+            session_factory=Session,
+            policy=SimpleNamespace(policy_id="test"),
             include_status_context=context,
         )
 
 
 def test_status_context_rejects_legacy_capture_before_opening(tmp_path):
     capture = _capture(tmp_path)
+
     def forbidden():
         raise AssertionError("must reject before opening")
+
     with pytest.raises(episode.RedTrainerPracticeEpisodeError, match="rich battle"):
         episode.run_red_trainer_practice_episode(
-            capture, session_factory=forbidden, policy=SimpleNamespace(policy_id="test"),
+            capture,
+            session_factory=forbidden,
+            policy=SimpleNamespace(policy_id="test"),
             include_status_context=True,
         )
 
@@ -831,10 +856,16 @@ def test_live_runner_forwards_observation_without_status_permission(monkeypatch)
         return sentinel
 
     monkeypatch.setattr(episode, "run_red_trainer_practice_episode", run)
-    assert episode.run_live_red_trainer_practice_episode(
-        object(), session=object(), policy=object(),
-        include_status_context=True, allow_status_moves=False,
-    ) is sentinel
+    assert (
+        episode.run_live_red_trainer_practice_episode(
+            object(),
+            session=object(),
+            policy=object(),
+            include_status_context=True,
+            allow_status_moves=False,
+        )
+        is sentinel
+    )
     assert seen["include_status_context"] is True
     assert seen["allow_status_moves"] is False
 
@@ -843,8 +874,9 @@ def test_live_runner_forwards_observation_without_status_permission(monkeypatch)
 def test_live_runner_forwards_explicit_forced_struggle_to_existing_core(monkeypatch, enabled):
     seen = {}
     monkeypatch.setattr(episode, "_BorrowedTrainerSession", lambda session: session)
-    monkeypatch.setattr(episode, "run_red_trainer_practice_episode",
-                        lambda capture, **kwargs: seen.update(kwargs))
+    monkeypatch.setattr(
+        episode, "run_red_trainer_practice_episode", lambda capture, **kwargs: seen.update(kwargs)
+    )
     episode.run_live_red_trainer_practice_episode(
         object(), session=object(), policy=object(), allow_forced_struggle=enabled
     )
@@ -910,7 +942,9 @@ def test_episode_preserves_one_based_late_slot_through_forced_execution(
 
 
 @pytest.mark.parametrize("partition", [ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT])
-def test_opt_in_forced_struggle_counts_turn_without_querying_model(tmp_path, monkeypatch, partition):
+def test_opt_in_forced_struggle_counts_turn_without_querying_model(
+    tmp_path, monkeypatch, partition
+):
     from pokemon_red_completion.red_forced_struggle import ForcedStruggleExecution
 
     capture = _capture(tmp_path, partition=partition)

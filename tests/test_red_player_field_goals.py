@@ -4,6 +4,7 @@ from types import SimpleNamespace as N
 import pytest
 
 from pokemon_red_completion import red_player_field_goals as f
+from pokemon_red_completion.gen1_traversal import cut_capabilities
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport, GoalVerification
 
@@ -56,7 +57,7 @@ def setup(monkeypatch):
 
     def observer(reader, **kwargs):
         if kwargs:
-            assert kwargs == {"capability_projector": f.cut_capabilities}
+            assert kwargs == {"capability_projector": cut_capabilities}
         return N(observe=lambda: N())
 
     monkeypatch.setattr(f, "Gen1TraversalObserver", observer)
@@ -159,7 +160,7 @@ def test_center_selection_rechecks_current_feasibility_and_cost(monkeypatch):
     rt, actions, route, _, _, calls = setup(monkeypatch)
 
     def observer(*a, **k):
-        assert k["capability_projector"] is f.cut_capabilities
+        assert k["capability_projector"] is cut_capabilities
         return N(observe=lambda: object())
 
     monkeypatch.setattr(f, "Gen1TraversalObserver", observer)
@@ -195,16 +196,20 @@ def test_indigo_nurse_inventory_requires_explicit_existing_service_opt_in(monkey
         quoted.append((center, goal_at))
         return N(cost=3)
 
-    monkeypatch.setattr(type(route), "route_world",
-        property(lambda _: N(plan_feasible_to_map=plan)))
-    arguments = dict(route=route,centers=frozenset({int(f.MapId.INDIGO_PLATEAU_LOBBY)}),
-                     include_indigo_lobby=permission)
+    monkeypatch.setattr(
+        type(route), "route_world", property(lambda _: N(plan_feasible_to_map=plan))
+    )
+    arguments = dict(
+        route=route,
+        centers=frozenset({int(f.MapId.INDIGO_PLATEAU_LOBBY)}),
+        include_indigo_lobby=permission,
+    )
     if permission is True:
-        assert f.nearest_reachable_player_center(rt,**arguments) == f.MapId.INDIGO_PLATEAU_LOBBY
-        assert quoted == [(int(f.MapId.INDIGO_PLATEAU_LOBBY),(7,7))]
+        assert f.nearest_reachable_player_center(rt, **arguments) == f.MapId.INDIGO_PLATEAU_LOBBY
+        assert quoted == [(int(f.MapId.INDIGO_PLATEAU_LOBBY), (7, 7))]
     else:
-        with pytest.raises((TypeError,ValueError)):
-            f.nearest_reachable_player_center(rt,**arguments)
+        with pytest.raises((TypeError, ValueError)):
+            f.nearest_reachable_player_center(rt, **arguments)
         assert not quoted
     assert actions.actions_executed == 0 and not calls
 
@@ -219,7 +224,7 @@ def test_restoration_quote_can_match_current_trainer_reservation(monkeypatch, gu
     monkeypatch.setattr(f, "certified_cash_safe_transition", lambda *a: None)
 
     def observer(*args, **kwargs):
-        assert kwargs["capability_projector"] is f.cut_capabilities
+        assert kwargs["capability_projector"] is cut_capabilities
         assert kwargs.get("hazard_projector") is (projector if guarded else None)
         return N(observe=lambda: N(hazards=(projector,) if guarded else ()))
 
@@ -253,11 +258,17 @@ def test_nurse_without_walking_has_no_travel_cash_exposure(monkeypatch, walking,
     raw.party_status = (8 if poisoned else 0,)
     monkeypatch.setattr(f, "_raw_party_fully_restored", lambda _: False)
     monkeypatch.setattr(f, "certified_cash_safe_transition", lambda *a: None)
-    monkeypatch.setattr(type(route), "route_world", property(lambda _: N(
-        plan_feasible_to_map=lambda *a, **k: N(
-            cost=10 if walking else 0, steps=(1,) if walking else (), terminal_at=(3, 3)
-        )
-    )))
+    monkeypatch.setattr(
+        type(route),
+        "route_world",
+        property(
+            lambda _: N(
+                plan_feasible_to_map=lambda *a, **k: N(
+                    cost=10 if walking else 0, steps=(1,) if walking else (), terminal_at=(3, 3)
+                )
+            )
+        ),
+    )
     binding = f.routed_restoration_binding(rt, actions, home_map=41, route=route)
     assert binding.maximum_cash_debit == (None if walking else 0)
     assert actions.actions_executed == rt.emulator.frame_count == 0 and not calls
@@ -271,58 +282,82 @@ def test_restoration_trainer_observation_requires_explicit_boolean(value):
         )
 
 
-@pytest.mark.parametrize("fault", [None,"anchor_unchanged","already_indigo","default"])
-def test_healthy_indigo_nursing_requires_actual_checkpoint_when_opted_in(monkeypatch,fault):
-    rt,actions,route,_,lesson,calls=setup(monkeypatch)
-    raw=rt.reader.read()
-    raw.map_id,raw.player_y,raw.player_x=174,7,7
-    anchor=[9 if fault == "already_indigo" else 7]
-    rt.reader.read_last_blackout_map=lambda:anchor[0]
-    rt.adapter=N(observe=lambda:object())
-    lesson["party"][0]["moves"]=[(19,15)]
-    monkeypatch.setattr(f,"_raw_party_fully_restored",lambda _:True)
-    monkeypatch.setattr(f,"certified_cash_safe_transition",lambda *a:None)
-    monkeypatch.setattr(f,"restoration_progress_preserved",lambda *a:True)
-    monkeypatch.setattr(type(route),"route_world",property(lambda _:N(
-        plan_feasible_to_map=lambda *a,**k:N(cost=0,steps=(),terminal_at=(7,7)))))
+@pytest.mark.parametrize("fault", [None, "anchor_unchanged", "already_indigo", "default"])
+def test_healthy_indigo_nursing_requires_actual_checkpoint_when_opted_in(monkeypatch, fault):
+    rt, actions, route, _, lesson, calls = setup(monkeypatch)
+    raw = rt.reader.read()
+    raw.map_id, raw.player_y, raw.player_x = 174, 7, 7
+    anchor = [9 if fault == "already_indigo" else 7]
+    rt.reader.read_last_blackout_map = lambda: anchor[0]
+    rt.adapter = N(observe=lambda: object())
+    lesson["party"][0]["moves"] = [(19, 15)]
+    monkeypatch.setattr(f, "_raw_party_fully_restored", lambda _: True)
+    monkeypatch.setattr(f, "certified_cash_safe_transition", lambda *a: None)
+    monkeypatch.setattr(f, "restoration_progress_preserved", lambda *a: True)
+    monkeypatch.setattr(
+        type(route),
+        "route_world",
+        property(
+            lambda _: N(
+                plan_feasible_to_map=lambda *a, **k: N(cost=0, steps=(), terminal_at=(7, 7))
+            )
+        ),
+    )
 
     def nurse():
         actions.execute("normal-nurse")
         if fault != "anchor_unchanged":
-            anchor[0]=9
-        return GoalExecutionReport(1,10,{"whole_party_restore":True})
+            anchor[0] = 9
+        return GoalExecutionReport(1, 10, {"whole_party_restore": True})
 
-    child=N(execute=nurse,verify=lambda _:GoalVerification.succeeded())
+    child = N(execute=nurse, verify=lambda _: GoalVerification.succeeded())
 
     class Provider:
-        def __init__(self,*a,**k):
-            assert k == dict(require_full_pp_restore=True,include_indigo_lobby=True,
-                             require_indigo_checkpoint=True)
+        def __init__(self, *a, **k):
+            assert k == dict(
+                require_full_pp_restore=True,
+                include_indigo_lobby=True,
+                require_indigo_checkpoint=True,
+            )
 
-        def offer(self,*a):
+        def offer(self, *a):
             return N(binding=child)
 
-    monkeypatch.setattr(f,"RedCenterRestoreGoalProvider",Provider)
-    binding=f.routed_restoration_binding(rt,actions,home_map=174,route=route,
-        include_indigo_lobby=True,require_indigo_checkpoint=fault != "default")
-    if fault in {"default","already_indigo"}:
+    monkeypatch.setattr(f, "RedCenterRestoreGoalProvider", Provider)
+    binding = f.routed_restoration_binding(
+        rt,
+        actions,
+        home_map=174,
+        route=route,
+        include_indigo_lobby=True,
+        require_indigo_checkpoint=fault != "default",
+    )
+    if fault in {"default", "already_indigo"}:
         assert binding is None and not calls
         return
     assert binding is not None and not calls
-    report=binding.execute()
+    report = binding.execute()
     assert calls == ["normal-nurse"]
     assert binding.verify(report).status is (
         GoalDecisionOutcome.FAILED if fault == "anchor_unchanged" else GoalDecisionOutcome.SUCCEEDED
     )
 
 
-@pytest.mark.parametrize("home,include,alternatives", [(41,False,frozenset()),
-    (174,False,frozenset()),(174,True,frozenset({41}))])
-def test_indigo_checkpoint_cannot_substitute_another_center(home,include,alternatives):
-    with pytest.raises(ValueError,match="exact lobby"):
-        f.routed_restoration_binding(None,None,home_map=home,route=None,
-            include_indigo_lobby=include,alternate_centers=alternatives,
-            require_indigo_checkpoint=True)
+@pytest.mark.parametrize(
+    "home,include,alternatives",
+    [(41, False, frozenset()), (174, False, frozenset()), (174, True, frozenset({41}))],
+)
+def test_indigo_checkpoint_cannot_substitute_another_center(home, include, alternatives):
+    with pytest.raises(ValueError, match="exact lobby"):
+        f.routed_restoration_binding(
+            None,
+            None,
+            home_map=home,
+            route=None,
+            include_indigo_lobby=include,
+            alternate_centers=alternatives,
+            require_indigo_checkpoint=True,
+        )
 
 
 @pytest.mark.parametrize(
@@ -345,7 +380,10 @@ def test_indigo_checkpoint_cannot_substitute_another_center(home,include,alterna
 @pytest.mark.parametrize("pending", [False, True])
 @pytest.mark.parametrize("party_count", [1, 6])
 def test_poison_blackout_is_a_measured_failed_restoration_not_a_forgiven_route(
-    monkeypatch, fault, pending, party_count,
+    monkeypatch,
+    fault,
+    pending,
+    party_count,
 ):
     from copy import deepcopy
     from dataclasses import replace
@@ -363,8 +401,9 @@ def test_poison_blackout_is_a_measured_failed_restoration_not_a_forgiven_route(
     raw.badge_bits, raw.event_flags = 0, b"events"
     lesson["objective_catalog"] = list(lesson["completed_objectives"])
     lesson["party"][0]["moves"] = [[33, 35], [39, 30], [145, 30], [0, 0]]
-    lesson["party"] = [dict(deepcopy(lesson["party"][0]), specimen_ref=f"retained-{i}")
-                       for i in range(party_count)]
+    lesson["party"] = [
+        dict(deepcopy(lesson["party"][0]), specimen_ref=f"retained-{i}") for i in range(party_count)
+    ]
     rt.reader.read_last_blackout_map = lambda: 2
     rt.reader.read_input_readiness = lambda: N(
         ready=bool(any(raw.party_hp)) and not (fault == "unready" and raw.map_id == 2)
@@ -377,8 +416,9 @@ def test_poison_blackout_is_a_measured_failed_restoration_not_a_forgiven_route(
     monkeypatch.setattr(
         f,
         "_raw_party_fully_restored",
-        lambda r: r.map_id == 2 and r.party_status == (0,) * party_count
-        and fault != "not_restored",
+        lambda r: (
+            r.map_id == 2 and r.party_status == (0,) * party_count and fault != "not_restored"
+        ),
     )
     monkeypatch.setattr(f, "certified_cash_safe_transition", lambda *a: route)
 
@@ -388,7 +428,8 @@ def test_poison_blackout_is_a_measured_failed_restoration_not_a_forgiven_route(
         raw.map_id, raw.player_y, raw.player_x = (47 if pending else 2), 26, 13
         raw.party_hp, raw.party_status, raw.player_money = (
             (0,) * party_count if pending else (20,) * party_count,
-            (0,) * party_count, 1500 if pending else 750
+            (0,) * party_count,
+            1500 if pending else 750,
         )
         if fault == "cash":
             raw.player_money = 749
@@ -449,8 +490,22 @@ def test_restoration_blackout_opt_in_is_not_truthy_coercion(monkeypatch):
         f.routed_restoration_binding(rt, actions, home_map=41, route=route, allow_blackout_return=1)
 
 
-@pytest.mark.parametrize("fault", [None, "default", "same_map", "cash", "bag", "party",
-    "unready", "other_reason", "no_alternative", "second_failure", "not_healed"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "default",
+        "same_map",
+        "cash",
+        "bag",
+        "party",
+        "unready",
+        "other_reason",
+        "no_alternative",
+        "second_failure",
+        "not_healed",
+    ],
+)
 def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypatch, fault):
     from copy import deepcopy
 
@@ -459,8 +514,9 @@ def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypat
     rt.adapter = N(observe=lambda: object())
     lesson["objective_catalog"] = list(lesson["completed_objectives"])
     lesson["party"][0]["moves"] = [[33, 35]]
-    monkeypatch.setattr(f, "capture_player_lesson_snapshot",
-        lambda _: (N(raw=deepcopy(raw)), deepcopy(lesson)))
+    monkeypatch.setattr(
+        f, "capture_player_lesson_snapshot", lambda _: (N(raw=deepcopy(raw)), deepcopy(lesson))
+    )
     rt.reader.read_input_readiness = lambda: N(ready=not (fault == "unready" and raw.map_id == 82))
     rt.emulator.save_state_bytes = lambda: str(rt.emulator.frame_count).encode()
     monkeypatch.setattr(f, "_raw_party_fully_restored", lambda _: healed[0])
@@ -485,12 +541,16 @@ def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypat
                 raw.bag_items = ((1, 1),)
             if fault == "party":
                 lesson["party"][0]["experience"] += 1
-            reason = (f.RouteExecutionFailureReason.WORLD_STATE_DIVERGED
-                if fault == "other_reason" else f.RouteExecutionFailureReason.PLANNER_NO_ROUTE)
+            reason = (
+                f.RouteExecutionFailureReason.WORLD_STATE_DIVERGED
+                if fault == "other_reason"
+                else f.RouteExecutionFailureReason.PLANNER_NO_ROUTE
+            )
             raise f.RouteExecutionError("retained route cannot reach original nurse", reason=reason)
         if fault == "second_failure":
-            raise f.RouteExecutionError("alternate also blocked",
-                reason=f.RouteExecutionFailureReason.PLANNER_NO_ROUTE)
+            raise f.RouteExecutionError(
+                "alternate also blocked", reason=f.RouteExecutionFailureReason.PLANNER_NO_ROUTE
+            )
         raw.map_id, (raw.player_y, raw.player_x) = self.destination_map, self.destination_at
 
     monkeypatch.setattr(type(route), "__call__", travel)
@@ -502,10 +562,16 @@ def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypat
         return GoalExecutionReport(1, 10, dict(verified=True))
 
     child = N(execute=nurse, verify=lambda _: GoalVerification.succeeded())
-    monkeypatch.setattr(f, "RedCenterRestoreGoalProvider",
-        lambda *a, **k: N(offer=lambda _: N(binding=child)))
-    binding = f.routed_restoration_binding(rt, actions, home_map=141, route=route,
-        alternate_centers=frozenset() if fault == "default" else frozenset({41, 141}))
+    monkeypatch.setattr(
+        f, "RedCenterRestoreGoalProvider", lambda *a, **k: N(offer=lambda _: N(binding=child))
+    )
+    binding = f.routed_restoration_binding(
+        rt,
+        actions,
+        home_map=141,
+        route=route,
+        alternate_centers=frozenset() if fault == "default" else frozenset({41, 141}),
+    )
     assert binding is not None and not calls
     if fault in {None, "not_healed"}:
         report = binding.execute()
@@ -515,8 +581,9 @@ def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypat
         assert receipt["original_center"] == 141 and receipt["actual_center"] == 41
         assert receipt["goal_kind_unchanged"] and receipt["model_goal_queries"] == 0
         verdict = binding.verify(report)
-        assert verdict.status is (GoalDecisionOutcome.FAILED if fault == "not_healed"
-                                  else GoalDecisionOutcome.SUCCEEDED)
+        assert verdict.status is (
+            GoalDecisionOutcome.FAILED if fault == "not_healed" else GoalDecisionOutcome.SUCCEEDED
+        )
     else:
         with pytest.raises(f.RouteExecutionError):
             binding.execute()
@@ -528,8 +595,9 @@ def test_selected_healing_can_replan_once_to_declared_alternate_center(monkeypat
 def test_restoration_alternatives_fail_closed_before_input(monkeypatch, centers):
     rt, actions, route, _, _, _ = setup(monkeypatch)
     with pytest.raises(ValueError, match="declared ordinary"):
-        f.routed_restoration_binding(rt, actions, home_map=41, route=route,
-            alternate_centers=centers)
+        f.routed_restoration_binding(
+            rt, actions, home_map=41, route=route, alternate_centers=centers
+        )
     assert actions.actions_executed == 0
 
 
@@ -560,7 +628,12 @@ def test_delivery_does_not_hide_unverified_changes(monkeypatch, fault):
 
 def preparation_quote_fixture(monkeypatch, runtime, route):
     """Typed action-free geometry for tests of fresh child/restoration ownership."""
-    from pokemon_red_completion.global_router import MacroEdge, MacroGraph, MacroPath, MacroTransition
+    from pokemon_red_completion.global_router import (
+        MacroEdge,
+        MacroGraph,
+        MacroPath,
+        MacroTransition,
+    )
     from pokemon_red_completion.local_router import LocalEdge, LocalPath
     from pokemon_red_completion.route_executor import TraversalSnapshot
     from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
@@ -569,23 +642,42 @@ def preparation_quote_fixture(monkeypatch, runtime, route):
 
     def quote(start, destination, *, goal_at):
         if destination == start.map_id:
-            local = None if start.at == goal_at else LocalPath(
-                (start.at, goal_at), (LocalEdge(goal_at, "up", cost=10),),
-                (start.mode, start.mode),
+            local = (
+                None
+                if start.at == goal_at
+                else LocalPath(
+                    (start.at, goal_at),
+                    (LocalEdge(goal_at, "up", cost=10),),
+                    (start.mode, start.mode),
+                )
             )
             return RoutePlan(
-                MacroPath((start.map_id,), ()), start.at, start.mode, (), local,
-                goal_at, start.mode,
+                MacroPath((start.map_id,), ()),
+                start.at,
+                start.mode,
+                (),
+                local,
+                goal_at,
+                start.mode,
             )
         edge = MacroEdge(destination, cost=10)
         graph.edges[start.map_id] = (*graph.neighbors(start.map_id), edge)
         segment = RouteSegment(
-            start.map_id, destination, LocalPath((start.at,), (), (start.mode,)),
-            MacroTransition(start.at, goal_at, "up"), "connection", False,
+            start.map_id,
+            destination,
+            LocalPath((start.at,), (), (start.mode,)),
+            MacroTransition(start.at, goal_at, "up"),
+            "connection",
+            False,
         )
         return RoutePlan(
-            MacroPath((start.map_id, destination), (edge,)), start.at, start.mode,
-            (segment,), None, goal_at, start.mode,
+            MacroPath((start.map_id, destination), (edge,)),
+            start.at,
+            start.mode,
+            (segment,),
+            None,
+            goal_at,
+            start.mode,
         )
 
     world = N(rom=route.rom, macro_graph=graph, plan_feasible_to_map=quote)
@@ -594,7 +686,10 @@ def preparation_quote_fixture(monkeypatch, runtime, route):
     def observe():
         raw = runtime.reader.read()
         return TraversalSnapshot(
-            raw.map_id, (raw.player_y, raw.player_x), True, mode="land",
+            raw.map_id,
+            (raw.player_y, raw.player_x),
+            True,
+            mode="land",
             last_outside_map=1,
         )
 
@@ -624,7 +719,12 @@ def test_preparation_rebinds_at_arrival_not_before(monkeypatch, missing):
 
     monkeypatch.setattr(f, "preparation_binding", fresh)
     binding = f.routed_preparation_binding(
-        rt, a, home_map=41, route=route, battler=N(session=rt.emulator), plan=object(),
+        rt,
+        a,
+        home_map=41,
+        route=route,
+        battler=N(session=rt.emulator),
+        plan=object(),
         corridor=corridor,
     )
     assert not calls and not bound
@@ -701,7 +801,12 @@ def test_field_preparation_cannot_bypass_opening_battle(monkeypatch, map_id, riv
     monkeypatch.setattr(f, "observe_preparation_members", lambda *a: ())
     monkeypatch.setattr(f, "preparation_trainee", lambda *a: object())
     binding = f.routed_preparation_binding(
-        rt, a, home_map=41, route=route, battler=N(session=rt.emulator), plan=object(),
+        rt,
+        a,
+        home_map=41,
+        route=route,
+        battler=N(session=rt.emulator),
+        plan=object(),
         corridor=corridor,
     )
     assert (binding is not None) is available
@@ -802,7 +907,12 @@ def test_arrival_damage_restores_then_rebinds_the_unchanged_target(monkeypatch, 
 
     a.execute_restoration = restore
     binding = f.routed_preparation_binding(
-        rt, a, home_map=41, route=route, battler=N(session=rt.emulator), plan=plan,
+        rt,
+        a,
+        home_map=41,
+        route=route,
+        battler=N(session=rt.emulator),
+        plan=plan,
         corridor=corridor,
     )
     assert not calls and not rebound
@@ -839,7 +949,12 @@ def test_injured_arrival_offers_restore_then_original_target_only_at_home(
     monkeypatch.setattr(f, "next_preparation_decision", lambda *a: N(directive=directive))
     monkeypatch.setattr(f, "preparation_trainee", lambda *a: pytest.fail("unready excursion"))
     binding = f.routed_preparation_binding(
-        rt, a, home_map=41, route=route, battler=N(session=rt.emulator), plan=object(),
+        rt,
+        a,
+        home_map=41,
+        route=route,
+        battler=N(session=rt.emulator),
+        plan=object(),
         corridor=corridor,
     )
     assert (binding is not None) is available

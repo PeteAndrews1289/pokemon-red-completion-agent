@@ -16,8 +16,6 @@ from pokemon_red_completion.party_development_catalog import (
     PartyDevelopmentProspectiveBinding,
 )
 from pokemon_red_completion.party_development_rank import (
-    PARTY_DEVELOPMENT_FEATURE_NAMES,
-    PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
     PartyDevelopmentCandidate,
     PartyDevelopmentCandidateSet,
     PartyDevelopmentGoal,
@@ -215,8 +213,11 @@ def adapt_party_development_outcomes_v2(
         raise ScenarioOutcomeError("total task efficiency requires an explicit boolean")
     if total_task_efficiency and candidate_set.goal is not PartyDevelopmentGoal.EVOLUTION:
         raise ScenarioOutcomeError("complete task cost requires a declared evolution goal")
-    objective = (PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE if total_task_efficiency
-                 else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE)
+    objective = (
+        PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE
+        if total_task_efficiency
+        else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE
+    )
     if not isinstance(prospective_binding, PartyDevelopmentProspectiveBinding):
         raise TypeError("prospective_binding must be a PartyDevelopmentProspectiveBinding")
     if len(prospective_binding.candidate_available) != len(candidate_set.candidates):
@@ -366,8 +367,11 @@ def _criterion_values(
     if total_task_efficiency:
         if trial.evolution_completed and evolution_reduction <= 0:
             raise ScenarioOutcomeError("completed evolution lacks measured completion progress")
-        return (*values[:9], float(trial.frames_executed) if trial.evolution_completed else 0.0,
-                *values[9:])
+        return (
+            *values[:9],
+            float(trial.frames_executed) if trial.evolution_completed else 0.0,
+            *values[9:],
+        )
     return values
 
 

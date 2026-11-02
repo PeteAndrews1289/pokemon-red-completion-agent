@@ -630,22 +630,45 @@ def test_native_closed_entry_is_filtered_before_corridor_or_route_work(monkeypat
     observation = _observation()
     monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=()))
     monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: ())
-    monkeypatch.setattr(regional, "_rank_regional_sources", lambda *a, **kw: ((first.source_id, 228),))
+    monkeypatch.setattr(
+        regional, "_rank_regional_sources", lambda *a, **kw: ((first.source_id, 228),)
+    )
     checks = []
-    monkeypatch.setattr(regional, "closed_remote_cave_entry", lambda *a, **kw: checks.append(kw) or closed)
+    monkeypatch.setattr(
+        regional, "closed_remote_cave_entry", lambda *a, **kw: checks.append(kw) or closed
+    )
+
     def corridor(*args, **kwargs):
         raise regional.RedLivingDexWildCorridorError("ordinary geometry check retained")
+
     monkeypatch.setattr(regional, "derive_red_living_dex_wild_corridor", corridor)
-    runtime = _Runtime(first.profile, SimpleNamespace(frame_count=0), object(),
-                       SimpleNamespace(read_retained_outside_map=lambda: None))
-    world = SimpleNamespace(rom=b"fixture", terrain={228: None}, local_graphs={228: None},
-                            object_blockers={228: frozenset()}, macro_graph=SimpleNamespace(warp_locations={}))
+    runtime = _Runtime(
+        first.profile,
+        SimpleNamespace(frame_count=0),
+        object(),
+        SimpleNamespace(read_retained_outside_map=lambda: None),
+    )
+    world = SimpleNamespace(
+        rom=b"fixture",
+        terrain={228: None},
+        local_graphs={228: None},
+        object_blockers={228: frozenset()},
+        macro_graph=SimpleNamespace(warp_locations={}),
+    )
     events = []
-    actions = SimpleNamespace(actions_executed=0,
-        record_diagnostic_event=lambda kind, payload: events.append((kind, payload)))
-    assert regional.enumerate_red_regional_acquisitions(runtime, observation, actions, world,
-        maximum_actions=1000, maximum_frames=100000) == ()
+    actions = SimpleNamespace(
+        actions_executed=0,
+        record_diagnostic_event=lambda kind, payload: events.append((kind, payload)),
+    )
+    assert (
+        regional.enumerate_red_regional_acquisitions(
+            runtime, observation, actions, world, maximum_actions=1000, maximum_frames=100000
+        )
+        == ()
+    )
     assert checks == [dict(current_map=observation.raw.map_id, target_map=228)]
     excluded = [p for kind, p in events if kind == "regional_source_excluded"]
-    assert excluded[0]["reason"] == ("native_entry_guard_visible" if closed else "corridor_or_profile_unavailable")
+    assert excluded[0]["reason"] == (
+        "native_entry_guard_visible" if closed else "corridor_or_profile_unavailable"
+    )
     assert actions.actions_executed == runtime.emulator.frame_count == 0

@@ -96,11 +96,28 @@ def living_dex_option_kind_for_goal(
 
     if not isinstance(kind, GoalKind):
         raise TypeError("kind must be a GoalKind")
-    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16}:
+    if type(feature_version) is not int or feature_version not in {
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+    }:
         raise LivingDexGoalPolicyError("living-Dex feature version differs")
     if kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
         return LivingDexOptionKind.RESTORE
     return _OPTION_BY_GOAL.get(kind)
+
 
 # Benefits dominate routine cost, while irreversible loss is as important as
 # verified success.  These weights are fixed policy governance, not fitted
@@ -119,7 +136,9 @@ DEFAULT_LIVING_DEX_GOAL_UTILITY = LivingDexOptionUtility(
 
 
 def economy_offer_from_opportunity(
-    opportunity: GoalOpportunity, *, include_replenishment: bool = False,
+    opportunity: GoalOpportunity,
+    *,
+    include_replenishment: bool = False,
 ) -> EconomyOffer:
     """Project a semantic opportunity into an explicit prospective economy offer.
 
@@ -150,14 +169,17 @@ def economy_offer_from_opportunity(
             mode=EconomyMode.PURCHASE,
             conditional_income=0,
             planned_spend=planned_spend,
-            replenishment=(EconomyReplenishmentOffer(reserves)
-                           if include_replenishment and reserves else None),
+            replenishment=(
+                EconomyReplenishmentOffer(reserves) if include_replenishment and reserves else None
+            ),
         )
     return EconomyOffer(mode=EconomyMode.OTHER, conditional_income=0, planned_spend=0)
 
 
 def apply_story_approach_prior(
-    candidate: LivingDexOptionCandidate, *, approach_only: bool,
+    candidate: LivingDexOptionCandidate,
+    *,
+    approach_only: bool,
 ) -> LivingDexOptionCandidate:
     """Share the existing two-phase access prior without changing outcome labels.
 
@@ -172,15 +194,22 @@ def apply_story_approach_prior(
         return candidate
     if candidate.features.kind is not LivingDexOptionKind.UNLOCK_ACCESS:
         raise LivingDexGoalPolicyError("story approach prior requires a story candidate")
-    return replace(candidate, features=replace(
-        candidate.features,
-        dependency_unlock_gain=candidate.features.dependency_unlock_gain / 2,
-    ))
+    return replace(
+        candidate,
+        features=replace(
+            candidate.features,
+            dependency_unlock_gain=candidate.features.dependency_unlock_gain / 2,
+        ),
+    )
 
 
 def project_living_dex_goal_candidate(
-    question: GoalManagerQuestion, index: int, *, feature_version: int,
-    binding_ref: str, readiness: PlayerReadiness | None = None,
+    question: GoalManagerQuestion,
+    index: int,
+    *,
+    feature_version: int,
+    binding_ref: str,
+    readiness: PlayerReadiness | None = None,
     include_replenishment: bool = False,
 ) -> LivingDexOptionCandidate | None:
     """Project one executable semantic option without scoring it or inventing a menu."""
@@ -199,12 +228,15 @@ def project_living_dex_goal_candidate(
         raise LivingDexGoalPolicyError("available goal lacks bounded estimates")
     economy_offer = (
         economy_offer_from_opportunity(opportunity, include_replenishment=include_replenishment)
-        if feature_version >= 4 else None
+        if feature_version >= 4
+        else None
     )
     return LivingDexOptionCandidate(
         binding_ref=binding_ref,
         features=red_living_dex_setup_candidate_features(
-            option_kind, route_controller_actions=0, maximum_controller_actions=1,
+            option_kind,
+            route_controller_actions=0,
+            maximum_controller_actions=1,
             estimated_effort=opportunity.estimated_effort,
             estimated_risk=opportunity.estimated_risk,
             storage_unit=question.situation.storage_pressure,
@@ -332,9 +364,11 @@ class LivingDexGoalShadowDecision:
                     "economic_input_sha256": self.economic_input_sha256,
                     "economic_contract": (
                         "known-spend-and-bounded-consumption-v2"
-                        if any(score.resource_quote is not None
-                               and score.resource_quote.available_recovery_units is not None
-                               for score in self.scores)
+                        if any(
+                            score.resource_quote is not None
+                            and score.resource_quote.available_recovery_units is not None
+                            for score in self.scores
+                        )
                         else "known-spend-and-excess-reserve-v1"
                     ),
                 }
@@ -369,8 +403,9 @@ class LivingDexGoalShadowPolicy:
     def __post_init__(self) -> None:
         if not isinstance(self.model, LivingDexOptionValueModel):
             raise TypeError("living-Dex shadow policy needs an option-value model")
-        if self.readiness is not None and (not isinstance(self.readiness, PlayerReadiness)
-                                          or self.model.feature_version < 5):
+        if self.readiness is not None and (
+            not isinstance(self.readiness, PlayerReadiness) or self.model.feature_version < 5
+        ):
             raise LivingDexGoalPolicyError("readiness requires a compatible V5 policy")
         if not isinstance(self.utility, LivingDexOptionUtility):
             raise TypeError("living-Dex shadow policy needs a utility contract")
@@ -482,7 +517,9 @@ class LivingDexGoalShadowPolicy:
         for index in question.available_indices:
             opportunity = question.opportunities[index]
             candidate = project_living_dex_goal_candidate(
-                question, index, feature_version=self.model.feature_version,
+                question,
+                index,
+                feature_version=self.model.feature_version,
                 binding_ref=f"policy-row-{len(projected)}",
                 readiness=self.readiness,
             )

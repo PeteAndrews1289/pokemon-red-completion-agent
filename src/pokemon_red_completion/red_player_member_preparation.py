@@ -31,10 +31,13 @@ def preparation_venue_rank(encounter_levels, travel_cost):
     and actual training results. Equal bands prefer cheaper travel. This reads
     decoded encounter levels, not species identities or previous outcomes.
     """
-    if (not isinstance(encounter_levels, tuple) or not encounter_levels
-            or any(type(level) is not int or not 1 <= level <= 100
-                   for level in encounter_levels)
-            or type(travel_cost) not in (int, float) or not 0 <= travel_cost < float("inf")):
+    if (
+        not isinstance(encounter_levels, tuple)
+        or not encounter_levels
+        or any(type(level) is not int or not 1 <= level <= 100 for level in encounter_levels)
+        or type(travel_cost) not in (int, float)
+        or not 0 <= travel_cost < float("inf")
+    ):
         raise ValueError("preparation venue requires actual levels and finite travel cost")
     return -sum(encounter_levels) / len(encounter_levels), travel_cost
 
@@ -47,10 +50,13 @@ def preparation_venue_within_party_band(encounter_levels, party_levels):
     route, require grinding, or predict type matchups and critical hits.
     """
     preparation_venue_rank(encounter_levels, 0)
-    if (not isinstance(party_levels, tuple) or not party_levels
-            or any(type(level) is not int or not 1 <= level <= 100 for level in party_levels)):
+    if (
+        not isinstance(party_levels, tuple)
+        or not party_levels
+        or any(type(level) is not int or not 1 <= level <= 100 for level in party_levels)
+    ):
         raise ValueError("venue screening requires actual party levels")
-    return sum(encounter_levels)/len(encounter_levels) <= max(party_levels)
+    return sum(encounter_levels) / len(encounter_levels) <= max(party_levels)
 
 
 def member_preparation_plans(
@@ -76,13 +82,17 @@ def member_preparation_plans(
     The caller authenticates the loss and source ancestry. Roles and the actual
     opposition quote are never edited to manufacture a target.
     """
-    if type(allow_above_reference) is not bool or (allow_above_reference and (
-        not isinstance(observed_defeat, BattleAftermath)
-        or observed_defeat.result is not BattleResult.LOST
-    )):
+    if type(allow_above_reference) is not bool or (
+        allow_above_reference
+        and (
+            not isinstance(observed_defeat, BattleAftermath)
+            or observed_defeat.result is not BattleResult.LOST
+        )
+    ):
         raise ValueError("above-reference option requires an observed defeat")
-    if (len(members) != len(plan.roster)
-            or {m.specimen_ref for m in members} != {m.specimen_ref for m in plan.roster}):
+    if len(members) != len(plan.roster) or {m.specimen_ref for m in members} != {
+        m.specimen_ref for m in plan.roster
+    }:
         raise ValueError("member inventory changed; reassess the retained roster")
     choices = []
     for member in members:
@@ -114,8 +124,11 @@ def member_preparation_plans(
         xp = cartridge.species(mon.species_id).experience_at_level(target) - mon.experience
         known_moves = tuple(m for m in mon.moves if m.is_known)
         maxima = tuple(m.max_pp for m in known_moves if m.max_pp is not None)
-        pp = (sum(m.current_pp for m in known_moves) / max(1, sum(maxima))
-              if known_moves and len(maxima) == len(known_moves) else None)
+        pp = (
+            sum(m.current_pp for m in known_moves) / max(1, sum(maxima))
+            if known_moves and len(maxima) == len(known_moves)
+            else None
+        )
         descriptor = OptionPreparation(
             mon.level,
             target,
@@ -147,9 +160,14 @@ def member_preparation_options(
 ):
     """Produce fresh routed executors with distinct private member/target identity."""
     partition = getattr(kwargs.get("battler"), "source_partition", None)
-    if (allow_above_reference and partition is not ScenarioPartition.TRAIN
-            and partition is not ScenarioPartition.DEVELOPMENT):
-        raise ValueError("above-reference native preparation requires typed TRAIN or DEVELOPMENT scope")
+    if (
+        allow_above_reference
+        and partition is not ScenarioPartition.TRAIN
+        and partition is not ScenarioPartition.DEVELOPMENT
+    ):
+        raise ValueError(
+            "above-reference native preparation requires typed TRAIN or DEVELOPMENT scope"
+        )
     members = observe_preparation_members(runtime.emulator, plan)
     dex = internal_to_dex(route.rom)
     codes = {number: code for code, number in dex.items()}

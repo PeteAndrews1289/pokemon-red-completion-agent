@@ -60,12 +60,21 @@ def test_opt_in_return_leaves_restoration_for_player(tmp_path, monkeypatch):
 @pytest.mark.parametrize("field_start", [False, True])
 @pytest.mark.parametrize("escort", [False, True])
 def test_wild_excursion_tracks_xp_and_retains_failures(
-    tmp_path, monkeypatch, fault, maximum_battles, field_start, escort, continue_exits=False, minimum_ready_members=None
+    tmp_path,
+    monkeypatch,
+    fault,
+    maximum_battles,
+    field_start,
+    escort,
+    continue_exits=False,
+    minimum_ready_members=None,
 ):
     members, plan = setup()
     if fault == "reserve_low_nonwinning":
-        members = tuple(replace(m, observation=replace(m.observation, hp=hp, max_hp=hp))
-                        for m, hp in zip(members, (121, 53, 37), strict=True))
+        members = tuple(
+            replace(m, observation=replace(m.observation, hp=hp, max_hp=hp))
+            for m, hp in zip(members, (121, 53, 37), strict=True)
+        )
     live = [members]
     raw = NS(
         map_id=9 if field_start else 89,
@@ -176,19 +185,27 @@ def test_wild_excursion_tracks_xp_and_retains_failures(
             first, *rest = live[0]
             recipient = (
                 next(m for m in live[0] if m.specimen_ref not in dict(plan.targets))
-                if fault in {"escort_only_xp", "reserve_xp_decreased"} else first
+                if fault in {"escort_only_xp", "reserve_xp_decreased"}
+                else first
             )
             live[0] = tuple(
-                replace(m, observation=replace(
-                    m.observation, experience=m.observation.experience + 200
-                )) if m.specimen_ref == recipient.specimen_ref else m
+                replace(
+                    m, observation=replace(m.observation, experience=m.observation.experience + 200)
+                )
+                if m.specimen_ref == recipient.specimen_ref
+                else m
                 for m in live[0]
             )
             if fault == "reserve_xp_decreased":
                 live[0] = tuple(
-                    replace(m, observation=replace(
-                        m.observation, experience=m.observation.experience - 100
-                    )) if m.specimen_ref == first.specimen_ref else m
+                    replace(
+                        m,
+                        observation=replace(
+                            m.observation, experience=m.observation.experience - 100
+                        ),
+                    )
+                    if m.specimen_ref == first.specimen_ref
+                    else m
                     for m in live[0]
                 )
         raw.battle_state = 0
@@ -207,7 +224,11 @@ def test_wild_excursion_tracks_xp_and_retains_failures(
             raw.party_hp = (0, 50, 50)
         if fault == "reserve_low_nonwinning":
             first, second, reserve = live[0]
-            live[0] = (first, second, replace(reserve, observation=replace(reserve.observation, hp=18)))
+            live[0] = (
+                first,
+                second,
+                replace(reserve, observation=replace(reserve.observation, hp=18)),
+            )
             raw.party_hp = tuple(m.observation.hp for m in live[0])
         return NS(battle_won=not escape, stop_reason="battle_exited_without_win")
 
@@ -273,7 +294,14 @@ def test_wild_excursion_tracks_xp_and_retains_failures(
         result = w.execute_wild_preparation(**kwargs)
         expected = (
             0
-            if fault in {"nonwinning_exit", "no_encounter", "early_health", "escape_low_hp", "reserve_low_nonwinning"}
+            if fault
+            in {
+                "nonwinning_exit",
+                "no_encounter",
+                "early_health",
+                "escape_low_hp",
+                "reserve_low_nonwinning",
+            }
             else 1
             if fault in {"low_hp", "later_no_encounter", "zero_xp_faint", "all_statused"}
             else maximum_battles - 1
@@ -287,8 +315,11 @@ def test_wild_excursion_tracks_xp_and_retains_failures(
         if fault == "escort_only_xp":
             assert result["status"] == "no_progress"
             assert result["stop_reason"] == "trainee_received_no_xp"
-            assert all(m.observation.experience == 1000 for m in live[0]
-                       if m.specimen_ref in dict(plan.targets))
+            assert all(
+                m.observation.experience == 1000
+                for m in live[0]
+                if m.specimen_ref in dict(plan.targets)
+            )
         if fault == "all_statused":
             assert raw.party_status == (0, 0, 0)
             assert records["healing-started"]
@@ -411,32 +442,56 @@ def test_status_only_recipient_can_use_learned_switch_but_reserve_pp_is_required
 
     members, _ = setup()
     trainee = members[1]
-    members = tuple(replace(m, observation=replace(m.observation,
-        moves=(MoveObservation(106, 30),) if m is trainee else (MoveObservation(33, pp),)))
-        for m in members)
+    members = tuple(
+        replace(
+            m,
+            observation=replace(
+                m.observation,
+                moves=(MoveObservation(106, 30),) if m is trainee else (MoveObservation(33, pp),),
+            ),
+        )
+        for m in members
+    )
     assert w.wild_training_has_attack_capacity(members)
     assert w.wild_training_return_reason(members, trainee.specimen_ref, 34) == reason
     assert "attack_support_pp_low" in w.HEALTH_LIMITED_RETURNS
 
 
-@pytest.mark.parametrize("fault,reason", [("none", "trainee_no_attack_support"),
-    ("self_destruct", "trainee_no_attack_support"), ("faint", "party_fainted"),
-    ("status", "party_status"), ("hp", "party_hp_below_half")])
+@pytest.mark.parametrize(
+    "fault,reason",
+    [
+        ("none", "trainee_no_attack_support"),
+        ("self_destruct", "trainee_no_attack_support"),
+        ("faint", "party_fainted"),
+        ("status", "party_status"),
+        ("hp", "party_hp_below_half"),
+    ],
+)
 def test_status_only_recipient_never_waives_party_safety_or_structural_capacity(fault, reason):
     from pokemon_red_completion.party import MoveObservation
 
     members, _ = setup()
     trainee = members[1]
-    members = tuple(replace(m, observation=replace(m.observation,
-        moves=(MoveObservation(106, 30),))) for m in members)
+    members = tuple(
+        replace(m, observation=replace(m.observation, moves=(MoveObservation(106, 30),)))
+        for m in members
+    )
     if fault != "none":
         reserve = members[0]
         changed = {"moves": (MoveObservation(120 if fault == "self_destruct" else 33, 20),)}
-        changed.update({"hp": 0} if fault == "faint" else
-                       {"hp": 24} if fault == "hp" else
-                       {"status": w.StatusCondition.POISON} if fault == "status" else {})
-        members = (replace(reserve, observation=replace(reserve.observation, **changed)),
-                   *members[1:])
+        changed.update(
+            {"hp": 0}
+            if fault == "faint"
+            else {"hp": 24}
+            if fault == "hp"
+            else {"status": w.StatusCondition.POISON}
+            if fault == "status"
+            else {}
+        )
+        members = (
+            replace(reserve, observation=replace(reserve.observation, **changed)),
+            *members[1:],
+        )
     assert w.wild_training_has_attack_capacity(members) is (fault not in {"none", "self_destruct"})
     assert w.wild_training_return_reason(members, trainee.specimen_ref, 34) == reason
     assert "trainee_no_attack_support" not in w.HEALTH_LIMITED_RETURNS
@@ -447,8 +502,16 @@ def test_depleted_direct_attacker_still_retreats_with_fresh_reserve():
 
     members, _ = setup()
     trainee = members[1]
-    members = (members[0], replace(trainee, observation=replace(trainee.observation,
-        moves=(MoveObservation(33, 0), MoveObservation(106, 30)))), members[2])
+    members = (
+        members[0],
+        replace(
+            trainee,
+            observation=replace(
+                trainee.observation, moves=(MoveObservation(33, 0), MoveObservation(106, 30))
+            ),
+        ),
+        members[2],
+    )
     assert (
         w.wild_training_return_reason(members, trainee.specimen_ref, 34) == "trainee_attack_pp_low"
     )
@@ -555,16 +618,25 @@ def test_transport_missing_or_invalid_stats_fail_closed(stats):
         )
 
 
-@pytest.mark.parametrize("minimum,encounters,reason", [
-    (None, 1, "party_hp_below_half"),
-    (2, 2, "encounter_limit"),
-])
+@pytest.mark.parametrize(
+    "minimum,encounters,reason",
+    [
+        (None, 1, "party_hp_below_half"),
+        (2, 2, "encounter_limit"),
+    ],
+)
 def test_healthy_trainee_and_escort_continue_past_depleted_reserve(
     tmp_path, monkeypatch, minimum, encounters, reason
 ):
     result, records, calls = test_wild_excursion_tracks_xp_and_retains_failures(
-        tmp_path, monkeypatch, "reserve_low_nonwinning", 2, False, False,
-        continue_exits=True, minimum_ready_members=minimum,
+        tmp_path,
+        monkeypatch,
+        "reserve_low_nonwinning",
+        2,
+        False,
+        False,
+        continue_exits=True,
+        minimum_ready_members=minimum,
     )
     assert len(calls) == result["encounters"] == result["nonwinning_exits"] == encounters
     assert result["battles"] == result["xp_gained"] == 0

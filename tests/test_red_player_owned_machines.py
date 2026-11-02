@@ -16,8 +16,13 @@ from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 
 def fixture(monkeypatch, fault=None):
-    raw = replace(_raw(), bag_items=((211, 2), (4, 3)), bag_item_ids=(211, 4),
-                  party_moves=((70, 39, 145, 57),), party_pp=((15, 30, 30, 1),))
+    raw = replace(
+        _raw(),
+        bag_items=((211, 2), (4, 3)),
+        bag_item_ids=(211, 4),
+        party_moves=((70, 39, 145, 57),),
+        party_pp=((15, 30, 30, 1),),
+    )
     reader = _Reader(raw=raw, ready=True)
     reader.read_pc_items = lambda: ()
     em = N(state=b"source", frame_count=0, pressed_buttons=(), exp=12345)
@@ -30,15 +35,19 @@ def fixture(monkeypatch, fault=None):
 
     actions = CountingExecutor(N(execute=action))
     rt = N(reader=reader, emulator=em)
-    monkeypatch.setattr(module, "PokemonRedPartyReader",
-        lambda _em: N(read=lambda: N(members=(N(experience=em.exp),))))
+    monkeypatch.setattr(
+        module,
+        "PokemonRedPartyReader",
+        lambda _em: N(read=lambda: N(members=(N(experience=em.exp),))),
+    )
 
     def plan(_rom, received, *, item_id, party_slot, replace_slot):
         assert received is reader
         if item_id != 211 or party_slot != 1 or replace_slot not in (2, 3):
             raise ValueError("incompatible/HM/wrong slot")
-        return RedMachineLesson(item_id, party_slot, replace_slot, 28,
-                                reader.raw.party_moves[0], 61)
+        return RedMachineLesson(
+            item_id, party_slot, replace_slot, 28, reader.raw.party_moves[0], 61
+        )
 
     monkeypatch.setattr(module, "plan_machine_lesson", plan)
 
@@ -47,8 +56,12 @@ def fixture(monkeypatch, fault=None):
         executor.execute(MacroAction(MacroActionKind.WAIT))
         moves, pp = list(reader.raw.party_moves[0]), list(reader.raw.party_pp[0])
         moves[lesson.replace_slot - 1], pp[lesson.replace_slot - 1] = 61, 20
-        reader.raw = replace(reader.raw, party_moves=(tuple(moves),), party_pp=(tuple(pp),),
-                             bag_items=((211, 1), (4, 3)))
+        reader.raw = replace(
+            reader.raw,
+            party_moves=(tuple(moves),),
+            party_pp=(tuple(pp),),
+            bag_items=((211, 1), (4, 3)),
+        )
         em.state = b"terminal"
         if fault == "cash":
             reader.raw = replace(reader.raw, player_money=123)
@@ -155,8 +168,9 @@ def test_machine_rows_use_the_same_cached_inventory_and_descriptor_guards(monkey
     rt, actions, _ = fixture(monkeypatch)
     rows = module.owned_machine_options(rt, actions, rom=b"fixture")
     base = _ordinary_bindings([])
-    inventory = NativeStoryBranchInventory(lambda *_: base, lambda *_: (),
-                                          enumerate_owned_machines=lambda *_: rows)
+    inventory = NativeStoryBranchInventory(
+        lambda *_: base, lambda *_: (), enumerate_owned_machines=lambda *_: rows
+    )
     observation = N(situation=_situation())
     ordinary = inventory.enumerate(rt, actions, observation)
     extra = inventory.supplements(rt, actions, observation, ordinary)
@@ -178,11 +192,17 @@ def test_invalid_or_mutating_machine_inventory_fails_closed(monkeypatch, fault):
         if fault == "mutable":
             return list(rows)
         if fault == "kind":
-            return (replace(rows[0], binding=replace(rows[0].binding, kind=GoalKind.RESUPPLY, cash_outcome=None)),)
+            return (
+                replace(
+                    rows[0],
+                    binding=replace(rows[0].binding, kind=GoalKind.RESUPPLY, cash_outcome=None),
+                ),
+            )
         return (rows[0], rows[0]) if fault == "duplicate" else rows
 
-    inventory = NativeStoryBranchInventory(lambda *_: _ordinary_bindings([]), lambda *_: (),
-                                          enumerate_owned_machines=machines)
+    inventory = NativeStoryBranchInventory(
+        lambda *_: _ordinary_bindings([]), lambda *_: (), enumerate_owned_machines=machines
+    )
     with pytest.raises(ValueError):
         inventory.enumerate(rt, actions, N(situation=_situation()))
     assert inventory._observed is None
@@ -192,6 +212,7 @@ def test_capacity_is_not_damage_and_does_not_value_unexpressible_status_or_ohko(
     assert module.direct_attack_capacity(28, (39, 32, 120, 0), (30, 5, 5, 0)) == 0
     assert module.direct_attack_capacity(28, (61, 0, 0, 0), (20, 0, 0, 0)) == 1950
 
+
 def fly_fixture(monkeypatch):
     rt, actions, seen = fixture(monkeypatch)
     rt.reader.raw = replace(rt.reader.raw, bag_items=((197, 1), (4, 3)), badge_bits=255)
@@ -199,16 +220,19 @@ def fly_fixture(monkeypatch):
     def plan(_rom, reader, *, item_id, party_slot, replace_slot):
         if item_id != 197 or party_slot != 1 or replace_slot not in (2, 3):
             raise ValueError("incompatible, redundant or HM")
-        return RedMachineLesson(item_id, party_slot, replace_slot, 28,
-                                reader.raw.party_moves[0], 19)
+        return RedMachineLesson(
+            item_id, party_slot, replace_slot, 28, reader.raw.party_moves[0], 19
+        )
+
     monkeypatch.setattr(module, "plan_machine_lesson", plan)
 
     def execute(em, executor, reader, lesson, *, rom):
         executor.execute(MacroAction(MacroActionKind.WAIT))
         moves, pp = list(reader.raw.party_moves[0]), list(reader.raw.party_pp[0])
-        moves[lesson.replace_slot-1], pp[lesson.replace_slot-1] = 19, 15
+        moves[lesson.replace_slot - 1], pp[lesson.replace_slot - 1] = 19, 15
         reader.raw = replace(reader.raw, party_moves=(tuple(moves),), party_pp=(tuple(pp),))
         em.state = b"terminal-fly"
+
     monkeypatch.setattr(module, "execute_machine_lesson", execute)
     return rt, actions, seen
 
@@ -216,8 +240,9 @@ def fly_fixture(monkeypatch):
 def test_fly_lesson_is_default_off_and_explicit_dependency_not_attack_gain(monkeypatch):
     rt, actions, seen = fly_fixture(monkeypatch)
     assert module.owned_machine_options(rt, actions, rom=b"fixture") == ()
-    rows = module.owned_machine_options(rt, actions, rom=b"fixture",
-                                       include_fly_lesson=True, include_attack_lessons=False)
+    rows = module.owned_machine_options(
+        rt, actions, rom=b"fixture", include_fly_lesson=True, include_attack_lessons=False
+    )
     assert len(rows) == 2 and not seen
     assert all(r.candidate.features.dependency_unlock_gain == 1 for r in rows)
     report = rows[0].binding.execute()
@@ -226,20 +251,20 @@ def test_fly_lesson_is_default_off_and_explicit_dependency_not_attack_gain(monke
     assert report.evidence["machine_consumed"] == 0
     assert report.evidence["field_move_unlocked"] == 19
     assert rt.reader.raw.party_moves[0] == (70, 19, 145, 57)
-    assert module.owned_machine_options(rt, actions, rom=b"fixture",
-                                       include_fly_lesson=True) == ()
+    assert module.owned_machine_options(rt, actions, rom=b"fixture", include_fly_lesson=True) == ()
 
 
 def test_fly_lesson_requires_real_badge_and_never_substitutes_a_compatible_member(monkeypatch):
     rt, actions, seen = fly_fixture(monkeypatch)
     rt.reader.raw = replace(rt.reader.raw, badge_bits=0)
-    assert module.owned_machine_options(rt, actions, rom=b"fixture",
-                                       include_fly_lesson=True) == ()
+    assert module.owned_machine_options(rt, actions, rom=b"fixture", include_fly_lesson=True) == ()
     rt.reader.raw = replace(rt.reader.raw, badge_bits=255)
-    monkeypatch.setattr(module, "plan_machine_lesson",
-                        lambda *_a, **_kw: (_ for _ in ()).throw(ValueError("incompatible")))
-    assert module.owned_machine_options(rt, actions, rom=b"fixture",
-                                       include_fly_lesson=True) == ()
+    monkeypatch.setattr(
+        module,
+        "plan_machine_lesson",
+        lambda *_a, **_kw: (_ for _ in ()).throw(ValueError("incompatible")),
+    )
+    assert module.owned_machine_options(rt, actions, rom=b"fixture", include_fly_lesson=True) == ()
     assert not seen
 
 
@@ -253,8 +278,13 @@ def test_machine_permissions_are_explicit_booleans(monkeypatch, option):
 def test_pp_capacity_decrease_does_not_hide_legal_move_tradeoff(monkeypatch):
     rt, actions, seen = fixture(monkeypatch)
     moves, pp = (44, 39, 61, 55), (25, 30, 20, 25)
-    rt.reader.raw = replace(rt.reader.raw, bag_items=((213, 1),),
-        bag_item_ids=(213,), party_moves=(moves,), party_pp=(pp,))
+    rt.reader.raw = replace(
+        rt.reader.raw,
+        bag_items=((213, 1),),
+        bag_item_ids=(213,),
+        party_moves=(moves,),
+        party_pp=(pp,),
+    )
 
     def plan(_rom, reader, *, item_id, party_slot, replace_slot):
         if (item_id, party_slot, replace_slot) != (213, 1, 4):

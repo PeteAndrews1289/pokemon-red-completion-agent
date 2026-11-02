@@ -53,8 +53,12 @@ def fixture(
             return None
 
         monkeypatch.setattr(p, name, stub)
-    for name in ("ss_anne_rival_contract", "tower_rival_contract", "hideout_scripted_contract",
-                 "fossil_guard_contract"):
+    for name in (
+        "ss_anne_rival_contract",
+        "tower_rival_contract",
+        "hideout_scripted_contract",
+        "fossil_guard_contract",
+    ):
         monkeypatch.setattr(p, name, lambda *a: contract)
     monkeypatch.setattr(p, "trainer_party_quote", lambda *a: N(party=(N(level=20), N(level=16))))
     return rt, N(rom=b"fixture"), N(), binding, calls, raw
@@ -63,7 +67,9 @@ def fixture(
 @pytest.mark.parametrize("room", [199, 202, 203])
 def test_fuji_departure_reuses_verified_healthy_hideout_return(monkeypatch, room):
     rt, route, actor, _, calls, _ = fixture(
-        monkeypatch, objective="rescue_fuji", room=room,
+        monkeypatch,
+        objective="rescue_fuji",
+        room=room,
     )
     original = _binding(GoalKind.RESTORE_TEAM, binding_ref="verified-return", calls=[])
 
@@ -84,11 +90,20 @@ def test_fuji_departure_reuses_verified_healthy_hideout_return(monkeypatch, room
 @pytest.mark.parametrize("room", [199, 202, 203])
 def test_unavailable_hideout_return_cannot_use_static_elevator_fallback(monkeypatch, room):
     rt, route, actor, _, calls, _ = fixture(
-        monkeypatch, objective="rescue_fuji", room=room,
+        monkeypatch,
+        objective="rescue_fuji",
+        room=room,
     )
-    assert p.fuji_story_option(
-        rt, N(), route=route, battler=actor, combat_levels=(38,),
-    ) is None
+    assert (
+        p.fuji_story_option(
+            rt,
+            N(),
+            route=route,
+            battler=actor,
+            combat_levels=(38,),
+        )
+        is None
+    )
     assert [name for name, _ in calls] == ["hideout_restoration_binding"]
 
 
@@ -130,16 +145,15 @@ def test_cerulean_arrival_respects_readiness_and_graph_legality(monkeypatch, rea
     rt, route, actor, _, calls, _ = fixture(
         monkeypatch, objective="reach_cerulean", room=61, ready=ready, legal=legal
     )
-    assert p.cerulean_arrival_story_option(
-        rt, N(), route=route, battler=actor, combat_levels=(16,)
-    ) is None
+    assert (
+        p.cerulean_arrival_story_option(rt, N(), route=route, battler=actor, combat_levels=(16,))
+        is None
+    )
     assert calls == []
 
 
 def test_cerulean_arrival_does_not_replace_an_executable_travel_option(monkeypatch):
-    rt, route, actor, binding, calls, _ = fixture(
-        monkeypatch, objective="reach_cerulean", room=61
-    )
+    rt, route, actor, binding, calls, _ = fixture(monkeypatch, objective="reach_cerulean", room=61)
     monkeypatch.setattr(p, "story_travel_binding", lambda *a, **k: binding)
     row = p.cerulean_arrival_story_option(rt, N(), route=route, battler=actor, combat_levels=(16,))
     assert row[0].story_objective_ref == "reach_cerulean" and not row[1].opposition_known
@@ -153,20 +167,23 @@ def test_cerulean_fossil_gate_requires_its_actual_readable_map(monkeypatch, faul
     )
     if fault != "map":
         raw.event_flags = None if fault == "missing_events" else b"\x00"
-    assert p.cerulean_arrival_story_option(
-        rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,)
-    ) is None
+    assert (
+        p.cerulean_arrival_story_option(
+            rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,)
+        )
+        is None
+    )
     assert not any(name in {"story_battle_binding", "fossil_pickup_binding"} for name, _ in calls)
 
 
 def test_cerulean_arrival_reuses_exact_scripted_guard_without_completion(monkeypatch):
-    rt, route, actor, binding, calls, _ = fixture(
-        monkeypatch, objective="reach_cerulean", room=61
-    )
+    rt, route, actor, binding, calls, _ = fixture(monkeypatch, objective="reach_cerulean", room=61)
     monkeypatch.setattr(
         p, "story_battle_binding", lambda *a, **k: calls.append(("battle", k)) or binding
     )
-    row = p.cerulean_arrival_story_option(rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,))
+    row = p.cerulean_arrival_story_option(
+        rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,)
+    )
     assert row[0].story_objective_ref == "reach_cerulean" and row[1].opposition_known
     kwargs = calls[-1][1]
     assert kwargs["battler"] is actor and kwargs["scripted_fossil_guard"] is True
@@ -176,11 +193,15 @@ def test_cerulean_arrival_reuses_exact_scripted_guard_without_completion(monkeyp
 
 def test_cerulean_arrival_after_guard_reuses_pickup_not_a_battle(monkeypatch):
     rt, route, actor, binding, calls, _ = fixture(
-        monkeypatch, objective="reach_cerulean", room=61,
-        flags=(int(p.EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD),)
+        monkeypatch,
+        objective="reach_cerulean",
+        room=61,
+        flags=(int(p.EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD),),
     )
     monkeypatch.setattr(p, "fossil_pickup_binding", lambda *a, **k: binding)
-    row = p.cerulean_arrival_story_option(rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,))
+    row = p.cerulean_arrival_story_option(
+        rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,)
+    )
     assert row[0].story_objective_ref == "reach_cerulean" and not row[1].opposition_known
     assert not any(name == "story_battle_binding" for name, _ in calls)
 
@@ -227,12 +248,17 @@ def test_only_ticketed_vermilion_cut_uses_bounded_boarding_route(monkeypatch, fa
     objective = "reach_celadon" if fault == "objective" else "obtain_cut"
     room = int(p.MapId.CERULEAN_CITY) if fault == "map" else int(p.MapId.VERMILION_CITY)
     rt, _, actor, binding, calls, raw = fixture(
-        monkeypatch, objective=objective, room=room,
+        monkeypatch,
+        objective=objective,
+        room=room,
     )
     quantity = {"zero": 0, "boolean": True}.get(fault, 1)
     raw.bag_items = None if fault == "missing" else ((int(p.ItemId.SS_TICKET), quantity),)
     route = p.RedVermilionGroundTransition(
-        b"fixture", _world(), allow_wild_faints=True, allow_field_faint_dialogue=True,
+        b"fixture",
+        _world(),
+        allow_wild_faints=True,
+        allow_field_faint_dialogue=True,
     )
 
     def travel(*args, **kwargs):
@@ -241,7 +267,11 @@ def test_only_ticketed_vermilion_cut_uses_bounded_boarding_route(monkeypatch, fa
 
     monkeypatch.setattr(p, "story_travel_binding", travel)
     row = p.early_story_travel_option(
-        rt, N(), objective_id=objective, route=route, battler=actor,
+        rt,
+        N(),
+        objective_id=objective,
+        route=route,
+        battler=actor,
     )
     assert row[0].story_objective_ref == objective
     assert row[1].combat_required is False
@@ -263,15 +293,25 @@ def test_only_ticketed_vermilion_cut_uses_bounded_boarding_route(monkeypatch, fa
 
 def test_ticketed_boarding_does_not_change_an_unknown_route_type(monkeypatch):
     rt, route, actor, binding, calls, raw = fixture(
-        monkeypatch, room=int(p.MapId.VERMILION_CITY),
+        monkeypatch,
+        room=int(p.MapId.VERMILION_CITY),
     )
     raw.bag_items = ((int(p.ItemId.SS_TICKET), 1),)
     monkeypatch.setattr(
-        p, "story_travel_binding", lambda *a, **k: calls.append(("travel", k)) or binding,
+        p,
+        "story_travel_binding",
+        lambda *a, **k: calls.append(("travel", k)) or binding,
     )
-    assert p.early_story_travel_option(
-        rt, N(), objective_id="obtain_cut", route=route, battler=actor,
-    ) is not None
+    assert (
+        p.early_story_travel_option(
+            rt,
+            N(),
+            objective_id="obtain_cut",
+            route=route,
+            battler=actor,
+        )
+        is not None
+    )
     assert calls[0][1]["route"] is route
     assert "certify_cash_approach" not in calls[0][1]
 
@@ -363,8 +403,14 @@ def test_ghost_uses_existing_exact_actor_and_stays_combat_unknown(monkeypatch, s
     monkeypatch.setattr(
         p, "marowak_binding", lambda *a, **k: captured.append(k["battler"]) or binding
     )
-    row = p.fuji_story_option(rt, N(), route=route, battler=actor, combat_levels=(30,),
-                             trainer_battler=N() if separate_trainer else None)
+    row = p.fuji_story_option(
+        rt,
+        N(),
+        route=route,
+        battler=actor,
+        combat_levels=(30,),
+        trainer_battler=N() if separate_trainer else None,
+    )
     assert captured == [actor] and row[1].combat_required and not row[1].opposition_known
 
 
@@ -377,9 +423,11 @@ def test_fuji_ordinary_trainers_use_explicit_actor_without_replacing_wild(
     trainer = N() if separate_trainer else None
     expected = actor if trainer is None else trainer
     captured = []
+
     def battle(*args, **kwargs):
         captured.append(kwargs["battler"])
         return binding
+
     if room == 143:
         monkeypatch.setattr(p, "scripted_rival_binding", battle)
     elif room == 147:
@@ -387,11 +435,15 @@ def test_fuji_ordinary_trainers_use_explicit_actor_without_replacing_wild(
         monkeypatch.setattr(p, "obstructing_story_battle_binding", battle)
     else:
         monkeypatch.setattr(p, "map_object_events", lambda *a: (N(object_index=4, y=2, x=3),))
-        monkeypatch.setattr(p, "StoryTrainerContract", N(from_cartridge=lambda *a, **k:
-            N(trainer_identity=(242, 42, 1))))
+        monkeypatch.setattr(
+            p,
+            "StoryTrainerContract",
+            N(from_cartridge=lambda *a, **k: N(trainer_identity=(242, 42, 1))),
+        )
         monkeypatch.setattr(p, "story_battle_binding", battle)
-    row = p.fuji_story_option(rt, N(), route=route, battler=actor, combat_levels=(30,),
-                             trainer_battler=trainer)
+    row = p.fuji_story_option(
+        rt, N(), route=route, battler=actor, combat_levels=(30,), trainer_battler=trainer
+    )
     assert row is not None and row[0].story_objective_ref == "rescue_fuji"
     assert captured and all(candidate is expected for candidate in captured)
     if room == 147:

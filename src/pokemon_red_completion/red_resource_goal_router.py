@@ -36,7 +36,11 @@ from pokemon_red_completion.gen1_traversal import (
     map_object_events,
     surf_capabilities,
 )
-from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager import (
+    GoalAvailability,
+    GoalKind,
+    GoalUnavailableReason,
+)
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
@@ -53,7 +57,10 @@ from pokemon_red_completion.red_goal_context import (
     _ProfileBoundProvider,
     _RedTeamGoalProvider,
 )
-from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
+from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalMechanic,
+    RedGoalProviderSpec,
+)
 from pokemon_red_completion.red_goal_manager import (
     CallableRedGoalBindingProvider,
     RedGoalBindingOffer,
@@ -185,17 +192,26 @@ def route_work_estimates(base_effort: float, ordinary_trainers: int) -> tuple[fl
 
 
 def _safari_resource_departure_handler(
-    runtime: RedGoalContextRuntime, actions: CountingExecutor,
-    fallback: InterruptionHandler, kind: GoalKind,
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    fallback: InterruptionHandler,
+    kind: GoalKind,
 ) -> InterruptionHandler:
     """Let an opted-in selected supply route finish its paid-session exit."""
-    if (kind is not GoalKind.RESUPPLY
-            or getattr(runtime, "safari_departure_recovery", False) is not True):
+    if (
+        kind is not GoalKind.RESUPPLY
+        or getattr(runtime, "safari_departure_recovery", False) is not True
+    ):
         return fallback
-    from .red_safari_exit import RedSafariDepartureInterruptionHandler, RedSafariExitDialogueHandler
+    from .red_safari_exit import (
+        RedSafariDepartureInterruptionHandler,
+        RedSafariExitDialogueHandler,
+    )
 
     return RedSafariDepartureInterruptionHandler(
-        runtime.emulator, actions, runtime.reader,
+        runtime.emulator,
+        actions,
+        runtime.reader,
         RedSafariExitDialogueHandler(actions, runtime.reader, fallback),
     )
 
@@ -415,7 +431,11 @@ class RedResourceGoalRouter:
             )
             if not isinstance(
                 provider,
-                (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider, _RedTeamGoalProvider),
+                (
+                    RedAreaSurveyGoalProvider,
+                    RedMartResupplyGoalProvider,
+                    _RedTeamGoalProvider,
+                ),
             ):
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
@@ -450,7 +470,9 @@ class RedResourceGoalRouter:
             # high-variance cross-region walk. An unavailable flight returns
             # None and preserves the ordinary walking fallback below.
             if spec.parameters.get("fly_transport") is True:
-                from pokemon_red_completion.red_collection_fly import bind_collection_fly
+                from pokemon_red_completion.red_collection_fly import (
+                    bind_collection_fly,
+                )
 
                 flight = bind_collection_fly(self, spec, provider, fresh, traversal)
                 if flight is not None:
@@ -495,7 +517,10 @@ class RedResourceGoalRouter:
             if self.interruption_handler_wrapper is not None:
                 interruption_handler = self.interruption_handler_wrapper(interruption_handler, spec)
             interruption_handler = _safari_resource_departure_handler(
-                self.runtime, self.actions, interruption_handler, spec.kind,
+                self.runtime,
+                self.actions,
+                interruption_handler,
+                spec.kind,
             )
             if not _supports_required_route_interruptions(interruption_handler):
                 continue
@@ -564,9 +589,12 @@ class RedResourceGoalRouter:
             )
             base_effort = min(
                 1.0,
-                0.36 + len(plan.steps) / 1_000 + (
+                0.36
+                + len(plan.steps) / 1_000
+                + (
                     provider.search_effort_surcharge
-                    if isinstance(provider, RedAreaSurveyGoalProvider) else 0.0
+                    if isinstance(provider, RedAreaSurveyGoalProvider)
+                    else 0.0
                 ),
             )
             estimated_effort, estimated_risk = base_effort, 0.18
@@ -578,11 +606,16 @@ class RedResourceGoalRouter:
                 estimated_effort, estimated_risk = route_work_estimates(
                     base_effort, work_quote["ordinary_trainers_crossed"]
                 )
-                self.actions.record_diagnostic_event("capture_route_work_quote", dict(
-                    source_id=provider.source_id, **work_quote,
-                    estimated_effort=estimated_effort, estimated_risk=estimated_risk,
-                    policy_features="existing_normalized_effort_and_risk",
-                ))
+                self.actions.record_diagnostic_event(
+                    "capture_route_work_quote",
+                    dict(
+                        source_id=provider.source_id,
+                        **work_quote,
+                        estimated_effort=estimated_effort,
+                        estimated_risk=estimated_risk,
+                        policy_features="existing_normalized_effort_and_risk",
+                    ),
+                )
             binding = build_red_routed_semantic_goal_composer(
                 binding_ref=f"red-resource-goal:{origin}:{spec.configuration_sha256}",
                 transport=transport,
@@ -595,7 +628,8 @@ class RedResourceGoalRouter:
             ).binding()
             if isinstance(provider, RedAreaSurveyGoalProvider):
                 binding = replace(
-                    binding, search_source_ref=f"pokemon.red:acquisition:{provider.source_id}"
+                    binding,
+                    search_source_ref=f"pokemon.red:acquisition:{provider.source_id}",
                 )
             replacements[binding.binding_ref] = binding
             opportunities[index] = binding.opportunity
@@ -619,7 +653,9 @@ class RedResourceGoalRouter:
             and spec.parameters.get("capture_party_preparation", True) is True
             for spec in self.runtime.profile.providers
         ):
-            from pokemon_red_completion.red_routed_capture_support import bind_capture_party_support
+            from pokemon_red_completion.red_routed_capture_support import (
+                bind_capture_party_support,
+            )
 
             result = bind_capture_party_support(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
@@ -629,7 +665,9 @@ class RedResourceGoalRouter:
                 bind_capture_escort,
                 prepare_capture_escort,
             )
-            from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
+            from pokemon_red_completion.red_routed_recovery import (
+                bind_routed_center_recovery,
+            )
 
             def prepare_escort() -> None:
                 prepare_capture_escort(self.runtime, self.actions)
@@ -649,7 +687,9 @@ class RedResourceGoalRouter:
             result = self._with_quotes(result, observation, purchase_provider=reserve_purchase)
         # Income is not a Mart purchase and must never inherit a spend quote.
         if self.trainer_funding:
-            from pokemon_red_completion.red_routed_trainer_funding import bind_local_trainer_funding
+            from pokemon_red_completion.red_routed_trainer_funding import (
+                bind_local_trainer_funding,
+            )
 
             result = bind_local_trainer_funding(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
@@ -732,7 +772,8 @@ class RedResourceGoalRouter:
             set() if _surf_enabled(spec) else {SURF_CAPABILITY}
         )
         start = replace(
-            fresh.traversal, capabilities=fresh.traversal.capabilities.difference(unsupported)
+            fresh.traversal,
+            capabilities=fresh.traversal.capabilities.difference(unsupported),
         )
         if spec.mechanic in {
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
@@ -772,7 +813,9 @@ class RedResourceGoalRouter:
             # corridor is not a live door-layout witness. Arrive at the exact
             # planned entry, then rebind reachable terrain in that same source.
             plan = self.plan_feasible_to_map(
-                start, target_map, goal_at=None if _observed_indoor_capture(spec) else (y, x)
+                start,
+                target_map,
+                goal_at=None if _observed_indoor_capture(spec) else (y, x),
             )
         except RoutePlanningError:
             return None
@@ -808,7 +851,8 @@ class RedResourceGoalRouter:
         request = replace(
             request,
             current=replace(
-                request.current, capabilities=request.current.capabilities.difference(unsupported)
+                request.current,
+                capabilities=request.current.capabilities.difference(unsupported),
             ),
         )
         # A moving NPC must not occupy both its cartridge starting square and
@@ -823,10 +867,12 @@ class RedResourceGoalRouter:
 
 
 def _observed_indoor_capture(spec: RedGoalProviderSpec) -> bool:
+    map_id = spec.parameters.get("map_id")
     return (
         spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
         and spec.parameters.get("observed_local_capture") is True
-        and spec.parameters["map_id"] >= 0x25
+        and type(map_id) is int
+        and map_id >= 0x25
     )
 
 
@@ -834,7 +880,9 @@ def _observed_capture_destination_provider(router, spec, provider):
     """Rebind the selected source after authenticated walking arrival, not a peer."""
     if not _observed_indoor_capture(spec):
         return provider
-    from pokemon_red_completion.red_observed_local_capture import bind_observed_local_capture
+    from pokemon_red_completion.red_observed_local_capture import (
+        bind_observed_local_capture,
+    )
 
     def offer(observation):
         child = bind_observed_local_capture(router, spec, observation)

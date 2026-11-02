@@ -141,7 +141,9 @@ def test_shared_native_call_preserves_partial_costs_and_censored_history(
 ):
     output = tmp_path / "runs/segment-001"
     output.mkdir(parents=True)
-    emulator = N(_backend=object(), frame_count=3000, pressed_buttons=(), save_state_bytes=lambda: b"earned")
+    emulator = N(
+        _backend=object(), frame_count=3000, pressed_buttons=(), save_state_bytes=lambda: b"earned"
+    )
     previous = dict(decisions=12, actions=190, frames=8000, seconds=7.0, heals=2, cash_debits=100)
     observed = []
     runtime = N(

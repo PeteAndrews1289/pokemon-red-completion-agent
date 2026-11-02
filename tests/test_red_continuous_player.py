@@ -763,9 +763,12 @@ def test_returned_partial_evolution_dose_requeries_model_without_claiming_succes
     binding = N(kind=GoalKind.EVOLVE_SPECIES)
     if composed:
         binding = N(kind=GoalKind.ACQUIRE_SPECIES, binding_ref="red-npc-trade-dependency:1:77")
-        evidence = dict(mechanic="trade_level_dependency", complete=False,
-            intermediate=evidence, intermediate_verification=dict(
-                status="failed", failure_reason="outcome_not_verified"))
+        evidence = dict(
+            mechanic="trade_level_dependency",
+            complete=False,
+            intermediate=evidence,
+            intermediate_verification=dict(status="failed", failure_reason="outcome_not_verified"),
+        )
     report = GoalExecutionReport(1 if fault == "unmeasured" else 2, 20, evidence)
     verdict = GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
     assert ordinary_player_setback(
@@ -817,15 +820,30 @@ def test_returned_partial_dose_renews_before_starting_another_loan(
         )
 
         if composed:
-            return GoalExecutionReport(1, 10, dict(mechanic="trade_level_dependency",
-                complete=False, intermediate=dict(report.evidence),
-                intermediate_verification=dict(status="failed", failure_reason="outcome_not_verified")))
+            return GoalExecutionReport(
+                1,
+                10,
+                dict(
+                    mechanic="trade_level_dependency",
+                    complete=False,
+                    intermediate=dict(report.evidence),
+                    intermediate_verification=dict(
+                        status="failed", failure_reason="outcome_not_verified"
+                    ),
+                ),
+            )
         return report
 
     def observe(ordinal):
         bindings = tuple(
             replace(
-                _binding(kind, binding_ref="red-npc-trade-dependency:1:77" if composed and kind is target_kind else kind.value, calls=[]),
+                _binding(
+                    kind,
+                    binding_ref="red-npc-trade-dependency:1:77"
+                    if composed and kind is target_kind
+                    else kind.value,
+                    calls=[],
+                ),
                 execute=execute,
                 verify=lambda _: GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED),
             )

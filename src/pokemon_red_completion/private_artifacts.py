@@ -27,9 +27,7 @@ PRIVATE_ROOT_SENTINEL = ".pokemon-red-completion-private-root.json"
 PRIVATE_ROOT_FORMAT = "pokemon-red-completion-private-root"
 EPISODE_FORMAT = "pokemon-red-completion-episode-jsonl"
 PRIVATE_JSON_ARTIFACT_FORMAT = "pokemon-red-completion-private-artifact-jsonl"
-PRIVATE_JSON_ARTIFACT_IDENTITY_FORMAT = (
-    "pokemon-red-completion-private-artifact-identity"
-)
+PRIVATE_JSON_ARTIFACT_IDENTITY_FORMAT = "pokemon-red-completion-private-artifact-identity"
 PRIVATE_SEALED_RECORD_FORMAT = "pokemon-red-completion-private-sealed-record"
 PRIVATE_ARTIFACT_SCHEMA_VERSION = 1
 _PRIVATE_DIRECTORY_MODE = 0o700
@@ -371,9 +369,7 @@ class PrivateArtifactRoot:
         self._allow_same_device = allow_same_device
         self._device_id = device_id
         self._git_worktree_probe = git_worktree_probe
-        self._native_input_storage = _read_native_input_storage(
-            root, expected=native_input_storage
-        )
+        self._native_input_storage = _read_native_input_storage(root, expected=native_input_storage)
 
     def __repr__(self) -> str:
         return "PrivateArtifactRoot(validated=True)"
@@ -424,8 +420,10 @@ class PrivateArtifactRoot:
                     "sealed private record identity collides with another private artifact"
                 )
 
-        if (self._native_input_storage == _FLAT_NATIVE_STORAGE
-                and kind in _NATIVE_INPUT_KINDS.values()):
+        if (
+            self._native_input_storage == _FLAT_NATIVE_STORAGE
+            and kind in _NATIVE_INPUT_KINDS.values()
+        ):
             return _publish_flat_native_record(self._root, record_id, kind=kind, payload=payload)
 
         temporary = self._root / (f".{record_id}.sealed-{uuid.uuid4().hex}.partial")
@@ -485,8 +483,9 @@ class PrivateArtifactRoot:
         self._revalidate()
         flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
         if _lexists(flat):
-            if (self._native_input_storage != _FLAT_NATIVE_STORAGE
-                    or _lexists(self._root / record_id)):
+            if self._native_input_storage != _FLAT_NATIVE_STORAGE or _lexists(
+                self._root / record_id
+            ):
                 raise PrivateArtifactError("native record storage is ambiguous or undeclared")
             return _open_flat_native_record(self._root, record_id, expected_kind=expected_kind)
         if not _lexists(self._root / record_id):
@@ -498,7 +497,10 @@ class PrivateArtifactRoot:
         )
 
     def read_native_record_batch(
-        self, record_ids: Sequence[str], *, expected_kind: str,
+        self,
+        record_ids: Sequence[str],
+        *,
+        expected_kind: str,
     ) -> tuple[PrivateSealedRecord, ...]:
         """Verify a bounded immutable snapshot of native action or trace records.
 
@@ -527,16 +529,23 @@ class PrivateArtifactRoot:
                 directory = _entry_metadata(descriptor, record_id)
                 if flat is not None:
                     if self._native_input_storage != _FLAT_NATIVE_STORAGE or directory is not None:
-                        raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+                        raise PrivateArtifactError(
+                            "native record storage is ambiguous or undeclared"
+                        )
                     record = _read_flat_native_record(
-                        self._root, record_id, expected_kind=expected_kind,
-                        metadata_only=False, anchored_root_descriptor=descriptor,
+                        self._root,
+                        record_id,
+                        expected_kind=expected_kind,
+                        metadata_only=False,
+                        anchored_root_descriptor=descriptor,
                     )
                 else:
                     if directory is None:
                         raise PrivateArtifactError("native batch record is absent")
                     record = _open_private_sealed_record(
-                        self._root, record_id, expected_kind=expected_kind,
+                        self._root,
+                        record_id,
+                        expected_kind=expected_kind,
                         anchored_root_descriptor=descriptor,
                     )
                 payload_bytes += record.summary.total_bytes
@@ -577,8 +586,9 @@ class PrivateArtifactRoot:
         self._revalidate()
         flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
         if _lexists(flat):
-            if (self._native_input_storage != _FLAT_NATIVE_STORAGE
-                    or _lexists(self._root / record_id)):
+            if self._native_input_storage != _FLAT_NATIVE_STORAGE or _lexists(
+                self._root / record_id
+            ):
                 raise PrivateArtifactError("native record storage is ambiguous or undeclared")
             return _inspect_flat_native_record(self._root, record_id, expected_kind=expected_kind)
         if not _lexists(self._root / record_id):
@@ -608,13 +618,12 @@ class PrivateArtifactRoot:
         _validate_record_id_digest_prefix(record_id_prefix)
         _validate_artifact_kind(expected_kind)
         if type(maximum_records) is not int or maximum_records <= 0:  # noqa: E721
-            raise PrivateArtifactError(
-                "sealed record inventory bound must be a positive integer"
-            )
+            raise PrivateArtifactError("sealed record inventory bound must be a positive integer")
         self._revalidate()
         inventory_options = (
             {"flat_native_inputs": True}
-            if self._native_input_storage == _FLAT_NATIVE_STORAGE else {}
+            if self._native_input_storage == _FLAT_NATIVE_STORAGE
+            else {}
         )
         before = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
         if len(before) > maximum_records:
@@ -707,8 +716,7 @@ class PrivateArtifactRoot:
         interrupted = self._root / f"{artifact_id}.interrupted.partial"
         try:
             occupied = any(
-                _lexists(candidate)
-                for candidate in (partial, final, failed, interrupted)
+                _lexists(candidate) for candidate in (partial, final, failed, interrupted)
             )
         except PrivateArtifactError as error:
             raise PrivateArtifactError(str(error)) from None
@@ -861,9 +869,7 @@ class PrivateArtifactRoot:
             raise PrivateArtifactError("failed episode assignment stream is absent")
         assignment = _read_single_episode_record(reader, "assignment")
         claim = (
-            _read_single_episode_record(reader, "claim")
-            if "claim" in reader.stream_names
-            else None
+            _read_single_episode_record(reader, "claim") if "claim" in reader.stream_names else None
         )
         failure_diagnostic = (
             _read_single_episode_record(reader, "failure_diagnostic")
@@ -1336,9 +1342,7 @@ class EpisodeWriter:
             if opened_stream:
                 _fsync_directory(self._partial)
         except (OSError, PrivateArtifactError):
-            raise PrivateArtifactError(
-                "unable to synchronize a private episode record"
-            ) from None
+            raise PrivateArtifactError("unable to synchronize a private episode record") from None
 
     def complete(self) -> EpisodeSummary:
         """Write the manifest last and atomically publish the completed directory."""
@@ -1646,9 +1650,7 @@ class PrivateArtifactWriter:
             target.handle.flush()
             os.fsync(target.handle.fileno())
         except OSError:
-            raise PrivateArtifactError(
-                "unable to synchronize a private artifact record"
-            ) from None
+            raise PrivateArtifactError("unable to synchronize a private artifact record") from None
         if opened_stream:
             try:
                 _fsync_directory(self._partial)
@@ -1917,10 +1919,13 @@ class PrivateArtifactWriter:
         _remove_private_artifact_identity(self._lock_descriptor)
 
     def _restore_identity_seal(self) -> None:
-        if _entry_metadata(
-            self._lock_descriptor,
-            _TYPED_ARTIFACT_IDENTITY,
-        ) is None:
+        if (
+            _entry_metadata(
+                self._lock_descriptor,
+                _TYPED_ARTIFACT_IDENTITY,
+            )
+            is None
+        ):
             _write_exclusive_private_entry(
                 self._lock_descriptor,
                 _TYPED_ARTIFACT_IDENTITY,
@@ -2019,10 +2024,12 @@ def open_private_root(
 
 
 def _native_input_storage_bytes() -> bytes:
-    return _canonical_json_line({
-        "schema": "pokemon.native-input-storage.v1",
-        "native_input_storage": _FLAT_NATIVE_STORAGE,
-    })
+    return _canonical_json_line(
+        {
+            "schema": "pokemon.native-input-storage.v1",
+            "native_input_storage": _FLAT_NATIVE_STORAGE,
+        }
+    )
 
 
 def _read_native_input_storage(root: Path, *, expected: str | None = None) -> str | None:
@@ -2034,10 +2041,16 @@ def _read_native_input_storage(root: Path, *, expected: str | None = None) -> st
         descriptor = os.open(root, _directory_read_flags())
         try:
             data = _native_input_storage_bytes()
-            if _read_private_entry(
-                descriptor, _NATIVE_STORAGE_MARKER, subject="native input storage declaration",
-                maximum_bytes=len(data), expected_bytes=len(data),
-            ) != data:
+            if (
+                _read_private_entry(
+                    descriptor,
+                    _NATIVE_STORAGE_MARKER,
+                    subject="native input storage declaration",
+                    maximum_bytes=len(data),
+                    expected_bytes=len(data),
+                )
+                != data
+            ):
                 raise PrivateArtifactError("native input storage declaration is invalid")
         finally:
             os.close(descriptor)
@@ -2065,20 +2078,32 @@ def _initialize_native_input_storage(root: Path, mode: str | None) -> None:
 
 
 def _require_native_input_identity(record_id: str, kind: str) -> None:
-    if not any(record_id.startswith(prefix) and kind == value
-               for prefix, value in _NATIVE_INPUT_KINDS.items()):
+    if not any(
+        record_id.startswith(prefix) and kind == value
+        for prefix, value in _NATIVE_INPUT_KINDS.items()
+    ):
         raise PrivateArtifactError("flat native record identity or kind is invalid")
 
 
 def _publish_flat_native_record(
-    root: Path, record_id: str, *, kind: str, payload: bytes,
+    root: Path,
+    record_id: str,
+    *,
+    kind: str,
+    payload: bytes,
 ) -> PrivateSealedRecord:
     _require_native_input_identity(record_id, kind)
-    manifest = _canonical_json_line(dict(
-        bytes=len(payload), format=PRIVATE_SEALED_RECORD_FORMAT, kind=kind,
-        record_id=record_id, record_sha256=hashlib.sha256(payload).hexdigest(),
-        schema_version=PRIVATE_ARTIFACT_SCHEMA_VERSION, status="complete",
-    ))
+    manifest = _canonical_json_line(
+        dict(
+            bytes=len(payload),
+            format=PRIVATE_SEALED_RECORD_FORMAT,
+            kind=kind,
+            record_id=record_id,
+            record_sha256=hashlib.sha256(payload).hexdigest(),
+            schema_version=PRIVATE_ARTIFACT_SCHEMA_VERSION,
+            status="complete",
+        )
+    )
     if len(manifest) > _MAX_FLAT_NATIVE_HEADER_BYTES:
         raise PrivateArtifactError("flat native record manifest exceeds its bound")
     temporary = root / f".{record_id}.sealed-{uuid.uuid4().hex}.partial"
@@ -2103,16 +2128,22 @@ def _publish_flat_native_record(
 
 
 def _read_flat_native_record(
-    root: Path, record_id: str, *, expected_kind: str | None, metadata_only: bool,
+    root: Path,
+    record_id: str,
+    *,
+    expected_kind: str | None,
+    metadata_only: bool,
     anchored_root_descriptor: int | None = None,
 ) -> PrivateSealedRecord | SealedRecordManifestMetadata:
     """One file, two original canonical lines; metadata never reads payload bytes."""
     root_descriptor = descriptor = -1
     filename = record_id + _FLAT_NATIVE_SUFFIX
     try:
-        root_descriptor = (os.open(root, _directory_read_flags())
-                           if anchored_root_descriptor is None
-                           else os.dup(anchored_root_descriptor))
+        root_descriptor = (
+            os.open(root, _directory_read_flags())
+            if anchored_root_descriptor is None
+            else os.dup(anchored_root_descriptor)
+        )
         if not _same_file(root.lstat(), os.fstat(root_descriptor)):
             raise PrivateArtifactError("flat native root changed while opening")
         before = _entry_metadata(root_descriptor, filename)
@@ -2140,13 +2171,15 @@ def _read_flat_native_record(
             header.extend(chunk)
             newline = header.find(b"\n")
             if newline >= 0:
-                del header[newline + 1:]
+                del header[newline + 1 :]
                 break
         else:
             raise PrivateArtifactError("flat native manifest exceeds its bound")
         manifest_bytes = bytes(header)
         kind, size, record_sha256 = _sealed_record_manifest_fields(
-            manifest_bytes, record_id=record_id, expected_kind=expected_kind,
+            manifest_bytes,
+            record_id=record_id,
+            expected_kind=expected_kind,
         )
         _require_native_input_identity(record_id, kind)
         if before.st_size != len(manifest_bytes) + size:
@@ -2154,19 +2187,20 @@ def _read_flat_native_record(
         payload = None
         if not metadata_only:
             combined = _read_private_entry(
-                root_descriptor, filename, subject="flat native record",
-                maximum_bytes=(
-                    _MAX_FLAT_NATIVE_HEADER_BYTES + _sealed_record_maximum_bytes(kind)
-                ),
+                root_descriptor,
+                filename,
+                subject="flat native record",
+                maximum_bytes=(_MAX_FLAT_NATIVE_HEADER_BYTES + _sealed_record_maximum_bytes(kind)),
                 expected_bytes=before.st_size,
             )
-            if combined[:len(manifest_bytes)] != manifest_bytes:
+            if combined[: len(manifest_bytes)] != manifest_bytes:
                 raise PrivateArtifactError("flat native manifest changed during validation")
-            payload = combined[len(manifest_bytes):]
+            payload = combined[len(manifest_bytes) :]
             if hashlib.sha256(payload).hexdigest() != record_sha256:
                 raise PrivateArtifactError("flat native payload failed its integrity check")
             value = _decode_canonical_json_object(
-                payload, subject="flat native payload",
+                payload,
+                subject="flat native payload",
                 maximum_bytes=_sealed_record_maximum_bytes(kind),
             )
             if _canonical_record(value) != payload:
@@ -2175,21 +2209,32 @@ def _read_flat_native_record(
         named = _entry_metadata(root_descriptor, filename)
         _validate_sealed_payload_metadata(final, expected_bytes=before.st_size)
         _require_current_owner(final, subject="flat native record")
-        if (named is None or not _same_file(opened, named) or not _same_file(opened, final)
-                or (opened.st_mtime_ns, opened.st_ctime_ns)
-                != (final.st_mtime_ns, final.st_ctime_ns)
-                or not _same_file(root.lstat(), os.fstat(root_descriptor))):
+        if (
+            named is None
+            or not _same_file(opened, named)
+            or not _same_file(opened, final)
+            or (opened.st_mtime_ns, opened.st_ctime_ns) != (final.st_mtime_ns, final.st_ctime_ns)
+            or not _same_file(root.lstat(), os.fstat(root_descriptor))
+        ):
             raise PrivateArtifactError("flat native record changed during validation")
         if metadata_only:
             return SealedRecordManifestMetadata(
-                record_id=record_id, kind=kind, declared_record_sha256=record_sha256,
+                record_id=record_id,
+                kind=kind,
+                declared_record_sha256=record_sha256,
                 manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
                 declared_total_bytes=size,
             )
-        return PrivateSealedRecord(payload=payload, summary=SealedRecordSummary(
-            record_id=record_id, kind=kind, record_sha256=record_sha256,
-            manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(), total_bytes=size,
-        ))
+        return PrivateSealedRecord(
+            payload=payload,
+            summary=SealedRecordSummary(
+                record_id=record_id,
+                kind=kind,
+                record_sha256=record_sha256,
+                manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
+                total_bytes=size,
+            ),
+        )
     except PrivateArtifactError:
         raise
     except OSError:
@@ -2203,13 +2248,19 @@ def _read_flat_native_record(
 
 def _open_flat_native_record(root, record_id, *, expected_kind):
     return _read_flat_native_record(
-        root, record_id, expected_kind=expected_kind, metadata_only=False,
+        root,
+        record_id,
+        expected_kind=expected_kind,
+        metadata_only=False,
     )
 
 
 def _inspect_flat_native_record(root, record_id, *, expected_kind):
     return _read_flat_native_record(
-        root, record_id, expected_kind=expected_kind, metadata_only=True,
+        root,
+        record_id,
+        expected_kind=expected_kind,
+        metadata_only=True,
     )
 
 
@@ -2223,9 +2274,11 @@ def _open_private_sealed_record(
     root_descriptor = -1
     record_descriptor = -1
     try:
-        root_descriptor = (os.open(root, _directory_read_flags())
-                           if anchored_root_descriptor is None
-                           else os.dup(anchored_root_descriptor))
+        root_descriptor = (
+            os.open(root, _directory_read_flags())
+            if anchored_root_descriptor is None
+            else os.dup(anchored_root_descriptor)
+        )
         if not _same_file(root.lstat(), os.fstat(root_descriptor)):
             raise PrivateArtifactError("sealed native root changed while opening")
         expected_directory = _entry_metadata(root_descriptor, record_id)
@@ -2286,11 +2339,13 @@ def _open_private_sealed_record(
             subject="sealed private record directory",
         )
         named_directory = _entry_metadata(root_descriptor, record_id)
-        if (named_directory is None
-                or not _same_file(opened_directory, named_directory)
-                or not _same_file(root.lstat(), os.fstat(root_descriptor))
-                or not _same_file(opened_directory, final_directory)
-                or _directory_entries(record_descriptor) != {"manifest.json", "record.json"}):
+        if (
+            named_directory is None
+            or not _same_file(opened_directory, named_directory)
+            or not _same_file(root.lstat(), os.fstat(root_descriptor))
+            or not _same_file(opened_directory, final_directory)
+            or _directory_entries(record_descriptor) != {"manifest.json", "record.json"}
+        ):
             raise PrivateArtifactError("sealed private record changed during validation")
         return PrivateSealedRecord(
             payload=payload,
@@ -2536,9 +2591,7 @@ def _reconcile_private_artifact(
         "failed": root / f"{artifact_id}.failed.partial",
         "interrupted": root / f"{artifact_id}.interrupted.partial",
     }
-    present = tuple(
-        status for status, candidate in candidates.items() if _lexists(candidate)
-    )
+    present = tuple(status for status, candidate in candidates.items() if _lexists(candidate))
     if not present:
         raise PrivateArtifactError("typed artifact is absent")
     if set(present) == {"complete", "failed"}:
@@ -2639,18 +2692,14 @@ def _reconcile_private_artifact(
                 _remove_private_artifact_identity(lock_descriptor)
 
         destination = (
-            candidates["complete"]
-            if expected_status == "complete"
-            else candidates["failed"]
+            candidates["complete"] if expected_status == "complete" else candidates["failed"]
         )
         _require_named_locked_directory(root, partial.name, lock_descriptor)
         try:
             _rename_no_replace(partial, destination)
             _fsync_directory(root)
         except OSError:
-            raise PrivateArtifactError(
-                "unable to publish the reconciled typed artifact"
-            ) from None
+            raise PrivateArtifactError("unable to publish the reconciled typed artifact") from None
         summary, reason_code = _validate_private_artifact_directory_state(
             root,
             destination.name,
@@ -2710,10 +2759,7 @@ def _is_valid_terminal_namespace(root: Path, artifact_id: str) -> bool:
             maximum_bytes=_MAX_MANIFEST_BYTES,
         )
         kind = manifest.get("kind")
-        if (
-            manifest.get("format") != PRIVATE_JSON_ARTIFACT_FORMAT
-            or not isinstance(kind, str)
-        ):
+        if manifest.get("format") != PRIVATE_JSON_ARTIFACT_FORMAT or not isinstance(kind, str):
             return False
         _validate_artifact_kind(kind)
         _validate_private_artifact_directory_state(
@@ -2771,9 +2817,7 @@ def _seal_interrupted_private_artifact(
                 "partial typed artifact contains an invalid stream name"
             ) from None
         if filename != f"{stream}.jsonl":
-            raise PrivateArtifactError(
-                "partial typed artifact contains an invalid stream name"
-            )
+            raise PrivateArtifactError("partial typed artifact contains an invalid stream name")
         payload = _read_private_entry(
             directory_descriptor,
             filename,
@@ -2877,15 +2921,11 @@ def _seal_interrupted_private_artifact(
             partial / "manifest.json",
         )
     except OSError:
-        raise PrivateArtifactError(
-            "unable to publish the typed artifact recovery seal"
-        ) from None
+        raise PrivateArtifactError("unable to publish the typed artifact recovery seal") from None
     try:
         os.fsync(directory_descriptor)
     except OSError:
-        raise PrivateArtifactError(
-            "unable to synchronize the reconciled typed artifact"
-        ) from None
+        raise PrivateArtifactError("unable to synchronize the reconciled typed artifact") from None
     _remove_private_artifact_identity(directory_descriptor)
     expected_terminal_entries = {*stream_entries, "manifest.json"}
     if unpublished_manifest_present:
@@ -2903,9 +2943,7 @@ def _open_private_artifact(
     expected_status: str,
 ) -> PrivateArtifactReader:
     directory_name = (
-        artifact_id
-        if expected_status == "complete"
-        else f"{artifact_id}.failed.partial"
+        artifact_id if expected_status == "complete" else f"{artifact_id}.failed.partial"
     )
     summary, reason_code = _validate_private_artifact_directory_state(
         root,
@@ -2974,15 +3012,10 @@ def _open_private_artifact(
             expected_status=expected_status,
         )
         expected_entries = {"manifest.json", *(file.filename for file in files)}
-        if (
-            expected_status == "failed"
-            and manifest.get("reason_code") == "publication_failed"
-        ):
+        if expected_status == "failed" and manifest.get("reason_code") == "publication_failed":
             expected_entries.add("manifest.unpublished.json")
         if _directory_entries(artifact_descriptor) != expected_entries:
-            raise PrivateArtifactError(
-                "typed artifact contents do not exactly match its manifest"
-            )
+            raise PrivateArtifactError("typed artifact contents do not exactly match its manifest")
         payloads: dict[str, bytes] = {}
         for file in files:
             payload = _read_private_entry(
@@ -3109,14 +3142,10 @@ def _validate_private_artifact_directory_state(
         unpublished = "manifest.unpublished.json" in entries
         if unpublished:
             if expected_status != "failed" or manifest.get("reason_code") != "publication_failed":
-                raise PrivateArtifactError(
-                    "typed artifact has an unexpected unpublished seal"
-                )
+                raise PrivateArtifactError("typed artifact has an unexpected unpublished seal")
             expected_entries.add("manifest.unpublished.json")
         if entries != expected_entries:
-            raise PrivateArtifactError(
-                "typed artifact contents do not exactly match its manifest"
-            )
+            raise PrivateArtifactError("typed artifact contents do not exactly match its manifest")
 
         for file in files:
             payload = _read_private_entry(
@@ -3179,11 +3208,7 @@ def _validate_private_artifact_directory_state(
                 total_bytes=_manifest_integer(totals, "bytes"),
                 manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),
             ),
-            (
-                str(manifest["reason_code"])
-                if expected_status == "failed"
-                else None
-            ),
+            (str(manifest["reason_code"]) if expected_status == "failed" else None),
         )
     except PrivateArtifactError:
         raise
@@ -3490,11 +3515,7 @@ def _open_private_episode(
 ) -> PrivateEpisodeReader:
     if expected_status not in {"complete", "failed"}:
         raise PrivateArtifactError("episode reader status is unsupported")
-    directory_name = (
-        episode_id
-        if expected_status == "complete"
-        else f"{episode_id}.failed.partial"
-    )
+    directory_name = episode_id if expected_status == "complete" else f"{episode_id}.failed.partial"
     status_label = "completed" if expected_status == "complete" else "failed"
     root_descriptor = -1
     episode_descriptor = -1
@@ -3518,13 +3539,9 @@ def _open_private_episode(
         if expected_directory is None:
             raise PrivateArtifactError(f"{status_label} episode is absent")
         if not stat.S_ISDIR(expected_directory.st_mode):
-            raise PrivateArtifactError(
-                f"{status_label} episode is not a regular private directory"
-            )
+            raise PrivateArtifactError(f"{status_label} episode is not a regular private directory")
         if stat.S_IMODE(expected_directory.st_mode) != _PRIVATE_DIRECTORY_MODE:
-            raise PrivateArtifactError(
-                f"{status_label} episode directory permissions are unsafe"
-            )
+            raise PrivateArtifactError(f"{status_label} episode directory permissions are unsafe")
 
         try:
             episode_descriptor = os.open(
@@ -3541,16 +3558,12 @@ def _open_private_episode(
             subject=f"{status_label} episode directory",
         )
         if not _same_file(expected_directory, opened_directory):
-            raise PrivateArtifactError(
-                f"{status_label} episode changed while it was being opened"
-            )
+            raise PrivateArtifactError(f"{status_label} episode changed while it was being opened")
         if (
             not stat.S_ISDIR(opened_directory.st_mode)
             or stat.S_IMODE(opened_directory.st_mode) != _PRIVATE_DIRECTORY_MODE
         ):
-            raise PrivateArtifactError(
-                f"{status_label} episode directory permissions are unsafe"
-            )
+            raise PrivateArtifactError(f"{status_label} episode directory permissions are unsafe")
 
         manifest_bytes = _read_private_entry(
             episode_descriptor,
@@ -3565,14 +3578,10 @@ def _open_private_episode(
         )
 
         expected_entries = {"manifest.json", *(file.filename for file in files)}
-        unpublished = "manifest.unpublished.json" in _directory_entries(
-            episode_descriptor
-        )
+        unpublished = "manifest.unpublished.json" in _directory_entries(episode_descriptor)
         if unpublished:
             if expected_status != "failed" or manifest.get("reason_code") != "publication_failed":
-                raise PrivateArtifactError(
-                    "episode artifact has an unexpected unpublished seal"
-                )
+                raise PrivateArtifactError("episode artifact has an unexpected unpublished seal")
             expected_entries.add("manifest.unpublished.json")
         if _directory_entries(episode_descriptor) != expected_entries:
             raise PrivateArtifactError(
@@ -4138,7 +4147,10 @@ def _validate_record_id_digest_prefix(record_id_prefix: str) -> None:
 
 
 def _inventory_digest_record_ids(
-    root: Path, record_id_prefix: str, *, flat_native_inputs: bool = False,
+    root: Path,
+    record_id_prefix: str,
+    *,
+    flat_native_inputs: bool = False,
 ) -> tuple[str, ...]:
     try:
         entries = os.listdir(root)
@@ -4196,7 +4208,8 @@ def _is_trajectory_episode_header(
 ) -> bool:
     return (
         stream == "episode"
-        and set(record) == {
+        and set(record)
+        == {
             "record_type",
             "trajectory_schema",
             "episode_id",
@@ -4458,17 +4471,13 @@ def _write_exclusive_private_entry(
             or metadata.st_nlink != 1
             or metadata.st_size != len(payload)
         ):
-            raise PrivateArtifactError(
-                "reconciled typed artifact manifest failed validation"
-            )
+            raise PrivateArtifactError("reconciled typed artifact manifest failed validation")
         _require_current_owner(
             metadata,
             subject="reconciled typed artifact manifest",
         )
     except FileExistsError:
-        raise PrivateArtifactError(
-            "reconciled typed artifact manifest already exists"
-        ) from None
+        raise PrivateArtifactError("reconciled typed artifact manifest already exists") from None
     except PrivateArtifactError:
         raise
     except OSError:
@@ -4687,9 +4696,7 @@ def _require_named_locked_directory(
     except PrivateArtifactError:
         raise
     except OSError:
-        raise PrivateArtifactError(
-            "unable to authenticate the typed artifact directory"
-        ) from None
+        raise PrivateArtifactError("unable to authenticate the typed artifact directory") from None
     finally:
         if root_descriptor >= 0:
             with suppress(OSError):

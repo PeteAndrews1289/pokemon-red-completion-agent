@@ -39,10 +39,12 @@ def test_configuration_roundtrip_keeps_exact_exclusion_and_identity():
     assert not after.admits(broken)
     assert after.admits(replace(broken, binding_ref="native:evolution:" + "d" * 64))
     assert after.admits(replace(broken, kind=GoalKind.ADVANCE_STORY))
-    assert not after.admits(replace(broken,
-        binding_ref="native:evolution:profile-"+"d"*64+":config-"+"c"*64))
-    assert after.admits(replace(broken,
-        binding_ref="native:evolution:profile-"+"c"*64+":config-"+"d"*64))
+    assert not after.admits(
+        replace(broken, binding_ref="native:evolution:profile-" + "d" * 64 + ":config-" + "c" * 64)
+    )
+    assert after.admits(
+        replace(broken, binding_ref="native:evolution:profile-" + "c" * 64 + ":config-" + "d" * 64)
+    )
 
 
 def test_route_work_configuration_versions_only_the_explicit_opt_in():
@@ -88,7 +90,8 @@ def test_route_work_reaches_backend_only_from_versioned_configuration(tmp_path, 
     configuration = replace(original, quote_capture_route_work=enabled)
     reloaded = RedPlayerConfiguration.from_dict(json.loads(json.dumps(configuration.to_dict())))
     payload, _, _, _, source = assemble_configured_player(
-        N(assembly=assemble), reloaded, tmp_path, tmp_path, plan_path=tmp_path / "plan.json")
+        N(assembly=assemble), reloaded, tmp_path, tmp_path, plan_path=tmp_path / "plan.json"
+    )
     assert payload == b"unchanged" and source["configuration_sha256"] == configuration.sha256
     if enabled:
         assert calls[0]["quote_capture_route_work"] is True
@@ -199,8 +202,19 @@ def test_fresh_assemblies_filter_only_the_exact_offer_without_breaking_menu_iden
     assert len(built) == 2 and built[0] is not built[1] and not calls
 
 
-@pytest.mark.parametrize("fault", [None, "context_hash", "state_hash", "running", "foreign",
-                                  "duplicate", "missing", "changed_config"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "context_hash",
+        "state_hash",
+        "running",
+        "foreign",
+        "duplicate",
+        "missing",
+        "changed_config",
+    ],
+)
 def test_pending_loan_authenticates_only_the_immediate_original_roster(tmp_path, fault):
     from hashlib import sha256
 
@@ -210,20 +224,45 @@ def test_pending_loan_authenticates_only_the_immediate_original_roster(tmp_path,
     parent.mkdir()
     prior.mkdir()
     refs = [*(f"retained-{i}" for i in range(5)), "reserve-individual"]
-    context = dict(state_sha256=sha256(b"source").hexdigest(), spent={}, lesson=dict(party=[
-        dict(specimen_ref=ref, species_id=i+1, level=17, experience=5000, hp=40, max_hp=40,
-             status="healthy", moves=[[33, 35]]) for i, ref in enumerate(refs)]))
+    context = dict(
+        state_sha256=sha256(b"source").hexdigest(),
+        spent={},
+        lesson=dict(
+            party=[
+                dict(
+                    specimen_ref=ref,
+                    species_id=i + 1,
+                    level=17,
+                    experience=5000,
+                    hp=40,
+                    max_hp=40,
+                    status="healthy",
+                    moves=[[33, 35]],
+                )
+                for i, ref in enumerate(refs)
+            ]
+        ),
+    )
     if fault == "duplicate":
         context["lesson"]["party"][-1]["specimen_ref"] = refs[0]
     encoded = json.dumps(context).encode()
     (prior / "CONTEXT.json").write_bytes(encoded)
     (prior / "terminal.state").write_bytes(b"source")
-    result = dict(worker_stopped=fault != "running", released=True, spent={},
-        state_sha256=context["state_sha256"], context_sha256=sha256(encoded).hexdigest(),
-        configuration_sha256=config().sha256)
+    result = dict(
+        worker_stopped=fault != "running",
+        released=True,
+        spent={},
+        state_sha256=context["state_sha256"],
+        context_sha256=sha256(encoded).hexdigest(),
+        configuration_sha256=config().sha256,
+    )
     (prior / "RESULT.json").write_text(json.dumps(result))
-    record = dict(actual_parent=str(prior), context_sha256=result["context_sha256"],
-                  source_sha256=result["state_sha256"], configuration_sha256=config().sha256)
+    record = dict(
+        actual_parent=str(prior),
+        context_sha256=result["context_sha256"],
+        source_sha256=result["state_sha256"],
+        configuration_sha256=config().sha256,
+    )
     if fault == "context_hash":
         record["context_sha256"] = "0" * 64
     if fault == "state_hash":
@@ -232,9 +271,10 @@ def test_pending_loan_authenticates_only_the_immediate_original_roster(tmp_path,
         record["configuration_sha256"] = "0" * 64
     if fault == "foreign":
         record["actual_parent"] = str(tmp_path.parent / "foreign")
-    current = dict(preparation=dict(roster=[dict(specimen_ref=r) for r in refs]),
-                   lesson=dict(party=[dict(specimen_ref=r) for r in refs[:5]] +
-                                     [dict(specimen_ref="guest")]))
+    current = dict(
+        preparation=dict(roster=[dict(specimen_ref=r) for r in refs]),
+        lesson=dict(party=[dict(specimen_ref=r) for r in refs[:5]] + [dict(specimen_ref="guest")]),
+    )
     if fault == "missing":
         current["preparation"]["roster"].pop()
     (parent / "CONTEXT.json").write_text(json.dumps(current))
@@ -249,9 +289,25 @@ def test_pending_loan_authenticates_only_the_immediate_original_roster(tmp_path,
         assert (prior / "terminal.state").read_bytes() == b"source"
 
 
-@pytest.mark.parametrize("fault", [None, "context_hash", "state_hash", "running", "unreleased",
-    "changed_config", "spent", "duplicate", "wrong_loan", "changed_roster", "cycle",
-    "foreign", "limit", "no_original"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "context_hash",
+        "state_hash",
+        "running",
+        "unreleased",
+        "changed_config",
+        "spent",
+        "duplicate",
+        "wrong_loan",
+        "changed_roster",
+        "cycle",
+        "foreign",
+        "limit",
+        "no_original",
+    ],
+)
 def test_pending_loan_follows_only_verified_consecutive_recovery_sources(
     tmp_path, monkeypatch, fault
 ):
@@ -274,27 +330,50 @@ def test_pending_loan_follows_only_verified_consecutive_recovery_sources(
             active = refs[1:] + ["guest"]
         retained = refs[:5] + ["substituted"] if i == 1 and fault == "changed_roster" else refs
         state = f"state-{i}".encode()
-        document = dict(state_sha256=sha256(state).hexdigest(), spent={"actions": i},
+        document = dict(
+            state_sha256=sha256(state).hexdigest(),
+            spent={"actions": i},
             preparation=dict(roster=[dict(specimen_ref=r) for r in retained]),
-            lesson=dict(party=[dict(specimen_ref=ref, species_id=j+1, level=17,
-                experience=5000, hp=40, max_hp=40, status="healthy", moves=[[33, 35]])
-                for j, ref in enumerate(active)]))
+            lesson=dict(
+                party=[
+                    dict(
+                        specimen_ref=ref,
+                        species_id=j + 1,
+                        level=17,
+                        experience=5000,
+                        hp=40,
+                        max_hp=40,
+                        status="healthy",
+                        moves=[[33, 35]],
+                    )
+                    for j, ref in enumerate(active)
+                ]
+            ),
+        )
         encoded = json.dumps(document).encode()
         (path / "terminal.state").write_bytes(state)
         (path / "CONTEXT.json").write_bytes(encoded)
-        result = dict(worker_stopped=not (i == 0 and fault == "running"),
-            released=not (i == 0 and fault == "unreleased"), spent=document["spent"],
-            state_sha256=document["state_sha256"], context_sha256=sha256(encoded).hexdigest(),
-            configuration_sha256=config().sha256)
+        result = dict(
+            worker_stopped=not (i == 0 and fault == "running"),
+            released=not (i == 0 and fault == "unreleased"),
+            spent=document["spent"],
+            state_sha256=document["state_sha256"],
+            context_sha256=sha256(encoded).hexdigest(),
+            configuration_sha256=config().sha256,
+        )
         if i == 0 and fault == "spent":
             result["spent"] = {"actions": 999}
         (path / "RESULT.json").write_text(json.dumps(result))
         contexts.append(document)
         results.append(result)
     for i in (1, 2):
-        result = results[i-1]
-        record = dict(actual_parent=str(paths[i-1]), context_sha256=result["context_sha256"],
-            source_sha256=result["state_sha256"], configuration_sha256=config().sha256)
+        result = results[i - 1]
+        record = dict(
+            actual_parent=str(paths[i - 1]),
+            context_sha256=result["context_sha256"],
+            source_sha256=result["state_sha256"],
+            configuration_sha256=config().sha256,
+        )
         if i == 1:
             if fault == "context_hash":
                 record["context_sha256"] = "0" * 64
@@ -322,19 +401,27 @@ def test_pending_loan_follows_only_verified_consecutive_recovery_sources(
     assert {str(p): p.read_bytes() for root in paths for p in root.iterdir()} == before
 
 
-
 @pytest.mark.parametrize("version", [5, 6, 7, 8, 9])
-def test_model_schema_enables_workload_observation_without_changing_legacy_kwargs(tmp_path, version):
+def test_model_schema_enables_workload_observation_without_changing_legacy_kwargs(
+    tmp_path, version
+):
     calls = []
+
     def assembly(*args, **kwargs):
         calls.append(kwargs)
         menu = NativeStoryBranchInventory(lambda *_: GoalBindingSet((), ()), lambda *_: ())
         return b"unchanged", None, menu, {}, {"partition": "development"}
+
     configuration = config()
     before = configuration.to_dict()
     payload, _, _, _, _ = assemble_configured_player(
-        N(assembly=assembly), configuration, tmp_path, tmp_path,
-        plan_path=tmp_path/"plan.json", model_feature_version=version)
+        N(assembly=assembly),
+        configuration,
+        tmp_path,
+        tmp_path,
+        plan_path=tmp_path / "plan.json",
+        model_feature_version=version,
+    )
     assert payload == b"unchanged" and configuration.to_dict() == before
     if version == 9:
         assert calls[0]["include_level_workload"] is True
@@ -346,5 +433,11 @@ def test_model_schema_enables_workload_observation_without_changing_legacy_kwarg
 def test_bad_model_schema_fails_before_backend_assembly(tmp_path, version):
     backend = N(assembly=lambda *a, **k: pytest.fail("invalid schema reached backend"))
     with pytest.raises(ValueError, match="supported model feature version"):
-        assemble_configured_player(backend, config(), tmp_path, tmp_path,
-                                  plan_path=tmp_path/"plan.json", model_feature_version=version)
+        assemble_configured_player(
+            backend,
+            config(),
+            tmp_path,
+            tmp_path,
+            plan_path=tmp_path / "plan.json",
+            model_feature_version=version,
+        )

@@ -79,16 +79,18 @@ def test_offer_is_read_only_and_execution_has_write_ahead_receipts(monkeypatch, 
         binding.execute()
 
 
-def test_declared_prepared_helper_changes_bound_configuration_without_discovery_input(monkeypatch,tmp_path):
-    world,provider=fixture(monkeypatch,tmp_path)
-    provider=replace(provider,require_status_success=True)
-    prepared=replace(provider,minimum_prepared_helper_level=55)
-    assert prepared.configuration_sha256!=provider.configuration_sha256
+def test_declared_prepared_helper_changes_bound_configuration_without_discovery_input(
+    monkeypatch, tmp_path
+):
+    world, provider = fixture(monkeypatch, tmp_path)
+    provider = replace(provider, require_status_success=True)
+    prepared = replace(provider, minimum_prepared_helper_level=55)
+    assert prepared.configuration_sha256 != provider.configuration_sha256
     assert prepared.offer(world.observe()).binding is not None and not list(tmp_path.iterdir())
-    with pytest.raises(ValueError,match='prepared helper'):
-        replace(prepared,require_status_success=False)
-    with pytest.raises(ValueError,match='prepared helper'):
-        replace(prepared,minimum_prepared_helper_level=0)
+    with pytest.raises(ValueError, match="prepared helper"):
+        replace(prepared, require_status_success=False)
+    with pytest.raises(ValueError, match="prepared helper"):
+        replace(prepared, minimum_prepared_helper_level=0)
 
 
 @pytest.mark.parametrize("fault", ["state", "frames", "actions", "observation"])

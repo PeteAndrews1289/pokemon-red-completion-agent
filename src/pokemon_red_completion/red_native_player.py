@@ -94,10 +94,17 @@ class NativePlayerLimits:
 class NativePlayerActions(CountingExecutor):
     """One metered input port, including nested restoration prerequisites."""
 
-    def __init__(self, delegate, restoration, training_healing=None, *, observe_cash=None,
-                 evolution_subgoal=None):
+    def __init__(
+        self,
+        delegate,
+        restoration,
+        training_healing=None,
+        *,
+        observe_cash=None,
+        evolution_subgoal=None,
+    ):
         if observe_cash is not None and not callable(observe_cash):
-            raise TypeError('Native cash observation must be callable')
+            raise TypeError("Native cash observation must be callable")
         super().__init__(delegate)
         self.execute_restoration = restoration
         self.execute_training_healing = training_healing
@@ -115,10 +122,15 @@ class NativePlayerActions(CountingExecutor):
             return super().execute(action)
         finally:
             after = None if self.observe_cash is None else self.observe_cash()
-            if (type(before) is int and type(after) is int
-                    and 0 <= before <= 999999 and 0 <= after <= 999999 and before != after):
-                self.observed_cash_debits += max(0, before-after)
-                self.observed_cash_rewards += max(0, after-before)
+            if (
+                type(before) is int
+                and type(after) is int
+                and 0 <= before <= 999999
+                and 0 <= after <= 999999
+                and before != after
+            ):
+                self.observed_cash_debits += max(0, before - after)
+                self.observed_cash_rewards += max(0, after - before)
                 self.observed_cash_changes += 1
 
 
@@ -156,14 +168,19 @@ class NativePlayerSession:
         consequence_branch_model=None,
         greedy_selection=False,
         allow_greedy_branch_recovery=False,
-        refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
+        refine_preparation=False,
+        defer_unbound_preparation=False,
+        allow_singleton_parent_support=False,
+        associate_unique_combat=False,
         allow_collection_restoration=False,
         force_resource_safety=True,
         include_live_pp_readiness=False,
         continue_safe_route_failures=False,
         train_inference_scope=None,
     ):
-        if observe_preparation_party is not None and (not callable(observe_preparation_party) or model_feature_version not in (15, 16)):
+        if observe_preparation_party is not None and (
+            not callable(observe_preparation_party) or model_feature_version not in (15, 16)
+        ):
             raise ValueError("party-count observer requires V15 and a callable")
         if observe_matchups is not None and (
             not callable(observe_matchups) or model_feature_version not in (15, 16)
@@ -224,7 +241,8 @@ class NativePlayerSession:
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            allow_singleton_parent_support=allow_singleton_parent_support,
+            associate_unique_combat=associate_unique_combat,
             source=source,
             model=consequence_branch_model,
             head=consequence_head,
@@ -258,11 +276,15 @@ class NativePlayerSession:
                 consequence_objective_ref,
                 greedy_selection=greedy_selection,
                 refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+                defer_unbound_preparation=defer_unbound_preparation,
+                allow_singleton_parent_support=allow_singleton_parent_support,
+                associate_unique_combat=associate_unique_combat,
             )
         if consequence_head is not None:
-            from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
+            from .player_challenge_consequence import (
+                ChallengeConsequenceHead,
+                consequence_feature_versions_compatible,
+            )
 
             if (
                 type(consequence_head) is not ChallengeConsequenceHead
@@ -270,7 +292,9 @@ class NativePlayerSession:
                 or consequence_head.feedback_version != 2
                 or (source["partition"] != "development" and not train_inference)
                 or model_feature_version not in (7, 9, 10, 11, 15, 16)
-                or not consequence_feature_versions_compatible(consequence_head.feature_version, model_feature_version)
+                or not consequence_feature_versions_compatible(
+                    consequence_head.feature_version, model_feature_version
+                )
                 or consequence_spec is not None
                 or execution.model_sha256
                 != (consequence_head.model_sha256 if expected_policy is None else expected_policy)
@@ -318,7 +342,7 @@ class NativePlayerSession:
         self.observe_challenges = observe_challenges
         self.observe_preparations = observe_preparations
         self.observe_matchups = observe_matchups
-        self.observe_preparation_party=observe_preparation_party
+        self.observe_preparation_party = observe_preparation_party
         self.model_feature_version = model_feature_version
         self.curriculum = curriculum
         if capture_reserve is not None:
@@ -371,15 +395,25 @@ class NativePlayerSession:
             plan["associate_unique_combat"] = True
         if consequence_spec is not None:
             plan["consequence_spec"] = consequence_spec.document()
-        if model_feature_version in (9, 10, 11, 15, 16) and (consequence_spec is not None or consequence_head is not None):
+        if model_feature_version in (9, 10, 11, 15, 16) and (
+            consequence_spec is not None or consequence_head is not None
+        ):
             plan["consequence_feature_version"] = (
-                consequence_head.feature_version if consequence_head is not None else model_feature_version
+                consequence_head.feature_version
+                if consequence_head is not None
+                else model_feature_version
             )
-            if consequence_head is not None and model_feature_version == 16 and consequence_head.feature_version == 15:
+            if (
+                consequence_head is not None
+                and model_feature_version == 16
+                and consequence_head.feature_version == 15
+            ):
                 plan["consequence_input_projection"] = dict(
                     schema="pokemon.consequence.v16-to-v15-prefix.v1",
-                    observed_feature_version=16, child_feature_version=15,
-                    observed_width=510, child_raw_width=506,
+                    observed_feature_version=16,
+                    child_feature_version=15,
+                    observed_width=510,
+                    child_raw_width=506,
                     child_model_sha256=consequence_head.model_sha256,
                     child_weights_and_provenance_unchanged=True,
                 )
@@ -489,7 +523,8 @@ class NativePlayerSession:
         shared. Only this typed child may temporarily own the inner nurse port.
         """
         if (
-            not self.allow_collection_restoration or not self.recorder.enabled
+            not self.allow_collection_restoration
+            or not self.recorder.enabled
             or self.active_kind is not GoalKind.ACQUIRE_SPECIES
             or not isinstance(binding, ExecutableGoalBinding)
             or binding.kind is not GoalKind.EVOLVE_SPECIES
@@ -500,10 +535,15 @@ class NativePlayerSession:
         try:
             record = getattr(self.actions, "record_diagnostic_event", None)
             if callable(record):
-                record("evolution_subgoal_delegation", dict(
-                    outer_kind=self.active_kind.value, inner_kind=binding.kind.value,
-                    binding_ref=binding.binding_ref, model_queries=0,
-                ))
+                record(
+                    "evolution_subgoal_delegation",
+                    dict(
+                        outer_kind=self.active_kind.value,
+                        inner_kind=binding.kind.value,
+                        binding_ref=binding.binding_ref,
+                        model_queries=0,
+                    ),
+                )
             return binding.execute()
         finally:
             self._evolution_subgoal_active = False
@@ -513,10 +553,13 @@ class NativePlayerSession:
         if (
             not self.allow_collection_restoration
             or not self.recorder.enabled
-            or not (self.active_kind is GoalKind.EVOLVE_SPECIES or (
-                self.active_kind is GoalKind.ACQUIRE_SPECIES
-                and getattr(self, "_evolution_subgoal_active", False)
-            ))
+            or not (
+                self.active_kind is GoalKind.EVOLVE_SPECIES
+                or (
+                    self.active_kind is GoalKind.ACQUIRE_SPECIES
+                    and getattr(self, "_evolution_subgoal_active", False)
+                )
+            )
             or reader is not self.runtime.reader
             or emulator is not self.controller
             or not callable(healer)
@@ -597,7 +640,9 @@ class NativePlayerSession:
         )
         if overlaps_training:
             self._training_nurse_credit = 0
-            self.training_restoration_overlaps = getattr(self, "training_restoration_overlaps", 0) + 1
+            self.training_restoration_overlaps = (
+                getattr(self, "training_restoration_overlaps", 0) + 1
+            )
         else:
             if self.heals >= self.limits.heals:
                 raise RestorationBudgetExhausted(
@@ -695,8 +740,11 @@ class NativePlayerSession:
             restoration_attempts=self.heals,
             nested_restoration_attempts=self.support_restorations,
             training_healing_attempts=self.training_healing_trips,
-            **({"training_restoration_overlaps": self.training_restoration_overlaps}
-               if getattr(self, "training_restoration_overlaps", 0) else {}),
+            **(
+                {"training_restoration_overlaps": self.training_restoration_overlaps}
+                if getattr(self, "training_restoration_overlaps", 0)
+                else {}
+            ),
             completed_objectives=lesson["completed_objectives"],
             battle_state=raw.battle_state,
             input_ready=(
@@ -714,13 +762,19 @@ class NativePlayerSession:
             guard.verify()
             if getattr(self, "continue_safe_route_failures", False):
                 from .gen1_route_runtime import Gen1TraversalObserver
+
                 facts["party_guard_verified"] = True
                 facts["bag_items"] = raw.bag_items
                 facts["coins"] = self.runtime.reader.read_game_corner_coins()
                 if raw.battle_state == 0 and facts["input_ready"]:
                     route = Gen1TraversalObserver(self.runtime.reader).observe()
-                    facts["route_boundary"] = dict(map_id=route.map_id, at=list(route.at),
-                        ready=route.ready, interruption=route.interruption, mode=route.mode)
+                    facts["route_boundary"] = dict(
+                        map_id=route.map_id,
+                        at=list(route.at),
+                        ready=route.ready,
+                        interruption=route.interruption,
+                        mode=route.mode,
+                    )
             if getattr(self, "_decision_party_guard_pending", True):
                 self._decision_party_guard = replace(
                     guard,
@@ -803,12 +857,18 @@ class NativePlayerSession:
         # Menu construction is charged before this uniform admission check.
         # Preserve first-decision diagnostics and their wall-only safeguard;
         # keep compulsory recovery available while control is still unsettled.
-        if (self.source.get("partition") == "development"
-                and self.allow_collection_restoration
-                and ((self.decisions > 0 and self.decision_admission_reserve_reached())
-                     or (self.limits.seconds - self.wall.elapsed_seconds
-                         <= min(60, max(1, self.limits.seconds // 4))
-                         and self.evolution_reserve_reached()))):
+        if (
+            self.source.get("partition") == "development"
+            and self.allow_collection_restoration
+            and (
+                (self.decisions > 0 and self.decision_admission_reserve_reached())
+                or (
+                    self.limits.seconds - self.wall.elapsed_seconds
+                    <= min(60, max(1, self.limits.seconds // 4))
+                    and self.evolution_reserve_reached()
+                )
+            )
+        ):
             from .red_integrated_play import settled_player_boundary
 
             boundary = self.snapshot()
@@ -913,7 +973,10 @@ def validate_settlement_refinement_scope(
     if not allow:
         return False
     from .living_dex_option_value import LivingDexOptionValueModel
-    from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
+    from .player_challenge_consequence import (
+        ChallengeConsequenceHead,
+        consequence_feature_versions_compatible,
+    )
     from .red_consequence_choice import (
         branch_recovery_scope_ref,
         valid_branch_recovery_objectives,
@@ -934,7 +997,9 @@ def validate_settlement_refinement_scope(
         or sequence_policy is not None
         or consequence_spec is not None
     ):
-        raise ValueError("settled branch refinement requires matching declared native-TRAIN V2 DEVELOPMENT")
+        raise ValueError(
+            "settled branch refinement requires matching declared native-TRAIN V2 DEVELOPMENT"
+        )
     return True
 
 
@@ -972,7 +1037,10 @@ def run_native_continuous_player(
     greedy_selection=False,
     exploration_mix=0.25,
     allow_greedy_branch_recovery=False,
-    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
+    refine_preparation=False,
+    defer_unbound_preparation=False,
+    allow_singleton_parent_support=False,
+    associate_unique_combat=False,
     settle_existing_blackout=False,
     settle_existing_wild=False,
     settle_existing_capture=False,
@@ -986,13 +1054,20 @@ def run_native_continuous_player(
     train_inference_scope=None,
 ):
     """Execute one isolated, already authorized native episode; never reset it."""
-    if (isinstance(exploration_mix, bool) or not isinstance(exploration_mix, (int, float))
-            or not math.isfinite(exploration_mix) or not 0 <= exploration_mix <= 1):
+    if (
+        isinstance(exploration_mix, bool)
+        or not isinstance(exploration_mix, (int, float))
+        or not math.isfinite(exploration_mix)
+        or not 0 <= exploration_mix <= 1
+    ):
         raise ValueError("native exploration mix must be finite within zero and one")
     if exploration_mix != 0.25 and (
-        source.get("partition") != "development" or greedy_selection
-        or sequence_horizon is not None or sequence_policy is not None
-        or consequence_spec is not None or consequence_head is not None
+        source.get("partition") != "development"
+        or greedy_selection
+        or sequence_horizon is not None
+        or sequence_policy is not None
+        or consequence_spec is not None
+        or consequence_head is not None
     ):
         raise ValueError("custom exploration requires separate native DEVELOPMENT scope")
     search_memory = (
@@ -1052,8 +1127,9 @@ def run_native_continuous_player(
         allow=allow_greedy_branch_recovery,
         greedy_selection=greedy_selection,
         refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+        defer_unbound_preparation=defer_unbound_preparation,
+        allow_singleton_parent_support=allow_singleton_parent_support,
+        associate_unique_combat=associate_unique_combat,
         source=source,
         model=model,
         head=consequence_head,
@@ -1086,7 +1162,8 @@ def run_native_continuous_player(
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            allow_singleton_parent_support=allow_singleton_parent_support,
+            associate_unique_combat=associate_unique_combat,
         )
     if consequence_head is not None and (
         sequence_policy is not None or sequence_horizon is not None or consequence_spec is not None
@@ -1158,13 +1235,18 @@ def run_native_continuous_player(
         greedy_selection=greedy_selection,
         allow_greedy_branch_recovery=allow_greedy_branch_recovery,
         refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+        defer_unbound_preparation=defer_unbound_preparation,
+        allow_singleton_parent_support=allow_singleton_parent_support,
+        associate_unique_combat=associate_unique_combat,
         allow_collection_restoration=allow_collection_restoration,
         force_resource_safety=force_resource_safety,
         include_live_pp_readiness=include_live_pp_readiness,
-        continue_safe_route_failures=(source.get("partition") == "development"
-            and collector is None and sequence_policy is None and consequence_head is None),
+        continue_safe_route_failures=(
+            source.get("partition") == "development"
+            and collector is None
+            and sequence_policy is None
+            and consequence_head is None
+        ),
         train_inference_scope=train_inference_scope,
     )
     try:
@@ -1225,7 +1307,8 @@ def run_native_continuous_player(
                 # battle2 and its movement latch. Only the existing exact,
                 # sole recovery binding can refine this motion preface.
                 if (
-                    motion and settle_existing_trainer
+                    motion
+                    and settle_existing_trainer
                     and isinstance(options, RedPlayerSupport)
                     and options.binding.kind is GoalKind.RECOVER_CONTROL
                     and options.binding.binding_ref
@@ -1238,7 +1321,8 @@ def run_native_continuous_player(
                 # Refine only its sole exact-state capture binding; never
                 # authorize Run, another target or a replacement policy choice.
                 if (
-                    escape and isinstance(options, RedPlayerSupport)
+                    escape
+                    and isinstance(options, RedPlayerSupport)
                     and options.binding.kind is GoalKind.RECOVER_CONTROL
                     and options.binding.binding_ref
                     == "pokemon.red:retained-capture:" + before.sha256
@@ -1305,12 +1389,16 @@ def run_native_continuous_player(
                 preface_cash_debits = max(0, before.facts["cash"] - after.facts["cash"])
                 chained = report.evidence.get("chained_trainer_recovery")
                 ordinary_trainer_loss = (
-                    (trainer or escape and isinstance(chained, dict)
-                     and chained.get("binding_ref") == "pokemon.red:retained-engagement:"
-                     + str(chained.get("source_sha256"))
-                     and chained.get("support") == "already_engaged_native_trainer"
-                     and chained.get("battle") == report.evidence.get("battle")
-                     and chained.get("terminal_sha256") == after.sha256)
+                    (
+                        trainer
+                        or escape
+                        and isinstance(chained, dict)
+                        and chained.get("binding_ref")
+                        == "pokemon.red:retained-engagement:" + str(chained.get("source_sha256"))
+                        and chained.get("support") == "already_engaged_native_trainer"
+                        and chained.get("battle") == report.evidence.get("battle")
+                        and chained.get("terminal_sha256") == after.sha256
+                    )
                     and verdict.status is GoalDecisionOutcome.FAILED
                     and verdict.failure_reason is GoalFailureReason.RESOURCE_LOST
                     and report.evidence.get("battle", {}).get("outcome") == "lost"
@@ -1387,7 +1475,8 @@ def run_native_continuous_player(
             allow_greedy_branch_recovery=allow_greedy_branch_recovery,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            allow_singleton_parent_support=allow_singleton_parent_support,
+            associate_unique_combat=associate_unique_combat,
             maximum_cash_spent=remaining_cash,
             sequence_collector=collector,
             sequence_policy=sequence_policy,
@@ -1422,13 +1511,21 @@ def run_native_continuous_player(
                 restore_attempts=session.heals,
                 nested_restore_attempts=session.support_restorations,
                 training_healing_attempts=session.training_healing_trips,
-                **({"training_restoration_overlaps": session.training_restoration_overlaps}
-                   if getattr(session, "training_restoration_overlaps", 0) else {}),
+                **(
+                    {"training_restoration_overlaps": session.training_restoration_overlaps}
+                    if getattr(session, "training_restoration_overlaps", 0)
+                    else {}
+                ),
                 control_recovery_cash_debits=preface_cash_debits,
-                **(dict(observed_cash_debits=session.actions.observed_cash_debits,
+                **(
+                    dict(
+                        observed_cash_debits=session.actions.observed_cash_debits,
                         observed_cash_rewards=session.actions.observed_cash_rewards,
-                        observed_cash_changes=session.actions.observed_cash_changes)
-                   if session.actions.observe_cash is not None else {}),
+                        observed_cash_changes=session.actions.observed_cash_changes,
+                    )
+                    if session.actions.observe_cash is not None
+                    else {}
+                ),
                 buttons_released=not session.controller.pressed_buttons,
                 automatic_fit=False,
                 promotions=0,

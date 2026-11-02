@@ -13,7 +13,9 @@ from pokemon_red_completion.red_player_party_guard import RedPlayerPartyGuard
 
 @pytest.mark.parametrize("supported", [True, False])
 @pytest.mark.parametrize("phase", ["initial", "replan"])
-def test_return_walk_uses_counted_center_waiter_and_preserves_walking_guard(monkeypatch, supported, phase):
+def test_return_walk_uses_counted_center_waiter_and_preserves_walking_guard(
+    monkeypatch, supported, phase
+):
     import pokemon_red_completion.red_native_boxed_evolution as evolution
     from pokemon_red_completion.route_executor import ReplanRequest, TraversalSnapshot
     from pokemon_red_completion.route_plan import RoutePlanningError
@@ -55,8 +57,12 @@ def test_return_walk_uses_counted_center_waiter_and_preserves_walking_guard(monk
         assert port is actions and traversal is observer
         assert limits is loan._ROUTE_LIMITS and interruption_handler is None
         if phase == "replan":
-            assert replanner(ReplanRequest(observer.observe(), map_id, goal,
-                {map_id: frozenset({goal})}, 1)) is replacement
+            assert (
+                replanner(
+                    ReplanRequest(observer.observe(), map_id, goal, {map_id: frozenset({goal})}, 1)
+                )
+                is replacement
+            )
         position[0] = goal
         return N(passed=True)
 
@@ -310,8 +316,7 @@ def test_failed_transition_returns_to_a_reachable_center_without_healing(monkeyp
 def test_loan_walk_refreshes_live_occupancy_without_relaxing_route_guards(monkeypatch, fault):
     from pokemon_red_completion.route_plan import RoutePlanningError
 
-    reader = N(read_bottom_dialogue_box_visible=lambda: False,
-               read_current_map_objects=lambda: ())
+    reader = N(read_bottom_dialogue_box_visible=lambda: False, read_current_map_objects=lambda: ())
     runtime = N(reader=reader)
     start = N(map_id=133, at=(4, 13))
     terminal = N(map_id=133, at=(3, 3), ready=True, interruption=None)
@@ -325,8 +330,12 @@ def test_loan_walk_refreshes_live_occupancy_without_relaxing_route_guards(monkey
     replacement = N(walking=fault not in {"cut", "surf"})
     # The route executor's accumulated blocker and the observed moving NPC
     # remain in the unchanged request. Only stale world geometry is refreshed.
-    request = N(current=N(map_id=133, at=(4, 9), occupied=frozenset({(4, 8)})),
-        blocked={133: frozenset({(4, 8), (6, 10)})}, goal_map=133, goal_at=(3, 3))
+    request = N(
+        current=N(map_id=133, at=(4, 9), occupied=frozenset({(4, 8)})),
+        blocked={133: frozenset({(4, 8), (6, 10)})},
+        goal_map=133,
+        goal_at=(3, 3),
+    )
     calls = []
 
     def plan(observed, destination, *, goal_at):
@@ -341,8 +350,7 @@ def test_loan_walk_refreshes_live_occupancy_without_relaxing_route_guards(monkey
             raise RoutePlanningError("the destination is still occupied")
         return replacement
 
-    fresh = N(replanner=lambda: fresh_replan,
-              with_current_observation=lambda actual_reader: fresh)
+    fresh = N(replanner=lambda: fresh_replan, with_current_observation=lambda actual_reader: fresh)
 
     def refresh(actual_reader):
         assert actual_reader is reader
@@ -351,8 +359,11 @@ def test_loan_walk_refreshes_live_occupancy_without_relaxing_route_guards(monkey
             raise ValueError("current routing observation needs a settled field boundary")
         return fresh
 
-    initial = N(plan_feasible_to_map=plan, with_current_observation=refresh,
-        replanner=lambda: pytest.fail("stale occupancy replanner was reused"))
+    initial = N(
+        plan_feasible_to_map=plan,
+        with_current_observation=refresh,
+        replanner=lambda: pytest.fail("stale occupancy replanner was reused"),
+    )
     world = N(with_current_observation=lambda actual_reader: initial)
     actions = object()
 

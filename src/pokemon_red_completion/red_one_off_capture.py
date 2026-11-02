@@ -119,8 +119,15 @@ def settle_caught_one_off_transfer(
             or raw.party_count not in {count, min(6, count + 1)}
         ):
             raise OneOffCapturePaused("capture transfer changed protected boundary")
-        for name in ("party_species_ids", "party_pp", "party_hp", "party_status",
-                     "party_moves", "party_levels", "party_max_hp"):
+        for name in (
+            "party_species_ids",
+            "party_pp",
+            "party_hp",
+            "party_status",
+            "party_moves",
+            "party_levels",
+            "party_max_hp",
+        ):
             old, new = getattr(before_throw, name), getattr(raw, name)
             if old is not None and (new is None or new[:count] != old):
                 raise OneOffCapturePaused("capture transfer changed original party or PP")
@@ -221,10 +228,13 @@ def run_one_off_capture(
             or identity.original_species_id != request.internal_species
             or raw.enemy_level != request.level
             or not raw.enemy_hp
-            or (not allow_fainted and (
-                (raw.battler_hp or 0) <= 0
-                or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
-            ))
+            or (
+                not allow_fainted
+                and (
+                    (raw.battler_hp or 0) <= 0
+                    or reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN
+                )
+            )
         ):
             raise OneOffCapturePaused("one-off target/lead/MAIN boundary unavailable")
         if (
@@ -252,10 +262,23 @@ def run_one_off_capture(
         ):
             raise OneOffCapturePaused("replacement choice is not a living reserve")
         if record_decision is not None:
-            record_decision({"directive": "replace_fainted_catcher", "party_slot": slot + 1,
-                             "throws_committed": throws, "learned": False})
-        switch_active_battler(executor, reader, emulator, slot, expected_battle_state=1,
-                              label="one-off capture replacement", wait_frames=120)
+            record_decision(
+                {
+                    "directive": "replace_fainted_catcher",
+                    "party_slot": slot + 1,
+                    "throws_committed": throws,
+                    "learned": False,
+                }
+            )
+        switch_active_battler(
+            executor,
+            reader,
+            emulator,
+            slot,
+            expected_battle_state=1,
+            label="one-off capture replacement",
+            wait_frames=120,
+        )
         after = reader.read()
         live_boundary()
         protected_inventory(throws)
@@ -294,9 +317,13 @@ def run_one_off_capture(
             after_preparation = reader.read()
             if after_preparation.enemy_hp != before_preparation.enemy_hp:
                 from .red_capture_status_runtime import observed_rest_recovery
+
                 if not observed_rest_recovery(
-                    before_preparation, after_preparation, before_moves,
-                    moves_reader(), status_reader(),
+                    before_preparation,
+                    after_preparation,
+                    before_moves,
+                    moves_reader(),
+                    status_reader(),
                 ):
                     raise OneOffCapturePaused("preparation changed target HP")
         raw = reader.read()
@@ -305,16 +332,26 @@ def run_one_off_capture(
         throw_counters = capture_execution_counters(emulator, executor)
         ball_quantity = dict(_bag(emulator)).get(request.ball, 0)
         record_capture_diagnostic(
-            executor, "capture_throw_started", raw, source="one_off",
-            throw=throw, ball=request.ball, ball_quantity=ball_quantity,
+            executor,
+            "capture_throw_started",
+            raw,
+            source="one_off",
+            throw=throw,
+            ball=request.ball,
+            ball_quantity=ball_quantity,
         )
 
-        def finish_throw(outcome, state):
+        def finish_throw(outcome, state, *, throw=throw, throw_counters=throw_counters):
             record_capture_diagnostic(
-                executor, "capture_throw_completed", state, source="one_off",
-                throw=throw, ball=request.ball,
+                executor,
+                "capture_throw_completed",
+                state,
+                source="one_off",
+                throw=throw,
+                ball=request.ball,
                 ball_quantity=dict(_bag(emulator)).get(request.ball, 0),
-                outcome=outcome, before_counters=throw_counters,
+                outcome=outcome,
+                before_counters=throw_counters,
                 counters=capture_execution_counters(emulator, executor),
             )
 
@@ -347,7 +384,10 @@ def run_one_off_capture(
                 expected_bag = dict(initial_bag)
                 expected_bag[request.ball] -= throw - previous_throws
                 caught = settle_caught_one_off_transfer(
-                    emulator, executor, reader, request,
+                    emulator,
+                    executor,
+                    reader,
+                    request,
                     before_throw=throw_start,
                     initial_owned=initial_owned,
                     initial_specimens=initial_specimens,

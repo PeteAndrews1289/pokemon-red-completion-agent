@@ -31,30 +31,51 @@ def _inputs():
 
 @pytest.mark.parametrize("blocker", [None, "stock", "final_credit", "wrong_edge"])
 def test_fishing_dependency_requires_missing_final_and_actual_spare_demand(
-    tmp_path, monkeypatch, blocker,
+    tmp_path,
+    monkeypatch,
+    blocker,
 ):
     from dataclasses import replace
+
     from test_registered_runtime_binding import bound_fixture
+
     from pokemon_red_completion.gen1_cartridge import EvolutionMethod
     from pokemon_red_completion.red_collection import red_species_ref
 
     runtime, _, _ = bound_fixture(tmp_path, inherited=(61,))
     observation = runtime.adapter.observe()
-    collection = replace(observation.collection_observation,
-                         owned_species=observation.collection_observation.owned_species | {
-                             red_species_ref(61),
-                         })
+    collection = replace(
+        observation.collection_observation,
+        owned_species=observation.collection_observation.owned_species
+        | {
+            red_species_ref(61),
+        },
+    )
     if blocker == "stock":
         specimen = collection.specimens[0]
-        collection = replace(collection, specimens=(
-            replace(specimen, species_ref=red_species_ref(61)), *collection.specimens[1:],
-        ))
+        collection = replace(
+            collection,
+            specimens=(
+                replace(specimen, species_ref=red_species_ref(61)),
+                *collection.specimens[1:],
+            ),
+        )
     if blocker == "final_credit":
-        collection = replace(collection, owned_species=collection.owned_species | {red_species_ref(62)})
+        collection = replace(
+            collection, owned_species=collection.owned_species | {red_species_ref(62)}
+        )
     observation = replace(observation, collection_observation=collection)
-    monkeypatch.setattr(fishing, "evolution_graph", lambda _: {} if blocker == "wrong_edge" else {
-        61: (SimpleNamespace(method=EvolutionMethod.STONE, to_species=62),),
-    })
+    monkeypatch.setattr(
+        fishing,
+        "evolution_graph",
+        lambda _: (
+            {}
+            if blocker == "wrong_edge"
+            else {
+                61: (SimpleNamespace(method=EvolutionMethod.STONE, to_species=62),),
+            }
+        ),
+    )
     before = runtime.registration_policy.goal_registered(collection)
     assert fishing.stone_precursor_fishing_demand(runtime, observation, b"rom") == (
         (61,) if blocker is None else ()
@@ -132,16 +153,18 @@ def test_fishing_reuses_budget_chain_and_goal_registration_and_rejects_mutation(
         return SimpleNamespace(supplements=supplements)
 
     monkeypatch.setattr(fishing, "build_red_live_fishing_inventory", inventory)
+
     def wrapper(inner):
-        pytest.fail('inventory invoked the battle wrapper')
-    options = {} if not wrapped else {'interruption_handler_wrapper': wrapper}
+        pytest.fail("inventory invoked the battle wrapper")
+
+    options = {} if not wrapped else {"interruption_handler_wrapper": wrapper}
     if mutation:
         with pytest.raises(ValueError, match="changed the game"):
             fishing.autonomous_fishing_options(runtime, observation, actions, world, **options)
     else:
         actual = fishing.autonomous_fishing_options(runtime, observation, actions, world, **options)
         assert actual is supplements
-    assert observed.get('interruption_handler_wrapper') is (wrapper if wrapped else None)
+    assert observed.get("interruption_handler_wrapper") is (wrapper if wrapped else None)
     assert observed["actions"] is actions
     assert observed["controller"] is observed["emulator"] is runtime.emulator
     assert observed["reader"] is runtime.reader
@@ -152,12 +175,13 @@ def test_fishing_reuses_budget_chain_and_goal_registration_and_rejects_mutation(
     assert observed["safari_session_steps"] == (129 if safari else None)
 
 
-@pytest.mark.parametrize('wrapper', [True, 1, object()])
+@pytest.mark.parametrize("wrapper", [True, 1, object()])
 def test_fishing_rejects_noncallable_battle_wrapper(wrapper):
     runtime, observation, actions, world = _inputs()
-    with pytest.raises(TypeError, match='wrapper must be callable'):
-        fishing.autonomous_fishing_options(runtime, observation, actions, world,
-                                           interruption_handler_wrapper=wrapper)
+    with pytest.raises(TypeError, match="wrapper must be callable"):
+        fishing.autonomous_fishing_options(
+            runtime, observation, actions, world, interruption_handler_wrapper=wrapper
+        )
     assert actions.actions_executed == 0 and runtime.emulator.frame_count == 17
 
 

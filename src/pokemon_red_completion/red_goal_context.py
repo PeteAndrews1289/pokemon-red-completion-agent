@@ -51,7 +51,9 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.party import PartyObservation
 from pokemon_red_completion.red_acquisition import (
-    RED_ACQUISITION_CATALOG, RedAcquisitionCatalog, RedAreaExecutionPolicy,
+    RED_ACQUISITION_CATALOG,
+    RedAcquisitionCatalog,
+    RedAreaExecutionPolicy,
 )
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
@@ -129,6 +131,8 @@ class RedGoalContextEmulator(Protocol):
 
     def tick(self, frames: int) -> None: ...
 
+    def save_state_bytes(self) -> bytes: ...
+
 
 @dataclass(frozen=True, slots=True)
 class RedBoxedLevelEvolutionGoalRequest:
@@ -162,15 +166,20 @@ class RedBoxedLevelEvolutionGoalRequest:
             raise RedGoalContextError("boxed evolution storage binding differs")
         if type(self.declared_blastoise_loan) is not bool:
             raise RedGoalContextError("boxed evolution loan permission differs")
-        if self.deposit_internal_species_id in {
-            self.precursor_internal_species_id,
-            self.evolved_internal_species_id,
-        } or (
-            self.deposit_internal_species_id == BLASTOISE_SPECIES_ID
-            and not self.declared_blastoise_loan
-        ) or (
-            self.declared_blastoise_loan
-            and self.deposit_internal_species_id != BLASTOISE_SPECIES_ID
+        if (
+            self.deposit_internal_species_id
+            in {
+                self.precursor_internal_species_id,
+                self.evolved_internal_species_id,
+            }
+            or (
+                self.deposit_internal_species_id == BLASTOISE_SPECIES_ID
+                and not self.declared_blastoise_loan
+            )
+            or (
+                self.declared_blastoise_loan
+                and self.deposit_internal_species_id != BLASTOISE_SPECIES_ID
+            )
         ):
             raise RedGoalContextError("boxed evolution deposit binding is unsafe")
 
@@ -217,15 +226,20 @@ class RedBoxedItemEvolutionGoalRequest:
             raise RedGoalContextError("boxed item evolution storage binding differs")
         if type(self.declared_blastoise_loan) is not bool:
             raise RedGoalContextError("boxed item evolution loan permission differs")
-        if self.deposit_internal_species_id in {
-            self.precursor_internal_species_id,
-            self.evolved_internal_species_id,
-        } or (
-            self.deposit_internal_species_id == BLASTOISE_SPECIES_ID
-            and not self.declared_blastoise_loan
-        ) or (
-            self.declared_blastoise_loan
-            and self.deposit_internal_species_id != BLASTOISE_SPECIES_ID
+        if (
+            self.deposit_internal_species_id
+            in {
+                self.precursor_internal_species_id,
+                self.evolved_internal_species_id,
+            }
+            or (
+                self.deposit_internal_species_id == BLASTOISE_SPECIES_ID
+                and not self.declared_blastoise_loan
+            )
+            or (
+                self.declared_blastoise_loan
+                and self.deposit_internal_species_id != BLASTOISE_SPECIES_ID
+            )
         ):
             raise RedGoalContextError("boxed item evolution deposit binding is unsafe")
 
@@ -313,8 +327,11 @@ class RedGoalContextRuntime:
         )
 
     def provider_for(
-        self, kind: GoalKind, actions: CountingExecutor,
-        *, observation: RedGoalObservation | None = None,
+        self,
+        kind: GoalKind,
+        actions: CountingExecutor,
+        *,
+        observation: RedGoalObservation | None = None,
     ) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
 
@@ -489,7 +506,8 @@ def _build_provider(
     runtime: RedGoalContextRuntime,
     spec: RedGoalProviderSpec,
     actions: CountingExecutor,
-    *, observation: RedGoalObservation | None = None,
+    *,
+    observation: RedGoalObservation | None = None,
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.OAKS_ERRAND:
@@ -498,8 +516,13 @@ def _build_provider(
 
         return RedStoryGoalBindingProvider(
             COMPLETION_QUEST,
-            ObjectiveSkillRegistry((build_red_oaks_errand_skill(
-                runtime.emulator, runtime.reader, actions, runtime.observer),)),
+            ObjectiveSkillRegistry(
+                (
+                    build_red_oaks_errand_skill(
+                        runtime.emulator, runtime.reader, actions, runtime.observer
+                    ),
+                )
+            ),
             runtime.observer,
         )
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
@@ -591,7 +614,10 @@ def _build_provider(
             from .red_faint_recovery import RedFaintAwareFieldRestoreGoalProvider
 
             return RedFaintAwareFieldRestoreGoalProvider(
-                actions, runtime.reader, runtime.emulator, runtime.adapter,
+                actions,
+                runtime.reader,
+                runtime.emulator,
+                runtime.adapter,
             )
         hp_provider = RedFieldRestoreGoalProvider(
             actions,
@@ -659,10 +685,12 @@ def _wild_search_diagnostic_observer(runtime):
     def observe(raw):
         nonlocal cached_blocks, cached_terrain, cached_tables
         facts = dict(
-            eligible_encounter_tile=None, movement_mode=None,
+            eligible_encounter_tile=None,
+            movement_mode=None,
             repel_remaining_steps=raw.repel_remaining_steps,
             lead_level=None if raw.party_levels is None else raw.party_levels[0],
-            cartridge_table=None, rate_byte_is_not_step_probability=True,
+            cartridge_table=None,
+            rate_byte_is_not_step_probability=True,
             slot_order_does_not_imply_equal_weights=True,
         )
         if world is None:
@@ -684,7 +712,10 @@ def _wild_search_diagnostic_observer(runtime):
                 return facts
             if blocks != cached_blocks:
                 cached_terrain = terrain_from_blocks(
-                    world.rom, blocks.map_id, blocks.rows, world.tilesets,
+                    world.rom,
+                    blocks.map_id,
+                    blocks.rows,
+                    world.tilesets,
                     water_set_ids=world.water_tilesets,
                 )
                 cached_blocks = blocks
@@ -694,23 +725,34 @@ def _wild_search_diagnostic_observer(runtime):
             table = next((t for t in cached_tables.get(raw.map_id, ()) if t.medium == medium), None)
             terrain = cached_terrain
             grid = terrain.water if medium == "water" else terrain.grass
-            if (medium == "grass" and raw.map_id >= FIRST_INDOOR_MAP
-                    and terrain.tileset != FOREST_TILESET):
+            if (
+                medium == "grass"
+                and raw.map_id >= FIRST_INDOOR_MAP
+                and terrain.tileset != FOREST_TILESET
+            ):
                 grid = indoor_land_encounter_mask(world.rom, terrain)
             y, x = raw.player_y, raw.player_x
-            if type(y) is not int or type(x) is not int or not (
-                0 <= y < terrain.height and 0 <= x < terrain.width
+            if (
+                type(y) is not int
+                or type(x) is not int
+                or not (0 <= y < terrain.height and 0 <= x < terrain.width)
             ):
                 facts["coverage_gap"] = "tile_coordinate_unavailable"
                 return facts
             facts.update(
-                movement_mode=int(mode), medium=medium,
+                movement_mode=int(mode),
+                medium=medium,
                 eligible_encounter_tile=bool(table is not None and grid[y][x]),
                 cartridge_table=(
-                    None if table is None else dict(
-                        medium=table.medium, rate_byte=table.rate_byte,
-                        ordered_slots=[dict(slot=i, level=level, internal_species=s)
-                                       for i, (level, s) in enumerate(table.slots)],
+                    None
+                    if table is None
+                    else dict(
+                        medium=table.medium,
+                        rate_byte=table.rate_byte,
+                        ordered_slots=[
+                            dict(slot=i, level=level, internal_species=s)
+                            for i, (level, s) in enumerate(table.slots)
+                        ],
                     )
                 ),
                 actual_engine_encounter_checks=None,
@@ -736,24 +778,36 @@ def red_capture_source_catalog(
     """
     from .red_collection import red_species_ref
 
+    registered_species = None
+    if runtime.registration_policy is not None:
+        if collection_observation is None:
+            raise RedGoalContextError(
+                "registered capture requires the current collection observation"
+            )
+        registered_species = runtime.registration_policy.goal_registered(collection_observation)
     return replace(
         RED_ACQUISITION_CATALOG,
         remaining_demand=(
             runtime.remaining_acquisition_demand or runtime.registration_policy is not None
         ),
-        registered_species=(
-            runtime.registration_policy.goal_registered(collection_observation)
-            if runtime.registration_policy is not None else None
-        ),
+        registered_species=registered_species,
         protected_counts=(
             tuple(sorted(runtime.registration_policy.protected_counts.items()))
-            if runtime.registration_policy is not None else ()
+            if runtime.registration_policy is not None
+            else ()
         ),
         level_evolution_edges=runtime.level_evolution_acquisition_edges,
         wild_source_species=(
-            ((source_id, tuple(red_species_ref(number)
-                              for number in cast(tuple[int, ...], local_captures))),)
-            if local_captures is not None else ()
+            (
+                (
+                    source_id,
+                    tuple(
+                        red_species_ref(number) for number in cast(tuple[int, ...], local_captures)
+                    ),
+                ),
+            )
+            if local_captures is not None
+            else ()
         ),
     )
 
@@ -762,7 +816,8 @@ def _wild_provider(
     runtime: RedGoalContextRuntime,
     spec: RedGoalProviderSpec,
     actions: CountingExecutor,
-    *, observation: RedGoalObservation | None = None,
+    *,
+    observation: RedGoalObservation | None = None,
 ) -> RedGoalBindingProvider:
     parameters = spec.parameters
     source_id = _text(parameters, "source_id")
@@ -781,7 +836,9 @@ def _wild_provider(
         capture_status_support=parameters.get("capture_status_support", False) is True,
         capture_weakening_support=parameters.get("capture_weakening_support", False) is True,
         capture_level_evolution_edges=getattr(
-            getattr(runtime.adapter, "party_guard", None), "edges", frozenset(),
+            getattr(runtime.adapter, "party_guard", None),
+            "edges",
+            frozenset(),
         ),
         observe_search_conditions=_wild_search_diagnostic_observer(runtime),
     )
@@ -800,8 +857,10 @@ def _wild_provider(
             source_id=source_id,
             search_effort_surcharge=(
                 max(0, _integer(parameters, "maximum_legs") - 64) / 1_000
-                if parameters.get("capture_search_budget") in (
-                    "bounded-search-v1", "bounded-search-v2",
+                if parameters.get("capture_search_budget")
+                in (
+                    "bounded-search-v1",
+                    "bounded-search-v2",
                 )
                 else 0.0
             ),
@@ -817,9 +876,14 @@ def _wild_provider(
             boundary=boundary,
             normalize_after_capture=area.finish_at_starting_endpoint,
             catalog=red_capture_source_catalog(
-                runtime, source_id, cast(tuple[int, ...] | None, local_captures),
-                (observation if observation is not None else runtime.adapter.observe()).collection_observation
-                if runtime.registration_policy is not None else None,
+                runtime,
+                source_id,
+                cast(tuple[int, ...] | None, local_captures),
+                (
+                    observation if observation is not None else runtime.adapter.observe()
+                ).collection_observation
+                if runtime.registration_policy is not None
+                else None,
             ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
@@ -1012,6 +1076,73 @@ def _team_provider(
     actions: CountingExecutor,
 ) -> RedGoalBindingProvider:
     return _RedTeamGoalProvider(runtime, spec, actions)
+
+
+def boxed_level_evolution_request(
+    runtime: RedGoalContextRuntime,
+    spec: RedGoalProviderSpec,
+    observation: RedGoalObservation,
+) -> RedBoxedLevelEvolutionGoalRequest:
+    if spec.mechanic is not RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        raise RedGoalContextError("boxed evolution request lacks its mechanic")
+    source_ref = _text(spec.parameters, "source_species_ref")
+    target_ref = _text(spec.parameters, "target_species_ref")
+    source_internal = _internal_species_id(source_ref)
+    target_internal = _internal_species_id(target_ref)
+    from .red_player_party_guard import (
+        retained_party_slot_is_declared_loan,
+        retained_party_slot_is_depositable,
+    )
+
+    collection = observation.collection_observation
+    current_box = collection.current_box_index
+    candidates = tuple(
+        specimen
+        for specimen in collection.specimens
+        if specimen.species_ref == source_ref
+        and specimen.location is CollectionLocation.BOX
+        and (specimen.container_index == current_box or runtime.boxed_level_evolution_cross_box)
+        and specimen.container_index < len(collection.box_counts)
+        and collection.box_counts[specimen.container_index] < collection.box_capacity
+    )
+    deposit_candidates = tuple(
+        (index + 1, member.species_id)
+        for index, member in enumerate(observation.party.members)
+        if member.species_id not in {source_internal, target_internal}
+        and (
+            member.species_id != BLASTOISE_SPECIES_ID
+            or (
+                callable(runtime.evolution_settlement)
+                and retained_party_slot_is_declared_loan(runtime.adapter, index + 1)
+            )
+        )
+        and retained_party_slot_is_depositable(runtime.adapter, index + 1)
+    )
+    if (
+        len(candidates) < 1
+        or source_internal in observation.party.species_ids()
+        or observation.party.size != 6
+        or not deposit_candidates
+    ):
+        raise RedGoalContextError("boxed evolution has no executable storage binding")
+    precursor = min(
+        candidates,
+        key=lambda item: (
+            item.container_index != current_box,
+            item.container_index,
+            item.slot_index,
+        ),
+    )
+    deposit_slot, deposit_species = deposit_candidates[-1]
+    return RedBoxedLevelEvolutionGoalRequest(
+        precursor_internal_species_id=source_internal,
+        evolved_internal_species_id=target_internal,
+        current_box_index=precursor.container_index,
+        precursor_box_slot=precursor.slot_index + 1,
+        deposit_party_slot=deposit_slot,
+        deposit_internal_species_id=deposit_species,
+        declared_blastoise_loan=deposit_species == BLASTOISE_SPECIES_ID,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1283,7 +1414,7 @@ class _RedTeamGoalProvider:
         evolved_party = tuple(
             member for member in after.party.members if member.species_id == evolution_target[1]
         )
-        evolved_members = evolved_party
+        evolved_levels = tuple(member.level for member in evolved_party)
         # An explicit temporary-PC-loan assembly restores its original roster
         # before independent verification. Only that verified contract may
         # count an evolved trainee returned to storage; ordinary callers still
@@ -1299,8 +1430,9 @@ class _RedTeamGoalProvider:
             ):
                 try:
                     guard.verify_active_roster_restored()
-                    evolved_members = tuple(
-                        member for member in guard.storage_reader.read_box_specimen_identities()
+                    evolved_levels = tuple(
+                        member.level
+                        for member in guard.storage_reader.read_box_specimen_identities()
                         if member.species_id == evolution_target[1]
                     )
                 except ValueError:
@@ -1322,8 +1454,8 @@ class _RedTeamGoalProvider:
             or after.raw.battle_state
             or not after.input_ready
             or after.party.fainted_count
-            or len(evolved_members) != 1
-            or evolved_members[0].level < level_requirement
+            or len(evolved_levels) != 1
+            or evolved_levels[0] < level_requirement
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
@@ -1368,10 +1500,12 @@ class _RedTeamGoalProvider:
         observation: RedGoalObservation,
     ) -> RedGoalSkillAvailability:
         raw = observation.raw
-        if (self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+        if (
+            self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
             and self.runtime.party_level_evolution_executor is not None
             and self.runtime.party_level_evolution_start_allowed is not None
-            and self.runtime.party_level_evolution_start_allowed(observation)):
+            and self.runtime.party_level_evolution_start_allowed(observation)
+        ):
             return self.resource_availability(observation)
         allowed_maps = (
             {MapId.CELADON_POKECENTER}
@@ -1391,7 +1525,8 @@ class _RedTeamGoalProvider:
         native_targeted_level = (
             self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
             and self.runtime.boxed_level_evolution_readiness is not None
-            and self.runtime.boxed_level_evolution_executor is not None)
+            and self.runtime.boxed_level_evolution_executor is not None
+        )
         if (
             not native_targeted_level
             and BLASTOISE_SPECIES_ID not in observation.party.species_ids()
@@ -1543,68 +1678,7 @@ class _RedTeamGoalProvider:
         self,
         observation: RedGoalObservation,
     ) -> RedBoxedLevelEvolutionGoalRequest:
-        if self.spec.mechanic is not RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
-            raise RedGoalContextError("boxed evolution request lacks its mechanic")
-        source_ref = _text(self.spec.parameters, "source_species_ref")
-        target_ref = _text(self.spec.parameters, "target_species_ref")
-        source_internal = _internal_species_id(source_ref)
-        target_internal = _internal_species_id(target_ref)
-        from .red_player_party_guard import (
-            retained_party_slot_is_declared_loan,
-            retained_party_slot_is_depositable,
-        )
-        collection = observation.collection_observation
-        current_box = collection.current_box_index
-        candidates = tuple(
-            specimen
-            for specimen in collection.specimens
-            if specimen.species_ref == source_ref
-            and specimen.location is CollectionLocation.BOX
-            and (
-                specimen.container_index == current_box
-                or self.runtime.boxed_level_evolution_cross_box
-            )
-            and specimen.container_index < len(collection.box_counts)
-            and collection.box_counts[specimen.container_index] < collection.box_capacity
-        )
-        deposit_candidates = tuple(
-            (index + 1, member.species_id)
-            for index, member in enumerate(observation.party.members)
-            if member.species_id not in {source_internal, target_internal}
-            and (
-                member.species_id != BLASTOISE_SPECIES_ID
-                or (
-                    callable(self.runtime.evolution_settlement)
-                    and retained_party_slot_is_declared_loan(self.runtime.adapter, index + 1)
-                )
-            )
-            and retained_party_slot_is_depositable(self.runtime.adapter,index+1)
-        )
-        if (
-            len(candidates) < 1
-            or source_internal in observation.party.species_ids()
-            or observation.party.size != 6
-            or not deposit_candidates
-        ):
-            raise RedGoalContextError("boxed evolution has no executable storage binding")
-        precursor = min(
-            candidates,
-            key=lambda item: (
-                item.container_index != current_box,
-                item.container_index,
-                item.slot_index,
-            ),
-        )
-        deposit_slot, deposit_species = deposit_candidates[-1]
-        return RedBoxedLevelEvolutionGoalRequest(
-            precursor_internal_species_id=source_internal,
-            evolved_internal_species_id=target_internal,
-            current_box_index=precursor.container_index,
-            precursor_box_slot=precursor.slot_index + 1,
-            deposit_party_slot=deposit_slot,
-            deposit_internal_species_id=deposit_species,
-            declared_blastoise_loan=deposit_species == BLASTOISE_SPECIES_ID,
-        )
+        return boxed_level_evolution_request(self.runtime, self.spec, observation)
 
     def _boxed_item_evolution_request(
         self,
@@ -1620,6 +1694,7 @@ class _RedTeamGoalProvider:
             retained_party_slot_is_declared_loan,
             retained_party_slot_is_depositable,
         )
+
         collection = observation.collection_observation
         current_box = collection.current_box_index
         candidates = tuple(
@@ -1651,7 +1726,7 @@ class _RedTeamGoalProvider:
                 other_index != index and other.hp > 0
                 for other_index, other in enumerate(observation.party.members)
             )
-            and retained_party_slot_is_depositable(self.runtime.adapter,index+1)
+            and retained_party_slot_is_depositable(self.runtime.adapter, index + 1)
         )
         # Deposit occurs into the current box before a possible box switch.
         current_box_has_room = (
@@ -1800,8 +1875,10 @@ def _mart_provider(
         ),
         affordable_ball_purchase=parameters.get("affordable_ball_purchase", False) is True,
         reserve_targets=tuple(
-            (ItemId(_integer(_parameter_mapping(target), "item_id")),
-             _integer(_parameter_mapping(target), "quantity"))
+            (
+                ItemId(_integer(_parameter_mapping(target), "item_id")),
+                _integer(_parameter_mapping(target), "quantity"),
+            )
             for target in raw_targets
         ),
     )

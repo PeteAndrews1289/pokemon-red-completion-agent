@@ -1,12 +1,13 @@
 """Shared existing-pattern lifecycle claim; no native imports or case-specific code."""
-from pathlib import Path
-from datetime import datetime, timezone
+
 import argparse
 import fcntl
 import hashlib
 import json
 import os
 import re
+from datetime import UTC, datetime
+from pathlib import Path
 
 
 def read(path):
@@ -23,10 +24,14 @@ def require(condition, message):
 
 
 def validate_source_claim(claim, mission):
-    require(claim.get("source_writer_active") is True
-            and claim["source_writer_mission"] == mission and claim["actual_running"] is False
-            and claim["all_native_workers_stopped"] is True and claim.get("active_probe") is None,
-            "exclusive active mission/source claim is not clear")
+    require(
+        claim.get("source_writer_active") is True
+        and claim["source_writer_mission"] == mission
+        and claim["actual_running"] is False
+        and claim["all_native_workers_stopped"] is True
+        and claim.get("active_probe") is None,
+        "exclusive active mission/source claim is not clear",
+    )
 
 
 def validate_guard_spec(spec, resource, plan):
@@ -36,24 +41,49 @@ def validate_guard_spec(spec, resource, plan):
     case = Path(spec["case"]).resolve()
     capacity = Path(spec["capacity_root"]).resolve()
     require(case.parent == capacity, "case outside declared capacity root")
-    require(Path(spec["worker"]).resolve().is_relative_to(capacity), "shared worker outside supervisor scope")
+    require(
+        Path(spec["worker"]).resolve().is_relative_to(capacity),
+        "shared worker outside supervisor scope",
+    )
     require(Path(spec["plan"]).resolve() == case / "PLAN.json", "shared case plan differs")
     require(Path(plan["case"]).resolve() == case, "plan case identity differs")
     if phase == "direct":
         require(plan.get("native_execution_authorized") is True, "native execution disabled")
     require(spec["guard_sha256"] == sha(spec["guard"]), "guard file differs")
-    command = [spec["python"], "-I", "-B", spec["worker"], "--case", str(case),
-               "--plan-sha256", spec["plan_sha256"], "--phase", phase]
-    require(spec["worker_command"] == resource["command"] == command, "exact declared worker command differs")
+    command = [
+        spec["python"],
+        "-I",
+        "-B",
+        spec["worker"],
+        "--case",
+        str(case),
+        "--plan-sha256",
+        spec["plan_sha256"],
+        "--phase",
+        phase,
+    ]
+    require(
+        spec["worker_command"] == resource["command"] == command,
+        "exact declared worker command differs",
+    )
     require(resource["script_sha256"] == spec["worker_sha256"], "resource worker pin differs")
     require(resource["absolute_cutoff_utc"] == plan["cutoff_utc"], "resource cutoff differs")
-    require(resource["outer_seconds"] == (plan["preflight_root_seconds"] if phase == "preflight" else plan["full_hold_seconds"]),
-            "phase resource duration differs")
-    require(spec["linux_user"] == "pokemon" and isinstance(spec["distribution"], str)
-            and re.fullmatch(r"[A-Za-z0-9_.-]+", spec["distribution"]), "host identity declaration invalid")
+    require(
+        resource["outer_seconds"]
+        == (plan["preflight_root_seconds"] if phase == "preflight" else plan["full_hold_seconds"]),
+        "phase resource duration differs",
+    )
+    require(
+        spec["linux_user"] == "pokemon"
+        and isinstance(spec["distribution"], str)
+        and re.fullmatch(r"[A-Za-z0-9_.-]+", spec["distribution"]),
+        "host identity declaration invalid",
+    )
     require(plan["mission"] == spec["mission"], "mission identity differs")
-    require(spec["guard_arguments"][:1] == ["--spec"] and len(spec["guard_arguments"]) == 2,
-            "guard interface differs")
+    require(
+        spec["guard_arguments"][:1] == ["--spec"] and len(spec["guard_arguments"]) == 2,
+        "guard interface differs",
+    )
     return case / "preflight" if phase == "preflight" else case
 
 
@@ -63,7 +93,9 @@ def actors(capacity):
         if not proc.name.isdigit() or int(proc.name) == os.getpid():
             continue
         try:
-            command = [os.fsdecode(item) for item in (proc / "cmdline").read_bytes().split(b"\0") if item]
+            command = [
+                os.fsdecode(item) for item in (proc / "cmdline").read_bytes().split(b"\0") if item
+            ]
         except (OSError, ProcessLookupError):
             continue
         if any(arg.startswith(str(capacity) + "/") and arg.endswith(".py") for arg in command):
@@ -94,21 +126,57 @@ def main(argv=None):
         inventory = actors(Path(spec["capacity_root"]))
         require(not inventory, "another capacity process is present: " + repr(inventory))
         cutoff = datetime.fromisoformat(plan["cutoff_utc"])
-        minimum = plan["aggregate_full_hold_seconds"] if spec["phase"] == "preflight" else plan["full_hold_seconds"] + plan["closeout_seconds"]
-        require((cutoff - datetime.now(timezone.utc)).total_seconds() >= minimum, "insufficient fixed-cutoff hold")
-        require(cutoff <= datetime.fromisoformat(read(spec["mission"])["deadline_utc"]), "case exceeds mission cutoff")
+        minimum = (
+            plan["aggregate_full_hold_seconds"]
+            if spec["phase"] == "preflight"
+            else plan["full_hold_seconds"] + plan["closeout_seconds"]
+        )
+        require(
+            (cutoff - datetime.now(UTC)).total_seconds() >= minimum,
+            "insufficient fixed-cutoff hold",
+        )
+        require(
+            cutoff <= datetime.fromisoformat(read(spec["mission"])["deadline_utc"]),
+            "case exceeds mission cutoff",
+        )
         require(not (output / "EARLY-LINUX-IDENTITY.json").exists(), "phase already started")
         if spec["phase"] == "direct":
             auth = read(Path(spec["case"]) / "preflight/TERMINAL-AUTHENTICATION.json")
-            require(all(auth[key] is True for key in ("passed", "all_original_processes_absent", "controls_released", "supervisor_cgroup_empty", "windows_parents_absent")), "preflight not closed")
+            require(
+                all(
+                    auth[key] is True
+                    for key in (
+                        "passed",
+                        "all_original_processes_absent",
+                        "controls_released",
+                        "supervisor_cgroup_empty",
+                        "windows_parents_absent",
+                    )
+                ),
+                "preflight not closed",
+            )
             qualification = read(Path(spec["case"]) / "preflight/QUALIFICATION.json")
-            require(qualification["passed"] is True and qualification["plan_sha256"] == spec["plan_sha256"]
-                    and qualification["worker_sha256"] == spec["worker_sha256"]
-                    and qualification["package_sha256"] == spec["package_sha256"], "preflight pins differ")
+            require(
+                qualification["passed"] is True
+                and qualification["plan_sha256"] == spec["plan_sha256"]
+                and qualification["worker_sha256"] == spec["worker_sha256"]
+                and qualification["package_sha256"] == spec["package_sha256"],
+                "preflight pins differ",
+            )
         with (output / "LAUNCH-CLAIM.json").open("x") as stream:
-            json.dump(dict(phase=spec["phase"], observed_at_utc=datetime.now(timezone.utc).isoformat(),
-                           plan_sha256=spec["plan_sha256"], actor_inventory=[]), stream, indent=2)
-        claim.update(active_probe=str(output), all_native_workers_stopped=spec["phase"] == "preflight")
+            json.dump(
+                dict(
+                    phase=spec["phase"],
+                    observed_at_utc=datetime.now(UTC).isoformat(),
+                    plan_sha256=spec["plan_sha256"],
+                    actor_inventory=[],
+                ),
+                stream,
+                indent=2,
+            )
+        claim.update(
+            active_probe=str(output), all_native_workers_stopped=spec["phase"] == "preflight"
+        )
         Path(spec["source_claim"]).write_text(json.dumps(claim, indent=2, sort_keys=True) + "\n")
     return 0
 

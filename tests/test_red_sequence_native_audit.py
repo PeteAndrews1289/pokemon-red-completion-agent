@@ -29,12 +29,13 @@ def collect(tmp_path, monkeypatch, *, greedy=False):
     args["limits"] = replace(args["limits"], actions=3, decisions=3)
     args["sequence_horizon"] = 2
     if greedy:
-        args["source"]={**args["source"],"partition":"development"}
+        args["source"] = {**args["source"], "partition": "development"}
         del args["sequence_horizon"]  # Greedy is a separate DEVELOPMENT mode.
-    run_native_continuous_player(**args,**({"greedy_selection":True} if greedy else {}))
+    run_native_continuous_player(**args, **({"greedy_selection": True} if greedy else {}))
     root = args["output"]
     kwargs = dict(
-        store=args["store"], model=args["model"],
+        store=args["store"],
+        model=args["model"],
         expected_native_plan_sha256=canonical_sha256(read(root / "native-plan.json")),
         expected_actor_result_sha256=canonical_sha256(read(root / "episode/result.json")),
         source_sha256=args["source"]["state_sha256"],
@@ -65,15 +66,20 @@ def test_audit_formats_trace_and_unreported_input_lookups(tmp_path, monkeypatch)
 
     monkeypatch.setattr(audit_module, "native_action_record_id", record_id)
     audit_native_sequence_trace(root, **kwargs)
-    assert calls == [(kind, ordinal) for ordinal in range(4)
-                     for kind in ("action", "trace")]
+    assert calls == [(kind, ordinal) for ordinal in range(4) for kind in ("action", "trace")]
 
 
-@pytest.mark.parametrize("field,value", [
-    ("scores", [0, 0]), ("probabilities", [1.0, 0.0]),
-    ("selected_candidate_index", -1), ("model_sha256", "f" * 64),
-    ("teacher_labels", True), ("mode", "equivalent_exploration"),
-])
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("scores", [0, 0]),
+        ("probabilities", [1.0, 0.0]),
+        ("selected_candidate_index", -1),
+        ("model_sha256", "f" * 64),
+        ("teacher_labels", True),
+        ("mode", "equivalent_exploration"),
+    ],
+)
 def test_sampling_replay_rejects_edited_decision(tmp_path, monkeypatch, field, value):
     root, kwargs, _ = collect(tmp_path, monkeypatch)
     step = root / "episode/step-000"
@@ -81,7 +87,11 @@ def test_sampling_replay_rejects_edited_decision(tmp_path, monkeypatch, field, v
     decision[field] = value
     with pytest.raises(ValueError, match="does not replay"):
         replay_recorded_sequence_choice(
-            kwargs["model"], read(step / "intent.json"), decision, seed=101, ordinal=0,
+            kwargs["model"],
+            read(step / "intent.json"),
+            decision,
+            seed=101,
+            ordinal=0,
         )
 
 
@@ -96,26 +106,31 @@ def test_seed_and_query_authority_must_match_original_sampler(tmp_path, monkeypa
         replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
 
 
-@pytest.mark.parametrize("fault", [None,"missing_opt_in","edited_score","wrong_seed","query"])
-def test_recorded_greedy_choice_needs_original_seed_and_exact_authority(tmp_path,monkeypatch,fault):
-    root,kwargs,executed=collect(tmp_path,monkeypatch,greedy=True)
-    step=root/"episode/step-000"
-    intent,decision=read(step/"intent.json"),read(step/"decision.json")
-    assert decision["mode"]=="model_greedy"
-    if fault=="missing_opt_in":
+@pytest.mark.parametrize("fault", [None, "missing_opt_in", "edited_score", "wrong_seed", "query"])
+def test_recorded_greedy_choice_needs_original_seed_and_exact_authority(
+    tmp_path, monkeypatch, fault
+):
+    root, kwargs, executed = collect(tmp_path, monkeypatch, greedy=True)
+    step = root / "episode/step-000"
+    intent, decision = read(step / "intent.json"), read(step / "decision.json")
+    assert decision["mode"] == "model_greedy"
+    if fault == "missing_opt_in":
         del intent["private_selection_authority"]["greedy_selection"]
-    elif fault=="edited_score":
-        decision["scores"][0]+=1
-    elif fault=="wrong_seed":
-        intent["selection_seed"]+=1
-    elif fault=="query":
-        intent["query_may_be_consumed"]=False
+    elif fault == "edited_score":
+        decision["scores"][0] += 1
+    elif fault == "wrong_seed":
+        intent["selection_seed"] += 1
+    elif fault == "query":
+        intent["query_may_be_consumed"] = False
     if fault:
         with pytest.raises(ValueError):
-            replay_recorded_sequence_choice(kwargs["model"],intent,decision,seed=101,ordinal=0)
+            replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
     else:
-        assert replay_recorded_sequence_choice(kwargs["model"],intent,decision,seed=101,ordinal=0)=="model_greedy"
-    assert executed==[2,4,6]
+        assert (
+            replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
+            == "model_greedy"
+        )
+    assert executed == [2, 4, 6]
 
 
 def test_forced_support_is_not_certified_as_a_sampled_choice(tmp_path, monkeypatch):
@@ -123,9 +138,16 @@ def test_forced_support_is_not_certified_as_a_sampled_choice(tmp_path, monkeypat
     step = root / "episode/step-000"
     intent, decision = read(step / "intent.json"), read(step / "decision.json")
     decision["mode"] = "deterministic_safety"
-    assert replay_recorded_sequence_choice(
-        kwargs["model"], intent, decision, seed=101, ordinal=0,
-    ) == "support_requires_authority_audit"
+    assert (
+        replay_recorded_sequence_choice(
+            kwargs["model"],
+            intent,
+            decision,
+            seed=101,
+            ordinal=0,
+        )
+        == "support_requires_authority_audit"
+    )
 
 
 def test_equivalent_exploration_replays_real_sampler_without_model_credit(tmp_path, monkeypatch):
@@ -134,18 +156,34 @@ def test_equivalent_exploration_replays_real_sampler_without_model_credit(tmp_pa
     menu = restore_living_dex_policy_menu(intent["menu"]["menu"])
     first = menu.candidates[0]
     menu = replace(menu, candidates=(first, replace(first, binding_ref="duplicate-features")))
-    bindings = tuple(_binding(GoalKind.ADVANCE_STORY, binding_ref=c.binding_ref, calls=[])
-                     for c in menu.candidates)
+    bindings = tuple(
+        _binding(GoalKind.ADVANCE_STORY, binding_ref=c.binding_ref, calls=[])
+        for c in menu.candidates
+    )
     options = RedLiveOptionSet(
-        _situation(resources=0.1), _ordinary_bindings([]), menu, bindings, frozenset(), "a" * 64,
+        _situation(resources=0.1),
+        _ordinary_bindings([]),
+        menu,
+        bindings,
+        frozenset(),
+        "a" * 64,
     )
     decision = select_red_live_option(
-        kwargs["model"], options, seed=intent["selection_seed"],
+        kwargs["model"],
+        options,
+        seed=intent["selection_seed"],
     ).public_dict()
     intent.update(menu=options.public_dict(), query_may_be_consumed=False)
-    assert replay_recorded_sequence_choice(
-        kwargs["model"], intent, decision, seed=101, ordinal=0,
-    ) == "equivalent_exploration"
+    assert (
+        replay_recorded_sequence_choice(
+            kwargs["model"],
+            intent,
+            decision,
+            seed=101,
+            ordinal=0,
+        )
+        == "equivalent_exploration"
+    )
     decision["probabilities"] = [1.0, 0.0]
     with pytest.raises(ValueError, match="does not replay"):
         replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
@@ -184,17 +222,24 @@ def test_native_trace_cannot_hide_or_reassign_input(tmp_path, monkeypatch, fault
         audit_native_sequence_trace(root, **kwargs)
 
 
-@pytest.mark.parametrize("file,field,value", [
-    ("native-costs.json", "actions_attempted", 2),
-    ("native-costs.json", "actions_completed", 2),
-    ("native-costs.json", "frames", 5),
-    ("native-costs.json", "goal_attempts", 2),
-    ("native-costs.json", "seconds", float("nan")),
-    ("native-plan.json", "automatic_fit", True),
-    ("episode/plan.json", "exploration_mix", 0.5),
-])
+@pytest.mark.parametrize(
+    "file,field,value",
+    [
+        ("native-costs.json", "actions_attempted", 2),
+        ("native-costs.json", "actions_completed", 2),
+        ("native-costs.json", "frames", 5),
+        ("native-costs.json", "goal_attempts", 2),
+        ("native-costs.json", "seconds", float("nan")),
+        ("native-plan.json", "automatic_fit", True),
+        ("episode/plan.json", "exploration_mix", 0.5),
+    ],
+)
 def test_changed_scope_or_counters_reject_without_touching_receipts(
-    tmp_path, monkeypatch, file, field, value,
+    tmp_path,
+    monkeypatch,
+    file,
+    field,
+    value,
 ):
     root, kwargs, _ = collect(tmp_path, monkeypatch)
     path = root / file
@@ -220,26 +265,48 @@ def test_changed_terminal_or_source_bytes_reject(tmp_path, monkeypatch):
 
 @pytest.mark.parametrize("balanced", [True, False])
 def test_sampling_replay_preserves_kind_balanced_and_legacy_receipts(
-    tmp_path, monkeypatch, balanced,
+    tmp_path,
+    monkeypatch,
+    balanced,
 ):
     root, kwargs, _ = collect(tmp_path, monkeypatch)
     intent = read(root / "episode/step-000/intent.json")
     menu = restore_living_dex_policy_menu(intent["menu"]["menu"])
     first, second = menu.candidates
-    menu = replace(menu, candidates=(first, replace(first, binding_ref="same-kind-variant"), second))
-    from pokemon_red_completion.living_dex_goal_policy import living_dex_option_kind_for_goal
-    bindings = tuple(_binding(next(kind for kind in GoalKind
-        if living_dex_option_kind_for_goal(kind, feature_version=menu.feature_version)
-           is candidate.features.kind), binding_ref=candidate.binding_ref, calls=[])
-        for candidate in menu.candidates)
-    options = RedLiveOptionSet(
-        _situation(resources=0.1), _ordinary_bindings([]), menu, bindings, frozenset(), "a" * 64,
+    menu = replace(
+        menu, candidates=(first, replace(first, binding_ref="same-kind-variant"), second)
     )
-    decision = select_red_live_option(kwargs["model"], options,
-        seed=intent["selection_seed"], kind_balanced_exploration=balanced).public_dict()
+    from pokemon_red_completion.living_dex_goal_policy import living_dex_option_kind_for_goal
+
+    bindings = tuple(
+        _binding(
+            next(
+                kind
+                for kind in GoalKind
+                if living_dex_option_kind_for_goal(kind, feature_version=menu.feature_version)
+                is candidate.features.kind
+            ),
+            binding_ref=candidate.binding_ref,
+            calls=[],
+        )
+        for candidate in menu.candidates
+    )
+    options = RedLiveOptionSet(
+        _situation(resources=0.1),
+        _ordinary_bindings([]),
+        menu,
+        bindings,
+        frozenset(),
+        "a" * 64,
+    )
+    decision = select_red_live_option(
+        kwargs["model"], options, seed=intent["selection_seed"], kind_balanced_exploration=balanced
+    ).public_dict()
     intent.update(menu=options.public_dict(), query_may_be_consumed=True)
-    assert replay_recorded_sequence_choice(kwargs["model"], intent, decision,
-        seed=101, ordinal=0) == "model_exploration"
+    assert (
+        replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
+        == "model_exploration"
+    )
     if balanced:
         # Three rows contain two public kinds: each variant gets half its kind's mass.
         assert decision["probabilities"][0] == decision["probabilities"][1]

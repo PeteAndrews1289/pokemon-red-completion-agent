@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 
+from pokemon_red_completion.collection_protocol import working_source_bundle_sha256
 from pokemon_red_completion.strategic_navigation_protocol import (
     STRATEGIC_NAVIGATION_EPISODE_PREFIX,
     STRATEGIC_NAVIGATION_REGISTRY_DIGEST_RELATIVE_PATH,
@@ -23,6 +24,7 @@ from pokemon_red_completion.strategic_navigation_protocol import (
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_RELATIVE_PATH
 DIGEST_PATH = PROJECT_ROOT / STRATEGIC_NAVIGATION_REGISTRY_DIGEST_RELATIVE_PATH
+HISTORICAL_FIXTURE = PROJECT_ROOT / "tests/fixtures/strategic-navigation-original"
 
 
 def _canonical(value: object) -> bytes:
@@ -80,10 +82,10 @@ def test_registry_is_canonical_preassigned_and_seals_test_roots() -> None:
         registry.learning_assignment("red-strategic-v1-08-test")
 
 
-def test_registry_and_contract_have_stable_public_identities() -> None:
-    payload = REGISTRY_PATH.read_bytes()
+def test_historical_registry_and_contract_have_stable_public_identities() -> None:
+    payload = (HISTORICAL_FIXTURE / REGISTRY_PATH.name).read_bytes()
     registry = parse_strategic_navigation_registry(payload)
-    digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
+    digest = json.loads((HISTORICAL_FIXTURE / DIGEST_PATH.name).read_text(encoding="ascii"))
 
     assert len(payload) == 6019
     assert (
@@ -102,6 +104,30 @@ def test_registry_and_contract_have_stable_public_identities() -> None:
         registry.execution.teacher_execution_sha256
         == "5ba5861566fa03ce4a997b28d67bb37ab52fe0815203c093bd4f8255884adf84"
     )
+    assert digest == {
+        "bytes": len(payload),
+        "schema": "pokemon-strategic-navigation-collection-registry-digest-v1",
+        "sha256": registry.registry_sha256,
+    }
+
+
+def test_prospective_registry_preserves_contract_and_binds_current_source() -> None:
+    payload = REGISTRY_PATH.read_bytes()
+    registry = parse_strategic_navigation_registry(payload)
+    digest = json.loads(DIGEST_PATH.read_text(encoding="ascii"))
+    historical = json.loads((HISTORICAL_FIXTURE / REGISTRY_PATH.name).read_text(encoding="ascii"))
+    current = json.loads(payload)
+
+    # Rebuilding source changes executable identity, not declared seeds, roots,
+    # partitions, behavior or decision contracts. Historical receipts keep the
+    # original fixture's identity and cannot inherit this prospective registry.
+    for key in ("source_bundle_sha256", "teacher_execution_sha256"):
+        del historical["execution"][key]
+        del current["execution"][key]
+    assert current == historical
+    assert registry.execution.source_bundle_sha256 == working_source_bundle_sha256(PROJECT_ROOT)
+    # Parsing above also verifies the teacher digest derived from source and
+    # the unchanged semantic contract; the sidecar binds the exact new bytes.
     assert digest == {
         "bytes": len(payload),
         "schema": "pokemon-strategic-navigation-collection-registry-digest-v1",
@@ -242,9 +268,16 @@ def test_committed_loader_binds_registry_to_exact_source(tmp_path: Path) -> None
     subprocess.run(["git", "add", "."], cwd=repository, check=True)
     subprocess.run(
         [
-            "git", "-c", "user.name=Strategic Collection Test",
-            "-c", "user.email=strategic@example.invalid",
-            "-c", "commit.gpgsign=false", "commit", "-qm", "later implementation",
+            "git",
+            "-c",
+            "user.name=Strategic Collection Test",
+            "-c",
+            "user.email=strategic@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "commit",
+            "-qm",
+            "later implementation",
         ],
         cwd=repository,
         check=True,

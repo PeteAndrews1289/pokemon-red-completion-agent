@@ -39,11 +39,20 @@ def test_requires_native_typed_destination_in_declared_region(observed_region, d
     assert observed_fly_funding_gate_region(world, start, region, destinations) is None
 
 
-@pytest.mark.parametrize("changes", [
-    {"ready": False}, {"ready": 1}, {"interruption": "wild_battle"},
-    {"mode": "water"}, {"map_id": True}, {"map_id": 0x0B},
-    {"last_outside_map": None}, {"last_outside_map": True}, {"last_outside_map": 0x25},
-])
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"ready": False},
+        {"ready": 1},
+        {"interruption": "wild_battle"},
+        {"mode": "water"},
+        {"map_id": True},
+        {"map_id": 0x0B},
+        {"last_outside_map": None},
+        {"last_outside_map": True},
+        {"last_outside_map": 0x25},
+    ],
+)
 def test_unsettled_or_unknown_origin_has_no_offer(observed_region, changes):
     world, start, region = observed_region
     assert observed_fly_funding_gate_region(world, replace(start, **changes), region, (7,)) is None
@@ -51,10 +60,15 @@ def test_unsettled_or_unknown_origin_has_no_offer(observed_region, changes):
 
 @pytest.mark.parametrize("inventory", ["macro", "local", "objects"])
 @pytest.mark.parametrize("missing", [6, 7, 0x87, 0xB8])
-def test_missing_source_destination_or_gate_inventory_fails_closed(observed_region, inventory, missing):
+def test_missing_source_destination_or_gate_inventory_fails_closed(
+    observed_region, inventory, missing
+):
     world, start, region = observed_region
     if inventory == "macro":
-        world.macro_graph = replace(world.macro_graph, edges={m: e for m, e in world.macro_graph.edges.items() if m != missing})
+        world.macro_graph = replace(
+            world.macro_graph,
+            edges={m: e for m, e in world.macro_graph.edges.items() if m != missing},
+        )
     elif inventory == "local":
         world.local_graphs.pop(missing)
     else:

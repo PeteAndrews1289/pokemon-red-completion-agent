@@ -1,4 +1,5 @@
 """A safe productive dose stays incomplete, but need not end the player."""
+
 import copy
 from dataclasses import replace
 from types import SimpleNamespace as N
@@ -24,8 +25,11 @@ def partial_dose(monkeypatch, *, retained=True, progress=True):
         (mon.experience, actions.actions_executed, healthy[0])
     ).encode()
     kwargs["plan"].budget = N(max_no_progress=3)
-    kwargs.update(maximum_battles=3, maximum_recoveries=1 if retained else 0,
-                  repeat_health_limited_zero_progress=retained)
+    kwargs.update(
+        maximum_battles=3,
+        maximum_recoveries=1 if retained else 0,
+        repeat_health_limited_zero_progress=retained,
+    )
 
     def run(**kw):
         calls.append(kw["maximum_battles"])
@@ -35,11 +39,13 @@ def partial_dose(monkeypatch, *, retained=True, progress=True):
         healthy[0] = not retained or not first
         actions.actions_executed += 5
         rt.emulator.frame_count += 200
-        return dict(battles=int(first and progress),
-                    encounters=1 if retained and first else kw["maximum_battles"],
-                    xp_gained=10 if first and progress else 0,
-                    health_limited_return=not healthy[0],
-                    stop_reason="party_status" if not healthy[0] else "encounter_limit")
+        return dict(
+            battles=int(first and progress),
+            encounters=1 if retained and first else kw["maximum_battles"],
+            xp_gained=10 if first and progress else 0,
+            health_limited_return=not healthy[0],
+            stop_reason="party_status" if not healthy[0] else "encounter_limit",
+        )
 
     def heal(_):
         healthy[0] = True
@@ -48,8 +54,9 @@ def partial_dose(monkeypatch, *, retained=True, progress=True):
 
     actions.execute_restoration = heal
     monkeypatch.setattr(p, "execute_wild_preparation", run)
-    monkeypatch.setattr(p, "RedCenterRestoreGoalProvider",
-                        lambda *a, **k: N(offer=lambda _: N(binding=object())))
+    monkeypatch.setattr(
+        p, "RedCenterRestoreGoalProvider", lambda *a, **k: N(offer=lambda _: N(binding=object()))
+    )
     binding = p.preparation_binding(rt, actions, **kwargs)
     report = binding.execute()
     return rt, raw, actions, mon, calls, binding, report
@@ -75,9 +82,25 @@ def test_healthy_productive_partial_dose_retains_failure_and_exact_allowance(mon
         assert all(not d["target_reached"] for d in report.evidence["retained_doses"])
 
 
-@pytest.mark.parametrize("fault", ["no_xp", "cash", "bag", "battle", "coordinate", "pressed",
-                                  "input", "dialogue", "species", "xp_loss", "objectives",
-                                  "receipt", "actions", "frames"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "no_xp",
+        "cash",
+        "bag",
+        "battle",
+        "coordinate",
+        "pressed",
+        "input",
+        "dialogue",
+        "species",
+        "xp_loss",
+        "objectives",
+        "receipt",
+        "actions",
+        "frames",
+    ],
+)
 def test_partial_admission_does_not_bypass_native_or_report_checks(monkeypatch, fault):
     rt, raw, _, mon, _, binding, report = partial_dose(monkeypatch, progress=fault != "no_xp")
     if fault == "cash":
@@ -112,27 +135,71 @@ def test_partial_admission_does_not_bypass_native_or_report_checks(monkeypatch, 
 
 
 @pytest.mark.parametrize("binding_type", ["bounded", "routed", "member", "member_direct"])
-@pytest.mark.parametrize("fault", [None, "schema", "terminal", "target", "xp", "count", "bool",
-                                  "ref", "reason", "error", "battle", "input", "pressed",
-                                  "lost_specimen", "lost_objective", "cost", "unknown_trainee"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "schema",
+        "terminal",
+        "target",
+        "xp",
+        "count",
+        "bool",
+        "ref",
+        "reason",
+        "error",
+        "battle",
+        "input",
+        "pressed",
+        "lost_specimen",
+        "lost_objective",
+        "cost",
+        "unknown_trainee",
+    ],
+)
 def test_only_certified_incomplete_preparation_permits_next_choice(binding_type, fault):
     def facts(xp, n):
-        return dict(actions=n, completed_actions=n, frames=10*n, cash=235,
-                    battle_state=0, input_ready=True, buttons_released=True,
-                    owned_species=["pokemon:national:007"],
-                    specimen_counts={"pokemon:national:007": 1},
-                    completed_objectives=["begin"], player_lesson=dict(
-                        schema="pokemon.red.player-lesson-snapshot.v1",
-                        party=[dict(specimen_ref="one", level=32, experience=xp)]))
+        return dict(
+            actions=n,
+            completed_actions=n,
+            frames=10 * n,
+            cash=235,
+            battle_state=0,
+            input_ready=True,
+            buttons_released=True,
+            owned_species=["pokemon:national:007"],
+            specimen_counts={"pokemon:national:007": 1},
+            completed_objectives=["begin"],
+            player_lesson=dict(
+                schema="pokemon.red.player-lesson-snapshot.v1",
+                party=[dict(specimen_ref="one", level=32, experience=xp)],
+            ),
+        )
+
     before = AutonomousSnapshot(b"before", facts(100, 0), True)
     after = AutonomousSnapshot(b"after", facts(110, 2), True)
-    receipt = dict(schema="pokemon.red.preparation-partial.v1", trainee_ref="one",
-                   target_level=34, initial_level=32, terminal_level=32,
-                   initial_xp=100, terminal_xp=110, encounter_allowance=3, encounters=3,
-                   target_reached=False, fully_restored=True, stop_reason="encounter_limit",
-                   terminal_sha256=after.sha256)
-    binding = _binding(GoalKind.DEVELOP_TEAM,
-                       binding_ref=f"pokemon.red:{'member' if binding_type == 'member_direct' else binding_type}-preparation:abc", calls=[])
+    receipt = dict(
+        schema="pokemon.red.preparation-partial.v1",
+        trainee_ref="one",
+        target_level=34,
+        initial_level=32,
+        terminal_level=32,
+        initial_xp=100,
+        terminal_xp=110,
+        encounter_allowance=3,
+        encounters=3,
+        target_reached=False,
+        fully_restored=True,
+        stop_reason="encounter_limit",
+        terminal_sha256=after.sha256,
+    )
+    binding = _binding(
+        GoalKind.DEVELOP_TEAM,
+        binding_ref="pokemon.red:{}-preparation:abc".format(
+            "member" if binding_type == "member_direct" else binding_type
+        ),
+        calls=[],
+    )
     error, reason = None, GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
     if fault == "schema":
         receipt["schema"] = "unknown"
@@ -166,8 +233,11 @@ def test_only_certified_incomplete_preparation_permits_next_choice(binding_type,
         receipt["trainee_ref"] = "another"
     evidence = dict(bounded_partial_preparation=receipt)
     if binding_type in {"routed", "member"}:
-        evidence = dict(mechanic="routed_preparation", support="cartridge_route_then_fresh_binding",
-                        preparation=evidence)
+        evidence = dict(
+            mechanic="routed_preparation",
+            support="cartridge_route_then_fresh_binding",
+            preparation=evidence,
+        )
     if fault == "routed_mechanic":
         evidence["mechanic"] = "unknown"
     elif fault == "routed_support":

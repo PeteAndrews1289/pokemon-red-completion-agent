@@ -8,7 +8,9 @@ from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 
 @pytest.mark.parametrize("fault", [None, "xp", "story", "stale", "living"])
 @pytest.mark.parametrize("battle_state", [0, 1, 2])
-def test_only_existing_native_loss_can_settle_without_changing_progress(monkeypatch, fault, battle_state):
+def test_only_existing_native_loss_can_settle_without_changing_progress(
+    monkeypatch, fault, battle_state
+):
     raw = N(battle_state=battle_state, party_hp=(0,), player_money=1690)
     ready = [False]
     lesson = dict(

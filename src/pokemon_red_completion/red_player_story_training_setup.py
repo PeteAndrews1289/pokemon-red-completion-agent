@@ -25,8 +25,16 @@ class _StagedMemory:
 
 
 def prepare_misty_party_training_fixture(
-    memory, *, rom, rom_sha256, isolated_training_setup, controller_released,
-    battle_state, partition, condition, parent_state_bytes=None,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    isolated_training_setup,
+    controller_released,
+    battle_state,
+    partition,
+    condition,
+    parent_state_bytes=None,
 ):
     """Condition one authenticated TRAIN field copy for declared preparation trials.
 
@@ -37,21 +45,43 @@ def prepare_misty_party_training_fixture(
     if isolated_training_setup is not True or partition != "train":
         raise ValueError("party fixture requires explicit isolated TRAIN field authority")
     if condition == "healthy-six-party-rattata20-deferred":
-        return _prepare_misty_deferred20_fixture(memory, rom=rom, rom_sha256=rom_sha256,
-            controller_released=controller_released, battle_state=battle_state,
-            parent_state_bytes=parent_state_bytes)
+        return _prepare_misty_deferred20_fixture(
+            memory,
+            rom=rom,
+            rom_sha256=rom_sha256,
+            controller_released=controller_released,
+            battle_state=battle_state,
+            parent_state_bytes=parent_state_bytes,
+        )
     if condition == "healthy-six-party-rattata19":
-        return _append_misty_training_reserves(memory, rom=rom, rom_sha256=rom_sha256,
-            controller_released=controller_released, battle_state=battle_state,
-            parent_state_bytes=parent_state_bytes)
+        return _append_misty_training_reserves(
+            memory,
+            rom=rom,
+            rom_sha256=rom_sha256,
+            controller_released=controller_released,
+            battle_state=battle_state,
+            parent_state_bytes=parent_state_bytes,
+        )
     if parent_state_bytes is not None:
         raise ValueError("parent state bytes are only for the declared six-party fixture")
-    return _prepare_misty_party_fixture(memory, rom=rom, rom_sha256=rom_sha256,
-        controller_released=controller_released, battle_state=battle_state, condition=condition)
+    return _prepare_misty_party_fixture(
+        memory,
+        rom=rom,
+        rom_sha256=rom_sha256,
+        controller_released=controller_released,
+        battle_state=battle_state,
+        condition=condition,
+    )
 
 
 def _prepare_misty_party_fixture(
-    memory, *, rom, rom_sha256, controller_released, battle_state, condition,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    controller_released,
+    battle_state,
+    condition,
 ):
     """Shared conditioning; public caller separately checks TRAIN/evaluation authority."""
     from hashlib import sha256
@@ -64,17 +94,30 @@ def _prepare_misty_party_fixture(
         "healthy-rattata18-progressed": ((179, 165, 150, 113), (17, 18, 18, 7), 100),
         "healthy-wartortle19": ((179, 166, 150, 113), (19, 20, 18, 7), 100),
     }
-    if (controller_released is not True or type(battle_state) is not int
-        or battle_state != 0 or not isinstance(rom, bytes)
-        or rom_sha256 != RED_ROM_SHA256 or sha256(rom).hexdigest() != rom_sha256
-        or type(condition) is not str or condition not in conditions):
+    if (
+        controller_released is not True
+        or type(battle_state) is not int
+        or battle_state != 0
+        or not isinstance(rom, bytes)
+        or rom_sha256 != RED_ROM_SHA256
+        or sha256(rom).hexdigest() != rom_sha256
+        or type(condition) is not str
+        or condition not in conditions
+    ):
         raise ValueError("party fixture requires explicit isolated TRAIN field authority")
     base = int(RamAddress.PARTY_MON_1)
-    expected = {int(RamAddress.CURRENT_MAP): int(MapId.CERULEAN_GYM),
-        int(RamAddress.PARTY_COUNT): 1, int(RamAddress.PARTY_SPECIES): 179,
-        int(RamAddress.PARTY_SPECIES) + 1: 255, base: 179, base + 33: 14}
-    if (any(int(memory[a]) != v for a, v in expected.items())
-        or int(memory[int(RamAddress.STATUS_FLAGS_4)]) & 1):
+    expected = {
+        int(RamAddress.CURRENT_MAP): int(MapId.CERULEAN_GYM),
+        int(RamAddress.PARTY_COUNT): 1,
+        int(RamAddress.PARTY_SPECIES): 179,
+        int(RamAddress.PARTY_SPECIES) + 1: 255,
+        base: 179,
+        base + 33: 14,
+    }
+    if (
+        any(int(memory[a]) != v for a, v in expected.items())
+        or int(memory[int(RamAddress.STATUS_FLAGS_4)]) & 1
+    ):
         raise ValueError("party fixture source must be the single-starter field ancestor")
     for flag in (int(EventFlag.BEAT_MISTY), 0xBE):
         if int(memory[int(RamAddress.EVENT_FLAGS) + flag // 8]) & (1 << (flag % 8)):
@@ -93,9 +136,11 @@ def _prepare_misty_party_fixture(
         zip(species_ids, levels, move_sources, movesets, strict=True)
     ):
         species, ancestor = cartridge.species(species_id), cartridge.species(ancestor_id)
-        if (species.national_number != expected_dex[species_id]
+        if (
+            species.national_number != expected_dex[species_id]
             or ancestor.national_number != expected_dex[ancestor_id]
-            or not set(moves) <= set(ancestor.intrinsic_moves_at_level(level))):
+            or not set(moves) <= set(ancestor.intrinsic_moves_at_level(level))
+        ):
             raise ValueError("party fixture cartridge identity or legal moves differ")
         dvs = (8, 8, 8, 8 + index)
         fingerprint = (*ot, dvs[0] * 16 + dvs[1], dvs[2] * 16 + dvs[3])
@@ -123,8 +168,14 @@ def _prepare_misty_party_fixture(
         for j in range(3):
             staged[member + 14 + j] = (xp >> (16 - 8 * j)) & 255
         hp = max(1, stats.max_hp * hp_percent // 100)
-        for offset, value in ((1, hp), (34, stats.max_hp), (36, stats.attack),
-                              (38, stats.defense), (40, stats.speed), (42, stats.special)):
+        for offset, value in (
+            (1, hp),
+            (34, stats.max_hp),
+            (36, stats.attack),
+            (38, stats.defense),
+            (40, stats.speed),
+            (42, stats.special),
+        ):
             staged[member + offset], staged[member + offset + 1] = value >> 8, value & 255
         for j, move in enumerate(moves):
             staged[member + 8 + j] = move
@@ -139,8 +190,9 @@ def _prepare_misty_party_fixture(
             staged[start + dex_index // 8] |= 1 << (dex_index % 8)
     staged[int(RamAddress.PARTY_COUNT)] = 4
     staged[int(RamAddress.PARTY_SPECIES) + 4] = 255
-    rows = tuple(dict(address=a, before=int(memory[a]), after=v)
-                 for a, v in sorted(staged.changes.items()))
+    rows = tuple(
+        dict(address=a, before=int(memory[a]), after=v) for a, v in sorted(staged.changes.items())
+    )
     for row in rows:
         memory[row["address"]] = row["after"]
     if any(int(memory[r["address"]]) != r["after"] for r in rows):
@@ -148,13 +200,18 @@ def _prepare_misty_party_fixture(
     return rows
 
 
-
 # Exact original TRAINfar field fixture; no DEVELOPMENT source is accepted here.
 _MISTY_SIX_PARTY_PARENT_SHA256 = "e0ec6ba4eeb3dab69c37b29093c3b182ec42278a1962122f46365c32cac9544e"
 
 
 def _append_misty_training_reserves(
-    memory, *, rom, rom_sha256, controller_released, battle_state, parent_state_bytes,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    controller_released,
+    battle_state,
+    parent_state_bytes,
 ):
     """Append two disclosed, healthy reserves without changing the four originals.
 
@@ -164,22 +221,39 @@ def _append_misty_training_reserves(
     """
     from hashlib import sha256
 
-    if (controller_released is not True or type(battle_state) is not int
-        or battle_state != 0 or not isinstance(rom, bytes)
-        or rom_sha256 != RED_ROM_SHA256 or sha256(rom).hexdigest() != rom_sha256
+    if (
+        controller_released is not True
+        or type(battle_state) is not int
+        or battle_state != 0
+        or not isinstance(rom, bytes)
+        or rom_sha256 != RED_ROM_SHA256
+        or sha256(rom).hexdigest() != rom_sha256
         or type(parent_state_bytes) is not bytes
-        or sha256(parent_state_bytes).hexdigest() != _MISTY_SIX_PARTY_PARENT_SHA256):
+        or sha256(parent_state_bytes).hexdigest() != _MISTY_SIX_PARTY_PARENT_SHA256
+    ):
         raise ValueError("six-party fixture requires its exact isolated TRAIN parent")
     base = int(RamAddress.PARTY_MON_1)
-    expected = {int(RamAddress.CURRENT_MAP): int(MapId.CERULEAN_GYM),
-                int(RamAddress.PARTY_COUNT): 4,
-                int(RamAddress.PARTY_SPECIES) + 4: 255}
-    for index, (species_id, level) in enumerate(zip((179, 165, 150, 113), (17, 19, 18, 7), strict=True)):
+    expected = {
+        int(RamAddress.CURRENT_MAP): int(MapId.CERULEAN_GYM),
+        int(RamAddress.PARTY_COUNT): 4,
+        int(RamAddress.PARTY_SPECIES) + 4: 255,
+    }
+    for index, (species_id, level) in enumerate(
+        zip((179, 165, 150, 113), (17, 19, 18, 7), strict=True)
+    ):
         member = base + 44 * index
-        expected.update({int(RamAddress.PARTY_SPECIES) + index: species_id,
-                         member: species_id, member + 3: level, member + 33: level})
-    if (any(int(memory[a]) != v for a, v in expected.items())
-            or int(memory[int(RamAddress.STATUS_FLAGS_4)]) & 1):
+        expected.update(
+            {
+                int(RamAddress.PARTY_SPECIES) + index: species_id,
+                member: species_id,
+                member + 3: level,
+                member + 33: level,
+            }
+        )
+    if (
+        any(int(memory[a]) != v for a, v in expected.items())
+        or int(memory[int(RamAddress.STATUS_FLAGS_4)]) & 1
+    ):
         raise ValueError("six-party fixture parent field roster differs")
     for flag in (int(EventFlag.BEAT_MISTY), int(EventFlag.GOT_TM11)):
         if int(memory[int(RamAddress.EVENT_FLAGS) + flag // 8]) & (1 << (flag % 8)):
@@ -190,18 +264,18 @@ def _append_misty_training_reserves(
     ot = (int(memory[base + 12]), int(memory[base + 13]))
     ot_name = tuple(int(memory[0xD273 + i]) for i in range(11))
     fingerprints = {
-        tuple(int(memory[base + 44 * i + j]) for j in (12, 13, 27, 28))
-        for i in range(4)
+        tuple(int(memory[base + 44 * i + j]) for j in (12, 13, 27, 28)) for i in range(4)
     }
     if len(fingerprints) != 4:
         raise ValueError("six-party fixture parent specimen fingerprints collide")
     # Low-level, undecided-role coverage. The worker retains only the original
     # four combat specimen refs; this teacher does not choose runtime roles.
-    reserves = ((4, 5, 21, 12, (64, 45, 43)),
-                (5, 108, 23, 10, (35, 43, 40)))
+    reserves = ((4, 5, 21, 12, (64, 45, 43)), (5, 108, 23, 10, (35, 43, 40)))
     for index, species_id, dex, level, moves in reserves:
         species = cartridge.species(species_id)
-        if species.national_number != dex or not set(moves) <= set(species.intrinsic_moves_at_level(level)):
+        if species.national_number != dex or not set(moves) <= set(
+            species.intrinsic_moves_at_level(level)
+        ):
             raise ValueError("six-party reserve cartridge identity or legal moves differ")
         dvs = (8, 8, 8, 8 + index)
         fingerprint = (*ot, dvs[0] * 16 + dvs[1], dvs[2] * 16 + dvs[3])
@@ -221,8 +295,14 @@ def _append_misty_training_reserves(
         xp = species.experience_at_level(level)
         for j in range(3):
             staged[member + 14 + j] = (xp >> (16 - 8 * j)) & 255
-        for offset, value in ((1, stats.max_hp), (34, stats.max_hp), (36, stats.attack),
-                              (38, stats.defense), (40, stats.speed), (42, stats.special)):
+        for offset, value in (
+            (1, stats.max_hp),
+            (34, stats.max_hp),
+            (36, stats.attack),
+            (38, stats.defense),
+            (40, stats.speed),
+            (42, stats.special),
+        ):
             staged[member + offset], staged[member + offset + 1] = value >> 8, value & 255
         for j, move in enumerate(moves):
             staged[member + 8 + j] = move
@@ -237,8 +317,9 @@ def _append_misty_training_reserves(
             staged[start + dex_index // 8] |= 1 << (dex_index % 8)
     staged[int(RamAddress.PARTY_COUNT)] = 6
     staged[int(RamAddress.PARTY_SPECIES) + 6] = 255
-    rows = tuple(dict(address=a, before=int(memory[a]), after=v)
-                 for a, v in sorted(staged.changes.items()))
+    rows = tuple(
+        dict(address=a, before=int(memory[a]), after=v) for a, v in sorted(staged.changes.items())
+    )
     for row in rows:
         memory[row["address"]] = row["after"]
     if any(int(memory[r["address"]]) != r["after"] for r in rows):
@@ -247,8 +328,14 @@ def _append_misty_training_reserves(
 
 
 def prepare_bill_training_fixture(
-    memory, *, rom, rom_sha256, isolated_training_setup, controller_released,
-    battle_state, partition,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    isolated_training_setup,
+    controller_released,
+    battle_state,
+    partition,
 ):
     """Supply only a disclosed fresh TRAIN baseline and native Bill-house entry.
 
@@ -256,13 +343,27 @@ def prepare_bill_training_fixture(
     phases must be executed natively. This is not an earned north-route run.
     """
     staged = _StagedMemory(memory)
-    prepare_income_fixture(staged, rom=rom, rom_sha256=rom_sha256,
-        isolated_training_setup=isolated_training_setup, controller_released=controller_released,
-        battle_state=battle_state, partition=partition, level=5, money=3000, balls=5,
-        forest_warp=3)
-    for flag in (EventFlag.MET_BILL, EventFlag.USED_CELL_SEPARATOR_ON_BILL,
-                 EventFlag.GOT_SS_TICKET, EventFlag.MET_BILL_2,
-                 EventFlag.BILL_SAID_USE_CELL_SEPARATOR, EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING):
+    prepare_income_fixture(
+        staged,
+        rom=rom,
+        rom_sha256=rom_sha256,
+        isolated_training_setup=isolated_training_setup,
+        controller_released=controller_released,
+        battle_state=battle_state,
+        partition=partition,
+        level=5,
+        money=3000,
+        balls=5,
+        forest_warp=3,
+    )
+    for flag in (
+        EventFlag.MET_BILL,
+        EventFlag.USED_CELL_SEPARATOR_ON_BILL,
+        EventFlag.GOT_SS_TICKET,
+        EventFlag.MET_BILL_2,
+        EventFlag.BILL_SAID_USE_CELL_SEPARATOR,
+        EventFlag.LEFT_BILLS_HOUSE_AFTER_HELPING,
+    ):
         address = int(RamAddress.EVENT_FLAGS) + int(flag) // 8
         if int(memory[address]) & (1 << (int(flag) % 8)):
             raise ValueError("Bill fixture requires fresh native phase flags")
@@ -274,8 +375,9 @@ def prepare_bill_training_fixture(
     staged[0xD365] = int(MapId.ROUTE_25)
     staged[0xD3B1] = staged[0xD3B5] = 0
     staged[0xD3B2] = staged[0xD3B6] = int(MapId.BILLS_HOUSE)
-    rows = tuple(dict(address=a, before=int(memory[a]), after=v)
-                 for a, v in sorted(staged.changes.items()))
+    rows = tuple(
+        dict(address=a, before=int(memory[a]), after=v) for a, v in sorted(staged.changes.items())
+    )
     for row in rows:
         memory[row["address"]] = row["after"]
     if any(int(memory[r["address"]]) != r["after"] for r in rows):
@@ -284,8 +386,16 @@ def prepare_bill_training_fixture(
 
 
 def prepare_misty_training_fixture(
-    memory, *, rom, rom_sha256, isolated_training_setup, controller_released,
-    battle_state, partition, level, hp_percent,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    isolated_training_setup,
+    controller_released,
+    battle_state,
+    partition,
+    level,
+    hp_percent,
 ):
     """Supply one Wartortle14..30, fixed resources, and a loaded gym entry.
 
@@ -294,29 +404,60 @@ def prepare_misty_training_fixture(
     """
     if isolated_training_setup is not True or partition != "train":
         raise ValueError("Misty fixture requires explicit isolated TRAIN authority")
-    return _prepare_misty_fixture(memory, rom=rom, rom_sha256=rom_sha256,
-        controller_released=controller_released, battle_state=battle_state,
-        level=level, hp_percent=hp_percent)
+    return _prepare_misty_fixture(
+        memory,
+        rom=rom,
+        rom_sha256=rom_sha256,
+        controller_released=controller_released,
+        battle_state=battle_state,
+        level=level,
+        hp_percent=hp_percent,
+    )
 
 
 def _prepare_misty_fixture(
-    memory, *, rom, rom_sha256, controller_released, battle_state, level, hp_percent,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    controller_released,
+    battle_state,
+    level,
+    hp_percent,
 ):
     """Shared mechanics; public entrypoints retain separate partition authority."""
     from .red_player_income_setup import _apply_fixture_changes, _income_fixture_changes
 
-    if (type(level) is not int or not 14 <= level <= 30
-        or type(hp_percent) is not int or hp_percent not in (50, 100)):
+    if (
+        type(level) is not int
+        or not 14 <= level <= 30
+        or type(hp_percent) is not int
+        or hp_percent not in (50, 100)
+    ):
         raise ValueError("Misty fixture requires declared bounded level and health")
     staged = _StagedMemory(memory)
-    _apply_fixture_changes(staged, _income_fixture_changes(
-        staged, rom=rom, rom_sha256=rom_sha256, controller_released=controller_released,
-        battle_state=battle_state, level=level, money=3000, balls=5, forest_warp=3))
+    _apply_fixture_changes(
+        staged,
+        _income_fixture_changes(
+            staged,
+            rom=rom,
+            rom_sha256=rom_sha256,
+            controller_released=controller_released,
+            battle_state=battle_state,
+            level=level,
+            money=3000,
+            balls=5,
+            forest_warp=3,
+        ),
+    )
     gym = int(MapId.CERULEAN_GYM)
     headers = trainer_headers(rom, {gym}, full_event_offsets=True)
     ordinary = tuple(h.event_flag for h in headers if h.sprite_index != 1)
-    if (len(ordinary) != 2 or len(set(ordinary)) != 2
-        or any(not 0xB0 <= f < int(EventFlag.BEAT_MISTY) for f in ordinary)):
+    if (
+        len(ordinary) != 2
+        or len(set(ordinary)) != 2
+        or any(not 0xB0 <= f < int(EventFlag.BEAT_MISTY) for f in ordinary)
+    ):
         raise ValueError("Misty fixture needs exact cartridge gym prerequisites")
     base = int(RamAddress.PARTY_MON_1)
     species = RedPracticeCartridge(rom).species(179)
@@ -328,8 +469,14 @@ def _prepare_misty_fixture(
     staged[base + 5], staged[base + 6] = species.types
     staged[base + 7] = species.catch_rate
     hp = max(1, stats.max_hp * hp_percent // 100)
-    for offset, value in ((1, hp), (34, stats.max_hp), (36, stats.attack),
-                          (38, stats.defense), (40, stats.speed), (42, stats.special)):
+    for offset, value in (
+        (1, hp),
+        (34, stats.max_hp),
+        (36, stats.attack),
+        (38, stats.defense),
+        (40, stats.speed),
+        (42, stats.special),
+    ):
         staged[base + offset], staged[base + offset + 1] = value >> 8, value & 255
     xp = species.experience_at_level(level)
     for i in range(3):
@@ -357,8 +504,9 @@ def _prepare_misty_fixture(
     staged[0xD365] = int(MapId.CERULEAN_CITY)
     staged[0xD3B1] = staged[0xD3B5] = 0
     staged[0xD3B2] = staged[0xD3B6] = gym
-    rows = tuple(dict(address=a, before=int(memory[a]), after=v)
-                 for a, v in sorted(staged.changes.items()))
+    rows = tuple(
+        dict(address=a, before=int(memory[a]), after=v) for a, v in sorted(staged.changes.items())
+    )
     for row in rows:
         memory[row["address"]] = row["after"]
     if any(int(memory[r["address"]]) != r["after"] for r in rows):
@@ -368,8 +516,15 @@ def _prepare_misty_fixture(
 
 _MISTY_DEFERRED20_PARENT_SHA256 = "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d"
 
+
 def _prepare_misty_deferred20_fixture(
-    memory, *, rom, rom_sha256, controller_released, battle_state, parent_state_bytes,
+    memory,
+    *,
+    rom,
+    rom_sha256,
+    controller_released,
+    battle_state,
+    parent_state_bytes,
 ):
     """Supply one explicitly deferred20 TRAIN condition; never earned progress.
 
@@ -380,20 +535,43 @@ def _prepare_misty_deferred20_fixture(
     """
     from hashlib import sha256
     from types import SimpleNamespace
+
     from .party import StatusCondition
-    from .red_party import (PokemonRedPartyReader, member_field_address,
-        SPECIES_OFFSET, EXPERIENCE_OFFSET, DETERMINANT_VALUES_OFFSET, PP_OFFSET)
-    from .red_battle_practice_factory import (_PARTY_BOX_LEVEL_OFFSET,
-        _PARTY_STAT_EXP_OFFSET, _put_u16, _put_u24, _put_stats, _stats,
-        PARTY_LEVEL_OFFSET, PARTY_HP_OFFSET, PARTY_MAX_HP_OFFSET)
+    from .red_battle_practice_factory import (
+        _PARTY_BOX_LEVEL_OFFSET,
+        _PARTY_STAT_EXP_OFFSET,
+        PARTY_HP_OFFSET,
+        PARTY_LEVEL_OFFSET,
+        PARTY_MAX_HP_OFFSET,
+        _put_stats,
+        _put_u16,
+        _put_u24,
+        _stats,
+    )
+    from .red_party import (
+        DETERMINANT_VALUES_OFFSET,
+        EXPERIENCE_OFFSET,
+        SPECIES_OFFSET,
+        PokemonRedPartyReader,
+        member_field_address,
+    )
     from .red_player_income_setup import _apply_fixture_changes
-    if (controller_released is not True or type(battle_state) is not int
-        or battle_state != 0 or type(rom) is not bytes
-        or rom_sha256 != RED_ROM_SHA256 or sha256(rom).hexdigest() != rom_sha256
+
+    if (
+        controller_released is not True
+        or type(battle_state) is not int
+        or battle_state != 0
+        or type(rom) is not bytes
+        or rom_sha256 != RED_ROM_SHA256
+        or sha256(rom).hexdigest() != rom_sha256
         or type(parent_state_bytes) is not bytes
-        or sha256(parent_state_bytes).hexdigest() != _MISTY_DEFERRED20_PARENT_SHA256):
+        or sha256(parent_state_bytes).hexdigest() != _MISTY_DEFERRED20_PARENT_SHA256
+    ):
         raise ValueError("deferred20 fixture requires exact isolated TRAIN source")
-    if int(memory[RamAddress.CURRENT_MAP]) != int(MapId.CERULEAN_GYM) or int(memory[RamAddress.STATUS_FLAGS_4]) & 1:
+    if (
+        int(memory[RamAddress.CURRENT_MAP]) != int(MapId.CERULEAN_GYM)
+        or int(memory[RamAddress.STATUS_FLAGS_4]) & 1
+    ):
         raise ValueError("deferred20 fixture requires original field boundary")
     for flag in (int(EventFlag.BEAT_MISTY), int(EventFlag.GOT_TM11)):
         if int(memory[int(RamAddress.EVENT_FLAGS) + flag // 8]) & (1 << (flag % 8)):
@@ -402,20 +580,26 @@ def _prepare_misty_deferred20_fixture(
     party = reader.read()
     refs = reader.preparation_specimen_refs()
     expected = ((179, 17), (165, 19), (150, 18), (113, 7), (5, 12), (108, 10))
-    if (tuple((m.species_id, m.level) for m in party.members) != expected
+    if (
+        tuple((m.species_id, m.level) for m in party.members) != expected
         or int(memory[int(RamAddress.PARTY_SPECIES) + 6]) != 255
-        or any(m.status is not StatusCondition.HEALTHY or m.hp != m.max_hp for m in party.members)):
+        or any(m.status is not StatusCondition.HEALTHY or m.hp != m.max_hp for m in party.members)
+    ):
         raise ValueError("deferred20 source requires exact healthy six-party roster")
     base = member_field_address(1, SPECIES_OFFSET)
     species = RedPracticeCartridge(rom).species(165)
     dvs = (8, 8, 8, 9)
-    if (species.national_number != 19 or int(memory[base + _PARTY_BOX_LEVEL_OFFSET]) != 19
-        or tuple(int(memory[base + DETERMINANT_VALUES_OFFSET + i]) for i in range(2)) != (0x88, 0x89)
+    if (
+        species.national_number != 19
+        or int(memory[base + _PARTY_BOX_LEVEL_OFFSET]) != 19
+        or tuple(int(memory[base + DETERMINANT_VALUES_OFFSET + i]) for i in range(2))
+        != (0x88, 0x89)
         or any(int(memory[base + _PARTY_STAT_EXP_OFFSET + i]) != 0 for i in range(10))
         or party.members[1].experience != species.experience_at_level(19)
         or _stats(memory, base + PARTY_MAX_HP_OFFSET) != species.stats_with_dvs(19, dvs)
         or tuple(m.move_id for m in party.members[1].moves) != (33, 39, 98, 158)
-        or any(m.current_pp != m.max_pp for m in party.members[1].moves)):
+        or any(m.current_pp != m.max_pp for m in party.members[1].moves)
+    ):
         raise ValueError("deferred20 source Rattata XP, DVs, zero-EVs, stats or moves differ")
     stats = species.stats_with_dvs(20, dvs)
     staged = _StagedMemory(memory)
@@ -425,8 +609,13 @@ def _prepare_misty_deferred20_fixture(
     _put_u16(staged, base + PARTY_HP_OFFSET, stats.max_hp)
     projected = PokemonRedPartyReader(SimpleNamespace(read_u8=lambda a: int(staged[a])))
     target = projected.read().members[1]
-    if (projected.preparation_specimen_refs() != refs or target.species_id != 165
-        or target.level != 20 or target.experience != species.experience_at_level(20)
-        or target.hp != target.max_hp or target.moves != party.members[1].moves):
+    if (
+        projected.preparation_specimen_refs() != refs
+        or target.species_id != 165
+        or target.level != 20
+        or target.experience != species.experience_at_level(20)
+        or target.hp != target.max_hp
+        or target.moves != party.members[1].moves
+    ):
         raise ValueError("deferred20 staged native party readback differs")
     return _apply_fixture_changes(memory, staged.changes)

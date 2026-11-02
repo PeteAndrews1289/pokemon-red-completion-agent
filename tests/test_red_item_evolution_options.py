@@ -15,10 +15,12 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_goal_context import RedGoalContextError
-from pokemon_red_completion.red_item_evolution_options import enumerate_red_item_evolutions
 from pokemon_red_completion.red_goal_context_profile import (
-    RedGoalMechanic, build_red_goal_context_profile_payload, parse_red_goal_context_profile,
+    RedGoalMechanic,
+    build_red_goal_context_profile_payload,
+    parse_red_goal_context_profile,
 )
+from pokemon_red_completion.red_item_evolution_options import enumerate_red_item_evolutions
 
 
 def _two_families(tmp_path, monkeypatch):
@@ -63,8 +65,11 @@ def _enumerate(runtime, world, *, interruption_handler_wrapper=None):
         world,
         maximum_actions=3000,
         maximum_frames=300000,
-        **({"interruption_handler_wrapper": interruption_handler_wrapper}
-           if interruption_handler_wrapper is not None else {}),
+        **(
+            {"interruption_handler_wrapper": interruption_handler_wrapper}
+            if interruption_handler_wrapper is not None
+            else {}
+        ),
     )
     assert before == (runtime.reader.read(), runtime.emulator.frame_count)
     assert actions.actions_executed == 0
@@ -99,13 +104,30 @@ def test_all_missing_stone_targets_use_actual_individual_resources(
 ):
     runtime, reader, world = _two_families(tmp_path, monkeypatch)
     if not declared:
-        providers = {spec.kind: (spec.kind, spec.mechanic, dict(spec.parameters))
-                     for spec in runtime.profile.providers if spec.kind is not GoalKind.EVOLVE_SPECIES}
-        providers[GoalKind.ADVANCE_STORY] = (GoalKind.ADVANCE_STORY, RedGoalMechanic.OAKS_ERRAND, {})
-        providers[GoalKind.RECOVER_CONTROL] = (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {})
-        runtime = replace(runtime, profile=parse_red_goal_context_profile(
-            build_red_goal_context_profile_payload(profile_id=runtime.profile.profile_id,
-                providers=tuple(providers[kind] for kind in GoalKind if kind in providers))))
+        providers = {
+            spec.kind: (spec.kind, spec.mechanic, dict(spec.parameters))
+            for spec in runtime.profile.providers
+            if spec.kind is not GoalKind.EVOLVE_SPECIES
+        }
+        providers[GoalKind.ADVANCE_STORY] = (
+            GoalKind.ADVANCE_STORY,
+            RedGoalMechanic.OAKS_ERRAND,
+            {},
+        )
+        providers[GoalKind.RECOVER_CONTROL] = (
+            GoalKind.RECOVER_CONTROL,
+            RedGoalMechanic.CONTROL_RECOVERY,
+            {},
+        )
+        runtime = replace(
+            runtime,
+            profile=parse_red_goal_context_profile(
+                build_red_goal_context_profile_payload(
+                    profile_id=runtime.profile.profile_id,
+                    providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+                )
+            ),
+        )
     original_profile = runtime.profile
     reader.raw = replace(
         reader.raw, player_money=cash, bag_items=((int(ItemId.FIRE_STONE), 1),) if held else ()
@@ -218,7 +240,7 @@ def test_enumeration_detects_mutation_even_on_error(tmp_path, monkeypatch):
         _enumerate(runtime, world)
 
 
-@pytest.mark.parametrize('enabled', [False, True])
+@pytest.mark.parametrize("enabled", [False, True])
 def test_routed_targets_use_separate_native_profiles_and_only_evolution_routing(
     tmp_path, monkeypatch, enabled
 ):
@@ -251,11 +273,14 @@ def test_routed_targets_use_separate_native_profiles_and_only_evolution_routing(
             )
 
     monkeypatch.setattr(module, "RedResourceGoalRouter", Router)
+
     def wrapper(inner, spec):
         return inner
 
     candidates = _enumerate(
-        runtime, world, interruption_handler_wrapper=wrapper if enabled else None,
+        runtime,
+        world,
+        interruption_handler_wrapper=wrapper if enabled else None,
     )
     assert len(profiles) == len(candidates) == 2
     assert profiles[0] != profiles[1]
@@ -272,11 +297,16 @@ def test_loaded_cartridge_must_support_every_offered_edge(tmp_path, monkeypatch)
         _enumerate(runtime, world)
 
 
-@pytest.mark.parametrize('wrapper', [True, 3, object()])
+@pytest.mark.parametrize("wrapper", [True, 3, object()])
 def test_invalid_evolution_wrapper_refuses_before_live_access(wrapper):
-    with pytest.raises(TypeError, match='evolution interruption wrapper must be callable'):
+    with pytest.raises(TypeError, match="evolution interruption wrapper must be callable"):
         enumerate_red_item_evolutions(
-            None, None, None, None, maximum_actions=1, maximum_frames=1,
+            None,
+            None,
+            None,
+            None,
+            maximum_actions=1,
+            maximum_frames=1,
             interruption_handler_wrapper=wrapper,
         )
 

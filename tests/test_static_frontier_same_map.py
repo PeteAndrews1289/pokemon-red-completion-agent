@@ -1,4 +1,5 @@
 """A partial frontier must never be dispatched as the distant static target."""
+
 from dataclasses import dataclass
 from types import SimpleNamespace as N
 
@@ -12,19 +13,36 @@ from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 @pytest.mark.parametrize("continuous", [False, True])
 @pytest.mark.parametrize("descriptor", [False, True])
 def test_same_map_frontier_uses_quoted_endpoint_and_declines_zero_work(
-    monkeypatch, empty, continuous, descriptor,
+    monkeypatch,
+    empty,
+    continuous,
+    descriptor,
 ):
-    raw = N(map_id=207, player_y=1, player_x=26, player_money=26389,
-        bag_items=((73, 1),), party_species_ids=(151, 114),
-        event_flags=b"unchanged", badge_bits=15)
+    raw = N(
+        map_id=207,
+        player_y=1,
+        player_x=26,
+        player_money=26389,
+        bag_items=((73, 1),),
+        party_species_ids=(151, 114),
+        event_flags=b"unchanged",
+        badge_bits=15,
+    )
     emulator = N(frame_count=0, state=b"actual-before")
     emulator.save_state_bytes = lambda: emulator.state
     inputs, diagnostics, planned = [], [], []
-    actions = N(actions_executed=0,
-        record_diagnostic_event=lambda kind, payload: diagnostics.append((kind, payload)))
-    runtime = N(reader=N(read=lambda: N(**vars(raw))), emulator=emulator,
-        adapter=N(observe=lambda: N(game_state=None), graph=N(
-            available_objectives=lambda _: (N(id="reach_fuchsia"),))))
+    actions = N(
+        actions_executed=0,
+        record_diagnostic_event=lambda kind, payload: diagnostics.append((kind, payload)),
+    )
+    runtime = N(
+        reader=N(read=lambda: N(**vars(raw))),
+        emulator=emulator,
+        adapter=N(
+            observe=lambda: N(game_state=None),
+            graph=N(available_objectives=lambda _: (N(id="reach_fuchsia"),)),
+        ),
+    )
     monkeypatch.setattr(s, "_field_ready", lambda _: True)
     monkeypatch.setattr(s, "_origin", lambda *_: object())
     monkeypatch.setattr(s, "observe_static_capture", lambda *_: N(registered=False, consumed=False))
@@ -42,9 +60,13 @@ def test_same_map_frontier_uses_quoted_endpoint_and_declines_zero_work(
                 planned.append((map_id, goal_at))
                 if map_id != 207:
                     raise s.RoutePlanningError("future map target not currently quoted")
-                return N(cost=0 if empty else 1, terminal_at=endpoint,
+                return N(
+                    cost=0 if empty else 1,
+                    terminal_at=endpoint,
                     steps=() if empty else (N(expected_map=207, expected_at=endpoint),),
-                    segments=())
+                    segments=(),
+                )
+
             return N(plan_feasible_to_map=plan)
 
         def __call__(self, *_):
@@ -57,9 +79,16 @@ def test_same_map_frontier_uses_quoted_endpoint_and_declines_zero_work(
             raw.player_y, raw.player_x = self.destination_at
 
     fn = s.static_approach_option if descriptor else s.static_approach_binding
-    result = fn(runtime, actions, route=Route(), target=N(map_id=23, at=(62, 10)),
-        objective_id="reach_fuchsia", battler=None, continuous_travel=continuous,
-        **({"combat_levels": (58, 33)} if descriptor else {}))
+    result = fn(
+        runtime,
+        actions,
+        route=Route(),
+        target=N(map_id=23, at=(62, 10)),
+        objective_id="reach_fuchsia",
+        battler=None,
+        continuous_travel=continuous,
+        **({"combat_levels": (58, 33)} if descriptor else {}),
+    )
     assert not inputs and emulator.frame_count == 0
     assert planned[-1] == (207, endpoint)
     if empty:
@@ -78,14 +107,27 @@ def test_same_map_frontier_uses_quoted_endpoint_and_declines_zero_work(
 
 @pytest.mark.parametrize("explicit_later_step", [False, True])
 def test_implicit_stair_arrival_precedes_walking_on_the_next_map(monkeypatch, explicit_later_step):
-    raw = N(map_id=207, player_y=1, player_x=26, player_money=26389,
-        bag_items=(), party_species_ids=(151,), event_flags=b"same", badge_bits=15)
+    raw = N(
+        map_id=207,
+        player_y=1,
+        player_x=26,
+        player_money=26389,
+        bag_items=(),
+        party_species_ids=(151,),
+        event_flags=b"same",
+        badge_bits=15,
+    )
     em = N(frame_count=0, state=b"before")
     em.save_state_bytes = lambda: em.state
     actions = N(actions_executed=0)
-    runtime = N(reader=N(read=lambda: N(**vars(raw))), emulator=em,
-        adapter=N(observe=lambda: N(game_state=None), graph=N(
-            available_objectives=lambda _: (N(id="reach_fuchsia"),))))
+    runtime = N(
+        reader=N(read=lambda: N(**vars(raw))),
+        emulator=em,
+        adapter=N(
+            observe=lambda: N(game_state=None),
+            graph=N(available_objectives=lambda _: (N(id="reach_fuchsia"),)),
+        ),
+    )
     monkeypatch.setattr(s, "_field_ready", lambda _: True)
     monkeypatch.setattr(s, "_origin", lambda *_: object())
     monkeypatch.setattr(s, "observe_static_capture", lambda *_: N(registered=False, consumed=False))
@@ -95,23 +137,38 @@ def test_implicit_stair_arrival_precedes_walking_on_the_next_map(monkeypatch, ex
     class Route:
         destination_map: int = 0
         destination_at: tuple = (0, 0)
+
         @property
         def route_world(self):
             def plan(origin, map_id, *, goal_at):
                 if map_id != 181:
                     raise s.RoutePlanningError("future map occupancy")
-                return N(cost=1, terminal_at=(1, 26),
-                    steps=(N(expected_map=181, expected_at=(2, 26)),) if explicit_later_step else (),
-                    segments=(N(target_map=181, transition=N(arrival_at=(1, 26))),))
+                return N(
+                    cost=1,
+                    terminal_at=(1, 26),
+                    steps=(N(expected_map=181, expected_at=(2, 26)),)
+                    if explicit_later_step
+                    else (),
+                    segments=(N(target_map=181, transition=N(arrival_at=(1, 26))),),
+                )
+
             return N(plan_feasible_to_map=plan)
+
         def __call__(self, *_):
             assert (self.destination_map, self.destination_at) == (181, (1, 26))
             raw.map_id = 181
             actions.actions_executed += 4
             em.frame_count += 192
             em.state = b"arrived"
-    binding = s.static_approach_binding(runtime, actions, route=Route(),
-        target=N(map_id=23, at=(62, 10)), objective_id="reach_fuchsia", battler=None)
+
+    binding = s.static_approach_binding(
+        runtime,
+        actions,
+        route=Route(),
+        target=N(map_id=23, at=(62, 10)),
+        objective_id="reach_fuchsia",
+        battler=None,
+    )
     assert binding is not None and not actions.actions_executed
     report = binding.execute()
     assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED

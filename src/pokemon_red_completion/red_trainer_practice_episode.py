@@ -11,7 +11,7 @@ from collections.abc import Callable, Iterator, Mapping
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass, replace
 from time import perf_counter_ns
-from typing import Protocol, cast
+from typing import Protocol, TypedDict, cast
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
@@ -59,6 +59,10 @@ from .red_forced_struggle import (
     model_struggle_available,
 )
 from .scenario_lab import ScenarioPartition
+
+
+class _PendingActiveHPOptions(TypedDict, total=False):
+    allow_pending_active_hp: bool
 
 
 def validate_opening_idle_frames(value: int) -> None:
@@ -421,8 +425,11 @@ def run_red_trainer_practice_episode(
                 "opening_idle_frames": opening_idle_frames,
                 "state_before": _resource_state(initial),
                 **({"allow_forced_struggle": True} if allow_forced_struggle else {}),
-                **({"wild_training": True, "train_wild_diagnostic": True}
-                   if train_wild_diagnostic else {}),
+                **(
+                    {"wild_training": True, "train_wild_diagnostic": True}
+                    if train_wild_diagnostic
+                    else {}
+                ),
             },
         )
         for decision_index in range(1, max_decisions + 1):
@@ -459,7 +466,11 @@ def run_red_trainer_practice_episode(
                         reader,
                         actions,
                         expected_map=capture.manifest.expected_map,
-                        **({"allow_pending_active_hp": True} if pending else {}),
+                        **(
+                            _PendingActiveHPOptions(allow_pending_active_hp=True)
+                            if pending
+                            else _PendingActiveHPOptions()
+                        ),
                     )
             _require_plausible_hp(raw)
             if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {
@@ -556,9 +567,13 @@ def run_red_trainer_practice_episode(
                 if (
                     not any(prepared_main.supported_candidate_mask)
                     and not options
-                    and not (allow_forced_struggle and (
-                        forced_struggle_available(raw) or disabled_forced_struggle_available(raw)
-                    ))
+                    and not (
+                        allow_forced_struggle
+                        and (
+                            forced_struggle_available(raw)
+                            or disabled_forced_struggle_available(raw)
+                        )
+                    )
                 ):
                     _emit(
                         event_sink,
@@ -613,7 +628,8 @@ def run_red_trainer_practice_episode(
                 frames_before = _frame_count(session)
                 struggle_executor = (
                     execute_disabled_forced_struggle_turn
-                    if disabled_forced_struggle_available(raw) else execute_forced_struggle_turn
+                    if disabled_forced_struggle_available(raw)
+                    else execute_forced_struggle_turn
                 )
                 execution = struggle_executor(
                     reader,

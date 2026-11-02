@@ -109,8 +109,11 @@ def without_coordinates(
         return graph
     return LocalGraph(
         {
-            source: tuple(edge for edge in outgoing if edge.target not in unavailable
-                          and not unavailable.intersection(edge.via))
+            source: tuple(
+                edge
+                for edge in outgoing
+                if edge.target not in unavailable and not unavailable.intersection(edge.via)
+            )
             for source, outgoing in graph.edges.items()
             if source not in unavailable
         }
@@ -197,7 +200,9 @@ class _IncrementalLocalPaths:
         self.pending = None
         current, current_mode = current_state
         for edge in self.graph.neighbors(current):
-            if not edge.requirements.issubset(self.capabilities) or not edge.permits_mode(current_mode):
+            if not edge.requirements.issubset(self.capabilities) or not edge.permits_mode(
+                current_mode
+            ):
                 continue
             candidate_cost = cost + edge.cost
             following = (edge.target, edge.next_mode(current_mode))
@@ -205,7 +210,9 @@ class _IncrementalLocalPaths:
                 continue
             self.came_from[following] = (current_state, edge)
             self.best_cost[following] = candidate_cost
-            heapq.heappush(self.frontier, (candidate_cost, self.sequence, following[0], following[1]))
+            heapq.heappush(
+                self.frontier, (candidate_cost, self.sequence, following[0], following[1])
+            )
             self.sequence += 1
 
     def paths(self, goals):

@@ -8,8 +8,8 @@ from .gen1_trainer_sight import trainer_headers, trainer_sight_zones
 from .gen1_traversal import map_object_events
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
-from .player_option_challenge import OptionChallenge
 from .observation import MapId, event_flag_is_set
+from .player_option_challenge import OptionChallenge
 from .red_player_field_goals import _field_ready
 from .red_player_story_battle import story_battle_binding
 from .red_player_story_obstruction import blocking_story_trainers
@@ -48,17 +48,37 @@ def _static_approach_events_preserved(before, after):
 
 
 def static_approach_binding(
-    runtime, actions, *, route, target, objective_id, battler, continuous_travel=False,
+    runtime,
+    actions,
+    *,
+    route,
+    target,
+    objective_id,
+    battler,
+    continuous_travel=False,
 ):
     """Reach an adjacent tile or fight an observed obstruction; never activate target."""
-    row = _static_approach_option(runtime, actions, route=route, target=target,
-                                 objective_id=objective_id, battler=battler,
-                                 continuous_travel=continuous_travel)
+    row = _static_approach_option(
+        runtime,
+        actions,
+        route=route,
+        target=target,
+        objective_id=objective_id,
+        battler=battler,
+        continuous_travel=continuous_travel,
+    )
     return None if row is None else row[0]
 
 
 def static_approach_option(
-    runtime, actions, *, route, target, objective_id, battler, combat_levels,
+    runtime,
+    actions,
+    *,
+    route,
+    target,
+    objective_id,
+    battler,
+    combat_levels,
     continuous_travel=False,
 ):
     """Pair the unchanged executor with its real next-component challenge.
@@ -66,17 +86,33 @@ def static_approach_option(
     Travel is not combat. An actual obstruction quotes that cartridge trainer,
     not the static Pokémon or an eventual boss beyond the map boundary.
     """
-    if (not isinstance(combat_levels, tuple) or not combat_levels
-            or any(type(level) is not int or not 1 <= level <= 100 for level in combat_levels)):
+    if (
+        not isinstance(combat_levels, tuple)
+        or not combat_levels
+        or any(type(level) is not int or not 1 <= level <= 100 for level in combat_levels)
+    ):
         raise ValueError("static approach requires actual combat-role levels")
-    return _static_approach_option(runtime, actions, route=route, target=target,
-                                  objective_id=objective_id, battler=battler,
-                                  combat_levels=combat_levels,
-                                  continuous_travel=continuous_travel)
+    return _static_approach_option(
+        runtime,
+        actions,
+        route=route,
+        target=target,
+        objective_id=objective_id,
+        battler=battler,
+        combat_levels=combat_levels,
+        continuous_travel=continuous_travel,
+    )
 
 
 def _static_approach_option(
-    runtime, actions, *, route, target, objective_id, battler, combat_levels=None,
+    runtime,
+    actions,
+    *,
+    route,
+    target,
+    objective_id,
+    battler,
+    combat_levels=None,
     continuous_travel=False,
 ):
     if type(continuous_travel) is not bool:
@@ -165,11 +201,12 @@ def _static_approach_option(
         )
         if binding is None:
             return None
-        challenge = OptionChallenge(True, False, 0., 0., 0.)
+        challenge = OptionChallenge(True, False, 0.0, 0.0, 0.0)
         if combat_levels is not None:
             quote = trainer_party_quote(route.rom, trainer.trainer_class, trainer.trainer_set)
             challenge = OptionChallenge.from_levels(
-                combat_levels=combat_levels, opponent_levels=tuple(m.level for m in quote.party))
+                combat_levels=combat_levels, opponent_levels=tuple(m.level for m in quote.party)
+            )
         return binding, challenge
     plan = min(plans, key=lambda p: (p.cost, p.terminal_at))
     # An implicit stair/door transition can have no explicit walking steps.
@@ -177,13 +214,20 @@ def _static_approach_option(
     if not plan.steps and not plan.segments:
         record = getattr(actions, "record_diagnostic_event", None)
         if callable(record):
-            record("static_approach_quote", dict(
-                objective=objective_id, source_map=raw.map_id,
-                source_at=[raw.player_y, raw.player_x], target_map=target.map_id,
-                target_at=list(target.at), quoted_at=list(plan.terminal_at),
-                executable=False, reason="no_executable_frontier_steps",
-                controller_inputs=0,
-            ))
+            record(
+                "static_approach_quote",
+                dict(
+                    objective=objective_id,
+                    source_map=raw.map_id,
+                    source_at=[raw.player_y, raw.player_x],
+                    target_map=target.map_id,
+                    target_at=list(target.at),
+                    quoted_at=list(plan.terminal_at),
+                    executable=False,
+                    reason="no_executable_frontier_steps",
+                    controller_inputs=0,
+                ),
+            )
         return None
     # A cartridge path through a future map does not quote its live trainer
     # sight. Stop at the first map boundary so the next menu can expose the
@@ -235,7 +279,8 @@ def _static_approach_option(
                 activated=False,
                 incidental_map_entry_events=(
                     ["silph_receptionist_returns_to_desk"]
-                    if raw.event_flags != final.event_flags else []
+                    if raw.event_flags != final.event_flags
+                    else []
                 ),
                 continuous_travel_requested=continuous_travel,
                 complete_target_approach=(
@@ -261,4 +306,4 @@ def _static_approach_option(
         verify,
         story_objective_ref=objective_id,
     )
-    return binding, OptionChallenge(False, False, 0., 0., 0.)
+    return binding, OptionChallenge(False, False, 0.0, 0.0, 0.0)

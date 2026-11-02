@@ -5,7 +5,6 @@ They do not choose the story objective, buy supplies, sell items or train a part
 Routes are replanned from the live map; there is no chapter movement string.
 """
 
-from .player_option_story_unit import OptionStoryUnit
 from dataclasses import replace
 from hashlib import sha256
 from types import SimpleNamespace
@@ -19,13 +18,14 @@ from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set
 from .player_option_challenge import OptionChallenge
+from .player_option_story_unit import OptionStoryUnit
 from .red_player_field_goals import _field_ready
 from .red_player_field_item import field_item_story_option, settle_story_interaction
 from .red_player_lesson import capture_player_lesson_snapshot
 from .red_player_story_travel import story_travel_binding
 from .rom import verify_rom_bytes
-from .route_plan import RoutePlanningError
 from .route_1_wild import WildFleeFieldExit, flee_wild
+from .route_plan import RoutePlanningError
 
 OBJECTIVE = "obtain_secret_key"
 EXIT_OBJECTIVE = "defeat_blaine"
@@ -62,12 +62,16 @@ def mansion_departure_world(world, cartridge_world, raw):
         or event_flag_is_set(raw.event_flags, int(EventFlag.MANSION_SWITCH_ON))
     ):
         return world
-    return replace(world, **{
-        name: {**getattr(world, name), **{
-            map_id: getattr(cartridge_world, name)[map_id] for map_id in MANSION_MAPS
-        }}
-        for name in ("terrain", "local_graphs", "object_blockers")
-    })
+    return replace(
+        world,
+        **{
+            name: {
+                **getattr(world, name),
+                **{map_id: getattr(cartridge_world, name)[map_id] for map_id in MANSION_MAPS},
+            }
+            for name in ("terrain", "local_graphs", "object_blockers")
+        },
+    )
 
 
 def _toggle_statue(actions, reader, emulator, *, expected):
@@ -86,10 +90,9 @@ def _toggle_statue(actions, reader, emulator, *, expected):
         raw = reader.read()
         if raw.battle_state:
             raise BlaineChapterError("Mansion statue retained unsupported battle control.")
-        if (
-            event_flag_is_set(raw.event_flags, int(EventFlag.MANSION_SWITCH_ON)) == expected
-            and _field_ready(runtime)
-        ):
+        if event_flag_is_set(
+            raw.event_flags, int(EventFlag.MANSION_SWITCH_ON)
+        ) == expected and _field_ready(runtime):
             return recoveries
         # Short confirmation plus neutral settlement, not a long Confirm hold
         # spanning the setup of a deferred wild encounter.
@@ -151,7 +154,8 @@ def mansion_secret_key_option(runtime, actions, _, *, route):
     # through an unobserved first-floor door is not an alternative completed
     # passage and must not send the player back down the wrong staircase.
     ordinary = (
-        None if runtime.reader.read().map_id == int(MapId.POKEMON_MANSION_3F)
+        None
+        if runtime.reader.read().map_id == int(MapId.POKEMON_MANSION_3F)
         else field_item_story_option(
             runtime, actions, route=route, objective_id=OBJECTIVE, item_id=int(ItemId.SECRET_KEY)
         )
@@ -227,9 +231,17 @@ def mansion_restoration_binding(runtime, actions, *, route):
         return None
     verify_rom_bytes(route.rom)
     phase = _mansion_interaction_option(
-        runtime, actions, route=route, before=before, lesson=lesson,
-        switch=False, drop=False, target_map=SOUTH_STATUE[0], at=SOUTH_STATUE[1],
-        objective=None, kind=GoalKind.RESTORE_TEAM,
+        runtime,
+        actions,
+        route=route,
+        before=before,
+        lesson=lesson,
+        switch=False,
+        drop=False,
+        target_map=SOUTH_STATUE[0],
+        at=SOUTH_STATUE[1],
+        objective=None,
+        kind=GoalKind.RESTORE_TEAM,
     )
     if phase is None:
         return None
@@ -252,7 +264,8 @@ def mansion_restoration_binding(runtime, actions, *, route):
         # First-floor doors are projected from that floor's live observation.
         # Do not quote a complete Center path through an unobserved locked wing.
         origin = Gen1TraversalObserver(
-            runtime.reader, capability_projector=cut_capabilities,
+            runtime.reader,
+            capability_projector=cut_capabilities,
             hazard_projector=Gen1TrainerSightProjector(
                 route.rom, runtime.reader, full_event_offsets=True
             ),
@@ -261,34 +274,57 @@ def mansion_restoration_binding(runtime, actions, *, route):
             origin, int(MapId.POKEMON_MANSION_1F)
         )
         departure = runtime.reader.read()
-        replace(live_route, destination_map=int(MapId.POKEMON_MANSION_1F),
-                destination_at=boundary.terminal_at)(actions, runtime.reader, runtime.emulator)
+        replace(
+            live_route,
+            destination_map=int(MapId.POKEMON_MANSION_1F),
+            destination_at=boundary.terminal_at,
+        )(actions, runtime.reader, runtime.emulator)
         arrival = runtime.reader.read()
         if (
             not _field_ready(runtime)
             or arrival.map_id != int(MapId.POKEMON_MANSION_1F)
             or (arrival.player_y, arrival.player_x) != boundary.terminal_at
-            or any(getattr(arrival, name) != getattr(departure, name) for name in (
-                "bag_items", "player_money", "event_flags", "badge_bits", "party_species_ids",
-                "party_levels", "party_moves", "party_pp",
-            ))
+            or any(
+                getattr(arrival, name) != getattr(departure, name)
+                for name in (
+                    "bag_items",
+                    "player_money",
+                    "event_flags",
+                    "badge_bits",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_moves",
+                    "party_pp",
+                )
+            )
         ):
             raise RuntimeError("Mansion restoration first-floor boundary differs")
         live_route = replace(
             route, route_world=route.route_world.with_current_observation(runtime.reader)
         )
         child = routed_restoration_binding(
-            runtime, actions, home_map=int(MapId.CINNABAR_POKECENTER), route=live_route,
-            observe_trainer_hazards=True, allow_blackout_return=True,
+            runtime,
+            actions,
+            home_map=int(MapId.CINNABAR_POKECENTER),
+            route=live_route,
+            observe_trainer_hazards=True,
+            allow_blackout_return=True,
         )
         if child is None:
             raise RuntimeError("Mansion departure has no verified Cinnabar nurse route")
         child_report = child.execute()
         return GoalExecutionReport(
-            actions.actions_executed - a, runtime.emulator.frame_count - f,
-            dict(support="observed_mansion_departure_then_center", learned_puzzle=False,
-                 departure=dict(puzzle_report.evidence), restoration=dict(child_report.evidence),
-                 objective_completed=False, purchases=0, sales=0),
+            actions.actions_executed - a,
+            runtime.emulator.frame_count - f,
+            dict(
+                support="observed_mansion_departure_then_center",
+                learned_puzzle=False,
+                departure=dict(puzzle_report.evidence),
+                restoration=dict(child_report.evidence),
+                objective_completed=False,
+                purchases=0,
+                sales=0,
+            ),
         )
 
     def verify(_):
@@ -298,8 +334,12 @@ def mansion_restoration_binding(runtime, actions, *, route):
 
     return ExecutableGoalBinding(
         "pokemon.red:mansion-center:" + sha256(source).hexdigest(),
-        GoalKind.RESTORE_TEAM, min(1.0, puzzle.estimated_effort + 0.05), puzzle.estimated_risk,
-        execute, verify, maximum_cash_debit=0,
+        GoalKind.RESTORE_TEAM,
+        min(1.0, puzzle.estimated_effort + 0.05),
+        puzzle.estimated_risk,
+        execute,
+        verify,
+        maximum_cash_debit=0,
     )
 
 
@@ -307,8 +347,12 @@ def _flee_drop_encounter(actions, reader, encounter):
     """Verify only the authored 3F-to-1F drop interrupted by a wild battle."""
     try:
         escaped = flee_wild(
-            actions, reader, encounter, expected_map_id=encounter.map_id,
-            route_name="observed Mansion floor drop", stabilization_frames=120,
+            actions,
+            reader,
+            encounter,
+            expected_map_id=encounter.map_id,
+            route_name="observed Mansion floor drop",
+            stabilization_frames=120,
             error_type=RuntimeError,
         )
         return escaped.public_dict()
@@ -318,46 +362,73 @@ def _flee_drop_encounter(actions, reader, encounter):
             raise
         before, after, evidence = cause.before, cause.after, cause.evidence
         if not (
-            before is encounter and after == reader.read()
+            before is encounter
+            and after == reader.read()
             and before.battle_state == evidence.initial_battle_state == 1
             and before.map_id == evidence.expected_map_id == int(MapId.POKEMON_MANSION_3F)
             and (before.player_y, before.player_x) == DROP_TERMINAL
             and after.map_id == evidence.map_id == int(MapId.POKEMON_MANSION_1F)
-            and (after.player_y, after.player_x) == (evidence.player_y, evidence.player_x) == DROP_TERMINAL
+            and (after.player_y, after.player_x)
+            == (evidence.player_y, evidence.player_x)
+            == DROP_TERMINAL
             and after.battle_state == evidence.final_battle_state == 0
             and after.battle_result == evidence.battle_result == 0
-            and evidence.control_ready and reader.read_input_readiness().ready
+            and evidence.control_ready
+            and reader.read_input_readiness().ready
             and evidence.hp_scope == "first_party_member"
-            and evidence.enemy_species_id > 0 and evidence.enemy_level > 0
+            and evidence.enemy_species_id > 0
+            and evidence.enemy_level > 0
             and 0 < evidence.final_hp <= evidence.initial_hp
-            and evidence.maximum_hp_preserved and evidence.party_preserved
-            and evidence.level_preserved and evidence.pp_preserved and evidence.status_preserved
-            and 1 <= evidence.run_attempts <= 16 and evidence.stabilization_frames == 120
-            and not evidence.new_fainted_slots and not evidence.forced_switch_slots
-            and not evidence.status_changes_allowed and not evidence.party_faints_allowed
-            and not evidence.faint_prompt_exit and not evidence.ordinary_opponent_ko_exit
+            and evidence.maximum_hp_preserved
+            and evidence.party_preserved
+            and evidence.level_preserved
+            and evidence.pp_preserved
+            and evidence.status_preserved
+            and 1 <= evidence.run_attempts <= 16
+            and evidence.stabilization_frames == 120
+            and not evidence.new_fainted_slots
+            and not evidence.forced_switch_slots
+            and not evidence.status_changes_allowed
+            and not evidence.party_faints_allowed
+            and not evidence.faint_prompt_exit
+            and not evidence.ordinary_opponent_ko_exit
             and evidence.native_purified_healing is None
             and evidence.native_opponent_teleport_exit is None
         ):
             raise
-        from .wild_party_flee import validate_flee_party
         from .battle_runtime import note_observed_battle_exit
+        from .wild_party_flee import validate_flee_party
 
         try:
             validate_flee_party(before, after)
         except ValueError:
-            raise failure
+            raise failure from cause
         note_observed_battle_exit()
         # The cartridge resets battle_result during the drop script. Retain that
         # zero and the rejected generic receipt; do not manufacture a RUN result.
-        return dict(verified=True, support="observed_mansion_drop_after_run",
-            source_map=before.map_id, terminal_map=after.map_id,
-            position_yx=list(DROP_TERMINAL), battle_result=after.battle_result,
-            generic_same_map_evidence=evidence.public_dict())
+        return dict(
+            verified=True,
+            support="observed_mansion_drop_after_run",
+            source_map=before.map_id,
+            terminal_map=after.map_id,
+            position_yx=list(DROP_TERMINAL),
+            battle_result=after.battle_result,
+            generic_same_map_evidence=evidence.public_dict(),
+        )
 
 
 def _mansion_interaction_option(
-    runtime, actions, *, route, before, lesson, switch, drop, target_map, at, objective,
+    runtime,
+    actions,
+    *,
+    route,
+    before,
+    lesson,
+    switch,
+    drop,
+    target_map,
+    at,
+    objective,
     kind=GoalKind.ADVANCE_STORY,
 ):
     raw = before.raw
@@ -407,9 +478,8 @@ def _mansion_interaction_option(
                 if current.battle_state:
                     if (
                         current.battle_state != 1
-                        or current.map_id not in {
-                            int(MapId.POKEMON_MANSION_3F), int(MapId.POKEMON_MANSION_1F)
-                        }
+                        or current.map_id
+                        not in {int(MapId.POKEMON_MANSION_3F), int(MapId.POKEMON_MANSION_1F)}
                         or (current.player_y, current.player_x) != DROP_TERMINAL
                     ):
                         raise RuntimeError("Mansion drop triggered an unexpected battle")
@@ -497,8 +567,9 @@ def _mansion_interaction_option(
             execute,
             verify,
             story_objective_ref=objective,
-            story_unit=(OptionStoryUnit("interaction", True)
-                        if kind is GoalKind.ADVANCE_STORY else None),
+            story_unit=(
+                OptionStoryUnit("interaction", True) if kind is GoalKind.ADVANCE_STORY else None
+            ),
             story_approach_only=kind is GoalKind.ADVANCE_STORY,
         ),
         OptionChallenge(False, False, 0.0, 0.0, 0.0),

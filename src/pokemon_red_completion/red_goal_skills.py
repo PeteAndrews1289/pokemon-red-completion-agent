@@ -1266,10 +1266,14 @@ class RedCenterRestoreGoalProvider:
                 raw = self.reader.read()
                 if raw.map_id != start.map_id:
                     raise RedGoalSkillError("Center recovery changed maps")
-                if (restored(raw) and self.reader.read_input_readiness().ready
-                        and (not self.require_indigo_checkpoint
-                             or self.reader.read_last_blackout_map()
-                             == int(MapId.INDIGO_PLATEAU))):
+                if (
+                    restored(raw)
+                    and self.reader.read_input_readiness().ready
+                    and (
+                        not self.require_indigo_checkpoint
+                        or self.reader.read_last_blackout_map() == int(MapId.INDIGO_PLATEAU)
+                    )
+                ):
                     break
             else:
                 raise RedGoalSkillError("Center recovery did not restore the party")
@@ -1390,12 +1394,25 @@ class RedControlRecoveryGoalProvider:
         before_actions = self.actions.actions_executed
         before_frames = self.emulator.frame_count
         before_story = self.adapter.graph.completed_ids(observation.game_state)
-        preserved = {
-            name: getattr(observation.raw, name)
-            for name in ("player_money", "bag_items", "party_species_ids", "party_levels",
-                         "party_hp", "party_max_hp", "party_status", "party_moves", "party_pp",
-                         "badge_bits")
-        } if self.settle_dialogue else {}
+        preserved = (
+            {
+                name: getattr(observation.raw, name)
+                for name in (
+                    "player_money",
+                    "bag_items",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_hp",
+                    "party_max_hp",
+                    "party_status",
+                    "party_moves",
+                    "party_pp",
+                    "badge_bits",
+                )
+            }
+            if self.settle_dialogue
+            else {}
+        )
 
         def execute() -> GoalExecutionReport:
             attempts = self._recover()
@@ -1412,9 +1429,13 @@ class RedControlRecoveryGoalProvider:
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             if observation.party.species_ids() != after.party.species_ids():
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
-            if (report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready
-                    or self._dialogue_blocked()
-                    or any(getattr(after.raw, name) != value for name, value in preserved.items())):
+            if (
+                report.actions_executed <= 0
+                or after.raw.battle_state
+                or not after.input_ready
+                or self._dialogue_blocked()
+                or any(getattr(after.raw, name) != value for name, value in preserved.items())
+            ):
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             if self._start_menu_visible():
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
@@ -1466,8 +1487,11 @@ class RedControlRecoveryGoalProvider:
         return bool(getattr(self.reader, "read_overworld_start_menu_visible", lambda: False)())
 
     def _field_control_ready(self) -> bool:
-        return (self.reader.read_input_readiness().ready and not self._start_menu_visible()
-                and not self._dialogue_blocked())
+        return (
+            self.reader.read_input_readiness().ready
+            and not self._start_menu_visible()
+            and not self._dialogue_blocked()
+        )
 
     def _dialogue_blocked(self) -> bool:
         return self.settle_dialogue and bool(
@@ -1622,7 +1646,8 @@ class RedEncounterDiscoveryGoalProvider:
                 and report.evidence["new_sighting_count"] == 0
                 and type(report.evidence.get("captures")) is int
                 and report.evidence["captures"] == 0
-                and report.evidence.get("search_stop_reason") in {
+                and report.evidence.get("search_stop_reason")
+                in {
                     "survey_leg_limit_exceeded",
                     "encounter_limit_reached",
                     "seek_step_limit_reached",
@@ -1637,7 +1662,8 @@ class RedEncounterDiscoveryGoalProvider:
                 return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
             return (
                 GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
-                if verdict.status is GoalDecisionOutcome.SUCCEEDED else verdict
+                if verdict.status is GoalDecisionOutcome.SUCCEEDED
+                else verdict
             )
 
         from .provenance import canonical_sha256
@@ -1649,11 +1675,15 @@ class RedEncounterDiscoveryGoalProvider:
             if self.source_species_numbers is not None
             else {"local_coverage": "unknown", "seen_target_numbers": sorted(initially_seen)}
         )
-        return replace(offer, binding=replace(
-            binding, verify=verify,
-            search_source_ref=f"pokemon.red:discovery:{self.source_id}",
-            search_objective_sha256=canonical_sha256(objective),
-        ))
+        return replace(
+            offer,
+            binding=replace(
+                binding,
+                verify=verify,
+                search_source_ref=f"pokemon.red:discovery:{self.source_id}",
+                search_objective_sha256=canonical_sha256(objective),
+            ),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1751,10 +1781,13 @@ class RedAreaSurveyGoalProvider:
         guard = getattr(self.adapter, "party_guard", None)
         survey_guard = (
             replace(
-                guard, before=guard.reader.read(),
-                refs=guard.reader.preparation_specimen_refs(), loanable_refs=frozenset(),
+                guard,
+                before=guard.reader.read(),
+                refs=guard.reader.preparation_specimen_refs(),
+                loanable_refs=frozenset(),
             )
-            if isinstance(guard, RedPlayerPartyGuard) else None
+            if isinstance(guard, RedPlayerPartyGuard)
+            else None
         )
 
         def evolution_census(observed):
@@ -1765,7 +1798,8 @@ class RedAreaSurveyGoalProvider:
                 "owned_species": sorted(collection.owned_species),
                 "specimen_counts": dict(Counter(s.species_ref for s in collection.specimens)),
                 "retained_party_continuation": survey_guard.continuation_evidence(
-                    collection, include_unreserved_additions=True,
+                    collection,
+                    include_unreserved_additions=True,
                 ),
             }
 
@@ -1860,8 +1894,11 @@ class RedAreaSurveyGoalProvider:
                     "bounded": True,
                     **survey_evidence,
                     "capture_survey": survey_evidence,
-                    **({"capture_health_stopped": True}
-                       if getattr(self.area_executor, "capture_health_stopped", False) else {}),
+                    **(
+                        {"capture_health_stopped": True}
+                        if getattr(self.area_executor, "capture_health_stopped", False)
+                        else {}
+                    ),
                     "capture_diagnostics": dict(
                         schema="pokemon.red.capture-survey-diagnostics.v1",
                         diagnostic_only=True,
@@ -1956,7 +1993,9 @@ class RedAreaSurveyGoalProvider:
                 before_census is not None
                 and after_census is not None
                 and _retained_evolution_census(
-                    before_census, after_census, require_exact_owned=True,
+                    before_census,
+                    after_census,
+                    require_exact_owned=True,
                 )
             )
 
@@ -1975,17 +2014,24 @@ class RedAreaSurveyGoalProvider:
                     settled_health_stop = (
                         getattr(self.area_executor, "capture_health_stopped", False) is True
                         and report.evidence.get("bounded") is True
-                        and report.actions_executed > 0 and report.frames_executed > 0
+                        and report.actions_executed > 0
+                        and report.frames_executed > 0
                         and type(report.evidence.get("captures")) is int
                         and report.evidence["captures"] == 0
-                        and not after.raw.battle_state and after.input_ready
-                        and not any(member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
-                                    for member in after.party.members)
-                        and (after.collection_observation == observation.collection_observation
-                             or verified_incidental_evolution(after))
+                        and not after.raw.battle_state
+                        and after.input_ready
+                        and not any(
+                            member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
+                            for member in after.party.members
+                        )
+                        and (
+                            after.collection_observation == observation.collection_observation
+                            or verified_incidental_evolution(after)
+                        )
                     )
                     return GoalVerification.failed(
-                        GoalFailureReason.RESOURCE_LOST if settled_health_stop
+                        GoalFailureReason.RESOURCE_LOST
+                        if settled_health_stop
                         else GoalFailureReason.OUTCOME_NOT_VERIFIED
                     )
                 return GoalVerification.failed(

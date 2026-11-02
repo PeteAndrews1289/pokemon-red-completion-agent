@@ -47,8 +47,8 @@ from pokemon_red_completion.party_development_rank import (
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
 )
-from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.player_option_level_workload import OptionLevelWorkload
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
@@ -289,9 +289,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
                 "candidate availability and unavailable reasons must agree"
             )
         if not isinstance(self.venue_prior_feature_mode, VenuePriorFeatureMode):
-            raise PartyDevelopmentAdapterError(
-                "venue-prior feature mode must be typed"
-            )
+            raise PartyDevelopmentAdapterError("venue-prior feature mode must be typed")
         if self.venue_prior_feature_mode is VenuePriorFeatureMode.MASKED_UNCALIBRATED:
             if (
                 any(prior.available for prior in self.venue_priors)
@@ -305,8 +303,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
                     and (
                         not isinstance(self.shared_venue, GrindingArea)
                         or any(
-                            not isinstance(value, PartyMemberObservation)
-                            for value in self.bindings
+                            not isinstance(value, PartyMemberObservation) for value in self.bindings
                         )
                     )
                 )
@@ -314,10 +311,7 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
                     self.candidate_set.kind is TrainingChoiceKind.VENUE
                     and (
                         self.shared_venue is not None
-                        or any(
-                            not isinstance(value, GrindingArea)
-                            for value in self.bindings
-                        )
+                        or any(not isinstance(value, GrindingArea) for value in self.bindings)
                     )
                 )
             ):
@@ -367,27 +361,29 @@ class BoundPartyDevelopmentMenu(Generic[_BindingT]):
 
 
 def observe_party_development_context(
-    *, goal: PartyDevelopmentGoal, party: PartyObservation, policy: BalancedTeamPolicy,
+    *,
+    goal: PartyDevelopmentGoal,
+    party: PartyObservation,
+    policy: BalancedTeamPolicy,
     member_profiles: tuple[PartyDevelopmentMemberProfile, ...],
-    registration_owned_count: int, registration_target_count: int,
-    living_unique_count: int, living_target_count: int,
-    role_coverage_count: int, role_target_count: int,
+    registration_owned_count: int,
+    registration_target_count: int,
+    living_unique_count: int,
+    living_target_count: int,
+    role_coverage_count: int,
+    role_target_count: int,
 ) -> PartyDevelopmentContext:
     """Project the same observed party semantics for fixtures and live inference."""
     profiles = member_profiles
     return PartyDevelopmentContext(
         goal=goal,
         party_size=party.size,
-        below_floor_count=sum(
-            member_needs_training(item.member, policy) for item in profiles
-        ),
+        below_floor_count=sum(member_needs_training(item.member, policy) for item in profiles),
         evolution_needed_count=sum(item.evolution.required for item in profiles),
         registration_needed_count=sum(item.registration_needed for item in profiles),
         living_needed_count=sum(item.living_target_needed for item in profiles),
         role_gap_count=min(party.size, role_target_count - role_coverage_count),
-        registration_completion_ratio=(
-            registration_owned_count / registration_target_count
-        ),
+        registration_completion_ratio=(registration_owned_count / registration_target_count),
         living_completion_ratio=(living_unique_count / living_target_count),
         role_coverage_ratio=role_coverage_count / role_target_count,
         healthy_trainable_count=sum(
@@ -402,7 +398,6 @@ def observe_party_development_context(
         ),
         fainted_count=party.fainted_count,
     )
-
 
 
 @dataclass(frozen=True, slots=True)
@@ -532,14 +527,27 @@ class PartyDevelopmentSemanticSnapshot:
             raise PartyDevelopmentAdapterError("workload observations require explicit opt-in")
         levels = self.level_workloads_by_member
         venues = self.venue_workloads_by_member
-        if (not isinstance(levels, tuple) or (levels and len(levels) != self.party.size)
-                or any(value is not None and not isinstance(value, OptionLevelWorkload)
-                       for value in levels)):
+        if (
+            not isinstance(levels, tuple)
+            or (levels and len(levels) != self.party.size)
+            or any(
+                value is not None and not isinstance(value, OptionLevelWorkload) for value in levels
+            )
+        ):
             raise PartyDevelopmentAdapterError("level workloads must align with observed party")
-        if (not isinstance(venues, tuple) or (venues and len(venues) != self.party.size)
-                or any(not isinstance(row, tuple) or len(row) != len(self.areas)
-                       or any(value is not None and not isinstance(value, VenueTrainingWorkload)
-                              for value in row) for row in venues)):
+        if (
+            not isinstance(venues, tuple)
+            or (venues and len(venues) != self.party.size)
+            or any(
+                not isinstance(row, tuple)
+                or len(row) != len(self.areas)
+                or any(
+                    value is not None and not isinstance(value, VenueTrainingWorkload)
+                    for value in row
+                )
+                for row in venues
+            )
+        ):
             raise PartyDevelopmentAdapterError("venue workloads must align with party and venues")
         conditions = self.active_conditions
         if (
@@ -591,24 +599,30 @@ class PartyDevelopmentSemanticSnapshot:
                 "active_conditions": list(self.active_conditions),
                 "venue_prior_feature_mode": self.venue_prior_feature_mode.value,
                 "execution_protocol_id": self.execution_protocol_id,
-                **({
-                    "include_workload": True,
-                    "level_workloads_by_member": [
-                        None if work is None else work.public_dict()
-                        for work in self.level_workloads_by_member
-                    ],
-                    "venue_workloads_by_member": [
-                        [None if work is None else asdict(work) for work in row]
-                        for row in self.venue_workloads_by_member
-                    ],
-                } if self.include_workload else {}),
+                **(
+                    {
+                        "include_workload": True,
+                        "level_workloads_by_member": [
+                            None if work is None else work.public_dict()
+                            for work in self.level_workloads_by_member
+                        ],
+                        "venue_workloads_by_member": [
+                            [None if work is None else asdict(work) for work in row]
+                            for row in self.venue_workloads_by_member
+                        ],
+                    }
+                    if self.include_workload
+                    else {}
+                ),
             }
         )
 
     @property
     def context(self) -> PartyDevelopmentContext:
         return observe_party_development_context(
-            goal=self.goal, party=self.party, policy=self.policy,
+            goal=self.goal,
+            party=self.party,
+            policy=self.policy,
             member_profiles=self.member_profiles,
             registration_owned_count=self.registration_owned_count,
             registration_target_count=self.registration_target_count,
@@ -665,10 +679,16 @@ class PartyDevelopmentSemanticSnapshot:
             semantics,
             venue_priors=repeated_prior,
             include_workload=self.include_workload,
-            level_workloads=(tuple(self.level_workload_for(item) for item in bindings)
-                             if self.include_workload else None),
-            venue_workloads=(tuple(self.venue_workload_for(item, venue_index) for item in bindings)
-                             if self.include_workload else None),
+            level_workloads=(
+                tuple(self.level_workload_for(item) for item in bindings)
+                if self.include_workload
+                else None
+            ),
+            venue_workloads=(
+                tuple(self.venue_workload_for(item, venue_index) for item in bindings)
+                if self.include_workload
+                else None
+            ),
         )
         if sum(item.available for item in capabilities) < 2:
             return None
@@ -710,9 +730,7 @@ class PartyDevelopmentSemanticSnapshot:
             tuple(
                 self.venue_prior_registry.prior_for(
                     item,
-                    operational_contract_sha256=(
-                        self.venue_operational_contract_sha256[index]
-                    ),
+                    operational_contract_sha256=(self.venue_operational_contract_sha256[index]),
                 )
                 for item, index in zip(bindings, indexes, strict=True)
             )
@@ -727,17 +745,22 @@ class PartyDevelopmentSemanticSnapshot:
             semantics,
             venue_priors=priors,
             include_workload=self.include_workload,
-            level_workloads=((self.level_workload_for(trainee),) * len(bindings)
-                             if self.include_workload else None),
-            venue_workloads=(tuple(self.venue_workload_for(trainee, index) for index in indexes)
-                             if self.include_workload else None),
+            level_workloads=(
+                (self.level_workload_for(trainee),) * len(bindings)
+                if self.include_workload
+                else None
+            ),
+            venue_workloads=(
+                tuple(self.venue_workload_for(trainee, index) for index in indexes)
+                if self.include_workload
+                else None
+            ),
         )
         availability = tuple(
             capability.available
             and (
                 prior.available
-                or self.venue_prior_feature_mode
-                is VenuePriorFeatureMode.MASKED_UNCALIBRATED
+                or self.venue_prior_feature_mode is VenuePriorFeatureMode.MASKED_UNCALIBRATED
             )
             for prior, capability in zip(priors, capabilities, strict=True)
         )
@@ -819,8 +842,11 @@ class PartyDevelopmentSemanticSnapshot:
             total_task_efficiency and self.goal is not PartyDevelopmentGoal.EVOLUTION
         ):
             raise PartyDevelopmentAdapterError("total task objective requires an evolution goal")
-        objective = (PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE if total_task_efficiency
-                     else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE)
+        objective = (
+            PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE
+            if total_task_efficiency
+            else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE
+        )
         if menu.semantic_snapshot_sha256 != self.semantic_snapshot_sha256:
             raise PartyDevelopmentAdapterError("menu belongs to a different semantic snapshot")
         self.venue_prior_registry.require_scenario_is_independent(
@@ -852,7 +878,9 @@ class PartyDevelopmentSemanticSnapshot:
         return self.level_workloads_by_member[self.party.members.index(member)]
 
     def venue_workload_for(
-        self, member: PartyMemberObservation, venue_index: int,
+        self,
+        member: PartyMemberObservation,
+        venue_index: int,
     ) -> VenueTrainingWorkload | None:
         self._profile_for_member(member)
         if type(venue_index) is not int or not 0 <= venue_index < len(self.areas):

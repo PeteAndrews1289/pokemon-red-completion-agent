@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from collections.abc import Collection
 from dataclasses import dataclass, replace
-from typing import Protocol
+from typing import Protocol, TypedDict
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor, FrameBudgetController
@@ -77,6 +77,18 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 from pokemon_red_completion.surge import DEFAULT_SURGE_TIMING, LiveWildEncounterExecutor
 
 
+class _PhysicalDemandOptions(TypedDict, total=False):
+    physical_demand: Collection[int]
+
+
+class _FastTransportOptions(TypedDict, total=False):
+    dig_escape: DigEscapePlan | None
+    flight_origins: tuple[TraversalSnapshot, ...]
+    departure_origin: TraversalSnapshot | None
+    departure_steps: int
+    departure_cost: int
+
+
 class RedLiveFishingError(RuntimeError):
     """Fishing option construction or execution crossed its declared boundary."""
 
@@ -107,6 +119,8 @@ class RedLiveFishingEmulator(Protocol):
 
     @property
     def pressed_buttons(self) -> frozenset[str]: ...
+
+    def save_state_bytes(self) -> bytes: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -221,8 +235,13 @@ def discover_reachable_red_fishing_destinations(
     if safari == _ordinary_fishing_origin(traversal.map_id):
         return ()
     offers = red_super_rod_destination_offers(
-        rom, registered_species_numbers,
-        **({"physical_demand": physical_demand} if physical_demand else {}),
+        rom,
+        registered_species_numbers,
+        **(
+            _PhysicalDemandOptions(physical_demand=physical_demand)
+            if physical_demand
+            else _PhysicalDemandOptions()
+        ),
     )
     executable: list[RedReachableFishingDestination] = []
     walk_origin = (
@@ -457,7 +476,7 @@ def build_red_live_fishing_inventory(
     if physical_demand and safari_session_steps is not None:
         raise ValueError("physical fishing dependency requires ordinary capture controls")
     escape = None
-    flight_origins = ()
+    flight_origins: tuple[TraversalSnapshot, ...] = ()
     departure = None
     departure_steps = departure_cost = 0
     if allow_fast_transport and safari_session_steps is None:
@@ -546,11 +565,15 @@ def build_red_live_fishing_inventory(
         traversal=traversal,
         maximum_candidates=maximum_candidates,
         safari_session_steps=safari_session_steps,
-        **({"physical_demand": physical_demand} if physical_demand else {}),
         **(
-            {}
+            _PhysicalDemandOptions(physical_demand=physical_demand)
+            if physical_demand
+            else _PhysicalDemandOptions()
+        ),
+        **(
+            _FastTransportOptions()
             if not allow_fast_transport
-            else dict(
+            else _FastTransportOptions(
                 dig_escape=escape,
                 flight_origins=flight_origins,
                 departure_origin=departure,
@@ -598,11 +621,17 @@ def _live_fishing_binding(
 
     def route_interruptions(label):
         inner = Gen1RouteInterruptionHandler(
-            actions, reader, maximum_flees=_MAX_ROUTE_FLEES, maximum_trainer_battles=0,
-            stabilization_frames=180, route_name=label, maximum_scripted_dialogues=4,
+            actions,
+            reader,
+            maximum_flees=_MAX_ROUTE_FLEES,
+            maximum_trainer_battles=0,
+            stabilization_frames=180,
+            route_name=label,
+            maximum_scripted_dialogues=4,
         )
-        return (inner if interruption_handler_wrapper is None
-                else interruption_handler_wrapper(inner))
+        return (
+            inner if interruption_handler_wrapper is None else interruption_handler_wrapper(inner)
+        )
 
     def execute() -> GoalExecutionReport:
         nonlocal claimed
@@ -771,15 +800,23 @@ def _live_fishing_binding(
                 counters = actions.actions_executed, emulator.frame_count
                 raw = reader.read()
                 facts = dict(
-                    diagnostic_only=True, native_actions=counters[0], native_frames=counters[1],
-                    map_id=raw.map_id, player_x=raw.player_x, player_y=raw.player_y,
+                    diagnostic_only=True,
+                    native_actions=counters[0],
+                    native_frames=counters[1],
+                    map_id=raw.map_id,
+                    player_x=raw.player_x,
+                    player_y=raw.player_y,
                     movement_mode=int(reader.read_overworld_movement_mode()),
-                    repel_remaining_steps=raw.repel_remaining_steps, party_levels=raw.party_levels,
-                    player_money=raw.player_money, bag_items=raw.bag_items,
+                    repel_remaining_steps=raw.repel_remaining_steps,
+                    party_levels=raw.party_levels,
+                    player_money=raw.player_money,
+                    bag_items=raw.bag_items,
                     capture_conditions=capture_diagnostic_observation(raw),
                     registered_species=sorted(port.registered_species_numbers()),
-                    physical_target_stock={str(n): port.physical_species_count(n)
-                                           for n in destination.offer.physical_species_numbers},
+                    physical_target_stock={
+                        str(n): port.physical_species_count(n)
+                        for n in destination.offer.physical_species_numbers
+                    },
                 )
                 if counters != (actions.actions_executed, emulator.frame_count):
                     raise RedLiveFishingError("fishing diagnostics advanced native execution")
@@ -818,8 +855,10 @@ def _live_fishing_binding(
             or not before <= after
             or len(after - before) != result.new_registrations
             or emulator.pressed_buttons
-            or (destination.offer.physical_species_numbers
-                and attempt.get("physical_terminal") != emulator.save_state_bytes())
+            or (
+                destination.offer.physical_species_numbers
+                and attempt.get("physical_terminal") != emulator.save_state_bytes()
+            )
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         if result.passed:
@@ -846,8 +885,11 @@ def _live_fishing_binding(
                 "facing": destination.stance.direction.value,
                 "water": destination.stance.water_at,
                 "missing": destination.offer.missing_species_numbers,
-                **({"physical": destination.offer.physical_species_numbers}
-                   if destination.offer.physical_species_numbers else {}),
+                **(
+                    {"physical": destination.offer.physical_species_numbers}
+                    if destination.offer.physical_species_numbers
+                    else {}
+                ),
                 "casts": maximum_casts,
             }
         ),

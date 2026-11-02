@@ -41,24 +41,31 @@ def registered_story_branches(runtime, actions, *, observers):
     rows = []
     for objective in sorted(legal & observers.keys()):
         row = observers[objective](runtime, actions, observation)
-        if (runtime.emulator.save_state_bytes() != state
-                or runtime.emulator.frame_count != frame
-                or runtime.emulator.pressed_buttons != buttons):
+        if (
+            runtime.emulator.save_state_bytes() != state
+            or runtime.emulator.frame_count != frame
+            or runtime.emulator.pressed_buttons != buttons
+        ):
             raise ValueError("story registry observer changed native state")
         if row is None:
             continue
-        if (not isinstance(row, tuple) or len(row) != 2
-                or not isinstance(row[0], ExecutableGoalBinding)
-                or row[0].kind is not GoalKind.ADVANCE_STORY
-                or row[0].story_objective_ref != objective
-                or not isinstance(row[1], OptionChallenge)):
+        if (
+            not isinstance(row, tuple)
+            or len(row) != 2
+            or not isinstance(row[0], ExecutableGoalBinding)
+            or row[0].kind is not GoalKind.ADVANCE_STORY
+            or row[0].story_objective_ref != objective
+            or not isinstance(row[1], OptionChallenge)
+        ):
             raise ValueError("story registry requires its own typed native branch")
         rows.append(row)
     if len({b.binding_ref for b, _ in rows}) != len(rows):
         raise ValueError("story registry repeats a native executor")
-    if (runtime.emulator.save_state_bytes() != state
-            or runtime.emulator.frame_count != frame
-            or runtime.emulator.pressed_buttons != buttons):
+    if (
+        runtime.emulator.save_state_bytes() != state
+        or runtime.emulator.frame_count != frame
+        or runtime.emulator.pressed_buttons != buttons
+    ):
         raise ValueError("story registry observer changed native state")
     return tuple(rows)
 
@@ -75,15 +82,21 @@ class DeclaredCashDemand:
     components: tuple[tuple[str, int | None], ...]
 
     def __post_init__(self):
-        if (type(self.components) is not tuple or not self.components
-                or any(type(row) is not tuple or len(row) != 2 for row in self.components)):
+        if (
+            type(self.components) is not tuple
+            or not self.components
+            or any(type(row) is not tuple or len(row) != 2 for row in self.components)
+        ):
             raise ValueError("cash demand components must be immutable pairs")
         scopes = tuple(scope for scope, _ in self.components)
-        if (any(scope not in {"capture", "recovery"} for scope in scopes)
-                or len(set(scopes)) != len(scopes)):
+        if any(scope not in {"capture", "recovery"} for scope in scopes) or len(set(scopes)) != len(
+            scopes
+        ):
             raise ValueError("cash demand needs unique disjoint supported scopes")
-        if any(value is not None and (type(value) is not int or value < 0)
-               for _, value in self.components):
+        if any(
+            value is not None and (type(value) is not int or value < 0)
+            for _, value in self.components
+        ):
             raise ValueError("cash demand component must be a non-negative integer or unknown")
 
     @property
@@ -95,10 +108,13 @@ class DeclaredCashDemand:
         return all(value is not None for _, value in self.components)
 
     def public_dict(self):
-        return dict(schema="pokemon.red.declared-cash-demand.v1",
-                    components=dict(self.components), target_cash=self.target_cash,
-                    declared_scopes_known=self.known,
-                    all_future_expenses_known=False)
+        return dict(
+            schema="pokemon.red.declared-cash-demand.v1",
+            components=dict(self.components),
+            target_cash=self.target_cash,
+            declared_scopes_known=self.known,
+            all_future_expenses_known=False,
+        )
 
 
 class NativeStoryBranchInventory:
@@ -113,12 +129,24 @@ class NativeStoryBranchInventory:
     A subsequent boundary must enumerate again before using its peers.
     """
 
-    def __init__(self, enumerate_base, enumerate_branches, *, enumerate_preparation=None,
-                 enumerate_resources=None, enumerate_medicine_reserve=None,
-                 enumerate_collection=None, reuse_local_route_queries=False,
-                 enumerate_league_healing=None, enumerate_league_capacity=None,
-                 enumerate_owned_machines=None, observe_matchups=None, observe_preparation_party=None,
-                  enumerate_empty_recovery=None, observe_cash_target=None):
+    def __init__(
+        self,
+        enumerate_base,
+        enumerate_branches,
+        *,
+        enumerate_preparation=None,
+        enumerate_resources=None,
+        enumerate_medicine_reserve=None,
+        enumerate_collection=None,
+        reuse_local_route_queries=False,
+        enumerate_league_healing=None,
+        enumerate_league_capacity=None,
+        enumerate_owned_machines=None,
+        observe_matchups=None,
+        observe_preparation_party=None,
+        enumerate_empty_recovery=None,
+        observe_cash_target=None,
+    ):
         if not callable(enumerate_base) or not callable(enumerate_branches):
             raise TypeError("native branch inventory needs callable observers")
         if observe_cash_target is not None and not callable(observe_cash_target):
@@ -155,7 +183,7 @@ class NativeStoryBranchInventory:
         self.observe_matchups = observe_matchups
         if observe_preparation_party is not None and not callable(observe_preparation_party):
             raise TypeError("party-count observer must be callable")
-        self.observe_preparation_party=observe_preparation_party
+        self.observe_preparation_party = observe_preparation_party
         if type(reuse_local_route_queries) is not bool:
             raise TypeError("local route reuse must be an explicit boolean")
         self.reuse_local_route_queries = reuse_local_route_queries
@@ -186,15 +214,23 @@ class NativeStoryBranchInventory:
         ):
             binding = self.enumerate_league_healing(runtime, actions, observation)
             if binding is not None:
-                if (not isinstance(binding, ExecutableGoalBinding)
-                        or binding.kind is not GoalKind.RESTORE_TEAM
-                        or binding.maximum_cash_debit != 0
-                        or not binding.binding_ref.startswith("league-pre-entry-healing:")):
+                if (
+                    not isinstance(binding, ExecutableGoalBinding)
+                    or binding.kind is not GoalKind.RESTORE_TEAM
+                    or binding.maximum_cash_debit != 0
+                    or not binding.binding_ref.startswith("league-pre-entry-healing:")
+                ):
                     raise ValueError("temporary League healing requires its free native nurse")
-                blocked = tuple(GoalOpportunity(
-                    "league-healing-safeguard:" + kind.value, kind, GoalAvailability.UNAVAILABLE,
-                    unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
-                ) for kind in GoalKind if kind is not GoalKind.RESTORE_TEAM)
+                blocked = tuple(
+                    GoalOpportunity(
+                        "league-healing-safeguard:" + kind.value,
+                        kind,
+                        GoalAvailability.UNAVAILABLE,
+                        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                    )
+                    for kind in GoalKind
+                    if kind is not GoalKind.RESTORE_TEAM
+                )
                 ordinary = GoalBindingSet((binding.opportunity,) + blocked, (binding,))
                 if runtime.emulator.save_state_bytes() != state:
                     raise ValueError("League healing observer changed native state")
@@ -205,15 +241,23 @@ class NativeStoryBranchInventory:
         ):
             binding = self.enumerate_league_capacity(runtime, actions, observation)
             if binding is not None:
-                if (not isinstance(binding, ExecutableGoalBinding)
-                        or binding.kind is not GoalKind.MANAGE_STORAGE
-                        or binding.maximum_cash_debit != 0
-                        or not binding.binding_ref.startswith("league-medicine-capacity:")):
+                if (
+                    not isinstance(binding, ExecutableGoalBinding)
+                    or binding.kind is not GoalKind.MANAGE_STORAGE
+                    or binding.maximum_cash_debit != 0
+                    or not binding.binding_ref.startswith("league-medicine-capacity:")
+                ):
                     raise ValueError("temporary League capacity requires free native key storage")
-                blocked = tuple(GoalOpportunity(
-                    "league-capacity-safeguard:" + kind.value, kind, GoalAvailability.UNAVAILABLE,
-                    unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
-                ) for kind in GoalKind if kind is not GoalKind.MANAGE_STORAGE)
+                blocked = tuple(
+                    GoalOpportunity(
+                        "league-capacity-safeguard:" + kind.value,
+                        kind,
+                        GoalAvailability.UNAVAILABLE,
+                        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                    )
+                    for kind in GoalKind
+                    if kind is not GoalKind.MANAGE_STORAGE
+                )
                 ordinary = GoalBindingSet((binding.opportunity,) + blocked, (binding,))
                 if runtime.emulator.save_state_bytes() != state:
                     raise ValueError("League capacity observer changed native state")
@@ -227,54 +271,73 @@ class NativeStoryBranchInventory:
                 if not isinstance(binding, ExecutableGoalBinding):
                     raise ValueError("temporary medicine support requires a quoted native purchase")
                 quote = binding.resource_quote
-                if (binding.kind is not GoalKind.RESUPPLY or quote is None
-                        or not quote.purchase_cost or quote.funding_proceeds
-                        or quote.expected_income
-                        or len(quote.reserves) != 1 or quote.reserves[0].resource != "recovery"):
+                if (
+                    binding.kind is not GoalKind.RESUPPLY
+                    or quote is None
+                    or not quote.purchase_cost
+                    or quote.funding_proceeds
+                    or quote.expected_income
+                    or len(quote.reserves) != 1
+                    or quote.reserves[0].resource != "recovery"
+                ):
                     raise ValueError("temporary medicine support requires a quoted native purchase")
-                blocked = tuple(GoalOpportunity(
-                    "medicine-safeguard:" + kind.value, kind, GoalAvailability.UNAVAILABLE,
-                    unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
-                ) for kind in GoalKind if kind is not GoalKind.RESUPPLY)
+                blocked = tuple(
+                    GoalOpportunity(
+                        "medicine-safeguard:" + kind.value,
+                        kind,
+                        GoalAvailability.UNAVAILABLE,
+                        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                    )
+                    for kind in GoalKind
+                    if kind is not GoalKind.RESUPPLY
+                )
                 ordinary = GoalBindingSet((binding.opportunity,) + blocked, (binding,))
                 if runtime.emulator.save_state_bytes() != state:
                     raise ValueError("medicine reserve observer changed native state")
                 self._observed = (runtime, state, ordinary, (), {}, {})
                 return ordinary
-        branches = () if any(b.kind is GoalKind.RECOVER_CONTROL for b in base.bindings) else (
-            self.enumerate_branches(runtime, actions, observation)
+        branches = (
+            ()
+            if any(b.kind is GoalKind.RECOVER_CONTROL for b in base.bindings)
+            else (self.enumerate_branches(runtime, actions, observation))
         )
-        if (not isinstance(branches, tuple) or any(
-            not isinstance(row, tuple) or len(row) != 2
-            or not isinstance(row[1], OptionChallenge) for row in branches
-        )):
+        if not isinstance(branches, tuple) or any(
+            not isinstance(row, tuple) or len(row) != 2 or not isinstance(row[1], OptionChallenge)
+            for row in branches
+        ):
             raise ValueError("native branches need immutable executor/challenge pairs")
         ordinary, extra = plural_story_bindings(
-            base, tuple(b for b, _ in branches), observation.situation,
+            base,
+            tuple(b for b, _ in branches),
+            observation.situation,
         )
         preparations = ()
         if self.enumerate_preparation is not None and not any(
             b.kind is GoalKind.RECOVER_CONTROL for b in ordinary.bindings
         ):
             preparations = self.enumerate_preparation(runtime, actions, observation)
-            if (not isinstance(preparations, tuple) or any(
-                not isinstance(row, tuple) or len(row) != 2
-                or not isinstance(row[1], OptionPreparation) for row in preparations
-            )):
+            if not isinstance(preparations, tuple) or any(
+                not isinstance(row, tuple)
+                or len(row) != 2
+                or not isinstance(row[1], OptionPreparation)
+                for row in preparations
+            ):
                 raise ValueError("preparation needs immutable executor/descriptor pairs")
             ordinary, additional = plural_preparation_bindings(
-                ordinary, tuple(b for b, _ in preparations), observation.situation,
+                ordinary,
+                tuple(b for b, _ in preparations),
+                observation.situation,
             )
             extra += additional
         if self.enumerate_collection is not None and not any(
             b.kind is GoalKind.RECOVER_CONTROL for b in ordinary.bindings
         ):
             collection = self.enumerate_collection(runtime, actions, observation)
-            if (not isinstance(collection, tuple) or any(
+            if not isinstance(collection, tuple) or any(
                 not isinstance(row, RedLiveSupplementalOption)
                 or row.binding.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
                 for row in collection
-            )):
+            ):
                 raise ValueError("collection needs immutable acquisition/evolution supplements")
             refs = [b.binding_ref for b in ordinary.bindings] + [
                 s.binding.binding_ref for s in extra + collection
@@ -286,25 +349,29 @@ class NativeStoryBranchInventory:
             b.kind is GoalKind.RECOVER_CONTROL for b in ordinary.bindings
         ):
             resources = self.enumerate_resources(runtime, actions, observation)
-            if (not isinstance(resources, tuple) or any(
+            if not isinstance(resources, tuple) or any(
                 not isinstance(row, (ExecutableGoalBinding, RedLiveSupplementalOption))
-                or (row.binding.kind if isinstance(row, RedLiveSupplementalOption)
-                    else row.kind) is not GoalKind.RESUPPLY for row in resources
-            )):
+                or (row.binding.kind if isinstance(row, RedLiveSupplementalOption) else row.kind)
+                is not GoalKind.RESUPPLY
+                for row in resources
+            ):
                 raise ValueError("resource peers need immutable typed resupply options")
             # Some providers already carry genuine prospective economy facts.
             # Do not erase those descriptors by extracting the bare executor
             # and rebuilding a generic OTHER/zero-spend candidate.
-            described = tuple(row for row in resources
-                              if isinstance(row, RedLiveSupplementalOption))
-            resources = tuple(row for row in resources
-                              if isinstance(row, ExecutableGoalBinding))
+            described = tuple(
+                row for row in resources if isinstance(row, RedLiveSupplementalOption)
+            )
+            resources = tuple(row for row in resources if isinstance(row, ExecutableGoalBinding))
             resources = _resource_peers_without_base_duplicates(ordinary, resources)
             ordinary, additional = plural_resource_bindings(
-                ordinary, resources, observation.situation,
+                ordinary,
+                resources,
+                observation.situation,
             )
-            refs = ([b.binding_ref for b in ordinary.bindings]
-                    + [s.binding.binding_ref for s in extra + additional + described])
+            refs = [b.binding_ref for b in ordinary.bindings] + [
+                s.binding.binding_ref for s in extra + additional + described
+            ]
             if len(refs) != len(set(refs)):
                 raise ValueError("resource peers repeat a native executor")
             extra += additional + described
@@ -317,7 +384,8 @@ class NativeStoryBranchInventory:
             machine_rows = self.enumerate_owned_machines(runtime, actions, observation)
             if not isinstance(machine_rows, tuple) or any(
                 not isinstance(row, RedLiveSupplementalOption)
-                or row.binding.kind is not GoalKind.DEVELOP_TEAM for row in machine_rows
+                or row.binding.kind is not GoalKind.DEVELOP_TEAM
+                for row in machine_rows
             ):
                 raise ValueError("owned machines need immutable team-development supplements")
             refs = [b.binding_ref for b in ordinary.bindings] + [
@@ -331,27 +399,45 @@ class NativeStoryBranchInventory:
         if not ordinary.bindings and not extra and self.enumerate_empty_recovery is not None:
             recovery = self.enumerate_empty_recovery(runtime, actions, observation)
             if recovery is not None:
-                if (not isinstance(recovery, ExecutableGoalBinding)
-                        or recovery.kind is not GoalKind.RECOVER_CONTROL
-                        or recovery.maximum_cash_debit != 0
-                        or not recovery.binding_ref.startswith("pokemon.red:empty-indoor-departure:")):
+                if (
+                    not isinstance(recovery, ExecutableGoalBinding)
+                    or recovery.kind is not GoalKind.RECOVER_CONTROL
+                    or recovery.maximum_cash_debit != 0
+                    or not recovery.binding_ref.startswith("pokemon.red:empty-indoor-departure:")
+                ):
                     raise ValueError("empty-menu recovery requires its bounded indoor departure")
                 ordinary = GoalBindingSet(
-                    tuple(o for o in ordinary.opportunities if o.kind is not GoalKind.RECOVER_CONTROL)
-                    + (recovery.opportunity,), (recovery,),
+                    tuple(
+                        o for o in ordinary.opportunities if o.kind is not GoalKind.RECOVER_CONTROL
+                    )
+                    + (recovery.opportunity,),
+                    (recovery,),
                 )
             if runtime.emulator.save_state_bytes() != state:
                 raise ValueError("empty-menu recovery observer changed native state")
-        self._observed = (runtime, state, ordinary, extra,
-                          {**{b.binding_ref: challenge for b, challenge in branches},
-                           **{s.binding.binding_ref: s.candidate.challenge for s in machine_rows
-                              if s.candidate.challenge is not None}},
-                          {b.binding_ref: facts for b, facts in preparations})
+        self._observed = (
+            runtime,
+            state,
+            ordinary,
+            extra,
+            {
+                **{b.binding_ref: challenge for b, challenge in branches},
+                **{
+                    s.binding.binding_ref: s.candidate.challenge
+                    for s in machine_rows
+                    if s.candidate.challenge is not None
+                },
+            },
+            {b.binding_ref: facts for b, facts in preparations},
+        )
         return ordinary
 
     def _current(self, runtime):
-        if (self._observed is None or self._observed[0] is not runtime
-            or runtime.emulator.save_state_bytes() != self._observed[1]):
+        if (
+            self._observed is None
+            or self._observed[0] is not runtime
+            or runtime.emulator.save_state_bytes() != self._observed[1]
+        ):
             raise ValueError("native branch inventory is absent or stale")
         return self._observed
 
@@ -376,9 +462,9 @@ class NativeStoryBranchInventory:
         self._current(runtime)
         return result
 
-    def preparation_party(self,runtime,bindings,supplements,boundary):
-        self._descriptors(runtime,bindings,supplements,boundary,4)
-        result=self.observe_preparation_party(runtime,bindings,supplements,boundary)
+    def preparation_party(self, runtime, bindings, supplements, boundary):
+        self._descriptors(runtime, bindings, supplements, boundary, 4)
+        result = self.observe_preparation_party(runtime, bindings, supplements, boundary)
         self._current(runtime)
         return result
 
@@ -401,14 +487,16 @@ class NativeStoryBranchInventory:
 
     def native_callbacks(self):
         """Keep enumeration and descriptors together for the existing native loop."""
-        callbacks = dict(enumerate_bindings=self.enumerate,
-                         enumerate_supplements=self.supplements,
-                         observe_challenges=self.challenges,
-                         observe_preparations=self.preparations)
+        callbacks = dict(
+            enumerate_bindings=self.enumerate,
+            enumerate_supplements=self.supplements,
+            observe_challenges=self.challenges,
+            observe_preparations=self.preparations,
+        )
         if self.observe_matchups is not None:
             callbacks["observe_matchups"] = self.matchups
         if self.observe_preparation_party is not None:
-            callbacks["observe_preparation_party"]=self.preparation_party
+            callbacks["observe_preparation_party"] = self.preparation_party
         return callbacks
 
     def _descriptors(self, runtime, bindings, supplements, boundary, index):
@@ -445,7 +533,11 @@ def plural_resource_bindings(base, additions, situation):
         raise TypeError("typed inventory and immutable resource additions required")
     existing = tuple(b for b in base.bindings if b.kind is GoalKind.RESUPPLY)
     return _plural_bindings(
-        base, existing + additions, situation, GoalKind.RESUPPLY, "resource",
+        base,
+        existing + additions,
+        situation,
+        GoalKind.RESUPPLY,
+        "resource",
     )
 
 
@@ -502,16 +594,16 @@ def _resource_peers_without_base_duplicates(base, additions):
 def _plural_bindings(base, branches, situation, kind, label):
     if not isinstance(base, GoalBindingSet) or not isinstance(branches, tuple):
         raise TypeError("typed inventory and immutable story branches required")
-    if any(
-        not isinstance(b, ExecutableGoalBinding) or b.kind is not kind
-        for b in branches
-    ):
+    if any(not isinstance(b, ExecutableGoalBinding) or b.kind is not kind for b in branches):
         raise ValueError(f"plural {label} inventory contains a non{label} binding")
     if len({b.binding_ref for b in branches}) != len(branches):
-        repeated = sorted({
-            b.binding_ref for b in branches
-            if sum(other.binding_ref == b.binding_ref for other in branches) > 1
-        })
+        repeated = sorted(
+            {
+                b.binding_ref
+                for b in branches
+                if sum(other.binding_ref == b.binding_ref for other in branches) > 1
+            }
+        )
         raise ValueError(f"duplicate {label} binding: {repeated}")
     if any(b.kind is GoalKind.RECOVER_CONTROL for b in base.bindings):
         return base, ()

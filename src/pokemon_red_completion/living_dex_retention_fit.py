@@ -15,11 +15,14 @@ RIDGE_MULTIPLIERS = (0.25, 0.5, 1.0, 2.0, 4.0)
 
 def curriculum_mse(model, rows):
     """Unit-weight prediction loss, with no invented observed-arm propensity."""
-    features = np.asarray([curriculum_features(row, model.feature_version) for row in rows],
-                          dtype=np.float64)
+    features = np.asarray(
+        [curriculum_features(row, model.feature_version) for row in rows], dtype=np.float64
+    )
     targets = np.asarray([row.outcome.target_vector for row in rows], dtype=np.float64)
     prediction = np.clip(
-        model.raw_predictions(features) if (model.bounded_story_success_head is not None or model.movement_success_head is not None) else model.intercept
+        model.raw_predictions(features)
+        if (model.bounded_story_success_head is not None or model.movement_success_head is not None)
+        else model.intercept
         + ((features - model.feature_mean) / model.feature_scale) @ model.coefficients,
         0.0,
         1.0,

@@ -2,15 +2,15 @@
 
 from collections.abc import Callable, Mapping
 from dataclasses import replace
-from typing import cast
+from typing import TypedDict, cast
 
-from .player_option_level_workload import OptionLevelWorkload
-from .party_development_outcome_learning import PartyDevelopmentOutcomeModel
 from .collection import CollectionLocation, LivingSpecimen
 from .executor import CountingExecutor
 from .gen1_cartridge import EvolutionMethod, evolution_graph
 from .goal_manager import GoalKind, GoalUnavailableReason
 from .observation import RedBoxSpecimenIdentity
+from .party_development_outcome_learning import PartyDevelopmentOutcomeModel
+from .player_option_level_workload import OptionLevelWorkload
 from .red_battle_practice_cartridge import RedPracticeCartridge
 from .red_collection import RED_SOLO_COLLECTION_CONTRACT, red_internal_species_id, red_species_ref
 from .red_full_pokedex_direct_profile import _evolution_capability_parameters
@@ -36,8 +36,27 @@ from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 from .training_venue import TrainingVenue
 
 
+class _InterruptionWrapperOptions(TypedDict, total=False):
+    interruption_handler_wrapper: Callable[
+        [InterruptionHandler, RedGoalProviderSpec], InterruptionHandler
+    ]
+
+
+class _NativeEvolutionOptions(TypedDict, total=False):
+    allow_direct_evolution: bool
+    maximum_wall_seconds: int
+    prefer_highest_supported_venue: bool
+    allow_guarded_venue_escapes: bool
+    training_venues: tuple[TrainingVenue, ...]
+    venue_model: PartyDevelopmentOutcomeModel | None
+    venue_model_sha256: str | None
+    observe_venue_decision: Callable[[object, tuple[TrainingVenue, ...], int, int], None]
+
+
 def level_evolution_effort(
-    current_level: int, target_level: int, level_progress: float | None,
+    current_level: int,
+    target_level: int,
+    level_progress: float | None,
 ) -> float:
     """Remaining-level workload, including observed partial-level XP.
 
@@ -58,11 +77,16 @@ def _boxed_level_progress(
     cartridge: RedPracticeCartridge,
 ) -> float:
     """Quote the executor's physical source, not a better-progressed sibling."""
-    matches = tuple(row for row in identities
-                    if row.box_index == precursor.container_index
-                    and row.box_slot == precursor.slot_index + 1)
-    if (len(matches) != 1 or matches[0].species_id != source_species_id
-            or matches[0].level != precursor.level):
+    matches = tuple(
+        row
+        for row in identities
+        if row.box_index == precursor.container_index and row.box_slot == precursor.slot_index + 1
+    )
+    if (
+        len(matches) != 1
+        or matches[0].species_id != source_species_id
+        or matches[0].level != precursor.level
+    ):
         raise ValueError("boxed evolution identity differs from selected precursor")
     observed = matches[0]
     species = cartridge.species(source_species_id)
@@ -90,7 +114,8 @@ def enumerate_red_level_evolutions(
     include_level_workload: bool = False,
     venue_model: PartyDevelopmentOutcomeModel | None = None,
     venue_model_sha256: str | None = None,
-    observe_venue_decision: Callable[[object, tuple[TrainingVenue, ...], int, int], None] | None = None,
+    observe_venue_decision: Callable[[object, tuple[TrainingVenue, ...], int, int], None]
+    | None = None,
     interruption_handler_wrapper: (
         Callable[[InterruptionHandler, RedGoalProviderSpec], InterruptionHandler] | None
     ) = None,
@@ -107,12 +132,18 @@ def enumerate_red_level_evolutions(
     if maximum_wall_seconds is not None and (
         type(maximum_wall_seconds) is not int or maximum_wall_seconds <= 0
     ):
-        raise ValueError('level evolution wall limit must be a positive integer')
-    for permission in (prefer_highest_supported_venue, allow_guarded_venue_escapes, include_level_workload, allow_direct_evolution):
+        raise ValueError("level evolution wall limit must be a positive integer")
+    for permission in (
+        prefer_highest_supported_venue,
+        allow_guarded_venue_escapes,
+        include_level_workload,
+        allow_direct_evolution,
+    ):
         if type(permission) is not bool:
             raise ValueError("level evolution venue options require explicit booleans")
     if training_venues is not None and (
-        not isinstance(training_venues, tuple) or not training_venues
+        not isinstance(training_venues, tuple)
+        or not training_venues
         or any(not isinstance(venue, TrainingVenue) for venue in training_venues)
         or len({venue.band.identity for venue in training_venues}) != len(training_venues)
     ):
@@ -120,8 +151,31 @@ def enumerate_red_level_evolutions(
     if runtime.registration_policy is None:
         raise ValueError("level enumeration requires a registration policy")
     runtime = bind_native_evolution_goal_reserve(
-        runtime, actions, maximum_actions=maximum_actions, maximum_frames=maximum_frames,
+        runtime,
+        actions,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
     )
+    router_options: _InterruptionWrapperOptions = {}
+    if interruption_handler_wrapper is not None:
+        router_options["interruption_handler_wrapper"] = interruption_handler_wrapper
+    assert runtime.registration_policy is not None
+    native_options: _NativeEvolutionOptions = {}
+    if not allow_direct_evolution:
+        native_options["allow_direct_evolution"] = False
+    if maximum_wall_seconds is not None:
+        native_options["maximum_wall_seconds"] = maximum_wall_seconds
+    if prefer_highest_supported_venue:
+        native_options["prefer_highest_supported_venue"] = True
+    if allow_guarded_venue_escapes:
+        native_options["allow_guarded_venue_escapes"] = True
+    if training_venues is not None:
+        native_options["training_venues"] = training_venues
+    if venue_model is not None or venue_model_sha256 is not None:
+        native_options["venue_model"] = venue_model
+        native_options["venue_model_sha256"] = venue_model_sha256
+    if observe_venue_decision is not None:
+        native_options["observe_venue_decision"] = observe_venue_decision
     before = actions.actions_executed, runtime.emulator.frame_count, runtime.reader.read()
     collection = observation.collection_observation
     registered = runtime.registration_policy.goal_registered(collection)
@@ -132,7 +186,8 @@ def enumerate_red_level_evolutions(
         for source, edges in sorted(evolution_graph(world.rom).items()):
             source_ref = red_species_ref(source)
             party = tuple(
-                specimen for specimen in collection.specimens
+                specimen
+                for specimen in collection.specimens
                 if specimen.species_ref == source_ref
                 and specimen.location is CollectionLocation.PARTY
             )
@@ -140,7 +195,8 @@ def enumerate_red_level_evolutions(
             if len(party) > 1:
                 continue
             boxed = tuple(
-                specimen for specimen in collection.specimens
+                specimen
+                for specimen in collection.specimens
                 if specimen.species_ref == source_ref
                 and specimen.location is CollectionLocation.BOX
                 and collection.box_counts[specimen.container_index] < collection.box_capacity
@@ -149,16 +205,27 @@ def enumerate_red_level_evolutions(
                 continue
             # Native execution resumes an in-party source before any boxed one.
             # Otherwise match its current-box-first storage selection.
-            precursor = party[0] if party else min(boxed, key=lambda s: (
-                s.container_index != collection.current_box_index, s.container_index, s.slot_index,
-            ))
+            precursor = (
+                party[0]
+                if party
+                else min(
+                    boxed,
+                    key=lambda s: (
+                        s.container_index != collection.current_box_index,
+                        s.container_index,
+                        s.slot_index,
+                    ),
+                )
+            )
             if precursor.level >= 100:
                 continue
             for edge in edges:
                 target_ref = red_species_ref(edge.to_species)
-                if (edge.method is not EvolutionMethod.LEVEL
+                if (
+                    edge.method is not EvolutionMethod.LEVEL
                     or target_ref not in RED_SOLO_COLLECTION_CONTRACT.target_species
-                    or target_ref in registered):
+                    or target_ref in registered
+                ):
                     continue
                 level = edge.requirement
                 if type(level) is not int or not 1 <= level <= 100:
@@ -169,47 +236,52 @@ def enumerate_red_level_evolutions(
                     "target_species_ref": target_ref,
                     "evolution_level": level,
                 }
-                providers = {
-                    spec.kind: (spec.kind, spec.mechanic,
-                                cast(Mapping[str, object], _thaw(spec.parameters)))
+                providers: dict[
+                    GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]
+                ] = {
+                    spec.kind: (
+                        spec.kind,
+                        spec.mechanic,
+                        cast(Mapping[str, object], _thaw(spec.parameters)),
+                    )
                     for spec in runtime.profile.providers
                     if spec.kind is not GoalKind.EVOLVE_SPECIES
                 }
                 # A live capture-only profile need not predeclare an evolution.
                 # Bind this observed edge, retaining canonical provider order.
                 providers[GoalKind.EVOLVE_SPECIES] = (
-                    GoalKind.EVOLVE_SPECIES, RedGoalMechanic.TARGETED_LEVEL_EVOLUTION, parameters,
+                    GoalKind.EVOLVE_SPECIES,
+                    RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+                    parameters,
                 )
-                profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-                    profile_id=runtime.profile.profile_id,
-                    providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
-                ))
+                profile = parse_red_goal_context_profile(
+                    build_red_goal_context_profile_payload(
+                        profile_id=runtime.profile.profile_id,
+                        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+                    )
+                )
                 native = bind_native_boxed_evolution(
-                    replace(runtime, profile=profile), world,
-                    maximum_quanta=maximum_quanta, allow_cross_box=True,
-                    **({"allow_direct_evolution": False} if not allow_direct_evolution else {}),
-                    **({'maximum_wall_seconds':maximum_wall_seconds}
-                       if maximum_wall_seconds is not None else {}),
-                    **({"prefer_highest_supported_venue": True}
-                       if prefer_highest_supported_venue else {}),
-                    **({"allow_guarded_venue_escapes": True}
-                       if allow_guarded_venue_escapes else {}),
-                    **({"training_venues": training_venues} if training_venues is not None else {}),
-                    **({"venue_model": venue_model, "venue_model_sha256": venue_model_sha256}
-                       if venue_model is not None or venue_model_sha256 is not None else {}),
-                    **({"observe_venue_decision": observe_venue_decision}
-                       if observe_venue_decision is not None else {}),
+                    replace(runtime, profile=profile),
+                    world,
+                    maximum_quanta=maximum_quanta,
+                    allow_cross_box=True,
+                    **native_options,
                 )
                 offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(observation)
                 binding = offer.binding
-                if (binding is None
-                    and offer.unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY):
+                if (
+                    binding is None
+                    and offer.unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+                ):
                     routed = RedResourceGoalRouter(
-                        native, actions, world, maximum_controller_actions=maximum_actions,
+                        native,
+                        actions,
+                        world,
+                        maximum_controller_actions=maximum_actions,
                         maximum_emulator_frames=maximum_frames,
-                        quote_resource_costs=True, include_recovery_offers=False,
-                        **({"interruption_handler_wrapper": interruption_handler_wrapper}
-                           if interruption_handler_wrapper is not None else {}),
+                        quote_resource_costs=True,
+                        include_recovery_offers=False,
+                        **router_options,
                     ).enumerate_routed_kinds(observation, frozenset({GoalKind.EVOLVE_SPECIES}))
                     bindings = tuple(
                         b for b in routed.bindings if b.kind is GoalKind.EVOLVE_SPECIES
@@ -223,48 +295,70 @@ def enumerate_red_level_evolutions(
                     if party:
                         if cartridge is None:
                             cartridge = RedPracticeCartridge(world.rom)
-                        rich_party = PokemonRedPartyReader(runtime.emulator).read_with_level_progress(
-                            cartridge)
-                        members = tuple(m for m in rich_party.members
-                                        if m.species_id == red_internal_species_id(source))
+                        rich_party = PokemonRedPartyReader(
+                            runtime.emulator
+                        ).read_with_level_progress(cartridge)
+                        members = tuple(
+                            m
+                            for m in rich_party.members
+                            if m.species_id == red_internal_species_id(source)
+                        )
                         progress = members[0].level_progress if len(members) == 1 else None
                         if include_level_workload and len(members) == 1:
                             observed_xp = members[0].experience
                     else:
                         # Some read-only observation ports expose only box levels.
                         # Retain the whole-level unknown quote for those ports.
-                        read_identities = getattr(runtime.reader, "read_box_specimen_identities", None)
+                        read_identities = getattr(
+                            runtime.reader, "read_box_specimen_identities", None
+                        )
                         if read_identities is not None:
                             if boxed_identities is None:
                                 boxed_identities = read_identities()
                             if cartridge is None:
                                 cartridge = RedPracticeCartridge(world.rom)
                             progress = _boxed_level_progress(
-                                precursor, red_internal_species_id(source),
-                                boxed_identities, cartridge,
+                                precursor,
+                                red_internal_species_id(source),
+                                boxed_identities,
+                                cartridge,
                             )
                             if include_level_workload:
-                                observed_xp = next(row.experience for row in boxed_identities
+                                observed_xp = next(
+                                    row.experience
+                                    for row in boxed_identities
                                     if row.box_index == precursor.container_index
-                                    and row.box_slot == precursor.slot_index + 1)
+                                    and row.box_slot == precursor.slot_index + 1
+                                )
                     workload = None
                     if include_level_workload and observed_xp is not None:
+                        assert cartridge is not None
                         effective_target = max(precursor.level + 1, level)
                         species = cartridge.species(red_internal_species_id(source))
                         floor = species.experience_at_level(precursor.level)
                         ceiling = species.experience_at_level(precursor.level + 1)
                         if type(observed_xp) is not int or not floor <= observed_xp < ceiling:
-                            raise ValueError("level evolution experience differs from observed level")
+                            raise ValueError(
+                                "level evolution experience differs from observed level"
+                            )
                         target_xp = species.experience_at_level(effective_target)
-                        workload = OptionLevelWorkload(precursor.level, effective_target, target_xp - observed_xp)
-                    candidates.append(RedEvolutionOption(
-                        profile, binding, EconomyOffer(EconomyMode.OTHER, planned_spend=0),
-                        level_evolution_effort(precursor.level, level, progress),
-                        workload,
-                    ))
+                        workload = OptionLevelWorkload(
+                            precursor.level, effective_target, target_xp - observed_xp
+                        )
+                    candidates.append(
+                        RedEvolutionOption(
+                            profile,
+                            binding,
+                            EconomyOffer(EconomyMode.OTHER, planned_spend=0),
+                            level_evolution_effort(precursor.level, level, progress),
+                            workload,
+                        )
+                    )
     finally:
         if before != (
-            actions.actions_executed, runtime.emulator.frame_count, runtime.reader.read(),
+            actions.actions_executed,
+            runtime.emulator.frame_count,
+            runtime.reader.read(),
         ):
             raise ValueError("level target enumeration changed the game")
     if len({c.binding.binding_ref for c in candidates}) != len(candidates):

@@ -3,9 +3,10 @@
 This authenticates a lesson's source/configuration; it grants no controller,
 fit admission or model promotion. Existing DEVELOPMENT and K scopes stay exact.
 """
-from dataclasses import asdict, dataclass
-from hashlib import sha256
+
 import json
+from dataclasses import dataclass
+from hashlib import sha256
 
 from .provenance import canonical_sha256
 from .scenario_lab import ScenarioPartition
@@ -16,29 +17,36 @@ STORY_MODEL = "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad"
 STORY_CONTENT = "e1063ce5b510b70a7721107ce716e223d8b1833314bf498ff6d738f43ea67629"
 SOURCE_ORIGIN = "fb501fe63c2af637775c237861fe851f720d7f07c9218a6bb612b2937d46e111"
 # These are existing authentic TRAIN fixtures, not the DEVELOPMENT comparison's outputs.
-SOURCE_STATES = frozenset({
-    "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d",
-    "e0ec6ba4eeb3dab69c37b29093c3b182ec42278a1962122f46365c32cac9544e",
-    "cdaef04a24f6bb0670c33fa532749e8bd5894cc51d7030c316d48298d22287ec",
-    "7da092393b618c187ef1f2ffadef50dd492be4944f96a6133aed1fe57c417755",
-    '2d2eb758146be68e49bdbe08fa63177eb4852899e52ae9650aee17c423a51ef8',
-})
+SOURCE_STATES = frozenset(
+    {
+        "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d",
+        "e0ec6ba4eeb3dab69c37b29093c3b182ec42278a1962122f46365c32cac9544e",
+        "cdaef04a24f6bb0670c33fa532749e8bd5894cc51d7030c316d48298d22287ec",
+        "7da092393b618c187ef1f2ffadef50dd492be4944f96a6133aed1fe57c417755",
+        "2d2eb758146be68e49bdbe08fa63177eb4852899e52ae9650aee17c423a51ef8",
+    }
+)
 SOURCE_PROVENANCE = {
     "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d": (
         "066f81b50ee76e61c50a21daf7a5a6a0ba2ea0d912c26943006f3b4894a71c64",
-        "86eae3aba87c463a3335b940cd5638dfb6518bea5fc6f4978cdfee91a77f6039"),
+        "86eae3aba87c463a3335b940cd5638dfb6518bea5fc6f4978cdfee91a77f6039",
+    ),
     "e0ec6ba4eeb3dab69c37b29093c3b182ec42278a1962122f46365c32cac9544e": (
         "0d679bd7e32a5b6cfec2486ce2977924285a2fb376cb11ecae6d30914a7b83ae",
-        "0132306ba8cb849391408de4856f5ce228346dbf9f42bbdeb1c096f0e16daf57"),
+        "0132306ba8cb849391408de4856f5ce228346dbf9f42bbdeb1c096f0e16daf57",
+    ),
     "cdaef04a24f6bb0670c33fa532749e8bd5894cc51d7030c316d48298d22287ec": (
         "f6f7c876335191e66eea0f49d6edb0ee5cb073213cf20d56d7efaefe4953227f",
-        "cedda9c05430b3f484fc02dd1651137f1066941e2ec58808f8d744230e6a9a59"),
+        "cedda9c05430b3f484fc02dd1651137f1066941e2ec58808f8d744230e6a9a59",
+    ),
     "7da092393b618c187ef1f2ffadef50dd492be4944f96a6133aed1fe57c417755": (
         "260f72f640dbc24ad1d83be13c318fd399a23da45c8fa08c7cdbebc119bf9b4d",
-        "61eb52658ea246af77697af4867ebdbf9060bc6556fc993fb6bfbfb287a4c172"),
-    '2d2eb758146be68e49bdbe08fa63177eb4852899e52ae9650aee17c423a51ef8': (
-        'c6d38a178e6913d24cceebd36df245230a5ca259de3d1ec037d3843b340959d9',
-        '4ebe54eb247222f2bb3da423ce04eec94b9e09aa4d929fe4b347a0ebffb21c83'),
+        "61eb52658ea246af77697af4867ebdbf9060bc6556fc993fb6bfbfb287a4c172",
+    ),
+    "2d2eb758146be68e49bdbe08fa63177eb4852899e52ae9650aee17c423a51ef8": (
+        "c6d38a178e6913d24cceebd36df245230a5ca259de3d1ec037d3843b340959d9",
+        "4ebe54eb247222f2bb3da423ce04eec94b9e09aa4d929fe4b347a0ebffb21c83",
+    ),
 }
 ADMISSION_SCHEMA = "pokemon.red.production-train-components.v1"
 
@@ -52,28 +60,40 @@ WILD_COMPONENT_SCHEMA = "pokemon.red.production-train-wild-component-reuse.v1"
 QUALIFIED_WILD_COMPONENTS = {
     "3b187fc6bfb46dd0fd062f0d14ff5fadffe353347d4e94a2124bdbaba988c4b3": (
         "c9e129fd9413a1358c36801e1a0807b3af8187f1a30ab7af31a0b8f285fc1fb2",
-        "5773d5ac6989cce842b873a31c7449174bbe4fbfb95ba4c4e857fe70af8a1d0a"),
+        "5773d5ac6989cce842b873a31c7449174bbe4fbfb95ba4c4e857fe70af8a1d0a",
+    ),
 }
 _WILD_COMPONENT_TOKEN = object()
 
 
 def _wild_component_document(model_sha256, content_sha256, qualification_sha256):
-    return dict(schema=WILD_COMPONENT_SCHEMA, model_sha256=model_sha256,
-        model_content_sha256=content_sha256, qualification_sha256=qualification_sha256,
-        role="wild_only", wild_map_id=15, trainer_deployment_qualified=False,
-        global_adoption=False, fit_admission=False)
+    return dict(
+        schema=WILD_COMPONENT_SCHEMA,
+        model_sha256=model_sha256,
+        model_content_sha256=content_sha256,
+        qualification_sha256=qualification_sha256,
+        role="wild_only",
+        wild_map_id=15,
+        trainer_deployment_qualified=False,
+        global_adoption=False,
+        fit_admission=False,
+    )
 
 
 @dataclass(frozen=True, init=False)
 class VerifiedProductionWildComponent:
     """Immutable byte-authenticated existing wild component; never a new actor."""
+
     _canonical: bytes
 
     def __init__(self, document, *, _token=None):
         if _token is not _WILD_COMPONENT_TOKEN:
             raise ValueError("wild component requires actual model and qualification bytes")
-        object.__setattr__(self, "_canonical", json.dumps(document, sort_keys=True,
-            separators=(",", ":"), ensure_ascii=True).encode())
+        object.__setattr__(
+            self,
+            "_canonical",
+            json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode(),
+        )
         self.require_registered()
 
     def document(self):
@@ -82,8 +102,9 @@ class VerifiedProductionWildComponent:
     def require_registered(self):
         document = self.document()
         pair = QUALIFIED_WILD_COMPONENTS.get(document.get("model_sha256"))
-        if (pair is None or document != _wild_component_document(
-                document["model_sha256"], pair[0], pair[1])):
+        if pair is None or document != _wild_component_document(
+            document["model_sha256"], pair[0], pair[1]
+        ):
             raise ValueError("wild component is not an exact qualified reuse")
 
     @property
@@ -116,29 +137,41 @@ def authenticate_production_wild_component(*, model_bytes, qualification_bytes):
     if pair is None or sha256(qualification_bytes).hexdigest() != pair[1]:
         raise ValueError("wild component model or qualification bytes differ")
     qualification = json.loads(qualification_bytes)
-    if (type(qualification) is not dict
+    if (
+        type(qualification) is not dict
         or qualification.get("schema") != "pokemon.current-control-wild-component-qualification.v1"
-        or any(qualification.get(k) is not True for k in (
-            "passed", "wild_preparation_core_native_qualified", "all801_numeric_bounds_passed",
-            "healthy_and_sand_nidoran_endpoints_exact", "unused_configuration_retained",
-            "whole_preparation_retained"))
+        or any(
+            qualification.get(k) is not True
+            for k in (
+                "passed",
+                "wild_preparation_core_native_qualified",
+                "all801_numeric_bounds_passed",
+                "healthy_and_sand_nidoran_endpoints_exact",
+                "unused_configuration_retained",
+                "whole_preparation_retained",
+            )
+        )
         or qualification.get("candidate", {}).get("sha256") != raw
         or qualification.get("trainer_deployment_qualified") is not False
         or qualification.get("global_models_adopted") != 0
-        or qualification.get("actual_registration_delta") != 0):
+        or qualification.get("actual_registration_delta") != 0
+    ):
         raise ValueError("wild-only qualification contract differs")
     from .red_trainer_practice_fit import TrainerPracticeThreeHeadModel
+
     original = json.loads(model_bytes)
     model = TrainerPracticeThreeHeadModel.from_dict(original)
-    if (canonical_sha256(model.to_dict()) != pair[0]
-        or canonical_sha256(original) != pair[0]):
+    if canonical_sha256(model.to_dict()) != pair[0] or canonical_sha256(original) != pair[0]:
         raise ValueError("wild component codec or canonical content differs")
-    return VerifiedProductionWildComponent(_wild_component_document(raw, *pair),
-        _token=_WILD_COMPONENT_TOKEN)
+    return VerifiedProductionWildComponent(
+        _wild_component_document(raw, *pair), _token=_WILD_COMPONENT_TOKEN
+    )
 
 
 def _digest(value, length=64):
-    return type(value) is str and len(value) == length and all(c in "0123456789abcdef" for c in value)
+    return (
+        type(value) is str and len(value) == length and all(c in "0123456789abcdef" for c in value)
+    )
 
 
 def _noncombat_declaration(objectives, *, teacher_prefix):
@@ -147,7 +180,9 @@ def _noncombat_declaration(objectives, *, teacher_prefix):
     if not objectives:
         return {}
     if not teacher_prefix or objectives != ("obtain_strength",):
-        raise ValueError("noncombat TRAIN objective needs the exact teacher-prefix source and scope")
+        raise ValueError(
+            "noncombat TRAIN objective needs the exact teacher-prefix source and scope"
+        )
     return dict(noncombat_objective_ids=list(objectives))
 
 
@@ -164,32 +199,60 @@ class ProductionTrainAdmission:
     noncombat_objective_ids: tuple[str, ...] = ()
 
     def __post_init__(self):
-        original = (self.source_state_sha256 in SOURCE_STATES
-            and (self.envelope_sha256, self.progress_sha256) == SOURCE_PROVENANCE[self.source_state_sha256])
+        original = (
+            self.source_state_sha256 in SOURCE_STATES
+            and (self.envelope_sha256, self.progress_sha256)
+            == SOURCE_PROVENANCE[self.source_state_sha256]
+        )
         derived = False
         if self.derived_source_proof is not None:
-            from .red_production_train_source import (VerifiedDerivedTrainSource, VerifiedTeacherPrefixTrainSource,
-                VerifiedEarnedNoncombatTrainSource)
+            from .red_production_train_source import (
+                VerifiedDerivedTrainSource,
+                VerifiedEarnedNoncombatTrainSource,
+                VerifiedTeacherPrefixTrainSource,
+            )
+
             proof = self.derived_source_proof
-            derived = (type(proof) in (VerifiedDerivedTrainSource, VerifiedTeacherPrefixTrainSource, VerifiedEarnedNoncombatTrainSource)
+            derived = (
+                type(proof)
+                in (
+                    VerifiedDerivedTrainSource,
+                    VerifiedTeacherPrefixTrainSource,
+                    VerifiedEarnedNoncombatTrainSource,
+                )
                 and self.source_state_sha256 == proof.source_state_sha256
                 and self.source_origin_sha256 == proof.source_origin_sha256
-                and self.source_commit == proof.source_commit)
-        if ((not original if self.derived_source_proof is None else not derived)
+                and self.source_commit == proof.source_commit
+            )
+        if (
+            (not original if self.derived_source_proof is None else not derived)
             or self.source_origin_sha256 != self.expected_origin
             or not _digest(self.source_commit, 40)
-            or not all(_digest(x) for x in (self.work_order_sha256, self.envelope_sha256, self.progress_sha256))):
+            or not all(
+                _digest(x)
+                for x in (self.work_order_sha256, self.envelope_sha256, self.progress_sha256)
+            )
+        ):
             raise ValueError("production TRAIN admission source or identity differs")
         if self.teacher_prefix:
             from .red_production_train_source import SOURCE049_ARTIFACT_PINS
-            if (self.envelope_sha256 != SOURCE049_ARTIFACT_PINS["prefix_envelope"]
-                or self.progress_sha256 != sha256(self.derived_source_proof.progress_bytes()).hexdigest()):
+
+            if (
+                self.envelope_sha256 != SOURCE049_ARTIFACT_PINS["prefix_envelope"]
+                or self.progress_sha256
+                != sha256(self.derived_source_proof.progress_bytes()).hexdigest()
+            ):
                 raise ValueError("teacher TRAIN admission needs its exact source metadata bytes")
-        if self.earned_noncombat:
-            if (self.noncombat_objective_ids != ("obtain_strength",)
-                or self.envelope_sha256 != sha256(self.derived_source_proof.envelope_bytes()).hexdigest()
-                or self.progress_sha256 != sha256(self.derived_source_proof.progress_bytes()).hexdigest()):
-                raise ValueError("earned TRAIN admission needs exact metadata and obtain_strength scope")
+        if self.earned_noncombat and (
+            self.noncombat_objective_ids != ("obtain_strength",)
+            or self.envelope_sha256
+            != sha256(self.derived_source_proof.envelope_bytes()).hexdigest()
+            or self.progress_sha256
+            != sha256(self.derived_source_proof.progress_bytes()).hexdigest()
+        ):
+            raise ValueError(
+                "earned TRAIN admission needs exact metadata and obtain_strength scope"
+            )
         if self.wild_component_proof is not None:
             if type(self.wild_component_proof) is not VerifiedProductionWildComponent:
                 raise ValueError("production TRAIN needs a verified wild component witness")
@@ -197,9 +260,19 @@ class ProductionTrainAdmission:
         _noncombat_declaration(self.noncombat_objective_ids, teacher_prefix=self.source049_family)
 
     @classmethod
-    def authenticate(cls, *, source_state, envelope_bytes, progress_bytes, plan_bytes, source_commit,
-                     derived_source_proof=None, context_bytes=None, wild_component_proof=None,
-                     noncombat_objective_ids=()):
+    def authenticate(
+        cls,
+        *,
+        source_state,
+        envelope_bytes,
+        progress_bytes,
+        plan_bytes,
+        source_commit,
+        derived_source_proof=None,
+        context_bytes=None,
+        wild_component_proof=None,
+        noncombat_objective_ids=(),
+    ):
         """Bind actual source bytes and original TRAIN metadata before input.
 
         Caller still owns package/read guards and the source custody chain. A
@@ -209,9 +282,17 @@ class ProductionTrainAdmission:
         state = sha256(source_state).hexdigest()
         derived_declaration = {}
         if derived_source_proof is not None:
-            from .red_production_train_source import (VerifiedDerivedTrainSource, VerifiedTeacherPrefixTrainSource,
-                VerifiedEarnedNoncombatTrainSource)
-            if type(derived_source_proof) not in (VerifiedDerivedTrainSource, VerifiedTeacherPrefixTrainSource, VerifiedEarnedNoncombatTrainSource):
+            from .red_production_train_source import (
+                VerifiedDerivedTrainSource,
+                VerifiedEarnedNoncombatTrainSource,
+                VerifiedTeacherPrefixTrainSource,
+            )
+
+            if type(derived_source_proof) not in (
+                VerifiedDerivedTrainSource,
+                VerifiedTeacherPrefixTrainSource,
+                VerifiedEarnedNoncombatTrainSource,
+            ):
                 raise ValueError("derived source needs authenticated sealed prefix readback")
             derived_source_proof.require_metadata(envelope, progress)
             derived_source_proof.require_source_context(source_state, context_bytes)
@@ -220,44 +301,95 @@ class ProductionTrainAdmission:
             if type(wild_component_proof) is not VerifiedProductionWildComponent:
                 raise ValueError("production TRAIN needs a verified wild component witness")
             wild_component_proof.require_registered()
-        component = {} if wild_component_proof is None else dict(
-            wild_component_proof_sha256=wild_component_proof.identity,
-            wild_model_content_sha256=wild_component_proof.model_content_sha256,
-            wild_qualification_sha256=wild_component_proof.qualification_sha256)
-        from .red_production_train_source import VerifiedTeacherPrefixTrainSource, VerifiedEarnedNoncombatTrainSource
-        teacher = type(derived_source_proof) in (VerifiedTeacherPrefixTrainSource, VerifiedEarnedNoncombatTrainSource)
+        component = (
+            {}
+            if wild_component_proof is None
+            else dict(
+                wild_component_proof_sha256=wild_component_proof.identity,
+                wild_model_content_sha256=wild_component_proof.model_content_sha256,
+                wild_qualification_sha256=wild_component_proof.qualification_sha256,
+            )
+        )
+        from .red_production_train_source import (
+            VerifiedEarnedNoncombatTrainSource,
+            VerifiedTeacherPrefixTrainSource,
+        )
+
+        teacher = type(derived_source_proof) in (
+            VerifiedTeacherPrefixTrainSource,
+            VerifiedEarnedNoncombatTrainSource,
+        )
         noncombat = _noncombat_declaration(noncombat_objective_ids, teacher_prefix=teacher)
         origin = SOURCE_ORIGIN if not teacher else derived_source_proof.source_origin_sha256
         objective = "defeat_blaine" if teacher else "defeat_misty"
-        expected = dict(schema=(ADMISSION_NONCOMBAT_SCHEMA if noncombat else ADMISSION_TEACHER_SCHEMA if teacher else
-            ADMISSION_SCHEMA if wild_component_proof is None else ADMISSION_COMPONENT_SCHEMA),
-            source_state_sha256=state, source_envelope_sha256=sha256(envelope_bytes).hexdigest(),
+        expected = dict(
+            schema=(
+                ADMISSION_NONCOMBAT_SCHEMA
+                if noncombat
+                else ADMISSION_TEACHER_SCHEMA
+                if teacher
+                else ADMISSION_SCHEMA
+                if wild_component_proof is None
+                else ADMISSION_COMPONENT_SCHEMA
+            ),
+            source_state_sha256=state,
+            source_envelope_sha256=sha256(envelope_bytes).hexdigest(),
             assisted_progress_sha256=sha256(progress_bytes).hexdigest(),
-            wild_model_sha256=WILD_MODEL if wild_component_proof is None else wild_component_proof.model_sha256,
-            story_model_sha256=STORY_MODEL, wild_map_id=15, objective_id=objective,
-            **derived_declaration, **component, **noncombat)
-        if (plan.get("partition") != "train"
+            wild_model_sha256=WILD_MODEL
+            if wild_component_proof is None
+            else wild_component_proof.model_sha256,
+            story_model_sha256=STORY_MODEL,
+            wild_map_id=15,
+            objective_id=objective,
+            **derived_declaration,
+            **component,
+            **noncombat,
+        )
+        if (
+            plan.get("partition") != "train"
             or plan.get("production_train_components") != expected
-            or progress.get("partition") != "train" or progress.get("fit_allowed") is not True
+            or progress.get("partition") != "train"
+            or progress.get("fit_allowed") is not True
             or progress.get("campaign_eligible") is not False
             or progress.get("role") != "train_sampling"
             or progress.get("source_origin_sha256") != origin
             or progress.get("envelope") != envelope
-            or envelope.get("state_sha256") != state):
-            raise ValueError("production TRAIN admission requires exact prospective TRAIN source metadata")
-        return cls(state, origin, source_commit, sha256(plan_bytes).hexdigest(),
-                   sha256(envelope_bytes).hexdigest(), sha256(progress_bytes).hexdigest(),
-                   derived_source_proof, wild_component_proof, noncombat_objective_ids)
+            or envelope.get("state_sha256") != state
+        ):
+            raise ValueError(
+                "production TRAIN admission requires exact prospective TRAIN source metadata"
+            )
+        return cls(
+            state,
+            origin,
+            source_commit,
+            sha256(plan_bytes).hexdigest(),
+            sha256(envelope_bytes).hexdigest(),
+            sha256(progress_bytes).hexdigest(),
+            derived_source_proof,
+            wild_component_proof,
+            noncombat_objective_ids,
+        )
 
     @classmethod
     def from_document(cls, document, *, derived_source_proof=None, wild_component_proof=None):
-        names = ("source_state_sha256", "source_origin_sha256", "source_commit",
-                 "work_order_sha256", "envelope_sha256", "progress_sha256")
+        names = (
+            "source_state_sha256",
+            "source_origin_sha256",
+            "source_commit",
+            "work_order_sha256",
+            "envelope_sha256",
+            "progress_sha256",
+        )
         noncombat = document.get("noncombat_objective_ids", [])
         if type(noncombat) is not list:
             raise ValueError("noncombat TRAIN document scope must be a list")
-        restored = cls(**{name: document[name] for name in names}, derived_source_proof=derived_source_proof,
-                       wild_component_proof=wild_component_proof, noncombat_objective_ids=tuple(noncombat))
+        restored = cls(
+            **{name: document[name] for name in names},
+            derived_source_proof=derived_source_proof,
+            wild_component_proof=wild_component_proof,
+            noncombat_objective_ids=tuple(noncombat),
+        )
         if canonical_sha256(restored.document()) != canonical_sha256(document):
             raise ValueError("production TRAIN admission document differs")
         return restored
@@ -265,11 +397,13 @@ class ProductionTrainAdmission:
     @property
     def teacher_prefix(self):
         from .red_production_train_source import VerifiedTeacherPrefixTrainSource
+
         return type(self.derived_source_proof) is VerifiedTeacherPrefixTrainSource
 
     @property
     def earned_noncombat(self):
         from .red_production_train_source import VerifiedEarnedNoncombatTrainSource
+
         return type(self.derived_source_proof) is VerifiedEarnedNoncombatTrainSource
 
     @property
@@ -279,6 +413,7 @@ class ProductionTrainAdmission:
     @property
     def expected_origin(self):
         from .red_production_train_source import SOURCE049_ORIGIN
+
         return SOURCE049_ORIGIN if self.source049_family else SOURCE_ORIGIN
 
     @property
@@ -302,6 +437,7 @@ class ProductionTrainAdmission:
     @property
     def story_reward(self):
         from .red_gym_reward import BLAINE_REWARD, MISTY_REWARD
+
         return BLAINE_REWARD if self.source049_family else MISTY_REWARD
 
     @property
@@ -314,45 +450,91 @@ class ProductionTrainAdmission:
 
     @property
     def wild_model_sha256(self):
-        return WILD_MODEL if self.wild_component_proof is None else self.wild_component_proof.model_sha256
+        return (
+            WILD_MODEL
+            if self.wild_component_proof is None
+            else self.wild_component_proof.model_sha256
+        )
 
     @property
     def wild_model_content_sha256(self):
-        return WILD_CONTENT if self.wild_component_proof is None else self.wild_component_proof.model_content_sha256
+        return (
+            WILD_CONTENT
+            if self.wild_component_proof is None
+            else self.wild_component_proof.model_content_sha256
+        )
 
     def _wild_component_declaration(self):
         proof = self.wild_component_proof
-        return {} if proof is None else dict(wild_component_proof_sha256=proof.identity,
-            wild_model_content_sha256=proof.model_content_sha256,
-            wild_qualification_sha256=proof.qualification_sha256)
+        return (
+            {}
+            if proof is None
+            else dict(
+                wild_component_proof_sha256=proof.identity,
+                wild_model_content_sha256=proof.model_content_sha256,
+                wild_qualification_sha256=proof.qualification_sha256,
+            )
+        )
 
     @property
     def root_lineage_id(self):
         return "red-goal-root-" + self.source_origin_sha256
 
     def document(self):
-        names = ("source_state_sha256", "source_origin_sha256", "source_commit",
-                 "work_order_sha256", "envelope_sha256", "progress_sha256")
-        derived = ({} if self.derived_source_proof is None else
-                   dict(derived_source_proof_sha256=self.derived_source_proof.identity))
-        return dict(schema=self.admission_schema, **{name: getattr(self, name) for name in names}, **derived,
-                    source_partition="train", wild_model_sha256=self.wild_model_sha256,
-                    story_model_sha256=STORY_MODEL, wild_map_id=self.wild_map_id,
-                    objective_id=self.objective_id, fit_admission=False, **self._wild_component_declaration(),
-                    **_noncombat_declaration(self.noncombat_objective_ids, teacher_prefix=self.source049_family))
+        names = (
+            "source_state_sha256",
+            "source_origin_sha256",
+            "source_commit",
+            "work_order_sha256",
+            "envelope_sha256",
+            "progress_sha256",
+        )
+        derived = (
+            {}
+            if self.derived_source_proof is None
+            else dict(derived_source_proof_sha256=self.derived_source_proof.identity)
+        )
+        return dict(
+            schema=self.admission_schema,
+            **{name: getattr(self, name) for name in names},
+            **derived,
+            source_partition="train",
+            wild_model_sha256=self.wild_model_sha256,
+            story_model_sha256=STORY_MODEL,
+            wild_map_id=self.wild_map_id,
+            objective_id=self.objective_id,
+            fit_admission=False,
+            **self._wild_component_declaration(),
+            **_noncombat_declaration(
+                self.noncombat_objective_ids, teacher_prefix=self.source049_family
+            ),
+        )
 
     @property
     def identity(self):
         return canonical_sha256(self.document())
 
     def declaration(self):
-        derived = ({} if self.derived_source_proof is None else
-                   dict(derived_source_proof_sha256=self.derived_source_proof.identity))
-        return dict(schema=self.admission_schema, **derived, source_state_sha256=self.source_state_sha256,
-            source_envelope_sha256=self.envelope_sha256, assisted_progress_sha256=self.progress_sha256,
-            wild_model_sha256=self.wild_model_sha256, story_model_sha256=STORY_MODEL,
-            wild_map_id=self.wild_map_id, objective_id=self.objective_id, **self._wild_component_declaration(),
-            **_noncombat_declaration(self.noncombat_objective_ids, teacher_prefix=self.source049_family))
+        derived = (
+            {}
+            if self.derived_source_proof is None
+            else dict(derived_source_proof_sha256=self.derived_source_proof.identity)
+        )
+        return dict(
+            schema=self.admission_schema,
+            **derived,
+            source_state_sha256=self.source_state_sha256,
+            source_envelope_sha256=self.envelope_sha256,
+            assisted_progress_sha256=self.progress_sha256,
+            wild_model_sha256=self.wild_model_sha256,
+            story_model_sha256=STORY_MODEL,
+            wild_map_id=self.wild_map_id,
+            objective_id=self.objective_id,
+            **self._wild_component_declaration(),
+            **_noncombat_declaration(
+                self.noncombat_objective_ids, teacher_prefix=self.source049_family
+            ),
+        )
 
     def require_source_context(self, payload, context_bytes):
         if sha256(payload).hexdigest() != self.source_state_sha256:
@@ -366,34 +548,54 @@ class ProductionTrainAdmission:
         if sha256(payload).hexdigest() != self.work_order_sha256:
             raise ValueError("production TRAIN admission work order changed")
         plan = json.loads(payload)
-        if (type(plan) is not dict or plan.get("partition") != "train"
-            or plan.get("production_train_components") != self.declaration()):
+        if (
+            type(plan) is not dict
+            or plan.get("partition") != "train"
+            or plan.get("production_train_components") != self.declaration()
+        ):
             raise ValueError("production TRAIN admission needs its exact TRAIN work order")
 
     def require_scope(self, scope, role):
-        if (scope.source_state_sha256 != self.source_state_sha256
+        if (
+            scope.source_state_sha256 != self.source_state_sha256
             or scope.root_lineage_id != self.root_lineage_id
-            or scope.work_order_sha256 != self.work_order_sha256):
+            or scope.work_order_sha256 != self.work_order_sha256
+        ):
             raise ValueError("production TRAIN scope source/work order differs")
         if role == "wild":
-            valid = (scope.model_sha256 == self.wild_model_sha256
-                     and scope.model_content_sha256 == self.wild_model_content_sha256
-                     and scope.map_id == self.wild_map_id)
+            valid = (
+                scope.model_sha256 == self.wild_model_sha256
+                and scope.model_content_sha256 == self.wild_model_content_sha256
+                and scope.map_id == self.wild_map_id
+            )
         elif role == "story":
             contract = scope.contract
-            expected = ((239, 39, 1), 665, 4653, ((238, 1),), 64) if self.source049_family else (
-                (235, 35, 1), 191, 2079, ((211, 1),), 2)
-            valid = (scope.model_sha256 == STORY_MODEL and scope.model_content_sha256 == STORY_CONTENT
-                and contract is not None and contract.objective_id == self.objective_id
-                and contract.battle_plan_id == self.objective_id and contract.map_id == self.story_map_id
-                and contract.trainer_identity == expected[0] and contract.defeated_event == expected[1]
-                and contract.victory_money == expected[2] and contract.victory_items == expected[3]
+            expected = (
+                ((239, 39, 1), 665, 4653, ((238, 1),), 64)
+                if self.source049_family
+                else ((235, 35, 1), 191, 2079, ((211, 1),), 2)
+            )
+            valid = (
+                scope.model_sha256 == STORY_MODEL
+                and scope.model_content_sha256 == STORY_CONTENT
+                and contract is not None
+                and contract.objective_id == self.objective_id
+                and contract.battle_plan_id == self.objective_id
+                and contract.map_id == self.story_map_id
+                and contract.trainer_identity == expected[0]
+                and contract.defeated_event == expected[1]
+                and contract.victory_money == expected[2]
+                and contract.victory_items == expected[3]
                 and contract.victory_badge_bits == expected[4]
-                and scope.gym_reward is not None and scope.gym_reward.objective_id == self.objective_id
-                and scope.allow_learned_tactics is True and scope.diagnostic_status_entry is True
+                and scope.gym_reward is not None
+                and scope.gym_reward.objective_id == self.objective_id
+                and scope.allow_learned_tactics is True
+                and scope.diagnostic_status_entry is True
                 and scope.screen_capped_status_moves is True
                 and scope.diagnostic_stay_when_productive is False
-                and scope.diagnostic_prompt_stay is False and scope.diagnostic_status_release is False)
+                and scope.diagnostic_prompt_stay is False
+                and scope.diagnostic_status_release is False
+            )
         else:
             valid = False
         if not valid:
@@ -401,12 +603,14 @@ class ProductionTrainAdmission:
 
     def require_actor(self, actor, scope, role):
         self.require_scope(scope, role)
-        if (actor.source_partition is not ScenarioPartition.TRAIN
+        if (
+            actor.source_partition is not ScenarioPartition.TRAIN
             or actor.source_commit != self.source_commit
             or actor.source_state_sha256 != self.source_state_sha256
             or actor.root_lineage_id != self.root_lineage_id
             or type(actor.pp_depleted_switch_screen) is not bool
             or actor.pp_depleted_switch_screen is not (role == "story")
             or actor.mechanics_aware_tower_choices is not False
-            or actor.diagnostic_tower_productive_stay is not False):
+            or actor.diagnostic_tower_productive_stay is not False
+        ):
             raise ValueError("production TRAIN actor source/settings differs")

@@ -5,9 +5,9 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
+from synthetic_evolution_cartridge import synthetic_evolution_cartridge
 from test_red_resource_goal_router import _World
 from test_registered_runtime_binding import bound_fixture
-from synthetic_evolution_cartridge import synthetic_evolution_cartridge
 
 import pokemon_red_completion.red_full_pokedex_goal_proposal as proposal_module
 from pokemon_red_completion.executor import CountingExecutor
@@ -653,7 +653,7 @@ def test_terminal_observation_survives_lost_diversity_and_has_no_second_authorit
 
 
 def test_synthetic_cartridge_uses_real_decoder_and_preserves_helper_evolution_exclusions():
-    from pokemon_red_completion.gen1_cartridge import internal_to_dex, evolution_graph
+    from pokemon_red_completion.gen1_cartridge import evolution_graph, internal_to_dex
     from pokemon_red_completion.generation_one import GENERATION_ONE_LEVEL_EVOLUTIONS
     from pokemon_red_completion.red_collection import red_internal_species_id
     from pokemon_red_completion.red_trainer_evolution import level_evolution_edges
@@ -661,8 +661,10 @@ def test_synthetic_cartridge_uses_real_decoder_and_preserves_helper_evolution_ex
     rom = synthetic_evolution_cartridge()
     assert len(internal_to_dex(rom)) == 151
     assert len(evolution_graph(rom)) == 70
-    expected = frozenset((red_internal_species_id(a), red_internal_species_id(b), level)
-                         for a, b, level in GENERATION_ONE_LEVEL_EVOLUTIONS)
+    expected = frozenset(
+        (red_internal_species_id(a), red_internal_species_id(b), level)
+        for a, b, level in GENERATION_ONE_LEVEL_EVOLUTIONS
+    )
     assert level_evolution_edges(rom) == expected
     assert (red_internal_species_id(77), red_internal_species_id(78), 40) in expected
     assert red_internal_species_id(7) in {source for source, _, _ in expected}
@@ -670,8 +672,11 @@ def test_synthetic_cartridge_uses_real_decoder_and_preserves_helper_evolution_ex
 
 def test_synthetic_cartridge_still_fails_the_production_mapping_anchor():
     from pokemon_red_completion.gen1_cartridge import (
-        CartridgeReadError, INTERNAL_TO_DEX_TABLE, internal_to_dex,
+        INTERNAL_TO_DEX_TABLE,
+        CartridgeReadError,
+        internal_to_dex,
     )
+
     rom = bytearray(synthetic_evolution_cartridge())
     rom[INTERNAL_TO_DEX_TABLE + 0x1C - 1] = 0
     with pytest.raises(CartridgeReadError, match="internal index"):

@@ -18,10 +18,10 @@ from pokemon_red_completion.living_dex_option_value import (
     living_dex_option_train_dataset_sha256,
     upgrade_option_value_model_for_challenge,
     upgrade_option_value_model_for_economy,
-    upgrade_option_value_model_for_optional_recovery,
-    upgrade_option_value_model_for_preparation,
     upgrade_option_value_model_for_kind_effort,
     upgrade_option_value_model_for_level_workload,
+    upgrade_option_value_model_for_optional_recovery,
+    upgrade_option_value_model_for_preparation,
     upgrade_option_value_model_for_readiness,
     upgrade_option_value_model_for_search_history,
 )
@@ -92,7 +92,9 @@ def fit_red_player_update(
     Measured choices without an action trace are training-only and survive all fits.
     """
     if (
-        not episodes and not measured_choices and not native_curriculum
+        not episodes
+        and not measured_choices
+        and not native_curriculum
         and not collection_teacher_lessons
     ) or len({item.episode_id for item in episodes}) != len(episodes):
         raise ValueError("native training episode inventory differs")
@@ -233,7 +235,8 @@ def fit_red_player_update(
     native_inputs, native_rows = retained_native_curriculum(store, corpus_data, native_curriculum)
     old_native_count = len(native_rows) - len(native_curriculum)
     collection_inputs, collection_rows = retained_collection_teacher_lessons(
-        store,corpus_data,collection_teacher_lessons)
+        store, corpus_data, collection_teacher_lessons
+    )
     if collection_inputs and retention_search:
         raise ValueError("collection teacher lessons require the complete single-fit curriculum")
     curriculum = (*curriculum, *native_rows, *collection_rows)
@@ -303,8 +306,11 @@ def fit_red_player_update(
     corpus_sha = canonical_sha256(corpus)
     if curriculum:
         corpus["curriculum_examples"] = [row.public_dict() for row in curriculum]
-        corpus["curriculum_contract"] = (NATIVE_CURRICULUM_CONTRACT if native_inputs
-                                        else "forced-singleton-story-outcome-unit-weight-v1")
+        corpus["curriculum_contract"] = (
+            NATIVE_CURRICULUM_CONTRACT
+            if native_inputs
+            else "forced-singleton-story-outcome-unit-weight-v1"
+        )
         if native_inputs:
             corpus["native_curriculum"] = [item.public_dict() for item in native_inputs]
         corpus_sha = canonical_sha256(corpus)
@@ -320,9 +326,9 @@ def fit_red_player_update(
         ]
         corpus_sha = canonical_sha256(corpus)
     if collection_inputs:
-        corpus["collection_teacher_lessons"]=[item.public_dict() for item in collection_inputs]
-        corpus["collection_teacher_contract"]="native-trace-menu-outcome-unit-weight-v1"
-        corpus_sha=canonical_sha256(corpus)
+        corpus["collection_teacher_lessons"] = [item.public_dict() for item in collection_inputs]
+        corpus["collection_teacher_contract"] = "native-trace-menu-outcome-unit-weight-v1"
+        corpus_sha = canonical_sha256(corpus)
     if all_measured_choices:
         corpus["measured_choices"] = [
             {
@@ -346,14 +352,22 @@ def fit_red_player_update(
         *(row.feature_version for row in curriculum),
     )
     baseline_model = (
-        upgrade_option_value_model_for_level_workload(prior.model) if feature_version == 9
-        else upgrade_option_value_model_for_kind_effort(prior.model) if feature_version == 8
-        else upgrade_option_value_model_for_preparation(prior.model) if feature_version == 7
-        else upgrade_option_value_model_for_challenge(prior.model) if feature_version == 6
-        else upgrade_option_value_model_for_readiness(prior.model) if feature_version == 5
-        else upgrade_option_value_model_for_economy(prior.model) if feature_version == 4
-        else upgrade_option_value_model_for_optional_recovery(prior.model) if feature_version == 3
-        else upgrade_option_value_model_for_search_history(prior.model) if feature_version == 2
+        upgrade_option_value_model_for_level_workload(prior.model)
+        if feature_version == 9
+        else upgrade_option_value_model_for_kind_effort(prior.model)
+        if feature_version == 8
+        else upgrade_option_value_model_for_preparation(prior.model)
+        if feature_version == 7
+        else upgrade_option_value_model_for_challenge(prior.model)
+        if feature_version == 6
+        else upgrade_option_value_model_for_readiness(prior.model)
+        if feature_version == 5
+        else upgrade_option_value_model_for_economy(prior.model)
+        if feature_version == 4
+        else upgrade_option_value_model_for_optional_recovery(prior.model)
+        if feature_version == 3
+        else upgrade_option_value_model_for_search_history(prior.model)
+        if feature_version == 2
         else prior.model
     )
     if frozen_level_workload_base is not None and retention_search:
@@ -361,18 +375,30 @@ def fit_red_player_update(
     selection_report = None
     if retention_search:
         from .living_dex_retention_fit import fit_retaining_prior
+
         fit, selection_report = fit_retaining_prior(
-            baseline_model, rows, native_rows[old_native_count:],
+            baseline_model,
+            rows,
+            native_rows[old_native_count:],
             retained_curriculum=native_rows[:old_native_count],
         )
         if fit is None:
-            return {"status": "rejected_retention", "model_fitted": False,
-                    "retention_selection": selection_report, "authority_promotions": 0}
+            return {
+                "status": "rejected_retention",
+                "model_fitted": False,
+                "retention_selection": selection_report,
+                "authority_promotions": 0,
+            }
     else:
         fit = fit_living_dex_option_value(
-            rows, feature_version=feature_version, curriculum_examples=curriculum,
-            **({"frozen_level_workload_base": frozen_level_workload_base}
-               if frozen_level_workload_base is not None else {}),
+            rows,
+            feature_version=feature_version,
+            curriculum_examples=curriculum,
+            **(
+                {"frozen_level_workload_base": frozen_level_workload_base}
+                if frozen_level_workload_base is not None
+                else {}
+            ),
         )
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
@@ -429,14 +455,20 @@ def fit_red_player_update(
             else {}
         ),
         "controller_actions": 0,
-        **({"workload_cost_retention": {
-            "baseline_model_sha256": frozen_level_workload_base.model_sha256,
-            "unchanged_feature_prefix": 365,
-            "updated_outcome_heads": ["action_cost", "frame_cost"],
-            "unknown_workload_predictions_exact": True,
-            "new_feature_mean_zero": True,
-            "existing_ridge_objective_with_frozen_parameters": True,
-        }} if frozen_level_workload_base is not None else {}),
+        **(
+            {
+                "workload_cost_retention": {
+                    "baseline_model_sha256": frozen_level_workload_base.model_sha256,
+                    "unchanged_feature_prefix": 365,
+                    "updated_outcome_heads": ["action_cost", "frame_cost"],
+                    "unknown_workload_predictions_exact": True,
+                    "new_feature_mean_zero": True,
+                    "existing_ridge_objective_with_frozen_parameters": True,
+                }
+            }
+            if frozen_level_workload_base is not None
+            else {}
+        ),
         **({"retention_selection": selection_report} if selection_report else {}),
         "authority_promotions": 0,
         **(
@@ -444,7 +476,8 @@ def fit_red_player_update(
                 "collection_teacher_outcomes": len(collection_rows),
                 "new_collection_teacher_outcomes": len(collection_teacher_lessons),
             }
-            if collection_inputs else {}
+            if collection_inputs
+            else {}
         ),
         **(
             {
@@ -576,7 +609,8 @@ def _bootstrap_red_player_features(
     }
     record = store.publish_sealed_record(
         f"{'rpr' if economy else 'rp'}-model-{model.model_sha256}",
-        kind="red_player_model", record=document
+        kind="red_player_model",
+        record=document,
     )
     loaded = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=model.model_sha256
@@ -594,11 +628,13 @@ def _bootstrap_red_player_features(
         "authority_promotions": 0,
     }
     if economy:
-        report.update({
-            "schema": "pokemon.red.economy-bootstrap.v1",
-            "initialization": "retained-head-with-zero-economy-coefficients",
-            "economy_effect_learned": False,
-        })
+        report.update(
+            {
+                "schema": "pokemon.red.economy-bootstrap.v1",
+                "initialization": "retained-head-with-zero-economy-coefficients",
+                "economy_effect_learned": False,
+            }
+        )
         del report["unknown_history_examples"]
         del report["history_effect_learned"]
     elif optional_recovery:
@@ -615,8 +651,11 @@ def _bootstrap_red_player_features(
 
 
 def bootstrap_red_player_economy(
-    store: PrivateArtifactRoot, *, prior: RedPlayerModelRecord,
-    source_commit: str, source_bundle_sha256: str,
+    store: PrivateArtifactRoot,
+    *,
+    prior: RedPlayerModelRecord,
+    source_commit: str,
+    source_bundle_sha256: str,
 ) -> dict[str, object]:
     """Preserve registered history while enabling prospective cash observations.
 
@@ -624,6 +663,10 @@ def bootstrap_red_player_economy(
     creates no new examples or learned income effect; it is not model fitting.
     """
     return _bootstrap_red_player_features(
-        store, prior=prior, source_commit=source_commit,
-        source_bundle_sha256=source_bundle_sha256, optional_recovery=False, economy=True,
+        store,
+        prior=prior,
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        optional_recovery=False,
+        economy=True,
     )

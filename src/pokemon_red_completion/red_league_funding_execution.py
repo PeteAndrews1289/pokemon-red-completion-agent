@@ -70,40 +70,55 @@ class RedLeagueFundingBattleLoss(RuntimeError):
         self.certificate = certificate
 
 
-def native_league_loss_certificate(runtime, before, completion, objective_id, *, prepared_party_species_ids=None):
+def native_league_loss_certificate(
+    runtime, before, completion, objective_id, *, prepared_party_species_ids=None
+):
     """Authenticate the existing learned battle result against the live blackout."""
     from hashlib import sha256
+
     if completion is None or completion.outcome != "lost" or not completion.field_ready:
         return None
-    expected_party = (before.party_species_ids if prepared_party_species_ids is None
-                      else prepared_party_species_ids)
+    expected_party = (
+        before.party_species_ids
+        if prepared_party_species_ids is None
+        else prepared_party_species_ids
+    )
     outcome = completion.public_dict()
     after = runtime.reader.read()
     if (
         outcome.get("schema") != "pokemon.red.learned-trainer-completion.v1"
-        or outcome.get("outcome") != "lost" or outcome.get("field_ready") is not True
-        or after.battle_state or not runtime.reader.read_input_readiness().ready
+        or outcome.get("outcome") != "lost"
+        or outcome.get("field_ready") is not True
+        or after.battle_state
+        or not runtime.reader.read_input_readiness().ready
         or runtime.emulator.pressed_buttons
-        or type(before.player_money) is not int or type(after.player_money) is not int
+        or type(before.player_money) is not int
+        or type(after.player_money) is not int
         or after.player_money != before.player_money // 2
         or outcome.get("money_delta") != after.player_money - before.player_money
-        or not isinstance(before.party_species_ids, tuple) or not 1 <= len(before.party_species_ids) <= 6
+        or not isinstance(before.party_species_ids, tuple)
+        or not 1 <= len(before.party_species_ids) <= 6
         or type(before.badge_bits) is not int
         or after.party_species_ids != expected_party
         or after.badge_bits != before.badge_bits
     ):
         return None
-    return dict(schema="pokemon.red.league-funding-native-loss.v1",objective_id=objective_id,
-                money_before_battle=before.player_money,ending_money=after.player_money,
-                completion=outcome,
-                party_species_ids_before_preparation=list(before.party_species_ids),
-                prepared_party_species_ids=list(expected_party),
-                terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest())
+    return dict(
+        schema="pokemon.red.league-funding-native-loss.v1",
+        objective_id=objective_id,
+        money_before_battle=before.player_money,
+        ending_money=after.player_money,
+        completion=outcome,
+        party_species_ids_before_preparation=list(before.party_species_ids),
+        prepared_party_species_ids=list(expected_party),
+        terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+    )
 
 
 def run_retained_league_battle(runtime, call, *, battle_owner, objective_id):
     """Run the existing battle and certify only its settled native loss."""
     from .red_lorelei_story import LoreleiStoryBattleStopped
+
     battle_before = runtime.reader.read()
     # The selected story skill may first swap its planned lead in the field.
     # Authenticate that exact frozen plan before input; never infer a permitted
@@ -112,6 +127,7 @@ def run_retained_league_battle(runtime, call, *, battle_owner, objective_id):
     expected_party = battle_before.party_species_ids
     if lead_plan is not None:
         from .red_capture_lead import RedCaptureLeadPlan
+
         if not isinstance(lead_plan, RedCaptureLeadPlan):
             raise TypeError("funding battle requires a typed prepared lead")
         lead_plan.require_current(runtime.adapter.observe().party)
@@ -124,7 +140,13 @@ def run_retained_league_battle(runtime, call, *, battle_owner, objective_id):
     try:
         return call()
     except LoreleiStoryBattleStopped as error:
-        certificate = native_league_loss_certificate(runtime, battle_before, getattr(battle_owner, 'last_completion', None), objective_id, prepared_party_species_ids=expected_party)
+        certificate = native_league_loss_certificate(
+            runtime,
+            battle_before,
+            getattr(battle_owner, "last_completion", None),
+            objective_id,
+            prepared_party_species_ids=expected_party,
+        )
         if certificate is None:
             raise
         raise RedLeagueFundingBattleLoss(certificate) from error
@@ -155,17 +177,24 @@ class ScopedLeagueIncomeReuse:
 
     def __post_init__(self):
         for value in (self.model_sha256, self.work_order_sha256):
-            if (type(value) is not str or len(value) != 64
-                    or any(c not in '0123456789abcdef' for c in value)):
-                raise ValueError('Scoped income reuse requires exact model/work-order hashes')
+            if (
+                type(value) is not str
+                or len(value) != 64
+                or any(c not in "0123456789abcdef" for c in value)
+            ):
+                raise ValueError("Scoped income reuse requires exact model/work-order hashes")
         if not callable(self.bind_runtime) or (
             self.observe_battle is not None and not callable(self.observe_battle)
         ):
-            raise ValueError('Scoped income reuse requires explicit binding/observation ports')
+            raise ValueError("Scoped income reuse requires explicit binding/observation ports")
 
     def public_dict(self):
-        return dict(model_sha256=self.model_sha256, work_order_sha256=self.work_order_sha256,
-                    scope='existing-native-room-development', new_model=False)
+        return dict(
+            model_sha256=self.model_sha256,
+            work_order_sha256=self.work_order_sha256,
+            scope="existing-native-room-development",
+            new_model=False,
+        )
 
     def bind(self, runtime, actions, world, objective_id):
         from .red_lorelei_story import (
@@ -175,23 +204,26 @@ class ScopedLeagueIncomeReuse:
 
         before = runtime.emulator.save_state_bytes()
         configured = self.bind_runtime(runtime, actions, world, objective_id)
-        owner = getattr(configured, 'league_story_battle_controller', None)
-        owner_type = (ScopedAssistedChampionController if objective_id == 'defeat_champion'
-                      else ScopedAssistedLeagueRetryController)
-        scope = getattr(getattr(owner, 'battler', None), 'development_story_scope', None)
+        owner = getattr(configured, "league_story_battle_controller", None)
+        owner_type = (
+            ScopedAssistedChampionController
+            if objective_id == "defeat_champion"
+            else ScopedAssistedLeagueRetryController
+        )
+        scope = getattr(getattr(owner, "battler", None), "development_story_scope", None)
         if (
             type(owner) is not owner_type
             or configured.emulator is not runtime.emulator
             or configured.reader is not runtime.reader
             or configured.adapter is not runtime.adapter
-            or getattr(configured, 'league_battle_controller', None) is not None
+            or getattr(configured, "league_battle_controller", None) is not None
             or owner.contract.objective_id != objective_id
             or owner.battler.model_sha256 != self.model_sha256
-            or getattr(scope, 'work_order_sha256', None) != self.work_order_sha256
-            or getattr(configured.trainer_battle_runner, '__self__', None) is not owner.battler
+            or getattr(scope, "work_order_sha256", None) != self.work_order_sha256
+            or getattr(configured.trainer_battle_runner, "__self__", None) is not owner.battler
             or runtime.emulator.save_state_bytes() != before
         ):
-            raise ValueError('Income battle reuse changed its exact native actor/boundary')
+            raise ValueError("Income battle reuse changed its exact native actor/boundary")
         owner.require_objective(objective_id, rematch=True)
         return configured
 
@@ -234,8 +266,11 @@ class RedLeagueFundingBattleResult:
             "frames": self.frames,
             "full_restores_spent": self.full_restores_spent,
             "critical_exposures_claimed": self.critical_exposures_claimed,
-            **({"controller_name": self.controller_name, "model_sha256": self.model_sha256}
-               if self.controller_name is not None else {}),
+            **(
+                {"controller_name": self.controller_name, "model_sha256": self.model_sha256}
+                if self.controller_name is not None
+                else {}
+            ),
         }
 
 
@@ -411,33 +446,62 @@ def _run_battle(
         0,
     )
     battle_owner = None
+
     def make_skill():
         nonlocal battle_owner
-        configured = (runtime if development_reuse is None else
-                      development_reuse.bind(runtime, actions, world, objective_id))
+        configured = (
+            runtime
+            if development_reuse is None
+            else development_reuse.bind(runtime, actions, world, objective_id)
+        )
         battle_owner = getattr(configured, "league_story_battle_controller", None)
-        mode = (recovery_controller if development_reuse is None else
-                configured.league_story_battle_controller.controller_name)
-        readiness = ({} if development_reuse is None else {
-            'maximum_level_deficit': (
-                configured.league_story_battle_controller.declared_level_deficit),
-        })
-        if objective_id == 'defeat_champion':
-            return RedCartridgeChampionSkill(configured, actions, world,
-                recovery_controller=mode, maximum_full_restores=maximum_full_restores,
-                rematch=True, **readiness)
-        return RedCartridgeLoreleiSkill(configured, actions, world,
-            objective_id=objective_id, recovery_controller=mode,
+        mode = (
+            recovery_controller
+            if development_reuse is None
+            else configured.league_story_battle_controller.controller_name
+        )
+        readiness = (
+            {}
+            if development_reuse is None
+            else {
+                "maximum_level_deficit": (
+                    configured.league_story_battle_controller.declared_level_deficit
+                ),
+            }
+        )
+        if objective_id == "defeat_champion":
+            return RedCartridgeChampionSkill(
+                configured,
+                actions,
+                world,
+                recovery_controller=mode,
+                maximum_full_restores=maximum_full_restores,
+                rematch=True,
+                **readiness,
+            )
+        return RedCartridgeLoreleiSkill(
+            configured,
+            actions,
+            world,
+            objective_id=objective_id,
+            recovery_controller=mode,
             maximum_full_restores=maximum_full_restores,
-            maximum_critical_exposures=maximum_critical_exposures, rematch=True, **readiness)
+            maximum_critical_exposures=maximum_critical_exposures,
+            rematch=True,
+            **readiness,
+        )
 
     def run_retained(call):
         def observe():
             if development_reuse is not None and development_reuse.observe_battle is not None:
                 development_reuse.observe_battle(objective_id)
+
         try:
             report = run_retained_league_battle(
-                runtime, call, battle_owner=battle_owner, objective_id=objective_id,
+                runtime,
+                call,
+                battle_owner=battle_owner,
+                objective_id=objective_id,
             )
         except BaseException as native_error:
             try:
@@ -542,9 +606,15 @@ def _run_battle(
         report.frames_executed,
         spent,
         critical_claimed,
-        (None if development_reuse is None else
-         ('scoped-assisted-champion-development' if objective_id == 'defeat_champion'
-          else 'scoped-assisted-league-retry-development')),
+        (
+            None
+            if development_reuse is None
+            else (
+                "scoped-assisted-champion-development"
+                if objective_id == "defeat_champion"
+                else "scoped-assisted-league-retry-development"
+            )
+        ),
         None if development_reuse is None else development_reuse.model_sha256,
     )
 
@@ -626,7 +696,7 @@ def execute_red_league_funding(
     """
 
     if development_reuse is not None and type(development_reuse) is not ScopedLeagueIncomeReuse:
-        raise TypeError('Income reuse requires the explicit exact-room DEVELOPMENT port')
+        raise TypeError("Income reuse requires the explicit exact-room DEVELOPMENT port")
     for name, value in (("maximum_actions", maximum_actions), ("maximum_frames", maximum_frames)):
         if type(value) is not int or value <= 0:  # noqa: E721
             raise ValueError(f"{name} must be a positive integer")
@@ -634,13 +704,23 @@ def execute_red_league_funding(
     from .red_player_lesson_runtime import _RecordedActions
 
     delegate = actions.delegate
-    recorded = isinstance(actions, NativePlayerActions) and isinstance(delegate, _RecordedActions)
+    recorded_caller = (
+        delegate
+        if isinstance(actions, NativePlayerActions) and isinstance(delegate, _RecordedActions)
+        else None
+    )
+    recorded = recorded_caller is not None
     nested = isinstance(delegate, HardCompositionActionLimiter)
-    frame_safe = delegate.delegate if recorded or nested else delegate
+    if recorded_caller is not None:
+        frame_safe = recorded_caller.delegate
+    elif isinstance(delegate, HardCompositionActionLimiter):
+        frame_safe = delegate.delegate
+    else:
+        frame_safe = delegate
     if (
         not isinstance(frame_safe, FrameSafeExecutor)
         or frame_safe.controller is not runtime.emulator
-        or (recorded and delegate.controller is not runtime.emulator)
+        or (recorded_caller is not None and recorded_caller.controller is not runtime.emulator)
     ):
         raise TypeError("League funding requires one direct frame-safe controller chain")
     if not isinstance(binding, RedLeagueFundingExecutionBinding):
@@ -654,7 +734,7 @@ def execute_red_league_funding(
         raise RedLeagueFundingExecutionError("League funding exact origin changed before input")
     learned = learned_league_controller(runtime)
     if development_reuse is not None and learned is None:
-        raise ValueError('Scoped income reuse requires the existing learned route qualification')
+        raise ValueError("Scoped income reuse requires the existing learned route qualification")
     field_recovery = learned.field_recovery if learned is not None else None
     if field_recovery is not None:
         field_recovery.claim()
@@ -710,7 +790,7 @@ def execute_red_league_funding(
             actions,
             FrameSafeExecutor(frame_limiter, frame_safe.timing),
             through_caller=nested or recorded,
-            recorded_caller=delegate if recorded else None,
+            recorded_caller=recorded_caller,
         ),
         maximum_actions_per_decision=maximum_actions,
         maximum_episode_actions=maximum_actions,
@@ -743,8 +823,11 @@ def execute_red_league_funding(
             # Any HP/PP/resource change still fails the existing supply-boundary
             # checks below; no payout or qualification is fabricated.
             escape = Gen1WildFleeHandler(
-                bounded_actions, runtime.reader, maximum_flees=16,
-                stabilization_frames=120, route_name="League income indoor departure",
+                bounded_actions,
+                runtime.reader,
+                maximum_flees=16,
+                stabilization_frames=120,
+                route_name="League income indoor departure",
             )
             route = execute_route(
                 qualification.exit_plan,
@@ -875,8 +958,11 @@ def execute_red_league_funding(
                     recovery_controller,
                     battle_restore_budget,
                     quote.maximum_critical_exposures,
-                    **({'development_reuse': development_reuse}
-                       if development_reuse is not None else {}),
+                    **(
+                        {"development_reuse": development_reuse}
+                        if development_reuse is not None
+                        else {}
+                    ),
                 )
             )
             remaining_full_restores -= results[-1].full_restores_spent

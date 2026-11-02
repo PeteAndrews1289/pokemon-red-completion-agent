@@ -11,7 +11,7 @@ import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, TypedDict
 
 from .battle_runtime import (
     BattleActionExecutor,
@@ -61,6 +61,10 @@ CHAMPION_STORY_ADMISSION_SHA256 = "f16ca748947b0fc3e0418a8a940bedfe97ada96687fff
 CHAMPION_STORY_SOURCE_SHA256 = "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6"
 TRAIN_RISK_AUTHORITY = "frozen-risk-cost-train-story"
 EVALUATION_RISK_AUTHORITY = "frozen-risk-cost-evaluation-story"
+
+
+class _TrainingObjectiveOptions(TypedDict, total=False):
+    training_objective: WildTrainingObjective
 
 
 class FrozenTrainerTerminalUnverified(RuntimeError):
@@ -628,7 +632,11 @@ class FrozenTrainerBattler:
             maximum_decisions=maximum_decisions,
             authority=authority,
             wild_training=True,
-            **({"training_objective": training_objective} if training_objective is not None else {}),
+            **(
+                _TrainingObjectiveOptions(training_objective=training_objective)
+                if training_objective is not None
+                else _TrainingObjectiveOptions()
+            ),
         )
 
     def _play(
@@ -650,7 +658,8 @@ class FrozenTrainerBattler:
         training_objective: WildTrainingObjective | None = None,
     ) -> RedTrainerPracticeEpisode:
         if training_objective is not None and (
-            type(training_objective) is not WildTrainingObjective or not wild_training
+            type(training_objective) is not WildTrainingObjective
+            or not wild_training
             or training_objective.party_witness.source_state_sha256 != self.source_state_sha256
         ):
             raise ValueError("wild training objective differs from its admitted source or mode")
@@ -728,8 +737,12 @@ class FrozenTrainerBattler:
                 or wild_training
                 or train_funding_diagnostic
                 or allow_immune_switch_recovery
-                or authority != (self.story_authority() if scoped_train else
-                    story_battle_authority(self.model_sha256, self.qualification_sha256))
+                or authority
+                != (
+                    self.story_authority()
+                    if scoped_train
+                    else story_battle_authority(self.model_sha256, self.qualification_sha256)
+                )
                 or expected_map != contract.map_id
                 or raw.map_id != contract.map_id
                 or raw.battle_state != 2
@@ -751,13 +764,17 @@ class FrozenTrainerBattler:
             raise ValueError("TRAIN funding diagnostic cannot authorize other battle modes")
         if train_funding_diagnostic:
             self.require_funding_scope()
-        if train_diagnostic and not scoped_train and (
-            not (wild_training or train_funding_diagnostic or train_story)
-            or (
-                not train_risk
-                and (
-                    self.model_sha256 != FROZEN_K_SHA256
-                    or self.qualification_sha256 != K_QUALIFICATION_SHA256
+        if (
+            train_diagnostic
+            and not scoped_train
+            and (
+                not (wild_training or train_funding_diagnostic or train_story)
+                or (
+                    not train_risk
+                    and (
+                        self.model_sha256 != FROZEN_K_SHA256
+                        or self.qualification_sha256 != K_QUALIFICATION_SHA256
+                    )
                 )
             )
         ):
@@ -853,9 +870,14 @@ class FrozenTrainerBattler:
                 "allow_status_moves": status_story or preparation_scope is not None,
                 "allow_forced_struggle": forced_struggle,
                 "wild_training": wild_training,
-                **({"wild_training_objective": training_objective.document(),
-                    "wild_training_objective_consumed_by_heads": False}
-                   if training_objective is not None else {}),
+                **(
+                    {
+                        "wild_training_objective": training_objective.document(),
+                        "wild_training_objective_consumed_by_heads": False,
+                    }
+                    if training_objective is not None
+                    else {}
+                ),
                 **(
                     {
                         "pp_depleted_switch_screen": True,

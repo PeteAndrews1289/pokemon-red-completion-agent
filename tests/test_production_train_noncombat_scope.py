@@ -1,18 +1,28 @@
 """Exact teacher-prefix noncombat permission; no guest, prediction or fitting."""
+
 import ast
+import json
 from dataclasses import replace
 from hashlib import sha256
-import json
 
 import pytest
-
 from test_production_train_admission import admitted, scope_and_actor
 from test_production_train_teacher_prefix import (
-    artifacts, admitted_source, blaine_scope, helper_hook,
+    admitted_source as admitted_source,
 )
+from test_production_train_teacher_prefix import (
+    artifacts as artifacts,
+)
+from test_production_train_teacher_prefix import (
+    blaine_scope,
+    helper_hook,
+)
+
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_production_train_admission import (
-    ADMISSION_NONCOMBAT_SCHEMA, ADMISSION_TEACHER_SCHEMA, ProductionTrainAdmission,
+    ADMISSION_NONCOMBAT_SCHEMA,
+    ADMISSION_TEACHER_SCHEMA,
+    ProductionTrainAdmission,
 )
 
 
@@ -20,18 +30,25 @@ from pokemon_red_completion.red_production_train_admission import (
 def noncombat_source(admitted_source, artifacts):
     old, proof, _ = admitted_source
     requested = replace(old, noncombat_objective_ids=("obtain_strength",))
-    plan = json.dumps(dict(partition="train", production_train_components=requested.declaration()),
-                      sort_keys=True).encode()
+    plan = json.dumps(
+        dict(partition="train", production_train_components=requested.declaration()), sort_keys=True
+    ).encode()
     result = ProductionTrainAdmission.authenticate(
-        source_state=artifacts["prefix_state"], envelope_bytes=artifacts["prefix_envelope"],
-        progress_bytes=proof.progress_bytes(), plan_bytes=plan, source_commit=proof.source_commit,
-        derived_source_proof=proof, context_bytes=artifacts["prefix_context"],
+        source_state=artifacts["prefix_state"],
+        envelope_bytes=artifacts["prefix_envelope"],
+        progress_bytes=proof.progress_bytes(),
+        plan_bytes=plan,
+        source_commit=proof.source_commit,
+        derived_source_proof=proof,
+        context_bytes=artifacts["prefix_context"],
         noncombat_objective_ids=("obtain_strength",),
     )
     return result, proof, plan
 
 
-def test_explicit_noncombat_scope_roundtrips_without_changing_combat(noncombat_source, admitted_source):
+def test_explicit_noncombat_scope_roundtrips_without_changing_combat(
+    noncombat_source, admitted_source
+):
     a, proof, plan = noncombat_source
     old, _, old_plan = admitted_source
     assert a.admission_schema == ADMISSION_NONCOMBAT_SCHEMA
@@ -67,9 +84,19 @@ def test_noncombat_does_not_broaden_wild_map(noncombat_source):
         a.require_actor(actor, scope, "wild")
 
 
-@pytest.mark.parametrize("value", [None, "obtain_strength", ["obtain_strength"],
-    ("obtain_surf",), ("defeat_blaine",), ("obtain_strength", "obtain_surf"),
-    ("obtain_strength", "obtain_strength"), (True,)])
+@pytest.mark.parametrize(
+    "value",
+    [
+        None,
+        "obtain_strength",
+        ["obtain_strength"],
+        ("obtain_surf",),
+        ("defeat_blaine",),
+        ("obtain_strength", "obtain_surf"),
+        ("obtain_strength", "obtain_strength"),
+        (True,),
+    ],
+)
 def test_wrong_or_untyped_scope_rejected(admitted_source, value):
     with pytest.raises(ValueError):
         replace(admitted_source[0], noncombat_objective_ids=value)
@@ -86,12 +113,18 @@ def test_scope_must_be_committed_in_exact_work_order(admitted_source, noncombat_
     uncommitted = replace(old, noncombat_objective_ids=("obtain_strength",))
     with pytest.raises(ValueError, match="exact TRAIN work order"):
         uncommitted.require_work_order(old_plan)
-    kwargs = dict(source_state=artifacts["prefix_state"], envelope_bytes=artifacts["prefix_envelope"],
-        progress_bytes=proof.progress_bytes(), source_commit=proof.source_commit,
-        derived_source_proof=proof, context_bytes=artifacts["prefix_context"])
+    kwargs = dict(
+        source_state=artifacts["prefix_state"],
+        envelope_bytes=artifacts["prefix_envelope"],
+        progress_bytes=proof.progress_bytes(),
+        source_commit=proof.source_commit,
+        derived_source_proof=proof,
+        context_bytes=artifacts["prefix_context"],
+    )
     with pytest.raises(ValueError):
-        ProductionTrainAdmission.authenticate(**kwargs, plan_bytes=old_plan,
-                                               noncombat_objective_ids=("obtain_strength",))
+        ProductionTrainAdmission.authenticate(
+            **kwargs, plan_bytes=old_plan, noncombat_objective_ids=("obtain_strength",)
+        )
     with pytest.raises(ValueError):
         ProductionTrainAdmission.authenticate(**kwargs, plan_bytes=plan)
     with pytest.raises(ValueError):
@@ -102,19 +135,29 @@ def test_scope_must_be_committed_in_exact_work_order(admitted_source, noncombat_
 def test_noncombat_scope_retains_source_and_document_guards(noncombat_source, artifacts, fault):
     a, proof, plan = noncombat_source
     if fault in ("state", "context"):
-        kwargs = dict(source_state=artifacts["prefix_state"], envelope_bytes=artifacts["prefix_envelope"],
-            progress_bytes=proof.progress_bytes(), plan_bytes=plan, source_commit=proof.source_commit,
-            derived_source_proof=proof, context_bytes=artifacts["prefix_context"],
-            noncombat_objective_ids=("obtain_strength",))
+        kwargs = dict(
+            source_state=artifacts["prefix_state"],
+            envelope_bytes=artifacts["prefix_envelope"],
+            progress_bytes=proof.progress_bytes(),
+            plan_bytes=plan,
+            source_commit=proof.source_commit,
+            derived_source_proof=proof,
+            context_bytes=artifacts["prefix_context"],
+            noncombat_objective_ids=("obtain_strength",),
+        )
         kwargs["source_state" if fault == "state" else "context_bytes"] += b" "
         with pytest.raises(ValueError):
             ProductionTrainAdmission.authenticate(**kwargs)
     else:
         d = a.document()
-        if fault == "origin": d["source_origin_sha256"] = "f" * 64
-        elif fault == "goal": d["noncombat_objective_ids"] = ["obtain_surf"]
-        elif fault == "schema": d["schema"] = ADMISSION_TEACHER_SCHEMA
-        else: d["noncombat_objective_ids"] = "obtain_strength"
+        if fault == "origin":
+            d["source_origin_sha256"] = "f" * 64
+        elif fault == "goal":
+            d["noncombat_objective_ids"] = ["obtain_surf"]
+        elif fault == "schema":
+            d["schema"] = ADMISSION_TEACHER_SCHEMA
+        else:
+            d["noncombat_objective_ids"] = "obtain_strength"
         with pytest.raises(ValueError):
             ProductionTrainAdmission.from_document(d, derived_source_proof=proof)
 
@@ -131,19 +174,32 @@ def test_opt_out_keeps_exact_legacy_declaration_document_and_identity(admitted_s
     assert ProductionTrainAdmission.from_document(original, derived_source_proof=proof) == a
     assert a.admitted_story_objective_ids == ("defeat_blaine",)
     with pytest.raises(ValueError):
-        ProductionTrainAdmission.from_document(dict(original, noncombat_objective_ids=[]),
-                                               derived_source_proof=proof)
+        ProductionTrainAdmission.from_document(
+            dict(original, noncombat_objective_ids=[]), derived_source_proof=proof
+        )
 
 
-def test_actual_helper_filters_only_declared_observers_without_calling_them(noncombat_source, admitted_source):
+def test_actual_helper_filters_only_declared_observers_without_calling_them(
+    noncombat_source, admitted_source
+):
     path, hook = helper_hook("branches")
-    node = next(n for n in hook.body if isinstance(n, ast.If)
-                and "admitted_story_objective_ids" in ast.dump(n))
+    node = next(
+        n
+        for n in hook.body
+        if isinstance(n, ast.If) and "admitted_story_objective_ids" in ast.dump(n)
+    )
+
     def forbidden(*args):
         raise AssertionError("observer execution is not admission")
-    original = {key: forbidden for key in ("defeat_blaine", "obtain_strength", "obtain_surf", "defeat_giovanni")}
-    for a, expected in ((admitted_source[0], {"defeat_blaine"}),
-                        (noncombat_source[0], {"defeat_blaine", "obtain_strength"})):
+
+    original = {
+        key: forbidden
+        for key in ("defeat_blaine", "obtain_strength", "obtain_surf", "defeat_giovanni")
+    }
+    for a, expected in (
+        (admitted_source[0], {"defeat_blaine"}),
+        (noncombat_source[0], {"defeat_blaine", "obtain_strength"}),
+    ):
         ns = dict(training_admission=a, observers=dict(original))
         exec(compile(ast.Module(body=[node], type_ignores=[]), str(path), "exec"), ns)
         assert set(ns["observers"]) == expected

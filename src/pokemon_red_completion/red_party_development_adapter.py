@@ -24,7 +24,10 @@ from pokemon_red_completion.collection import (
     summarize_collection,
 )
 from pokemon_red_completion.gen1_cartridge import (
-    Evolution, EvolutionMethod, evolution_graph, wild_encounter_tables,
+    Evolution,
+    EvolutionMethod,
+    evolution_graph,
+    wild_encounter_tables,
 )
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.party import PartyMemberObservation, StatusCondition
@@ -56,6 +59,9 @@ from pokemon_red_completion.party_development_rank import (
 from pokemon_red_completion.party_development_venue_priors import (
     PartyDevelopmentVenuePriorRegistry,
 )
+from pokemon_red_completion.player_option_level_workload import OptionLevelWorkload
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_collection import (
     RED_SOLO_COLLECTION_CONTRACT,
     red_internal_species_number,
@@ -63,8 +69,6 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
-from pokemon_red_completion.player_option_level_workload import OptionLevelWorkload
-from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_party import (
     BLASTOISE_SPECIES_ID,
     RED_BALANCED_ROSTER,
@@ -88,10 +92,12 @@ from pokemon_red_completion.team_training import (
     training_safety_ceiling,
 )
 from pokemon_red_completion.training_candidate_rank import (
-    TrainingChoiceKind, TrainingCandidate, TrainingCandidateSet, _candidate_features,
+    TrainingCandidate,
+    TrainingCandidateSet,
+    TrainingChoiceKind,
+    _candidate_features,
 )
 from pokemon_red_completion.training_venue import TrainingVenue
-from pokemon_red_completion.provenance import canonical_sha256
 
 RED_PARTY_DEVELOPMENT_CURRICULUM_POLICY = BalancedTeamPolicy(
     minimum_level=60,
@@ -123,9 +129,7 @@ class RedPartyDevelopmentExecutionCapabilityError(RedPartyDevelopmentAdapterErro
 
 RedPartyDevelopmentTransitionGuard = Callable[[RawGameState, int, int], bool | None]
 
-RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS: tuple[
-    RedPartyDevelopmentTransitionGuard, ...
-] = (
+RED_PARTY_DEVELOPMENT_TRANSITION_GUARDS: tuple[RedPartyDevelopmentTransitionGuard, ...] = (
     red_vermilion_training_transition_available,
     red_vermilion_training_transition_available,
 )
@@ -374,10 +378,14 @@ def build_red_party_development_snapshot(
         active_conditions=active_conditions,
         venue_prior_feature_mode=venue_prior_feature_mode,
         include_workload=include_workload,
-        level_workloads_by_member=(tuple(
-            observe_red_evolution_workload(profile.member, profile.evolution, cartridge)
-            for profile in profiles
-        ) if include_workload else ()),
+        level_workloads_by_member=(
+            tuple(
+                observe_red_evolution_workload(profile.member, profile.evolution, cartridge)
+                for profile in profiles
+            )
+            if include_workload
+            else ()
+        ),
         venue_workloads_by_member=venue_workloads_by_member,
         execution_protocol_id=(
             "switch-assisted-fixed-dose-v1"
@@ -565,10 +573,15 @@ def red_party_completion_snapshot(
 
 def build_native_evolution_venue_menu(
     observation: RedGoalObservation,
-    *, rom: bytes, trainee: PartyMemberObservation, target_species_id: int,
-    policy: BalancedTeamPolicy, venues: tuple[TrainingVenue, ...],
+    *,
+    rom: bytes,
+    trainee: PartyMemberObservation,
+    target_species_id: int,
+    policy: BalancedTeamPolicy,
+    venues: tuple[TrainingVenue, ...],
     excluded_helper_species: frozenset[int] = frozenset(),
-    allow_guarded_escapes: bool = False, resources: bool = True,
+    allow_guarded_escapes: bool = False,
+    resources: bool = True,
 ) -> BoundPartyDevelopmentMenu[GrindingArea]:
     """Bind the executor's safe shared-XP inventory to the existing V3 scorer.
 
@@ -576,16 +589,24 @@ def build_native_evolution_venue_menu(
     explicitly inspect recoverability instead; it is not the live resource gate.
     Identities remain private bindings and never enter the scorer's feature rows.
     """
-    from pokemon_red_completion.red_native_boxed_evolution import native_evolution_encounter_supported
-    from pokemon_red_completion.red_team_training import collection_finisher, collection_escape_escort
-    from pokemon_red_completion.red_safari_acquisition import _RED_ENCOUNTER_SLOT_WEIGHTS
     from pokemon_red_completion import red_goal_context as native_context
+    from pokemon_red_completion.red_native_boxed_evolution import (
+        native_evolution_encounter_supported,
+    )
+    from pokemon_red_completion.red_safari_acquisition import _RED_ENCOUNTER_SLOT_WEIGHTS
+    from pokemon_red_completion.red_team_training import (
+        collection_escape_escort,
+        collection_finisher,
+    )
 
     if type(resources) is not bool or type(allow_guarded_escapes) is not bool:
         raise RedPartyDevelopmentAdapterError("native venue gates require explicit booleans")
-    if (not isinstance(venues, tuple) or len(venues) < 2
-            or any(not isinstance(venue, TrainingVenue) for venue in venues)
-            or len({venue.band.identity for venue in venues}) != len(venues)):
+    if (
+        not isinstance(venues, tuple)
+        or len(venues) < 2
+        or any(not isinstance(venue, TrainingVenue) for venue in venues)
+        or len({venue.band.identity for venue in venues}) != len(venues)
+    ):
         raise RedPartyDevelopmentAdapterError("native venue menu needs distinct executable choices")
     if trainee not in observation.party.members:
         raise RedPartyDevelopmentAdapterError("native venue trainee differs from observed party")
@@ -597,35 +618,65 @@ def build_native_evolution_venue_menu(
     _require_evolution_graph(graph)
     source_national = red_internal_species_number(trainee.species_id)
     target_national = red_internal_species_number(target_species_id)
-    selected_edges = tuple(edge for edge in graph.get(source_national, ())
-                           if edge.to_species == target_national and edge.method is EvolutionMethod.LEVEL)
+    selected_edges = tuple(
+        edge
+        for edge in graph.get(source_national, ())
+        if edge.to_species == target_national and edge.method is EvolutionMethod.LEVEL
+    )
     if len(selected_edges) != 1:
-        raise RedPartyDevelopmentAdapterError("native venue goal has no unique cartridge level evolution")
+        raise RedPartyDevelopmentAdapterError(
+            "native venue goal has no unique cartridge level evolution"
+        )
     cartridge = RedPracticeCartridge(rom)
     decoded = wild_encounter_tables(rom)
-    escaped = native_context.MANSION_VOLATILE_ENEMY_SPECIES | native_context.MANSION_ESCORT_ENEMY_SPECIES
+    escaped = (
+        native_context.MANSION_VOLATILE_ENEMY_SPECIES | native_context.MANSION_ESCORT_ENEMY_SPECIES
+    )
     workloads = []
     for venue in venues:
-        if (venue.native_transport_ready is not None
-                and venue.native_transport_ready(observation.party) is not True):
+        if (
+            venue.native_transport_ready is not None
+            and venue.native_transport_ready(observation.party) is not True
+        ):
             raise RedPartyDevelopmentAdapterError("native venue transport is unavailable")
         blocks = tuple(table for table in decoded.get(venue.map_id, ()) if table.medium == "grass")
         if len(blocks) != 1 or len(blocks[0].slots) != len(_RED_ENCOUNTER_SLOT_WEIGHTS):
-            raise RedPartyDevelopmentAdapterError("native venue lacks one complete grass encounter table")
+            raise RedPartyDevelopmentAdapterError(
+                "native venue lacks one complete grass encounter table"
+            )
         useful_weight = 0
         weighted_xp = 0
-        for (level, species), weight in zip(blocks[0].slots, _RED_ENCOUNTER_SLOT_WEIGHTS, strict=True):
+        for (level, species), weight in zip(
+            blocks[0].slots, _RED_ENCOUNTER_SLOT_WEIGHTS, strict=True
+        ):
             if not native_evolution_encounter_supported(
-                observation.party, trainee.species_id, policy, level, species,
+                observation.party,
+                trainee.species_id,
+                policy,
+                level,
+                species,
                 allow_guarded_escapes=allow_guarded_escapes,
                 excluded_helper_species=excluded_helper_species,
             ):
-                raise RedPartyDevelopmentAdapterError("native venue inventory failed existing encounter safety")
+                raise RedPartyDevelopmentAdapterError(
+                    "native venue inventory failed existing encounter safety"
+                )
             helper = collection_escape_escort if species in escaped else collection_finisher
-            if helper(observation.party, trainee.species_id, policy, enemy_level=level,
-                      enemy_species=species, resources=resources,
-                      excluded_helper_species=excluded_helper_species) is None:
-                raise RedPartyDevelopmentAdapterError("native venue lost its qualified helper resources")
+            if (
+                helper(
+                    observation.party,
+                    trainee.species_id,
+                    policy,
+                    enemy_level=level,
+                    enemy_species=species,
+                    resources=resources,
+                    excluded_helper_species=excluded_helper_species,
+                )
+                is None
+            ):
+                raise RedPartyDevelopmentAdapterError(
+                    "native venue lost its qualified helper resources"
+                )
             if species in escaped:
                 continue
             useful_weight += weight
@@ -636,7 +687,9 @@ def build_native_evolution_venue_menu(
             nominal_xp = (cartridge.species(species).base_experience // 2) * level // 7
             weighted_xp += weight * nominal_xp
         denominator = sum(_RED_ENCOUNTER_SLOT_WEIGHTS)
-        workloads.append(VenueTrainingWorkload(useful_weight / denominator, weighted_xp / denominator))
+        workloads.append(
+            VenueTrainingWorkload(useful_weight / denominator, weighted_xp / denominator)
+        )
 
     collection = observation.collection_observation
     owned = set(collection.owned_species)
@@ -647,58 +700,110 @@ def build_native_evolution_venue_menu(
     missing_living = {red_species_number(ref) for ref in living if counts[ref] == 0}
     roster = RED_BALANCED_ROSTER
     roster_internal = set(roster.species_ids)
-    present = {red_internal_species_number(member.species_id) for member in observation.party.members}
+    present = {
+        red_internal_species_number(member.species_id) for member in observation.party.members
+    }
     missing_roles = {red_internal_species_number(species) for species in roster_internal} - present
     inventory = dict(observation.raw.bag_items or ())
     areas = tuple(venue.band for venue in venues)
     unknown = PartyDevelopmentCapabilityState.UNKNOWN
     capabilities = (PartyDevelopmentExecutionCapability(unknown, unknown, unknown),) * len(areas)
-    profiles = tuple(_member_profile(
-        member, execution_capabilities_by_venue=capabilities,
-        party=observation.party.members, evolutions=graph, policy=policy, areas=areas,
-        inventory=inventory, missing_registration=missing_registration,
-        missing_living=missing_living, missing_roles=missing_roles, living_targets=living,
-        specimen_counts=counts, roster_internal=roster_internal,
-        trade_available=False, active_conditions=(),
-    ) for member in observation.party.members)
+    profiles = tuple(
+        _member_profile(
+            member,
+            execution_capabilities_by_venue=capabilities,
+            party=observation.party.members,
+            evolutions=graph,
+            policy=policy,
+            areas=areas,
+            inventory=inventory,
+            missing_registration=missing_registration,
+            missing_living=missing_living,
+            missing_roles=missing_roles,
+            living_targets=living,
+            specimen_counts=counts,
+            roster_internal=roster_internal,
+            trade_available=False,
+            active_conditions=(),
+        )
+        for member in observation.party.members
+    )
     report = summarize_collection(contract, collection)
     context = observe_party_development_context(
-        goal=PartyDevelopmentGoal.EVOLUTION, party=observation.party, policy=policy,
-        member_profiles=profiles, registration_owned_count=report.pokedex_owned_count,
-        registration_target_count=report.target_count, living_unique_count=report.living_count,
+        goal=PartyDevelopmentGoal.EVOLUTION,
+        party=observation.party,
+        policy=policy,
+        member_profiles=profiles,
+        registration_owned_count=report.pokedex_owned_count,
+        registration_target_count=report.target_count,
+        living_unique_count=report.living_count,
         living_target_count=report.living_target_count,
         role_coverage_count=len(roster_internal & set(observation.party.species_ids())),
         role_target_count=len(roster.slots),
     )
     profile = profiles[observation.party.members.index(trainee)]
     evolution = _evolution_semantics(
-        trainee, national_species=source_national, evolutions=graph,
-        required_targets={target_national}, inventory=inventory, trade_available=False,
+        trainee,
+        national_species=source_national,
+        evolutions=graph,
+        required_targets={target_national},
+        inventory=inventory,
+        trade_available=False,
     )
     level_workload = observe_red_evolution_workload(trainee, evolution, cartridge)
-    semantics = tuple(replace(profile.semantics_for_venue(index), evolution=evolution,
-                              registration_needed=red_species_ref(target_national) not in owned)
-                      for index in range(len(areas)))
+    semantics = tuple(
+        replace(
+            profile.semantics_for_venue(index),
+            evolution=evolution,
+            registration_needed=red_species_ref(target_national) not in owned,
+        )
+        for index in range(len(areas))
+    )
     # The native referee has checked shared-XP helpers; the historical direct-
     # trainee mask would incorrectly remove a safe assisted training venue.
-    base = TrainingCandidateSet(TrainingChoiceKind.VENUE, tuple(
-        TrainingCandidate(index, _candidate_features(kind=TrainingChoiceKind.VENUE,
-            party=observation.party, policy=policy, trainee=trainee, areas=areas, venue=area))
-        for index, area in enumerate(areas)
-    ))
-    candidates = augment_training_candidate_set(
-        base, context, semantics, include_workload=True,
-        level_workloads=(level_workload,) * len(areas), venue_workloads=tuple(workloads),
+    base = TrainingCandidateSet(
+        TrainingChoiceKind.VENUE,
+        tuple(
+            TrainingCandidate(
+                index,
+                _candidate_features(
+                    kind=TrainingChoiceKind.VENUE,
+                    party=observation.party,
+                    policy=policy,
+                    trainee=trainee,
+                    areas=areas,
+                    venue=area,
+                ),
+            )
+            for index, area in enumerate(areas)
+        ),
     )
-    snapshot_sha256 = canonical_sha256(dict(
-        schema="pokemon.red.native-evolution-venue-menu.v1", party=asdict(observation.party),
-        target=target_species_id, venues=[venue.band.identity for venue in venues],
-        excluded_helpers=sorted(excluded_helper_species), resources_checked=resources,
-        candidates=candidates.public_dict(), nominal_yield="unboosted-two-participant-wild-v1",
-    ))
+    candidates = augment_training_candidate_set(
+        base,
+        context,
+        semantics,
+        include_workload=True,
+        level_workloads=(level_workload,) * len(areas),
+        venue_workloads=tuple(workloads),
+    )
+    snapshot_sha256 = canonical_sha256(
+        dict(
+            schema="pokemon.red.native-evolution-venue-menu.v1",
+            party=asdict(observation.party),
+            target=target_species_id,
+            venues=[venue.band.identity for venue in venues],
+            excluded_helpers=sorted(excluded_helper_species),
+            resources_checked=resources,
+            candidates=candidates.public_dict(),
+            nominal_yield="unboosted-two-participant-wild-v1",
+        )
+    )
     return BoundPartyDevelopmentMenu(
-        candidate_set=candidates, semantic_snapshot_sha256=snapshot_sha256, bindings=areas,
-        candidate_available=(True,) * len(areas), candidate_unavailable_reasons=(None,) * len(areas),
+        candidate_set=candidates,
+        semantic_snapshot_sha256=snapshot_sha256,
+        bindings=areas,
+        candidate_available=(True,) * len(areas),
+        candidate_unavailable_reasons=(None,) * len(areas),
         venue_priors=(VenueOperationalPrior(),) * len(areas),
         venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
     )
@@ -714,21 +819,30 @@ def observe_red_evolution_workload(
     Missing XP or growth data stays unknown. An overdue evolution needs one more
     ordinary level-up; no save edit, controller input or cost forecast occurs.
     """
-    if (not evolution.required or evolution.route_kind is not EvolutionRouteKind.LEVEL
-            or evolution.levels_to_next is None or member.level >= 100
-            or member.experience is None or cartridge is None):
+    if (
+        not evolution.required
+        or evolution.route_kind is not EvolutionRouteKind.LEVEL
+        or evolution.levels_to_next is None
+        or member.level >= 100
+        or member.experience is None
+        or cartridge is None
+    ):
         return None
     species = cartridge.species(member.species_id)
     floor = species.experience_at_level(member.level)
     ceiling = species.experience_at_level(member.level + 1)
-    if (type(member.experience) is not int or ceiling <= floor
-            or not floor <= member.experience < ceiling):
+    if (
+        type(member.experience) is not int
+        or ceiling <= floor
+        or not floor <= member.experience < ceiling
+    ):
         raise RedPartyDevelopmentAdapterError("observed evolution XP differs from observed level")
     target_level = member.level + max(1, evolution.levels_to_next)
     if target_level > 100:
         raise RedPartyDevelopmentAdapterError("observed evolution target exceeds legal levels")
     return OptionLevelWorkload(
-        member.level, target_level,
+        member.level,
+        target_level,
         species.experience_at_level(target_level) - member.experience,
     )
 
@@ -917,8 +1031,7 @@ def _execution_capability_matrix(
                 if (
                     escort_can_win
                     if switch_assisted_battle_credit
-                    else direct_fight_ready
-                    or (not member_fights_here and escort_can_win)
+                    else direct_fight_ready or (not member_fights_here and escort_can_win)
                 )
                 else PartyDevelopmentCapabilityState.BLOCKED
             )
@@ -927,8 +1040,7 @@ def _execution_capability_matrix(
                 if (
                     escort_recoverable
                     if switch_assisted_battle_credit
-                    else member_recoverable
-                    and (direct_fight_ready or escort_recoverable)
+                    else member_recoverable and (direct_fight_ready or escort_recoverable)
                 )
                 else PartyDevelopmentCapabilityState.BLOCKED
             )

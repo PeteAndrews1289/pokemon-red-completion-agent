@@ -11,7 +11,6 @@ from .actions import MacroAction, MacroActionKind
 from .gen1_acquisition import map_objects
 from .gen1_route_runtime import Gen1TraversalObserver
 from .gen1_trainer_sight import Gen1TrainerSightProjector
-from .gen1_traversal import cut_capabilities
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import (
     ExecutableGoalBinding,
@@ -19,7 +18,7 @@ from .goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from .observation import ItemId, MapId, semantic_facts, semantic_location_facts
+from .observation import ItemId, MapId, semantic_location_facts
 from .party_preparation import next_preparation_decision
 from .play import (
     DEFAULT_QUALIFIED_PLAY_TIMING,
@@ -66,8 +65,11 @@ def nearest_reachable_player_center(runtime, *, route, centers, include_indigo_l
     """
     if type(include_indigo_lobby) is not bool:
         raise TypeError("Indigo recovery opt-in must be boolean")
-    supported = (_POKEMON_CENTER_MAPS | {int(MapId.INDIGO_PLATEAU_LOBBY)}
-                 if include_indigo_lobby else _POKEMON_CENTER_MAPS)
+    supported = (
+        _POKEMON_CENTER_MAPS | {int(MapId.INDIGO_PLATEAU_LOBBY)}
+        if include_indigo_lobby
+        else _POKEMON_CENTER_MAPS
+    )
     if (
         not isinstance(centers, frozenset)
         or not centers
@@ -171,10 +173,7 @@ def restoration_progress_preserved(runtime, before, after, raw):
     facts = semantic_location_facts(raw)
     for objective_id in new - old:
         required = runtime.adapter.graph.objective(objective_id).completion_facts
-        if (
-            not required
-            or not required <= facts
-        ):
+        if not required or not required <= facts:
             return False
     return True
 
@@ -204,9 +203,11 @@ def routed_restoration_binding(
         raise TypeError("restoration trainer observation must be an explicit boolean")
     if type(require_indigo_checkpoint) is not bool:
         raise TypeError("Indigo restoration checkpoint must be an explicit boolean")
-    if (type(alternate_centers) is not frozenset
-            or any(type(m) is not int for m in alternate_centers)
-            or not alternate_centers <= _POKEMON_CENTER_MAPS):
+    if (
+        type(alternate_centers) is not frozenset
+        or any(type(m) is not int for m in alternate_centers)
+        or not alternate_centers <= _POKEMON_CENTER_MAPS
+    ):
         raise ValueError("restoration alternatives require declared ordinary Centers")
     indigo = include_indigo_lobby and home_map == MapId.INDIGO_PLATEAU_LOBBY
     if require_indigo_checkpoint and (not indigo or alternate_centers):
@@ -219,7 +220,8 @@ def routed_restoration_binding(
     before, lesson = capture_player_lesson_snapshot(runtime)
     raw = before.raw
     if (
-        _raw_party_fully_restored(raw) and not (
+        _raw_party_fully_restored(raw)
+        and not (
             require_indigo_checkpoint
             and runtime.reader.read_last_blackout_map() != int(MapId.INDIGO_PLATEAU)
         )
@@ -315,17 +317,24 @@ def routed_restoration_binding(
                     and lesson["party"] == terminal["party"]
                     and restoration_progress_preserved(runtime, lesson, terminal, after.raw)
                 ):
-                    alternative = nearest_reachable_player_center(
-                        runtime, route=route, centers=alternate_centers - {home_map}
-                    ) if alternate_centers - {home_map} else None
+                    alternative = (
+                        nearest_reachable_player_center(
+                            runtime, route=route, centers=alternate_centers - {home_map}
+                        )
+                        if alternate_centers - {home_map}
+                        else None
+                    )
                     if alternative is None:
                         raise
                     alternate_evidence = dict(
-                        original_center=home_map, actual_center=alternative,
-                        original_error_type=type(error).__name__, original_error=str(error),
+                        original_center=home_map,
+                        actual_center=alternative,
+                        original_error_type=type(error).__name__,
+                        original_error=str(error),
                         original_reason=error.reason.value,
                         boundary_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                        model_goal_queries=0, goal_kind_unchanged=True,
+                        model_goal_queries=0,
+                        goal_kind_unchanged=True,
                         support="replan_selected_healing_to_declared_center",
                     )
                     actual_home = alternative
@@ -354,10 +363,18 @@ def routed_restoration_binding(
                         and identities(lesson) == identities(terminal)
                         and lesson["completed_objectives"] == terminal["completed_objectives"]
                         and lesson["objective_catalog"] == terminal["objective_catalog"]
-                        and all(getattr(after.raw, key) == getattr(raw, key) for key in (
-                            "bag_items", "party_count", "party_species_ids", "party_moves",
-                            "party_levels", "badge_bits", "event_flags",
-                        ))
+                        and all(
+                            getattr(after.raw, key) == getattr(raw, key)
+                            for key in (
+                                "bag_items",
+                                "party_count",
+                                "party_species_ids",
+                                "party_moves",
+                                "party_levels",
+                                "badge_bits",
+                                "event_flags",
+                            )
+                        )
                     )
                     if pending_blackout:
                         # The cartridge may still be on an intermediate warp map.
@@ -502,9 +519,14 @@ def routed_restoration_binding(
 
     return ExecutableGoalBinding(
         "pokemon.red:routed-restoration:"
-        + canonical_sha256(dict(home=home_map, source=sha256(state).hexdigest(),
-            **({"require_indigo_checkpoint": True} if require_indigo_checkpoint else {}),
-            **({"alternate_centers": sorted(alternate_centers)} if alternate_centers else {}))),
+        + canonical_sha256(
+            dict(
+                home=home_map,
+                source=sha256(state).hexdigest(),
+                **({"require_indigo_checkpoint": True} if require_indigo_checkpoint else {}),
+                **({"alternate_centers": sorted(alternate_centers)} if alternate_centers else {}),
+            )
+        ),
         GoalKind.RESTORE_TEAM,
         min(1.0, (travel.cost + 40) / 3000),
         0.25,
@@ -603,9 +625,7 @@ def routed_preparation_binding(
         )
     except RoutePlanningError:
         return None
-    effort = preparation_estimated_effort(
-        child_travel.cost, battles, approach_cost=travel.cost
-    )
+    effort = preparation_estimated_effort(child_travel.cost, battles, approach_cost=travel.cost)
     state = runtime.emulator.save_state_bytes()
     used, child, child_report = False, None, None
 
@@ -672,8 +692,13 @@ def routed_preparation_binding(
 
     return ExecutableGoalBinding(
         "pokemon.red:routed-preparation:"
-        + canonical_sha256(dict(home=home_map, source=sha256(state).hexdigest(),
-            **({"restore_exhausted_partial": True} if restore_exhausted_partial else {}))),
+        + canonical_sha256(
+            dict(
+                home=home_map,
+                source=sha256(state).hexdigest(),
+                **({"restore_exhausted_partial": True} if restore_exhausted_partial else {}),
+            )
+        ),
         GoalKind.DEVELOP_TEAM,
         effort,
         0.20,
@@ -741,8 +766,10 @@ def parcel_story_binding(runtime, actions, *, route):
         # Preserve the transition's prohibition on combining generic scripted
         # acknowledgement with the newer ordinary wild/poison-faint recovery.
         scripted = replace(
-            route, maximum_scripted_dialogues=4,
-            allow_wild_faints=False, allow_field_faint_dialogue=False,
+            route,
+            maximum_scripted_dialogues=4,
+            allow_wild_faints=False,
+            allow_field_faint_dialogue=False,
         )
         if mart is not None:
             replace(

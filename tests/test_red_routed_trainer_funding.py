@@ -201,8 +201,11 @@ def test_live_funding_detour_keeps_exact_target_and_blockers(monkeypatch, fault)
 
     router.world = World({22: graph})
     request = ReplanRequest(
-        TraversalSnapshot(22, (9, 18), True, mode="land"), 22, (10, 36),
-        {22: frozenset({(9, 19)})}, 1,
+        TraversalSnapshot(22, (9, 18), True, mode="land"),
+        22,
+        (10, 36),
+        {22: frozenset({(9, 19)})},
+        1,
     )
     if fault == "goal":
         request = replace(request, goal_at=(10, 35))
@@ -1201,9 +1204,7 @@ def test_real_return_composition_uses_observed_surf_not_fainted_fly(
     router.regional_trainer_funding = True
     router.runtime.reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
     # This outdoor Surf fixture has no escapable interior or Dig holder.
-    monkeypatch.setattr(
-        "pokemon_red_completion.red_dig_recovery.plan_dig_escape", lambda *_: None
-    )
+    monkeypatch.setattr("pokemon_red_completion.red_dig_recovery.plan_dig_escape", lambda *_: None)
 
     def capabilities(_memory, observed, *, allow_cut, allow_surf):
         assert observed is state.raw and allow_surf is True and allow_cut is True
@@ -1307,8 +1308,11 @@ def test_funding_return_uses_one_verified_escape_then_fresh_center_route(monkeyp
     router, state, _, _, calls = recovery_fixture(monkeypatch, mock_restore=False)
     state.raw = replace(
         state.raw,
-        map_id=int(MapId.VICTORY_ROAD_2F), player_y=8, player_x=12,
-        player_money=1078, party_hp=(190, 88),
+        map_id=int(MapId.VICTORY_ROAD_2F),
+        player_y=8,
+        player_x=12,
+        player_money=1078,
+        party_hp=(190, 88),
         party_moves=((91, 0, 0, 0), (19, 0, 0, 0)),
         party_pp=((9, 0, 0, 0), (14, 0, 0, 0)),
     )
@@ -1330,14 +1334,18 @@ def test_funding_return_uses_one_verified_escape_then_fresh_center_route(monkeyp
             pass
 
         def observe(self):
-            return SimpleNamespace(map_id=state.raw.map_id, at=(state.raw.player_y, state.raw.player_x))
+            return SimpleNamespace(
+                map_id=state.raw.map_id, at=(state.raw.player_y, state.raw.player_x)
+            )
 
     monkeypatch.setattr(funding, "Gen1TraversalObserver", Traversal)
     center = int(MapId.VIRIDIAN_POKECENTER)
 
     def plan(start, target, *, goal_at):
         assert goal_at == (3, 3)
-        reachable = case == "direct" or (start.map_id == int(MapId.VIRIDIAN_CITY) and case != "still-blocked")
+        reachable = case == "direct" or (
+            start.map_id == int(MapId.VIRIDIAN_CITY) and case != "still-blocked"
+        )
         if target != center or not reachable:
             raise RoutePlanningError("no walking return")
         return SimpleNamespace(steps=("walk",), terminal_map=center)
@@ -1366,7 +1374,10 @@ def test_funding_return_uses_one_verified_escape_then_fresh_center_route(monkeyp
         if case == "escape-failed":
             raise RedDigRecoveryError("landing failed to verify")
         state.raw = replace(state.raw, map_id=int(MapId.VIRIDIAN_CITY), player_y=5, player_x=5)
-        assert state.raw.player_money == original.player_money and state.raw.party_hp == original.party_hp
+        assert (
+            state.raw.player_money == original.player_money
+            and state.raw.party_hp == original.party_hp
+        )
         return {"verified_escape": True, "anchor_map": int(MapId.VIRIDIAN_CITY)}
 
     monkeypatch.setattr("pokemon_red_completion.red_dig_recovery.plan_dig_escape", escape_plan)
@@ -1380,23 +1391,33 @@ def test_funding_return_uses_one_verified_escape_then_fresh_center_route(monkeyp
             calls.append("walk")
             state.raw = replace(state.raw, map_id=center, player_y=3, player_x=3)
 
-    monkeypatch.setattr("pokemon_red_completion.red_training_ground_route.RedVermilionGroundTransition", Transition)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_training_ground_route.RedVermilionGroundTransition", Transition
+    )
 
     def nurse():
         calls.append("nurse")
         if case != "unrestored":
             state.raw = replace(
-                state.raw, party_hp=(213, 213),
+                state.raw,
+                party_hp=(213, 213),
                 party_pp=((10, 0, 0, 0), (15, 0, 0, 0)),
             )
         return GoalExecutionReport(1, 10, {"whole_party_restore": True})
 
-    binding = SimpleNamespace(execute=nurse, verify=lambda _: (
-        GoalVerification.failed(funding.GoalFailureReason.OUTCOME_NOT_VERIFIED)
-        if case == "nurse" else GoalVerification.succeeded()
-    ))
-    monkeypatch.setattr(funding, "RedCenterRestoreGoalProvider", lambda *_a, **_k: SimpleNamespace(
-        offer=lambda _: SimpleNamespace(binding=binding)))
+    binding = SimpleNamespace(
+        execute=nurse,
+        verify=lambda _: (
+            GoalVerification.failed(funding.GoalFailureReason.OUTCOME_NOT_VERIFIED)
+            if case == "nurse"
+            else GoalVerification.succeeded()
+        ),
+    )
+    monkeypatch.setattr(
+        funding,
+        "RedCenterRestoreGoalProvider",
+        lambda *_a, **_k: SimpleNamespace(offer=lambda _: SimpleNamespace(binding=binding)),
+    )
     if case in {"direct", "dig"}:
         result = funding._restore_funding_party(router)
         assert result["whole_party_restore"] is True and state.raw.player_money == 1078

@@ -22,47 +22,11 @@ fits, restore false zero demand, or replace the model with a new planner.
 [Session](work-sessions/2026-10-30-forest-decision.md) ·
 [Handoff](../HANDOFF.md) · [Status](../ACTIVE_PRODUCT_STATE.md).
 
-## Historical October29 outcome-retained candidate
+## Historical checkpoints
 
-The following result belongs to the older73fb candidate and is not a live work order.
-
-The October 29 LATE development test now proves Gate 3: useful preparation and
-model-owned stopping in one native story payoff. The parent chose Raticate
-training while Lorelei was already legal, then chose Lorelei while further
-training remained legal. The same trained Raticate fought in the verified win.
-This is one related development case, not broad transfer or fresh acceptance.
-
-The unchanged candidate continued through Champion and Hall of Fame using the
-existing forced League support after Lorelei. It closed safely after 41.77 native
-minutes, with 116/124 registrations and the Master Ball intact. That is short of
-Gate 1's unchanged 45-minute requirement; no idle padding or restart earns it.
-Gate 2's LATE component passes. MID then failed after 51.17 native minutes with
-a Mansion interruption error and no qualifying story milestone. Only Gate 3 passes
-on this candidate; the full three-gate result remains open.
-
-No new weights were adopted in this block. The proposed success correction was
-rejected for preparation regressions, and the diagnostic copy's gains stay out
-of the actual save. All guests are closed. Qualify the narrow Mansion repair, then
-obtain genuine noncombat TRAIN coverage before another informative correction.
-Retest all gates on the same final candidate without changing thresholds.
-
-[Current handoff](../HANDOFF.md) · [Current status](../ACTIVE_PRODUCT_STATE.md).
-
-## Earlier October 29 supplier/capture closeout
-
-The bounded supplier/capture block is closed at22/124 and two badges in the
-preserved DEVELOPMENT save, up from12. Qualified support exposed affordable
-resupply, optional non-damaging capture, strict faint recovery and safe helper
-admission. No model parameters changed. Cut teaching is not a gym win.
-
-The45-minute target failed: longest unchanged guest20.29minutes. Final cutoff
-settlement is a retained nonordinary verification failure with no native exception.
-Investigate reserve-aware admission before storage/setup, then the narrow healing
-completion bottleneck, then measure sustained unchanged play. Exact typed helper
-headroom was source-tested but not directly re-triggered in native followup.
-All guests are stopped, costs and failed tails retained. Fresh acceptance remains open.
-
-[Current handoff](../HANDOFF.md) · [Final session](work-sessions/2026-10-28-supplier-capture.md).
+The [dated roadmap snapshot](history/2026-11-02-before-ci-cleanup-model-first-roadmap.md)
+preserves the October 26–29 results, candidate-specific gate outcomes and old
+work orders. They are evidence, not the current executable plan.
 
 ## First delivery remains unchanged
 
@@ -191,17 +155,3 @@ Fresh/8-of-10 exits and stage IDs remain unchanged.
 
 Earlier V53–V57 boundary/resource chronology and full-chain results are retained
 in [the archived pre-efficiency roadmap](history/2026-10-21-model-first-roadmap-before-helper-efficiency.md).
-
-## October26 switching qualification
-
-P13 lifecycle is native-qualified across two live chunks in one guest. Control4af fails status-only and critical-HP tests. Four separate TRAIN contexts supply12timed targets; no actual progress or global model adoption.
-
-Freeze the updated masked-Adam learner, then run one32parameter TRAIN correction using the measured zero-support rows117/258. Preserve all14current targets/283budgets; qualify the saved artifact before opening reserved native validation.
-
-See [session](work-sessions/2026-10-26-switch-qualification.md) and [evidence](evidence/red-switch-qualification-2026-10-26.json).
-
-## October27 historical-payoff correction
-
-Historical payoff correction: exact BE9/8fd2 preparation with legacy720 had already evolved and won Misty at7460inputs/538,368frames/21heals. Alternative3428 achieved1282/94,428/3 and later4eab/3b187 retained the result. Those old150second limits/configuration differ from the new300second7da TRAIN comparison. The broad earlier claim that DEV preparation payoff was unmeasured is withdrawn; raw prior claims and costs remain preserved.
-
-[Current work](work-sessions/2026-10-27-goal-aware-wild-training.md).

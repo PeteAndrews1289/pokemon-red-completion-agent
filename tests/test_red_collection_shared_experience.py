@@ -42,30 +42,54 @@ def test_helper_exclusions_apply_to_combat_escape_and_whole_venue(resources, esc
     party = PartyObservation((recipient, evolving, stable))
     kwargs = dict(enemy_level=15, enemy_species=enemy, resources=resources)
     assert helper(party, recipient.species_id, POLICY, **kwargs) == evolving
-    assert helper(
-        party, recipient.species_id, POLICY, **kwargs,
-        excluded_helper_species=frozenset({150}),
-    ) == stable
+    assert (
+        helper(
+            party,
+            recipient.species_id,
+            POLICY,
+            **kwargs,
+            excluded_helper_species=frozenset({150}),
+        )
+        == stable
+    )
     lone = PartyObservation((recipient, evolving))
-    assert helper(
-        lone, recipient.species_id, POLICY, **kwargs,
-        excluded_helper_species=frozenset({150}),
-    ) is None
+    assert (
+        helper(
+            lone,
+            recipient.species_id,
+            POLICY,
+            **kwargs,
+            excluded_helper_species=frozenset({150}),
+        )
+        is None
+    )
     assert not training.collection_encounter_coverage(
-        lone, recipient.species_id, POLICY, [(15, enemy)], resources=resources,
+        lone,
+        recipient.species_id,
+        POLICY,
+        [(15, enemy)],
+        resources=resources,
         escape_species=frozenset({enemy}) if escape else frozenset(),
         excluded_helper_species=frozenset({150}),
     )
 
 
-@pytest.mark.parametrize("invalid", [None, set(), [150], frozenset({True}),
-                                     frozenset({0}), frozenset({256})])
-@pytest.mark.parametrize("helper", [training.collection_finisher,
-                                    training.collection_escape_escort])
+@pytest.mark.parametrize(
+    "invalid", [None, set(), [150], frozenset({True}), frozenset({0}), frozenset({256})]
+)
+@pytest.mark.parametrize(
+    "helper", [training.collection_finisher, training.collection_escape_escort]
+)
 def test_helper_exclusions_fail_closed_on_malformed_native_species(invalid, helper):
     with pytest.raises(ValueError, match="helper exclusions"):
-        helper(PartyObservation((member(slot=1),)), 0x6C, POLICY, enemy_level=15,
-               enemy_species=0x21, excluded_helper_species=invalid)
+        helper(
+            PartyObservation((member(slot=1),)),
+            0x6C,
+            POLICY,
+            enemy_level=15,
+            enemy_species=0x21,
+            excluded_helper_species=invalid,
+        )
 
 
 def test_actual_collection_loop_uses_stable_helper_instead_of_evolving_one(monkeypatch):
@@ -73,7 +97,8 @@ def test_actual_collection_loop_uses_stable_helper_instead_of_evolving_one(monke
 
     experience_events = []
     monkeypatch.setattr(
-        FakeExecutor, "record_diagnostic_event",
+        FakeExecutor,
+        "record_diagnostic_event",
         lambda self, kind, payload: experience_events.append((kind, payload)),
         raising=False,
     )
@@ -112,15 +137,23 @@ def test_actual_collection_loop_uses_stable_helper_instead_of_evolving_one(monke
 
     monkeypatch.setattr(training, "switch_active_battler", switch)
     monkeypatch.setattr(training, "run_adaptive_wild_battle", fight)
-    venue = replace(_venue(GrindingArea("shared", 9, 15, measured_samples=40)),
-                    walk_to_grass=seek,
-                    heal_and_return=lambda *args: pytest.fail("safe helper needs no recovery"))
+    venue = replace(
+        _venue(GrindingArea("shared", 9, 15, measured_samples=40)),
+        walk_to_grass=seek,
+        heal_and_return=lambda *args: pytest.fail("safe helper needs no recovery"),
+    )
     with pytest.raises(training.EvolutionTrainingPaused) as stopped:
-        run(memory, reader, policy=POLICY, venues=[venue],
-            evolution_target=(0x94, 0x26), evolution_battle_quantum=1,
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[venue],
+            evolution_target=(0x94, 0x26),
+            evolution_battle_quantum=1,
             collection_shared_experience=True,
             excluded_collection_helper_species=frozenset({150}),
-            collection_encounters={venue.map_id: [(15, 0x21)]})
+            collection_encounters={venue.map_id: [(15, 0x21)]},
+        )
     assert switches == fights == [2]
     assert memory.xp == 623
     assert len(experience_events) == 1
@@ -138,29 +171,49 @@ def test_guarded_muk_coverage_is_escape_only_not_permission_to_attack(resources)
     helper = member(0x1C, 80, 2)
     party = PartyObservation((recipient, helper))
     assert not training.training_type_matchup_acceptable(helper.species_id, 0x88)
-    assert training.collection_finisher(
-        party, 0x6C, POLICY, enemy_level=39, enemy_species=0x88, resources=resources
-    ) is None
+    assert (
+        training.collection_finisher(
+            party, 0x6C, POLICY, enemy_level=39, enemy_species=0x88, resources=resources
+        )
+        is None
+    )
     assert not training.collection_encounter_coverage(
         party, 0x6C, POLICY, [(39, 0x88)], resources=resources
     )
     assert training.collection_encounter_coverage(
-        party, 0x6C, POLICY, [(39, 0x88)], resources=resources,
+        party,
+        0x6C,
+        POLICY,
+        [(39, 0x88)],
+        resources=resources,
         escape_species=frozenset({0x88}),
     )
 
 
-@pytest.mark.parametrize("change", [
-    {"hp": 0}, {"hp": 1}, {"status": StatusCondition.POISON}, {"level": 40},
-    {"species_id": 0x54},  # Pikachu is still vulnerable to incoming Ground.
-])
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"hp": 0},
+        {"hp": 1},
+        {"status": StatusCondition.POISON},
+        {"level": 40},
+        {"species_id": 0x54},  # Pikachu is still vulnerable to incoming Ground.
+    ],
+)
 def test_guarded_escape_preserves_live_defensive_checks(change):
     helper = replace(member(0x1C, 80, 2), **change)
     enemy = 0x76 if change.get("species_id") else 0x88
     party = PartyObservation((member(0x6C, 11, 1), helper))
-    assert training.collection_escape_escort(
-        party, 0x6C, POLICY, enemy_level=39, enemy_species=enemy,
-    ) is None
+    assert (
+        training.collection_escape_escort(
+            party,
+            0x6C,
+            POLICY,
+            enemy_level=39,
+            enemy_species=enemy,
+        )
+        is None
+    )
 
 
 @pytest.mark.parametrize("flee_count", [1, 9, 31, 32])
@@ -188,19 +241,31 @@ def test_live_guarded_muk_is_fled_without_attack_or_spurious_nurse(monkeypatch, 
         raise StopIteration("next encounter sought normally")
 
     monkeypatch.setattr(training, "switch_active_battler", switch)
-    monkeypatch.setattr(training, "run_adaptive_wild_battle",
-                        lambda *a, **kw: pytest.fail("excluded Muk must not be fought"))
-    venue = replace(_venue(GrindingArea("mixed", 28, 34,
-                                     rare_maximum_encounter_level=39, measured_samples=40)),
-                    walk_to_grass=seek,
-                    heal_and_return=lambda *a: pytest.fail("escape is not PP exhaustion"))
+    monkeypatch.setattr(
+        training,
+        "run_adaptive_wild_battle",
+        lambda *a, **kw: pytest.fail("excluded Muk must not be fought"),
+    )
+    venue = replace(
+        _venue(GrindingArea("mixed", 28, 34, rare_maximum_encounter_level=39, measured_samples=40)),
+        walk_to_grass=seek,
+        heal_and_return=lambda *a: pytest.fail("escape is not PP exhaustion"),
+    )
     expected_error = RuntimeError if flee_count == 32 else StopIteration
     message = "Training venue does not match" if flee_count == 32 else "next encounter sought"
     with pytest.raises(expected_error, match=message):
-        run(memory, reader, policy=POLICY, venues=[venue], flee_func=flee,
-            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
-            collection_shared_experience=True, escort_enemy_species=frozenset({0x88}),
-            collection_encounters={venue.map_id: [(39, 0x88)]})
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[venue],
+            flee_func=flee,
+            evolution_target=(0x6C, 0x2D),
+            evolution_battle_quantum=1,
+            collection_shared_experience=True,
+            escort_enemy_species=frozenset({0x88}),
+            collection_encounters={venue.map_id: [(39, 0x88)]},
+        )
     assert switches == [1] * flee_count
     assert flees == [True] * flee_count
 
@@ -236,8 +301,9 @@ def test_collection_keeps_direct_combat_failure_evidence_after_healing(
     fights, heals, flees = [], [], []
 
     def seek(*args):
-        reader.raw = state(battle_state=1, enemy_level=12, enemy_species_id=0x6C,
-                           active_party_index=0)
+        reader.raw = state(
+            battle_state=1, enemy_level=12, enemy_species_id=0x6C, active_party_index=0
+        )
         return 1
 
     def switch(*args, target_index, **kwargs):
@@ -265,16 +331,25 @@ def test_collection_keeps_direct_combat_failure_evidence_after_healing(
 
     monkeypatch.setattr(training, "switch_active_battler", switch)
     monkeypatch.setattr(training, "run_adaptive_wild_battle", fight)
-    venue = replace(_venue(GrindingArea("mixed", 9, 14, measured_samples=40)),
-                    heal_and_return=heal, walk_to_grass=seek)
+    venue = replace(
+        _venue(GrindingArea("mixed", 9, 14, measured_samples=40)),
+        heal_and_return=heal,
+        walk_to_grass=seek,
+    )
     error = RuntimeError if helper_always_pauses else training.EvolutionTrainingPaused
     with pytest.raises(error) as stopped:
-        run(memory, reader,
+        run(
+            memory,
+            reader,
             policy=replace(POLICY, retreat_hp_ratio=0.9, max_healing_trips=3),
-            venues=[venue], flee_func=flee, allow_direct_evolution=True,
-            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
+            venues=[venue],
+            flee_func=flee,
+            allow_direct_evolution=True,
+            evolution_target=(0x6C, 0x2D),
+            evolution_battle_quantum=1,
             collection_shared_experience=True,
-            collection_encounters={venue.map_id: [(12, 0x6C)]})
+            collection_encounters={venue.map_id: [(12, 0x6C)]},
+        )
     if helper_always_pauses:
         assert "required-recovery budget" in str(stopped.value)
         assert len(heals) == 3
@@ -365,9 +440,7 @@ def test_encounter_coverage_rejects_level_only_primeape_and_exhausted_backup():
     party = PartyObservation((recipient, fighter, backup))
     assert training.collection_finisher(party, 0x6C, POLICY, enemy_level=9) == fighter
     assert not training.collection_encounter_coverage(party, 0x6C, POLICY, [(9, 0x30)])
-    assert training.collection_encounter_coverage(
-        party, 0x6C, POLICY, [(9, 0x30)], resources=False
-    )
+    assert training.collection_encounter_coverage(party, 0x6C, POLICY, [(9, 0x30)], resources=False)
     assert not training.collection_encounter_coverage(party, 0x6C, POLICY, [])
 
 
@@ -391,14 +464,26 @@ def test_each_opponent_may_have_a_different_qualified_helper():
 def test_pp_independent_escape_does_not_waive_defensive_guards(change):
     recipient = member(0x6C, 11, 1)
     exhausted = member(0x76, 55, 2, pp=0)
-    assert training.collection_escape_escort(
-        PartyObservation((recipient, exhausted)), 0x6C, POLICY,
-        enemy_level=9, enemy_species=0x30,
-    ) == exhausted
-    assert training.collection_escape_escort(
-        PartyObservation((recipient, replace(exhausted, **change))), 0x6C, POLICY,
-        enemy_level=9, enemy_species=0x30,
-    ) is None
+    assert (
+        training.collection_escape_escort(
+            PartyObservation((recipient, exhausted)),
+            0x6C,
+            POLICY,
+            enemy_level=9,
+            enemy_species=0x30,
+        )
+        == exhausted
+    )
+    assert (
+        training.collection_escape_escort(
+            PartyObservation((recipient, replace(exhausted, **change))),
+            0x6C,
+            POLICY,
+            enemy_level=9,
+            enemy_species=0x30,
+        )
+        is None
+    )
 
 
 @pytest.mark.parametrize(
@@ -406,22 +491,40 @@ def test_pp_independent_escape_does_not_waive_defensive_guards(change):
 )
 def test_support_escape_cannot_bypass_health_status_or_level_guards(change):
     active = member(0x76, 55, 1, pp=0)
-    assert training.collection_escape_escort(
-        PartyObservation((replace(active, **change),)), None, POLICY,
-        enemy_level=9, enemy_species=0x30,
-    ) is None
+    assert (
+        training.collection_escape_escort(
+            PartyObservation((replace(active, **change),)),
+            None,
+            POLICY,
+            enemy_level=9,
+            enemy_species=0x30,
+        )
+        is None
+    )
 
 
 def test_support_escape_can_reuse_safe_active_member_without_a_training_recipient():
     active = member(0x76, 55, 1, pp=0)
-    assert training.collection_escape_escort(
-        PartyObservation((active,)), None, POLICY,
-        enemy_level=9, enemy_species=0x30,
-    ) == active
-    assert training.collection_escape_escort(
-        PartyObservation((active,)), active.species_id, POLICY,
-        enemy_level=9, enemy_species=0x30,
-    ) is None
+    assert (
+        training.collection_escape_escort(
+            PartyObservation((active,)),
+            None,
+            POLICY,
+            enemy_level=9,
+            enemy_species=0x30,
+        )
+        == active
+    )
+    assert (
+        training.collection_escape_escort(
+            PartyObservation((active,)),
+            active.species_id,
+            POLICY,
+            enemy_level=9,
+            enemy_species=0x30,
+        )
+        is None
+    )
 
 
 def test_real_loop_heals_instead_of_accepting_species_blind_helper():
@@ -443,9 +546,16 @@ def test_real_loop_heals_instead_of_accepting_species_blind_helper():
         read=lambda: state(), read_input_readiness=lambda: SimpleNamespace(ready=True)
     )
     with pytest.raises(RuntimeError, match="recovery repeated"):
-        run(memory, reader, policy=POLICY, venues=[venue],
-            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
-            collection_shared_experience=True, collection_encounters={venue.map_id: [(9, 0x30)]})
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[venue],
+            evolution_target=(0x6C, 0x2D),
+            evolution_battle_quantum=1,
+            collection_shared_experience=True,
+            collection_encounters={venue.map_id: [(9, 0x30)]},
+        )
     assert heals == [True]
     assert not memory.swaps
 
@@ -480,12 +590,21 @@ def test_no_finisher_battle_uses_escape_not_structural_combat(monkeypatch):
     monkeypatch.setattr(
         training, "run_adaptive_wild_battle", lambda *a, **kw: pytest.fail("must not attack")
     )
-    venue = replace(_venue(GrindingArea("mixed", 9, 15, measured_samples=40)),
-                    heal_and_return=recovered)
+    venue = replace(
+        _venue(GrindingArea("mixed", 9, 15, measured_samples=40)), heal_and_return=recovered
+    )
     with pytest.raises(StopIteration, match="recovery reached"):
-        run(memory, reader, policy=POLICY, venues=[venue], flee_func=flee,
-            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
-            collection_shared_experience=True, collection_encounters={venue.map_id: [(9, 0x30)]})
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[venue],
+            flee_func=flee,
+            evolution_target=(0x6C, 0x2D),
+            evolution_battle_quantum=1,
+            collection_shared_experience=True,
+            collection_encounters={venue.map_id: [(9, 0x30)]},
+        )
     assert switches == [2]
     assert flees == [True]
 
@@ -517,9 +636,13 @@ def test_escape_abstains_or_stops_without_issuing_more_inputs(monkeypatch, failu
     )
     with pytest.raises(RuntimeError):
         training.escape_collection_battle(
-            SimpleNamespace(execute=execute), reader, memory,
-            recipient_species_id=0x6C, policy=POLICY,
-            flee_func=lambda *args: None, flee_timing=object(),
+            SimpleNamespace(execute=execute),
+            reader,
+            memory,
+            recipient_species_id=0x6C,
+            policy=POLICY,
+            flee_func=lambda *args: None,
+            flee_timing=object(),
         )
     assert len(calls) == {"no_escort": 0, "faint_on_switch": 1, "no_exit": 2}[failure]
 
@@ -658,13 +781,15 @@ def test_actual_loop_switches_finishes_and_requires_recipient_xp(
 
 @pytest.mark.parametrize("stronger_is_safe", [False, True])
 def test_collection_evolution_prefers_stronger_band_only_after_coverage_check(
-    monkeypatch, stronger_is_safe,
+    monkeypatch,
+    stronger_is_safe,
 ):
     """Exercise venue binding in the real loop, including its safety filter."""
     memory = FakeMemory()
     memory.set_party([(0x94, 12), (0x1C, 40)])
-    reader = SimpleNamespace(read=lambda: state(),
-                             read_input_readiness=lambda: SimpleNamespace(ready=True))
+    reader = SimpleNamespace(
+        read=lambda: state(), read_input_readiness=lambda: SimpleNamespace(ready=True)
+    )
     visits = []
 
     class ReachedVenue(Exception):
@@ -674,24 +799,42 @@ def test_collection_evolution_prefers_stronger_band_only_after_coverage_check(
         def execute(*args):
             visits.append(name)
             raise ReachedVenue
+
         return execute
 
-    weak = replace(_venue(GrindingArea("weak", 9, 15, measured_samples=40)),
-                   map_id=11, is_in_center=lambda raw: True,
-                   walk_to_grass=walk("weak"), heal_and_return=walk("weak"))
-    strong = replace(_venue(GrindingArea("strong", 15, 21, measured_samples=40)),
-                     map_id=12, is_in_center=lambda raw: True,
-                     walk_to_grass=walk("strong"), heal_and_return=walk("strong"))
-    monkeypatch.setattr(training, "collection_encounter_coverage",
-                        lambda party, species, policy, encounters, **kwargs:
-                        encounters[0][0] == 15 or stronger_is_safe)
+    weak = replace(
+        _venue(GrindingArea("weak", 9, 15, measured_samples=40)),
+        map_id=11,
+        is_in_center=lambda raw: True,
+        walk_to_grass=walk("weak"),
+        heal_and_return=walk("weak"),
+    )
+    strong = replace(
+        _venue(GrindingArea("strong", 15, 21, measured_samples=40)),
+        map_id=12,
+        is_in_center=lambda raw: True,
+        walk_to_grass=walk("strong"),
+        heal_and_return=walk("strong"),
+    )
+    monkeypatch.setattr(
+        training,
+        "collection_encounter_coverage",
+        lambda party, species, policy, encounters, **kwargs: (
+            encounters[0][0] == 15 or stronger_is_safe
+        ),
+    )
     with pytest.raises(ReachedVenue):
-        run(memory, reader, policy=POLICY, venues=[weak, strong],
-            evolution_target=(0x94, 0x26), evolution_battle_quantum=1,
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[weak, strong],
+            evolution_target=(0x94, 0x26),
+            evolution_battle_quantum=1,
             collection_shared_experience=True,
-            collection_encounters={11: [(15, 0x21)], 12: [(21, 0x3B)]})
+            collection_encounters={11: [(15, 0x21)], 12: [(21, 0x3B)]},
+        )
     assert visits == ["strong" if stronger_is_safe else "weak"]
-
 
 
 @pytest.mark.parametrize("unsafe", [None, "input", "faint", "unknown_hp", "battle"])
@@ -701,40 +844,64 @@ def test_real_no_win_bound_is_a_partial_only_after_safe_settlement(monkeypatch, 
 
     memory = FakeMemory()
     memory.set_party([(0x6C, 11), (0x1C, 80)], hp=100, max_hp=100)
-    raw = state(party_count=2, party_hp=(100, 100), battle_state=1,
-                enemy_level=39, enemy_species_id=0x88)
+    raw = state(
+        party_count=2, party_hp=(100, 100), battle_state=1, enemy_level=39, enemy_species_id=0x88
+    )
     current, flees, events = [raw], [], []
     reader = SimpleNamespace(
         read=lambda: current[0],
         read_input_readiness=lambda: SimpleNamespace(
-            ready=not (unsafe == "input" and len(flees) == 32)),
+            ready=not (unsafe == "input" and len(flees) == 32)
+        ),
     )
 
     def flee(*args):
         flees.append(True)
-        current[0] = replace(raw, battle_state=1 if unsafe == "battle" else 0,
-                            party_hp=None if unsafe == "unknown_hp" else
-                            (100, 0) if unsafe == "faint" else (100, 100))
+        current[0] = replace(
+            raw,
+            battle_state=1 if unsafe == "battle" else 0,
+            party_hp=None
+            if unsafe == "unknown_hp"
+            else (100, 0)
+            if unsafe == "faint"
+            else (100, 100),
+        )
 
     def seek(*args):
         current[0] = raw
         return 1
 
     monkeypatch.setattr(training, "switch_active_battler", lambda *a, **kw: True)
-    monkeypatch.setattr(training, "run_adaptive_wild_battle",
-                        lambda *a, **kw: pytest.fail("excluded encounter must not be fought"))
-    monkeypatch.setattr(FakeExecutor, "record_diagnostic_event",
-                        lambda self, kind, payload: events.append((kind, payload)), raising=False)
-    venue = replace(_venue(GrindingArea("mixed", 28, 34,
-                                      rare_maximum_encounter_level=39, measured_samples=40)),
-                    walk_to_grass=seek,
-                    heal_and_return=lambda *a: pytest.fail("excluded exit needs no nurse"))
+    monkeypatch.setattr(
+        training,
+        "run_adaptive_wild_battle",
+        lambda *a, **kw: pytest.fail("excluded encounter must not be fought"),
+    )
+    monkeypatch.setattr(
+        FakeExecutor,
+        "record_diagnostic_event",
+        lambda self, kind, payload: events.append((kind, payload)),
+        raising=False,
+    )
+    venue = replace(
+        _venue(GrindingArea("mixed", 28, 34, rare_maximum_encounter_level=39, measured_samples=40)),
+        walk_to_grass=seek,
+        heal_and_return=lambda *a: pytest.fail("excluded exit needs no nurse"),
+    )
     error = RuntimeError if unsafe else training.EvolutionVenueExhausted
     with pytest.raises(error) as stopped:
-        run(memory, reader, policy=POLICY, venues=[venue], flee_func=flee,
-            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
-            collection_shared_experience=True, escort_enemy_species=frozenset({0x88}),
-            collection_encounters={venue.map_id: [(39, 0x88)]})
+        run(
+            memory,
+            reader,
+            policy=POLICY,
+            venues=[venue],
+            flee_func=flee,
+            evolution_target=(0x6C, 0x2D),
+            evolution_battle_quantum=1,
+            collection_shared_experience=True,
+            escort_enemy_species=frozenset({0x88}),
+            collection_encounters={venue.map_id: [(39, 0x88)]},
+        )
     assert len(flees) == 32
     exhausted = [payload for kind, payload in events if kind == "wild_training_venue_exhausted"]
     if unsafe:
@@ -749,23 +916,46 @@ def test_real_no_win_bound_is_a_partial_only_after_safe_settlement(monkeypatch, 
         assert exhausted[0]["no_verified_win"] is True
 
 
-@pytest.mark.parametrize("change", [
-    {"collection_shared_experience": False}, {"collection_encounters": None},
-    {"evolution_target": None}, {"battles": 1},
-])
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"collection_shared_experience": False},
+        {"collection_encounters": None},
+        {"evolution_target": None},
+        {"battles": 1},
+    ],
+)
 def test_venue_pause_does_not_soften_other_training_failures(change):
     def forbidden():
         pytest.fail("legacy/non-evolution/winning caller must not inspect a new boundary")
-    options = dict(collection_shared_experience=True, collection_encounters={165: [(39, 0x88)]},
-                   evolution_target=(0x6C, 0x2D), battles=0, healing_trips=2)
+
+    options = dict(
+        collection_shared_experience=True,
+        collection_encounters={165: [(39, 0x88)]},
+        evolution_target=(0x6C, 0x2D),
+        battles=0,
+        healing_trips=2,
+    )
     options.update(change)
-    assert training._bounded_no_win_evolution_pause(SimpleNamespace(read=forbidden), **options) is None
+    assert (
+        training._bounded_no_win_evolution_pause(SimpleNamespace(read=forbidden), **options) is None
+    )
 
 
 @pytest.mark.parametrize("ready", [None, False, 1, "ready"])
 def test_venue_pause_requires_exact_observed_input_readiness(ready):
-    reader = SimpleNamespace(read=lambda: state(party_hp=(100, 100)),
-                             read_input_readiness=lambda: SimpleNamespace(ready=ready))
-    assert training._bounded_no_win_evolution_pause(
-        reader, collection_shared_experience=True, collection_encounters={165: [(39, 0x88)]},
-        evolution_target=(0x6C, 0x2D), battles=0, healing_trips=2) is None
+    reader = SimpleNamespace(
+        read=lambda: state(party_hp=(100, 100)),
+        read_input_readiness=lambda: SimpleNamespace(ready=ready),
+    )
+    assert (
+        training._bounded_no_win_evolution_pause(
+            reader,
+            collection_shared_experience=True,
+            collection_encounters={165: [(39, 0x88)]},
+            evolution_target=(0x6C, 0x2D),
+            battles=0,
+            healing_trips=2,
+        )
+        is None
+    )

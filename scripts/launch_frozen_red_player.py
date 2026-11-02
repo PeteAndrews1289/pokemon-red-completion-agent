@@ -8,6 +8,7 @@ import json
 import os
 import runpy
 import sys
+from datetime import UTC
 from hashlib import sha256
 from pathlib import Path
 
@@ -40,16 +41,21 @@ class FrozenSourceFinder:
         source = Path(spec.origin).absolute()
         if not source.is_relative_to(self.root):
             expected = self.environment_pins.get(str(source.resolve()))
-            if expected is None or not isinstance(spec.loader, importlib.machinery.SourceFileLoader):
+            if expected is None or not isinstance(
+                spec.loader, importlib.machinery.SourceFileLoader
+            ):
                 return None
             if source.is_symlink():
                 raise ValueError("pinned environment import requires regular Python source")
             spec.loader = PinnedSourceLoader(fullname, str(source), expected)
             return spec
         expected = self.pins.get(str(source.resolve()))
-        if (source.is_symlink() or not source.resolve().is_relative_to(self.root)
-                or expected is None
-                or not isinstance(spec.loader, importlib.machinery.SourceFileLoader)):
+        if (
+            source.is_symlink()
+            or not source.resolve().is_relative_to(self.root)
+            or expected is None
+            or not isinstance(spec.loader, importlib.machinery.SourceFileLoader)
+        ):
             raise ValueError("frozen import requires declared regular Python source")
         spec.loader = PinnedSourceLoader(fullname, str(source), expected)
         return spec
@@ -96,7 +102,11 @@ def write_isolated_io_report(output, report, *, compressed=False):
             os.fchmod(raw.fileno(), 0o600)
             with (
                 gzip.GzipFile(
-                    fileobj=raw, filename="", mtime=0, mode="wb", compresslevel=1,
+                    fileobj=raw,
+                    filename="",
+                    mtime=0,
+                    mode="wb",
+                    compresslevel=1,
                 ) as zipped,
                 io.TextIOWrapper(zipped, encoding="utf-8") as stream,
             ):
@@ -140,30 +150,37 @@ def run_selected_driver(script, *, plan, check_imports=False):
 
 def validate_diagnostic_timing(plan, *, now=None):
     """Validate prospective serial-copy timing without importing an emulator."""
-    from datetime import datetime, timezone
+    from datetime import datetime
     from math import isfinite
 
     try:
-        native = plan['native_limits']['seconds']
-        worker = plan['worker_wall_seconds']
-        outer = plan['caps']['outer_seconds']
-        hold = plan['full_hold_seconds']
-        cutoff = datetime.fromisoformat(plan['cutoff_utc'])
+        native = plan["native_limits"]["seconds"]
+        worker = plan["worker_wall_seconds"]
+        outer = plan["caps"]["outer_seconds"]
+        hold = plan["full_hold_seconds"]
+        cutoff = datetime.fromisoformat(plan["cutoff_utc"])
     except (KeyError, TypeError, ValueError) as error:
-        raise ValueError('diagnostic timing declaration is incomplete') from error
-    if (any(type(v) not in (int, float) or not isfinite(v) or v <= 0
-            for v in (native, worker, outer, hold))
-            or type(native) is not int
-            or not native < worker < outer or outer != hold
-            or cutoff.utcoffset() is None):
-        raise ValueError('diagnostic timing requires native < worker < outer == hold and aware cutoff')
+        raise ValueError("diagnostic timing declaration is incomplete") from error
+    if (
+        any(
+            type(v) not in (int, float) or not isfinite(v) or v <= 0
+            for v in (native, worker, outer, hold)
+        )
+        or type(native) is not int
+        or not native < worker < outer
+        or outer != hold
+        or cutoff.utcoffset() is None
+    ):
+        raise ValueError(
+            "diagnostic timing requires native < worker < outer == hold and aware cutoff"
+        )
     if now is None:
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
     if type(now) is not datetime or now.utcoffset() is None:
-        raise ValueError('diagnostic timing requires an aware current time')
+        raise ValueError("diagnostic timing requires an aware current time")
     remaining = (cutoff - now).total_seconds()
     if remaining <= 0:
-        raise ValueError('diagnostic cutoff has expired')
+        raise ValueError("diagnostic cutoff has expired")
     return min(worker, remaining)
 
 
@@ -173,24 +190,29 @@ def validate_retained_train_custody(plan, custody, catalog_row):
     Exact parent terminal authentication and failed-tail policy remain with the
     existing scenario preflight. This shared check does not require a parent win.
     """
+
     def digest(value):
-        return (type(value) is str and len(value) == 64
-                and all(c in '0123456789abcdef' for c in value))
+        return (
+            type(value) is str and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+        )
 
     if any(type(v) is not dict for v in (plan, custody, catalog_row)):
-        raise ValueError('retained TRAIN custody requires explicit documents')
-    source = plan.get('source_sha256')
-    original = plan.get('original_TRAIN_state_sha256')
-    if (not digest(source) or not digest(original)
-            or custody.get('retained_state_sha256') != source
-            or custody.get('original_TRAIN_state_sha256') != original
-            or catalog_row.get('state_sha256') != original
-            or catalog_row.get('source_partition') != 'train'
-            or custody.get('development_relabel') is not False
-            or custody.get('same_related_TRAIN_ancestry') is not True
-            or type(custody.get('save_writes')) is not int
-            or custody['save_writes'] != 0):
-        raise ValueError('retained TRAIN custody flags or source identities differ')
+        raise ValueError("retained TRAIN custody requires explicit documents")
+    source = plan.get("source_sha256")
+    original = plan.get("original_TRAIN_state_sha256")
+    if (
+        not digest(source)
+        or not digest(original)
+        or custody.get("retained_state_sha256") != source
+        or custody.get("original_TRAIN_state_sha256") != original
+        or catalog_row.get("state_sha256") != original
+        or catalog_row.get("source_partition") != "train"
+        or custody.get("development_relabel") is not False
+        or custody.get("same_related_TRAIN_ancestry") is not True
+        or type(custody.get("save_writes")) is not int
+        or custody["save_writes"] != 0
+    ):
+        raise ValueError("retained TRAIN custody flags or source identities differ")
 
 
 def validate_diagnostic_startup(plan, custody, catalog_row, *, now=None):
@@ -198,8 +220,6 @@ def validate_diagnostic_startup(plan, custody, catalog_row, *, now=None):
     allowance = validate_diagnostic_timing(plan, now=now)
     validate_retained_train_custody(plan, custody, catalog_row)
     return allowance
-
-
 
 
 def verify_initial_dependencies(manifest, root):
@@ -212,8 +232,9 @@ def verify_initial_dependencies(manifest, root):
     policy = manifest.get("declaration", {}).get("verified_data_cache_release")
     if policy not in (None, "posix_fadvise_dontneed_v1"):
         raise ValueError("unknown verified data cache release policy")
-    if policy is not None and (not hasattr(os, "posix_fadvise")
-            or not hasattr(os, "POSIX_FADV_DONTNEED")):
+    if policy is not None and (
+        not hasattr(os, "posix_fadvise") or not hasattr(os, "POSIX_FADV_DONTNEED")
+    ):
         raise ValueError("verified data cache release is unavailable")
     pins = {**manifest["pins"], **manifest["environment_pins"]}
     data_files = data_bytes = 0
@@ -240,8 +261,14 @@ def verify_initial_dependencies(manifest, root):
             except OSError as error:
                 raise ValueError("verified data cache release failed") from error
             data_files += 1
-    return dict(policy=policy,authenticated_files=len(pins),released_data_files=data_files,
-        streamed_data_bytes=data_bytes,every_pin_authenticated=True,file_contents_changed=False)
+    return dict(
+        policy=policy,
+        authenticated_files=len(pins),
+        released_data_files=data_files,
+        streamed_data_bytes=data_bytes,
+        every_pin_authenticated=True,
+        file_contents_changed=False,
+    )
 
 
 def preload_verified_native_dependencies(manifest):
@@ -272,9 +299,14 @@ def declared_protected_inputs(plan):
         raise ValueError("protected inputs require an exact path-to-SHA256 mapping")
     inputs = {}
     for name, expected in protected.items():
-        if (type(name) is not str or not name.strip() or not Path(name).is_absolute()
-                or type(expected) is not str or len(expected) != 64
-                or any(c not in "0123456789abcdef" for c in expected)):
+        if (
+            type(name) is not str
+            or not name.strip()
+            or not Path(name).is_absolute()
+            or type(expected) is not str
+            or len(expected) != 64
+            or any(c not in "0123456789abcdef" for c in expected)
+        ):
             raise ValueError("protected inputs require absolute file paths and SHA256 digests")
         path = Path(name).resolve()
         if not path.is_file() or sha256(path.read_bytes()).hexdigest() != expected:
@@ -293,8 +325,11 @@ def launch():
     parser.add_argument("--plan", required=True)
     parser.add_argument("--plan-sha256", required=True)
     parser.add_argument("--fresh", action="store_true")
-    parser.add_argument("--check-imports", action="store_true",
-        help="Import and validate the fresh driver without an emulator or gameplay dispatch")
+    parser.add_argument(
+        "--check-imports",
+        action="store_true",
+        help="Import and validate the fresh driver without an emulator or gameplay dispatch",
+    )
     args, remaining = parser.parse_known_args()
     if args.check_imports and (not args.fresh or remaining):
         parser.error("--check-imports requires --fresh and accepts no gameplay arguments")
@@ -315,9 +350,12 @@ def launch():
     sources = plan.get("backend_sources")
     if "backend_sources" in plan and (
         not isinstance(sources, dict)
-        or any(not isinstance(name, str) or not isinstance(expected, str)
-               or manifest["pins"].get(name) != expected
-               for name, expected in sources.items())
+        or any(
+            not isinstance(name, str)
+            or not isinstance(expected, str)
+            or manifest["pins"].get(name) != expected
+            for name, expected in sources.items()
+        )
     ):
         raise ValueError("frozen backend declaration differs from package")
     protected_inputs = declared_protected_inputs(plan)
@@ -329,9 +367,9 @@ def launch():
         str(root / "checkout/scripts"),
         str(root / "helpers"),
     ]
-    sys.meta_path.insert(0, FrozenSourceFinder(
-        root, manifest["pins"], manifest["environment_pins"]
-    ))
+    sys.meta_path.insert(
+        0, FrozenSourceFinder(root, manifest["pins"], manifest["environment_pins"])
+    )
     from pokemon_red_completion.red_player_package import bind_player_package, package_read_guard
 
     bound = bind_player_package(
@@ -339,14 +377,17 @@ def launch():
     )
     native_dependency_imports = preload_verified_native_dependencies(bound)
     reads, writes = package_read_guard(
-        bound, manifest_path=manifest_path, output=plan_path.parent,
+        bound,
+        manifest_path=manifest_path,
+        output=plan_path.parent,
         extra_inputs=(str(plan_path), *protected_inputs),
     )
     script = "run_fresh_red_player.py" if args.fresh else "run_configured_red_player.py"
     sys.argv = [script, "--plan", str(plan_path), *remaining]
     try:
-        run_selected_driver(root / "checkout/scripts" / script,
-            plan=plan, check_imports=args.check_imports)
+        run_selected_driver(
+            root / "checkout/scripts" / script, plan=plan, check_imports=args.check_imports
+        )
     finally:
         import_failure = None
         try:

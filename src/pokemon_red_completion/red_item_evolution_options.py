@@ -7,14 +7,14 @@ executor; one catalog-selected evolution is not cloned into several menu rows.
 
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
-from typing import cast
+from typing import TypedDict, cast
 
-from .player_option_level_workload import OptionLevelWorkload
 from .collection import CollectionLocation
 from .executor import CountingExecutor
 from .goal_manager import GoalKind, GoalUnavailableReason
 from .goal_manager_runtime import ExecutableGoalBinding
 from .observation import MAX_BAG_ITEMS
+from .player_option_level_workload import OptionLevelWorkload
 from .red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
 from .red_evolution_stones import BUYABLE_EVOLUTION_STONES, EVOLUTION_STONE_ITEMS
 from .red_full_pokedex_direct_profile import _evolution_capability_parameters
@@ -33,6 +33,12 @@ from .red_resource_goal_router import RedResourceGoalRouter
 from .resource_economy_observation import EconomyMode, EconomyOffer
 from .route_executor import InterruptionHandler
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
+
+
+class _InterruptionWrapperOptions(TypedDict, total=False):
+    interruption_handler_wrapper: Callable[
+        [InterruptionHandler, RedGoalProviderSpec], InterruptionHandler
+    ]
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,6 +73,9 @@ def enumerate_red_item_evolutions(
         raise TypeError("evolution interruption wrapper must be callable")
     if runtime.registration_policy is None:
         raise ValueError("item target enumeration requires a registration policy")
+    router_options: _InterruptionWrapperOptions = {}
+    if interruption_handler_wrapper is not None:
+        router_options["interruption_handler_wrapper"] = interruption_handler_wrapper
     before = actions.actions_executed, runtime.emulator.frame_count, runtime.reader.read()
     registered = runtime.registration_policy.goal_registered(observation.collection_observation)
     boxed = {
@@ -113,13 +122,19 @@ def enumerate_red_item_evolutions(
                 "target_species_ref": method.species_ref,
                 "item_id": item_id,
             }
-            providers = {
-                spec.kind: (spec.kind, spec.mechanic,
-                            cast(Mapping[str, object], _thaw(spec.parameters)))
-                for spec in runtime.profile.providers if spec.kind is not GoalKind.EVOLVE_SPECIES
+            providers: dict[GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]] = {
+                spec.kind: (
+                    spec.kind,
+                    spec.mechanic,
+                    cast(Mapping[str, object], _thaw(spec.parameters)),
+                )
+                for spec in runtime.profile.providers
+                if spec.kind is not GoalKind.EVOLVE_SPECIES
             }
             providers[GoalKind.EVOLVE_SPECIES] = (
-                GoalKind.EVOLVE_SPECIES, RedGoalMechanic.TARGETED_ITEM_EVOLUTION, parameters,
+                GoalKind.EVOLVE_SPECIES,
+                RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+                parameters,
             )
             profile = parse_red_goal_context_profile(
                 build_red_goal_context_profile_payload(
@@ -147,8 +162,7 @@ def enumerate_red_item_evolutions(
                     maximum_emulator_frames=maximum_frames,
                     quote_resource_costs=True,
                     include_recovery_offers=False,
-                    **({"interruption_handler_wrapper": interruption_handler_wrapper}
-                       if interruption_handler_wrapper is not None else {}),
+                    **router_options,
                 ).enumerate_routed_kinds(observation, frozenset({GoalKind.EVOLVE_SPECIES}))
                 bindings = tuple(b for b in routed.bindings if b.kind is GoalKind.EVOLVE_SPECIES)
                 if len(bindings) > 1:

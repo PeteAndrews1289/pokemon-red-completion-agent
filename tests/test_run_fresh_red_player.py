@@ -65,8 +65,12 @@ def test_import_only_checks_blocked_plan_without_granting_gameplay_authority():
     assert spec == original
     with pytest.raises(ValueError):
         validate_fresh_plan(spec)
-    for key, value in (("parent", "/old/save"), ("fit_allowed", True),
-                       ("startup", "teacher_rival"), ("extra_boot_frames", True)):
+    for key, value in (
+        ("parent", "/old/save"),
+        ("fit_allowed", True),
+        ("startup", "teacher_rival"),
+        ("extra_boot_frames", True),
+    ):
         faulty = dict(spec, **{key: value})
         with pytest.raises(ValueError):
             validate_fresh_plan(faulty, import_only=True)
@@ -100,8 +104,15 @@ def test_fresh_entry_preserves_valid_spectator_settings_without_changing_plan():
     assert spec == before
 
 
-@pytest.mark.parametrize("spectator", [True, {}, {"port": 8769, "maximum_fps": 0},
-    {"port": 8769, "maximum_fps": 4, "host": "0.0.0.0"}])
+@pytest.mark.parametrize(
+    "spectator",
+    [
+        True,
+        {},
+        {"port": 8769, "maximum_fps": 0},
+        {"port": 8769, "maximum_fps": 4, "host": "0.0.0.0"},
+    ],
+)
 def test_fresh_entry_rejects_bad_spectator_settings_even_in_import_mode(spectator):
     spec = dict(plan(), spectator=spectator)
     with pytest.raises(ValueError, match="spectator"):
@@ -141,8 +152,11 @@ def test_real_fresh_teacher_overlap_preserves_exact_exclusions_and_order():
     before = deepcopy(template)
     profiles = (teacher, additional)
     config = realized_configuration(
-        template, origin_sha256="a" * 64, origin_id="fresh",
-        starter_ref="observed-starter", teacher_profiles=profiles,
+        template,
+        origin_sha256="a" * 64,
+        origin_id="fresh",
+        starter_ref="observed-starter",
+        teacher_profiles=profiles,
     )
     assert template == before and profiles == (teacher, additional)
     assert config.excluded_profiles == (other, teacher, additional)
@@ -151,7 +165,9 @@ def test_real_fresh_teacher_overlap_preserves_exact_exclusions_and_order():
     assert config.admits(N(kind=N(value="advance_story"), binding_ref="native:" + "e" * 64))
     repeated = realized_configuration(
         dict(template, excluded_profiles=config.excluded_profiles),
-        origin_sha256="a" * 64, origin_id="fresh", starter_ref="observed-starter",
+        origin_sha256="a" * 64,
+        origin_id="fresh",
+        starter_ref="observed-starter",
         teacher_profiles=profiles,
     )
     assert repeated == config and repeated.sha256 == config.sha256
@@ -165,12 +181,13 @@ def test_realization_collapses_only_an_identical_kind_and_profile_pair():
         quote_capture_route_work=True,
     )
     config = realized_configuration(
-        template, origin_sha256="a" * 64, origin_id="fresh", starter_ref="observed-starter",
+        template,
+        origin_sha256="a" * 64,
+        origin_id="fresh",
+        starter_ref="observed-starter",
         teacher_profiles=(("advance_story", "c" * 64),),
     )
-    assert config.excluded_profiles == (
-        ("evolve_species", "c" * 64), ("advance_story", "c" * 64)
-    )
+    assert config.excluded_profiles == (("evolve_species", "c" * 64), ("advance_story", "c" * 64))
 
 
 @pytest.mark.parametrize("faulty_list", ["base", "teacher"])
@@ -195,7 +212,10 @@ def test_realization_does_not_normalize_invalid_or_duplicate_input_lists(faulty_
     before = deepcopy(template)
     with pytest.raises(ValueError, match="exclusions must name exact kind/profile pairs"):
         realized_configuration(
-            template, origin_sha256="a" * 64, origin_id="fresh", starter_ref="observed-starter",
+            template,
+            origin_sha256="a" * 64,
+            origin_id="fresh",
+            starter_ref="observed-starter",
             teacher_profiles=invalid if faulty_list == "teacher" else (pair,),
         )
     assert template == before
@@ -210,7 +230,10 @@ def test_realization_keeps_teacher_pair_type_validation_when_it_overlaps():
     )
     with pytest.raises(ValueError, match="exclusions must name exact kind/profile pairs"):
         realized_configuration(
-            template, origin_sha256="a" * 64, origin_id="fresh", starter_ref="observed-starter",
+            template,
+            origin_sha256="a" * 64,
+            origin_id="fresh",
+            starter_ref="observed-starter",
             teacher_profiles=(["advance_story", "c" * 64],),
         )
 
@@ -248,10 +271,22 @@ def test_model_handoff_cannot_pass_from_initialization_or_failed_admission():
     )
 
 
-@pytest.mark.parametrize("fault", [
-    None, "unknown_error", "wrong_state", "no_digest", "wrong_binding", "substitution",
-    "input", "false_zero", "unqualified", "erased_failure", "wrong_schema",
-])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "unknown_error",
+        "wrong_state",
+        "no_digest",
+        "wrong_binding",
+        "substitution",
+        "input",
+        "false_zero",
+        "unqualified",
+        "erased_failure",
+        "wrong_schema",
+    ],
+)
 def test_readiness_adjudicates_only_matching_confirmed_control_receipt(fault):
     state = "b" * 64
     outcome = dict(
@@ -261,9 +296,14 @@ def test_readiness_adjudicates_only_matching_confirmed_control_receipt(fault):
     )
     receipt = dict(
         schema="pokemon.red.qualified-native-control-handoff.v1",
-        state_sha256=state, binding_ref="pokemon.red:retained-engagement:" + state,
-        qualified=True, failed_transport_preserved=True, strategic_substitution=False,
-        inputs=0, frames=0, model_queries=0,
+        state_sha256=state,
+        binding_ref="pokemon.red:retained-engagement:" + state,
+        qualified=True,
+        failed_transport_preserved=True,
+        strategic_substitution=False,
+        inputs=0,
+        frames=0,
+        model_queries=0,
     )
     if fault == "unknown_error":
         outcome["error"] = "unexplained transport fault"
@@ -288,14 +328,21 @@ def test_readiness_adjudicates_only_matching_confirmed_control_receipt(fault):
     episodes = [dict(model_decisions=1, outcomes=[outcome])]
     original = deepcopy(episodes)
     assert not model_handoff_verified(episodes)
-    assert model_handoff_verified(
-        episodes, recovered_control_handoffs=(receipt,)
-    ) is (fault is None)
+    assert model_handoff_verified(episodes, recovered_control_handoffs=(receipt,)) is (
+        fault is None
+    )
     assert episodes == original
 
 
-@pytest.mark.parametrize("machine_mode", [None, "direct_attack_capacity_v1",
-    "boxed_frontier_attack_capacity_v2", "boxed_frontier_evolution_bundles_v3"])
+@pytest.mark.parametrize(
+    "machine_mode",
+    [
+        None,
+        "direct_attack_capacity_v1",
+        "boxed_frontier_attack_capacity_v2",
+        "boxed_frontier_evolution_bundles_v3",
+    ],
+)
 @pytest.mark.parametrize("control_handoff", [None, "accepted", "rejected"])
 @pytest.mark.parametrize("model_version", [7, 9])
 def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
@@ -324,6 +371,7 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
 
     emulator = Emulator()
     import run_configured_red_player as configured
+
     import pokemon_red_completion.red_boxed_machine_options as boxed
     import pokemon_red_completion.red_prepared_evolution_options as prepared
 
@@ -403,16 +451,20 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         assert declared["goal_selection"]["mode"] == "exploration"
         context = json.loads((parent / "CONTEXT.json").read_bytes())
         assert declared.get("owned_machine_options") == spec.get("owned_machine_options")
-        holder = dict(prior_spent=context["spent"],
-            configured_route=N(route_world=f"fresh-route-{len(assembled)}"))
+        holder = dict(
+            prior_spent=context["spent"],
+            configured_route=N(route_world=f"fresh-route-{len(assembled)}"),
+        )
         assembled.append(context["state_sha256"])
 
         def factory(controller):
-            holder["runtime"] = N(emulator=controller, reader=N(read=lambda:N(badge_bits=255)))
+            holder["runtime"] = N(emulator=controller, reader=N(read=lambda: N(badge_bits=255)))
             return holder["runtime"]
 
-        menu = N(enumerate_owned_machines=lambda *a:("existing-machine",),
-            enumerate_collection=lambda *a:("ordinary-evolution",))
+        menu = N(
+            enumerate_owned_machines=lambda *a: ("existing-machine",),
+            enumerate_collection=lambda *a: ("ordinary-evolution",),
+        )
         return (parent / "terminal.state").read_bytes(), factory, menu, holder, object()
 
     def chunk(**kwargs):
@@ -420,7 +472,10 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         expected_machines = ("existing-machine",)
         if machine_mode:
             expected_machines += ("party-machine",)
-        if machine_mode in ("boxed_frontier_attack_capacity_v2", "boxed_frontier_evolution_bundles_v3"):
+        if machine_mode in (
+            "boxed_frontier_attack_capacity_v2",
+            "boxed_frontier_evolution_bundles_v3",
+        ):
             expected_machines += ("boxed-machine",)
         assert menu.enumerate_owned_machines(runtime, object(), object()) == expected_machines
         expected_evolutions = ("ordinary-evolution",)
@@ -429,7 +484,9 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         assert menu.enumerate_collection(runtime, object(), object()) == expected_evolutions
         if machine_mode == "boxed_frontier_evolution_bundles_v3":
             assert recipe_calls[-1]["admits"] == kwargs["configuration"].admits
-            assert not recipe_calls[-1]["admits"](N(kind=N(value="advance_story"), binding_ref="native:"+"c"*64))
+            assert not recipe_calls[-1]["admits"](
+                N(kind=N(value="advance_story"), binding_ref="native:" + "c" * 64)
+            )
         calls.append(kwargs)
         ordinal = kwargs["ordinal"]
         emulator.state, emulator.frame_count = f"earned-{ordinal}".encode(), 997 + ordinal * 20
@@ -441,8 +498,10 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         (output / "terminal.state").write_bytes(emulator.state)
         (output / "CONTEXT.json").write_text(json.dumps(context))
         error_type = (
-            "RouteExecutionError" if control_handoff else "ControllerFrameBudgetExhausted"
-        ) if ordinal == 1 else None
+            ("RouteExecutionError" if control_handoff else "ControllerFrameBudgetExhausted")
+            if ordinal == 1
+            else None
+        )
         outcome = dict(error_type=error_type)
         if control_handoff and ordinal == 1:
             outcome.update(
@@ -474,10 +533,14 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
             return None
         return dict(
             schema="pokemon.red.qualified-native-control-handoff.v1",
-            qualified=True, state_sha256=row["state_sha256"],
+            qualified=True,
+            state_sha256=row["state_sha256"],
             binding_ref="pokemon.red:retained-engagement:" + row["state_sha256"],
-            failed_transport_preserved=True, strategic_substitution=False,
-            inputs=0, frames=0, model_queries=0,
+            failed_transport_preserved=True,
+            strategic_substitution=False,
+            inputs=0,
+            frames=0,
+            model_queries=0,
         )
 
     monkeypatch.setattr(fresh, "qualified_menu_control_handoff", qualify)
@@ -497,8 +560,10 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         ),
     )
     if machine_mode:
-        spec["owned_machine_options"] = dict(mode=machine_mode,
-            reason="Reuse the same declared preparation capability in fresh renewals.")
+        spec["owned_machine_options"] = dict(
+            mode=machine_mode,
+            reason="Reuse the same declared preparation capability in fresh renewals.",
+        )
     if control_handoff:
         spec["automatic_runtime_renewal"] = dict(mode="live_chunks_v1", reason="Declared renewal.")
     path = tmp_path / "PLAN.json"
@@ -523,4 +588,6 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         assert len(result["verified_automatic_control_recoveries"]) == 1
         assert not result["pending_automatic_control_recoveries"]
     assert all(call["plan"]["goal_selection"] == spec["goal_selection"] for call in calls)
-    assert len(recipe_calls) == (len(calls) if machine_mode == "boxed_frontier_evolution_bundles_v3" else 0)
+    assert len(recipe_calls) == (
+        len(calls) if machine_mode == "boxed_frontier_evolution_bundles_v3" else 0
+    )

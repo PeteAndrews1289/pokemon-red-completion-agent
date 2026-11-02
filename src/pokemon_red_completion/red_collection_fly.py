@@ -8,6 +8,7 @@ owns destination execution, verification and total resource accounting.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import replace
 from functools import lru_cache, partial
 from typing import TYPE_CHECKING
@@ -137,10 +138,12 @@ def bind_collection_fly(
     raw, start = fresh.observation.raw, fresh.traversal
     if land_departure_projection and (
         getattr(runtime, "collection_surf_departure", False) is not True
-        or reader.read().map_id < 0x25
+        or (departure_map := reader.read().map_id) is None
+        or departure_map < 0x25
         or reader.read_overworld_movement_mode() is not OverworldMovementMode.SURFING
         or reader.read_safari_session_state().in_safari_zone
-        or start.mode != "land" or not 0 <= start.map_id <= 0x24
+        or start.mode != "land"
+        or not 0 <= start.map_id <= 0x24
     ):
         return None
     if start.map_id >= 0x25:
@@ -157,8 +160,10 @@ def bind_collection_fly(
         or start.map_id == 0x0B
         or start.mode != "land"
         or not int(raw.badge_bits or 0) & int(Badge.THUNDER)
-        or (not land_departure_projection
-            and reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING)
+        or (
+            not land_departure_projection
+            and reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+        )
         or reader.read_bottom_dialogue_box_visible()
         or reader.read_pending_trainer_battle_identity() is not None
         or reader.read_fly_menu_state() is not None
@@ -299,7 +304,8 @@ def bind_collection_fly(
                 # Ordinary route scripts (including Tower purification text)
                 # must restore real field control before the destination runs.
                 maximum_scripted_dialogues=4,
-                allow_field_faints=True, emulator=runtime.emulator,
+                allow_field_faints=True,
+                emulator=runtime.emulator,
             ),
         )
         # Fly changes only the transport prefix. Its onward walk must retain
@@ -344,6 +350,9 @@ def bind_collection_fly(
 
         fields = FieldMoveSummary.from_evidence(result.evidence) or FieldMoveSummary()
         fields = fields.plus(FieldMoveSummary(flights=len(port.fly_receipts)))
+        route_setback = result.evidence.get("route_setback")
+        if "route_setback" in result.evidence and not isinstance(route_setback, Mapping):
+            raise Gen1FieldMoveError("onward walk route setback evidence differs")
         route_report = GoalExecutionReport(
             actions_executed=after.controller_actions - before.controller_actions,
             frames_executed=after.emulator_frames - before.emulator_frames,
@@ -354,8 +363,11 @@ def bind_collection_fly(
                 "field_moves": fields.public_dict(),
                 "cartridge_landing_verified": True,
                 "onward_walk": dict(result.evidence),
-                **({"route_setback": dict(result.evidence["route_setback"])}
-                   if "route_setback" in result.evidence else {}),
+                **(
+                    {"route_setback": dict(route_setback)}
+                    if isinstance(route_setback, Mapping)
+                    else {}
+                ),
                 "transport_is_policy_kind": False,
             },
         )
@@ -372,7 +384,8 @@ def bind_collection_fly(
             traversal.observe()
         ):
             return GoalVerification.failed(
-                route_failure_reason or GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                route_failure_reason or GoalFailureReason.OUTCOME_NOT_VERIFIED
+            )
         return GoalVerification.succeeded()
 
     from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
@@ -407,8 +420,10 @@ def bind_collection_fly(
         travel_handlers,
     )
     estimated_effort, estimated_risk = min(1.0, 0.42 + len(plan.steps) / 1000), 0.18
-    if (getattr(router, "quote_capture_route_work", False)
-            and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE):
+    if (
+        getattr(router, "quote_capture_route_work", False)
+        and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+    ):
         from pokemon_red_completion.red_resource_goal_router import (
             ordinary_route_work_quote,
             route_work_estimates,
@@ -422,12 +437,17 @@ def bind_collection_fly(
         estimated_effort, estimated_risk = route_work_estimates(
             estimated_effort, work_quote["ordinary_trainers_crossed"]
         )
-        actions.record_diagnostic_event("capture_route_work_quote", dict(
-            source_id=str(spec.parameters["source_id"]), **work_quote,
-            transport_leg="post_fly_walking", estimated_effort=estimated_effort,
-            estimated_risk=estimated_risk,
-            policy_features="existing_normalized_effort_and_risk",
-        ))
+        actions.record_diagnostic_event(
+            "capture_route_work_quote",
+            dict(
+                source_id=str(spec.parameters["source_id"]),
+                **work_quote,
+                transport_leg="post_fly_walking",
+                estimated_effort=estimated_effort,
+                estimated_risk=estimated_risk,
+                policy_features="existing_normalized_effort_and_risk",
+            ),
+        )
     binding = RoutedSemanticGoalComposer(
         binding_ref="red-collection-fly-goal:" + origin + ":" + spec.configuration_sha256,
         destination_kind=spec.kind,

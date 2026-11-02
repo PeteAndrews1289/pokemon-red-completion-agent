@@ -77,14 +77,14 @@ class Gen1TraversalObserver:
             interruption = "trainer_engagement"
         readiness = self.reader.read_input_readiness()
         input_ready = readiness.ready
-        if (
-            interruption is None
-            and self.reader.read_bottom_dialogue_box_visible()
-        ):
+        if interruption is None and self.reader.read_bottom_dialogue_box_visible():
             interruption = "scripted_dialogue"
         if (
-            interruption is None and not input_ready and raw.ss_anne_departure_pending
-            and readiness.joy_ignore == 255 and not readiness.npc_movement_script_table
+            interruption is None
+            and not input_ready
+            and raw.ss_anne_departure_pending
+            and readiness.joy_ignore == 255
+            and not readiness.npc_movement_script_table
         ):
             interruption = "native_ship_departure"
         ready = interruption is None and input_ready
@@ -154,12 +154,16 @@ class Gen1WildFleeHandler:
         if type(self.allow_field_faint_dialogue) is not bool:
             raise TypeError("field faint dialogue opt-in must be boolean")
         if not isinstance(self.field_faint_warps, tuple) or any(
-            not isinstance(warp, tuple) or len(warp) != 4
-            or any(type(warp[index]) is not int or warp[index] < 0 for index in (0, 2))
+            not isinstance(warp, tuple)
+            or len(warp) != 4
+            or any(type(map_id) is not int or map_id < 0 for map_id in (warp[0], warp[2]))
             or warp[0] == warp[2]
-            or any(not isinstance(warp[index], tuple) or len(warp[index]) != 2
-                   or any(type(value) is not int or value < 0 for value in warp[index])
-                   for index in (1, 3))
+            or any(
+                not isinstance(at, tuple)
+                or len(at) != 2
+                or any(type(value) is not int or value < 0 for value in at)
+                for at in (warp[1], warp[3])
+            )
             for warp in self.field_faint_warps
         ):
             raise ValueError("field faint warps need exact declared native endpoints")
@@ -186,11 +190,16 @@ class Gen1WildFleeHandler:
     def has_new_field_faint(self, current: RawGameState) -> bool:
         """Select the strict faint verifier; this is not proof of a legal faint."""
         before = self._field_boundary
-        return bool(before is not None and before.party_hp is not None
-                    and current.party_hp is not None
-                    and len(before.party_hp) == len(current.party_hp)
-                    and any(old > 0 and hp == 0 for old, hp in
-                            zip(before.party_hp, current.party_hp, strict=True)))
+        return bool(
+            before is not None
+            and before.party_hp is not None
+            and current.party_hp is not None
+            and len(before.party_hp) == len(current.party_hp)
+            and any(
+                old > 0 and hp == 0
+                for old, hp in zip(before.party_hp, current.party_hp, strict=True)
+            )
+        )
 
     def observe_native_field_boundary(self) -> None:
         """Refresh only after an independently verified native field return."""
@@ -198,9 +207,12 @@ class Gen1WildFleeHandler:
             return
         current = self.reader.read()
         ready = self.reader.read_input_readiness()
-        if (current.battle_state != 0 or not ready.ready
-                or self.reader.read_bottom_dialogue_box_visible()
-                or self.reader.trainer_engagement_active()):
+        if (
+            current.battle_state != 0
+            or not ready.ready
+            or self.reader.read_bottom_dialogue_box_visible()
+            or self.reader.trainer_engagement_active()
+        ):
             raise RouteExecutionError("native field boundary is not settled")
         self._field_boundary = current
 
@@ -222,46 +234,62 @@ class Gen1WildFleeHandler:
             or (encounter.player_y, encounter.player_x) != interruption.at
         ):
             raise RouteExecutionError("wild interruption drifted before recovery")
-        escape, extra = flee_wild, {}
         if self.allow_party_faints:
             from .wild_party_flee import flee_with_fainted_lead
 
-            escape, extra = (
-                flee_with_fainted_lead,
-                {"allow_new_faints": True, "allow_status_changes": True, "emulator": self.emulator,
-                 "allow_opponent_ko_exit": callable(
-                     getattr(self.reader, "read_retained_wild_identity", None)
-                 )},
-            )
+            extra = {
+                "allow_new_faints": True,
+                "allow_status_changes": True,
+                "emulator": self.emulator,
+                "allow_opponent_ko_exit": callable(
+                    getattr(self.reader, "read_retained_wild_identity", None)
+                ),
+            }
             if self.allow_field_faint_dialogue:
                 extra["allow_native_purified_transition"] = True
                 extra["allow_native_purified_healing"] = True
-        receipt = escape(
-            self.executor,
-            self.reader,
-            encounter,
-            expected_map_id=interruption.map_id,
-            route_name=self.route_name,
-            stabilization_frames=self.stabilization_frames,
-            error_type=RouteExecutionError,
-            **extra,
-        )
+            receipt = flee_with_fainted_lead(
+                self.executor,
+                self.reader,
+                encounter,
+                expected_map_id=interruption.map_id,
+                route_name=self.route_name,
+                stabilization_frames=self.stabilization_frames,
+                error_type=RouteExecutionError,
+                **extra,
+            )
+        else:
+            receipt = flee_wild(
+                self.executor,
+                self.reader,
+                encounter,
+                expected_map_id=interruption.map_id,
+                route_name=self.route_name,
+                stabilization_frames=self.stabilization_frames,
+                error_type=RouteExecutionError,
+            )
         self.evidence.append(receipt)
         native_event = None
         if self.allow_field_faint_dialogue:
             from .wild_party_flee import purified_zone_escape_event
 
             native_event = purified_zone_escape_event(
-                encounter, self.reader.read(), allow_healing=True)
+                encounter, self.reader.read(), allow_healing=True
+            )
             if native_event is not None and native_event.get("resources_restored"):
                 native_event["individual_xp_box_dex_custody_verified"] = True
             if native_event is not None:
                 record = getattr(self.executor, "record_diagnostic_event", None)
                 if callable(record):
-                    record("native_purified_zone_escape", dict(
-                        actor="rule_based_support", model_queries=0,
-                        native_event=native_event, escape=receipt.public_dict(),
-                    ))
+                    record(
+                        "native_purified_zone_escape",
+                        dict(
+                            actor="rule_based_support",
+                            model_queries=0,
+                            native_event=native_event,
+                            escape=receipt.public_dict(),
+                        ),
+                    )
         if self.allow_field_faint_dialogue:
             self._field_boundary = self.reader.read()
         pending = {}
@@ -283,7 +311,8 @@ class Gen1WildFleeHandler:
             resumed_map=receipt.map_id,
             resumed_at=(receipt.player_y, receipt.player_x),
             details={
-                **receipt.public_dict(), **pending,
+                **receipt.public_dict(),
+                **pending,
                 **({"native_field_event": native_event} if native_event is not None else {}),
             },
         )
@@ -297,26 +326,39 @@ class Gen1WildFleeHandler:
         before = self.reader.read()
         readiness = self.reader.read_input_readiness()
         if (
-            self.ship_departure_evidence or not before.ss_anne_departure_pending
+            self.ship_departure_evidence
+            or not before.ss_anne_departure_pending
             or (interruption.map_id, interruption.at) != (before.map_id, (2, 14))
-            or readiness.ready or readiness.joy_ignore != 255
+            or readiness.ready
+            or readiness.joy_ignore != 255
             or readiness.npc_movement_script_table
             or self.reader.trainer_engagement_active()
             or self.reader.read_bottom_dialogue_box_visible()
         ):
             raise RouteExecutionError("ship departure lacks its exact native pending boundary")
         protected = (
-            "party_count", "party_species_ids", "party_levels", "party_hp", "party_max_hp",
-            "party_stats", "party_status", "party_moves", "party_pp", "player_money",
-            "bag_items", "badge_bits",
+            "party_count",
+            "party_species_ids",
+            "party_levels",
+            "party_hp",
+            "party_max_hp",
+            "party_stats",
+            "party_status",
+            "party_moves",
+            "party_pp",
+            "player_money",
+            "bag_items",
+            "badge_bits",
         )
         if any(getattr(before, key) is None for key in protected):
             raise RouteExecutionError("ship departure resources are unavailable")
         boxes, dex = self.reader.read_all_box_states(), self.reader.read_pokedex_state()
         assert before.event_flags is not None
         expected_events = bytearray(before.event_flags)
-        for flag in (EventFlag.STARTED_WALKING_OUT_OF_DOCK,
-                     EventFlag.WALKED_PAST_GUARD_AFTER_SS_ANNE_LEFT):
+        for flag in (
+            EventFlag.STARTED_WALKING_OUT_OF_DOCK,
+            EventFlag.WALKED_PAST_GUARD_AFTER_SS_ANNE_LEFT,
+        ):
             expected_events[int(flag) // 8] |= 1 << (int(flag) % 8)
         allowed_bits = {
             int(EventFlag.STARTED_WALKING_OUT_OF_DOCK),
@@ -330,10 +372,12 @@ class Gen1WildFleeHandler:
             native_warp_in_flight = bool(
                 current.map_id == int(MapId.VERMILION_CITY)
                 and (current.player_y, current.player_x) == (0, 14)
-                and not controls.ready and controls.joy_ignore == 255
+                and not controls.ready
+                and controls.joy_ignore == 255
                 and controls.simulated_joypad_index == 0
                 and controls.player_moving_direction == 8
-                and controls.status_flags_5 & 128 and controls.movement_flags & 4
+                and controls.status_flags_5 & 128
+                and controls.movement_flags & 4
                 and current.event_flags is not None
                 and event_flag_is_set(
                     current.event_flags, int(EventFlag.STARTED_WALKING_OUT_OF_DOCK)
@@ -343,16 +387,17 @@ class Gen1WildFleeHandler:
                 )
             )
             if (
-                current.battle_state != 0 or current.event_flags is None
+                current.battle_state != 0
+                or current.event_flags is None
                 or len(current.event_flags) != len(before.event_flags)
                 or any(getattr(current, key) != getattr(before, key) for key in protected)
                 or self.reader.read_all_box_states() != boxes
                 or self.reader.read_pokedex_state() != dex
                 or self.reader.trainer_engagement_active()
                 or self.reader.read_bottom_dialogue_box_visible()
-                or not native_warp_in_flight and (
-                    current.map_id, (current.player_y, current.player_x)
-                ) not in {
+                or not native_warp_in_flight
+                and (current.map_id, (current.player_y, current.player_x))
+                not in {
                     (int(MapId.VERMILION_DOCK), (2, 14)),
                     (int(MapId.VERMILION_DOCK), (1, 14)),
                     (int(MapId.VERMILION_DOCK), (0, 14)),
@@ -363,12 +408,14 @@ class Gen1WildFleeHandler:
                     (int(MapId.VERMILION_CITY), (31, 18)),
                 }
                 or any(
-                    old & ~new or any((old ^ new) & (1 << bit)
-                                     and index * 8 + bit not in allowed_bits
-                                     for bit in range(8))
-                    for index, (old, new) in enumerate(zip(
-                        before.event_flags, current.event_flags, strict=True
-                    ))
+                    old & ~new
+                    or any(
+                        (old ^ new) & (1 << bit) and index * 8 + bit not in allowed_bits
+                        for bit in range(8)
+                    )
+                    for index, (old, new) in enumerate(
+                        zip(before.event_flags, current.event_flags, strict=True)
+                    )
                 )
             ):
                 raise RouteExecutionError("ship departure changed its protected native boundary")
@@ -382,12 +429,20 @@ class Gen1WildFleeHandler:
                         "ship departure did not verify its native city landing"
                     )
                 receipt = InterruptionReceipt(
-                    "native_ship_departure", current.map_id, (29, 18),
-                    dict(verified=True, source_map=int(MapId.VERMILION_DOCK),
-                         automatic_native_warp=True, wait_actions=pulse,
-                         wait_frames_requested=pulse * 96, model_queries=0,
-                         protected_resources_unchanged=True),
-                    allows_relocation=True, allows_map_transition=True,
+                    "native_ship_departure",
+                    current.map_id,
+                    (29, 18),
+                    dict(
+                        verified=True,
+                        source_map=int(MapId.VERMILION_DOCK),
+                        automatic_native_warp=True,
+                        wait_actions=pulse,
+                        wait_frames_requested=pulse * 96,
+                        model_queries=0,
+                        protected_resources_unchanged=True,
+                    ),
+                    allows_relocation=True,
+                    allows_map_transition=True,
                 )
                 self.ship_departure_evidence.append(receipt)
                 return receipt
@@ -405,28 +460,51 @@ class Gen1WildFleeHandler:
         """
         before, current = self._field_boundary, self.reader.read()
         ready = self.reader.read_input_readiness()
+        pressed_buttons = getattr(self.emulator, "pressed_buttons", None)
         if (
-            before is None or self.emulator is None or self.emulator.pressed_buttons
-            or before.battle_state != 0 or not before.game_started or not current.game_started
-            or current.battle_state != 0 or ready.ready or ready.joy_ignore
-            or ready.simulated_joypad_index or ready.npc_movement_script_table
+            before is None
+            or self.emulator is None
+            or pressed_buttons is None
+            or pressed_buttons
+            or before.battle_state != 0
+            or not before.game_started
+            or not current.game_started
+            or current.battle_state != 0
+            or ready.ready
+            or ready.joy_ignore
+            or ready.simulated_joypad_index
+            or ready.npc_movement_script_table
             or self.reader.trainer_engagement_active()
             or not self.reader.read_bottom_dialogue_box_visible()
             or (current.map_id, (current.player_y, current.player_x))
             != (interruption.map_id, interruption.at)
-            or not before.party_hp or not any(before.party_hp)
+            or not before.party_hp
+            or not any(before.party_hp)
             or before.party_count != len(before.party_hp)
             or current.party_hp != (0,) * len(before.party_hp)
             or before.party_status is None
             or len(before.party_status) != len(before.party_hp)
             or current.party_status != (0,) * len(before.party_hp)
-            or any(hp > 0 and status != 8 for hp, status in zip(
-                before.party_hp, before.party_status, strict=True))
-            or any(getattr(before, key) is None or getattr(current, key) != getattr(before, key)
-                   for key in (
-                       "party_count", "party_species_ids", "party_levels", "party_max_hp",
-                       "party_stats", "party_moves", "party_pp", "player_money", "bag_items",
-                       "badge_bits", "event_flags"))
+            or any(
+                hp > 0 and status != 8
+                for hp, status in zip(before.party_hp, before.party_status, strict=True)
+            )
+            or any(
+                getattr(before, key) is None or getattr(current, key) != getattr(before, key)
+                for key in (
+                    "party_count",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_max_hp",
+                    "party_stats",
+                    "party_moves",
+                    "party_pp",
+                    "player_money",
+                    "bag_items",
+                    "badge_bits",
+                    "event_flags",
+                )
+            )
         ):
             return
         raise Gen1FieldBlackoutPending(
@@ -450,44 +528,68 @@ class Gen1WildFleeHandler:
         ):
             return self._dismiss_purified_zone(interruption, current)
         ready = self.reader.read_input_readiness()
-        if (before is None or current.battle_state != 0 or ready.joy_ignore
-                or ready.simulated_joypad_index or ready.npc_movement_script_table
-                or self.reader.trainer_engagement_active()
-                or not current.party_hp or not before.party_hp or not before.party_status
-                or len(current.party_hp) != len(before.party_hp)
-                or len(before.party_status) != len(before.party_hp)
-                or current.party_species_ids != before.party_species_ids
-                or not any(hp > 0 for hp in current.party_hp)
-                or len(self.field_faint_evidence) >= len(current.party_hp)):
+        if (
+            before is None
+            or current.battle_state != 0
+            or ready.joy_ignore
+            or ready.simulated_joypad_index
+            or ready.npc_movement_script_table
+            or self.reader.trainer_engagement_active()
+            or not current.party_hp
+            or not before.party_hp
+            or not before.party_status
+            or len(current.party_hp) != len(before.party_hp)
+            or len(before.party_status) != len(before.party_hp)
+            or current.party_species_ids != before.party_species_ids
+            or not any(hp > 0 for hp in current.party_hp)
+            or len(self.field_faint_evidence) >= len(current.party_hp)
+        ):
             raise RouteExecutionError("field dialogue is not an admitted native faint")
-        slots = tuple(index + 1 for index, (old_hp, hp, status) in enumerate(zip(
-            before.party_hp, current.party_hp, before.party_status, strict=True
-        )) if old_hp > 0 and hp == 0 and status & 0x08)
+        slots = tuple(
+            index + 1
+            for index, (old_hp, hp, status) in enumerate(
+                zip(before.party_hp, current.party_hp, before.party_status, strict=True)
+            )
+            if old_hp > 0 and hp == 0 and status & 0x08
+        )
         if not slots:
             raise RouteExecutionError("field dialogue lacks a newly poisoned member faint")
         boxes, dex = self.reader.read_all_box_states(), self.reader.read_pokedex_state()
         handler = Gen1RouteInterruptionHandler(
-            self.executor, self.reader, maximum_flees=0, maximum_trainer_battles=0,
-            stabilization_frames=self.stabilization_frames, maximum_scripted_dialogues=1,
-            max_scripted_dialogue_pulses=32, route_name=self.route_name,
+            self.executor,
+            self.reader,
+            maximum_flees=0,
+            maximum_trainer_battles=0,
+            stabilization_frames=self.stabilization_frames,
+            maximum_scripted_dialogues=1,
+            max_scripted_dialogue_pulses=32,
+            route_name=self.route_name,
         )
         receipt = handler._dismiss_scripted_dialogue(interruption)
         after = self.reader.read()
         landing = (receipt.resumed_map, receipt.resumed_at)
         same_tile = landing == (interruption.map_id, interruption.at)
-        declared_warp = (interruption.map_id, interruption.at,
-                         receipt.resumed_map, receipt.resumed_at) in self.field_faint_warps
+        declared_warp = (
+            interruption.map_id,
+            interruption.at,
+            receipt.resumed_map,
+            receipt.resumed_at,
+        ) in self.field_faint_warps
         # Gen I processes field poison in party order. A faint message pauses
         # that loop; only later, still-poisoned living members can receive its
         # remaining one-point tick. Never admit healing or another faint here.
         pending_ticks = []
-        hp_preserved = (after.party_hp is not None and current.party_status is not None
-                        and len(after.party_hp) == len(current.party_hp)
-                        and len(current.party_status) == len(current.party_hp))
+        hp_preserved = (
+            after.party_hp is not None
+            and current.party_status is not None
+            and len(after.party_hp) == len(current.party_hp)
+            and len(current.party_status) == len(current.party_hp)
+        )
         if hp_preserved:
-            for index, (old_hp, hp, status) in enumerate(zip(
-                current.party_hp, after.party_hp, current.party_status, strict=True
-            ), start=1):
+            assert after.party_hp is not None and current.party_status is not None
+            for index, (old_hp, hp, status) in enumerate(
+                zip(current.party_hp, after.party_hp, current.party_status, strict=True), start=1
+            ):
                 if type(old_hp) is not int or type(hp) is not int or type(status) is not int:
                     hp_preserved = False
                 elif hp != old_hp:
@@ -495,23 +597,45 @@ class Gen1WildFleeHandler:
                         pending_ticks.append(index)
                     else:
                         hp_preserved = False
-        if (not (same_tile or declared_warp) or not hp_preserved
-                or any(getattr(after, key) != getattr(current, key) for key in (
-                    "player_money", "bag_items", "badge_bits", "event_flags",
-                    "party_count", "party_species_ids", "party_levels", "party_max_hp",
-                    "party_stats", "party_pp",
-                    "party_status", "party_moves"))
-                or self.reader.read_all_box_states() != boxes
-                or self.reader.read_pokedex_state() != dex):
+        if (
+            not (same_tile or declared_warp)
+            or not hp_preserved
+            or any(
+                getattr(after, key) != getattr(current, key)
+                for key in (
+                    "player_money",
+                    "bag_items",
+                    "badge_bits",
+                    "event_flags",
+                    "party_count",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_max_hp",
+                    "party_stats",
+                    "party_pp",
+                    "party_status",
+                    "party_moves",
+                )
+            )
+            or self.reader.read_all_box_states() != boxes
+            or self.reader.read_pokedex_state() != dex
+        ):
             raise RouteExecutionError("field faint dismissal changed protected resources")
-        receipt = replace(receipt, allows_relocation=declared_warp,
-            allows_map_transition=declared_warp, details={
-            **receipt.details, "native_field_faint": True, "new_fainted_slots": list(slots),
-            "pending_native_poison_tick_slots": pending_ticks,
-            "declared_native_warp": declared_warp,
-            **({"source_map": interruption.map_id} if declared_warp else {}),
-            "learned_recovery": False, "model_queries": 0,
-        })
+        receipt = replace(
+            receipt,
+            allows_relocation=declared_warp,
+            allows_map_transition=declared_warp,
+            details={
+                **receipt.details,
+                "native_field_faint": True,
+                "new_fainted_slots": list(slots),
+                "pending_native_poison_tick_slots": pending_ticks,
+                "declared_native_warp": declared_warp,
+                **({"source_map": interruption.map_id} if declared_warp else {}),
+                "learned_recovery": False,
+                "model_queries": 0,
+            },
+        )
         self.field_faint_evidence.append(receipt)
         self._field_boundary = after
         return receipt
@@ -535,37 +659,67 @@ class Gen1WildFleeHandler:
             raise RouteExecutionError("purified-zone message lacks native whole-party healing")
         boxes, dex = self.reader.read_all_box_states(), self.reader.read_pokedex_state()
         handler = Gen1RouteInterruptionHandler(
-            self.executor, self.reader, maximum_flees=0, maximum_trainer_battles=0,
-            stabilization_frames=self.stabilization_frames, maximum_scripted_dialogues=1,
-            max_scripted_dialogue_pulses=32, route_name=self.route_name,
+            self.executor,
+            self.reader,
+            maximum_flees=0,
+            maximum_trainer_battles=0,
+            stabilization_frames=self.stabilization_frames,
+            maximum_scripted_dialogues=1,
+            max_scripted_dialogue_pulses=32,
+            route_name=self.route_name,
         )
         receipt = handler._dismiss_scripted_dialogue(interruption)
         after = self.reader.read()
         if (
             (receipt.resumed_map, receipt.resumed_at) != (interruption.map_id, interruption.at)
-            or any(getattr(after, key) != getattr(current, key) for key in (
-                "player_money", "bag_items", "badge_bits", "event_flags",
-                "party_species_ids", "party_levels", "party_hp", "party_max_hp", "party_pp",
-                "party_status", "party_moves",
-            ))
+            or any(
+                getattr(after, key) != getattr(current, key)
+                for key in (
+                    "player_money",
+                    "bag_items",
+                    "badge_bits",
+                    "event_flags",
+                    "party_species_ids",
+                    "party_levels",
+                    "party_hp",
+                    "party_max_hp",
+                    "party_pp",
+                    "party_status",
+                    "party_moves",
+                )
+            )
             or self.reader.read_all_box_states() != boxes
             or self.reader.read_pokedex_state() != dex
         ):
             raise RouteExecutionError("purified-zone dismissal changed protected resources")
-        receipt = replace(receipt, allows_relocation=False, details={
-            **receipt.details, "native_purified_zone": True, "already_healed": True,
-            "learned_recovery": False, "model_queries": 0,
-        })
+        receipt = replace(
+            receipt,
+            allows_relocation=False,
+            details={
+                **receipt.details,
+                "native_purified_zone": True,
+                "already_healed": True,
+                "learned_recovery": False,
+                "model_queries": 0,
+            },
+        )
         record = getattr(self.executor, "record_diagnostic_event", None)
         if not callable(record):
-            record = getattr(getattr(self.executor, "delegate", None),
-                             "record_diagnostic_event", None)
+            record = getattr(
+                getattr(self.executor, "delegate", None), "record_diagnostic_event", None
+            )
         if callable(record):
-            record("native_purified_zone_message", dict(
-                actor="rule_based_support", map_id=current.map_id,
-                at=[current.player_y, current.player_x], party_hp=list(current.party_hp),
-                healing_performed_by_handler=False, **receipt.details,
-            ))
+            record(
+                "native_purified_zone_message",
+                dict(
+                    actor="rule_based_support",
+                    map_id=current.map_id,
+                    at=[current.player_y, current.player_x],
+                    party_hp=list(current.party_hp),
+                    healing_performed_by_handler=False,
+                    **receipt.details,
+                ),
+            )
         self.field_healing_evidence.append(receipt)
         self._field_boundary = after
         return receipt
@@ -926,15 +1080,14 @@ class Gen1RouteInterruptionHandler:
             raise RouteExecutionError("scripted dialogue drifted before recovery")
         for pulses in range(self.max_scripted_dialogue_pulses + 1):
             active = self.reader.read()
+            if active.battle_state is None:
+                raise RouteExecutionError("scripted dialogue battle state is unavailable")
             if active.battle_state != 0:
                 successor = _interruption_kind(active.battle_state)
                 capacity = (
                     active.battle_state == 2
                     and len(self.trainer_evidence) < self.maximum_trainer_battles
-                ) or (
-                    active.battle_state == 1
-                    and len(self._wild.evidence) < self.maximum_flees
-                )
+                ) or (active.battle_state == 1 and len(self._wild.evidence) < self.maximum_flees)
                 if (
                     pulses == 0
                     or not capacity
@@ -946,6 +1099,11 @@ class Gen1RouteInterruptionHandler:
                 # This is a verified observed successor, never free field control
                 # or a battle win. The route executor must spend another bounded
                 # interruption and invoke the independently configured handler.
+                assert (
+                    active.map_id is not None
+                    and active.player_y is not None
+                    and active.player_x is not None
+                )
                 receipt = InterruptionReceipt(
                     kind="scripted_dialogue",
                     resumed_map=active.map_id,

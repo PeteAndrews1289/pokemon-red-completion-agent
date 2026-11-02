@@ -305,7 +305,10 @@ def _dig_scene(scene, monkeypatch, *, available=True, fault=None):
             raise RedDigRecoveryError("native escape resource check failed")
         scene.game.stage = "field"
         scene.game.raw = replace(
-            scene.game.raw, map_id=0, player_y=6, player_x=10 if fault == "landing" else 9,
+            scene.game.raw,
+            map_id=0,
+            player_y=6,
+            player_x=10 if fault == "landing" else 9,
         )
         if fault == "unavailable":
             scene.game.available = ()
@@ -318,7 +321,8 @@ def _dig_scene(scene, monkeypatch, *, available=True, fault=None):
 
 
 def test_opted_in_dig_composes_only_the_selected_flight_and_fresh_destination(
-    indoor_scene, monkeypatch,
+    indoor_scene,
+    monkeypatch,
 ):
     scene = indoor_scene
     quotes, executions = _dig_scene(scene, monkeypatch)
@@ -362,7 +366,9 @@ def test_default_off_departure_does_not_even_quote_dig(indoor_scene, monkeypatch
 
 @pytest.mark.parametrize("fault", ["landing", "unavailable", "primitive", "budget", "stale"])
 def test_dig_departure_failure_never_executes_flight_or_replacement_goal(
-    indoor_scene, monkeypatch, fault,
+    indoor_scene,
+    monkeypatch,
+    fault,
 ):
     from pokemon_red_completion.red_dig_recovery import RedDigRecoveryError
 
@@ -432,8 +438,9 @@ def test_walking_departure_replans_with_the_same_executor_capabilities(indoor_sc
 
     indoor_scene.router.world.replanner = lambda: replan
     assert indoor_scene.bind() is not None
-    current = replace(indoor_scene.observer.observe(),
-                      capabilities=frozenset({"move:surf", "event:open"}))
+    current = replace(
+        indoor_scene.observer.observe(), capabilities=frozenset({"move:surf", "event:open"})
+    )
     request = ReplanRequest(current, 0, (6, 9), {}, 1)
     assert captured[0](request) == indoor_scene.exit_plan
     assert received[0].current.capabilities == frozenset({"event:open"})
@@ -445,14 +452,22 @@ def test_walking_departure_replans_with_the_same_executor_capabilities(indoor_sc
 @pytest.mark.parametrize("known", [False, True])
 @pytest.mark.parametrize("in_safari", [False, True])
 def test_ordinary_surf_departure_requires_opt_in_and_never_enables_paid_safari(
-    indoor_scene, enabled, known, in_safari,
+    indoor_scene,
+    enabled,
+    known,
+    in_safari,
 ):
     scene = indoor_scene
     scene.router.runtime.collection_surf_departure = enabled
     scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=in_safari)
-    original_observe, original_plan = scene.observer.observe, scene.router.world.plan_feasible_to_map
-    scene.observer.observe = lambda: replace(original_observe(), capabilities=frozenset(
-        {"move:cut", "event:open"} | ({"move:surf"} if known else set())))
+    original_observe, original_plan = (
+        scene.observer.observe,
+        scene.router.world.plan_feasible_to_map,
+    )
+    scene.observer.observe = lambda: replace(
+        original_observe(),
+        capabilities=frozenset({"move:cut", "event:open"} | ({"move:surf"} if known else set())),
+    )
     starts = []
 
     def require_live_surf(start, target, **kwargs):
@@ -481,8 +496,9 @@ def test_surf_departure_replan_preserves_same_explicit_capabilities(indoor_scene
     scene.router.runtime.collection_surf_departure = True
     scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=False)
     observed = scene.observer.observe
-    scene.observer.observe = lambda: replace(observed(), capabilities=frozenset(
-        {"move:surf", "move:cut", "event:open"}))
+    scene.observer.observe = lambda: replace(
+        observed(), capabilities=frozenset({"move:surf", "move:cut", "event:open"})
+    )
     original_transport, replanners, received = departure.RedSemanticTransportRoute, [], []
 
     def transport(**kwargs):
@@ -506,7 +522,11 @@ def test_surf_departure_replan_preserves_same_explicit_capabilities(indoor_scene
 @pytest.mark.parametrize("known", [False, True])
 @pytest.mark.parametrize("in_safari", [False, True])
 def test_retained_indoor_water_quotes_only_an_opted_in_ordinary_land_departure(
-    indoor_scene, monkeypatch, enabled, known, in_safari,
+    indoor_scene,
+    monkeypatch,
+    enabled,
+    known,
+    in_safari,
 ):
     import pokemon_red_completion.red_collection_fly as fly
     from pokemon_red_completion.observation import OverworldMovementMode
@@ -516,18 +536,28 @@ def test_retained_indoor_water_quotes_only_an_opted_in_ordinary_land_departure(
     scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=in_safari)
     scene.game.read_overworld_movement_mode = lambda: OverworldMovementMode.SURFING
     original_observe = scene.observer.observe
-    scene.observer.observe = lambda: replace(original_observe(), mode="water",
-        capabilities=frozenset({"move:surf"} if known else ()))
+    scene.observer.observe = lambda: replace(
+        original_observe(), mode="water", capabilities=frozenset({"move:surf"} if known else ())
+    )
     # Quote a genuine mode-continuous water-to-shore path, not the fixture's
     # default land-start route. Native execution remains separately guarded.
-    water_exit = replace(scene.exit_plan, start_mode="water", segments=(
-        replace(scene.exit_plan.segments[0],
-            approach=LocalPath(((6, 3), (6, 4)), (LocalEdge((6, 4), "right"),),
-                               ("water", "land")),
-            transition=MacroTransition((6, 4), (6, 9), "down")),))
+    water_exit = replace(
+        scene.exit_plan,
+        start_mode="water",
+        segments=(
+            replace(
+                scene.exit_plan.segments[0],
+                approach=LocalPath(
+                    ((6, 3), (6, 4)), (LocalEdge((6, 4), "right"),), ("water", "land")
+                ),
+                transition=MacroTransition((6, 4), (6, 9), "down"),
+            ),
+        ),
+    )
     original_plan = scene.router.world.plan_feasible_to_map
     scene.router.world.plan_feasible_to_map = lambda start, target, **kwargs: (
-        water_exit if start.map_id == 89 and target == 0 else original_plan(start, target, **kwargs))
+        water_exit if start.map_id == 89 and target == 0 else original_plan(start, target, **kwargs)
+    )
     original, previews = fly.bind_collection_fly, []
 
     def quote(*args, **kwargs):
@@ -551,14 +581,25 @@ def test_prospective_land_flight_cannot_be_executed_or_replace_actual_water_guar
     scene.router.runtime.collection_surf_departure = True
     scene.game.read_safari_session_state = lambda: SimpleNamespace(in_safari_zone=False)
     scene.game.read_overworld_movement_mode = lambda: OverworldMovementMode.SURFING
-    projected = FreshRedGoalObservation("0" * 64,
-        replace(scene.adapter.observe(), raw=replace(scene.game.raw,
-            map_id=0, player_y=6, player_x=9)),
-        replace(scene.observer.observe(), map_id=0, at=(6, 9), mode="land"))
-    assert bind_collection_fly(scene.router, scene.spec, scene.provider,
-        projected, scene.observer) is None
-    preview = bind_collection_fly(scene.router, scene.spec, scene.provider,
-        projected, scene.observer, land_departure_projection=True)
+    projected = FreshRedGoalObservation(
+        "0" * 64,
+        replace(
+            scene.adapter.observe(), raw=replace(scene.game.raw, map_id=0, player_y=6, player_x=9)
+        ),
+        replace(scene.observer.observe(), map_id=0, at=(6, 9), mode="land"),
+    )
+    assert (
+        bind_collection_fly(scene.router, scene.spec, scene.provider, projected, scene.observer)
+        is None
+    )
+    preview = bind_collection_fly(
+        scene.router,
+        scene.spec,
+        scene.provider,
+        projected,
+        scene.observer,
+        land_departure_projection=True,
+    )
     assert preview is not None
     with pytest.raises(Gen1FieldMoveError, match="quotation-only"):
         preview.execute()
@@ -566,7 +607,8 @@ def test_prospective_land_flight_cannot_be_executed_or_replace_actual_water_guar
 
 
 def test_indoor_departure_binds_the_shared_scripted_dialogue_cap(
-    indoor_scene, monkeypatch,
+    indoor_scene,
+    monkeypatch,
 ):
     import pokemon_red_completion.red_indoor_collection_departure as departure
 
@@ -600,6 +642,7 @@ def test_indoor_departure_then_fly_and_destination_share_actual_accounting(indoo
 @pytest.mark.parametrize("fault", [None, "wrong_exit", "unavailable_after_exit"])
 def test_supply_exit_rebinds_actual_flight_and_preserves_failure(indoor_scene, fault):
     from test_red_resupply_fly import supply_spec
+
     scene = indoor_scene
     spec = supply_spec(scene)
     fresh = FreshRedGoalObservation("0" * 64, scene.adapter.observe(), scene.observer.observe())
@@ -653,45 +696,73 @@ def test_qualification_rejects_when_no_exit_route(indoor_scene):
     assert indoor_scene.game.actions == []
 
 
-@pytest.mark.parametrize("enabled,departure_count,onward_count", [
-    (False, 2, 6), (True, 0, 6), (True, 2, 6),
-])
+@pytest.mark.parametrize(
+    "enabled,departure_count,onward_count",
+    [
+        (False, 2, 6),
+        (True, 0, 6),
+        (True, 2, 6),
+    ],
+)
 def test_indoor_capture_quotes_both_walking_legs_without_projecting_live_objects(
     indoor_scene, monkeypatch, enabled, departure_count, onward_count
 ):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
+
     import pokemon_red_completion.red_resource_goal_router as routing
 
     scene = indoor_scene
-    profile = bind_indoor_fly_departure_profile(bind_capture_fly_profile(_local_discovery_profile()))
+    profile = bind_indoor_fly_departure_profile(
+        bind_capture_fly_profile(_local_discovery_profile())
+    )
     spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
-    target, goal = spec.parameters["map_id"], (spec.parameters["player_y"], spec.parameters["player_x"])
+    target, goal = (
+        spec.parameters["map_id"],
+        (spec.parameters["player_y"], spec.parameters["player_x"]),
+    )
     scene.provider.kind = GoalKind.ACQUIRE_SPECIES
     scene.router.quote_capture_route_work = enabled
-    onward = replace(scene.onward_plan, macro_path=MacroPath((5, target), (MacroEdge(target),)),
-        segments=(replace(scene.onward_plan.segments[0], target_map=target,
-            transition=MacroTransition((6, 9), goal, "down")),), terminal_at=goal)
+    onward = replace(
+        scene.onward_plan,
+        macro_path=MacroPath((5, target), (MacroEdge(target),)),
+        segments=(
+            replace(
+                scene.onward_plan.segments[0],
+                target_map=target,
+                transition=MacroTransition((6, 9), goal, "down"),
+            ),
+        ),
+        terminal_at=goal,
+    )
     scene.router.world.macro_graph = MacroGraph({89: (MacroEdge(0),), 5: (MacroEdge(target),)})
     scene.router.world.plan_feasible_to_map = lambda start, _map, **_kw: (
-        scene.exit_plan if start.map_id == 89 else onward)
+        scene.exit_plan if start.map_id == 89 else onward
+    )
     diagnostics, quoted = [], []
-    scene.router.actions.record_diagnostic_event = lambda kind, payload: diagnostics.append((kind, payload))
+    scene.router.actions.record_diagnostic_event = lambda kind, payload: diagnostics.append(
+        (kind, payload)
+    )
 
     def quote(plan, observed, _rom, reader):
         assert observed.raw.map_id == reader.read().map_id == 89
         quoted.append(plan)
-        return dict(ordinary_trainers_crossed=(departure_count if plan is scene.exit_plan else onward_count))
+        return dict(
+            ordinary_trainers_crossed=(departure_count if plan is scene.exit_plan else onward_count)
+        )
 
     monkeypatch.setattr(routing, "ordinary_route_work_quote", quote)
-    fresh = FreshRedGoalObservation("0"*64, scene.adapter.observe(), scene.observer.observe())
-    binding = bind_indoor_collection_departure(scene.router, spec, scene.provider, fresh, scene.observer)
-    base = .42 + (len(onward.steps) + len(scene.exit_plan.steps))/1000
+    fresh = FreshRedGoalObservation("0" * 64, scene.adapter.observe(), scene.observer.observe())
+    binding = bind_indoor_collection_departure(
+        scene.router, spec, scene.provider, fresh, scene.observer
+    )
+    base = 0.42 + (len(onward.steps) + len(scene.exit_plan.steps)) / 1000
     count = onward_count + departure_count if enabled else 0
-    assert binding.estimated_effort == pytest.approx(min(1.0, base + count/16))
-    assert binding.estimated_risk == pytest.approx(min(1.0, .18 + count/8))
+    assert binding.estimated_effort == pytest.approx(min(1.0, base + count / 16))
+    assert binding.estimated_risk == pytest.approx(min(1.0, 0.18 + count / 8))
     assert quoted == ([onward, scene.exit_plan] if enabled else [])
     assert [payload["transport_leg"] for _kind, payload in diagnostics] == (
-        ["post_fly_walking", "indoor_departure"] if enabled else [])
+        ["post_fly_walking", "indoor_departure"] if enabled else []
+    )
     assert scene.game.actions == [] and scene.router.actions.actions_executed == 0
 
 
@@ -809,8 +880,11 @@ def test_capture_source_identity_preserved_and_verified(indoor_scene, monkeypatc
 @pytest.mark.parametrize("changed", ["money", "party", "position"])
 def test_changed_actual_origin_fails_before_departure_input(indoor_scene, changed):
     binding = indoor_scene.bind()
-    fields = {"money": {"player_money": 1}, "party": {"party_hp": (1, 2, 3)},
-              "position": {"player_x": 4}}[changed]
+    fields = {
+        "money": {"player_money": 1},
+        "party": {"party_hp": (1, 2, 3)},
+        "position": {"player_x": 4},
+    }[changed]
     indoor_scene.game.raw = replace(indoor_scene.game.raw, **fields)
     with pytest.raises(RoutedSemanticGoalError, match="origin changed"):
         binding.execute()
@@ -843,26 +917,36 @@ def test_flight_receives_only_the_remaining_action_budget(indoor_scene):
 
 
 def test_legacy_fly_profile_keeps_its_original_indoor_menu(indoor_scene):
-    legacy = bind_evolution_fly_profile(parse_red_goal_context_profile(
-        build_native_boxed_evolution_profile_payload(
-            indoor_scene.router.runtime.profile,
-            source_species=96, target_species=97, evolution_level=26,
+    legacy = bind_evolution_fly_profile(
+        parse_red_goal_context_profile(
+            build_native_boxed_evolution_profile_payload(
+                indoor_scene.router.runtime.profile,
+                source_species=96,
+                target_species=97,
+                evolution_level=26,
+            )
         )
-    ))
+    )
     legacy_spec = next(s for s in legacy.providers if s.kind is GoalKind.EVOLVE_SPECIES)
     assert "indoor_fly_departure" not in legacy_spec.parameters
     fresh = FreshRedGoalObservation(
         "0" * 64, indoor_scene.adapter.observe(), indoor_scene.observer.observe()
     )
-    assert bind_indoor_collection_departure(
-        indoor_scene.router, legacy_spec, indoor_scene.provider, fresh, indoor_scene.observer
-    ) is None
+    assert (
+        bind_indoor_collection_departure(
+            indoor_scene.router, legacy_spec, indoor_scene.provider, fresh, indoor_scene.observer
+        )
+        is None
+    )
     enabled = bind_indoor_fly_departure_profile(legacy)
     enabled_spec = next(s for s in enabled.providers if s.kind is GoalKind.EVOLVE_SPECIES)
     assert enabled.profile_sha256 != legacy.profile_sha256
-    assert bind_indoor_collection_departure(
-        indoor_scene.router, enabled_spec, indoor_scene.provider, fresh, indoor_scene.observer
-    ) is not None
+    assert (
+        bind_indoor_collection_departure(
+            indoor_scene.router, enabled_spec, indoor_scene.provider, fresh, indoor_scene.observer
+        )
+        is not None
+    )
     assert indoor_scene.router.actions.actions_executed == 0
 
 
@@ -893,10 +977,14 @@ def test_indoor_departure_requires_explicit_boolean(indoor_scene, invalid):
 
     from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfileError
 
-    document = json.loads(build_native_boxed_evolution_profile_payload(
-        indoor_scene.router.runtime.profile,
-        source_species=96, target_species=97, evolution_level=26,
-    ))
+    document = json.loads(
+        build_native_boxed_evolution_profile_payload(
+            indoor_scene.router.runtime.profile,
+            source_species=96,
+            target_species=97,
+            evolution_level=26,
+        )
+    )
     row = next(p for p in document["providers"] if p["kind"] == "evolve_species")
     row["parameters"]["fly_transport"] = True
     row["parameters"]["indoor_fly_departure"] = invalid
@@ -965,9 +1053,7 @@ def test_different_indoor_and_outdoor_maps(indoor_scene):
         5: LocalGraph({(6, 9): ()}),
     }
     indoor_scene.router.world.object_blockers = {90: frozenset(), 5: frozenset()}
-    indoor_scene.router.world.macro_graph = MacroGraph(
-        {90: (MacroEdge(1),), 5: (MacroEdge(89),)}
-    )
+    indoor_scene.router.world.macro_graph = MacroGraph({90: (MacroEdge(1),), 5: (MacroEdge(89),)})
     indoor_scene.router.world.plan_feasible_to_map = plan_feasible
     indoor_scene.router.world.replanner = lambda: (
         lambda req: exit_plan if req.start.map_id == 90 else onward_plan

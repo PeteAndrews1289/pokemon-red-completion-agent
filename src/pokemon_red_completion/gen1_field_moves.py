@@ -38,6 +38,8 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.route_executor import RouteActionPort
 
+from .route_executor import RouteActionInterrupted
+
 FLY_MOVE_ID = 0x13
 DIG_MOVE_ID = 0x5B
 FLASH_MOVE_ID = 0x94
@@ -72,9 +74,6 @@ STRENGTH_ACTIVE_MASK = 1 << 0
 # input-readiness bytes are already clear at that point, so two acknowledged A
 # pulses are part of the live activation boundary rather than optional delay.
 STRENGTH_POST_FLAG_CONFIRMATIONS = 2
-
-
-from .route_executor import RouteActionInterrupted
 
 
 class Gen1FieldMoveError(RuntimeError):
@@ -147,6 +146,7 @@ class Gen1CutReceipt:
     The cache can remain stale after a successful Cut. It is retained truthfully
     as diagnostic evidence, never required to acknowledge the fresh block buffer.
     """
+
     source_map: int
     source_at: tuple[int, int]
     target_at: tuple[int, int]
@@ -647,9 +647,7 @@ class Gen1FieldMovePort:
     def _yield_live_battle(self) -> None:
         battle = self.reader.read().battle_state
         if battle in (1, 2):
-            raise Gen1FieldMoveInterrupted(
-                "wild_battle" if battle == 1 else "trainer_battle"
-            )
+            raise Gen1FieldMoveInterrupted("wild_battle" if battle == 1 else "trainer_battle")
 
     def _pulse(self, action: MacroAction, frames: int) -> None:
         self._yield_live_battle()

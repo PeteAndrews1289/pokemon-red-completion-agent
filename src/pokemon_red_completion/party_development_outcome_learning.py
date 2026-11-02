@@ -25,10 +25,10 @@ from numpy.typing import NDArray
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
-    PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES,
-    party_development_feature_names,
+    PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
     PartyDevelopmentCandidateSet,
+    party_development_feature_names,
 )
 from pokemon_red_completion.scenario_lab import ScenarioFamily, ScenarioPartition
 from pokemon_red_completion.scenario_outcomes import ScenarioOutcomeExample
@@ -40,9 +40,7 @@ from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
 )
 
-PARTY_DEVELOPMENT_OUTCOME_MODEL_ID = (
-    "pokemon.core.party-development.outcome-ranker.mlp.v2"
-)
+PARTY_DEVELOPMENT_OUTCOME_MODEL_ID = "pokemon.core.party-development.outcome-ranker.mlp.v2"
 PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID = "pokemon.core.party-development.outcome-ranker.mlp.v3"
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
@@ -71,9 +69,7 @@ class PartyDevelopmentTeacherPrior:
             (self.offline_evidence_sha256, "teacher-prior offline evidence"),
         ):
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-                raise PartyDevelopmentOutcomeLearningError(
-                    f"{subject} digest is invalid"
-                )
+                raise PartyDevelopmentOutcomeLearningError(f"{subject} digest is invalid")
         self._require_partition(
             self.training_root_lineage_ids,
             self.training_state_sha256,
@@ -84,9 +80,7 @@ class PartyDevelopmentTeacherPrior:
             self.evaluation_state_sha256,
             subject="evaluation",
         )
-        if set(self.training_root_lineage_ids) & set(
-            self.evaluation_root_lineage_ids
-        ):
+        if set(self.training_root_lineage_ids) & set(self.evaluation_root_lineage_ids):
             raise PartyDevelopmentOutcomeLearningError(
                 "teacher-prior root crosses training and evaluation"
             )
@@ -108,31 +102,23 @@ class PartyDevelopmentTeacherPrior:
             or len(roots) != len(states)
             or len(set(roots)) != len(roots)
             or any(
-                not isinstance(value, str) or _SAFE_ID.fullmatch(value) is None
-                for value in roots
+                not isinstance(value, str) or _SAFE_ID.fullmatch(value) is None for value in roots
             )
             or not isinstance(states, tuple)
             or len(set(states)) != len(states)
             or any(
-                not isinstance(value, str) or _SHA256.fullmatch(value) is None
-                for value in states
+                not isinstance(value, str) or _SHA256.fullmatch(value) is None for value in states
             )
         ):
-            raise PartyDevelopmentOutcomeLearningError(
-                f"teacher-prior {subject} roots are invalid"
-            )
-        if tuple(zip(roots, states, strict=True)) != tuple(
-            sorted(zip(roots, states, strict=True))
-        ):
+            raise PartyDevelopmentOutcomeLearningError(f"teacher-prior {subject} roots are invalid")
+        if tuple(zip(roots, states, strict=True)) != tuple(sorted(zip(roots, states, strict=True))):
             raise PartyDevelopmentOutcomeLearningError(
                 f"teacher-prior {subject} roots are not in canonical order"
             )
 
     @property
     def consumed_root_lineage_ids(self) -> frozenset[str]:
-        return frozenset(
-            (*self.training_root_lineage_ids, *self.evaluation_root_lineage_ids)
-        )
+        return frozenset((*self.training_root_lineage_ids, *self.evaluation_root_lineage_ids))
 
     @property
     def consumed_state_sha256(self) -> frozenset[str]:
@@ -150,9 +136,7 @@ class PartyDevelopmentTeacherPrior:
         }
 
     @classmethod
-    def from_dict(
-        cls, value: Mapping[str, object]
-    ) -> PartyDevelopmentTeacherPrior:
+    def from_dict(cls, value: Mapping[str, object]) -> PartyDevelopmentTeacherPrior:
         expected = {
             "model_file_sha256",
             "model_canonical_sha256",
@@ -163,9 +147,7 @@ class PartyDevelopmentTeacherPrior:
             "evaluation_state_sha256",
         }
         if set(value) != expected:
-            raise PartyDevelopmentOutcomeLearningError(
-                "teacher-prior record is incompatible"
-            )
+            raise PartyDevelopmentOutcomeLearningError("teacher-prior record is incompatible")
         training_roots = value["training_root_lineage_ids"]
         training_states = value["training_state_sha256"]
         evaluation_roots = value["evaluation_root_lineage_ids"]
@@ -177,24 +159,17 @@ class PartyDevelopmentTeacherPrior:
             evaluation_states,
         )
         if any(
-            not isinstance(items, list)
-            or not all(isinstance(item, str) for item in items)
+            not isinstance(items, list) or not all(isinstance(item, str) for item in items)
             for items in sequences
         ):
-            raise PartyDevelopmentOutcomeLearningError(
-                "teacher-prior lineage record is invalid"
-            )
+            raise PartyDevelopmentOutcomeLearningError("teacher-prior lineage record is invalid")
         file_sha, canonical_sha, evidence_sha = (
             value["model_file_sha256"],
             value["model_canonical_sha256"],
             value["offline_evidence_sha256"],
         )
-        if not all(
-            isinstance(item, str) for item in (file_sha, canonical_sha, evidence_sha)
-        ):
-            raise PartyDevelopmentOutcomeLearningError(
-                "teacher-prior digest record is invalid"
-            )
+        if not all(isinstance(item, str) for item in (file_sha, canonical_sha, evidence_sha)):
+            raise PartyDevelopmentOutcomeLearningError("teacher-prior digest record is invalid")
         return cls(
             model_file_sha256=cast(str, file_sha),
             model_canonical_sha256=cast(str, canonical_sha),
@@ -227,7 +202,9 @@ class PartyDevelopmentOutcomeModel:
         try:
             width = len(party_development_feature_names(self.feature_schema_id))
         except ValueError as error:
-            raise PartyDevelopmentOutcomeLearningError("model feature schema is unsupported") from error
+            raise PartyDevelopmentOutcomeLearningError(
+                "model feature schema is unsupported"
+            ) from error
         arrays = tuple(
             np.asarray(value, dtype=np.float64)
             for value in (
@@ -239,9 +216,11 @@ class PartyDevelopmentOutcomeModel:
             )
         )
         weights1, bias1, weights2, mean, scale = arrays
-        expected_id = (PARTY_DEVELOPMENT_OUTCOME_MODEL_ID
-                       if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
-                       else PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID)
+        expected_id = (
+            PARTY_DEVELOPMENT_OUTCOME_MODEL_ID
+            if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+            else PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID
+        )
         if self.model_id != expected_id:
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development model identity is unsupported"
@@ -263,9 +242,7 @@ class PartyDevelopmentOutcomeModel:
                 "party-development model parameters are not finite"
             )
         if type(self.training_seed) is not int or self.training_seed < 0:  # noqa: E721
-            raise PartyDevelopmentOutcomeLearningError(
-                "party-development training seed is invalid"
-            )
+            raise PartyDevelopmentOutcomeLearningError("party-development training seed is invalid")
         if (
             type(self.outcome_training_examples) is not int  # noqa: E721
             or self.outcome_training_examples < 0
@@ -275,10 +252,8 @@ class PartyDevelopmentOutcomeModel:
             )
         if (
             not isinstance(self.outcome_training_root_lineage_ids, tuple)
-            or len(self.outcome_training_root_lineage_ids)
-            != self.outcome_training_examples
-            or len(set(self.outcome_training_root_lineage_ids))
-            != self.outcome_training_examples
+            or len(self.outcome_training_root_lineage_ids) != self.outcome_training_examples
+            or len(set(self.outcome_training_root_lineage_ids)) != self.outcome_training_examples
             or any(
                 not isinstance(value, str) or _SAFE_ID.fullmatch(value) is None
                 for value in self.outcome_training_root_lineage_ids
@@ -289,10 +264,8 @@ class PartyDevelopmentOutcomeModel:
             )
         if (
             not isinstance(self.outcome_training_state_sha256, tuple)
-            or len(self.outcome_training_state_sha256)
-            != self.outcome_training_examples
-            or len(set(self.outcome_training_state_sha256))
-            != self.outcome_training_examples
+            or len(self.outcome_training_state_sha256) != self.outcome_training_examples
+            or len(set(self.outcome_training_state_sha256)) != self.outcome_training_examples
             or any(
                 not isinstance(value, str) or _SHA256.fullmatch(value) is None
                 for value in self.outcome_training_state_sha256
@@ -302,18 +275,14 @@ class PartyDevelopmentOutcomeModel:
                 "party-development outcome training states are invalid"
             )
         if not isinstance(self.teacher_prior, PartyDevelopmentTeacherPrior):
-            raise PartyDevelopmentOutcomeLearningError(
-                "party-development teacher prior is invalid"
-            )
+            raise PartyDevelopmentOutcomeLearningError("party-development teacher prior is invalid")
         if set(self.outcome_training_root_lineage_ids) & (
             self.teacher_prior.consumed_root_lineage_ids
         ):
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome roots overlap teacher-prior evidence"
             )
-        if set(self.outcome_training_state_sha256) & (
-            self.teacher_prior.consumed_state_sha256
-        ):
+        if set(self.outcome_training_state_sha256) & (self.teacher_prior.consumed_state_sha256):
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome states overlap teacher-prior evidence"
             )
@@ -349,14 +318,10 @@ class PartyDevelopmentOutcomeModel:
             raise TypeError("candidates must be a PartyDevelopmentCandidateSet")
         if candidates.feature_schema_id != self.feature_schema_id:
             raise PartyDevelopmentOutcomeLearningError("candidate and model feature schemas differ")
-        features = np.asarray(
-            [item.features for item in candidates.candidates], dtype=np.float64
-        )
+        features = np.asarray([item.features for item in candidates.candidates], dtype=np.float64)
         return self._scores(features)
 
-    def probabilities(
-        self, candidates: PartyDevelopmentCandidateSet
-    ) -> NDArray[np.float64]:
+    def probabilities(self, candidates: PartyDevelopmentCandidateSet) -> NDArray[np.float64]:
         scores = self.scores(candidates)
         shifted = scores - np.max(scores)
         probabilities = np.exp(shifted)
@@ -382,7 +347,9 @@ class PartyDevelopmentOutcomeModel:
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "format_version": (3 if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID else 4),
+            "format_version": (
+                3 if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID else 4
+            ),
             "model_id": self.model_id,
             "feature_schema_id": self.feature_schema_id,
             "feature_names": list(self.feature_names),
@@ -390,12 +357,8 @@ class PartyDevelopmentOutcomeModel:
             "training_seed": self.training_seed,
             "teacher_prior": self.teacher_prior.to_dict(),
             "outcome_training_examples": self.outcome_training_examples,
-            "outcome_training_root_lineage_ids": list(
-                self.outcome_training_root_lineage_ids
-            ),
-            "outcome_training_state_sha256": list(
-                self.outcome_training_state_sha256
-            ),
+            "outcome_training_root_lineage_ids": list(self.outcome_training_root_lineage_ids),
+            "outcome_training_state_sha256": list(self.outcome_training_state_sha256),
             "training_target": self.training_target,
             "weights1": self.weights1.tolist(),
             "bias1": self.bias1.tolist(),
@@ -405,9 +368,7 @@ class PartyDevelopmentOutcomeModel:
         }
 
     @classmethod
-    def from_dict(
-        cls, value: Mapping[str, object]
-    ) -> PartyDevelopmentOutcomeModel:
+    def from_dict(cls, value: Mapping[str, object]) -> PartyDevelopmentOutcomeModel:
         names = value.get("feature_names")
         seed = value.get("training_seed")
         example_count = value.get("outcome_training_examples")
@@ -416,11 +377,17 @@ class PartyDevelopmentOutcomeModel:
         prior_value = value.get("teacher_prior")
         schema_id = value.get("feature_schema_id")
         try:
+            if not isinstance(schema_id, str):
+                raise ValueError("party-development feature schema must be a string")
             expected_names = party_development_feature_names(schema_id)
         except ValueError as error:
-            raise PartyDevelopmentOutcomeLearningError("party-development model record is incompatible") from error
+            raise PartyDevelopmentOutcomeLearningError(
+                "party-development model record is incompatible"
+            ) from error
         legacy = schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
-        expected_id = PARTY_DEVELOPMENT_OUTCOME_MODEL_ID if legacy else PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID
+        expected_id = (
+            PARTY_DEVELOPMENT_OUTCOME_MODEL_ID if legacy else PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID
+        )
         if (
             value.get("format_version") != (3 if legacy else 4)
             or value.get("model_id") != expected_id
@@ -561,9 +528,7 @@ class PartyDevelopmentPairedEvaluation:
         if count == 0:
             return 1.0
         tail = min(self.updated_wins, self.base_wins)
-        probability = sum(math.comb(count, value) for value in range(tail + 1)) / (
-            2**count
-        )
+        probability = sum(math.comb(count, value) for value in range(tail + 1)) / (2**count)
         return min(1.0, 2.0 * probability)
 
     def public_dict(self) -> dict[str, object]:
@@ -605,12 +570,9 @@ class PartyDevelopmentOutcomeLearningCycle:
                 "party-development learning-cycle update is invalid"
             )
         if (
-            self.base_development.model_sha256
-            != self.update.report.base_model_sha256
-            or self.updated_development.model_sha256
-            != self.update.report.updated_model_sha256
-            or self.paired_development.base_model_sha256
-            != self.update.report.base_model_sha256
+            self.base_development.model_sha256 != self.update.report.base_model_sha256
+            or self.updated_development.model_sha256 != self.update.report.updated_model_sha256
+            or self.paired_development.base_model_sha256 != self.update.report.base_model_sha256
             or self.paired_development.updated_model_sha256
             != self.update.report.updated_model_sha256
         ):
@@ -618,14 +580,10 @@ class PartyDevelopmentOutcomeLearningCycle:
                 "party-development learning-cycle model binding is invalid"
             )
         if (
-            self.base_development.example_count
-            != self.updated_development.example_count
-            or self.base_development.example_count
-            != self.paired_development.example_count
-            or self.base_development.root_lineage_ids
-            != self.updated_development.root_lineage_ids
-            or self.base_development.root_lineage_ids
-            != self.paired_development.root_lineage_ids
+            self.base_development.example_count != self.updated_development.example_count
+            or self.base_development.example_count != self.paired_development.example_count
+            or self.base_development.root_lineage_ids != self.updated_development.root_lineage_ids
+            or self.base_development.root_lineage_ids != self.paired_development.root_lineage_ids
         ):
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development learning-cycle development binding is invalid"
@@ -657,10 +615,7 @@ def initialize_from_teacher_model(
         raise TypeError("teacher must be a TrainingCandidateMLP")
     if not isinstance(teacher_prior, PartyDevelopmentTeacherPrior):
         raise TypeError("teacher_prior must be a PartyDevelopmentTeacherPrior")
-    if (
-        canonical_training_candidate_model_sha256(teacher)
-        != teacher_prior.model_canonical_sha256
-    ):
+    if canonical_training_candidate_model_sha256(teacher) != teacher_prior.model_canonical_sha256:
         raise PartyDevelopmentOutcomeLearningError(
             "teacher model differs from its authenticated prior provenance"
         )
@@ -704,10 +659,12 @@ def upgrade_party_development_model_for_workload(
     extra = len(PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES) - len(model.feature_names)
     return PartyDevelopmentOutcomeModel(
         weights1=np.vstack((model.weights1, np.zeros((extra, model.weights1.shape[1])))),
-        bias1=model.bias1, weights2=model.weights2,
+        bias1=model.bias1,
+        weights2=model.weights2,
         feature_mean=np.concatenate((model.feature_mean, np.zeros(extra))),
         feature_scale=np.concatenate((model.feature_scale, np.ones(extra))),
-        training_seed=model.training_seed, teacher_prior=model.teacher_prior,
+        training_seed=model.training_seed,
+        teacher_prior=model.teacher_prior,
         outcome_training_examples=model.outcome_training_examples,
         outcome_training_root_lineage_ids=model.outcome_training_root_lineage_ids,
         outcome_training_state_sha256=model.outcome_training_state_sha256,
@@ -734,13 +691,9 @@ def bind_teacher_prior_from_offline_evidence(
         if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
             raise PartyDevelopmentOutcomeLearningError(f"{subject} digest is invalid")
     if not isinstance(evidence_payload, bytes) or not evidence_payload:
-        raise PartyDevelopmentOutcomeLearningError(
-            "teacher offline evidence payload is invalid"
-        )
+        raise PartyDevelopmentOutcomeLearningError("teacher offline evidence payload is invalid")
     if hashlib.sha256(evidence_payload).hexdigest() != expected_evidence_sha256:
-        raise PartyDevelopmentOutcomeLearningError(
-            "teacher offline evidence failed authentication"
-        )
+        raise PartyDevelopmentOutcomeLearningError("teacher offline evidence failed authentication")
     try:
         document = json.loads(evidence_payload)
     except (UnicodeError, json.JSONDecodeError) as error:
@@ -753,8 +706,7 @@ def bind_teacher_prior_from_offline_evidence(
         or document.get("schema") != "pokemon-training-candidate-offline-receipt-v1"
         or document.get("status") != "offline_candidate_eligible"
         or document.get("candidate_model_file_sha256") != model_file_sha256
-        or document.get("candidate_model_canonical_sha256")
-        != canonical_model_sha256
+        or document.get("candidate_model_canonical_sha256") != canonical_model_sha256
         or document.get("offline_candidate_eligible") is not True
         or document.get("private_artifacts_tracked") is not False
     ):
@@ -772,9 +724,7 @@ def bind_teacher_prior_from_offline_evidence(
     }
     for row in lineages:
         if not isinstance(row, Mapping):
-            raise PartyDevelopmentOutcomeLearningError(
-                "teacher offline lineage record is invalid"
-            )
+            raise PartyDevelopmentOutcomeLearningError("teacher offline lineage record is invalid")
         partition = row.get("partition")
         lineage_id = row.get("lineage_id")
         state_sha256 = row.get("root_sha256")
@@ -817,8 +767,11 @@ def adapt_party_development_model_from_outcomes(
     """Fit all scorer weights to train-only soft preferences with a prior anchor."""
 
     choices = tuple(examples)
-    _require_examples(choices, partition=ScenarioPartition.TRAIN,
-                      feature_schema_id=base_model.feature_schema_id)
+    _require_examples(
+        choices,
+        partition=ScenarioPartition.TRAIN,
+        feature_schema_id=base_model.feature_schema_id,
+    )
     choice_roots = {item.root_lineage_id for item in choices}
     choice_states = {item.initial_state_sha256 for item in choices}
     _require_disjoint_from_teacher_prior(base_model, choices)
@@ -867,8 +820,8 @@ def adapt_party_development_model_from_outcomes(
             second[index] = 0.999 * second[index] + 0.001 * gradients[index] ** 2
             corrected_first = first[index] / (1.0 - 0.9**step)
             corrected_second = second[index] / (1.0 - 0.999**step)
-            parameters[index][...] -= learning_rate * corrected_first / (
-                np.sqrt(corrected_second) + 1e-8
+            parameters[index][...] -= (
+                learning_rate * corrected_first / (np.sqrt(corrected_second) + 1e-8)
             )
 
     updated = PartyDevelopmentOutcomeModel(
@@ -906,12 +859,8 @@ def adapt_party_development_model_from_outcomes(
             base_model_sha256=base_sha256,
             updated_model_sha256=updated_sha256,
             training_example_count=len(choices),
-            training_root_lineage_ids=tuple(
-                sorted(item.root_lineage_id for item in choices)
-            ),
-            training_state_sha256=tuple(
-                sorted(item.initial_state_sha256 for item in choices)
-            ),
+            training_root_lineage_ids=tuple(sorted(item.root_lineage_id for item in choices)),
+            training_state_sha256=tuple(sorted(item.initial_state_sha256 for item in choices)),
             tied_target_examples=sum(len(item.best_candidate_indices) > 1 for item in choices),
             loss_before=loss_before,
             loss_after=loss_after,
@@ -929,8 +878,11 @@ def evaluate_party_development_outcomes(
     """Evaluate without fitting on untouched development roots."""
 
     choices = tuple(examples)
-    _require_examples(choices, partition=ScenarioPartition.DEVELOPMENT,
-                      feature_schema_id=model.feature_schema_id)
+    _require_examples(
+        choices,
+        partition=ScenarioPartition.DEVELOPMENT,
+        feature_schema_id=model.feature_schema_id,
+    )
     _require_disjoint_from_teacher_prior(model, choices)
     _require_disjoint_from_outcome_training(model, choices)
     model_sha256 = canonical_party_development_outcome_model_sha256(model)
@@ -947,11 +899,11 @@ def evaluate_party_development_outcomes(
         losses.append(float(-np.sum(target[positive] * np.log(probabilities[positive]))))
         available_count = len(example.available_candidate_indices)
         uniform_losses.append(math.log(available_count))
-        winner_probabilities.append(float(np.sum(probabilities[list(example.best_candidate_indices)])))
-    if canonical_party_development_outcome_model_sha256(model) != model_sha256:
-        raise PartyDevelopmentOutcomeLearningError(
-            "party-development evaluation mutated the model"
+        winner_probabilities.append(
+            float(np.sum(probabilities[list(example.best_candidate_indices)]))
         )
+    if canonical_party_development_outcome_model_sha256(model) != model_sha256:
+        raise PartyDevelopmentOutcomeLearningError("party-development evaluation mutated the model")
     return PartyDevelopmentOutcomeEvaluation(
         model_sha256=model_sha256,
         example_count=len(choices),
@@ -972,8 +924,11 @@ def compare_party_development_outcomes(
     """Compare both models on each identical development decision."""
 
     choices = tuple(examples)
-    _require_examples(choices, partition=ScenarioPartition.DEVELOPMENT,
-                      feature_schema_id=base_model.feature_schema_id)
+    _require_examples(
+        choices,
+        partition=ScenarioPartition.DEVELOPMENT,
+        feature_schema_id=base_model.feature_schema_id,
+    )
     if base_model.feature_schema_id != updated_model.feature_schema_id:
         raise PartyDevelopmentOutcomeLearningError("paired models use different feature schemas")
     if base_model.teacher_prior != updated_model.teacher_prior:
@@ -1016,8 +971,7 @@ def compare_party_development_outcomes(
             probability_ties += 1
     if (
         canonical_party_development_outcome_model_sha256(base_model) != base_sha256
-        or canonical_party_development_outcome_model_sha256(updated_model)
-        != updated_sha256
+        or canonical_party_development_outcome_model_sha256(updated_model) != updated_sha256
     ):
         raise PartyDevelopmentOutcomeLearningError(
             "paired party-development evaluation mutated a model"
@@ -1050,18 +1004,22 @@ def run_party_development_outcome_learning_cycle(
 
     training = tuple(training_examples)
     development = tuple(development_examples)
-    _require_examples(training, partition=ScenarioPartition.TRAIN,
-                      feature_schema_id=base_model.feature_schema_id)
-    _require_examples(development, partition=ScenarioPartition.DEVELOPMENT,
-                      feature_schema_id=base_model.feature_schema_id)
+    _require_examples(
+        training,
+        partition=ScenarioPartition.TRAIN,
+        feature_schema_id=base_model.feature_schema_id,
+    )
+    _require_examples(
+        development,
+        partition=ScenarioPartition.DEVELOPMENT,
+        feature_schema_id=base_model.feature_schema_id,
+    )
     if training[0].objective != development[0].objective:
         raise PartyDevelopmentOutcomeLearningError("training and development objectives differ")
     _require_disjoint_from_teacher_prior(base_model, training)
     _require_disjoint_from_teacher_prior(base_model, development)
     _require_disjoint_from_outcome_training(base_model, development)
-    if {item.root_lineage_id for item in training} & {
-        item.root_lineage_id for item in development
-    }:
+    if {item.root_lineage_id for item in training} & {item.root_lineage_id for item in development}:
         raise PartyDevelopmentOutcomeLearningError(
             "party-development root lineage crosses train and development"
         )
@@ -1081,9 +1039,7 @@ def run_party_development_outcome_learning_cycle(
     return PartyDevelopmentOutcomeLearningCycle(
         update=update,
         base_development=evaluate_party_development_outcomes(base_model, development),
-        updated_development=evaluate_party_development_outcomes(
-            update.model, development
-        ),
+        updated_development=evaluate_party_development_outcomes(update.model, development),
         paired_development=compare_party_development_outcomes(
             base_model, update.model, development
         ),
@@ -1151,15 +1107,14 @@ def _require_examples(
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome partition is invalid"
             )
-        if (
-            item.feature_schema_id != feature_schema_id
-            or item.feature_names != expected_names
-        ):
+        if item.feature_schema_id != feature_schema_id or item.feature_names != expected_names:
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome feature schema is incompatible"
             )
         if item.objective != choices[0].objective:
-            raise PartyDevelopmentOutcomeLearningError("party-development outcome objectives differ")
+            raise PartyDevelopmentOutcomeLearningError(
+                "party-development outcome objectives differ"
+            )
         if not item.fully_measured:
             raise PartyDevelopmentOutcomeLearningError(
                 "censored party-development evidence cannot become a target"

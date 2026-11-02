@@ -65,9 +65,11 @@ class DevelopmentStoryScope:
         if type(self.screen_capped_status_moves) is not bool:
             raise ValueError("Capped status screen must be an explicit boolean")
         if type(self.allow_learned_tactics) is not bool or (
-            self.allow_learned_tactics and (
+            self.allow_learned_tactics
+            and (
                 self.diagnostic_stay_when_productive
-                or self.diagnostic_prompt_stay or self.diagnostic_status_release
+                or self.diagnostic_prompt_stay
+                or self.diagnostic_status_release
             )
         ):
             raise ValueError("learned tactics require no supplied control overrides")
@@ -95,9 +97,8 @@ class DevelopmentStoryScope:
         ):
             raise ValueError("prompt stay requires explicit diagnostic stay")
         if type(self.diagnostic_status_entry) is not bool or (
-            self.diagnostic_status_entry and not (
-                self.diagnostic_stay_when_productive or self.allow_learned_tactics
-            )
+            self.diagnostic_status_entry
+            and not (self.diagnostic_stay_when_productive or self.allow_learned_tactics)
         ):
             raise ValueError("status entry requires explicit diagnostic stay")
         if self.contract is not None and (
@@ -138,6 +139,7 @@ class DevelopmentStoryScope:
 
         if self.train_admission is not None:
             from .red_production_train_admission import ProductionTrainAdmission
+
             if type(self.train_admission) is not ProductionTrainAdmission:
                 raise ValueError("typed production TRAIN admission required")
             self.train_admission.require_scope(self, "story")
@@ -179,15 +181,19 @@ class DevelopmentStoryScope:
         values = dict(document)
         if values.get("train_admission") is not None:
             from .red_production_train_admission import ProductionTrainAdmission
+
             if train_admission is not None:
-                if (type(train_admission) is not ProductionTrainAdmission
-                    or canonical_sha256(values["train_admission"]) != canonical_sha256(train_admission.document())):
+                if type(train_admission) is not ProductionTrainAdmission or canonical_sha256(
+                    values["train_admission"]
+                ) != canonical_sha256(train_admission.document()):
                     raise ValueError("story scope differs from authenticated TRAIN admission")
                 values["train_admission"] = train_admission
             else:
                 # Original metadata-only admissions remain decodable. A derived
                 # document needs its separately authenticated sealed proof.
-                values["train_admission"] = ProductionTrainAdmission.from_document(values["train_admission"])
+                values["train_admission"] = ProductionTrainAdmission.from_document(
+                    values["train_admission"]
+                )
         elif train_admission is not None:
             raise ValueError("story scope omitted its authenticated TRAIN admission")
         if values.get("gym_reward") is not None:
@@ -231,10 +237,15 @@ class DevelopmentStoryScope:
     def require(self, actor, contract=None):
         if self.train_admission is not None:
             from .red_production_train_admission import ProductionTrainAdmission
+
             if type(self.train_admission) is not ProductionTrainAdmission:
                 raise ValueError("typed production TRAIN admission required")
             self.train_admission.require_actor(actor, self, "story")
-        partition = ScenarioPartition.DEVELOPMENT if self.train_admission is None else ScenarioPartition.TRAIN
+        partition = (
+            ScenarioPartition.DEVELOPMENT
+            if self.train_admission is None
+            else ScenarioPartition.TRAIN
+        )
         if (
             actor.source_partition is not partition
             or actor.source_state_sha256 != self.source_state_sha256
@@ -243,8 +254,10 @@ class DevelopmentStoryScope:
             or actor.qualification_sha256 != self.identity
             or canonical_sha256(actor.model.to_dict()) != self.model_content_sha256
             or actor.story_chain_scope is not None
-            or (actor.train_story_contract is not None and (self.train_admission is None
-                or actor.train_story_contract != self.contract))
+            or (
+                actor.train_story_contract is not None
+                and (self.train_admission is None or actor.train_story_contract != self.contract)
+            )
             or actor.train_risk_story_scope is not None
             or actor.evaluation_story_scope is not None
             or actor.train_funding_diagnostic

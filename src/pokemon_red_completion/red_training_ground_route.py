@@ -21,19 +21,21 @@ from pokemon_red_completion.gen1_route_runtime import (
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
 from pokemon_red_completion.gen1_traversal import cut_capabilities, surf_capabilities
+from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding
 from pokemon_red_completion.observation import (
     MapId,
     PokemonRedStateReader,
     RawGameState,
     ReadOnlyMemory,
 )
-from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.route_executor import (
     DEFAULT_ROUTE_EXECUTION_LIMITS,
+    InterruptionHandler,
     RouteActionPort,
     RouteExecutionError,
     execute_route,
 )
+from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     STRATEGIC_SCENARIO_MAXIMUM_FLEES,
     StrategicScenarioRouteWorld,
@@ -73,8 +75,10 @@ class RedVermilionGroundTransition:
     require_cash_safe: bool = False
     allow_surf: bool = False
     allow_complete_cut_search: bool = False
-    trainer_binding_factory: Callable[[], object | None] | None = field(
-        default=None, repr=False, compare=False,
+    trainer_binding_factory: Callable[[], ExecutableGoalBinding | None] | None = field(
+        default=None,
+        repr=False,
+        compare=False,
     )
     maximum_learned_trainers: int = 8
     allow_wild_faints: bool = False
@@ -83,7 +87,10 @@ class RedVermilionGroundTransition:
     def __post_init__(self) -> None:
         if self.trainer_binding_factory is not None and not callable(self.trainer_binding_factory):
             raise TypeError("ground trainer recovery needs an exact binding factory")
-        if type(self.maximum_learned_trainers) is not int or not 1 <= self.maximum_learned_trainers <= 32:
+        if (
+            type(self.maximum_learned_trainers) is not int
+            or not 1 <= self.maximum_learned_trainers <= 32
+        ):
             raise ValueError("ground learned-trainer allowance must be1..32")
         if self.trainer_binding_factory is not None and self.require_cash_safe:
             raise ValueError("learned ground trainers conflict with cash-safe transport")
@@ -117,8 +124,10 @@ class RedVermilionGroundTransition:
             or not 1 <= self.maximum_readiness_waits <= 100
         ):
             raise ValueError("ground readiness wait bound must be1..100")
-        if (type(self.transition_settle_frames) is not int
-                or not 1 <= self.transition_settle_frames <= 1200):
+        if (
+            type(self.transition_settle_frames) is not int
+            or not 1 <= self.transition_settle_frames <= 1200
+        ):
             raise ValueError("ground transition settlement must be1..1200frames")
         if (
             not isinstance(self.excluded_maps, frozenset)
@@ -160,17 +169,25 @@ class RedVermilionGroundTransition:
         """
         try:
             return world.plan_feasible_to_map(
-                start, self.destination_map, goal_at=self.destination_at,
+                start,
+                self.destination_map,
+                goal_at=self.destination_at,
             )
         except RoutePlanningError:
             if not self.allow_complete_cut_search:
                 raise
             return world._plan_candidate(
-                start, self.destination_map, goal_at=self.destination_at,
-                blocked={start.map_id: start.occupied | frozenset(
-                    h.at for h in start.hazards
-                    if h.kind != "trainer_sight" or self.trainer_binding_factory is None
-                )},
+                start,
+                self.destination_map,
+                goal_at=self.destination_at,
+                blocked={
+                    start.map_id: start.occupied
+                    | frozenset(
+                        h.at
+                        for h in start.hazards
+                        if h.kind != "trainer_sight" or self.trainer_binding_factory is None
+                    )
+                },
             )
 
     def __call__(
@@ -229,18 +246,27 @@ class RedVermilionGroundTransition:
                 swap.before: swap.after for swap in self.route_world.rules.cut_block_swaps
             },
         )
+
         def declared_faint_warps(candidate):
             # A faint message can interrupt an already-started native doorway.
             # Admit only endpoints from the route being executed, as in item
             # transport. The strict handler still verifies every resource.
-            return tuple(
-                (segment.source_map, segment.transition.exit_at,
-                 segment.target_map, segment.transition.arrival_at)
-                for segment in candidate.segments if segment.passage_kind == "warp"
-                and segment.source_map != segment.target_map
-            ) if self.allow_field_faint_dialogue else ()
+            return (
+                tuple(
+                    (
+                        segment.source_map,
+                        segment.transition.exit_at,
+                        segment.target_map,
+                        segment.transition.arrival_at,
+                    )
+                    for segment in candidate.segments
+                    if segment.passage_kind == "warp" and segment.source_map != segment.target_map
+                )
+                if self.allow_field_faint_dialogue
+                else ()
+            )
 
-        interruption_handler: Gen1WildFleeHandler | Gen1RouteInterruptionHandler
+        interruption_handler: InterruptionHandler
         wild_handler = Gen1WildFleeHandler(
             field_actions,
             reader,
@@ -277,7 +303,9 @@ class RedVermilionGroundTransition:
             # sight trainer. Combat stays with the supplied frozen local battler;
             # the referee must verify the win and unchanged field boundary.
             interruption_handler = EngagedStoryRouteHandler(
-                interruption_handler, reader, self.trainer_binding_factory,
+                interruption_handler,
+                reader,
+                self.trainer_binding_factory,
                 maximum_trainers=self.maximum_learned_trainers,
             )
 
@@ -300,15 +328,27 @@ class RedVermilionGroundTransition:
             observer,
             interruption_handler=interruption_handler,
             replanner=(
-                replan if (self.observe_terrain or self.require_cash_safe
-                           or self.allow_field_faint_dialogue) else base_world.replanner()
+                replan
+                if (
+                    self.observe_terrain
+                    or self.require_cash_safe
+                    or self.allow_field_faint_dialogue
+                )
+                else base_world.replanner()
             ),
             limits=replace(
                 DEFAULT_ROUTE_EXECUTION_LIMITS,
-                max_interruptions=max(1, self.maximum_flees + self.maximum_scripted_dialogues
-                                      + (6 if self.allow_field_faint_dialogue else 0)
-                                      + (self.maximum_learned_trainers
-                                         if self.trainer_binding_factory is not None else 0)),
+                max_interruptions=max(
+                    1,
+                    self.maximum_flees
+                    + self.maximum_scripted_dialogues
+                    + (6 if self.allow_field_faint_dialogue else 0)
+                    + (
+                        self.maximum_learned_trainers
+                        if self.trainer_binding_factory is not None
+                        else 0
+                    ),
+                ),
                 max_replans=16,
                 max_readiness_waits=self.maximum_readiness_waits,
                 transition_settle_frames=self.transition_settle_frames,

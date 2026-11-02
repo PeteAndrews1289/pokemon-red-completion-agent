@@ -208,7 +208,16 @@ def run_red_fishing_capture(
     count_stock = getattr(port, "physical_species_count", None)
     if physical and not callable(count_stock):
         raise RedFishingCaptureError("physical fishing demand lacks a stock observer")
-    stock = {n: count_stock(n) for n in physical}
+
+    def observed_stock(species_number: int) -> int:
+        if not callable(count_stock):
+            raise RedFishingCaptureError("physical fishing demand lacks a stock observer")
+        count = count_stock(species_number)
+        if type(count) is not int or count < 0:
+            raise RedFishingCaptureError("physical fishing stock is unknown")
+        return count
+
+    stock = {n: observed_stock(n) for n in physical}
     if any(type(n) is not int or n < 0 for n in stock.values()):
         raise RedFishingCaptureError("physical fishing stock is unknown")
     if port.current_map_id() != offer.map_id:
@@ -222,16 +231,26 @@ def run_red_fishing_capture(
     def emit(kind, **payload):
         if record_diagnostic_event is not None:
             row = dict(
-                schema="pokemon.red.fishing-diagnostics.v1", diagnostic_only=True,
-                selection_authority="deterministic_capture_support", rod="super",
-                map_id=offer.map_id, missing_species=sorted(missing),
+                schema="pokemon.red.fishing-diagnostics.v1",
+                diagnostic_only=True,
+                selection_authority="deterministic_capture_support",
+                rod="super",
+                map_id=offer.map_id,
+                missing_species=sorted(missing),
                 physical_species=sorted(physical),
-                cartridge_slots=[dict(slot=i, species=s.species, level=s.level)
-                                 for i, s in enumerate(offer.slots)],
+                cartridge_slots=[
+                    dict(slot=i, species=s.species, level=s.level)
+                    for i, s in enumerate(offer.slots)
+                ],
                 slot_order_does_not_imply_equal_weights=True,
-                casts=casts, encounters=encounters, no_bites=no_bites,
-                captures=captures, failed_captures=failed, flees=flees,
-                training_admission=False, **payload,
+                casts=casts,
+                encounters=encounters,
+                no_bites=no_bites,
+                captures=captures,
+                failed_captures=failed,
+                flees=flees,
+                training_admission=False,
+                **payload,
             )
             if observe_diagnostics is not None:
                 row["state"] = observe_diagnostics()
@@ -241,7 +260,7 @@ def run_red_fishing_capture(
         before = port.registered_species_numbers()
         if before != initial or port.current_map_id() != offer.map_id:
             raise RedFishingCaptureError("registration changed between fishing casts")
-        if any(count_stock(n) != count for n, count in stock.items()):
+        if any(observed_stock(n) != count for n, count in stock.items()):
             raise RedFishingCaptureError("physical fishing demand changed between casts")
         if capture_items_available is not None:
             available_items = capture_items_available()
@@ -255,17 +274,26 @@ def run_red_fishing_capture(
         try:
             result = port.cast()
         except BaseException as error:
-            emit("fishing_cast_failed", cast_attempt=cast_number,
-                 before=before_diagnostics, error_type=type(error).__name__)
+            emit(
+                "fishing_cast_failed",
+                cast_attempt=cast_number,
+                before=before_diagnostics,
+                error_type=type(error).__name__,
+            )
             raise
         if not isinstance(result, FishingCastResult):
             raise RedFishingCaptureError("fishing cast returned an invalid receipt")
         casts = cast_number
         encountered = port.encountered_species_number()
-        emit("fishing_cast_observed", cast_attempt=cast_number,
-             before=before_diagnostics, elapsed_seconds=monotonic() - started,
-             outcome=result.outcome.value, encountered_species=encountered,
-             selected_target_seen=encountered in missing if encountered is not None else False)
+        emit(
+            "fishing_cast_observed",
+            cast_attempt=cast_number,
+            before=before_diagnostics,
+            elapsed_seconds=monotonic() - started,
+            outcome=result.outcome.value,
+            encountered_species=encountered,
+            selected_target_seen=encountered in missing if encountered is not None else False,
+        )
         if port.current_map_id() != offer.map_id:
             raise RedFishingCaptureError("fishing cast left its selected map")
         if result.rod_kind is not RodKind.SUPER:
@@ -299,13 +327,19 @@ def run_red_fishing_capture(
                 raise RedFishingCaptureError(
                     "successful fishing capture did not add exactly its registration"
                 )
-            if any(count_stock(n) != count + int(n == encountered)
-                   for n, count in stock.items()):
-                raise RedFishingCaptureError("successful fishing capture lacks exact physical stock")
+            if any(
+                observed_stock(n) != count + int(n == encountered) for n, count in stock.items()
+            ):
+                raise RedFishingCaptureError(
+                    "successful fishing capture lacks exact physical stock"
+                )
             captures += 1
-            emit("fishing_capture_verified", encountered_species=encountered,
-                 physical_stock_before=stock.get(encountered),
-                 new_registration=encountered not in physical)
+            emit(
+                "fishing_capture_verified",
+                encountered_species=encountered,
+                physical_stock_before=stock.get(encountered),
+                new_registration=encountered not in physical,
+            )
             return RedFishingCaptureReport(
                 cast_number,
                 encounters,
@@ -321,14 +355,15 @@ def run_red_fishing_capture(
             )
         if after != before:
             raise RedFishingCaptureError("failed fishing capture changed registration")
-        if any(count_stock(n) != count for n, count in stock.items()):
+        if any(observed_stock(n) != count for n, count in stock.items()):
             raise RedFishingCaptureError("failed fishing capture changed physical stock")
         failed += 1
         emit("fishing_capture_not_retained", encountered_species=encountered)
 
-    emit("fishing_search_stopped", reason=(
-        "capture_items_exhausted" if items_exhausted else "cast_limit"
-    ))
+    emit(
+        "fishing_search_stopped",
+        reason=("capture_items_exhausted" if items_exhausted else "cast_limit"),
+    )
     return RedFishingCaptureReport(
         casts,
         encounters,

@@ -238,11 +238,20 @@ def test_explicit_initial_recovery_withholds_infeasible_private_checkpoints(mode
     old = TrainerHeadExample(((0, 0, 1), (0, 0, -1)), (0,), mean_returns=(2, 0))
     budgets = (RegretBudget("restore", (fresh,), 0), RegretBudget("stable", (old,), 0))
     original = model.to_dict()
-    rejected, initial = fit_budgeted_head(model, (fresh,), (old,), budgets,
-        epochs=120, learning_rate=0.05, update_rule=mode)
+    rejected, initial = fit_budgeted_head(
+        model, (fresh,), (old,), budgets, epochs=120, learning_rate=0.05, update_rule=mode
+    )
     assert rejected is None and initial["stop_reason"] == "initial_budget_infeasible"
-    child, receipt = fit_budgeted_head(model, (fresh,), (old,), budgets,
-        epochs=120, learning_rate=0.05, update_rule=mode, allow_initial_infeasibility=True)
+    child, receipt = fit_budgeted_head(
+        model,
+        (fresh,),
+        (old,),
+        budgets,
+        epochs=120,
+        learning_rate=0.05,
+        update_rule=mode,
+        allow_initial_infeasibility=True,
+    )
     assert child is not None and model.to_dict() == original
     assert selected_regret(child, (fresh,)) == selected_regret(child, (old,)) == 0
     assert receipt["initial_feasible"] is False and receipt["private_infeasible_checkpoints"] > 1
@@ -251,36 +260,72 @@ def test_explicit_initial_recovery_withholds_infeasible_private_checkpoints(mode
     assert all(h["budgets"]["stable"] == 0 for h in receipt["history"])
     assert all(not h["selected"] for h in receipt["history"] if not h["feasible"])
     excess = [h["budgets"]["restore"] for h in receipt["history"]]
-    assert all(b <= a for a, b in zip(excess, excess[1:]))
+    assert all(b <= a for a, b in zip(excess, excess[1:], strict=False))
 
 
 def test_initial_recovery_never_returns_impossible_offset():
     row = case()
-    child, receipt = fit_budgeted_head(unit_head(), (row,), (row,),
-        (RegretBudget("impossible", (row,), 1, offset=3),), epochs=20,
-        learning_rate=0.05, update_rule="joint_ranking_v1", allow_initial_infeasibility=True)
+    child, receipt = fit_budgeted_head(
+        unit_head(),
+        (row,),
+        (row,),
+        (RegretBudget("impossible", (row,), 1, offset=3),),
+        epochs=20,
+        learning_rate=0.05,
+        update_rule="joint_ranking_v1",
+        allow_initial_infeasibility=True,
+    )
     assert child is None and receipt["feasible_checkpoints"] == 0
     assert receipt["selected_epoch"] is None and len(receipt["steps"]) <= 20
 
 
 def test_initial_recovery_rejects_a_new_budget_violation(monkeypatch):
     from pokemon_red_completion import red_trainer_joint_ranking as module
-    model = TrainerHeadModel("three", ("x", "y", "z"), np.eye(3), np.zeros(3), np.array([-1., 1., .1]), 1)
+
+    model = TrainerHeadModel(
+        "three", ("x", "y", "z"), np.eye(3), np.zeros(3), np.array([-1.0, 1.0, 0.1]), 1
+    )
     fresh = TrainerHeadExample(((1, 0, 0), (0, 1, 0)), (0,), mean_returns=(4, 0))
     old = TrainerHeadExample(((0, 0, 1), (0, 0, -1)), (0,), mean_returns=(2, 0))
     bad = np.zeros(model.weights1.size + model.bias1.size + model.weights2.size)
-    bad[-3], bad[-1] = 5., -2.
-    monkeypatch.setattr(module, "solve_direction", lambda *a, **k: (bad, {"forced_test_step": True}))
-    child, receipt = fit_budgeted_head(model, (fresh,), (old,),
+    bad[-3], bad[-1] = 5.0, -2.0
+    monkeypatch.setattr(
+        module, "solve_direction", lambda *a, **k: (bad, {"forced_test_step": True})
+    )
+    child, receipt = fit_budgeted_head(
+        model,
+        (fresh,),
+        (old,),
         (RegretBudget("restore", (fresh,), 0), RegretBudget("stable", (old,), 0)),
-        epochs=2, learning_rate=.05, update_rule="joint_ranking_v1", allow_initial_infeasibility=True)
+        epochs=2,
+        learning_rate=0.05,
+        update_rule="joint_ranking_v1",
+        allow_initial_infeasibility=True,
+    )
     assert child is None and not any(h["feasible"] for h in receipt["history"])
     assert all(not attempt["accepted"] for step in receipt["steps"] for attempt in step["attempts"])
-    assert any("stable" in attempt["violated"] for step in receipt["steps"] for attempt in step["attempts"])
+    assert any(
+        "stable" in attempt["violated"] for step in receipt["steps"] for attempt in step["attempts"]
+    )
 
 
-@pytest.mark.parametrize("flag,mode", [(1, "joint_ranking_v1"), (None, "joint_ranking_v1"), (True, "adam"), (True, "projected_budget_v1")])
+@pytest.mark.parametrize(
+    "flag,mode",
+    [
+        (1, "joint_ranking_v1"),
+        (None, "joint_ranking_v1"),
+        (True, "adam"),
+        (True, "projected_budget_v1"),
+    ],
+)
 def test_initial_recovery_flag_is_explicit_and_scoped(flag, mode):
     with pytest.raises(ValueError, match="feasibility recovery"):
-        fit_budgeted_head(unit_head(), (case(),), (case(),), (RegretBudget("a", (case(),), 2),),
-            epochs=1, update_rule=mode, allow_initial_infeasibility=flag)
+        fit_budgeted_head(
+            unit_head(),
+            (case(),),
+            (case(),),
+            (RegretBudget("a", (case(),), 2),),
+            epochs=1,
+            update_rule=mode,
+            allow_initial_infeasibility=flag,
+        )

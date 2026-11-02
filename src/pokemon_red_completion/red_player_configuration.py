@@ -36,7 +36,6 @@ ASSEMBLY_FLAGS = frozenset(
 )
 
 
-
 def player_lifecycle_fields(*, scope, released, guest_backend_closed):
     """Describe an in-process boundary; never attest the host process exited.
 
@@ -45,18 +44,27 @@ def player_lifecycle_fields(*, scope, released, guest_backend_closed):
     actual host exit still requires the supervisor/OS evidence outside Python.
     """
     scopes = {"live_chunk", "diagnostic_chunk", "driver_terminal", "prelaunch_failure"}
-    if (type(scope) is not str or scope not in scopes or type(released) is not bool
-        or guest_backend_closed is not None and type(guest_backend_closed) is not bool):
+    if (
+        type(scope) is not str
+        or scope not in scopes
+        or type(released) is not bool
+        or guest_backend_closed is not None
+        and type(guest_backend_closed) is not bool
+    ):
         raise ValueError("invalid measured player lifecycle boundary")
     return dict(
         worker_stopped=guest_backend_closed is True,
         live_driver_running=scope in {"live_chunk", "diagnostic_chunk"},
         checkpoint_lifecycle=dict(
-            schema="pokemon.red.checkpoint-quiescence.v1", scope=scope,
-            chunk_complete=True, inputs_released=released,
-            guest_backend_closed=guest_backend_closed, host_process_exit_confirmed=False,
-            unexpected_guest_closure=(scope in {"live_chunk", "diagnostic_chunk"}
-                and guest_backend_closed is True),
+            schema="pokemon.red.checkpoint-quiescence.v1",
+            scope=scope,
+            chunk_complete=True,
+            inputs_released=released,
+            guest_backend_closed=guest_backend_closed,
+            host_process_exit_confirmed=False,
+            unexpected_guest_closure=(
+                scope in {"live_chunk", "diagnostic_chunk"} and guest_backend_closed is True
+            ),
         ),
     )
 
@@ -74,21 +82,37 @@ def checkpoint_quiescent(result):
     if "checkpoint_lifecycle" not in result:
         return result.get("worker_stopped") is True
     life = result["checkpoint_lifecycle"]
-    if (type(life) is not dict or set(life) != {
-        "schema", "scope", "chunk_complete", "inputs_released",
-        "guest_backend_closed", "host_process_exit_confirmed", "unexpected_guest_closure"}
+    if (
+        type(life) is not dict
+        or set(life)
+        != {
+            "schema",
+            "scope",
+            "chunk_complete",
+            "inputs_released",
+            "guest_backend_closed",
+            "host_process_exit_confirmed",
+            "unexpected_guest_closure",
+        }
         or life.get("schema") != "pokemon.red.checkpoint-quiescence.v1"
-        or life.get("chunk_complete") is not True or life.get("inputs_released") is not True
-        or life.get("host_process_exit_confirmed") is not False):
+        or life.get("chunk_complete") is not True
+        or life.get("inputs_released") is not True
+        or life.get("host_process_exit_confirmed") is not False
+    ):
         return False
     try:
-        expected = player_lifecycle_fields(scope=life.get("scope"), released=True,
-            guest_backend_closed=life.get("guest_backend_closed"))
+        expected = player_lifecycle_fields(
+            scope=life.get("scope"),
+            released=True,
+            guest_backend_closed=life.get("guest_backend_closed"),
+        )
     except (ValueError, TypeError):
         return False
-    return (life == expected["checkpoint_lifecycle"]
+    return (
+        life == expected["checkpoint_lifecycle"]
         and result.get("worker_stopped") is expected["worker_stopped"]
-        and result.get("live_driver_running") is expected["live_driver_running"])
+        and result.get("live_driver_running") is expected["live_driver_running"]
+    )
 
 
 def _sha(value):
@@ -169,26 +193,45 @@ class RedPlayerConfiguration:
             values.pop("evolution_allow_direct_fights")
         if self.preparation_encounter_quantum is None:
             values.pop("preparation_encounter_quantum")
-        schema = (PREPARATION_QUANTUM_SCHEMA if self.preparation_encounter_quantum is not None else
-                  HELPER_VENUE_SCHEMA if not self.evolution_allow_direct_fights else
-                  VENUE_SCHEMA if self.evolution_venue_model_sha256 is not None else
-                  ROUTE_WORK_SCHEMA if self.quote_capture_route_work else SCHEMA)
+        schema = (
+            PREPARATION_QUANTUM_SCHEMA
+            if self.preparation_encounter_quantum is not None
+            else HELPER_VENUE_SCHEMA
+            if not self.evolution_allow_direct_fights
+            else VENUE_SCHEMA
+            if self.evolution_venue_model_sha256 is not None
+            else ROUTE_WORK_SCHEMA
+            if self.quote_capture_route_work
+            else SCHEMA
+        )
         return dict(schema=schema, **values)
 
     @classmethod
     def from_dict(cls, document):
-        optional = {"quote_capture_route_work", "evolution_venue_model_sha256", "evolution_venue_scope",
-                    "evolution_allow_direct_fights", "preparation_encounter_quantum"}
+        optional = {
+            "quote_capture_route_work",
+            "evolution_venue_model_sha256",
+            "evolution_venue_scope",
+            "evolution_allow_direct_fights",
+            "preparation_encounter_quantum",
+        }
         names = {entry.name for entry in fields(cls)} - optional
         if not isinstance(document, dict):
             raise ValueError("configured player document schema differs")
         schema = document.get("schema")
         quantum = schema == PREPARATION_QUANTUM_SCHEMA
         helper_only = schema == HELPER_VENUE_SCHEMA or (
-            quantum and "evolution_allow_direct_fights" in document)
+            quantum and "evolution_allow_direct_fights" in document
+        )
         venue = schema in {VENUE_SCHEMA, HELPER_VENUE_SCHEMA} or (
-            quantum and bool({"evolution_venue_model_sha256", "evolution_venue_scope"} & set(document)))
-        route = schema == ROUTE_WORK_SCHEMA or (venue or quantum) and "quote_capture_route_work" in document
+            quantum
+            and bool({"evolution_venue_model_sha256", "evolution_venue_scope"} & set(document))
+        )
+        route = (
+            schema == ROUTE_WORK_SCHEMA
+            or (venue or quantum)
+            and "quote_capture_route_work" in document
+        )
         expected = {"schema", *names}
         if quantum:
             expected.add("preparation_encounter_quantum")
@@ -198,25 +241,45 @@ class RedPlayerConfiguration:
             expected.update(("evolution_venue_model_sha256", "evolution_venue_scope"))
         if helper_only:
             expected.add("evolution_allow_direct_fights")
-        if (schema not in {SCHEMA, ROUTE_WORK_SCHEMA, VENUE_SCHEMA, HELPER_VENUE_SCHEMA, PREPARATION_QUANTUM_SCHEMA}
-            or quantum and document.get("preparation_encounter_quantum") is None
-            or helper_only and document.get("evolution_allow_direct_fights") is not False
+        if (
+            schema
+            not in {
+                SCHEMA,
+                ROUTE_WORK_SCHEMA,
+                VENUE_SCHEMA,
+                HELPER_VENUE_SCHEMA,
+                PREPARATION_QUANTUM_SCHEMA,
+            }
+            or quantum
+            and document.get("preparation_encounter_quantum") is None
+            or helper_only
+            and document.get("evolution_allow_direct_fights") is not False
             or set(document) != expected
-            or route and document["quote_capture_route_work"] is not True
-            or venue and (not _sha(document["evolution_venue_model_sha256"])
-                          or type(document["evolution_venue_scope"]) not in (list, tuple))):
+            or route
+            and document["quote_capture_route_work"] is not True
+            or venue
+            and (
+                not _sha(document["evolution_venue_model_sha256"])
+                or type(document["evolution_venue_scope"]) not in (list, tuple)
+            )
+        ):
             raise ValueError("configured player document schema differs")
         return cls(
-            origin_sha256=document["origin_sha256"], origin_id=document["origin_id"],
+            origin_sha256=document["origin_sha256"],
+            origin_id=document["origin_id"],
             goal_model_sha256=document["goal_model_sha256"],
             assembly_flags=tuple(tuple(pair) for pair in document["assembly_flags"]),
             excluded_profiles=tuple(tuple(pair) for pair in document["excluded_profiles"]),
             loanable_specimen_refs=tuple(document["loanable_specimen_refs"]),
             quote_capture_route_work=route,
-            evolution_venue_model_sha256=document["evolution_venue_model_sha256"] if venue else None,
+            evolution_venue_model_sha256=document["evolution_venue_model_sha256"]
+            if venue
+            else None,
             evolution_venue_scope=tuple(document["evolution_venue_scope"]) if venue else (),
             evolution_allow_direct_fights=not helper_only,
-            preparation_encounter_quantum=document["preparation_encounter_quantum"] if quantum else None,
+            preparation_encounter_quantum=document["preparation_encounter_quantum"]
+            if quantum
+            else None,
         )
 
     @property
@@ -225,7 +288,8 @@ class RedPlayerConfiguration:
 
     def admits(self, binding):
         return not any(
-            binding.kind.value == kind and (
+            binding.kind.value == kind
+            and (
                 binding.binding_ref.endswith(":" + profile)
                 or binding.binding_ref.endswith(":config-" + profile)
             )
@@ -268,7 +332,11 @@ def connect_retained_route22_recovery(backend, holder):
                 # It supplies no
                 # approach or full-quest credit; unknown contracts still fail.
                 binding = engaged_story_binding(
-                    runtime, actions, rom=rom, battler=battler, objective_id="rescue_fuji",
+                    runtime,
+                    actions,
+                    rom=rom,
+                    battler=battler,
+                    objective_id="rescue_fuji",
                     allow_retained_tower=True,
                 )
                 if binding is not None:
@@ -339,15 +407,23 @@ def declared_native_evolution_venue_model(plan, configuration=None):
     if expected is None:
         raise ValueError("native venue model lacks an explicit configured identity")
     _validate_venue_configuration(expected, tuple(scope) if type(scope) in (list, tuple) else scope)
-    if (plan.get("partition") != "development" or not isinstance(spec, dict)
+    if (
+        plan.get("partition") != "development"
+        or not isinstance(spec, dict)
         or set(spec) != {"path", "content_sha256", "reason"}
-        or not isinstance(spec["path"], str) or not Path(spec["path"]).is_absolute()
+        or not isinstance(spec["path"], str)
+        or not Path(spec["path"]).is_absolute()
         or not _sha(spec["content_sha256"])
-        or not isinstance(spec["reason"], str) or not spec["reason"].strip()):
+        or not isinstance(spec["reason"], str)
+        or not spec["reason"].strip()
+    ):
         raise ValueError("native venue model requires a pinned DEVELOPMENT declaration")
     from .party_development_outcome_learning import load_party_development_outcome_model
     from .red_native_boxed_evolution import validate_native_evolution_venue_model
-    model = load_party_development_outcome_model(spec["path"], expected_sha256=spec["content_sha256"])
+
+    model = load_party_development_outcome_model(
+        spec["path"], expected_sha256=spec["content_sha256"]
+    )
     validate_native_evolution_venue_model(model, expected)
     return model
 
@@ -355,10 +431,16 @@ def declared_native_evolution_venue_model(plan, configuration=None):
 def _validate_venue_configuration(model_sha256, scope):
     if model_sha256 is None and scope == ():
         return
-    if (not _sha(model_sha256) or type(scope) is not tuple or len(scope) < 2
+    if (
+        not _sha(model_sha256)
+        or type(scope) is not tuple
+        or len(scope) < 2
         or any(type(name) is not str or name not in VENUE_SCOPE_NAMES for name in scope)
-        or len(set(scope)) != len(scope)):
-        raise ValueError("native venue configuration requires its model identity and distinct scope")
+        or len(set(scope)) != len(scope)
+    ):
+        raise ValueError(
+            "native venue configuration requires its model identity and distinct scope"
+        )
 
 
 def _configured_native_venue_policy(configuration, model):
@@ -366,14 +448,20 @@ def _configured_native_venue_policy(configuration, model):
         if model is not None:
             raise ValueError("native venue model lacks an explicit configured identity")
         return None
-    from .red_native_boxed_evolution import NativeEvolutionVenuePolicy
     from . import red_goal_context as context
-    venues = dict(route11=context.ROUTE_11_TRAINING_VENUE,
-                  digletts_cave=context.DIGLETTS_CAVE_TRAINING_VENUE,
-                  mansion=context.MANSION_TRAINING_VENUE)
-    return NativeEvolutionVenuePolicy(model, configuration.evolution_venue_model_sha256,
+    from .red_native_boxed_evolution import NativeEvolutionVenuePolicy
+
+    venues = dict(
+        route11=context.ROUTE_11_TRAINING_VENUE,
+        digletts_cave=context.DIGLETTS_CAVE_TRAINING_VENUE,
+        mansion=context.MANSION_TRAINING_VENUE,
+    )
+    return NativeEvolutionVenuePolicy(
+        model,
+        configuration.evolution_venue_model_sha256,
         tuple(venues[name] for name in configuration.evolution_venue_scope),
-        allow_direct_evolution=configuration.evolution_allow_direct_fights)
+        allow_direct_evolution=configuration.evolution_allow_direct_fights,
+    )
 
 
 def _retained_capture_inventory(runtime, actions, *, parent, output):
@@ -387,26 +475,31 @@ def _retained_capture_inventory(runtime, actions, *, parent, output):
         return None
     parent = Path(parent)
     receipts = tuple(parent.glob("snorlax-*/*-paused/receipt.json")) + tuple(
-        parent.glob("static-*/*-paused/receipt.json"))
+        parent.glob("static-*/*-paused/receipt.json")
+    )
     if not receipts:
         return None
     state = runtime.emulator.save_state_bytes()
     if state != (parent / "terminal.state").read_bytes():
         return None
     from hashlib import sha256
+
     from red_earned_run_completion_20261005 import retained_capture_binding
 
     binding = retained_capture_binding(runtime, actions, parent=parent, output=output)
-    if (binding is None or binding.kind is not GoalKind.RECOVER_CONTROL
-            or binding.binding_ref != "pokemon.red:retained-capture:" + sha256(state).hexdigest()):
+    if (
+        binding is None
+        or binding.kind is not GoalKind.RECOVER_CONTROL
+        or binding.binding_ref != "pokemon.red:retained-capture:" + sha256(state).hexdigest()
+    ):
         raise ValueError("retained capture inventory lacks its exact verified binding")
     blocked = GoalOpportunity(
-        binding.binding_ref + ":settlement-only", GoalKind.ADVANCE_STORY,
+        binding.binding_ref + ":settlement-only",
+        GoalKind.ADVANCE_STORY,
         GoalAvailability.UNAVAILABLE,
         unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
     )
     return GoalBindingSet((binding.opportunity, blocked), (binding,))
-
 
 
 def _retained_wild_faint_inventory(runtime, actions, *, parent, rom):
@@ -421,47 +514,62 @@ def _retained_wild_faint_inventory(runtime, actions, *, parent, rom):
         return None
     raw = read()
     active = getattr(raw, "active_party_index", None)
-    if (raw.battle_state != 1 or type(active) is not int
-            or not raw.party_hp or not 0 <= active < len(raw.party_hp)
-            or raw.party_hp[active] != 0 or not any(raw.party_hp)):
+    if (
+        raw.battle_state != 1
+        or type(active) is not int
+        or not raw.party_hp
+        or not 0 <= active < len(raw.party_hp)
+        or raw.party_hp[active] != 0
+        or not any(raw.party_hp)
+    ):
         return None
     parent = Path(parent)
-    if not all((parent / name).is_file() for name in
-               ("RESULT.json", "CONTEXT.json", "terminal.state")):
+    if not all(
+        (parent / name).is_file() for name in ("RESULT.json", "CONTEXT.json", "terminal.state")
+    ):
         return None
     state = runtime.emulator.save_state_bytes()
     context_bytes = (parent / "CONTEXT.json").read_bytes()
     result = json.loads((parent / "RESULT.json").read_bytes())
     context = json.loads(context_bytes)
     state_sha = sha256(state).hexdigest()
-    if (state != (parent / "terminal.state").read_bytes()
-            or not checkpoint_quiescent(result)
-            or result.get("state_sha256") != state_sha
-            or context.get("state_sha256") != state_sha
-            or result.get("context_sha256") != sha256(context_bytes).hexdigest()
-            or result.get("spent") != context.get("spent")
-            or result.get("continuation_reason") != "native_execution_error"):
+    if (
+        state != (parent / "terminal.state").read_bytes()
+        or not checkpoint_quiescent(result)
+        or result.get("state_sha256") != state_sha
+        or context.get("state_sha256") != state_sha
+        or result.get("context_sha256") != sha256(context_bytes).hexdigest()
+        or result.get("spent") != context.get("spent")
+        or result.get("continuation_reason") != "native_execution_error"
+    ):
         return None
     outcomes = result.get("episode", {}).get("outcomes", ())
     if not outcomes:
         return None
     outcome = outcomes[-1]
     chain = outcome.get("error_chain", ())
-    if (outcome.get("terminal_state_sha256") != state_sha
-            or outcome.get("error_type") != "RouteExecutionError"
-            or not chain or type(chain[0]) is not dict
-            or chain[0].get("error_type") != "RouteExecutionError"
-            or chain[0].get("reason_code") != "world_state_diverged"):
+    if (
+        outcome.get("terminal_state_sha256") != state_sha
+        or outcome.get("error_type") != "RouteExecutionError"
+        or not chain
+        or type(chain[0]) is not dict
+        or chain[0].get("error_type") != "RouteExecutionError"
+        or chain[0].get("reason_code") != "world_state_diverged"
+    ):
         return None
     from .red_player_wild_recovery import interrupted_wild_binding
 
     binding = interrupted_wild_binding(
-        runtime, actions, rom=rom() if callable(rom) else rom, allow_fainted_active=True,
+        runtime,
+        actions,
+        rom=rom() if callable(rom) else rom,
+        allow_fainted_active=True,
     )
     if binding is None:
         return None
     blocked = GoalOpportunity(
-        binding.binding_ref + ":settlement-only", GoalKind.ADVANCE_STORY,
+        binding.binding_ref + ":settlement-only",
+        GoalKind.ADVANCE_STORY,
         GoalAvailability.UNAVAILABLE,
         unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
     )
@@ -480,9 +588,11 @@ def _retained_field_faint_inventory(runtime, actions, *, parent):
     if state != (parent / "terminal.state").read_bytes():
         return None
     result = json.loads((parent / "RESULT.json").read_bytes())
-    if (not checkpoint_quiescent(result)
+    if (
+        not checkpoint_quiescent(result)
         or result.get("state_sha256") != sha256(state).hexdigest()
-        or result.get("continuation_reason") != "native_execution_error"):
+        or result.get("continuation_reason") != "native_execution_error"
+    ):
         return None
     outcomes = result.get("episode", {}).get("outcomes", ())
     if not outcomes:
@@ -494,45 +604,79 @@ def _retained_field_faint_inventory(runtime, actions, *, parent):
     if boundary_path.is_file():
         prior_native = json.loads(boundary_path.read_bytes())
         boundary_state = parent / "retained-native-field-boundary.state"
-        if (prior_native.get("retained_tail_sha256") != sha256(state).hexdigest()
-                or prior_native.get("source_chunk_state_sha256") != outcomes[0].get("before_state_sha256")
-                or not boundary_state.is_file()
-                or sha256(boundary_state.read_bytes()).hexdigest() != prior_native.get("native_final_state_sha256")):
+        if (
+            prior_native.get("retained_tail_sha256") != sha256(state).hexdigest()
+            or prior_native.get("source_chunk_state_sha256")
+            != outcomes[0].get("before_state_sha256")
+            or not boundary_state.is_file()
+            or sha256(boundary_state.read_bytes()).hexdigest()
+            != prior_native.get("native_final_state_sha256")
+        ):
             return None
-    binding = retained_field_faint_binding(runtime, actions, outcome=outcomes[-1], prior_native_boundary=prior_native)
+    binding = retained_field_faint_binding(
+        runtime, actions, outcome=outcomes[-1], prior_native_boundary=prior_native
+    )
     if binding is None:
         return None
-    blocked = GoalOpportunity(binding.binding_ref + ":settlement-only",
-        GoalKind.ADVANCE_STORY, GoalAvailability.UNAVAILABLE,
-        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED)
+    blocked = GoalOpportunity(
+        binding.binding_ref + ":settlement-only",
+        GoalKind.ADVANCE_STORY,
+        GoalAvailability.UNAVAILABLE,
+        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+    )
     return GoalBindingSet((binding.opportunity, blocked), (binding,))
-
 
 
 def local_ordinary_ball_supply_profile(profile, mart_map_id):
     """Reuse the verified local clerk and the existing affordable five-ball order."""
     from .observation import ItemId, MapId
     from .red_goal_context_profile import (
-        RedGoalMechanic, _thaw, build_red_goal_context_profile_payload,
+        RedGoalMechanic,
+        _thaw,
+        build_red_goal_context_profile_payload,
         parse_red_goal_context_profile,
     )
 
     if type(mart_map_id) is not int or mart_map_id not in {
-            int(MapId.CERULEAN_MART), int(MapId.VERMILION_MART)}:
-        raise ValueError('ordinary ball supplier needs a verified clerk catalog entry')
-    providers = [(spec.kind, spec.mechanic, _thaw(spec.parameters))
-                 for spec in profile.providers if spec.kind is not GoalKind.RESUPPLY]
-    providers.append((GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, dict(
-        map_id=mart_map_id, player_x=2, player_y=5,
-        interaction_direction='left',
-        purchases=[dict(absolute_index=0, item_id=int(ItemId.POKE_BALL),
-                        quantity=5, unit_price=200)],
-        affordable_ball_purchase=True, resource_choice_variants=True,
-    )))
+        int(MapId.CERULEAN_MART),
+        int(MapId.VERMILION_MART),
+    }:
+        raise ValueError("ordinary ball supplier needs a verified clerk catalog entry")
+    providers = [
+        (spec.kind, spec.mechanic, _thaw(spec.parameters))
+        for spec in profile.providers
+        if spec.kind is not GoalKind.RESUPPLY
+    ]
+    providers.append(
+        (
+            GoalKind.RESUPPLY,
+            RedGoalMechanic.MART_RESUPPLY,
+            dict(
+                map_id=mart_map_id,
+                player_x=2,
+                player_y=5,
+                interaction_direction="left",
+                purchases=[
+                    dict(
+                        absolute_index=0, item_id=int(ItemId.POKE_BALL), quantity=5, unit_price=200
+                    )
+                ],
+                affordable_ball_purchase=True,
+                resource_choice_variants=True,
+            ),
+        )
+    )
     providers.sort(key=lambda row: tuple(GoalKind).index(row[0]))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=('whole-player-local-vermilion-ordinary-balls-v1' if mart_map_id == int(MapId.VERMILION_MART)
-                    else 'whole-player-local-cerulean-ordinary-balls-v1'), providers=tuple(providers)))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=(
+                "whole-player-local-vermilion-ordinary-balls-v1"
+                if mart_map_id == int(MapId.VERMILION_MART)
+                else "whole-player-local-cerulean-ordinary-balls-v1"
+            ),
+            providers=tuple(providers),
+        )
+    )
 
 
 def local_ordinary_ball_supply_peers(runtime, actions, observation, *, world, _town=None):
@@ -553,27 +697,52 @@ def local_ordinary_ball_supply_peers(runtime, actions, observation, *, world, _t
     # native-verified stance (2,5), LEFT, ordinary ball stock index zero at 200.
     # The current route quote decides reachability for every verified clerk;
     # no current-town filter hides a legitimate nearby supplier from the model.
-    catalog = ((int(MapId.CERULEAN_CITY), int(MapId.CERULEAN_MART)),
-               (int(MapId.VERMILION_CITY), int(MapId.VERMILION_MART)))
+    catalog = (
+        (int(MapId.CERULEAN_CITY), int(MapId.CERULEAN_MART)),
+        (int(MapId.VERMILION_CITY), int(MapId.VERMILION_MART)),
+    )
     outside = runtime.reader.read_retained_outside_map()
-    matches = [mart for town, mart in catalog if _town is None or (town == _town
-               and (raw.map_id == town or raw.map_id == mart
-                    or type(raw.map_id) is int and raw.map_id >= 0x25 and outside == town))]
+    matches = [
+        mart
+        for town, mart in catalog
+        if _town is None
+        or (
+            town == _town
+            and (
+                raw.map_id == town
+                or raw.map_id == mart
+                or type(raw.map_id) is int
+                and raw.map_id >= 0x25
+                and outside == town
+            )
+        )
+    ]
     if not matches:
         return ()
-    if not ordinary_ball_resupply_peer_needed(raw, hall_of_fame='enter_hall_of_fame' in set(
-            runtime.adapter.graph.completed_ids(observation.game_state))):
+    if not ordinary_ball_resupply_peer_needed(
+        raw,
+        hall_of_fame="enter_hall_of_fame"
+        in set(runtime.adapter.graph.completed_ids(observation.game_state)),
+    ):
         return ()
     world = world.with_current_observation(runtime.reader)
     bindings = []
     for mart_map_id in matches:
-        configured = replace(runtime, profile=local_ordinary_ball_supply_profile(runtime.profile, mart_map_id))
+        configured = replace(
+            runtime, profile=local_ordinary_ball_supply_profile(runtime.profile, mart_map_id)
+        )
         inventory = RedResourceGoalRouter(
-            configured, actions, world, quote_resource_costs=True,
-            prepare_capture_party=False, prepare_capture_escort=False,
+            configured,
+            actions,
+            world,
+            quote_resource_costs=True,
+            prepare_capture_party=False,
+            prepare_capture_escort=False,
             include_recovery_offers=False,
         ).enumerate_routed_kinds(observation, frozenset({GoalKind.RESUPPLY}))
-        bindings.extend(binding for binding in inventory.bindings if binding.kind is GoalKind.RESUPPLY)
+        bindings.extend(
+            binding for binding in inventory.bindings if binding.kind is GoalKind.RESUPPLY
+        )
     return tuple(bindings)
 
 
@@ -588,8 +757,9 @@ def local_vermilion_ball_supply_peers(runtime, actions, observation, *, world):
     """Preserve the original Vermilion-only helper contract."""
     from .observation import MapId
 
-    return local_ordinary_ball_supply_peers(runtime, actions, observation,
-                                          world=world, _town=int(MapId.VERMILION_CITY))
+    return local_ordinary_ball_supply_peers(
+        runtime, actions, observation, world=world, _town=int(MapId.VERMILION_CITY)
+    )
 
 
 def connect_early_capture_status_support(runtime):
@@ -605,27 +775,53 @@ def connect_early_capture_status_support(runtime):
 
 
 def assemble_configured_player(
-    backend, configuration, parent, output, *, plan_path, model_feature_version=7,
-    evolution_venue_model=None, training_admission=None, include_preparation_party_context=False,
+    backend,
+    configuration,
+    parent,
+    output,
+    *,
+    plan_path,
+    model_feature_version=7,
+    evolution_venue_model=None,
+    training_admission=None,
+    include_preparation_party_context=False,
 ):
     """Reuse the existing composition with persistent admission and loan wiring."""
     if not isinstance(configuration, RedPlayerConfiguration):
         raise TypeError("typed player configuration required")
-    if type(model_feature_version) is not int or model_feature_version not in (5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16):
+    if type(model_feature_version) is not int or model_feature_version not in (
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+    ):
         raise ValueError("configured player requires a supported model feature version")
-    if type(include_preparation_party_context) is not bool or (include_preparation_party_context and model_feature_version not in (15, 16)):
+    if type(include_preparation_party_context) is not bool or (
+        include_preparation_party_context and model_feature_version not in (15, 16)
+    ):
         raise ValueError("preparation party context requires explicit V15 observation opt-in")
     if configuration.evolution_venue_model_sha256 is not None and evolution_venue_model is None:
         evolution_venue_model = declared_native_evolution_venue_model(
-            json.loads(Path(plan_path).read_bytes()), configuration)
+            json.loads(Path(plan_path).read_bytes()), configuration
+        )
     venue_policy = _configured_native_venue_policy(configuration, evolution_venue_model)
     if training_admission is not None:
         from .red_production_train_admission import ProductionTrainAdmission
+
         if type(training_admission) is not ProductionTrainAdmission:
             raise TypeError("typed production TRAIN admission required")
         training_admission.require_work_order(Path(plan_path).read_bytes())
-        if (configuration.origin_sha256 != training_admission.source_origin_sha256
-            or configuration.origin_id != training_admission.root_lineage_id):
+        if (
+            configuration.origin_sha256 != training_admission.source_origin_sha256
+            or configuration.origin_id != training_admission.root_lineage_id
+        ):
             raise ValueError("configured TRAIN origin differs from admitted source")
     payload, factory0, menu, holder, source = backend.assembly(
         parent,
@@ -636,12 +832,17 @@ def assemble_configured_player(
         origin_id=configuration.origin_id,
         continuation_loan_refs=frozenset(configuration.loanable_specimen_refs),
         **({"quote_capture_route_work": True} if configuration.quote_capture_route_work else {}),
-        **({"preparation_encounter_quantum": configuration.preparation_encounter_quantum}
-           if configuration.preparation_encounter_quantum is not None else {}),
+        **(
+            {"preparation_encounter_quantum": configuration.preparation_encounter_quantum}
+            if configuration.preparation_encounter_quantum is not None
+            else {}
+        ),
         **({"include_level_workload": True} if model_feature_version >= 9 else {}),
         **({"include_capture_invocation": True} if model_feature_version >= 13 else {}),
         **({"include_matchup_observation": True} if model_feature_version >= 15 else {}),
-        **({"include_preparation_party_context": True} if include_preparation_party_context else {}),
+        **(
+            {"include_preparation_party_context": True} if include_preparation_party_context else {}
+        ),
         **dict(configuration.assembly_flags),
     )
     if model_feature_version >= 10:
@@ -649,18 +850,26 @@ def assemble_configured_player(
 
         connect_move_change_inventory(menu, rom=backend.c.ROM.read_bytes())
     connect_retained_route22_recovery(backend, holder)
-    if (training_admission is None and menu.enumerate_resources is not None
-            and dict(configuration.assembly_flags)['include_supply']
-            and dict(configuration.assembly_flags)['include_rewards']):
+    if (
+        training_admission is None
+        and menu.enumerate_resources is not None
+        and dict(configuration.assembly_flags)["include_supply"]
+        and dict(configuration.assembly_flags)["include_rewards"]
+    ):
         regional_resources = menu.enumerate_resources
 
         def resources_with_local_mart(runtime, actions, observation):
             from .red_player_story_menu import merge_resource_observer_bindings
 
             rows = regional_resources(runtime, actions, observation)
-            route = holder.get('configured_route')
-            local = (() if route is None else local_ordinary_ball_supply_peers(
-                runtime, actions, observation, world=route.route_world))
+            route = holder.get("configured_route")
+            local = (
+                ()
+                if route is None
+                else local_ordinary_ball_supply_peers(
+                    runtime, actions, observation, world=route.route_world
+                )
+            )
             return merge_resource_observer_bindings(rows + local)
 
         menu.enumerate_resources = resources_with_local_mart
@@ -669,7 +878,9 @@ def assemble_configured_player(
 
         def empty_indoor_recovery(runtime, actions, observation):
             route = holder.get("configured_route")
-            return None if route is None else indoor_departure_binding(runtime, actions, route=route)
+            return (
+                None if route is None else indoor_departure_binding(runtime, actions, route=route)
+            )
 
         menu.enumerate_empty_recovery = empty_indoor_recovery
     ordinary, supplements = menu.enumerate_base, menu.supplements
@@ -683,7 +894,10 @@ def assemble_configured_player(
             return retained
         if training_admission is None:
             retained = _retained_wild_faint_inventory(
-                args[0], args[1], parent=parent, rom=lambda: backend.c.ROM.read_bytes(),
+                args[0],
+                args[1],
+                parent=parent,
+                rom=lambda: backend.c.ROM.read_bytes(),
             )
             if retained is not None:
                 return retained
@@ -692,7 +906,8 @@ def assemble_configured_player(
             departure = native_ship_departure_binding(args[0], args[1])
             if departure is not None:
                 blocked = GoalOpportunity(
-                    departure.binding_ref + ":settlement-only", GoalKind.ADVANCE_STORY,
+                    departure.binding_ref + ":settlement-only",
+                    GoalKind.ADVANCE_STORY,
                     GoalAvailability.UNAVAILABLE,
                     unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
                 )
@@ -772,8 +987,11 @@ def assemble_configured_player(
     def factory(controller):
         runtime = factory0(controller)
         flags = dict(configuration.assembly_flags)
-        if (training_admission is None and flags["include_rewards"]
-                and flags["include_early_preparation"]):
+        if (
+            training_admission is None
+            and flags["include_rewards"]
+            and flags["include_early_preparation"]
+        ):
             runtime = connect_early_capture_status_support(runtime)
         if flags["include_rewards"] and flags["include_supply"]:
             runtime = connect_retained_ordinary_funding(runtime, holder.get("actor"))
@@ -816,8 +1034,11 @@ def assemble_configured_player(
             },
             party_guard=guard,
         )
-        runtime = replace(runtime, adapter=adapter,
-            certified_evolution_helper_xp=(training_admission is None and flags["include_rewards"]))
+        runtime = replace(
+            runtime,
+            adapter=adapter,
+            certified_evolution_helper_xp=(training_admission is None and flags["include_rewards"]),
+        )
         if venue_policy is not None:
             runtime = replace(runtime, native_evolution_venue_policy=venue_policy)
         # Existing ROM route topology; there is no supplied strategic destination.
@@ -835,8 +1056,7 @@ def assemble_configured_player(
                 runtime, actions, route.route_world
             ),
             resource_wild_faint_recovery=(
-                training_admission is None
-                and dict(configuration.assembly_flags)["include_rewards"]
+                training_admission is None and dict(configuration.assembly_flags)["include_rewards"]
             ),
         )
         if not pending_loan:
@@ -878,7 +1098,8 @@ def authenticated_preloan_roster(parent, configuration):
         )
 
     if (
-        len(expected_refs) != len(expected) or len(expected) != 6
+        len(expected_refs) != len(expected)
+        or len(expected) != 6
         or any(not isinstance(ref, str) or not ref for ref in expected_refs)
         or not pending_roster(current)
     ):

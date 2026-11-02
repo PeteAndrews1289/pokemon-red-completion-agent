@@ -3,6 +3,7 @@ import importlib.machinery
 import json
 import os
 import py_compile
+from datetime import UTC
 from hashlib import sha256
 from types import SimpleNamespace as N
 
@@ -24,22 +25,33 @@ def test_separate_inspections_and_continuations_retain_each_isolation_report(tmp
 def test_compressed_report_retains_every_original_json_byte_and_shared_ordinals(tmp_path):
     report = dict(
         reads=[f"private/read-{i:05d}" for i in range(1000)],
-        writes=[f"private/write-{i:05d}" for i in range(1000)], error="native failure retained",
+        writes=[f"private/write-{i:05d}" for i in range(1000)],
+        error="native failure retained",
     )
     plain = launcher.write_isolated_io_report(tmp_path, report)
     compressed = launcher.write_isolated_io_report(tmp_path, report, compressed=True)
-    assert compressed.name == 'ISOLATED-IO-0002.json.gz'
+    assert compressed.name == "ISOLATED-IO-0002.json.gz"
     assert gzip.decompress(compressed.read_bytes()) == plain.read_bytes()
     assert json.loads(gzip.decompress(compressed.read_bytes())) == report
     assert compressed.stat().st_size < plain.stat().st_size / 5
-    assert launcher.isolated_io_report_path(tmp_path).name == 'ISOLATED-IO-0003.json'
-    assert launcher.isolated_io_report_path(
-        tmp_path, compressed=True,
-    ).name == 'ISOLATED-IO-0003.json.gz'
+    assert launcher.isolated_io_report_path(tmp_path).name == "ISOLATED-IO-0003.json"
+    assert (
+        launcher.isolated_io_report_path(
+            tmp_path,
+            compressed=True,
+        ).name
+        == "ISOLATED-IO-0003.json.gz"
+    )
 
 
-@pytest.mark.parametrize('spec,partition', [({'isolation_report': 'sample'}, 'development'),
-    ({'isolation_report': 'gzip_json_v1'}, 'train'), ([], 'development')])
+@pytest.mark.parametrize(
+    "spec,partition",
+    [
+        ({"isolation_report": "sample"}, "development"),
+        ({"isolation_report": "gzip_json_v1"}, "train"),
+        ([], "development"),
+    ],
+)
 def test_compressed_report_rejects_undeclared_or_lossy_modes(spec, partition):
     with pytest.raises(ValueError):
         launcher.declared_compressed_io_report(dict(input_recording=spec, partition=partition))
@@ -95,7 +107,8 @@ def test_frozen_wrapper_rejects_changed_or_missing_inputs_before_player_import(
             str(plan),
             "--plan-sha256",
             plan_pin,
-        ] + (["--fresh", "--check-imports"] if import_check else []),
+        ]
+        + (["--fresh", "--check-imports"] if import_check else []),
     )
     monkeypatch.setattr(
         launcher.runpy, "run_path", lambda *a, **k: pytest.fail("must not reach player")
@@ -160,8 +173,9 @@ def test_import_only_check_validates_fresh_plan_and_rejects_other_entries(tmp_pa
     with pytest.raises(ValueError, match="invalid declaration"):
         launcher.run_selected_driver(script, plan={}, check_imports=True)
     with pytest.raises(ValueError, match="requires the fresh entry"):
-        launcher.run_selected_driver(tmp_path / "run_configured_red_player.py",
-            plan={}, check_imports=True)
+        launcher.run_selected_driver(
+            tmp_path / "run_configured_red_player.py", plan={}, check_imports=True
+        )
 
 
 def test_pinned_source_loader_ignores_valid_wrong_bytecode_before_guard_bootstrap(tmp_path):
@@ -190,7 +204,8 @@ def test_source_finder_rejects_unlisted_symlink_and_sourceless_modules(tmp_path)
     source = tmp_path / "unit.py"
     source.write_text("value=1\n")
     finder = launcher.FrozenSourceFinder(
-        tmp_path, {str(source): sha256(source.read_bytes()).hexdigest()})
+        tmp_path, {str(source): sha256(source.read_bytes()).hexdigest()}
+    )
     assert isinstance(finder.find_spec("unit", [str(tmp_path)]).loader, launcher.PinnedSourceLoader)
     unlisted = tmp_path / "unlisted.py"
     unlisted.write_text("value=2\n")
@@ -220,19 +235,41 @@ def test_source_finder_does_not_replace_environment_loaders(tmp_path):
 
 
 @pytest.mark.parametrize("import_check", [False, True])
-@pytest.mark.parametrize("fault", ["stale_hash", "unknown_source", "not_mapping", "null_sources", "null_hash", "runtime_identity"])
-def test_conflicting_plan_is_rejected_before_dependency_payload_reads(tmp_path, monkeypatch, fault, import_check):
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "stale_hash",
+        "unknown_source",
+        "not_mapping",
+        "null_sources",
+        "null_hash",
+        "runtime_identity",
+    ],
+)
+def test_conflicting_plan_is_rejected_before_dependency_payload_reads(
+    tmp_path, monkeypatch, fault, import_check
+):
     frozen = tmp_path / "frozen"
     frozen.mkdir()
     dependency = frozen / "helper.py"
     dependency.write_bytes(b"native-helper")
     digest = sha256(dependency.read_bytes()).hexdigest()
     manifest = frozen / "PLAYER-PACKAGE.json"
-    manifest.write_text(json.dumps(dict(schema="pokemon.red.frozen-player-package.v1",
-        pins={str(dependency): digest}, environment_pins={}, roots=[])))
+    manifest.write_text(
+        json.dumps(
+            dict(
+                schema="pokemon.red.frozen-player-package.v1",
+                pins={str(dependency): digest},
+                environment_pins={},
+                roots=[],
+            )
+        )
+    )
     manifest_sha = sha256(manifest.read_bytes()).hexdigest()
-    spec = dict(runtime_package=dict(path=str(manifest), sha256=manifest_sha),
-        backend_sources={str(dependency): digest})
+    spec = dict(
+        runtime_package=dict(path=str(manifest), sha256=manifest_sha),
+        backend_sources={str(dependency): digest},
+    )
     if fault == "stale_hash":
         spec["backend_sources"][str(dependency)] = "a" * 64
     elif fault == "unknown_source":
@@ -259,10 +296,25 @@ def test_conflicting_plan_is_rejected_before_dependency_payload_reads(tmp_path, 
         return original_read(path)
 
     monkeypatch.setattr(type(manifest), "read_bytes", restricted_read)
-    monkeypatch.setattr(launcher.sys, "argv", ["launch", "--manifest", str(manifest),
-        "--manifest-sha256", manifest_sha, "--plan", str(plan), "--plan-sha256", plan_sha]
-        + (["--fresh", "--check-imports"] if import_check else []))
-    monkeypatch.setattr(launcher.runpy, "run_path", lambda *a, **k:pytest.fail("no player import allowed"))
+    monkeypatch.setattr(
+        launcher.sys,
+        "argv",
+        [
+            "launch",
+            "--manifest",
+            str(manifest),
+            "--manifest-sha256",
+            manifest_sha,
+            "--plan",
+            str(plan),
+            "--plan-sha256",
+            plan_sha,
+        ]
+        + (["--fresh", "--check-imports"] if import_check else []),
+    )
+    monkeypatch.setattr(
+        launcher.runpy, "run_path", lambda *a, **k: pytest.fail("no player import allowed")
+    )
     with pytest.raises(ValueError, match="declaration differs|runtime package identity"):
         launcher.launch()
     assert reads == [manifest, plan]
@@ -270,24 +322,55 @@ def test_conflicting_plan_is_rejected_before_dependency_payload_reads(tmp_path, 
 
 
 @pytest.mark.parametrize("import_check", [False, True])
-def test_matching_backend_declaration_keeps_full_dependency_integrity(tmp_path, monkeypatch, import_check):
+def test_matching_backend_declaration_keeps_full_dependency_integrity(
+    tmp_path, monkeypatch, import_check
+):
     frozen = tmp_path / "frozen"
     frozen.mkdir()
     dependency = frozen / "helper.py"
     dependency.write_bytes(b"old-native-helper")
     digest = sha256(dependency.read_bytes()).hexdigest()
     manifest = frozen / "PLAYER-PACKAGE.json"
-    manifest.write_text(json.dumps(dict(schema="pokemon.red.frozen-player-package.v1",
-        pins={str(dependency): digest}, environment_pins={}, roots=[])))
+    manifest.write_text(
+        json.dumps(
+            dict(
+                schema="pokemon.red.frozen-player-package.v1",
+                pins={str(dependency): digest},
+                environment_pins={},
+                roots=[],
+            )
+        )
+    )
     manifest_sha = sha256(manifest.read_bytes()).hexdigest()
     plan = tmp_path / "PLAN.json"
-    plan.write_text(json.dumps(dict(runtime_package=dict(path=str(manifest), sha256=manifest_sha),
-        backend_sources={str(dependency): digest})))
+    plan.write_text(
+        json.dumps(
+            dict(
+                runtime_package=dict(path=str(manifest), sha256=manifest_sha),
+                backend_sources={str(dependency): digest},
+            )
+        )
+    )
     dependency.write_bytes(b"changed-native-helper")
-    monkeypatch.setattr(launcher.sys, "argv", ["launch", "--manifest", str(manifest),
-        "--manifest-sha256", manifest_sha, "--plan", str(plan), "--plan-sha256", sha256(plan.read_bytes()).hexdigest()]
-        + (["--fresh", "--check-imports"] if import_check else []))
-    monkeypatch.setattr(launcher.runpy, "run_path", lambda *a, **k:pytest.fail("no player import allowed"))
+    monkeypatch.setattr(
+        launcher.sys,
+        "argv",
+        [
+            "launch",
+            "--manifest",
+            str(manifest),
+            "--manifest-sha256",
+            manifest_sha,
+            "--plan",
+            str(plan),
+            "--plan-sha256",
+            sha256(plan.read_bytes()).hexdigest(),
+        ]
+        + (["--fresh", "--check-imports"] if import_check else []),
+    )
+    monkeypatch.setattr(
+        launcher.runpy, "run_path", lambda *a, **k: pytest.fail("no player import allowed")
+    )
     with pytest.raises(ValueError, match="runtime dependency changed"):
         launcher.launch()
 
@@ -340,62 +423,135 @@ def test_environment_pinning_does_not_grant_unlisted_cache_or_symlink(tmp_path):
 
 
 def startup_documents():
-    from datetime import datetime,timezone
-    plan=dict(native_limits=dict(seconds=480),worker_wall_seconds=570,
-        caps=dict(outer_seconds=600),full_hold_seconds=600,
-        cutoff_utc='2026-10-23T04:32:30+00:00',source_sha256='a'*64,
-        original_TRAIN_state_sha256='b'*64)
-    custody=dict(retained_state_sha256='a'*64,original_TRAIN_state_sha256='b'*64,
-        development_relabel=False,same_related_TRAIN_ancestry=True,save_writes=0)
-    row=dict(state_sha256='b'*64,source_partition='train')
-    return plan,custody,row,datetime(2026,10,23,2,tzinfo=timezone.utc)
+    from datetime import datetime
+
+    plan = dict(
+        native_limits=dict(seconds=480),
+        worker_wall_seconds=570,
+        caps=dict(outer_seconds=600),
+        full_hold_seconds=600,
+        cutoff_utc="2026-10-23T04:32:30+00:00",
+        source_sha256="a" * 64,
+        original_TRAIN_state_sha256="b" * 64,
+    )
+    custody = dict(
+        retained_state_sha256="a" * 64,
+        original_TRAIN_state_sha256="b" * 64,
+        development_relabel=False,
+        same_related_TRAIN_ancestry=True,
+        save_writes=0,
+    )
+    row = dict(state_sha256="b" * 64, source_partition="train")
+    return plan, custody, row, datetime(2026, 10, 23, 2, tzinfo=UTC)
 
 
-@pytest.mark.parametrize('native,worker,outer',[(240,330,360),(480,570,600)])
-def test_shared_diagnostic_startup_admits_both_declared_profiles(native,worker,outer):
-    p,c,r,now=startup_documents();p.update(native_limits=dict(seconds=native),
-        worker_wall_seconds=worker,caps=dict(outer_seconds=outer),full_hold_seconds=outer)
-    assert launcher.validate_diagnostic_startup(p,c,r,now=now)==worker
+@pytest.mark.parametrize("native,worker,outer", [(240, 330, 360), (480, 570, 600)])
+def test_shared_diagnostic_startup_admits_both_declared_profiles(native, worker, outer):
+    p, c, r, now = startup_documents()
+    p.update(
+        native_limits=dict(seconds=native),
+        worker_wall_seconds=worker,
+        caps=dict(outer_seconds=outer),
+        full_hold_seconds=outer,
+    )
+    assert launcher.validate_diagnostic_startup(p, c, r, now=now) == worker
     from datetime import timedelta
-    assert launcher.validate_diagnostic_startup(p,c,r,now=now+timedelta(hours=2,minutes=31))==90
+
+    assert (
+        launcher.validate_diagnostic_startup(p, c, r, now=now + timedelta(hours=2, minutes=31))
+        == 90
+    )
 
 
-@pytest.mark.parametrize('fault',['equal','inverted','hold','bool','string','nan','infinity','expired','naive','fractional_native','missing'])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "equal",
+        "inverted",
+        "hold",
+        "bool",
+        "string",
+        "nan",
+        "infinity",
+        "expired",
+        "naive",
+        "fractional_native",
+        "missing",
+    ],
+)
 def test_shared_diagnostic_timing_rejects_invalid_or_stale_limits(fault):
-    p,c,r,now=startup_documents()
-    if fault=='equal':p['native_limits']['seconds']=570
-    elif fault=='inverted':p['worker_wall_seconds']=700
-    elif fault=='hold':p['full_hold_seconds']=601
-    elif fault=='bool':p['native_limits']['seconds']=True
-    elif fault=='string':p['native_limits']['seconds']='480'
-    elif fault=='nan':p['worker_wall_seconds']=float('nan')
-    elif fault=='infinity':p['caps']['outer_seconds']=float('inf')
-    elif fault=='expired':p['cutoff_utc']='2026-10-23T01:00:00+00:00'
-    elif fault=='naive':p['cutoff_utc']='2026-10-23T04:32:30'
-    elif fault=='fractional_native':p['native_limits']['seconds']=480.5
-    else:del p['worker_wall_seconds']
-    with pytest.raises(ValueError):launcher.validate_diagnostic_startup(p,c,r,now=now)
-
-
-@pytest.mark.parametrize('fault',['missing_flag','relabel','integer_flag','ancestry','writes','bool_writes','retained_hash','original_hash','catalog_hash','partition'])
-def test_shared_custody_gate_rejects_before_emulator_construction(fault):
-    p,c,r,now=startup_documents();construction=[]
-    if fault=='missing_flag':del c['development_relabel']
-    elif fault=='relabel':c['development_relabel']=True
-    elif fault=='integer_flag':c['development_relabel']=0
-    elif fault=='ancestry':c['same_related_TRAIN_ancestry']=False
-    elif fault=='writes':c['save_writes']=1
-    elif fault=='bool_writes':c['save_writes']=False
-    elif fault=='retained_hash':c['retained_state_sha256']='c'*64
-    elif fault=='original_hash':p['original_TRAIN_state_sha256']='c'*64
-    elif fault=='catalog_hash':r['state_sha256']='c'*64
-    else:r['source_partition']='development'
+    p, c, r, now = startup_documents()
+    if fault == "equal":
+        p["native_limits"]["seconds"] = 570
+    elif fault == "inverted":
+        p["worker_wall_seconds"] = 700
+    elif fault == "hold":
+        p["full_hold_seconds"] = 601
+    elif fault == "bool":
+        p["native_limits"]["seconds"] = True
+    elif fault == "string":
+        p["native_limits"]["seconds"] = "480"
+    elif fault == "nan":
+        p["worker_wall_seconds"] = float("nan")
+    elif fault == "infinity":
+        p["caps"]["outer_seconds"] = float("inf")
+    elif fault == "expired":
+        p["cutoff_utc"] = "2026-10-23T01:00:00+00:00"
+    elif fault == "naive":
+        p["cutoff_utc"] = "2026-10-23T04:32:30"
+    elif fault == "fractional_native":
+        p["native_limits"]["seconds"] = 480.5
+    else:
+        del p["worker_wall_seconds"]
     with pytest.raises(ValueError):
-        launcher.validate_diagnostic_startup(p,c,r,now=now)
-        construction.append('forbidden emulator construction')
+        launcher.validate_diagnostic_startup(p, c, r, now=now)
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "missing_flag",
+        "relabel",
+        "integer_flag",
+        "ancestry",
+        "writes",
+        "bool_writes",
+        "retained_hash",
+        "original_hash",
+        "catalog_hash",
+        "partition",
+    ],
+)
+def test_shared_custody_gate_rejects_before_emulator_construction(fault):
+    p, c, r, now = startup_documents()
+    construction = []
+    if fault == "missing_flag":
+        del c["development_relabel"]
+    elif fault == "relabel":
+        c["development_relabel"] = True
+    elif fault == "integer_flag":
+        c["development_relabel"] = 0
+    elif fault == "ancestry":
+        c["same_related_TRAIN_ancestry"] = False
+    elif fault == "writes":
+        c["save_writes"] = 1
+    elif fault == "bool_writes":
+        c["save_writes"] = False
+    elif fault == "retained_hash":
+        c["retained_state_sha256"] = "c" * 64
+    elif fault == "original_hash":
+        p["original_TRAIN_state_sha256"] = "c" * 64
+    elif fault == "catalog_hash":
+        r["state_sha256"] = "c" * 64
+    else:
+        r["source_partition"] = "development"
+    with pytest.raises(ValueError):
+        launcher.validate_diagnostic_startup(p, c, r, now=now)
+        construction.append("forbidden emulator construction")
     assert not construction
 
 
 def test_custody_gate_does_not_require_a_winning_parent():
-    p,c,r,now=startup_documents();c.update(parent_passed=False,parent_outcome='ordinary_loss')
-    assert launcher.validate_diagnostic_startup(p,c,r,now=now)==570
+    p, c, r, now = startup_documents()
+    c.update(parent_passed=False, parent_outcome="ordinary_loss")
+    assert launcher.validate_diagnostic_startup(p, c, r, now=now) == 570

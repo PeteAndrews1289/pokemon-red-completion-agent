@@ -368,7 +368,10 @@ class RedRunReader:
 
     def read(self) -> tuple[DashboardSnapshot, dict]:
         root = self.root
-        launch, plan = self.document(root / "LAUNCH.json"), self.document(root / "PLAN.json")
+        launch, plan = (
+            self.document(root / "LAUNCH.json"),
+            self.document(root / "PLAN.json"),
+        )
         terminal, exit_record = (
             self.document(root / "RESULT.json"),
             self.document(root / "PROCESS-EXIT.json"),
@@ -378,8 +381,11 @@ class RedRunReader:
             # Probe even after a guest-closed receipt; a live matching process
             # takes precedence over a stale external exit record.
             probed_running = bool(self.process_probe(launch, root))
-            closed = (not self.owner_running and not probed_running
-                and exit_record.get("worker_exit_confirmed") is True)
+            closed = (
+                not self.owner_running
+                and not probed_running
+                and exit_record.get("worker_exit_confirmed") is True
+            )
             running = bool(self.owner_running or probed_running)
         else:
             # Retained legacy viewer records keep their original display rules.
@@ -499,7 +505,10 @@ class RedRunReader:
         )
         badge_bits = _count(native.get("badge_bits", diag.get("badge_bits")))
         try:
-            location = MapId(diag.get("map_id")).name.replace("_", " ").title()
+            recorded_map = diag.get("map_id")
+            if recorded_map is None:
+                raise ValueError("map identity is not recorded")
+            location = MapId(recorded_map).name.replace("_", " ").title()
         except (ValueError, TypeError):
             location = "Location not yet recorded"
         start = _date(launch.get("started_at_utc"))
@@ -584,7 +593,7 @@ class RunViewerState(DashboardRelayState):
         self._retained_frame: bytes | None = None
         self._retained_at = 0.0
         self._retained_version = 0
-        self._retained_token = None
+        self._retained_token: tuple[object, object] | None = None
         snapshot, self.run_metadata = reader.read()
         super().__init__(snapshot, live_port=live_port)
 

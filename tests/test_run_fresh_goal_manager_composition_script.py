@@ -4,6 +4,7 @@ import argparse
 import inspect
 import json
 import runpy
+import subprocess
 import traceback
 from pathlib import Path
 from types import SimpleNamespace
@@ -367,9 +368,7 @@ def test_preflight_receipt_is_path_free_and_advances_no_counter() -> None:
         "restore_team",
     ]
     assert receipt["attestations"]["current_source_binding_manifest_frozen"] is True
-    assert receipt["attestations"]["historical_preflight_role"] == (
-        "origin_and_root_lineage_only"
-    )
+    assert receipt["attestations"]["historical_preflight_role"] == ("origin_and_root_lineage_only")
     assert receipt["input_bindings"]["runtime_sha256"] == "5" * 64
     assert (
         receipt["durability"]["pre_writer_storage_failure_leaves_durable_root_consumption_claim"]
@@ -522,10 +521,63 @@ def test_nonsealed_attestation_is_exact_and_canonical(tmp_path: Path) -> None:
         )
 
 
-def test_root_provenance_authenticates_the_preexisting_lineage(tmp_path: Path) -> None:
+def test_root_provenance_authenticates_the_preexisting_lineage(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Authenticate an independently generated synthetic registry through real
+    # historical Git reads. No private development commit is assumed present.
+    repository = tmp_path / "historical-source"
+    (repository / "src/pokemon_red_completion").mkdir(parents=True)
+    (repository / "configs").mkdir()
+    (repository / "pyproject.toml").write_bytes(b"[project]\nname = 'provenance-fixture'\n")
+    (repository / "src/pokemon_red_completion/fixture.py").write_bytes(b"VERSION = 1\n")
+
+    def git(*arguments: str) -> str:
+        return subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Root Provenance Test",
+                "-c",
+                "user.email=root-provenance@example.invalid",
+                "-c",
+                "commit.gpgsign=false",
+                *arguments,
+            ],
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+    git("init", "-q")
+    generator = runpy.run_path(str(PROJECT_ROOT / "scripts/regenerate_goal_manager_registry.py"))
+    generate = generator["_generated_payloads"]
+    monkeypatch.setitem(generate.__globals__, "ROOT", repository)
+    registry_payload, digest_payload, _summary = generate()
+    (repository / generator["GOAL_MANAGER_REGISTRY_RELATIVE_PATH"]).write_bytes(registry_payload)
+    (repository / generator["GOAL_MANAGER_REGISTRY_DIGEST_RELATIVE_PATH"]).write_bytes(
+        digest_payload
+    )
+    git("add", ".")
+    git("commit", "-qm", "Freeze synthetic historical provenance")
+    historical_commit = git("rev-parse", "HEAD")
+    # A later implementation must not rebind the already captured lineage.
+    (repository / "src/pokemon_red_completion/fixture.py").write_bytes(b"VERSION = 2\n")
+    git("add", ".")
+    git("commit", "-qm", "Later synthetic implementation")
+    assert git("rev-parse", "HEAD") != historical_commit
+    authenticate = SCRIPT["_authenticate_root_provenance"]
+    monkeypatch.setitem(authenticate.__globals__, "PROJECT_ROOT", repository)
+    registry = SCRIPT["load_committed_goal_manager_registry_at_revision"](
+        repository,
+        historical_commit,
+    )
+    assignment = registry.assignment("red-goal-v1-038-restore_team-train-02")
     document = {
         "actions_executed": 0,
-        "assignment_id": "967788b63a5045574a67fe59a59a2d9cbe2718ad9fad543e6e8199ceadd9320a",
+        "assignment_id": assignment.assignment_id,
         "available_goal_count": 3,
         "available_goal_kinds": ["acquire_species", "restore_team", "explore"],
         "available_menu_sha256": "cdbd9511f1fb64363ba57e875716bb62447c94cb2098764ef1be239ad8ca7b3e",
@@ -543,7 +595,7 @@ def test_root_provenance_authenticates_the_preexisting_lineage(tmp_path: Path) -
             "restore_team",
             "acquire_species",
         ],
-        "capture_id": "qual-acquisition-heavy-ae6f3bf",
+        "capture_id": "synthetic-historical-root-provenance",
         "collection_id": "red-goal-manager-v1",
         "envelope_sha256": "55a7ee55e57cd23b45ff8f1392f06df9106daf95baba8b829acf46655191d3e5",
         "episode_created": False,
@@ -553,13 +605,13 @@ def test_root_provenance_authenticates_the_preexisting_lineage(tmp_path: Path) -
         "policy_context_sha256": "315f1be80b8cad208ccfc8f90c825ee5ac0735e91f2f9a4ebb7bcbbee6c5990e",
         "private_path_fields": 0,
         "question_sha256": "5422cf8e7e08aaa5943bf80124d0506b84e359512abd84fc3ffcde533025dcba",
-        "registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+        "registry_sha256": assignment.registry_sha256,
         "schema": "pokemon-red-goal-manager-context-preflight-v2",
         "selected_candidate_index": 7,
         "selected_kind": "restore_team",
         "slot_id": "red-goal-v1-038-restore_team-train-02",
-        "source_bundle_sha256": "4e20e35e8286818461def89101cf25c761c35cc6736342e224896730c4814c64",
-        "source_commit": "ae6f3bf07493a54c19d4899949f8c9bfcf706584",
+        "source_bundle_sha256": assignment.source_bundle_sha256,
+        "source_commit": historical_commit,
         "state_sha256": "6434b96be928bba88c3242a7a3076c8f88ae2415331da42e28928a8464ecaaf4",
     }
     path = tmp_path / "provenance.json"
@@ -581,6 +633,23 @@ def test_root_provenance_authenticates_the_preexisting_lineage(tmp_path: Path) -
     )
 
     assert lineage == f"red-goal-root-{document['assignment_id']}"
+
+    for field, forged in (
+        ("source_commit", "0" * 40),
+        ("assignment_id", "0" * 64),
+        ("source_bundle_sha256", "0" * 64),
+    ):
+        altered = {**document, field: forged}
+        path.write_text(
+            json.dumps(altered, ensure_ascii=True, separators=(",", ":"), sort_keys=True) + "\n",
+            encoding="ascii",
+        )
+        altered_digest = SCRIPT["hashlib"].sha256(path.read_bytes()).hexdigest()
+        with pytest.raises(
+            SCRIPT["FreshCompositionRunError"],
+            match="authenticated historical preflight",
+        ):
+            authenticate(path, capture=capture, expected_sha256=altered_digest)
 
     path.write_text(json.dumps(document), encoding="ascii")
     changed_digest = SCRIPT["hashlib"].sha256(path.read_bytes()).hexdigest()

@@ -23,7 +23,9 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pokemon_red_completion.player_option_level_workload import (
-    OptionLevelWorkload, level_workload_feature_names, level_workload_vector,
+    OptionLevelWorkload,
+    level_workload_feature_names,
+    level_workload_vector,
 )
 from pokemon_red_completion.training_candidate_rank import (
     TRAINING_CANDIDATE_FEATURE_NAMES,
@@ -154,8 +156,12 @@ class VenueTrainingWorkload:
     recovery_steps: int | None = None
 
     def __post_init__(self) -> None:
-        if (self.useful_encounter_share is None) != (self.expected_recipient_xp_per_encounter is None):
-            raise PartyDevelopmentFeatureError("venue yield fields must be both known or both unknown")
+        if (self.useful_encounter_share is None) != (
+            self.expected_recipient_xp_per_encounter is None
+        ):
+            raise PartyDevelopmentFeatureError(
+                "venue yield fields must be both known or both unknown"
+            )
         for name, ceiling in (
             ("useful_encounter_share", 1.0),
             ("expected_recipient_xp_per_encounter", 100_000.0),
@@ -163,8 +169,12 @@ class VenueTrainingWorkload:
             value = getattr(self, name)
             if value is None:
                 continue
-            if (isinstance(value, bool) or not isinstance(value, (int, float))
-                    or not math.isfinite(value) or not 0 <= value <= ceiling):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+                or not 0 <= value <= ceiling
+            ):
                 raise PartyDevelopmentFeatureError("venue workload must be finite and bounded")
         if self.useful_encounter_share == 0 and self.expected_recipient_xp_per_encounter != 0:
             raise PartyDevelopmentFeatureError("an unusable encounter cannot promise recipient XP")
@@ -177,9 +187,13 @@ class VenueTrainingWorkload:
         return (
             float(self.useful_encounter_share is not None),
             0.0 if self.useful_encounter_share is None else float(self.useful_encounter_share),
-            0.0 if self.expected_recipient_xp_per_encounter is None else float(self.expected_recipient_xp_per_encounter) / 100_000,
-            float(self.travel_steps is not None), (self.travel_steps or 0) / 1_000_000,
-            float(self.recovery_steps is not None), (self.recovery_steps or 0) / 1_000_000,
+            0.0
+            if self.expected_recipient_xp_per_encounter is None
+            else float(self.expected_recipient_xp_per_encounter) / 100_000,
+            float(self.travel_steps is not None),
+            (self.travel_steps or 0) / 1_000_000,
+            float(self.recovery_steps is not None),
+            (self.recovery_steps or 0) / 1_000_000,
         )
 
 
@@ -424,8 +438,13 @@ class PartyDevelopmentCandidate:
         return {
             "candidate_index": self.candidate_index,
             "feature_schema_id": self.feature_schema_id,
-            "features": dict(zip(party_development_feature_names(self.feature_schema_id),
-                                 self.features, strict=True)),
+            "features": dict(
+                zip(
+                    party_development_feature_names(self.feature_schema_id),
+                    self.features,
+                    strict=True,
+                )
+            ),
         }
 
 
@@ -490,9 +509,11 @@ class PartyDevelopmentCandidateSet:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": ("pokemon-party-development-candidate-set-v2"
-                       if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
-                       else "pokemon-party-development-candidate-set-v3"),
+            "schema": (
+                "pokemon-party-development-candidate-set-v2"
+                if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+                else "pokemon-party-development-candidate-set-v3"
+            ),
             "kind": self.kind.value,
             "goal": self.goal.value,
             "candidates": [item.public_dict() for item in self.candidates],
@@ -506,8 +527,11 @@ class PartyDevelopmentCandidateSet:
         if (
             not isinstance(value, Mapping)
             or set(value) != expected
-            or value["schema"] not in ("pokemon-party-development-candidate-set-v2",
-                                       "pokemon-party-development-candidate-set-v3")
+            or value["schema"]
+            not in (
+                "pokemon-party-development-candidate-set-v2",
+                "pokemon-party-development-candidate-set-v3",
+            )
             or not isinstance(value["kind"], str)
             or not isinstance(value["goal"], str)
             or not isinstance(value["candidates"], list)
@@ -515,9 +539,11 @@ class PartyDevelopmentCandidateSet:
             raise PartyDevelopmentFeatureError(
                 "party-development candidate-set document is invalid"
             )
-        schema_id = (PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
-                     if value["schema"] == "pokemon-party-development-candidate-set-v2"
-                     else PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID)
+        schema_id = (
+            PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+            if value["schema"] == "pokemon-party-development-candidate-set-v2"
+            else PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+        )
         feature_names = party_development_feature_names(schema_id)
         candidates = []
         for row in value["candidates"]:
@@ -540,9 +566,7 @@ class PartyDevelopmentCandidateSet:
             candidates.append(
                 PartyDevelopmentCandidate(
                     candidate_index=row["candidate_index"],
-                    features=tuple(
-                        float(features[name]) for name in feature_names
-                    ),
+                    features=tuple(float(features[name]) for name in feature_names),
                     feature_schema_id=schema_id,
                 )
             )
@@ -608,8 +632,11 @@ def augment_training_candidate_set(
     levels = level_workloads if level_workloads is not None else (None,) * count
     venues = venue_workloads if venue_workloads is not None else (None,) * count
     for values, cls in ((levels, OptionLevelWorkload), (venues, VenueTrainingWorkload)):
-        if (not isinstance(values, tuple) or len(values) != count
-                or any(value is not None and not isinstance(value, cls) for value in values)):
+        if (
+            not isinstance(values, tuple)
+            or len(values) != count
+            or any(value is not None and not isinstance(value, cls) for value in values)
+        ):
             raise PartyDevelopmentFeatureError("workloads must match the candidate menu")
     if base.kind is TrainingChoiceKind.VENUE and len(set(levels)) != 1:
         raise PartyDevelopmentFeatureError("venue choices must share one observed trainee workload")
@@ -623,25 +650,40 @@ def augment_training_candidate_set(
         or base.kind is not TrainingChoiceKind.VENUE
         or any(work != fixed_level_target for work in levels)
     ):
-        raise PartyDevelopmentFeatureError("fixed level target requires one declared balance venue workload")
+        raise PartyDevelopmentFeatureError(
+            "fixed level target requires one declared balance venue workload"
+        )
     for row, semantic, work in zip(base.candidates, semantics, levels, strict=True):
         if work is not None and (
-            (fixed_level_target is None and (
-                semantic.evolution.route_kind is not EvolutionRouteKind.LEVEL
-                or semantic.evolution.levels_to_next is None
-                or max(1, semantic.evolution.levels_to_next) != work.target_level - work.current_level
-            ))
-            or abs(row.features[TRAINING_CANDIDATE_FEATURE_NAMES.index("candidate.level")]
-                   - work.current_level / 100) > 1e-12
+            (
+                fixed_level_target is None
+                and (
+                    semantic.evolution.route_kind is not EvolutionRouteKind.LEVEL
+                    or semantic.evolution.levels_to_next is None
+                    or max(1, semantic.evolution.levels_to_next)
+                    != work.target_level - work.current_level
+                )
+            )
+            or abs(
+                row.features[TRAINING_CANDIDATE_FEATURE_NAMES.index("candidate.level")]
+                - work.current_level / 100
+            )
+            > 1e-12
         ):
-            raise PartyDevelopmentFeatureError("observed XP workload contradicts candidate semantics")
+            raise PartyDevelopmentFeatureError(
+                "observed XP workload contradicts candidate semantics"
+            )
     suffixes = tuple(
         (*level_workload_vector(level), *((0.0,) * 7 if venue is None else venue.vector()))
-        if include_workload else ()
+        if include_workload
+        else ()
         for level, venue in zip(levels, venues, strict=True)
     )
-    schema_id = (PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID if include_workload
-                 else PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID)
+    schema_id = (
+        PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+        if include_workload
+        else PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+    )
     candidates = tuple(
         PartyDevelopmentCandidate(
             candidate_index=index,

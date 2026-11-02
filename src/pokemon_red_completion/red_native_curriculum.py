@@ -103,7 +103,8 @@ def curriculum_projection(plan):
     exchange = plan.get("schema") == EXCHANGE_PLAN_SCHEMA
     scoped_story = plan.get("schema") == SCOPED_STORY_UNIT_PLAN_SCHEMA
     approach = plan.get("schema") == APPROACH_STORY_UNIT_PLAN_SCHEMA or (
-        scoped_story and plan.get("story_approach_only") is True)
+        scoped_story and plan.get("story_approach_only") is True
+    )
     story_unit = scoped_story or approach or plan.get("schema") == STORY_UNIT_PLAN_SCHEMA
     challenge = story_unit or plan.get("schema") == CHALLENGE_PLAN_SCHEMA
     continuous = plan.get("schema") == CONTINUOUS_RESOURCE_PLAN_SCHEMA
@@ -111,21 +112,51 @@ def curriculum_projection(plan):
     readiness = preparation or challenge or resource or plan.get("schema") == READINESS_PLAN_SCHEMA
     player = readiness or plan.get("schema") == PLAYER_PLAN_SCHEMA
     plan_schema = (
-        SCOPED_STORY_UNIT_PLAN_SCHEMA if scoped_story else
-        APPROACH_STORY_UNIT_PLAN_SCHEMA if approach else
-        PREPARATION_PLAN_SCHEMA if preparation else
-        STORY_UNIT_PLAN_SCHEMA if story_unit else CHALLENGE_PLAN_SCHEMA if challenge else
-        CONTINUOUS_RESOURCE_PLAN_SCHEMA if continuous else
-        RESOURCE_PLAN_SCHEMA if resource else READINESS_PLAN_SCHEMA if readiness else
-        PLAYER_PLAN_SCHEMA if player else EXCHANGE_PLAN_SCHEMA if exchange else PLAN_SCHEMA
+        SCOPED_STORY_UNIT_PLAN_SCHEMA
+        if scoped_story
+        else APPROACH_STORY_UNIT_PLAN_SCHEMA
+        if approach
+        else PREPARATION_PLAN_SCHEMA
+        if preparation
+        else STORY_UNIT_PLAN_SCHEMA
+        if story_unit
+        else CHALLENGE_PLAN_SCHEMA
+        if challenge
+        else CONTINUOUS_RESOURCE_PLAN_SCHEMA
+        if continuous
+        else RESOURCE_PLAN_SCHEMA
+        if resource
+        else READINESS_PLAN_SCHEMA
+        if readiness
+        else PLAYER_PLAN_SCHEMA
+        if player
+        else EXCHANGE_PLAN_SCHEMA
+        if exchange
+        else PLAN_SCHEMA
     )
-    contract = (SCOPED_STORY_UNIT_CONTRACT if scoped_story else
-                APPROACH_STORY_UNIT_CONTRACT if approach else
-                PREPARATION_CONTRACT if preparation else
-                STORY_UNIT_CONTRACT if story_unit else CHALLENGE_CONTRACT if challenge else
-                CONTINUOUS_RESOURCE_CONTRACT if continuous else
-                RESOURCE_CONTRACT if resource else READINESS_CONTRACT if readiness
-                else PLAYER_CONTRACT if player else EXCHANGE_CONTRACT if exchange else CONTRACT)
+    contract = (
+        SCOPED_STORY_UNIT_CONTRACT
+        if scoped_story
+        else APPROACH_STORY_UNIT_CONTRACT
+        if approach
+        else PREPARATION_CONTRACT
+        if preparation
+        else STORY_UNIT_CONTRACT
+        if story_unit
+        else CHALLENGE_CONTRACT
+        if challenge
+        else CONTINUOUS_RESOURCE_CONTRACT
+        if continuous
+        else RESOURCE_CONTRACT
+        if resource
+        else READINESS_CONTRACT
+        if readiness
+        else PLAYER_CONTRACT
+        if player
+        else EXCHANGE_CONTRACT
+        if exchange
+        else CONTRACT
+    )
     if (
         set(plan)
         != {
@@ -143,7 +174,8 @@ def curriculum_projection(plan):
             "maximum_frames",
             "teacher_selected",
             "comparative_choice",
-        } | ({"npc_exchange"} if exchange else {"player_lesson"} if player else set())
+        }
+        | ({"npc_exchange"} if exchange else {"player_lesson"} if player else set())
         | ({"readiness"} if readiness else set())
         | ({"challenge"} if challenge else set())
         | ({"story_unit"} if story_unit else set())
@@ -163,9 +195,12 @@ def curriculum_projection(plan):
         raise ValueError("approach curriculum requires the selected binding's true scope")
     if scoped_story:
         from .player_option_story_unit import OptionStoryUnit
+
         scope = OptionStoryUnit.from_public(plan["story_unit_scope"])
-        if (type(plan["story_approach_only"]) is not bool
-                or scope.requires_further_selected_unit != plan["story_approach_only"]):
+        if (
+            type(plan["story_approach_only"]) is not bool
+            or scope.requires_further_selected_unit != plan["story_approach_only"]
+        ):
             raise ValueError("story unit scope and approach declaration differ")
     if continuous:
         from .red_native_player import NativeExecutionIdentity
@@ -207,8 +242,10 @@ def curriculum_projection(plan):
         type(index) is not int
         or index not in q.available_indices
         or (not player and q.opportunities[index].kind is not GoalKind.ACQUIRE_SPECIES)
-        or q.situation.policy_dict() != (
-            _continuous_situation(plan) if continuous
+        or q.situation.policy_dict()
+        != (
+            _continuous_situation(plan)
+            if continuous
             else semantic_facts(plan["before"])["situation"]
         )
     ):
@@ -247,7 +284,10 @@ def curriculum_projection(plan):
     from .player_readiness import PlayerReadiness
 
     candidate = project_living_dex_goal_candidate(
-        q, index, feature_version=5 if readiness else 4, binding_ref="native-teacher-execution",
+        q,
+        index,
+        feature_version=5 if readiness else 4,
+        binding_ref="native-teacher-execution",
         readiness=PlayerReadiness.from_public(plan["readiness"]) if readiness else None,
     )
     if candidate is None:
@@ -261,9 +301,15 @@ def curriculum_projection(plan):
         from .red_player_lesson import validate_preparation_lesson
 
         facts = validate_preparation_lesson(plan, q.opportunities[index].kind)
-        candidate = replace(candidate, preparation=facts, challenge=(
-            None if plan["challenge"] is None else OptionChallenge.from_public(plan["challenge"])
-        ))
+        candidate = replace(
+            candidate,
+            preparation=facts,
+            challenge=(
+                None
+                if plan["challenge"] is None
+                else OptionChallenge.from_public(plan["challenge"])
+            ),
+        )
     if approach:
         candidate = apply_story_approach_prior(candidate, approach_only=True)
     if scoped_story:
@@ -285,7 +331,8 @@ def reconstruct_native_curriculum(plan, result):
     exchange = plan["schema"] == EXCHANGE_PLAN_SCHEMA
     scoped_story = plan["schema"] == SCOPED_STORY_UNIT_PLAN_SCHEMA
     approach = plan["schema"] == APPROACH_STORY_UNIT_PLAN_SCHEMA or (
-        scoped_story and plan["story_approach_only"] is True)
+        scoped_story and plan["story_approach_only"] is True
+    )
     story_unit = scoped_story or approach or plan["schema"] == STORY_UNIT_PLAN_SCHEMA
     challenge = story_unit or plan["schema"] == CHALLENGE_PLAN_SCHEMA
     continuous = plan["schema"] == CONTINUOUS_RESOURCE_PLAN_SCHEMA
@@ -293,14 +340,27 @@ def reconstruct_native_curriculum(plan, result):
     readiness = preparation or challenge or resource or plan["schema"] == READINESS_PLAN_SCHEMA
     player = readiness or plan["schema"] == PLAYER_PLAN_SCHEMA
     outcome_schema = (
-        SCOPED_STORY_UNIT_OUTCOME_SCHEMA if scoped_story else
-        APPROACH_STORY_UNIT_OUTCOME_SCHEMA if approach else
-        PREPARATION_OUTCOME_SCHEMA if preparation else
-        STORY_UNIT_OUTCOME_SCHEMA if story_unit else CHALLENGE_OUTCOME_SCHEMA if challenge else
-        CONTINUOUS_RESOURCE_OUTCOME_SCHEMA if continuous else
-        RESOURCE_OUTCOME_SCHEMA if resource else READINESS_OUTCOME_SCHEMA if readiness
-        else PLAYER_OUTCOME_SCHEMA if player
-        else EXCHANGE_OUTCOME_SCHEMA if exchange else OUTCOME_SCHEMA
+        SCOPED_STORY_UNIT_OUTCOME_SCHEMA
+        if scoped_story
+        else APPROACH_STORY_UNIT_OUTCOME_SCHEMA
+        if approach
+        else PREPARATION_OUTCOME_SCHEMA
+        if preparation
+        else STORY_UNIT_OUTCOME_SCHEMA
+        if story_unit
+        else CHALLENGE_OUTCOME_SCHEMA
+        if challenge
+        else CONTINUOUS_RESOURCE_OUTCOME_SCHEMA
+        if continuous
+        else RESOURCE_OUTCOME_SCHEMA
+        if resource
+        else READINESS_OUTCOME_SCHEMA
+        if readiness
+        else PLAYER_OUTCOME_SCHEMA
+        if player
+        else EXCHANGE_OUTCOME_SCHEMA
+        if exchange
+        else OUTCOME_SCHEMA
     )
     if (
         set(result)
@@ -313,7 +373,8 @@ def reconstruct_native_curriculum(plan, result):
             "terminal_state_sha256",
             "native_audit",
             "interventions_during_execution",
-        } | ({"npc_exchange"} if exchange else {"player_lesson"} if player else set())
+        }
+        | ({"npc_exchange"} if exchange else {"player_lesson"} if player else set())
         | ({"economy_after"} if resource else set())
         | ({"story_unit"} if story_unit else set())
         or result["schema"] != outcome_schema
@@ -373,8 +434,12 @@ def reconstruct_native_curriculum(plan, result):
             measured_economy = verify_resource_lesson(plan, result, question)
         else:
             verify_player_lesson(
-                plan["player_lesson"], result["player_lesson"], plan["before"], result["after"],
-                selected_kind, result["succeeded"],
+                plan["player_lesson"],
+                result["player_lesson"],
+                plan["before"],
+                result["after"],
+                selected_kind,
+                result["succeeded"],
             )
     outcome = red_registered_outcome_from_observations(
         plan["before"],
@@ -387,7 +452,9 @@ def reconstruct_native_curriculum(plan, result):
         maximum_frames=COMPLETION_FRAMES,
         npc_exchange=(plan["npc_exchange"], result["npc_exchange"]) if exchange else None,
     )
-    feature_version = 16 if scoped_story else 7 if preparation else 6 if challenge else 5 if readiness else 4
+    feature_version = (
+        16 if scoped_story else 7 if preparation else 6 if challenge else 5 if readiness else 4
+    )
     return LivingDexCurriculumOutcomeExample(
         canonical_sha256(plan),
         "train",
@@ -426,9 +493,15 @@ def _require_continuous_execution(store, plan):
         execution.get("execution") != plan["execution_identity"]
         or execution.get("resource_setup_receipt") != plan["source"]["setup_receipt_sha256"]
         or execution.get("capture_reserve") != plan["capture_reserve"]
-        or any(execution["source"][key] != plan["source"][key] for key in (
-            "origin_sha256", "partition", "source_commit", "source_bundle_sha256",
-        ))
+        or any(
+            execution["source"][key] != plan["source"][key]
+            for key in (
+                "origin_sha256",
+                "partition",
+                "source_commit",
+                "source_bundle_sha256",
+            )
+        )
         or plan["maximum_actions"] > execution["limits"]["actions"]
         or plan["maximum_frames"] > execution["limits"]["frames"]
     ):

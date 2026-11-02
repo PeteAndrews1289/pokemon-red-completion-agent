@@ -9,22 +9,29 @@ from dataclasses import replace
 
 import numpy as np
 import pytest
+from test_success_head_retention import parent, samples
 
 import pokemon_red_completion.living_dex_option_value as m
-from test_success_head_retention import parent, samples
 
 
 def _new_curriculum():
-    return tuple(m.LivingDexCurriculumOutcomeExample(
-        row.decision_sha256, 'train', 9,
-        row.menu.candidate_vector(row.selected_candidate_index, feature_version=9),
-        row.outcome,
-    ) for row in samples())
+    return tuple(
+        m.LivingDexCurriculumOutcomeExample(
+            row.decision_sha256,
+            "train",
+            9,
+            row.menu.candidate_vector(row.selected_candidate_index, feature_version=9),
+            row.outcome,
+        )
+        for row in samples()
+    )
 
 
 def _fit(base, curriculum):
     return m.fit_living_dex_option_value(
-        (), feature_version=9, curriculum_examples=curriculum,
+        (),
+        feature_version=9,
+        curriculum_examples=curriculum,
         frozen_success_base=base,
     )
 
@@ -33,8 +40,7 @@ def test_curriculum_only_success_update_has_exactly_its_new_corpus_denominator()
     base = parent()
     curriculum = _new_curriculum()
     result = _fit(base, curriculum)
-    expected_digest = m.living_dex_option_train_dataset_sha256(
-        (), curriculum_examples=curriculum)
+    expected_digest = m.living_dex_option_train_dataset_sha256((), curriculum_examples=curriculum)
 
     assert result.model.settled_examples == 6
     assert result.model.censored_examples == 0
@@ -42,7 +48,7 @@ def test_curriculum_only_success_update_has_exactly_its_new_corpus_denominator()
     assert result.report.successful_examples == 3
     assert result.model.train_dataset_sha256 == expected_digest
     assert result.report.train_dataset_sha256 == expected_digest
-    assert result.report.public_dict()['frozen_parent_model_sha256'] == base.model_sha256
+    assert result.report.public_dict()["frozen_parent_model_sha256"] == base.model_sha256
     assert result.model.objective == m.LIVING_DEX_SUCCESS_RESIDUAL_OBJECTIVE
 
 
@@ -76,34 +82,40 @@ def test_inherited_economy_evidence_count_does_not_expand_or_reject_new_success_
     # The exception belongs to the explicit retained-head mode.  It must not
     # weaken the legacy same-corpus economy count contract.
     legacy_document = model.to_dict()
-    legacy_document['objective'] = m.LIVING_DEX_OPTION_OBJECTIVE
+    legacy_document["objective"] = m.LIVING_DEX_OPTION_OBJECTIVE
     with pytest.raises(m.LivingDexOptionValueError):
         m.LivingDexOptionValueModel.from_dict(legacy_document)
     with pytest.raises(m.LivingDexOptionValueError):
         replace(model, objective=m.LIVING_DEX_OPTION_OBJECTIVE)
 
 
-@pytest.mark.parametrize('case', ['empty', 'all_success', 'all_failure', 'duplicate'])
+@pytest.mark.parametrize("case", ["empty", "all_success", "all_failure", "duplicate"])
 def test_invalid_curriculum_only_updates_refuse_before_optimizer(monkeypatch, case):
     curriculum = _new_curriculum()
-    if case == 'empty':
+    if case == "empty":
         curriculum = ()
-    elif case == 'duplicate':
+    elif case == "duplicate":
         curriculum = (*curriculum, curriculum[0])
     else:
-        curriculum = tuple(replace(row, outcome=replace(
-            row.outcome, verified_success=(case == 'all_success')))
-            for row in curriculum)
-    monkeypatch.setattr(np.linalg, 'solve', lambda *a, **k: pytest.fail('optimizer ran'))
+        curriculum = tuple(
+            replace(row, outcome=replace(row.outcome, verified_success=(case == "all_success")))
+            for row in curriculum
+        )
+    monkeypatch.setattr(np.linalg, "solve", lambda *a, **k: pytest.fail("optimizer ran"))
     with pytest.raises(m.LivingDexOptionValueError):
         _fit(parent(), curriculum)
 
 
 def test_censored_curriculum_is_identity_only_not_an_extra_success_target():
     curriculum = _new_curriculum()
-    censored = replace(curriculum[0], decision_sha256='f' * 64,
-        outcome=m.LivingDexObservedOutcome(m.LivingDexOutcomeStatus.CENSORED,
-            censor_reason=m.LivingDexCensorReason.EXTERNAL_INTERRUPTION))
+    censored = replace(
+        curriculum[0],
+        decision_sha256="f" * 64,
+        outcome=m.LivingDexObservedOutcome(
+            m.LivingDexOutcomeStatus.CENSORED,
+            censor_reason=m.LivingDexCensorReason.EXTERNAL_INTERRUPTION,
+        ),
+    )
     base = parent()
     one = _fit(base, curriculum)
     two = _fit(base, (*curriculum, censored))

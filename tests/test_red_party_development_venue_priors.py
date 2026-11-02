@@ -10,6 +10,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import pytest
+from route11_historical_fixture import historical_venue_source as historical_venue_source
 
 import pokemon_red_completion.red_party_development_venue_priors as venue_prior_module
 from pokemon_red_completion.blaine import ROUTE_11_TRAINING_VENUE
@@ -283,7 +284,7 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_eighteen_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == ("00499bc68b099ffcd0125a6777bc3b836a84ff0b")
@@ -299,6 +300,10 @@ def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() ->
         "module-assignments.red-team-training",
         "module-assignments.training-venue",
         "red.adaptive-wild-battle",
+        "red.evolution-healing-trip",
+        "red.evolution-no-win-boundary",
+        "red.helper-exclusion-validation",
+        "red.move-decision-sink-options",
         "red.route-11-heal-and-return",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
@@ -310,10 +315,10 @@ def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() ->
         "6a5e45df1a9b79636ead10f94c287567bce3808d895a60b0cf4cd0c2113debfc"
     )
     assert attestation.current_elements_sha256 == (
-        "8c043ab60eef5baea3a8fef551182806c2a93fd9f64e1ecda226c32f8d359e06"
+        "51d45883ac3261e172780883d3b7dea69528da42a04ff524461d5bfc11e06b94"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "84f13652a6c36833fa2b32ea96a347c3c1609c8eec95f5969bf030b5c6d728c7"
+        "4928613d7173c08cdc7988218b5ca35058143a96e1b2d9b69260e082b8baab40"
     )
 
 
@@ -747,26 +752,23 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "409ea80f855f8b4dbab6b76a5f791a4a85597acb93c0724df80f259af2109fb4"
+        "7cb7bc45d9d96890d9373bb757cb00eab13255ba3595957477c628e1171b4dd6"
     )
     assert contract.recovery_execution_sha256 == (
-        "0ecb1620a2b15cae1ce74fd6626acd4c3ca3edbdb62590cf645f55d981b1699b"
+        "8c73fa704bbffdbbde45981440b0e2ec86ad025fbd2cfa39c7de67b754cd1833"
     )
-    # Reviewed September30 working sources: recovery additionally hashes Blaine's
-    # default-disabled correct-only quiz guard; battle timing additionally hashes
-    # the authenticated send-out wait. Neither changes this venue's policy,
-    # encounter or accounting identities. Historical evidence is not rewritten.
-    # Reviewed September25 through3863e0ad: the whole-module identity includes
-    # bounded sleep-turn yielding, unspent send-out/trapping boundaries, wild
-    # double-KO/evolution settlement and the default-disabled reserve hook.
-    # Accounting also hashes the entire training
-    # function/module, so its fingerprint includes the reviewed disabled hook;
-    # budgeted phases and cleanup accounting themselves have not changed.
+    # Reviewed source 7d650eab: helper restrictions, evolution pauses and
+    # metered healing remain disabled on the measured legacy path; the typed
+    # sink dictionary reconstructs its exact preceding execution AST. Both
+    # behavior and dependency closure have focused regression coverage.
+    # These four operational fingerprints include whole source bytes, so the
+    # reviewed formatting/import cleanup also changes them. Measured policy,
+    # unchanged elements and every historical evidence receipt remain intact.
     assert contract.battle_timing_sha256 == (
-        "9eb9e60b13ed869b4c01bd6f13bf2226056788df63b91340de6ff8c24dd8bbf8"
+        "1d10a5097a7eb8ad8db68caaa8a445e70071a43b9b043021522c692caff0a7d4"
     )
     assert contract.accounting_sha256 == (
-        "0a8849ecc330b6fcab4f62c0a3c5ca8f9e35b640c2f8c6289f4372e16918322b"
+        "23037a9f798ee74858349dabd98bfbdaec7209b64aeeae0a07866027b411dc72"
     )
 
 

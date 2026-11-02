@@ -235,9 +235,11 @@ def fresh_water_machine_gift(rom: bytes) -> RedDrinkItemGift:
     script = pointer(texts + 2)
     # The girl's prompt calls the verified filtered-drink helper, YesNoChoice
     # and the gift dispatcher. This rejects another ordinary text NPC.
-    if (rom[script : script + 8] != bytes.fromhex("08 cd d8 43 fa 37 cd a7")
-            or rom[script + 21 : script + 24] != bytes.fromhex("cd ec 35")
-            or rom[script + 30 : script + 33] != bytes.fromhex("cd 0c 44")):
+    if (
+        rom[script : script + 8] != bytes.fromhex("08 cd d8 43 fa 37 cd a7")
+        or rom[script + 21 : script + 24] != bytes.fromhex("cd ec 35")
+        or rom[script + 30 : script + 33] != bytes.fromhex("cd 0c 44")
+    ):
         raise CartridgeReadError("drink gift prompt grammar differs")
     dispatcher = pointer(script + 31)
     body = rom[dispatcher : dispatcher + 220]
@@ -253,7 +255,9 @@ def fresh_water_machine_gift(rom: bytes) -> RedDrinkItemGift:
     event = (address - EVENT_FLAGS_START) * 8 + bit
     if not EVENT_FLAGS_START <= address < EVENT_FLAGS_END or event != int(EventFlag.GOT_TM13):
         raise CartridgeReadError("drink gift event differs")
-    return RedDrinkItemGift(mid, 2, objects[1].sprite, int(ItemId.FRESH_WATER), body[at + 18], event)
+    return RedDrinkItemGift(
+        mid, 2, objects[1].sprite, int(ItemId.FRESH_WATER), body[at + 18], event
+    )
 
 
 def collect_drink_item_gift(actions, reader, gift: RedDrinkItemGift, *, rom: bytes) -> dict:
@@ -270,30 +274,41 @@ def collect_drink_item_gift(actions, reader, gift: RedDrinkItemGift, *, rom: byt
     bag = dict(before.bag_items or ())
     flags = before.event_flags
     if (
-        not before.game_started or before.map_id != gift.map_id or before.battle_state
-        or not reader.read_input_readiness().ready or reader.read_bottom_dialogue_box_visible()
-        or flags is None or len(flags) * 8 <= gift.event_flag
-        or event_flag_is_set(flags, gift.event_flag) or bag.get(gift.item_id, 0)
-        or bag.get(gift.drink_item_id, 0) != 1 or len(bag) >= MAX_BAG_ITEMS
+        not before.game_started
+        or before.map_id != gift.map_id
+        or before.battle_state
+        or not reader.read_input_readiness().ready
+        or reader.read_bottom_dialogue_box_visible()
+        or flags is None
+        or len(flags) * 8 <= gift.event_flag
+        or event_flag_is_set(flags, gift.event_flag)
+        or bag.get(gift.item_id, 0)
+        or bag.get(gift.drink_item_id, 0) != 1
+        or len(bag) >= MAX_BAG_ITEMS
     ):
         raise ValueError("drink gift requires an unconsumed field/resource boundary")
     npcs = [o for o in reader.read_current_map_objects() if o.sprite_index == gift.object_index]
     direction = reader.read_player_facing()
     delta = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
     if (
-        len(npcs) != 1 or not npcs[0].visible or npcs[0].moving
-        or npcs[0].picture_id != gift.sprite_id or direction not in delta
-        or before.player_y is None or before.player_x is None
-        or (before.player_y + delta[direction][0], before.player_x + delta[direction][1]) != npcs[0].at
+        len(npcs) != 1
+        or not npcs[0].visible
+        or npcs[0].moving
+        or npcs[0].picture_id != gift.sprite_id
+        or direction not in delta
+        or before.player_y is None
+        or before.player_x is None
+        or (before.player_y + delta[direction][0], before.player_x + delta[direction][1])
+        != npcs[0].at
     ):
         raise ValueError("drink gift requires the observed adjacent-facing NPC")
     # Keep the contract conservative: one drink leaves one slot for the TM.
     expected_bag = dict(bag)
     del expected_bag[gift.drink_item_id]
     expected_bag[gift.item_id] = 1
-    expected_flags = bytearray(flags)
-    expected_flags[gift.event_flag // 8] |= 1 << (gift.event_flag % 8)
-    expected_flags = bytes(expected_flags)
+    flag_buffer = bytearray(flags)
+    flag_buffer[gift.event_flag // 8] |= 1 << (gift.event_flag % 8)
+    expected_flags = bytes(flag_buffer)
     custody = (reader.read_all_box_states(), reader.read_pokedex_state(), reader.read_pc_items())
     drink_count = sum(bool(bag.get(i)) for i in (60, 61, 62))
     confirmed_offer = False
@@ -302,30 +317,56 @@ def collect_drink_item_gift(actions, reader, gift: RedDrinkItemGift, *, rom: byt
     for _ in range(96):
         after = reader.read()
         for name in (
-            "map_id", "player_y", "player_x", "player_money", "battle_state", "badge_bits",
-            "party_count", "party_species_ids", "party_levels", "party_hp", "party_max_hp",
-            "party_moves", "party_pp", "party_status", "party_stats",
+            "map_id",
+            "player_y",
+            "player_x",
+            "player_money",
+            "battle_state",
+            "badge_bits",
+            "party_count",
+            "party_species_ids",
+            "party_levels",
+            "party_hp",
+            "party_max_hp",
+            "party_moves",
+            "party_pp",
+            "party_status",
+            "party_stats",
         ):
             if getattr(after, name) != getattr(before, name):
                 raise RuntimeError("drink gift changed protected " + name)
         current = dict(after.bag_items or ())
         removed = {k: v for k, v in bag.items() if k != gift.drink_item_id}
-        if (after.bag_items is None or current not in (bag, removed, expected_bag)
-                or after.event_flags not in (flags, expected_flags)
-                or custody != (reader.read_all_box_states(), reader.read_pokedex_state(), reader.read_pc_items())):
+        if (
+            after.bag_items is None
+            or current not in (bag, removed, expected_bag)
+            or after.event_flags not in (flags, expected_flags)
+            or custody
+            != (reader.read_all_box_states(), reader.read_pokedex_state(), reader.read_pc_items())
+        ):
             raise RuntimeError("drink gift changed protected inventory, events or collection")
         gained = current == expected_bag and after.event_flags == expected_flags
-        if (gained and confirmed_offer and confirmed_drink
-                and reader.read_input_readiness().ready
-                and not reader.read_bottom_dialogue_box_visible()):
-            return dict(drink_item_id=gift.drink_item_id, item_id=gift.item_id, quantity=1,
-                        drink_consumed=True, event_verified=True, learned=False,
-                        normal_controller_inputs=True, cash_debit=0)
+        if (
+            gained
+            and confirmed_offer
+            and confirmed_drink
+            and reader.read_input_readiness().ready
+            and not reader.read_bottom_dialogue_box_visible()
+        ):
+            return dict(
+                drink_item_id=gift.drink_item_id,
+                item_id=gift.item_id,
+                quantity=1,
+                drink_consumed=True,
+                event_verified=True,
+                learned=False,
+                normal_controller_inputs=True,
+                cash_debit=0,
+            )
         if gained:
             _pulse(actions, MacroActionKind.CANCEL, frames=120)
             continue
-        if (confirmed_offer and confirmed_drink
-                and current in (removed, expected_bag)):
+        if confirmed_offer and confirmed_drink and current in (removed, expected_bag):
             # Exact chosen-drink consumption owns the rest of this cartridge
             # transaction. Red gives the TM, prints several acknowledgement
             # pages, then sets the event flag. Its old bag cursor can persist

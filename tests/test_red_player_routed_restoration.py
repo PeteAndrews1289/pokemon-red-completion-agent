@@ -6,6 +6,7 @@ from test_red_player_field_goals import setup
 
 from pokemon_red_completion import red_player_field_goals as f
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
+from pokemon_red_completion.gen1_traversal import cut_capabilities
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalFailureReason
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport, GoalVerification
 
@@ -14,7 +15,7 @@ def fixture(monkeypatch):
     rt, actions, route, story, lesson, calls = setup(monkeypatch)
 
     def observer(reader, *, capability_projector):
-        assert capability_projector is f.cut_capabilities
+        assert capability_projector is cut_capabilities
         return N(observe=lambda: N())
 
     monkeypatch.setattr(f, "Gen1TraversalObserver", observer)
@@ -205,8 +206,8 @@ def test_healing_accepts_only_native_arrival_progress(monkeypatch, fault):
     rt.adapter.graph = N(objective=lambda _: N(completion_facts=required))
     monkeypatch.setattr(
         f,
-        "semantic_facts",
-        lambda _: frozenset() if fault == "unobserved" else facts | {"story:quest"},
+        "semantic_location_facts",
+        lambda _: frozenset() if fault == "unobserved" else facts,
     )
     binding = f.routed_restoration_binding(rt, actions, home_map=41, route=route)
     report = binding.execute()

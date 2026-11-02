@@ -13,7 +13,9 @@ from pathlib import Path
 from pokemon_red_completion.battle_scenario_capture import BattleScenarioCapture
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_trainer_practice_episode import _episode_metrics
-from pokemon_red_completion.red_trainer_practice_log import verify_trainer_practice_event_log
+from pokemon_red_completion.red_trainer_practice_log import (
+    verify_trainer_practice_event_log,
+)
 from pokemon_red_completion.red_trainer_practice_returns import (
     TrainerPracticeReturnError,
     score_trainer_practice_episode,
@@ -54,7 +56,8 @@ def inspect_trainer_practice_choices(
     if type(train_wild_diagnostic) is not bool or train_wild_diagnostic and allow_forced_struggle:
         raise TrainerPracticeAdmissionError("TRAIN wild diagnostic authority differs")
     if train_wild_limits is not None and (
-        not train_wild_diagnostic or type(train_wild_limits) is not tuple
+        not train_wild_diagnostic
+        or type(train_wild_limits) is not tuple
         or len(train_wild_limits) != 2
         or any(type(value) is not int for value in train_wild_limits)
         or train_wild_limits != (8, 32)
@@ -63,24 +66,34 @@ def inspect_trainer_practice_choices(
     if train_wild_choice_scope is not None and (
         type(train_wild_choice_scope) is not str
         or train_wild_choice_scope != "switch_selection"
-        or train_wild_diagnostic is not True or train_wild_limits != (8, 32)
+        or train_wild_diagnostic is not True
+        or train_wild_limits != (8, 32)
     ):
-        raise TrainerPracticeAdmissionError("switch-selection scope requires explicit TRAIN wild (8, 32)")
+        raise TrainerPracticeAdmissionError(
+            "switch-selection scope requires explicit TRAIN wild (8, 32)"
+        )
     if document.get("train_wild_choice_scope") != train_wild_choice_scope:
         raise TrainerPracticeAdmissionError("declared TRAIN wild choice scope differs")
     if train_wild_choice_scope == "switch_selection" and (
-        not isinstance(expected_choice_refs, tuple) or len(expected_choice_refs) != 2
-        or any(type(ref) is not str or ref not in {
-            f"pokemon.core:battle:switch:{slot}" for slot in range(1, 7)
-        } for ref in expected_choice_refs)
+        not isinstance(expected_choice_refs, tuple)
+        or len(expected_choice_refs) != 2
+        or any(
+            type(ref) is not str
+            or ref not in {f"pokemon.core:battle:switch:{slot}" for slot in range(1, 7)}
+            for ref in expected_choice_refs
+        )
     ):
         raise TrainerPracticeAdmissionError("switch-selection requires two exact switch refs")
-    limits_metadata = (None if train_wild_limits is None else
-                       {"player_turn_horizon": 8, "max_decisions": 32})
-    if document.get("train_wild_limits") != limits_metadata or (
-        limits_metadata is not None and (
-            type(document["train_wild_limits"].get("player_turn_horizon")) is not int
-            or type(document["train_wild_limits"].get("max_decisions")) is not int
+    limits_metadata = (
+        None if train_wild_limits is None else {"player_turn_horizon": 8, "max_decisions": 32}
+    )
+    declared_limits = document.get("train_wild_limits")
+    if declared_limits != limits_metadata or (
+        limits_metadata is not None
+        and (
+            not isinstance(declared_limits, Mapping)
+            or type(declared_limits.get("player_turn_horizon")) is not int
+            or type(declared_limits.get("max_decisions")) is not int
         )
     ):
         raise TrainerPracticeAdmissionError("declared TRAIN wild limits metadata differs")
@@ -105,8 +118,12 @@ def inspect_trainer_practice_choices(
         not isinstance(capture, BattleScenarioCapture)
         or capture.manifest.partition is not ScenarioPartition.TRAIN
         or capture.manifest.expected_battle_state != expected_battle_state
-        or document.get("schema") != ("pokemon.red.wild-practice-counterfactual-set.v1" if train_wild_diagnostic
-                                      else "pokemon.red.trainer-practice-counterfactual-set.v1")
+        or document.get("schema")
+        != (
+            "pokemon.red.wild-practice-counterfactual-set.v1"
+            if train_wild_diagnostic
+            else "pokemon.red.trainer-practice-counterfactual-set.v1"
+        )
         or document.get("wild_training", False) is not train_wild_diagnostic
         or document.get("train_wild_diagnostic", False) is not train_wild_diagnostic
         or (train_wild_diagnostic and document.get("expected_battle_state") != 1)
@@ -134,14 +151,17 @@ def inspect_trainer_practice_choices(
     ):
         raise TrainerPracticeAdmissionError("choice inventory or horizon differs")
     if train_wild_diagnostic and (
-        horizon != wild_horizon or len(branches) != 2
-        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:move:")]) != (
-            0 if train_wild_choice_scope == "switch_selection" else 1)
-        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:switch:")]) != (
-            2 if train_wild_choice_scope == "switch_selection" else 1)
+        horizon != wild_horizon
+        or len(branches) != 2
+        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:move:")])
+        != (0 if train_wild_choice_scope == "switch_selection" else 1)
+        or len([r for r in expected_choice_refs if r.startswith("pokemon.core:battle:switch:")])
+        != (2 if train_wild_choice_scope == "switch_selection" else 1)
         or (max_decisions is not None and max_decisions > wild_decisions)
-        or (train_wild_limits is not None and
-            (type(max_decisions) is not int or max_decisions != wild_decisions))
+        or (
+            train_wild_limits is not None
+            and (type(max_decisions) is not int or max_decisions != wild_decisions)
+        )
     ):
         raise TrainerPracticeAdmissionError("wild diagnostic contrast or horizon differs")
     rows: list[dict[str, object]] = []
@@ -205,7 +225,10 @@ def inspect_trainer_practice_choices(
             or not _matches_first_choice(first, choice)
         ):
             raise TrainerPracticeAdmissionError("first executed action differs")
-        if train_wild_choice_scope == "switch_selection" and first.get("kind") != "voluntary_switch":
+        if (
+            train_wild_choice_scope == "switch_selection"
+            and first.get("kind") != "voluntary_switch"
+        ):
             raise TrainerPracticeAdmissionError("switch-selection requires native MAIN switches")
         if first_resources is None:
             first_resources = first.get("state_before")
@@ -312,7 +335,12 @@ def inspect_trainer_practice_choices(
         measured = _episode_metrics(tuple(decisions))
         if any(
             metrics[key] != measured[key]
-            for key in ("opponent_faints", "party_faints", "party_hp_lost", "party_pp_spent")
+            for key in (
+                "opponent_faints",
+                "party_faints",
+                "party_hp_lost",
+                "party_pp_spent",
+            )
         ):
             raise TrainerPracticeAdmissionError("choice metrics differ from decisions")
         frames = episode.get("frames_executed")
@@ -348,12 +376,22 @@ def inspect_trainer_practice_choices(
     if branch_event_logs is not None and set(branch_event_logs) != seen:
         raise TrainerPracticeAdmissionError("branch log inventory differs from declared plan")
     return {
-        "schema": ("pokemon.red.wild-practice-admission.v1" if train_wild_diagnostic
-                   else "pokemon.red.trainer-practice-admission.v1"),
-        **({"train_wild_diagnostic": True, "expected_battle_state": 1} if train_wild_diagnostic else {}),
+        "schema": (
+            "pokemon.red.wild-practice-admission.v1"
+            if train_wild_diagnostic
+            else "pokemon.red.trainer-practice-admission.v1"
+        ),
+        **(
+            {"train_wild_diagnostic": True, "expected_battle_state": 1}
+            if train_wild_diagnostic
+            else {}
+        ),
         **({"train_wild_limits": dict(limits_metadata)} if limits_metadata is not None else {}),
-        **({"train_wild_choice_scope": train_wild_choice_scope}
-           if train_wild_choice_scope is not None else {}),
+        **(
+            {"train_wild_choice_scope": train_wild_choice_scope}
+            if train_wild_choice_scope is not None
+            else {}
+        ),
         "capture_id": capture.manifest.capture_id,
         "manifest_sha256": capture.manifest_sha256,
         "source_commit": capture.manifest.source_commit,
@@ -417,15 +455,20 @@ def _verify_branch_log(
             "max_decisions": max_decisions,
             "opening_idle_frames": opening_idle_frames,
             **(
-                {"allow_status_moves": True, "native_status_context": dict(status_context)}
+                {
+                    "allow_status_moves": True,
+                    "native_status_context": dict(status_context),
+                }
                 if status_context is not None
                 else {}
             ),
         }
         if any(bound.get(key) != value for key, value in expected.items()):
             raise TrainerPracticeAdmissionError("branch log identity differs from plan")
-        if (bound.get("wild_training", False) is not train_wild_diagnostic
-                or bound.get("train_wild_diagnostic", False) is not train_wild_diagnostic):
+        if (
+            bound.get("wild_training", False) is not train_wild_diagnostic
+            or bound.get("train_wild_diagnostic", False) is not train_wild_diagnostic
+        ):
             raise TrainerPracticeAdmissionError("branch wild authority differs from plan")
         if bound.get("train_wild_choice_scope") != train_wild_choice_scope:
             raise TrainerPracticeAdmissionError("branch choice scope differs from plan")
@@ -507,9 +550,11 @@ def _matches_first_choice(first: Mapping[str, object], choice: str) -> bool:
     if prefix == "pokemon.core:battle:move":
         return first.get("kind") == "attack" and first.get("move_slot") == slot
     if prefix == "pokemon.core:battle:switch":
-        return first.get("kind") in {"voluntary_switch", "switch_prompt", "forced_switch"} and (
-            first.get("party_slot") == slot
-        )
+        return first.get("kind") in {
+            "voluntary_switch",
+            "switch_prompt",
+            "forced_switch",
+        } and (first.get("party_slot") == slot)
     return False
 
 

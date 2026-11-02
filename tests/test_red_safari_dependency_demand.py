@@ -16,6 +16,8 @@ from pokemon_red_completion.red_autonomous_safari import _safari_physical_demand
 from pokemon_red_completion.red_collection import (
     RED_COLLECTION_GAME_ID,
     RED_SOLO_COLLECTION_CONTRACT,
+)
+from pokemon_red_completion.red_collection import (
     red_species_ref as ref,
 )
 from pokemon_red_completion.red_live_safari import (
@@ -137,8 +139,9 @@ def test_duplicate_safari_offer_is_explicit_and_default_stays_registration_only(
 
 
 def test_duplicate_candidate_reports_dependency_not_new_registration(monkeypatch):
-    import pokemon_red_completion.red_live_safari as m
     from test_red_live_safari import _area
+
+    import pokemon_red_completion.red_live_safari as m
     from pokemon_red_completion.goal_manager import GoalSituation
     from pokemon_red_completion.living_dex_option_value import (
         living_dex_option_context_from_goal_situation,

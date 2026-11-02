@@ -1148,9 +1148,12 @@ class RedBoxSpecimenIdentity:
 
     def __post_init__(self) -> None:
         for value, low, high in (
-            (self.box_index, 0, 11), (self.box_slot, 1, 20),
-            (self.species_id, 1, 255), (self.level, 1, 100),
-            (self.experience, 0, 0xFFFFFF), (self.original_trainer_id, 0, 0xFFFF),
+            (self.box_index, 0, 11),
+            (self.box_slot, 1, 20),
+            (self.species_id, 1, 255),
+            (self.level, 1, 100),
+            (self.experience, 0, 0xFFFFFF),
+            (self.original_trainer_id, 0, 0xFFFF),
         ):
             if type(value) is not int or not low <= value <= high:
                 raise ValueError("boxed specimen identity/progress differs")
@@ -1294,9 +1297,14 @@ class RawGameState:
             and self.battle_state == 0
             and self.event_flags is not None
             and len(self.event_flags) * 8 > int(EventFlag.WALKED_OUT_OF_DOCK)
-            and all(event_flag_is_set(self.event_flags, int(flag)) for flag in (
-                EventFlag.GOT_HM01, EventFlag.RUBBED_CAPTAINS_BACK, EventFlag.SS_ANNE_LEFT,
-            ))
+            and all(
+                event_flag_is_set(self.event_flags, int(flag))
+                for flag in (
+                    EventFlag.GOT_HM01,
+                    EventFlag.RUBBED_CAPTAINS_BACK,
+                    EventFlag.SS_ANNE_LEFT,
+                )
+            )
             and not event_flag_is_set(
                 self.event_flags, int(EventFlag.WALKED_PAST_GUARD_AFTER_SS_ANNE_LEFT)
             )
@@ -1511,11 +1519,16 @@ class OaksErrandState:
         not permission to confirm an arbitrary field dialogue or shop menu.
         """
         return bool(
-            self.map_id == MapId.OAKS_LAB and self.battle_state == 0
-            and self.lab_script == 16 and not self.controls_ready
-            and self.battled_rival and self.got_oaks_parcel
-            and not self.parcel_in_bag and not self.oak_got_parcel
-            and not self.got_pokedex and self.first_party_species == SQUIRTLE_SPECIES_ID
+            self.map_id == MapId.OAKS_LAB
+            and self.battle_state == 0
+            and self.lab_script == 16
+            and not self.controls_ready
+            and self.battled_rival
+            and self.got_oaks_parcel
+            and not self.parcel_in_bag
+            and not self.oak_got_parcel
+            and not self.got_pokedex
+            and self.first_party_species == SQUIRTLE_SPECIES_ID
         )
 
 
@@ -3873,19 +3886,40 @@ class NativeWildTeleportWitness:
     enemy_hp: int
 
     def __post_init__(self):
-        if (any(type(v) is not int for v in (self.map_id, self.player_x, self.player_y,
-                self.enemy_species_id, self.enemy_level, self.enemy_hp))
-                or not 0 <= self.map_id <= 255 or min(self.player_x, self.player_y) < 0
-                or self.enemy_species_id != 148 or not 1 <= self.enemy_level <= 100
-                or self.enemy_hp <= 0):
-            raise ValueError('native Teleport witness has invalid ordinary wild identity')
+        if (
+            any(
+                type(v) is not int
+                for v in (
+                    self.map_id,
+                    self.player_x,
+                    self.player_y,
+                    self.enemy_species_id,
+                    self.enemy_level,
+                    self.enemy_hp,
+                )
+            )
+            or not 0 <= self.map_id <= 255
+            or min(self.player_x, self.player_y) < 0
+            or self.enemy_species_id != 148
+            or not 1 <= self.enemy_level <= 100
+            or self.enemy_hp <= 0
+        ):
+            raise ValueError("native Teleport witness has invalid ordinary wild identity")
 
     def public_dict(self):
-        return dict(schema='pokemon.red.live-wild-teleport-witness.v1', map_id=self.map_id,
-                    player_x=self.player_x, player_y=self.player_y,
-                    enemy_species_id=self.enemy_species_id, enemy_level=self.enemy_level,
-                    enemy_hp=self.enemy_hp, enemy_move=100, enemy_effect=28,
-                    player_move=0, live_escaped_flag=1)
+        return dict(
+            schema="pokemon.red.live-wild-teleport-witness.v1",
+            map_id=self.map_id,
+            player_x=self.player_x,
+            player_y=self.player_y,
+            enemy_species_id=self.enemy_species_id,
+            enemy_level=self.enemy_level,
+            enemy_hp=self.enemy_hp,
+            enemy_move=100,
+            enemy_effect=28,
+            player_move=0,
+            live_escaped_flag=1,
+        )
 
 
 class PokemonRedStateReader:
@@ -3905,8 +3939,7 @@ class PokemonRedStateReader:
         menu = self.read_menu_cursor_state()
         if (menu.top_y, menu.top_x, menu.maximum_visible_index) != (2, 11, 7):
             return False
-        labels = {"".join(row.replace(">", "").split())
-                  for row in self.read_screen_text_rows()}
+        labels = {"".join(row.replace(">", "").split()) for row in self.read_screen_text_rows()}
         return {"POKMON", "ITEM", "SAVE", "OPTION", "EXIT"}.issubset(labels)
 
     def read_silph_gift_received(self) -> bool:
@@ -3939,8 +3972,12 @@ class PokemonRedStateReader:
         selected = menu.selected_visible_index
         rows = self.read_screen_text_rows()
         text = " ".join(" ".join(rows).split())
-        if ((menu.top_y, menu.top_x, menu.maximum_visible_index) == (8, 15, 1)
-                and selected in {0, 1} and "YES" in text and "NO" in text):
+        if (
+            (menu.top_y, menu.top_x, menu.maximum_visible_index) == (8, 15, 1)
+            and selected in {0, 1}
+            and "YES" in text
+            and "NO" in text
+        ):
             return "offer", selected
         count = self._memory.read_u8(RamAddress.PARTY_COUNT)
         if (
@@ -4025,31 +4062,46 @@ class PokemonRedStateReader:
             raise ValueError("PC item inventory contains a duplicate item")
         return entries
 
-    def read_live_wild_teleport_witness(self, raw: RawGameState) -> NativeWildTeleportWitness | None:
+    def read_live_wild_teleport_witness(
+        self, raw: RawGameState
+    ) -> NativeWildTeleportWitness | None:
         """Read only the supported revision's active, successful enemy effect.
 
         Last-move bytes after a battle do not qualify. The live escape flag must
         still be set, the ordinary wild Abra must be alive, and the complete
         repeated read must remain coherent. No value enters policy features.
         """
-        if (raw.battle_state != 1 or raw.battle_result != 0
-                or raw.enemy_species_id != 148 or type(raw.enemy_hp) is not int
-                or raw.enemy_hp <= 0 or type(raw.enemy_level) is not int
-                or not 1 <= raw.enemy_level <= 100):
+        if (
+            raw.battle_state != 1
+            or raw.battle_result != 0
+            or raw.enemy_species_id != 148
+            or type(raw.enemy_hp) is not int
+            or raw.enemy_hp <= 0
+            or type(raw.enemy_level) is not int
+            or not 1 <= raw.enemy_level <= 100
+        ):
             return None
         # pret/pokered WRAM, anchored by the existing revision-zero symbols:
         # enemy move/effect precede ENEMY_SPECIES_2; escape follows disable data.
-        addresses = (int(RamAddress.ENEMY_SPECIES_2)-12,
-                     int(RamAddress.ENEMY_SPECIES_2)-11,
-                     int(RamAddress.ENEMY_SPECIES_2)-6,
-                     int(RamAddress.PLAYER_DISABLED_MOVE)+11)
+        addresses = (
+            int(RamAddress.ENEMY_SPECIES_2) - 12,
+            int(RamAddress.ENEMY_SPECIES_2) - 11,
+            int(RamAddress.ENEMY_SPECIES_2) - 6,
+            int(RamAddress.PLAYER_DISABLED_MOVE) + 11,
+        )
         values = tuple(self._memory.read_u8(at) for at in addresses)
         if values != (100, 28, 0, 1):
             return None
         if self.read() != raw or tuple(self._memory.read_u8(at) for at in addresses) != values:
             return None
-        return NativeWildTeleportWitness(raw.map_id, raw.player_x, raw.player_y,
-                                         raw.enemy_species_id, raw.enemy_level, raw.enemy_hp)
+        return NativeWildTeleportWitness(
+            raw.map_id,
+            raw.player_x,
+            raw.player_y,
+            raw.enemy_species_id,
+            raw.enemy_level,
+            raw.enemy_hp,
+        )
 
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
@@ -4223,19 +4275,28 @@ class PokemonRedStateReader:
             player_disable_turns=(disabled_move & 0x0F) if battle_state else None,
             player_confused=(
                 bool(self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1) & 0x80)
-                if battle_state else None
+                if battle_state
+                else None
             ),
             enemy_confused=(
                 bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & 0x80)
-                if battle_state else None
+                if battle_state
+                else None
             ),
             player_stat_stages=(
-                tuple(self._memory.read_u8(int(RamAddress.PLAYER_ATTACK_STAGE) + i)
-                      for i in range(6)) if battle_state else None
+                tuple(
+                    self._memory.read_u8(int(RamAddress.PLAYER_ATTACK_STAGE) + i) for i in range(6)
+                )
+                if battle_state
+                else None
             ),
             enemy_stat_stages=(
-                tuple(self._memory.read_u8(int(RamAddress.ENEMY_DEFENSE_STAGE) - 1 + i)
-                      for i in range(6)) if battle_state else None
+                tuple(
+                    self._memory.read_u8(int(RamAddress.ENEMY_DEFENSE_STAGE) - 1 + i)
+                    for i in range(6)
+                )
+                if battle_state
+                else None
             ),
             enemy_using_trapping_move=(
                 bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & (1 << 5))
@@ -4390,7 +4451,8 @@ class PokemonRedStateReader:
         )
 
     def read_wild_special_damage_inputs(
-        self, expected: RawGameState,
+        self,
+        expected: RawGameState,
     ) -> tuple[int, int, tuple[str, ...], tuple[str, ...]]:
         """Conservative special attack/defense and live types for capture support.
 
@@ -4399,32 +4461,55 @@ class PokemonRedStateReader:
         deliberately an upper bound, not a damage prediction. No snapshot fields
         or learned features change. Unsupported volatile/Transform states stop.
         """
-        if (self.read() != expected or expected.battle_state != 1
-                or expected.active_party_index is None or expected.party_count is None
-                or not 0 <= expected.active_party_index < expected.party_count <= 6
-                or (expected.enemy_hp or 0) <= 0):
+        if (
+            self.read() != expected
+            or expected.battle_state != 1
+            or expected.active_party_index is None
+            or expected.party_count is None
+            or not 0 <= expected.active_party_index < expected.party_count <= 6
+            or (expected.enemy_hp or 0) <= 0
+        ):
             raise SemanticStateError("capture damage requires coherent live wild state")
         identity = self.read_wild_capture_identity()
-        flags = tuple(self._memory.read_u8(int(RamAddress.PLAYER_BATTLE_STATUS_1) + i)
-                      for i in range(3))
-        if (identity is None or identity.transformed or flags[0] & 0xFF
-                or flags[1] & 0xF0 or flags[2] & 0x09):
+        flags = tuple(
+            self._memory.read_u8(int(RamAddress.PLAYER_BATTLE_STATUS_1) + i) for i in range(3)
+        )
+        if (
+            identity is None
+            or identity.transformed
+            or flags[0] & 0xFF
+            or flags[1] & 0xF0
+            or flags[2] & 0x09
+        ):
             raise SemanticStateError("capture damage has unsupported volatile mechanics")
         base = int(RamAddress.PARTY_MON_1) + expected.active_party_index * PARTY_STRUCT_STRIDE
         attack = max(self._read_u16_be(base + 42), self._read_u16_be(RamAddress.BATTLE_MON_SPECIAL))
-        defense = min(self._read_u16_be(RamAddress.ENEMY_SPECIAL),
-                      self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL))
+        defense = min(
+            self._read_u16_be(RamAddress.ENEMY_SPECIAL),
+            self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL),
+        )
         try:
             # battle_struct types at5/6 precede Attack at17; use live types
             # rather than party types, which Conversion can change in battle.
-            own_types = tuple(dict.fromkeys(GEN1_TYPE_NAMES_BY_CODE[self._memory.read_u8(
-                int(RamAddress.BATTLE_MON_ATTACK) - 12 + i)] for i in (0, 1)))
-            enemy_types = tuple(dict.fromkeys(
-                GEN1_TYPE_NAMES_BY_CODE[t] for t in identity.type_ids))
+            own_types = tuple(
+                dict.fromkeys(
+                    GEN1_TYPE_NAMES_BY_CODE[
+                        self._memory.read_u8(int(RamAddress.BATTLE_MON_ATTACK) - 12 + i)
+                    ]
+                    for i in (0, 1)
+                )
+            )
+            enemy_types = tuple(
+                dict.fromkeys(GEN1_TYPE_NAMES_BY_CODE[t] for t in identity.type_ids)
+            )
         except KeyError as error:
             raise SemanticStateError("capture damage type bytes differ") from error
-        if (not 1 <= attack <= 1023 or not 1 <= defense <= 1023
-                or self.read() != expected or self.read_wild_capture_identity() != identity):
+        if (
+            not 1 <= attack <= 1023
+            or not 1 <= defense <= 1023
+            or self.read() != expected
+            or self.read_wild_capture_identity() != identity
+        ):
             raise SemanticStateError("capture damage inputs changed or are invalid")
         return attack, defense, own_types, enemy_types
 
@@ -4464,8 +4549,7 @@ class PokemonRedStateReader:
         if raw.battle_state != 1 or not raw.enemy_hp:
             return None
         points = tuple(
-            self._memory.read_u8(int(RamAddress.ENEMY_SPECIAL) + 2 + i) & 0x3F
-            for i in range(4)
+            self._memory.read_u8(int(RamAddress.ENEMY_SPECIAL) + 2 + i) & 0x3F for i in range(4)
         )
         if self.read() != raw:
             raise SemanticStateError("wild capture PP observation changed")
@@ -4556,14 +4640,19 @@ class PokemonRedStateReader:
             return {"active": False}
         player = self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1)
         enemy = self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1)
-        if (self.read() != expected
-                or self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1) != player
-                or self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) != enemy):
+        if (
+            self.read() != expected
+            or self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1) != player
+            or self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) != enemy
+        ):
             raise SemanticStateError("charge telemetry flags changed")
-        return {"active": True, "player_charging": bool(player & 0x10),
-                "player_invulnerable": bool(player & 0x40),
-                "opponent_charging": bool(enemy & 0x10),
-                "opponent_invulnerable": bool(enemy & 0x40)}
+        return {
+            "active": True,
+            "player_charging": bool(player & 0x10),
+            "player_invulnerable": bool(player & 0x40),
+            "opponent_charging": bool(enemy & 0x10),
+            "opponent_invulnerable": bool(enemy & 0x40),
+        }
 
     def read_trainer_mirror_switch_ready(self, expected: RawGameState) -> bool:
         """A fresh send-out clears Mirror Move, but not an already copied move.
@@ -4834,9 +4923,7 @@ class PokemonRedStateReader:
         """
         number = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER)
         current = self.read_current_box_state()
-        payloads = (
-            self._read_saved_box_payloads() if number & RED_BOX_CHANGED_MASK else None
-        )
+        payloads = self._read_saved_box_payloads() if number & RED_BOX_CHANGED_MASK else None
         result = []
         live_structures = []
         for box_index in range(RED_BOX_LIMIT):
@@ -4846,30 +4933,37 @@ class PokemonRedStateReader:
                 continue
             else:
                 box = _decode_saved_red_box(box_index, payloads[box_index])
-            for index, (species, level) in enumerate(
-                zip(box.species_ids, box.levels, strict=True)
-            ):
+            for index, (species, level) in enumerate(zip(box.species_ids, box.levels, strict=True)):
                 if box_index == current.box_index:
                     base = int(RamAddress.CURRENT_BOX_MONS) + index * RED_BOX_STRUCT_STRIDE
-                    structure = bytes(self._memory.read_u8(base + i)
-                                      for i in range(RED_BOX_STRUCT_STRIDE))
+                    structure = bytes(
+                        self._memory.read_u8(base + i) for i in range(RED_BOX_STRUCT_STRIDE)
+                    )
                     live_structures.append((base, structure))
                 else:
                     base = 1 + RED_BOX_CAPACITY + 1 + index * RED_BOX_STRUCT_STRIDE
                     structure = payloads[box_index][base : base + RED_BOX_STRUCT_STRIDE]
                 if structure[0] != species or structure[3] != level:
                     raise SemanticStateError("boxed identity membership changed during observation")
-                result.append(RedBoxSpecimenIdentity(
-                    box_index, index + 1, species, level,
-                    int.from_bytes(structure[14:17], "big"),
-                    int.from_bytes(structure[12:14], "big"),
-                    (structure[27], structure[28]),
-                ))
+                result.append(
+                    RedBoxSpecimenIdentity(
+                        box_index,
+                        index + 1,
+                        species,
+                        level,
+                        int.from_bytes(structure[14:17], "big"),
+                        int.from_bytes(structure[12:14], "big"),
+                        (structure[27], structure[28]),
+                    )
+                )
         if (
             self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER) != number
             or self.read_current_box_state() != current
-            or any(bytes(self._memory.read_u8(base + i) for i in range(RED_BOX_STRUCT_STRIDE))
-                   != structure for base, structure in live_structures)
+            or any(
+                bytes(self._memory.read_u8(base + i) for i in range(RED_BOX_STRUCT_STRIDE))
+                != structure
+                for base, structure in live_structures
+            )
         ):
             raise SemanticStateError("box identity census changed during observation")
         return tuple(result)
@@ -5156,6 +5250,7 @@ class PokemonRedStateReader:
         A practice fixture must preserve these rather than infer a trainer's
         moves from the species' ordinary level-up learnset.
         """
+
         def roster() -> tuple[tuple[int, ...], ...]:
             if self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 2:
                 raise SemanticStateError("trainer move roster requires a live trainer battle")
@@ -5224,14 +5319,23 @@ class PokemonRedStateReader:
 
     def read_wild_next_mon_prompt(self, raw: RawGameState) -> int | None:
         """Observe the wild faint YES/NO gate, not the subsequent party menu."""
-        if (raw.battle_state != 1 or raw.battler_hp != 0
-                or not raw.party_hp or not any(hp > 0 for hp in raw.party_hp)
-                or not self._active_menu_cursor()):
+        if (
+            raw.battle_state != 1
+            or raw.battler_hp != 0
+            or not raw.party_hp
+            or not any(hp > 0 for hp in raw.party_hp)
+            or not self._active_menu_cursor()
+        ):
             return None
-        signature = tuple(self._memory.read_u8(address) for address in (
-            RamAddress.TOP_MENU_ITEM_Y, RamAddress.TOP_MENU_ITEM_X,
-            RamAddress.MAX_MENU_ITEM, RamAddress.MENU_WATCHED_KEYS,
-        ))
+        signature = tuple(
+            self._memory.read_u8(address)
+            for address in (
+                RamAddress.TOP_MENU_ITEM_Y,
+                RamAddress.TOP_MENU_ITEM_X,
+                RamAddress.MAX_MENU_ITEM,
+                RamAddress.MENU_WATCHED_KEYS,
+            )
+        )
         selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if signature != (10, 14, 1, 3) or selected not in {0, 1}:
             return None
@@ -5239,8 +5343,11 @@ class PokemonRedStateReader:
         for offset in range(20 * 12, TILE_MAP_SIZE):
             tile = self._memory.read_u8(int(RamAddress.TILE_MAP) + offset)
             letters.append(
-                chr(ord("A") + tile - 0x80) if 0x80 <= tile <= 0x99
-                else chr(ord("a") + tile - 0xA0) if 0xA0 <= tile <= 0xB9 else " "
+                chr(ord("A") + tile - 0x80)
+                if 0x80 <= tile <= 0x99
+                else chr(ord("a") + tile - 0xA0)
+                if 0xA0 <= tile <= 0xB9
+                else " "
             )
         visible = " ".join("".join(letters).split())
         return selected if "Use next POK MON" in visible else None
@@ -5263,10 +5370,15 @@ class PokemonRedStateReader:
             or not self._active_menu_cursor()
         ):
             return None
-        signature = tuple(self._memory.read_u8(address) for address in (
-            RamAddress.TOP_MENU_ITEM_Y, RamAddress.TOP_MENU_ITEM_X,
-            RamAddress.MAX_MENU_ITEM, RamAddress.MENU_WATCHED_KEYS,
-        ))
+        signature = tuple(
+            self._memory.read_u8(address)
+            for address in (
+                RamAddress.TOP_MENU_ITEM_Y,
+                RamAddress.TOP_MENU_ITEM_X,
+                RamAddress.MAX_MENU_ITEM,
+                RamAddress.MENU_WATCHED_KEYS,
+            )
+        )
         selected = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
         if signature not in {(8, 15, 1, 3), (8, 5, 3, 3)} or selected > signature[2]:
             return None
@@ -5274,8 +5386,11 @@ class PokemonRedStateReader:
         for offset in range(20 * 12, TILE_MAP_SIZE):
             tile = self._memory.read_u8(int(RamAddress.TILE_MAP) + offset)
             letters.append(
-                chr(ord("A") + tile - 0x80) if 0x80 <= tile <= 0x99
-                else chr(ord("a") + tile - 0xA0) if 0xA0 <= tile <= 0xB9 else " "
+                chr(ord("A") + tile - 0x80)
+                if 0x80 <= tile <= 0x99
+                else chr(ord("a") + tile - 0xA0)
+                if 0xA0 <= tile <= 0xB9
+                else " "
             )
         visible = " ".join("".join(letters).split())
         if signature == (8, 15, 1, 3):
@@ -5366,18 +5481,27 @@ class PokemonRedStateReader:
         This is text observation, not permission to acknowledge an unknown menu.
         Character codes follow the pinned cartridge's standard font table.
         """
+
         def character(tile: int) -> str:
             if 0x80 <= tile <= 0x99:
-                return chr(ord('A') + tile - 0x80)
+                return chr(ord("A") + tile - 0x80)
             if 0xA0 <= tile <= 0xB9:
-                return chr(ord('a') + tile - 0xA0)
+                return chr(ord("a") + tile - 0xA0)
             if 0xF6 <= tile <= 0xFF:
                 return str(tile - 0xF6)
-            return '>' if tile == FILLED_MENU_CURSOR_TILE else ' '
+            return ">" if tile == FILLED_MENU_CURSOR_TILE else " "
 
-        return tuple(''.join(character(self._memory.read_u8(
-            int(RamAddress.TILE_MAP) + row * 20 + column,
-        )) for column in range(20)) for row in range(18))
+        return tuple(
+            "".join(
+                character(
+                    self._memory.read_u8(
+                        int(RamAddress.TILE_MAP) + row * 20 + column,
+                    )
+                )
+                for column in range(20)
+            )
+            for row in range(18)
+        )
 
     def trainer_introduction_visible(self, raw: RawGameState) -> bool:
         """Recognize the pre-send-out announcement, never a replacement menu."""

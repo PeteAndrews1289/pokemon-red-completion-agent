@@ -98,13 +98,16 @@ def test_dig_departure_is_default_off_and_explicit_opt_in_preserves_profile():
     rt = collection_runtime()
     ordinary = p.bind_player_collection_capabilities(rt, seed_corridor=corridor())
     enabled = p.bind_player_collection_capabilities(
-        rt, seed_corridor=corridor(), include_dig_departure=True,
+        rt,
+        seed_corridor=corridor(),
+        include_dig_departure=True,
     )
     assert not rt.collection_dig_departure and not ordinary.collection_dig_departure
     assert enabled.collection_dig_departure and enabled.profile == ordinary.profile
     assert enabled.registration_policy is rt.registration_policy
     assert p.bind_player_collection_capabilities(
-        enabled, seed_corridor=corridor(),
+        enabled,
+        seed_corridor=corridor(),
     ).collection_dig_departure
 
 
@@ -112,7 +115,9 @@ def test_dig_departure_is_default_off_and_explicit_opt_in_preserves_profile():
 def test_dig_departure_permission_requires_a_boolean(flag):
     with pytest.raises(TypeError, match="boolean"):
         p.bind_player_collection_capabilities(
-            collection_runtime(), seed_corridor=corridor(), include_dig_departure=flag,
+            collection_runtime(),
+            seed_corridor=corridor(),
+            include_dig_departure=flag,
         )
 
 
@@ -120,21 +125,26 @@ def test_fly_transport_is_default_off_and_target_free_evolution_inherits_only_op
     from pokemon_red_completion.red_full_pokedex_direct_profile import (
         _evolution_capability_parameters,
     )
+
     runtime = collection_runtime()
     ordinary = p.bind_player_collection_capabilities(runtime, seed_corridor=corridor())
     assert _evolution_capability_parameters(ordinary.profile) == {}
     enabled = p.bind_player_collection_capabilities(
-        runtime, seed_corridor=corridor(), include_fly_transport=True)
+        runtime, seed_corridor=corridor(), include_fly_transport=True
+    )
     capture = next(s for s in enabled.profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
     assert capture.parameters["fly_transport"] is True
     assert capture.parameters["indoor_fly_departure"] is True
     assert _evolution_capability_parameters(enabled.profile) == {
-        "fly_transport": True, "indoor_fly_departure": True}
+        "fly_transport": True,
+        "indoor_fly_departure": True,
+    }
     assert enabled.registration_policy is runtime.registration_policy
     assert runtime.profile == collection_runtime().profile
     with pytest.raises(TypeError, match="boolean"):
-        p.bind_player_collection_capabilities(runtime, seed_corridor=corridor(),
-                                             include_fly_transport=1)
+        p.bind_player_collection_capabilities(
+            runtime, seed_corridor=corridor(), include_fly_transport=1
+        )
 
 
 def test_explicit_early_capture_uses_existing_plain_mode_and_keeps_transport_bounds():
@@ -187,9 +197,13 @@ def test_collection_capabilities_reject_unregistered_or_unverified_seed(fault):
 
 def fixture(monkeypatch):
     em = N(frame_count=0, pressed_buttons=frozenset(), save_state_bytes=lambda: b"same")
-    rt = N(emulator=em, registration_policy=object(), adapter=N(
-        observe=lambda: N(party=N(members=(N(hp=1),))),
-    ))
+    rt = N(
+        emulator=em,
+        registration_policy=object(),
+        adapter=N(
+            observe=lambda: N(party=N(members=(N(hp=1),))),
+        ),
+    )
     actions = N(actions_executed=0)
     monkeypatch.setattr(p, "_field_ready", lambda _: True)
     for name in (
@@ -238,16 +252,22 @@ def test_no_capability_returns_no_manufactured_goal(monkeypatch):
 
 @pytest.mark.parametrize("balls,expected", [(1, 1.0), (8, 0.125), (0, 0.0)])
 def test_wild_capture_projects_known_stock_exposure_without_controller_changes(
-    monkeypatch, balls, expected,
+    monkeypatch,
+    balls,
+    expected,
 ):
     rt, actions, obs = fixture(monkeypatch)
-    live = N(situation=obs.situation, raw=N(bag_items=((4, balls), (1, 1))),
-             party=N(members=(N(hp=1),)))
+    live = N(
+        situation=obs.situation, raw=N(bag_items=((4, balls), (1, 1))), party=N(members=(N(hp=1),))
+    )
     rt.adapter.observe = lambda: live
-    binding = replace(_binding(GoalKind.ACQUIRE_SPECIES, binding_ref="wild", calls=[]),
-                      search_source_ref="pokemon.red:acquisition:wild:Route4:grass")
-    monkeypatch.setattr(p, "enumerate_red_regional_acquisitions",
-                        lambda *a, **k: (N(binding=binding),))
+    binding = replace(
+        _binding(GoalKind.ACQUIRE_SPECIES, binding_ref="wild", calls=[]),
+        search_source_ref="pokemon.red:acquisition:wild:Route4:grass",
+    )
+    monkeypatch.setattr(
+        p, "enumerate_red_regional_acquisitions", lambda *a, **k: (N(binding=binding),)
+    )
     result = p.player_collection_supplements(rt, actions, obs, world=N())
     assert result[0].candidate.features.resource_cost == expected
     assert result[0].binding is binding
@@ -258,12 +278,15 @@ def test_wild_capture_projects_known_stock_exposure_without_controller_changes(
 @pytest.mark.parametrize("source", [None, "gift:Eevee", "fishing:Route12", "safari:Center"])
 def test_nonwild_acquisition_does_not_inherit_bag_ball_cost(monkeypatch, source):
     rt, actions, obs = fixture(monkeypatch)
-    rt.adapter.observe = lambda: N(situation=obs.situation, raw=N(bag_items=((4, 1),)),
-                                   party=N(members=(N(hp=1),)))
-    binding = replace(_binding(GoalKind.ACQUIRE_SPECIES, binding_ref="other", calls=[]),
-                      search_source_ref=source)
-    monkeypatch.setattr(p, "enumerate_red_regional_acquisitions",
-                        lambda *a, **k: (N(binding=binding),))
+    rt.adapter.observe = lambda: N(
+        situation=obs.situation, raw=N(bag_items=((4, 1),)), party=N(members=(N(hp=1),))
+    )
+    binding = replace(
+        _binding(GoalKind.ACQUIRE_SPECIES, binding_ref="other", calls=[]), search_source_ref=source
+    )
+    monkeypatch.setattr(
+        p, "enumerate_red_regional_acquisitions", lambda *a, **k: (N(binding=binding),)
+    )
     result = p.player_collection_supplements(rt, actions, obs, world=N())
     assert result[0].candidate.features.resource_cost == 0.0
     assert actions.actions_executed == rt.emulator.frame_count == 0
@@ -293,43 +316,70 @@ def test_current_menu_omits_known_zero_action_survey_but_keeps_other_mechanics(m
 
 
 def test_long_evolution_limits_do_not_expand_ordinary_capture(monkeypatch):
-    rt,actions,obs=fixture(monkeypatch)
-    calls={}
-    monkeypatch.setattr(p,'enumerate_red_regional_acquisitions',
-        lambda *a,**k:calls.update(capture=k) or ())
-    monkeypatch.setattr(p,'enumerate_red_level_evolutions',
-        lambda *a,**k:calls.update(evolve=k) or ())
-    assert p.player_collection_supplements(rt,actions,obs,world=N(),
-        maximum_evolution_quanta=256,maximum_evolution_actions=80000,
-        maximum_evolution_frames=8000000,maximum_evolution_seconds=1800)==()
-    assert calls['capture']['maximum_actions']==20000
-    assert calls['capture']['maximum_frames']==2000000
-    assert calls['evolve']['maximum_actions']==80000
-    assert calls['evolve']['maximum_frames']==8000000
-    assert calls['evolve']['maximum_quanta']==256
-    assert calls['evolve']['maximum_wall_seconds']==1800
-    assert 'maximum_wall_seconds' not in calls['capture']
+    rt, actions, obs = fixture(monkeypatch)
+    calls = {}
+    monkeypatch.setattr(
+        p, "enumerate_red_regional_acquisitions", lambda *a, **k: calls.update(capture=k) or ()
+    )
+    monkeypatch.setattr(
+        p, "enumerate_red_level_evolutions", lambda *a, **k: calls.update(evolve=k) or ()
+    )
+    assert (
+        p.player_collection_supplements(
+            rt,
+            actions,
+            obs,
+            world=N(),
+            maximum_evolution_quanta=256,
+            maximum_evolution_actions=80000,
+            maximum_evolution_frames=8000000,
+            maximum_evolution_seconds=1800,
+        )
+        == ()
+    )
+    assert calls["capture"]["maximum_actions"] == 20000
+    assert calls["capture"]["maximum_frames"] == 2000000
+    assert calls["evolve"]["maximum_actions"] == 80000
+    assert calls["evolve"]["maximum_frames"] == 8000000
+    assert calls["evolve"]["maximum_quanta"] == 256
+    assert calls["evolve"]["maximum_wall_seconds"] == 1800
+    assert "maximum_wall_seconds" not in calls["capture"]
 
 
-@pytest.mark.parametrize('value',[0,-1,True,1.5])
-def test_explicit_evolution_limits_remain_finite_positive_integers(monkeypatch,value):
-    rt,actions,obs=fixture(monkeypatch)
-    with pytest.raises(ValueError,match='positive integers'):
-        p.player_collection_supplements(rt,actions,obs,world=N(),maximum_evolution_actions=value)
-    with pytest.raises(ValueError,match='positive integers'):
-        p.player_collection_supplements(rt,actions,obs,world=N(),maximum_evolution_seconds=value)
+@pytest.mark.parametrize("value", [0, -1, True, 1.5])
+def test_explicit_evolution_limits_remain_finite_positive_integers(monkeypatch, value):
+    rt, actions, obs = fixture(monkeypatch)
+    with pytest.raises(ValueError, match="positive integers"):
+        p.player_collection_supplements(
+            rt, actions, obs, world=N(), maximum_evolution_actions=value
+        )
+    with pytest.raises(ValueError, match="positive integers"):
+        p.player_collection_supplements(
+            rt, actions, obs, world=N(), maximum_evolution_seconds=value
+        )
 
 
 @pytest.mark.parametrize("enabled", [False, True])
 def test_capture_transport_forwards_existing_battle_wrapper_without_choosing(monkeypatch, enabled):
     rt, actions, obs = fixture(monkeypatch)
     calls = []
+
     def wrapper(inner, spec):
         pytest.fail("observation invoked battle wrapper")
-    monkeypatch.setattr(p, "enumerate_red_regional_acquisitions",
-                        lambda *a, **kw: calls.append(kw) or ())
-    assert p.player_collection_supplements(rt, actions, obs, world=N(),
-        capture_interruption_handler_wrapper=wrapper if enabled else None) == ()
+
+    monkeypatch.setattr(
+        p, "enumerate_red_regional_acquisitions", lambda *a, **kw: calls.append(kw) or ()
+    )
+    assert (
+        p.player_collection_supplements(
+            rt,
+            actions,
+            obs,
+            world=N(),
+            capture_interruption_handler_wrapper=wrapper if enabled else None,
+        )
+        == ()
+    )
     assert calls[0].get("interruption_handler_wrapper") is (wrapper if enabled else None)
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
@@ -338,61 +388,83 @@ def test_capture_transport_forwards_existing_battle_wrapper_without_choosing(mon
 def test_capture_transport_rejects_noncallable_wrapper_before_observation(monkeypatch, wrapper):
     rt, actions, obs = fixture(monkeypatch)
     with pytest.raises(TypeError, match="wrapper must be callable"):
-        p.player_collection_supplements(rt, actions, obs, world=N(),
-                                       capture_interruption_handler_wrapper=wrapper)
+        p.player_collection_supplements(
+            rt, actions, obs, world=N(), capture_interruption_handler_wrapper=wrapper
+        )
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
-@pytest.mark.parametrize('enabled', [False, True])
+@pytest.mark.parametrize("enabled", [False, True])
 def test_fishing_transport_forwards_existing_battle_wrapper_without_execution(monkeypatch, enabled):
     rt, actions, obs = fixture(monkeypatch)
     calls = []
+
     def wrapper(inner):
-        pytest.fail('observation invoked the fishing battle wrapper')
-    monkeypatch.setattr(p, 'autonomous_fishing_options',
-                        lambda *a, **kw: calls.append(kw) or ())
-    assert p.player_collection_supplements(rt, actions, obs, world=N(),
-        fishing_interruption_handler_wrapper=wrapper if enabled else None) == ()
-    assert calls[0].get('interruption_handler_wrapper') is (wrapper if enabled else None)
+        pytest.fail("observation invoked the fishing battle wrapper")
+
+    monkeypatch.setattr(p, "autonomous_fishing_options", lambda *a, **kw: calls.append(kw) or ())
+    assert (
+        p.player_collection_supplements(
+            rt,
+            actions,
+            obs,
+            world=N(),
+            fishing_interruption_handler_wrapper=wrapper if enabled else None,
+        )
+        == ()
+    )
+    assert calls[0].get("interruption_handler_wrapper") is (wrapper if enabled else None)
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
-@pytest.mark.parametrize('enabled', [False, True])
+@pytest.mark.parametrize("enabled", [False, True])
 def test_both_evolution_sources_forward_exact_wrapper_without_execution(monkeypatch, enabled):
     rt, actions, obs = fixture(monkeypatch)
     calls = []
 
     def wrapper(inner, spec):
-        pytest.fail('enumeration invoked the evolution battle wrapper')
+        pytest.fail("enumeration invoked the evolution battle wrapper")
 
-    for name in ('enumerate_red_item_evolutions', 'enumerate_red_level_evolutions'):
+    for name in ("enumerate_red_item_evolutions", "enumerate_red_level_evolutions"):
         monkeypatch.setattr(p, name, lambda *args, **kwargs: calls.append(kwargs) or ())
-    assert p.player_collection_supplements(
-        rt, actions, obs, world=N(),
-        evolution_interruption_handler_wrapper=wrapper if enabled else None,
-    ) == ()
+    assert (
+        p.player_collection_supplements(
+            rt,
+            actions,
+            obs,
+            world=N(),
+            evolution_interruption_handler_wrapper=wrapper if enabled else None,
+        )
+        == ()
+    )
     assert len(calls) == 2
-    assert all(call.get('interruption_handler_wrapper') is
-               (wrapper if enabled else None) for call in calls)
+    assert all(
+        call.get("interruption_handler_wrapper") is (wrapper if enabled else None) for call in calls
+    )
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
-@pytest.mark.parametrize('wrapper', [True, 3, object()])
+@pytest.mark.parametrize("wrapper", [True, 3, object()])
 def test_evolution_transport_refuses_noncallable_before_observation(monkeypatch, wrapper):
     rt, actions, obs = fixture(monkeypatch)
-    with pytest.raises(TypeError, match='evolution interruption wrapper must be callable'):
+    with pytest.raises(TypeError, match="evolution interruption wrapper must be callable"):
         p.player_collection_supplements(
-            rt, actions, obs, world=N(), evolution_interruption_handler_wrapper=wrapper,
+            rt,
+            actions,
+            obs,
+            world=N(),
+            evolution_interruption_handler_wrapper=wrapper,
         )
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
-@pytest.mark.parametrize('wrapper', [True, 3, object()])
+@pytest.mark.parametrize("wrapper", [True, 3, object()])
 def test_fishing_transport_rejects_noncallable_wrapper_before_observation(monkeypatch, wrapper):
     rt, actions, obs = fixture(monkeypatch)
-    with pytest.raises(TypeError, match='wrapper must be callable'):
-        p.player_collection_supplements(rt, actions, obs, world=N(),
-                                       fishing_interruption_handler_wrapper=wrapper)
+    with pytest.raises(TypeError, match="wrapper must be callable"):
+        p.player_collection_supplements(
+            rt, actions, obs, world=N(), fishing_interruption_handler_wrapper=wrapper
+        )
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
@@ -402,12 +474,15 @@ def test_fossil_revival_is_an_explicit_peer_not_a_replacement(monkeypatch, enabl
     capture = _binding(GoalKind.ACQUIRE_SPECIES, binding_ref="wild", calls=[])
     fossil = _binding(GoalKind.ACQUIRE_SPECIES, binding_ref="fossil", calls=[])
     calls = []
-    monkeypatch.setattr(p, "enumerate_red_regional_acquisitions",
-                        lambda *a, **kw: (N(binding=capture),))
-    monkeypatch.setattr(p, "fossil_acquisition_bindings",
-                        lambda *a, **kw: calls.append(kw) or (fossil,))
-    rows = p.player_collection_supplements(rt, actions, obs, world=N(),
-                                         include_fossil_acquisition=enabled)
+    monkeypatch.setattr(
+        p, "enumerate_red_regional_acquisitions", lambda *a, **kw: (N(binding=capture),)
+    )
+    monkeypatch.setattr(
+        p, "fossil_acquisition_bindings", lambda *a, **kw: calls.append(kw) or (fossil,)
+    )
+    rows = p.player_collection_supplements(
+        rt, actions, obs, world=N(), include_fossil_acquisition=enabled
+    )
     assert tuple(row.binding for row in rows) == ((capture, fossil) if enabled else (capture,))
     assert calls == ([dict(maximum_actions=20000, maximum_frames=2000000)] if enabled else [])
     assert actions.actions_executed == rt.emulator.frame_count == 0
@@ -417,20 +492,37 @@ def test_fossil_revival_is_an_explicit_peer_not_a_replacement(monkeypatch, enabl
 @pytest.mark.parametrize("venue_override", (False, True))
 def test_evolution_venue_reuse_is_explicit_and_zero_input(monkeypatch, enabled, venue_override):
     from pokemon_red_completion.red_goal_context import DIGLETTS_CAVE_TRAINING_VENUE
+
     rt, actions, obs = fixture(monkeypatch)
     calls = []
-    monkeypatch.setattr(p, "enumerate_red_level_evolutions",
-                        lambda *a, **kw: calls.append(kw) or ())
-    assert p.player_collection_supplements(
-        rt, actions, obs, world=N(), prefer_highest_evolution_venue=enabled,
-        allow_guarded_evolution_escapes=enabled,
-        evolution_training_venues=(DIGLETTS_CAVE_TRAINING_VENUE,) if venue_override else None,
-    ) == ()
-    assert calls == [dict(maximum_actions=20000, maximum_frames=2000000, maximum_quanta=64,
-                         **(dict(prefer_highest_supported_venue=True,
-                                 allow_guarded_venue_escapes=True) if enabled else {}),
-                         **({"training_venues": (DIGLETTS_CAVE_TRAINING_VENUE,)}
-                            if venue_override else {}))]
+    monkeypatch.setattr(
+        p, "enumerate_red_level_evolutions", lambda *a, **kw: calls.append(kw) or ()
+    )
+    assert (
+        p.player_collection_supplements(
+            rt,
+            actions,
+            obs,
+            world=N(),
+            prefer_highest_evolution_venue=enabled,
+            allow_guarded_evolution_escapes=enabled,
+            evolution_training_venues=(DIGLETTS_CAVE_TRAINING_VENUE,) if venue_override else None,
+        )
+        == ()
+    )
+    assert calls == [
+        dict(
+            maximum_actions=20000,
+            maximum_frames=2000000,
+            maximum_quanta=64,
+            **(
+                dict(prefer_highest_supported_venue=True, allow_guarded_venue_escapes=True)
+                if enabled
+                else {}
+            ),
+            **({"training_venues": (DIGLETTS_CAVE_TRAINING_VENUE,)} if venue_override else {}),
+        )
+    ]
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 
@@ -438,8 +530,9 @@ def test_evolution_venue_reuse_is_explicit_and_zero_input(monkeypatch, enabled, 
 def test_evolution_venue_permission_cannot_be_coerced(monkeypatch, value):
     rt, actions, obs = fixture(monkeypatch)
     with pytest.raises(ValueError, match="explicit booleans"):
-        p.player_collection_supplements(rt, actions, obs, world=N(),
-                                       prefer_highest_evolution_venue=value)
+        p.player_collection_supplements(
+            rt, actions, obs, world=N(), prefer_highest_evolution_venue=value
+        )
 
 
 def test_unsettled_controls_skip_all_collection(monkeypatch):
@@ -491,10 +584,17 @@ def test_execution_limits_are_explicit_positive_integers(monkeypatch, limits):
         p.player_collection_supplements(rt, actions, obs, world=N(), **limits)
 
 
-@pytest.mark.parametrize("stock,expected", [
-    ((), True), (((1, 1),), True), (((3, 1),), False),
-    (((2, 1), (1, 1)), False), (((4, 1),), False), (None, False),
-])
+@pytest.mark.parametrize(
+    "stock,expected",
+    [
+        ((), True),
+        (((1, 1),), True),
+        (((3, 1),), False),
+        (((2, 1), (1, 1)), False),
+        (((4, 1),), False),
+        (None, False),
+    ],
+)
 def test_ordinary_supply_gap_uses_observed_balls_and_preserves_master(stock, expected):
     from pokemon_red_completion.observation import RawGameState
 
@@ -509,51 +609,83 @@ def test_ordinary_supply_gap_does_not_invent_completion(flag):
     from pokemon_red_completion.observation import RawGameState
 
     with pytest.raises(ValueError, match="explicit boolean"):
-        p.ordinary_ball_resupply_peer_needed(RawGameState(True, 159, 21, 11, 6, 0),
-                                              hall_of_fame=flag)
+        p.ordinary_ball_resupply_peer_needed(
+            RawGameState(True, 159, 21, 11, 6, 0), hall_of_fame=flag
+        )
 
 
-@pytest.mark.parametrize("source,map_id,numbers", [
-    ("wild:Route1:grass", MapId.ROUTE_1, (9, 16)),
-    ("wild:Route2:grass", MapId.ROUTE_2, (9, 13)),
-])
+@pytest.mark.parametrize(
+    "source,map_id,numbers",
+    [
+        ("wild:Route1:grass", MapId.ROUTE_1, (9, 16)),
+        ("wild:Route2:grass", MapId.ROUTE_2, (9, 13)),
+    ],
+)
 def test_shared_composition_binds_actual_discovery_source_from_cartridge(
-    monkeypatch, source, map_id, numbers,
+    monkeypatch,
+    source,
+    map_id,
+    numbers,
 ):
+    from test_red_goal_skills import _ActionPort, _adapter, _DiscoveryExecutor, _raw, _Reader
+
     from pokemon_red_completion import gen1_cartridge as cartridge
+    from pokemon_red_completion.executor import CountingExecutor
     from pokemon_red_completion.goal_manager import GoalUnavailableReason
     from pokemon_red_completion.red_goal_skills import RedEncounterDiscoveryGoalProvider
-    from test_red_goal_skills import _Reader, _raw, _ActionPort, _adapter, _DiscoveryExecutor
-    from pokemon_red_completion.executor import CountingExecutor
 
     # The pre-existing source may differ from the schema seed. Water cannot keep
     # an all-seen walking survey eligible. No cartridge or guest inputs are used.
     monkeypatch.setattr(cartridge, "internal_to_dex", lambda _: {90: numbers[0], 91: numbers[1]})
+
     def tables(rom, *, medium):
         assert rom == b"fixture" and medium == "grass"
         return {int(map_id): [(2, 90), (3, 91)]}
+
     monkeypatch.setattr(cartridge, "wild_tables", tables)
     existing = RedLivingDexWildCorridor(source, int(map_id), (4, 2), (3, 2))
-    rt = collection_runtime(((GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
-                              existing.profile_parameters()),))
+    rt = collection_runtime(
+        (
+            (
+                GoalKind.EXPLORE,
+                RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                existing.profile_parameters(),
+            ),
+        )
+    )
     legacy = p.bind_player_collection_capabilities(rt, seed_corridor=corridor())
-    assert "source_species_numbers" not in next(
-        s for s in legacy.profile.providers if s.kind is GoalKind.EXPLORE).parameters
+    assert (
+        "source_species_numbers"
+        not in next(s for s in legacy.profile.providers if s.kind is GoalKind.EXPLORE).parameters
+    )
     composed = p.bind_player_collection_capabilities(
-        rt, seed_corridor=corridor(), discovery_rom=b"fixture")
+        rt, seed_corridor=corridor(), discovery_rom=b"fixture"
+    )
     discovery = next(s for s in composed.profile.providers if s.kind is GoalKind.EXPLORE)
     assert discovery.parameters["source_id"] == source
     assert discovery.parameters["source_species_numbers"] == numbers
-    assert p.bind_player_collection_capabilities(
-        composed, seed_corridor=corridor(), discovery_rom=b"fixture").profile == composed.profile
+    assert (
+        p.bind_player_collection_capabilities(
+            composed, seed_corridor=corridor(), discovery_rom=b"fixture"
+        ).profile
+        == composed.profile
+    )
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)
     actions = CountingExecutor(port)
     adapter = _adapter(reader)
     provider = RedEncounterDiscoveryGoalProvider(
-        source, _DiscoveryExecutor(reader, actions), actions, port, adapter,
-        source_species_numbers=discovery.parameters["source_species_numbers"])
+        source,
+        _DiscoveryExecutor(reader, actions),
+        actions,
+        port,
+        adapter,
+        source_species_numbers=discovery.parameters["source_species_numbers"],
+    )
     assert provider.offer(adapter.observe()).binding is not None
     reader.pokedex = replace(reader.pokedex, seen_species=frozenset(numbers))
-    assert provider.offer(adapter.observe()).unavailable_reason is GoalUnavailableReason.NO_LEGAL_TARGET
+    assert (
+        provider.offer(adapter.observe()).unavailable_reason
+        is GoalUnavailableReason.NO_LEGAL_TARGET
+    )
     assert actions.actions_executed == 0

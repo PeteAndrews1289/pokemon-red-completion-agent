@@ -133,8 +133,9 @@ def test_hole_transition_checks_arrival_boulder_and_resources(monkeypatch, fault
         assert steps == ["right"]
 
 
-@pytest.mark.parametrize("fault", [None, "trainer", "unknown", "wrong_tile", "no_binding",
-                                   "unverified", "drift", "hp"])
+@pytest.mark.parametrize(
+    "fault", [None, "trainer", "unknown", "wrong_tile", "no_binding", "unverified", "drift", "hp"]
+)
 def test_hole_follow_settles_only_an_acknowledged_ordinary_wild_step(monkeypatch, fault):
     before = replace(strength_raw((15, 21)), map_id=198, player_money=4226, battle_state=0)
     current, steps, escapes = [before], [], []
@@ -145,10 +146,16 @@ def test_hole_follow_settles_only_an_acknowledged_ordinary_wild_step(monkeypatch
     def step(*args):
         steps.append(args[2])
         if len(steps) == 1:
-            current[0] = replace(before, player_x=21 if fault == "wrong_tile" else 22,
-                                 battle_state=2 if fault == "trainer" else 1)
-            message = ("another execution failure" if fault == "unknown" else
-                       "verified dropped-boulder follow entered an unexpected battle.")
+            current[0] = replace(
+                before,
+                player_x=21 if fault == "wrong_tile" else 22,
+                battle_state=2 if fault == "trainer" else 1,
+            )
+            message = (
+                "another execution failure"
+                if fault == "unknown"
+                else "verified dropped-boulder follow entered an unexpected battle."
+            )
             raise s.VictoryRoadChapterError(message)
         current[0] = replace(current[0], map_id=194, player_y=16, player_x=22)
 
@@ -159,21 +166,33 @@ def test_hole_follow_settles_only_an_acknowledged_ordinary_wild_step(monkeypatch
 
         def execute():
             escapes.append(True)
-            current[0] = replace(current[0], battle_state=0,
+            current[0] = replace(
+                current[0],
+                battle_state=0,
                 player_x=23 if fault == "drift" else 22,
-                party_hp=(current[0].party_hp[0] - 1,) if fault == "hp" else current[0].party_hp)
+                party_hp=(current[0].party_hp[0] - 1,) if fault == "hp" else current[0].party_hp,
+            )
             return N(evidence={"escape": {"verified": True}})
 
-        return N(execute=execute, verify=lambda _: (
-            s.GoalVerification.failed(s.GoalFailureReason.OUTCOME_NOT_VERIFIED)
-            if fault == "unverified" else s.GoalVerification.succeeded()))
+        return N(
+            execute=execute,
+            verify=lambda _: (
+                s.GoalVerification.failed(s.GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                if fault == "unverified"
+                else s.GoalVerification.succeeded()
+            ),
+        )
 
     from pokemon_red_completion import red_player_wild_recovery
 
     monkeypatch.setattr(s, "verified_victory_step", step)
     monkeypatch.setattr(red_player_wild_recovery, "interrupted_wild_binding", bind)
-    rt = N(reader=N(read=lambda: current[0], read_current_strength_boulders=lambda: (
-        N(sprite_index=13, at=(16, 23)),)))
+    rt = N(
+        reader=N(
+            read=lambda: current[0],
+            read_current_strength_boulders=lambda: (N(sprite_index=13, at=(16, 23)),),
+        )
+    )
     if fault:
         with pytest.raises((s.VictoryRoadChapterError, RuntimeError)):
             s.follow_dropped_boulder(rt, object(), b"rom")
@@ -289,6 +308,7 @@ def test_indigo_route_stops_at_next_map_and_only_arrival_can_complete(monkeypatc
     )
     assert not calls and a.actions_executed == 0
     from pokemon_red_completion.player_option_story_unit import OptionStoryUnit
+
     assert binding.story_unit == OptionStoryUnit("movement", intermediate)
     assert binding.story_approach_only is intermediate
     report = binding.execute()
@@ -340,14 +360,28 @@ def test_feasible_cave_exit_precedes_reset_puzzles(monkeypatch, map_id, objectiv
         return result
 
     monkeypatch.setattr(s, "_route_option", quote)
-    assert s.victory_road_story_option(
-        rt, actions, None, route=route, battler=object(), preparation_plan=object(),
-        access_objective_ref=None if objective_ref == s.OBJECTIVE else objective_ref,
-    ) is result
-    assert quotes == [dict(
-        world=observed_world, phase="reach-indigo", destination_map=9,
-        record=None, finishes=True, objective_ref=objective_ref,
-    )]
+    assert (
+        s.victory_road_story_option(
+            rt,
+            actions,
+            None,
+            route=route,
+            battler=object(),
+            preparation_plan=object(),
+            access_objective_ref=None if objective_ref == s.OBJECTIVE else objective_ref,
+        )
+        is result
+    )
+    assert quotes == [
+        dict(
+            world=observed_world,
+            phase="reach-indigo",
+            destination_map=9,
+            record=None,
+            finishes=True,
+            objective_ref=objective_ref,
+        )
+    ]
     assert not calls and actions.actions_executed == 0 and state.payload == b"source"
 
 
@@ -371,25 +405,36 @@ def test_blocked_cave_exit_keeps_original_puzzle_fallback(monkeypatch, puzzle_av
         return result
 
     monkeypatch.setattr(s, "_puzzle_option", puzzle)
-    assert s.victory_road_story_option(
-        rt, actions, None, route=route, battler=object(), preparation_plan=object(),
-    ) is result
+    assert (
+        s.victory_road_story_option(
+            rt,
+            actions,
+            None,
+            route=route,
+            battler=object(),
+            preparation_plan=object(),
+        )
+        is result
+    )
     assert puzzles == [("third-switch", contract, s.OBJECTIVE)]
     assert not calls and actions.actions_executed == 0 and state.payload == b"source"
 
 
-@pytest.mark.parametrize("phase", ["first-switch", "second-switch", "third-switch",
-                                    "boulder-drop", "final-switch"])
+@pytest.mark.parametrize(
+    "phase", ["first-switch", "second-switch", "third-switch", "boulder-drop", "final-switch"]
+)
 def test_strength_puzzle_certifies_only_intermediate_interaction(monkeypatch, phase):
     from pokemon_red_completion.player_option_story_unit import (
-        OptionStoryUnit, story_unit_vector,
+        OptionStoryUnit,
+        story_unit_vector,
     )
+
     rt, actions, route, _, state, calls = fixture(monkeypatch)
     plan = N(steps=(object(),), cost=2, explored_states=3)
     monkeypatch.setattr(s, "_puzzle_plan", lambda *_: (plan, object()))
     binding, challenge = s._puzzle_option(rt, actions, route, phase, object(), None)
     assert binding.story_unit == OptionStoryUnit("interaction", True)
-    assert story_unit_vector(binding.story_unit) == (1., 0., 1., 1.)
+    assert story_unit_vector(binding.story_unit) == (1.0, 0.0, 1.0, 1.0)
     assert binding.story_approach_only is True
     assert binding.story_objective_ref == s.OBJECTIVE
     assert challenge.combat_required is False

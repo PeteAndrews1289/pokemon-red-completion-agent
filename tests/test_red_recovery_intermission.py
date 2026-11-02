@@ -67,12 +67,15 @@ def test_selected_next_returned_without_executing_or_healing(monkeypatch, tmp_pa
 
 
 def test_actual_readiness_is_passed_to_both_candidates(monkeypatch, tmp_path):
+    from pokemon_red_completion.living_dex_option_value import (
+        upgrade_option_value_model_for_readiness,
+    )
     from pokemon_red_completion.player_readiness import PlayerReadiness
-    from pokemon_red_completion.living_dex_option_value import upgrade_option_value_model_for_readiness
+
     params, _, calls, advance, queries, binding = setup(monkeypatch, tmp_path)
     params["model"] = upgrade_option_value_model_for_readiness(params["model"])
     params["model_sha256"] = params["model"].model_sha256
-    observed = PlayerReadiness((0.,) * 22 + (1.,) * 5, history_observed=False)
+    observed = PlayerReadiness((0.0,) * 22 + (1.0,) * 5, history_observed=False)
     params["observe_readiness"] = lambda: observed
     assert module.run_recovery_intermission(**params) is binding
     assert all(candidate.readiness == observed for candidate in queries[0].menu.candidates)
@@ -82,10 +85,12 @@ def test_actual_readiness_is_passed_to_both_candidates(monkeypatch, tmp_path):
 @pytest.mark.parametrize("mutate", [False, True])
 def test_invalid_or_mutating_readiness_refuses_before_selection(monkeypatch, tmp_path, mutate):
     params, reader, calls, advance, queries, _ = setup(monkeypatch, tmp_path)
+
     def observed():
         if mutate:
             reader.raw = replace(reader.raw, party_hp=(99, 0))
         return object()
+
     params["observe_readiness"] = observed
     with pytest.raises(module.RecoveryIntermissionError, match="readiness"):
         module.run_recovery_intermission(**params)

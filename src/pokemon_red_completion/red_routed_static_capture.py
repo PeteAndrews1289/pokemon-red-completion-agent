@@ -35,39 +35,61 @@ from .routed_semantic_goal import RoutedSemanticGoalLimits
 def _prepared_route_recovery_report(runtime, actions, loss, counters):
     """Retain a typed native route setback without executing its capture target."""
     from .red_routed_recovery import settled_route_field_recovery_evidence
-    from .route_executor import RouteExecutionFailureReport, RouteExecutionFailureReason
+    from .route_executor import RouteExecutionFailureReason, RouteExecutionFailureReport
     from .route_plan import RoutePlan
 
     failure, proof = loss.failure, loss.evidence
     after = runtime.adapter.observe()
     count = actions.actions_executed - counters[0]
     frames = runtime.emulator.frame_count - counters[1]
-    if (not isinstance(failure, RouteExecutionFailureReport)
+    if (
+        not isinstance(failure, RouteExecutionFailureReport)
         or not isinstance(failure.initial_plan, RoutePlan)
         or failure.reason is not RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED
         or not settled_route_field_recovery_evidence(proof)
-        or not after.input_ready or after.raw.battle_state != 0
+        or not after.input_ready
+        or after.raw.battle_state != 0
         or runtime.emulator.pressed_buttons
-        or sha256(runtime.emulator.save_state_bytes()).hexdigest() != proof['terminal_sha256']
-        or list(after.raw.party_hp or ()) != proof['party_hp']
-        or after.raw.player_money != proof['cash_after']
-        or count < loss.report.actions_executed or frames < loss.report.frames_executed):
+        or sha256(runtime.emulator.save_state_bytes()).hexdigest() != proof["terminal_sha256"]
+        or list(after.raw.party_hp or ()) != proof["party_hp"]
+        or after.raw.player_money != proof["cash_after"]
+        or count < loss.report.actions_executed
+        or frames < loss.report.frames_executed
+    ):
         raise loss
-    return GoalExecutionReport(count, frames, dict(
-        schema='pokemon.core.routed-semantic-goal-report.v1',
-        destination_kind=GoalKind.ACQUIRE_SPECIES.value,
-        route_verified=False, destination_bound=False, destination_executed=False,
-        budget_reconciled=True, within_budget=True, route_is_policy_kind=False,
-        private_binding_fields=0, private_route_fields=0,
-        route_setback=dict(proof), prepared_static_capture_not_executed=True,
-        acknowledged_steps=len(failure.executed_steps),
-        movement_requests=failure.movement_requests,wait_actions=failure.wait_actions,
-    ))
+    return GoalExecutionReport(
+        count,
+        frames,
+        dict(
+            schema="pokemon.core.routed-semantic-goal-report.v1",
+            destination_kind=GoalKind.ACQUIRE_SPECIES.value,
+            route_verified=False,
+            destination_bound=False,
+            destination_executed=False,
+            budget_reconciled=True,
+            within_budget=True,
+            route_is_policy_kind=False,
+            private_binding_fields=0,
+            private_route_fields=0,
+            route_setback=dict(proof),
+            prepared_static_capture_not_executed=True,
+            acknowledged_steps=len(failure.executed_steps),
+            movement_requests=failure.movement_requests,
+            wait_actions=failure.wait_actions,
+        ),
+    )
 
 
 def prepared_static_acquisition_binding(
-    runtime, actions, *, rom, target, execute_prepared, verify_return,
-    estimated_effort, estimated_risk,
+    runtime,
+    actions,
+    *,
+    rom,
+    target,
+    execute_prepared,
+    verify_return,
+    estimated_effort,
+    estimated_risk,
     allow_route16_snorlax=False,
 ):
     """Expose a prepared route/capture/return recipe without choosing its target.
@@ -93,8 +115,10 @@ def prepared_static_acquisition_binding(
     counters = (actions.actions_executed, runtime.emulator.frame_count)
     availability = observe_static_capture(runtime.reader, target)
     if (
-        availability.registered or availability.consumed
-        or observation.raw.battle_state or not observation.input_ready
+        availability.registered
+        or availability.consumed
+        or observation.raw.battle_state
+        or not observation.input_ready
         or runtime.emulator.pressed_buttons
     ):
         return None
@@ -113,14 +137,18 @@ def prepared_static_acquisition_binding(
             raise RuntimeError("prepared acquisition source changed or was already attempted")
         used = True
         from .red_routed_recovery import SettledNativeFieldRecovery
+
         try:
             inner = execute_prepared(target)
         except SettledNativeFieldRecovery as loss:
             # Only an attached, independently verified native route failure is
             # eligible. Its capture target must remain entirely unexecuted.
             status = observe_static_capture(runtime.reader, target)
-            if (status.registered or status.consumed
-                or runtime.reader.read_pokedex_state().owned_species != owned):
+            if (
+                status.registered
+                or status.consumed
+                or runtime.reader.read_pokedex_state().owned_species != owned
+            ):
                 raise
             report = _prepared_route_recovery_report(runtime, actions, loss, counters)
             terminal = runtime.emulator.save_state_bytes()
@@ -146,21 +174,31 @@ def prepared_static_acquisition_binding(
         after = runtime.adapter.observe()
         status = observe_static_capture(runtime.reader, target)
         if recovered_route:
-            proof = report.evidence['route_setback']
-            if (candidate_report is report and runtime.emulator.save_state_bytes() == terminal
-                and not runtime.emulator.pressed_buttons and after.input_ready
-                and after.raw.battle_state == 0 and not status.registered and not status.consumed
+            proof = report.evidence["route_setback"]
+            if (
+                candidate_report is report
+                and runtime.emulator.save_state_bytes() == terminal
+                and not runtime.emulator.pressed_buttons
+                and after.input_ready
+                and after.raw.battle_state == 0
+                and not status.registered
+                and not status.consumed
                 and runtime.reader.read_pokedex_state().owned_species == owned
-                and list(after.raw.party_hp or ()) == proof['party_hp']
-                and after.raw.player_money == proof['cash_after']):
+                and list(after.raw.party_hp or ()) == proof["party_hp"]
+                and after.raw.player_money == proof["cash_after"]
+            ):
                 return GoalVerification.failed(GoalFailureReason.RECOVERY_REQUIRED)
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         if (
-            used and candidate_report is report and terminal is not None
+            used
+            and candidate_report is report
+            and terminal is not None
             and runtime.emulator.save_state_bytes() == terminal
             and not runtime.emulator.pressed_buttons
-            and after.input_ready and not after.raw.battle_state
-            and status.registered and status.consumed
+            and after.input_ready
+            and not after.raw.battle_state
+            and status.registered
+            and status.consumed
             and runtime.reader.read_pokedex_state().owned_species == owned | {target.species_number}
             and verify_return() is True
         ):
@@ -170,13 +208,16 @@ def prepared_static_acquisition_binding(
     binding = ExecutableGoalBinding(
         binding_ref=f"red-prepared-static:{sha256(source).hexdigest()}:{canonical_sha256(asdict(target))}",
         kind=GoalKind.ACQUIRE_SPECIES,
-        estimated_effort=estimated_effort, estimated_risk=estimated_risk,
-        execute=execute, verify=verify,
+        estimated_effort=estimated_effort,
+        estimated_risk=estimated_risk,
+        execute=execute,
+        verify=verify,
         search_source_ref=f"pokemon.red:static-capture:{target.map_id}:{target.object_index}",
     )
-    if runtime.emulator.save_state_bytes() != source or (
-        actions.actions_executed, runtime.emulator.frame_count
-    ) != counters:
+    if (
+        runtime.emulator.save_state_bytes() != source
+        or (actions.actions_executed, runtime.emulator.frame_count) != counters
+    ):
         raise RuntimeError("prepared acquisition discovery changed the game")
     return binding
 
@@ -219,7 +260,9 @@ class RedRoutedStaticCaptureGoalProvider:
             from .red_capture_readiness import assess_capture_readiness
 
             readiness = assess_capture_readiness(
-                observation, p.readiness_budget, target_available=True,
+                observation,
+                p.readiness_budget,
+                target_available=True,
                 enemy_species_id=p.target.internal_species,
             )
             if readiness.hard_blocks:

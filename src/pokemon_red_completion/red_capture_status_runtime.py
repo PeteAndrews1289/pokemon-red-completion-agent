@@ -35,12 +35,16 @@ def observed_rest_recovery(before, after, before_moves, after_moves, after_statu
     return (
         before.battle_state == after.battle_state == 1
         and before.map_id == after.map_id
-        and before.enemy_hp is not None and before.enemy_hp > 0
-        and after.enemy_hp is not None and after.enemy_hp > before.enemy_hp
+        and before.enemy_hp is not None
+        and before.enemy_hp > 0
+        and after.enemy_hp is not None
+        and after.enemy_hp > before.enemy_hp
         and after.enemy_hp == after.enemy_max_hp == before.enemy_max_hp
         and after.enemy_species_id == before.enemy_species_id
-        and before_moves is not None and 156 in before_moves
-        and after_moves == before_moves and after_status == 2
+        and before_moves is not None
+        and 156 in before_moves
+        and after_moves == before_moves
+        and after_status == 2
     )
 
 
@@ -61,7 +65,10 @@ class RedCaptureStatusError(RuntimeError):
     """An observed status turn changed protected capture state."""
 
     def __init__(
-        self, message: str, *, reason_code: CaptureStatusDrift | None = None,
+        self,
+        message: str,
+        *,
+        reason_code: CaptureStatusDrift | None = None,
     ) -> None:
         super().__init__(message)
         self.reason_code = None if reason_code is None else reason_code.value
@@ -118,8 +125,11 @@ class RedCaptureStatusPreparer:
         # This boundary returns without input when MAIN is already present and
         # never selects a move. Party and inventory remain protected throughout.
         advance_battle_to_policy_boundary(
-            self.reader, self.actions, expected_map=entry.map_id,
-            expected_battle_state=1, label="capture status introduction",
+            self.reader,
+            self.actions,
+            expected_map=entry.map_id,
+            expected_battle_state=1,
+            label="capture status introduction",
         )
         initial = self.reader.read()
         identity = self.reader.read_wild_capture_identity()
@@ -153,8 +163,11 @@ class RedCaptureStatusPreparer:
         moves = self.reader.read_enemy_capture_moves()
         if moves is None:
             raise RedCaptureStatusError("capture target moves are unavailable")
-        if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
-               for move in moves if move):
+        if any(
+            RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+            for move in moves
+            if move
+        ):
             # A setup/switch turn may lose the encounter before any ball. Keep
             # the current battler and permit the ball; do not invent sleep or
             # assume the opponent's move choice, speed or escape outcome.
@@ -174,8 +187,11 @@ class RedCaptureStatusPreparer:
             current_moves = self.reader.read_enemy_capture_moves()
             if current_moves is None:
                 raise RedCaptureStatusError("capture target moves are unavailable")
-            if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
-                   for move in current_moves if move):
+            if any(
+                RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+                for move in current_moves
+                if move
+            ):
                 self.bypassed_for_escape = True
                 return self._record_throw_preparation()
             status_byte = self.reader.read_enemy_capture_status()
@@ -198,8 +214,13 @@ class RedCaptureStatusPreparer:
                 before_switch = raw
                 try:
                     switch_active_battler(
-                        self.actions, self.reader, self.emulator, option.party_slot - 1,
-                        expected_battle_state=1, label="capture status helper", wait_frames=120,
+                        self.actions,
+                        self.reader,
+                        self.emulator,
+                        option.party_slot - 1,
+                        expected_battle_state=1,
+                        label="capture status helper",
+                        wait_frames=120,
                     )
                 except ProtectedRecoveryError:
                     if self.reader.read().battle_state == 0:
@@ -208,8 +229,14 @@ class RedCaptureStatusPreparer:
                 raw = self.reader.read()
                 identity = self.reader.read_wild_capture_identity()
                 target_hp = self._protect_after_turn(
-                    before_switch, raw, identity, target_hp, party_ids, initial_bag,
-                    current_moves, phase="helper_switch",
+                    before_switch,
+                    raw,
+                    identity,
+                    target_hp,
+                    party_ids,
+                    initial_bag,
+                    current_moves,
+                    phase="helper_switch",
                 )
                 assert identity is not None
                 helper = PokemonRedPartyReader(self.emulator).read().members[option.party_slot - 1]
@@ -220,8 +247,11 @@ class RedCaptureStatusPreparer:
                 post_moves = self.reader.read_enemy_capture_moves()
                 if post_moves is None:
                     raise RedCaptureStatusError("capture target moves are unavailable")
-                if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
-                       for move in post_moves if move):
+                if any(
+                    RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+                    for move in post_moves
+                    if move
+                ):
                     self.bypassed_for_escape = True
                     return self._record_throw_preparation()
                 post_status_byte = self.reader.read_enemy_capture_status()
@@ -244,46 +274,73 @@ class RedCaptureStatusPreparer:
                 )
                 if option is None or option.party_slot - 1 != raw.active_party_index:
                     break
-            before_pp = PokemonRedPartyReader(self.emulator).read().members[
-                option.party_slot - 1
-            ].moves[option.move_slot - 1].current_pp
+            before_pp = (
+                PokemonRedPartyReader(self.emulator)
+                .read()
+                .members[option.party_slot - 1]
+                .moves[option.move_slot - 1]
+                .current_pp
+            )
             before_turn = self.reader.read()
             before_moves = self.reader.read_enemy_capture_moves()
             target_hp_before = target_hp
             recoveries_before = len(self.opponent_recoveries)
             self.attempts += 1
             turn = execute_bounded_battle_move_turn(
-                self.reader, self.actions, expected_map=initial.map_id,
-                selected_slot=option.move_slot, expected_battle_state=1,
+                self.reader,
+                self.actions,
+                expected_map=initial.map_id,
+                selected_slot=option.move_slot,
+                expected_battle_state=1,
                 label="non-damaging capture status",
             )
             after = self.reader.read()
             if after.battle_state == 0:
-                self.reports.append({"attempt": self.attempts, "encounter_ended": True,
-                                     "status_success": False})
+                self.reports.append(
+                    {"attempt": self.attempts, "encounter_ended": True, "status_success": False}
+                )
                 return False
             identity = self.reader.read_wild_capture_identity()
             target_hp = self._protect_after_turn(
-                before_turn, after, identity, target_hp, party_ids, initial_bag,
-                before_moves, phase="status_turn",
+                before_turn,
+                after,
+                identity,
+                target_hp,
+                party_ids,
+                initial_bag,
+                before_moves,
+                phase="status_turn",
             )
             if (after.battler_hp or 0) <= 0:
                 raise RedCaptureStatusError("capture status helper fainted; stop safely")
             before_settlement = after
             settlement_moves = self.reader.read_enemy_capture_moves()
             advance_battle_to_policy_boundary(
-                self.reader, self.actions, expected_map=initial.map_id,
-                expected_battle_state=1, label="capture status turn settlement",
+                self.reader,
+                self.actions,
+                expected_map=initial.map_id,
+                expected_battle_state=1,
+                label="capture status turn settlement",
             )
             after = self.reader.read()
             identity = self.reader.read_wild_capture_identity()
             target_hp = self._protect_after_turn(
-                before_settlement, after, identity, target_hp, party_ids, initial_bag,
-                settlement_moves, phase="status_settlement",
+                before_settlement,
+                after,
+                identity,
+                target_hp,
+                party_ids,
+                initial_bag,
+                settlement_moves,
+                phase="status_settlement",
             )
-            after_pp = PokemonRedPartyReader(self.emulator).read().members[
-                option.party_slot - 1
-            ].moves[option.move_slot - 1].current_pp
+            after_pp = (
+                PokemonRedPartyReader(self.emulator)
+                .read()
+                .members[option.party_slot - 1]
+                .moves[option.move_slot - 1]
+                .current_pp
+            )
             if before_pp - after_pp != int(turn.move_executed):
                 raise RedCaptureStatusError("capture status move PP differs")
             after_byte = self.reader.read_enemy_capture_status()
@@ -297,43 +354,61 @@ class RedCaptureStatusPreparer:
             if actual not in allowed_statuses:
                 raise RedCaptureStatusError("capture status effect differs from selected move")
             assert identity is not None
-            self.reports.append({
-                "attempt": self.attempts, "party_slot": option.party_slot,
-                "move_slot": option.move_slot, "condition": option.condition.value,
-                "move_executed": turn.move_executed, "status_after": actual.value,
-                "status_success": bool(turn.move_executed and actual is option.condition and not opponent_rest),
-                "opponent_recovery_observed": opponent_rest,
-                "target_hp_before": target_hp_before, "target_hp_after": after.enemy_hp,
-                "target_preserved": True, "balls_spent": 0,
-                "original_species_id": identity.original_species_id,
-                "displayed_species_id": identity.displayed_species_id,
-                "transformed": identity.transformed,
-            })
+            self.reports.append(
+                {
+                    "attempt": self.attempts,
+                    "party_slot": option.party_slot,
+                    "move_slot": option.move_slot,
+                    "condition": option.condition.value,
+                    "move_executed": turn.move_executed,
+                    "status_after": actual.value,
+                    "status_success": bool(
+                        turn.move_executed and actual is option.condition and not opponent_rest
+                    ),
+                    "opponent_recovery_observed": opponent_rest,
+                    "target_hp_before": target_hp_before,
+                    "target_hp_after": after.enemy_hp,
+                    "target_preserved": True,
+                    "balls_spent": 0,
+                    "original_species_id": identity.original_species_id,
+                    "displayed_species_id": identity.displayed_species_id,
+                    "transformed": identity.transformed,
+                }
+            )
         current = self.reader.read()
         if current.battle_state != 1:
             return False
         identity = self.reader.read_wild_capture_identity()
         self._require_protected(current, identity, target_hp, party_ids, initial_bag)
         party = PokemonRedPartyReader(self.emulator).read()
-        active = next((member for member in party.members
-                       if member.slot - 1 == current.active_party_index), None)
+        active = next(
+            (member for member in party.members if member.slot - 1 == current.active_party_index),
+            None,
+        )
         target_status = self.reader.read_enemy_capture_status()
         # Freeze prevents moves, not ball-menu use. Paralysis likewise does not
         # block throwing; keep an explicitly prepared, more-than-half-healthy
         # paralyzed helper instead of exposing an unprepared reserve. Other
         # afflictions and the historical default retain their existing policy.
-        prepared_paralyzed = (active is not None
+        prepared_paralyzed = (
+            active is not None
             and self.minimum_prepared_helper_level is not None
             and active.level >= self.minimum_prepared_helper_level
             and active.hp_ratio > 0.5
-            and active.status is StatusCondition.PARALYSIS)
-        if (self.preserve_viable_active and active is not None and active.hp > 0
-                and (active.status is StatusCondition.FREEZE or prepared_paralyzed)
-                and target_status is not None
-                and decode_status(target_status) is not StatusCondition.HEALTHY):
+            and active.status is StatusCondition.PARALYSIS
+        )
+        if (
+            self.preserve_viable_active
+            and active is not None
+            and active.hp > 0
+            and (active.status is StatusCondition.FREEZE or prepared_paralyzed)
+            and target_status is not None
+            and decode_status(target_status) is not StatusCondition.HEALTHY
+        ):
             return self._record_throw_preparation()
         healthy = [
-            member for member in party.members
+            member
+            for member in party.members
             if member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
         ]
         if not healthy:
@@ -348,27 +423,47 @@ class RedCaptureStatusPreparer:
             # Avoid spending sleep on a switch when the active helper is still
             # healthy and has at least half the best catcher's current HP.
             # Do not strand a fragile low-level helper merely for being full HP.
-            active = next((member for member in healthy
-                           if member.slot - 1 == current.active_party_index), None)
-            prepared_active = (active is not None and self.minimum_prepared_helper_level is not None
+            active = next(
+                (member for member in healthy if member.slot - 1 == current.active_party_index),
+                None,
+            )
+            prepared_active = (
+                active is not None
+                and self.minimum_prepared_helper_level is not None
                 and active.level >= self.minimum_prepared_helper_level
-                and any(option.party_slot == active.slot for option in self._status_options(party, identity)))
+                and any(
+                    option.party_slot == active.slot
+                    for option in self._status_options(party, identity)
+                )
+            )
             if active is not None and (active.hp * 2 >= catcher.hp or prepared_active):
                 catcher = active
         if current.active_party_index != catcher.slot - 1:
             before_moves = self.reader.read_enemy_capture_moves()
             switch_active_battler(
-                self.actions, self.reader, self.emulator, catcher.slot - 1,
-                expected_battle_state=1, label="capture protected catcher", wait_frames=120,
+                self.actions,
+                self.reader,
+                self.emulator,
+                catcher.slot - 1,
+                expected_battle_state=1,
+                label="capture protected catcher",
+                wait_frames=120,
             )
             self._protect_after_turn(
-                current, self.reader.read(), self.reader.read_wild_capture_identity(),
-                target_hp, party_ids, initial_bag, before_moves, phase="catcher_switch",
+                current,
+                self.reader.read(),
+                self.reader.read_wild_capture_identity(),
+                target_hp,
+                party_ids,
+                initial_bag,
+                before_moves,
+                phase="catcher_switch",
             )
         return self._record_throw_preparation()
 
-    def _protect_after_turn(self, before, after, identity, hp, party_ids, bag,
-                            before_moves, *, phase):
+    def _protect_after_turn(
+        self, before, after, identity, hp, party_ids, bag, before_moves, *, phase
+    ):
         """Admit the observed Rest transition, never arbitrary healing or damage.
 
         Our selected move is non-damaging (or we switched). Rest's live move,
@@ -377,29 +472,45 @@ class RedCaptureStatusPreparer:
         checked separately. No species allowlist or predicted outcome is used.
         """
         if after.map_id != before.map_id:
-            raise RedCaptureStatusError("capture status battle map changed",
-                                        reason_code=CaptureStatusDrift.MAP)
+            raise RedCaptureStatusError(
+                "capture status battle map changed", reason_code=CaptureStatusDrift.MAP
+            )
         rest = before.enemy_hp == hp and observed_rest_recovery(
-            before, after, before_moves, self.reader.read_enemy_capture_moves(),
+            before,
+            after,
+            before_moves,
+            self.reader.read_enemy_capture_moves(),
             self.reader.read_enemy_capture_status(),
         )
         protected_hp = after.enemy_hp if rest else hp
         self._require_protected(after, identity, protected_hp, party_ids, bag)
         if rest:
-            self.opponent_recoveries.append({
-                "phase": phase, "opponent_move": "rest", "move_id": 156,
-                "target_hp_before": hp, "target_hp_after": after.enemy_hp,
-                "status_after": "sleep", "status_counter": 2,
-                "our_status_success": False,
-            })
+            self.opponent_recoveries.append(
+                {
+                    "phase": phase,
+                    "opponent_move": "rest",
+                    "move_id": 156,
+                    "target_hp_before": hp,
+                    "target_hp_after": after.enemy_hp,
+                    "status_after": "sleep",
+                    "status_counter": 2,
+                    "our_status_success": False,
+                }
+            )
         return protected_hp
 
     def _status_options(self, party, identity):
-        options = red_capture_status_options(party, enemy_species_id=identity.displayed_species_id,
-            live_type_names=identity.type_names)
+        options = red_capture_status_options(
+            party,
+            enemy_species_id=identity.displayed_species_id,
+            live_type_names=identity.type_names,
+        )
         if self.minimum_prepared_helper_level is not None:
-            options = tuple(option for option in options
-                if party.members[option.party_slot - 1].level >= self.minimum_prepared_helper_level)
+            options = tuple(
+                option
+                for option in options
+                if party.members[option.party_slot - 1].level >= self.minimum_prepared_helper_level
+            )
         return options
 
     def _record_throw_preparation(self) -> bool:
@@ -413,21 +524,23 @@ class RedCaptureStatusPreparer:
         raw = self.reader.read()
         status = self.reader.read_enemy_capture_status()
         identity = self.reader.read_wild_capture_identity()
-        self.throw_preparations.append({
-            "preparation_ordinal": len(self.throw_preparations) + 1,
-            "status_attempts_used": self.attempts,
-            "target_status": decode_status(status).value if status is not None else None,
-            "target_hp": raw.enemy_hp,
-            "target_max_hp": raw.enemy_max_hp,
-            "active_party_slot": (
-                raw.active_party_index + 1 if raw.active_party_index is not None else None
-            ),
-            "original_species_id": identity.original_species_id if identity else None,
-            "displayed_species_id": identity.displayed_species_id if identity else None,
-            "transformed": identity.transformed if identity else None,
-            "escape_setup_bypassed": self.bypassed_for_escape,
-            "throw_executed": False,
-        })
+        self.throw_preparations.append(
+            {
+                "preparation_ordinal": len(self.throw_preparations) + 1,
+                "status_attempts_used": self.attempts,
+                "target_status": decode_status(status).value if status is not None else None,
+                "target_hp": raw.enemy_hp,
+                "target_max_hp": raw.enemy_max_hp,
+                "active_party_slot": (
+                    raw.active_party_index + 1 if raw.active_party_index is not None else None
+                ),
+                "original_species_id": identity.original_species_id if identity else None,
+                "displayed_species_id": identity.displayed_species_id if identity else None,
+                "transformed": identity.transformed if identity else None,
+                "escape_setup_bypassed": self.bypassed_for_escape,
+                "throw_executed": False,
+            }
+        )
         return True
 
     def _require_protected(

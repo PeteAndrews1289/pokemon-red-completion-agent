@@ -10,14 +10,16 @@ from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_control_features import BattleControlHistoryTracker
 from pokemon_red_completion.battle_semantics import BattleFeatureProjector
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
-from pokemon_red_completion.wild_training_objective import WildTrainingObjective
 from pokemon_red_completion.red_battle_mechanics_boundary import (
     capped_stat_choices,
     immunity_choices,
     productive_reserve_slots,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
-from pokemon_red_completion.red_status_battle_features import project_for_head, status_choice_slots
+from pokemon_red_completion.red_status_battle_features import (
+    project_for_head,
+    status_choice_slots,
+)
 from pokemon_red_completion.red_trainer_practice_features import (
     project_trainer_control_features,
     project_trainer_switch_features,
@@ -30,6 +32,7 @@ from pokemon_red_completion.red_trainer_proposed_control import (
     PROPOSED_CONTROL_SCHEMA,
     proposed_control,
 )
+from pokemon_red_completion.wild_training_objective import WildTrainingObjective
 
 
 class TrainerOutcomePolicyError(ValueError):
@@ -64,7 +67,10 @@ class RedTrainerPracticeOutcomePolicy:
     )
 
     def __post_init__(self) -> None:
-        if self.training_objective is not None and type(self.training_objective) is not WildTrainingObjective:
+        if (
+            self.training_objective is not None
+            and type(self.training_objective) is not WildTrainingObjective
+        ):
             raise TrainerOutcomePolicyError("typed selected wild training objective required")
         if not self.policy_id or not self.battle_plan_id:
             raise TrainerOutcomePolicyError("outcome policy identity is missing")
@@ -139,7 +145,9 @@ class RedTrainerPracticeOutcomePolicy:
         legal_moves = tuple(
             slot + 1
             for slot, legal in zip(
-                prepared.features.slot_indices, prepared.supported_candidate_mask, strict=True
+                prepared.features.slot_indices,
+                prepared.supported_candidate_mask,
+                strict=True,
             )
             if legal
         )
@@ -155,7 +163,9 @@ class RedTrainerPracticeOutcomePolicy:
                 and row[names.index("move.effect.fixed_damage")] == 0
                 and row[names.index("move.type_effectiveness_fraction")] > 0
                 for slot, row in zip(
-                    prepared.features.slot_indices, prepared.features.candidate_vectors, strict=True
+                    prepared.features.slot_indices,
+                    prepared.features.candidate_vectors,
+                    strict=True,
                 )
                 if slot + 1 in legal_moves
             )
@@ -206,7 +216,7 @@ class RedTrainerPracticeOutcomePolicy:
             switch_slots = self._mechanics_switch_slots(observation, switch_slots, history)
             if not switch_slots:
                 switches = None
-        unsupported_removed = ()
+        unsupported_removed: tuple[int, ...] = ()
         if self.pp_depleted_switch_screen:
             screened = self._unsupported_switch_slots(observation, switch_slots)
             # Keep the last escape if nobody has an executable move. Do not
@@ -216,7 +226,7 @@ class RedTrainerPracticeOutcomePolicy:
                 switch_slots = screened
                 if not switch_slots:
                     switches = None
-        depleted_removed = ()
+        depleted_removed: tuple[int, ...] = ()
         if self.pp_depleted_switch_screen:
             screened = self._pp_switch_slots(observation, switch_slots)
             # Never create an all-party-depletion dead end. Mandatory native
@@ -366,7 +376,7 @@ class RedTrainerPracticeOutcomePolicy:
             if immune_recovery_offered:
                 self._immune_switch_escape_opponent = history.opponent_index
             if self.pp_depleted_switch_screen and not legal_moves:
-                active = observation["features"]["party"]["active_index"] + 1
+                active = _active_party_slot(observation)
                 if self._supported_attacks_pp_depleted(observation, active):
                     self._pp_depleted_members.add(active)
                 if self._unsupported_moves_only(prepared):
@@ -379,9 +389,7 @@ class RedTrainerPracticeOutcomePolicy:
             )
         if self.mechanics_aware_choices:
             if action.kind is BattleActionKind.SWITCH and productive_reserves:
-                self._mechanics_escaped_members.add(
-                    observation["features"]["party"]["active_index"] + 1
-                )
+                self._mechanics_escaped_members.add(_active_party_slot(observation))
             self.last_decision_diagnostics["mechanics_boundary"] = {
                 "schema": "pokemon.red.immunity-screen.v2",
                 "removed_move_slots": list(mechanically_removed),
@@ -473,11 +481,12 @@ class RedTrainerPracticeOutcomePolicy:
                 "decision_mode": "main",
                 "control_choice": "struggle" if selected == 0 else "switch",
                 "control_input_schema": self.model.control.schema_id,
-            "control_candidate_vectors": (
-                [list(row) for row in candidates]
-                if switches is not None or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
-                else []
-            ),
+                "control_candidate_vectors": (
+                    [list(row) for row in candidates]
+                    if switches is not None
+                    or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                    else []
+                ),
                 "control_probabilities": self.model.control.probabilities(candidates).tolist()
                 if switches is not None
                 else [1.0, 0.0],
@@ -524,7 +533,7 @@ class RedTrainerPracticeOutcomePolicy:
             return None
         candidates = project_trainer_switch_features(observation, self.catalog)
         legal = tuple(slot for slot in candidates.candidate_slots if slot in legal_party_slots)
-        unsupported_removed = ()
+        unsupported_removed: tuple[int, ...] = ()
         if self.pp_depleted_switch_screen and may_decline:
             screened = self._unsupported_switch_slots(observation, legal)
             unsupported_removed = tuple(s for s in legal if s not in screened)
@@ -538,7 +547,7 @@ class RedTrainerPracticeOutcomePolicy:
                 self._record_pp_screen(())
                 self._record_unsupported_screen(unsupported_removed)
                 return None
-        depleted_removed = ()
+        depleted_removed: tuple[int, ...] = ()
         if self.pp_depleted_switch_screen and may_decline:
             screened = self._pp_switch_slots(observation, legal)
             depleted_removed = tuple(s for s in legal if s not in screened)
@@ -636,11 +645,15 @@ class RedTrainerPracticeOutcomePolicy:
         # These are the adapter's scope exclusions, not poor move values or
         # transient PP/Disable/immunity. Status-capable actors keep their moves.
         reasons = getattr(prepared, "unsupported_candidate_reasons", ())
-        return bool(reasons) and all(reason in {
-            "status_or_non_damaging_outside_segment",
-            "counter_needs_prior_damage",
-            "self_destruct_outside_segment",
-        } for reason in reasons)
+        return bool(reasons) and all(
+            reason
+            in {
+                "status_or_non_damaging_outside_segment",
+                "counter_needs_prior_damage",
+                "self_destruct_outside_segment",
+            }
+            for reason in reasons
+        )
 
     @staticmethod
     def _member_move_signature(observation, slot):
@@ -652,7 +665,8 @@ class RedTrainerPracticeOutcomePolicy:
         # A legitimately changed moveset readmits the member; mandatory native
         # replacements never call this voluntary/prompt reentry screen.
         self._unsupported_move_members = {
-            s: signature for s, signature in self._unsupported_move_members.items()
+            s: signature
+            for s, signature in self._unsupported_move_members.items()
             if self._member_move_signature(observation, s) == signature
         }
         return tuple(s for s in slots if s not in self._unsupported_move_members)
@@ -691,7 +705,9 @@ class RedTrainerPracticeOutcomePolicy:
 
     def _record_pp_screen(self, removed):
         if self.training_objective is not None:
-            self.last_decision_diagnostics["wild_training_objective"] = self.training_objective.diagnostics()
+            self.last_decision_diagnostics["wild_training_objective"] = (
+                self.training_objective.diagnostics()
+            )
         if self.pp_depleted_switch_screen:
             self.last_decision_diagnostics["pp_depleted_switch_screen"] = {
                 "schema": "pokemon.red.pp-depleted-reentry.v1",
@@ -726,7 +742,9 @@ class RedTrainerPracticeOutcomePolicy:
                 and move.power > 0
                 and "fixed_damage" not in move.effect_flags
                 and red_battle_move_is_model_supported(
-                    int(item["move_ref"].rsplit(":", 1)[1]), item["pp"], catalog=self.catalog
+                    int(item["move_ref"].rsplit(":", 1)[1]),
+                    item["pp"],
+                    catalog=self.catalog,
                 )
                 and self.catalog.type_effectiveness(move.type_name, foe.types) > 0
             ):
@@ -781,6 +799,15 @@ def _all_supported_attacks_immune(prepared: PreparedRedBattleScenario) -> bool:
         and row[names.index("move.effect.fixed_damage")] == 0
         for row in relevant
     )
+
+
+def _active_party_slot(observation: Mapping[str, object]) -> int:
+    features = observation.get("features")
+    party = features.get("party") if isinstance(features, Mapping) else None
+    active = party.get("active_index") if isinstance(party, Mapping) else None
+    if type(active) is not int:
+        raise TrainerOutcomePolicyError("party inventory differs")
+    return active + 1
 
 
 def _has_living_reserve(observation: Mapping[str, object]) -> bool:

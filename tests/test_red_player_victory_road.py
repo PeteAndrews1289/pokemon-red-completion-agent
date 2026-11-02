@@ -7,8 +7,8 @@ import pytest
 from pokemon_red_completion import red_player_victory_road as s
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 from pokemon_red_completion.observation import MapId, OverworldMovementMode
-from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.player_option_story_unit import OptionStoryUnit
+from pokemon_red_completion.route_plan import RoutePlanningError
 
 
 def fixture(monkeypatch):
@@ -77,10 +77,20 @@ def fixture(monkeypatch):
 
     monkeypatch.setattr(s, "_field_ready", lambda _: state.ready)
     monkeypatch.setattr(s, "verify_rom_bytes", lambda _: None)
-    monkeypatch.setattr(s, "Gen1TraversalObserver", lambda *a, **k: N(observe=lambda: N(
-        ready=True, interruption=None, mode="land", map_id=raw.map_id,
-        at=(raw.player_y, raw.player_x), last_outside_map=None,
-    )))
+    monkeypatch.setattr(
+        s,
+        "Gen1TraversalObserver",
+        lambda *a, **k: N(
+            observe=lambda: N(
+                ready=True,
+                interruption=None,
+                mode="land",
+                map_id=raw.map_id,
+                at=(raw.player_y, raw.player_x),
+                last_outside_map=None,
+            )
+        ),
+    )
     monkeypatch.setattr(s, "Gen1TrainerSightProjector", lambda *a, **k: object())
     return rt, actions, Route(World()), raw, state, calls
 
@@ -231,7 +241,8 @@ def fly_fixture(monkeypatch):
 
 @pytest.mark.parametrize("rival_defeated", [False, True])
 def test_earned_fly_is_zero_input_then_shortens_only_the_selected_rival_approach(
-    monkeypatch, rival_defeated,
+    monkeypatch,
+    rival_defeated,
 ):
     rt, actions, route, raw, state, calls = fly_fixture(monkeypatch)
     if rival_defeated:
@@ -259,7 +270,9 @@ def test_earned_fly_is_zero_input_then_shortens_only_the_selected_rival_approach
 @pytest.mark.parametrize("fault", ["map", "cash", "bag", "level"])
 @pytest.mark.parametrize("rival_defeated", [False, True])
 def test_fly_approach_keeps_native_landing_and_resource_verification(
-    monkeypatch, fault, rival_defeated,
+    monkeypatch,
+    fault,
+    rival_defeated,
 ):
     rt, actions, route, raw, state, _ = fly_fixture(monkeypatch)
     if rival_defeated:
@@ -272,13 +285,27 @@ def test_fly_approach_keeps_native_landing_and_resource_verification(
         binding.execute()
 
 
-@pytest.mark.parametrize("fault", [
-    "no_holder", "holder_fainted", "surfing", "dialogue", "pending", "fly_menu",
-    "unvisited", "landing_blocked", "onward_blocked", "shorter_walk", "already_viridian",
-])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "no_holder",
+        "holder_fainted",
+        "surfing",
+        "dialogue",
+        "pending",
+        "fly_menu",
+        "unvisited",
+        "landing_blocked",
+        "onward_blocked",
+        "shorter_walk",
+        "already_viridian",
+    ],
+)
 @pytest.mark.parametrize("rival_defeated", [False, True])
 def test_unavailable_or_unhelpful_flight_retains_the_existing_walk(
-    monkeypatch, fault, rival_defeated,
+    monkeypatch,
+    fault,
+    rival_defeated,
 ):
     rt, actions, route, raw, state, calls = fly_fixture(monkeypatch)
     if rival_defeated:
@@ -314,8 +341,21 @@ def test_unavailable_or_unhelpful_flight_retains_the_existing_walk(
     assert binding.binding_ref.startswith("pokemon.red:victory-road:" + phase + ":")
 
 
-@pytest.mark.parametrize("fault", [None, "blocked", "cross_map", "water_quote", "water_after",
-                                   "map", "cash", "bag", "level", "ready"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "blocked",
+        "cross_map",
+        "water_quote",
+        "water_after",
+        "map",
+        "cash",
+        "bag",
+        "level",
+        "ready",
+    ],
+)
 def test_selected_return_lands_normally_before_the_walking_only_flight(monkeypatch, fault):
     rt, actions, route, raw, state, calls = fixture(monkeypatch)
     raw.map_id, raw.player_y, raw.player_x = int(MapId.ROUTE_7), 10, 18
@@ -324,8 +364,9 @@ def test_selected_return_lands_normally_before_the_walking_only_flight(monkeypat
     state.fault = fault
     rt.reader.read_fly_destinations = lambda: (int(MapId.VIRIDIAN_CITY),)
     rt.reader.read_overworld_movement_mode = lambda: (
-        OverworldMovementMode.WALKING if state.payload == b"terminal"
-        and fault != "water_after" else OverworldMovementMode.SURFING
+        OverworldMovementMode.WALKING
+        if state.payload == b"terminal" and fault != "water_after"
+        else OverworldMovementMode.SURFING
     )
     shore = (11, 18)
     edge = N(target=shore, kind="water_exit", required_mode="water", result_mode="land")
@@ -337,13 +378,26 @@ def test_selected_return_lands_normally_before_the_walking_only_flight(monkeypat
             assert target == raw.map_id and goal_at == shore
             if fault == "blocked":
                 raise RoutePlanningError("no native shore route")
-            return N(cost=1, terminal_mode="water" if fault == "water_quote" else "land",
-                     steps=(N(source_map=raw.map_id,
-                              expected_map=0 if fault == "cross_map" else raw.map_id),))
+            return N(
+                cost=1,
+                terminal_mode="water" if fault == "water_quote" else "land",
+                steps=(
+                    N(
+                        source_map=raw.map_id,
+                        expected_map=0 if fault == "cross_map" else raw.map_id,
+                    ),
+                ),
+            )
 
     start = N(mode="water", ready=True, interruption=None, at=(10, 18))
     result = s._rival_land_before_fly_option(
-        rt, actions, route, world=World(), start=start, record=None, objective_ref=s.OBJECTIVE,
+        rt,
+        actions,
+        route,
+        world=World(),
+        start=start,
+        record=None,
+        objective_ref=s.OBJECTIVE,
     )
     assert not calls and actions.actions_executed == 0
     if fault in {"blocked", "cross_map", "water_quote"}:
@@ -438,7 +492,12 @@ def test_completed_crossing_exposes_only_unfinished_league_access(monkeypatch, o
     rt.adapter.graph.available_objectives = lambda _: (N(id=objective_ref),)
     rt.adapter.graph.completed_ids = lambda _: (s.OBJECTIVE,)
     binding, _ = s.victory_road_story_option(
-        rt, actions, None, route=route, battler=object(), preparation_plan=object(),
+        rt,
+        actions,
+        None,
+        route=route,
+        battler=object(),
+        preparation_plan=object(),
         access_objective_ref=objective_ref,
     )
     assert not calls and actions.actions_executed == 0
@@ -459,14 +518,22 @@ def test_league_access_does_not_reopen_or_skip_native_gates(monkeypatch, fault):
         events[1318 // 8] |= 1 << (1318 % 8)
     raw.event_flags = bytes(events)
     ref = "defeat_lorelei" if fault != "unrelated" else "help_bill"
-    rt.adapter.graph.available_objectives = (
-        lambda _: () if fault == "goal_completed" else (N(id=ref),)
+    rt.adapter.graph.available_objectives = lambda _: (
+        () if fault == "goal_completed" else (N(id=ref),)
     )
     rt.adapter.graph.completed_ids = lambda _: () if fault == "cross_unfinished" else (s.OBJECTIVE,)
-    assert s.victory_road_story_option(
-        rt, actions, None, route=route, battler=object(), preparation_plan=object(),
-        access_objective_ref=ref,
-    ) is None
+    assert (
+        s.victory_road_story_option(
+            rt,
+            actions,
+            None,
+            route=route,
+            battler=object(),
+            preparation_plan=object(),
+            access_objective_ref=ref,
+        )
+        is None
+    )
     assert not calls and actions.actions_executed == 0
 
 
@@ -475,94 +542,127 @@ def test_access_arrival_at_indigo_never_latches_a_league_victory(monkeypatch):
     raw.map_id = int(MapId.INDIGO_PLATEAU)
     monkeypatch.setattr(s, "semantic_facts", lambda _: pytest.fail("access cannot complete quests"))
     binding, _ = s._mechanics_option(
-        rt, actions, phase="reach-indigo", operation=lambda: {}, valid=lambda _: True,
+        rt,
+        actions,
+        phase="reach-indigo",
+        operation=lambda: {},
+        valid=lambda _: True,
         objective_ref="defeat_lorelei",
     )
     report = binding.execute()
     assert report.evidence["objective_completed"] is False
     assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
     with pytest.raises(ValueError, match="cannot complete"):
-        s._mechanics_option(rt, actions, phase="bad", operation=lambda: {}, valid=lambda _: True,
-                            objective_ref="defeat_lorelei", completes_objective=True)
+        s._mechanics_option(
+            rt,
+            actions,
+            phase="bad",
+            operation=lambda: {},
+            valid=lambda _: True,
+            objective_ref="defeat_lorelei",
+            completes_objective=True,
+        )
 
 
 def indigo_fly_fixture(monkeypatch):
-    rt,actions,route,raw,state,calls=fly_fixture(monkeypatch)
-    town=int(MapId.INDIGO_PLATEAU)
-    landing=(6,8)
-    state.destinations=(town,)
+    rt, actions, route, raw, state, calls = fly_fixture(monkeypatch)
+    town = int(MapId.INDIGO_PLATEAU)
+    landing = (6, 8)
+    state.destinations = (town,)
 
     class World(type(route.route_world)):
         @property
         def local_graphs(self):
-            return {town:N(edges={landing:{}})}
+            return {town: N(edges={landing: {}})}
 
         @property
         def object_blockers(self):
-            return {town:{landing} if state.landing_blocked else set()}
+            return {town: {landing} if state.landing_blocked else set()}
 
-        def plan_feasible_to_map(self,*a,**k):
+        def plan_feasible_to_map(self, *a, **k):
             pytest.fail("an earned direct Indigo flight does not replay Victory Road")
 
     class Port:
-        def __init__(self,delegate,reader,memory):
+        def __init__(self, delegate, reader, memory):
             assert delegate.delegate is actions and reader is rt.reader
 
-        def execute(self,action):
+        def execute(self, action):
             assert action.value == "fly:indigo_plateau"
             calls.append(action.value)
-            raw.map_id=town
-            raw.player_y,raw.player_x=landing
+            raw.map_id = town
+            raw.player_y, raw.player_x = landing
             if state.fault == "cash":
-                raw.player_money-=1
-            actions.actions_executed+=1
-            rt.emulator.frame_count+=12
-            state.payload=b"indigo"
-            return {"destination_map":town,"actions":1}
+                raw.player_money -= 1
+            actions.actions_executed += 1
+            rt.emulator.frame_count += 12
+            state.payload = b"indigo"
+            return {"destination_map": town, "actions": 1}
 
-    route.route_world=World()
-    monkeypatch.setattr(s,"Gen1FieldMovePort",Port)
-    monkeypatch.setattr(s,"red_fly_landings",lambda _:((town,landing),))
-    return rt,actions,route,raw,state,calls
+    route.route_world = World()
+    monkeypatch.setattr(s, "Gen1FieldMovePort", Port)
+    monkeypatch.setattr(s, "red_fly_landings", lambda _: ((town, landing),))
+    return rt, actions, route, raw, state, calls
 
 
-@pytest.mark.parametrize("fault", [None,"unvisited","surfing","pending","dialogue",
-                                  "no_badge","blocked_landing","cash_mutation"])
-def test_earned_indigo_return_is_native_guarded_navigation_not_league_credit(monkeypatch,fault):
-    rt,actions,route,raw,state,calls=indigo_fly_fixture(monkeypatch)
+@pytest.mark.parametrize(
+    "fault",
+    [
+        None,
+        "unvisited",
+        "surfing",
+        "pending",
+        "dialogue",
+        "no_badge",
+        "blocked_landing",
+        "cash_mutation",
+    ],
+)
+def test_earned_indigo_return_is_native_guarded_navigation_not_league_credit(monkeypatch, fault):
+    rt, actions, route, raw, state, calls = indigo_fly_fixture(monkeypatch)
     if fault == "unvisited":
-        state.destinations=()
+        state.destinations = ()
     if fault == "surfing":
-        state.mode=OverworldMovementMode.SURFING
+        state.mode = OverworldMovementMode.SURFING
     if fault == "pending":
-        state.pending=(224,5)
+        state.pending = (224, 5)
     if fault == "dialogue":
-        state.dialogue=True
+        state.dialogue = True
     if fault == "no_badge":
-        raw.badge_bits=0
+        raw.badge_bits = 0
     if fault == "blocked_landing":
-        state.landing_blocked=True
+        state.landing_blocked = True
     if fault == "cash_mutation":
-        state.fault="cash"
+        state.fault = "cash"
     from dataclasses import replace
-    observer=s.Gen1TraversalObserver(rt.reader).observe()
+
+    observer = s.Gen1TraversalObserver(rt.reader).observe()
     if fault == "surfing":
-        observer=replace(observer,mode="water")
-    row=s._rival_fly_approach_option(rt,actions,route,world=route.route_world,start=observer,
-        walking_plan=None,record=None,objective_ref="defeat_lorelei",phase="indigo-return-fly",
-        landing_town=MapId.INDIGO_PLATEAU,onward_destination=MapId.INDIGO_PLATEAU)
+        observer = replace(observer, mode="water")
+    row = s._rival_fly_approach_option(
+        rt,
+        actions,
+        route,
+        world=route.route_world,
+        start=observer,
+        walking_plan=None,
+        record=None,
+        objective_ref="defeat_lorelei",
+        phase="indigo-return-fly",
+        landing_town=MapId.INDIGO_PLATEAU,
+        onward_destination=MapId.INDIGO_PLATEAU,
+    )
     assert not calls and actions.actions_executed == 0
-    if fault not in {None,"cash_mutation"}:
+    if fault not in {None, "cash_mutation"}:
         assert row is None
         return
-    binding,_=row
+    binding, _ = row
     assert binding.story_unit == OptionStoryUnit("movement", True)
     assert binding.story_approach_only is True
     if fault == "cash_mutation":
-        with pytest.raises(RuntimeError,match="did not prove its terminal"):
+        with pytest.raises(RuntimeError, match="did not prove its terminal"):
             binding.execute()
         return
-    report=binding.execute()
+    report = binding.execute()
     assert calls == ["fly:indigo_plateau"]
     assert report.evidence["phase"] == "indigo-return-fly"
     assert report.evidence["objective_completed"] is False
@@ -571,11 +671,18 @@ def test_earned_indigo_return_is_native_guarded_navigation_not_league_credit(mon
 
 
 def test_league_access_route_uses_earned_indigo_before_any_cave_quote(monkeypatch):
-    rt,actions,route,raw,state,calls=indigo_fly_fixture(monkeypatch)
-    row=s._route_option(rt,actions,route,world=route.route_world,phase="route22-return",
-        destination_map=int(MapId.ROUTE_22),objective_ref="defeat_lorelei")
+    rt, actions, route, raw, state, calls = indigo_fly_fixture(monkeypatch)
+    row = s._route_option(
+        rt,
+        actions,
+        route,
+        world=route.route_world,
+        phase="route22-return",
+        destination_map=int(MapId.ROUTE_22),
+        objective_ref="defeat_lorelei",
+    )
     assert row is not None and not calls and state.payload == b"source"
-    report=row[0].execute()
+    report = row[0].execute()
     assert raw.map_id == int(MapId.INDIGO_PLATEAU)
     assert report.evidence["objective_completed"] is False
 
@@ -583,21 +690,33 @@ def test_league_access_route_uses_earned_indigo_before_any_cave_quote(monkeypatc
 def test_indoor_league_return_quotes_only_its_real_departure_before_fly(monkeypatch):
     from pokemon_red_completion import red_indoor_departure_plan as indoor
 
-    rt,actions,route,raw,state,calls=indigo_fly_fixture(monkeypatch)
-    raw.map_id=int(MapId.FUCHSIA_POKECENTER)
-    outside=int(MapId.FUCHSIA_CITY)
-    target=(3,23)
-    quoted=[]
-    monkeypatch.setattr(indoor,"bounded_indoor_departure",lambda start,world:
-        quoted.append(world) or N(terminal_map=outside,terminal_at=target,cost=12))
-    row=s._route_option(rt,actions,route,world=route.route_world,phase="route22-return",
-        destination_map=int(MapId.ROUTE_22),objective_ref="defeat_lorelei")
-    assert len(quoted)==1 and not calls and state.payload == b"source"
+    rt, actions, route, raw, state, calls = indigo_fly_fixture(monkeypatch)
+    raw.map_id = int(MapId.FUCHSIA_POKECENTER)
+    outside = int(MapId.FUCHSIA_CITY)
+    target = (3, 23)
+    quoted = []
+    monkeypatch.setattr(
+        indoor,
+        "bounded_indoor_departure",
+        lambda start, world: (
+            quoted.append(world) or N(terminal_map=outside, terminal_at=target, cost=12)
+        ),
+    )
+    row = s._route_option(
+        rt,
+        actions,
+        route,
+        world=route.route_world,
+        phase="route22-return",
+        destination_map=int(MapId.ROUTE_22),
+        objective_ref="defeat_lorelei",
+    )
+    assert len(quoted) == 1 and not calls and state.payload == b"source"
     assert row[0].story_unit == OptionStoryUnit("movement", True)
     assert row[0].story_approach_only is True
-    report=row[0].execute()
-    assert calls == [(outside,target)]
-    assert raw.map_id == outside and (raw.player_y,raw.player_x) == target
+    report = row[0].execute()
+    assert calls == [(outside, target)]
+    assert raw.map_id == outside and (raw.player_y, raw.player_x) == target
     assert report.evidence["phase"] == "indigo-return-departure"
     assert report.evidence["objective_completed"] is False
     assert report.evidence["result"]["flight_executed"] is False
@@ -641,10 +760,12 @@ def test_earned_fly_does_not_require_an_unavailable_original_walk(monkeypatch, f
     if fault == "onward_blocked":
         state.onward_blocked = True
     old_quote = route.route_world.plan_feasible_to_map
+
     def quote(observed, target):
         if observed.map_id == int(MapId.ROUTE_7):
             raise RoutePlanningError("original walking route unavailable")
         return old_quote(observed, target)
+
     monkeypatch.setattr(route.route_world, "plan_feasible_to_map", quote)
     result = option(rt, actions, route)
     assert (result is not None) is (fault is None)
@@ -658,6 +779,7 @@ def test_earned_fly_does_not_require_an_unavailable_original_walk(monkeypatch, f
 
 def indoor_return_fixture(monkeypatch):
     from dataclasses import replace
+
     from pokemon_red_completion.actions import MacroActionKind
 
     rt, actions, route, raw, state, calls = fly_fixture(monkeypatch)
@@ -670,16 +792,36 @@ def indoor_return_fixture(monkeypatch):
     events[1318 // 8] |= 1 << (1318 % 8)
     raw.event_flags = bytes(events)
     original_start = s.Gen1TraversalObserver(rt.reader).observe()
-    monkeypatch.setattr(s, "Gen1TraversalObserver", lambda *a, **k: N(observe=lambda: replace(
-        original_start, map_id=raw.map_id, at=(raw.player_y, raw.player_x),
-        last_outside_map=int(MapId.FUCHSIA_CITY),
-    )))
-    step = N(source_map=int(MapId.FUCHSIA_POKECENTER), expected_map=int(MapId.FUCHSIA_CITY),
-             kind="warp", action_kind=MacroActionKind.MOVE, action="down",
-             source_mode="land", expected_mode="land")
-    departure = N(steps=(step,), terminal_map=int(MapId.FUCHSIA_CITY),
-                  terminal_at=(20, 19), terminal_mode="land", cost=12)
+    monkeypatch.setattr(
+        s,
+        "Gen1TraversalObserver",
+        lambda *a, **k: N(
+            observe=lambda: replace(
+                original_start,
+                map_id=raw.map_id,
+                at=(raw.player_y, raw.player_x),
+                last_outside_map=int(MapId.FUCHSIA_CITY),
+            )
+        ),
+    )
+    step = N(
+        source_map=int(MapId.FUCHSIA_POKECENTER),
+        expected_map=int(MapId.FUCHSIA_CITY),
+        kind="warp",
+        action_kind=MacroActionKind.MOVE,
+        action="down",
+        source_mode="land",
+        expected_mode="land",
+    )
+    departure = N(
+        steps=(step,),
+        terminal_map=int(MapId.FUCHSIA_CITY),
+        terminal_at=(20, 19),
+        terminal_mode="land",
+        cost=12,
+    )
     original_quote = route.route_world.plan_feasible_to_map
+
     def quote(start, target):
         if start.map_id == int(MapId.FUCHSIA_POKECENTER):
             if target == int(MapId.FUCHSIA_CITY) and not state.exit_blocked:
@@ -688,6 +830,7 @@ def indoor_return_fixture(monkeypatch):
                 return departure
             raise RoutePlanningError("no complete original walking route")
         return original_quote(start, target)
+
     monkeypatch.setattr(route.route_world, "plan_feasible_to_map", quote)
     return rt, actions, route, raw, state, calls
 
@@ -722,37 +865,86 @@ def test_unfinished_story_quotes_real_indoor_exit_then_reobserves_fly(monkeypatc
     assert next_binding.verify(next_report).status is GoalDecisionOutcome.SUCCEEDED
 
 
-@pytest.mark.parametrize("fault", ["no_holder", "fainted_holder", "unvisited", "onward_blocked",
-    "exit_blocked", "exit_invalid", "completed", "unready", "dialogue", "pending", "fly_menu", "surfing"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "no_holder",
+        "fainted_holder",
+        "unvisited",
+        "onward_blocked",
+        "exit_blocked",
+        "exit_invalid",
+        "completed",
+        "unready",
+        "dialogue",
+        "pending",
+        "fly_menu",
+        "surfing",
+    ],
+)
 def test_indoor_story_exit_requires_actual_exit_and_earned_onward_transport(monkeypatch, fault):
     rt, actions, route, raw, state, calls = indoor_return_fixture(monkeypatch)
-    if fault == "no_holder": raw.party_moves = ((33, 39, 57, 0), (29, 133, 156, 0))
-    if fault == "fainted_holder": raw.party_hp = (0, 144)
-    if fault == "unvisited": state.destinations = ()
-    if fault in {"onward_blocked", "exit_blocked", "exit_invalid", "dialogue"}: setattr(state, fault, True)
-    if fault == "completed": state.legal = False
-    if fault == "unready": state.ready = False
-    if fault in {"pending", "fly_menu"}: setattr(state, fault, object())
-    if fault == "surfing": state.mode = OverworldMovementMode.SURFING
+    if fault == "no_holder":
+        raw.party_moves = ((33, 39, 57, 0), (29, 133, 156, 0))
+    if fault == "fainted_holder":
+        raw.party_hp = (0, 144)
+    if fault == "unvisited":
+        state.destinations = ()
+    if fault in {"onward_blocked", "exit_blocked", "exit_invalid", "dialogue"}:
+        setattr(state, fault, True)
+    if fault == "completed":
+        state.legal = False
+    if fault == "unready":
+        state.ready = False
+    if fault in {"pending", "fly_menu"}:
+        setattr(state, fault, object())
+    if fault == "surfing":
+        state.mode = OverworldMovementMode.SURFING
     assert option(rt, actions, route) is None
     assert not calls and actions.actions_executed == 0 and state.payload == b"source"
 
 
-@pytest.mark.parametrize("fault", ["map", "cash", "bag", "level", "ready", "hp", "pp", "status", "moves", "mode", "pending", "fly_menu", "dialogue"])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "map",
+        "cash",
+        "bag",
+        "level",
+        "ready",
+        "hp",
+        "pp",
+        "status",
+        "moves",
+        "mode",
+        "pending",
+        "fly_menu",
+        "dialogue",
+    ],
+)
 def test_indoor_story_exit_keeps_source_terminal_and_party_guards(monkeypatch, fault):
     rt, actions, route, raw, state, calls = indoor_return_fixture(monkeypatch)
     binding, _ = option(rt, actions, route)
     state.fault = fault
     old_call = type(route).__call__
+
     def travel(self, *args):
         old_call(self, *args)
-        if fault == "hp": raw.party_hp = (148, 144)
-        if fault == "pp": raw.party_pp = ((14, 35, 30, 15), (15, 20, 10, 0))
-        if fault == "status": raw.party_status = (1, 0)
-        if fault == "moves": raw.party_moves = ((33, 19, 39, 57), (29, 133, 156, 0))
-        if fault == "mode": state.mode = OverworldMovementMode.SURFING
-        if fault in {"pending", "fly_menu"}: setattr(state, fault, object())
-        if fault == "dialogue": state.dialogue = True
+        if fault == "hp":
+            raw.party_hp = (148, 144)
+        if fault == "pp":
+            raw.party_pp = ((14, 35, 30, 15), (15, 20, 10, 0))
+        if fault == "status":
+            raw.party_status = (1, 0)
+        if fault == "moves":
+            raw.party_moves = ((33, 19, 39, 57), (29, 133, 156, 0))
+        if fault == "mode":
+            state.mode = OverworldMovementMode.SURFING
+        if fault in {"pending", "fly_menu"}:
+            setattr(state, fault, object())
+        if fault == "dialogue":
+            state.dialogue = True
+
     monkeypatch.setattr(type(route), "__call__", travel)
     with pytest.raises(RuntimeError, match="terminal"):
         binding.execute()
@@ -767,13 +959,17 @@ def test_indoor_story_departure_rejects_stale_source_before_input(monkeypatch):
     assert not calls and actions.actions_executed == 0
 
 
-@pytest.mark.parametrize("phase", ["badge-corridor", "teach-strength", "first-switch",
-                                    "follow-dropped-boulder"])
+@pytest.mark.parametrize(
+    "phase", ["badge-corridor", "teach-strength", "first-switch", "follow-dropped-boulder"]
+)
 def test_unclassified_mechanics_remain_unknown_before_input(monkeypatch, phase):
     rt, actions, _, _, state, calls = fixture(monkeypatch)
     binding, _ = s._mechanics_option(
-        rt, actions, phase=phase,
-        operation=lambda: pytest.fail("quotation executed a mechanic"), valid=lambda _: True,
+        rt,
+        actions,
+        phase=phase,
+        operation=lambda: pytest.fail("quotation executed a mechanic"),
+        valid=lambda _: True,
     )
     assert binding.story_unit is None
     assert binding.story_approach_only is False
@@ -784,16 +980,27 @@ def test_unclassified_mechanics_remain_unknown_before_input(monkeypatch, phase):
 def test_certified_movement_scope_cannot_disagree_with_completion(monkeypatch, completes, further):
     rt, actions, _, _, state, calls = fixture(monkeypatch)
     with pytest.raises(ValueError, match="completion scope differs"):
-        s._mechanics_option(rt, actions, phase="observed-route",
-            operation=lambda: pytest.fail("bad scope executed"), valid=lambda _: True,
-            completes_objective=completes, story_unit=OptionStoryUnit("movement", further))
+        s._mechanics_option(
+            rt,
+            actions,
+            phase="observed-route",
+            operation=lambda: pytest.fail("bad scope executed"),
+            valid=lambda _: True,
+            completes_objective=completes,
+            story_unit=OptionStoryUnit("movement", further),
+        )
     assert state.payload == b"source" and actions.actions_executed == 0 and not calls
 
 
 def test_certified_mechanics_refuse_untyped_descriptor_before_input(monkeypatch):
     rt, actions, _, _, state, calls = fixture(monkeypatch)
     with pytest.raises(TypeError, match="must be typed"):
-        s._mechanics_option(rt, actions, phase="observed-route",
-            operation=lambda: pytest.fail("bad descriptor executed"), valid=lambda _: True,
-            story_unit={"mode": "movement", "requires_further_selected_unit": True})
+        s._mechanics_option(
+            rt,
+            actions,
+            phase="observed-route",
+            operation=lambda: pytest.fail("bad descriptor executed"),
+            valid=lambda _: True,
+            story_unit={"mode": "movement", "requires_further_selected_unit": True},
+        )
     assert state.payload == b"source" and actions.actions_executed == 0 and not calls

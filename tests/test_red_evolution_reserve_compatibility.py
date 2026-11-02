@@ -11,6 +11,34 @@ from pokemon_red_completion.red_team_training import run_red_team_balancing
 def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
     node = ast.parse(textwrap.dedent(inspect.getsource(run_red_team_balancing))).body[0]
     assert isinstance(node, ast.FunctionDef)
+
+    # The separately authenticated TypedDict extension changes only the
+    # construction spelling of these two optional dictionaries.
+    class RemoveTypedSinkOptions(ast.NodeTransformer):
+        calls = 0
+
+        def visit_Call(self, current):
+            if isinstance(current.func, ast.Name) and current.func.id == "_MoveDecisionSinkOptions":
+                assert not current.args and len(current.keywords) in (0, 1)
+                assert all(
+                    value.arg == "move_decision_sink"
+                    and isinstance(value.value, ast.Name)
+                    and value.value.id == "move_decision_sink"
+                    for value in current.keywords
+                )
+                self.calls += 1
+                return ast.copy_location(
+                    ast.Dict(
+                        keys=[ast.Constant(value.arg) for value in current.keywords],
+                        values=[value.value for value in current.keywords],
+                    ),
+                    current,
+                )
+            return self.generic_visit(current)
+
+    typed_sink = RemoveTypedSinkOptions()
+    node = typed_sink.visit(node)
+    assert typed_sink.calls == 2
     # Only these two default-None branches and their keyword are new. Erasing
     # them must reconstruct the exact immediate, already-reviewed predecessor.
     helper_index = [arg.arg for arg in node.args.kwonlyargs].index("collection_helper_xp_guard")
@@ -23,9 +51,10 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
         branches = 0
 
         def visit_If(self, current):
-            if (ast.unparse(current.test) == "collection_helper_xp_guard is not None"
-                    or (isinstance(current.test, ast.BoolOp)
-                        and ast.unparse(current.test.values[0]) == "collection_helper_xp_guard is not None")):
+            if ast.unparse(current.test) == "collection_helper_xp_guard is not None" or (
+                isinstance(current.test, ast.BoolOp)
+                and ast.unparse(current.test.values[0]) == "collection_helper_xp_guard is not None"
+            ):
                 assert not current.orelse
                 self.branches += 1
                 return None
@@ -48,9 +77,12 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
         validations = 0
 
         def visit_If(self, current):
-            if any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
-                   and n.func.id == "evolution_reserve_requested"
-                   for n in ast.walk(current.test)):
+            if any(
+                isinstance(n, ast.Call)
+                and isinstance(n.func, ast.Name)
+                and n.func.id == "evolution_reserve_requested"
+                for n in ast.walk(current.test)
+            ):
                 assert isinstance(current.test, ast.BoolOp)
                 assert isinstance(current.test.op, ast.And)
                 assert ast.dump(current.test.values[0]) == ast.dump(
@@ -61,9 +93,7 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
             return self.generic_visit(current)
 
         def visit_BoolOp(self, current):
-            expected = ast.dump(ast.parse(
-                "evolution_stop_requested is not None", mode="eval"
-            ).body)
+            expected = ast.dump(ast.parse("evolution_stop_requested is not None", mode="eval").body)
             kept = [value for value in current.values if ast.dump(value) != expected]
             if len(kept) != len(current.values):
                 assert isinstance(current.op, ast.Or)
@@ -74,6 +104,7 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
     remove = RemoveDisabledReserve()
     normalized = remove.visit(node)
     assert (remove.branches, remove.validations) == (1, 1)
+
     # Normalize only the two disclosed collection-mode additions. The entire
     # remaining historical function must still match the reviewed predecessor.
     class RemoveCollectionEfficiency(ast.NodeTransformer):
@@ -81,15 +112,17 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
         observational_calls = 0
 
         def visit_Assign(self, current):
-            if (len(current.targets) == 1
-                    and isinstance(current.targets[0], ast.Name)
-                    and current.targets[0].id == "target_band"
-                    and isinstance(current.value, ast.Call)
-                    and isinstance(current.value.func, ast.Name)
-                    and current.value.func.id == "max"
-                    and len(current.value.args) == 1
-                    and isinstance(current.value.args[0], ast.Name)
-                    and current.value.args[0].id == "supported"):
+            if (
+                len(current.targets) == 1
+                and isinstance(current.targets[0], ast.Name)
+                and current.targets[0].id == "target_band"
+                and isinstance(current.value, ast.Call)
+                and isinstance(current.value.func, ast.Name)
+                and current.value.func.id == "max"
+                and len(current.value.args) == 1
+                and isinstance(current.value.args[0], ast.Name)
+                and current.value.args[0].id == "supported"
+            ):
                 self.venue_changes += 1
                 current.value.func.id = "min"
             return self.generic_visit(current)

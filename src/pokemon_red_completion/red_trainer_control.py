@@ -25,12 +25,12 @@ from .battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from .observation import PokemonRedStateReader, RawGameState
+from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
 from .red_goal_context import RedGoalContextEmulator
 from .red_party import party_observation_from_raw
 from .red_trainer_damage import incoming_damage_bounds
 from .red_trainer_healing import bag_after_full_restores, use_active_full_restore
 from .red_trainer_party import trainer_entry_candidates, trainer_matchup_candidates
-from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
 
 
 class RedTrainerControlError(BattleRuntimeError):
@@ -74,21 +74,33 @@ class RedTrainerPartyController:
         """
         slot = raw.active_party_index
         if (
-            not self.maximum_full_restores or self.heals_claimed >= self.maximum_full_restores
-            or type(slot) is not int or raw.party_hp is None or raw.party_max_hp is None
-            or raw.party_status is None or not 0 <= slot < len(raw.party_hp)
-            or not all(hp > 0 for hp in raw.party_hp) or raw.battle_state != 2
-            or raw.enemy_species_id is None or raw.enemy_level is None
+            not self.maximum_full_restores
+            or self.heals_claimed >= self.maximum_full_restores
+            or type(slot) is not int
+            or raw.party_hp is None
+            or raw.party_max_hp is None
+            or raw.party_status is None
+            or not 0 <= slot < len(raw.party_hp)
+            or not all(hp > 0 for hp in raw.party_hp)
+            or raw.battle_state != 2
+            or raw.enemy_species_id is None
+            or raw.enemy_level is None
             or dict(raw.bag_items or ()).get(16, 0) <= 0
             or (raw.party_hp[slot] * 2 >= raw.party_max_hp[slot] and not raw.party_status[slot])
         ):
             return None
-        restored = replace(raw, party_hp=tuple(
-            raw.party_max_hp[i] if i == slot else hp for i, hp in enumerate(raw.party_hp)
-        ), party_status=tuple(0 if i == slot else status
-                              for i, status in enumerate(raw.party_status)))
+        restored = replace(
+            raw,
+            party_hp=tuple(
+                raw.party_max_hp[i] if i == slot else hp for i, hp in enumerate(raw.party_hp)
+            ),
+            party_status=tuple(
+                0 if i == slot else status for i, status in enumerate(raw.party_status)
+            ),
+        )
         candidates = trainer_matchup_candidates(
-            party_observation_from_raw(restored), opponent_species=raw.enemy_species_id,
+            party_observation_from_raw(restored),
+            opponent_species=raw.enemy_species_id,
             opponent_level=raw.enemy_level,
         )
         if not any(candidate.party_slot == slot + 1 for candidate in candidates):
@@ -111,7 +123,9 @@ class RedTrainerPartyController:
         if heal_bound is not None:
             raise _HealRequest(heal_bound, raw)
         candidates = trainer_matchup_candidates(
-            party, opponent_species=raw.enemy_species_id, opponent_level=raw.enemy_level,
+            party,
+            opponent_species=raw.enemy_species_id,
+            opponent_level=raw.enemy_level,
         )
         active_slot = raw.active_party_index + 1
         active = next((c for c in candidates if c.party_slot == active_slot), None)
@@ -120,24 +134,37 @@ class RedTrainerPartyController:
         # A preparation match is not an entry qualification. Only screen when
         # a switch could be useful. A preferred switch with unknown incoming
         # mechanics must refuse, never interpret missing data as safe entry.
-        reserves = tuple(c for c in candidates if c.party_slot != active_slot and (
-            active is None or c.score - active.score >= 0.10
-        ))
+        reserves = tuple(
+            c
+            for c in candidates
+            if c.party_slot != active_slot and (active is None or c.score - active.score >= 0.10)
+        )
         if reserves and self._move_since_switch and len(self.switches) < self.maximum_switches:
             incoming = self.reader.read_trainer_entry_moves(raw)
             if incoming is None:
                 raise RedTrainerControlError("incoming trainer moves are unavailable")
-            trapping = any(move and RED_BATTLE_CATALOG.resolve_move(
-                pokemon_red_move_ref(move)).effect_flags == frozenset({"trapping"})
-                for move in incoming)
-            commitment = (incoming_damage_bounds(self.reader.read_trainer_damage_observation(raw))
-                if trapping else None)
+            trapping = any(
+                move
+                and RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move)).effect_flags
+                == frozenset({"trapping"})
+                for move in incoming
+            )
+            commitment = (
+                incoming_damage_bounds(self.reader.read_trainer_damage_observation(raw))
+                if trapping
+                else None
+            )
             reserves = trainer_entry_candidates(
-                party, reserves, incoming_moves=incoming, enemy_level=raw.enemy_level,
+                party,
+                reserves,
+                incoming_moves=incoming,
+                enemy_level=raw.enemy_level,
                 entry_speeds=self.reader.read_trainer_entry_speeds(raw)
-                if any(move in (12, 32, 90) for move in incoming) else None,
+                if any(move in (12, 32, 90) for move in incoming)
+                else None,
                 mirror_move_reset_qualified=self.reader.read_trainer_mirror_switch_ready(raw)
-                if 119 in incoming else False,
+                if 119 in incoming
+                else False,
                 incoming_commitment_bounds=commitment,
             )
             if not reserves and active is None:
@@ -162,9 +189,16 @@ class RedTrainerPartyController:
         return selected
 
     def run(
-        self, reader: BattleStateReader, executor: BattleActionExecutor,
-        move_slot_policy: MoveSlotPolicy, *, expected_map: int, intent: BattleIntent,
-        timing: BattleRuntimeTiming, label: str, consume_battle_start_schedule: bool,
+        self,
+        reader: BattleStateReader,
+        executor: BattleActionExecutor,
+        move_slot_policy: MoveSlotPolicy,
+        *,
+        expected_map: int,
+        intent: BattleIntent,
+        timing: BattleRuntimeTiming,
+        label: str,
+        consume_battle_start_schedule: bool,
         move_decision_guard: MoveDecisionGuard,
         battle_exit_guard: MoveDecisionGuard | None = None,
     ) -> RawGameState:
@@ -181,7 +215,8 @@ class RedTrainerPartyController:
             move_decision_guard(raw)
             expected_bag = (
                 bag_after_full_restores(before.bag_items or (), self.heals_claimed)
-                if self.maximum_full_restores else before.bag_items
+                if self.maximum_full_restores
+                else before.bag_items
             )
             if raw.bag_items != expected_bag:
                 raise RedTrainerControlError("trainer control cannot spend bag resources")
@@ -192,8 +227,14 @@ class RedTrainerPartyController:
         while True:
             try:
                 return run_adaptive_trainer_battle(
-                    reader, executor, policy, expected_map=expected_map, intent=intent,
-                    timing=timing, label=label, consume_battle_start_schedule=False,
+                    reader,
+                    executor,
+                    policy,
+                    expected_map=expected_map,
+                    intent=intent,
+                    timing=timing,
+                    label=label,
+                    consume_battle_start_schedule=False,
                     move_decision_guard=guard,
                     battle_exit_guard=battle_exit_guard,
                 )
@@ -208,7 +249,10 @@ class RedTrainerPartyController:
                         raise RedTrainerControlError("healing qualification changed") from error
                     self.heals_claimed += 1  # Claim before input; never refund a failed item.
                     use_active_full_restore(
-                        executor, self.reader, self.emulator, expected=current,
+                        executor,
+                        self.reader,
+                        self.emulator,
+                        expected=current,
                         incoming_bound=request.incoming_bound,
                     )
                     guard(reader.read())
@@ -230,7 +274,11 @@ class RedTrainerPartyController:
                 self.switches.append(slot)
                 self._move_since_switch = False
                 switch_active_battler(
-                    executor, self.reader, self.emulator, slot - 1,
-                    label="observed trainer matchup switch", wait_frames=180,
+                    executor,
+                    self.reader,
+                    self.emulator,
+                    slot - 1,
+                    label="observed trainer matchup switch",
+                    wait_frames=180,
                 )
                 guard(reader.read())

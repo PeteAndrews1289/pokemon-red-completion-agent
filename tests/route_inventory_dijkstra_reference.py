@@ -1,8 +1,21 @@
-"""Pinned pre-change Dijkstra oracle;source SHA8436080a65546154b0c657a95b8d61b9dad23ce0bc879a57eaf292214e86f168."""
+"""Pinned pre-change Dijkstra oracle;source \
+SHA8436080a65546154b0c657a95b8d61b9dad23ce0bc879a57eaf292214e86f168."""
+
 from __future__ import annotations
+
 import heapq
 from collections.abc import Collection, Mapping
-from pokemon_red_completion.local_router import LocalGraph,LocalGoal,LocalPath,LocalEdge,TraversalMode,TraversalState,Coordinate
+
+from pokemon_red_completion.local_router import (
+    Coordinate,
+    LocalEdge,
+    LocalGoal,
+    LocalGraph,
+    LocalPath,
+    TraversalMode,
+    TraversalState,
+)
+
 
 def reference_paths(
     graph: LocalGraph,
@@ -59,6 +72,7 @@ def reference_paths(
             )
             sequence += 1
     return found
+
 
 def _reconstruct(
     came_from: Mapping[TraversalState, tuple[TraversalState, LocalEdge]],

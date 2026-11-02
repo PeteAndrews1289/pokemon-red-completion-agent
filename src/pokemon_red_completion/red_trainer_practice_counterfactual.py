@@ -29,6 +29,11 @@ from pokemon_red_completion.red_trainer_practice_log import TrainerPracticeEvent
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 
+class _WildDiagnosticOptions(TypedDict, total=False):
+    wild_training: bool
+    train_wild_diagnostic: bool
+
+
 class TrainerPracticeCounterfactualError(ValueError):
     """A declared action or continuation policy crossed the TRAIN boundary."""
 
@@ -80,38 +85,54 @@ class TrainerPracticeCounterfactualSet:
             or self.train_wild_diagnostic is not True
             or self.train_wild_limits != (8, 32)
             or len(self.branches) != 2
-            or any(choice.action is None or choice.action.kind is not BattleActionKind.SWITCH
-                   for choice, _ in self.branches)
+            or any(
+                choice.action is None or choice.action.kind is not BattleActionKind.SWITCH
+                for choice, _ in self.branches
+            )
             or len({choice.semantic_ref for choice, _ in self.branches}) != 2
         ):
             raise TrainerPracticeCounterfactualError("switch-selection metadata differs")
         if self.train_wild_limits is not None and (
-            self.train_wild_diagnostic is not True or type(self.train_wild_limits) is not tuple
+            self.train_wild_diagnostic is not True
+            or type(self.train_wild_limits) is not tuple
             or len(self.train_wild_limits) != 2
             or any(type(value) is not int for value in self.train_wild_limits)
             or self.train_wild_limits != (8, 32)
-            or type(self.player_turn_horizon) is not int or self.player_turn_horizon != 8
+            or type(self.player_turn_horizon) is not int
+            or self.player_turn_horizon != 8
         ):
             raise TrainerPracticeCounterfactualError("explicit TRAIN wild limits metadata differs")
         return {
-            "schema": ("pokemon.red.wild-practice-counterfactual-set.v1" if self.train_wild_diagnostic
-                       else "pokemon.red.trainer-practice-counterfactual-set.v1"),
+            "schema": (
+                "pokemon.red.wild-practice-counterfactual-set.v1"
+                if self.train_wild_diagnostic
+                else "pokemon.red.trainer-practice-counterfactual-set.v1"
+            ),
             "capture_id": self.capture_id,
             "manifest_sha256": self.manifest_sha256,
             "root_lineage_id": self.root_lineage_id,
             "partition": "train",
-            **({"wild_training": True, "train_wild_diagnostic": True, "expected_battle_state": 1}
-               if self.train_wild_diagnostic else {}),
+            **(
+                {"wild_training": True, "train_wild_diagnostic": True, "expected_battle_state": 1}
+                if self.train_wild_diagnostic
+                else {}
+            ),
             "player_turn_horizon": self.player_turn_horizon,
             "branch_count": len(self.branches),
             "branches": [
                 {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()}
                 for choice, episode in self.branches
             ],
-            **({"train_wild_limits": {"player_turn_horizon": 8, "max_decisions": 32}}
-               if self.train_wild_limits is not None else {}),
-            **({"train_wild_choice_scope": self.train_wild_choice_scope}
-               if self.train_wild_choice_scope is not None else {}),
+            **(
+                {"train_wild_limits": {"player_turn_horizon": 8, "max_decisions": 32}}
+                if self.train_wild_limits is not None
+                else {}
+            ),
+            **(
+                {"train_wild_choice_scope": self.train_wild_choice_scope}
+                if self.train_wild_choice_scope is not None
+                else {}
+            ),
             "new_independent_upstream_roots": 0,
             "teacher_choice_targets": 0,
             "model_updates": 0,
@@ -237,7 +258,8 @@ def collect_trainer_practice_counterfactuals(
     ):
         raise TrainerPracticeCounterfactualError("counterfactual branch inventory differs")
     if train_wild_limits is not None and (
-        not train_wild_diagnostic or type(train_wild_limits) is not tuple
+        not train_wild_diagnostic
+        or type(train_wild_limits) is not tuple
         or len(train_wild_limits) != 2
         or any(type(value) is not int for value in train_wild_limits)
         or train_wild_limits != (8, 32)
@@ -246,21 +268,30 @@ def collect_trainer_practice_counterfactuals(
     if train_wild_choice_scope is not None and (
         type(train_wild_choice_scope) is not str
         or train_wild_choice_scope != "switch_selection"
-        or train_wild_diagnostic is not True or train_wild_limits != (8, 32)
+        or train_wild_diagnostic is not True
+        or train_wild_limits != (8, 32)
     ):
-        raise TrainerPracticeCounterfactualError("switch-selection scope requires explicit TRAIN wild (8, 32)")
+        raise TrainerPracticeCounterfactualError(
+            "switch-selection scope requires explicit TRAIN wild (8, 32)"
+        )
     wild_horizon, wild_decisions = (2, 8) if train_wild_limits is None else train_wild_limits
     if train_wild_diagnostic and (
-        allow_forced_struggle or len(first_choices) != 2 or player_turn_horizon != wild_horizon
+        allow_forced_struggle
+        or len(first_choices) != 2
+        or player_turn_horizon != wild_horizon
         or max_decisions > wild_decisions
         or (train_wild_limits is not None and max_decisions != wild_decisions)
         or any(c.action is None for c in first_choices)
-        or {c.action.kind for c in first_choices} != (
-            {BattleActionKind.SWITCH} if train_wild_choice_scope == "switch_selection"
+        or {c.action.kind for c in first_choices if c.action is not None}
+        != (
+            {BattleActionKind.SWITCH}
+            if train_wild_choice_scope == "switch_selection"
             else {BattleActionKind.SELECT_MOVE, BattleActionKind.SWITCH}
         )
     ):
-        raise TrainerPracticeCounterfactualError("wild diagnostic requires bounded attack/switch contrast")
+        raise TrainerPracticeCounterfactualError(
+            "wild diagnostic requires bounded attack/switch contrast"
+        )
     branches: list[tuple[TrainerPracticeFirstChoice, RedTrainerPracticeEpisode]] = []
     for index, choice in enumerate(first_choices):
         continuation = continuation_policy_factory()
@@ -284,8 +315,11 @@ def collect_trainer_practice_counterfactuals(
                 opening_idle_frames=opening_idle_frames,
                 action_executor=action_executor,
                 decision_guard=decision_guard,
-                **({"wild_training": True, "train_wild_diagnostic": True}
-                   if train_wild_diagnostic else {}),
+                **(
+                    _WildDiagnosticOptions(wild_training=True, train_wild_diagnostic=True)
+                    if train_wild_diagnostic
+                    else _WildDiagnosticOptions()
+                ),
                 **(
                     _StruggleOptions(allow_forced_struggle=True)
                     if allow_forced_struggle

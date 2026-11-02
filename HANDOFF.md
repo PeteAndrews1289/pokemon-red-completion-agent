@@ -4,7 +4,9 @@
 [Closed session](docs/work-sessions/2026-10-30-forest-decision.md).
 
 November 2 [source-publication validation](docs/work-sessions/2026-11-02-publication.md)
-adds no native activity. The next player work remains below.
+adds no native activity. Pete then authorized the [CI repair](docs/work-sessions/2026-11-02-ci-remediation.md)
+for that merge; public-checkout lint, typing and focused repairs pass.
+Required hosted CI must pass before merge. All games remain paused; next player work is below.
 
 Read current_forest_decision_block for exact results, costs, package and released
 writer proof. This block ends15:59UTC October30; native cutoff15:47UTC was retained.
@@ -49,7 +51,8 @@ Next bounded work order:
 6. If the model changes useful choices, test native behavior, then all three gates
    on one unchanged candidate. Short tail success cannot substitute for these.
 
-Allow3hours; audit2hours; reassess15minutes or2equivalent failures. Stop unqualified
+Default work blocks allow up to 3 hours; audit after 2 hours and reassess after
+15 minutes or 2 equivalent failures. Stop unqualified
 native work, preserve exact terminal, and pivot to the smallest falsifier. No new
 planner, opening replay, DEVELOPMENT fitting, copied gains or parallel actor.
 Forecast6to12engineering hours for currently identified work, then roughly2to3hours

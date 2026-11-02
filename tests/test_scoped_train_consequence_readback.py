@@ -7,22 +7,26 @@ calls before its one completed story loss. No private path/data is embedded.
 Without this opt-in, the twelve native-evidence readback tests are skipped.
 All reads are pure; mutations below affect in-memory file reads only.
 """
-from copy import deepcopy
-from dataclasses import replace
-from pathlib import Path
+
 import json
 import os
 import unittest
+from copy import deepcopy
+from dataclasses import replace
+from pathlib import Path
 from unittest.mock import patch
 
 from pokemon_red_completion import red_challenge_consequence as module
 from pokemon_red_completion.private_artifacts import (
-    gitless_fast_path_worktree_probe, open_private_root,
+    gitless_fast_path_worktree_probe,
+    open_private_root,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_story_battle import StoryTrainerContract
 
-read = lambda path: json.loads(path.read_bytes())
+
+def read(path):
+    return json.loads(path.read_bytes())
 
 
 def _arguments(case):
@@ -31,7 +35,8 @@ def _arguments(case):
     declaration = read(case / "scoped-battles/declaration.json")
     targets = read(case / "EXACT-TRAIN-BATTLE-SCOPES.json")
     document = next(
-        dict(item) for item in targets["contracts"]
+        dict(item)
+        for item in targets["contracts"]
         if item["map_id"] == plan["spec"]["challenge_target"]["map_id"]
         and [item["defeated_event"]] == plan["spec"]["challenge_target"]["events"]
     )
@@ -39,8 +44,10 @@ def _arguments(case):
     document["victory_items"] = tuple(tuple(item) for item in document["victory_items"])
     package = Path(read(case / "PLAN.json")["package"]).parent
     store = open_private_root(
-        case / "journal", repository_root=package / "checkout",
-        allow_same_device=True, git_worktree_probe=gitless_fast_path_worktree_probe,
+        case / "journal",
+        repository_root=package / "checkout",
+        allow_same_device=True,
+        git_worktree_probe=gitless_fast_path_worktree_probe,
         native_input_storage="flat_sealed_v1",
     )
     return store, dict(
@@ -67,10 +74,7 @@ class _StoreProxy:
 
     def find_sealed_record(self, record_id, **kwargs):
         record = self.store.find_sealed_record(record_id, **kwargs)
-        return (
-            _RecordProxy(record, self.transform)
-            if record_id == self.result_id else record
-        )
+        return _RecordProxy(record, self.transform) if record_id == self.result_id else record
 
 
 class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
@@ -111,7 +115,8 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
         declaration = read(self.case / "scoped-battles/declaration.json")
         contract = self.kwargs["expected_story_contract"]
         index = next(
-            actor["index"] for actor in declaration["actors"]
+            actor["index"]
+            for actor in declaration["actors"]
             if actor["scope"] == "story"
             and actor["contract"]["defeated_event"] == contract.defeated_event
             and actor["contract"]["map_id"] == contract.map_id
@@ -151,7 +156,9 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
 
         original = self.load()
         self.store = _StoreProxy(
-            self.store, "rcc-result-" + self.kwargs["result_sha256"], transform,
+            self.store,
+            "rcc-result-" + self.kwargs["result_sha256"],
+            transform,
         )
         changed = self.load()
         self.assertEqual(original.episode_sha256, changed.episode_sha256)
@@ -160,7 +167,8 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
     def test_different_typed_contract_refused(self):
         contract = self.kwargs["expected_story_contract"]
         self.kwargs["expected_story_contract"] = replace(
-            contract, defeated_event=contract.defeated_event + 1,
+            contract,
+            defeated_event=contract.defeated_event + 1,
         )
         with self.assertRaises(ValueError):
             self.load()
@@ -180,17 +188,21 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
         changed = read(path)
         changed["source_state_sha256"] = "0" * 64
         self.kwargs["expected_scoped_declaration_sha256"] = canonical_sha256(changed)
-        with self.mutate_file(path, lambda value: value.update(source_state_sha256="0" * 64)):
-            with self.assertRaises(ValueError):
-                self.load()
+        with (
+            self.mutate_file(path, lambda value: value.update(source_state_sha256="0" * 64)),
+            self.assertRaises(ValueError),
+        ):
+            self.load()
 
     def test_changed_native_outcome_refused(self):
-        with self.mutate_file(
-            self.target_directory() / "outcome.json",
-            lambda value: value.update(battle_won=True),
+        with (
+            self.mutate_file(
+                self.target_directory() / "outcome.json",
+                lambda value: value.update(battle_won=True),
+            ),
+            self.assertRaises(ValueError),
         ):
-            with self.assertRaises(ValueError):
-                self.load()
+            self.load()
 
     def test_changed_event_contract_refused(self):
         path = self.target_directory() / "events/event-00001.json"
@@ -198,15 +210,16 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
         def change(value):
             value["payload"]["identity"]["train_story_contract"]["defeated_event"] += 1
 
-        with self.mutate_file(path, change):
-            with self.assertRaises(ValueError):
-                self.load()
+        with self.mutate_file(path, change), self.assertRaises(ValueError):
+            self.load()
 
     def test_unaccounted_global_call_refused(self):
         path = self.case / "scoped-battles/battle-000-end.json"
-        with self.mutate_file(path, lambda value: value.update(calls_after=2)):
-            with self.assertRaises(ValueError):
-                self.load()
+        with (
+            self.mutate_file(path, lambda value: value.update(calls_after=2)),
+            self.assertRaises(ValueError),
+        ):
+            self.load()
 
     def test_sealed_cost_change_refused(self):
         def change(value):
@@ -214,7 +227,9 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
             return value
 
         self.store = _StoreProxy(
-            self.store, "rcc-result-" + self.kwargs["result_sha256"], change,
+            self.store,
+            "rcc-result-" + self.kwargs["result_sha256"],
+            change,
         )
         with self.assertRaises(ValueError):
             self.load()
@@ -225,9 +240,8 @@ class TestScopedTrainConsequencePrivateReadback(unittest.TestCase):
         def change(value):
             value["payload"]["outcome"]["actor_returned_win"] = True
 
-        with self.mutate_file(path, change):
-            with self.assertRaises(ValueError):
-                self.load()
+        with self.mutate_file(path, change), self.assertRaises(ValueError):
+            self.load()
 
 
 def test_untyped_target_rejects_before_store_access():
@@ -237,7 +251,11 @@ def test_untyped_target_rejects_before_store_access():
 
     with unittest.TestCase().assertRaises(ValueError):
         module.load_scoped_train_challenge_consequence(
-            UnusedStore(), declaration_sha256="0" * 64, result_sha256="0" * 64,
-            scoped_output=Path("unused"), expected_scoped_declaration_sha256="0" * 64,
-            expected_native_plan_sha256="0" * 64, expected_story_contract={},
+            UnusedStore(),
+            declaration_sha256="0" * 64,
+            result_sha256="0" * 64,
+            scoped_output=Path("unused"),
+            expected_scoped_declaration_sha256="0" * 64,
+            expected_native_plan_sha256="0" * 64,
+            expected_story_contract={},
         )

@@ -1,16 +1,17 @@
 """Do not spend a finite return reserve starting another selected trip."""
+
 from dataclasses import replace
 from hashlib import sha256
 from types import SimpleNamespace as NS
 
 import pytest
+from run_configured_red_player import chunk_continuation_reason
 from test_red_native_player import setup
 from test_red_player_budget_stop import session
 
 from pokemon_red_completion import red_native_player as native
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.red_player_support import PlayerBudgetStop
-from run_configured_red_player import chunk_continuation_reason
 
 
 def actor_at_reserve(tmp_path, monkeypatch, *, support=None, partition="development"):
@@ -26,7 +27,9 @@ def actor_at_reserve(tmp_path, monkeypatch, *, support=None, partition="developm
 
 
 @pytest.mark.parametrize("axis", ["seconds", "actions", "frames"])
-def test_settled_budget_boundary_has_no_new_goal_input_or_counter_reset(tmp_path, monkeypatch, axis):
+def test_settled_budget_boundary_has_no_new_goal_input_or_counter_reset(
+    tmp_path, monkeypatch, axis
+):
     actor, executed = actor_at_reserve(tmp_path, monkeypatch)
     if axis != "seconds":
         actor.wall.elapsed_seconds = 1
@@ -84,9 +87,12 @@ def test_unaffected_ordinary_menus_remain_available(tmp_path, monkeypatch, scope
 
 @pytest.mark.parametrize("progress", [False, True])
 def test_driver_renews_settlement_stop_only_after_real_progress(progress):
-    result = dict(released=True, state_sha256="b" * 64 if progress else "a" * 64,
+    result = dict(
+        released=True,
+        state_sha256="b" * 64 if progress else "a" * 64,
         chunk_costs=dict(actions_attempted=10 if progress else 0, frames=240 if progress else 0),
-        episode=dict(stop_reason="settlement_budget", outcomes=[]))
+        episode=dict(stop_reason="settlement_budget", outcomes=[]),
+    )
     assert chunk_continuation_reason(result, source_sha256="a" * 64) == (
         "automatic_chunk_renewal" if progress else "no_executable_progress"
     )

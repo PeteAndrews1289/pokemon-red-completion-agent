@@ -1,4 +1,5 @@
 """A settled new decision needs useful work headroom above its return reserve."""
+
 from dataclasses import replace
 
 import pytest
@@ -22,11 +23,18 @@ def set_remaining(actor, monkeypatch, axis, remaining):
 
 @pytest.mark.parametrize("axis,reserve", [("actions", 100), ("frames", 1000), ("seconds", 30)])
 @pytest.mark.parametrize("extra,stops", [(0, True), (1, False)])
-def test_new_goal_boundary_retains_work_and_return_allowances(tmp_path, monkeypatch, axis, reserve, extra, stops):
+def test_new_goal_boundary_retains_work_and_return_allowances(
+    tmp_path, monkeypatch, axis, reserve, extra, stops
+):
     actor, executed = actor_at_reserve(tmp_path, monkeypatch)
     set_remaining(actor, monkeypatch, axis, 2 * reserve + extra)
     before = actor.snapshot()
-    counters = (len(actor.recorder.trace), actor.controller.frames_executed, actor.heals, actor.decisions)
+    counters = (
+        len(actor.recorder.trace),
+        actor.controller.frames_executed,
+        actor.heals,
+        actor.decisions,
+    )
     # At this boundary the in-flight goal may still train, but a fresh goal waits.
     assert not actor.evolution_reserve_reached()
     value = actor.observe(1)
@@ -37,7 +45,12 @@ def test_new_goal_boundary_retains_work_and_return_allowances(tmp_path, monkeypa
     else:
         assert {b.kind for b in value.bindings} == {GoalKind.ADVANCE_STORY, GoalKind.DEVELOP_TEAM}
     assert actor.snapshot() == before and not executed
-    assert counters == (len(actor.recorder.trace), actor.controller.frames_executed, actor.heals, actor.decisions)
+    assert counters == (
+        len(actor.recorder.trace),
+        actor.controller.frames_executed,
+        actor.heals,
+        actor.decisions,
+    )
 
 
 def test_mid_failed_evolution_frame_headroom_renews_before_choice(tmp_path, monkeypatch):

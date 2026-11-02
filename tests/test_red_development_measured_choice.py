@@ -1286,7 +1286,8 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
         "error_type": "RedTravelCaptureError" if status == "exception" else None,
         "error_chain": (
             [{"error": "capture controller failed", "error_type": "RedTravelCaptureError"}]
-            if status == "exception" else None
+            if status == "exception"
+            else None
         ),
         "failure_reason": "search_exhausted" if status == "verification_failed" else None,
         "ordinal": 0,
@@ -1294,8 +1295,11 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
         "selected_kind": selected_kind,
         "terminal_state_sha256": base.terminal_state_sha256,
         "verification": (
-            "succeeded" if status == "succeeded" else
-            "failed" if status == "verification_failed" else None
+            "succeeded"
+            if status == "succeeded"
+            else "failed"
+            if status == "verification_failed"
+            else None
         ),
     }
     measured, result = publish_autonomous_measured_choice(
@@ -1364,7 +1368,8 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
     choice = RedDevelopmentMeasuredChoice.from_public(record.read())
     assert choice.selection_declaration["schema"] == (
         RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
-        if tight_budget else RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+        if tight_budget
+        else RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
     )
     if tight_budget:
         assert choice.selection_declaration["execution_maximum_actions"] == 3000
@@ -2328,4 +2333,6 @@ def test_measured_machine_rounding_preserves_frozen_receipt_without_redraw(tmp_p
     _validate_behavior(rounded, Behavior())
     assert choice.public_dict() == original
     with pytest.raises(ValueError, match="does not replay"):
-        _validate_behavior(replace(choice, scores=tuple(x + 1e-8 for x in choice.scores)), Behavior())
+        _validate_behavior(
+            replace(choice, scores=tuple(x + 1e-8 for x in choice.scores)), Behavior()
+        )

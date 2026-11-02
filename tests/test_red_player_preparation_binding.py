@@ -3,6 +3,7 @@ from types import SimpleNamespace as N
 import pytest
 
 from pokemon_red_completion import red_player_preparation_binding as p
+from pokemon_red_completion.gen1_traversal import cut_capabilities
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
 from pokemon_red_completion.party import MoveObservation
@@ -30,7 +31,7 @@ def setup(monkeypatch):
     monkeypatch.setattr(p, "preparation_trainee", lambda *a: member)
 
     def observer(reader, *, capability_projector):
-        assert capability_projector is p.cut_capabilities
+        assert capability_projector is cut_capabilities
         return N(observe=lambda: None)
 
     monkeypatch.setattr(p, "Gen1TraversalObserver", observer)
@@ -74,9 +75,14 @@ def test_single_starter_supported_and_success_requires_fresh_xp(monkeypatch):
         binding.execute()
 
 
-@pytest.mark.parametrize("allow_surf,forced_bike,available", [
-    (True, False, True), (False, False, False), (True, True, False),
-])
+@pytest.mark.parametrize(
+    "allow_surf,forced_bike,available",
+    [
+        (True, False, True),
+        (False, False, False),
+        (True, True, False),
+    ],
+)
 def test_preparation_quote_reaches_a_water_connected_venue_only_with_real_permission(
     monkeypatch, allow_surf, forced_bike, available
 ):
@@ -86,8 +92,15 @@ def test_preparation_quote_reaches_a_water_connected_venue_only_with_real_permis
 
     rt, actions, kwargs, _ = setup(monkeypatch)
     raw = RawGameState(
-        True, 41, 3, 3, 1, 0, badge_bits=int(Badge.CASCADE | Badge.SOUL),
-        party_hp=(50,), party_moves=((15, 57, 0, 0),),
+        True,
+        41,
+        3,
+        3,
+        1,
+        0,
+        badge_bits=int(Badge.CASCADE | Badge.SOUL),
+        party_hp=(50,),
+        party_moves=((15, 57, 0, 0),),
     )
     rt.reader.read = lambda: raw
     rt.emulator.read_u8 = lambda _: (1 << 5) if forced_bike else 0

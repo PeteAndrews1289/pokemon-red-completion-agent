@@ -15,16 +15,19 @@ from time import monotonic
 MAX_SEMANTIC_ACTIONS = 10_000_000
 MAX_SURVEY_COUNT = 1_000_000
 ALLOWED_SEARCH_STOP_REASON = "survey_leg_limit_exceeded"
-_REQUIRED_EVIDENCE_FIELDS = frozenset({
-    "semantic_actions",
-    "encounters_seen",
-    "captures",
-    "flees",
-    "search_exhausted",
-    "safety_stopped",
-})
+_REQUIRED_EVIDENCE_FIELDS = frozenset(
+    {
+        "semantic_actions",
+        "encounters_seen",
+        "captures",
+        "flees",
+        "search_exhausted",
+        "safety_stopped",
+    }
+)
 _ALLOWED_EVIDENCE_FIELDS = _REQUIRED_EVIDENCE_FIELDS | {
-    "search_stop_reason", "capture_items_exhausted",
+    "search_stop_reason",
+    "capture_items_exhausted",
 }
 
 
@@ -32,20 +35,26 @@ def capture_diagnostic_observation(raw, *, ball=None, ball_quantity=None):
     """Private decoded capture facts; stale enemy fields are not live targets."""
     live = getattr(raw, "battle_state", None) == 1
     fields = {
-        "target_species_id": "enemy_species_id", "target_level": "enemy_level",
-        "target_hp": "enemy_hp", "target_max_hp": "enemy_max_hp", "target_status": "enemy_status",
+        "target_species_id": "enemy_species_id",
+        "target_level": "enemy_level",
+        "target_hp": "enemy_hp",
+        "target_max_hp": "enemy_max_hp",
+        "target_status": "enemy_status",
     }
     facts = {name: getattr(raw, source, None) if live else None for name, source in fields.items()}
     facts.update(
         map_id=getattr(raw, "map_id", None),
-        player_x=getattr(raw, "player_x", None), player_y=getattr(raw, "player_y", None),
+        player_x=getattr(raw, "player_x", None),
+        player_y=getattr(raw, "player_y", None),
         target_fields_live=live,
         catcher_hp=getattr(raw, "battler_hp", None),
         catcher_status=getattr(raw, "battler_status", None),
         catcher_pp=getattr(raw, "battler_pp", None),
         battle_state=getattr(raw, "battle_state", None),
-        ball_id=None if ball is None else int(ball), ball_quantity=ball_quantity,
-        critical_hit_observed=None, miss_observed=None,
+        ball_id=None if ball is None else int(ball),
+        ball_quantity=ball_quantity,
+        critical_hit_observed=None,
+        miss_observed=None,
     )
     hp, maximum = facts["target_hp"], facts["target_max_hp"]
     facts["target_hp_fraction"] = (
@@ -59,13 +68,24 @@ def capture_execution_counters(emulator, executor):
     """No input: native counters and a monotonic stamp for one throw."""
     return dict(
         actions=getattr(executor, "actions_executed", None),
-        frames=getattr(emulator, "frame_count", None), seconds=monotonic(),
+        frames=getattr(emulator, "frame_count", None),
+        seconds=monotonic(),
     )
 
 
-def record_capture_diagnostic(executor, kind, raw, *, source, throw, ball,
-                              ball_quantity, outcome=None, before_counters=None,
-                              counters=None):
+def record_capture_diagnostic(
+    executor,
+    kind,
+    raw,
+    *,
+    source,
+    throw,
+    ball,
+    ball_quantity,
+    outcome=None,
+    before_counters=None,
+    counters=None,
+):
     """Use the existing input journal, not a second logging or control path."""
     record = getattr(executor, "record_diagnostic_event", None)
     if not callable(record):
@@ -77,13 +97,20 @@ def record_capture_diagnostic(executor, kind, raw, *, source, throw, ball,
             for key in ("actions", "frames", "seconds")
             for a, b in [(before_counters.get(key), counters.get(key))]
         }
-    record(kind, dict(
-        schema="pokemon.red.capture-throw-diagnostics.v1", diagnostic_only=True,
-        selection_authority="deterministic_capture_support", source=source,
-        throw=throw, outcome=outcome, measured_cost=costs,
-        conditions=capture_diagnostic_observation(raw, ball=ball, ball_quantity=ball_quantity),
-        training_admission=False,
-    ))
+    record(
+        kind,
+        dict(
+            schema="pokemon.red.capture-throw-diagnostics.v1",
+            diagnostic_only=True,
+            selection_authority="deterministic_capture_support",
+            source=source,
+            throw=throw,
+            outcome=outcome,
+            measured_cost=costs,
+            conditions=capture_diagnostic_observation(raw, ball=ball, ball_quantity=ball_quantity),
+            training_admission=False,
+        ),
+    )
 
 
 def survey_operation_diagnostics(before, after, *, operation, elapsed_seconds):
@@ -98,11 +125,22 @@ def survey_operation_diagnostics(before, after, *, operation, elapsed_seconds):
         a, b = old_search.get(name), new_search.get(name)
         measured[name] = b - a if type(a) is int and type(b) is int else None
     return dict(
-        schema="pokemon.red.survey-operation-diagnostics.v1", diagnostic_only=True,
-        operation=operation, elapsed_seconds=elapsed_seconds, measured=measured,
+        schema="pokemon.red.survey-operation-diagnostics.v1",
+        diagnostic_only=True,
+        operation=operation,
+        elapsed_seconds=elapsed_seconds,
+        measured=measured,
         context_before={
-            k: old.get(k) for k in ("map_id", "player_x", "player_y", "repel_remaining_steps",
-                                   "party_levels", "movement_mode", "physical_search_context_sha256")
+            k: old.get(k)
+            for k in (
+                "map_id",
+                "player_x",
+                "player_y",
+                "repel_remaining_steps",
+                "party_levels",
+                "movement_mode",
+                "physical_search_context_sha256",
+            )
         },
         target_after=capture_diagnostic_observation_from_state(new),
         search_eligibility_known=measured["eligible_search_steps"] is not None,
@@ -115,8 +153,10 @@ def capture_diagnostic_observation_from_state(state):
     live = state.get("battle_state") == 1
     return dict(
         target_fields_live=live,
-        **{k: state.get(k) if live else None for k in
-           ("enemy_species_id", "enemy_level", "enemy_hp", "enemy_max_hp", "enemy_status")},
+        **{
+            k: state.get(k) if live else None
+            for k in ("enemy_species_id", "enemy_level", "enemy_hp", "enemy_max_hp", "enemy_status")
+        },
     )
 
 
@@ -183,9 +223,7 @@ class CaptureSurveySummary:
         return result
 
     @classmethod
-    def from_evidence(
-        cls, evidence: Mapping[str, object]
-    ) -> CaptureSurveySummary | None:
+    def from_evidence(cls, evidence: Mapping[str, object]) -> CaptureSurveySummary | None:
         if not isinstance(evidence, Mapping):
             raise TypeError("evidence must be a mapping")
         if "capture_survey" not in evidence:

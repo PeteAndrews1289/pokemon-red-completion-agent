@@ -84,14 +84,15 @@ from pokemon_red_completion.red_party import (
 from pokemon_red_completion.red_team_training import (
     TRAINING_ATTACK_PP_RESERVE,
     TRAINING_MOVE_IDS,
-    _bounded_no_win_evolution_pause,
-    execute_evolution_healing_trip,
-    validate_collection_helper_exclusions,
     TeamTrainingExecutionSummary,
+    _bounded_no_win_evolution_pause,
+    _MoveDecisionSinkOptions,
+    execute_evolution_healing_trip,
     run_red_team_balancing,
     trainee_should_fight_directly,
     training_attack_pp,
     training_attack_pp_reserve,
+    validate_collection_helper_exclusions,
 )
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
@@ -139,7 +140,7 @@ RED_PARTY_DEVELOPMENT_OUTCOME_PLAN_SHA256 = (
 RED_PARTY_DEVELOPMENT_OUTCOME_RESULT_SHA256 = (
     "a182025184383d7e2d8d1bdaa4d1c4477dca7136b5005cc78667e5c7d0132036"
 )
-RED_ROUTE_11_SOURCE_COMPATIBILITY_ATTESTATION_ID = "red-route-11-00499bc-runtime-compatibility-v4"
+RED_ROUTE_11_SOURCE_COMPATIBILITY_ATTESTATION_ID = "red-route-11-00499bc-runtime-compatibility-v5"
 RED_ROUTE_11_STATELESS_WALKER_AST_SHA256 = (
     "8ae1a58bc11bd7801ba229fae4afbcb292d9e34c484d42b97e32694116b45522"
 )
@@ -187,12 +188,11 @@ class _SourceCompatibilityWaiver:
 # receipts and observed AST digests are unchanged. This is a new prospective
 # compatibility binding, not a rewrite of historical operational proof.
 _ROUTE_11_REVIEWED_PREDECESSOR_AST_SHA256 = {
-    "training-venue.contract": (
-        "748f27949b60ae4137a2b70df849a9def707b04947fc30e59ebf1061e2614c1d"
+    "red.run-team-balancing-before-typed-sink": (
+        "73facf6dbcb0080660b1bf0a6567d04cec4a1572fd4f5c10686db13d26bcf810"
     ),
-    "red.run-team-balancing": (
-        "4dfa5210376fa3ee8897bce0c2d92ffff77c07dbfebdd25fb12fc1f5a1b9ddaa"
-    ),
+    "training-venue.contract": ("748f27949b60ae4137a2b70df849a9def707b04947fc30e59ebf1061e2614c1d"),
+    "red.run-team-balancing": ("4dfa5210376fa3ee8897bce0c2d92ffff77c07dbfebdd25fb12fc1f5a1b9ddaa"),
     "red.route-11-heal-and-return": (
         "ef05d302d3d38aa43ae8949bf78ba882d130c40ae8271ea9a3fe002416e834c5"
     ),
@@ -200,6 +200,12 @@ _ROUTE_11_REVIEWED_PREDECESSOR_AST_SHA256 = {
 
 
 _ROUTE_11_SOURCE_ELEMENTS = (
+    _SourceElement(
+        "red.move-decision-sink-options",
+        "src/pokemon_red_completion/red_team_training.py",
+        "_MoveDecisionSinkOptions",
+        _MoveDecisionSinkOptions,
+    ),
     _SourceElement(
         "red.helper-exclusion-validation",
         "src/pokemon_red_completion/red_team_training.py",
@@ -536,34 +542,28 @@ _ROUTE_11_SOURCE_ELEMENTS = (
 
 _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
+        element_id="red.move-decision-sink-options",
+        observed_ast_sha256=None,
+        current_ast_sha256="e94ba9c21417f4f7864185bdd0964ac7b06fd8489e0faecb9ce7f14ccccfbaed",
+        justification_id="optional-typed-dictionary-retains-plain-dict-and-exact-callback-identity",
+    ),
+    _SourceCompatibilityWaiver(
         element_id="red.helper-exclusion-validation",
         observed_ast_sha256=None,
-        current_ast_sha256=(
-            "42acf681aa71b5e6ef00420e907ec72d475eb466e8b00b2e5ec8ae21779670b1"
-        ),
-        justification_id=(
-            "empty-native-helper-exclusions-validate-without-effects"
-        ),
+        current_ast_sha256=("42acf681aa71b5e6ef00420e907ec72d475eb466e8b00b2e5ec8ae21779670b1"),
+        justification_id=("empty-native-helper-exclusions-validate-without-effects"),
     ),
     _SourceCompatibilityWaiver(
         element_id="red.evolution-no-win-boundary",
         observed_ast_sha256=None,
-        current_ast_sha256=(
-            "1b59594baf539e40362e4136e3a59d16ff73dc0f4958883b84ea0af2fa5e06d8"
-        ),
-        justification_id=(
-            "ordinary-training-default-returns-before-reading-or-pausing"
-        ),
+        current_ast_sha256=("1b59594baf539e40362e4136e3a59d16ff73dc0f4958883b84ea0af2fa5e06d8"),
+        justification_id=("ordinary-training-default-returns-before-reading-or-pausing"),
     ),
     _SourceCompatibilityWaiver(
         element_id="red.evolution-healing-trip",
         observed_ast_sha256=None,
-        current_ast_sha256=(
-            "d5912a7498b28cd444cf8fbde666bcfc85174161719aa87516f8366cccf1e7aa"
-        ),
-        justification_id=(
-            "unmetered-default-delegates-once-to-identical-healer"
-        ),
+        current_ast_sha256=("d5912a7498b28cd444cf8fbde666bcfc85174161719aa87516f8366cccf1e7aa"),
+        justification_id=("unmetered-default-delegates-once-to-identical-healer"),
     ),
     _SourceCompatibilityWaiver(
         element_id="red.adaptive-wild-battle",
@@ -613,7 +613,7 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
         observed_ast_sha256=("495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"),
-        current_ast_sha256=("73facf6dbcb0080660b1bf0a6567d04cec4a1572fd4f5c10686db13d26bcf810"),
+        current_ast_sha256=("8ae88e1c27152b964fbfcad2973641ff40a693ab7300b1e193da7b4fdc163131"),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
@@ -627,7 +627,8 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "plus-collection-only-readiness-sentinel-and-persistent-suppression-"
             "plus-default-disabled-evolution-reserve-proved-by-exact-predecessor-ast-"
             "plus-default-none-certified-helper-xp-guard-reconstructs-immediate-predecessor-"
-            "plus-known-headroom-partial-branch-disabled-without-xp-guard"
+            "plus-known-headroom-partial-branch-disabled-without-xp-guard-"
+            "plus-typed-optional-sink-dictionary-reconstructs-exact-reviewed-predecessor"
         ),
     ),
     _SourceCompatibilityWaiver(

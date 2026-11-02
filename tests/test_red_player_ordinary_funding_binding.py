@@ -5,7 +5,6 @@ from types import SimpleNamespace as N
 
 import pytest
 
-from pokemon_red_completion.scenario_lab import ScenarioPartition
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_learned_trainer import (
     FROZEN_K_SHA256,
@@ -13,6 +12,7 @@ from pokemon_red_completion.red_learned_trainer import (
     FrozenTrainerBattler,
 )
 from pokemon_red_completion.red_player_configuration import connect_retained_ordinary_funding
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 
 def fixture(badges=6):
@@ -22,9 +22,12 @@ def fixture(badges=6):
     actor.source_partition = ScenarioPartition.DEVELOPMENT
     emulator = N(frame_count=0, pressed_buttons=(), save_state_bytes=lambda: b"original")
     runtime = RedGoalContextRuntime(
-        profile=object(), capture=object(), emulator=emulator,
+        profile=object(),
+        capture=object(),
+        emulator=emulator,
         reader=N(read=lambda: N(badge_bits=(1 << badges) - 1)),
-        observer=object(), adapter=object(),
+        observer=object(),
+        adapter=object(),
     )
     return runtime, actor
 
@@ -37,9 +40,13 @@ def test_qualified_existing_actor_can_earn_before_or_after_league_without_inputs
     assert bound.trainer_battle_model_sha256 == FROZEN_K_SHA256
     assert bound.trainer_battle_qualification_sha256 == K_QUALIFICATION_SHA256
     changes = {
-        "trainer_battle_runner", "trainer_battle_model_sha256",
-        "trainer_battle_qualification_sha256", "trainer_funding_recovery",
-        "trainer_funding_ledges", "trainer_funding_surf", "trainer_funding_indoor_departure",
+        "trainer_battle_runner",
+        "trainer_battle_model_sha256",
+        "trainer_battle_qualification_sha256",
+        "trainer_funding_recovery",
+        "trainer_funding_ledges",
+        "trainer_funding_surf",
+        "trainer_funding_indoor_departure",
     }
     for field in fields(original):
         if field.name not in changes:

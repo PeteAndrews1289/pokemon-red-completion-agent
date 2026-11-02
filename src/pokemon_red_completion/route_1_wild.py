@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from .observation import NativeWildTeleportWitness
-
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, replace
 from typing import Protocol, overload
@@ -16,6 +14,8 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
     RawGameState,
 )
+
+from .observation import NativeWildTeleportWitness
 
 ROUTE_1_WALKER_APPROACH = (14, 14)
 ROUTE_1_WALKER_YIELD = (15, 14)
@@ -163,33 +163,48 @@ class Route1WildFleeEvidence:
             if not healed:
                 return False
         witness = self.native_opponent_teleport_exit
-        teleported = (type(witness) is NativeWildTeleportWitness
-            and self.hp_scope == 'whole_party' and self.pp_preserved and self.status_preserved
-            and not self.new_fainted_slots and 1 <= self.run_attempts <= 16
+        teleported = (
+            type(witness) is NativeWildTeleportWitness
+            and self.hp_scope == "whole_party"
+            and self.pp_preserved
+            and self.status_preserved
+            and not self.new_fainted_slots
+            and 1 <= self.run_attempts <= 16
             and (self.map_id, self.player_x, self.player_y, self.enemy_species_id, self.enemy_level)
-                == (witness.map_id, witness.player_x, witness.player_y,
-                    witness.enemy_species_id, witness.enemy_level))
+            == (
+                witness.map_id,
+                witness.player_x,
+                witness.player_y,
+                witness.enemy_species_id,
+                witness.enemy_level,
+            )
+        )
         return (
             self.initial_battle_state == 1
             and self.final_battle_state == 0
             and (
                 self.battle_result == 2
                 or (teleported and self.battle_result == 0)
-                or (self.ordinary_opponent_ko_exit and self.battle_result == 0
-                    and self.hp_scope == "whole_party")
+                or (
+                    self.ordinary_opponent_ko_exit
+                    and self.battle_result == 0
+                    and self.hp_scope == "whole_party"
+                )
             )
             and self.map_id == self.expected_map_id
             and self.player_x >= 0
             and self.player_y >= 0
             and self.enemy_species_id > 0
             and self.enemy_level > 0
-            and 0 < self.final_hp and (healed or self.final_hp <= self.initial_hp)
+            and self.final_hp > 0
+            and (healed or self.final_hp <= self.initial_hp)
             and self.maximum_hp_preserved
             and self.party_preserved
             and self.level_preserved
             and (self.pp_preserved or healed)
             and (
-                self.status_preserved or healed
+                self.status_preserved
+                or healed
                 or (
                     self.status_changes_allowed
                     and self.hp_scope == "whole_party"
@@ -238,11 +253,17 @@ class Route1WildFleeEvidence:
             "verified": self.verified,
             "hp_scope": self.hp_scope,
             "faint_prompt_exit": self.faint_prompt_exit,
-            **({"native_purified_healing": self.native_purified_healing}
-               if self.native_purified_healing is not None else {}),
+            **(
+                {"native_purified_healing": self.native_purified_healing}
+                if self.native_purified_healing is not None
+                else {}
+            ),
             **({"ordinary_opponent_ko_exit": True} if self.ordinary_opponent_ko_exit else {}),
-            **({'native_opponent_teleport_exit': self.native_opponent_teleport_exit.public_dict()}
-               if type(self.native_opponent_teleport_exit) is NativeWildTeleportWitness else {}),
+            **(
+                {"native_opponent_teleport_exit": self.native_opponent_teleport_exit.public_dict()}
+                if type(self.native_opponent_teleport_exit) is NativeWildTeleportWitness
+                else {}
+            ),
             **(
                 {"party_faints_allowed": True, "new_fainted_slots": list(self.new_fainted_slots)}
                 if self.party_faints_allowed
@@ -757,7 +778,9 @@ def flee_wild(
                         f"{route_name} flee failed its stabilized semantic evidence gate: "
                         "status recovery required."
                     ) from WildFleeStatusChange(encounter, raw, evidence)
-                failure = error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
+                failure = error_type(
+                    f"{route_name} flee failed its stabilized semantic evidence gate."
+                )
                 if raw.battle_state == 0 and control_ready:
                     raise failure from WildFleeFieldExit(encounter, raw, evidence)
                 raise failure

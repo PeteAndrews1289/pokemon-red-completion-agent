@@ -8,12 +8,17 @@ from test_gen1_route_runtime import FakeReader, raw, reader_as_real
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.gen1_route_runtime import (
-    Gen1RouteInterruptionHandler, Gen1TraversalObserver,
+    Gen1RouteInterruptionHandler,
+    Gen1TraversalObserver,
 )
 from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.route_executor import (
-    InterruptionReceipt, RouteExecutionError, RouteExecutionLimits, TraversalSnapshot,
-    _pending_verified_interruption, _wait_until_ready,
+    InterruptionReceipt,
+    RouteExecutionError,
+    RouteExecutionLimits,
+    TraversalSnapshot,
+    _pending_verified_interruption,
+    _wait_until_ready,
 )
 
 
@@ -27,8 +32,9 @@ class DialogueStartsBattle:
     def execute(self, action):
         self.actions.append(action)
         if isinstance(action, MacroAction) and action.kind is MacroActionKind.CANCEL:
-            self.reader.raw = replace(self.reader.raw, battle_state=self.battle_state,
-                                     player_y=7 if self.relocated else 8)
+            self.reader.raw = replace(
+                self.reader.raw, battle_state=self.battle_state, player_y=7 if self.relocated else 8
+            )
             self.reader.dialogue_visible = False
         return action
 
@@ -37,9 +43,12 @@ def prepared(*, battle=2, trainers=1, flees=1, relocated=False):
     reader = FakeReader(raw(), ready=False, dialogue_visible=True)
     actions = DialogueStartsBattle(reader, battle, relocated)
     handler = Gen1RouteInterruptionHandler(
-        cast(object, actions), reader_as_real(reader),
-        maximum_flees=flees, maximum_trainer_battles=trainers,
-        stabilization_frames=24, maximum_scripted_dialogues=1,
+        cast(object, actions),
+        reader_as_real(reader),
+        maximum_flees=flees,
+        maximum_trainer_battles=trainers,
+        stabilization_frames=24,
+        maximum_scripted_dialogues=1,
     )
     snapshot = TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "scripted_dialogue")
     return reader, actions, handler, snapshot
@@ -62,7 +71,9 @@ def test_dialogue_reports_observed_pending_battle_without_claiming_free_control(
     assert [a.kind for a in actions.actions] == [MacroActionKind.CANCEL, MacroActionKind.WAIT]
 
 
-@pytest.mark.parametrize("fault", ["no_trainer", "trainer_exhausted", "no_flee", "relocated", "unknown"])
+@pytest.mark.parametrize(
+    "fault", ["no_trainer", "trainer_exhausted", "no_flee", "relocated", "unknown"]
+)
 def test_undeclared_exhausted_or_relocated_battle_stays_an_error(fault):
     reader, actions, handler, snapshot = prepared(
         battle=1 if fault == "no_flee" else 3 if fault == "unknown" else 2,
@@ -71,10 +82,14 @@ def test_undeclared_exhausted_or_relocated_battle_stays_an_error(fault):
         relocated=fault == "relocated",
     )
     if fault == "trainer_exhausted":
-        handler.trainer_evidence.append(InterruptionReceipt(
-            kind="trainer_engagement", resumed_map=snapshot.map_id,
-            resumed_at=snapshot.at, details={"verified": True},
-        ))
+        handler.trainer_evidence.append(
+            InterruptionReceipt(
+                kind="trainer_engagement",
+                resumed_map=snapshot.map_id,
+                resumed_at=snapshot.at,
+                details={"verified": True},
+            )
+        )
     with pytest.raises(RouteExecutionError, match="entered a battle"):
         handler.handle(snapshot)
     assert not handler.scripted_dialogue_evidence
@@ -93,7 +108,9 @@ def test_route_spends_separate_interruption_budget_for_actual_battle(monkeypatch
         reader.ready = True
         return reader.raw
 
-    monkeypatch.setattr("pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle", finish)
+    monkeypatch.setattr(
+        "pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle", finish
+    )
     observer = Gen1TraversalObserver(reader_as_real(reader))
     args = (snapshot, actions, observer, handler, RouteExecutionLimits(max_interruptions=budget))
     if budget == 1:

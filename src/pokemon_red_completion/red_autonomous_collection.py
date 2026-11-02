@@ -2,6 +2,7 @@
 
 from collections.abc import Callable
 from dataclasses import replace
+from typing import TypedDict
 
 from .executor import CountingExecutor
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
@@ -41,6 +42,10 @@ from .red_scripted_gift import scripted_gift_bindings
 from .red_trade_dependency_options import npc_trade_dependency_bindings
 from .resource_economy_observation import EconomySnapshot
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
+
+
+class _LeaguePostgameReturnOptions(TypedDict, total=False):
+    postgame_return: Callable[[], GoalExecutionReport]
 
 
 def autonomous_capture_funding_target_cash(
@@ -86,8 +91,12 @@ def autonomous_evolution_continuation_bindings(
     )
     live = runtime.adapter.observe()
     return tuple(
-        option.binding for option in enumerate_red_level_evolutions(
-            runtime, live, actions, world,
+        option.binding
+        for option in enumerate_red_level_evolutions(
+            runtime,
+            live,
+            actions,
+            world,
             maximum_actions=maximum_actions,
             maximum_frames=maximum_frames,
             maximum_quanta=maximum_quanta,
@@ -144,7 +153,8 @@ def autonomous_collection_options(
     if len({b.binding_ref for b in additional_acquisitions}) != len(additional_acquisitions):
         raise ValueError("additional acquisition bindings must be distinct")
     if funding_gate_transit is not None and not isinstance(
-        funding_gate_transit, FundingGateTransit,
+        funding_gate_transit,
+        FundingGateTransit,
     ):
         raise ValueError("collection funding transit requires a typed bounded inventory")
     if type(allow_support) is not bool or (
@@ -165,14 +175,18 @@ def autonomous_collection_options(
     # Keep the original transport declarations for per-target enumeration below.
     evolution_runtime = runtime
     profile = derive_direct_full_pokedex_profile(
-        runtime.profile, live, world, require_evolution=False,
+        runtime.profile,
+        live,
+        world,
+        require_evolution=False,
     )
     profile = bind_funding_fly_profile(
         bind_mart_funding_departure_profile(bind_composable_trainer_funding_profile(profile))
     )
     runtime = replace(runtime, profile=profile)
     evolution = next(
-        (spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES), None,
+        (spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES),
+        None,
     )
     if evolution is None:
         native = runtime
@@ -197,6 +211,7 @@ def autonomous_collection_options(
         target_cash = max(target_cash, safari_quote.admission_cost)
     if include_coin_procurement:
         from .red_game_corner_goals import game_corner_funding_target_cash
+
         target_cash = max(target_cash, game_corner_funding_target_cash(native, world))
     router = RedResourceGoalRouter(
         native,
@@ -244,8 +259,12 @@ def autonomous_collection_options(
         maximum_frames=maximum_frames,
     )
     evolutions += enumerate_red_level_evolutions(
-        evolution_runtime, live, actions, world,
-        maximum_actions=maximum_actions, maximum_frames=maximum_frames,
+        evolution_runtime,
+        live,
+        actions,
+        world,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
         maximum_quanta=maximum_evolution_quanta,
     )
     replaced_kinds = {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
@@ -271,11 +290,19 @@ def autonomous_collection_options(
     acquisitions += scripted_gift_bindings(native, live, actions, world)
     acquisitions += additional_acquisitions
     acquisitions += npc_trade_dependency_bindings(
-        native, live, actions, world, maximum_actions=maximum_actions,
-        maximum_frames=maximum_frames, maximum_quanta=maximum_evolution_quanta,
+        native,
+        live,
+        actions,
+        world,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
+        maximum_quanta=maximum_evolution_quanta,
     )
     acquisitions += npc_trade_bindings(
-        native, live, actions, world,
+        native,
+        live,
+        actions,
+        world,
         include_moving=getattr(native, "moving_npc_trades", False),
     )
     for binding in acquisitions:
@@ -330,36 +357,75 @@ def autonomous_collection_options(
         if candidate is None:
             raise ValueError("evolution lacks a portable projection")
         if target.execution_effort is not None:
-            candidate = replace(candidate, features=replace(
-                candidate.features, execution_effort=target.execution_effort,
-            ))
+            candidate = replace(
+                candidate,
+                features=replace(
+                    candidate.features,
+                    execution_effort=target.execution_effort,
+                ),
+            )
         supplements.append(
             supplemental_live_option(
                 binding,
                 replace(candidate, economy_offer=target.economy_offer),
             )
         )
-    supplements.extend(autonomous_fishing_options(native, live, actions, world,
-        **({} if not fishing_fast_transport else {"allow_fast_transport": True})))
+    supplements.extend(
+        autonomous_fishing_options(
+            native,
+            live,
+            actions,
+            world,
+            **({} if not fishing_fast_transport else {"allow_fast_transport": True}),
+        )
+    )
     supplements.extend(autonomous_safari_options(native, live, actions, world))
     if include_game_corner:
         from .red_game_corner_goals import game_corner_options
-        supplements.extend(game_corner_options(native,live,actions,world,
-            situation=observed.situation,model_feature_version=model_feature_version,
-            maximum_actions=maximum_actions,maximum_frames=maximum_frames))
+
+        supplements.extend(
+            game_corner_options(
+                native,
+                live,
+                actions,
+                world,
+                situation=observed.situation,
+                model_feature_version=model_feature_version,
+                maximum_actions=maximum_actions,
+                maximum_frames=maximum_frames,
+            )
+        )
         if include_coin_procurement:
             from .red_game_corner_goals import game_corner_coin_options
-            supplements.extend(game_corner_coin_options(native,live,actions,world,
-                situation=observed.situation,model_feature_version=model_feature_version,
-                maximum_actions=maximum_actions,maximum_frames=maximum_frames))
-    league_funding = bind_autonomous_league_funding(
-        native,
-        actions,
-        world,
-        maximum_actions=maximum_actions,
-        maximum_frames=maximum_frames,
-        **({} if league_postgame_return is None else {"postgame_return": league_postgame_return}),
-    ) if include_league_funding else None
+
+            supplements.extend(
+                game_corner_coin_options(
+                    native,
+                    live,
+                    actions,
+                    world,
+                    situation=observed.situation,
+                    model_feature_version=model_feature_version,
+                    maximum_actions=maximum_actions,
+                    maximum_frames=maximum_frames,
+                )
+            )
+    league_funding = (
+        bind_autonomous_league_funding(
+            native,
+            actions,
+            world,
+            maximum_actions=maximum_actions,
+            maximum_frames=maximum_frames,
+            **(
+                _LeaguePostgameReturnOptions()
+                if league_postgame_return is None
+                else _LeaguePostgameReturnOptions(postgame_return=league_postgame_return)
+            ),
+        )
+        if include_league_funding
+        else None
+    )
     if league_funding is not None:
         # Project this supplemental earning option in its own one-per-kind
         # question. The ordinary inventory can already contain both a Mart
@@ -367,14 +433,12 @@ def autonomous_collection_options(
         # violate the established resource-variant boundary. Keep those exact
         # ordinary executors for the final mixed menu and its safety checks.
         league_question = GoalBindingSet(
-            tuple(
-                op
-                for op in ordinary.opportunities
-                if op.kind is not GoalKind.RESUPPLY
-            )
+            tuple(op for op in ordinary.opportunities if op.kind is not GoalKind.RESUPPLY)
             + (league_funding.opportunity,),
-            (*tuple(b for b in ordinary.bindings if b.kind is not GoalKind.RESUPPLY),
-             league_funding),
+            (
+                *tuple(b for b in ordinary.bindings if b.kind is not GoalKind.RESUPPLY),
+                league_funding,
+            ),
         ).question(observed.situation)
         league_index = next(
             i
@@ -392,6 +456,7 @@ def autonomous_collection_options(
         supplements.append(supplemental_live_option(league_funding, league_candidate))
     executable = (*ordinary.bindings, *(s.binding for s in supplements))
     if allow_support and len(executable) == 1:
+        assert readiness is not None
         binding = executable[0]
         # Use the already enumerated executor. Re-enumerating an earlier profile
         # can produce a different quote/fingerprint and is not the same offer.
@@ -399,8 +464,10 @@ def autonomous_collection_options(
             GoalBindingSet(
                 tuple(o for o in ordinary.opportunities if o.binding_ref != binding.binding_ref)
                 + (binding.opportunity,),
-                (binding,), allow_resource_variants=ordinary.allow_resource_variants,
-            ), readiness,
+                (binding,),
+                allow_resource_variants=ordinary.allow_resource_variants,
+            ),
+            readiness,
         )
     return build_red_live_option_set(
         situation=observed.situation,

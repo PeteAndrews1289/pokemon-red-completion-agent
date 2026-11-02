@@ -20,7 +20,11 @@ from typing import cast
 
 from .executor import RestorationBudgetExhausted
 from .goal_manager import GoalDecisionOutcome, GoalFailureReason, GoalKind
-from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
+from .goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalExecutionReport,
+    GoalVerification,
+)
 from .goal_search_memory import GoalSearchMemory
 from .living_dex_option_value import LivingDexOptionValueModel
 from .provenance import canonical_sha256
@@ -34,8 +38,8 @@ from .red_integrated_play import (
     ordinary_player_setback,
     safe_route_setback,
     search_objective_key,
-    settled_player_boundary,
     settled_evolution_partial,
+    settled_player_boundary,
     spending_bound,
 )
 from .red_live_option_menu import (
@@ -45,7 +49,11 @@ from .red_live_option_menu import (
     select_red_live_option,
 )
 from .red_player_curriculum import PlayerCurriculumCompletion
-from .red_player_support import PlayerBudgetStop, RedPlayerSupport, RedPlayerSupportChoice
+from .red_player_support import (
+    PlayerBudgetStop,
+    RedPlayerSupport,
+    RedPlayerSupportChoice,
+)
 from .red_recorded_selection_authority import record_selection_authority
 
 
@@ -424,7 +432,8 @@ def run_autonomous_options(
     output: Path,
     snapshot: Callable[[], AutonomousSnapshot],
     observe: Callable[
-        [int], RedLiveOptionSet | RedPlayerSupport | PlayerCurriculumCompletion | PlayerBudgetStop
+        [int],
+        RedLiveOptionSet | RedPlayerSupport | PlayerCurriculumCompletion | PlayerBudgetStop,
     ],
     seed: int,
     maximum_decisions: int = 3,
@@ -472,12 +481,19 @@ def run_autonomous_options(
     ):
         raise ValueError("retained search memory requires a typed player scope")
     source_context = cast(Mapping[str, object], provenance.get("source", {}))
-    if (isinstance(exploration_mix, bool) or not isinstance(exploration_mix, (int, float))
-            or not math.isfinite(exploration_mix) or not 0 <= exploration_mix <= 1):
+    if (
+        isinstance(exploration_mix, bool)
+        or not isinstance(exploration_mix, (int, float))
+        or not math.isfinite(exploration_mix)
+        or not 0 <= exploration_mix <= 1
+    ):
         raise ValueError("autonomous exploration mix must be finite within zero and one")
     if exploration_mix != 0.25 and (
-        not continuous_player or source_context.get("partition") != "development"
-        or greedy_selection or sequence_collector is not None or sequence_policy is not None
+        not continuous_player
+        or source_context.get("partition") != "development"
+        or greedy_selection
+        or sequence_collector is not None
+        or sequence_policy is not None
         or consequence_head is not None
     ):
         raise ValueError("custom exploration requires separate continuous DEVELOPMENT scope")
@@ -518,8 +534,9 @@ def run_autonomous_options(
         allow=allow_greedy_branch_recovery,
         greedy_selection=greedy_selection,
         refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+        defer_unbound_preparation=defer_unbound_preparation,
+        allow_singleton_parent_support=allow_singleton_parent_support,
+        associate_unique_combat=associate_unique_combat,
         source=source_context,
         model=model,
         head=consequence_head,
@@ -566,19 +583,23 @@ def run_autonomous_options(
     if (consequence_head is None) != (consequence_challenge_ref is None):
         raise ValueError("consequence head and private context must accompany each other")
     if consequence_objective_ref is not None and (
-        consequence_head is None
-        or not valid_branch_recovery_objectives(consequence_objective_ref)
+        consequence_head is None or not valid_branch_recovery_objectives(consequence_objective_ref)
     ):
         raise ValueError("branch recovery requires a head and explicit objective dispatch")
     if consequence_head is not None:
-        from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
+        from .player_challenge_consequence import (
+            ChallengeConsequenceHead,
+            consequence_feature_versions_compatible,
+        )
 
         if (
             type(consequence_head) is not ChallengeConsequenceHead
             or consequence_head.feedback_version != 2
             or not continuous_player
             or model.feature_version not in (7, 9, 10, 11, 15, 16)
-            or not consequence_feature_versions_compatible(consequence_head.feature_version, model.feature_version)
+            or not consequence_feature_versions_compatible(
+                consequence_head.feature_version, model.feature_version
+            )
             or sequence_policy is not None
             or sequence_collector is not None
             or type(consequence_challenge_ref) is not str
@@ -604,7 +625,8 @@ def run_autonomous_options(
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            allow_singleton_parent_support=allow_singleton_parent_support,
+            associate_unique_combat=associate_unique_combat,
         )
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     _record(
@@ -644,9 +666,14 @@ def run_autonomous_options(
                     )
                 }
             ),
-            **({"production_train_consequence_inference": train_inference_scope.document(),
-                "production_train_consequence_inference_sha256": train_inference_scope.identity}
-                if train_inference else {}),
+            **(
+                {
+                    "production_train_consequence_inference": train_inference_scope.document(),
+                    "production_train_consequence_inference_sha256": train_inference_scope.identity,
+                }
+                if train_inference
+                else {}
+            ),
             "teacher_actions_allowed": False,
             "independent_evaluation": False,
             "integrated_play": integrated_play,
@@ -856,8 +883,9 @@ def run_autonomous_options(
                         seed=decision_seed,
                         greedy_selection=greedy_selection,
                         refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+                        defer_unbound_preparation=defer_unbound_preparation,
+                        allow_singleton_parent_support=allow_singleton_parent_support,
+                        associate_unique_combat=associate_unique_combat,
                         source_state_sha256=before.sha256,
                     )
                 )
@@ -900,13 +928,19 @@ def run_autonomous_options(
             cash_receipt = choice.private_consequence_receipt()
             if cash_receipt is not None:
                 _record(step / "consequence-cash-private.json", cash_receipt)
-        if (isinstance(choice, RedLiveOptionChoice) and choice.branch_recovery is not None
-                and choice.branch_recovery.unique_combat_witness is not None):
+        if (
+            isinstance(choice, RedLiveOptionChoice)
+            and choice.branch_recovery is not None
+            and choice.branch_recovery.unique_combat_witness is not None
+        ):
             witness = choice.branch_recovery.unique_combat_witness
             from .red_consequence_choice import branch_recovery_objectives
-            witness.validate(choice.branch_recovery.parent,
+
+            witness.validate(
+                choice.branch_recovery.parent,
                 branch_recovery_objectives(choice.branch_recovery.objective_ref),
-                source_state_sha256=before.sha256)
+                source_state_sha256=before.sha256,
+            )
             _record(step / "preparation-combat-private.json", witness.document())
         _record(step / "decision.json", choice.public_dict())
         selection_seconds = monotonic() - selection_started
@@ -1062,9 +1096,7 @@ def run_autonomous_options(
             # recoverable game loss. Retain any paid tail and the original error.
             execution_error = error
             if failure_phase == "execution":
-                verification = GoalVerification.failed(
-                    GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
-                )
+                verification = GoalVerification.failed(GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED)
         except BaseException as error:
             execution_error = error
         finally:
@@ -1108,6 +1140,14 @@ def run_autonomous_options(
                 player_outcome_diagnostics,
             )
 
+            outcome_phase_seconds: dict[str, float | None] = dict(
+                menu_and_boundary_observation=menu_seconds,
+                selection_and_receipt=selection_seconds,
+                selection_diagnostics=diagnostic_seconds,
+                execution=execution_seconds,
+                verification=verification_seconds,
+                terminal_observation=terminal_observation_seconds,
+            )
             outcome: dict[str, object] = {
                 "ordinal": ordinal,
                 "selected_kind": selected.kind.value,
@@ -1144,14 +1184,7 @@ def run_autonomous_options(
                 "error": None if execution_error is None else str(execution_error),
                 "error_chain": _exception_chain(execution_error),
                 "failure_phase": None if execution_error is None else failure_phase,
-                "phase_seconds": dict(
-                    menu_and_boundary_observation=menu_seconds,
-                    selection_and_receipt=selection_seconds,
-                    selection_diagnostics=diagnostic_seconds,
-                    execution=execution_seconds,
-                    verification=verification_seconds,
-                    terminal_observation=terminal_observation_seconds,
-                ),
+                "phase_seconds": outcome_phase_seconds,
                 "measured_cost": cost,
                 "observed_cost": counters,
                 "diagnostic_delta": player_diagnostic_delta(before.facts, terminal.facts),
@@ -1173,9 +1206,7 @@ def run_autonomous_options(
                 ),
                 selection_diagnostics=diagnostics,
             )
-            outcome["phase_seconds"]["outcome_diagnostics"] = (
-                monotonic() - outcome_diagnostic_started
-            )
+            outcome_phase_seconds["outcome_diagnostics"] = monotonic() - outcome_diagnostic_started
             outcome["elapsed_seconds"] = monotonic() - execution_started
             _record(step / "outcome.json", outcome)
             outcomes.append(outcome)
@@ -1193,8 +1224,7 @@ def run_autonomous_options(
                 if execution_error is not None and not isinstance(execution_error, Exception):
                     raise execution_error
                 break
-        if (type(execution_error) is RestorationBudgetExhausted
-                and failure_phase == "execution"):
+        if type(execution_error) is RestorationBudgetExhausted and failure_phase == "execution":
             stop = "restoration_budget"
             break
         if execution_error is not None:
@@ -1222,10 +1252,7 @@ def run_autonomous_options(
             if maximum_cash_spent is not None and cash_spent > maximum_cash_spent:
                 stop = "continuous_spending_exceeded"
                 break
-            if (
-                ordinary_setback
-                and settled_evolution_partial(selected, report)
-            ):
+            if ordinary_setback and settled_evolution_partial(selected, report):
                 # Its measured dose reserved enough inputs to return the party.
                 # Renew the finite execution port before offering another goal;
                 # do not spend that return reserve starting a second PC loan.
@@ -1277,7 +1304,8 @@ def run_autonomous_options(
         "schema": "pokemon.red.autonomous-option-result.v1",
         "stop_reason": stop,
         "stop_diagnostics": player_stop_diagnostics(
-            stop, admission_failure or (outcomes[-1] if outcomes else None),
+            stop,
+            admission_failure or (outcomes[-1] if outcomes else None),
         ),
         **({"admission_failure": admission_failure} if admission_failure else {}),
         "executed_decisions": len(outcomes),

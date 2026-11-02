@@ -19,7 +19,12 @@ from .gen1_trainer_sight import (
 )
 from .gen1_traversal import cut_capabilities, map_object_events
 from .goal_manager import GoalFailureReason, GoalKind
-from .goal_manager_runtime import GoalCashOutcome, ExecutableGoalBinding, GoalExecutionReport, GoalVerification
+from .goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalCashOutcome,
+    GoalExecutionReport,
+    GoalVerification,
+)
 from .observation import event_flag_is_set
 from .provenance import canonical_sha256
 from .red_gym_reward import GymReward
@@ -308,15 +313,21 @@ def story_battle_binding(
             ):
                 record = getattr(actions, "record_diagnostic_event", None)
                 if callable(record):
-                    record("story_battle_decision_budget", dict(
-                        stop_reason=episode.stop_reason,
-                        decisions_consumed=len(episode.decisions),
-                        maximum_decisions=controller.maximum_decisions,
-                        battle_won=False, field_ready=False,
-                        terminal_state_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                        outcome_and_costs_retained=True,
-                        new_controller_inputs=0,
-                    ))
+                    record(
+                        "story_battle_decision_budget",
+                        dict(
+                            stop_reason=episode.stop_reason,
+                            decisions_consumed=len(episode.decisions),
+                            maximum_decisions=controller.maximum_decisions,
+                            battle_won=False,
+                            field_ready=False,
+                            terminal_state_sha256=sha256(
+                                runtime.emulator.save_state_bytes()
+                            ).hexdigest(),
+                            outcome_and_costs_retained=True,
+                            new_controller_inputs=0,
+                        ),
+                    )
                 raise StoryBattleDecisionBudgetReached(
                     "story battle reached its bounded decision limit"
                 )
@@ -390,6 +401,9 @@ def story_battle_binding(
         verify,
         maximum_cash_debit=loss_debit,
         story_objective_ref=contract.objective_id,
-        cash_outcome=(None if loss_debit is None else GoalCashOutcome(
-            sha256(source).hexdigest(), "single_trainer", loss_debit)),
+        cash_outcome=(
+            None
+            if loss_debit is None
+            else GoalCashOutcome(sha256(source).hexdigest(), "single_trainer", loss_debit)
+        ),
     )

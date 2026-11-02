@@ -9,6 +9,7 @@ import stat
 from pathlib import Path
 
 import pytest
+from route11_historical_fixture import historical_venue_source as historical_venue_source
 
 from pokemon_red_completion.collection_protocol import (
     committed_source_bundle_sha256,

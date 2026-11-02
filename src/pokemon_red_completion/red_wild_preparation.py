@@ -160,7 +160,15 @@ def wild_training_return_reason(members, trainee_ref, target_level, *, minimum_r
 
 
 def transport_to_observed_preparation_corridor(
-    actions, reader, emulator, *, route, corridor, record, recovery_map, recovery_at,
+    actions,
+    reader,
+    emulator,
+    *,
+    route,
+    corridor,
+    record,
+    recovery_map,
+    recovery_at,
 ):
     """Materialize the same venue's physical lane after ordinary map arrival.
 
@@ -173,7 +181,8 @@ def transport_to_observed_preparation_corridor(
     from .gen1_trainer_sight import Gen1TrainerSightProjector
     from .red_living_dex_provider_curriculum import RedEncounterSourceTarget
     from .red_living_dex_wild_corridor import (
-        RedLivingDexWildCorridorUnavailable, derive_red_living_dex_wild_corridor,
+        RedLivingDexWildCorridorUnavailable,
+        derive_red_living_dex_wild_corridor,
     )
     from .red_training_ground_route import ground_route_capability_projector
     from .route_plan import RoutePlanningError
@@ -188,29 +197,41 @@ def transport_to_observed_preparation_corridor(
     observer = Gen1TraversalObserver(
         reader,
         hazard_projector=Gen1TrainerSightProjector(
-            route.rom, reader, full_event_offsets=route.full_event_offsets,
+            route.rom,
+            reader,
+            full_event_offsets=route.full_event_offsets,
         ),
         capability_projector=ground_route_capability_projector(route, emulator),
     )
 
     def observed_world():
         snapshot = observer.observe()
-        if (not snapshot.ready or snapshot.interruption is not None
-                or snapshot.mode != "land" or emulator.pressed_buttons):
+        if (
+            not snapshot.ready
+            or snapshot.interruption is not None
+            or snapshot.mode != "land"
+            or emulator.pressed_buttons
+        ):
             raise ValueError("preparation corridor requires a settled land boundary")
         world = route.route_world.with_current_observation(reader)
         if route.excluded_maps:
-            world = replace(world, macro_graph=replace(
-                world.macro_graph,
-                edges={
-                    m: tuple(e for e in edges if e.target_map not in route.excluded_maps)
-                    for m, edges in world.macro_graph.edges.items()
-                    if m not in route.excluded_maps
-                },
-            ))
+            world = replace(
+                world,
+                macro_graph=replace(
+                    world.macro_graph,
+                    edges={
+                        m: tuple(e for e in edges if e.target_map not in route.excluded_maps)
+                        for m, edges in world.macro_graph.edges.items()
+                        if m not in route.excluded_maps
+                    },
+                ),
+            )
         raw = reader.read()
-        if (raw.battle_state != 0 or raw.map_id != snapshot.map_id
-                or (raw.player_y, raw.player_x) != snapshot.at):
+        if (
+            raw.battle_state != 0
+            or raw.map_id != snapshot.map_id
+            or (raw.player_y, raw.player_x) != snapshot.at
+        ):
             raise ValueError("preparation corridor observation changed")
         return snapshot, world
 
@@ -223,11 +244,17 @@ def transport_to_observed_preparation_corridor(
             if not route.allow_complete_cut_search:
                 raise
             return world._plan_candidate(
-                snapshot, goal_map, goal_at=goal_at,
-                blocked={snapshot.map_id: snapshot.occupied | frozenset(
-                    h.at for h in snapshot.hazards
-                    if h.kind != "trainer_sight" or route.trainer_binding_factory is None
-                )},
+                snapshot,
+                goal_map,
+                goal_at=goal_at,
+                blocked={
+                    snapshot.map_id: snapshot.occupied
+                    | frozenset(
+                        h.at
+                        for h in snapshot.hazards
+                        if h.kind != "trainer_sight" or route.trainer_binding_factory is None
+                    )
+                },
             )
 
     snapshot, world = observed_world()
@@ -238,17 +265,24 @@ def transport_to_observed_preparation_corridor(
         entry = quote(world, snapshot, corridor.map_id, None)
         if entry.terminal_map != corridor.map_id:
             raise ValueError("preparation map-entry quote differs from venue")
-        replace(route, route_world=world, destination_map=corridor.map_id,
-                destination_at=entry.terminal_at)(actions, reader, emulator)
+        replace(
+            route,
+            route_world=world,
+            destination_map=corridor.map_id,
+            destination_at=entry.terminal_at,
+        )(actions, reader, emulator)
         snapshot, world = observed_world()
     if snapshot.map_id != corridor.map_id:
         raise ValueError("preparation did not reach its selected venue")
+
     def observed_corridor(*, local_component, preferred):
         excluded = snapshot.occupied | frozenset(h.at for h in snapshot.hazards)
         return derive_red_living_dex_wild_corridor(
             RedEncounterSourceTarget(corridor.source_id),
-            world.terrain[corridor.map_id], world.local_graphs[corridor.map_id],
-            cartridge=route.rom, excluded=excluded,
+            world.terrain[corridor.map_id],
+            world.local_graphs[corridor.map_id],
+            cartridge=route.rom,
+            excluded=excluded,
             reachable_from=snapshot.at if local_component else None,
             preferred_corridor=preferred,
         )
@@ -265,25 +299,33 @@ def transport_to_observed_preparation_corridor(
             component_passage = quote(world, snapshot, candidate.map_id, candidate.origin_at)
         except RoutePlanningError as planning_error:
             raise unavailable from planning_error
-        if (component_passage.terminal_map != candidate.map_id
-                or component_passage.terminal_at != candidate.origin_at
-                or component_passage.terminal_mode != "land"):
-            raise ValueError("preparation component passage differs from corridor")
-        projected = replace(snapshot, at=component_passage.terminal_at,
-                            mode=component_passage.terminal_mode)
+        if (
+            component_passage.terminal_map != candidate.map_id
+            or component_passage.terminal_at != candidate.origin_at
+            or component_passage.terminal_mode != "land"
+        ):
+            raise ValueError("preparation component passage differs from corridor") from unavailable
+        projected = replace(
+            snapshot, at=component_passage.terminal_at, mode=component_passage.terminal_mode
+        )
         returned = quote(world, projected, recovery_map, recovery_at)
         if returned.terminal_map != recovery_map or returned.terminal_at != recovery_at:
-            raise ValueError("preparation component passage lacks recovery return")
-        replace(route, route_world=world, destination_map=candidate.map_id,
-                destination_at=candidate.origin_at)(actions, reader, emulator)
+            raise ValueError("preparation component passage lacks recovery return") from unavailable
+        replace(
+            route,
+            route_world=world,
+            destination_map=candidate.map_id,
+            destination_at=candidate.origin_at,
+        )(actions, reader, emulator)
         snapshot, world = observed_world()
         if snapshot.map_id != corridor.map_id:
-            raise ValueError("preparation component passage changed venue")
+            raise ValueError("preparation component passage changed venue") from unavailable
         # Fresh occupancy/terrain and the actual landed component remain final
         # authority. Do not retry a failed passage or keep its stale pair.
         live = observed_corridor(local_component=True, preferred=candidate)
     live = replace(
-        live, maximum_legs=corridor.maximum_legs,
+        live,
+        maximum_legs=corridor.maximum_legs,
         maximum_seek_steps=corridor.maximum_seek_steps,
         maximum_encounters=corridor.maximum_encounters,
     )
@@ -294,25 +336,31 @@ def transport_to_observed_preparation_corridor(
     returned = quote(world, projected, recovery_map, recovery_at)
     if returned.terminal_map != recovery_map or returned.terminal_at != recovery_at:
         raise ValueError("observed preparation return quote differs from recovery")
-    record("preparation-corridor-observed", {
-        "authority": "same_selected_venue_observed_local_geometry",
-        "planned_corridor": corridor.private_dict(),
-        "observed_corridor": live.private_dict(),
-        "corridor_rebound": live != corridor,
-        "native_map_entry_used": entry is not None,
-        "component_passage_used": component_passage is not None,
-        "component_passage_quote_steps": 0 if component_passage is None else len(component_passage.steps),
-        "entry_quote_steps": 0 if entry is None else len(entry.steps),
-        "local_quote_steps": len(quoted.steps),
-        "return_quote_steps": len(returned.steps),
-        "recovery_map": recovery_map,
-        "recovery_at": recovery_at,
-        "source_id_unchanged": True,
-        "encounter_search_and_leg_caps_unchanged": True,
-        "fit_allowed": False,
-    })
-    replace(route, route_world=world, destination_map=live.map_id,
-            destination_at=live.origin_at)(actions, reader, emulator)
+    record(
+        "preparation-corridor-observed",
+        {
+            "authority": "same_selected_venue_observed_local_geometry",
+            "planned_corridor": corridor.private_dict(),
+            "observed_corridor": live.private_dict(),
+            "corridor_rebound": live != corridor,
+            "native_map_entry_used": entry is not None,
+            "component_passage_used": component_passage is not None,
+            "component_passage_quote_steps": 0
+            if component_passage is None
+            else len(component_passage.steps),
+            "entry_quote_steps": 0 if entry is None else len(entry.steps),
+            "local_quote_steps": len(quoted.steps),
+            "return_quote_steps": len(returned.steps),
+            "recovery_map": recovery_map,
+            "recovery_at": recovery_at,
+            "source_id_unchanged": True,
+            "encounter_search_and_leg_caps_unchanged": True,
+            "fit_allowed": False,
+        },
+    )
+    replace(route, route_world=world, destination_map=live.map_id, destination_at=live.origin_at)(
+        actions, reader, emulator
+    )
     return live
 
 
@@ -347,7 +395,9 @@ def execute_wild_preparation(
     battle_authority = battler.wild_authority(corridor.map_id)
     validate_scoped_wild_battler(battler)
     objective_version = getattr(battler, "wild_training_objective_version", None)
-    if objective_version is not None and (type(objective_version) is not int or objective_version != 1):
+    if objective_version is not None and (
+        type(objective_version) is not int or objective_version != 1
+    ):
         raise ValueError("unsupported wild training objective capability")
     if type(maximum_battles) is not int or not 1 <= maximum_battles <= 128:
         raise ValueError("wild preparation battle count outside bound")
@@ -420,8 +470,14 @@ def execute_wild_preparation(
         if prepare_transport_escort:
             prepare_training_transport(actions, reader, emulator, hideout_timing)
             corridor = transport_to_observed_preparation_corridor(
-                actions, reader, emulator, route=route, corridor=corridor, record=record,
-                recovery_map=int(home), recovery_at=destination,
+                actions,
+                reader,
+                emulator,
+                route=route,
+                corridor=corridor,
+                record=record,
+                recovery_map=int(home),
+                recovery_at=destination,
             )
             trainee = next(
                 m
@@ -443,8 +499,14 @@ def execute_wild_preparation(
             raise RuntimeError("wild preparation lead binding changed")
         if not prepare_transport_escort:
             corridor = transport_to_observed_preparation_corridor(
-                actions, reader, emulator, route=route, corridor=corridor, record=record,
-                recovery_map=int(home), recovery_at=destination,
+                actions,
+                reader,
+                emulator,
+                route=route,
+                corridor=corridor,
+                record=record,
+                recovery_map=int(home),
+                recovery_at=destination,
             )
         for battle_index in range(maximum_battles):
             live_members = observe_preparation_members(emulator, plan)

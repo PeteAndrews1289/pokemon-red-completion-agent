@@ -12,8 +12,9 @@ from .provenance import canonical_sha256
 from .red_goal_context import RedGoalContextRuntime
 from .red_league_funding import RedLeagueFundingError
 from .red_league_funding_execution import (
+    RedLeagueFundingBattleLoss,
+    RedLeagueFundingExecutionError,
     ScopedLeagueIncomeReuse,
-    RedLeagueFundingExecutionError, RedLeagueFundingBattleLoss,
     bind_red_league_funding_execution,
     execute_red_league_funding,
 )
@@ -53,7 +54,7 @@ def bind_autonomous_league_funding(
     if postgame_return is not None and not callable(postgame_return):
         raise ValueError("League postgame return must be an explicit callable")
     if development_reuse is not None and type(development_reuse) is not ScopedLeagueIncomeReuse:
-        raise TypeError('Income reuse requires its exact-room DEVELOPMENT declaration')
+        raise TypeError("Income reuse requires its exact-room DEVELOPMENT declaration")
     try:
         league = bind_red_league_funding_execution(runtime, world)
     except RedLeagueFundingError:
@@ -80,10 +81,15 @@ def bind_autonomous_league_funding(
                 league,
                 maximum_actions=maximum_actions,
                 maximum_frames=maximum_frames,
-                **({"development_reuse": development_reuse} if development_reuse is not None else {}),
+                **(
+                    {"development_reuse": development_reuse}
+                    if development_reuse is not None
+                    else {}
+                ),
             )
         except RedLeagueFundingExecutionError as error:
             from hashlib import sha256
+
             cause = error.__cause__
             if not isinstance(cause, RedLeagueFundingBattleLoss) or error.progress is None:
                 raise
@@ -92,20 +98,29 @@ def bind_autonomous_league_funding(
             certificate = cause.certificate
             current = runtime.adapter.observe()
             lost_terminal = runtime.emulator.save_state_bytes()
-            if (certificate.get("terminal_sha256") != sha256(lost_terminal).hexdigest()
-                    or current.raw.battle_state or not current.input_ready
-                    or runtime.emulator.pressed_buttons
-                    or certificate.get("ending_money") != current.raw.player_money
-                    or error.progress.phase != "battle:" + certificate.get("objective_id", "")):
+            if (
+                certificate.get("terminal_sha256") != sha256(lost_terminal).hexdigest()
+                or current.raw.battle_state
+                or not current.input_ready
+                or runtime.emulator.pressed_buttons
+                or certificate.get("ending_money") != current.raw.player_money
+                or error.progress.phase != "battle:" + certificate.get("objective_id", "")
+            ):
                 raise
             completed_report = GoalExecutionReport(
                 actions.actions_executed - first_actions,
                 runtime.emulator.frame_count - first_frames,
-                dict(status="lost", no_income_credit=True, native_league_funding_loss=certificate,
-                     league_progress=error.progress.public_dict(),
-                     native_error_chain=[dict(error_type=type(error).__name__,error=str(error)),
-                                         dict(error_type=type(cause).__name__,error=str(cause)),
-                                         dict(error_type=type(cause.__cause__).__name__,error=str(cause.__cause__))]),
+                dict(
+                    status="lost",
+                    no_income_credit=True,
+                    native_league_funding_loss=certificate,
+                    league_progress=error.progress.public_dict(),
+                    native_error_chain=[
+                        dict(error_type=type(error).__name__, error=str(error)),
+                        dict(error_type=type(cause).__name__, error=str(cause)),
+                        dict(error_type=type(cause.__cause__).__name__, error=str(cause.__cause__)),
+                    ],
+                ),
             )
             return completed_report
         evidence = {
@@ -114,44 +129,61 @@ def bind_autonomous_league_funding(
             "league_funding": completed.public_dict(),
         }
         if development_reuse is not None:
-            evidence['development_battle_reuse'] = development_reuse.public_dict()
+            evidence["development_battle_reuse"] = development_reuse.public_dict()
         extra_actions = extra_frames = 0
         if postgame_return is not None:
             before_actions, before_frames = actions.actions_executed, runtime.emulator.frame_count
             returned = postgame_return()
             extra_actions = actions.actions_executed - before_actions
             extra_frames = runtime.emulator.frame_count - before_frames
-            if (not isinstance(returned, GoalExecutionReport)
+            if (
+                not isinstance(returned, GoalExecutionReport)
                 or returned.actions_executed != extra_actions
                 or returned.frames_executed != extra_frames
                 or returned.evidence.get("native_league_return_verified") is not True
-                or extra_actions < 0 or extra_frames < 0):
+                or extra_actions < 0
+                or extra_frames < 0
+            ):
                 raise ValueError("League postgame return accounting or native proof differs")
             evidence["league_return"] = dict(returned.evidence)
             evidence["postgame_return_mechanics"] = "native Continue and verified field restoration"
         completed_report = GoalExecutionReport(
-            completed.actions + extra_actions, completed.frames + extra_frames, evidence,
+            completed.actions + extra_actions,
+            completed.frames + extra_frames,
+            evidence,
         )
         return completed_report
 
     def verify(report: GoalExecutionReport) -> GoalVerification:
         current = runtime.adapter.observe()
         if lost_terminal is not None:
-            if (report is not completed_report or runtime.emulator.save_state_bytes() != lost_terminal
-                    or current.raw.battle_state or not current.input_ready
-                    or runtime.emulator.pressed_buttons
-                    or report.evidence.get("status") != "lost"
-                    or report.evidence.get("no_income_credit") is not True):
+            if (
+                report is not completed_report
+                or runtime.emulator.save_state_bytes() != lost_terminal
+                or current.raw.battle_state
+                or not current.input_ready
+                or runtime.emulator.pressed_buttons
+                or report.evidence.get("status") != "lost"
+                or report.evidence.get("no_income_credit") is not True
+            ):
                 return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
             return GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
         if (
             completed is None
             or report is not completed_report
             or report.evidence.get("league_funding") != completed.public_dict()
-            or (development_reuse is not None and report.evidence.get(
-                'development_battle_reuse') != development_reuse.public_dict())
-            or (postgame_return is not None and (returned is None
-                or report.evidence.get("league_return") != dict(returned.evidence)))
+            or (
+                development_reuse is not None
+                and report.evidence.get("development_battle_reuse")
+                != development_reuse.public_dict()
+            )
+            or (
+                postgame_return is not None
+                and (
+                    returned is None
+                    or report.evidence.get("league_return") != dict(returned.evidence)
+                )
+            )
             or current.raw.player_money != completed.ending_money
             or completed.observed_net_income != income
             or completed.observed_net_income - completed.field_item_replacement_cost <= 0
@@ -170,8 +202,11 @@ def bind_autonomous_league_funding(
                 "maximum_actions": maximum_actions,
                 "maximum_frames": maximum_frames,
                 **({"native_postgame_return": True} if postgame_return is not None else {}),
-                **({"development_battle_reuse": development_reuse.public_dict()}
-                   if development_reuse is not None else {}),
+                **(
+                    {"development_battle_reuse": development_reuse.public_dict()}
+                    if development_reuse is not None
+                    else {}
+                ),
             }
         ),
         kind=GoalKind.RESUPPLY,
@@ -186,25 +221,38 @@ def bind_autonomous_league_funding(
 __all__ = ["bind_autonomous_league_funding"]
 
 
-def compose_native_funding_loss(report, verdict, *, actions, frames, cash_before,
-                                cash_after, purchase_cost, pre_entry_support):
+def compose_native_funding_loss(
+    report, verdict, *, actions, frames, cash_before, cash_after, purchase_cost, pre_entry_support
+):
     """Carry failed income through approved medicine support without win credit."""
-    if (not isinstance(report, GoalExecutionReport)
-            or verdict != GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
-            or report.evidence.get("status") != "lost"
-            or report.evidence.get("no_income_credit") is not True
-            or not isinstance(report.evidence.get("native_league_funding_loss"), dict)):
+    if (
+        not isinstance(report, GoalExecutionReport)
+        or verdict != GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
+        or report.evidence.get("status") != "lost"
+        or report.evidence.get("no_income_credit") is not True
+        or not isinstance(report.evidence.get("native_league_funding_loss"), dict)
+    ):
         return None
     values = (actions, frames, cash_before, cash_after, purchase_cost)
-    if (any(type(x) is not int or x < 0 for x in values)
-            or actions < report.actions_executed or frames < report.frames_executed
-            or purchase_cost > cash_before
-            or report.evidence["native_league_funding_loss"].get("ending_money") != cash_after):
+    if (
+        any(type(x) is not int or x < 0 for x in values)
+        or actions < report.actions_executed
+        or frames < report.frames_executed
+        or purchase_cost > cash_before
+        or report.evidence["native_league_funding_loss"].get("ending_money") != cash_after
+    ):
         raise ValueError("native funding loss support cost accounting differs")
-    return GoalExecutionReport(actions, frames, dict(
-        report.evidence, pre_entry_support=pre_entry_support,
-        medicine_procurement_learned=False, pre_entry_purchase_cost=purchase_cost,
-        observed_total_net_income=cash_after-cash_before,
-        gross_battle_income=None, failed_funding=True,
-        medicine_cost_already_in_net_cash=True,
-    ))
+    return GoalExecutionReport(
+        actions,
+        frames,
+        dict(
+            report.evidence,
+            pre_entry_support=pre_entry_support,
+            medicine_procurement_learned=False,
+            pre_entry_purchase_cost=purchase_cost,
+            observed_total_net_income=cash_after - cash_before,
+            gross_battle_income=None,
+            failed_funding=True,
+            medicine_cost_already_in_net_cash=True,
+        ),
+    )

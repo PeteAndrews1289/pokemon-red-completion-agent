@@ -28,22 +28,34 @@ from pokemon_red_completion.provenance import canonical_sha256
 
 def workload_documents(tmp_path, monkeypatch):
     plan, phases, menu = documents(tmp_path, monkeypatch)
-    rows = tuple(replace(c, level_workload=OptionLevelWorkload(
-        c.preparation.current_level, c.preparation.target_level, c.preparation.remaining_xp
-    )) for c in menu.candidates)
+    rows = tuple(
+        replace(
+            c,
+            level_workload=OptionLevelWorkload(
+                c.preparation.current_level, c.preparation.target_level, c.preparation.remaining_xp
+            ),
+        )
+        for c in menu.candidates
+    )
     newer = replace(menu, candidates=rows)
-    plan.update(schema="pokemon.red.challenge-consequence-plan.v5", feature_version=9,
-                menu=newer.policy_dict())
+    plan.update(
+        schema="pokemon.red.challenge-consequence-plan.v5",
+        feature_version=9,
+        menu=newer.policy_dict(),
+    )
     return plan, phases, newer, menu
 
 
 def upgraded_head(head):
     """Declared synthetic fixture extension, never a production model upgrade."""
     extra = len(option_feature_names(9)) - len(option_feature_names(7))
-    return replace(head, feature_version=9,
+    return replace(
+        head,
+        feature_version=9,
         coefficients=np.vstack((head.coefficients, np.zeros((extra, len(head.intercept))))),
         feature_mean=np.concatenate((head.feature_mean, np.zeros(extra))),
-        feature_scale=np.concatenate((head.feature_scale, np.ones(extra))))
+        feature_scale=np.concatenate((head.feature_scale, np.ones(extra))),
+    )
 
 
 def test_v9_projection_keeps_the_exact_workload_and_legacy_prefix(tmp_path, monkeypatch):
@@ -61,7 +73,9 @@ def test_v9_projection_keeps_the_exact_workload_and_legacy_prefix(tmp_path, monk
     assert ConsequenceExample.from_document(row.document()) == row
 
 
-@pytest.mark.parametrize("fault", ["missing_version", "legacy_plan", "false_version", "wrong_version"])
+@pytest.mark.parametrize(
+    "fault", ["missing_version", "legacy_plan", "false_version", "wrong_version"]
+)
 def test_v9_plan_cannot_hide_observed_workload_from_admission(tmp_path, monkeypatch, fault):
     plan, phases, _, _ = workload_documents(tmp_path, monkeypatch)
     if fault == "missing_version":
@@ -84,7 +98,9 @@ def test_v9_workload_must_match_the_observed_dose(tmp_path, monkeypatch, field):
         workload = None
     else:
         workload = replace(workload, **{field: getattr(workload, field) + 1})
-    bad = replace(menu, candidates=(replace(candidate, level_workload=workload), *menu.candidates[1:]))
+    bad = replace(
+        menu, candidates=(replace(candidate, level_workload=workload), *menu.candidates[1:])
+    )
     plan["menu"] = bad.policy_dict()
     with pytest.raises(ValueError, match="workload"):
         consequence.project_consequence(plan, phases)
@@ -95,7 +111,7 @@ def test_v9_example_codec_rejects_inconsistent_documents(tmp_path, monkeypatch, 
     plan, phases, _, _ = workload_documents(tmp_path, monkeypatch)
     doc = consequence.project_consequence(plan, phases).document()
     if fault == "truncate":
-        doc["features"] = doc["features"][:len(option_feature_names(7))]
+        doc["features"] = doc["features"][: len(option_feature_names(7))]
     elif fault == "missing_version":
         doc.pop("feature_version")
     else:
@@ -116,18 +132,28 @@ def test_new_fitter_retains_legacy_rows_and_learns_the_new_workload_column(tmp_p
     # These artificial matrices are deliberately not tagged as native TRAIN.
     index = option_feature_names(9).index("level_workload.remaining_xp")
     low, high = list(base.features), list(base.features)
-    low[index], high[index] = .01, .5
-    cheap = replace(base, declaration_sha256="d"*64, features=tuple(low),
-                    outcome=replace(base.outcome, actions=50, frames=5000))
-    costly = replace(base, declaration_sha256="e"*64, features=tuple(high),
-                     outcome=replace(base.outcome, actions=4000, frames=400000))
+    low[index], high[index] = 0.01, 0.5
+    cheap = replace(
+        base,
+        declaration_sha256="d" * 64,
+        features=tuple(low),
+        outcome=replace(base.outcome, actions=50, frames=5000),
+    )
+    costly = replace(
+        base,
+        declaration_sha256="e" * 64,
+        features=tuple(high),
+        outcome=replace(base.outcome, actions=4000, frames=400000),
+    )
     head = fit_challenge_consequence((legacy, cheap, costly))
     assert head.feature_version == 9 and head.examples == 3 and head.provenance == "synthetic"
     assert head.coefficients.shape[0] == len(option_feature_names(9))
     assert head.coefficients[index, 2] != 0
     assert head.predict(cheap.features)[2] < head.predict(costly.features)[2]
     assert legacy.document() == frozen and "feature_version" not in frozen
-    restored = ChallengeConsequenceHead.from_document(head.document(), expected_sha256=head.model_sha256)
+    restored = ChallengeConsequenceHead.from_document(
+        head.document(), expected_sha256=head.model_sha256
+    )
     assert restored.feature_version == 9
     assert np.array_equal(restored.coefficients, head.coefficients)
     assert restored.document() == head.document()
@@ -160,8 +186,11 @@ def test_v9_continuous_recorder_retains_the_same_guarded_port(tmp_path, monkeypa
             story = next(b for b in choices.bindings if b.kind is GoalKind.ADVANCE_STORY)
             story.verify(story.execute())
     result = s.consequence.finish()
-    row = consequence.load_challenge_consequence(args["store"],
-        declaration_sha256=result["declaration_sha256"], result_sha256=canonical_sha256(result))
+    row = consequence.load_challenge_consequence(
+        args["store"],
+        declaration_sha256=result["declaration_sha256"],
+        result_sha256=canonical_sha256(result),
+    )
     assert row.feature_version == 9 and row.features == vector
     if fault == "exception":
         assert row.outcome is None and row.censor_reason
@@ -191,7 +220,9 @@ def test_v9_progress_feedback_still_requires_verified_battle_evidence(tmp_path, 
 
                 def challenge(execute=execute):
                     report = execute()
-                    return replace(report, evidence={"battle": {"outcome": "lost", "episode": episode()}})
+                    return replace(
+                        report, evidence={"battle": {"outcome": "lost", "episode": episode()}}
+                    )
 
                 binding = replace(binding, execute=challenge)
             result.append(binding)
@@ -204,16 +235,21 @@ def test_v9_progress_feedback_still_requires_verified_battle_evidence(tmp_path, 
         selected = next(b for b in options.bindings if b.kind is kind)
         selected.verify(selected.execute())
     result = s.consequence.finish()
-    row = consequence.load_challenge_consequence(args["store"],
-        declaration_sha256=result["declaration_sha256"], result_sha256=canonical_sha256(result))
+    row = consequence.load_challenge_consequence(
+        args["store"],
+        declaration_sha256=result["declaration_sha256"],
+        result_sha256=canonical_sha256(result),
+    )
     assert row.feature_version == 9 and row.feedback_version == 2
     assert row.outcome.attempted and not row.outcome.completed
-    assert row.outcome.challenge_progress == pytest.approx(.495)
+    assert row.outcome.challenge_progress == pytest.approx(0.495)
     assert row.outcome.actions == 3 and row.outcome.restorations == 1
 
 
 @pytest.mark.parametrize("fault", ["claim_version", "frames", "omitted_later_input"])
-def test_v9_loader_still_authenticates_session_version_and_every_native_input(tmp_path, monkeypatch, fault):
+def test_v9_loader_still_authenticates_session_version_and_every_native_input(
+    tmp_path, monkeypatch, fault
+):
     args, _ = harness(tmp_path, monkeypatch)
     args["model"] = upgrade_option_value_model_for_level_workload(args["model"])
     s = session(args)
@@ -242,13 +278,17 @@ def test_v9_loader_still_authenticates_session_version_and_every_native_input(tm
         else:
             result["phases"] = result["phases"][:1]
             result["phases"][0]["verified"] = False
-        result["row"] = consequence.project_consequence(s.consequence.plan, result["phases"]).document()
+        result["row"] = consequence.project_consequence(
+            s.consequence.plan, result["phases"]
+        ).document()
         digest = canonical_sha256(result)
-        args["store"].publish_sealed_record("rcc-result-"+digest,
-            kind="red_challenge_consequence_result", record=result)
+        args["store"].publish_sealed_record(
+            "rcc-result-" + digest, kind="red_challenge_consequence_result", record=result
+        )
     with pytest.raises(ValueError):
-        consequence.load_challenge_consequence(args["store"],
-            declaration_sha256=result["declaration_sha256"], result_sha256=digest)
+        consequence.load_challenge_consequence(
+            args["store"], declaration_sha256=result["declaration_sha256"], result_sha256=digest
+        )
 
 
 def test_v9_head_owns_the_existing_provisional_continuous_choice(tmp_path, monkeypatch):
@@ -262,7 +302,9 @@ def test_v9_head_owns_the_existing_provisional_continuous_choice(tmp_path, monke
 
 
 @pytest.mark.parametrize("upgrade_model", [True, False])
-def test_mismatched_head_and_parent_versions_refuse_before_input(tmp_path, monkeypatch, upgrade_model):
+def test_mismatched_head_and_parent_versions_refuse_before_input(
+    tmp_path, monkeypatch, upgrade_model
+):
     args, state = provisional_args(tmp_path, monkeypatch)
     if upgrade_model:
         args["model"] = upgrade_option_value_model_for_level_workload(args["model"])
@@ -295,47 +337,81 @@ def test_legacy_session_claim_is_not_rewritten_with_new_version_metadata(tmp_pat
     assert s.model_feature_version == 7 and args["emulator"].frame_count == 0
 
 
-@pytest.mark.parametrize("feature,kind", [
-    ("kind.develop", GoalKind.DEVELOP_TEAM),
-    ("kind.unlock_access", GoalKind.ADVANCE_STORY),
-])
-def test_v9_child_refines_only_the_parent_selected_combat_branch(tmp_path, monkeypatch, feature, kind):
+@pytest.mark.parametrize(
+    "feature,kind",
+    [
+        ("kind.develop", GoalKind.DEVELOP_TEAM),
+        ("kind.unlock_access", GoalKind.ADVANCE_STORY),
+    ],
+)
+def test_v9_child_refines_only_the_parent_selected_combat_branch(
+    tmp_path, monkeypatch, feature, kind
+):
     from test_red_branch_recovery import menu, parent_choice
     from test_red_consequence_choice import progress_head
+
     import pokemon_red_completion.red_consequence_choice as composition
 
     options, at, state, runtime = menu(tmp_path, monkeypatch)
-    candidates = tuple(replace(c, level_workload=OptionLevelWorkload(
-        c.preparation.current_level, c.preparation.target_level, c.preparation.remaining_xp
-    )) if c.features.kind.value == "develop" else c for c in options.menu.candidates)
+    candidates = tuple(
+        replace(
+            c,
+            level_workload=OptionLevelWorkload(
+                c.preparation.current_level, c.preparation.target_level, c.preparation.remaining_xp
+            ),
+        )
+        if c.features.kind.value == "develop"
+        else c
+        for c in options.menu.candidates
+    )
     options = replace(options, menu=replace(options.menu, candidates=candidates))
     args, _ = provisional_args(tmp_path / "model", monkeypatch)
     model = upgrade_option_value_model_for_level_workload(args["model"])
-    monkeypatch.setattr(composition, "select_red_live_option",
-        lambda model, observed, **kwargs: parent_choice(observed, at, model, seed=kwargs["seed"]))
-    choice = composition.select_branch_recovery_live_option(model, options,
-        upgraded_head(progress_head(feature)), objective_ref="private-combat-goal", seed=1)
+    monkeypatch.setattr(
+        composition,
+        "select_red_live_option",
+        lambda model, observed, **kwargs: parent_choice(observed, at, model, seed=kwargs["seed"]),
+    )
+    choice = composition.select_branch_recovery_live_option(
+        model,
+        options,
+        upgraded_head(progress_head(feature)),
+        objective_ref="private-combat-goal",
+        seed=1,
+    )
     assert choice.selected_binding.kind is kind
     child = choice.branch_recovery.child
     assert child is not None and child.options.menu.feature_version == 9
     assert all(b.story_objective_ref != "private-travel-goal" for b in child.options.bindings)
-    assert all(len(child.options.menu.candidate_vector(i, feature_version=9)) == 370
-               for i in child.options.menu.available_indices)
+    assert all(
+        len(child.options.menu.candidate_vector(i, feature_version=9)) == 370
+        for i in child.options.menu.available_indices
+    )
     assert not runtime.recorder.trace and not state["trained"] and not state["challenge"]
 
 
 @pytest.mark.parametrize("model_version,head_version", [(9, 9), (7, 9), (9, 7)])
-def test_v9_settled_refinement_keeps_the_declared_matching_scope(tmp_path, monkeypatch, model_version, head_version):
+def test_v9_settled_refinement_keeps_the_declared_matching_scope(
+    tmp_path, monkeypatch, model_version, head_version
+):
     args, _ = provisional_args(tmp_path, monkeypatch)
     model, head = args["model"], args["consequence_head"]
     if model_version == 9:
         model = upgrade_option_value_model_for_level_workload(model)
     if head_version == 9:
         head = upgraded_head(head)
-    kwargs = dict(allow=True, source=args["source"], model=model, head=head,
-        objective_ref="private-combat-goal", challenge_ref="private-combat-goal",
-        settlement_requested=True, sequence_horizon=None,
-        sequence_policy=None, consequence_spec=None)
+    kwargs = dict(
+        allow=True,
+        source=args["source"],
+        model=model,
+        head=head,
+        objective_ref="private-combat-goal",
+        challenge_ref="private-combat-goal",
+        settlement_requested=True,
+        sequence_horizon=None,
+        sequence_policy=None,
+        consequence_spec=None,
+    )
     if model_version == head_version:
         assert native.validate_settlement_refinement_scope(**kwargs)
     else:

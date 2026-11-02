@@ -22,21 +22,47 @@ def test_unwitnessed_status_clear_during_text_is_still_rejected():
         run_transition(already_cleared=False)
 
 
-@pytest.mark.parametrize("fault", [
-    "living_cure", "earlier_cure", "different_status", "new_poison", "mixed_status",
-    "boolean_status", "missing_status", "extra_faint", "healing", "cash", "bag",
-    "pp", "species", "boxes", "dex", "unknown_warp",
-])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "living_cure",
+        "earlier_cure",
+        "different_status",
+        "new_poison",
+        "mixed_status",
+        "boolean_status",
+        "missing_status",
+        "extra_faint",
+        "healing",
+        "cash",
+        "bag",
+        "pp",
+        "species",
+        "boxes",
+        "dex",
+        "unknown_warp",
+    ],
+)
 def test_faint_status_exception_does_not_waive_other_native_guards(fault):
     with pytest.raises(RouteExecutionError, match="protected resources"):
         run_transition(fault=fault)
 
 
 def run_transition(*, already_cleared=False, fault=None):
-    initial = replace(raw(), map_id=6, player_y=13, player_x=10, party_count=3,
-        party_species_ids=(28, 166, 151), party_hp=(5, 1, 3), party_status=(8, 8, 8),
-        party_max_hp=(5, 20, 30), party_stats=((1, 2, 3, 4),) * 3,
-        party_pp=((5,),) * 3, player_money=100)
+    initial = replace(
+        raw(),
+        map_id=6,
+        player_y=13,
+        player_x=10,
+        party_count=3,
+        party_species_ids=(28, 166, 151),
+        party_hp=(5, 1, 3),
+        party_status=(8, 8, 8),
+        party_max_hp=(5, 20, 30),
+        party_stats=((1, 2, 3, 4),) * 3,
+        party_pp=((5,),) * 3,
+        player_money=100,
+    )
     fake = FakeReader(initial, dialogue_visible=True, moving_direction=8)
     box, dex = [()], [()]
     fake.read_all_box_states = lambda: box[0]
@@ -82,8 +108,16 @@ def run_transition(*, already_cleared=False, fault=None):
                 fake.raw = replace(fake.raw, **changes)
             return action
 
-    handler = Gen1WildFleeHandler(Port(), reader_as_real(fake), 0, 24,
-        allow_party_faints=True, allow_field_faint_dialogue=True)
-    current_status = 0 if already_cleared or fault == "new_poison" else 24 if fault == "mixed_status" else 8
+    handler = Gen1WildFleeHandler(
+        Port(),
+        reader_as_real(fake),
+        0,
+        24,
+        allow_party_faints=True,
+        allow_field_faint_dialogue=True,
+    )
+    current_status = (
+        0 if already_cleared or fault == "new_poison" else 24 if fault == "mixed_status" else 8
+    )
     fake.raw = replace(initial, party_hp=(5, 0, 3), party_status=(8, current_status, 8))
     return handler.handle(TraversalSnapshot(6, (13, 10), False, "scripted_dialogue"))

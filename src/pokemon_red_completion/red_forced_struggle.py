@@ -21,8 +21,10 @@ from .observation import BattleMenuPhase, RawGameState
 
 def forced_struggle_available(raw: RawGameState) -> bool:
     """Deliberately exclude disabled positive-PP moves and living reserves."""
-    return model_struggle_available(raw) and not any(
-        hp > 0 for i, hp in enumerate(raw.party_hp) if i != raw.active_party_index
+    return (
+        model_struggle_available(raw)
+        and raw.party_hp is not None
+        and not any(hp > 0 for i, hp in enumerate(raw.party_hp) if i != raw.active_party_index)
     )
 
 
@@ -53,22 +55,34 @@ def disabled_forced_struggle_available(raw: RawGameState) -> bool:
     """
     hp, pp, moves = raw.party_hp, raw.battler_pp, raw.battler_moves
     slot, turns, active = (
-        raw.player_disabled_move_slot, raw.player_disable_turns, raw.active_party_index
+        raw.player_disabled_move_slot,
+        raw.player_disable_turns,
+        raw.active_party_index,
     )
     return bool(
-        raw.battle_state == 2 and raw.battler_hp is not None and raw.battler_hp > 0
-        and hp and type(active) is int and 0 <= active < len(hp)
+        raw.battle_state == 2
+        and raw.battler_hp is not None
+        and raw.battler_hp > 0
+        and hp
+        and type(active) is int
+        and 0 <= active < len(hp)
         and hp[active] == raw.battler_hp
         and all(value == 0 for index, value in enumerate(hp) if index != active)
-        and pp is not None and len(pp) == 4
+        and pp is not None
+        and len(pp) == 4
         and all(type(value) is int and 0 <= value <= 255 for value in pp)
-        and moves is not None and len(moves) == 4
+        and moves is not None
+        and len(moves) == 4
         and all(type(move) is int and 0 <= move <= 165 for move in moves)
-        and type(slot) is int and 1 <= slot <= 4
-        and type(turns) is int and 1 <= turns <= 8
-        and moves[slot - 1] > 0 and pp[slot - 1] & 63 > 0
+        and type(slot) is int
+        and 1 <= slot <= 4
+        and type(turns) is int
+        and 1 <= turns <= 8
+        and moves[slot - 1] > 0
+        and pp[slot - 1] & 63 > 0
         and all(value == 0 for index, value in enumerate(pp) if index != slot - 1)
-        and raw.enemy_hp is not None and raw.enemy_hp > 0
+        and raw.enemy_hp is not None
+        and raw.enemy_hp > 0
     )
 
 
@@ -136,7 +150,8 @@ class ForcedStruggleExecution:
                     learned_choice=False,
                     train_admission_authorized=False,
                 )
-                if disabled_forced_struggle_available(self.initial_state) else {}
+                if disabled_forced_struggle_available(self.initial_state)
+                else {}
             ),
         }
 
@@ -164,8 +179,12 @@ def execute_disabled_forced_struggle_turn(
 ):
     """Only the disabled-last-move singleton; retain the original native proof."""
     return _execute_struggle_turn(
-        reader, executor, expected_map=expected_map, timing=timing,
-        model_selected=False, disabled_only=True,
+        reader,
+        executor,
+        expected_map=expected_map,
+        timing=timing,
+        model_selected=False,
+        disabled_only=True,
     )
 
 
@@ -174,8 +193,11 @@ def _execute_struggle_turn(
 ):
     label = "model Struggle" if model_selected else "forced Struggle"
     available = (
-        disabled_forced_struggle_available if disabled_only
-        else model_struggle_available if model_selected else forced_struggle_available
+        disabled_forced_struggle_available
+        if disabled_only
+        else model_struggle_available
+        if model_selected
+        else forced_struggle_available
     )
     if _BATTLE_POLICY_OVERRIDE.get() is not None:
         raise BattleRuntimeError("forced Struggle forbids policy override")
@@ -183,7 +205,8 @@ def _execute_struggle_turn(
     if initial.map_id != expected_map or not available(initial):
         raise BattleRuntimeError(
             "disabled Struggle requires an observed singleton Disable boundary"
-            if disabled_only else f"{label} requires true zero PP"
+            if disabled_only
+            else f"{label} requires true zero PP"
             + ("" if model_selected else " and no living reserve")
         )
     menu = _validated_menu(reader.read_battle_menu_state(initial), label=label)
@@ -212,7 +235,11 @@ def _execute_struggle_turn(
             direction = {1: "up", 2: "left", 3: "up"}.get(menu.selected_main_command)
             if direction is None:
                 raise BattleRuntimeError("forced Struggle invalid command")
-            _pulse(measured, MacroAction(MacroActionKind.MOVE, direction), timing.menu_wait_frames)
+            _pulse(
+                measured,
+                MacroAction(MacroActionKind.MOVE, direction),
+                timing.menu_wait_frames,
+            )
             raw = reader.read()
             if raw.map_id != expected_map or not available(raw):
                 raise BattleRuntimeError("forced Struggle precondition changed")

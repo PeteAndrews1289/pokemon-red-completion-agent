@@ -7,16 +7,20 @@ retain action/time/party costs and choice-admission evidence alongside these fac
 """
 
 import math
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
-from collections.abc import Mapping
 
 from .goal_resource_quote import GoalResourceReserve
 
 ECONOMY_SCHEMA = "pokemon.core.resource-economy-snapshot.v1"
 ECONOMY_FEATURE_NAMES = (
-    "earning", "purchasing", "cash_shortfall", "conditional_income",
-    "planned_spend", "shortfall_income",
+    "earning",
+    "purchasing",
+    "cash_shortfall",
+    "conditional_income",
+    "planned_spend",
+    "shortfall_income",
 )
 
 
@@ -50,7 +54,8 @@ class EconomySnapshot:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": ECONOMY_SCHEMA, "cash": self.cash,
+            "schema": ECONOMY_SCHEMA,
+            "cash": self.cash,
             "inventory": [[key, count] for key, count in self.inventory],
         }
 
@@ -68,25 +73,38 @@ class EconomyReplenishmentOffer:
     reserves: tuple[GoalResourceReserve, ...]
 
     def __post_init__(self) -> None:
-        if (type(self.reserves) is not tuple or not self.reserves
-                or any(type(r) is not GoalResourceReserve for r in self.reserves)
-                or len({r.resource for r in self.reserves}) != len(self.reserves)):
+        if (
+            type(self.reserves) is not tuple
+            or not self.reserves
+            or any(type(r) is not GoalResourceReserve for r in self.reserves)
+            or len({r.resource for r in self.reserves}) != len(self.reserves)
+        ):
             raise ValueError("replenishment reserves must be unique typed facts")
         object.__setattr__(self, "reserves", tuple(sorted(self.reserves, key=lambda r: r.resource)))
 
     def public_dict(self) -> dict[str, object]:
-        return {"schema": "pokemon.core.replenishment-offer.v1",
-                "reserves": [r.public_dict() for r in self.reserves]}
+        return {
+            "schema": "pokemon.core.replenishment-offer.v1",
+            "reserves": [r.public_dict() for r in self.reserves],
+        }
 
     @classmethod
     def from_public_dict(cls, value: object) -> "EconomyReplenishmentOffer":
-        if (not isinstance(value, Mapping) or set(value) != {"schema", "reserves"}
-                or value["schema"] != "pokemon.core.replenishment-offer.v1"
-                or not isinstance(value["reserves"], list)):
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != {"schema", "reserves"}
+            or value["schema"] != "pokemon.core.replenishment-offer.v1"
+            or not isinstance(value["reserves"], list)
+        ):
             raise ValueError("replenishment offer schema differs")
         reserves = []
         for row in value["reserves"]:
-            if not isinstance(row, Mapping) or set(row) != {"resource", "available", "target", "purchased"}:
+            if not isinstance(row, Mapping) or set(row) != {
+                "resource",
+                "available",
+                "target",
+                "purchased",
+            }:
                 raise ValueError("replenishment reserve schema differs")
             reserves.append(GoalResourceReserve(**row))
         result = cls(tuple(reserves))
@@ -111,13 +129,16 @@ class EconomyOffer:
             raise ValueError("only an earning offer may quote income")
         if self.replenishment is not None and (
             type(self.replenishment) is not EconomyReplenishmentOffer
-            or self.mode is not EconomyMode.PURCHASE or self.planned_spend <= 0
+            or self.mode is not EconomyMode.PURCHASE
+            or self.planned_spend <= 0
         ):
             raise ValueError("replenishment requires an explicit purchase offer")
 
 
 def quoted_replenishment_gain(
-    offer: EconomyOffer | None, *, qualified_resources: tuple[str, ...] = ("capture",),
+    offer: EconomyOffer | None,
+    *,
+    qualified_resources: tuple[str, ...] = ("capture",),
 ) -> float:
     """Prospective demand-capped target satisfaction; never a success label.
 
@@ -134,8 +155,11 @@ def quoted_replenishment_gain(
         return 0.0
     if any(r.resource not in qualified_resources for r in offer.replenishment.reserves):
         return 0.0  # Mixed/medicine offers are not qualified by capture-only TRAIN.
-    rows = tuple(r for r in offer.replenishment.reserves
-                 if r.resource in qualified_resources and r.target > 0)
+    rows = tuple(
+        r
+        for r in offer.replenishment.reserves
+        if r.resource in qualified_resources and r.target > 0
+    )
     denominator = sum(r.target for r in rows)
     if denominator == 0:
         return 0.0
@@ -143,7 +167,10 @@ def quoted_replenishment_gain(
 
 
 def economy_features(
-    before: EconomySnapshot, offer: EconomyOffer, *, target_cash: int,
+    before: EconomySnapshot,
+    offer: EconomyOffer,
+    *,
+    target_cash: int,
 ) -> tuple[float, ...]:
     """Identity-free prospective features, relative to a declared useful budget.
 
@@ -158,7 +185,9 @@ def economy_features(
     return (
         float(offer.mode == EconomyMode.EARN),
         float(offer.mode == EconomyMode.PURCHASE),
-        shortfall, income, min(1.0, offer.planned_spend / scale),
+        shortfall,
+        income,
+        min(1.0, offer.planned_spend / scale),
         shortfall * income,
     )
 
@@ -194,13 +223,17 @@ class EconomyOutcome:
             "useful_liquidity_gain": self.useful_liquidity_gain,
             "cash_loss": self.cash_loss,
             # Endpoint differences cannot identify either gross flow.
-            "gross_income": None, "gross_spend": None,
+            "gross_income": None,
+            "gross_spend": None,
         }
 
 
 def economy_outcome(
-    before: EconomySnapshot | None, after: EconomySnapshot | None, *,
-    target_cash: int, interrupted: bool = False,
+    before: EconomySnapshot | None,
+    after: EconomySnapshot | None,
+    *,
+    target_cash: int,
+    interrupted: bool = False,
 ) -> EconomyOutcome | None:
     """Censor missing/interrupted data, never substitute a quote or zero money.
 

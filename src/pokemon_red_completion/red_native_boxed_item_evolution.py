@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import replace
-from typing import cast
+from typing import TypedDict, cast
 
 from . import red_goal_context as context
 from .executor import CountingExecutor
@@ -40,6 +40,10 @@ from .saffron import DEFAULT_SAFFRON_TIMING, purchase_celadon_evolution_stone
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
+class _MoveLearningPreservationOptions(TypedDict, total=False):
+    allow_move_learning_preservation: bool
+
+
 def _withdrawn_precursor_slot(party, withdrawn, species_id):
     """Bind the exact appended specimen, not another party member of its species."""
     if (
@@ -63,18 +67,33 @@ def _native_item_transport(runtime, world, actions, traversal, destination, *, g
     # learned transport battle. Reuse the strict existing message handler;
     # this allows no wild escape, arbitrary dialogue, healing or replacement.
     handler = Gen1WildFleeHandler(
-        actions, runtime.reader, maximum_flees=0, stabilization_frames=120,
-        allow_party_faints=True, emulator=runtime.emulator,
-        allow_field_faint_dialogue=True, route_name="local item evolution transport",
+        actions,
+        runtime.reader,
+        maximum_flees=0,
+        stabilization_frames=120,
+        allow_party_faints=True,
+        emulator=runtime.emulator,
+        allow_field_faint_dialogue=True,
+        route_name="local item evolution transport",
         field_faint_warps=tuple(
-            (segment.source_map, segment.transition.exit_at,
-             segment.target_map, segment.transition.arrival_at)
-            for segment in plan.segments if segment.passage_kind == "warp"
-            and segment.source_map != segment.target_map
+            (
+                segment.source_map,
+                segment.transition.exit_at,
+                segment.target_map,
+                segment.transition.arrival_at,
+            )
+            for segment in plan.segments
+            if segment.passage_kind == "warp" and segment.source_map != segment.target_map
         ),
     )
-    return execute_route(plan, actions, traversal,
-        limits=_ROUTE_LIMITS, replanner=current.replanner(), interruption_handler=handler)
+    return execute_route(
+        plan,
+        actions,
+        traversal,
+        limits=_ROUTE_LIMITS,
+        replanner=current.replanner(),
+        interruption_handler=handler,
+    )
 
 
 def bind_native_boxed_item_evolution(
@@ -197,13 +216,18 @@ def bind_native_boxed_item_evolution(
             detector = getattr(runtime.reader, "read_move_learning_prompt", None)
             box_reader = getattr(runtime.reader, "read_box_move_members", None)
             members = box_reader(request.source_box_index) if callable(box_reader) else ()
-            source_moves = tuple(m for m in members if (
-                m.box_slot == request.precursor_box_slot
-                and m.species_id == request.precursor_internal_species_id
-                and m.level == request.precursor_level
-            ))
+            source_moves = tuple(
+                m
+                for m in members
+                if (
+                    m.box_slot == request.precursor_box_slot
+                    and m.species_id == request.precursor_internal_species_id
+                    and m.level == request.precursor_level
+                )
+            )
             prompt_supported = (
-                callable(detector) and len(source_moves) == 1
+                callable(detector)
+                and len(source_moves) == 1
                 and len(source_moves[0].moves) == 4
                 and all(1 <= move <= 165 for move in source_moves[0].moves)
             )
@@ -255,8 +279,9 @@ def bind_native_boxed_item_evolution(
         if needs_shop:
             if offer is None:
                 raise context.RedGoalContextError("finite evolution stone has no shop")
-            if not _native_item_transport(runtime, world, actions, traversal,
-                    int(MapId.CELADON_MART_4F), goal_at=(2, 12)).passed:
+            if not _native_item_transport(
+                runtime, world, actions, traversal, int(MapId.CELADON_MART_4F), goal_at=(2, 12)
+            ).passed:
                 raise context.RedGoalContextError("stone procurement route failed")
             purchase_celadon_evolution_stone(
                 actions,
@@ -267,8 +292,9 @@ def bind_native_boxed_item_evolution(
                 absolute_index=offer.mart_absolute_index,
                 price=offer.price,
             )
-        if not _native_item_transport(runtime, world, actions, traversal,
-                int(MapId.CELADON_POKECENTER), goal_at=(4, 13)).passed:
+        if not _native_item_transport(
+            runtime, world, actions, traversal, int(MapId.CELADON_POKECENTER), goal_at=(4, 13)
+        ).passed:
             raise context.RedGoalContextError("item evolution PC route failed")
         face_pc_boundary(actions, runtime.reader, "up")
         open_bills_pc(actions, runtime.reader)
@@ -300,8 +326,11 @@ def bind_native_boxed_item_evolution(
             runtime.emulator,
             registration,
             lambda: runtime.adapter.observe().collection_observation,
-            **({"allow_move_learning_preservation": True}
-               if allow_move_learning_preservation else {}),
+            **(
+                _MoveLearningPreservationOptions(allow_move_learning_preservation=True)
+                if allow_move_learning_preservation
+                else _MoveLearningPreservationOptions()
+            ),
         ).execute(
             actions,
             RedPartyItemEvolutionRequest(

@@ -1,9 +1,10 @@
 """ROM-free proposals: constructor gate and retained-dose completed endpoint."""
+
 from dataclasses import replace
 
 import pytest
-
 from test_preparation_ready_endpoint import ready_fixture
+
 from pokemon_red_completion import red_player_field_goals as f
 from pokemon_red_completion import red_player_preparation_binding as p
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome
@@ -13,7 +14,8 @@ from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 def test_routed_completed_endpoint_flag_is_validated_before_field_work(monkeypatch, value):
     rt, actions, kwargs, _, _, _, _ = ready_fixture(monkeypatch)
     monkeypatch.setattr(
-        f, "_field_ready",
+        f,
+        "_field_ready",
         lambda _: pytest.fail("invalid declaration reached field observation"),
     )
     with pytest.raises(ValueError, match="explicit boolean"):
@@ -31,7 +33,8 @@ def test_routed_completed_endpoint_requires_metered_port_before_field_work(monke
     else:
         actions.execute_restoration = object()
     monkeypatch.setattr(
-        f, "_field_ready",
+        f,
+        "_field_ready",
         lambda _: pytest.fail("missing restoration port reached field observation"),
     )
     with pytest.raises(ValueError, match="shared metered"):
@@ -46,9 +49,12 @@ def test_routed_legacy_endpoint_still_needs_no_final_restoration_port(monkeypatc
     del actions.execute_restoration
     observed = []
     monkeypatch.setattr(f, "_field_ready", lambda _: observed.append(True) or False)
-    assert f.routed_preparation_binding(
-        rt, actions, home_map=41, restore_completed_target=False, **kwargs
-    ) is None
+    assert (
+        f.routed_preparation_binding(
+            rt, actions, home_map=41, restore_completed_target=False, **kwargs
+        )
+        is None
+    )
     assert observed == [True]
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
@@ -73,7 +79,9 @@ def test_completed_endpoint_after_retained_doses_counts_both_nursing_calls(monke
         actions.actions_executed += 5
         rt.emulator.frame_count += 200
         return dict(
-            battles=1, encounters=1, xp_gained=30 if reached else 15,
+            battles=1,
+            encounters=1,
+            xp_gained=30 if reached else 15,
             health_limited_return=not reached,
             stop_reason="target_reached" if reached else "party_hp_below_half",
         )
@@ -99,10 +107,14 @@ def test_completed_endpoint_after_retained_doses_counts_both_nursing_calls(monke
     assert evidence["completed_target_endpoint"]["restoration"]["actions"] == 3
     assert evidence["completed_target_endpoint"]["restoration"]["frames"] == 60
     assert [name for name, _ in records] == [
-        "retained-dose", "retained-recovery-intent", "retained-dose",
-        "completed-target-recovery-intent", "completed-target-ready-endpoint",
+        "retained-dose",
+        "retained-recovery-intent",
+        "retained-dose",
+        "completed-target-recovery-intent",
+        "completed-target-ready-endpoint",
     ]
     # Omitting either same-cost nurse must fail the actual-counter check.
-    assert binding.verify(replace(
-        report, actions_executed=13, frames_executed=460
-    )).status is GoalDecisionOutcome.FAILED
+    assert (
+        binding.verify(replace(report, actions_executed=13, frames_executed=460)).status
+        is GoalDecisionOutcome.FAILED
+    )

@@ -112,10 +112,15 @@ def bind_indoor_collection_departure(
     raw, start = fresh.observation.raw, fresh.traversal
     ordinary_surf = getattr(runtime, "collection_surf_departure", False) is True
     safari_surf = getattr(runtime, "safari_departure_surf", False) is True
-    in_safari = (reader.read_safari_session_state().in_safari_zone
-                 if ordinary_surf or safari_surf else False)
-    water_departure = (ordinary_surf and not in_safari and start.mode == "water"
-                       and "move:surf" in start.capabilities)
+    in_safari = (
+        reader.read_safari_session_state().in_safari_zone if ordinary_surf or safari_surf else False
+    )
+    water_departure = (
+        ordinary_surf
+        and not in_safari
+        and start.mode == "water"
+        and "move:surf" in start.capabilities
+    )
 
     if (
         not fresh.observation.input_ready
@@ -123,8 +128,8 @@ def bind_indoor_collection_departure(
         or start.interruption is not None
         or start.map_id < 0x25
         or (start.mode != "land" and not water_departure)
-        or reader.read_overworld_movement_mode() is not (
-            OverworldMovementMode.SURFING if water_departure else OverworldMovementMode.WALKING)
+        or reader.read_overworld_movement_mode()
+        is not (OverworldMovementMode.SURFING if water_departure else OverworldMovementMode.WALKING)
         or reader.read_bottom_dialogue_box_visible()
         or reader.read_pending_trainer_battle_identity() is not None
         or reader.read_fly_menu_state() is not None
@@ -133,22 +138,29 @@ def bind_indoor_collection_departure(
 
     escape = (
         plan_dig_escape(router.world, reader, raw, start)
-        if getattr(runtime, "collection_dig_departure", False) is True else None
+        if getattr(runtime, "collection_dig_departure", False) is True
+        else None
     )
     if escape is None and (
-        start.last_outside_map is None or not (0 <= start.last_outside_map <= 0x24)
+        start.last_outside_map is None
+        or not (0 <= start.last_outside_map <= 0x24)
         or start.last_outside_map == 0x0B
     ):
         return None
 
-    allow_surf = ("move:surf" in start.capabilities
-                  and ((ordinary_surf and not in_safari) or (safari_surf and in_safari)))
+    allow_surf = "move:surf" in start.capabilities and (
+        (ordinary_surf and not in_safari) or (safari_surf and in_safari)
+    )
 
     def executable_start(snapshot):
-        return replace(snapshot, capabilities=frozenset(
-            c for c in snapshot.capabilities
-            if not c.startswith("move:") or (allow_surf and c == "move:surf")
-        ))
+        return replace(
+            snapshot,
+            capabilities=frozenset(
+                c
+                for c in snapshot.capabilities
+                if not c.startswith("move:") or (allow_surf and c == "move:surf")
+            ),
+        )
 
     plan = None
     try:
@@ -226,7 +238,11 @@ def bind_indoor_collection_departure(
     )
 
     disposable_flight = bind_collection_fly(
-        router, spec, provider, projected_fresh, traversal,
+        router,
+        spec,
+        provider,
+        projected_fresh,
+        traversal,
         **({"land_departure_projection": True} if water_departure else {}),
     )
     if disposable_flight is None:
@@ -266,24 +282,30 @@ def bind_indoor_collection_departure(
     travel_handler = bind_travel_capture_handler(router, spec, route_handler)
     if plan is not None and router.interruption_handler_wrapper is not None:
         travel_handler = router.interruption_handler_wrapper(travel_handler, spec)
-    transport = None if plan is None else RedSemanticTransportRoute(
-        binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
-        origin_observation_sha256=origin,
-        planner_binding_sha256=canonical_sha256(
-            {
-                "schema": "pokemon.red.indoor-collection-departure.v1",
-                "profile": runtime.profile.profile_sha256,
-            }
-        ),
-        plan=plan,
-        actions=actions,
-        traversal_observer=traversal,
-        emulator=runtime.emulator,
-        interruption_handler=travel_handler,
-        replanner=replan,
-        field_actions=Gen1FieldMovePort(actions, reader, runtime.emulator) if allow_surf else None,
-        route_limits=_ROUTE_LIMITS,
-        prepare_departure=lambda: prepare_center_departure(actions, reader),
+    transport = (
+        None
+        if plan is None
+        else RedSemanticTransportRoute(
+            binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
+            origin_observation_sha256=origin,
+            planner_binding_sha256=canonical_sha256(
+                {
+                    "schema": "pokemon.red.indoor-collection-departure.v1",
+                    "profile": runtime.profile.profile_sha256,
+                }
+            ),
+            plan=plan,
+            actions=actions,
+            traversal_observer=traversal,
+            emulator=runtime.emulator,
+            interruption_handler=travel_handler,
+            replanner=replan,
+            field_actions=Gen1FieldMovePort(actions, reader, runtime.emulator)
+            if allow_surf
+            else None,
+            route_limits=_ROUTE_LIMITS,
+            prepare_departure=lambda: prepare_center_departure(actions, reader),
+        )
     )
     if transport is not None:
         departure = transport.route_binding()
@@ -309,12 +331,18 @@ def bind_indoor_collection_departure(
                 and terminal_boundary.matches_traversal(traversal.observe())
                 and terminal_boundary.matches_goal_observation(runtime.adapter.observe())
             )
-            return (GoalVerification.succeeded() if passed else
-                    GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED))
+            return (
+                GoalVerification.succeeded()
+                if passed
+                else GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+            )
 
         departure = RoutedSemanticRouteBinding(
             "red-indoor-dig-route:" + spec.configuration_sha256,
-            origin, terminal_boundary.sha256, execute_escape, verify_escape,
+            origin,
+            terminal_boundary.sha256,
+            execute_escape,
+            verify_escape,
         )
 
     def execute_departure() -> GoalExecutionReport:
@@ -398,10 +426,14 @@ def bind_indoor_collection_departure(
 
     estimated_effort = min(1.0, disposable_flight.estimated_effort + departure_effort)
     estimated_risk = disposable_flight.estimated_risk
-    if (plan is not None and getattr(router, "quote_capture_route_work", False)
-            and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE):
+    if (
+        plan is not None
+        and getattr(router, "quote_capture_route_work", False)
+        and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+    ):
         from pokemon_red_completion.red_resource_goal_router import (
-            ordinary_route_work_quote, route_work_estimates,
+            ordinary_route_work_quote,
+            route_work_estimates,
         )
 
         work_quote = ordinary_route_work_quote(plan, fresh.observation, router.world.rom, reader)
@@ -409,12 +441,17 @@ def bind_indoor_collection_departure(
             estimated_effort, work_quote["ordinary_trainers_crossed"]
         )
         estimated_risk = min(1.0, estimated_risk + departure_risk - 0.18)
-        actions.record_diagnostic_event("capture_route_work_quote", dict(
-            source_id=str(spec.parameters["source_id"]), **work_quote,
-            transport_leg="indoor_departure", estimated_effort=estimated_effort,
-            estimated_risk=estimated_risk,
-            policy_features="existing_normalized_effort_and_risk",
-        ))
+        actions.record_diagnostic_event(
+            "capture_route_work_quote",
+            dict(
+                source_id=str(spec.parameters["source_id"]),
+                **work_quote,
+                transport_leg="indoor_departure",
+                estimated_effort=estimated_effort,
+                estimated_risk=estimated_risk,
+                policy_features="existing_normalized_effort_and_risk",
+            ),
+        )
     composer = RoutedSemanticGoalComposer(
         binding_ref=(
             "red-indoor-collection-departure-goal:" + origin + ":" + spec.configuration_sha256

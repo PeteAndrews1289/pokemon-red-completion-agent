@@ -36,13 +36,13 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
     RedEncounterSourceTarget,
 )
 
-RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
-    "pokemon.red.private-living-dex-wild-corridor.v1"
-)
+RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = "pokemon.red.private-living-dex-wild-corridor.v1"
 
 
 def bind_red_capture_search_budget_profile(
-    profile: RedGoalContextProfile, *, maximum_legs: int | None = None,
+    profile: RedGoalContextProfile,
+    *,
+    maximum_legs: int | None = None,
 ) -> RedGoalContextProfile:
     """Opt future captures into versioned, coupled finite search bounds.
 
@@ -66,14 +66,20 @@ def bind_red_capture_search_budget_profile(
             # One encounter can consume a non-displacing seek plus a flee.
             # Leave room for both for every permitted encounter and terminal
             # exhaustion; use an even number so ordinary exhaustion ends home.
-            actions, encounters = parameters["maximum_seek_steps"], parameters["maximum_encounters"]
+            actions, encounters = (
+                parameters["maximum_seek_steps"],
+                parameters["maximum_encounters"],
+            )
             assert isinstance(actions, int) and isinstance(encounters, int)
             if bound == 320 and not prior_v2:
                 actions, encounters = min(512, 2 * actions), min(64, 2 * encounters)
             elif bound == 160 and prior_v2:
                 actions, encounters = min(256, actions), min(32, encounters)
             parameters["capture_search_budget"] = f"bounded-search-v{2 if bound == 320 else 1}"
-            parameters["maximum_seek_steps"], parameters["maximum_encounters"] = actions, encounters
+            parameters["maximum_seek_steps"], parameters["maximum_encounters"] = (
+                actions,
+                encounters,
+            )
             legs = min(bound, actions - 2 * encounters - 2)
             if prior_v2:
                 legs = min(legs, parameters["maximum_legs"])
@@ -84,12 +90,17 @@ def bind_red_capture_search_budget_profile(
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("search budget needs an existing corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
-def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_red_capture_status_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
     """Explicitly opt into bounded, observed sleep/paralysis preparation.
 
     Historical profiles remain byte-for-byte unchanged. This is deterministic
@@ -106,12 +117,17 @@ def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalCo
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("capture status needs an existing corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
-def bind_red_optional_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_red_optional_capture_status_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
     """Enable live nondamaging preparation without requiring a PC status helper.
 
     Existing composite weakening support keeps its prior mandatory party
@@ -122,16 +138,24 @@ def bind_red_optional_capture_status_profile(profile: RedGoalContextProfile) -> 
     providers = []
     for spec in profile.providers:
         parameters = _thaw(spec.parameters)
-        if (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
-                and parameters.get("capture_weakening_support") is not True):
+        assert isinstance(parameters, dict)
+        if (
+            spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and parameters.get("capture_weakening_support") is not True
+        ):
             parameters["capture_party_preparation"] = False
         providers.append((spec.kind, spec.mechanic, parameters))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
-def bind_red_capture_weakening_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_red_capture_weakening_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
     """Prospectively reuse the existing abstaining nonlethal damage executor.
 
     It has one three-turn ceiling per ordinary encounter, no new move selector,
@@ -141,18 +165,24 @@ def bind_red_capture_weakening_profile(profile: RedGoalContextProfile) -> RedGoa
     providers = []
     for spec in profile.providers:
         parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
             parameters["capture_weakening_support"] = True
             if "capture_party_preparation" in parameters:
                 parameters["capture_party_preparation"] = True
         providers.append((spec.kind, spec.mechanic, parameters))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_red_local_discovery_profile(
-    profile: RedGoalContextProfile, source_id: str, rom: bytes,
+    profile: RedGoalContextProfile,
+    source_id: str,
+    rom: bytes,
 ) -> RedGoalContextProfile:
     """Declare local sighting coverage from all cartridge slots, not canonical targets.
 
@@ -188,13 +218,17 @@ def bind_red_local_discovery_profile(
         if spec.kind is GoalKind.EXPLORE:
             parameters["source_species_numbers"] = numbers
         providers.append((spec.kind, spec.mechanic, parameters))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_red_opportunistic_capture_profile(
-    profile: RedGoalContextProfile, rom: bytes,
+    profile: RedGoalContextProfile,
+    rom: bytes,
 ) -> RedGoalContextProfile:
     """Bind all local cartridge grass offers without changing canonical dependencies."""
     from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
@@ -223,14 +257,19 @@ def bind_red_opportunistic_capture_profile(
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("opportunistic capture needs a corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def retarget_red_wild_profile(
-    profile: RedGoalContextProfile, corridor: RedLivingDexWildCorridor,
-    *, rom: bytes | None = None,
+    profile: RedGoalContextProfile,
+    corridor: RedLivingDexWildCorridor,
+    *,
+    rom: bytes | None = None,
 ) -> RedGoalContextProfile:
     """Move capture/discovery together, preserving every other skill and bound.
 
@@ -247,8 +286,9 @@ def retarget_red_wild_profile(
     }
     if not wild.issubset({spec.mechanic for spec in profile.providers}):
         raise RedLivingDexWildCorridorError("regional profile needs capture and discovery")
-    if any(spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT
-           for spec in profile.providers):
+    if any(
+        spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT for spec in profile.providers
+    ):
         raise RedLivingDexWildCorridorError("regional profile cannot move venue-bound development")
     providers = []
     for spec in profile.providers:
@@ -290,9 +330,12 @@ def retarget_red_wild_profile(
                 derived["capture_access_requirements"] = parameters["capture_access_requirements"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
-    result = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    result = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
     if any("capture_species_numbers" in spec.parameters for spec in profile.providers):
         if rom is None:
             raise RedLivingDexWildCorridorError("opportunistic retargeting requires cartridge data")
@@ -343,9 +386,7 @@ class RedLivingDexWildCorridor:
             (self.maximum_encounters, "encounters"),
         ):
             if type(value) is not int or value <= 0:  # noqa: E721
-                raise RedLivingDexWildCorridorError(
-                    f"encounter corridor {subject} bound differs"
-                )
+                raise RedLivingDexWildCorridorError(f"encounter corridor {subject} bound differs")
 
     @property
     def binding_sha256(self) -> str:
@@ -417,18 +458,16 @@ def derive_red_living_dex_wild_corridor(
         raise TypeError("wild corridor derivation needs cartridge terrain and graph")
     map_id = int(map_id_for_wild_source(target.source_id))
     if terrain.map_id != map_id:
-        raise RedLivingDexWildCorridorError(
-            "wild corridor terrain differs from its source map"
-        )
-    if not any(
-        method.source_id == target.source_id
-        for method in RED_ACQUISITION_CATALOG.methods
-    ):
+        raise RedLivingDexWildCorridorError("wild corridor terrain differs from its source map")
+    if not any(method.source_id == target.source_id for method in RED_ACQUISITION_CATALOG.methods):
         from pokemon_red_completion.gen1_cartridge import wild_tables
         from pokemon_red_completion.observation import MapId
 
-        if (cartridge is None or "SAFARI" in MapId(map_id).name
-                or not wild_tables(cartridge, medium="grass").get(map_id)):
+        if (
+            cartridge is None
+            or "SAFARI" in MapId(map_id).name
+            or not wild_tables(cartridge, medium="grass").get(map_id)
+        ):
             raise RedLivingDexWildCorridorError(
                 "wild corridor source has no authenticated ordinary encounter table"
             )
@@ -472,9 +511,14 @@ def derive_red_living_dex_wild_corridor(
                     pending.append(edge.target)
 
     encounter_grid = terrain.grass
-    if (cartridge is not None and terrain.map_id >= FIRST_INDOOR_MAP
-            and terrain.tileset != FOREST_TILESET):
-        from pokemon_red_completion.gen1_indoor_encounters import indoor_land_encounter_mask
+    if (
+        cartridge is not None
+        and terrain.map_id >= FIRST_INDOOR_MAP
+        and terrain.tileset != FOREST_TILESET
+    ):
+        from pokemon_red_completion.gen1_indoor_encounters import (
+            indoor_land_encounter_mask,
+        )
 
         # Do not relabel Terrain.grass: indoor land encounters are a separate
         # cartridge rule. Legacy no-cartridge callers keep their exact behavior.
@@ -488,7 +532,8 @@ def derive_red_living_dex_wild_corridor(
             if (
                 south in blocked
                 or north in blocked
-                or reachable is not None and (south not in reachable or north not in reachable)
+                or reachable is not None
+                and (south not in reachable or north not in reachable)
                 or not encounter_grid[south[0]][south[1]]
                 or not encounter_grid[north[0]][north[1]]
                 or not _plain_land_walk(graph, south, north, "up")
@@ -502,10 +547,7 @@ def derive_red_living_dex_wild_corridor(
                 terrain.width - 1 - x,
             )
             exclusion_clearance = min(
-                (
-                    abs(south[0] - other[0]) + abs(south[1] - other[1])
-                    for other in blocked
-                ),
+                (abs(south[0] - other[0]) + abs(south[1] - other[1]) for other in blocked),
                 default=terrain.height + terrain.width,
             )
             candidates.append(
@@ -541,10 +583,7 @@ def _plain_land_walk(
     target: Coordinate,
     action: str,
 ) -> bool:
-    return any(
-        _is_plain_land_walk(edge, target, action)
-        for edge in graph.neighbors(source)
-    )
+    return any(_is_plain_land_walk(edge, target, action) for edge in graph.neighbors(source))
 
 
 def _is_plain_land_walk(edge: LocalEdge, target: Coordinate, action: str) -> bool:

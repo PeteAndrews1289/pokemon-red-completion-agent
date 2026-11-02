@@ -8,7 +8,6 @@ from dataclasses import asdict
 from hashlib import sha256
 
 from .gen1_route_runtime import Gen1FieldBlackoutPending, Gen1TraversalObserver
-from .gen1_traversal import cut_capabilities
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .provenance import canonical_sha256
@@ -19,9 +18,9 @@ from .red_goal_skills import (
     _raw_party_fully_restored,
 )
 from .red_party_preparation import observe_preparation_members, preparation_trainee
-from .red_training_ground_route import ground_route_capability_projector
 from .red_player_lesson import capture_player_lesson_snapshot
 from .red_trainer_evolution import level_evolution_edges, level_evolution_matches
+from .red_training_ground_route import ground_route_capability_projector
 from .red_wild_preparation import (
     HEALTH_LIMITED_RETURNS,
     WildPreparationDefeat,
@@ -46,7 +45,8 @@ def settle_preparation_loss(
         raw.battle_state == 0
         and not runtime.reader.read_input_readiness().ready
         and runtime.reader.read_bottom_dialogue_box_visible()
-        if allow_field_loss else raw.battle_state == 1
+        if allow_field_loss
+        else raw.battle_state == 1
     )
     if (
         not admitted_origin
@@ -60,7 +60,10 @@ def settle_preparation_loss(
         dict(source_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(), before=lesson),
     )
     evidence = settle_red_blackout(
-        actions, runtime.reader, runtime.emulator, maximum_pulses=maximum_pulses,
+        actions,
+        runtime.reader,
+        runtime.emulator,
+        maximum_pulses=maximum_pulses,
         **({"allow_field_loss": True} if allow_field_loss else {}),
     )
     after, terminal = capture_player_lesson_snapshot(runtime)
@@ -183,7 +186,9 @@ def preparation_binding(
     if type(restore_exhausted_partial) is not bool:
         raise ValueError("partial preparation restoration must be explicit boolean")
     restore = getattr(actions, "execute_restoration", None)
-    if (maximum_recoveries or restore_completed_target or restore_exhausted_partial) and not callable(restore):
+    if (
+        maximum_recoveries or restore_completed_target or restore_exhausted_partial
+    ) and not callable(restore):
         raise ValueError("preparation recovery requires the shared metered restoration port")
     if battler.session is not runtime.emulator:
         raise ValueError("preparation battler bypasses the guarded controller")
@@ -311,20 +316,29 @@ def preparation_binding(
             except (WildPreparationDefeat, Gen1FieldBlackoutPending) as defeat:
                 field_loss = isinstance(defeat, Gen1FieldBlackoutPending)
                 if field_loss:
-                    record("field-blackout-handoff", dict(
-                        source_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                        reason=str(defeat),
-                        route_failure=None if defeat.failure is None else dict(
-                            reason=defeat.failure.reason.value,
-                            acknowledged_steps=[asdict(r.step)
-                                                for r in defeat.failure.executed_steps],
-                            movement_requests=defeat.failure.movement_requests,
-                            wait_actions=defeat.failure.wait_actions,
+                    record(
+                        "field-blackout-handoff",
+                        dict(
+                            source_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+                            reason=str(defeat),
+                            route_failure=None
+                            if defeat.failure is None
+                            else dict(
+                                reason=defeat.failure.reason.value,
+                                acknowledged_steps=[
+                                    asdict(r.step) for r in defeat.failure.executed_steps
+                                ],
+                                movement_requests=defeat.failure.movement_requests,
+                                wait_actions=defeat.failure.wait_actions,
+                            ),
+                            model_queries=0,
+                            learned_recovery=False,
                         ),
-                        model_queries=0, learned_recovery=False,
-                    ))
+                    )
                 loss = result = settle_preparation_loss(
-                    runtime, actions, record=record,
+                    runtime,
+                    actions,
+                    record=record,
                     **({"allow_field_loss": True} if field_loss else {}),
                 )
                 break
@@ -463,51 +477,90 @@ def preparation_binding(
                 old = {m.specimen_ref: m.observation for m in members}
                 new = {m.specimen_ref: m.observation for m in current}
                 party_xp = sum(new[k].experience - old[k].experience for k in old)
-                trainee_xp = new[trainee.specimen_ref].experience - old[trainee.specimen_ref].experience
-                result = dict(result, party_xp_gained_across_doses=party_xp,
-                              trainee_xp_gained_across_doses=trainee_xp)
+                trainee_xp = (
+                    new[trainee.specimen_ref].experience - old[trainee.specimen_ref].experience
+                )
+                result = dict(
+                    result,
+                    party_xp_gained_across_doses=party_xp,
+                    trainee_xp_gained_across_doses=trainee_xp,
+                )
         if loss is None and restore_completed_target:
             valid, current = retained_boundary(members)
             old = {m.specimen_ref: m.observation for m in members}
             before_heal = {m.specimen_ref: m.observation for m in current}
             ref = trainee.specimen_ref
-            reached = (valid and before_heal[ref].level >= target
-                       and before_heal[ref].experience > old[ref].experience)
+            reached = (
+                valid
+                and before_heal[ref].level >= target
+                and before_heal[ref].experience > old[ref].experience
+            )
             if reached:
                 restoration = None
                 if not _raw_party_fully_restored(runtime.reader.read()):
-                    record("completed-target-recovery-intent", dict(
-                        trainee_ref=ref, target_level=target, model_queries=0,
-                        terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                    ))
+                    record(
+                        "completed-target-recovery-intent",
+                        dict(
+                            trainee_ref=ref,
+                            target_level=target,
+                            model_queries=0,
+                            terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+                        ),
+                    )
                     offer = RedCenterRestoreGoalProvider(
-                        actions, runtime.reader, runtime.emulator, runtime.adapter,
+                        actions,
+                        runtime.reader,
+                        runtime.emulator,
+                        runtime.adapter,
                         require_full_pp_restore=True,
                         **({"include_indigo_lobby": True} if indigo else {}),
                     ).offer(runtime.adapter.observe())
                     if offer.binding is None:
                         raise RuntimeError("completed preparation restoration unavailable")
                     restored = restore(offer.binding)
-                    restoration = dict(actions=restored.actions_executed,
-                                       frames=restored.frames_executed,
-                                       evidence=dict(restored.evidence))
+                    restoration = dict(
+                        actions=restored.actions_executed,
+                        frames=restored.frames_executed,
+                        evidence=dict(restored.evidence),
+                    )
                 valid, healed_members = retained_boundary(current)
                 healed = {m.specimen_ref: m.observation for m in healed_members}
-                if (not valid or not _raw_party_fully_restored(runtime.reader.read())
-                    or any((healed[k].species_id, healed[k].level, healed[k].experience,
-                            tuple(m.move_id for m in healed[k].known_moves))
-                           != (before_heal[k].species_id, before_heal[k].level,
-                               before_heal[k].experience,
-                               tuple(m.move_id for m in before_heal[k].known_moves))
-                           for k in before_heal)):
-                    raise ValueError("completed preparation restoration changed progress or readiness")
+                if (
+                    not valid
+                    or not _raw_party_fully_restored(runtime.reader.read())
+                    or any(
+                        (
+                            healed[k].species_id,
+                            healed[k].level,
+                            healed[k].experience,
+                            tuple(m.move_id for m in healed[k].known_moves),
+                        )
+                        != (
+                            before_heal[k].species_id,
+                            before_heal[k].level,
+                            before_heal[k].experience,
+                            tuple(m.move_id for m in before_heal[k].known_moves),
+                        )
+                        for k in before_heal
+                    )
+                ):
+                    raise ValueError(
+                        "completed preparation restoration changed progress or readiness"
+                    )
                 completed_state_sha256 = sha256(runtime.emulator.save_state_bytes()).hexdigest()
-                result = dict(result, completed_target_endpoint=dict(
-                    schema="pokemon.red.preparation-ready-endpoint.v1",
-                    trainee_ref=ref, target_level=target, target_reached=True,
-                    fully_restored=True, terminal_sha256=completed_state_sha256,
-                    restoration=restoration, model_queries=0,
-                ))
+                result = dict(
+                    result,
+                    completed_target_endpoint=dict(
+                        schema="pokemon.red.preparation-ready-endpoint.v1",
+                        trainee_ref=ref,
+                        target_level=target,
+                        target_reached=True,
+                        fully_restored=True,
+                        terminal_sha256=completed_state_sha256,
+                        restoration=restoration,
+                        model_queries=0,
+                    ),
+                )
                 completed_report_digest = canonical_sha256(result)
                 record("completed-target-ready-endpoint", result["completed_target_endpoint"])
         if loss is None and bounded_progress_return:
@@ -523,16 +576,28 @@ def preparation_binding(
                 and (no_progress_limit is None or consecutive_no_progress < no_progress_limit)
             )
             restoration = None
-            if (eligible and restore_exhausted_partial
-                    and not _raw_party_fully_restored(runtime.reader.read())):
-                record("bounded-partial-recovery-intent", dict(
-                    trainee_ref=ref, target_level=target, model_queries=0,
-                    authority="selected_preparation_final_restoration",
-                    target_reached=False, encounters_exhausted=True,
-                    terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                ))
+            if (
+                eligible
+                and restore_exhausted_partial
+                and not _raw_party_fully_restored(runtime.reader.read())
+            ):
+                record(
+                    "bounded-partial-recovery-intent",
+                    dict(
+                        trainee_ref=ref,
+                        target_level=target,
+                        model_queries=0,
+                        authority="selected_preparation_final_restoration",
+                        target_reached=False,
+                        encounters_exhausted=True,
+                        terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+                    ),
+                )
                 offer = RedCenterRestoreGoalProvider(
-                    actions, runtime.reader, runtime.emulator, runtime.adapter,
+                    actions,
+                    runtime.reader,
+                    runtime.emulator,
+                    runtime.adapter,
                     require_full_pp_restore=True,
                     **({"include_indigo_lobby": True} if indigo else {}),
                 ).offer(runtime.adapter.observe())
@@ -542,37 +607,63 @@ def preparation_binding(
                     restored = restore(offer.binding)
                     valid, healed_members = retained_boundary(current)
                     healed = {m.specimen_ref: m.observation for m in healed_members}
-                    if (not valid or not _raw_party_fully_restored(runtime.reader.read())
-                        or any((healed[k].species_id, healed[k].level, healed[k].experience,
-                                tuple(m.move_id for m in healed[k].known_moves))
-                               != (new[k].species_id, new[k].level, new[k].experience,
-                                   tuple(m.move_id for m in new[k].known_moves))
-                               for k in new)):
-                        raise ValueError("partial preparation restoration changed progress or readiness")
-                    restoration = dict(actions=restored.actions_executed,
-                                       frames=restored.frames_executed,
-                                       evidence=dict(restored.evidence))
+                    if (
+                        not valid
+                        or not _raw_party_fully_restored(runtime.reader.read())
+                        or any(
+                            (
+                                healed[k].species_id,
+                                healed[k].level,
+                                healed[k].experience,
+                                tuple(m.move_id for m in healed[k].known_moves),
+                            )
+                            != (
+                                new[k].species_id,
+                                new[k].level,
+                                new[k].experience,
+                                tuple(m.move_id for m in new[k].known_moves),
+                            )
+                            for k in new
+                        )
+                    ):
+                        raise ValueError(
+                            "partial preparation restoration changed progress or readiness"
+                        )
+                    restoration = dict(
+                        actions=restored.actions_executed,
+                        frames=restored.frames_executed,
+                        evidence=dict(restored.evidence),
+                    )
             # A fully healed final nonwinning encounter may already be ready.
             # Both paths remain failed doses requiring a fresh model choice.
             if eligible and _raw_party_fully_restored(runtime.reader.read()):
-                result = dict(result, bounded_partial_preparation=dict(
-                    schema="pokemon.red.preparation-partial.v1",
-                    trainee_ref=ref,
-                    target_level=target,
-                    initial_level=old[ref].level,
-                    terminal_level=new[ref].level,
-                    initial_xp=old[ref].experience,
-                    terminal_xp=new[ref].experience,
-                    encounter_allowance=maximum_battles,
-                    encounters=maximum_battles,
-                    target_reached=False,
-                    fully_restored=True,
-                    stop_reason="encounter_limit",
-                    **(dict(restoration=restoration,
-                            support_authority="selected_preparation_final_restoration",
-                            model_queries=0) if restoration is not None else {}),
-                    terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
-                ))
+                result = dict(
+                    result,
+                    bounded_partial_preparation=dict(
+                        schema="pokemon.red.preparation-partial.v1",
+                        trainee_ref=ref,
+                        target_level=target,
+                        initial_level=old[ref].level,
+                        terminal_level=new[ref].level,
+                        initial_xp=old[ref].experience,
+                        terminal_xp=new[ref].experience,
+                        encounter_allowance=maximum_battles,
+                        encounters=maximum_battles,
+                        target_reached=False,
+                        fully_restored=True,
+                        stop_reason="encounter_limit",
+                        **(
+                            dict(
+                                restoration=restoration,
+                                support_authority="selected_preparation_final_restoration",
+                                model_queries=0,
+                            )
+                            if restoration is not None
+                            else {}
+                        ),
+                        terminal_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+                    ),
+                )
                 partial_report_digest = canonical_sha256(result)
         return GoalExecutionReport(
             actions.actions_executed - before_actions,
@@ -622,7 +713,8 @@ def preparation_binding(
                     not _raw_party_fully_restored(after.raw)
                     or completed_report_digest is None
                     or canonical_sha256(dict(report.evidence)) != completed_report_digest
-                    or sha256(runtime.emulator.save_state_bytes()).hexdigest() != completed_state_sha256
+                    or sha256(runtime.emulator.save_state_bytes()).hexdigest()
+                    != completed_state_sha256
                     or report.actions_executed != actions.actions_executed - before_actions
                     or report.frames_executed != runtime.emulator.frame_count - before_frames
                 ):

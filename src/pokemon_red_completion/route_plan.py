@@ -30,12 +30,12 @@ from pokemon_red_completion.global_router import (
     advance_macro_state,
 )
 from pokemon_red_completion.local_router import (
-    _IncrementalLocalPaths,
     LocalGoal,
     LocalGraph,
     LocalPath,
     LocalRouterError,
     TraversalMode,
+    _IncrementalLocalPaths,
     find_local_path,
     find_local_paths,
     without_coordinates,
@@ -77,19 +77,37 @@ class _FrozenLocalRouteCache:
             self.graphs[identity] = (graph, dict(graph.edges))
         return identity in self.graphs
 
-    def route_key(self, graph, local_graphs, start_map, start_at, goal_map,
-                  unavailable, capabilities, last_outside, start_mode, goal_at, goal_mode):
+    def route_key(
+        self,
+        graph,
+        local_graphs,
+        start_map,
+        start_at,
+        goal_map,
+        unavailable,
+        capabilities,
+        last_outside,
+        start_mode,
+        goal_at,
+        goal_mode,
+    ):
         """Retain all input graphs before reusing one complete pure query."""
         if self.invalidated:
             raise RoutePlanningError("read-only route inventory was invalidated")
         # Subclasses may compute neighbors dynamically; retain their old path.
-        if type(graph) is not MacroGraph or any(type(g) is not LocalGraph for g in local_graphs.values()):
+        if type(graph) is not MacroGraph or any(
+            type(g) is not LocalGraph for g in local_graphs.values()
+        ):
             return None
         macro_id, world_id = id(graph), id(local_graphs)
-        state = (dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
-                 dict(graph.retained_outside_overrides),
-                 None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
-                 None if graph.warp_triggers is None else dict(graph.warp_triggers))
+        state = (
+            dict(graph.edges),
+            graph.outside_nodes,
+            dict(graph.warp_locations),
+            dict(graph.retained_outside_overrides),
+            None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+            None if graph.warp_triggers is None else dict(graph.warp_triggers),
+        )
         previous = self.route_macro_graphs.get(macro_id)
         if previous is not None and (previous[0] is not graph or previous[1] != state):
             self.invalidated = self.route_invalidated = True
@@ -108,23 +126,39 @@ class _FrozenLocalRouteCache:
         if previous_world is None:
             if len(self.route_worlds) >= 128:
                 return None
-            self.route_worlds[world_id] = (local_graphs, {m: id(g) for m, g in local_graphs.items()})
+            self.route_worlds[world_id] = (
+                local_graphs,
+                {m: id(g) for m, g in local_graphs.items()},
+            )
         retained = True
         for local in local_graphs.values():
             retained = self._retain_graph(local) and retained
         if not retained:
             return None
-        return (macro_id, frozenset(self.route_worlds[world_id][1].items()),
-                start_map, start_at, goal_map,
-                frozenset((m, frozenset(at)) for m, at in unavailable.items()),
-                capabilities, last_outside, start_mode, goal_at, goal_mode)
+        return (
+            macro_id,
+            frozenset(self.route_worlds[world_id][1].items()),
+            start_map,
+            start_at,
+            goal_map,
+            frozenset((m, frozenset(at)) for m, at in unavailable.items()),
+            capabilities,
+            last_outside,
+            start_mode,
+            goal_at,
+            goal_mode,
+        )
 
     def verify_routes(self):
         for graph, state in self.route_macro_graphs.values():
-            current = (dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
-                       dict(graph.retained_outside_overrides),
-                       None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
-                       None if graph.warp_triggers is None else dict(graph.warp_triggers))
+            current = (
+                dict(graph.edges),
+                graph.outside_nodes,
+                dict(graph.warp_locations),
+                dict(graph.retained_outside_overrides),
+                None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+                None if graph.warp_triggers is None else dict(graph.warp_triggers),
+            )
             if current != state:
                 self.invalidated = self.route_invalidated = True
         for local_graphs, state in self.route_worlds.values():
@@ -166,14 +200,22 @@ class _FrozenLocalRouteCache:
             projected = without_warp_transit(graph, warps, start_at=start)
             projected_retained = self._retain_graph(projected)
             search = None
-            if retained and projected_retained and len(self.searches) < _MAX_LOCAL_INVENTORY_SEARCHES:
-                search = _IncrementalLocalPaths(projected, start, capabilities=capabilities, start_mode=mode)
+            if (
+                retained
+                and projected_retained
+                and len(self.searches) < _MAX_LOCAL_INVENTORY_SEARCHES
+            ):
+                search = _IncrementalLocalPaths(
+                    projected, start, capabilities=capabilities, start_mode=mode
+                )
                 self.searches[search_key] = projected, search
         else:
             projected, search = entry
             projected_retained = self._retain_graph(projected)
         if search is None:
-            paths = find_local_paths(projected, start, goals, capabilities=capabilities, start_mode=mode)
+            paths = find_local_paths(
+                projected, start, goals, capabilities=capabilities, start_mode=mode
+            )
         else:
             try:
                 paths = search.paths(goals)
@@ -528,8 +570,17 @@ def plan_route(
     route_key = None
     if inventory_cache is not None:
         route_key = inventory_cache.route_key(
-            graph, local_graphs, start_map, start_at, goal_map, unavailable,
-            capabilities, last_outside, start_mode, goal_at, goal_mode,
+            graph,
+            local_graphs,
+            start_map,
+            start_at,
+            goal_map,
+            unavailable,
+            capabilities,
+            last_outside,
+            start_mode,
+            goal_at,
+            goal_mode,
         )
         if route_key is not None and route_key in inventory_cache.routes:
             inventory_cache.route_hits += 1
@@ -542,8 +593,8 @@ def plan_route(
     projected = {
         map_id: (
             without_coordinates(local, unavailable.get(map_id, frozenset()))
-            if inventory_cache is None else
-            inventory_cache.project(local, unavailable.get(map_id, frozenset()))
+            if inventory_cache is None
+            else inventory_cache.project(local, unavailable.get(map_id, frozenset()))
         )
         for map_id, local in local_graphs.items()
     }
@@ -562,12 +613,17 @@ def plan_route(
         )
     except RoutePlanningError as error:
         # Preserve complex native exception chains instead of flattening them.
-        if (route_key is not None and len(inventory_cache.routes) < 1024
+        if (
+            route_key is not None
+            and inventory_cache is not None
+            and len(inventory_cache.routes) < 1024
             and type(error) is RoutePlanningError
-            and error.__cause__ is None and error.__context__ is None):
+            and error.__cause__ is None
+            and error.__context__ is None
+        ):
             inventory_cache.routes[route_key] = (False, error.args)
         raise
-    if route_key is not None and len(inventory_cache.routes) < 1024:
+    if route_key is not None and inventory_cache is not None and len(inventory_cache.routes) < 1024:
         inventory_cache.routes[route_key] = (True, result)
     return result
 
@@ -654,7 +710,11 @@ def _find_composed_route(
             if inventory_cache is None:
                 local = without_warp_transit(local, warps, start_at=state.at)
                 local_paths = find_local_paths(
-                    local, state.at, goals, capabilities=capabilities, start_mode=state.mode
+                    local,
+                    state.at,
+                    goals,
+                    capabilities=capabilities,
+                    start_mode=state.mode,
                 )
             else:
                 local, local_paths = inventory_cache.paths(
@@ -711,7 +771,10 @@ def _find_composed_route(
                     passages[passage_key] = ()
                     continue
                 candidates = tuple(
-                    (segment, sum(local_edge.cost for local_edge in segment.approach.edges))
+                    (
+                        segment,
+                        sum(local_edge.cost for local_edge in segment.approach.edges),
+                    )
                     for segment in composed
                 )
                 passages[passage_key] = candidates

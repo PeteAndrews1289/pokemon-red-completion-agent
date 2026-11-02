@@ -153,9 +153,7 @@ class BoundedPlayerStep:
             "collection_after": self.collection_after.public_dict(),
             "collection_before": self.collection_before.public_dict(),
             "decision_ordinal": self.decision_ordinal,
-            "failure_reason": (
-                None if self.failure_reason is None else self.failure_reason.value
-            ),
+            "failure_reason": (None if self.failure_reason is None else self.failure_reason.value),
             "frames_executed": self.frames_executed,
             "policy_context_sha256": self.policy_context_sha256,
             "recovery_attempt": self.recovery_attempt,
@@ -163,16 +161,31 @@ class BoundedPlayerStep:
             "selection_mode": self.selection_mode.value,
             "semantic_state_changed": self.semantic_state_changed,
             "status": self.status.value,
-            **({"capture_support": self.capture_support.public_dict()}
-               if self.capture_support is not None else {}),
-            **({"capture_survey": self.capture_survey.public_dict()}
-               if self.capture_survey is not None else {}),
-            **({"storage_preparation": self.storage_preparation.public_dict()}
-               if self.storage_preparation is not None else {}),
-            **({"field_moves": self.field_moves.public_dict()}
-               if self.field_moves is not None else {}),
-            **({"destination_unavailable": self.destination_unavailable.public_dict()}
-               if self.destination_unavailable is not None else {}),
+            **(
+                {"capture_support": self.capture_support.public_dict()}
+                if self.capture_support is not None
+                else {}
+            ),
+            **(
+                {"capture_survey": self.capture_survey.public_dict()}
+                if self.capture_survey is not None
+                else {}
+            ),
+            **(
+                {"storage_preparation": self.storage_preparation.public_dict()}
+                if self.storage_preparation is not None
+                else {}
+            ),
+            **(
+                {"field_moves": self.field_moves.public_dict()}
+                if self.field_moves is not None
+                else {}
+            ),
+            **(
+                {"destination_unavailable": self.destination_unavailable.public_dict()}
+                if self.destination_unavailable is not None
+                else {}
+            ),
         }
 
 
@@ -191,17 +204,11 @@ class BoundedPlayerResult:
 
     @property
     def authority_decisions(self) -> int:
-        return sum(
-            step.selection_mode is GoalSelectionMode.AUTHORITY
-            for step in self.steps
-        )
+        return sum(step.selection_mode is GoalSelectionMode.AUTHORITY for step in self.steps)
 
     @property
     def forced_singleton_steps(self) -> int:
-        return sum(
-            step.selection_mode is GoalSelectionMode.FORCED_SINGLETON
-            for step in self.steps
-        )
+        return sum(step.selection_mode is GoalSelectionMode.FORCED_SINGLETON for step in self.steps)
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -253,9 +260,7 @@ def _retain_executor_failure(
                 else GoalFailureReason.BINDING_FAILED
             )
             return GoalExecutionReport(
-                actions_executed=(
-                    after.controller_actions - before.controller_actions
-                ),
+                actions_executed=(after.controller_actions - before.controller_actions),
                 frames_executed=after.emulator_frames - before.emulator_frames,
                 evidence={},
             )
@@ -371,7 +376,9 @@ def run_bounded_player_episode(
 
     for decision_index in range(limits.max_decisions):
         if stop_requested is not None and _completion_without_actions(
-            stop_requested, current, budget_meter,
+            stop_requested,
+            current,
+            budget_meter,
         ):
             trajectory.require_settled()
             return BoundedPlayerResult(
@@ -391,15 +398,11 @@ def run_bounded_player_episode(
         )
         if available_count < limits.min_available_goals and not forced_singleton:
             if not steps:
-                raise BoundedPlayerError(
-                    "bounded player lacks a genuine semantic choice"
-                )
+                raise BoundedPlayerError("bounded player lacks a genuine semantic choice")
             trajectory.require_settled()
             return BoundedPlayerResult(
                 authority_id=authority_id,
-                stop_reason=(
-                    BoundedPlayerStopReason.INSUFFICIENT_AVAILABLE_GOALS
-                ),
+                stop_reason=(BoundedPlayerStopReason.INSUFFICIENT_AVAILABLE_GOALS),
                 steps=tuple(steps),
                 completion_satisfied=False,
             )
@@ -409,9 +412,7 @@ def run_bounded_player_episode(
             allow_resource_variants=current.binding_set.allow_resource_variants,
         )
         if len(question.available_indices) != available_count:
-            raise BoundedPlayerError(
-                "bounded player availability accounting differs"
-            )
+            raise BoundedPlayerError("bounded player availability accounting differs")
         recovery_attempt = failed_kind is not None
         if recovery_attempt and question.policy_context_sha256 == failed_context:
             trajectory.require_settled()
@@ -423,9 +424,7 @@ def run_bounded_player_episode(
             )
 
         selection_mode = (
-            GoalSelectionMode.FORCED_SINGLETON
-            if forced_singleton
-            else GoalSelectionMode.AUTHORITY
+            GoalSelectionMode.FORCED_SINGLETON if forced_singleton else GoalSelectionMode.AUTHORITY
         )
         selected_authority: GoalDecisionAuthority = (
             _ForcedSingletonAuthority() if forced_singleton else authority
@@ -478,10 +477,7 @@ def run_bounded_player_episode(
             raise BoundedPlayerError(
                 "bounded player report differs from independent budget accounting"
             )
-        if (
-            actions > limits.max_actions_per_decision
-            or frames > limits.max_frames_per_decision
-        ):
+        if actions > limits.max_actions_per_decision or frames > limits.max_frames_per_decision:
             raise BoundedPlayerError("bounded player decision exceeded its budget")
         if (
             executed_budget.controller_actions - initial_budget.controller_actions
@@ -503,30 +499,34 @@ def run_bounded_player_episode(
             )
         except GoalManagerCompositionError as error:
             raise BoundedPlayerError(str(error)) from error
-        semantic_changed = (
-            after.semantic_state_sha256 != current.semantic_state_sha256
-        )
+        semantic_changed = after.semantic_state_sha256 != current.semantic_state_sha256
         if execution.passed and not semantic_changed:
-            raise BoundedPlayerError(
-                "successful bounded goal did not change semantic state"
-            )
+            raise BoundedPlayerError("successful bounded goal did not change semantic state")
         search_binding = current.binding_set.require(
             question.opportunities[execution.selected_candidate_index].binding_ref
         )
-        if search_memory is not None and actions > 0 and (
-            search_binding.tracks_search_effort
+        if (
+            search_memory is not None
+            and actions > 0
             and (
-                execution.passed
-                or execution.verification.failure_reason in {
-                    GoalFailureReason.SEARCH_EXHAUSTED,
-                    GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED,
-                }
+                search_binding.tracks_search_effort
+                and (
+                    execution.passed
+                    or execution.verification.failure_reason
+                    in {
+                        GoalFailureReason.SEARCH_EXHAUSTED,
+                        GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED,
+                    }
+                )
             )
         ):
             search_memory.record(
                 search_binding.search_memory_source,
-                search_binding.search_objective_sha256 or current.collection.required_specimens_sha256,
-                exhausted=not execution.passed, actions=actions, frames=frames,
+                search_binding.search_objective_sha256
+                or current.collection.required_specimens_sha256,
+                exhausted=not execution.passed,
+                actions=actions,
+                frames=frames,
             )
             refreshed = _observe_without_actions(observe, budget_meter, executed_budget)
             if refreshed.collection != after.collection:
@@ -549,23 +549,28 @@ def run_bounded_player_episode(
                 collection_after=after.collection,
                 selection_mode=selection_mode,
                 capture_support=(
-                    None if execution_report is None
+                    None
+                    if execution_report is None
                     else CaptureSupportSummary.from_evidence(execution_report.evidence)
                 ),
                 capture_survey=(
-                    None if execution_report is None
+                    None
+                    if execution_report is None
                     else CaptureSurveySummary.from_evidence(execution_report.evidence)
                 ),
                 field_moves=(
-                    None if execution_report is None
+                    None
+                    if execution_report is None
                     else FieldMoveSummary.from_evidence(execution_report.evidence)
                 ),
                 destination_unavailable=(
-                    None if execution_report is None
+                    None
+                    if execution_report is None
                     else DestinationUnavailableSummary.from_evidence(execution_report.evidence)
                 ),
                 storage_preparation=(
-                    None if execution_report is None
+                    None
+                    if execution_report is None
                     else StoragePreparationSummary.from_evidence(execution_report.evidence)
                 ),
             )
@@ -653,8 +658,7 @@ def _require_settled_execution(result: GoalManagerExecutionResult) -> None:
         )
     if result.execution is None and (
         result.verification.status is not GoalDecisionOutcome.FAILED
-        or result.verification.failure_reason
-        is not GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+        or result.verification.failure_reason is not GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
     ):
         raise BoundedPlayerError("bounded player execution report is absent")
 
@@ -664,8 +668,6 @@ def _different_goal_guard(
 ) -> Callable[[object], None]:
     def guard(selection: object) -> None:
         if failed_kind is not None and getattr(selection, "kind", None) is failed_kind:
-            raise _RepeatedRecoveryGoal(
-                "bounded player repeated the failed goal during recovery"
-            )
+            raise _RepeatedRecoveryGoal("bounded player repeated the failed goal during recovery")
 
     return guard

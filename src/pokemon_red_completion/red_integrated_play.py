@@ -98,8 +98,9 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         },
     }
     route_loss = _settled_route_trainer_loss(binding, terminal, report)
-    route_recovery = (_settled_route_trainer_recovery(binding, terminal, report)
-                      or _settled_route_field_recovery(binding, terminal, report))
+    route_recovery = _settled_route_trainer_recovery(
+        binding, terminal, report
+    ) or _settled_route_field_recovery(binding, terminal, report)
     route_stop = route_loss or route_recovery
     destination_unavailable = _settled_evolution_destination_unavailable(
         binding, before, terminal, report
@@ -116,7 +117,9 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         binding, before, terminal, report
     ):
         reasons[GoalKind.RESUPPLY] = {GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED}
-    if binding.kind is GoalKind.RESUPPLY and _settled_league_funding_loss(binding, terminal, report):
+    if binding.kind is GoalKind.RESUPPLY and _settled_league_funding_loss(
+        binding, terminal, report
+    ):
         reasons[GoalKind.RESUPPLY] = {GoalFailureReason.RESOURCE_LOST}
     if "route_setback" in report.evidence and not route_stop:
         return False
@@ -188,9 +191,13 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         set(before.facts["owned_species"]) <= set(terminal.facts["owned_species"])
         and set(before.facts["completed_objectives"]) <= set(terminal.facts["completed_objectives"])
         and (
-            (before.facts["specimen_counts"] == terminal.facts["specimen_counts"]
-             and (not route_stop or set(before.facts["owned_species"])
-                  == set(terminal.facts["owned_species"])))
+            (
+                before.facts["specimen_counts"] == terminal.facts["specimen_counts"]
+                and (
+                    not route_stop
+                    or set(before.facts["owned_species"]) == set(terminal.facts["owned_species"])
+                )
+            )
             or (
                 (
                     route_stop
@@ -207,24 +214,28 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
                     )
                 )
                 and _retained_evolution_census(
-                    before.facts, terminal.facts,
+                    before.facts,
+                    terminal.facts,
                     require_exact_owned=route_stop or binding.kind is GoalKind.ACQUIRE_SPECIES,
                 )
             )
             or (
                 binding.kind is GoalKind.ACQUIRE_SPECIES
-                and (captures := _settled_partial_capture_events(
-                    report, native_local_source=_native_local_capture_source(
-                        binding, before, terminal,
-                    ),
-                )) is not None
-                and _retained_evolution_census(
-                    before.facts, terminal.facts, captures=captures
+                and (
+                    captures := _settled_partial_capture_events(
+                        report,
+                        native_local_source=_native_local_capture_source(
+                            binding,
+                            before,
+                            terminal,
+                        ),
+                    )
                 )
+                is not None
+                and _retained_evolution_census(before.facts, terminal.facts, captures=captures)
             )
         )
     )
-
 
 
 def _settled_funding_approach_limit(binding, before, terminal, report):
@@ -239,10 +250,12 @@ def _settled_funding_approach_limit(binding, before, terminal, report):
         and evidence["maximum_flees"] == evidence["completed_flees"] == 8
         and evidence.get("trainer_attempted") is False
         and evidence.get("target_reached") is False
-        and type(evidence.get("income_earned")) is int and evidence["income_earned"] == 0
+        and type(evidence.get("income_earned")) is int
+        and evidence["income_earned"] == 0
         and evidence.get("terminal_sha256") == terminal.sha256
         and before.facts.get("cash") == terminal.facts.get("cash")
-        and report.actions_executed > 0 and report.frames_executed > 0
+        and report.actions_executed > 0
+        and report.frames_executed > 0
     )
 
 
@@ -258,7 +271,8 @@ def settled_evolution_partial(binding, report):
             not getattr(binding, "binding_ref", "").startswith("red-npc-trade-dependency:")
             or evidence.get("mechanic") != "trade_level_dependency"
             or evidence.get("complete") is not False
-            or evidence.get("intermediate_verification") != {
+            or evidence.get("intermediate_verification")
+            != {
                 "status": GoalDecisionOutcome.FAILED.value,
                 "failure_reason": GoalFailureReason.OUTCOME_NOT_VERIFIED.value,
             }
@@ -309,7 +323,7 @@ def settled_evolution_partial(binding, report):
         and type(evidence.get("healing_trips")) is int
         and evidence["healing_trips"] >= 0
     )
-    if (
+    return not (
         not (routed or native)
         or evidence.get("evolution_partial") is not True
         or evidence.get("retained_active_roster_restored") is not True
@@ -321,9 +335,7 @@ def settled_evolution_partial(binding, report):
         )
         or type(evidence.get("completed_training_battles")) is not int
         or evidence["completed_training_battles"] <= 0
-    ):
-        return False
-    return True
+    )
 
 
 def _settled_partial_preparation(binding, before, terminal, report):
@@ -336,13 +348,16 @@ def _settled_partial_preparation(binding, before, terminal, report):
     evidence = report.evidence
     member = binding.binding_ref.startswith("pokemon.red:member-preparation:")
     routed_shape = any(key in evidence for key in ("mechanic", "support", "preparation"))
-    if (binding.binding_ref.startswith("pokemon.red:routed-preparation:")
-            or (member and routed_shape)):
+    if binding.binding_ref.startswith("pokemon.red:routed-preparation:") or (
+        member and routed_shape
+    ):
         # A member alias preserves its child's report. Away from the nurse the
         # child is routed; at the nurse it can be a direct bounded executor.
         # Malformed routed evidence must not fall through to a planted partial.
-        if (evidence.get("mechanic") != "routed_preparation"
-                or evidence.get("support") != "cartridge_route_then_fresh_binding"):
+        if (
+            evidence.get("mechanic") != "routed_preparation"
+            or evidence.get("support") != "cartridge_route_then_fresh_binding"
+        ):
             return False
         evidence = evidence.get("preparation")
     elif not (member or binding.binding_ref.startswith("pokemon.red:bounded-preparation:")):
@@ -358,12 +373,25 @@ def _settled_partial_preparation(binding, before, terminal, report):
         or partial.get("target_reached") is not False
         or partial.get("fully_restored") is not True
         or partial.get("stop_reason") != "encounter_limit"
-        or any(type(partial.get(k)) is not int for k in (
-            "target_level", "initial_level", "terminal_level", "initial_xp", "terminal_xp",
-            "encounter_allowance", "encounters",
-        ))
-        or not (1 <= partial["initial_level"] <= partial["terminal_level"]
-                < partial["target_level"] <= 100)
+        or any(
+            type(partial.get(k)) is not int
+            for k in (
+                "target_level",
+                "initial_level",
+                "terminal_level",
+                "initial_xp",
+                "terminal_xp",
+                "encounter_allowance",
+                "encounters",
+            )
+        )
+        or not (
+            1
+            <= partial["initial_level"]
+            <= partial["terminal_level"]
+            < partial["target_level"]
+            <= 100
+        )
         or not 0 <= partial["initial_xp"] < partial["terminal_xp"]
         or not 1 <= partial["encounters"] == partial["encounter_allowance"] <= 128
         or not isinstance(partial.get("trainee_ref"), str)
@@ -372,8 +400,10 @@ def _settled_partial_preparation(binding, before, terminal, report):
     members = []
     for snapshot in (before, terminal):
         lesson = snapshot.facts.get("player_lesson")
-        if (not isinstance(lesson, Mapping)
-                or lesson.get("schema") != "pokemon.red.player-lesson-snapshot.v1"):
+        if (
+            not isinstance(lesson, Mapping)
+            or lesson.get("schema") != "pokemon.red.player-lesson-snapshot.v1"
+        ):
             return False
         party = lesson.get("party")
         if not isinstance(party, (list, tuple)) or not all(isinstance(m, Mapping) for m in party):
@@ -397,9 +427,11 @@ def _settled_field_delivery_stop(binding, before, terminal, report):
     """One certified failed free delivery, not unknown exceptions or stock credit."""
     e = report.evidence
     lessons = [s.facts.get("player_lesson") for s in (before, terminal)]
-    if not all(isinstance(lesson, Mapping)
-               and lesson.get("schema") == "pokemon.red.player-lesson-snapshot.v1"
-               for lesson in lessons):
+    if not all(
+        isinstance(lesson, Mapping)
+        and lesson.get("schema") == "pokemon.red.player-lesson-snapshot.v1"
+        for lesson in lessons
+    ):
         return False
     parties = [lesson.get("party") for lesson in lessons]
     bags = []
@@ -417,20 +449,26 @@ def _settled_field_delivery_stop(binding, before, terminal, report):
         and e.get("item_acquired") is False
         and e.get("complete_delivery") is False
         and e.get("objective_completed") is False
-        and all(type(e.get(k)) is int and e[k] == 0
-                for k in ("quantity_acquired", "purchases", "cash_debit"))
-        and type(e.get("item")) is int and 1 <= e["item"] <= 250
+        and all(
+            type(e.get(k)) is int and e[k] == 0
+            for k in ("quantity_acquired", "purchases", "cash_debit")
+        )
+        and type(e.get("item")) is int
+        and 1 <= e["item"] <= 250
         and binding.binding_ref
         == "pokemon.red:field-resupply:" + before.sha256 + ":" + str(e["item"])
         and type(e.get("quoted_navigation_transitions")) is int
         and e["quoted_navigation_transitions"] > 1
         and e.get("source_sha256") == before.sha256
         and e.get("terminal_sha256") == terminal.sha256
-        and report.actions_executed > 0 and report.frames_executed > 0
+        and report.actions_executed > 0
+        and report.frames_executed > 0
         and before.facts.get("cash") == terminal.facts.get("cash")
-        and isinstance(parties[0], (tuple, list)) and 1 <= len(parties[0]) <= 6
+        and isinstance(parties[0], (tuple, list))
+        and 1 <= len(parties[0]) <= 6
         and parties[0] == parties[1]
-        and isinstance(bags[0], (tuple, list)) and bags[0] == bags[1]
+        and isinstance(bags[0], (tuple, list))
+        and bags[0] == bags[1]
         and before.facts.get("specimen_counts") == terminal.facts.get("specimen_counts")
         and set(before.facts.get("owned_species", ()))
         == set(terminal.facts.get("owned_species", ()))
@@ -453,12 +491,17 @@ def _settled_evolution_destination_unavailable(binding, before, terminal, report
         binding.kind is not GoalKind.EVOLVE_SPECIES
         or e.get("schema") != "pokemon.core.routed-semantic-goal-report.v1"
         or e.get("destination_kind") != binding.kind.value
-        or not all(e.get(name) is True for name in (
-            "route_verified", "budget_reconciled", "within_budget"))
-        or not all(e.get(name) is False for name in (
-            "destination_bound", "destination_executed", "route_is_policy_kind"))
-        or any(type(e.get(name)) is not int or e[name] != 0 for name in (
-            "private_binding_fields", "private_route_fields"))
+        or not all(
+            e.get(name) is True for name in ("route_verified", "budget_reconciled", "within_budget")
+        )
+        or not all(
+            e.get(name) is False
+            for name in ("destination_bound", "destination_executed", "route_is_policy_kind")
+        )
+        or any(
+            type(e.get(name)) is not int or e[name] != 0
+            for name in ("private_binding_fields", "private_route_fields")
+        )
     ):
         return False
     try:
@@ -478,53 +521,73 @@ def _settled_route_trainer_loss(binding, terminal, report):
     """A proven route blackout is not arrival or completion of its destination."""
     from .red_player_engaged_story import settled_route_trainer_loss_evidence
 
-    return _settled_route_trainer_stop(binding, terminal, report, settled_route_trainer_loss_evidence)
+    return _settled_route_trainer_stop(
+        binding, terminal, report, settled_route_trainer_loss_evidence
+    )
 
 
 def _settled_route_trainer_recovery(binding, terminal, report):
     from .red_player_engaged_story import settled_route_trainer_recovery_evidence
 
-    if not _settled_route_trainer_stop(binding, terminal, report, settled_route_trainer_recovery_evidence):
+    if not _settled_route_trainer_stop(
+        binding, terminal, report, settled_route_trainer_recovery_evidence
+    ):
         return False
     hp = (terminal.facts.get("diagnostics") or {}).get("party_hp")
-    return isinstance(hp, (tuple, list)) and list(hp) == report.evidence["route_setback"]["party_hp"]
+    return (
+        isinstance(hp, (tuple, list)) and list(hp) == report.evidence["route_setback"]["party_hp"]
+    )
 
 
 def _settled_route_field_recovery(binding, terminal, report):
     from .red_routed_recovery import settled_route_field_recovery_evidence
 
-    if not _settled_route_trainer_stop(binding, terminal, report, settled_route_field_recovery_evidence):
+    if not _settled_route_trainer_stop(
+        binding, terminal, report, settled_route_field_recovery_evidence
+    ):
         return False
     hp = (terminal.facts.get("diagnostics") or {}).get("party_hp")
-    return isinstance(hp, (tuple, list)) and list(hp) == report.evidence["route_setback"]["party_hp"]
+    return (
+        isinstance(hp, (tuple, list)) and list(hp) == report.evidence["route_setback"]["party_hp"]
+    )
 
 
 def _settled_route_trainer_stop(binding, terminal, report, validator):
     evidence = report.evidence
     loss = evidence.get("route_setback")
     chain = evidence.get("route_setback_destination_chain", ())
-    if (not isinstance(chain, (tuple, list)) or len(chain) > 8
-        or any(not isinstance(node, Mapping) for node in chain)):
+    if (
+        not isinstance(chain, (tuple, list))
+        or len(chain) > 8
+        or any(not isinstance(node, Mapping) for node in chain)
+    ):
         return False
     actions, frames = report.actions_executed, report.frames_executed
     nodes = [evidence, *chain]
     for index, node in enumerate(nodes):
-        if (node.get("schema") != "pokemon.core.routed-semantic-goal-report.v1"
+        if (
+            node.get("schema") != "pokemon.core.routed-semantic-goal-report.v1"
             or node.get("destination_kind") != binding.kind.value
             or node.get("budget_reconciled") is not True
-            or node.get("within_budget") is not True):
+            or node.get("within_budget") is not True
+        ):
             return False
         # Every outer transport succeeded and invoked a routed destination.
         # Only the final route stopped before its semantic destination ran.
         expected = index < len(nodes) - 1
-        if any(node.get(key) is not expected for key in (
-            "route_verified", "destination_bound", "destination_executed"
-        )):
+        if any(
+            node.get(key) is not expected
+            for key in ("route_verified", "destination_bound", "destination_executed")
+        ):
             return False
         if index:
             child_actions, child_frames = node.get("actions"), node.get("frames")
-            if (type(child_actions) is not int or type(child_frames) is not int
-                or not 0 <= child_actions <= actions or not 0 <= child_frames <= frames):
+            if (
+                type(child_actions) is not int
+                or type(child_frames) is not int
+                or not 0 <= child_actions <= actions
+                or not 0 <= child_frames <= frames
+            ):
                 return False
             actions, frames = child_actions, child_frames
     return (
@@ -582,10 +645,12 @@ def _settled_capture_trip_stop(report, *, exhausted=False):
     ):
         return True
     diagnostics = evidence.get("capture_diagnostics")
-    if (not isinstance(diagnostics, Mapping)
-            or diagnostics.get("schema") != "pokemon.red.capture-survey-diagnostics.v1"
-            or diagnostics.get("diagnostic_only") is not True
-            or not isinstance(diagnostics.get("events"), (list, tuple))):
+    if (
+        not isinstance(diagnostics, Mapping)
+        or diagnostics.get("schema") != "pokemon.red.capture-survey-diagnostics.v1"
+        or diagnostics.get("diagnostic_only") is not True
+        or not isinstance(diagnostics.get("events"), (list, tuple))
+    ):
         return False
     events = diagnostics["events"]
     if not events or any(not isinstance(event, Mapping) for event in events):
@@ -597,10 +662,13 @@ def _settled_capture_trip_stop(report, *, exhausted=False):
     actions = []
     for event in events:
         ordinal = event.get("event_ordinal")
-        if (type(ordinal) is not int or ordinal <= last_ordinal
-                or event.get("source_id") != source
-                or event.get("selection_authority") != "deterministic_capture_support"
-                or event.get("kind") == "capture_verified"):
+        if (
+            type(ordinal) is not int
+            or ordinal <= last_ordinal
+            or event.get("source_id") != source
+            or event.get("selection_authority") != "deterministic_capture_support"
+            or event.get("kind") == "capture_verified"
+        ):
             return False
         last_ordinal = ordinal
         if event.get("kind") == "survey_action_failed" and not (
@@ -614,8 +682,10 @@ def _settled_capture_trip_stop(report, *, exhausted=False):
         if event.get("kind") == "survey_action_returned":
             operation = event.get("operation")
             expected = False if operation == "capture_encounter" else None
-            if (operation not in {"seek_encounter", "flee_encounter", "capture_encounter"}
-                    or event.get("returned") is not expected):
+            if (
+                operation not in {"seek_encounter", "flee_encounter", "capture_encounter"}
+                or event.get("returned") is not expected
+            ):
                 return False
             actions.append(operation)
     failed = actions.count("capture_encounter")
@@ -628,18 +698,21 @@ def _settled_capture_trip_stop(report, *, exhausted=False):
         and final_review.get("operation") == "seek_encounter"
         and isinstance(final_review.get("measured"), Mapping)
         and all(
-            type(final_review["measured"].get(name)) is int
-            and final_review["measured"][name] == 0
+            type(final_review["measured"].get(name)) is int and final_review["measured"][name] == 0
             for name in ("native_actions", "native_frames")
         )
     )
     return (
         len(actions) + int(exhausted) == survey["semantic_actions"]
         and failed + flees == survey["encounters_seen"] == survey["flees"]
-        and all(type(diagnostics.get(name)) is int and diagnostics[name] == count
-                for name, count in (("capture_attempts", failed),
-                                    ("failed_capture_attempts", failed),
-                                    ("direct_flees", flees)))
+        and all(
+            type(diagnostics.get(name)) is int and diagnostics[name] == count
+            for name, count in (
+                ("capture_attempts", failed),
+                ("failed_capture_attempts", failed),
+                ("direct_flees", flees),
+            )
+        )
         and sum(event.get("kind") == "capture_not_retained" for event in events) == failed
         and (
             (
@@ -667,7 +740,7 @@ def _native_local_capture_source(binding, before, terminal):
     if not isinstance(ref, str) or not ref.startswith(prefix):
         return None
     head, separator, _ = ref.partition(":profile-")
-    source = head[len(prefix):]
+    source = head[len(prefix) :]
     if not separator or not source.startswith("wild:"):
         return None
     maps = []
@@ -684,10 +757,14 @@ def _native_local_capture_source(binding, before, terminal):
 
 def _native_local_partial_capture_report(evidence, survey, source):
     """Recognize the existing bounded local report, not an unknown wrapper."""
-    if (not isinstance(source, str) or not source.startswith("wild:")
-            or "schema" in evidence or evidence.get("bounded") is not True
-            or type(evidence.get("source_normalized")) is not bool
-            or not isinstance(survey, Mapping)):
+    if (
+        not isinstance(source, str)
+        or not source.startswith("wild:")
+        or "schema" in evidence
+        or evidence.get("bounded") is not True
+        or type(evidence.get("source_normalized")) is not bool
+        or not isinstance(survey, Mapping)
+    ):
         return False
     for name in ("captures", "encounters_seen", "semantic_actions", "flees"):
         if type(evidence.get(name)) is not int or evidence[name] != survey.get(name):
@@ -695,7 +772,12 @@ def _native_local_partial_capture_report(evidence, survey, source):
     for name in ("safety_stopped", "search_exhausted"):
         if type(evidence.get(name)) is not bool or evidence[name] is not survey.get(name):
             return False
-    names = ("initial_missing", "final_missing", "initial_missing_specimens", "final_missing_specimens")
+    names = (
+        "initial_missing",
+        "final_missing",
+        "initial_missing_specimens",
+        "final_missing_specimens",
+    )
     if any(type(evidence.get(name)) is not int for name in names):
         return False
     return (
@@ -713,16 +795,25 @@ def _settled_partial_capture_events(report, *, native_local_source=None):
     routed = (
         evidence.get("schema") == "pokemon.core.routed-semantic-goal-report.v1"
         and evidence.get("destination_kind") == GoalKind.ACQUIRE_SPECIES.value
-        and all(evidence.get(name) is True for name in (
-            "budget_reconciled", "destination_bound", "destination_executed",
-            "route_verified", "within_budget"))
+        and all(
+            evidence.get(name) is True
+            for name in (
+                "budget_reconciled",
+                "destination_bound",
+                "destination_executed",
+                "route_verified",
+                "within_budget",
+            )
+        )
     )
     native_local = _native_local_partial_capture_report(evidence, survey, native_local_source)
     if (
         not (routed or native_local)
         or not isinstance(survey, Mapping)
-        or any(type(survey.get(name)) is not int or survey[name] < 0 for name in (
-            "captures", "encounters_seen", "semantic_actions", "flees"))
+        or any(
+            type(survey.get(name)) is not int or survey[name] < 0
+            for name in ("captures", "encounters_seen", "semantic_actions", "flees")
+        )
         or survey["captures"] <= 0
         or survey["encounters_seen"] < survey["captures"]
         or survey["semantic_actions"] < survey["captures"]
@@ -736,20 +827,25 @@ def _settled_partial_capture_events(report, *, native_local_source=None):
         or any(not isinstance(event, Mapping) for event in diagnostics["events"])
     ):
         return None
-    captures = tuple(event for event in diagnostics["events"]
-                     if event.get("kind") == "capture_verified")
+    captures = tuple(
+        event for event in diagnostics["events"] if event.get("kind") == "capture_verified"
+    )
     if len(captures) != survey["captures"]:
         return None
     last_ordinal, source_id = -1, None
     for event in captures:
         if (
             event.get("selection_authority") != "deterministic_capture_support"
-            or not isinstance(event.get("source_id"), str) or not event["source_id"]
+            or not isinstance(event.get("source_id"), str)
+            or not event["source_id"]
             or type(event.get("event_ordinal")) is not int
             or event["event_ordinal"] <= last_ordinal
-            or not isinstance(event.get("species_ref"), str) or not event["species_ref"]
-            or any(type(event.get(name)) is not int or event[name] < 0 for name in (
-                "specimen_count_before", "specimen_count_after"))
+            or not isinstance(event.get("species_ref"), str)
+            or not event["species_ref"]
+            or any(
+                type(event.get(name)) is not int or event[name] < 0
+                for name in ("specimen_count_before", "specimen_count_after")
+            )
             or event["specimen_count_after"] != event["specimen_count_before"] + 1
             or not isinstance(event.get("new_owned_species"), (list, tuple))
         ):
@@ -822,9 +918,7 @@ def _retained_evolution_census(
     additions = Counter()
     running = Counter(a["other_specimen_counts"])
     running.update(m["species_ref"] for m in b["individuals"].values())
-    owned = set(before["owned_species"]) | {
-        m["species_ref"] for m in b["individuals"].values()
-    }
+    owned = set(before["owned_species"]) | {m["species_ref"] for m in b["individuals"].values()}
     for event in captures:
         ref = event["species_ref"]
         if event["specimen_count_before"] != running[ref]:
@@ -1186,10 +1280,14 @@ def _settled_league_funding_loss(binding, terminal, report):
         and report.evidence.get("no_income_credit") is True
         and proof.get("schema") == "pokemon.red.league-funding-native-loss.v1"
         and proof.get("terminal_sha256") == terminal.sha256
-        and type(before) is int and type(after) is int and before >= 0
-        and after == before // 2 and after == terminal.facts.get("cash")
+        and type(before) is int
+        and type(after) is int
+        and before >= 0
+        and after == before // 2
+        and after == terminal.facts.get("cash")
         and isinstance(battle, dict)
         and battle.get("schema") == "pokemon.red.learned-trainer-completion.v1"
-        and battle.get("outcome") == "lost" and battle.get("field_ready") is True
+        and battle.get("outcome") == "lost"
+        and battle.get("field_ready") is True
         and battle.get("money_delta") == after - before
     )

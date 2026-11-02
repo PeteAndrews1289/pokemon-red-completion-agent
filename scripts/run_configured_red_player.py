@@ -21,7 +21,8 @@ from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalBindingSet
 from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.living_dex_option_value import (
-    upgrade_option_value_model_for_matchup, upgrade_option_value_model_for_story_unit,
+    upgrade_option_value_model_for_matchup,
+    upgrade_option_value_model_for_story_unit,
 )
 from pokemon_red_completion.player_challenge_consequence import ChallengeConsequenceHead
 from pokemon_red_completion.private_artifacts import (
@@ -49,12 +50,16 @@ from pokemon_red_completion.red_player_configuration import (
     RedPlayerConfiguration,
     assemble_configured_player,
     checkpoint_quiescent,
-    player_lifecycle_fields,
     declared_native_evolution_venue_model,
+    player_lifecycle_fields,
 )
 from pokemon_red_completion.red_player_continuation import (
     SCHEMA as PLAYER_CONTINUATION_SCHEMA,
+)
+from pokemon_red_completion.red_player_continuation import (
     _costs as continuation_costs,
+)
+from pokemon_red_completion.red_player_continuation import (
     accumulate_player_costs,
     capture_player_continuation,
 )
@@ -95,8 +100,12 @@ def declared_owned_machine_options(plan):
         or not isinstance(spec, dict)
         or set(spec) != {"mode", "reason"}
         or type(spec["mode"]) is not str
-        or spec["mode"] not in {"direct_attack_capacity_v1", "boxed_frontier_attack_capacity_v2",
-                                "boxed_frontier_evolution_bundles_v3"}
+        or spec["mode"]
+        not in {
+            "direct_attack_capacity_v1",
+            "boxed_frontier_attack_capacity_v2",
+            "boxed_frontier_evolution_bundles_v3",
+        }
         or not isinstance(spec["reason"], str)
         or not spec["reason"].strip()
     ):
@@ -118,11 +127,17 @@ def declared_goal_model_observation_compatibility(plan):
         or spec["mode"] not in {"v9_to_v15_zero_extension_v1", "v9_to_v16_zero_extension_v1"}
         or not isinstance(spec["reason"], str)
         or not spec["reason"].strip()
-        or any(type(spec[key]) is not str or len(spec[key]) != 64
-               or any(c not in "0123456789abcdef" for c in spec[key])
-               for key in ("source_model_sha256", "target_model_sha256"))
+        or any(
+            type(spec[key]) is not str
+            or len(spec[key]) != 64
+            or any(c not in "0123456789abcdef" for c in spec[key])
+            for key in ("source_model_sha256", "target_model_sha256")
+        )
     ):
-        raise ValueError("goal observation compatibility requires an explicit pinned DEVELOPMENT V9-to-V15 declaration")
+        raise ValueError(
+            "goal observation compatibility requires an explicit pinned "
+            "DEVELOPMENT V9-to-V15 declaration"
+        )
     return dict(spec)
 
 
@@ -160,28 +175,47 @@ def declared_goal_model(plan, configuration, backend):
     if model.model_sha256 != configuration.goal_model_sha256:
         raise ValueError("configured goal model differs")
     if compatibility is not None:
-        if (model.feature_version != 9
-                or model.model_sha256 != compatibility["source_model_sha256"]):
-            raise ValueError("goal observation compatibility source differs from authenticated V9 record")
+        if model.feature_version != 9 or model.model_sha256 != compatibility["source_model_sha256"]:
+            raise ValueError(
+                "goal observation compatibility source differs from authenticated V9 record"
+            )
         target_version = 16 if compatibility["mode"] == "v9_to_v16_zero_extension_v1" else 15
-        model = (upgrade_option_value_model_for_story_unit(model) if target_version == 16
-                 else upgrade_option_value_model_for_matchup(model))
-        if (model.feature_version != target_version
-                or model.model_sha256 != compatibility["target_model_sha256"]):
+        model = (
+            upgrade_option_value_model_for_story_unit(model)
+            if target_version == 16
+            else upgrade_option_value_model_for_matchup(model)
+        )
+        if (
+            model.feature_version != target_version
+            or model.model_sha256 != compatibility["target_model_sha256"]
+        ):
             raise ValueError("goal observation compatibility target differs from zero extension")
     return model
 
 
-def connect_owned_machine_options(menu, *, rom, include_boxed_frontier=False, boxed_world=None,
-                                  include_prepared_evolution=False, admits=None):
+def connect_owned_machine_options(
+    menu,
+    *,
+    rom,
+    include_boxed_frontier=False,
+    boxed_world=None,
+    include_prepared_evolution=False,
+    admits=None,
+):
     """Extend the existing ports; preserve ordinary choices and exclusions."""
     if type(include_boxed_frontier) is not bool or (
         include_boxed_frontier and not callable(boxed_world)
     ):
         raise ValueError("boxed-machine options require their declared route binding")
-    if (type(include_prepared_evolution) is not bool or include_prepared_evolution and (
-            not include_boxed_frontier or not callable(admits)
-            or not callable(getattr(menu, "enumerate_collection", None)))):
+    if (
+        type(include_prepared_evolution) is not bool
+        or include_prepared_evolution
+        and (
+            not include_boxed_frontier
+            or not callable(admits)
+            or not callable(getattr(menu, "enumerate_collection", None))
+        )
+    ):
         raise ValueError("prepared evolution requires the existing admitted collection observer")
     previous = menu.enumerate_owned_machines
 
@@ -197,10 +231,13 @@ def connect_owned_machine_options(menu, *, rom, include_boxed_frontier=False, bo
             return rows
         rows += owned_machine_options(runtime, actions, rom=rom)
         if include_boxed_frontier:
-            from pokemon_red_completion.red_boxed_machine_options import boxed_frontier_machine_options
+            from pokemon_red_completion.red_boxed_machine_options import (
+                boxed_frontier_machine_options,
+            )
 
-            rows += boxed_frontier_machine_options(runtime, actions, observation,
-                rom=rom, world=world_now())
+            rows += boxed_frontier_machine_options(
+                runtime, actions, observation, rom=rom, world=world_now()
+            )
         return rows
 
     menu.enumerate_owned_machines = observe
@@ -211,14 +248,25 @@ def connect_owned_machine_options(menu, *, rom, include_boxed_frontier=False, bo
             rows = collection(runtime, actions, observation)
             if runtime.reader.read().badge_bits != 255:
                 return rows
-            from pokemon_red_completion.red_boxed_machine_options import quoted_boxed_frontier_machine_options
-            from pokemon_red_completion.red_prepared_evolution_options import prepared_evolution_options
+            from pokemon_red_completion.red_boxed_machine_options import (
+                quoted_boxed_frontier_machine_options,
+            )
+            from pokemon_red_completion.red_prepared_evolution_options import (
+                prepared_evolution_options,
+            )
 
-            choices = quoted_boxed_frontier_machine_options(runtime, actions, observation,
-                rom=rom, world=world_now())
-            return rows + prepared_evolution_options(runtime, actions, observation,
-                machine_choices=choices, evolution_options=rows,
-                enumerate_collection=collection, admits=admits)
+            choices = quoted_boxed_frontier_machine_options(
+                runtime, actions, observation, rom=rom, world=world_now()
+            )
+            return rows + prepared_evolution_options(
+                runtime,
+                actions,
+                observation,
+                machine_choices=choices,
+                evolution_options=rows,
+                enumerate_collection=collection,
+                admits=admits,
+            )
 
         menu.enumerate_collection = observe_collection
 
@@ -227,12 +275,15 @@ def connect_declared_machine_options(menu, plan, *, rom, holder, configuration):
     if not declared_owned_machine_options(plan):
         return
     mode = plan["owned_machine_options"]["mode"]
-    connect_owned_machine_options(menu, rom=rom,
-        include_boxed_frontier=mode in {
-            "boxed_frontier_attack_capacity_v2", "boxed_frontier_evolution_bundles_v3"},
+    connect_owned_machine_options(
+        menu,
+        rom=rom,
+        include_boxed_frontier=mode
+        in {"boxed_frontier_attack_capacity_v2", "boxed_frontier_evolution_bundles_v3"},
         boxed_world=lambda: holder["configured_route"].route_world,
         include_prepared_evolution=mode == "boxed_frontier_evolution_bundles_v3",
-        admits=configuration.admits if mode == "boxed_frontier_evolution_bundles_v3" else None)
+        admits=configuration.admits if mode == "boxed_frontier_evolution_bundles_v3" else None,
+    )
 
 
 def doc(path):
@@ -325,8 +376,11 @@ def configured_run_nodes(root):
             row = doc(error)
             if (
                 row.get("phase") != "before_emulator"
-                or (not checkpoint_quiescent(row) if "checkpoint_lifecycle" in row
-                    else row.get("worker_stopped") is not True)
+                or (
+                    not checkpoint_quiescent(row)
+                    if "checkpoint_lifecycle" in row
+                    else row.get("worker_stopped") is not True
+                )
                 or row.get("state_loads") != 0
                 or row.get("inputs") != 0
                 or row.get("frames") != 0
@@ -365,8 +419,10 @@ def copied_native_cash_costs(actions):
     """Copy wrappers retain the same observed gross cash meter as normal play."""
     if not callable(actions.observe_cash):
         raise ValueError("copied native costs require live cash observation")
-    result = {key: getattr(actions, key) for key in (
-        "observed_cash_debits", "observed_cash_rewards", "observed_cash_changes")}
+    result = {
+        key: getattr(actions, key)
+        for key in ("observed_cash_debits", "observed_cash_rewards", "observed_cash_changes")
+    }
     if any(type(value) is not int or value < 0 for value in result.values()):
         raise ValueError("copied native cash counter is invalid")
     return result
@@ -396,7 +452,6 @@ def configured_execution_limits(args, left, wall_left):
     )
 
 
-
 def configured_renewal_stop_reason(args, left, wall_left, *, compulsory_settlement):
     """Do not turn a return reserve into a fresh goal's setup allowance.
 
@@ -414,10 +469,15 @@ def configured_renewal_stop_reason(args, left, wall_left, *, compulsory_settleme
     limits = configured_execution_limits(args, left, wall_left)
     if compulsory_settlement:
         return "insufficient_settlement_allowance" if limits.decisions < 2 else None
-    requested = dict(actions=getattr(args, "actions", 30000),
-                     frames=getattr(args, "frames", 2500000), seconds=args.seconds)
-    reserves = {axis: min(cap, max(1, requested[axis] // 4))
-                for axis, cap in (("actions", 3000), ("frames", 250000), ("seconds", 60))}
+    requested = dict(
+        actions=getattr(args, "actions", 30000),
+        frames=getattr(args, "frames", 2500000),
+        seconds=args.seconds,
+    )
+    reserves = {
+        axis: min(cap, max(1, requested[axis] // 4))
+        for axis, cap in (("actions", 3000), ("frames", 250000), ("seconds", 60))
+    }
     if any(getattr(limits, axis) <= 2 * reserve for axis, reserve in reserves.items()):
         return "insufficient_settlement_allowance"
     return None
@@ -503,9 +563,13 @@ def declared_greedy_selection(plan):
         raise ValueError("goal selection requires an explicit ordinary DEVELOPMENT declaration")
     if "exploration_mix" in spec:
         mix = spec["exploration_mix"]
-        if (spec["mode"] != "exploration" or isinstance(mix, bool)
-                or not isinstance(mix, (int, float)) or not 0 <= mix <= 1
-                or plan.get("readiness_refinement") is not None):
+        if (
+            spec["mode"] != "exploration"
+            or isinstance(mix, bool)
+            or not isinstance(mix, (int, float))
+            or not 0 <= mix <= 1
+            or plan.get("readiness_refinement") is not None
+        ):
             raise ValueError("custom exploration requires separate ordinary DEVELOPMENT selection")
     return spec["mode"] == "greedy"
 
@@ -523,7 +587,8 @@ def declared_input_recording(plan):
         return {}
     if (
         not isinstance(spec, dict)
-        or not {"git_worktree_probe", "reason"} <= set(spec)
+        or not {"git_worktree_probe", "reason"}
+        <= set(spec)
         <= {"git_worktree_probe", "reason", "native_input_storage", "isolation_report"}
         or spec["git_worktree_probe"] != "gitless_fast_path_v1"
         or type(spec["reason"]) is not str
@@ -548,9 +613,7 @@ def declared_readiness_refinement(plan):
     spec = plan.get("readiness_refinement")
     if spec is None:
         return {}
-    if not isinstance(spec, dict) or (
-        ("objective_ref" in spec) == ("objective_refs" in spec)
-    ):
+    if not isinstance(spec, dict) or (("objective_ref" in spec) == ("objective_refs" in spec)):
         raise ValueError("readiness refinement requires one explicit branch scope")
     plural = "objective_refs" in spec
     scope_key = "objective_refs" if plural else "objective_ref"
@@ -558,39 +621,60 @@ def declared_readiness_refinement(plan):
         raise ValueError("readiness branch set requires a declared JSON list")
     objective_ref = tuple(spec[scope_key]) if plural else spec[scope_key]
     scope = branch_recovery_objectives(objective_ref)
-    if plural and (
-        plan.get("partition") != "development" or not declared_greedy_selection(plan)
-    ):
+    if plural and (plan.get("partition") != "development" or not declared_greedy_selection(plan)):
         raise ValueError("readiness branch set requires explicit greedy DEVELOPMENT scope")
     if (
         not {scope_key, "head_path", "head_sha256", "content_sha256", "reason"}
         <= set(spec)
-        <= {scope_key, "head_path", "head_sha256", "content_sha256", "reason",
-            "refine_preparation", "defer_unbound_preparation", "allow_singleton_parent_support", "associate_unique_combat"}
+        <= {
+            scope_key,
+            "head_path",
+            "head_sha256",
+            "content_sha256",
+            "reason",
+            "refine_preparation",
+            "defer_unbound_preparation",
+            "allow_singleton_parent_support",
+            "associate_unique_combat",
+        }
         or any(ref not in plan["objectives"] for ref in scope)
         or not isinstance(spec["reason"], str)
         or not spec["reason"].strip()
     ):
         raise ValueError("readiness refinement requires one declared objective and reuse reason")
     refine_preparation = spec.get("refine_preparation", False)
-    if type(refine_preparation) is not bool or refine_preparation and (
-        plan.get("partition") != "development" or not declared_greedy_selection(plan)
+    if (
+        type(refine_preparation) is not bool
+        or refine_preparation
+        and (plan.get("partition") != "development" or not declared_greedy_selection(plan))
     ):
         raise ValueError("preparation refinement requires declared greedy DEVELOPMENT scope")
     defer_unbound_preparation = spec.get("defer_unbound_preparation", False)
     allow_singleton_parent_support = spec.get("allow_singleton_parent_support", False)
-    if (type(defer_unbound_preparation) is not bool
+    if (
+        type(defer_unbound_preparation) is not bool
         or type(allow_singleton_parent_support) is not bool
-        or (defer_unbound_preparation or allow_singleton_parent_support) and (
-            plan.get("partition") != "development" or not declared_greedy_selection(plan))
-        or allow_singleton_parent_support and not defer_unbound_preparation):
+        or (defer_unbound_preparation or allow_singleton_parent_support)
+        and (plan.get("partition") != "development" or not declared_greedy_selection(plan))
+        or allow_singleton_parent_support
+        and not defer_unbound_preparation
+    ):
         raise ValueError("parent-bound preparation requires explicit greedy DEVELOPMENT scope")
     associate_unique_combat = spec.get("associate_unique_combat", False)
-    if type(associate_unique_combat) is not bool or associate_unique_combat and (
-        not refine_preparation or defer_unbound_preparation or allow_singleton_parent_support
-        or plan.get("partition") != "development" or not declared_greedy_selection(plan)
+    if (
+        type(associate_unique_combat) is not bool
+        or associate_unique_combat
+        and (
+            not refine_preparation
+            or defer_unbound_preparation
+            or allow_singleton_parent_support
+            or plan.get("partition") != "development"
+            or not declared_greedy_selection(plan)
+        )
     ):
-        raise ValueError("unique combat association requires unmasked DEVELOPMENT preparation refinement")
+        raise ValueError(
+            "unique combat association requires unmasked DEVELOPMENT preparation refinement"
+        )
     payload = Path(spec["head_path"]).read_bytes()
     if sha256(payload).hexdigest() != spec["content_sha256"]:
         raise ValueError("readiness refinement head bytes differ")
@@ -682,10 +766,14 @@ def declared_league_first_collection_scope(plan):
     spec = plan.get("league_first_collection_scope")
     if spec is None:
         return None
-    if (plan.get("partition") != "development" or type(spec) is not dict
-            or set(spec) != {"mode","reason"}
-            or spec["mode"] != "defer_eight_badge_collection_until_hof_v1"
-            or type(spec["reason"]) is not str or not spec["reason"].strip()):
+    if (
+        plan.get("partition") != "development"
+        or type(spec) is not dict
+        or set(spec) != {"mode", "reason"}
+        or spec["mode"] != "defer_eight_badge_collection_until_hof_v1"
+        or type(spec["reason"]) is not str
+        or not spec["reason"].strip()
+    ):
         raise ValueError(
             "League-first scope requires an explicit supported DEVELOPMENT declaration"
         )
@@ -713,12 +801,18 @@ def player_wiring_declaration(plan):
     if type(bootstrap) is not bool or bootstrap and plan.get("partition") != "development":
         raise ValueError("owned-stock income bootstrap requires explicit DEVELOPMENT permission")
     conserved = plan.get("conserved_owned_medicine_income", False)
-    if (type(conserved) is not bool
-            or conserved and (plan.get("partition") != "development" or not bootstrap)):
+    if (
+        type(conserved) is not bool
+        or conserved
+        and (plan.get("partition") != "development" or not bootstrap)
+    ):
         raise ValueError("conserved income requires explicit DEVELOPMENT owned-stock permission")
     wiring = {
-        key: bootstrap if key == "owned_stock_income_bootstrap" else
-        conserved if key == "conserved_owned_medicine_income" else plan.get(key)
+        key: bootstrap
+        if key == "owned_stock_income_bootstrap"
+        else conserved
+        if key == "conserved_owned_medicine_income"
+        else plan.get(key)
         for key in PLAYER_WIRING_FIELDS
     }
     if venue_model is not None:
@@ -815,14 +909,18 @@ def execute_player_chunk(
         admission = result["episode"].get("admission_failure")
         if admission:
             result.update(
-                passed=False, error_type=admission["error_type"], error=admission["error"],
-                admission_failure=admission, error_chain=admission.get("error_chain"),
+                passed=False,
+                error_type=admission["error_type"],
+                error=admission["error"],
+                admission_failure=admission,
+                error_chain=admission.get("error_chain"),
             )
         else:
             result["passed"] = True
     except BaseException as error:
-        result.update(error_type=type(error).__name__, error=str(error),
-                          error_chain=_exception_chain(error))
+        result.update(
+            error_type=type(error).__name__, error=str(error), error_chain=_exception_chain(error)
+        )
     finally:
         _write(output / "terminal.state", emulator.save_state_bytes())
         cost_path = output / "native/native-costs.json"
@@ -845,8 +943,11 @@ def execute_player_chunk(
             outcomes[-1].get("error_type") if outcomes else None
         )
         error_message = (
-            result.get("error") if result.get("error_type")
-            else outcomes[-1].get("error") if outcomes else None
+            result.get("error")
+            if result.get("error_type")
+            else outcomes[-1].get("error")
+            if outcomes
+            else None
         )
         primary_error_chain = result.get("error_chain") or (
             outcomes[-1].get("error_chain") if outcomes else None
@@ -856,17 +957,20 @@ def execute_player_chunk(
         checkpoint_type = error_type if error_type in CHECKPOINT_ERRORS else None
         if error_type == "ControllerFrameBudgetError":
             checkpoint_type = (
-                error_type if error_message == "controller exhausted its hard frame budget"
+                error_type
+                if error_message == "controller exhausted its hard frame budget"
                 else None
             )
         checkpoint_kwargs = (
             {"checkpoint_error": error_message}
-            if checkpoint_type == "ControllerFrameBudgetError" else {}
+            if checkpoint_type == "ControllerFrameBudgetError"
+            else {}
         )
         exported = None
         try:
             history = holder["observe_history"](
-                checkpoint_error_type=checkpoint_type, **checkpoint_kwargs,
+                checkpoint_error_type=checkpoint_type,
+                **checkpoint_kwargs,
             )
             censored = holder.get("censored_battle_checkpoint")
             exported = capture_player_continuation(
@@ -883,15 +987,18 @@ def execute_player_chunk(
             # fabricated continuation or permission to renew the live player.
             exported = None
             export_failure = dict(
-                error_type=type(export_error).__name__, error=str(export_error),
+                error_type=type(export_error).__name__,
+                error=str(export_error),
                 error_chain=_exception_chain(export_error),
-                primary_error_type=error_type, primary_error=error_message,
+                primary_error_type=error_type,
+                primary_error=error_message,
                 primary_error_chain=primary_error_chain,
                 resume_authorized=False,
             )
             _record(output / "CHECKPOINT-EXPORT-ERROR.json", export_failure)
             result.update(
-                passed=False, checkpoint_export_error=export_failure,
+                passed=False,
+                checkpoint_export_error=export_failure,
                 error_type=error_type or type(export_error).__name__,
                 error=error_message if error_type else str(export_error),
                 error_chain=primary_error_chain if error_type else _exception_chain(export_error),
@@ -899,8 +1006,13 @@ def execute_player_chunk(
         censored = holder.get("censored_battle_checkpoint")
         raw = holder["runtime"].reader.read()
         result.update(
-            **player_lifecycle_fields(scope="live_chunk", released=not emulator.pressed_buttons,
-                guest_backend_closed=(emulator._backend is None) if hasattr(emulator,"_backend") else None),
+            **player_lifecycle_fields(
+                scope="live_chunk",
+                released=not emulator.pressed_buttons,
+                guest_backend_closed=(emulator._backend is None)
+                if hasattr(emulator, "_backend")
+                else None,
+            ),
             released=not emulator.pressed_buttons,
             state_sha256=c.digest(output / "terminal.state"),
             context_sha256=c.digest(output / "CONTEXT.json") if exported is not None else None,
@@ -910,18 +1022,33 @@ def execute_player_chunk(
             map_id=raw.map_id,
             at=(raw.player_y, raw.player_x),
             levels=raw.party_levels,
-            completed=(exported["lesson"]["completed_objectives"] if exported is not None
-                       else outcomes[-1].get("after", {}).get("completed_objectives", [])
-                       if outcomes else []),
+            completed=(
+                exported["lesson"]["completed_objectives"]
+                if exported is not None
+                else outcomes[-1].get("after", {}).get("completed_objectives", [])
+                if outcomes
+                else []
+            ),
             native_facts=native_checkpoint_facts(holder["runtime"]),
             censored_battle_checkpoint=censored,
             chunk_costs=meter,
         )
     saved_export = doc(output / "CONTEXT.json") if exported is not None else None
-    required_export = {"schema", "state_sha256", "lesson", "cash", "bag", "preparation",
-                       "battle", "spent", "grants_new_budget", "fit_allowed"}
+    required_export = {
+        "schema",
+        "state_sha256",
+        "lesson",
+        "cash",
+        "bag",
+        "preparation",
+        "battle",
+        "spent",
+        "grants_new_budget",
+        "fit_allowed",
+    }
     result["paired_context_authenticated"] = bool(
-        type(exported) is dict and type(saved_export) is dict
+        type(exported) is dict
+        and type(saved_export) is dict
         and set(exported) - {"search_memory"} == required_export
         and set(saved_export) - {"search_memory"} == required_export
         and exported.get("schema") == PLAYER_CONTINUATION_SCHEMA
@@ -945,31 +1072,67 @@ def qualified_route_setback_receipt(row):
     chain, cost = row.get("error_chain"), row.get("observed_cost")
     before, after = row.get("before", {}), row.get("after", {})
     walk, route = proof.get("failed_walk"), proof.get("route_terminal")
-    if (proof.get("reason") != "step_acknowledgement_exhausted"
-            or not isinstance(chain, list) or len(chain) != 1
-            or not isinstance(chain[0], dict)
-            or chain[0].get("reason_code") != proof["reason"]
-            or row.get("verification") is not None or row.get("safe_terminal") is not True
-            or not isinstance(cost, dict) or proof.get("cost") != cost
-            or not isinstance(walk, dict) or not isinstance(route, dict)):
+    if (
+        proof.get("reason") != "step_acknowledgement_exhausted"
+        or not isinstance(chain, list)
+        or len(chain) != 1
+        or not isinstance(chain[0], dict)
+        or chain[0].get("reason_code") != proof["reason"]
+        or row.get("verification") is not None
+        or row.get("safe_terminal") is not True
+        or not isinstance(cost, dict)
+        or proof.get("cost") != cost
+        or not isinstance(walk, dict)
+        or not isinstance(route, dict)
+    ):
         return False
-    if (any(type(cost.get(k)) is not int for k in ("actions", "completed_actions", "frames", "cash_spent"))
-            or cost["actions"] <= 0 or cost["frames"] <= 0
-            or cost["completed_actions"] != cost["actions"] or cost["cash_spent"] != 0):
+    if (
+        any(
+            type(cost.get(k)) is not int
+            for k in ("actions", "completed_actions", "frames", "cash_spent")
+        )
+        or cost["actions"] <= 0
+        or cost["frames"] <= 0
+        or cost["completed_actions"] != cost["actions"]
+        or cost["cash_spent"] != 0
+    ):
         return False
-    keys = ("player_lesson", "owned_species", "specimen_counts", "completed_objectives", "bag_items", "coins", "cash")
-    if (not isinstance(before, dict) or not isinstance(after, dict)
-            or any(k not in before or k not in after or before[k] != after[k] for k in keys)):
+    keys = (
+        "player_lesson",
+        "owned_species",
+        "specimen_counts",
+        "completed_objectives",
+        "bag_items",
+        "coins",
+        "cash",
+    )
+    if (
+        not isinstance(before, dict)
+        or not isinstance(after, dict)
+        or any(k not in before or k not in after or before[k] != after[k] for k in keys)
+    ):
         return False
     for facts in (before, after):
-        if (facts.get("party_guard_verified") is not True or facts.get("input_ready") is not True
-                or facts.get("buttons_released") is not True or facts.get("battle_state") != 0):
+        if (
+            facts.get("party_guard_verified") is not True
+            or facts.get("input_ready") is not True
+            or facts.get("buttons_released") is not True
+            or facts.get("battle_state") != 0
+        ):
             return False
-    return (after.get("route_boundary") == route
-            and route == dict(map_id=walk.get("source_map"), at=walk.get("source_at"),
-                              ready=True, interruption=None, mode="land")
-            and walk.get("source_map") == walk.get("expected_map")
-            and walk.get("action") in {"up", "down", "left", "right"})
+    return (
+        after.get("route_boundary") == route
+        and route
+        == dict(
+            map_id=walk.get("source_map"),
+            at=walk.get("source_at"),
+            ready=True,
+            interruption=None,
+            mode="land",
+        )
+        and walk.get("source_map") == walk.get("expected_map")
+        and walk.get("action") in {"up", "down", "left", "right"}
+    )
 
 
 def qualified_restoration_budget_censor(result, *, limits=None):
@@ -978,92 +1141,133 @@ def qualified_restoration_budget_censor(result, *, limits=None):
         return False
     episode, meter = result.get("episode") or {}, result.get("chunk_costs") or {}
     rows = episode.get("outcomes") or ()
-    if (episode.get("stop_reason") != "restoration_budget" or not rows
-            or result.get("error_type") or result.get("error")
-            or result.get("checkpoint_export_error")
-            or episode.get("admission_failure") or result.get("admission_failure")
-            or result.get("released") is not True or result.get("field_ready") is not True
-            or result.get("paired_context_authenticated") is not True
-            or not checkpoint_quiescent(result)
-            or result.get("cost_lower_bound") is True
-            or result.get("context_costs_complete") is False
-            or result.get("unknown_cost_fields")):
+    if (
+        episode.get("stop_reason") != "restoration_budget"
+        or not rows
+        or result.get("error_type")
+        or result.get("error")
+        or result.get("checkpoint_export_error")
+        or episode.get("admission_failure")
+        or result.get("admission_failure")
+        or result.get("released") is not True
+        or result.get("field_ready") is not True
+        or result.get("paired_context_authenticated") is not True
+        or not checkpoint_quiescent(result)
+        or result.get("cost_lower_bound") is True
+        or result.get("context_costs_complete") is False
+        or result.get("unknown_cost_fields")
+    ):
         return False
     for key in ("state_sha256", "context_sha256"):
         value = result.get(key)
-        if (type(value) is not str or len(value) != 64
-                or any(c not in "0123456789abcdef" for c in value)):
+        if (
+            type(value) is not str
+            or len(value) != 64
+            or any(c not in "0123456789abcdef" for c in value)
+        ):
             return False
     row = rows[-1]
     message = "native player restoration budget exhausted"
     chain = [dict(error_type="RestorationBudgetExhausted", error=message)]
-    if (row.get("error_type") != "RestorationBudgetExhausted" or row.get("error") != message
-            or row.get("error_chain") != chain
-            or result.get("error_chain") not in (None, chain)
-            or row.get("failure_phase") != "execution"
-            or row.get("failure_reason") != "execution_budget_exhausted"
-            or row.get("verification") != "failed"
-            or row.get("ordinary_setback") is not False
-            or row.get("safe_terminal") is not True
-            or row.get("terminal_state_sha256") != result["state_sha256"]
-            or any(r.get("error_type") or r.get("error") or r.get("error_chain")
-                   for r in rows[:-1])
-            or any(r.get("verification") == "failed" and r.get("ordinary_setback") is not True
-                   for r in rows[:-1])):
+    if (
+        row.get("error_type") != "RestorationBudgetExhausted"
+        or row.get("error") != message
+        or row.get("error_chain") != chain
+        or result.get("error_chain") not in (None, chain)
+        or row.get("failure_phase") != "execution"
+        or row.get("failure_reason") != "execution_budget_exhausted"
+        or row.get("verification") != "failed"
+        or row.get("ordinary_setback") is not False
+        or row.get("safe_terminal") is not True
+        or row.get("terminal_state_sha256") != result["state_sha256"]
+        or any(r.get("error_type") or r.get("error") or r.get("error_chain") for r in rows[:-1])
+        or any(
+            r.get("verification") == "failed" and r.get("ordinary_setback") is not True
+            for r in rows[:-1]
+        )
+    ):
         return False
-    integer_costs = ("actions_attempted", "actions_completed", "frames", "goal_attempts",
-        "restore_attempts", "nested_restore_attempts", "training_healing_attempts",
-        "observed_cash_debits", "observed_cash_rewards", "observed_cash_changes",
-        "control_recovery_cash_debits")
-    if (meter.get("schema") != "pokemon.red.native-player-costs.v1"
-            or meter.get("automatic_fit") is not False
-            or any(type(meter.get(k)) is not int or meter[k] < 0 for k in integer_costs)
-            or type(meter.get("seconds")) not in (int, float)
-            or not 0 <= meter["seconds"] < float("inf")
-            or meter.get("buttons_released") is not True
-            or meter["restore_attempts"] != limits.heals
-            or (limits.cash_debits is not None
-                and meter["observed_cash_debits"] > limits.cash_debits)
-            or meter["actions_completed"] != meter["actions_attempted"]
-            or meter["actions_attempted"] > limits.actions or meter["frames"] > limits.frames
-            or meter["seconds"] > limits.seconds or meter["goal_attempts"] > limits.decisions
-            or meter["goal_attempts"] != episode.get("executed_decisions")
-            or meter["goal_attempts"] != len(rows)):
+    integer_costs = (
+        "actions_attempted",
+        "actions_completed",
+        "frames",
+        "goal_attempts",
+        "restore_attempts",
+        "nested_restore_attempts",
+        "training_healing_attempts",
+        "observed_cash_debits",
+        "observed_cash_rewards",
+        "observed_cash_changes",
+        "control_recovery_cash_debits",
+    )
+    if (
+        meter.get("schema") != "pokemon.red.native-player-costs.v1"
+        or meter.get("automatic_fit") is not False
+        or any(type(meter.get(k)) is not int or meter[k] < 0 for k in integer_costs)
+        or type(meter.get("seconds")) not in (int, float)
+        or not 0 <= meter["seconds"] < float("inf")
+        or meter.get("buttons_released") is not True
+        or meter["restore_attempts"] != limits.heals
+        or (limits.cash_debits is not None and meter["observed_cash_debits"] > limits.cash_debits)
+        or meter["actions_completed"] != meter["actions_attempted"]
+        or meter["actions_attempted"] > limits.actions
+        or meter["frames"] > limits.frames
+        or meter["seconds"] > limits.seconds
+        or meter["goal_attempts"] > limits.decisions
+        or meter["goal_attempts"] != episode.get("executed_decisions")
+        or meter["goal_attempts"] != len(rows)
+    ):
         return False
     try:
         spent = continuation_costs(result.get("spent"))
     except (TypeError, ValueError):
         return False
-    for key, charged in {"decisions": "goal_attempts", "actions": "actions_attempted",
-                         "frames": "frames", "heals": "restore_attempts",
-                         "cash_debits": "observed_cash_debits"}.items():
+    for key, charged in {
+        "decisions": "goal_attempts",
+        "actions": "actions_attempted",
+        "frames": "frames",
+        "heals": "restore_attempts",
+        "cash_debits": "observed_cash_debits",
+    }.items():
         if type(spent.get(key)) is not int or spent[key] < meter[charged]:
             return False
-    if (type(spent.get("seconds")) not in (int, float)
-            or not meter["seconds"] <= spent["seconds"] < float("inf")):
+    if type(spent.get("seconds")) not in (int, float) or not meter["seconds"] <= spent[
+        "seconds"
+    ] < float("inf"):
         return False
     before, after, cost = row.get("before"), row.get("after"), row.get("observed_cost")
     if not all(type(v) is dict for v in (before, after, cost)):
         return False
-    snapshots = {"actions": "actions_attempted", "completed_actions": "actions_completed",
-        "frames": "frames", "restoration_attempts": "restore_attempts",
+    snapshots = {
+        "actions": "actions_attempted",
+        "completed_actions": "actions_completed",
+        "frames": "frames",
+        "restoration_attempts": "restore_attempts",
         "nested_restoration_attempts": "nested_restore_attempts",
-        "training_healing_attempts": "training_healing_attempts"}
+        "training_healing_attempts": "training_healing_attempts",
+    }
     for key, metered in snapshots.items():
-        if (type(before.get(key)) is not int or type(after.get(key)) is not int
-                or not 0 <= before[key] <= after[key] or after[key] != meter[metered]):
+        if (
+            type(before.get(key)) is not int
+            or type(after.get(key)) is not int
+            or not 0 <= before[key] <= after[key]
+            or after[key] != meter[metered]
+        ):
             return False
     for key in ("actions", "completed_actions", "frames"):
         if type(cost.get(key)) is not int or cost[key] != after[key] - before[key]:
             return False
-    if (type(before.get("cash")) is not int or type(after.get("cash")) is not int
-            or type(cost.get("cash_spent")) is not int
-            or cost["cash_spent"] != max(0, before["cash"] - after["cash"])
-            or after.get("battle_state") != 0 or type(after.get("battle_state")) is not int
-            or after.get("input_ready") is not True or after.get("buttons_released") is not True
-            or after.get("party_guard_verified") is not True):
-        return False
-    return True
+    return not (
+        type(before.get("cash")) is not int
+        or type(after.get("cash")) is not int
+        or type(cost.get("cash_spent")) is not int
+        or cost["cash_spent"] != max(0, before["cash"] - after["cash"])
+        or after.get("battle_state") != 0
+        or type(after.get("battle_state")) is not int
+        or after.get("input_ready") is not True
+        or after.get("buttons_released") is not True
+        or after.get("party_guard_verified") is not True
+    )
 
 
 def native_result_status(result, *, limits=None):
@@ -1077,12 +1281,15 @@ def native_result_status(result, *, limits=None):
     outcomes = episode.get("outcomes") or ()
     errors = sum(bool(row.get("error_type") or row.get("error")) for row in outcomes)
     recovered_routes = sum(qualified_route_setback_receipt(row) for row in outcomes)
-    root_error = bool(result.get("error_type") or result.get("error")
-                      or result.get("checkpoint_export_error"))
+    root_error = bool(
+        result.get("error_type") or result.get("error") or result.get("checkpoint_export_error")
+    )
     admission = bool(episode.get("admission_failure") or result.get("admission_failure"))
     setbacks = sum(row.get("ordinary_setback") is True for row in outcomes)
-    verification_failures = sum(row.get("verification") == "failed"
-                                and row.get("ordinary_setback") is not True for row in outcomes)
+    verification_failures = sum(
+        row.get("verification") == "failed" and row.get("ordinary_setback") is not True
+        for row in outcomes
+    )
     budget_censors = int(qualified_restoration_budget_censor(result, limits=limits))
     if admission:
         status = "admission_error"
@@ -1107,16 +1314,20 @@ def native_result_status(result, *, limits=None):
     else:
         status = "unverified"
     return dict(
-        schema="pokemon.red.native-result-status.v1", scope="current_chunk",
-        status=status, wrapper_returned=result.get("passed") is True,
-        native_outcome_error_count=errors, wrapper_or_export_error=root_error,
+        schema="pokemon.red.native-result-status.v1",
+        scope="current_chunk",
+        status=status,
+        wrapper_returned=result.get("passed") is True,
+        native_outcome_error_count=errors,
+        wrapper_or_export_error=root_error,
         recovered_route_error_count=recovered_routes,
         unrecovered_native_error_count=errors - recovered_routes,
         qualified_budget_censor_count=budget_censors,
         finite_censor=bool(budget_censors),
         effective_unrecovered_native_error_count=errors - recovered_routes - budget_censors,
         effective_nonordinary_verification_failures=verification_failures - budget_censors,
-        admission_error=admission, ordinary_setbacks=setbacks,
+        admission_error=admission,
+        ordinary_setbacks=setbacks,
         nonordinary_verification_failures=verification_failures,
         field_ready=result.get("field_ready") is True,
         controls_released=result.get("released") is True,
@@ -1153,7 +1364,8 @@ def chunk_continuation_reason(result, *, source_sha256, limits=None):
         return (
             "automatic_budget_recovery"
             if all(
-                kind in CHUNK_BUDGET_ERRORS and (
+                kind in CHUNK_BUDGET_ERRORS
+                and (
                     kind != "ControllerFrameBudgetError"
                     or message == "controller exhausted its hard frame budget"
                 )
@@ -1185,14 +1397,11 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
     if not outcomes:
         return None
     last = outcomes[-1]
-    known_trainer_error = (
-        last.get("error_type") == "RouteExecutionError"
-        and last.get("error") in {
-            "field dialogue lacks a newly poisoned member faint",
-            "field dialogue is not an admitted native faint",
-            "Gen I route cannot dismiss 'trainer_engagement'",
-        }
-    )
+    known_trainer_error = last.get("error_type") == "RouteExecutionError" and last.get("error") in {
+        "field dialogue lacks a newly poisoned member faint",
+        "field dialogue is not an admitted native faint",
+        "Gen I route cannot dismiss 'trainer_engagement'",
+    }
     known_loan_wild_error = (
         last.get("selected_kind") == GoalKind.EVOLVE_SPECIES.value
         and last.get("error_type") == "RedGoalContextError"
@@ -1201,8 +1410,7 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
     known_static_settlement = (
         last.get("selected_kind") == GoalKind.ACQUIRE_SPECIES.value
         and last.get("error_type") == "RouteExecutionError"
-        and last.get("error")
-        == "selected static transport requires ordinary player settlement"
+        and last.get("error") == "selected static transport requires ordinary player settlement"
     )
     known_story_decision_budget = (
         last.get("selected_kind") == GoalKind.ADVANCE_STORY.value
@@ -1222,11 +1430,19 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         or episode.get("stop_reason") != "execution_failed"
         or last.get("selected_kind") not in {kind.value for kind in GoalKind}
         or last.get("failure_phase") != "execution"
-        or (last.get("safe_terminal") is not True
-            and not ((known_loan_wild_error or known_story_decision_budget)
-                     and last.get("safe_terminal") is False))
-        or not (known_trainer_error or known_loan_wild_error or known_static_settlement
-                or known_story_decision_budget)
+        or (
+            last.get("safe_terminal") is not True
+            and not (
+                (known_loan_wild_error or known_story_decision_budget)
+                and last.get("safe_terminal") is False
+            )
+        )
+        or not (
+            known_trainer_error
+            or known_loan_wild_error
+            or known_static_settlement
+            or known_story_decision_budget
+        )
         or last.get("terminal_state_sha256") != result.get("state_sha256")
         or any(outcome.get("error_type") for outcome in outcomes[:-1])
         or runtime.emulator.pressed_buttons
@@ -1241,19 +1457,25 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
 
         guard = getattr(runtime.adapter, "party_guard", None)
         raw = runtime.reader.read()
-        if (not isinstance(guard, RedPlayerPartyGuard) or raw.battle_state != 0
-                or not raw.party_hp or not any(raw.party_hp)
-                or not runtime.reader.read_bottom_dialogue_box_visible()
-                or runtime.reader.read_overworld_start_menu_visible()):
+        if (
+            not isinstance(guard, RedPlayerPartyGuard)
+            or raw.battle_state != 0
+            or not raw.party_hp
+            or not any(raw.party_hp)
+            or not runtime.reader.read_bottom_dialogue_box_visible()
+            or runtime.reader.read_overworld_start_menu_visible()
+        ):
             return None
         guard.verify_active_roster_restored()
     if known_loan_wild_error:
         from pokemon_red_completion.red_player_party_guard import RedPlayerPartyGuard
 
         guard = getattr(runtime.adapter, "party_guard", None)
-        if (not isinstance(guard, RedPlayerPartyGuard)
-                or len(guard.loanable_refs) != 1
-                or runtime.reader.read().battle_state != 1):
+        if (
+            not isinstance(guard, RedPlayerPartyGuard)
+            or len(guard.loanable_refs) != 1
+            or runtime.reader.read().battle_state != 1
+        ):
             return None
         guard.verify()
         if set(guard.refs) - set(guard.reader.preparation_specimen_refs()) != set(
@@ -1261,36 +1483,55 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         ):
             return None
     bindings = inspect_bindings()
-    if (runtime.emulator.save_state_bytes() != before
-            or runtime.emulator.frame_count != frames):
+    if runtime.emulator.save_state_bytes() != before or runtime.emulator.frame_count != frames:
         raise ValueError("native control handoff inspection changed state")
     expected_ref = (
-        ("pokemon.red:interrupted-wild:" if known_loan_wild_error else
-         "pokemon.red:retained-engagement:") + result["state_sha256"]
-    )
+        "pokemon.red:interrupted-wild:"
+        if known_loan_wild_error
+        else "pokemon.red:retained-engagement:"
+    ) + result["state_sha256"]
     if (
         type(bindings) is not GoalBindingSet
         or len(bindings.bindings) != 1
         or bindings.bindings[0].kind is not GoalKind.RECOVER_CONTROL
-        or bindings.bindings[0].binding_ref
-        != expected_ref
+        or bindings.bindings[0].binding_ref != expected_ref
     ):
         return None
     return dict(
         schema="pokemon.red.qualified-native-control-handoff.v1",
         state_sha256=result["state_sha256"],
         binding_ref=bindings.bindings[0].binding_ref,
-        qualified=True, inputs=0, frames=0, model_queries=0,
-        failed_transport_preserved=True, strategic_substitution=False,
-        **({"retained_declared_loan": True, "wild_exit_before_pc_return": True}
-           if known_loan_wild_error else {}),
-        **({"original_terminal_safe": False, "compulsory_settlement_required": True}
-           if known_loan_wild_error and last.get("safe_terminal") is False else {}),
-        **({"retained_native_introduction": True, "retained_roster_restored": True}
-           if known_static_settlement else {}),
-        **({"censored_story_battle": True, "original_terminal_safe": False,
-            "local_decision_limit_unchanged": True, "aggregate_budget_reset": False}
-           if known_story_decision_budget else {}),
+        qualified=True,
+        inputs=0,
+        frames=0,
+        model_queries=0,
+        failed_transport_preserved=True,
+        strategic_substitution=False,
+        **(
+            {"retained_declared_loan": True, "wild_exit_before_pc_return": True}
+            if known_loan_wild_error
+            else {}
+        ),
+        **(
+            {"original_terminal_safe": False, "compulsory_settlement_required": True}
+            if known_loan_wild_error and last.get("safe_terminal") is False
+            else {}
+        ),
+        **(
+            {"retained_native_introduction": True, "retained_roster_restored": True}
+            if known_static_settlement
+            else {}
+        ),
+        **(
+            {
+                "censored_story_battle": True,
+                "original_terminal_safe": False,
+                "local_decision_limit_unchanged": True,
+                "aggregate_budget_reset": False,
+            }
+            if known_story_decision_budget
+            else {}
+        ),
     )
 
 
@@ -1307,6 +1548,7 @@ def qualified_menu_control_handoff(result, *, runtime, menu):
     This delegates to the existing exact retained-source/unique-recovery guard;
     it neither supplies a strategic goal nor turns an unknown error into success.
     """
+
     def inspect_control_bindings():
         actions = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
         return menu.enumerate_base(runtime, actions, runtime.adapter.observe())
@@ -1388,8 +1630,11 @@ def verify_loan_copy(args, plan, root, backend, configuration):
             evidence = settle_native_evolution(runtime, actions)
             result.update(passed=True, evidence=evidence, stock_preserved=before == _stock(runtime))
         except BaseException as error:
-            result.update(error_type=type(error).__name__, error=str(error),
-                          error_chain=_exception_chain(error))
+            result.update(
+                error_type=type(error).__name__,
+                error=str(error),
+                error_chain=_exception_chain(error),
+            )
         finally:
             rec.enabled = False
             ctrl.input_enabled = False
@@ -1399,8 +1644,11 @@ def verify_loan_copy(args, plan, root, backend, configuration):
                 frames=ctrl.frames_executed,
                 seconds=wall.elapsed_seconds,
                 released=not ctrl.pressed_buttons,
-                **player_lifecycle_fields(scope="diagnostic_chunk", released=not ctrl.pressed_buttons,
-                    guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None),
+                **player_lifecycle_fields(
+                    scope="diagnostic_chunk",
+                    released=not ctrl.pressed_buttons,
+                    guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+                ),
                 model_queries=0,
                 fits=0,
                 copy_back=False,
@@ -1411,8 +1659,13 @@ def verify_loan_copy(args, plan, root, backend, configuration):
                 configuration_sha256=configuration.sha256,
             )
             _record(output / "RESULT.json", result)
-    result.update(player_lifecycle_fields(scope="driver_terminal", released=result["released"],
-        guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None))
+    result.update(
+        player_lifecycle_fields(
+            scope="driver_terminal",
+            released=result["released"],
+            guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+        )
+    )
     _record(output / "FINAL-RESULT.json", result)
     authenticate_parent(guard_parent, c.digest)
     authenticate_parent(loan_parent, c.digest)
@@ -1467,7 +1720,9 @@ def declared_evolution_copy_experiment(plan):
         or type(spec["maximum_wall_seconds"]) is not int
         or not 1 <= spec["maximum_wall_seconds"] <= 600
     ):
-        raise ValueError("evolution experiment requires bounded non-copy-back DEVELOPMENT diagnostic")
+        raise ValueError(
+            "evolution experiment requires bounded non-copy-back DEVELOPMENT diagnostic"
+        )
     return dict(spec)
 
 
@@ -1478,27 +1733,42 @@ def evolution_recovery_accounting(session, evidence):
     restores = session.support_restorations
     overlaps = session.training_restoration_overlaps
     reported = evidence.get("healing_trips")
-    valid = all(type(v) is int and v >= 0
-                for v in (charged, training, restores, overlaps, reported))
-    exact = valid and overlaps <= min(training, restores) and charged == training + restores - overlaps
+    valid = all(
+        type(v) is int and v >= 0 for v in (charged, training, restores, overlaps, reported)
+    )
+    exact = (
+        valid and overlaps <= min(training, restores) and charged == training + restores - overlaps
+    )
     funded = valid and reported <= charged
-    return dict(passed=bool(exact and funded), charged_recovery_attempts=charged,
-        training_trip_attempts=training, restoration_attempts=restores,
-        verified_overlap_credits=overlaps, reported_skill_healing_trips=reported,
-        counters_have_different_scope=True)
+    return dict(
+        passed=bool(exact and funded),
+        charged_recovery_attempts=charged,
+        training_trip_attempts=training,
+        restoration_attempts=restores,
+        verified_overlap_credits=overlaps,
+        reported_skill_healing_trips=reported,
+        counters_have_different_scope=True,
+    )
 
 
 def evolution_copy_limits(args, left, seconds, *, experiment):
     """Explicit measurements reuse the same finite aggregate clipping as play."""
     if experiment is not None:
-        request = argparse.Namespace(decisions=1, seconds=seconds,
+        request = argparse.Namespace(
+            decisions=1,
+            seconds=seconds,
             actions=getattr(args, "actions", 20000),
-            frames=getattr(args, "frames", 2000000))
+            frames=getattr(args, "frames", 2000000),
+        )
         return configured_execution_limits(request, left, seconds)
-    return NativePlayerLimits(decisions=1,
+    return NativePlayerLimits(
+        decisions=1,
         actions=min(20000, int(left["actions"])),
         frames=min(2000000, int(left["frames"])),
-        seconds=seconds, heals=int(left["heals"]), cash_debits=None)
+        seconds=seconds,
+        heals=int(left["heals"]),
+        cash_debits=None,
+    )
 
 
 def verify_evolution_copy(args, plan, root, backend, configuration, parent, context, left):
@@ -1547,7 +1817,9 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
         journal = output / "journal"
         journal.mkdir(mode=0o700)
         store = initialize_private_root(
-            journal, repository_root=c.REPO, allow_same_device=True,
+            journal,
+            repository_root=c.REPO,
+            allow_same_device=True,
             **declared_input_recording(plan),
         )
         factory(ReadOnlyController(em))
@@ -1584,16 +1856,24 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
                     raise ValueError("declared native evolution venue adapter is unavailable")
                 state = em.save_state_bytes()
                 action_count, frames = session.actions.actions_executed, em.frame_count
-                world, venues = provider(runtime, holder["configured_route"].route_world,
-                                         experiment["venue"])
-                if (em.save_state_bytes() != state or em.frame_count != frames
-                        or session.actions.actions_executed != action_count):
+                world, venues = provider(
+                    runtime, holder["configured_route"].route_world, experiment["venue"]
+                )
+                if (
+                    em.save_state_bytes() != state
+                    or em.frame_count != frames
+                    or session.actions.actions_executed != action_count
+                ):
                     raise ValueError("evolution venue discovery changed the game")
-                options = dict(training_venues=venues, prefer_highest_supported_venue=True,
+                options = dict(
+                    training_venues=venues,
+                    prefer_highest_supported_venue=True,
                     allow_guarded_venue_escapes=True,
                     maximum_quanta=experiment["maximum_quanta"],
-                    maximum_wall_seconds=min(experiment["maximum_wall_seconds"],
-                                             max(1, limits.seconds - 20)))
+                    maximum_wall_seconds=min(
+                        experiment["maximum_wall_seconds"], max(1, limits.seconds - 20)
+                    ),
+                )
             observation = runtime.adapter.observe()
             alternatives = enumerate_red_level_evolutions(
                 runtime,
@@ -1653,29 +1933,50 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
             )
             if experiment is not None:
                 from pokemon_red_completion.red_collection import red_internal_species_id
+
                 source_number = int(spec.parameters["source_species_ref"].rsplit(":", 1)[1])
                 source_id = red_internal_species_id(source_number)
                 trainees = [row for row in before if row[1] == source_id]
                 prior = trainees[0] if len(trainees) == 1 else None
-                final = next((row for row in after if prior is not None
-                              and row[0] == prior[0]), None)
+                final = next(
+                    (row for row in after if prior is not None and row[0] == prior[0]), None
+                )
                 gain = None if prior is None or final is None else final[3] - prior[3]
-                bounded_partial = (verdict.status.value == "failed"
+                bounded_partial = (
+                    verdict.status.value == "failed"
                     and verdict.failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
                     and report.evidence.get("evolution_partial") is True
-                    and any(report.evidence.get(k) is True for k in (
-                        "settlement_reserve_reached", "wall_limit_reached", "quantum_limit_reached")))
-                result.update(experiment=experiment, trainee_ref=None if prior is None else prior[0],
+                    and any(
+                        report.evidence.get(k) is True
+                        for k in (
+                            "settlement_reserve_reached",
+                            "wall_limit_reached",
+                            "quantum_limit_reached",
+                        )
+                    )
+                )
+                result.update(
+                    experiment=experiment,
+                    trainee_ref=None if prior is None else prior[0],
                     trainee_experience_before=None if prior is None else prior[3],
                     trainee_experience_after=None if final is None else final[3],
-                    useful_trainee_xp_gain=gain, native_evolution_succeeded=verdict.status.value == "succeeded",
+                    useful_trainee_xp_gain=gain,
+                    native_evolution_succeeded=verdict.status.value == "succeeded",
                     productive_bounded_partial=bounded_partial,
-                    passed=preserved and xp_retained and type(gain) is int and gain > 0
+                    passed=preserved
+                    and xp_retained
+                    and type(gain) is int
+                    and gain > 0
                     and (bounded_partial or verdict.status.value == "succeeded")
-                    and evolution_recovery_accounting(session, report.evidence)["passed"] and _field_ready(runtime))
+                    and evolution_recovery_accounting(session, report.evidence)["passed"]
+                    and _field_ready(runtime),
+                )
         except BaseException as error:
-            result.update(error_type=type(error).__name__, error=str(error),
-                          error_chain=_exception_chain(error))
+            result.update(
+                error_type=type(error).__name__,
+                error=str(error),
+                error_chain=_exception_chain(error),
+            )
         finally:
             session.recorder.enabled = False
             session.controller.input_enabled = False
@@ -1691,8 +1992,11 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
                 <= set(guard.reader.preparation_specimen_refs()),
                 field_ready=_field_ready(runtime),
                 released=not em.pressed_buttons,
-                **player_lifecycle_fields(scope="diagnostic_chunk", released=not em.pressed_buttons,
-                    guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None),
+                **player_lifecycle_fields(
+                    scope="diagnostic_chunk",
+                    released=not em.pressed_buttons,
+                    guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+                ),
                 state_sha256=c.digest(output / "terminal.state"),
                 configuration_sha256=configuration.sha256,
             )
@@ -1717,20 +2021,32 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
                     _record(output / "CONTEXT.json", exported)
                     result.update(spent=spent, context_sha256=c.digest(output / "CONTEXT.json"))
                 except BaseException as error:
-                    result.update(passed=False, context_error=str(error),
-                                  context_error_type=type(error).__name__,
-                                  context_error_chain=_exception_chain(error))
+                    result.update(
+                        passed=False,
+                        context_error=str(error),
+                        context_error_type=type(error).__name__,
+                        context_error_chain=_exception_chain(error),
+                    )
             _record(output / "RESULT.json", result)
-    result.update(player_lifecycle_fields(scope="driver_terminal", released=result["released"],
-        guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None))
+    result.update(
+        player_lifecycle_fields(
+            scope="driver_terminal",
+            released=result["released"],
+            guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+        )
+    )
     if result["passed"]:
         try:
             proof = verify_diagnostic_reload(c, factory, payload, output, after, result["spent"])
             result["reload_passed"] = proof["passed"]
             result["passed"] = bool(result["passed"] and proof["passed"])
         except BaseException as error:
-            result.update(passed=False, reload_error=str(error),
-                reload_error_type=type(error).__name__, reload_error_chain=_exception_chain(error))
+            result.update(
+                passed=False,
+                reload_error=str(error),
+                reload_error_type=type(error).__name__,
+                reload_error_chain=_exception_chain(error),
+            )
     _record(output / "FINAL-RESULT.json", result)
     authenticate_parent(parent, c.digest)
     verify_pins(plan["protected"])
@@ -1747,151 +2063,276 @@ def verify_diagnostic_reload(c, factory, payload, output, after_stock, spent):
         reloaded = factory(ReadOnlyController(fresh))
         terminal = (output / "terminal.state").read_bytes()
         fresh.load_state_bytes(terminal)
-        carried = restore_player_continuation(reloaded, doc(output / "CONTEXT.json"),
+        carried = restore_player_continuation(
+            reloaded,
+            doc(output / "CONTEXT.json"),
             expected_sha256=canonical_sha256(doc(output / "CONTEXT.json")),
-            evolution_rom=c.ROM.read_bytes())
-        proof = dict(passed=fresh.save_state_bytes() == terminal
-            and fresh.frame_count == 0 and not fresh.pressed_buttons
-            and _stock(reloaded) == after_stock and carried.spent == spent
-            and _field_ready(reloaded), inputs=0, frames=fresh.frame_count, model_queries=0,
+            evolution_rom=c.ROM.read_bytes(),
+        )
+        proof = dict(
+            passed=fresh.save_state_bytes() == terminal
+            and fresh.frame_count == 0
+            and not fresh.pressed_buttons
+            and _stock(reloaded) == after_stock
+            and carried.spent == spent
+            and _field_ready(reloaded),
+            inputs=0,
+            frames=fresh.frame_count,
+            model_queries=0,
             state_sha256=c.digest(output / "terminal.state"),
-            context_sha256=c.digest(output / "CONTEXT.json"),copy_back=False,
-            inherited_spent=carried.spent)
+            context_sha256=c.digest(output / "CONTEXT.json"),
+            copy_back=False,
+            inherited_spent=carried.spent,
+        )
         _record(output / "RELOAD.json", proof)
         return proof
 
 
-def verify_boxed_machine_copy(args, plan, root, backend, configuration, parent, context, left,
-                              *, prepared_evolution=False):
+def verify_boxed_machine_copy(
+    args, plan, root, backend, configuration, parent, context, left, *, prepared_evolution=False
+):
     """One explicit operator diagnostic; ordinary gameplay still uses the model."""
     from pokemon_red_completion.red_boxed_machine_options import boxed_frontier_machine_options
     from pokemon_red_completion.red_player_party_loan import _stock
 
-    expected_mode = ("boxed_frontier_evolution_bundles_v3" if prepared_evolution
-                     else "boxed_frontier_attack_capacity_v2")
-    if (type(prepared_evolution) is not bool or plan.get("diagnostic_only") is not True
-            or plan.get("actual_gameplay_resume_authorized") is not False
-            or plan.get("copy_back") is not False or plan.get("fit_allowed") is not False
-            or not declared_owned_machine_options(plan)
-            or plan["owned_machine_options"]["mode"] != expected_mode):
+    expected_mode = (
+        "boxed_frontier_evolution_bundles_v3"
+        if prepared_evolution
+        else "boxed_frontier_attack_capacity_v2"
+    )
+    if (
+        type(prepared_evolution) is not bool
+        or plan.get("diagnostic_only") is not True
+        or plan.get("actual_gameplay_resume_authorized") is not False
+        or plan.get("copy_back") is not False
+        or plan.get("fit_allowed") is not False
+        or not declared_owned_machine_options(plan)
+        or plan["owned_machine_options"]["mode"] != expected_mode
+    ):
         raise ValueError("boxed-machine copy requires explicit non-copy-back diagnostic authority")
     c = backend.c
-    seconds = min(args.seconds,int(left["seconds"]),
-        int((datetime.fromisoformat(plan["cutoff_utc"])-datetime.now(UTC)).total_seconds()))
-    request = argparse.Namespace(decisions=1,actions=args.actions,frames=args.frames,seconds=seconds)
-    limits = configured_execution_limits(request,left,seconds)
+    seconds = min(
+        args.seconds,
+        int(left["seconds"]),
+        int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()),
+    )
+    request = argparse.Namespace(
+        decisions=1, actions=args.actions, frames=args.frames, seconds=seconds
+    )
+    limits = configured_execution_limits(request, left, seconds)
     prefix = "prepared-evolution" if prepared_evolution else "boxed-machine"
     output = root / f"diagnostics/{prefix}-{datetime.now(UTC).strftime('%H%M%S%f')}"
-    output.mkdir(mode=0o700,parents=True,exist_ok=False)
-    declaration = dict(partition="development",correlated_copy=True,copy_back=False,
-        operator_diagnostic_choice=True,goal_model_queries=0,
-        **player_wiring_declaration(plan),diagnostic_only=True,
-        actual_gameplay_resume_authorized=False,fit_allowed=False,source=str(parent),
-        source_sha256=context["state_sha256"],configuration_sha256=configuration.sha256,
-        configuration=configuration.to_dict(),limits=asdict(limits),
-        inherited_spent=context["spent"],launcher_sha256=c.digest(Path(__file__)))
-    _record(output/"PLAN.json",declaration)
-    _write(output/"executed-launcher.py",Path(__file__).read_bytes())
-    payload,factory,menu,holder,source = assemble_configured_player(
-        backend,configuration,parent,output,plan_path=output/"PLAN.json")
+    output.mkdir(mode=0o700, parents=True, exist_ok=False)
+    declaration = dict(
+        partition="development",
+        correlated_copy=True,
+        copy_back=False,
+        operator_diagnostic_choice=True,
+        goal_model_queries=0,
+        **player_wiring_declaration(plan),
+        diagnostic_only=True,
+        actual_gameplay_resume_authorized=False,
+        fit_allowed=False,
+        source=str(parent),
+        source_sha256=context["state_sha256"],
+        configuration_sha256=configuration.sha256,
+        configuration=configuration.to_dict(),
+        limits=asdict(limits),
+        inherited_spent=context["spent"],
+        launcher_sha256=c.digest(Path(__file__)),
+    )
+    _record(output / "PLAN.json", declaration)
+    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
+    payload, factory, menu, holder, source = assemble_configured_player(
+        backend, configuration, parent, output, plan_path=output / "PLAN.json"
+    )
     if prepared_evolution:
-        connect_declared_machine_options(menu,plan,rom=c.ROM.read_bytes(),
-            holder=holder,configuration=configuration)
-    result = dict(passed=False,error=None,copy_back=False,model_queries=0,fits=0,decisions=1,
-        prepared_evolution=prepared_evolution)
+        connect_declared_machine_options(
+            menu, plan, rom=c.ROM.read_bytes(), holder=holder, configuration=configuration
+        )
+    result = dict(
+        passed=False,
+        error=None,
+        copy_back=False,
+        model_queries=0,
+        fits=0,
+        decisions=1,
+        prepared_evolution=prepared_evolution,
+    )
     after = None
     with c.PyBoyAdapter(c.ROM) as em:
         em.load_state_bytes(payload)
         factory(ReadOnlyController(em))
-        journal=output/"journal";journal.mkdir(mode=0o700)
-        store=initialize_private_root(journal,repository_root=c.REPO,allow_same_device=True,
-            **declared_input_recording(plan))
-        session=NativePlayerSession(store=store,emulator=em,runtime_factory=factory,
-            source=source,execution=NativeExecutionIdentity(root.name,output.name,
-                configuration.goal_model_sha256,plan["seed"]),output=output/"native",
-            limits=limits,combat_specimen_refs=tuple(m.specimen_ref for m in holder["plan"].roster
-                if m.purpose.value=="combat"),battle_observer=holder["observe_history"],
-            target_cash=0,model_feature_version=7,curriculum=declared_player_curriculum(
-                plan,next(m.specimen_ref for m in holder["plan"].roster
-                    if m.purpose.value=="combat")),
-            allow_collection_restoration=True,force_resource_safety=False,include_live_pp_readiness=True)
-        runtime=session.runtime;before=_stock(runtime)
+        journal = output / "journal"
+        journal.mkdir(mode=0o700)
+        store = initialize_private_root(
+            journal,
+            repository_root=c.REPO,
+            allow_same_device=True,
+            **declared_input_recording(plan),
+        )
+        session = NativePlayerSession(
+            store=store,
+            emulator=em,
+            runtime_factory=factory,
+            source=source,
+            execution=NativeExecutionIdentity(
+                root.name, output.name, configuration.goal_model_sha256, plan["seed"]
+            ),
+            output=output / "native",
+            limits=limits,
+            combat_specimen_refs=tuple(
+                m.specimen_ref for m in holder["plan"].roster if m.purpose.value == "combat"
+            ),
+            battle_observer=holder["observe_history"],
+            target_cash=0,
+            model_feature_version=7,
+            curriculum=declared_player_curriculum(
+                plan,
+                next(m.specimen_ref for m in holder["plan"].roster if m.purpose.value == "combat"),
+            ),
+            allow_collection_restoration=True,
+            force_resource_safety=False,
+            include_live_pp_readiness=True,
+        )
+        runtime = session.runtime
+        before = _stock(runtime)
         try:
             if prepared_evolution:
-                choices=tuple(row for row in menu.enumerate_collection(runtime,session.actions,
-                    runtime.adapter.observe()) if row.binding.binding_ref.startswith(
-                        "pokemon.red:prepared-evolution:"))
+                choices = tuple(
+                    row
+                    for row in menu.enumerate_collection(
+                        runtime, session.actions, runtime.adapter.observe()
+                    )
+                    if row.binding.binding_ref.startswith("pokemon.red:prepared-evolution:")
+                )
             else:
-                choices=boxed_frontier_machine_options(runtime,session.actions,
-                    runtime.adapter.observe(),rom=c.ROM.read_bytes(),
-                    world=holder["configured_route"].route_world)
+                choices = boxed_frontier_machine_options(
+                    runtime,
+                    session.actions,
+                    runtime.adapter.observe(),
+                    rom=c.ROM.read_bytes(),
+                    world=holder["configured_route"].route_world,
+                )
             if not choices:
                 raise ValueError("no observed boxed-frontier machine bundle is available")
-            choice=max(choices,key=lambda row:row.candidate.features.dependency_unlock_gain)
-            _record(output/"CHOICE.json",dict(binding_ref=choice.binding.binding_ref,
-                operator_choice=True,selector="highest_declared_capacity_gain",
-                available_bundles=len(choices),model_queries=0))
-            session.active_kind=GoalKind.EVOLVE_SPECIES if prepared_evolution else GoalKind.DEVELOP_TEAM
-            session.recorder.enabled=True
-            report=choice.binding.execute();session.recorder.enabled=False
-            verdict=choice.binding.verify(report);after=_stock(runtime)
+            choice = max(choices, key=lambda row: row.candidate.features.dependency_unlock_gain)
+            _record(
+                output / "CHOICE.json",
+                dict(
+                    binding_ref=choice.binding.binding_ref,
+                    operator_choice=True,
+                    selector="highest_declared_capacity_gain",
+                    available_bundles=len(choices),
+                    model_queries=0,
+                ),
+            )
+            session.active_kind = (
+                GoalKind.EVOLVE_SPECIES if prepared_evolution else GoalKind.DEVELOP_TEAM
+            )
+            session.recorder.enabled = True
+            report = choice.binding.execute()
+            session.recorder.enabled = False
+            verdict = choice.binding.verify(report)
+            after = _stock(runtime)
             runtime.adapter.party_guard.verify_active_roster_restored()
             if prepared_evolution:
-                from pokemon_red_completion.red_prepared_evolution_options import prepared_stock_progress
+                from pokemon_red_completion.red_prepared_evolution_options import (
+                    prepared_stock_progress,
+                )
 
-                progress=prepared_stock_progress(before,after)
+                progress = prepared_stock_progress(before, after)
                 result.update(progress)
-                result["recovery_accounting"]=evolution_recovery_accounting(session,report.evidence)
-                stock_ok=all(progress.values()) and result["recovery_accounting"]["passed"]
+                result["recovery_accounting"] = evolution_recovery_accounting(
+                    session, report.evidence
+                )
+                stock_ok = all(progress.values()) and result["recovery_accounting"]["passed"]
             else:
-                stock_ok=before==after
-            result.update(passed=verdict.status.value=="succeeded" and stock_ok
-                and _field_ready(runtime),evidence=dict(report.evidence),
-                verification=verdict.status.value,stock_xp_preserved=stock_ok)
+                stock_ok = before == after
+            result.update(
+                passed=verdict.status.value == "succeeded" and stock_ok and _field_ready(runtime),
+                evidence=dict(report.evidence),
+                verification=verdict.status.value,
+                stock_xp_preserved=stock_ok,
+            )
         except BaseException as error:
-            result.update(error_type=type(error).__name__,error=str(error),
-                error_chain=_exception_chain(error))
+            result.update(
+                error_type=type(error).__name__,
+                error=str(error),
+                error_chain=_exception_chain(error),
+            )
         finally:
-            session.recorder.enabled=False;session.controller.input_enabled=False
-            _write(output/"terminal.state",em.save_state_bytes())
-            result.update(actions=len(session.recorder.trace),frames=session.controller.frames_executed,
-                seconds=session.wall.elapsed_seconds,heals=session.heals,
+            session.recorder.enabled = False
+            session.controller.input_enabled = False
+            _write(output / "terminal.state", em.save_state_bytes())
+            result.update(
+                actions=len(session.recorder.trace),
+                frames=session.controller.frames_executed,
+                seconds=session.wall.elapsed_seconds,
+                heals=session.heals,
                 inner_healing_attempts=session.training_healing_trips,
                 nested_restoration_attempts=session.support_restorations,
                 original_roles_restored=set(runtime.adapter.party_guard.refs)
-                    <=set(runtime.adapter.party_guard.reader.preparation_specimen_refs()),
-                field_ready=_field_ready(runtime),released=not em.pressed_buttons,
-                **player_lifecycle_fields(scope="diagnostic_chunk", released=not em.pressed_buttons,
-                    guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None),
-                state_sha256=c.digest(output/"terminal.state"),configuration_sha256=configuration.sha256)
+                <= set(runtime.adapter.party_guard.reader.preparation_specimen_refs()),
+                field_ready=_field_ready(runtime),
+                released=not em.pressed_buttons,
+                **player_lifecycle_fields(
+                    scope="diagnostic_chunk",
+                    released=not em.pressed_buttons,
+                    guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+                ),
+                state_sha256=c.digest(output / "terminal.state"),
+                configuration_sha256=configuration.sha256,
+            )
             if result["field_ready"] and result["original_roles_restored"]:
                 try:
                     result.update(copied_native_cash_costs(session.actions))
-                    spent=accumulate_player_costs(context["spent"],decisions=1,
-                        actions=result["actions"],frames=result["frames"],seconds=result["seconds"],
-                        heals=result["heals"],cash_deltas=native_cash_deltas(result, ()))
-                    exported=capture_player_continuation(runtime,preparation=holder["plan"],
-                        battle=None,spent=spent)
-                    _record(output/"CONTEXT.json",exported)
-                    result.update(spent=spent,context_sha256=c.digest(output/"CONTEXT.json"))
+                    spent = accumulate_player_costs(
+                        context["spent"],
+                        decisions=1,
+                        actions=result["actions"],
+                        frames=result["frames"],
+                        seconds=result["seconds"],
+                        heals=result["heals"],
+                        cash_deltas=native_cash_deltas(result, ()),
+                    )
+                    exported = capture_player_continuation(
+                        runtime, preparation=holder["plan"], battle=None, spent=spent
+                    )
+                    _record(output / "CONTEXT.json", exported)
+                    result.update(spent=spent, context_sha256=c.digest(output / "CONTEXT.json"))
                 except BaseException as error:
-                    result.update(passed=False,context_error=str(error),
-                        context_error_type=type(error).__name__,context_error_chain=_exception_chain(error))
-            _record(output/"RESULT.json",result)
-    result.update(player_lifecycle_fields(scope="driver_terminal", released=result["released"],
-        guest_backend_closed=(em._backend is None) if hasattr(em,"_backend") else None))
+                    result.update(
+                        passed=False,
+                        context_error=str(error),
+                        context_error_type=type(error).__name__,
+                        context_error_chain=_exception_chain(error),
+                    )
+            _record(output / "RESULT.json", result)
+    result.update(
+        player_lifecycle_fields(
+            scope="driver_terminal",
+            released=result["released"],
+            guest_backend_closed=(em._backend is None) if hasattr(em, "_backend") else None,
+        )
+    )
     if result["passed"]:
         try:
-            proof=verify_diagnostic_reload(c,factory,payload,output,after,result["spent"])
-            result["reload_passed"]=proof["passed"]
-            result["passed"]=bool(result["passed"] and proof["passed"])
+            proof = verify_diagnostic_reload(c, factory, payload, output, after, result["spent"])
+            result["reload_passed"] = proof["passed"]
+            result["passed"] = bool(result["passed"] and proof["passed"])
         except BaseException as error:
-            result.update(passed=False,reload_error=str(error),
-                reload_error_type=type(error).__name__,reload_error_chain=_exception_chain(error))
+            result.update(
+                passed=False,
+                reload_error=str(error),
+                reload_error_type=type(error).__name__,
+                reload_error_chain=_exception_chain(error),
+            )
         # Native RESULT is already immutable. Keep final reload status separately.
-    _record(output/"FINAL-RESULT.json",result)
-    authenticate_parent(parent,c.digest);verify_pins(plan["protected"])
-    print(json.dumps(dict(result,output=str(output)),default=str),flush=True)
+    _record(output / "FINAL-RESULT.json", result)
+    authenticate_parent(parent, c.digest)
+    verify_pins(plan["protected"])
+    print(json.dumps(dict(result, output=str(output)), default=str), flush=True)
 
 
 def run(args):
@@ -1953,8 +2394,17 @@ def run(args):
     if prepared_copy or boxed_copy:
         if args.inspect or args.evolution_copy or prepared_copy and boxed_copy:
             raise ValueError("machine copies require one separate diagnostic mode")
-        verify_boxed_machine_copy(args, plan, root, backend, configuration, parent, context, left,
-            prepared_evolution=prepared_copy)
+        verify_boxed_machine_copy(
+            args,
+            plan,
+            root,
+            backend,
+            configuration,
+            parent,
+            context,
+            left,
+            prepared_evolution=prepared_copy,
+        )
         return
     if args.evolution_copy:
         if args.inspect:
@@ -1964,7 +2414,7 @@ def run(args):
     model = declared_goal_model(plan, configuration, backend)
     refinement = declared_readiness_refinement(plan)
     greedy = declared_greedy_selection(plan)
-    preparation_component = declared_preparation_component(plan)
+    _preparation_component = declared_preparation_component(plan)
     input_recording = declared_input_recording(plan)
     machine_options = declared_owned_machine_options(plan)
     declared_automatic_renewal(plan)
@@ -1984,10 +2434,16 @@ def run(args):
         configuration_sha256=configuration.sha256,
         configuration=configuration.to_dict(),
         **wiring,
-        **({"goal_model_observation_identity": dict(
-            stored_model_sha256=configuration.goal_model_sha256,
-            effective_model_sha256=model.model_sha256,
-        )} if "goal_model_observation_compatibility" in wiring else {}),
+        **(
+            {
+                "goal_model_observation_identity": dict(
+                    stored_model_sha256=configuration.goal_model_sha256,
+                    effective_model_sha256=model.model_sha256,
+                )
+            }
+            if "goal_model_observation_compatibility" in wiring
+            else {}
+        ),
         fit_allowed=False,
         new_origin=False,
         copy_back=False,
@@ -2005,10 +2461,19 @@ def run(args):
     _record(output / "PLAN.json", declaration)
     try:
         payload, factory, menu, holder, source = assemble_configured_player(
-            backend, configuration, parent, output, plan_path=output / "PLAN.json",
+            backend,
+            configuration,
+            parent,
+            output,
+            plan_path=output / "PLAN.json",
             model_feature_version=model.feature_version,
-            **({"include_preparation_party_context": True} if refinement.get("consequence_head") is not None
-               and refinement["consequence_head"].context_projection=="prospective_preparation_party_context_v1" else {}),
+            **(
+                {"include_preparation_party_context": True}
+                if refinement.get("consequence_head") is not None
+                and refinement["consequence_head"].context_projection
+                == "prospective_preparation_party_context_v1"
+                else {}
+            ),
         )
     except BaseException as error:
         _record(
@@ -2016,8 +2481,9 @@ def run(args):
             dict(
                 phase="before_emulator",
                 released=True,
-                **player_lifecycle_fields(scope="prelaunch_failure", released=True,
-                    guest_backend_closed=None),
+                **player_lifecycle_fields(
+                    scope="prelaunch_failure", released=True, guest_backend_closed=None
+                ),
                 state_loads=0,
                 inputs=0,
                 frames=0,
@@ -2029,11 +2495,13 @@ def run(args):
         raise
     if machine_options:
         rom = c.ROM.read_bytes()
-        connect_declared_machine_options(menu,plan,rom=rom,holder=holder,
-            configuration=configuration)
-    with RunFrameFeed(plan, root, enabled=not args.inspect) as feed, c.PyBoyAdapter(
-        c.ROM, **feed.adapter_options
-    ) as em:
+        connect_declared_machine_options(
+            menu, plan, rom=rom, holder=holder, configuration=configuration
+        )
+    with (
+        RunFrameFeed(plan, root, enabled=not args.inspect) as feed,
+        c.PyBoyAdapter(c.ROM, **feed.adapter_options) as em,
+    ):
         em.load_state_bytes(payload)
         runtime = factory(ReadOnlyController(em))
         verify_loaded_backend_sources(backend_sources, plan["helpers_root"])
@@ -2084,9 +2552,14 @@ def run(args):
                 if refinement is not None and refinement.get("associate_unique_combat", False):
                     observed_state = em.save_state_bytes()
                     association_source_sha256 = sha256(observed_state).hexdigest()
-                    if (observed_state != payload
-                            or association_source_sha256 != context["state_sha256"]):
-                        raise ValueError("inspection association source differs from authenticated native boundary")
+                    if (
+                        observed_state != payload
+                        or association_source_sha256 != context["state_sha256"]
+                    ):
+                        raise ValueError(
+                            "inspection association source differs from authenticated "
+                            "native boundary"
+                        )
                 choice = (
                     select_branch_recovery_live_option(
                         model,
@@ -2096,14 +2569,21 @@ def run(args):
                         seed=plan["seed"] + ordinal,
                         greedy_selection=greedy,
                         refine_preparation=refinement.get("refine_preparation", False),
-                        defer_unbound_preparation=refinement.get("defer_unbound_preparation", False),
-                        allow_singleton_parent_support=refinement.get("allow_singleton_parent_support", False),
+                        defer_unbound_preparation=refinement.get(
+                            "defer_unbound_preparation", False
+                        ),
+                        allow_singleton_parent_support=refinement.get(
+                            "allow_singleton_parent_support", False
+                        ),
                         associate_unique_combat=refinement.get("associate_unique_combat", False),
                         source_state_sha256=association_source_sha256,
                     )
                     if refinement
                     else select_red_live_option(
-                        model, options, seed=plan["seed"] + ordinal, greedy_selection=greedy,
+                        model,
+                        options,
+                        seed=plan["seed"] + ordinal,
+                        greedy_selection=greedy,
                         exploration_mix=declared_exploration_mix(plan),
                     )
                 )
@@ -2224,7 +2704,9 @@ def run(args):
             )
             if automatic and reason == "native_execution_error":
                 handoff = qualified_menu_control_handoff(
-                    result, runtime=holder["runtime"], menu=menu,
+                    result,
+                    runtime=holder["runtime"],
+                    menu=menu,
                 )
                 if handoff is not None:
                     result["qualified_native_control_handoff"] = handoff
@@ -2257,8 +2739,11 @@ def run(args):
                 driver_terminal_reason = "declared_budget_exhausted"
                 break
             driver_terminal_reason = configured_renewal_stop_reason(
-                args, left,
-                int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()),
+                args,
+                left,
+                int(
+                    (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
+                ),
                 compulsory_settlement=requires_compulsory_settlement(holder["runtime"]),
             )
             if driver_terminal_reason is not None:
@@ -2279,21 +2764,34 @@ def run(args):
             )
             _record(output / "PLAN.json", declaration)
             payload, factory, menu, holder, source = assemble_configured_player(
-                backend, configuration, parent, output, plan_path=output / "PLAN.json",
+                backend,
+                configuration,
+                parent,
+                output,
+                plan_path=output / "PLAN.json",
                 model_feature_version=model.feature_version,
-                **({"include_preparation_party_context": True} if refinement.get("consequence_head") is not None
-                   and refinement["consequence_head"].context_projection=="prospective_preparation_party_context_v1" else {}),
+                **(
+                    {"include_preparation_party_context": True}
+                    if refinement.get("consequence_head") is not None
+                    and refinement["consequence_head"].context_projection
+                    == "prospective_preparation_party_context_v1"
+                    else {}
+                ),
             )
             if payload != em.save_state_bytes():
                 raise ValueError("automatic renewal changed the retained native state")
             if machine_options:
-                connect_declared_machine_options(menu,plan,rom=c.ROM.read_bytes(),
-                    holder=holder,configuration=configuration)
+                connect_declared_machine_options(
+                    menu, plan, rom=c.ROM.read_bytes(), holder=holder, configuration=configuration
+                )
             factory(ReadOnlyController(em))
     result = dict(
         result,
-        **player_lifecycle_fields(scope="driver_terminal", released=result.get("released") is True,
-            guest_backend_closed=em._backend is None),
+        **player_lifecycle_fields(
+            scope="driver_terminal",
+            released=result.get("released") is True,
+            guest_backend_closed=em._backend is None,
+        ),
         driver_terminal_reason=driver_terminal_reason,
     )
     driver_path = root / f"DRIVER-RESULT-{ordinal:03d}.json"

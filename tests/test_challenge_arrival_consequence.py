@@ -24,9 +24,13 @@ def arrival_session(tmp_path, monkeypatch, *, opt_in=True, fault="win", feedback
         args["consequence_spec"], include_challenge_arrival=opt_in, feedback_version=feedback
     )
     monkeypatch.setattr(
-        consequence, "capture_story_unit",
-        lambda *_: dict(map_id=0 if state["arrived"] else 1, at=[1, 1],
-                       events=[state["challenge"] and fault == "win"]),
+        consequence,
+        "capture_story_unit",
+        lambda *_: dict(
+            map_id=0 if state["arrived"] else 1,
+            at=[1, 1],
+            events=[state["challenge"] and fault == "win"],
+        ),
     )
     original = args["enumerate_bindings"]
 
@@ -36,30 +40,36 @@ def arrival_session(tmp_path, monkeypatch, *, opt_in=True, fault="win", feedback
         for binding in bindings.bindings:
             if binding.kind is GoalKind.ADVANCE_STORY:
                 if state["trained"] and not state["arrived"]:
+
                     def arrive():
                         actions.execute(MacroAction(MacroActionKind.WAIT, repeat=2))
                         state["arrived"] = True
                         return GoalExecutionReport(1, 2, {})
 
-                    binding = replace(binding, execute=arrive,
-                                      binding_ref="pokemon.red:story-travel:" + "a" * 64)
+                    binding = replace(
+                        binding, execute=arrive, binding_ref="pokemon.red:story-travel:" + "a" * 64
+                    )
                     from pokemon_red_completion.goal_manager_runtime import GoalVerification
+
                     binding = replace(binding, verify=lambda _: GoalVerification.succeeded())
                 elif feedback == 2:
                     execute = binding.execute
 
                     def battle(execute=execute):
                         from test_red_post_battle_strategy import episode
+
                         report = execute()
-                        return replace(report, evidence={
-                            "battle": {"outcome": "lost", "episode": episode()}
-                        })
+                        return replace(
+                            report, evidence={"battle": {"outcome": "lost", "episode": episode()}}
+                        )
 
                     binding = replace(binding, execute=battle)
             result.append(binding)
-        return replace(bindings, bindings=tuple(result),
-                       opportunities=tuple(replace(b.opportunity, binding_ref=b.binding_ref)
-                                           for b in result))
+        return replace(
+            bindings,
+            bindings=tuple(result),
+            opportunities=tuple(replace(b.opportunity, binding_ref=b.binding_ref) for b in result),
+        )
 
     args["enumerate_bindings"] = enumerate_bindings
     return session(args), args
@@ -72,7 +82,9 @@ def execute_kind(s, ordinal, kind):
 
 
 @pytest.mark.parametrize("fault,feedback", [("win", 1), (None, 1), (None, 2)])
-def test_native_arrival_keeps_full_costs_until_actual_battle(tmp_path, monkeypatch, fault, feedback):
+def test_native_arrival_keeps_full_costs_until_actual_battle(
+    tmp_path, monkeypatch, fault, feedback
+):
     s, args = arrival_session(tmp_path, monkeypatch, fault=fault, feedback=feedback)
     execute_kind(s, 0, GoalKind.DEVELOP_TEAM)
     execute_kind(s, 1, GoalKind.ADVANCE_STORY)
@@ -82,7 +94,8 @@ def test_native_arrival_keeps_full_costs_until_actual_battle(tmp_path, monkeypat
     assert s.consequence.done
     result = s.consequence.finish()
     row = consequence.load_challenge_consequence(
-        args["store"], declaration_sha256=result["declaration_sha256"],
+        args["store"],
+        declaration_sha256=result["declaration_sha256"],
         result_sha256=canonical_sha256(result),
     )
     assert row.outcome.attempted and row.outcome.completed is (fault == "win")
@@ -90,19 +103,22 @@ def test_native_arrival_keeps_full_costs_until_actual_battle(tmp_path, monkeypat
     assert row.outcome.restorations == 1
     assert row.feature_version == 9 and row.feedback_version == feedback
     if feedback == 2:
-        assert row.outcome.challenge_progress == pytest.approx(.495)
+        assert row.outcome.challenge_progress == pytest.approx(0.495)
     assert not s.controller.pressed_buttons
 
 
-@pytest.mark.parametrize("opt_in,reason", [(True, "challenge_not_reached_before_stop"),
-                                          (False, "challenge_not_observed")])
+@pytest.mark.parametrize(
+    "opt_in,reason",
+    [(True, "challenge_not_reached_before_stop"), (False, "challenge_not_observed")],
+)
 def test_arrival_alone_is_never_a_success_label(tmp_path, monkeypatch, opt_in, reason):
     s, args = arrival_session(tmp_path, monkeypatch, opt_in=opt_in)
     execute_kind(s, 0, GoalKind.DEVELOP_TEAM)
     execute_kind(s, 1, GoalKind.ADVANCE_STORY)
     result = s.consequence.finish()
     row = consequence.load_challenge_consequence(
-        args["store"], declaration_sha256=result["declaration_sha256"],
+        args["store"],
+        declaration_sha256=result["declaration_sha256"],
         result_sha256=canonical_sha256(result),
     )
     assert row.outcome is None and row.censor_reason == reason
@@ -112,7 +128,9 @@ def test_arrival_alone_is_never_a_success_label(tmp_path, monkeypatch, opt_in, r
         assert "include_challenge_arrival" not in s.consequence.plan["spec"]
 
 
-@pytest.mark.parametrize("fault", ["binding", "destination", "party", "cash", "events", "unsettled"])
+@pytest.mark.parametrize(
+    "fault", ["binding", "destination", "party", "cash", "events", "unsettled"]
+)
 def test_forged_or_unsettled_arrival_cannot_be_skipped(tmp_path, monkeypatch, fault):
     s, _ = arrival_session(tmp_path, monkeypatch)
     execute_kind(s, 0, GoalKind.DEVELOP_TEAM)

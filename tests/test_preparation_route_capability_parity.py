@@ -1,11 +1,15 @@
 """Preparation quotes retain the ground executor's real Surf permission seam."""
+
 from dataclasses import replace
 from types import SimpleNamespace as N
 
 import pytest
 
 from pokemon_red_completion.gen1_traversal import (
-    CUT_CAPABILITY, SURF_CAPABILITY, STRENGTH_CAPABILITY, cut_capabilities,
+    CUT_CAPABILITY,
+    STRENGTH_CAPABILITY,
+    SURF_CAPABILITY,
+    cut_capabilities,
 )
 from pokemon_red_completion.observation import Badge, MapId, RawGameState
 from pokemon_red_completion.red_training_ground_route import ground_route_capability_projector
@@ -13,9 +17,15 @@ from pokemon_red_completion.red_training_ground_route import ground_route_capabi
 
 def raw():
     return RawGameState(
-        True, MapId.INDIGO_PLATEAU_LOBBY, 7, 7, 1, 0,
+        True,
+        MapId.INDIGO_PLATEAU_LOBBY,
+        7,
+        7,
+        1,
+        0,
         badge_bits=int(Badge.CASCADE | Badge.SOUL | Badge.RAINBOW),
-        party_hp=(50,), party_moves=((15, 57, 70, 0),),
+        party_hp=(50,),
+        party_moves=((15, 57, 70, 0),),
     )
 
 
@@ -33,14 +43,17 @@ def test_explicit_route_can_quote_the_water_edge_its_executor_can_use():
     assert STRENGTH_CAPABILITY not in projector(raw())
 
 
-@pytest.mark.parametrize("change", [
-    {"party_hp": (0,)},
-    {"badge_bits": int(Badge.CASCADE)},
-    {"party_moves": ((15, 0, 0, 0),)},
-    {"party_count": 2},
-    {"party_hp": None},
-    {"party_moves": None},
-])
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"party_hp": (0,)},
+        {"badge_bits": int(Badge.CASCADE)},
+        {"party_moves": ((15, 0, 0, 0),)},
+        {"party_count": 2},
+        {"party_hp": None},
+        {"party_moves": None},
+    ],
+)
 def test_surf_quote_does_not_invent_a_living_complete_badged_holder(change):
     projector = ground_route_capability_projector(N(allow_surf=True), N(read_u8=lambda _: 0))
     assert SURF_CAPABILITY not in projector(replace(raw(), **change))

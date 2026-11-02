@@ -88,9 +88,16 @@ def _execution_diagnostics(evidence):
     source = {**prior, **evidence}
     fields = {}
     for name in (
-        "money_spent", "sale_proceeds", "purchase_count", "quantity_purchased",
-        "cash_debit", "coins_before", "coins_after", "purchases",
-        "completed_training_battles", "healing_trips",
+        "money_spent",
+        "sale_proceeds",
+        "purchase_count",
+        "quantity_purchased",
+        "cash_debit",
+        "coins_before",
+        "coins_after",
+        "purchases",
+        "completed_training_battles",
+        "healing_trips",
     ):
         if name in source:
             value = source[name]
@@ -98,7 +105,10 @@ def _execution_diagnostics(evidence):
     if type(source.get("procurement_executed")) is bool:
         fields["procurement_executed"] = source["procurement_executed"]
     mechanic = source.get("mechanic")
-    if isinstance(mechanic, str) and mechanic in {"game_corner", "game_corner_coin_procurement"}:
+    if isinstance(mechanic, str) and mechanic in {
+        "game_corner",
+        "game_corner_coin_procurement",
+    }:
         fields["mechanic"] = mechanic
     return {} if not fields else dict(execution_diagnostics=dict(diagnostic_only=True, **fields))
 
@@ -486,9 +496,10 @@ class RoutedSemanticGoalComposer:
             if route_fields is not None or destination_fields is not None
             else None
         )
+        route_setback_evidence = route_execution.evidence.get("route_setback")
         route_setback = (
-            {"route_setback": dict(route_execution.evidence["route_setback"])}
-            if isinstance(route_execution.evidence.get("route_setback"), Mapping)
+            {"route_setback": dict(route_setback_evidence)}
+            if isinstance(route_setback_evidence, Mapping)
             else _destination_route_setback(destination_execution)
         )
         report = GoalExecutionReport(
@@ -541,7 +552,8 @@ class RoutedSemanticGoalComposer:
                 ),
                 **(
                     _execution_diagnostics(destination_execution.evidence)
-                    if destination_execution is not None else {}
+                    if destination_execution is not None
+                    else {}
                 ),
                 **({"storage_preparation": storage.public_dict()} if storage is not None else {}),
                 **({"field_moves": fields.public_dict()} if fields is not None else {}),
@@ -604,15 +616,26 @@ def _destination_route_setback(report: GoalExecutionReport | None) -> dict:
     evidence = report.evidence
     stop = evidence.get("route_setback")
     chain = evidence.get("route_setback_destination_chain", ())
-    if (evidence.get("schema") != ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA
+    if (
+        evidence.get("schema") != ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA
         or not isinstance(stop, Mapping)
-        or not isinstance(chain, (tuple, list)) or len(chain) >= 8
-        or any(not isinstance(node, Mapping) for node in chain)):
+        or not isinstance(chain, (tuple, list))
+        or len(chain) >= 8
+        or any(not isinstance(node, Mapping) for node in chain)
+    ):
         return {}
-    node = {key: evidence.get(key) for key in (
-        "schema", "route_verified", "destination_bound", "destination_executed",
-        "destination_kind", "budget_reconciled", "within_budget",
-    )}
+    node = {
+        key: evidence.get(key)
+        for key in (
+            "schema",
+            "route_verified",
+            "destination_bound",
+            "destination_executed",
+            "destination_kind",
+            "budget_reconciled",
+            "within_budget",
+        )
+    }
     node.update(actions=report.actions_executed, frames=report.frames_executed)
     return {
         "route_setback": dict(stop),

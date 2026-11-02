@@ -10,8 +10,15 @@ from dataclasses import dataclass, replace
 
 import numpy as np
 
-from pokemon_red_completion.red_trainer_practice_head import TrainerHeadExample, TrainerHeadModel
-from pokemon_red_completion.red_trainer_retention import _batch, _forward, batch_loss_gradient
+from pokemon_red_completion.red_trainer_practice_head import (
+    TrainerHeadExample,
+    TrainerHeadModel,
+)
+from pokemon_red_completion.red_trainer_retention import (
+    _batch,
+    _forward,
+    batch_loss_gradient,
+)
 
 
 @dataclass(frozen=True)
@@ -40,7 +47,10 @@ def unique_budget_replay(anchors, budgets):
     for cases in (anchors, *(budget.cases for budget in budgets)):
         _batch(cases)
         for case in cases:
-            key = (tuple(tuple(v) for v in case.candidate_vectors), tuple(case.mean_returns))
+            key = (
+                tuple(tuple(v) for v in case.candidate_vectors),
+                tuple(case.mean_returns),
+            )
             unique.setdefault(key, case)
     return tuple(unique[key] for key in sorted(unique))
 
@@ -113,8 +123,10 @@ def fit_budgeted_head(
         update_rule != "adam"
         or type(trainable_input_rows) is not tuple
         or not trainable_input_rows
-        or any(type(row) is not int or not 0 <= row < len(initial.feature_names)
-               for row in trainable_input_rows)
+        or any(
+            type(row) is not int or not 0 <= row < len(initial.feature_names)
+            for row in trainable_input_rows
+        )
         or len(set(trainable_input_rows)) != len(trainable_input_rows)
     ):
         raise ValueError("input-row freezing requires unique valid integer rows and Adam")
@@ -168,8 +180,12 @@ def fit_budgeted_head(
     if trainable_input_rows is not None:
         row_mask = np.zeros_like(initial.weights1, dtype=bool)
         row_mask[list(trainable_input_rows), :] = True
-        parameter_mask = np.concatenate((row_mask.ravel(),
-            np.zeros(initial.bias1.size + initial.weights2.size, dtype=bool)))
+        parameter_mask = np.concatenate(
+            (
+                row_mask.ravel(),
+                np.zeros(initial.bias1.size + initial.weights2.size, dtype=bool),
+            )
+        )
         initial_packed = packed.copy()
     first = np.zeros_like(packed)
     second = np.zeros_like(packed)
@@ -229,9 +245,12 @@ def fit_budgeted_head(
             np.sqrt(second / (1 - 0.999 ** (epoch + 1))) + 1e-8
         )
         if parameter_mask is not None:
+            assert initial_packed is not None
             packed[~parameter_mask] = initial_packed[~parameter_mask]
-            if not np.array_equal(packed[~parameter_mask].view(np.uint64),
-                                  initial_packed[~parameter_mask].view(np.uint64)):
+            if not np.array_equal(
+                packed[~parameter_mask].view(np.uint64),
+                initial_packed[~parameter_mask].view(np.uint64),
+            ):
                 raise ValueError("frozen fitter coordinates changed")
         if not np.all(np.isfinite(packed)):
             raise ValueError("nonfinite budgeted training iterate")
@@ -255,11 +274,15 @@ def fit_budgeted_head(
         "history": history,
     }
     if parameter_mask is not None:
+        assert trainable_input_rows is not None
         receipt["parameter_update_scope"] = dict(
-            mode="input_rows_v1", trainable_input_rows=list(trainable_input_rows),
+            mode="input_rows_v1",
+            trainable_input_rows=list(trainable_input_rows),
             trainable_input_features=[initial.feature_names[row] for row in trainable_input_rows],
             trainable_coordinates=int(parameter_mask.sum()),
-            bias1_frozen=True, weights2_frozen=True, other_input_rows_frozen=True,
+            bias1_frozen=True,
+            weights2_frozen=True,
+            other_input_rows_frozen=True,
             frozen_coordinates_bit_identical=True,
         )
     if retention_replay != "anchors":

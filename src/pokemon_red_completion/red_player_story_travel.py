@@ -1,6 +1,5 @@
 """Separate a model-selected story destination from preparation and gym combat."""
 
-from .player_option_story_unit import OptionStoryUnit
 from dataclasses import replace
 from hashlib import sha256
 
@@ -12,6 +11,7 @@ from .global_router import GlobalRouterError, find_macro_path
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set, semantic_facts
+from .player_option_story_unit import OptionStoryUnit
 from .provenance import canonical_sha256
 from .red_player_cash_exposure import certified_cash_safe_transition
 from .red_player_field_goals import _field_ready
@@ -187,9 +187,7 @@ def story_travel_binding(
         # A complete noncombat quote must respect known future trainer lanes.
         # Keep this projection in the executor and its Cut rebuilds too. A
         # blocked quote leaves frontier travel and combat to separate choices.
-        route = replace(
-            route, route_world=_noncombat_fly_world(route.route_world, raw)
-        )
+        route = replace(route, route_world=_noncombat_fly_world(route.route_world, raw))
 
     def field_capabilities(raw):
         known = cut_capabilities(raw)
@@ -210,14 +208,20 @@ def story_travel_binding(
         start = observer.observe()
         if (
             isinstance(route, RedVermilionGroundTransition)
-            and intermediate_map is None and exact_at is None
+            and intermediate_map is None
+            and exact_at is None
         ):
             from .red_player_story_fly import story_fly_binding
 
             flight = story_fly_binding(
-                runtime, actions, objective_id=objective_id,
-                final_destination=final_destination, route=route, start=start,
-                before=before, lesson=lesson,
+                runtime,
+                actions,
+                objective_id=objective_id,
+                final_destination=final_destination,
+                route=route,
+                start=start,
+                before=before,
+                lesson=lesson,
                 arrival_objective=objective_id in ARRIVAL_OBJECTIVES,
                 allow_surf=allow_surf,
             )
@@ -228,9 +232,7 @@ def story_travel_binding(
                 return None
             at = exact_at
         if frontier:
-            destination, at = story_frontier_target(
-                route.route_world, start, final_destination
-            )
+            destination, at = story_frontier_target(route.route_world, start, final_destination)
             completes_objective = (
                 objective_id in ARRIVAL_OBJECTIVES and destination == final_destination
             )
@@ -252,9 +254,7 @@ def story_travel_binding(
         )
     except (RoutePlanningError, GlobalRouterError):
         return None
-    if exact_at is not None and (
-        plan.terminal_map != destination or plan.terminal_at != exact_at
-    ):
+    if exact_at is not None and (plan.terminal_map != destination or plan.terminal_at != exact_at):
         return None
     terminal_at = plan.terminal_at
     if stop_at_map_boundary:
@@ -345,8 +345,11 @@ def story_travel_binding(
                 source=sha256(state).hexdigest(),
                 **({"certify_cash_approach": False} if not certify_cash_approach else {}),
                 **({"allow_surf": True} if allow_surf else {}),
-                **({"route_destination_at": route_destination_at}
-                   if route_destination_at is not None else {}),
+                **(
+                    {"route_destination_at": route_destination_at}
+                    if route_destination_at is not None
+                    else {}
+                ),
             )
         ),
         GoalKind.ADVANCE_STORY,

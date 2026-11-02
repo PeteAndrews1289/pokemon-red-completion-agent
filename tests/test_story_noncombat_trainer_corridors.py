@@ -42,40 +42,66 @@ def fixture(monkeypatch, *, defeated=False, detour=False):
             edges[at] = edges.get(at, ()) + onward
         middle = LocalGraph(edges)
     world = StrategicScenarioRouteWorld(
-        macro_graph=MacroGraph({
-            41: (MacroEdge(2, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
-            2: (MacroEdge(45, kind="warp", at=(0, 2), arrival_at=(0, 0)),),
-            45: (),
-        }),
+        macro_graph=MacroGraph(
+            {
+                41: (MacroEdge(2, kind="warp", at=(0, 1), arrival_at=(0, 0)),),
+                2: (MacroEdge(45, kind="warp", at=(0, 2), arrival_at=(0, 0)),),
+                45: (),
+            }
+        ),
         local_graphs={41: line((0, 0), (0, 1)), 2: middle, 45: line((0, 0))},
-        rom=b"fixture", terrain={41: None, 2: None, 45: None},
-        rules=N(cut_block_swaps=()), tilesets={}, water_tilesets=frozenset(),
+        rom=b"fixture",
+        terrain={41: None, 2: None, 45: None},
+        rules=N(cut_block_swaps=()),
+        tilesets={},
+        water_tilesets=frozenset(),
         object_blockers={41: frozenset(), 2: frozenset({(1, 1)}), 45: frozenset()},
     )
     zone = TrainerSightZone(2, 1, 1, 1, (1, 1), TrainerFacing.UP, 1, 9, defeated, False)
     monkeypatch.setattr(projection, "_fly_trainer_tables", lambda *a: ((), ()))
     monkeypatch.setattr(projection, "static_trainer_sight_zones", lambda *a: (zone,))
     certificates = []
-    monkeypatch.setattr(story, "certified_cash_safe_transition",
-                        lambda route, raw, plan: certificates.append(route.route_world) or None)
-    return runtime, actions, RedVermilionGroundTransition(b"fixture", world), raw, lesson, snap, certificates
+    monkeypatch.setattr(
+        story,
+        "certified_cash_safe_transition",
+        lambda route, raw, plan: certificates.append(route.route_world) or None,
+    )
+    return (
+        runtime,
+        actions,
+        RedVermilionGroundTransition(b"fixture", world),
+        raw,
+        lesson,
+        snap,
+        certificates,
+    )
 
 
-@pytest.mark.parametrize("defeated,border,available", [
-    (False, False, False),
-    (True, False, True),
-    (False, True, True),
-])
+@pytest.mark.parametrize(
+    "defeated,border,available",
+    [
+        (False, False, False),
+        (True, False, True),
+        (False, True, True),
+    ],
+)
 def test_complete_quote_respects_future_battle_but_first_border_remains_available(
-    monkeypatch, defeated, border, available,
+    monkeypatch,
+    defeated,
+    border,
+    available,
 ):
     runtime, actions, route, raw, lesson, snap, certificates = fixture(
-        monkeypatch, defeated=defeated,
+        monkeypatch,
+        defeated=defeated,
     )
     # Geometry alone has a complete route. The future trainer changes legality.
     assert route.route_world.plan_feasible_to_map(snap, 45).terminal_map == 45
     binding = story.story_travel_binding(
-        runtime, actions, objective_id="defeat_giovanni", route=route,
+        runtime,
+        actions,
+        objective_id="defeat_giovanni",
+        route=route,
         stop_at_map_boundary=border,
     )
     assert (binding is not None) is available
@@ -95,8 +121,11 @@ def test_selected_detour_keeps_same_future_lane_guard_in_execution(monkeypatch):
 
     def execute(selected, _actions, _reader, _emulator):
         plan = selected.route_world.plan_feasible_to_map(snap, selected.destination_map)
-        assert all((0, 1) not in segment.approach.coordinates
-                   for segment in plan.segments if segment.source_map == 2)
+        assert all(
+            (0, 1) not in segment.approach.coordinates
+            for segment in plan.segments
+            if segment.source_map == 2
+        )
         assert (0, 1) in selected.route_world.object_blockers[2]
         executed.append(selected.route_world)
         raw.map_id = selected.destination_map
@@ -105,7 +134,10 @@ def test_selected_detour_keeps_same_future_lane_guard_in_execution(monkeypatch):
 
     monkeypatch.setattr(RedVermilionGroundTransition, "__call__", execute)
     binding = story.story_travel_binding(
-        runtime, actions, objective_id="defeat_giovanni", route=route,
+        runtime,
+        actions,
+        objective_id="defeat_giovanni",
+        route=route,
     )
     assert binding is not None and actions.actions_executed == 0
     report = binding.execute()

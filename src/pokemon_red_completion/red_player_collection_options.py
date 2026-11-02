@@ -98,16 +98,18 @@ def bind_player_collection_capabilities(
     route. Existing providers and their resource settings remain unchanged;
     conflicting capture/discovery providers are not silently replaced.
     """
-    if any(type(v) is not bool for v in (
-        add_capture_preparation_support, include_fly_transport, include_dig_departure
-    )):
+    if any(
+        type(v) is not bool
+        for v in (add_capture_preparation_support, include_fly_transport, include_dig_departure)
+    ):
         raise TypeError("capture preparation support permission must be boolean")
     if runtime.registration_policy is None:
         raise ValueError("shared collection requires the registered objective")
     if not isinstance(seed_corridor, RedLivingDexWildCorridor):
         raise ValueError("collection composition requires a verified corridor")
     providers = tuple(
-        (spec.kind, spec.mechanic, _thaw(spec.parameters)) for spec in runtime.profile.providers
+        (spec.kind, spec.mechanic, {key: _thaw(value) for key, value in spec.parameters.items()})
+        for spec in runtime.profile.providers
     )
     required = (
         (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE),
@@ -130,7 +132,9 @@ def bind_player_collection_capabilities(
         # declares cartridge coverage, not a destination or strategic preference.
         discovery = next(spec for spec in profile.providers if spec.kind is GoalKind.EXPLORE)
         profile = bind_red_local_discovery_profile(
-            profile, str(discovery.parameters["source_id"]), discovery_rom,
+            profile,
+            str(discovery.parameters["source_id"]),
+            discovery_rom,
         )
     profile = bind_observed_local_capture_profile(
         bind_capture_surf_profile(bind_capture_cut_profile(profile))
@@ -146,9 +150,11 @@ def bind_player_collection_capabilities(
     profile = bind_red_capture_search_budget_profile(profile)
     if include_fly_transport:
         profile = bind_capture_fly_profile(profile)
-        if any(s.mechanic in {RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
-                              RedGoalMechanic.TARGETED_ITEM_EVOLUTION}
-               for s in profile.providers):
+        if any(
+            s.mechanic
+            in {RedGoalMechanic.TARGETED_LEVEL_EVOLUTION, RedGoalMechanic.TARGETED_ITEM_EVOLUTION}
+            for s in profile.providers
+        ):
             profile = bind_evolution_fly_profile(profile)
         profile = bind_indoor_fly_departure_profile(profile)
     return replace(
@@ -194,20 +200,29 @@ def player_collection_supplements(
 ):
     if evolution_venue_model is not None or evolution_venue_model_sha256 is not None:
         from .red_native_boxed_evolution import validate_native_evolution_venue_model
+
         validate_native_evolution_venue_model(evolution_venue_model, evolution_venue_model_sha256)
         if prefer_highest_evolution_venue:
-            raise ValueError("native model choice cannot be prefiltered by highest-level preference")
+            raise ValueError(
+                "native model choice cannot be prefiltered by highest-level preference"
+            )
     for bound in (maximum_evolution_actions, maximum_evolution_frames, maximum_evolution_seconds):
         if bound is not None and (type(bound) is not int or bound <= 0):
-            raise ValueError('explicit evolution bounds must be positive integers')
-    for permission in (prefer_highest_evolution_venue, allow_guarded_evolution_escapes,
-                       include_fossil_acquisition, quote_capture_route_work, include_level_workload,
-                       include_capture_invocation):
+            raise ValueError("explicit evolution bounds must be positive integers")
+    for permission in (
+        prefer_highest_evolution_venue,
+        allow_guarded_evolution_escapes,
+        include_fossil_acquisition,
+        quote_capture_route_work,
+        include_level_workload,
+        include_capture_invocation,
+    ):
         if type(permission) is not bool:
             raise ValueError("collection evolution options require explicit booleans")
     policy = getattr(runtime, "native_evolution_venue_policy", None)
     if policy is not None:
         from .red_native_boxed_evolution import NativeEvolutionVenuePolicy
+
         if not isinstance(policy, NativeEvolutionVenuePolicy):
             raise ValueError("configured native venue policy differs")
         if evolution_venue_model is not None and (
@@ -221,18 +236,21 @@ def player_collection_supplements(
         # that model question. Native access, safety and settlement guards remain.
         prefer_highest_evolution_venue = False
         evolution_training_venues = policy.training_venues
-    if (not isinstance(unsupported_remote_capture_maps, frozenset)
-            or any(type(m) is not int or not 0 <= m <= 255
-                   for m in unsupported_remote_capture_maps)):
+    if not isinstance(unsupported_remote_capture_maps, frozenset) or any(
+        type(m) is not int or not 0 <= m <= 255 for m in unsupported_remote_capture_maps
+    ):
         raise ValueError("unsupported capture entries must be explicit native map IDs")
-    if (capture_interruption_handler_wrapper is not None
-            and not callable(capture_interruption_handler_wrapper)):
+    if capture_interruption_handler_wrapper is not None and not callable(
+        capture_interruption_handler_wrapper
+    ):
         raise TypeError("capture interruption wrapper must be callable")
-    if (fishing_interruption_handler_wrapper is not None
-            and not callable(fishing_interruption_handler_wrapper)):
+    if fishing_interruption_handler_wrapper is not None and not callable(
+        fishing_interruption_handler_wrapper
+    ):
         raise TypeError("fishing interruption wrapper must be callable")
-    if (evolution_interruption_handler_wrapper is not None
-            and not callable(evolution_interruption_handler_wrapper)):
+    if evolution_interruption_handler_wrapper is not None and not callable(
+        evolution_interruption_handler_wrapper
+    ):
         raise TypeError("evolution interruption wrapper must be callable")
     if any(
         type(n) is not int or n < 1
@@ -254,27 +272,41 @@ def player_collection_supplements(
     # Keep legacy provider fingerprints intact, but do not present that known
     # zero-action capture as a real alternative in the current player menu.
     capture_party_ready = all(member.hp > 0 for member in live.party.members)
-    acquisitions = tuple(
-        row.binding
-        for row in enumerate_red_regional_acquisitions(
+    acquisitions = (
+        tuple(
+            row.binding
+            for row in enumerate_red_regional_acquisitions(
+                runtime,
+                live,
+                actions,
+                world,
+                maximum_actions=maximum_actions,
+                maximum_frames=maximum_frames,
+                **(
+                    {"unsupported_remote_maps": unsupported_remote_capture_maps}
+                    if unsupported_remote_capture_maps
+                    else {}
+                ),
+                **(
+                    {"interruption_handler_wrapper": capture_interruption_handler_wrapper}
+                    if capture_interruption_handler_wrapper is not None
+                    else {}
+                ),
+                **({"quote_capture_route_work": True} if quote_capture_route_work else {}),
+            )
+        )
+        if capture_party_ready
+        else ()
+    )
+    acquisitions += scripted_gift_bindings(runtime, live, actions, world)
+    if include_fossil_acquisition:
+        acquisitions += fossil_acquisition_bindings(
             runtime,
             live,
             actions,
             world,
             maximum_actions=maximum_actions,
             maximum_frames=maximum_frames,
-            **({"unsupported_remote_maps": unsupported_remote_capture_maps}
-               if unsupported_remote_capture_maps else {}),
-            **({"interruption_handler_wrapper": capture_interruption_handler_wrapper}
-               if capture_interruption_handler_wrapper is not None else {}),
-            **({"quote_capture_route_work": True} if quote_capture_route_work else {}),
-        )
-    ) if capture_party_ready else ()
-    acquisitions += scripted_gift_bindings(runtime, live, actions, world)
-    if include_fossil_acquisition:
-        acquisitions += fossil_acquisition_bindings(
-            runtime, live, actions, world,
-            maximum_actions=maximum_actions, maximum_frames=maximum_frames,
         )
     acquisitions += npc_trade_dependency_bindings(
         runtime,
@@ -295,30 +327,50 @@ def player_collection_supplements(
         world,
         maximum_actions=maximum_actions,
         maximum_frames=maximum_frames,
-        **({"interruption_handler_wrapper": evolution_interruption_handler_wrapper}
-           if evolution_interruption_handler_wrapper is not None else {}),
+        **(
+            {"interruption_handler_wrapper": evolution_interruption_handler_wrapper}
+            if evolution_interruption_handler_wrapper is not None
+            else {}
+        ),
     )
     evolutions += enumerate_red_level_evolutions(
         runtime,
         live,
         actions,
         world,
-        maximum_actions=(maximum_actions if maximum_evolution_actions is None
-                         else maximum_evolution_actions),
-        maximum_frames=(maximum_frames if maximum_evolution_frames is None
-                        else maximum_evolution_frames),
+        maximum_actions=(
+            maximum_actions if maximum_evolution_actions is None else maximum_evolution_actions
+        ),
+        maximum_frames=(
+            maximum_frames if maximum_evolution_frames is None else maximum_evolution_frames
+        ),
         maximum_quanta=maximum_evolution_quanta,
         **({"include_level_workload": True} if include_level_workload else {}),
-        **({'maximum_wall_seconds':maximum_evolution_seconds}
-           if maximum_evolution_seconds is not None else {}),
+        **(
+            {"maximum_wall_seconds": maximum_evolution_seconds}
+            if maximum_evolution_seconds is not None
+            else {}
+        ),
         **({"prefer_highest_supported_venue": True} if prefer_highest_evolution_venue else {}),
         **({"allow_guarded_venue_escapes": True} if allow_guarded_evolution_escapes else {}),
-        **({"training_venues": evolution_training_venues}
-           if evolution_training_venues is not None else {}),
-        **({"venue_model": evolution_venue_model, "venue_model_sha256": evolution_venue_model_sha256}
-           if evolution_venue_model is not None else {}),
-        **({"interruption_handler_wrapper": evolution_interruption_handler_wrapper}
-           if evolution_interruption_handler_wrapper is not None else {}),
+        **(
+            {"training_venues": evolution_training_venues}
+            if evolution_training_venues is not None
+            else {}
+        ),
+        **(
+            {
+                "venue_model": evolution_venue_model,
+                "venue_model_sha256": evolution_venue_model_sha256,
+            }
+            if evolution_venue_model is not None
+            else {}
+        ),
+        **(
+            {"interruption_handler_wrapper": evolution_interruption_handler_wrapper}
+            if evolution_interruption_handler_wrapper is not None
+            else {}
+        ),
     )
     result = []
     for binding, evolution in tuple((b, None) for b in acquisitions) + tuple(
@@ -351,13 +403,30 @@ def player_collection_supplements(
                     ),
                 )
         result.append(supplemental_live_option(binding, candidate))
-    result.extend(autonomous_fishing_options(runtime, live, actions, world, **(
-        {} if fishing_interruption_handler_wrapper is None else {
-            "interruption_handler_wrapper": fishing_interruption_handler_wrapper,
-        }
-    )))
-    result.extend(autonomous_safari_options(runtime, live, actions, world,
-        **({"include_capture_invocation": True} if include_capture_invocation else {})))
+    result.extend(
+        autonomous_fishing_options(
+            runtime,
+            live,
+            actions,
+            world,
+            **(
+                {}
+                if fishing_interruption_handler_wrapper is None
+                else {
+                    "interruption_handler_wrapper": fishing_interruption_handler_wrapper,
+                }
+            ),
+        )
+    )
+    result.extend(
+        autonomous_safari_options(
+            runtime,
+            live,
+            actions,
+            world,
+            **({"include_capture_invocation": True} if include_capture_invocation else {}),
+        )
+    )
     if len({row.binding.binding_ref for row in result}) != len(result):
         raise ValueError("collection mechanisms repeat a native executor")
     if (

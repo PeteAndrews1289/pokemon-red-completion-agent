@@ -54,27 +54,52 @@ def test_nugget_introduction_is_exact_but_does_not_invent_its_reward(monkeypatch
             assert not s.event_flag_is_set(raw.event_flags, int(s.EventFlag.GOT_NUGGET))
 
 
-@pytest.mark.parametrize("fault", [None, "reward", "bag", "identity", "ready", "movement", "bridge", "defeated"])
+@pytest.mark.parametrize(
+    "fault", [None, "reward", "bag", "identity", "ready", "movement", "bridge", "defeated"]
+)
 def test_nugget_post_reward_movement_handoff_requires_all_native_evidence(monkeypatch, fault):
     monkeypatch.setattr(s, "verify_rom_bytes", lambda _: None)
-    monkeypatch.setattr(s, "map_object_events", lambda *a:(N(object_index=1,
-        trainer_class=230,trainer_set=6,movement=255,y=15,x=11),))
-    monkeypatch.setattr(s,"trainer_party_quote",lambda *a:N(expected_victory_money=450))
-    flags=bytearray(320)
-    for event in (s.EventFlag.BEAT_ROUTE_24_TRAINER_1,s.EventFlag.BEAT_ROUTE_24_TRAINER_2,
-                  s.EventFlag.BEAT_ROUTE_24_TRAINER_3,s.EventFlag.BEAT_ROUTE_24_TRAINER_4,
-                  s.EventFlag.BEAT_ROUTE_24_TRAINER_5,s.EventFlag.GOT_NUGGET):
-        if (fault=="reward" and event==s.EventFlag.GOT_NUGGET) or (fault=="bridge" and event==s.EventFlag.BEAT_ROUTE_24_TRAINER_5):
+    monkeypatch.setattr(
+        s,
+        "map_object_events",
+        lambda *a: (N(object_index=1, trainer_class=230, trainer_set=6, movement=255, y=15, x=11),),
+    )
+    monkeypatch.setattr(s, "trainer_party_quote", lambda *a: N(expected_victory_money=450))
+    flags = bytearray(320)
+    for event in (
+        s.EventFlag.BEAT_ROUTE_24_TRAINER_1,
+        s.EventFlag.BEAT_ROUTE_24_TRAINER_2,
+        s.EventFlag.BEAT_ROUTE_24_TRAINER_3,
+        s.EventFlag.BEAT_ROUTE_24_TRAINER_4,
+        s.EventFlag.BEAT_ROUTE_24_TRAINER_5,
+        s.EventFlag.GOT_NUGGET,
+    ):
+        if (fault == "reward" and event == s.EventFlag.GOT_NUGGET) or (
+            fault == "bridge" and event == s.EventFlag.BEAT_ROUTE_24_TRAINER_5
+        ):
             continue
-        flags[int(event)//8] |= 1 << (int(event)%8)
-    if fault=="defeated":
-        flags[int(s.EventFlag.BEAT_ROUTE_24_ROCKET)//8] |= 1 << (int(s.EventFlag.BEAT_ROUTE_24_ROCKET)%8)
-    raw=N(map_id=35,battle_state=0,player_y=15,player_x=10,event_flags=bytes(flags),
-        bag_items=() if fault=="bag" else ((int(s.ItemId.NUGGET),1),))
-    reader=N(read=lambda:raw,read_bottom_dialogue_box_visible=lambda:False,
-        read_trainer_battle_identity=lambda:(230,30,230,7 if fault=="identity" else 6),
-        read_input_readiness=lambda:N(ready=fault=="ready",player_moving_direction=0 if fault=="movement" else 8))
-    contract=s.nugget_rocket_introduction_contract(b"rom",reader)
+        flags[int(event) // 8] |= 1 << (int(event) % 8)
+    if fault == "defeated":
+        flags[int(s.EventFlag.BEAT_ROUTE_24_ROCKET) // 8] |= 1 << (
+            int(s.EventFlag.BEAT_ROUTE_24_ROCKET) % 8
+        )
+    raw = N(
+        map_id=35,
+        battle_state=0,
+        player_y=15,
+        player_x=10,
+        event_flags=bytes(flags),
+        bag_items=() if fault == "bag" else ((int(s.ItemId.NUGGET), 1),),
+    )
+    reader = N(
+        read=lambda: raw,
+        read_bottom_dialogue_box_visible=lambda: False,
+        read_trainer_battle_identity=lambda: (230, 30, 230, 7 if fault == "identity" else 6),
+        read_input_readiness=lambda: N(
+            ready=fault == "ready", player_moving_direction=0 if fault == "movement" else 8
+        ),
+    )
+    contract = s.nugget_rocket_introduction_contract(b"rom", reader)
     assert (contract is not None) == (fault is None)
 
 

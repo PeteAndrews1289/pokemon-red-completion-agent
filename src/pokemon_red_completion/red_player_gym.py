@@ -286,8 +286,10 @@ def gym_story_option(
         # room before quoting beyond it; an old off-screen grid is not a
         # current exit witness. This limits navigation, not the chosen gym.
         continuous_route = continuous_travel and raw.map_id not in {
-            int(MapId.POKEMON_MANSION_1F), int(MapId.POKEMON_MANSION_2F),
-            int(MapId.POKEMON_MANSION_3F), int(MapId.POKEMON_MANSION_B1F),
+            int(MapId.POKEMON_MANSION_1F),
+            int(MapId.POKEMON_MANSION_2F),
+            int(MapId.POKEMON_MANSION_3F),
+            int(MapId.POKEMON_MANSION_B1F),
         }
         binding = story_travel_binding(
             runtime,
@@ -303,8 +305,13 @@ def gym_story_option(
             # Reuse the existing real next-boundary quote before declaring the
             # selected gym unreachable. Never execute its object-free preview.
             binding = story_travel_binding(
-                runtime, actions, objective_id=objective, route=route,
-                frontier=True, stop_at_map_boundary=True, allow_surf=allow_surf,
+                runtime,
+                actions,
+                objective_id=objective,
+                route=route,
+                frontier=True,
+                stop_at_map_boundary=True,
+                allow_surf=allow_surf,
             )
         if binding is None:
             binding = obstructing_story_battle_binding(
@@ -325,8 +332,10 @@ def gym_story_option(
     challenge = OptionChallenge(combat, False, 0.0, 0.0, 0.0)
     if obstruction_quote is not None and obstruction_quote[1] is not binding:
         raise ValueError("gym obstruction witness does not belong to the admitted binding")
-    exact_contract = leader_contract if leader_contract is not None else (
-        obstruction_quote[0] if obstruction_quote is not None else None
+    exact_contract = (
+        leader_contract
+        if leader_contract is not None
+        else (obstruction_quote[0] if obstruction_quote is not None else None)
     )
     quote = None
     if exact_contract is not None:
@@ -351,7 +360,7 @@ def gym_story_option(
     if observe_matchup_binding is not None and exact_contract is not None:
         from .red_player_matchup import ExactTrainerMatchupWitness
 
-        if not combat or runtime.emulator.save_state_bytes() != matchup_source:
+        if not combat or quote is None or runtime.emulator.save_state_bytes() != matchup_source:
             raise ValueError("gym matchup witness changed its current native boundary")
         witness = ExactTrainerMatchupWitness(
             source_sha256=sha256(matchup_source).hexdigest(),

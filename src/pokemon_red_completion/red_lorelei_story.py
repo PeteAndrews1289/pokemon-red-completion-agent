@@ -190,8 +190,13 @@ class ScopedAssistedLoreleiController(FrozenLoreleiStoryController):
 
     def require_identity(self):
         self._require_scoped_identity(
-            ("defeat_lorelei", "cartridge-trainer-story", int(MapId.LORELEIS_ROOM),
-             (244, 44, 1), int(EventFlag.BEAT_LORELEI))
+            (
+                "defeat_lorelei",
+                "cartridge-trainer-story",
+                int(MapId.LORELEIS_ROOM),
+                (244, 44, 1),
+                int(EventFlag.BEAT_LORELEI),
+            )
         )
 
     def _require_scoped_identity(self, target):
@@ -211,17 +216,25 @@ class ScopedAssistedLoreleiController(FrozenLoreleiStoryController):
             or not 0 <= self.declared_level_deficit <= 100
             or type(self.declared_stay_when_productive) is not bool
             or scope.diagnostic_stay_when_productive is not self.declared_stay_when_productive
-            or (not self.declared_stay_when_productive
+            or (
+                not self.declared_stay_when_productive
                 and type(self) is not ScopedAssistedLoreleiController
-                and not (scope.allow_learned_tactics
-                         and type(self) in {ScopedAssistedLeagueRetryController,
-                                            ScopedAssistedChampionController}))
+                and not (
+                    scope.allow_learned_tactics
+                    and type(self)
+                    in {ScopedAssistedLeagueRetryController, ScopedAssistedChampionController}
+                )
+            )
             or (scope.allow_learned_tactics and self.declared_stay_when_productive)
             or scope.contract != self.contract
             or type(self.contract) is not StoryTrainerContract
-            or (self.contract.objective_id, self.contract.battle_plan_id,
-                self.contract.map_id, self.contract.trainer_identity,
-                self.contract.defeated_event)
+            or (
+                self.contract.objective_id,
+                self.contract.battle_plan_id,
+                self.contract.map_id,
+                self.contract.trainer_identity,
+                self.contract.defeated_event,
+            )
             != target
             or type(self.maximum_decisions) is not int
             or not 1 <= self.maximum_decisions <= 80
@@ -240,8 +253,13 @@ class ScopedAssistedBrunoController(ScopedAssistedLoreleiController):
 
     def require_identity(self):
         self._require_scoped_identity(
-            ("defeat_bruno", "cartridge-trainer-story", int(MapId.BRUNOS_ROOM),
-             (233, 33, 1), int(EventFlag.BEAT_BRUNO))
+            (
+                "defeat_bruno",
+                "cartridge-trainer-story",
+                int(MapId.BRUNOS_ROOM),
+                (233, 33, 1),
+                int(EventFlag.BEAT_BRUNO),
+            )
         )
 
     def require_objective(self, objective_id, *, rematch=False):
@@ -260,8 +278,13 @@ class ScopedAssistedAgathaController(ScopedAssistedLoreleiController):
 
     def require_identity(self):
         self._require_scoped_identity(
-            ("defeat_agatha", "cartridge-trainer-story", int(MapId.AGATHAS_ROOM),
-             (246, 46, 1), int(EventFlag.BEAT_AGATHA))
+            (
+                "defeat_agatha",
+                "cartridge-trainer-story",
+                int(MapId.AGATHAS_ROOM),
+                (246, 46, 1),
+                int(EventFlag.BEAT_AGATHA),
+            )
         )
 
     def require_objective(self, objective_id, *, rematch=False):
@@ -280,8 +303,13 @@ class ScopedAssistedLanceController(ScopedAssistedLoreleiController):
 
     def require_identity(self):
         self._require_scoped_identity(
-            ("defeat_lance", "cartridge-trainer-story", int(MapId.LANCES_ROOM),
-             (247, 47, 1), int(EventFlag.BEAT_LANCES_ROOM_TRAINER))
+            (
+                "defeat_lance",
+                "cartridge-trainer-story",
+                int(MapId.LANCES_ROOM),
+                (247, 47, 1),
+                int(EventFlag.BEAT_LANCES_ROOM_TRAINER),
+            )
         )
 
     def require_objective(self, objective_id, *, rematch=False):
@@ -569,8 +597,13 @@ class ScopedAssistedChampionController(ScopedAssistedLoreleiController):
         if identity not in ((243, 43, 1), (243, 43, 2), (243, 43, 3)):
             raise ValueError("scoped Champion requires a native final-rival roster")
         self._require_scoped_identity(
-            ("defeat_champion", "cartridge-final-story", int(MapId.CHAMPIONS_ROOM),
-             identity, int(EventFlag.BEAT_CHAMPION_RIVAL))
+            (
+                "defeat_champion",
+                "cartridge-final-story",
+                int(MapId.CHAMPIONS_ROOM),
+                identity,
+                int(EventFlag.BEAT_CHAMPION_RIVAL),
+            )
         )
 
     def require_objective(self, objective_id, *, rematch=False):
@@ -633,7 +666,6 @@ def story_league_controller(runtime, objective_id, *, rematch=False):
     """Resolve the explicit story binding without changing default K authority."""
     from .red_learned_league import learned_league_controller
     from .red_story_copy import StoryCopyController
-
     from .red_train_lorelei import FrozenTrainLoreleiStoryController
 
     controller = getattr(runtime, "league_story_battle_controller", None)

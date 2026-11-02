@@ -74,10 +74,14 @@ def retained_power_on(adapter, root, result):
 
 
 FRESH_ACCEPTANCE_SCHEMA = "pokemon.red.frozen-fresh-acceptance.v1"
-FRESH_ACCEPTANCE_SUPPORT = frozenset({
-    "declared_startup_mechanics", "deterministic_execution",
-    "forced_singleton_mechanics", "league_medicine_reserve",
-})
+FRESH_ACCEPTANCE_SUPPORT = frozenset(
+    {
+        "declared_startup_mechanics",
+        "deterministic_execution",
+        "forced_singleton_mechanics",
+        "league_medicine_reserve",
+    }
+)
 
 
 def declared_fresh_acceptance(plan):
@@ -93,15 +97,22 @@ def declared_fresh_acceptance(plan):
             raise ValueError("fresh acceptance declaration lacks prospective authority")
         return False
     expected = {
-        "schema", "lane", "teacher_oracle_fallback", "cross_run_memory",
-        "freeze_until_exit", "champion_and_concurrent_hall_of_fame",
-        "required_registrations", "required_species_sha256",
-        "configuration_template_sha256", "allowed_support",
+        "schema",
+        "lane",
+        "teacher_oracle_fallback",
+        "cross_run_memory",
+        "freeze_until_exit",
+        "champion_and_concurrent_hall_of_fame",
+        "required_registrations",
+        "required_species_sha256",
+        "configuration_template_sha256",
+        "allowed_support",
     }
     species = plan.get("required_species")
     configuration = plan.get("configuration_template")
     if (
-        not isinstance(declaration, dict) or set(declaration) != expected
+        not isinstance(declaration, dict)
+        or set(declaration) != expected
         or declaration.get("schema") != FRESH_ACCEPTANCE_SCHEMA
         or declaration.get("lane") != "learned_hybrid"
         or declaration.get("teacher_oracle_fallback") is not False
@@ -110,8 +121,10 @@ def declared_fresh_acceptance(plan):
         or declaration.get("champion_and_concurrent_hall_of_fame") is not True
         or type(declaration.get("required_registrations")) is not int
         or declaration["required_registrations"] != 124
-        or type(species) is not list or len(species) != 124
-        or any(type(s) is not str for s in species) or len(set(species)) != 124
+        or type(species) is not list
+        or len(species) != 124
+        or any(type(s) is not str for s in species)
+        or len(set(species)) != 124
         or not isinstance(configuration, dict)
         or declaration.get("required_species_sha256") != canonical_sha256(species)
         or declaration.get("configuration_template_sha256") != canonical_sha256(configuration)
@@ -119,14 +132,30 @@ def declared_fresh_acceptance(plan):
         or any(type(s) is not str for s in declaration["allowed_support"])
         or len(declaration["allowed_support"]) != len(FRESH_ACCEPTANCE_SUPPORT)
         or set(declaration["allowed_support"]) != FRESH_ACCEPTANCE_SUPPORT
-        or any(type(plan.get(k)) is not int or plan[k] != n for k,n in (
-            ("maximum_state_loads", 0), ("maximum_emulators", 1), ("runtime_llm_calls", 0)))
-        or any(plan.get(k) is not False for k in (
-            "fit_allowed", "training_admission", "copy_back", "resume_allowed"))
-        or any(plan.get(k) is not True for k in (
-            "source_and_models_frozen_during_attempt", "no_midrun_repair_or_rollback", "all_attempts_count"))
+        or any(
+            type(plan.get(k)) is not int or plan[k] != n
+            for k, n in (
+                ("maximum_state_loads", 0),
+                ("maximum_emulators", 1),
+                ("runtime_llm_calls", 0),
+            )
+        )
+        or any(
+            plan.get(k) is not False
+            for k in ("fit_allowed", "training_admission", "copy_back", "resume_allowed")
+        )
+        or any(
+            plan.get(k) is not True
+            for k in (
+                "source_and_models_frozen_during_attempt",
+                "no_midrun_repair_or_rollback",
+                "all_attempts_count",
+            )
+        )
     ):
-        raise ValueError("fresh acceptance needs frozen zero-load unassisted identity and full curriculum")
+        raise ValueError(
+            "fresh acceptance needs frozen zero-load unassisted identity and full curriculum"
+        )
     return True
 
 
@@ -136,8 +165,10 @@ def fresh_official_completion_candidate(plan, result, terminal_reason):
         declared_fresh_acceptance(plan)
         and terminal_reason == "curriculum_complete"
         and result.get("passed") is True
-        and all(type(result.get(k)) is int and result[k] == 0
-                for k in ("state_loads", "training", "fits", "runtime_llm_calls"))
+        and all(
+            type(result.get(k)) is int and result[k] == 0
+            for k in ("state_loads", "training", "fits", "runtime_llm_calls")
+        )
         and not result.get("error_type")
         and not result.get("pending_automatic_control_recoveries")
     )
@@ -196,9 +227,8 @@ def realized_configuration(template, *, origin_sha256, origin_id, starter_ref, t
     teachers = replace(base, excluded_profiles=tuple(teacher_profiles))
     return replace(
         base,
-        excluded_profiles=base.excluded_profiles + tuple(
-            pair for pair in teachers.excluded_profiles if pair not in base.excluded_profiles
-        ),
+        excluded_profiles=base.excluded_profiles
+        + tuple(pair for pair in teachers.excluded_profiles if pair not in base.excluded_profiles),
     )
 
 
@@ -218,9 +248,12 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
         and receipt.get("qualified") is True
         and receipt.get("failed_transport_preserved") is True
         and receipt.get("strategic_substitution") is False
-        and all(type(receipt.get(key)) is int and receipt[key] == 0
-                for key in ("inputs", "frames", "model_queries"))
-        and receipt.get("binding_ref") in {
+        and all(
+            type(receipt.get(key)) is int and receipt[key] == 0
+            for key in ("inputs", "frames", "model_queries")
+        )
+        and receipt.get("binding_ref")
+        in {
             "pokemon.red:retained-engagement:" + str(receipt.get("state_sha256")),
             "pokemon.red:interrupted-wild:" + str(receipt.get("state_sha256")),
         }
@@ -231,7 +264,8 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
             return False
         known = (
             outcome["error_type"] == "RouteExecutionError"
-            and outcome.get("error") in {
+            and outcome.get("error")
+            in {
                 "field dialogue lacks a newly poisoned member faint",
                 "field dialogue is not an admitted native faint",
                 "Gen I route cannot dismiss 'trainer_engagement'",
@@ -244,9 +278,7 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
         return not (known and outcome.get("terminal_state_sha256") in recovered)
 
     return any(e.get("model_decisions", 0) > 0 for e in episodes) and not any(
-        unresolved_error(o)
-        for e in episodes
-        for o in e.get("outcomes", ())
+        unresolved_error(o) for e in episodes for o in e.get("outcomes", ())
     )
 
 
@@ -307,9 +339,12 @@ def run(plan_path):
     emulator, episodes = None, []
     pending_control_handoffs, recovered_control_handoffs = [], []
     try:
-        with RunFrameFeed(plan, root) as feed, retained_power_on(
-            c.PyBoyAdapter(c.ROM, watch=False, speed=None, **feed.adapter_options), root, result
-        ) as emulator:
+        with (
+            RunFrameFeed(plan, root) as feed,
+            retained_power_on(
+                c.PyBoyAdapter(c.ROM, watch=False, speed=None, **feed.adapter_options), root, result
+            ) as emulator,
+        ):
             wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=limits.seconds)
             controller = _NoLoadController(wall, maximum_frames=limits.frames)
             if controller.frame_count != 0 or controller.pressed_buttons:
@@ -431,14 +466,19 @@ def run(plan_path):
                     ),
                 )
                 source_payload, factory, menu, holder, source = assemble_configured_player(
-                    backend, configuration, parent, output, plan_path=output / "PLAN.json",
+                    backend,
+                    configuration,
+                    parent,
+                    output,
+                    plan_path=output / "PLAN.json",
                     model_feature_version=model.feature_version,
                 )
                 if source_payload != controller.save_state_bytes():
                     raise ValueError("live runtime renewal changed the retained native state")
                 factory(ReadOnlyController(controller))
-                connect_declared_machine_options(menu, plan, rom=c.ROM.read_bytes(),
-                    holder=holder, configuration=configuration)
+                connect_declared_machine_options(
+                    menu, plan, rom=c.ROM.read_bytes(), holder=holder, configuration=configuration
+                )
                 cash_left = (
                     None
                     if limits.cash_debits is None

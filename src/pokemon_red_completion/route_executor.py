@@ -130,12 +130,13 @@ class InterruptionReceipt:
             raise ValueError("interruption relocation permission must be boolean")
         if type(self.allows_map_transition) is not bool:
             raise ValueError("interruption map transition permission must be boolean")
+        source_map = self.details.get("source_map")
         if self.allows_map_transition and (
             not self.allows_relocation
             or self.details.get("verified") is not True
-            or type(self.details.get("source_map")) is not int
-            or self.details["source_map"] < 0
-            or self.details["source_map"] == self.resumed_map
+            or type(source_map) is not int
+            or source_map < 0
+            or source_map == self.resumed_map
         ):
             raise ValueError("map transition requires a verified declared relocation")
 
@@ -557,8 +558,7 @@ def _execute_route(
             attempts += 1
             observed = observer.observe()
             trace.last_observation = observed
-            if (yielded_interruption is not None
-                    and observed.interruption != yielded_interruption):
+            if yielded_interruption is not None and observed.interruption != yielded_interruption:
                 raise RouteExecutionError(
                     "compound action interruption lacks matching live observation",
                     reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
@@ -764,8 +764,13 @@ def _execute_route(
                 # Only WAIT until readiness; exact destination acknowledgement
                 # below remains mandatory and no movement is retried mid-step.
                 observed, new_receipts, waits = _wait_until_ready(
-                    observed, actions, observer, interruption_handler, limits,
-                    used_interruptions=len(interruptions), trace=trace,
+                    observed,
+                    actions,
+                    observer,
+                    interruption_handler,
+                    limits,
+                    used_interruptions=len(interruptions),
+                    trace=trace,
                 )
                 trace.last_observation = observed
                 interruptions.extend(new_receipts)

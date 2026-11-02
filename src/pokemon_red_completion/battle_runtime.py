@@ -569,7 +569,10 @@ def advance_battle_to_policy_boundary(
             # introduction; never mistake send-out for a forced switch.
             if raw.battler_hp == 0 and raw.party_hp and any(raw.party_hp):
                 _require_present_turn_state(
-                    raw, expected_map=expected_map, label=label, allow_player_faint=True,
+                    raw,
+                    expected_map=expected_map,
+                    label=label,
+                    allow_player_faint=True,
                 )
                 if raw.battle_state != expected_battle_state:
                     raise BattleRuntimeError(f"{label} ended before a policy boundary.")
@@ -577,8 +580,11 @@ def advance_battle_to_policy_boundary(
                 if menu.phase is BattleMenuPhase.UNKNOWN:
                     intro = getattr(reader, "trainer_introduction_visible", None)
                     if callable(intro) and intro(raw):
-                        _pulse(measured, MacroAction(MacroActionKind.CONFIRM),
-                               timing.dialogue_wait_frames)
+                        _pulse(
+                            measured,
+                            MacroAction(MacroActionKind.CONFIRM),
+                            timing.dialogue_wait_frames,
+                        )
                     else:
                         _wait(measured, timing.dialogue_wait_frames)
                     continue
@@ -816,9 +822,13 @@ def trainer_double_knockout_roster_pending(
     index = raw.enemy_party_position
     return bool(
         raw.battle_state == _TRAINER_BATTLE_STATE
-        and raw.battler_hp == 0 and raw.enemy_hp == 0
-        and raw.party_hp is not None and any(hp > 0 for hp in raw.party_hp)
-        and roster and type(index) is int and 0 <= index < len(roster)
+        and raw.battler_hp == 0
+        and raw.enemy_hp == 0
+        and raw.party_hp is not None
+        and any(hp > 0 for hp in raw.party_hp)
+        and roster
+        and type(index) is int
+        and 0 <= index < len(roster)
         and all(type(hp) is int and hp >= 0 for hp in roster)
         and all(hp == 0 for slot, hp in enumerate(roster) if slot != index)
     )
@@ -859,10 +869,14 @@ def settle_trainer_double_knockout(
         if raw.map_id != expected_map:
             raise BattleRuntimeError("trainer double KO left its authenticated map")
         if raw.battle_state == 0:
-            if pending and (raw.enemy_hp != 0 or not observed_roster
+            if pending and (
+                raw.enemy_hp != 0
+                or not observed_roster
                 or len(observed_roster) != roster_count
                 or any(type(hp) is not int or hp != 0 for hp in observed_roster)
-                or not raw.party_hp or not any(hp > 0 for hp in raw.party_hp)):
+                or not raw.party_hp
+                or not any(hp > 0 for hp in raw.party_hp)
+            ):
                 raise BattleRuntimeError("trainer double KO terminal did not flush defeated roster")
             return raw
         if (
@@ -870,9 +884,14 @@ def settle_trainer_double_knockout(
             or raw.battler_hp != 0
             or raw.enemy_hp != 0
             or not observed_roster
-            or (pending and (raw.enemy_party_position != opponent_index
-                or len(observed_roster) != roster_count
-                or not trainer_double_knockout_roster_pending(raw, observed_roster)))
+            or (
+                pending
+                and (
+                    raw.enemy_party_position != opponent_index
+                    or len(observed_roster) != roster_count
+                    or not trainer_double_knockout_roster_pending(raw, observed_roster)
+                )
+            )
             or (not pending and any(type(hp) is not int or hp != 0 for hp in observed_roster))
         ):
             raise BattleRuntimeError("trainer double KO changed its terminal boundary")
@@ -907,12 +926,14 @@ def _await_next_battle_decision(
         elif raw.battle_state == expected_battle_state:
             if _original_battler_pp_vector(initial_raw, raw, label=label) == initial_raw.battler_pp:
                 return
-            if (allow_delayed_selected_spend
-                    and type(initial_raw.active_party_index) is int
-                    and 0 <= initial_raw.active_party_index < 6
-                    and initial_raw.active_party_index == raw.active_party_index
-                    and initial_raw.battler_moves is not None
-                    and initial_raw.battler_moves == raw.battler_moves):
+            if (
+                allow_delayed_selected_spend
+                and type(initial_raw.active_party_index) is int
+                and 0 <= initial_raw.active_party_index < 6
+                and initial_raw.active_party_index == raw.active_party_index
+                and initial_raw.battler_moves is not None
+                and initial_raw.battler_moves == raw.battler_moves
+            ):
                 # A submitted move can spend after a transient Disable gate.
                 # No new attack is selected here: the existing whole-vector
                 # verifier permits exactly its one spend, and remains active
@@ -1151,9 +1172,8 @@ def run_adaptive_trainer_battle(
             )
 
         ready_reads = 0
-        if (
-            not transient_zero_pp_main_is_dialogue
-            and _preserve_moves_at_learning_prompt(reader, executor, raw, timing=timing)
+        if not transient_zero_pp_main_is_dialogue and _preserve_moves_at_learning_prompt(
+            reader, executor, raw, timing=timing
         ):
             # The adaptive collection path can reach a level-up prompt outside
             # the selected-turn settlement loop. It owns the same preservation
@@ -1694,26 +1714,40 @@ def _execute_policy_turn(
             # An opponent replacement can overtake an unspent move attempt.
             # UNKNOWN here is a model-owned yes/no gate, not sleep dialogue.
             return False
-        if return_after_suppressed_turn and _unspent_sleep_turn_progress(initial_raw, raw, label=label):
+        if return_after_suppressed_turn and _unspent_sleep_turn_progress(
+            initial_raw, raw, label=label
+        ):
             return False
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.MOVE:
             move_menu = menu
             break
         if menu.phase is BattleMenuPhase.MAIN and menu.selected_main_command == _FIGHT_COMMAND:
-            if (return_after_suppressed_turn
-                and initial_raw.enemy_hp is not None and raw.enemy_hp is not None
-                and 0 < raw.enemy_hp < initial_raw.enemy_hp):
+            if (
+                return_after_suppressed_turn
+                and initial_raw.enemy_hp is not None
+                and raw.enemy_hp is not None
+                and 0 < raw.enemy_hp < initial_raw.enemy_hp
+            ):
                 # Own Wrap can advance without a fresh move choice or PP spend.
                 # Stop at its first MAIN; a second A can enter a new MOVE menu.
-                if (raw.active_party_index != initial_raw.active_party_index
+                if (
+                    raw.active_party_index != initial_raw.active_party_index
                     or raw.party_species_ids != initial_raw.party_species_ids
                     or raw.battler_moves != initial_raw.battler_moves
                     or (raw.enemy_species_id, raw.enemy_party_position)
-                       != (initial_raw.enemy_species_id, initial_raw.enemy_party_position)):
-                    raise BattleRuntimeError(f"{label} changed identity during automatic damage continuation.")
-                if _original_battler_pp_vector(initial_raw, raw, label=label) != initial_raw.battler_pp:
-                    raise BattleRuntimeError(f"{label} changed PP during automatic damage continuation.")
+                    != (initial_raw.enemy_species_id, initial_raw.enemy_party_position)
+                ):
+                    raise BattleRuntimeError(
+                        f"{label} changed identity during automatic damage continuation."
+                    )
+                if (
+                    _original_battler_pp_vector(initial_raw, raw, label=label)
+                    != initial_raw.battler_pp
+                ):
+                    raise BattleRuntimeError(
+                        f"{label} changed PP during automatic damage continuation."
+                    )
                 return False
             if (
                 (initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move)
@@ -1965,10 +1999,16 @@ def _confirm_attack_with_pp_gate(
             # unchanged full PP proves no player move executed or was replaced.
             return False
         if return_after_suppressed_turn and _unspent_trainer_prompt_boundary(
-            reader, raw, expected_map=expected_map, initial_pp_vector=initial_raw.battler_pp, label=label
+            reader,
+            raw,
+            expected_map=expected_map,
+            initial_pp_vector=initial_raw.battler_pp,
+            label=label,
         ):
             return False
-        if return_after_suppressed_turn and _unspent_sleep_turn_progress(initial_raw, raw, label=label):
+        if return_after_suppressed_turn and _unspent_sleep_turn_progress(
+            initial_raw, raw, label=label
+        ):
             return False
         if (
             (raw.battler_status or 0) & 0x07
@@ -2077,7 +2117,9 @@ def _selected_move_identity_replaced(
     )
 
 
-def _unspent_sleep_turn_progress(original: RawGameState, current: RawGameState, *, label: str) -> bool:
+def _unspent_sleep_turn_progress(
+    original: RawGameState, current: RawGameState, *, label: str
+) -> bool:
     """Prove a suppressed turn progressed; settlement owns its next stable menu."""
     if original.battler_status is None or current.battler_status is None:
         if (original.battler_status or 0) & 7 or (current.battler_status or 0) & 7:
@@ -2087,40 +2129,57 @@ def _unspent_sleep_turn_progress(original: RawGameState, current: RawGameState, 
     if not (before or after):
         return False
     if original.active_party_index != current.active_party_index:
-        raise BattleRuntimeError(f"{label} changed active identity during an unspent sleeping turn.")
+        raise BattleRuntimeError(
+            f"{label} changed active identity during an unspent sleeping turn."
+        )
     if (original.enemy_species_id, original.enemy_party_position) != (
-        current.enemy_species_id, current.enemy_party_position
+        current.enemy_species_id,
+        current.enemy_party_position,
     ):
         # A trainer may switch its living active member while the player's
         # sleeping turn consumes no PP. This is a roster transition, not a faint
         # or a different player action. Settlement still owns the next menu.
         count = original.enemy_party_count
         positions = (original.enemy_party_position, current.enemy_party_position)
-        living = (original.enemy_species_id, current.enemy_species_id,
-                  original.enemy_hp, current.enemy_hp)
+        living = (
+            original.enemy_species_id,
+            current.enemy_species_id,
+            original.enemy_hp,
+            current.enemy_hp,
+        )
         roster_switch = (
             original.battle_state == current.battle_state == _TRAINER_BATTLE_STATE
-            and original.map_id is not None and original.map_id == current.map_id
-            and type(count) is int and 2 <= count <= 6
-            and type(current.enemy_party_count) is int and current.enemy_party_count == count
+            and original.map_id is not None
+            and original.map_id == current.map_id
+            and type(count) is int
+            and 2 <= count <= 6
+            and type(current.enemy_party_count) is int
+            and current.enemy_party_count == count
             and all(type(position) is int and 0 <= position < count for position in positions)
             and positions[0] != positions[1]
             and all(type(value) is int and value > 0 for value in living)
             and original.battler_moves is not None
             and original.battler_moves == current.battler_moves
-            and original.battler_pp is not None and len(original.battler_pp) == 4
-            and before > 0 and after in (before, before - 1)
+            and original.battler_pp is not None
+            and len(original.battler_pp) == 4
+            and before > 0
+            and after in (before, before - 1)
         )
         if not roster_switch:
-            raise BattleRuntimeError(f"{label} changed opponent identity during an unspent sleeping turn.")
+            raise BattleRuntimeError(
+                f"{label} changed opponent identity during an unspent sleeping turn."
+            )
         if _original_battler_pp_vector(original, current, label=label) != original.battler_pp:
             raise BattleRuntimeError(f"{label} changed PP during an unspent sleeping turn.")
         # An incomplete replacement alone cannot certify the player's turn.
         return after == before - 1
     if after > before and before not in (0, 1):
         raise BattleRuntimeError(f"{label} sleep counter increased before its wake-up boundary.")
-    damaged = (original.battler_hp is not None and current.battler_hp is not None
-               and current.battler_hp < original.battler_hp)
+    damaged = (
+        original.battler_hp is not None
+        and current.battler_hp is not None
+        and current.battler_hp < original.battler_hp
+    )
     if before == after and not damaged:
         return False
     if _original_battler_pp_vector(original, current, label=label) != original.battler_pp:
@@ -2155,8 +2214,9 @@ def _recover_sleep_transition(
     ):
         return True
     if return_after_suppressed_turn and _unspent_sleep_turn_progress(original, raw, label=label):
-        _require_present_turn_state(raw, expected_map=expected_map, label=label,
-                                    allow_player_faint=allow_player_faint)
+        _require_present_turn_state(
+            raw, expected_map=expected_map, label=label, allow_player_faint=allow_player_faint
+        )
         return True
     sleep_count = (raw.battler_status or 0) & 0x07
     if sleep_count == 0:
@@ -2221,7 +2281,9 @@ def _recover_sleep_transition(
             )
         if original_pp(raw) != initial_pp_vector:
             raise BattleRuntimeError(f"{label} changed an off-slot PP value during sleep recovery.")
-        if return_after_suppressed_turn and _unspent_sleep_turn_progress(original, raw, label=label):
+        if return_after_suppressed_turn and _unspent_sleep_turn_progress(
+            original, raw, label=label
+        ):
             return True
 
         if _unspent_trainer_prompt_boundary(
@@ -2233,12 +2295,9 @@ def _recover_sleep_transition(
         ):
             return True
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
-        if (
-            menu.phase is BattleMenuPhase.MAIN
-            and (
-                sleep_turns >= timing.max_sleep_turns_per_decision
-                or sleep_reapplications >= timing.max_sleep_reapplications
-            )
+        if menu.phase is BattleMenuPhase.MAIN and (
+            sleep_turns >= timing.max_sleep_turns_per_decision
+            or sleep_reapplications >= timing.max_sleep_reapplications
         ):
             # Return control at a verified action boundary, not halfway through
             # dialogue. Do not request another turn after the sleep-application

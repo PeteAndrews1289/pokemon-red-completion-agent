@@ -258,8 +258,14 @@ def test_start_menu_recovery_cancels_without_confirming_or_querying_strategy(clo
     port = MenuPort(reader)
     adapter = _adapter(reader)
     provider = RedControlRecoveryGoalProvider(
-        CountingExecutor(port), reader, port, adapter,
-        wait_attempts=1, cancel_attempts=1, confirm_attempts=1, settle_frames=1,
+        CountingExecutor(port),
+        reader,
+        port,
+        adapter,
+        wait_attempts=1,
+        cancel_attempts=1,
+        confirm_attempts=1,
+        settle_frames=1,
     )
     assert not adapter.observe().input_ready
     offer = provider.offer(adapter.observe())
@@ -387,9 +393,17 @@ class _CenterPort(_ActionPort):
 
 @pytest.mark.parametrize("updates_anchor", [True, False])
 def test_full_health_nurse_must_complete_the_requested_indigo_checkpoint(updates_anchor):
-    reader = _Reader(raw=replace(_raw(), map_id=MapId.INDIGO_PLATEAU_LOBBY,
-        player_x=7, player_y=7, party_moves=((55, 0, 0, 0),),
-        party_pp=((25, 0, 0, 0),)), ready=True)
+    reader = _Reader(
+        raw=replace(
+            _raw(),
+            map_id=MapId.INDIGO_PLATEAU_LOBBY,
+            player_x=7,
+            player_y=7,
+            party_moves=((55, 0, 0, 0),),
+            party_pp=((25, 0, 0, 0),),
+        ),
+        ready=True,
+    )
     state = {"anchor": 15, "confirms": 0}
     reader.read_last_blackout_map = lambda: state["anchor"]
 
@@ -403,9 +417,17 @@ def test_full_health_nurse_must_complete_the_requested_indigo_checkpoint(updates
             return action
 
     port = CheckpointPort(reader)
-    offer = RedCenterRestoreGoalProvider(CountingExecutor(port), reader, port, _adapter(reader),
-        settle_frames=1, dialogue_attempts=4, require_full_pp_restore=True,
-        include_indigo_lobby=True, require_indigo_checkpoint=True).offer(_adapter(reader).observe())
+    offer = RedCenterRestoreGoalProvider(
+        CountingExecutor(port),
+        reader,
+        port,
+        _adapter(reader),
+        settle_frames=1,
+        dialogue_attempts=4,
+        require_full_pp_restore=True,
+        include_indigo_lobby=True,
+        require_indigo_checkpoint=True,
+    ).offer(_adapter(reader).observe())
     assert offer.binding is not None and state["confirms"] == 0
     if not updates_anchor:
         with pytest.raises(RedGoalSkillError, match="did not restore"):
@@ -419,11 +441,14 @@ def test_full_health_nurse_must_complete_the_requested_indigo_checkpoint(updates
     assert offer.binding.verify(report).status.value == "failed"
 
 
-@pytest.mark.parametrize("kwargs", [
-    {"require_indigo_checkpoint": 1},
-    {"require_indigo_checkpoint": True},
-    {"require_indigo_checkpoint": True, "include_indigo_lobby": True},
-])
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"require_indigo_checkpoint": 1},
+        {"require_indigo_checkpoint": True},
+        {"require_indigo_checkpoint": True, "include_indigo_lobby": True},
+    ],
+)
 def test_indigo_checkpoint_cannot_be_implicitly_enabled(kwargs):
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)
@@ -515,13 +540,18 @@ def test_center_restore_reaches_nurse_and_verifies_whole_party_recovery() -> Non
 
 @pytest.mark.parametrize("wait_frames", [1, 120])
 def test_center_receipt_excludes_separately_metered_input_after_offer(wait_frames):
-    reader = _Reader(raw=replace(
-        _raw(hp=100), map_id=MapId.CELADON_POKECENTER, player_x=3, player_y=7),
-        ready=True)
+    reader = _Reader(
+        raw=replace(_raw(hp=100), map_id=MapId.CELADON_POKECENTER, player_x=3, player_y=7),
+        ready=True,
+    )
     port = _CenterPort(reader)
     actions = CountingExecutor(port)
     offer = RedCenterRestoreGoalProvider(
-        actions, reader, port, _adapter(reader), settle_frames=1,
+        actions,
+        reader,
+        port,
+        _adapter(reader),
+        settle_frames=1,
     ).offer(_adapter(reader).observe())
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=wait_frames))
     before_actions, before_frames = actions.actions_executed, port.frame_count
@@ -1628,9 +1658,14 @@ def test_encounter_discovery_learns_a_new_sighting_without_capturing() -> None:
     assert len(reader.pokedex.seen_species) == 2
 
 
-@pytest.mark.parametrize("limit", [
-    "survey_leg_limit_exceeded", "seek_step_limit_reached", "encounter_limit_reached",
-])
+@pytest.mark.parametrize(
+    "limit",
+    [
+        "survey_leg_limit_exceeded",
+        "seek_step_limit_reached",
+        "encounter_limit_reached",
+    ],
+)
 def test_discovery_returns_a_measured_failed_miss_and_exits_the_last_encounter(limit):
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)
@@ -1646,8 +1681,13 @@ def test_discovery_returns_a_measured_failed_miss_and_exits_the_last_encounter(l
 
     area = NoFindArea(reader, actions)
     provider = RedEncounterDiscoveryGoalProvider(
-        "wild:Route1:grass", area, actions, port, _adapter(reader),
-        maximum_seek_steps=2, maximum_encounters=1,
+        "wild:Route1:grass",
+        area,
+        actions,
+        port,
+        _adapter(reader),
+        maximum_seek_steps=2,
+        maximum_encounters=1,
     )
     offer = provider.offer(provider.adapter.observe())
     assert offer.binding is not None
@@ -1662,10 +1702,20 @@ def test_discovery_returns_a_measured_failed_miss_and_exits_the_last_encounter(l
     assert offer.binding.verify(report).failure_reason is GoalFailureReason.SEARCH_EXHAUSTED
 
 
-@pytest.mark.parametrize("fault", [
-    "unready", "battle", "fainted", "identity", "new_seen", "no_actions", "no_frames",
-    "reason", "false_count",
-])
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "unready",
+        "battle",
+        "fainted",
+        "identity",
+        "new_seen",
+        "no_actions",
+        "no_frames",
+        "reason",
+        "false_count",
+    ],
+)
 def test_discovery_no_find_verifier_rejects_unsafe_or_unproven_misses(fault):
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)
@@ -1677,7 +1727,11 @@ def test_discovery_no_find_verifier_rejects_unsafe_or_unproven_misses(fault):
             raise RedAreaExecutionError("bounded patrol", reason_code="survey_leg_limit_exceeded")
 
     provider = RedEncounterDiscoveryGoalProvider(
-        "wild:Route1:grass", ExhaustedArea(reader, actions), actions, port, _adapter(reader),
+        "wild:Route1:grass",
+        ExhaustedArea(reader, actions),
+        actions,
+        port,
+        _adapter(reader),
     )
     offer = provider.offer(provider.adapter.observe())
     assert offer.binding is not None
@@ -1699,7 +1753,8 @@ def test_discovery_no_find_verifier_rejects_unsafe_or_unproven_misses(fault):
     else:
         key, value = (
             ("search_stop_reason", "unknown")
-            if fault == "reason" else ("new_sighting_count", False)
+            if fault == "reason"
+            else ("new_sighting_count", False)
         )
         report = replace(report, evidence={**report.evidence, key: value})
     verdict = offer.binding.verify(report)
@@ -1718,12 +1773,19 @@ def test_discovery_does_not_swallow_unexpected_search_errors(fault):
             self.actions.execute(MacroAction(MacroActionKind.WAIT))
             if fault == "still_encountered":
                 self.encountered = red_species_ref(9)
-            raise RedAreaExecutionError("not a safe miss", reason_code=(
-                "control_failed" if fault == "control" else "survey_leg_limit_exceeded"
-            ))
+            raise RedAreaExecutionError(
+                "not a safe miss",
+                reason_code=(
+                    "control_failed" if fault == "control" else "survey_leg_limit_exceeded"
+                ),
+            )
 
     provider = RedEncounterDiscoveryGoalProvider(
-        "wild:Route1:grass", BrokenArea(reader, actions), actions, port, _adapter(reader),
+        "wild:Route1:grass",
+        BrokenArea(reader, actions),
+        actions,
+        port,
+        _adapter(reader),
     )
     offer = provider.offer(provider.adapter.observe())
     assert offer.binding is not None
@@ -2025,28 +2087,45 @@ def test_red_encounter_source_development_rejects_invalid_fresh_boundary() -> No
 
 def test_discovery_history_identity_ignores_unrelated_progress_but_tracks_local_knowledge():
     from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+
     reader = _Reader(raw=_raw(), ready=True)
     port = _ActionPort(reader)
     actions = CountingExecutor(port)
     adapter = _adapter(reader)
     provider = RedEncounterDiscoveryGoalProvider(
-        "wild:Route1:grass", _DiscoveryExecutor(reader, actions), actions, port, adapter,
-        source_species_numbers=(9, 16, 19))
+        "wild:Route1:grass",
+        _DiscoveryExecutor(reader, actions),
+        actions,
+        port,
+        adapter,
+        source_species_numbers=(9, 16, 19),
+    )
     first = provider.offer(adapter.observe()).binding
     assert first is not None and first.tracks_search_effort
     memory = GoalSearchMemory()
-    memory.record(first.search_memory_source, first.search_objective_sha256,
-                  exhausted=True, actions=7, frames=99)
-    reader.pokedex = replace(reader.pokedex, seen_species=frozenset({9, 25}),
-                             owned_species=frozenset({9, 25}))
+    memory.record(
+        first.search_memory_source,
+        first.search_objective_sha256,
+        exhausted=True,
+        actions=7,
+        frames=99,
+    )
+    reader.pokedex = replace(
+        reader.pokedex, seen_species=frozenset({9, 25}), owned_species=frozenset({9, 25})
+    )
     changed = replace(provider, maximum_seek_steps=123).offer(adapter.observe()).binding
     assert changed.search_memory_source == first.search_memory_source
     assert changed.search_objective_sha256 == first.search_objective_sha256
-    assert memory.lookup(changed.search_memory_source, changed.search_objective_sha256).attempts == 1
+    assert (
+        memory.lookup(changed.search_memory_source, changed.search_objective_sha256).attempts == 1
+    )
     reader.pokedex = replace(reader.pokedex, seen_species=frozenset({9, 16, 25}))
     remaining = provider.offer(adapter.observe()).binding
     assert remaining.search_objective_sha256 != first.search_objective_sha256
-    assert memory.lookup(remaining.search_memory_source, remaining.search_objective_sha256).attempts == 0
+    assert (
+        memory.lookup(remaining.search_memory_source, remaining.search_objective_sha256).attempts
+        == 0
+    )
     other = replace(provider, source_id="wild:Route2:grass").offer(adapter.observe()).binding
     assert other.search_memory_source != remaining.search_memory_source
     assert actions.actions_executed == 0

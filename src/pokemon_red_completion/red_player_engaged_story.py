@@ -9,7 +9,10 @@ from .gen1_trainer_sight import static_trainer_sight_zones, trainer_headers
 from .gen1_traversal import map_object_events
 from .goal_manager import GoalDecisionOutcome, GoalFailureReason, GoalKind
 from .goal_manager_runtime import (
-    ExecutableGoalBinding, GoalExecutionReport, GoalRecoveryRequired, GoalVerification,
+    ExecutableGoalBinding,
+    GoalExecutionReport,
+    GoalRecoveryRequired,
+    GoalVerification,
 )
 from .observation import (
     CERULEAN_RIVAL_TRIGGER_XS,
@@ -22,6 +25,7 @@ from .red_player_field_goals import _field_ready
 from .red_scoped_training_battlers import resolve_story_battler
 from .red_story_battle import FrozenStoryBattleController, StoryTrainerContract
 from .route_executor import (
+    InterruptionHandler,
     InterruptionReceipt,
     RouteExecutionError,
     RouteExecutionFailureReason,
@@ -29,9 +33,15 @@ from .route_executor import (
 
 SETTLED_ROUTE_TRAINER_LOSS_SCHEMA = "pokemon.red.settled-route-trainer-loss.v1"
 SETTLED_ROUTE_TRAINER_RECOVERY_SCHEMA = "pokemon.red.settled-route-trainer-recovery.v1"
-_LEAGUE_CONTEXTS = frozenset({
-    "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion",
-})
+_LEAGUE_CONTEXTS = frozenset(
+    {
+        "defeat_lorelei",
+        "defeat_bruno",
+        "defeat_agatha",
+        "defeat_lance",
+        "defeat_champion",
+    }
+)
 
 
 class SettledNativeTrainerLoss(RouteExecutionError):
@@ -61,9 +71,15 @@ class SettledNativeTrainerLoss(RouteExecutionError):
             cash_lost=cash_before - cash_after,
             actions=report.actions_executed,
             frames=report.frames_executed,
-            battle={key: report.evidence["battle"][key] for key in (
-                "schema", "outcome", "field_ready", "money_delta",
-            )},
+            battle={
+                key: report.evidence["battle"][key]
+                for key in (
+                    "schema",
+                    "outcome",
+                    "field_ready",
+                    "money_delta",
+                )
+            },
             objective_completed=False,
             reward=None,
         )
@@ -75,17 +91,24 @@ class SettledNativeTrainerRecovery(RouteExecutionError, GoalRecoveryRequired):
     failure_reason = GoalFailureReason.RECOVERY_REQUIRED
 
     def __init__(self, report, *, cash_before, cash_after, party_hp):
-        super().__init__("verified trainer exit needs native faint recovery",
-                         reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED)
+        super().__init__(
+            "verified trainer exit needs native faint recovery",
+            reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
+        )
         self.report = report
         self.evidence = dict(
-            schema=SETTLED_ROUTE_TRAINER_RECOVERY_SCHEMA, verified=True,
-            learned_combat=True, support=report.evidence.get("support"),
+            schema=SETTLED_ROUTE_TRAINER_RECOVERY_SCHEMA,
+            verified=True,
+            learned_combat=True,
+            support=report.evidence.get("support"),
             source_sha256=report.evidence.get("source_sha256"),
             terminal_sha256=report.evidence.get("terminal_sha256"),
-            cash_before=cash_before, cash_after=cash_after,
-            actions=report.actions_executed, frames=report.frames_executed,
-            party_hp=list(party_hp), battle=dict(report.evidence.get("battle", {})),
+            cash_before=cash_before,
+            cash_after=cash_after,
+            actions=report.actions_executed,
+            frames=report.frames_executed,
+            party_hp=list(party_hp),
+            battle=dict(report.evidence.get("battle", {})),
         )
 
 
@@ -99,29 +122,38 @@ def settled_route_trainer_recovery_evidence(evidence):
     battle, hp = evidence.get("battle"), evidence.get("party_hp")
     return (
         evidence.get("schema") == SETTLED_ROUTE_TRAINER_RECOVERY_SCHEMA
-        and evidence.get("verified") is True and evidence.get("learned_combat") is True
+        and evidence.get("verified") is True
+        and evidence.get("learned_combat") is True
         and evidence.get("support") == "already_engaged_native_trainer"
-        and all(isinstance(evidence.get(key), str)
-                and re.fullmatch(r"[0-9a-f]{64}", evidence[key])
-                for key in ("source_sha256", "terminal_sha256"))
-        and all(type(evidence.get(key)) is int and 0 <= evidence[key] <= 999999
-                for key in ("cash_before", "cash_after"))
-        and all(type(evidence.get(key)) is int and evidence[key] > 0
-                for key in ("actions", "frames"))
-        and isinstance(hp, (tuple, list)) and 1 <= len(hp) <= 6
+        and all(
+            isinstance(evidence.get(key), str) and re.fullmatch(r"[0-9a-f]{64}", evidence[key])
+            for key in ("source_sha256", "terminal_sha256")
+        )
+        and all(
+            type(evidence.get(key)) is int and 0 <= evidence[key] <= 999999
+            for key in ("cash_before", "cash_after")
+        )
+        and all(
+            type(evidence.get(key)) is int and evidence[key] > 0 for key in ("actions", "frames")
+        )
+        and isinstance(hp, (tuple, list))
+        and 1 <= len(hp) <= 6
         and all(type(value) is int and value >= 0 for value in hp)
-        and 0 in hp and any(value > 0 for value in hp)
+        and 0 in hp
+        and any(value > 0 for value in hp)
         and isinstance(battle, Mapping)
         and battle.get("schema") == "pokemon.red.learned-trainer-completion.v1"
-        and battle.get("outcome") == "won" and battle.get("field_ready") is True
+        and battle.get("outcome") == "won"
+        and battle.get("field_ready") is True
         and type(battle.get("money_delta")) is int
         and 0 <= battle["money_delta"] == evidence["cash_after"] - evidence["cash_before"]
     )
 
 
 def settled_route_trainer_stop_evidence(evidence):
-    return (settled_route_trainer_loss_evidence(evidence)
-            or settled_route_trainer_recovery_evidence(evidence))
+    return settled_route_trainer_loss_evidence(evidence) or settled_route_trainer_recovery_evidence(
+        evidence
+    )
 
 
 def settled_route_trainer_loss_evidence(evidence):
@@ -139,15 +171,19 @@ def settled_route_trainer_loss_evidence(evidence):
         and evidence.get("support") == "already_engaged_native_trainer"
         and evidence.get("objective_completed") is False
         and evidence.get("reward") is None
-        and all(isinstance(evidence.get(key), str)
-                and re.fullmatch(r"[0-9a-f]{64}", evidence[key]) for key in (
-                    "source_sha256", "terminal_sha256"))
-        and all(type(evidence.get(key)) is int and 0 <= evidence[key] <= 999999
-                for key in ("cash_before", "cash_after", "cash_lost"))
+        and all(
+            isinstance(evidence.get(key), str) and re.fullmatch(r"[0-9a-f]{64}", evidence[key])
+            for key in ("source_sha256", "terminal_sha256")
+        )
+        and all(
+            type(evidence.get(key)) is int and 0 <= evidence[key] <= 999999
+            for key in ("cash_before", "cash_after", "cash_lost")
+        )
         and evidence["cash_after"] == evidence["cash_before"] // 2
         and evidence["cash_lost"] == evidence["cash_before"] - evidence["cash_after"]
-        and all(type(evidence.get(key)) is int and evidence[key] > 0
-                for key in ("actions", "frames"))
+        and all(
+            type(evidence.get(key)) is int and evidence[key] > 0 for key in ("actions", "frames")
+        )
         and isinstance(battle, Mapping)
         and battle.get("schema") == "pokemon.red.learned-trainer-completion.v1"
         and battle.get("outcome") == "lost"
@@ -157,14 +193,18 @@ def settled_route_trainer_loss_evidence(evidence):
     )
 
 
-def engaged_story_contract(reader, rom, *, objective_id, ordinary_transport_context=False,
-                           dojo_master_transport=False):
+def engaged_story_contract(
+    reader, rom, *, objective_id, ordinary_transport_context=False, dojo_master_transport=False
+):
     raw = reader.read()
     if type(dojo_master_transport) is not bool:
         raise ValueError("Dojo transport recovery must be explicit")
     if dojo_master_transport:
-        if (objective_id not in _LEAGUE_CONTEXTS | {"cross_victory_road"} or raw.badge_bits != 255
-                or raw.map_id != int(MapId.FIGHTING_DOJO)):
+        if (
+            objective_id not in _LEAGUE_CONTEXTS | {"cross_victory_road"}
+            or raw.badge_bits != 255
+            or raw.map_id != int(MapId.FIGHTING_DOJO)
+        ):
             return None
         from .red_scripted_story_trainer import (
             dojo_master_contract,
@@ -172,12 +212,12 @@ def engaged_story_contract(reader, rom, *, objective_id, ordinary_transport_cont
         )
 
         if raw.battle_state == 2:
-            if reader.read_active_trainer_identity() != (224,24,1):
+            if reader.read_active_trainer_identity() != (224, 24, 1):
                 return None
-            contract = dojo_master_contract(rom,raw)
+            contract = dojo_master_contract(rom, raw)
         else:
-            contract = dojo_master_introduction_contract(rom,reader)
-        return None if contract is None else replace(contract,objective_id=objective_id)
+            contract = dojo_master_introduction_contract(rom, reader)
+        return None if contract is None else replace(contract, objective_id=objective_id)
     if type(ordinary_transport_context) is not bool:
         raise ValueError("ordinary transport context must be explicit")
     if ordinary_transport_context:
@@ -225,10 +265,7 @@ def engaged_story_contract(reader, rom, *, objective_id, ordinary_transport_cont
             # The already-triggered native introduction can be reached by
             # a training walk too. Finish it, without supplying a new approach.
             return cerulean_rival_contract(rom, reader)
-    if (
-        objective_id == "cross_victory_road"
-        and raw.map_id == int(MapId.ROUTE_22)
-    ):
+    if objective_id == "cross_victory_road" and raw.map_id == int(MapId.ROUTE_22):
         from .red_player_route22_rival import (
             retained_second_route22_contract,
             route22_rival_contract,
@@ -304,16 +341,23 @@ def engaged_story_contract(reader, rom, *, objective_id, ordinary_transport_cont
     if objective_id in {"defeat_brock", "defeat_misty", "defeat_surge"}:
         from .red_gym_reward import BROCK_REWARD, MISTY_REWARD, SURGE_REWARD
 
-        reward = next(r for r in (BROCK_REWARD, MISTY_REWARD, SURGE_REWARD)
-                      if r.objective_id == objective_id)
+        reward = next(
+            r for r in (BROCK_REWARD, MISTY_REWARD, SURGE_REWARD) if r.objective_id == objective_id
+        )
         if raw.map_id == reward.map_id and identity == (
-            reward.trainer_class, reward.trainer_class - 200, reward.trainer_set,
+            reward.trainer_class,
+            reward.trainer_class - 200,
+            reward.trainer_set,
         ):
             return reward.contract(rom, raw)
-    if (objective_id == 'postgame_collection'
-            and raw.map_id == int(MapId.FIGHTING_DOJO) and identity == (224,24,1)):
+    if (
+        objective_id == "postgame_collection"
+        and raw.map_id == int(MapId.FIGHTING_DOJO)
+        and identity == (224, 24, 1)
+    ):
         from .red_scripted_story_trainer import dojo_master_contract
-        return dojo_master_contract(rom,raw)
+
+        return dojo_master_contract(rom, raw)
     if objective_id == "defeat_erika" and raw.map_id == int(MapId.CELADON_GYM):
         from .red_gym_reward import ERIKA_REWARD
 
@@ -398,8 +442,14 @@ def retained_ordinary_transport_binding(runtime, actions, *, rom, battler):
         }:
             # This available objective labels already-triggered native control;
             # the exact Master contract supplies no approach or chapter credit.
-            binding = engaged_story_binding(runtime, actions, rom=rom, battler=battler,
-                objective_id="cross_victory_road", dojo_master_transport=True)
+            binding = engaged_story_binding(
+                runtime,
+                actions,
+                rom=rom,
+                battler=battler,
+                objective_id="cross_victory_road",
+                dojo_master_transport=True,
+            )
             if binding is not None:
                 return binding
     if raw.battle_state == 2:
@@ -415,10 +465,14 @@ def retained_ordinary_transport_binding(runtime, actions, *, rom, battler):
         return None
     zones = static_trainer_sight_zones(
         trainer_headers(rom, {raw.map_id}, full_event_offsets=True),
-        map_object_events(rom, {raw.map_id}), raw.event_flags,
+        map_object_events(rom, {raw.map_id}),
+        raw.event_flags,
     )
-    matches = [z for z in zones if not z.defeated and
-               (z.trainer_class, z.trainer_class - 200, z.trainer_set) == identity]
+    matches = [
+        z
+        for z in zones
+        if not z.defeated and (z.trainer_class, z.trainer_class - 200, z.trainer_set) == identity
+    ]
     if not matches:
         return None
     if len(matches) != 1:
@@ -491,9 +545,13 @@ def engaged_story_binding(
         # A collection walk can trigger this battle before the Silph Scope
         # unlocks the full Fuji quest. Finishing an already active native
         # trainer is compulsory control recovery, not a new quest selection.
-        if (objective_id != "rescue_fuji" or context_ref != objective_id
-                or ordinary_transport_context or dojo_master_transport
-                or allow_postgame_collection):
+        if (
+            objective_id != "rescue_fuji"
+            or context_ref != objective_id
+            or ordinary_transport_context
+            or dojo_master_transport
+            or allow_postgame_collection
+        ):
             raise ValueError("retained Tower recovery requires its exact compulsory context")
         raw = runtime.reader.read()
         if raw.map_id != int(MapId.POKEMON_TOWER_2F) or raw.battle_state != 2:
@@ -501,10 +559,13 @@ def engaged_story_binding(
         contract = engaged_story_contract(runtime.reader, rom, **contract_keywords)
         if contract is None:
             return None
-        if (contract.objective_id != "rescue_fuji" or contract.battle_plan_id != "tower-rival"
-                or contract.map_id != int(MapId.POKEMON_TOWER_2F)
-                or contract.defeated_event != int(EventFlag.BEAT_POKEMON_TOWER_RIVAL)
-                or runtime.reader.read_active_trainer_identity() != contract.trainer_identity):
+        if (
+            contract.objective_id != "rescue_fuji"
+            or contract.battle_plan_id != "tower-rival"
+            or contract.map_id != int(MapId.POKEMON_TOWER_2F)
+            or contract.defeated_event != int(EventFlag.BEAT_POKEMON_TOWER_RIVAL)
+            or runtime.reader.read_active_trainer_identity() != contract.trainer_identity
+        ):
             raise ValueError("retained Tower recovery contract differs")
     if not available and not postgame and contract is None:
         return None
@@ -518,8 +579,9 @@ def engaged_story_binding(
     ):
         from .red_gym_reward import BROCK_REWARD, MISTY_REWARD, SURGE_REWARD
 
-        reward = next(r for r in (BROCK_REWARD, MISTY_REWARD, SURGE_REWARD)
-                      if r.objective_id == objective_id)
+        reward = next(
+            r for r in (BROCK_REWARD, MISTY_REWARD, SURGE_REWARD) if r.objective_id == objective_id
+        )
         if contract != reward.contract(rom, runtime.reader.read()):
             raise ValueError("retained early leader reward contract differs")
     if objective_id == "defeat_erika" and contract.battle_plan_id == "defeat_erika":
@@ -576,17 +638,32 @@ def engaged_story_binding(
             if raw.battle_state or raw.map_id != contract.map_id:
                 raise ValueError("unexpected retained trainer introduction")
             if contract.battle_plan_id in {
-                "retained-route22-first-rival", "route22-rival-gate",
+                "retained-route22-first-rival",
+                "route22-rival-gate",
             } and (
                 engaged_story_contract(runtime.reader, rom, **contract_keywords) != contract
-                or any(getattr(raw, key) != getattr(entry, key) for key in (
-                        "party_count", "party_species_ids", "party_levels", "party_hp",
-                        "party_moves", "party_pp", "party_status", "bag_items",
-                        "player_money", "badge_bits", "event_flags",
-                ))
+                or any(
+                    getattr(raw, key) != getattr(entry, key)
+                    for key in (
+                        "party_count",
+                        "party_species_ids",
+                        "party_levels",
+                        "party_hp",
+                        "party_moves",
+                        "party_pp",
+                        "party_status",
+                        "bag_items",
+                        "player_money",
+                        "badge_bits",
+                        "event_flags",
+                    )
+                )
             ):
-                encounter = ("first" if contract.battle_plan_id == "retained-route22-first-rival"
-                             else "second")
+                encounter = (
+                    "first"
+                    if contract.battle_plan_id == "retained-route22-first-rival"
+                    else "second"
+                )
                 raise ValueError(f"{encounter} Route22 rival introduction changed protected state")
             actions.execute(MacroAction(MacroActionKind.CONFIRM))
             actions.execute(MacroAction(MacroActionKind.WAIT, repeat=144))
@@ -631,8 +708,11 @@ def engaged_story_binding(
                 reward=reward_evidence,
                 source_sha256=sha256(source).hexdigest(),
                 terminal_sha256=sha256(terminal).hexdigest(),
-                **(dict(compulsory_tower_recovery=True, quest_prerequisite_available=available)
-                   if allow_retained_tower else {}),
+                **(
+                    dict(compulsory_tower_recovery=True, quest_prerequisite_available=available)
+                    if allow_retained_tower
+                    else {}
+                ),
             ),
         )
 
@@ -675,7 +755,7 @@ class EngagedStoryRouteHandler:
     native recovery state; it is not retried or hidden inside transport.
     """
 
-    inner: object
+    inner: InterruptionHandler
     reader: object
     binding_factory: Callable[[], ExecutableGoalBinding | None]
     maximum_trainers: int = 8
@@ -697,7 +777,9 @@ class EngagedStoryRouteHandler:
     @property
     def handled_interruption_kinds(self):
         return frozenset(getattr(self.inner, "handled_interruption_kinds", ())) | {
-            "trainer_engagement", "battle:2", "scripted_dialogue",
+            "trainer_engagement",
+            "battle:2",
+            "scripted_dialogue",
         }
 
     def observe_native_field_boundary(self) -> None:
@@ -710,27 +792,35 @@ class EngagedStoryRouteHandler:
         """Only independently verified native wins contribute route proceeds."""
         total = 0
         for receipt in self.trainer_evidence:
-            battle = receipt.details['battle']
-            amount = battle.get('money_delta')
-            if (receipt.details.get('verified') is not True or battle.get('outcome') != 'won'
-                    or type(amount) is not int or amount < 0):
-                raise RouteExecutionError('learned route payout lacks native win evidence')
+            battle = receipt.details["battle"]
+            amount = battle.get("money_delta")
+            if (
+                receipt.details.get("verified") is not True
+                or battle.get("outcome") != "won"
+                or type(amount) is not int
+                or amount < 0
+            ):
+                raise RouteExecutionError("learned route payout lacks native win evidence")
             total += amount
         return total
 
     def handle(self, interruption):
         receipt = self._handle_current(interruption)
         native_pending = getattr(self.reader, "trainer_engagement_active", None)
-        if (not callable(native_pending) or native_pending() is not True
-                or not isinstance(receipt, InterruptionReceipt)
-                or receipt.details.get("verified") is not True):
+        if (
+            not callable(native_pending)
+            or native_pending() is not True
+            or not isinstance(receipt, InterruptionReceipt)
+            or receipt.details.get("verified") is not True
+        ):
             return receipt
         after = self.reader.read()
-        if (after.battle_state != 0
-                or (after.map_id, (after.player_y, after.player_x))
-                != (receipt.resumed_map, receipt.resumed_at)
-                or receipt.details.get("pending_interruption_kind")
-                not in {None, "trainer_engagement"}):
+        if (
+            after.battle_state != 0
+            or (after.map_id, (after.player_y, after.player_x))
+            != (receipt.resumed_map, receipt.resumed_at)
+            or receipt.details.get("pending_interruption_kind") not in {None, "trainer_engagement"}
+        ):
             raise RouteExecutionError(
                 "native trainer successor differs from its verified field boundary",
                 reason=RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED,
@@ -738,9 +828,13 @@ class EngagedStoryRouteHandler:
         # The receipt certifies its own finished mechanic. The live native
         # trainer is a separate compulsory interruption at the identical tile;
         # its existing binding and battler must verify/handle it independently.
-        return replace(receipt, details={
-            **receipt.details, "pending_interruption_kind": "trainer_engagement",
-        })
+        return replace(
+            receipt,
+            details={
+                **receipt.details,
+                "pending_interruption_kind": "trainer_engagement",
+            },
+        )
 
     def _handle_current(self, interruption):
         scripted = interruption.interruption == "scripted_dialogue"
@@ -793,7 +887,9 @@ class EngagedStoryRouteHandler:
                 and type(after.player_money) is int
             ):
                 loss = SettledNativeTrainerLoss(
-                    report, cash_before=cash_before, cash_after=after.player_money,
+                    report,
+                    cash_before=cash_before,
+                    cash_after=after.player_money,
                 )
                 if settled_route_trainer_loss_evidence(loss.evidence):
                     raise loss
@@ -829,16 +925,23 @@ class EngagedStoryRouteHandler:
         # An adjacent native trainer still owns control and must settle first.
         hp = getattr(after, "party_hp", None)
         pending = getattr(self.reader, "trainer_engagement_active", None)
-        if hp is not None and any(value <= 0 for value in hp) and not (
-            callable(pending) and pending() is True
+        if (
+            hp is not None
+            and any(value <= 0 for value in hp)
+            and not (callable(pending) and pending() is True)
         ):
             stop = SettledNativeTrainerRecovery(
-                report, cash_before=cash_before, cash_after=after.player_money, party_hp=hp,
+                report,
+                cash_before=cash_before,
+                cash_after=after.player_money,
+                party_hp=hp,
             )
-            if (len(hp) != getattr(after, "party_count", None)
-                    or not settled_route_trainer_recovery_evidence(stop.evidence)
-                    or report.evidence.get("source_sha256")
-                    != binding.binding_ref.removeprefix("pokemon.red:retained-engagement:")):
+            if (
+                len(hp) != getattr(after, "party_count", None)
+                or not settled_route_trainer_recovery_evidence(stop.evidence)
+                or report.evidence.get("source_sha256")
+                != binding.binding_ref.removeprefix("pokemon.red:retained-engagement:")
+            ):
                 raise RouteExecutionError("trainer recovery lacks a verified living field party")
             raise stop
         return receipt

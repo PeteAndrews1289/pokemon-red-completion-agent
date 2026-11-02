@@ -17,7 +17,9 @@ def test_log_retains_complete_ordered_trace(tmp_path, serialized_paths):
     log.emit({"event": "decision_started", "decision_index": 1})
     log.emit({"event": "choice_recorded", "selected_action": "attack"})
     log.finish({"battle_won": False, "stop_reason": "party_defeated"})
-    verified = verify_trainer_practice_event_log(str(log.directory) if serialized_paths else log.directory)
+    verified = verify_trainer_practice_event_log(
+        str(log.directory) if serialized_paths else log.directory
+    )
     assert verified["complete"] is True
     assert verified["terminal_event"] == "run_finished"
     assert verified["event_count"] == 4
@@ -34,11 +36,20 @@ def test_log_retains_failure_after_selected_action(tmp_path, serialized_paths):
     log.emit({"event": "choice_recorded", "selected_action": "switch"})
     error = ValueError("private path /do/not/retain")
     error.battle_runtime_diagnostic = BattleRuntimeDiagnostic(
-        phase="settle", total_events=1, recording_failures=0,
-        selection={"slot": 2}, events=({"kind": "selection"},), exception_chain=(),
+        phase="settle",
+        total_events=1,
+        recording_failures=0,
+        selection={"slot": 2},
+        events=({"kind": "selection"},),
+        exception_chain=(),
     )
     log.fail(error)
-    assert verify_trainer_practice_event_log(str(log.directory) if serialized_paths else log.directory)["terminal_event"] == "run_failed"
+    assert (
+        verify_trainer_practice_event_log(
+            str(log.directory) if serialized_paths else log.directory
+        )["terminal_event"]
+        == "run_failed"
+    )
     text = (log.directory / "event-00004.json").read_text()
     assert "ValueError" in text
     assert "choice_recorded" in text

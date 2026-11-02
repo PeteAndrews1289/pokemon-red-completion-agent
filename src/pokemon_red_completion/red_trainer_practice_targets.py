@@ -13,7 +13,10 @@ from typing import cast
 
 from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_trainer_practice_returns import RETURN_SCHEMA_ID, tied_best_indices
+from pokemon_red_completion.red_trainer_practice_returns import (
+    RETURN_SCHEMA_ID,
+    tied_best_indices,
+)
 
 
 class TrainerPracticeTargetError(ValueError):
@@ -21,15 +24,18 @@ class TrainerPracticeTargetError(ValueError):
 
 
 def extract_trainer_practice_targets(
-    admission: Mapping[str, object], document: Mapping[str, object],
-    *, train_wild_diagnostic: bool = False,
+    admission: Mapping[str, object],
+    document: Mapping[str, object],
+    *,
+    train_wild_diagnostic: bool = False,
     train_wild_limits: tuple[int, int] | None = None,
     train_wild_choice_scope: str | None = None,
 ) -> dict[str, object]:
     if type(train_wild_diagnostic) is not bool:
         raise TrainerPracticeTargetError("explicit TRAIN wild target opt-in must be boolean")
     if train_wild_limits is not None and (
-        not train_wild_diagnostic or type(train_wild_limits) is not tuple
+        not train_wild_diagnostic
+        or type(train_wild_limits) is not tuple
         or len(train_wild_limits) != 2
         or any(type(value) is not int for value in train_wild_limits)
         or train_wild_limits != (8, 32)
@@ -38,21 +44,31 @@ def extract_trainer_practice_targets(
     if train_wild_choice_scope is not None and (
         type(train_wild_choice_scope) is not str
         or train_wild_choice_scope != "switch_selection"
-        or train_wild_diagnostic is not True or train_wild_limits != (8, 32)
+        or train_wild_diagnostic is not True
+        or train_wild_limits != (8, 32)
     ):
-        raise TrainerPracticeTargetError("switch-selection scope requires explicit TRAIN wild (8, 32)")
-    if any(value.get("train_wild_choice_scope") != train_wild_choice_scope
-           for value in (admission, document)):
-        raise TrainerPracticeTargetError("declared TRAIN wild choice scope differs")
-    limits_metadata = (None if train_wild_limits is None else
-                       {"player_turn_horizon": 8, "max_decisions": 32})
-    if any(value.get("train_wild_limits") != limits_metadata or (
-        limits_metadata is not None and (
-            type(value["train_wild_limits"].get("player_turn_horizon")) is not int
-            or type(value["train_wild_limits"].get("max_decisions")) is not int
+        raise TrainerPracticeTargetError(
+            "switch-selection scope requires explicit TRAIN wild (8, 32)"
         )
-    ) for value in (admission, document)):
-        raise TrainerPracticeTargetError("declared TRAIN wild limits metadata differs")
+    if any(
+        value.get("train_wild_choice_scope") != train_wild_choice_scope
+        for value in (admission, document)
+    ):
+        raise TrainerPracticeTargetError("declared TRAIN wild choice scope differs")
+    limits_metadata = (
+        None if train_wild_limits is None else {"player_turn_horizon": 8, "max_decisions": 32}
+    )
+    for value in (admission, document):
+        declared_limits = value.get("train_wild_limits")
+        if declared_limits != limits_metadata or (
+            limits_metadata is not None
+            and (
+                not isinstance(declared_limits, Mapping)
+                or type(declared_limits.get("player_turn_horizon")) is not int
+                or type(declared_limits.get("max_decisions")) is not int
+            )
+        ):
+            raise TrainerPracticeTargetError("declared TRAIN wild limits metadata differs")
     wild_horizon = 2 if train_wild_limits is None else train_wild_limits[0]
     if train_wild_diagnostic and (
         admission.get("train_wild_diagnostic") is not True
@@ -62,16 +78,22 @@ def extract_trainer_practice_targets(
         or document.get("train_wild_diagnostic") is not True
         or document.get("expected_battle_state") != 1
         or document.get("player_turn_horizon") != wild_horizon
-        or (train_wild_limits is not None and (
-            type(document.get("player_turn_horizon")) is not int
-            or type(admission.get("player_turn_horizon")) is not int
-            or admission.get("player_turn_horizon") != wild_horizon))
+        or (
+            train_wild_limits is not None
+            and (
+                type(document.get("player_turn_horizon")) is not int
+                or type(admission.get("player_turn_horizon")) is not int
+                or admission.get("player_turn_horizon") != wild_horizon
+            )
+        )
         or document.get("branch_count") != 2
     ):
         raise TrainerPracticeTargetError("TRAIN wild control target scope differs")
     if (
-        admission.get("schema") != (
-            "pokemon.red.wild-practice-admission.v1" if train_wild_diagnostic
+        admission.get("schema")
+        != (
+            "pokemon.red.wild-practice-admission.v1"
+            if train_wild_diagnostic
             else "pokemon.red.trainer-practice-admission.v1"
         )
         or admission.get("partition") != "train"
@@ -126,7 +148,8 @@ def extract_trainer_practice_targets(
         if kind not in {"attack", "voluntary_switch", "switch_prompt", "forced_switch"}:
             raise TrainerPracticeTargetError("first action is unsupported")
         if train_wild_choice_scope == "switch_selection" and (
-            kind != "voluntary_switch" or type(first.get("party_slot")) is not int
+            kind != "voluntary_switch"
+            or type(first.get("party_slot")) is not int
             or not 1 <= first["party_slot"] <= 6
             or choice != f"pokemon.core:battle:switch:{first['party_slot']}"
             or not isinstance(first.get("legal_party_slots"), list)
@@ -148,7 +171,8 @@ def extract_trainer_practice_targets(
         raise TrainerPracticeTargetError("first-choice contexts are mixed")
     supported = (
         initial_model_input.get("supported_candidate_mask")
-        if isinstance(initial_model_input, Mapping) else None
+        if isinstance(initial_model_input, Mapping)
+        else None
     )
     attack_depleted = (
         context == "main"
@@ -175,7 +199,9 @@ def extract_trainer_practice_targets(
     elif decline and switches:
         groups["control"] = (*decline, *switches)
     if train_wild_diagnostic and (
-        context != "main" or len(refs) != 2 or (
+        context != "main"
+        or len(refs) != 2
+        or (
             (len(attack) != 0 or len(switches) != 2 or set(groups) != {"switch"})
             if train_wild_choice_scope == "switch_selection"
             else (len(attack) != 1 or len(switches) != 1 or set(groups) != {"control"})
@@ -194,11 +220,21 @@ def extract_trainer_practice_targets(
         }
     return {
         "schema": "pokemon.red.trainer-practice-three-head-targets.v1",
-        **({"train_wild_diagnostic": True, "expected_battle_state": 1,
-            "new_independent_upstream_roots": 0} if train_wild_diagnostic else {}),
+        **(
+            {
+                "train_wild_diagnostic": True,
+                "expected_battle_state": 1,
+                "new_independent_upstream_roots": 0,
+            }
+            if train_wild_diagnostic
+            else {}
+        ),
         **({"train_wild_limits": dict(limits_metadata)} if limits_metadata is not None else {}),
-        **({"train_wild_choice_scope": train_wild_choice_scope}
-           if train_wild_choice_scope is not None else {}),
+        **(
+            {"train_wild_choice_scope": train_wild_choice_scope}
+            if train_wild_choice_scope is not None
+            else {}
+        ),
         "capture_id": admission["capture_id"],
         "manifest_sha256": admission["manifest_sha256"],
         "source_commit": admission["source_commit"],
@@ -293,7 +329,8 @@ def aggregate_trainer_timing_targets(
             "timing_returns": per_timing,
             "return_spread": [
                 round(
-                    max(row[index] for row in per_timing) - min(row[index] for row in per_timing), 9
+                    max(row[index] for row in per_timing) - min(row[index] for row in per_timing),
+                    9,
                 )
                 for index in range(len(refs))
             ],

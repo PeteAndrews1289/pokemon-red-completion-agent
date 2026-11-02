@@ -741,6 +741,7 @@ def test_autonomous_collection_funds_eligible_safari_admission_integration(tmp_p
         badge_bits=int(Badge.THUNDER),
         party_hp=(50,) + reader.raw.party_hp[1:],
         party_moves=((0x13, 0, 0, 0),) + reader.raw.party_moves[1:],
+        party_pp=((15, 0, 0, 0),) + reader.raw.party_pp[1:],
     )
     reader.read_fly_destinations = lambda: (int(MapId.FUCHSIA_CITY),)
     reader.read_overworld_movement_mode = lambda: OverworldMovementMode.WALKING
