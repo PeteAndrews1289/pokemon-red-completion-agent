@@ -186,7 +186,14 @@ def _source_has_acquisition_demand(
     This only excludes completed sources. Supplies, storage and reachability
     remain the router's responsibility because its preparation can change them.
     """
-    provider = runtime.provider_for(GoalKind.ACQUIRE_SPECIES, actions)
+    # Reuse this unchanged boundary while preserving the original complete
+    # provider construction and validation. Custom runtimes keep their existing
+    # method signature and behavior; no observation is cached across inputs.
+    provider = (
+        runtime.provider_for(GoalKind.ACQUIRE_SPECIES, actions, observation=observation)
+        if type(runtime) is RedGoalContextRuntime
+        else runtime.provider_for(GoalKind.ACQUIRE_SPECIES, actions)
+    )
     if not isinstance(provider, RedAreaSurveyGoalProvider):
         raise ValueError("regional demand requires a real area-survey provider")
     return bool(

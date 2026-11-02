@@ -27,7 +27,7 @@ from pokemon_red_completion.blaine import (
     ROUTE_11_TRAINING_VENUE,
     _flee,
 )
-from pokemon_red_completion.collection import CollectionLocation
+from pokemon_red_completion.collection import CollectionLocation, CollectionObservation
 from pokemon_red_completion.executor import CountingExecutor, WindowedFrameBudgetController
 from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
@@ -50,7 +50,9 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 from pokemon_red_completion.party import PartyObservation
-from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAreaExecutionPolicy
+from pokemon_red_completion.red_acquisition import (
+    RED_ACQUISITION_CATALOG, RedAcquisitionCatalog, RedAreaExecutionPolicy,
+)
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_internal_species_number,
@@ -280,6 +282,9 @@ class RedGoalContextRuntime:
     # Default-off composition of the existing legal Dig escape with selected
     # indoor collection/resource goals. It never selects a destination.
     collection_dig_departure: bool = False
+    # Existing whole-party escape plus settled-recovery handoff for ordinary
+    # resource transport. Conservative and TRAIN runtimes keep the default.
+    resource_wild_faint_recovery: bool = False
     # Default-off live Surf in ordinary indoor departures. Paid Safari retains
     # its separate session/step allowance and explicit existing opt-in.
     collection_surf_departure: bool = False
@@ -293,6 +298,8 @@ class RedGoalContextRuntime:
     trainer_funding_event_sink: Callable[[dict[str, object]], None] | None = None
     # Explicit configured local venue authority; never a policy observation.
     native_evolution_venue_policy: object | None = None
+    # Default-off cartridge-certified support, never a learned policy feature.
+    certified_evolution_helper_xp: bool = False
 
     def bound_configuration_sha256(self, configuration_sha256: str) -> str:
         if self.registration_policy is None:
@@ -305,15 +312,20 @@ class RedGoalContextRuntime:
             }
         )
 
-    def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
+    def provider_for(
+        self, kind: GoalKind, actions: CountingExecutor,
+        *, observation: RedGoalObservation | None = None,
+    ) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
 
         if not isinstance(kind, GoalKind) or not isinstance(actions, CountingExecutor):
             raise TypeError("provider construction needs a goal kind and counted actions")
+        if observation is not None and not isinstance(observation, RedGoalObservation):
+            raise TypeError("provider observation must be a typed current boundary")
         specs = tuple(spec for spec in self.profile.providers if spec.kind is kind)
         if len(specs) != 1:
             raise RedGoalContextError("goal context profile lacks one requested provider")
-        return _build_provider(self, specs[0], actions)
+        return _build_provider(self, specs[0], actions, observation=observation)
 
     def enumerator(self, actions: CountingExecutor) -> RedGoalOpportunityEnumerator:
         if not isinstance(actions, CountingExecutor):
@@ -477,6 +489,7 @@ def _build_provider(
     runtime: RedGoalContextRuntime,
     spec: RedGoalProviderSpec,
     actions: CountingExecutor,
+    *, observation: RedGoalObservation | None = None,
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.OAKS_ERRAND:
@@ -564,7 +577,7 @@ def _build_provider(
         RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT,
         RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
     }:
-        return _wild_provider(runtime, spec, actions)
+        return _wild_provider(runtime, spec, actions, observation=observation)
     if mechanic in {
         RedGoalMechanic.BALANCED_TEAM,
         RedGoalMechanic.DIGLETT_EVOLUTION,
@@ -709,10 +722,47 @@ def _wild_search_diagnostic_observer(runtime):
     return observe
 
 
+def red_capture_source_catalog(
+    runtime: RedGoalContextRuntime,
+    source_id: str,
+    local_captures: tuple[int, ...] | None,
+    collection_observation: CollectionObservation | None,
+) -> RedAcquisitionCatalog:
+    """Pure catalog projection for this observed boundary, with no native read.
+
+    Demand and the executable provider share exactly the same registration,
+    protection and evolution obligations. Callers must supply the current
+    collection observation; nothing is cached across a native transition.
+    """
+    from .red_collection import red_species_ref
+
+    return replace(
+        RED_ACQUISITION_CATALOG,
+        remaining_demand=(
+            runtime.remaining_acquisition_demand or runtime.registration_policy is not None
+        ),
+        registered_species=(
+            runtime.registration_policy.goal_registered(collection_observation)
+            if runtime.registration_policy is not None else None
+        ),
+        protected_counts=(
+            tuple(sorted(runtime.registration_policy.protected_counts.items()))
+            if runtime.registration_policy is not None else ()
+        ),
+        level_evolution_edges=runtime.level_evolution_acquisition_edges,
+        wild_source_species=(
+            ((source_id, tuple(red_species_ref(number)
+                              for number in cast(tuple[int, ...], local_captures))),)
+            if local_captures is not None else ()
+        ),
+    )
+
+
 def _wild_provider(
     runtime: RedGoalContextRuntime,
     spec: RedGoalProviderSpec,
     actions: CountingExecutor,
+    *, observation: RedGoalObservation | None = None,
 ) -> RedGoalBindingProvider:
     parameters = spec.parameters
     source_id = _text(parameters, "source_id")
@@ -744,7 +794,6 @@ def _wild_provider(
 
     if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
         from .red_capture_access import required_wild_source_items
-        from .red_collection import red_species_ref
 
         local_captures = parameters.get("capture_species_numbers")
         return RedAreaSurveyGoalProvider(
@@ -767,37 +816,10 @@ def _wild_provider(
             adapter=runtime.adapter,
             boundary=boundary,
             normalize_after_capture=area.finish_at_starting_endpoint,
-            catalog=replace(
-                RED_ACQUISITION_CATALOG,
-                remaining_demand=(
-                    runtime.remaining_acquisition_demand or runtime.registration_policy is not None
-                ),
-                registered_species=(
-                    runtime.registration_policy.goal_registered(
-                        runtime.adapter.observe().collection_observation,
-                    )
-                    if runtime.registration_policy is not None
-                    else None
-                ),
-                protected_counts=(
-                    tuple(sorted(runtime.registration_policy.protected_counts.items()))
-                    if runtime.registration_policy is not None
-                    else ()
-                ),
-                level_evolution_edges=runtime.level_evolution_acquisition_edges,
-                wild_source_species=(
-                    (
-                        (
-                            source_id,
-                            tuple(
-                                red_species_ref(number)
-                                for number in cast(tuple[int, ...], local_captures)
-                            ),
-                        ),
-                    )
-                    if local_captures is not None
-                    else ()
-                ),
+            catalog=red_capture_source_catalog(
+                runtime, source_id, cast(tuple[int, ...] | None, local_captures),
+                (observation if observation is not None else runtime.adapter.observe()).collection_observation
+                if runtime.registration_policy is not None else None,
             ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),

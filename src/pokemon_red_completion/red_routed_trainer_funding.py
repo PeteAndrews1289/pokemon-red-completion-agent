@@ -8,6 +8,7 @@ Existing route/battle skills own controls; a fresh verifier owns success.
 from __future__ import annotations
 
 from dataclasses import asdict, replace
+from hashlib import sha256
 from typing import TYPE_CHECKING
 
 from .battle_runtime import DEFAULT_BATTLE_RUNTIME_TIMING
@@ -62,6 +63,24 @@ if TYPE_CHECKING:
 
 class RedTrainerFundingError(RuntimeError):
     """A trainer income opportunity or its retained state is no longer valid."""
+
+
+
+def _funding_approach_terminal_valid(runtime, current, money, bag, species, ledger, event, events):
+    raw = current.raw
+    return (
+        raw.battle_state == 0 and current.input_ready
+        and not runtime.emulator.pressed_buttons
+        and not runtime.reader.read_bottom_dialogue_box_visible()
+        and runtime.reader.read_pending_trainer_battle_identity() is None
+        and not runtime.reader.trainer_engagement_active()
+        and raw.player_money == money and raw.bag_items == bag
+        and tuple(raw.party_species_ids or ()) == species
+        and bool(raw.party_hp) and all(hp > 0 for hp in raw.party_hp)
+        and raw.event_flags == events and events is not None
+        and not event_flag_is_set(raw.event_flags, event)
+        and dependency_specimen_ledger(current.collection_observation) == ledger
+    )
 
 
 def _restore_funding_party(router):
@@ -818,6 +837,7 @@ def bind_local_trainer_funding(
     completed_receipt: TrainerFundingBattleReceipt | None = None
     final_party_species: tuple[int, ...] = ()
     recovery_receipt = None
+    approach_terminal = None
 
     def require_target(*, before_departure: bool = False) -> None:
         current = runtime.reader.read()
@@ -885,7 +905,7 @@ def bind_local_trainer_funding(
 
     def execute() -> GoalExecutionReport:
         nonlocal claimed, completed_receipt, completed_report, final_party_species, target
-        nonlocal recovery_receipt
+        nonlocal recovery_receipt, approach_terminal
         if claimed:
             raise RedTrainerFundingError("trainer funding binding already consumed")
         claimed = True
@@ -968,31 +988,56 @@ def bind_local_trainer_funding(
             route_actions = Gen1FieldMovePort(actions, runtime.reader, runtime.emulator)
         from .red_resource_goal_router import _ROUTE_LIMITS
 
+        from .red_funding_approach import FundingApproachLimit, BoundedFundingApproach
+
         route_result = None
-        if target.approach.steps:
-            route_result = _execute_recorded_route(
-                router,
-                "trainer_approach",
-                target.approach,
-                route_actions,
-                traversal,
-                limits=_ROUTE_LIMITS,
-                interruption_handler=Gen1WildFleeHandler(
-                    actions,
-                    runtime.reader,
-                    maximum_flees=8,
-                    stabilization_frames=180,
-                    route_name="ordinary trainer funding approach",
-                ),
-                replanner=(
-                    _funding_approach_replanner(router, target)
-                    if getattr(router, "regional_trainer_funding", False)
-                    and getattr(router, "observed_trainer_funding", False)
-                    else None
-                ),
+        approach_handler = BoundedFundingApproach(
+            Gen1WildFleeHandler(
+                actions, runtime.reader, maximum_flees=8, stabilization_frames=180,
+                route_name="ordinary trainer funding approach",
+            ), runtime.reader, runtime.emulator,
+            (target.trainer.map_id, *target.approach.terminal_at),
+        )
+        try:
+            if target.approach.steps:
+                route_result = _execute_recorded_route(
+                    router, "trainer_approach", target.approach, route_actions, traversal,
+                    limits=_ROUTE_LIMITS, interruption_handler=approach_handler,
+                    replanner=(
+                        _funding_approach_replanner(router, target)
+                        if getattr(router, "regional_trainer_funding", False)
+                        and getattr(router, "observed_trainer_funding", False) else None
+                    ),
+                )
+                if not route_result.passed:
+                    raise RedTrainerFundingError("trainer funding approach failed")
+        except FundingApproachLimit as stopped:
+            if (type(stopped) is not FundingApproachLimit
+                    or stopped.handler is not approach_handler
+                    or approach_handler.stop_receipt is not stopped.receipt):
+                raise
+            guard._require_preserved_living_slots(runtime.reader.read())
+            current = runtime.adapter.observe()
+            if not _funding_approach_terminal_valid(
+                runtime, current, before_money, before_bag, final_party_species,
+                ledger, target.trainer.event_flag, raw.event_flags,
+            ):
+                raise RedTrainerFundingError("bounded funding approach did not preserve its terminal")
+            approach_terminal = runtime.emulator.save_state_bytes()
+            completed_report = GoalExecutionReport(
+                actions.actions_executed - action_start,
+                runtime.emulator.frame_count - frame_start,
+                dict(funding_approach_partial=dict(
+                    schema="pokemon.red.funding-approach-partial.v1",
+                    stop_reason="verified_flee_limit", maximum_flees=8, completed_flees=8,
+                    trainer_attempted=False, income_earned=0, target_reached=False,
+                    terminal_sha256=sha256(approach_terminal).hexdigest(),
+                    terminal_map=current.raw.map_id,
+                    terminal_at=[current.raw.player_y, current.raw.player_x],
+                    last_escape=dict(stopped.receipt.details),
+                )),
             )
-            if not route_result.passed:
-                raise RedTrainerFundingError("trainer funding approach failed")
+            return completed_report
         guard._require_preserved_living_slots(runtime.reader.read())
         require_target()
         facing_interruption = None
@@ -1121,6 +1166,15 @@ def bind_local_trainer_funding(
     def verify(report: GoalExecutionReport) -> GoalVerification:
         current = runtime.adapter.observe()
         final = current.raw
+        if approach_terminal is not None:
+            if (report is completed_report
+                    and runtime.emulator.save_state_bytes() == approach_terminal
+                    and _funding_approach_terminal_valid(
+                        runtime, current, before_money, before_bag, final_party_species,
+                        ledger, target.trainer.event_flag, raw.event_flags,
+                    )):
+                return GoalVerification.failed(GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED)
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         t = target.trainer
         quote = trainer_party_quote(router.world.rom, t.trainer_class, t.trainer_set)
         if (

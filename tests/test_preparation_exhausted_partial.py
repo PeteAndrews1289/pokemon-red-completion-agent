@@ -205,8 +205,21 @@ def test_configured_global_preparation_constructor_explicitly_enables_partial_su
     flags = {k.arg: k.value for k in configured[0].keywords}
     assert isinstance(flags["restore_exhausted_partial"], ast.Constant)
     assert flags["restore_exhausted_partial"].value is True
-    assert flags["maximum_battles"].value == 64
-    assert flags["maximum_recoveries"].value == 63
+    assert isinstance(flags["maximum_battles"], ast.Name)
+    assert isinstance(flags["maximum_recoveries"], ast.Name)
+    assert flags["maximum_battles"].id == "preparation_battles"
+    assert flags["maximum_recoveries"].id == "preparation_recoveries"
+    limits = [n for n in ast.walk(tree) if isinstance(n, ast.Assign)
+              and isinstance(n.value, ast.Call)
+              and isinstance(n.value.func, ast.Name)
+              and n.value.func.id == "preparation_encounter_limits"]
+    assert len(limits) == 1 and len(limits[0].targets) == 1
+    assert isinstance(limits[0].targets[0], ast.Tuple)
+    assert [n.id for n in limits[0].targets[0].elts] == [
+        "preparation_battles", "preparation_recoveries"]
+    assert len(limits[0].value.args) == 1
+    assert limits[0].value.args[0].id == "preparation_encounter_quantum"
+    assert p.preparation_encounter_limits(None) == (64, 63)
 
 
 def test_two_doses_preserve_original_failed_receipts_and_charge_final_nurse_once(monkeypatch):

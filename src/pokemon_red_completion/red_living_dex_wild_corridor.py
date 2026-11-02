@@ -111,6 +111,26 @@ def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalCo
     ))
 
 
+def bind_red_optional_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Enable live nondamaging preparation without requiring a PC status helper.
+
+    Existing composite weakening support keeps its prior mandatory party
+    preparation. Plain status support can throw with a healthy existing catcher
+    when no sleep/paralysis helper is owned. No custody exception is swallowed.
+    """
+    profile = bind_red_capture_status_profile(profile)
+    providers = []
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        if (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                and parameters.get("capture_weakening_support") is not True):
+            parameters["capture_party_preparation"] = False
+        providers.append((spec.kind, spec.mechanic, parameters))
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_red_capture_weakening_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Prospectively reuse the existing abstaining nonlethal damage executor.
 
@@ -123,6 +143,8 @@ def bind_red_capture_weakening_profile(profile: RedGoalContextProfile) -> RedGoa
         parameters = _thaw(spec.parameters)
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
             parameters["capture_weakening_support"] = True
+            if "capture_party_preparation" in parameters:
+                parameters["capture_party_preparation"] = True
         providers.append((spec.kind, spec.mechanic, parameters))
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id, providers=tuple(providers),
@@ -248,6 +270,8 @@ def retarget_red_wild_profile(
                 derived[key] = min(new_bound, old_bound)
             if "capture_status_support" in parameters:
                 derived["capture_status_support"] = parameters["capture_status_support"]
+            if "capture_party_preparation" in parameters:
+                derived["capture_party_preparation"] = parameters["capture_party_preparation"]
             if "capture_weakening_support" in parameters:
                 derived["capture_weakening_support"] = parameters["capture_weakening_support"]
             if "cut_transport" in parameters:
@@ -278,6 +302,10 @@ def retarget_red_wild_profile(
 
 class RedLivingDexWildCorridorError(ValueError):
     """A source cannot supply a reversible cartridge-derived encounter lane."""
+
+
+class RedLivingDexWildCorridorUnavailable(RedLivingDexWildCorridorError):
+    """No safe pair exists in the requested physical component."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -490,7 +518,7 @@ def derive_red_living_dex_wild_corridor(
                 )
             )
     if not candidates:
-        raise RedLivingDexWildCorridorError(
+        raise RedLivingDexWildCorridorUnavailable(
             "wild source has no unobstructed reversible grass pair"
         )
     if preferred_corridor is not None and any(
@@ -536,5 +564,6 @@ __all__ = [
     "RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA",
     "RedLivingDexWildCorridor",
     "RedLivingDexWildCorridorError",
+    "RedLivingDexWildCorridorUnavailable",
     "derive_red_living_dex_wild_corridor",
 ]

@@ -1,5 +1,65 @@
 # Agent review and adjudication log
 
+## October30 Forest block: causal comparison and retained failure
+
+Internal reviewers independently traced the exact Forest choice, closed native
+journal/cost continuity, original MID stop and Ponyta XP/venue costs. Root froze
+and qualified the narrow repair, then authenticated a serial latest-tail copy.
+Every original failure remains; no gate pass transfers between candidates. The
+TRAIN collector stays a private proposal; no external review, fits or publication.
+Two-hour audit occurred at15:01:06UTC, about107seconds after its14:59:19target while
+authenticating the stopped MID. [Session](work-sessions/2026-10-30-forest-decision.md).
+
+## October30: exact failed-tail repair and resource-horizon diagnosis
+
+Internal read-only reviews and Root authenticate the originalMIDfailure, exact
+paired corridor repair,81closedLATEchoices, full menus, host/control exits and all
+metered costs. Baseline0cGate1fails while literalGates2/3remain; new2eallgates
+UNPROVED, not a full-budget negative test. One exact cached score pass isolates
+local-success/cash forecast terms; no development labels or weights were fitted.
+Two zero-input harness failures and the stale-fixture failure remain retained.
+The annotation-only draft had no parent consumer and was withdrawn. No external
+review or publication was dispatched. Audit observed01:25:07.643UTC,67.643seconds
+after its01:24target; remaining effort pivoted to medicine diagnosis within limits.
+[Session](work-sessions/2026-10-30-midgame-medicine-active.md).
+
+## October29 evening: independent ownership and cost adjudication
+
+Internal reviewers authenticated24 full parent menus, the useful preparation →
+Lorelei choice with two legal preparation alternatives → prepared-member battle
+participation chain, and all closed costs. Root reauthenticated106 pinned evidence
+files and native/host closure. Current0c passesGate3 andGate2LATE only; older9ad
+Gate1/MID results are separate. Fourcopies total80.66native minutes, oneproduction
+fit from18existingTRAINrows, no newnativeTRAIN and no actual gain. No external
+review or publication was dispatched. The current-stage roadmap label was corrected
+to avoid presenting historical development completion as fresh acceptance.
+[Session](work-sessions/2026-10-29-replenishment-value.md).
+
+## October 29: internal review confirms the LATE preparation payoff
+
+Internal sealed-receipt review and Root closeout authenticate Gate 3's Raticate
+preparation → voluntary Lorelei choice → native participation/win, with further
+preparation still legal. The copy closes at 41.77 native minutes: 52 model choices,
+86 support steps, six ordinary setbacks and no native or nonordinary errors.
+Later Champion/Hall-of-Fame continuation remains attributed to forced support.
+LATE is short of 45 minutes. MID subsequently closed after 51.17 native minutes
+with one Mansion error and no listed story milestone; Gates 1 and 2 fail. Internal
+source review confirms the narrow repair and meaningful tests, with native timing
+still unqualified. No new weights were adopted in this block, no actual-save gains were
+imported, and no external review or publication was dispatched.
+
+## October29: supplier/capture qualification and honest sustained-play miss
+
+Internal source and receipt reviews plus Root Windows/Linux/cgroup/guest closure
+authenticate12→22/124actual DEVELOPMENT and38model choices across4guests.
+Supplier/capture/recovery/private XP support qualified. Headroom repair passes
+248focused checks plus1unchanged receipt composition check, not a full suite.
+The exact new typed headroom cause was not re-triggered natively. Longest guest
+20.29minutes;45failed. Final cutoff zero-progress partial remains one nonordinary
+verification failure with0runtime exceptions. Prior errors and all actual/copied
+costs remain.0newTRAIN/fits/weights;0external dispatch/publication.
+[Final evidence](evidence/supplier-capture-block-progress-2026-10-29.json).
+
 ## October28: one whole model-owned payoff, paired failure retained
 
 Rootboundary178bf08f verifies two genuine headed TRAIN timings: both choose
@@ -3472,3 +3532,11 @@ Accepted narrowcoverage/duplicatedbinding/time-loss critique. Corrected absent e
 ## October28 frozen viability assessment
 
 Read-only peers authenticate exposed source pairs, locked fairness, exact measurement-only correction and qualification claim limits. First instrumentation failure remains separate. Both actual public calls fail assembly with0queries/loads. No external dispatch.
+
+## October29 — three-gate candidate and partial-result review
+
+Internal read-only reviewers verified MID support attribution, original gate
+criteria, TRAIN provenance/retention limits and the exact LATE failure. Root
+retains sole source/dispatch authority. Gate1passes; Gates2/3notdemonstrated.
+The direct member partial repair passes exact saved-receipt replay and malformed
+controls; native repair qualification remains pending. No external dispatch.

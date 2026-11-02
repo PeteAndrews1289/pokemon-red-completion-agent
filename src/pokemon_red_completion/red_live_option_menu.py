@@ -36,6 +36,7 @@ from pokemon_red_completion.goal_manager_runtime import (
 )
 from pokemon_red_completion.living_dex_goal_policy import (
     DEFAULT_LIVING_DEX_GOAL_UTILITY,
+    apply_story_approach_prior,
     living_dex_option_kind_for_goal,
     project_living_dex_goal_candidate,
 )
@@ -582,7 +583,7 @@ def build_red_live_option_set(
         not isinstance(item, RedLiveSupplementalOption) for item in supplements
     ):
         raise TypeError("mixed live menu supplements must be immutable")
-    if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15}:
+    if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16}:
         raise RedLiveOptionMenuError("mixed live menu feature version differs")
     if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(ordering_seed_sha256) is None:
         raise RedLiveOptionMenuError("mixed live menu ordering seed differs")
@@ -647,14 +648,34 @@ def build_red_live_option_set(
     rows = [
         (
             binding,
-            replace(candidate, features=replace(
-                candidate.features,
-                dependency_unlock_gain=candidate.features.dependency_unlock_gain / 2,
-            )) if binding.story_approach_only else candidate,
+            apply_story_approach_prior(
+                candidate, approach_only=binding.story_approach_only,
+            ),
             ordinary,
         )
         for binding, candidate, ordinary in rows
     ]
+    if model_feature_version >= 16:
+        rows = [(binding, replace(candidate, story_unit=binding.story_unit), ordinary)
+                for binding, candidate, ordinary in rows]
+    if model_feature_version >= 4:
+        # This live-only descriptor does not alter old vector coordinates or
+        # historical TRAIN reconstruction. The binding supplies prechoice facts;
+        # the optional learned economy extension alone may value actual renewal.
+        from .resource_economy_observation import EconomyMode, EconomyReplenishmentOffer
+
+        rows = [
+            (binding, replace(candidate, economy_offer=replace(
+                candidate.economy_offer,
+                replenishment=EconomyReplenishmentOffer(binding.resource_quote.reserves),
+            )), ordinary)
+            if (binding.resource_quote is not None and binding.resource_quote.reserves
+                and candidate.economy_offer is not None
+                and candidate.economy_offer.mode is EconomyMode.PURCHASE
+                and candidate.economy_offer.planned_spend > 0)
+            else (binding, candidate, ordinary)
+            for binding, candidate, ordinary in rows
+        ]
     refs = tuple(binding.binding_ref for binding, _candidate, _ordinary in rows)
     if len(rows) < 2 or len(set(refs)) != len(refs):
         raise RedLiveOptionMenuError(
@@ -708,7 +729,7 @@ def build_red_live_option_set(
         from .player_option_matchup import OptionMatchup
 
         if (
-            model_feature_version != 15
+            model_feature_version not in (15, 16)
             or not isinstance(matchups, dict)
             or not matchups.keys() <= set(refs)
             or any(not isinstance(value, OptionMatchup) for value in matchups.values())

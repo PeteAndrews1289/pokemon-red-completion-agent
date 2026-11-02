@@ -469,7 +469,10 @@ class RedResourceGoalRouter:
                 maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 route_name="bounded resource-goal transport",
             )
-            if self.routed_recovery:
+            wild_recovery = getattr(self.runtime, "resource_wild_faint_recovery", False)
+            if type(wild_recovery) is not bool:
+                raise TypeError("resource wild faint recovery must be boolean")
+            if self.routed_recovery or wild_recovery:
                 from pokemon_red_completion.red_routed_recovery import (
                     guarded_collection_route_handler,
                 )
@@ -480,6 +483,8 @@ class RedResourceGoalRouter:
                     route_name="guarded resource-goal transport",
                     maximum_flees=_MAX_ROUTE_FLEES,
                     maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
+                    allow_wild_faints=wild_recovery,
+                    emulator=self.runtime.emulator if wild_recovery else None,
                 )
             from pokemon_red_completion.red_travel_capture_runtime import (
                 bind_travel_capture_destination,
@@ -611,6 +616,7 @@ class RedResourceGoalRouter:
             result = bind_capture_storage_support(self, result, observation)
         if self.prepare_capture_party and any(
             spec.parameters.get("capture_status_support") is True
+            and spec.parameters.get("capture_party_preparation", True) is True
             for spec in self.runtime.profile.providers
         ):
             from pokemon_red_completion.red_routed_capture_support import bind_capture_party_support

@@ -1,5 +1,48 @@
 # Roadmap baseline and deviations
 
+## October30: align goal continuity and utility before another fit
+
+Original0cMID earned two badges in50.01native minutes, then failed at a corridor.
+The narrow repair was verified on its exact paired tail. New2e makes81clean LATE
+actions but no milestone or medicine gain: funding financed prize coins, while
+five returns repeated VictoryRoad work. Local success is not goal completion.
+
+Keep baseline0cGates2/3 separate from its Gate1failure and all-unproved2e. Resolve
+cash-horizon/goal-continuity contracts using the focused Astra brief and genuine
+TRAIN only. Profile the measured31.6%menu/boundary time independently. Qualify a
+useful correction before one final freeze and full gates; avoid repeated broad
+fits or another planner revamp. Actual22/124 and all final exit criteria stay put.
+[Session](work-sessions/2026-10-30-midgame-medicine-active.md).
+
+## October29 evening: finish one candidate's proof before changing it
+
+Keep frozen0c for originalMID/endurance qualification; its Gate3 andLATE proof do
+not inherit older9ad passes. A single samecandidate qualifying45-minute MID test
+could close the remaining development gates. Do not relax thresholds or silently
+include editable known-cash/Strength changes. Diagnose proactive medicine demand
+separately from existing closed evidence before any prospective TRAIN contrast.
+
+Correct the roadmap's historical red-story verified marker: the fresh model-led
+exit criterion has not passed. Red-story is current; collection remains planned
+with historical evidence retained. StageIDs, exitcriteria and allfalse fresh
+completion flags stay unchanged. This corrects reporting, not game progress.
+[Session](work-sessions/2026-10-29-replenishment-value.md).
+
+## October 29: retain the first native preparation and stopping proof
+
+Gate 3 passes on one related LATE development copy: the local model selected
+Raticate training with Lorelei available, later selected Lorelei over further
+legal preparation, and used the trained specimen in the native win. Later League
+battles and Hall of Fame used existing forced support, which keeps its own credit.
+
+The guest ended naturally after 41.77 native minutes with 116/124 registrations,
+so Gate 1's 45-minute requirement remains unmet. Gate 2's LATE component passes;
+MID closed after 51.17 minutes with one Mansion interruption error and no listed
+story milestone, so Gates 1 and 2 fail on this candidate. No thresholds change, no
+new weights were adopted in this block, and no copied gains enter the actual save.
+Retain the rejected correction, all ordinary setbacks and complete costs.
+[Current handoff](../HANDOFF.md).
+
 ## October28 audit: identify the owner before another fit
 
 Preserve the local learning results and their limits. Current capture failures
@@ -3360,3 +3403,30 @@ The paired DEV progression test earns3registrations and defeatsMisty with fixedm
 ## October28 frozen viability assessment
 
 Frozen viability assessment: STOP current-stack expansion. Both unchanged public cases fail V9/V15 assembly before native; policy ability remains untested. No repair, fit, switch to921 or automatic nextactor.
+
+<!-- supplier-capture-20261028-2256 -->
+## 2026-10-29 — expose safe choices before changing learner weights
+
+Native failures included optional support treated as mandatory, an alive-lead-only
+route owner, and a quote guard reading an intentionally XP-less policy observation.
+Qualified existing mechanics exposed evolution; actual gameplay reached22/124
+and an active Cut lesson with fixed weights. The new productive headroom pause
+has focused source coverage; native followups did not directly trigger that cause.
+Do not substitute more fitting for an unavailable operation.
+
+Keep stage IDs and final Red criteria unchanged. Longest20.29native minutes
+failed the45-minute target. Final zero-progress reserve settlement remains a
+nonordinary verification failure. Next investigate reserve-aware admission before
+storage/setup, then semantic healing completion. Diagnose success/horizon value
+from closed evidence; earned-only strict TRAIN comparisons remain conditional.
+No DEVELOPMENT fitting, copied gains or fresh-acceptance claim follows.
+
+## October29: preserve capability outcomes, not every prediction error
+
+The current frozen candidate passes the45-minute reliability gate with a real
+Blaine milestone, while disclosed forced support leaves autonomous story and
+stopping gates unproved. Exact old-output retention protects known erroneous
+estimates too. Test one prospective correction using source-qualified TRAIN
+outcomes and explicit story/preparation guards; never reinterpret old fit success
+or weaken native gates. First qualify the narrow member-direct partial repair.
+No new planner, source factory, DEVELOPMENT fitting or final-stage change.

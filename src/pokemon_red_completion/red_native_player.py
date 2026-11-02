@@ -156,17 +156,17 @@ class NativePlayerSession:
         consequence_branch_model=None,
         greedy_selection=False,
         allow_greedy_branch_recovery=False,
-        refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False,
+        refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
         allow_collection_restoration=False,
         force_resource_safety=True,
         include_live_pp_readiness=False,
         continue_safe_route_failures=False,
         train_inference_scope=None,
     ):
-        if observe_preparation_party is not None and (not callable(observe_preparation_party) or model_feature_version!=15):
+        if observe_preparation_party is not None and (not callable(observe_preparation_party) or model_feature_version not in (15, 16)):
             raise ValueError("party-count observer requires V15 and a callable")
         if observe_matchups is not None and (
-            not callable(observe_matchups) or model_feature_version != 15
+            not callable(observe_matchups) or model_feature_version not in (15, 16)
         ):
             raise ValueError("native matchup observer requires V15 and a callable")
         if not isinstance(limits, NativePlayerLimits):
@@ -224,7 +224,7 @@ class NativePlayerSession:
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
             source=source,
             model=consequence_branch_model,
             head=consequence_head,
@@ -248,7 +248,7 @@ class NativePlayerSession:
             if (
                 consequence_head is None
                 or not isinstance(consequence_branch_model, LivingDexOptionValueModel)
-                or consequence_branch_model.feature_version not in (7, 9, 10, 11, 15)
+                or consequence_branch_model.feature_version not in (7, 9, 10, 11, 15, 16)
                 or consequence_branch_model.feature_version != model_feature_version
             ):
                 raise ValueError("native branch recovery requires the exact declared branch model")
@@ -259,18 +259,18 @@ class NativePlayerSession:
                 greedy_selection=greedy_selection,
                 refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
             )
         if consequence_head is not None:
-            from .player_challenge_consequence import ChallengeConsequenceHead
+            from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
 
             if (
                 type(consequence_head) is not ChallengeConsequenceHead
                 or consequence_head.provenance != "native_train"
                 or consequence_head.feedback_version != 2
                 or (source["partition"] != "development" and not train_inference)
-                or model_feature_version not in (7, 9, 10, 11, 15)
-                or consequence_head.feature_version != model_feature_version
+                or model_feature_version not in (7, 9, 10, 11, 15, 16)
+                or not consequence_feature_versions_compatible(consequence_head.feature_version, model_feature_version)
                 or consequence_spec is not None
                 or execution.model_sha256
                 != (consequence_head.model_sha256 if expected_policy is None else expected_policy)
@@ -296,7 +296,7 @@ class NativePlayerSession:
             if (
                 type(consequence_spec) is not ChallengeConsequenceSpec
                 or source["partition"] != "train"
-                or model_feature_version not in (7, 9, 10, 15)
+                or model_feature_version not in (7, 9, 10, 15, 16)
             ):
                 raise ValueError("consequence recording requires explicit TRAIN V7 or V9 scope")
         # Reopening a receipt is safe; re-executing its inputs under that identity
@@ -367,10 +367,22 @@ class NativePlayerSession:
             plan["defer_unbound_preparation"] = True
         if allow_singleton_parent_support:
             plan["allow_singleton_parent_support"] = True
+        if associate_unique_combat:
+            plan["associate_unique_combat"] = True
         if consequence_spec is not None:
             plan["consequence_spec"] = consequence_spec.document()
-        if model_feature_version in (9, 10, 11, 15) and (consequence_spec is not None or consequence_head is not None):
-            plan["consequence_feature_version"] = model_feature_version
+        if model_feature_version in (9, 10, 11, 15, 16) and (consequence_spec is not None or consequence_head is not None):
+            plan["consequence_feature_version"] = (
+                consequence_head.feature_version if consequence_head is not None else model_feature_version
+            )
+            if consequence_head is not None and model_feature_version == 16 and consequence_head.feature_version == 15:
+                plan["consequence_input_projection"] = dict(
+                    schema="pokemon.consequence.v16-to-v15-prefix.v1",
+                    observed_feature_version=16, child_feature_version=15,
+                    observed_width=510, child_raw_width=506,
+                    child_model_sha256=consequence_head.model_sha256,
+                    child_weights_and_provenance_unchanged=True,
+                )
         if consequence_head is not None:
             plan["consequence_policy"] = dict(
                 head=consequence_head.document(),
@@ -453,6 +465,21 @@ class NativePlayerSession:
             <= min(250000, max(1, self.limits.frames // 4))
             or self.limits.seconds - self.wall.elapsed_seconds
             <= min(60, max(1, self.limits.seconds // 4))
+        )
+
+    def decision_admission_reserve_reached(self):
+        """Keep one work allowance above the existing settlement reserve.
+
+        This uniform boundary margin is not an upper bound on arbitrary routes.
+        In-flight goals retain their separate, smaller settlement threshold.
+        """
+        return (
+            self.limits.actions - len(self.recorder.trace)
+            <= 2 * min(3000, max(1, self.limits.actions // 4))
+            or self.limits.frames - self.controller.frames_executed
+            <= 2 * min(250000, max(1, self.limits.frames // 4))
+            or self.limits.seconds - self.wall.elapsed_seconds
+            <= 2 * min(60, max(1, self.limits.seconds // 4))
         )
 
     def execute_evolution_subgoal(self, binding):
@@ -772,13 +799,16 @@ class NativePlayerSession:
         if isinstance(options, (PlayerCurriculumCompletion, PlayerBudgetStop)):
             return options
 
-        # Building a legal menu can itself spend the last training headroom.
-        # Renew the finite port at a settled boundary before selecting/travelling;
+        # A new goal needs work headroom above the in-flight return reserve.
+        # Menu construction is charged before this uniform admission check.
+        # Preserve first-decision diagnostics and their wall-only safeguard;
         # keep compulsory recovery available while control is still unsettled.
         if (self.source.get("partition") == "development"
-                and (self.decisions > 0 or self.limits.seconds - self.wall.elapsed_seconds
-                     <= min(60, max(1, self.limits.seconds // 4)))
-                and self.allow_collection_restoration and self.evolution_reserve_reached()):
+                and self.allow_collection_restoration
+                and ((self.decisions > 0 and self.decision_admission_reserve_reached())
+                     or (self.limits.seconds - self.wall.elapsed_seconds
+                         <= min(60, max(1, self.limits.seconds // 4))
+                         and self.evolution_reserve_reached()))):
             from .red_integrated_play import settled_player_boundary
 
             boundary = self.snapshot()
@@ -883,7 +913,7 @@ def validate_settlement_refinement_scope(
     if not allow:
         return False
     from .living_dex_option_value import LivingDexOptionValueModel
-    from .player_challenge_consequence import ChallengeConsequenceHead
+    from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
     from .red_consequence_choice import (
         branch_recovery_scope_ref,
         valid_branch_recovery_objectives,
@@ -893,9 +923,9 @@ def validate_settlement_refinement_scope(
         source.get("partition") != "development"
         or not settlement_requested
         or not isinstance(model, LivingDexOptionValueModel)
-        or model.feature_version not in (7, 9, 10, 11, 15)
+        or model.feature_version not in (7, 9, 10, 11, 15, 16)
         or type(head) is not ChallengeConsequenceHead
-        or head.feature_version != model.feature_version
+        or not consequence_feature_versions_compatible(head.feature_version, model.feature_version)
         or head.provenance != "native_train"
         or head.feedback_version != 2
         or not valid_branch_recovery_objectives(objective_ref)
@@ -942,7 +972,7 @@ def run_native_continuous_player(
     greedy_selection=False,
     exploration_mix=0.25,
     allow_greedy_branch_recovery=False,
-    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False,
+    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
     settle_existing_blackout=False,
     settle_existing_wild=False,
     settle_existing_capture=False,
@@ -1023,7 +1053,7 @@ def run_native_continuous_player(
         greedy_selection=greedy_selection,
         refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
         source=source,
         model=model,
         head=consequence_head,
@@ -1056,7 +1086,7 @@ def run_native_continuous_player(
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
         )
     if consequence_head is not None and (
         sequence_policy is not None or sequence_horizon is not None or consequence_spec is not None
@@ -1129,7 +1159,7 @@ def run_native_continuous_player(
         allow_greedy_branch_recovery=allow_greedy_branch_recovery,
         refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
         allow_collection_restoration=allow_collection_restoration,
         force_resource_safety=force_resource_safety,
         include_live_pp_readiness=include_live_pp_readiness,
@@ -1357,7 +1387,7 @@ def run_native_continuous_player(
             allow_greedy_branch_recovery=allow_greedy_branch_recovery,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
             maximum_cash_spent=remaining_cash,
             sequence_collector=collector,
             sequence_policy=sequence_policy,

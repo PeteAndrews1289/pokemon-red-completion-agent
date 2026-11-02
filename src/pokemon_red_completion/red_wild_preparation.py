@@ -172,7 +172,9 @@ def transport_to_observed_preparation_corridor(
     from .gen1_route_runtime import Gen1TraversalObserver
     from .gen1_trainer_sight import Gen1TrainerSightProjector
     from .red_living_dex_provider_curriculum import RedEncounterSourceTarget
-    from .red_living_dex_wild_corridor import derive_red_living_dex_wild_corridor
+    from .red_living_dex_wild_corridor import (
+        RedLivingDexWildCorridorUnavailable, derive_red_living_dex_wild_corridor,
+    )
     from .red_training_ground_route import ground_route_capability_projector
     from .route_plan import RoutePlanningError
 
@@ -241,13 +243,45 @@ def transport_to_observed_preparation_corridor(
         snapshot, world = observed_world()
     if snapshot.map_id != corridor.map_id:
         raise ValueError("preparation did not reach its selected venue")
-    excluded = snapshot.occupied | frozenset(h.at for h in snapshot.hazards)
-    live = derive_red_living_dex_wild_corridor(
-        RedEncounterSourceTarget(corridor.source_id),
-        world.terrain[corridor.map_id], world.local_graphs[corridor.map_id],
-        cartridge=route.rom, excluded=excluded, reachable_from=snapshot.at,
-        preferred_corridor=corridor,
-    )
+    def observed_corridor(*, local_component, preferred):
+        excluded = snapshot.occupied | frozenset(h.at for h in snapshot.hazards)
+        return derive_red_living_dex_wild_corridor(
+            RedEncounterSourceTarget(corridor.source_id),
+            world.terrain[corridor.map_id], world.local_graphs[corridor.map_id],
+            cartridge=route.rom, excluded=excluded,
+            reachable_from=snapshot.at if local_component else None,
+            preferred_corridor=preferred,
+        )
+
+    component_passage = None
+    try:
+        live = observed_corridor(local_component=True, preferred=corridor)
+    except RedLivingDexWildCorridorUnavailable as unavailable:
+        # A map can have a gate-separated arrival alcove. Its safe encounter
+        # lane still needs the existing composed route, not a fictitious local
+        # walk edge. Quote both directions before using that unchanged executor.
+        candidate = observed_corridor(local_component=False, preferred=corridor)
+        try:
+            component_passage = quote(world, snapshot, candidate.map_id, candidate.origin_at)
+        except RoutePlanningError as planning_error:
+            raise unavailable from planning_error
+        if (component_passage.terminal_map != candidate.map_id
+                or component_passage.terminal_at != candidate.origin_at
+                or component_passage.terminal_mode != "land"):
+            raise ValueError("preparation component passage differs from corridor")
+        projected = replace(snapshot, at=component_passage.terminal_at,
+                            mode=component_passage.terminal_mode)
+        returned = quote(world, projected, recovery_map, recovery_at)
+        if returned.terminal_map != recovery_map or returned.terminal_at != recovery_at:
+            raise ValueError("preparation component passage lacks recovery return")
+        replace(route, route_world=world, destination_map=candidate.map_id,
+                destination_at=candidate.origin_at)(actions, reader, emulator)
+        snapshot, world = observed_world()
+        if snapshot.map_id != corridor.map_id:
+            raise ValueError("preparation component passage changed venue")
+        # Fresh occupancy/terrain and the actual landed component remain final
+        # authority. Do not retry a failed passage or keep its stale pair.
+        live = observed_corridor(local_component=True, preferred=candidate)
     live = replace(
         live, maximum_legs=corridor.maximum_legs,
         maximum_seek_steps=corridor.maximum_seek_steps,
@@ -266,6 +300,8 @@ def transport_to_observed_preparation_corridor(
         "observed_corridor": live.private_dict(),
         "corridor_rebound": live != corridor,
         "native_map_entry_used": entry is not None,
+        "component_passage_used": component_passage is not None,
+        "component_passage_quote_steps": 0 if component_passage is None else len(component_passage.steps),
         "entry_quote_steps": 0 if entry is None else len(entry.steps),
         "local_quote_steps": len(quoted.steps),
         "return_quote_steps": len(returned.steps),

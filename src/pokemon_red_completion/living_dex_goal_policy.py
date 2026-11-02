@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import math
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from enum import StrEnum
 
 from pokemon_red_completion.goal_manager import (
@@ -96,7 +96,7 @@ def living_dex_option_kind_for_goal(
 
     if not isinstance(kind, GoalKind):
         raise TypeError("kind must be a GoalKind")
-    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15}:
+    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16}:
         raise LivingDexGoalPolicyError("living-Dex feature version differs")
     if kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
         return LivingDexOptionKind.RESTORE
@@ -118,7 +118,9 @@ DEFAULT_LIVING_DEX_GOAL_UTILITY = LivingDexOptionUtility(
 )
 
 
-def economy_offer_from_opportunity(opportunity: GoalOpportunity) -> EconomyOffer:
+def economy_offer_from_opportunity(
+    opportunity: GoalOpportunity, *, include_replenishment: bool = False,
+) -> EconomyOffer:
     """Project a semantic opportunity into an explicit prospective economy offer.
 
     Preserves both conditional income and planned spend when an opportunity
@@ -126,6 +128,8 @@ def economy_offer_from_opportunity(opportunity: GoalOpportunity) -> EconomyOffer
     """
     if not isinstance(opportunity, GoalOpportunity):
         raise TypeError("opportunity must be a GoalOpportunity")
+    if type(include_replenishment) is not bool:
+        raise TypeError("replenishment projection opt-in must be boolean")
     quote = opportunity.resource_quote
     if quote is None:
         return EconomyOffer(mode=EconomyMode.OTHER, conditional_income=0, planned_spend=0)
@@ -139,17 +143,45 @@ def economy_offer_from_opportunity(opportunity: GoalOpportunity) -> EconomyOffer
             planned_spend=planned_spend,
         )
     if planned_spend > 0:
+        from .resource_economy_observation import EconomyReplenishmentOffer
+
+        reserves = getattr(quote, "reserves", ())
         return EconomyOffer(
             mode=EconomyMode.PURCHASE,
             conditional_income=0,
             planned_spend=planned_spend,
+            replenishment=(EconomyReplenishmentOffer(reserves)
+                           if include_replenishment and reserves else None),
         )
     return EconomyOffer(mode=EconomyMode.OTHER, conditional_income=0, planned_spend=0)
+
+
+def apply_story_approach_prior(
+    candidate: LivingDexOptionCandidate, *, approach_only: bool,
+) -> LivingDexOptionCandidate:
+    """Share the existing two-phase access prior without changing outcome labels.
+
+    The caller authenticates the private binding scope. No destination identity
+    or new feature enters the model; finishing and legacy candidates are unchanged.
+    """
+    if not isinstance(candidate, LivingDexOptionCandidate):
+        raise TypeError("story approach prior requires a portable candidate")
+    if type(approach_only) is not bool:
+        raise TypeError("story approach scope must be an explicit boolean")
+    if not approach_only:
+        return candidate
+    if candidate.features.kind is not LivingDexOptionKind.UNLOCK_ACCESS:
+        raise LivingDexGoalPolicyError("story approach prior requires a story candidate")
+    return replace(candidate, features=replace(
+        candidate.features,
+        dependency_unlock_gain=candidate.features.dependency_unlock_gain / 2,
+    ))
 
 
 def project_living_dex_goal_candidate(
     question: GoalManagerQuestion, index: int, *, feature_version: int,
     binding_ref: str, readiness: PlayerReadiness | None = None,
+    include_replenishment: bool = False,
 ) -> LivingDexOptionCandidate | None:
     """Project one executable semantic option without scoring it or inventing a menu."""
     if readiness is not None and feature_version < 5:
@@ -166,7 +198,8 @@ def project_living_dex_goal_candidate(
     if opportunity.estimated_effort is None or opportunity.estimated_risk is None:
         raise LivingDexGoalPolicyError("available goal lacks bounded estimates")
     economy_offer = (
-        economy_offer_from_opportunity(opportunity) if feature_version >= 4 else None
+        economy_offer_from_opportunity(opportunity, include_replenishment=include_replenishment)
+        if feature_version >= 4 else None
     )
     return LivingDexOptionCandidate(
         binding_ref=binding_ref,

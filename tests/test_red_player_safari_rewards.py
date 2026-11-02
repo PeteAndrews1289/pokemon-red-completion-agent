@@ -6,6 +6,7 @@ import pytest
 
 from pokemon_red_completion import red_player_safari_rewards as s
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.player_option_story_unit import OptionStoryUnit, story_unit_vector
 
 
 @pytest.mark.parametrize("fault", [None, "not_ready", "no_hm", "known", "stale", "unsettled"])
@@ -465,6 +466,9 @@ def test_strength_exchange_is_current_party_state_bound_and_verified(monkeypatch
     monkeypatch.setattr(s, "replace", lambda *a, **kw: route_back)
     binding = s.strength_reward_binding(rt, actions, route=N(rom=b"rom"))
     assert binding.maximum_cash_debit == 0 and not inputs
+    assert binding.story_unit == OptionStoryUnit("interaction", False)
+    assert story_unit_vector(binding.story_unit) == (1.0, 0.0, 1.0, 0.0)
+    assert binding.story_approach_only is False
     if fault == "stale":
         raw.player_money -= 1
     if fault:
@@ -476,6 +480,64 @@ def test_strength_exchange_is_current_party_state_bound_and_verified(monkeypatch
     else:
         report = binding.execute()
         assert not report.evidence["strength_taught"] and facts
+        assert report.evidence["objective"] == "obtain_strength"
+        assert report.evidence["objective_completed"] is True
         assert binding.verify(report).status.value == "succeeded"
         with pytest.raises(ValueError, match="consumed"):
             binding.execute()
+
+
+@pytest.mark.parametrize(
+    "fault", [None, "unready", "outdoor", "no_teeth", "two_teeth", "no_surf", "already_owned"]
+)
+def test_strength_interaction_descriptor_requires_the_real_unfinished_reward_boundary(monkeypatch, fault):
+    bag = ((198, 1), (64, 1))
+    if fault == "no_teeth":
+        bag = ((198, 1),)
+    elif fault == "two_teeth":
+        bag = ((198, 1), (64, 2))
+    elif fault == "no_surf":
+        bag = ((64, 1),)
+    elif fault == "already_owned":
+        bag = (*bag, (199, 1))
+    raw = N(map_id=7 if fault == "outdoor" else 154, bag_items=bag)
+    snapshot = repr(raw).encode()
+    runtime = N(
+        reader=N(read=lambda: deepcopy(raw)),
+        emulator=N(save_state_bytes=lambda: repr(raw).encode()),
+    )
+    actions = N(execute=lambda _: pytest.fail("descriptor construction sent input"))
+    monkeypatch.setattr(s, "_field_ready", lambda _: fault != "unready")
+    binding = s.strength_reward_binding(runtime, actions, route=object())
+    assert runtime.emulator.save_state_bytes() == snapshot
+    if fault is not None:
+        assert binding is None
+    else:
+        assert binding.story_objective_ref == "obtain_strength"
+        assert binding.story_unit == OptionStoryUnit("interaction", False)
+        assert binding.story_approach_only is False
+        assert binding.maximum_cash_debit == 0
+
+
+def test_outdoor_strength_offer_preserves_the_actual_movement_unit(monkeypatch):
+    raw = N(map_id=7, player_y=28, player_x=19, bag_items=((198, 1), (64, 1)))
+    runtime = N(reader=N(read=lambda: deepcopy(raw)))
+    actions = N(execute=lambda _: pytest.fail("offer enumeration sent input"))
+    monkeypatch.setattr(s, "_field_ready", lambda _: True)
+    movement = N(story_objective_ref="obtain_strength",
+                 story_unit=OptionStoryUnit("movement", True), story_approach_only=True)
+    calls = []
+
+    def travel(rt, executor, **kwargs):
+        assert rt is runtime and executor is actions
+        calls.append(kwargs)
+        return movement
+
+    monkeypatch.setattr(s, "story_travel_binding", travel)
+    binding, challenge = s.safari_reward_story_option(
+        runtime, actions, objective_id="obtain_strength", route=object()
+    )
+    assert binding is movement
+    assert story_unit_vector(binding.story_unit) == (1.0, 1.0, 0.0, 1.0)
+    assert calls[0]["frontier"] is True and calls[0]["stop_at_map_boundary"] is True
+    assert challenge.combat_required is False

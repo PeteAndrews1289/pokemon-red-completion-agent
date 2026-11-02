@@ -6621,25 +6621,11 @@ def location_label(map_id: int | None) -> str | None:
     }.get(map_id, f"map_{map_id:02x}")
 
 
-def semantic_facts(raw: RawGameState) -> frozenset[str]:
+def semantic_location_facts(raw: RawGameState) -> frozenset[str]:
+    """Facts witnessed solely by the current native map, independent of quest names."""
     if not raw.game_started:
         return frozenset()
-
-    facts: set[str] = {"story:adventure_begun"}
-    events = raw.event_flags
-    items = set(raw.bag_item_ids or ())
-    badges = Badge(raw.badge_bits or 0)
-
-    if (raw.party_count or 0) > 0 or _event(events, EventFlag.GOT_STARTER):
-        facts.add("party:starter_obtained")
-    if _event(events, EventFlag.FOLLOWED_OAK_INTO_LAB):
-        facts.add("story:oak_lab_reached")
-    if _event(events, EventFlag.OAK_ASKED_TO_CHOOSE_MON):
-        facts.add("story:starter_selection_ready")
-    if _event(events, EventFlag.GOT_POKEDEX):
-        facts.add("story:pokedex_received")
-    if raw.status_flags_1 is not None and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK:
-        facts.add(SAFFRON_GUARD_ACCESS_FACT)
+    facts: set[str] = set()
 
     map_facts = {
         MapId.PEWTER_CITY: "location:pewter_city",
@@ -6673,6 +6659,31 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         facts.add(map_facts[MapId(raw.map_id)])
     if raw.map_id in {MapId.INDIGO_PLATEAU, MapId.INDIGO_PLATEAU_LOBBY}:
         facts.add("story:victory_road_cleared")
+
+    return frozenset(facts)
+
+
+def semantic_facts(raw: RawGameState) -> frozenset[str]:
+    if not raw.game_started:
+        return frozenset()
+
+    facts: set[str] = {"story:adventure_begun"}
+    events = raw.event_flags
+    items = set(raw.bag_item_ids or ())
+    badges = Badge(raw.badge_bits or 0)
+
+    if (raw.party_count or 0) > 0 or _event(events, EventFlag.GOT_STARTER):
+        facts.add("party:starter_obtained")
+    if _event(events, EventFlag.FOLLOWED_OAK_INTO_LAB):
+        facts.add("story:oak_lab_reached")
+    if _event(events, EventFlag.OAK_ASKED_TO_CHOOSE_MON):
+        facts.add("story:starter_selection_ready")
+    if _event(events, EventFlag.GOT_POKEDEX):
+        facts.add("story:pokedex_received")
+    if raw.status_flags_1 is not None and raw.status_flags_1 & SAFFRON_GUARD_ACCESS_MASK:
+        facts.add(SAFFRON_GUARD_ACCESS_FACT)
+
+    facts.update(semantic_location_facts(raw))
 
     for badge, fact in {
         Badge.BOULDER: "badge:boulder",

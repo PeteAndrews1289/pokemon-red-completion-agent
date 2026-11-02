@@ -126,7 +126,7 @@ def read_production_train_pool(scoped_output, *, expected_declaration_sha256,
         _require((manifest.capture_id,manifest.root_lineage_id,manifest.source_commit,
             manifest.source_state_sha256,manifest.partition,manifest.expected_map,manifest.expected_battle_state)==
             (f"player-trainer-{counts[index]:04d}",admission.root_lineage_id,admission.source_commit,
-             admission.source_state_sha256,ScenarioPartition.TRAIN,65 if role=="story" else 15,
+             admission.source_state_sha256,ScenarioPartition.TRAIN,admission.story_map_id if role=="story" else admission.wild_map_id,
              2 if role=="story" else 1), "capture source/map/partition differs")
         outcome=_read(directory/"outcome.json");endpoint=_read(directory/"endpoint.json")
         _require(outcome.get("capture_id")==manifest.capture_id

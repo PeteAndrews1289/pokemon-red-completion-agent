@@ -1,5 +1,6 @@
 """Legal Fly prefix toward the same selected story objective; never a new goal."""
 
+from .player_option_story_unit import OptionStoryUnit
 from dataclasses import asdict, replace
 from hashlib import sha256
 
@@ -205,6 +206,7 @@ def story_fly_binding(
         )),
         GoalKind.ADVANCE_STORY, _FLIGHT_ACTIONS / 3000, 0.15, execute, verify,
         maximum_cash_debit=0, story_objective_ref=objective_id, story_approach_only=not completes,
+        story_unit=OptionStoryUnit("movement", not completes),
     )
 
 

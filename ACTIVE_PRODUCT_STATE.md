@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Keep runs paused for source publication. Next qualify suppliers and nonlethal capture support, then sustained play before more fitting or scale-up.
+- Next decision: Integrate and qualify the private mock-tested TRAIN collector, collect informative partial-interaction evidence, and fit only with strict retained-output proof; diagnose venue costs from existing receipts.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Reliable and efficient local autonomous Red play using the existing model/execution stack,with measured Windows scaling and later cross-title reuse. |
-| Authority now | Fixed local weights made 29 strategic choices in repaired DEVELOPMENT: Bill/rival/Cut,2badges,12registrations. Operator repairs disclosed; fresh acceptance and broad autonomous payoff unproved. |
+| Authority now | Existing model stack owns choices; zero new fits. Source743d fixes productive-stop classification, truthful interaction metadata and redundant observations. All three current-candidate gates remain unproved; actual22/124 paused. |
 | Authority target | The local student chooses collection and preparation actions without runtime LLM calls or teacher substitution. Existing executors translate selected goals into normal inputs. |
 | Transfer test | Two isolated P7 actors completed eight choices each with matching 2,000-action, 124,644-frame traces and terminal states. Peak memory: 1.743 GiB; minimum available Windows/WSL memory: 15.260/13.207 GiB. No OOM or swap. At most two finite development workers qualify. The older P4 1.812x throughput estimate is separate. |
 | Cheapest falsifier | A stale/illegal menu,unretained failed tail,unsafe custody,unmeasured speed claim or two-worker memory/throughput failure disproves readiness. Use paired native evidence,not copied wins or counts alone. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-10-28-project-audit-publication** · status **closed** · evidence [development episode](docs/evidence/red-project-audit-2026-10-28.json)
+**2026-10-30-forest-decision** · status **closed** · evidence [development episode](docs/evidence/forest-decision-2026-10-30.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Attribute current failures to the correct layer and publish an honest source snapshot. |
-| Learning output | Audit only:0gameplay/TRAIN/fits/weights. Prior play-first gains remain10to12registrations with29strategic choices. |
-| Authority delta | No runtime authority change. Capture fallback is deterministic; pending suppliers remain unrun. |
-| Transfer result | No new independent evaluation, fresh acceptance or later-title transfer. |
-| Blocker | Capture support causes avoidable target KOs; supplier coverage needs native qualification. Source lint/type debt and external private helpers limit publication reproducibility. |
-| Decision | Keep runs paused for source publication. Next qualify suppliers and nonlethal capture support, then sustained play before more fitting or scale-up. |
-| Next session | New block up to3h: qualify pending suppliers on the retained Cerulean pair, test existing nonlethal capture support on a paid copy, then seek45native minutes. Reassess15min/two failures; no fresh starts or parallel actors. |
-| Next falsifier | The existing capture-support hypothesis must improve actual retention without illegal actions or hidden model substitution. |
-| Stop condition | All game runs remain paused throughout audit/publication; native work requires a new finite block. |
+| Product alignment | Model-owned progress with persistent observed feedback, truthful opponent facts and authenticated logs; no hidden target substitution. |
+| Learning output | Zero fits/new weights/new TRAIN. Three isolated native copies; Forest3/124, original MID68to74/124, repaired tail77/124. Actual22/124 remains paused; no copied gains imported. |
+| Authority delta | Existing model unchanged. Scoped source repair under user authority; no gate credit or promotion. |
+| Transfer result | Matched Forest trainer win and local Brock efficiency are verified. Original MID failed and repaired tail is short correlated DEVELOPMENT; no gate inheritance. |
+| Blocker | Original MID stopped on a productive venue-exhaustion verification mismatch; repaired source now preserves ordinary failed status. Remaining strategic gaps: partial-interaction success coverage, and venue cost inputs both unpopulated and zero-weighted; the exact original TRAIN-matrix explanation remains unresolved. |
+| Decision | Integrate and qualify the private mock-tested TRAIN collector, collect informative partial-interaction evidence, and fit only with strict retained-output proof; diagnose venue costs from existing receipts. |
+| Next session | Improve useful autonomous story decisions, then attempt all three gates on one unchanged candidate. |
+| Next falsifier | No genuine informative partial-interaction label, unsafe failure accounting, lost movement-head retention, unchanged full-menu choice, or native regression rejects deployment. |
+| Stop condition | This finite block closed; all native workers and controls released. Next work requires a fresh bounded session, without reviving old trials or changing their costs. |
 
 ### Stop conditions
 

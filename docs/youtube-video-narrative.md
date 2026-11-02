@@ -1,27 +1,114 @@
 # Teaching a local model to play Pokémon
 
-Editorial treatment updated October 28, 2026. All actual/full campaigns remain
-paused while finite copied learning checks are reviewed. This is an unfinished
-autonomy project with supported completions, measured learning gains and failures.
+Editorial treatment updated October30,2026. Show successful local actions beside their failed overall payoff. All runs are closed; autonomous acceptance remains unproved.
+[Current status](../ACTIVE_PRODUCT_STATE.md) · [Handoff](../HANDOFF.md).
+
+## October30: a wrong observation, then a costly training venue
+
+The exact Forest comparison changed the local model's choice without new weights.
+It chose and beat the trainer. From the same origin Brock took18choices instead
+of89and6heals instead of43; collection side benefits differed, so this is a local
+story improvement, not a fivefold whole-game speedup.
+
+The next original midgame copy gained six registrations but stopped after26native
+minutes. Ponyta had made real XP progress; a productive venue stop was incorrectly
+classified as fatal. We retained that failure, repaired the narrow consumer and
+qualified a short continuation from its exact terminal. The copied continuation
+ends77/124. It does not erase the failure or qualify endurance.
+
+The logs expose why training dragged: frequent recovery made the Mansion much
+less productive than the earlier Cave dose. Recorded costs do not feed the current
+menu priors, and the venue model has zero weights on those11cost/prior inputs;
+wiring alone cannot fix the preference. Why those weights are zero remains open. Late play has a separate missing
+partial-interaction learning signal. Repeated cash-only fitting would not fix it.
+All current gates and fresh autonomous completion remain unproved. No new weights
+or actual-save registrations were added this block; all runs are closed.
+[Evidence and limits](work-sessions/2026-10-30-forest-decision.md).
+
+## Earlier October30 findings, retained as history
+
+## October30: successful actions can still fail to advance the goal
+
+The original midgame copy reached84registrations and eight badges, then stopped
+on a routing error. Keep the complete failed tail:50minutes alone is not a clean
+endurance pass. A narrow repair subsequently crossed that exact failed passage.
+
+The medicine demand is now visible, but a new late-game copy earned19043 and
+spent18000on prize coins plus1800on balls, buying no medicine. It repeatedly
+returned to the same VictoryRoad work. The individual actions succeeded; no new
+story objective or registration completed in23minutes. Coins are legitimate
+collection stock, but those transactions do not prove useful medicine planning.
+
+Exact score readback exposes local-success rewards and cash-forecast/horizon
+mismatches. Menu/boundary construction also consumed31.6%of the closed midgame
+time. These are specific next experiments, not proof another broad revamp works.
+No new model learning or actual-save progress occurred; all copies are stopped.
+Baseline0c keeps two separate gate passes and an endurance failure; new2e has
+all gates unproved. Fresh autonomous Champion/Hall-of-Fame+124 remains open.
+[Closed session](work-sessions/2026-10-30-midgame-medicine-active.md) ·
+[Focused Astra brief](reviews/2026-10-30-medicine-continuity.md).
+
+## Earlier summary, retained as history
+
+Editorial treatment updated October29,2026 after the replenishment block.
+All copies are closed; one current-build stopping gate passes. Fresh autonomous
+acceptance and the full project remain unfinished.
 [Current status](../ACTIVE_PRODUCT_STATE.md) · [Current handoff](../HANDOFF.md).
 
-## October28 audit: execution support before more fitting
+## October 29, evening: stopping transfers; completion remains open
 
-The shared public entry now carries the preserved Misty-win development ancestry
-through Bill, the ship rival and Cut, with10→12registrations. It takes8repair
-relaunches and only6m15s of metered native-player time. This is useful progress,
-with a substantial reliability limitation.
+The new useful-stock head bought seven Great Balls from a real deficit. It reused
+18 existing TRAIN outcomes from one origin; no development outcomes were fitted.
+An older candidate then exceeded 45 native minutes and earned two badges, but its
+late-game test exposed a healing-verification defect. Preserve both results.
 
-The most pointed finding is outside the learner: deterministic capture support
-chooses Rattata/Tackle and repeatedly knocks out intended catches. Supplier
-coverage also hides affordable reachable shops. The reusable supplier candidate
-is frozen but unrun. The next work is native supplier qualification and reuse of
-existing nonlethal capture support, then sustained play before more fitting.
+After the narrow healing repair, the current candidate trained while Lorelei was
+available, then chose Lorelei with two further preparation options still legal.
+Three directly trained specimens participated in the win. That proves the bounded
+preparation/stopping gate and the late-game half of the transfer gate on this build.
+It does not inherit the older build's midgame endurance pass.
 
-Scoped preparation/recovery successes and useful no-fit decisions remain valid.
-Fresh autonomous Red completion and later-title transfer remain unproved.
-[Lessons and evidence](project-lessons-2026-10-28.md) ·
-[Native scoreboard](work-sessions/2026-10-28-play-first.md).
+This copy beat all four Elite Four members, lost to Champion, recovered and
+re-entered the League. Later League battles used existing forced support; Lorelei
+was a parent choice. The initial Champion entry had two fainted members, low HP
+and no healing medicine. Recovery worked, but proactive medicine demand remains
+a specific interface gap. All copies are closed; actual progress stays22/124.
+
+Next test the original midgame case on the unchanged current build. Full fresh
+Champion/Hall-of-Fame plus124 remains unproved. Show the loss and recovery beside
+the successful menus; do not splice different candidates into one winning run.
+[Current session](work-sessions/2026-10-29-replenishment-value.md).
+
+Earlier on October29, a different candidate proved a Raticate preparation chain
+and reached Champion/Hall of Fame, then failed its midgame Mansion test. That
+historical result remains in the [archived narrative](history/2026-10-29-before-replenishment-youtube-video-narrative.md) and its dated session; it is
+not evidence that the current candidate completed the game.
+
+## Earlier October 29: supplier/capture closeout
+
+The supplier/capture block advanced the actual preserved DEVELOPMENT save from
+12 to22/124 registrations, with two badges. It earned Diglett,Drowzee,Weedle,
+Butterfree,Beedrill,Kadabra,Fearow,Raticate,Arbok and Gloom. All diagnostic gains
+remain excluded. Suppliers, optional non-damaging capture and strict faint recovery
+were qualified; conservative XP helper support exposed real evolution choices.
+The model also selected an active Cut lesson. No third badge is claimed.
+
+Four actual guests used47.45 metered native minutes and38model choices. The
+longest unchanged guest reached20.29minutes, so the45-minute target failed.
+The final Diglett attempt had no training wins and retained a nonordinary
+verification failure at cutoff, despite no runtime exception. All guests and
+controls are now closed. Repairs and gameplay XP changed no model parameters.
+
+One copied training audit attributed62.8%of frames to recovery/return, not a
+measured wall-time share. An obsolete healing-completion check is a narrow
+optimization target. Legal Surge travel appeared in every last-run menu but the
+model preferred evolutions. This separates support availability from model value.
+The new typed helper-headroom cause was not directly re-triggered natively.
+
+Next investigate reserve-aware admission before storage/setup, then the measured
+healer and sustained play. Earned-only TRAIN success/horizon contrasts remain
+conditional on informative, strictly matched data. No fresh acceptance follows.
+[Final scoreboard](work-sessions/2026-10-28-supplier-capture.md).
 
 [Earlier narrative view](chronicle/2026-10-28-youtube-before-publication.md).
 
@@ -225,3 +312,14 @@ retention cap hides legacy13 utility error0.307839→0.330481 because newer exam
 improve. These are concrete limits of the current evidence. Matched current-
 controller training and timing repetitions come before more fits or campaigns.
 The original numeric pass is retained honestly; no gate is rewritten afterward.
+
+## October29 evidence beat: reliable mechanics still need learned decisions
+
+One unchanged midgame guest played53minutes, added24registrations and defeated
+Blaine. The victory came through forced support, so it proves reliability but
+not autonomous story choice. The late-game copy exposed a small integration
+error: productive training reached its bound and the parent misread the report.
+We preserved the failure and qualified a narrow source repair offline. The next
+challenge is meaningful story and preparation/stopping choices, not another
+montage of catches. One of the three development gates is proved; no final
+fresh-run completion claim follows. Actual save remains paused at22/124.

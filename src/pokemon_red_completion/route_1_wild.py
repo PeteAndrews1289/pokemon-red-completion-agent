@@ -41,6 +41,20 @@ class ActionExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
 
 
+class WildFleeFieldExit(RuntimeError):
+    """Rejected stabilized field exit; evidence only, never route permission.
+
+    A caller owning a known scripted map transition may verify it separately.
+    The generic same-map escape verifier continues to reject this outcome.
+    """
+
+    def __init__(self, before, after, evidence):
+        super().__init__("wild escape left its expected field boundary")
+        self.before = before
+        self.after = after
+        self.evidence = evidence
+
+
 class WildFleeStatusChange(RuntimeError):
     """Private cause: an otherwise verified escape acquired a lead status.
 
@@ -743,7 +757,10 @@ def flee_wild(
                         f"{route_name} flee failed its stabilized semantic evidence gate: "
                         "status recovery required."
                     ) from WildFleeStatusChange(encounter, raw, evidence)
-                raise error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
+                failure = error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
+                if raw.battle_state == 0 and control_ready:
+                    raise failure from WildFleeFieldExit(encounter, raw, evidence)
+                raise failure
             note_observed_battle_exit()
             return evidence
         if raw.battle_state == 2 and trainer_handoff is not None:

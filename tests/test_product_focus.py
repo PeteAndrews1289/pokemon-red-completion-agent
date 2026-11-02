@@ -384,8 +384,9 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     assert state.active_lane["time_box"] == {"maximum_hours": 3, "maximum_sessions": 1}
     assert state.active_lane["next_decision"].strip()
     reorientation = state.active_lane["latest_reorientation"]
-    # The human-authorized seven-goal mission remains active after local repairs.
-    assert reorientation["status"] == "active"
+    # The learning lane remains active when its latest finite session closes.
+    assert state.active_lane["status"] == "active"
+    assert reorientation["status"] in {"active", "closed"}
     assert reorientation["next_session_goal"].strip()
     assert reorientation["stop_condition"].strip()
     assert reorientation["decision"].strip()
@@ -399,6 +400,8 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
         assert latest["models_adopted"] == latest["new_fits"] == 0
     assert latest["session"] == reorientation["session_id"]
     assert latest["partition"] == "development"
+    if reorientation["status"] == "closed":
+        assert latest["status"].startswith("closed")
 
 
 def test_koga_fly_checkpoint_separates_comparative_choices_support_and_learning() -> None:

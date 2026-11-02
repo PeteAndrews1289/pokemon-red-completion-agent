@@ -54,6 +54,7 @@ class RedFullPokedexDirectOriginError(ValueError):
 _CAPTURE_CAPABILITY_PARAMETERS = (
     "capture_search_budget",
     "capture_status_support",
+    "capture_party_preparation",
     "capture_weakening_support",
     "cut_transport",
     "surf_transport",

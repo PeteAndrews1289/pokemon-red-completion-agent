@@ -42,6 +42,7 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.resource_economy_observation import (
     EconomyMode,
     EconomyOffer,
+    EconomyReplenishmentOffer,
     EconomySnapshot,
 )
 
@@ -50,6 +51,7 @@ from .player_option_preparation import OptionPreparation
 from .player_option_move_change import OptionMoveChange
 from .player_option_level_workload import OptionLevelWorkload
 from .player_option_matchup import OptionMatchup
+from .player_option_story_unit import OptionStoryUnit
 from .player_readiness import PlayerReadiness
 
 LIVING_DEX_PRIVATE_MENU_SCHEMA = "pokemon.core.private-living-dex-option-menu.v1"
@@ -134,6 +136,7 @@ def restore_living_dex_policy_menu(
         "pokemon.core.living-dex-option-menu.v10",
         "pokemon.core.living-dex-option-menu.v12",
         "pokemon.core.living-dex-option-menu.v15",
+        "pokemon.core.living-dex-option-menu.v16",
     ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
@@ -148,6 +151,7 @@ def restore_living_dex_policy_menu(
         "pokemon.core.living-dex-option-menu.v10",
         "pokemon.core.living-dex-option-menu.v12",
         "pokemon.core.living-dex-option-menu.v15",
+        "pokemon.core.living-dex-option-menu.v16",
     } and (
         context.economy_snapshot is not None or context.target_cash is not None
     ):
@@ -194,7 +198,8 @@ def _restore_context(document: Mapping[str, object]) -> LivingDexOptionContext:
     elif schema == "pokemon.core.living-dex-option-context.v2":
         _exact_keys(
             document,
-            {"schema", *_CONTEXT_FIELDS, "economy_cash", "target_cash"},
+            {"schema", *_CONTEXT_FIELDS, "economy_cash", "target_cash"}
+            | ({"cash_target_known"} if "cash_target_known" in document else set()),
             subject="policy context",
         )
         values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
@@ -205,7 +210,8 @@ def _restore_context(document: Mapping[str, object]) -> LivingDexOptionContext:
             snapshot = EconomySnapshot(cash, ())
             target_cash = _integer(document["target_cash"], subject="target cash")
             context = LivingDexOptionContext(
-                **values, economy_snapshot=snapshot, target_cash=target_cash
+                **values, economy_snapshot=snapshot, target_cash=target_cash,
+                cash_target_known=document.get("cash_target_known", False),
             )
         except (TypeError, ValueError) as error:
             raise LivingDexPolicyCodecError(str(error)) from None
@@ -233,7 +239,8 @@ def _restore_candidate(
         | ({"level_workload"} if "level_workload" in document else set())
         | ({"move_change"} if "move_change" in document else set())
         | ({"capture_invocation"} if "capture_invocation" in document else set())
-        | ({"matchup"} if "matchup" in document else set()),
+        | ({"matchup"} if "matchup" in document else set())
+        | ({"story_unit"} if "story_unit" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -282,7 +289,8 @@ def _restore_candidate(
         offer_doc = _mapping(document["economy_offer"], subject="economy offer")
         _exact_keys(
             offer_doc,
-            {"conditional_income", "mode", "planned_spend"},
+            {"conditional_income", "mode", "planned_spend"}
+            | ({"replenishment"} if "replenishment" in offer_doc else set()),
             subject="economy offer",
         )
         try:
@@ -296,6 +304,8 @@ def _restore_candidate(
                 mode=mode,
                 conditional_income=cond_income,
                 planned_spend=planned_spend,
+                replenishment=(EconomyReplenishmentOffer.from_public_dict(offer_doc["replenishment"])
+                               if "replenishment" in offer_doc else None),
             )
         except (TypeError, ValueError) as error:
             raise LivingDexPolicyCodecError(str(error)) from None
@@ -331,7 +341,9 @@ def _restore_candidate(
             capture_invocation=(OptionCaptureInvocation.from_public(document["capture_invocation"])
                                 if "capture_invocation" in document else None),
             matchup=(OptionMatchup.from_public(document["matchup"])
-                     if "matchup" in document else None),
+                      if "matchup" in document else None),
+            story_unit=(OptionStoryUnit.from_public(document["story_unit"])
+                        if "story_unit" in document else None),
             preparation=(OptionPreparation.from_public(document["preparation"])
                          if "preparation" in document else None),
         )

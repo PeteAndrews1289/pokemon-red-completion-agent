@@ -1,8 +1,9 @@
 # Current ownership
 
-[Active state](ACTIVE_PRODUCT_STATE.md) · [Handoff](HANDOFF.md).
+[Active product state](ACTIVE_PRODUCT_STATE.md) · [Handoff](HANDOFF.md).
 
-Root owns the October28 audit/docs/registry/publication lease. Internal peers
-provided read-only evidence, privacy and integration reviews; none launched
-actors or edited source. No external review was dispatched. All game runs are
-paused. Authenticate the released private claim before the next source session.
+All native copies in the October30 Forest block are closed. The current migration
+handoff records the source-writer lease and final release evidence. Internal
+reviewers supplied private audits and proposals; no external reviewer or worker2
+was dispatched. Future work needs a fresh bounded ownership claim. Root alone
+may dispatch native work and write Code under that claim.

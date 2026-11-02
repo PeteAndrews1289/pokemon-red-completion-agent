@@ -1,5 +1,6 @@
 """Separate a model-selected story destination from preparation and gym combat."""
 
+from .player_option_story_unit import OptionStoryUnit
 from dataclasses import replace
 from hashlib import sha256
 
@@ -356,4 +357,5 @@ def story_travel_binding(
         maximum_cash_debit=0 if cash_route is not None else None,
         story_objective_ref=objective_id,
         story_approach_only=not completes_objective,
+        story_unit=OptionStoryUnit("movement", not completes_objective),
     )

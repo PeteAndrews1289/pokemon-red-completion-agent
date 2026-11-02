@@ -54,7 +54,8 @@ from pokemon_red_completion.red_goal_skills import (
     finish_center_dialogue,
     prepare_center_departure,
 )
-from pokemon_red_completion.red_party import PokemonRedPartyReader
+from pokemon_red_completion.red_party import PokemonRedPartyReader, party_observation_from_raw
+from pokemon_red_completion.red_evolution_helper_xp import EvolutionHelperXPExhausted
 from pokemon_red_completion.red_team_training import (
     COLLECTION_UNSUPPORTED_MOVE_EFFECTS,
     EvolutionSettlementReserveReached,
@@ -596,6 +597,38 @@ def select_native_evolution_model_venue(
     return selected
 
 
+def _native_route_11_heal_and_return(actions, reader, emulator, *, world, ground_transition):
+    """Authenticate field escape before the existing outdoor return skill.
+
+    Dig targets the observed healing anchor. The legacy training helper's
+    historical town list is not an authority for that native destination.
+    """
+    from .red_dig_recovery import plan_dig_escape, execute_dig_escape
+    from .red_training_transitions import (
+        RED_ESCAPE_WARP_TILESETS, RED_TRAINING_FLY_OUTDOOR_MAPS,
+        red_training_fly_available,
+    )
+
+    raw = reader.read()
+    if reader.read_current_map_tileset() in RED_ESCAPE_WARP_TILESETS:
+        start = Gen1TraversalObserver(reader).observe()
+        plan = plan_dig_escape(world, reader, raw, start)
+        if plan is not None:
+            # Escape must retain an executable onward return. A direct
+            # Vermilion anchor needs no Fly; other anchors use the caller's
+            # already supported outdoor transport, without broadening it.
+            if plan.anchor != int(MapId.VERMILION_CITY) and (
+                plan.anchor not in RED_TRAINING_FLY_OUTDOOR_MAPS
+                or not red_training_fly_available(raw)
+                or int(MapId.VERMILION_CITY) not in reader.read_fly_destinations()
+            ):
+                raise context.RedGoalContextError("native escape lacks its onward training return")
+            execute_dig_escape(world, reader, emulator, actions, plan)
+    return _route_11_heal_and_return(
+        actions, reader, emulator, ground_transition=ground_transition,
+    )
+
+
 def _with_native_cave_ground_recovery(venue, world):
     """Keep selected venue transport executable after a PC loan removes Dig."""
     if (
@@ -606,19 +639,26 @@ def _with_native_cave_ground_recovery(venue, world):
         return replace(venue, heal_and_return=partial(
             mansion_native_heal_and_return, world=world, legacy=venue.heal_and_return,
         ))
-    if (
-        venue.map_id != int(MapId.DIGLETTS_CAVE)
-        or venue.heal_and_return is not context.DIGLETTS_CAVE_TRAINING_VENUE.heal_and_return
-    ):
+    cave = (
+        venue.map_id == int(MapId.DIGLETTS_CAVE)
+        and venue.heal_and_return is context.DIGLETTS_CAVE_TRAINING_VENUE.heal_and_return
+    )
+    route_11 = (
+        venue.map_id == int(MapId.ROUTE_11)
+        and venue.heal_and_return is context.ROUTE_11_TRAINING_VENUE.heal_and_return
+    )
+    if not (cave or route_11):
         return venue
 
     def heal_and_return(actions, reader, emulator):
         ground = RedVermilionGroundTransition(rom=world.rom, route_world=world)
+        recovery = partial(
+            _native_route_11_heal_and_return, world=world, ground_transition=ground,
+        )
+        if route_11:
+            return recovery(actions, reader, emulator)
         return venue.heal_and_return(
-            actions, reader, emulator,
-            route_11_recovery=partial(
-                _route_11_heal_and_return, ground_transition=ground,
-            ),
+            actions, reader, emulator, route_11_recovery=recovery,
         )
 
     return replace(venue, heal_and_return=heal_and_return)
@@ -747,6 +787,30 @@ def bind_native_boxed_evolution(
         else frozenset()
     )
 
+    certified = getattr(runtime, "certified_evolution_helper_xp", False)
+    if type(certified) is not bool:
+        raise ValueError("certified helper XP mode must be an explicit boolean")
+    helper_xp_guard = None
+    if certified:
+        from .red_evolution_helper_xp import EvolutionHelperXPGuard
+        helper_xp_guard = EvolutionHelperXPGuard.from_rom(world.rom, excluded_helper_species)
+
+    def helper_exclusions(observation, *, diagnostic_headroom=False):
+        if helper_xp_guard is None:
+            return excluded_helper_species
+        # GoalObservation deliberately projects one coherent raw frame without XP.
+        # Enrich only this executor-side certificate, never the policy observation.
+        coherent = party_observation_from_raw(observation.raw)
+        rich = PokemonRedPartyReader(runtime.emulator).read()
+        if (len(rich.members) != len(coherent.members)
+                or any(replace(member, experience=None) != expected
+                       for member, expected in zip(rich.members, coherent.members))):
+            return excluded_helper_species
+        strict = helper_xp_guard.exclusions(rich, observation.raw)
+        if diagnostic_headroom:
+            return strict - helper_xp_guard.headroom_exhausted_species(rich, observation.raw)
+        return strict
+
     def allowed(observation: context.RedGoalObservation) -> bool:
         source = cast(str, spec.parameters["source_species_ref"])
         target = cast(str, spec.parameters["target_species_ref"])
@@ -760,7 +824,7 @@ def bind_native_boxed_evolution(
             sum(s.species_ref == source for s in observation.collection_observation.specimens) == 2
         )
 
-    def supported_venues(observation: context.RedGoalObservation) -> tuple[TrainingVenue, ...]:
+    def supported_venues(observation: context.RedGoalObservation, *, diagnostic_headroom=False) -> tuple[TrainingVenue, ...]:
         source_id = cast(str, spec.parameters["source_species_ref"])
         source_internal = red_internal_species_id(red_species_number(source_id))
         party = observation.party
@@ -816,7 +880,7 @@ def bind_native_boxed_evolution(
                 enemy_level=venue.band.rare_maximum_encounter_level
                 or venue.band.maximum_encounter_level,
                 resources=False,
-                excluded_helper_species=excluded_helper_species,
+                excluded_helper_species=helper_exclusions(observation, diagnostic_headroom=diagnostic_headroom),
             )
             is not None
             and all(
@@ -827,7 +891,7 @@ def bind_native_boxed_evolution(
                     level,
                     species,
                     allow_guarded_escapes=allow_guarded_venue_escapes,
-                    excluded_helper_species=excluded_helper_species,
+                    excluded_helper_species=helper_exclusions(observation, diagnostic_headroom=diagnostic_headroom),
                 )
                 for level, species in tables[venue.map_id]
             )
@@ -888,16 +952,41 @@ def bind_native_boxed_evolution(
         )
         if trainee is None:
             raise context.RedGoalContextError("native training lost its in-party precursor")
-        venues = supported_venues(runtime.adapter.observe())
+        current = runtime.adapter.observe()
+        initial_trainee_xp = None
+        current_trainee_xp = None
+        if helper_xp_guard is not None:
+            current_trainee_xp = next(
+                (member.experience for member in PokemonRedPartyReader(runtime.emulator).read().members
+                 if member.species_id == source_id), None)
+            if choice_state is not None:
+                initial_trainee_xp = choice_state.setdefault("trainee_initial_xp", current_trainee_xp)
+            else:
+                initial_trainee_xp = current_trainee_xp
+        venues = supported_venues(current)
         if not venues:
+            if (helper_xp_guard is not None and choice_state is not None
+                    and choice_state.get("helper_xp_admission_seen", False)
+                    and type(initial_trainee_xp) is int and type(current_trainee_xp) is int
+                    and current_trainee_xp > initial_trainee_xp
+                    and current.raw.battle_state == 0 and current.input_ready
+                    and not runtime.emulator.pressed_buttons
+                    and all(member.hp > 0 for member in current.party.members)):
+                blocked = (helper_exclusions(current)
+                           - helper_exclusions(current, diagnostic_headroom=True))
+                # A diagnostic counterquote can explain a pause, never authorize input.
+                if blocked and supported_venues(current, diagnostic_headroom=True):
+                    raise EvolutionHelperXPExhausted(0, initial_heals, frozenset(blocked))
             raise context.RedGoalContextError(
                 "no cartridge venue permits safe shared-experience evolution"
             )
+        if helper_xp_guard is not None and choice_state is not None:
+            choice_state["helper_xp_admission_seen"] = True
         if venue_model is not None:
             initial_heals += _restore_native_cave_venue_resources(
                 runtime, actions, source_id=source_id, venues=venues,
                 encounters=wild_tables(world.rom),
-                excluded_helper_species=excluded_helper_species,
+                excluded_helper_species=helper_exclusions(runtime.adapter.observe()),
             )
         venue_observation = None
         if venue_model is not None or observe_venue_decision is not None:
@@ -923,7 +1012,7 @@ def bind_native_boxed_evolution(
                 venue_observation, rom=world.rom, source_id=source_id, target_id=target_id,
                 venues=venues, model=venue_model, model_sha256=venue_model_sha256,
                 choice_state=choice_state, actions=actions,
-                excluded_helper_species=excluded_helper_species,
+                excluded_helper_species=helper_exclusions(venue_observation),
                 allow_guarded_escapes=allow_guarded_venue_escapes,
             )
             venues = (selected,)
@@ -967,8 +1056,21 @@ def bind_native_boxed_evolution(
                 evolution_stop_requested=runtime.evolution_stop_requested,
                 report_label="native bounded collection evolution",
                 checkpoint_count=1,
+                **({"collection_helper_xp_guard": helper_xp_guard}
+                   if helper_xp_guard is not None else {}),
                 **native_evolution_training_diagnostics(actions),
             )
+        except EvolutionHelperXPExhausted as paused:
+            final_trainee_xp = next(
+                (member.experience for member in PokemonRedPartyReader(runtime.emulator).read().members
+                 if member.species_id == source_id), None)
+            if (type(initial_trainee_xp) is not int or type(final_trainee_xp) is not int
+                    or final_trainee_xp <= initial_trainee_xp):
+                raise context.RedGoalContextError(
+                    "helper headroom pause requires verified trainee XP progress") from paused
+            raise EvolutionHelperXPExhausted(
+                paused.battles, paused.healing_trips + initial_heals,
+                paused.blocked_helpers) from paused
         except EvolutionTrainingPaused as paused:
             record = getattr(actions, "record_diagnostic_event", None)
             if callable(record):
@@ -1045,6 +1147,10 @@ def bind_native_boxed_evolution(
                     battles + paused.battles,
                     heals + paused.healing_trips,
                 ) from paused
+            except EvolutionHelperXPExhausted as paused:
+                raise EvolutionHelperXPExhausted(
+                    battles + paused.battles, heals + paused.healing_trips,
+                    paused.blocked_helpers) from paused
             except EvolutionTrainingPaused as paused:
                 battles += paused.battles
                 heals += paused.healing_trips
@@ -1100,6 +1206,8 @@ def bind_native_boxed_evolution(
                 "target_species_ref": spec.parameters["target_species_ref"],
                 "settlement_reserve_reached": isinstance(paused, EvolutionSettlementReserveReached),
                 "wall_limit_reached": isinstance(paused, EvolutionWallLimitReached),
+                **({"helper_xp_headroom_exhausted": True}
+                   if isinstance(paused, EvolutionHelperXPExhausted) else {}),
                 **(
                     {
                         "training_venue_exhausted": True,
@@ -1253,7 +1361,7 @@ def bind_native_boxed_evolution(
                         context.MANSION_TEAM_POLICY,
                         enemy_level=venue.band.rare_maximum_encounter_level
                         or venue.band.maximum_encounter_level,
-                        excluded_helper_species=excluded_helper_species,
+                        excluded_helper_species=helper_exclusions(retained),
                     )
                 )
                 is not None

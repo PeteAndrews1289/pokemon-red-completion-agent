@@ -111,7 +111,7 @@ def test_partial_admission_does_not_bypass_native_or_report_checks(monkeypatch, 
     assert binding.verify(report).failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
 
 
-@pytest.mark.parametrize("binding_type", ["bounded", "routed", "member"])
+@pytest.mark.parametrize("binding_type", ["bounded", "routed", "member", "member_direct"])
 @pytest.mark.parametrize("fault", [None, "schema", "terminal", "target", "xp", "count", "bool",
                                   "ref", "reason", "error", "battle", "input", "pressed",
                                   "lost_specimen", "lost_objective", "cost", "unknown_trainee"])
@@ -132,7 +132,7 @@ def test_only_certified_incomplete_preparation_permits_next_choice(binding_type,
                    target_reached=False, fully_restored=True, stop_reason="encounter_limit",
                    terminal_sha256=after.sha256)
     binding = _binding(GoalKind.DEVELOP_TEAM,
-                       binding_ref=f"pokemon.red:{binding_type}-preparation:abc", calls=[])
+                       binding_ref=f"pokemon.red:{'member' if binding_type == 'member_direct' else binding_type}-preparation:abc", calls=[])
     error, reason = None, GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
     if fault == "schema":
         receipt["schema"] = "unknown"
@@ -165,10 +165,22 @@ def test_only_certified_incomplete_preparation_permits_next_choice(binding_type,
     elif fault == "unknown_trainee":
         receipt["trainee_ref"] = "another"
     evidence = dict(bounded_partial_preparation=receipt)
-    if binding_type != "bounded":
+    if binding_type in {"routed", "member"}:
         evidence = dict(mechanic="routed_preparation", support="cartridge_route_then_fresh_binding",
                         preparation=evidence)
+    if fault == "routed_mechanic":
+        evidence["mechanic"] = "unknown"
+    elif fault == "routed_support":
+        evidence["support"] = "unknown"
+    elif fault == "routed_payload":
+        evidence["preparation"] = None
     report = GoalExecutionReport(2, 20, evidence)
     verdict = GoalVerification.failed(reason)
     admitted = ordinary_player_setback(binding, before, after, report, verdict, error)
     assert admitted is (fault is None)
+
+
+@pytest.mark.parametrize("binding_type", ["routed", "member", "member_direct"])
+@pytest.mark.parametrize("fault", ["routed_mechanic", "routed_support", "routed_payload"])
+def test_malformed_routed_member_evidence_never_falls_back_to_direct_partial(binding_type, fault):
+    test_only_certified_incomplete_preparation_permits_next_choice(binding_type, fault)

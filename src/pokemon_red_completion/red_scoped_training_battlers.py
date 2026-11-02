@@ -123,7 +123,7 @@ class ScopedTrainingBattlers:
             or wild.development_preparation_scope.train_admission != admission
             or story.development_story_scope.train_admission != admission):
             raise ValueError("production TRAIN pool actor ownership differs")
-        wild.wild_authority(15)
+        wild.wild_authority(admission.wild_map_id)
         contract = story.development_story_scope.contract
         story.require_story_contract(contract)
         return cls(wild, contracts=(contract,), output=output,
@@ -152,7 +152,7 @@ class ScopedTrainingBattlers:
                 or len(contracts) != 1 or len(story_overrides) != 1
                 or not callable(getattr(production_reader, "read", None))):
                 raise ValueError("production TRAIN pool declaration differs")
-            prototype.wild_authority(15)
+            prototype.wild_authority(production_admission.wild_map_id)
         if (
             type(prototype) is not FrozenTrainerBattler
             or type(prototype.calls) is not int or prototype.calls != 0
@@ -284,7 +284,7 @@ class ScopedTrainingBattlers:
         for actor in self._actors:
             if self._production_admission is not None:
                 if actor.train_story_contract is None:
-                    actor.wild_authority(15)
+                    actor.wild_authority(self._production_admission.wild_map_id)
                 else:
                     actor.require_train_story_scope()
             if actor.train_risk_story_scope is not None:

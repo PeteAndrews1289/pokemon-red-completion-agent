@@ -1640,7 +1640,20 @@ class RedEncounterDiscoveryGoalProvider:
                 if verdict.status is GoalDecisionOutcome.SUCCEEDED else verdict
             )
 
-        return replace(offer, binding=replace(binding, verify=verify))
+        from .provenance import canonical_sha256
+
+        # Execution/configuration identities change on renewal; local sighting
+        # knowledge does not. These private keys never enter policy features.
+        objective = (
+            {"unseen_local_species": sorted(set(self.source_species_numbers) - initially_seen)}
+            if self.source_species_numbers is not None
+            else {"local_coverage": "unknown", "seen_target_numbers": sorted(initially_seen)}
+        )
+        return replace(offer, binding=replace(
+            binding, verify=verify,
+            search_source_ref=f"pokemon.red:discovery:{self.source_id}",
+            search_objective_sha256=canonical_sha256(objective),
+        ))
 
 
 @dataclass(frozen=True, slots=True)
@@ -1784,8 +1797,9 @@ class RedAreaSurveyGoalProvider:
                 self.area_executor,
                 policy=self.policy,
                 catalog=self.catalog,
-                safety_check=lambda: all(
-                    member.hp > 0 for member in self.adapter.observe().party.members
+                safety_check=lambda: (
+                    not getattr(self.area_executor, "capture_health_stopped", False)
+                    and all(member.hp > 0 for member in self.adapter.observe().party.members)
                 ),
                 capture_resources_available=lambda: any(
                     quantity > 0 and item in _ORDINARY_CAPTURE_ITEMS
@@ -1846,6 +1860,8 @@ class RedAreaSurveyGoalProvider:
                     "bounded": True,
                     **survey_evidence,
                     "capture_survey": survey_evidence,
+                    **({"capture_health_stopped": True}
+                       if getattr(self.area_executor, "capture_health_stopped", False) else {}),
                     "capture_diagnostics": dict(
                         schema="pokemon.red.capture-survey-diagnostics.v1",
                         diagnostic_only=True,
@@ -1950,6 +1966,28 @@ class RedAreaSurveyGoalProvider:
             if before_story.difference(after_story):
                 return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
             if report.evidence.get("safety_stopped") is True:
+                if report.evidence.get("capture_health_stopped") is True:
+                    from .party import StatusCondition
+
+                    # Do not admit an arbitrary marker or protected-state drift.
+                    # The completed ordinary-wild escape and fresh observation
+                    # must both show the same missing capture capability.
+                    settled_health_stop = (
+                        getattr(self.area_executor, "capture_health_stopped", False) is True
+                        and report.evidence.get("bounded") is True
+                        and report.actions_executed > 0 and report.frames_executed > 0
+                        and type(report.evidence.get("captures")) is int
+                        and report.evidence["captures"] == 0
+                        and not after.raw.battle_state and after.input_ready
+                        and not any(member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
+                                    for member in after.party.members)
+                        and (after.collection_observation == observation.collection_observation
+                             or verified_incidental_evolution(after))
+                    )
+                    return GoalVerification.failed(
+                        GoalFailureReason.RESOURCE_LOST if settled_health_stop
+                        else GoalFailureReason.OUTCOME_NOT_VERIFIED
+                    )
                 return GoalVerification.failed(
                     GoalFailureReason.RESOURCE_LOST
                     if not after.raw.battle_state

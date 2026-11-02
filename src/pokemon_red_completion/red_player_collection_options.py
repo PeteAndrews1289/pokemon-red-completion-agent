@@ -34,6 +34,7 @@ from .red_living_dex_wild_corridor import (
     RedLivingDexWildCorridor,
     bind_red_capture_search_budget_profile,
     bind_red_capture_weakening_profile,
+    bind_red_local_discovery_profile,
 )
 from .red_npc_trade_options import npc_trade_bindings
 from .red_player_field_goals import _field_ready
@@ -88,6 +89,7 @@ def bind_player_collection_capabilities(
     add_capture_preparation_support=True,
     include_fly_transport=False,
     include_dig_departure=False,
+    discovery_rom: bytes | None = None,
 ):
     """Opt an existing player runtime into its existing collection executors.
 
@@ -123,6 +125,13 @@ def bind_player_collection_capabilities(
             providers=tuple(sorted(providers, key=lambda row: tuple(GoalKind).index(row[0]))),
         )
     )
+    if discovery_rom is not None:
+        # Bind the existing discovery source, which need not be the seed. This
+        # declares cartridge coverage, not a destination or strategic preference.
+        discovery = next(spec for spec in profile.providers if spec.kind is GoalKind.EXPLORE)
+        profile = bind_red_local_discovery_profile(
+            profile, str(discovery.parameters["source_id"]), discovery_rom,
+        )
     profile = bind_observed_local_capture_profile(
         bind_capture_surf_profile(bind_capture_cut_profile(profile))
     )

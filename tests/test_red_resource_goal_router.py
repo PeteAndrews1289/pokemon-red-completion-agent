@@ -1042,3 +1042,27 @@ def test_unopted_or_outdoor_capture_preserves_original_destination_provider(indo
                         observed_local_capture=observed))
     provider = object()
     assert routing._observed_capture_destination_provider(None, spec, provider) is provider
+
+
+@pytest.mark.parametrize("allowed", [False, True])
+def test_ordinary_resource_route_reuses_whole_party_settled_owner(fixture, monkeypatch, allowed):
+    from pokemon_red_completion import red_routed_recovery as recovery
+
+    f = fixture
+    f.router.runtime.resource_wild_faint_recovery = allowed
+    calls = []
+    original = recovery.guarded_collection_route_handler
+
+    def guard(*args, **kwargs):
+        handler = original(*args, **kwargs)
+        calls.append(handler)
+        assert handler.allow_wild_faints is True
+        assert handler.inner._wild.allow_party_faints is True
+        assert handler.inner._wild.emulator is f.port
+        return handler
+
+    monkeypatch.setattr(recovery, "guarded_collection_route_handler", guard)
+    before = f.port.frame_count
+    assert _supply(f.router.enumerate(f.adapter.observe())).kind is GoalKind.RESUPPLY
+    assert len(calls) == int(allowed)
+    assert f.actions.actions_executed == 0 and f.port.frame_count == before

@@ -2021,3 +2021,32 @@ def test_red_encounter_source_development_rejects_invalid_fresh_boundary() -> No
 
     with pytest.raises(RedGoalSkillError, match="invalid fresh boundary evidence"):
         offer.binding.verify(offer.binding.execute())
+
+
+def test_discovery_history_identity_ignores_unrelated_progress_but_tracks_local_knowledge():
+    from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    provider = RedEncounterDiscoveryGoalProvider(
+        "wild:Route1:grass", _DiscoveryExecutor(reader, actions), actions, port, adapter,
+        source_species_numbers=(9, 16, 19))
+    first = provider.offer(adapter.observe()).binding
+    assert first is not None and first.tracks_search_effort
+    memory = GoalSearchMemory()
+    memory.record(first.search_memory_source, first.search_objective_sha256,
+                  exhausted=True, actions=7, frames=99)
+    reader.pokedex = replace(reader.pokedex, seen_species=frozenset({9, 25}),
+                             owned_species=frozenset({9, 25}))
+    changed = replace(provider, maximum_seek_steps=123).offer(adapter.observe()).binding
+    assert changed.search_memory_source == first.search_memory_source
+    assert changed.search_objective_sha256 == first.search_objective_sha256
+    assert memory.lookup(changed.search_memory_source, changed.search_objective_sha256).attempts == 1
+    reader.pokedex = replace(reader.pokedex, seen_species=frozenset({9, 16, 25}))
+    remaining = provider.offer(adapter.observe()).binding
+    assert remaining.search_objective_sha256 != first.search_objective_sha256
+    assert memory.lookup(remaining.search_memory_source, remaining.search_objective_sha256).attempts == 0
+    other = replace(provider, source_id="wild:Route2:grass").offer(adapter.observe()).binding
+    assert other.search_memory_source != remaining.search_memory_source
+    assert actions.actions_executed == 0

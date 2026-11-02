@@ -16,6 +16,7 @@ def fixture(
         events[event // 8] |= 1 << (event % 8)
     raw = N(map_id=room, event_flags=bytes(events), status_flags_1=0)
     rt = N(
+        emulator=N(save_state_bytes=lambda: b"unchanged-observation", frame_count=0),
         reader=N(
             read=lambda: raw,
             read_ss_anne_rival_script=lambda: script,
@@ -153,7 +154,7 @@ def test_cerulean_fossil_gate_requires_its_actual_readable_map(monkeypatch, faul
     if fault != "map":
         raw.event_flags = None if fault == "missing_events" else b"\x00"
     assert p.cerulean_arrival_story_option(
-        rt, N(), route=route, battler=actor, combat_levels=(16,)
+        rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,)
     ) is None
     assert not any(name in {"story_battle_binding", "fossil_pickup_binding"} for name, _ in calls)
 
@@ -165,7 +166,7 @@ def test_cerulean_arrival_reuses_exact_scripted_guard_without_completion(monkeyp
     monkeypatch.setattr(
         p, "story_battle_binding", lambda *a, **k: calls.append(("battle", k)) or binding
     )
-    row = p.cerulean_arrival_story_option(rt, N(), route=route, battler=actor, combat_levels=(16,))
+    row = p.cerulean_arrival_story_option(rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,))
     assert row[0].story_objective_ref == "reach_cerulean" and row[1].opposition_known
     kwargs = calls[-1][1]
     assert kwargs["battler"] is actor and kwargs["scripted_fossil_guard"] is True
@@ -179,7 +180,7 @@ def test_cerulean_arrival_after_guard_reuses_pickup_not_a_battle(monkeypatch):
         flags=(int(p.EventFlag.BEAT_MT_MOON_EXIT_SUPER_NERD),)
     )
     monkeypatch.setattr(p, "fossil_pickup_binding", lambda *a, **k: binding)
-    row = p.cerulean_arrival_story_option(rt, N(), route=route, battler=actor, combat_levels=(16,))
+    row = p.cerulean_arrival_story_option(rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(16,))
     assert row[0].story_objective_ref == "reach_cerulean" and not row[1].opposition_known
     assert not any(name == "story_battle_binding" for name, _ in calls)
 

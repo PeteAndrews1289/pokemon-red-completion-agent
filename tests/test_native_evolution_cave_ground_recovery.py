@@ -97,8 +97,8 @@ def test_native_builtin_cave_binds_existing_router_to_recovery(monkeypatch):
     candidate.heal_and_return(*ports)
     assert calls[0][0] == ports
     callback = calls[0][1]["route_11_recovery"]
-    assert callback.func is n._route_11_heal_and_return
-    assert callback.keywords == dict(ground_transition=route)
+    assert callback.func is n._native_route_11_heal_and_return
+    assert callback.keywords == dict(world=world, ground_transition=route)
 
 
 def test_explicit_custom_cave_recovery_is_preserved():
@@ -107,8 +107,8 @@ def test_explicit_custom_cave_recovery_is_preserved():
     assert n._with_native_cave_ground_recovery(custom, object()) is custom
 
 
-def test_other_venues_keep_their_exact_recovery():
-    base = n.context.ROUTE_11_TRAINING_VENUE
+def test_custom_route_11_keeps_its_exact_recovery():
+    base = replace(n.context.ROUTE_11_TRAINING_VENUE, heal_and_return=lambda *_args: None)
     assert n._with_native_cave_ground_recovery(base, object()) is base
 
 

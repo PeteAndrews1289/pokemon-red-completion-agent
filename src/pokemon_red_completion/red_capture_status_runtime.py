@@ -54,6 +54,7 @@ class CaptureStatusDrift(StrEnum):
     BAG_ITEMS = "capture_status.bag_items"
     ORIGINAL_SPECIES = "capture_status.original_species"
     DISPLAYED_SPECIES = "capture_status.displayed_species"
+    NO_HEALTHY_CATCHER = "capture_status.no_healthy_catcher"
 
 
 class RedCaptureStatusError(RuntimeError):
@@ -336,7 +337,10 @@ class RedCaptureStatusPreparer:
             if member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
         ]
         if not healthy:
-            raise RedCaptureStatusError("capture preparation has no healthy catcher")
+            raise RedCaptureStatusError(
+                "capture preparation has no healthy catcher",
+                reason_code=CaptureStatusDrift.NO_HEALTHY_CATCHER,
+            )
         # The low-level status helper is not left to absorb repeated failed-ball
         # turns. Switching can consume sleep turns; do not claim status persists.
         catcher = max(healthy, key=lambda member: (member.hp, member.level))

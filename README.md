@@ -10,18 +10,19 @@ autonomous or pixel-only player.
 - Supported DEVELOPMENT ancestries completed Champion/Hall of Fame and124 declared
   registrations. Repairs and assistance remain disclosed.
 - Scoped local models demonstrate preparation, stopping, recovery and battle wins.
-- The shared public entry now progresses Bill/rival/Cut and10→12 registrations
-  from a preserved checkpoint, with8 repair relaunches and6m15s native-player time.
+- A matched Forest comparison chooses and beats the trainer, then reaches Brock
+  in18choices versus89. A separate repaired midgame copy reaches77/124.
 - Historical finite two-worker capacity checks passed; all game runs are paused.
 
 [Latest lessons](docs/project-lessons-2026-10-28.md) ·
-[Seven goals](docs/seven-goals.md) · [Native scoreboard](docs/work-sessions/2026-10-28-play-first.md)
+[Seven goals](docs/seven-goals.md) · [Native scoreboard](docs/work-sessions/2026-10-30-forest-decision.md)
 
 ## What is not solved
 
-Capture support repeatedly knocks out intended catches. Supplier coverage has a
-frozen, unrun correction. Numerical fit passes and scoped wins do not establish
-broad autonomous reliability. Fresh same-save Champion/HOF+124 and the declared
+The latest original midgame test stopped on a productive-evolution verification
+mismatch; the repair passed focused tests and a short exact-tail continuation.
+Story-interaction learning and training-venue cost sensitivity remain gaps.
+Numerical fit passes and scoped wins do not establish broad autonomous reliability. Fresh same-save Champion/HOF+124 and the declared
 repeated-run gate remain unproved; later games stay behind Red.
 
 The source snapshot has known lint/type debt. The current player also depends on

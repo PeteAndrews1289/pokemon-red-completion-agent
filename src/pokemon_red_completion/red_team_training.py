@@ -1255,6 +1255,7 @@ def run_red_team_balancing(
     collection_shared_experience: bool = False,
     collection_encounters: Mapping[int, Sequence[tuple[int, int]]] | None = None,
     excluded_collection_helper_species: frozenset[int] = frozenset(),
+    collection_helper_xp_guard: object | None = None,
     evolution_battle_quantum: int | None = None,
     evolution_stop_requested: Callable[[], bool] | None = None,
     development_target_species_id: int | None = None,
@@ -1282,6 +1283,13 @@ def run_red_team_balancing(
     if type(collection_shared_experience) is not bool:
         raise ValueError("collection shared-experience mode must be boolean")
     validate_collection_helper_exclusions(excluded_collection_helper_species)
+    if collection_helper_xp_guard is not None:
+        from .red_evolution_helper_xp import EvolutionHelperXPGuard
+        if type(collection_helper_xp_guard) is not EvolutionHelperXPGuard:
+            raise ValueError("typed cartridge helper XP guard required")
+        if not collection_shared_experience or evolution_target is None:
+            raise ValueError("helper XP guard requires selected shared-XP evolution")
+        collection_helper_xp_guard.require_scope(excluded_collection_helper_species)
     if excluded_collection_helper_species and not collection_shared_experience:
         raise ValueError("helper exclusions require collection shared-experience mode")
     if collection_encounters is not None:
@@ -1646,6 +1654,10 @@ def run_red_team_balancing(
 
     while True:
         party = party_reader.read()
+        if collection_helper_xp_guard is not None:
+            # Fresh before every encounter/XP commitment, never once per quantum.
+            excluded_collection_helper_species = collection_helper_xp_guard.exclusions(
+                party, reader.read())
         if collection_shared_experience:
             require_zero_faints(party_reader, "collection training boundary")
         progress = TeamTrainingProgress(
@@ -1889,6 +1901,25 @@ def run_red_team_balancing(
             else:
                 target_band = choose_grinding_area(bands, trainee, policy)
             if target_band is None:
+                if (collection_helper_xp_guard is not None and battles > 0
+                        and collection_encounters is not None
+                        and reader.read().battle_state == 0
+                        and reader.read_input_readiness().ready
+                        and getattr(emulator, "pressed_buttons", None) == frozenset()):
+                    blocked = collection_helper_xp_guard.headroom_exhausted_species(
+                        party, reader.read())
+                    diagnostic_exclusions = excluded_collection_helper_species - blocked
+                    if blocked and any(
+                        venue.band.has_nearby_healer and collection_encounter_coverage(
+                            party, trainee.species_id, policy,
+                            collection_encounters[venue.map_id], resources=False,
+                            escape_species=volatile_enemy_species | escort_enemy_species,
+                            excluded_helper_species=diagnostic_exclusions)
+                        for venue in venues
+                    ):
+                        from .red_evolution_helper_xp import EvolutionHelperXPExhausted
+                        raise EvolutionHelperXPExhausted(
+                            battles, healing_trips, frozenset(blocked))
                 raise RuntimeError(f"No provided venue suits precursor at level {trainee.level}.")
             current_venue = next(v for v in venues if v.band == target_band)
             venue_projection = (

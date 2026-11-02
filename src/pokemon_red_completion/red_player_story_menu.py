@@ -7,7 +7,7 @@ The mixed menu orders all rows neutrally and the model owns selection.
 
 from collections.abc import Mapping
 from contextlib import nullcontext
-from dataclasses import replace
+from dataclasses import dataclass, replace
 
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
 from .goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
@@ -63,6 +63,44 @@ def registered_story_branches(runtime, actions, *, observers):
     return tuple(rows)
 
 
+@dataclass(frozen=True, slots=True)
+class DeclaredCashDemand:
+    """Priced, disjoint current reserve scopes; not all future game expenses.
+
+    A missing component remains unknown. Its known peers still form a useful
+    lower bound, but cannot certify that the declared aggregate is fulfilled.
+    No affordability, route, reward, priority or learned outcome is inferred.
+    """
+
+    components: tuple[tuple[str, int | None], ...]
+
+    def __post_init__(self):
+        if (type(self.components) is not tuple or not self.components
+                or any(type(row) is not tuple or len(row) != 2 for row in self.components)):
+            raise ValueError("cash demand components must be immutable pairs")
+        scopes = tuple(scope for scope, _ in self.components)
+        if (any(scope not in {"capture", "recovery"} for scope in scopes)
+                or len(set(scopes)) != len(scopes)):
+            raise ValueError("cash demand needs unique disjoint supported scopes")
+        if any(value is not None and (type(value) is not int or value < 0)
+               for _, value in self.components):
+            raise ValueError("cash demand component must be a non-negative integer or unknown")
+
+    @property
+    def target_cash(self):
+        return sum(value for _, value in self.components if value is not None)
+
+    @property
+    def known(self):
+        return all(value is not None for _, value in self.components)
+
+    def public_dict(self):
+        return dict(schema="pokemon.red.declared-cash-demand.v1",
+                    components=dict(self.components), target_cash=self.target_cash,
+                    declared_scopes_known=self.known,
+                    all_future_expenses_known=False)
+
+
 class NativeStoryBranchInventory:
     """Keep the native player's callbacks on one freshly observed menu.
 
@@ -80,9 +118,12 @@ class NativeStoryBranchInventory:
                  enumerate_collection=None, reuse_local_route_queries=False,
                  enumerate_league_healing=None, enumerate_league_capacity=None,
                  enumerate_owned_machines=None, observe_matchups=None, observe_preparation_party=None,
-                  enumerate_empty_recovery=None):
+                  enumerate_empty_recovery=None, observe_cash_target=None):
         if not callable(enumerate_base) or not callable(enumerate_branches):
             raise TypeError("native branch inventory needs callable observers")
+        if observe_cash_target is not None and not callable(observe_cash_target):
+            raise TypeError("cash target observer must be callable")
+        self.observe_cash_target = observe_cash_target
         self.enumerate_base = enumerate_base
         self.enumerate_branches = enumerate_branches
         if enumerate_preparation is not None and not callable(enumerate_preparation):
@@ -340,6 +381,23 @@ class NativeStoryBranchInventory:
         result=self.observe_preparation_party(runtime,bindings,supplements,boundary)
         self._current(runtime)
         return result
+
+    def cash_target_context(self, runtime, actions, context):
+        """Read declared demand only; never change bindings, safety or ordering."""
+        if self.observe_cash_target is None:
+            return context
+        target = self.observe_cash_target(runtime, actions)
+        if type(target) is DeclaredCashDemand:
+            amount, known = target.target_cash, target.known
+        else:
+            if target is not None and (type(target) is not int or target < 0):
+                raise ValueError("cash demand must be a non-negative integer or unknown")
+            amount, known = (0 if target is None else target), target is not None
+        if context.economy_snapshot is None:
+            raise ValueError("cash demand observation requires measured cash")
+        # Knownness describes the declared scopes, never every future expense.
+        # An incomplete typed quote retains its proven positive lower bound.
+        return replace(context, target_cash=amount, cash_target_known=known)
 
     def native_callbacks(self):
         """Keep enumeration and descriptors together for the existing native loop."""

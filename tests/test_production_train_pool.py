@@ -254,7 +254,7 @@ def test_consequence_bridge_binds_exact_native_target_and_preserves_failed_prefi
         assert loaded.row.provenance=="synthetic"  # Never a fit-eligible native proof from a unit fixture.
 
 
-@pytest.mark.parametrize("admission",[None,object()])
+@pytest.mark.parametrize("admission",[None,N(wild_map_id=15)])
 def test_helper_cannot_fall_back_to_k_under_explicit_train(admission):
     helper=Path(__file__).resolve().parents[1]/"runtime_helpers/red_whole_player_inventory_20261006.py"
     tree=ast.parse(helper.read_text());assembly=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=="assembly")

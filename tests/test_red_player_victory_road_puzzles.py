@@ -288,6 +288,9 @@ def test_indigo_route_stops_at_next_map_and_only_arrival_can_complete(monkeypatc
         finishes=True,
     )
     assert not calls and a.actions_executed == 0
+    from pokemon_red_completion.player_option_story_unit import OptionStoryUnit
+    assert binding.story_unit == OptionStoryUnit("movement", intermediate)
+    assert binding.story_approach_only is intermediate
     report = binding.execute()
     assert calls[0] == (target, at)
     assert report.evidence["objective_completed"] is (not intermediate)
@@ -373,3 +376,21 @@ def test_blocked_cave_exit_keeps_original_puzzle_fallback(monkeypatch, puzzle_av
     ) is result
     assert puzzles == [("third-switch", contract, s.OBJECTIVE)]
     assert not calls and actions.actions_executed == 0 and state.payload == b"source"
+
+
+@pytest.mark.parametrize("phase", ["first-switch", "second-switch", "third-switch",
+                                    "boulder-drop", "final-switch"])
+def test_strength_puzzle_certifies_only_intermediate_interaction(monkeypatch, phase):
+    from pokemon_red_completion.player_option_story_unit import (
+        OptionStoryUnit, story_unit_vector,
+    )
+    rt, actions, route, _, state, calls = fixture(monkeypatch)
+    plan = N(steps=(object(),), cost=2, explored_states=3)
+    monkeypatch.setattr(s, "_puzzle_plan", lambda *_: (plan, object()))
+    binding, challenge = s._puzzle_option(rt, actions, route, phase, object(), None)
+    assert binding.story_unit == OptionStoryUnit("interaction", True)
+    assert story_unit_vector(binding.story_unit) == (1., 0., 1., 1.)
+    assert binding.story_approach_only is True
+    assert binding.story_objective_ref == s.OBJECTIVE
+    assert challenge.combat_required is False
+    assert state.payload == b"source" and actions.actions_executed == 0 and not calls

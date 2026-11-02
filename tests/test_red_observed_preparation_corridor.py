@@ -220,3 +220,81 @@ def test_observed_transport_retains_exact_existing_recovery_destination(monkeypa
     event=records[0][1]
     assert event['recovery_map']==HOME and event['recovery_at']==(3,3)
     assert event['return_quote_steps']==1 and len(calls)==2
+
+
+# A real Route15 arrival lands in a grassless western component; its existing
+# composed route passes through the gate and returns to the same map. This
+# synthetic fixture proves that boundary contract without loading a ROM/guest.
+def component_passage_fixture(monkeypatch, *, bridge=True):
+    run, route, world, raw, calls, records, emulator = setup_transport(monkeypatch)
+    t = world.terrain[TARGET]
+    world.terrain[TARGET] = replace(t, grass=tuple(
+        tuple(value and x >= 3 for x, value in enumerate(row)) for row in t.grass))
+    original = world._quote
+    def composed(start, goal_map, goal_at, blocked):
+        if bridge and goal_map == TARGET and start.map_id == TARGET and start.at[1] < 3 and goal_at == (3, 4):
+            return NS(terminal_map=TARGET, terminal_at=(3, 4), terminal_mode="land",
+                      steps=("ordinary-gate-entry", "ordinary-gate-return"))
+        return original(start, goal_map, goal_at, blocked)
+    monkeypatch.setattr(world, "_quote", composed)
+    return run, route, world, raw, calls, records, emulator
+
+
+def test_grassless_entry_component_uses_existing_composed_route_and_fresh_pair(monkeypatch):
+    run, route, world, raw, calls, records, _ = component_passage_fixture(monkeypatch)
+    actual = run()
+    assert actual == preferred()
+    assert calls == [(TARGET, preferred().origin_at), (TARGET, preferred().origin_at)]
+    assert world.observed_maps == [TARGET, TARGET]
+    assert world.quotes[:2] == [(TARGET, TARGET, preferred().origin_at), (TARGET, HOME, (3, 3))]
+    assert records[0][1]["component_passage_used"] is True
+    assert records[0][1]["component_passage_quote_steps"] == 2
+    assert records[0][1]["encounter_search_and_leg_caps_unchanged"] is True
+
+
+def test_grassless_entry_without_composed_path_still_refuses_without_input(monkeypatch):
+    run, _, _, _, calls, records, _ = component_passage_fixture(monkeypatch, bridge=False)
+    with pytest.raises(RedLivingDexWildCorridorError, match="no unobstructed") as caught:
+        run()
+    assert isinstance(caught.value.__cause__, RoutePlanningError)
+    assert str(caught.value.__cause__) == "synthetic local route unavailable"
+    assert calls == [] and records == []
+
+
+def test_component_passage_requires_proven_recovery_before_transport(monkeypatch):
+    run, _, world, _, calls, records, _ = component_passage_fixture(monkeypatch)
+    world.fail_return = True
+    with pytest.raises(RoutePlanningError, match="synthetic return route unavailable"):
+        run()
+    assert calls == [] and records == []
+
+
+def test_failed_component_transport_is_not_retried_or_reclassified(monkeypatch):
+    run, _, _, _, calls, records, _ = component_passage_fixture(monkeypatch)
+    error = RuntimeError("paid composed passage failed")
+    with pytest.raises(RuntimeError) as caught:
+        run(fail_call=error)
+    assert caught.value is error and len(calls) == 1 and records == []
+
+
+def test_globally_unsafe_pair_does_not_enable_component_transport(monkeypatch):
+    run, _, world, _, calls, records, _ = component_passage_fixture(monkeypatch)
+    t = world.terrain[TARGET]
+    world.terrain[TARGET] = replace(t, grass=tuple((False,) * t.width for _ in range(t.height)))
+    with pytest.raises(RedLivingDexWildCorridorError, match="no unobstructed"):
+        run()
+    assert calls == [] and records == []
+
+
+def test_component_arrival_reobserves_unsettled_control_before_final_lane(monkeypatch):
+    run, _, world, raw, calls, records, emulator = component_passage_fixture(monkeypatch)
+    original = world.with_current_observation
+    def observed(reader):
+        result = original(reader)
+        if len(world.observed_maps) == 2:
+            raw.battle_state = 1
+        return result
+    monkeypatch.setattr(world, "with_current_observation", observed)
+    with pytest.raises(ValueError, match="observation changed"):
+        run()
+    assert len(calls) == 1 and records == []

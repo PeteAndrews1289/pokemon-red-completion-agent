@@ -152,6 +152,7 @@ def test_observed_switch_controls_only_mechanics_not_story_completion(
     binding, challenge = s.mansion_secret_key_option(rt, actions, None, route=route)
     assert not calls and actions.actions_executed == rt.emulator.frame_count == 0
     assert not challenge.opposition_known and binding.story_objective_ref == s.OBJECTIVE
+    assert binding.story_approach_only is True
     assert binding.verify(None).status is GoalDecisionOutcome.FAILED
     report = binding.execute()
     assert calls == [expected] and state.switch is not switch
@@ -172,6 +173,7 @@ def test_native_floor_drop_must_match_exact_terminal_without_toggling(monkeypatc
     assert raw.map_id == int(MapId.POKEMON_MANSION_1F)
     assert (raw.player_y, raw.player_x) == s.DROP_TERMINAL and state.switch
     assert report.evidence["support"] == "observed_mansion_floor_drop"
+    assert binding.story_approach_only is True
     assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
 
 
@@ -384,6 +386,7 @@ def test_selected_restoration_opens_exit_without_key_or_story_selection(
     monkeypatch.setattr(goals, "routed_restoration_binding", nurse)
     bag = raw.bag_items
     binding = s.mansion_restoration_binding(rt, actions, route=route)
+    assert binding.story_approach_only is False
     assert binding.kind is s.GoalKind.RESTORE_TEAM and binding.story_objective_ref is None
     assert binding.maximum_cash_debit == 0
     assert not calls and not quoted and actions.actions_executed == rt.emulator.frame_count == 0
@@ -443,6 +446,7 @@ def test_mansion_restoration_retains_departure_or_nurse_failures(monkeypatch, fa
         goals, "routed_restoration_binding", lambda *a, **k: None if fault == "no_nurse" else nurse
     )
     binding = s.mansion_restoration_binding(rt, actions, route=route)
+    assert binding.story_approach_only is False
     if fault == "stale":
         state.payload = b"changed"
         with pytest.raises(ValueError, match="stale"):
@@ -558,3 +562,82 @@ def test_statue_already_target_or_missing_effect_is_not_success(monkeypatch):
     with pytest.raises(s.BlaineChapterError, match="did not toggle"):
         s._toggle_statue(N(), reader, N(), expected=True)
     assert pulses.count(s.MacroActionKind.CONFIRM) == 16
+
+
+@pytest.mark.parametrize(
+    "mode",
+    ["source_wild", "landing_wild", "deferred", "never_drop", "trainer",
+     "wrong_map", "wrong_coordinate", "escape_failure", "cash_after_escape"],
+)
+def test_drop_settles_only_exact_native_floor_transition(monkeypatch, mode):
+    rt, actions, route, raw, state, calls = setup(
+        monkeypatch, map_id=int(MapId.POKEMON_MANSION_3F), switch=True
+    )
+    pulses, escapes = [], []
+    monkeypatch.setattr(s, "_field_ready", lambda _: state.ready and not raw.battle_state)
+
+    def pulse(executor, kind, value=None, *, frames):
+        pulses.append((kind, value))
+        executor.actions_executed += 1
+        rt.emulator.frame_count += frames
+        state.payload = b"drop-transition"
+        if kind is s.MacroActionKind.MOVE:
+            assert value == "down" and len(pulses) == 1
+            raw.player_y, raw.player_x = s.DROP_TERMINAL
+            raw.map_id = int(MapId.POKEMON_MANSION_3F)
+            if mode == "landing_wild":
+                raw.map_id = int(MapId.POKEMON_MANSION_1F)
+            if mode == "wrong_map":
+                raw.map_id = int(MapId.POKEMON_MANSION_2F)
+            if mode == "wrong_coordinate":
+                raw.player_y += 1
+            raw.battle_state = 0 if mode in {"deferred", "never_drop"} else 1
+            if mode == "trainer":
+                raw.battle_state = 2
+            state.ready = not raw.battle_state
+        else:
+            assert kind is s.MacroActionKind.WAIT and value is None
+            if mode != "never_drop":
+                raw.map_id = int(MapId.POKEMON_MANSION_1F)
+                state.ready = True
+
+    def escape(executor, reader, encounter, *, expected_map_id, **kwargs):
+        assert encounter.battle_state == 1
+        assert expected_map_id == encounter.map_id == raw.map_id
+        assert (encounter.player_y, encounter.player_x) == s.DROP_TERMINAL
+        escapes.append(expected_map_id)
+        if mode == "escape_failure":
+            raise RuntimeError("retained escape failure")
+        raw.battle_state = 0
+        state.ready = True
+        if mode == "cash_after_escape":
+            raw.player_money += 1
+        return N(public_dict=lambda: {"verified": True, "map_id": expected_map_id})
+
+    monkeypatch.setattr(s, "_pulse", pulse)
+    monkeypatch.setattr(s, "flee_wild", escape)
+    binding, _ = s.mansion_secret_key_option(rt, actions, None, route=route)
+    if mode in {"source_wild", "landing_wild", "deferred"}:
+        report = binding.execute()
+        assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+        assert raw.map_id == int(MapId.POKEMON_MANSION_1F)
+        assert (raw.player_y, raw.player_x) == s.DROP_TERMINAL and state.switch
+        assert not report.evidence["objective_completed"]
+        assert len(report.evidence["drop_wild_recovery"]) == (mode != "deferred")
+        assert sum(kind is s.MacroActionKind.MOVE for kind, _ in pulses) == 1
+        if mode == "source_wild":
+            assert escapes == [int(MapId.POKEMON_MANSION_3F)]
+            assert pulses[-1] == (s.MacroActionKind.WAIT, None)
+        elif mode == "landing_wild":
+            assert escapes == [int(MapId.POKEMON_MANSION_1F)]
+    else:
+        with pytest.raises(RuntimeError) as exc:
+            binding.execute()
+        assert binding.verify(None).status is GoalDecisionOutcome.FAILED
+        if mode == "escape_failure":
+            assert str(exc.value) == "retained escape failure"
+        if mode in {"trainer", "wrong_map", "wrong_coordinate"}:
+            assert not escapes and len(pulses) == 1
+        if mode == "never_drop":
+            assert not escapes and len(pulses) == 33
+            assert sum(kind is s.MacroActionKind.MOVE for kind, _ in pulses) == 1

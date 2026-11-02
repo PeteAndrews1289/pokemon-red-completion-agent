@@ -19,7 +19,7 @@ from .goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from .observation import ItemId, MapId, semantic_facts
+from .observation import ItemId, MapId, semantic_facts, semantic_location_facts
 from .party_preparation import next_preparation_decision
 from .play import (
     DEFAULT_QUALIFIED_PLAY_TIMING,
@@ -168,12 +168,11 @@ def restoration_progress_preserved(runtime, before, after, raw):
         return False
     if new == old:
         return True
-    facts = semantic_facts(raw)
+    facts = semantic_location_facts(raw)
     for objective_id in new - old:
         required = runtime.adapter.graph.objective(objective_id).completion_facts
         if (
             not required
-            or not all(f.startswith("location:") for f in required)
             or not required <= facts
         ):
             return False

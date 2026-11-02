@@ -11,6 +11,32 @@ from pokemon_red_completion.red_team_training import run_red_team_balancing
 def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
     node = ast.parse(textwrap.dedent(inspect.getsource(run_red_team_balancing))).body[0]
     assert isinstance(node, ast.FunctionDef)
+    # Only these two default-None branches and their keyword are new. Erasing
+    # them must reconstruct the exact immediate, already-reviewed predecessor.
+    helper_index = [arg.arg for arg in node.args.kwonlyargs].index("collection_helper_xp_guard")
+    assert isinstance(node.args.kw_defaults[helper_index], ast.Constant)
+    assert node.args.kw_defaults[helper_index].value is None
+    del node.args.kwonlyargs[helper_index]
+    del node.args.kw_defaults[helper_index]
+
+    class RemoveDisabledHelperXP(ast.NodeTransformer):
+        branches = 0
+
+        def visit_If(self, current):
+            if (ast.unparse(current.test) == "collection_helper_xp_guard is not None"
+                    or (isinstance(current.test, ast.BoolOp)
+                        and ast.unparse(current.test.values[0]) == "collection_helper_xp_guard is not None")):
+                assert not current.orelse
+                self.branches += 1
+                return None
+            return self.generic_visit(current)
+
+    helper = RemoveDisabledHelperXP()
+    node = helper.visit(node)
+    assert helper.branches == 3
+    assert _ast_node_sha256(node, qualname="run_red_team_balancing") == (
+        "b976dab52a263168650ab161be71a3c8da539e38acadc5a6addd8052a14e59ae"
+    )
     index = [arg.arg for arg in node.args.kwonlyargs].index("evolution_stop_requested")
     assert isinstance(node.args.kw_defaults[index], ast.Constant)
     assert node.args.kw_defaults[index].value is None
@@ -81,7 +107,8 @@ def test_disabled_reserve_callback_preserves_reviewed_team_balancing_ast():
     normalized = collection.visit(normalized)
     assert (collection.venue_changes, collection.observational_calls) == (1, 1)
     # Baseline is the existing Windows-qualified actor with helper exclusions;
-    # its predecessor hash was stale before this change.
+    # this existing assertion was stale before the helper-XP change; independent
+    # saved-baseline normalization establishes the corrected digest.
     assert _ast_node_sha256(normalized, qualname="run_red_team_balancing") == (
-        "2594a445c86d8acf989c25207e1e004b991575839f8bc30cf3f0ed72b97f0c4f"
+        "6d2a54013974b364957842d62af613a53d0ea1a8af88736050c632dc34f585a4"
     )

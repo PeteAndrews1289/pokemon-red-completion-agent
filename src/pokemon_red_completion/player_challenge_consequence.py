@@ -76,6 +76,34 @@ def _require_feature_version(version):
     return len(option_feature_names(version))
 
 
+def consequence_feature_versions_compatible(head_version, parent_version):
+    """Inference only: V16 appends four fields unused by the unchanged V15 child.
+
+    This does not admit V16 consequence TRAIN rows, alter the child model identity,
+    or reinterpret PARTY side-context columns as appended raw option fields.
+    """
+    if type(head_version) is not int or type(parent_version) is not int:
+        return False
+    return (head_version == parent_version and head_version in (7, 9, 10, 11, 15)) or (
+        head_version == 15 and parent_version == 16
+    )
+
+
+def consequence_candidate_vector(menu, index, *, feature_version):
+    """Use the exact validated raw prefix; retain the original full menu/binding."""
+    if menu.feature_version == 16 and feature_version == 15:
+        from .player_option_story_unit import STORY_UNIT_FEATURE_NAMES, story_unit_from_vector
+        old_names = option_feature_names(15)
+        if option_feature_names(16) != old_names + STORY_UNIT_FEATURE_NAMES:
+            raise ValueError("consequence V16 compatibility requires the exact V15 prefix")
+        full = menu.candidate_vector(index, feature_version=16)
+        if len(full) != len(old_names) + len(STORY_UNIT_FEATURE_NAMES):
+            raise ValueError("consequence V16 input width differs")
+        story_unit_from_vector(full[len(old_names):])
+        return full[:len(old_names)]
+    return menu.candidate_vector(index, feature_version=feature_version)
+
+
 def supports_consequence_preparation(candidate, feature_version):
     """Recognize represented preparation; never invent a level dose for a lesson."""
     return candidate.preparation is not None or (
@@ -337,8 +365,9 @@ class ChallengeConsequenceHead:
                     for v in single_battle_loss_debits)):
             raise ValueError("consequence cash exposures differ from candidates")
         if (
-            menu.feature_version not in (6, 7, 9, 10, 15)
-            or menu.feature_version > self.feature_version
+            menu.feature_version not in (6, 7, 9, 10, 15, 16)
+            or (menu.feature_version > self.feature_version
+                and not consequence_feature_versions_compatible(self.feature_version, menu.feature_version))
             or len(challenge_refs) != len(menu.candidates)
             or not available
             or len({challenge_refs[i] for i in available}) != 1
@@ -370,7 +399,7 @@ class ChallengeConsequenceHead:
                 w * v
                 for w, v in zip(
                     consequence_contract(self.feedback_version)[3],
-                    self.predict(menu.candidate_vector(i, feature_version=self.feature_version),
+                    self.predict(consequence_candidate_vector(menu, i, feature_version=self.feature_version),
                                  single_battle_loss_debit=single_battle_loss_debits[i],party_context=party_context),
                     strict=True
                 )

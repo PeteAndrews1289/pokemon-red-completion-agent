@@ -29,6 +29,12 @@ from .post_battle_strategy import context_after_recovery
 from .provenance import canonical_sha256
 from .red_live_option_menu import build_red_live_forced_singleton, build_red_live_option_set
 from .red_native_curriculum import (
+    SCOPED_STORY_UNIT_CONTRACT,
+    SCOPED_STORY_UNIT_OUTCOME_SCHEMA,
+    SCOPED_STORY_UNIT_PLAN_SCHEMA,
+    APPROACH_STORY_UNIT_CONTRACT,
+    APPROACH_STORY_UNIT_OUTCOME_SCHEMA,
+    APPROACH_STORY_UNIT_PLAN_SCHEMA,
     CHALLENGE_CONTRACT,
     CHALLENGE_OUTCOME_SCHEMA,
     CHALLENGE_PLAN_SCHEMA,
@@ -735,10 +741,10 @@ def observe_native_player_options(
     neither this observer nor the lesson target chooses the next action. Caller
     supplies observed aftermath and authenticated remaining-budget fractions.
     """
-    if observe_preparation_party is not None and (not callable(observe_preparation_party) or model_feature_version!=15):
+    if observe_preparation_party is not None and (not callable(observe_preparation_party) or model_feature_version not in (15, 16)):
         raise ValueError("party-count observer requires explicit V15 boundary")
     if observe_matchups is not None and (
-        not callable(observe_matchups) or model_feature_version != 15
+        not callable(observe_matchups) or model_feature_version not in (15, 16)
     ):
         raise ValueError("native matchup observer requires V15 and a callable")
     if type(force_resource_safety) is not bool:
@@ -961,6 +967,13 @@ def observe_native_player_options(
         ),
         force_resource_safety=force_resource_safety,
     )
+    # The exact bound inventory may expose read-only economic metadata.
+    # Apply it after enumeration so it cannot mask, reorder or replace offers.
+    from .red_player_story_menu import NativeStoryBranchInventory
+    inventory = getattr(enumerate_bindings, "__self__", None)
+    if isinstance(inventory, NativeStoryBranchInventory):
+        context = inventory.cash_target_context(runtime, actions, options.menu.context)
+        options = replace(options, menu=replace(options.menu, context=context))
     if observe_preparation_party is not None:
         from .player_preparation_party_context import PreparationPartyWitness
         witness=observe_preparation_party(runtime,bindings,supplements,boundary)
@@ -1142,6 +1155,12 @@ def record_native_player_lesson(
     if type(selected_index) is not int or selected_index not in question.available_indices:
         raise ValueError("native lesson selected unavailable binding")
     binding = bindings.require(question.opportunities[selected_index].binding_ref)
+    approach = binding.story_approach_only
+    scoped_story = binding.story_unit is not None
+    if scoped_story and story_unit_target is None:
+        raise ValueError("certified story scope requires a declared native unit endpoint")
+    if approach and story_unit_target is None:
+        raise ValueError("approach lesson requires a declared native story-unit endpoint")
     resource = binding.kind in RESOURCE_LESSON_KINDS
     challenge = None
     if observe_challenge is not None:
@@ -1181,7 +1200,11 @@ def record_native_player_lesson(
         )
     plan = dict(
         schema=(
-            PREPARATION_PLAN_SCHEMA
+            SCOPED_STORY_UNIT_PLAN_SCHEMA
+            if scoped_story
+            else APPROACH_STORY_UNIT_PLAN_SCHEMA
+            if approach
+            else PREPARATION_PLAN_SCHEMA
             if preparation_lesson
             else STORY_UNIT_PLAN_SCHEMA
             if story_unit is not None
@@ -1192,7 +1215,11 @@ def record_native_player_lesson(
             else READINESS_PLAN_SCHEMA
         ),
         contract=(
-            PREPARATION_CONTRACT
+            SCOPED_STORY_UNIT_CONTRACT
+            if scoped_story
+            else APPROACH_STORY_UNIT_CONTRACT
+            if approach
+            else PREPARATION_CONTRACT
             if preparation_lesson
             else STORY_UNIT_CONTRACT
             if story_unit is not None
@@ -1228,6 +1255,10 @@ def record_native_player_lesson(
         plan["challenge"] = None if challenge is None else challenge.public_dict()
     if story_unit is not None:
         plan["story_unit"] = story_unit
+    if approach or scoped_story:
+        plan["story_approach_only"] = approach
+    if scoped_story:
+        plan["story_unit_scope"] = binding.story_unit.public_dict()
     declaration = canonical_sha256(plan)
     curriculum_projection(plan)
     if controller.frames_executed or controller.save_state_bytes() != start_state:
@@ -1292,7 +1323,11 @@ def record_native_player_lesson(
                 raise ValueError("native lesson terminal audit changed state")
             result = dict(
                 schema=(
-                    PREPARATION_OUTCOME_SCHEMA
+                    SCOPED_STORY_UNIT_OUTCOME_SCHEMA
+                    if scoped_story
+                    else APPROACH_STORY_UNIT_OUTCOME_SCHEMA
+                    if approach
+                    else PREPARATION_OUTCOME_SCHEMA
                     if preparation_lesson
                     else STORY_UNIT_OUTCOME_SCHEMA
                     if story_unit is not None

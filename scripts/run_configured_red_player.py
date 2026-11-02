@@ -20,7 +20,9 @@ from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor,
 from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalBindingSet
 from pokemon_red_completion.goal_search_memory import GoalSearchMemory
-from pokemon_red_completion.living_dex_option_value import upgrade_option_value_model_for_matchup
+from pokemon_red_completion.living_dex_option_value import (
+    upgrade_option_value_model_for_matchup, upgrade_option_value_model_for_story_unit,
+)
 from pokemon_red_completion.player_challenge_consequence import ChallengeConsequenceHead
 from pokemon_red_completion.private_artifacts import (
     gitless_fast_path_worktree_probe,
@@ -113,7 +115,7 @@ def declared_goal_model_observation_compatibility(plan):
         or not isinstance(spec, dict)
         or set(spec) != {"schema", "mode", "source_model_sha256", "target_model_sha256", "reason"}
         or spec["schema"] != "pokemon.red.goal-model-observation-compatibility.v1"
-        or spec["mode"] != "v9_to_v15_zero_extension_v1"
+        or spec["mode"] not in {"v9_to_v15_zero_extension_v1", "v9_to_v16_zero_extension_v1"}
         or not isinstance(spec["reason"], str)
         or not spec["reason"].strip()
         or any(type(spec[key]) is not str or len(spec[key]) != 64
@@ -161,8 +163,10 @@ def declared_goal_model(plan, configuration, backend):
         if (model.feature_version != 9
                 or model.model_sha256 != compatibility["source_model_sha256"]):
             raise ValueError("goal observation compatibility source differs from authenticated V9 record")
-        model = upgrade_option_value_model_for_matchup(model)
-        if (model.feature_version != 15
+        target_version = 16 if compatibility["mode"] == "v9_to_v16_zero_extension_v1" else 15
+        model = (upgrade_option_value_model_for_story_unit(model) if target_version == 16
+                 else upgrade_option_value_model_for_matchup(model))
+        if (model.feature_version != target_version
                 or model.model_sha256 != compatibility["target_model_sha256"]):
             raise ValueError("goal observation compatibility target differs from zero extension")
     return model
@@ -392,6 +396,33 @@ def configured_execution_limits(args, left, wall_left):
     )
 
 
+
+def configured_renewal_stop_reason(args, left, wall_left, *, compulsory_settlement):
+    """Do not turn a return reserve into a fresh goal's setup allowance.
+
+    Derive reserves from the requested chunk, before aggregate/cutoff clipping.
+    A fresh goal needs a productive allowance plus its settlement reserve.
+    Recomputing either allowance after clipping would admit a late chunk with
+    too little headroom. This matches the within-chunk admission margin; it is
+    not a bound on arbitrary route costs. Existing compulsory recovery may use
+    the remaining allowance, and every hard limit remains unchanged.
+    """
+    if type(compulsory_settlement) is not bool:
+        raise TypeError("renewal settlement state must be boolean")
+    if wall_left < 1:
+        return "declared_cutoff_reached"
+    limits = configured_execution_limits(args, left, wall_left)
+    if compulsory_settlement:
+        return "insufficient_settlement_allowance" if limits.decisions < 2 else None
+    requested = dict(actions=getattr(args, "actions", 30000),
+                     frames=getattr(args, "frames", 2500000), seconds=args.seconds)
+    reserves = {axis: min(cap, max(1, requested[axis] // 4))
+                for axis, cap in (("actions", 3000), ("frames", 250000), ("seconds", 60))}
+    if any(getattr(limits, axis) <= 2 * reserve for axis, reserve in reserves.items()):
+        return "insufficient_settlement_allowance"
+    return None
+
+
 def diagnostic_spending(root):
     """Copy costs consume the block allowance but never enter the player's save."""
     totals = dict(decisions=0, actions=0, frames=0, seconds=0.0, heals=0)
@@ -535,7 +566,7 @@ def declared_readiness_refinement(plan):
         not {scope_key, "head_path", "head_sha256", "content_sha256", "reason"}
         <= set(spec)
         <= {scope_key, "head_path", "head_sha256", "content_sha256", "reason",
-            "refine_preparation", "defer_unbound_preparation", "allow_singleton_parent_support"}
+            "refine_preparation", "defer_unbound_preparation", "allow_singleton_parent_support", "associate_unique_combat"}
         or any(ref not in plan["objectives"] for ref in scope)
         or not isinstance(spec["reason"], str)
         or not spec["reason"].strip()
@@ -554,6 +585,12 @@ def declared_readiness_refinement(plan):
             plan.get("partition") != "development" or not declared_greedy_selection(plan))
         or allow_singleton_parent_support and not defer_unbound_preparation):
         raise ValueError("parent-bound preparation requires explicit greedy DEVELOPMENT scope")
+    associate_unique_combat = spec.get("associate_unique_combat", False)
+    if type(associate_unique_combat) is not bool or associate_unique_combat and (
+        not refine_preparation or defer_unbound_preparation or allow_singleton_parent_support
+        or plan.get("partition") != "development" or not declared_greedy_selection(plan)
+    ):
+        raise ValueError("unique combat association requires unmasked DEVELOPMENT preparation refinement")
     payload = Path(spec["head_path"]).read_bytes()
     if sha256(payload).hexdigest() != spec["content_sha256"]:
         raise ValueError("readiness refinement head bytes differ")
@@ -570,6 +607,7 @@ def declared_readiness_refinement(plan):
         **({"refine_preparation": True} if refine_preparation else {}),
         **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
         **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
+        **({"associate_unique_combat": True} if associate_unique_combat else {}),
     )
 
 
@@ -2042,6 +2080,13 @@ def run(args):
                             }
                         ),
                     )
+                association_source_sha256 = None
+                if refinement is not None and refinement.get("associate_unique_combat", False):
+                    observed_state = em.save_state_bytes()
+                    association_source_sha256 = sha256(observed_state).hexdigest()
+                    if (observed_state != payload
+                            or association_source_sha256 != context["state_sha256"]):
+                        raise ValueError("inspection association source differs from authenticated native boundary")
                 choice = (
                     select_branch_recovery_live_option(
                         model,
@@ -2053,6 +2098,8 @@ def run(args):
                         refine_preparation=refinement.get("refine_preparation", False),
                         defer_unbound_preparation=refinement.get("defer_unbound_preparation", False),
                         allow_singleton_parent_support=refinement.get("allow_singleton_parent_support", False),
+                        associate_unique_combat=refinement.get("associate_unique_combat", False),
+                        source_state_sha256=association_source_sha256,
                     )
                     if refinement
                     else select_red_live_option(
@@ -2209,14 +2256,12 @@ def run(args):
             except ValueError:
                 driver_terminal_reason = "declared_budget_exhausted"
                 break
-            if (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds() < 1:
-                driver_terminal_reason = "declared_cutoff_reached"
-                break
-            if (
-                requires_compulsory_settlement(holder["runtime"])
-                and min(args.decisions, int(left["decisions"])) < 2
-            ):
-                driver_terminal_reason = "insufficient_settlement_allowance"
+            driver_terminal_reason = configured_renewal_stop_reason(
+                args, left,
+                int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()),
+                compulsory_settlement=requires_compulsory_settlement(holder["runtime"]),
+            )
+            if driver_terminal_reason is not None:
                 break
             parent, context = output, exported
             ordinal, renewed = ordinal + 1, renewed + 1

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-10-28-project-audit-publication**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-10-30-forest-decision**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -55,7 +55,7 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — verified
+### 04. Finish Red with the model — current
 
 Choose progression from a fresh game through the Champion.
 
@@ -65,7 +65,7 @@ Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
 [Current evidence](../docs/evidence/red-two-hour-champion-recovery-2026-10-10.json)
 
-### 05. Complete Red's legitimate native route — current
+### 05. Complete Red's legitimate native route — planned
 
 Register the declared 124-species Red route in the same fresh-run save.
 
@@ -104,13 +104,13 @@ Try legitimate linked-version acquisition when practical; otherwise earn deferre
 Earlier reviews remain in the [status history](../configs/development-roadmap-state.json)
 and dated work-session reports. Their next steps are not current instructions.
 
-### 2026-10-28-project-audit-publication
+### 2026-10-30-forest-decision
 
-Audited scoped successes and repeated support failures. Capture fallback KOs and supplier menu omissions point to existing execution integration before more fitting.
+Forest exact choice/native benefit verified. Original MID productive-evolution stop retained; short qualified repaired tail closed. No new learning or gate award.
 
-**Deviation:** No gameplay/model/stage/acceptance change. Source-only review snapshot has known quality debt; private originals remain unchanged.
+**Deviation:** Three correlated native copies, no actual-save gains or DEVELOPMENT fitting; private TRAIN prototype remains undeployed.
 
-**Next:** Keep runs paused for source publication. Next qualify suppliers and nonlethal capture support, then sustained play before more fitting or scale-up.
+**Next:** Integrate and qualify the private mock-tested TRAIN collector, collect informative partial-interaction evidence, and fit only with strict retained-output proof; diagnose venue costs from existing receipts.
 
 ## Update contract
 

@@ -19,7 +19,7 @@ def curriculum_mse(model, rows):
                           dtype=np.float64)
     targets = np.asarray([row.outcome.target_vector for row in rows], dtype=np.float64)
     prediction = np.clip(
-        model.raw_predictions(features) if model.bounded_story_success_head is not None else model.intercept
+        model.raw_predictions(features) if (model.bounded_story_success_head is not None or model.movement_success_head is not None) else model.intercept
         + ((features - model.feature_mean) / model.feature_scale) @ model.coefficients,
         0.0,
         1.0,
@@ -34,7 +34,7 @@ def fit_retaining_prior(prior, rows, curriculum, *, retained_curriculum=()):
     fabricated counterfactual, development metric or chosen destination is used.
     The economy head is unchanged: teacher demonstrations do not train that head.
     """
-    if prior.bounded_story_success_head is not None:
+    if prior.bounded_story_success_head is not None or prior.movement_success_head is not None:
         raise ValueError("retention search for an already corrected parent is unsupported")
     if not curriculum or any(
         r.partition != "train" for r in (*rows, *curriculum, *retained_curriculum)

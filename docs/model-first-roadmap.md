@@ -7,14 +7,62 @@ Historical work orders are evidence,not dispatch instructions.
 
 ## Current decision
 
-The separately authorized play-first block repaired the shared public entry and
-continued the preserved Misty-win DEVELOPMENT save through Bill/rival/Cut and
-12registrations. Fixed weights/configuration; execution repairs disclosed.
-The earlier no-repair viability assessment remains historical evidence.
+October30 verified the exact Forest choice change and a native trainer/Brock win.
+The original MID added six registrations but stopped after26native minutes on a
+productive evolution verification mismatch. A narrow repaired package and short
+exact-tail continuation are retained separately. All three gates still need one
+unchanged candidate; historical passes and different copied saves do not combine.
 
-Qualify the pending supplier candidate and existing nonlethal capture support before more fitting or scale-up. Keep all runs paused after this bounded block.
+The next learning gap is partial story interactions. Qualify the existing TRAIN
+collector's failure accounting, obtain informative native TRAIN evidence, and fit
+only while preserving retained movement/goal outputs. Use recorded evolution
+healing and escape costs to diagnose venue choice. Do not repeat existing cash
+fits, restore false zero demand, or replace the model with a new planner.
 
-[Current handoff](../HANDOFF.md) · [Scoreboard](work-sessions/2026-10-28-play-first.md).
+[Session](work-sessions/2026-10-30-forest-decision.md) ·
+[Handoff](../HANDOFF.md) · [Status](../ACTIVE_PRODUCT_STATE.md).
+
+## Historical October29 outcome-retained candidate
+
+The following result belongs to the older73fb candidate and is not a live work order.
+
+The October 29 LATE development test now proves Gate 3: useful preparation and
+model-owned stopping in one native story payoff. The parent chose Raticate
+training while Lorelei was already legal, then chose Lorelei while further
+training remained legal. The same trained Raticate fought in the verified win.
+This is one related development case, not broad transfer or fresh acceptance.
+
+The unchanged candidate continued through Champion and Hall of Fame using the
+existing forced League support after Lorelei. It closed safely after 41.77 native
+minutes, with 116/124 registrations and the Master Ball intact. That is short of
+Gate 1's unchanged 45-minute requirement; no idle padding or restart earns it.
+Gate 2's LATE component passes. MID then failed after 51.17 native minutes with
+a Mansion interruption error and no qualifying story milestone. Only Gate 3 passes
+on this candidate; the full three-gate result remains open.
+
+No new weights were adopted in this block. The proposed success correction was
+rejected for preparation regressions, and the diagnostic copy's gains stay out
+of the actual save. All guests are closed. Qualify the narrow Mansion repair, then
+obtain genuine noncombat TRAIN coverage before another informative correction.
+Retest all gates on the same final candidate without changing thresholds.
+
+[Current handoff](../HANDOFF.md) · [Current status](../ACTIVE_PRODUCT_STATE.md).
+
+## Earlier October 29 supplier/capture closeout
+
+The bounded supplier/capture block is closed at22/124 and two badges in the
+preserved DEVELOPMENT save, up from12. Qualified support exposed affordable
+resupply, optional non-damaging capture, strict faint recovery and safe helper
+admission. No model parameters changed. Cut teaching is not a gym win.
+
+The45-minute target failed: longest unchanged guest20.29minutes. Final cutoff
+settlement is a retained nonordinary verification failure with no native exception.
+Investigate reserve-aware admission before storage/setup, then the narrow healing
+completion bottleneck, then measure sustained unchanged play. Exact typed helper
+headroom was source-tested but not directly re-triggered in native followup.
+All guests are stopped, costs and failed tails retained. Fresh acceptance remains open.
+
+[Current handoff](../HANDOFF.md) · [Final session](work-sessions/2026-10-28-supplier-capture.md).
 
 ## First delivery remains unchanged
 
@@ -37,13 +85,14 @@ configuration and qualification/supervisor machinery. Navigation,PC,evolution,
 capture,resource and dialogue skills exist. Single-option mechanics and manual
 engineering repairs do not become learned strategic competence.
 
-The frozen base goal model was trained on173authenticated TRAIN examples and
+The historical base goal model was trained on173authenticated TRAIN examples and
 370V9features. Its runtime adapter zero-extends the later V15 schema; that does
 not retrain the base. The historical configured exploration mix is0.75; it is not the
-sampling policy of every runtime test. The current Erika readbacks use the frozen
+sampling policy of every runtime test. The earlier Erika readbacks used the frozen
 greedy selector specified in their exact plans. The separate consequence learner
-retains its own typed outcomes and fit denominator; new preparation heads remain
-unadopted. Current XP and registrations are gameplay, not new weights. Future learning needs informative native TRAIN contrasts and
+retains its own typed outcomes and fit denominator; individual historical corrections are not automatically adopted. The current
++frozen composition, including its V16 movement and economy components, is pinned
+in the handoff. Current XP and registrations are gameplay, not new weights. Future learning needs informative native TRAIN contrasts and
 held-out outcomes,never a fit of this exposed DEVELOPMENT ancestry.
 
 The earlier earned reference already demonstrates Champion/HOF+124 and retained

@@ -50,7 +50,7 @@ from pokemon_red_completion.red_player_story_menu import (
 from pokemon_red_completion.red_player_story_obstruction import obstructing_story_battle_binding
 from pokemon_red_completion.red_player_early_story_options import (
     bill_story_option, cerulean_arrival_story_option, cut_story_option, early_story_travel_option, fuji_story_option,
-    hideout_story_option, parcel_story_option, saffron_story_option,
+    hideout_story_option, parcel_story_option, saffron_story_option, observed_story_obstruction_option,
 )
 from pokemon_red_completion.red_player_collection_options import (
     bind_player_collection_capabilities, player_collection_supplements,
@@ -685,6 +685,25 @@ def income_reserve_cost(raw, *, targets=(4,6,2)):
     return sum(max(0, target-stock.get(int(item),0))*price
         for (item,price),target in zip(((ItemId.FULL_RESTORE,3000),
             (ItemId.REVIVE,1500),(ItemId.FULL_HEAL,600)),targets,strict=True))
+
+
+def observed_medicine_cash_target(raw, *, include_rewards):
+    """Expose the existing approved medicine budget without affordability clamping.
+
+    The same first/postgame eight-badge reserve is already used by
+    pre_champion_medicine_income_peers. This is metadata, not a new entry gate.
+    """
+    if type(include_rewards) is not bool:
+        raise ValueError('medicine demand scope must be explicit')
+    if not include_rewards:
+        return 0  # This declared support scope is inactive.
+    if type(raw.badge_bits) is not int or not 0 <= raw.badge_bits <= 255:
+        return None
+    if raw.badge_bits != 255:
+        return 0
+    if raw.bag_items is None or raw.player_money is None:
+        return None
+    return income_reserve_cost(raw)  # Existing (4,6,2) targets and actual prices.
 
 
 def measured_owned_income_bootstrap_ready(runtime):
@@ -1483,7 +1502,7 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
                 completed=context['lesson']['completed_objectives']))
         if include_rewards:
             rt = bind_player_collection_capabilities(
-                rt, seed_corridor=collection_seed,
+                rt, seed_corridor=collection_seed, discovery_rom=rom,
                 add_capture_preparation_support=not include_early_preparation,
                 include_fly_transport=True)
             if {'defeat_champion','enter_hall_of_fame'} <= set(context['lesson']['completed_objectives']):
@@ -1623,8 +1642,8 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
         return holder['scoped_actors'][objective][0]
 
     def preparation_actor(map_id, *, _bind_pool=True):
-        if training_admission is not None and map_id != 15:
-            raise ValueError('production TRAIN preparation requires the declared Route4 venue')
+        if training_admission is not None and map_id != training_admission.wild_map_id:
+            raise ValueError('production TRAIN preparation requires its exact admitted venue')
         # Optional exact existing battler reuse, not a supplied training choice.
         # Each venue has its own typed wild-only source/model/work-order scope.
         spec = d.prior.doc(declared).get('preparation_battle_component')
@@ -1752,6 +1771,29 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
         actor.require_story_contract(contract)
         return actor
 
+    def parent_capture_cash_target(runtime, actions):
+        """The same declared reserve as the ordinary router, before affordability."""
+        from pokemon_red_completion.red_capture_readiness import capture_reserve_purchase
+        resource_runtime = observed_resource_runtime(runtime)
+        budget = player_supply_reserve(resource_runtime.profile)
+        observation = resource_runtime.adapter.observe()
+        if (budget is None or observation.raw.bag_items is None
+                or observation.raw.player_money is None):
+            return None
+        _, quote = capture_reserve_purchase(
+            observation, budget, resource_runtime.provider_for(GoalKind.RESUPPLY, actions))
+        return quote["full_reserve_cost"]
+
+    def parent_cash_demand(runtime, actions):
+        """Observe disjoint ball and approved medicine costs at the same boundary."""
+        from pokemon_red_completion.red_player_story_menu import DeclaredCashDemand
+        capture = parent_capture_cash_target(runtime, actions)
+        recovery = observed_medicine_cash_target(runtime.reader.read(),
+                                                include_rewards=include_rewards)
+        quote = DeclaredCashDemand((("capture", capture), ("recovery", recovery)))
+        record('parent-cash-demand', quote.public_dict())
+        return quote
+
     def observed_resource_runtime(runtime):
         league_maps = {int(c.MapId.INDIGO_PLATEAU), int(c.MapId.INDIGO_PLATEAU_LOBBY)}
         league_maps.update(int(t.room) for t in LEAGUE_PLAYER_TARGETS + (CHAMPION_PLAYER_TARGET,))
@@ -1822,8 +1864,8 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
             or runtime.emulator is not owned.emulator or runtime.adapter is not owned.adapter):
             raise ValueError('production TRAIN pool cannot replace its reader/runtime')
         if 'training_pool' not in holder:
-            wild = preparation_actor(15, _bind_pool=False)
-            story = leader_actor(MISTY_REWARD, runtime, _bind_pool=False)
+            wild = preparation_actor(training_admission.wild_map_id, _bind_pool=False)
+            story = leader_actor(training_admission.story_reward, runtime, _bind_pool=False)
             if wild.session is not runtime.emulator or story.session is not runtime.emulator:
                 raise ValueError('production TRAIN pool cannot replace its native session')
             pool = ScopedTrainingBattlers.for_production_source(wild, story,
@@ -1831,15 +1873,15 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
                 reader=runtime.reader,
                 initial=holder['initial_battle'])
             holder['training_pool'] = pool
-            for key, actor in (('preparation-map-15', pool.wild),
-                               ('defeat_misty', pool.story(story.development_story_scope.contract))):
+            for key, actor in (('preparation-map-'+str(training_admission.wild_map_id), pool.wild),
+                               (training_admission.objective_id, pool.story(story.development_story_scope.contract))):
                 holder['scoped_actors'][key] = (actor, NativeBattlerHistory(actor, initial=holder['initial_battle']))
         return holder['training_pool']
 
     def leader_actor(reward, runtime, *, _bind_pool=True):
         """Same prospective scoped actor for a selected or retained leader."""
-        if training_admission is not None and reward.objective_id != 'defeat_misty':
-            raise ValueError('production TRAIN story requires the declared Misty target')
+        if training_admission is not None and reward.objective_id != training_admission.objective_id:
+            raise ValueError('production TRAIN story requires its exact admitted target')
         if reward.objective_id not in holder['scoped_actors']:
             path = d.ROOT/'reused-damage/candidate-model.json'
             pin = '29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad'
@@ -2098,21 +2140,22 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
                     objective_id=objective, battler=holder['actor'], combat_levels=levels,
                     continuous_travel=continuous_travel)
             if objective == 'reach_vermilion' and runtime.reader.read().map_id == int(c.MapId.BILLS_HOUSE):
+                levels = tuple(m.observation.level for m in d.observe_preparation_members(
+                    runtime.emulator, holder['plan']) if m.purpose.value == 'combat')
                 return early_story_travel_option(runtime,executor,objective_id=objective,
-                    route=route,battler=holder['actor'])
+                    route=route,battler=holder['actor'],combat_levels=levels)
             binding = story_travel_binding(runtime, executor, objective_id=objective,
                 route=route, frontier=True, stop_at_map_boundary=True,
                 allow_surf=include_rewards and objective == 'reach_cinnabar')
-            combat = False
             if binding is None:
-                binding = obstructing_story_battle_binding(runtime, executor,
+                levels = tuple(m.observation.level for m in d.observe_preparation_members(
+                    runtime.emulator, holder['plan']) if m.purpose.value == 'combat')
+                return observed_story_obstruction_option(runtime, executor,
                     objective_id=objective, route=route, battler=holder['actor'],
-                    frontier=True, allow_sequence=True,
+                    combat_levels=levels, frontier=True, allow_sequence=True,
                     allow_surf=include_rewards and objective == 'reach_cinnabar')
-                combat = binding is not None
-            return (None if binding is None else
-                    (replace(binding, story_objective_ref=objective),
-                     OptionChallenge(combat, False, 0., 0., 0.)))
+            return (replace(binding, story_objective_ref=objective),
+                    OptionChallenge(False, False, 0., 0., 0.))
 
         observers = {r.objective_id: lambda *args, r=r: gym(r, *args) for r in REWARDS}
         observers.update({o: lambda *args, o=o: arrival(o, *args) for o in ARRIVAL_OBJECTIVES})
@@ -2207,10 +2250,10 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
             observers.update({t.objective_id: lambda *args,o=t.objective_id: league(o,*args)
                               for t in LEAGUE_PLAYER_TARGETS + (CHAMPION_PLAYER_TARGET,)})
         if training_admission is not None:
-            # This prospective TRAIN lesson admits only its declared leader;
-            # unsupported story callbacks must not construct a different actor.
-            objective = training_admission.declaration()['objective_id']
-            observers = {objective: observers[objective]}
+            # Keep combat authority on its exact leader. Explicit noncombat
+            # observer permission does not admit another battler or source.
+            observers = {objective: observers[objective]
+                         for objective in training_admission.admitted_story_objective_ids}
         full_capabilities = set(observers) - set(holder.get('partial_native_capabilities', {}))
         holder['configured_native_capabilities'] = sorted(full_capabilities)
         legal = {o.id for o in rt.adapter.graph.available_objectives(observation.game_state)}
@@ -2385,6 +2428,15 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
                                source_id,venue_home,levels))
             except (RoutePlanningError, ValueError):
                 continue
+        if training_admission is not None:
+            ordinary_venues = tuple(venues)
+            venues = [v for v in ordinary_venues if v[1] == training_admission.wild_map_id]
+            holder['preparation_admission'] = dict(
+                ordinary_reachable_venue_maps=[v[1] for v in ordinary_venues],
+                admitted_venue_maps=[v[1] for v in venues],
+                unavailable=[dict(map_id=v[1], reason='outside_exact_train_wild_scope')
+                             for v in ordinary_venues if v[1] != training_admission.wild_map_id],
+                unrestricted_preparation_coverage=False)
         if not venues:
             return ()
         _, _, corridor, source_id, home, levels = min(venues, key=lambda v: v[:2])
@@ -2583,6 +2635,7 @@ def assembly(parent, output, *, plan_path=None, continuous_travel=False, include
             boundary.lesson_snapshot,c.sha256(boundary.state).hexdigest())
 
     return payload, factory, NativeStoryBranchInventory(base, branches,
+        observe_cash_target=parent_cash_demand,
         observe_matchups=matchup_observer if include_matchup_observation else None,
         observe_preparation_party=preparation_party_observer if include_preparation_party_context else None,
         reuse_local_route_queries=True,

@@ -1238,6 +1238,15 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("capture status support differs")
             required.add("capture_status_support")
+        if "capture_party_preparation" in row:
+            if (mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                    or type(row["capture_party_preparation"]) is not bool
+                    or row.get("capture_status_support") is not True
+                    or (row["capture_party_preparation"] is False
+                        and row.get("capture_weakening_support") is True)):
+                raise RedGoalContextProfileError(
+                    "capture party preparation needs explicit boolean status support")
+            required.add("capture_party_preparation")
         if "capture_weakening_support" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 type(row["capture_weakening_support"]) is not bool
@@ -1295,6 +1304,8 @@ def _parse_parameters(
             parsed["capture_species_numbers"] = capture_species
         if "capture_status_support" in row:
             parsed["capture_status_support"] = row["capture_status_support"]
+        if "capture_party_preparation" in row:
+            parsed["capture_party_preparation"] = row["capture_party_preparation"]
         if "capture_weakening_support" in row:
             parsed["capture_weakening_support"] = row["capture_weakening_support"]
         if "capture_search_budget" in row:

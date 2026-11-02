@@ -61,7 +61,52 @@ def _row(binding, objective, *, route, combat_levels=(), contract=None, combat=F
     return replace(binding, story_objective_ref=objective), challenge
 
 
-def early_story_travel_option(runtime, actions, *, objective_id, route, battler):
+def observed_story_obstruction_option(
+    runtime, actions, *, objective_id, route, battler, combat_levels=(), **scope,
+):
+    """Expose the admitted trainer's known levels; never invent combat roles."""
+    if (not isinstance(combat_levels, tuple) or len(combat_levels) > 6
+            or any(type(level) is not int or not 1 <= level <= 100 for level in combat_levels)):
+        raise ValueError("story obstruction requires observed combat-role levels")
+    if not combat_levels:
+        binding = obstructing_story_battle_binding(
+            runtime, actions, objective_id=objective_id, route=route, battler=battler, **scope)
+        return _row(binding, objective_id, route=route, combat=binding is not None)
+    raw = runtime.reader.read()
+    source = runtime.emulator.save_state_bytes()
+    counters = actions.actions_executed, runtime.emulator.frame_count
+    witness = None
+
+    def observe_obstruction(contract, quoted_binding):
+        nonlocal witness
+        if (witness is not None or not isinstance(contract, StoryTrainerContract)
+                or contract.objective_id != objective_id or contract.map_id != raw.map_id
+                or contract.battle_plan_id != "observed-story-obstruction"
+                or contract.defeated_event is None
+                or event_flag_is_set(raw.event_flags, contract.defeated_event)
+                or contract.victory_items or contract.victory_badge_bits):
+            raise ValueError("arrival obstruction witness differs from its current component")
+        witness = contract, quoted_binding
+
+    binding = obstructing_story_battle_binding(
+        runtime, actions, objective_id=objective_id, route=route, battler=battler,
+        observe_binding=observe_obstruction, **scope)
+    if binding is None:
+        if witness is not None:
+            raise ValueError("arrival obstruction witness lacks an admitted binding")
+        result = None
+    else:
+        if witness is None or witness[1] is not binding:
+            raise ValueError("arrival obstruction witness does not belong to the admitted binding")
+        result = _row(binding, objective_id, route=route, combat_levels=combat_levels,
+                      contract=witness[0], combat=True)
+    if (runtime.emulator.save_state_bytes() != source
+            or counters != (actions.actions_executed, runtime.emulator.frame_count)):
+        raise ValueError("arrival challenge observation changed its native boundary")
+    return result
+
+
+def early_story_travel_option(runtime, actions, *, objective_id, route, battler, combat_levels=()):
     """Keep travel/obstruction as peers; departing Bill observes the exit first."""
     if not _legal(runtime, objective_id):
         return None
@@ -96,6 +141,12 @@ def early_story_travel_option(runtime, actions, *, objective_id, route, battler)
     )
     combat = False
     if binding is None:
+        if combat_levels:
+            return observed_story_obstruction_option(
+                runtime, actions, objective_id=objective_id, route=route, battler=battler,
+                combat_levels=combat_levels, allow_sequence=True, frontier=not departing_bill,
+                intermediate_map=kwargs["intermediate_map"],
+            )
         binding = obstructing_story_battle_binding(
             runtime,
             actions,
@@ -127,7 +178,8 @@ def cerulean_arrival_story_option(runtime, actions, observation=None, *, route,
     if not _legal(runtime, objective):
         return None
     row = early_story_travel_option(
-        runtime, actions, objective_id=objective, route=route, battler=battler
+        runtime, actions, objective_id=objective, route=route, battler=battler,
+        combat_levels=combat_levels,
     )
     if row is not None:
         return row
@@ -186,7 +238,8 @@ def cut_story_option(runtime, actions, observation=None, *, route, battler, comb
             captain_interaction_binding(runtime, actions, route=route), objective, route=route
         )
     return early_story_travel_option(
-        runtime, actions, objective_id=objective, route=route, battler=battler
+        runtime, actions, objective_id=objective, route=route, battler=battler,
+        combat_levels=combat_levels,
     )
 
 

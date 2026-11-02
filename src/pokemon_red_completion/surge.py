@@ -2278,6 +2278,7 @@ class LiveWildEncounterExecutor:
         capture_status_support: bool = False,
         capture_weakening_support: bool = False,
         capture_level_evolution_edges: frozenset[tuple[int, int, int]] = frozenset(),
+        settle_unavailable_catcher: bool = False,
     ) -> None:
         if not label.strip():
             raise ValueError("live wild encounter label must not be empty")
@@ -2292,6 +2293,9 @@ class LiveWildEncounterExecutor:
             capture_weakening_support and not capture_status_support
         ):
             raise ValueError("capture weakening needs explicit status support")
+        if type(settle_unavailable_catcher) is not bool:
+            raise ValueError("catcher-health settlement permission must be boolean")
+        self._settle_unavailable_catcher = settle_unavailable_catcher
         self._capture_status_support = capture_status_support
         self._capture_weakening_support = capture_weakening_support
         if not isinstance(capture_level_evolution_edges, frozenset) or any(
@@ -2306,6 +2310,7 @@ class LiveWildEncounterExecutor:
         self.capture_throw_preparations: list[dict[str, object]] = []
         self.capture_weakening_reports: list[dict[str, object]] = []
         self.capture_escape_bypasses = 0
+        self.capture_health_stopped = False
         self._party_reader = PokemonRedPartyReader(emulator)
 
     def read_collection(self) -> CollectionObservation:
@@ -2352,7 +2357,9 @@ class LiveWildEncounterExecutor:
                 reason_code="capture_species_missing",
             )
         if self._capture_status_support:
-            from pokemon_red_completion.red_capture_status_runtime import RedCaptureStatusPreparer
+            from pokemon_red_completion.red_capture_status_runtime import (
+                CaptureStatusDrift, RedCaptureStatusError, RedCaptureStatusPreparer,
+            )
 
             prepare = RedCaptureStatusPreparer(
                 self._emulator, self._executor, self._reader,
@@ -2362,7 +2369,26 @@ class LiveWildEncounterExecutor:
 
             def before_throw():
                 nonlocal weakened
-                if not prepare():
+                try:
+                    prepared = prepare()
+                except RedCaptureStatusError as error:
+                    if (not self._settle_unavailable_catcher
+                            or error.reason_code != CaptureStatusDrift.NO_HEALTHY_CATCHER.value):
+                        raise
+                    # Attrition can remove a capture prerequisite after routing
+                    # or a failed throw. Settle only this typed health stop; the
+                    # existing throw guard verifies unchanged census/ball costs.
+                    self.flee_encounter()
+                    self.capture_health_stopped = True
+                    from .capture_survey import record_capture_diagnostic
+
+                    record_capture_diagnostic(
+                        self._executor, "capture_preparation_stopped", self._reader.read(),
+                        source="ordinary_wild", throw=None, ball=None, ball_quantity=None,
+                        outcome=error.reason_code,
+                    )
+                    return False
+                if not prepared:
                     return False
                 if (
                     self._capture_weakening_support
@@ -2552,6 +2578,9 @@ class LiveWildCorridorSurveyExecutor(LiveWildEncounterExecutor):
             capture_status_support=capture_status_support,
             capture_weakening_support=capture_weakening_support,
             capture_level_evolution_edges=capture_level_evolution_edges,
+            # This survey consumes the latched stop; unrelated base users such
+            # as fishing keep their existing fail-closed health behavior.
+            settle_unavailable_catcher=True,
         )
         self._forward_directions = forward_directions
         self._starting_endpoint = starting_endpoint

@@ -446,6 +446,7 @@ def run_autonomous_options(
     refine_preparation: bool = False,
     defer_unbound_preparation: bool = False,
     allow_singleton_parent_support: bool = False,
+    associate_unique_combat: bool = False,
     initial_search_memory: GoalSearchMemory | None = None,
     train_inference_scope=None,
 ) -> dict[str, object]:
@@ -518,7 +519,7 @@ def run_autonomous_options(
         greedy_selection=greedy_selection,
         refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
         source=source_context,
         model=model,
         head=consequence_head,
@@ -570,14 +571,14 @@ def run_autonomous_options(
     ):
         raise ValueError("branch recovery requires a head and explicit objective dispatch")
     if consequence_head is not None:
-        from .player_challenge_consequence import ChallengeConsequenceHead
+        from .player_challenge_consequence import ChallengeConsequenceHead, consequence_feature_versions_compatible
 
         if (
             type(consequence_head) is not ChallengeConsequenceHead
             or consequence_head.feedback_version != 2
             or not continuous_player
-            or model.feature_version not in (7, 9, 10, 11, 15)
-            or consequence_head.feature_version != model.feature_version
+            or model.feature_version not in (7, 9, 10, 11, 15, 16)
+            or not consequence_feature_versions_compatible(consequence_head.feature_version, model.feature_version)
             or sequence_policy is not None
             or sequence_collector is not None
             or type(consequence_challenge_ref) is not str
@@ -603,7 +604,7 @@ def run_autonomous_options(
             greedy_selection=greedy_selection,
             refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
         )
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     _record(
@@ -656,6 +657,7 @@ def run_autonomous_options(
             **({"refine_preparation": True} if refine_preparation else {}),
             **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
             **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
+            **({"associate_unique_combat": True} if associate_unique_combat else {}),
             "maximum_cash_spent": maximum_cash_spent,
             "provenance": dict(provenance),
         },
@@ -740,7 +742,7 @@ def run_autonomous_options(
                 continuous_player
                 and not isinstance(options, RedPlayerSupport)
                 and (
-                    model.feature_version not in (5, 6, 7, 8, 9, 10, 11, 13, 14, 15)
+                    model.feature_version not in (5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16)
                     or not 5 <= options.menu.feature_version <= model.feature_version
                     or any(candidate.readiness is None for candidate in options.menu.candidates)
                 )
@@ -749,7 +751,7 @@ def run_autonomous_options(
             if integrated_play or (
                 continuous_player
                 and isinstance(options, RedLiveOptionSet)
-                and any(b.kind is GoalKind.ACQUIRE_SPECIES for b in options.bindings)
+                and any(b.tracks_search_effort for b in options.bindings)
             ):
                 assert isinstance(options, RedLiveOptionSet)
                 objective = objective_key(before.facts)
@@ -855,7 +857,8 @@ def run_autonomous_options(
                         greedy_selection=greedy_selection,
                         refine_preparation=refine_preparation,
             defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+                        source_state_sha256=before.sha256,
                     )
                 )
             except (ValueError, TypeError) as error:
@@ -897,6 +900,14 @@ def run_autonomous_options(
             cash_receipt = choice.private_consequence_receipt()
             if cash_receipt is not None:
                 _record(step / "consequence-cash-private.json", cash_receipt)
+        if (isinstance(choice, RedLiveOptionChoice) and choice.branch_recovery is not None
+                and choice.branch_recovery.unique_combat_witness is not None):
+            witness = choice.branch_recovery.unique_combat_witness
+            from .red_consequence_choice import branch_recovery_objectives
+            witness.validate(choice.branch_recovery.parent,
+                branch_recovery_objectives(choice.branch_recovery.objective_ref),
+                source_state_sha256=before.sha256)
+            _record(step / "preparation-combat-private.json", witness.document())
         _record(step / "decision.json", choice.public_dict())
         selection_seconds = monotonic() - selection_started
         diagnostic_started = monotonic()
@@ -1220,15 +1231,12 @@ def run_autonomous_options(
                 # do not spend that return reserve starting a second PC loan.
                 stop = "settlement_budget"
                 break
-        if stop_after_outcome is not None and stop_after_outcome():
-            stop = "declared_consequence_complete"
-            break
         if integrated_play:
             if cost is None or not 0 <= cost["cash_spent"] <= debit_bound:
                 stop = "unaccounted_integrated_cost"
                 break
             cash_spent += cost["cash_spent"]
-        if (integrated_play or continuous_player) and selected.kind is GoalKind.ACQUIRE_SPECIES:
+        if (integrated_play or continuous_player) and selected.tracks_search_effort:
             # A certified settled route exception has actual observed cost but
             # no completed executor report. Keep measured_cost unknown in the
             # failed receipt; reuse only that narrow certificate for memory.
@@ -1258,6 +1266,11 @@ def run_autonomous_options(
                     "cumulative_cash_spent": cash_spent,
                 },
             )
+        # A declared consequence is an administrative stop after the admitted
+        # outcome. Preserve its measured feedback before closing the segment.
+        if stop_after_outcome is not None and stop_after_outcome():
+            stop = "declared_consequence_complete"
+            break
     from .red_player_lesson_runtime import player_stop_diagnostics
 
     result: dict[str, object] = {

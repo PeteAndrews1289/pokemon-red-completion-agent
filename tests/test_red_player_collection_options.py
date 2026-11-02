@@ -511,3 +511,49 @@ def test_ordinary_supply_gap_does_not_invent_completion(flag):
     with pytest.raises(ValueError, match="explicit boolean"):
         p.ordinary_ball_resupply_peer_needed(RawGameState(True, 159, 21, 11, 6, 0),
                                               hall_of_fame=flag)
+
+
+@pytest.mark.parametrize("source,map_id,numbers", [
+    ("wild:Route1:grass", MapId.ROUTE_1, (9, 16)),
+    ("wild:Route2:grass", MapId.ROUTE_2, (9, 13)),
+])
+def test_shared_composition_binds_actual_discovery_source_from_cartridge(
+    monkeypatch, source, map_id, numbers,
+):
+    from pokemon_red_completion import gen1_cartridge as cartridge
+    from pokemon_red_completion.goal_manager import GoalUnavailableReason
+    from pokemon_red_completion.red_goal_skills import RedEncounterDiscoveryGoalProvider
+    from test_red_goal_skills import _Reader, _raw, _ActionPort, _adapter, _DiscoveryExecutor
+    from pokemon_red_completion.executor import CountingExecutor
+
+    # The pre-existing source may differ from the schema seed. Water cannot keep
+    # an all-seen walking survey eligible. No cartridge or guest inputs are used.
+    monkeypatch.setattr(cartridge, "internal_to_dex", lambda _: {90: numbers[0], 91: numbers[1]})
+    def tables(rom, *, medium):
+        assert rom == b"fixture" and medium == "grass"
+        return {int(map_id): [(2, 90), (3, 91)]}
+    monkeypatch.setattr(cartridge, "wild_tables", tables)
+    existing = RedLivingDexWildCorridor(source, int(map_id), (4, 2), (3, 2))
+    rt = collection_runtime(((GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY,
+                              existing.profile_parameters()),))
+    legacy = p.bind_player_collection_capabilities(rt, seed_corridor=corridor())
+    assert "source_species_numbers" not in next(
+        s for s in legacy.profile.providers if s.kind is GoalKind.EXPLORE).parameters
+    composed = p.bind_player_collection_capabilities(
+        rt, seed_corridor=corridor(), discovery_rom=b"fixture")
+    discovery = next(s for s in composed.profile.providers if s.kind is GoalKind.EXPLORE)
+    assert discovery.parameters["source_id"] == source
+    assert discovery.parameters["source_species_numbers"] == numbers
+    assert p.bind_player_collection_capabilities(
+        composed, seed_corridor=corridor(), discovery_rom=b"fixture").profile == composed.profile
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    provider = RedEncounterDiscoveryGoalProvider(
+        source, _DiscoveryExecutor(reader, actions), actions, port, adapter,
+        source_species_numbers=discovery.parameters["source_species_numbers"])
+    assert provider.offer(adapter.observe()).binding is not None
+    reader.pokedex = replace(reader.pokedex, seen_species=frozenset(numbers))
+    assert provider.offer(adapter.observe()).unavailable_reason is GoalUnavailableReason.NO_LEGAL_TARGET
+    assert actions.actions_executed == 0

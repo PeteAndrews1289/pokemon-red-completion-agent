@@ -46,6 +46,7 @@ from .observation import (
 )
 from .party_preparation import PreparationPurpose
 from .player_option_challenge import OptionChallenge
+from .player_option_story_unit import OptionStoryUnit
 from .red_badge_corridor import CORRIDOR_MAPS, quote_badge_corridor, traverse_badge_corridor
 from .red_battle_practice_cartridge import RedPracticeCartridge
 from .red_collection_fly import red_fly_landings
@@ -93,11 +94,17 @@ def _mechanics_option(
     record=None,
     completes_objective=False,
     objective_ref=OBJECTIVE,
+    story_unit=None,
 ):
     if type(completes_objective) is not bool:
         raise TypeError("Victory Road completion authority must be explicit")
     if completes_objective and objective_ref != OBJECTIVE:
         raise ValueError("Access mechanics cannot complete a League objective")
+    if story_unit is not None:
+        if type(story_unit) is not OptionStoryUnit:
+            raise TypeError("Victory Road story unit must be typed")
+        if story_unit.requires_further_selected_unit != (not completes_objective):
+            raise ValueError("Victory Road story unit completion scope differs")
     source = runtime.emulator.save_state_bytes()
     before = runtime.reader.read()
     protected = {
@@ -176,6 +183,10 @@ def _mechanics_option(
         verify,
         maximum_cash_debit=0,
         story_objective_ref=objective_ref,
+        # Only audited callers certify scope; other mechanics remain UNKNOWN.
+        story_approach_only=(story_unit.requires_further_selected_unit
+                             if story_unit is not None else False),
+        story_unit=story_unit,
     )
     return binding, OptionChallenge(False, False, 0.0, 0.0, 0.0)
 
@@ -422,6 +433,9 @@ def _puzzle_option(runtime, actions, route, name, contract, record, *, objective
         cost=0.2 + plan.cost / 3000,
         record=record,
         objective_ref=objective_ref,
+        # Strength changes an observed event/block; the enclosing story still
+        # needs another selected unit. This is interaction, never movement.
+        story_unit=OptionStoryUnit("interaction", True),
     )
 
 
@@ -480,6 +494,7 @@ def _rival_land_before_fly_option(runtime, actions, route, *, world, start, reco
         valid=lambda r: (r.map_id, r.player_y, r.player_x) == (raw.map_id, *at)
         and runtime.reader.read_overworld_movement_mode() is OverworldMovementMode.WALKING,
         cost=0.2 + cost / 3000, record=record, objective_ref=objective_ref,
+        story_unit=OptionStoryUnit("movement", True),
     )
 
 
@@ -488,8 +503,9 @@ def _rival_fly_approach_option(
     phase="route22-approach-fly",
     landing_town=MapId.VIRIDIAN_CITY,
     onward_destination=MapId.ROUTE_22,
+    indoor_departure=None,
 ):
-    """Shorten the selected approach, never choose or complete its rival battle."""
+    """Quote earned transport; an indoor offer ends at its actual outside boundary."""
     raw = runtime.reader.read()
     town = int(landing_town)
     destination = int(onward_destination)
@@ -498,9 +514,17 @@ def _rival_fly_approach_option(
         (int(MapId.INDIGO_PLATEAU),int(MapId.INDIGO_PLATEAU)),
     }:
         raise ValueError("late-story Fly destination is not declared")
+    source_map = raw.map_id
+    if indoor_departure is not None:
+        if (raw.map_id < 0x25 or start.map_id != raw.map_id
+                or indoor_departure.terminal_map != start.last_outside_map):
+            return None
+        # This is only an eligibility quote. No projected outdoor state is
+        # executed, observed as real, or used to claim a flight occurred.
+        source_map = indoor_departure.terminal_map
     if (
-        not 0 <= raw.map_id <= 0x24
-        or raw.map_id in {0x0B, town, destination}
+        not 0 <= source_map <= 0x24
+        or source_map in {0x0B, town, destination}
         or not int(raw.badge_bits or 0) & int(Badge.THUNDER)
         or not start.ready or start.interruption is not None or start.mode != "land"
         or runtime.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
@@ -536,6 +560,31 @@ def _rival_fly_approach_option(
     quoted_cost = 40 + (0 if onward is None else onward.cost)
     if walking_plan is not None and quoted_cost >= walking_plan.cost:
         return None
+    if indoor_departure is not None:
+        outside, at = indoor_departure.terminal_map, indoor_departure.terminal_at
+        protected = {name: getattr(raw, name, None) for name in (
+            "party_hp", "party_max_hp", "party_stats", "party_status", "party_moves", "party_pp",
+        )}
+
+        def depart():
+            replace(route, route_world=world, destination_map=outside, destination_at=at)(
+                actions, runtime.reader, runtime.emulator,
+            )
+            return dict(transport="observed_indoor_departure", map_id=outside, at=at,
+                        quoted_destination=destination, navigation_learned=False,
+                        flight_executed=False, requires_fresh_outdoor_observation=True)
+
+        return _mechanics_option(
+            runtime, actions, phase=phase.removesuffix("-fly") + "-departure", operation=depart,
+            valid=lambda r: (r.map_id, r.player_y, r.player_x) == (outside, *at)
+            and runtime.reader.read_overworld_movement_mode() is OverworldMovementMode.WALKING
+            and runtime.reader.read_pending_trainer_battle_identity() is None
+            and runtime.reader.read_fly_menu_state() is None
+            and not runtime.reader.read_bottom_dialogue_box_visible()
+            and all(getattr(r, name, None) == value for name, value in protected.items()),
+            cost=0.2 + indoor_departure.cost / 3000, record=record, objective_ref=objective_ref,
+            story_unit=OptionStoryUnit("movement", True),
+        )
 
     def fly():
         limited = HardCompositionActionLimiter(
@@ -559,6 +608,7 @@ def _rival_fly_approach_option(
         runtime, actions, phase=phase, operation=fly,
         valid=lambda r: (r.map_id, r.player_y, r.player_x) == (town, *landing),
         cost=0.2 + quoted_cost / 3000, record=record, objective_ref=objective_ref,
+        story_unit=OptionStoryUnit("movement", True),
     )
 
 
@@ -610,6 +660,7 @@ def _route_option(
                     runtime,actions,phase="indigo-return-departure",operation=depart,
                     valid=lambda r:(r.map_id,r.player_y,r.player_x)==(outside,*at),
                     cost=0.2+departure.cost/3000,record=record,objective_ref=objective_ref,
+                    story_unit=OptionStoryUnit("movement", True),
                 )
         flight = _rival_fly_approach_option(
             runtime,actions,route,world=world,start=start,walking_plan=None,
@@ -625,7 +676,7 @@ def _route_option(
             **({"goal_at": destination_at} if destination_at is not None else {}),
         )
     except RoutePlanningError:
-        return None
+        plan = None
     if (phase in {"route22-approach", "route22-return"}
             and destination_map == int(MapId.ROUTE_22)):
         shore = _rival_land_before_fly_option(
@@ -634,12 +685,20 @@ def _route_option(
         )
         if shore is not None:
             return shore
+        departure = None
+        if plan is None and raw.map_id >= 0x25:
+            from .red_indoor_departure_plan import bounded_indoor_departure
+
+            departure = bounded_indoor_departure(start, world)
         flight = _rival_fly_approach_option(
             runtime, actions, route, world=world, start=start, walking_plan=plan,
             record=record, objective_ref=objective_ref, phase=phase + "-fly",
+            **({"indoor_departure": departure} if departure is not None else {}),
         )
         if flight is not None:
             return flight
+    if plan is None:
+        return None
     target_map, target_at = destination_map, plan.terminal_at
     first = next((s for s in plan.steps if s.expected_map != raw.map_id), None)
     if first is not None:
@@ -675,6 +734,7 @@ def _route_option(
         record=record,
         completes_objective=completes,
         objective_ref=objective_ref,
+        story_unit=OptionStoryUnit("movement", not completes),
     )
 
 

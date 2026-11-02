@@ -112,6 +112,10 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         binding, before, terminal, report
     ):
         reasons[GoalKind.RESUPPLY] = {GoalFailureReason.OUTCOME_NOT_VERIFIED}
+    if binding.kind is GoalKind.RESUPPLY and _settled_funding_approach_limit(
+        binding, before, terminal, report
+    ):
+        reasons[GoalKind.RESUPPLY] = {GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED}
     if binding.kind is GoalKind.RESUPPLY and _settled_league_funding_loss(binding, terminal, report):
         reasons[GoalKind.RESUPPLY] = {GoalFailureReason.RESOURCE_LOST}
     if "route_setback" in report.evidence and not route_stop:
@@ -222,6 +226,26 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
     )
 
 
+
+def _settled_funding_approach_limit(binding, before, terminal, report):
+    evidence = report.evidence.get("funding_approach_partial")
+    return (
+        binding.binding_ref.startswith("red-trainer-funding:")
+        and isinstance(evidence, Mapping)
+        and evidence.get("schema") == "pokemon.red.funding-approach-partial.v1"
+        and evidence.get("stop_reason") == "verified_flee_limit"
+        and type(evidence.get("maximum_flees")) is int
+        and type(evidence.get("completed_flees")) is int
+        and evidence["maximum_flees"] == evidence["completed_flees"] == 8
+        and evidence.get("trainer_attempted") is False
+        and evidence.get("target_reached") is False
+        and type(evidence.get("income_earned")) is int and evidence["income_earned"] == 0
+        and evidence.get("terminal_sha256") == terminal.sha256
+        and before.facts.get("cash") == terminal.facts.get("cash")
+        and report.actions_executed > 0 and report.frames_executed > 0
+    )
+
+
 def settled_evolution_partial(binding, report):
     """Recognize the dose receipt; callers still verify costs and native custody.
 
@@ -275,6 +299,16 @@ def settled_evolution_partial(binding, report):
         and 1 <= evidence["maximum_training_quanta"] <= 512
         and evidence["completed_training_quanta"] == evidence["maximum_training_quanta"]
     )
+    # A later quantum may exhaust the selected venue after earlier verified
+    # wins. This remains an incomplete evolution; the next goal belongs to the
+    # model. A zero-win dose, unknown stop or unverified custody still stops.
+    productive_venue_stop = (
+        evidence.get("training_venue_exhausted") is True
+        and evidence.get("no_verified_win_in_quantum") is True
+        and evidence.get("no_verified_win") is False
+        and type(evidence.get("healing_trips")) is int
+        and evidence["healing_trips"] >= 0
+    )
     if (
         not (routed or native)
         or evidence.get("evolution_partial") is not True
@@ -283,6 +317,7 @@ def settled_evolution_partial(binding, report):
             evidence.get("settlement_reserve_reached") is True
             or evidence.get("wall_limit_reached") is True
             or quantum_stop
+            or productive_venue_stop
         )
         or type(evidence.get("completed_training_battles")) is not int
         or evidence["completed_training_battles"] <= 0
@@ -299,16 +334,18 @@ def _settled_partial_preparation(binding, before, terminal, report):
     exact dose allowance and the existing outer cost/custody checks.
     """
     evidence = report.evidence
-    if binding.binding_ref.startswith((
-        "pokemon.red:routed-preparation:", "pokemon.red:member-preparation:",
-    )):
-        # Member selection wraps the same routed executor with an identity for
-        # its exact trainee/target; it does not change the report or verifier.
+    member = binding.binding_ref.startswith("pokemon.red:member-preparation:")
+    routed_shape = any(key in evidence for key in ("mechanic", "support", "preparation"))
+    if (binding.binding_ref.startswith("pokemon.red:routed-preparation:")
+            or (member and routed_shape)):
+        # A member alias preserves its child's report. Away from the nurse the
+        # child is routed; at the nurse it can be a direct bounded executor.
+        # Malformed routed evidence must not fall through to a planted partial.
         if (evidence.get("mechanic") != "routed_preparation"
                 or evidence.get("support") != "cartridge_route_then_fresh_binding"):
             return False
         evidence = evidence.get("preparation")
-    elif not binding.binding_ref.startswith("pokemon.red:bounded-preparation:"):
+    elif not (member or binding.binding_ref.startswith("pokemon.red:bounded-preparation:")):
         return False
     if not isinstance(evidence, Mapping):
         return False
@@ -1011,7 +1048,7 @@ def menu_with_search_history(options, memory: GoalSearchMemory, objective: str):
                 binding.search_memory_source, search_objective_key(binding, objective)
             ),
         )
-        if binding.kind is GoalKind.ACQUIRE_SPECIES
+        if binding.tracks_search_effort
         else candidate
         for candidate, binding in zip(options.menu.candidates, options.bindings, strict=True)
     )

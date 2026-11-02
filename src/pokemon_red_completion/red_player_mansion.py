@@ -5,6 +5,7 @@ They do not choose the story objective, buy supplies, sell items or train a part
 Routes are replanned from the live map; there is no chapter movement string.
 """
 
+from .player_option_story_unit import OptionStoryUnit
 from dataclasses import replace
 from hashlib import sha256
 from types import SimpleNamespace
@@ -24,6 +25,7 @@ from .red_player_lesson import capture_player_lesson_snapshot
 from .red_player_story_travel import story_travel_binding
 from .rom import verify_rom_bytes
 from .route_plan import RoutePlanningError
+from .route_1_wild import WildFleeFieldExit, flee_wild
 
 OBJECTIVE = "obtain_secret_key"
 EXIT_OBJECTIVE = "defeat_blaine"
@@ -301,6 +303,59 @@ def mansion_restoration_binding(runtime, actions, *, route):
     )
 
 
+def _flee_drop_encounter(actions, reader, encounter):
+    """Verify only the authored 3F-to-1F drop interrupted by a wild battle."""
+    try:
+        escaped = flee_wild(
+            actions, reader, encounter, expected_map_id=encounter.map_id,
+            route_name="observed Mansion floor drop", stabilization_frames=120,
+            error_type=RuntimeError,
+        )
+        return escaped.public_dict()
+    except RuntimeError as failure:
+        cause = failure.__cause__
+        if type(cause) is not WildFleeFieldExit:
+            raise
+        before, after, evidence = cause.before, cause.after, cause.evidence
+        if not (
+            before is encounter and after == reader.read()
+            and before.battle_state == evidence.initial_battle_state == 1
+            and before.map_id == evidence.expected_map_id == int(MapId.POKEMON_MANSION_3F)
+            and (before.player_y, before.player_x) == DROP_TERMINAL
+            and after.map_id == evidence.map_id == int(MapId.POKEMON_MANSION_1F)
+            and (after.player_y, after.player_x) == (evidence.player_y, evidence.player_x) == DROP_TERMINAL
+            and after.battle_state == evidence.final_battle_state == 0
+            and after.battle_result == evidence.battle_result == 0
+            and evidence.control_ready and reader.read_input_readiness().ready
+            and evidence.hp_scope == "first_party_member"
+            and evidence.enemy_species_id > 0 and evidence.enemy_level > 0
+            and 0 < evidence.final_hp <= evidence.initial_hp
+            and evidence.maximum_hp_preserved and evidence.party_preserved
+            and evidence.level_preserved and evidence.pp_preserved and evidence.status_preserved
+            and 1 <= evidence.run_attempts <= 16 and evidence.stabilization_frames == 120
+            and not evidence.new_fainted_slots and not evidence.forced_switch_slots
+            and not evidence.status_changes_allowed and not evidence.party_faints_allowed
+            and not evidence.faint_prompt_exit and not evidence.ordinary_opponent_ko_exit
+            and evidence.native_purified_healing is None
+            and evidence.native_opponent_teleport_exit is None
+        ):
+            raise
+        from .wild_party_flee import validate_flee_party
+        from .battle_runtime import note_observed_battle_exit
+
+        try:
+            validate_flee_party(before, after)
+        except ValueError:
+            raise failure
+        note_observed_battle_exit()
+        # The cartridge resets battle_result during the drop script. Retain that
+        # zero and the rejected generic receipt; do not manufacture a RUN result.
+        return dict(verified=True, support="observed_mansion_drop_after_run",
+            source_map=before.map_id, terminal_map=after.map_id,
+            position_yx=list(DROP_TERMINAL), battle_result=after.battle_result,
+            generic_same_map_evidence=evidence.public_dict())
+
+
 def _mansion_interaction_option(
     runtime, actions, *, route, before, lesson, switch, drop, target_map, at, objective,
     kind=GoalKind.ADVANCE_STORY,
@@ -344,25 +399,24 @@ def _mansion_interaction_option(
             or event_flag_is_set(current.event_flags, int(EventFlag.MANSION_SWITCH_ON)) != switch
         ):
             raise RuntimeError("Mansion interaction approach or switch changed")
+        drop_wild_recovery = []
         if drop:
             _pulse(actions, MacroActionKind.MOVE, "down", frames=120)
             for _ in range(32):
                 current = reader.read()
                 if current.battle_state:
-                    from .surge import flee_wild
-
-                    if current.battle_state != 1 or current.map_id != int(MapId.POKEMON_MANSION_1F):
+                    if (
+                        current.battle_state != 1
+                        or current.map_id not in {
+                            int(MapId.POKEMON_MANSION_3F), int(MapId.POKEMON_MANSION_1F)
+                        }
+                        or (current.player_y, current.player_x) != DROP_TERMINAL
+                    ):
                         raise RuntimeError("Mansion drop triggered an unexpected battle")
-                    flee_wild(
-                        actions,
-                        reader,
-                        current,
-                        expected_map_id=int(MapId.POKEMON_MANSION_1F),
-                        route_name="observed Mansion floor drop",
-                        stabilization_frames=120,
-                        error_type=RuntimeError,
-                    )
-                if _field_ready(runtime):
+                    drop_wild_recovery.append(_flee_drop_encounter(actions, reader, current))
+                # A wild battle can begin on the drop tile before the cartridge
+                # changes floors. Settle that script without another movement.
+                if _field_ready(runtime) and reader.read().map_id == int(MapId.POKEMON_MANSION_1F):
                     break
                 _pulse(actions, MacroActionKind.WAIT, frames=120)
             current = reader.read()
@@ -413,6 +467,7 @@ def _mansion_interaction_option(
                 trainer_battles=0,
                 automatic_objectives=[],
                 pending_wild_recovery=pending_wild,
+                drop_wild_recovery=drop_wild_recovery,
                 statue_wild_recovery=None if drop else statue_wild_recovery,
             ),
         )
@@ -442,6 +497,9 @@ def _mansion_interaction_option(
             execute,
             verify,
             story_objective_ref=objective,
+            story_unit=(OptionStoryUnit("interaction", True)
+                        if kind is GoalKind.ADVANCE_STORY else None),
+            story_approach_only=kind is GoalKind.ADVANCE_STORY,
         ),
         OptionChallenge(False, False, 0.0, 0.0, 0.0),
     )

@@ -1,0 +1,119 @@
+{
+  "actual_badges": 2,
+  "actual_inputs": 0,
+  "actual_progress_credit": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 22,
+  "actual_running": false,
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "astra_review_warranted": true,
+  "baseline_gate1": "failed_final_corridor_error",
+  "baseline_gate2": "passed_literal_original_milestones",
+  "baseline_gate3": "passed",
+  "baseline_mid_badges": [
+    6,
+    8
+  ],
+  "baseline_mid_native_seconds": 3000.805,
+  "baseline_mid_outcomes": 115,
+  "baseline_mid_registrations": [
+    68,
+    84
+  ],
+  "baseline_package_sha256": "0c3bec3571dd2678b03cb0fdb25a2fb8d894ea7d0e9c6c3385a4ca3542a77e08",
+  "cached_medicine_quote_incremental_funding_margin": 0.022765447429808905,
+  "cached_unknownness_funding_success_delta": 4.0,
+  "costs": {
+    "actions": 165452.0,
+    "cash_debits": 40800.0,
+    "decisions": 197.0,
+    "frames": 14146015.0,
+    "heals": 132.0,
+    "physical_loads": 5.0,
+    "seconds": 5421.266622611999
+  },
+  "current_package_sha256": "2e1a1df999362dd2f0720e6280cc4018164105f548f9d30aa06c2a2dc91f737c",
+  "external_review_dispatched": false,
+  "final_cost_census_sha256": "04b67f18ef274114cea35384a8a57ff26cab10b30f025582cb3c1897e39da7f4",
+  "final_gate_adjudication_sha256": "648b4e07d9fc752a07facc4cd9ddd7de37e224ad5d9fb68727b4180ba7783b6c",
+  "fits": 0,
+  "measured_selection_receipt_seconds": 5.316362,
+  "menu_boundary_share": 0.31624,
+  "native_late": {
+    "cash": [
+      1078,
+      321
+    ],
+    "child_queries": 0,
+    "closed_outcomes": 81,
+    "coin_gain": 900,
+    "coin_spend": 18000,
+    "funding_earned": 19043,
+    "great_ball_gain": 3,
+    "great_ball_spend": 1800,
+    "medicine_gain": 0,
+    "native_errors": 0,
+    "new_completed_objectives": 0,
+    "ordinary_setbacks": 0,
+    "package_prefix": "2e1a1df9",
+    "parent_queries": 51,
+    "planned_seconds": 1500,
+    "registrations": [
+      116,
+      116
+    ],
+    "seconds": 1379.8076080510036,
+    "stop_reason": "insufficient_settlement_allowance",
+    "support_choices": 30
+  },
+  "native_mid": {
+    "badges": [
+      6,
+      8
+    ],
+    "child_queries": 3,
+    "closed_outcomes": 115,
+    "native_errors": 1,
+    "ordinary_setbacks": 14,
+    "package_prefix": "0c3bec35",
+    "parent_Blaine_seconds": 2083.523988479,
+    "parent_queries": 113,
+    "registrations": [
+      68,
+      84
+    ],
+    "seconds": 3000.804969089
+  },
+  "native_status": "All copied workers, guests and controls authenticated closed; no successor launched.",
+  "native_time_loss_reference_sha256": "b17aa871009d75c0afee7100833ed7e0f9939b1fa0ad30ae340a89874ea16642",
+  "new_candidate_gate_results": {
+    "all_three_passed": false,
+    "gate1": "unproved",
+    "gate2": "unproved",
+    "gate3": "unproved"
+  },
+  "new_native_TRAIN_rows": 0,
+  "new_weights": 0,
+  "next_step": "Review local success/goal value and cash horizons, then targeted genuine TRAIN and useful native correction before freezing once for all three gates. Profile menu construction independently.",
+  "no_inherited_gate_credit": true,
+  "physical_guest_loads": 5,
+  "private_live_auth_sha256": "a59bc7d689a7c049defe08b63d66e1fd43fb2c360efffb94c802b795c07565ba",
+  "repair": {
+    "corridor_probe_actions": 27,
+    "corridor_probe_frames": 840,
+    "corridor_quote_steps": 25,
+    "failed_zero_input_probe_loads": 2,
+    "frozen_focused_tests": 813,
+    "full_suite_pass_claimed": false,
+    "recovery_quote_steps": 106,
+    "source_commit": "c8437bbc593c617d6b4ec3d1b3af6252554ae5fb",
+    "source_corridor_focused_tests": 521,
+    "test_groups_overlap": true
+  },
+  "schema": "pokemon.development-episode-evidence.v1",
+  "session_id": "2026-10-29-midgame-medicine",
+  "status": "closed",
+  "two_hour_audit_sha256": "9c74c05cdd23c516a799f21295ebf1ef2d4f9f9e20948b4d336e028670f00058",
+  "zero_guest_qualifications": 3
+}

@@ -10,6 +10,7 @@ from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set
 from .player_option_challenge import OptionChallenge
+from .player_option_story_unit import OptionStoryUnit
 from .red_field_item import collect_visible_field_item, red_field_items
 from .red_machine_teaching import execute_machine_lesson, plan_machine_lesson
 from .red_npc_approach import approach_npc
@@ -503,6 +504,7 @@ def strength_reward_binding(runtime, actions, *, route):
         verify,
         maximum_cash_debit=0,
         story_objective_ref="obtain_strength",
+        story_unit=OptionStoryUnit("interaction", False),
     )
 
 

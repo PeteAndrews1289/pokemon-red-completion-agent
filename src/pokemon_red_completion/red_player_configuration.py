@@ -409,6 +409,65 @@ def _retained_capture_inventory(runtime, actions, *, parent, output):
 
 
 
+def _retained_wild_faint_inventory(runtime, actions, *, parent, rom):
+    """Resume only an authenticated failed wild tail through existing Run support.
+
+    This offers control settlement, never a strategic action or a healed copy.
+    The whole-party executor owns encounter, PP, inventory and surviving-party
+    conservation; one-off captures retain their separate journal authority.
+    """
+    read = getattr(getattr(runtime, "reader", None), "read", None)
+    if not callable(read):
+        return None
+    raw = read()
+    active = getattr(raw, "active_party_index", None)
+    if (raw.battle_state != 1 or type(active) is not int
+            or not raw.party_hp or not 0 <= active < len(raw.party_hp)
+            or raw.party_hp[active] != 0 or not any(raw.party_hp)):
+        return None
+    parent = Path(parent)
+    if not all((parent / name).is_file() for name in
+               ("RESULT.json", "CONTEXT.json", "terminal.state")):
+        return None
+    state = runtime.emulator.save_state_bytes()
+    context_bytes = (parent / "CONTEXT.json").read_bytes()
+    result = json.loads((parent / "RESULT.json").read_bytes())
+    context = json.loads(context_bytes)
+    state_sha = sha256(state).hexdigest()
+    if (state != (parent / "terminal.state").read_bytes()
+            or not checkpoint_quiescent(result)
+            or result.get("state_sha256") != state_sha
+            or context.get("state_sha256") != state_sha
+            or result.get("context_sha256") != sha256(context_bytes).hexdigest()
+            or result.get("spent") != context.get("spent")
+            or result.get("continuation_reason") != "native_execution_error"):
+        return None
+    outcomes = result.get("episode", {}).get("outcomes", ())
+    if not outcomes:
+        return None
+    outcome = outcomes[-1]
+    chain = outcome.get("error_chain", ())
+    if (outcome.get("terminal_state_sha256") != state_sha
+            or outcome.get("error_type") != "RouteExecutionError"
+            or not chain or type(chain[0]) is not dict
+            or chain[0].get("error_type") != "RouteExecutionError"
+            or chain[0].get("reason_code") != "world_state_diverged"):
+        return None
+    from .red_player_wild_recovery import interrupted_wild_binding
+
+    binding = interrupted_wild_binding(
+        runtime, actions, rom=rom() if callable(rom) else rom, allow_fainted_active=True,
+    )
+    if binding is None:
+        return None
+    blocked = GoalOpportunity(
+        binding.binding_ref + ":settlement-only", GoalKind.ADVANCE_STORY,
+        GoalAvailability.UNAVAILABLE,
+        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+    )
+    return GoalBindingSet((binding.opportunity, blocked), (binding,))
+
+
 def _retained_field_faint_inventory(runtime, actions, *, parent):
     """Read the exact failed native parent before offering compulsory settlement."""
     read = getattr(getattr(runtime, "reader", None), "read", None)
@@ -533,6 +592,18 @@ def local_vermilion_ball_supply_peers(runtime, actions, observation, *, world):
                                           world=world, _town=int(MapId.VERMILION_CITY))
 
 
+def connect_early_capture_status_support(runtime):
+    """Reuse optional non-damaging preparation, even without a status helper.
+
+    The existing preparer can select a healthy catcher and throw directly. It
+    never substitutes the legacy damaging Tackle fallback or requires ownership
+    of a sleep/paralysis move. Nonlethal damage support is not enabled here.
+    """
+    from .red_living_dex_wild_corridor import bind_red_optional_capture_status_profile
+
+    return replace(runtime, profile=bind_red_optional_capture_status_profile(runtime.profile))
+
+
 def assemble_configured_player(
     backend, configuration, parent, output, *, plan_path, model_feature_version=7,
     evolution_venue_model=None, training_admission=None, include_preparation_party_context=False,
@@ -540,9 +611,9 @@ def assemble_configured_player(
     """Reuse the existing composition with persistent admission and loan wiring."""
     if not isinstance(configuration, RedPlayerConfiguration):
         raise TypeError("typed player configuration required")
-    if type(model_feature_version) is not int or model_feature_version not in (5, 6, 7, 8, 9, 10, 11, 13, 14, 15):
+    if type(model_feature_version) is not int or model_feature_version not in (5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16):
         raise ValueError("configured player requires a supported model feature version")
-    if type(include_preparation_party_context) is not bool or (include_preparation_party_context and model_feature_version!=15):
+    if type(include_preparation_party_context) is not bool or (include_preparation_party_context and model_feature_version not in (15, 16)):
         raise ValueError("preparation party context requires explicit V15 observation opt-in")
     if configuration.evolution_venue_model_sha256 is not None and evolution_venue_model is None:
         evolution_venue_model = declared_native_evolution_venue_model(
@@ -611,6 +682,11 @@ def assemble_configured_player(
         if retained is not None:
             return retained
         if training_admission is None:
+            retained = _retained_wild_faint_inventory(
+                args[0], args[1], parent=parent, rom=lambda: backend.c.ROM.read_bytes(),
+            )
+            if retained is not None:
+                return retained
             from .red_indoor_departure_plan import native_ship_departure_binding
 
             departure = native_ship_departure_binding(args[0], args[1])
@@ -696,6 +772,9 @@ def assemble_configured_player(
     def factory(controller):
         runtime = factory0(controller)
         flags = dict(configuration.assembly_flags)
+        if (training_admission is None and flags["include_rewards"]
+                and flags["include_early_preparation"]):
+            runtime = connect_early_capture_status_support(runtime)
         if flags["include_rewards"] and flags["include_supply"]:
             runtime = connect_retained_ordinary_funding(runtime, holder.get("actor"))
         state = controller.save_state_bytes()
@@ -737,7 +816,8 @@ def assemble_configured_player(
             },
             party_guard=guard,
         )
-        runtime = replace(runtime, adapter=adapter)
+        runtime = replace(runtime, adapter=adapter,
+            certified_evolution_helper_xp=(training_admission is None and flags["include_rewards"]))
         if venue_policy is not None:
             runtime = replace(runtime, native_evolution_venue_policy=venue_policy)
         # Existing ROM route topology; there is no supplied strategic destination.
@@ -753,6 +833,10 @@ def assemble_configured_player(
             runtime,
             evolution_settlement=lambda actions: restore_guarded_party_loan(
                 runtime, actions, route.route_world
+            ),
+            resource_wild_faint_recovery=(
+                training_admission is None
+                and dict(configuration.assembly_flags)["include_rewards"]
             ),
         )
         if not pending_loan:

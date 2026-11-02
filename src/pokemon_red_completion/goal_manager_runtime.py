@@ -34,6 +34,7 @@ from pokemon_red_completion.goal_manager_trajectory import (
 )
 from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
+from .player_option_story_unit import OptionStoryUnit
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -262,8 +263,16 @@ class ExecutableGoalBinding:
     # A selected approach still requires a separately selected native phase.
     story_approach_only: bool = False
     cash_outcome: GoalCashOutcome | None = None
+    story_unit: OptionStoryUnit | None = None
 
     def __post_init__(self) -> None:
+        if self.story_unit is not None and (
+            type(self.story_unit) is not OptionStoryUnit
+            or self.kind is not GoalKind.ADVANCE_STORY
+            or self.story_objective_ref is None
+            or self.story_unit.requires_further_selected_unit != self.story_approach_only
+        ):
+            raise GoalManagerRuntimeError("story unit differs from certified executable scope")
         if self.cash_outcome is not None and (
             type(self.cash_outcome) is not GoalCashOutcome
             or self.resource_quote is not None
@@ -296,15 +305,19 @@ class ExecutableGoalBinding:
             raise GoalManagerRuntimeError("story context must bind a story objective")
         if self.search_source_ref is not None and (
             not isinstance(self.search_source_ref, str) or not self.search_source_ref
-            or self.kind is not GoalKind.ACQUIRE_SPECIES
+            or self.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EXPLORE}
         ):
-            raise GoalManagerRuntimeError("search source must bind an acquisition")
+            raise GoalManagerRuntimeError("search source must bind acquisition or discovery")
         if self.search_objective_sha256 is not None and (
             not isinstance(self.search_objective_sha256, str)
             or re.fullmatch(r"[0-9a-f]{64}", self.search_objective_sha256) is None
-            or self.kind is not GoalKind.ACQUIRE_SPECIES
+            or self.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EXPLORE}
         ):
-            raise GoalManagerRuntimeError("search objective must bind an acquisition SHA256")
+            raise GoalManagerRuntimeError("search objective must bind acquisition or discovery SHA256")
+        if self.kind is GoalKind.EXPLORE and (
+            (self.search_source_ref is None) != (self.search_objective_sha256 is None)
+        ):
+            raise GoalManagerRuntimeError("discovery search requires both source and objective")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise GoalManagerRuntimeError("goal binding reference must be non-empty")
         if not isinstance(self.kind, GoalKind):
@@ -313,6 +326,16 @@ class ExecutableGoalBinding:
             raise GoalManagerRuntimeError("goal binding requires executor and verifier callables")
         # Reuse the policy contract's strict normalized-metric validation.
         _ = self.opportunity
+
+    @property
+    def tracks_search_effort(self) -> bool:
+        # Acquisition retains its legacy fallback. Only explicitly bound search
+        # exploration uses this memory; generic exploration is not a failed search.
+        return self.kind is GoalKind.ACQUIRE_SPECIES or (
+            self.kind is GoalKind.EXPLORE
+            and self.search_source_ref is not None
+            and self.search_objective_sha256 is not None
+        )
 
     @property
     def search_memory_source(self) -> str:

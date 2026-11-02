@@ -510,8 +510,11 @@ def run_bounded_player_episode(
             raise BoundedPlayerError(
                 "successful bounded goal did not change semantic state"
             )
+        search_binding = current.binding_set.require(
+            question.opportunities[execution.selected_candidate_index].binding_ref
+        )
         if search_memory is not None and actions > 0 and (
-            execution.selected_kind is GoalKind.ACQUIRE_SPECIES
+            search_binding.tracks_search_effort
             and (
                 execution.passed
                 or execution.verification.failure_reason in {
@@ -521,10 +524,8 @@ def run_bounded_player_episode(
             )
         ):
             search_memory.record(
-                current.binding_set.require(
-                    question.opportunities[execution.selected_candidate_index].binding_ref
-                ).search_memory_source,
-                current.collection.required_specimens_sha256,
+                search_binding.search_memory_source,
+                search_binding.search_objective_sha256 or current.collection.required_specimens_sha256,
                 exhausted=not execution.passed, actions=actions, frames=frames,
             )
             refreshed = _observe_without_actions(observe, budget_meter, executed_budget)

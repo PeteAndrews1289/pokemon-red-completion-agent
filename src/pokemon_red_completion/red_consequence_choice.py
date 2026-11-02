@@ -13,6 +13,7 @@ from .living_dex_option_value import (
 )
 from .player_challenge_consequence import (
     ChallengeConsequenceHead, supports_consequence_preparation,
+    consequence_feature_versions_compatible, consequence_candidate_vector,
 )
 from .provenance import canonical_sha256
 from .red_live_option_menu import (
@@ -77,7 +78,7 @@ def branch_recovery_scope_ref(objective_ref):
 
 def branch_recovery_identity(
     branch_sha256, head_sha256, objective_ref, *, greedy_selection=False,
-    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False,
+    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
 ):
     """Private dispatch context binds authority,never enters model features."""
     if (
@@ -98,12 +99,18 @@ def branch_recovery_identity(
         not defer_unbound_preparation or not greedy_selection
     ):
         raise ValueError("singleton parent support requires explicit parent-bound preparation")
+    if type(associate_unique_combat) is not bool or associate_unique_combat and (
+        not greedy_selection or not refine_preparation or defer_unbound_preparation
+        or allow_singleton_parent_support
+    ):
+        raise ValueError("unique combat association requires unmasked greedy preparation refinement")
     plural = type(objective_ref) is tuple
     if plural and not greedy_selection:
         raise ValueError("plural branch recovery requires declared highest-score selection")
     return canonical_sha256(
         dict(
-            schema=("pokemon.red.branch-recovery-policy.v6" if allow_singleton_parent_support
+            schema=("pokemon.red.branch-recovery-policy.v7" if associate_unique_combat
+                    else "pokemon.red.branch-recovery-policy.v6" if allow_singleton_parent_support
                     else "pokemon.red.branch-recovery-policy.v5" if defer_unbound_preparation
                     else "pokemon.red.branch-recovery-policy.v4" if refine_preparation
                     else "pokemon.red.branch-recovery-policy.v3" if plural
@@ -118,13 +125,14 @@ def branch_recovery_identity(
             **({"refine_preparation": True} if refine_preparation else {}),
             **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
             **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
+            **({"associate_unique_combat": True} if associate_unique_combat else {}),
         )
     )
 
 
 def validate_greedy_branch_recovery_scope(
     *, allow, greedy_selection, source, model, head, objective_ref, challenge_ref,
-    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False,
+    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
     train_inference_scope=None,
 ):
     """Default-off composition admission, not a new choice policy or feature."""
@@ -142,6 +150,12 @@ def validate_greedy_branch_recovery_scope(
         not allow or not defer_unbound_preparation or greedy_selection is not True
     ):
         raise ValueError("singleton parent support requires explicit DEVELOPMENT composition scope")
+    if type(associate_unique_combat) is not bool or associate_unique_combat and (
+        not allow or greedy_selection is not True or not refine_preparation
+        or defer_unbound_preparation or allow_singleton_parent_support
+        or source.get("partition") != "development" or train_inference_scope is not None
+    ):
+        raise ValueError("unique combat association requires explicit unmasked DEVELOPMENT scope")
     train_inference = False
     if train_inference_scope is not None:
         from .red_production_train_inference import validate_train_consequence_inference
@@ -155,9 +169,9 @@ def validate_greedy_branch_recovery_scope(
         greedy_selection is not True
         or (source.get("partition") != "development" and not train_inference)
         or not isinstance(model, LivingDexOptionValueModel)
-        or model.feature_version not in (7, 9, 10, 11, 15)
+        or model.feature_version not in (7, 9, 10, 11, 15, 16)
         or type(head) is not ChallengeConsequenceHead
-        or head.feature_version != model.feature_version
+        or not consequence_feature_versions_compatible(head.feature_version, model.feature_version)
         or head.feedback_version != 2
         or head.provenance != "native_train"
         or not valid_branch_recovery_objectives(objective_ref)
@@ -175,12 +189,16 @@ def validate_greedy_branch_recovery_scope(
     branch_recovery_identity(model.model_sha256, head.model_sha256, objective_ref,
                              greedy_selection=True, refine_preparation=refine_preparation,
                              defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support)
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat)
     return True if train_inference else None
 
 
-def _refinement_branch(parent, scope, *, refine_preparation, defer_unbound_preparation=False, allow_singleton_parent_support=False):
+def _refinement_branch(parent, scope, *, refine_preparation, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False, unique_combat_witness=None):
     """Bind an existing combat question without guessing a preparation target."""
+    if unique_combat_witness is not None:
+        if not associate_unique_combat:
+            raise ValueError("undeclared unique combat witness")
+        return unique_combat_witness.validate(parent, scope)
     options = parent.options
     selected = parent.selected_binding
     candidate = options.menu.candidates[parent.selected_candidate_index]
@@ -206,6 +224,75 @@ def _refinement_branch(parent, scope, *, refine_preparation, defer_unbound_prepa
 
 
 @dataclass(frozen=True)
+class UniqueObservedCombatWitness:
+    """Private current-boundary association, never a parent feature or choice."""
+
+    options: RedLiveOptionSet
+    source_state_sha256: str
+    preparation_binding: object
+    combat_binding: object
+
+    def validate(self, parent, scope, *, source_state_sha256=None):
+        from .player_preparation_party_context import PreparationPartyWitness
+        party = self.options.preparation_party_witness
+        if (parent.options is not self.options
+                or parent.selected_binding is not self.preparation_binding
+                or parent.mode is not RedLiveOptionSelectionMode.MODEL_GREEDY
+                or type(party) is not PreparationPartyWitness
+                or party.source_state_sha256 != self.source_state_sha256
+                or (source_state_sha256 is not None and source_state_sha256 != self.source_state_sha256)
+                or not _unbound_level_dose(self.options, parent.selected_candidate_index)
+                or _unique_observed_combat(self.options, scope) is not self.combat_binding):
+            raise ValueError("unique combat witness differs from exact observed preparation boundary")
+        return self.combat_binding
+
+    def document(self):
+        return dict(schema="pokemon.red.unique-observed-combat-witness.v1",
+            source_state_sha256=self.source_state_sha256,
+            menu_sha256=self.options.menu.policy_sha256,
+            preparation_binding_ref=self.preparation_binding.binding_ref,
+            combat_binding_ref=self.combat_binding.binding_ref,
+            combat_objective_ref=self.combat_binding.story_objective_ref,
+            association_rule="sole_available_known_nonapproach_combat_executor",
+            parent_combat_selection=False, teacher_selected=False)
+
+
+def _unique_observed_combat(options, scope):
+    """Uniqueness is over all legal story peers, before checking allowed scope."""
+    combats = []
+    for i in options.menu.available_indices:
+        binding, candidate = options.binding(i), options.menu.candidates[i]
+        if binding.kind is not GoalKind.ADVANCE_STORY:
+            continue
+        challenge = candidate.challenge
+        if challenge is None:
+            return None  # Another story executor has unknown combat scope.
+        if not challenge.combat_required:
+            continue
+        if not challenge.opposition_known or binding.story_approach_only:
+            return None
+        combats.append(binding)
+    return combats[0] if len(combats) == 1 and combats[0].story_objective_ref in scope else None
+
+
+def _selected_unique_combat_witness(parent, scope, source_state_sha256):
+    from .player_preparation_party_context import PreparationPartyWitness
+    options = parent.options
+    if source_state_sha256 is None:
+        return None  # Pure callers without a native boundary cannot assert one.
+    if (parent.mode is not RedLiveOptionSelectionMode.MODEL_GREEDY
+            or not _unbound_level_dose(options, parent.selected_candidate_index)):
+        return None
+    branch = _unique_observed_combat(options, scope)
+    if branch is None or type(options.preparation_party_witness) is not PreparationPartyWitness:
+        return None
+    witness = UniqueObservedCombatWitness(options, source_state_sha256,
+        parent.selected_binding, branch)
+    witness.validate(parent, scope, source_state_sha256=source_state_sha256)
+    return witness
+
+
+@dataclass(frozen=True)
 class BranchRecoveryDecision:
     """Two existing decisions,with no score blending or fixed branch order."""
 
@@ -217,6 +304,8 @@ class BranchRecoveryDecision:
     refine_preparation: bool = False
     defer_unbound_preparation: bool = False
     allow_singleton_parent_support: bool = False
+    associate_unique_combat: bool = False
+    unique_combat_witness: UniqueObservedCombatWitness | None = None
 
     @property
     def identity(self):
@@ -225,7 +314,7 @@ class BranchRecoveryDecision:
             greedy_selection=self.greedy_selection,
             refine_preparation=self.refine_preparation,
             defer_unbound_preparation=self.defer_unbound_preparation,
-            allow_singleton_parent_support=self.allow_singleton_parent_support,
+            allow_singleton_parent_support=self.allow_singleton_parent_support, associate_unique_combat=self.associate_unique_combat,
         )
 
     def validate(self, choice):
@@ -234,6 +323,7 @@ class BranchRecoveryDecision:
             or type(self.refine_preparation) is not bool
             or type(self.defer_unbound_preparation) is not bool
             or type(self.allow_singleton_parent_support) is not bool
+            or type(self.associate_unique_combat) is not bool
             or type(self.parent) is not RedLiveOptionChoice
             or self.parent.branch_recovery is not None
             or self.parent.sequence_policy is not None
@@ -261,6 +351,10 @@ class BranchRecoveryDecision:
                 choice.options, branch_recovery_objectives(self.objective_ref))
         ):
             raise ValueError("forced singleton parent differs from exact observed combat binding")
+        if self.unique_combat_witness is not None:
+            if type(self.unique_combat_witness) is not UniqueObservedCombatWitness or not self.associate_unique_combat or self.child is None:
+                raise ValueError("private association requires an actual declared child comparison")
+            self.unique_combat_witness.validate(self.parent, branch_recovery_objectives(self.objective_ref))
         if self.child is None:
             if (
                 choice.selected_binding is not selected
@@ -279,7 +373,8 @@ class BranchRecoveryDecision:
             self.parent, branch_recovery_objectives(self.objective_ref),
             refine_preparation=self.refine_preparation,
             defer_unbound_preparation=self.defer_unbound_preparation,
-            allow_singleton_parent_support=self.allow_singleton_parent_support,
+            allow_singleton_parent_support=self.allow_singleton_parent_support, associate_unique_combat=self.associate_unique_combat,
+            unique_combat_witness=self.unique_combat_witness,
         )
         if (
             type(self.child) is not RedLiveOptionChoice
@@ -291,7 +386,8 @@ class BranchRecoveryDecision:
         ):
             raise ValueError("branch recovery child crosses its selected objective")
         parent_challenge = self.parent.options.menu.candidates[
-            self.parent.selected_candidate_index
+            next(i for i, b in enumerate(self.parent.options.bindings) if b is branch)
+            if self.unique_combat_witness is not None else self.parent.selected_candidate_index
         ].challenge
         if (
             parent_challenge is None
@@ -347,7 +443,7 @@ class BranchRecoveryDecision:
     def document(self):
         return dict(
             branch=self.parent.public_dict(),
-            **({"parent_menu": self.parent.options.public_dict()} if self.defer_unbound_preparation else {}),
+            **({"parent_menu": self.parent.options.public_dict()} if self.defer_unbound_preparation or self.associate_unique_combat else {}),
             recovery=None if self.child is None else self.child.public_dict(),
             recovery_menu=None if self.child is None else self.child.options.public_dict(),
             head_sha256=self.head_sha256,
@@ -377,6 +473,18 @@ class BranchRecoveryDecision:
                if self.allow_singleton_parent_support else {}),
             **({"refine_preparation": True} if self.refine_preparation else {}),
             **({"defer_unbound_preparation": True} if self.defer_unbound_preparation else {}),
+            **({"associate_unique_combat": True,
+                "parent_authority": self.parent.mode.value,
+                "parent_model_queries": int(self.parent.mode in {
+                    RedLiveOptionSelectionMode.MODEL_EXPLORATION,
+                    RedLiveOptionSelectionMode.MODEL_GREEDY}),
+                "child_model_queries": int(self.child is not None),
+                "unique_combat_association": self.unique_combat_witness is not None,
+                "parent_selected_kind": self.parent.selected_binding.kind.value,
+                "child_selected_kind": None if self.child is None else self.child.selected_binding.kind.value,
+                "child_overrode_parent_binding": self.child is not None and self.child.selected_binding is not self.parent.selected_binding,
+                "association_witness_sha256": None if self.unique_combat_witness is None else canonical_sha256(self.unique_combat_witness.document())}
+               if self.associate_unique_combat else {}),
         )
 
 
@@ -393,7 +501,8 @@ def _branch_scope_available(options, scope):
 
 def select_branch_recovery_live_option(
     model, options, head, *, objective_ref, seed, greedy_selection=False,
-    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False,
+    refine_preparation=False, defer_unbound_preparation=False, allow_singleton_parent_support=False, associate_unique_combat=False,
+    source_state_sha256=None,
 ):
     """Let the parent choose first; refine its selected declared combat branch.
 
@@ -404,26 +513,36 @@ def select_branch_recovery_live_option(
     """
     if (type(head) is not ChallengeConsequenceHead or head.feedback_version != 2
             or not isinstance(model, LivingDexOptionValueModel)
-            or model.feature_version not in (7, 9, 10, 11, 15)
-            or head.feature_version != model.feature_version):
+            or model.feature_version not in (7, 9, 10, 11, 15, 16)
+            or not consequence_feature_versions_compatible(head.feature_version, model.feature_version)):
         raise ValueError("branch recovery requires the prospective V2head")
     identity = branch_recovery_identity(model.model_sha256, head.model_sha256, objective_ref,
                                         greedy_selection=greedy_selection,
                                         refine_preparation=refine_preparation,
                              defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support)
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat)
     scope = branch_recovery_objectives(objective_ref)
     scope_available = _branch_scope_available(options, scope)
-    defer_for_scope = defer_unbound_preparation and scope_available
+    # A requested singleton context must still validate its sole actual branch
+    # when the declared objective is wrong. Do not silently query the full parent.
+    non_doses = tuple(i for i in options.menu.available_indices
+                      if not _unbound_level_dose(options, i))
+    singleton_validation = (allow_singleton_parent_support and len(non_doses) < 2
+                            and len(non_doses) < len(options.menu.available_indices))
+    defer_for_scope = defer_unbound_preparation and (scope_available or singleton_validation)
     parent = _select_preparation_parent(model, options, seed=seed,
         greedy_selection=greedy_selection, defer_unbound_preparation=defer_for_scope,
-        allow_singleton_parent_support=allow_singleton_parent_support and scope_available,
+        allow_singleton_parent_support=allow_singleton_parent_support and (scope_available or singleton_validation),
         scope=scope)
     selected = parent.selected_binding
-    challenge = parent.options.menu.candidates[parent.selected_candidate_index].challenge
+    witness = (_selected_unique_combat_witness(parent, scope, source_state_sha256)
+               if associate_unique_combat else None)
     branch = _refinement_branch(parent, scope, refine_preparation=refine_preparation,
                              defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support)
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            unique_combat_witness=witness)
+    challenge = (None if branch is None else next(c.challenge for b, c in
+        zip(options.bindings, options.menu.candidates, strict=True) if b is branch))
     child = None
     if (
         parent.mode in {
@@ -477,7 +596,8 @@ def select_branch_recovery_live_option(
                                      greedy_selection=greedy_selection,
                                      refine_preparation=refine_preparation,
                              defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support)
+            allow_singleton_parent_support=allow_singleton_parent_support, associate_unique_combat=associate_unique_combat,
+            unique_combat_witness=witness if child is not None else None)
     if child is None:
         return replace(parent, options=options,
             mode=(RedLiveOptionSelectionMode.MODEL_EXPLORATION
@@ -678,7 +798,7 @@ def select_consequence_live_option(options, head, *, challenge_ref, seed):
     if (
         len(
             {
-                options.menu.candidate_vector(i, feature_version=head.feature_version)
+                consequence_candidate_vector(options.menu, i, feature_version=head.feature_version)
                 for i in options.menu.available_indices
             }
         )
@@ -716,6 +836,8 @@ def selected_preparation_parent(choice):
         return None
     receipt = choice.branch_recovery
     receipt.validate(choice)
+    if receipt.child is not None and choice.selected_binding.kind is GoalKind.DEVELOP_TEAM and receipt.unique_combat_witness is not None:
+        return receipt.unique_combat_witness.validate(receipt.parent, branch_recovery_objectives(receipt.objective_ref))
     if (receipt.child is None or choice.selected_binding.kind is not GoalKind.DEVELOP_TEAM
             or receipt.parent.selected_binding.kind is not GoalKind.ADVANCE_STORY):
         return None
