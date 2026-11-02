@@ -434,7 +434,7 @@ That makes the best current interview story: I did not use a neural network wher
 the better tool, and I did not create synthetic labels to claim training had started. I built the
 measurement boundary first, preserved negative outcomes, and made the next model earn its authority
 against route-cost and candidate-shape baselines. See the
-[current audit](../current-audit-2026-08-11.md),
+[current audit](retired-plans-2026-10-07/current-audit-2026-08-11.md),
 [acquisition evidence](../evidence/acquisition-routes-2026-08-11.json), and
 [joint-routing evidence](../evidence/joint-route-pricing-audit-2026-08-11.json), plus the
 [safe-hub calibration](../evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
@@ -463,8 +463,8 @@ fake possession permission because it needs player/boulder state search.
 That pair is the best interview story in the repository. It demonstrates causal evaluation,
 calibration against rare actions, separation of model errors from executor errors, source-bound
 experiment lineage, and honest negative evidence. See the
-[August 10 audit](../current-audit-2026-08-10.md),
-[navigation audit](../traversal-audit-2026-08-10.md),
+[August 10 audit](retired-plans-2026-10-07/current-audit-2026-08-10.md),
+[navigation audit](retired-plans-2026-10-07/traversal-audit-2026-08-10.md),
 [passing receipt](../evidence/portable-clean-start-six-role-perturbation-12-qualification-2026-08-10.json),
 and [failure receipt](../evidence/portable-clean-start-six-role-perturbation-13-failure-2026-08-10.json).
 
@@ -700,7 +700,7 @@ switch-decline sequence canceled evolution. This is a compact example of why UI 
 semantic intent and postconditions.
 
 Those limitations are not hidden backlog trivia; they define the next falsification tests. The
-[current audit](../current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
+[current audit](retired-plans-2026-10-07/current-audit-2026-08-09.md) explains why the ten clean-start roots should not open
 until the now-canonical-qualified reserve-aware stack also passes a perturbation rehearsal.
 
 ## Resume-ready bullets

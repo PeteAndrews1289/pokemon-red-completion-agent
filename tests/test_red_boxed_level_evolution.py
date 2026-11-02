@@ -333,6 +333,44 @@ def test_route_backed_skill_identity_remains_compatible_with_published_v1() -> N
     assert _observed_pc_plan().skill_binding_sha256 != _plan().skill_binding_sha256
 
 
+def test_native_bound_retained_escort_supports_pre_blastoise_party(monkeypatch):
+    world = _world()
+    escort = red_internal_species_id(8)
+    world.party[0] = escort
+    plan = replace(_plan(), escort_internal_species_id=escort)
+    adapter = _adapter(monkeypatch, world, plan=plan)
+    before = dependency_specimen_ledger(world.collection())
+    bound = adapter.qualify(red_dual_capability_scenario_specs()[1], before)
+    assert world.actions_executed == 0
+    report = bound.execute()
+    assert report.after_ledger.count(red_species_ref(12)) == 1
+    assert escort in world.party and BLASTOISE_SPECIES_ID not in world.party
+    assert plan.skill_binding_sha256 != _plan().skill_binding_sha256
+    assert "escort_internal_species_id" not in plan.public_dict()
+
+
+def test_missing_bound_escort_still_refuses_without_input(monkeypatch):
+    world = _world()
+    world.party[0] = red_internal_species_id(8)
+    adapter = _adapter(monkeypatch, world)
+    before = dependency_specimen_ledger(world.collection())
+    with pytest.raises(RedBoxedLevelEvolutionError, match="party boundary"):
+        adapter.qualify(red_dual_capability_scenario_specs()[1], before)
+    assert world.actions_executed == 0 and world.log == []
+
+
+@pytest.mark.parametrize("escort", [PRECURSOR, EVOLVED, HITMONLEE_SPECIES_ID])
+def test_bound_escort_cannot_be_trainee_or_deposited_member(escort):
+    with pytest.raises(RedBoxedLevelEvolutionError, match="retained escort"):
+        replace(_plan(), escort_internal_species_id=escort)
+
+
+@pytest.mark.parametrize("escort", [None, 0, True])
+def test_bound_escort_cannot_be_missing_or_untyped(escort):
+    with pytest.raises(RedBoxedLevelEvolutionError, match="escort_internal_species_id"):
+        replace(_plan(), escort_internal_species_id=escort)
+
+
 def test_selected_boxed_evolution_routes_stores_trains_and_proves_exact_transition(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -365,10 +403,14 @@ def test_selected_boxed_evolution_routes_stores_trains_and_proves_exact_transiti
     assert red_species_ref(12) not in encoded
 
 
+@pytest.mark.parametrize("native_escort", [False, True])
 def test_goal_executor_bridge_reuses_the_boxed_engine_without_species_logic(
     monkeypatch: pytest.MonkeyPatch,
+    native_escort: bool,
 ) -> None:
     world = _world()
+    escort = red_internal_species_id(8) if native_escort else BLASTOISE_SPECIES_ID
+    world.party[0] = escort
     _patch_storage(monkeypatch, world)
     to_pc, to_training = _routes()
     actions = CountingExecutor(world)
@@ -388,6 +430,7 @@ def test_goal_executor_bridge_reuses_the_boxed_engine_without_species_logic(
         observe_collection=world.collection,
         train_evolution=train,
         emulator=SimpleNamespace(frame_count=0),
+        escort_internal_species_id=escort,
     )
     request = RedBoxedLevelEvolutionGoalRequest(
         precursor_internal_species_id=PRECURSOR,
@@ -406,6 +449,7 @@ def test_goal_executor_bridge_reuses_the_boxed_engine_without_species_logic(
     assert report.evidence["required_living_preserved"] is True
     assert EVOLVED in world.party
     assert HITMONLEE_SPECIES_ID in world.box
+    assert escort in world.party
 
 
 def test_exact_pc_start_uses_an_observed_boundary_without_a_fake_route(

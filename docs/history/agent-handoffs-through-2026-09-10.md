@@ -3072,7 +3072,7 @@ The roadmap review is complete. Claude's cluster-power, control-envelope, and fi
 conditions were accepted. Antigravity's capability and full-denominator gaps were accepted, while
 its global “missing prediction is correct” repair was replaced with separate supported-performance
 and unsupported-abstention endpoints. Details are in the
-[review adjudication](../red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
+[review adjudication](retired-plans-2026-10-07/red-to-crystal-roadmap-review-adjudication-2026-08-30.md). Future reviewer
 assignments begin at the next named milestone; no standing audit blocks ordinary current-lane work.
 
 ## Previous override: six-card R1 passed throughput; Codex owned successor completion
@@ -5266,7 +5266,7 @@ for a concrete title-neutral Crystal development protocol and then challenges at
 transfer assumptions plus work to delete. Neither blocks routine work, and their desktop apps may
 remain closed. See the
 [path-free fit receipt](../evidence/repeatable-party-outcome-initial-fit-v1-2026-08-17.json) and
-[current audit](../current-audit-2026-08-17.md). Local pre-fit qualification was **3,965 passed · 3
+[current audit](retired-plans-2026-10-07/current-audit-2026-08-17.md). Local pre-fit qualification was **3,965 passed · 3
 integration deselected · 1 expected xfail**, plus lint, typing, docs, privacy and focus.
 
 ## Superseded August 16 override: one execution-eligibility repair, then a fresh 8+4 pilot

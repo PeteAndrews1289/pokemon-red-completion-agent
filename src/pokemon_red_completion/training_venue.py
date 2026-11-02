@@ -29,7 +29,7 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeTiming,
 )
 from pokemon_red_completion.observation import RawGameState
-from pokemon_red_completion.party import PartyMemberObservation
+from pokemon_red_completion.party import PartyMemberObservation, PartyObservation
 from pokemon_red_completion.team_training import (
     BalancedTeamPolicy,
     GrindingArea,
@@ -190,6 +190,9 @@ class TrainingVenue:
     move_guard: MoveGuard | None = None
     battle_timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING
     walk_to_grass_factory: WalkToGrassFactory | None = None
+    native_transport_ready: Callable[[PartyObservation], bool] | None = field(
+        default=None, repr=False, compare=False,
+    )
 
     def __post_init__(self) -> None:
         if not isinstance(self.band, GrindingArea):
@@ -205,6 +208,8 @@ class TrainingVenue:
             raise TypeError("battle_timing must be a BattleRuntimeTiming")
         if self.walk_to_grass_factory is not None and not callable(self.walk_to_grass_factory):
             raise TypeError("walk_to_grass_factory must be callable")
+        if self.native_transport_ready is not None and not callable(self.native_transport_ready):
+            raise TypeError("native_transport_ready must be callable")
 
     @property
     def area_id(self) -> str:

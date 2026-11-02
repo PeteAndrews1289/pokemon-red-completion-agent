@@ -14,6 +14,7 @@ def red_registered_outcome_from_observations(
     before: Mapping[str, object], after: Mapping[str, object], *,
     selected_kind: GoalKind, succeeded: bool, actions: int, frames: int,
     maximum_actions: int, maximum_frames: int,
+    npc_exchange: tuple[Mapping[str, object], Mapping[str, object]] | None = None,
 ) -> LivingDexObservedOutcome:
     """Reconstruct novelty from sets, retaining existing actual resource costs.
 
@@ -27,10 +28,17 @@ def red_registered_outcome_from_observations(
         raise ValueError("registered outcome observation schema differs")
     old = RegisteredCollectionCheckpoint.from_public(before.get("registration"))
     new = RegisteredCollectionCheckpoint.from_public(after.get("registration"))
-    require_registered_transition(
-        old, new, selected_kind=selected_kind,
-        require_selected_goal_progress=succeeded,
-    )
+    if npc_exchange is None:
+        require_registered_transition(
+            old, new, selected_kind=selected_kind,
+            require_selected_goal_progress=succeeded,
+        )
+    else:
+        from .red_npc_exchange_learning import require_npc_exchange_transition
+
+        if selected_kind is not GoalKind.ACQUIRE_SPECIES or succeeded is not True:
+            raise ValueError("NPC exchange outcome requires a completed acquisition")
+        require_npc_exchange_transition(old, new, *npc_exchange)
     old_local, new_local = before.get("semantic_observation"), after.get("semantic_observation")
     if not isinstance(old_local, Mapping) or not isinstance(new_local, Mapping):
         raise ValueError("registered outcome resource observations differ")

@@ -1,0 +1,76 @@
+{
+  "actions": 54,
+  "aggregate_attempt": {
+    "actions": 693,
+    "frames": 55104,
+    "seconds": 5.014267375227064,
+    "wild_escapes": 16
+  },
+  "audit_frames": 0,
+  "audit_source_sha256": "74b3aab7f1bf85b81f93b292a0f11e1a608c2a60803ae42724005577e519fd91",
+  "budget_refilled": false,
+  "cash": 25841,
+  "cash_delta": 0,
+  "engineering_result": "Retained interrupted boundary continued and switch opened; no fresh interrupted-push reissue occurred.",
+  "envelope_sha256": "b598fe8c044b48f5d8725b0bd16624bd50ae9d5765ba18f75b37bf4c5ed11fb1",
+  "execution_commit": "657ca9c6ebcd4d8dd88e0e2b545f87e44678e495",
+  "frames": 4776,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "local_registrations": 17,
+  "map_id": 198,
+  "native_event_changes": {
+    "reset": [],
+    "set": [
+      1632
+    ]
+  },
+  "native_interrupted_push_reissue_branch_exercised": false,
+  "new_fits": 0,
+  "new_model_decisions": 0,
+  "new_registrations": 0,
+  "new_verified_pushes": 4,
+  "next_unused_stage": 337,
+  "original_escape_cap_exhausted": true,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    93,
+    120,
+    162,
+    110,
+    176
+  ],
+  "party_levels": [
+    43,
+    43,
+    52,
+    42,
+    37
+  ],
+  "plan_sha256": "a1820d3bb1263cdbe5fb2d40d5bd3556933d1df94cf8604fd3ee602eea0e12df",
+  "position": [
+    2,
+    2
+  ],
+  "pre_league_gaps": [
+    "Snorlax combat-role reconciliation",
+    "Relevant opposition readiness assessment",
+    "Bounded native preparation if needed; rule-based support is not learned strategic training choice."
+  ],
+  "protected_inputs_unchanged": true,
+  "reassessment": "Two maintenance/navigation sessions without new model decisions. Stop the retry loop. Review prospective traversal limits before any further movement; old capped attempt remains closed.",
+  "remaining_puzzle_steps_completed": 9,
+  "runtime_error": "remaining wild allowance exhausted; stopped before further movement",
+  "safe": true,
+  "schema": "pokemon.red.victory-road-third-floor-resume.v1",
+  "seconds": 1.210865959059447,
+  "source_replayed": false,
+  "source_sha256": "5c7e33cf5b1d9261e235b6c8c26b3dcd8e1abf7be54cd7a69a1743d92e9405d7",
+  "source_stage": 335,
+  "story_objectives": 29,
+  "terminal_sha256": "3b8ecc8c3ed54baab42d6c4b1fc4e90592bf0f78227f6ae23a07e3cb40eb801c",
+  "terminal_stage": 336,
+  "third_floor_puzzle_complete": true,
+  "trainer_1633_defeated": false,
+  "wild_escapes": 2
+}

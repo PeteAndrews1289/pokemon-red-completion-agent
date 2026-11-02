@@ -10,6 +10,8 @@ square while the player stays put. This module therefore searches explicit
 from __future__ import annotations
 
 import heapq
+import math
+from collections import deque
 from collections.abc import Collection, Mapping
 from dataclasses import dataclass, field
 
@@ -31,6 +33,8 @@ from pokemon_red_completion.observation import (
     ReadOnlyMemory,
 )
 from pokemon_red_completion.route_executor import (
+    InterruptionHandler,
+    InterruptionReceipt,
     ResourceRenewalReceipt,
     RouteActionPort,
     RouteResourceManager,
@@ -190,6 +194,8 @@ class StrengthPushReceipt:
     boulder_dust_observed: bool
     pushed_flag_observed: bool
     engine_attempt_cost: int
+    interrupted_attempts: int = 0
+    facing_adjustments: int = 0
 
     @property
     def engine_acknowledged(self) -> bool:
@@ -205,6 +211,7 @@ class StrengthExecutionReport:
     wait_actions: int
     pushes: tuple[StrengthPushReceipt, ...]
     resource_renewals: tuple[ResourceRenewalReceipt, ...] = ()
+    interruptions: tuple[InterruptionReceipt, ...] = ()
 
     @property
     def passed(self) -> bool:
@@ -221,12 +228,22 @@ class Gen1StrengthExecutor:
     timing: StrengthExecutionTiming = DEFAULT_STRENGTH_EXECUTION_TIMING
     resource_manager: RouteResourceManager | None = None
     resource_observer: TraversalObserver | None = None
+    interruption_handler: InterruptionHandler | None = None
+    interruption_observer: TraversalObserver | None = None
+    allow_verified_wild_hp_loss: bool = False
     push_receipts: list[StrengthPushReceipt] = field(default_factory=list, init=False)
     resource_receipts: list[ResourceRenewalReceipt] = field(default_factory=list, init=False)
+    interruption_receipts: list[InterruptionReceipt] = field(default_factory=list, init=False)
     _inputs: int = field(default=0, init=False)
     _waits: int = field(default=0, init=False)
+    _verified_lead_hp: int | None = field(default=None, init=False)
 
     def execute(self, plan: StrengthPlan) -> StrengthExecutionReport:
+        if type(self.allow_verified_wild_hp_loss) is not bool:
+            raise StrengthPlanningError("Strength wild HP permission must be boolean")
+        self._verified_lead_hp = None
+        if (self.interruption_handler is None) != (self.interruption_observer is None):
+            raise StrengthPlanningError("Strength interruption recovery needs handler and observer")
         if (self.resource_manager is None) != (self.resource_observer is None):
             raise StrengthPlanningError(
                 "Strength resource management needs both manager and observer"
@@ -257,7 +274,59 @@ class Gen1StrengthExecutor:
             wait_actions=self._waits,
             pushes=tuple(self.push_receipts),
             resource_renewals=tuple(self.resource_receipts),
+            interruptions=tuple(self.interruption_receipts),
         )
+
+    def _settle_wild(self, map_id, protected):
+        """Bounded escape; optional lead damage requires the native flee proof.
+
+        PP, reserves, statuses, bag and puzzle state stay exact. No healing,
+        faint, trainer or arbitrary dialogue can use the damage exception.
+        """
+        raw = self.reader.read()
+        if raw.battle_state != 1:
+            return
+        if self.interruption_handler is None or self.interruption_observer is None:
+            raise StrengthPlanningError("Strength execution entered a battle")
+        self._require_protected(raw, protected)
+        before = self.interruption_observer.observe()
+        if (before.interruption != "wild_battle" or before.map_id != map_id
+                or before.at != (raw.player_y, raw.player_x)):
+            raise StrengthPlanningError("Strength wild observation changed its boundary")
+        receipt = self.interruption_handler.handle(before)
+        self.interruption_receipts.append(receipt)
+        after = self.interruption_observer.observe()
+        if (receipt.kind != "wild_battle" or receipt.resumed_map != map_id
+                or receipt.resumed_at != before.at or not after.ready
+                or after.interruption is not None or after.map_id != map_id
+                or after.at != before.at or self.reader.read().battle_state != 0):
+            raise StrengthPlanningError("Strength wild escape did not restore the exact boundary")
+        settled = self.reader.read()
+        if self.allow_verified_wild_hp_loss and settled.party_hp != raw.party_hp:
+            details = receipt.details
+            if (
+                not raw.party_hp or not settled.party_hp
+                or len(raw.party_hp) != len(settled.party_hp)
+                or raw.party_hp[1:] != settled.party_hp[1:]
+                or not 0 < settled.party_hp[0] < raw.party_hp[0]
+                or details.get("verified") is not True
+                or details.get("hp_scope") != "first_party_member"
+                or details.get("initial_hp") != raw.party_hp[0]
+                or details.get("final_hp") != settled.party_hp[0]
+            ):
+                raise StrengthPlanningError("Strength HP loss lacks the exact verified flee proof")
+            # Adopt only this proven loss. Every other field remains protected,
+            # and subsequent overworld inputs cannot invent further HP changes.
+            self._verified_lead_hp = settled.party_hp[0]
+        self._require_protected(settled, protected)
+
+    def _protected_after_flee(self, expected):
+        if self._verified_lead_hp is None:
+            return expected
+        return (expected[0], (self._verified_lead_hp, *expected[1][1:]), *expected[2:])
+
+    def _require_protected(self, raw, expected):
+        _require_protected(raw, self._protected_after_flee(expected))
 
     def _renew_resource(
         self,
@@ -287,7 +356,7 @@ class Gen1StrengthExecutor:
         if resource is None or resource.remaining != receipt.after_remaining:
             raise StrengthPlanningError("resource renewal receipt disagrees with observation")
         after = self.reader.read()
-        _require_protected_except_bag(after, protected)
+        _require_protected_except_bag(after, self._protected_after_flee(protected))
         self.resource_receipts.append(receipt)
         return _protected_state(after)
 
@@ -330,26 +399,60 @@ class Gen1StrengthExecutor:
         elif _boulder_at(step.result, step.boulder_index) != after_boulder:
             raise StrengthPlanningError("a Strength push has an invalid planned destination")
 
-        self.actions.execute(MacroAction(MacroActionKind.MOVE, step.direction.value))
-        self._inputs += 1
-        immediate_raw = self.reader.read()
-        if immediate_raw.map_id != map_id or immediate_raw.battle_state not in {0, None}:
-            raise StrengthPlanningError("Strength push left the controllable overworld")
-        _require_protected(immediate_raw, protected)
-        immediate_flags = self.memory.read_u8(RamAddress.MISC_FLAGS)
-        boulder_dust = bool(immediate_flags & BOULDER_DUST_MASK)
-        pushed_flag = bool(immediate_flags & PUSHED_BOULDER_MASK)
-        self.actions.execute(
-            MacroAction(MacroActionKind.WAIT, repeat=self.timing.settle_frames)
-        )
-        self._waits += 1
-        after_push = self._checked_state(map_id, protected)
-        pushed_flag = pushed_flag or bool(
-            self.memory.read_u8(RamAddress.MISC_FLAGS) & PUSHED_BOULDER_MASK
-        )
-        if after_push != step.result:
+        interrupted_attempts = 0
+        facing_adjustments = 0
+        read_facing = getattr(self.reader, "read_player_facing", None)
+        for _ in range(self.timing.max_step_attempts):
+            interruptions_before = len(self.interruption_receipts)
+            facing_before = read_facing() if read_facing is not None else None
+            pushed_before = bool(
+                self.memory.read_u8(RamAddress.MISC_FLAGS) & PUSHED_BOULDER_MASK
+            )
+            self.actions.execute(MacroAction(MacroActionKind.MOVE, step.direction.value))
+            self._inputs += 1
+            self._settle_wild(map_id, protected)
+            immediate_raw = self.reader.read()
+            if immediate_raw.map_id != map_id or immediate_raw.battle_state not in {0, None}:
+                raise StrengthPlanningError("Strength push left the controllable overworld")
+            self._require_protected(immediate_raw, protected)
+            immediate_flags = self.memory.read_u8(RamAddress.MISC_FLAGS)
+            boulder_dust = bool(immediate_flags & BOULDER_DUST_MASK)
+            pushed_flag = bool(immediate_flags & PUSHED_BOULDER_MASK)
+            self.actions.execute(
+                MacroAction(MacroActionKind.WAIT, repeat=self.timing.settle_frames)
+            )
+            self._waits += 1
+            after_push = self._checked_state(map_id, protected)
+            pushed_flag = pushed_flag or bool(
+                self.memory.read_u8(RamAddress.MISC_FLAGS) & PUSHED_BOULDER_MASK
+            )
+            if after_push == step.result:
+                break
+            # A pulse may only turn the player toward the adjacent boulder.
+            # Require that actual facing transition, unchanged puzzle/resources
+            # and no new push acknowledgement; Red may retain the previous
+            # push bit while this pulse only changes facing. A newly raised
+            # bit, dust, or an unexplained blocked push is not a retry license.
+            turned = (
+                read_facing is not None
+                and facing_before is not None
+                and facing_before != step.direction.value
+                and read_facing() == step.direction.value
+            )
+            interrupted = len(self.interruption_receipts) > interruptions_before
+            unexplained_push = pushed_flag and not (pushed_before and turned)
+            if (after_push != step.source or boulder_dust or unexplained_push
+                    or not (interrupted or turned)
+                    or not self.memory.read_u8(RamAddress.STATUS_FLAGS_1) & STRENGTH_ACTIVE_MASK):
+                raise StrengthPlanningError(
+                    f"Strength push step {ordinal} did not make the exact state transition"
+                )
+            interrupted_attempts += int(interrupted)
+            facing_adjustments += int(turned)
+            self._wait_ready(map_id, step.source, protected)
+        else:
             raise StrengthPlanningError(
-                f"Strength push step {ordinal} did not make the exact state transition"
+                f"Strength push step {ordinal} exhausted its interrupted-push budget"
             )
         if not (boulder_dust or pushed_flag):
             raise StrengthPlanningError(
@@ -369,6 +472,8 @@ class Gen1StrengthExecutor:
                 boulder_dust_observed=boulder_dust,
                 pushed_flag_observed=pushed_flag,
                 engine_attempt_cost=STRENGTH_PUSH_COST,
+                interrupted_attempts=interrupted_attempts,
+                facing_adjustments=facing_adjustments,
             )
         )
 
@@ -387,8 +492,9 @@ class Gen1StrengthExecutor:
         protected: tuple[object, ...],
     ) -> None:
         for _ in range(self.timing.max_readiness_waits + 1):
+            self._settle_wild(map_id, protected)
             raw = self.reader.read()
-            _require_protected(raw, protected)
+            self._require_protected(raw, protected)
             if raw.battle_state not in {0, None}:
                 raise StrengthPlanningError("Strength execution entered a battle")
             if self._observe_state(map_id) != expected:
@@ -426,10 +532,11 @@ class Gen1StrengthExecutor:
         map_id: int,
         protected: tuple[object, ...],
     ) -> StrengthState:
+        self._settle_wild(map_id, protected)
         raw = self.reader.read()
         if raw.battle_state not in {0, None}:
             raise StrengthPlanningError("Strength execution entered a battle")
-        _require_protected(raw, protected)
+        self._require_protected(raw, protected)
         if not self.memory.read_u8(RamAddress.STATUS_FLAGS_1) & STRENGTH_ACTIVE_MASK:
             raise StrengthPlanningError("Strength active field flag disappeared")
         return self._observe_state(map_id)
@@ -452,7 +559,10 @@ def plan_strength(
     raw: RawGameState,
     *,
     blocked: Collection[Coordinate] = (),
+    forbidden_player_coordinates: Collection[Coordinate] = (),
+    forbidden_player_edges: Collection[tuple[Coordinate, str]] = (),
     max_states: int = 100_000,
+    push_macros: bool = False,
 ) -> StrengthPlan:
     """Find the cheapest bounded sequence that puts a boulder on ``goal``.
 
@@ -464,6 +574,8 @@ def plan_strength(
 
     if type(max_states) is not int or max_states <= 0:  # noqa: E721
         raise ValueError("max_states must be a positive integer")
+    if type(push_macros) is not bool:
+        raise ValueError("push_macros must be boolean")
     if STRENGTH_CAPABILITY not in strength_capabilities(raw):
         raise StrengthPlanningError("Strength requires Rainbow Badge and a living move holder")
     if raw.map_id != terrain.map_id:
@@ -482,12 +594,20 @@ def plan_strength(
     ):
         raise StrengthPlanningError("disappearing Strength goal boulder is not present")
     unavailable = frozenset(blocked)
+    # A player may start on an arrival warp, but must never walk back onto it.
+    # Solid blockers cannot express this because they reject the initial state.
+    forbidden = frozenset(forbidden_player_coordinates)
+    forbidden_edges = frozenset(forbidden_player_edges)
     if initial.player_at in unavailable or initial.occupied & unavailable:
         raise StrengthPlanningError("non-boulder occupancy overlaps the initial Strength state")
 
     graph = local_graph(terrain, rules, blocked=unavailable)
     if goal.satisfied_by(initial):
         return StrengthPlan((initial,), (), 0, 1)
+    if push_macros:
+        return _plan_push_macros(
+            terrain, graph, initial, goal, forbidden, forbidden_edges, max_states
+        )
 
     frontier: list[tuple[int, int, StrengthState]] = [(0, 0, initial)]
     best_cost = {initial: 0}
@@ -507,6 +627,11 @@ def plan_strength(
             return _reconstruct(came_from, initial, current, cost, explored)
         for step in _neighbors(terrain, graph, current, goal):
             following = step.result
+            if following.player_at != current.player_at and following.player_at in forbidden:
+                continue
+            if any((at, step.direction.value) in forbidden_edges
+                   for at in (current.player_at, following.player_at)):
+                continue
             candidate = cost + step.cost
             if candidate >= best_cost.get(following, candidate + 1):
                 continue
@@ -514,6 +639,158 @@ def plan_strength(
             came_from[following] = current, step
             heapq.heappush(frontier, (candidate, sequence, following))
             sequence += 1
+    raise StrengthPlanningError(
+        f"no legal Strength plan reaches boulder coordinate {goal.boulder_at}"
+    )
+
+
+def _plan_push_macros(terrain, graph, initial, goal, forbidden, forbidden_edges, max_states):
+    """Compress only walking, not puzzle state or controller semantics.
+
+    Each edge is a shortest legal walk to a push stance plus one original push.
+    Keep the exact player coordinate after each push (Red does not move it).
+    This preserves minimum total step cost, unlike minimizing pushes or merging
+    every reachable player position. Walking-only terminal goals remain edges.
+    The expansion cap counts settled macro states, not a larger step allowance.
+    """
+    # Relax only other boulders and access to push stances, not static geometry.
+    # Reverse push distance is an admissible lower bound and identifies boulder
+    # dead ends without guessing a native solution or removing any obstacle.
+    distances = {goal.boulder_at: 0}
+    reverse_queue = [(0, goal.boulder_at)]
+    while reverse_queue:
+        distance, beyond = heapq.heappop(reverse_queue)
+        if distance != distances[beyond]:
+            continue
+        if terrain.tiles[beyond[0]][beyond[1]] == STAIRS_TILE:
+            continue
+        for direction in Direction:
+            dy, dx = direction.delta
+            adjacent = beyond[0] - dy, beyond[1] - dx
+            stance = adjacent[0] - dy, adjacent[1] - dx
+            if (not terrain.can_stand(*stance)
+                    or _walk_edge(graph, adjacent, beyond, direction) is None):
+                continue
+            step_cost = 1 if goal.remove_boulder and beyond == goal.boulder_at else 2
+            candidate = distance + step_cost
+            if candidate < distances.get(adjacent, math.inf):
+                distances[adjacent] = candidate
+                heapq.heappush(reverse_queue, (candidate, adjacent))
+
+    def lower_bound(state):
+        candidates = [b for b in state.boulders
+                      if goal.boulder_index is None or b.sprite_index == goal.boulder_index]
+        # Red leaves the player stationary. Between n pushes of the selected
+        # boulder, at least n-1 walks are mandatory, in addition to reaching its
+        # first adjacent stance. Other boulders cannot make these walks vanish.
+        bounds = []
+        for boulder in candidates:
+            distance = distances.get(boulder.at, math.inf)
+            if distance == 0:
+                bounds.append(0)
+                continue
+            pushes = (distance + int(goal.remove_boulder)) / 2
+            approach = max(0, abs(state.player_at[0] - boulder.at[0])
+                           + abs(state.player_at[1] - boulder.at[1]) - 1)
+            bounds.append(distance + max(0, pushes - 1) + approach)
+        push_cost = (0 if goal.remove_boulder and not candidates else
+                     min(bounds, default=math.inf))
+        walk_cost = (0 if goal.player_at is None else
+                     abs(state.player_at[0] - goal.player_at[0])
+                     + abs(state.player_at[1] - goal.player_at[1]))
+        # The required final-player walk may overlap the mandatory push walks.
+        return max(push_cost, walk_cost)
+
+    def allowed(step):
+        return not (
+            (step.result.player_at != step.source.player_at
+             and step.result.player_at in forbidden)
+            or any((at, step.direction.value) in forbidden_edges
+                   for at in (step.source.player_at, step.result.player_at))
+        )
+
+    walking = {
+        at: tuple((edge.target, Direction(edge.action)) for edge in edges
+                  if edge.kind == "walk" and not edge.requirements
+                  and edge.target not in forbidden
+                  and not any((point, edge.action) in forbidden_edges
+                              for point in (at, edge.target)))
+        for at, edges in graph.edges.items()
+    }
+
+    best = {initial: 0}
+    parents = {}
+    frontier = [(lower_bound(initial), 0, 0, initial)]
+    sequence = explored = 0
+    while frontier:
+        estimate, cost, _, state = heapq.heappop(frontier)
+        if not math.isfinite(estimate):
+            break
+        if cost != best.get(state):
+            continue
+        explored += 1
+        if explored > max_states:
+            raise StrengthPlanningError(f"Strength search exceeded its {max_states}-state bound")
+        if goal.satisfied_by(state):
+            segments = []
+            current = state
+            while current != initial:
+                previous, segment = parents[current]
+                segments.append(segment)
+                current = previous
+            steps = tuple(step for segment in reversed(segments) for step in segment)
+            return StrengthPlan((initial, *(step.result for step in steps)), steps, cost, explored)
+
+        # Breadth-first closure is exact because each permitted walk costs one.
+        paths = {state.player_at: None}
+        queue = deque([state.player_at])
+        occupied = state.occupied
+        while queue:
+            at = queue.popleft()
+            for target, direction in walking.get(at, ()):
+                if target not in occupied and target not in paths:
+                    paths[target] = at, direction
+                    queue.append(target)
+        stances = {goal.player_at} if goal.player_at in paths else set()
+        for boulder in state.boulders:
+            for direction in Direction:
+                dy, dx = direction.delta
+                at = boulder.at[0] - dy, boulder.at[1] - dx
+                if at in paths:
+                    stances.add(at)
+        for at in sorted(stances):
+            standing = StrengthState(at, state.boulders)
+            reverse_path = []
+            cursor = at
+            while paths[cursor] is not None:
+                previous, direction = paths[cursor]
+                reverse_path.append(StrengthStep(
+                    "walk", direction, StrengthState(previous, state.boulders),
+                    StrengthState(cursor, state.boulders)))
+                cursor = previous
+            path = tuple(reversed(reverse_path))
+            successors = []
+            if path and goal.satisfied_by(standing):
+                successors.append((standing, path))
+            for step in _neighbors(terrain, graph, standing, goal):
+                if not allowed(step):
+                    continue
+                if step.kind == "walk":
+                    continue
+                else:
+                    successors.append((step.result, (*path, step)))
+            for following, segment in successors:
+                candidate = cost + sum(step.cost for step in segment)
+                if candidate >= best.get(following, candidate + 1):
+                    continue
+                bound = lower_bound(following)
+                if not math.isfinite(bound):
+                    continue
+                best[following] = candidate
+                parents[following] = state, segment
+                sequence += 1
+                heapq.heappush(frontier,
+                               (candidate + bound, candidate, sequence, following))
     raise StrengthPlanningError(
         f"no legal Strength plan reaches boulder coordinate {goal.boulder_at}"
     )
@@ -644,6 +921,10 @@ def _protected_state(raw: RawGameState) -> tuple[object, ...]:
         raw.party_status,
         raw.party_moves,
         raw.party_pp,
+        raw.party_species_ids,
+        raw.party_levels,
+        raw.player_money,
+        raw.badge_bits,
         raw.bag_items,
     )
 

@@ -60,31 +60,50 @@ def test_first_choice_owns_initial_action_and_then_defers_to_fresh_continuation(
     assert decline.choose_switch({}, (2, 3), forced=True, may_decline=False) == 2
 
 
-@pytest.mark.parametrize("budget", [8, 160])
-def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch, budget):
+@pytest.mark.parametrize("budget,horizon", [(8, 2), (160, 80)])
+@pytest.mark.parametrize("bounded", [False, True])
+@pytest.mark.parametrize("status", [False, True])
+def test_matched_branches_keep_one_root_and_fresh_policies(
+    tmp_path, monkeypatch, budget, horizon, bounded, status
+):
     capture = _capture(tmp_path)
     policies = []
     retained = []
+    executor = object() if bounded else None
+    guard = (lambda _raw: None) if bounded else None
 
     def policy_factory():
         policy = Continuation()
         policies.append(policy)
         return policy
 
-    def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns,
-                 event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
+    def fake_run(
+        _capture,
+        *,
+        session_factory,
+        policy,
+        max_decisions,
+        max_player_turns,
+        event_sink=None,
+        public_species_base_stats=None,
+        opening_idle_frames=0,
+        action_executor=None,
+        decision_guard=None,
+        allow_status_moves=False,
+    ):
+        assert allow_status_moves is status
+        assert action_executor is executor
+        assert decision_guard is guard
         assert max_decisions == budget
-        assert max_player_turns == 2
+        assert max_player_turns == horizon
         assert session_factory() is None
         action = policy.choose_main({}, object())
         return RedTrainerPracticeEpisode(
             capture_id=capture.manifest.capture_id,
             manifest_sha256=capture.manifest_sha256,
             policy_id=policy.policy_id,
-            decisions=(
-                {"kind": "voluntary_switch" if action.party_slot else "attack"},
-                {"kind": "attack"},
-            ),
+            decisions=({"kind": "voluntary_switch" if action.party_slot else "attack"},)
+            + tuple({"kind": "attack"} for _ in range(horizon - 1)),
             battle_won=False,
             final_battle_state=2,
             stop_reason="player_turn_budget",
@@ -97,6 +116,10 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         session_factory=lambda: None,
         continuation_policy_factory=policy_factory,
         max_decisions=budget,
+        player_turn_horizon=horizon,
+        action_executor=executor,
+        decision_guard=guard,
+        allow_status_moves=status,
         first_choices=(
             counterfactual.TrainerPracticeFirstChoice(BattleAction.move(1)),
             counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)),
@@ -117,6 +140,31 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
     ]
 
 
+@pytest.mark.parametrize("horizon", [81, 100, 160])
+def test_admission_incompatible_horizon_rejected_before_any_branch(tmp_path, horizon):
+    capture = _capture(tmp_path)
+    calls = []
+
+    def forbidden(*args):
+        calls.append(args)
+        raise AssertionError("must reject before any policy/log/native access")
+
+    with pytest.raises(counterfactual.TrainerPracticeCounterfactualError, match="inventory"):
+        counterfactual.collect_trainer_practice_counterfactuals(
+            capture,
+            session_factory=forbidden,
+            continuation_policy_factory=forbidden,
+            branch_event_log_factory=forbidden,
+            max_decisions=160,
+            player_turn_horizon=horizon,
+            first_choices=(
+                counterfactual.TrainerPracticeFirstChoice(BattleAction.move(1)),
+                counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)),
+            ),
+        )
+    assert not calls
+
+
 def test_counterfactual_rejects_development_capture(tmp_path):
     capture = _capture(tmp_path, partition=ScenarioPartition.DEVELOPMENT)
     try:
@@ -135,18 +183,58 @@ def test_counterfactual_rejects_development_capture(tmp_path):
         raise AssertionError("development capture entered TRAIN counterfactual collector")
 
 
+def test_first_choice_wrapper_forwards_every_opponent_transition():
+    class Stateful(Continuation):
+        def __init__(self):
+            self.transitions = []
+
+        def observe_opponent_transition(self, before, after):
+            self.transitions.append((before, after))
+
+    continuation = Stateful()
+    wrapper = counterfactual._FirstChoicePolicy(
+        counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)), continuation
+    )
+    wrapper.observe_opponent_transition(0, 1)
+    wrapper.choose_main({}, object())
+    wrapper.observe_opponent_transition(1, 0)
+    wrapper.choose_main({}, object())
+    wrapper.observe_opponent_transition(0, 0)
+    assert continuation.transitions == [(0, 1), (1, 0), (0, 0)]
+    # Stateless legacy continuation policies remain compatible.
+    counterfactual._FirstChoicePolicy(
+        counterfactual.TrainerPracticeFirstChoice(None), Continuation()
+    ).observe_opponent_transition(0, 1)
+
+
 def test_failed_branch_retains_selected_choice_and_typed_failure(tmp_path, monkeypatch):
     capture = _capture(tmp_path)
     directory = tmp_path / "branch-events"
     retained = []
 
-    def crash(_capture, *, session_factory, policy, max_decisions, max_player_turns,
-              event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
+    def crash(
+        _capture,
+        *,
+        session_factory,
+        policy,
+        max_decisions,
+        max_player_turns,
+        event_sink=None,
+        public_species_base_stats=None,
+        opening_idle_frames=0,
+        action_executor=None,
+        decision_guard=None,
+    ):
         assert event_sink is not None
         event_sink({"event": "episode_started"})
         event_sink({"event": "decision_started"})
-        event_sink({"event": "choice_recorded", "decision_index": 1,
-                    "selected_action": {"kind": "select_move", "move_slot": 1}})
+        event_sink(
+            {
+                "event": "choice_recorded",
+                "decision_index": 1,
+                "selected_action": {"kind": "select_move", "move_slot": 1},
+            }
+        )
         raise RuntimeError("diagnostic switch boundary")
 
     monkeypatch.setattr(counterfactual, "run_red_trainer_practice_episode", crash)

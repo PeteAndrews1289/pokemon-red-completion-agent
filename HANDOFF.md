@@ -1,64 +1,60 @@
-# Current development handoff
+# Current handoff — Forest improvement verified; all runs closed
 
-Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 19, 2026.
+[Rules](NORTH_STAR.md) · [Active state](ACTIVE_PRODUCT_STATE.md) ·
+[Closed session](docs/work-sessions/2026-10-30-forest-decision.md).
 
-## Battle lifecycle is verified; return to useful game goals
+November 2 [source-publication validation](docs/work-sessions/2026-11-02-publication.md)
+adds no native activity. Pete then authorized the [CI repair](docs/work-sessions/2026-11-02-ci-remediation.md)
+for that merge; public-checkout lint, typing and focused repairs pass.
+Required hosted CI must pass before merge. All games remain paused; next player work is below.
 
-[Session report](docs/work-sessions/2026-09-19-battle-lifecycle-continuation.md) ·
-[Evidence](docs/evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
-[Detailed next steps and all 28 gaps](docs/model-first-roadmap.md).
+Read current_forest_decision_block for exact results, costs, package and released
+writer proof. This block ends15:59UTC October30; native cutoff15:47UTC was retained.
+All actual campaigns remain paused. Worker2 off; the October30 block had no publication
+or external review.
 
-Frozen J SHA256: 260b227a2fb3ba46a80be9c42e1f7e17977068e890f135407f8faafe2336fb09.
-318 TRAIN contexts, no new fit. Small-party scope remains one to three members.
+Forest exact target-state choice changed to the trainer and won. Common-origin
+Brock89to18choices,43to6heals,495.759to104.792phase seconds; baseline had different
+collection co-benefits.40model choices,0errors; copied branch3/124/1badge/$1067.
 
-The original funding attempt failed after Wartortle fainted. Its strict verifier is unchanged.
-A separate declared continuation from that exact endpoint allowed J to replace the fainted
-member and finish the battle. J chose Zubat and four attacks; the party lost.
-Three attacks executed; the last selected attack was prevented by Zubat fainting.
+Original MID23162d retained68to74/124,6badges,$7 and Master Ball after26native
+minutes,50model+1support choices. It stopped on one nonordinary evolution
+verification failure, not a Python exception. Exact failed tail remains retained.
+The producer had4verified training wins before a zero-win venue quantum; the
+referee omitted that productive stop type.485focused checks plus exact negative
+receipt readback verify the narrow ordinary-failed classification repair.
 
-Normal cartridge blackout then restored HP to 28/51 and returned field control on map 15.
-Cash fell from 1,706 to 853; trainer event 1405 remains unset. Party and registrations retained.
-Five complete decisions, 22 hash-chained events, zero invalid actions or teacher intervention.
-55 new actions / 5,424 frames; cumulative 302 actions / 24,708 frames including the failed parent.
-The final state reopened exactly with zero actions/frames. This is a completed battle loss and
-verified lifecycle, not successful funding, independent reliability or a new fit.
+Current frozen a09a/source743d adds that repair, truthful puzzle metadata and
+same-boundary observation reuse; weights/configuration unchanged. Qualified
+latest-tail continuation closed at77/124,6badges,
+$7, after247.285native seconds,
+7model choices. It is a new correlated diagnostic episode,
+not a matched replay or any gate award. See exact outcome audit for limits.
+Actual22/124, prior7/124, Forest and MID branches never merge.
 
-## Exact private continuation
+Next bounded work order:
+1. Reuse exact tail evidence and existing player/battler; keep failures and costs.
+2. Venue trace: native menus omit travel/recovery measurements and deliberately
+   mask empirical priors. All11corresponding frozen-model inputs have zero first-
+   layer weights, so wiring alone cannot change rankings. Useful share is visible.
+   Inspect the exact model's TRAIN rows before collecting a matched cost contrast;
+   do not infer never-trained from zero weights. Recorded97.72versus7.46XP/sec is
+   descriptive evidence under different conditions, not a controlled venue test.
+3. Integrate and qualify the prepared noncombat TRAIN collector. Private v2 passed
+   focused exception/cost/closure tests and independent review; it is not yet
+   integrated or natively qualified. Reuse these tests rather than repeat the audit.
+4. Use authenticated historical TRAIN041 only for one informative partial switch
+   outcome if qualified. Never fit MID/LATE DEVELOPMENT or relabel its lineage.
+5. Conditional retained-output fit: existing V16interaction coefficient; retain
+   movement head ancestry honestly and compare exact runtime outputs. No repeated
+   identical cash fit, forced zero cash demand or arbitrary interaction score.
+6. If the model changes useful choices, test native behavior, then all three gates
+   on one unchanged candidate. Short tail success cannot substitute for these.
 
-Private run: red-player-battler-continuation-20260919-v1.
-Execution source: 2ead10a2b578d4437482c5fa4f8270db380cf3c0.
-Consumed input: e7616aff8abe5d7444419785c65ada63626d448d57d79dbd9a627fa5a5d34024.
-Retained field endpoint: 5c828787bb2cf952c1d41227791fac1f01d24d69f1a35c3ccfc2ec1efa15fbac.
-Original parent result: b5779065eebee9d47e49b5527bf4f7b4f3f19621bdbd9e852332355f6a549a0c.
-
-Never replay either consumed input or relabel its DEVELOPMENT experience as TRAIN.
-No reset, cheat, automatic retry, new source factory or broad trainer refit is authorized.
-
-## Main collection: separate save, unchanged
-
-Model137 remains 137 examples / 92 successes / 58 economy-qualified.
-Main save: 96/124 registrations, 74 specimens, 198 cash, six party members.
-Exact terminal: 27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054.
-Private run: goal-manager-v1/model139-post-marowak-choice-20260916-v1/step-000/terminal.state.
-Fresh read-only reopening confirmed the hash, 96 flags, six members, 198 cash and map 156
-at (3,4), zero frames and identical bytes. Main party national IDs: 105/83/87/51/9/99.
-
-The earlier fishing choice is consumed. Paid Safari admission must not be treated as a walking
-edge; the 500 admission price exceeds current cash by 302 before supplies. The corrected
-offer set lacks two distinct executable choices. Do not rerun its old choice or pick a hidden
-teacher substitute.
-
-## Next bounded objective
-
-Rebuild useful executable options from the exact main-save terminal: legitimate funding and
-metered admission, or a distinct non-Safari acquisition family. Retain one genuinely
-model-selected result and actual costs. Only fit admissible actual goal outcomes.
-J cannot silently run the six-member party; qualify broader scope if the selected work needs it.
-Wild capture and Elite Four remain explicitly separate controllers.
-
-The roadmap lists every missing species, its current catalog method and dependency, plus the
-remaining battle-scope and fresh-run gates. Fresh acceptance remains 0/5; no full run is open.
-Gameplay stopped. No Flash/Claude was used or is pending.
-Pete explicitly authorized this checkpoint's publication and merge; later publication is his decision.
-Next: Astra High, Fast off; 45–90 minutes for main-save options and one bounded result.
+Default work blocks allow up to 3 hours; audit after 2 hours and reassess after
+15 minutes or 2 equivalent failures. Stop unqualified
+native work, preserve exact terminal, and pivot to the smallest falsifier. No new
+planner, opening replay, DEVELOPMENT fitting, copied gains or parallel actor.
+Forecast6to12engineering hours for currently identified work, then roughly2to3hours
+for a gate attempt, with substantial uncertainty. Full fresh autonomy has no proven
+delivery date; do not claim these estimates guarantee passes or completion.

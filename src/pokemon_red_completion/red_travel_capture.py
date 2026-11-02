@@ -102,6 +102,11 @@ class RegisteredTravelCaptureHandler:
     def handled_interruption_kinds(self) -> frozenset[str]:
         return frozenset(getattr(self.fallback, "handled_interruption_kinds", ()))
 
+    def observe_native_field_boundary(self) -> None:
+        from .route_executor import observe_native_field_boundary
+
+        observe_native_field_boundary(self.fallback)
+
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         if self.attempted and not self.receipts:
             raise RedTravelCaptureError("incomplete capture cannot resume or fall back")
@@ -228,6 +233,7 @@ class RegisteredTravelCaptureHandler:
             raise RedTravelCaptureError("travel capture collection or ball delta differs")
         detail: dict[str, object] = {
             "schema": "pokemon.red.registered-travel-capture.v1",
+            "verified": True,
             "species_ref": species,
             "captured": caught,
             "new_registrations": int(caught),
@@ -238,6 +244,11 @@ class RegisteredTravelCaptureHandler:
             "destination_changed": False,
             "learned_encounter_choice": False,
         }
+        pending_trainer = getattr(self.reader, "trainer_engagement_active", None)
+        if callable(pending_trainer) and pending_trainer():
+            detail["pending_interruption_kind"] = "trainer_engagement"
+        else:
+            self.observe_native_field_boundary()
         self.verified_collection = after
         self.receipts.append(detail)
         return InterruptionReceipt(

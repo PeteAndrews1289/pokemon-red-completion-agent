@@ -1,0 +1,94 @@
+{
+  "schema": "pokemon.red.celadon-collection-session.v1",
+  "session": "2026-09-20-celadon-collection",
+  "source_commit": "9df536242bd59c11cdcc1ac38792736365941aff",
+  "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+  "run_id": "model137-celadon-collection-20260920-v1",
+  "result_sha256": "dcd77a558bde25d0ff956f45fc54728b9bce765dd432bc6c29f761e7d26d4f3d",
+  "start": {
+    "registrations": 98,
+    "cash": 24268,
+    "specimens": 75,
+    "state_sha256": "d28d0da202d767c63e28d4677c654ef1226f67fae7ff2ca29c8370b4b45272f1"
+  },
+  "end": {
+    "registrations": 101,
+    "remaining_native": 23,
+    "cash": 20068,
+    "specimens": 75,
+    "map_id": 22,
+    "position_yx": [
+      6,
+      0
+    ],
+    "state_sha256": "57c791d6bae8d0fb49034f67a7ed41a5f259e45a4e5ad1c6961bbfdcebcd8214"
+  },
+  "steps": [
+    {
+      "ordinal": 0,
+      "species": "Arcanine",
+      "national": [
+        "pokemon:national:059"
+      ],
+      "verification": "succeeded",
+      "candidate_count": 6,
+      "choice_mode": "model_exploration",
+      "cash_spent": 2100,
+      "actions": 616,
+      "frames": 58812,
+      "terminal_sha256": "ce9bafb925112dfddb8360d536a8e982b596b7b1ba7fc67106311cf1aa4822fe",
+      "outcome_sha256": "60bda82f9ecf546419e99c1394b3677ea851f16d7fcd972824b5af5cdf5c1199"
+    },
+    {
+      "ordinal": 1,
+      "species": "Starmie",
+      "national": [
+        "pokemon:national:121"
+      ],
+      "verification": "succeeded",
+      "candidate_count": 5,
+      "choice_mode": "model_exploration",
+      "cash_spent": 2100,
+      "actions": 539,
+      "frames": 44316,
+      "terminal_sha256": "b2a9a71f51f90e0e82ef4e9fa17043a8c129517aa78988cfaae0b9895eb50a74",
+      "outcome_sha256": "f4b6fedd205756c5c5f6275435e23196910275d0536b2e0b9338fc91702a06b5"
+    },
+    {
+      "ordinal": 2,
+      "species": "Seaking",
+      "national": [
+        "pokemon:national:119"
+      ],
+      "verification": "succeeded",
+      "candidate_count": 5,
+      "choice_mode": "model_exploration",
+      "cash_spent": 0,
+      "actions": 18964,
+      "frames": 1663517,
+      "terminal_sha256": "57c791d6bae8d0fb49034f67a7ed41a5f259e45a4e5ad1c6961bbfdcebcd8214",
+      "outcome_sha256": "c0cb536829482731d2ddc1006635ca4c0a6d1e77fcb9f12e0b4fc43c2a423020"
+    }
+  ],
+  "totals": {
+    "model_decisions": 3,
+    "successful_decisions": 3,
+    "failures": 0,
+    "support_decisions": 0,
+    "operator_interventions": 0,
+    "cash_spent": 4200,
+    "cash_earned": 0,
+    "actions": 20119,
+    "frames": 1766645,
+    "fits": 0
+  },
+  "stop_reason": "decision_budget",
+  "native_verification": "Three exact state links and terminal native registrations/specimens/cash independently verified with zero frames and no controller inputs.",
+  "limits": [
+    "One earned development chain, not fresh-start acceptance or independent generalization.",
+    "Goal and evolution selection are model-owned; equivalent options use declared exploration. Navigation, storage and wild-battle execution retain existing deterministic/heuristic mechanics.",
+    "No learned battle qualification, League income qualification, fit or authority promotion.",
+    "All original states and frozen models preserved. No cheats, resets, League run or publication."
+  ],
+  "next": "Continue at most three model-selected collection goals from the exact earned endpoint and existing20068cash; reassess45-90minutes. Inspect costly level-evolution throughput before repeating many long goals."
+}

@@ -265,7 +265,7 @@ class BattleControlExample:
 def control_class_ref(action: BattleAction) -> str:
     """Collapse cartridge-specific targets into a transferable action class."""
 
-    if action.kind is BattleActionKind.SELECT_MOVE:
+    if action.kind in {BattleActionKind.SELECT_MOVE, BattleActionKind.STRUGGLE}:
         return CONTROL_CLASS_REFS[0]
     if action.kind is BattleActionKind.USE_RECOVERY:
         return CONTROL_CLASS_REFS[1]

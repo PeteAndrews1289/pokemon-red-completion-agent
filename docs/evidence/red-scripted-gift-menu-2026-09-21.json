@@ -1,0 +1,92 @@
+{
+  "schema": "pokemon.red.scripted-gift-menu-evidence.v1",
+  "session": "2026-09-21-scripted-gift-menu",
+  "classification": "engineering_with_one_development_model_choice",
+  "source_commit": "f6efe93a2cf5608081f4862c3f6165531570ad9f",
+  "scope": {
+    "new_train_rows": 0,
+    "fits": 0,
+    "teacher_target_choices": 0,
+    "save_edits": 0,
+    "rewinds": 0,
+    "authority_promotions": 0,
+    "github_publications": 0,
+    "external_agents_used": false
+  },
+  "implementation": {
+    "family": "one-shot scripted gift",
+    "first_boundary": "liberated Silph worker",
+    "species_level_and_object_from_cartridge": true,
+    "real_flag_and_storage_checks": true,
+    "source_scope_opt_in": "scripted_gifts",
+    "model_identity_fields": 0,
+    "controller_discovery_inputs": 0,
+    "rom_free_targeted_tests_passed": 440,
+    "native_gift_execution_qualified": false,
+    "limitations": [
+      "Only the liberated Silph gift boundary is supported; not all gifts or NPC trades.",
+      "No evidence of native gift dialogue, acquisition or successful route execution yet.",
+      "No learned improvement or cross-title transfer established."
+    ],
+    "primary_semantic_sources": [
+      "https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/scripts/SilphCo7F.asm",
+      "https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/engine/events/give_pokemon.asm"
+    ]
+  },
+  "run": {
+    "run_id": "model137-scripted-gift-20260921-v1",
+    "origin_sha256": "de8c4e963a1254060c6c7fbbb4c9d3b8591ce782d6255e5b337fe6829f9bcda1",
+    "terminal_sha256": "b49e682a227bce571f2d62fd0290d0bfe0adf7964220a69bc5c502f64962a712",
+    "plan.json": "4c7b470e0bb3245ea0e0ea7181c2539f605b012f774ffa7db38893ff6c0e984f",
+    "result.json": "dff74171a3dc00a8a101da8f9a4af3f1904e10b45c70be4b8902a86134b5cebe",
+    "step-000/outcome.json": "56c0cb43adabe0a33789a9e566d463137fbd157bed7dbda13101e76b3c2fb7b7",
+    "step-000/terminal-native-audit.json": "080596e2993274c247177fa66bef4bc436fd1a41e6d0a44a3f79a1da0865e0a2",
+    "step-000/decision.json": "d2ee59b031367378807d0cd22e332c6c0872a5b87df1c0b6f7abc6185cc8f235",
+    "model_queries": 1,
+    "candidate_count": 5,
+    "choice_mode": "model_exploration",
+    "selected_index": 2,
+    "selected_family": "Safari West",
+    "gift_index": 4,
+    "gift_score": -1.0101421795752683,
+    "gift_selection_probability": 0.1160036327168998,
+    "gift_rank": 5,
+    "verification": "failed",
+    "failure_reason": "search_exhausted",
+    "error": null,
+    "actions": 1304,
+    "frames": 151020,
+    "cash_before": 16468,
+    "cash_after": 15968,
+    "cash_spent": 500,
+    "encounters": 18,
+    "captures": 0,
+    "search_actions": 210,
+    "automatic_departure_passed": true,
+    "registered_species": 107,
+    "specimens": 77,
+    "all_prior_registrations_preserved": true,
+    "party_hp_pp_training_and_items_preserved": true,
+    "safe_terminal": true,
+    "terminal_map": 7,
+    "terminal_position_yx": [
+      4,
+      18
+    ],
+    "safari_active": false,
+    "independent_native_audit": "verified_native_zero_input"
+  },
+  "interpretation": "The gift enters the real five-choice menu, but the frozen model ranked it last and selected Safari West. That paid attempt failed honestly and returned safely. No claim of gift acquisition, training progress or native gift qualification. Do not tune on this DEVELOPMENT choice or sample repeated admissions to force the new option.",
+  "next": "Prospectively declare an isolated mechanics-only gift qualification and suitable TRAIN evidence; keep any fixture/teacher action separate from final-player authority. No more rare-Safari sampling to force selection, no DEVELOPMENT fitting or replay.",
+  "next_menu_inspection": {
+    "status": "verified_action_free",
+    "terminal_sha256": "b49e682a227bce571f2d62fd0290d0bfe0adf7964220a69bc5c502f64962a712",
+    "candidate_count": 5,
+    "distinct_semantic_candidates": 5,
+    "model_queries": 0,
+    "actions": 0,
+    "frames": 0,
+    "menu_sha256": "bd2c32fa84b577de03a1e2fab1fda279acfb3a99fb3e58b380c28c30ff7ed992",
+    "gift_still_available": true
+  }
+}

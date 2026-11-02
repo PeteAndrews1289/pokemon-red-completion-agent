@@ -1,0 +1,926 @@
+{
+  "schema": "pokemon.red.collected-run-data-audit.v1",
+  "date": "2026-10-12",
+  "partition": "development",
+  "status": "completed_read_only_analysis",
+  "goal_status": "paused",
+  "scope": {
+    "metadata_directories": 467,
+    "unique_root_metadata_files": 723,
+    "metadata_logical_bytes": 237370665,
+    "recent_declared_fresh_attempts": 20,
+    "recent_fresh_attempts_with_goal_receipts": 18,
+    "fresh_completed_goal_receipts": 3890,
+    "fresh_receipt_reader_files": 3948,
+    "fresh_receipt_logical_bytes_read": 4783841247,
+    "latest_selection_diagnostics": 293,
+    "assisted_segment_results_read": 131,
+    "assisted_segment_result_bytes_read": 514955978,
+    "assisted_large_results_not_parsed": 2,
+    "assisted_segment_without_root_result": 130,
+    "coverage_prefix_bytes_read": 720896,
+    "raw_journal_tree_enumerated": false,
+    "all_archive_bytes_exhaustively_read": false,
+    "full_battler_benchmark_performed": false
+  },
+  "actions": {
+    "gameplay_launches": 0,
+    "state_loads": 0,
+    "TRAIN": 0,
+    "fits": 0,
+    "parameter_updates": 0,
+    "source_runtime_changes": 0,
+    "deleted_files": 0,
+    "external_agents": 0,
+    "github_publication": false
+  },
+  "current_checkpoint": {
+    "attempt": "frozen-r29",
+    "family": "red-fresh-autonomous-run-20261012-v9",
+    "worker_stopped": true,
+    "goal_paused": true,
+    "registrations": 28,
+    "badges": 2,
+    "outcomes": 299,
+    "successes": 252,
+    "ordinary_setbacks": 47,
+    "unexpected_execution_errors": 0,
+    "terminal_sha256": "e369d3158310d6d4e4ce479bcb667af6dc91c21b66be7a6f2419fb1e7b5042d3",
+    "context_sha256": "cdfa04a66701627a26c711747c34434671a4d326f0f09661eae002ade42e9c03",
+    "all_originals_returned": true,
+    "verified_save_and_context_unchanged_by_analysis": true,
+    "raw_interruption_labels_retained": true
+  },
+  "repeated_fresh_runs": {
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "plan_seed": 2026101101,
+    "distinct_deployed_goal_models_in_goal_receipts": 1,
+    "total_goals": 3890,
+    "successes": 3492,
+    "ordinary_setbacks": 381,
+    "nonordinary_failed_boundaries": 17,
+    "unique_source_state_hashes": 1132,
+    "unique_transition_triplets": 1147,
+    "duplicate_transition_events": 2743,
+    "duplicate_transition_fraction": 0.7051413881748072,
+    "interpretation": "Repeated exact source/terminal/goal transitions are regression coverage, not independent learning examples. Frozen inference intentionally does not fit.",
+    "costs": {
+      "actions_attempted": 3536073,
+      "frames": 290668060,
+      "goal_attempts": 3890,
+      "restore_attempts": 5284,
+      "nested_restore_attempts": 1692,
+      "training_healing_attempts": 2888,
+      "seconds": 70020.59510299552,
+      "diagnostic_events": 624236,
+      "diagnostic_journal_seconds": 3892.4803938401164
+    },
+    "root_accounting_stale_example": {
+      "attempt": "frozen-r23",
+      "root_reported_decisions": 414,
+      "actual_native_and_outcome_decisions": 456
+    }
+  },
+  "fresh_progress": [
+    {
+      "attempt": "frozen-r19",
+      "family": "red-fresh-autonomous-run-20261011-v10",
+      "outcomes": 240,
+      "registrations": 34,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 27,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "restore_team",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "world_state_diverged"
+    },
+    {
+      "attempt": "frozen-r20",
+      "family": "red-fresh-autonomous-run-20261011-v11",
+      "outcomes": 254,
+      "registrations": 34,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 27,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "develop_team",
+      "last_error_type": "BattleRuntimeError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r17",
+      "family": "red-fresh-autonomous-run-20261011-v8",
+      "outcomes": 136,
+      "registrations": 14,
+      "badges_completed": [
+        "defeat_brock"
+      ],
+      "ordinary_setbacks": 12,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": "SurgeChapterError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r18",
+      "family": "red-fresh-autonomous-run-20261011-v9",
+      "outcomes": 192,
+      "registrations": 18,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 16,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "evolve_species",
+      "last_error_type": null,
+      "last_failure": "failed"
+    },
+    {
+      "attempt": "frozen-r21",
+      "family": "red-fresh-autonomous-run-20261012-v1",
+      "outcomes": 257,
+      "registrations": 34,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 27,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "develop_team",
+      "last_error_type": "BattleRuntimeError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r22",
+      "family": "red-fresh-autonomous-run-20261012-v2",
+      "outcomes": 438,
+      "registrations": 34,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty",
+        "defeat_surge"
+      ],
+      "ordinary_setbacks": 27,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "world_state_diverged"
+    },
+    {
+      "attempt": "frozen-r23",
+      "family": "red-fresh-autonomous-run-20261012-v3",
+      "outcomes": 456,
+      "registrations": 34,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty",
+        "defeat_surge"
+      ],
+      "ordinary_setbacks": 27,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "evolve_species",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "interruption_unrecovered"
+    },
+    {
+      "attempt": "frozen-r24",
+      "family": "red-fresh-autonomous-run-20261012-v4",
+      "outcomes": 207,
+      "registrations": 27,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 20,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "evolve_species",
+      "last_error_type": "RedGoalContextError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r25",
+      "family": "red-fresh-autonomous-run-20261012-v5",
+      "outcomes": 473,
+      "registrations": 35,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_erika",
+        "defeat_misty",
+        "defeat_surge"
+      ],
+      "ordinary_setbacks": 30,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "restore_team",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "step_acknowledgement_exhausted"
+    },
+    {
+      "attempt": "frozen-r26",
+      "family": "red-fresh-autonomous-run-20261012-v6",
+      "outcomes": 149,
+      "registrations": 7,
+      "badges_completed": [
+        "defeat_brock"
+      ],
+      "ordinary_setbacks": 21,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": null,
+      "last_failure": "failed"
+    },
+    {
+      "attempt": "frozen-r27",
+      "family": "red-fresh-autonomous-run-20261012-v7",
+      "outcomes": 171,
+      "registrations": 12,
+      "badges_completed": [
+        "defeat_brock"
+      ],
+      "ordinary_setbacks": 24,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": "SurgeChapterError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r28",
+      "family": "red-fresh-autonomous-run-20261012-v8",
+      "outcomes": 237,
+      "registrations": 15,
+      "badges_completed": [
+        "defeat_brock"
+      ],
+      "ordinary_setbacks": 38,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "restore_team",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "world_state_diverged"
+    },
+    {
+      "attempt": "frozen-r29",
+      "family": "red-fresh-autonomous-run-20261012-v9",
+      "outcomes": 299,
+      "registrations": 28,
+      "badges_completed": [
+        "defeat_brock",
+        "defeat_misty"
+      ],
+      "ordinary_setbacks": 47,
+      "nonordinary_failed_boundaries": 0,
+      "last_kind": "evolve_species",
+      "last_error_type": null,
+      "last_failure": "succeeded"
+    },
+    {
+      "attempt": "frozen-r9",
+      "family": "red-fresh-autonomous-run-20261011-v1",
+      "outcomes": 0,
+      "registrations": null,
+      "badges_completed": [],
+      "ordinary_setbacks": 0,
+      "nonordinary_failed_boundaries": 0,
+      "last_kind": null,
+      "last_error_type": null,
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r10",
+      "family": "red-fresh-autonomous-run-20261011-v2",
+      "outcomes": 0,
+      "registrations": null,
+      "badges_completed": [],
+      "ordinary_setbacks": 0,
+      "nonordinary_failed_boundaries": 0,
+      "last_kind": null,
+      "last_error_type": "KeyError",
+      "last_failure": null
+    },
+    {
+      "attempt": "frozen-r12",
+      "family": "red-fresh-autonomous-run-20261011-v3",
+      "outcomes": 32,
+      "registrations": 2,
+      "badges_completed": [],
+      "ordinary_setbacks": 1,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "world_state_diverged"
+    },
+    {
+      "attempt": "frozen-r13",
+      "family": "red-fresh-autonomous-run-20261011-v4",
+      "outcomes": 62,
+      "registrations": 3,
+      "badges_completed": [],
+      "ordinary_setbacks": 15,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": "RouteExecutionError",
+      "last_failure": "world_state_diverged"
+    },
+    {
+      "attempt": "frozen-r14",
+      "family": "red-fresh-autonomous-run-20261011-v5",
+      "outcomes": 60,
+      "registrations": 7,
+      "badges_completed": [],
+      "ordinary_setbacks": 4,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": null,
+      "last_failure": "failed"
+    },
+    {
+      "attempt": "frozen-r15",
+      "family": "red-fresh-autonomous-run-20261011-v6",
+      "outcomes": 104,
+      "registrations": 11,
+      "badges_completed": [],
+      "ordinary_setbacks": 8,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "develop_team",
+      "last_error_type": null,
+      "last_failure": "failed"
+    },
+    {
+      "attempt": "frozen-r16",
+      "family": "red-fresh-autonomous-run-20261011-v7",
+      "outcomes": 123,
+      "registrations": 13,
+      "badges_completed": [
+        "defeat_brock"
+      ],
+      "ordinary_setbacks": 10,
+      "nonordinary_failed_boundaries": 1,
+      "last_kind": "acquire_species",
+      "last_error_type": null,
+      "last_failure": "failed"
+    }
+  ],
+  "latest_goal_selection": {
+    "model_decisions_with_diagnostics": 293,
+    "selected_below_best": 158,
+    "story_or_access_highest_score_menus": 289,
+    "selected_evolution_goals": 13,
+    "selected_evolution_below_story_rank": 13,
+    "sampling_mode": "exploration",
+    "implementation": "Per-candidate softmax plus uniform exploration_mix=0.25. Candidate-family multiplicity changes aggregate probability mass.",
+    "first_expensive_evolution": {
+      "candidate_counts": {
+        "acquire": 3,
+        "evolve": 9,
+        "unlock_access": 1
+      },
+      "family_probability_mass": {
+        "acquire": 0.15871553039237288,
+        "evolve": 0.6286146993589821,
+        "unlock_access": 0.2126697702486452
+      },
+      "selected_score": 3.014905693405412,
+      "highest_story_score": 4.355533723204474,
+      "highest_story_probability": 0.2126697702486452,
+      "highest_story_probability_without_uniform_mix": 0.25791866802383456
+    },
+    "observed_evolution_slices": [
+      {
+        "step": "runs/segment-006/native/episode/step-036",
+        "candidate_counts": {
+          "acquire": 3,
+          "evolve": 9,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "acquire": 0.15871553039237288,
+          "evolve": 0.6286146993589821,
+          "unlock_access": 0.2126697702486452
+        },
+        "selected_is_top": false,
+        "execution_seconds": 313.57390979200136
+      },
+      {
+        "step": "runs/segment-007/native/episode/step-001",
+        "candidate_counts": {
+          "evolve": 9,
+          "unlock_access": 1,
+          "restore": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.6400802516065173,
+          "unlock_access": 0.2083995649547537,
+          "restore": 0.15152018343872914
+        },
+        "selected_is_top": false,
+        "execution_seconds": 335.2751975840656
+      },
+      {
+        "step": "runs/segment-008/native/episode/step-002",
+        "candidate_counts": {
+          "restore": 1,
+          "unlock_access": 1,
+          "evolve": 9
+        },
+        "family_probability_mass": {
+          "restore": 0.15185258567066567,
+          "unlock_access": 0.20829478997520814,
+          "evolve": 0.6398526243541262
+        },
+        "selected_is_top": false,
+        "execution_seconds": 251.57058099994902
+      },
+      {
+        "step": "runs/segment-008/native/episode/step-005",
+        "candidate_counts": {
+          "evolve": 8,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.7304194120511366,
+          "unlock_access": 0.26958058794886347
+        },
+        "selected_is_top": false,
+        "execution_seconds": 355.51049399992917
+      },
+      {
+        "step": "runs/segment-008/native/episode/step-006",
+        "candidate_counts": {
+          "evolve": 8,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.6342157363646621,
+          "unlock_access": 0.36578426363533784
+        },
+        "selected_is_top": false,
+        "execution_seconds": 373.52502670791
+      },
+      {
+        "step": "runs/segment-008/native/episode/step-007",
+        "candidate_counts": {
+          "evolve": 7,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.5761065501944327,
+          "unlock_access": 0.42389344980556726
+        },
+        "selected_is_top": false,
+        "execution_seconds": 388.191548999981
+      },
+      {
+        "step": "runs/segment-009/native/episode/step-000",
+        "candidate_counts": {
+          "evolve": 6,
+          "restore": 1,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.5487935866037881,
+          "restore": 0.19299610045628257,
+          "unlock_access": 0.25821031293992935
+        },
+        "selected_is_top": false,
+        "execution_seconds": 419.0215779170394
+      },
+      {
+        "step": "runs/segment-010/native/episode/step-001",
+        "candidate_counts": {
+          "evolve": 6,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.6747269581274107,
+          "unlock_access": 0.3252730418725893
+        },
+        "selected_is_top": false,
+        "execution_seconds": 169.0247633330291
+      },
+      {
+        "step": "runs/segment-010/native/episode/step-002",
+        "candidate_counts": {
+          "unlock_access": 1,
+          "evolve": 6
+        },
+        "family_probability_mass": {
+          "unlock_access": 0.3459820613619687,
+          "evolve": 0.6540179386380313
+        },
+        "selected_is_top": false,
+        "execution_seconds": 50.28822341701016
+      },
+      {
+        "step": "runs/segment-010/native/episode/step-003",
+        "candidate_counts": {
+          "evolve": 5,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.6095759537549957,
+          "unlock_access": 0.3904240462450042
+        },
+        "selected_is_top": false,
+        "execution_seconds": 343.5632391249528
+      },
+      {
+        "step": "runs/segment-011/native/episode/step-003",
+        "candidate_counts": {
+          "unlock_access": 1,
+          "evolve": 4,
+          "restore": 1
+        },
+        "family_probability_mass": {
+          "unlock_access": 0.309856921612916,
+          "evolve": 0.4548002035098473,
+          "restore": 0.23534287487723676
+        },
+        "selected_is_top": false,
+        "execution_seconds": 158.91000133298803
+      },
+      {
+        "step": "runs/segment-011/native/episode/step-004",
+        "candidate_counts": {
+          "evolve": 4,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.5583362902650605,
+          "unlock_access": 0.44166370973493946
+        },
+        "selected_is_top": false,
+        "execution_seconds": 120.40871712495573
+      },
+      {
+        "step": "runs/segment-011/native/episode/step-006",
+        "candidate_counts": {
+          "evolve": 2,
+          "unlock_access": 1
+        },
+        "family_probability_mass": {
+          "evolve": 0.43126639817009793,
+          "unlock_access": 0.5687336018299021
+        },
+        "selected_is_top": false,
+        "execution_seconds": 81.50784633297008
+      }
+    ],
+    "offline_ranking_replay_is_not_an_executed_counterfactual": true
+  },
+  "current_model_training": {
+    "settled_examples": 151,
+    "censored_examples": 0,
+    "feature_version": 7,
+    "feature_count": 356,
+    "nonzero_feature_rows": 60,
+    "feature_blocks": {
+      "kind": {
+        "total": 9,
+        "nonzero": 5
+      },
+      "readiness": {
+        "total": 252,
+        "nonzero": 28
+      },
+      "challenge": {
+        "total": 54,
+        "nonzero": 0
+      },
+      "preparation": {
+        "total": 13,
+        "nonzero": 0
+      }
+    },
+    "comparative_training": {
+      "acquire": {
+        "attempts": 55,
+        "censored": 0,
+        "failures": 38,
+        "successes": 17
+      },
+      "evolve": {
+        "attempts": 19,
+        "censored": 0,
+        "failures": 2,
+        "successes": 17
+      },
+      "explore": {
+        "attempts": 1,
+        "censored": 0,
+        "failures": 1,
+        "successes": 0
+      },
+      "restore": {
+        "attempts": 28,
+        "censored": 0,
+        "failures": 0,
+        "successes": 28
+      },
+      "resupply": {
+        "attempts": 34,
+        "censored": 0,
+        "failures": 4,
+        "successes": 30
+      }
+    },
+    "unit_training": {
+      "acquire": {
+        "attempts": 7,
+        "censored": 0,
+        "failures": 0,
+        "successes": 7
+      },
+      "evolve": {
+        "attempts": 5,
+        "censored": 0,
+        "failures": 1,
+        "successes": 4
+      },
+      "restore": {
+        "attempts": 2,
+        "censored": 0,
+        "failures": 0,
+        "successes": 2
+      }
+    },
+    "direct_story_or_develop_examples_in_deployed_head_coverage": 0,
+    "separate_readiness_refinement_configured": false,
+    "interpretation": "Existing challenge/preparation features are present but make no coefficient contribution in this deployed head. Story/development scoring extrapolates shared learned features; it is not directly validated whole-campaign competence. Other specialist models exist but are not implied active by old reports."
+  },
+  "party_readiness": {
+    "physical_members": 6,
+    "declared_combat_members": 1,
+    "combat_role": "observed_initial_starter",
+    "other_member_roles": "undecided",
+    "physical_levels": [
+      38,
+      16,
+      16,
+      18,
+      36,
+      36
+    ],
+    "physical_level_spread": 22,
+    "combat_level_spread_feature_in_latest_menus": 0,
+    "interpretation": "Single-role readiness is not a full-party readiness assessment. This may be intentional carry-centric scope; it does not establish learned balanced-team preparation."
+  },
+  "latest_costs": {
+    "by_goal_kind": {
+      "advance_story": {
+        "goals": 148,
+        "succeeded": 148,
+        "ordinary": 0,
+        "actions": 6969,
+        "frames": 397896,
+        "execution_seconds": 114.7400192959467,
+        "registration_delta": 1
+      },
+      "develop_team": {
+        "goals": 24,
+        "succeeded": 24,
+        "ordinary": 0,
+        "actions": 55732,
+        "frames": 4215684,
+        "execution_seconds": 788.7905584189575,
+        "registration_delta": 1
+      },
+      "resupply": {
+        "goals": 8,
+        "succeeded": 8,
+        "ordinary": 0,
+        "actions": 1768,
+        "frames": 91320,
+        "execution_seconds": 21.304133957833983,
+        "registration_delta": 0
+      },
+      "restore_team": {
+        "goals": 50,
+        "succeeded": 49,
+        "ordinary": 1,
+        "actions": 4182,
+        "frames": 205368,
+        "execution_seconds": 58.75690074567683,
+        "registration_delta": 0
+      },
+      "acquire_species": {
+        "goals": 55,
+        "succeeded": 15,
+        "ordinary": 40,
+        "actions": 39186,
+        "frames": 2276028,
+        "execution_seconds": 845.4542457548669,
+        "registration_delta": 17
+      },
+      "explore": {
+        "goals": 1,
+        "succeeded": 0,
+        "ordinary": 1,
+        "actions": 298,
+        "frames": 18204,
+        "execution_seconds": 3.1355953339952976,
+        "registration_delta": 0
+      },
+      "evolve_species": {
+        "goals": 13,
+        "succeeded": 8,
+        "ordinary": 5,
+        "actions": 155923,
+        "frames": 14393449,
+        "execution_seconds": 3360.3711266667815,
+        "registration_delta": 8
+      }
+    },
+    "phase_seconds": {
+      "execution": 5192.552580174059,
+      "menu_and_boundary_observation": 1036.7905478326138,
+      "outcome_diagnostics": 9.116923038265668,
+      "selection_and_receipt": 2.0627187851350754,
+      "selection_diagnostics": 4.133491794578731,
+      "terminal_observation": 14.70902183605358,
+      "verification": 4.25336694822181
+    },
+    "native_costs": {
+      "actions_attempted": 264058,
+      "frames": 21597949,
+      "goal_attempts": 299,
+      "restore_attempts": 347,
+      "nested_restore_attempts": 70,
+      "training_healing_attempts": 227,
+      "seconds": 6310.782953165821,
+      "diagnostic_events": 59523,
+      "diagnostic_journal_seconds": 436.87386252963915
+    },
+    "evolution": {
+      "battles": 1249,
+      "healing_trips": 233,
+      "execution_seconds": 3360.3711266667815
+    },
+    "evolution_share_of_measured_goal_execution": 0.647152065343966,
+    "whole_training_capture_evolution_share_of_measured_goal_execution": 0.9618806653804134,
+    "menu_observation_share_of_metered_run": 0.16419544707400588,
+    "diagnostic_journal_callback_seconds": 436.87386252963915,
+    "selected_evolution_inner_battle_authority": "rule_based_support",
+    "evolution_wiring_source_sha256": "f0b07ba224b96ea90b64646fe619302871726e5a95be960ffb5ccdb4efd5cd71",
+    "public_source_matches_actual_frozen_source": true,
+    "inner_training_is_not_deployed_battler_learning": true
+  },
+  "prediction_residuals": {
+    "selected_outcomes": {
+      "develop": {
+        "n": 24,
+        "mean_prediction": 1,
+        "observed_success_fraction": 1,
+        "mean_squared_prediction_residual": 0
+      },
+      "unlock_access": {
+        "n": 143,
+        "mean_prediction": 1,
+        "observed_success_fraction": 1,
+        "mean_squared_prediction_residual": 0
+      },
+      "resupply": {
+        "n": 8,
+        "mean_prediction": 1,
+        "observed_success_fraction": 1,
+        "mean_squared_prediction_residual": 0
+      },
+      "restore": {
+        "n": 49,
+        "mean_prediction": 1,
+        "observed_success_fraction": 1,
+        "mean_squared_prediction_residual": 0
+      },
+      "acquire": {
+        "n": 55,
+        "mean_prediction": 0.7651310253771854,
+        "observed_success_fraction": 0.2727272727272727,
+        "mean_squared_prediction_residual": 0.5052592755182713
+      },
+      "explore": {
+        "n": 1,
+        "mean_prediction": 1,
+        "observed_success_fraction": 0,
+        "mean_squared_prediction_residual": 1
+      },
+      "evolve": {
+        "n": 13,
+        "mean_prediction": 0.9710591185027375,
+        "observed_success_fraction": 0.6153846153846154,
+        "mean_squared_prediction_residual": 0.36492275960573567
+      }
+    },
+    "outputs_are_not_calibrated_probabilities": true,
+    "normalized_cost_outputs_are_not_native_action_units": true,
+    "partial_evolution_can_earn_valid_XP_while_goal_stays_failed": true
+  },
+  "capture_search": {
+    "selected_capture_goals": 55,
+    "successful_capture_goals": 15,
+    "failed_capture_goals": 40,
+    "failure_counts": {
+      "search_exhausted": 35,
+      "capture_items_exhausted": 2,
+      "resource_lost": 3
+    },
+    "completed_throw_events": 34,
+    "verified_capture_events": 15,
+    "completed_seek_operations": 6802,
+    "seek_operations_with_known_exposure": 4,
+    "known_eligible_tile_steps": 0,
+    "total_eligible_tile_exposure": null,
+    "actual_rng_checks": null,
+    "existing_instrumentation": "surge.py corridor search_diagnostics and capture_survey.py survey_operation_diagnostics",
+    "interpretation": "Unknown exposure is not zero exposure. Search failures dominate; catch mechanics alone cannot explain them. Per-goal exhaustion is not a trainer loss. Reconcile existing exposure tracking before inferring rare-encounter probabilities."
+  },
+  "retained_comparisons": {
+    "informative_collection_20261009": {
+      "candidate_examples": 162,
+      "new_admitted_examples": 11,
+      "candidate_model_sha256": "893215a3fd31b9bafac4c8e4f835d7eb28b4ba22142c4294a66e5741aa16f788",
+      "new_train_mse_before": 0.04420726717574592,
+      "new_train_mse_after": 0.014440856934857884,
+      "useful_choice_improvement": false,
+      "four_comparison_terminal_states_identical": true,
+      "deployed": false,
+      "interpretation": "Better fit on added TRAIN lessons did not change these retained native choices. Do not blindly adopt this rejected candidate or repeat an identical fit."
+    },
+    "assisted_reference": {
+      "last_segment": 133,
+      "verified_local_registrations": 124,
+      "badge_bits": 255,
+      "champion_and_hof_objectives_retained": true,
+      "legendary_registrations": [
+        144,
+        145,
+        146,
+        150
+      ],
+      "ready_terminal": true,
+      "full_unassisted_fresh_acceptance": false,
+      "interpretation": "Broad mechanics and collection coverage are reusable; assisted completion is not final autonomous proof."
+    }
+  },
+  "diagnostic_event_counts": {
+    "capture_not_retained": 196,
+    "capture_route_work_quote": 640,
+    "capture_throw_completed": 34,
+    "capture_throw_started": 34,
+    "capture_verified": 15,
+    "flee_verified": 457,
+    "ordinary_goal_inventory": 299,
+    "player_boundary": 299,
+    "regional_source_evaluation_started": 2259,
+    "regional_source_excluded": 2486,
+    "regional_source_offered": 671,
+    "regional_source_topology": 15045,
+    "regional_sources_unexamined": 295,
+    "survey_action_failed": 35,
+    "survey_action_returned": 7435,
+    "survey_decision": 7472,
+    "survey_stopped": 5,
+    "capture_preparation_bypassed": 1,
+    "configured_goal_exclusions": 19,
+    "wild_training_control": 19730,
+    "wild_training_move": 1779,
+    "wild_training_pause": 309,
+    "wild_training_summary": 8
+  },
+  "next_experiment": {
+    "status": "proposed_not_authorized_as_resume_by_this_audit_request",
+    "hypothesis": "The existing highest-score selection reduces candidate-family dilution and unnecessary early evolution, letting unchanged learners advance story without an operator walkthrough.",
+    "required_player_source_changes": 0,
+    "existing_mode": "goal_selection.mode=greedy",
+    "origin": "exact_retained_r29_ready_checkpoint",
+    "partition": "development",
+    "retain_sampled_baseline": true,
+    "load_diagnostic_gains_back": false,
+    "fit_on_development": false,
+    "change_battler": false,
+    "change_fitted_model": false,
+    "execution_budget": "20 goal decisions with model/support attribution or30minutes of measured execution;90minute whole work block",
+    "acceptance": "Authenticate the retained state/context and all prior costs; execute model-selected useful story progress toward Cut/Surge with legal recovery and original-party retention. Report actual new story objective, not merely predicted rankings or transport microsteps.",
+    "failure": "Repeated loops, real control/legality/accounting failure, or unsafe readiness despite highest-score choice. Preserve terminal and explain whether the missing lever is option inventory, role/readiness or battle capability; no blind refit.",
+    "reassessment": "15minutes or two equivalent failures; firm review after the declared test budget",
+    "exclusions": [
+      "no new planner or logger",
+      "no emulator launch during this audit",
+      "no fresh full-game diagnostic replay",
+      "no same-save rollback",
+      "no undeclared strategic ordering",
+      "no cloned evaluation independence",
+      "no GitHub publication"
+    ],
+    "then": "Only address confirmed remaining gaps using the existing battler, native TRAIN recorder, readiness/challenge features and role contracts."
+  },
+  "model_recommendation": {
+    "for_extraction": "GPT-6.1 Sol at high/extra-high/max as available; standard speed adequate",
+    "for_decision_review": "Astra high or max, standard speed; recommended to challenge this synthesis, not to reread every journal or perform bulk extraction",
+    "official_guidance": "https://learn.chatgpt.com/docs/model-selection#how-to-think-about-models-and-reasoning-effort",
+    "paired_model_comparison_performed": false,
+    "actual_ui_model_or_speed_not_verified": true
+  }
+}

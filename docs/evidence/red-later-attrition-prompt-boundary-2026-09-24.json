@@ -1,0 +1,148 @@
+{
+  "schema": "pokemon.red.later-attrition-prompt-boundary.v1",
+  "session_id": "2026-09-24-later-attrition-prompt-boundary",
+  "status": "closed_native_executor_failure_no_fit",
+  "native_source_commit": "bed47a9635d1d17540b57e16f585455d6517a9f9",
+  "hashes": {
+    "plan": "47948a144e9ed83d60bb2684c229872cc968a3452f6eb3c9fe0f14e4a1b0f62d",
+    "result": "54383fc72bb6ec05d7e4a04737a7b3bac7169e688830546bd4f388ef8c0eb565",
+    "independent_audit": "4dcfc6b4460e8d73b4c96f96f8dd03dfbb622927aa9b8226c7b7b96fd8446971",
+    "training_audit": "de6af9e900213d6911de8a37d7b291e7621565a7d24127566274065d1e7bab71",
+    "partial_summary": "bf4796996b0ce6995bde239944748912d0b16def196e13bf246948d9e24fb61e",
+    "readonly_failure_diagnosis": "3f5df354ab17a2fc9a5d6447fe177a49b1947e36651c131afcc57b77df010a4e"
+  },
+  "preflight": {
+    "zero_input_setups": 36,
+    "prior_targets_reextracted": 36,
+    "prior_branches": 935,
+    "excluded_train_pairs": 1329,
+    "excluded_prior_teams": 296,
+    "input_only_amendment_before_freeze": true,
+    "initial_allocation_attempts": 12,
+    "initial_failure_retained": true,
+    "initial_retained_status_vector_queries": 591,
+    "new_scenario_queries_before_amendment": 0
+  },
+  "collection": {
+    "prospective_contexts": 12,
+    "attempted_contexts": 7,
+    "new_complete_contexts": 5,
+    "main_contexts": 3,
+    "forced_contexts": 2,
+    "complete_target_branches": 105,
+    "complete_target_branch_decisions": 1227,
+    "complete_target_trajectory_decisions": 134,
+    "selection_misses": 1,
+    "incomplete_contexts": 1,
+    "prior_contexts_retained": 36,
+    "cumulative_complete_contexts": 41,
+    "previously_fitted_contexts": 36,
+    "new_fits": 0,
+    "comparison_episodes": 0,
+    "unopened_comparison_teams": 24
+  },
+  "native": {
+    "episodes": 142,
+    "complete_episodes": 141,
+    "selected_choices": 1986,
+    "completed_decisions": 1985,
+    "actions": 31478,
+    "frames": 2693276,
+    "seconds": 197.65998966712505,
+    "complete_episode_stops": {
+      "battle_won": 26,
+      "party_defeated": 115
+    },
+    "complete_episode_metrics": {
+      "party_faints": 457,
+      "opponent_faints": 151,
+      "party_pp_spent": 596,
+      "invalid_action_failures": 0,
+      "teacher_interventions": 0
+    },
+    "phases": {
+      "voluntary_switch": 389,
+      "attack": 1094,
+      "switch_prompt": 126,
+      "forced_switch": 376
+    },
+    "policy_latency_ns": {
+      "count": 1985,
+      "total": 5116718929,
+      "median": 2363292,
+      "p95": 6138625,
+      "maximum": 49106209
+    }
+  },
+  "audit": {
+    "evidence_valid": true,
+    "experiment_passed": false,
+    "complete_episode_decisions_slot_checked": 1970,
+    "terminal_slot_clearings_independently_verified": 26,
+    "uncommanded_in_battle_slot_changes_in_complete_episodes": 0,
+    "controller_inputs": 0,
+    "initial_naive_slot_diagnostic_retained": true
+  },
+  "representation": {
+    "switch": {
+      "cases": 3,
+      "nonconstant": 3,
+      "current_regret": 0.7216673046666665
+    },
+    "control": {
+      "cases": 3,
+      "nonconstant": 3,
+      "current_regret": 0.11966505953333299
+    },
+    "identical_vector_conflicts": 0,
+    "fit": false
+  },
+  "failure": {
+    "context": "attrition-train-3-03",
+    "timing": 12,
+    "branch": 1,
+    "reason": "sleep counter never decreased during bounded recovery",
+    "final_state_sha256": "1e71458f62006cb999eb67e8eef0dd459ad547fb3c64c64779fcb7cce86502c1",
+    "opponent_position_before": 1,
+    "opponent_position_after": 2,
+    "party_hp": [
+      83,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sleep_count": 2,
+    "selected_pp_unchanged": true,
+    "terminal_screen": "Bring out which POKeMON",
+    "diagnosis": "Missing semantic trainer-prompt yield in unspent move/sleep recovery; automatic prompt confirmation is inferred, not directly visible in the truncated trace.",
+    "partial_target_admitted": false
+  },
+  "repair": {
+    "semantic_prompt_handoff": true,
+    "pp_map_battle_guards_retained": true,
+    "new_tests": 13,
+    "focused_tests_passed": 521,
+    "full_suite": false,
+    "native_qualification": false
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "campaign_state_sha256": "359a96aa317019a8a4d3627711a8faab668091eaa6c48e7485c81d4c17211719",
+    "campaign_envelope_sha256": "36dbc835178d9fc6cca3fe7b0f896b6e508fdeb5030cab02fa787d82ec9e03c8",
+    "deployed_actor_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+    "experimental_parent_sha256": "b106108e00c78595e1920b250d28c16720c4d05b610e70596ee7b22af28802f3",
+    "main_save_inputs": 0,
+    "authority_promotions": 0,
+    "story_delta": 0,
+    "registration_delta": 0
+  },
+  "limitations": [
+    "Five new lessons remain unfitted; fewer than8required contexts and fewer than3forced contexts.",
+    "Complete-episode zero-intervention metrics do not validate the failed executor.",
+    "Reused TRAIN teams and timing siblings share ancestry; not independent natural-root transfer.",
+    "No comparison, native repair qualification, deployment, story progress or publication."
+  ],
+  "next": "Declare one separate native prompt-handoff qualification; only then propose a fresh bounded continuation retaining all41complete targets, without replaying the closed packet."
+}

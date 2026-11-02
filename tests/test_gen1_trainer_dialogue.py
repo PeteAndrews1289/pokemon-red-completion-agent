@@ -41,6 +41,27 @@ def test_qualified_thunk_resolves_header_not_copied_real_rom_address(fixture):
     assert dialogue._qualified_header(bytes(rom), target) == 0x4800
 
 
+@pytest.mark.parametrize("hp", [(50, 0), (0, 0), (-1, 50), (True, 50)])
+def test_explicit_faint_recovery_preserves_unchanged_living_remainder(fixture, hp):
+    rom, _, target = fixture
+    initial = make_state(map_id=12, yx=(2, 6), hp=hp)
+    env = ScriptedEnvironment(initial, dialogue=True)
+    env.read_trainer_dialogue_context = lambda: (0x4800, 1)
+    strict = dialogue.bind_scripted_trainer_dialogue(
+        bytes(rom), env, target, initial, final_event_flag=1200)
+    with pytest.raises(CartridgeReadError):
+        strict()
+    recovery = dialogue.bind_scripted_trainer_dialogue(
+        bytes(rom), env, target, initial, final_event_flag=1200,
+        allow_fainted_reserves=True)
+    if hp == (50, 0):
+        recovery()
+        env.state = replace(initial, party_hp=(49, 0))
+    with pytest.raises(CartridgeReadError):
+        recovery()
+    assert not env.actions
+
+
 def test_map_enum_is_normalized_at_strict_cartridge_parser_boundary(fixture, monkeypatch):
     from pokemon_red_completion.observation import MapId
     rom, _, target = fixture

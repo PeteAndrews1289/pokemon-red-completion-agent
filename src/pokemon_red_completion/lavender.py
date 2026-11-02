@@ -1421,7 +1421,10 @@ def _use_battle_status_item(
     *,
     item: ItemId,
     expected_status: int,
+    reserve: int = 1,
 ) -> None:
+    if type(reserve) is not int or reserve < 0:
+        raise ValueError("status-item reserve must be a nonnegative integer")
     before = reader.read()
     menu = reader.read_battle_menu_state(before)
     target_index = before.active_party_index
@@ -1436,7 +1439,7 @@ def _use_battle_status_item(
         or before.battler_status != expected_status
         or expected_status_mask is None
         or not expected_status & expected_status_mask
-        or before_quantity <= 1
+        or before_quantity <= reserve
         or menu.phase is not BattleMenuPhase.MAIN
     ):
         raise LavenderChapterError(f"{label} status cure lacks its stable supported gate.")

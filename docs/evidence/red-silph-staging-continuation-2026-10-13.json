@@ -1,0 +1,322 @@
+{
+  "at": [
+    3,
+    3
+  ],
+  "badge_bits": 47,
+  "badges_after": 5,
+  "badges_before": 4,
+  "cash_after": 4743,
+  "cash_before": 8727,
+  "cash_rewards": 12716,
+  "cold_proof": {
+    "frames": 0,
+    "inputs": 0,
+    "passed": true,
+    "path": "diagnostics/cold-closeout-v3/RESULT.json",
+    "sha256": "ac9ad45bd217181d452a2e51ec28c6d6808f41f03b0efbe5ad24d16ba07d6f67"
+  },
+  "completed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "obtain_strength",
+    "obtain_surf",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_fuchsia",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "completed_objective_receipts": [
+    {
+      "objective": "obtain_surf",
+      "path": "runs/segment-007/native/episode/step-007/outcome.json",
+      "sha256": "84728f5eafc6d4c0b8a54822a7934d20979e027c8ee459400c2791ced1bd51a7"
+    },
+    {
+      "objective": "obtain_strength",
+      "path": "runs/segment-007/native/episode/step-012/outcome.json",
+      "sha256": "ca3297f1b5f9dec3782c8eedd2d95289b7ef7e65506a7098579109bfaa2bcfd5"
+    },
+    {
+      "objective": "liberate_silph",
+      "path": "runs/segment-008/native/episode/step-005/outcome.json",
+      "sha256": "2277bdc2b1f8f32feaeb950030850f6f32aad1a98efc9a7ee357d9aabcede112"
+    },
+    {
+      "objective": "defeat_sabrina",
+      "path": "runs/segment-009/native/episode/step-004/outcome.json",
+      "sha256": "1b4a56714714e607bf6a76da8747d7e07ab1917eb569b423025830e24e6acbaf"
+    }
+  ],
+  "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+  "confirmed_stop_utc": "2026-10-13T21:01:25.856760+00:00",
+  "context_sha256": "4f1dda759aad49934dc4eff5c738cebeb4d66cb0aa065ec81c890e071ad00a65",
+  "copied_progress_imported": false,
+  "cumulative_spent": {
+    "actions": 758210,
+    "cash_debits": 66751,
+    "decisions": 813,
+    "frames": 61230510,
+    "heals": 877,
+    "seconds": 15364.390414662932
+  },
+  "cutoff_utc": "2026-10-13T21:45:23Z",
+  "field_ready": true,
+  "fits": 0,
+  "flat_outcomes": 88,
+  "goal_kinds": {
+    "acquire_species": 32,
+    "advance_story": 27,
+    "develop_team": 10,
+    "evolve_species": 2,
+    "restore_team": 16,
+    "resupply": 1
+  },
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_unchanged": true,
+  "goal_modes": {
+    "deterministic_safety": 1,
+    "model_exploration": 87
+  },
+  "goal_verification": {
+    "failed": 30,
+    "null": 4,
+    "succeeded": 54
+  },
+  "great_ball_purchase_cost": 1200,
+  "lapras_registered": true,
+  "limitations": [
+    "Assisted DEVELOPMENT,not unchanged fresh autonomous acceptance",
+    "No new parameter learning,promotion,independent origin or transfer proof",
+    "Paid misses,interruption,free departure,export reconstruction and runtime repairs remain",
+    "Some native/copy harness setup timing is a marked lower bound; original exit time is conservatively charged",
+    "Cold proof costs are separately retained after the final native ledger",
+    "Optional preparation/collection still interleave; narrow sampler comparison is not causal gameplay isolation",
+    "Sequence learner deferred; frozen fresh Red exit gates remain0of5"
+  ],
+  "map_id": 182,
+  "master_ball_present": true,
+  "native_execution_errors": [
+    {
+      "error": "Safari reward has no step-safe interaction stance",
+      "error_type": "ValueError",
+      "path": "runs/segment-003/native/episode/step-000"
+    },
+    {
+      "error": "wild preparation produced no reserve XP; healed then stopped",
+      "error_type": "RuntimeError",
+      "path": "runs/segment-006/native/episode/step-005"
+    },
+    {
+      "error": "Safari indoor departure changed boundary or resources",
+      "error_type": "ValueError",
+      "path": "runs/segment-007/native/episode/step-018"
+    }
+  ],
+  "new_actual_costs": {
+    "actions": 197352,
+    "cash_debits": 16700,
+    "decisions": 89,
+    "frames": 15683575,
+    "heals": 254,
+    "seconds": 3088.4984777061436
+  },
+  "new_registrations": [
+    "pokemon:national:030",
+    "pokemon:national:105",
+    "pokemon:national:113",
+    "pokemon:national:115",
+    "pokemon:national:123",
+    "pokemon:national:131"
+  ],
+  "original_six_restored": true,
+  "original_state_sha256": "3f31712969197535625cd5aeee0873730be5fd30e97a19a3554f7f3b62137b3b",
+  "outcomes_by_kind": {
+    "acquire_species": {
+      "failed": 26,
+      "null": 2,
+      "succeeded": 4
+    },
+    "advance_story": {
+      "null": 1,
+      "succeeded": 26
+    },
+    "develop_team": {
+      "failed": 4,
+      "null": 1,
+      "succeeded": 5
+    },
+    "evolve_species": {
+      "succeeded": 2
+    },
+    "restore_team": {
+      "succeeded": 16
+    },
+    "resupply": {
+      "succeeded": 1
+    }
+  },
+  "parameter_updates": 0,
+  "partition": "development",
+  "party_levels": [
+    50,
+    45,
+    39,
+    37,
+    43,
+    44
+  ],
+  "party_total_level_gain": 39,
+  "primary_family": "red-r29-silph-sabrina-continuation-20261013-v2",
+  "registrations_after": 64,
+  "registrations_before": 58,
+  "released": true,
+  "requested_objectives_complete": true,
+  "result_sha256": "58d4fe492966d1f4214a327a1548c3091635a57dc57a1abd5f0ef6b79814be1d",
+  "runtime_llm_calls": 0,
+  "runtime_package_sha256": "22d049faa4aa06a2e6ae537b3e22b2dc2c92b62fb3a7fa3a8927a768801d4a08",
+  "safari_fee_total": 15500,
+  "safari_paid_visits": 31,
+  "same_menu_rival_probability_after": 0.35396510362957023,
+  "same_menu_rival_probability_before": 0.18827745714210908,
+  "sampling_rule": "mean_exponential_weight_per_public_option_kind",
+  "schema": "pokemon.red.silph-staging-continuation.v1",
+  "separate_diagnostic_costs": {
+    "actions": 1691,
+    "decisions": 8,
+    "frames": 53880,
+    "heals": 3,
+    "seconds": 65.07337316707708
+  },
+  "session": "2026-10-13-silph-staging-continuation",
+  "started_utc": "2026-10-13T18:45:23Z",
+  "state_sha256": "ddd353802e1107721e87ab56f3d143f3a5bd38e592020aa018cc58c3ec35f1ae",
+  "status": "closed_all_requested_outcomes_complete",
+  "story_battles": [
+    {
+      "action_counts": {
+        "attack": 12,
+        "forced_switch": 2,
+        "switch_prompt": 2,
+        "voluntary_switch": 9
+      },
+      "decisions": 25,
+      "invalid_action_failures": 0,
+      "party_faints": 2,
+      "path": "runs/segment-005/native/episode/step-009/outcome.json",
+      "phase": "third",
+      "recorded_combat_teacher_interventions": 0,
+      "sha256": "458287b81534810c1a6a755c580bd396a4eface4db7004e22bab9f321814770d",
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 17,
+        "forced_switch": 4,
+        "switch_prompt": 4,
+        "voluntary_switch": 7
+      },
+      "decisions": 32,
+      "invalid_action_failures": 0,
+      "party_faints": 4,
+      "path": "runs/segment-007/native/episode/step-002/outcome.json",
+      "phase": "rival",
+      "recorded_combat_teacher_interventions": 0,
+      "sha256": "e71ca1610641c84c263f47ad60076c7c0c420e4906af543ff1edf91314ea8245",
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 15,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 11
+      },
+      "decisions": 28,
+      "invalid_action_failures": 0,
+      "party_faints": 0,
+      "path": "runs/segment-007/native/episode/step-004/outcome.json",
+      "phase": "eleventh",
+      "recorded_combat_teacher_interventions": 0,
+      "sha256": "7a94a99a74b4bd1cbddd310830e7d37d7f625e05b4b09863447a08b417f6d4be",
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 9,
+        "forced_switch": 0,
+        "switch_prompt": 3,
+        "voluntary_switch": 2
+      },
+      "decisions": 14,
+      "invalid_action_failures": 0,
+      "party_faints": 0,
+      "path": "runs/segment-008/native/episode/step-005/outcome.json",
+      "phase": "giovanni",
+      "recorded_combat_teacher_interventions": 0,
+      "sha256": "2277bdc2b1f8f32feaeb950030850f6f32aad1a98efc9a7ee357d9aabcede112",
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 16,
+        "forced_switch": 0,
+        "switch_prompt": 3,
+        "voluntary_switch": 8
+      },
+      "decisions": 27,
+      "invalid_action_failures": 0,
+      "party_faints": 0,
+      "path": "runs/segment-009/native/episode/step-004/outcome.json",
+      "phase": "defeat_sabrina",
+      "recorded_combat_teacher_interventions": 0,
+      "sha256": "1b4a56714714e607bf6a76da8747d7e07ab1917eb569b423025830e24e6acbaf",
+      "won": true
+    }
+  ],
+  "surf_and_strength_owned": true,
+  "terminal": "runs/segment-009",
+  "training_rows_added": 0,
+  "whole_party_restored": true,
+  "worker_stopped": true,
+  "terminal_export_utc": "2026-10-13T20:50:25.047489+00:00",
+  "focused_verification": {
+    "runner_preparation_safari_tests": 1071,
+    "earlier_route_and_silph_tests": 506,
+    "counts_are_groups_not_combined_unique_total": true,
+    "ruff": true,
+    "full_suite": false,
+    "ci": false,
+    "final_unique_focused_tests": 1167,
+    "documentation_surface_tests": 20,
+    "documentation_checks": true
+  },
+  "narrative_preservation": {
+    "project_archive": "docs/history/2026-10-13-project-narrative-before-silph-compact.md",
+    "project_source_sha256": "cbbe94ec1ab23cfddc3386b40babb9fba6774267d7636c9a4ae837f58373dbf8",
+    "video_archive": "docs/history/2026-10-13-video-narrative-before-silph-compact.md",
+    "video_source_sha256": "aa725ed93889d643daa7f0efc0722fc1d45c466ad6b5534e7d062c93f00e9eb0",
+    "both_exact_original_hashes_restore": true,
+    "project_frontpage_lines": 89,
+    "video_frontpage_lines": 90,
+    "history_deleted": false,
+    "tests_weakened": false
+  }
+}

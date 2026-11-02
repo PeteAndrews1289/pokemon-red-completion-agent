@@ -1,24 +1,39 @@
 # Assistance policy
 
-The project does not treat assistance as contamination. It treats undisclosed assistance as an
-invalid claim.
+Assistance must be disclosed and attributed. Current requirements are governed by
+[MISSION.md](../MISSION.md), [NORTH_STAR.md](../NORTH_STAR.md) and the
+[completion contract](completion-contract.md); old comparison classes do not waive them.
 
-| Class | Route knowledge | Read-only RAM/maps | Teacher fallback | Live foundation model | Claim |
-| --- | --- | --- | --- | --- | --- |
-| Deterministic teacher | Yes | Yes | Not applicable | No | Scripted expert baseline |
-| Hybrid learner | Yes | Yes | Disclosed | Optional, disclosed | Autonomous hybrid completion |
-| Learned skill stack | Yes | Yes | No | No by default | Trained specialists completed |
-| Distilled macro-policy | Goal identifier only | Declared structured state and pixels | No | No | Local learned controller completed |
-| Pixels-only ablation | No route at inference | No | No | No | Research comparison only |
+## Current player claim
 
-Training snapshots, demonstrations, and corrections are permitted for every learned class. They are
-disabled during official evaluation.
+The final player uses local learned goal and battle decisions, with zero runtime
+LLM calls, no teacher fallback, no save editing and no copied diagnostic progress.
+Semantic RAM/map observations and declared deterministic navigation/menu/capture
+mechanics are allowed; they do not become learned strategy by association.
 
-The objective graph and deterministic action executor may remain present in a learned-stack run.
-They provide temporal abstraction and controller safety; they do not choose a specialist's learned
-battle or recovery action.
+Pete's temporary League medicine-reserve safeguard uses normal inputs and earned
+resources. It remains explicitly rule-based support, frozen before official
+evaluation. No broader manual strategy exception follows from it.
 
-A completed human run is not required to build the deterministic teacher chapter-by-chapter. A
-full clean teacher completion is this project's promotion gate before training or evaluating
-full-game composition. Completion claims are governed by their own clean-run evidence. The
-[Teaching and Data Plan](teaching-plan.md) defines the reference and demonstration boundary.
+## Development and training
+
+Disclosed teachers may manipulate isolated TRAIN fixtures to create informative
+lessons. Fit only eligible TRAIN outcomes. DEVELOPMENT, benchmark, sealed and
+explicitly no-fit results remain excluded. Models stay frozen during evaluation.
+Levels and XP earned in-game are separate from fitted parameter changes.
+
+Related diagnostic copies may test a repair, but their XP, money, registrations
+and wins never enter another save. Preserve errors, losses, interventions and costs.
+A supported completion is labelled supported; it is not retroactive frozen autonomy.
+
+## Historical comparison classes
+
+Earlier research considered scripted teachers, hybrid systems with disclosed
+foundation-model use, specialist stacks and pixel-only ablations. Those are
+comparison categories, not current live authority. In particular, optional live
+foundation-model decisions cannot satisfy this project's zero-runtime-LLM gate.
+The [previous policy table](history/2026-10-26-assistance-policy-before-documentation-refresh.md)
+is preserved with its historical scope.
+
+The [current handoff](../HANDOFF.md) owns actual work; this page does not launch a
+player or convert an assisted result into official acceptance.

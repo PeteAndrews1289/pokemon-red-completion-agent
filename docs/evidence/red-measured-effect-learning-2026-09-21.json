@@ -1,0 +1,60 @@
+{
+  "schema": "pokemon.red.measured-effect-learning-evidence.v1",
+  "session": "2026-09-21-measured-effect-learning",
+  "classification": "bounded_auxiliary_learning_not_battle_policy_qualification",
+  "source_commit": "a4a96c2e17a960b5754559c8da59c3825b2361bb",
+  "private_packet": "red-measured-effect-learning-20260921-v1",
+  "plan_sha256": "f15f28b17f7294893b4bc0ebd431a284ab96ca31480eea791886dffb800bbd1b",
+  "fit_sha256": "cad523f4e23e513e281a807603bf6a52315328291b96916b759e427699efab02",
+  "training_sha256": "8c5d247a2f37fd50d986a62471971f4512cd8711a93ddcc255d98e43c55b291a",
+  "inventory_sha256": "b5ee158b5e3778693b8fbcee96d284d0b47bf793df346b0643c1bd76765723e2",
+  "result_sha256": "9bb486994f9e29251f836c8c0c3ff84e5b2763ecebec863c3e20e64c42d9e486",
+  "disable_sha256": "c32d61fb14793d9c7c83e571e9ea99a7c14825cae48655dd40ec7cdc6129740f",
+  "disable": {
+    "pairs": 6, "episodes": 12, "exact_state_equal_pairs": 6,
+    "clear_target_applied": 2, "clear_target_no_effect": 2,
+    "occupied_target_no_effect": 2,
+    "positive_native_observation_verified": true,
+    "admitted_to_fit": 0
+  },
+  "learner": {
+    "families": ["heal", "rest", "confusion"],
+    "target": "effect_application_conditional_on_execution",
+    "fits": 1, "iterations": 31, "fit_seconds": 0.002419500146061182,
+    "fitting_rows": 36, "fitting_roots": 3, "fitting_unique_feature_vectors": 12,
+    "reserved_rows": 6, "reserved_train_roots": 1,
+    "reserved_unique_feature_vectors": 6,
+    "weights_frozen_before_reserved_execution": true,
+    "observed_labels": 42, "positive_labels": 21, "negative_labels": 21,
+    "suppressed_labels": 0, "unknown_labels": 0,
+    "fit_brier": 0.0007944886389639866,
+    "reserved_brier": 0.0007975103131500617,
+    "fitting_only_constant_reserved_brier": 0.25,
+    "reserved_correct_at_half": 6,
+    "reserved_confusion_brier": 0.0015790434881976126,
+    "reserved_heal_brier": 0.0006785453508396265,
+    "reserved_rest_brier": 0.00013494210041294633,
+    "diagnostic_pass": true,
+    "trace_fields_in_features": 0,
+    "scope": "Assisted first-turn contrasts with prospective slower opponents; repeated recipes across TRAIN roots, not36 independent configurations. Six withheld cases are a small configuration diagnostic on previously used TRAIN ancestry, not natural or cross-title transfer."
+  },
+  "execution": {
+    "episodes": 54, "forced_training_choices": 54, "learned_battle_choices": 0,
+    "authenticated_logs": 54, "event_records": 378, "frames": 63200,
+    "seconds": 7.377595165744424, "invalid_actions": 0,
+    "actor_memory_writes": 0, "disclosed_teacher_setup": true,
+    "reauthenticated_rows": 42, "rechecked_native_pairs": 6,
+    "gameplay_stopped": true
+  },
+  "authority_promotions": 0,
+  "collection_delta": 0,
+  "old_reserved_battle_comparisons_opened": 0,
+  "protected": {
+    "story_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "k_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472"
+  },
+  "tests": {"targeted_passed": 527, "integration_skipped": 13},
+  "next": "Freeze a bounded selector-combination experiment using the predictor as learned input, never a runtime veto. Preserve182preferences/rewardv2 and distinguish execution probability from conditional effect. Require later-turn support and unchanged TRAIN readiness before unopened comparisons or natural-party integration. Disable needs an explicit observable-state contract before any predictor use."
+}

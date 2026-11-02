@@ -1,5 +1,10 @@
 # The story: teaching a model to actually play Pokémon
 
+> Historical entries below use their original dates and scopes. Their “current”
+> or “next” wording is not a live instruction. Use [HANDOFF](../HANDOFF.md),
+> [active state](../ACTIVE_PRODUCT_STATE.md) and [seven goals](seven-goals.md).
+
+
 > **Historical narrative archive.** The sections below preserve the story as it developed and use
 > “current” relative to their dates. For the live state, read the
 > [project narrative](project-narrative.md), [active product state](../ACTIVE_PRODUCT_STATE.md), and

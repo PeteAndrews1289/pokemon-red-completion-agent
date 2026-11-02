@@ -1,0 +1,143 @@
+{
+  "acceptance_sha256": "4fc67aeb2315ffa2d73b4ffbff2c54f6a174ad3b5ad8f7680179d89bec9ca216",
+  "failed_first_attempt": {
+    "restarted": false,
+    "retained": true,
+    "unchanged": true
+  },
+  "final_red_gates_met": 0,
+  "final_red_gates_total": 5,
+  "formal_final_acceptance": false,
+  "fresh_smoke": {
+    "clean_power_on": true,
+    "completed_chunks": 2,
+    "costs": {
+      "actions": 2293,
+      "cash_debits": 3000,
+      "decisions": 8,
+      "frames": 164665,
+      "heals": 3,
+      "seconds": 35.310451498953626
+    },
+    "elapsed_seconds": 37.51210299995728,
+    "model_decisions": 7,
+    "native_registrations": 2,
+    "progress_imported": false,
+    "qualified": true,
+    "released": true,
+    "state_loads": 0,
+    "support_decisions": 1,
+    "teacher_actions": 0,
+    "terminal_reason": "declared_budget_exhausted",
+    "terminal_sha256": "d0b2808a51e0d708fe771458fc37a2748147a13ca452df1753a19ce87ee1e659",
+    "worker_stopped": true
+  },
+  "frozen_retry": {
+    "actor_unchanged": true,
+    "deadline_utc": "2026-10-15T10:37:57.392383+00:00",
+    "extra_boot_frames": 997,
+    "formal_final_acceptance": false,
+    "fresh_save": true,
+    "idle_sleep_prevention_scoped_to_process": true,
+    "log_destination_reason": "Smoke journal38924KiB/2293actions projects beyond Runs2 remaining19GiB; existing private-data volume has about45GiB. No data move/deletion or volume changes.",
+    "log_volume": "T7 Developer",
+    "monitor_id": "frozen-red-r14-read-only-monitor",
+    "monitor_kind": "heartbeat",
+    "monitor_read_only": true,
+    "no_restore": true,
+    "plan_sha256": "b338b41828867c7e637bcabbb53325de23edd77bc9efbbcb9b8f7aabdc845ee5",
+    "private_family": "red-frozen-autonomous-run-20261014-v2",
+    "review_interval_seconds": 7200,
+    "seconds": 57600,
+    "seed": 2026101412,
+    "started_at_utc": "2026-10-14T18:37:57.392383+00:00",
+    "started_separate_from_smoke": true,
+    "worker_pid": 73112
+  },
+  "learning": {
+    "fits": 0,
+    "new_train_rows": 0,
+    "new_weights": 0,
+    "runtime_llm_calls": 0
+  },
+  "live_snapshot": {
+    "as_of_utc": "2026-10-14T18:47:58.625565+00:00",
+    "closed_segments": 3,
+    "native_facts": {
+      "badges": 0,
+      "cash": 183,
+      "party_levels": [
+        11,
+        15,
+        12,
+        7,
+        8
+      ],
+      "registrations": 5
+    },
+    "spent": {
+      "actions": 36828,
+      "cash_debits": 3082,
+      "decisions": 60,
+      "frames": 2562049,
+      "heals": 68,
+      "seconds": 466.2052080836147
+    },
+    "terminal_result_exists": false
+  },
+  "native_overlap_check": {
+    "failed_old_attempt_source_unchanged": true,
+    "frames": 0,
+    "inputs": 0,
+    "model_queries": 0,
+    "preserved_all_exclusions": true,
+    "unrelated_valid_profile_admitted": true
+  },
+  "package": {
+    "actor_settings_sha256": "c80275a6ce1202f964d198fdecaac03c01ea62e1f5965901879dbcd7f4c6ea20",
+    "all_actor_wiring_unchanged_except_paths": true,
+    "configuration_class_unchanged": true,
+    "helpers_models_data_unchanged": true,
+    "input_lists_validated_independently": true,
+    "manifest_sha256": "c5e7e70be1c793a0ca6c3c6e29909baf4c96bbe223f758cf1206d0a64ac330d3",
+    "only_cross_list_exact_duplicates_removed": true,
+    "source_changes": [
+      "scripts/run_fresh_red_player.py"
+    ]
+  },
+  "partition": "development",
+  "passed": true,
+  "private_proof_hashes": {
+    "TARGETED-VERIFICATION.json": "24d77d6784e4954a6aa0189a32272ae38e0416a715bd37ea9938e0434cfa9953",
+    "native-exclusion-check-v1/RESULT.json": "86fc4a8fbe9a643505a73fd8eb47fab06040de6ba77b73eeadd4074ca6663367",
+    "smoke-fresh-v1/ISOLATED-IO.json": "b1205c00ac7cc66cb0a84b9391b2bfefb220f00e0db615c0309210909493c6de",
+    "smoke-fresh-v1/PLAN.json": "4df2e339f890436316be873350d18c98fe3af742d315befd078dc99a5ca889f2",
+    "smoke-fresh-v1/REALIZED-CONFIGURATION.json": "067f39a15c3b8b1ad3e34ba9323d1453fbc45bbd7b37e80494ee5f766f393a2f",
+    "smoke-fresh-v1/RESULT.json": "a7025d3292c9c6dfe7f91db0bc068ae0cf1471e8abb10d99e68a375cc8a543d9",
+    "smoke-fresh-v1/terminal.state": "d0b2808a51e0d708fe771458fc37a2748147a13ca452df1753a19ce87ee1e659"
+  },
+  "private_repair_family": "red-fresh-exclusion-repair-20261014-v1",
+  "protected_completed_save": {
+    "champion_and_hall_of_fame": true,
+    "inputs": 0,
+    "registrations": 124,
+    "state_sha256": "41846e7698706ab243d53fd134cd16267050c8c5d873aba3bb168e2a7357187c",
+    "unchanged": true
+  },
+  "retained_preacceptance_check_failure": {
+    "actor_changed": false,
+    "cause": "Audit serialized Unicode paths before normalization; corrected normalization preserves exact nonpath equality.",
+    "frames": 0,
+    "inputs": 0
+  },
+  "schema": "pokemon.red.fresh-exclusion-repair-and-retry.v1",
+  "scope": "Exclusion composition and actual native handoff qualification, not full-game completion.",
+  "session_id": "2026-10-14-fresh-exclusion-repair-and-retry",
+  "verification": {
+    "ci": false,
+    "full_suite": false,
+    "lint_passed": true,
+    "private_funding_tests": 60,
+    "public_tests": 519
+  }
+}

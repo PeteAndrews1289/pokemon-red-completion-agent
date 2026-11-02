@@ -253,6 +253,101 @@ def test_wild_capture_requires_living_collection_growth_after_battle_exit(
     assert runtime.raw.battle_state == 0
 
 
+@pytest.mark.parametrize("required_throws", [1, 2, 3])
+def test_ordinary_capture_settles_without_untracked_command_confirmation(
+    monkeypatch: pytest.MonkeyPatch, required_throws: int,
+) -> None:
+    class Runtime:
+        raw = replace(_raw(), battle_state=1)
+        bag = {ItemId.MASTER_BALL: 1, ItemId.POKE_BALL: 5}
+        box_count = 0
+        confirmations = 0
+        pending = False
+        throws = 0
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_all_box_states(self) -> object:
+            return SimpleNamespace(counts=(self.box_count,) + (0,) * 11)
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(
+                BattleMenuPhase.UNKNOWN if self.pending else BattleMenuPhase.MAIN,
+                selected_main_command=None if self.pending else 1,
+            )
+
+    runtime = Runtime()
+
+    def navigate(*_args: object) -> None:
+        assert not runtime.pending, "another throw cannot start before settlement"
+        runtime.confirmations = 0
+
+    def pulse(_executor: object, kind: MacroActionKind, *_args: object,
+              **_kwargs: object) -> None:
+        if kind is MacroActionKind.CONFIRM:
+            assert not runtime.pending, "A would select an untracked command"
+            runtime.confirmations += 1
+            if runtime.confirmations == 2:
+                runtime.bag[ItemId.POKE_BALL] -= 1
+                runtime.throws += 1
+                runtime.pending = True
+        elif kind is MacroActionKind.CANCEL:
+            runtime.pending = False
+            if runtime.throws == required_throws:
+                runtime.raw = replace(runtime.raw, battle_state=0)
+                runtime.box_count = 1
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: runtime.bag)
+    monkeypatch.setattr(surge_module, "_navigate_main", navigate)
+    monkeypatch.setattr(surge_module, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_confirm_kind", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    assert surge_module._try_catch_wild(
+        runtime, object(), runtime, 0xA3, "transient command menu", max_throws=3,
+    )
+    assert runtime.throws == required_throws
+    assert runtime.bag == {ItemId.MASTER_BALL: 1, ItemId.POKE_BALL: 5 - required_throws}
+
+
+def test_ordinary_capture_does_not_retry_an_unsettled_throw(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class Runtime:
+        raw = replace(_raw(), battle_state=1)
+        bag = {ItemId.POKE_BALL: 3}
+        confirmations = 0
+
+        def read(self) -> RawGameState:
+            return self.raw
+
+        def read_all_box_states(self) -> object:
+            return SimpleNamespace(counts=(0,) * 12)
+
+        def read_battle_menu_state(self, _raw: RawGameState) -> BattleMenuState:
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime = Runtime()
+
+    def pulse(_executor: object, kind: MacroActionKind, *_args: object,
+              **_kwargs: object) -> None:
+        if kind is MacroActionKind.CONFIRM:
+            runtime.confirmations += 1
+            assert runtime.confirmations <= 2
+            if runtime.confirmations == 2:
+                runtime.bag[ItemId.POKE_BALL] -= 1
+
+    monkeypatch.setattr(surge_module, "_bag", lambda _emulator: runtime.bag)
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_select_bag_item", lambda *_args: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    with pytest.raises(surge_module.SurgeChapterError, match="settled boundary"):
+        surge_module._try_catch_wild(
+            runtime, object(), runtime, 0xA3, "unsettled throw", max_throws=3,
+        )
+    assert runtime.bag[ItemId.POKE_BALL] == 2
+
+
 def test_mart_buy_list_waits_for_variable_purchase_dialogue(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -515,6 +610,87 @@ def test_encounter_aware_corridor_preserves_the_interrupted_grass_step(
     assert (final.player_x, final.player_y, final.battle_state) == (12, 6, 0)
 
 
+@pytest.mark.parametrize("fault", [None, "no_faint", "all_fainted", "script",
+                                   "cash", "relocation", "joy_ignore", "ordinary_tick"])
+def test_wild_corridor_settles_only_verified_native_poison_faint(monkeypatch, fault):
+    from pokemon_red_completion.observation import InputReadiness
+    from pokemon_red_completion.route_executor import RouteExecutionError
+
+    class Reader:
+        state = replace(_raw(), map_id=MapId.ROUTE_3, player_x=61, player_y=9,
+                        battle_state=0, party_count=2, party_species_ids=(165, 36),
+                        party_hp=(20, 2 if fault == "ordinary_tick" else 1),
+                        party_status=(0, 8))
+        dialogue = False
+        moving = 0
+
+        def read(self):
+            return self.state
+
+        def read_input_readiness(self):
+            return InputReadiness(1 if fault == "joy_ignore" else 0, 0, 0, self.moving, 0)
+
+        def read_bottom_dialogue_box_visible(self):
+            return self.dialogue
+
+        def trainer_engagement_active(self):
+            return fault == "script"
+
+        def read_all_box_states(self):
+            return ()
+
+        def read_pokedex_state(self):
+            return ()
+
+    reader = Reader()
+    actions = []
+
+    class Port:
+        def execute(self, action):
+            actions.append(action)
+            if action.kind is MacroActionKind.CANCEL:
+                reader.dialogue, reader.moving = False, 0
+                if fault == "cash":
+                    reader.state = replace(reader.state, player_money=999)
+                if fault == "relocation":
+                    reader.state = replace(reader.state, player_x=62)
+            return action
+
+    def step(*_args):
+        reader.dialogue = fault != "ordinary_tick"
+        reader.moving = 4 if reader.dialogue else 0
+        reader.state = replace(reader.state, player_y=8,
+                               party_hp=(0 if fault == "all_fainted" else 20,
+                                         1 if fault in {"no_faint", "ordinary_tick"} else 0),
+                               party_status=(0, 8 if fault == "ordinary_tick" else 0))
+        return reader.state
+
+    monkeypatch.setattr(surge_module, "_survey_step", step)
+    area = LiveWildCorridorSurveyExecutor(object(), Port(), reader, DEFAULT_SURGE_TIMING,
+                                         label="shared wild source", forward_directions=("up",),
+                                         starting_endpoint="south", max_legs=1)
+    if fault in {None, "ordinary_tick"}:
+        area.seek_encounter()
+        assert reader.read_input_readiness().ready and not reader.dialogue
+        assert not area._directions and area._completed_legs == 1
+        proof = area.search_diagnostics()["native_field_faint_settlements"]
+        if fault is None:
+            assert [action.kind for action in actions] == [
+                MacroActionKind.CANCEL, MacroActionKind.WAIT]
+            assert reader.state.party_hp == (20, 0)  # No revival or replacement goal.
+            assert len(proof) == 1 and proof[0]["new_fainted_slots"] == [2]
+            assert proof[0]["protected_resources_unchanged"] is True
+            assert proof[0]["model_queries"] == 0
+        else:
+            assert not actions and not proof and reader.state.party_hp == (20, 1)
+    else:
+        with pytest.raises(RouteExecutionError):
+            area.seek_encounter()
+        assert not area.search_diagnostics()["native_field_faint_settlements"]
+        if fault not in {"cash", "relocation"}:
+            assert not actions
+
+
 def test_post_collection_pc_route_visits_nurse_before_exiting() -> None:
     assert surge_module._directions("LLLLDLLLLDLUULU") == surge_module.VERMILION_PC_TO_NURSE
     assert surge_module._directions("DDDDD") == surge_module.VERMILION_NURSE_TO_EXIT
@@ -718,6 +894,61 @@ def test_wild_helper_switch_recovers_when_incoming_helper_faints(
 
     assert observed is restored
     assert recovered_slots == [0]
+
+
+@pytest.mark.parametrize("enemy_hp", [9, 12, 16])
+def test_wild_switch_acknowledges_live_target_after_its_turn_without_an_extra_attack(
+    monkeypatch, enemy_hp,
+):
+    initial = replace(_raw(), battle_state=1, party_species_ids=(179, RATTATA_SPECIES_ID),
+                      party_hp=(30, 35), enemy_species_id=185, enemy_hp=12,
+                      active_party_index=0, active_party_hp=30)
+    switched = replace(initial, enemy_hp=enemy_hp, active_party_index=1, active_party_hp=31)
+    reader = SimpleNamespace(state=initial)
+    reader.read = lambda: reader.state
+    reader.read_battle_menu_state = lambda _: BattleMenuState(BattleMenuPhase.MAIN)
+    phase = [0]
+    commands = []
+    emulator = SimpleNamespace(read_u8=lambda _: 1 if phase[0] == 1 else 0)
+
+    def pulse(_executor, kind, *args, **kwargs):
+        commands.append(kind)
+        assert kind is MacroActionKind.CONFIRM and len(commands) <= 3
+        phase[0] += 1
+        if phase[0] == 3:
+            reader.state = switched
+
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    assert surge_module._switch_wild_capture_party_slot(
+        emulator, object(), reader, 1, 185, 12, "capture helper") is switched
+    assert commands == [MacroActionKind.CONFIRM]*3
+
+
+def test_wild_switch_pending_settlement_never_confirms_another_attack(monkeypatch):
+    initial = replace(_raw(), battle_state=1, party_species_ids=(179, RATTATA_SPECIES_ID),
+                      party_hp=(30, 35), enemy_species_id=185, enemy_hp=12,
+                      active_party_index=0, active_party_hp=30)
+    switched = replace(initial, enemy_hp=16, active_party_index=1, active_party_hp=31)
+    state = [initial]
+    phase = [0]
+    reader = SimpleNamespace(read=lambda: state[0], read_battle_menu_state=lambda _:
+        BattleMenuState(BattleMenuPhase.MAIN))
+    emulator = SimpleNamespace(read_u8=lambda _: 1 if phase[0] == 1 else 0)
+
+    def pulse(_executor, kind, *args, **kwargs):
+        phase[0] += 1
+        if phase[0] <= 3:
+            assert kind is MacroActionKind.CONFIRM
+        else:
+            assert kind is MacroActionKind.CANCEL
+            state[0] = switched
+
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_: None)
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    assert surge_module._switch_wild_capture_party_slot(
+        emulator, object(), reader, 1, 185, 12, "capture helper") is switched
+    assert phase[0] == 4
 
 
 def test_diglett_capture_recovers_a_fainted_catcher_with_living_party(
@@ -1552,6 +1783,43 @@ def test_weakening_miss_settles_without_requesting_another_attack() -> None:
     )
 
 
+@pytest.mark.parametrize("fault", [None, "pp", "no_guard", "identity", "missing",
+                                   "species", "xp", "level", "edge"])
+def test_capture_knockout_requires_exact_identity_and_earned_cartridge_evolution(fault):
+    from pokemon_red_completion.red_player_party_guard import RedPlayerPartyGuard
+
+    old = PartyMemberObservation(1, RATTATA_SPECIES_ID, 19, 40, 40, experience=7950)
+    new = replace(old, species_id=166, level=20, experience=8050)
+    if fault == "species":
+        new = replace(new, species_id=PIDGEY_SPECIES_ID)
+    elif fault == "xp":
+        new = replace(new, experience=old.experience)
+    elif fault == "level":
+        new = replace(new, level=19)
+    refs = () if fault == "missing" else ("replacement" if fault == "identity" else "original",)
+    reader = SimpleNamespace(read=lambda: PartyObservation(() if fault == "missing" else (new,)),
+                             preparation_specimen_refs=lambda: refs)
+    edges = frozenset({(RATTATA_SPECIES_ID, 166, 21 if fault == "edge" else 20)})
+    guard = RedPlayerPartyGuard(reader, PartyObservation((old,)), ("original",), edges)
+    current = replace(_raw(), battle_state=0, party_species_ids=(new.species_id,))
+    if fault is None:
+        surge_module._verify_wild_capture_knockout(current, (old.species_id,), True,
+                                                  guard, "ordinary wild target")
+    else:
+        with pytest.raises(surge_module.SurgeChapterError):
+            surge_module._verify_wild_capture_knockout(
+                current, (old.species_id,), fault != "pp",
+                None if fault == "no_guard" else guard, "ordinary wild target")
+
+
+@pytest.mark.parametrize("edges", [None, {(165, 166, 20)}, frozenset({(165, 166, True)}),
+                                   frozenset({(165, 166, 0)}), frozenset({(165, 166)})])
+def test_capture_evolution_edges_reject_unvalidated_inputs(edges):
+    with pytest.raises(ValueError, match="validated cartridge"):
+        LiveWildEncounterExecutor(object(), object(), object(), DEFAULT_SURGE_TIMING,
+                                  label="capture", capture_level_evolution_edges=edges)
+
+
 def test_wild_capture_helper_prefers_safe_rattata_tackle() -> None:
     party = PartyObservation(
         (
@@ -1617,6 +1885,144 @@ def test_wild_capture_helper_rejects_unsafe_or_unusable_members() -> None:
     )
 
     assert _select_wild_capture_helper(party) is None
+
+
+@pytest.mark.parametrize("status", [
+    StatusCondition.SLEEP, StatusCondition.PARALYSIS, StatusCondition.FREEZE,
+    StatusCondition.POISON, StatusCondition.BURN, StatusCondition.TOXIC,
+])
+def test_weakening_revalidates_helper_status_after_the_opponents_switch_turn(
+    monkeypatch: pytest.MonkeyPatch, status: StatusCondition,
+) -> None:
+    initial = replace(
+        _raw(), battle_state=1, enemy_species_id=100, enemy_hp=33,
+        party_species_ids=(179, RATTATA_SPECIES_ID), party_hp=(30, 21),
+        active_party_index=0, active_party_hp=30,
+    )
+    switched = replace(initial, active_party_index=1, active_party_hp=21)
+    reader = SimpleNamespace(state=initial)
+    reader.read = lambda: reader.state
+    helper = PartyMemberObservation(
+        slot=2, species_id=RATTATA_SPECIES_ID, level=7, hp=21, max_hp=21,
+        status=status, moves=(MoveObservation(33, 34),),
+    )
+    monkeypatch.setattr(surge_module, "PokemonRedPartyReader", lambda _: SimpleNamespace(
+        read=lambda: SimpleNamespace(members=(None, helper)),
+    ))
+
+    def switch(*_args):
+        reader.state = switched
+        return switched
+
+    fled = []
+
+    def flee(_emulator, _executor, actual_reader, actual):
+        assert actual_reader is reader and actual is switched
+        fled.append(actual)
+        reader.state = replace(switched, battle_state=0)
+
+    monkeypatch.setattr(surge_module, "_switch_wild_capture_party_slot", switch)
+    monkeypatch.setattr(surge_module, "_flee", flee)
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_: pytest.fail(
+        "newly unqualified helper must not select FIGHT"))
+    monkeypatch.setattr(surge_module, "_pulse", lambda *_args, **_kwargs: pytest.fail(
+        "newly unqualified helper must not request an attack"))
+
+    assert surge_module._weaken_wild_capture_once(
+        object(), object(), reader, 1, 0, "capture helper",
+    ) is False
+    assert fled == [switched]
+    assert reader.read().battle_state == 0
+    assert helper.moves[0].current_pp == 34
+
+
+def test_healthy_switched_helper_still_performs_exactly_one_weakening_attack(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    initial = replace(
+        _raw(), battle_state=1, enemy_species_id=100, enemy_hp=33,
+        party_species_ids=(179, RATTATA_SPECIES_ID), party_hp=(30, 21),
+        active_party_index=1, active_party_hp=21,
+    )
+    reader = SimpleNamespace(state=initial, phase=BattleMenuPhase.MAIN)
+    reader.read = lambda: reader.state
+    reader.read_battle_menu_state = lambda _: BattleMenuState(
+        reader.phase, selected_move_slot=1,
+    )
+    pp = [34]
+    monkeypatch.setattr(surge_module, "PokemonRedPartyReader", lambda _: SimpleNamespace(
+        read=lambda: SimpleNamespace(members=(None, PartyMemberObservation(
+            slot=2, species_id=RATTATA_SPECIES_ID, level=7, hp=21, max_hp=21,
+            moves=(MoveObservation(33, pp[0]),),
+        ))),
+    ))
+    monkeypatch.setattr(surge_module, "_switch_wild_capture_party_slot", lambda *_: initial)
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_: None)
+    commands = []
+
+    def pulse(_executor, kind, **_kwargs):
+        commands.append(kind)
+        assert kind is MacroActionKind.CONFIRM
+        if len(commands) == 1:
+            reader.phase = BattleMenuPhase.MOVE
+        elif len(commands) == 2:
+            reader.phase = BattleMenuPhase.MAIN
+            reader.state = replace(initial, enemy_hp=30, active_party_index=0)
+            pp[0] -= 1
+        else:
+            pytest.fail("weakening must request exactly one attack")
+
+    monkeypatch.setattr(surge_module, "_pulse", pulse)
+    monkeypatch.setattr(surge_module, "_flee", lambda *_: pytest.fail(
+        "healthy, proven weakening must not flee"))
+
+    assert surge_module._weaken_wild_capture_once(
+        object(), object(), reader, 1, 0, "capture helper",
+    ) is True
+    assert pp == [33]
+    assert commands == [MacroActionKind.CONFIRM, MacroActionKind.CONFIRM]
+
+
+def test_healthy_helper_trapped_on_switch_abstains_before_fight(monkeypatch) -> None:
+    initial = replace(
+        _raw(), battle_state=1, enemy_species_id=108, enemy_hp=21,
+        party_species_ids=(84, RATTATA_SPECIES_ID), party_hp=(43, 38),
+        active_party_index=0, active_party_hp=43, enemy_using_trapping_move=False,
+    )
+    switched = replace(initial, active_party_index=1, active_party_hp=37,
+        party_hp=(43, 37), enemy_using_trapping_move=True)
+    reader = SimpleNamespace(state=initial)
+    reader.read = lambda: reader.state
+    helper = PartyMemberObservation(
+        slot=2, species_id=RATTATA_SPECIES_ID, level=14, hp=37, max_hp=38,
+        moves=(MoveObservation(33, 35),),
+    )
+    monkeypatch.setattr(surge_module, "PokemonRedPartyReader", lambda _: SimpleNamespace(
+        read=lambda: SimpleNamespace(members=(None, helper)),
+    ))
+
+    def switch(*_args):
+        reader.state = switched
+        return switched
+
+    fled = []
+
+    def flee(_emulator, _executor, actual_reader, actual):
+        assert actual_reader is reader and actual is switched
+        fled.append(actual)
+        reader.state = replace(switched, battle_state=0)
+
+    monkeypatch.setattr(surge_module, "_switch_wild_capture_party_slot", switch)
+    monkeypatch.setattr(surge_module, "_flee", flee)
+    monkeypatch.setattr(surge_module, "_navigate_main", lambda *_: pytest.fail(
+        "trapped helper must not select FIGHT"))
+    monkeypatch.setattr(surge_module, "_pulse", lambda *_args, **_kwargs: pytest.fail(
+        "trapped helper must not issue a move selection or attack"))
+    assert surge_module._weaken_wild_capture_once(
+        object(), object(), reader, 1, 0, "retained trapping capture",
+    ) is False
+    assert fled == [switched]
+    assert reader.state.battle_state == 0 and helper.moves[0].current_pp == 35
 
 
 def test_high_risk_capture_helper_requires_a_large_hp_reserve() -> None:

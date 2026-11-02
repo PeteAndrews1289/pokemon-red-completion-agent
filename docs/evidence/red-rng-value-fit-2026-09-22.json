@@ -1,0 +1,316 @@
+{
+  "schema": "pokemon.red.randomized-training-evidence.v1",
+  "session": "2026-09-22-randomized-outcome-training",
+  "source_commit": "481b0c83",
+  "private_packet": "red-rng-value-fit-20260922-v1",
+  "result_sha256": "eb0b988c3712b8800b1114a47e202a5b5330c525c71d095b9d5060c2c4f6dba2",
+  "audit_sha256": "b9220f2eb8cffde37433d2a6ec93777e9ff7512140e1a737ddf781c56e066616",
+  "actor_promotions": 0,
+  "cohorts": {
+    "2026092291": {
+      "concerning_selections": 34,
+      "decisions": {
+        "candidate": 158,
+        "frozen": 82
+      },
+      "improved_won_status_cases": 0,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 15,
+        "frozen": 15
+      }
+    },
+    "2026092292": {
+      "concerning_selections": 8,
+      "decisions": {
+        "candidate": 98,
+        "frozen": 65
+      },
+      "improved_won_status_cases": 2,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 8,
+        "frozen": 12
+      }
+    },
+    "2026092293": {
+      "concerning_selections": 29,
+      "decisions": {
+        "candidate": 102,
+        "frozen": 75
+      },
+      "improved_won_status_cases": 2,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 16,
+        "frozen": 16
+      }
+    },
+    "2026092294": {
+      "concerning_selections": 5,
+      "decisions": {
+        "candidate": 56,
+        "frozen": 47
+      },
+      "improved_won_status_cases": 1,
+      "invalid_actions": 0,
+      "original_zero_flag_passed": false,
+      "passed": false,
+      "raw_flags_are_diagnostic": true,
+      "schema": "pokemon.red.battler.outcome-readiness.v2",
+      "wins": {
+        "candidate": 16,
+        "frozen": 19
+      }
+    }
+  },
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": false,
+    "iterations": 99,
+    "minimum_slack": -4.621303340002214e-15,
+    "new_group": {
+      "actor": {
+        "contexts": 104,
+        "errors": 16,
+        "high_cost_errors": 12,
+        "regret": 0.41917957674534695
+      },
+      "candidate": {
+        "contexts": 104,
+        "errors": 9,
+        "high_cost_errors": 4,
+        "regret": 0.071461531855452
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 8,
+          "high_cost_errors": 0,
+          "regret": 0.00996374309112787
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 2,
+          "high_cost_errors": 0,
+          "regret": 0.00343162440226481
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 6,
+          "high_cost_errors": 3,
+          "regret": 0.2234387409891507
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 0,
+          "regret": 0.00477731969651097
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 145,
+          "errors": 5,
+          "high_cost_errors": 0,
+          "regret": 0.0052861312390579535
+        },
+        "initial": {
+          "contexts": 145,
+          "errors": 21,
+          "high_cost_errors": 18,
+          "regret": 0.6041773301519345
+        }
+      }
+    ],
+    "passed": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_success": true
+  },
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 683,
+    "episodes": 256,
+    "event_records": 3500,
+    "frames": 934448,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 683,
+    "new_target_contexts": 0,
+    "plan_sha256": "f98f0169e584cf556a13408a189489e84b425115a8bcbbd0c6180542f463819e",
+    "prescribed_first_choices": 0,
+    "status_move_attempts_including_prescribed": 177,
+    "stops": {
+      "battle_won": 117,
+      "party_defeated": 139
+    }
+  },
+  "optimizer_stages": 2,
+  "pretraining": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": true,
+    "iterations": 3704,
+    "minimum_slack": 0.0000031357031747142328,
+    "new_group": {
+      "actor": {
+        "contexts": 104,
+        "errors": 16,
+        "high_cost_errors": 12,
+        "regret": 0.41917957674534695
+      },
+      "candidate": {
+        "contexts": 104,
+        "errors": 7,
+        "high_cost_errors": 3,
+        "regret": 0.0581022308975773
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 7,
+          "high_cost_errors": 0,
+          "regret": 0.009359878356828355
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 2,
+          "high_cost_errors": 0,
+          "regret": 0.00343162440226481
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.22434855339896312
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 0,
+          "regret": 0.005233569696510957
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 145,
+          "errors": 3,
+          "high_cost_errors": 0,
+          "regret": 0.0034486022606737654
+        },
+        "initial": {
+          "contexts": 145,
+          "errors": 21,
+          "high_cost_errors": 18,
+          "regret": 0.6041773301519345
+        }
+      }
+    ],
+    "parameters": 482,
+    "passed": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "seconds": 18.66992133297026,
+    "solver_message": "Optimization terminated successfully",
+    "solver_success": true
+  },
+  "representation_usable": true,
+  "screen": {
+    "concerning_selections": 76,
+    "decisions": {
+      "candidate": 414,
+      "frozen": 269
+    },
+    "improved_won_status_cases": 5,
+    "invalid_actions": 0,
+    "original_zero_flag_passed": false,
+    "passed": false,
+    "raw_flags_are_diagnostic": true,
+    "schema": "pokemon.red.battler.outcome-readiness.v2",
+    "wins": {
+      "candidate": 55,
+      "frozen": 62
+    }
+  },
+  "seconds": 115.43483083322644,
+  "training_complete": false,
+  "collection_delta": 0
+}

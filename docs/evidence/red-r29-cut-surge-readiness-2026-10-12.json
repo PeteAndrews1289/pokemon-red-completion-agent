@@ -1,0 +1,200 @@
+{
+  "schema": "pokemon.red.retained-cut-surge-readiness.v1",
+  "session": "2026-10-12-r29-cut-surge-readiness",
+  "partition": "development",
+  "status": "completed_session",
+  "start_utc": "2026-10-12T22:57:04Z",
+  "cutoff_utc": "2026-10-13T01:57:04Z",
+  "original_review_sha256": "026f43ddb4a1ac521e1311e4048bf16cef64a7d38dfacc69c2a6ca69a2914979",
+  "original_fresh_r29_preserved": true,
+  "primary": {
+    "family": "red-r29-cut-surge-greedy-continuation-20261012-v1",
+    "terminal": "runs/segment-002",
+    "source_sha256": "e369d3158310d6d4e4ce479bcb667af6dc91c21b66be7a6f2419fb1e7b5042d3",
+    "terminal_sha256": "4d018b17973a68d2a6243e11c07e03fcdda9783841a7735b7b6e2552ae6cc25f",
+    "context_sha256": "7fad13aebc0903e8ab0e90df2e859c00972c8bbc8d59a290f6f5ac9c1b54460d",
+    "result_sha256": "d6c4cbe4fa7cf589a309bb25d524dd4b29811a8e9905819f3f2dde730d7f73c0",
+    "cut_at_goal": 6,
+    "surge_at_goal": 19,
+    "new_successful_goals": 21,
+    "model_greedy_story_goals": 20,
+    "forced_singleton_restoration": 1,
+    "new_losses": 0,
+    "new_execution_errors": 0,
+    "badges_before": 2,
+    "badges_after": 3,
+    "registrations_before": 28,
+    "registrations_after": 28,
+    "cash_before": 6489,
+    "cash_after": 10165,
+    "party_levels": [
+      38,
+      17,
+      16,
+      18,
+      36,
+      36
+    ],
+    "all_six_originals_preserved": true,
+    "fully_restored": true,
+    "new_costs": {
+      "actions": 1344,
+      "frames": 89544,
+      "decisions": 21,
+      "cash_debits": 0,
+      "heals": 1,
+      "seconds": 44.95208829198964
+    },
+    "cumulative_costs": {
+      "actions": 265625,
+      "frames": 21715970,
+      "decisions": 320,
+      "cash_debits": 7951,
+      "heals": 348,
+      "seconds": 6359.320521207876
+    },
+    "workers_stopped": true,
+    "no_restart_or_copied_gains": true,
+    "runtime_llm_calls": 0
+  },
+  "readiness": {
+    "lineage": "independent historical Cerulean DEVELOPMENT diagnostic; not current primary",
+    "source_family": "red-player-cerulean-ten-steps-20260927-v1/cerulean-13",
+    "source_sha256": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e",
+    "baseline": {
+      "goals": 12,
+      "challenge_losses": 4,
+      "optional_preparation": 0
+    },
+    "singular_child": {
+      "goals": 12,
+      "selected_preparation": 4,
+      "misty_unrefined_losses": 4,
+      "scope": "help_bill"
+    },
+    "plural_child": {
+      "scope": [
+        "defeat_misty",
+        "help_bill"
+      ],
+      "prepared_member_doses": 25,
+      "query_ownership_verified": true,
+      "parent_branch_choice_preserved": true,
+      "peer_branches_excluded_from_child": true
+    },
+    "retained_lineage_challenge_losses": 8,
+    "separate_operator_selected_misty_loss": 1,
+    "separate_operator_goal_queries": 0,
+    "manual_half_prepared_check": {
+      "levels": [
+        22,
+        16,
+        19,
+        15
+      ],
+      "battle_choices": 26,
+      "voluntary_switches": 6,
+      "opponent_remaining_hp": 6,
+      "loss_retained": true,
+      "no_copy_back": true
+    },
+    "prepared_misty": {
+      "won": true,
+      "battle_choices": 10,
+      "attacks": 7,
+      "forced_switches": 1,
+      "voluntary_switches": 1,
+      "switch_prompts": 1,
+      "terminal_sha256": "533c1282556e788fed7bde405f445f2f6d543dc56cabb6044ecd421a333128e3",
+      "student_chose_preparation": true,
+      "stopping_with_training_alternative_proved": false,
+      "interpretation": "The parent returned to battle only after the offered preparation doses expired. Useful preparation and later victory are observed; learned stopping is not proved."
+    },
+    "bill_completed": true,
+    "reach_vermilion_completed": true,
+    "nugget_recovery_battle_choices": 4,
+    "thief_recovery_battle_choices": 6,
+    "interrupted_transport_errors_retained": 2,
+    "old_preface_zero_input_refusal_retained": true,
+    "unknown_errors_still_block": true,
+    "automatic_handoff_native_qualification_sha256": "adab09037e9eba81262e02dfd6827d87a3559d496a8637f0661a58e4d78d603c",
+    "automatic_handoff_qualification": "424 focused tests and two actual native zero-input inventories; both existing compulsory recoveries execute natively. A new full warm-original-binding replay is not claimed.",
+    "final_terminal_sha256": "5e49f2d47d0395e8ff4eac8408e94efe2ec0de1709f145df4286eeed8a6bea26",
+    "final_context_sha256": "7545e68518a90b3b9c2397e8496661fed57612ae17e3d32e7d71c018dbc4195e",
+    "final_result_sha256": "a0c92c380bc18384b277e5886ea5894934971e7a3b935c8d15d3666cbdde1b24",
+    "final_levels": [
+      24,
+      23,
+      21,
+      23
+    ],
+    "final_badges": 2,
+    "final_registrations": 9,
+    "registrations_delta": 3,
+    "final_cash": 7089,
+    "all_four_originals_preserved": true,
+    "field_ready": true,
+    "fully_restored": false,
+    "workers_stopped": true,
+    "costs_from_original_weak_source": {
+      "decisions": 153,
+      "actions": 45706,
+      "frames": 3448992,
+      "cash_debits": 882,
+      "heals": 74,
+      "seconds": 664.907848621835
+    },
+    "manual_diagnostic_seconds": 6.863525332999416,
+    "render_only_frames": 1,
+    "combined_native_seconds_guard": 900,
+    "diagnostic_gains_imported": 0
+  },
+  "deployment": {
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "reused_readiness_head_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+    "reused_head_native_train_examples": 36,
+    "new_train_examples": 0,
+    "new_fits": 0,
+    "new_weight_updates": 0,
+    "final_development_package": "readiness/branch-scope-package-v5",
+    "final_package_sha256": "6bf0a783f062217f4efe30a7336af4a386812d5c640004ab742a47a64356e49e",
+    "private_helpers": 174,
+    "data_inputs": 6941,
+    "model_bytes_unchanged": true,
+    "changed_runtime_sha256": {
+      "src/pokemon_red_completion/red_consequence_choice.py": "f45565feb111461791011701b1976e2c479cab1251a9f9a1843feec40b4c9fcd",
+      "src/pokemon_red_completion/red_native_player.py": "c5e57253f3004e993db5821a575ddead08a3e612dbffc59ff2f4c6a73889ff4c",
+      "src/pokemon_red_completion/red_autonomous_player.py": "cc33dc6481034cbaa5d56ca13e7d8870a84460455abc8a609a7004791f5c649c",
+      "scripts/run_configured_red_player.py": "5752aee893f7c9f0fc61b36b6500c61f035ff98357f0300b3bd01a4d69a2f07d"
+    },
+    "next_primary_inspection": {
+      "passed": true,
+      "inputs": 0,
+      "frames": 0,
+      "selected_goal": "reach_lavender",
+      "source_preserved": true,
+      "early_head_promoted_to_erika": false
+    },
+    "focused_tests": 424,
+    "related_tests": 197,
+    "ruff": "passed",
+    "full_suite_or_ci_claim": false
+  },
+  "accounting": {
+    "summary_sha256": "082e83ce4ce46765eeee827435fb0c4a5f8ac103fef81623c23ebb843d47ac64",
+    "non_gameplay_setup_failures_retained": true,
+    "old_failed_pkg_v3_unlaunched": true,
+    "inspector_dependency_and_render_errors_private": true,
+    "manual_wrapper_battle_calls_zero_not_actual_episode_count": true,
+    "observed_manual_episode_count": 1,
+    "raw_receipts_unchanged": true
+  },
+  "product_boundary": {
+    "official_fresh_completion": false,
+    "final_gate_passes": 0,
+    "final_gate_count": 5,
+    "hack_or_crystal_started": false,
+    "publication": false
+  },
+  "next_decision": "Continue the actual three-badge/28-registration primary toward Erika and Silph Scope using existing components; do not restart Red or replay the weak readiness diagnostic. Use matched actual TRAIN for stopping only if preparation prevents useful story progress."
+}

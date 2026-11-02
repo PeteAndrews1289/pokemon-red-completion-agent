@@ -1,0 +1,50 @@
+{
+  "actual_public_qualification_attempts": 2,
+  "actual_registration_delta": 0,
+  "all_prior_costs_preserved": true,
+  "all_seven_goals_complete": false,
+  "automatic_restart": false,
+  "case_lock_sha256": "375c8bb2c0bda3a184c8a5db348bc523e962d42a2d823c679ebcfa461bda54c4",
+  "case_outcomes": [
+    "QUALIFICATION_FAILED_BEFORE_NATIVE",
+    "QUALIFICATION_FAILED_BEFORE_NATIVE"
+  ],
+  "changed_parameters": 0,
+  "closed_boundaries_sha256": "4ed3b7492146aef314697496d7fcdb98bc4d87f6c56149707ef5a6d41f7fa455",
+  "completed_model_choices": 0,
+  "diagnostic_registration_delta": 0,
+  "final_cost_ledger_sha256": "19723a999eb6c536bbb20798a171aa27e59ee9a18d919a42f76fb744ff3fa27e",
+  "first_probe_instrumentation_failure_preserved": true,
+  "frozen_player_sha256": "dba4436c4d302b40e7f551fa39268417748871eceedef9145d10acb02baa4dd7",
+  "frozen_postcheck_sha256": "528c9802edf73d220d93f9ffe08efbe607bf6472afc087586d6a7d8c7d2ab4b9",
+  "historical_default_921_not_tested": true,
+  "known_disjoint_resource_seconds": 146.16794808600002,
+  "late_before": {
+    "badges": 8,
+    "cash": 1078,
+    "registrations": 116
+  },
+  "measurement_job_count": 3,
+  "mid_before": {
+    "badges": 6,
+    "cash": 7107,
+    "registrations": 68
+  },
+  "model_config_support_changes": 0,
+  "model_queries": 0,
+  "models_not_disproven": true,
+  "native_gameplay_tested": false,
+  "nested_probe_seconds": 143.97507491800002,
+  "new_TRAIN_rows": 0,
+  "new_fits": 0,
+  "new_native_loads": 0,
+  "observed_at_utc": "2026-10-28T18:42:00.386722+00:00",
+  "player_repairs": 0,
+  "private_evidence_root": "windows-seven-goal-implementation-20261017/viability-assessment-20261028-1803",
+  "qualification_failure": "Stored A9 V9 is loaded without the private-worker V15 codec step; head33 preparation-party context explicitly requires V15.",
+  "recommendation": "STOP_CURRENT_STACK_SCALING_AND_OPEN_ENDED_TRAINING",
+  "same_integration_defect_not_two_gameplay_losses": true,
+  "schema": "pokemon.red.frozen-viability-assessment-evidence.v1",
+  "session": "2026-10-28-frozen-viability-assessment",
+  "status": "qualification_failed_no_native_gameplay"
+}

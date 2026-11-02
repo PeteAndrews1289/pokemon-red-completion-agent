@@ -55,6 +55,45 @@ def test_invalid_inputs_fail(args):
         demand(**args)
 
 
+def test_exact_semantic_inputs_reuse_math_without_sharing_mutable_results():
+    from pokemon_red_completion.collection_acquisition_demand import _registered_capture_demands
+
+    _registered_capture_demands.cache_clear()
+    edges = (("A", "B"), ("A", "C"))
+    first = demand("ABC", "A", {"A": 1, "D": 0}, edges)
+    assert first == {"A": 1}
+    first["A"] = 99
+    second = demand("CBA", "A", {"D": 0, "A": 1}, tuple(reversed(edges)))
+    assert second == {"A": 1}
+    info = _registered_capture_demands.cache_info()
+    assert (info.hits, info.misses, info.maxsize) == (1, 1, 128)
+
+
+def test_reuse_invalidates_for_every_semantic_input_and_still_validates():
+    from pokemon_red_completion.collection_acquisition_demand import _registered_capture_demands
+
+    _registered_capture_demands.cache_clear()
+    edges = (("A", "B"), ("A", "C"))
+    assert demand("ABC", "A", {"A": 1}, edges) == {"A": 1}
+    assert demand("ABC", "A", {"A": 2}, edges) == {"A": 0}
+    assert demand("ABC", "AB", {"A": 1}, edges) == {"A": 0}
+    assert demand("AB", "A", {"A": 1}, edges) == {"A": 0}
+    assert demand("ABC", "A", {"A": 1}, (("A", "B"), ("B", "C"))) == {"A": 0}
+    assert demand("ABC", "A", {"A": 1}, edges, candidates=("A", "D")) == {"A": 1, "D": 0}
+    assert demand("ABC", "A", {"A": 1}, edges, protected={"A": 1}) == {"A": 2}
+    assert _registered_capture_demands.cache_info().misses == 7
+    # A true/float count compares equal to 1 in a key; validation must reject it
+    # even when otherwise identical valid inputs have already warmed the cache.
+    for invalid in (True, 1.0):
+        with pytest.raises(ValueError, match="nonnegative integers"):
+            demand("ABC", "A", {"A": invalid}, edges)
+    with pytest.raises(ValueError, match="acyclic"):
+        demand("ABC", "A", {"A": 1}, (*edges, ("B", "A")))
+    with pytest.raises(ValueError, match="nonexistent physical stock"):
+        demand("ABC", "A", {"A": 1}, edges, protected={"A": 2})
+    assert _registered_capture_demands.cache_info().misses == 7
+
+
 def test_all_small_dags_against_independent_exhaustive_physical_path_enumeration():
     # An independent tiny oracle: enumerate every actual path each specimen can
     # take and union its registrations. No matching/flow code is reused.

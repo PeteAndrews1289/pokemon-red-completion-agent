@@ -1,0 +1,164 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adopted_models": 0,
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "archive_changes": false,
+  "audit_completed_at_utc": "2026-10-24T03:56:05.486002+00:00",
+  "block_started_at_utc": "2026-10-24T01:55:57Z",
+  "cost_scope": "Known nonnested supervised root time for3preflights,2zero-input observer loads and2fits only. Engineering/profile/build/hold/reviews and rejected prestart overhead are separate/incompletely metered. Every earlier failed run, native/diagnostic cost and cutoff remains retained.",
+  "costs": {
+    "diagnostic_cash_spent": 0,
+    "diagnostic_heals": 0,
+    "known_supervised_native_and_preflight_parent_seconds": 132.20060173500025,
+    "known_supervised_total_seconds": 140.63216582600018,
+    "native_actions": 0,
+    "native_execution_errors": 1,
+    "native_frames": 0,
+    "new_fits": 2,
+    "new_native_loads": 2,
+    "new_preflights": 3,
+    "offline_fit_root_seconds": 8.431564090999927,
+    "ordinary_setbacks": 0
+  },
+  "deadline_utc": "2026-10-24T04:55:57Z",
+  "engineering": {
+    "active_focused_checks": 180,
+    "additional_constructor_checks": 3,
+    "frozen_focused_checks": 180,
+    "full_suite": false,
+    "shared_teacher_native_collector_qualification": false
+  },
+  "fits": {
+    "derived_rows": 11,
+    "maximum_original_raw_drift": 1.2156942119645464e-14,
+    "new_fullPP_predictions": [
+      2.599673871476708,
+      2.253642113038625
+    ],
+    "new_fullPP_targets": [
+      0,
+      0.10925925925925926
+    ],
+    "original_rows": 173,
+    "other_heads_normalizer_economy_exact": true,
+    "related_derived_families": 3,
+    "retained_output_rejected": true,
+    "rows": 184,
+    "unconstrained_rejected": true,
+    "useful_policy_improvement": false
+  },
+  "misty": {
+    "candidate_count": 5,
+    "cumulative_loads": 2,
+    "failed_observer_preserved": true,
+    "frames": 0,
+    "independent_origin": false,
+    "inputs": 0,
+    "labels": 0,
+    "levels": [
+      17,
+      19,
+      18,
+      7
+    ],
+    "livePP_full": true,
+    "queries": 0,
+    "repaired_observer_passed": true,
+    "single_unit_weight_row_cannot_meet_gates_for_any_target_in_0_1": true,
+    "source_and_terminal_exact": true,
+    "whole_world_parity": false
+  },
+  "model_owned_choices": 0,
+  "new_TRAIN_rows": 0,
+  "next_decision": "Preregister one exploratory party-only fit protecting all four original TRAIN story anchors, retaining all184 rows, weights, labels and unchanged audit gates. Evaluate every old subgroup before exposed full menus. Only a useful qualified choice warrants native consequences; qualify minimal TRAIN packaging during that informative case. Do not restart a campaign for calibration alone.",
+  "observed_at_utc": "2026-10-24T04:05:27.156356+00:00",
+  "partition": "development",
+  "performance": {
+    "A9_and_K_model_loading_passed": true,
+    "baseline_data_bytes": 6080355562,
+    "baseline_data_files": 74984,
+    "baseline_wall_seconds": 29.243237217000114,
+    "candidate_data_bytes": 1375269,
+    "candidate_data_files": 3,
+    "candidate_wall_seconds": 1.131293949999872,
+    "environment_pins_unchanged": 2771,
+    "fits": 0,
+    "full_hash_and_cache_policy_retained": true,
+    "gameplay_speedup_claim": false,
+    "helpers_relocated_only": 174,
+    "independent_review_sha256": "b20921061b0d4e9cccab267a5b53fd3380203341ff3220906b25c17b53e2675e",
+    "native_dependency_closure_qualified": false,
+    "observed_component_wall_ratio": 25.849371170952892,
+    "package_sha256": "22b6f71305d90b6a03586c2018a13f33ea806b3202030d1ce36504cdf86b7c6e",
+    "physical_emulators": 0,
+    "scope": "One profiled warm-host full package binding component; model/assembly checks outside the timed region.",
+    "source_checkout_files_unchanged": 2439,
+    "strict_guard_missing_archive_read_rejected": true,
+    "whole_player_qualified": false
+  },
+  "private_evidence_sha256": {
+    "ACTIVE-REFACTOR-CHECKS.json": "5863e02c1ed9dd9f046004e26be52eb04d75e7269b83aa86b4f9882dd8755c33",
+    "FROZEN-V175-CHECKS.json": "8829f1b839e07c610381d6e04084812590ab15802968f50570cbe005775e29e5",
+    "MINIMAL-TRAIN-PACKAGE-RESULT.json": "988b7e425452a6ec5059ae6b46fd1b976f06aece4a71646c82bc1d2457dfbc3d",
+    "MISSION.json": "ed070f8736439e907f806cb4328a3b2c67d3d82c461a900df88158a9309b2d06",
+    "MISTY-OBSERVATION-FAILED-CLOSED.json": "6678cff6ced501e1c63b0213d9309ccd94ce544d77d181dc88bccd3273089d80",
+    "MISTY-OBSERVATION-R2-CLOSED.json": "ad1ae1ef7a809ec7b655c602ea54708b965ad876350c665e67e3c4161c982b41",
+    "PARTY-COST-EXPERIMENT-DECISION.json": "38999edecbccc790016f76c6d40a3049874d41aa3e99713cc133c855a5c04ee6",
+    "PARTY-FIT-CLOSED.json": "45168710306d6f73c2d01a6303c8855b2502ad68d866e0b68f78896efffc5626",
+    "PERFORMANCE-CHECKER-PROVENANCE.json": "83acee046b1d8d5fa7390295ef1c8cd6341cef8ac65704d9b886c08d09c5bbc7",
+    "RETAINED-PARTY-EXPERIMENT-DECISION.json": "c16310b99a74c8f5bda860f4dd1cfe99968f37e65255821b81ec435541e85d52",
+    "RETAINED-PARTY-FIT-CLOSED.json": "967d695f9b354ca5346b07ac11b87d08aec581df3d6f7529be7c96f99dfe9397",
+    "SESSION-CONTRACT-TEST-CHECKS.json": "88f2391c9bce83b22ea5957373ac8652b0b220f51cc0659097dd1e75108e7bf2",
+    "TEACHER-STATIC-PREFLIGHT-CLOSED.json": "6c950c14123b7717800202825e075e4e1cbef258c324de7963410c998da90ca8",
+    "TWO-HOUR-AUDIT.json": "b07ee6459ee625b7bff92c45d5136b9b86aa58d9f0eef073ca2eb4ebb54214d5",
+    "proposals/consumer-review/MISTY-SINGLE-ROW-INFLUENCE-BOUND.json": "8d8dea1b59a2a594f9f0991fbb3be03772c7bd4eb0b3a9aa5aaf81a93f64db32",
+    "proposals/consumer-review/NARROW-STORY-ANCHOR-RETENTION-DESIGN.json": "27c5af446986b5ffbc47a66db5b6ebb64f145bc6c938e23790aeebd2e8d65ea6",
+    "proposals/learning-design-review/MINIMAL-TRAIN-PERFORMANCE-INDEPENDENT-REVIEW.json": "b20921061b0d4e9cccab267a5b53fd3380203341ff3220906b25c17b53e2675e",
+    "proposals/learning-design-review/PARTIAL-PP-FEATURE-FALSIFIER.json": "303060a805b389362508ccd3e70512a93fc4614fad4abbf9cc604421d1eaeadf"
+  },
+  "publication": false,
+  "real_fits": 2,
+  "runtime_LLM": false,
+  "schema": "pokemon.red.retained-party-train-runtime-development.v1",
+  "session": "2026-10-17-seven-goal-implementation",
+  "seven_goals": [
+    {
+      "goal": "Funding",
+      "status": "Open",
+      "verified_delta": "No funding-policy or cash outcome improvement this block; economic head retained."
+    },
+    {
+      "goal": "Reliability",
+      "status": "Open; reusable progress",
+      "verified_delta": "Shared strict TRAIN code integrated and constructor guard regression fixed. Read-only native observer qualified after one retained failure; generic native collector still unqualified."
+    },
+    {
+      "goal": "Performance",
+      "status": "Open; component improvement measured",
+      "verified_delta": "Minimal TRAIN package full binding29.243s to1.131s with full verification retained. Native and whole-campaign closure pending."
+    },
+    {
+      "goal": "Preparation",
+      "status": "Open",
+      "verified_delta": "No useful preparation decision or benefit demonstrated. Analytic information gate prevented an uninformative Misty battle."
+    },
+    {
+      "goal": "Capacity",
+      "status": "Earlier two-worker pilot qualified; broader goal open",
+      "verified_delta": "Existing1.805x result unchanged. No new concurrency/GPU/campaign qualification."
+    },
+    {
+      "goal": "Decision quality",
+      "status": "Open",
+      "verified_delta": "Two models rejected. Exact old173 output retention works but overconstrained candidate fails new full-PP calibration and useful choice transfer."
+    },
+    {
+      "goal": "Acceptance",
+      "status": "Unmet",
+      "verified_delta": "No actual progress, new registration, official success or heldout start. Fresh Champion/HOF+124 and8/10 remain unmet."
+    }
+  ]
+}

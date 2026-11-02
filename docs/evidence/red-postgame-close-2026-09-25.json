@@ -1,0 +1,418 @@
+{
+  "actions": 210,
+  "audit_precheck_correction": "Initial read-only audit compared invocation path spellings;unique resolved paths and all exact digests match. No executable change or gameplay replay.",
+  "authority": "native-support-only",
+  "bag": [
+    [
+      4,
+      1
+    ],
+    [
+      42,
+      1
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      15,
+      5
+    ],
+    [
+      74,
+      1
+    ],
+    [
+      46,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      3,
+      20
+    ],
+    [
+      198,
+      1
+    ],
+    [
+      199,
+      1
+    ],
+    [
+      197,
+      1
+    ],
+    [
+      43,
+      1
+    ],
+    [
+      52,
+      1
+    ]
+  ],
+  "battles": 0,
+  "boxes": {
+    "boxes": [
+      {
+        "box_index": 0,
+        "levels": [
+          3,
+          6,
+          5,
+          4,
+          4,
+          9,
+          3,
+          2,
+          3
+        ],
+        "species_ids": [
+          84,
+          113,
+          113,
+          124,
+          124,
+          107,
+          36,
+          165,
+          123
+        ]
+      },
+      {
+        "box_index": 1,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 2,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 3,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 4,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 5,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 6,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 7,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 8,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 9,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 10,
+        "levels": [],
+        "species_ids": []
+      },
+      {
+        "box_index": 11,
+        "levels": [],
+        "species_ids": []
+      }
+    ],
+    "current_box_index": 0,
+    "storage_initialized": true
+  },
+  "cash_spent": 0,
+  "checkpoints": [
+    {
+      "map": 0,
+      "name": "04-pallet",
+      "sha256": "41ee125724580a4d6452a7b1384dd3f0b36c49cc78bd0042f410c8bd4de42914"
+    },
+    {
+      "map": 1,
+      "name": "05-viridian",
+      "sha256": "71c12eb9ab42d00e3ed1b5ea675cb92d0cc8344c0aba68f9315b749e5639eb20"
+    },
+    {
+      "map": 41,
+      "name": "06-center",
+      "sha256": "da4c6ef3ed6c417e9e34a9e57d26b58f02656e6602866e59036723a73a999d03"
+    },
+    {
+      "map": 41,
+      "name": "07-healed",
+      "sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979"
+    },
+    {
+      "map": 41,
+      "name": "final",
+      "sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979"
+    }
+  ],
+  "event_flag_changes": [
+    2273,
+    2278,
+    2281,
+    2286,
+    2289,
+    2294,
+    2297,
+    2302,
+    2303,
+    2305
+  ],
+  "fits": 0,
+  "frames": 15684,
+  "full_hp_status_pp": true,
+  "gameplay_running": false,
+  "historical_completion_not_current_live_champion_flag": true,
+  "historical_story_objectives": 36,
+  "hp": [
+    206,
+    156,
+    144,
+    250,
+    121
+  ],
+  "items_spent": 0,
+  "legendary_interactions": 0,
+  "levels": [
+    65,
+    55,
+    54,
+    52,
+    55
+  ],
+  "model_choices": 0,
+  "models_unchanged": true,
+  "money": 30620,
+  "moves": [
+    [
+      44,
+      70,
+      58,
+      57
+    ],
+    [
+      33,
+      28,
+      98,
+      84
+    ],
+    [
+      64,
+      28,
+      15,
+      19
+    ],
+    [
+      29,
+      133,
+      156,
+      34
+    ],
+    [
+      10,
+      45,
+      91,
+      28
+    ]
+  ],
+  "native_league_flags_reset": true,
+  "new_registrations": 0,
+  "partition": "development",
+  "party": [
+    28,
+    104,
+    64,
+    132,
+    118
+  ],
+  "passed": true,
+  "phases": {
+    "center": 5,
+    "field": 1,
+    "fly": 21,
+    "hall": 140,
+    "heal": 24,
+    "summary": 2,
+    "title": 17
+  },
+  "plan_sha256": "ea48f7ba76595f97b3a9ed2e5c72c57b801d9cfaac32359ca14b22e3362f18ed",
+  "postgame_continue_proven": true,
+  "pp": [
+    [
+      25,
+      15,
+      10,
+      15
+    ],
+    [
+      35,
+      15,
+      30,
+      30
+    ],
+    [
+      35,
+      15,
+      30,
+      15
+    ],
+    [
+      15,
+      20,
+      10,
+      15
+    ],
+    [
+      35,
+      40,
+      10,
+      15
+    ]
+  ],
+  "prior471stages_unchanged": true,
+  "registered": 17,
+  "remaining_campaign_actions": 13838,
+  "schema": "pokemon.red-postgame-close.v1",
+  "seconds": 0.7626813750030124,
+  "source_sha256": "5450b083b06c1ba15f5edb30268afc09c034df1b91d06a1762d1e700b69955f1",
+  "stage472_absent": true,
+  "static_encounters": [
+    {
+      "accessibility_proven": false,
+      "at": [
+        9,
+        4
+      ],
+      "capture_qualified": false,
+      "event_flag": 1129,
+      "event_set": false,
+      "level": 50,
+      "map_id": 83,
+      "name": "Zapdos",
+      "registered": false,
+      "repeatable": false,
+      "species": 145
+    },
+    {
+      "accessibility_proven": false,
+      "at": [
+        1,
+        6
+      ],
+      "capture_qualified": false,
+      "event_flag": 2522,
+      "event_set": false,
+      "level": 50,
+      "map_id": 162,
+      "name": "Articuno",
+      "registered": false,
+      "repeatable": false,
+      "species": 144
+    },
+    {
+      "accessibility_proven": false,
+      "at": [
+        5,
+        11
+      ],
+      "capture_qualified": false,
+      "event_flag": 1342,
+      "event_set": false,
+      "level": 50,
+      "map_id": 194,
+      "name": "Moltres",
+      "registered": false,
+      "repeatable": false,
+      "species": 146
+    },
+    {
+      "accessibility_proven": false,
+      "at": [
+        13,
+        27
+      ],
+      "capture_qualified": false,
+      "event_flag": 2241,
+      "event_set": false,
+      "level": 70,
+      "map_id": 227,
+      "name": "Mewtwo",
+      "registered": false,
+      "repeatable": false,
+      "species": 150
+    }
+  ],
+  "static_event_clear_not_full_availability_proof": true,
+  "static_flag_reference": "pret/pokered a1a22aaf84d1675bcdbaeb194592379d586d838e constants/event_constants.asm",
+  "terminal_envelope_sha256": "2075e2c5b7160e12aaa8aaa69b9bd8cc75fa438c425bbe4e9b9789e876c89c65",
+  "terminal_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+  "total_campaign_actions": 286162,
+  "total_campaign_frames": 22587800,
+  "zero_input_audit": true,
+  "source_commit": "02109443",
+  "stage": 471,
+  "report": "docs/work-sessions/2026-09-25-postgame-close.md",
+  "capture_readiness": {
+    "party_pure_sleep_or_paralysis_moves": 0,
+    "boxed_pure_sleep_or_paralysis_moves": 0,
+    "box_members_inspected": 9,
+    "master_balls": 1,
+    "great_balls": 20,
+    "poke_balls": 1,
+    "ultra_balls": 0,
+    "open_party_slots": 1,
+    "open_current_box_slots": 11,
+    "legendary_capture_executor_qualified": false
+  },
+  "tests": {
+    "postgame_targeted": 135,
+    "capture_components_targeted": 107,
+    "full_suite": false
+  },
+  "separate_collection": {
+    "registered": 109,
+    "target": 124,
+    "specimens": 78,
+    "money": 11968,
+    "unchanged": true
+  },
+  "legacy_train": 135,
+  "fresh_run_gate": "0/5"
+}

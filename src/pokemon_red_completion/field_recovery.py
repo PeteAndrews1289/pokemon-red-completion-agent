@@ -37,7 +37,7 @@ def recovery_item_hp(item: ItemId, hp: int, maximum: int) -> int:
     """Exact cartridge recovery amounts, including early-game stock."""
     if item is ItemId.FULL_HEAL:
         return hp
-    if item is ItemId.FULL_RESTORE:
+    if item in {ItemId.FULL_RESTORE, ItemId.MAX_POTION}:
         return maximum
     amounts = {ItemId.POTION: 20, ItemId.SUPER_POTION: 50, ItemId.HYPER_POTION: 200}
     if item not in amounts:

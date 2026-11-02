@@ -1,0 +1,84 @@
+{
+  "actual_registration_delta": 0,
+  "actual_registrations": 63,
+  "adopted_models": 0,
+  "all_seven_goals_complete": false,
+  "all_workers_stopped": true,
+  "cash_contract_native_scoped": true,
+  "combined_support": {
+    "centered_rank": 12,
+    "distinct_non_timing_vectors": 14,
+    "rows": 41
+  },
+  "costs": {
+    "actions": 1362,
+    "actual_inputs": 0,
+    "actual_registration_delta": 0,
+    "adopted_models": 0,
+    "all_reserved_holds_seconds": 3870,
+    "cash_debits": 0,
+    "emulators": 6,
+    "fit_calls": 1,
+    "fit_hold_seconds": 180,
+    "fit_parent_seconds": 28.312711213,
+    "fit_worker_seconds": 28.058787982000013,
+    "frames": 120512,
+    "full_hold_seconds": 3690,
+    "native_seconds": 21.199413985000007,
+    "new_models": 1,
+    "new_rows": 6,
+    "root_seconds": 227.29834034200002,
+    "state_loads": 6,
+    "unlaunched_hold_seconds": 0
+  },
+  "fit_gates": {
+    "001_grouped_completion_improves": true,
+    "001_supported_preparation_order": true,
+    "005_supported_tail_order": false,
+    "049_extra_actions": true,
+    "049_extra_frames": true,
+    "049_supported_order": false,
+    "level_physical_cost_retention": true,
+    "older_V9_cost_order_retained": true,
+    "projected_single_battle_cash_consistency": true
+  },
+  "fits": 1,
+  "focused_tests": 696,
+  "full_suite": false,
+  "independent_generalization_proved": false,
+  "learned_cash_scorer_native_qualified": false,
+  "new_models": 1,
+  "new_native_TRAIN_rows": 6,
+  "new_native_summary": [
+    {
+      "arm": "direct",
+      "mean_actions": 228,
+      "mean_frames": 20673.333333333332,
+      "mean_progress": 1.0,
+      "mean_utility": 1.2427544444444445,
+      "rows": 3,
+      "wins": 3
+    },
+    {
+      "arm": "replace-bite",
+      "mean_actions": 226,
+      "mean_frames": 19497.333333333332,
+      "mean_progress": 1.0,
+      "mean_utility": 1.2429837777777777,
+      "rows": 3,
+      "wins": 3
+    }
+  ],
+  "observed_at_utc": "2026-10-23T02:46:11.432009+00:00",
+  "official_acceptance": false,
+  "old34row_coverage_rank_after": 10,
+  "old34row_coverage_rank_before": 10,
+  "old_support": {
+    "centered_rank": 11,
+    "distinct_non_timing_vectors": 13,
+    "rows": 35
+  },
+  "private_closeout_sha256": "b6f9226de0677bb01ef89f0c612c16a15ea5b2abb0fa106891c1005bf0f0f939",
+  "schema": "pokemon.red.cash-contract-progress.v1",
+  "win_rate_estimate": false
+}

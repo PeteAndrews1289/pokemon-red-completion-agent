@@ -115,6 +115,15 @@ def test_real_center_provider_heals_nonlead_after_stationary_orientation(directi
         return action
 
     actions = CountingExecutor(SimpleNamespace(execute=execute))
+
+    def metered_restore(binding):
+        before_actions, before_frames = actions.actions_executed, emulator.frame_count
+        report = binding.execute()
+        assert report.actions_executed == actions.actions_executed - before_actions
+        assert report.frames_executed == emulator.frame_count - before_frames
+        return report
+
+    actions.execute_restoration = metered_restore
     runtime = SimpleNamespace(reader=reader, adapter=_adapter(reader), emulator=emulator)
     assert native.restore_native_center_party(runtime, actions) == 1
     assert reader.raw.party_hp == (180, 18)

@@ -1,0 +1,219 @@
+{
+  "actual": {
+    "active_party_hp": 0,
+    "badges": 3,
+    "battle_state": 2,
+    "cash": 12961,
+    "master_ball": 0,
+    "party_hp": [
+      0,
+      138,
+      78,
+      118,
+      119,
+      128
+    ],
+    "party_levels": [
+      25,
+      42,
+      28,
+      43,
+      40,
+      38
+    ],
+    "registrations": 39
+  },
+  "actual_running": false,
+  "audit_new_emulators": 0,
+  "audit_new_fits": 0,
+  "audit_new_inputs": 0,
+  "audit_new_loads": 0,
+  "completed_model_choices": 45,
+  "completed_support_choices": 103,
+  "component_gates_met": 4,
+  "controls_released": true,
+  "cumulative_fit_attempts": 18,
+  "cumulative_fits": 14,
+  "equivalent_failure_reassessment": 2,
+  "execution_errors": 1,
+  "findings": [
+    {
+      "evidence": "red_routed_recovery.py183-225requires originally living slots remain alive. The failing lead hasHP0while five reserves haveHP138,78,118,119,128. Existing learned and forced-switch support elsewhere is not composed through this route.",
+      "priority": 1,
+      "recommendation": "Fix shared interruption semantics and recovery ownership;do not demand a perfect battle win rate.",
+      "title": "Trainer faint is an execution-composition failure"
+    },
+    {
+      "evidence": "832targeted checks and32native no-Dig exits supported a two-file Cave fix. Actual then gained8registrations before a different ordinary battle boundary failed.",
+      "priority": 2,
+      "recommendation": "Use a small boundary matrix derived from retained failures,then short normal continuation;stop using freshcampaigns as local bug detectors.",
+      "title": "Focused checks do not cover cross-skill composition"
+    },
+    {
+      "evidence": "Evolution839.00s plus teamdevelopment139.48s equal73.58%of measuredphase time;112associatedhealingattempts.5evolutions and3captures added registrations.4partialdoses retained progress.",
+      "priority": 3,
+      "recommendation": "Measure marginal usefulXP and completed evolution including travel/recovery;separate expensive from unnecessary.",
+      "title": "Training is the dominant measured cost in this early continuation"
+    },
+    {
+      "evidence": "Native driverpassedtrue/errornull coexists with native_execution_error;observer correctly findsfailure. Privatecurrentaliases conflict andgoal7stillheld5failedfresh attempts. Prior audits retain multiple prestart schema/constructor/hash mistakes.",
+      "priority": 4,
+      "recommendation": "One current pointer and status interpretation,typed preflight reuse,batch narrative updates. Preserve raw receipts.",
+      "title": "Status and setup glue add avoidable friction"
+    },
+    {
+      "evidence": "Two-worker pilot1.805xworker throughput;currentroot noOOM orswap but6161memory.high events. Currentfatalcauseis native recovery,not memory exhaustion.",
+      "priority": 5,
+      "recommendation": "Use future dualworkers for controlled independent comparisons after qualification;measure cache/reclaim before changing any future memory limits.",
+      "title": "Capacity is adequate but not the present bottleneck"
+    }
+  ],
+  "fresh_attempts": 6,
+  "fresh_failures": 6,
+  "fresh_successes": 0,
+  "full_suite": false,
+  "goals": [
+    {
+      "finding": "Ordinary funding has narrow native evidence; sustained low-resource recovery remains open.",
+      "id": "funding_recovery",
+      "status": "in_progress"
+    },
+    {
+      "finding": "No-Dig Cave repair qualified; new collection trainer-faint composition fails with five healthy reserves.",
+      "id": "execution_boundaries",
+      "status": "in_progress"
+    },
+    {
+      "finding": "10.1718% end-to-end reduction across eight matched goals; not a campaign speed estimate.",
+      "id": "menu_performance",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "40.35% evolution time and36.54% frame reduction on one correlated reserved checkpoint; early-game preparation still dominates.",
+      "id": "training_efficiency",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "1.805x worker throughput,1.741x conservative driver-inclusive comparison in one mirrored context; not independent campaign reliability.",
+      "id": "two_worker_capacity",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "One recent genuine TRAIN fit changed880parameters; scoped gain only. No fit during Cave repair,actual continuation or this audit.",
+      "id": "model_decision_quality",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "Six fresh attempts failed;0freshsuccesses and0heldout reliability starts. Restored39/124 cannot pass fresh acceptance.",
+      "id": "autonomous_acceptance",
+      "status": "not_met"
+    }
+  ],
+  "limits": {
+    "F_engineering_boundary_now_passed": true,
+    "F_engineering_reassessment_utc": "2026-10-21T15:08:15.503715+00:00",
+    "diagnostic_emulators_remaining": 0,
+    "diagnostic_loads_remaining": 0,
+    "no_native_budget_created_by_audit": true,
+    "no_restart_authorized_by_audit": true,
+    "original_absolute_cutoff_utc": "2026-10-22T00:08:15.503715+00:00"
+  },
+  "new_badges_in_continuation": 1,
+  "new_registrations_in_continuation": 8,
+  "not_completion_percentage": true,
+  "observed_at_utc": "2026-10-21T15:42:44.292987+00:00",
+  "official_acceptance": false,
+  "ordinary_setbacks": 4,
+  "reassess_minutes": 15,
+  "reliability_starts": 0,
+  "schema": "pokemon.windows.requested-seven-goal-audit.v1",
+  "task_time_allowance_minutes": 180,
+  "tasks": [
+    {
+      "acceptance": "Existing model chooses among legal reserves where choice exists; support only executes and verifies. A normal faint is recoverable, unsafe or unverified transitions still fail visibly.",
+      "cheapest_falsifier": "The retained terminal has a fainted lead and five living reserves; a contract that still raises solely on lead HP disproves the change.",
+      "exclusions": [
+        "no new battler",
+        "no manual strategic replacement",
+        "no live or frozen package edit"
+      ],
+      "minutes": 45,
+      "order": 1,
+      "outcome": "Ordinary trainer faint permits bounded legitimate recovery without operator repair",
+      "reuse": [
+        "existing battle runtime",
+        "existing learned party-switch control",
+        "Gen1RouteInterruptionHandler",
+        "RecoveryRouteInterruptionHandler"
+      ],
+      "work": "Trace the exact route call path; replace the unconditional no-new-faint assumption with explicit supported recovery while preserving custody and native loss costs. First add ROM-free contracts for one faint with living reserves, repeated forced switches, total-party loss, wrong-map drift and no legal action."
+    },
+    {
+      "acceptance": "The current exit0/passedtrue/native_execution_error record displays stopped/failed. Setup contract errors fail before an emulator is constructed.",
+      "exclusions": [
+        "do not rewrite raw native receipts",
+        "no new logging framework",
+        "no scheduler"
+      ],
+      "minutes": 15,
+      "order": 2,
+      "outcome": "One truthful launch/terminal status and reusable preflight",
+      "reuse": [
+        "existing launcher and supervisor",
+        "existing terminal observer",
+        "existing frozen-package preflight"
+      ],
+      "work": "Make future status consumers distinguish process exit,checkpoint export,gameplay failure and acceptance. Probe exact constructors,schemas,hashes and source route predicates before expensive native execution; reuse current helpers instead of copied launch glue."
+    },
+    {
+      "acceptance": "Rank avoidable overhead using measured evidence; distinguish necessary healing and retained partialXP. Candidate experiment has a baseline,legal alternatives,censored failure handling and separate reserved evidence. Do not fit these exposedDEVELOPMENT receipts.",
+      "exclusions": [
+        "no speculative refit",
+        "no blanket stronger-wild or overlevel policy",
+        "no new model architecture"
+      ],
+      "minutes": 60,
+      "order": 3,
+      "outcome": "A measured training-cost diagnosis and one informative learning experiment",
+      "reuse": [
+        "existing closed native receipts",
+        "existing venue features and cost learner",
+        "authenticated TRAIN registry"
+      ],
+      "work": "Attribute nine evolution attempts and eight team-development attempts to battle,travel,PP/HP recovery and partial-dose restart costs. Measure completed evolution and usefulXP per total minute. Design a small genuineTRAIN contrast for the largest avoidable cost using different helper/resource conditions; establish legal offers and source eligibility before generating data."
+    },
+    {
+      "acceptance": "Retained native error,exact source,legal recovery,unmodified earned resources and controls released. Continue actual only from its earned tail under exact qualified authority and inherited limits. If allocation or safety is unresolved,finish ROM-free and experiment-design deliverables and leave actors stopped.",
+      "exclusions": [
+        "no blind restart",
+        "no fresh full-game replay for this local bug",
+        "no diagnostic terminal import",
+        "no second actual campaign"
+      ],
+      "minutes": 60,
+      "order": 4,
+      "outcome": "A qualified recovery candidate,or an explicit bounded launch blocker",
+      "reuse": [
+        "exact failed segment007 state/context",
+        "current frozen candidate builder",
+        "existing copy-only native qualifier"
+      ],
+      "work": "At the two-hour active-work audit,assess the shared-boundary repair and time-loss findings. Freeze one selected candidate. The current Fdiagnostic emulator/load reserve is exhausted: resolve a lawful prospective allocation before any native test and never reset Fby renaming this repair. If a native allocation is available,verify the exact failed tail plus neighboring recovery conditions and short ordinary model continuation before any actual successor."
+    }
+  ],
+  "terminal_state_sha256": "78a12487903ce3f797c965c1c34bc85b0753781fd7c8fee5af7c113d36b18e40",
+  "time_loss": {
+    "all_continuation_healing_attempts": 125,
+    "all_heals_not_assumed_wasted": true,
+    "background_agent_monitoring_not_running": true,
+    "development_healing_attempts": 21,
+    "evolution_healing_attempts": 91,
+    "execution_seconds": 1040.0640513599994,
+    "fresh_failure_to_actual_resume_approx_minutes": 69.3,
+    "measured_phase_seconds": 1329.8113669139982,
+    "menu_seconds": 285.42552394300014,
+    "preparation_action_seconds": 978.4823533030004,
+    "preparation_fraction_of_measured_phase_time": 0.7358053763472463,
+    "unobserved_stop_minutes_approx": 23
+  }
+}

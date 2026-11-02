@@ -614,9 +614,7 @@ def _recipe_party(
     species = [BLASTOISE_SPECIES_ID]
     levels = [60]
     if development_ref is not None:
-        development_level = (
-            20 if evolution_level is None else max(2, evolution_level - 2)
-        )
+        development_level = 20 if evolution_level is None else max(2, evolution_level - 2)
         species.append(red_internal_species_id(int(development_ref[-3:])))
         levels.append(development_level)
     excluded = {
@@ -642,6 +640,9 @@ class _Reader:
     def read(self) -> RawGameState:
         boundary = self.arm.boundary
         species, levels = _recipe_party(self.arm.recipe)
+        # These setup roots declare completed early story, including Oak's errand.
+        events = bytearray(0x140)
+        events[7] = 1  # OAK_GOT_PARCEL (bit 0x038).
         return RawGameState(
             game_started=True,
             map_id=boundary.map_id,
@@ -649,6 +650,7 @@ class _Reader:
             player_y=boundary.at[0],
             party_count=6,
             battle_state=0,
+            event_flags=bytes(events),
             bag_item_ids=(int(ItemId.POKE_BALL), int(ItemId.HYPER_POTION)),
             bag_items=(
                 (int(ItemId.POKE_BALL), 20),
@@ -667,7 +669,7 @@ class _Reader:
                 (55, 57, 58, 0),
                 (55, 57, 58, 0),
             ),
-            party_pp=((25, 15, 10, 10), (20, 35, 10, 0)) + ((25, 15, 10, 0),) * 4,
+            party_pp=((15, 10, 10, 10), (20, 35, 10, 0)) + ((25, 15, 10, 0),) * 4,
             player_money=99_999,
         )
 
@@ -1015,9 +1017,7 @@ def test_complete_recipe_capacity_uses_real_targeted_team_families() -> None:
         for kind in LivingDexOptionKind
     }
     mechanics = {
-        provider.family.mechanic
-        for recipe in plan.recipes
-        for provider in recipe.providers
+        provider.family.mechanic for recipe in plan.recipes for provider in recipe.providers
     }
 
     assert len(families_by_kind[LivingDexOptionKind.EVOLVE]) == 5
@@ -1193,12 +1193,8 @@ def test_same_root_validation_derives_real_menu_without_executing_a_provider() -
     assert result.policy_projection.maximum_controller_actions == (
         slot.setup.maximum_controller_actions
     )
-    assert result.policy_projection.maximum_emulator_frames == (
-        slot.setup.maximum_emulator_frames
-    )
-    assert result.public_dict()["policy_menu"] == (
-        result.policy_projection.menu.policy_dict()
-    )
+    assert result.policy_projection.maximum_emulator_frames == (slot.setup.maximum_emulator_frames)
+    assert result.public_dict()["policy_menu"] == (result.policy_projection.menu.policy_dict())
     assert all(
         candidate.binding_ref not in str(result.public_dict()["policy_menu"])
         for candidate in result.policy_projection.menu.candidates
@@ -1835,9 +1831,7 @@ def test_recipe_campaign_restart_matrix_never_reuses_a_claimed_root(
             if cutpoint != "after_plan_seal":
                 raise AssertionError("a globally claimed root reentered an arm")
             return actual(recipe, purpose, ordinal)
-        raise RedLivingDexControlledRecipeFailure(
-            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
-        )
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     recovered = run_red_living_dex_setup_recipe_campaign(
         store,
@@ -1908,9 +1902,7 @@ def test_recipe_campaign_failure_restart_matrix_is_also_no_retry(
         nonlocal first_calls
         if recipe is plan.recipes[0]:
             first_calls += 1
-        raise RedLivingDexControlledRecipeFailure(
-            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
-        )
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     def failpoint(name: str, recipe: RedLivingDexSetupSlotRecipe) -> None:
         nonlocal armed
@@ -2012,9 +2004,7 @@ def test_prelocal_interruption_recovery_survives_a_second_power_loss(
     ) -> _Arm:
         if recipe is plan.recipes[0]:
             raise AssertionError("the twice-interrupted root cannot reenter an arm")
-        raise RedLivingDexControlledRecipeFailure(
-            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
-        )
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     recovered = run_red_living_dex_setup_recipe_campaign(
         store,
@@ -2083,9 +2073,7 @@ def test_account_claim_blocks_the_same_physical_root_in_another_store(
         if recipe is second_plan.recipes[0]:
             first_root_reentered = True
             raise AssertionError("account-wide consumed root entered another store")
-        raise RedLivingDexControlledRecipeFailure(
-            RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE
-        )
+        raise RedLivingDexControlledRecipeFailure(RedLivingDexSetupFailureReason.ROOT_UNAVAILABLE)
 
     result = run_red_living_dex_setup_recipe_campaign(
         second_store,

@@ -154,6 +154,31 @@ def test_absent_helper_masks_only_capture_without_input(monkeypatch):
     assert result.opportunities[1] == bindings.opportunities[1]
 
 
+def test_reserved_individual_cannot_be_loaned_for_capture(monkeypatch):
+    router, bindings, observation, calls = fixture(monkeypatch)
+    bindings = replace(bindings, allow_resource_variants=True)
+    checked = []
+
+    def reserved(adapter, slot):
+        assert adapter is router.runtime.adapter
+        checked.append(slot)
+        return False
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_party_guard.retained_party_slot_is_depositable",
+        reserved,
+    )
+    result = support.bind_capture_party_support(router, bindings, observation)
+    assert checked == [6]
+    assert result.bindings == () and calls == []
+    assert result.allow_resource_variants
+    assert result.opportunities[0].unavailable_reason.value == "missing_capability"
+    assert result.opportunities[1] == bindings.opportunities[1]
+    with pytest.raises(support.RedCapturePartyError, match="retained party"):
+        support.bind_selected_capture_party_support(router, bindings.bindings[0], observation)
+    assert calls == [] and router.actions.actions_executed == 0
+
+
 def test_box_move_inventory_mismatch_masks_capture_without_input(monkeypatch):
     router, bindings, observation, calls = fixture(monkeypatch)
     router.runtime.reader.read_box_move_members = (

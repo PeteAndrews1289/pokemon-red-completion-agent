@@ -12,8 +12,9 @@ from pokemon_red_completion.goal_manager import GoalDecisionOutcome
 from pokemon_red_completion.red_elixir_plan import RedElixirPlanError
 
 
-def fixture(monkeypatch, fault=None):
-    reader = _Reader(raw=state(), ready=True)
+def fixture(monkeypatch, fault=None, *, raw=None):
+    initial = raw if raw is not None else state()
+    reader = _Reader(raw=initial, ready=True)
     adapter = replace(_adapter(reader), include_pp_restoration=True)
     emulator = SimpleNamespace(frame_count=0, pressed_buttons=frozenset())
     inputs, stages, targets = [], [], []
@@ -36,7 +37,7 @@ def fixture(monkeypatch, fault=None):
         actions.execute(MacroAction(MacroActionKind.CONFIRM))
         if targets and fault != "no_consumption":
             assert targets == [1]  # non-lead, no reorder or hidden lead swap
-            reader.raw = finished(state())
+            reader.raw = finished(initial)
             if fault == "wrong_target":
                 reader.raw = replace(reader.raw, party_pp=((10, 35, 0, 0), (2, 6, 0, 0)),
                                      first_party_pp=(10, 35, 0, 0))
@@ -49,6 +50,7 @@ def test_nonlead_pp_use_has_exact_receipt_and_one_shot_success(monkeypatch):
     provider, _reader, adapter, inputs, stages = fixture(monkeypatch)
     offer = provider.offer(adapter.observe())
     assert offer.binding is not None and not inputs
+    assert offer.binding.health_safety_recovery is False
     report = offer.binding.execute()
     assert stages == ["bag", "item", "closed"]
     assert report.evidence["restored_pp"] == 14
@@ -99,6 +101,22 @@ def test_old_observation_cannot_opt_itself_into_unaccounted_pp_use(monkeypatch):
     old = _adapter(reader).observe()
     assert provider.offer(old).binding is None
     assert not inputs
+
+
+def test_opt_in_restores_living_target_with_fainted_reserve(monkeypatch):
+    from pokemon_red_completion import red_faint_recovery
+    raw = replace(state(), party_hp=(0, 164), first_party_hp=0)
+    provider, reader, adapter, inputs, stages = fixture(monkeypatch, raw=raw)
+    assert provider.offer(adapter.observe()).binding is None
+    provider.allow_fainted_reserves = True
+    monkeypatch.setattr(red_faint_recovery, "_open_bag", lambda *_: stages.append("observed_bag"))
+    binding = provider.offer(adapter.observe()).binding
+    assert binding is not None and not inputs
+    report = binding.execute()
+    assert reader.raw.party_hp == (0, 164)
+    assert stages == ["observed_bag", "item", "closed"]
+    assert report.evidence["allow_fainted_reserves"] is True
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
 
 
 def two_stage_fixture(monkeypatch, *, stock, fault=None):

@@ -129,3 +129,46 @@ def test_consumed_one_shot_and_unbound_warps_refuse():
     assert graph.warp_arrivals[map_id][0] == (11, 4)
     with pytest.raises(CartridgeReadError):
         with_scripted_trainer_arrival(replace(graph, warp_arrivals=None), arrival)
+
+
+def reentry_cartridge(*, bank=2, map_id=7):
+    rom, map_id, offset = cartridge(bank=bank, map_id=map_id)
+    rom = bytearray(rom)
+    def put(at, data):
+        data = bytes.fromhex(data)
+        rom[offset + at:offset + at + len(data)] = data
+    put(0x4105, '00 54')
+    put(0x5402, '00 55')
+    put(0x5500, '17 00 60 01 50')
+    put(0x44a4, '3e 02 e0 8c cd 20 29 3e 40 ea d3 cc 3e 01 ea 38 cd cd 86 34 '
+                '3e 03 ea 4f d6 ea 39 da c9')
+    put(0x5200, 'fa 38 cd a7 c0 cd d7 3d af ea 6b cd ea 4f d6 ea 39 da c9')
+    return bytes(rom), map_id, offset
+
+
+@pytest.mark.parametrize('bank,map_id', [(2, 7), (3, 8)])
+def test_reentry_is_explicit_and_derives_two_pushes_from_trigger_chain(bank, map_id):
+    rom, map_id, _ = reentry_cartridge(bank=bank, map_id=map_id)
+    flags = bytes([4]) + bytes(319)
+    with pytest.raises(CartridgeReadError):
+        trainer_room_arrival(rom, map_id, flags)
+    initial = trainer_room_arrival(rom, map_id, bytes(320), allow_reentry=True)
+    assert initial.steps == 6 and initial.reentry_text_id is None
+    arrival = trainer_room_arrival(rom, map_id, flags, allow_reentry=True)
+    assert arrival.steps == 2 and arrival.reentry_text_id == 2
+    assert arrival.settled_at((11, 4)) == (9, 4)
+    assert arrival.settled_at((11, 5)) == (9, 5)
+
+
+@pytest.mark.parametrize('address', [
+    0x44a4, 0x44a5, 0x44a6, 0x44a8, 0x44a9, 0x44aa, 0x44ac,
+    0x44b1, 0x44b5, 0x44b9, 0x44bd, 0x44c0,
+    0x5200, 0x5204, 0x5206, 0x5209, 0x520d, 0x5212, 0x5500, 0x5504,
+])
+def test_reentry_refuses_changed_fallback_moving_and_text_grammar(address):
+    rom, map_id, offset = reentry_cartridge()
+    changed = bytearray(rom)
+    changed[offset + address] = 0
+    assert changed != rom
+    with pytest.raises(CartridgeReadError):
+        trainer_room_arrival(bytes(changed), map_id, bytes([4]) + bytes(319), allow_reentry=True)

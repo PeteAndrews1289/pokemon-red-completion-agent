@@ -97,6 +97,25 @@ class PokemonRedBattleCatalog:
         effect = _MOVE_EFFECT_BY_ID[identifier]
         return {"SLEEP_EFFECT": "sleep", "PARALYZE_EFFECT": "paralysis"}.get(effect)
 
+    def move_effect(self, move_ref: str, /) -> str:
+        """Pinned effect metadata, not a recommendation or success prediction."""
+        self.resolve_move(move_ref)
+        return _MOVE_EFFECT_BY_ID[_parse_ref(move_ref, expected_kind="move")]
+
+    def status_move_supported(self, move_ref: str, /) -> bool:
+        """Explicit experimental single-turn status surface; legacy masks stay closed."""
+        effect = self.move_effect(move_ref)
+        return self.resolve_move(move_ref).category == "status" and (
+            effect in {
+                "SLEEP_EFFECT", "POISON_EFFECT", "PARALYZE_EFFECT", "CONFUSION_EFFECT",
+                "DISABLE_EFFECT", "HEAL_EFFECT",
+            }
+            or bool(re.fullmatch(
+                r"(ATTACK|DEFENSE|SPEED|SPECIAL|ACCURACY|EVASION)_(UP|DOWN)[12]_EFFECT",
+                effect,
+            ))
+        )
+
     def can_end_wild_encounter(self, move_ref: str, /) -> bool:
         """Escape-effect capability, not a prediction that the move will succeed."""
         identifier = _parse_ref(move_ref, expected_kind="move")

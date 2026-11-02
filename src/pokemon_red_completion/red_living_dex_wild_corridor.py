@@ -36,30 +36,53 @@ from pokemon_red_completion.red_living_dex_provider_curriculum import (
     RedEncounterSourceTarget,
 )
 
-RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
-    "pokemon.red.private-living-dex-wild-corridor.v1"
-)
+RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = "pokemon.red.private-living-dex-wild-corridor.v1"
 
 
-def bind_red_capture_search_budget_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
-    """Opt future captures into up to160legs; all other existing caps survive.
+def bind_red_capture_search_budget_profile(
+    profile: RedGoalContextProfile,
+    *,
+    maximum_legs: int | None = None,
+) -> RedGoalContextProfile:
+    """Opt future captures into versioned, coupled finite search bounds.
 
     The explicit marker carries this allowance through destination enumeration.
-    Legacy derived corridors and checkpoint profiles retain their64-leg default.
+    The default preserves the historical160-leg opt-in, or an existing v2 opt-in.
+    Explicit320 doubles seek/encounter allowances once, capped at512/64. Historical
+    derived corridors and checkpoint profiles retain their64-leg default.
     """
+    if maximum_legs is not None and (
+        type(maximum_legs) is not int or maximum_legs not in (160, 320)
+    ):
+        raise RedLivingDexWildCorridorError("search allowance must be160or320legs")
     providers = []
     found = False
     for spec in profile.providers:
         parameters = _thaw(spec.parameters)
         assert isinstance(parameters, dict)
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
-            parameters["capture_search_budget"] = "bounded-search-v1"
+            prior_v2 = parameters.get("capture_search_budget") == "bounded-search-v2"
+            bound = maximum_legs if maximum_legs is not None else (320 if prior_v2 else 160)
             # One encounter can consume a non-displacing seek plus a flee.
             # Leave room for both for every permitted encounter and terminal
             # exhaustion; use an even number so ordinary exhaustion ends home.
-            actions, encounters = parameters["maximum_seek_steps"], parameters["maximum_encounters"]
+            actions, encounters = (
+                parameters["maximum_seek_steps"],
+                parameters["maximum_encounters"],
+            )
             assert isinstance(actions, int) and isinstance(encounters, int)
-            legs = min(160, actions - 2 * encounters - 2)
+            if bound == 320 and not prior_v2:
+                actions, encounters = min(512, 2 * actions), min(64, 2 * encounters)
+            elif bound == 160 and prior_v2:
+                actions, encounters = min(256, actions), min(32, encounters)
+            parameters["capture_search_budget"] = f"bounded-search-v{2 if bound == 320 else 1}"
+            parameters["maximum_seek_steps"], parameters["maximum_encounters"] = (
+                actions,
+                encounters,
+            )
+            legs = min(bound, actions - 2 * encounters - 2)
+            if prior_v2:
+                legs = min(legs, parameters["maximum_legs"])
             if legs < 2:
                 raise RedLivingDexWildCorridorError("search budget has no safe patrol allowance")
             parameters["maximum_legs"] = legs - legs % 2
@@ -67,12 +90,17 @@ def bind_red_capture_search_budget_profile(profile: RedGoalContextProfile) -> Re
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("search budget needs an existing corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
-def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_red_capture_status_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
     """Explicitly opt into bounded, observed sleep/paralysis preparation.
 
     Historical profiles remain byte-for-byte unchanged. This is deterministic
@@ -89,13 +117,72 @@ def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalCo
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("capture status needs an existing corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
+
+
+def bind_red_optional_capture_status_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
+    """Enable live nondamaging preparation without requiring a PC status helper.
+
+    Existing composite weakening support keeps its prior mandatory party
+    preparation. Plain status support can throw with a healthy existing catcher
+    when no sleep/paralysis helper is owned. No custody exception is swallowed.
+    """
+    profile = bind_red_capture_status_profile(profile)
+    providers = []
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if (
+            spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and parameters.get("capture_weakening_support") is not True
+        ):
+            parameters["capture_party_preparation"] = False
+        providers.append((spec.kind, spec.mechanic, parameters))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
+
+
+def bind_red_capture_weakening_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
+    """Prospectively reuse the existing abstaining nonlethal damage executor.
+
+    It has one three-turn ceiling per ordinary encounter, no new move selector,
+    party loan, policy feature or training label. Historical profiles stay intact.
+    """
+    profile = bind_red_capture_status_profile(profile)
+    providers = []
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["capture_weakening_support"] = True
+            if "capture_party_preparation" in parameters:
+                parameters["capture_party_preparation"] = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_red_local_discovery_profile(
-    profile: RedGoalContextProfile, source_id: str, rom: bytes,
+    profile: RedGoalContextProfile,
+    source_id: str,
+    rom: bytes,
 ) -> RedGoalContextProfile:
     """Declare local sighting coverage from all cartridge slots, not canonical targets.
 
@@ -131,13 +218,17 @@ def bind_red_local_discovery_profile(
         if spec.kind is GoalKind.EXPLORE:
             parameters["source_species_numbers"] = numbers
         providers.append((spec.kind, spec.mechanic, parameters))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def bind_red_opportunistic_capture_profile(
-    profile: RedGoalContextProfile, rom: bytes,
+    profile: RedGoalContextProfile,
+    rom: bytes,
 ) -> RedGoalContextProfile:
     """Bind all local cartridge grass offers without changing canonical dependencies."""
     from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
@@ -166,14 +257,19 @@ def bind_red_opportunistic_capture_profile(
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
         raise RedLivingDexWildCorridorError("opportunistic capture needs a corridor capture")
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    return parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
 
 
 def retarget_red_wild_profile(
-    profile: RedGoalContextProfile, corridor: RedLivingDexWildCorridor,
-    *, rom: bytes | None = None,
+    profile: RedGoalContextProfile,
+    corridor: RedLivingDexWildCorridor,
+    *,
+    rom: bytes | None = None,
 ) -> RedGoalContextProfile:
     """Move capture/discovery together, preserving every other skill and bound.
 
@@ -190,8 +286,9 @@ def retarget_red_wild_profile(
     }
     if not wild.issubset({spec.mechanic for spec in profile.providers}):
         raise RedLivingDexWildCorridorError("regional profile needs capture and discovery")
-    if any(spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT
-           for spec in profile.providers):
+    if any(
+        spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT for spec in profile.providers
+    ):
         raise RedLivingDexWildCorridorError("regional profile cannot move venue-bound development")
     providers = []
     for spec in profile.providers:
@@ -199,9 +296,13 @@ def retarget_red_wild_profile(
         assert isinstance(parameters, dict)
         if spec.mechanic in wild:
             derived = corridor.profile_parameters()
-            if parameters.get("capture_search_budget") == "bounded-search-v1":
-                derived["capture_search_budget"] = "bounded-search-v1"
-                derived["maximum_legs"] = 160
+            search_budget = parameters.get("capture_search_budget")
+            if search_budget in ("bounded-search-v1", "bounded-search-v2"):
+                derived["capture_search_budget"] = search_budget
+                extended = search_budget == "bounded-search-v2"
+                derived["maximum_legs"] = 320 if extended else 160
+                derived["maximum_seek_steps"] = 512 if extended else 256
+                derived["maximum_encounters"] = 64 if extended else 32
             # Location changes cannot silently increase the old survey budget.
             for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
                 old_bound, new_bound = parameters[key], derived[key]
@@ -209,6 +310,10 @@ def retarget_red_wild_profile(
                 derived[key] = min(new_bound, old_bound)
             if "capture_status_support" in parameters:
                 derived["capture_status_support"] = parameters["capture_status_support"]
+            if "capture_party_preparation" in parameters:
+                derived["capture_party_preparation"] = parameters["capture_party_preparation"]
+            if "capture_weakening_support" in parameters:
+                derived["capture_weakening_support"] = parameters["capture_weakening_support"]
             if "cut_transport" in parameters:
                 derived["cut_transport"] = parameters["cut_transport"]
             if "surf_transport" in parameters:
@@ -225,9 +330,12 @@ def retarget_red_wild_profile(
                 derived["capture_access_requirements"] = parameters["capture_access_requirements"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
-    result = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=profile.profile_id, providers=tuple(providers),
-    ))
+    result = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=profile.profile_id,
+            providers=tuple(providers),
+        )
+    )
     if any("capture_species_numbers" in spec.parameters for spec in profile.providers):
         if rom is None:
             raise RedLivingDexWildCorridorError("opportunistic retargeting requires cartridge data")
@@ -237,6 +345,10 @@ def retarget_red_wild_profile(
 
 class RedLivingDexWildCorridorError(ValueError):
     """A source cannot supply a reversible cartridge-derived encounter lane."""
+
+
+class RedLivingDexWildCorridorUnavailable(RedLivingDexWildCorridorError):
+    """No safe pair exists in the requested physical component."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -274,9 +386,7 @@ class RedLivingDexWildCorridor:
             (self.maximum_encounters, "encounters"),
         ):
             if type(value) is not int or value <= 0:  # noqa: E721
-                raise RedLivingDexWildCorridorError(
-                    f"encounter corridor {subject} bound differs"
-                )
+                raise RedLivingDexWildCorridorError(f"encounter corridor {subject} bound differs")
 
     @property
     def binding_sha256(self) -> str:
@@ -331,8 +441,16 @@ def derive_red_living_dex_wild_corridor(
     *,
     excluded: Collection[Coordinate] = (),
     cartridge: bytes | None = None,
+    reachable_from: Coordinate | None = None,
+    preferred_corridor: RedLivingDexWildCorridor | None = None,
 ) -> RedLivingDexWildCorridor:
-    """Choose a reversible land-encounter pair; cartridge indoor support is explicit."""
+    """Choose a reversible pair, optionally within the observed land component.
+
+    A live puzzle map can contain several disconnected encounter components.
+    Ranking clearance alone must not choose the other side of a closed door.
+    This local geometry filter supplies no route, species or strategic ordering;
+    the caller still verifies the complete feasible transport contract.
+    """
 
     if not isinstance(target, RedEncounterSourceTarget):
         raise TypeError("wild corridor derivation needs an encounter target")
@@ -340,21 +458,25 @@ def derive_red_living_dex_wild_corridor(
         raise TypeError("wild corridor derivation needs cartridge terrain and graph")
     map_id = int(map_id_for_wild_source(target.source_id))
     if terrain.map_id != map_id:
-        raise RedLivingDexWildCorridorError(
-            "wild corridor terrain differs from its source map"
-        )
-    if not any(
-        method.source_id == target.source_id
-        for method in RED_ACQUISITION_CATALOG.methods
-    ):
+        raise RedLivingDexWildCorridorError("wild corridor terrain differs from its source map")
+    if not any(method.source_id == target.source_id for method in RED_ACQUISITION_CATALOG.methods):
         from pokemon_red_completion.gen1_cartridge import wild_tables
         from pokemon_red_completion.observation import MapId
 
-        if (cartridge is None or "SAFARI" in MapId(map_id).name
-                or not wild_tables(cartridge, medium="grass").get(map_id)):
+        if (
+            cartridge is None
+            or "SAFARI" in MapId(map_id).name
+            or not wild_tables(cartridge, medium="grass").get(map_id)
+        ):
             raise RedLivingDexWildCorridorError(
                 "wild corridor source has no authenticated ordinary encounter table"
             )
+    if preferred_corridor is not None and (
+        not isinstance(preferred_corridor, RedLivingDexWildCorridor)
+        or preferred_corridor.source_id != target.source_id
+        or preferred_corridor.map_id != map_id
+    ):
+        raise RedLivingDexWildCorridorError("preferred corridor source differs")
     blocked = frozenset(excluded)
     if any(
         not isinstance(coordinate, tuple)
@@ -366,10 +488,37 @@ def derive_red_living_dex_wild_corridor(
             "wild corridor exclusions contain an invalid coordinate"
         )
 
+    reachable = None
+    if reachable_from is not None:
+        if (
+            not isinstance(reachable_from, tuple)
+            or len(reachable_from) != 2
+            or any(type(value) is not int or value < 0 for value in reachable_from)
+            or reachable_from[0] >= terrain.height
+            or reachable_from[1] >= terrain.width
+            or reachable_from in blocked
+        ):
+            raise RedLivingDexWildCorridorError("wild corridor origin is invalid or excluded")
+        reachable, pending = {reachable_from}, [reachable_from]
+        while pending:
+            for edge in graph.neighbors(pending.pop()):
+                if (
+                    edge.target not in reachable
+                    and edge.target not in blocked
+                    and _is_plain_land_walk(edge, edge.target, edge.action)
+                ):
+                    reachable.add(edge.target)
+                    pending.append(edge.target)
+
     encounter_grid = terrain.grass
-    if (cartridge is not None and terrain.map_id >= FIRST_INDOOR_MAP
-            and terrain.tileset != FOREST_TILESET):
-        from pokemon_red_completion.gen1_indoor_encounters import indoor_land_encounter_mask
+    if (
+        cartridge is not None
+        and terrain.map_id >= FIRST_INDOOR_MAP
+        and terrain.tileset != FOREST_TILESET
+    ):
+        from pokemon_red_completion.gen1_indoor_encounters import (
+            indoor_land_encounter_mask,
+        )
 
         # Do not relabel Terrain.grass: indoor land encounters are a separate
         # cartridge rule. Legacy no-cartridge callers keep their exact behavior.
@@ -383,6 +532,8 @@ def derive_red_living_dex_wild_corridor(
             if (
                 south in blocked
                 or north in blocked
+                or reachable is not None
+                and (south not in reachable or north not in reachable)
                 or not encounter_grid[south[0]][south[1]]
                 or not encounter_grid[north[0]][north[1]]
                 or not _plain_land_walk(graph, south, north, "up")
@@ -396,10 +547,7 @@ def derive_red_living_dex_wild_corridor(
                 terrain.width - 1 - x,
             )
             exclusion_clearance = min(
-                (
-                    abs(south[0] - other[0]) + abs(south[1] - other[1])
-                    for other in blocked
-                ),
+                (abs(south[0] - other[0]) + abs(south[1] - other[1]) for other in blocked),
                 default=terrain.height + terrain.width,
             )
             candidates.append(
@@ -412,9 +560,14 @@ def derive_red_living_dex_wild_corridor(
                 )
             )
     if not candidates:
-        raise RedLivingDexWildCorridorError(
+        raise RedLivingDexWildCorridorUnavailable(
             "wild source has no unobstructed reversible grass pair"
         )
+    if preferred_corridor is not None and any(
+        south == preferred_corridor.origin_at and north == preferred_corridor.terminal_at
+        for _clearance, _excluded_clearance, _row, south, north in candidates
+    ):
+        return preferred_corridor
     _clearance, _excluded_clearance, _row, south, north = min(candidates)
     return RedLivingDexWildCorridor(
         source_id=target.source_id,
@@ -430,10 +583,7 @@ def _plain_land_walk(
     target: Coordinate,
     action: str,
 ) -> bool:
-    return any(
-        _is_plain_land_walk(edge, target, action)
-        for edge in graph.neighbors(source)
-    )
+    return any(_is_plain_land_walk(edge, target, action) for edge in graph.neighbors(source))
 
 
 def _is_plain_land_walk(edge: LocalEdge, target: Coordinate, action: str) -> bool:
@@ -453,5 +603,6 @@ __all__ = [
     "RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA",
     "RedLivingDexWildCorridor",
     "RedLivingDexWildCorridorError",
+    "RedLivingDexWildCorridorUnavailable",
     "derive_red_living_dex_wild_corridor",
 ]

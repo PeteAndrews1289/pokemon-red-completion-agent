@@ -1,5 +1,10 @@
 # Historical archive — superseded September 10, 2026
 
+> Historical entries below use their original dates and scopes. Their “current”
+> or “next” wording is not a live instruction. Use [HANDOFF](../HANDOFF.md),
+> [active state](../ACTIVE_PRODUCT_STATE.md) and [seven goals](seven-goals.md).
+
+
 This document preserves earlier reports, including their original headings and claims.
 Nothing below is current guidance, execution authorization or an aggregate result.
 See the repository README and current handoff for the active project.
@@ -1107,7 +1112,7 @@ See the [audit and next steps](../docs/audits/red-saved-endpoint-learning-2026-0
 > [materializer qualification](../docs/evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json),
 > [adapter design](../docs/red-living-dex-observed-arm-adapter.md),
 > [shared contract](../docs/living-dex-option-value-contract.md), and
-> [redesign audit](../docs/living-dex-option-value-redesign-audit-2026-08-25.md).
+> [redesign audit](history/retired-plans-2026-10-07/living-dex-option-value-redesign-audit-2026-08-25.md).
 >
 > The next gate is one read-only inventory of authenticated repeatable, nonsealed, unconsumed Red
 > captures. It must prove a path-free plan with 8 train scenarios across at least 4 genuine option
@@ -2093,7 +2098,7 @@ See the [audit and next steps](../docs/audits/red-saved-endpoint-learning-2026-0
 > Do not reuse any consumed development label or collect new outcomes. See the
 > [path-free negative-fit result](../docs/evidence/repeatable-party-outcome-recovery-fit-result-v1-2026-08-17.json).
 > Run `.venv/bin/python scripts/run_product_focus_dashboard.py` for the view-only scorecard on port
-> 8768. The [current audit](../docs/current-audit-2026-08-17.md) records the rejection boundary and
+> 8768. The [current audit](history/retired-plans-2026-10-07/current-audit-2026-08-17.md) records the rejection boundary and
 > next train-only falsifier.
 
 > **V1 retained one pre-input failure; V2 successor publication is next (August 16, 2026).** The
@@ -2604,7 +2609,7 @@ See the [audit and next steps](../docs/audits/red-saved-endpoint-learning-2026-0
 > `40b7daff70127f8df53ad73db79eea97ad7408a6152647418a0105c4ea1a6138`. Exact-commit CI, a typed
 > published-source Saffron-to-Cinnabar qualification, final authorization-level audit, custodian-
 > supplied path-free catalog and owner authorization remain gates. Test remains 0/12 and no
-> authorization receipt exists. See the [August 13 audit](../docs/current-audit-2026-08-13.md).
+> authorization receipt exists. See the [August 13 audit](history/retired-plans-2026-10-07/current-audit-2026-08-13.md).
 
 > **Latest verified results (August 11, 2026):** the six-role learned stack completed one uncounted
 > derived-timing clean start through Hall of Fame. A second root legitimately lost the lab rival,
@@ -2677,7 +2682,7 @@ See the [audit and next steps](../docs/audits/red-saved-endpoint-learning-2026-0
 > strategic generalization or reliably beat the baseline. The next gate is a preregistered,
 > context-diverse scenario benchmark with paired evaluation—not another five 47-million-frame
 > reruns. No numeric feature schema is frozen and no navigation model is claimed. See the
-> [experiment-design audit](../docs/strategic-experiment-design-audit-2026-08-11.md).
+> [experiment-design audit](history/retired-plans-2026-10-07/strategic-experiment-design-audit-2026-08-11.md).
 > The short-scenario harness is now implemented: exact capture/source assignment, read-only
 > all-candidate preflight, record-before-movement execution and strict one-decision reload.
 > Published repair `318a1c3` then qualified the first live context. An initial unsafe Cerulean fork
@@ -2718,8 +2723,8 @@ See the [audit and next steps](../docs/audits/red-saved-endpoint-learning-2026-0
 > Collection stays closed, and the 12 test situations remain sealed.
 > Counted v95 remains unopened at **0/10**, and broad generated routing is not yet authorized
 > across the completion run. See the
-> [current audit](../docs/current-audit-2026-08-11.md),
-> [navigation audit](../docs/traversal-audit-2026-08-10.md), and
+> [current audit](history/retired-plans-2026-10-07/current-audit-2026-08-11.md),
+> [navigation audit](history/retired-plans-2026-10-07/traversal-audit-2026-08-10.md), and
 > [safe-hub calibration](../docs/evidence/pallet-strategic-safe-hub-route-probe-2026-08-11.json) and
 > [genuine-branch calibration](../docs/evidence/fuchsia-strategic-objective-route-probe-2026-08-11.json),
 > [non-cost calibration](../docs/evidence/celadon-strategic-objective-route-probe-2026-08-11.json), and
@@ -3054,7 +3059,7 @@ receipt separates teacher, shadow, constrained, and model-controlled authority s
 cannot blur that boundary.
 
 For a compact technical review, read the
-[current capability and portfolio audit](../docs/current-audit-2026-08-09.md). The complete evidence
+[current capability and portfolio audit](history/retired-plans-2026-10-07/current-audit-2026-08-09.md). The complete evidence
 log is preserved below for reproducibility, but collapsed so the repository's first screen states
 the result and boundary before the experiment history.
 
@@ -3345,7 +3350,7 @@ uninterrupted twenty-dispatch run. See the
 
 - [Current technical handoff](../HANDOFF.md)
 - [Dependency-ordered roadmap](../docs/roadmap.md)
-- [Current capability and portfolio audit](../docs/current-audit-2026-08-08.md)
+- [Current capability and portfolio audit](history/retired-plans-2026-10-07/current-audit-2026-08-08.md)
 - [Evidence-first project narrative](../docs/project-narrative.md)
 - [Potential YouTube video narrative](../docs/youtube-video-narrative.md)
 

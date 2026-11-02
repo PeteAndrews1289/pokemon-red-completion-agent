@@ -54,6 +54,22 @@ def test_forget_prompt_is_distinct_from_fight_menu():
     assert reader.read_move_learning_prompt(_raw(enemy_hp=0)) == ("forget_move", 0)
 
 
+@pytest.mark.parametrize("text,expected", [
+    ("move to make room", "replace_move"), ("Abandon learning", "abandon_learning"),
+])
+def test_stone_prompt_field_scope_is_explicit_and_still_requires_live_text(text, expected):
+    raw = replace(_raw(enemy_hp=50), battle_state=0)
+    assert prompt_reader(text).read_move_learning_prompt(raw) is None
+    assert prompt_reader(text).read_move_learning_prompt(raw, allow_field=True) == (expected, 0)
+    assert prompt_reader(text, cursor=False).read_move_learning_prompt(
+        raw, allow_field=True
+    ) is None
+    assert prompt_reader("Change Pokemon").read_move_learning_prompt(raw, allow_field=True) is None
+    assert prompt_reader(text).read_move_learning_prompt(
+        _raw(enemy_hp=50), allow_field=True
+    ) is None
+
+
 @pytest.mark.parametrize(
     "prompt,action",
     [
@@ -75,6 +91,51 @@ def test_preservation_never_confirms_a_move_replacement(prompt, action):
     assert runtime.actions[0].kind is action
     if action is MacroActionKind.MOVE:
         assert runtime.actions[0].value == "up"
+
+
+@pytest.mark.parametrize("battle", [1, 2])
+@pytest.mark.parametrize("kind,selected", [("forget_move", 0), ("replace_move", 0),
+                                          ("abandon_learning", 0), ("abandon_learning", 1)])
+def test_adaptive_battle_entry_preserves_moves_at_retained_learning_prompt(battle, kind, selected):
+    from types import SimpleNamespace
+
+    from pokemon_red_completion.battle_runtime import (
+        run_adaptive_trainer_battle,
+        run_adaptive_wild_battle,
+    )
+    from pokemon_red_completion.observation import BattleMenuPhase, BattleMenuState
+
+    initial = replace(_raw(enemy_hp=0), battle_state=battle)
+    live = dict(raw=initial, prompt=(kind, selected), inputs=[])
+
+    def execute(action):
+        if action.kind is MacroActionKind.WAIT:
+            return
+        live["inputs"].append((action.kind, action.value))
+        prompt = live["prompt"]
+        if prompt[0] in {"replace_move", "forget_move"}:
+            assert action.kind is MacroActionKind.CANCEL
+            live["prompt"] = ("abandon_learning", 0)
+        elif prompt[1] == 1:
+            assert (action.kind, action.value) == (MacroActionKind.MOVE, "up")
+            live["prompt"] = ("abandon_learning", 0)
+        else:
+            assert action.kind is MacroActionKind.CONFIRM
+            live["raw"] = replace(initial, battle_state=0)
+            live["prompt"] = None
+
+    reader = SimpleNamespace(read=lambda: live["raw"],
+        read_move_learning_prompt=lambda raw: live["prompt"],
+        read_battle_menu_state=lambda raw: BattleMenuState(BattleMenuPhase.UNKNOWN),
+        read_input_readiness=lambda: SimpleNamespace(ready=True))
+    runner = run_adaptive_wild_battle if battle == 1 else run_adaptive_trainer_battle
+    terminal = runner(reader, SimpleNamespace(execute=execute),
+        lambda raw: pytest.fail("settlement must not choose an attack"),
+        expected_map=initial.map_id)
+    assert terminal.battle_state == 0
+    assert terminal.first_party_moves == initial.first_party_moves
+    assert terminal.first_party_pp == initial.first_party_pp
+    assert len(live["inputs"]) <= 2
 
 
 def test_unexpected_unselected_move_replacement_still_fails_pp_proof():

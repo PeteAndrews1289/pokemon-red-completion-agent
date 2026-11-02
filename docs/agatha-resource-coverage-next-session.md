@@ -1,5 +1,10 @@
 # Closed: final Agatha resource batch
 
+> Documentation role: historical scoped plan. The original trial, budget and
+> results below retain their date-specific scope. For current work follow
+> [HANDOFF](../HANDOFF.md) and latest user direction; this page is not a dispatch.
+
+
 All four declarations executed once. Two reached Agatha completion; two heal/heal
 sequences hit the decision limit. All seven attempted returns, including the
 original controller stop, entered one shadow refit. No replacement cohort.

@@ -2870,7 +2870,17 @@ def _route_11_heal_and_return(
             _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Center exterior")
         elif (
             ground_transition is not None
-            and red_training_ground_transition_available(raw)
+            and (
+                red_training_ground_transition_available(raw)
+                or (
+                    raw.map_id in {
+                        MapId.DIGLETTS_CAVE,
+                        MapId.DIGLETTS_CAVE_ROUTE_11,
+                        MapId.DIGLETTS_CAVE_ROUTE_2,
+                    }
+                    and not any(DIG in moves for moves in (raw.party_moves or ()))
+                )
+            )
         ):
             ground_transition(actions, reader, emulator)
         else:
@@ -3308,7 +3318,13 @@ def _answer_quiz(
     index: int,
     answer: bool,
     text_pulses: int,
+    *,
+    correct_only: bool = False,
 ) -> CinnabarGymTrainerReceipt | None:
+    if type(correct_only) is not bool or not 1 <= index <= len(QUIZ_CORRECT_ANSWERS):
+        raise ValueError("explicit supported quiz mode required")
+    if correct_only and answer != QUIZ_CORRECT_ANSWERS[index - 1]:
+        raise ValueError("correct-only quiz cannot authorize a trainer battle")
     target_event = GYM_GATE_EVENTS[index]
     if _event(emulator, target_event):
         raise BlaineChapterError(f"Quiz gate {index} was already open.")
@@ -3319,7 +3335,7 @@ def _answer_quiz(
         _pulse(actions, MacroActionKind.MOVE, "down", 120)
     _pulse(actions, MacroActionKind.CONFIRM)
     plan = CINNABAR_GYM_TRAINER_PLANS.get(index)
-    if plan is None:
+    if plan is None or correct_only:
         if answer != QUIZ_CORRECT_ANSWERS[index - 1]:
             raise BlaineChapterError(f"Quiz {index} has an unplanned incorrect answer.")
         _pulse(actions, MacroActionKind.CONFIRM)

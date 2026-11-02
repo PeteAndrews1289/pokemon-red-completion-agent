@@ -21,6 +21,7 @@ from __future__ import annotations
 from collections.abc import Collection
 from dataclasses import dataclass
 from enum import StrEnum
+from functools import lru_cache
 
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.gen1_cartridge import (
@@ -375,7 +376,11 @@ def surf_capabilities(
 
 
 def cut_capabilities(raw: RawGameState) -> frozenset[str]:
-    """Derive field Cut from Cascade Badge and a living observed holder."""
+    """Derive field Cut from Cascade Badge and a completely observed holder.
+
+    Red's StartMenu_Pokemon.cut and UsedCut do not test the holder's HP.
+    A fainted Cut holder can still open the route back to a Center.
+    """
 
     if not (int(raw.badge_bits or 0) & int(Badge.CASCADE)):
         return frozenset()
@@ -383,10 +388,7 @@ def cut_capabilities(raw: RawGameState) -> frozenset[str]:
     moves = raw.party_moves or ()
     if raw.party_count is None or raw.party_count != len(hp) or len(hp) != len(moves):
         return frozenset()
-    if any(
-        current_hp > 0 and CUT_MOVE_ID in known
-        for current_hp, known in zip(hp, moves, strict=True)
-    ):
+    if any(CUT_MOVE_ID in known for known in moves):
         return frozenset({CUT_CAPABILITY})
     return frozenset()
 
@@ -409,6 +411,38 @@ def strength_capabilities(raw: RawGameState) -> frozenset[str]:
 
 
 def _local_graph(
+    terrain: Terrain,
+    rules: TraversalRules,
+    *,
+    blocked: Collection[tuple[int, int]],
+    include_surf: bool,
+) -> LocalGraph:
+    unavailable = frozenset(blocked)
+    if type(terrain) is Terrain and type(rules) is TraversalRules:
+        try:
+            hash((terrain, rules, unavailable, include_surf))
+        except TypeError:
+            # Preserve the previous API for valid, but unhashable grid/rule
+            # containers. Never substitute object identity for semantic data.
+            pass
+        else:
+            return LocalGraph(dict(_local_graph_edges(terrain, rules, unavailable, include_surf)))
+    return _build_local_graph(terrain, rules, blocked=unavailable, include_surf=include_surf)
+
+
+@lru_cache(maxsize=512)
+def _local_graph_edges(terrain, rules, unavailable, include_surf):
+    """Bounded immutable graph math, never a route or permission decision.
+
+    Complete terrain/rules/dynamic blockers/Surf mode form the key. Copy the
+    mapping for every caller so edits to a returned graph cannot poison peers.
+    Changed live Cut grids or object positions therefore cannot reuse old edges.
+    """
+    graph = _build_local_graph(terrain, rules, blocked=unavailable, include_surf=include_surf)
+    return tuple(graph.edges.items())
+
+
+def _build_local_graph(
     terrain: Terrain,
     rules: TraversalRules,
     *,

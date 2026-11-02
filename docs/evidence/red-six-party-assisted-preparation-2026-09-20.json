@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red-six-party-assisted-preparation.v1",
+  "session": "2026-09-20-six-party-assisted-preparation",
+  "status": "stopped_after_retained_first_source",
+  "classification": "assisted_evaluation_preparation_not_learning",
+  "execution_source_commit": "bde86e7d607738a19b2723e3596b2a9c7a396e7f",
+  "prospective_protocol_sha256": "a9c1de0af502cfc16551c7e7a2e58dc2a0e562124771d787085d70fe3a4b7607",
+  "authorized_schedule": {
+    "boot_frames": [3300, 3500],
+    "own_party_sizes_per_origin": [4, 5, 6],
+    "maximum_episodes": 6,
+    "independent_origin_clusters": 2,
+    "fit_allowed": false,
+    "natural_qualification": false,
+    "automatic_promotion": false
+  },
+  "implementation": [
+    "Separate explicit assisted DEVELOPMENT specification and materializer; TRAIN API still rejects DEVELOPMENT.",
+    "Truthful assisted receipts and partitions; no player-accessible memory-write action.",
+    "Fixed two-source schedule, exclusive claims, six predeclared conditions and input freeze before model evaluation.",
+    "Frame/wall-bounded source preparation and retained failure snapshots; existing capped model runner reused.",
+    "Global stop on invalid/setup failure; normal verified loss is retained without requiring perfect wins."
+  ],
+  "retained_source": {
+    "root_lineage_id": "fresh-red-lab-rival-development-boot3300",
+    "first_party_ot_id": 45762,
+    "origin_state_sha256": "eaef973f6a3722e6c8a53df05ffccc722219f93f74c2cf11fb26b6be7cee0cd4",
+    "battle_state_sha256": "fab22a7a47b85abbb983e78620fb1197654fe120550de6c10438c0484e9cea1e",
+    "manifest_sha256": "786355bc83c2e386300997022098002cbb0b570d9a25ef5536deaab4723b69a8",
+    "opening_frames": 28764,
+    "total_frames": 31284,
+    "post_opening_macro_actions": 26,
+    "fresh_power_on": true,
+    "source_state_loads": 0,
+    "model_queries": 0
+  },
+  "failure": {
+    "stage": "source-3300 metadata disjointness check after capture persistence",
+    "error_type": "KeyError",
+    "field": "source_state_sha256",
+    "cause": "Checker incorrectly required an optional parent-state hash. One of 589 parsed legacy manifests omits it.",
+    "emulator_setup_succeeded": true,
+    "second_source_started": false,
+    "constructed_cases": 0,
+    "model_episodes": 0,
+    "global_stop_honored": true,
+    "original_failure_preserved": true
+  },
+  "correction": {
+    "behavior": "Keep every legacy state hash and root excluded; allow absent parent only, reject malformed present hashes. Validate inventory compatibility before any new emulator or claim.",
+    "retained_source_recheck": "Metadata disjointness against prior inventory/eight physical-source receipts and actual retained source file hashes passed; no emulation or retry.",
+    "recovery": "Requires explicit authorization to resume the unchanged schedule from the retained first source, not replay it. No resume occurred in this record."
+  },
+  "new_train_examples": 0,
+  "verification": {
+    "targeted_rom_free_tests_passed": 235,
+    "integration_tests_deselected": 13,
+    "mypy_source_files": 544,
+    "ruff": "passed",
+    "documentation_and_product_focus": "passed",
+    "public_artifacts": "passed",
+    "full_suite_run": false,
+    "legacy_parent_regressions_added_after_failure": 5
+  },
+  "model_updates": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "main_save_changed": false,
+  "full_game_runs": 0,
+  "publication": "Local only; no GitHub push."
+}

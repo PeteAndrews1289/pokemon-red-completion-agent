@@ -1,0 +1,25 @@
+{
+  "schema": "pokemon.red.story-development-admission.v1",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "semantic_model_sha256": "c8a1aa79c3b2baf4692c48953b1a829a43b9a1012f2a6c77e1051b5f79704ab3",
+  "admission_basis": "Owner requested integration after passing damage ranking, full-battle composition and bounded Dig/Fly qualification. Exact-model opt-in story DEVELOPMENT only; native input requires a separate one-use prospective trial plan.",
+  "qualification_audits": {
+    "damage": "d09765133b998b7fd78afaf96db6a2f494cef08f3afb1acf8ed84717da549379",
+    "composition": "d1faa4ac7cf75f8aa3136391c274acfb3d3ca9ce31f110cfdd326f9256fb3f88",
+    "two_turn": "4fad6a62186e90da859271f5e53713358ac5f097d67745a260c6b307e2ae86fe"
+  },
+  "maximum_party_members": 6,
+  "allow_status_moves": true,
+  "teacher_fallback_allowed": false,
+  "full_player_promoted": false,
+  "ordinary_funding_authorized": false,
+  "league_authorized": false,
+  "wild_training_authorized": false,
+  "development_fitting_allowed": false,
+  "limitations": [
+    "Reused TRAIN roots; no independent-root or cross-title transfer claim.",
+    "Dig/Fly execution qualified, not optimal charge-duration valuation.",
+    "Composition common-win actual PP reduction18.6%; historical20.3%was endpoint depletion after healing.",
+    "No story superiority or completion claim before prospective native observation."
+  ]
+}

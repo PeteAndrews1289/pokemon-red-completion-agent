@@ -1,0 +1,338 @@
+{
+  "actions": 4109,
+  "authority": "Existing additive trainer battler; navigation, targeting and healing are disclosed support.",
+  "bag": [
+    [
+      20,
+      4
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      212,
+      1
+    ],
+    [
+      42,
+      1
+    ],
+    [
+      11,
+      2
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      63,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      15,
+      6
+    ],
+    [
+      74,
+      1
+    ],
+    [
+      46,
+      1
+    ],
+    [
+      221,
+      1
+    ],
+    [
+      19,
+      7
+    ],
+    [
+      82,
+      1
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      246,
+      1
+    ],
+    [
+      3,
+      20
+    ],
+    [
+      206,
+      1
+    ]
+  ],
+  "battles": [
+    {
+      "decisions": 3,
+      "income": 725,
+      "metrics": {
+        "attack_turn_utility_sum": 6,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 2,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6282209,
+        "policy_latency_ns_mean": 3818639.3333333335,
+        "policy_latency_ns_min": 831834,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "639f073a9d7037746305549483ab99c98e90d3c5c61a1b6e3b90ae96d72610c4",
+      "stage": 176
+    },
+    {
+      "decisions": 7,
+      "income": 725,
+      "metrics": {
+        "attack_turn_utility_sum": 6,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 13,
+        "party_pp_spent": 4,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7580208,
+        "policy_latency_ns_mean": 3269523.8571428573,
+        "policy_latency_ns_min": 884459,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "df3e6e99beaddd8ac375199645c08a82b5bc4d5b29a042df8b34945bd6d88de9",
+      "stage": 178
+    },
+    {
+      "decisions": 13,
+      "income": 480,
+      "metrics": {
+        "attack_turn_utility_sum": 14.41355047829868,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 5,
+        "party_faints": 0,
+        "party_hp_lost": 71,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6087916,
+        "policy_latency_ns_mean": 2534157.153846154,
+        "policy_latency_ns_min": 835084,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "fc6b1a3ccc02a74d38cb54b50ab782a42a58a451599d30da06926ea2796b8543",
+      "stage": 180
+    },
+    {
+      "decisions": 5,
+      "income": 1330,
+      "metrics": {
+        "attack_turn_utility_sum": 2.496598639455782,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 74,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6505583,
+        "policy_latency_ns_mean": 4820075,
+        "policy_latency_ns_min": 4366375,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "4c71b3cdd455e3191cdff557697115f7a1c221a5367479777b8c950cc44eda0d",
+      "stage": 183
+    },
+    {
+      "decisions": 12,
+      "income": 1085,
+      "metrics": {
+        "attack_turn_utility_sum": 11.553956834532373,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 122,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6473834,
+        "policy_latency_ns_mean": 2715649.5,
+        "policy_latency_ns_min": 814000,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "0921ec9b0c37947da1b4d4a2e7367b9a66a9045cedc3a9ff57f736d85ac16158",
+      "stage": 185
+    },
+    {
+      "decisions": 8,
+      "income": 1190,
+      "metrics": {
+        "attack_turn_utility_sum": 5.718338399189463,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 51,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6545708,
+        "policy_latency_ns_mean": 3277218.75,
+        "policy_latency_ns_min": 847500,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "80aa7f6f3b21ba7109ffbf49007bbd3b8e3196f7255ced6b4f55fa4a822f2a30",
+      "stage": 187
+    },
+    {
+      "decisions": 37,
+      "income": -2892,
+      "metrics": {
+        "attack_turn_utility_sum": -11.09935945180992,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 1,
+        "party_faints": 5,
+        "party_hp_lost": 557,
+        "party_pp_spent": 27,
+        "party_status_changes": 6,
+        "policy_latency_ns_max": 6784083,
+        "policy_latency_ns_mean": 3380430.243243243,
+        "policy_latency_ns_min": 158792,
+        "teacher_interventions": 0
+      },
+      "outcome": "lost",
+      "outcome_sha256": "1df2920d402be6bfd157bf9cb95181931ec4b75c64bbb97f048aecde0294fc90",
+      "stage": 189
+    },
+    {
+      "decisions": 17,
+      "income": 4257,
+      "metrics": {
+        "attack_turn_utility_sum": 12,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 4,
+        "party_faints": 1,
+        "party_hp_lost": 94,
+        "party_pp_spent": 11,
+        "party_status_changes": 1,
+        "policy_latency_ns_max": 7068167,
+        "policy_latency_ns_mean": 3437759.705882353,
+        "policy_latency_ns_min": 289209,
+        "teacher_interventions": 0
+      },
+      "outcome": "won",
+      "outcome_sha256": "40d306f6cc2999edab59e96b0bb8812b6867790b7166cf6408eb63a9889b36a6",
+      "stage": 192
+    }
+  ],
+  "blackout_cost": 2892,
+  "cash": 7149,
+  "earned_koga_attempts": 2,
+  "envelope_sha256": "1965e7afdd5afee7abd46c5a32c324361dcb753d7f2e162a88047e3c08848b0e",
+  "errors_retained": [
+    175,
+    177,
+    179,
+    182,
+    184,
+    186
+  ],
+  "frames": 277668,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "koga_defeated": true,
+  "learned_trainer_decisions": 102,
+  "local_registrations": 17,
+  "losses": 1,
+  "native_badge": 16,
+  "native_execution_seconds": 92.29854712402448,
+  "native_reward_item": 206,
+  "net_income": 6900,
+  "new_fits": 0,
+  "new_local_registrations": 0,
+  "next_preparation_guard_verified": true,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    150,
+    79,
+    94,
+    99,
+    139
+  ],
+  "party_levels": [
+    48,
+    37,
+    36,
+    36,
+    30
+  ],
+  "primary_unchanged": true,
+  "recomputed_heads": {
+    "attack": 69,
+    "control": 72,
+    "switch": 29
+  },
+  "rejected_preclaim": "partial JSON serialization, no runtime or gameplay",
+  "reward_events_verified": true,
+  "sales": 0,
+  "save_rewinds": 0,
+  "schema": "pokemon.red.earned-koga.v1",
+  "story_objectives": 23,
+  "terminal_sha256": "81047acab62557546d226aef7cd1d3606a8cc22d4256c0f86c00d9f24c50413e",
+  "terminal_stage": 192,
+  "wins": 7,
+  "mission_check": {
+    "reusable_capability": "Observed trainer-sight entry into declared learned story combat; native gym reward reconciliation.",
+    "learned_authority": "Existing additive model owns all trainer decisions. Travel, targets, healing and rematch initiation remain disclosed support.",
+    "transfer_test": "Unused route and gym rosters; ROM-free varied identity, terrain, hazards and reward failures.",
+    "cheapest_falsifier": "No-input route preflight then one declared trainer encounter, at most80decisions.",
+    "time_box": "One session/two hours; at most80decisions per battle; one prospectively capped earned Koga rematch.",
+    "stop_condition": "No rewind, no teacher battle fallback, no DEVELOPMENT fit; retain unsafe or unresolved terminal."
+  },
+  "targeted_tests_passed": 201,
+  "full_suite_run": false,
+  "new_story_objectives": [
+    "reach_fuchsia",
+    "defeat_koga"
+  ],
+  "rematch": {
+    "first_stage": 189,
+    "second_stage": 192,
+    "source_rewind": false,
+    "first_loss_cash_cost": 2892,
+    "policy_changed": false,
+    "party_intervention": false,
+    "learning_claim": false,
+    "limitation": "Outcome variability and evasion/status weakness remain; this is not reliable boss qualification."
+  },
+  "prospective_source_bundle_sha256": "4e76bd15f500a7ddbd1f92cd307592bc6d9e6172ddcb2c6bd95aaa358361c2b7",
+  "next_stage": 193
+}

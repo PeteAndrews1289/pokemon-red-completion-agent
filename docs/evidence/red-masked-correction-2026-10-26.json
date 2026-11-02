@@ -1,0 +1,99 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_fit_workers_stopped": true,
+  "all_native_workers_stopped": true,
+  "all_seven_final_goals_complete": false,
+  "audits": {
+    "first_observed_utc": "2026-10-26T08:17:08.385639+00:00",
+    "first_scheduled_utc": "2026-10-26T07:53:17+00:00",
+    "second_executed_on_time": false,
+    "second_recorded_retrospectively_utc": "2026-10-26T12:56:17.098926+00:00",
+    "second_scheduled_utc": "2026-10-26T09:53:17+00:00"
+  },
+  "authorized_block_utc": [
+    "2026-10-26T05:53:17+00:00",
+    "2026-10-26T11:53:17+00:00"
+  ],
+  "current_block_counters": {
+    "actual_control_parameters_changed": 32,
+    "actual_inputs": 0,
+    "battle_decision_records": 0,
+    "configured_model_choices": 0,
+    "diagnostic_dispatches": 0,
+    "emulator_construction_attempts": 0,
+    "emulators_constructed": 0,
+    "exposed_shadow_failed_save_logical_policy_choices": 6,
+    "exposed_shadow_logical_policy_choices": 12,
+    "exposed_shadow_successful_logical_policy_choices": 6,
+    "mask_fit_worker_seconds": 76.99103524200109,
+    "native_costs": {
+      "actions": 0,
+      "cash_debits": 0,
+      "decisions": 0,
+      "frames": 0,
+      "heals": 0,
+      "seconds": 0.0
+    },
+    "new_fits": 1,
+    "new_unknown_native_cost_tails": 0,
+    "resource_root_seconds": 77.17516288499974,
+    "reused_train_timing_targets": 12,
+    "state_loads": 0,
+    "training_rows_admitted": 0,
+    "unknown_shadow_wall_cost_tails": 1
+  },
+  "evidence_sha256": {
+    "CLOSEOUT.json": "aee46c5728f486ad5a77c03029f060764430bc27add5283b371edc5173f52208",
+    "FOUR-HOUR-AUDIT-RETROSPECTIVE.json": "5221369471209f8dcbfe5611b7d7233c0db8422670a1f1afec89a004d19369bb",
+    "MASKED-CONTROL-FIT-ROOT-QUALIFICATION.json": "62d156c80f47ccccd3868c5d2bd063965563ff611649cf84bb3b9d28f0890ccc",
+    "SOURCE-ACTIVATION-REFUSAL-CLOSEOUT.json": "6e6cac34a6d070eb5a494849c414b9b4e2cf430baec34a2e90eff0a7ec8ebd51",
+    "TWO-HOUR-AUDIT.json": "bb07f496de3c6155a73446b1e2bbe12871abf7d5190143e5814e109c0cef2621",
+    "exposed-shadow-proposal/FAILED-ATTEMPT-r1.json": "d137f3223735b15198f41724b65dea8e8971d5ef0d73993ad8756557e329edaa",
+    "exposed-shadow-proposal/READBACK-CLOSEOUT-r1.json": "644e2015ddbecd7ac788903e22f113c1083b086597309b2ee68f70ca4b0f1380",
+    "masked32-fit/INDEPENDENT-READBACK.json": "d1656de8f155d0dd72aa746df7c3ae06928b12f1d99f44592bb354147df06a5b"
+  },
+  "exposed_shadow": {
+    "failed_save_queries": 6,
+    "failed_save_wall_time_unknown": true,
+    "known_critical_hp_first_choice_unchanged": true,
+    "logical_policy_queries": 12,
+    "native_outcome_verified": false,
+    "status_only_first_choice_corrected": true,
+    "successful_queries": 6
+  },
+  "fit": {
+    "actual_fits": 1,
+    "all_current_train_targets_zero_regret": 14,
+    "changed_coordinates": 32,
+    "frozen_move_switch_damage_reference": true,
+    "input_rows": [
+      117,
+      258
+    ],
+    "resource_root_seconds": 77.17516288499974,
+    "retained_score_and_argmax_bit_identity": 283,
+    "selected_epoch": 2400,
+    "trainable_coordinates": 32,
+    "worker_seconds": 76.99103524200109
+  },
+  "frozen_package_sha256": "5c482d97ded3f86f5a6bd71a227be881ba07fdba42df82d31c6aa001ae9e519d",
+  "full_campaigns_paused": true,
+  "limits": [
+    "All14TRAIN targets and283historical retained projections pass; this is not full current-policy retention, native benefit or independent generalization.",
+    "Exposed Harden-only first choice now switches. Known critical-HP QuickAttack decision remains unchanged and unfixed.",
+    "No native validation or preparation comparison ran in this expired session. Reserved cases remain permanently no-fit and unopened.",
+    "The failed shadow save consumed6queries; its wall time is unknown. All12queries remain charged.",
+    "First audit was late; second audit was missed and recorded retrospectively. The whole activity gap cannot be attributed to capacity from current evidence.",
+    "Focused prior checks are not a full-suite or CI pass. All historical failed attempts/costs remain separate and preserved."
+  ],
+  "models_adopted": 0,
+  "native_validation_executed": false,
+  "next_decision": "Use separately authorized fresh bounded mission for reserved native validation, then useful preparation comparison only within qualified scope; never revive expired exact plans or sealed campaigns.",
+  "observed_at_utc": "2026-10-26T12:56:17.098926+00:00",
+  "qualified_candidate_sha256": "3428cb38193aceeff01f2ee7035f4299cd94ac41d959cbe00a81260208b18869",
+  "reserved_validation_permanently_no_fit": true,
+  "schema": "pokemon.red.masked-correction-session.v1",
+  "status": "closed"
+}

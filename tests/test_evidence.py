@@ -800,6 +800,7 @@ def test_vermilion_receipt_is_source_bound_repeatable_and_privacy_safe() -> None
     # reapplication field. Its historical default was the same value (two),
     # but the absent key remains part of the artifact's authenticated schema.
     historical_vermilion_timing["battle_runtime"].pop("max_sleep_reapplications")
+    historical_vermilion_timing["battle_runtime"].pop("max_sleep_turns_per_decision")
     expected_configuration = {
         "battle_policy": ("adaptive_rocket_and_fixed_route6_trainers_with_bounded_sleep_recovery"),
         "controller_timing": {

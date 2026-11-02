@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red.post-battle-providers-result.v1",
+  "classification": "maintenance_unblocking_learned_preparation_choice",
+  "result": "training_offer_ready_in_read_only_preflight_story_reentry_blocked",
+  "source_stage": 368,
+  "source_sha256": "5bf49331533816a5b827ba0ecc01522adde8ae38d02da14e48a35144aaeb7159",
+  "envelope_sha256": "dbd7cb35d6ec5a1e1e8c17e4ff9f8b0b3f6a779712ebf1a4ca847b1387d26c88",
+  "episode_sha256": "77a426fb1b09bc89ca07e3b73a435f0ea7824f534a9800bf8ea6e18adbf5dc0e",
+  "private_preflight_sha256": "fce182d6938903996f294fafef5a2f252302ffa02b006f0e99076cc147139a26",
+  "retained_blocked_preflight_sha256": "18adac8d667fe310cfd7d21cfe9eb14b085c115e6ce9e255db4a0a38c26870a5",
+  "private_arrival_diagnosis_sha256": "f99818bed9c0307776555c59c6f2edafa4ce0738ab87cf6a650f7a6e95b281df",
+  "source_file_sha256": {
+    "red_post_battle_providers.py": "4c106da2a562fb00e8177fadc2e4257d6543f4c639e2485f02559e71784d410c",
+    "red_wild_preparation.py": "febf513c36847624929147b2d06df7cc75f457aa39bcced08ca4a9e92c437c04"
+  },
+  "available_kinds": ["develop_team"],
+  "story_availability": {
+    "executable": false,
+    "reason": "unsupported or already consumed scripted trainer arrival",
+    "cartridge_first_entry_flag": 2278,
+    "actual_first_entry_flag_set": true,
+    "first_entry_automatic_steps": 6,
+    "reentry_support_added": false,
+    "diagnostic_method": "Decode the pinned cartridge grammar using temporary zero event bytes to discover its flag, then read that flag from the actual retained state. No emulator memory or save was changed; the hypothetical first-entry decode was not admitted as the current arrival."
+  },
+  "training_route": {
+    "approach_steps": 69,
+    "return_steps": 69,
+    "recovery_home_map": 174,
+    "support_authority": "disclosed trainee, venue, navigation and healing; exact K owns battles",
+    "correction": "Projected round-trip endpoint now advances retained outside-map context through the actual macro edges. It no longer copies the origin's stale outside-map value."
+  },
+  "prospective_single_attempt_limits": {"actions": 3000, "frames": 300000, "seconds": 60, "wild_battles": 8},
+  "retained_preparation_costs": {"attempts": 24, "actions": 22249, "frames": 1747056, "seconds": 94.68390012346208, "heals": 21},
+  "tests": {
+    "focused_passed": 429,
+    "new_provider_tests": 40,
+    "additional_field_recovery_cases": 24,
+    "full_suite_run": false,
+    "checks": ["single use across alternatives", "durable claim before inputs", "changed source/configuration/weights rejected", "action/frame/wall limits", "terminal retained on error or interruption", "settled story loss is a failed outcome", "no fallback", "fresh-state XP/resources/storage/registration verification", "complete retained cost limits", "route endpoint return context", "no available goals cannot be scored"]
+  },
+  "actions": 0,
+  "frames": 0,
+  "new_fits": 0,
+  "model_goal_choices": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "native_dispatch_qualified": false,
+  "dispatch_authorized": false,
+  "source_memory_unchanged": true,
+  "local_closeout_checks": {
+    "lint": "passed",
+    "documentation_and_product_focus": "passed",
+    "prospective_registry_regeneration_check": "passed",
+    "diff_whitespace": "passed",
+    "new_public_files_private_path_scan": "no matches",
+    "canonical_clean_head": "f084c4dbff073adcffa39392c6bb4aa68981a54a",
+    "model141_file_sha256_unchanged": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "next_unused_stage": 369,
+  "gameplay_running": false,
+  "limitations": [
+    "The two-choice native comparison remains blocked. A sole training offer is not learned grinding preference.",
+    "Preflight intentionally uses a read-only controller and forbidden persistence hooks; a native runner must supply durable fresh-claim, terminal-retention and complete-ledger authentication hooks.",
+    "Route feasibility and ROM-free dispatch tests do not establish native execution qualification.",
+    "Effort derives from declared caps and risk is an inherited heuristic, not measured win probability.",
+    "The old strategy model is incompatible with the new input; no new scorer was fitted.",
+    "Post-loss reentry needs its actual cartridge branch and dialogue lifecycle qualified; never clear the flag or substitute the first-entry walk."
+  ],
+  "next": "Stop at the declared preflight falsifier. Qualify actual post-loss reentry under a fresh bounded packet, then collect disjoint TRAIN consequences and evaluate a compatible strategy scorer. Do not start another input/schema-only cycle or fit the retained DEVELOPMENT loss."
+}

@@ -1,0 +1,249 @@
+{
+  "actions": 1290,
+  "authority": "Observed routing and native HM menu support, not learned goal or move selection.",
+  "bag": [
+    [
+      20,
+      4
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      212,
+      1
+    ],
+    [
+      42,
+      1
+    ],
+    [
+      11,
+      2
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      63,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      15,
+      6
+    ],
+    [
+      74,
+      1
+    ],
+    [
+      46,
+      1
+    ],
+    [
+      221,
+      1
+    ],
+    [
+      19,
+      7
+    ],
+    [
+      82,
+      1
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      3,
+      20
+    ],
+    [
+      198,
+      1
+    ],
+    [
+      199,
+      1
+    ]
+  ],
+  "cash": 6649,
+  "cash_spent": 500,
+  "envelope_sha256": "b59dec9016172380da69123df005ab5661bc48a617defb25a941b95c7d1d0794",
+  "errors_retained": [
+    {
+      "cause": "Action counting wrapper missing; unpaid gate retained.",
+      "stage": 194
+    },
+    {
+      "cause": "Verifier treated event bitfield as a set; earned rewards retained.",
+      "stage": 195
+    }
+  ],
+  "frames": 73068,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "gold_teeth_exchanged": true,
+  "learned_choices": 0,
+  "local_registrations": 17,
+  "native_execution_seconds": 5.851164165884256,
+  "new_fits": 0,
+  "new_local_registrations": 0,
+  "paid_entries": 1,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    150,
+    79,
+    94,
+    99,
+    139
+  ],
+  "party_levels": [
+    48,
+    37,
+    36,
+    36,
+    30
+  ],
+  "party_moves": [
+    [
+      44,
+      70,
+      58,
+      57
+    ],
+    [
+      10,
+      45,
+      91,
+      28
+    ],
+    [
+      64,
+      28,
+      15,
+      31
+    ],
+    [
+      33,
+      28,
+      98,
+      84
+    ],
+    [
+      29,
+      133,
+      156,
+      0
+    ]
+  ],
+  "pc": [
+    [
+      20,
+      7
+    ],
+    [
+      48,
+      1
+    ],
+    [
+      72,
+      1
+    ],
+    [
+      206,
+      1
+    ],
+    [
+      246,
+      1
+    ]
+  ],
+  "primary_unchanged": true,
+  "route_receipts": {
+    "gold-route": {
+      "at": [
+        8,
+        19
+      ],
+      "encounters_fled": 4,
+      "map_id": 219,
+      "planned_steps": 273,
+      "steps_after": 230,
+      "steps_before": 500
+    },
+    "house-departure": {
+      "at": [
+        4,
+        3
+      ],
+      "encounters_fled": 0,
+      "map_id": 219,
+      "planned_steps": 4,
+      "steps_after": 199,
+      "steps_before": 203
+    },
+    "house-route": {
+      "at": [
+        4,
+        3
+      ],
+      "encounters_fled": 0,
+      "map_id": 222,
+      "planned_steps": 27,
+      "steps_after": 203,
+      "steps_before": 230
+    },
+    "paid-departure": {
+      "acknowledged_steps": 97,
+      "field_moves": {
+        "cuts": 0,
+        "flights": 0,
+        "surfs": 2
+      },
+      "interruptions": 2,
+      "movement_requests": 98,
+      "passed": true,
+      "private_route_fields": 0,
+      "replans": 0,
+      "resource_renewals": 0,
+      "schema": "pokemon.red.routed-semantic-route-report.v1",
+      "semantic_router_authenticated": true,
+      "transport_is_policy_kind": false,
+      "verified_cuts": 0,
+      "verified_surfs": 2,
+      "wait_actions": 4
+    }
+  },
+  "sales": 0,
+  "save_edits": 0,
+  "schema": "pokemon.red.earned-field-hms.v1",
+  "source_rewinds": 0,
+  "stored_tms": [
+    206,
+    246
+  ],
+  "story_objectives": 25,
+  "strength_obtained_and_taught": true,
+  "surf_obtained_and_taught": true,
+  "terminal_sha256": "badf017fdeac95a77e6ae9e3484c0d9033a3e102de7f6b2a27f7756881b91690",
+  "terminal_stage": 197,
+  "targeted_tests": 170,
+  "full_suite_run": false
+}

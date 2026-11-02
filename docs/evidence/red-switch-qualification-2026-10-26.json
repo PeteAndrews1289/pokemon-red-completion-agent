@@ -1,0 +1,150 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_final_goals_complete": false,
+  "authorized_block_utc": [
+    "2026-10-26T02:01:43+00:00",
+    "2026-10-26T05:01:43+00:00"
+  ],
+  "counterexamples": {
+    "candidate_adoption_blocked": true,
+    "critical_hp": {
+      "baseline_faints": [
+        0,
+        0,
+        0
+      ],
+      "baseline_trainee_xp": [
+        207,
+        207,
+        207
+      ],
+      "both_parties_eventually_win": true,
+      "candidate_faints": [
+        1,
+        1,
+        1
+      ],
+      "candidate_trainee_xp": [
+        0,
+        0,
+        0
+      ]
+    },
+    "evaluation_only_forever": true,
+    "independent_roots": 0,
+    "status_only": {
+      "baseline_turns": [
+        2,
+        2,
+        2
+      ],
+      "both_trainee_xp": [
+        24,
+        24,
+        24
+      ],
+      "candidate_turns": [
+        8,
+        9,
+        10
+      ]
+    },
+    "timing_offsets": [
+      0,
+      4,
+      12
+    ]
+  },
+  "current_block_counters": {
+    "actual_inputs": 0,
+    "battle_decision_records": 51,
+    "configured_model_choices": 7,
+    "control_correction_fit_worker_seconds": 47.037766250999994,
+    "diagnostic_dispatches": 10,
+    "emulator_construction_attempts": 57,
+    "emulators_constructed": 56,
+    "native_costs": {
+      "actions": 9099,
+      "cash_debits": 0,
+      "decisions": 5,
+      "frames": 692092,
+      "heals": 22,
+      "seconds": 110.0276117400008
+    },
+    "native_costs_are_lower_bounds": true,
+    "native_proposal_verification_queries": 24,
+    "new_fits": 2,
+    "new_unknown_native_cost_tails": 2,
+    "offline_proposal_model_queries": 4,
+    "projected_fit_worker_seconds": 27.725978174001284,
+    "resource_root_seconds": 476.35789816900115,
+    "state_loads": 56,
+    "train_native_context_comparisons_admitted": 12,
+    "train_sources_materialized": 4,
+    "train_unique_configurations": 4,
+    "training_rows_admitted": 12
+  },
+  "evidence_sha256": {
+    "CONTROL-CORRECTION-FIT-ROOT-QUALIFICATION.json": "5d2ebc52878bc0182c3d16a5b1522fad2e7e0b5f79b302c14b2580c14b193801",
+    "CONTROL-CORRECTION-PROJECTED-FIT-ROOT-QUALIFICATION.json": "44322c8f6048eca5abddee91aa45369396c1e1cd656d6b8cb3c0a26aa5d93b7e",
+    "COUNTEREXAMPLE-QUALIFICATION.json": "48fa63ade34376a5814571b0169711bf4b486dc5a6785038384c0543245e59f3",
+    "LIFECYCLE-TWO-CHUNKS-FAILED-ROOT-CLOSEOUT.json": "ed629e66d6fca5bd5da2dd5d77c5c2a809d916e462ab2a5e24bc28536b438285",
+    "LIFECYCLE-TWO-CHUNKS-R5-FAILED-ROOT-CLOSEOUT.json": "f981c53f79f9b4d627cd3719f6efd121ce7cae6627ab1fb4f4e87505ae811727",
+    "LIFECYCLE-TWO-LIVE-CHUNKS-ROOT-QUALIFICATION.json": "061e2dc1665620b838f0f2d53f22468da0e07ce0f1e0f96c956a05be34e2c910",
+    "MASKED-FIT-ROOT-INTEGRATION.json": "a2824726b872892837756eb0a88edeea7d4348759f9e11ee18a9e2d4b59ba436",
+    "TRAIN-COLLECTION-ROOT-CLOSEOUT.json": "fc6b2e9278e8a3687dd98a4dcae54ce883bc99f947e61654adfdf702759d78f8",
+    "TRAIN-SOURCE-ROOT-CLOSEOUT.json": "6ccfed3088e840877b03b6658c601dd5dfddd9b477b3c1b570e30b17c761c3fd",
+    "TWO-HOUR-AUDIT.json": "d56d5e2303951e7318a4500b90b91b9bf0895a23a414ad48cc59afabc89e39cb"
+  },
+  "full_campaigns_paused": true,
+  "limits": [
+    "Related teacher-controlled TRAIN fixtures and timing siblings are not independent generalization roots.",
+    "Historical retention uses original child projections; full current720-policy retention remains unproved.",
+    "Two failed harness attempts and their unknown cost tails remain charged. Live partial totals stay lower bounds.",
+    "TRAIN collection finished before a delayed live-process probe; exact launch/UID/cgroup and native closed proofs were verified, without claiming a live argv observation.",
+    "Focused checks are not full-suite or CI success. Historical59failures/29errors are not erased.",
+    "Fresh unchanged same-save Champion/Hall-of-Fame plus124/124 and8/10heldout reliability remain unproved."
+  ],
+  "models_adopted": 0,
+  "native_lifecycle": {
+    "external_exit_verified": true,
+    "guest_closed_at_chunk_boundary": false,
+    "one_guest": true,
+    "one_load": true,
+    "two_live_chunks": true,
+    "worker_stopped_at_chunk_boundary": false
+  },
+  "next_decision": "Freeze the updated masked-Adam learner, then run one32parameter TRAIN correction using the measured zero-support rows117/258. Preserve all14current targets/283budgets; qualify the saved artifact before opening reserved native validation.",
+  "observed_at_utc": "2026-10-26T04:57:31.085277+00:00",
+  "reserved_validation": {
+    "native_outputs_exist": false,
+    "permanently_no_fit": true,
+    "specifications_frozen": true
+  },
+  "schema": "pokemon.red.switch-qualification-session.v1",
+  "source_checks": {
+    "active_fitter_source_ahead_of_P13": true,
+    "counts_not_combined": true,
+    "frozen_package_sha256": "ce6628f52f2387b40293f3bcf78547bf983b5925dc70800d6704b519d7c5fcef",
+    "full_suite_or_CI": false,
+    "masked_fitter_targeted_passes": 41,
+    "unique_focused_root_passes": 579
+  },
+  "status": "closed",
+  "train_correction": {
+    "adam_candidate_qualified": false,
+    "adam_parameter_delta": 0,
+    "all_valid_outcomes_retained": true,
+    "existing_attack_anchors": 2,
+    "historical_control_vectors": 281,
+    "masked_training_trial_executed": false,
+    "new_related_timing_targets": 12,
+    "new_unique_contexts": 4,
+    "projected_accepted_steps": 8,
+    "projected_candidate_qualified": false,
+    "projected_executed": true
+  }
+}

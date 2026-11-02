@@ -1,5 +1,10 @@
 # Development supplement adapter checkpoint
 
+> Documentation role: historical scoped plan. The original trial, budget and
+> results below retain their date-specific scope. For current work follow
+> [HANDOFF](../HANDOFF.md) and latest user direction; this page is not a dispatch.
+
+
 ## Operational update: repeatable input readiness and resolver rehearsal pass
 
 The internal-worktree repeatable reader reopened all five unclaimed roots and the exact 18-example

@@ -1,0 +1,143 @@
+{
+  "active_goal_continues": true,
+  "all7complete": false,
+  "component_gates_met": 5,
+  "costs": {
+    "active_goal_meter_lower_bound": {
+      "observed_before_audit": true,
+      "time_seconds": 33951,
+      "tokens": 3915108
+    },
+    "all_prior_costs_partial_failures_and_deadlines_retained": true,
+    "closeouts": [
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/safe-shared-experience-qualification-20261021-1005/CLOSEOUT.json",
+        "sha256": "df47bf68677856ca6c70a6ca72b36700ab82d758307746ddc42d79107814fe19"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/helper-only-cost-learning-20261021-1032/CLOSEOUT.json",
+        "sha256": "2e104a3d95881a371f26434b5b7ff643bfee9212ef1546384f751eb22b89e3c3"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/late-execution-composition-20261021-1128/CLOSEOUT.json",
+        "sha256": "c22e8b7935e7e7200ce6b6ec3d5e2cc2e8d351a4bd159246fc22bf38010eba39"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/fresh-acceptance-admission-20261021-1154/CLOSEOUT.json",
+        "sha256": "a713a4b9c2dcc5e8a98f04b57c40a7adbc865d5eb4a83d5a28fef28eeba126e0"
+      }
+    ],
+    "prior_paused_goal_usage_retained_separately": {
+      "time_seconds": 162083,
+      "tokens": 24640292
+    },
+    "since_audit041": {
+      "actual_registration_delta": 0,
+      "changed_parameters": 880,
+      "completed_new_fits": 1,
+      "fit_attempts": 1,
+      "frames": 4692686,
+      "full_root_holds": 6030,
+      "heals": 67,
+      "inputs": 53490,
+      "measured_native_preflight_fit_root_seconds": 1584.968454932,
+      "new_weights": 1,
+      "operator_offline_overhead_not_fully_measured": true,
+      "physical_emulators": 10,
+      "state_loads": 10
+    }
+  },
+  "current_process_state": {
+    "actual_actors": 0,
+    "all_known_controls_released": true,
+    "fit_processes": 0,
+    "fresh_actors": 0,
+    "native_diagnostics": 0,
+    "source_writer_active": false
+  },
+  "goals": [
+    {
+      "id": "funding_recovery",
+      "status": "in_progress",
+      "title": "Repair preserved-save funding/recovery"
+    },
+    {
+      "id": "execution_boundaries",
+      "status": "complete",
+      "title": "Harden related execution boundaries"
+    },
+    {
+      "id": "menu_performance",
+      "status": "complete",
+      "title": "Reduce menu and package overhead"
+    },
+    {
+      "id": "training_efficiency",
+      "status": "complete",
+      "title": "Improve useful training/evolution efficiency"
+    },
+    {
+      "id": "two_worker_capacity",
+      "status": "complete",
+      "title": "Qualify two isolated workers"
+    },
+    {
+      "id": "model_decision_quality",
+      "status": "complete",
+      "title": "Improve one demonstrated model weakness"
+    },
+    {
+      "id": "autonomous_acceptance",
+      "status": "in_progress",
+      "title": "Prove frozen autonomous Red completion and reliability"
+    }
+  ],
+  "limitations": [
+    "Five bounded component gates are not an overall completion percentage.",
+    "Diagnostic94/8is not actual or fresh progress.",
+    "The reserved venue result is one correlated checkpoint,not independent/full-campaign generalization.",
+    "Frozen783focusedchecks are not full-suite/CI;two unchanged-base readiness test mismatches remain excluded and retained.",
+    "Legacy missing TRAIN timing fields remain unknown;future schedules must state known exclusion checks and uncertainty.",
+    "No original actor revival,publication,deletion,scheduler,agents or originals/T7/archive writes."
+  ],
+  "limits": {
+    "Y_closed": true,
+    "actual_badges": 7,
+    "actual_registrations": 92,
+    "global_completed_fits": 14,
+    "global_fit_attempts": 18,
+    "heldout_reliability_starts": 0,
+    "new_trial_not_yet_launched": true,
+    "official_fresh_successes": 0,
+    "old_actuals_cutoff_sealed": true
+  },
+  "next_due_utc": "2026-10-21T14:00:19.773019+00:00",
+  "next_sequence": [
+    "Preregister exact P84/A9/K/d522helper-only clean-start plan,seed/timing,budgets/support and full same-save Champion/concurrentHOF+124criteria;preserve allfive failed qualifiers.",
+    "Run exact zero-emulator preflight,authenticate no live actor,worker/supervisor/Windows parent and first native0load origin before relying on progress.",
+    "Monitor newly closed receipts within the original new trial cutoff/cumulative native+diagnostic caps. On error retain native tail/controls/costs and perform scoped qualified copy repair;any restored tail cannot pass frozen fresh acceptance.",
+    "Only a complete unchanged fresh campaign plus final native audit establishes first delivery. Then preregister10heldout starts and require8successes with everyattempt retained."
+  ],
+  "not_completion_percentage": true,
+  "number": 42,
+  "observed_at_utc": "2026-10-21T12:02:55.989966+00:00",
+  "outcomes": {
+    "V": "Helper-only existing execution mode qualifies a complete originalTRAIN evolution;nearXP remains only a safe partial. Original Vtwo-completion gate did not pass. Allthree copies stopped;no Vrevival.",
+    "W": "One genuine single-root/two-alternative TRAINfit changes880parameters. Frozen d522choosesCave;reserved051time125.37to74.79seconds,frames1179416to748480,40.35%time/36.54%frame gain,zero faints/traineeattacks,stock/XP retained. Ordinary3A9unforced goals integrate durable helper mode;no natural evolution there. Bounded efficiency component qualifies,not independent/full-game gain.",
+    "X": "Two exact late-state/continuation copies complete16successes,12model4support,0execution/admission errors;diagnostic92to94registrations,7to8badges includingGiovanni,cash27to11362,11335earned/0spent,MasterBall1. Combined Lfiveearliercontexts plusX gives56goals,43model13support,51success5ordinarysetbacks/0errors. Bounded composed execution qualifies,not whole-fresh reliability.",
+    "Y": "Existing freshentry gains strict prospective acceptance admission and distinct runtime-candidate/final-audit recording.172current/783frozen targeted checks,39newcontrols,one source delta overP83r2,74983data/modelpins unchanged.0actors/fits/gameplay-policy changes. P84readyfor exact prospective trialpreflight.",
+    "learning": "Global14completedfits/18attempts. One new head,880changedparameters. No fit of DEVELOPMENT/benchmark/sealed material,actual gain or old experiment restart."
+  },
+  "scheduled_anchor_utc": "2026-10-21T12:00:19.773019+00:00",
+  "scheduled_automation_created": false,
+  "schema": "pokemon.windows.seven-goal-self-audit.v1",
+  "time_losses_and_pivots": [
+    "Measured menu/boundary work remains79.93%of the two late Xaction/export windows;the qualified10.17%runtime gain is useful but does not remove the larger planning-observation cost. Do not infer emulator/GPU speed gains.",
+    "Avoidable glue failures:Wsingleton support representation,two frozen-test fixture mismatches that also reproduce on unchanged base,and stale root fit-counter projection. All were retained;no actual progress lost. Check exact typed wiring and authoritative counter receipts before expensive dispatch;do not make another logging system.",
+    "One safe helper regime and one real measured venue contrast produced useful learning. The prior repeated-root fit failure remains consumed;XPconditions were not relabeled as roots.",
+    "Xneeded no further route source patch:the existing selected P74/P83stack passed the earlier censored boundary when given a prospective sufficient window. Reusing existing components beat another speculative repair.",
+    "Official fresh recording was incomplete in the legacy entry. Prospective admission now avoids relabeling a future DEVELOPMENT win after the fact;final native audit still owns acceptance."
+  ],
+  "total_goals": 7,
+  "why_this_advances_autonomy": "The remaining work now tests a complete frozen autonomous campaign rather than another isolated mechanic:useful venue learning and composed late execution have measured native benefit. Funding/final-chain actual confirmation and full fresh/reliability evidence remain open."
+}

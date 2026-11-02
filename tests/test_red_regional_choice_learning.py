@@ -275,3 +275,47 @@ def test_record_and_semantic_mutations_are_distinguishable(tmp_path, damage):
         proxy = SimpleNamespace(find_sealed_record=changed, open_episode=store.open_episode)
     with pytest.raises(ValueError):
         learning.load_red_regional_choice_example(proxy, item)
+
+
+def test_regional_machine_rounding_retains_original_row(tmp_path, monkeypatch):
+    store, item, expected = _recorded(tmp_path)
+    original = learning.sample_regional_acquisition
+
+    def rounded(*args, **kwargs):
+        replay = original(*args, **kwargs)
+        replay["scores"][0] += 1e-15
+        replay["probabilities"][0] += 1e-16
+        replay["probabilities"][1] -= 1e-16
+        return replay
+
+    monkeypatch.setattr(learning, "sample_regional_acquisition", rounded)
+    actual = learning.load_red_regional_choice_example(store, item)
+    assert actual.public_dict() == expected.public_dict()
+
+
+@pytest.mark.parametrize(
+    "key,value",
+    [
+        ("seed", 18),
+        ("selected_candidate_index", 8),
+        ("policy_id", "different"),
+        ("menu_sha256", "0" * 64),
+        ("model_sha256", "0" * 64),
+        ("exploration_mix", 0.5),
+        ("temperature", 2.0),
+        ("scores", [0.0, 0.0]),
+        ("probabilities", [0.9, 0.1]),
+    ],
+)
+def test_regional_rounding_does_not_relax_sampling_identity(tmp_path, monkeypatch, key, value):
+    store, item, _ = _recorded(tmp_path)
+    original = learning.sample_regional_acquisition
+
+    def changed(*args, **kwargs):
+        replay = original(*args, **kwargs)
+        replay[key] = value
+        return replay
+
+    monkeypatch.setattr(learning, "sample_regional_acquisition", changed)
+    with pytest.raises(ValueError, match="sampling does not replay"):
+        learning.load_red_regional_choice_example(store, item)

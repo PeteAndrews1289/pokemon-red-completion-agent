@@ -1,0 +1,620 @@
+{
+  "action_counts": {
+    "attack": 117,
+    "forced_switch": 2,
+    "switch_prompt": 0,
+    "voluntary_switch": 113
+  },
+  "actions": 7936,
+  "actor_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "audit_frames": 0,
+  "batch_caps": {
+    "actions": 12000,
+    "battles_per_outing": 8,
+    "frames": 1200000,
+    "outings": 8,
+    "seconds": 180
+  },
+  "battles": 55,
+  "cash": 27346,
+  "cash_delta": 0,
+  "envelope_sha256": "52590630ddb08cb86a191f16539a7fa9da972d308cfd14269517284412720f09",
+  "episodes": [
+    {
+      "battle": "battle-0001",
+      "decisions": 2,
+      "outcome_sha256": "6337ee1b1b8c8406195fb4dcf7d9a902bef336436587f7fbfb5a53e820e88fad",
+      "stage": 360,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 2,
+      "outcome_sha256": "e6aefc47637620e89924b32f7a1be7e67c255c0aacb38e1d56bb6881f7a5703f",
+      "stage": 360,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 4,
+      "outcome_sha256": "4cc9392fc391130ed88667fae521a452d3fc4ecab18fbfe01a6899aedb522777",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 18,
+      "outcome_sha256": "162610ad618990791898529ee501d7010ebcd7b83ece7640f8bca2d436d037d9",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 2,
+      "outcome_sha256": "b5092e1fb926c1ca65749ba4321e709ad88142376fda33a9d575938b27a22e4a",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 1,
+      "outcome_sha256": "7663c0be2ea7e024dc9ad70e5401be7bd19186683df884e85103fa7efb807402",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 5,
+      "outcome_sha256": "144bce4f48e480738ef45221f808610aafbfd65be8284d7d5f688745e4aec65e",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 2,
+      "outcome_sha256": "300ba4bdcaabe3a9ff69e2f5fad5d6d645c70d66f7508fce994b355e04d1b538",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 2,
+      "outcome_sha256": "110c8fc476d822a78ee75d8043ee574bdb32b0c81b3482f66c3bbc1646e5fc32",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 7,
+      "outcome_sha256": "d2aed4ec1eedfa733022c24adc391a196f7d9e8544ab4c2ed8da5d378cb46ba7",
+      "stage": 361,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 3,
+      "outcome_sha256": "3198188b6701450985c434e8d8d9cbaf8269474744cd76c841404d8b054a03cf",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 4,
+      "outcome_sha256": "008af36d65d7603c204b108abd18b69089cd1cb4020d7fcb347ea065ac6e7936",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 8,
+      "outcome_sha256": "7534eb3d9421c5b18b56cdfb3c15ea2e1c1b80d17188d7769273d3b98787aa14",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 6,
+      "outcome_sha256": "945ea96f89d0cca3b9e50d9b3f500bb8decd7d57f19b57d95f52b01c62d46c7b",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 10,
+      "outcome_sha256": "86f87f6081c168e80fe571c07cb6dccec16e2780f07c887eddc45567c95bf84d",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 2,
+      "outcome_sha256": "be5b7fcfdfd88f303930c25230472aa02fe2b84df31bceb04acebf4d98de842d",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 2,
+      "outcome_sha256": "f942d15508cc3d79c649fdcaa1f2e13561b360bd85598d9148629f2b30ffa411",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 14,
+      "outcome_sha256": "585e13d5eed33ed3f3ef9ee501e6171a8922bdd348e5d0a541743f320ec3b054",
+      "stage": 362,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 8,
+      "outcome_sha256": "f6eb43e9ae18990b39787b804866b83e7c3cf93d5167768e968526b699b7ab2c",
+      "stage": 363,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 4,
+      "outcome_sha256": "dd1bbe7c29d04d053adb9a6e73d40d8b2513595d8fa810277bffb1772039947b",
+      "stage": 363,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 6,
+      "outcome_sha256": "573a7f016d331f1fa62c3e8b9ad47aec4814baed5dffdb46fdb57c9a61fa47c9",
+      "stage": 363,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 4,
+      "outcome_sha256": "70c55786a8737114a3dbde6cbf9f90c49ed45392d49d63927120f3654dd0ba43",
+      "stage": 363,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 17,
+      "outcome_sha256": "a4b76c9d9510b655f16b01476f80911cbe3e17607b26fcc30bc191dbddd2a932",
+      "stage": 363,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 2,
+      "outcome_sha256": "7669f65c53aba0234d63ed89a3f8247cd747c3a0ed45df2c4d78a5b7ec9beba5",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 2,
+      "outcome_sha256": "9eecd4433cafdb1b37b40805c6f3e83e4e4ca12ba0684d815f09a84484eb4234",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 3,
+      "outcome_sha256": "4969609ea4efb7b61f3b901709e68fc98fefbbef1bf1afbac9ae8670fd5d615c",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 2,
+      "outcome_sha256": "3623f1799e3c9839ea80eff950b4e25f1090470acb57b2dd127d5a4b2a5e22f3",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 7,
+      "outcome_sha256": "90f454cf6e0827a3c68e1ba0b10f7901b745cac6ac413654afbdbaeebd21b8ce",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 2,
+      "outcome_sha256": "f645550b5f5806512cec3bc97bc337d2c8775cd9da476f280c77c9785bf182b9",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 1,
+      "outcome_sha256": "6a487c8775d2f5289961968988dd772b2d9dad4c819f488ded9d2655240f45b1",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 2,
+      "outcome_sha256": "dd301af289556bafed0c07702503dbc9139c0aa34fdc7273331520d6a370eb74",
+      "stage": 364,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 2,
+      "outcome_sha256": "3ad818d3797959a5da1cc6656ecb66cbc578111b1aae8a6a7528f69bb588e71f",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 2,
+      "outcome_sha256": "f9c6e927727f666de59a618b126d112fc503c2d0b2aa3bebc1316d815e9a9335",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 4,
+      "outcome_sha256": "0ba6bf3e62db063fdbaaf76112f7a9dc1d7e0c2dd04c0b3eb151d879a425ac5e",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 2,
+      "outcome_sha256": "964bdbab8d7c83a7e249190d7fc47cfbe8c7ce1424408cd72dc64149e7b19373",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 6,
+      "outcome_sha256": "42525dce69f26f4d8e2573ac1ffafe19537aece2f83b46babea076a9e566b6bd",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 4,
+      "outcome_sha256": "5c122f315f99623ff7e3d0628775ec10fc079275cb3acad844a4bd2b426fa027",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 6,
+      "outcome_sha256": "5af7afd5287d8a6487af2a392305983173184a0c307f27e465d91852eb361ad9",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 2,
+      "outcome_sha256": "f55418b68991b84d50a0278f3bda90cadaf1b02b0b624bb9fd6375d196c424fb",
+      "stage": 365,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 2,
+      "outcome_sha256": "025515d4466156b3405c36546ccc437d8aac460bc860aa7458ea1780f7074dc8",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 1,
+      "outcome_sha256": "1b59059def1b9ed62fb1c535f92bfad5855a0ce31cb7e1142c49a2f359d02f87",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 2,
+      "outcome_sha256": "08de922c5c766112eaa2d2f01648bbe98a72a645f043f489e829d65b33646ad4",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 2,
+      "outcome_sha256": "215a696843d9f2732326c873191798c4acc740a503e1240c97ca075aa7f86519",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 2,
+      "outcome_sha256": "2a0185837700762a37b2abd2e21787a580e9ac45079d6e508ff0365d98277f8b",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 2,
+      "outcome_sha256": "87b7c3e699291fa54835c0753d5cfe05169f2fb93c7e6a30bd5d54cc7370bdb5",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 2,
+      "outcome_sha256": "a38d99332a50372bac7cbba6853e1f1b074fb87f7700f54b418872accfe98ee1",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 6,
+      "outcome_sha256": "2640af68a9eb1727c589b76fc3f40d05bdd9ad5264acdd1081aaf578d44eaade",
+      "stage": 366,
+      "won": true
+    },
+    {
+      "battle": "battle-0001",
+      "decisions": 4,
+      "outcome_sha256": "d63d7bb18ba158bb786813ee90c4d38748a75645438caca93bda8b92acecc61f",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0002",
+      "decisions": 1,
+      "outcome_sha256": "eac4fdc530f85db6f0bfaab52a60fc30be8799486e485de41ccdef1ac1aec578",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0003",
+      "decisions": 4,
+      "outcome_sha256": "7d537077a704602f42a7f6e1f1249933c4936d390ac6feff285de604107ad5c1",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0004",
+      "decisions": 2,
+      "outcome_sha256": "21dcacc3db151653060613bd12765a4a8212954dd891160e5d2a1253e35624b1",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0005",
+      "decisions": 2,
+      "outcome_sha256": "a94ee27bdf8ac6fca94af53c7dc95726746a097dd53e1ba2a87d6445c42c6688",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0006",
+      "decisions": 14,
+      "outcome_sha256": "3b1366810992d17c060ba91b6f2848cb39ff00a317de4b75492b602468d33515",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0007",
+      "decisions": 2,
+      "outcome_sha256": "99e5e4b79900af69a1a90a212baf11e1d9242660b3f4d60be7ba5a63cbde218e",
+      "stage": 367,
+      "won": true
+    },
+    {
+      "battle": "battle-0008",
+      "decisions": 2,
+      "outcome_sha256": "7a7ad1263620ebb5ad66e78fafb70145905fe7fe471e7f55c09fdc72e1d58455",
+      "stage": 367,
+      "won": true
+    }
+  ],
+  "frames": 631212,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "heads_recomputed": {
+    "attack": 117,
+    "control": 121,
+    "switch": 115
+  },
+  "latencies": {
+    "execution_ns": 17886202118,
+    "policy_ns": 232928836
+  },
+  "learned_anticipation": false,
+  "learned_preparation": false,
+  "limitations": [
+    "Single continuous development lineage, not independent-root transfer.",
+    "Preparation and navigation remain support; battle actions belong to exact K.",
+    "No League qualification or model update."
+  ],
+  "local_registrations": 17,
+  "location": "Indigo Plateau lobby",
+  "map_id": 174,
+  "metrics": {
+    "invalid_action_failures": 0,
+    "party_faints": 3,
+    "party_hp_lost": 1647,
+    "party_pp_spent": 111,
+    "party_status_changes": 0,
+    "teacher_interventions": 0
+  },
+  "model_decisions": 232,
+  "native_double_ko_witnesses": [
+    {
+      "battle": "battle-0008",
+      "decision_index": 7,
+      "kind": "attack",
+      "native_terminal_sha256": "63de3d188261d61aad0961503deb250eb2a80b86c0eb7b9fe393431bc1fcd4d6",
+      "no_subsequent_replacement_choice": true,
+      "outcome_sha256": "d2aed4ec1eedfa733022c24adc391a196f7d9e8544ab4c2ed8da5d378cb46ba7",
+      "stage": 361
+    }
+  ],
+  "native_seconds": 34.251466582063586,
+  "new_fits": 0,
+  "new_goal_choices": 0,
+  "new_registrations": 0,
+  "next_unused_stage": 368,
+  "outings": 8,
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "internal_species_id": 64,
+      "level_after": 45,
+      "level_before": 44,
+      "target": 51,
+      "xp_gained": 7108,
+      "xp_remaining": 36837
+    },
+    {
+      "internal_species_id": 132,
+      "level_after": 41,
+      "level_before": 40,
+      "target": 51,
+      "xp_gained": 6928,
+      "xp_remaining": 77584
+    },
+    {
+      "internal_species_id": 28,
+      "level_after": 53,
+      "level_before": 53,
+      "target": null,
+      "xp_gained": 3142,
+      "xp_remaining": 0
+    },
+    {
+      "internal_species_id": 118,
+      "level_after": 45,
+      "level_before": 44,
+      "target": 51,
+      "xp_gained": 4951,
+      "xp_remaining": 37382
+    },
+    {
+      "internal_species_id": 104,
+      "level_after": 45,
+      "level_before": 45,
+      "target": 51,
+      "xp_gained": 4051,
+      "xp_remaining": 36881
+    }
+  ],
+  "plan_sha256": "512eaaf0fc98141b8239fe124a7500ea3f0d24ce5dc9c4ac0c3d74c28bf0f72b",
+  "position": [
+    7,
+    7
+  ],
+  "prior_batch_failed_episodes_reclassified": 0,
+  "prior_costs_retained": true,
+  "qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+  "reserve_xp": 23038,
+  "reserve_xp_remaining": 188684,
+  "save_edits": 0,
+  "schema": "pokemon.red.indigo-grinding-continuation.v3",
+  "source_commit": "64d0932230d002154f70017fd5ac20f5c8524980",
+  "source_replays": 0,
+  "source_sha256": "d8978690f11cb6ded662d2a4678257b46e1125b4e319278e6250f9ed8ec0e3c1",
+  "source_stage": 359,
+  "stages": [
+    {
+      "actions": 373,
+      "frames": 24312,
+      "seconds": 1.3476988333277404,
+      "source_sha256": "d8978690f11cb6ded662d2a4678257b46e1125b4e319278e6250f9ed8ec0e3c1",
+      "stage": 360,
+      "terminal_sha256": "bb0e424da68c2831422be0079168c4fbe61c9f4fb9a65eebb137f05f7b2ab4d5"
+    },
+    {
+      "actions": 1177,
+      "frames": 96552,
+      "seconds": 5.1608374998904765,
+      "source_sha256": "bb0e424da68c2831422be0079168c4fbe61c9f4fb9a65eebb137f05f7b2ab4d5",
+      "stage": 361,
+      "terminal_sha256": "b1797f1f88764ae2e1e2a8e251aa04c543b4558c036eaaa9435226dd0b4df4c8"
+    },
+    {
+      "actions": 1369,
+      "frames": 114024,
+      "seconds": 6.0873157498426735,
+      "source_sha256": "b1797f1f88764ae2e1e2a8e251aa04c543b4558c036eaaa9435226dd0b4df4c8",
+      "stage": 362,
+      "terminal_sha256": "6bd828e76421c76aa6790595db58919525d673fc0b889e8aba86c0b71cd1da67"
+    },
+    {
+      "actions": 1129,
+      "frames": 91332,
+      "seconds": 4.811424750369042,
+      "source_sha256": "6bd828e76421c76aa6790595db58919525d673fc0b889e8aba86c0b71cd1da67",
+      "stage": 363,
+      "terminal_sha256": "fe36ca41240da658b5f5b439ef11d3e9cec46188d4edecec94b83ad4e0f0461c"
+    },
+    {
+      "actions": 975,
+      "frames": 75108,
+      "seconds": 4.110527374781668,
+      "source_sha256": "fe36ca41240da658b5f5b439ef11d3e9cec46188d4edecec94b83ad4e0f0461c",
+      "stage": 364,
+      "terminal_sha256": "2204a55f9639ba23554c36d31f488cf06af88e2802c7f12a24ea6e4e52fb96d6"
+    },
+    {
+      "actions": 1125,
+      "frames": 87324,
+      "seconds": 4.733336415607482,
+      "source_sha256": "2204a55f9639ba23554c36d31f488cf06af88e2802c7f12a24ea6e4e52fb96d6",
+      "stage": 365,
+      "terminal_sha256": "627a76316740b83db8817fc1b76298b2399e63032797bead0bcd47e49613d347"
+    },
+    {
+      "actions": 809,
+      "frames": 63156,
+      "seconds": 3.556053708307445,
+      "source_sha256": "627a76316740b83db8817fc1b76298b2399e63032797bead0bcd47e49613d347",
+      "stage": 366,
+      "terminal_sha256": "e94e3549a01a98d71b9a023e8d91e0caafe87101ff05134a53915ccc4c22287d"
+    },
+    {
+      "actions": 979,
+      "frames": 79404,
+      "seconds": 4.4442722499370575,
+      "source_sha256": "e94e3549a01a98d71b9a023e8d91e0caafe87101ff05134a53915ccc4c22287d",
+      "stage": 367,
+      "terminal_sha256": "a485290a10e6c2f259e3cd049429b8951831ed0eefd37ab21fbf829636b9cfd6"
+    }
+  ],
+  "story_objectives": 30,
+  "switch_double_ko_qualified": false,
+  "targets_met": 0,
+  "targets_total": 4,
+  "terminal_sha256": "a485290a10e6c2f259e3cd049429b8951831ed0eefd37ab21fbf829636b9cfd6",
+  "terminal_stage": 367,
+  "termination": "eight-outing cap; no automatic continuation",
+  "wins": 55,
+  "xp_total": 26180,
+  "tests": {
+    "targeted_passed": 104,
+    "full_suite_run": false,
+    "suites": [
+      "test_party_preparation",
+      "test_red_party_preparation",
+      "test_red_wild_preparation",
+      "test_red_learned_league",
+      "test_red_league_continuation"
+    ]
+  },
+  "cumulative_preparation": {
+    "attempts": 24,
+    "attempt_cap": 32,
+    "actions": 22249,
+    "frames": 1747056,
+    "native_seconds": 94.68390012346208,
+    "verified_wins": 148,
+    "xp_total": 71436
+  },
+  "throughput_reassessment": {
+    "reserve_xp_per_outing": 2879.75,
+    "estimated_further_outings_at_batch_rate": 66,
+    "attempts_remaining": 8,
+    "estimate_is_not_forecast": true,
+    "level_51_is_heuristic_not_acceptance": true,
+    "decision": "Do not automatically extend grinding. Audit bounded League story actor binding and combat readiness before more preparation.",
+    "binding_gap": "FrozenLeagueController.require_identity admits exact K only; damage story candidate remains outside League admission."
+  }
+}

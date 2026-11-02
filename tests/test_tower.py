@@ -121,6 +121,29 @@ def _report() -> TowerChapterReport:
     )
 
 
+@pytest.mark.parametrize("extra", [(0x68,), (0x84, 0x2B), (0x84, 0x2B, 0x2C)])
+def test_tower_preserves_extra_members_and_rejects_lost_or_changed_reserves(extra):
+    from pokemon_red_completion.tower import _observe_protected_party, _RunState
+
+    base = _report()
+    initial = (*base.evolution_before, *extra)
+    final = (*base.evolution_after, *extra)
+    report = replace(base, evolution_before=initial, evolution_after=final,
+        final_raw=replace(base.final_raw, party_species_ids=final, party_count=len(final)),
+        party_hp=(*base.party_hp, *((20,) * len(extra))),
+        party_max_hp=(*base.party_max_hp, *((20,) * len(extra))),
+        party_status=(*base.party_status, *((0,) * len(extra))))
+    assert report.passed
+    assert not replace(report, evolution_after=final[:-1]).passed
+    assert not replace(report, final_raw=replace(report.final_raw,
+        party_species_ids=(*final[:-1], 1))).passed
+    run = _RunState(initial_party=initial)
+    assert _observe_protected_party(run, report.final_raw)
+    assert run.evolved
+    assert not _observe_protected_party(run, replace(report.final_raw,
+        party_species_ids=final[:-1]))
+
+
 def test_tower_timing_is_positive_and_bounded() -> None:
     assert TowerTiming() == DEFAULT_TOWER_TIMING
     assert all(

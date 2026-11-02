@@ -1,0 +1,23 @@
+--- a/helpers/red_whole_player_inventory_20261006.py
++++ b/helpers/red_whole_player_inventory_20261006.py
+@@ -387,7 +387,10 @@
+     underlying early-story supply profiles retain their walking-only defaults.
+     """
+     observation = runtime.adapter.observe()
+-    if 'enter_hall_of_fame' not in set(runtime.adapter.graph.completed_ids(observation.game_state)):
++    from pokemon_red_completion.red_player_collection_options import ordinary_ball_resupply_peer_needed
++    if not ordinary_ball_resupply_peer_needed(
++            observation.raw, hall_of_fame='enter_hall_of_fame' in set(
++                runtime.adapter.graph.completed_ids(observation.game_state))):
+         return ()
+     rows = []
+     owner = getattr(runtime.trainer_battle_runner, '__self__', None)
+@@ -1347,7 +1350,7 @@
+             rt = bind_player_collection_capabilities(
+                 rt, seed_corridor=collection_seed,
+                 add_capture_preparation_support=not include_early_preparation,
+-                include_fly_transport=rt.reader.read().badge_bits == 255)
++                include_fly_transport=True)
+             if {'defeat_champion','enter_hall_of_fame'} <= set(context['lesson']['completed_objectives']):
+                 rt = replace(rt, collection_dig_departure=True, collection_surf_departure=True,
+                              safari_departure_recovery=True)

@@ -62,6 +62,7 @@ class PokemonRedObservationEncoder:
     reader: RedSemanticReader
     include_battle_stats: bool = False
     public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None
+    include_status_context: bool = False
 
     @classmethod
     def from_state_reader(
@@ -225,6 +226,21 @@ class PokemonRedObservationEncoder:
                     "player_disabled_move_slot": raw.player_disabled_move_slot,
                     "player_disable_turns": raw.player_disable_turns,
                     "opponent_using_trapping_move": raw.enemy_using_trapping_move,
+                    **({
+                        "status_context": {
+                            "schema": "pokemon.core.battle.status-context.v1",
+                            "player_confused": raw.player_confused,
+                            "opponent_confused": raw.enemy_confused,
+                            "player_stages": (
+                                [_normalize_stage(x) for x in raw.player_stat_stages]
+                                if raw.player_stat_stages is not None else None
+                            ),
+                            "opponent_stages": (
+                                [_normalize_stage(x) for x in raw.enemy_stat_stages]
+                                if raw.enemy_stat_stages is not None else None
+                            ),
+                        }
+                    } if self.include_status_context else {}),
                 }
                 if in_battle
                 else None

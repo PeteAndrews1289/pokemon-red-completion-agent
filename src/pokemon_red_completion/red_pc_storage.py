@@ -145,6 +145,125 @@ class RedPCSwitchBoxReport:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class RedPCItemQuantityWithdrawReport:
+    item_id: int
+    quantity: int
+    bag_before: tuple[tuple[int, int], ...]
+    bag_after: tuple[tuple[int, int], ...]
+    pc_before: tuple[tuple[int, int], ...]
+    pc_after: tuple[tuple[int, int], ...]
+
+    @property
+    def passed(self) -> bool:
+        try:
+            bag, pc = _item_withdrawal_inventory(
+                self.bag_before, self.pc_before, self.item_id, self.quantity
+            )
+        except (ValueError, RedPCStorageError):
+            return False
+        return self.bag_after == bag and self.pc_after == pc
+
+
+def _item_withdrawal_inventory(bag, pc, item_id, quantity):
+    if type(item_id) is not int or not 1 <= item_id <= 255:
+        raise ValueError("item_id must be a byte-sized positive integer")
+    if type(quantity) is not int or not 1 <= quantity <= 99:
+        raise ValueError("quantity must be an integer between 1 and 99")
+    for inventory in (bag, pc):
+        if len(dict(inventory)) != len(inventory) or any(
+            type(i) is not int or not 1 <= i <= 255
+            or type(q) is not int or not 1 <= q <= 99 for i, q in inventory
+        ):
+            raise RedPCStorageError("withdrawal inventory is invalid or duplicated")
+    stored = dict(pc).get(item_id, 0)
+    if stored < quantity:
+        raise RedPCStorageError("PC lacks the declared item quantity")
+    owned = dict(bag).get(item_id, 0)
+    if len(bag) > MAX_BAG_ITEMS or (not owned and len(bag) == MAX_BAG_ITEMS):
+        raise RedPCStorageError("Red cannot withdraw an item into a full bag")
+    if owned + quantity > 99:
+        raise RedPCStorageError("withdrawal exceeds the bag stack capacity")
+    expected_bag = (tuple((i, q + quantity if i == item_id else q) for i, q in bag)
+                    if owned else (*bag, (item_id, quantity)))
+    expected_pc = tuple((i, q - quantity if i == item_id else q)
+                        for i, q in pc if i != item_id or q > quantity)
+    return expected_bag, expected_pc
+
+
+def withdraw_pc_item_quantity(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    item_id: int,
+    quantity: int,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> RedPCItemQuantityWithdrawReport:
+    """Withdraw an exact stack quantity; never confirm an unverified amount.
+
+    The legacy singleton API retains its absent-bag/exact-singleton contract.
+    This explicit API supports ordinary stackable items and partial withdrawal.
+    """
+    before = reader.read()
+    bag, pc = before.bag_items or (), reader.read_pc_items()
+    expected_bag, expected_pc = _item_withdrawal_inventory(bag, pc, item_id, quantity)
+    if before.battle_state != 0:
+        raise RedPCStorageError("item withdrawal cannot run in battle")
+    boxes = reader.read_all_box_states()
+    protected = (
+        "map_id", "player_x", "player_y", "battle_state", "party_count",
+        "party_species_ids", "party_levels", "party_hp", "party_max_hp",
+        "party_status", "party_moves", "party_pp", "player_money",
+    )
+
+    def check():
+        after = reader.read()
+        current = after.bag_items or (), reader.read_pc_items()
+        if (reader.read_all_box_states() != boxes or any(
+            getattr(after, f) != getattr(before, f) for f in protected
+        )):
+            raise RedPCStorageError("item withdrawal changed protected state")
+        if current not in ((bag, pc), (expected_bag, expected_pc)):
+            raise RedPCStorageError("item withdrawal changed an unexpected quantity or item")
+        return current == (expected_bag, expected_pc)
+
+    _require_reds_pc_menu(reader.read_menu_cursor_state())
+    _select_absolute_index(actions, reader, REDS_PC_WITHDRAW_INDEX, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    target = next(i for i, row in enumerate(pc) if row[0] == item_id)
+    _select_absolute_index(actions, reader, target, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    # Key items may transfer immediately; ordinary items enter quantity input.
+    if not check():
+        for _attempt in range(99 + timing.max_navigation_pulses):
+            selected, amount = reader.read_item_quantity_selection()
+            if selected != item_id or not 1 <= amount <= dict(pc)[item_id]:
+                raise RedPCStorageError("PC quantity selector differs from the selected item")
+            if amount == quantity:
+                break
+            _pulse(actions, MacroActionKind.MOVE,
+                   "up" if amount < quantity else "down", timing=timing)
+            if check():
+                raise RedPCStorageError("item transferred before quantity confirmation")
+        else:
+            raise RedPCStorageError("PC quantity selection exceeded its navigation budget")
+        _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+        # No further confirmations: another A could select/withdraw a second item.
+        for attempt in range(timing.max_dialogue_pulses + 1):
+            if check():
+                break
+            if attempt == timing.max_dialogue_pulses:
+                raise RedPCStorageError("item withdrawal did not reach its bounded transition")
+            _wait(actions, timing=timing)
+    after = reader.read()
+    report = RedPCItemQuantityWithdrawReport(
+        item_id, quantity, bag, after.bag_items or (), pc, reader.read_pc_items()
+    )
+    if not report.passed:
+        raise RedPCStorageError("item withdrawal failed its exact inventory proof")
+    return report
+
+
 def face_pc_boundary(
     actions: ActionExecutor,
     reader: PokemonRedStateReader,

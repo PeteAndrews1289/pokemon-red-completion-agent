@@ -1,0 +1,125 @@
+{
+  "schema": "pokemon.red.native-later-selector-evidence.v1",
+  "session": "2026-09-22-native-later-selector",
+  "classification": "later_effect_and_fit_pass_native_screen_rejected",
+  "authorization": "Pete explicitly answered Please begin to the prepared fresh qualification request.",
+  "private_packet": "red-native-later-effect-qualification-20260922-v1",
+  "source_commit": "4a5fb9a1c1448ed9e2f400860ce5929c66cf30b3",
+  "audit": {
+    "bindings": {
+      "plan": "feec05a8b08782d3075b704942f5d6ad1c12be91dd83cd4b09589191b7fb5ff6",
+      "preparation": "24006f79b7940710f1ff747827ca65055ec149201a66fde8754e466fd14203e8",
+      "qualification": "e46bb64eafb3aad42914b155ebc67129b99bc700694e5288718b194c02d1872b",
+      "result": "151fd7d5f0f63dfe6c94a13c4bd7ffdfc793dbe4f0076fe0be2456503aca4fcd"
+    },
+    "brier": 0.04202399661182537,
+    "correct_at_half": 9,
+    "first_unpassed_gate": "native_train_screen",
+    "fits": 1,
+    "full_battler_complete": false,
+    "gates": {
+      "later_effect_qualification": true,
+      "native_train_screen": false,
+      "retained_selector_fit": true
+    },
+    "live_story_ready": false,
+    "native": {
+      "actor_memory_writes": 0,
+      "all_event_and_terminal_hashes_verified": true,
+      "decision_records": 375,
+      "episodes": 148,
+      "event_records": 1944,
+      "frames": 518148,
+      "invalid_actions": 0,
+      "learned_continuation_or_evaluation_choices": 355,
+      "new_target_contexts": 0,
+      "plan_sha256": "24006f79b7940710f1ff747827ca65055ec149201a66fde8754e466fd14203e8",
+      "prescribed_first_choices": 20,
+      "status_move_attempts_including_prescribed": 66,
+      "stops": {
+        "battle_won": 70,
+        "party_defeated": 58,
+        "player_turn_budget": 20
+      }
+    },
+    "natural_party_qualified": false,
+    "observed_awake": 10,
+    "positive_effects": 8,
+    "ready_to_prepare_reserved_comparison": false,
+    "schema": "pokemon.red.battler-finish-readiness.v1",
+    "source_commit": "4a5fb9a1c1448ed9e2f400860ce5929c66cf30b3",
+    "suppressions": []
+  },
+  "candidate_sha256": "1de5e6a2b841fc08993e98174ca2b11bcf31792b75fe222bec0bb07f831cf42b",
+  "fit_sha256": "6c5fae319bc5055d99bc5a210365c7be7098faefebbeda774e06eecdebbf5671",
+  "fit": {
+    "count": 1,
+    "solver_success": true,
+    "iterations": 80,
+    "retention_preferences": 182,
+    "retention_regressions": 0,
+    "minimum_slack": -9.950373858202965e-15,
+    "auxiliary_readout": [
+      0.6121374201726457,
+      -0.7554344263069539
+    ],
+    "auxiliary_refits": 0,
+    "new_fit_contexts": 0,
+    "existing_contexts": 312
+  },
+  "screen": {
+    "cases": 64,
+    "paired_arms": 128,
+    "wins": {
+      "candidate": 38,
+      "frozen": 32
+    },
+    "decisions": {
+      "candidate": 201,
+      "frozen": 154
+    },
+    "decision_limit": 192.5,
+    "concerning_selections": 13,
+    "improved_won_status_cases": 7,
+    "passed": false
+  },
+  "diagnosis": {
+    "concern_counts": {
+      "major_status_occupied": 9,
+      "already_confused": 2,
+      "heal_full_hp": 2
+    },
+    "full_hp_rest_choices_asleep_and_not_executed": 2,
+    "changed_choices_from_prior_on_candidate_observations": 5,
+    "compared_choices": 201,
+    "exact_matching_concern_fit_contexts": 4,
+    "unmatched_concern_contexts": 9,
+    "matching_contexts_favoring_selected_concern_action": 2,
+    "other_matching_selected_return_gaps": [
+      0.03598484848484951,
+      0.024096385542168974
+    ],
+    "interpretation": "Conditional-effect prediction is qualified narrowly, but whole-battle selection is not. Unsupported sleep/paralysis receive no auxiliary contribution. Low-probability confusion receives a positive support-offset contribution. Two exact measured value targets favor the flagged move; two others differ by small measured return gaps. These facts do not prove readiness semantics or rewards should be silently changed."
+  },
+  "tests": {
+    "targeted_passed": 585,
+    "private_integration_skipped": 13
+  },
+  "learned_battle_choices": 355,
+  "candidate_battle_choices": 201,
+  "baseline_battle_choices": 154,
+  "collection_delta": 0,
+  "authority_promotions": 0,
+  "reserved_comparisons": 0,
+  "gameplay_stopped": true,
+  "publication": false,
+  "external_agents": false,
+  "protected": {
+    "story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "frozen_K": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "effect_predictor": "8ac8c2d5376ebf0f6e9d31c3852c5b89b6dfd18ea87ab583c4606a6d5dde4105"
+  },
+  "next": "Resolve the measured battle-value versus raw-concern mismatch before another fit. Audit the four exact matching concern targets and prospectively specify a small on-policy TRAIN value packet for redundant sleep/paralysis/confusion and execution-suppressed Rest. Retain182preferences and all old failures; no automatic gate relaxation, repeated fit on312unchanged targets, auxiliary refit, reserved comparisons or story input. Budget60-90minutes; stop for explicit adjudication if readiness semantics must change."
+}

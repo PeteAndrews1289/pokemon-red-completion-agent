@@ -1,0 +1,111 @@
+{
+  "schema": "pokemon.red.post-seaking-collection-session.v1",
+  "session": "2026-09-20-post-seaking-collection",
+  "source_commits": [
+    "380c984552a1a8a5e3c7a930cd064225f4c13c67",
+    "aead512181cc4534034aaa5490bc990ff9fd8a59"
+  ],
+  "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+  "start": {
+    "registrations": 101,
+    "specimens": 75,
+    "cash": 20068,
+    "state_sha256": "57c791d6bae8d0fb49034f67a7ed41a5f259e45a4e5ad1c6961bbfdcebcd8214"
+  },
+  "end": {
+    "registrations": 102,
+    "remaining_native": 22,
+    "specimens": 75,
+    "cash": 17968,
+    "state_sha256": "e894d750581dbc9d6f64887c3bca4232e0646c26426f5fdf152f8db95f94b001",
+    "map_id": 22,
+    "position_yx": [
+      6,
+      12
+    ],
+    "battle_state": 1,
+    "input_ready": false,
+    "party_levels": [
+      35,
+      62,
+      37,
+      58,
+      85,
+      33
+    ],
+    "party_hp": [
+      119,
+      164,
+      131,
+      125,
+      268,
+      107
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "model137-post-seaking-collection-20260920-v1",
+      "result_sha256": "6cbd44fc4bf0cecb02eec26a7922c3af54f4dc77a3dab9c4c55f2a1ddc480e30",
+      "outcome_sha256": "e5c98d5bff67f7f984129f3749738cf4c81596a5fdad055a98989f5fc473f371",
+      "before_state_sha256": "57c791d6bae8d0fb49034f67a7ed41a5f259e45a4e5ad1c6961bbfdcebcd8214",
+      "terminal_state_sha256": "d24d3ee7b1a59a1b52b2aba08d1ded9445fd1f3b3c825d0fc2367155b27ae416",
+      "candidate_count": 3,
+      "choice_mode": "model_exploration",
+      "verification": "succeeded",
+      "error_type": null,
+      "actions": 446,
+      "frames": 39157
+    },
+    {
+      "run_id": "model137-post-seaking-collection-20260920-v2",
+      "result_sha256": "e00ea7631e66004edcb65b2022dd8a5d0b35c3b82e18847dfe00a596ef7e1b81",
+      "outcome_sha256": "ec1b50f22deb18f42c469536368b2ef94941cba910b296acc6b4074e442f8add",
+      "before_state_sha256": "d24d3ee7b1a59a1b52b2aba08d1ded9445fd1f3b3c825d0fc2367155b27ae416",
+      "terminal_state_sha256": "e894d750581dbc9d6f64887c3bca4232e0646c26426f5fdf152f8db95f94b001",
+      "candidate_count": 2,
+      "choice_mode": "model_exploration",
+      "verification": null,
+      "error_type": "CompositionActionBudgetExhausted",
+      "actions": 29554,
+      "frames": 2502161
+    }
+  ],
+  "totals": {
+    "model_decisions": 2,
+    "successful_goals": 1,
+    "incomplete_goals": 1,
+    "admission_failures": 1,
+    "registrations_added": 1,
+    "cash_spent": 2100,
+    "cash_earned": 0,
+    "actions": 30000,
+    "frames": 2541318,
+    "fits": 0,
+    "operator_game_inputs": 0,
+    "operator_process_restarts_after_repair": 1
+  },
+  "progress": {
+    "registered": [
+      "Exeggutor"
+    ],
+    "partial": "Model-selected Rhyhorn evolution retained level25 to35 progress; Rhydon level42 not reached."
+  },
+  "repair": {
+    "cause": "Legacy direct profile required a boxed catalog evolution before any mixed-menu category could be considered.",
+    "change": "Optional evolution requirement for autonomous mixed menus; omit exhausted legacy provider while preserving original declared transport for independent per-target enumeration. Strict legacy default unchanged.",
+    "tests": 211,
+    "lint": "passed",
+    "typing": "two changed source files passed with follow-imports=silent",
+    "registry": "regenerated and checked",
+    "native_check": "Exact Exeggutor terminal returned two semantic alternatives with zero input, frames or model queries before the resumed execution."
+  },
+  "verification": "Both earned terminals independently loaded read-only; local registrations, specimen counts, cash and battle state matched receipts. Exact state/hash joins and frozen input hashes verified; no controller inputs or advanced frames.",
+  "stop_reason": "CompositionActionBudgetExhausted at exactly30000 combined actions; retained mid-wild-battle endpoint, not safe for ordinary restart.",
+  "limits": [
+    "Not a fresh-start run, independent transfer, or fitted learning result.",
+    "Goal choices are model-owned; navigation, storage and wild-battle execution remain existing heuristic/deterministic support.",
+    "No source reset, cheats, League attempt, failed-outcome relabeling or publication.",
+    "Automatic collection continuation remains disabled. Do not substitute an earlier safe save for the latest partial terminal."
+  ],
+  "next": "Bounded exact-state battle settlement from retained partial terminal, then address action-reserve/long-evolution continuation before another ordinary collection goal. No replay or renewed budget under the same experiment."
+}

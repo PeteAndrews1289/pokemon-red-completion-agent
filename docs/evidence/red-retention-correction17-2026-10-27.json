@@ -1,0 +1,545 @@
+{
+  "TRAIN_admission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/LOWER-DEFICIT17-STRICT-ROOT-ADMISSION.json",
+    "sha256": "b05cd21c742291936e49f700ddcc41c1e5c00688fe1b2cf53932c4e95ebe612b"
+  },
+  "actual_campaign_paused": true,
+  "actual_registration_delta": 0,
+  "additional_TRAIN_input_SVDs": 1,
+  "additional_cached_affine_difference_operations": 2,
+  "all_current_controls_released": true,
+  "all_current_native_and_fit_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "audit_due_utc": "2026-10-28T01:19:11+00:00",
+  "candidate_model_sha256": "fbb591f7b0157392c08c6b53c000bb94cf91253b144a52982cbd2b96e16d47df",
+  "candidate_numeric_qualified": true,
+  "candidate_retained": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/joint-order-budget-fit-20261027-2319-v1/CONSEQUENCE-HEAD.json",
+    "sha256": "0b542284008945d462bebca36059cfe5102ec820b9329c9b178cb152f5b75619"
+  },
+  "deadline_utc": "2026-10-28T02:19:11+00:00",
+  "diagnostic_evidence": {
+    "affine": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/diagnostics/be9-feature-transfer-cached/CACHED-AFFINE-DIFFERENCE-AND-SUPPORT.json",
+      "sha256": "47dd30e1e25c153e4c46166cea9425d69c8483551dba2e2d9e270c9383b6ff8d"
+    },
+    "features": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/diagnostics/be9-feature-transfer-cached/FEATURE-AND-CACHED-SCORE-COMPARISON.json",
+      "sha256": "ca60eb74f9896d8bae3f85fec821bf7939d78f13952f9e2e2d1bad64a9409128"
+    },
+    "group_metrics": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/native-readiness/cached-executor-group-audit-v1/GROUPED-CACHED-METRICS.json",
+      "sha256": "ec53d5c9275eb00420ffac190234fe14ea8dd5c9b0dc4475c79cb0324c6d1ea0"
+    },
+    "heterogeneity": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/diagnostics/target-continuation-heterogeneity-v1/TARGET-CONTINUATION-HETEROGENEITY.json",
+      "sha256": "fa9e5eab4d49b7a5c6ff08ce6508412624f6abc7805bca9d131f4f5d3fe4816c"
+    },
+    "history": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/native-readiness/train-local-sensitivity-proposal-v1/SENSITIVITY-AND-HISTORY-PROPOSAL.json",
+      "sha256": "f1e10224b3fea33d8a243d16549ee16f0a09927a5bae5da001c516303ecd6e14"
+    },
+    "native": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/NATIVE-PREPARATION-STOPPING-ROOT-CLOSEOUT.json",
+      "sha256": "a5dbc4d5052b949389f1cbd5309e1f5c6eba02d0d44e8b69c9ae952058b081db"
+    },
+    "prefix": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/diagnostics/be9-feature-transfer-cached/TRAIN-PREFIX-AND-DECLARED-STATS-INVENTORY.json",
+      "sha256": "8a96ddb53466f455024d2a5db9595963c49b7bf21cc2172538117637d5771f40"
+    },
+    "timing": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/diagnostics/target-continuation-heterogeneity-v1/TIMING-REPLICATION-AND-RETENTION-ADDENDUM.json",
+      "sha256": "5ef87c8a3b40315f1138cd54e46edb53e8237be109457a1d1512e182af5f1994"
+    },
+    "wording": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/native-readiness/train-local-sensitivity-proposal-v1/QUALITY-RECEIPT-COUNT-CLARIFICATION.json",
+      "sha256": "a67fc5e2b21902bfd6e2f60a6ec74a9cec87d02d1847ea67d2db9ca6757d431a"
+    }
+  },
+  "diagnostic_fitter_construction_calls": 1,
+  "final_actor_cost_ledger": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/FINAL-COST-LEDGER-v2.json",
+    "sha256": "09eb4a1193fd4ff8330ce763f03597088ddca6b82df982136b3d1bc62f8eb61f"
+  },
+  "fit1_quality": {
+    "failed": [
+      "all17_utility_MAE_improved",
+      "old15_utility_MAE_no_worse"
+    ],
+    "quality": {
+      "baseline_metrics": {
+        "all17": {
+          "normalized_MSE": 0.3571812561901759,
+          "utility_MAE": 0.40419189969455954
+        },
+        "new2": {
+          "normalized_MSE": 1.0391044355374526,
+          "utility_MAE": 1.009097846868741
+        },
+        "old15": {
+          "normalized_MSE": 0.266258165610539,
+          "utility_MAE": 0.32353777340466866
+        }
+      },
+      "candidate_metrics": {
+        "all17": {
+          "normalized_MSE": 0.1801182214060726,
+          "utility_MAE": 0.40603083928120753
+        },
+        "new2": {
+          "normalized_MSE": 0.10557095809184948,
+          "utility_MAE": 0.558202519554924
+        },
+        "old15": {
+          "normalized_MSE": 0.19005785651463566,
+          "utility_MAE": 0.3857412819113787
+        }
+      },
+      "newpair": {
+        "margin_passed": true,
+        "observed_right_minus_left": 1.269636723163842,
+        "predicted_right_minus_left": 0.15323168405399387,
+        "public_signed_margin": 0.15323168405399387,
+        "required_margin": 0.01
+      },
+      "old8": [
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.10970733333333338,
+          "predicted_right_minus_left": -0.544006210174253,
+          "public_signed_margin": 0.544006210174253,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.3277277966101695,
+          "predicted_right_minus_left": -1.034073746876951,
+          "public_signed_margin": 1.034073746876951,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.218020463276836,
+          "predicted_right_minus_left": -0.490067536702698,
+          "public_signed_margin": 0.490067536702698,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.04465983050847458,
+          "predicted_right_minus_left": -0.004465983050017108,
+          "public_signed_margin": 0.004465983050017108,
+          "required_margin": 0.004465983050847458
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": 0.8331749378531074,
+          "predicted_right_minus_left": 0.010000000001264386,
+          "public_signed_margin": 0.010000000001264386,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.6715276610169492,
+          "predicted_right_minus_left": -0.5089968561217437,
+          "public_signed_margin": 0.5089968561217437,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.17543802259887006,
+          "predicted_right_minus_left": -0.49356223976917984,
+          "public_signed_margin": 0.49356223976917984,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.0086129604519773,
+          "predicted_right_minus_left": -0.5035622397704442,
+          "public_signed_margin": 0.5035622397704442,
+          "required_margin": 0.01
+        }
+      ],
+      "passed": false,
+      "prior3b": {
+        "margin_passed": true,
+        "observed_right_minus_left": -0.052584632768361575,
+        "predicted_right_minus_left": -0.5694391381289602,
+        "public_signed_margin": 0.5694391381289602,
+        "required_margin": 0.01
+      },
+      "quality_checks": {
+        "all17_normalized_MSE_no_worse": true,
+        "all17_utility_MAE_improved": false,
+        "all_old8_public_margins_pass": true,
+        "new2_normalized_MSE_improved": true,
+        "new2_utility_MAE_improved": true,
+        "newpair_public_001_margin_pass": true,
+        "old15_normalized_MSE_no_worse": true,
+        "old15_utility_MAE_no_worse": false,
+        "prior3b_W_R_public_001_margin_retained": true
+      }
+    }
+  },
+  "fit2_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/RETAINED-UTILITY-FIT-ROOT-CLOSEOUT.json",
+    "sha256": "53ef0336235b6a703ce617de03babdcdf6d390cd135c08ccbd2f85558151f1e3"
+  },
+  "fit2_quality": {
+    "failed": [
+      "newpair_public_001_margin_pass"
+    ],
+    "quality": {
+      "baseline_metrics": {
+        "all17": {
+          "normalized_MSE": 0.3571812561901759,
+          "utility_MAE": 0.40419189969455954
+        },
+        "new2": {
+          "normalized_MSE": 1.0391044355374526,
+          "utility_MAE": 1.009097846868741
+        },
+        "old15": {
+          "normalized_MSE": 0.266258165610539,
+          "utility_MAE": 0.32353777340466866
+        }
+      },
+      "candidate_metrics": {
+        "all17": {
+          "normalized_MSE": 0.1794182487430888,
+          "utility_MAE": 0.36606189102382747
+        },
+        "new2": {
+          "normalized_MSE": 0.12954082321994628,
+          "utility_MAE": 0.68499352316891
+        },
+        "old15": {
+          "normalized_MSE": 0.18606857214617448,
+          "utility_MAE": 0.32353767340448314
+        }
+      },
+      "newpair": {
+        "margin_passed": false,
+        "observed_right_minus_left": 1.269636723163842,
+        "predicted_right_minus_left": -0.10035032317397824,
+        "public_signed_margin": -0.10035032317397824,
+        "required_margin": 0.01
+      },
+      "old8": [
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.10970733333333338,
+          "predicted_right_minus_left": -0.6851645412680836,
+          "public_signed_margin": 0.6851645412680836,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.3277277966101695,
+          "predicted_right_minus_left": -1.2489708177955332,
+          "public_signed_margin": 1.2489708177955332,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.218020463276836,
+          "predicted_right_minus_left": -0.5638062765274496,
+          "public_signed_margin": 0.5638062765274496,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.04465983050847458,
+          "predicted_right_minus_left": -0.004465983035315008,
+          "public_signed_margin": 0.004465983035315008,
+          "required_margin": 0.004465983050847458
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": 0.8331749378531074,
+          "predicted_right_minus_left": 0.11011208357424646,
+          "public_signed_margin": 0.11011208357424646,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.6715276610169492,
+          "predicted_right_minus_left": -0.7277691285232333,
+          "public_signed_margin": 0.7277691285232333,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -0.17543802259887006,
+          "predicted_right_minus_left": -0.45963072336296984,
+          "public_signed_margin": 0.45963072336296984,
+          "required_margin": 0.01
+        },
+        {
+          "margin_passed": true,
+          "observed_right_minus_left": -1.0086129604519773,
+          "predicted_right_minus_left": -0.5697428069372164,
+          "public_signed_margin": 0.5697428069372164,
+          "required_margin": 0.01
+        }
+      ],
+      "passed": false,
+      "prior3b": {
+        "margin_passed": true,
+        "observed_right_minus_left": -0.052584632768361575,
+        "predicted_right_minus_left": -0.6289565695536943,
+        "public_signed_margin": 0.6289565695536943,
+        "required_margin": 0.01
+      },
+      "quality_checks": {
+        "all17_normalized_MSE_no_worse": true,
+        "all17_utility_MAE_improved": true,
+        "all_old8_public_margins_pass": true,
+        "new2_normalized_MSE_improved": true,
+        "new2_utility_MAE_improved": true,
+        "newpair_public_001_margin_pass": false,
+        "old15_normalized_MSE_no_worse": true,
+        "old15_utility_MAE_no_worse": true,
+        "prior3b_W_R_public_001_margin_retained": true
+      }
+    }
+  },
+  "fit_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/FIT17-ROOT-CLOSEOUT.json",
+    "sha256": "532dd44c58700d3c04d9001c2bb3c63c21bd0314e839d0858fd98e9f3f3da54c"
+  },
+  "focused_main_tests": 156,
+  "focused_skips": 0,
+  "focused_subtests": 30,
+  "frozen_P27": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/native-candidate27/FREEZE-CLOSEOUT.json",
+    "sha256": "a201cce81fec5cd06f3c2ba9f34ff7fd6dbd75ec50b05c0e349ab6bf71adaf44"
+  },
+  "full_suite": false,
+  "further_native_or_fit_jobs_this_block": false,
+  "heldout_generalization": false,
+  "independent_new_origins": 0,
+  "joint_fit_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/JOINT-ORDER-BUDGET-FIT-ROOT-CLOSEOUT.json",
+    "sha256": "fe906926218ccfadc599d4093a4dc6c01a17654f6a5d0db5d5884a781997c7a9"
+  },
+  "joint_fit_quality": {
+    "baseline_metrics": {
+      "all17": {
+        "normalized_MSE": 0.3571812561901759,
+        "utility_MAE": 0.40419189969455954
+      },
+      "new2": {
+        "normalized_MSE": 1.0391044355374526,
+        "utility_MAE": 1.009097846868741
+      },
+      "old15": {
+        "normalized_MSE": 0.266258165610539,
+        "utility_MAE": 0.32353777340466866
+      }
+    },
+    "candidate_metrics": {
+      "all17": {
+        "normalized_MSE": 0.1791937265807747,
+        "utility_MAE": 0.35957069554392995
+      },
+      "new2": {
+        "normalized_MSE": 0.12405744409326834,
+        "utility_MAE": 0.6298183615847157
+      },
+      "old15": {
+        "normalized_MSE": 0.1865452309124422,
+        "utility_MAE": 0.3235376734051585
+      }
+    },
+    "newpair": {
+      "margin_passed": true,
+      "observed_right_minus_left": 1.269636723163842,
+      "predicted_right_minus_left": 0.009999999994410397,
+      "public_signed_margin": 0.009999999994410397,
+      "required_margin": 0.01
+    },
+    "old8": [
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -0.10970733333333338,
+        "predicted_right_minus_left": -0.6758527052865113,
+        "public_signed_margin": 0.6758527052865113,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -1.3277277966101695,
+        "predicted_right_minus_left": -1.2589345977376467,
+        "public_signed_margin": 1.2589345977376467,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -1.218020463276836,
+        "predicted_right_minus_left": -0.5830818924511354,
+        "public_signed_margin": 0.5830818924511354,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -0.04465983050847458,
+        "predicted_right_minus_left": -0.00446598305617299,
+        "public_signed_margin": 0.00446598305617299,
+        "required_margin": 0.004465983050847458
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": 0.8331749378531074,
+        "predicted_right_minus_left": 0.12507846518781868,
+        "public_signed_margin": 0.12507846518781868,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -1.6715276610169492,
+        "predicted_right_minus_left": -0.668511268862116,
+        "public_signed_margin": 0.668511268862116,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -0.17543802259887006,
+        "predicted_right_minus_left": -0.41532637945202955,
+        "public_signed_margin": 0.41532637945202955,
+        "required_margin": 0.01
+      },
+      {
+        "margin_passed": true,
+        "observed_right_minus_left": -1.0086129604519773,
+        "predicted_right_minus_left": -0.5404048446398482,
+        "public_signed_margin": 0.5404048446398482,
+        "required_margin": 0.01
+      }
+    ],
+    "passed": true,
+    "prior3b": {
+      "margin_passed": true,
+      "observed_right_minus_left": -0.052584632768361575,
+      "predicted_right_minus_left": -0.6093985667169499,
+      "public_signed_margin": 0.6093985667169499,
+      "required_margin": 0.01
+    },
+    "quality_checks": {
+      "all17_normalized_MSE_no_worse": true,
+      "all17_utility_MAE_improved": true,
+      "all_old8_public_margins_pass": true,
+      "new2_normalized_MSE_improved": true,
+      "new2_utility_MAE_improved": true,
+      "newpair_public_001_margin_pass": true,
+      "old15_normalized_MSE_no_worse": true,
+      "old15_utility_MAE_no_worse": true,
+      "prior3b_W_R_public_001_margin_retained": true
+    }
+  },
+  "joint_mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/JOINT-ORDER-BUDGET-REPAIR-MISSION.json",
+    "sha256": "9a4bbdb9449541a002e4e2013ab90b0f6dd41e0c000e6ea28bf286b24522876c"
+  },
+  "learned_preparation": false,
+  "learned_stopping": false,
+  "learning_diagnosis": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/ROOT-LEARNING-DIAGNOSIS.json",
+    "sha256": "6a1e740bcdce486749a13b4279d5c08114e550172c2eb6f335f595631855dec8"
+  },
+  "legacy13_subgroup_regression_disclosed": true,
+  "mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/MISSION.json",
+    "sha256": "7686343e839a34369435882ad7ae39ee7b831f385d082233d5935ab438a7416b"
+  },
+  "models_adopted": 0,
+  "native_Misty_win": false,
+  "native_benefit": false,
+  "native_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/NATIVE-PREPARATION-STOPPING-ROOT-BOUNDARY.json",
+    "sha256": "2c9c2c55872b19e1082267656012db8b1282e9262040d26e4e62f0ab033d27d3"
+  },
+  "native_costs": {
+    "actions": 1834,
+    "cash_debits": 884,
+    "decisions": 8,
+    "frames": 157860,
+    "heals": 1,
+    "seconds": 35.60831333199985
+  },
+  "native_errors": 0,
+  "native_head_consumed": true,
+  "native_joined_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/NATIVE-PREPARATION-STOPPING-ROOT-CLOSEOUT.json",
+    "sha256": "a5dbc4d5052b949389f1cbd5309e1f5c6eba02d0d44e8b69c9ae952058b081db"
+  },
+  "native_ordinary_losses": 2,
+  "native_semantic_audit": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/proposals/native-readiness/closed-fbb-be9-semantic-audit-v1/SEMANTIC-AUDIT.json",
+    "sha256": "d6e4a342ea6f73b71de1f1db5e5aaf7dfcd1a291fb48ea4553cc09f1b0a741b0"
+  },
+  "new_TRAIN_rows": 0,
+  "new_actual_TRAIN_fits": 3,
+  "new_baseline_forecasts": 0,
+  "new_native_global_score_calls": 8,
+  "new_native_head_forecasts": 25,
+  "new_native_head_score_calls": 2,
+  "new_native_loads": 1,
+  "new_native_trainer_score_calls": 444,
+  "new_public_forecasts": 51,
+  "new_scalar_channels": 0,
+  "observed_at_utc": "2026-10-28T01:19:30.530980+00:00",
+  "old15_retention_is_pooled_mean_only": true,
+  "one_related_TRAIN_origin": true,
+  "optimizer_intercepts": 1,
+  "original_actual_cutoff_unchanged": true,
+  "paid17_baseline": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/PAID-BASELINE17-ROOT-QUALIFICATION.json",
+    "sha256": "ae047405d3cd458a4fda0cb1ddd68ee020c7f845457a6f4ea3bfc7219dc2b757"
+  },
+  "parameter_learning": true,
+  "previous_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/SESSION-CLOSEOUT.json",
+    "sha256": "87170bbc369cb7bb2f170920d93e635c0392b95b646bf4682e64569d61f7d6bc"
+  },
+  "prior_costs": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/FINAL-COST-LEDGER.json",
+    "sha256": "bb212de655e5111a64abc0ea7785870def21e1d1ce24c3fcc791cf70ab193b8d"
+  },
+  "prospective_quality": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/PROSPECTIVE-LOWER-DEFICIT-LEARNING-QUALITY.json",
+    "sha256": "5924a4d9c0db1d4d210ff3911294c6b2a71125b9ffa915f8cb491dd0cf9db1b9"
+  },
+  "quality_named_checks": 9,
+  "quality_receipt_prefix_not_gate_count": "5924a4d9",
+  "repair_mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/RETAINED-UTILITY-BUDGET-REPAIR-MISSION.json",
+    "sha256": "dec54195f69b694402607fadfb4d75e3061f2e7fc1288a48a1d7aedbc0367f9a"
+  },
+  "retention_group_metrics": {
+    "current4_3b_utility_MAE_baseline": 0.717338,
+    "current4_3b_utility_MAE_candidate": 0.454113,
+    "interpretation": "All original nine named quality checks pass honestly, but the pooled15 cap does not promise retention for each subgroup. Legacy13 regression is offset by newer current-controller gains; report it explicitly. Prior9 observed preference orders remain retained.",
+    "legacy13_utility_MAE_baseline": 0.307839,
+    "legacy13_utility_MAE_candidate": 0.330481,
+    "no_retrospective_gate_waiver": true,
+    "old15_pooled_utility_MAE_baseline": 0.32353777340466866,
+    "old15_pooled_utility_MAE_candidate": 0.323537673405
+  },
+  "schema": "pokemon.red.retention-correction17-session-evidence.v1",
+  "source_api_qualification": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/P26-TYPED17-CODEC-API-ROOT-QUALIFICATION.json",
+    "sha256": "0b6949b4785be3148215914537c1f06dafb4d3ed7e488ee028e24c7b39a75d93"
+  },
+  "source_exposed": true,
+  "started_at_utc": "2026-10-27T23:19:11+00:00",
+  "status": "closed_numeric_qualified_native_behavior_failed_review_ready",
+  "total_new_public_consequence_forecasts_including_native": 76,
+  "total_public_TRAIN_fitter_entries": 4,
+  "two_hour_audit": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/retention-correction17-20261027-2319/TWO-HOUR-ROOT-AUDIT.json",
+    "sha256": "33206ef0a852fc22fa92e4be469df798a47b60651c7e722a7d6de8ca2942ad94"
+  },
+  "whole_process_NN_metering_complete": false,
+  "zero_objective_LP_solves": 1
+}

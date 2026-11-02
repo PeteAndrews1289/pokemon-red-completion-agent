@@ -5176,7 +5176,7 @@ cannot open fitting. See the
 [materializer qualification](../evidence/red-living-dex-durable-materializer-qualification-v1-2026-08-26.json),
 [adapter design](../red-living-dex-observed-arm-adapter.md),
 [shared contract](../living-dex-option-value-contract.md), and
-[redesign audit](../living-dex-option-value-redesign-audit-2026-08-25.md).
+[redesign audit](retired-plans-2026-10-07/living-dex-option-value-redesign-audit-2026-08-25.md).
 
 Source `98cfa01096e16b36c3f6b9a829d05ffa7293af36` passed exact-source GitHub CI
 `32933786447/1` with **4,802 passed · 1 skipped · 3 deselected · 1 expected failure** and merged

@@ -1,0 +1,206 @@
+{
+  "schema": "pokemon.red.frozen-snorlax-income-terminal.v1",
+  "at_utc": "2026-10-16T09:13:27.010426+00:00",
+  "completed": false,
+  "terminal_reason": "native_execution_error",
+  "terminal_sha256": "622edc9705ed0dfc361d5512b01af827fd69f7fc4e729d2ba5dc6fc4feb7e1eb",
+  "context_sha256": "349bfda9b87af64b0117f7bc38812ed7d7aba8993dda0de650a5733f49bfd7d2",
+  "counts": {
+    "executed": 556,
+    "model": 265,
+    "setbacks": 19,
+    "support": 291
+  },
+  "spent": {
+    "actions": 244833,
+    "cash_debits": 7214,
+    "decisions": 558,
+    "frames": 19622114,
+    "heals": 346,
+    "seconds": 4052.4039625797886
+  },
+  "native_facts": {
+    "badge_bits": 15,
+    "badges": 4,
+    "bag_stock": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        48,
+        1
+      ]
+    ],
+    "cash": 32458,
+    "event_flags_hex": "01000000af000003000000000000c40000000001800000cc0000000000800004008c8e000001000000000000df0000000000000000ff010200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007c03000000007000000000020202005000000000000000000000000000c00000000000000000000020000000fb00dbf8100000860000000000000000000000001f0000000000000000000000000000000000000000000000fc00000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000460100000000000000",
+    "party_levels": [
+      39,
+      30,
+      29,
+      34,
+      33,
+      38
+    ],
+    "registrations": 23,
+    "whole_party_restored": false
+  },
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_surge",
+    "help_bill",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "released": true,
+  "actual_processes_absent": true,
+  "state_loads": 0,
+  "runtime_llm_calls": 0,
+  "training": 0,
+  "fits": 0,
+  "copied_gains": 0,
+  "wall_seconds": 4139.625444083009,
+  "process_exit": {
+    "exit_code": 0,
+    "exited_at_utc": "2026-10-16T09:07:11.069104+00:00",
+    "no_restart": true,
+    "root_result_exists": true,
+    "safety_stop_reason": null,
+    "supervisor_seconds": 4173.28669462516,
+    "worker_exit_confirmed": true,
+    "worker_pid": 63999
+  },
+  "isolated_io": {
+    "all_writes_in_failed_run": true,
+    "loaded_modules": 644,
+    "module_isolation_error": null,
+    "reads": 45640,
+    "sha256": "58d192c5652b9872aba34f89c7a389192036a6748ebd5e891849951ffc0468b5",
+    "writes": 576133
+  },
+  "package_pins_verified": 7878,
+  "environment_pins_verified": 4512,
+  "protected_pins_verified": 643,
+  "prior_recovered_error": "Two automatic battle-entry recoveries are retained; not an error-free trace",
+  "verified_automatic_control_recoveries": [
+    {
+      "binding_ref": "pokemon.red:retained-engagement:980f4f87735b7c888fb9c0e7d1591bece9c386c6f2b445616e566ca00f05d1b4",
+      "failed_transport_preserved": true,
+      "frames": 0,
+      "inputs": 0,
+      "model_queries": 0,
+      "qualified": true,
+      "schema": "pokemon.red.qualified-native-control-handoff.v1",
+      "state_sha256": "980f4f87735b7c888fb9c0e7d1591bece9c386c6f2b445616e566ca00f05d1b4",
+      "strategic_substitution": false
+    },
+    {
+      "binding_ref": "pokemon.red:retained-engagement:ecee995001ac3dd576c9e450ff18cc4dd1e2a0e58d39ae63c8c1c45ac0c6c1d2",
+      "failed_transport_preserved": true,
+      "frames": 0,
+      "inputs": 0,
+      "model_queries": 0,
+      "qualified": true,
+      "schema": "pokemon.red.qualified-native-control-handoff.v1",
+      "state_sha256": "ecee995001ac3dd576c9e450ff18cc4dd1e2a0e58d39ae63c8c1c45ac0c6c1d2",
+      "strategic_substitution": false
+    }
+  ],
+  "final_menu_diagnostics": {
+    "additional_inputs_authorized": false,
+    "category": "control_or_verification_failure",
+    "diagnostic_only": true,
+    "error_chain": [
+      {
+        "error": "learned Silph Card Key handoff failed preservation",
+        "error_type": "RuntimeError"
+      }
+    ],
+    "failure_reason": null,
+    "resume_authorized": false,
+    "safe_terminal": true,
+    "schema": "pokemon.red.player-stop-diagnostics.v1",
+    "stop_reason": "execution_failed"
+  },
+  "launch": {
+    "worker_pid": 63999,
+    "supervisor_pid": 63998,
+    "sleep_prevention_pid": 64000,
+    "started_at_utc": "2026-10-16T07:57:37.796852+00:00",
+    "deadline_utc": "2026-10-16T23:57:37.796852+00:00",
+    "plan_sha256": "3d5fb3a2f0a488b98ba14b6cf4955f85a48d77ed545342fa27c96f5ac02fcbe4",
+    "manifest_sha256": "93353169ce6e128c840f45a7df50f9e5894b5f8d01fe3a80bc0ab46359cd413e"
+  },
+  "run_id": "red-frozen-autonomous-run-20261016-snorlax-income-v1",
+  "new_weights": 0,
+  "completed_save_and_failed_runs_preserved": true,
+  "retained_closed_segments": 30,
+  "diagnosis": "The learned battler won and the native Card Key was acquired, but existing poison reduced lead HP from117 to115 during the field walk. An exact-HP preservation check rejected that legitimate attrition. This is an execution verification mismatch, not a lost battle or policy failure.",
+  "next_action": "Scoped copied repair qualified separately. Original failed actual is never resumed."
+}

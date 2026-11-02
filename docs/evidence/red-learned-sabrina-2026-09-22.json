@@ -1,0 +1,113 @@
+{
+  "actions": 902,
+  "audit_frames": 0,
+  "battle_replays": 0,
+  "battles": [
+    {
+      "decisions": 28,
+      "metrics": {
+        "attack_turn_utility_sum": 6.526769486221541,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 4,
+        "party_faints": 2,
+        "party_hp_lost": 357,
+        "party_pp_spent": 15,
+        "party_status_changes": 2,
+        "policy_latency_ns_max": 10820708,
+        "policy_latency_ns_mean": 3461819.964285714,
+        "policy_latency_ns_min": 184000,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "7cb855df6a7650747ac3994ff92cfeb75866bef1df2599ab5ab06cc875c76609",
+      "payout": 4257,
+      "review": {
+        "battle_outcome": "won",
+        "learned_preparation": false,
+        "next_action": "recover",
+        "observed_opponents": 4,
+        "opposition_level": 38,
+        "reason": "level preparation not needed",
+        "reconstructed_from_retained_episode": true,
+        "schema": "pokemon.story-preparation-review.v1",
+        "source_sha256": "d3e9a32fa74689c63ccc4309a69429473fa0bbb02eddd1b7b2aea25008db2f6c",
+        "targets": {}
+      },
+      "stage": 161
+    }
+  ],
+  "cash": 16459,
+  "completed_objectives": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "decisions": 28,
+  "envelope_sha256": "ee5946fe2887ef7ac0c31fb50e5605325bb37202fb74f87e41d636097c2c6540",
+  "fits": 0,
+  "frames": 77844,
+  "fully_restored": true,
+  "limitation": "Learned battle decisions; reward, navigation, preparation review and healing remain disclosed support. Default ordinary battle reward guards remain unchanged.",
+  "map_id": 182,
+  "marsh_badge": true,
+  "master_ball": 1,
+  "net_income": 4257,
+  "new_registrations": 0,
+  "next_preparation_guard_verified": true,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    75,
+    143,
+    91,
+    97
+  ],
+  "party_levels": [
+    35,
+    46,
+    35,
+    35
+  ],
+  "position": [
+    3,
+    3
+  ],
+  "purchases": 0,
+  "recomputed_choices": {
+    "attack": 17,
+    "control": 19,
+    "switch": 9
+  },
+  "retained_errors": [
+    156,
+    157,
+    159,
+    161
+  ],
+  "sabrina_defeated": true,
+  "sales": 0,
+  "schema": "pokemon.red.learned-sabrina.v1",
+  "seconds": 82.76031895680353,
+  "teacher_battle_choices": 0,
+  "terminal_sha256": "a2592aadd802992d6a42720de19968dc07a1314a6f4863a788dc522d4b7b0250",
+  "terminal_stage": 162,
+  "tests_passed": 661,
+  "tm46": 1
+}

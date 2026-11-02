@@ -1,0 +1,106 @@
+{
+  "schema": "pokemon.red-safari-gate-cartridge-check.v1",
+  "session": "2026-09-19-safari-gate-cartridge-check",
+  "status": "blocked_before_assistance",
+  "classification": "action_free_engineering_diagnostic",
+  "source_commit": "4fc3ee815d9492f28bde258c8c4d6381635ba0fb",
+  "source_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+  "loaded_state_sha256": "27694933e9f647140608807803e1c750d750507ff9e325ed1884beee2bb93054",
+  "private_record_sha256": {
+    "plan.json": "14343ff38a2a804e212174ff4790d2365cd0a539f09b87788357608aa7693fe0",
+    "read-only.json": "f3b9bfaa551296f7180363b68403acd496f9a78946750e0ec6a5e37c75d741e2",
+    "result.json": "3bcb7f7dfe499b8ddbb26e4cb3d7ca92e9def4e4bb25e90196ca5e11094f219f",
+    "funding-inspection.json": "a76f726070150a5ad37e00b56d9992b5f7e4127d56ac65ca724d775d918d245b",
+    "funding-inspection-v2.json": "949f81358d558d28fef51cf5fcd25b77229a3517276aa644e672b1278936a85a"
+  },
+  "observation": {
+    "position_xy": [
+      4,
+      3
+    ],
+    "map_id": 156,
+    "cash": 198,
+    "registered": 96,
+    "party_count": 6,
+    "free_storage_slots": 172,
+    "ready": true,
+    "battle": false,
+    "visible_dialogue": false,
+    "gate_script": 0,
+    "safari_session": {
+      "in_safari_zone": false,
+      "safari_balls": 28,
+      "safari_game_over": false,
+      "safari_steps": 473
+    }
+  },
+  "gate": {
+    "entry_mode": null,
+    "eligible_areas": 0,
+    "affordable_areas": 0,
+    "quote": null,
+    "unfunded_rejection": "safari_gate_funds_insufficient",
+    "defect": "Nonzero leftover counters are incorrectly treated as proof of an active session.",
+    "pinned_disassembly_commit": "1e96034092686d006e863cace09e87273051a3d8",
+    "source_path": "scripts/SafariZoneGate.asm",
+    "source_routine": "SafariZoneGateSafariZoneWorker1LeavingEarlyText"
+  },
+  "funding": {
+    "cash_target": 2400,
+    "ordinary_bindings": 0,
+    "supplements": [
+      {
+        "kind": "evolve_species",
+        "binding_family": "indoor_collection_departure"
+      }
+    ],
+    "model_menu_failure": "mixed live menu needs distinct executable candidates",
+    "trainer_added_offers": 0,
+    "learned_trainer_bound": false,
+    "observed_exit_steps": 3,
+    "exit_plan_executed": false,
+    "league_rejection": "save is not at a fresh postgame League boundary",
+    "league_story_fact_present": true,
+    "league_events": {
+      "lorelei": true,
+      "bruno": true,
+      "agatha": true,
+      "lances_room_trainer": false,
+      "lance": false,
+      "champion": false
+    },
+    "league_team_strength_evaluated": false
+  },
+  "invariants": {
+    "state_bytes_unchanged": true,
+    "source_file_overwritten": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "money_writes": 0,
+    "assisted_attempts": 0,
+    "model_queries": 0,
+    "model_fits": 0,
+    "new_examples": 0,
+    "new_registrations": 0,
+    "authority_promotions": 0,
+    "github_publications": 0
+  },
+  "diagnostic_logger": {
+    "first_attempt": "AttributeError on display method; retained",
+    "corrected_read_only_attempt": "Complete unchanged-state menu breakdown",
+    "gameplay_failure": false
+  },
+  "next": "Correct settled inactive Safari lifecycle and preserve residual counters throughout approach. Then separately qualify a bounded assisted entry. Generic indoor income departure and partial League-reset lifecycle remain separate resource blockers; no battle refit or full run.",
+  "limitations": [
+    "No paid-entry or gameplay qualification passed.",
+    "No learned result or profitable funding was established.",
+    "A computed exit is not an executed or qualified funding action.",
+    "J remains limited to one-to-three own party members."
+  ],
+  "model_preference": {
+    "model": "Astra",
+    "effort": "high",
+    "fast": false,
+    "source": "explicit_user_preference"
+  }
+}

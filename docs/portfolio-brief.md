@@ -2,39 +2,51 @@
 
 ## Thirty-second explanation
 
-I direct an AI-assisted project to build a Pokémon player that learns useful goals and battle
-decisions, verifies what happened, and eventually transfers those skills between games.
-It combines small learned models with deterministic navigation/menu skills. It is active
-development, not a finished autonomous player.
+Pete directs an AI-assisted project to build a local Pokémon player that learns
+useful goals, battle decisions, preparation and recovery. Semantic observations
+and declared control skills support small learned models. This is an unfinished
+autonomy project, not a pixel-only system or a scripted completion presented as AI.
 
-## Demonstrated
+## Demonstrated results
 
-- Model-selected collection/resource choices and fitting from actual outcomes, including failures.
-- Main Red development save:96/124 registrations; Model137:137 examples,92 successes.
-- Frozen battle learner J: modest unused-team improvement,9/24 wins versus predecessor7/24.
-- Natural small-party wins with voluntary switching and no teacher battle choices.
-- Explicit integration into the main player's ordinary trainer-funding entry.
-- Durable saves, decision/timing logs, independent verification and shared registration memory.
+Earlier supported DEVELOPMENT saves completed Champion/Hall of Fame and all
+124 declared legitimate Red registrations. Their separate ancestries, repairs,
+assistance and retained specimens remain explicit; they are not a fresh unchanged
+autonomous acceptance result.
 
-The first main-entry goal failed after Wartortle fainted. The old funding guard stopped the
-unfinished battle; four decisions and the exact state were retained without reset or teacher
-substitution. A separate retained-state continuation then completed five J decisions and a natural
-loss/blackout, restoring field control with the expected cash loss. This establishes battle
-lifecycle handling, not successful funding or six-member mastery.
+The latest learner work includes a qualified 32-weight masked correction, a
+1,169-parameter control correction and a 235-parameter switch correction against
+different parents. These counts are not an additive total of unique weights.
+The switch candidate reduces faints 13→2 and frames 37,020→10,188 on three
+related/exposed wild cases. Four healthy cases retain exact endpoints. A complete
+evolution/Misty comparison retains the earlier useful preparation payoff.
+[Evidence](evidence/red-masked-native-validation-2026-10-26.json).
 
-## Remaining work
+Reusable components include semantic goal selection, local battlers, navigation,
+capture, evolution, storage, ordinary economy and native failure/cost records.
+The runtime makes no LLM calls. Offline fitting is separate from gameplay XP.
 
-Broader qualified battle scope, sustainable resource planning,28 remaining native registrations
-and a fresh model-directed Red run. Fresh-run acceptance remains0/5. ROM-hack transfer, Crystal
-and Emerald follow Red acceptance. Prior checkpoint-based Champion/Hall-of-Fame work used
-deterministic battle mechanics and is not the required fresh-game completion.
+## Limits and next decision
 
-## Role and technology
+Psyduck still gives its trainee zero XP, and six older TRAIN control views regress
+after the switch proposal changes. There is no independent generalization result,
+global adoption or defensible overall completion percentage.
 
-Pete Andrews defines requirements, directs the AI workflow and validates outcomes. Codex, Claude
-and Antigravity have contributed implementation or reviews; authorship is explicitly AI-assisted.
-Python, PyBoy, NumPy, SQLite, typed skills, hash-linked evidence, pytest, Ruff and mypy.
-Coding assistants are not secretly choosing the gameplay actions.
+All runs are stopped for review. The next proposed experiment reuses existing
+TRAIN captures for matched current-policy attack/switch lessons, followed by a
+control-only fit if informative and native usefulness/retention checks.
+[Current handoff](../HANDOFF.md) · [Seven goals](seven-goals.md).
 
-[Evidence](evidence/red-battle-lifecycle-continuation-2026-09-19.json) ·
-[Architecture](architecture.md) · [Interview handoff](ai-systems-specialist-interview-handoff.md)
+Final delivery remains fresh unchanged Red Champion/Hall of Fame plus 124 same-save
+registrations, then the declared reliability evaluation. An unfamiliar compatible
+hack, Crystal and at least Emerald follow; cross-game transfer remains unproved.
+
+## Authorship and sources
+
+Pete defines requirements, directs development and validates outcomes. Coding
+assistants have contributed implementation and review; they are not secretly
+choosing each live game action. No external review was dispatched in this refresh.
+
+[Architecture](architecture.md) · [Project narrative](project-narrative.md) ·
+[YouTube treatment](youtube-video-narrative.md) ·
+[Research record](research-retrospective.md) · [Chronicle](chronicle/README.md).

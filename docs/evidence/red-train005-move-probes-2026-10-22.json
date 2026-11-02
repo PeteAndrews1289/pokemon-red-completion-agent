@@ -1,0 +1,278 @@
+{
+  "current_capacity_proxy": [
+    4950,
+    4400
+  ],
+  "fit_allowed": false,
+  "full_battle_arms": [
+    {
+      "actions": 180,
+      "arm": "baseline",
+      "attack_turn_utility_sum": -7.726354453627181,
+      "changed_ram_bytes": 0,
+      "decisions": 13,
+      "failed_move_executions": 6,
+      "field_ready": true,
+      "first_move_probabilities": [
+        0.9999899217665129,
+        6.837343900064715e-06,
+        3.2408895872072467e-06
+      ],
+      "first_move_slot": 1,
+      "first_opponent_hp_after": 50,
+      "fixture_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+      "frames": 17616,
+      "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+      "money_delta": -10181,
+      "native_seconds": 1.7264519379999683,
+      "opponent_faints": 0,
+      "outcome": "lost",
+      "package_sha256": "f47a77c4ccbb3a7206cc7b7985aaa23969d4ade9cf8f35b97f23e98f80bdc9d6",
+      "party_faints": 3,
+      "result_sha256": "561826fd7beed6fe2f2d874aa1fbe3cd5bc5a4504825427e010ccf7d127ae500",
+      "source_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+      "terminal_authentication_sha256": "9f6b66204d171ed887b0d067256f937b8bff32c44f109dcafc062a0d361d9c03",
+      "terminal_sha256": "7d235ede4cd3edb0eedbecac76fe9d20f5901dc5e3bdefda3ef815fcd23ed164"
+    },
+    {
+      "actions": 332,
+      "arm": "ice_beam",
+      "attack_turn_utility_sum": -2.9687159155575893,
+      "changed_ram_bytes": 4,
+      "decisions": 22,
+      "failed_move_executions": 6,
+      "field_ready": true,
+      "first_move_probabilities": [
+        0.8005962699342574,
+        5.474007190972139e-06,
+        0.19939825605855166
+      ],
+      "first_move_slot": 1,
+      "first_opponent_hp_after": 50,
+      "fixture_sha256": "9c9325d0e43cd47bc8cceab9ee427add3e3c4c6117cd6b57f50da41945651613",
+      "frames": 32040,
+      "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+      "money_delta": -10181,
+      "native_seconds": 3.298021186999904,
+      "opponent_faints": 1,
+      "outcome": "lost",
+      "package_sha256": "f47a77c4ccbb3a7206cc7b7985aaa23969d4ade9cf8f35b97f23e98f80bdc9d6",
+      "party_faints": 3,
+      "result_sha256": "62b83b5c59fca500594858701a2065bd87c826506d0107c1c65f0e93f03a2f5d",
+      "source_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+      "terminal_authentication_sha256": "90a6c73a421e76d1816c9e2bf86723d400a8f45a50f4ab276e03826719e11e87",
+      "terminal_sha256": "2dbfa94c2dc785b7308badfeae54366c981f351a8dba8e2ddffe04c8fec24a08"
+    }
+  ],
+  "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-22T09:47:09.156485+00:00",
+  "opening_arms": [
+    {
+      "actions": 5,
+      "after": {
+        "active_party_hp": 121,
+        "active_party_max_hp": 121,
+        "active_party_moves": [
+          44,
+          39,
+          61,
+          58
+        ],
+        "active_party_pp": [
+          24,
+          30,
+          20,
+          10
+        ],
+        "active_party_status": 0,
+        "battle_state": 2,
+        "enemy_hp": 48,
+        "enemy_max_hp": 90,
+        "enemy_party_hp": [
+          90,
+          69,
+          87
+        ],
+        "enemy_party_position": 0,
+        "enemy_species_id": 190,
+        "enemy_status": 0,
+        "map_id": 134,
+        "party_hp": [
+          121,
+          53,
+          37
+        ],
+        "party_levels": [
+          39,
+          20,
+          22
+        ],
+        "player_money": 20362
+      },
+      "before": {
+        "active_party_hp": 121,
+        "active_party_max_hp": 121,
+        "active_party_moves": [
+          44,
+          39,
+          61,
+          58
+        ],
+        "active_party_pp": [
+          25,
+          30,
+          20,
+          10
+        ],
+        "active_party_status": 0,
+        "battle_state": 2,
+        "enemy_hp": 90,
+        "enemy_max_hp": 90,
+        "enemy_party_hp": [
+          90,
+          69,
+          87
+        ],
+        "enemy_party_position": 0,
+        "enemy_species_id": 190,
+        "enemy_status": 0,
+        "map_id": 134,
+        "party_hp": [
+          121,
+          53,
+          37
+        ],
+        "party_levels": [
+          39,
+          20,
+          22
+        ],
+        "player_money": 20362
+      },
+      "fixture_sha256": "9c9325d0e43cd47bc8cceab9ee427add3e3c4c6117cd6b57f50da41945651613",
+      "frames": 924,
+      "native_seconds": 0.06500378600000545,
+      "pre_attack_frames": 720,
+      "result_sha256": "ee0046580db81ab9cf61bae6917bc97247cea64908805d85681b265ad1099eb4",
+      "selected_slot": 1,
+      "source_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+      "terminal_sha256": "3f818624eb8729b0b9175667bcf7457d8a2c2e223fc3539b72051ddd3e0c25d9"
+    },
+    {
+      "actions": 13,
+      "after": {
+        "active_party_hp": 121,
+        "active_party_max_hp": 121,
+        "active_party_moves": [
+          44,
+          39,
+          61,
+          58
+        ],
+        "active_party_pp": [
+          25,
+          30,
+          20,
+          9
+        ],
+        "active_party_status": 0,
+        "battle_state": 2,
+        "enemy_hp": 1,
+        "enemy_max_hp": 90,
+        "enemy_party_hp": [
+          90,
+          69,
+          87
+        ],
+        "enemy_party_position": 0,
+        "enemy_species_id": 190,
+        "enemy_status": 0,
+        "map_id": 134,
+        "party_hp": [
+          121,
+          53,
+          37
+        ],
+        "party_levels": [
+          39,
+          20,
+          22
+        ],
+        "player_money": 20362
+      },
+      "before": {
+        "active_party_hp": 121,
+        "active_party_max_hp": 121,
+        "active_party_moves": [
+          44,
+          39,
+          61,
+          58
+        ],
+        "active_party_pp": [
+          25,
+          30,
+          20,
+          10
+        ],
+        "active_party_status": 0,
+        "battle_state": 2,
+        "enemy_hp": 90,
+        "enemy_max_hp": 90,
+        "enemy_party_hp": [
+          90,
+          69,
+          87
+        ],
+        "enemy_party_position": 0,
+        "enemy_species_id": 190,
+        "enemy_status": 0,
+        "map_id": 134,
+        "party_hp": [
+          121,
+          53,
+          37
+        ],
+        "party_levels": [
+          39,
+          20,
+          22
+        ],
+        "player_money": 20362
+      },
+      "fixture_sha256": "9c9325d0e43cd47bc8cceab9ee427add3e3c4c6117cd6b57f50da41945651613",
+      "frames": 1128,
+      "native_seconds": 0.12089417999999341,
+      "pre_attack_frames": 720,
+      "result_sha256": "6f325abee80409169dfc43c97e0e5975a1bdbe4c0ef2466d54be869355e788e2",
+      "selected_slot": 4,
+      "source_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+      "terminal_sha256": "864c8aab152b859c01db2867929429cd5b73dedec24b9b3673e80bf1d19d7871"
+    }
+  ],
+  "opening_probe": {
+    "actual_credit": 0,
+    "common_pre_attack_frames": 720,
+    "copy_back": false,
+    "fit_allowed": false,
+    "full_battle_win_measured": false,
+    "full_enemy_response_settled": false,
+    "limitation": "One matched timing pair from one exposed originalTRAINorigin. Damage endpoints alone are not a policy improvement,full battle success,independent robustness or end-to-end preparation benefit. The failed432pair and partial costs remain separate.",
+    "native_acquisition_cost_measured": false,
+    "new_fits": 0,
+    "new_weights": 0,
+    "observed_at_utc": "2026-10-22T09:47:09.156485+00:00",
+    "player_model_queries": 0,
+    "schema": "pokemon.red.original-TRAIN-opening-probe-result.v1",
+    "teacher_selected_actions": 2,
+    "unique_upstream_roots": 1
+  },
+  "partition": "train",
+  "proxy_rejection_is_not_tactical_label": true,
+  "registered_full_challenge_rows": 0,
+  "schema": "pokemon.red.train-preparation-probes.v1",
+  "source_sha256": "9a3258f22f3dcbba0ba5759d10d8bce95b220eddb5db98c114411a01dd1d169b",
+  "unique_upstream_roots": 1
+}

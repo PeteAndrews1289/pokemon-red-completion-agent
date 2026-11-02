@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon.red.forced-struggle-step2-closeout.v1",
+  "session_id": "2026-09-24-forced-struggle",
+  "qualification": {
+    "path": "docs/evidence/red-forced-struggle-2026-09-24.json",
+    "sha256": "89f89d715f976adc1a6fce7258f8ec6785087a834cfed685ccdd5592ca40bff9",
+    "native_cases_passed": 6,
+    "actions": 73,
+    "frames": 6370,
+    "learner_queries": 0
+  },
+  "step2": {
+    "status": "closed_infrastructure_failure",
+    "plan_sha256": "9ba89b413ad2c5ce782a55eb7cd5522b9a9bfa327c3e9ed431623e7d478b6069",
+    "result_sha256": "503d20612bfb2ae1939185f6d2f2cb3643fcf40e743152bf756527884faed703",
+    "audit_sha256": "01c1cf9962e77ecb8221fdde5d09aca1954a60159acc4612fb6c8afe0ae78e34",
+    "failure": "Runner supplied unsupported allow_forced_struggle argument to observation preparation.",
+    "contexts": 0,
+    "episodes": 0,
+    "controller_inputs": 0,
+    "fits": 0,
+    "retired_recipes": 60,
+    "automatic_replacement": false
+  },
+  "correction": {
+    "verification_sha256": "9d1ac5dec9f13db7e91af2b286250129cbd2522d3d321e32d071a84857b48deb",
+    "passed": true,
+    "zero_input_inventory_verified": true,
+    "qualified_executor_ast_unchanged": true,
+    "terminal_referee_faint_accounting_fixed": true,
+    "historical_episode_unchanged": true,
+    "projection_used_for_fit": false
+  },
+  "unfrozen_successor": {
+    "status": "input_allocation_incomplete",
+    "latest_greedy_attempt_allocated": 49,
+    "required": 60,
+    "failed_family": "forced_replacement",
+    "failed_split": "comparison",
+    "failed_index": 2,
+    "attempt_limit_per_recipe": 20000,
+    "learning_dispatches": 0,
+    "limitation": "Generator failure is not proof no valid inventory exists. Preserve prior exclusions; do not fit a partial corpus."
+  },
+  "focused_tests_passed": 502,
+  "private_integration_tests_skipped": 13,
+  "targeted_typecheck_modules": 7,
+  "full_suite_rerun": false,
+  "new_model_fits": 0,
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "actual_stage": 461,
+  "actual_stage_462_exists": false,
+  "model_unchanged": true,
+  "gameplay_running": false,
+  "publication": false,
+  "next": "Bound input-only allocation repair and verify the full runner preparation path before freezing any separately authorized learning packet."
+}

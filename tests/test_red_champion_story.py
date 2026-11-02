@@ -136,8 +136,9 @@ def fixture(monkeypatch, fault=None):
             scene["queue"] = 5
         elif action.kind is MacroActionKind.WAIT:
             if scene["won"]:
-                reader.raw = replace(reader.raw, map_id=118)
-                scene["stage"] = 0
+                if fault != "epilogue_stuck":
+                    reader.raw = replace(reader.raw, map_id=118)
+                    scene["stage"] = 0
                 if fault == "held_terminal":
                     emulator.pressed_buttons = frozenset({"a"})
             elif reader.raw.map_id == 120 and not reader.raw.battle_state:
@@ -213,6 +214,7 @@ def fixture(monkeypatch, fault=None):
     monkeypatch.setattr(module, "RedTrainerPartyController", Controller)
     skill = module.RedCartridgeChampionSkill(runtime, actions, world)
     skill._prepared_budget = 0
+    skill._prepared_level_deficit = skill.maximum_level_deficit
     entry = RouteStep(113, (0, 5), "up", 120, (7, 3), "warp", MacroActionKind.MOVE, "land", "land")
     skill._prepared = module._Prepared(
         observe(), script, object(), reader.read_current_map_blocks(), world, approach, entry,
@@ -235,6 +237,27 @@ def test_owned_entry_single_taps_and_cartridge_epilogue_reach_concurrent_referee
     with pytest.raises(module.RedChampionStoryError, match="unconsumed"):
         skill.execute()
     assert len(inputs) == count
+
+
+@pytest.mark.parametrize("fault", [None, "epilogue_stuck", "missing_current_event"])
+def test_latched_history_cannot_finish_the_current_champion_escort(monkeypatch, fault):
+    skill, reader, inputs, scene = fixture(monkeypatch, fault)
+    original_observe = skill.runtime.adapter.observe
+    def historical():
+        observation = original_observe()
+        return replace(observation, game_state=replace(observation.game_state,
+            facts=observation.game_state.facts | {CHAMPION_DEFEATED_FACT, HALL_OF_FAME_FACT}))
+    skill.runtime.adapter.observe = historical
+    skill.rematch = skill._prepared_rematch = True
+    skill._prepared = replace(skill._prepared, before=historical())
+    if fault is None:
+        result = skill.execute()
+        assert reader.raw.map_id == 118
+        assert result.evidence["concurrent_champion_and_hall_of_fame"]
+    else:
+        with pytest.raises(module.RedChampionStoryError, match="epilogue"):
+            skill.execute()
+    assert scene["entry"] == scene["battle_calls"] == 1 and inputs
 
 
 def test_changed_champion_rematch_mode_refuses_before_input(monkeypatch):

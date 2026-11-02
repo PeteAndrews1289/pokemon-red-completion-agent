@@ -1,0 +1,243 @@
+{
+  "action_counts": {
+    "attack": 45,
+    "forced_switch": 4,
+    "party_faints": 5,
+    "pp_spent": 38,
+    "switch_prompt": 5,
+    "voluntary_switch": 9
+  },
+  "actions": 1132,
+  "audit_source_sha256": "e6d39663523b5a27680350f4fab1e3d0a1173cbe1ae840b3e40f6d1ab7886fba",
+  "battle_won": false,
+  "campaign_execution": false,
+  "campaign_stage": 463,
+  "campaign_story_objectives": 34,
+  "campaign_unchanged": true,
+  "champion_victory_qualified": false,
+  "choice_reconstruction_passed": true,
+  "concurrent_champion_and_hall_of_fame": false,
+  "copy_story_objectives": 34,
+  "decisions": 63,
+  "default_model_changed": false,
+  "deployed_unchanged": true,
+  "diagnosis_causal_claim": false,
+  "diagnosis_findings": [
+    "Blastoise lost93HP against Alakazam at decision3 before spending Surf PP;critical cause not established.",
+    "Nine voluntary switches and four low-HP switch flags merit focused review,not automatic relabeling as all incorrect.",
+    "Snorlax alone faced Venusaur with174HP and zero Headbutt/BodySlam PP;all four reserves fainted.",
+    "Venusaur remained189HP. Amnesia/Rest still had PP,so ordinary all-moves-exhausted Struggle was not eligible.",
+    "Five successful Rest PP spends restored HP during battle;HP lost1353 is cumulative,not starting HP.",
+    "One current-resource trajectory cannot separate insufficient starting supplies from avoidable decisions or RNG."
+  ],
+  "diagnosis_landmarks": [
+    {
+      "active_hp_after": 0,
+      "active_hp_before": 93,
+      "active_pp_after": [
+        25,
+        15,
+        7,
+        9
+      ],
+      "active_pp_before": [
+        25,
+        15,
+        7,
+        9
+      ],
+      "active_species": 28,
+      "active_status": null,
+      "enemy_hp_after": 143,
+      "enemy_hp_before": 143,
+      "enemy_species": 149,
+      "index": 3,
+      "kind": "attack",
+      "move_id": 57,
+      "party_hp_after": [
+        0,
+        96,
+        72,
+        228,
+        51
+      ],
+      "selected_party_slot": null
+    },
+    {
+      "active_hp_after": 174,
+      "active_hp_before": 174,
+      "active_pp_after": [
+        0,
+        20,
+        8,
+        0
+      ],
+      "active_pp_before": [
+        0,
+        20,
+        8,
+        0
+      ],
+      "active_species": 132,
+      "active_status": null,
+      "enemy_hp_after": 189,
+      "enemy_hp_before": 189,
+      "enemy_species": 154,
+      "index": 51,
+      "kind": "switch_prompt",
+      "move_id": null,
+      "party_hp_after": [
+        0,
+        0,
+        0,
+        174,
+        0
+      ],
+      "selected_party_slot": null
+    },
+    {
+      "active_hp_after": 0,
+      "active_hp_before": 116,
+      "active_pp_after": [
+        0,
+        14,
+        5,
+        0
+      ],
+      "active_pp_before": [
+        0,
+        14,
+        5,
+        0
+      ],
+      "active_species": 132,
+      "active_status": "sleep",
+      "enemy_hp_after": 189,
+      "enemy_hp_before": 189,
+      "enemy_species": 154,
+      "index": 63,
+      "kind": "attack",
+      "move_id": 156,
+      "party_hp_after": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "selected_party_slot": null
+    }
+  ],
+  "diagnosis_sha256": "6a0cbb3e307efadf82bf0073e1faefa0a1b79a2f23b03ac21b39fdc9f628107f",
+  "diagnostics": [],
+  "envelope_authenticated": true,
+  "envelope_sha256": "23224a81c5ebf9d213942e194d7a13043da46fe021f98cc746620779ae816f4f",
+  "error": "RuntimeError: retained isolated story-copy outcome: lost",
+  "event_records": 246,
+  "evidence_valid": true,
+  "execution_and_loss_handoff_passed": true,
+  "failed_broad_qualification_retained": true,
+  "fits": 0,
+  "focused_tests_passed": 270,
+  "frames": 102720,
+  "gameplay_running": false,
+  "independent_roots": 0,
+  "latency_ns": {
+    "maximum": 7163667,
+    "median": 2558667,
+    "total": 158272834
+  },
+  "limitations": [
+    "One known DEVELOPMENT trajectory,no independent generalization. All copies inherit source lineage.",
+    "Defeated five opponents but Venusaur remained189HP;not a near-victory claim.",
+    "Copy blackout cost11922and owned Revive consumption retained only in copy;actual23843cash and Revive1unchanged.",
+    "Hall-of-Fame integration is ROM-free tested,not native-qualified by a losing attempt.",
+    "Broad29/72versus30/72still fails;collection109/124,freshRed0/5and goal training counters unchanged."
+  ],
+  "metrics": {
+    "attack_turn_utility_sum": 1.5938760553409466,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 7,
+    "opponent_faints": 5,
+    "party_faints": 5,
+    "party_hp_lost": 1353,
+    "party_pp_spent": 38,
+    "party_status_changes": 10,
+    "policy_latency_ns_max": 7163667,
+    "policy_latency_ns_mean": 2512267.206349206,
+    "policy_latency_ns_min": 9208,
+    "selected_move_pp_spends": 38,
+    "teacher_interventions": 0
+  },
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "money": 11921,
+  "money_delta": -11922,
+  "native_epilogue_tested": false,
+  "new_registrations": 0,
+  "new_train_labels": 0,
+  "next_campaign_stage_created": false,
+  "next_decision": "One prospective isolated diagnostic to separate starting HP/PP sufficiency from switch/conservation decisions;no earned dispatch,blind refit,grinding or replay of this consumed trial.",
+  "opponent_faints": 5,
+  "outcome": "lost",
+  "outcome_sha256": "30d0edefa1129829b05e49b1f52eb279e462d56d0568348bfdb3e4aa8ab87e76",
+  "partition": "development",
+  "party_hp": [
+    200,
+    118,
+    144,
+    250,
+    153
+  ],
+  "party_levels": [
+    63,
+    54,
+    54,
+    52,
+    54
+  ],
+  "plan_sha256": "2543c80af5a67c040286b7fb09f20d00d47f56aea57d08932802ba1ff486f26f",
+  "private_audit_sha256": "3155c4480136f4977f64b3a7307d04485cd2daae898dfac13811d276f38c417f",
+  "promoted": false,
+  "recovery_authority": "Operator-approved deterministic support;not a model-selected recovery goal,despite generic provider capability label.",
+  "recovery_items_used": 1,
+  "recovery_learned_choice": false,
+  "recovery_report": {
+    "actions_executed": 56,
+    "evidence": {
+      "after_hp": 72,
+      "after_status": 0,
+      "before_hp": 0,
+      "bounded": true,
+      "item_id": 53,
+      "learned_authority": "goal_choice_only",
+      "owned_items_consumed": 1,
+      "party_index": 2,
+      "schema": "pokemon.red.faint-aware-field-recovery.v1",
+      "target_selection": "deterministic_fainted_then_lowest_hp_fraction",
+      "whole_party_restored": false
+    },
+    "frames_executed": 4752
+  },
+  "risk_counts": {
+    "attack": 45,
+    "attack_choices_while_asleep": 5,
+    "attacks_without_positive_power_coverage": 12,
+    "control_margins_within_0_05": 0,
+    "forced_switch": 4,
+    "status_move_choices": 15,
+    "switch_choices_below_quarter_hp": 4,
+    "switch_prompt": 5,
+    "type_immune_attacks": 0,
+    "voluntary_switch": 9,
+    "zero_power_choices_with_covered_alternative": 0
+  },
+  "runner_sha256": "ec41246a19089cf85a31ea008748ede80b1dabb628bbfba41752524abea22f2f",
+  "safe": true,
+  "schema": "pokemon.red.champion-candidate-copy-audit.v1",
+  "seconds": 5.886316957999952,
+  "selected_choices": 63,
+  "session_id": "2026-09-25-champion-candidate-copy",
+  "source_commit": "2ce16b41b099e01531c2c3a2e9ad9f201026a481",
+  "source_sha256": "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6",
+  "terminal_sha256": "b2fc5fc400ffab1a3bacd93ef21a15a1d825422484bb033806ac1f5f566a456f"
+}

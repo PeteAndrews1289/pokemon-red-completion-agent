@@ -1,0 +1,19 @@
+{
+  "schema": "pokemon.red.league-challenge-development-admission.v1",
+  "partition": "DEVELOPMENT",
+  "authorization": "Owner-authorized continuous two-hour development, preserving actual Agatha loss and native recovery before a prepared rechallenge.",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "recovered_root_sha256": "0a8d06af179f3dda4b54759154bef48db866eb3a4e4deeabb587f03d0e2d338d",
+  "objectives": ["defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"],
+  "source_binding": "Each one-use dispatch independently pins its exact native descendant source, live cartridge target, immutable plan, code, model and budgets.",
+  "rechallenge": "Explicitly bound boolean permits native re-entry after retained failure. Historical quest facts never substitute for current trainer flags.",
+  "combat": "Frozen learned attacks/switches only. No teacher fallback, battle items, save edits, fitting, favorable-copy loading or repeated identical-source attempts.",
+  "support": "Declared cartridge navigation, opening lead and useful owned field recovery; ordinary purchases spend actual cash without item sales.",
+  "limits": {"battles_per_dispatch": 1, "maximum_decisions": 80},
+  "copy_first_for_new_mechanics": true,
+  "league_income_admission": false,
+  "default_promotion": false,
+  "fit_allowed": false,
+  "fresh_run_qualification": false,
+  "limitations": ["Prospective bounded-development permission, not measured League mastery.", "Copy and campaign outcomes from the same source are correlated."]
+}

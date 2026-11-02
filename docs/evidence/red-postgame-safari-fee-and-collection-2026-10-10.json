@@ -1,0 +1,641 @@
+{
+  "active_native_worker": false,
+  "active_worker_segment": null,
+  "authority": "151 broader goals;111 conditional League combat;K ordinary combat. Normal execution, inner doses and medicine safeguards are disclosed support.",
+  "champion_hall_of_fame_segment": 94,
+  "closed_utc": "2026-10-10T19:45:25+00:00",
+  "coin_procurement112": {
+    "actual_followthrough": {
+      "registered": true,
+      "remaining_purchase_cash": 3000,
+      "segment": 114,
+      "species_number": 137,
+      "step": 6
+    },
+    "cash_debit": 197000,
+    "coins_after": 9850,
+    "coins_before": 0,
+    "execution_owner": "deterministic_native_support",
+    "learned_quantity": false,
+    "model_selected": true,
+    "native_registration_from_procurement": false,
+    "purchases": 197,
+    "total_coin_cash": 200000
+  },
+  "completed_income_cycles_this_session": 1,
+  "copy_back": false,
+  "cost_delta": {
+    "actions": 69702,
+    "cash_debits": 237500,
+    "decisions": 78,
+    "frames": 7194972,
+    "heals": 8,
+    "seconds": 5465.7635950018885
+  },
+  "current_plan_revision": 72,
+  "current_registrations": 51,
+  "cutoff_utc": "2026-10-10T19:46:58+00:00",
+  "dojo_continuation": {
+    "actual_gift_step": 0,
+    "compulsory_control_is_learned_goal_choice": false,
+    "first_gift_attempt_segment": 112,
+    "gift_completed_on_first_attempt": false,
+    "navigation_and_gift_learned": false,
+    "no_restart": true,
+    "original_travel_and_control_failures_retained": true,
+    "prerequisite_combat_component": "frozen K",
+    "registered": true,
+    "retained_battle_handoff_segment": 114,
+    "retained_control_attempt_segment": 113,
+    "species_number": 106
+  },
+  "fee_repair": {
+    "all_reaudited_residuals": 0,
+    "cause": "Diagnostic admission fee required overall capture success rather than independent admission verification.",
+    "failed_capture_visits": 9,
+    "fee_total": 7000,
+    "focused_rom_free_tests": 184,
+    "historical_outcomes_changed": false,
+    "historical_segment": 106,
+    "initial_focused_tests": 180,
+    "listed_pre_entry_receipts_repaired": true,
+    "live_all_completed_admission_residuals": 0,
+    "live_completed_admission_total": 5000,
+    "live_completed_admissions": 10,
+    "live_failed_searches": 6,
+    "native_meter_changed": false,
+    "ruff_passed": true,
+    "source_sha256": "733d45318400f80ffa07859e10efb795b1c2da2ef392b361f007c3e09ad8ba36",
+    "test_sha256": "1d4f8d9d25b82aa75a144b94749a6232a383ac46be335a106a9c1d13cd0c76ba",
+    "verified_admissions": 14
+  },
+  "final_censor": {
+    "error": "controller reached its hard monotonic wall-time admission deadline",
+    "error_type": "ControllerWallTimeBudgetExhausted",
+    "failure_phase": "execution",
+    "safe_terminal": true,
+    "selected_kind": "manage_storage"
+  },
+  "final_episode_stop": {
+    "accounted_cash_spent": 5600,
+    "continuous_player": true,
+    "executed_decisions": 19,
+    "integrated_play": false,
+    "model_decisions": 18,
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "ordinary_setbacks": 4,
+    "schema": "pokemon.red.autonomous-option-result.v1",
+    "stop_reason": "execution_failed",
+    "successful_decisions": 14,
+    "support_decisions": 1,
+    "teacher_actions": 0
+  },
+  "final_validation": {
+    "all_originals_verified_against109": true,
+    "all_six_originals_active": true,
+    "at": [
+      10,
+      41
+    ],
+    "cash": 1908,
+    "checkpoint": 114,
+    "context_sha256": "c5e2ce137c8aa06421bd6755bd7a137121ebaececf0ebc1bf2dd927e6cb96d15",
+    "copy_back": false,
+    "frames": 0,
+    "inputs": 0,
+    "key_specimens": {
+      "106": 1,
+      "131": 1,
+      "133": 1,
+      "137": 1,
+      "150": 1
+    },
+    "levels": [
+      100,
+      55,
+      55,
+      63,
+      53,
+      64
+    ],
+    "map_id": 6,
+    "model_queries": 0,
+    "passed": true,
+    "registrations": 51,
+    "required_registered": 51,
+    "state_sha256": "dae0e9ea8644d55f69cdb146d79dc38321a006d5495f19bd3056e48b049f630a",
+    "whole_party_restored": false
+  },
+  "final_worker_exit_code": 0,
+  "fits_completed": 0,
+  "frozen_final_gate_count": 0,
+  "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+  "goal_selection": {
+    "actual_first_choice_confirmed": true,
+    "base_seed_changed": false,
+    "forced_target": false,
+    "mode": "model_exploration",
+    "teacher_labels": 0,
+    "weights_changed": false
+  },
+  "healing": {
+    "cash_preserved": true,
+    "evidence": {
+      "mechanic": "routed_restoration",
+      "model_queries": 0,
+      "navigation": "cartridge_route_with_existing_flee_support",
+      "restoration": {
+        "bounded": true,
+        "whole_party_restore": true
+      }
+    },
+    "hp_full": true,
+    "measured_cost": {
+      "actions": 132,
+      "cash_spent": 0,
+      "frames": 4608
+    },
+    "phase_seconds": {
+      "execution": 2.9614176669856533,
+      "menu_and_boundary_observation": 55.86561970796902,
+      "outcome_diagnostics": 0.0001888750120997429,
+      "selection_and_receipt": 0.02060495805926621,
+      "selection_diagnostics": 0.03312287502922118,
+      "terminal_observation": 0.056413249927572906,
+      "verification": 0.02941537497099489
+    },
+    "pp_full": true,
+    "registrations_preserved": true,
+    "segment": 107,
+    "specimen_counts_preserved": true,
+    "status": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "step": 0,
+    "verification": "succeeded"
+  },
+  "income107": {
+    "diagnostic_reaudit": {
+      "explained_net_cash_change": 20799,
+      "gross_spending_known": true,
+      "observed_net_cash_change": 20799,
+      "supported_receipts": [
+        {
+          "amount": 29799,
+          "evidence_path": "evidence.league_funding.observed_gross_income",
+          "kind": "trainer_income"
+        },
+        {
+          "amount": 0,
+          "evidence_path": "evidence.league_funding.sale_proceeds",
+          "kind": "item_sales"
+        },
+        {
+          "amount": 0,
+          "evidence_path": "evidence.league_funding.purchase_cost",
+          "kind": "purchases"
+        },
+        {
+          "amount": 6000,
+          "evidence_path": "evidence.pre_entry_support[0].evidence.money_spent",
+          "kind": "purchases"
+        },
+        {
+          "amount": 3000,
+          "evidence_path": "evidence.pre_entry_support[1].evidence.money_spent",
+          "kind": "purchases"
+        }
+      ],
+      "unexplained_net_cash_change": 0,
+      "unit": "cartridge_currency",
+      "unobserved_causes_not_inferred": true
+    },
+    "gross": 29799,
+    "incoming_owned_replacement": 3000,
+    "net_after_owned_replacement": 17799,
+    "net_cash": 20799,
+    "pre_entry_purchases": 9000
+  },
+  "income_component_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+  "latest_earned_hashes": {
+    "context": "c5e2ce137c8aa06421bd6755bd7a137121ebaececf0ebc1bf2dd927e6cb96d15",
+    "result": "f36e5309af88525f2ae5ba4dae5889edc7e345c9df92583a1a3d65c18e9c5e2f",
+    "state": "dae0e9ea8644d55f69cdb146d79dc38321a006d5495f19bd3056e48b049f630a"
+  },
+  "latest_earned_segment": 114,
+  "latest_retained_result": {
+    "at": [
+      10,
+      41
+    ],
+    "cash": 1908,
+    "censored_battle_checkpoint": null,
+    "completed": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "cross_victory_road",
+      "defeat_agatha",
+      "defeat_blaine",
+      "defeat_brock",
+      "defeat_bruno",
+      "defeat_champion",
+      "defeat_erika",
+      "defeat_giovanni",
+      "defeat_koga",
+      "defeat_lance",
+      "defeat_lorelei",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "enter_hall_of_fame",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_secret_key",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "context_sha256": "c5e2ce137c8aa06421bd6755bd7a137121ebaececf0ebc1bf2dd927e6cb96d15",
+    "error": null,
+    "field_ready": true,
+    "fits": 0,
+    "levels": [
+      100,
+      55,
+      55,
+      63,
+      53,
+      64
+    ],
+    "map_id": 6,
+    "new_origin": false,
+    "passed": true,
+    "released": true,
+    "spent": {
+      "actions": 571104,
+      "cash_debits": 773317,
+      "decisions": 1321,
+      "frames": 47214260,
+      "heals": 606,
+      "seconds": 30690.58479009499
+    },
+    "state_sha256": "dae0e9ea8644d55f69cdb146d79dc38321a006d5495f19bd3056e48b049f630a",
+    "training": 0,
+    "worker_stopped": true
+  },
+  "native_trade_failure": {
+    "all_original_individuals_located": true,
+    "cause": "A nonloanable original member was deposited before withdrawing a spare donor; the individual remained present in storage.",
+    "context_export_failed": true,
+    "error": "retained party lost or duplicated an individual",
+    "error_type": "ValueError",
+    "original_actions": 7825,
+    "original_cash_debits": 1500,
+    "original_frames": 569460,
+    "original_goal_attempts": 10,
+    "original_seconds": 704.4895937920082,
+    "postmortem_not_a_resumable_context": true,
+    "postmortem_result_recorded": true,
+    "raw_terminal_preserved": true,
+    "raw_terminal_sha256": "26f3005d9ed750610f062b6752d221df3e452b4cd873e7538f502196fb74e1c9",
+    "segment": 110,
+    "selected": "red-npc-trade:1",
+    "step": 9,
+    "trade_completed": false,
+    "worker_exit_code": 1
+  },
+  "native_trade_repair": {
+    "declared_loan_requires_repayment_port": true,
+    "deposit_admission_respects_existing_guard": true,
+    "original_individuals_not_trade_donors": true,
+    "proof_scope": "ROM-free changed-behavior checks and actual interrupted-loan restoration; full NPC-trade completion not claimed",
+    "public_ruff_passed": true,
+    "source_sha256": "fcc66c37407564768d73b1c2c39deb9eaa278a2bdf5612797d0952149f649737",
+    "successful_named_loan_settlement_connected": true,
+    "targeted_checks": 94,
+    "tests_sha256": "110a1c956bb78f852a9c4d010126ee26faa1419ade0a353a1d8802bf79b7490e"
+  },
+  "new_origin": false,
+  "new_registrations": [
+    {
+      "name": "Rhyhorn",
+      "number": 111,
+      "segment": 107,
+      "step": 5
+    },
+    {
+      "name": "Parasect",
+      "number": 47,
+      "segment": 107,
+      "step": 6
+    },
+    {
+      "name": "Paras",
+      "number": 46,
+      "segment": 107,
+      "step": 8
+    },
+    {
+      "name": "Scyther",
+      "number": 123,
+      "segment": 107,
+      "step": 13
+    },
+    {
+      "name": "Jigglypuff",
+      "number": 39,
+      "segment": 108,
+      "step": 0
+    },
+    {
+      "name": "Mewtwo",
+      "number": 150,
+      "segment": 110,
+      "step": 1
+    },
+    {
+      "name": "Lapras",
+      "number": 131,
+      "segment": 110,
+      "step": 2
+    },
+    {
+      "name": "Zubat",
+      "number": 41,
+      "segment": 110,
+      "step": 7
+    },
+    {
+      "name": "Hitmonlee",
+      "number": 106,
+      "segment": 114,
+      "step": 0
+    },
+    {
+      "name": "Tangela",
+      "number": 114,
+      "segment": 114,
+      "step": 2
+    },
+    {
+      "name": "Porygon",
+      "number": 137,
+      "segment": 114,
+      "step": 6
+    },
+    {
+      "name": "Shellder",
+      "number": 90,
+      "segment": 114,
+      "step": 7
+    },
+    {
+      "name": "Clefairy",
+      "number": 35,
+      "segment": 114,
+      "step": 9
+    },
+    {
+      "name": "Krabby",
+      "number": 98,
+      "segment": 114,
+      "step": 14
+    },
+    {
+      "name": "Diglett",
+      "number": 50,
+      "segment": 114,
+      "step": 15
+    },
+    {
+      "name": "Eevee",
+      "number": 133,
+      "segment": 114,
+      "step": 17
+    }
+  ],
+  "next_work": "Continue actual114 toward73 remaining local flags with151 exploration,K ordinary combat/scoped111 income and existing native collection/storage. Cash1908 after Porygon; qualify guarded boxed NPC trade if unavailable deposit admission blocks progress. No restart or DEVELOPMENT fit; explain broader architecture first.",
+  "normal_pc_return": {
+    "actions": 97,
+    "all_physical_stock_preserved": true,
+    "all_six_originals_active": true,
+    "cash_preserved": 202573,
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "field_ready": true,
+    "frames": 11616,
+    "guard_baseline_changed": false,
+    "inspection_frames": 0,
+    "inspection_inputs": 0,
+    "inspection_passed": true,
+    "model_queries": 0,
+    "original110_costs_retained": true,
+    "passed": true,
+    "registrations_preserved": 43,
+    "released": true,
+    "seconds": 3.276952875079587,
+    "segment": 111,
+    "temporary_restoration_only_declaration": true,
+    "worker_stopped": true
+  },
+  "ordinary_component_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "original_costs_retained": true,
+  "parameter_updates": 0,
+  "partition": "development",
+  "registration_delta": 16,
+  "remaining_native_registrations": 73,
+  "retained_partial": {
+    "cash_debit": 500,
+    "charged_in_native_budget": true,
+    "reason": "Controller wall-time admission deadline",
+    "receipt_unobserved": true,
+    "resume_source": true,
+    "segment": 107,
+    "step": 15,
+    "treated_as_failed_capture": false
+  },
+  "safari108": {
+    "admission_spend": 9500,
+    "capture_attempts": 4,
+    "captures": 0,
+    "encounters": 608,
+    "mean_execution_seconds": 39.20841442542396,
+    "mean_menu_seconds": 51.38135342554214,
+    "ordinary_misses": 19,
+    "original_outcomes_unchanged": true,
+    "terminal_censor": "wall_time_during_next_boundary_no_additional_fee",
+    "unexplained_cash": 0,
+    "visits": 19
+  },
+  "safari109": {
+    "actual_exit_code": 0,
+    "admission_spend": 1500,
+    "all_costs_retained": true,
+    "captures": 0,
+    "intentional_boundary_interruption": true,
+    "original_error_type": "KeyboardInterrupt",
+    "original_result_passed": false,
+    "paid_visits": [
+      {
+        "encounters": 42,
+        "error": null,
+        "exit_reserve": 26,
+        "fee": 500,
+        "resources": {
+          "safari_balls": 25,
+          "safari_steps": 26
+        },
+        "step": "step-000",
+        "throws": 1,
+        "verified": "failed"
+      },
+      {
+        "encounters": 50,
+        "error": null,
+        "exit_reserve": 26,
+        "fee": 500,
+        "resources": {
+          "safari_balls": 30,
+          "safari_steps": 26
+        },
+        "step": "step-001",
+        "throws": 0,
+        "verified": "failed"
+      },
+      {
+        "encounters": 40,
+        "error": null,
+        "exit_reserve": 26,
+        "fee": 500,
+        "resources": {
+          "safari_balls": 30,
+          "safari_steps": 26
+        },
+        "step": "step-002",
+        "throws": 0,
+        "verified": "failed"
+      }
+    ],
+    "safely_reserved_departures": 3
+  },
+  "safari_exposure_repair": {
+    "capture_probability_claim": false,
+    "capture_quota": 1,
+    "default_complete_paid_maximum_encounters": 500,
+    "explicit_encounter_bounds_preserved": true,
+    "features_changed": [
+      "execution_effort",
+      "uncertainty"
+    ],
+    "focused_tests_passed": 395,
+    "legacy_default_probe_maximum_encounters": 32,
+    "model_sha256_unchanged": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "native_slot_table_sha256": "cc7c8d55c379dd3bfcefd538aff7db3b479a9df12c5013469e8af40e4f1b6009",
+    "native_step_and_ball_exit_reserves_preserved": true,
+    "new_feature_names": 0,
+    "per_step_probability_claim": false,
+    "reason": "Actual remaining-target offers have unequal native slot weights, while repeated complete visits were still restricted to the short 32-encounter probe.",
+    "reassess": "After two completed paid visits under the corrected execution dose or fifteen minutes; ordinary misses are not exceptions. Do not automatically refit or start another subsystem.",
+    "reported_resources_before_departure": true,
+    "slot_weights": [
+      51,
+      51,
+      39,
+      25,
+      25,
+      25,
+      13,
+      13,
+      11,
+      3
+    ],
+    "source_hashes": {
+      "src/pokemon_red_completion/red_live_safari.py": "96cc301831bc7e161a1a1d2f27934e60d7d13be64eee2a490d75e59664628627",
+      "src/pokemon_red_completion/red_safari_acquisition.py": "2e35ea77b172e5cbbbc2ce88f19cbf1c4184e902176276e9eede9be32a0b5b2c",
+      "tests/test_red_live_safari.py": "345cd9c7e8cbc0c5d583237af722dc9704125a53badacdacdfa888ff5ca197ee",
+      "tests/test_red_safari_acquisition.py": "3c804c5f82472cfad30e8db840484bceb762708a17bf3cae46aae48e080c23e1"
+    },
+    "source_terminal_ordinal": 108,
+    "weight_denominator": 256,
+    "zero_input_shadow": {
+      "both_two_area_weight_assignments_tested": true,
+      "changed_choice": false,
+      "not_a_native_comparison": true,
+      "score_replay_error": 0,
+      "source": "native108-step013"
+    }
+  },
+  "schema": "pokemon.red.same-save-collection-session.v1",
+  "selector_reassessment": {
+    "base_seed_unchanged": true,
+    "choice_mode_changed": true,
+    "encounters": [
+      42,
+      50,
+      40
+    ],
+    "existing_exploration_only": true,
+    "fees_retained": 1500,
+    "forced_goal": false,
+    "greedy_failures_retained": true,
+    "overall_cutoff_utc": "2026-10-10T19:46:58+00:00",
+    "reassess": "After fifteen minutes of actual mixed selected play. Retain all sampled choices, setbacks and costs; fix ordinary execution errors in scope. A sampling-mode improvement is not evidence of parameter learning.",
+    "safari_balls_at_departure": [
+      25,
+      30,
+      30
+    ],
+    "safari_fixed_visits": 3,
+    "safari_steps_at_departure": [
+      26,
+      26,
+      26
+    ],
+    "source_error_type": "KeyboardInterrupt",
+    "source_field_ready": true,
+    "source_passed": false,
+    "source_released": true,
+    "source_status": "intentionally_interrupted_at_unstarted_next_goal_boundary",
+    "source_terminal_ordinal": 109,
+    "weights_changed": false
+  },
+  "session_id": "2026-10-10-two-hour-healing-safari-fee-and-collection",
+  "source_context_sha256": "3deef620b805162e4fd379aa7fe8af2091e13de2a2e5e7ab71370d26e5854101",
+  "source_result_sha256": "25fdbf312755efaa2772ed1ce1a7fec0c90e120283307db24bbce48d6173f85e",
+  "source_segment": 106,
+  "source_state_sha256": "2bb506ab99dd05d6b526f67b1949c312f8cd132b8c8f4e1bd5f67487333c4447",
+  "start_utc": "2026-10-10T17:46:58+00:00",
+  "starting_cash": 201374,
+  "starting_registrations": 35,
+  "status": "completed",
+  "trainer_income_recovery112": {
+    "cash_after": 2303,
+    "cash_before": 273,
+    "finite_income": true,
+    "item_sale": false,
+    "model_selected": true,
+    "ordinary_battle_component_unchanged": true,
+    "segment": 112,
+    "step": 4
+  },
+  "training_examples_added": 0,
+  "worker_stopped": true
+}

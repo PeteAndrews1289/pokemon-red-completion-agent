@@ -78,6 +78,21 @@ def test_status_does_not_forbid_living_target_and_is_preserved():
     verify_field_elixir(plan, raw, finished(raw))
 
 
+def test_opt_in_fainted_reserves_preserved_and_never_selected():
+    raw = replace(state(), party_hp=(0, 164), first_party_hp=0)
+    with pytest.raises(RedElixirPlanError):
+        plan_field_elixir(raw)
+    plan = plan_field_elixir(raw, allow_fainted_reserves=True)
+    assert plan.party_index == 1
+    verify_field_elixir(plan, raw, finished(raw))
+    with pytest.raises(RedElixirPlanError):
+        verify_field_elixir(plan, raw, replace(finished(raw), party_hp=(1, 164), first_party_hp=1))
+    with pytest.raises(RedElixirPlanError):
+        plan_field_elixir(replace(raw, party_hp=(0, 0)), allow_fainted_reserves=True)
+    with pytest.raises(RedElixirPlanError):
+        plan_field_elixir(raw, allow_fainted_reserves=1)
+
+
 @pytest.mark.parametrize("change", [
     {"game_started": 1}, {"battle_state": False}, {"battle_state": 2},
     {"party_count": True}, {"player_money": True}, {"event_flags": bytes(318)},

@@ -110,8 +110,9 @@ class RedBoundedPlayerObserver:
         if self.search_memory is not None:
             bindings = tuple(
                 replace(binding, search_history=self.search_memory.lookup(
-                    binding.search_memory_source, collection.required_specimens_sha256,
-                )) if binding.kind is GoalKind.ACQUIRE_SPECIES else binding
+                    binding.search_memory_source,
+                    binding.search_objective_sha256 or collection.required_specimens_sha256,
+                )) if binding.tracks_search_effort else binding
                 for binding in binding_set.bindings
             )
             by_ref = {binding.binding_ref: binding.opportunity for binding in bindings}

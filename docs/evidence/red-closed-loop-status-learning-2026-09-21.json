@@ -1,0 +1,182 @@
+{
+  "authority_promotions": 0,
+  "closed_loop": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "authority_promotions": 0,
+    "collection_delta": 0,
+    "completed_episode_replays": 0,
+    "decision_records": 5334,
+    "episodes": 1422,
+    "event_records": 27114,
+    "fits": 2,
+    "frames": 6874852,
+    "gameplay_running": false,
+    "giovanni_completed": false,
+    "independent_heldout_roots": 0,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 4200,
+    "new_target_contexts": 189,
+    "plan_sha256": "f2266db09f918c79c5811ba4a68d8380fc65a38d271fbed068d6425d80bb3062",
+    "prescribed_first_choices": 1134,
+    "recovered_preinput_timing_failures": 1,
+    "rounds": [
+      {
+        "actor_memory_writes": 0,
+        "all_event_and_terminal_hashes_verified": true,
+        "baseline_regret": 0.9379880563948824,
+        "candidate_regret": 0.9868695335921489,
+        "candidate_sha256": "63c4d7cbf26ee86a9e6cb484bd3a7e10562262778297d14b55fd4d0f6f1c699a",
+        "decision_records": 3027,
+        "episodes": 650,
+        "event_records": 14818,
+        "frames": 3852508,
+        "invalid_actions": 0,
+        "learned_continuation_or_evaluation_choices": 2457,
+        "new_target_contexts": 95,
+        "plan_sha256": "f2266db09f918c79c5811ba4a68d8380fc65a38d271fbed068d6425d80bb3062",
+        "prescribed_first_choices": 570,
+        "screen": {
+          "concerning_selections": 1,
+          "decisions": {
+            "candidate": 163,
+            "frozen": 154
+          },
+          "improved_won_status_cases": 3,
+          "passed": false,
+          "wins": {
+            "candidate": 34,
+            "frozen": 32
+          }
+        },
+        "status_move_attempts_including_prescribed": 1684,
+        "stopping_better": 16,
+        "stopping_vs_repetition_contrasts": 17,
+        "stops": {
+          "battle_won": 232,
+          "party_defeated": 403,
+          "player_turn_budget": 15
+        }
+      },
+      {
+        "actor_memory_writes": 0,
+        "all_event_and_terminal_hashes_verified": true,
+        "baseline_regret": 1.0164891533400073,
+        "candidate_regret": 0.6542996434755425,
+        "candidate_sha256": "fc4098a62bd910ba47860476c2be92ca05bd102c29f7ce0eb391352bcb93b0c7",
+        "decision_records": 1988,
+        "episodes": 644,
+        "event_records": 10636,
+        "frames": 2589354,
+        "invalid_actions": 0,
+        "learned_continuation_or_evaluation_choices": 1424,
+        "new_target_contexts": 94,
+        "plan_sha256": "f2266db09f918c79c5811ba4a68d8380fc65a38d271fbed068d6425d80bb3062",
+        "prescribed_first_choices": 564,
+        "screen": {
+          "concerning_selections": 0,
+          "decisions": {
+            "candidate": 180,
+            "frozen": 154
+          },
+          "improved_won_status_cases": 5,
+          "passed": true,
+          "wins": {
+            "candidate": 37,
+            "frozen": 32
+          }
+        },
+        "status_move_attempts_including_prescribed": 370,
+        "stopping_better": 15,
+        "stopping_vs_repetition_contrasts": 15,
+        "stops": {
+          "battle_won": 279,
+          "party_defeated": 351,
+          "player_turn_budget": 14
+        }
+      }
+    ],
+    "schema": "pokemon.red.closed-loop-status-audit.v1",
+    "status_move_attempts_including_prescribed": 2064,
+    "stops": {
+      "battle_won": 581,
+      "party_defeated": 812,
+      "player_turn_budget": 29
+    },
+    "unique_target_capture_ids": 109,
+    "verified_candidate_predictions": 427,
+    "withheld": {
+      "concerning_selections": 0,
+      "decisions": {
+        "candidate": 84,
+        "frozen": 81
+      },
+      "improved_won_status_cases": 1,
+      "passed": false,
+      "wins": {
+        "candidate": 18,
+        "frozen": 20
+      }
+    }
+  },
+  "collection_delta": 0,
+  "cost_sensitive": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "authority_promotions": 0,
+    "candidate_regret": 0.16915070873815077,
+    "candidate_sha256": "b8f3a53daf6e23b194ff34ba4a475a0cf3ea662731ad5dafdcebc460e05e369a",
+    "collection_delta": 0,
+    "decision_records": 365,
+    "episodes": 128,
+    "event_records": 1844,
+    "fits": 1,
+    "frames": 498776,
+    "gameplay_running": false,
+    "independent_heldout_roots": 0,
+    "initial_regret": 0.6542996434755425,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 365,
+    "new_target_contexts": 0,
+    "plan_sha256": "5bc0151734655b270278a104e312fb241e5a19e4f6013ac48df90c582b32de33",
+    "prescribed_first_choices": 0,
+    "reused_TRAIN_targets": 94,
+    "schema": "pokemon.red.cost-sensitive-status-audit.v1",
+    "screen": {
+      "concerning_selections": 18,
+      "decisions": {
+        "candidate": 211,
+        "frozen": 154
+      },
+      "improved_won_status_cases": 5,
+      "passed": false,
+      "wins": {
+        "candidate": 37,
+        "frozen": 32
+      }
+    },
+    "status_move_attempts_including_prescribed": 71,
+    "stops": {
+      "battle_won": 69,
+      "party_defeated": 59
+    },
+    "verified_candidate_predictions": 211,
+    "withheld": null
+  },
+  "fits": 3,
+  "gameplay_running": false,
+  "limits": [
+    "All three new candidates rejected; no live promotion",
+    "Generated heldout has shared TRAIN ancestry, not independent natural transfer",
+    "Cost-sensitive fresh holdout remains unopened; no extra fit authorized in either packet",
+    "Single-member status behavior, not multi-opponent attrition or Giovanni completion"
+  ],
+  "protected_sha256": {
+    "earned_story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032"
+  },
+  "schema": "pokemon.red.closed-loop-status-session.v1",
+  "total_decisions": 5699,
+  "total_episodes": 1550
+}

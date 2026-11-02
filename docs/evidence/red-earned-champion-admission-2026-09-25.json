@@ -1,0 +1,17 @@
+{
+  "authority": "frozen-risk-cost-champion-development",
+  "campaign_stage": 464,
+  "failed_broad_qualification_retained": true,
+  "maximum_battles": 1,
+  "maximum_decisions": 80,
+  "maximum_prebattle_owned_revives": 1,
+  "model_content_sha256": "905b7e5a8943278bee14d7cb1e55361c1bdb2445dd35e943382f24b2df39e3f4",
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "objective_id": "defeat_champion",
+  "owner_direction": "Continue: earned Champion attempt and conditional native loss recovery.",
+  "partition": "development",
+  "prohibited": ["copy-back", "retry", "fit", "forced loss", "default deployment", "ordinary funding", "wild execution", "automatic second League challenge"],
+  "recovery_qualification_sha256": "7ce91ccb12cfd118e9aa128033ac08a8cf0d0458d82bdb86b986ed1455ec5487",
+  "schema": "pokemon.red.earned-champion-admission.v1",
+  "source_sha256": "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6"
+}

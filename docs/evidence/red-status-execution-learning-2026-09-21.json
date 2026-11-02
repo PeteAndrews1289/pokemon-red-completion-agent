@@ -1,0 +1,163 @@
+{
+  "actor_memory_writes": 0,
+  "all_event_and_terminal_hashes_verified": true,
+  "authority_promotions": 0,
+  "branch_predictions": 2514,
+  "candidate_sha256": "0734686a10ffa0d231ea4b7456261f53b55d6e7762a1455fb3974af9118e5951",
+  "candidate_weight_norm": 50.626417190401696,
+  "collection_delta": 0,
+  "coverage": {
+    "measured": 126,
+    "not_reached_or_non_main": 376,
+    "predecision_sleep": 10
+  },
+  "decision_records": 3516,
+  "diagnostics": {},
+  "eligibility": [
+    {
+      "eligible_count": 92,
+      "excluded": [
+        {
+          "capture_id": "status-sequence-balanced-rest-0-0-post",
+          "reason": "predecision_sleep"
+        },
+        {
+          "capture_id": "status-sequence-balanced-rest-1-0-post",
+          "reason": "predecision_sleep"
+        }
+      ],
+      "input_count": 94,
+      "schema": "pokemon.red.status.predecision-learning-eligibility.v1"
+    },
+    {
+      "eligible_count": 94,
+      "excluded": [
+        {
+          "capture_id": "trajectory-balanced-rest-0-3-002",
+          "reason": "predecision_sleep"
+        },
+        {
+          "capture_id": "trajectory-balanced-rest-1-1-003",
+          "reason": "predecision_sleep"
+        },
+        {
+          "capture_id": "trajectory-balanced-rest-1-3-002",
+          "reason": "predecision_sleep"
+        }
+      ],
+      "input_count": 97,
+      "schema": "pokemon.red.status.predecision-learning-eligibility.v1"
+    },
+    {
+      "eligible_count": 126,
+      "excluded": [],
+      "input_count": 126,
+      "schema": "pokemon.red.status.predecision-learning-eligibility.v1"
+    }
+  ],
+  "eligible_group_sizes": [
+    92,
+    94,
+    126
+  ],
+  "episodes": 820,
+  "evaluation_predictions": 0,
+  "event_records": 17668,
+  "fit": {
+    "accepted_steps": 0,
+    "backtracked_steps": 0,
+    "groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 0,
+          "high_cost_errors": 0,
+          "regret": 0.0001270298585647104
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 11,
+          "high_cost_errors": 7,
+          "regret": 0.668523548768489
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 2,
+          "high_cost_errors": 0,
+          "regret": 0.00461430054251136
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.774339628106996
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 7,
+          "high_cost_errors": 3,
+          "regret": 0.25334219438700195
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 15,
+          "high_cost_errors": 10,
+          "regret": 0.7172800121144665
+        }
+      }
+    ],
+    "protected_preferences": 182,
+    "rejected_steps": 0,
+    "retention_regressions": 0,
+    "solver_result": {
+      "anchor_l2": 0.001,
+      "iterations": 2000,
+      "loss": 0.1595820393433659,
+      "message": "Iteration limit reached",
+      "minimum_constraint_slack": 0.00019686561150393522,
+      "parameter_distance": 64.12284681338397,
+      "solver": "slsqp",
+      "success": false
+    }
+  },
+  "frames": 5107728,
+  "gameplay_running": false,
+  "independent_heldout_roots": 0,
+  "invalid_actions": 0,
+  "learned_continuation_or_evaluation_choices": 2760,
+  "new_target_contexts": 126,
+  "plan_sha256": "d0b8790cb496999ac904f3505c4c47438ebca7e9a40c5e25f1059b98812edd05",
+  "prescribed_first_choices": 756,
+  "result": {
+    "authority_promotions": 0,
+    "fit_gate": false,
+    "fits": 1,
+    "new_contexts": 126,
+    "screen": null,
+    "withheld": null
+  },
+  "retention": {
+    "minimum_constraint_slack": 0.00019686561149860615,
+    "protected_preferences": 182,
+    "retention_regressions": 0
+  },
+  "schema": "pokemon.red.status-execution-learning-audit.v1",
+  "snapshots": 136,
+  "source_commit": "9ce5e9fc6095f0e8f5ef3b867d6473911c1f4313",
+  "status_move_attempts_including_prescribed": 1550,
+  "stops": {
+    "battle_won": 451,
+    "party_defeated": 369
+  },
+  "trajectory_predictions": 246,
+  "unchanged_trajectories": 64,
+  "protected_artifacts_sha256": {
+    "earned_story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_record": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  }
+}

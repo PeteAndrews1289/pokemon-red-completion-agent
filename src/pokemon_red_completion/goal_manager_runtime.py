@@ -9,6 +9,7 @@ The executor cannot manufacture its own successful label.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from types import MappingProxyType
@@ -33,6 +34,8 @@ from pokemon_red_completion.goal_manager_trajectory import (
 )
 from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
+
+from .player_option_story_unit import OptionStoryUnit
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -139,8 +142,10 @@ class CompletionFirstGoalTeacher:
             assert opp.estimated_effort is not None
             assert opp.resource_quote is not None
             return (
-                float(opp.estimated_risk), float(opp.estimated_effort),
-                opp.resource_quote.cost_units, int(opp.resource_quote.expected_income > 0),
+                float(opp.estimated_risk),
+                float(opp.estimated_effort),
+                opp.resource_quote.cost_units,
+                int(opp.resource_quote.expected_income > 0),
             )
 
         available_by_kind: dict[GoalKind, int] = {}
@@ -185,7 +190,8 @@ class CompletionFirstGoalTeacher:
                 tuple(-value for value in resource_rank(opportunity))
                 if question.allow_resource_variants
                 and opportunity.kind is GoalKind.RESUPPLY
-                and opportunity.resource_quote is not None else ()
+                and opportunity.resource_quote is not None
+                else ()
             )
             return utility, opportunity.kind.value, resource_tie
 
@@ -213,6 +219,34 @@ GoalSelectionGuard = Callable[[BoundGoalSelection], None]
 
 
 @dataclass(frozen=True, slots=True)
+class GoalCashOutcome:
+    """Private state-bound accounting proof, never a strategic recommendation.
+
+    A single trainer returns after its first settled win/loss with no preceding
+    cash change. A preserving mechanic leaves wallet, position and approach
+    safety unchanged. Numeric upper bounds alone cannot mint either proof.
+    """
+
+    source_sha256: str
+    kind: str
+    loss_debit: int | None = None
+
+    def __post_init__(self):
+        if (
+            type(self.source_sha256) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", self.source_sha256) is None
+            or type(self.kind) is not str
+            or self.kind not in {"single_trainer", "preserves_cash_approach"}
+            or (
+                self.kind == "single_trainer"
+                and (type(self.loss_debit) is not int or not 0 <= self.loss_debit <= 500000)
+            )
+            or (self.kind == "preserves_cash_approach" and self.loss_debit is not None)
+        ):
+            raise GoalManagerRuntimeError("invalid private cash outcome certificate")
+
+
+@dataclass(frozen=True, slots=True)
 class ExecutableGoalBinding:
     """One adapter-private bounded skill and its independent verifier."""
 
@@ -225,13 +259,84 @@ class ExecutableGoalBinding:
     resource_quote: GoalResourceQuote | None = None
     search_history: GoalSearchHistory | None = None
     search_source_ref: str | None = None
+    search_objective_sha256: str | None = None
+    story_objective_ref: str | None = None
+    # Adapter-private exposure, authenticated by the state-bound executor.
+    # None retains conservative admission. Never a policy feature or fake quote.
+    maximum_cash_debit: int | None = None
+    # Private execution purpose, never a feature or strategic recommendation.
+    # PP-only recovery cannot satisfy an unrelated HP/status safety override.
+    health_safety_recovery: bool = True
+    # Known execution scope, not an objective identity or observed reward.
+    # A selected approach still requires a separately selected native phase.
+    story_approach_only: bool = False
+    cash_outcome: GoalCashOutcome | None = None
+    story_unit: OptionStoryUnit | None = None
 
     def __post_init__(self) -> None:
-        if self.search_source_ref is not None and (
-            not isinstance(self.search_source_ref, str) or not self.search_source_ref
-            or self.kind is not GoalKind.ACQUIRE_SPECIES
+        if self.story_unit is not None and (
+            type(self.story_unit) is not OptionStoryUnit
+            or self.kind is not GoalKind.ADVANCE_STORY
+            or self.story_objective_ref is None
+            or self.story_unit.requires_further_selected_unit != self.story_approach_only
         ):
-            raise GoalManagerRuntimeError("search source must bind an acquisition")
+            raise GoalManagerRuntimeError("story unit differs from certified executable scope")
+        if self.cash_outcome is not None and (
+            type(self.cash_outcome) is not GoalCashOutcome
+            or self.resource_quote is not None
+            or (
+                self.cash_outcome.kind == "single_trainer"
+                and (
+                    self.kind is not GoalKind.ADVANCE_STORY
+                    or self.story_approach_only
+                    or self.story_objective_ref is None
+                    or self.maximum_cash_debit != self.cash_outcome.loss_debit
+                )
+            )
+            or (
+                self.cash_outcome.kind == "preserves_cash_approach"
+                and (self.kind is not GoalKind.DEVELOP_TEAM or self.maximum_cash_debit != 0)
+            )
+        ):
+            raise GoalManagerRuntimeError("cash outcome certificate differs from executable scope")
+        if type(self.story_approach_only) is not bool or (
+            self.story_approach_only and self.kind is not GoalKind.ADVANCE_STORY
+        ):
+            raise GoalManagerRuntimeError("invalid private story approach scope")
+        if type(self.health_safety_recovery) is not bool or (
+            not self.health_safety_recovery and self.kind is not GoalKind.RESTORE_TEAM
+        ):
+            raise GoalManagerRuntimeError("invalid private health-safety recovery purpose")
+        if self.maximum_cash_debit is not None and (
+            type(self.maximum_cash_debit) is not int
+            or not 0 <= self.maximum_cash_debit <= 999999
+            or self.resource_quote is not None
+        ):
+            raise GoalManagerRuntimeError("invalid or conflicting private cash exposure")
+        if self.story_objective_ref is not None and (
+            type(self.story_objective_ref) is not str
+            or not self.story_objective_ref
+            or self.kind is not GoalKind.ADVANCE_STORY
+        ):
+            raise GoalManagerRuntimeError("story context must bind a story objective")
+        if self.search_source_ref is not None and (
+            not isinstance(self.search_source_ref, str)
+            or not self.search_source_ref
+            or self.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EXPLORE}
+        ):
+            raise GoalManagerRuntimeError("search source must bind acquisition or discovery")
+        if self.search_objective_sha256 is not None and (
+            not isinstance(self.search_objective_sha256, str)
+            or re.fullmatch(r"[0-9a-f]{64}", self.search_objective_sha256) is None
+            or self.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EXPLORE}
+        ):
+            raise GoalManagerRuntimeError(
+                "search objective must bind acquisition or discovery SHA256"
+            )
+        if self.kind is GoalKind.EXPLORE and (
+            (self.search_source_ref is None) != (self.search_objective_sha256 is None)
+        ):
+            raise GoalManagerRuntimeError("discovery search requires both source and objective")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise GoalManagerRuntimeError("goal binding reference must be non-empty")
         if not isinstance(self.kind, GoalKind):
@@ -240,6 +345,16 @@ class ExecutableGoalBinding:
             raise GoalManagerRuntimeError("goal binding requires executor and verifier callables")
         # Reuse the policy contract's strict normalized-metric validation.
         _ = self.opportunity
+
+    @property
+    def tracks_search_effort(self) -> bool:
+        # Acquisition retains its legacy fallback. Only explicitly bound search
+        # exploration uses this memory; generic exploration is not a failed search.
+        return self.kind is GoalKind.ACQUIRE_SPECIES or (
+            self.kind is GoalKind.EXPLORE
+            and self.search_source_ref is not None
+            and self.search_objective_sha256 is not None
+        )
 
     @property
     def search_memory_source(self) -> str:
@@ -315,9 +430,11 @@ class GoalBindingSet:
         return GoalManagerQuestion(
             situation=situation,
             opportunities=self.opportunities,
-            allow_resource_variants=(self.allow_resource_variants
-                                     if allow_resource_variants is None
-                                     else allow_resource_variants),
+            allow_resource_variants=(
+                self.allow_resource_variants
+                if allow_resource_variants is None
+                else allow_resource_variants
+            ),
         )
 
 
@@ -350,9 +467,7 @@ class GoalManagerExecutionResult:
             "actions_executed": (
                 None if self.execution is None else self.execution.actions_executed
             ),
-            "frames_executed": (
-                None if self.execution is None else self.execution.frames_executed
-            ),
+            "frames_executed": (None if self.execution is None else self.execution.frames_executed),
             "decision_recorded": self.decision_recorded,
             "outcome_recorded": self.outcome_recorded,
             "private_binding_fields": 0,
@@ -384,7 +499,8 @@ def execute_goal_manager_decision(
     if not isinstance(selection_mode, GoalSelectionMode):
         raise TypeError("selection_mode must be GoalSelectionMode")
     question = trajectory.ordered_question(
-        situation, binding_set.opportunities,
+        situation,
+        binding_set.opportunities,
         allow_resource_variants=binding_set.allow_resource_variants,
     )
     selected = authority.select(question)
@@ -410,9 +526,7 @@ def execute_goal_manager_decision(
     metadata_provider = getattr(authority, "selection_metadata", None)
     if metadata_provider is not None:
         if not callable(metadata_provider):
-            raise GoalManagerRuntimeError(
-                "goal authority selection metadata provider is invalid"
-            )
+            raise GoalManagerRuntimeError("goal authority selection metadata provider is invalid")
         provided = metadata_provider()
         if not isinstance(provided, Mapping):
             raise GoalManagerRuntimeError("goal authority selection metadata is invalid")
@@ -427,9 +541,7 @@ def execute_goal_manager_decision(
     if require_durable_decision and not decision_recorded:
         trajectory.abandon_unrecorded_selection(pending)
         trajectory.require_settled()
-        raise GoalManagerRuntimeError(
-            "goal decision was not durably recorded before execution"
-        )
+        raise GoalManagerRuntimeError("goal decision was not durably recorded before execution")
     execution: GoalExecutionReport | None = None
     try:
         execution = binding.execute()
@@ -451,9 +563,7 @@ def execute_goal_manager_decision(
         trajectory.require_settled()
         raise
     except GoalExecutionBudgetExhausted:
-        verification = GoalVerification.failed(
-            GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
-        )
+        verification = GoalVerification.failed(GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED)
         outcome_recorded = trajectory.record_outcome(
             pending,
             status=verification.status,

@@ -85,7 +85,7 @@ def _raw() -> RawGameState:
         party_max_hp=(60, 100, 80),
         party_status=(0, 0, 0),
         party_moves=((10, 91, 0, 0), (55, 57, 58, 0), (15, 19, 31, 0)),
-        party_pp=((20, 10, 0, 0), (15, 10, 5, 0), (30, 20, 15, 0)),
+        party_pp=((20, 10, 0, 0), (15, 10, 5, 0), (30, 15, 15, 0)),
     )
 
 
@@ -415,8 +415,7 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
         switch_assisted_battle_credit=True,
     )
     assert all(
-        row[0].unavailable_reason
-        is PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE
+        row[0].unavailable_reason is PartyDevelopmentUnavailableReason.BATTLE_POLICY_INCOMPATIBLE
         for row in capabilities
     )
 
@@ -438,8 +437,7 @@ def test_red_execution_capabilities_mask_dynamic_transition_and_move_failures() 
     )
     assert all(row[0].available for row in recovery_capabilities)
     assert all(
-        row[1].unavailable_reason
-        is PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE
+        row[1].unavailable_reason is PartyDevelopmentUnavailableReason.TRANSITION_UNAVAILABLE
         for row in recovery_capabilities
     )
 
@@ -512,6 +510,11 @@ def test_red_transition_guard_matches_existing_navigator_boundaries() -> None:
         22,
     )
     cave_source = replace(field_dig_source, map_id=MapId.DIGLETTS_CAVE)
+    assert not red_vermilion_training_transition_available(
+        replace(field_dig_source, map_id=MapId.AGATHAS_ROOM),
+        int(MapId.VERMILION_CITY),
+        15,
+    )
     assert not red_vermilion_training_transition_available(cave_source, 0, 17)
     assert red_vermilion_training_transition_available(
         cave_source,

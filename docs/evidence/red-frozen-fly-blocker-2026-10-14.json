@@ -1,0 +1,270 @@
+{
+  "schema": "pokemon.red.frozen-fly-blocker.v1",
+  "observed_at_utc": "2026-10-15T01:20:29.766995+00:00",
+  "run_id": "red-frozen-autonomous-run-20261014-fly-v1",
+  "partition": "development",
+  "official_final_acceptance": false,
+  "launch_verified": true,
+  "full_run_complete": false,
+  "started_at_utc": "2026-10-15T01:12:16.675795+00:00",
+  "exited_at_utc": "2026-10-15T01:17:06.965387+00:00",
+  "original_deadline_utc": "2026-10-15T17:12:16.675795+00:00",
+  "elapsed_process_seconds": 290.28975641704164,
+  "time_allowance_seconds": 57600,
+  "review_interval_seconds": 7200,
+  "first_review_due_utc": "2026-10-15T03:12:16.675795+00:00",
+  "periodic_reviews_due_at_exit": 0,
+  "supervisor_pid": 99758,
+  "worker_pid": 99771,
+  "sleep_prevention_pid": 99772,
+  "supervisor_session": 19808,
+  "viewer_pid": 99821,
+  "viewer_session": 64672,
+  "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+  "frozen_source_dirty": true,
+  "package_manifest_sha256": "5a549c764963ff3f115f8fddf3164d886618c3f8ce87b911e2d7a2df00802051",
+  "actor_settings_sha256": "8476355429c97399de79b64aaa4da441d21547278606dec69652ad7bd876bd57",
+  "candidate_acceptance_sha256": "9d250ff8db8bbeaa9455037cbe3e54bdc80ba31cd1760d788a7e42fbf1db8386",
+  "plan_sha256": "a0a4a1705453d5348d4a7e0d9097d15056684430cc2f018436daa6f76b537573",
+  "package_files_verified": 7877,
+  "environment_files_verified": 4512,
+  "protected_file_pins_unchanged": 61,
+  "actor_inputs_unchanged": true,
+  "seed": 2026101416,
+  "extra_boot_frames": 997,
+  "assistance": "Disclosed hybrid tactical, resource, capture and deterministic execution support; approved medicine reserve.",
+  "limits": {
+    "actions": 3000000,
+    "cash_debits": null,
+    "decisions": 6000,
+    "frames": 240000000,
+    "heals": 100000,
+    "seconds": 57600
+  },
+  "fresh_power_on": {
+    "verified": true,
+    "state_loads": 0,
+    "no_parent": true,
+    "no_resume": true,
+    "human_input": false,
+    "save_on_exit": false,
+    "origin_sha256": "019e0896bd669981bfafa1ba13dab4e7ef2b915ea723ac1956548d851f0520fb",
+    "rom": {
+      "sha1": "ea9bcae617fdf159b045185467ae58b2e4a48b9a",
+      "sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+      "size_bytes": 1048576,
+      "title": "POKEMON RED"
+    },
+    "opening_mechanics": "Declared Squirtle opening; no teacher combat"
+  },
+  "native_progress": {
+    "required_native_registrations": 7,
+    "registration_delta_from_starter": 6,
+    "badges": 1,
+    "completed": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock",
+      "power_on",
+      "reach_pewter",
+      "receive_pokedex"
+    ],
+    "party_levels": [
+      16,
+      6,
+      8,
+      3,
+      8,
+      5
+    ],
+    "model_decisions": 34,
+    "support_decisions": 3,
+    "ordinary_setbacks": 3,
+    "teacher_actions": 0,
+    "metered_decisions": 37,
+    "attribution_gap": 0,
+    "cash": 864,
+    "bag_stock": [
+      [
+        4,
+        5
+      ],
+      [
+        234,
+        1
+      ]
+    ],
+    "battle": {
+      "engaged_levels": [
+        16,
+        3,
+        8
+      ],
+      "exhausted_move_fraction": 0,
+      "last_opponent_hp_fraction": 0.14285714285714285,
+      "opponent_count": 4,
+      "opponent_levels": [
+        9,
+        9
+      ],
+      "opponents_defeated": 1,
+      "party_size": 6,
+      "pp_spent_fraction": 0.061611374407582936,
+      "result": "unresolved",
+      "suppressed_attack_fraction": 0,
+      "terminal_fainted_count": 3,
+      "terminal_hp_fraction": 0.3006535947712418,
+      "voluntary_switch_fraction": 0.6625
+    }
+  },
+  "spent": {
+    "actions": 18560,
+    "cash_debits": 4482,
+    "decisions": 37,
+    "frames": 1301005,
+    "heals": 22,
+    "seconds": 245.10693566710688
+  },
+  "startup_actions": 178,
+  "startup_frames": 22213,
+  "root_frames_include_startup": true,
+  "native_seconds": 249.04085166705772,
+  "segments": [
+    {
+      "id": "segment-001",
+      "result_sha256": "9b62079a42e3d34cbe69ac19a9e179302b007eeb00fff00881c944c18a9ac3e4",
+      "context_sha256": "3531720f7b97079dc5f8f23bae10b95cec505528af81a3ce1a0146272cf13ed9",
+      "terminal_sha256": "a67b8c8fee152c132e80b754fd7ebdf30e67a892edae3007403ceb0e72060e79",
+      "continuation_reason": "automatic_chunk_renewal",
+      "model_decisions": 17,
+      "support_decisions": 3,
+      "ordinary_setbacks": 3,
+      "native_registrations": 3,
+      "badges": 0,
+      "spent": {
+        "actions": 9597,
+        "cash_debits": 3282,
+        "decisions": 20,
+        "frames": 681265,
+        "heals": 15,
+        "seconds": 132.86620079213753
+      }
+    },
+    {
+      "id": "segment-002",
+      "result_sha256": "40bd18178dd68f138216396d8d4814b657e1a583f2dc1b1a3289b9cd12c029d0",
+      "context_sha256": "899e1a8559fd22ea117d5f91f4acb333ec9b03053e713dfd250040d1177a3b98",
+      "terminal_sha256": "fa1e60176cf216cad92e44f8acb6d64ef414aebaab3e3eb8b562d9cef84a0fa4",
+      "continuation_reason": "native_execution_error",
+      "model_decisions": 17,
+      "support_decisions": 0,
+      "ordinary_setbacks": 0,
+      "native_registrations": 7,
+      "badges": 1,
+      "spent": {
+        "actions": 18560,
+        "cash_debits": 4482,
+        "decisions": 37,
+        "frames": 1301005,
+        "heals": 22,
+        "seconds": 245.10693566710688
+      }
+    }
+  ],
+  "blocker": {
+    "terminal_reason": "native_execution_error",
+    "selected_kind": "acquire_species",
+    "choice_mode": "model_exploration",
+    "candidates": 6,
+    "selected_index": 5,
+    "selected_sampling_probability": 0.06317966120421267,
+    "error_type": "RuntimeError",
+    "error": "retained trainer battle did not settle",
+    "failure_phase": "execution",
+    "map_id": 14,
+    "location": "Route3",
+    "at": [
+      6,
+      19
+    ],
+    "before_sha256": "bcbf86b7e590ddca6545574f9835a5a5da53d9ab884efe6564cb271349cef7d4",
+    "terminal_sha256": "fa1e60176cf216cad92e44f8acb6d64ef414aebaab3e3eb8b562d9cef84a0fa4",
+    "context_sha256": "899e1a8559fd22ea117d5f91f4acb333ec9b03053e713dfd250040d1177a3b98",
+    "battle_state_after": 2,
+    "field_ready": false,
+    "buttons_released": true,
+    "observed_cost": {
+      "actions": 2520,
+      "cash_spent": -415,
+      "completed_actions": 2520,
+      "frames": 218280
+    },
+    "elapsed_seconds": 24.65011875005439,
+    "diagnostic_observation": "Battle unresolved:66.25%voluntary-switch fraction,three faints; level16carry still alive against observed level9opponents. Switching is an investigation lead, not a proved cause or fix.",
+    "reached_fly_barrier": false,
+    "fly_fix_falsified": false,
+    "specific_cause_beyond_unsettled_battle_not_yet_qualified": true,
+    "remedy_not_implemented": true,
+    "scope": "Existing incidental-trainer battle handoff and battler, not a new strategic subsystem"
+  },
+  "retained_pins": {
+    "PLAN.json": "a0a4a1705453d5348d4a7e0d9097d15056684430cc2f018436daa6f76b537573",
+    "SESSION.json": "6247bcf6259342cb4c102b44178b2ac23e671021e7873e71aedbe0a1a44eb541",
+    "LAUNCH.json": "f2407e2e8db64d456c5104b35e3f26bd09e1fa310924277968b5af451e837ebd",
+    "RESULT.json": "f29a746df80bc9045a116630528e27c4ed1fb60f3dba2154839f543dddbfe367",
+    "PROCESS-EXIT.json": "2a42ceff94e02fc089248027d9f4c22a9da588ee366996d1eaa27afb4200f3ae",
+    "terminal.state": "fa1e60176cf216cad92e44f8acb6d64ef414aebaab3e3eb8b562d9cef84a0fa4",
+    "MONITOR.md": "20d87faecea6f3e76123739ff12ceacef0f7654f0bd284ec3c405b5002562dcf",
+    "REALIZED-CONFIGURATION.json": "8774300c917a6c3b3c7542cd533f9434df07efcf761bb511897220fdf62fc300",
+    "bootstrap/OPENING.json": "093c20d7110cf5659fe140a8fda9cfe3dcbe8d54ce4488e3112be8dbfd252af5",
+    "ISOLATED-IO.json": "c0a2972428aa6723e30a5920d62fd49904cbf89ee7931cc5dfb78abecff34191"
+  },
+  "failed_step_pins": {
+    "before.json": "ea00a09af81108bd9ecf2a9726913174b3a3ff1b3c11cef458f76494138320ea",
+    "selection-diagnostics.json": "661ac55644646125b392e0e227046eddb9c90582919280a9aaf4db711a43def7",
+    "intent.json": "ff17f9eb39a6eeaab23ecf4c6bee6781e2739db2d989be2bc8f402c0de0f59d3",
+    "cash-admission.json": "4207d04740967485617b4d966f66e202f141ed38a61168fd516ae99f3eeb42ae",
+    "execution-started.json": "84013636d5c47c9413d9cf1d4f0c680f42b17471548032db953039338431b7bc",
+    "outcome.json": "abc0fce7b28d2319aa667d2decd25b476f61fbed0363b93325b54c45ea1077d9",
+    "before.state": "bcbf86b7e590ddca6545574f9835a5a5da53d9ab884efe6564cb271349cef7d4",
+    "terminal.state": "fa1e60176cf216cad92e44f8acb6d64ef414aebaab3e3eb8b562d9cef84a0fa4",
+    "decision.json": "45d07db66f1b04892e36a20211119d1e3e1f8e0fd2ec31119b850df8fbddf215",
+    "search-memory-before.json": "1f1ebec4adc8803dfda6e59de01d6da1c28159f1186ef6042270203d75bae986"
+  },
+  "worker_exit_confirmed": true,
+  "recorded_worker_supervisor_sleep_processes_absent": true,
+  "exit_code": 0,
+  "released": true,
+  "safety_stop_reason": null,
+  "no_restart": true,
+  "diagnostic_state_loads": 0,
+  "completed_save_inputs": 0,
+  "previous_failed_run_inputs": 0,
+  "copy_back": false,
+  "runtime_llm_calls": 0,
+  "train_examples": 0,
+  "fits": 0,
+  "new_weights": 0,
+  "dashboard": {
+    "url": "http://127.0.0.1:8768/watch",
+    "selected_exact_run": true,
+    "status": "stopped",
+    "live_frame_feed_connected": false,
+    "live_frames_verified_during_play": true,
+    "retains_last_real_frame": true,
+    "last_png_bytes": 2503,
+    "last_png_sha256": "70cdde35948f8f68a3739548e3a5801f1f4510c89c10fbb998512ea0de7e14ae",
+    "controller_endpoints": 0,
+    "archived_frames": 0,
+    "viewer_outside_actor": true,
+    "initial_viewer_retry_for_missing_packaged_launcher": true,
+    "actor_affected_by_viewer_retry": false
+  },
+  "monitor": {
+    "id": "frozen-red-r14-read-only-monitor",
+    "status": "PAUSED",
+    "duplicate_created": false
+  },
+  "next": "Propose up to two hours on exact before/terminal copies: trace incidental trainer settlement and switching through existing engaged-story controller/battler; qualify a scoped repair without relaxing checks. No repair, copied gameplay, refit or fresh dispatch under this frozen request.",
+  "final_fresh_gates_advanced": 0
+}

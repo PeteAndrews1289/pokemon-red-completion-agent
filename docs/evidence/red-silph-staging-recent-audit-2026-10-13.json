@@ -1,0 +1,293 @@
+{
+  "schema": "pokemon.red.silph-staging-recent-audit.v1",
+  "session": "2026-10-13-silph-staging-recent-audit",
+  "partition": "development",
+  "status": "retained_actual_capture_pause_pending_decision",
+  "start_utc": "2026-10-13T05:16:13Z",
+  "cutoff_utc": "2026-10-13T08:16:13Z",
+  "gameplay_stopped_confirmed_utc": "2026-10-13T07:08:41Z",
+  "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+  "configuration_sha256": "a61bb2fa730e3f80555b9896d470545cee7d35a8d7752fbba19ad0a38c9f4c68",
+  "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+  "final_package_sha256": "f69a1e225280d0141984c85a5de0c1940a0a8fd826539b55d0d54f9cbce3c9c7",
+  "new_train_examples": 0,
+  "new_fits": 0,
+  "new_parameter_updates": 0,
+  "all_6941_data_inputs_unchanged": true,
+  "private_helpers_changed": 1,
+  "environment_unchanged": true,
+  "primary": {
+    "family": "red-r29-silph-sabrina-session-20261013-v1",
+    "terminal": "qualified-continuation/runs/segment-001",
+    "source_sha256": "3b8db626ce379481f7b94e28a54ae6baa4d0101b40e4f52b05dd33fcd794897c",
+    "terminal_sha256": "d51566bf073bf7f6d16ae4a85ab7722a9d5ffe33ffbe642ec7612486a5731ee3",
+    "context_sha256": "1b72d80046d59775e9138ffb3e9a4e51a28e891f2a5e7dd957e6444ef12b9e5f",
+    "result_sha256": "1ee1ac470ab9283c7d85d6dfa49e096a9dd026626a589166ae1467f760efcf4f",
+    "stopped_driver_sha256": "729d5d82d21a07ad14d86657c9248f1752d8f4e1c2d2526c9c341d8957f32b04",
+    "badges_before": 4,
+    "badges_after": 4,
+    "registrations_before": 31,
+    "registrations_after": 43,
+    "new_registrations": [
+      "pokemon:national:057",
+      "pokemon:national:058",
+      "pokemon:national:100",
+      "pokemon:national:096",
+      "pokemon:national:059",
+      "pokemon:national:084",
+      "pokemon:national:085",
+      "pokemon:national:066",
+      "pokemon:national:067",
+      "pokemon:national:095",
+      "pokemon:national:097",
+      "pokemon:national:024"
+    ],
+    "new_registration_names": [
+      "Primeape",
+      "Growlithe",
+      "Voltorb",
+      "Drowzee",
+      "Arcanine",
+      "Doduo",
+      "Dodrio",
+      "Machop",
+      "Machoke",
+      "Onix",
+      "Hypno",
+      "Arbok"
+    ],
+    "original_six_verified": true,
+    "initial_registrations_preserved": true,
+    "party_levels": [
+      26,
+      26,
+      29,
+      41,
+      46,
+      38
+    ],
+    "cash_before": 30815,
+    "cash_after": 15650,
+    "cash_debits": 15900,
+    "gross_income": 735,
+    "cumulative_costs": {
+      "actions": 436573,
+      "cash_debits": 31551,
+      "decisions": 651,
+      "frames": 35828485,
+      "heals": 531,
+      "seconds": 10301.424748000107
+    },
+    "new_costs": {
+      "actions": 143945,
+      "cash_debits": 15900,
+      "decisions": 104,
+      "frames": 12034025,
+      "heals": 168,
+      "seconds": 3053.1619549172465
+    },
+    "metered_decisions": 104,
+    "model_goal_choices": 102,
+    "deterministic_support_goal_choices": 1,
+    "compulsory_wild_recovery_prefaces": 1,
+    "flat_goal_outcomes": 103,
+    "successful_goal_outcomes": 88,
+    "verified_incomplete_outcomes": 12,
+    "unverified_budget_outcomes": 2,
+    "oneoff_capture_pauses": 1,
+    "original_trial": {
+      "goal_outcomes": 100,
+      "modes": [
+        {
+          "mode": "deterministic_safety",
+          "count": 1
+        },
+        {
+          "mode": "model_exploration",
+          "count": 99
+        }
+      ],
+      "successes": 86,
+      "verified_failures": 12,
+      "unverified_errors": 2,
+      "errors": [
+        {
+          "type": "ControllerFrameBudgetError",
+          "count": 1
+        },
+        {
+          "type": "ControllerWallTimeBudgetExhausted",
+          "count": 1
+        }
+      ],
+      "new_species": [
+        "pokemon:national:057",
+        "pokemon:national:058",
+        "pokemon:national:100",
+        "pokemon:national:096",
+        "pokemon:national:059",
+        "pokemon:national:084",
+        "pokemon:national:085",
+        "pokemon:national:066",
+        "pokemon:national:067",
+        "pokemon:national:095",
+        "pokemon:national:097",
+        "pokemon:national:024"
+      ],
+      "objectives": [],
+      "partial_evolutions": 5,
+      "training_battles": 915,
+      "execution_seconds": 2243.6334431695286,
+      "menu_seconds": 762.5336059494875,
+      "selection_seconds": 0.5914795433636755
+    },
+    "requested_silph_sabrina_targets_met": false,
+    "actual_censored_frame_terminal_retained": true,
+    "missing_checkpoint_metadata_repaired_without_inputs": true,
+    "primary_source_relaunches": 1,
+    "copied_gains_imported": false,
+    "red_restarted": false,
+    "progress_rollback": false,
+    "native_workers_stopped": true,
+    "live_driver_running": false,
+    "field_ready": false,
+    "battle_state": 1,
+    "location": {
+      "map_id": 23,
+      "at": [
+        61,
+        10
+      ]
+    },
+    "capture_target": "Route12 Snorlax",
+    "capture_success": false,
+    "remaining_balls": 0,
+    "target_hp": 138,
+    "target_max_hp": 138,
+    "target_status": "paralyzed",
+    "native_target_consumed": false,
+    "temporary_route12_retreat_authority": "awaiting explicit user answer",
+    "runtime_llm_calls": 0,
+    "full_fresh_autonomy_passed": false
+  },
+  "repairs": [
+    "Honor declared continuous travel only for an already fully quoted one-off staging approach; never activate target. Incomplete relevance quotes keep original map boundary and protected-state verification.",
+    "Recognize only the exact aggregate ControllerFrameBudgetError message for authenticated censored export and automatic budget classification. Closed-log,source,model,terminal and normal-inference rejection checks remain."
+  ],
+  "diagnostics": {
+    "native_copied_actions": 929,
+    "native_copied_frames": 48072,
+    "native_copied_metered_decisions": 5,
+    "native_copied_seconds": 38.281000290997326,
+    "native_copied_heals": 1,
+    "continuous_approach_copy": {
+      "model_mode": "greedy_execution_only",
+      "choices": 1,
+      "actions": 317,
+      "frames": 14040,
+      "target_map": 23,
+      "target_at": [
+        61,
+        10
+      ],
+      "activated": false,
+      "protected_state_unchanged": true
+    },
+    "recovery_copy": {
+      "compulsory_recovery": 1,
+      "model_choices": 3,
+      "healing_verified": true,
+      "staging_verified": true,
+      "subsequent_capture_paused": true,
+      "whole_copy_success_claim": false,
+      "copied_terminal_matches_actual_native_bytes": true,
+      "independent_transfer": false
+    },
+    "actual_pause_inspection": {
+      "inputs": 0,
+      "frames": 0,
+      "proof_sha256": "ab27ced2e8f296d6b2383929281b4955341a5036f6e06710812c23e8f2936529",
+      "weakening_attempts": 0,
+      "weakening_damage": 0,
+      "stop_reason": "unsupported_enemy_reply",
+      "enemy_effects": [
+        "FLINCH_SIDE_EFFECT2",
+        "SPECIAL_UP2_EFFECT",
+        "HEAL_EFFECT"
+      ]
+    },
+    "setup_failures_retained": [
+      "missing inspection output directory,zero-input",
+      "later-progress guard correctly refused earlier snapshot reconstruction,zero-input",
+      "wrong private model import,before emulator"
+    ],
+    "static_quote_result": "Two exact related zero-input quotes reduce remaining travel cost244to230 through distinct RockTunnel stairways. Selected collection goals take the player back; no planner-cycle bug is proved."
+  },
+  "audit": {
+    "recent_sessions": [
+      "docs/evidence/red-r29-cut-surge-readiness-2026-10-12.json",
+      "docs/evidence/red-unattended-handoffs-erika-scope-2026-10-13.json",
+      "docs/evidence/red-fuji-card-key-2026-10-13.json"
+    ],
+    "sequence_learner": "Keep deferred. Demonstrated gaps are control-retention,goal granularity,capture support and untrained existing readiness fields,not a need for a new planner or battler.",
+    "model_feature_coverage": {
+      "feature_count": 356,
+      "settled_examples": 151,
+      "challenge_count": 54,
+      "challenge_nonzero": 0,
+      "recent_count": 126,
+      "recent_nonzero": 0,
+      "deficit_count": 18,
+      "deficit_nonzero": 0,
+      "all_readiness_count": 252,
+      "all_readiness_nonzero": 28,
+      "note": "Some current health, spread, observed and budget interactions are nonzero. Zero direct challenge/recent/gap coefficients do not imply blindness to health, support-derived offers or changed legal menus.",
+      "zero_training_mean_and_default_scale_count": 198
+    },
+    "cumulative_recent_game_progress": {
+      "badges_before": 2,
+      "badges_after": 4,
+      "registrations_before": 28,
+      "registrations_after": 43,
+      "new_registrations": 15,
+      "parameter_updates": 0
+    },
+    "learned_stopping_proved": false,
+    "independent_transfer_proved": false,
+    "final_gates_passed": 0,
+    "final_gates_total": 5,
+    "stale_report_fields": "Erika evidence successful_goals18/failed_goals1 describe the initial attempt; use whole-session successful_goal_outcomes66/failed_goal_outcomes2,including59model choices,nine support and one preface.",
+    "immediate_decision": "Do not replay Red or rebuild the battler. Resolve the actual zero-ball one-off by explicit choice,then address capture preparation and matched TRAIN/deployment readiness through existing components."
+  },
+  "accounting": {
+    "original_session_allowance": {
+      "actions": 150000,
+      "frames": 12000000,
+      "decisions": 200,
+      "seconds": 7200,
+      "heals": 100000
+    },
+    "corrected_diagnostic_inclusive_allowance": {
+      "actions": 220000,
+      "frames": 18000000,
+      "decisions": 200,
+      "seconds": 7200,
+      "heals": 100000
+    },
+    "original_combined_frame_overshoot_preserved": 48065,
+    "note": "Both copies were not deducted from the already-running primary guard. Every individual native guard remained intact; the48065-frame combined overshoot remains disclosed,not relabeled an old-envelope pass. The prospective repair continuation carries all costs under the same cutoff.",
+    "data_storage": "Second candidate uses verified same-volume data hardlinks under the existing package format; no data,save or history bytes are changed or deleted."
+  },
+  "checks": {
+    "focused_history_launcher_static_tests": 311,
+    "focused_silph_gym_move_config_tests": 136,
+    "scoped_ruff": true,
+    "whitespace": true,
+    "full_suite": false,
+    "hosted_ci": false,
+    "no_publication": true,
+    "no_external_agents": true,
+    "no_cleanup": true
+  },
+  "next_work": "If Pete authorizes the exact no-ball Route12 retreat,use existing source-bound loss recovery and preserve unchanged registration;otherwise retain this exact pause. Then qualify the smallest existing capture-support/readiness improvement on copies and measured native TRAIN,never fit DEVELOPMENT or force a story branch."
+}

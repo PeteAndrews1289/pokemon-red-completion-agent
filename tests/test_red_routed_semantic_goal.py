@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, replace
+from hashlib import sha256
 from typing import Any
 
 import pytest
@@ -34,7 +35,11 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedSemanticTransportRoute,
     build_red_routed_semantic_goal_composer,
 )
-from pokemon_red_completion.route_executor import InterruptionReceipt, TraversalSnapshot
+from pokemon_red_completion.route_executor import (
+    InterruptionReceipt,
+    RouteExecutionError,
+    TraversalSnapshot,
+)
 from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.routed_semantic_goal import (
     RoutedSemanticGoalError,
@@ -262,6 +267,86 @@ def test_red_composition_routes_then_binds_the_real_semantic_goal() -> None:
     assert world.events.index("action:right") < world.events.index("provider_offer")
     assert world.events.index("provider_offer") < world.events.index("destination_execute")
     assert world.events[-1] == "destination_verify"
+
+
+@pytest.mark.parametrize("fault", [None, "generic", "unsettled", "terminal", "unverified",
+                                   "short_actions", "short_frames"])
+def test_verified_route_blackout_stays_failed_and_never_executes_destination(fault):
+    from pokemon_red_completion.red_player_engaged_story import SettledNativeTrainerLoss
+
+    world = _World()
+    world.save_state_bytes = lambda: b"settled-loss"
+    actions = CountingExecutor(world)
+
+    class Handler:
+        def handle(self, interruption):
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+            world.map_id, world.at, world.ready = 64, (3, 4), fault != "unsettled"
+            world.interruption = "battle:2" if fault == "unsettled" else None
+            if fault == "generic":
+                raise RouteExecutionError("unknown route defect")
+            child = GoalExecutionReport(2 if fault == "short_actions" else 1,
+                8 if fault == "short_frames" else 7, dict(
+                    source_sha256="a" * 64,
+                    terminal_sha256="b" * 64 if fault == "terminal"
+                    else sha256(b"settled-loss").hexdigest(),
+                    battle=dict(schema="pokemon.red.learned-trainer-completion.v1",
+                                outcome="lost", field_ready=True, money_delta=-946)))
+            loss = SettledNativeTrainerLoss(child, cash_before=1891, cash_after=945)
+            if fault == "unverified":
+                loss.evidence["verified"] = False
+            raise loss
+
+    transport = _transport(world, actions, interruption_handler=Handler())
+    binding = build_red_routed_semantic_goal_composer(
+        binding_ref="private:route-to-resupply", transport=transport,
+        destination=_destination(world, actions), estimated_effort=0.4,
+        estimated_risk=0.1, limits=RoutedSemanticGoalLimits(10, 100)).binding()
+    world.interruption, world.ready = "battle:2", False
+    if fault:
+        with pytest.raises(RouteExecutionError):
+            binding.execute()
+    else:
+        report = binding.execute()
+        assert report.actions_executed == 1 and report.frames_executed == 7
+        assert report.evidence["route_verified"] is False
+        assert report.evidence["destination_bound"] is False
+        assert report.evidence["destination_executed"] is False
+        assert report.evidence["budget_reconciled"] is True
+        assert report.evidence["route_setback"]["cash_lost"] == 946
+        assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
+        with pytest.raises(RedRoutedSemanticGoalError, match="unavailable"):
+            transport.authenticated_report()
+    assert "provider_offer" not in world.events
+    assert "destination_execute" not in world.events
+
+
+def test_route_loss_terminal_cannot_change_before_verification(monkeypatch):
+    import pokemon_red_completion.red_routed_semantic_goal as runtime
+    from pokemon_red_completion.red_player_engaged_story import SettledNativeTrainerLoss
+    from pokemon_red_completion.route_executor import RouteExecutionFailureReport
+
+    world, payload = _World(), [b"settled-loss"]
+    world.save_state_bytes = lambda: payload[0]
+    actions = CountingExecutor(world)
+    transport = _transport(world, actions)
+    binding = transport.route_binding()
+
+    def lost(plan, *args, **kwargs):
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        child = GoalExecutionReport(1, 7, dict(source_sha256="a" * 64,
+            terminal_sha256=sha256(payload[0]).hexdigest(), battle=dict(
+                schema="pokemon.red.learned-trainer-completion.v1", outcome="lost",
+                field_ready=True, money_delta=-946)))
+        loss = SettledNativeTrainerLoss(child, cash_before=1891, cash_after=945)
+        loss.attach_failure(RouteExecutionFailureReport(plan, loss.reason, world.observe(),
+            (), (), (), 0, 0))
+        raise loss
+
+    monkeypatch.setattr(runtime, "execute_route", lost)
+    report = binding.execute()
+    payload[0] = b"changed"
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
 
 
 @pytest.mark.parametrize("changed_origin", [False, True])

@@ -1,0 +1,286 @@
+# Historical snapshot — November 2, 2026
+
+Not current instructions. This preserves the prior reader page before CI documentation cleanup.
+Relative links are rebased for this archive location; historical results are unchanged.
+Original reader-page SHA-256: `942adedaa3ee207aaf7766e35df055978c832da3f79b42add516e1da232604b3`.
+
+## From a Pokémon teacher to a local learned player
+
+Current summary: October30,2026. The project remains unfinished; all runs are closed.
+[Mission](../../MISSION.md) · [Current status](../../ACTIVE_PRODUCT_STATE.md).
+
+## October30: a wrong observation, then a costly training venue
+
+The exact Forest comparison changed the local model's choice without new weights.
+It chose and beat the trainer. From the same origin Brock took18choices instead
+of89and6heals instead of43; collection side benefits differed, so this is a local
+story improvement, not a fivefold whole-game speedup.
+
+The next original midgame copy gained six registrations but stopped after26native
+minutes. Ponyta had made real XP progress; a productive venue stop was incorrectly
+classified as fatal. We retained that failure, repaired the narrow consumer and
+qualified a short continuation from its exact terminal. The copied continuation
+ends77/124. It does not erase the failure or qualify endurance.
+
+The logs expose why training dragged: frequent recovery made the Mansion much
+less productive than the earlier Cave dose. Recorded costs do not feed the current
+menu priors, and the venue model has zero weights on those11cost/prior inputs;
+wiring alone cannot fix the preference. Why those weights are zero remains open. Late play has a separate missing
+partial-interaction learning signal. Repeated cash-only fitting would not fix it.
+All current gates and fresh autonomous completion remain unproved. No new weights
+or actual-save registrations were added this block; all runs are closed.
+[Evidence and limits](../work-sessions/2026-10-30-forest-decision.md).
+
+## Earlier October30 findings, retained as history
+
+## October30: successful actions can still fail to advance the goal
+
+The original midgame copy reached84registrations and eight badges, then stopped
+on a routing error. Keep the complete failed tail:50minutes alone is not a clean
+endurance pass. A narrow repair subsequently crossed that exact failed passage.
+
+The medicine demand is now visible, but a new late-game copy earned19043 and
+spent18000on prize coins plus1800on balls, buying no medicine. It repeatedly
+returned to the same VictoryRoad work. The individual actions succeeded; no new
+story objective or registration completed in23minutes. Coins are legitimate
+collection stock, but those transactions do not prove useful medicine planning.
+
+Exact score readback exposes local-success rewards and cash-forecast/horizon
+mismatches. Menu/boundary construction also consumed31.6%of the closed midgame
+time. These are specific next experiments, not proof another broad revamp works.
+No new model learning or actual-save progress occurred; all copies are stopped.
+Baseline0c keeps two separate gate passes and an endurance failure; new2e has
+all gates unproved. Fresh autonomous Champion/Hall-of-Fame+124 remains open.
+[Closed session](../work-sessions/2026-10-30-midgame-medicine-active.md) ·
+[Focused Astra brief](../reviews/2026-10-30-medicine-continuity.md).
+
+## Earlier summary, retained as history
+
+Current summary: October 29, 2026. Pete Andrews directs this AI-assisted project.
+The aim is a model that chooses useful goals, fights, prepares and recovers,
+with enough reusable competence to learn later games with less teaching.
+[Mission](../../MISSION.md) · [Current status](../../ACTIVE_PRODUCT_STATE.md).
+
+## October 29, evening: stopping transfers; completion remains open
+
+The new useful-stock head bought seven Great Balls from a real deficit. It reused
+18 existing TRAIN outcomes from one origin; no development outcomes were fitted.
+An older candidate then exceeded 45 native minutes and earned two badges, but its
+late-game test exposed a healing-verification defect. Preserve both results.
+
+After the narrow healing repair, the current candidate trained while Lorelei was
+available, then chose Lorelei with two further preparation options still legal.
+Three directly trained specimens participated in the win. That proves the bounded
+preparation/stopping gate and the late-game half of the transfer gate on this build.
+It does not inherit the older build's midgame endurance pass.
+
+This copy beat all four Elite Four members, lost to Champion, recovered and
+re-entered the League. Later League battles used existing forced support; Lorelei
+was a parent choice. The initial Champion entry had two fainted members, low HP
+and no healing medicine. Recovery worked, but proactive medicine demand remains
+a specific interface gap. All copies are closed; actual progress stays22/124.
+
+Next test the original midgame case on the unchanged current build. Full fresh
+Champion/Hall-of-Fame plus124 remains unproved. Show the loss and recovery beside
+the successful menus; do not splice different candidates into one winning run.
+[Current session](../work-sessions/2026-10-29-replenishment-value.md).
+
+Earlier on October29, a different candidate proved a Raticate preparation chain
+and reached Champion/Hall of Fame, then failed its midgame Mansion test. That
+historical result remains in the [archived narrative](../history/2026-10-29-before-replenishment-project-narrative.md) and its dated session; it is
+not evidence that the current candidate completed the game.
+
+## Earlier October 29: supplier/capture closeout
+
+The supplier/capture block advanced the actual preserved DEVELOPMENT save from
+12 to22/124 registrations, with two badges. It earned Diglett,Drowzee,Weedle,
+Butterfree,Beedrill,Kadabra,Fearow,Raticate,Arbok and Gloom. All diagnostic gains
+remain excluded. Suppliers, optional non-damaging capture and strict faint recovery
+were qualified; conservative XP helper support exposed real evolution choices.
+The model also selected an active Cut lesson. No third badge is claimed.
+
+Four actual guests used47.45 metered native minutes and38model choices. The
+longest unchanged guest reached20.29minutes, so the45-minute target failed.
+The final Diglett attempt had no training wins and retained a nonordinary
+verification failure at cutoff, despite no runtime exception. All guests and
+controls are now closed. Repairs and gameplay XP changed no model parameters.
+
+One copied training audit attributed62.8%of frames to recovery/return, not a
+measured wall-time share. An obsolete healing-completion check is a narrow
+optimization target. Legal Surge travel appeared in every last-run menu but the
+model preferred evolutions. This separates support availability from model value.
+The new typed helper-headroom cause was not directly re-triggered natively.
+
+Next investigate reserve-aware admission before storage/setup, then the measured
+healer and sustained play. Earned-only TRAIN success/horizon contrasts remain
+conditional on informative, strictly matched data. No fresh acceptance follows.
+[Final scoreboard](../work-sessions/2026-10-28-supplier-capture.md).
+
+[Earlier narrative view](../chronicle/2026-10-28-project-narrative-before-publication.md).
+
+## The result we are trying to prove
+
+First complete a fresh model-directed Red story with concurrent Champion/Hall of
+Fame and all 124 declared legitimate registrations in the same save. Then meet
+the preregistered repeated-run reliability target before gated transfer work.
+The final player uses no runtime LLM, copied progress, save editing or hidden
+operator strategy. Deterministic navigation and declared mechanics remain support.
+The temporary League medicine-reserve rule is explicitly unlearned assistance.
+[Completion contract](../completion-contract.md) · [Development contract](../../NORTH_STAR.md).
+
+The route is a registered Pokédex goal, not a requirement to keep every form
+simultaneously. Version, trade, event and unavailable dependencies remain explicit.
+After Red's gate, the intended order is an unfamiliar compatible modification,
+Crystal and at least Emerald. Cross-game transfer is not yet demonstrated.
+[Mission and acquisition boundary](../../MISSION.md).
+
+## What works, and what its evidence means
+
+Earlier supported development lineages finish Champion/Hall of Fame and 124/124.
+Those are real same-save achievements within their declared ancestries. Restoration,
+repairs and supplied support prevent treating them as fresh frozen autonomous
+acceptance. Do not join different saves or edit away their failures.
+[Assisted completion assessment](../evidence/red-assisted-development-124-2026-10-22.json).
+
+The local student owns scoped goal and battle choices. Existing skills translate
+semantic observations and selected actions into cartridge inputs; the referee
+verifies outcomes. Teachers can create isolated TRAIN lessons but are absent from
+official evaluation. In-game XP is not a parameter update, and an execution fix
+does not by itself demonstrate learning.
+[Architecture](../architecture.md) · [Assistance policy](../assistance-policy.md).
+
+Windows supports the tested configuration with at most two bounded development
+workers. This is capacity and isolation evidence, not a doubling of useful learning
+or autonomous progress. Actual/full campaigns remain paused; isolated development
+tests follow the bounded plans in the current handoff.
+[Windows capacity evidence](../evidence/red-audit-readiness-2026-10-25.json).
+
+## October 26: useful preparation and a better switch choice
+
+The original combined candidate completes one exposed evolution/Misty preparation
+sequence with the same useful result at 7,460 → 1,282 actions and
+538,368 → 94,428 frames. Restores fall from 21 to 3 and faints from 12 to 2.
+This gain includes inherited changes; it cannot be attributed solely to the
+32-weight correction, nor generalized to a whole Red campaign.
+[Measured preparation comparison](../evidence/red-masked-native-validation-2026-10-26.json).
+
+The bounded masked correction changes exactly 32 weights and passes all 283
+declared retained constraints on their original projections. A later control fit
+changes 1,169 parameters and reduces meaningful TRAIN errors from 23 to 12 while
+passing 541 bounds. Expected probability regret worsens, and a trainer stress
+replay loses under the changed continuation. The configured component remains
+scoped to wild preparation; no general trainer upgrade follows.
+[Masked control correction](../work-sessions/2026-10-26-masked-correction.md) ·
+[Current learning record](../work-sessions/2026-10-26-masked-native-validation.md).
+
+Two measured TRAIN comparisons then expose a switch child that prefers nearly
+fainted reserves over a healthy carry. A 235-parameter switch correction passes
+all 289 historical switch ceilings plus the two new bounds, keeping control,
+move and damage components frozen. The constrained trajectory qualifies at step
+70 after exactly reproducing its retained 64-step prefix. All prior failures and
+duplicated computation remain charged. Successive parameter counts have different
+parents and should not be summed as unique project-wide learning.
+[Qualified local corrections](../evidence/red-masked-native-validation-2026-10-26.json).
+
+Complete natural-policy comparisons on three related/exposed wild cases retain
+wins while reducing faints from 13 to 2, turns from 20 to 7, and frames from
+37,020 to 10,188. Four healthy cases retain identical native endpoints and XP.
+The full evolution/Misty sequence retains 1,282 actions, 94,428 frames, three
+restores, two faints and 1,993 trainee XP. Identical work with different wall seconds
+is not a new speed gain. These copies carry zero independent-origin credit.
+[Native evidence and scope](../evidence/red-masked-native-validation-2026-10-26.json).
+
+## October 26, later: a productive control correction
+
+Four fresh TRAIN branches hold the current continuation fixed and measure attack
+against a healthy-reserve switch. The existing return favours switching by about
+0.98 in both critical cases; only the switch branches preserve the trainee's XP.
+One control-only fit changes 1,052 parameters, freezes switch, move and damage
+components, and passes all 801 declared numerical bounds. It repairs the six
+inherited numerical projection failures. The later six native trainer comparisons
+give mixed results, showing why old conditional labels are not current-trajectory
+oracles.
+[Current lesson and scope](../evidence/red-current-control-lesson-2026-10-26.json).
+
+In natural play, Psyduck now switches first, survives and gains 149 XP, instead
+of fainting for 0 XP. That useful battle takes 5,592 rather than 3,348 frames.
+This is productive training, not a speed gain. Sandshrew, Nidoran and four healthy
+cases retain exact endpoints; a prospectively reserved, never-fit related case
+also retains its endpoint with 149 trainee XP and no faints. The full preparation
+sequence still uses 1,282 actions / 94,428 frames and earns 1,993 trainee XP while
+completing evolution and Misty. The new correction is locally useful and retains
+that payoff; it does not improve this whole-sequence timing result.
+[Native comparisons](../evidence/red-current-control-lesson-2026-10-26.json).
+
+No reward or XP term changed. The new coverage was sufficient to fix this local
+decision under the existing learner and return. It does not prove that omitting a
+direct XP term is harmless in every preparation problem, or establish the unique
+cause of the earlier failures. Keep measuring useful trainee XP, survival and
+complete preparation costs separately.
+[Lesson interpretation](../work-sessions/2026-10-26-current-control-lesson.md).
+
+## Why the remaining checks matter
+
+The six historical trainer trajectories are now measured. Both models win five
+and lose one, but the candidate's return is lower in two cases and its frame
+count rises in four. One case reduces faints from two to one. Broad trainer
+nonregression therefore fails even though all numerical constraints pass.
+These outcomes remain permanently no-fit.
+[Current trajectory evidence](../evidence/red-current-control-lesson-2026-10-26.json).
+
+The candidate is provisionally qualified only for bounded DEVELOPMENT wild
+preparation with the tested support. It is not qualified for trainer deployment
+or globally adopted. Four further arms hold the same candidate continuation
+fixed on the two contrary trainer cases. Both matching arms reproduce their
+natural trajectories. One deficit starts with a worse opening switch; in the
+other, the new opening attack is better and the deficit comes from later play
+after the old opening. These are two local failure modes, not one blanket
+attack-or-switch rule. The result is restricted to the fixed zero-offset cases;
+all new outputs remain no-fit, with no numerical caps waived.
+[Scoped qualification and causal comparison](../evidence/red-current-control-lesson-2026-10-26.json).
+
+The retained switch corpus has trainer battles with parties of three or five;
+the new cases are six-party wild situations. Historical returns also mix timing
+and continuation policies. A choice's old short-horizon return is not an oracle
+for a newly composed full trajectory. The useful response is measured current
+coverage and native validation, rather than repeated uninformative fitting.
+[Evidence and limitations](../evidence/red-masked-native-validation-2026-10-26.json).
+
+## Next work and honest status
+
+October 27 adds an enabling native milestone: a retained-reference fit preserves old forecasts, while genuine parent/child use retains the historical Misty result. A shared live-terrain corridor repair completes a level20→21/Blaine lesson with456traineeXP. One9-channel TRAIN row is sealed and unadmitted; no nullspace fit or improved native policy is proved. The capacity interruption passed the deadline: the06:29audit occurred and the08:29audit was missed. All campaigns remain paused. [Closed work and limits](../work-sessions/2026-10-27-retained-stopping-correction.md).
+
+## History and presentation
+
+The [previous narrative](../history/2026-10-26-project-narrative-before-documentation-refresh.md)
+preserves the detailed October 13–23 checkpoints and earlier October 26 summaries.
+Use the [chronicle](../chronicle/README.md), [source index](../chronicle/SOURCE_INDEX.md)
+and dated work-session reports for historical details rather than treating an old
+“next” paragraph as a current command. The [YouTube treatment](../youtube-video-narrative.md)
+turns this record into an editable story while retaining assistance and claim limits.
+
+## October27, later: a correct fit can still choose the wrong battle
+
+The preparation consequence learner first exposes a retention/calibration tradeoff.
+Two corrected candidates fail their unchanged quality gates and remain rejected.
+A narrow opt-in utility budget and a joint feasibility check then produce a third
+head that keeps pooled old15 utility-MAE and passes all17-row TRAIN gates.
+The third model reduces local utility MAE0.404192→0.359571. The data still comes
+from one related origin; this does not prove broad learning.
+
+The decisive native test is negative. The qualified head is demonstrably used,
+yet challenges Misty twice instead of preparing and loses both times. Eight model
+choices finish without execution errors; no learned preparation or stopping is
+verified. Keep this distinction visible: running the model, fitting its lessons
+and playing well are separate accomplishments. The next useful question is why
+the measured TRAIN preference fails to carry into the actual offered choices.
+No actual campaign progress or global model adoption is added.
+[Current session](../work-sessions/2026-10-27-retention-correction17.md) ·
+[Fit and native evidence](../evidence/red-retention-correction17-2026-10-27.json).
+
+The final cached audit narrows this lesson: a+0.01 training preference reverses
+under modest stat/XP changes within individual training ranges. Also, the pooled
+retention cap hides legacy13 utility error0.307839→0.330481 because newer examples
+improve. These are concrete limits of the current evidence. Matched current-
+controller training and timing repetitions come before more fits or campaigns.
+The original numeric pass is retained honestly; no gate is rewritten afterward.

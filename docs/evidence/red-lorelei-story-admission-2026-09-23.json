@@ -1,0 +1,16 @@
+{
+  "schema": "pokemon.red.lorelei-story-development-admission.v1",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "story_admission_sha256": "d513b0fd3df081a86a6353ed74447e705e457395fbedf8a752b6b9af53717a29",
+  "objective": "defeat_lorelei",
+  "mode": "first_challenge_only",
+  "basis": "Exact existing damage, composition, Dig/Fly and story-development evidence. Owner requested bounded League integration; execution requires a separate prospective native packet.",
+  "battle_items_allowed": false,
+  "recoverable_faints": true,
+  "teacher_fallback_allowed": false,
+  "later_league_rooms_authorized": false,
+  "league_funding_authorized": false,
+  "rematch_authorized": false,
+  "native_qualification_claimed": false,
+  "development_fitting_allowed": false
+}

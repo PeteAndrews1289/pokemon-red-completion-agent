@@ -1,0 +1,342 @@
+{
+  "schema": "pokemon.red.league-preparation-ownership-result.v1",
+  "session_id": "2026-10-06-league-preparation-ownership",
+  "status": "closed_partial_parent_activation_blocked",
+  "partition": "development",
+  "independent": false,
+  "fit_allowed": false,
+  "started_at": "2026-10-06T12:47:26+00:00",
+  "native_finished_at": "2026-10-06T13:37:22+00:00",
+  "original_cutoff": "2026-10-06T15:47:26+00:00",
+  "family": "red-league-preparation-ownership-20261006-v1",
+  "private_audit_sha256": "f5bda08f1758bf301b6b512f6e4833267696c332550d251105a09a9e89379218",
+  "prospective_repair_sha256": "fdabcd0b1f6b5da6429f3cf9df55dfde6e1666850edad2e2c04e9bc5b4b2da24",
+  "components": {
+    "parent_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "recovery_head_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+    "wild_actor_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "scoped_story_actor_file_sha256": "e189983f79f7838f214e969f7cba19184c7392e546187b272bb61e40a76c8368"
+  },
+  "source_pins": {
+    "112": {
+      "state": "627b430eedecd58b6f088df991814779d393f4976cddcf513b397e2e550c341c",
+      "context": "fc49cddf627caeed5a495a16c77995587f4f200a520630fb7650e55de05c1f87"
+    },
+    "162": {
+      "state": "c08db1c92769c0a55703f4f8b5594a508c95405689d9d13f8c375ae405f01332",
+      "context": "3d77254c71d1f940a5a387f7c5c31dad2a22d695884def84b5d9216ab47f06dc"
+    }
+  },
+  "source_observations": {
+    "112": {
+      "levels": [
+        62,
+        28,
+        32,
+        21,
+        28,
+        35
+      ],
+      "owned": 11,
+      "cash": 6600,
+      "position": [
+        9,
+        6,
+        9
+      ],
+      "native_lorelei": false
+    },
+    "162": {
+      "levels": [
+        70,
+        28,
+        32,
+        21,
+        28,
+        35
+      ],
+      "owned": 11,
+      "cash": 5604,
+      "position": [
+        174,
+        5,
+        2
+      ],
+      "native_lorelei": false
+    }
+  },
+  "engineering": [
+    "Explicit Indigo nursing/preparation coordinates with fresh verification; defaults preserved.",
+    "Optional one/three-level above-reference DEVELOPMENT doses after typed observed defeat; actual opposition unchanged.",
+    "Exact scoped DEVELOPMENT Lorelei retry re-entry and normalization of independently verified ordinary loss.",
+    "Corrected new private-driver preview to derive trainer identity from the real battle contract; no hard-coded Erika quote."
+  ],
+  "preview_error": {
+    "consumed_arms": [
+      "112-baseline",
+      "112-head"
+    ],
+    "incorrect_opposition_levels": [
+      24,
+      24,
+      24
+    ],
+    "actual_lorelei_levels": [
+      54,
+      53,
+      54,
+      56,
+      56
+    ],
+    "strategic_inference_allowed": false,
+    "all_results_costs_retained": true,
+    "no_repeated_112_arms": true,
+    "interrupted_worker_exit_code": 130,
+    "actual_stop_confirmed": true,
+    "terminal_retained_field_ready": true
+  },
+  "arms": [
+    {
+      "arm": "112-baseline",
+      "interpretation": "invalid_preview_quarantined",
+      "result_sha256": "dbefc22f696793b65d5257fec7537f9285aaac1e8657dfd9b0ee332a7b3cf9eb",
+      "plan_sha256": "048bb862334029858a20ca8b6e9563c1cf4ee4c22622b62bee66df5b166876e5",
+      "driver_sha256": "dde330377e39f103b16c124fb666cc2daaef2ac5f7e7758ef0cbd59ecbc7f755",
+      "source_code_sha256": "ee99d98ca9961e3e0e1a2a7c089218e289bd916629ffb645c76c277b242a4287",
+      "raw_stop": "execution_failed",
+      "classified_stop": "restoration_limit_censored",
+      "model_selections": 7,
+      "support_selections": 1,
+      "child_queries": 0,
+      "inputs_attempted": 7150,
+      "inputs_completed": 7150,
+      "frames": 529992,
+      "seconds": 592.2800296670175,
+      "restorations": 12,
+      "cash_debits": 6300,
+      "wild_episodes": 17,
+      "wild_wins": 17,
+      "story_episodes": 1,
+      "story_wins": 0,
+      "terminal_state_sha256": "45cb9e6c117965d4230499c79fbb7ac4d6e8457531ff3c3d8edd0b30abb8f1ee",
+      "terminal_levels": [
+        62,
+        28,
+        33,
+        22,
+        30,
+        35
+      ],
+      "terminal_cash": 300,
+      "terminal_owned": 11,
+      "field_ready": true,
+      "released_controls": true,
+      "registration_delta": 0
+    },
+    {
+      "arm": "112-head",
+      "interpretation": "invalid_preview_quarantined",
+      "result_sha256": "ffb5d4050cfe921d04561780b2c9af30f8d547e3c27acf4384ca416442bfa0b1",
+      "plan_sha256": "ac3074100e83c7272c7a924591ab950e22372bedc8edd1c9fd6410c5ada1b3ad",
+      "driver_sha256": "dde330377e39f103b16c124fb666cc2daaef2ac5f7e7758ef0cbd59ecbc7f755",
+      "source_code_sha256": "ee99d98ca9961e3e0e1a2a7c089218e289bd916629ffb645c76c277b242a4287",
+      "raw_stop": null,
+      "classified_stop": "interrupted_invalid_preview",
+      "model_selections": 3,
+      "support_selections": 1,
+      "child_queries": 1,
+      "inputs_attempted": 2939,
+      "inputs_completed": 2938,
+      "frames": 226752,
+      "seconds": 247.56508612498874,
+      "restorations": 3,
+      "cash_debits": 6300,
+      "wild_episodes": 5,
+      "wild_wins": 5,
+      "story_episodes": 1,
+      "story_wins": 0,
+      "terminal_state_sha256": "91bcf2b281a6f8533e0a791f531d8d0f31040e8071eb2dae9cb3d59a9970d7fc",
+      "terminal_levels": [
+        62,
+        28,
+        33,
+        21,
+        29,
+        35
+      ],
+      "terminal_cash": 300,
+      "terminal_owned": 11,
+      "field_ready": true,
+      "released_controls": true,
+      "registration_delta": 0
+    },
+    {
+      "arm": "162-baseline",
+      "interpretation": "valid_prepared_pair_censored_parent_activation",
+      "result_sha256": "83ee2ff6a522405347e51b380c4181ed82842643592eaa17ba6ba93026cdd608",
+      "plan_sha256": "338f4d82957fe2c07092fd55e862d6e6eafcce4eaca69ced2643631122b31794",
+      "driver_sha256": "db2a38dba6cbb4dac2b6c68fb4c01a8ad60d8a3100eb04a671ca4d240fd656b8",
+      "source_code_sha256": "ee99d98ca9961e3e0e1a2a7c089218e289bd916629ffb645c76c277b242a4287",
+      "raw_stop": "execution_failed",
+      "classified_stop": "restoration_limit_censored",
+      "model_selections": 4,
+      "support_selections": 1,
+      "child_queries": 0,
+      "inputs_attempted": 5662,
+      "inputs_completed": 5662,
+      "frames": 396048,
+      "seconds": 471.855034667009,
+      "restorations": 12,
+      "cash_debits": 4800,
+      "wild_episodes": 20,
+      "wild_wins": 20,
+      "story_episodes": 0,
+      "story_wins": 0,
+      "terminal_state_sha256": "bf03fcea73e53f3dad3cc603e5f2e385450f32f9ac87f876442536a8d1000100",
+      "terminal_levels": [
+        70,
+        28,
+        33,
+        21,
+        29,
+        35
+      ],
+      "terminal_cash": 804,
+      "terminal_owned": 11,
+      "field_ready": true,
+      "released_controls": true,
+      "registration_delta": 0
+    },
+    {
+      "arm": "162-head",
+      "interpretation": "valid_prepared_pair_censored_parent_activation",
+      "result_sha256": "07874c94a30c6554b49a30ba3120a91defc76e719e70cc7967be38a7a0e8bb2b",
+      "plan_sha256": "b36302ec50255221cfdda3e600ac48a244d607b28f2ace97de39c7ed28133ae1",
+      "driver_sha256": "db2a38dba6cbb4dac2b6c68fb4c01a8ad60d8a3100eb04a671ca4d240fd656b8",
+      "source_code_sha256": "ee99d98ca9961e3e0e1a2a7c089218e289bd916629ffb645c76c277b242a4287",
+      "raw_stop": "execution_failed",
+      "classified_stop": "restoration_limit_censored",
+      "model_selections": 4,
+      "support_selections": 1,
+      "child_queries": 0,
+      "inputs_attempted": 5662,
+      "inputs_completed": 5662,
+      "frames": 396048,
+      "seconds": 471.58410924999043,
+      "restorations": 12,
+      "cash_debits": 4800,
+      "wild_episodes": 20,
+      "wild_wins": 20,
+      "story_episodes": 0,
+      "story_wins": 0,
+      "terminal_state_sha256": "bf03fcea73e53f3dad3cc603e5f2e385450f32f9ac87f876442536a8d1000100",
+      "terminal_levels": [
+        70,
+        28,
+        33,
+        21,
+        29,
+        35
+      ],
+      "terminal_cash": 804,
+      "terminal_owned": 11,
+      "field_ready": true,
+      "released_controls": true,
+      "registration_delta": 0
+    }
+  ],
+  "valid_pair": {
+    "arms": [
+      "162-baseline",
+      "162-head"
+    ],
+    "same_terminal": true,
+    "parent_model_selections_per_arm": 4,
+    "fully_reported_incomplete_preparation_goals_per_arm": 3,
+    "ordinary_preparation_setbacks_per_arm": 3,
+    "healing_cap_blocked_goal_per_arm": 1,
+    "child_queries": 0,
+    "lorelei_attempts": 0,
+    "kind_probability_mass": {
+      "develop_min": 0.8696694080925426,
+      "develop_max": 0.8868854506343103,
+      "story_min": 0.1116513474202866,
+      "story_max": 0.11311454936568976
+    },
+    "preparation_variants": 12,
+    "preparation_variant_scores_equal_within_boundary": true,
+    "selected_doses": [
+      {
+        "member": "Snorlax",
+        "level_before": 35,
+        "target": 36,
+        "level_after": 35,
+        "trainee_xp": 2108,
+        "party_xp": 3678
+      },
+      {
+        "member": "Blastoise",
+        "level_before": 70,
+        "target": 73,
+        "level_after": 70,
+        "trainee_xp": 1878,
+        "party_xp": 3156
+      },
+      {
+        "member": "Snorlax",
+        "level_before": 35,
+        "target": 36,
+        "level_after": 35,
+        "trainee_xp": 879,
+        "party_xp": 2507
+      }
+    ],
+    "meaning": "Parent activation is unproved under the declared allowance; neither recovery-head transfer nor Lorelei combat capability was tested by the valid pair."
+  },
+  "aggregate": {
+    "native_arms": 4,
+    "inputs_attempted": 21413,
+    "inputs_completed": 21412,
+    "frames": 1548840,
+    "native_seconds": 1783.2842597090057,
+    "restorations": 39,
+    "cash_debits_across_isolated_copies": 22200,
+    "wild_episodes": 62,
+    "wild_wins": 62,
+    "strategically_invalid_story_losses": 2,
+    "valid_child_queries": 0,
+    "source_edits": 0,
+    "train_delta": 0,
+    "fit_delta": 0,
+    "registration_delta": 0,
+    "authority_promotion_delta": 0
+  },
+  "supplied_support": [
+    "Ordinary mandatory ball resupply is deterministic safety, not learned resource selection.",
+    "Cartridge routes, training venue, transport escort and nursing mechanics are supplied.",
+    "Frozen K/e189 actors retain productive/prompt/status/PP tactical screens; this is not unassisted full-player qualification."
+  ],
+  "verification": {
+    "rom_free_focused_tests_passed": 1103,
+    "private_rom_free_preview_regression_assertions": 3,
+    "zero_input_repaired_source_admission": true,
+    "zero_input_terminal_audit": true,
+    "mypy_changed_source_files_passed": 5,
+    "scoped_ruff_remaining_findings": 6,
+    "scoped_ruff_note": "Remaining findings predate this session; introduced findings fixed. Whole-project static/metadata debt not cleared.",
+    "full_suite_pass_claimed": false,
+    "native_workers_exited": true,
+    "protected_sources_unchanged": true
+  },
+  "protected": {
+    "completed_terminal": "5a81496cc3be86d330593f0b00d92e71945e334b2b6068eb39dbb9e0ca20febe",
+    "completed_context": "f1161ee16070c1eae3569e7165a72b8c48c2c2df09db348ff0f2a24eb7c23a9f",
+    "previous_audit_report": "352b9670712ad5f54f79b178a836deeee3ac7c92d5f26eb50d4ac43d07aa0635",
+    "previous_audit_evidence": "46dfef12e26503944edf24fcbd2a67fe8cfb6009535bb1681f74643857884971",
+    "previous_closing_report": "6f2d5b362583f63f2231bd4a46451a6bcfefc985d544ba9d7cfa39e520d75fcc",
+    "previous_closing_evidence": "ff947351af41103f01f1e5753cfb65c21fd733c51235cfd1041ae9e7675530c2"
+  },
+  "decision": "Keep bounded preparation/recovery integration; do not promote the head or refit the battler from this test. Next reuse existing highest-score parent selection with an explicitly admitted scoped recovery child, continue earned terminals with carried costs and test actual head-owned choices.",
+  "next_session_report": "docs/work-sessions/2026-10-06-league-preparation-ownership.md",
+  "final_autonomous_red_gate_count": 0
+}

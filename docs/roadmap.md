@@ -1,11 +1,16 @@
 # Roadmap
 
+> Historical entries below use their original dates and scopes. Their “current”
+> or “next” wording is not a live instruction. Use [HANDOFF](../HANDOFF.md),
+> [active state](../ACTIVE_PRODUCT_STATE.md) and [seven goals](seven-goals.md).
+
+
 > **Historical work record.** This file preserves the detailed sequence of earlier experiments and
 > should not be read as the active plan. Start with the [mission](../MISSION.md),
 > [active product state](../ACTIVE_PRODUCT_STATE.md), and
-> [model-first roadmap](model-first-roadmap.md). The current endpoint is Model121 with86 registrations
-> and121 settled examples. The next boundary is an action-free inspection of its published terminal. Full fresh-run Red
-> story and local Pokédex completion must precede any ROM hack.
+> [model-first roadmap](model-first-roadmap.md). Earlier counters and next steps below describe
+> their historical checkpoints, not the current endpoint. Use the [handoff](../HANDOFF.md)
+> for continuation. Fresh model-directed Red completion must precede any ROM hack.
 
 ## September 5 bootstrap stop and final successor
 
@@ -1315,7 +1320,7 @@ Ordered next work:
     its path-free typed receipt externally. Then obtain a final independent authorization audit;
     only a favorable exact-v9 receipt may precede catalog custody and owner authorization.
 11. Independently attack that exact commit and live evidence using the
-   [directional-warp repair handoff](claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md).
+   [directional-warp repair handoff](history/retired-plans-2026-10-07/claude-sealed-directional-warp-repair-audit-handoff-2026-08-13.md).
    Only a typed `approved_for_authorization` verdict can satisfy the next gate.
 12. Obtain a custodian-supplied canonical path-free manifest for the twelve test captures. Do not
    add private-storage enumeration to the sealed code and do not treat later evaluation authority
@@ -1345,7 +1350,7 @@ learning scenarios**: sixteen train and eight validation. Scenarios 003, 007, 01
 qualify all six preregistered validation cost-baseline challenges. Counted collection remains 0/0 and all
 12 test situations remain sealed. Scenario 005 is also newly constructed and qualified. Exact
 receipts and the current state review are in the
-[August 12 audit](current-audit-2026-08-12.md).
+[August 12 audit](history/retired-plans-2026-10-07/current-audit-2026-08-12.md).
 The [paired capability receipt](evidence/strategic-validation-cost-baseline-capability-audit-2026-08-12.json)
 records six unique cost-baseline disagreements and a best-case exact p-value of 0.03125; it does
 not claim that a model has been trained or evaluated.
@@ -1393,7 +1398,7 @@ train root 01. Exact historical measurement found only three candidate-order-inv
 nine successful train rows. The proposed validation set would repeat those contexts twice, so it
 cannot test unseen-choice generalization or establish superiority to the 2/3 cost baseline.
 
-The new item 0 is the [experiment-design audit](strategic-experiment-design-audit-2026-08-11.md):
+The new item 0 is the [experiment-design audit](history/retired-plans-2026-10-07/strategic-experiment-design-audit-2026-08-11.md):
 
 1. add permutation-invariant policy-context fingerprints and fail any exact train/validation
    context overlap;
@@ -1539,7 +1544,7 @@ Implementation status:
     whose operational preconditions are stricter than the quest graph's legal counterfactual
     frontiers, beginning with early Saffron access needed by validation scenario 015.
 
-See the [registry audit](strategic-scenario-registry-audit-2026-08-11.md). The immutable design
+See the [registry audit](history/retired-plans-2026-10-07/strategic-scenario-registry-audit-2026-08-11.md). The immutable design
 receipt still reports zero because it describes the prospective registry, not later measurements.
 Measured evidence now contains four authenticated uncounted contexts and zero counted rows.
 `collection_open` remains false and prospective rows do not satisfy the admission gate by
@@ -1800,7 +1805,7 @@ so its regenerated rehearsal must repeat step 2 before step 5:
    from-scratch comparison before expanding a full Gen II teacher script.
 
 The full reasoning, risks and admission criteria are in the
-[current audit](current-audit-2026-08-11.md). None of this opens v95; counted v95 remains 0/10.
+[current audit](history/retired-plans-2026-10-07/current-audit-2026-08-11.md). None of this opens v95; counted v95 remains 0/10.
 
 ## Current focus (2026-08-10)
 

@@ -118,6 +118,65 @@ def test_fossil_constants_match_pinned_cartridge_layout() -> None:
     assert tuple(target.national_dex_number for target in RED_FOSSIL_TARGETS) == (140, 138, 142)
 
 
+@pytest.mark.parametrize("map_id", [MapId.CINNABAR_POKECENTER, MapId.CINNABAR_MART,
+                                    MapId.CINNABAR_LAB_TRADE_ROOM])
+def test_local_cinnabar_indoor_service_needs_no_fly_or_teleport(map_id):
+    executor = RedRoutedFossilRevival(None, _Reader(), None, None)
+    observer = SimpleNamespace(observe=lambda: SimpleNamespace(map_id=int(map_id)))
+    assert executor._reach_cinnabar(None, observer) is False
+
+
+@pytest.mark.parametrize("fault", [None, "remote", "no_item", "unreachable",
+                                    "unsupported", "stale"])
+def test_fossil_menu_quotes_real_local_route_without_inputs(monkeypatch, fault):
+    from pokemon_red_completion import red_fossil_acquisition as module
+
+    reader = _Reader()
+    reader.raw = replace(reader.raw, map_id=int(
+        MapId.ROUTE_11 if fault == "remote" else MapId.CINNABAR_POKECENTER))
+    if fault == "no_item":
+        reader.raw = replace(reader.raw, bag_items=(), bag_item_ids=())
+    observation = SimpleNamespace(raw=reader.raw, collection_observation=SimpleNamespace(
+        owned_species=frozenset(), specimens=()))
+    observed = object() if fault == "stale" else observation
+    state = [b"source"]
+    emulator = SimpleNamespace(frame_count=0, save_state_bytes=lambda: state[0])
+    actions = SimpleNamespace(actions_executed=0)
+    runtime = SimpleNamespace(reader=reader, emulator=emulator,
+                              adapter=SimpleNamespace(observe=lambda: observed))
+    calls = []
+
+    def quote(start, destination):
+        calls.append(destination)
+        if fault == "unreachable":
+            raise RoutePlanningError("unavailable")
+        return SimpleNamespace(cost=30)
+
+    world = SimpleNamespace(plan_feasible_to_map=quote)
+    world.with_current_observation = lambda r: world
+    monkeypatch.setattr("pokemon_red_completion.red_player_field_goals._field_ready",
+                        lambda r: True)
+    monkeypatch.setattr(module.RedRoutedFossilRevival, "_ports",
+                        lambda e: (None, SimpleNamespace(observe=lambda: object())))
+    monkeypatch.setattr(module, "_supported_plan", lambda *a, **kw: fault != "unsupported")
+    if fault == "stale":
+        with pytest.raises(ValueError, match="stale"):
+            module.fossil_acquisition_bindings(runtime, observation, actions, world)
+    else:
+        rows = module.fossil_acquisition_bindings(runtime, observation, actions, world)
+        assert len(rows) == (1 if fault is None else 0)
+        if rows:
+            assert rows[0].kind is GoalKind.ACQUIRE_SPECIES
+            assert rows[0].search_source_ref == RED_FOSSIL_TARGETS[1].source_ref
+            state[0] = b"changed"
+            with pytest.raises(RedFossilAcquisitionError, match="stale or consumed"):
+                rows[0].execute()
+            assert rows[0].verify(GoalExecutionReport(1, 1, {})).status.value == "failed"
+    assert calls == ([] if fault in ("remote", "no_item", "stale") else [int(
+        MapId.CINNABAR_LAB_FOSSIL_ROOM)])
+    assert actions.actions_executed == emulator.frame_count == 0
+
+
 def test_inventory_derives_one_generic_ready_target_without_input() -> None:
     reader = _Reader()
     reads = reader.reads
@@ -205,6 +264,88 @@ def test_fossil_binding_replaces_only_a_masked_high_level_acquisition_slot() -> 
     capture = _available_binding(GoalKind.ACQUIRE_SPECIES, "wild")
     available = GoalBindingSet((story.opportunity, capture.opportunity), (story, capture))
     assert bind_available_fossil_acquisition(available, fossil) is available
+
+
+@pytest.mark.parametrize("allowed,fault", [(False, None), (True, None), (True, "primitive")])
+def test_fossil_reuses_opted_in_native_escape_before_fly_with_all_costs(
+    monkeypatch, allowed, fault,
+):
+    from pokemon_red_completion import red_fossil_acquisition as module
+    from pokemon_red_completion.actions import MacroAction, MacroActionKind
+    from pokemon_red_completion.executor import CountingExecutor
+    from pokemon_red_completion.red_dig_recovery import DigEscapePlan, RedDigRecoveryError
+    from pokemon_red_completion.route_executor import TraversalSnapshot
+
+    reader = _Reader()
+    reader.raw = replace(reader.raw, map_id=int(MapId.POKEMON_MANSION_B1F))
+    em = SimpleNamespace(frame_count=0)
+    calls = []
+
+    def dispatch(action):
+        em.frame_count += action.repeat
+
+    actions = CountingExecutor(SimpleNamespace(execute=dispatch))
+    observer = SimpleNamespace(observe=lambda: TraversalSnapshot(
+        reader.raw.map_id, (reader.raw.player_y, reader.raw.player_x), True, mode="land",
+    ))
+    escape = DigEscapePlan(int(MapId.POKEMON_MANSION_B1F), (6, 0), 5, (4, 11), 0, 22)
+
+    def quote(*args):
+        calls.append("quote")
+        return escape
+
+    def dig(world, port, emulator, controller, quoted):
+        assert quoted is escape and port is reader and controller is actions
+        calls.append("dig")
+        controller.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        if fault:
+            raise RedDigRecoveryError("native escape resource mismatch")
+        reader.raw = replace(reader.raw, map_id=5, player_y=4, player_x=11)
+        return {"verified_escape": True}
+
+    def reach(self, field_actions, traversal):
+        assert field_actions is actions and traversal is observer
+        assert reader.raw.map_id == (5 if allowed else int(MapId.POKEMON_MANSION_B1F))
+        calls.append("fly")
+        field_actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        reader.raw = replace(reader.raw, map_id=int(MapId.CINNABAR_ISLAND))
+        return allowed
+
+    target = fossil_target_by_item(int(ItemId.HELIX_FOSSIL))
+
+    def route(self, field_actions, traversal, destination_map, **kwargs):
+        calls.append("lab")
+        field_actions.execute(MacroAction(MacroActionKind.WAIT, repeat=7))
+        reader.raw = replace(reader.raw, map_id=destination_map, bag_items=(), bag_item_ids=())
+        reader.owned = frozenset({target.national_dex_number})
+        reader.box = RedCurrentBoxState(0, (*reader.box.species_ids, target.internal_species_id),
+                                       (*reader.box.levels, 30))
+        return 1
+
+    monkeypatch.setattr(module, "plan_dig_escape", quote)
+    monkeypatch.setattr(module, "execute_dig_escape", dig)
+    monkeypatch.setattr(RedRoutedFossilRevival, "_ports", lambda self: (actions, observer))
+    monkeypatch.setattr(RedRoutedFossilRevival, "_reach_cinnabar", reach)
+    monkeypatch.setattr(RedRoutedFossilRevival, "_route", route)
+    executor = RedRoutedFossilRevival(actions, reader, em, SimpleNamespace(),
+                                     allow_dig_departure=allowed)
+    if fault:
+        with pytest.raises(RedDigRecoveryError, match="resource mismatch"):
+            executor.execute(target)
+        assert calls == ["quote", "dig"] and actions.actions_executed == 1
+        return
+    report = executor.execute(target)
+    assert report.passed and report.dig_escape_used is allowed
+    assert calls == (["quote", "dig"] if allowed else []) + ["fly", "lab"]
+    assert report.actions_executed == actions.actions_executed == 2 + int(allowed)
+    assert report.frames_executed == em.frame_count == 7 * report.actions_executed
+    assert report.public_dict().get("dig_escape_used", False) is allowed
+
+
+@pytest.mark.parametrize("flag", [1, "yes", None])
+def test_fossil_native_escape_requires_boolean_opt_in(flag):
+    with pytest.raises(ValueError, match="boolean permission"):
+        RedRoutedFossilRevival(None, None, None, None, allow_dig_departure=flag)
 
 
 def test_fossil_provider_verifies_new_registration_and_retained_specimen() -> None:
@@ -441,6 +582,54 @@ def test_fossil_route_recovers_one_verified_transient_off_graph_square() -> None
     assert [(action.kind, action.value) for action in actions.actions] == [
         (MacroActionKind.MOVE, "down")
     ]
+
+
+@pytest.mark.parametrize("method", ["transport", "scientist"])
+@pytest.mark.parametrize("already_fainted", [False, True])
+def test_fossil_routes_wire_existing_guarded_flees_without_trainer_authority(
+    monkeypatch, method, already_fainted,
+) -> None:
+    from pokemon_red_completion import red_fossil_acquisition as module
+    from pokemon_red_completion.red_resource_goal_router import _MAX_ROUTE_FLEES, _ROUTE_LIMITS
+    from pokemon_red_completion.red_routed_recovery import RedRoutedRecoveryError
+
+    reader = _Reader()
+    reader.raw = replace(reader.raw, party_count=3, party_species_ids=(1, 2, 3),
+                         party_hp=(0 if already_fainted else 30, 40, 50))
+    snapshot = TraversalSnapshot(int(MapId.POKEMON_MANSION_B1F), (17, 10), True)
+    plan = SimpleNamespace(cost=1, steps=(object(),))
+    world = SimpleNamespace(plan_feasible_to_map=lambda *a, **k: plan,
+                            replanner=lambda: None)
+    actions = SimpleNamespace(actions_executed=0)
+    emulator = SimpleNamespace(frame_count=0)
+    executor = RedRoutedFossilRevival(actions, reader, emulator, world,
+                                     route_limits=_ROUTE_LIMITS)
+    seen = []
+
+    def execute(quoted, route_actions, observer, **kwargs):
+        assert quoted is plan and route_actions is actions
+        assert kwargs["limits"] is _ROUTE_LIMITS
+        handler = kwargs["interruption_handler"]
+        assert handler.maximum_flees == _MAX_ROUTE_FLEES
+        assert handler.maximum_trainer_battles == handler.maximum_scripted_dialogues == 0
+        assert handler.post_prep_species == (1, 2, 3)
+        assert handler.post_prep_living_slots == ((1, 2) if already_fainted else (0, 1, 2))
+        assert handler.inner.maximum_trainer_battles == 0
+        handler._require_preserved_living_slots(reader.raw)
+        with pytest.raises(RedRoutedRecoveryError, match="slot 1 fainted"):
+            handler._require_preserved_living_slots(replace(reader.raw, party_hp=(30, 0, 50)))
+        seen.append(handler)
+        return SimpleNamespace(passed=True, executed_steps=(object(),))
+
+    monkeypatch.setattr(module, "execute_route", execute)
+    monkeypatch.setattr(module, "_supported_plan", lambda *a, **k: True)
+    observer = SimpleNamespace(observe=lambda: snapshot)
+    if method == "transport":
+        assert executor._route(actions, observer, module.FOSSIL_ROOM_MAP_ID) == 1
+    else:
+        assert executor._route_to_scientist(actions, observer, (3, 5)) == 1
+    assert len(seen) == 1
+    assert actions.actions_executed == emulator.frame_count == 0
 
 
 def test_fossil_scientist_remains_routable_outside_the_viewport() -> None:

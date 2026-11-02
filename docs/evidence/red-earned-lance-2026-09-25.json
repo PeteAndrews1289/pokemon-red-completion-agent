@@ -1,0 +1,296 @@
+{
+  "action_counts": {
+    "attack": 8,
+    "forced_switch": 1,
+    "party_faints": 1,
+    "pp_spent": 7,
+    "switch_prompt": 4,
+    "voluntary_switch": 1
+  },
+  "actions": 350,
+  "audit_source_sha256": "abd516005134194590cb85b26abc7340470fb1ed4f9464be126f346f009f2b12",
+  "battle_won": true,
+  "campaign_execution": true,
+  "campaign_stage": 463,
+  "campaign_story_objectives": 34,
+  "choice_reconstruction_passed": true,
+  "copy_back": false,
+  "decisions": 14,
+  "default_model_changed": false,
+  "deployed_unchanged": true,
+  "diagnostics": [],
+  "envelope_authenticated": true,
+  "envelope_sha256": "d572672b1efd9b2db52d5362b6d565caabf5800fed80234ee6585bcf332e95ea",
+  "error": null,
+  "event_records": 54,
+  "evidence_valid": true,
+  "failed_broad_qualification_retained": true,
+  "fits": 0,
+  "focused_tests_passed": 392,
+  "frames": 33528,
+  "gameplay_running": false,
+  "independent_roots": 0,
+  "integration_passed": true,
+  "items_used": 0,
+  "latency_ns": {
+    "maximum": 7910292,
+    "median": 2961479.5,
+    "total": 40648168
+  },
+  "limitations": [
+    "Known DEVELOPMENT lineage and identical copy/earned trajectory,not independent wins or fresh-game acceptance.",
+    "Broader comparison remains failed:29/72candidate versus30/72default. No general promotion.",
+    "One low-HP switch flagged;Farfetch'd fainted. Strategic recovery not learned or executed this turn.",
+    "Goal selection,navigation and opening lead remain disclosed support. Collection109/124separate;freshRed0/5."
+  ],
+  "metrics": {
+    "attack_turn_utility_sum": 14.154965986394558,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 1,
+    "opponent_faints": 5,
+    "party_faints": 1,
+    "party_hp_lost": 150,
+    "party_pp_spent": 7,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 7910292,
+    "policy_latency_ns_mean": 2903440.5714285714,
+    "policy_latency_ns_min": 302500,
+    "selected_move_pp_spends": 7,
+    "teacher_interventions": 0
+  },
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "money": 23843,
+  "money_delta": 6138,
+  "new_registrations": 0,
+  "new_train_labels": 0,
+  "next_campaign_stage_created": false,
+  "next_decision": "Separately bind isolated Champion integration with at most the owned Revive,then audit before earned dispatch. No fit,grinding,copy-back or restart.",
+  "opponent_faints": 5,
+  "outcome": "won",
+  "outcome_sha256": "26a947f10addcc9e6936f645b3551b819715e26e84a94dc2b96ade2b740f70a7",
+  "partition": "development",
+  "party_hp": [
+    51,
+    96,
+    0,
+    228,
+    89
+  ],
+  "party_levels": [
+    54,
+    54,
+    54,
+    51,
+    62
+  ],
+  "plan_sha256": "2a65d614a50f232984d280d5608e0dcbcb3794c128accc9fa88186dd16214425",
+  "prior_campaign_story_objectives": 33,
+  "prior_campaign_unchanged": true,
+  "prior_stages_authenticated": 463,
+  "private_audit_sha256": "6293ad273b51286440f79ff8d720cc25fe722b6d57c91e752b145b0766f8d74c",
+  "promoted": false,
+  "recovery_assessment": {
+    "bag_items": [
+      [
+        4,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        15,
+        5
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        46,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        3,
+        20
+      ],
+      [
+        198,
+        1
+      ],
+      [
+        199,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        43,
+        1
+      ],
+      [
+        53,
+        1
+      ]
+    ],
+    "champion_executed": false,
+    "champion_identity": [
+      243,
+      43,
+      2
+    ],
+    "champion_quote": {
+      "base_money": 99,
+      "expected_victory_money": 6435,
+      "opponent_id": 243,
+      "party": [
+        {
+          "internal_species": 151,
+          "level": 61,
+          "species": 18
+        },
+        {
+          "internal_species": 149,
+          "level": 59,
+          "species": 65
+        },
+        {
+          "internal_species": 1,
+          "level": 61,
+          "species": 112
+        },
+        {
+          "internal_species": 22,
+          "level": 61,
+          "species": 130
+        },
+        {
+          "internal_species": 20,
+          "level": 63,
+          "species": 59
+        },
+        {
+          "internal_species": 154,
+          "level": 65,
+          "species": 3
+        }
+      ],
+      "trainer_set": 2
+    },
+    "frames": 0,
+    "hp": [
+      51,
+      96,
+      0,
+      228,
+      89
+    ],
+    "inputs": 0,
+    "max_hp": [
+      153,
+      118,
+      144,
+      245,
+      196
+    ],
+    "next": "Separately bound isolated Champion integration with at most the owned Revive; audit before earned dispatch.",
+    "pp": [
+      [
+        35,
+        15,
+        30,
+        23
+      ],
+      [
+        35,
+        40,
+        3,
+        14
+      ],
+      [
+        35,
+        14,
+        30,
+        13
+      ],
+      [
+        15,
+        20,
+        10,
+        3
+      ],
+      [
+        25,
+        15,
+        8,
+        9
+      ]
+    ],
+    "recovery_executed": false,
+    "recovery_option": {
+      "expected_hp": 72,
+      "expected_status": 0,
+      "item": 53,
+      "party_index": 2
+    },
+    "recovery_option_is_learned_choice": false,
+    "schema": "pokemon.red.post-lance-readonly-assessment.v1",
+    "source_sha256": "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6",
+    "status": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "recovery_assessment_sha256": "3b1e00278753a44f14178a23248d0461d878d8756730582e7e73055b908eb379",
+  "risk_counts": {
+    "attack": 8,
+    "attack_choices_while_asleep": 0,
+    "attacks_without_positive_power_coverage": 0,
+    "control_margins_within_0_05": 0,
+    "forced_switch": 1,
+    "status_move_choices": 0,
+    "switch_choices_below_quarter_hp": 1,
+    "switch_prompt": 4,
+    "type_immune_attacks": 0,
+    "voluntary_switch": 1,
+    "zero_power_choices_with_covered_alternative": 0
+  },
+  "runner_sha256": "60bd5ff4adb4bc5686d0554379cba09a297e421c8c0e2f9a5528bddd25ac25c1",
+  "safe": true,
+  "schema": "pokemon.red.earned-lance-audit.v1",
+  "seconds": 1.9811563750008645,
+  "selected_choices": 14,
+  "session_id": "2026-09-25-earned-lance",
+  "source_commit": "1924c878f02e14f355967fafe42b23b55d70e9cd",
+  "source_sha256": "6ab3bf1b2a81fe5d213f769124db17d9dca2e4b0313551c17765cb3cc9c35717",
+  "terminal_matches_copy": true,
+  "terminal_sha256": "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6",
+  "total_campaign_actions": 282185,
+  "total_campaign_frames": 22235162
+}

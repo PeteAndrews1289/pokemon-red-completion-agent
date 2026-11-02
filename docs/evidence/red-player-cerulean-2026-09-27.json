@@ -1,0 +1,649 @@
+{
+  "schema": "pokemon.red.player-cerulean.v1",
+  "date": "2026-09-27",
+  "session_id": "2026-09-27-player-cerulean",
+  "status": "amended-scope-complete-healthy-cerulean",
+  "partition": "development",
+  "scope_amendment": "Misty/Bill branch selection is the next milestone; neither claimed complete",
+  "source_sha256": "6c9f0037da545999bb7d0959377c4c2ccc76d100c168f596a2fc2367e76e8bc5",
+  "private_record_sha256": {
+    "AUDIT.json": "fcc2b8bcc920dce081604e550aede2fa92b09cea2bd3080de42631b12d983cdd",
+    "AUDITED-BOUNDARIES.json": "710f051a2fe51907770bf71a3ee9db23601787905c5713da41066cada840c7f6",
+    "READINESS-AUDIT.json": "c44642b313b7c988127a8c44fa9cd7b2c646b7bbfa2e5f6a85974ca531ce30a9",
+    "REGIONAL-PREPARATION-DECLARATION.json": "59a75761ec183c8ad533ff4d66bb93577ffdd3f67368f0ae36f85511bfe14bc4",
+    "cerulean-11/RECONCILIATION.json": "7554b5c93097ff2ff3dd5a46cafde01c718ba34f40caa327621e3901fcf5407e"
+  },
+  "models": {
+    "baseline_bridge": "a26dc468d1be8e2d69b201dc08675b7144d757b1fffe3576ad945d5a9a8fcc0f",
+    "frozen_k": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472"
+  },
+  "summary": {
+    "packets": 13,
+    "goals": 40,
+    "model": 10,
+    "support": 29,
+    "unclassified": 1,
+    "succeeded": 31,
+    "failed": 5,
+    "interrupted": 3,
+    "missing": 1,
+    "battles": 21,
+    "wins": 18,
+    "losses": 3,
+    "battle_choices": 229,
+    "earned": 1215,
+    "debits": 2596,
+    "delta": {
+      "actions": 6409,
+      "cash_debits": 2596,
+      "decisions": 40,
+      "frames": 476328,
+      "heals": 6,
+      "seconds": 414.09138600100414
+    },
+    "final": {
+      "sha": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e",
+      "cash": 427,
+      "bag": {
+        "4": 5,
+        "42": 1,
+        "234": 1
+      },
+      "owned": [
+        7,
+        8,
+        13,
+        14,
+        16,
+        19
+      ],
+      "helix": true
+    }
+  },
+  "final": {
+    "state_sha256": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e",
+    "map": 3,
+    "cash": 427,
+    "bag": {
+      "4": 5,
+      "42": 1,
+      "234": 1
+    },
+    "owned": [
+      7,
+      8,
+      13,
+      14,
+      16,
+      19
+    ],
+    "levels": [
+      17,
+      7,
+      5,
+      7
+    ],
+    "fully_restored": true,
+    "input_ready": true,
+    "in_battle": 0,
+    "dialogue": false,
+    "brock_event": true,
+    "badges": 1,
+    "tm34_event": true,
+    "fossil_guard": true,
+    "helix": true,
+    "dome": false,
+    "misty_completed": false,
+    "bill_completed": false
+  },
+  "cumulative_costs_including_source": {
+    "actions": 11656,
+    "cash_debits": 5264,
+    "decisions": 66,
+    "frames": 777975,
+    "heals": 13,
+    "seconds": 715.18919670998
+  },
+  "readiness": {
+    "legacy_features": 37,
+    "new_readiness_features": 252,
+    "nonzero_readiness_coefficients": 0,
+    "readiness_only_inference_contrast_delta": 0,
+    "interpretation": "Preparation execution does not establish learned level-gap anticipation; regional target from a disclosed cartridge preview."
+  },
+  "audit_input_frames": 0,
+  "fits": 0,
+  "new_training_rows": 0,
+  "promotions": 0,
+  "campaign_registrations": 0,
+  "development_owned_delta": 2,
+  "independent_origin_groups": 1,
+  "protected_unchanged": true,
+  "original_incomplete_receipt_preserved": true,
+  "qualification": {
+    "targeted_tests_passed": 2242,
+    "optional_integration_tests_skipped": 13,
+    "mypy_source_files": 678,
+    "ruff": "passed",
+    "native_ancestry_action_cost_and_battle_audit": "passed",
+    "full_suite_claim": false
+  },
+  "packets": [
+    {
+      "actions": 753,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 34740,
+      "goals": [
+        {
+          "cash_delta": -200,
+          "error": null,
+          "kind": "resupply",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": "Red observed scripted ground transition exceeded its 0-trainer budget",
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "packet": "cerulean-01",
+      "result_sha256": "845793303f3bec844d8fcceadec4be3969f2ec8a907591f18a833bff1f73d740",
+      "seconds": 42.401604207989294,
+      "stop": "execution_failed",
+      "terminal_sha256": "eb4b33b64066df168b8a1771b4875a8aa8d23ace6937104a44b90ccba7a1370e"
+    },
+    {
+      "actions": 432,
+      "battle_choices": 31,
+      "battle_losses": 1,
+      "battle_wins": 0,
+      "battles": 1,
+      "frames": 40992,
+      "goals": [
+        {
+          "cash_delta": -804,
+          "error": null,
+          "kind": "recover_control",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "failed"
+        }
+      ],
+      "packet": "cerulean-02",
+      "result_sha256": "c97cc8121c198a2bb9fa0629dbd4484051a900a0ac315c68cec9968e63899d7d",
+      "seconds": 24.817867917008698,
+      "stop": "verification_failed",
+      "terminal_sha256": "e4273d89c44ae416880cb76b46d0c9db97db7042780969441ba7fa7292307c2f"
+    },
+    {
+      "actions": 1282,
+      "battle_choices": 69,
+      "battle_losses": 0,
+      "battle_wins": 3,
+      "battles": 3,
+      "frames": 105636,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 100,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 165,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 150,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-03",
+      "result_sha256": "1ab660dff9945c30d41ddf8e6d9d5dfc0345a4144ebd5a0fd1beb6e8c5bbae66",
+      "seconds": 83.552428666997,
+      "stop": "decision_budget",
+      "terminal_sha256": "3556751efa056486cdc3c76c246b0a217beed0df659e8408fb138b747b7932d5"
+    },
+    {
+      "actions": 10,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 432,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": "Red observed scripted ground transition exceeded its 0-trainer budget",
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "packet": "cerulean-04",
+      "result_sha256": "7fc98ef68085e7d2acfc5f7594607f40e8577279ca9f6f34afb88cad974eeb2e",
+      "seconds": 1.912706083006924,
+      "stop": "execution_failed",
+      "terminal_sha256": "ecffc7daba4eed81aa9e398d23e6cbde144ab22b4d75b9f3003e116d8cffdb4d"
+    },
+    {
+      "actions": 163,
+      "battle_choices": 14,
+      "battle_losses": 1,
+      "battle_wins": 0,
+      "battles": 1,
+      "frames": 15624,
+      "goals": [
+        {
+          "cash_delta": -610,
+          "error": null,
+          "kind": "recover_control",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "failed"
+        }
+      ],
+      "packet": "cerulean-05",
+      "result_sha256": "30118daec29283b861f80f6dc9cd01f7b1d531ceb19cb5126268d968fc9c9fe4",
+      "seconds": 9.364796542009572,
+      "stop": "verification_failed",
+      "terminal_sha256": "79ed99311306bf39bdbd54f7b7e4bd5edc2a344f20c1736dc373d4da6a35528f"
+    },
+    {
+      "actions": 681,
+      "battle_choices": 37,
+      "battle_losses": 0,
+      "battle_wins": 1,
+      "battles": 1,
+      "frames": 57024,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 110,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-06",
+      "result_sha256": "1189c253cc40b26cc492b0c34cc97f99d3f658fdf328cb57f018b8dfe5d31be7",
+      "seconds": 39.90966475001187,
+      "stop": "menu_unavailable",
+      "terminal_sha256": "5a73b9e5aa6a1cc43142089b3913da4ed6a51c67fe8dc1ad309b25472a40e460"
+    },
+    {
+      "actions": 49,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 2424,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-07",
+      "result_sha256": "cd8b826b6d648d9b48de997d23c9525acaa3fd50fc5db2b4a6fda3e86a7210c0",
+      "seconds": 3.5721128750010394,
+      "stop": "curriculum_complete",
+      "terminal_sha256": "62d646e0aca7e2657aa839dcd8b047377a6146c577875fa1b3b760c55067b1a5"
+    },
+    {
+      "actions": 642,
+      "battle_choices": 17,
+      "battle_losses": 0,
+      "battle_wins": 8,
+      "battles": 8,
+      "frames": 50016,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "develop_team",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "failed"
+        }
+      ],
+      "packet": "cerulean-08",
+      "result_sha256": "60ebb5ece4fffb68b4fdf14ce27fdba4ef0595e0775a43ab1b429bdb071122e1",
+      "seconds": 36.46476274999441,
+      "stop": "verification_failed",
+      "terminal_sha256": "04ad8873be37227014ebc7b00110ded9741ed77bcb81b2bb91b8725645353931"
+    },
+    {
+      "actions": 523,
+      "battle_choices": 9,
+      "battle_losses": 0,
+      "battle_wins": 4,
+      "battles": 4,
+      "frames": 35592,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "develop_team",
+          "model_choice": true,
+          "ordinary_setback": true,
+          "verification": "failed"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-09",
+      "result_sha256": "419c76a4b2b417efb312458491ef77bc4b227070fd207ab6a000cd53eaeaf34f",
+      "seconds": 36.811754166992614,
+      "stop": "menu_unavailable",
+      "terminal_sha256": "5bfdf6ac200703ebddba85509f57e83ff513379b4781c1fe28b1da3cb4c79785"
+    },
+    {
+      "actions": 299,
+      "battle_choices": 8,
+      "battle_losses": 0,
+      "battle_wins": 1,
+      "battles": 1,
+      "frames": 24852,
+      "goals": [
+        {
+          "cash_delta": 390,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-10",
+      "result_sha256": "db6ffcdef010931036988b75dc8f608459356c515db488febe1e1cf30d7d4b18",
+      "seconds": 21.54332766699372,
+      "stop": "menu_unavailable",
+      "terminal_sha256": "e414e89c6126662de473514e69691735798eb14e8ff0970d21883ae76c156f56"
+    },
+    {
+      "actions": 962,
+      "battle_choices": 44,
+      "battle_losses": 1,
+      "battle_wins": 1,
+      "battles": 2,
+      "frames": 78084,
+      "goals": [
+        {
+          "cash_delta": -555,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": true,
+          "verification": "failed"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 300,
+          "error": "registered checkpoint lost protected physical stock",
+          "kind": "advance_story",
+          "model_choice": null,
+          "ordinary_setback": null,
+          "verification": "unavailable_observation_error"
+        }
+      ],
+      "packet": "cerulean-11",
+      "result_sha256": "a23b022c48f900cdce101ab090d0de4d26a8de3ed1c7c53aea672452bb3b8e2d",
+      "seconds": 62.22997745798784,
+      "stop": "observation_error",
+      "terminal_sha256": "26f5e7a18e8d6f15f7c0da1907692a96076e194bb5a3538e95006b9f9e011a78"
+    },
+    {
+      "actions": 108,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 4344,
+      "goals": [
+        {
+          "cash_delta": -427,
+          "error": "route drifted after down: expected (61, (17, 23)), observed (15, (6, 11))",
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "packet": "cerulean-12",
+      "result_sha256": "2939ad72cfca02ad55325af77e0b197c544fa61f7a12fa30d693472753902c97",
+      "seconds": 13.894568084011553,
+      "stop": "execution_failed",
+      "terminal_sha256": "f1deefac6e95fd2ef544b8722af4e3e9a92eca5393143365bd2a906cfa8f83b7"
+    },
+    {
+      "actions": 505,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 26568,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "packet": "cerulean-13",
+      "result_sha256": "873dcbea0d82b3fdbc126ef336e03969e7a9cd32c1f36baffd1c9664ab8ff286",
+      "seconds": 37.615814832999604,
+      "stop": "curriculum_complete",
+      "terminal_sha256": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e"
+    }
+  ],
+  "note": "One retained ancestry across thirteen prospectively bounded engineering continuations, not uninterrupted autonomy, independent trials or a comparative learning gain. One final goal receipt failed during evolution observation; actual terminal/costs retained and independently reconciled, without retroactive success credit."
+}

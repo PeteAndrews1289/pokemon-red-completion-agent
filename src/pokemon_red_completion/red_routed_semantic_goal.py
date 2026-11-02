@@ -13,7 +13,8 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Protocol
+from hashlib import sha256
+from typing import TYPE_CHECKING, Protocol
 
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
@@ -52,15 +53,14 @@ from pokemon_red_completion.routed_semantic_goal import (
     RoutedSemanticRouteBinding,
 )
 
-RED_ROUTED_SEMANTIC_TRANSPORT_SCHEMA = (
-    "pokemon.red.routed-semantic-transport.v1"
-)
-RED_ROUTED_SEMANTIC_ROUTE_REPORT_SCHEMA = (
-    "pokemon.red.routed-semantic-route-report.v1"
-)
-RED_FRESH_DESTINATION_OBSERVATION_SCHEMA = (
-    "pokemon.red.fresh-destination-observation.v1"
-)
+if TYPE_CHECKING:
+    from .red_player_engaged_story import SettledNativeTrainerLoss, SettledNativeTrainerRecovery
+    from .red_routed_recovery import SettledNativeFieldRecovery
+
+
+RED_ROUTED_SEMANTIC_TRANSPORT_SCHEMA = "pokemon.red.routed-semantic-transport.v1"
+RED_ROUTED_SEMANTIC_ROUTE_REPORT_SCHEMA = "pokemon.red.routed-semantic-route-report.v1"
+RED_FRESH_DESTINATION_OBSERVATION_SCHEMA = "pokemon.red.fresh-destination-observation.v1"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -76,6 +76,12 @@ class RedRoutedSemanticFrameCounter(Protocol):
     def frame_count(self) -> int: ...
 
 
+class RedRoutedSemanticEmulator(RedRoutedSemanticFrameCounter, Protocol):
+    """Native transport also authenticates a retained stop against its save."""
+
+    def save_state_bytes(self) -> bytes: ...
+
+
 @dataclass(frozen=True, slots=True)
 class RedRoutedSemanticBoundary:
     """Private exact terminal shared by transport and destination binding."""
@@ -86,23 +92,15 @@ class RedRoutedSemanticBoundary:
 
     def __post_init__(self) -> None:
         if type(self.map_id) is not int or self.map_id < 0:  # noqa: E721
-            raise RedRoutedSemanticGoalError(
-                "Red routed semantic boundary map differs"
-            )
+            raise RedRoutedSemanticGoalError("Red routed semantic boundary map differs")
         if (
             not isinstance(self.at, tuple)
             or len(self.at) != 2
             or any(type(value) is not int or value < 0 for value in self.at)  # noqa: E721
         ):
-            raise RedRoutedSemanticGoalError(
-                "Red routed semantic boundary coordinate differs"
-            )
-        if self.mode is not None and (
-            not isinstance(self.mode, str) or not self.mode
-        ):
-            raise RedRoutedSemanticGoalError(
-                "Red routed semantic boundary mode differs"
-            )
+            raise RedRoutedSemanticGoalError("Red routed semantic boundary coordinate differs")
+        if self.mode is not None and (not isinstance(self.mode, str) or not self.mode):
+            raise RedRoutedSemanticGoalError("Red routed semantic boundary mode differs")
 
     @property
     def sha256(self) -> str:
@@ -167,13 +165,9 @@ class FreshRedGoalObservation:
             self.traversal.map_id,
             *self.traversal.at,
         ):
-            raise RedRoutedSemanticGoalError(
-                "fresh Red goal and traversal observations disagree"
-            )
+            raise RedRoutedSemanticGoalError("fresh Red goal and traversal observations disagree")
         if self.observation.input_ready != self.traversal.ready:
-            raise RedRoutedSemanticGoalError(
-                "fresh Red readiness observations disagree"
-            )
+            raise RedRoutedSemanticGoalError("fresh Red readiness observations disagree")
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -216,7 +210,7 @@ class RedSemanticTransportRoute:
     plan: RoutePlan
     actions: CountingExecutor
     traversal_observer: TraversalObserver
-    emulator: RedRoutedSemanticFrameCounter
+    emulator: RedRoutedSemanticEmulator
     interruption_handler: InterruptionHandler | None = None
     replanner: RouteReplanner | None = None
     resource_manager: RouteResourceManager | None = None
@@ -239,12 +233,14 @@ class RedSemanticTransportRoute:
         init=False,
         repr=False,
     )
+    _settled_loss: (
+        SettledNativeTrainerLoss | SettledNativeTrainerRecovery | SettledNativeFieldRecovery | None
+    ) = field(default=None, init=False, repr=False)
+    _loss_terminal: TraversalSnapshot | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
-            raise RedRoutedSemanticGoalError(
-                "Red semantic transport binding reference is absent"
-            )
+            raise RedRoutedSemanticGoalError("Red semantic transport binding reference is absent")
         _require_sha256(self.origin_observation_sha256, "origin observation")
         _require_sha256(self.planner_binding_sha256, "planner binding")
         if not isinstance(self.plan, RoutePlan):
@@ -334,9 +330,7 @@ class RedSemanticTransportRoute:
 
     def _execute(self) -> GoalExecutionReport:
         if self._executed:
-            raise RedRoutedSemanticGoalError(
-                "Red semantic transport was already executed"
-            )
+            raise RedRoutedSemanticGoalError("Red semantic transport was already executed")
         self._executed = True
         before = self._checkpoint()
         initial_cuts = len(self.field_actions.cut_receipts) if self.field_actions is not None else 0
@@ -351,32 +345,51 @@ class RedSemanticTransportRoute:
             self.prepare_departure()
             if not self._matches_start(self.traversal_observer.observe()):
                 raise RedRoutedSemanticGoalError("departure preparation changed the route origin")
-        route_report = execute_route(
-            self.plan,
-            self.field_actions if self.field_actions is not None else self.actions,
-            self.traversal_observer,
-            interruption_handler=self.interruption_handler,
-            replanner=self.replanner,
-            resource_manager=self.resource_manager,
-            limits=self.route_limits,
-        )
+        from .red_player_engaged_story import SettledNativeTrainerLoss, SettledNativeTrainerRecovery
+        from .red_routed_recovery import SettledNativeFieldRecovery
+
+        try:
+            route_report = execute_route(
+                self.plan,
+                self.field_actions if self.field_actions is not None else self.actions,
+                self.traversal_observer,
+                interruption_handler=self.interruption_handler,
+                replanner=self.replanner,
+                resource_manager=self.resource_manager,
+                limits=self.route_limits,
+            )
+        except (
+            SettledNativeTrainerLoss,
+            SettledNativeTrainerRecovery,
+            SettledNativeFieldRecovery,
+        ) as loss:
+            return self._retain_settled_loss(loss, before)
         after = self._checkpoint()
         actions = after.controller_actions - before.controller_actions
         frames = after.emulator_frames - before.emulator_frames
         if actions < 0 or frames < 0:
-            raise RedRoutedSemanticGoalError(
-                "Red semantic transport counters moved backwards"
-            )
+            raise RedRoutedSemanticGoalError("Red semantic transport counters moved backwards")
         if route_report.initial_plan is not self.plan:
             raise RedRoutedSemanticGoalError(
                 "Red semantic transport executed a different initial plan"
             )
         travel_captures = [
-            {key: receipt.details[key] for key in (
-                "schema", "species_ref", "captured", "new_registrations", "actions",
-                "frames", "balls_spent", "route_boundary_preserved", "destination_changed",
-                "learned_encounter_choice",
-            ) if key in receipt.details}
+            {
+                key: receipt.details[key]
+                for key in (
+                    "schema",
+                    "species_ref",
+                    "captured",
+                    "new_registrations",
+                    "actions",
+                    "frames",
+                    "balls_spent",
+                    "route_boundary_preserved",
+                    "destination_changed",
+                    "learned_encounter_choice",
+                )
+                if key in receipt.details
+            }
             for receipt in route_report.interruptions
             if receipt.details.get("schema") == "pokemon.red.registered-travel-capture.v1"
         ]
@@ -396,12 +409,19 @@ class RedSemanticTransportRoute:
                 "transport_is_policy_kind": False,
                 "private_route_fields": 0,
                 **({"travel_captures": travel_captures} if travel_captures else {}),
-                **({"verified_cuts": len(self.field_actions.cut_receipts) - initial_cuts,
-                    "verified_surfs": len(self.field_actions.receipts) - initial_surfs,
-                    "field_moves": {"cuts": len(self.field_actions.cut_receipts) - initial_cuts,
-                                    "surfs": len(self.field_actions.receipts) - initial_surfs,
-                                    "flights": 0}}
-                   if self.field_actions is not None else {}),
+                **(
+                    {
+                        "verified_cuts": len(self.field_actions.cut_receipts) - initial_cuts,
+                        "verified_surfs": len(self.field_actions.receipts) - initial_surfs,
+                        "field_moves": {
+                            "cuts": len(self.field_actions.cut_receipts) - initial_cuts,
+                            "surfs": len(self.field_actions.receipts) - initial_surfs,
+                            "flights": 0,
+                        },
+                    }
+                    if self.field_actions is not None
+                    else {}
+                ),
             },
         )
         self._route_report = route_report
@@ -409,14 +429,16 @@ class RedSemanticTransportRoute:
         return report
 
     def _verify(self, report: GoalExecutionReport) -> GoalVerification:
-        if not self._executed or self._goal_report is None or self._route_report is None:
+        if (
+            not self._executed
+            or self._goal_report is None
+            or (self._route_report is None and self._settled_loss is None)
+        ):
             raise RedRoutedSemanticGoalError(
                 "Red semantic transport cannot verify before execution"
             )
         if self._verified:
-            raise RedRoutedSemanticGoalError(
-                "Red semantic transport was already verified"
-            )
+            raise RedRoutedSemanticGoalError("Red semantic transport was already verified")
         self._verified = True
         if report is not self._goal_report:
             raise RedRoutedSemanticGoalError(
@@ -427,15 +449,68 @@ class RedSemanticTransportRoute:
         after = self._checkpoint()
         if after != before:
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+        if self._settled_loss is not None:
+            if (
+                current != self._loss_terminal
+                or sha256(self.emulator.save_state_bytes()).hexdigest()
+                != self._settled_loss.evidence["terminal_sha256"]
+            ):
+                return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+            return GoalVerification.failed(self._settled_loss.failure_reason)
+        assert self._route_report is not None
         if (
             not self._route_report.passed
-            or not self.terminal_boundary.matches_traversal(
-                self._route_report.terminal
-            )
+            or not self.terminal_boundary.matches_traversal(self._route_report.terminal)
             or not self.terminal_boundary.matches_traversal(current)
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
+
+    def _retain_settled_loss(self, loss, before):
+        from .red_player_engaged_story import settled_route_trainer_stop_evidence
+        from .red_routed_recovery import settled_route_field_recovery_evidence
+
+        checkpoint = self._checkpoint()
+        terminal = self.traversal_observer.observe()
+        failure = loss.failure
+        actions = checkpoint.controller_actions - before.controller_actions
+        frames = checkpoint.emulator_frames - before.emulator_frames
+        if (
+            failure is None
+            or failure.initial_plan is not self.plan
+            or not (
+                settled_route_trainer_stop_evidence(loss.evidence)
+                or settled_route_field_recovery_evidence(loss.evidence)
+            )
+            or self._checkpoint() != checkpoint
+            or not terminal.ready
+            or terminal.interruption is not None
+            or sha256(self.emulator.save_state_bytes()).hexdigest()
+            != loss.evidence["terminal_sha256"]
+            or actions < loss.report.actions_executed
+            or frames < loss.report.frames_executed
+        ):
+            raise loss
+        report = GoalExecutionReport(
+            actions,
+            frames,
+            {
+                "schema": RED_ROUTED_SEMANTIC_ROUTE_REPORT_SCHEMA,
+                "passed": False,
+                "acknowledged_steps": len(failure.executed_steps),
+                "movement_requests": failure.movement_requests,
+                "wait_actions": failure.wait_actions,
+                "interruptions": len(failure.interruptions),
+                "replans": len(failure.replans),
+                "resource_renewals": len(failure.resource_renewals),
+                "semantic_router_authenticated": True,
+                "transport_is_policy_kind": False,
+                "private_route_fields": 0,
+                "route_setback": dict(loss.evidence),
+            },
+        )
+        self._settled_loss, self._loss_terminal, self._goal_report = loss, terminal, report
+        return report
 
     def _checkpoint(self) -> RoutedSemanticBudgetCheckpoint:
         return RedRoutedSemanticBudgetMeter(self.actions, self.emulator).checkpoint()
@@ -448,14 +523,24 @@ class RedSemanticTransportRoute:
             and value.mode == self.plan.start_mode
             and value.ready
             and value.interruption is None
-            and (self.field_actions is None or not any(
-                step.action_kind is MacroActionKind.FIELD_MOVE
-                and step.action.startswith("cut:") for step in self.plan.steps
-            ) or "move:cut" in value.capabilities)
-            and (self.field_actions is None or not any(
-                step.action_kind is MacroActionKind.FIELD_MOVE
-                and step.action.startswith("surf:") for step in self.plan.steps
-            ) or "move:surf" in value.capabilities)
+            and (
+                self.field_actions is None
+                or not any(
+                    step.action_kind is MacroActionKind.FIELD_MOVE
+                    and step.action.startswith("cut:")
+                    for step in self.plan.steps
+                )
+                or "move:cut" in value.capabilities
+            )
+            and (
+                self.field_actions is None
+                or not any(
+                    step.action_kind is MacroActionKind.FIELD_MOVE
+                    and step.action.startswith("surf:")
+                    for step in self.plan.steps
+                )
+                or "move:surf" in value.capabilities
+            )
         )
 
 
@@ -470,9 +555,7 @@ class RedFreshGoalDestinationBinder:
 
     def __post_init__(self) -> None:
         if not isinstance(self.kind, GoalKind):
-            raise RedRoutedSemanticGoalError(
-                "Red routed destination kind differs"
-            )
+            raise RedRoutedSemanticGoalError("Red routed destination kind differs")
         if not isinstance(self.boundary, RedRoutedSemanticBoundary):
             raise TypeError("Red routed destination needs a terminal boundary")
         if not callable(self.observe_fresh):
@@ -480,9 +563,7 @@ class RedFreshGoalDestinationBinder:
         if not callable(getattr(self.provider, "offer", None)):
             raise TypeError("Red routed destination needs a goal provider")
         if self.provider.kind is not self.kind:
-            raise RedRoutedSemanticGoalError(
-                "Red routed destination provider kind differs"
-            )
+            raise RedRoutedSemanticGoalError("Red routed destination provider kind differs")
 
     def __call__(self) -> FreshDestinationGoalOffer:
         fresh = self.observe_fresh()
@@ -491,10 +572,9 @@ class RedFreshGoalDestinationBinder:
                 "Red routed destination observer returned invalid evidence"
             )
         fresh.__post_init__()
-        if (
-            not self.boundary.matches_traversal(fresh.traversal)
-            or not self.boundary.matches_goal_observation(fresh.observation)
-        ):
+        if not self.boundary.matches_traversal(
+            fresh.traversal
+        ) or not self.boundary.matches_goal_observation(fresh.observation):
             raise RedRoutedSemanticGoalError(
                 "fresh Red destination differs from the route terminal"
             )
@@ -544,9 +624,7 @@ def build_red_routed_semantic_goal_composer(
     if not isinstance(destination, RedFreshGoalDestinationBinder):
         raise TypeError("Red routed semantic composer needs a destination binder")
     if transport.terminal_boundary != destination.boundary:
-        raise RedRoutedSemanticGoalError(
-            "Red transport and destination boundaries differ"
-        )
+        raise RedRoutedSemanticGoalError("Red transport and destination boundaries differ")
     provider_actions = getattr(destination.provider, "actions", transport.actions)
     if provider_actions is not transport.actions:
         raise RedRoutedSemanticGoalError(
@@ -574,17 +652,13 @@ def build_red_routed_semantic_goal_composer(
 
 def _read_counter(value: object, subject: str) -> int:
     if type(value) is not int or value < 0:  # noqa: E721
-        raise RedRoutedSemanticGoalError(
-            f"Red routed semantic {subject} counter differs"
-        )
+        raise RedRoutedSemanticGoalError(f"Red routed semantic {subject} counter differs")
     return value
 
 
 def _require_sha256(value: str, subject: str) -> None:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedRoutedSemanticGoalError(
-            f"Red routed semantic {subject} SHA-256 differs"
-        )
+        raise RedRoutedSemanticGoalError(f"Red routed semantic {subject} SHA-256 differs")
 
 
 __all__ = [

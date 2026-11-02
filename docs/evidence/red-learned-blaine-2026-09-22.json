@@ -1,0 +1,317 @@
+{
+  "action_counts": {
+    "attack": 36,
+    "switch_prompt": 12
+  },
+  "actions": 2084,
+  "active_party_slot_counts": {
+    "1": 39,
+    "2": 9
+  },
+  "attack_slot_counts": {
+    "party1:slot1": 16,
+    "party1:slot2": 14,
+    "party2:slot3": 6
+  },
+  "audit_frames": 0,
+  "authority_promotions": 0,
+  "badges": 7,
+  "battles": [
+    {
+      "action_counts": {
+        "attack": 5,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 0
+      },
+      "decisions": 7,
+      "final_sha256": "badd0df10e9dd6e880017fe28a5649efb27585f3aca1286130a0d96f1ace6477",
+      "metrics": {
+        "attack_turn_utility_sum": 9,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7842167,
+        "policy_latency_ns_mean": 3405529.714285714,
+        "policy_latency_ns_min": 831708,
+        "teacher_interventions": 0
+      },
+      "object_index": 3,
+      "outcome_sha256": "9d8aba4ff336336fccdef6deef9f85f394e099b41eb66b6ce164cea2e80876af",
+      "payout": 3240,
+      "source_sha256": "9764363656d664e447be26af209e3d17f153008fd23b19b1a3c17de770f13803",
+      "stage": 229
+    },
+    {
+      "action_counts": {
+        "attack": 6,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 0
+      },
+      "decisions": 8,
+      "final_sha256": "100b8a65ddc633e363353e89002150d640359c49824f7be25ce2b583f88ecc6c",
+      "metrics": {
+        "attack_turn_utility_sum": 8.906666666666666,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 14,
+        "party_pp_spent": 6,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 7607792,
+        "policy_latency_ns_mean": 3557541.875,
+        "policy_latency_ns_min": 822667,
+        "teacher_interventions": 0
+      },
+      "object_index": 2,
+      "outcome_sha256": "0fce4f34afd9c7b50081c601b531e67ab61be40e0f6b876ad9baacabf377e36f",
+      "payout": 900,
+      "source_sha256": "badd0df10e9dd6e880017fe28a5649efb27585f3aca1286130a0d96f1ace6477",
+      "stage": 230
+    },
+    {
+      "action_counts": {
+        "attack": 5,
+        "forced_switch": 0,
+        "switch_prompt": 3,
+        "voluntary_switch": 0
+      },
+      "decisions": 8,
+      "final_sha256": "1c554d8536392a5f70c73524d7d3aa72a60eb5e1ef3d7f373b819e8986f5827d",
+      "metrics": {
+        "attack_turn_utility_sum": 11.926666666666666,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 11,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4620000,
+        "policy_latency_ns_mean": 2349281.25,
+        "policy_latency_ns_min": 816625,
+        "teacher_interventions": 0
+      },
+      "object_index": 4,
+      "outcome_sha256": "38317749769e8316188b24e4b37f20fa699d084e7bffa6a13534b22de6155c02",
+      "payout": 850,
+      "source_sha256": "100b8a65ddc633e363353e89002150d640359c49824f7be25ce2b583f88ecc6c",
+      "stage": 231
+    },
+    {
+      "action_counts": {
+        "attack": 2,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 0
+      },
+      "decisions": 2,
+      "final_sha256": "44d37ebed843683231680deef1cca0d8a4a03acf0d535c981f6e9a7ae1b69032",
+      "metrics": {
+        "attack_turn_utility_sum": 3,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 2,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 5380750,
+        "policy_latency_ns_mean": 4932187.5,
+        "policy_latency_ns_min": 4483625,
+        "teacher_interventions": 0
+      },
+      "object_index": 5,
+      "outcome_sha256": "91ba699a7ac3e1a8ab5c86ed2015474b5c9ea1e4557cc5e902c9402a28553cdc",
+      "payout": 3690,
+      "source_sha256": "1c554d8536392a5f70c73524d7d3aa72a60eb5e1ef3d7f373b819e8986f5827d",
+      "stage": 232
+    },
+    {
+      "action_counts": {
+        "attack": 3,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 0
+      },
+      "decisions": 3,
+      "final_sha256": "322baef262155c7ebccf38e07814189233ee892bb2a4c4f78973f90a941e25b4",
+      "metrics": {
+        "attack_turn_utility_sum": 3,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4594083,
+        "policy_latency_ns_mean": 4447694.333333333,
+        "policy_latency_ns_min": 4314541,
+        "teacher_interventions": 0
+      },
+      "object_index": 6,
+      "outcome_sha256": "60bc012c6dd1e7b1fde838638a1b1d7e99eba0b5d79f5f57d7438fc6b5b9aab4",
+      "payout": 1025,
+      "source_sha256": "44d37ebed843683231680deef1cca0d8a4a03acf0d535c981f6e9a7ae1b69032",
+      "stage": 233
+    },
+    {
+      "action_counts": {
+        "attack": 3,
+        "forced_switch": 0,
+        "switch_prompt": 1,
+        "voluntary_switch": 0
+      },
+      "decisions": 4,
+      "final_sha256": "42f4f0185d2fd9151a94f7da03fef1606b8c7e5b1efaea2b2b3e92d722ebe7c1",
+      "metrics": {
+        "attack_turn_utility_sum": 5.967320261437909,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 5,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4729000,
+        "policy_latency_ns_mean": 3181041.5,
+        "policy_latency_ns_min": 935458,
+        "teacher_interventions": 0
+      },
+      "object_index": 7,
+      "outcome_sha256": "ec5d15462511fc57bac736d16f348934d57dcb578d60710a6b606e5d3b8c347b",
+      "payout": 3330,
+      "source_sha256": "322baef262155c7ebccf38e07814189233ee892bb2a4c4f78973f90a941e25b4",
+      "stage": 234
+    },
+    {
+      "action_counts": {
+        "attack": 3,
+        "forced_switch": 0,
+        "switch_prompt": 1,
+        "voluntary_switch": 0
+      },
+      "decisions": 4,
+      "final_sha256": "557bc9fb6edec10f7021caf68b5d3224e954beb384a649796fc3729369ad0c99",
+      "metrics": {
+        "attack_turn_utility_sum": 5.973856209150327,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 4,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4640625,
+        "policy_latency_ns_mean": 3113823,
+        "policy_latency_ns_min": 847917,
+        "teacher_interventions": 0
+      },
+      "object_index": 8,
+      "outcome_sha256": "d944461b43b2e725b05e53164a0a8b8119ef0ac9c0b2d653bb1e4594b13b8d70",
+      "payout": 925,
+      "source_sha256": "42f4f0185d2fd9151a94f7da03fef1606b8c7e5b1efaea2b2b3e92d722ebe7c1",
+      "stage": 235
+    },
+    {
+      "action_counts": {
+        "attack": 9,
+        "forced_switch": 0,
+        "switch_prompt": 3,
+        "voluntary_switch": 0
+      },
+      "decisions": 12,
+      "final_sha256": "551dc9fd521fc28622bfad9c064d1b61f561897f9f7f82afcca7a309fa6dfda9",
+      "metrics": {
+        "attack_turn_utility_sum": 11.359477124183007,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 98,
+        "party_pp_spent": 9,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4819125,
+        "policy_latency_ns_mean": 3494579.8333333335,
+        "policy_latency_ns_min": 764333,
+        "teacher_interventions": 0
+      },
+      "object_index": 1,
+      "outcome_sha256": "d73c7472a20b1c7e012795ecd634e290e19308c06542b1cb5bf6008a2e871efe",
+      "payout": 4653,
+      "source_sha256": "557bc9fb6edec10f7021caf68b5d3224e954beb384a649796fc3729369ad0c99",
+      "stage": 236
+    }
+  ],
+  "cash_after": 25262,
+  "cash_before": 6649,
+  "cash_earned": 18613,
+  "decisions": 48,
+  "envelope_sha256": "d1534f73998315efac261770827eccb803554058a31ab2d834c4da4ee151e4ba",
+  "final_sha256": "551dc9fd521fc28622bfad9c064d1b61f561897f9f7f82afcca7a309fa6dfda9",
+  "final_stage": 236,
+  "fits": 0,
+  "frames": 158280,
+  "fresh_red_gate": "0/5 unchanged",
+  "full_recovery": true,
+  "gameplay_running": false,
+  "goal_choices": 0,
+  "limitations": [
+    "Eight sequential battles share one development lineage, not independent generalization.",
+    "Mansion switch-aware routing remains unresolved; legal Dig bypassed the exit blocker.",
+    "No new fit, collection gain, renewable-income qualification or final-player promotion."
+  ],
+  "local_registrations": 17,
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "native_seconds": 17.160649749916047,
+  "new_noncomplete_stages": 0,
+  "next_stage": 237,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    156,
+    82,
+    94,
+    99,
+    139
+  ],
+  "party_levels": [
+    50,
+    38,
+    36,
+    36,
+    30
+  ],
+  "qualification_sha256": "4e68390900853e1213a540d0a044cca379d8700926f3a784c65de1819e3b56bd",
+  "registration_delta": 0,
+  "sales": 0,
+  "save_edits": 0,
+  "schema": "pokemon.red.earned-blaine.v1",
+  "source_replays": 0,
+  "source_sha256": "0ebe1d08c86b39c3632b21e7afbf8dc0869156f6c3dc311f695854de0760972b",
+  "source_stage": 226,
+  "story_objectives_after": 28,
+  "story_objectives_before": 27,
+  "support": "Observed Dig/Fly/routes, reversible SS Ticket storage, accessible trainer selection and free Center healing are support, not learned goals.",
+  "teacher_battle_queries": 0,
+  "mission_check": {
+    "capability": "Share observed legal Dig escape across collection recovery and story support; connect native gym rewards to frozen learned battles.",
+    "learned_authority": "48 new attack/switch-prompt choices by the already admitted additive story battler; route and trainer selection remain support.",
+    "transfer_test": "ROM-free escape tests cover three healing towns and stale/resource-mutated states. Native gym battles are one development lineage, not independent transfer.",
+    "cheapest_falsifier": "Stage226 escape cannot preserve the actual landing, party and resources, or one exact-model gym battle fails its 80-decision boundary.",
+    "time_box": "One session, two hours; native packet stages227-236 completed.",
+    "stop_condition": "Stop at verified Blaine reward and free healing, or retain any unsupported/unsafe terminal without replay."
+  },
+  "verification": {
+    "targeted_code_tests": 118,
+    "full_suite_run": false
+  },
+  "next_objective": "Reversibly store TM38 to free the full bag, use native Fly to Viridian, quote current preparation and gym approach, then bind the learned Giovanni battle. No default grinding, refit, replay or publication.",
+  "private_audit_sha256": "55ab78d1b1dd17e05c2fb32f066ced753dcd4588af7bafec4a9f7331002c9c59"
+}

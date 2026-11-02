@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 from pokemon_red_completion.actions import MacroAction
 from pokemon_red_completion.gen1_cut import (
@@ -12,9 +12,13 @@ from pokemon_red_completion.gen1_cut import (
     plan_cut_candidate_in_graphs,
     staged_cut_path,
 )
+from pokemon_red_completion.gen1_forced_motion import apply_forced_motion, spinner_sequences
 from pokemon_red_completion.gen1_maps import macro_graph_from_nodes, map_graph
 from pokemon_red_completion.gen1_story_routing import (
     GEN1_STORY_PASSAGE_REQUIREMENTS,
+    apply_gen1_cinnabar_gym_requirement,
+    apply_gen1_league_reverse_exit_requirements,
+    apply_gen1_pewter_exit_requirement,
     apply_gen1_seafoam_current_requirements,
     apply_gen1_story_requirements,
     gen1_story_static_object_blockers,
@@ -42,7 +46,7 @@ from pokemon_red_completion.global_router import (
     find_macro_path,
 )
 from pokemon_red_completion.local_router import LocalGraph, LocalPath, without_coordinates
-from pokemon_red_completion.observation import CurrentMapBlocks
+from pokemon_red_completion.observation import CurrentMapBlocks, MapId, PokemonRedStateReader
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.red_trajectory import POKEMON_RED_GAME_ID
 from pokemon_red_completion.route_executor import (
@@ -101,6 +105,22 @@ from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 class StrategicScenarioRuntimeError(RuntimeError):
     """Raised before a rehearsal can overstate a branch or durable result."""
+
+
+def _without_unwired_celadon_elevator(graph: MacroGraph) -> MacroGraph:
+    """Retain stairs, not the lift's script-mutated placeholder destination.
+
+    The Mart lift exits to its selected/current floor, not always the ROM's
+    first-floor placeholder. Ordinary walking has no floor-selection skill.
+    Keep its trigger metadata so a local walk cannot accidentally enter it.
+    """
+    elevator = int(MapId.CELADON_MART_ELEVATOR)
+    return replace(graph, edges={
+        source: () if source == elevator else tuple(
+            edge for edge in edges if edge.target_map != elevator
+        )
+        for source, edges in graph.edges.items()
+    })
 
 
 STRATEGIC_SCENARIO_MAXIMUM_FLEES = 32
@@ -192,6 +212,9 @@ class StrategicScenarioRouteWorld:
     tilesets: Mapping[int, Tileset]
     water_tilesets: frozenset[int]
     object_blockers: Mapping[int, frozenset[tuple[int, int]]]
+    forced_movements: Mapping[int, Mapping[tuple[int, int], tuple[tuple[int, int], ...]]] = field(
+        default_factory=dict
+    )
 
     @classmethod
     def from_rom(cls, rom: bytes) -> StrategicScenarioRouteWorld:
@@ -209,18 +232,22 @@ class StrategicScenarioRouteWorld:
             )
             for map_id in terrain
         }
+        motion = {map_id: spinner_sequences(rom, map_id) for map_id in terrain}
         local_graphs = apply_gen1_story_requirements(
             {
-                map_id: surf_local_graph(
-                    local,
-                    rules,
-                    blocked=blockers[map_id],
+                map_id: apply_forced_motion(
+                    surf_local_graph(local, rules, blocked=blockers[map_id]),
+                    motion[map_id],
+                    forbidden=maps[map_id].warp_locations,
                 )
                 for map_id, local in terrain.items()
             }
         )
+        from .gen1_seafoam import apply_seafoam_hole_guards
+
+        local_graphs = apply_seafoam_hole_guards(rom, local_graphs)
         return cls(
-            macro_graph_from_nodes(maps),
+            _without_unwired_celadon_elevator(macro_graph_from_nodes(maps)),
             local_graphs,
             rom,
             terrain,
@@ -228,6 +255,7 @@ class StrategicScenarioRouteWorld:
             sets,
             surf_sets,
             blockers,
+            motion,
         )
 
     def _graph_for_terrain(self, terrain: Terrain) -> LocalGraph:
@@ -237,7 +265,6 @@ class StrategicScenarioRouteWorld:
         graph = surf_local_graph(
             terrain,
             self.rules,
-            blocked=self.object_blockers[map_id],
         )
         requirements = tuple(
             requirement
@@ -249,7 +276,26 @@ class StrategicScenarioRouteWorld:
                 {map_id: graph},
                 requirements,
             )[map_id]
-        return apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
+        graph = apply_gen1_cinnabar_gym_requirement({map_id: graph})[map_id]
+        graph = apply_gen1_pewter_exit_requirement({map_id: graph})[map_id]
+        graph = apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
+        graph = apply_gen1_league_reverse_exit_requirements({map_id: graph})[map_id]
+        from .gen1_seafoam import apply_seafoam_hole_guards
+
+        graph = apply_seafoam_hole_guards(self.rom, {map_id: graph})[map_id]
+        # Bind semantic gates to geometry before occupancy removes edges. A
+        # present guard may stand ON a gated tile; that is not stale geometry.
+        # Removing the guard later must expose the same still-gated edges.
+        blocked = self.object_blockers[map_id]
+        graph = without_coordinates(graph, blocked)
+        graph = LocalGraph({
+            at: tuple(edge for edge in edges if edge.transient not in blocked)
+            for at, edges in graph.edges.items()
+        })
+        return apply_forced_motion(
+            graph, self.forced_movements.get(map_id, {}),
+            forbidden=self.macro_graph.warp_locations.get(map_id, ()),
+        )
 
     def with_current_blocks(self, blocks: CurrentMapBlocks) -> StrategicScenarioRouteWorld:
         """Overlay only an observed active map; preserve every traversal requirement.
@@ -267,6 +313,39 @@ class StrategicScenarioRouteWorld:
             self, terrain={**self.terrain, blocks.map_id: current},
             local_graphs={**self.local_graphs, blocks.map_id: self._graph_for_terrain(current)},
         )
+
+    def with_current_observation(
+        self, reader: PokemonRedStateReader
+    ) -> StrategicScenarioRouteWorld:
+        """Overlay live terrain and map-wide occupancy at a settled field boundary.
+
+        Cartridge objects describe the initial layout. Removed guards and moved
+        boulders must not remain permanent walls. Only the active map's complete
+        toggle-aware object table replaces those blockers; off-screen present
+        objects still block. Unvisited maps and all passage/field requirements
+        stay unchanged. The executor must continue checking live movement.
+        """
+        before = reader.read()
+        if (
+            not before.game_started
+            or before.battle_state != 0
+            or before.map_id not in self.terrain
+            or not reader.read_input_readiness().ready
+            or reader.read_bottom_dialogue_box_visible()
+            or reader.trainer_engagement_active()
+        ):
+            raise ValueError("current routing observation needs a settled field boundary")
+        blocks = reader.read_current_map_blocks()
+        objects = reader.read_current_map_objects()
+        if blocks.map_id != before.map_id or reader.read() != before:
+            raise ValueError("current routing observation changed during projection")
+        occupied = frozenset(item.at for item in objects)
+        if len(occupied) != len(objects) or len({o.sprite_index for o in objects}) != len(objects):
+            raise ValueError("current routing observation repeats an object")
+        observed = replace(
+            self, object_blockers={**self.object_blockers, blocks.map_id: occupied}
+        )
+        return observed.with_current_blocks(blocks)
 
     def _staged_cut_plan(
         self,
@@ -531,6 +610,56 @@ class StrategicScenarioRouteWorld:
         return self._plan_candidate(start, goal_map, goal_at=goal_at)
 
     def plan_feasible_to_map(
+        self, start: TraversalSnapshot, goal_map: int, *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        """Quote ordinary travel, or two Cut passages across one observed exit.
+
+        An interior and its outside approach can each contain a Cut passage.
+        Reuse the bounded one-Cut composer on either side of a directly declared
+        native return. This is a finite mechanical split of the same destination,
+        not a new waypoint policy or an all-map multi-Cut search. Live execution
+        still observes each transition and applies the ordinary field-move guard.
+        """
+        try:
+            return self._bounded_single_cut_plan(start, goal_map, goal_at=goal_at)
+        except RoutePlanningError as original:
+            outside = start.last_outside_map
+            if (CUT_CAPABILITY not in start.capabilities
+                or start.map_id in self.macro_graph.outside_nodes
+                or outside not in self.macro_graph.outside_nodes
+                or goal_map in (start.map_id, outside)
+                or not any(edge.kind == "return" for edge in
+                           self.macro_graph.edges.get(start.map_id, ()))):
+                raise
+            try:
+                prefix = self._bounded_single_cut_plan(start, outside)
+                if (prefix.macro_path.maps != (start.map_id, outside)
+                    or prefix.terminal_approach is not None
+                    or sum(a.startswith("cut:") for a in prefix.actions) != 1):
+                    raise original
+                onward = replace(start, map_id=outside, at=prefix.terminal_at,
+                    mode=prefix.terminal_mode, last_outside_map=outside,
+                    occupied=frozenset(), hazards=())
+                suffix = self._bounded_single_cut_plan(onward, goal_map, goal_at=goal_at)
+                if (start.map_id in suffix.macro_path.maps
+                    or suffix.terminal_map != goal_map
+                    or sum(a.startswith("cut:") for a in suffix.actions) != 1):
+                    raise original
+                from .global_router import MacroPath
+
+                return RoutePlan(
+                    MacroPath(prefix.macro_path.maps + suffix.macro_path.maps[1:],
+                              prefix.macro_path.edges + suffix.macro_path.edges),
+                    prefix.start_at, prefix.start_mode, prefix.segments + suffix.segments,
+                    suffix.terminal_approach, suffix.terminal_at, suffix.terminal_mode,
+                )
+            except RoutePlanningError as error:
+                if error is original:
+                    raise
+                raise original from error
+
+    def _bounded_single_cut_plan(
         self,
         start: TraversalSnapshot,
         goal_map: int,
@@ -553,6 +682,10 @@ class StrategicScenarioRouteWorld:
             raise TypeError("scenario relocation start must be a traversal snapshot")
         if type(goal_map) is not int or goal_map < 0:  # noqa: E721
             raise TypeError("scenario relocation goal must be a non-negative map ID")
+        # A prospective approach has no authority to resolve a trainer fight.
+        # Reserve the complete observed sight lanes, not only solid objects or
+        # the final interaction tile. Execution still rechecks changing hazards.
+        blocked = {start.map_id: start.occupied | frozenset(h.at for h in start.hazards)}
         try:
             return plan_route(
                 self.macro_graph,
@@ -560,7 +693,7 @@ class StrategicScenarioRouteWorld:
                 start.map_id,
                 start.at,
                 goal_map,
-                blocked={start.map_id: start.occupied},
+                blocked=blocked,
                 capabilities=start.capabilities,
                 last_outside=start.last_outside_map,
                 start_mode=start.mode,
@@ -583,6 +716,7 @@ class StrategicScenarioRouteWorld:
                     start,
                     goal_map,
                     goal_at=goal_at,
+                    blocked=blocked,
                     candidate_map_ids=frozenset(corridor.maps),
                 )
             except RoutePlanningError as error:

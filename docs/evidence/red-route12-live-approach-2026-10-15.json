@@ -1,0 +1,112 @@
+{
+  "actor_settings_sha256": "53592ef48006593aeb1a2e51babf5a404672fbc2537ad02cdd904590d5f631a0",
+  "all_emulators_stopped": true,
+  "at": "2026-10-15T17:57:59.570554+00:00",
+  "baseline_regressions_fail": 5,
+  "candidate_id": "route12-package-v2",
+  "copied_back_progress": false,
+  "environment_pins": 4512,
+  "existing_battler_decisions": 12,
+  "existing_battler_won": true,
+  "existing_volume_settings_unchanged": true,
+  "files_deleted": 0,
+  "fits": 0,
+  "focused_rom_free_tests": 725,
+  "fresh_completion_gates_passed": 0,
+  "fresh_completion_gates_total": 5,
+  "fresh_run_started": false,
+  "full_run_complete": false,
+  "isolated_modules": 301,
+  "isolated_writes": 0,
+  "launch_authorized": false,
+  "limitations": [
+    "Related DEVELOPMENT copies, not independent fresh completion",
+    "Broad model copy ends at a legitimate partial training settlement, not 24 completed goals",
+    "Long future-map travel and synthetic blocker preservation in other callers remain watch points",
+    "Windows migration requires a rebuilt environment and separately qualified package"
+  ],
+  "main_registration_delta": 0,
+  "manifest_sha256": "068f4bcd5c16578e55c1d757fce9a8481f3e8a621bf62531c658985a5149b396",
+  "mechanics_cases": {
+    "baseline-evolution-03": {
+      "actions": 2,
+      "frames": 48,
+      "receipt_sha256": "0f0f35b8c93b9c473091b290d5a78322274af8880e92acc8edfab35b5e1890cf",
+      "related_development_copy": true,
+      "source_sha256": "fc367d1e35e3f5e18e2694373f9e3598bc1e296b48c2396c18945e60215e691e",
+      "state_loads": 1,
+      "terminal_sha256": "2e487cfcc49a696930ce7f1f6282c9c29445fcd62684b0129bc50f2d6de3163a"
+    },
+    "baseline-route12": {
+      "actions": 195,
+      "frames": 5448,
+      "receipt_sha256": "c84150a99a5b0daf3d91d754411064ac695c3689475a0b1855cebdc0507910f4",
+      "related_development_copy": true,
+      "source_sha256": "2c081a4ef37210ab82d147afe6544ea8cb13802bbdf39810f58e98ce22bc9516",
+      "state_loads": 1,
+      "terminal_sha256": "257b71eb42036f24306f9b3f7c89656d6d8482daa576628b2993bcbd7094e72b"
+    },
+    "repaired-evolution-v2": {
+      "actions": 676,
+      "frames": 65352,
+      "receipt_sha256": "d0bb56a1b0d3101e703a77155e34e875c820a4c992e0e709a5146c59beddf2a7",
+      "related_development_copy": true,
+      "source_sha256": "fc367d1e35e3f5e18e2694373f9e3598bc1e296b48c2396c18945e60215e691e",
+      "state_loads": 1,
+      "terminal_sha256": "99fe4df143eb37f9401d657419ec627815dddd16a9533c20792c92b44d751b1d"
+    },
+    "repaired-route12-before-v2": {
+      "actions": 6,
+      "frames": 240,
+      "receipt_sha256": "a99a438e3dcc7e60a7e90bb6521627ffa1f1960de39d2d918dbbb8537a385c56",
+      "related_development_copy": true,
+      "source_sha256": "2c081a4ef37210ab82d147afe6544ea8cb13802bbdf39810f58e98ce22bc9516",
+      "state_loads": 1,
+      "terminal_sha256": "2709b0c644fe5e0e2e0b5ef196c5d0b78cd9a9f9028c3cb7006e8ba91e9240af"
+    },
+    "terminal-trainer-v2": {
+      "actions": 224,
+      "frames": 20916,
+      "receipt_sha256": "b5203f1e35ab69f96a43f3ced10eb917733f19d9ecf8f5665fd60038f462255e",
+      "related_development_copy": true,
+      "source_sha256": "4e2358adade94d1d657cb69f9e6cbe18bb4864c3d9bc2cd1ec2a252df87331d3",
+      "state_loads": 1,
+      "terminal_sha256": "20fc15840f4863499d086f25a2747f2a0f20004ffb110897dfe5306b465b6913"
+    }
+  },
+  "model_and_helper_changes": 0,
+  "model_copy": {
+    "actions": 24480,
+    "cash_debits": 9900,
+    "decisions": 15,
+    "error_count": 0,
+    "frames": 2134077,
+    "heals": 23,
+    "ordinary_setbacks": 1,
+    "receipt_sha256": "404c67c00adb18368e4551341d09c16e4953acb2644fed7fa66276842174fcff",
+    "registrations_after": 25,
+    "registrations_before": 21,
+    "seconds": 299.73788283299655,
+    "stop_reason": "settlement_budget",
+    "verified_successes": 14
+  },
+  "monitor_paused": true,
+  "new_volume_quota_bytes": 100000002048,
+  "output_free_bytes": 97251827712,
+  "package_pins": 7877,
+  "passed": true,
+  "private_acceptance_sha256": "f4af17a0e99fa7ea0de7520e182840398cea659ae7cc7daf9b8ed1b4dbb5a385",
+  "private_packet_id": "red-route12-static-approach-20261015-v1",
+  "protected_pins": 365,
+  "schema": "pokemon.red.route12-live-approach-acceptance.v1",
+  "scope": "routing_boundary_qualification_only",
+  "source_changes": [
+    "src/pokemon_red_completion/red_player_static_approach.py",
+    "src/pokemon_red_completion/red_resource_goal_router.py"
+  ],
+  "stop_reserve_bytes": 3221225472,
+  "total_copy_loads": 10,
+  "total_diagnostic_actions": 32251,
+  "total_diagnostic_frames": 2797010,
+  "train_examples": 0
+}

@@ -1,0 +1,16 @@
+{
+  "authority": "frozen-risk-cost-agatha-development",
+  "campaign_stage": 462,
+  "copy_audit_sha256": "56bb86cd84bcf2881786f81a82ca5eeaac653d179524ff9715ac202a0eabe637",
+  "failed_broad_qualification_retained": true,
+  "maximum_battles": 1,
+  "maximum_decisions": 80,
+  "model_content_sha256": "905b7e5a8943278bee14d7cb1e55361c1bdb2445dd35e943382f24b2df39e3f4",
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "objective_id": "defeat_agatha",
+  "owner_direction": "Alright let's go: one earned Agatha attempt, then assess resources before Lance.",
+  "partition": "development",
+  "prohibited": ["copy-back", "retry", "fit", "Lance execution", "default deployment", "ordinary funding", "wild execution"],
+  "schema": "pokemon.red.earned-agatha-admission.v1",
+  "source_sha256": "359a96aa317019a8a4d3627711a8faab668091eaa6c48e7485c81d4c17211719"
+}

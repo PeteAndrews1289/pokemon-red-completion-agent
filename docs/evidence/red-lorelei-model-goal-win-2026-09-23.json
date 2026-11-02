@@ -1,0 +1,180 @@
+{
+  "action_counts": {
+    "attack": 34,
+    "forced_switch": 4,
+    "switch_prompt": 4,
+    "voluntary_switch": 11
+  },
+  "actions": 911,
+  "all_battle_choices_recomputed": true,
+  "audit_frames": 0,
+  "audit_source_sha256": "992a11ee7c17129dbad498da3749b3c5c479819dd775bd1312d9ae31813782d8",
+  "audited_behavior": {
+    "active_slot_1": 25,
+    "active_slot_2": 15,
+    "active_slot_3": 1,
+    "active_slot_4": 4,
+    "active_slot_5": 8,
+    "attack": 34,
+    "decisions": 53,
+    "forced_switch": 4,
+    "main_with_legal_status": 22,
+    "opponents_defeated": 5,
+    "own_faints": 4,
+    "policy_nanoseconds": 164358042,
+    "pp_spent": 28,
+    "status_choices": 1,
+    "suppressed_or_failed": 6,
+    "switch_prompt": 4,
+    "voluntary_switch": 11
+  },
+  "battler_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "cash": 19217,
+  "cash_before": 13673,
+  "cash_delta": 5544,
+  "cross_title_transfer": false,
+  "default_authority_promotions": 0,
+  "envelope_sha256": "4f3167d7e5960aeba7cac8941bac58d403d86cf3163eee024c1d464a722bd89b",
+  "event_log_verified": true,
+  "event_records": 207,
+  "execution_commit": "52d6f2932b70e8180ae7cf55455cf4e18dccc401",
+  "frames": 84840,
+  "gameplay_running": false,
+  "goal_decision_sha256": "79d626a26b6ab3cb0e26dc83160ba701fced4a374ac1764b9a140d0b7121cee9",
+  "goal_model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+  "limitations": [
+    "Model141 uses legacy current-state features, not new aftermath context; predictions are not calibrated win probabilities.",
+    "One win after one loss cannot establish general reliability or causal benefit of retry over preparation.",
+    "The unplayed preparation alternative has no outcome label; loss-aware policy training remains deferred.",
+    "Four party members fainted and Surf exhausted. No Bruno admission or recovery claim follows."
+  ],
+  "local_registrations": 17,
+  "losses": 0,
+  "metrics": {
+    "attack_turn_utility_sum": 10.075957224266983,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 6,
+    "opponent_faints": 5,
+    "party_faints": 4,
+    "party_hp_lost": 831,
+    "party_pp_spent": 28,
+    "party_status_changes": 2,
+    "policy_latency_ns_max": 7306000,
+    "policy_latency_ns_mean": 3101095.132075472,
+    "policy_latency_ns_min": 151167,
+    "selected_move_pp_spends": 28,
+    "teacher_interventions": 0
+  },
+  "model_battle_decisions": 53,
+  "model_goal_choice_recomputed": true,
+  "model_goal_choices": 1,
+  "native_execution_failures": 0,
+  "native_seconds": 4.649945708923042,
+  "new_fits": 0,
+  "new_registrations": 0,
+  "new_train_examples": 0,
+  "next_unused_stage": 370,
+  "outcome_sha256": "e3d9dc27416d9107d4ab36ef987db00cc6203f39b36e70c8700c1e0e52cb8ccf",
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 54,
+      "level_before": 54,
+      "species_id": 28,
+      "xp_gained": 7822
+    },
+    {
+      "level_after": 41,
+      "level_before": 41,
+      "species_id": 132,
+      "xp_gained": 567
+    },
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 64,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 118,
+      "xp_gained": 567
+    },
+    {
+      "level_after": 46,
+      "level_before": 46,
+      "species_id": 104,
+      "xp_gained": 1515
+    }
+  ],
+  "party_fainted": 4,
+  "party_hp": [
+    38,
+    0,
+    0,
+    0,
+    0
+  ],
+  "party_max_hp": [
+    169,
+    195,
+    118,
+    97,
+    129
+  ],
+  "party_pp": [
+    [
+      25,
+      13,
+      10,
+      0
+    ],
+    [
+      15,
+      20,
+      9,
+      9
+    ],
+    [
+      35,
+      15,
+      30,
+      15
+    ],
+    [
+      35,
+      40,
+      9,
+      15
+    ],
+    [
+      35,
+      15,
+      30,
+      27
+    ]
+  ],
+  "plan_sha256": "2caff901a46b2a855bd596e18cf7a28f955823cd53269981df6e96d7445bf3ef",
+  "preparation_outings": 0,
+  "prior_campaign_loss_retained": true,
+  "protected_inputs_unchanged": true,
+  "real_available_alternatives": 2,
+  "recent_battle_context_consumed": false,
+  "save_edits": 0,
+  "schema": "pokemon.red.lorelei-model-goal-win.v1",
+  "scope": "One earned model-selected Lorelei continuation. No Bruno, profitable League, fresh run or loss-aware fit.",
+  "selected_goal": "advance_story",
+  "source_replays": 0,
+  "source_sha256": "5bf49331533816a5b827ba0ecc01522adde8ae38d02da14e48a35144aaeb7159",
+  "source_stage": 368,
+  "story_objective_delta": 1,
+  "story_objectives": 31,
+  "teacher_combat": 0,
+  "terminal_sha256": "365af4747021049aaeb17d433b9c6696ad056a7a6d78ea6ea93dc333600700f7",
+  "terminal_stage": 369,
+  "wins": 1,
+  "xp_total": 10471,
+  "targeted_tests_passed": 161,
+  "full_suite_run": false
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import runpy
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -502,14 +503,90 @@ def test_retention_rule_rejects_a_mixed_result() -> None:
     assert not SCRIPT["_retention_decision"](mixed)["candidate_retained_for_shadow_design"]
 
 
-def test_historical_runner_authentication_rejects_current_or_committed_drift() -> None:
-    args = SimpleNamespace(
-        expected_successor_source="f17b7a16d791014195d9840339bd211b04931dfa",
-        expected_successor_runner_sha256="0" * 64,
-        expected_development_runner_sha256=(
-            "29c6e2c4cfcd39f8dc0fcbe22627ddf496565c25473aa82e5995ead6b7339cc8"
-        ),
-    )
+@pytest.fixture
+def historical_runner_repository(tmp_path, monkeypatch):
+    repository = tmp_path / "historical-runners"
+    scripts = repository / "scripts"
+    scripts.mkdir(parents=True)
+    declared_bytes = {
+        "successor": b"SUCCESSOR_VERSION = 1\n",
+        "development": b"DEVELOPMENT_VERSION = 1\n",
+    }
+    paths = {
+        "successor": scripts / "successor.py",
+        "development": scripts / "development.py",
+    }
+    for kind, path in paths.items():
+        path.write_bytes(declared_bytes[kind])
 
-    with pytest.raises(RuntimeError, match="successor runner differs"):
-        SCRIPT["_require_historical_runner_bytes"](args)
+    def git(*arguments):
+        return subprocess.run(
+            [
+                "git",
+                "-c",
+                "user.name=Historical Runner Test",
+                "-c",
+                "user.email=historical-runner@example.invalid",
+                "-c",
+                "commit.gpgsign=false",
+                *arguments,
+            ],
+            cwd=repository,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+    git("init", "-q")
+    git("add", "scripts")
+    git("commit", "-qm", "Declared synthetic runner source")
+    args = SimpleNamespace(
+        expected_successor_source=git("rev-parse", "HEAD"),
+        expected_successor_runner_sha256=hashlib.sha256(declared_bytes["successor"]).hexdigest(),
+        expected_development_runner_sha256=hashlib.sha256(
+            declared_bytes["development"]
+        ).hexdigest(),
+    )
+    authenticate = SCRIPT["_require_historical_runner_bytes"]
+    globals_ = authenticate.__globals__
+    monkeypatch.setitem(globals_, "PROJECT_ROOT", repository)
+    monkeypatch.setitem(globals_, "_SUCCESSOR_RUNNER", paths["successor"])
+    monkeypatch.setitem(globals_, "_DEVELOPMENT_RUNNER", paths["development"])
+    return authenticate, args, paths, declared_bytes, git
+
+
+def test_historical_runner_authentication_accepts_exact_committed_and_current_bytes(
+    historical_runner_repository,
+):
+    authenticate, args, _paths, _declared, _git = historical_runner_repository
+    authenticate(args)
+
+
+@pytest.mark.parametrize("kind", ["successor", "development"])
+@pytest.mark.parametrize("drift", ["current", "committed"])
+def test_historical_runner_authentication_rejects_current_or_committed_drift(
+    historical_runner_repository,
+    kind,
+    drift,
+):
+    authenticate, args, paths, declared, git = historical_runner_repository
+    authenticate(args)
+    path = paths[kind]
+    path.write_bytes(declared[kind] + b"# independent drift\n")
+    if drift == "committed":
+        git("add", "scripts")
+        git("commit", "-qm", "Changed historical runner bytes")
+        args.expected_successor_source = git("rev-parse", "HEAD")
+        # Isolate the historical mismatch: current bytes match the declared pin.
+        path.write_bytes(declared[kind])
+
+    with pytest.raises(RuntimeError, match=f"{kind} runner differs"):
+        authenticate(args)
+
+
+def test_historical_runner_authentication_rejects_missing_history(historical_runner_repository):
+    authenticate, args, _paths, _declared, _git = historical_runner_repository
+    args.expected_successor_source = "0" * 40
+
+    with pytest.raises(RuntimeError, match="successor runner committed bytes are unavailable"):
+        authenticate(args)

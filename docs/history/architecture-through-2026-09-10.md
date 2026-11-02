@@ -251,6 +251,6 @@ answer key. Red is the teacher and first evaluation platform. Cross-title compet
 when the same learned interfaces produce measured value on a title they were not written around.
 
 For the newest navigation measurements and risks, see the
-[knowledge-to-action audit](../traversal-audit-2026-08-10.md). For the full capability ledger, see the
-[current audit](../current-audit-2026-08-11.md). For the dependency order, see the
+[knowledge-to-action audit](retired-plans-2026-10-07/traversal-audit-2026-08-10.md). For the full capability ledger, see the
+[current audit](retired-plans-2026-10-07/current-audit-2026-08-11.md). For the dependency order, see the
 [roadmap](../roadmap.md). For the experiment story, see the [project narrative](../project-narrative.md).

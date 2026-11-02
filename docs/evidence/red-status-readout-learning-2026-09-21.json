@@ -1,0 +1,247 @@
+{
+  "actor_memory_writes": 0,
+  "all_event_and_terminal_hashes_verified": true,
+  "authority_promotions": 0,
+  "candidate_predictions_verified": 0,
+  "candidate_sha256": "5f6e9d5a72d692fabbd0d4c3b89cac4c72fd80661ed2dc707bd809714f31a558",
+  "collection_delta": 0,
+  "decision_records": 0,
+  "episodes": 0,
+  "event_records": 0,
+  "fit": {
+    "groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 13,
+          "high_cost_errors": 7,
+          "regret": 0.6740904765769685
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 11,
+          "high_cost_errors": 7,
+          "regret": 0.668523548768489
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 11,
+          "high_cost_errors": 7,
+          "regret": 0.5697010947275426
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.774339628106996
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 8,
+          "regret": 0.6158196049760932
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 15,
+          "high_cost_errors": 10,
+          "regret": 0.7172800121144663
+        }
+      }
+    ],
+    "hidden_parameters_unchanged": true,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_result": {
+      "anchor_l2": 0.001,
+      "iterations": 103,
+      "loss": 0.768229497603029,
+      "message": "Optimization terminated successfully",
+      "minimum_constraint_slack": -1.8041124150158794e-16,
+      "parameter_distance": 13.73923193545261,
+      "seconds": 0.029159583151340485,
+      "stationarity_residual": 0.000015784629629753073,
+      "success": true
+    }
+  },
+  "frames": 0,
+  "gameplay_running": false,
+  "independently_verified_stationarity": 0.000015784629629755522,
+  "invalid_actions": 0,
+  "later_group_regret_reduction_fraction": 0.2052124631936193,
+  "learned_continuation_or_evaluation_choices": 0,
+  "new_target_contexts": 0,
+  "oldest_group_gate": false,
+  "plan_sha256": "ead4cd868a034306a3f4e728b8dba27eefba40c1ec20a700ae4fda9417bc1a8b",
+  "prescribed_first_choices": 0,
+  "representation": {
+    "contrast_rank": 16,
+    "hidden_width": 16,
+    "high_cost_initial_errors": 27,
+    "individual_feasibility": [
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 13
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 31
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 34
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 36
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 55
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 84
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 88
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 123
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 126
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 127
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 130
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 132
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 136
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 156
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 159
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 160
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 162
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 187
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 228
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 230
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 231
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 233
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 234
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 237
+      },
+      {
+        "feasible": false,
+        "solver_status": 2,
+        "target_index": 244
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 270
+      },
+      {
+        "feasible": true,
+        "solver_status": 0,
+        "target_index": 273
+      }
+    ],
+    "individually_correctable_errors": 25,
+    "joint_learnability_claim": false
+  },
+  "result": {
+    "authority_promotions": 0,
+    "fit_gate": false,
+    "fits": 1,
+    "screen": null,
+    "withheld": null
+  },
+  "retention": {
+    "minimum_constraint_slack": -4.0245584642661925e-16,
+    "protected_preferences": 182,
+    "retention_regressions": 0
+  },
+  "schema": "pokemon.red.status-readout-audit.v1",
+  "source_commit": "a4e77c70c34067a6df5c8fa95d742e91a15d7722",
+  "status_move_attempts_including_prescribed": 0,
+  "stops": {},
+  "training_contexts": 312,
+  "protected_artifacts_sha256": {
+    "earned_story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141_record": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  }
+}

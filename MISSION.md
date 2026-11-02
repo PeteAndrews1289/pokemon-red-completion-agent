@@ -1,105 +1,61 @@
 # Mission
 
-Every agent and every contributor reads this first. If a proposed change does not serve the goal
-below, it does not belong in this repository — however good it looks on its own terms.
+Build a model that can actually play Pokémon: choose useful goals, fight, prepare,
+recover from setbacks and carry learned competence into unfamiliar games.
+A fixed walkthrough that completes Red is useful infrastructure, not the product.
 
-Then read [NORTH_STAR.md](NORTH_STAR.md). It turns this mission into mandatory task filters,
-time boxes, stop rules, and a full-run gate. Authority flows from mission to north star to the
-generated [active product state](ACTIVE_PRODUCT_STATE.md), then the model-first roadmap; no newer
-checkpoint can reverse that order. The active state is the compact answer to what work is allowed
-now and which measured learning output must result.
+Read [NORTH_STAR.md](NORTH_STAR.md) for development rules,
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) for current status and
+[HANDOFF.md](HANDOFF.md) for the next work order.
 
-## The goal
+## First delivery
 
-**Create a model that can actually play Pokémon.**
+Complete one fresh, model-directed Red run from the opening through Champion and
+Hall of Fame, with all 124 registrations on the declared legitimate native route
+earned in that same save. Retain concurrent Champion/Hall-of-Fame evidence even
+when ordinary credits later clear temporary flags.
 
-Not a model that completes Pokémon Red. Not a route that reaches the Hall of Fame reliably. A model
-that plays the game: chooses what to do, reacts when things differ from what it saw in training, and
-carries that competence into games it has never seen.
+Consequential story, preparation, recovery, collection and resource choices belong
+to the model. Deterministic navigation, menu handling and other declared execution
+skills may support it. No hidden operator walkthrough, save editing, cheat actions,
+copied victories or stitched-together save progress count as final completion.
 
-Concretely, success is:
+The final player makes decisions locally, with zero runtime LLM calls. Teachers
+may supply TRAIN demonstrations and corrections but are absent during evaluation.
 
-1. **A shared, registered Pokédex across mainline titles.** One accumulating registry of species
-   verified as caught/owned through capture, evolution, gifts or legitimate trades across runs.
-   Each species needs global credit once, not a simultaneous living specimen of every form.
-   Per-save Pokédex registration and physical party/box inventory remain separate facts.
-2. **Ideally 100% completion of each title.** The dex is the spine, because collecting everything
-   forces the system to exercise the whole game rather than the shortest path through it.
-3. **Transfer.** Knowledge earned in one generation reduces the teaching required for the next.
+Pete approved one temporary exception on October 6: an automated, disclosed
+medicine-reserve safeguard before the uninterrupted League challenge. It uses
+normal inputs and earned money; broader goals and battles remain model-directed.
+Freeze its configuration for the final run and label procurement as rule-based
+support. Learned medicine anticipation remains future work.
 
-The delivery gate revised by Pete on September 15 is **complete Red's legitimate native route
-before any ROM hack**: a fresh start-to-finish, model-directed run, concurrent Champion and
-Hall-of-Fame evidence, and the declared 124-species selected Red route registered in that run's
-save. A fixed walkthrough with random timing or a stitched checkpoint demonstration does not
-satisfy this gate. Deterministic mechanics may support the player, but consequential progression
-and resource decisions must belong to the model under declared authority.
+## Collection and transfer
 
-Version, cable-trade and event dependencies remain explicit legitimate gaps; shared credit never
-fabricates a local Red flag. Mew is deferred until a later legitimate source. Red/Blue link play
-may be attempted after model completeness, but an unavailable emulator link does not block the
-ROM-hack gate: record the dependency and earn it in a later title instead. The final player and
-official completion run may not cheat or edit a save. Training may use disclosed, isolated state
-interventions, including money overrides, to teach or test a mechanic without a resource bottleneck.
-Such assisted results are not legitimate funding, fresh-run completion or ordinary economy labels;
-the model must never receive an action that can perform the intervention itself.
-After that gate: a compatible unfamiliar Red ROM modification, then Crystal, continuing the
-shared registered Pokédex through at least Emerald. Report initial transfer and adaptation
-separately. Red experience should reduce teaching, not guarantee immediate success.
+The objective is a shared, verified registered Pokédex, not a living specimen of
+every form. Capture, evolution, gifts and legitimate trades can each establish
+credit. Global credit, local Pokédex flags and physical party/box stock are separate.
 
-## Explicit scope revision — September 9, 2026
+The current Red route excludes 27 version, trade, event or mutually exclusive
+dependencies. Blue or later legitimate titles may supply them; Mew is deferred.
+Unavailable link play must not block the declared Red route or fabricate local flags.
+Do not release specimens or discard valuable saves merely to simplify accounting.
 
-Pete retired the living-specimen completion requirement and the level-100 stretch target.
-After story completion, catch a useful missing line, evolve only as far as needed for missing
-registrations, deposit when it is no longer needed, and pursue the next gap. No arbitrary
-completion level is required. Before the story ends, develop a capable team as necessary.
+After Red passes its final gate, test a compatible unfamiliar Red ROM hack, then
+transfer to Crystal and continue through at least Emerald. Red experience should
+reduce the teaching required; immediate zero-shot mastery is not assumed.
 
-A shared ledger prevents Blue and later runs from repeating already-credited evolution lines
-solely for global completion. An already-recorded species may still be needed for the current
-team or as a prerequisite for a new branch. Duplicate captures are allowed without an intrinsic
-duplicate penalty; first-time credit is not awarded twice and actual resource costs remain visible.
-No automatic releases or destructive save edits are authorized by this change.
+## What counts as progress
 
-The new goal does not retroactively alter old learning receipts, rewards or contracts. The
-versioned registered-only runtime and shared ledger must be integrated before new collection
-runs. [Scope and migration plan](docs/shared-pokedex-registration-plan.md).
+Reusable execution, more consequential model-owned decisions, useful fitted
+improvements and sustained play without operator repairs all contribute.
+Report them separately. In-game levels and newly caught species do not change
+model weights. A repeated supported completion does not prove new autonomy.
 
-## Why the Pokédex, and not just beating the game
+Teachers may control isolated TRAIN scenarios, including money, levels, stats and
+moves, to generate informative lessons. Those interventions never become final
+player actions or legitimate earned resources. Successes and failures both matter;
+a perfect battle win rate is not required.
 
-Beating Pokémon Red is easy and we can already do it. The current teacher finishes the game
-repeatedly with Champion and Hall-of-Fame evidence. That result is worth almost nothing as
-*training data*, and the measurements prove why.
-
-A recorded run finished the game with a level-87 Blastoise that erased the Champion's entire
-six-Pokémon team in **six turns — one apiece**. The other five party members never entered the
-battle. Every recorded decision in that fight was "use the strongest move," and it was always
-correct. There is nothing in that data for a model to learn.
-
-Collecting the Pokédex cannot be done that way. It requires encounter tables, every evolution
-method, capture judgment, storage management, trading, version differences, and the areas a
-completion route deliberately skips. Those are the skills that transfer — and later generations
-stack breeding, held items, day/night, and abilities on the same foundations.
-
-**So the Pokédex is not a stretch goal bolted onto a completion project. It is the thing that forces
-the system to learn to play.**
-
-## What this rules out
-
-- **Optimizing Red completion reliability.** More seeds passing a fixed route produces more of the
-  same empty demonstrations. Reliability of a teacher that makes no interesting decisions is not the
-  bottleneck; the decisions are.
-- **Overleveling.** A party far above its opposition removes every decision from every battle. It is
-  the same failure as the single carry, wearing a six-member costume.
-- **Route tricks that do not generalize.** A fixed walk string, a cursor exception, or a
-  species-specific hack solves Red and teaches nothing. Prefer the reusable concept even when it is
-  more expensive.
-- **Metrics that cannot embarrass you.** Twelve committed receipts reported the *Champion's* party
-  levels as our own for five evaluation versions, because the number looked like what everyone hoped
-  for and nobody checked it. Prefer measurements that can come back wrong.
-
-## How to tell whether work serves the goal
-
-Ask: *does this increase the number of real decisions in the demonstrations, or the breadth of
-mechanics the system exercises?*
-
-If neither, it is probably Red maintenance. Red maintenance is sometimes necessary — a route that
-cannot finish produces no data at all — but it is never the objective.
+Use [the completion contract](docs/completion-contract.md) for official evaluation
+and [the current roadmap](docs/model-first-roadmap.md) for remaining delivery work.
+Historical research rules do not override the latest explicit user direction.

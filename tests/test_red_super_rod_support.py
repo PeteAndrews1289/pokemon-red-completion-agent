@@ -188,6 +188,30 @@ def test_acquired_gift_dialogue_settles_without_regranting_item():
     assert dict(reader.raw.bag_items)[int(ItemId.SUPER_ROD)] == 1
 
 
+def test_first_gift_closes_with_cancel_after_native_acquisition():
+    reader, emulator = _Reader(), _Emulator()
+
+    class RetriggeringGift(_GiftActions):
+        def execute(self, action):
+            acquired = int(ItemId.SUPER_ROD) in dict(reader.raw.bag_items)
+            super().execute(action)
+            if acquired and action.kind is MacroActionKind.CONFIRM:
+                reader.dialogue = True
+            if acquired and action.kind is MacroActionKind.CANCEL:
+                reader.ready = True
+                reader.dialogue = False
+
+    delegate = RetriggeringGift(reader, emulator, acquire_on=3, settle_on=99)
+    receipt = RedSuperRodSupportExecutor(CountingExecutor(delegate), reader, emulator).execute()
+    assert receipt.actions == 4
+    assert delegate.kinds == [
+        MacroActionKind.INTERACT, MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM, MacroActionKind.CANCEL,
+    ]
+    assert observe_red_super_rod_support(reader).acquired
+    assert not reader.dialogue
+
+
 @pytest.mark.parametrize(
     "mutation",
     ["map", "position", "facing", "input", "dialogue", "battle", "full_bag"],
@@ -236,7 +260,7 @@ def test_executor_verifies_gift_and_settles_dialogue_without_learning():
         MacroActionKind.INTERACT,
         MacroActionKind.CONFIRM,
         MacroActionKind.CONFIRM,
-        MacroActionKind.CONFIRM,
+        MacroActionKind.CANCEL,
     ]
     assert result.actions == 4 and result.frames == 96
     assert result.public_dict()["training_examples"] == 0
@@ -381,7 +405,7 @@ def test_routed_executor_reaches_faces_and_accepts_support_gift(monkeypatch):
         MacroActionKind.INTERACT,
         MacroActionKind.CONFIRM,
         MacroActionKind.CONFIRM,
-        MacroActionKind.CONFIRM,
+        MacroActionKind.CANCEL,
     ]
     assert result.route_steps == 1
     assert result.facing_action_used
@@ -397,6 +421,29 @@ def test_routed_executor_rejects_unsupported_route_before_input(monkeypatch):
     with pytest.raises(RedSuperRodSupportError, match="unsupported transport"):
         RedRoutedSuperRodSupport(CountingExecutor(delegate), reader, emulator, world).execute()
     assert delegate.count == 0 and emulator.frame_count == 0
+
+
+def test_routed_rod_uses_explicit_interruption_wrapper_without_replacing_gift_checks(monkeypatch):
+    reader, emulator = _Reader(), _Emulator()
+    runtime, world = _patch_routed_dependencies(monkeypatch, reader)
+    delegate = _RoutedGiftActions(reader, emulator, acquire_on=3, settle_on=4)
+    wrapped = SimpleNamespace(handle=lambda _: None)
+    seen = []
+    original = runtime.execute_route
+
+    def execute(*a, **k):
+        seen.append(k["interruption_handler"])
+        return original(*a, **k)
+
+    monkeypatch.setattr(runtime, "execute_route", execute)
+    result = RedRoutedSuperRodSupport(
+        CountingExecutor(delegate), reader, emulator, world,
+        interruption_handler_wrapper=lambda _: wrapped,
+    ).execute()
+    assert seen == [wrapped] and result.gift.actions == 4
+    with pytest.raises(TypeError, match="callable"):
+        RedRoutedSuperRodSupport(CountingExecutor(delegate), reader, emulator, world,
+                                interruption_handler_wrapper="invalid")
 
 
 def test_active_safari_exit_selects_yes_and_settles_before_onward_route(monkeypatch):

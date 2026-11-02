@@ -284,8 +284,14 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
         ]
         if row["evidence"]:
             result += [f"[Current evidence](../{row['evidence']})", ""]
-    result += ["## Session reviews", ""]
-    for review in reversed(state["reviews"]):
+    result += [
+        "## Latest review",
+        "",
+        "Earlier reviews remain in the [status history](../configs/development-roadmap-state.json)",
+        "and dated work-session reports. Their next steps are not current instructions.",
+        "",
+    ]
+    for review in state["reviews"][-1:]:
         result += [
             f"### {review['session']}",
             "",
@@ -299,7 +305,8 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
     result += [
         "## Update contract",
         "",
-        "After each completed session or substantial verified milestone, update "
+        "After a material learner milestone, strategy/requirements change "
+        "or explicit request, update "
         "the [status record](../configs/development-roadmap-state.json), "
         "preserve the review history, "
         "and regenerate this page and graphic. Record changes to the stable goals in "

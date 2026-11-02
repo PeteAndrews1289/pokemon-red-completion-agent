@@ -1,0 +1,210 @@
+{
+  "schema": "pokemon.red.audit-readiness-implementation.v1",
+  "status": "ready_bounded_development_maximum_two",
+  "human_scope": "Implement reconciled audit goals until ready for large-scale testing; full campaigns paused pending evidence.",
+  "actual_registration_delta": 0,
+  "new_native_loads": 39,
+  "new_fits": 3,
+  "models_adopted": 0,
+  "retained_baseline": {
+    "sampled_goal_decisions": 239,
+    "sampled_battle_outcomes": 167,
+    "actual_plan_goal_model": "a9c97388",
+    "actual_plan_feature_version": 9,
+    "actual_plan_training_rows": 173,
+    "p182_settings_goal_model": "921d5d8a",
+    "p182_settings_feature_version": 7,
+    "p182_settings_training_rows": 161,
+    "selected_probability_uniform_mean": 0.752,
+    "story_probability_uniform_mean": 0.837,
+    "source_dependence": "Retained sample shares ancestry; no independent trial claim.",
+    "gym_sample_wins": 15,
+    "gym_sample_battles": 15,
+    "switching_harm_proved": false
+  },
+  "changes": [
+    "Typed restoration budget stop retains failed tail and never retries.",
+    "Opted-in final metered nursing closes a productive exhausted partial without target success.",
+    "Trainee XP distinguished from whole-party XP.",
+    "Sole executable development/storage supplements reuse attributed singleton support.",
+    "V15 consequence codecs and existing parent/child integration extended; default settings unchanged.",
+    "Opt-in prospective-context V15 projection retains317of506rawcolumns, excludes historical opponent/budget confounds; defaults remain unchanged.",
+    "Strict restoration-budget censor reporting retains raw failure/costs and authenticates disk/context pairing; original aggregate allowance still gates renewals."
+  ],
+  "checks": [
+    {
+      "scope": "Native/autonomous budget negatives",
+      "passed": 303
+    },
+    {
+      "scope": "Budget plus preparation integration",
+      "passed": 525
+    },
+    {
+      "scope": "Lesson-runtime singleton support",
+      "passed": 99
+    },
+    {
+      "scope": "V15 parent/child plus native/autonomous/lesson integration",
+      "passed": 423
+    },
+    {
+      "scope": "Configured launcher,parent-child and version integration",
+      "passed": 460
+    },
+    {
+      "scope": "Sequence audit replay and semantic fixtures",
+      "passed": 98
+    },
+    {
+      "scope": "Tail recovery/corridor/native integration",
+      "passed": 371
+    },
+    {
+      "scope": "Prospective projection integration",
+      "passed": 111
+    },
+    {
+      "scope": "Live projected head and consumer, fit tests excluded",
+      "passed": 78,
+      "deselected": 5
+    },
+    {
+      "scope": "Restoration finite-censor reporting/export regression",
+      "passed": 166
+    },
+    {
+      "scope": "Own automatic-damage turn boundary and existing battle runtime",
+      "passed": 337
+    },
+    {
+      "scope": "Protected-catcher fresh-HP faint fallback and complete Surge ROM-free file",
+      "passed": 123
+    }
+  ],
+  "focused_counts_overlap": true,
+  "full_suite": false,
+  "blockers": [
+    "No unresolved blocker to finitemax2copy-onlyP7DEVELOPMENT withinqualifiedguards.",
+    "Sixparty cost/stoppingcoverage,independentgeneralization,robustreliability/freshcompletion remainunproved.",
+    "BroadROMfree/CIbaseline remainsnotgreen; scopedfocusedqualification only."
+  ],
+  "external_review_contributions": "Human-supplied Gemini and Claude audits; claims reconciled against original source and receipts.",
+  "session": "2026-10-25-audit-readiness",
+  "partition": "development",
+  "native_episode": false,
+  "fit_allowed": false,
+  "completed_teacher_native_pairs": 1,
+  "learning_delta": 3,
+  "native_comparison": {
+    "direct_win": false,
+    "prepared_win": true,
+    "teacher_queries": 0,
+    "fit_allowed": false,
+    "independent_origins": 1,
+    "trainee_xp": 1165,
+    "party_xp": 1519
+  },
+  "configured_model_choices": 128,
+  "configured_selector_native_passed": true,
+  "updated_at_utc": "2026-10-25T19:18:32.577656+00:00",
+  "training_rows_admitted": 8,
+  "diagnostic_loads": 39,
+  "production_train_direct_native_qualified": true,
+  "preparation_consumer_vector_parity": true,
+  "postdose_source_proof": "6c2880d7c72ede371559e92a2457d7504269e0b5fdf5ee677d8681a59ee63e14",
+  "large_scale_ready": true,
+  "candidate_head_sha256": "a20263c9ee890c46e411465caad28ca010690c499bfe6ab05d7ed56e85ae004d",
+  "native_learned_preparation_benefit_verified": false,
+  "all_native_workers_stopped": true,
+  "all_controls_released": true,
+  "unknown_native_cost_tails": 2,
+  "current_two_worker_hardware_qualified": true,
+  "capacity": {
+    "aggregate_throughput_ratio": 1.8124530381431252,
+    "max_worker_slowdown_fraction": 0.08806860928743454,
+    "maximum_qualified_workers": 2,
+    "package_scope": "P4 fixed teacher TRAIN prebattle workload",
+    "independent_origins": 1,
+    "autonomous_reliability_claim": false
+  },
+  "near_candidate": {
+    "passed": false,
+    "native_attempts": 23,
+    "goal_policy_queries": 25,
+    "controls_released": true,
+    "field_ready": false,
+    "typed_error": "BattleRuntimeError",
+    "failed_tail_preserved": true,
+    "extra_training_then_misty_loss": true,
+    "teacher_queries": 0,
+    "fit_allowed": false,
+    "independent_origins": 1
+  },
+  "production_failed_wild_recovery_qualified": true,
+  "standalone_battle_decisions": 23,
+  "native_repair_qualification": {
+    "initial_battle_replay": true,
+    "exact_failed_move_battle": true,
+    "actual_configured_observer_recovery": true,
+    "policy_queries_during_mandatory_recovery": 0,
+    "original_attempts_cap_consumed": 24,
+    "old_failure_preserved": true,
+    "models_unchanged": true,
+    "whole_player_continuation_authorized": false
+  },
+  "eighth_train_row": {
+    "partition": "train",
+    "trainee_species_id": 179,
+    "level_before": 17,
+    "level_after": 18,
+    "trainee_xp": 691,
+    "battle_won": false,
+    "cash_debits": 1500,
+    "actions": 1474,
+    "frames": 114228,
+    "heals": 2,
+    "seconds": 21.00963137799954,
+    "forecast_completion": 0.392172,
+    "forecast_computed_after_collection": true,
+    "model_preexisting_and_unchanged": true,
+    "cost_lower_bound_flag_retained": true,
+    "fit_performed": false
+  },
+  "protected_catcher_caller_repair_romfree_passed": 123,
+  "protected_catcher_P7_native_qualified": true,
+  "current_P6_parallel_pilot_passed": false,
+  "matched_pair": {
+    "identity_misty_wins": 0,
+    "identity_misty_losses": 2,
+    "prospective_misty_wins": 1,
+    "identity_actions": 1834,
+    "prospective_actions": 7501,
+    "identity_frames": 157860,
+    "prospective_frames": 540504,
+    "identity_restores": 1,
+    "prospective_restores": 22,
+    "identical_sampler_hierarchy_caps": true,
+    "literal_raw_menu_equal": false,
+    "raw_difference": "budget.seconds only; both-head cross-input rankings stable",
+    "independent_origins": 1,
+    "independent_trials": 0,
+    "adoption": false
+  },
+  "bounded_development_ready": true,
+  "large_scale_ready_scope": "FrozenP7,finiteisolatedcopy-onlyDEVELOPMENT,max2workers,4GiBsoft/6GiBhard/noswap/reserveguards. Noautomaticbatch/actual/officialcampaignlaunch.",
+  "unrestricted_large_scale_ready": false,
+  "current_P7_parallel_pilot_passed": true,
+  "qualified_maximum_concurrency": 2,
+  "all_seven_final_goals_complete": false,
+  "current_package_capacity": {
+    "maximum_workers": 2,
+    "scope": "Two8choice copiedP7actors,execution/isolation/resourcequalification only",
+    "peak_gib": 1.743,
+    "minimum_windows_available_gib": 15.26,
+    "minimum_wsl_available_gib": 13.207,
+    "swap_or_oom": false,
+    "actual_progress": 0,
+    "consequence_head_queries": 0
+  }
+}

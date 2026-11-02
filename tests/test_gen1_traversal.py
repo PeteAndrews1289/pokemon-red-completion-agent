@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -206,6 +207,51 @@ def terrain(
     )
 
 
+def test_exact_graph_math_reuse_keeps_each_mapping_private():
+    from pokemon_red_completion.gen1_traversal import _local_graph_edges
+
+    _local_graph_edges.cache_clear()
+    grid, constraints = terrain(((1, 1, 1),)), rules()
+    first = local_graph(grid, constraints, blocked=[(0, 2)])
+    expected = dict(first.edges)
+    first.edges.clear()
+    second = local_graph(replace(grid), constraints, blocked=((0, 2),))
+    assert second.edges == expected
+    assert second is not first and second.edges is not first.edges
+    info = _local_graph_edges.cache_info()
+    assert (info.hits, info.misses, info.maxsize) == (1, 1, 512)
+
+
+def test_graph_reuse_keys_live_terrain_rules_blockers_and_surf_mode():
+    from pokemon_red_completion.gen1_traversal import _local_graph_edges
+
+    _local_graph_edges.cache_clear()
+    grid, constraints = terrain(((1, 2, 1),)), rules()
+    initial = local_graph(grid, constraints)
+    blocked = local_graph(grid, constraints, blocked=((0, 1),))
+    assert blocked.edges != initial.edges
+    changed_tiles = local_graph(replace(grid, tiles=((1, 3, 1),)), constraints)
+    assert changed_tiles.edges == initial.edges
+    restricted = local_graph(grid, rules(land=(TilePairRestriction(0, 1, 2),)))
+    assert restricted.edges != initial.edges
+    wet = replace(grid, walkable=((True, False, True),), water=((False, True, False),))
+    dry_mode, surf_mode = local_graph(wet, constraints), surf_local_graph(wet, constraints)
+    assert dry_mode.edges != surf_mode.edges
+    assert _local_graph_edges.cache_info().misses == 6
+
+
+def test_unhashable_but_valid_terrain_does_not_use_identity_cache():
+    from pokemon_red_completion.gen1_traversal import _local_graph_edges
+
+    _local_graph_edges.cache_clear()
+    grid = replace(terrain(((1, 1),)), walkable=[[True, True]])
+    first = local_graph(grid, rules())
+    grid.walkable[0][1] = False
+    second = local_graph(grid, rules())
+    assert first.edges != second.edges
+    assert _local_graph_edges.cache_info().currsize == 0
+
+
 def test_all_four_static_rule_tables_are_decoded_from_independent_bytes() -> None:
     rom = bytes(traversal_cartridge())
 
@@ -330,7 +376,7 @@ def test_surf_requires_the_badge_and_a_living_observed_move_holder() -> None:
     )
 
 
-def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
+def test_cut_requires_the_badge_and_a_complete_observed_holder() -> None:
     def observed(
         *,
         badges: Badge = Badge.CASCADE,
@@ -351,7 +397,7 @@ def test_cut_requires_the_badge_and_a_complete_living_observed_holder() -> None:
 
     assert cut_capabilities(observed()) == frozenset({CUT_CAPABILITY})
     assert not cut_capabilities(observed(badges=Badge.SOUL))
-    assert not cut_capabilities(observed(hp=(0,)))
+    assert cut_capabilities(observed(hp=(0,))) == frozenset({CUT_CAPABILITY})
     assert not cut_capabilities(observed(moves=((SURF_MOVE_ID,),)))
     assert not cut_capabilities(observed(hp=(20, 20), moves=((CUT_MOVE_ID,),)))
 

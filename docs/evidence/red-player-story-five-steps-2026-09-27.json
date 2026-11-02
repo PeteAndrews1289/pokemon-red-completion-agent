@@ -1,0 +1,367 @@
+{
+  "schema": "pokemon.red.player-story-five-steps.v1",
+  "date": "2026-09-27",
+  "session_id": "2026-09-27-player-story-five-steps",
+  "status": "five-step-bounded-development-complete",
+  "partition": "development",
+  "private_record_sha256": {
+    "AUDIT.json": "f776fba173926ad0a37d106d5e90fdfcfba2061a56e26fe90fe5573abea3e848",
+    "AUDITED-BOUNDARIES.json": "efbeadddcdea493f6518bc37321fe31168311dd44d29f0a01a6b6da4482e773c",
+    "CONTINUATION-AUDIT.json": "5dcbc27113280ba2e699e52ffa42df957fbca074521ecc7ff403fc4ecc362061"
+  },
+  "source_sha256": "9ced63caa297a3a046e85bde908c872b26f31ee15a917b2ecd15040c28bcffa8",
+  "models": {
+    "baseline_bridge": "a26dc468d1be8e2d69b201dc08675b7144d757b1fffe3576ad945d5a9a8fcc0f",
+    "frozen_k": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472"
+  },
+  "audit_input_frames": 0,
+  "campaign_registrations": 0,
+  "cumulative_costs_including_source": {
+    "actions": 5247,
+    "cash_debits": 2668,
+    "decisions": 26,
+    "frames": 301647,
+    "heals": 7,
+    "seconds": 301.0978107089759
+  },
+  "final": {
+    "bag": {
+      "4": 4,
+      "234": 1
+    },
+    "boulder_badge": true,
+    "brock_event": true,
+    "cash": 1808,
+    "fully_restored": true,
+    "levels": [
+      11,
+      5,
+      3,
+      5
+    ],
+    "map": 14,
+    "owned": [
+      7,
+      13,
+      16,
+      19
+    ],
+    "state_sha256": "6c9f0037da545999bb7d0959377c4c2ccc76d100c168f596a2fc2367e76e8bc5",
+    "tm34_event": true
+  },
+  "fits": 0,
+  "full_player_promotion": false,
+  "independent_origin_groups": 1,
+  "new_training_rows": 0,
+  "note": "Retained continuous state ancestry across engineering repairs; not one uninterrupted runtime or a comparative learning result.",
+  "packets": [
+    {
+      "actions": 137,
+      "battle_choices": 5,
+      "battle_losses": 0,
+      "battle_wins": 1,
+      "battles": 1,
+      "frames": 8880,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "develop_team",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "failed"
+        }
+      ],
+      "model_choices": 1,
+      "packet": "brock-01",
+      "result_sha256": "eb1d308c54654efb96032203c85018b6d0349f1879d96e331ab066f869c8d3c2",
+      "seconds": 7.977207791991532,
+      "stop": "verification_failed",
+      "support_choices": 0,
+      "terminal_sha256": "afcc5da4d427e9f792a45aca9a2be50f05663fed073f2362c959c9d50d02247b"
+    },
+    {
+      "actions": 421,
+      "battle_choices": 5,
+      "battle_losses": 0,
+      "battle_wins": 1,
+      "battles": 1,
+      "frames": 21900,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "develop_team",
+          "model_choice": true,
+          "ordinary_setback": true,
+          "verification": "failed"
+        },
+        {
+          "cash_delta": 0,
+          "error": "route replanning found no candidate",
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "model_choices": 2,
+      "packet": "brock-02",
+      "result_sha256": "2b0f87143f6c0591c4c3be1c92bfdb442cc8a1628751b39cda1bab0d8d87fdc8",
+      "seconds": 23.37306974999956,
+      "stop": "execution_failed",
+      "support_choices": 0,
+      "terminal_sha256": "bcf059eb3018b0c90fa5ef2d37dadcf72538cbf483267769247c49c85334766c"
+    },
+    {
+      "actions": 263,
+      "battle_choices": 17,
+      "battle_losses": 0,
+      "battle_wins": 1,
+      "battles": 1,
+      "frames": 23685,
+      "goals": [
+        {
+          "cash_delta": 90,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "model_choices": 1,
+      "packet": "brock-03",
+      "result_sha256": "74e84981f594a5c1565368c3fe9e26fbd0d4b945ae802b3f6eb1cf6a39d9ea2f",
+      "seconds": 15.443935291987145,
+      "stop": "continuous_spending_boundary",
+      "support_choices": 0,
+      "terminal_sha256": "86fd3324318eefef95a7e5db997c1dd797a37a7d8a10514ccd816a7b01e6bb52"
+    },
+    {
+      "actions": 98,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 5088,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": "Gen I route cannot dismiss 'scripted_dialogue'",
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "model_choices": 0,
+      "packet": "brock-04",
+      "result_sha256": "3c89f2f163fb991a0f7561163d55069c14aa9a4ee3b314b011d03bbe28c0ce0e",
+      "seconds": 5.6891449589747936,
+      "stop": "execution_failed",
+      "support_choices": 1,
+      "terminal_sha256": "43b04509acfefe40a09a0810e19fc0e54879866cce7ef6831752ef558cf834a7"
+    },
+    {
+      "actions": 269,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 8784,
+      "goals": [
+        {
+          "cash_delta": -845,
+          "error": null,
+          "kind": "recover_control",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "model_choices": 1,
+      "packet": "brock-05",
+      "result_sha256": "2f5f403acd790e7596db24a7e4b79e33ba366a9ce9a2453b5e916fe20b7f93e4",
+      "seconds": 15.071572000015294,
+      "stop": "menu_unavailable",
+      "support_choices": 1,
+      "terminal_sha256": "f0acda2544a786a3d73c643aa9249db39ee682701660c8157bd18f982de9b7c9"
+    },
+    {
+      "actions": 1749,
+      "battle_choices": 28,
+      "battle_losses": 1,
+      "battle_wins": 2,
+      "battles": 3,
+      "frames": 100824,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "develop_team",
+          "model_choice": true,
+          "ordinary_setback": true,
+          "verification": "failed"
+        },
+        {
+          "cash_delta": -423,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": true,
+          "verification": "failed"
+        },
+        {
+          "cash_delta": 1386,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "model_choices": 3,
+      "packet": "brock-06",
+      "result_sha256": "b276ef1ac9788f8c9ee13dfd84b5d194e5d265c98f599b79f1fe471a81723bfe",
+      "seconds": 94.33618929202203,
+      "stop": "curriculum_complete",
+      "support_choices": 1,
+      "terminal_sha256": "20e71139c384b493817ef4651ab08735383672167ef1fbfec50040cf6c446d55"
+    },
+    {
+      "actions": 392,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 18828,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "acquire_species",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": "Gen I route cannot dismiss 'scripted_dialogue'",
+          "kind": "restore_team",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": null
+        }
+      ],
+      "model_choices": 1,
+      "packet": "post-brock-01",
+      "result_sha256": "0d35749bb150d624fc1f3b8c0eed7442bedace6cc2d21669dc98d0d70323844e",
+      "seconds": 21.493862583010923,
+      "stop": "execution_failed",
+      "support_choices": 1,
+      "terminal_sha256": "3b39d64f80396e2fb533a4099c3b1fafe0419d58c76378a1a5d936a8538f22af"
+    },
+    {
+      "actions": 418,
+      "battle_choices": 0,
+      "battle_losses": 0,
+      "battle_wins": 0,
+      "battles": 0,
+      "frames": 13734,
+      "goals": [
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "recover_control",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "restore_team",
+          "model_choice": false,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        },
+        {
+          "cash_delta": 0,
+          "error": null,
+          "kind": "advance_story",
+          "model_choice": true,
+          "ordinary_setback": false,
+          "verification": "succeeded"
+        }
+      ],
+      "model_choices": 2,
+      "packet": "post-brock-02",
+      "result_sha256": "bc1e98bb45cb38fa8bd4c1760548fa8eee4f368ebe531af65ec59550115379eb",
+      "seconds": 27.594385999982478,
+      "stop": "curriculum_complete",
+      "support_choices": 2,
+      "terminal_sha256": "6c9f0037da545999bb7d0959377c4c2ccc76d100c168f596a2fc2367e76e8bc5"
+    }
+  ],
+  "passed": true,
+  "protected_unchanged": true,
+  "source_edits": 0,
+  "scope": {
+    "steps_completed": 5,
+    "brock_and_route3_qualified": true,
+    "cerulean_complete": false,
+    "scarcity_funding_new_trial": false,
+    "funding": "Existing need-based ordinary trainer funding retained; actual story income verified. No sales or forced purchase.",
+    "learning": "Frozen baseline141 V5 bridge and FrozenK; no fit, promotion or candidate advantage claim.",
+    "recovery": "Native blackout and singleton control/healing are support; model selected challenge/rematch and onward travel.",
+    "continuity": "Same native state ancestry across eight bounded engineering packets; not an uninterrupted error-free run."
+  },
+  "totals": {
+    "executed_goals": 17,
+    "successful_goals": 10,
+    "unsuccessful_or_interrupted_goals": 7,
+    "executed_model_choices": 11,
+    "support_choices": 6,
+    "learned_battle_choices": 55,
+    "battles": 6,
+    "battle_wins": 5,
+    "battle_losses": 1,
+    "field_blackouts": 1,
+    "story_cash_earned": 1476,
+    "blackout_cash_lost": 1268,
+    "development_species_added": 1,
+    "campaign_species_added": 0
+  },
+  "verification": {
+    "targeted_tests": 929,
+    "ruff_pass": true,
+    "mypy_source_files": 673,
+    "full_suite_run": false
+  },
+  "next": "Bounded Route3/MtMoon integration toward Cerulean from the actual retained endpoint; expose actual blockers as opportunities and keep costs, roles and source ancestry. No final campaign."
+}

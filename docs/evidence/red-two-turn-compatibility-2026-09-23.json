@@ -1,0 +1,106 @@
+{
+  "assignment": "red-two-turn-compatibility-20260923-v1",
+  "disposition": "bounded_two_turn_compatibility_passed_no_story_admission",
+  "execution_commit": "a4f6c45261ab35d68e492ea351b6aed3b8ed6c1b",
+  "plan_sha256": "21719d3608f2fb025b972fc1e44618b78ea931e04e3fd2571fc6f3187e9a20aa",
+  "result_sha256": "82441f78ede9d56f1d74ec32668e80966731851bef5ced07cba8421d7ca0f07d",
+  "audit_sha256": "4fad6a62186e90da859271f5e53713358ac5f097d67745a260c6b307e2ae86fe",
+  "audit_source_sha256": "ac7a37db12cc3c62cbc87b68ad88b77b2860fdc9569b4abf14d2650576451cc0",
+  "candidate_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "episodes": 64,
+  "prescribed_single_choice_probes": 16,
+  "complete_learned_battles": 48,
+  "paired_cases": 24,
+  "fresh_recipes": 12,
+  "offsets": [
+    0,
+    12
+  ],
+  "reused_train_roots": 4,
+  "independent_new_roots": 0,
+  "summary": {
+    "admitted_wins": 6,
+    "candidate_wins": 6,
+    "admitted_losses": 18,
+    "candidate_losses": 18,
+    "common_wins": 6,
+    "censored": 0,
+    "illegal_actions": 0,
+    "admitted_actual_selected_move_pp_spends": 87,
+    "candidate_actual_selected_move_pp_spends": 77,
+    "admitted_historical_endpoint_pp_depletion": 81,
+    "candidate_historical_endpoint_pp_depletion": 71,
+    "common_win_actual_pp_means": {
+      "admitted": 3.3333333333333335,
+      "candidate": 2.6666666666666665,
+      "increase_fraction": -0.20000000000000007
+    },
+    "common_win_frames": {
+      "admitted": 6662.333333333333,
+      "candidate": 5560,
+      "increase_fraction": -0.16545754740581375
+    },
+    "overall_frames": {
+      "admitted": 155960,
+      "candidate": 160130
+    },
+    "own_faints": {
+      "admitted": 25,
+      "candidate": 25
+    },
+    "gate_failures": []
+  },
+  "trace_audit": {
+    "learned_decisions": 264,
+    "admitted_decisions": 134,
+    "candidate_decisions": 130,
+    "prescribed_decisions": 16,
+    "event_records": 5285,
+    "controller_actions": 3937,
+    "frames": 339598,
+    "candidate_dig_choices": 11,
+    "candidate_fly_choices": 40,
+    "candidate_observed_charge_releases": 31,
+    "candidate_observed_charge_interruptions": 3,
+    "choices_during_player_charge": 0,
+    "decisions_completed_during_player_charge": 0,
+    "both_player_and_enemy_dig_fly_observed": true,
+    "native_elapsed_seconds": 25.99901479203254
+  },
+  "accounting_correction": {
+    "reason": "Native post-battle healing can restore party PP and clear the active index. Historical party_pp_spent is positive endpoint depletion, not all actual expenditure. Charge audit uses live telemetry. Future episode reporting adds selected_move_pp_spends without changing historical records or the actor.",
+    "method": "For these supported one-PP-spend domains, sum attack decisions with outcome.move_executed true: the shared executor requires exact selected-slot single-PP proof. Authenticate retained episode hashes against pair records first.",
+    "previous_composition": {
+      "assignment": "red-interaction-damage-composition-20260923-v1",
+      "episodes_authenticated": 144,
+      "admitted_actual_pp_spends": 730,
+      "candidate_actual_pp_spends": 681,
+      "common_wins": 17,
+      "admitted_actual_common_win_pp_mean": 12,
+      "candidate_actual_common_win_pp_mean": 9.764705882352942,
+      "actual_common_win_pp_increase_fraction": -0.1862745098039215,
+      "historical_endpoint_depletion_increase_fraction": -0.20320855614973254,
+      "gates_still_pass": true
+    },
+    "terminal_hp_caveat": "Terminal HP is post-settlement and can include native post-battle healing; it is not a pre-heal battle-efficiency measure.",
+    "native_records_modified": false,
+    "native_replay": false
+  },
+  "experimental_fits": 0,
+  "authority_promotions": 0,
+  "registration_delta": 0,
+  "story_inputs": 0,
+  "protected_inputs_unchanged": true,
+  "canonical_unchanged": true,
+  "stage329_absent": true,
+  "targeted_rom_free_tests_passed": 571,
+  "limitations": [
+    "Both actors won only6/24 constructed stress battles; this is compatibility, not an ordinary story win-rate estimate.",
+    "Reused TRAIN ancestry and two offsets per recipe are correlated, not independent-root or cross-title transfer.",
+    "Charge telemetry is referee-only and sampled at controller boundaries, not every native frame.",
+    "Frozen scorer has no explicit charge-duration feature; safe execution does not establish optimal two-turn selection.",
+    "Overall candidate frames were higher even though common-win frames were lower. Faints/losses remain counted.",
+    "Deployed additive story actor, ordinary K and Model141 remain unchanged."
+  ],
+  "next": "Bind a separately declared narrow DEVELOPMENT story trial to this frozen candidate and the retained healed stage328. Audit identity, legal actions, recovery and caps before any input; no automatic rematch, fit, canonical integration or publication."
+}

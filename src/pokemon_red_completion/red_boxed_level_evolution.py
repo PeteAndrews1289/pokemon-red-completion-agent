@@ -263,6 +263,8 @@ class BoxedLevelEvolutionPlan:
     route_to_training: SemanticVenueRouteBinding
     training_binding_sha256: str
     pc_facing: str | None = None
+    declared_blastoise_loan: bool = False
+    escort_internal_species_id: int = BLASTOISE_SPECIES_ID
 
     def __post_init__(self) -> None:
         _require_sha256(self.reset_state_sha256, "boxed evolution reset state")
@@ -275,6 +277,7 @@ class BoxedLevelEvolutionPlan:
             "precursor_internal_species_id",
             "evolved_internal_species_id",
             "deposit_internal_species_id",
+            "escort_internal_species_id",
         ):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
@@ -285,11 +288,28 @@ class BoxedLevelEvolutionPlan:
             self.species_binding.evolved_species_ref
         ):
             raise RedBoxedLevelEvolutionError("boxed evolution internal species binding differs")
+        if type(self.declared_blastoise_loan) is not bool:
+            raise RedBoxedLevelEvolutionError("boxed evolution loan permission differs")
+        if self.escort_internal_species_id in {
+            self.precursor_internal_species_id, self.evolved_internal_species_id,
+        } or (
+            self.escort_internal_species_id == self.deposit_internal_species_id
+            and not self.declared_blastoise_loan
+        ) or (
+            self.declared_blastoise_loan
+            and self.escort_internal_species_id != BLASTOISE_SPECIES_ID
+        ):
+            raise RedBoxedLevelEvolutionError("boxed evolution retained escort differs")
         if self.deposit_internal_species_id in {
             self.precursor_internal_species_id,
             self.evolved_internal_species_id,
-            BLASTOISE_SPECIES_ID,
-        }:
+        } or (
+            self.deposit_internal_species_id == BLASTOISE_SPECIES_ID
+            and not self.declared_blastoise_loan
+        ) or (
+            self.declared_blastoise_loan
+            and self.deposit_internal_species_id != BLASTOISE_SPECIES_ID
+        ):
             raise RedBoxedLevelEvolutionError(
                 "boxed evolution deposit would remove a target or qualified escort"
             )
@@ -331,6 +351,10 @@ class BoxedLevelEvolutionPlan:
             ),
             "training_binding_sha256": self.training_binding_sha256,
         }
+        if self.declared_blastoise_loan:
+            document["declared_blastoise_loan"] = True
+        if self.escort_internal_species_id != BLASTOISE_SPECIES_ID:
+            document["escort_internal_species_id"] = self.escort_internal_species_id
         if isinstance(self.route_to_pc, SemanticVenueRouteBinding):
             # Preserve every already-published route-backed skill identity.
             document.update(
@@ -557,7 +581,10 @@ class RedBoxedLevelEvolutionAdapter:
         if (
             not isinstance(party, tuple)
             or len(party) != 6
-            or BLASTOISE_SPECIES_ID not in party
+            or (
+                not self.plan.declared_blastoise_loan
+                and self.plan.escort_internal_species_id not in party
+            )
             or self.plan.precursor_internal_species_id not in party
             or self.plan.deposit_internal_species_id in party
         ):
@@ -689,7 +716,7 @@ class RedBoxedLevelEvolutionAdapter:
             or battle_state != 0
             or getattr(readiness, "ready", None) is not True
             or party[self.plan.deposit_party_slot - 1] != self.plan.deposit_internal_species_id
-            or BLASTOISE_SPECIES_ID not in party
+            or self.plan.escort_internal_species_id not in party
             or self.plan.precursor_internal_species_id in party
         ):
             raise RedBoxedLevelEvolutionError("boxed evolution party boundary is not executable")

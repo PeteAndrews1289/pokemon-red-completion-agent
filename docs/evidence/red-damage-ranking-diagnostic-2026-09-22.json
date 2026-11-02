@@ -1,0 +1,403 @@
+{
+  "schema": "pokemon.red.damage-ranking-diagnostic-public.v1",
+  "partition": "TRAIN; DEVELOPMENT observations used only for read-only score diagnosis",
+  "plan_sha256": "3d985c6785671aaf346eb7fc336f302865e2ef8391ebe076992c2be57dcf9f22",
+  "result_sha256": "f4c7fd8e2f312e1a8026ba6e94e4657a38b1f89d7d41d260522a1db22e982c2d",
+  "audit_sha256": "a91da2c52a17241fc09dcbcef575ba7a4fe424c296ec4135d718452be9479488",
+  "executed_driver_sha256": "0123b2693f6807ef13ceb34675925f36829c483bac475aff6c2e4d4cb78ea488",
+  "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "branches": 144,
+  "frames": 197602,
+  "suppressed_moves": 2,
+  "configurations": 16,
+  "attack_alternatives_per_configuration": 3,
+  "timing_siblings": 3,
+  "shared_train_origins": 4,
+  "independent_evaluation_roots": 0,
+  "excluded_all_route22_actor_and_opponent_species": true,
+  "baseline_best_damage_choices": 10,
+  "ablated_best_damage_choices": 9,
+  "baseline_mean_damage_regret": 0.06793647959331617,
+  "ablated_mean_damage_regret": 0.0777270281920043,
+  "changed_choices": 2,
+  "material_regressions": [
+    "damage-07"
+  ],
+  "ablation_rejected": true,
+  "stops": {
+    "battle_won": 6,
+    "party_defeated": 2,
+    "player_turn_budget": 136
+  },
+  "unique_terminal_hashes": 144,
+  "attack_cells_with_varying_timing_outcomes": 46,
+  "elapsed_seconds": 16.719262584112585,
+  "new_fits": 0,
+  "authority_promotions": 0,
+  "new_registrations": 0,
+  "story_inputs": 0,
+  "story_cash": 19693,
+  "story_state_sha256": "a8a6ecbfff5ca25dc8290a37a4be4132acafc05dded3cb80bbbf3c9ccf2ff941",
+  "stage": 328,
+  "next_unused_stage": 329,
+  "primary_collection_unchanged": true,
+  "gameplay_running": false,
+  "illegal_choices": 0,
+  "actor_memory_writes": 0,
+  "teacher_first_choices": 144,
+  "teacher_setup_interventions": true,
+  "learned_native_choices": 0,
+  "model_choices_scored": 32,
+  "branches_audited": 144,
+  "story_score_diagnostics": [
+    {
+      "alternative_slot": 4,
+      "contributions": [
+        [
+          "move.type.electric",
+          9.97715568854881
+        ],
+        [
+          "move.type_effectiveness_fraction",
+          -5.869405153210598
+        ],
+        [
+          "move.type.normal",
+          2.9864864688588866
+        ],
+        [
+          "move.category.special",
+          2.823882447822945
+        ],
+        [
+          "move.category.physical",
+          2.6282801958592232
+        ],
+        [
+          "interaction.effective_power_x_opponent_hp",
+          -1.603177768370638
+        ],
+        [
+          "move.effect.status",
+          1.4920314297924993
+        ],
+        [
+          "move.effective_power_fraction",
+          -1.4312720187287653
+        ]
+      ],
+      "decision": 10,
+      "scores": [
+        -28.330826010100303,
+        -24.517676114921347,
+        -25.07826622971849,
+        -32.658541464912346
+      ],
+      "selected_slot": 3,
+      "shortlist": [
+        2,
+        3
+      ]
+    },
+    {
+      "alternative_slot": 1,
+      "contributions": [
+        [
+          "move.type.flying",
+          7.372176023626137
+        ],
+        [
+          "move.type.normal",
+          2.417784707511897
+        ],
+        [
+          "move.type_effectiveness_fraction",
+          -1.4242013118125598
+        ],
+        [
+          "move.power_fraction",
+          1.123663187500998
+        ],
+        [
+          "move.accuracy_weighted_effective_power_fraction",
+          -0.316386358670391
+        ],
+        [
+          "interaction.effective_power_x_opponent_hp",
+          -0.23480147009566982
+        ],
+        [
+          "move.effective_power_fraction",
+          -0.2259821713091156
+        ],
+        [
+          "interaction.pp_x_effective_power",
+          -0.20743973964408557
+        ]
+      ],
+      "decision": 27,
+      "scores": [
+        -20.512855105783206,
+        -21.796082652808547,
+        -12.128628495198008,
+        -14.861057034996584
+      ],
+      "selected_slot": 3,
+      "shortlist": [
+        2,
+        3
+      ]
+    },
+    {
+      "alternative_slot": 3,
+      "contributions": [
+        [
+          "move.effect.status",
+          4.4500041511995825
+        ],
+        [
+          "move.type.ice",
+          3.1494071671794175
+        ],
+        [
+          "move.type.normal",
+          3.0111006701118166
+        ],
+        [
+          "move.category.special",
+          2.2176820162483093
+        ],
+        [
+          "move.type_effectiveness_fraction",
+          -1.5409956364247237
+        ],
+        [
+          "move.pp_fraction",
+          -1.2421889171450269
+        ],
+        [
+          "move.accuracy_weighted_effective_power_fraction",
+          -1.1553686767240796
+        ],
+        [
+          "move.category.physical",
+          1.0962694381233908
+        ]
+      ],
+      "decision": 33,
+      "scores": [
+        -24.581308821397286,
+        -8.00111153772853,
+        -15.31029847870721,
+        -24.184354488955734
+      ],
+      "selected_slot": 2,
+      "shortlist": [
+        2
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-00",
+      "mean_damage_fraction": [
+        0.7952380952380952,
+        0.6095238095238095,
+        0.48095238095238096
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-01",
+      "mean_damage_fraction": [
+        0.6632302405498282,
+        0.1924398625429553,
+        0.06872852233676975
+      ]
+    },
+    {
+      "ablated_regret": 0.05729166666666667,
+      "ablated_slot": 2,
+      "baseline_regret": 0.05729166666666667,
+      "baseline_slot": 2,
+      "id": "damage-02",
+      "mean_damage_fraction": [
+        0.1796875,
+        0.12239583333333333,
+        0.1640625
+      ]
+    },
+    {
+      "ablated_regret": 0.19531250000000003,
+      "ablated_slot": 2,
+      "baseline_regret": 0.19531250000000003,
+      "baseline_slot": 2,
+      "id": "damage-03",
+      "mean_damage_fraction": [
+        0.12760416666666666,
+        0.19010416666666666,
+        0.3854166666666667
+      ]
+    },
+    {
+      "ablated_regret": 0.21705426356589141,
+      "ablated_slot": 1,
+      "baseline_regret": 0.18604651162790695,
+      "baseline_slot": 3,
+      "id": "damage-04",
+      "mean_damage_fraction": [
+        0.10465116279069768,
+        0.3217054263565891,
+        0.13565891472868216
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-05",
+      "mean_damage_fraction": [
+        0.5288888888888889,
+        0.11555555555555556,
+        0.27555555555555555
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-06",
+      "mean_damage_fraction": [
+        0.8104575163398694,
+        0.1372549019607843,
+        0.22549019607843138
+      ]
+    },
+    {
+      "ablated_regret": 0.1256410256410257,
+      "ablated_slot": 2,
+      "baseline_regret": 0,
+      "baseline_slot": 3,
+      "id": "damage-07",
+      "mean_damage_fraction": [
+        0.27435897435897433,
+        0.3153846153846154,
+        0.44102564102564107
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 3,
+      "baseline_regret": 0,
+      "baseline_slot": 3,
+      "id": "damage-08",
+      "mean_damage_fraction": [
+        0.16199376947040497,
+        0.1588785046728972,
+        0.43302180685358255
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-09",
+      "mean_damage_fraction": [
+        0.6090534979423868,
+        0.2839506172839506,
+        0.2839506172839506
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-10",
+      "mean_damage_fraction": [
+        0.8833333333333333,
+        0.08055555555555556,
+        0.7611111111111111
+      ]
+    },
+    {
+      "ablated_regret": 0.279874213836478,
+      "ablated_slot": 3,
+      "baseline_regret": 0.279874213836478,
+      "baseline_slot": 3,
+      "id": "damage-11",
+      "mean_damage_fraction": [
+        0.25471698113207547,
+        0.6257861635220126,
+        0.34591194968553457
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-12",
+      "mean_damage_fraction": [
+        0.3508771929824561,
+        0.3333333333333333,
+        0.34210526315789475
+      ]
+    },
+    {
+      "ablated_regret": 0,
+      "ablated_slot": 1,
+      "baseline_regret": 0,
+      "baseline_slot": 1,
+      "id": "damage-13",
+      "mean_damage_fraction": [
+        0.6666666666666666,
+        0.10569105691056911,
+        0.052845528455284556
+      ]
+    },
+    {
+      "ablated_regret": 0.15770609318996406,
+      "ablated_slot": 2,
+      "baseline_regret": 0.15770609318996406,
+      "baseline_slot": 2,
+      "id": "damage-14",
+      "mean_damage_fraction": [
+        0.3655913978494623,
+        0.21863799283154126,
+        0.3763440860215053
+      ]
+    },
+    {
+      "ablated_regret": 0.210752688172043,
+      "ablated_slot": 2,
+      "baseline_regret": 0.210752688172043,
+      "baseline_slot": 2,
+      "id": "damage-15",
+      "mean_damage_fraction": [
+        0.3053763440860215,
+        0.09462365591397849,
+        0.16129032258064516
+      ]
+    }
+  ],
+  "limitations": [
+    "Diagnostic damage target, not battle-win utility or learned model improvement.",
+    "Four reused TRAIN origins; timing variants and unique state hashes do not establish independent transfer.",
+    "Single ablation frozen before outcomes; rejected, not revised on these results.",
+    "Three timing siblings are a small noisy sample; six choices miss empirical best damage, not proof all six are strategically wrong.",
+    "Score decomposition explains this network algebraically; it does not establish causal battle outcomes or the original training-data cause.",
+    "No switch-value experiment this session; composed control/switch retention remains required."
+  ],
+  "next": "One prospectively bounded, fresh-configuration TRAIN experiment for an outcome-trained mechanics-aware damage proposal; one fit and untouched configuration holdout, followed by composed-control and retention checks. No story rematch until justified."
+}

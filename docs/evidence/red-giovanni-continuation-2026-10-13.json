@@ -1,0 +1,947 @@
+{
+  "acquisitions": [
+    {
+      "captures": 1,
+      "kind": "acquire_species",
+      "path": "runs/segment-001/native/episode/step-002",
+      "species": [
+        "pokemon:national:079"
+      ]
+    },
+    {
+      "captures": null,
+      "kind": "evolve_species",
+      "path": "runs/segment-001/native/episode/step-005",
+      "species": [
+        "pokemon:national:080"
+      ]
+    },
+    {
+      "captures": null,
+      "kind": "acquire_species",
+      "path": "runs/segment-002/native/episode/step-001",
+      "species": [
+        "pokemon:national:108"
+      ]
+    },
+    {
+      "captures": 1,
+      "kind": "acquire_species",
+      "path": "runs/segment-006/native/episode/step-004",
+      "species": [
+        "pokemon:national:090"
+      ]
+    }
+  ],
+  "actual_model_comparative_choices": 69,
+  "actual_stop_utc": "2026-10-14T02:30:03.860544+00:00",
+  "aggregate_correction": "Optional grinding count uses the retained mechanic field,not only support:0to19. Native outcomes,costs,models and terminal are unchanged;v1 retained.",
+  "aggregation_version": 2,
+  "at": [
+    3,
+    3
+  ],
+  "automatic_singleton_support": 43,
+  "badge_bits": 255,
+  "badges_after": 8,
+  "badges_before": 7,
+  "bag_slots_after": 14,
+  "bag_slots_before": 19,
+  "bag_stock": [
+    [
+      42,
+      1
+    ],
+    [
+      49,
+      1
+    ],
+    [
+      211,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      221,
+      1
+    ],
+    [
+      72,
+      1
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      198,
+      1
+    ],
+    [
+      199,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      197,
+      1
+    ],
+    [
+      206,
+      1
+    ],
+    [
+      227,
+      1
+    ]
+  ],
+  "cash_after": 5268,
+  "cash_before": 5113,
+  "cash_net_positive_receipts": 7555,
+  "cash_reward_receipts": [
+    {
+      "amount": 150,
+      "path": "runs/segment-001/native/episode/step-002"
+    },
+    {
+      "amount": 1505,
+      "path": "runs/segment-005/native/episode/step-017"
+    },
+    {
+      "amount": 950,
+      "path": "runs/segment-007/native/episode/step-017"
+    },
+    {
+      "amount": 4950,
+      "path": "runs/segment-009/native/episode/step-009"
+    }
+  ],
+  "cold_proof": {
+    "frames": 0,
+    "inputs": 0,
+    "path": "diagnostics/cold-closeout-v1/RESULT.json",
+    "sha256": "bacefc1e7f7282d109e21b8435a88a90c8b47cc605955be621954c2e78d43d8a"
+  },
+  "completed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_blaine",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_giovanni",
+    "defeat_koga",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_secret_key",
+    "obtain_silph_scope",
+    "obtain_strength",
+    "obtain_surf",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_cinnabar",
+    "reach_fuchsia",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+  "confirmed_stop_utc": "2026-10-14T02:39:05.109385+00:00",
+  "context_sha256": "46aaa75aacf25727e4d8e93169d7dfc489acab958d067da5ccd7250e3a23b44c",
+  "copied_progress_imported": false,
+  "cumulative_spent": {
+    "actions": 1074587,
+    "cash_debits": 87951,
+    "decisions": 1067,
+    "frames": 85696011,
+    "heals": 1270,
+    "seconds": 21286.892303868004
+  },
+  "cutoff_utc": "2026-10-14T03:54:27Z",
+  "diagnostic_results": [
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "passed": true,
+      "path": "diagnostics/cold-closeout-v1/RESULT.json",
+      "seconds": 1.4851338749285787,
+      "sha256": "bacefc1e7f7282d109e21b8435a88a90c8b47cc605955be621954c2e78d43d8a"
+    },
+    {
+      "actions": 1765,
+      "error": null,
+      "frames": 206856,
+      "passed": true,
+      "path": "diagnostics/early-safari-copy-v1/RESULT.json",
+      "seconds": 27.567946041934192,
+      "sha256": "64456242ac28747f9d406b250824ca1203fc72f64c63b27ed5d752a689b1bbc6"
+    },
+    {
+      "actions": 0,
+      "error": "",
+      "frames": 0,
+      "passed": false,
+      "path": "diagnostics/exploration-copy-v1/RESULT.json",
+      "seconds": 19.011182749876752,
+      "sha256": "5e48268d07bd3924c8e2a1273aee674808ad529a9c3e1b00898386b7565671c5"
+    },
+    {
+      "actions": 0,
+      "error": "('RedPlayerSupport', None, 'pokemon.red:story-travel:b6f8fdad8157e8e6972dded9e78278a89c2300caec2a065d12526384331cdd38')",
+      "frames": 0,
+      "passed": false,
+      "path": "diagnostics/exploration-copy-v2/RESULT.json",
+      "seconds": 18.415695250034332,
+      "sha256": "9904925f5d1a60ba537036dc2b280e6991227e55461d14ce0b35dcaed6bddf18"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "passed": true,
+      "path": "diagnostics/exploration-copy-v3/RESULT.json",
+      "seconds": 18.286493624793366,
+      "sha256": "d27cff5a57d3a6d3ad234533ffe56f901e0c1dedd9a0152d31b09c2963124e7d"
+    },
+    {
+      "actions": 1538,
+      "error": null,
+      "frames": 93876,
+      "passed": true,
+      "path": "diagnostics/giovanni-baseline-copy-v1/RESULT.json",
+      "seconds": 84.96723200008273,
+      "sha256": "4c4a17f08d31c5927828d7acc76f990a1794f8457abd3f3af187806b8cd0750e"
+    },
+    {
+      "actions": 6,
+      "error": null,
+      "frames": 240,
+      "passed": true,
+      "path": "diagnostics/gym-frontier-copy-v1/RESULT.json",
+      "seconds": 12.498248749878258,
+      "sha256": "4e61ae21648a4c47e643d806f6c626271e2022ef72433634142fdf2e0e70d2a1"
+    },
+    {
+      "actions": 0,
+      "error": "'route'",
+      "frames": 0,
+      "passed": false,
+      "path": "diagnostics/story-quote-v1/RESULT.json",
+      "seconds": 6.495103124994785,
+      "sha256": "8b77645e47ce8c164611294096d7fe354c5f61dc8e94c6a4d70c1d6a91437f4d"
+    },
+    {
+      "actions": 0,
+      "error": null,
+      "frames": 0,
+      "passed": true,
+      "path": "diagnostics/story-quote-v2/RESULT.json",
+      "seconds": 10.817815833957866,
+      "sha256": "7490ab677c0b4a794fb0354537349852395f0b053320ff6c44ae21d541795894"
+    },
+    {
+      "actions": 278,
+      "error": null,
+      "frames": 17820,
+      "passed": true,
+      "path": "diagnostics/walking-arrival-copy-v1/RESULT.json",
+      "seconds": 12.888649417087436,
+      "sha256": "0586ebe260aa8174f33ff56044342768de6225cafc579c9a94fb6802ddeee61c"
+    }
+  ],
+  "earlier_menu_unavailable_retained": true,
+  "earlier_party_gym_copy": {
+    "battles": [
+      {
+        "action_counts": {
+          "attack": 3,
+          "forced_switch": 0,
+          "switch_prompt": 0,
+          "voluntary_switch": 3
+        },
+        "decisions": 6,
+        "metrics": {
+          "attack_turn_utility_sum": 2.909774436090226,
+          "invalid_action_failures": 0,
+          "move_suppressed_or_failed": 0,
+          "opponent_faints": 1,
+          "party_faints": 0,
+          "party_hp_lost": 64,
+          "party_pp_spent": 3,
+          "party_status_changes": 0,
+          "policy_latency_ns_max": 19103916,
+          "policy_latency_ns_mean": 6025618.0,
+          "policy_latency_ns_min": 2824625,
+          "selected_move_pp_spends": 3,
+          "teacher_interventions": 0
+        },
+        "outcome": "won",
+        "teacher_queries": 0,
+        "won": true
+      },
+      {
+        "action_counts": {
+          "attack": 4,
+          "forced_switch": 0,
+          "switch_prompt": 2,
+          "voluntary_switch": 3
+        },
+        "decisions": 9,
+        "metrics": {
+          "attack_turn_utility_sum": 8.73076923076923,
+          "invalid_action_failures": 0,
+          "move_suppressed_or_failed": 0,
+          "opponent_faints": 3,
+          "party_faints": 0,
+          "party_hp_lost": 55,
+          "party_pp_spent": 4,
+          "party_status_changes": 0,
+          "policy_latency_ns_max": 6160375,
+          "policy_latency_ns_mean": 3147125.0,
+          "policy_latency_ns_min": 960625,
+          "selected_move_pp_spends": 4,
+          "teacher_interventions": 0
+        },
+        "outcome": "won",
+        "teacher_queries": 0,
+        "won": true
+      },
+      {
+        "action_counts": {
+          "attack": 5,
+          "forced_switch": 0,
+          "switch_prompt": 4,
+          "voluntary_switch": 1
+        },
+        "decisions": 10,
+        "metrics": {
+          "attack_turn_utility_sum": 15.0,
+          "invalid_action_failures": 0,
+          "move_suppressed_or_failed": 0,
+          "opponent_faints": 5,
+          "party_faints": 0,
+          "party_hp_lost": 0,
+          "party_pp_spent": 5,
+          "party_status_changes": 0,
+          "policy_latency_ns_max": 4983292,
+          "policy_latency_ns_mean": 3052558.5,
+          "policy_latency_ns_min": 982584,
+          "selected_move_pp_spends": 5,
+          "teacher_interventions": 0
+        },
+        "outcome": "won",
+        "teacher_queries": 0,
+        "won": true
+      }
+    ],
+    "confounders": [
+      "Different retained party order/levels and battle state;one correlated diagnostic,not evidence that added levels harm performance"
+    ],
+    "copy_back": false,
+    "independent_origin": false,
+    "optional_preparation_goals": 0,
+    "paired_comparison": false,
+    "party_levels_before": [
+      51,
+      47,
+      43,
+      43,
+      48,
+      48
+    ],
+    "passed": true,
+    "path": "diagnostics/giovanni-baseline-copy-v1/RESULT.json",
+    "sha256": "4c4a17f08d31c5927828d7acc76f990a1794f8457abd3f3af187806b8cd0750e"
+  },
+  "field_ready": true,
+  "final_fresh_exit_gates": {
+    "completed": 0,
+    "total": 5
+  },
+  "fits": 0,
+  "flat_outcomes": 112,
+  "giovanni_reward_received": true,
+  "goal_kinds": {
+    "acquire_species": 14,
+    "advance_story": 45,
+    "develop_team": 22,
+    "evolve_species": 1,
+    "manage_storage": 2,
+    "restore_team": 25,
+    "resupply": 3
+  },
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_unchanged": true,
+  "goal_modes": {
+    "model_exploration": 69,
+    "support:forced_singleton": 43
+  },
+  "known_field_moves": {
+    "cut": true,
+    "fly": true,
+    "strength": false,
+    "surf": true
+  },
+  "limitations": [
+    "Assisted DEVELOPMENT ancestry,not final frozen fresh acceptance",
+    "Parameter learning and independent readiness/transfer are not established by gameplay XP or related copies",
+    "Changing a target-neutral DEVELOPMENT sampling setting is disclosed selection support,not learned preparation stopping",
+    "Earlier failures,costs and repairs remain inherited;no copied progress or restart",
+    "League and remaining registrations follow;no publication,cleanup,new subsystem or title advance"
+  ],
+  "local_repairs": [
+    "Walking indoor capture stops at authenticated arrival,then reuses same-source observed reachable terrain",
+    "Connect existing guarded indoor Safari departure recovery before the League",
+    "If a continuous gym quote is unavailable,reuse the existing real next-map frontier and reobserve",
+    "Wire existing target-neutral exploration mix through launcher/native loop;default0.25 unchanged,explicit DEVELOPMENT0.75,no forced target or model/seed change"
+  ],
+  "mandatory_control_preface_units": 2,
+  "mandatory_control_prefaces": [
+    {
+      "actions": 15,
+      "frames": 1728,
+      "kind": "supplied_wild_escape_preface",
+      "learned": false,
+      "model_queries": 0,
+      "segment": "segment-003",
+      "verification": "succeeded"
+    },
+    {
+      "actions": 11,
+      "frames": 1200,
+      "kind": "supplied_wild_escape_preface",
+      "learned": false,
+      "model_queries": 0,
+      "segment": "segment-009",
+      "verification": "succeeded"
+    }
+  ],
+  "mandatory_wild_escape_prefaces": 2,
+  "manual_actual_goal_substitutions": 0,
+  "map_id": 41,
+  "master_ball_present": true,
+  "metered_units": 114,
+  "native_execution_errors": [
+    {
+      "error": "route replanning found no candidate",
+      "error_type": "RouteExecutionError",
+      "path": "runs/segment-001/native/episode/step-007"
+    },
+    {
+      "error": "unhandled route interruption 'wild_battle'",
+      "error_type": "RouteExecutionError",
+      "path": "runs/segment-002/native/episode/step-003"
+    },
+    {
+      "error": "",
+      "error_type": "KeyboardInterrupt",
+      "path": "runs/segment-008/native/episode/step-002"
+    }
+  ],
+  "native_gross_cash_rewards": 7555,
+  "new_actual_costs": {
+    "actions": 179596,
+    "cash_debits": 7400,
+    "decisions": 114,
+    "frames": 13670593,
+    "heals": 227,
+    "seconds": 3335.6041925824247
+  },
+  "no_opening_restart": true,
+  "optional_grinding_goals": 19,
+  "original_six_restored": true,
+  "outcome_counts": {
+    "None": 3,
+    "failed": 21,
+    "succeeded": 88
+  },
+  "owned_machine_lessons": [
+    {
+      "capacity_after": 1192.5,
+      "capacity_before": 682.5,
+      "capacity_proxy": "current_PP_times_power_accuracy_STAB_not_damage_or_win",
+      "cash_debit": 0,
+      "field_move_unlocked": null,
+      "learned_menu_execution": false,
+      "lesson": {
+        "before_moves": [
+          106,
+          111,
+          88,
+          120
+        ],
+        "item_id": 238,
+        "move_id": 126,
+        "party_slot": 5,
+        "replace_slot": 1,
+        "species_id": 39
+      },
+      "machine_consumed": 1,
+      "mechanic": "owned_native_machine_lesson",
+      "normal_controller_inputs": true,
+      "objective_completed": false,
+      "path": "runs/segment-009/native/episode/step-011",
+      "registrations_gained": 0,
+      "selected_bundle_authority": "model_or_disclosed_equivalent_choice",
+      "xp_gained": 0
+    },
+    {
+      "capacity_after": 2692.5,
+      "capacity_before": 1192.5,
+      "capacity_proxy": "current_PP_times_power_accuracy_STAB_not_damage_or_win",
+      "cash_debit": 0,
+      "field_move_unlocked": null,
+      "learned_menu_execution": false,
+      "lesson": {
+        "before_moves": [
+          126,
+          111,
+          88,
+          120
+        ],
+        "item_id": 228,
+        "move_id": 91,
+        "party_slot": 5,
+        "replace_slot": 2,
+        "species_id": 39
+      },
+      "machine_consumed": 1,
+      "mechanic": "owned_native_machine_lesson",
+      "normal_controller_inputs": true,
+      "objective_completed": false,
+      "path": "runs/segment-009/native/episode/step-012",
+      "registrations_gained": 0,
+      "selected_bundle_authority": "model_or_disclosed_equivalent_choice",
+      "xp_gained": 0
+    },
+    {
+      "capacity_after": 4413.0,
+      "capacity_before": 2988.0,
+      "capacity_proxy": "current_PP_times_power_accuracy_STAB_not_damage_or_win",
+      "cash_debit": 0,
+      "field_move_unlocked": null,
+      "learned_menu_execution": false,
+      "lesson": {
+        "before_moves": [
+          116,
+          39,
+          98,
+          158
+        ],
+        "item_id": 224,
+        "move_id": 85,
+        "party_slot": 1,
+        "replace_slot": 2,
+        "species_id": 166
+      },
+      "machine_consumed": 1,
+      "mechanic": "owned_native_machine_lesson",
+      "normal_controller_inputs": true,
+      "objective_completed": false,
+      "path": "runs/segment-009/native/episode/step-013",
+      "registrations_gained": 0,
+      "selected_bundle_authority": "model_or_disclosed_equivalent_choice",
+      "xp_gained": 0
+    }
+  ],
+  "parameter_updates": 0,
+  "partition": "development",
+  "party_hp": [
+    150,
+    182,
+    154,
+    131,
+    150,
+    177
+  ],
+  "party_levels": [
+    51,
+    51,
+    50,
+    50,
+    53,
+    52
+  ],
+  "party_max_hp": [
+    150,
+    182,
+    154,
+    131,
+    150,
+    177
+  ],
+  "party_moves": [
+    [
+      116,
+      85,
+      98,
+      158
+    ],
+    [
+      97,
+      28,
+      98,
+      19
+    ],
+    [
+      106,
+      31,
+      116,
+      15
+    ],
+    [
+      84,
+      45,
+      86,
+      98
+    ],
+    [
+      126,
+      91,
+      88,
+      120
+    ],
+    [
+      110,
+      39,
+      145,
+      57
+    ]
+  ],
+  "party_pp_current": [
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      20,
+      30,
+      30
+    ],
+    [
+      30,
+      40,
+      20,
+      30
+    ],
+    [
+      5,
+      10,
+      15,
+      5
+    ],
+    [
+      40,
+      30,
+      30,
+      15
+    ]
+  ],
+  "party_pp_maximum": [
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      15,
+      30,
+      15
+    ],
+    [
+      30,
+      20,
+      30,
+      30
+    ],
+    [
+      30,
+      40,
+      20,
+      30
+    ],
+    [
+      5,
+      10,
+      15,
+      5
+    ],
+    [
+      40,
+      30,
+      30,
+      15
+    ]
+  ],
+  "party_species_ids": [
+    166,
+    151,
+    114,
+    84,
+    39,
+    28
+  ],
+  "party_status": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "party_total_level_gain": 27,
+  "preparation_goals": 22,
+  "prior_aggregate_sha256": "82ed68f71a1b0c81b047f229f4a14dcad99a4c6e04f086b816c41cff60e5ce77",
+  "process_notes": {
+    "path": "PROCESS-NOTES.json",
+    "sha256": "cfc5e2b3d56fac3f64c46a6bf6e7fcc394e046a183f56b3a46dc827df95edcc8"
+  },
+  "qualified_early_safari_departure": true,
+  "qualified_exploration_adjustment": true,
+  "qualified_gym_frontier": true,
+  "qualified_walking_capture_arrival": true,
+  "registrations_added": 4,
+  "registrations_after": 75,
+  "registrations_before": 71,
+  "released": true,
+  "result_sha256": "b76857094305c9be12ff8e5c7a18b9c51d8618e8615c8d38bb474077620bd69d",
+  "runtime_llm_calls": 0,
+  "runtime_package_sha256": "857d24a2cc4c1e0f8afe5000b61e7447974f5487040898d18722998de8ff394c",
+  "schema": "pokemon.red.giovanni-continuation.v1",
+  "secret_key_conserved_in_pc": true,
+  "selection_adjustment": {
+    "actual_first_segment": "segment-009",
+    "declared_mix": 0.75,
+    "default_mix": 0.25,
+    "forced_goal": null,
+    "learned_stopping": false,
+    "legal_choices_unchanged": true,
+    "model_weights_unchanged": true,
+    "operator_interrupt_retained_source": "runs/segment-008",
+    "proof": "diagnostics/exploration-copy-v3/RESULT.json",
+    "proof_sha256": "d27cff5a57d3a6d3ad234533ffe56f901e0c1dedd9a0152d31b09c2963124e7d",
+    "seed_unchanged": true
+  },
+  "separate_diagnostic_costs": {
+    "actions": 3587,
+    "cash_debits": 500,
+    "decisions": 15,
+    "frames": 318792,
+    "heals": 1,
+    "seconds": 212.4335006675683
+  },
+  "session": "2026-10-13-giovanni-continuation",
+  "source_session_result_sha256": "d68b13d41832ff68fc8e8d94a640d6f44557d3bdc79a454ddedeef904fbabc8c",
+  "started_utc": "2026-10-14T00:54:27Z",
+  "state_sha256": "2d685f6d05ef7030eddae93b8a720390e097bd142cc463e89d7e6e168eb5013e",
+  "status": "closed_all_requested_outcomes_complete",
+  "storage_receipts": [
+    {
+      "bag_slots_after": 19,
+      "bag_slots_before": 20,
+      "items_conserved": true,
+      "learned_item_selection": false,
+      "path": "runs/segment-001/native/episode/step-003",
+      "sales": 0,
+      "stored_items": [
+        43
+      ],
+      "support": "completed_key_capacity_storage"
+    },
+    {
+      "bag_slots_after": 17,
+      "bag_slots_before": 19,
+      "items_conserved": true,
+      "learned_item_selection": false,
+      "path": "runs/segment-009/native/episode/step-010",
+      "sales": 0,
+      "stored_items": [
+        234,
+        246
+      ],
+      "support": "completed_key_capacity_storage"
+    }
+  ],
+  "story_battles": [
+    {
+      "action_counts": {
+        "attack": 2,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 2
+      },
+      "badge_bits_after": 127,
+      "badge_bits_before": 127,
+      "decisions": 4,
+      "memory_writes": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 2.8268156424581004,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 60,
+        "party_pp_spent": 2,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 13486500,
+        "policy_latency_ns_mean": 5837187.75,
+        "policy_latency_ns_min": 2738042,
+        "selected_move_pp_spends": 2,
+        "teacher_interventions": 0
+      },
+      "objective": "defeat_giovanni",
+      "outcome": "won",
+      "path": "runs/segment-005/native/episode/step-017",
+      "teacher_queries": 0,
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 4,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 3
+      },
+      "badge_bits_after": 127,
+      "badge_bits_before": 127,
+      "decisions": 9,
+      "memory_writes": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 8.967532467532468,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 51,
+        "party_pp_spent": 4,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 28877000,
+        "policy_latency_ns_mean": 5623254.555555556,
+        "policy_latency_ns_min": 910334,
+        "selected_move_pp_spends": 4,
+        "teacher_interventions": 0
+      },
+      "objective": "defeat_giovanni",
+      "outcome": "won",
+      "path": "runs/segment-007/native/episode/step-017",
+      "teacher_queries": 0,
+      "won": true
+    },
+    {
+      "action_counts": {
+        "attack": 13,
+        "forced_switch": 0,
+        "switch_prompt": 4,
+        "voluntary_switch": 11
+      },
+      "badge_bits_after": 255,
+      "badge_bits_before": 127,
+      "decisions": 28,
+      "memory_writes": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 14.629304029304029,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 5,
+        "party_faints": 0,
+        "party_hp_lost": 136,
+        "party_pp_spent": 13,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 38805500,
+        "policy_latency_ns_mean": 4462382.428571428,
+        "policy_latency_ns_min": 947125,
+        "selected_move_pp_spends": 13,
+        "teacher_interventions": 0
+      },
+      "objective": "defeat_giovanni",
+      "outcome": "won",
+      "path": "runs/segment-009/native/episode/step-009",
+      "teacher_queries": 0,
+      "won": true
+    }
+  ],
+  "terminal": "runs/segment-009",
+  "training_rows_added": 0,
+  "verification": {
+    "ci": false,
+    "distinct_focused_tests_passed": 1298,
+    "documentation_focus_roadmap_evidence_tests_passed": 199,
+    "focused_runtime_tests_passed": 1099,
+    "full_suite": false
+  },
+  "whole_party_restored": true,
+  "worker_stopped": true,
+  "zero_input_inspections": [
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 1,
+      "path": "inspections/inspect-005617582572/RESULT.json",
+      "qualifier": "Some early inspections have prior-package declarations;retained but not promoted",
+      "sha256": "3b6fc1cc124a115a3c4233da897a3281df39c20c6ae15e82e5e150e471ab84b1"
+    },
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 1,
+      "path": "inspections/inspect-010250614955/RESULT.json",
+      "qualifier": "Some early inspections have prior-package declarations;retained but not promoted",
+      "sha256": "ac73695360c8be1f36cd4a16a1915d90dba0c9f8b3ea69a92995ed99838689cc"
+    },
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 1,
+      "path": "inspections/inspect-011033104705/RESULT.json",
+      "qualifier": "Some early inspections have prior-package declarations;retained but not promoted",
+      "sha256": "1d8f5d25d9b39b40605675ba51cc71d5a88ff0b4f2ff1d01857cb1b782dd3191"
+    },
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 1,
+      "path": "inspections/inspect-011140323056/RESULT.json",
+      "qualifier": "Some early inspections have prior-package declarations;retained but not promoted",
+      "sha256": "e0e3139ffde94f99ac06a2e324f9de70bb0300be2666759e6fbb076c35ac754d"
+    },
+    {
+      "actions": 0,
+      "frames": 0,
+      "model_queries": 0,
+      "path": "inspections/inspect-011507106819/RESULT.json",
+      "qualifier": "Some early inspections have prior-package declarations;retained but not promoted",
+      "sha256": "91032548a688e0e2cea3916ac9fefac916bfeb93c9ed7cc8dc0ab71b2c15ff93"
+    }
+  ]
+}

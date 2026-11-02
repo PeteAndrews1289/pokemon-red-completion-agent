@@ -1,0 +1,95 @@
+{
+  "schema": "pokemon.red.destination-training-preparation.v1",
+  "session_id": "2026-09-20-destination-training-preparation",
+  "status": "local_fit_path_ready_scenario_packet_blocked",
+  "classification": "engineering_and_read_only_audit_not_learning",
+  "source_commit": "4cb8d33fd5856087692550642b896e15ed22dd62",
+  "source_inventory": {
+    "scope": "Five retained goal-context catalog revisions and the account-wide claim ledger, not a global source census or state-byte verification.",
+    "private_report_sha256": "17047521492b912865788bff37fac916aab7d738fb1ce3c761230fdb39792e98",
+    "invocation_sha256": "b84d68b8b29bf441a5f37629f54cfe2df424dee3edf50f672b7e954ee843b0e4",
+    "catalog_revisions": 5,
+    "latest_catalog_sha256": "f913158ffc3fd9d9c9cfd89ee42abe819a9bc3139901df603a017182df6f3959",
+    "claim_registry_sha256": "81c0a06b1f9854682705ac2c438cf081406b0a5f8d88b11eefbc9d7617158a06",
+    "latest_entries": 81,
+    "latest_train_entries": 54,
+    "latest_validation_entries": 27,
+    "unclaimed_train": 8,
+    "unclaimed_validation": 5,
+    "unclaimed_train_kinds": {
+      "advance_story": 3,
+      "recover_control": 5
+    },
+    "unclaimed_validation_kinds": {
+      "advance_story": 2,
+      "recover_control": 2,
+      "explore": 1
+    },
+    "independent_upstream_groups_verified": 0,
+    "ready_safari_training_packet": false,
+    "caveats": [
+      "Catalog revisions are not independent source banks.",
+      "Unclaimed is not proof of unused, suitable, unexposed or upstream-independent.",
+      "Historical available goals are not current live feasibility.",
+      "Current DEVELOPMENT continuations, retired trials and sealed/benchmark sources remain excluded."
+    ]
+  },
+  "prior_inventory": {
+    "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "corpus_sha256": "2c970e976fa97792a01334fafa989d6456908d735276a08c1b42a98fe8a8bcd5",
+    "settled_examples": 137,
+    "native_episode_records": 118,
+    "regional_choice_records": 33,
+    "measured_choice_records": 33,
+    "behavior_model_identities": 135,
+    "native_plan_partition": "train",
+    "authenticated": "Exact corpus, episode manifests/headers/plans and historical behavior models; not full outcome re-evaluation.",
+    "initial_audit_failure": "Resolver omitted legacy rp-model records. Corrected before fitting; actual retained inventory then authenticated.",
+    "invocation_sha256": "4e310c61fd1d0a3a493f0f8b47e3242758a8b673f880e52154d66f47f9b5d2e6",
+    "count_note": "Record inventories overlap; do not add them as example counts. Existing measured-development history is retained, not permission for new such inputs."
+  },
+  "implementation": {
+    "command": "scripts/fit_red_player_training.py --registered-result PATH:SHA256",
+    "local_clean_source_allowed": true,
+    "legacy_publication_mode_unchanged": true,
+    "registered_objective": true,
+    "full_prior_history_retained": true,
+    "new_development_measured_results_rejected": true,
+    "duplicate_json_keys_and_episodes_rejected": true,
+    "entire_input_batch_hash_checked_before_fit": true,
+    "train_origin_validation": "Delegated to existing typed episode, plan, action and outcome admission; no guard weakened.",
+    "promotion_automatic": false,
+    "remaining_launcher_gap": "Legacy native TRAIN gameplay launcher still requires published source. It was not changed or executed; actual Safari TRAIN recording integration is unqualified."
+  },
+  "verification": {
+    "targeted_tests_passed": 106,
+    "ruff": "passed",
+    "registry_check": "passed_unchanged_because_fitter_is_not_collection_execution_source",
+    "cli_help": "passed",
+    "full_suite": false
+  },
+  "effects": {
+    "new_fits": 0,
+    "new_examples": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "root_claims": 0,
+    "save_payloads_opened": 0,
+    "new_source_selections": 0,
+    "github_publication": false,
+    "external_agents": false
+  },
+  "preserved_endpoint": {
+    "state_sha256": "31d3cc4ebb21745c36a9504121412c9358c39f54b46508117c11ffd94d964a65",
+    "registrations": 105,
+    "native_target": 124,
+    "specimens": 77,
+    "cash": 17468,
+    "safari_balls": 21,
+    "safari_steps": 56,
+    "gameplay": "not_started_this_session"
+  },
+  "next": "Seek approval for a bounded isolated teacher-assisted Safari scenario setup pilot, not a full-game source factory. Establish actual provenance and split suitability before selecting/opening any sources; qualify local native TRAIN recording, then collect/fit/compare. Do not treat the provisional8+4 size as an acceptance threshold or claim a runnable packet yet.",
+  "estimate": "Earlier one-preparation-plus-one-training-session estimate was conditional; current audit did not establish usable disjoint sources, so no weight-update deadline is justified."
+}

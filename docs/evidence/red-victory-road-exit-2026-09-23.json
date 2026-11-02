@@ -1,0 +1,187 @@
+{
+  "actions": 1210,
+  "audit_frames": 0,
+  "audit_source_sha256": "5c7997c7c4207a197ba56ccac0aa67087f6ef641e8fbda9e8d8ba541128eb2df",
+  "cash": 27346,
+  "cash_delta": 0,
+  "envelope_sha256": "0979c7359ffcc0e12031143271364fa8e40d06b806a1dd4fa3e55e1d18b5bf5b",
+  "execution_commit": "6a8d45bf3131b2913247d27150891ccacaeee0f3",
+  "frames": 88548,
+  "interrupted_push_branch_exercised": false,
+  "league_entered": false,
+  "league_roster_preview": [
+    {
+      "levels": [
+        54,
+        53,
+        54,
+        56,
+        56
+      ],
+      "national_species": [
+        87,
+        91,
+        80,
+        124,
+        131
+      ],
+      "objective": "defeat_lorelei",
+      "source": "cartridge roster preview; not observed combat"
+    },
+    {
+      "levels": [
+        53,
+        55,
+        55,
+        56,
+        58
+      ],
+      "national_species": [
+        95,
+        107,
+        106,
+        95,
+        68
+      ],
+      "objective": "defeat_bruno",
+      "source": "cartridge roster preview; not observed combat"
+    },
+    {
+      "levels": [
+        56,
+        56,
+        55,
+        58,
+        60
+      ],
+      "national_species": [
+        94,
+        42,
+        93,
+        24,
+        94
+      ],
+      "objective": "defeat_agatha",
+      "source": "cartridge roster preview; not observed combat"
+    },
+    {
+      "levels": [
+        58,
+        56,
+        56,
+        60,
+        62
+      ],
+      "national_species": [
+        130,
+        148,
+        148,
+        142,
+        149
+      ],
+      "objective": "defeat_lance",
+      "source": "cartridge roster preview; not observed combat"
+    }
+  ],
+  "local_registrations": 17,
+  "map_id": 174,
+  "native_cave_exit": true,
+  "native_full_restore": true,
+  "new_fits": 0,
+  "new_model_decisions": 0,
+  "new_registrations": 0,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    93,
+    120,
+    162,
+    110,
+    181
+  ],
+  "party_levels": [
+    43,
+    43,
+    52,
+    42,
+    38
+  ],
+  "pc_items_preserved": true,
+  "plan_sha256": "d7d2083984d68045426c222d5fe6428bc387974d278cabe30cde997606f1902d",
+  "player_hole_warp_executed": false,
+  "position": [
+    7,
+    3
+  ],
+  "protected_inputs_unchanged": true,
+  "qualification_scope": "Native recovery and cave navigation support only; no learned strategic choice, League actor admission or full-run gate promotion.",
+  "recovery": {
+    "actions": 317,
+    "audit_frames": 0,
+    "audit_source_sha256": "9e4dd2e991d5cb1c60f4b176952569e68cb840c0ae3366b1a0a86eb6ef556a6c",
+    "cash": 27346,
+    "cash_delta": 0,
+    "envelope_sha256": "f81116791fe9b636a922a7eeaae363a4812ae61e6200f903348877718a6498a7",
+    "execution_commit": "910740074457998cb2ab67b6e2b727f94392588c",
+    "fainted_holder_dig_verified": true,
+    "frames": 12000,
+    "map_id": 108,
+    "native_events_reset": [
+      1336,
+      1632
+    ],
+    "native_full_restore": true,
+    "new_fits": 0,
+    "new_model_decisions": 0,
+    "new_registrations": 0,
+    "partition": "DEVELOPMENT",
+    "party_hp": [
+      93,
+      120,
+      162,
+      110,
+      181
+    ],
+    "party_levels": [
+      43,
+      43,
+      52,
+      42,
+      38
+    ],
+    "plan_sha256": "47be6018dee377e441d5c94b1b1316b7222aeb9b528be71bcb50f6b3aa15b563",
+    "position": [
+      17,
+      8
+    ],
+    "protected_inputs_unchanged": true,
+    "restored_hp": 330,
+    "restored_pp": 8,
+    "safe": true,
+    "schema": "pokemon.red.victory-road-fainted-dig-recovery.v1",
+    "seconds": 1.5225189160555601,
+    "source_sha256": "9c6cbb3b4d2db270cf93d456bce5128a4723ce6b3dcfa679eeb37a51050096f2",
+    "source_stage": 337,
+    "terminal_sha256": "a201426340e42df6957faa2e68dea329008e896e3b0f182aeeba8250eda3044c",
+    "terminal_stage": 338,
+    "trainer_events_preserved": [
+      2321,
+      1337,
+      1633
+    ],
+    "wild_escapes": 0
+  },
+  "resources_preserved": true,
+  "safe": true,
+  "schema": "pokemon.red.victory-road-exit.v1",
+  "seconds": 6.1171286245808005,
+  "source_sha256": "a201426340e42df6957faa2e68dea329008e896e3b0f182aeeba8250eda3044c",
+  "source_stage": 338,
+  "story_objectives_completed": 30,
+  "story_objectives_total": 36,
+  "terminal_event_delta": [],
+  "terminal_sha256": "4531381b8cf6fc52c0286c0c09bc454fd52f066385bd5b218fc1b20df2c49930",
+  "terminal_stage": 339,
+  "verified_boulder_drops": 1,
+  "verified_boulder_pushes": 65,
+  "wild_escapes": 27
+}

@@ -1,0 +1,247 @@
+{
+  "actual_cash_delta": 11286,
+  "actual_payouts": [
+    {
+      "cash": 5544,
+      "trainer": "Lorelei"
+    },
+    {
+      "cash": 5742,
+      "trainer": "Bruno"
+    }
+  ],
+  "battle_logs": [
+    {
+      "action_counts": {},
+      "actor_returned_win": false,
+      "battle_id": "battle-0001",
+      "choices": 0,
+      "completed_decisions": 0,
+      "completed_prompt_count": 0,
+      "completed_prompt_pp_spent": 0,
+      "event_count": 2,
+      "run_id": "model137-k-league-cycle-20260920-v1",
+      "terminal_event": "run_failed",
+      "terminal_sha256": "575a3574636ff500f51e1b6a1795260bd179b5f05aa24b9f9b81806c78ef2e61"
+    },
+    {
+      "action_counts": {
+        "attack": 8,
+        "switch_prompt": 4
+      },
+      "actor_returned_win": true,
+      "battle_id": "battle-0001",
+      "choices": 12,
+      "completed_decisions": 12,
+      "completed_prompt_count": 4,
+      "completed_prompt_pp_spent": 0,
+      "event_count": 47,
+      "run_id": "model137-k-league-continuation-20260920-v1",
+      "terminal_event": "run_finished",
+      "terminal_sha256": "bb3f46e856981cf12cbbe0b234e7f555f855efbc5f871b7a6de0a742ea70b63b"
+    },
+    {
+      "action_counts": {
+        "attack": 1
+      },
+      "actor_returned_win": false,
+      "battle_id": "battle-0002",
+      "choices": 2,
+      "completed_decisions": 1,
+      "completed_prompt_count": 0,
+      "completed_prompt_pp_spent": 0,
+      "event_count": 9,
+      "run_id": "model137-k-league-continuation-20260920-v1",
+      "terminal_event": "run_failed",
+      "terminal_sha256": "068760aad82f5c6ffc5bcfdcd63a2ed5bc13b15da13f1f565057d8b3c54cc292"
+    },
+    {
+      "action_counts": {
+        "attack": 5,
+        "switch_prompt": 3
+      },
+      "actor_returned_win": true,
+      "battle_id": "battle-0001",
+      "choices": 8,
+      "completed_decisions": 8,
+      "completed_prompt_count": 3,
+      "completed_prompt_pp_spent": 0,
+      "event_count": 32,
+      "run_id": "model137-k-league-continuation-20260920-v3",
+      "terminal_event": "run_finished",
+      "terminal_sha256": "b340a59b00ea6e54a84bf98a4c095a6d3741d0689ef4a03389411bd018e0b01f"
+    },
+    {
+      "action_counts": {
+        "attack": 5,
+        "switch_prompt": 2,
+        "voluntary_switch": 2
+      },
+      "actor_returned_win": false,
+      "battle_id": "battle-0002",
+      "choices": 9,
+      "completed_decisions": 9,
+      "completed_prompt_count": 2,
+      "completed_prompt_pp_spent": 0,
+      "event_count": 37,
+      "run_id": "model137-k-league-continuation-20260920-v3",
+      "terminal_event": "run_failed",
+      "terminal_sha256": "aa5deb175cd9a7e28c1769f851604cd19fbe2b74587a951634c228e1a1cd4b15"
+    }
+  ],
+  "cash_after": 11859,
+  "cash_before": 573,
+  "collection_preserved": true,
+  "complete_clean_cycles": 0,
+  "completed_decisions": 30,
+  "date": "2026-09-20",
+  "default_league_promotion": false,
+  "failed_switch": {
+    "first_reserve_hp_after_attack": 49,
+    "first_reserve_level": 28,
+    "first_selected_reserve": "Marowak",
+    "hp_after": 0,
+    "hp_before": 56,
+    "next_reserve_level": 22,
+    "next_selected_reserve": "Goldeen",
+    "opponent": "Golbat",
+    "opponent_level": 56,
+    "other_living_members": 5,
+    "trainer": "Agatha"
+  },
+  "failures": [
+    "First private departure harness failed before inputs because its specimen ledger was not JSON serializable; its identity and source are retained.",
+    "Successor output-path typo failed before emulator/claim creation; corrected before execution.",
+    "Initial League entry reached Lorelei but MapId enum failed strict integer capture validation before a model query. Exact active battle was continued after normalization.",
+    "Bruno prompt settlement produced one unowned Surf after the model declined switching. The original cycle is disqualified, even if subsequently completed.",
+    "A zero-input recovery attempt correctly rejected the mismatched old prompt resources; the opponent and PP had advanced. Its unchanged endpoint was retained.",
+    "After the generic prompt fix, Agatha reached a genuine model-selected Goldeen faint. The unchanged no-faint guard stopped execution."
+  ],
+  "frames": 64272,
+  "full_suite_claim": false,
+  "gameplay_stopped": true,
+  "items_bought": 0,
+  "items_sold": 0,
+  "items_used": 0,
+  "macros": 719,
+  "model_choices": 31,
+  "model_fit_performed": false,
+  "model_goal_queries": 0,
+  "model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "native_denominator": 124,
+  "next_decision": "User choice requested: preserve strict no-faint criterion, or prospectively qualify complete positive-net cycles with explicitly counted recoverable faints. Old failures stay failed either way.",
+  "operator_selected_qualification": true,
+  "partition": "development",
+  "qualification_contract": "two_complete_positive_net_cycles_from_earned_endpoints_with_no_faints_or_unowned_battle_actions",
+  "registrations": 97,
+  "required_remaining": [
+    "finish or safely recover exact Agatha state under an authorized contract",
+    "prove Lance/Champion and Hall of Fame",
+    "prove cartridge-native postgame return and healing",
+    "two clean profitable earned cycles",
+    "model-selected League income integration"
+  ],
+  "root_lineage_id": "red-goal-v1-010-acquire_species-train-01",
+  "safari_departure": {
+    "balls_remaining": 28,
+    "deliberate_qualification_support_not_model_goal_choice": true,
+    "new_fee": 0,
+    "paid_steps_at_exit": 399,
+    "paid_steps_before": 403,
+    "session_ended": true
+  },
+  "schema": "pokemon.red.learned-league-qualification-audit.v1",
+  "specimens": 75,
+  "stages": [
+    {
+      "bag_preserved": true,
+      "cash_after": 573,
+      "cash_before": 573,
+      "error_type": null,
+      "frames": 768,
+      "macros": 25,
+      "parent_state_sha256": "8f41a0350ddb7d6dd5da388de33792cd8d8e9ce75089f5d3725296af4bf1306f",
+      "result_sha256": "5e6f97360ac5932bdb56f8e09876558932c8198e3b26f7c3206cb697082c5796",
+      "run_id": "model137-k-league-departure-20260920-v2",
+      "source_commit": "b241191d007ca79ad1796d4e489e501b79a1cc6c",
+      "specimens_and_registrations_preserved": true,
+      "status": "passed",
+      "terminal_state_sha256": "8a1f66802eb8ebf8c80491b3505815b2b07049d7dd1f6a7e9b330df9b37d8363"
+    },
+    {
+      "bag_preserved": true,
+      "cash_after": 573,
+      "cash_before": 573,
+      "error_type": "RedLeagueFundingExecutionError",
+      "frames": 6528,
+      "macros": 80,
+      "parent_state_sha256": "8a1f66802eb8ebf8c80491b3505815b2b07049d7dd1f6a7e9b330df9b37d8363",
+      "result_sha256": "eef1f7a7620c14bedd51816b26423962f13301302f0962d330d9f257211793cd",
+      "run_id": "model137-k-league-cycle-20260920-v1",
+      "source_commit": "f48af06f12411695f4ba6e6870fb9181634f36d5",
+      "specimens_and_registrations_preserved": true,
+      "status": "failed",
+      "terminal_state_sha256": "575a3574636ff500f51e1b6a1795260bd179b5f05aa24b9f9b81806c78ef2e61"
+    },
+    {
+      "bag_preserved": true,
+      "cash_after": 6117,
+      "cash_before": 573,
+      "error_type": "ProtectedRecoveryError",
+      "frames": 24936,
+      "macros": 271,
+      "parent_state_sha256": "575a3574636ff500f51e1b6a1795260bd179b5f05aa24b9f9b81806c78ef2e61",
+      "result_sha256": "206717ef678fd6e87844050640965cb8105dcecf6b28513e42a2a56f0f2bdcec",
+      "run_id": "model137-k-league-continuation-20260920-v1",
+      "source_commit": "c7aa6d25c39996967f41667495c166e2ebd5e71b",
+      "specimens_and_registrations_preserved": true,
+      "status": "failed",
+      "terminal_state_sha256": "068760aad82f5c6ffc5bcfdcd63a2ed5bc13b15da13f1f565057d8b3c54cc292"
+    },
+    {
+      "bag_preserved": true,
+      "cash_after": 6117,
+      "cash_before": 6117,
+      "error_type": "AssertionError",
+      "frames": 0,
+      "macros": 0,
+      "parent_state_sha256": "068760aad82f5c6ffc5bcfdcd63a2ed5bc13b15da13f1f565057d8b3c54cc292",
+      "result_sha256": "275d95dc750eeb6adadf4ad7272ed2e5ecf9a46789219d98fa332cd20c3e5f97",
+      "run_id": "model137-k-league-continuation-20260920-v2",
+      "source_commit": "360dad1969d53cbaad9b10152aa9014971cc2b65",
+      "specimens_and_registrations_preserved": true,
+      "status": "failed",
+      "terminal_state_sha256": "068760aad82f5c6ffc5bcfdcd63a2ed5bc13b15da13f1f565057d8b3c54cc292"
+    },
+    {
+      "bag_preserved": true,
+      "cash_after": 11859,
+      "cash_before": 6117,
+      "error_type": "TrainerFundingBattleError",
+      "frames": 32040,
+      "macros": 343,
+      "parent_state_sha256": "068760aad82f5c6ffc5bcfdcd63a2ed5bc13b15da13f1f565057d8b3c54cc292",
+      "result_sha256": "5dd415e9796391037a9e31033ca1b9f20364d3ab08d8866f08d368c28a4e6853",
+      "run_id": "model137-k-league-continuation-20260920-v3",
+      "source_commit": "c3a44874989ad74161f14b6f892b81ca66e3cd47",
+      "specimens_and_registrations_preserved": true,
+      "status": "failed",
+      "terminal_state_sha256": "aa5deb175cd9a7e28c1769f851604cd19fbe2b74587a951634c228e1a1cd4b15"
+    }
+  ],
+  "status": "not_qualified_stopped_at_existing_no_faint_guard",
+  "targeted_tests_passed": 734,
+  "terminal_active_battle": true,
+  "terminal_map": 247,
+  "terminal_state_sha256": "aa5deb175cd9a7e28c1769f851604cd19fbe2b74587a951634c228e1a1cd4b15",
+  "unowned_attack": {
+    "correction": "settle with cancel rather than confirm to avoid entering FIGHT",
+    "count": 1,
+    "location": "Bruno",
+    "move_id": 57,
+    "opponents_defeated": 1,
+    "own_pp_spent": 1,
+    "parent_choice": "decline_switch"
+  },
+  "verified_event_count": 127
+}

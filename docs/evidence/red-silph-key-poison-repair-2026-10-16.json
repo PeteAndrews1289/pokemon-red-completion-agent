@@ -1,0 +1,249 @@
+{
+  "actor_settings_sha256": "a642aec95fd03b0696613a1ac0a8d82bf63be68ba9783e95b036017227e9e3ab",
+  "aggregate_development_cutoff": null,
+  "all_copy_receipts": [
+    {
+      "actions": 5629,
+      "cash_debits": 0,
+      "frames": 743904,
+      "heals": 8,
+      "loads": 1,
+      "model_queries": 12,
+      "name": "corrected-composed-v1",
+      "native_sha256": "d3211511d190fa1a0d16e1b7cc5a26bcc3e4ece659d8f8552b2ff27890c7035c",
+      "passed": true,
+      "receipt_sha256": "fd6c1bed416c511f11176068eef8117296905051f3bbfe0f46252a433f124c6d",
+      "support_steps": 8
+    }
+  ],
+  "all_emulators_stopped": true,
+  "at_utc": "2026-10-16T09:23:47.577479+00:00",
+  "baseline_manifest_sha256": "93353169ce6e128c840f45a7df50f9e5894b5f8d01fe3a80bc0ab46359cd413e",
+  "candidate": "silph-key-package-v1",
+  "changed_runtime_sources": [
+    "src/pokemon_red_completion/red_silph_learned_phase.py"
+  ],
+  "composed_chain": {
+    "actions": 5629,
+    "card_key_acquired": true,
+    "cash_debits": 0,
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "copy_back": false,
+    "export_verified": true,
+    "fit_allowed": false,
+    "frames": 743904,
+    "fresh_loads_allowed_only_on_related_copy": true,
+    "goal_attempts": 20,
+    "heals": 8,
+    "independent_origin": false,
+    "initial_copy_registrations": 23,
+    "key_receipts": [
+      {
+        "index": 14,
+        "phase": {
+          "actions": 616,
+          "battle_authority": "development_scoped_frozen_model",
+          "battle_decisions": 3,
+          "battle_outcome": "won",
+          "card_key_acquired": true,
+          "cash_after": 32458,
+          "cash_before": 31468,
+          "chapter_complete": false,
+          "combat_items": 0,
+          "field_poison_hp_lost": 2,
+          "frames": 215928,
+          "model_goal_queries": 0,
+          "purchases": 0,
+          "sales": 0,
+          "status": "complete",
+          "support": [
+            "navigation",
+            "Card Key pickup"
+          ]
+        }
+      }
+    ],
+    "later_actual_model_choices": 5,
+    "model_queries": 12,
+    "native_poison_guard_verified": true,
+    "original_roster_returned": true,
+    "passed": true,
+    "post_key_healing_verified": true,
+    "post_key_outcomes": [
+      {
+        "error": null,
+        "kind": "restore_team",
+        "support_role": null
+      },
+      {
+        "error": null,
+        "kind": "advance_story",
+        "support_role": null
+      },
+      {
+        "error": null,
+        "kind": "restore_team",
+        "support_role": null
+      },
+      {
+        "error": null,
+        "kind": "develop_team",
+        "support_role": null
+      },
+      {
+        "error": null,
+        "kind": "restore_team",
+        "support_role": null
+      }
+    ],
+    "related_copy": true,
+    "released": true,
+    "seconds": 130.01459962502122,
+    "source_sha256": "1eb70f29559d57283c6fd5cd9d9e79d3ace927ff931f61b7b0214f1532dcc214",
+    "state_loads": 1,
+    "stop_reason": "decision_budget",
+    "supplied_strategic_goal": false,
+    "support_steps": 8,
+    "terminal_bag": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        48,
+        1
+      ]
+    ],
+    "terminal_cash": 33298,
+    "terminal_copy_registrations": 23,
+    "terminal_sha256": "1e3457239d7e78246fa989abbb774a262feeb77ea03dee4a043e045731bb126d",
+    "worker_stopped": true
+  },
+  "copied_back_progress": false,
+  "environment_pins": 4512,
+  "failed_actual": "red-frozen-autonomous-run-20261016-snorlax-income-v1",
+  "fits": 0,
+  "focused_rom_free_tests": 330,
+  "focused_test_receipt_sha256": "c5c8fc0157c0fc22d47b98e4d8321b6777a7a287499db7fd1809da6f84a9d5b4",
+  "forecast_output_bytes": 19517046089,
+  "full_suite_or_ci_claimed": false,
+  "headroom_after_forecast_and_reserve": 26734572215,
+  "helper_changes": 0,
+  "interpretation": "Scoped execution repair, not parameter learning or fresh-run completion. The model won the battle; native poison on the walk to the key is now verified with the existing reward guard. Cash, bag, PP, party, move, level, native flag and ready/released checks remain strict. No data, model or helper changes.",
+  "isolated_inputs": 0,
+  "isolated_loads": 0,
+  "isolated_modules": 301,
+  "isolated_plan_sha256": "f9b069ed210c4b5ba22fe3f142f0e6d32e2167da2a98fedc95a77b1979800755",
+  "isolated_writes": 0,
+  "main_registration_delta": 0,
+  "manifest_sha256": "fa09ed2aeffbcf112438169c71581e9b86af830e9cfbf3d533b381b507c557bc",
+  "model_and_data_changes": 0,
+  "new_weights": 0,
+  "next_action": "Launch one distinct fresh sixteen-hour dashboard actor under continuing human authorization after exclusive preflight; review every two hours.",
+  "output_free_bytes": 49472843776,
+  "package_pins": 7878,
+  "passed": true,
+  "private_closeout_sha256": "0a1b634cb7c29c2eff65756ce94fe8720d7881941a92462b9df5a75a742c8399",
+  "protected_pins": 741,
+  "reserve_bytes": 3221225472,
+  "schema": "pokemon.red.silph-key-poison-repair-acceptance.v1",
+  "scoped_style_passed": true,
+  "scoped_whitespace_passed": true,
+  "session_started_at_utc": "2026-10-16T09:13:27.812525+00:00",
+  "total_copy_loads": 3,
+  "total_diagnostic_actions": 5629,
+  "total_diagnostic_cash_debits": 0,
+  "total_diagnostic_frames": 743904,
+  "total_diagnostic_heals": 8,
+  "train_examples": 0,
+  "zero_input_probes": [
+    {
+      "frames": 0,
+      "inputs": 0,
+      "loads": 0,
+      "name": "boundary-probe-v1",
+      "sha256": "eecfbebd582d939d07027908191d29c01431cb9861602710bc81248bc5f94bac",
+      "tooling_import_failure": true
+    },
+    {
+      "frames": 0,
+      "inputs": 0,
+      "loads": 2,
+      "name": "boundary-probe-v2",
+      "sha256": "0023ef3da67dde77fbef05cd649263d2c8187730fb2ca6607986a715e58c6602",
+      "tooling_import_failure": false
+    }
+  ]
+}

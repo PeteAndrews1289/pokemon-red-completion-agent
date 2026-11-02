@@ -1,0 +1,74 @@
+{
+  "assignment": "red-interaction-damage-successor-20260923-v2",
+  "disposition": "damage_screen_passed_no_battle_admission",
+  "execution_commit": "ea94b8d88696a292aaa1bb060849053641bee251",
+  "plan_sha256": "cdb8267f853ceacc3256a39ca62ea054ef057ee0925b4031b2a12ff1acede9e0",
+  "result_sha256": "c0d8e0532c4c8dc491d37b630a65981aa32dc45b314add22d1495882ed9a73e8",
+  "audit_sha256": "d09765133b998b7fd78afaf96db6a2f494cef08f3afb1acf8ed84717da549379",
+  "candidate_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "fit": {
+    "families": 24,
+    "configurations": 72,
+    "experimental_fit_attempts": 1
+  },
+  "comparison": {
+    "families": 16,
+    "configurations": 48,
+    "baseline_mean_damage_regret": 0.1396488912604986,
+    "candidate_mean_damage_regret": 0.009059253966398914,
+    "relative_improvement": 0.9351283502172606,
+    "baseline_exact_best": 27,
+    "candidate_exact_best": 41,
+    "baseline_within_002_of_best": 28,
+    "candidate_within_002_of_best": 42,
+    "all_frozen_gates_passed": true,
+    "family_regressions": 0,
+    "root_groups_improved": 4,
+    "candidate_category_choices": {
+      "physical": 19,
+      "special": 29
+    },
+    "conditional_family_bootstrap_improvement_interval": [
+      0.05711352103549839,
+      0.2223076524305218
+    ]
+  },
+  "retention": {
+    "old_train_configurations_reconstructed": 96,
+    "baseline_mean_damage_regret": 0.24547319343099674,
+    "candidate_mean_damage_regret": 0.0275458390850359,
+    "physical_best_configurations": 20,
+    "physical_best_regret_change": -0.05541673534887328,
+    "special_best_configurations": 77,
+    "special_best_regret_change": -0.255413739959759,
+    "all_frozen_gates_passed": true,
+    "historical_utility_records_classified": 936
+  },
+  "native": {
+    "forced_branches": 4320,
+    "hash_chained_events": 37920,
+    "attempted_controller_actions": 82134,
+    "completed_controller_actions": 82134,
+    "frames": 6596892,
+    "elapsed_seconds": 527.3031233749352,
+    "invalid_actions": 0,
+    "forced_stops": {
+      "player_turn_budget": 3282,
+      "party_defeated": 619,
+      "battle_won": 419
+    }
+  },
+  "independent_coefficients_reconstructed": true,
+  "protected_inputs_unchanged": true,
+  "learned_native_actions": 0,
+  "authority_promotions": 0,
+  "registration_delta": 0,
+  "story_inputs": 0,
+  "limitations": [
+    "Configuration comparison reuses four TRAIN origins; timing offsets are correlated and do not demonstrate independent-root or cross-title transfer.",
+    "Single-turn supported damage only; complete battles, status/control/switch interaction and unsupported mechanics including Dig/Fly remain unqualified.",
+    "Forced branch wins/losses are measurement endpoints, not learner battle win rates.",
+    "One experimental damage fit does not change Model141 or the deployed battle actor."
+  ],
+  "next": "Freeze the passing candidate and qualify its composition with the existing status/control/switch heads in bounded full-team battles, then separately settle two-turn-move coverage before a prospective story attempt."
+}

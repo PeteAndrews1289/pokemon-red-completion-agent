@@ -1,0 +1,138 @@
+{
+  "schema": "pokemon.red.story-frontier-continuation.v1",
+  "date": "2026-09-21",
+  "status": "retained_partial_goal_failed",
+  "runtime_commit": "fa44e513841a2f3c9d2598250460322ba6c40bc0",
+  "source_sha256": "01fff089bc9676c807347ba03c9c6acef398163b30d763ebae5630da46977b06",
+  "terminal_sha256": "34086644446c06f902c82ece673ff341e268626932f0595fb0cc42b864608308",
+  "terminal_envelope_sha256": "a5c336e5bd70b12430e861e871ef3eb30efaed1afd5399edfbad163a343c8697",
+  "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+  "claim_sha256": "a3c35c7c8c7c95c366a965bbfe44727138e4ac96cc4cf5e5a86ee59ff6846df3",
+  "result_sha256": "feba9e7b7643e0c096423305d1db737c35e2b173146a6118ed9718d9d50ed2c0",
+  "audit_sha256": "fa5682ff22ad2b508c7342e2d45abc41aab885f1d150e47fe87c0936808ba5a5",
+  "partition": "development",
+  "fit_allowed": false,
+  "seed": 2026092102,
+  "admission": {
+    "options": [
+      "defeat_erika",
+      "reach_saffron",
+      "rescue_fuji"
+    ],
+    "planned_spends": [
+      2200,
+      2300,
+      0
+    ],
+    "cash": 12992,
+    "read_only": true,
+    "frames": 0,
+    "actions": 0,
+    "initial_entry_checks_passed": true,
+    "missed_requirement": "Jolteon terminal verifier requires evolved Blastoise core",
+    "menu_sha256": "ca392d9c845521d26baf45fb78328888c5071b961237169ba3f6a4963d439154"
+  },
+  "selection": {
+    "selected": "reach_saffron",
+    "selected_index": 1,
+    "mode": "model_exploration",
+    "probabilities": [
+      0.3379836101704664,
+      0.3281559595374258,
+      0.33386043029210777
+    ],
+    "model_choices": 1,
+    "goal_successes": 0,
+    "redraws": 0,
+    "teacher_goal_choices": 0
+  },
+  "outcome": {
+    "story_before": 16,
+    "story_after": 16,
+    "story_total": 36,
+    "registrations_before": 12,
+    "registrations_after": 14,
+    "new_registrations": [
+      "Eevee",
+      "Jolteon"
+    ],
+    "scripted_preparation": true,
+    "learned_acquisition_choices": 0,
+    "learned_battle_choices": 0,
+    "cash_before": 12992,
+    "cash_after": 10892,
+    "cash_spent": 2100,
+    "actions": 846,
+    "completed_actions": 846,
+    "frames": 109320,
+    "seconds": 3.2299139590468258,
+    "party_hp": [
+      98,
+      51,
+      37,
+      68
+    ],
+    "party_max_hp": [
+      98,
+      51,
+      37,
+      68
+    ],
+    "party_preserved": true,
+    "bag_preserved": true,
+    "guard_open": false,
+    "saffron_reached": false,
+    "safe_terminal": true,
+    "error_type": "SaffronChapterError",
+    "failure": "Jolteon preparation verifier rejects preserved Wartortle core",
+    "runner_measured_cost": null,
+    "cost_source": "separate audit derived from retained before/after counters; original result unchanged"
+  },
+  "audit": {
+    "passed": true,
+    "frames": 0,
+    "inputs": 0,
+    "recorded_menu_and_draw_reproduced": true,
+    "raw_terminal_verified": true,
+    "raw_party_preserved_with_jolteon": true,
+    "guard_still_closed": true,
+    "source_and_model_and_primary_save_unchanged": true
+  },
+  "correction": {
+    "scope": "Future admission checks legacy preparation terminal-core compatibility before spending; no verifier weakening or route change",
+    "historical_attempt_rewritten": false,
+    "replayed": false,
+    "retained_four_member_access_admitted": true,
+    "remaining_access_cost": 200
+  },
+  "verification": {
+    "targeted_tests_passed": 141,
+    "full_suite": false,
+    "ruff": true,
+    "registry_regenerated": true
+  },
+  "primary": {
+    "registrations": 109,
+    "target": 124,
+    "specimens": 78,
+    "cash": 11968,
+    "unchanged": true
+  },
+  "learning": {
+    "new_fits": 0,
+    "new_training_examples": 0,
+    "model_outcomes": 141,
+    "successes": 96,
+    "economy_qualified": 58
+  },
+  "next": "Declare continuation of the already-selected Saffron goal from retained 34086644; direct access only, 200cash, no new draw or repeated preparation. Independently verify guard and Saffron endpoint.",
+  "limitations": [
+    "One correlated story continuation, not independent transfer.",
+    "Zero story success this attempt; partial registrations were scripted support.",
+    "Near-uniform probabilities are not strategic mastery.",
+    "Recovery was unnecessary and remains untested.",
+    "Failed native cost remains separately audited because the generic runtime received no chapter report."
+  ],
+  "gameplay_running": false,
+  "github_published": false
+}

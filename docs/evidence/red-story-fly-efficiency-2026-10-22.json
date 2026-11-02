@@ -1,0 +1,132 @@
+{
+  "actions_reduction": 0.5817805383022774,
+  "baseline": {
+    "actions": 483,
+    "cash_spent": 0,
+    "frames": 21684,
+    "no_error": true,
+    "no_other_progress": true,
+    "phase_seconds": {
+      "execution": 3.882996822999985,
+      "menu_and_boundary_observation": 64.06304322300002,
+      "outcome_diagnostics": 0.0003172220001488313,
+      "selection_and_receipt": 0.010935331999917253,
+      "selection_diagnostics": 3.0730000162293436e-06,
+      "terminal_observation": 0.23129347500025688,
+      "verification": 0.11969601299961141
+    },
+    "receipts": [
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-000/outcome.json",
+        "sha256": "4fb44c0fbd5b8a468e0eb04c7d5874e1cc3031f53f5b542b7841d0f4e13ac68a"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-001/outcome.json",
+        "sha256": "fec617b34864a3b5b304fbfb3b9d36aa4d3ac5d96ff1b56cdd494230724b76c8"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-002/outcome.json",
+        "sha256": "54808caa623c851a4b4932d87af895f0e72628a87954034fda9b00ad4a2f9e07"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-003/outcome.json",
+        "sha256": "579790b06ffd9b3ddcb999ff0eae5115e898e273f0d4e60fc33af48af3cbebdc"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-004/outcome.json",
+        "sha256": "2cb1760519b2baff936093a9703d88a42ed091ecdb1d3eb86b887f01c2c726eb"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-005/outcome.json",
+        "sha256": "5a544a6b70b172e7cd8753512ff5016f8e02ca4171d5d9c9e0701c341c61b5a7"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-006/outcome.json",
+        "sha256": "8b9f8d3e6e8ef8f6fea88f6db9abd890eb4309720f6d9745b1beb5537e4ec299"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v101-baseline-20261022-004037/runs/segment-001/native/episode/step-007/outcome.json",
+        "sha256": "130189dec60ee766ea3469c53d34c4e0c31938d1653558e6bc19ba59d283ba2b"
+      }
+    ],
+    "recorded_phase_seconds": 68.30828516099996,
+    "same_story_goal": true,
+    "source_map": 47,
+    "start_state_sha256": "91214af2e8435729e70424c8ca80c8efdeba825d4720075565fea8990ed5d165",
+    "steps": 8,
+    "terminal_position": {
+      "map_id": 8,
+      "player_x": 10,
+      "player_y": 0
+    },
+    "terminal_state_sha256": "9b22b072303fb910b72c37d6cb8552e46cdec1eb6b0cb43b1316fe26cbb607ed"
+  },
+  "candidate": {
+    "actions": 202,
+    "cash_spent": 0,
+    "frames": 9432,
+    "no_error": true,
+    "no_other_progress": true,
+    "phase_seconds": {
+      "execution": 1.7437704369999665,
+      "menu_and_boundary_observation": 36.427147036000065,
+      "outcome_diagnostics": 0.00020713700007490843,
+      "selection_and_receipt": 0.005943052000020543,
+      "selection_diagnostics": 1.8539999473432545e-06,
+      "terminal_observation": 0.114020365999977,
+      "verification": 0.058678978999978426
+    },
+    "receipts": [
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v102-qualification-20261022-003334/runs/segment-001/native/episode/step-000/outcome.json",
+        "sha256": "dfeb5dc9c71c4280357b3383e21c42013b47e598be507d5b94088d29d9cf8333"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v102-qualification-20261022-003334/runs/segment-001/native/episode/step-001/outcome.json",
+        "sha256": "3e7028fa9ce75e6f765abfa0c72e1cd3f12dd9aebe5bfb5db1c9ca9ca910a7b9"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v102-qualification-20261022-003334/runs/segment-001/native/episode/step-002/outcome.json",
+        "sha256": "6c657ac80538aaa24d27add937b0217f11a5f525c2dbf9afb586fd0b8a8ec68e"
+      },
+      {
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/story-fly-v102-qualification-20261022-003334/runs/segment-001/native/episode/step-003/outcome.json",
+        "sha256": "3c8e8b9f807e1fca6d523aafbe29a566cf7d2e2044e3a9ae014e09d749e0e801"
+      }
+    ],
+    "recorded_phase_seconds": 38.34976886100003,
+    "same_story_goal": true,
+    "source_map": 47,
+    "start_state_sha256": "91214af2e8435729e70424c8ca80c8efdeba825d4720075565fea8990ed5d165",
+    "steps": 4,
+    "terminal_position": {
+      "map_id": 8,
+      "player_x": 11,
+      "player_y": 12
+    },
+    "terminal_state_sha256": "4843769455f5f416ada28faa615b304ee26b92d1f13186fb504eec972e7bec99"
+  },
+  "common_prefix_byte_exact": true,
+  "comparison_gains_discarded": true,
+  "component": "existing native Fly prefix for same bound story objective",
+  "earned_actual_progress": 0,
+  "evidence": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/story-travel-efficiency-20261022-0019/NATIVE-COMPARISON-RESULT.json",
+  "evidence_sha256": "e407911219b952f0be56e15dc25411f95d57f7135f5f013edc1c5a8c1fcfb64f",
+  "fit_count": 0,
+  "focused_tests": 419,
+  "frames_reduction": 0.5650249031543996,
+  "full_game_speed_claim": false,
+  "full_holds_seconds": 1020,
+  "full_suite": false,
+  "heldout_starts": 0,
+  "independent_origins": 0,
+  "model_changes": 0,
+  "observed_at_utc": "2026-10-22T00:48:33.792045+00:00",
+  "official_successes": 0,
+  "recorded_phase_time_reduction": 0.43857807628150636,
+  "replicates_per_arm": 1,
+  "root_and_preflight_seconds": 604.7339315149999,
+  "same_town_not_exact_tile": true,
+  "schema": "pokemon.red.story-fly-efficiency-milestone.v1",
+  "source_state_sha256": "91214af2e8435729e70424c8ca80c8efdeba825d4720075565fea8990ed5d165"
+}

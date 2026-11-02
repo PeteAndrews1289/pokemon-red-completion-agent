@@ -1,0 +1,360 @@
+{
+  "schema": "pokemon.red.composed-ranking-result.v1",
+  "session_id": "2026-09-24-composed-learning",
+  "status": "learned_fit_verified_native_comparison_complete_not_qualified",
+  "candidate_sha256": "532246485bec55c00d5df51a190b8159c4c9b04c15e54c897d0fdc5e29ccc7d9",
+  "source_commits": {
+    "composed": "fb4aa59c",
+    "solver": "82fd509a",
+    "curvature": "f933fd91",
+    "verification_record": "31ab1ff2",
+    "runtime": "3c081a38"
+  },
+  "packets": {
+    "red-composed-ranking-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "508ce26437e8ebaa9ef4f0d8ec8577cbcc28ddc7e5b7768e0ffd2a71c4fab672",
+        "RESULT.json": "865345e6395bd9fc6bbe8ec50b1ff671202157f39f37cd60b076226ebe7ff8e2",
+        "fit.json": "600a8b88996e93d76490cc332fa163b6aa75db87b7655981d296cd960b356627",
+        "candidate-model.json": "d3dd6c09b2ed6a8b67623a470587677785fa1337e3a188307efee415731bb6be",
+        "FIT_INDEPENDENT_AUDIT.json": "3099e95063975928f76e95f255a8b701dfcc5cbc0e01bce7b47afc02c5dbf593",
+        "INDEPENDENT_AUDIT.json": "37c79aa04cece556f5a4a53d70649471e51657dfc38bf7f768beaf7b09517eaa"
+      },
+      "result": {
+        "authority_promotions": 0,
+        "episodes": 0,
+        "error": "ValueError: composed three-stage fit gate failed",
+        "fits": 1,
+        "new_targets": 0,
+        "passed": false,
+        "retained_targets": 45,
+        "seconds": 167.55255479100015,
+        "stage": "fit",
+        "story_inputs": 0
+      }
+    },
+    "red-composed-ranking-solver-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "cfa4e0b3e0d027e64040640a862331dfacd7392da34687b9da6c06d39d499616",
+        "RESULT.json": "6e0cd6bdb52a027e3dc784f4e72ec78a92a9bfb2cf8e478ec2928da826c91c3b",
+        "fit.json": "c7fb6e837c3735fe90a0108e42a4a9754772294096ec4509d236254387370c2b",
+        "candidate-model.json": "1b122d36fc5ff6fdca73c637c26f38e0573a5a5a48c74a0cd76e8ab95ab9b77d",
+        "FIT_INDEPENDENT_AUDIT.json": "8edaa96e66c01ce954d336caa8d48cef4161feabb2594ef8b8e35fbeb2b63a5b",
+        "INDEPENDENT_AUDIT.json": "ce0e72728b8fce67db92e996f5d9b2790dfbd7982b6a5b09b3d9fea70e671a1b",
+        "READONLY_CURVATURE_DIAGNOSIS.json": "5eb43f5d5a84bf72ef15b410aaaeab20c0451ff83156868af2ff425ac8a71593"
+      },
+      "result": {
+        "authority_promotions": 0,
+        "episodes": 0,
+        "error": "ValueError: composed three-stage fit gate failed",
+        "fits": 1,
+        "new_targets": 0,
+        "passed": false,
+        "retained_targets": 45,
+        "seconds": 403.524041749999,
+        "stage": "fit",
+        "story_inputs": 0
+      }
+    },
+    "red-composed-ranking-curvature-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "4e32fbacd00ff30b6c8702fba7b615a9392343e8738e5dfae7037f54db3b3cea",
+        "RESULT.json": "957c1ad7be6649694e515b3977a3733e4b06ac9db67b1f5a02d53b7da3906fe6",
+        "fit.json": "3e375a80e9de8ed84f3a4d50a3ee7bc6c29f7951450d8e81179694564fbd3a4c",
+        "candidate-model.json": "532246485bec55c00d5df51a190b8159c4c9b04c15e54c897d0fdc5e29ccc7d9"
+      },
+      "result": {
+        "authority_promotions": 0,
+        "episodes": 0,
+        "error": "IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices",
+        "fits": 1,
+        "new_targets": 0,
+        "passed": false,
+        "retained_targets": 45,
+        "seconds": 285.53734470900054,
+        "stage": "fit",
+        "story_inputs": 0
+      }
+    },
+    "red-composed-ranking-verification-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "535c2d1aad41cb2cb5916a6e8d4c7c8e858eb5ba4102d2620738a838c7fff7b4",
+        "RESULT.json": "c1f76f2ccdd78ac346a82b860fcdfa0260c91e059237ae00c4fc572deb982ca9",
+        "FIT_INDEPENDENT_AUDIT.json": "85093de57cd6a8124ea0f443157338b9d43a3ee77581744af602705f87397662",
+        "INDEPENDENT_AUDIT.json": "1f6cb608c4371ab33d03e0ec538d10f6f51ddce467817afa3f2dfd0edc17d0b4"
+      },
+      "result": {
+        "authority_promotions": 0,
+        "candidate_sha256": "532246485bec55c00d5df51a190b8159c4c9b04c15e54c897d0fdc5e29ccc7d9",
+        "episodes": 26,
+        "error": "ProtectedRecoveryError: model trainer practice voluntary switch did not return to MAIN with its selected battler.",
+        "fits": 0,
+        "passed": false,
+        "seconds": 85.7010779580014,
+        "stage": "comparison",
+        "story_inputs": 0
+      }
+    },
+    "red-composed-ranking-native-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "1ba05b850ddb8660b3440df861b15cb4fa73ce88f250e19c7d1627bf92f91e9d",
+        "RESULT.json": "cb35748481bdc470e2cc3121d0bea8896d5af5891f1ab5884d03cde0e66df7b0",
+        "FIT_INDEPENDENT_AUDIT.json": "85093de57cd6a8124ea0f443157338b9d43a3ee77581744af602705f87397662",
+        "INDEPENDENT_AUDIT.json": "57d7e2edc508c92003b85d8aa6fe877c05b5c2d1f79296a3e1999899949827ca",
+        "READONLY_GAP_DIAGNOSIS.json": "3acee3e00b879eb804ec17320d4584c745e01aab0472d5921926b61bf55ca6c1"
+      },
+      "result": {
+        "authority_promotions": 0,
+        "candidate_sha256": "532246485bec55c00d5df51a190b8159c4c9b04c15e54c897d0fdc5e29ccc7d9",
+        "episodes": 216,
+        "error": "ValueError: new three-arm comparison gate failed",
+        "fits": 0,
+        "passed": false,
+        "seconds": 329.8389641249996,
+        "stage": "comparison",
+        "story_inputs": 0
+      }
+    },
+    "red-residual-switch-prompt-20260924-v1": {
+      "hashes": {
+        "PLAN.json": "7be46a3fcd7517ccdd9fc957b77cab073e81757e7f7c0fa3e865bfa2742b9b07",
+        "RESULT.json": "e6816c2c99ddaabc6ae165b6d67fc9e960de9bd4017cb5887ee2e540a47b0f7d"
+      },
+      "result": {
+        "campaign_unchanged": true,
+        "comparison_replays": 0,
+        "episodes": 4,
+        "error": null,
+        "model_updates": 0,
+        "passed": true
+      }
+    }
+  },
+  "fit": {
+    "attempts": 3,
+    "passing_complete_fits": 1,
+    "retained_recent_contexts": 45,
+    "retained_groups": 18,
+    "new_training_targets": 0,
+    "derived_control_pairs": 10,
+    "new_switch": {
+      "before": 0.5313747160857142,
+      "after": 0.3511255894,
+      "cases": 7
+    },
+    "new_full_control": {
+      "before": 0.9821167398500001,
+      "after": 0.5871598704000004,
+      "cases": 4,
+      "relative_reduction": 0.4021485974369218
+    },
+    "old_numeric_checks": 35,
+    "retention_regressions": 0,
+    "status_predictions_identical": 591,
+    "passing_fit_checkpoints_recomputed": 38,
+    "stages": {
+      "control_coverage": {
+        "accepted": 22,
+        "selected": 19
+      },
+      "composed_switch": {
+        "accepted": 13,
+        "selected": 13
+      },
+      "control_finish": {
+        "accepted": 0,
+        "selected": 0
+      }
+    },
+    "damage_and_status_frozen": true
+  },
+  "comparison": {
+    "comparisons": {
+      "deployed": {
+        "authority_promotions": 0,
+        "common_win_costs": {
+          "decisions": {
+            "baseline": 474,
+            "candidate": 459
+          },
+          "pp_spent": {
+            "baseline": 213,
+            "candidate": 213
+          }
+        },
+        "common_wins": 22,
+        "constructed_teams": 24,
+        "gates": {
+          "common_win_costs_noninferior": true,
+          "risk_improved": false,
+          "wins_noninferior": true,
+          "zero_invalid_and_interventions": true
+        },
+        "independent_natural_roots": 0,
+        "passed": false,
+        "timing_pairs": 72,
+        "totals": {
+          "baseline": {
+            "decisions": 1625,
+            "forced_mechanics": 0,
+            "invalid": 0,
+            "learned_decisions": 1625,
+            "pp_spent": 654,
+            "risk_rate": 0.02276923076923077,
+            "teacher_interventions": 0,
+            "type_immune_attacks": 18,
+            "win": 27,
+            "zero_power_choices_with_covered_alternative": 19
+          },
+          "candidate": {
+            "decisions": 1560,
+            "forced_mechanics": 0,
+            "invalid": 0,
+            "learned_decisions": 1560,
+            "pp_spent": 655,
+            "risk_rate": 0.023076923076923078,
+            "teacher_interventions": 0,
+            "type_immune_attacks": 24,
+            "win": 32,
+            "zero_power_choices_with_covered_alternative": 12
+          }
+        }
+      },
+      "parent": {
+        "authority_promotions": 0,
+        "common_win_costs": {
+          "decisions": {
+            "baseline": 502,
+            "candidate": 519
+          },
+          "pp_spent": {
+            "baseline": 242,
+            "candidate": 245
+          }
+        },
+        "common_wins": 25,
+        "constructed_teams": 24,
+        "gates": {
+          "common_win_costs_noninferior": false,
+          "risk_improved": true,
+          "wins_noninferior": true,
+          "zero_invalid_and_interventions": true
+        },
+        "independent_natural_roots": 0,
+        "passed": false,
+        "timing_pairs": 72,
+        "totals": {
+          "baseline": {
+            "decisions": 1551,
+            "forced_mechanics": 0,
+            "invalid": 0,
+            "learned_decisions": 1551,
+            "pp_spent": 649,
+            "risk_rate": 0.024500322372662798,
+            "teacher_interventions": 0,
+            "type_immune_attacks": 26,
+            "win": 27,
+            "zero_power_choices_with_covered_alternative": 12
+          },
+          "candidate": {
+            "decisions": 1560,
+            "forced_mechanics": 0,
+            "invalid": 0,
+            "learned_decisions": 1560,
+            "pp_spent": 655,
+            "risk_rate": 0.023076923076923078,
+            "teacher_interventions": 0,
+            "type_immune_attacks": 24,
+            "win": 32,
+            "zero_power_choices_with_covered_alternative": 12
+          }
+        }
+      }
+    },
+    "passed": false
+  },
+  "verification": {
+    "focused_tests_passed": 310,
+    "full_suite": false,
+    "lint_passed": true,
+    "independent_native_audit": true,
+    "counts": {
+      "actions": 70941,
+      "attempted_episodes": 216,
+      "completed_decisions": 4736,
+      "frames": 6035956,
+      "invalid_action_failures": 0,
+      "opponent_faints": 690,
+      "party_faints": 762,
+      "party_pp_spent": 1958,
+      "selected_choices": 4736,
+      "teacher_interventions": 0,
+      "terminal_slot_clearings": 86
+    },
+    "latency_ns": {
+      "count": 4736,
+      "median": 1645750,
+      "p95": 3285958
+    },
+    "native_battle_episodes_complete": 216,
+    "missing_or_censored": 0
+  },
+  "deviations": {
+    "first_fit": "Minimum-L1 epigraph solver limit; zero useful control updates. Preserved.",
+    "second_fit": "Equivalent split LP removes solver timeout; full control improvement 8.1%, below original gate. Preserved.",
+    "third_fit": "Curvature correction passes full fit; auditor variable-shadow error preserved then repaired without fitting or changing candidate.",
+    "first_comparison": "25 complete episodes, episode26 parent voluntary-switch runtime failure. Exact endpoint retained, not continuation-qualified or replayed.",
+    "runtime_repair": "Explicitly yield newly exposed trainer prompt after residual knockout during voluntary switch; four TRAIN-only probes pass.",
+    "replacement_screen": "21 wholly unopened original teams plus3 input-only replacements for all consumed teams; family/size/level counts preserved. Same models and win/cost/risk gates.",
+    "qualified": false
+  },
+  "diagnosis": {
+    "parent_common_win_excess": {
+      "decisions": 17,
+      "pp": 3,
+      "battles": 25
+    },
+    "dominant_status_team": {
+      "common_wins": 2,
+      "decisions_excess": 26,
+      "pp_excess": 6
+    },
+    "candidate_risks": {
+      "immune_attacks": 24,
+      "immune_with_covered_reserve": 16,
+      "immune_without_any_positive_power_coverage": 8,
+      "zero_power_with_covered_alternative": 12
+    },
+    "candidate_native_voluntary_switch_to_prompt_boundaries": 1,
+    "risk_note": "Candidate36flags/1560decisions versus deployed37/1625. Fewer flags but slightly higher frozen rate; no gate changed. Coverage flags are not counterfactual mistakes."
+  },
+  "deltas": {
+    "new_training_targets": 0,
+    "verified_complete_fit": 1,
+    "qualified_models": 0,
+    "native_model_episodes_attempted": 242,
+    "native_model_episodes_completed": 241,
+    "mechanics_probes": 4,
+    "story": 0,
+    "registrations": 0,
+    "authority_promotions": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "state": "359a96aa",
+    "envelope": "36dbc835",
+    "deployed": "4ea4cfde",
+    "unused_stage": 462,
+    "fresh_red_gates": "0/5",
+    "story": "32/36",
+    "separate_collection": "109/124",
+    "unopened_current_comparison_teams": 0
+  },
+  "next": "Keep the completed fitter and candidate. Next learning question: fresh TRAIN-only covered-reserve MAIN choices and costly status/voluntary-switch decisions; measure alternatives before fitting. Do not reuse consumed comparison outcomes as labels, repeat optimizer redesign, or lower gates.",
+  "limitations": [
+    "The training failure is fixed; full battler qualification is not complete.",
+    "All comparison teams in both native packets are consumed.",
+    "Three timings per constructed team are correlated; no independent natural roots or population win-rate claim.",
+    "No campaign inputs, deployment, publication or external agents. All processes stopped."
+  ]
+}

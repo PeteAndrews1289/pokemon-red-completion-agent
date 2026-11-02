@@ -1,0 +1,282 @@
+{
+  "schema": "pokemon.red.frozen-dashboard-retained-blocker.v1",
+  "session": "2026-10-14-frozen-dashboard-run",
+  "partition": "development",
+  "run_id": "red-frozen-autonomous-run-20261014-dashboard-v1",
+  "status": "stopped_failed",
+  "passed": false,
+  "ready": false,
+  "official_final_acceptance": false,
+  "terminal_reason": "native_execution_error",
+  "stop_category": "control_or_verification_failure",
+  "failure": {
+    "binding_mechanic": "native_Fly_reward_dependency",
+    "selected_kind": "develop_team",
+    "dashboard_generic_label": "Train the party",
+    "actual_intent": "Obtain Fly",
+    "choice_mode": "model_exploration",
+    "candidate_count": 3,
+    "selected_candidate_index": 0,
+    "other_available_kinds": [
+      "restore_team",
+      "advance_story"
+    ],
+    "other_story_objective": "reach_lavender",
+    "error_type": "RouteExecutionError",
+    "reason_code": "planner_no_route",
+    "error": "route replanning found no candidate",
+    "nested_error": "no staged Cut route from map 82 to map 188",
+    "terminal_location": "Rock Tunnel 1F",
+    "terminal_map_id": 82,
+    "terminal_coordinates_xy": [
+      7,
+      20
+    ],
+    "target_map_id": 188,
+    "target_location": "Route 16 Fly house",
+    "actions": 133,
+    "frames": 6312,
+    "elapsed_seconds": 7.230448083020747,
+    "registrations_gained": 0,
+    "xp_gained": 0,
+    "cash_debits": 0,
+    "safe_terminal": true,
+    "buttons_released": true,
+    "input_ready": true,
+    "in_battle": false,
+    "selection_scores": [
+      4.3397873531826345,
+      3.9821047050542733,
+      0.7191258727248793
+    ],
+    "selection_probabilities": [
+      0.3948385400024528,
+      0.35128486137952614,
+      0.25387659861802103
+    ],
+    "scores_are_not_calibrated_confidence": true,
+    "immediate_obstacle": "Quoted Fly prefix and native route execution do not stay consistent; exact terrain or hazard cause still requires a copied diagnostic.",
+    "not_a_training_dose_or_battle_loss": true
+  },
+  "candidate": {
+    "name": "route22-gate-package-v1",
+    "manifest_sha256": "58be3dce491af438d2891d29b45d902d37359bdec6f9932b93c7401feb7da131",
+    "actor_settings_sha256": "b29900e4a11b1765df0ac50e887ced52f78c95be3e465867c03d823d0c43cced",
+    "acceptance_sha256": "b7e304d692131efc410163b8221b43a15fea7ed10908a4b03afab4dceef49ead",
+    "plan_sha256": "f3563689c953fc2e30a3fb71d9e225fc024d0406b7f3270394367a1b9a77c60c",
+    "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+    "model_train_examples": 161,
+    "package_files": 7877,
+    "environment_files": 4512,
+    "actor_changes_after_acceptance": 0,
+    "support": "Disclosed hybrid tactical, resource, capture and deterministic execution; approved League medicine reserve."
+  },
+  "lifecycle": {
+    "started_at_utc": "2026-10-14T22:03:54.749738+00:00",
+    "exited_at_utc": "2026-10-14T23:29:08.714847+00:00",
+    "original_deadline_utc": "2026-10-15T14:03:54.749738+00:00",
+    "supervisor_seconds": 5113.880493375007,
+    "driver_seconds": 5069.374704750022,
+    "worker_pid": 83859,
+    "worker_exit_confirmed": true,
+    "exit_code": 0,
+    "released": true,
+    "worker_supervisor_sleep_processes_absent": true,
+    "supervisor_safety_stop_reason": null,
+    "no_restart": true,
+    "first_due_review_index": 1,
+    "periodic_reviews_due_at_exit": 0,
+    "monitor_status": "PAUSED",
+    "monitor_id": "frozen-red-r14-read-only-monitor",
+    "viewer_status": "running_read_only_stopped_actor_last_real_frame"
+  },
+  "progress": {
+    "native_registrations": 30,
+    "clean_power_on_registration_delta": 30,
+    "since_final_launch_check_registration_delta": 17,
+    "required_species": 124,
+    "badges": 3,
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "power_on",
+      "reach_cerulean",
+      "reach_pewter",
+      "reach_vermilion",
+      "receive_pokedex"
+    ],
+    "objective_boundary_authority": {
+      "defeat_brock": "model_exploration",
+      "defeat_misty": "model_exploration",
+      "help_bill": "forced_singleton_support",
+      "obtain_cut": "forced_singleton_support",
+      "defeat_surge": "forced_singleton_support"
+    },
+    "completed_segments": 25,
+    "metered_units": 415,
+    "attributed_choices": 414,
+    "model_decisions": 260,
+    "support_steps": 154,
+    "ordinary_setbacks": 34,
+    "metered_minus_attributed_units": 1,
+    "attribution_gap": {
+      "segment": 13,
+      "metered_delta": 20,
+      "episode_choices": 19,
+      "cause_not_inferred": true
+    },
+    "cash": 9654,
+    "capture_balls": 0,
+    "party": [
+      {
+        "species": "Pidgeot",
+        "level": 40,
+        "hp": 136,
+        "max_hp": 136,
+        "status": "healthy"
+      },
+      {
+        "species": "Beedrill",
+        "level": 25,
+        "hp": 78,
+        "max_hp": 78,
+        "status": "healthy"
+      },
+      {
+        "species": "Nidorina",
+        "level": 27,
+        "hp": 75,
+        "max_hp": 81,
+        "status": "sleep"
+      },
+      {
+        "species": "Beedrill",
+        "level": 24,
+        "hp": 59,
+        "max_hp": 74,
+        "status": "paralysis"
+      },
+      {
+        "species": "Raticate",
+        "level": 32,
+        "hp": 87,
+        "max_hp": 87,
+        "status": "healthy"
+      },
+      {
+        "species": "Blastoise",
+        "level": 36,
+        "hp": 108,
+        "max_hp": 115,
+        "status": "healthy"
+      }
+    ],
+    "whole_party_restored": false,
+    "last_battle": {
+      "result": "won",
+      "opponents_defeated": 3,
+      "opponents": 3,
+      "opponent_levels": [
+        20,
+        20,
+        20
+      ],
+      "engaged_levels": [
+        40,
+        25,
+        36
+      ],
+      "terminal_fainted_count": 0,
+      "terminal_hp_fraction": 0.9509632224168126
+    },
+    "spent": {
+      "actions": 295661,
+      "frames": 24367909,
+      "decisions": 415,
+      "heals": 383,
+      "cash_debits": 8782,
+      "seconds": 4966.637628499884
+    },
+    "action_mix": {
+      "member_preparation_goals": 34,
+      "member_preparation_actions": 96472,
+      "member_preparation_action_share": 0.3262926121470197,
+      "level_evolution_goals": 13,
+      "level_evolution_actions": 157482,
+      "level_evolution_action_share": 0.5326438048981773,
+      "interpretation": "XP-based evolution is collection work, not automatically wasted grinding. Readiness stopping remains unproved."
+    },
+    "verified_automatic_control_handoffs": 1,
+    "actual_state_loads": 0,
+    "train_lessons": 0,
+    "fits": 0,
+    "new_weights": 0,
+    "runtime_llm_calls": 0
+  },
+  "immutable_check": {
+    "checked_at_utc": "2026-10-15T00:14:21+00:00",
+    "package_environment_verified": true,
+    "protected_reference_files_rehashed_unchanged": 33,
+    "plan_settings_unchanged": true,
+    "terminal_context_and_outcome_hashes_match": true,
+    "completed_save_unchanged": true,
+    "failed_v1_v2_v3_unchanged": true,
+    "root_result_sha256": "054e4557e8f40a186ca4efa8e82ca453098af3ae97cac0c0cf3930aaef3ab616",
+    "process_exit_sha256": "049b0b4a134fa3698ddcc8885876ccf889062126add885a3a9953cee1af31004",
+    "terminal_sha256": "aa4a1a87e830ef6aa0c5b2d1988c9f011fda54233659de8bcad9669c6e1835a5",
+    "context_sha256": "147eaec861560825863a2b152e6a027132542ab31fcdab509d968d839bae3aac",
+    "segment_result_sha256": "55e9febbd60d49759cb7747311919b049a4f3fa2909445683dd486a4f9518721",
+    "before_state_sha256": "c38055916cdd7a9cb707a829c5889dcdf44f89bd541a41141d091630fb4f274e",
+    "outcome_sha256": "de9832741220c4201169889d670e9b046ad0a8581ebc6bd6adf34add4e918f4b",
+    "intent_sha256": "6c43c1544e98c402d7385359d6a2df6f69f6b3d4de6d8dfe5bfd24e93a9074ce",
+    "decision_sha256": "e840617011b4dd4165afdfdba0606e69deef2609ef431a920948bc4a06506aed"
+  },
+  "review_effects": {
+    "controller_inputs": 0,
+    "state_loads": 0,
+    "player_source_changes": 0,
+    "actor_config_changes": 0,
+    "fit_or_parameter_updates": 0,
+    "copy_back": false,
+    "github_publication": false,
+    "data_deleted": false,
+    "final_fresh_gates_advanced": 0,
+    "t7_developer_free_gib_observed": 29,
+    "runs2_free_gib_observed": 19
+  },
+  "next_session_proposal": {
+    "player_outcome": "Expose and execute only a feasible Fly dependency while retaining normal story/heal alternatives.",
+    "components": [
+      "red_player_fly.fly_reward_option",
+      "story_frontier_target",
+      "StrategicScenarioRouteWorld",
+      "RedVermilionGroundTransition"
+    ],
+    "work": "Trace the exact before/terminal copied route, align quoted prefixes with replanning and retain accurate partial costs. Add targeted positive and negative route tests, then qualify on copies without adopting their progress.",
+    "acceptance": "A quote either stays unavailable with no inputs, or its model-selected execution reaches the verified native Fly reward or an explicitly accounted legal continuation; original legality/custody/referee checks remain.",
+    "time_allowance_hours": 2,
+    "reassess_stalled_minutes": 15,
+    "reassess_equivalent_failures": 2,
+    "no_dispatch_under_this_review": true,
+    "exclusions": [
+      "frozen_actor_resume_or_restart",
+      "new_campaign_launch",
+      "copy_back",
+      "refit",
+      "battler_redesign",
+      "blanket_overleveling",
+      "new_subsystem",
+      "publication",
+      "deletion",
+      "title_advance"
+    ],
+    "recommended_coding_model": "6.1 Sol",
+    "recommended_effort": "Max",
+    "fast": false
+  }
+}

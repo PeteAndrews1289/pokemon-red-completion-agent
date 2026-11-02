@@ -136,16 +136,15 @@ def test_tracked_registry_is_canonical_frozen_and_preassigned() -> None:
 def test_final_campaign_identity_has_public_golden_values(monkeypatch) -> None:
     # These are historical golden values. The current registry intentionally
     # changes when executable source changes; never update this vector to match it.
-    payload = subprocess.run(
-        [
-            "git",
-            "show",
-            "40c847c6f4b71e119cbea5cbe38fd009b30a1d00:configs/red-battle-collection-v95.json",
-        ],
-        cwd=PROJECT_ROOT,
-        check=True,
-        capture_output=True,
-    ).stdout
+    # Exact public registry bytes from commit
+    # 40c847c6f4b71e119cbea5cbe38fd009b30a1d00. Retain the independent
+    # historical SHA256 assertion below; no private Git history is required.
+    payload = (
+        Path(__file__).parent
+        / "fixtures"
+        / "historical"
+        / "red-battle-collection-v95-40c847c6.json"
+    ).read_bytes()
     # Keep the historical version pins local to this golden-vector test. The
     # production parser still rejects every registry except its current version.
     monkeypatch.setattr(

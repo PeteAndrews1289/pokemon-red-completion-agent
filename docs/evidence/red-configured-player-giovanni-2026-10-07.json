@@ -1,0 +1,233 @@
+{
+  "schema": "pokemon.red.configured-player-giovanni.v1",
+  "kind": "development",
+  "date": "2026-10-07",
+  "audit_basis": {
+    "source": "docs/evidence/red-project-audit-2026-10-07.json",
+    "reviewer": "Astra",
+    "source_read": true
+  },
+  "decision": "Accept same-player Giovanni, normal pending-reward recovery, full healing and durable reload. Keep the exact failed evolution excluded; reserve/nurse copying is qualified only at the tested in-party safe boundary, not arbitrary hard interruption or combined boxed-loan recovery.",
+  "configuration": {
+    "sha256": "adb64a49dc130e2b11d49013ff384912043ead4cf337b958c5e891cb3c92d343",
+    "entry_point": "scripts/run_configured_red_player.py",
+    "legacy_private_assembly_remains": true,
+    "exact_excluded_evolution_sha256": "ccbbecd095f501884443967f49e22e20eb0040047327d9cd6e35b19301a7b501",
+    "retained_individual_guard": true,
+    "automatic_loan_settlement": true
+  },
+  "source": {
+    "family": "red-configured-player-recovery-20261007-v1",
+    "node": "runs/segment-001",
+    "state_sha256": "d8e7ab1803d9315075a2a59ec630d86d672f06411e0b84a357cb0d5193770476",
+    "context_sha256": "b7a0d7709b69df951e8d158e086766cd303d7600b327cb7cfffe23e6426b159e",
+    "spent": {
+      "actions": 139449,
+      "cash_debits": 60908,
+      "decisions": 845,
+      "frames": 10766850,
+      "heals": 141,
+      "seconds": 21083.722999501042
+    }
+  },
+  "current_terminal": {
+    "family": "red-configured-player-giovanni-20261007-v1",
+    "node": "runs/segment-004",
+    "state_sha256": "69a48cc3eee826607b89b2ab0c19c1f500d594e21b9bcff07d5f746e8c422649",
+    "context_sha256": "8103f67591a898c2a740739dd8ceba714a35c7236f0098ab4ce668835b1e224a",
+    "badges": 8,
+    "badge_bits": 255,
+    "completed_story_objectives": 29,
+    "total_story_objectives": 36,
+    "registered_species": 13,
+    "cash": 20747,
+    "map_id": 41,
+    "at_y_x": [
+      3,
+      3
+    ],
+    "party_levels": [
+      29,
+      39,
+      31,
+      26,
+      39,
+      17
+    ],
+    "native_defeat_event": 81,
+    "native_reward_event": 80,
+    "giovanni_flags_verified": true,
+    "reward_item": 227,
+    "reward_item_quantity": 1,
+    "master_balls": 1,
+    "fully_restored": true,
+    "controls_released": true,
+    "worker_stopped": true,
+    "process_exit_code": 0
+  },
+  "authority": {
+    "goal_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "battler_model_sha256": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad",
+    "battler_scope": "scoped-exact-story-development",
+    "model_goals": 4,
+    "support_goal_attempts": 3,
+    "support_successes": 2,
+    "support_failures": 1,
+    "model_goal_reward_failure_retained": true,
+    "zero_input_menu_failure_retained": true,
+    "battles_won": 3,
+    "battle_choices": 34,
+    "action_counts": {
+      "attack": 21,
+      "voluntary_switch": 6,
+      "forced_switch": 1,
+      "switch_prompt": 6
+    },
+    "teacher_queries": 0,
+    "teacher_interventions": 0,
+    "memory_writes": 0,
+    "authority_promotions": 0,
+    "support": "Existing cartridge routing/rewards, one pending earned-reward repair with completed-key PC deposit and NPC return, and one native safety nurse. Inherited immunity/status/PP legality screens are supplied mechanics, not newly learned tactics."
+  },
+  "cost_delta": {
+    "actions": 1876,
+    "frames": 209592,
+    "seconds": 322.927368249162,
+    "goals": 7,
+    "heals": 1,
+    "cash_debits": 0,
+    "cash_earned": 7405
+  },
+  "inherited_spent": {
+    "actions": 141325,
+    "cash_debits": 60908,
+    "decisions": 852,
+    "frames": 10976442,
+    "heals": 142,
+    "seconds": 21406.650367750204
+  },
+  "retained_attempts": [
+    {
+      "node": "segment-001",
+      "model_goals": 4,
+      "state_sha256": "b96d949cfab634507af2167fb6b28c7a9d9c7fd1291d8dbf9d2fa419fdc1d23f",
+      "result": "Won two gym trainers and Giovanni; full bag prevented reward settlement.",
+      "stop_reason": "execution_failed"
+    },
+    {
+      "node": "segment-002",
+      "model_goals": 0,
+      "actions": 0,
+      "frames": 0,
+      "seconds": 1.3108417919,
+      "result": "One-opportunity control inventory rejected before input.",
+      "stop_reason": "menu_unavailable"
+    },
+    {
+      "node": "segment-003",
+      "support_goals": 1,
+      "actions": 8,
+      "frames": 816,
+      "seconds": 2.2022132501,
+      "result": "Readiness alone did not prove the visible dialogue had closed.",
+      "stop_reason": "execution_failed"
+    },
+    {
+      "node": "segment-004",
+      "support_goals": 2,
+      "result": "Normal PC capacity recovery, original earned reward and whole-party nurse succeeded.",
+      "stop_reason": "curriculum_complete"
+    }
+  ],
+  "battle_logs": {
+    "hash_chains_verified": 3,
+    "events": 138,
+    "started_decisions": 34,
+    "completed_decisions": 34,
+    "incomplete_decisions": 0,
+    "failed_runs": 0,
+    "terminal_events": [
+      "run_finished",
+      "run_finished",
+      "run_finished"
+    ],
+    "last_record_sha256": [
+      "de89a5c2b7fe31bac0553382aefee64c6ad541dd0743ede30bdb2e619a2a4928",
+      "74303175eba384f05d8c0bc00c3f65dd2d8f16638dfb213f4a01e6094a0a64b8",
+      "1d05e9bfd9feb20406a3dcf819cd6f4811b6ffcd52785aeecfa254a0b2bd42ea"
+    ]
+  },
+  "reserve_nurse_copy": {
+    "partition": "development",
+    "correlated_copy": true,
+    "fit_allowed": false,
+    "copy_back": false,
+    "model_queries": 0,
+    "attempts": 5,
+    "failed_preflights": 3,
+    "failed_partial_report": 1,
+    "corrected_attempt": {
+      "diagnostic_id": "evolution-174852657675",
+      "passed": true,
+      "source": "same seven-badge configured player",
+      "in_party_target": "Doduo",
+      "before_level": 26,
+      "after_level": 27,
+      "xp_gained": 3145,
+      "completed_training_battles": 24,
+      "heals": 1,
+      "actions": 1448,
+      "frames": 116616,
+      "seconds": 136.4187856670469,
+      "settlement_reserve_reached": true,
+      "evolution_completed": false,
+      "goal_verification": "failed",
+      "failure_reason": "outcome_not_verified",
+      "original_six_preserved": true,
+      "physical_specimens_preserved": 8,
+      "state_sha256": "fab251faa253fc837c11ca67b442f6e2a219961ab94d392424a128f2f5cfc46d",
+      "context_sha256": "cbbf41f7c15181b3649116b483dae45102f83ca6310989528fa78d4d0dfe1061",
+      "reload_passed": true,
+      "reload_inputs": 0,
+      "reload_frames": 0
+    },
+    "aggregate_diagnostic_costs": {
+      "actions": 3078,
+      "frames": 247972,
+      "seconds": 277.40503483405337,
+      "heals": 2,
+      "attempts": 5
+    },
+    "accounting": "All copies consume the work-block allowance but never enter the main player's ancestry. Initial bootstrap failures had zero native inputs/frames/time; later failures retain their actual costs.",
+    "limitations": "No admitted boxed level alternative existed. This is an in-party reserve/nurse test plus separate earlier failed-loan recovery, not qualification of the combined interrupted boxed-loan case or arbitrary hard stops inside battle/PC macros."
+  },
+  "reload": {
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "configuration_unchanged": true,
+    "inherited_costs_unchanged": true,
+    "real_alternatives": 5,
+    "selected_objective": "cross_victory_road",
+    "party_guard_and_settlement_present": true,
+    "native_rewards_and_full_hp_pp_status_verified": true,
+    "protected_source_model_pins_verified": 14
+  },
+  "learning_delta": {
+    "new_train_examples": 0,
+    "new_fits": 0,
+    "weight_changes": 0,
+    "registrations": 0
+  },
+  "tests": {
+    "focused_runtime_config_loan_gym_tests_passed": 828,
+    "full_suite_claim": false
+  },
+  "remaining_limits": [
+    "Explicit private legacy assembly is not a self-contained public export.",
+    "Combined boxed-loan hard interruption remains unqualified; known failed profile stays excluded.",
+    "The base model's 319 added readiness/preparation rows still have zero coefficients.",
+    "No final fresh autonomous Red completion or title-transfer claim."
+  ],
+  "final_autonomous_red_completed": false
+}

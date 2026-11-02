@@ -50,7 +50,9 @@ def synthetic_cartridge() -> bytes:
 
 
 def make_grid(
-    height: int, width: int, blocked: frozenset[tuple[int, int]] = frozenset(),
+    height: int,
+    width: int,
+    blocked: frozenset[tuple[int, int]] = frozenset(),
 ) -> LocalGraph:
     edges: dict[tuple[int, int], tuple[LocalEdge, ...]] = {}
     for y in range(height):
@@ -82,9 +84,7 @@ def funding_env(monkeypatch):
     # Quote fixture
     monkeypatch.setattr(
         "pokemon_red_completion.red_regional_trainer_funding.trainer_party_quote",
-        lambda *args: TrainerPartyQuote(
-            201, 9, (TrainerPartyMember(108, 23, 21),), 15, 315
-        ),
+        lambda *args: TrainerPartyQuote(201, 9, (TrainerPartyMember(108, 23, 21),), 15, 315),
     )
 
     town_grid = make_grid(16, 16)
@@ -168,6 +168,166 @@ def funding_env(monkeypatch):
     )
 
     return router, state, reader, world
+
+
+@pytest.mark.parametrize("fault", [None, "disabled", "blocked", "missing_map"])
+def test_fly_reuses_only_the_declared_gate_inventory(funding_env, fault):
+    from pokemon_red_completion.red_regional_trainer_funding import FundingGateTransit
+
+    router, state, reader, world = funding_env
+    world.macro_graph = MacroGraph({
+        22: (),
+        5: (MacroEdge(184, "warp", at=(13, 14), arrival_at=(1, 1)),),
+        184: (MacroEdge(23, "warp", at=(1, 2), arrival_at=(0, 14)),),
+        23: (),
+    })
+    world.local_graphs[184] = make_grid(4, 4)
+    world.object_blockers[184] = frozenset({(1, 1)}) if fault == "blocked" else frozenset()
+    reader.read_fly_destinations = lambda: (5, 9)
+    maps = frozenset({22, 5, 23, 184})
+    if fault == "missing_map":
+        maps |= {99}
+    if fault != "disabled":
+        router.funding_gate_transit = FundingGateTransit(maps, frozenset({184}), 3)
+    before = state.raw
+    if fault == "missing_map":
+        with pytest.raises(ValueError, match="origin"):
+            funding_fly_candidates(router)
+    else:
+        results = funding_fly_candidates(router)
+        assert bool(results) == (fault is None)
+        if results:
+            assert all(c.town == 5 for c in results)
+            assert all(c.target.approach.macro_path.maps == (5, 184, 23) for c in results)
+    assert state.raw == before
+
+
+@pytest.mark.parametrize(
+    "fault", [None, "disabled", "wrong_exit", "third_map", "field_move", "active_safari"]
+)
+def test_indoor_income_projection_requires_bounded_observed_exit(funding_env, fault):
+    router, state, reader, world = funding_env
+    from pokemon_red_completion.global_router import MacroPath
+    from pokemon_red_completion.local_router import LocalPath
+    from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
+
+    indoor = 156 if fault == "active_safari" else 40
+    state.raw = replace(state.raw, map_id=indoor)
+    reader.read_safari_session_state = lambda: SimpleNamespace(has_active_session=True)
+    reader.read_safari_zone_gate_script = lambda: 0
+    router.runtime.trainer_funding_indoor_departure = fault != "disabled"
+    destination = 21 if fault == "wrong_exit" else 22
+    segment = RouteSegment(
+        indoor,
+        destination,
+        LocalPath(((4, 4),), (), ("land",)),
+        MacroTransition((4, 4), (4, 4), "down"),
+        "warp",
+        False,
+    )
+    plan = RoutePlan(
+        MacroPath((indoor, destination), (MacroEdge(destination, kind="warp"),)),
+        (4, 4),
+        "land",
+        (segment,),
+        None,
+        (4, 4),
+        "land",
+    )
+    if fault == "third_map":
+        plan = SimpleNamespace(
+            steps=(replace(plan.steps[0], source_map=41),),
+            terminal_map=22,
+            terminal_at=(4, 4),
+            terminal_mode="land",
+        )
+    if fault == "field_move":
+        plan = SimpleNamespace(
+            steps=(replace(plan.steps[0], action_kind=MacroActionKind.FIELD_MOVE),),
+            terminal_map=22,
+            terminal_at=(4, 4),
+            terminal_mode="land",
+        )
+    calls = []
+    world.plan_feasible_to_map = lambda start, outside: calls.append((start, outside)) or plan
+    original = state.raw
+    result = funding_fly_candidates(router)
+    assert bool(result) == (fault is None)
+    assert state.raw == original
+    if result:
+        assert result[0].departure == plan
+        assert result[0].town == 5
+
+
+@pytest.mark.parametrize("fault", [None, "route_error", "wrong_boundary", "stale_quote"])
+def test_income_departure_flees_wilds_but_rechecks_before_fly(
+    funding_env, monkeypatch, fault
+):
+    from pokemon_red_completion import red_routed_trainer_funding as funding
+    from pokemon_red_completion.gen1_route_runtime import Gen1WildFleeHandler
+    from pokemon_red_completion.route_executor import RouteExecutionError, TraversalSnapshot
+
+    router, state, reader, _world = funding_env
+    outdoor = funding_fly_candidates(router)[0]
+    departure = SimpleNamespace(terminal_map=22, terminal_at=(4, 4))
+    selected = replace(outdoor, departure=departure)
+    state.raw = replace(state.raw, map_id=40)
+    calls = []
+    router.actions = SimpleNamespace()
+    router.maximum_controller_actions = 256
+    router.runtime.emulator = object()
+    router.runtime.adapter = SimpleNamespace(
+        observe=lambda: SimpleNamespace(raw=state.raw, input_ready=True)
+    )
+
+    def fresh_candidates(_router):
+        if state.raw.map_id == 40:
+            return (selected,)
+        return () if fault == "stale_quote" else (outdoor,)
+
+    def execute_departure(_router, label, plan, actions, observer, **kwargs):
+        assert label == "indoor_departure" and plan is departure
+        handler = kwargs["interruption_handler"]
+        assert isinstance(handler, Gen1WildFleeHandler)
+        assert handler.executor is router.actions and handler.reader is reader
+        assert handler.maximum_flees == 8
+        with pytest.raises(RouteExecutionError, match="cannot dismiss"):
+            handler.handle(
+                TraversalSnapshot(40, (4, 4), False, interruption="battle:2")
+            )
+        calls.append("departure")
+        if fault == "route_error":
+            raise RouteExecutionError("wild flee failed")
+        state.raw = replace(state.raw, map_id=22, player_y=4, player_x=4)
+        if fault == "wrong_boundary":
+            state.raw = replace(state.raw, battle_state=1)
+        return SimpleNamespace(passed=True)
+
+    class FieldPort:
+        def __init__(self, *_args):
+            self.fly_receipts = []
+
+        def execute(self, action):
+            assert action.kind is MacroActionKind.FIELD_MOVE
+            assert state.raw.map_id == 22 and state.raw.battle_state == 0
+            calls.append("fly")
+            self.fly_receipts.append(object())
+            state.raw = replace(
+                state.raw, map_id=outdoor.town,
+                player_y=outdoor.landing[0], player_x=outdoor.landing[1],
+            )
+
+    monkeypatch.setattr(funding_fly, "funding_fly_candidates", fresh_candidates)
+    monkeypatch.setattr(funding, "_execute_recorded_route", execute_departure)
+    monkeypatch.setattr("pokemon_red_completion.gen1_field_moves.Gen1FieldMovePort", FieldPort)
+    if fault is None:
+        funding._execute_funding_flight(router, selected)
+        assert calls == ["departure", "fly"]
+    else:
+        error = RouteExecutionError if fault == "route_error" else funding.RedTrainerFundingError
+        with pytest.raises(error):
+            funding._execute_funding_flight(router, selected)
+        assert calls == ["departure"]
 
 
 def test_opt_in_regional_trainer_funding_and_funding_fly_transport(funding_env):
@@ -315,10 +475,14 @@ def test_remote_hazards_and_origin_isolation(funding_env, monkeypatch):
     # At (2, 14) facing DOWN with engage 3: lane covers (3, 14), (4, 14), (5, 14).
     # If target is at (1, 14) facing UP with engage 2: lane covers (0, 14), blocking the entrance!
     blocking_event = MapObjectEvent(23, 1, 1, 14, 0xFF, 0xD1, 0x42, 1, 201, 9)
-    monkeypatch.setattr(funding_fly, "trainer_headers",
-                        lambda _rom, maps, **kwargs: (trainer_header,) if 23 in maps else ())
-    monkeypatch.setattr(funding_fly, "map_object_events",
-                        lambda _rom, maps: (blocking_event,) if 23 in maps else ())
+    monkeypatch.setattr(
+        funding_fly,
+        "trainer_headers",
+        lambda _rom, maps, **kwargs: (trainer_header,) if 23 in maps else (),
+    )
+    monkeypatch.setattr(
+        funding_fly, "map_object_events", lambda _rom, maps: (blocking_event,) if 23 in maps else ()
+    )
 
     # Entrance to route 23 at (0, 14) is in the trainer's sight lane, so regional route cannot reach
     blocked_candidates = funding_fly_candidates(router)
@@ -363,10 +527,14 @@ def test_real_regional_planner_with_unequal_route_geometry(funding_env, monkeypa
     # Route goes through (0,14), left to column13, then down past the wall to interact.
     trainer_header = TrainerHeader(23, 1, 1, 17, 0)
     trainer_event = MapObjectEvent(23, 1, 6, 14, 0xFF, 0xD0, 0x42, 1, 201, 9)
-    monkeypatch.setattr(funding_fly, "trainer_headers",
-                        lambda _rom, maps, **kwargs: (trainer_header,) if 23 in maps else ())
-    monkeypatch.setattr(funding_fly, "map_object_events",
-                        lambda _rom, maps: (trainer_event,) if 23 in maps else ())
+    monkeypatch.setattr(
+        funding_fly,
+        "trainer_headers",
+        lambda _rom, maps, **kwargs: (trainer_header,) if 23 in maps else (),
+    )
+    monkeypatch.setattr(
+        funding_fly, "map_object_events", lambda _rom, maps: (trainer_event,) if 23 in maps else ()
+    )
 
     candidates = funding_fly_candidates(router)
     assert len(candidates) == 1

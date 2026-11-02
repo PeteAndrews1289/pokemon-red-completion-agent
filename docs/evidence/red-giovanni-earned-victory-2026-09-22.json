@@ -1,0 +1,159 @@
+{
+  "action_counts": {
+    "attack": 16,
+    "forced_switch": 1,
+    "switch_prompt": 4,
+    "voluntary_switch": 10
+  },
+  "actions": 670,
+  "audit_frames": 0,
+  "authority_promotions": 0,
+  "badges": 8,
+  "bag_stacks": 20,
+  "cash": 39387,
+  "cash_before": 34437,
+  "claim_sha256": "d2b115406487e6ed8ad5d6cbc15b52f8a3efae3a02c394d7da6c8ac0e385eaf0",
+  "contract": {
+    "battle_plan_id": "defeat_giovanni",
+    "defeated_event": 81,
+    "map_id": 45,
+    "objective_id": "defeat_giovanni",
+    "trainer_identity": [
+      229,
+      29,
+      3
+    ],
+    "victory_badge_bits": 128,
+    "victory_items": [
+      [
+        227,
+        1
+      ]
+    ],
+    "victory_money": 4950
+  },
+  "envelope_sha256": "af6ee35778feac952c99fa48aa65b9be3d188f418a8b65f1bb6c7972baac9173",
+  "event_log_verified": true,
+  "frames": 65808,
+  "frozen_choices_recomputed": {
+    "attack": 16,
+    "control": 20,
+    "switch": 11
+  },
+  "fully_restored": true,
+  "gameplay_running": false,
+  "helper_hashes": {
+    "earned_giovanni.py": "98c76af1dd2d0fcedb062e756feb7221bfaf0197414d6e5faa4ce5f5c9352f5e",
+    "earned_gym_battle.py": "2ddfdcec072ccad8668524e6a2d705898e5b11d9330a72def4b5edd1833cead2",
+    "earned_story_campaign.py": "bb560e39c0718028d69ad2b4fb471c490a541c360f9b89d89308553dd666c3e8",
+    "giovanni_boss_packet.py": "e0bad90f564725091020a62791aed8ca923963b5f32defda804f225e17601deb"
+  },
+  "leader_defeated": true,
+  "limitations": [
+    "One forward boss victory, not broad battle mastery or fresh-run acceptance.",
+    "Boss selection, navigation and healing remain support; no learned strategic preparation claim.",
+    "Automatic preparation review requests three combat reserves at level42; no new grinding executed.",
+    "Bag is full after legitimate TM27 reward; storage must be handled before new acquisitions."
+  ],
+  "local_registrations": 17,
+  "losses": 0,
+  "map_id": 41,
+  "maximum_actions": 5000,
+  "maximum_decisions": 80,
+  "maximum_frames": 600000,
+  "maximum_native_seconds": 600,
+  "metrics": {
+    "attack_turn_utility_sum": 14.506462091367752,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 5,
+    "party_faints": 1,
+    "party_hp_lost": 224,
+    "party_pp_spent": 16,
+    "party_status_changes": 2,
+    "policy_latency_ns_max": 22853500,
+    "policy_latency_ns_mean": 3487739.2258064514,
+    "policy_latency_ns_min": 327875,
+    "teacher_interventions": 0
+  },
+  "model_decisions": 31,
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "native_seconds": 5.243817667011172,
+  "net_income": 4950,
+  "new_contract_allowance": 1,
+  "new_contracts_consumed": 1,
+  "new_fits": 0,
+  "new_goal_choices": 0,
+  "new_registrations": 0,
+  "next_unused_stage": 294,
+  "next_work": "Plan bounded level42 reserve preparation and reversible TM storage, then rival/Victory Road/League. New native scope required; no second boss attempt or old packet refill.",
+  "old_contracts_consumed": 10,
+  "outcome_sha256": "82d648bf8fa6eb47e6c5866f436446545b4b6f40faa6752770776f25b3a9ee36",
+  "partition": "DEVELOPMENT",
+  "party_levels": [
+    39,
+    40,
+    51,
+    39,
+    34
+  ],
+  "party_levels_before": [
+    39,
+    40,
+    50,
+    39,
+    33
+  ],
+  "plan_sha256": "dcf7fbb5e51bfb0bcec58e02b642e14170f719d68f28380a7c8af5796c5641e5",
+  "position": [
+    3,
+    3
+  ],
+  "preparation_executed": false,
+  "preparation_is_learned": false,
+  "preparation_opposition_level": 45,
+  "preparation_targets": [
+    {
+      "current_level": 39,
+      "party_slot": 1,
+      "target_level": 42
+    },
+    {
+      "current_level": 40,
+      "party_slot": 2,
+      "target_level": 42
+    },
+    {
+      "current_level": 39,
+      "party_slot": 4,
+      "target_level": 42
+    }
+  ],
+  "primary_unchanged": true,
+  "publication": false,
+  "qualification_sha256": "4e68390900853e1213a540d0a044cca379d8700926f3a784c65de1819e3b56bd",
+  "reward": {
+    "badge": 128,
+    "item": 227,
+    "money_delta": 4950,
+    "native_defeat_event": 81,
+    "native_reward_event": 80
+  },
+  "save_edits": 0,
+  "schema": "pokemon.red.giovanni-earned-victory.v1",
+  "source_commit": "8c128d86d61cf552d177f49e0eeaf28a4f771cfd",
+  "source_hashes": {
+    "red_gym_reward.py": "0c36abdca0346110fa0a28a8d52091599142bb41bb5671ba48ba740f8ae90f47",
+    "red_learned_trainer.py": "d59a1dfe23e64ca3776cd7dccc4ca7b3758d883c658cdd30670e693a6f954630",
+    "red_npc_approach.py": "b7d405c362e1f163e8a21919ca905377df49826b90f0a8cb34c379f18559d3fe",
+    "red_story_battle.py": "1917d3f2010ae37981062a3b8b02f5e82d1007c4a9e2298acc3c767aafc95714"
+  },
+  "source_replays": 0,
+  "source_sha256": "49ab490f4d199f359dd7a49f499b2956a0517998a9335e7697028e2eb29d9ad2",
+  "source_stage": 292,
+  "story_objectives": 29,
+  "targeted_tests_passed": 117,
+  "terminal_sha256": "187a1a5521db5ed1d12e91210bfb92508dda468fbaeba8494e73c752510b6be7",
+  "terminal_stage": 293,
+  "wins": 1
+}

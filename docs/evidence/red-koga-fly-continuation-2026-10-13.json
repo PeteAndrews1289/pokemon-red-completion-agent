@@ -1,0 +1,420 @@
+{
+  "actual_ancestry_flights": 0,
+  "actual_model_comparative_choices": 58,
+  "at": [
+    0,
+    10
+  ],
+  "automatic_singleton_support": 46,
+  "badge_bits": 63,
+  "badges_after": 6,
+  "badges_before": 5,
+  "bag_slots_after": 17,
+  "bag_slots_before": 19,
+  "ball_purchase_cost": 4800,
+  "cash_after": 460,
+  "cash_before": 4743,
+  "cash_reward_receipts": [
+    {
+      "amount": 1330,
+      "path": "runs/segment-002/native/episode/step-016"
+    },
+    {
+      "amount": 1085,
+      "path": "runs/segment-003/native/episode/step-002"
+    },
+    {
+      "amount": 1190,
+      "path": "runs/segment-003/native/episode/step-007"
+    },
+    {
+      "amount": 4257,
+      "path": "runs/segment-003/native/episode/step-012"
+    },
+    {
+      "amount": 155,
+      "path": "runs/segment-003/native/episode/step-014"
+    },
+    {
+      "amount": 1500,
+      "path": "runs/segment-004/native/episode/step-004"
+    }
+  ],
+  "cash_rewards": 9517,
+  "cold_proof": {
+    "frames": 0,
+    "inputs": 0,
+    "path": "diagnostics/cold-closeout-v1/RESULT.json",
+    "sha256": "8bbf60c2f727a20a2a5aa478aa58be91b489071095e29568cf7e7efc1ea0b91f"
+  },
+  "completed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_koga",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_silph_scope",
+    "obtain_strength",
+    "obtain_surf",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_cinnabar",
+    "reach_fuchsia",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+  "confirmed_stop_utc": "2026-10-13T22:50:44.391997+00:00",
+  "context_sha256": "394a95a6f32b375baaaf2942ca227866930bba1d944a81f7b6c8f94b2defd68d",
+  "copied_progress_imported": false,
+  "cumulative_spent": {
+    "actions": 892807,
+    "cash_debits": 80551,
+    "decisions": 917,
+    "frames": 71880371,
+    "heals": 1039,
+    "seconds": 17823.62896511964
+  },
+  "cutoff_utc": "2026-10-14T00:48:57Z",
+  "field_ready": true,
+  "final_fresh_completion_gates": "0/5",
+  "fits": 0,
+  "flat_outcomes": 104,
+  "fly_holder": "Pidgeot",
+  "fly_obtained_and_taught": true,
+  "focused_verification": {
+    "full_suite": false,
+    "hosted_ci": false,
+    "ruff": true,
+    "scope": "121Fly dependency/reward/machine/Gen1flight/package and194documentation/product-focus/roadmap checks",
+    "tests": 315
+  },
+  "goal_kinds": {
+    "acquire_species": 25,
+    "advance_story": 49,
+    "develop_team": 9,
+    "evolve_species": 4,
+    "manage_storage": 2,
+    "restore_team": 13,
+    "resupply": 2
+  },
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_unchanged": true,
+  "goal_modes": {
+    "model_exploration": 58,
+    "support:forced_singleton": 46
+  },
+  "limitations": [
+    "Assisted DEVELOPMENT ancestry,not final frozen fresh Red acceptance",
+    "No new fitted learning or independent transfer/stopping proof",
+    "Paid misses and excessive preparation/collection deferral remain; copied Koga already won with an earlier party",
+    "Actual travels by walking/Surf; Fly is earned/taught and field flight is qualified on a related copy only",
+    "Original failed copy export/harness and conservative trace accounting are retained",
+    "Concurrent diagnostics are separately charged in this aggregate; live driver snapshot initially charged only the first copy; aggregate stays below every allowance",
+    "No publication,cleanup,new subsystem,learner or title advance"
+  ],
+  "manual_actual_goal_substitutions": 0,
+  "map_id": 8,
+  "master_ball_present": true,
+  "native_execution_errors": [],
+  "native_flight_copy": "diagnostics/native-flight-copy-v1/RESULT.json",
+  "native_flight_verified_on_related_copy": true,
+  "new_actual_costs": {
+    "actions": 134597,
+    "cash_debits": 13800,
+    "decisions": 104,
+    "frames": 10649861,
+    "heals": 162,
+    "seconds": 2459.2385504567064
+  },
+  "new_registrations": [
+    {
+      "path": "runs/segment-001/native/episode/step-005",
+      "species": [
+        "pokemon:national:122"
+      ]
+    },
+    {
+      "path": "runs/segment-003/native/episode/step-014",
+      "species": [
+        "pokemon:national:116"
+      ]
+    },
+    {
+      "path": "runs/segment-003/native/episode/step-015",
+      "species": [
+        "pokemon:national:086"
+      ]
+    },
+    {
+      "path": "runs/segment-004/native/episode/step-000",
+      "species": [
+        "pokemon:national:117"
+      ]
+    },
+    {
+      "path": "runs/segment-004/native/episode/step-002",
+      "species": [
+        "pokemon:national:087"
+      ]
+    },
+    {
+      "path": "runs/segment-004/native/episode/step-004",
+      "species": [
+        "pokemon:national:081"
+      ]
+    },
+    {
+      "path": "runs/segment-005/native/episode/step-006",
+      "species": [
+        "pokemon:national:082"
+      ]
+    }
+  ],
+  "no_restart": true,
+  "observed_fly_destinations": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10
+  ],
+  "ordinary_balls": 0,
+  "original_six_restored": true,
+  "outcomes_by_kind": {
+    "acquire_species": {
+      "failed": 21,
+      "succeeded": 4
+    },
+    "advance_story": {
+      "succeeded": 49
+    },
+    "develop_team": {
+      "failed": 4,
+      "succeeded": 5
+    },
+    "evolve_species": {
+      "failed": 1,
+      "succeeded": 3
+    },
+    "manage_storage": {
+      "succeeded": 2
+    },
+    "restore_team": {
+      "succeeded": 13
+    },
+    "resupply": {
+      "succeeded": 2
+    }
+  },
+  "parameter_updates": 0,
+  "partition": "development",
+  "party_levels": [
+    48,
+    51,
+    47,
+    43,
+    43,
+    47
+  ],
+  "party_total_level_gain": 21,
+  "primary_family": "red-r29-koga-fly-continuation-20261013-v1",
+  "registrations_after": 71,
+  "registrations_before": 64,
+  "released": true,
+  "replaced_move": "Whirlwind",
+  "result_sha256": "74510c2456e9ea2e044f37023a8f896910b6613e95e2c005563f5cbdc4a2a953",
+  "route16_snorlax_still_blocks": true,
+  "runtime_llm_calls": 0,
+  "runtime_package_sha256": "a6bfafa8bc6a6ad38c3e3d54568eccd6e1f3a26a978600382fd4599698b03c4f",
+  "safari_capture_attempts": 4,
+  "safari_encounters": 212,
+  "safari_fee_total": 9000,
+  "safari_paid_visits": 18,
+  "safari_receipts": [
+    {
+      "capture_attempts": 0,
+      "encounters": 3,
+      "path": "runs/segment-001/native/episode/step-002",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 19,
+      "path": "runs/segment-001/native/episode/step-003",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 17,
+      "path": "runs/segment-001/native/episode/step-006",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 4,
+      "path": "runs/segment-001/native/episode/step-007",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 20,
+      "path": "runs/segment-001/native/episode/step-008",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 1,
+      "encounters": 4,
+      "path": "runs/segment-001/native/episode/step-009",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 1,
+      "encounters": 17,
+      "path": "runs/segment-001/native/episode/step-011",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 1,
+      "encounters": 18,
+      "path": "runs/segment-001/native/episode/step-012",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 23,
+      "path": "runs/segment-001/native/episode/step-013",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 1,
+      "path": "runs/segment-002/native/episode/step-018",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 2,
+      "path": "runs/segment-002/native/episode/step-019",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 18,
+      "path": "runs/segment-003/native/episode/step-000",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 18,
+      "path": "runs/segment-003/native/episode/step-004",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 1,
+      "path": "runs/segment-003/native/episode/step-005",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 1,
+      "encounters": 4,
+      "path": "runs/segment-003/native/episode/step-009",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 15,
+      "path": "runs/segment-003/native/episode/step-010",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 15,
+      "path": "runs/segment-003/native/episode/step-019",
+      "result": "failed"
+    },
+    {
+      "capture_attempts": 0,
+      "encounters": 13,
+      "path": "runs/segment-004/native/episode/step-001",
+      "result": "failed"
+    }
+  ],
+  "same_ancestry_champion": false,
+  "schema": "pokemon.red.koga-fly-continuation.v1",
+  "separate_diagnostic_costs": {
+    "actions": 1283,
+    "decisions": 4,
+    "frames": 94188,
+    "heals": 1,
+    "seconds": 91.02232994395308
+  },
+  "session": "2026-10-13-koga-fly-continuation",
+  "started_utc": "2026-10-13T21:48:57Z",
+  "state_sha256": "4a81364dd344931c2d4670f6e0f8cd715c1e181d04e1196995868afc138c4749",
+  "status": "closed_all_requested_outcomes_complete",
+  "story_battles": [
+    {
+      "combat_teacher_interventions": 0,
+      "decisions": 7,
+      "invalid_action_failures": 0,
+      "objective": "defeat_koga",
+      "party_faints": 1,
+      "path": "runs/segment-002/native/episode/step-016",
+      "won": true
+    },
+    {
+      "combat_teacher_interventions": 0,
+      "decisions": 14,
+      "invalid_action_failures": 0,
+      "objective": "defeat_koga",
+      "party_faints": 0,
+      "path": "runs/segment-003/native/episode/step-002",
+      "won": true
+    },
+    {
+      "combat_teacher_interventions": 0,
+      "decisions": 15,
+      "invalid_action_failures": 0,
+      "objective": "defeat_koga",
+      "party_faints": 0,
+      "path": "runs/segment-003/native/episode/step-007",
+      "won": true
+    },
+    {
+      "combat_teacher_interventions": 0,
+      "decisions": 14,
+      "invalid_action_failures": 0,
+      "objective": "defeat_koga",
+      "party_faints": 1,
+      "path": "runs/segment-003/native/episode/step-012",
+      "won": true
+    }
+  ],
+  "support_roles": {
+    "forced_singleton": 46
+  },
+  "terminal": "runs/segment-006",
+  "training_rows_added": 0,
+  "whole_party_restored": true,
+  "worker_stopped": true
+}

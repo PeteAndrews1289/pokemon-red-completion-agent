@@ -1,0 +1,32 @@
+{
+  "actual_progress_delta": 0,
+  "all173prior_fingerprints_retained": true,
+  "all_processes_released": true,
+  "current_tests": 182,
+  "emulators": 0,
+  "existing_model_unchanged": true,
+  "first_frozen_fixture_failure_retained": true,
+  "fit_calls": 0,
+  "frozen_tests": 182,
+  "full175_admission_passed": true,
+  "full_suite": false,
+  "mission_closed": true,
+  "native_records_owned": 295822,
+  "new_learning_study_preregistered_after_repair": true,
+  "new_weights": 0,
+  "only_two_admitted_new_fingerprints": true,
+  "original_cap_seconds": 600,
+  "root_seconds": 114.14547551100009,
+  "schema": "pokemon.red.native-lesson-admission-repair-closeout.v1",
+  "seven_goal_objective_active": true,
+  "source_delta": [
+    "private_artifacts.py",
+    "red_collection_teacher_learning.py"
+  ],
+  "state_loads": 0,
+  "teacher_executions": 24,
+  "total_root_holds_seconds": 360,
+  "unlaunched_case_and_caller_failures_retained": true,
+  "unused_original_capacity_not_reassigned": true,
+  "within_100second_margin": false
+}

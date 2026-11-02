@@ -1,0 +1,99 @@
+{
+  "capture_failures": {
+    "ball_consuming_operations": 2,
+    "balls_spent": 3,
+    "escapes_without_ball": 3,
+    "knockouts_without_ball": 9,
+    "operations": 14,
+    "owner": "deterministic_capture_support"
+  },
+  "game_runs_paused": true,
+  "kind": "development_episode",
+  "latest_development": {
+    "badges": 2,
+    "cash": 1446,
+    "model_owned_choices": 29,
+    "native_seconds": 375.472860827,
+    "registrations": 12,
+    "repair_relaunches": 8
+  },
+  "models_changed": false,
+  "new_TRAIN_rows": 0,
+  "new_fits": 0,
+  "new_gameplay": false,
+  "privacy": {
+    "expanded_guard_focused_checks": 17,
+    "native_binaries_or_credentials_uploaded": false,
+    "native_originals_preserved": true,
+    "prepublication_unref_objects_may_retain_two_path_prefixes": true,
+    "private_artifacts_excluded": true,
+    "public_summaries_redacted": 24,
+    "published_snapshot_scanned": true,
+    "wsl_prefixes_redacted": 2
+  },
+  "schema": "pokemon.project-lessons-publication-audit.v1",
+  "scope": "Source and evidence-summary snapshot; no fresh autonomy or complete playable release claim.",
+  "supplier_candidate": {
+    "focused_checks": 165,
+    "frozen": true,
+    "native_tested": false
+  },
+  "validation": {
+    "ci_python": "3.11",
+    "clean_release": false,
+    "committed_venue_check": {
+      "dirty_source_guard_resolved": true,
+      "failed": 41,
+      "guard_waived": false,
+      "passed": 11,
+      "remaining_guard": "unreviewed Route11 source drift: training-venue.contract",
+      "scope": "Separate pointed file on committed source; not combined with the earlier inventory or a whole-suite pass.",
+      "skipped": 0,
+      "source_clean_before_and_after": true
+    },
+    "docs_check": "passed",
+    "full_suite_pass": false,
+    "inventory_failure_categories": [
+      {
+        "count": 1,
+        "evidence": "test_product_focus.py388 expects active; current closed status is closed.",
+        "kind": "Tracked governance assertion"
+      },
+      {
+        "count": 19,
+        "evidence": "All19 chained RedPartyPpError: Red move reports PP above its own maximum; no assertion or fixture changes made.",
+        "files": {
+          "test_red_autonomous_collection.py": 1,
+          "test_red_living_dex_setup_recipe.py": 18
+        },
+        "kind": "Party PP coherence rejection"
+      },
+      {
+        "count": 20,
+        "evidence": "Loaded runtime differs from attested current commit, red_party_development_venue_priors.py750-754;4directerrors and16negative regex expectations blocked by same earlier guard.",
+        "kind": "Route11 source-attestation guard"
+      }
+    ],
+    "mypy_python311_target_errors": 210,
+    "notes": "Inventory ran on the uncommitted source. Its20source-attestation failures must be checked on a committed tree; no source guard was weakened. Counts from repeated runs are not added.",
+    "public_artifact_guard": "passed",
+    "publication": "draft_review_snapshot",
+    "registry_regeneration_and_check": "passed",
+    "romfree_inventory": {
+      "deselected": null,
+      "executed": 9686,
+      "failed": 40,
+      "passed": 9644,
+      "seconds": 140.6891139270001,
+      "selected": 29602,
+      "selected_not_run": 19916,
+      "skipped": 2
+    },
+    "ruff_findings": 5444,
+    "runtime_python": "3.14.3",
+    "wiring_test_only_repair": {
+      "production_code_changed": false,
+      "targeted_passed": 263
+    }
+  }
+}

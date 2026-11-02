@@ -1,0 +1,126 @@
+{
+  "schema": "pokemon.red.battler-finish-preparation-evidence.v1",
+  "session": "2026-09-22-battler-finish-preparation",
+  "classification": "prepared_execution_pipeline_but_later_effect_coverage_failed",
+  "source_commit": "9f3dc41eabf6495c3dc6ba2e13afb6542c8ae1f7",
+  "private_packet": "red-timing-selector-preparation-20260922-v1",
+  "plan_document": "docs/battler-finish-plan.md",
+  "audit": {
+    "bindings": {
+      "plan": "959d9315cdeff36a1778070d0d545f1140c3768a03820171fba02a6af58e1493",
+      "preparation": "915240b86506e517d8295faf73fae0438ac06bc003e351933d182bff4984f44f",
+      "qualification": "5e3e7c0894bb2ffcc46ebc8555616176296977ca9525b8c3234f6960d3392d6c",
+      "result": "1ee214a275efb88f8086706213c1f864caf2ff41a2b8fbb16224de0c652138cd"
+    },
+    "brier": 0.05634455518985545,
+    "correct_at_half": 6,
+    "first_unpassed_gate": "later_effect_qualification",
+    "fits": 0,
+    "full_battler_complete": false,
+    "gates": {
+      "later_effect_qualification": false,
+      "native_train_screen": false,
+      "retained_selector_fit": false
+    },
+    "live_story_ready": false,
+    "native": {
+      "actor_memory_writes": 0,
+      "all_event_and_terminal_hashes_verified": true,
+      "decision_records": 12,
+      "episodes": 12,
+      "event_records": 84,
+      "frames": 16070,
+      "invalid_actions": 0,
+      "learned_continuation_or_evaluation_choices": 0,
+      "new_target_contexts": 0,
+      "plan_sha256": "915240b86506e517d8295faf73fae0438ac06bc003e351933d182bff4984f44f",
+      "prescribed_first_choices": 12,
+      "status_move_attempts_including_prescribed": 12,
+      "stops": {
+        "party_defeated": 3,
+        "player_turn_budget": 9
+      }
+    },
+    "natural_party_qualified": false,
+    "observed_awake": 7,
+    "positive_effects": 7,
+    "ready_to_prepare_reserved_comparison": false,
+    "schema": "pokemon.red.battler-finish-readiness.v1",
+    "source_commit": "9f3dc41eabf6495c3dc6ba2e13afb6542c8ae1f7",
+    "suppressions": [
+      {
+        "asleep_before": false,
+        "case": "timing-later-effect-01",
+        "hp_after": 0,
+        "hp_before": 50,
+        "player_fainted": true,
+        "stop": "party_defeated"
+      },
+      {
+        "asleep_before": false,
+        "case": "timing-later-effect-02",
+        "hp_after": 0,
+        "hp_before": 41,
+        "player_fainted": true,
+        "stop": "party_defeated"
+      },
+      {
+        "asleep_before": true,
+        "case": "timing-later-effect-09",
+        "hp_after": 37,
+        "hp_before": 84,
+        "player_fainted": false,
+        "stop": "player_turn_budget"
+      }
+    ]
+  },
+  "predictor_sha256": "8ac8c2d5376ebf0f6e9d31c3852c5b89b6dfd18ea87ab583c4606a6d5dde4105",
+  "diagnosis": "Two awake occupied-confusion actions were suppressed by fainting before execution (50->0HP and41->0HP); one sleeping Rest choice suppressed. Seven observed awake effects, all positive, below minimum8and missing occupied-confusion support. Brier0.056345passes0.125numerically; the full qualification correctly fails.",
+  "implementation": [
+    "Disjoint qualification excludes capture ID, manifest and state hashes.",
+    "Native primer-to-next-turn capture linkage is authenticated without post-primer memory intervention.",
+    "One constrained selector fit/native screen is wired but did not execute after the failed prerequisite.",
+    "Independent read-only audit recomputes gate readiness, native logs/terminals and selected-effect joins.",
+    "Evaluation-only128case reserved runner implemented; real failed packet rejects before ROM access/output creation.",
+    "Prospective ten-pair fresh-native qualification implemented and ROM-metadata-preflighted, not executed; user decision pending."
+  ],
+  "prepared_next_experiment": {
+    "status": "unexecuted_awaiting_user_decision",
+    "seed": 2026092221,
+    "primer_cases": 10,
+    "diagnostic_cases": 10,
+    "auxiliary_refits": 0,
+    "max_selector_fits": 1,
+    "max_total_episodes": 150,
+    "max_total_frames": 15470000,
+    "max_minutes": 90,
+    "consumed_exclusions": 22,
+    "qualification_thresholds_unchanged": true
+  },
+  "remaining": [
+    "Pass complete later-turn support.",
+    "One constrained selector fit and64paired-case native TRAIN screen.",
+    "Evaluate128unopened configurations with the guarded runner.",
+    "Bind a qualified candidate into a prospective realistic-party workload and independent development check.",
+    "Exact-checkpoint story adapter qualification before earned continuation."
+  ],
+  "tests": {
+    "targeted_passed": 585,
+    "private_integration_skipped": 13,
+    "ruff": true,
+    "real_failed_packet_blocked_before_reserved_rom_access": true
+  },
+  "fits": 0,
+  "learned_battle_choices": 0,
+  "collection_delta": 0,
+  "authority_promotions": 0,
+  "gameplay_stopped": true,
+  "publication": false,
+  "external_agents": false,
+  "protected": {
+    "story": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+    "primary": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "model141": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1"
+  },
+  "next": "Await Pete's decision on one new prospectively complete native later-turn qualification. Prepared --fresh-native mode freezes ten setup/diagnostic pairs, excludes22consumed identities, retains8ac8c2d5 without refit and keeps>=8observed/all-five-cell/Brier<=0.125 thresholds. If approved and passing, one182constraint selector fit then64case paired TRAIN screen run automatically. Reserved comparison runner remains blocked until independent passing audit; no story/save changes. Budget90minutes."
+}

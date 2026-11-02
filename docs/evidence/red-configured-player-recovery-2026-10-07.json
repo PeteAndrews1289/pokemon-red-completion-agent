@@ -1,0 +1,163 @@
+{
+  "schema": "pokemon.red.configured-player-recovery.v1",
+  "kind": "development",
+  "date": "2026-10-07",
+  "audit_basis": {
+    "source": "docs/evidence/red-project-audit-2026-10-07.json",
+    "reviewer": "Astra",
+    "source_read": true,
+    "user_clarification": "The intended review was Astra's existing October 7 audit, not a new Claude report."
+  },
+  "decision": "Accept durable configured Sabrina progression and retained-loan copy recovery. Keep exact failed evolution quarantined; hard-budget interruption and inner nursing accounting are not fully qualified.",
+  "configuration": {
+    "sha256": "adb64a49dc130e2b11d49013ff384912043ead4cf337b958c5e891cb3c92d343",
+    "entry_point": "scripts/run_configured_red_player.py",
+    "legacy_private_assembly_remains": true,
+    "exact_excluded_evolution_sha256": "ccbbecd095f501884443967f49e22e20eb0040047327d9cd6e35b19301a7b501",
+    "retained_individual_guard": true,
+    "automatic_loan_settlement": true
+  },
+  "source": {
+    "family": "red-model-selected-silph-20261007-v1",
+    "node": "runs/segment-011",
+    "state_sha256": "08f7dc316e66d18595659ffe63ad283aa7628027a22b38a1e301015c89726d73",
+    "context_sha256": "846927c5c7bb7b405249c82d27801a74d4c0d9ed09486d4ec937b812d896ad74"
+  },
+  "current_terminal": {
+    "family": "red-configured-player-recovery-20261007-v1",
+    "node": "runs/segment-001",
+    "state_sha256": "d8e7ab1803d9315075a2a59ec630d86d672f06411e0b84a357cb0d5193770476",
+    "context_sha256": "b7a0d7709b69df951e8d158e086766cd303d7600b327cb7cfffe23e6426b159e",
+    "badges": 7,
+    "badge_bits": 127,
+    "completed_story_objectives": 28,
+    "total_story_objectives": 36,
+    "registered_species": 13,
+    "cash": 13342,
+    "map_id": 182,
+    "party_levels": [
+      28,
+      37,
+      31,
+      26,
+      38,
+      17
+    ],
+    "native_defeat_event": 865,
+    "native_reward_event": 864,
+    "sabrina_flags_verified": true,
+    "reward_item": 246,
+    "reward_item_quantity": 1,
+    "master_balls": 1,
+    "fully_restored": true,
+    "controls_released": true,
+    "worker_stopped": true,
+    "process_exit_code": 0
+  },
+  "authority": {
+    "goal_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "battler_model_sha256": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad",
+    "battler_scope": "scoped-exact-story-development",
+    "model_goals": 2,
+    "support_goals": 1,
+    "support": "Existing routing, gym mechanics/rewards and forced whole-party restoration; PP/status mechanics screens remain disclosed.",
+    "battle_choices": 22,
+    "action_counts": {
+      "attack": 14,
+      "forced_switch": 4,
+      "switch_prompt": 3,
+      "voluntary_switch": 1
+    },
+    "party_faints": 4,
+    "opponent_faints": 4,
+    "failed_or_suppressed_moves": 4,
+    "invalid_action_failures": 0,
+    "teacher_queries": 0,
+    "teacher_interventions": 0,
+    "memory_writes": 0,
+    "authority_promotions": 0
+  },
+  "cost_delta": {
+    "actions": 577,
+    "frames": 42696,
+    "seconds": 166.127891208045,
+    "goals": 3,
+    "heals": 1,
+    "cash_debits": 0,
+    "cash_earned": 4257
+  },
+  "inherited_spent": {
+    "actions": 139449,
+    "cash_debits": 60908,
+    "decisions": 845,
+    "frames": 10766850,
+    "heals": 141,
+    "seconds": 21083.722999501042
+  },
+  "battle_log": {
+    "events": 84,
+    "started_decisions": 22,
+    "completed_decisions": 22,
+    "incomplete_decisions": 0,
+    "terminal_event": "run_finished",
+    "last_record_sha256": "c4f09bd71d4613da3800bcafdaf6033ac282121080faed7712c1ac21d49beeb0",
+    "policy_latency_ns_mean": 3823697,
+    "policy_latency_ns_max": 19467959
+  },
+  "loan_copy": {
+    "actual_failed_source_sha256": "89dbff678ade2a814a0b49affa57b7e1af47ccc2c6ed716b8773fe253ae8ed94",
+    "failed_attempt": {
+      "error_type": "TypeError",
+      "actions": 0,
+      "frames": 0,
+      "seconds": 1.1388816660037264,
+      "retained": true
+    },
+    "corrected_attempt": {
+      "passed": true,
+      "state_sha256": "8f89cbd7d8b0ab3474b61abec5084a49f58a4798bea5cf03804472347ef06450",
+      "actions": 121,
+      "frames": 7536,
+      "seconds": 12.40519154095091,
+      "original_roles_restored": true,
+      "stock_and_earned_xp_preserved": true,
+      "worker_stopped": true,
+      "controls_released": true
+    },
+    "copy_back": false,
+    "fits": 0,
+    "model_queries": 0,
+    "aggregate_diagnostic_seconds": 13.544073206954636,
+    "diagnostics_deducted_from_block_allowance_not_save_lineage": true
+  },
+  "reload": {
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "configuration_unchanged": true,
+    "inherited_costs_unchanged": true,
+    "real_alternatives": 10,
+    "selected_objective": "defeat_giovanni",
+    "excluded_profile_absent": true,
+    "party_guard_and_settlement_present": true,
+    "native_rewards_and_full_hp_pp_status_verified": true,
+    "protected_source_model_pins_verified": 12
+  },
+  "learning_delta": {
+    "new_train_examples": 0,
+    "new_fits": 0,
+    "weight_changes": 0,
+    "registrations": 0
+  },
+  "tests": {
+    "focused_runtime_config_loan_tests_passed": 443,
+    "full_suite_claim": false
+  },
+  "remaining_limits": [
+    "Legacy private assembly dependency remains; not a self-contained export.",
+    "Hard input/frame/wall budget interruption before a safe training pause is not yet qualified end-to-end.",
+    "Future partial reports preserve recorded inner nurse counts; historical lost counts are not invented, and complete inner nursing aggregation remains open.",
+    "No general battler or final fresh autonomous Red qualification."
+  ],
+  "final_autonomous_red_completed": false
+}

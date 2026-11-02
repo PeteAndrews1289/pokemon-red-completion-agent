@@ -37,11 +37,23 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionMenu,
     LivingDexOptionUnavailableReason,
 )
+from pokemon_red_completion.player_option_capture_invocation import (
+    OptionCaptureInvocation,
+)
 from pokemon_red_completion.resource_economy_observation import (
     EconomyMode,
     EconomyOffer,
+    EconomyReplenishmentOffer,
     EconomySnapshot,
 )
+
+from .player_option_challenge import OptionChallenge
+from .player_option_level_workload import OptionLevelWorkload
+from .player_option_matchup import OptionMatchup
+from .player_option_move_change import OptionMoveChange
+from .player_option_preparation import OptionPreparation
+from .player_option_story_unit import OptionStoryUnit
+from .player_readiness import PlayerReadiness
 
 LIVING_DEX_PRIVATE_MENU_SCHEMA = "pokemon.core.private-living-dex-option-menu.v1"
 
@@ -86,7 +98,9 @@ def living_dex_private_menu_dict(menu: LivingDexOptionMenu) -> dict[str, object]
     }
 
 
-def restore_living_dex_private_menu(document: Mapping[str, object]) -> LivingDexOptionMenu:
+def restore_living_dex_private_menu(
+    document: Mapping[str, object],
+) -> LivingDexOptionMenu:
     """Restore one exact private menu after an outer artifact integrity check."""
 
     _exact_keys(
@@ -118,6 +132,14 @@ def restore_living_dex_policy_menu(
         "pokemon.core.living-dex-option-menu.v2",
         "pokemon.core.living-dex-option-menu.v3",
         "pokemon.core.living-dex-option-menu.v4",
+        "pokemon.core.living-dex-option-menu.v5",
+        "pokemon.core.living-dex-option-menu.v6",
+        "pokemon.core.living-dex-option-menu.v7",
+        "pokemon.core.living-dex-option-menu.v9",
+        "pokemon.core.living-dex-option-menu.v10",
+        "pokemon.core.living-dex-option-menu.v12",
+        "pokemon.core.living-dex-option-menu.v15",
+        "pokemon.core.living-dex-option-menu.v16",
     ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
@@ -125,7 +147,16 @@ def restore_living_dex_policy_menu(
     if document["schema"] == "pokemon.core.living-dex-option-menu.v4":
         if context.economy_snapshot is None or context.target_cash is None:
             raise LivingDexPolicyCodecError("v4 living-Dex policy menu requires economy context")
-    elif context.economy_snapshot is not None or context.target_cash is not None:
+    elif document["schema"] not in {
+        "pokemon.core.living-dex-option-menu.v5",
+        "pokemon.core.living-dex-option-menu.v6",
+        "pokemon.core.living-dex-option-menu.v7",
+        "pokemon.core.living-dex-option-menu.v9",
+        "pokemon.core.living-dex-option-menu.v10",
+        "pokemon.core.living-dex-option-menu.v12",
+        "pokemon.core.living-dex-option-menu.v15",
+        "pokemon.core.living-dex-option-menu.v16",
+    } and (context.economy_snapshot is not None or context.target_cash is not None):
         raise LivingDexPolicyCodecError("pre-v4 policy menu cannot include economy context")
     rows = _sequence(document["candidates"], subject="policy candidates")
     if binding_refs is None:
@@ -163,13 +194,24 @@ def _restore_context(document: Mapping[str, object]) -> LivingDexOptionContext:
         )
         values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
         try:
-            context = LivingDexOptionContext(**values, economy_snapshot=None, target_cash=None)
+            context = LivingDexOptionContext(
+                collection_pressure=values["collection_pressure"],
+                dependency_pressure=values["dependency_pressure"],
+                access_pressure=values["access_pressure"],
+                resource_pressure=values["resource_pressure"],
+                storage_pressure=values["storage_pressure"],
+                party_pressure=values["party_pressure"],
+                knowledge_pressure=values["knowledge_pressure"],
+                economy_snapshot=None,
+                target_cash=None,
+            )
         except (TypeError, ValueError) as error:
             raise LivingDexPolicyCodecError(str(error)) from None
     elif schema == "pokemon.core.living-dex-option-context.v2":
         _exact_keys(
             document,
-            {"schema", *_CONTEXT_FIELDS, "economy_cash", "target_cash"},
+            {"schema", *_CONTEXT_FIELDS, "economy_cash", "target_cash"}
+            | ({"cash_target_known"} if "cash_target_known" in document else set()),
             subject="policy context",
         )
         values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
@@ -179,8 +221,20 @@ def _restore_context(document: Mapping[str, object]) -> LivingDexOptionContext:
             # evidence. Full ledgers must be read from the outcome observation.
             snapshot = EconomySnapshot(cash, ())
             target_cash = _integer(document["target_cash"], subject="target cash")
+            cash_target_known = document.get("cash_target_known", False)
+            if type(cash_target_known) is not bool:
+                raise LivingDexPolicyCodecError("cash target-known flag must be boolean")
             context = LivingDexOptionContext(
-                **values, economy_snapshot=snapshot, target_cash=target_cash
+                collection_pressure=values["collection_pressure"],
+                dependency_pressure=values["dependency_pressure"],
+                access_pressure=values["access_pressure"],
+                resource_pressure=values["resource_pressure"],
+                storage_pressure=values["storage_pressure"],
+                party_pressure=values["party_pressure"],
+                knowledge_pressure=values["knowledge_pressure"],
+                economy_snapshot=snapshot,
+                target_cash=target_cash,
+                cash_target_known=cash_target_known,
             )
         except (TypeError, ValueError) as error:
             raise LivingDexPolicyCodecError(str(error)) from None
@@ -201,7 +255,15 @@ def _restore_candidate(
         document,
         {"availability", "features", "unavailable_reason"}
         | ({"search_history"} if "search_history" in document else set())
-        | ({"economy_offer"} if "economy_offer" in document else set()),
+        | ({"economy_offer"} if "economy_offer" in document else set())
+        | ({"readiness"} if "readiness" in document else set())
+        | ({"challenge"} if "challenge" in document else set())
+        | ({"preparation"} if "preparation" in document else set())
+        | ({"level_workload"} if "level_workload" in document else set())
+        | ({"move_change"} if "move_change" in document else set())
+        | ({"capture_invocation"} if "capture_invocation" in document else set())
+        | ({"matchup"} if "matchup" in document else set())
+        | ({"story_unit"} if "story_unit" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -250,7 +312,8 @@ def _restore_candidate(
         offer_doc = _mapping(document["economy_offer"], subject="economy offer")
         _exact_keys(
             offer_doc,
-            {"conditional_income", "mode", "planned_spend"},
+            {"conditional_income", "mode", "planned_spend"}
+            | ({"replenishment"} if "replenishment" in offer_doc else set()),
             subject="economy offer",
         )
         try:
@@ -264,6 +327,11 @@ def _restore_candidate(
                 mode=mode,
                 conditional_income=cond_income,
                 planned_spend=planned_spend,
+                replenishment=(
+                    EconomyReplenishmentOffer.from_public_dict(offer_doc["replenishment"])
+                    if "replenishment" in offer_doc
+                    else None
+                ),
             )
         except (TypeError, ValueError) as error:
             raise LivingDexPolicyCodecError(str(error)) from None
@@ -288,6 +356,44 @@ def _restore_candidate(
                 else None
             ),
             economy_offer=economy_offer,
+            readiness=(
+                PlayerReadiness.from_public(document["readiness"])
+                if "readiness" in document
+                else None
+            ),
+            challenge=(
+                OptionChallenge.from_public(document["challenge"])
+                if "challenge" in document
+                else None
+            ),
+            level_workload=(
+                OptionLevelWorkload.from_public(document["level_workload"])
+                if "level_workload" in document
+                else None
+            ),
+            move_change=(
+                OptionMoveChange.from_public(document["move_change"])
+                if "move_change" in document
+                else None
+            ),
+            capture_invocation=(
+                OptionCaptureInvocation.from_public(document["capture_invocation"])
+                if "capture_invocation" in document
+                else None
+            ),
+            matchup=(
+                OptionMatchup.from_public(document["matchup"]) if "matchup" in document else None
+            ),
+            story_unit=(
+                OptionStoryUnit.from_public(document["story_unit"])
+                if "story_unit" in document
+                else None
+            ),
+            preparation=(
+                OptionPreparation.from_public(document["preparation"])
+                if "preparation" in document
+                else None
+            ),
         )
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None

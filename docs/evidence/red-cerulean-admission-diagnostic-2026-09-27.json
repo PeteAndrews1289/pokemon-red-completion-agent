@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon.red.cerulean-admission-diagnostic-checkpoint.v1",
+  "starting_commit": "21e1490c2d8cdf4fcfa6557d2159bc7a3de33b98",
+  "classification": "maintenance_and_frozen_policy_development_diagnostic",
+  "sequence_learner": "deferred_inactive",
+  "goal_model_sha256": "422876890388dfe504a7a80489e8b0d110e21bd6029dae8f549b54d7bbea1ea7",
+  "battler_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "source_sha256": "7a12dad7c00abce1be5d891308a70e89837d3afa08dc571f0c337ace41ad546e",
+  "source_context_sha256": "e4dc0e727235d1d29e1442311b99ef119a6752e916f35f4c78796a544bf55c3f",
+  "terminal_sha256": "e60928a52e1cca7df77efcbd313eade3005ab13a9d88f95b05153b9a9ac04b00",
+  "native_plan_sha256": "858d8d0dd1eaa5332f5f180c5f644a340339c9ab28f970c99e8cc95eb0379f88",
+  "native_audit_sha256": "2afa7f88ec0a136f3ace8e084eeeda694b8506c3d82030d15f69f9641500ab5a",
+  "executed_source_patch_sha256": "1b1424feae56c205547637bf014f15963cb6edff8d6a8ec18fc4a39652bee3c3",
+  "cash_zero_input_regression_sha256": "e526cad3946debd95a26ede17fa24df313aa8f3ab2ad3c3f3cca169efe35ad7f",
+  "seed": 2026092751,
+  "caps": {
+    "decisions": 20, "actions": 6000, "frames": 600000,
+    "seconds": 600, "heals": 6, "cash_debits": 427, "blackouts": 2
+  },
+  "measured": {
+    "packets": 1, "goal_choices": 8, "combat_choices": 47,
+    "actions": 1174, "frames": 87792, "seconds": 84.040204541001,
+    "heals": 0, "cash_debits": 321, "blackouts": 2,
+    "trainer_victories": 0, "new_trainer_or_story_events": 0,
+    "quests_completed": 0, "captures": 0, "terminal_cash": 106,
+    "terminal_party_levels": [19, 9, 5, 7],
+    "teacher_combat_interventions": 0, "invalid_battle_actions": 0
+  },
+  "stop": {
+    "runner_reason": "menu_unavailable",
+    "explicit_reason": "declared_diagnostic_blackout_limit",
+    "settled": true, "fully_restored": true,
+    "unspent_second_packet": true, "restarted": false
+  },
+  "verification": {
+    "focused_tests": 262, "typed_source_files": 702,
+    "selected_choices_independently_replayed": 8,
+    "native_state_and_action_audit_passed": true,
+    "audit_frames_advanced": 0,
+    "historical_cash_507_healing_quote_now_zero": true,
+    "historical_regression_inputs": 0,
+    "cash_after_income_native_healing_exercised": false,
+    "capture_roster_native_refresh_exercised": false,
+    "progress_criterion_passed": false
+  },
+  "learning_delta": {
+    "train_rows": 0, "fits": 0, "adoptions": 0,
+    "authority_promotions": 0, "transfer_results": 0,
+    "campaign_registrations": 0
+  },
+  "limitations": [
+    "Both lost battles defeated three opposing Pokemon; two losses are not a population win-rate estimate.",
+    "The retained level17 target was already complete; no new grinding option was offered.",
+    "No wallet-guard rejection would have occurred on this diagnostic's executed prefix.",
+    "Free-healing and capture-refresh repairs have regression coverage, not newly completed native use.",
+    "The original source, campaign, models and consumed comparison results remain unchanged."
+  ],
+  "next_decision": "Scope one existing-trainer rival combat/readiness diagnostic; do not start a refit or sequence experiment under this closed packet.",
+  "gameplay_stopped": true,
+  "github_publication": false
+}

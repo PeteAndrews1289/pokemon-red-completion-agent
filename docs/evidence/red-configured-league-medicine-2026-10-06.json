@@ -1,0 +1,153 @@
+{
+  "schema": "pokemon.red.configured-league-medicine-result.v1",
+  "session_id": "2026-10-06-autonomous-red-completion-goal",
+  "status": "league_diagnostic_closed_public_support_integrated",
+  "partition": "development",
+  "independent": false,
+  "official_completion": false,
+  "goal_active": true,
+  "final_fresh_red_gates": 0,
+  "final_fresh_red_denominator": 5,
+  "registration_delta": 0,
+  "components": {
+    "parent_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "deployed_recovery_head_sha256": "dbdc7c07f1e46544a10afd4155db351fd84dc62981eda372272b9022e6d02562",
+    "rejected_for_native_use_purchase_head_sha256": "51eab430493d39025c1b1ce51c77c297255ebeab0a004324340e0c3cbf83f346",
+    "reused_battle_file_sha256": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad"
+  },
+  "learning": {
+    "new_authenticated_train_consequences": 8,
+    "new_fits": 1,
+    "settled_examples": 44,
+    "prior_rows_retained": 38,
+    "prior_settled_examples": 36,
+    "prior_censored_rows": 2,
+    "all_prior_native_receipts_reauthenticated": true,
+    "development_rows": 0,
+    "train_wins": 1,
+    "train_losses": 7,
+    "new_mse_before": 0.08362316521708812,
+    "new_mse_after": 0.02335887633441726,
+    "prior_mse_before": 0.04746232095325964,
+    "prior_mse_after": 0.046609103531506324,
+    "native_medicine_choice_probes": 2,
+    "medicine_chosen_in_probes": false,
+    "new_head_adopted": false,
+    "qualified": false,
+    "authority_promotions": 0,
+    "legacy_registered_train_counter": 135,
+    "teacher_interventions": "Isolated TRAIN HP fixtures at10/40/100percent;no DEVELOPMENT relabeling. Classroom excludes free nursing to teach actual owned medicine.",
+    "costs": {
+      "actions": 2555,
+      "frames": 216132,
+      "native_seconds": 364.55610433302354,
+      "owned_heals": 6,
+      "cash_debits": 11700
+    }
+  },
+  "approved_support": {
+    "approval": "Pete permits disclosed automated pre-League medicine reserve as a temporary final-player stopgap;revisit learned anticipation later.",
+    "learned_procurement": false,
+    "save_edits": 0,
+    "native_purchases": {
+      "full_restore": 4,
+      "revive": 2
+    },
+    "actual_purchase_cost": 15000,
+    "supply_model_goals": 0,
+    "supply_support_goals": 3,
+    "supply_policy_queries": 0,
+    "buying_and_healing_use_normal_game_inputs": true,
+    "no_borrowing_sales_or_item_generation": true
+  },
+  "stocked_league": {
+    "family": "red-configured-league-player-20261006-v1",
+    "audit_sha256": "1d457943fac335ee000513a4f568bb2ee5e98448e5f52c1dc43511d89e1374c3",
+    "source_state_sha256": "a903eba832b6deb34087f30b08a6e96aadbd0ce6a537c72db052c9afb89d60c7",
+    "terminal_state_sha256": "93bd67bc791a91010c50818c6b86b8d53f0a190fce76f13a7ca100228056d19a",
+    "terminal_context_sha256": "a2c82db6ebd7b456ae398e4b73abb300eefee5b8dff0f1a401fad12307f7b8db",
+    "all_five_battles_won": true,
+    "actual_concurrent_champion_hall": true,
+    "zero_input_terminal_readback": true,
+    "actual_workers_stopped": true,
+    "protected_pins_preserved": true,
+    "model_goals": 6,
+    "support_goals_including_procurement": 8,
+    "strategic_policy_queries": 12,
+    "combat_decisions": 93,
+    "tactical_override_keys": 0,
+    "owned_restorations": 6,
+    "medicine_consumed": {
+      "full_restore": 4,
+      "revive": 2
+    },
+    "cash_before_stock": 17431,
+    "cash_after_stock": 2431,
+    "cash_after_champion": 32230,
+    "costs_including_stock": {
+      "actions": 2274,
+      "frames": 209358,
+      "native_seconds": 210.23257929296233,
+      "goal_attempts": 14,
+      "cash_debits": 15000
+    },
+    "lifetime_spent": {
+      "actions": 166259,
+      "frames": 14912897,
+      "seconds": 15870.736664921802,
+      "decisions": 715,
+      "heals": 229,
+      "cash_debits": 236632
+    },
+    "retained_family_losses": {
+      "agatha": 3,
+      "bruno": 1,
+      "champion": 2,
+      "lance": 1
+    },
+    "remaining_support": [
+      "routes and cartridge execution",
+      "prebattle lead",
+      "type/status/PP screens",
+      "item/recipient selection",
+      "five mandatory singleton goals"
+    ],
+    "terminal_carry_level": 83,
+    "terminal_carry_hp": 64,
+    "terminal_carry_max_hp": 263,
+    "adaptive_development_not_causal_comparison_or_reliability": true
+  },
+  "public_integration": {
+    "profiles_and_actual_affordable_reserve_binding": true,
+    "default_off_inventory_callback": true,
+    "control_recovery_priority_preserved": true,
+    "source_state_mutation_refused": true,
+    "missing_stock_no_model_query": true,
+    "satisfied_stock_genuine_alternatives": 13,
+    "satisfied_stock_parent_child_queries": 2,
+    "readonly_inputs": 0,
+    "readonly_frames": 0,
+    "public_missing_stock_quote_matches_actual_native_purchase": true,
+    "targeted_rom_free_tests": 243,
+    "full_suite_claim": false,
+    "old_native_helpers_preserved": true
+  },
+  "prospective_limits": {
+    "original_native_ceiling": 900,
+    "extended_native_ceiling": 1800,
+    "original_window_preserved": true,
+    "all_costs_and_losses_carried": true,
+    "stock_diagnostic_cutoff": "2026-10-06T20:38:09+00:00",
+    "actions": 30000,
+    "frames": 2500000,
+    "goals": 64,
+    "restores": 128
+  },
+  "decision": "Close earned League recovery;keep36-row recovery head and tested reused battler. Use the approved automatic medicine stopgap,not more same-data refits. Next connect real-option whole-player inventory without supplied story ordering and declare a fresh DEVELOPMENT integration run before the separately frozen official124-run.",
+  "future_debt": [
+    "learn medicine anticipation/procurement",
+    "whole-player story/preparation/resource authority",
+    "live no-rollback global composition",
+    "separate final-stack checks and official authenticated fresh same-save124completion"
+  ]
+}

@@ -1,0 +1,351 @@
+{
+  "actual_model_comparative_choices": 7,
+  "actual_stop_utc": "2026-10-14T00:21:23.627031+00:00",
+  "at": [
+    3,
+    3
+  ],
+  "automatic_singleton_support": 28,
+  "badge_bits": 127,
+  "badges_after": 7,
+  "badges_before": 6,
+  "bag_slots_after": 19,
+  "bag_slots_before": 17,
+  "blaine_reward_received": true,
+  "cash_after": 5113,
+  "cash_before": 460,
+  "cash_reward_receipts": [
+    {
+      "amount": 4653,
+      "path": "runs/segment-005/native/episode/step-004"
+    }
+  ],
+  "cash_rewards": 4653,
+  "cold_proof": {
+    "frames": 0,
+    "inputs": 0,
+    "path": "diagnostics/cold-closeout-v1/RESULT.json",
+    "sha256": "452e85cd5021dce7646751f6759b3dc10fec102c3e05e100e9f2b23375d35495"
+  },
+  "completed": [
+    "begin_adventure",
+    "choose_starter",
+    "clear_rocket_hideout",
+    "defeat_blaine",
+    "defeat_brock",
+    "defeat_erika",
+    "defeat_koga",
+    "defeat_misty",
+    "defeat_sabrina",
+    "defeat_surge",
+    "help_bill",
+    "liberate_silph",
+    "obtain_cut",
+    "obtain_secret_key",
+    "obtain_silph_scope",
+    "obtain_strength",
+    "obtain_surf",
+    "power_on",
+    "reach_celadon",
+    "reach_cerulean",
+    "reach_cinnabar",
+    "reach_fuchsia",
+    "reach_lavender",
+    "reach_pewter",
+    "reach_saffron",
+    "reach_vermilion",
+    "receive_pokedex",
+    "rescue_fuji"
+  ],
+  "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+  "confirmed_stop_utc": "2026-10-14T00:27:19.991192+00:00",
+  "context_sha256": "cfcfa26032e01eef386a2435dbfc6b639c260514f5037c7479b8a353ca505a42",
+  "copied_progress_imported": false,
+  "cumulative_spent": {
+    "actions": 894991,
+    "cash_debits": 80551,
+    "decisions": 953,
+    "frames": 72025418,
+    "heals": 1043,
+    "seconds": 17951.28811128558
+  },
+  "cutoff_utc": "2026-10-14T02:48:17Z",
+  "diagnostic_results": [
+    {
+      "actions": 0,
+      "conservative_seconds": false,
+      "error": null,
+      "error_type": null,
+      "frames": 0,
+      "passed": true,
+      "path": "diagnostics/cold-closeout-v1/RESULT.json",
+      "seconds": 0.9619314160663635,
+      "sha256": "452e85cd5021dce7646751f6759b3dc10fec102c3e05e100e9f2b23375d35495"
+    },
+    {
+      "actions": 0,
+      "conservative_seconds": true,
+      "error": "continuation terminal differs",
+      "error_type": "ValueError",
+      "frames": 0,
+      "passed": false,
+      "path": "diagnostics/mansion-copy-v2-cold-v1/RESULT.json",
+      "seconds": 60,
+      "sha256": "c14ad836062e59dd0fa45d922df87d0f2076d9e0378051eb41af02332b7f6b0c"
+    },
+    {
+      "actions": 0,
+      "conservative_seconds": false,
+      "error": null,
+      "error_type": null,
+      "frames": 0,
+      "passed": true,
+      "path": "diagnostics/mansion-copy-v2-cold-v2/RESULT.json",
+      "seconds": 0.2639788328669965,
+      "sha256": "ea029c74ace074841379e9a3009a7a6288783a42465fc65725b137bf6c97e6e8"
+    },
+    {
+      "actions": 114,
+      "conservative_seconds": false,
+      "error": "Mansion departure has no verified Cinnabar nurse route",
+      "error_type": "RuntimeError",
+      "frames": 9288,
+      "passed": false,
+      "path": "diagnostics/mansion-nurse-copy-v1/RESULT.json",
+      "seconds": 2.665661374805495,
+      "sha256": "64f240592e8110aef60c2ac8bd55ea519048840ec7356d409b2ea3c1f9fe96f7"
+    },
+    {
+      "actions": 274,
+      "conservative_seconds": false,
+      "error": "",
+      "error_type": "AssertionError",
+      "frames": 19452,
+      "passed": false,
+      "path": "diagnostics/mansion-nurse-copy-v2/RESULT.json",
+      "seconds": 3.9085466659162194,
+      "sha256": "70d4d940c79c199b28490cb3f8a1a51ce5ba99e9e3a826849562b350e04d35d3"
+    },
+    {
+      "actions": 274,
+      "conservative_seconds": false,
+      "error": "same-live Key option must survive the selected nurse trip",
+      "error_type": "AssertionError",
+      "frames": 19452,
+      "passed": false,
+      "path": "diagnostics/mansion-nurse-copy-v3/RESULT.json",
+      "seconds": 4.049768208060414,
+      "sha256": "c46a3778d1189392052508d0d0ded10b94ad4a0f45536dc3a2f6e3a7c499ec35"
+    },
+    {
+      "actions": 274,
+      "conservative_seconds": false,
+      "error": null,
+      "error_type": null,
+      "frames": 19452,
+      "passed": true,
+      "path": "diagnostics/mansion-nurse-copy-v4/RESULT.json",
+      "seconds": 7.578345333226025,
+      "sha256": "dac2bd943cff694a7f4841f9172022e2b0faef5b22d407d905a51f2758474e7f"
+    },
+    {
+      "actions": 322,
+      "conservative_seconds": false,
+      "error": null,
+      "error_type": null,
+      "frames": 23416,
+      "passed": true,
+      "path": "diagnostics/mansion-nurse-copy-v5/RESULT.json",
+      "seconds": 9.228209458990023,
+      "sha256": "82b00f2c695b0bdf669f51e9230a6c5a41e0e4633714893130a7d09c1ebdc4a8"
+    },
+    {
+      "actions": 11,
+      "conservative_seconds": false,
+      "error": "",
+      "error_type": "AssertionError",
+      "frames": 1080,
+      "passed": false,
+      "path": "diagnostics/mansion-statue-copy-v1/RESULT.json",
+      "seconds": 1.8894222090020776,
+      "sha256": "a36de602ea651d697dabe365e107bcae571bc305dde3ef6b474ab6da912d8ce3"
+    },
+    {
+      "actions": 11,
+      "conservative_seconds": false,
+      "error": "pokemon.red:story-travel:f3eacd4a8313c0953fb427a8cfb6970f835fc254796a05942640aeb57d75826e",
+      "error_type": "AssertionError",
+      "frames": 1080,
+      "passed": false,
+      "path": "diagnostics/mansion-statue-copy-v2/RESULT.json",
+      "seconds": 5.755188708892092,
+      "sha256": "80b8d758a660b283f0b9c7d84bd0f848f0ec583b82c9ebc017a1cf05eddbbac8"
+    },
+    {
+      "actions": 32,
+      "conservative_seconds": false,
+      "error": null,
+      "error_type": null,
+      "frames": 2284,
+      "passed": true,
+      "path": "diagnostics/mansion-statue-copy-v3/RESULT.json",
+      "seconds": 4.565123042091727,
+      "sha256": "fea3ceed9a9759d801acd0a8065263e9a6a1933762f68030c97ac4e3bda15a1d"
+    }
+  ],
+  "earlier_menu_unavailable_retained": true,
+  "field_ready": true,
+  "fits": 0,
+  "flat_outcomes": 35,
+  "goal_kinds": {
+    "advance_story": 31,
+    "restore_team": 4
+  },
+  "goal_model_record_sha256": "13b1bf69010a26da0a81e308c66875b573fe04c83545088d8459f54d99c2ebdd",
+  "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+  "goal_model_unchanged": true,
+  "goal_modes": {
+    "model_exploration": 7,
+    "support:forced_singleton": 28
+  },
+  "limitations": [
+    "Assisted DEVELOPMENT ancestry,not final frozen fresh acceptance",
+    "Local runtime repairs and correlated diagnostic copies are disclosed; no copy gain imported",
+    "No new fitted learning,independent transfer or general perfect battle claim",
+    "Every native/copy failure and metadata mistake remains; one zero-input failed probe is conservatively charged60seconds",
+    "Final Giovanni,League and53registrations remain; final fresh gates0/5",
+    "No new learner,logger,subsystem,external agent,publication,cleanup or title advance"
+  ],
+  "local_repairs": [
+    "Mansion departure nursing before Key",
+    "reset volatile Mansion projections on native exit",
+    "settle ordinary encounters before statue dialogue",
+    "observed third-floor puzzle before speculative staircase"
+  ],
+  "mandatory_wild_escape_prefaces": 1,
+  "manual_actual_goal_substitutions": 0,
+  "map_id": 171,
+  "master_ball_present": true,
+  "metered_units": 36,
+  "native_execution_errors": [
+    {
+      "error": "route replanning found no candidate",
+      "error_type": "RouteExecutionError",
+      "path": "runs/segment-001/native/episode/step-005"
+    },
+    {
+      "error": "Mansion statue did not toggle to the expected state.",
+      "error_type": "BlaineChapterError",
+      "path": "runs/segment-003/native/episode/step-002"
+    }
+  ],
+  "new_actual_costs": {
+    "actions": 2184,
+    "cash_debits": 0,
+    "decisions": 36,
+    "frames": 145047,
+    "heals": 4,
+    "seconds": 127.65914616594091
+  },
+  "no_opening_restart": true,
+  "ordinary_balls": 0,
+  "original_six_restored": true,
+  "outcome_counts": {
+    "None": 2,
+    "succeeded": 33
+  },
+  "outcomes_by_kind": {
+    "advance_story": {
+      "None": 1,
+      "succeeded": 30
+    },
+    "restore_team": {
+      "None": 1,
+      "succeeded": 3
+    }
+  },
+  "parameter_updates": 0,
+  "partition": "development",
+  "party_levels": [
+    48,
+    51,
+    47,
+    43,
+    43,
+    48
+  ],
+  "party_total_level_gain": 1,
+  "post_final_repair_native_errors": 0,
+  "preparation_goals": 0,
+  "registrations_added": 0,
+  "registrations_after": 71,
+  "registrations_before": 71,
+  "released": true,
+  "result_sha256": "c1ed25b5b959274c5d95a1275e86ab92d9dc6aacba8442ca5419661f13692eb8",
+  "runtime_llm_calls": 0,
+  "runtime_package_sha256": "52b72cfce6e49f4086be1494752052c359718de3a236eea01803956b729d8e4b",
+  "schema": "pokemon.red.blaine-continuation.v1",
+  "secret_key_earned": true,
+  "separate_diagnostic_costs": {
+    "actions": 1312,
+    "decisions": 11,
+    "frames": 95504,
+    "heals": 5,
+    "seconds": 100.86617524991743
+  },
+  "session": "2026-10-13-blaine-continuation",
+  "started_utc": "2026-10-13T23:48:17Z",
+  "state_sha256": "105f61954420ec4bb705f510a6c85dfeada19314e6c18a59e010e7e13ba98022",
+  "status": "closed_all_requested_outcomes_complete",
+  "story_battles": [
+    {
+      "action_counts": {
+        "attack": 4,
+        "forced_switch": 0,
+        "switch_prompt": 3,
+        "voluntary_switch": 1
+      },
+      "decisions": 8,
+      "memory_writes": 0,
+      "metrics": {
+        "attack_turn_utility_sum": 12,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 4,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 21070250,
+        "policy_latency_ns_mean": 5052687.375,
+        "policy_latency_ns_min": 915750,
+        "selected_move_pp_spends": 4,
+        "teacher_interventions": 0
+      },
+      "objective": "defeat_blaine",
+      "outcome": "won",
+      "path": "runs/segment-005/native/episode/step-004",
+      "teacher_queries": 0,
+      "won": true
+    }
+  ],
+  "terminal": "runs/segment-005",
+  "training_rows_added": 0,
+  "whole_party_restored": true,
+  "worker_stopped": true,
+  "private_aggregate_sha256": "8c5798add69aa0f02e8b468a341723cd123feaa818711e92fcab40d481dbd72e",
+  "checks": {
+    "runtime_focused_tests": 495,
+    "documentation_product_focus_roadmap_evidence_tests": 195,
+    "total_distinct_focused_tests": 690,
+    "ruff_passed": true,
+    "generated_focus_and_roadmap_passed": true,
+    "narrative_backups_exact_hash_restoration": true,
+    "scope": "Mansion/gym/quiz/hideout/field recovery/launcher/strategic navigation; targeted,not full suite or CI"
+  },
+  "final_fresh_exit_gates": {
+    "completed": 0,
+    "total": 5
+  },
+  "previous_session": "2026-10-13-koga-fly-continuation"
+}

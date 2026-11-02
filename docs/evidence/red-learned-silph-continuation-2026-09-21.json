@@ -1,0 +1,390 @@
+{
+  "blackout_cash_losses": [
+    7625,
+    3813,
+    1906
+  ],
+  "blackouts": 3,
+  "cash_after": 1906,
+  "cash_before": 14410,
+  "collection_delta": 0,
+  "decisions": 95,
+  "envelope_sha256": "96ff49cad066a8f3736a2f585ff142b5c537d82f4364ab12e0c32c8967fd7a0a",
+  "episodes": [
+    {
+      "actions": {
+        "attack": 7,
+        "forced_switch": 0,
+        "switch_prompt": 2,
+        "voluntary_switch": 0
+      },
+      "decisions": 9,
+      "log": {
+        "complete": true,
+        "completed_decisions": 9,
+        "event_count": 37,
+        "event_counts": {
+          "choice_recorded": 9,
+          "decision_completed": 9,
+          "decision_started": 9,
+          "episode_started": 1,
+          "model_input_prepared": 7,
+          "run_finished": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 0,
+        "incomplete_decisions": 0,
+        "last_record_sha256": "2ed6e2a24a265fb361f118afd3549db50f3aafe0e9377bf3253e76cbcc0b4d19",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 9,
+        "terminal_event": "run_finished"
+      },
+      "metrics": {
+        "attack_turn_utility_sum": 8.786259541984734,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 3,
+        "party_faints": 0,
+        "party_hp_lost": 28,
+        "party_pp_spent": 7,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 3915333,
+        "policy_latency_ns_mean": 1606027.6666666667,
+        "policy_latency_ns_min": 711833,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "6d08d4bea5d0f56fc5477482987ca6a3c672e655132eac980afaef96b2e5d1ec",
+      "stage": "stage-040",
+      "stop_reason": "battle_won"
+    },
+    {
+      "actions": {
+        "attack": 21,
+        "forced_switch": 3,
+        "switch_prompt": 3,
+        "voluntary_switch": 3
+      },
+      "decisions": 30,
+      "log": {
+        "complete": true,
+        "completed_decisions": 30,
+        "event_count": 118,
+        "event_counts": {
+          "choice_recorded": 30,
+          "decision_completed": 30,
+          "decision_started": 30,
+          "episode_started": 1,
+          "model_input_prepared": 24,
+          "run_finished": 1,
+          "run_identity": 1,
+          "unsupported_action_boundary": 1
+        },
+        "failed_runs": 0,
+        "incomplete_decisions": 0,
+        "last_record_sha256": "51ab3a6004e264d068d2f301c3a21872248e0a4e6e3fdec166bfb7954b201df8",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 30,
+        "terminal_event": "run_finished"
+      },
+      "metrics": {
+        "attack_turn_utility_sum": 4.87263310847969,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 3,
+        "party_faints": 3,
+        "party_hp_lost": 276,
+        "party_pp_spent": 19,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4893084,
+        "policy_latency_ns_mean": 1690059.6333333333,
+        "policy_latency_ns_min": 279083,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "d894135f38f4165524721dff7adc0f1d28975cbd6e13da6014873d15afc400df",
+      "stage": "stage-041",
+      "stop_reason": "unsupported_struggle_boundary"
+    },
+    {
+      "actions": {
+        "attack": 2,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 0
+      },
+      "decisions": 2,
+      "log": {
+        "complete": true,
+        "completed_decisions": 2,
+        "event_count": 11,
+        "event_counts": {
+          "choice_recorded": 2,
+          "decision_completed": 2,
+          "decision_started": 2,
+          "episode_started": 1,
+          "model_input_prepared": 2,
+          "run_finished": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 0,
+        "incomplete_decisions": 0,
+        "last_record_sha256": "7b3ac7bda51a0a86694d23fcf30c4b92dd67baa9fe9edbcb519f53f50c7bad68",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 2,
+        "terminal_event": "run_finished"
+      },
+      "metrics": {
+        "attack_turn_utility_sum": -2.323529411764706,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 1,
+        "opponent_faints": 0,
+        "party_faints": 1,
+        "party_hp_lost": 22,
+        "party_pp_spent": 1,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1309708,
+        "policy_latency_ns_mean": 871312,
+        "policy_latency_ns_min": 432916,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "49147e4bd9d9527d66cbb521ef726178c4834a8685475c8755b7ede6c26f5373",
+      "stage": "stage-042",
+      "stop_reason": "party_defeated"
+    },
+    {
+      "actions": {
+        "attack": 20,
+        "forced_switch": 3,
+        "switch_prompt": 3,
+        "voluntary_switch": 3
+      },
+      "decisions": 29,
+      "log": {
+        "complete": true,
+        "completed_decisions": 29,
+        "event_count": 113,
+        "event_counts": {
+          "choice_recorded": 29,
+          "decision_completed": 29,
+          "decision_started": 29,
+          "episode_started": 1,
+          "model_input_prepared": 23,
+          "run_finished": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 0,
+        "incomplete_decisions": 0,
+        "last_record_sha256": "0ef61fcd44e7fb58eb67b522fe9a4fe69c73bfcaa309901249a0ec40eb70d15d",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 29,
+        "terminal_event": "run_finished"
+      },
+      "metrics": {
+        "attack_turn_utility_sum": 0.6292134831460674,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 3,
+        "party_faints": 4,
+        "party_hp_lost": 298,
+        "party_pp_spent": 17,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 22373000,
+        "policy_latency_ns_mean": 1892258.5862068965,
+        "policy_latency_ns_min": 235292,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "ecc4be6c9206bffabfa324ad7ade0306c2e0c3fdc6500dd4f2b0447b72bf4526",
+      "stage": "stage-044",
+      "stop_reason": "party_defeated"
+    },
+    {
+      "actions": {
+        "attack": 16,
+        "forced_switch": 3,
+        "switch_prompt": 3,
+        "voluntary_switch": 3
+      },
+      "decisions": 25,
+      "log": {
+        "complete": true,
+        "completed_decisions": 25,
+        "event_count": 97,
+        "event_counts": {
+          "choice_recorded": 25,
+          "decision_completed": 25,
+          "decision_started": 25,
+          "episode_started": 1,
+          "model_input_prepared": 19,
+          "run_finished": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 0,
+        "incomplete_decisions": 0,
+        "last_record_sha256": "57afddec6f9ccd2ead3c40adfbea1454f6d4e08961477e438fcfd11e34d70c07",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 25,
+        "terminal_event": "run_finished"
+      },
+      "metrics": {
+        "attack_turn_utility_sum": -0.11661082759743546,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 3,
+        "opponent_faints": 3,
+        "party_faints": 4,
+        "party_hp_lost": 281,
+        "party_pp_spent": 13,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4370833,
+        "policy_latency_ns_mean": 1145243.24,
+        "policy_latency_ns_min": 196166,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "e2156c624b96dd96b622a3c0e92a29af67df98d71bce22847781f1052725b343",
+      "stage": "stage-046",
+      "stop_reason": "party_defeated"
+    }
+  ],
+  "full_hp_pp": true,
+  "goal_model_queries": 0,
+  "income": 840,
+  "invalid_model_actions": 0,
+  "item_support": {
+    "learned_item_choices": false,
+    "x_accuracy": 1,
+    "x_special": 1
+  },
+  "limitations": [
+    "One correlated earned lineage; native rematches preserve losses, not independent trials.",
+    "Last rival attempt included disclosed item support, not autonomous item selection.",
+    "Story-only stranded Sand-Attack execution is not learned status-move qualification.",
+    "Rival,11F Rocket and Giovanni remain undefeated; no further blind rematch authorized by this packet."
+  ],
+  "local_registrations": 15,
+  "map_id": 182,
+  "native_audit_frames": 0,
+  "native_audit_inputs": 0,
+  "native_fresh_encounters": 4,
+  "net_cash_change": -12504,
+  "new_fits": 0,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    137,
+    59,
+    37,
+    68
+  ],
+  "party_levels": [
+    44,
+    22,
+    22,
+    25
+  ],
+  "position_yx": [
+    3,
+    3
+  ],
+  "primary_goal_model_and_frozen_k_unchanged": true,
+  "requested_giovanni_completion": false,
+  "rival_losses": 3,
+  "runtime_exceptions": 0,
+  "runtime_unsupported_stops": 1,
+  "schema": "pokemon.red.learned-silph-continuation-audit.v1",
+  "source_sha256": "58b4f6b0f8eac2cec9cf799cb76b55050942bc362c084c993483324f1e021e9a",
+  "stages": [
+    {
+      "actions": 244,
+      "cash": 15250,
+      "claim_sha256": "deca29b14eb30dbc4c7297ce90e35d9680e9b0b83dbea7a6228810d177257865",
+      "frames": 64860,
+      "mode": "silph_continue",
+      "phase": "third",
+      "seconds": 3.029867625096813,
+      "stage": "stage-040",
+      "state_sha256": "775b6a33b18dabf8f7f318402b9214b55e0342c0974978e56afe785e6396b7a5"
+    },
+    {
+      "actions": 1165,
+      "cash": 15250,
+      "claim_sha256": "a9e48b7eaa37cff9d6a57360f4509cdf5ca8839a4fa2f4440d20d1adcc55a97d",
+      "frames": 333456,
+      "mode": "silph_continue",
+      "phase": "rival",
+      "seconds": 16.103218083037063,
+      "stage": "stage-041",
+      "state_sha256": "f32b5a8343c93ef976968ed86da5bcc6923d85ad1f08db1b75aefd297850dbac"
+    },
+    {
+      "actions": 25,
+      "cash": 7625,
+      "claim_sha256": "53e54837f3808a2ac97e74cdaa519d371bd8f9f4d7e8ddd86d31183a662bd778",
+      "frames": 2388,
+      "mode": "silph_continue",
+      "phase": "resume-rival",
+      "seconds": 0.23876470793038607,
+      "stage": "stage-042",
+      "state_sha256": "53e205f83d4e329a4efaabb568274ba5ecafb543dcc58cd92edfc3db5099ae97"
+    },
+    {
+      "actions": 6,
+      "cash": 7625,
+      "claim_sha256": "824148deca84d7a98953a9980273404801a37cae1e3b1325a73be2dd48ecb0fe",
+      "frames": 240,
+      "mode": "relocate",
+      "phase": null,
+      "seconds": 0.05795108387246728,
+      "stage": "stage-043",
+      "state_sha256": "706fe2e20b2feb06e6bebe64a0056306fdc6d37ecc75c18cfcf01141986a0e56"
+    },
+    {
+      "actions": 930,
+      "cash": 3812,
+      "claim_sha256": "971e4e0aa91deef0e303d8b9a75acb5ae7e4c9da9ec5cfa0d6ff407f78ec5b07",
+      "frames": 245352,
+      "mode": "silph_continue",
+      "phase": "rival-center",
+      "seconds": 10.90111470897682,
+      "stage": "stage-044",
+      "state_sha256": "ad562171a1c71ab0f283c45e340013339bd96a460bae967e60ee9543582ea9c3"
+    },
+    {
+      "actions": 6,
+      "cash": 3812,
+      "claim_sha256": "5904e2ae5a3e7dc07be615e9608b369e073a7cc2c1afd8ad587d7ff2344c7bcd",
+      "frames": 240,
+      "mode": "relocate",
+      "phase": null,
+      "seconds": 0.06487366696819663,
+      "stage": "stage-045",
+      "state_sha256": "560fc6f417c4717ce1687cfac0e275e56344a19a401ed94b53a04231458ac811"
+    },
+    {
+      "actions": 944,
+      "cash": 1906,
+      "claim_sha256": "83a51ecdc92f5d4a8bb19e63ee8082490bc66a11e886a8f51b779195d5f7055f",
+      "frames": 243528,
+      "mode": "silph_continue",
+      "phase": "rival-center",
+      "seconds": 10.369102083146572,
+      "stage": "stage-046",
+      "state_sha256": "5f02fdc9b195c1aecb52cd20485617bf487fc8e2aed15c3b83216a221047fee4"
+    },
+    {
+      "actions": 6,
+      "cash": 1906,
+      "claim_sha256": "e729e1c43d96eb7a1147a5bf01ec3081c4e8c64d5d575c2efca6522879e1afc4",
+      "frames": 240,
+      "mode": "relocate",
+      "phase": null,
+      "seconds": 0.053743791999295354,
+      "stage": "stage-047",
+      "state_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38"
+    }
+  ],
+  "status": "blocked_on_rival_capability",
+  "story_objectives": 19,
+  "terminal_sha256": "35feb8fa5641052e126fd88fa6489327fea1380b88ed6ae10c552b7d9677ee38",
+  "terminal_stage": "stage-047",
+  "trainer_move_teacher_queries": 0,
+  "wins": 1,
+  "native_audit_sha256": "19195f9dbd95d3e1330e7c3686b1cc2b2a965c4c62140d09122f1f72e9dcdae1",
+  "tests_passed": 878
+}

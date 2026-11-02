@@ -1,0 +1,1309 @@
+{
+  "schema": "pokemon.red.capture-recovery-matched-readiness.v1",
+  "session": "2026-10-13-capture-recovery-matched-readiness",
+  "partition": "development",
+  "status": "closed_retained_actual_continuation",
+  "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+  "start_utc": "2026-10-13T12:48:38Z",
+  "cutoff_utc": "2026-10-13T15:48:38Z",
+  "primary": {
+    "family": "red-r29-capture-recovery-silph-training-20261013-v1",
+    "terminal": "qualified-candidate921-continuation/runs/segment-001",
+    "source_sha256": "d51566bf073bf7f6d16ae4a85ab7722a9d5ffe33ffbe642ec7612486a5731ee3",
+    "state_sha256": "3f31712969197535625cd5aeee0873730be5fd30e97a19a3554f7f3b62137b3b",
+    "context_sha256": "372b15538e4a319e3290ae4f2b5534d521e03a193f0c7aa7f888d3ba250a9356",
+    "result_sha256": "5e90f5eb8f281fcd52dbc6beb13c4351e1093acf9667300b8d46db9522840744",
+    "registrations_before": 43,
+    "registrations_after": 58,
+    "new_registrations": [
+      "pokemon:national:010",
+      "pokemon:national:029",
+      "pokemon:national:032",
+      "pokemon:national:033",
+      "pokemon:national:048",
+      "pokemon:national:049",
+      "pokemon:national:092",
+      "pokemon:national:093",
+      "pokemon:national:101",
+      "pokemon:national:102",
+      "pokemon:national:103",
+      "pokemon:national:104",
+      "pokemon:national:111",
+      "pokemon:national:112",
+      "pokemon:national:132"
+    ],
+    "badges": 4,
+    "cash_before": 15650,
+    "cash_after": 8727,
+    "levels": [
+      48,
+      28,
+      29,
+      43,
+      32,
+      39
+    ],
+    "map_id": 89,
+    "at": [
+      3,
+      3
+    ],
+    "whole_party_restored": false,
+    "field_ready": true,
+    "released": true,
+    "worker_stopped": true,
+    "spent": {
+      "actions": 560858,
+      "cash_debits": 50051,
+      "decisions": 724,
+      "frames": 45546935,
+      "heals": 623,
+      "seconds": 12275.891936956788
+    },
+    "new_costs": {
+      "actions": 124285,
+      "cash_debits": 18500,
+      "decisions": 73,
+      "frames": 9718450,
+      "heals": 92,
+      "seconds": 1974.4671889566816
+    },
+    "goal_modes": {
+      "model_exploration": 66,
+      "null": 1,
+      "deterministic_safety": 4
+    },
+    "goal_kinds": {
+      "restore_team": 10,
+      "advance_story": 24,
+      "resupply": 4,
+      "acquire_species": 20,
+      "evolve_species": 9,
+      "develop_team": 2,
+      "manage_storage": 2
+    },
+    "flat_outcomes": 71,
+    "model_choices": 66,
+    "completed": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_misty",
+      "defeat_surge",
+      "help_bill",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "segments": [
+      {
+        "family": "model-continuation",
+        "terminal": "model-continuation/runs/segment-001",
+        "result_sha256": "1cd29e54928c4c0c50390abd60a4b994058b9a0f2723b2237c8d0a6f0c756111",
+        "state_sha256": "43fa0a71b2cd36d49bce9fa26a5b63ab4d92261b9d19a564bf018a4805f21de1",
+        "context_sha256": "e782e67306715d26c6738ee3744dfaf997e726595a996098d6928450c44ed382",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 436608,
+          "cash_debits": 31551,
+          "decisions": 653,
+          "frames": 35830237,
+          "heals": 532,
+          "seconds": 10315.681426833034
+        },
+        "registrations": 43,
+        "rows": [
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": null,
+            "failure_reason": null,
+            "error_type": "RouteExecutionError",
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "model-continuation",
+        "terminal": "model-continuation/runs/segment-002",
+        "result_sha256": "e45843d84f303346cd92248017fc9561c284605a5b39c81864f067688b45db83",
+        "state_sha256": "5ed1a1ca9ee8f36f64be8d5cb14940a1433c5fbc5555521772ef125933608ac9",
+        "context_sha256": "338854c15cb80fff901ac07a1726a727e0ad385a762963d39254501341f08ce2",
+        "passed": false,
+        "error_type": "Original live checkpoint retention failed after the closed ProtectedRecoveryError; original process exited1.",
+        "worker_stopped": true,
+        "spent": {
+          "actions": 437995,
+          "cash_debits": 36351,
+          "decisions": 658,
+          "frames": 35929477,
+          "heals": 533,
+          "seconds": 10360.391428958043
+        },
+        "registrations": 43,
+        "rows": [
+          {
+            "kind": "advance_story",
+            "mode": null,
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "reach_fuchsia",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "reach_fuchsia",
+            "objective_completed": false
+          },
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "resupply",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": null,
+            "failure_reason": null,
+            "error_type": "ProtectedRecoveryError",
+            "safe_terminal": false,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "qualified-silph-continuation",
+        "terminal": "qualified-silph-continuation/runs/segment-001",
+        "result_sha256": "0b401c771742fa7603eeefb509285ff499c76bb3fbffb494b2ea84980add7f93",
+        "state_sha256": "559ea05891e262cb2211a198cc2ea1c9348a6821d1a3caa69a32e6c71a72b46c",
+        "context_sha256": "1072a7fff439b36de40f00806965ebc5bc5d4b38dd833fe09f31800c7018d18c",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 448011,
+          "cash_debits": 37451,
+          "decisions": 672,
+          "frames": 36689919,
+          "heals": 543,
+          "seconds": 10554.31935691589
+        },
+        "registrations": 46,
+        "rows": [
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "reach_fuchsia",
+            "objective_completed": false
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "resource_lost",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "restore_team",
+            "mode": "deterministic_safety",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "resupply",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "reach_fuchsia",
+            "objective_completed": false
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "resource_lost",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "reach_fuchsia",
+            "objective_completed": false
+          },
+          {
+            "kind": "restore_team",
+            "mode": "deterministic_safety",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": null,
+            "failure_reason": null,
+            "error_type": "RouteExecutionError",
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "qualified-silph-continuation",
+        "terminal": "qualified-silph-continuation/runs/segment-002",
+        "result_sha256": "6d068bfdc389f601cb8194d9c4df6bada153f9497fc501f0d6033cd2243cf0d1",
+        "state_sha256": "fbefaf97e7f65c4a6e1005f38f7bba7d00ec9ce1541f4cbdd2c7324b0b8f49f5",
+        "context_sha256": "409f3a3e01f588877346539d5fc0ce9578ddd8ce32267bc532ba850fa79c4679",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 469943,
+          "cash_debits": 37451,
+          "decisions": 684,
+          "frames": 38499565,
+          "heals": 571,
+          "seconds": 10896.903003498795
+        },
+        "registrations": 47,
+        "rows": [
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "liberate_silph",
+            "objective_completed": false
+          },
+          {
+            "kind": "develop_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "liberate_silph",
+            "objective_completed": false
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "search_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "search_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "outcome_not_verified",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "qualified-silph-continuation-v3",
+        "terminal": "qualified-silph-continuation-v3/runs/segment-001",
+        "result_sha256": "08035cd90f771b7e88d17a1f0b5a53a264ad24673637dc1c474bd3aa48ac5ca8",
+        "state_sha256": "5a1d0065d9718e2cb50a2ec8547448df9cae03203587216da69891a8eaea9847",
+        "context_sha256": "e829ab840a742eacb10a011e9b3905f7880487d8134abe9babdd10daa902d1a3",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 507190,
+          "cash_debits": 43151,
+          "decisions": 701,
+          "frames": 41347809,
+          "heals": 598,
+          "seconds": 11427.573337165755
+        },
+        "registrations": 52,
+        "rows": [
+          {
+            "kind": "manage_storage",
+            "mode": "deterministic_safety",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "search_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "resupply",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "manage_storage",
+            "mode": "deterministic_safety",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "develop_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "outcome_not_verified",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "qualified-silph-continuation-v3",
+        "terminal": "qualified-silph-continuation-v3/runs/segment-002",
+        "result_sha256": "68376228a1ecfccee160f65ea0be0a7c5accfaa79b78eb06a044f1570fe54e40",
+        "state_sha256": "718b92401e9b99b109034cc234c0f113e7b2faccd68c9805fafb3d52cd008c6a",
+        "context_sha256": "8303581dba196ff388e62e5d0b39aa7a6d01ea1487796daa5d01ab0c2177ab2d",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 538720,
+          "cash_debits": 45251,
+          "decisions": 715,
+          "frames": 43822018,
+          "heals": 613,
+          "seconds": 11956.609385873773
+        },
+        "registrations": 55,
+        "rows": [
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "liberate_silph",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "capture_items_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "obtain_surf",
+            "objective_completed": false
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "defeat_koga",
+            "objective_completed": false
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "outcome_not_verified",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      },
+      {
+        "family": "qualified-candidate921-continuation",
+        "terminal": "qualified-candidate921-continuation/runs/segment-001",
+        "result_sha256": "5e90f5eb8f281fcd52dbc6beb13c4351e1093acf9667300b8d46db9522840744",
+        "state_sha256": "3f31712969197535625cd5aeee0873730be5fd30e97a19a3554f7f3b62137b3b",
+        "context_sha256": "372b15538e4a319e3290ae4f2b5534d521e03a193f0c7aa7f888d3ba250a9356",
+        "passed": true,
+        "error_type": null,
+        "worker_stopped": true,
+        "spent": {
+          "actions": 560858,
+          "cash_debits": 50051,
+          "decisions": 724,
+          "frames": 45546935,
+          "heals": 623,
+          "seconds": 12275.891936956788
+        },
+        "registrations": 58,
+        "rows": [
+          {
+            "kind": "restore_team",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "resupply",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "search_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "advance_story",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": "liberate_silph",
+            "objective_completed": false
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "search_exhausted",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "acquire_species",
+            "mode": "model_exploration",
+            "verification": "succeeded",
+            "failure_reason": null,
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          },
+          {
+            "kind": "evolve_species",
+            "mode": "model_exploration",
+            "verification": "failed",
+            "failure_reason": "outcome_not_verified",
+            "error_type": null,
+            "safe_terminal": true,
+            "objective": null,
+            "objective_completed": null
+          }
+        ]
+      }
+    ],
+    "all_originals_verified": true,
+    "cold_reload_sha256": "99d3cabec520e1ce858668d8d088810248ad2a2cb547d6c009c3de2e32dcc585",
+    "cold_reload_inputs": 0,
+    "cold_reload_frames": 0,
+    "gameplay_stopped_confirmed_utc": "2026-10-13T15:34:28Z"
+  },
+  "learning": {
+    "native_attempts": 12,
+    "eligible_new_train": 10,
+    "excluded_infrastructure_failures": 2,
+    "fits": 2,
+    "parameter_updates": 2,
+    "development_inputs": 0,
+    "prior_examples_retained": 151,
+    "candidate_examples": 161,
+    "fit_results": [
+      {
+        "fit": "fit-01",
+        "result_sha256": "1b1125fbb3c432e53aec9b8a229fbdb63dc785e73699459832ad207022f93997",
+        "model_sha256": "28880a42112432e6c16e5b53545d989ea29dc3c77b7669bff3ed743d877246bf",
+        "examples": 159,
+        "new_examples_total": 8,
+        "old_train_mse_before": 0.012646456991376821,
+        "old_train_mse_after": 0.012702057422658964,
+        "new_train_mse_before": 0.10116765420811023,
+        "new_train_mse_after": 3.90806029278783e-7,
+        "all151_retained": true,
+        "development_inputs": 0
+      },
+      {
+        "fit": "fit-02",
+        "result_sha256": "2d79692ce95c7a613d0e6ffe6b262abaa8608b80ca956aa872853b26f953b062",
+        "model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+        "examples": 161,
+        "new_examples_total": 10,
+        "old_train_mse_before": 0.012646456991376821,
+        "old_train_mse_after": 0.012703006662388995,
+        "new_train_mse_before": 0.08287332631365085,
+        "new_train_mse_after": 7.30378822352415e-7,
+        "all151_retained": true,
+        "development_inputs": 0
+      }
+    ],
+    "lessons": [
+      {
+        "name": "depleted-direct",
+        "result_sha256": "0939b3a84971b424aaa9041f6f38080f822e3e928810d6f2ca7c424708fede41",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "advance_story",
+        "actions": 223,
+        "frames": 19932,
+        "seconds": 2.324706375133246,
+        "error_type": null,
+        "wild_battles": 0,
+        "terminal_sha256": "9b6d52860d1461ae92829992bcfd526e98e2b07c786ce4e7f10f82f53583e090"
+      },
+      {
+        "name": "depleted-restore",
+        "result_sha256": "3f57f88ca90827c6a29869f12568259f3ae9df9ccb18eebab837f6d2b636f1f6",
+        "admitted": true,
+        "eligible": true,
+        "success": true,
+        "kind": "restore_team",
+        "actions": 44,
+        "frames": 2304,
+        "seconds": 0.341108291875571,
+        "error_type": null,
+        "wild_battles": 0,
+        "terminal_sha256": "e3a6d28334d7ceaaa60d3292c83a7612179d199611bf71da01f50d3e5221f20f"
+      },
+      {
+        "name": "loss-conditioned-direct",
+        "result_sha256": "ef0c7f1e1c34e7646f09f62d333c3083daf015accec34dc50f61d785174b4967",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "advance_story",
+        "actions": 295,
+        "frames": 26652,
+        "seconds": 3.5039271251298487,
+        "error_type": null,
+        "wild_battles": 0,
+        "terminal_sha256": "7bde57b27db03dcc296c339e8e7b0e8f96af63a1ba10780f9d6bf533bcf65a31"
+      },
+      {
+        "name": "loss-conditioned-prepare",
+        "result_sha256": "770a1544f211447a3ac352a6fa69347f4aa906e3ff378455a25b08825bb53b18",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "develop_team",
+        "actions": 370,
+        "frames": 24864,
+        "seconds": 2.9048300408758223,
+        "error_type": null,
+        "wild_battles": 2,
+        "terminal_sha256": "cf211e8d3f32d1288ffa78bc3c050afeedebbfab0e14799ad8838cbf5f4c724a"
+      },
+      {
+        "name": "loss-conditioned-prepare-metered-recovery",
+        "result_sha256": "61a7e400cfa2e83b2877f744e8784e5f1cf2f9c659b93ad51a15c8189222ad0a",
+        "admitted": true,
+        "eligible": true,
+        "success": true,
+        "kind": "develop_team",
+        "actions": 2210,
+        "frames": 159300,
+        "seconds": 16.836886500008404,
+        "error_type": null,
+        "wild_battles": 23,
+        "terminal_sha256": "d6770285a87a56c07f6bf828cab8c1ed757040a3cabed0b35dc8a38c9c2af196"
+      },
+      {
+        "name": "loss-conditioned-prepare-with-recovery",
+        "result_sha256": "3e399af7e6edd77a9ca53fb4aa04710fd944d9d1af64db58084630784cf44bee",
+        "admitted": true,
+        "eligible": false,
+        "success": false,
+        "kind": "develop_team",
+        "actions": 22,
+        "frames": 720,
+        "seconds": 0.20221770904026926,
+        "error_type": "ValueError",
+        "wild_battles": 0,
+        "terminal_sha256": "2736d41a6eea0fcd084f7cca7508768e119a486ea8ea882ac034a5ca8e3dfe54"
+      },
+      {
+        "name": "ready-direct",
+        "result_sha256": "a3810cc6836f3098051433d94d968c5ab7e01e8ff38ed34328dd2eff5bd0449d",
+        "admitted": true,
+        "eligible": true,
+        "success": true,
+        "kind": "advance_story",
+        "actions": 393,
+        "frames": 35748,
+        "seconds": 3.5872016658540815,
+        "error_type": null,
+        "wild_battles": 0,
+        "terminal_sha256": "4e1350f6e1e31a9c30c168a41ba427d4ced1716a973dab31aa3e2a653132bc8a"
+      },
+      {
+        "name": "ready-prepare",
+        "result_sha256": "d4c0dad278ff8edc339ba7e520cf2d565a6dda208db618177d773d8e6339f8fd",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "develop_team",
+        "actions": 882,
+        "frames": 69564,
+        "seconds": 8.340766959125176,
+        "error_type": null,
+        "wild_battles": 13,
+        "terminal_sha256": "d43a6413b7e46328febe0ed35b8033139b29c9c343446f767f03ac632706f5c7"
+      },
+      {
+        "name": "under-direct",
+        "result_sha256": "100539086783fe3f61f14f9df5e45abc91a4cce97615fa0b6544496c29301f7e",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "advance_story",
+        "actions": 295,
+        "frames": 26652,
+        "seconds": 2.6049954160116613,
+        "error_type": null,
+        "wild_battles": 0,
+        "terminal_sha256": "7bde57b27db03dcc296c339e8e7b0e8f96af63a1ba10780f9d6bf533bcf65a31"
+      },
+      {
+        "name": "under-prepare",
+        "result_sha256": "549f5e0bdf253b8183719303ffc1ad30ff4a6dd1e7f4af79641b9562a528cc2a",
+        "admitted": true,
+        "eligible": true,
+        "success": false,
+        "kind": "develop_team",
+        "actions": 370,
+        "frames": 24864,
+        "seconds": 3.0732465418986976,
+        "error_type": null,
+        "wild_battles": 2,
+        "terminal_sha256": "cf211e8d3f32d1288ffa78bc3c050afeedebbfab0e14799ad8838cbf5f4c724a"
+      },
+      {
+        "name": "under-prepare-metered-recovery",
+        "result_sha256": "4673f75cc0ff938eebb532721c57d2ab9074addb74eefdb4283c296f1443184d",
+        "admitted": true,
+        "eligible": true,
+        "success": true,
+        "kind": "develop_team",
+        "actions": 2210,
+        "frames": 159300,
+        "seconds": 16.693082958925515,
+        "error_type": null,
+        "wild_battles": 23,
+        "terminal_sha256": "d6770285a87a56c07f6bf828cab8c1ed757040a3cabed0b35dc8a38c9c2af196"
+      },
+      {
+        "name": "under-prepare-with-recovery",
+        "result_sha256": "889629708adb1417f5846bea89e0bcd7ab424667efb3e0c8221c81cb06918256",
+        "admitted": true,
+        "eligible": false,
+        "success": false,
+        "kind": "develop_team",
+        "actions": 22,
+        "frames": 720,
+        "seconds": 0.22629645792767406,
+        "error_type": "ValueError",
+        "wild_battles": 0,
+        "terminal_sha256": "2736d41a6eea0fcd084f7cca7508768e119a486ea8ea882ac034a5ca8e3dfe54"
+      }
+    ],
+    "train_costs": {
+      "actions": 7336,
+      "frames": 550620,
+      "seconds": 60.63926604180597
+    },
+    "coefficient_coverage": {
+      "challenge": {
+        "fields": 54,
+        "coefficient_fields_nonzero": 18,
+        "training_mean_fields_nonzero": 18
+      },
+      "recent_result": {
+        "fields": 126,
+        "coefficient_fields_nonzero": 20,
+        "training_mean_fields_nonzero": 20
+      },
+      "direct_level_gap": {
+        "fields": 18,
+        "coefficient_fields_nonzero": 4,
+        "training_mean_fields_nonzero": 4
+      },
+      "preparation": {
+        "fields": 13,
+        "coefficient_fields_nonzero": 9,
+        "training_mean_fields_nonzero": 9
+      }
+    },
+    "matched_behavior_screen_sha256": "b4c04c76cd26c00b9f7497c4e489354aac9c27cad1bad40316460e04fc6d6c7c",
+    "in_sample_only": true,
+    "independent_readiness_transfer": false,
+    "actual_post_loss_campaign_continuation_proved": false,
+    "candidate_provisionally_deployed": true,
+    "actual_candidate_goal_choices": 9
+  },
+  "candidate_copy": {
+    "result_sha256": "fb2b2b91869b1ddcf8e927ab5ff7cf08ec9cfc34adfb92cb490d506088c2f6c2",
+    "model_choices": 3,
+    "execution_errors": 0,
+    "successful_nursing": true,
+    "copied_gains_imported": false,
+    "costs": {
+      "actions_attempted": 8088,
+      "actions_completed": 8088,
+      "automatic_fit": false,
+      "buttons_released": true,
+      "control_recovery_cash_debits": 0,
+      "diagnostic_events": 1789,
+      "diagnostic_journal_seconds": 6.842579495161772,
+      "frames": 650039,
+      "goal_attempts": 3,
+      "nested_restore_attempts": 0,
+      "observed_cash_changes": 0,
+      "observed_cash_debits": 0,
+      "observed_cash_rewards": 0,
+      "promotions": 0,
+      "restore_attempts": 5,
+      "schema": "pokemon.red.native-player-costs.v1",
+      "seconds": 159.71130058402196,
+      "training_healing_attempts": 4
+    }
+  },
+  "qualifications": {
+    "route12_retreat_sha256": "02757c0d6dc15c5db27ecd44154d0325b4c3ddac061033ba730097cbe3ba5244",
+    "capture_weakening_sha256": "d2b07d12f55a5fb078fb21a62414e37f5f6d5ec62e1020b01c193166e381df70",
+    "protected_retention_sha256": "b4d4b59988513c4e55fb71db2a9e240c00ee92a21e99e66bec1e0a8d81568826",
+    "trainer_prompt_sha256": "0c020e0567f79fe345b13c0a18914af91074a7c89375f88c670d1f95404684bc",
+    "local_macos_quota_tools_read_only": true
+  },
+  "package_sha256": "3dcc87a043fc4a570ef7765bce19832ba0136b6eb06ba7ae8bc747c4f4ae7fca",
+  "full_suite": false,
+  "ci": false,
+  "rom_free_tests": 863,
+  "final_fresh_gates": "0/5",
+  "no_publication": true,
+  "no_reset": true,
+  "no_copy_back": true,
+  "capture": {
+    "route12_missed": true,
+    "route12_reset": false,
+    "snorlax_registered": false,
+    "route16_reserved_for_later": true,
+    "route16_capture_access_not_newly_qualified": true,
+    "weakening_native_copy_damage": 22,
+    "weakening_native_copy_attempts": 3,
+    "weakener_switch_disclosed_unlearned": true,
+    "capture_allocation_minimum": 8,
+    "capture_allocation_maximum": 24,
+    "allocation_uses_carried_stock_only": true,
+    "supply_still_targets_eight": true,
+    "copied_catch_proves_rate_improvement": false
+  },
+  "remaining": {
+    "silph_liberation": false,
+    "sabrina_defeated": false,
+    "unattended_readiness_transfer": false,
+    "learner_stopping_native_sequence": false,
+    "sequence_learner_deferred": true
+  },
+  "bottleneck": {
+    "selected_silph_approach_actual_map": 182,
+    "arrival_at": [
+      7,
+      3
+    ],
+    "required_stage_at": [
+      3,
+      3
+    ],
+    "arrival_does_not_mean_liberation": true,
+    "interleaved_collection_after_arrival": true,
+    "fully_restored_party_required_for_silph_offer": true,
+    "next_fix": "Qualify complete selected Silph approach to exact existing phase staging boundary;keep readiness,source,legality and battle-entry guards. Generic exact-target quote currently refuses cross-map targets;do not simply change caller destination_at or remove guard."
+  },
+  "storage": {
+    "volume_quota_bytes": 150000001024,
+    "used_bytes": 148611153920,
+    "container_free_bytes": 135230177280,
+    "approved_total_gb": 200,
+    "existing_quota_changed": false,
+    "overflow_creation_pending_authorization": false,
+    "no_deletion_or_moves": true,
+    "overflow_created": true,
+    "overflow_quota_bytes": 50000003072,
+    "overflow_volume_uuid": "B9753848-9160-4341-8079-F0BCDEA56566",
+    "existing_volume_quotas_unchanged": true,
+    "future_outputs": "New 50GB overflow volume;existing outputs and frozen inputs stay in place."
+  },
+  "docs_workflow": "Current entries replaced surgically;unique prior narratives and all old evidence retained."
+}

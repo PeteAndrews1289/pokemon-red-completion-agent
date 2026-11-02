@@ -1,0 +1,26 @@
+{
+  "actual_registration_delta": 0,
+  "actual_sealed_badges": 7,
+  "actual_sealed_registrations": 92,
+  "all9traced_modules_match_frozen_P66": true,
+  "component_goals_complete": 2,
+  "current_V9_cost_fit_api_needs_qualified_extension": true,
+  "current_V9_workload_contrast": true,
+  "emulators": 0,
+  "feature_collision_falsifiers": 2,
+  "kind": "ROM-free qualification,not learning",
+  "legacy_venue_head_controls_native_evolution": false,
+  "limitations": [
+    "Synthetic falsifiers are not native labels or efficacy results.",
+    "Current native first-frame qualification remains pending.",
+    "No learned venue policy or native cost gain proved."
+  ],
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "objective_slower_completion_falsifier": true,
+  "observed_at_utc": "2026-10-20T17:54:53.804005+00:00",
+  "official_fresh_successes": 0,
+  "old_objectives_and_feature_schemas_unchanged": true,
+  "schema": "pokemon.red.preparation-feature-target-qualification.v1"
+}

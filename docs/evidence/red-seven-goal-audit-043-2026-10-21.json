@@ -1,0 +1,172 @@
+{
+  "active_goal_continues": false,
+  "all7complete": false,
+  "component_gates_met": 4,
+  "costs": {
+    "active_goal_meter_observation": {
+      "cause_unknown": true,
+      "status": "blocked",
+      "time_seconds": 41573,
+      "tokens": 4590930
+    },
+    "actual_terminal_authentication": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/frozen-fresh-v85-a9-20261021-006-r3/TERMINAL-AUTHENTICATION.json",
+      "sha256": "14685017b3601166d0fa03d4117ab54d26fc53bcc579d852faa2db6e2f1650f6"
+    },
+    "all_prior_costs_partial_failures_and_deadlines_retained": true,
+    "preflight_receipts": [
+      {
+        "exit_code": 1,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/frozen-fresh-v85-a9-20261021-006-r1/preflight/ROOT-EXIT-RECEIPT.json",
+        "seconds": 2.4092325279999995,
+        "sha256": "f0ff23942d3733e5c94bdcaf9e6480085286efef4d5f7c32f6b6ac8d45380ac6"
+      },
+      {
+        "exit_code": 0,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/frozen-fresh-v85-a9-20261021-006-r2/preflight/ROOT-EXIT-RECEIPT.json",
+        "seconds": 48.29804834299999,
+        "sha256": "c79f1decb4cb9aed656fab0e202bc563d3e84939c3e97ff8578a8947bb73d0ad"
+      },
+      {
+        "exit_code": 0,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/frozen-fresh-v85-a9-20261021-006-r3/preflight/ROOT-EXIT-RECEIPT.json",
+        "seconds": 47.323103034,
+        "sha256": "42f961585dedf7b19986c3522f305ecf7c9d79935e0f879bd112dac6a636bb34"
+      },
+      {
+        "exit_code": 1,
+        "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/frozen-fresh-v84-a9-20261021-006/preflight/ROOT-EXIT-RECEIPT.json",
+        "seconds": 49.508012131,
+        "sha256": "97897ebeffef1986201f4c17e723e2c8340b95d61fcaca77b11d5d84f2122550"
+      }
+    ],
+    "prior_paused_goal_usage_retained_separately": {
+      "time_seconds": 162083,
+      "tokens": 24640292
+    },
+    "since_audit042": {
+      "actual_badges_earned": 2,
+      "actual_cash_terminal": 8005,
+      "actual_frames": 24416387,
+      "actual_heals": 377,
+      "actual_inputs": 298689,
+      "actual_registrations_earned": 31,
+      "actual_root_seconds": 3757.882887914,
+      "declared_fullholds_total": 31200,
+      "diagnostic_emulators": 0,
+      "diagnostic_state_loads": 0,
+      "final_release_fullhold": 120,
+      "fit_attempts": 0,
+      "fresh_actual_root_fullhold": 30000,
+      "master_ball_terminal": 0,
+      "metered_goal_attempts": 243,
+      "native_accounted_seconds": 3649.555972534,
+      "native_worker_seconds": 3677.6045382449997,
+      "new_weights": 0,
+      "physical_emulators": 1,
+      "preflight_fullholds": 180,
+      "preflight_root_seconds": 147.538396036,
+      "repair_fullholds_already_charged": 900,
+      "state_loads": 0,
+      "terminal_authentication_seconds": 26.551710063999998
+    },
+    "unmetered_prestart_and_offline_engineering_overhead_not_zeroed": true
+  },
+  "current_process_state": {
+    "actual_actors": 0,
+    "all_known_controls_released": true,
+    "fit_processes": 0,
+    "fresh_actors": 0,
+    "native_diagnostics": 0,
+    "source_writer_active": true
+  },
+  "delay_reason": "Native failure terminal/package authentication and scoped first repair checks",
+  "goal_control_status": "blocked_as_reported_by_get_goal_cause_unknown",
+  "goals": [
+    {
+      "id": "funding_recovery",
+      "status": "in_progress",
+      "title": "Repair preserved-save funding/recovery"
+    },
+    {
+      "id": "execution_boundaries",
+      "status": "in_progress",
+      "title": "Harden related execution boundaries"
+    },
+    {
+      "id": "menu_performance",
+      "status": "complete",
+      "title": "Reduce menu and package overhead"
+    },
+    {
+      "id": "training_efficiency",
+      "status": "complete",
+      "title": "Improve useful training/evolution efficiency"
+    },
+    {
+      "id": "two_worker_capacity",
+      "status": "complete",
+      "title": "Qualify two isolated workers"
+    },
+    {
+      "id": "model_decision_quality",
+      "status": "complete",
+      "title": "Improve one demonstrated model weakness"
+    },
+    {
+      "id": "autonomous_acceptance",
+      "status": "in_progress",
+      "title": "Prove frozen autonomous Red completion and reliability"
+    }
+  ],
+  "historical_bounded_component_qualifications": 5,
+  "limitations": [
+    "42targetedchecks are not native qualification/fullsuite/CI.",
+    "One comparative venuechoice proves integration,not actual counterfactual speedup.",
+    "All diagnostic94/8and restored124reference gains remain separate.",
+    "Historical missing TRAINtiming fields remain unknown.",
+    "Goal control unexpectedly reportsblocked;no new accounting goal or scheduler was created to bypass it. Current in-scope work can proceed;automatic continuation state needs truthful reporting."
+  ],
+  "limits": {
+    "engineering_boundary_utc": "2026-10-21T15:08:15.503715+00:00",
+    "fit_cap": 0,
+    "heldout_reliability_starts": 0,
+    "new_fullholds": 0,
+    "official_fresh_successes": 0,
+    "old_actuals_cutoff_sealed": true,
+    "original_F_caps_unchanged": true,
+    "original_absolute_cutoff_utc": "2026-10-22T00:08:15.503715+00:00",
+    "remaining_diagnostic_emulators": 2,
+    "remaining_diagnostic_loads": 2,
+    "repair_remaining_original_subholds": 630
+  },
+  "next_due_utc": "2026-10-21T16:00:19.773019+00:00",
+  "next_sequence": [
+    "Freeze selected two-file candidate over immutable P85 and run appropriate frozen checks.",
+    "Use only original630unspent subhold seconds and atmost2diagnosticcopies/loads for exact-tail recovery and ordinary continuation;retain everyfailure.",
+    "Authenticate qualification and exact inherited same-save DEVELOPMENT continuation plan before any actual launch. Fresh006always staysfailed.",
+    "FinalunchangedfreshChampion/concurrentHOF+124is still required,then preregistered8/10heldoutreliability."
+  ],
+  "not_completion_percentage": true,
+  "number": 43,
+  "observation_delay_seconds": 674.615983,
+  "observed_at_utc": "2026-10-21T14:11:34.389002+00:00",
+  "outcomes": {
+    "accounting": "All11pairedchunks inspected reconcile native attempts with closedchoices plus1compulsorypreface. Final243attempts=215model+27closed support+1mandatorytrainer recovery;its139inputs/12948frames already counted,not added again.",
+    "fresh006": "Authenticated clean power-on/0loads;earned31/124and2badges/cash8005. NativeNoDigCaveerror stopped actor13:33:26UTC. Exact terminal97b8dd4d/context retained,controls/processes released. First guard interruption recovered automatically;second remains unresolved. Sixfreshattemptsfailed,0officialsuccesses/reliabilitystarts.",
+    "learning": "Global14completedfits/18attempts unchanged. ActualXP/registrations are not parameter learning. Among15closed venueevents14wereone-venue support and1comparative d522choice;configuration alone is not learned authority.",
+    "repair": "Two activeCode execution adapters now supply existing cartridge-composed walking recovery for a Cave party without Dig,preserving the Dig path.42focusedtests pass including9newcontracts. P85immutable;candidatefreeze/nativecopyqualification still pending.0newfits/emulators/loads."
+  },
+  "scheduled_anchor_utc": "2026-10-21T14:00:19.773019+00:00",
+  "scheduled_automation_created": false,
+  "schema": "pokemon.windows.seven-goal-self-audit.v1",
+  "time_losses_and_pivots": [
+    "The selected Cave exposed a composition gap:old Dig-bearing training qualification did not prove recovery without Dig. Reuse existing ground navigation instead of restricting the learner or teaching a workaround.",
+    "First161fresh closed outcomes show77.15%execution/22.41%menu;preparation57%of profiledphase time. All35restores changed resources,so raw heal counts alone do not prove wasted trips. This is an early prefix,not campaign timing.",
+    "Prestart package/head/hash/timeout binding rejections were0emulator failures with retained cost. Avoid repeating ad-hoc launch glue.",
+    "Reconciled stale5vs6fresh-counter aliases and the omitted compulsorypreface attribution. Old qualification evidence remains historical;execution goal is reopened rather than calling allfivecomponents working."
+  ],
+  "total_goals": 7,
+  "why_this_advances_autonomy": "The actual fresh run exposed a reusable execution dependency that unit/snapshot qualification had missed. Repairing it through existing navigation lets the learned venue choice remain meaningful without manual input,move teaching,save edits or fit. Full fresh completion is still unproved.",
+  "work_continues_under_standing_user_authority": true
+}

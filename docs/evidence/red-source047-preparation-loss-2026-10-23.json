@@ -1,0 +1,91 @@
+{
+  "actual_registration_delta": 0,
+  "actual_registrations": 63,
+  "adopted_models": 0,
+  "all_native_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "candidate_fits": 1,
+  "costs": {
+    "actual_inputs": 0,
+    "actual_registration_delta": 0,
+    "adopted_models": 0,
+    "candidate_fits": 1,
+    "diagnostic_cross_context_fits": 5,
+    "fit_calls": 6,
+    "fit_parent_seconds": 32.537367329999995,
+    "fit_worker_seconds": 32.290449924,
+    "native_actions": 7353,
+    "native_copies": 15,
+    "native_frames": 679628,
+    "native_preflight_fit_nonoverlapping_measured_seconds": 1011.7293885489999,
+    "native_root_seconds": 575.3103924789999,
+    "native_seconds": 157.92652377100012,
+    "new_TRAIN_rows": 6,
+    "new_models": 6,
+    "preflight_count": 13,
+    "preflight_root_seconds": 403.8816287399999
+  },
+  "diagnostic_fits": 5,
+  "feature_support_max_standardized": {
+    "001": 2.309401076758503,
+    "003": 2.309401076758503,
+    "005": 7.099295739719539,
+    "047": 3.361075583746922,
+    "049": 5.830951894845301
+  },
+  "fit_calls": 6,
+  "fit_gates": {
+    "001_grouped_completion_improves": true,
+    "001_supported_preparation_order": true,
+    "005_supported_tail_order": true,
+    "047_supported_no_benefit_order": false,
+    "049_bite_cash_correction": true,
+    "049_bite_completion_correction": true,
+    "049_bite_physical_cost_correction": true,
+    "049_extra_actions": true,
+    "049_extra_frames": true,
+    "049_supported_order": false,
+    "all16_grouped_calibration_improves": true,
+    "level_physical_cost_retention": true,
+    "older_V9_cost_order_retained": true,
+    "original13_grouped_calibration_retained": false,
+    "projected_single_battle_cash_consistency": true
+  },
+  "focused_checks": {
+    "declared_lead_loss": 351,
+    "indoor": 284,
+    "opening_control": 118,
+    "sleep": 469
+  },
+  "frozen_package_sha256": "44837282ffb908697b352fb42060033f3bbbdd3a793a00c795c262cde1ad8c67",
+  "full_suite": false,
+  "independent_generalization_proved": false,
+  "loco_metrics": {
+    "excluded_context_prediction": {
+      "actions": 120.25946306644883,
+      "cash_debits": 5913.682193662857,
+      "completed": 0.5622272448493943,
+      "frames": 11193.375715894592
+    },
+    "full47_fit_prediction": {
+      "actions": 13.101999657605663,
+      "cash_debits": 632.5176341325653,
+      "completed": 0.12087640629157292,
+      "frames": 1168.106201789957
+    }
+  },
+  "new_models": 6,
+  "new_native_TRAIN_rows": 6,
+  "observed_at_utc": "2026-10-23T07:02:04.340745+00:00",
+  "official_acceptance": false,
+  "outer_funding_loss_native_qualified": true,
+  "private_closeout_sha256": "f1cc9aaa34af913a4038c56c0e5782af484963c19d2c3b7db9038b048f052d7a",
+  "retained_openings_exact": 46,
+  "schema": "pokemon.red.source047-preparation-and-loss-closeout.v1",
+  "source010_battle_qualified": false,
+  "source010_discovery_qualified": true,
+  "source047_each_arm_wins": 3,
+  "source047_extra_lesson_actions": 404,
+  "source047_extra_lesson_frames": 32484,
+  "source047_taught_move_uses": 0
+}

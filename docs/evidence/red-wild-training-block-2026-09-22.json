@@ -1,0 +1,82 @@
+{
+  "schema": "pokemon.red.wild-training-block.public.v1",
+  "date": "2026-09-22",
+  "partition": "DEVELOPMENT",
+  "status": "stopped_execution_failure",
+  "source_commit": "f510ebb3",
+  "private_audit_sha256": "77e0f87a1b4afb010a84ca98cc9f22018f4f9760d5e867c2fd8ab22c74404c4b",
+  "origin_sha256": "f782af104c984a3e47e1fa2f599544e81f2b78c2638d61b7cda5d02256f5ecc1",
+  "terminal_sha256": "fa1cd694734bcf5893cb9a6e8cc571173de4ddeb46f15f3723f41f6950631ddb",
+  "envelope_sha256": "cf0fdfbd2b3a80be92b5d165d98acc97867e2948e26e93395c615362ddbfa03f",
+  "outings": 2,
+  "wild_wins": 3,
+  "unfinished_battles": 1,
+  "recorded_model_choices": 16,
+  "completed_model_decisions": 15,
+  "pending_choice": {
+    "stage": 67,
+    "battle": 3,
+    "decision": 4,
+    "party_slot": 3,
+    "species": "Farfetch'd",
+    "must_preserve": true
+  },
+  "actions": 1237,
+  "frames": 79512,
+  "reserve_xp": 681,
+  "carry_xp": 0,
+  "cash_before": 4583,
+  "cash_after": 4583,
+  "faints": 1,
+  "healed_returns": 1,
+  "party": [
+    {
+      "species": "Diglett",
+      "level": 24,
+      "xp_delta": 273,
+      "hp": 0
+    },
+    {
+      "species": "Blastoise",
+      "level": 45,
+      "xp_delta": 0,
+      "hp": 140
+    },
+    {
+      "species": "Farfetch'd",
+      "level_before": 24,
+      "level": 25,
+      "xp_delta": 408,
+      "hp": 27
+    },
+    {
+      "species": "Jolteon",
+      "level": 26,
+      "xp_delta": 0,
+      "hp": 71
+    }
+  ],
+  "verified_predictions": {
+    "attacks": 7,
+    "controls": 8,
+    "switches": 9
+  },
+  "targeted_tests_passed": 663,
+  "correction": "Recognize wild Use next Pokemon Yes/No prompt before forced party selection.",
+  "retained_prompt_read_only_verified": true,
+  "corrected_native_execution_verified": false,
+  "fits": 0,
+  "story_delta": 0,
+  "registrations_delta": 0,
+  "sales": 0,
+  "purchases": 0,
+  "authority": "Frozen K attacks/switches; teacher preparation, trainee, venue, navigation, healing and transit flee.",
+  "limitations": [
+    "Terminal remains in battle; no defeat or recovered endpoint claim.",
+    "Sequential development sample; no independent qualification.",
+    "Pokemon XP is not model weight learning.",
+    "Sustained grinding not qualified; third outing not launched.",
+    "Prior Route11 pilot 386 XP/48660 frames; current incomplete return prevents a fair throughput comparison."
+  ],
+  "next": "Authenticate retained pending slot3 decision, complete its execution, settle current battle and recover normally without replay or replacement choice."
+}

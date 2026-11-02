@@ -1,0 +1,100 @@
+{
+  "active_emulator_loads": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 22,
+  "actual_running": false,
+  "all_failed_attempts_retained": true,
+  "block_inclusive_seconds": 5474.842903003,
+  "candidate_package_sha256": "55f0230d3d546556f470a96423388249fc17c9747145d2e32ead535b88efc735",
+  "changed_learned_parameters": 278,
+  "closed_emulator_loads": 4,
+  "current_work": "Frozen candidate closed at1of3gates. MID Gate1passed; MID/LATE model-owned qualifying story and useful stopping unproved. LATE member-direct productive partial caused one nonordinary verification failure. Narrow source repair passes283focusedchecks and exact saved-receipt replay; new native qualification pending.",
+  "emulator_loads": 4,
+  "exact_repair_replay_sha256": "6eb08c6e94eb78e275e6f0aaae538943c3b576bbd5c7ffa125275c89fa3435ad",
+  "failed_preinput_attempts": 1,
+  "fit_model_sha256": "e9941ec1748cfef829f344e0503f3310204ab47077ebc1c5bb4eec4f5e427159",
+  "gate3_stopping_chain_verified": false,
+  "gate_criteria_sha256": "0840ed0391d5c46de5288ee88e29c77dcaf3dfb44f244af5e96dc44232cc020e",
+  "gates_passed": 1,
+  "gates_required": 3,
+  "late_badges": 8,
+  "late_execution_exceptions": 0,
+  "late_margins_improved": 8,
+  "late_model_choices": 41,
+  "late_native_minutes": 29.982963552366588,
+  "late_nonordinary_verification_failures": 1,
+  "late_registrations_end": 116,
+  "late_registrations_start": 116,
+  "late_story_argmax": 0,
+  "late_support_choices": 67,
+  "mid_badges_end": 7,
+  "mid_badges_start": 6,
+  "mid_blaine_model_owned": false,
+  "mid_execution_errors": 0,
+  "mid_gate_adjudication_sha256": "0646a8c4b9fae1d42396455e15c7a7ce80bcf5d21c9e6a9331b092e00fbe1c59",
+  "mid_model_choices": 107,
+  "mid_native_minutes": 53.078413860799934,
+  "mid_registrations_end": 92,
+  "mid_registrations_start": 68,
+  "mid_support_choices": 27,
+  "mission_id": "noncombat-story-learning-20261029-0751",
+  "native_lesson_actions": 59,
+  "native_lesson_frames": 1512,
+  "new_TRAIN_rows": 1,
+  "new_fits": 2,
+  "new_source_native_qualification_pending": true,
+  "no_DEVELOPMENT_fitting": true,
+  "no_publication": true,
+  "observed_at_utc": "2026-10-29T10:36:28.200023+00:00",
+  "one_native_actor": true,
+  "package_sha256": "29ae4db4dbd529dcf0906a182dce68d9dd5537e0967028c67936a679a9c16c58",
+  "parameter_changes": {
+    "action_cost": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "completion_gain": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "dependency_unlock_gain": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "frame_cost": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "irreversible_loss": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "party_cost": {
+      "absolute_delta_above_1e_minus_10": 59,
+      "changed_values": 245
+    },
+    "resource_cost": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "storage_cost": {
+      "absolute_delta_above_1e_minus_10": 0,
+      "changed_values": 0
+    },
+    "verified_success": {
+      "absolute_delta_above_1e_minus_10": 18,
+      "changed_values": 33
+    }
+  },
+  "partition": "separate_authenticated_TRAIN_and_exposed_DEVELOPMENT",
+  "previous_turn": "verified_progress",
+  "prior_late_raw_success_regressions": 8,
+  "prior_mid_execution_errors": 0,
+  "prior_mid_native_minutes": 46.88803213808327,
+  "prior_mid_story_milestones": 0,
+  "repair_focused_tests": 283,
+  "repair_source_sha256": "ddc96d7f2f039ce0fd3d0890118b593addcb1dd1f80f02d0082d5d309e73a209",
+  "schema": "pokemon.noncombat-story-learning-status.v1",
+  "useful_TM91_execution_verified": true,
+  "worker2_off": true
+}

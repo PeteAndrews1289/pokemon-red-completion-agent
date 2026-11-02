@@ -1,0 +1,221 @@
+{
+  "schema": "pokemon.red.development-work-block-result.v1",
+  "status": "closed_earned_native_collection_and_data_audit",
+  "session_id": "2026-10-09-earned-collection-completion-and-audit",
+  "partition": "development",
+  "correlated_continuation": true,
+  "independent_evaluation": false,
+  "final_autonomy": false,
+  "source": {
+    "family": "red-earned-collection-completion-20261009-v1",
+    "initial_registrations": 81,
+    "initial_cash": 0,
+    "state_sha256": "c1f8a701c8e12a105eb147331ef059e5765093cdce3e4ac205a9fadc87e24fa6"
+  },
+  "terminal": {
+    "segment": "segment-029",
+    "registrations": 124,
+    "remaining_native_route_registrations": 0,
+    "cash": 13062,
+    "map_id": 133,
+    "map_name": "CELADON_POKECENTER",
+    "at_yx": [
+      3,
+      3
+    ],
+    "party_levels": [
+      100,
+      69,
+      68,
+      70,
+      75,
+      55
+    ],
+    "whole_party_restored": true,
+    "field_ready": true,
+    "worker_stopped": true,
+    "controls_released": true,
+    "state_sha256": "3d3b8b100e7a14ccb572600fd0e5940aeff40d9a8e8c6f9f5dba2e0b4a4ddd8a",
+    "context_sha256": "fc371a15e9c7a99b37ff63c738ed6cfec0d22d2158b2585871a89c438da9f78d",
+    "result_sha256": "2b6c89556c5e9a3a526e6c8f29461b074b1872ce91726cf5f47dbc09aeb1f2ce",
+    "final_stop_reason": "curriculum_complete"
+  },
+  "registration_delta": {
+    "total": 43,
+    "during_model_owned_goals": 41,
+    "during_singleton_support": 2,
+    "singleton_registrations": [
+      121,
+      146
+    ],
+    "combined_previous_and_current_blocks": {
+      "initial_registrations": 33,
+      "final_registrations": 124,
+      "total": 91,
+      "during_model_owned_goals": 87,
+      "during_singleton_support": 4
+    },
+    "legendary_goal_authority": {
+      "mewtwo": "model",
+      "zapdos": "model",
+      "articuno": "model",
+      "moltres": "forced_singleton_support"
+    },
+    "physical_poliwhirl_reacquisition": {
+      "model_selected": true,
+      "new_registrations": 0,
+      "physical_acquisitions": 1,
+      "subsequent_poliwrath_registration": true
+    }
+  },
+  "outcomes": {
+    "executed_goals": 156,
+    "model_owned_goals": 123,
+    "support_goals": 33,
+    "successes": 115,
+    "ordinary_failed_verifications": 20,
+    "other_failed_verifications": 6,
+    "execution_errors": 15,
+    "separate_menu_admission_stops": 6,
+    "charged_decision_attempts": 160,
+    "all_original_failures_and_costs_retained": true,
+    "execution_errors_are_not_all_software_defects": true
+  },
+  "learning": {
+    "admitted_train_delta": 0,
+    "fit_delta": 0,
+    "model_examples": 151,
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "train_corpus_sha256": "70f6971f82df7757f4ae6a2a607c2c0d729c796a52ff6b1d7a49abe03d6597ce",
+    "configuration_sha256": "0f0172bddc974b3619eb0e6cff29792ae7587aa51516549cca46ea21c476d974",
+    "automatic_online_weight_updates": false,
+    "development_fitting": false,
+    "runtime_llm_calls": 0,
+    "official_authority_promotions": 0
+  },
+  "block_costs": {
+    "actions": 362208,
+    "frames": 28917260,
+    "decision_attempts": 160,
+    "restore_attempts": 192,
+    "cash_debits": 467182,
+    "native_accounted_seconds": 13238.541585829924,
+    "native_seconds_are_not_total_block_wall_time": true,
+    "post_completion_census_seconds_separate": 12.952612416935153
+  },
+  "lifetime_costs": {
+    "actions": 1449399,
+    "frames": 119612777,
+    "decision_attempts": 1905,
+    "restore_attempts": 1432,
+    "cash_debits": 794292,
+    "native_accounted_seconds": 88285.22244337585
+  },
+  "verification": {
+    "exact_terminal_reload_passed": true,
+    "reload_inputs": 0,
+    "reload_frames": 0,
+    "all_124_required_local_flags": true,
+    "all_four_legendary_sources_registered_and_consumed": true,
+    "all_four_physical_legendary_specimens": true,
+    "original_roster_retained_and_restored": true,
+    "protected_pins_verified": 21,
+    "protected_main_registrations": 32,
+    "protected_main_changed": false,
+    "save_progress_merged": false,
+    "copy_back": false,
+    "item_sales_or_injected_player_money": false,
+    "publication": false,
+    "full_suite_ci_claim": false,
+    "focused_rom_free_tests_passed": 1083,
+    "focused_test_seconds": 5.53,
+    "census_result_sha256": "2bce76a887e1d27fb601e8364436e0a397ef0f8529bafcd3b2d1e81badd67e90",
+    "census_executed_source_sha256": "58ad2e12b17b34aedaac9576c0afb195ae931410d0bf22831cafa78d286a93f2",
+    "champion_hof_ancestry": {
+      "authenticated_nodes": 90,
+      "verified_parent_links": 89,
+      "all_source_states_match_authenticated_parent": true,
+      "all_lifetime_costs_monotonic": true,
+      "concurrent_champion_and_hall_of_fame": true,
+      "champion_outcome_sha256": "912fd869178d6552f09a03752cae11bc83a3be96d8d4312401d59e9c11441cf5",
+      "champion_state_sha256": "79a057796d8c960bbe418b188e29f1a4b98b0ecc01732e6087490bfaa75b4e04",
+      "champion_goal_attribution": "forced_singleton_support"
+    }
+  },
+  "audit": {
+    "scope": "Two recent related collection families, their goal/selection/encounter/exclusion/cost records and K battle logs, all151 current TRAIN examples, exact completion reload and authenticated Champion ancestry. This is not an exhaustive census of every historical file.",
+    "review_sha256": "8950e0234db3402243a66fdd68b2f75c35b7555fb000697dbc9ff8d5fe59dfa6",
+    "analysis_rows": 11,
+    "combined_goal_outcomes": 434,
+    "combined_model_goals": 359,
+    "combined_support_goals": 75,
+    "combined_successes": 285,
+    "combined_ordinary_misses": 102,
+    "combined_other_failed_verifications": 11,
+    "combined_execution_errors": 36,
+    "combined_menu_admission_stops": 15,
+    "current_phase_seconds": {
+      "execution": 9091.657123742974,
+      "menu_and_boundary_observation": 4030.693552451092,
+      "selection_and_receipt": 1.3029012011829764
+    },
+    "current_candidate_rows": 938,
+    "current_success_head_clipped_rows": 703,
+    "current_acquisition_rows": 390,
+    "current_acquisition_success_head_above_one": 319,
+    "current_acquisition_selected_arm": {
+      "observations": 42,
+      "successes": 23,
+      "mean_bounded_score": 0.9769467027197707,
+      "observed_success_rate": 0.5476190476190477,
+      "sample_biased_and_correlated": true,
+      "scores_are_not_calibrated_probabilities": true,
+      "includes_one_physical_dependency_capture": true
+    },
+    "train_design": {
+      "examples": 151,
+      "comparative_examples": 137,
+      "curriculum_examples": 14,
+      "varying_features": 60,
+      "weighted_design_columns": 61,
+      "rank": 37,
+      "train_nearest_joint_distance_median": 0.32833947167289074,
+      "live_acquisition_nearest_train_joint_distance_median": 85.51782771249708,
+      "distance_is_not_uncertainty_or_causal_proof": true
+    },
+    "selection_pressure": {
+      "exploration_menus": 123,
+      "argmax_selected": 33,
+      "median_peak_probability_over_uniform": 1.5707700032702285,
+      "median_effective_choice_fraction": 0.9381789754763505,
+      "offline_argmax_changes_without_success_term": 37,
+      "offline_sensitivity_is_not_native_counterfactual": true
+    },
+    "current_frozen_battler": {
+      "episodes": 87,
+      "verified_event_chains": 87,
+      "native_actor_wins": 85,
+      "failed_runs": 1,
+      "remaining_nonwin_records": 1,
+      "decisions": 1420,
+      "type_immune_attacks": 0,
+      "teacher_queries": 0,
+      "memory_write_actions": 0,
+      "authority_promotions": 0,
+      "policy_seconds": 2.352667745,
+      "not_independent_win_rate_evaluation": true
+    }
+  },
+  "limitations": [
+    "Adaptive source repairs and operator checkpoint resumptions prevent final frozen-autonomy acceptance.",
+    "No new TRAIN outcomes or weights were created during either collection block.",
+    "Inner capture, status/ball preparation, grinding, nursing, routes, menus and singleton actions remain disclosed mechanics.",
+    "The original-roster/loan constraints and heavily earned levels limit general party-development claims.",
+    "Exact private helper import closure and unattended recovery/startup assembly still need packaging; launcher pins do not cover every transitive helper.",
+    "The successful physical-precursor fishing trial originally projected its intermediate as completion gain. A post-run ROM-free correction moves that gain to dependency unlock; original decisions/results remain unchanged and are not fitted.",
+    "Unknown one-off/unsafe loan recovery is not automatically qualified by the successful legendary captures.",
+    "Focused tests are not full-suite, typing or hosted CI success.",
+    "All five official fresh-Red criteria remain unadvanced; ROM hack,Crystal and Emerald are deferred."
+  ],
+  "decision": "Stop replaying Red to rediscover coverage. Use the existing learner and authenticated TRAIN bridge for a focused, full-retention capture/readiness/resource contrast experiment, then close persistent assembly/recovery before an explicitly authorized frozen fresh run. No new sequence learner, battler or logging system."
+}

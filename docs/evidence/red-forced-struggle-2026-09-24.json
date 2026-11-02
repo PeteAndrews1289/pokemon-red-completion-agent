@@ -1,0 +1,74 @@
+{
+  "schema": "pokemon.red.forced-struggle-qualification.v1",
+  "session_id": "2026-09-24-forced-struggle",
+  "classification": "TRAIN mechanics maintenance unblocking switch/control learning",
+  "counts": {
+    "actions": 73,
+    "cases": 6,
+    "forced_mechanics": 6,
+    "frames": 6370,
+    "learner_choices": 0,
+    "pp_spent": 0
+  },
+  "endpoints": [
+    {
+      "case": "recoil",
+      "episode_sha256": "2f7f942c6abd9ce28978551140269f987019ca92a2fb610f79f0a27e9be31cc3",
+      "state_sha256": "8008ca2853f31630a4fb61e222ff29e7ae813e50627cdf21c00250a1570997eb"
+    },
+    {
+      "case": "own_faint",
+      "episode_sha256": "a254cb405a8f76a18c158be45be4860d5ac93b0ae94d78bbb53146b4a91c728f",
+      "state_sha256": "5851c2317797218f74673b548abd713616a94bf5b157d7202f2ddaf414b07a20"
+    },
+    {
+      "case": "enemy_ko",
+      "episode_sha256": "a95fde10e3671f655105d15886f3316e4f67ba0501c37cfbbe8c4f82a7513d2b",
+      "state_sha256": "37cb4e39d3ad26248425bd1f48aaa8a6ce0ffda9e8086b1ecd19019e05ac05f5"
+    },
+    {
+      "case": "ghost_immunity",
+      "episode_sha256": "d2ca2474a8f910baad25b862c5c653fbf20b142217b9e6d30cd8b3de9b2f4375",
+      "state_sha256": "8a9e9743482f698fbc8d852156f253347452bef01758ae3871eee495e894f3e3"
+    },
+    {
+      "case": "sleep",
+      "episode_sha256": "0bfcb3bac22c6249fa7167670b809727ee6cd4c3ae27af38397cc68d8d43e0a1",
+      "state_sha256": "d0f97b24f448206aa2f289dbf61060fa27006bc65f78df9586d1fe82d5d21f21"
+    },
+    {
+      "case": "both_low_hp",
+      "episode_sha256": "213bd1d804a2cd48d2b9971565681ed9417966183f0e154008f8719d2de09227",
+      "state_sha256": "4a6022201db7ed475ac8caacfc51091ecadd27d4d86e9f5d436f156c59f1435b"
+    }
+  ],
+  "fits": 0,
+  "passed": true,
+  "plan_sha256": "2ddef26c88a2eaddba046b16d0d29935e454a505753ed4f17a58147f016a8c5d",
+  "result_sha256": "6035c5a382822f83fe903f12c00dff6c53cfdc52ad817ddf3387fd41bf68f566",
+  "scope": "TRAIN singleton zero-PP continuation only",
+  "story_inputs": 0,
+  "new_model_fits": 0,
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "focused_tests_passed": 501,
+  "full_suite_rerun": false,
+  "prior_failures_preserved": [
+    "v1: setup requires at least two actor moves; zero inputs",
+    "v2: custom trainer stats prohibited; zero inputs",
+    "v3: terminal clears active identity and scripted healing restores PP",
+    "v4: sleep skips native move selection"
+  ],
+  "limits": [
+    "TRAIN-only opt-in; no living reserves and all actual PP exhausted",
+    "Disabled positive-PP moves are excluded",
+    "Sleep/freeze/trapping suppression is logged without claiming move selection",
+    "Ghost immunity is native; no type-independent damage is invented",
+    "No learned Struggle-vs-switch ranking or campaign integration"
+  ],
+  "next": "Proceed with fresh frozen switch/control step-2 packet; no old packet replay",
+  "gameplay_running": false,
+  "publication": false,
+  "external_agents": false
+}

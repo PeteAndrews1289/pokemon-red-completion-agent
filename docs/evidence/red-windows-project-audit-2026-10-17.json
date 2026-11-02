@@ -1,0 +1,157 @@
+{
+  "actual_admission_errors": 1,
+  "actual_cutoff_utc": "2026-10-17T07:49:36.070458+00:00",
+  "actual_execution_errors": 0,
+  "actual_final_costs": {
+    "actions": 1070390,
+    "cash_debits": 201379,
+    "decisions": 1245,
+    "frames": 86853204,
+    "heals": 1165,
+    "seconds": 23567.44914841741
+  },
+  "actual_native_authentication_sha256": "7a5ee347ad357e680250abd92df8d710792dcb8db93de083497ccdc926d9bb85",
+  "actual_native_badges": 8,
+  "actual_native_observation_utc": "2026-10-17T05:01:23.889780+00:00",
+  "actual_native_registrations": 117,
+  "actual_ordinary_setbacks": 3,
+  "actual_running": false,
+  "actual_terminal_context_sha256": "e30c63765e994c0ac797125489122641c059e82b9312a9663e90a8c2af50fcb6",
+  "actual_terminal_state_sha256": "fc9712c0e1fff89473b7592017e9cf8fe5457554be19b4ab474168d3c286f545",
+  "all_historical_train_corpora_verified": false,
+  "audit_player_source_scope_proof_sha256": "4ace42be5a4ef3370e09854c09dad3ea11eb91656ca034489f1b21e477eccd4a",
+  "audit_scope": "Runtime and provenance,local model/support authority,closed native costs,Git/test state,migration availability,hardware and post-run gates.",
+  "audit_source_inventory_count": 2293,
+  "benchmark_actors_started": 0,
+  "copied_gains_imported": false,
+  "critical_working_assets_present": true,
+  "current_blocker": "Empty postgame native menu in Celadon GameCorner after coin procurement.",
+  "executables_changed": false,
+  "fits": 0,
+  "fresh_completion_gates_advanced": 0,
+  "frozen_package_models_configuration_unchanged": true,
+  "full_suite_run": false,
+  "hardware": {
+    "cores": 12,
+    "cpu": "AMD Ryzen9 9900X",
+    "gpu": "NVIDIA GeForce RTX5060 Ti",
+    "installed_ram_class_gib": 32,
+    "threads": 24,
+    "vram_mib": 16311,
+    "worker_rss_bytes": 3468701696,
+    "wsl_memory_bytes": 16310595584
+  },
+  "historical_transfer_complete": false,
+  "master_ball_spent_natively_on_mewtwo": true,
+  "native_champion_concurrent_hof_verified": true,
+  "native_mewtwo_verified": true,
+  "new_train_examples": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-17T05:10:51.102490+00:00",
+  "parallel_trials_started": false,
+  "partition": "development",
+  "post_run_priorities": [
+    "Seal actual and source recovery point",
+    "Qualify known boundary contracts",
+    "Profile and improve menu,package and preparation cost",
+    "Benchmark one versus two workers after existing boundary",
+    "Target one verified TRAIN-only decision gap",
+    "Separately authorized unchanged fresh acceptance",
+    "Reliability then compatible hack,Crystal,Emerald"
+  ],
+  "preaudit_git_status_counts": {
+    "deleted_tracked": 38,
+    "modified_tracked": 361,
+    "untracked": 515
+  },
+  "restored_development_not_fresh_acceptance": true,
+  "runtime_llm_calls": 0,
+  "runtime_package_file_pins": 690983,
+  "runtime_package_history_file_pins": 683105,
+  "runtime_package_manifest_bytes": 208754994,
+  "schema": "pokemon.red.windows-project-audit.v1",
+  "seven_remaining": [
+    "Porygon",
+    "Articuno",
+    "Zapdos",
+    "Moltres",
+    "Dratini",
+    "Dragonair",
+    "Dragonite"
+  ],
+  "source_module_count": 748,
+  "terminal_authentication_sha256": "554fc5d4994075616c62b63af1446bf40b9184334f948d02e4b9297c752694bc",
+  "terminal_observed_at_utc": "2026-10-17T05:16:22.205727+00:00",
+  "test_module_count": 1175,
+  "v7_phase_sample": {
+    "execution_fraction_of_measured": 0.3685145077290116,
+    "execution_seconds": 1234.609174643996,
+    "frames": 4850256,
+    "measured_phase_total_seconds": 3338.3028472209953,
+    "menu_fraction_of_measured": 0.6299633165078732,
+    "model_mode_counts": {
+      "None": 6,
+      "model_exploration": 88
+    },
+    "phase_counts": {
+      "None": 64,
+      "badge-corridor": 3,
+      "first-switch": 1,
+      "route22-return": 16,
+      "route22-return-fly": 7,
+      "second-switch": 1,
+      "stairs-second-switch": 1,
+      "teach-strength": 1
+    },
+    "phase_seconds": {
+      "execution": 1230.213030394003,
+      "menu_and_boundary_observation": 2103.008333143014,
+      "outcome_diagnostics": 0.6423937649742584,
+      "selection_and_receipt": 0.3025028409938386,
+      "selection_diagnostics": 0.645202336992952,
+      "terminal_observation": 2.732702157998574,
+      "verification": 0.7586825830185262
+    },
+    "rows": 94,
+    "unmeasured_phase_counts": {
+      "verification": 1
+    }
+  },
+  "v8_partial_phase_sample": {
+    "execution_fraction_of_measured": 0.2636745454061202,
+    "execution_seconds": 403.9558764619869,
+    "frames": 1675116,
+    "measured_phase_total_seconds": 1516.1580864669559,
+    "menu_fraction_of_measured": 0.7334611901885111,
+    "model_mode_counts": {
+      "None": 61,
+      "model_exploration": 41
+    },
+    "phase_counts": {
+      "None": 32,
+      "badge-corridor": 9,
+      "boulder-drop": 1,
+      "final-switch": 1,
+      "first-switch": 7,
+      "follow-dropped-boulder": 1,
+      "reach-indigo": 4,
+      "route22-return": 14,
+      "route22-return-fly": 10,
+      "second-switch": 7,
+      "stairs-second-switch": 7,
+      "stairs-third-switch": 5,
+      "third-switch": 4
+    },
+    "phase_seconds": {
+      "execution": 399.7722942129876,
+      "menu_and_boundary_observation": 1112.043114613989,
+      "outcome_diagnostics": 0.04204873798880726,
+      "selection_and_receipt": 0.2114920610183617,
+      "selection_diagnostics": 0.22206832401934662,
+      "terminal_observation": 3.0369615129893646,
+      "verification": 0.8301070039633487
+    },
+    "rows": 102,
+    "unmeasured_phase_counts": {}
+  }
+}

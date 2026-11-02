@@ -1,0 +1,177 @@
+{
+  "actions": 1005,
+  "cash_after": 2398,
+  "cash_before": 1478,
+  "envelope_sha256": "30d6bee025a74e140fc05a4375f80953b666d075e26044c6612b35c47859ce47",
+  "episodes": [
+    {
+      "actions": {
+        "attack": 6,
+        "forced_switch": 1,
+        "switch_prompt": 0,
+        "voluntary_switch": 5
+      },
+      "decisions": 12,
+      "metrics": {
+        "attack_turn_utility_sum": -0.9995014955134596,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 2,
+        "opponent_faints": 1,
+        "party_faints": 1,
+        "party_hp_lost": 115,
+        "party_pp_spent": 4,
+        "party_status_changes": 7,
+        "policy_latency_ns_max": 3681958,
+        "policy_latency_ns_mean": 1079326.4166666667,
+        "policy_latency_ns_min": 255959,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "3a0a6f222ccc84378e4cb11d0da5a1955831d83c624507905b4e2f8871648c36",
+      "stage": 54
+    },
+    {
+      "actions": {
+        "attack": 3,
+        "forced_switch": 0,
+        "switch_prompt": 1,
+        "voluntary_switch": 2
+      },
+      "decisions": 6,
+      "metrics": {
+        "attack_turn_utility_sum": 5.868852459016393,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 21,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 1894917,
+        "policy_latency_ns_mean": 1010361.1666666666,
+        "policy_latency_ns_min": 505792,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "925c3bccf6029347fd9aa66c766c7ca261c3d3ffabaf92849d0e503d57017382",
+      "stage": 55
+    },
+    {
+      "actions": {
+        "attack": 5,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 4
+      },
+      "decisions": 9,
+      "metrics": {
+        "attack_turn_utility_sum": 2.5465284474445515,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 48,
+        "party_pp_spent": 5,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 3415750,
+        "policy_latency_ns_mean": 1100370.2222222222,
+        "policy_latency_ns_min": 426084,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "05c3562e17d8f5cd373b31f1f1dc2a6f9e167094e2365cca74d26c63765e11d8",
+      "stage": 56
+    }
+  ],
+  "faints": 1,
+  "fits": 0,
+  "frames": 78948,
+  "learned_preparation": false,
+  "model_decisions": 27,
+  "native_audit_frames": 0,
+  "net_income": 920,
+  "origin_sha256": "273b78f0723d7aa105e1bc1a38969383353eced1b0e32e4c3feb507067e6ddd0",
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 28,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 23,
+      "level_before": 22,
+      "species_id": 64,
+      "xp_gained": 868
+    },
+    {
+      "level_after": 22,
+      "level_before": 22,
+      "species_id": 59,
+      "xp_gained": 376
+    },
+    {
+      "level_after": 25,
+      "level_before": 25,
+      "species_id": 104,
+      "xp_gained": 483
+    }
+  ],
+  "purchases": 0,
+  "sales": 0,
+  "schema": "pokemon.red.party-preparation-native-pilot.v1",
+  "stages": [
+    {
+      "actions": 6,
+      "cash": 1478,
+      "frames": 240,
+      "seconds": 0.09304174967110157,
+      "sha256": "aac6a7b88b65077a7dade60ffd6e1eb36d0f28711c7461eb3d4239a2f6d6f550",
+      "stage": 53
+    },
+    {
+      "actions": 416,
+      "cash": 1678,
+      "frames": 34416,
+      "seconds": 3.058445041999221,
+      "sha256": "08e5f5282cd65f2e92b2040feba5a26a5b9b19d21fdd5c875b2846879ce76b63",
+      "stage": 54
+    },
+    {
+      "actions": 269,
+      "cash": 1998,
+      "frames": 20232,
+      "seconds": 2.325476040598005,
+      "sha256": "1edcd9c6355d0a26028876ea5da8866c2013cf7de6371d08a4db0391e4e11aae",
+      "stage": 55
+    },
+    {
+      "actions": 314,
+      "cash": 2398,
+      "frames": 24060,
+      "seconds": 2.4838244169950485,
+      "sha256": "8620309ea3a41fe491a779278e85510175ce578f7da8a7872d4229200972a3bb",
+      "stage": 56
+    }
+  ],
+  "teacher_battle_choices": 0,
+  "terminal_sha256": "8620309ea3a41fe491a779278e85510175ce578f7da8a7872d4229200972a3bb",
+  "trainees_rotated": 3,
+  "trainer_wins": 3,
+  "verified": {
+    "attacks_reprojected": 14,
+    "controls_recomputed": 15,
+    "switches_recomputed": 12
+  },
+  "whole_excursion_seconds": 7.960787249263376,
+  "targeted_tests_passed": 310,
+  "all_six_pre_post_states_full_hp_status_pp": true,
+  "pilot_stop_reason": "attempt budget",
+  "story_objectives_delta": 0,
+  "registrations_delta": 0,
+  "native_run_source_commit": "e8d0c253",
+  "post_pilot_hardening": "Strict full-party PP admission added and regression tested; all six actual pre/post pilot states independently satisfy it. No replay.",
+  "limitations": [
+    "Teacher selects trainee and venue; learned preparation not demonstrated.",
+    "Three wins are a bounded native pilot, not broad battle qualification.",
+    "Provisional level targets remain unmet; no boss retry or model fit."
+  ]
+}

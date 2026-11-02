@@ -1,0 +1,293 @@
+{
+  "audit": {
+    "construction_failure_not_charged_as_unexecuted_goal": true,
+    "forward_nodes": [
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "9478801a66e79cfc6423fd370e1e0295860ed02d345759661a79a9c40218ad1c",
+        "model_goals": 10,
+        "node": "segment-001",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "8a1b77f479c71af3723bf5699619abf89a5dde300728925e21e7395b3f0d2909",
+        "stop_reason": "operator_interrupt_between_goals_preserved",
+        "support_goals": 0
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "f809ff3d1811a2b8f5e6dfe9cad025b0ed9de1660c80a869b39f7542fa40e5cb",
+        "model_goals": 8,
+        "node": "segment-002",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "98948b6611e76ec08e3868a698ac296a39a88fbbb8bb493962ace55b07ecad87",
+        "stop_reason": "execution_failed",
+        "support_goals": 1
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "fa67bd1546ef9215836ad7e4ae7c547ed16b5b5fee42ed7838683e0448a373ce",
+        "model_goals": 1,
+        "node": "segment-003",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "d0a634f045459744a66bc62b3e82906a6512c030adb573247ba7d2c7cc8d56b4",
+        "stop_reason": "decision_budget",
+        "support_goals": 1
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "7edcfeea9dd843834789d12a7877e18e29f269db84acee43ef37c05e4771aae3",
+        "model_goals": 4,
+        "node": "segment-004",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "822e02171ed59f4a99f28466df815fee9a736a63a1bb5f85e205e3db4ca16edc",
+        "stop_reason": "operator_interrupt_between_goals_preserved",
+        "support_goals": 0
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "b81fbcefda6d47484b4a7b1bff5aa2331ad5ca608c7596f1004509594b4ff7ea",
+        "model_goals": 3,
+        "node": "segment-005",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "d1f18960b9b5e33c1f90d6d246a46bf9b1e4568bac467cdac27b7953f5ef7c73",
+        "stop_reason": "menu_unavailable",
+        "support_goals": 1
+      },
+      {
+        "active_preparation_restored": false,
+        "context_sha256": "bc5865e2dcf13d2da0c7b371c1126f152b2ea8edb1b5b11a3df7cc544da0d276",
+        "model_goals": 3,
+        "node": "segment-006",
+        "original_member_physically_boxed_verified": true,
+        "state_sha256": "89dbff678ade2a814a0b49affa57b7e1af47ccc2c6ed716b8773fe253ae8ed94",
+        "stop_reason": "execution_failed",
+        "support_goals": 0
+      },
+      {
+        "active_preparation_restored": false,
+        "context_sha256": "bc5865e2dcf13d2da0c7b371c1126f152b2ea8edb1b5b11a3df7cc544da0d276",
+        "model_goals": 0,
+        "node": "segment-007",
+        "original_member_physically_boxed_verified": true,
+        "state_sha256": "89dbff678ade2a814a0b49affa57b7e1af47ccc2c6ed716b8773fe253ae8ed94",
+        "stop_reason": "construction_failed_before_inputs",
+        "support_goals": 0
+      },
+      {
+        "active_preparation_restored": false,
+        "context_sha256": "ab8b9b5833cc7f65ed8d808b1041029199e06c66ea92e8ac03877c9e57450962",
+        "model_goals": 0,
+        "node": "segment-008",
+        "original_member_physically_boxed_verified": true,
+        "state_sha256": "89dbff678ade2a814a0b49affa57b7e1af47ccc2c6ed716b8773fe253ae8ed94",
+        "stop_reason": "supplied_party_return_failed",
+        "support_goals": 1
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "68b47e69fd305107c1ef353b6deca5058771cfe268702324e44319e27a4ed8bb",
+        "model_goals": 0,
+        "node": "segment-009",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "8c426e5deb6485b7a37a8308fce92b5cee57d4eca3552466e235e4233c187299",
+        "stop_reason": "supplied_party_return_complete",
+        "support_goals": 1
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "055347c1743b63e21ee491976c8d0e30db1993bb8a5e90ddea4be909b644b42f",
+        "model_goals": 1,
+        "node": "segment-010",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "18f95cfdb6e154511f56a4ac099abe6f9c3ccef3baf45b6f6acaf5fba75ff797",
+        "stop_reason": "menu_unavailable",
+        "support_goals": 0
+      },
+      {
+        "active_preparation_restored": true,
+        "context_sha256": "846927c5c7bb7b405249c82d27801a74d4c0d9ed09486d4ec937b812d896ad74",
+        "model_goals": 0,
+        "node": "segment-011",
+        "original_member_physically_boxed_verified": false,
+        "state_sha256": "08f7dc316e66d18595659ffe63ad283aa7628027a22b38a1e301015c89726d73",
+        "stop_reason": "curriculum_complete",
+        "support_goals": 1
+      }
+    ],
+    "frames": 0,
+    "inputs": 0,
+    "model_queries": 0,
+    "passed": true,
+    "protected_sources_unchanged": true,
+    "strict_original_roster_restored_at_final": true
+  },
+  "audited_through": "runs/segment-011",
+  "authority": {
+    "failed_goals": 7,
+    "learned_combat_choices": 388,
+    "legacy_evolution_inner_combat": "Not attributed to the learned battler. Outer native actions/frames/time and failed goal are retained;inner nurse count remains audit debt.",
+    "model_goal_attempts": 30,
+    "model_queries": 33,
+    "supplied_support": "Native navigation,preparation venue/dose,PC loan return,safety recovery and final singleton nursing are support. Final post-reward closure is deliberately not a learned strategic choice.",
+    "support_goal_attempts": 6
+  },
+  "closed_at_utc": "2026-10-07T14:27:55.807841+00:00",
+  "components": {
+    "authority_promotions": 0,
+    "current_recovery_head_active": false,
+    "legacy_registered_train_counter": 135,
+    "new_fits": 0,
+    "new_train_examples": 0,
+    "parent_model_sha256": "06f6493d05b6ce41dc17028e77e59b545c21d1886d2bdfa6055f7ef5b3203d87",
+    "provisional_silph_battle_sha256": "05a7afb42bfdf8b5d416782a516e78ae82d7a6d4cd72eea77134b484822c7333",
+    "recovery_head_result": "Existing Misty V2 provisionally selected real training but overprepared and hit a return error. Rolled back before later successful challenges.",
+    "scope": "Existing frozen Silph useful-move actor on exact remaining native trainer contracts;other actors unchanged. Adaptive exposed DEVELOPMENT reuse,not global qualification.",
+    "weights_changed": false
+  },
+  "costs": {
+    "blackout_debits_in_this_block": 10268,
+    "cumulative": {
+      "actions": 138872,
+      "cash_debits": 60908,
+      "decisions": 842,
+      "frames": 10724154,
+      "heals": 140,
+      "seconds": 20917.595108292997
+    },
+    "inherited": {
+      "actions": 114116,
+      "cash_debits": 50640,
+      "decisions": 806,
+      "frames": 7932934,
+      "heals": 124,
+      "seconds": 17714.217434375663
+    },
+    "main_delta": {
+      "actions": 24756,
+      "cash_debits": 10268,
+      "decisions": 36,
+      "frames": 2791220,
+      "heals": 16,
+      "seconds": 3203.3776739173336
+    },
+    "native_earned_income_in_this_block": 8459,
+    "no_cost_refund": true,
+    "unresolved_inner_evolution_nurse_count": true
+  },
+  "cutoff_utc": "2026-10-07T15:40:57+00:00",
+  "diagnostic": {
+    "copy_back": false,
+    "copy_won": true,
+    "limitation": "Same exposed source/RNG trajectory as the actual forward rematch. Win is an adaptive diagnostic,not an independent comparison;copy XP,money and state were not adopted.",
+    "parameters_fit": 0,
+    "rival_combat_choices": 64,
+    "separate_charged_costs": {
+      "actions": 1501,
+      "decisions": 2,
+      "frames": 301344,
+      "heals": 0,
+      "seconds": 226.78666699992027
+    }
+  },
+  "family": "red-model-selected-silph-20261007-v1",
+  "final_fresh_red_denominator": 5,
+  "final_fresh_red_gates": 0,
+  "goal_active": false,
+  "independent": false,
+  "native_cutoff_utc": "2026-10-07T15:20:57+00:00",
+  "new_origin": false,
+  "next_action": "Pause gameplay for user-directed Astra audit. Authenticate ancestry/reward/closure/costs;review provisional actor reuse,readiness rollback,PC/evolution debt and focused guards;produce one bounded next story work order. No new gameplay,fit,origin or publication during review.",
+  "official_completion": false,
+  "official_exam": false,
+  "parent": {
+    "audit_sha256": "a7239c3284fa7601945f676610585308192d3d5a2f1b9524743cfc4c1f02a7fe",
+    "context_sha256": "bef4f972243cf79c4ad47e78eb30fe68bb3540166bbcc7b121831dc5d023940e",
+    "family": "red-shared-player-continuation-20261007-v1",
+    "inherited_costs_and_failures_carried": true,
+    "node": "runs/segment-041",
+    "old_clock_remains_closed": true,
+    "state_sha256": "bf043edc54eb95262ae0e812f1195cd6db94f9a4d883912a6f506072fa477668",
+    "supplied_opening_and_repeated_development_origin_disclosed": true
+  },
+  "partition": "development",
+  "private_audit_sha256": "7b52e6e434147e10620d859ad492a5e2ebb9d6d00ba7f459ffcd51b726679819",
+  "private_closeout_sha256": "cdfeb825e1d9b05f08fe4fd637ed53eefc8a8193033b2e491ff8671880196ac1",
+  "repairs_and_retained_failures": {
+    "construction_only_failure_retained": true,
+    "continuation_lineage_guard": "Only continuation recognizes earned multi-stage level evolution. Immutable original roles/targets/specimen/XP and single-battle one-evolution guard remain unchanged.",
+    "failed_boxed_evolution": "Actual partial Ekans17 XP retained;original Spearow verified boxed. Exact failed profile quarantined only in this block;other peers retained.",
+    "pc_return": "Ordinary native deposit/withdraw and nursing restore original six. Their native order changes;no tactical lead selection.",
+    "post_reward_menu_failure_retained": true,
+    "primary_rival_losses": 3,
+    "readiness_reuse_rolled_back": true,
+    "route_return_failure_retained": true,
+    "zero_input_failed_support_attempt_retained": true
+  },
+  "schema": "pokemon.red.model-selected-silph-completion-result.v1",
+  "session_id": "2026-10-07-model-selected-silph-completion",
+  "started_at_utc": "2026-10-07T12:40:57+00:00",
+  "status": "complete_native_silph_and_restored_saffron",
+  "verification": {
+    "full_suite": false,
+    "hosted_ci": false,
+    "private_rom_free_tests_passed": 32,
+    "public_focused_tests_passed": 219,
+    "public_source_and_targeted_tests_ruff_passed": true
+  },
+  "verified_gameplay": {
+    "at": [
+      3,
+      3
+    ],
+    "badges": 6,
+    "cash": 9085,
+    "completed_story_objectives": 27,
+    "context_sha256": "846927c5c7bb7b405249c82d27801a74d4c0d9ed09486d4ec937b812d896ad74",
+    "controls_released": true,
+    "current_party": [
+      "Gloom28",
+      "Blastoise36",
+      "Pidgeotto31",
+      "Doduo26",
+      "Raticate37",
+      "Spearow17"
+    ],
+    "eleventh_floor_trainer_won": true,
+    "field_ready": true,
+    "final_location": "Saffron Pokemon Center",
+    "full_hp_pp_status_restored": true,
+    "giovanni": {
+      "attacks": 20,
+      "combat_choices": 37,
+      "enemy_faints": 4,
+      "failed_move_executions": 1,
+      "forced_switches": 4,
+      "goal_selection": "model_greedy",
+      "income": 4059,
+      "lead_stay_or_tactical_overrides": 0,
+      "memory_write_actions": 0,
+      "party_faints": 4,
+      "real_candidates": 20,
+      "switch_prompts": 3,
+      "teacher_queries": 0,
+      "voluntary_switches": 10
+    },
+    "giovanni_won": true,
+    "liberate_silph_complete": true,
+    "map_id": 182,
+    "master_ball_obtained": true,
+    "master_balls_held": 1,
+    "native_blastoise_evolution": true,
+    "registered_entries": 13,
+    "rival_won": true,
+    "silph_flags": {
+      "eleventh": true,
+      "giovanni": true,
+      "master_ball": true,
+      "rival": true
+    },
+    "state_sha256": "08f7dc316e66d18595659ffe63ad283aa7628027a22b38a1e301015c89726d73",
+    "story_objective_denominator": 36,
+    "third_floor_trainer_won": true,
+    "worker_stopped": true
+  }
+}

@@ -1,0 +1,4498 @@
+{
+  "active_native_worker": null,
+  "active_worker_segment": null,
+  "actual_long_search": {
+    "capture_attempts": 1,
+    "direct_flees": 26,
+    "encounters_seen": 27,
+    "failed_capture_attempts": 1,
+    "inputs_exceeded_old_preset": true,
+    "normal_search_exhausted": true,
+    "safety_stopped": false,
+    "segment": 125,
+    "semantic_actions": 362,
+    "step": 0
+  },
+  "actual_long_search_inspection": {
+    "checkpoint": 124,
+    "fit": false,
+    "frames": 0,
+    "inputs": 0,
+    "model_queries": 1,
+    "model_selected_kind": "acquire_species",
+    "passed": true,
+    "state_unchanged": true
+  },
+  "actual_primary_income": {
+    "actual_net_cash_income": 180090,
+    "all_native_returns_verified": true,
+    "battles": 50,
+    "copy_income_received": 0,
+    "cycles": 10,
+    "field_items_consumed": [
+      [
+        5,
+        [
+          [
+            52,
+            1
+          ]
+        ]
+      ],
+      [
+        11,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        15,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        18,
+        [
+          [
+            16,
+            3
+          ],
+          [
+            53,
+            2
+          ]
+        ]
+      ],
+      [
+        25,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        29,
+        [
+          [
+            16,
+            4
+          ],
+          [
+            53,
+            1
+          ]
+        ]
+      ]
+    ],
+    "field_items_consumed_scope": "Existing detail lists cover119;individual journals retain subsequent122/124consumption",
+    "first_owned_stock_round": {
+      "cash_after": 29836,
+      "cash_before": 37,
+      "full_restores_used": 0,
+      "net_after_owned_replacement": 29199,
+      "owned_replacement": 600,
+      "step": 5
+    },
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "gross_income": 297990,
+    "model_selected": true,
+    "parameters_updated": 0,
+    "pre_entry_medicine_purchases": 117900
+  },
+  "additional_unattributed_cash": [
+    {
+      "attribution_unresolved": true,
+      "cause_not_inferred": true,
+      "first_survey_cash": 74022,
+      "full_battle_journal_pending": false,
+      "localized_phase": "Departure boundary to first Seafoam1F survey observation",
+      "net_change": 1395,
+      "segment": 126,
+      "step": 16,
+      "trainer_state_events_in_survey": 0
+    },
+    {
+      "attribution_unresolved": true,
+      "cause_not_inferred": true,
+      "existing_journals_retained": true,
+      "net_change": 660,
+      "resource_attribution": {
+        "explained_net_cash_change": 0,
+        "gross_spending_known": false,
+        "observed_net_cash_change": 660,
+        "supported_receipts": [],
+        "unexplained_net_cash_change": 660,
+        "unit": "cartridge_currency",
+        "unobserved_causes_not_inferred": true
+      },
+      "segment": 129,
+      "step": 14
+    }
+  ],
+  "admission_guard_utc": "2026-10-11T08:01:39.000Z",
+  "aerodactyl_actual_verification": {
+    "ingredient_provider_reused": true,
+    "learned_preparation": false,
+    "mechanic": "ingredient_and_fossil_revival",
+    "new_registration": "pokemon:national:142",
+    "normal_inputs": true,
+    "preparation_fly_used": true,
+    "safe_terminal": true,
+    "segment": 125,
+    "selection_authority": "model_exploration",
+    "step": 12,
+    "verification": "succeeded"
+  },
+  "all_native_workers_stopped": true,
+  "authority": "151 broader goals;K ordinary combat;111 scoped League income. Navigation, menus, inner doses, medicine reserve and compulsory settlement are disclosed support.",
+  "champion_hall_of_fame_checkpoint": 94,
+  "champion_hall_of_fame_final_verification": {
+    "facts": {
+      "buttons_released": true,
+      "champion_flag": true,
+      "concurrent_hof_champion": true,
+      "frames": 0,
+      "hall_of_fame_map": true,
+      "map_id": 118,
+      "state_unchanged": true
+    },
+    "hashes": {
+      "CONTEXT.json": "8f7f1be2c8225da0024f08516955f3b2397757de3c561676da55c7070f848e10",
+      "RESULT.json": "ccc7b4a424f9542724df7e77eb1db63c781469c71c71233d3c988118bd954ea7",
+      "terminal.state": "e41d64afd9443be0671696cdeb5e3802b6fadbecce79460dbf025e768d6c84b5"
+    },
+    "protected_in_final_plan": true,
+    "segment": 94
+  },
+  "checkpoint_hashes": {
+    "CONTEXT.json": "1fa2196b146d57a2e0f36d6f2aa8716150f76e5e2042dec2f060d97a35f9b231",
+    "RESULT.json": "af6f0370a9113ee51142e798425be62e981f06443e8bbd03a51ffa4793c03745",
+    "terminal.state": "62e04ec2ab7c68f669a04ea5b92553db6cb780a7d2271294b39d951abbdb4315"
+  },
+  "closeout_checks": {
+    "README_lines": 81,
+    "README_words": 568,
+    "active_focus": true,
+    "documentation_links": true,
+    "earlier_targeted_repair_suites": [
+      237,
+      217
+    ],
+    "final_rom_free_dependency_tests": {
+      "count": 15,
+      "passed": true
+    },
+    "final_source_artifact_pins": 649,
+    "final_source_artifact_pins_verified": true,
+    "full_suite_or_CI": false,
+    "public_new_surface_path_secret_scan_passed": true,
+    "roadmap_generated": true,
+    "suites_overlap": true
+  },
+  "completed_income_summary": {
+    "actual_net_cash_income": 277485,
+    "censored_last": "ControllerWallTimeBudgetExhausted",
+    "field_items_consumed": [
+      [
+        5,
+        [
+          [
+            52,
+            1
+          ]
+        ]
+      ],
+      [
+        11,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        15,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        18,
+        [
+          [
+            16,
+            3
+          ],
+          [
+            53,
+            2
+          ]
+        ]
+      ],
+      [
+        25,
+        [
+          [
+            16,
+            4
+          ]
+        ]
+      ],
+      [
+        29,
+        [
+          [
+            16,
+            4
+          ],
+          [
+            53,
+            1
+          ]
+        ]
+      ]
+    ],
+    "field_items_consumed_scope": "119details only;later field consumption remains in individual native journals",
+    "gross_income": 446985,
+    "income_cycles": 15,
+    "new_flags": [
+      "pokemon:national:110",
+      "pokemon:national:060",
+      "pokemon:national:118",
+      "pokemon:national:109",
+      "pokemon:national:129",
+      "pokemon:national:116",
+      "pokemon:national:124",
+      "pokemon:national:147",
+      "pokemon:national:083",
+      "pokemon:national:072"
+    ],
+    "pre_entry_purchases": 169500,
+    "rooms": 75
+  },
+  "completed_utc": "2026-10-11T06:04:15Z",
+  "continued_evolution_verifications": [
+    {
+      "cash": 60222,
+      "cost": {
+        "actions": 20033,
+        "cash_spent": 0,
+        "completed_actions": 20033,
+        "frames": 1626934
+      },
+      "execution_seconds": 503.5999772499781,
+      "healing_trips": 5,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:148"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 0,
+      "training_battles": 250,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 60222,
+      "cost": {
+        "actions": 27878,
+        "cash_spent": 0,
+        "completed_actions": 27878,
+        "frames": 2256373
+      },
+      "execution_seconds": 666.8149620409822,
+      "healing_trips": 7,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:139"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 2,
+      "training_battles": 361,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 58122,
+      "cost": {
+        "actions": 709,
+        "cash_spent": 2100,
+        "completed_actions": 709,
+        "frames": 74222
+      },
+      "execution_seconds": 18.89978079206776,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:059"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 4,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 58122,
+      "cost": {
+        "actions": 13981,
+        "cash_spent": 0,
+        "completed_actions": 13981,
+        "frames": 1070934
+      },
+      "execution_seconds": 347.8468615000602,
+      "healing_trips": 17,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:051"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 5,
+      "training_battles": 114,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 72921,
+      "cost": {
+        "actions": 6132,
+        "cash_spent": 0,
+        "completed_actions": 6132,
+        "frames": 489910
+      },
+      "execution_seconds": 157.70940954203252,
+      "healing_trips": 3,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:093"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 7,
+      "training_battles": 70,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 72921,
+      "cost": {
+        "actions": 17784,
+        "cash_spent": 0,
+        "completed_actions": 17784,
+        "frames": 1378547
+      },
+      "execution_seconds": 424.51913733396214,
+      "healing_trips": 20,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:099"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 9,
+      "training_battles": 155,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 70821,
+      "cost": {
+        "actions": 636,
+        "cash_spent": 2100,
+        "completed_actions": 636,
+        "frames": 66396
+      },
+      "execution_seconds": 15.646852375008166,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:062"
+      ],
+      "returned": true,
+      "safe": true,
+      "segment": 127,
+      "step": 10,
+      "training_battles": null,
+      "verification": "succeeded"
+    }
+  ],
+  "continued_income_verification": {
+    "actual_net_cash_income": 14799,
+    "battles": 5,
+    "broader_goal": "model_selected_resupply",
+    "ending_cash": 72921,
+    "field_item_replacement_value_not_cash_debit": 12000,
+    "gross": 29799,
+    "inner_income_learned_goal_authority": false,
+    "learned_battle_authority": true,
+    "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+    "pre_entry_purchase_cost": 15000,
+    "safe": true,
+    "sale_proceeds": 0,
+    "segment": 127,
+    "step": 6
+  },
+  "continued_npc_trade_verification": {
+    "cash_debit": 0,
+    "exchange_verified_at_npc": true,
+    "mechanic": "npc_trade",
+    "new_species": "pokemon:national:108",
+    "received_level": 37,
+    "retained_party_loan_repaid": true,
+    "safe_terminal": true,
+    "segment": 127,
+    "selected_kind": "acquire_species",
+    "step": 3,
+    "trade_index": 5,
+    "verification": "succeeded"
+  },
+  "copy_back": false,
+  "current_cash": 2077,
+  "current_plan_revision": 94,
+  "current_registrations": 124,
+  "deadline_utc": null,
+  "evolution_actual_verification": {
+    "actions": 26769,
+    "battle_state": 0,
+    "buttons_released": true,
+    "cash": 84027,
+    "decision_mode": "model_exploration",
+    "execution_seconds": 624.5361027920153,
+    "frames": 2175686,
+    "healing_trips": 9,
+    "identity_verified": true,
+    "input_ready": true,
+    "model_queries": 1,
+    "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "new_species": [
+      "pokemon:national:073"
+    ],
+    "party_levels": [
+      71,
+      56,
+      68,
+      58,
+      58,
+      100
+    ],
+    "registrations": 80,
+    "retained_active_roster_restored": true,
+    "segment": 126,
+    "selected_kind": "evolve_species",
+    "step": 0,
+    "terminal_state_sha256": "79e4ed8896fa001c6f3e28a7451def83dde1375d634529c83a2c6e95d0f7d6b6",
+    "training_battles": 326,
+    "verification": "succeeded"
+  },
+  "evolution_native_outcomes": [
+    {
+      "cash": 84027,
+      "cost": {
+        "actions": 26769,
+        "cash_spent": 0,
+        "completed_actions": 26769,
+        "frames": 2175686
+      },
+      "execution_seconds": 624.5361027920153,
+      "healing_trips": 9,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:073"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 0,
+      "training_battles": 326,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 81927,
+      "cost": {
+        "actions": 535,
+        "cash_spent": 2100,
+        "completed_actions": 535,
+        "frames": 49716
+      },
+      "execution_seconds": 12.783619333058596,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:026"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 2,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 81927,
+      "cost": {
+        "actions": 224,
+        "cash_spent": 0,
+        "completed_actions": 224,
+        "frames": 25092
+      },
+      "execution_seconds": 5.952555625000969,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:036"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 3,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 79827,
+      "cost": {
+        "actions": 660,
+        "cash_spent": 2100,
+        "completed_actions": 660,
+        "frames": 68304
+      },
+      "execution_seconds": 15.250913582975045,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:045"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 4,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 79827,
+      "cost": {
+        "actions": 10772,
+        "cash_spent": 0,
+        "completed_actions": 10772,
+        "frames": 876746
+      },
+      "execution_seconds": 257.07947904104367,
+      "healing_trips": 4,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:085"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 5,
+      "training_battles": 158,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 77727,
+      "cost": {
+        "actions": 903,
+        "cash_spent": 2100,
+        "completed_actions": 903,
+        "frames": 105300
+      },
+      "execution_seconds": 21.495998415979557,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:103"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 6,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 77727,
+      "cost": {
+        "actions": 9320,
+        "cash_spent": 0,
+        "completed_actions": 9320,
+        "frames": 757716
+      },
+      "execution_seconds": 231.5242558750324,
+      "healing_trips": 4,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:087"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 7,
+      "training_battles": 120,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 77727,
+      "cost": {
+        "actions": 4847,
+        "cash_spent": 0,
+        "completed_actions": 4847,
+        "frames": 390608
+      },
+      "execution_seconds": 115.08013070898596,
+      "healing_trips": 3,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:130"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 8,
+      "training_battles": 56,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 75627,
+      "cost": {
+        "actions": 764,
+        "cash_spent": 2100,
+        "completed_actions": 764,
+        "frames": 76668
+      },
+      "execution_seconds": 17.847932833014056,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:091"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 11,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 72627,
+      "cost": {
+        "actions": 21316,
+        "cash_spent": 0,
+        "completed_actions": 21316,
+        "frames": 1731702
+      },
+      "execution_seconds": 511.99717324995436,
+      "healing_trips": 7,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:089"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 13,
+      "training_battles": 270,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 72627,
+      "cost": {
+        "actions": 10591,
+        "cash_spent": 0,
+        "completed_actions": 10591,
+        "frames": 857499
+      },
+      "execution_seconds": 254.30115824996028,
+      "healing_trips": 4,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:057"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 14,
+      "training_battles": 147,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 72627,
+      "cost": {
+        "actions": 7534,
+        "cash_spent": 0,
+        "completed_actions": 7534,
+        "frames": 610102
+      },
+      "execution_seconds": 178.4172422499396,
+      "healing_trips": 3,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:024"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 15,
+      "training_battles": 94,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 74022,
+      "cost": {
+        "actions": 33257,
+        "cash_spent": 0,
+        "completed_actions": 33257,
+        "frames": 2690511
+      },
+      "execution_seconds": 773.5271164160222,
+      "healing_trips": 10,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:078"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 18,
+      "training_battles": 411,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 71922,
+      "cost": {
+        "actions": 548,
+        "cash_spent": 2100,
+        "completed_actions": 548,
+        "frames": 52236
+      },
+      "execution_seconds": 14.951378582976758,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:121"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 20,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 71922,
+      "cost": {
+        "actions": 25236,
+        "cash_spent": 0,
+        "completed_actions": 25236,
+        "frames": 1947053
+      },
+      "execution_seconds": 606.9686163750011,
+      "healing_trips": 30,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:055"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 21,
+      "training_battles": 233,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 71922,
+      "cost": {
+        "actions": 55977,
+        "cash_spent": 0,
+        "completed_actions": 55977,
+        "frames": 4529237
+      },
+      "execution_seconds": 1394.9502593750367,
+      "healing_trips": 15,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:112"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 23,
+      "training_battles": 689,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 727,
+        "cash_spent": 2100,
+        "completed_actions": 727,
+        "frames": 82344
+      },
+      "execution_seconds": 18.891649958095513,
+      "healing_trips": null,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:135"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 25,
+      "training_battles": null,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 1172,
+        "cash_spent": 0,
+        "completed_actions": 1172,
+        "frames": 90247
+      },
+      "execution_seconds": 29.489502958022058,
+      "healing_trips": 2,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:012"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 26,
+      "training_battles": 7,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 16067,
+        "cash_spent": 0,
+        "completed_actions": 16067,
+        "frames": 1279469
+      },
+      "execution_seconds": 405.45585362496786,
+      "healing_trips": 10,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:119"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 28,
+      "training_battles": 209,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 9073,
+        "cash_spent": 0,
+        "completed_actions": 9073,
+        "frames": 728909
+      },
+      "execution_seconds": 223.29017383302562,
+      "healing_trips": 4,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:042"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 31,
+      "training_battles": 101,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 11910,
+        "cash_spent": 0,
+        "completed_actions": 11910,
+        "frames": 905053
+      },
+      "execution_seconds": 282.0620395829901,
+      "healing_trips": 16,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:067"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 32,
+      "training_battles": 109,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 11990,
+        "cash_spent": 0,
+        "completed_actions": 11990,
+        "frames": 969143
+      },
+      "execution_seconds": 287.1121402499266,
+      "healing_trips": 4,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:082"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 34,
+      "training_battles": 143,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 34339,
+        "cash_spent": 0,
+        "completed_actions": 34339,
+        "frames": 2566069
+      },
+      "execution_seconds": 925.1493441250641,
+      "healing_trips": 57,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:080"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 36,
+      "training_battles": 289,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 11037,
+        "cash_spent": 0,
+        "completed_actions": 11037,
+        "frames": 862191
+      },
+      "execution_seconds": 285.36286612506956,
+      "healing_trips": 10,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:097"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 38,
+      "training_battles": 123,
+      "verification": "succeeded"
+    },
+    {
+      "cash": 65022,
+      "cost": {
+        "actions": 17704,
+        "cash_spent": 0,
+        "completed_actions": 17704,
+        "frames": 1429310
+      },
+      "execution_seconds": 485.51175391697325,
+      "healing_trips": 5,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:101"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 39,
+      "training_battles": 218,
+      "verification": "succeeded"
+    }
+  ],
+  "evolution_terminal_verification": {
+    "all_native_identities_verified": true,
+    "all_original_active_rosters_returned": true,
+    "exact_state_bytes_unchanged": true,
+    "models_configuration_seed_unchanged": true,
+    "registrations": 104,
+    "safe_terminal": true,
+    "segment": 126,
+    "successful_evolutions": 25,
+    "whole_party_restored": true,
+    "worker_absent": true,
+    "worker_exit_code": 0,
+    "zero_inspection_frames": 0
+  },
+  "existing_journals_retained": [
+    "goal decisions and candidate alternatives",
+    "battle/move decisions and failures",
+    "native encounters/throws/registration flags",
+    "XP/healing/stock/cash debits and rewards",
+    "phase timing and exact interrupted terminals"
+  ],
+  "final_aggregation": {
+    "actual_net_income": 277485,
+    "cash": 2077,
+    "coverage": [
+      {
+        "authoritative_outcomes": 10,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 10,
+        "previous_file_only_omissions": [],
+        "segment": 115
+      },
+      {
+        "authoritative_outcomes": 46,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 46,
+        "previous_file_only_omissions": [],
+        "segment": 116
+      },
+      {
+        "authoritative_outcomes": 1,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 1,
+        "previous_file_only_omissions": [],
+        "segment": 117
+      },
+      {
+        "authoritative_outcomes": 1,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 1,
+        "previous_file_only_omissions": [],
+        "segment": 118
+      },
+      {
+        "authoritative_outcomes": 31,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 31,
+        "previous_file_only_omissions": [],
+        "segment": 119
+      },
+      {
+        "authoritative_outcomes": 3,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 3,
+        "previous_file_only_omissions": [],
+        "segment": 120
+      },
+      {
+        "authoritative_outcomes": 1,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 1,
+        "previous_file_only_omissions": [],
+        "segment": 121
+      },
+      {
+        "authoritative_outcomes": 7,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 7,
+        "previous_file_only_omissions": [],
+        "segment": 122
+      },
+      {
+        "authoritative_outcomes": 13,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 13,
+        "previous_file_only_omissions": [],
+        "segment": 123
+      },
+      {
+        "authoritative_outcomes": 12,
+        "closed": true,
+        "closed_episode_available": false,
+        "per_step_files": 12,
+        "previous_file_only_omissions": [],
+        "segment": 124
+      },
+      {
+        "authoritative_outcomes": 20,
+        "closed": true,
+        "closed_episode_available": false,
+        "per_step_files": 20,
+        "previous_file_only_omissions": [],
+        "segment": 125
+      },
+      {
+        "authoritative_outcomes": 44,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 44,
+        "previous_file_only_omissions": [],
+        "segment": 126
+      },
+      {
+        "authoritative_outcomes": 12,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 12,
+        "previous_file_only_omissions": [],
+        "segment": 127
+      },
+      {
+        "authoritative_outcomes": 3,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 3,
+        "previous_file_only_omissions": [],
+        "segment": 128
+      },
+      {
+        "authoritative_outcomes": 28,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 28,
+        "previous_file_only_omissions": [],
+        "segment": 129
+      },
+      {
+        "authoritative_outcomes": 2,
+        "closed": false,
+        "closed_episode_available": false,
+        "per_step_files": 2,
+        "previous_file_only_omissions": [],
+        "segment": 130
+      },
+      {
+        "authoritative_outcomes": 0,
+        "closed": true,
+        "closed_episode_available": false,
+        "per_step_files": 0,
+        "previous_file_only_omissions": [],
+        "segment": 131
+      },
+      {
+        "authoritative_outcomes": 3,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 3,
+        "previous_file_only_omissions": [],
+        "segment": 132
+      },
+      {
+        "authoritative_outcomes": 7,
+        "closed": true,
+        "closed_episode_available": true,
+        "per_step_files": 7,
+        "previous_file_only_omissions": [],
+        "segment": 133
+      }
+    ],
+    "execution_failures": [
+      {
+        "cost": {
+          "actions": 65,
+          "cash_spent": 0,
+          "completed_actions": 65,
+          "frames": 3900
+        },
+        "error": "route step right at (17, 30) exceeded 8 attempts",
+        "error_type": "RouteExecutionError",
+        "safe": true,
+        "segment": 115,
+        "step": 9
+      },
+      {
+        "cost": {
+          "actions": 1,
+          "cash_spent": 0,
+          "completed_actions": 0,
+          "frames": 0
+        },
+        "error": "controller reached its hard monotonic wall-time admission deadline",
+        "error_type": "ControllerWallTimeBudgetExhausted",
+        "safe": true,
+        "segment": 116,
+        "step": 45
+      },
+      {
+        "cost": {
+          "actions": 529,
+          "cash_spent": 0,
+          "completed_actions": 529,
+          "frames": 38820
+        },
+        "error": "collection Fly onward walk exceeded its 16-flee budget",
+        "error_type": "RouteExecutionError",
+        "safe": false,
+        "segment": 117,
+        "step": 0
+      },
+      {
+        "cost": {
+          "actions": 1,
+          "cash_spent": 0,
+          "completed_actions": 0,
+          "frames": 0
+        },
+        "error": "controller reached its hard monotonic wall-time admission deadline",
+        "error_type": "ControllerWallTimeBudgetExhausted",
+        "safe": true,
+        "segment": 119,
+        "step": 30
+      },
+      {
+        "cost": {
+          "actions": 163,
+          "cash_spent": 0,
+          "completed_actions": 163,
+          "frames": 13488
+        },
+        "error": "episode record keys must be strings",
+        "error_type": "PrivateArtifactError",
+        "safe": true,
+        "segment": 120,
+        "step": 2
+      },
+      {
+        "cost": {
+          "actions": 393,
+          "cash_spent": -1100,
+          "completed_actions": 393,
+          "frames": 25968
+        },
+        "error": "route interruption budget exhausted before further input",
+        "error_type": "RouteExecutionError",
+        "safe": true,
+        "segment": 121,
+        "step": 0
+      },
+      {
+        "cost": {
+          "actions": 6,
+          "cash_spent": 0,
+          "completed_actions": 6,
+          "frames": 144
+        },
+        "error": "unhandled route interruption 'wild_battle'",
+        "error_type": "RouteExecutionError",
+        "safe": false,
+        "segment": 123,
+        "step": 12
+      },
+      {
+        "cost": {
+          "actions": 1,
+          "cash_spent": 0,
+          "completed_actions": 0,
+          "frames": 0
+        },
+        "error": "controller reached its hard monotonic wall-time admission deadline",
+        "error_type": "ControllerWallTimeBudgetExhausted",
+        "safe": true,
+        "segment": 126,
+        "step": 43
+      },
+      {
+        "cost": {
+          "actions": 50,
+          "cash_spent": 0,
+          "completed_actions": 50,
+          "frames": 3852
+        },
+        "error": "",
+        "error_type": "AssertionError",
+        "safe": true,
+        "segment": 129,
+        "step": 27
+      }
+    ],
+    "fits": 0,
+    "gains": [
+      {
+        "segment": 115,
+        "species": [
+          "pokemon:national:074"
+        ],
+        "step": 5
+      },
+      {
+        "segment": 115,
+        "species": [
+          "pokemon:national:079"
+        ],
+        "step": 8
+      },
+      {
+        "segment": 116,
+        "species": [
+          "pokemon:national:077"
+        ],
+        "step": 1
+      },
+      {
+        "segment": 116,
+        "species": [
+          "pokemon:national:061"
+        ],
+        "step": 13
+      },
+      {
+        "segment": 116,
+        "species": [
+          "pokemon:national:066"
+        ],
+        "step": 24
+      },
+      {
+        "segment": 116,
+        "species": [
+          "pokemon:national:113"
+        ],
+        "step": 35
+      },
+      {
+        "segment": 116,
+        "species": [
+          "pokemon:national:011"
+        ],
+        "step": 44
+      },
+      {
+        "segment": 118,
+        "species": [
+          "pokemon:national:122"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:110"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:060"
+        ],
+        "step": 6
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:118"
+        ],
+        "step": 9
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:109"
+        ],
+        "step": 10
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:129"
+        ],
+        "step": 14
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:116"
+        ],
+        "step": 20
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:124"
+        ],
+        "step": 21
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:147"
+        ],
+        "step": 23
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:083"
+        ],
+        "step": 24
+      },
+      {
+        "segment": 119,
+        "species": [
+          "pokemon:national:072"
+        ],
+        "step": 27
+      },
+      {
+        "segment": 120,
+        "species": [
+          "pokemon:national:125"
+        ],
+        "step": 1
+      },
+      {
+        "segment": 122,
+        "species": [
+          "pokemon:national:081"
+        ],
+        "step": 6
+      },
+      {
+        "segment": 123,
+        "species": [
+          "pokemon:national:120"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 123,
+        "species": [
+          "pokemon:national:054"
+        ],
+        "step": 3
+      },
+      {
+        "segment": 123,
+        "species": [
+          "pokemon:national:088"
+        ],
+        "step": 5
+      },
+      {
+        "segment": 124,
+        "species": [
+          "pokemon:national:025"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 125,
+        "species": [
+          "pokemon:national:086"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 125,
+        "species": [
+          "pokemon:national:092"
+        ],
+        "step": 6
+      },
+      {
+        "segment": 125,
+        "species": [
+          "pokemon:national:138"
+        ],
+        "step": 10
+      },
+      {
+        "segment": 125,
+        "species": [
+          "pokemon:national:142"
+        ],
+        "step": 12
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:073"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:026"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:036"
+        ],
+        "step": 3
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:045"
+        ],
+        "step": 4
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:085"
+        ],
+        "step": 5
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:103"
+        ],
+        "step": 6
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:087"
+        ],
+        "step": 7
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:130"
+        ],
+        "step": 8
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:091"
+        ],
+        "step": 11
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:089"
+        ],
+        "step": 13
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:057"
+        ],
+        "step": 14
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:024"
+        ],
+        "step": 15
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:078"
+        ],
+        "step": 18
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:121"
+        ],
+        "step": 20
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:055"
+        ],
+        "step": 21
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:112"
+        ],
+        "step": 23
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:135"
+        ],
+        "step": 25
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:012"
+        ],
+        "step": 26
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:119"
+        ],
+        "step": 28
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:042"
+        ],
+        "step": 31
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:067"
+        ],
+        "step": 32
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:082"
+        ],
+        "step": 34
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:080"
+        ],
+        "step": 36
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:097"
+        ],
+        "step": 38
+      },
+      {
+        "segment": 126,
+        "species": [
+          "pokemon:national:101"
+        ],
+        "step": 39
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:148"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:139"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:108"
+        ],
+        "step": 3
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:059"
+        ],
+        "step": 4
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:051"
+        ],
+        "step": 5
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:093"
+        ],
+        "step": 7
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:099"
+        ],
+        "step": 9
+      },
+      {
+        "segment": 127,
+        "species": [
+          "pokemon:national:062"
+        ],
+        "step": 10
+      },
+      {
+        "segment": 128,
+        "species": [
+          "pokemon:national:075"
+        ],
+        "step": 1
+      },
+      {
+        "segment": 129,
+        "species": [
+          "pokemon:national:149"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 129,
+        "species": [
+          "pokemon:national:095"
+        ],
+        "step": 1
+      },
+      {
+        "segment": 129,
+        "species": [
+          "pokemon:national:040"
+        ],
+        "step": 8
+      },
+      {
+        "segment": 129,
+        "species": [
+          "pokemon:national:104"
+        ],
+        "step": 14
+      },
+      {
+        "segment": 129,
+        "species": [
+          "pokemon:national:105"
+        ],
+        "step": 22
+      },
+      {
+        "segment": 130,
+        "species": [
+          "pokemon:national:146"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 132,
+        "species": [
+          "pokemon:national:144"
+        ],
+        "step": 0
+      },
+      {
+        "segment": 132,
+        "species": [
+          "pokemon:national:145"
+        ],
+        "step": 2
+      },
+      {
+        "segment": 133,
+        "species": [
+          "pokemon:national:031"
+        ],
+        "step": 1
+      },
+      {
+        "segment": 133,
+        "species": [
+          "pokemon:national:064"
+        ],
+        "step": 4
+      },
+      {
+        "segment": 133,
+        "species": [
+          "pokemon:national:034"
+        ],
+        "step": 6
+      }
+    ],
+    "income_cycles": 15,
+    "income_gross": 446985,
+    "income_rooms": 75,
+    "kinds": {
+      "acquire_species": 80,
+      "evolve_species": 41,
+      "manage_storage": 12,
+      "restore_team": 22,
+      "resupply": 89
+    },
+    "latest_segment": 133,
+    "latest_step": 6,
+    "non_exception_unverified": [
+      {
+        "cost": {
+          "actions": 592,
+          "cash_spent": 0,
+          "completed_actions": 592,
+          "frames": 47772
+        },
+        "evolution_partial": null,
+        "original_roster_returned": null,
+        "reason": "outcome_not_verified",
+        "safe": true,
+        "segment": 118,
+        "step": 0,
+        "training_battles": null,
+        "verification": "failed",
+        "wall_limit_reached": null
+      },
+      {
+        "cost": {
+          "actions": 58340,
+          "cash_spent": 0,
+          "completed_actions": 58340,
+          "frames": 4726820
+        },
+        "evolution_partial": true,
+        "original_roster_returned": true,
+        "reason": "outcome_not_verified",
+        "safe": true,
+        "segment": 127,
+        "step": 11,
+        "training_battles": 752,
+        "verification": "failed",
+        "wall_limit_reached": true
+      },
+      {
+        "cost": {
+          "actions": 50741,
+          "cash_spent": 0,
+          "completed_actions": 50741,
+          "frames": 4111512
+        },
+        "evolution_partial": true,
+        "original_roster_returned": true,
+        "reason": "outcome_not_verified",
+        "safe": true,
+        "segment": 128,
+        "step": 2,
+        "training_battles": 636,
+        "verification": "failed",
+        "wall_limit_reached": true
+      }
+    ],
+    "ordinary_setbacks": 37,
+    "outcomes": 244,
+    "parameter_training": 0,
+    "phase_seconds": {
+      "execution": 19342.115,
+      "menu_and_boundary_observation": 7601.3,
+      "outcome_diagnostics": 10.268,
+      "selection_and_receipt": 3.661,
+      "selection_diagnostics": 4.946,
+      "terminal_observation": 17.056,
+      "verification": 5.505
+    },
+    "registration_delta": 73,
+    "registrations": 124,
+    "scope": "115throughclosed133;prefer closedRESULT.episode.outcomes;per-step fallback for interrupted results without episode",
+    "unexplained_cash": [
+      {
+        "change": 1500,
+        "segment": 116,
+        "step": 9
+      },
+      {
+        "change": 155,
+        "segment": 116,
+        "step": 21
+      },
+      {
+        "change": 1100,
+        "segment": 121,
+        "step": 0
+      },
+      {
+        "change": 1395,
+        "segment": 126,
+        "step": 16
+      },
+      {
+        "change": 660,
+        "segment": 129,
+        "step": 14
+      },
+      {
+        "change": -118800,
+        "segment": 129,
+        "step": 26
+      },
+      {
+        "change": 2000,
+        "segment": 130,
+        "step": 0
+      },
+      {
+        "change": -8400,
+        "segment": 130,
+        "step": 1
+      },
+      {
+        "change": -4800,
+        "segment": 132,
+        "step": 1
+      }
+    ]
+  },
+  "final_goal_ownership": {
+    "model_owned_outcomes": 217,
+    "registrations_during_model_owned_goals": 70,
+    "registrations_during_support_goals": 3,
+    "source": "Authoritative outcome support_role, with closed episode model/support counts where available; do not infer missing model_queries fields as zero.",
+    "support_outcomes": 27,
+    "support_registration_goals": [
+      {
+        "national": 145,
+        "segment": 132,
+        "step": 2
+      },
+      {
+        "national": 64,
+        "segment": 133,
+        "step": 4
+      },
+      {
+        "national": 34,
+        "segment": 133,
+        "step": 6
+      }
+    ]
+  },
+  "fit_allowed": false,
+  "fits": 0,
+  "fossil_actual_verification": {
+    "actions": 204,
+    "final_phase": "complete",
+    "frames": 12972,
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "initial_phase": "ready_to_submit",
+    "item_consumed": true,
+    "national_dex_number": 138,
+    "process_continues": true,
+    "refresh_steps": 51,
+    "registration_added": true,
+    "revival_level": 30,
+    "route_steps": 57,
+    "safe_terminal": true,
+    "segment": 125,
+    "selected_kind": "acquire_species",
+    "selection_authority": "model_exploration",
+    "step": 10,
+    "verification": "succeeded"
+  },
+  "frozen_final_gate_count": 0,
+  "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+  "goal_selection": "declared model-probability exploration",
+  "goal_until_completion": true,
+  "guard_renewable": true,
+  "latest_authenticated_checkpoint": 133,
+  "latest_spent": {
+    "actions": 1246582,
+    "cash_debits": 1239117,
+    "decisions": 1569,
+    "frames": 100347684,
+    "heals": 1213,
+    "seconds": 57828.56063655426
+  },
+  "live_progress": {
+    "registrations": 124,
+    "segment": 133,
+    "stop_reason": "curriculum_complete",
+    "worker_running": false
+  },
+  "live_required_membership_confirmation": null,
+  "native126_administrative_stop": {
+    "attempted_actions": 1,
+    "censor_not_new_gameplay_defect": true,
+    "completed_actions": 0,
+    "error_type": "ControllerWallTimeBudgetExhausted",
+    "frames": 0,
+    "launcher_passed": true,
+    "raw_stop_reason": "execution_failed",
+    "safe_terminal": true,
+    "step": 43
+  },
+  "native126_diagnostic_stream": {
+    "automatic_fit": false,
+    "diagnostic_only": true,
+    "event_counts": {
+      "capture_not_retained": 5,
+      "capture_route_work_quote": 292,
+      "capture_throw_completed": 21,
+      "capture_throw_started": 21,
+      "flee_verified": 99,
+      "ordinary_goal_inventory": 44,
+      "player_boundary": 44,
+      "regional_source_evaluation_started": 308,
+      "regional_source_excluded": 1394,
+      "regional_source_offered": 144,
+      "regional_source_topology": 2244,
+      "regional_sources_unexamined": 44,
+      "survey_action_failed": 3,
+      "survey_action_returned": 1296,
+      "survey_decision": 1301,
+      "survey_stopped": 2,
+      "wild_training_control": 42133,
+      "wild_training_move": 4415,
+      "wild_training_pause": 916,
+      "wild_training_summary": 18
+    },
+    "events": 54744
+  },
+  "native127_cash_reconciliation": {
+    "actual_other_purchases": 4200,
+    "actual_pre_entry_income_purchases": 15000,
+    "final_cash": 70821,
+    "gross_income": 29799,
+    "parent_cash": 60222,
+    "total_cash_debit": 19200,
+    "unattributed_difference": 0
+  },
+  "native127_ordinary_setback": {
+    "balls_spent": 8,
+    "capture_attempts": 2,
+    "cash_after": 72921,
+    "cash_before": 72921,
+    "error_type": null,
+    "failed_capture_attempts": 2,
+    "failure_reason": "capture_items_exhausted",
+    "measured_cost": {
+      "actions": 340,
+      "cash_spent": 0,
+      "frames": 21480
+    },
+    "observed_cost": {
+      "actions": 340,
+      "cash_spent": 0,
+      "completed_actions": 340,
+      "frames": 21480
+    },
+    "ordinary_setback": true,
+    "safe_terminal": true,
+    "source_id": "wild:VictoryRoad2F:grass",
+    "step": 8,
+    "survey": {
+      "capture_items_exhausted": true,
+      "captures": 0,
+      "encounters_seen": 2,
+      "flees": 2,
+      "safety_stopped": false,
+      "search_exhausted": false,
+      "semantic_actions": 47
+    }
+  },
+  "native127_retained_dragonair_stock": {
+    "box_index": 2,
+    "box_slot": 18,
+    "buttons_released": true,
+    "inspection_frames": 0,
+    "level": 45,
+    "scope": "Actual127terminal native current-box reader;not copied progress.",
+    "species": "pokemon:national:148",
+    "state_unchanged": true
+  },
+  "native127_terminal_verification": {
+    "all_pins_verified": true,
+    "buttons_released": true,
+    "cash": 70821,
+    "field_ready": true,
+    "frames": 0,
+    "launcher_passed": true,
+    "map_id": 89,
+    "original_roster_returned": true,
+    "outside_target": [],
+    "party_levels": [
+      59,
+      63,
+      72,
+      64,
+      85,
+      100
+    ],
+    "pin_count": 612,
+    "raw_stop_reason": "verification_failed",
+    "registration_completion": false,
+    "registrations": 112,
+    "required_registered": 112,
+    "state_unchanged": true,
+    "stop_observed_utc": "2026-10-11T03:31:42Z",
+    "whole_party_restored": false,
+    "worker_exit_code": 0,
+    "worker_pid_absent": true
+  },
+  "native127_training_censor": {
+    "actions": 58340,
+    "cash_debit": 0,
+    "classification": "safe_positive_XP_partial_at_existing_finite_training_limit",
+    "completed_actions": 58340,
+    "completed_training_battles": 752,
+    "error_type": null,
+    "evolution_partial": true,
+    "execution_seconds": 1814.6937292080838,
+    "failure_reason": "outcome_not_verified",
+    "frames": 4726820,
+    "healing_trips": 13,
+    "new_registration": false,
+    "ordinary_setback": false,
+    "original_roster_returned": true,
+    "retry_retains_earned_progress": true,
+    "safe_terminal": true,
+    "step": 11,
+    "target": "pokemon:national:149",
+    "verification": "failed",
+    "wall_limit_reached": true
+  },
+  "native128_evolution_verifications": [
+    {
+      "cash": 66021,
+      "cost": {
+        "actions": 9233,
+        "cash_spent": 0,
+        "completed_actions": 9233,
+        "frames": 742597
+      },
+      "execution_seconds": 319.57660000002943,
+      "healing_trips": 3,
+      "identity": true,
+      "kind": "evolve_species",
+      "mode": "model_exploration",
+      "new_species": [
+        "pokemon:national:075"
+      ],
+      "returned": true,
+      "safe": true,
+      "step": 1,
+      "training_battles": 109,
+      "verification": "succeeded"
+    }
+  ],
+  "native128_initial_resupply": {
+    "cash_after": 66021,
+    "cash_before": 70821,
+    "cash_debit": 4800,
+    "inherited_registrations": 112,
+    "scope": "Normal model-selected resupply on the same earned save;pending001selected evolve.",
+    "step": 0,
+    "verification": "succeeded"
+  },
+  "native128_retained_dragonair_stock": {
+    "box_index": 2,
+    "box_slot": 18,
+    "buttons_released": true,
+    "inspection_frames": 0,
+    "level": 52,
+    "scope": "Actual128terminal native current-box reader;not copied progress.",
+    "species": "pokemon:national:148",
+    "state_unchanged": true
+  },
+  "native128_terminal_verification": {
+    "all_pins_verified": true,
+    "buttons_released": true,
+    "cash": 66021,
+    "field_ready": true,
+    "frames": 0,
+    "launcher_passed": true,
+    "map_id": 89,
+    "original_roster_returned": true,
+    "outside_target": [],
+    "party_levels": [
+      63,
+      72,
+      65,
+      59,
+      87,
+      100
+    ],
+    "pin_count": 612,
+    "raw_stop_reason": "verification_failed",
+    "registration_completion": false,
+    "registrations": 113,
+    "required_registered": 113,
+    "state_unchanged": true,
+    "stop_observed_utc": "2026-10-11T04:13:18Z",
+    "whole_party_restored": false,
+    "worker_exit_code": 0,
+    "worker_pid_absent": true
+  },
+  "native128_training_censor": {
+    "actions": 50741,
+    "cash_debit": 0,
+    "classification": "safe_positive_XP_partial_at_existing_finite_training_limit",
+    "completed_actions": 50741,
+    "completed_training_battles": 636,
+    "error_type": null,
+    "evolution_partial": true,
+    "execution_seconds": 1820.5049959580647,
+    "failure_reason": "outcome_not_verified",
+    "frames": 4111512,
+    "healing_trips": 11,
+    "new_registration": false,
+    "ordinary_setback": false,
+    "original_roster_returned": true,
+    "retry_retains_earned_progress": true,
+    "safe_terminal": true,
+    "step": 2,
+    "target": "pokemon:national:149",
+    "verification": "failed",
+    "wall_limit_reached": true
+  },
+  "native129_bird_failure": {
+    "bird_not_activated": true,
+    "cause": "Legacy helper asserted Fearow35,not the authenticated original actually authorized by this configuration.",
+    "error_type": "AssertionError",
+    "failure_phase": "execution",
+    "loan_not_executed": true,
+    "observed_cost": {
+      "actions": 50,
+      "cash_spent": 0,
+      "completed_actions": 50,
+      "frames": 3852
+    },
+    "originals_restored": true,
+    "safe_terminal": true,
+    "step": 27
+  },
+  "native129_final_supply_verifications": [
+    {
+      "cash_after": 115878,
+      "cash_before": 86079,
+      "choice": {
+        "comparative_choice": false,
+        "menu_sha256": "c5406c0e6d3dec6631ceedd3865c691c858202e0108cb0d67bae2c706721565e",
+        "model_queries": 0,
+        "schema": "pokemon.red.player-support.v1",
+        "selected_kind": "resupply",
+        "support_role": "forced_singleton"
+      },
+      "cost": {
+        "actions": 2703,
+        "cash_spent": -29799,
+        "completed_actions": 2703,
+        "frames": 242574
+      },
+      "evidence": {
+        "finite_income": false,
+        "postgame_return_mechanics": "native Continue and verified field restoration",
+        "renewable_income": true
+      },
+      "execution_seconds": 89.40341229189653,
+      "funding": {
+        "actions": 2540,
+        "battle_count": 5,
+        "capture_supply_restored": false,
+        "concurrent_champion_and_hall_of_fame": true,
+        "ending_money": 115878,
+        "exit_steps": 5,
+        "expected_gross_income": 29799,
+        "field_item_replacement_cost": 12600,
+        "fly_destination": 9,
+        "forced_support_step": true,
+        "frames": 230790,
+        "full_restores_purchased": 0,
+        "full_restores_spent": 0,
+        "learned_battle_authority": true,
+        "learned_goal_authority": false,
+        "net_after_field_item_replacement": 17199,
+        "observed_gross_income": 29799,
+        "observed_net_income": 29799,
+        "postgame_reset_proven": false,
+        "purchase_cost": 0,
+        "replacement_value_is_cash_spent": false,
+        "sale_proceeds": 0,
+        "schema": "pokemon.red.repeatable-league-funding-execution.v2",
+        "starting_money": 86079,
+        "status": "hall_of_fame_verified_postgame_reset_pending",
+        "training_examples": 0
+      },
+      "kind": "resupply",
+      "resource_attribution": {
+        "explained_net_cash_change": 29799,
+        "gross_spending_known": true,
+        "observed_net_cash_change": 29799,
+        "supported_receipts": [
+          {
+            "amount": 29799,
+            "evidence_path": "evidence.league_funding.observed_gross_income",
+            "kind": "trainer_income"
+          },
+          {
+            "amount": 0,
+            "evidence_path": "evidence.league_funding.sale_proceeds",
+            "kind": "item_sales"
+          },
+          {
+            "amount": 0,
+            "evidence_path": "evidence.league_funding.purchase_cost",
+            "kind": "purchases"
+          }
+        ],
+        "unexplained_net_cash_change": 0,
+        "unit": "cartridge_currency",
+        "unobserved_causes_not_inferred": true
+      },
+      "safe": true,
+      "step": 23,
+      "verification": "succeeded"
+    },
+    {
+      "cash_after": 133077,
+      "cash_before": 115878,
+      "choice": {
+        "comparative_choice": false,
+        "menu_sha256": "0f2cc388b2d5e5e6bf820ece6ff9da202eb374bf92b5fe6bcaa7ec20244d727d",
+        "model_queries": 0,
+        "schema": "pokemon.red.player-support.v1",
+        "selected_kind": "resupply",
+        "support_role": "forced_singleton"
+      },
+      "cost": {
+        "actions": 2317,
+        "cash_spent": -17199,
+        "completed_actions": 2317,
+        "frames": 208422
+      },
+      "evidence": {
+        "finite_income": false,
+        "gross_battle_income": 29799,
+        "incoming_owned_replacement_cost": 1500,
+        "medicine_cost_already_in_net_cash": true,
+        "medicine_procurement_learned": false,
+        "net_after_purchase_and_incoming_owned_replacement": 15699,
+        "observed_total_net_income": 17199,
+        "postgame_return_mechanics": "native Continue and verified field restoration",
+        "pre_entry_purchase_cost": 12600,
+        "renewable_income": true
+      },
+      "execution_seconds": 71.22711445798632,
+      "funding": {
+        "actions": 1990,
+        "battle_count": 5,
+        "capture_supply_restored": false,
+        "concurrent_champion_and_hall_of_fame": true,
+        "ending_money": 133077,
+        "exit_steps": 12,
+        "expected_gross_income": 29799,
+        "field_item_replacement_cost": 10500,
+        "fly_destination": 9,
+        "forced_support_step": true,
+        "frames": 181662,
+        "full_restores_purchased": 0,
+        "full_restores_spent": 0,
+        "learned_battle_authority": true,
+        "learned_goal_authority": false,
+        "net_after_field_item_replacement": 19299,
+        "observed_gross_income": 29799,
+        "observed_net_income": 29799,
+        "postgame_reset_proven": false,
+        "purchase_cost": 0,
+        "replacement_value_is_cash_spent": false,
+        "sale_proceeds": 0,
+        "schema": "pokemon.red.repeatable-league-funding-execution.v2",
+        "starting_money": 103278,
+        "status": "hall_of_fame_verified_postgame_reset_pending",
+        "training_examples": 0
+      },
+      "kind": "resupply",
+      "resource_attribution": {
+        "explained_net_cash_change": 17199,
+        "gross_spending_known": true,
+        "observed_net_cash_change": 17199,
+        "supported_receipts": [
+          {
+            "amount": 29799,
+            "evidence_path": "evidence.league_funding.observed_gross_income",
+            "kind": "trainer_income"
+          },
+          {
+            "amount": 0,
+            "evidence_path": "evidence.league_funding.sale_proceeds",
+            "kind": "item_sales"
+          },
+          {
+            "amount": 0,
+            "evidence_path": "evidence.league_funding.purchase_cost",
+            "kind": "purchases"
+          },
+          {
+            "amount": 3000,
+            "evidence_path": "evidence.pre_entry_support[0].evidence.money_spent",
+            "kind": "purchases"
+          },
+          {
+            "amount": 600,
+            "evidence_path": "evidence.pre_entry_support[1].evidence.money_spent",
+            "kind": "purchases"
+          },
+          {
+            "amount": 6000,
+            "evidence_path": "evidence.pre_entry_support[2].evidence.money_spent",
+            "kind": "purchases"
+          },
+          {
+            "amount": 3000,
+            "evidence_path": "evidence.pre_entry_support[3].evidence.money_spent",
+            "kind": "purchases"
+          }
+        ],
+        "unexplained_net_cash_change": 0,
+        "unit": "cartridge_currency",
+        "unobserved_causes_not_inferred": true
+      },
+      "safe": true,
+      "step": 25,
+      "verification": "succeeded"
+    },
+    {
+      "cash_after": 14277,
+      "cash_before": 133077,
+      "choice": {
+        "actions_executed": 0,
+        "candidate_count": 2,
+        "emulator_frames": 0,
+        "menu_sha256": "13d7ce44b8963b653e67fc647649d911ec7f49dcddb56d7065236f3eb3be23f2",
+        "mode": "model_exploration",
+        "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+        "policy_id": "red-live-mixed-option-v1",
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "resource_authority": "model",
+        "schema": "pokemon.red.live-mixed-option-choice.v1",
+        "selected_candidate_index": 1,
+        "selected_option_kind": "resupply",
+        "teacher_labels": 0
+      },
+      "cost": {
+        "actions": 258,
+        "cash_spent": 118800,
+        "completed_actions": 258,
+        "frames": 19908
+      },
+      "evidence": {
+        "cash_spent": 118800,
+        "learned_quantity": false,
+        "native_ultra_procurement": true,
+        "original_reserve": 99,
+        "quantity": 99
+      },
+      "execution_seconds": 6.530186332995072,
+      "funding": {},
+      "kind": "resupply",
+      "resource_attribution": {
+        "explained_net_cash_change": 0,
+        "gross_spending_known": false,
+        "observed_net_cash_change": -118800,
+        "supported_receipts": [],
+        "unexplained_net_cash_change": -118800,
+        "unit": "cartridge_currency",
+        "unobserved_causes_not_inferred": true
+      },
+      "safe": true,
+      "step": 26,
+      "verification": "succeeded"
+    }
+  ],
+  "native129_live_verifications": {
+    "cubone_capture": {
+      "capture": {
+        "capture_attempts": 1,
+        "diagnostic_only": true,
+        "direct_flees": 2,
+        "failed_capture_attempts": 0,
+        "flees_includes_failed_capture_attempts": true,
+        "schema": "pokemon.red.capture-survey-diagnostics.v1"
+      },
+      "cash_after": 99679,
+      "cash_before": 99019,
+      "cost": {
+        "actions": 440,
+        "cash_spent": -660,
+        "completed_actions": 440,
+        "frames": 28261
+      },
+      "error_type": null,
+      "evidence": {
+        "budget_reconciled": true,
+        "destination_bound": true,
+        "destination_executed": true,
+        "destination_kind": "acquire_species",
+        "private_binding_fields": 0,
+        "private_route_fields": 0,
+        "route_is_policy_kind": false,
+        "route_verified": true,
+        "schema": "pokemon.core.routed-semantic-goal-report.v1",
+        "within_budget": true
+      },
+      "execution_seconds": 18.78078045800794,
+      "failure": null,
+      "kind": "acquire_species",
+      "new": [
+        "pokemon:national:104"
+      ],
+      "resource_attribution": {
+        "explained_net_cash_change": 0,
+        "gross_spending_known": false,
+        "observed_net_cash_change": 660,
+        "supported_receipts": [],
+        "unexplained_net_cash_change": 660,
+        "unit": "cartridge_currency",
+        "unobserved_causes_not_inferred": true
+      },
+      "safe": true,
+      "step": 14,
+      "verification": "succeeded"
+    },
+    "evolution": [
+      {
+        "cash": 66021,
+        "cost": {
+          "actions": 22446,
+          "cash_spent": 0,
+          "completed_actions": 22446,
+          "frames": 1817255
+        },
+        "execution_seconds": 636.5232980420114,
+        "healing_trips": 6,
+        "identity": true,
+        "kind": "evolve_species",
+        "mode": "model_exploration",
+        "new_species": [
+          "pokemon:national:149"
+        ],
+        "returned": true,
+        "safe": true,
+        "step": 0,
+        "training_battles": 275,
+        "verification": "succeeded"
+      },
+      {
+        "cash": 82220,
+        "cost": {
+          "actions": 272,
+          "cash_spent": 0,
+          "completed_actions": 272,
+          "frames": 29280
+        },
+        "evidence": {
+          "budget_reconciled": true,
+          "destination_bound": true,
+          "destination_executed": true,
+          "destination_kind": "evolve_species",
+          "private_binding_fields": 0,
+          "private_route_fields": 0,
+          "retained_active_roster_restored": true,
+          "route_is_policy_kind": false,
+          "route_verified": true,
+          "schema": "pokemon.core.routed-semantic-goal-report.v1",
+          "within_budget": true
+        },
+        "execution_seconds": 8.87421566597186,
+        "kind": "evolve_species",
+        "mode": "model_exploration",
+        "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+        "nested_evidence": {
+          "execution_diagnostics": [
+            "diagnostic_only",
+            "money_spent",
+            "procurement_executed"
+          ],
+          "field_moves": [
+            "cuts",
+            "flights",
+            "surfs"
+          ]
+        },
+        "new": [
+          "pokemon:national:040"
+        ],
+        "safe": true,
+        "step": 8,
+        "verification": "succeeded"
+      },
+      {
+        "after_scalars": {
+          "actions": 43340,
+          "battle_state": 0,
+          "buttons_released": true,
+          "cash": 86079,
+          "completed_actions": 43340,
+          "frames": 3332794,
+          "input_ready": true,
+          "nested_restoration_attempts": 13,
+          "restoration_attempts": 29,
+          "training_healing_attempts": 14
+        },
+        "cost": {
+          "actions": 8560,
+          "cash_spent": 0,
+          "completed_actions": 8560,
+          "frames": 664090
+        },
+        "evidence": {
+          "budget_reconciled": true,
+          "completed_training_battles": 94,
+          "destination_bound": true,
+          "destination_executed": true,
+          "destination_kind": "evolve_species",
+          "healing_trips": 8,
+          "private_binding_fields": 0,
+          "private_route_fields": 0,
+          "retained_active_roster_restored": true,
+          "route_is_policy_kind": false,
+          "route_verified": true,
+          "schema": "pokemon.core.routed-semantic-goal-report.v1",
+          "within_budget": true
+        },
+        "execution_seconds": 248.43576729099732,
+        "kind": "evolve_species",
+        "mode": "model_exploration",
+        "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+        "nested": {
+          "execution_diagnostics": {
+            "completed_training_battles": 94,
+            "diagnostic_only": true,
+            "healing_trips": 8
+          },
+          "field_moves": {
+            "cuts": 0,
+            "flights": 1,
+            "surfs": 0
+          }
+        },
+        "new": [
+          "pokemon:national:105"
+        ],
+        "safe": true,
+        "step": 22,
+        "verification": "succeeded"
+      }
+    ],
+    "income": [
+      {
+        "actual_net_income": 17799,
+        "cost": {
+          "actions": 2730,
+          "cash_spent": -17799,
+          "completed_actions": 2730,
+          "frames": 245910
+        },
+        "gross_income": 29799,
+        "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+        "pre_entry_purchase_cost": 12000,
+        "rooms": 5,
+        "safe": true,
+        "step": 6,
+        "unexplained_net_cash_change": 0,
+        "verification": "succeeded"
+      },
+      {
+        "actual_net_income": 17799,
+        "cost": {
+          "actions": 2514,
+          "cash_spent": -17799,
+          "completed_actions": 2514,
+          "frames": 224994
+        },
+        "gross_income": 29799,
+        "model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+        "pre_entry_purchase_cost": 12000,
+        "rooms": 5,
+        "safe": true,
+        "step": 12,
+        "unexplained_net_cash_change": 0,
+        "verification": "succeeded"
+      }
+    ],
+    "onix_capture": {
+      "capture_scalars": {
+        "capture_attempts": 1,
+        "diagnostic_only": true,
+        "direct_flees": 4,
+        "failed_capture_attempts": 0,
+        "flees_includes_failed_capture_attempts": true,
+        "schema": "pokemon.red.capture-survey-diagnostics.v1"
+      },
+      "cash": 66021,
+      "cost": {
+        "actions": 349,
+        "cash_spent": 0,
+        "completed_actions": 349,
+        "frames": 19740
+      },
+      "evidence_scalars": {
+        "budget_reconciled": true,
+        "destination_bound": true,
+        "destination_executed": true,
+        "destination_kind": "acquire_species",
+        "private_binding_fields": 0,
+        "private_route_fields": 0,
+        "route_is_policy_kind": false,
+        "route_verified": true,
+        "schema": "pokemon.core.routed-semantic-goal-report.v1",
+        "within_budget": true
+      },
+      "execution_seconds": 19.515302915940993,
+      "identity": true,
+      "kind": "acquire_species",
+      "mode": "model_exploration",
+      "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+      "new_species": [
+        "pokemon:national:095"
+      ],
+      "safe": true,
+      "step": 1,
+      "verification": "succeeded"
+    },
+    "ordinary_misses": [
+      {
+        "capture": {
+          "capture_attempts": 0,
+          "diagnostic_only": true,
+          "direct_flees": 20,
+          "failed_capture_attempts": 0,
+          "flees_includes_failed_capture_attempts": true,
+          "schema": "pokemon.red.capture-survey-diagnostics.v1"
+        },
+        "cash_after": 99019,
+        "cash_before": 99019,
+        "cost": {
+          "actions": 1070,
+          "cash_spent": 0,
+          "completed_actions": 1070,
+          "frames": 47820
+        },
+        "error_type": null,
+        "evidence": {
+          "budget_reconciled": true,
+          "destination_bound": true,
+          "destination_executed": true,
+          "destination_kind": "acquire_species",
+          "private_binding_fields": 0,
+          "private_route_fields": 0,
+          "route_is_policy_kind": false,
+          "route_verified": true,
+          "schema": "pokemon.core.routed-semantic-goal-report.v1",
+          "within_budget": true
+        },
+        "execution_seconds": 69.5555748330662,
+        "failure": "search_exhausted",
+        "kind": "acquire_species",
+        "new": [],
+        "resource_attribution": {
+          "explained_net_cash_change": 0,
+          "gross_spending_known": false,
+          "observed_net_cash_change": 0,
+          "supported_receipts": [],
+          "unexplained_net_cash_change": 0,
+          "unit": "cartridge_currency",
+          "unobserved_causes_not_inferred": true
+        },
+        "safe": true,
+        "step": 13,
+        "verification": "failed"
+      }
+    ],
+    "ordinary_search_miss": {
+      "actions": 1056,
+      "cash_debit": 0,
+      "completed_actions": 1056,
+      "error_type": null,
+      "failure_reason": "search_exhausted",
+      "frames": 45684,
+      "step": 4,
+      "verification": "failed"
+    },
+    "resupply": {
+      "cash_after": 65021,
+      "cash_before": 66021,
+      "cash_debit": 1000,
+      "step": 2,
+      "verification": "succeeded"
+    },
+    "terminal_authenticated": true
+  },
+  "native129_terminal_verification": {
+    "actual_exit_code": 0,
+    "at": [
+      3,
+      3
+    ],
+    "buttons_released": true,
+    "cash": 14277,
+    "completion": false,
+    "context_sha256": "9d1497d6ee56ed4fc45444df3c928bb17a5900eaa0c2e102c9824d9444f5976e",
+    "frames": 0,
+    "launcher_bounded_handling_passed": true,
+    "map_id": 64,
+    "originals_returned": true,
+    "prior_pins_verified": 612,
+    "process_absent": true,
+    "raw_stop_reason": "execution_failed",
+    "registered_required": 118,
+    "registrations": 118,
+    "result_sha256": "f830c2c7562985fc23b35b69f80d6f62003e717dba9f4f1c56736c1f82f5074d",
+    "state_sha256": "80337091f7d14ed0568be941dc113bc9ef70ca24d57e738f63ca9ebaf7b21150",
+    "state_unchanged": true,
+    "whole_party_restored": true
+  },
+  "native129_ultra_cost_attribution": {
+    "actual_purchase_verified": true,
+    "cash_spent": 118800,
+    "interpretation": "Known purchase;raw receipt mapper omits this field. Not an unexplained loss of money.",
+    "learned_quantity": false,
+    "observed_cash_change": -118800,
+    "quantity": 99,
+    "raw_mapper_unexplained_net_cash_change": -118800,
+    "source": "evidence.cash_spent and evidence.native_ultra_procurement",
+    "step": 26
+  },
+  "native130_failed_export": {
+    "actual_exit_code": 1,
+    "cause": "retained_collection_runtime clones the adapter for protected dependency counts. The selected capture guard changed only that clone;NativePlayerSession nursing/snapshots kept baseBlastoise permission and rejected a second Raticate loan.",
+    "completed_outcomes": 2,
+    "error": "retained party lost or duplicated an individual",
+    "error_type": "ValueError",
+    "guard129_verified_originals_present": true,
+    "native_total": {
+      "actions": 1972,
+      "cash_debits": 8400,
+      "frames": 174456,
+      "goals": 3,
+      "heals": 2,
+      "seconds": 93.28174391703214
+    },
+    "partial_cost": {
+      "actions": 166,
+      "frames": 17436
+    },
+    "partial_step": 2,
+    "pending_exact_raticate_box": {
+      "box": 1,
+      "level": 64,
+      "slot": 15,
+      "species_id": 166
+    },
+    "phase": "continuation_export",
+    "process_absent": true,
+    "raw_terminal_retained": true,
+    "raw_terminal_sha256": "349c6ab96da91e17f23c5c77ac87d87290077052ba9805610fefde921cb20ded"
+  },
+  "native130_moltres_verification": {
+    "cost": {
+      "actions": 1730,
+      "cash_spent": -2000,
+      "completed_actions": 1730,
+      "frames": 150528
+    },
+    "execution_seconds": 47.74619041697588,
+    "learned_ball_selection": false,
+    "learned_preparation": false,
+    "mode": "model_exploration",
+    "native_helper_return": true,
+    "raw_mapper_unexplained_positive_cash": 2000,
+    "raw_positive_cash_delta": 2000,
+    "registered_species": "pokemon:national:146",
+    "safe_terminal": true,
+    "status_attempts": 1,
+    "step": 0,
+    "throws": 7,
+    "verification": "succeeded"
+  },
+  "native130_ultra_replacement": {
+    "actual_purchase_known": true,
+    "cash_spent": 8400,
+    "learned_quantity": false,
+    "quantity": 7,
+    "raw_mapper_unexplained_net_cash_change": -8400,
+    "step": 1,
+    "support_role": "forced_singleton",
+    "verification": "succeeded"
+  },
+  "native131_normal_repayment": {
+    "actions": 140,
+    "actual_battle_history_verified": true,
+    "actual_exit_code": 0,
+    "cash_debit": 0,
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "copy_back": false,
+    "field_ready": true,
+    "frames": 15432,
+    "guard_source_segment": 129,
+    "model_queries": 0,
+    "new_origin": false,
+    "originals_returned": true,
+    "passed": true,
+    "process_absent": true,
+    "raw_failure_retained": true,
+    "registrations": 119,
+    "released": true,
+    "source_raw_segment": 130,
+    "whole_party_restored": true
+  },
+  "native131_terminal_verification": {
+    "Moltres_stock": {
+      "box": 8,
+      "level": 50,
+      "slot": 1
+    },
+    "all_pins_verified": true,
+    "buttons_released": true,
+    "cash": 7877,
+    "context_sha256": "a8fbe229c2dffa2c109107af331ceece1df1d669501a11baff4d37df4e4eefab",
+    "frames": 0,
+    "fully_restored": true,
+    "originals_returned": true,
+    "registered_required": 119,
+    "result_sha256": "ffff936314fedd6b24360cb94f0e827831ecb37abac478e94fd9052b60a96dff",
+    "state_sha256": "99068757f27c4e738615ff2e1d64bbe41f647680a3e0c7ab443330de2ae58ff6",
+    "state_unchanged": true,
+    "verified_pins": 628
+  },
+  "native132_bird_verifications": [
+    {
+      "actions": 2089,
+      "frames": 166296,
+      "national": 144,
+      "originals_returned": true,
+      "seconds": 55.048245375044644,
+      "selection": "model_exploration",
+      "throws": 4
+    },
+    {
+      "actions": 1712,
+      "frames": 115140,
+      "national": 145,
+      "originals_returned": true,
+      "seconds": 48.079482582979836,
+      "selection": "forced_singleton_support",
+      "throws": 3
+    }
+  ],
+  "native132_empty_menu": {
+    "no_Nido_precursor_or_Abra_boxed": true,
+    "original_Nidorina_Nidorino_protected": true,
+    "reason": "no_executable_capture_binding",
+    "regional_sources_evaluated": [
+      "wild:CeruleanCave1F:grass",
+      "wild:CeruleanCave2F:grass"
+    ],
+    "stop_reason": "menu_unavailable"
+  },
+  "native132_first_admission": {
+    "actual_exit_code": 1,
+    "archived_not_deleted": true,
+    "emulator_frames": 0,
+    "error_type": "FileNotFoundError",
+    "gameplay_inputs": 0,
+    "missing": "raw130/RESULT.json",
+    "model_queries": 0,
+    "no_native_execution_claim_created": true,
+    "ordinal": 132,
+    "output_contains_only_plan": true,
+    "phase": "assembly_before_emulator",
+    "plan": 92,
+    "process_absent": true
+  },
+  "native132_terminal_verification": {
+    "all_pins_verified": true,
+    "buttons_released": true,
+    "cash": 3077,
+    "context_sha256": "1d9ed7f68a77f323f98e3ea9b4ba7732b5004fa17d8b7adf57a55e2f0b5fea2a",
+    "frames": 0,
+    "fully_restored": true,
+    "legendaries": [
+      {
+        "box": 1,
+        "level": 70,
+        "national": 150,
+        "ref": "red-preparation:7a55ffe2ccc37c53173add38b5ad00f067caf251fa259ca4c416a80126351b05",
+        "slot": 15,
+        "species": 131
+      },
+      {
+        "box": 8,
+        "level": 50,
+        "national": 146,
+        "ref": "red-preparation:baef4840d9b32b766b436b637ea42f799ea1170ea02aa799c744f4f2c3615b43",
+        "slot": 1,
+        "species": 73
+      },
+      {
+        "box": 9,
+        "level": 50,
+        "national": 144,
+        "ref": "red-preparation:c766c0888dbcb69d008874bf6579fd97b0cd046d840568796f279b4fd1fd3c77",
+        "slot": 1,
+        "species": 74
+      },
+      {
+        "box": 10,
+        "level": 50,
+        "national": 145,
+        "ref": "red-preparation:6a41e8b6035ff3fc9df8e8d3712b466f7d1c2785c1d70baec608450e4677f940",
+        "slot": 1,
+        "species": 75
+      }
+    ],
+    "originals_returned": true,
+    "registered_required": 121,
+    "result_sha256": "d4fa06b128e10d86ada2d0fb4b1a7c9c6536d432640d90cd2263ba1e3213eb80",
+    "segment": 132,
+    "state_sha256": "eb54382d9f575a1e3fc183df18e012cf53cfea51febed6f4a435f5a56eb72018",
+    "state_unchanged": true,
+    "verified_pins": 633
+  },
+  "native132_ultra_purchase": {
+    "actions": 70,
+    "actual_cost": 4800,
+    "actual_quantity": 4,
+    "frames": 6060,
+    "selection": "forced_singleton_support"
+  },
+  "native133_goal_completion": {
+    "accounted_cash_spent": 1000,
+    "executed_decisions": 7,
+    "model_decisions": 5,
+    "ordinary_setbacks": 0,
+    "stop_reason": "curriculum_complete",
+    "successful_decisions": 7,
+    "support_decisions": 2,
+    "worker_absent": true,
+    "worker_exit_code": 0
+  },
+  "native133_terminal_verification": {
+    "all_pins_verified": true,
+    "buttons_released": true,
+    "cash": 2077,
+    "context_sha256": "1fa2196b146d57a2e0f36d6f2aa8716150f76e5e2042dec2f060d97a35f9b231",
+    "final_evolutions": [
+      {
+        "box": 1,
+        "level": 31,
+        "national": 31,
+        "ref": "red-preparation:c709458aaab36e94a89c567224d235ede3d6b65ebada9da15c64b7a9c38f67d8",
+        "slot": 16,
+        "species": 16
+      },
+      {
+        "box": 1,
+        "level": 16,
+        "national": 64,
+        "ref": "red-preparation:400340634802508052bce4ef9435fd28ece491683ff37f3f12f282318225b119",
+        "slot": 17,
+        "species": 38
+      },
+      {
+        "box": 1,
+        "level": 33,
+        "national": 34,
+        "ref": "red-preparation:c739c0181cc9202c462d26d1a7c4a64217da0cf9c121653dc6fc063a9bb52818",
+        "slot": 18,
+        "species": 7
+      }
+    ],
+    "frames": 0,
+    "fully_restored": true,
+    "legendaries": [
+      {
+        "box": 1,
+        "level": 70,
+        "national": 150,
+        "ref": "red-preparation:7a55ffe2ccc37c53173add38b5ad00f067caf251fa259ca4c416a80126351b05",
+        "slot": 15,
+        "species": 131
+      },
+      {
+        "box": 8,
+        "level": 50,
+        "national": 146,
+        "ref": "red-preparation:baef4840d9b32b766b436b637ea42f799ea1170ea02aa799c744f4f2c3615b43",
+        "slot": 1,
+        "species": 73
+      },
+      {
+        "box": 9,
+        "level": 50,
+        "national": 144,
+        "ref": "red-preparation:c766c0888dbcb69d008874bf6579fd97b0cd046d840568796f279b4fd1fd3c77",
+        "slot": 1,
+        "species": 74
+      },
+      {
+        "box": 10,
+        "level": 50,
+        "national": 145,
+        "ref": "red-preparation:6a41e8b6035ff3fc9df8e8d3712b466f7d1c2785c1d70baec608450e4677f940",
+        "slot": 1,
+        "species": 75
+      }
+    ],
+    "originals_returned": true,
+    "party_levels": [
+      89,
+      66,
+      74,
+      60,
+      64,
+      100
+    ],
+    "registered_required": 124,
+    "result_sha256": "af6f0370a9113ee51142e798425be62e981f06443e8bbd03a51ffa4793c03745",
+    "segment": 133,
+    "state_sha256": "62e04ec2ab7c68f669a04ea5b92553db6cb780a7d2271294b39d951abbdb4315",
+    "state_unchanged": true,
+    "verified_pins": 649
+  },
+  "new_origin": false,
+  "parameter_updates": 0,
+  "partition": "development",
+  "precursor_demand94": {
+    "not_full_suite_or_CI": true,
+    "overlap": true,
+    "scope": "existing cartridge level edges and actual physical Safari dependency demand; no subsystem/parameter changes",
+    "targeted_tests": [
+      237,
+      217
+    ],
+    "zero_input_confirmation": {
+      "configuration_unchanged": true,
+      "frames": 0,
+      "inputs": 0,
+      "legal_collection_peers": 6,
+      "one_local_model_query": true,
+      "passed": true,
+      "state_unchanged": true
+    }
+  },
+  "registration_delta": 73,
+  "remaining_required": [],
+  "repairs": [
+    {
+      "actual_loan_repayment_verified": true,
+      "actual_trade_execution_verified": true,
+      "cut_preserved": true,
+      "final_targeted_tests_passed": 107,
+      "kind": "npc_trade_field_move_loan_admission",
+      "lint_passed": true,
+      "model_parameters_changed": false,
+      "named_repayable_loan_only": true,
+      "normal_repayment_required": true,
+      "original_donors_forbidden": true,
+      "prospective_actual_verified_trades": [
+        {
+          "checkpoint": 119,
+          "species": 124,
+          "step": 21,
+          "trade": 6
+        },
+        {
+          "checkpoint": 119,
+          "species": 83,
+          "step": 24,
+          "trade": 4
+        }
+      ],
+      "prospective_composed_verifier_repaired": true,
+      "raw_outcome_verification": "failed:NPC venue expected after correct Center return",
+      "targeted_tests_passed": 102,
+      "trade_offers": [
+        4,
+        1,
+        6
+      ],
+      "zero_input_native_discovery_passed": true
+    },
+    {
+      "existing_resource_route_limits": true,
+      "kind": "fly_route_flee_allowance",
+      "learned_effort_risk_unchanged": true,
+      "new": 128,
+      "old": 16,
+      "targeted_tests_passed": 154
+    },
+    {
+      "actual_model_selected_income_verified": true,
+      "affordable_fallback_targets": [
+        0,
+        6,
+        1
+      ],
+      "cohort": {
+        "maximum_level": 100,
+        "minimum_level": 53,
+        "party_size": 6
+      },
+      "goal_choice_unchanged": true,
+      "kind": "narrow_owned_stock_income_admission",
+      "native_purchase_and_profit_guards_preserved": true,
+      "preferred_targets": [
+        4,
+        6,
+        2
+      ],
+      "provisional_development": true,
+      "targeted_tests_passed": 161
+    },
+    {
+      "actual_repaired_fishing_not_yet_verified": false,
+      "actual_verified_physical_fishing": {
+        "physical_acquisitions": 1,
+        "registration_gain": 0,
+        "segment": 123,
+        "step": 4,
+        "verified": true
+      },
+      "capture_behavior_unchanged": true,
+      "diagnostic_only": true,
+      "kind": "physical_fishing_diagnostic_key_encoding",
+      "lint_passed": true,
+      "new_regression_cases": 4,
+      "observer_action_free": true,
+      "original_failure_and_costs_retained": true,
+      "source_checkpoint": 120,
+      "source_step": 2,
+      "strict_artifact_writer_unchanged": true,
+      "targeted_tests_passed": 364
+    },
+    {
+      "action_frame_and_readiness_guards_retained": true,
+      "actual_native_transport_verified": {
+        "segment": 123,
+        "steps": [
+          2,
+          3,
+          4
+        ]
+      },
+      "indoor_and_onward_legs": true,
+      "kind": "fishing_route_allowance_reuse",
+      "lint_passed": true,
+      "old_flees": 16,
+      "old_interruptions": 8,
+      "original_failure_and_costs_retained": true,
+      "safari_paid_rules_unchanged": true,
+      "shared_flees": 128,
+      "shared_interruptions": 164,
+      "source_checkpoint": 121,
+      "source_step": 0,
+      "targeted_tests_passed": 486,
+      "trainer_permissions_unchanged": true,
+      "typed_reason": "interruption_budget_exhausted"
+    },
+    {
+      "acquisition_mask_unchanged": true,
+      "actual_storage_pressure": 0.875,
+      "actual_verified": {
+        "normal_storage_relief": 1,
+        "queries": 0,
+        "segment": 123,
+        "step": 0,
+        "supply_departure_verified": true
+      },
+      "allow_support_required": true,
+      "existing_storage_gate": 0.75,
+      "kind": "storage_masked_singleton_support",
+      "lint_passed": true,
+      "model_queries": 0,
+      "native_actual_verification_pending": false,
+      "new_regression_cases": 9,
+      "no_fabricated_alternative": true,
+      "old_reason": "RedLiveOptionMenuError:single resupply plus eight storage-masked acquisitions",
+      "originals_and_resource_guards_unchanged": true,
+      "reuse": "existing RedPlayerSupport forced_singleton",
+      "same_state_inputs": 0,
+      "sole_ordinary_capture_cannot_bypass_storage_gate": true,
+      "source_checkpoint": 122,
+      "source_step": 7,
+      "storage_peer_preserves_comparative_choices": true,
+      "targeted_tests_passed": 328,
+      "zero_input_native_verified": true
+    },
+    {
+      "actual_native_verification_pending": true,
+      "capture_zero_action_steps": [
+        9,
+        11
+      ],
+      "existing_guarded_wild_flees": true,
+      "filter": "Current regional-supplement menu excludes the existing all-living survey when any member is already fainted;legacy provider fingerprints remain unchanged",
+      "independent_action_and_frame_limits_unchanged": true,
+      "kind": "fossil_route_interruptions_and_current_survey_admission",
+      "lint_passed": true,
+      "living_slots_and_stock_preserved": true,
+      "maximum_flees": 128,
+      "maximum_scripted_dialogues": 0,
+      "maximum_trainer_battles": 0,
+      "model_parameters_changed": false,
+      "native_fossil_revived": true,
+      "new_regression_cases": 7,
+      "observed_party_hp": [
+        0,
+        147,
+        155,
+        184,
+        167,
+        152
+      ],
+      "other_collection_mechanics_unchanged": true,
+      "reason": "Fossil ordinary route omitted an interruption handler",
+      "restoration_not_forced": true,
+      "shared_route_limits": true,
+      "source_checkpoint": 123,
+      "targeted_tests_passed": 453,
+      "typed_failure_step": 12
+    },
+    {
+      "actual_exit_code": 0,
+      "actual_process_stop_verified": true,
+      "backend_compile_passed": true,
+      "completed_outcomes": 12,
+      "encounters": 64,
+      "incomplete_step": 12,
+      "inspection_frames": 0,
+      "inspection_inputs": 0,
+      "kind": "existing_longer_regional_search_preset",
+      "legs": 320,
+      "model_parameters_changed": false,
+      "native_actual_verification_pending": false,
+      "new_subsystem": false,
+      "observed_encounters_before160legcensor": [
+        19,
+        17,
+        15,
+        8
+      ],
+      "old_receipt_retained": true,
+      "partial_step_inputs": 0,
+      "preset": "existingv2",
+      "primary_runtime_profile_and_explicit_short_probes_unchanged": true,
+      "scope": "Only current regional collection callback after eight badges",
+      "semantic_actions": 512,
+      "source_checkpoint": 124,
+      "state_unchanged": true,
+      "targeted_tests_passed": 156,
+      "zero_input_inspection_passed": true
+    },
+    {
+      "actual_exit_code": 0,
+      "actual_process_stop_verified": true,
+      "base_seed_unchanged": true,
+      "completed_outcomes": 20,
+      "configuration_unchanged": true,
+      "default_legacy_restrictions_unchanged": true,
+      "exact_species_stock_and_registration_verification_unchanged": true,
+      "explicit_request_and_executor_opt_in": true,
+      "incomplete_step": 20,
+      "inspection": {
+        "candidate_count": 40,
+        "config": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+        "frames": 0,
+        "inputs": 0,
+        "kinds": {
+          "acquire_species": 4,
+          "evolve_species": 34,
+          "restore_team": 1,
+          "resupply": 1
+        },
+        "model_queries": 1,
+        "passed": true,
+        "selected": {
+          "kind": "evolve_species",
+          "objective": null
+        },
+        "settlement_present": true,
+        "state_sha256": "b5cb3a3a19912983df51cf75e7a85d3d89cd74ddf28c25385f8e6b5f78f27641"
+      },
+      "kind": "existing_declared_evolution_loan_admission",
+      "lint_passed": true,
+      "loan_repayment_callback_and_active_roster_verification_required": true,
+      "mentor_quote_excludes_deposited_blastoise": true,
+      "models_and_parameters_unchanged": true,
+      "native_actual_verification": {
+        "actions": 26769,
+        "battle_state": 0,
+        "buttons_released": true,
+        "cash": 84027,
+        "decision_mode": "model_exploration",
+        "execution_seconds": 624.5361027920153,
+        "frames": 2175686,
+        "healing_trips": 9,
+        "identity_verified": true,
+        "input_ready": true,
+        "model_queries": 1,
+        "model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+        "new_species": [
+          "pokemon:national:073"
+        ],
+        "party_levels": [
+          71,
+          56,
+          68,
+          58,
+          58,
+          100
+        ],
+        "registrations": 80,
+        "retained_active_roster_restored": true,
+        "segment": 126,
+        "selected_kind": "evolve_species",
+        "step": 0,
+        "terminal_state_sha256": "79e4ed8896fa001c6f3e28a7451def83dde1375d634529c83a2c6e95d0f7d6b6",
+        "training_battles": 326,
+        "verification": "succeeded"
+      },
+      "native_actual_verification_pending": false,
+      "native_request_rechecked_before_input": true,
+      "new_regression_cases": 17,
+      "new_subsystem": false,
+      "obstacle": "No valid boxed evolution deposit:all originals reserved;sole existing named Blastoise loan excluded by legacy requests and engine.",
+      "original_unpinned_files_archived_before_edits": [
+        "red_goal_context.py",
+        "red_player_party_guard.py",
+        "red_boxed_level_evolution.py",
+        "red_goal_boxed_evolution.py"
+      ],
+      "partial_step_inputs": 0,
+      "post_loan_mentor_coverage_required": true,
+      "raw_keyboard_interrupt_retained": true,
+      "registrations": 79,
+      "remaining_required": 45,
+      "scope": "Permit only the already-authorized individual through existing metered PC loans and repayment;no additional loanable refs or config change.",
+      "source_checkpoint": 125,
+      "style_only_cleanup": "Existing local import formatting and ambiguous exposure-loop variable name",
+      "targeted_tests_passed": 568
+    },
+    {
+      "F_lint_changed_slice_passed": true,
+      "all_six_originals_required_before_export": true,
+      "broad_lint_passed": false,
+      "native_actual_verification_pending": true,
+      "new_learner": false,
+      "original_source_archives_retained": true,
+      "parameters_changed": false,
+      "revision": 90,
+      "scope": "Authenticate the exact named helper loan instead of Fearow35;declared user-approved exactRaticate capture-only loan preserves Blastoise Surf. Base evolution loan/config unchanged.",
+      "source_checkpoint": 129,
+      "targeted_tests": {
+        "launcher": 115,
+        "loan_party_configuration": 136
+      }
+    },
+    {
+      "all_six_originals_returned": true,
+      "base_configuration_unchanged": true,
+      "native_normal_repayment_verified": true,
+      "native_raw_zero_input_inspection_passed": true,
+      "new_subsystem": false,
+      "parameters_changed": false,
+      "revision": 91,
+      "scope": "Bind bird peers to the engine runtime instead of the protected collection-view adapter clone;repay observed exact Raticate via existing nativePC ports.",
+      "source90_before_archive_retained": true,
+      "targeted_tests": 252
+    },
+    {
+      "configuration_and_models_unchanged": true,
+      "failed_admission_retained": true,
+      "gameplay_inputs_before_failed_admission": 0,
+      "new_subsystem": false,
+      "revision": 93,
+      "scope": "Preserve observed history through the exact raw predecessor of verified normal-party repayment;arbitrary missing results still reject.",
+      "source_before_archive_retained": true,
+      "targeted_tests": 257,
+      "zero_input_configured_inspection_passed": true
+    },
+    {
+      "repair": "existing prerequisite capture demand and verified Safari spare-stock outcomes",
+      "revision": 94
+    }
+  ],
+  "required_count": 124,
+  "required_membership_confirmation": {
+    "checkpoint": 131,
+    "frames": 0,
+    "native_required_registered": 113,
+    "outside_target": [],
+    "owned_species": [
+      "pokemon:national:007",
+      "pokemon:national:008",
+      "pokemon:national:009",
+      "pokemon:national:010",
+      "pokemon:national:011",
+      "pokemon:national:012",
+      "pokemon:national:013",
+      "pokemon:national:014",
+      "pokemon:national:015",
+      "pokemon:national:016",
+      "pokemon:national:017",
+      "pokemon:national:018",
+      "pokemon:national:019",
+      "pokemon:national:020",
+      "pokemon:national:021",
+      "pokemon:national:022",
+      "pokemon:national:023",
+      "pokemon:national:024",
+      "pokemon:national:025",
+      "pokemon:national:026",
+      "pokemon:national:029",
+      "pokemon:national:030",
+      "pokemon:national:032",
+      "pokemon:national:033",
+      "pokemon:national:035",
+      "pokemon:national:036",
+      "pokemon:national:039",
+      "pokemon:national:040",
+      "pokemon:national:041",
+      "pokemon:national:042",
+      "pokemon:national:043",
+      "pokemon:national:044",
+      "pokemon:national:045",
+      "pokemon:national:046",
+      "pokemon:national:047",
+      "pokemon:national:048",
+      "pokemon:national:049",
+      "pokemon:national:050",
+      "pokemon:national:051",
+      "pokemon:national:054",
+      "pokemon:national:055",
+      "pokemon:national:056",
+      "pokemon:national:057",
+      "pokemon:national:058",
+      "pokemon:national:059",
+      "pokemon:national:060",
+      "pokemon:national:061",
+      "pokemon:national:062",
+      "pokemon:national:063",
+      "pokemon:national:066",
+      "pokemon:national:067",
+      "pokemon:national:072",
+      "pokemon:national:073",
+      "pokemon:national:074",
+      "pokemon:national:075",
+      "pokemon:national:077",
+      "pokemon:national:078",
+      "pokemon:national:079",
+      "pokemon:national:080",
+      "pokemon:national:081",
+      "pokemon:national:082",
+      "pokemon:national:083",
+      "pokemon:national:084",
+      "pokemon:national:085",
+      "pokemon:national:086",
+      "pokemon:national:087",
+      "pokemon:national:088",
+      "pokemon:national:089",
+      "pokemon:national:090",
+      "pokemon:national:091",
+      "pokemon:national:092",
+      "pokemon:national:093",
+      "pokemon:national:095",
+      "pokemon:national:096",
+      "pokemon:national:097",
+      "pokemon:national:098",
+      "pokemon:national:099",
+      "pokemon:national:100",
+      "pokemon:national:101",
+      "pokemon:national:102",
+      "pokemon:national:103",
+      "pokemon:national:104",
+      "pokemon:national:105",
+      "pokemon:national:106",
+      "pokemon:national:108",
+      "pokemon:national:109",
+      "pokemon:national:110",
+      "pokemon:national:111",
+      "pokemon:national:112",
+      "pokemon:national:113",
+      "pokemon:national:114",
+      "pokemon:national:115",
+      "pokemon:national:116",
+      "pokemon:national:117",
+      "pokemon:national:118",
+      "pokemon:national:119",
+      "pokemon:national:120",
+      "pokemon:national:121",
+      "pokemon:national:122",
+      "pokemon:national:123",
+      "pokemon:national:124",
+      "pokemon:national:125",
+      "pokemon:national:128",
+      "pokemon:national:129",
+      "pokemon:national:130",
+      "pokemon:national:131",
+      "pokemon:national:132",
+      "pokemon:national:133",
+      "pokemon:national:135",
+      "pokemon:national:137",
+      "pokemon:national:138",
+      "pokemon:national:139",
+      "pokemon:national:142",
+      "pokemon:national:143",
+      "pokemon:national:146",
+      "pokemon:national:147",
+      "pokemon:national:148",
+      "pokemon:national:149",
+      "pokemon:national:150"
+    ],
+    "registered_required": 119,
+    "remaining": [
+      "pokemon:national:031",
+      "pokemon:national:034",
+      "pokemon:national:040",
+      "pokemon:national:064",
+      "pokemon:national:095",
+      "pokemon:national:104",
+      "pokemon:national:105",
+      "pokemon:national:144",
+      "pokemon:national:145",
+      "pokemon:national:146",
+      "pokemon:national:149"
+    ],
+    "required_count": 124,
+    "required_remaining": [
+      "pokemon:national:031",
+      "pokemon:national:034",
+      "pokemon:national:064",
+      "pokemon:national:144",
+      "pokemon:national:145"
+    ],
+    "state_unchanged": true
+  },
+  "retained_setbacks": [
+    {
+      "checkpoint": 115,
+      "costs_preserved": true,
+      "reason": "Blocked Fuchsia walk;normal same-position continuation recovers"
+    },
+    {
+      "checkpoint": 116,
+      "costs_preserved": true,
+      "reason": "Native chunk monotonic admission deadline;safe58-registration terminal retained",
+      "user_goal_not_complete": true
+    },
+    {
+      "checkpoint": 117,
+      "costs_preserved": true,
+      "reason": "RockTunnel onward16-flee exhaustion;exact encounter retained and normally settled118"
+    },
+    {
+      "checkpoint": 118,
+      "costs_preserved": true,
+      "reason": "Old verifier expected NPC venue after verified normal Center loan return;raw failed receipt retained"
+    },
+    {
+      "checkpoint": 119,
+      "costs_preserved": true,
+      "reason": "1800second guard censors final normal restoration;69flags/52231cash ready/released retained",
+      "user_goal_not_complete": true
+    },
+    {
+      "checkpoint": 120,
+      "costs_preserved": true,
+      "original_receipt_retained": true,
+      "reason": "Strict diagnostic writer rejects physical fishing stock integer keys;safe70flag terminal retained"
+    },
+    {
+      "checkpoint": 121,
+      "costs_preserved": true,
+      "original_receipt_retained": true,
+      "reason": "Eight-interruption fishing route guard;normal1100trainer reward and safe70flag terminal retained"
+    },
+    {
+      "checkpoint": 122,
+      "costs_preserved": true,
+      "original_receipt_retained": true,
+      "reason": "Safe71flag native122;one executable candidate rejected by mixed comparative menu"
+    },
+    {
+      "checkpoint": 123,
+      "costs_preserved": true,
+      "original_receipt_retained": true,
+      "reason": "Unhandled fossil-route wild encounter retained;already fainted lead and previous capture safety stops retained"
+    },
+    {
+      "checkpoint": 124,
+      "costs_preserved": true,
+      "not_user_pause": true,
+      "original_receipt_retained": true,
+      "reason": "Requested prospective setting change at step012 before its inputs;safe75flag terminal,original KeyboardInterrupt receipt retained"
+    },
+    {
+      "actual_exit_code": 0,
+      "actual_process_stop_verified": true,
+      "checkpoint": 125,
+      "completed_outcomes": 20,
+      "costs_preserved": true,
+      "not_user_pause": true,
+      "original_receipt_retained": true,
+      "partial_step_inputs": 0,
+      "reason": "Existing evolution storage excludes sole already-named Blastoise loan;safe before-input step020 stop for scoped opt-in repair"
+    },
+    {
+      "actual_exit_code": 0,
+      "actual_process_stop_verified": true,
+      "checkpoint": 126,
+      "costs_preserved": true,
+      "original_receipt_retained": true,
+      "reason": "Renewable administrative guard censors final resupply before any completed action/input frame;safe104flag terminal and all restored originals retained",
+      "user_goal_not_complete": true
+    }
+  ],
+  "review_aggregation_scope": {
+    "ordinary_setbacks": 37,
+    "outcomes": 244,
+    "parameter_updates": 0,
+    "separate_native132_no_input_admission_failure_retained": true,
+    "separate_raw130_export_failure_retained": true,
+    "source": "115throughclosed133;prefer closedRESULT.episode.outcomes;per-step fallback for interrupted results without episode",
+    "through_checkpoint": 133,
+    "typed_outcome_failures_or_censors": 9
+  },
+  "review_ready": true,
+  "reviews": [
+    {
+      "actual_net_income": 148092,
+      "authenticated_checkpoint": 122,
+      "current_obstacle": "A singleton ordinary executable remains after candidate projection, but the mixed menu rejects fewer than two candidates. Native122 ended safely;its raw admission-failure journal is retained.",
+      "fits": 0,
+      "gross_income": 238392,
+      "income_cycles": 8,
+      "income_rooms": 40,
+      "interpretation": "Gameplay progresses;menu/boundary construction costs exceed native execution. Existing income gate is tied to actual bird/collection supply shortfall. No fit or telemetry subsystem is needed for continuation.",
+      "next_action": "Identify and reuse the existing forced-singleton support path without inventing a second choice or attributing a model query.",
+      "next_review_utc": "2026-10-11T00:01:39Z",
+      "outcomes": 100,
+      "parameter_updates": 0,
+      "phase_seconds": {
+        "execution": 1747.773,
+        "menu_and_boundary_observation": 3148.257,
+        "outcome_diagnostics": 0.973,
+        "selection_and_receipt": 1.584,
+        "selection_diagnostics": 1.978,
+        "terminal_observation": 7.711,
+        "verification": 1.941
+      },
+      "registration_delta": 20,
+      "registrations": 71,
+      "remaining_required": 53,
+      "review_utc": "2026-10-10T22:06:24Z",
+      "scheduled_utc": "2026-10-10T22:01:39Z",
+      "training_examples": 0
+    },
+    {
+      "actual_net_income": 180090,
+      "authenticated_checkpoint": 125,
+      "disk_available_gib": 13,
+      "fits": 0,
+      "gross_income": 297990,
+      "income_cycles": 10,
+      "income_rooms": 50,
+      "interpretation": "Same-save gameplay advances. The evolution bottleneck was missing legitimate offers,not a demonstrated need for another fit. Level/stone evolutions and exact original loans now execute. Menu/boundary is53.0%of these two cumulative phases but42.2%in the newest interval;not an emulator-FPS or whole-wall-time attribution.",
+      "live_segment": 126,
+      "live_step": 13,
+      "native126": {
+        "completed_outcomes": 14,
+        "execution_errors": 0,
+        "ordinary_search_misses": 1,
+        "safe_return_and_identity_verification_for_all_completed_evolutions": true,
+        "successful_evolutions": 10
+      },
+      "next_action": "Continue current model-directed collection and normal recovery. Preserve partial XP,ordinary misses and every cost. No new fit,subsystem or native comparison. Watch disk and renew the administrative guard prospectively if needed;user goal has no deadline.",
+      "next_review_utc": "2026-10-11T02:01:39Z",
+      "outcomes": 159,
+      "parameter_updates": 0,
+      "pending_goal": {
+        "inspection_frames": 0,
+        "kind": "evolve",
+        "level_before_observed": 18,
+        "level_latest_observed": 25,
+        "next_evolution_level": 28,
+        "nurse_snapshot": "restoration-025",
+        "state_bytes_unchanged_by_inspection": true,
+        "step": 14,
+        "trainee_national": 56
+      },
+      "phase_seconds": {
+        "execution": 4695.971,
+        "menu_and_boundary_observation": 5304.534,
+        "outcome_diagnostics": 6.398,
+        "selection_and_receipt": 2.488,
+        "selection_diagnostics": 3.265,
+        "terminal_observation": 11.41,
+        "verification": 3.226
+      },
+      "read_only_file_pin_checks_passed": true,
+      "registration_delta": 38,
+      "registrations": 89,
+      "remaining_required": 35,
+      "review_utc": "2026-10-11T00:02:14Z",
+      "scheduled_utc": "2026-10-11T00:01:39Z",
+      "segment_terminal_authenticated": false,
+      "since_previous_review": {
+        "actual_net_income": 31998,
+        "execution_seconds": 2948.198,
+        "gross_income": 59598,
+        "income_cycles": 2,
+        "income_rooms": 10,
+        "menu_and_boundary_seconds": 2156.277,
+        "outcomes": 59,
+        "registrations": 18
+      },
+      "training_examples": 0,
+      "unresolved_cash_attribution": [
+        {
+          "change": 1500,
+          "segment": 116,
+          "step": 9
+        },
+        {
+          "change": 155,
+          "segment": 116,
+          "step": 21
+        },
+        {
+          "change": 1100,
+          "segment": 121,
+          "step": 0
+        }
+      ]
+    },
+    {
+      "actual_net_income": 180090,
+      "authenticated_checkpoint": 125,
+      "cash": 60222,
+      "closure_supplement": {
+        "actual_exit_code": 0,
+        "administrative_censor_step": 43,
+        "authenticated_checkpoint": 126,
+        "cash": 60222,
+        "censor_not_gameplay_error": true,
+        "exact_state_bytes_unchanged": true,
+        "launcher_passed": true,
+        "native126_outcomes": 44,
+        "observed_worker_exit_utc": "2026-10-11T02:03:33Z",
+        "outcomes": 189,
+        "phase_seconds": {
+          "execution": 11112.678,
+          "menu_and_boundary_observation": 6371.332,
+          "outcome_diagnostics": 7.641,
+          "selection_and_receipt": 2.996,
+          "selection_diagnostics": 4.2,
+          "terminal_observation": 13.568,
+          "verification": 4.156
+        },
+        "raw_stop_reason": "execution_failed",
+        "registrations": 104,
+        "source": "ClosedRESULT.episode.outcomes preferred;interrupted124/125 retain per-step receipts.",
+        "whole_party_restored": true,
+        "worker_absent": true,
+        "zero_input_frames": 0
+      },
+      "fits": 0,
+      "gross_income": 297990,
+      "income_cycles": 10,
+      "income_rooms": 50,
+      "interpretation": "Native25evolution gains demonstrate ordinary gameplay reuse of the admitted named loan. In this newest interval execution dominates menu/boundary timing;these are two measured phases,not whole-wall-time or emulator-FPS attribution. No demonstrated need for a fit.",
+      "live_segment": 126,
+      "live_step": 42,
+      "native126": {
+        "completed_outcomes": 43,
+        "gameplay_execution_errors": 0,
+        "ordinary_search_misses": 5,
+        "safe_return_and_identity_verification_for_all_completed_evolutions": true,
+        "successful_evolutions": 25
+      },
+      "next_action": "Continue same-save collection through124 using unchanged models/config/seed;renew finite guard without resetting costs.",
+      "next_review_utc": "2026-10-11T04:01:39Z",
+      "ordinary_setbacks": 32,
+      "outcomes": 188,
+      "outcomes_scope": "Per-step files written through126042 at review observation;later closed terminal adds043.",
+      "parameter_updates": 0,
+      "phase_seconds": {
+        "execution": 11112.613,
+        "menu_and_boundary_observation": 6325.59,
+        "outcome_diagnostics": 7.641,
+        "selection_and_receipt": 2.975,
+        "selection_diagnostics": 4.166,
+        "terminal_observation": 13.509,
+        "verification": 4.156
+      },
+      "read_only_file_pin_checks_passed": true,
+      "read_only_pin_count": 612,
+      "registration_delta": 53,
+      "registrations": 104,
+      "remaining_required": 20,
+      "review_utc": "2026-10-11T02:01:56Z",
+      "scheduled_utc": "2026-10-11T02:01:39Z",
+      "segment_terminal_authenticated": false,
+      "since_previous_review": {
+        "execution_seconds": 6416.642,
+        "menu_and_boundary_seconds": 1021.056,
+        "menu_share_of_these_two_phases_percent": 13.7281,
+        "outcomes": 29,
+        "registrations": 15
+      },
+      "training_examples": 0,
+      "unresolved_cash_attribution": [
+        {
+          "change": 1500,
+          "segment": 116,
+          "step": 9
+        },
+        {
+          "change": 155,
+          "segment": 116,
+          "step": 21
+        },
+        {
+          "change": 1100,
+          "segment": 121,
+          "step": 0
+        },
+        {
+          "change": 1395,
+          "segment": 126,
+          "step": 16
+        }
+      ]
+    },
+    {
+      "actual_net_income": 194889,
+      "authenticated_checkpoint": 127,
+      "cash": 66021,
+      "closure_supplement": {
+        "actual_exit_code": 0,
+        "authenticated_checkpoint": 128,
+        "boxed_dragonair_level": 52,
+        "cash": 66021,
+        "exact_state_bytes_unchanged": true,
+        "launcher_passed": true,
+        "native128_outcomes": 3,
+        "observed_worker_exit_utc": "2026-10-11T04:13:18Z",
+        "original_roster_returned": true,
+        "outcomes": 204,
+        "raw_stop_reason": "verification_failed",
+        "registrations": 113,
+        "source": "Actualclosed128episode adds its safe training partial;no newflag in002.",
+        "whole_party_restored": false,
+        "worker_absent": true,
+        "zero_input_frames": 0
+      },
+      "coverage": [
+        {
+          "authoritative_outcomes": 10,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 10,
+          "previous_file_only_omissions": [],
+          "segment": 115
+        },
+        {
+          "authoritative_outcomes": 46,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 46,
+          "previous_file_only_omissions": [],
+          "segment": 116
+        },
+        {
+          "authoritative_outcomes": 1,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 1,
+          "previous_file_only_omissions": [],
+          "segment": 117
+        },
+        {
+          "authoritative_outcomes": 1,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 1,
+          "previous_file_only_omissions": [],
+          "segment": 118
+        },
+        {
+          "authoritative_outcomes": 31,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 31,
+          "previous_file_only_omissions": [],
+          "segment": 119
+        },
+        {
+          "authoritative_outcomes": 3,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 3,
+          "previous_file_only_omissions": [],
+          "segment": 120
+        },
+        {
+          "authoritative_outcomes": 1,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 1,
+          "previous_file_only_omissions": [],
+          "segment": 121
+        },
+        {
+          "authoritative_outcomes": 7,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 7,
+          "previous_file_only_omissions": [],
+          "segment": 122
+        },
+        {
+          "authoritative_outcomes": 13,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 13,
+          "previous_file_only_omissions": [],
+          "segment": 123
+        },
+        {
+          "authoritative_outcomes": 12,
+          "closed": true,
+          "closed_episode_available": false,
+          "per_step_files": 12,
+          "previous_file_only_omissions": [],
+          "segment": 124
+        },
+        {
+          "authoritative_outcomes": 20,
+          "closed": true,
+          "closed_episode_available": false,
+          "per_step_files": 20,
+          "previous_file_only_omissions": [],
+          "segment": 125
+        },
+        {
+          "authoritative_outcomes": 44,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 44,
+          "previous_file_only_omissions": [],
+          "segment": 126
+        },
+        {
+          "authoritative_outcomes": 12,
+          "closed": true,
+          "closed_episode_available": true,
+          "per_step_files": 12,
+          "previous_file_only_omissions": [],
+          "segment": 127
+        },
+        {
+          "authoritative_outcomes": 2,
+          "closed": false,
+          "closed_episode_available": false,
+          "per_step_files": 2,
+          "previous_file_only_omissions": [],
+          "segment": 128
+        }
+      ],
+      "fits": 0,
+      "gross_income": 327789,
+      "income_cycles": 11,
+      "income_rooms": 55,
+      "interpretation": "Nine actual new flags and one more unchanged111income cycle demonstrate continued same-save reuse. New completed-outcome execution dominates menu/boundary timing (7.293%menu share of only those two phases);active002training is not yet in these totals. Safe cap partial retains boxed Dragonair45 and continuation reaches50. No demonstrated need for a fit/new subsystem. Ordinary misses and all four old cash gaps remain.",
+      "live_segment": 128,
+      "live_step": 1,
+      "native127_journal": {
+        "bytes": 48975900,
+        "exists": true,
+        "raw_retained": true
+      },
+      "native128_active_training": {
+        "buttons_released": true,
+        "inspection_frames": 0,
+        "level": 50,
+        "snapshot": "restoration-009",
+        "species": "pokemon:national:148",
+        "state_unchanged": true,
+        "step": 2,
+        "unfinished_goal_excluded_from_completed_outcome_phase_totals": true,
+        "xp": 159332
+      },
+      "new_engine_exceptions_since_review3": 0,
+      "next_action": "Keep actual128running under88 toward124;carry every cost,source/model/config/seed/original022baseline,then authenticate and stop for human review.",
+      "next_review_utc": "2026-10-11T06:01:39Z",
+      "non_exception_unverified": [
+        {
+          "cost": {
+            "actions": 592,
+            "cash_spent": 0,
+            "completed_actions": 592,
+            "frames": 47772
+          },
+          "evolution_partial": null,
+          "original_roster_returned": null,
+          "reason": "outcome_not_verified",
+          "safe": true,
+          "segment": 118,
+          "step": 0,
+          "training_battles": null,
+          "verification": "failed",
+          "wall_limit_reached": null
+        },
+        {
+          "cost": {
+            "actions": 58340,
+            "cash_spent": 0,
+            "completed_actions": 58340,
+            "frames": 4726820
+          },
+          "evolution_partial": true,
+          "original_roster_returned": true,
+          "reason": "outcome_not_verified",
+          "safe": true,
+          "segment": 127,
+          "step": 11,
+          "training_battles": 752,
+          "verification": "failed",
+          "wall_limit_reached": true
+        }
+      ],
+      "ordinary_setbacks": 33,
+      "outcomes": 203,
+      "outcomes_scope": "115throughlive128;prefer closedRESULT.episode.outcomes;per-step fallback for interrupted results without episode",
+      "parameter_updates": 0,
+      "partial_training_native127": {
+        "box_index": 2,
+        "box_slot": 18,
+        "completed_training_battles": 752,
+        "exact_state_bytes_unchanged": true,
+        "healing_trips": 13,
+        "original_roster_returned": true,
+        "raw_stop_reason": "verification_failed",
+        "raw_verification": "failed",
+        "reason": "Existing finite training wall limit;safe positive-XP partial,not an engine exception or new registration.",
+        "source_level_retained_in_terminal": 45,
+        "step": 11,
+        "zero_input_frames": 0
+      },
+      "phase_seconds": {
+        "execution": 15483.556,
+        "menu_and_boundary_observation": 6715.195,
+        "outcome_diagnostics": 7.722,
+        "selection_and_receipt": 3.286,
+        "selection_diagnostics": 4.561,
+        "terminal_observation": 14.449,
+        "verification": 4.572
+      },
+      "read_only_file_pin_checks_passed": true,
+      "read_only_pin_count": 612,
+      "registration_delta": 62,
+      "registrations": 113,
+      "remaining_required": 11,
+      "review_utc": "2026-10-11T04:03:32Z",
+      "scheduled_utc": "2026-10-11T04:01:39Z",
+      "segment_terminal_authenticated": false,
+      "since_previous_closed_review": {
+        "actual_net_income": 14799,
+        "execution_seconds": 4370.878,
+        "income_cycles": 1,
+        "income_rooms": 5,
+        "menu_and_boundary_seconds": 343.863,
+        "menu_share_of_these_two_phases_percent": 7.2934,
+        "outcomes": 14,
+        "registrations": 9
+      },
+      "training_examples": 0,
+      "typed_failures_and_censors_retained": 8,
+      "unresolved_cash_attribution": [
+        {
+          "change": 1500,
+          "segment": 116,
+          "step": 9
+        },
+        {
+          "change": 155,
+          "segment": 116,
+          "step": 21
+        },
+        {
+          "change": 1100,
+          "segment": 121,
+          "step": 0
+        },
+        {
+          "change": 1395,
+          "segment": 126,
+          "step": 16
+        }
+      ]
+    },
+    {
+      "actual_net_income": 277485,
+      "authenticated_checkpoint": 133,
+      "cash": 2077,
+      "fits": 0,
+      "gross_income": 446985,
+      "income_cycles": 15,
+      "income_rooms": 75,
+      "interpretation": "Same-save registered-route completion is verified; current-run source repairs, exploration configuration, deterministic reserve/capture/PC mechanics and three singleton registration goals remain disclosed. This is not a frozen unassisted pass. Existing models were reused; native XP and registrations are not parameter updates.",
+      "kind": "completion_review_ready_aggregation",
+      "menu_share_of_execution_plus_menu_percent": 28.2121,
+      "next_action": "Stop gameplay for the user's in-depth retrospective. Review existing data and decide the smallest freeze-readiness work order; do not start another campaign, fit, transfer or publish.",
+      "non_exception_unverified": [
+        {
+          "cost": {
+            "actions": 592,
+            "cash_spent": 0,
+            "completed_actions": 592,
+            "frames": 47772
+          },
+          "evolution_partial": null,
+          "original_roster_returned": null,
+          "reason": "outcome_not_verified",
+          "safe": true,
+          "segment": 118,
+          "step": 0,
+          "training_battles": null,
+          "verification": "failed",
+          "wall_limit_reached": null
+        },
+        {
+          "cost": {
+            "actions": 58340,
+            "cash_spent": 0,
+            "completed_actions": 58340,
+            "frames": 4726820
+          },
+          "evolution_partial": true,
+          "original_roster_returned": true,
+          "reason": "outcome_not_verified",
+          "safe": true,
+          "segment": 127,
+          "step": 11,
+          "training_battles": 752,
+          "verification": "failed",
+          "wall_limit_reached": true
+        },
+        {
+          "cost": {
+            "actions": 50741,
+            "cash_spent": 0,
+            "completed_actions": 50741,
+            "frames": 4111512
+          },
+          "evolution_partial": true,
+          "original_roster_returned": true,
+          "reason": "outcome_not_verified",
+          "safe": true,
+          "segment": 128,
+          "step": 2,
+          "training_battles": 636,
+          "verification": "failed",
+          "wall_limit_reached": true
+        }
+      ],
+      "ordinary_setbacks": 37,
+      "outcomes": 244,
+      "ownership": {
+        "model_owned_outcomes": 217,
+        "registrations_during_model_owned_goals": 70,
+        "registrations_during_support_goals": 3,
+        "source": "Authoritative outcome support_role, with closed episode model/support counts where available; do not infer missing model_queries fields as zero.",
+        "support_outcomes": 27,
+        "support_registration_goals": [
+          {
+            "national": 145,
+            "segment": 132,
+            "step": 2
+          },
+          {
+            "national": 64,
+            "segment": 133,
+            "step": 4
+          },
+          {
+            "national": 34,
+            "segment": 133,
+            "step": 6
+          }
+        ]
+      },
+      "parameter_updates": 0,
+      "phase_seconds": {
+        "execution": 19342.115,
+        "menu_and_boundary_observation": 7601.3,
+        "outcome_diagnostics": 10.268,
+        "selection_and_receipt": 3.661,
+        "selection_diagnostics": 4.946,
+        "terminal_observation": 17.056,
+        "verification": 5.505
+      },
+      "read_only_file_pin_checks_passed": true,
+      "read_only_pin_count": 649,
+      "registration_delta": 73,
+      "registrations": 124,
+      "remaining_required": 0,
+      "review_utc": "2026-10-11T06:04:15Z",
+      "scheduled_utc": "2026-10-11T06:01:39Z",
+      "separate_native132_no_input_admission_failure_retained": true,
+      "separate_raw130_export_failure_retained": true,
+      "state_unchanged": true,
+      "training_examples": 0,
+      "typed_outcome_failures_or_censors": 9,
+      "verified_evolutions": 39,
+      "worker_exit_code": 0,
+      "worker_stopped": true,
+      "zero_input_frames": 0
+    }
+  ],
+  "schema": "pokemon.same-save-completion-evidence.v1",
+  "scoped_bird_loan_zero_input_verification": {
+    "all_pins_passed": true,
+    "approved_loan_declaration_forwarded": true,
+    "configuration_unchanged": true,
+    "final_pin_count": 618,
+    "frames": 0,
+    "inputs": 0,
+    "inspection": "inspect-051526445333",
+    "model_queries": 1,
+    "offered_bird_goals": 3,
+    "passed": true,
+    "state_unchanged": true
+  },
+  "separate_income_diagnostic": {
+    "actions": 2155,
+    "actual_battle_comparisons": 1,
+    "actual_player_income_from_copy": 0,
+    "actual_worker_exit_code": 0,
+    "battle_model_sha256": "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+    "battles": 5,
+    "bootstrap_failures_before_inputs": 2,
+    "copy_back": false,
+    "frames": 193182,
+    "full_heals_used": 1,
+    "full_restores_used": 0,
+    "gross_income": 29799,
+    "hashes": {
+      "CONTEXT.json": "ae494ce28a9c73dbda29ec175333635ea6649d60cbb8e7472044ee4d23dda74b",
+      "RESULT.json": "838601572734a4cef77872919b80fa289f996d60d9548528fdb6f9f131d24820",
+      "terminal.state": "5468f37de617b6629b9928660dc1a391448b316a3865dc694ebf10cac5139170"
+    },
+    "medicine_learned": false,
+    "net_after_owned_replacement": 26199,
+    "normal_nurse": 1,
+    "operator_selected": true,
+    "owned_replacement_value": 3600,
+    "passed": true,
+    "released": true,
+    "revives_used": 2,
+    "seconds": 56.828510500025004,
+    "source_checkpoint": 118,
+    "stopped": true,
+    "strategic_model_queries": 0
+  },
+  "session_id": "2026-10-10-same-save-run-completion",
+  "started_utc": "2026-10-10T20:01:39.000Z",
+  "starting_cash": 1908,
+  "starting_checkpoint": 114,
+  "starting_pin_checks": {
+    "passed": true,
+    "private_backend": 171,
+    "protected": 326,
+    "public_source": 49
+  },
+  "starting_registrations": 51,
+  "starting_spent": {
+    "actions": 571104,
+    "cash_debits": 773317,
+    "decisions": 1321,
+    "frames": 47214260,
+    "heals": 606,
+    "seconds": 30690.58479009499
+  },
+  "status": "complete",
+  "training_examples": 0,
+  "unresolved_resource_attribution": [
+    {
+      "checkpoint": 116,
+      "gross_spending_known": false,
+      "step": 9,
+      "unexplained_positive_cash": 1500
+    },
+    {
+      "checkpoint": 116,
+      "gross_spending_known": false,
+      "step": 21,
+      "unexplained_positive_cash": 155
+    }
+  ],
+  "user_outcome": "Current earned Red run complete:124/124 required registrations with same-ancestry Champion/concurrent Hall-of-Fame proof, all four legendary specimens retained and all six originals returned/restored. Gameplay stopped for in-depth review.",
+  "verified_native_evolution_total": 39
+}

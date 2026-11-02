@@ -1,0 +1,103 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 63,
+  "actual_running": false,
+  "admitted_TRAIN_examples": 5,
+  "adopted_models": 0,
+  "block_closed": true,
+  "capture_arms_not_admitted": 0,
+  "capture_result": {
+    "independent_gameplay_origins_established": false,
+    "new_capture_credit_to_actual": 0,
+    "original047": {
+      "long_captures": 1,
+      "long_encounters": 31,
+      "short_captures": 0,
+      "short_encounters": 6
+    },
+    "original048": {
+      "long_captures": 0,
+      "long_encounters": 62,
+      "short_captures": 0,
+      "short_encounters": 6
+    }
+  },
+  "cash_debits": 2000,
+  "closeout_sha256": "910b066140b86d142de7e549b5e086c5a580b3f043191c820ab9d62f6e0d8ffb",
+  "complete_total_cost_unknown": true,
+  "deadline_utc": "2026-10-23T16:19:30+00:00",
+  "derived_V12_views_of_same_rows": 4,
+  "derived_views_are_additional_examples": false,
+  "development_lineage_registrations": 68,
+  "fit_calls": 0,
+  "full_suite_claim": false,
+  "fully_measured_paired_candidates": 2,
+  "geometry": {
+    "focused_checks": 100,
+    "frozen_package_sha256": "d781ed7384b41ee7d5c37e68e6f8c77cc81424ecef36ac2159ad3e5c311e2853",
+    "old_binding_changed": false,
+    "old_known_menu_and_model_identity_retained": true,
+    "route_mapping_activated": false
+  },
+  "known_native_study_root_seconds": 499.735373199,
+  "latest_audit": 67,
+  "latest_package_focused_checks": 342,
+  "latest_package_native_qualified": false,
+  "latest_package_sha256": "baae477e4a73aeda2181ee01bb765dced4252fa9bed1d1c2987b2ba6dddcd714",
+  "native_actions": 8386,
+  "native_frames": 787992,
+  "native_loads": 8,
+  "observed_at_utc": "2026-10-23T16:07:33.183543+00:00",
+  "offline_costs_separate": true,
+  "original_capture_rows": 4,
+  "package_bind": {
+    "ABBA_mean_baseline_seconds": 26.215141985,
+    "ABBA_mean_candidate_seconds": 23.958129245,
+    "cold_cache_claim": false,
+    "native_qualified": false,
+    "one_local_trial": true,
+    "peak_RSS_change_bytes": 6342656,
+    "relative_reduction_percent": 8.6095766382
+  },
+  "preflights": 5,
+  "preparation_effort": {
+    "direct_and_routed_formula_composed": true,
+    "native_venue_equivalence_proved": false,
+    "retrospective_entire_A9_score_gap_removed": true
+  },
+  "preparation_result": {
+    "both_fully_restored": true,
+    "fit_ready": false,
+    "recipient_start_level": 20,
+    "recovered_faints": 3,
+    "required_xp": 403,
+    "route7_frame_reduction_percent": 31.4285714286,
+    "route7_frames": 57024,
+    "route8_frames": 83160,
+    "target_level": 21,
+    "venue_specific_homes_differ": true
+  },
+  "private_evidence_hashes": {
+    "CAPTURE-HORIZON-V12-DERIVED-VIEWS.json": "bb05d5fbdf75f563c64c51e6e62887570a05563ad1667d65ba2520bc0b3de373",
+    "FIXED-READY-MATERIALIZATION-02.json": "f3257a8070326dfe4198b21b63f18403412a949b51bd796f81da1092e51302a0",
+    "FROZEN-V163-INDEPENDENT-GEOMETRY-REPORT-CHECKS.json": "748abc10457286a785000a77ed47bedf9a4651b98daa1fdd6bb82f3ac7665bb8",
+    "FROZEN-V164-PREPARATION-COMPOSITION-REPORT-CHECKS.json": "d44b26c10a1b852345fb7b76d8e73b856cc0a570ab11435800398ab66b147da5",
+    "HORIZON-PAIR-INDEPENDENT-REVIEW.json": "ba91682db6d0f177c44f8ace83d8e8e5154247c1c7c284646b317d56b52aecf2",
+    "PREPARATION-COMPOSITION-V164-CLOSEOUT.json": "e5c71bde7420fe5751b6df8f5ab4af31640429b8bf1b2af6c36448d8c57eeff6",
+    "SOURCE047-HORIZON-PAIR-NATIVE-COMPARISON.json": "99a82cc689917ff9654383a831ae027c3b2ae2504d45df262283d9c351a85217",
+    "capture-horizon-original-v9-admission/ADMITTED.json": "680c84de20a0555e94db20827044164812800f24b02ac7b9a67bedea7752a054",
+    "fixed-ready-train005-pair-admission/COST-AND-ADMISSION.json": "8436f75459f6a024ffea270a05b8be8e207d6f8de58ab3e6162ac30fe9a1690e",
+    "proposals/BIND-ABBA-INDEPENDENT-REVIEW.json": "5cac03c5ebad539e49110298693f407aadf9d1acc38f7f3762b69843cd2809e7",
+    "proposals/COMPLETE-PAID-LOCAL-CORRECTION-REVIEW.json": "a623a2bcf5cd39d3bb47e94f2e430b79b3e6676ceebf1ea3e505f98a339785bf",
+    "proposals/FIXED-READY-EXISTING-VENUE-PRIOR-REVIEW.json": "ddbc28ca9324dfe780535801be360c5457d785e1dfa13795ebe5c90714be80eb"
+  },
+  "retained_failures": {
+    "proposal_parser_dry_attempts": 1,
+    "root_materialization_attempts": 2,
+    "unapplicable_test_mismatch": true,
+    "zero_load_worker_startups": 1
+  },
+  "schema": "pokemon.red.capture-ready-learning-status.v1",
+  "separate_read_only_supervised_seconds": 147.941153656
+}

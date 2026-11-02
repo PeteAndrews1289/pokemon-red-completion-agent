@@ -1,0 +1,75 @@
+{
+  "actual_registration_delta": 0,
+  "actual_running": false,
+  "actual_state_sha256": "d43aa74b01819d4996126d85d2c126a0cca14b33d086c588927c67da77ed2012",
+  "adopted_weights": 0,
+  "all_seven_goals_complete": false,
+  "all_workers_stopped": true,
+  "badges": 5,
+  "costs": {
+    "actions": 7070,
+    "adopted_models": 0,
+    "allocated_cases": 34,
+    "fit_calls": 2,
+    "fit_worker_seconds": 9.834054558000048,
+    "frames": 594412,
+    "hold_seconds": 14280,
+    "loads": 19,
+    "native_seconds": 93.65722964099967,
+    "new_models": 2,
+    "root_seconds": 1012.3781424859994,
+    "unlaunched_holds": 1800
+  },
+  "effective_battle_policy_mismatch_identified_and_corrected": true,
+  "fit_worker_time_separate": true,
+  "fits": 2,
+  "focused_frozen_tests": 936,
+  "full_suite": false,
+  "independent_generalization_proved": false,
+  "master_ball": 1,
+  "native_time_already_in_root": true,
+  "native_timing_admission_errors": 0,
+  "native_timing_checks": 8,
+  "native_timing_execution_errors": 0,
+  "new_models": 2,
+  "new_native_TRAIN_rows": 12,
+  "observed_at_utc": "2026-10-22T22:53:29.644983+00:00",
+  "official_acceptance": false,
+  "private_closeout_sha256": "e3d3620d83420f5d3b3ed91ef3b4319a85d893e710b0daea3ebcdbe3d25a888c",
+  "readiness_focused_tests": 568,
+  "recipient_product_candidate_rejected": true,
+  "registrations": 63,
+  "restoration_retry_reached_level": true,
+  "sampled_timing_results": [
+    {
+      "arm": "replace-water-gun",
+      "context": "003",
+      "samples": 3,
+      "wins": 1
+    },
+    {
+      "arm": "replace-tail-whip",
+      "context": "003",
+      "samples": 3,
+      "wins": 0
+    },
+    {
+      "arm": "replace-water-gun",
+      "context": "005",
+      "samples": 3,
+      "wins": 1
+    },
+    {
+      "arm": "replace-tail-whip",
+      "context": "005",
+      "samples": 3,
+      "wins": 2
+    }
+  ],
+  "sampled_timings_are_win_rate_estimates": false,
+  "schema": "pokemon.red.preparation-readiness-progress.v1",
+  "starting_registrations": 63,
+  "subsequent_level_arm_challenge_won": false,
+  "timing_can_change_native_outcome": true,
+  "trainee_XP": 157
+}

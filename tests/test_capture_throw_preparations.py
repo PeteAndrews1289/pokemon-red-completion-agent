@@ -107,3 +107,37 @@ def test_preparation_fields_cannot_be_partly_dropped():
             'status_attempts': 0, 'verified_status_observations': 0,
             'party_preparations': 0, 'prepared_asleep': 1,
         }})
+
+
+@pytest.mark.parametrize('active_hp,active_max,keep', [(150, 200, True), (50, 50, False),
+                                                     (90, 200, False), (100, 150, True)])
+def test_opt_in_preserves_viable_active_without_stranding_fragile_helper(
+        monkeypatch, active_hp, active_max, keep):
+    world, prepare = setup(monkeypatch)
+    prepare.preserve_viable_active = True
+    world.status = 3
+    first = world.party.members[0]
+    world.party = replace(world.party, members=(
+        replace(first, hp=active_hp, max_hp=active_max), world.party.members[1]))
+    switches = []
+    def switch(_a, _r, _e, index, **kwargs):
+        switches.append(index)
+        world.raw = replace(world.raw, active_party_index=index)
+        world.status = 0
+    monkeypatch.setattr(runtime, 'switch_active_battler', switch)
+    assert prepare()
+    assert switches == ([] if keep else [1])
+    assert prepare.throw_preparations[-1]['target_status'] == ('sleep' if keep else 'healthy')
+    assert world.turns == prepare.attempts == 0
+
+
+def test_preservation_does_not_keep_status_afflicted_active(monkeypatch):
+    from pokemon_red_completion.party import StatusCondition
+    world, prepare = setup(monkeypatch)
+    prepare.preserve_viable_active = True
+    world.status = 3
+    world.party = replace(world.party, members=(
+        replace(world.party.members[0], hp=150, max_hp=200, status=StatusCondition.POISON),
+        world.party.members[1]))
+    assert prepare()
+    assert world.raw.active_party_index == 1

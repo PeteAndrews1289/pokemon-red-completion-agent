@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon.red.league-champion-development-checkpoint.v1",
+  "session_id": "2026-10-14-league-and-collection-continuation",
+  "run_family": "red-r29-league-collection-continuation-20261014-v1",
+  "partition": "development",
+  "status": "story_complete_collection_ongoing",
+  "checkpoint": "runs/segment-009/native/episode/step-004",
+  "checkpoint_state_sha256": "ef2573fc9f77278ef3f8ec758bab1faebcf2112c746a0f09fe986f96c9233b7e",
+  "native_champion_event": true,
+  "concurrent_native_hall_of_fame": true,
+  "cold_verification_actions": 0,
+  "cold_verification_frames": 0,
+  "original_six_preserved": true,
+  "master_ball_stock_at_checkpoint": 1,
+  "cash_at_checkpoint": 31176,
+  "party_levels_at_checkpoint": [60, 56, 57, 57, 51, 54],
+  "registrations_at_checkpoint": 83,
+  "required_native_registrations": 124,
+  "champion_battle": {
+    "authority": "scoped-assisted-champion-development",
+    "learned_battle_authority": true,
+    "moves_selected": 19,
+    "switches": 11,
+    "bag_items_spent": 0,
+    "victory_money": 6435,
+    "rematch": true
+  },
+  "learning": {
+    "new_train_rows": 0,
+    "new_fits": 0,
+    "new_parameter_versions": 0,
+    "configuration_sha256": "5e6a5128211fb0b26551d71acda68814f8337f6a6f99403335157579dc8420c1",
+    "goal_model_sha256": "921d5d8a0fc5d2b187e49e9922ddd8296669c7544ab19e807a0c846155abdf6d",
+    "gameplay_xp_is_parameter_learning": false
+  },
+  "support_disclosures": [
+    "DEVELOPMENT exploration mix 0.75; seed unchanged",
+    "Declared League-first deferral of optional late collection",
+    "Normal medicine reserve procurement and Indigo nurse checkpoint",
+    "Existing route, puzzle, compulsory control and faint recovery mechanics",
+    "Copied-qualified execution repairs during this development ancestry"
+  ],
+  "prior_agatha_and_lance_losses_retained": true,
+  "no_opening_save_restart": true,
+  "copied_progress_imported": false,
+  "master_ball_authorized_destination": "one legendary bird or Mewtwo; disclosed preference Mewtwo",
+  "all_registrations_complete": false,
+  "final_fresh_unmodified_acceptance_passed": false,
+  "final_fresh_exit_gates_passed": 0,
+  "final_fresh_exit_gates_required": 5,
+  "limitations": [
+    "Story completion on an assisted DEVELOPMENT save is not the final frozen autonomous product gate.",
+    "The first cold custody diagnostic compared all six members with only the combat-role anchor. Its report remains; zero-input adjudication verifies the complete six-member roster without replay.",
+    "Collection and authorized Master Ball consumption remain outstanding at this checkpoint."
+  ]
+}

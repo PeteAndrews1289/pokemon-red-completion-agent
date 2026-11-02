@@ -1,0 +1,43 @@
+{
+  "schema": "pokemon.red.player-source-followup.v1",
+  "classification": "metadata-only prerequisite investigation, not learning",
+  "scope": "Two older battle catalogs discovered after the known general-player-bank audit; not a global absence proof",
+  "catalogs": [
+    {
+      "sha256": "25aadf98b86ccd7daab29a98172f81c9e4d455be1e6237aef5327e51738d3d2e",
+      "rows": 8,
+      "train_labels": 4,
+      "development_labels": 4
+    },
+    {
+      "sha256": "3f155af9c625d56586b57f04f5b207ffad7601cb2c378acdd433802bf78a2f55",
+      "rows": 8,
+      "train_labels": 4,
+      "development_labels": 4
+    }
+  ],
+  "metadata_findings": [
+    "Catalog entries identify lineage labels, source commits, partitions and state locations; they do not authenticate independent upstream ancestry or absence from baseline training",
+    "The tracked V5 promotion plan identifies v5-validation-01 as sealed; the V6 plan explicitly retires its reuse for selection or claims",
+    "The tracked V6 plan assigns validation, shadow and causal-control roots separately; a later development catalog label alone does not override those earlier restrictions",
+    "Acquisition profile-lineage metadata maps the already-audited 81-entry bank, not a newly established independent source pool"
+  ],
+  "supporting_documents": [
+    "docs/evidence/training-control-overworld-promotion-plan-2026-08-08.json",
+    "docs/evidence/training-control-affordance-v6-promotion-plan-2026-08-08.json",
+    "docs/evidence/red-multi-goal-curriculum-lineage-inventory-2026-09-03.json",
+    "docs/evidence/red-player-source-supply-2026-09-25.json"
+  ],
+  "comparison_groups_authenticated": 0,
+  "required_comparison_groups": 2,
+  "state_payloads_opened": 0,
+  "evaluation_payloads_opened": 0,
+  "new_claims": 0,
+  "emulator_frames": 0,
+  "production_fits": 0,
+  "new_train_examples": 0,
+  "blocker": "Cannot satisfy the required comparison with currently authenticated source evidence. Existing assisted-setup approval does not create missing upstream provenance; the retired clean-power supply process cannot be silently restarted.",
+  "decision_needed": "Provide an authenticated independent source bank, or explicitly authorize a newly bounded independently initialized assisted-source protocol that supersedes the relevant no-clean-power-successor restriction without reopening old assignments or permitting full-game teacher routes. Preserve the two-group comparison requirement.",
+  "goal_complete": false,
+  "blocked_goal_turn_count": 1
+}

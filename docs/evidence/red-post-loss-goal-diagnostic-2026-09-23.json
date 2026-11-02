@@ -1,0 +1,135 @@
+{
+  "schema": "pokemon.post-loss-goal-shadow.v1",
+  "partition": "DEVELOPMENT_DIAGNOSTIC",
+  "plan_sha256": "47a5e37ab189778f8fd6b92ac2026653cc60d91c95e05b29f21d4baec50186f1",
+  "probe_sha256": "0d8793446037601a01bc16fb925959e5a6fb96c47a33698201a08dab3e93cfe3",
+  "source_sha256": "5bf49331533816a5b827ba0ecc01522adde8ae38d02da14e48a35144aaeb7159",
+  "envelope_sha256": "dbd7cb35d6ec5a1e1e8c17e4ff9f8b0b3f6a779712ebf1a4ca847b1387d26c88",
+  "source_stage": 368,
+  "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+  "model_file_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+  "model_feature_version": 4,
+  "hypothetical_proposals": true,
+  "executable_offers_qualified": false,
+  "recent_battle_outcome_in_model_input": false,
+  "primary_ranking": {
+    "binding_identity_fields": 0,
+    "menu_sha256": "769e1eeaff54b7c908745da0c28fbbebdc5711caac1758d2f1838c613a063c94",
+    "mode": "model_shadow",
+    "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "private_path_fields": 0,
+    "scores": [
+      {
+        "goal_candidate_index": 0,
+        "goal_kind": "advance_story",
+        "predicted_outcomes": {
+          "action_cost": 0,
+          "completion_gain": 0.004501426454844953,
+          "dependency_unlock_gain": 0,
+          "frame_cost": 0,
+          "irreversible_loss": 0,
+          "party_cost": 0.1604500181547169,
+          "resource_cost": 0,
+          "storage_cost": 0.011583346986137421,
+          "verified_success": 1
+        },
+        "utility": 4.604958291885846
+      },
+      {
+        "goal_candidate_index": 1,
+        "goal_kind": "develop_team",
+        "predicted_outcomes": {
+          "action_cost": 0,
+          "completion_gain": 0,
+          "dependency_unlock_gain": 0.003999121347828743,
+          "frame_cost": 0,
+          "irreversible_loss": 0,
+          "party_cost": 0.035046801354575705,
+          "resource_cost": 0,
+          "storage_cost": 0,
+          "verified_success": 1
+        },
+        "utility": 4.1170969332589955
+      }
+    ],
+    "selected_candidate_index": 0,
+    "selected_kind": "advance_story"
+  },
+  "candidate_order_invariance_passed": true,
+  "sensitivity_counts": {
+    "advance_story": 81
+  },
+  "adapter_normalization": {
+    "desired_capture_items": 10,
+    "desired_recovery_items": 8,
+    "desired_storage_headroom": 8,
+    "required_party_size": 6,
+    "required_team_level": 60
+  },
+  "current_cash": 13673,
+  "party_levels": [
+    54,
+    41,
+    45,
+    45,
+    46
+  ],
+  "rule_targets_by_party_slot": [
+    {
+      "level": 54,
+      "slot": 1,
+      "target": null
+    },
+    {
+      "level": 41,
+      "slot": 2,
+      "target": 51
+    },
+    {
+      "level": 45,
+      "slot": 3,
+      "target": 51
+    },
+    {
+      "level": 45,
+      "slot": 4,
+      "target": 51
+    },
+    {
+      "level": 46,
+      "slot": 5,
+      "target": 51
+    }
+  ],
+  "disclosures": [
+    "Proposal cost/risk values are assumptions, not live execution quotes.",
+    "Model input has current team pressure and cash, not recent loss, opponent levels or final enemy HP.",
+    "Six-member/level60 normalization is inherited adapter configuration, not a learned grinding target.",
+    "The separate prepare_party rule is not the model decision and does not refill the prior budget.",
+    "Other preparation methods are not represented by this two-proposal probe.",
+    "No native goal selected/executed, no fitting, learning gain, qualification or win probability claim."
+  ],
+  "actions": 0,
+  "frames": 0,
+  "new_goal_choices": 0,
+  "new_fits": 0,
+  "new_registrations": 0,
+  "gameplay_running": false,
+  "next_unused_stage": 369,
+  "private_full_report_sha256": "9a51a5df553362c837d097a7055569dfca91ec61579779556f9d9e73a6e277a6",
+  "independent_direct_scoring_cases": 82,
+  "all_81_case_order_reversals_passed": true,
+  "rule_based_review": {
+    "learned_preparation": false,
+    "next_action": "prepare_party",
+    "opposition_level": 54,
+    "observed_opponents": 5
+  },
+  "targeted_tests_passed": 51,
+  "diagnostic_logging_failure": "First report serialization rejected an immutable mapping after zero-input inference; partial report retained. Serialization fixed and same read-only diagnostic recomputed without changing model, inputs or assumptions.",
+  "next_work": [
+    "Add versioned semantic recent-battle outcome, observed opposition gap and HP/PP attrition evidence; do not fabricate learned sensitivity by increasing a hand-written pressure until training wins.",
+    "Bind both bounded training and forward story offers to actual availability and retained cumulative budgets; include legitimate move/resource preparation only when its executor is qualified.",
+    "Use disjoint TRAIN outcomes to learn when preparation pays, including well-prepared losses and underleveled wins; preserve Model141 and held DEVELOPMENT losses; evaluate before live promotion."
+  ]
+}

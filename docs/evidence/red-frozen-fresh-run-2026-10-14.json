@@ -1,0 +1,96 @@
+{
+  "actor_settings_sha256": "8d0c429b44a8a049f87a9726b4b5b33c886882f96a7ca2fee04f5102450d17ac",
+  "all_workers_stopped": true,
+  "cold_diagnosis": {
+    "diagnostic_state_loads": 2,
+    "failed_probe_retained": true,
+    "failed_probe_seconds": null,
+    "frames": 0,
+    "inputs": 0,
+    "model_queries": 0,
+    "passed": true,
+    "source_unchanged": true,
+    "state_restoration_into_actual": false,
+    "successful_probe_seconds": 2.175752041162923
+  },
+  "declared_deadline_utc": "2026-10-15T09:43:52.907301+00:00",
+  "declared_seconds": 57600,
+  "diagnosis": "Concrete teacher exclusion is already in the template and fresh realization appends it again; strict duplicate guard rejects it before model handoff.",
+  "duplicate_exact_pairs": [
+    [
+      "advance_story",
+      "006ebf832ae16c10f36622368ed7458183ac88de5ef325ece31e227b6bb3c2e9"
+    ]
+  ],
+  "error": {
+    "error": "configured player exclusions must name exact kind/profile pairs",
+    "error_type": "ValueError"
+  },
+  "final_red_gates_met": 0,
+  "final_red_gates_total": 5,
+  "formal_final_acceptance": false,
+  "frozen_attempts": 1,
+  "learning": {
+    "fits": 0,
+    "new_train_rows": 0,
+    "new_weights": 0,
+    "runtime_llm_calls": 0
+  },
+  "manifest_sha256": "6013bdc4ea57b7fe0d058602cf2588523e125d0f8be56cc7127389966057ea0d",
+  "native": {
+    "actions": 178,
+    "cash": 3000,
+    "champion": false,
+    "completed_segments": 0,
+    "frames": 22213,
+    "hall_of_fame": false,
+    "map_id": 40,
+    "model_decisions": 0,
+    "owned_species": [
+      7
+    ],
+    "registered_count": 1,
+    "registration_authority": "fixed_declared_starter_initialization",
+    "restarts": 0,
+    "seconds": 2.949781666044146,
+    "state_loads": 0,
+    "state_sha256": "77c361c1186bf7c3e7cdbe698ce13044c27c42f3c0a81f846e4c01ee417c807c",
+    "supervisor_seconds": 40.02246070909314
+  },
+  "next_work": "Preserve this failed attempt. Separately repair exact exclusion-union composition without weakening validation; test actual overlap, distinct profiles and the real first local-model handoff on a separate diagnostic; freeze a new candidate before any separately authorized retry.",
+  "partition": "development",
+  "passed": false,
+  "plan_sha256": "5655ef0ab5fda5cb00d20963cb6495225e2580421ca335d149eae88cf7d204cf",
+  "private_closeout_sha256": "353e03f16f9e4a3b9f1e8ea0e18adaad41b1e3106c6402ca218d44d911d36000",
+  "private_family": "red-frozen-autonomous-run-20261014-v1",
+  "private_proof_hashes": {
+    "CLAIM.json": "6f385f85c4852fe2620a6c8e7a0cc966ebb3ce5bccfb7dacf0cd8b0c2c06731b",
+    "ISOLATED-IO.json": "3cdf1d4268623e53f826b17d0b7b3a65a967088a79e2ac9eda1da6cb7dbe0427",
+    "LAUNCH.json": "889de63e1b8c251b9164b1c883b9f7bbbd3cdd12d5288d173c385cb6aad9531c",
+    "PLAN.json": "5655ef0ab5fda5cb00d20963cb6495225e2580421ca335d149eae88cf7d204cf",
+    "PROCESS-EXIT.json": "ae889fb1d8f78c65fbfb671d224491f2fe7600f5032dec3f30cd37bcbd4228d5",
+    "RESULT.json": "f9a76d5bc65bb9708ff9ff64097fa98320659f8c45eb7bb5d8796feb4424edc5",
+    "SESSION.json": "4b62c963272b07a4962c979bc95dbaac737342e74d235a9f8df5d79a620f80b1",
+    "STDERR.log": "3ce6000bfc4c539b7a648d3782dc644d100df991feef18ef661669222fc7bb6b",
+    "STDOUT.log": "e3394c055b1cad00b1a97c7820c44535f8c257f2d80d946cd00955df6aa64d5d",
+    "bootstrap/OPENING.json": "093c20d7110cf5659fe140a8fda9cfe3dcbe8d54ce4488e3112be8dbfd252af5",
+    "bootstrap/power-on.state": "019e0896bd669981bfafa1ba13dab4e7ef2b915ea723ac1956548d851f0520fb",
+    "diagnostics/fresh-exclusion-cold-v1/RESULT.json": "18c6de0244ce0433d47c49b47c0a173fbba0336cf3c354f730d4a31546f0ba7f",
+    "diagnostics/fresh-exclusion-cold-v2/RESULT.json": "5d999d931858cf6d1560418d2dafd67fd73c6160c5de35665bb9653e01a8ef79",
+    "initial/terminal.state": "77c361c1186bf7c3e7cdbe698ce13044c27c42f3c0a81f846e4c01ee417c807c",
+    "terminal.state": "77c361c1186bf7c3e7cdbe698ce13044c27c42f3c0a81f846e4c01ee417c807c"
+  },
+  "protected_completed_native_registrations": 124,
+  "protected_completed_save_inputs": 0,
+  "protected_completed_save_pins_unchanged": true,
+  "readiness_gap": "Import and synthetic disjoint-profile tests did not exercise the actual overlapping fresh bootstrap/configuration boundary.",
+  "released": true,
+  "review_monitor_activated": false,
+  "schema": "pokemon.red.frozen-fresh-run-result.v1",
+  "second_attempt_launched": false,
+  "session_id": "2026-10-14-frozen-fresh-run",
+  "source_model_config_support_unchanged": true,
+  "started_at_utc": "2026-10-14T17:43:52.907301+00:00",
+  "terminal_reason": "fresh_configuration_duplicate_teacher_exclusion",
+  "two_hour_reviews_due": 0
+}

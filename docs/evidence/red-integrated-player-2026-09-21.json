@@ -1,0 +1,155 @@
+{
+  "schema": "pokemon.red.integrated-player-episode.v1",
+  "status": "passed_bounded_development_integration",
+  "session_id": "2026-09-21-integrated-player",
+  "ownership_audit": "docs/player-ownership-and-integration.md",
+  "origin_state_sha256": "1c42fd3da5f790401667dca4e8165b7b5c200b2c8e2fbd017665eb42b4888c91",
+  "model_sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+  "limits": {
+    "maximum_decisions": 8,
+    "minimum_model_decisions": 5,
+    "maximum_cash_spent": 4000,
+    "maximum_actions": 30000,
+    "maximum_frames": 2000000,
+    "maximum_seconds": 1800
+  },
+  "acceptance": {
+    "ordinary_setback_followed_by_fresh_model_choice": true,
+    "minimum_verified_successes": 1,
+    "continuous_native_state_chain": true,
+    "no_operator_destination_or_teacher_fallback": true,
+    "no_reset_or_code_model_change": true,
+    "independent_endpoint_audits": true
+  },
+  "scope": "Native development integration only. Zero training, no new model, no full-game readiness or transfer claim. Earlier search history unknown.",
+  "results": {
+    "summary": "7continuous native model decisions: 1verified success, 5normal unsuccessful searches and one retained search-limit stop; +1registration, 3000cash spent. No reset, teacher choice, code/model change or intervention. Every before/after save independently audited with zero input. Current 109/124,78specimens,11968cash; terminalbf603930.",
+    "source_commit": "4aba152dc8e25d9f248699046a6c0d19cf563885",
+    "model_decisions": 7,
+    "successful_decisions": 1,
+    "ordinary_setbacks": 5,
+    "terminal_search_limit_stops": 1,
+    "terminal_encounters": 32,
+    "termination": {
+      "accounted_for_continuation": 2500,
+      "actual_total_cash_spent": 3000,
+      "last_ordinary_setback": false,
+      "reason": "verification_failed",
+      "safety_stop_retained": true
+    },
+    "accepted_continuations": 6,
+    "teacher_actions": 0,
+    "human_interventions": 0,
+    "model_fits": 0,
+    "registration_gain": 1,
+    "registered_species": 109,
+    "specimens": 78,
+    "cash": 11968,
+    "cash_spent": 3000,
+    "actions": 9218,
+    "frames": 1061724,
+    "terminal_state_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "stop_reason": "verification_failed",
+    "methods": [
+      "npc_trade",
+      "paid_safari"
+    ],
+    "decisions": [
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 0,
+        "ordinary_setback": true,
+        "outcome_sha256": "f4fbaec6ada10e88f86517ee5929d906672ba2809ef2936805fd98906f88f6e2",
+        "registration_gain": [],
+        "terminal_sha256": "31e35cc7ede9d62958a0f62f037c045c9ba3de9bc775e999cf7a74887ec70003",
+        "verification": "failed"
+      },
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 1,
+        "ordinary_setback": true,
+        "outcome_sha256": "491f477c83d35c8eaeb291a465d0ca7328cbe18df9ec9e54e65e3574c6120ab6",
+        "registration_gain": [],
+        "terminal_sha256": "9731f89c80ec0d1ae77fc188032e2849f780ef3255463d47230dd10b5746ed8a",
+        "verification": "failed"
+      },
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 2,
+        "ordinary_setback": true,
+        "outcome_sha256": "a7becace987d84ace96b68cf97f7ac97d71105371739a0d784358674a6e43cea",
+        "registration_gain": [],
+        "terminal_sha256": "ef58447f87ba65f3cc1b9fcb95ef0b03577b0a2188d6c21f7adc6a93fbcfc6b0",
+        "verification": "failed"
+      },
+      {
+        "cash_spent": 0,
+        "method": "npc_trade",
+        "ordinal": 3,
+        "ordinary_setback": false,
+        "outcome_sha256": "5e72508b3738451722ac90a53663f8a8a91b2ef0a3664ce34883a74704c592d8",
+        "registration_gain": [
+          "pokemon:national:122"
+        ],
+        "terminal_sha256": "17812c90c331fc087d6709f27fcbb9dd6b9092a5f77e90f13f46209d54c0cb6b",
+        "verification": "succeeded"
+      },
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 4,
+        "ordinary_setback": true,
+        "outcome_sha256": "988789b02e237696188db2bc5398b2f8b9bbf35a06ade2f3d669e6c77b4ba83a",
+        "registration_gain": [],
+        "terminal_sha256": "a6af90cf67173d6ce91602da3e3b70c4a5826a58217c77f1e6847c8d0aab53e4",
+        "verification": "failed"
+      },
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 5,
+        "ordinary_setback": true,
+        "outcome_sha256": "9ce1ec85ed9cb0ac80f1f2e46611c4e91cee336abbe4a015bac5c70a421894db",
+        "registration_gain": [],
+        "terminal_sha256": "6679e0e0aa114edc1fd2778aedbbedf46f2088778c896a5da8e15da9bdc609c8",
+        "verification": "failed"
+      },
+      {
+        "cash_spent": 500,
+        "method": "paid_safari",
+        "ordinal": 6,
+        "ordinary_setback": false,
+        "outcome_sha256": "35b3cae24cdbe0b2a18e5670cf03e298f2cd8333e51e5ae4d6405821f3d601a7",
+        "registration_gain": [],
+        "terminal_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+        "verification": "failed"
+      }
+    ],
+    "native_audit_sha256": "a99f69a35285ff1bb5c7cbbbb37b83fb8bf352b40bf28ac874c068998a12998e",
+    "plan_sha256": "bfead311ddc56d4f9c4b8df1962ce420dba6de1b901b9568da59e8133fbac6e0",
+    "result_sha256": "8381bec634293f94be0bca76ba5283af60c62c4277e06172a89a1aa324d307f8",
+    "final_outcome_sha256": "35b3cae24cdbe0b2a18e5670cf03e298f2cd8333e51e5ae4d6405821f3d601a7",
+    "gates": {
+      "cash_budget": true,
+      "five_to_eight_model_decisions": true,
+      "native_chain_verified": true,
+      "no_unsafe_or_exception_continuation": true,
+      "ordinary_setback_then_reassessment": true,
+      "useful_success": true,
+      "zero_teacher_actions": true
+    },
+    "targeted_tests": 578,
+    "full_suite_run": false
+  },
+  "limitations": [
+    "One late-game development origin, not independent transfer or a fresh-game run.",
+    "Goal selections are learned; navigation, native exchange and Safari capture actions remain controllers.",
+    "History is observed context for unchanged weights, not online fitting or proof of causal policy improvement.",
+    "History lookup is scoped to the full registered-species context: an unrelated new registration starts a new policy-history context, although all prior private records remain retained. Source-target-specific reuse remains a limitation.",
+    "Only strictly settled paid-search failures may continue; unexpected/unsafe failures still stop.",
+    "Training corpus remains141outcomes/96successes/58economy-qualified; final Red0/5 and League0/2 unchanged."
+  ]
+}

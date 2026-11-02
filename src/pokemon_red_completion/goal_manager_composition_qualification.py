@@ -190,8 +190,22 @@ class HardCompositionActionLimiter:
     def attempted_actions_this_decision(self) -> int:
         return self.attempted_actions - self._window_start
 
+    @property
+    def remaining_actions(self) -> int:
+        """Headroom under both live limits, including failed dispatch attempts."""
+        return min(
+            self._maximum_episode_actions - self.attempted_actions,
+            self._maximum_actions_per_decision - self.attempted_actions_this_decision,
+        )
+
     def begin_decision_window(self) -> None:
         self._window_start = self.attempted_actions
+
+    def record_diagnostic_event(self, kind: str, payload: dict[str, object]) -> None:
+        """Forward observations without reserving or consuming an input attempt."""
+        record = getattr(self._delegate, "record_diagnostic_event", None)
+        if callable(record):
+            record(kind, payload)
 
     def execute(self, action: Any) -> object:
         if (

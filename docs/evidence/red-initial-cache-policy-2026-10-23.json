@@ -1,0 +1,175 @@
+{
+  "active_source_sha256": "af3e24eddc1d11061f4af5fa4a9e509a9016130ebe12c35e70c67580a8f3c03d",
+  "adoption": false,
+  "aggregates": {
+    "baseline": {
+      "high_events": 12901,
+      "peak_mean_bytes": 4297322496,
+      "root_mean_seconds": 70.14900087799998
+    },
+    "candidate": {
+      "high_events": 0,
+      "peak_mean_bytes": 705343488,
+      "root_mean_seconds": 77.4293463675
+    }
+  },
+  "all_three_full_verifications": true,
+  "cold_cache_claim": false,
+  "data_bytes_per_pass": 6080355562,
+  "data_files_per_pass": 74984,
+  "decision": "Keep tested cache-policy implementation as a qualified resource tradeoff in editable source; do not claim speed improvement or change current frozen P152. Defer freezing/adoption until a measured memory-sensitive need or next functional package.",
+  "emulators": 0,
+  "failed_dispatch_root_seconds_unknown": true,
+  "files_per_pass": 80331,
+  "fits": 0,
+  "focused_tests": 96,
+  "frames": 0,
+  "full_suite": false,
+  "global_cache_reset": false,
+  "inputs": 0,
+  "limitations": [
+    "Two serial cases per arm,ABBA order,warm-cache conditions not controlled",
+    "No campaign throughput,parallel scaling or memory-stability claim",
+    "Elapsed startup slower; memory pressure reduced. All hashes and legacy behavior retained."
+  ],
+  "nested_worker_seconds_not_added": true,
+  "observed_at_utc": "2026-10-23T10:04:37.816016+00:00",
+  "passed": true,
+  "peak_reduction_fraction": 0.8358644275228256,
+  "root_slowdown_fraction": 0.10378402255738006,
+  "rows": [
+    {
+      "authentication_sha256": "48cb3e94aa036126900b5e3f7b63a4cd932f9313dfa1f7cde86256081ea804a2",
+      "memory_events": {
+        "high": 6451,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0
+      },
+      "order_index": 0,
+      "peak_bytes": 4297322496,
+      "phases": [
+        {
+          "name": "initial_dependencies",
+          "seconds": 24.456951608999987
+        },
+        {
+          "name": "bind_1",
+          "seconds": 19.14224300500001
+        },
+        {
+          "name": "bind_2",
+          "seconds": 25.220621405000003
+        }
+      ],
+      "pin_set_sha256": "fdfa92de9af7001f2a235a206a90d09183fa1e4af0c5f8deffeae4a24346dfa9",
+      "result_sha256": "3bf714251a65fa1af71e56c22137b1f9eeb01b950bc5b5569fc7881b2203553d",
+      "root_seconds": 69.48345879300001,
+      "variant": "baseline",
+      "worker_seconds": 69.02649937500001
+    },
+    {
+      "authentication_sha256": "586ee238a9926173be6f4ba081f3c27d5b80ccca9dabed14e259d041aaca3eac",
+      "memory_events": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0
+      },
+      "order_index": 1,
+      "peak_bytes": 705884160,
+      "phases": [
+        {
+          "name": "initial_dependencies",
+          "seconds": 26.751944649000023
+        },
+        {
+          "name": "bind_1",
+          "seconds": 24.537762920000006
+        },
+        {
+          "name": "bind_2",
+          "seconds": 25.463171359
+        }
+      ],
+      "pin_set_sha256": "fdfa92de9af7001f2a235a206a90d09183fa1e4af0c5f8deffeae4a24346dfa9",
+      "result_sha256": "fcc19fa008b2e5d35721a6e332ad9a0ffa821206ea8ad725076547bc260f3ca8",
+      "root_seconds": 77.316641928,
+      "variant": "candidate",
+      "worker_seconds": 76.89249860700002
+    },
+    {
+      "authentication_sha256": "1c773f7e924d8bb3c16cce6e26a3b318ace2ac5ed254fe06851a0ae17a066705",
+      "memory_events": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0
+      },
+      "order_index": 2,
+      "peak_bytes": 704802816,
+      "phases": [
+        {
+          "name": "initial_dependencies",
+          "seconds": 26.783754225999985
+        },
+        {
+          "name": "bind_1",
+          "seconds": 25.284677819000024
+        },
+        {
+          "name": "bind_2",
+          "seconds": 24.936862475999988
+        }
+      ],
+      "pin_set_sha256": "fdfa92de9af7001f2a235a206a90d09183fa1e4af0c5f8deffeae4a24346dfa9",
+      "result_sha256": "823f812bfb754c91068ae7601325e6dc18f29ef8bbcc4370da6e68056d4e29a4",
+      "root_seconds": 77.54205080700001,
+      "variant": "candidate",
+      "worker_seconds": 77.14314979700004
+    },
+    {
+      "authentication_sha256": "b6630dcf6717e595b20335e90fda90b198d10ad2b53e12c82530b7ab9febadc5",
+      "memory_events": {
+        "high": 6450,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0
+      },
+      "order_index": 3,
+      "peak_bytes": 4297322496,
+      "phases": [
+        {
+          "name": "initial_dependencies",
+          "seconds": 26.151137086999995
+        },
+        {
+          "name": "bind_1",
+          "seconds": 19.153489400000012
+        },
+        {
+          "name": "bind_2",
+          "seconds": 24.843704294999952
+        }
+      ],
+      "pin_set_sha256": "fdfa92de9af7001f2a235a206a90d09183fa1e4af0c5f8deffeae4a24346dfa9",
+      "result_sha256": "8c2f851447937649ca7d067800de28e431b4a0eac473301741e76e7924c514fd",
+      "root_seconds": 70.81454296299995,
+      "variant": "baseline",
+      "worker_seconds": 70.33843705199996
+    }
+  ],
+  "same_resource_limits": true,
+  "schema": "pokemon.red.initial-cache-policy-comparison.v1",
+  "state_loads": 0,
+  "study_plan_sha256": "e9ed1b887efd0b5983de63057b5598892f5ed3ea41c92acda0b7612481184896",
+  "total_root_seconds": 295.15669449099994
+}

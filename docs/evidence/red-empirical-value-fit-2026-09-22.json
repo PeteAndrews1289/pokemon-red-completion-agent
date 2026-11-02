@@ -1,0 +1,109 @@
+{
+  "schema": "pokemon.red.empirical-value-fit-evidence.v1",
+  "source_commit": "378ec9c3",
+  "private_packet": "red-empirical-value-fit-20260922-v1",
+  "result_sha256": "ec6bf3d0abb542c7374116e9231ad2bae4d6f08961e6e11b364a15c45622efc5",
+  "actor_promotions": 0,
+  "fit": {
+    "effect_refitted": false,
+    "fits": 1,
+    "hidden_changed": false,
+    "iterations": 54,
+    "minimum_slack": 4.163336342344337e-17,
+    "new_group": {
+      "actor": {
+        "contexts": 145,
+        "errors": 20,
+        "high_cost_errors": 16,
+        "regret": 0.6070126459381285
+      },
+      "candidate": {
+        "contexts": 145,
+        "errors": 25,
+        "high_cost_errors": 24,
+        "regret": 0.7626296355089012
+      }
+    },
+    "old_groups": [
+      {
+        "candidate": {
+          "contexts": 92,
+          "errors": 17,
+          "high_cost_errors": 9,
+          "regret": 0.8387608177758153
+        },
+        "initial": {
+          "contexts": 92,
+          "errors": 14,
+          "high_cost_errors": 7,
+          "regret": 0.6848516108733527
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8068004724632349
+        },
+        "initial": {
+          "contexts": 94,
+          "errors": 12,
+          "high_cost_errors": 10,
+          "regret": 0.8065509321427727
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 126,
+          "errors": 15,
+          "high_cost_errors": 12,
+          "regret": 0.8232273854911925
+        },
+        "initial": {
+          "contexts": 126,
+          "errors": 14,
+          "high_cost_errors": 10,
+          "regret": 0.7147055072669494
+        }
+      },
+      {
+        "candidate": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.1710757779535865
+        },
+        "initial": {
+          "contexts": 30,
+          "errors": 1,
+          "high_cost_errors": 1,
+          "regret": 0.3464441399868126
+        }
+      }
+    ],
+    "passed": false,
+    "protected_preferences": 182,
+    "retention_regressions": 0,
+    "solver_success": true
+  },
+  "fits": 1,
+  "native": {
+    "actor_memory_writes": 0,
+    "all_event_and_terminal_hashes_verified": true,
+    "decision_records": 0,
+    "episodes": 0,
+    "event_records": 0,
+    "frames": 0,
+    "invalid_actions": 0,
+    "learned_continuation_or_evaluation_choices": 0,
+    "new_target_contexts": 0,
+    "plan_sha256": "fa2ef9a67f63f504a46bb8910946df5275624a06ba36d2f9d1e118eb9df962aa",
+    "prescribed_first_choices": 0,
+    "status_move_attempts_including_prescribed": 0,
+    "stops": {}
+  },
+  "new_train_contexts": 0,
+  "screen": null,
+  "seconds": 0.059564375318586826
+}

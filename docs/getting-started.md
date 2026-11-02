@@ -1,52 +1,63 @@
 # Setup and verification
 
-The public repository contains source, tests and selected evidence summaries. It does not distribute the private ROM, saves, recorded trajectories, datasets or fitted model artifacts. It is an active development system, not a packaged autonomous game player.
+The repository contains source, tests and selected evidence summaries. Private
+ROMs, saves, trajectories, training corpora and model artifacts are not a public
+playable distribution. A documentation/review copy does not authorize gameplay.
 
-## ROM-free checks
+## Existing Windows project
 
-Use Python3.11 or later in a virtual environment:
+The private Windows MAIN installation uses an already qualified WSL2 environment
+and its existing Python runtime. The local platform handoff identifies the exact
+distribution, user, project paths and current closed state. Do not reinstall or
+upgrade that pinned runtime merely to read code or review documents.
+
+The authoritative source checkout and a normal-Windows review copy have different
+roles. Edit the active checkout only under the source-writer claim. Review copies
+are read-only snapshots; their directory is not a player-resume source.
+
+## Fresh source-only checkout
+
+For an independent public checkout, pyproject.toml requires Python 3.11 or later.
+Create a separate environment rather than modifying the qualified private one:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev,emulator]"
+```
+
+On native Windows, use the environment's Scripts activation command instead.
+The emulator dependency is needed by some imports; installing it does not open
+a ROM, qualify private assets or launch a game.
+
+## Documentation and ROM-free checks
+
+Run from the source checkout with the intended environment:
+
+```bash
 python scripts/check_public_artifacts.py
-python scripts/check_docs.py
 python scripts/check_product_focus.py
+python scripts/check_docs.py
 pytest -q tests/test_documentation_surface.py tests/test_product_focus.py
 ```
 
-The emulator package is installed here because some tests import it; these checks do not need or open a game ROM. On Windows, activate the environment using the corresponding Scripts activation command.
+These checks need no ROM or saved game. For a behavior change, run proportionate
+tests covering that behavior; do not start a full story replay as an installation
+test. Focused results are not full-suite or hosted-CI success. Historical broader
+failures remain part of the record until an appropriate later check resolves them.
 
-For the larger ROM-free suite:
+## Private runtime and gameplay
 
-```bash
-pytest -n 2 --dist loadfile --max-worker-restart 0 -m "not integration"
-```
+The player uses local learned models and declared execution support. The latest
+experimental model is not automatically the configured or adopted actor. Current
+source, package, model, continuation and limits belong to
+[HANDOFF.md](../HANDOFF.md) and its exact private plan.
 
-The full suite is substantially more expensive than targeted checks. A targeted pass is not a full-suite pass.
+All runs remain stopped for review. Do not replay old commands, revive an expired
+lineage, treat an old unclaimed plan as current, or import a diagnostic terminal.
+An eventual official evaluation needs its own authenticated fresh start, frozen
+configuration, declared assistance and explicit authority under the
+[completion contract](completion-contract.md).
 
-## Dashboard and gameplay
-
-The [dashboard guide](progress-dashboard.md) explains how to open the local viewer without launching a game.
-
-Private gameplay requires lawfully obtained compatible game assets, a configured private artifact store and an authenticated starting state/model. Read [the handoff](../HANDOFF.md) before continuing an existing run. Historical launch commands in archived documents are not current instructions and must not be replayed.
-
-Do not download or commit ROMs, saves, models, datasets or credentials. Do not run sealed evaluations or a full-game teacher replay merely to test installation.
-
-## Opt-in learned trainer
-
-The authenticated private plan for `scripts/run_red_autonomous_collection.py` may include
-`trainer_battler` with `path`, the qualified frozen J `sha256`, and the actual development
-`root_lineage_id`. The model stays private. Omit this binding to preserve existing controllers.
-
-This setting covers ordinary trainer-funding battles with one to three own party members,
-not wild captures or Elite Four fights. Decisions, timings, failures and final states are
-retained under the run's private `trainer-battles` directory. Player budgets and strict
-funding preservation checks remain active; a faint can fail the goal before battle completion.
-
-The first live integration failed that no-faints check. Read the
-[checkpoint report](work-sessions/2026-09-19-player-battler-integration.md) before use.
-Do not rerun its consumed one-shot probe or mistake the setting for full-player qualification.
-
-[Architecture](architecture.md) · [Contributor instructions](../AGENTS.md)
+[Architecture](architecture.md) · [Dashboard](progress-dashboard.md) ·
+[Contributor instructions](../AGENTS.md) · [Operating contract](../NORTH_STAR.md)

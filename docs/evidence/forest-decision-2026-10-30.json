@@ -1,0 +1,116 @@
+{
+  "actual_registration_credit": 0,
+  "all_three_gates_proven": false,
+  "brock_common_origin": {
+    "baseline_choices": 89,
+    "baseline_heals": 43,
+    "baseline_phase_seconds": 495.759,
+    "corrected_choices": 18,
+    "corrected_heals": 6,
+    "corrected_phase_seconds": 104.792
+  },
+  "claim": "Exact Forest correction wins the trainer and reaches Brock more efficiently; original MID retains a productive-evolution stop, then qualified exact-tail continuation tests the repair. Three gates remain unproved.",
+  "current_native_case": "All diagnostic copies closed; no actual campaign restarted.",
+  "diagnostic_branches": {
+    "forest": {
+      "badges": 1,
+      "cash": 1067,
+      "registrations": 3
+    },
+    "mid": {
+      "badges": 6,
+      "cash": 7,
+      "registrations_after": 74,
+      "registrations_before": 68
+    },
+    "mid_tail": {
+      "badges": 6,
+      "cash": 7,
+      "registrations": 77
+    }
+  },
+  "diagnostic_terminal": {
+    "badges": 1,
+    "cash": 1067,
+    "registrations": 3
+  },
+  "evidence_sha256": {
+    "BASELINE0C-LATE-COMPARISON.json": "f74aa108aa59b82af04afda94f34c77fb28b2510e22b72b15c195d7b4960e735",
+    "BROCK-COMMON-ORIGIN-COMPARISON.json": "4ddc94a6f52007fe328b2d9f43240b36836f4237c6f53d0ec461b109d803b3a8",
+    "EXACT-FOREST-DECISION-COMPARISON.json": "0b332f0e76bdaad332dcdb1dcf27df3d0e3a57bfc2978a2e7c66829db7471603",
+    "FINAL-FORECAST-PROPOSAL.json": "018949ac6101f339741024ce7ce333cd06785b3a30ffdec635b33bedd103660b",
+    "FINAL-SESSION-RESULTS.json": "c27270b92cd9bad74070fd381e51fc8dee89dca396901d76b61e896452008841",
+    "FOREST-MID-V2-LOG-AUDIT.json": "b574f84152d553bb4ce517289675c718899f8088c03fb0f5f988d0ee913eeda1",
+    "FOREST-MID-V2-STOP-AND-GATE-AUDIT.json": "157bdc3cd36aa39ea25e3b7b6ef3a8450d681373176c4e0602c4a6f9dbef23a3",
+    "FOREST-RECOVERY-SOURCE-QUALIFICATION.json": "fa471c4b12bdead94714fb7bcbf27c0762034eb366690ca0e7b89c66907a1fec",
+    "FOREST-TAIL-V1-LOG-AUDIT.json": "ca7a10cdac3d25b79ee0e2b6d77daa020c811ed770eb26ae6d5a5a594a487a4e",
+    "FOREST-V1-LOG-CLOSURE-ADDENDUM.json": "aaea14d56c1e0420096f49bc395e29ddbc3a488c010edf0729609f925a8a4a1d",
+    "LATE-TRAIN-AUDIT-CONCLUSION.json": "b8076e01e3461d9fe5f9896ff5006dcae9cec8cd76154e75d4f19ca10227707c",
+    "MID-EVOLUTION-EFFICIENCY-AND-GATE3-FINAL.json": "c5375657d831c643d2fb7fbce0df8fb120f97b51b6eface7b6acd58b5f2cea05",
+    "NATIVE-FOREST-COMPARISON-20261030T132912436125.json": "018b876ca4e48c1501864f6f8e89ee71fc45a70e60568bfd0d4d7042303b5ef5",
+    "PRODUCTIVE-VENUE-EXACT-READBACK.json": "d7395f39de26532456cbeb62c899b8356dff421b2b735e58a6af7c121966cbd8",
+    "PUZZLE-INTERACTION-READBACK.json": "d627f618c56db71cb623aed699758800ace4294fcc27c3df46fd2dc604d18466",
+    "PUZZLE-INTERFACE-APPLIED.json": "bf51fed6167ae0ec4035e0edccd51b50e29b7da2176ac91533e99874793efc92",
+    "SHARED-BUILD-forest-recovery-v1.json": "91fab3426fde99be689e5f7495215a93b1486fc9de09d12e3be9b5858d68b52b",
+    "TRAIN-STORY-INTERACTION-COVERAGE.json": "3b2854171575cfab5998ab0147be605367af485938e5cacdfaac064f10eec341",
+    "VENUE-FEEDBACK-GAP-STATIC-TRACE.json": "c6b74ab9552fb042e5b4cb073b4db318313097af8614f754371a04d5bc020a06"
+  },
+  "execution_errors": 0,
+  "failed_preflight": 1,
+  "interface_repair": {
+    "applied": true,
+    "choice_changed": false,
+    "frozen": true,
+    "models_changed": false
+  },
+  "late_diagnosis": "Exact successful baseline used target_cash0. Truthful24000target reveals funding preference over Strength puzzle with success prediction clippedzero; current TRAIN lineage lacks partial interaction outcomes.",
+  "limitations": [
+    "Baseline gained different species; local milestone speed is not full-game speed.",
+    "Target game state matched exactly; intermediate renderer-cache bytes differed then reconverged.",
+    "Current package has no awarded three-gate qualification.",
+    "Selected DEV coin cash counterfactual is arithmetic diagnosis only, never a TRAIN label.",
+    "MID failed after26native minutes; its retained failure is not erased by a later repair.",
+    "Short repaired-tail copy cannot award endurance or transfer gates.",
+    "TRAIN collector remains a private proposal; no native TRAIN, fitted weights or broad promotion this block.",
+    "Mansion versus Diglett Cave XP rates are descriptive observations, not controlled route comparison."
+  ],
+  "model_choices": 97,
+  "native_seconds": 1987.7360726300017,
+  "new_fits": 0,
+  "new_native_loads": 3,
+  "new_train_lessons": 0,
+  "nonordinary_verification_failures": 1,
+  "observation_reuse": {
+    "applied": true,
+    "controlled_native_speedup_not_proven": true,
+    "focused_checks": 77,
+    "static_repeated_reads_after": 0,
+    "static_repeated_reads_before": 100
+  },
+  "observed_at_utc": "2026-10-30T15:44:04.855880+00:00",
+  "observed_costs": {
+    "actions": 125185,
+    "cash_debits": 8300,
+    "decisions": 98,
+    "frames": 11638546,
+    "heals": 103
+  },
+  "package_sha256": "a09a4385d4e268d7e80a12edc4524707fd3985ca41413623537b916aecbabd49",
+  "partition": "development",
+  "preprocess_dispatch_rejection": 1,
+  "preserved_prior_diagnostic_registrations": 7,
+  "prior_closeout_sha256": "1fd3a75abbee0c396a0f27e06c41036328646d62fdc34b279be4ec430a981b28",
+  "productive_stop_repair": {
+    "exact_receipt_now_ordinary_failed": true,
+    "focused_checks": 485,
+    "native_exact_condition_retriggered": false,
+    "negative_cases_reject": true
+  },
+  "schema": "pokemon.forest-decision-session.v1",
+  "session": "2026-10-30-forest-decision",
+  "source_commit": "743d0116fc09f01ad28857f482c4affcf9da043d",
+  "status": "closed",
+  "support_choices": 1,
+  "tail_native_seconds": 247.28515767099998,
+  "verified_sealed_records": 276721
+}

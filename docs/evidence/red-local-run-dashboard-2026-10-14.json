@@ -1,0 +1,62 @@
+{
+  "schema": "pokemon.red.local-run-dashboard.v1",
+  "session": "2026-10-14-local-run-dashboard",
+  "partition": "engineering",
+  "selected_run": "red-frozen-autonomous-run-20261014-v3",
+  "viewer": {
+    "loopback_only": true,
+    "read_only": true,
+    "controller_endpoints": 0,
+    "viewer_port": 8768,
+    "prospective_feed_port": 8769,
+    "frame_storage": "memory_only",
+    "future_plan_opt_in_required": true,
+    "stopped_and_disconnected_states_explicit": true,
+    "other_run_feed_rejected": true,
+    "party_and_resources_are_recorded_boundaries": true,
+    "decision_totals_are_completed_segment_receipts": true
+  },
+  "verification": {
+    "targeted_rom_free_tests_passed": 395,
+    "ruff_passed": true,
+    "two_new_runtime_modules_mypy_passed": true,
+    "browser_stopped_checkpoint_verified": true,
+    "browser_errors_observed": 0,
+    "synthetic_png_feed_verified": true,
+    "private_rom_live_feed_verified": false,
+    "full_suite_or_ci_claim": false,
+    "frozen_package_files_unchanged": 7874,
+    "environment_files_unchanged": 4512,
+    "protected_reference_files_unchanged": 24,
+    "retained_run_pins_unchanged": 5
+  },
+  "retained_run": {
+    "gameplay_status": "stopped_failed",
+    "registrations": 10,
+    "badges": 1,
+    "model_decisions": 96,
+    "support_decisions": 12,
+    "ordinary_setbacks": 6,
+    "cash": 131,
+    "capture_balls": 7,
+    "party_levels": [14, 14, 16, 14, 14, 14],
+    "admission_error": "second rival unavailable, consumed or ambiguous",
+    "plan_sha256": "8378b36c89ad21effac1ad8ffbfa0c0c82885ceaac89f1abe489c550aa6fa6b2",
+    "result_sha256": "749ae31015c9c426eaf87d4b2bbca7751e52fe8b8a7b659f08b04be3425da6f8",
+    "terminal_sha256": "ca20d1b00fbdd8916d2c436d62036d38045e91ecd9c9764d3891c215e19e04c2",
+    "context_sha256": "869fe8b6e32c9f9490fdae51edd753979c43a5f1211f38d0037736d864b54873"
+  },
+  "session_effects": {
+    "gameplay_inputs": 0,
+    "private_save_loads": 0,
+    "registration_delta": 0,
+    "train_lessons": 0,
+    "fits": 0,
+    "parameter_updates": 0,
+    "frozen_actor_changes": 0,
+    "rival_gate_repaired": false,
+    "runtime_llm_calls": 0,
+    "github_publication": false,
+    "final_fresh_gates_advanced": 0
+  }
+}

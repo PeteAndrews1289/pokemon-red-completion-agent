@@ -1,0 +1,330 @@
+{
+  "schema": "pokemon.red.gift-native-learning-result.v1",
+  "session": "2026-09-21-gift-learning-result",
+  "classification": "native_mechanics_qualified_experimental_learning_rejected",
+  "source_commit": "f811553e941d4b87c6cfbd0c9e5bfb045c9d1777",
+  "scope": {
+    "teacher_isolated": true,
+    "earned_save_modified": false,
+    "prior_experiment_restarted": false,
+    "production_promoted": false,
+    "independent_cross_title_test": false,
+    "random_timing_variants_not_independent_lineages": true,
+    "external_agents_used": false,
+    "published": false
+  },
+  "verified": {
+    "native_gifts": 6,
+    "native_departures": 6,
+    "zero_input_terminal_audits": 12,
+    "party_delivery": 3,
+    "box_delivery": 3,
+    "route_steps_each": 66,
+    "existing_party_money_items_preserved": true,
+    "exhausted_gift_masked": true,
+    "rom_free_targeted_tests_passed": 387,
+    "full_suite_claim": false
+  },
+  "learning": {
+    "train_native_outcomes": 4,
+    "heldout_native_outcomes": 2,
+    "experimental_fits": 1,
+    "experimental_fitted_rows": 141,
+    "experimental_successes": 96,
+    "economy_qualified": 58,
+    "production_new_rows": 0,
+    "model_choices": 0,
+    "prior_mse": 0.11181407841180005,
+    "candidate_mse": 0.02355605364120472,
+    "heldout_error_ratio": 0.21067162539631312,
+    "heldout_ratio_limit": 0.8,
+    "old_row_error_ratio": 1.021965714624952,
+    "old_row_ratio_limit": 1.02,
+    "gate_passed": false,
+    "candidate_model_sha256": "30c5822b9547a307fe97822f19763b14cea17874f581e63229fcf9b91a6e64c9",
+    "counterfactual_targets": 0,
+    "heldout_fit_rows": 0
+  },
+  "costs": {
+    "gift_actions": 640,
+    "gift_frames": 34716,
+    "departure_actions": 420,
+    "departure_frames": 12384,
+    "short_opening_and_setup_frames": 113952,
+    "total_frames": 161052,
+    "earned_cash_spent": 0
+  },
+  "bridge_diagnostic": {
+    "frames": 0,
+    "train_states_inspected": 4,
+    "lesson_registration_denominator": 124,
+    "ordinary_local_red_registration_denominator": 151,
+    "other_context_fields_differ": true,
+    "real_mixed_menu_available": 0,
+    "production_admission_implemented": false,
+    "interpretation": "Acquisition-only lessons are valid within their declared experiment, not interchangeable with ordinary player-context evidence. Do not silently relabel their targets or fabricate an alternative. Red final acceptance remains 124 native registrations."
+  },
+  "artifacts": {
+    "plan_sha256": "699da491d443ea1de2c726eddb7e44f5e34a866cb7f81455abd7c65d95a85c83",
+    "fit_claim_sha256": "3703c3dde345152e34f5c358e17cc75d4a91d7390dcde7591566421f5373e6df",
+    "fit_sha256": "7e5c6f26af249dad85ec17df0ff78b5dc8a152c2e1469f7d442b5b4aa99b49ad",
+    "candidate_file_sha256": "ed4c5d65340f1adecd3dbfc7e8f0d03c01da27dd2690fe0a6b34750e5ba7a93b",
+    "evaluation_sha256": "3232247900b81dff5979969a0317f3b1ddf2ccaa1d48e146167c87217b3b4982",
+    "bridge_diagnostic_sha256": "d8686c99d5100993f8b351b21ed7ac148a0920359fa06e0bb707d23155ad6e95"
+  },
+  "cases": {
+    "gifts": [
+      {
+        "status": "native_verified",
+        "before_sha256": "8bb4e66b5c233e1187c900330f76d681dcdb0b17c3ebb042f16338345e52a648",
+        "terminal_sha256": "2d7a07039566c617d410dd8efa3944ca5e4e6ab80dbaa0e83c7aa219c51252e1",
+        "actions": 103,
+        "frames": 5412,
+        "wall_seconds": 2.1829174580052495,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "native_verified",
+        "before_sha256": "9948be2b50ec98ce9fcbe81ccfa714ca4c75e454bbd83dd9a59c349645ace96b",
+        "terminal_sha256": "e2e95184eae0d5c2374ba16586ec8b58406f3de6831cbb76b444dbdc228320ce",
+        "actions": 103,
+        "frames": 5412,
+        "wall_seconds": 2.135158292017877,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "native_verified",
+        "before_sha256": "4d1c2d04283cf9b16cd19fb0c077877e396717d061fefa8f6d34a53efe63af7c",
+        "terminal_sha256": "a5338a0a450bc4a2c54a472889859fc3224f10f7195d7628260b5e812e1749aa",
+        "actions": 111,
+        "frames": 6228,
+        "wall_seconds": 2.302109916927293,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "native_verified",
+        "before_sha256": "43cd7a8046576385dabf00cb9639e91236ed09f6d79a136a7b65f3c2d8a0e06d",
+        "terminal_sha256": "209365cae8bbd98e343825d36d7621b3a8dee319bf7534ceeb679fd6a224b7ef",
+        "actions": 111,
+        "frames": 6228,
+        "wall_seconds": 2.243115291930735,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "native_verified",
+        "before_sha256": "6d95863ab553a93a270abd5d2a4a6913026bf81b7c24363a1f95d196d3e202c4",
+        "terminal_sha256": "b1b6cf39b9fe2267a7f0ddcfa27a10db581b7ceaa78ada13777addccb237ca49",
+        "actions": 101,
+        "frames": 5208,
+        "wall_seconds": 2.1313444159459323,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "native_verified",
+        "before_sha256": "ad0424efc2ff670aa749c59bcd50328470c65116f2d0483ef87b4530b087306c",
+        "terminal_sha256": "5effab6b9479180b7688ad4a238881062a869c388db721f43b252677ded4bb89",
+        "actions": 111,
+        "frames": 6228,
+        "wall_seconds": 2.1864279580768198,
+        "terminal": {
+          "map": 212,
+          "position": [
+            5,
+            2
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      }
+    ],
+    "departures": [
+      {
+        "status": "passed",
+        "terminal_sha256": "755d9d86502d7860eb9cd7147e9a8466a96100f76d6cbdbb3242ee73bd0f0166",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "passed",
+        "terminal_sha256": "237b9965c1ab1c2fd26d3a07023344c4b4779b2f27e0731204e4b00f048bbeea",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "passed",
+        "terminal_sha256": "b653d3e751beebe4dcd1563fd2fddecd7b5b8fae049c96995084a914f9fd0651",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "passed",
+        "terminal_sha256": "1a942fec5d2d7a1c267f831535ae65b73ba7337ffb7beb9d31e8c2729fcd812d",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "passed",
+        "terminal_sha256": "c4193bd77506b93f0b62f8858f344e728aff177cd53bd5a760bb1ab501b305e4",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      },
+      {
+        "status": "passed",
+        "terminal_sha256": "98507ec953d0edd0e0c83f0ab9f7c2e31746fa961ec5a490abcc1ddae10b0e95",
+        "actions": 70,
+        "frames": 2064,
+        "steps": 66,
+        "terminal": {
+          "map": 10,
+          "position": [
+            22,
+            18
+          ],
+          "money": 3000,
+          "ready": true
+        }
+      }
+    ],
+    "sources": [
+      {
+        "status": "prepared",
+        "origin_sha256": "56320a5c5c5aab39abca57d1bc999f44907b95a805f53530302671c50e626436",
+        "terminal_sha256": "8bb4e66b5c233e1187c900330f76d681dcdb0b17c3ebb042f16338345e52a648",
+        "frames": 31932,
+        "wall_seconds": 2.177248999942094
+      },
+      {
+        "status": "prepared",
+        "origin_sha256": "9e252d0539ca42eca26f9c7afbe65d8e88ca892cdeb1ffc44074f59d9edb454e",
+        "terminal_sha256": "4d1c2d04283cf9b16cd19fb0c077877e396717d061fefa8f6d34a53efe63af7c",
+        "frames": 27140,
+        "wall_seconds": 1.5026351248379797
+      },
+      {
+        "status": "prepared",
+        "origin_sha256": "3ecc693ae31a38ec357ade17fa3b906fd1b11742ca5af4c6d9fa6fe3efe8acc4",
+        "terminal_sha256": "1c17cf99344feae92172505d0f3af0f09822044e701409347fd78e56a86ba086",
+        "frames": 27340,
+        "wall_seconds": 1.9078465001657605
+      },
+      {
+        "status": "prepared",
+        "origin_sha256": "2f3597f048d98489cb7f911552070e912afc464739825a920a059372b0d13d82",
+        "terminal_sha256": "8899d0117c4c7fadd3f8b6388d8cce64a4f8f11c47661ce2d635a50ea4b14cb2",
+        "frames": 27540,
+        "wall_seconds": 1.4234564998187125
+      }
+    ]
+  },
+  "earned_endpoint": {
+    "state_sha256": "b49e682a227bce571f2d62fd0290d0bfe0adf7964220a69bc5c502f64962a712",
+    "registrations": 107,
+    "native_target": 124,
+    "specimens": 77,
+    "cash": 15968,
+    "production_model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "fitted_examples": 137,
+    "successes": 92,
+    "economy_qualified": 58,
+    "league_profitable_cycles": 0,
+    "red_final_criteria": 0,
+    "running": false
+  },
+  "remaining": [
+    "Implement explicit authenticated TRAIN curriculum admission using the ordinary registered-player context and declared reward scope, or collect real model choices with genuine feasible alternatives.",
+    "Fit with declared prior-retention constraints; test on new heldout contexts without retuning on consumed outcomes.",
+    "Qualify an unforced ordinary mixed-menu acquisition and then the earned-lineage gift; no paid seed shopping."
+  ],
+  "decision": "Reject the one-fit experiment under its unchanged retention gate. Keep verified mechanics and all four TRAIN outcomes; heldout stays excluded. Stop at the missing ordinary learning bridge, not another route repair."
+}
+

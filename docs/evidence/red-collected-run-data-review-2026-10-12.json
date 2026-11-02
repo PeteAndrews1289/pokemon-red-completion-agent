@@ -1,0 +1,105 @@
+{
+  "schema": "pokemon.red.collected-run-data-review.v1",
+  "date": "2026-10-12",
+  "partition": "development",
+  "status": "completed_read_only_review",
+  "goal_status": "paused",
+  "original_audit_evidence_sha256": "5e30f2f8a287fbe65b881f128855c2a2c3af1ea42666db961ecd462c7e609688",
+  "current_checkpoint": {
+    "family": "red-fresh-autonomous-run-20261012-v9",
+    "terminal_sha256": "e369d3158310d6d4e4ce479bcb667af6dc91c21b66be7a6f2419fb1e7b5042d3",
+    "context_sha256": "cdfa04a66701627a26c711747c34434671a4d326f0f09661eae002ade42e9c03",
+    "root_result_sha256": "186f1bceef2aa3894b98feebb66d8c6dc36be51905fc6c641e27f51ffe10c3a4",
+    "registrations": 28,
+    "badges": 2,
+    "completed_outcomes": 299,
+    "recorded_worker_pid_absent": true
+  },
+  "review_actions": {
+    "gameplay_launches": 0,
+    "state_loads": 0,
+    "new_TRAIN": 0,
+    "fits": 0,
+    "weight_updates": 0,
+    "runtime_changes": 0,
+    "deleted_files": 0
+  },
+  "diagnostic_scope": {
+    "selection_files": 293,
+    "available_story_candidates": 315,
+    "menus_with_one_story_candidate": 271,
+    "menus_with_two_story_candidates": 22,
+    "story_binding_categories": {
+      "travel": 279,
+      "story_battle": 27,
+      "other": 9
+    },
+    "candidate_order_verified_against_recorded_live_bindings": true,
+    "interpretation": "Repeated decision menus from one trajectory; not independent battles or executed greedy counterfactuals."
+  },
+  "story_predictions": {
+    "success_clipped_above_one": 315,
+    "action_cost_clipped_below_zero": 315,
+    "frame_cost_clipped_below_zero": 315,
+    "dependency_gain_clipped_below_zero": 315,
+    "raw_success_range": [3.1287507563923964, 8.085784725552715],
+    "raw_action_cost_range": [-0.4622078325181035, -0.11778121793103291],
+    "raw_frame_cost_range": [-0.4255848350353563, -0.10641332738768884],
+    "economic_score_adjustment_range": [0.3289367882458746, 0.9111374774282011],
+    "probability_interpretation_allowed": false,
+    "correct_choice_proved_by_clipping": false
+  },
+  "readiness_coefficient_rows": {
+    "unlock_access": {"total": 28, "nonzero": 0},
+    "develop": {"total": 28, "nonzero": 0},
+    "restore": {"total": 28, "nonzero": 10},
+    "acquire": {"total": 28, "nonzero": 10},
+    "evolve": {"total": 28, "nonzero": 8}
+  },
+  "economic_score_decomposition": {
+    "same_story_family_winner": 129,
+    "restore_to_story": 136,
+    "restore_to_explore": 4,
+    "resupply_to_story": 1,
+    "evolve_to_story": 23,
+    "changed_best_family": 164,
+    "method": "Compare max(sum(recorded utility_terms)) against the recorded full-score winner among available candidates. Ties use recorded order. No policy changed or executed.",
+    "recommend_removing_economic_head": false
+  },
+  "selected_development": {
+    "total": 24,
+    "ranked_below_story": 24,
+    "before_brock": 23,
+    "after_brock_before_misty": 1,
+    "counterfactual_value_of_skipping_preparation": "unmeasured"
+  },
+  "older_readiness_activation_example": {
+    "family": "red-league-preparation-ownership-20261006-v1",
+    "source": "FINAL-AUDIT.json",
+    "valid_prepared_pair_actual_child_queries": 0,
+    "earlier_preview_arms_invalid": true,
+    "later_specialist_results_invalidated": false
+  },
+  "source_sha256_matches_current_and_frozen_r29": {
+    "src/pokemon_red_completion/red_live_option_menu.py": "9937a49c0c24fad03da6ee5dbfed0d4b0fd6663351b1d7667cbe465935f226ba",
+    "src/pokemon_red_completion/living_dex_option_value.py": "f01ba412e950f4e3baf76c31e66290a53feefddc9c7d3473d8ae66dfc1e6a7c4",
+    "src/pokemon_red_completion/red_player_story_menu.py": "2f6a99dbe75a8e72c885e185b2f4095518abaa365e8886157587e778ed383a6d",
+    "scripts/run_configured_red_player.py": "3b9f2b9a867b9b1d3d3cc7a2893a301070f7858241e9419b9074d23d392b73a9"
+  },
+  "proposed_session": {
+    "launch_authorized_by_review": false,
+    "aggregate_hours_after_resume": 3,
+    "primary_outcome": "Cut and Surge on a separately declared retained-save DEVELOPMENT continuation",
+    "initial_change": "existing greedy selector only",
+    "primary_native_minutes": 60,
+    "primary_goal_outer_guard": 300,
+    "decision_review_interval": 20,
+    "readiness_probe": "Existing retained Cerulean rival loss and native lesson harness, subject to current zero-input compatibility checks",
+    "readiness_native_minutes": 15,
+    "readiness_goal_guard": 12,
+    "reassess_stagnation_minutes": 15,
+    "reassess_equivalent_failures": 2,
+    "unconditional_global_greedy_promotion": false,
+    "new_fresh_campaign": false
+  }
+}

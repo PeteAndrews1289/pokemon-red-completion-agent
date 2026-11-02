@@ -1,12 +1,18 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 import pytest
 
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.gen1_story_routing import (
+    BICYCLE_CARRIED,
     CERULEAN_ROBBED_HOUSE_OPEN,
     CERULEAN_ROBBED_HOUSE_POLICE_AT,
     CERULEAN_ROBBED_HOUSE_REQUIREMENTS,
+    CINNABAR_GYM_KEY_CARRIED,
+    CINNABAR_GYM_LOCK_TRIGGER,
+    CYCLING_ROAD_GATE_REQUIREMENTS,
     ROUTE_5_GATE_MAP_ID,
     ROUTE_6_GATE_MAP_ID,
     ROUTE_7_GATE_REQUIREMENTS,
@@ -14,6 +20,7 @@ from pokemon_red_completion.gen1_story_routing import (
     ROUTE_12_SNORLAX_AT,
     ROUTE_12_SNORLAX_CLEARED,
     ROUTE_12_SNORLAX_REQUIREMENTS,
+    ROUTE_18_GATE_1F_MAP_ID,
     SAFARI_ADMISSION_GATE_EDGES,
     SAFARI_ADMISSION_SUPPORTED,
     SAFFRON_GUARD_GATE_REQUIREMENTS,
@@ -26,6 +33,7 @@ from pokemon_red_completion.gen1_story_routing import (
     SEAFOAM_INTERIOR_MAP_IDS,
     SILPH_ENTRANCE_OPEN,
     SILPH_ENTRANCE_REQUIREMENTS,
+    apply_gen1_cinnabar_gym_requirement,
     apply_gen1_safari_admission_requirement,
     apply_gen1_seafoam_current_requirements,
     apply_gen1_story_requirements,
@@ -42,6 +50,7 @@ from pokemon_red_completion.local_router import (
 from pokemon_red_completion.observation import (
     SAFFRON_GUARD_ACCESS_MASK,
     EventFlag,
+    ItemId,
     MapId,
     RawGameState,
     semantic_facts,
@@ -68,6 +77,85 @@ def raw(
 
 def test_guard_access_mask_is_the_independently_measured_status_bit() -> None:
     assert SAFFRON_GUARD_ACCESS_MASK == 0x40
+
+
+@pytest.mark.parametrize("bag, expected", (
+    (None, PredicateState.UNKNOWN), ((), PredicateState.UNSATISFIED),
+    (((int(ItemId.SECRET_KEY), 0),), PredicateState.UNSATISFIED),
+    (((int(ItemId.SECRET_KEY), 1),), PredicateState.SATISFIED),
+))
+def test_cinnabar_gym_needs_carried_key_not_completed_story(bag, expected):
+    state = replace(raw(status_flags_1=0), badge_bits=255, bag_items=bag)
+    observed = {item.name: item.state for item in observe_gen1_story_predicates(state)}
+    assert observed[CINNABAR_GYM_KEY_CARRIED] is expected
+    assert (CINNABAR_GYM_KEY_CARRIED in gen1_story_capabilities(state)) is (
+        expected is PredicateState.SATISFIED
+    )
+
+
+def test_cinnabar_key_gate_preserves_egress_and_reopens_from_live_capabilities():
+    trigger, below = CINNABAR_GYM_LOCK_TRIGGER, (5, 18)
+    original = LocalGraph({
+        below: (LocalEdge(trigger, "up"),),
+        trigger: (LocalEdge(below, "down"),),
+    })
+    graphs = {int(MapId.CINNABAR_ISLAND): original, 999: original}
+    gated = apply_gen1_cinnabar_gym_requirement(graphs)
+    graph = gated[int(MapId.CINNABAR_ISLAND)]
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(graph, below, trigger)
+    assert find_local_path(graph, trigger, below).coordinates == (trigger, below)
+    assert find_local_path(graph, below, trigger, capabilities=frozenset({
+        CINNABAR_GYM_KEY_CARRIED,
+    })).coordinates == (below, trigger)
+    assert not original.edges[below][0].requirements
+    assert gated[999] is original
+    assert apply_gen1_cinnabar_gym_requirement({}) == {}
+
+
+@pytest.mark.parametrize(
+    ("bag", "expected"),
+    (
+        (None, PredicateState.UNKNOWN),
+        ((), PredicateState.UNSATISFIED),
+        (((int(ItemId.POKE_BALL), 5),), PredicateState.UNSATISFIED),
+        (((int(ItemId.BICYCLE), 0),), PredicateState.UNSATISFIED),
+        (((int(ItemId.BICYCLE), 1),), PredicateState.SATISFIED),
+    ),
+)
+def test_cycling_access_requires_an_actually_carried_bicycle(bag, expected) -> None:
+    state = replace(raw(status_flags_1=0), bag_items=bag)
+    observed = {item.name: item.state for item in observe_gen1_story_predicates(state)}
+    assert observed[BICYCLE_CARRIED] is expected
+    assert (BICYCLE_CARRIED in gen1_story_capabilities(state)) is (
+        expected is PredicateState.SATISFIED
+    )
+
+
+def test_both_cycling_guard_scripts_gate_every_incoming_trigger_edge() -> None:
+    assert len(CYCLING_ROAD_GATE_REQUIREMENTS) == 28
+    assert {(item.map_id, item.target_at) for item in CYCLING_ROAD_GATE_REQUIREMENTS} == {
+        *((int(MapId.ROUTE_16_GATE_1F), (row, 4)) for row in range(7, 11)),
+        *((ROUTE_18_GATE_1F_MAP_ID, (row, 4)) for row in range(3, 7)),
+    }
+    for item in CYCLING_ROAD_GATE_REQUIREMENTS:
+        assert item.predicate == BICYCLE_CARRIED
+        assert sum(abs(a - b) for a, b in zip(item.source_at, item.target_at, strict=True)) == 1
+
+
+@pytest.mark.parametrize(
+    "map_id,row", ((int(MapId.ROUTE_16_GATE_1F), 8), (ROUTE_18_GATE_1F_MAP_ID, 4))
+)
+def test_cycling_guard_blocks_crossing_without_trapping_a_rejected_player(map_id, row) -> None:
+    projected = apply_gen1_story_requirements(story_graphs())[map_id]
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(projected, (row, 7), (row, 0), capabilities=frozenset())
+    assert find_local_path(
+        projected, (row, 7), (row, 0), capabilities=frozenset({BICYCLE_CARRIED})
+    ).coordinates[-1] == (row, 0)
+    assert find_local_path(
+        projected, (row, 4), (row, 7), capabilities=frozenset()
+    ).coordinates[-1] == (row, 7)
 
 
 def test_seafoam_water_edges_fail_closed_without_current_control() -> None:
@@ -203,6 +291,20 @@ def route_12_snorlax_graph() -> LocalGraph:
     )
 
 
+def cycling_gate_graph(rows: range) -> LocalGraph:
+    return LocalGraph({
+        (row, column): tuple(
+            LocalEdge(target, action)
+            for target, action in (
+                ((row - 1, column), "up"), ((row + 1, column), "down"),
+                ((row, column - 1), "left"), ((row, column + 1), "right"),
+            )
+            if target[0] in rows and target[1] in range(8)
+        )
+        for row in rows for column in range(8)
+    })
+
+
 def story_graphs() -> dict[int, LocalGraph]:
     return {
         ROUTE_5_GATE_MAP_ID: vertical_gate_graph(),
@@ -212,6 +314,8 @@ def story_graphs() -> dict[int, LocalGraph]:
         int(MapId.CERULEAN_CITY): police_graph(),
         int(MapId.SAFFRON_CITY): saffron_story_graph(),
         int(MapId.ROUTE_12): route_12_snorlax_graph(),
+        int(MapId.ROUTE_16_GATE_1F): cycling_gate_graph(range(7, 11)),
+        ROUTE_18_GATE_1F_MAP_ID: cycling_gate_graph(range(3, 7)),
     }
 
 

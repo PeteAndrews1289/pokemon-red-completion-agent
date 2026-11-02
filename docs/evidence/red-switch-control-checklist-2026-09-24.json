@@ -1,0 +1,73 @@
+{
+  "actual_unchanged": true,
+  "censors": [
+    {
+      "case": "train-1-00",
+      "decisions": 39,
+      "first": "pokemon.core:battle:move:2",
+      "offset": 0,
+      "opponent_hp": 6,
+      "own_remaining_hp": 80
+    }
+  ],
+  "contexts": 1,
+  "counts": {
+    "actions": 3889,
+    "branches": 22,
+    "decisions": 274,
+    "frames": 332880,
+    "invalid_action_failures": 0,
+    "learner_continuation_choices": 252,
+    "opponent_faints": 1,
+    "party_faints": 65,
+    "party_hp_lost": 5372,
+    "party_pp_spent": 156,
+    "prescribed_choices": 22,
+    "teacher_interventions": 0,
+    "wins": 0
+  },
+  "evidence_valid": true,
+  "experiment_passed": false,
+  "limitation": "One complete context does not satisfy six-family coverage or authorize fitting; censor is not a loss.",
+  "new_fits": 0,
+  "phases": {
+    "attack": 157,
+    "forced_switch": 44,
+    "switch_prompt": 1,
+    "voluntary_switch": 72
+  },
+  "plan_sha256": "e184ea9bf415390732022b15c57915bd3e4e6456d741a9654e1291ba289c5889",
+  "result_sha256": "583c2c6706d9a710934803c5be761e2e24a92aaf913022c9aeccd6472da8b4fe",
+  "stops": {
+    "party_defeated": 21,
+    "unsupported_struggle_boundary": 1
+  },
+  "schema": "pokemon.red.switch-control-checklist.v1",
+  "session_id": "2026-09-24-switch-control-checklist",
+  "classification": "Measured TRAIN data and execution-contract maintenance, not a model improvement",
+  "checklist_step_one_complete": true,
+  "checklist_step_two_complete": false,
+  "gameplay_running": false,
+  "complete_new_train_contexts": 1,
+  "new_model_fits": 0,
+  "new_story_objectives": 0,
+  "new_registrations": 0,
+  "authority_promotions": 0,
+  "focused_tests_passed": 396,
+  "private_tests_skipped": 13,
+  "full_suite_rerun": false,
+  "source_commit": "5861ce95d318394c9ec3f09080e5bc0e499ca384",
+  "independent_audit_sha256": "b92f8f3f2e714160a67ab5df1c9ac29bf75fa3b4c710c4ee2d581be73f06e9e4",
+  "target_sha256": "20f59c4c4ea388fe65671c9669b5984a1ae181f6e521f791c6dabb3d12915428",
+  "declared_fit_contexts": 36,
+  "declared_comparison_teams": 24,
+  "comparison_episodes": 0,
+  "prior_pairs_excluded": 2349,
+  "fit_started": false,
+  "story_inputs": 0,
+  "consumed_replay": false,
+  "diagnosis": "Both reserves fainted; surviving active has80HP, zeroPP, foe6HP. Struggle action is outside the current executor/policy contract. Censored boundary is not a loss.",
+  "next": "Explicit bounded Struggle capability/qualification before any new terminal-return curriculum. Preserve this consumed partial packet; no automatic replacement, fitting or story dispatch.",
+  "publication": false,
+  "external_agents": false
+}

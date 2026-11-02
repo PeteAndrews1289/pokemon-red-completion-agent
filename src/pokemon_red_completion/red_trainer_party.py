@@ -14,7 +14,11 @@ from typing import TYPE_CHECKING
 from .battle_matchups import PartyMatchupProfile, project_party_matchups
 from .gen1_trainer_parties import TrainerPartyQuote
 from .party import PartyObservation, StatusCondition
-from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref, pokemon_red_species_ref
+from .red_battle_catalog import (
+    RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
+    pokemon_red_species_ref,
+)
 from .red_capture_lead import RedCaptureLeadPlan
 
 if TYPE_CHECKING:
@@ -27,10 +31,14 @@ class RedTrainerPartyError(ValueError):
 
 
 def trainer_entry_candidates(
-    party: PartyObservation, candidates: tuple[PartyMatchupProfile, ...],
-    *, incoming_moves: tuple[int, ...], enemy_level: int | None = None,
+    party: PartyObservation,
+    candidates: tuple[PartyMatchupProfile, ...],
+    *,
+    incoming_moves: tuple[int, ...],
+    enemy_level: int | None = None,
     entry_speeds: tuple[int, tuple[int, ...]] | None = None,
     mirror_move_reset_qualified: bool = False,
+    incoming_commitment_bounds: tuple[int, ...] | None = None,
 ) -> tuple[PartyMatchupProfile, ...]:
     """Screen ordinary coverage and qualified fixed incoming HP loss.
 
@@ -41,19 +49,32 @@ def trainer_entry_candidates(
     criticals, multi-hit and status remain unresolved.
     Unsupported effects reject the screen, rather than becoming zero damage.
     """
-    if (not isinstance(incoming_moves, tuple) or len(incoming_moves) != 4
-            or any(type(move) is not int or not 0 <= move <= 165 for move in incoming_moves)
-            or not any(incoming_moves)):
+    if (
+        not isinstance(incoming_moves, tuple)
+        or len(incoming_moves) != 4
+        or any(type(move) is not int or not 0 <= move <= 165 for move in incoming_moves)
+        or not any(incoming_moves)
+    ):
         raise RedTrainerPartyError("incoming move inventory is unavailable")
-    attacking_types = []
+    attacking_types: list[str | None] = []
     fixed_bound = 0
+    trapping = False
+    if incoming_commitment_bounds is not None and (
+        not isinstance(incoming_commitment_bounds, tuple)
+        or len(incoming_commitment_bounds) != party.size
+        or any(type(bound) is not int or bound < 0 for bound in incoming_commitment_bounds)
+    ):
+        raise RedTrainerPartyError("incoming commitment bounds differ from the observed party")
     if 119 in incoming_moves and mirror_move_reset_qualified is not True:
         raise RedTrainerPartyError("Mirror Move entry requires no committed copied move")
     has_ohko = any(move in (12, 32, 90) for move in incoming_moves)
     if has_ohko and (
-        not isinstance(entry_speeds, tuple) or len(entry_speeds) != 2
-        or type(entry_speeds[0]) is not int or not 1 <= entry_speeds[0] <= 1023
-        or not isinstance(entry_speeds[1], tuple) or len(entry_speeds[1]) != party.size
+        not isinstance(entry_speeds, tuple)
+        or len(entry_speeds) != 2
+        or type(entry_speeds[0]) is not int
+        or not 1 <= entry_speeds[0] <= 1023
+        or not isinstance(entry_speeds[1], tuple)
+        or len(entry_speeds[1]) != party.size
         or any(type(speed) is not int or not 1 <= speed <= 999 for speed in entry_speeds[1])
     ):
         raise RedTrainerPartyError("OHKO entry requires observed current enemy and party speeds")
@@ -70,24 +91,61 @@ def trainer_entry_candidates(
         fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=enemy_level)
         if fixed is not None:
             fixed_bound = max(fixed_bound, fixed)
+        elif (
+            RED_BATTLE_CATALOG.resolve_move(ref).effect_flags == frozenset({"trapping"})
+            and incoming_commitment_bounds is not None
+        ):
+            # The type-only API still rejects trapping. This explicit caller
+            # also proves the entire five-hit/critical/residual commitment with
+            # the existing live incoming_damage_bounds API before any switch.
+            trapping = True
+            attacking_types.append(RED_BATTLE_CATALOG.resolve_move(ref).type_name)
         else:
             attacking_types.append(RED_BATTLE_CATALOG.switch_entry_attack_type(ref))
-    return tuple(candidate for candidate in candidates
-                 if (not has_ohko or (entry_speeds is not None
-                     and party.members[candidate.party_slot - 1].status is StatusCondition.HEALTHY
-                     and entry_speeds[1][candidate.party_slot - 1] > entry_speeds[0]))
-                 and party.members[candidate.party_slot - 1].hp > fixed_bound and all(
-        attack_type is None or RED_BATTLE_CATALOG.type_effectiveness(
-            attack_type, RED_BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(
-                party.members[candidate.party_slot - 1].species_id,
-            )).types,
-        ) <= 1.0 for attack_type in attacking_types
-    ))
+    return tuple(
+        candidate
+        for candidate in candidates
+        if (
+            not has_ohko
+            or (
+                entry_speeds is not None
+                and party.members[candidate.party_slot - 1].status is StatusCondition.HEALTHY
+                and entry_speeds[1][candidate.party_slot - 1] > entry_speeds[0]
+            )
+        )
+        and party.members[candidate.party_slot - 1].hp > fixed_bound
+        and all(
+            attack_type is None
+            or RED_BATTLE_CATALOG.type_effectiveness(
+                attack_type,
+                RED_BATTLE_CATALOG.resolve_species(
+                    pokemon_red_species_ref(
+                        party.members[candidate.party_slot - 1].species_id,
+                    )
+                ).types,
+            )
+            <= 1.0
+            for attack_type in attacking_types
+        )
+        and (
+            not trapping
+            or (
+                incoming_commitment_bounds is not None
+                and party.members[candidate.party_slot - 1].hp
+                > incoming_commitment_bounds[candidate.party_slot - 1]
+            )
+        )
+    )
 
 
 def trainer_matchup_candidates(
-    party: PartyObservation, *, opponent_species: int, opponent_level: int,
+    party: PartyObservation,
+    *,
+    opponent_species: int,
+    opponent_level: int,
     minimum_hp_ratio: float = 0.5,
+    maximum_level_deficit: int = 5,
+    allow_status: bool = False,
 ) -> tuple[PartyMatchupProfile, ...]:
     """Healthy, usable, non-immune matchups within five levels of an opponent.
 
@@ -101,6 +159,10 @@ def trainer_matchup_candidates(
         raise RedTrainerPartyError("trainer preparation requires an observed party")
     if minimum_hp_ratio not in (0.0, 0.5):
         raise RedTrainerPartyError("unsupported trainer HP screening mode")
+    if type(maximum_level_deficit) is not int or not 0 <= maximum_level_deficit <= 100:
+        raise RedTrainerPartyError("invalid explicit preparation level deficit")
+    if type(allow_status) is not bool:
+        raise RedTrainerPartyError("status allowance must be explicit boolean")
     members: list[dict[str, object]] = []
     for member in party.members:
         moves: list[dict[str, object]] = []
@@ -116,23 +178,43 @@ def trainer_matchup_candidates(
             if mechanics.effect_flags & {"self_destruct", "fixed_damage", "ohko"}:
                 continue
             moves.append({"move_ref": ref, "pp": move.current_pp})
-        members.append({
-            "species_ref": pokemon_red_species_ref(member.species_id),
-            "level": member.level, "hp": member.hp, "max_hp": member.max_hp,
-            "status": None if member.status is StatusCondition.HEALTHY else member.status.value,
-            "moves": moves,
-        })
-    profiles = project_party_matchups({"features": {
-        "party": {"members": members},
-        "battle": {"opponent_species_ref": pokemon_red_species_ref(opponent_species),
-                   "opponent_level": opponent_level},
-    }}, RED_BATTLE_CATALOG)
-    return tuple(sorted(
-        (profile for profile in profiles if profile.hp_ratio >= minimum_hp_ratio
-         and not profile.has_status
-         and profile.level_margin >= -0.05 and profile.offensive_power > 0),
-        key=PartyMatchupProfile.switch_rank, reverse=True,
-    ))
+        members.append(
+            {
+                "species_ref": pokemon_red_species_ref(member.species_id),
+                "level": member.level,
+                "hp": member.hp,
+                "max_hp": member.max_hp,
+                "status": None if member.status is StatusCondition.HEALTHY else member.status.value,
+                "moves": moves,
+            }
+        )
+    profiles = project_party_matchups(
+        {
+            "features": {
+                "party": {"members": members},
+                "battle": {
+                    "opponent_species_ref": pokemon_red_species_ref(opponent_species),
+                    "opponent_level": opponent_level,
+                },
+            }
+        },
+        RED_BATTLE_CATALOG,
+    )
+    return tuple(
+        sorted(
+            (
+                profile
+                for profile in profiles
+                if profile.hp_ratio > 0
+                and profile.hp_ratio >= minimum_hp_ratio
+                and (allow_status or not profile.has_status)
+                and profile.level_margin >= -maximum_level_deficit / 100
+                and profile.offensive_power > 0
+            ),
+            key=PartyMatchupProfile.switch_rank,
+            reverse=True,
+        )
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -141,6 +223,9 @@ class RedTrainerPartyPlan:
     quote: TrainerPartyQuote
     matchups: tuple[tuple[PartyMatchupProfile, ...], ...]
     minimum_hp_ratio: float = 0.5
+    allow_fainted_reserves: bool = False
+    maximum_level_deficit: int = 5
+    allow_status: bool = False
 
     @property
     def lead(self) -> RedCaptureLeadPlan:
@@ -149,7 +234,12 @@ class RedTrainerPartyPlan:
     def require_current(self, party: PartyObservation, quote: TrainerPartyQuote) -> None:
         """Recompute, so neither a stale roster nor a forged plan may swap."""
         if self != plan_trainer_party(
-            party, quote, minimum_hp_ratio=self.minimum_hp_ratio,
+            party,
+            quote,
+            minimum_hp_ratio=self.minimum_hp_ratio,
+            allow_fainted_reserves=self.allow_fainted_reserves,
+            maximum_level_deficit=self.maximum_level_deficit,
+            allow_status=self.allow_status,
         ):
             raise RedTrainerPartyError("trainer party, roster or preparation plan changed")
 
@@ -163,9 +253,16 @@ class RedTrainerPartyPlan:
             "preferred_party_slots": [candidates[0].party_slot for candidates in self.matchups],
             "requires_lead_swap": self.lead.requires_swap,
             "minimum_hp_ratio": self.minimum_hp_ratio,
+            "allow_fainted_reserves": self.allow_fainted_reserves,
             "victory_predicted": False,
             "battle_execution_qualified": False,
             "training_examples": 0,
+            **(
+                {"maximum_level_deficit": self.maximum_level_deficit}
+                if self.maximum_level_deficit != 5
+                else {}
+            ),
+            **({"allow_status": True, "status_cured": False} if self.allow_status else {}),
         }
 
 
@@ -174,6 +271,9 @@ def plan_trainer_party(
     quote: TrainerPartyQuote,
     *,
     minimum_hp_ratio: float = 0.5,
+    allow_fainted_reserves: bool = False,
+    maximum_level_deficit: int = 5,
+    allow_status: bool = False,
 ) -> RedTrainerPartyPlan:
     """Require at least one observed matchup per quoted opponent, then plan the lead.
 
@@ -182,7 +282,13 @@ def plan_trainer_party(
     """
     if not isinstance(quote, TrainerPartyQuote) or not 1 <= len(quote.party) <= 6:
         raise RedTrainerPartyError("trainer preparation requires a nonempty bounded roster")
-    if not isinstance(party, PartyObservation) or not party.members or party.fainted_count:
+    if type(allow_fainted_reserves) is not bool:
+        raise RedTrainerPartyError("fainted-reserve allowance must be boolean")
+    if (
+        not isinstance(party, PartyObservation)
+        or not party.members
+        or (party.fainted_count and not allow_fainted_reserves)
+    ):
         raise RedTrainerPartyError("trainer preparation requires a fully living party")
     matchups = tuple(
         trainer_matchup_candidates(
@@ -190,19 +296,33 @@ def plan_trainer_party(
             opponent_species=member.internal_species,
             opponent_level=member.level,
             minimum_hp_ratio=minimum_hp_ratio,
-        ) for member in quote.party
+            maximum_level_deficit=maximum_level_deficit,
+            allow_status=allow_status,
+        )
+        for member in quote.party
     )
     uncovered = tuple(index + 1 for index, candidates in enumerate(matchups) if not candidates)
     if uncovered:
         raise RedTrainerPartyError(
             f"no qualified offensive matchup for roster positions {uncovered}"
         )
-    return RedTrainerPartyPlan(party, quote, matchups, minimum_hp_ratio)
+    return RedTrainerPartyPlan(
+        party,
+        quote,
+        matchups,
+        minimum_hp_ratio,
+        allow_fainted_reserves,
+        maximum_level_deficit,
+        allow_status,
+    )
 
 
 def prepare_trainer_lead(
-    runtime: RedGoalContextRuntime, actions: CountingExecutor, plan: RedTrainerPartyPlan,
-    *, current_quote: TrainerPartyQuote,
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    plan: RedTrainerPartyPlan,
+    *,
+    current_quote: TrainerPartyQuote,
 ) -> bool:
     """Execute only the opening field swap; no battle, healing or route input."""
     from .red_capture_preparation import prepare_observed_lead
@@ -211,5 +331,8 @@ def prepare_trainer_lead(
         raise TypeError("plan must be a RedTrainerPartyPlan")
     plan.require_current(runtime.adapter.observe().party, current_quote)
     return prepare_observed_lead(
-        runtime, actions, plan.lead, label="cartridge-roster matchup lead",
+        runtime,
+        actions,
+        plan.lead,
+        label="cartridge-roster matchup lead",
     )

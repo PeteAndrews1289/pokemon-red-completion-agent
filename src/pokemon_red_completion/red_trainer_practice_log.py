@@ -65,8 +65,9 @@ class TrainerPracticeEventLog:
         self.closed = True
 
 
-def verify_trainer_practice_event_log(directory: Path) -> dict[str, object]:
+def verify_trainer_practice_event_log(directory: Path | str) -> dict[str, object]:
     """Check ordered file continuity and every hash link before consuming a log."""
+    directory = Path(directory)
     paths = sorted(directory.glob("event-*.json"))
     if not paths:
         raise ValueError("trainer practice event log is empty")

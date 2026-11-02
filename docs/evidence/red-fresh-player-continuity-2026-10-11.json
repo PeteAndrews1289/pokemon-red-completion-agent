@@ -1,0 +1,311 @@
+{
+  "schema": "pokemon.red.fresh-player-continuity.v1",
+  "session": "2026-10-11-fresh-player-continuity",
+  "partition": "development",
+  "verdict": "ready_for_prospective_frozen_autonomous_development_attempt",
+  "official_acceptance": false,
+  "final_frozen_gates_passed": 0,
+  "final_frozen_gates_total": 5,
+  "runtime_llm_calls": 0,
+  "training_examples_added": 0,
+  "fits": 0,
+  "parameter_updates": 0,
+  "protected_primary_registrations_added": 0,
+  "contract": {
+    "fresh_full_game_launched": false,
+    "related_origins": 2,
+    "independent_origins": 0,
+    "maximum_native_seconds_per_case": 1800,
+    "maximum_additional_charged_attempts_per_case": 24,
+    "copy_back": false,
+    "save_rollback": false,
+    "manual_repairs_between_failed_copy_releases": true,
+    "failed_copy_releases_remain_failed": true
+  },
+  "wiring": {
+    "fields": [
+      "goal_model_record",
+      "readiness_refinement",
+      "goal_selection",
+      "preparation_battle_component",
+      "input_recording",
+      "owned_machine_options",
+      "bird_capture_loan"
+    ],
+    "selection": "exploration",
+    "readiness_refinement": null,
+    "cash": "gross_observed_native_debits_not_net_income",
+    "renewal": "same_live_emulator_and_cumulative_context_no_checkpoint_restore_between_chunks",
+    "compulsory_recovery": "existing_trainer_wild_blackout_motion_control_only",
+    "partial_evolution": "positive_measured_battles_with_exact_return_preserved_progress_and_typed_certificate_only",
+    "unknown_errors": "retain_terminal_and_stop",
+    "settlement_reserve": "renew_before_another_training_loan_after_safe_partial",
+    "bird_loan": "bind_first_observed_exact_original_preserving_all_held_field_capabilities_for_bird_capture_only",
+    "bird_capture_executed_in_this_packet": false,
+    "fresh_plan_repair": "replace_legacy_owned_machine_boolean_with_explicit_validated_declaration"
+  },
+  "models": {
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9",
+    "retained_configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "preparation_component_sha256": "720e9db864f3fefe2edfa27889203bd7c0fcbbd6968a65b960adcf1d57392161",
+    "ordinary_combat": "existing_K",
+    "league_income_combat": "existing_scoped111_with_control52",
+    "preparation_combat": "existing_provisional_wild_component",
+    "generic_44_example_readiness_head": "not_promoted_not_deployed"
+  },
+  "early_loss": {
+    "source_identity": "next-fresh-run/segment-001",
+    "terminal": "continuity/early-loss/segment-013",
+    "source_state_sha256": "8c2ec6a605ba775caf43e20fe78b92c9cbb457ee59085d7c252def08d3c0d9a0",
+    "state_sha256": "a46df13ef53940888d7b7cc3cd56f7ef585fa4ac375092f13a621760f85283ee",
+    "context_sha256": "01ba08d3f9f02192a3c2d670f5c94286934ad1577e8f2bf1f4f5214fa31cf609",
+    "driver_receipt_sha256": "0a57f2f64243f181d59edbe9bf935626dd12b0495b25c80ff8e44f2118793c81",
+    "initial": {
+      "registrations": 1,
+      "cash": 1677,
+      "starter_level": 7,
+      "starter_hp": 0
+    },
+    "final": {
+      "registrations": 4,
+      "cash": 38,
+      "party_levels": [
+        14,
+        8,
+        5,
+        5
+      ],
+      "field_ready": true,
+      "whole_party_restored": false
+    },
+    "registration_delta": 3,
+    "model_owned_completed_choices": 23,
+    "loop_support_choices": 0,
+    "compulsory_loss_settlement_preface": {
+      "charged_attempts": 1,
+      "model_choices": 0,
+      "actions": 8,
+      "frames": 576,
+      "cash_debit": 839
+    },
+    "automatic_renewals": 11,
+    "automatic_release": "frozen-r5/segment-002-through-013",
+    "observed_spent": {
+      "actions": 14404,
+      "cash_debits": 3227,
+      "decisions": 40,
+      "frames": 956581,
+      "heals": 29,
+      "seconds": 226.80000804492738
+    },
+    "allowance_delta": {
+      "actions": 12786,
+      "cash_debits": 1639,
+      "decisions": 24,
+      "frames": 845628,
+      "heals": 28,
+      "seconds": 162.7549126689555
+    },
+    "worker_stopped": true,
+    "live_driver_running": false,
+    "checkpoint_stop": "declared_24_attempt_allowance_exhausted",
+    "prelaunch_failed_segment": "001_retained_zero_loads_inputs_frames"
+  },
+  "late_collection": {
+    "source_identity": "assisted-exploration-recovery/segment-115",
+    "terminal": "continuity/late-collection/segment-015",
+    "source_state_sha256": "6152fbd4cae3e489f59e57bc0c0b28a8251bbad1e879c9ae75e3c8b2880364ab",
+    "state_sha256": "81433b64ea20a29aa0e446b8b4750d2d343f45af026a5657f0fbb636c81da52f",
+    "context_sha256": "74356636da754775504b48fd5db2dc33c3482694b0c63dbcf94f1715bdb1f6ee",
+    "driver_receipt_sha256": "454fcf2cd882c949a8956e5a97dc1062e530c502ccc8403913edf7497197116c",
+    "initial": {
+      "registrations": 54,
+      "cash": 88,
+      "champion_and_hof_already_earned": true
+    },
+    "final": {
+      "registrations": 57,
+      "cash": 25687,
+      "party_levels": [
+        55,
+        55,
+        65,
+        57,
+        67,
+        100
+      ],
+      "field_ready": true,
+      "whole_party_restored": false,
+      "originals_active": 6
+    },
+    "registration_delta": 3,
+    "gross_native_cash_rewards": 31999,
+    "gross_native_cash_debits": 6400,
+    "model_owned_completed_choices": 22,
+    "support_completed_choices": 2,
+    "charged_attempts": 24,
+    "successful_goal_outcomes": 12,
+    "ordinary_setbacks": 9,
+    "unresolved_original_goal_failures": 3,
+    "failed_releases": [
+      {
+        "release": "frozen-r5",
+        "terminal": "002",
+        "reason": "routed_positive_returned_partial_not_recognized"
+      },
+      {
+        "release": "frozen-r6",
+        "terminal": "004",
+        "reason": "second_zero_training_dose_started_inside_reserved_return_budget"
+      },
+      {
+        "release": "frozen-r7",
+        "terminal": "006",
+        "reason": "direct_positive_partial_lacked_routed_certificate_shape"
+      }
+    ],
+    "final_automatic_subsection": {
+      "release": "frozen-r8",
+      "loaded_parent": "segment-006",
+      "automatic_segments": "007-through-015",
+      "automatic_renewals": 8,
+      "operator_dispatch_between_segments": false,
+      "state_loads_after_initial_parent": 0,
+      "model_choices": 12,
+      "support_choices": 2,
+      "successful_goal_outcomes": 8,
+      "ordinary_setbacks": 6,
+      "teacher_actions": 0,
+      "registrations_added": 3
+    },
+    "observed_spent": {
+      "actions": 646647,
+      "cash_debits": 783917,
+      "decisions": 1355,
+      "frames": 53215576,
+      "heals": 674,
+      "seconds": 32733.34062767506
+    },
+    "allowance_delta": {
+      "actions": 73040,
+      "cash_debits": 6400,
+      "decisions": 24,
+      "frames": 5855720,
+      "heals": 65,
+      "seconds": 1617.471555705064
+    },
+    "worker_stopped": true,
+    "live_driver_running": false,
+    "checkpoint_stop": "declared_24_attempt_allowance_exhausted",
+    "original_root_reason": "automatic_chunk_renewal",
+    "original_root_reason_limitation": "r8 labels chunk renewal; aggregate ledger establishes final administrative stop. r9 reports driver_terminal_reason separately."
+  },
+  "frozen_readiness": {
+    "package": "frozen-r9",
+    "manifest_sha256": "fc2433fa995e912096f509cd5a3b4c52bc732eab480f46f7c5872be14c2d6a09",
+    "source_commit": "2b1a11b4b6dd81ff2c517b38367ec16bd4e46e2f",
+    "package_file_pins": 7871,
+    "helper_inputs": 174,
+    "data_inputs": 6940,
+    "environment_pins": 4512,
+    "r9_cold_checks": [
+      {
+        "case": "early-loss",
+        "passed": true,
+        "inputs": 0,
+        "frames": 0,
+        "state_unchanged": true,
+        "context_unchanged": true,
+        "receipt_sha256": "354004240974bc3c295cb9da3bae7d028cf0159fcedfa471ce7cdda6dea2e333",
+        "bird_loan_available": false,
+        "capture_executed": false
+      },
+      {
+        "case": "late-collection",
+        "passed": true,
+        "inputs": 0,
+        "frames": 0,
+        "state_unchanged": true,
+        "context_unchanged": true,
+        "receipt_sha256": "60690e22fbd8c4a4d213b4603045f0aa689650fca7a0702ecc3b0bd94f36aed2",
+        "bird_loan_available": true,
+        "exact_originals_observed": 6,
+        "exact_loanable_originals": 1,
+        "capture_executed": false
+      }
+    ],
+    "prepared_plan": "prepared-fresh/PLAN-READY-10.json",
+    "prepared_plan_sha256": "ddcc1d82b09a306b6ea46055fd869d83fb0ccde7a61a4a2666a034e4332b4f64",
+    "prospective_seed": 2026101101,
+    "prospective_extra_boot_frames": 1213,
+    "native_seconds_envelope": 86400,
+    "chunk_native_seconds": 1800,
+    "launch_authorized": false,
+    "readiness_only": true,
+    "readonly_launch_refusal": {
+      "exit_code": 1,
+      "emulator_created": false,
+      "claims_written": 0,
+      "inputs": 0,
+      "frames": 0
+    },
+    "authorization_variant_validation": {
+      "passed": true,
+      "in_memory_only": true,
+      "file_changed": false,
+      "emulator_created": false,
+      "inputs": 0,
+      "frames": 0
+    },
+    "final_source_changes_after_native_r8": "strict earned evolution census handling, early declaration validation, explicit root administrative stop reporting; verified by focused tests and r9 cold inspection, not another live gameplay release",
+    "next_outcome": "one prospective immutable clean-power-on Champion_and_HOF_plus_124_same_save_native_registration_attempt"
+  },
+  "protected_originals": {
+    "source_files_checked": 8,
+    "source_files_unchanged": true,
+    "primary_and_reference_endpoint_files_checked": 9,
+    "primary_and_reference_endpoint_files_unchanged": true,
+    "endpoints": [
+      {
+        "identity": "completed133",
+        "unchanged": true,
+        "state_sha256": "62e04ec2ab7c68f669a04ea5b92553db6cb780a7d2271294b39d951abbdb4315",
+        "context_sha256": "1fa2196b146d57a2e0f36d6f2aa8716150f76e5e2042dec2f060d97a35f9b231",
+        "result_sha256": "af6f0370a9113ee51142e798425be62e981f06443e8bbd03a51ffa4793c03745"
+      },
+      {
+        "identity": "main065",
+        "unchanged": true,
+        "state_sha256": "b0a44ae04ab450adeb12be674d4a72572335fd2f25f66a226b5dcb6784064f50",
+        "context_sha256": "194e27203a0dd25991160663cc9f6424f939d09c3ae9e241cd4587ea447b2545",
+        "result_sha256": "0ac21239c940e0a255a0f276e7e9efdc4bb837b18d240173994e2e92beac1f08"
+      },
+      {
+        "identity": "completed029",
+        "unchanged": true,
+        "state_sha256": "3d3b8b100e7a14ccb572600fd0e5940aeff40d9a8e8c6f9f5dba2e0b4a4ddd8a",
+        "context_sha256": "fc371a15e9c7a99b37ff63c738ed6cfec0d22d2158b2585871a89c438da9f78d",
+        "result_sha256": "2b6c89556c5e9a3a526e6c8f29461b074b1872ce91726cf5f47dbc09aeb1f2ce"
+      }
+    ],
+    "previous_649_pin_closeout": "historical_exact_133_proof_not_a_claim_that_mutable_helper_sources_remain_identical_after_intentional_repairs"
+  },
+  "verification": {
+    "focused_tests_passed": 996,
+    "targeted_test_files": 20,
+    "ruff": "passed_changed_public_sources_and_tests",
+    "full_suite": false,
+    "ci": false,
+    "development_data_fitted": false
+  },
+  "limitations": [
+    "Two related checkpoint copies are not independent clean-power-on completion or repeatability.",
+    "Earlier copy releases required operator repairs and their failures remain failed.",
+    "The final native subsection uses r8; the ready r9 package has cold inspection and focused tests, not another gameplay origin.",
+    "The new semantic bird loan is observed eligible only; no bird capture or loan repayment under it executes in this packet.",
+    "Strategic readiness remains incompletely learned; generic readiness-head failure is not waived.",
+    "Disclosed opening, navigation, PC, inner training, compulsory recovery and medicine reserve are not learned strategy.",
+    "Zero new training and no learned parameter improvement claimed; native XP and isolated registrations are engineering progress.",
+    "Prepared fresh declaration is not launched and no official frozen acceptance gate advances."
+  ]
+}

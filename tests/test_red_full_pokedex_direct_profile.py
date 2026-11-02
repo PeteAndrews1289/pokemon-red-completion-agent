@@ -12,6 +12,7 @@ from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_full_pokedex_direct_profile import (
     RedFullPokedexDirectProfileError,
     _capture_corridor,
+    _item_evolution,
     _wild_sources,
     derive_direct_full_pokedex_profile,
 )
@@ -34,7 +35,9 @@ from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
 )
 from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridor,
+    bind_red_capture_search_budget_profile,
     bind_red_capture_status_profile,
+    bind_red_capture_weakening_profile,
 )
 
 
@@ -69,6 +72,29 @@ def _route_2_world():
         terrain={map_id: _terrain()},
         object_blockers={map_id: frozenset()},
     )
+
+
+@pytest.mark.parametrize("stock", [0, 1, 3])
+def test_direct_finite_stone_profile_requires_held_stock(tmp_path, stock):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 31)
+    observed = replace(
+        observed,
+        raw=replace(observed.raw, bag_items=((int(ItemId.MOON_STONE), stock),) if stock else ()),
+        collection_observation=replace(
+            observed.collection_observation,
+            specimens=tuple(
+                replace(s, species_ref=red_species_ref(30))
+                if s.location is CollectionLocation.BOX else s
+                for s in observed.collection_observation.specimens
+            ),
+        ),
+    )
+    if stock:
+        assert _item_evolution(observed) == (30, 31, int(ItemId.MOON_STONE))
+    else:
+        with pytest.raises(RedFullPokedexDirectProfileError):
+            _item_evolution(observed)
 
 
 @pytest.mark.nonconsuming_direct_rehearsal
@@ -232,6 +258,7 @@ def test_direct_profile_preserves_only_declared_generic_capture_capabilities(tmp
         bind_travel_capture_profile,
         bind_observed_local_capture_profile,
         bind_red_capture_status_profile,
+        bind_red_capture_weakening_profile,
     ):
         source = bind(source)
     providers = []
@@ -265,6 +292,7 @@ def test_direct_profile_preserves_only_declared_generic_capture_capabilities(tmp
             "travel_capture",
             "observed_local_capture",
             "capture_status_support",
+            "capture_weakening_support",
         )
     } == {
         "cut_transport": True,
@@ -275,6 +303,7 @@ def test_direct_profile_preserves_only_declared_generic_capture_capabilities(tmp
         "travel_capture": True,
         "observed_local_capture": True,
         "capture_status_support": True,
+        "capture_weakening_support": True,
     }
     assert capture.parameters["source_id"] == "wild:Route1:grass"
     assert "capture_species_numbers" not in capture.parameters
@@ -295,6 +324,7 @@ def test_direct_profile_does_not_invent_missing_capture_capabilities(tmp_path, m
     derived = derive_direct_full_pokedex_profile(source, observed, _world())
     capture = next(spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
     optional = {
+        "capture_search_budget",
         "cut_transport",
         "surf_transport",
         "fly_transport",
@@ -303,9 +333,32 @@ def test_direct_profile_does_not_invent_missing_capture_capabilities(tmp_path, m
         "travel_capture",
         "observed_local_capture",
         "capture_status_support",
+        "capture_weakening_support",
     }
     assert optional.isdisjoint(source_capture.parameters)
     assert optional.isdisjoint(capture.parameters)
+
+
+@pytest.mark.parametrize("maximum_legs", [160, 320])
+def test_direct_profile_retains_explicit_existing_longer_search_budget(
+    tmp_path, monkeypatch, maximum_legs,
+):
+    runtime, _, _ = bound_fixture(tmp_path)
+    source = bind_red_capture_search_budget_profile(
+        _local_discovery_profile(), maximum_legs=maximum_legs,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
+        lambda _actual, _world: _corridor(),
+    )
+    derived = derive_direct_full_pokedex_profile(source, runtime.adapter.observe(), _world())
+    before = next(spec for spec in source.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
+    after = next(spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
+    marker = f"bounded-search-v{2 if maximum_legs == 320 else 1}"
+    assert after.parameters["capture_search_budget"] == marker
+    assert after.parameters["maximum_legs"] == before.parameters["maximum_legs"] == maximum_legs
+    for bound in ("maximum_seek_steps", "maximum_encounters"):
+        assert after.parameters[bound] == before.parameters[bound]
 
 
 def test_direct_profile_preserves_declared_evolution_transport(tmp_path, monkeypatch):
@@ -343,4 +396,53 @@ def test_direct_profile_refuses_to_invent_evolution_without_boxed_precursor(
             runtime.profile,
             replace(observed, collection_observation=collection),
             _world(),
+        )
+
+
+def test_optional_evolution_exhaustion_preserves_capture_and_other_providers(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 13, map_id=MapId.ROUTE_2)
+    derived = derive_direct_full_pokedex_profile(
+        runtime.profile,
+        observed,
+        _route_2_world(),
+        require_evolution=False,
+    )
+    kinds = {spec.kind for spec in derived.providers}
+    assert GoalKind.EVOLVE_SPECIES not in kinds
+    assert GoalKind.ACQUIRE_SPECIES in kinds
+    assert {spec.kind for spec in runtime.profile.providers} - {
+        GoalKind.EVOLVE_SPECIES,
+        GoalKind.ACQUIRE_SPECIES,
+    } <= kinds
+
+
+def test_optional_evolution_does_not_swallow_missing_capture_geometry(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 72)
+    with pytest.raises(RedFullPokedexDirectProfileError, match="wild corridor"):
+        derive_direct_full_pokedex_profile(
+            runtime.profile,
+            observed,
+            _world(),
+            require_evolution=False,
+        )
+
+
+def test_optional_evolution_does_not_swallow_unexpected_inventory_error(tmp_path, monkeypatch):
+    runtime, _, _ = bound_fixture(tmp_path)
+
+    def invalid_inventory(observed):
+        raise RuntimeError("invalid inventory")
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._level_evolution",
+        invalid_inventory,
+    )
+    with pytest.raises(RuntimeError, match="invalid inventory"):
+        derive_direct_full_pokedex_profile(
+            runtime.profile,
+            runtime.adapter.observe(),
+            _world(),
+            require_evolution=False,
         )

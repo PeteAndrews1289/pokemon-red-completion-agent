@@ -10,8 +10,10 @@ import argparse
 import hashlib
 import json
 import subprocess
-from contextlib import contextmanager
+from collections.abc import Callable, Mapping
+from contextlib import contextmanager, suppress
 from pathlib import Path
+from time import monotonic
 
 from pokemon_red_completion.battle_control_model import BattleControlMLP
 from pokemon_red_completion.battle_neural_model import MaskedMLPMoveRanker
@@ -21,7 +23,14 @@ from pokemon_red_completion.battle_scenario_capture import (
 )
 from pokemon_red_completion.battle_switch_target_model import BattleSwitchTargetMLP
 from pokemon_red_completion.emulator import PyBoyAdapter
-from pokemon_red_completion.executor import FrameBudgetController
+from pokemon_red_completion.executor import (
+    ControllerActionBudgetExhausted,
+    ControllerActionLimiter,
+    ControllerWallTimeBudgetExhausted,
+    FrameBudgetController,
+    FrameSafeExecutor,
+    MonotonicWallTimeBudgetController,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_player import _record, _write
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
@@ -44,36 +53,118 @@ OUTCOME_SCHEMA = "pokemon.red.trainer-practice-outcome-model-plan.v1"
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 
 
+def _budget_failure(error: BaseException):
+    """Find an actual budget exception even when executor cleanup replaced it.
+
+    Inspect exception objects, never message text. Explicit causes and implicit
+    cleanup contexts can both retain the original stop; guard against cycles.
+    The caller still propagates the outer exception unchanged.
+    """
+    pending = [error]
+    seen: set[int] = set()
+    while pending:
+        current = pending.pop()
+        if id(current) in seen:
+            continue
+        seen.add(id(current))
+        if isinstance(
+            current, (ControllerActionBudgetExhausted, ControllerWallTimeBudgetExhausted)
+        ):
+            return current
+        if current.__context__ is not None:
+            pending.append(current.__context__)
+        if current.__cause__ is not None:
+            pending.append(current.__cause__)
+    return None
+
+
 @contextmanager
-def retained_session(emulator, *, maximum_frames: int, output: Path):
+def retained_session(
+    emulator,
+    *,
+    maximum_frames: int,
+    output: Path,
+    maximum_controller_actions: int | None = None,
+    maximum_wall_seconds: int | None = None,
+    monotonic_clock: Callable[[], float] = monotonic,
+    action_metadata: Callable[[], Mapping[str, object]] | None = None,
+    retention_metadata: dict[str, object] | None = None,
+):
     """Export the actual endpoint before emulator close, including failed episodes.
 
     This snapshot alone is NOT a successful or continuation-qualified outcome.
     A normal episode report must bind it before downstream use.
     """
-    session = FrameBudgetController(emulator, maximum_frames=maximum_frames)
+    if (maximum_controller_actions is None) != (maximum_wall_seconds is None):
+        raise ValueError("trainer action and wall budgets must be paired")
+    framed_session = FrameBudgetController(emulator, maximum_frames=maximum_frames)
+    session = (
+        MonotonicWallTimeBudgetController(
+            framed_session,
+            maximum_wall_seconds=maximum_wall_seconds,
+            monotonic_clock=monotonic_clock,
+        )
+        if maximum_wall_seconds is not None
+        else framed_session
+    )
     returned = False
     try:
         yield session
         returned = True
     finally:
-        payload = session.save_state_bytes()
-        if not isinstance(payload, bytes) or not payload:
-            raise ValueError("trainer endpoint snapshot is empty")
-        # Never replace an endpoint from a previous invocation.
-        _write(output / "final.state", payload)
-        _record(
-            output / "final-state.json",
-            {
-                "schema": "pokemon.red.trainer-endpoint.v1",
-                "state_sha256": hashlib.sha256(payload).hexdigest(),
-                "byte_count": len(payload),
-                "frames": session.frame_count,
-                "episode_returned": returned,
-                "pressed_buttons": sorted(session.pressed_buttons),
-                "continuation_qualified": False,
-            },
-        )
+        pressed_before_cleanup = sorted(session.pressed_buttons)
+        budget = dict(action_metadata()) if action_metadata is not None else {}
+        if maximum_wall_seconds is not None:
+            assert isinstance(session, MonotonicWallTimeBudgetController)
+            budget.update(
+                {
+                    "maximum_controller_actions": maximum_controller_actions,
+                    "maximum_wall_seconds": maximum_wall_seconds,
+                    "controller_action_unit": "attempted_macro_action_dispatch",
+                    "wall_time_measurement": (
+                        "retained_session_start_through_endpoint_cleanup_inspection"
+                    ),
+                    "wall_elapsed_seconds": session.elapsed_seconds,
+                }
+            )
+        latest = {
+            "frames": session.frame_count,
+            "frame_delta": framed_session.frames_executed,
+            "pressed_buttons_before_cleanup": pressed_before_cleanup,
+            **budget,
+        }
+        if retention_metadata is not None:
+            retention_metadata.update(latest)
+        try:
+            for button in pressed_before_cleanup:
+                session.release(button)
+            payload = session.save_state_bytes()
+            if not isinstance(payload, bytes) or not payload:
+                raise ValueError("trainer endpoint snapshot is empty")
+            # Never replace an endpoint from a previous invocation.
+            _write(output / "final.state", payload)
+            _record(
+                output / "final-state.json",
+                {
+                    "schema": "pokemon.red.trainer-endpoint.v1",
+                    "state_sha256": hashlib.sha256(payload).hexdigest(),
+                    "byte_count": len(payload),
+                    "frames": session.frame_count,
+                    "frame_delta": framed_session.frames_executed,
+                    "episode_returned": returned,
+                    "pressed_buttons": sorted(session.pressed_buttons),
+                    "pressed_buttons_before_cleanup": pressed_before_cleanup,
+                    "continuation_qualified": False,
+                    **budget,
+                },
+            )
+        finally:
+            # Cleanup can partly succeed before release/save/receipt fails. Keep
+            # obtainable input state without requiring a persisted endpoint, and
+            # never replace the primary failure if inspection itself is unavailable.
+            if retention_metadata is not None:
+                with suppress(Exception):
+                    retention_metadata["pressed_buttons"] = sorted(session.pressed_buttons)
 
 
 def _bound_file(value: object, label: str) -> bytes:
@@ -91,6 +182,7 @@ def _bound_file(value: object, label: str) -> bytes:
 def _authenticate(plan: object):
     if not isinstance(plan, dict) or plan.get("schema") not in {SCHEMA, OUTCOME_SCHEMA}:
         raise ValueError("trainer model plan differs")
+    _runtime_budgets(plan)
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise ValueError("commit trainer model code before running it")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
@@ -160,8 +252,35 @@ def _authenticate(plan: object):
     return plan, capture, model
 
 
-def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
+def _runtime_budgets(plan: Mapping[str, object]) -> tuple[int, int] | None:
+    """Validate the optional pair before artifact reads or output creation."""
+
+    has_actions = "maximum_controller_actions" in plan
+    has_wall = "maximum_wall_seconds" in plan
+    if not has_actions and not has_wall:
+        return None
+    actions = plan.get("maximum_controller_actions")
+    seconds = plan.get("maximum_wall_seconds")
+    if (
+        not has_actions
+        or not has_wall
+        or type(actions) is not int  # noqa: E721
+        or not 1 <= actions <= 5000
+        or type(seconds) is not int  # noqa: E721
+        or not 1 <= seconds <= 180
+    ):
+        raise ValueError("trainer model action and wall budgets differ")
+    return actions, seconds
+
+
+def run(
+    plan_path: Path,
+    *,
+    check_only: bool = False,
+    monotonic_clock: Callable[[], float] = monotonic,
+) -> dict[str, object]:
     plan, capture, model = _authenticate(json.loads(plan_path.read_bytes()))
+    runtime_budgets = _runtime_budgets(plan)
     if check_only:
         return {
             "status": "action_free_trainer_model_preflight_passed",
@@ -179,15 +298,63 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     assert isinstance(maximum_frames, int) and isinstance(max_decisions, int)
     assert isinstance(opening_idle_frames, int)
 
+    active_session: dict[str, object] = {}
+    active_limiter: dict[str, ControllerActionLimiter] = {}
+    retention_metadata: dict[str, object] = {}
+
+    def action_metadata() -> dict[str, object]:
+        limiter = active_limiter.get("limiter")
+        return {
+            "controller_actions_attempted": (
+                0 if limiter is None else limiter.attempted_actions
+            ),
+            "controller_actions_completed": (
+                0 if limiter is None else limiter.completed_actions
+            ),
+        }
+
+    class BoundEpisodeActionExecutor:
+        def execute(self, action):
+            session = active_session.get("session")
+            if session is None:
+                raise RuntimeError("trainer action executor has no retained session")
+            limiter = active_limiter.get("limiter")
+            if limiter is None:
+                assert runtime_budgets is not None
+                maximum_actions, _maximum_seconds = runtime_budgets
+                admit = session.check_wall_time_budget
+                limiter = ControllerActionLimiter(
+                    FrameSafeExecutor(session),
+                    maximum_actions=maximum_actions,
+                    admit_action=admit,
+                )
+                active_limiter["limiter"] = limiter
+            return limiter.execute(action)
+
     @contextmanager
     def session_factory():
+        maximum_actions = runtime_budgets[0] if runtime_budgets is not None else None
+        maximum_seconds = runtime_budgets[1] if runtime_budgets is not None else None
         with (
             PyBoyAdapter(Path(rom["path"]), watch=False, speed=None) as emulator,
             retained_session(
-                emulator, maximum_frames=maximum_frames, output=output
+                emulator,
+                maximum_frames=maximum_frames,
+                output=output,
+                maximum_controller_actions=maximum_actions,
+                maximum_wall_seconds=maximum_seconds,
+                monotonic_clock=monotonic_clock,
+                action_metadata=action_metadata if runtime_budgets is not None else None,
+                retention_metadata=retention_metadata if runtime_budgets is not None else None,
             ) as session,
         ):
-            yield session
+            active_session["session"] = session
+            try:
+                yield session
+                if runtime_budgets is not None:
+                    session.check_wall_time_budget()
+            finally:
+                active_session.pop("session", None)
 
     policy: RedTrainerPracticeOutcomePolicy | RedTrainerPracticeModelPolicy
     if isinstance(model, TrainerPracticeThreeHeadModel):
@@ -217,6 +384,15 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     assert isinstance(output_path, str)
     output = Path(output_path)
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
+    budget_identity = (
+        {}
+        if runtime_budgets is None
+        else {
+            "maximum_controller_actions": runtime_budgets[0],
+            "maximum_wall_seconds": runtime_budgets[1],
+            "controller_action_unit": "attempted_macro_action_dispatch",
+        }
+    )
     _record(
         output / "execution-started.json",
         {
@@ -225,6 +401,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "policy_id": policy.policy_id,
             "partition": capture.manifest.partition.value,
             "opening_idle_frames": opening_idle_frames,
+            **budget_identity,
         },
     )
     log = TrainerPracticeEventLog(
@@ -240,6 +417,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "max_decisions": max_decisions,
             "maximum_frames": maximum_frames,
             "opening_idle_frames": opening_idle_frames,
+            **budget_identity,
         },
     )
     try:
@@ -251,18 +429,91 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             opening_idle_frames=opening_idle_frames,
             event_sink=log.emit,
             public_species_base_stats=public_stats,
+            action_executor=(BoundEpisodeActionExecutor() if runtime_budgets is not None else None),
+            decision_guard=(
+                (lambda _raw: active_session["session"].check_wall_time_budget())
+                if runtime_budgets is not None
+                else None
+            ),
         )
         endpoint = json.loads((output / "final-state.json").read_bytes())
         if endpoint["episode_returned"] is not True or endpoint["pressed_buttons"]:
             raise ValueError("trainer endpoint is not released and normally returned")
     except Exception as error:
+        budget_error = _budget_failure(error)
+        is_budget_failure = isinstance(
+            budget_error,
+            (ControllerActionBudgetExhausted, ControllerWallTimeBudgetExhausted),
+        )
+        budget_reason = (
+            "controller_action_budget_exhausted"
+            if isinstance(budget_error, ControllerActionBudgetExhausted)
+            else "controller_wall_time_budget_exhausted"
+            if isinstance(budget_error, ControllerWallTimeBudgetExhausted)
+            else None
+        )
+        retained_budget = (
+            {
+                "error_type": type(budget_error).__name__,
+                "error_message": str(budget_error),
+                "reason": budget_reason,
+            }
+            if is_budget_failure
+            else None
+        )
+        if retained_budget is not None and budget_error is not error:
+            log.emit(
+                {
+                    "event": "budget_failure_retained",
+                    "budget_failure": retained_budget,
+                    "secondary_failure": {
+                        "error_type": type(error).__name__,
+                        "error_message": str(error),
+                    },
+                    "accounting": retention_metadata,
+                }
+            )
         log.fail(error)
+        endpoint = (
+            json.loads((output / "final-state.json").read_bytes())
+            if (output / "final-state.json").exists()
+            else {}
+        )
+        reason = budget_reason or "exception"
         _record(
             output / "failure.json",
             {
                 "schema": "pokemon.red.trainer-practice-model-failure.v1",
                 "error_type": type(error).__name__,
+                "error_message": str(error),
+                "reason": reason,
                 "partition": capture.manifest.partition.value,
+                **budget_identity,
+                **({"budget_failure": retained_budget} if retained_budget is not None else {}),
+                **(
+                    {
+                        "secondary_failure": {
+                            "error_type": type(error).__name__,
+                            "error_message": str(error),
+                        }
+                    }
+                    if retained_budget is not None and budget_error is not error
+                    else {}
+                ),
+                **retention_metadata,
+                **{
+                    key: endpoint[key]
+                    for key in (
+                        "controller_actions_attempted",
+                        "controller_actions_completed",
+                        "wall_elapsed_seconds",
+                        "frames",
+                        "frame_delta",
+                        "pressed_buttons",
+                        "pressed_buttons_before_cleanup",
+                    )
+                    if key in endpoint
+                },
             },
         )
         _record(
@@ -277,6 +528,13 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "root_lineage_id": capture.manifest.root_lineage_id,
             "source_commit": plan["source_commit"],
             "opening_idle_frames": opening_idle_frames,
+            **budget_identity,
+            **(action_metadata() if runtime_budgets is not None else {}),
+            **(
+                {"wall_elapsed_seconds": endpoint["wall_elapsed_seconds"]}
+                if runtime_budgets is not None
+                else {}
+            ),
             "model_updates": 0,
             "authority_promotions": 0,
             "final_state_sha256": endpoint["state_sha256"],

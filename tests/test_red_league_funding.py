@@ -61,13 +61,14 @@ class _World:
     exit_plan: object
     entry_plan: object
     supply_plan: object
+    supply_origin: tuple[int, int] = (6, 9)
 
     def plan_feasible_to_map(self, start, target, **kwargs):
         if target == 5:
             assert self.macro_graph == "raw"
             return self.exit_plan
         if target == 174:
-            assert start.at == (6, 9)
+            assert start.at == self.supply_origin
             return self.supply_plan
         assert target == 245 and self.macro_graph == "scripted-lorelei-arrival"
         assert start.at == (5, 2)
@@ -193,6 +194,50 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "net_profit_proven": False,
         "rematch_executed": False,
     }
+
+
+@pytest.mark.parametrize("at", [(6, 9), (7, 8)])
+@pytest.mark.parametrize("indoor_exit", [False, True])
+def test_qualification_walks_from_actual_indigo_pose_without_redundant_fly(
+    qualified, monkeypatch, at, indoor_exit,
+):
+    observation, reader, world = qualified
+    start = TraversalSnapshot(
+        174 if indoor_exit else 9, (5, 2) if indoor_exit else at,
+        True, mode="land", last_outside_map=9,
+    )
+    monkeypatch.setattr(
+        league, "Gen1TraversalObserver",
+        lambda reader: SimpleNamespace(observe=lambda: start),
+    )
+    world = replace(
+        world,
+        local_graphs={9: SimpleNamespace(edges={at: ()})},
+        supply_origin=at,
+        exit_plan=SimpleNamespace(steps=("out",), terminal_map=9, terminal_at=at),
+    )
+    original_plan = _World.plan_feasible_to_map
+
+    def plan(self, source, target, **kwargs):
+        if target == 9:
+            return self.exit_plan
+        return original_plan(self, source, target, **kwargs)
+
+    monkeypatch.setattr(_World, "plan_feasible_to_map", plan)
+    result = league.qualify_red_league_funding(b"rom", observation, reader, world)
+    assert result.fly_required is False
+    assert result.fly_landing == at
+    assert (result.exit_plan is not None) is indoor_exit
+    assert result.public_dict()["fly_required"] is False
+
+
+def test_fly_requirement_is_strict_boolean(qualified):
+    observation, reader, world = qualified
+    result = league.qualify_red_league_funding(b"rom", observation, reader, world)
+    assert result.fly_required is True
+    assert "fly_required" not in result.public_dict()
+    with pytest.raises(TypeError, match="Fly requirement"):
+        replace(result, fly_required=0)
 
 
 @pytest.mark.parametrize(

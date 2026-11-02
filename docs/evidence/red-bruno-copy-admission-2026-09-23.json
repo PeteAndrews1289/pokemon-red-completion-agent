@@ -1,0 +1,16 @@
+{
+  "schema": "pokemon.red.bruno-copy-development-admission.v1",
+  "model_sha256": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3",
+  "source_state_sha256": "365af4747021049aaeb17d433b9c6696ad056a7a6d78ea6ea93dc333600700f7",
+  "objective": "defeat_bruno",
+  "mode": "isolated_copy_first_challenge_only",
+  "basis": "User accepted a bounded two-member recovery and Bruno continuation on an isolated copy of the earned Lorelei victory. This admits an experiment, not a qualified win or a campaign dispatch.",
+  "recovery_selection": "disclosed_deterministic_diagnostic_setup",
+  "battle_items_allowed": false,
+  "teacher_fallback_allowed": false,
+  "campaign_execution_allowed": false,
+  "later_rooms_allowed": false,
+  "rematch_allowed": false,
+  "fit_allowed": false,
+  "default_promotion_allowed": false
+}

@@ -1,0 +1,137 @@
+{
+  "actions": 639,
+  "audit_frames": 0,
+  "audit_source_sha256": "29a121dffc0c0f9784b0de26dec779be2a3138ac8b29e6b8310b5b0c445506cf",
+  "cash": 25841,
+  "cash_delta": 0,
+  "envelope_sha256": "38f959fc91c8b26035e078bd201e21ec83a694e68fc668b150dee9fb74c32aee",
+  "execution_commit": "dd3d2c953e015342448fe4525d6cbd0bcb5b4ccd",
+  "first_two_puzzles_reopened": true,
+  "fix_status": "ROM-free verified interrupted-push reissue; not yet native-qualified",
+  "frames": 50328,
+  "fully_restored": true,
+  "gameplay_running": false,
+  "last_escape_consumed_push_without_motion": true,
+  "local_registrations": 17,
+  "map_id": 198,
+  "native_event_changes": {
+    "reset": [],
+    "set": [
+      1336
+    ]
+  },
+  "new_fits": 0,
+  "new_model_decisions": 0,
+  "new_registrations": 0,
+  "next": "Audit pre-battle interruption bookkeeping, then separately bound forward continuation from actual335; no reset or League entry.",
+  "next_unused_stage": 336,
+  "observed_preparation_roles": [
+    {
+      "level": 43,
+      "purpose": "combat",
+      "slot": 1
+    },
+    {
+      "level": 43,
+      "purpose": "combat",
+      "slot": 2
+    },
+    {
+      "level": 52,
+      "purpose": "combat",
+      "slot": 3
+    },
+    {
+      "level": 42,
+      "purpose": "combat",
+      "slot": 4
+    },
+    {
+      "level": 37,
+      "purpose": "undecided",
+      "slot": 5
+    }
+  ],
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    93,
+    120,
+    162,
+    110,
+    176
+  ],
+  "party_levels": [
+    43,
+    43,
+    52,
+    42,
+    37
+  ],
+  "party_max_hp": [
+    93,
+    120,
+    162,
+    110,
+    176
+  ],
+  "plan_sha256": "3df204862c1f284e8f5d72a05e332dd216cc0fbe10aaa37c19edfd47753e8ed7",
+  "position": [
+    1,
+    2
+  ],
+  "pre_league_gaps": [
+    "Reconcile frequently used Snorlax with undecided preparation role.",
+    "Prospective League readiness must not reuse cave opposition as proof or label previews as observed.",
+    "Training launch remains bounded explicit support, not automatically initiated by the battle model."
+  ],
+  "protected_inputs_unchanged": true,
+  "recovery": {
+    "actions": 349,
+    "audit_frames": 0,
+    "cash": 25841,
+    "envelope_sha256": "766f1bbea07a9ebebd4db113624c46cbd22392b95ea4e7db8d0020c027669efe",
+    "frames": 15660,
+    "fully_restored": true,
+    "hp_restored": 162,
+    "map_id": 108,
+    "native_events_reset": [
+      1336
+    ],
+    "next_stage": 335,
+    "plan_sha256": "8b9f7cdadb852b0d208312401eb77b1a15ff93b9ef65ac094191dcd03b849a33",
+    "position": [
+      17,
+      8
+    ],
+    "pp_restored": 6,
+    "protected_inputs_unchanged": true,
+    "schema": "pokemon.red.victory-road-dig-recovery.v1",
+    "seconds": 1.8328002910129726,
+    "source_commit": "b9d4b3141101e47621b167c7c826614e84b30a51",
+    "source_sha256": "b8a5351199e7102b9e554b0e5442c7e6c394062dff4784713c71cf8139b87ab2",
+    "stage": 334,
+    "terminal_sha256": "079cae595b7fb5557cb10b66558da9526f0f1bd9cbcc09b4b27ac905b57bc986",
+    "wild_escapes": 2
+  },
+  "retained_prefix_state_index": 58,
+  "runtime_error": "Strength push step 59 did not make the exact state transition",
+  "safe": true,
+  "schema": "pokemon.red.victory-road-third-floor-stop.v1",
+  "seconds": 3.803401416167617,
+  "source_replayed": false,
+  "source_sha256": "079cae595b7fb5557cb10b66558da9526f0f1bd9cbcc09b4b27ac905b57bc986",
+  "source_stage": 334,
+  "story_objectives": 29,
+  "terminal_sha256": "5c7e33cf5b1d9261e235b6c8c26b3dcd8e1abf7be54cd7a69a1743d92e9405d7",
+  "terminal_stage": 335,
+  "third_floor_planned_pushes": 27,
+  "third_floor_planned_steps": 67,
+  "third_floor_puzzle_complete": false,
+  "third_floor_verified_pushes": 23,
+  "total_verified_pushes": 46,
+  "training_trigger": "disclosed observed-opposition rule, not learned strategic choice",
+  "wild_escapes": 14,
+  "targeted_tests_passed": 265,
+  "recovery_preparation_tests_passed": 102,
+  "full_suite_run": false
+}

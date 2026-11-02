@@ -98,9 +98,12 @@ def bind_scripted_trainer_dialogue(
     initial: RawGameState,
     *,
     final_event_flag: int,
+    allow_fainted_reserves: bool = False,
 ) -> Callable[[], None]:
     """Return an explicit validator; creation never sends or authorizes input."""
     verify_rom_bytes(rom)
+    if type(allow_fainted_reserves) is not bool:
+        raise ValueError("fainted-reserve allowance must be boolean")
     header = _qualified_header(rom, target)
     if type(final_event_flag) is not int or not 0 <= final_event_flag < 2560:
         raise ValueError("trainer final event must be a supported event bit")
@@ -134,7 +137,10 @@ def bind_scripted_trainer_dialogue(
             or raw.party_hp != initial.party_hp
             or raw.party_count != initial.party_count
             or raw.party_hp is None
-            or any(hp <= 0 for hp in raw.party_hp)
+            or len(raw.party_hp) != raw.party_count
+            or any(type(hp) is not int or hp < 0 for hp in raw.party_hp)
+            or not any(hp > 0 for hp in raw.party_hp)
+            or (not allow_fainted_reserves and any(hp == 0 for hp in raw.party_hp))
         ):
             raise CartridgeReadError("automatic trainer dialogue context changed")
         if sprite != target.trainer.sprite_index:
@@ -155,6 +161,7 @@ def retained_scripted_trainer_candidate(
     map_id: int,
     trainer_event_flag: int,
     final_event_flag: int,
+    allow_fainted_reserves: bool = False,
 ) -> TrainerFundingCandidate:
     """Bind an observed introduction, never replay its movement or start a goal.
 
@@ -201,5 +208,8 @@ def retained_scripted_trainer_candidate(
         RoutePlan(MacroPath((map_id,), ()), at, None, (), None, at, None),
         facing,
     )
-    bind_scripted_trainer_dialogue(rom, reader, target, raw, final_event_flag=final_event_flag)()
+    bind_scripted_trainer_dialogue(
+        rom, reader, target, raw, final_event_flag=final_event_flag,
+        allow_fainted_reserves=allow_fainted_reserves,
+    )()
     return target

@@ -1,0 +1,94 @@
+{
+  "schema": "pokemon.red.reserve-ranking-audit.v1",
+  "session_id": "2026-09-24-reserve-ranking-audit",
+  "status": "diagnostic_complete_no_fit",
+  "classification": "maintenance_unblocking_switch_control_learning",
+  "base_commit": "0cb1851fbddccd9962375fe1be31fcb122e01d3d",
+  "hashes": {
+    "private_report": "c66a1ca1ec563870460918a4e86fd0fabeda4b9c16a1714069b52946b1e8cbfc",
+    "independent_audit": "fae790b742722fd1fda1454624792103f355ad278445305e3c42fe57c852ecdc",
+    "diagnostic_source": "267a4c61aace26fc42689f25fce737c94a0162fa432e2ab25c6bca687c7da0ff",
+    "parent": "b106108e00c78595e1920b250d28c16720c4d05b610e70596ee7b22af28802f3"
+  },
+  "inventory": {
+    "fresh_switch_cases": 7,
+    "wrong_switch_choices": 6,
+    "distinct_replay_examples": 337,
+    "retained_groups": 18,
+    "features": 38,
+    "hidden_units": 16,
+    "parameters": 640,
+    "wrong_pair_exact_old_overlap_count": 0
+  },
+  "findings": {
+    "useful_main_case_3_01": {
+      "wrong_score_margin": 14.575797503114941,
+      "own_lesson_direction": 12.369556566029756,
+      "all_fresh_direction": -15.792706531824674,
+      "combined_direction": -7.746138857771972,
+      "initial_adam_direction": -0.022451400880526093,
+      "retained_margin_nullspace_ratio": 0.20533446056790097,
+      "saturated_hidden_fraction": 0.546875,
+      "better_timing_outcomes": 3,
+      "timing_outcomes": 5
+    },
+    "useful_main_case_3_05": {
+      "wrong_score_margin": 11.553995006832885,
+      "initial_adam_direction": 1.0868472596673064,
+      "retained_margin_nullspace_ratio": 0.0000011995145408270052,
+      "saturated_hidden_fraction": 0.5,
+      "better_timing_outcomes": 3,
+      "timing_outcomes": 5
+    },
+    "fragile_retained_prompt": {
+      "score_margin": 0.007268572800171569,
+      "initial_adam_margin_direction": -0.027916101691124538,
+      "measured_return_gap": 2.3324088634,
+      "group_mean_regret_budget": 0,
+      "better_timing_outcomes": 2,
+      "timing_outcomes": 5,
+      "paired_delta_min": -1.2144993899999994,
+      "paired_delta_max": 12.973456467
+    },
+    "fresh_expected_regret_derivatives": {
+      "negative_combined_gradient": -0.0011321877134601484,
+      "initial_adam": 0.0012766681736067194
+    },
+    "retained_margin_jacobian_rank": 365,
+    "svd_relative_cutoff": 1e-10,
+    "decision": "Investigate shared-gradient interference and fragile ranking constraints with a feasibility-reporting ranking-direction method. No evidence yet requiring a larger model or new observation schema."
+  },
+  "verification": {
+    "focused_tests_passed": 207,
+    "full_suite": false,
+    "independent_scalar_derivative_max_error": 9.547918011776346e-14,
+    "input_hashes_verified": true,
+    "no_parameter_mutation": true
+  },
+  "deltas": {
+    "fits": 0,
+    "new_targets": 0,
+    "native_episodes": 0,
+    "controller_inputs": 0,
+    "model_parameter_updates": 0,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "state": "359a96aa",
+    "envelope": "36dbc835",
+    "deployed": "4ea4cfde",
+    "unused_stage": 462,
+    "unopened_comparison_teams": 24
+  },
+  "next": "Implement and synthetically test an opt-in direction solver that handles useful chosen-versus-better rankings and retained constraints together, reports first-order feasibility/residuals, and verifies actual nonlinear budgets. No private fit until a separate prospective plan is frozen.",
+  "limitations": [
+    "All derivatives are at the frozen parent; no reconstruction of unsaved intermediate fit weights.",
+    "No exact collision does not prove sufficient observable state or global neural feasibility.",
+    "The nullspace diagnostic freezes all sampled old margins, stricter than actual mean-regret retention; its residual is local and numerical.",
+    "Five correlated timing siblings do not establish population ordering or confidence intervals; no retention rule was relaxed.",
+    "No new trained advantage, native outcome or deployment progress."
+  ]
+}

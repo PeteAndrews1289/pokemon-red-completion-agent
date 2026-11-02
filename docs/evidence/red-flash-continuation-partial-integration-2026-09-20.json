@@ -1,0 +1,42 @@
+{
+  "schema": "pokemon.red.flash-continuation-partial-integration.v1",
+  "session": "2026-09-20-flash-safe-integration",
+  "classification": "maintenance_for_automatic_collection_continuation",
+  "flash_draft": "56d0aa91b1ee756c0752a9f1437c352ef29f0df7",
+  "base": "3e5c000628d7d4c01687297d04158b88ffa80cfa",
+  "accepted": [
+    "typed cumulative accounting with strict saved counters/caps and explicit downtime",
+    "before-state, parent, dispatch, terminal and goal-identity joins",
+    "validated read-only journal summaries",
+    "typed survey resource stop reason"
+  ],
+  "removed": [
+    "unsafe automatic coordinator and incomplete adapters",
+    "misleading mock-only runtime test claims"
+  ],
+  "live_continuation_enabled": false,
+  "normal_collection_unchanged": true,
+  "tests": {
+    "targeted_passed": 453,
+    "full_suite": false,
+    "ruff": "passed",
+    "mypy": "3files;follow-imports=silent;passed"
+  },
+  "gameplay": false,
+  "fits": 0,
+  "registration_delta": 0,
+  "current": {
+    "registrations": 101,
+    "specimens": 75,
+    "cash": 20068
+  },
+  "source_bundle_sha256": "839b70ce58a35acd3d20d7cda93f871a4a9ab7bb57f1aa09f7c8681411482e66",
+  "remaining": [
+    "real model-owned coordinator",
+    "bounded native adapter wiring",
+    "exact-terminal process resume",
+    "independent production-path and native qualification"
+  ],
+  "next": "Continue existing-resource collection; do not make the incomplete automatic continuation system a blanket gate.",
+  "publication": false
+}

@@ -1,0 +1,133 @@
+{
+  "schema": "pokemon.red.safari-fishing-connection-development.v1",
+  "session_id": "2026-09-20-safari-fishing-connection",
+  "status": "bounded_connection_verified_with_retained_failures",
+  "source_commits": [
+    "1b089a9d",
+    "09e42844"
+  ],
+  "before": {
+    "registered": 104,
+    "specimens": 76,
+    "cash": 17468,
+    "state_sha256": "cd3840bb2468c15feb15a1a46a7082f055cccbce2b118b66bdcb8cb32cf32fe9",
+    "balls": 29,
+    "steps": 129
+  },
+  "censored_attempt": {
+    "run_id": "model137-safari-fishing-connection-20260920-v1",
+    "plan_sha256": "8d66f3f27c401f6090e114fe5cddbf07f5596d2d27bb282f9ac28147e439e7d1",
+    "audit_sha256": "5f61e9f7bdb534b802ba08d6737c7b63d38ec89b7123e0966be166933bbcf83f",
+    "terminal_sha256": "2e2d860cca134bfa238b9929df7cf2cf16cb53a96ff0cc2558146065f211e7c4",
+    "safe": true,
+    "registration_gain": 0,
+    "balls_spent": 1,
+    "steps_spent": 0,
+    "cash_spent": 0,
+    "model_queries": 0,
+    "actions": null,
+    "frames": null,
+    "casts": null,
+    "error": "Harness result serialization rejected mappingproxy after terminal save. Counters were not retained; no inferred replacement or replay.",
+    "learning_eligible": false
+  },
+  "fresh_choice": {
+    "run_id": "model137-safari-fishing-qualified-20260920-v1",
+    "plan_sha256": "3d8fb5e7b3f8dae941784f8730b53bbd8a5b0337526dcde99597d0be6bcac6ac",
+    "result_sha256": "e137740d3178363224d2e9cce51047e471b29415e5678194f99553ef3a43f3b8",
+    "outcome_sha256": "d830648d2dffc6c9b8038601ab52ac2502b1959a55378ac01b451187f1d54f11",
+    "model_queries": 1,
+    "candidates": 2,
+    "mode": "model_exploration",
+    "selected_index": 0,
+    "scope": "Paid-session fishing destinations only, not full-player menu.",
+    "actions": 16,
+    "frames": 384,
+    "error": "Overworld readiness incorrectly required during Safari battle introduction.",
+    "safe": false,
+    "terminal_sha256": "8f675794f3f7b9e748b9b22a89a04870e546c2a9e67377061e04a1dffb8d015a"
+  },
+  "continuation": {
+    "run_id": "model137-safari-fishing-qualified-continuation-20260920-v1",
+    "plan_sha256": "2a2a722981762e42dd6acb1094388b6837ac2b7266ea1e17429926c7b6ce7fbf",
+    "result_sha256": "85e02ccf84c104e1bae33710a5dc1f7e9d6789f592e912106fb0407ae0efad22",
+    "recovery_sha256": "761032b69d8bd4f6b0d679237f47f594b1af8c897ae011bc78b3ed70a63e70dc",
+    "model_queries": 0,
+    "maximum_remaining_actions": 3984,
+    "maximum_remaining_frames": 399616,
+    "actions": 386,
+    "frames": 32244,
+    "verification": "succeeded",
+    "error": null,
+    "casts": 5,
+    "encounters": 4,
+    "no_bites": 1,
+    "captures": 1,
+    "failed_captures": 1,
+    "flees": 2,
+    "new_species": "pokemon:national:147",
+    "extra_admission": 0
+  },
+  "terminal": {
+    "sha256": "31d3cc4ebb21745c36a9504121412c9358c39f54b46508117c11ffd94d964a65",
+    "registered": 105,
+    "native_target": 124,
+    "specimens": 77,
+    "cash": 17468,
+    "map_id": 220,
+    "position_yx": [
+      7,
+      12
+    ],
+    "safari_active": true,
+    "safari_balls": 21,
+    "safari_steps": 56,
+    "safe": true
+  },
+  "accounting": {
+    "known_fresh_goal_actions_including_recovery": 402,
+    "known_fresh_goal_frames_including_recovery": 32628,
+    "whole_session_actions": null,
+    "whole_session_frames": null,
+    "whole_session_safari_balls_spent": 8,
+    "whole_session_cash_spent": 0,
+    "registration_gain": 1,
+    "specimen_gain": 1,
+    "new_model_queries": 1,
+    "new_fits": 0,
+    "note": "Whole-session action/frame totals remain unknown because the first attempt lost telemetry; never report402/32628 as the whole-session total."
+  },
+  "verification": {
+    "targeted_tests_passed": 406,
+    "full_suite": false,
+    "independent_final_verification_sha256": "f445a268e4d4c95bdd9c0604381bc6ef143e5e20c09a4d248c5cbff98ea3f2ed",
+    "native_verification_frames": 0,
+    "checks": [
+      "exact parent hash chain",
+      "all registrations",
+      "specimen counts",
+      "cash",
+      "party HP/PP",
+      "bag",
+      "session counters",
+      "safe/unsafe boundaries"
+    ],
+    "scope": "One earned native DEVELOPMENT lineage; not independent transfer or broad robustness."
+  },
+  "training": {
+    "model137_examples": 137,
+    "model137_successes": 92,
+    "model137_economy_qualified": 58,
+    "battlers": "K/L unchanged",
+    "fitting_started": false,
+    "remaining_gate": "Prospective eligible TRAIN sources and disjoint held-out packet; do not fit current DEVELOPMENT state.",
+    "next_packet": "docs/safari-training-next-packet.md"
+  },
+  "limits": [
+    "Original failed receipts remain failed; later continuation completes the same goal, not a second fitted success.",
+    "Recovery/continuation operator-dispatched; broad unattended continuation remains disabled.",
+    "Safari capture mechanics remain deterministic support, not learned ball/rock/bait policy.",
+    "League income0/2 and fresh Red acceptance0/5 unchanged.",
+    "No reset, repayment, main-save edit, publication or external agent."
+  ]
+}

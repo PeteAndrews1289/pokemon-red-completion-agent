@@ -1,4 +1,4 @@
-"""Portable, bounded non-damaging status support for a capture skill.
+"""Portable bounded status support and observed capture-preparation diagnostics.
 
 The title adapter supplies verified move effects and immunities. Species names,
 raw memory, target identities and routes do not participate in this selector.
@@ -26,6 +26,9 @@ class CaptureSupportSummary:
     prepared_asleep: int = 0
     prepared_paralyzed: int = 0
     prepared_full_hp: int = 0
+    weakening_attempts: int = 0
+    weakening_hp_removed: int = 0
+    weakening_abstentions: int = 0
 
     def __post_init__(self) -> None:
         if any(type(value) is not int for value in (
@@ -33,6 +36,7 @@ class CaptureSupportSummary:
             self.escape_setup_bypasses,
             self.prepared_throws, self.prepared_asleep, self.prepared_paralyzed,
             self.prepared_full_hp,
+            self.weakening_attempts, self.weakening_hp_removed, self.weakening_abstentions,
         )) or not (
             0 <= self.verified_status_observations <= self.status_attempts <= 1_000
             and 0 <= self.party_preparations <= 1
@@ -41,6 +45,9 @@ class CaptureSupportSummary:
             and 0 <= self.prepared_asleep <= self.prepared_throws
             and 0 <= self.prepared_paralyzed <= self.prepared_throws - self.prepared_asleep
             and 0 <= self.prepared_full_hp <= self.prepared_throws
+            and 0 <= self.weakening_attempts <= 1_000
+            and 0 <= self.weakening_hp_removed <= self.weakening_attempts * 65_535
+            and 0 <= self.weakening_abstentions <= 1_000
         ):
             raise ValueError("capture support diagnostic bounds differ")
 
@@ -54,7 +61,11 @@ class CaptureSupportSummary:
                     "prepared_asleep": self.prepared_asleep,
                     "prepared_paralyzed": self.prepared_paralyzed,
                     "prepared_full_hp": self.prepared_full_hp}
-                   if self.prepared_throws else {})}
+                   if self.prepared_throws else {}),
+                **({"weakening_attempts": self.weakening_attempts,
+                    "weakening_hp_removed": self.weakening_hp_removed,
+                    "weakening_abstentions": self.weakening_abstentions}
+                   if self.weakening_attempts or self.weakening_abstentions else {})}
 
     @classmethod
     def from_evidence(cls, evidence: Mapping[str, object]) -> CaptureSupportSummary | None:
@@ -65,15 +76,19 @@ class CaptureSupportSummary:
         preparation = {
             "prepared_throws", "prepared_asleep", "prepared_paralyzed", "prepared_full_hp",
         }
+        weakening = {"weakening_attempts", "weakening_hp_removed", "weakening_abstentions"}
         if not isinstance(value, Mapping) or not (
-            required <= set(value) <= required | {"escape_setup_bypasses"} | preparation
+            required <= set(value) <= required | {"escape_setup_bypasses"} | preparation | weakening
             and (not set(value).intersection(preparation) or preparation <= set(value))
+            and (not set(value).intersection(weakening) or weakening <= set(value))
         ) or any(type(item) is not int for item in value.values()):
             raise ValueError("capture support diagnostics differ")
         return cls(value["status_attempts"], value["verified_status_observations"],
                    value["party_preparations"], value.get("escape_setup_bypasses", 0),
                    value.get("prepared_throws", 0), value.get("prepared_asleep", 0),
-                   value.get("prepared_paralyzed", 0), value.get("prepared_full_hp", 0))
+                   value.get("prepared_paralyzed", 0), value.get("prepared_full_hp", 0),
+                   value.get("weakening_attempts", 0), value.get("weakening_hp_removed", 0),
+                   value.get("weakening_abstentions", 0))
 
 
 @dataclass(frozen=True, slots=True)
@@ -111,7 +126,7 @@ def choose_capture_status(
     active_party_slot: int | None = None,
     minimum_hp_ratio: float = 0.5,
 ) -> CaptureStatusOption | None:
-    """Prefer an already-active healthy helper, then accuracy and readiness.
+    """Prefer an active healthy helper, accuracy, readiness, then same-helper sleep.
 
 No status success is inferred from the selected move. A caller must read the
 actual target status after a bounded turn. Missing capability returns None,
@@ -161,6 +176,9 @@ not a damaging replacement move or permission to loop.
             -party.members[option.party_slot - 1].level,
             -party.members[option.party_slot - 1].hp_ratio,
             option.party_slot,
+            # Sleep gives the stronger Red capture bonus. This tie-break never
+            # buys an extra switch or overrides accuracy/health/usable PP.
+            option.condition is not StatusCondition.SLEEP,
             option.move_slot,
         ),
         default=None,

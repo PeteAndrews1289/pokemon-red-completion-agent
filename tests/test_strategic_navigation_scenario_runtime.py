@@ -10,13 +10,14 @@ import pytest
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
-from pokemon_red_completion.global_router import MacroGraph
+from pokemon_red_completion.global_router import MacroEdge, MacroGraph, find_macro_path
 from pokemon_red_completion.local_router import (
     LocalEdge,
     LocalGraph,
     LocalRouterError,
     find_local_path,
 )
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.private_artifacts import (
     PrivateArtifactError,
     initialize_private_root,
@@ -46,6 +47,7 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     STRATEGIC_SCENARIO_MAXIMUM_FLEES,
     StrategicScenarioRouteWorld,
     StrategicScenarioRuntimeError,
+    _without_unwired_celadon_elevator,
     bind_scenario_interruption_limits,
     record_strategic_scenario_rehearsal,
     require_executable_scenario_bindings,
@@ -56,6 +58,24 @@ from pokemon_red_completion.strategic_navigation_scenarios import (
 from pokemon_red_completion.trajectory import SemanticSnapshot
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_mart_route_uses_stairs_not_elevator_placeholder_without_mutating_graph():
+    floor, stairs, lobby, lift = (
+        int(MapId.CELADON_MART_4F), int(MapId.CELADON_MART_3F),
+        int(MapId.CELADON_MART_1F), int(MapId.CELADON_MART_ELEVATOR),
+    )
+    graph = MacroGraph({
+        floor: (MacroEdge(lift), MacroEdge(stairs, cost=2)),
+        lift: (MacroEdge(lobby),), stairs: (MacroEdge(lobby),), lobby: (),
+    }, warp_locations={floor: ((1, 1),)}, warp_triggers={floor: ((1, 1),)})
+    filtered = _without_unwired_celadon_elevator(graph)
+    assert find_macro_path(graph, floor, lobby).maps == (floor, lift, lobby)
+    assert find_macro_path(filtered, floor, lobby).maps == (floor, stairs, lobby)
+    assert filtered.edges[lift] == ()
+    assert filtered.warp_locations is graph.warp_locations
+    assert filtered.warp_triggers is graph.warp_triggers
+    assert graph.edges[lift] == (MacroEdge(lobby),)
 
 
 def test_scenario_interruption_limit_covers_both_handler_budgets() -> None:

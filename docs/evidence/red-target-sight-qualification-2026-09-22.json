@@ -1,0 +1,199 @@
+{
+  "action_counts": {
+    "attack": 5,
+    "forced_switch": 1,
+    "switch_prompt": 0,
+    "voluntary_switch": 5
+  },
+  "actions": 383,
+  "audit_frames": 0,
+  "authority_promotions": 0,
+  "badges": 7,
+  "bag_unchanged": true,
+  "cash": 34437,
+  "cash_before": 32932,
+  "contract": {
+    "battle_plan_id": "observed_gym_trainer",
+    "defeated_event": 86,
+    "map_id": 45,
+    "objective_id": "defeat_giovanni",
+    "trainer_identity": [
+      231,
+      31,
+      10
+    ],
+    "victory_badge_bits": 0,
+    "victory_items": [],
+    "victory_money": 1505
+  },
+  "entry": {
+    "combat_choices": 0,
+    "event": 86,
+    "map_id": 45,
+    "object_index": 6,
+    "prefix_at": [
+      6,
+      15
+    ],
+    "trainer_identity": [
+      231,
+      31,
+      10
+    ],
+    "transition_actions": 22,
+    "trigger_at": [
+      5,
+      15
+    ]
+  },
+  "envelope_sha256": "c6318491f0f1bbcb544495900f90cfbebb0f412adbb2344324b53881a62bc57d",
+  "event_log_verified": true,
+  "failure_retained": "Stage291 stopped during textbox drawing: sprite6 correct, table pointer18952 still active before header19000. No combat choice. Exact retained settlement used neutral waits until the individual header was bound; old cost and failure retained.",
+  "frames": 24588,
+  "frozen_choices_recomputed": {
+    "attack": 5,
+    "control": 5,
+    "switch": 6
+  },
+  "fully_restored": true,
+  "gameplay_running": false,
+  "leader_defeated": false,
+  "leader_safely_reachable": true,
+  "limitations": [
+    "One native sight engagement, not broad transfer or fresh-run acceptance.",
+    "Targeting/navigation/recovery remain support. Combat choices are frozen model outputs.",
+    "Giovanni is reachable but undefeated; original ten-contract allowance is fully consumed."
+  ],
+  "local_registrations": 17,
+  "losses": 0,
+  "map_id": 45,
+  "maximum_original_contracts": 10,
+  "metrics": {
+    "attack_turn_utility_sum": 0.5119047619047619,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 1,
+    "party_faints": 1,
+    "party_hp_lost": 187,
+    "party_pp_spent": 5,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 5866208,
+    "policy_latency_ns_mean": 2746519,
+    "policy_latency_ns_min": 300792,
+    "teacher_interventions": 0
+  },
+  "model_decisions": 11,
+  "model_sha256": "8ef6a8512bc6c2b4e21b6a95e98ed769bc1634ea90f997961f2e6fd3f7227a12",
+  "native_seconds": 3.912659083958715,
+  "net_income": 1505,
+  "new_contracts_after_trigger": 0,
+  "new_fits": 0,
+  "new_goal_choices": 0,
+  "new_registrations": 0,
+  "next_unused_stage": 293,
+  "next_work": "Await explicit prospective authority for one Giovanni attempt; retain frozen model and80decision cap. No gameplay under exhausted old budgets.",
+  "original_contract_stage": 291,
+  "outcome_sha256": "91be08535d4b6451c044aa9e6737244b5ae7ecb598209eb3bbe2e700759ca201",
+  "partition": "DEVELOPMENT",
+  "party_levels": [
+    39,
+    40,
+    50,
+    39,
+    33
+  ],
+  "position": [
+    17,
+    16
+  ],
+  "preparation_refills": 0,
+  "primary_unchanged": true,
+  "publication": false,
+  "qualification_sha256": "4e68390900853e1213a540d0a044cca379d8700926f3a784c65de1819e3b56bd",
+  "recovery_anchor_map": 1,
+  "remaining_candidates": [
+    {
+      "at": [
+        2,
+        2
+      ],
+      "event": 81,
+      "facing": "up",
+      "object_index": 1,
+      "steps": 39,
+      "trainer_class": 229,
+      "trainer_set": 3
+    },
+    {
+      "at": [
+        1,
+        1
+      ],
+      "event": 81,
+      "facing": "right",
+      "object_index": 1,
+      "steps": 41,
+      "trainer_class": 229,
+      "trainer_set": 3
+    },
+    {
+      "at": [
+        1,
+        3
+      ],
+      "event": 81,
+      "facing": "left",
+      "object_index": 1,
+      "steps": 39,
+      "trainer_class": 229,
+      "trainer_set": 3
+    },
+    {
+      "at": [
+        4,
+        6
+      ],
+      "event": 89,
+      "facing": "down",
+      "object_index": 9,
+      "steps": 33,
+      "trainer_class": 231,
+      "trainer_set": 1
+    }
+  ],
+  "save_edits": 0,
+  "schema": "pokemon.red.target-sight-qualification.v1",
+  "source_replays": 0,
+  "source_stage": 290,
+  "stages": [
+    {
+      "actions": 25,
+      "claim_sha256": "2fb2b6c8f3cc25297c12654334745b975c45208c509a8836740b7f6852935967",
+      "error": "wrong trainer dialogue identity",
+      "final_sha256": "40c254168e7706e9000cc9f20c82f1780b8e24b016ece2518aedab334d051a86",
+      "frames": 504,
+      "native_seconds": 2.4768661251291633,
+      "source_commit": "3f0c126ce378b392b5fa11712e3624374377cb66",
+      "source_sha256": "7e8b46a6cf8120288c77bd7ed4f9ed16ac914762310ba470e392ec59eb8cc482",
+      "stage": 291
+    },
+    {
+      "actions": 358,
+      "claim_sha256": "83439cb5a111ae230130cc2a2d053b112cb73fa2b2497efdfa825ce81bcf7373",
+      "error": null,
+      "final_sha256": "49ab490f4d199f359dd7a49f499b2956a0517998a9335e7697028e2eb29d9ad2",
+      "frames": 24084,
+      "native_seconds": 1.435792958829552,
+      "source_commit": "85aab98a754e4ad65b2702fd2d801453d166ff6b",
+      "source_sha256": "40c254168e7706e9000cc9f20c82f1780b8e24b016ece2518aedab334d051a86",
+      "stage": 292
+    }
+  ],
+  "story_objectives": 28,
+  "targeted_tests_passed": 215,
+  "terminal_sha256": "49ab490f4d199f359dd7a49f499b2956a0517998a9335e7697028e2eb29d9ad2",
+  "terminal_stage": 292,
+  "total_gym_contracts_used": 10,
+  "trigger_replays": 0,
+  "wins": 1
+}

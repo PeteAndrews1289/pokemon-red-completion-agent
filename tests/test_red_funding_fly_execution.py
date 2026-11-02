@@ -1,4 +1,5 @@
 """A quoted flight is not income: landing, onward route and payout must all verify."""
+
 from dataclasses import replace
 from types import SimpleNamespace
 
@@ -90,6 +91,55 @@ def test_flight_then_fresh_route_then_actual_payout_preserves_choice_and_costs(m
         bound.execute()
 
 
+@pytest.mark.parametrize("fault", [None, "departure", "changed_quote"])
+def test_indoor_departure_must_finish_and_rebind_before_flight(monkeypatch, fault):
+    from pokemon_red_completion import red_funding_fly as flights
+
+    router, state, original, calls, outdoor = flight_fixture(monkeypatch)
+    departure = SimpleNamespace(steps=(object(),), terminal_map=32, terminal_at=(2, 3))
+    indoor = replace(outdoor, departure=departure)
+    state.raw = replace(state.raw, map_id=40)
+    monkeypatch.setattr(
+        flights,
+        "funding_fly_candidates",
+        lambda _: (
+            (indoor,)
+            if state.raw.map_id == 40
+            else (() if fault == "changed_quote" else (outdoor,))
+        ),
+    )
+    original_travel = funding.execute_route
+
+    def travel(plan, *args, **kwargs):
+        if plan is departure:
+            calls.append("departure")
+            router.actions.actions_executed += 2
+            router.runtime.emulator.frame_count += 80
+            state.raw = replace(state.raw, map_id=32, player_y=2, player_x=3)
+            return SimpleNamespace(passed=fault != "departure")
+        return original_travel(plan, *args, **kwargs)
+
+    monkeypatch.setattr(funding, "execute_route", travel)
+    bound = funding.bind_local_trainer_funding(router, original, state).bindings[-1]
+    if fault:
+        with pytest.raises(funding.RedTrainerFundingError):
+            bound.execute()
+        assert calls == ["departure"]
+    else:
+        report = bound.execute()
+        assert calls == [
+            "departure",
+            "flight",
+            "observed_route",
+            "escort",
+            "walk",
+            "face",
+            "battle",
+        ]
+        assert (report.actions_executed, report.frames_executed) == (15, 1130)
+        assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
 @pytest.mark.parametrize("fault", ["landing", "battle", "unready", "receipt", "onward"])
 def test_bad_flight_or_unavailable_onward_route_never_fights_or_retries(monkeypatch, fault):
     router, state, original, calls, _ = flight_fixture(monkeypatch, fault=fault)
@@ -134,7 +184,8 @@ def test_flight_dispatch_uses_smaller_of_local_cap_and_256(monkeypatch, cap):
                 self.actions.execute(action)
 
     monkeypatch.setattr(
-        "pokemon_red_completion.gen1_field_moves.Gen1FieldMovePort", NeverLandingPort,
+        "pokemon_red_completion.gen1_field_moves.Gen1FieldMovePort",
+        NeverLandingPort,
     )
     bound = funding.bind_local_trainer_funding(router, original, state).bindings[-1]
     with pytest.raises(CompositionActionBudgetExhausted):

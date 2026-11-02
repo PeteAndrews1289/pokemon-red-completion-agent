@@ -1,87 +1,91 @@
 # Repository instructions
 
-Read [MISSION.md](MISSION.md) first — it states the product every change is judged against. Then
-read [NORTH_STAR.md](NORTH_STAR.md), whose anti-drift contract outranks every roadmap, handoff, and
-dated checkpoint. Then read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the generated
-one-page answer for the single active lane, learning counters, time box, and forbidden work. Read
-[docs/model-first-roadmap.md](docs/model-first-roadmap.md) for the broader strategy and
-[AGENT_COORDINATION.md](AGENT_COORDINATION.md) for ownership. A newer dated checkpoint may not
-override the mission, north star, or active product state.
+Work only in the active Current/Code checkout. Do not resume a legacy checkout or a
+dated experiment merely because it contains a handoff.
 
-Before implementation, add the six-part mission check from `NORTH_STAR.md` to the working plan:
-reusable capability, learned authority, transfer test, cheapest falsifier, time box, and stop
-condition. Do not start a full-game run unless every full-run gate in `NORTH_STAR.md` is recorded.
-The default development loop uses short authenticated scenarios; full runs are final exams.
-Run `python scripts/check_product_focus.py` before committing. It rejects multiple active lanes,
-learning work without measurable outputs, maintenance without a named unblock, weakened alarms,
-unsupported counters, and a stale generated active-state page.
+## Read before development
 
-Before publishing executable-source changes, regenerate the existing prospective
-collection registry with `PYTHONPATH=src python scripts/regenerate_collection_registry.py`,
-then run the same command with `--check` and include its two generated metadata files.
-This is metadata maintenance only: it does not authorize or launch a collection run.
-Do not repeatedly discover stale registry hashes through hosted CI emails.
+Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
+These answer, respectively: the product, operating rules, current status and next work.
+Consult [the roadmap](docs/model-first-roadmap.md) for the remaining delivery sequence.
+Latest explicit user direction takes precedence over repository documents.
 
-Pete alone decides when to push to GitHub. Do not push, publish a release, or create/update
-a pull request without his explicit instruction for that publication. "Begin", "continue",
-session completion and a passing test are not publication authorization. This supersedes
-older automatic-publication instructions in handoffs and workflow documents.
-Local development, verification and recoverable local commits may continue without a push.
-Batch ordinary implementation commits at useful local checkpoints; do not manually rerun
-unchanged failing CI.
-Fix relevant failures locally, preserve safety assertions, and distinguish a targeted
-pass from a full-suite pass. Development gameplay does not wait on hosted CI.
+Only HANDOFF.md contains the current executable work order. Dated reports, archived
+plans, review prompts and closed experiment declarations are evidence, not dispatch
+instructions. Do not read the entire archive at every session.
 
-At ordinary session closeout, replace the concise current handoff and retain one evidence record.
-Refresh the active state when the blocker or next decision changes. Update the infographic,
-roadmap status, narrative and review log only for a material learner milestone, stage/strategy
-change or Pete's explicit request; do not spend every session synchronizing presentation surfaces.
-Keep stage IDs and exit criteria stable and log material deviations in
-`docs/roadmap-decisions.md`. `scripts/check_docs.py` still checks any surfaces that are changed.
-Do not create a new CI workflow or count documentation work as model progress.
+## Development contract
 
-This is the completion-first successor to the concluded `pokemon-red-ai` research project.
+Before implementation, record the six-part mission check from NORTH_STAR.md:
+reusable capability, learned authority, transfer check, cheapest falsifier, time
+box and stopping condition. Anchor repairs to a player outcome, not an expanding
+list of infrastructure tasks. Reuse the existing player and battler first.
 
-## Public documentation discipline
+Default work blocks are up to 3 hours unless Pete specifies otherwise.
+Triage a local issue after 10 minutes; after 15 minutes or two equivalent failures,
+reassess the whole approach and pivot within scope. These are not automatic stops.
+Ordinary recovery, scoped repairs, useful TRAIN lessons, fits, diagnostics and
+reversible DEVELOPMENT integration do not require repeated approval.
+Explain a new subsystem, substantial architecture change or different product
+outcome before implementing it. Do not manufacture work to fill a time allowance.
 
-The README is a reader-facing introduction, not an agent work log. Keep it under100lines,
-with one title, plain-language capability/limitation statements and explicit AI-assisted
-authorship. Update it only when the public milestone or scope changes; never prepend a
-session report or another “Current” block. Do not use archived publisher scripts that stack
-status banners or overwrite concise documents with historical templates.
+Use targeted tests for changed behavior. Preserve legality, provenance, save
+recovery and truthful accounting checks. A targeted pass is not full-suite or CI
+success. Do not replay Red or repeat a teacher factory to diagnose a local defect.
+Do not repeatedly refit identical uninformative failures.
 
-Replace the relevant current handoff/roadmap sections in place. Keep current entry points
-under200lines; put detailed measurements in one dated work-session report. Preserve old
-reports in `docs/history/` or Git, clearly labeled historical, with working relative links.
-Current counters belong to the active-state source and evidence, not copied daily logs.
-Run `tests/test_documentation_surface.py` with the existing documentation checks. Never
-weaken its size limits to accommodate another status dump. Documentation and CI are not
-model progress, and an archived report cannot authorize gameplay.
+## Authority and safety
 
-## User-facing session closeout
+- Use semantic observations above the observation adapter; raw memory addresses stay below it.
+- Only the executor translates actions into controller inputs.
+- The referee verifies outcomes; it must not secretly choose a replacement action.
+- Disclosed teachers may manipulate isolated TRAIN fixtures. The final player has no cheat action.
+- Never fit DEVELOPMENT, benchmark or sealed data. Related snapshots are not independent origins.
+- Preserve original losses, costs, exact terminals and model-versus-support attribution.
+- Do not merge save progress or copy diagnostic wins, XP, money or specimens into another run.
+- Do not claim final completion without the same-run criteria in
+  [the completion contract](docs/completion-contract.md).
+- Add ROM-free tests for changed behavior; private-ROM tests use the integration marker.
+- Never commit ROMs, saves, datasets, model artifacts, credentials or personal filesystem paths.
 
-After each session, provide a concise outcome-first update: verified work, learning
-and collection deltas, whether gameplay is running or stopped, failures/limitations,
-next bounded objective and estimate, and candid suggestions when useful. End with
-the recommended next-session model, reasoning effort and whether Fast is worthwhile,
-with a task-specific reason. Never imply a recommendation changed the selected model.
-When Flash or Claude was used, identify its actual contribution, accepted/rejected
-findings, completion status and refreshed service quota (or explicitly unavailable).
-Use bounded Flash drafts/reviews when they save real work; do not add a standing
-external-review gate to ordinary development. Keep roadmap, handoff and narrative
-aligned with verified evidence; tests and documentation are not learning progress.
+## Documentation and closeout
 
-- Do not copy experimental claims or results from the predecessor into this repository.
-- Never commit ROMs, saves, snapshots, recordings, datasets, checkpoints, credentials, or private
-  machine paths.
-- Keep revision-specific memory reads inside the observation adapter.
-- High-level planning must consume semantic state, not raw addresses.
-- Only the executor may translate macro-actions into controller inputs.
-- The referee may observe and verify outcomes but may not choose or replace actor actions.
-- Training may use disclosed teachers, walkthroughs, snapshots, and corrections.
-- Official evaluation must follow `docs/completion-contract.md`.
-- Do not claim completion without concurrent Champion-event and Hall-of-Fame evidence.
-- Add ROM-free tests for every change; private-ROM integration tests must use the `integration`
-  marker.
-- Codex owns implementation; Pete authorizes GitHub publication. Claude and Antigravity are read-only reviewers by
-  default under `docs/three-agent-workflow.md`; do not let concurrent agents edit this worktree.
+Keep one concise current handoff and one dated work-session record. Update the
+active-state JSON and its generated page when the decision changes. Counters must
+cite evidence; gameplay XP, engineering work and tests are not parameter learning.
+Historical learning totals are not a target to repeat in every session.
+
+Keep README under 100 lines and 650 words; keep current entry points under 200 lines.
+Replace current sections instead of stacking status paragraphs. Preserve unique
+history in the chronicle or a clearly labeled archive. Back up a substantial
+narrative rewrite. Update the roadmap, narrative and review log for a material
+milestone or Pete's request, not automatically after every small fix.
+Keep roadmap stage IDs and final exit criteria stable. Record strategy changes in
+[roadmap decisions](docs/roadmap-decisions.md). Do not build another logging system.
+
+Run scripts/check_product_focus.py and the documentation checks for changed
+surfaces. Do not weaken tests to accommodate an unreadable status dump.
+
+The final chat response must state the verified outcome, learning/registration
+delta, running or stopped status, limitations and the next decision. Include an
+ordered next-session plan directly in chat: player outcome, blocker, components
+to reuse, work, acceptance/failure, time allowance, reassessment and exclusions.
+Recommend a model, effort and whether Fast is useful without claiming to change
+the user's setting.
+
+## Ownership and publication
+
+Codex implements and verifies. [AGENT_COORDINATION.md](AGENT_COORDINATION.md)
+contains current ownership. Flash, Claude and subagents are optional, not standing
+review gates; do not dispatch or check their quotas without a current assignment.
+Do not overlap source writers. Report actual external contributions if used.
+
+Pete alone authorizes GitHub publication. Passing tests, finishing a session or
+“continue” does not authorize a push, release or pull request. Preserve unrelated
+dirty work; local recoverable checkpoints are allowed.
+
+Before an explicitly authorized executable-source publication, regenerate the
+existing collection registry with scripts/regenerate_collection_registry.py,
+run its --check mode and include its generated metadata. This does not authorize
+gameplay. Do not manually rerun unchanged failing hosted CI.

@@ -38,7 +38,7 @@ from pokemon_red_completion.red_routed_recovery import (
     RedRoutedRecoveryError,
     bind_routed_center_recovery,
 )
-from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_executor import InterruptionReceipt, TraversalSnapshot
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
 
@@ -523,6 +523,59 @@ def test_partial_heal_refuse(monkeypatch):
     verif = routed.verify(report)
     assert verif.status is GoalDecisionOutcome.FAILED
     assert verif.failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+
+
+@pytest.mark.parametrize(
+    "fault", (None, "new_faint", "status", "all_faint", "species", "count", "trainer")
+)
+def test_opted_in_wild_exit_requests_healing_without_relaxing_roster(monkeypatch, fault):
+    from pokemon_red_completion.goal_manager_runtime import GoalRecoveryRequired
+
+    router, _, _, state, _, _ = make_fixture(monkeypatch)
+    state["raw"] = replace(state["raw"], party_count=2, party_hp=(30, 30))
+    kind = "trainer_engagement" if fault == "trainer" else "wild_battle"
+    details = {"native_status_changes": ((1, 0, 64),)} if fault == "status" else {}
+    receipt = InterruptionReceipt(kind, 22, (6, 5), details)
+    handler = RecoveryRouteInterruptionHandler(
+        router.actions, router.runtime.reader,
+        tuple(state["raw"].party_species_ids), (0, 1),
+        allow_wild_faints=True, emulator=object(),
+        inner=SimpleNamespace(handle=lambda _: receipt),
+    )
+    if fault in {"new_faint", "trainer"}:
+        state["raw"] = replace(state["raw"], party_hp=(0, 30))
+    elif fault == "all_faint":
+        state["raw"] = replace(state["raw"], party_hp=(0, 0))
+    elif fault == "species":
+        state["raw"] = replace(state["raw"], party_species_ids=(99, 99))
+    elif fault == "count":
+        state["raw"] = replace(state["raw"], party_count=1)
+    interruption = TraversalSnapshot(22, (6, 5), True, interruption="wild_battle")
+    if fault in {"new_faint", "status"}:
+        with pytest.raises(GoalRecoveryRequired, match="verified (wild|route) exit needs"):
+            handler.handle(interruption)
+    elif fault:
+        with pytest.raises(RedRoutedRecoveryError):
+            handler.handle(interruption)
+    else:
+        assert handler.handle(interruption) is receipt
+
+
+def test_collection_wild_faint_opt_in_reuses_existing_whole_party_escape(monkeypatch):
+    router, _, _, state, _, _ = make_fixture(monkeypatch)
+    memory = object()
+    handler = recovery.guarded_collection_route_handler(
+        router.actions, router.runtime.reader, route_name="copy transport",
+        allow_wild_faints=True, emulator=memory,
+    )
+    assert handler.inner._wild.allow_party_faints is True
+    assert handler.inner._wild.emulator is memory
+    assert handler.post_prep_species == state["raw"].party_species_ids
+    with pytest.raises(ValueError, match="native emulator"):
+        recovery.guarded_collection_route_handler(
+            router.actions, router.runtime.reader, route_name="copy transport",
+            allow_wild_faints=True,
+        )
 
 
 def test_postbattle_new_faint_stop(monkeypatch):

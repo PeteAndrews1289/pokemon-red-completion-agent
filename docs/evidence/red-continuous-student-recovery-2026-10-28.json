@@ -1,0 +1,69 @@
+{
+  "DEV_base_trainer_model": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "DEV_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/EXPOSED-DEV-v1-CLOSED-BOUNDARY.json",
+    "sha256": "3bd68b683c0c62068a3eb773063df791efa1cc3a3bde16e450c064a30f18a439"
+  },
+  "DEV_comparison_join": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/proposals/exposed-dev-closed-audit-v1/ROOT-BOUNDARY-JOIN.json",
+    "sha256": "67a44054d5926a4b424c3bc6012820b4f40a553c17f125bee657ccee12b48b9f"
+  },
+  "DEV_result": "ExposedBE9 fixed33 repeats all8 priorFBB native transitions/costs exactly:2MistyLOSS,2intermediateBilltrainerwins, neither objective complete; no preparation.",
+  "DEV_semantic_peer": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/proposals/exposed-dev-closed-audit-v1/AUDIT.json",
+    "sha256": "705462add9274667829422655a0ee568f2fbe56ee6f06bcacbef4a821c00fc3c"
+  },
+  "TRAIN_boundary": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/CONTINUOUS-STUDENT-v3-CLOSED-BOUNDARY.json",
+    "sha256": "f6838edfe71540e797017cb16b2ed16faf63cdefb0b9a397e8b0051960c09995"
+  },
+  "TRAIN_result": "One same-sessionLOSS/LOSS/WIN, fixedmodels,8choices; no extra wildtraining afterfirstMisty. Cartridgeblackoutsheal, explicitPPnursemodel-selected.",
+  "TRAIN_semantic_peer": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/proposals/closed-native-semantic-audit-v1/AUDIT.json",
+    "sha256": "5050a789a6b5fc21481e3c54ed3df7b1f9a239bfdfe52adf1be75acc565a9dd3"
+  },
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_native_and_fit_workers_stopped": true,
+  "all_seven_full_goals_complete": false,
+  "audit": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/TWO-HOUR-ROOT-AUDIT.json",
+    "sha256": "6d8003d4b37ef676d579faf8488c6f089fc2ce4efe547de578e908b2e4085070"
+  },
+  "audit_due_utc": "2026-10-28T14:02:14+00:00",
+  "audit_lateness_seconds": 1642.10341,
+  "changed_parameters": 0,
+  "deadline_utc": "2026-10-28T15:02:14+00:00",
+  "different_support_options": "TRAINforce_resource_safetyTrue;DEVFalse. Do not claim fullconfig or causal source/head equality.",
+  "final_cost_ledger": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/FINAL-COST-LEDGER.json",
+    "sha256": "a9b9521ea2e0844baddc1831f9e86650f37fc95531ab6a62ca854d368938cf77"
+  },
+  "full_suite_or_CI_claim": false,
+  "mission": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/continuous-student-recovery-20261028-1202/MISSION.json",
+    "sha256": "74a42befb1a6103ab0b206efe7548c130a4f8cc67aff13457e267590e324cd31"
+  },
+  "models_adopted": 0,
+  "new_TRAIN_rows": 0,
+  "new_fits": 0,
+  "new_model_queries": 76,
+  "new_native_loads": 2,
+  "observed_at_utc": "2026-10-28T14:39:29.765585+00:00",
+  "prior_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/SESSION-CLOSEOUT.json",
+    "sha256": "a1de3653ee0d2dd715d03b1b4a06bba2980e9febb4c05465d28c20ad6bb1bb6c"
+  },
+  "prior_costs": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/matched-train-preparation-20261028-0300/FINAL-COST-LEDGER.json",
+    "sha256": "7a85588e9c6e82d53c514889e1293dfb927a742377cc367518cca8ca8d3d21ec"
+  },
+  "related_origin_only": true,
+  "schema": "pokemon.red.continuous-student-recovery.v1",
+  "session_id": "2026-10-28-continuous-student-recovery",
+  "source_partition": "train",
+  "started_at_utc": "2026-10-28T12:02:14+00:00",
+  "status": "two_scoped_native_episodes_closed_Claude_review",
+  "task": "Existing student may continue after ordinaryLOSS in SAMEsession, with all real Native safety/settlement gates retained. Then in-depth Windows Claude review package, no external dispatch."
+}

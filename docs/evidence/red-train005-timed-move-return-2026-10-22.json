@@ -1,0 +1,45 @@
+{
+  "continuation_model_owned": true,
+  "fit_decision": "No fit:currentKalreadyselects highestmean native return(Bite). Do not teachIceBeam from opening damage alone.",
+  "independent_new_origins": 0,
+  "mean_returns": {
+    "pokemon.core:battle:move:1": 1.55054955,
+    "pokemon.core:battle:move:3": 0.3983986,
+    "pokemon.core:battle:move:4": 1.17935413
+  },
+  "native_acquisition_cost_known": false,
+  "native_branches": 15,
+  "new_fits": 0,
+  "new_registrations": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-22T10:49:29.074314+00:00",
+  "original_roots": 1,
+  "partition": "train",
+  "physical": {
+    "construction_attempts": 15,
+    "emulators_constructed": 15,
+    "frames": 83938,
+    "input_presses": 479,
+    "load_attempts": 15,
+    "native_seconds": 3.525841670000034,
+    "state_loads": 15
+  },
+  "player_turn_horizon": 3,
+  "schema": "pokemon.red.TRAIN005-timed-move-return.v1",
+  "teacher_first_action_contrasts": true,
+  "terminal_proofs_sha256": [
+    "667f8c2c94214b45b0a613a4f0457e78d01fd5c1876c93d629859f15c5815b93",
+    "410ad852c514b52174efda9ef582f3418c853b08ad8545131a68dd8b8f9fff3f",
+    "ace55a096fe7b5584bb574d73169c2cd8499b9ee1ccba1b81748b8a1e952a8c9",
+    "d8d9329a4e858e469f57cce346bda57546e4e8cc03bfceee7e78ae32484b9049",
+    "a48256da71b19c976eecab01f679af3097a14159c938fbc9ce68544490c831a8"
+  ],
+  "timing_offsets": [
+    0,
+    2,
+    4,
+    6,
+    8
+  ],
+  "whole_battle_outcomes": false
+}

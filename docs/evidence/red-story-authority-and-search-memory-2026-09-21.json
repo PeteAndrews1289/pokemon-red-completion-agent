@@ -1,0 +1,149 @@
+{
+  "schema": "pokemon.red.story-authority-and-search-memory.v1",
+  "date": "2026-09-21",
+  "base_commit": "8b2ae91a",
+  "classification": "engineering_repair_and_read_only_diagnostics",
+  "native_story_qualification": false,
+  "story_artifacts": {
+    "feature_count": 40,
+    "current_graph_sha256": "13c7cb5ef8b1d6c73e2d79d5d8e3a03b8acbafc593a9633370839fb18bf9b523",
+    "historical_graph_sha256": "d86fd746901dae2806de025b6ccc721794750c7bffa1c761b0e2a79dabdca3de",
+    "historical_model_sha256": "6fc78e52bea451b61d352861c7338ffb59631307e151c6c2d0735a2f9888ffb8",
+    "authenticated_historical_manifest_sha256": "27a106ffdfb167cd34ed2173953844a596bdb6ee66014e1d082c277c069cdc2f",
+    "artifacts_checked": 3,
+    "compatible_with_current_loader_and_graph": 0,
+    "failures": [
+      "Two earlier records omit required objective_graph_sha256",
+      "Finalized historical record authenticates against its own graph, rejects current graph"
+    ],
+    "first_badge_conductor": {
+      "required_singleton_decisions": 3,
+      "required_branching_decisions": 0
+    },
+    "objective_ranker_resource_features": false,
+    "existing_goal_layer": "RedStoryGoalBindingProvider -> GoalKind.ADVANCE_STORY -> LivingDexOptionKind.UNLOCK_ACCESS",
+    "story_target_limitation": "The ordinary provider selects executable[0]; selecting advance_story does not prove learned choice between story destinations."
+  },
+  "model": {
+    "sha256": "4a1216a9f2efddca3a9a3f4f564a51f18985057dbe0ea7be70efb5da85c9e318",
+    "record_sha256": "4ab0e75f06e5a08258fd86cd49e2a34972fa61988ab6c21ee290323bad08c2c1",
+    "weights_changed": false,
+    "new_fitted_examples": 0
+  },
+  "history_diagnostic": {
+    "episode": "model141-integrated-play-20260921-v1",
+    "step": 3,
+    "intervention": "In memory only, remove measured history from the retained menu; no action, rerun, fit or saved-record mutation",
+    "scores_observed": [
+      -0.2524242409741243,
+      -0.25924864704490785,
+      -0.10690714383224138,
+      -0.05137719855552593,
+      1.2411323826711067
+    ],
+    "scores_without_history": [
+      -0.042989074324495405,
+      -0.024962927367550167,
+      -0.10690714383224138,
+      -0.05137719855552593,
+      1.2411323826711067
+    ],
+    "maximum_absolute_score_difference": 0.23428571967735767,
+    "argmax_unchanged": true,
+    "claim": "The frozen model uses history; this is not evidence of improved native outcomes."
+  },
+  "synthetic_story_resource_diagnostic": {
+    "native_observation": false,
+    "execution_calls": 0,
+    "ordering_seed_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "selection_seed": 17,
+    "exploration_mix": 0,
+    "binding_kinds": [
+      "advance_story",
+      "restore_team"
+    ],
+    "each_binding_effort": 0.2,
+    "each_binding_risk": 0.1,
+    "economy": {
+      "cash": 5000,
+      "inventory": [],
+      "target_cash": 500
+    },
+    "fixed_situation": {
+      "story_pressure": 0.8,
+      "collection_pressure": 0,
+      "team_pressure": 0.1,
+      "evolution_pressure": 0,
+      "resource_pressure": 0.1,
+      "storage_pressure": 0.1,
+      "recovery_pressure": 0,
+      "exploration_pressure": 0.1
+    },
+    "cases": [
+      {
+        "safety_pressure": 0.1,
+        "scores": [
+          4.577562604237983,
+          3.1737390327042587
+        ],
+        "mode": "model_exploration",
+        "selection": "advance_story"
+      },
+      {
+        "safety_pressure": 0.4,
+        "scores": [
+          4.604398494693429,
+          2.921694022197458
+        ],
+        "mode": "model_exploration",
+        "selection": "advance_story"
+      },
+      {
+        "safety_pressure": 0.9,
+        "scores": [
+          4.649124978785839,
+          2.541492745350788
+        ],
+        "mode": "deterministic_safety",
+        "selection": "restore_team"
+      }
+    ],
+    "claim": "Real model, synthetic menus: critical healing is safety-owned, not learned; require native outcome evidence before any refit."
+  },
+  "repair": {
+    "scope": "Future opt-in integrated paid-search history",
+    "identity": "Stable source plus versioned remaining-local-target fingerprint",
+    "preserves": [
+      "Unrelated registration gains",
+      "Movement and cash changes",
+      "Menu availability and order",
+      "Existing feature-v4 weights",
+      "Legacy fallback and immutable old receipts"
+    ],
+    "separates": [
+      "Changed remaining target set",
+      "Different acquisition source"
+    ],
+    "private_identity_projected_to_policy": false,
+    "old_history_migrated": false,
+    "cross_episode_history_loading_added": false,
+    "rom_free_sequence": "Failed search -> successful unrelated exchange -> two failed searches retains attempts 0,1,2 at search queries"
+  },
+  "checks": {
+    "targeted_tests": 691,
+    "full_suite": false,
+    "initial_fixture_failure": "Corrected synthetic Safari offer to use valid local species; production validation unchanged"
+  },
+  "endpoint": {
+    "state_sha256": "bf603930d08c389f0a470e5c49268dd06b0829bfe5f50789615c5e66c92f2032",
+    "registrations": 109,
+    "route_target": 124,
+    "physical_specimens": 78,
+    "cash": 11968,
+    "new_registrations": 0,
+    "gameplay_running": false,
+    "emulator_inputs": 0
+  },
+  "next": "Authenticate an unused short story development context with both a legal story skill and recovery available; use the resource-aware goal policy, count safety overrides separately, and measure native outcomes before defining isolated TRAIN lessons. Do not replay consumed cells or bypass old ranker graph authentication.",
+  "github_publication": false
+}

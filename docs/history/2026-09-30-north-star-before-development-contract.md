@@ -1,0 +1,316 @@
+# North star and anti-drift contract
+
+Historical operating contract preserved before Pete's September30 development revision.
+Not current instructions. Read [the current North Star](../../NORTH_STAR.md) instead.
+Original root-file SHA256:5c4d696c7861705e6f27994768c5ee42697c67d466255c97c3e30f555828c388.
+Relative links are adjusted for this archive's location; the earlier prose is retained.
+
+Read this after [MISSION.md](../../MISSION.md) and before any roadmap, handoff, issue, or dated
+checkpoint.
+
+## The product
+
+Build a transferable hierarchical agent that can enter a mainline Pokémon game, learn its
+game-specific details, finish its story, solve its mechanics and puzzles, and build the declared
+shared registered Pokédex across the versions, trades, and event inputs that completion requires.
+
+Pokémon Red is the first curriculum and evaluation environment. It is not the product.
+
+An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
+Collection development must be practical to complete, preserve verified registration and useful specimens, and ultimately
+support a measured model-selected lesson. Keep partial progress, final goal success and learned
+advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
+
+The deterministic teacher is an oracle, demonstrator, verifier, and emergency safety authority.
+It is not the final player. A fixed route completing Red does not count as learned progress unless
+the work also increases model authority or produces evidence needed to do so.
+
+Destination selection is learned authority only when real alternatives are exposed and the
+selected destination controls the played attempt. Preserve failed searches and their resource
+costs; fitting failures alone does not establish practical collection competence. Resource
+recovery must use legitimate game mechanics, not resets that conceal unsustainable spending.
+
+## Registered completion — September 9, 2026
+
+The current user-authorized objective is one shared registered Pokédex, not simultaneous living
+forms and not level100. Catch/evolve only as needed for missing global entries, current story
+capability or genuine dependencies; deposit completed specimens when practical. Duplicate catches
+carry no intrinsic penalty and no repeated novelty credit. Actual costs remain measured.
+
+Maintain three separate views: shared verified registrations, each save's actual owned flags,
+and current physical specimens. A global entry never fabricates a local flag or transferable
+specimen. Protect story/HM carriers and needed branches, but do not require a spare base form
+merely to preserve a living Dex. This is not permission to release specimens or edit saves.
+
+Keep historical contracts and fitted outcomes unchanged. Migrate completion, demand, evolution,
+rewards, checkpoint metadata and reporting together before new registered-only training. Old
+living-Dex and level100 predicates remain legacy evidence, not the current product gate.
+See [the explicit revision](../../docs/roadmap-decisions.md) and
+[shared-ledger plan](../../docs/shared-pokedex-registration-plan.md).
+
+## Authority order
+
+When documents disagree, use this order:
+
+1. [MISSION.md](../../MISSION.md) — permanent product definition.
+2. This anti-drift contract — permanent operating rules.
+3. [ACTIVE_PRODUCT_STATE.md](../../ACTIVE_PRODUCT_STATE.md) — the one active lane, counters, time box,
+   stop conditions, rigor tier, and prohibited actions.
+4. [docs/model-first-roadmap.md](../../docs/model-first-roadmap.md) — broader development strategy.
+5. [AGENT_COORDINATION.md](../../AGENT_COORDINATION.md) — current ownership.
+6. [HANDOFF.md](../../HANDOFF.md) and dated checkpoints — evidence and historical state.
+
+A newer date does not overrule a higher-authority document. A checkpoint that asks for work
+contrary to the mission is stale by definition.
+
+## Mandatory mission check
+
+Before implementation, every active task must record:
+
+1. **Capability:** what reusable playing ability this adds.
+2. **Learned authority:** which choice moves from fixed code or teacher control to the model.
+3. **Transfer test:** how the result is tested outside the exact state that produced it.
+4. **Cheapest falsifier:** the shortest scenario that can prove the idea wrong.
+5. **Time box:** when to stop investigating and reassess.
+6. **Stop condition:** the observation that ends the lane without another patch or replay.
+
+If learned authority and transfer both remain unchanged, classify the task as maintenance. Perform
+maintenance only when it unblocks an already-named learned experiment, and keep it to the smallest
+repair that does so.
+
+The tracked source for the active state is `configs/active-product-focus.json`. CI validates it and
+requires [ACTIVE_PRODUCT_STATE.md](../../ACTIVE_PRODUCT_STATE.md) to be its exact generated projection.
+Inputs, preflights, CI passes, and teacher runs never advance its learning counters.
+
+## Default development loop
+
+### Product-first Tower continuation — September29,2026
+
+Pete approved beginning the practical continuation after the Max plan and logging
+discussion. For this new DEVELOPMENT work only, up to three existing-method
+control fits may run within45minutes of a two-hour Tower objective. Small declared
+retention tradeoffs may be tested; their numerical limits must precede fitting.
+Keep other battle heads and protected models intact. Freeze candidate selection
+before withheld checks; log regressions and reject unsafe or ineffective changes.
+If learning remains blocked, the existing stay-when-productive assistance may
+support an explicitly assisted Tower development continuation. Count overrides;
+this is not learned control, global promotion or final-player acceptance.
+Continue from the earned terminal, not a winning comparison copy. This scoped
+exception supersedes old one-fit/no-fallback proposals, not their historical
+results or final Red requirements. Reassess15minutes without useful progress;
+no new subsystem, save cheats, sealed tests or publication.
+
+### Progress-first development — September28,2026
+
+Pete explicitly relaxed experimental administration in favor of completing the
+player. Development may chain logged segments,ordinary losses/rematches,healing,
+legitimate spending and necessary repairs within one approved work session without
+per-segment approval. Small segment caps are checkpoint intervals,not user gates.
+An explicit ordinary-game economy mode may omit artificial cash-debit ceilings;
+actual money,spending and losses remain recorded and native affordability applies.
+Reassess repeated failures after10–15minutes to change approach,not automatically
+end the session. Prefer existing capabilities and prompt gameplay evidence over
+new experiment paperwork. Batch closeout documentation and relevant tests.
+This supersedes older per-packet administrative limits for NEW ordinary development,
+not historical experiment records. Keep recoverable saves,stuck-loop checks,model
+versus support attribution,and accurate completion claims. No hidden save cheats,
+destructive cleanup,external publication or unrelated architecture is authorized.
+Red/transfer goals and actual learning remain unchanged;development is not a claim
+of independent evaluation. Closed benchmark/sealed evidence is not reopened.
+
+### Outcome-first execution — September 27, 2026
+
+Pete reaffirmed the Max-developed connected preparation-to-progress plan and asked
+for enforcement against fixation on local issues. Its milestone is model-selected
+useful preparation, avoidance of unnecessary grinding, and improved connected
+Misty/Bill progress. Combat feasibility is a dependency,not a separate perfect-battler goal.
+
+- Before work,name one observable player outcome,the decision the next experiment
+  settles,the existing components to reuse,and one aggregate time/attempt budget.
+  A budget is a ceiling,not a target or permission to spend it on the first bug.
+- Check the actual model/configuration and supported capabilities before building
+  replacements. Produce the cheapest representative gameplay evidence as early as
+  practical;do not make unrelated cleanup or exhaustive tests its prerequisite.
+- Reassess the whole objective after15minutes of investigation/repair or two failed
+  attempts at the same approach,whichever comes first. Ask whether the issue is
+  necessary now,whether fixing it changes the gameplay decision,and whether an
+  existing supported path answers the question more cheaply. This is a reasoning
+  checkpoint,not a new document,a scheduled automation or a mandatory user pause.
+- A local issue receives at most10minutes before explicit critical-path triage.
+  Further work needs concrete evidence that it blocks the declared outcome and
+  must fit the remaining aggregate budget. "Almost fixed" is not sufficient.
+  This is not permission to skip legality,save protection or outcome verification.
+- Continue ordinary in-scope fixes and already-authorized next checkpoints without
+  making Pete approve every small step. Defer irrelevant problems;retain failures.
+  A new subsystem,substantial architecture change,broader training objective or
+  changed experimental question requires explaining the evidence and getting
+  approval before expansion. Do not confuse a new diagnostic arm within a declared
+  question with a new research objective;freeze its scope before native input.
+- Budgets belong to the gameplay objective across helper renames,patches,subtasks
+  and chat boundaries. Record time/attempts used in the concise handoff. Do not
+  grant a fresh budget by declaring another packet. At the aggregate boundary,
+  report the result and a recommendation;do not extend the budget yourself.
+- Report player capability gained,evidence that changed the next decision,and
+  elapsed work time separately from tests,infrastructure and documentation.
+  If no gameplay capability improved,say so. Completion of machinery is not
+  completion of the learned skill. Never require100%battle wins as a substitute
+  for measured usefulness,retained costs and legitimate recovery.
+
+These are execution obligations,not a guarantee of automatic software enforcement.
+Keep the check in the working decision;do not build another monitoring framework.
+
+Pete's September27 closeout addition:finish every session with a detailed next-session
+work order,not just a vague next objective. Include the player outcome,blocking
+evidence,reused components,ordered steps,acceptance/failure criteria,aggregate
+time/native-attempt bounds,15minute strategic reassessment and scope exclusions.
+Retain it with the session evidence and summarize it for Pete. This does not
+authorize the proposed experiment or reset a continuing objective's budget.
+
+### User-controlled publication — September 15, 2026
+
+Pete decides when to push to GitHub; publication requires his explicit instruction, not merely
+a completed session. Local implementation, testing and recoverable checkpoints may continue.
+A possible future paper is secondary to completing the player. Preserve original experiment
+configurations, model/code identities, outcomes, failures and intervention records as the work
+happens; do not reconstruct missing evidence later or turn paper preparation into a development gate.
+Keep current handoffs concise, replacing stale summaries and linking to retained evidence rather
+than copying the project's history into every handoff.
+
+Pete reaffirmed this on September29 UTC: complete the product while retaining a
+practical development trail for a later YouTube retrospective or possible paper.
+Use the existing dated session reports, not a new reporting system. Record what
+changed and why, observed successes and failures, assistance or relaxed checks,
+source/result references, and what a future repeat can reuse or omit. Mark missing
+measurements unknown. Stronger publication experiments may be designed and run
+later; preserve their separation from exploratory development and do not rewrite
+old outcomes or present the fastest known path as independently validated.
+
+### Fixed visual roadmap and session closeout
+
+Use the [development infographic](../../docs/development-roadmap.md) and its
+[stable baseline](../../configs/development-roadmap-baseline-v4.json) to locate each substantial task
+within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
+full Red registration and a fresh-start model-directed Red completion run, a compatible Red
+modification, Crystal, then at least Emerald. Version/trade support serves Red's explicit gate.
+This baseline is subordinate to the mission and this contract; it does not authorize execution.
+
+After an ordinary completed work session, replace the concise handoff and retain one factual
+evidence record. Refresh the active state when the blocker or next decision changes. Update the
+[roadmap status](../../configs/development-roadmap-state.json), infographic, review log and
+YouTube/project narrative only after a material learner milestone, a stage/strategy/requirements
+change, or Pete's explicit request. This keeps the eventual research record intact without making
+presentation maintenance a gate on the player.
+
+When those milestone surfaces do change, preserve earlier reviews, regenerate the infographic with
+`python scripts/development_roadmap.py --write`, inspect visual changes, and run the existing
+documentation check. Refresh summaries in place; do not prepend accumulating “Current” blocks.
+The public README explains the project to a new reader, not to another agent. Detailed reports and
+superseded directions belong in dated history. Update this North Star only when requirements,
+operating rules or the agreed sequence change; never rewrite its goals merely to make a session
+look successful. No extra CI workflow, mandatory outside audit, timed wakeup or minute-by-minute
+documentation loop is required.
+
+At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
+or recommendation. Do not manufacture feedback or confuse it with measured progress.
+
+End every session report with a recommendation for the **next session's model and thinking
+effort**, plus whether Fast mode is worthwhile and a brief task-specific reason. Pete's current
+priority is verified progress while conserving the primary Codex allowance: use bounded isolated
+Flash drafts, Codex integration and occasional Claude review where they reduce duplicate work.
+Do not trade away outcome verification merely for cheaper drafting. A recommendation is not permission to consume
+a reset or change the selected model. Reassess this guidance if Pete changes the budget priority.
+
+Stage exit criteria stay stable. Material changes require an explicit entry in
+[roadmap decisions](../../docs/roadmap-decisions.md), retaining the previous baseline and recording
+the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
+a difficult milestone with an easier one or count teacher completion as learned completion.
+Any percentage must name its checklist and denominator; do not report a whole-project percentage
+or turn equal checklist weights into a remaining-time estimate. Progress without a new learning
+result must remain visibly classified as engineering or documentation.
+
+### Runtime learning loop
+
+Pete's September23 clarification authorizes isolated test copies as the default
+when they protect campaign state or make development checks cheaper. No repeated
+per-copy approval is needed for in-scope testing. Retain source identity, purpose,
+limits, interventions and every outcome; copies inherit their source partition
+and lineage. A DEVELOPMENT copy is not TRAIN data or an independent evaluation
+root. Tests do not advance campaign progress, erase losses, reopen consumed
+one-shot evaluations, or grant access to sealed/benchmark material. Promote
+tested code explicitly; never silently replace the campaign with a favorable copy.
+
+Use authenticated development checkpoints and short randomized scenarios:
+
+1. restore a relevant state;
+2. let the model choose and act;
+3. let the teacher intervene only at a declared safety boundary;
+4. retain the state, choice, intervention, and outcome;
+5. refit or update from audited evidence;
+6. evaluate on unseen scenario instances;
+7. promote authority only after outcome-based gates pass.
+
+Do not replay Pallet Town to test a Saffron navigation change or a Cinnabar training policy.
+
+## Full-run gate
+
+Pete's September 15 acceptance requirement is a fresh start-to-finish model-directed Red run
+with story completion and the **declared 124-species legitimate native Red route before any ROM
+hack**. Checkpoint story demonstrations do not meet that requirement. Version-, cable-trade- and
+event-dependent entries remain explicit deferred gaps rather than fabricated local flags. Mew is
+deferred until a later legitimate source. A simultaneous Red/Blue link experiment is desirable
+after model completeness, but inability to link the available emulators does not block the hack;
+the shared registry may earn those species in a later title. This changes the dependency gate,
+not the readiness conditions below, and authorizes neither cheating nor another teacher factory.
+
+Pete's September 16 clarification allows a teacher or training harness to intervene in an
+isolated development copy, including overriding money to exercise Safari mechanics. The final
+actor, official run and native registration gate remain unassisted. Retain the original state,
+mark assisted provenance, and exclude synthetic liquidity from ordinary economy-goal fits and
+legitimate funding claims. This is training scaffolding, not a second route to Red acceptance.
+
+A new clean-power full-game run is prohibited unless all of these are recorded first:
+
+- the integration question cannot be answered by a shorter authenticated scenario;
+- every component under test passed its unseen bounded gate;
+- the run changes a named promotion or rejection decision;
+- expected frame, action, and wall-time cost is recorded;
+- failure diagnostics will retain the exact bounded cause;
+- the active roadmap explicitly authorizes the run.
+
+Full runs are final exams. They are not the training loop.
+
+## Metrics that matter
+
+Prefer outcomes that can expose failure:
+
+- navigation success, path overhead, collision rate, displacement recovery;
+- battle wins, objective satisfaction, HP/PP efficiency, interventions, illegal choices;
+- experience per frame, wins per heal, blackouts, party rotation, level/evolution progress;
+- multi-step goal completion and recovery from changed resources or state;
+- new global Pokédex registrations, dependency-plan success, recognized version/trade/event blockers;
+- zero-shot and post-adaptation performance in another title.
+
+Teacher agreement is diagnostic. It is never sufficient evidence by itself.
+
+## Anti-drift alarms
+
+Stop and reassess when any of these occur:
+
+- a second full replay is proposed for the same local question;
+- a fixed direction string, cursor exception, or species-specific patch becomes the main work;
+- CI is repeatedly repaired while no model authority is increasing;
+- an overleveled party removes the decisions the model is supposed to learn;
+- a teacher preference is copied without comparing outcomes;
+- a failure receipt loses the information needed to explain the failure;
+- more than one work session passes without a new learned decision or generalization result.
+
+## Active decision — 2026-08-14
+
+Red player v1 stopped safely during its first full teacher-supervised shadow run after 1,250
+balanced-team battles. The run demonstrated that full replays are too costly, fixed Saffron
+movement is visibly brittle, recovery is excessively conservative, and high offline accuracy can
+hide concentrated live disagreement. No further full Red replay is authorized.
+
+The active strategy is the scenario-based, model-first roadmap. Red sealed destination captures
+and all frozen Crystal transfer contexts remain unopened until their existing protocols explicitly
+authorize access.

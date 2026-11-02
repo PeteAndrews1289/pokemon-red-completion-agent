@@ -1,0 +1,678 @@
+{
+  "action_counts": {
+    "attack": 91,
+    "forced_switch": 2,
+    "switch_prompt": 0,
+    "voluntary_switch": 70
+  },
+  "actions": 6858,
+  "actor_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "additional_budget": 0,
+  "amendment_sha256": [
+    "6b5aa2b73e7b7c853650593700e087f8eb127650d57fc17dc6ea5678f036b7b4",
+    "a479fd55abaa1a665b1f2ade13cf52a391a513d77d699f87cbaab5d75c276acc",
+    "6eec12c625ed6cd156f401adb0d51d766ed2c6bd9438e82896fd0ee4e0664634",
+    "b3359cc6bf0193da748643b164eae7631a65904de0344ba21a7dc74b78b93b91",
+    "950ace6643cfac09f7d91792c8fbb7e84216dbf86df1a886c594ca4ba96375a7"
+  ],
+  "anticipated_opponents": 5,
+  "audit_frames": 0,
+  "automatic_continuation_authorized": false,
+  "caps_exhausted": false,
+  "cash": 27346,
+  "cash_delta": 0,
+  "completed_decisions": 171,
+  "completed_episode_latencies": {
+    "execution_ns": 13012551831,
+    "policy_ns": 184205296
+  },
+  "continuation_fragments": 1,
+  "encounters": 43,
+  "envelope_sha256": "c78c961222d9310aacaf0edc209b06083a63e3ab76f568d670c77f6138cda67f",
+  "episodes": [
+    {
+      "decisions": 3,
+      "outcome_sha256": "4ea2bcede81fc1f00918227062348c3388d692c1ce5249163602929d8c9ae11b",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "4702d379d7ad5eeed5d5520a4bd41010eaba1c6e36c1f16f4224ea0c3f102b7a",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 3,
+      "outcome_sha256": "16911f038766730769c68012d9c42824cece1d3adb15e7ae3b138a5ace18a1ef",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 3,
+      "outcome_sha256": "ad7016d97461ecbf40149ea2a5f4ba0a29a80918c29ff5084a81167414530b11",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 1,
+      "outcome_sha256": "d540c3339bc5ec9ec61f0bb16dda62ae162469fb576402e126e8dcc7c3087a46",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "e78be7723115004cf62300514537060af08432e6acb432114c051b1a37465408",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "d5089b49cdb9881042d0701b3bfdf1edec548829c70663c19d977311b4aac4ae",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 6,
+      "outcome_sha256": "0da82342b13d8b4e29b657983e28db33d3a8a350b20d8f3bfe119fa4dcf06278",
+      "stage": 340,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "a72e637c93d409dc045e8f66ae4336787965bbcacc665f4c41ff01fefcb71da4",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "3d5533d7c66ec5e61c726cdfe89877295a1c846e7196e8e4a0311cf57de7f7cb",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "50dbc7b64f375aab0111def3a258032cabcb14f2e60b345e2be05f3bbdcc4c0b",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "d70ee23608c410b3c417db94176c1ff1013a285d8fb8661e97b875b7f484125b",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "0436ba996dae8bfac06b3f0c1a264759def5c42753db3c00016f1422615abb27",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "07a185912f9bc6031007402309cace1df94aabb6441fcd4792e0b9a5a028ac40",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 1,
+      "outcome_sha256": "45c0d524c7875b8edac96025156c71b1341e6ad35fa0f1b2a572c50816af512d",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 5,
+      "outcome_sha256": "64c92e40c2223f74174a69d71cdff0e3ab16083a3d7d5b913e6c20db19c09cd9",
+      "stage": 342,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "ef8880c709a660d2e12d913c159c34a6c265062bf4668e6957e882b934c0946a",
+      "stage": 344,
+      "won": true
+    },
+    {
+      "decisions": 1,
+      "outcome_sha256": "af8d736c68e9cd161f3f91d8f3f894f29a16ef0dd0cc5f3afa05ba744a0c0b53",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "aed9a9df0a52a7b02687fc93061d13787bad1a4f449152e4fc5c61e915448ab7",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "a9cefb8e1f6e8785be2ed0ca751743670336862fe9f6ac63cc3cf7bd5cd694ff",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "4c12dc0d237086fff6f54a64630662f8cbe3810431287995c0db31a7af323723",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 8,
+      "outcome_sha256": "59b121885e72e9f55449873c7f7c4421f9cc17fcaf921fcbe015798377821f28",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 8,
+      "outcome_sha256": "3cfbb63a80b8e4fb154952cf9c01741e2e04a82598154153749c228a3b0adb21",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "c1aa589e87755d6bd1f6d2f72c6bc73a38a18c6919fe2c5d24b562e8a46c32f5",
+      "stage": 345,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "8d97983c5b8fc55a4da82f8150e6f9072750d1bd2c2da784fd6ce6c2140a4fcb",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "e9efa352580bd3772e1a131c6376204640a4bb07da962c8af248beeb78aa0875",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "e8ad80052b77307a594e1607b2f894a01f1417971c70c7fb23fa38038c888638",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 3,
+      "outcome_sha256": "26c38789b2718da567ce22cb002388816c3e7457cf7f5b8dcab14e6dd84c9fbd",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "bf99e9fd3f3fb3fd647be4256fe95f9bb202d77bd8b51dbe46fcff9fd564fd58",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "e35ea426077eced7243d0c305396d9c596eb54f426ca17ce0b691b58d201057b",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "c0738a9231762ccfced102068924a60ba8ce1b66aa67cfe310eaa42d919db401",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "4756436d6f52e78d83971628ff4ca9307000a5d119d8b5472b72c02c521cf576",
+      "stage": 347,
+      "won": true
+    },
+    {
+      "decisions": 7,
+      "outcome_sha256": "e8c603bcc3174ad09a0dbe99ffcfd59e6a4e77352c7bf816b3f9ab35d9638cc1",
+      "stage": 348,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "ffe00ae688d2788851595e78b616f497e2e603aff28879c7806a0ddb6a1668a4",
+      "stage": 348,
+      "won": true
+    },
+    {
+      "decisions": 11,
+      "outcome_sha256": "c8dc672551b00118f9451aba9fd2dc397898bc5eca40e2fdc4bacf8c4b89250e",
+      "stage": 348,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "cbe8a2de0c09d3483e10c0a5edb0f17a87394c598b123cdc4ff1d00f068f437d",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 12,
+      "outcome_sha256": "5005ffe0832ff0d0d2e614ae171e2e4adf5921345420bf8e0c842973f8c0bb23",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "d2262505b2ec4b167cb5ce3fec077797b9289c93de134be823e0681add40c3c3",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "94ffae40decbada78a772c5e4c9fb33cd8c99c745be57811c528d952ea3dcc22",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "5041b986467408b2a3aa03fa86fa1872d75139cb70307d01b96f52078e91cafe",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 17,
+      "outcome_sha256": "c09a190ab49f07ca7a0a374586c027c8bd3f3019261acc52af85879bcc37dfbf",
+      "stage": 349,
+      "won": true
+    },
+    {
+      "decisions": 4,
+      "outcome_sha256": "223f89499c157bc688715a5a336fda0f92a498a9e3a3752f4c42df644a448bac",
+      "stage": 350,
+      "won": true
+    },
+    {
+      "decisions": 2,
+      "outcome_sha256": "724c55c70f1dc62be49e9480980bf78e0577adbd0646c0ff6e0ed2f7a3f1041b",
+      "stage": 350,
+      "won": true
+    }
+  ],
+  "frames": 528792,
+  "frozen_heads_recomputed": {
+    "attack": 91,
+    "control": 92,
+    "partial_control": 5,
+    "partial_switch": 7,
+    "switch": 72
+  },
+  "fully_restored": true,
+  "gameplay_running": false,
+  "learned_anticipation": false,
+  "learned_preparation": false,
+  "limitations": [
+    "Pokemon XP is not a model fit.",
+    "Preview preparation is support, not a trained predictor or learned goal selection.",
+    "No League input or actor promotion."
+  ],
+  "local_registrations": 17,
+  "map_id": 174,
+  "metrics": {
+    "invalid_action_failures": 0,
+    "party_faints": 2,
+    "party_hp_lost": 1224,
+    "party_pp_spent": 80,
+    "party_status_changes": 0,
+    "teacher_interventions": 0
+  },
+  "metrics_scope": "metrics and latency totals cover completed episodes only; partial logs retained separately",
+  "model_decisions": 174,
+  "native_qualification_pending": [
+    "common episode-boundary double-KO settlement after voluntary switching"
+  ],
+  "native_seconds": 28.9662634995766,
+  "new_fits": 0,
+  "new_goal_choices": 0,
+  "new_registrations": 0,
+  "next_unused_stage": 352,
+  "observed_opponents_in_preview": 0,
+  "outings": 8,
+  "partial_choice_receipts": [
+    {
+      "decision_index": 1,
+      "record_sha256": "3eb3b42439e6fc040393d4b489ec4c9454a5b91f5b2021729a8aef355e9ea071",
+      "stage": 343
+    },
+    {
+      "decision_index": 2,
+      "record_sha256": "ecbd24a695b788f56d5f4623185973532b990b6404e8ee4fd7b568a3f5c40539",
+      "stage": 343
+    },
+    {
+      "decision_index": 1,
+      "record_sha256": "cd1f9d7afabfb9230898b21231d2cc6e1d1f4304fb680a4178427252b0f565b8",
+      "stage": 345
+    },
+    {
+      "decision_index": 2,
+      "record_sha256": "4bb5be03cbf6b807d1b9baf646208a4b8358f78ea9503d6e1893e5fb180ab6e1",
+      "stage": 345
+    },
+    {
+      "decision_index": 3,
+      "record_sha256": "6c7b955ed3cd5116de7aabc4a7529989a64602d6a8b5bcd9ccb65d23b0b3ff32",
+      "stage": 345
+    },
+    {
+      "decision_index": 1,
+      "record_sha256": "8fc073e3d0bb1a39e1019972ffda069d7f3718621ec2dfb4a64e552e544bb0f8",
+      "stage": 350
+    },
+    {
+      "decision_index": 2,
+      "record_sha256": "bcbfcf541e2b9f2515b701ebbfe512e4951d9cd321147519a41025bf1311b56f",
+      "stage": 350
+    },
+    {
+      "decision_index": 3,
+      "record_sha256": "37dc482de76742792c2ecd5fcfe6f2ac85673ee646998b3f9a8917a4d91634da",
+      "stage": 350
+    },
+    {
+      "decision_index": 4,
+      "record_sha256": "45e0b947fb07fdc74135580a2b509e1d8f5e36d0e51bc86cccce3da4d242b1c9",
+      "stage": 350
+    },
+    {
+      "decision_index": 5,
+      "record_sha256": "6e26d8441ac02f7fc356cda439e9638c1adf672d0b7e836ca0128077de0a28d7",
+      "stage": 350
+    },
+    {
+      "decision_index": 6,
+      "record_sha256": "39a2f8688944f8df5dea2b5dff3b1085d60af6d4d14de8094a710fb259218f4d",
+      "stage": 350
+    }
+  ],
+  "partial_choice_vectors_recomputed": {
+    "attack": 4,
+    "control": 5,
+    "switch": 7
+  },
+  "partial_choices": 11,
+  "partial_episodes": [
+    {
+      "battle": "battle-0001",
+      "completed_decisions": 1,
+      "final_state_sha256": "3d2db4c87cfd9843cd12c6100cfcb2be4608aadf718e9f94a87524d4041c2713",
+      "log": {
+        "complete": true,
+        "completed_decisions": 1,
+        "event_count": 10,
+        "event_counts": {
+          "choice_recorded": 2,
+          "decision_completed": 1,
+          "decision_started": 2,
+          "episode_started": 1,
+          "model_input_prepared": 2,
+          "run_failed": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 1,
+        "incomplete_decisions": 1,
+        "last_record_sha256": "a4c42eedb838a9c396d43c18dfda5f0026518f595ab3bf62d67a9716d1c5fa7f",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 2,
+        "terminal_event": "run_failed"
+      },
+      "outcome": "retained failure; not relabeled as completed battle",
+      "recorded_choices": 2,
+      "stage": 343
+    },
+    {
+      "battle": "battle-0008",
+      "completed_decisions": 2,
+      "final_state_sha256": "eabdf925018220e4d29266ab9f857b32eb41ad2d073f315c15f2a0bc1e38f0a0",
+      "log": {
+        "complete": true,
+        "completed_decisions": 2,
+        "event_count": 13,
+        "event_counts": {
+          "choice_recorded": 3,
+          "decision_completed": 2,
+          "decision_started": 3,
+          "episode_started": 1,
+          "model_input_prepared": 2,
+          "run_failed": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 1,
+        "incomplete_decisions": 1,
+        "last_record_sha256": "71e32975029465fde6e6911cb57258b6e968d4d3d2018163b4cc835ebc072068",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 3,
+        "terminal_event": "run_failed"
+      },
+      "outcome": "retained failure; not relabeled as completed battle",
+      "recorded_choices": 3,
+      "stage": 345
+    },
+    {
+      "battle": "battle-0003",
+      "completed_decisions": 5,
+      "final_state_sha256": "0e1cb38dbef422c15b9dab8c9be13270bbe3e80f3d4000d77a3fdc3e2ff718e4",
+      "log": {
+        "complete": true,
+        "completed_decisions": 5,
+        "event_count": 25,
+        "event_counts": {
+          "choice_recorded": 6,
+          "decision_completed": 5,
+          "decision_started": 6,
+          "episode_started": 1,
+          "model_input_prepared": 5,
+          "run_failed": 1,
+          "run_identity": 1
+        },
+        "failed_runs": 1,
+        "incomplete_decisions": 1,
+        "last_record_sha256": "5014441fc774cb0940fac3c308e0ca85c035152b44a191775737797bf75313b5",
+        "schema": "pokemon.red.trainer-practice-log-verification.v1",
+        "started_decisions": 6,
+        "terminal_event": "run_failed"
+      },
+      "outcome": "retained failure; not relabeled as completed battle",
+      "recorded_choices": 6,
+      "stage": 350
+    }
+  ],
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 44,
+      "level_before": 43,
+      "species_id": 104,
+      "target": 51,
+      "xp_gained": 4029,
+      "xp_remaining": 44169
+    },
+    {
+      "level_after": 39,
+      "level_before": 38,
+      "species_id": 132,
+      "target": 51,
+      "xp_gained": 6202,
+      "xp_remaining": 89769
+    },
+    {
+      "level_after": 52,
+      "level_before": 52,
+      "species_id": 28,
+      "target": null,
+      "xp_gained": 2066,
+      "xp_remaining": 0
+    },
+    {
+      "level_after": 43,
+      "level_before": 42,
+      "species_id": 64,
+      "target": 51,
+      "xp_gained": 7632,
+      "xp_remaining": 49531
+    },
+    {
+      "level_after": 44,
+      "level_before": 43,
+      "species_id": 118,
+      "target": 51,
+      "xp_gained": 3097,
+      "xp_remaining": 47146
+    }
+  ],
+  "physical_encounters": 45,
+  "plan_sha256": "fdad12ee0f41e0964e0b6f6e3675bc6d684ac7740797950744b61ed53c2047f8",
+  "position": [
+    7,
+    7
+  ],
+  "preparation_basis": "cartridge_preview",
+  "prior_audit_sha256": "e8abf46804796afa44f09ae0fe19540114c0e6521a9e5b7262645379ba9c4d09",
+  "qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+  "recovery_anchor_map": 9,
+  "reference_level": 54,
+  "reserve_xp": 20960,
+  "reserve_xp_remaining": 230615,
+  "retained_failures": [
+    "340 nurse boundary mismatch;341 healed in place.",
+    "343 trapping suppression crossed decision boundary;344 cancelled unspent MOVE and completed same encounter.",
+    "345 simultaneous wild KO wrongly requested replacement;346 returned/healed actual field. Error retained, not counted as completed episode.",
+    "350 same terminal after voluntary switch;351 returned/healed actual field. Common episode-boundary fix is ROM-free verified only."
+  ],
+  "retrospective_correction": "Partial attack choice representation is an action object; this supplemental audit explicitly recomputes all four partial attack rankings and all partial control/switch probabilities.",
+  "save_edits": 0,
+  "schema": "pokemon.red.anticipatory-preparation.v1",
+  "snorlax_role_basis": "recorded active combat in337",
+  "source_commit": "5ba59d4c",
+  "source_replays": 0,
+  "source_sha256": "4531381b8cf6fc52c0286c0c09bc454fd52f066385bd5b218fc1b20df2c49930",
+  "source_stage": 339,
+  "stages": [
+    {
+      "actions": 1063,
+      "error": "Center approach failed bounded movement",
+      "frames": 82044,
+      "seconds": 4.479970790911466,
+      "source_sha256": "4531381b8cf6fc52c0286c0c09bc454fd52f066385bd5b218fc1b20df2c49930",
+      "stage": 340,
+      "terminal_sha256": "4893522f90f669137d09a252154ef3ea354487846dc38c15d5a6159032f0c3cf"
+    },
+    {
+      "actions": 22,
+      "error": null,
+      "frames": 1584,
+      "seconds": 0.11513016698881984,
+      "source_sha256": "4893522f90f669137d09a252154ef3ea354487846dc38c15d5a6159032f0c3cf",
+      "stage": 341,
+      "terminal_sha256": "fbff02021cb8abcf9631b63453020101f90283b6b3ecefb96e334aad86bb678a"
+    },
+    {
+      "actions": 872,
+      "error": null,
+      "frames": 67380,
+      "seconds": 3.853365167044103,
+      "source_sha256": "fbff02021cb8abcf9631b63453020101f90283b6b3ecefb96e334aad86bb678a",
+      "stage": 342,
+      "terminal_sha256": "4bff64923c60cd63303a2037514f6c4a0223f92b0b4d57d80d6cb21c321cca84"
+    },
+    {
+      "actions": 253,
+      "error": "model trainer practice attack reached a second move selection before settlement.",
+      "frames": 17616,
+      "seconds": 0.8577272081747651,
+      "source_sha256": "4bff64923c60cd63303a2037514f6c4a0223f92b0b4d57d80d6cb21c321cca84",
+      "stage": 343,
+      "terminal_sha256": "3d2db4c87cfd9843cd12c6100cfcb2be4608aadf718e9f94a87524d4041c2713"
+    },
+    {
+      "actions": 165,
+      "error": null,
+      "frames": 10356,
+      "seconds": 0.6059328750707209,
+      "source_sha256": "3d2db4c87cfd9843cd12c6100cfcb2be4608aadf718e9f94a87524d4041c2713",
+      "stage": 344,
+      "terminal_sha256": "5dfd9db44e61ba4c7b1e1d65e2c9614ed8d379293cdf89faf60709bee1a248a8"
+    },
+    {
+      "actions": 929,
+      "error": "model trainer practice forced switch left battle during its forced switch.",
+      "frames": 77244,
+      "seconds": 4.369603500235826,
+      "source_sha256": "5dfd9db44e61ba4c7b1e1d65e2c9614ed8d379293cdf89faf60709bee1a248a8",
+      "stage": 345,
+      "terminal_sha256": "eabdf925018220e4d29266ab9f857b32eb41ad2d073f315c15f2a0bc1e38f0a0"
+    },
+    {
+      "actions": 104,
+      "error": null,
+      "frames": 4416,
+      "seconds": 0.23273875005543232,
+      "source_sha256": "eabdf925018220e4d29266ab9f857b32eb41ad2d073f315c15f2a0bc1e38f0a0",
+      "stage": 346,
+      "terminal_sha256": "757e2e1d5d493acfa74ab323edf3fb3139c8241cf948a80deb86597d4f5772e0"
+    },
+    {
+      "actions": 941,
+      "error": null,
+      "frames": 72540,
+      "seconds": 4.054956707637757,
+      "source_sha256": "757e2e1d5d493acfa74ab323edf3fb3139c8241cf948a80deb86597d4f5772e0",
+      "stage": 347,
+      "terminal_sha256": "039f3f104c886edaf8bceaa9ea6e0e75bac8e5d15a010d1f97fadcbd5b15310a"
+    },
+    {
+      "actions": 729,
+      "error": null,
+      "frames": 55608,
+      "seconds": 2.9356821249239147,
+      "source_sha256": "039f3f104c886edaf8bceaa9ea6e0e75bac8e5d15a010d1f97fadcbd5b15310a",
+      "stage": 348,
+      "terminal_sha256": "dc3b4e4cba6b98bbba58f6171f7bef129dad91e581679fcf72df044e9af3d748"
+    },
+    {
+      "actions": 1183,
+      "error": null,
+      "frames": 96876,
+      "seconds": 5.163006458431482,
+      "source_sha256": "dc3b4e4cba6b98bbba58f6171f7bef129dad91e581679fcf72df044e9af3d748",
+      "stage": 349,
+      "terminal_sha256": "abdd2578bb930783813d2443797cbe7170d9e723a2567baf20e59734fcb4e344"
+    },
+    {
+      "actions": 478,
+      "error": "model trainer practice forced switch left battle during its forced switch.",
+      "frames": 36984,
+      "seconds": 1.977622542064637,
+      "source_sha256": "abdd2578bb930783813d2443797cbe7170d9e723a2567baf20e59734fcb4e344",
+      "stage": 350,
+      "terminal_sha256": "0e1cb38dbef422c15b9dab8c9be13270bbe3e80f3d4000d77a3fdc3e2ff718e4"
+    },
+    {
+      "actions": 119,
+      "error": null,
+      "frames": 6144,
+      "seconds": 0.3205272080376744,
+      "source_sha256": "0e1cb38dbef422c15b9dab8c9be13270bbe3e80f3d4000d77a3fdc3e2ff718e4",
+      "stage": 351,
+      "terminal_sha256": "8ba92ff38918a78201c4a1c1e64de26cc5cbe30ec0476ec9d07181792c698bd2"
+    }
+  ],
+  "story_objectives": 30,
+  "target_level": 51,
+  "targets_met": 0,
+  "targets_total": 4,
+  "terminal_sha256": "8ba92ff38918a78201c4a1c1e64de26cc5cbe30ec0476ec9d07181792c698bd2",
+  "terminal_stage": 351,
+  "terminal_stop": "Repeated double-KO settlement error after switching; repaired and ROM-free tested, native qualification still pending. Healed and stopped; no further batch.",
+  "test_scope": "ten targeted capability/runtime suites plus documentation surface; not full suite",
+  "tested_count": 509,
+  "total_xp": 23026,
+  "wins": 43,
+  "scope": "Teacher-supported anticipatory preparation; exact K learned wild combat; DEVELOPMENT, not fit data.",
+  "preparation_data_eligible_for_fitting": false,
+  "tests": {
+    "passed": 509,
+    "full_suite": false
+  },
+  "retained_source_reporting_note": "Nurse recovery plan retained original339 source label alongside340 envelope metadata; actual340 source/claim/retained_failure hash and continuous state chain independently verified. No replay."
+}

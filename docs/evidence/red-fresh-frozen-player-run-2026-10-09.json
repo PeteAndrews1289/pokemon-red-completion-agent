@@ -1,0 +1,377 @@
+{
+  "schema": "pokemon.red.fresh-player-development-run.v1",
+  "status": "closed",
+  "recorded_at_utc": "2026-10-10T01:35:43Z",
+  "purpose": "Fresh packaged local player trial and disclosed same-earned-save development recovery with existing detailed journals.",
+  "final_autonomous_red_passed": false,
+  "partition": "development",
+  "runtime_llm_calls": 0,
+  "teacher_game_actions": 0,
+  "save_edits": 0,
+  "save_merging": false,
+  "parameter_learning_delta": {
+    "train_examples": 0,
+    "fits": 0,
+    "adoption": 0,
+    "goal_model_sha256": "f86aeecb94011a94988ea8bea30bf781bac76cbc1ee70c220ff6090d537b83f9"
+  },
+  "original_frozen_attempt": {
+    "package": "frozen-v8",
+    "manifest_sha256": "a2234f30279cb24a00ca9763f0450606a4cfd29bd63c95471e87cd17039545bf",
+    "plan_sha256": "7f89f68f273d6aa0338d96023e0aa533b3dc549cdb42ba1632707298b1825517",
+    "launch_utc": "2026-10-09T22:44:16Z",
+    "process_exit_confirmed": true,
+    "process_exit_code": 0,
+    "gameplay_passed": false,
+    "stop": "native_execution_error",
+    "cause": "sole poisoned starter fainted during selected restoration; pending all-party blackout was not admitted by partial-faint route guard",
+    "state_sha256": "8c2ec6a605ba775caf43e20fe78b92c9cbb457ee59085d7c252def08d3c0d9a0",
+    "context_sha256": "deaa317295156362e12a2a223736e6e618cf56b00a803fb78c696c86d0d3cade",
+    "registrations": 1,
+    "badges": 0,
+    "levels": [
+      7
+    ],
+    "cash": 1677,
+    "spent": {
+      "actions": 1618,
+      "frames": 110953,
+      "decisions": 16,
+      "heals": 1,
+      "cash_debits": 1588
+    }
+  },
+  "assisted_interventions": [
+    "existing native all-party blackout settlement connected to retained control and restoration",
+    "existing exact-identity leader settlement and same scoped actor connected for retained early gym engagement",
+    "prospective existing score-weighted exploration mode instead of greedy selection; unchanged weights, no forced training, no seed search",
+    "typed settled discovery search misses prospectively return FAILED/SEARCH_EXHAUSTED, never success",
+    "prospective semantic healthy-helper revalidation after SWITCH; newly status-afflicted helper uses existing bounded flee without FIGHT or false weakening credit",
+    "prospective shared collection optional wrapper connects actual level/item evolution routers to the existing learned engaged-trainer actor; exact already-engaged Route6 identities require a currently legal Vermilion/Cut/Surge context"
+  ],
+  "strategic_observation": {
+    "completed_same_level_brock_losses_before_pivot": 4,
+    "censored_next_engagement": true,
+    "training_offers_available": [
+      8,
+      10
+    ],
+    "second_challenge_score": 4.787149850842127,
+    "preparation_score": 4.002550187159692,
+    "learned_post_loss_reasoning_established": false,
+    "one_exposed_menu_preparation_candidates": 8,
+    "one_exposed_menu_identical_preparation_head_vectors": true,
+    "one_exposed_menu_preparation_probability": 0.7166379014365254,
+    "one_exposed_menu_misty_approach_probability": 0.1416956824518593,
+    "one_exposed_menu_bill_approach_probability": 0.1416664161116154,
+    "one_exposed_menu_highest_score_objective": "defeat_misty"
+  },
+  "verified_assisted_milestone": {
+    "brock_defeated": true,
+    "native_badge_tm_events_payout_verified": true,
+    "payout": 1386,
+    "preparation_level_change": [
+      7,
+      14
+    ],
+    "starter_level_after_win": 15,
+    "brock_goal_selection_mode": "forced_singleton",
+    "preparation_selection_mode": "model_exploration",
+    "combat_authority": "existing scoped learned battler",
+    "new_fit": false
+  },
+  "latest_closed_checkpoint": {
+    "family": "assisted-exploration-recovery",
+    "segment": 22,
+    "configuration_sha256": "f23bd3267957debde262d9bb09f25b7d9b507dd1923e197c9f2efe2af4c83f77",
+    "state_sha256": "c528d79e80f2da8e8cd51066856eac7127b59b05f139048cf2193f3ebff86465",
+    "context_sha256": "57abeaefc5d5d7cfb7712c80c6af0da6d4bd2336a4c0e8798858af32be2ea286",
+    "map_id": 64,
+    "position_yx": [
+      3,
+      3
+    ],
+    "levels": [
+      36,
+      26,
+      24,
+      36,
+      26,
+      24
+    ],
+    "cash": 11592,
+    "registrations": 14,
+    "badges": 3,
+    "bill_helped": true,
+    "cut_obtained_and_taught": true,
+    "worker_stopped": true,
+    "buttons_released": true,
+    "field_ready": true,
+    "stop_reason": "decision_budget",
+    "spent": {
+      "actions": 153416,
+      "cash_debits": 6004,
+      "decisions": 312,
+      "frames": 11867816,
+      "heals": 210,
+      "seconds": 5308.451376045006
+    },
+    "segment_goals": 48,
+    "segment_verified": 48,
+    "segment_model_decisions": 11,
+    "segment_support_decisions": 37,
+    "segment_execution_errors": 0
+  },
+  "active_continuation": null,
+  "targeted_checks": {
+    "discovery_continuation": 271,
+    "full_suite": false,
+    "ci": false,
+    "combined_rom_free": 1517,
+    "status_and_capture_subset": 346,
+    "not_additive": true,
+    "real_evolution_wrapper_subset": 490,
+    "boarding_subset": 218
+  },
+  "data_retained": [
+    "all candidate features,raw and bounded predictions,actual scores and choice probabilities",
+    "before and terminal states,semantic diagnostics and retained continuation",
+    "attempted and completed inputs,battle choices and events,HP,status,moves,PP and native payouts",
+    "preparation,healing,stock,search/capture exposures,costs and per-phase timings",
+    "typed errors,censored engagements,original losses and operator changes"
+  ],
+  "data_use": "Live observations and existing histories can affect selection; diagnostic-only records do not automatically become policy inputs or TRAIN rows.",
+  "protected_baseline_and_completed_reference_unchanged": true,
+  "limitations": [
+    "Original unchanged frozen attempt failed and remains failed.",
+    "Assisted continuation is not final autonomous completion or independent transfer.",
+    "Gameplay XP and registrations do not change model parameters.",
+    "Legacy evolution transport in015/016 was nonlearned and incompletely battle-journaled; zero teacher queries alone does not imply learned combat. New shared routing reuses the existing learned battler without a fit."
+  ],
+  "phase_sample": {
+    "scope": "exploration001through007,related adaptive development",
+    "execution_seconds": 344.11848575167824,
+    "menu_and_boundary_seconds": 338.3478533755988,
+    "selection_and_receipt_seconds": 0.29596133390441537,
+    "selection_diagnostics_seconds": 0.4669730814639479,
+    "not_pure_emulator_or_llm_benchmark": true
+  },
+  "verified_misty_milestone": {
+    "segment": 12,
+    "ordinal": 9,
+    "goal_choice": "model_exploration",
+    "candidate_count": 3,
+    "teacher_labels": 0,
+    "combat_authority": "existing scoped learned battler",
+    "battle_won": true,
+    "decisions": 27,
+    "player_turns": 22,
+    "failed_move_executions": 2,
+    "fainted_members": 4,
+    "normal_nursing_afterward": true,
+    "native_badge_bits": 3,
+    "native_reward_item": 211,
+    "native_defeat_event": 191,
+    "native_reward_event": 190,
+    "money_delta": 2079,
+    "teacher_queries": 0,
+    "memory_write_actions": 0,
+    "policy_elapsed_ns": 105181334,
+    "execution_elapsed_ns": 9877717123,
+    "observation_and_logging_elapsed_ns": 200995627
+  },
+  "nugget_bridge_retained_boundary": {
+    "segment": 13,
+    "error": "field dialogue lacks a newly poisoned member faint",
+    "failed_inputs": 6,
+    "failed_frames": 144,
+    "all_five_bridge_trainer_wins": true,
+    "existing_zero_input_recovery_admitted": true,
+    "new_source_change": false,
+    "original_failure_preserved": true
+  },
+  "verified_bill_milestone": {
+    "segment": 15,
+    "ordinal": 4,
+    "native_ticket_verified": true,
+    "model_or_support": "native phase completion; selection receipt retained, not claimed independently learned strategic ordering"
+  },
+  "evolution_transport_boundary": {
+    "legacy_attempts": [
+      {
+        "segment": 15,
+        "failed_actions": 176,
+        "failed_frames": 11772
+      },
+      {
+        "segment": 16,
+        "failed_actions": 118,
+        "failed_frames": 4860
+      }
+    ],
+    "legacy_combat": "nonlearned resource transport move controller; no all-party loss; original failed terminals and costs remain",
+    "base_router_revision05_insufficient": true,
+    "shared_constructor_fix_revision06": true,
+    "retained_route6_recovery": {
+      "segment": 17,
+      "battle": 1,
+      "battle_won": true,
+      "decision_count": 5,
+      "player_turn_count": 4,
+      "forced_switches": 1,
+      "teacher_queries": 0,
+      "memory_write_actions": 0,
+      "verified_normal_restoration": true,
+      "native_cash_after": 6916
+    },
+    "new_selected_evolution": {
+      "segment": 17,
+      "ordinal": 3,
+      "mode": "model_exploration",
+      "candidate_count": 3,
+      "selected_kind": "evolve",
+      "route_battles_won": [
+        2,
+        3
+      ],
+      "battle_decisions": [
+        20,
+        8
+      ],
+      "goal_completion_pending": true
+    }
+  },
+  "closed_continuation": {
+    "plan_revision": 7,
+    "source_edits": {
+      "src/pokemon_red_completion/red_native_player.py": "42110ffcc756da7b181067d47bcf80327f3895ae47e76116e7fa2ccb33082fe3",
+      "src/pokemon_red_completion/red_player_field_goals.py": "f74fdd70f49b1a74eea1c8ff14da78b5bad33874637d7ef0a1aca0b2d9844eb8",
+      "src/pokemon_red_completion/red_player_engaged_story.py": "d2416cbff01474d78326331e7249c6c68c90391d84ab9c36ed5b2a08bc42cf7f",
+      "src/pokemon_red_completion/red_goal_skills.py": "98d9f83dfe6363a8046e37564b687a7a636a61d754368724b8156663dba5427a",
+      "src/pokemon_red_completion/red_integrated_play.py": "39c7adea4cdc539ad48ebe7c6095b96288475313874010a958888676a69c1fe8",
+      "src/pokemon_red_completion/surge.py": "480094ccce81de29855d282654f1577a6508720d63501504bf958b3bde3ca0ec",
+      "src/pokemon_red_completion/red_player_collection_options.py": "61a71621808e718e3e323f92dd3a862981020332ac0964041514ebe36a5beae7",
+      "src/pokemon_red_completion/red_level_evolution_options.py": "ffd82954bdd2eefc4f0962548621fde371185ed9ff50139fcf51ee1cbb965c01",
+      "src/pokemon_red_completion/red_item_evolution_options.py": "b156b1dcffea85c8856b545166fe0a2e0bf8f673e86970bfe662118efcb11c24",
+      "src/pokemon_red_completion/red_player_early_story_options.py": "f29a6cbfbcfa44ecd14325b2d9be1fef4009fa3f81aa041d401d17dbab374510"
+    },
+    "private_helper_count": 170,
+    "private_helper_aggregate": "79eb7f2c14968a54c95faf6d8cc6a44084f7f61e813ed6c09206149fcab22508",
+    "partition": "development",
+    "assisted": true,
+    "new_origin": false,
+    "exit_code": 0
+  },
+  "final_verification": {
+    "cold_inspection": "016",
+    "state_sha256": "c528d79e80f2da8e8cd51066856eac7127b59b05f139048cf2193f3ebff86465",
+    "passed": true,
+    "inputs": 0,
+    "frames": 0,
+    "frozen_files": 7158,
+    "environment_files": 4512,
+    "continuation_pins": 262,
+    "all_pins_verified": true,
+    "all_native_workers_stopped": true
+  },
+  "verified_surge_milestone": {
+    "segment": 22,
+    "step": 36,
+    "goal_ownership": "forced_singleton",
+    "comparative_goal": false,
+    "goal_model_queries": 0,
+    "battle_actor": "existing learned actor",
+    "battle_decisions": 8,
+    "battle_turns": 6,
+    "attacks": 6,
+    "switch_prompts": 2,
+    "voluntary_switches": 0,
+    "forced_switches": 0,
+    "nonexecuted_actions": 0,
+    "teacher_queries": 0,
+    "memory_writes": 0,
+    "badge_bits": 7,
+    "badge_item": 4,
+    "tm_item": 224,
+    "defeat_event": 359,
+    "reward_event": 358,
+    "payout": 2376,
+    "cash_before": 8856,
+    "cash_after": 11232,
+    "hidden_puzzle_lock_indices_read": false
+  },
+  "verified_evolution_and_cut": {
+    "blastoise": {
+      "segment": 19,
+      "step": 2,
+      "national": 9,
+      "level": 36,
+      "registrations_before": 12,
+      "registrations_after": 13
+    },
+    "pidgeot": {
+      "segment": 20,
+      "step": 6,
+      "national": 18,
+      "level": 36,
+      "registrations_before": 13,
+      "registrations_after": 14,
+      "aggregate_support_wild_battles": 243,
+      "heals": 9
+    },
+    "cut": {
+      "segment": 20,
+      "step": 12,
+      "events": [
+        1505,
+        1504
+      ],
+      "hm01_verified": true,
+      "taught_step": 13,
+      "agent_train_row": false
+    },
+    "rival": {
+      "segment": 20,
+      "step": 4,
+      "comparative_goal": true,
+      "candidates": 2,
+      "learned_battle_decisions": 13,
+      "turns": 10,
+      "payout": 1300,
+      "voluntary_switches": 1,
+      "teacher_queries": 0,
+      "memory_writes": 0
+    }
+  },
+  "selection_diagnostic": {
+    "segment": 21,
+    "step": 14,
+    "total_candidates": 7,
+    "preparation_candidates": 6,
+    "unique_preparation_feature_vectors": 1,
+    "story_score": 4.508788255657041,
+    "preparation_score": 4.115066969912652,
+    "story_probability": 0.18430999070764897,
+    "preparation_total_probability": 0.815690009292351,
+    "interpretation": "Candidate-level sampling gives duplicate identical-input preparation alternatives extra aggregate mass despite the higher individual story score. Finite preparation subsequently permits progress; no infinite-loop claim.",
+    "selector_changed": false,
+    "captain_detour": {
+      "segment": 20,
+      "step": 6,
+      "captain_probability": 0.5307421329398196,
+      "selected_evolution_probability": 0.16576420745499618,
+      "highest_ranked": "captain"
+    }
+  },
+  "data_gaps": {
+    "legacy_inner_wild_training": "Rule-based support. Aggregate exposure and XP/healing retained; no detailed learned battle decision journal for these turns.",
+    "existing_sinks_available": [
+      "decision_sink",
+      "candidate_decision_sink",
+      "execution_summary_sink"
+    ],
+    "unknown_causes": "Do not infer critical-hit,miss,speed or controller causes without corresponding native events.",
+    "parameter_learning": "No new TRAIN rows, fits, adoption or weights; DEVELOPMENT journals are diagnostics, not fitting labels."
+  },
+  "next_work": "Authenticate actual022 and continue this earned ancestry toward Lavender/Celadon/Erika using151 and existing actors. If preparation aliases again dominate, assess exact-input group-normalized sampling as an explicitly prospective policy change, not an invisible repair. Reuse existing training data sinks if detailed wild-turn logging is needed. No new learner/logger, restart, save edit, DEVELOPMENT fit or publication."
+}

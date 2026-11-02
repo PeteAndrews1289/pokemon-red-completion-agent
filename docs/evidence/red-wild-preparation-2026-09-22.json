@@ -1,0 +1,171 @@
+{
+  "actions": 797,
+  "cash_after": 4583,
+  "cash_before": 4583,
+  "envelope_sha256": "d9ddfc1c3b7e9b16d747defa0154cd44a402473e85d645c2c826ad7170687e34",
+  "episodes": [
+    {
+      "actions": {
+        "attack": 1,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 1
+      },
+      "decisions": 2,
+      "metrics": {
+        "attack_turn_utility_sum": 3,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 0,
+        "party_pp_spent": 1,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 3666167,
+        "policy_latency_ns_mean": 2138375,
+        "policy_latency_ns_min": 610583,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "76afc9c4009fc3612f6852a7ad3a9d6f42c9bbd1b2c6ea68e8ec11baba3e7ca8",
+      "stage": 63
+    },
+    {
+      "actions": {
+        "attack": 1,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 1
+      },
+      "decisions": 2,
+      "metrics": {
+        "attack_turn_utility_sum": 2.9473684210526314,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 4,
+        "party_pp_spent": 1,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 2371667,
+        "policy_latency_ns_mean": 1462479,
+        "policy_latency_ns_min": 553291,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "83dab7acb74a558547bc4b50477ef958e51ebbb1d5925cd5a34f39873d8b4d59",
+      "stage": 64
+    },
+    {
+      "actions": {
+        "attack": 3,
+        "forced_switch": 0,
+        "switch_prompt": 0,
+        "voluntary_switch": 3
+      },
+      "decisions": 6,
+      "metrics": {
+        "attack_turn_utility_sum": 3,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 10,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 3972084,
+        "policy_latency_ns_mean": 1410660,
+        "policy_latency_ns_min": 598500,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "4ca4b0679b846263471fc6d14dfa1e4082f343e826538d21f6b08fd2431abe72",
+      "stage": 65
+    }
+  ],
+  "faints": 0,
+  "fits": 0,
+  "frames": 48660,
+  "learned_preparation": false,
+  "model_decisions": 10,
+  "native_audit_frames": 0,
+  "net_income": 0,
+  "origin_sha256": "b22dd2ddc260efb875f1a5e64cb54a3b12c71681328b75ec485f871e9ab6a303",
+  "partition": "DEVELOPMENT",
+  "party": [
+    {
+      "level_after": 45,
+      "level_before": 45,
+      "species_id": 28,
+      "xp_gained": 0
+    },
+    {
+      "level_after": 24,
+      "level_before": 24,
+      "species_id": 64,
+      "xp_gained": 210
+    },
+    {
+      "level_after": 24,
+      "level_before": 23,
+      "species_id": 59,
+      "xp_gained": 141
+    },
+    {
+      "level_after": 26,
+      "level_before": 26,
+      "species_id": 104,
+      "xp_gained": 35
+    }
+  ],
+  "purchases": 0,
+  "sales": 0,
+  "schema": "pokemon.red.wild-preparation-native.v1",
+  "stages": [
+    {
+      "actions": 243,
+      "cash": 4583,
+      "frames": 14004,
+      "seconds": 0.7595698330551386,
+      "sha256": "8203add7091db8f458a0804f963a8280282efa3c89a5a99a1dd7297155dc59fa",
+      "stage": 63
+    },
+    {
+      "actions": 237,
+      "cash": 4583,
+      "frames": 13788,
+      "seconds": 0.7637465000152588,
+      "sha256": "2f1a6526443b35a3688a23b03076ba0376867027641835769264379896bb0853",
+      "stage": 64
+    },
+    {
+      "actions": 317,
+      "cash": 4583,
+      "frames": 20868,
+      "seconds": 1.1560367080383003,
+      "sha256": "f782af104c984a3e47e1fa2f599544e81f2b78c2638d61b7cda5d02256f5ecc1",
+      "stage": 65
+    }
+  ],
+  "terminal_sha256": "f782af104c984a3e47e1fa2f599544e81f2b78c2638d61b7cda5d02256f5ecc1",
+  "trainees_rotated": 3,
+  "verified": {
+    "attacks_reprojected": 5,
+    "controls_recomputed": 5,
+    "switches_recomputed": 5
+  },
+  "whole_excursion_seconds": 2.6793530411086977,
+  "wild_wins": 3,
+  "teacher_training_battle_choices": 0,
+  "navigation_authority": "Existing bounded teacher navigation and transit flee support; not learned retreat.",
+  "native_run_source_commit": "a87649d7",
+  "targeted_tests_passed": 376,
+  "private_native_audit_sha256": "689df3cdbf958c4e89c598ce68259f2fdf58a280252ec4148b6c3882625e9c9c",
+  "stop_reason": "three_outing_pilot_consumed",
+  "all_six_pre_post_states_full_hp_status_pp": true,
+  "story_objectives_delta": 0,
+  "registrations_delta": 0,
+  "limitations": [
+    "Three Route11 wild wins are narrow DEVELOPMENT execution, not broad wild qualification.",
+    "Teacher chooses training, trainee, venue, navigation and recovery; no strategic preparation fit.",
+    "One encounter per heal verified recovery, not efficient sustained grinding.",
+    "No natural evolution or wild forced-switch occurred; capture controllers unchanged."
+  ]
+}

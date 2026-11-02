@@ -696,3 +696,29 @@ def scripted_species(rom: bytes) -> frozenset[int]:
     """Every species a parsed scripted route directly yields."""
 
     return frozenset(item.species for item in scripted_acquisitions(rom))
+
+
+def route16_snorlax_consumption_flag(rom: bytes) -> int:
+    """Authenticate the second Snorlax script's consumed bit, not fight-pending.
+
+    Raw cartridge operands remain in this decoder. Semantic capture callers
+    receive only the verified event index.
+    """
+    from .gen1_trainer_sight import EVENT_FLAGS_START
+
+    map_id = 27
+    bank = rom[MAP_HEADER_BANKS + map_id]
+    header = bank_offset(
+        bank, int.from_bytes(rom[MAP_HEADER_POINTERS+54:MAP_HEADER_POINTERS+56], "little")
+    )
+    script = bank_offset(bank, int.from_bytes(rom[header+7:header+9], "little"))
+    span = rom[script:script+165]
+    if (
+        span.count(bytes.fromhex("21e0d7cb4ec21932cb46cb86ca1932")) != 1
+        or span.count(bytes.fromhex("21e0d7cbcecdd73d")) != 1
+    ):
+        raise CartridgeReadError("Route16 Snorlax consumed-bit script differs")
+    flag = (0xD7E0-EVENT_FLAGS_START)*8+1
+    if flag != 0x4C9:
+        raise CartridgeReadError("Route16 Snorlax event indexing differs")
+    return flag

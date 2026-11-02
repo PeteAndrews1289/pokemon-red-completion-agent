@@ -26,6 +26,57 @@ from .route_executor import (
 )
 from .route_plan import RoutePlan
 
+
+def safari_departure_within_steps(plan: RoutePlan, reader: PokemonRedStateReader) -> bool:
+    """Do not advertise an exit that the paid-session timer will interrupt."""
+    session = reader.read_safari_session_state()
+    if not session.in_safari_zone:
+        return True
+    steps = 0
+    for step in plan.steps:
+        if step.source_map == SAFARI_GATE_MAP_ID:
+            break
+        steps += 1
+    # The existing Safari escape controller also needs sixteen steps of headroom.
+    return not session.safari_game_over and steps + 16 < session.safari_steps
+
+
+@dataclass
+class RedSafariDepartureInterruptionHandler:
+    """Use Safari RUN in the park, ordinary recovery only after departure."""
+
+    controller: object
+    executor: RouteActionPort
+    reader: PokemonRedStateReader
+    fallback: InterruptionHandler
+    safari_handler: object = field(init=False)
+
+    def __post_init__(self):
+        from .red_safari_fishing import SafariFishingInterruptionHandler
+
+        self.safari_handler = SafariFishingInterruptionHandler(
+            self.controller, self.executor, self.reader
+        )
+
+    def observe_native_field_boundary(self) -> None:
+        from .route_executor import observe_native_field_boundary
+
+        observe_native_field_boundary(self.fallback)
+
+    @property
+    def handled_hazard_kinds(self):
+        return getattr(self.fallback, "handled_hazard_kinds", frozenset())
+
+    @property
+    def handled_interruption_kinds(self):
+        return getattr(self.fallback, "handled_interruption_kinds", frozenset())
+
+    def handle(self, interruption):
+        if (interruption.interruption == "wild_battle"
+                and self.reader.read_safari_session_state().in_safari_zone):
+            return self.safari_handler.handle(interruption)
+        return self.fallback.handle(interruption)
+
 SAFARI_CENTER_MAP_ID = int(MapId.SAFARI_ZONE_CENTER)
 SAFARI_GATE_MAP_ID = int(MapId.SAFARI_ZONE_GATE)
 SAFARI_CENTER_EXIT_Y = 25
@@ -124,6 +175,11 @@ class RedSafariExitDialogueHandler:
     settle_limit: int = SAFARI_EXIT_SETTLE_LIMIT
     wait_frames: int = SAFARI_EXIT_WAIT_FRAMES
     evidence: list[InterruptionReceipt] = field(default_factory=list, init=False)
+
+    def observe_native_field_boundary(self) -> None:
+        from .route_executor import observe_native_field_boundary
+
+        observe_native_field_boundary(self.fallback)
 
     @property
     def handled_hazard_kinds(self) -> frozenset[str]:
@@ -247,7 +303,73 @@ class RedSafariExitDialogueHandler:
             raise RouteExecutionError("active Safari exit left its gate corridor")
 
 
+def retained_safari_exit_binding(runtime, actions):
+    """Finish an already-entered exit prompt; never initiate a park departure.
+
+    A selected route has crossed the park's exit warp. Cancellation would
+    undo that committed transition. Reuse its exact Yes/No and auto-walk
+    verification, without another resource goal, target or admission fee.
+    """
+    from hashlib import sha256
+
+    from .goal_manager import GoalFailureReason, GoalKind
+    from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
+    from .red_routed_recovery import guarded_collection_route_handler
+
+    if getattr(runtime, "safari_departure_recovery", False) is not True:
+        return None
+    raw = runtime.reader.read()
+    if (raw.map_id != SAFARI_GATE_MAP_ID or raw.player_y != SAFARI_GATE_ENTRY_Y
+            or raw.player_x not in SAFARI_GATE_LANES):
+        return None
+    interruption = TraversalSnapshot(raw.map_id, (raw.player_y, raw.player_x),
+                                     False, "scripted_dialogue")
+    handler = RedSafariExitDialogueHandler(
+        actions, runtime.reader, guarded_collection_route_handler(
+            actions, runtime.reader, route_name="retained paid-Safari exit",
+            maximum_scripted_dialogues=1),
+    )
+    if not handler._is_active_safari_prompt(interruption, raw):
+        return None
+    source = runtime.emulator.save_state_bytes()
+    used, terminal, report = False, None, None
+
+    def execute():
+        nonlocal used, terminal, report
+        if used or runtime.emulator.save_state_bytes() != source:
+            raise ValueError("retained Safari exit is stale or consumed")
+        used = True
+        a0, f0 = actions.actions_executed, runtime.emulator.frame_count
+        receipt = handler.handle(interruption)
+        runtime.adapter.party_guard.verify_active_roster_restored()
+        terminal = runtime.emulator.save_state_bytes()
+        report = GoalExecutionReport(
+            actions.actions_executed - a0, runtime.emulator.frame_count - f0,
+            dict(retained_safari_exit=dict(receipt.details), completed_committed_exit=True,
+                 supplied_not_learned=True, training_examples=0),
+        )
+        return report
+
+    def verify(receipt):
+        current = runtime.reader.read()
+        return (GoalVerification.succeeded()
+                if report is not None and receipt is report
+                and runtime.emulator.save_state_bytes() == terminal
+                and runtime.reader.read_input_readiness().ready
+                and not runtime.reader.read_bottom_dialogue_box_visible()
+                and current.battle_state == 0
+                and not _event_is_set(current.event_flags, EventFlag.IN_SAFARI_ZONE)
+                and not _event_is_set(current.event_flags, EventFlag.SAFARI_GAME_OVER)
+                else GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED))
+
+    return ExecutableGoalBinding(
+        "pokemon.red:retained-safari-exit:" + sha256(source).hexdigest(),
+        GoalKind.RECOVER_CONTROL, 0.01, 0.0, execute, verify, maximum_cash_debit=0,
+    )
+
+
 __all__ = [
     "RedSafariExitDialogueHandler",
     "normalize_active_safari_exit_plan",
+    "retained_safari_exit_binding",
 ]

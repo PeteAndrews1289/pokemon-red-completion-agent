@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red.player-first-native-train-evidence.v1",
+  "origin_commit": "c52737e6aebd60e8dc8374b713c457e026e50d5f",
+  "origin_plan_sha256": "ea0a7d1f5e371f051d2a9d11e4c2d8e7b4f4a78f4f213679e3da7e178c2c84f7",
+  "origin_audit_sha256": "f4e0caed5928182ee8cbc4f4b21affeb5500395a8b66038441d9b721d5371374",
+  "origins": {
+    "train": 1,
+    "reserved_comparison": 2,
+    "actions": 534,
+    "frames": 63781,
+    "state_loads_during_creation": 0,
+    "policy_queries": 0
+  },
+  "pilot": {
+    "attempts_including_preflight_failure": 3,
+    "admitted_native_train_lessons": 2,
+    "teacher_selected": true,
+    "family": "recovery_vs_continuation",
+    "setup_writes": 8,
+    "setup_actions": 13,
+    "setup_frames": 624,
+    "lesson_actions": 28,
+    "lesson_frames": 2016,
+    "hp_before": 1,
+    "hp_after": 20,
+    "cash_spent": 0,
+    "items_spent": 0,
+    "experience_delta": 0,
+    "registration_delta": 0,
+    "result_sha256": "1e230982d9a045fe88bc75d11c6389624595eabeccc028674e38488f2255c34f",
+    "declaration_sha256": "a1c94e8eafc053c88c71c34ebbb4f7f387741ba45a8f5c1de91081516cf8f64a",
+    "outcome_sha256": "8ea0b71493c419663b5d57a76fe2d5a2bc07efcc11ed6aa2cb71fba63d9e205b",
+    "audit_sha256": "2107c8e4c5b03a5b8ba89958a7cd190f2ea6c0134e3f64ae5a53dd957bf44ce0"
+  },
+  "story_lesson": {
+    "family": "story_vs_development",
+    "objective": "receive_pokedex",
+    "actions": 546,
+    "frames": 42816,
+    "completed_objectives_before": 3,
+    "completed_objectives_after": 4,
+    "level_before": 5,
+    "level_after": 6,
+    "experience_delta": 67,
+    "cash_before": 3000,
+    "cash_after": 3175,
+    "setup_writes": 0,
+    "combat_authority": "existing deterministic teacher",
+    "teacher_selected": true,
+    "declaration_sha256": "0a747b37fe77c36b6b698898473c22578780b63391945e2fc1bb6b753b055271",
+    "outcome_sha256": "c8d1ed8d795cf564baf5485143c1ae604e852296b7d0defacd0647a6506cfc4b",
+    "audit_sha256": "3a2342413046004273946133715d54d78730f103794895c470493034ba83c6d6"
+  },
+  "verification": {
+    "targeted_tests_passed": 401,
+    "mypy_source_files": 648,
+    "ruff_passed": true,
+    "full_suite_run": false
+  },
+  "production_fits": 0,
+  "high_level_model_choices": 0,
+  "comparison_policy_queries": 0,
+  "original_origins_unchanged": true,
+  "limitations": [
+    "Assisted teacher-selected recovery is data, not learned improvement.",
+    "Independent initializations share cartridge and bootstrap, not a statistical independence claim.",
+    "Preflight failure retained; successful lesson continued its actual prepared endpoint.",
+    "Native lesson pins its actual uncommitted code bundle, not a clean origin commit.",
+    "Multi-family pilot, native changing-battle-history qualification, candidate fit and comparison remain incomplete."
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "actual_first_native_state_sha256": "3170391a60fc576a551df8781b6adca6da7ecbdbb68497630420a3a01a4f9957",
+  "actual_first_state_byte_exact": true,
+  "actual_manifest_sha256": "377128a3d54bdc8d1f377ecb218b502659e6758f292277a336fd9d75e4076f9b",
+  "actual_native_latest": {
+    "badges": 7,
+    "cash": 70,
+    "completed_choices": 50,
+    "counts_can_lag_open_segment": true,
+    "execution_errors": 0,
+    "last_closed_receipt_sha256": "256cb3bac016c1748b9e83dce8deccafe70a5f7118317d593b8cb82a657a6ca9",
+    "master_ball": 1,
+    "party_levels": [
+      53,
+      48,
+      42,
+      44,
+      45,
+      52
+    ],
+    "registrations": 81
+  },
+  "actual_running": true,
+  "actual_source_checkpoint_registrations": 75,
+  "actual_training_xp_samples": [
+    {
+      "actor": "rule_based_support",
+      "experience_after": 29882,
+      "experience_before": 29791,
+      "experience_gained": 91,
+      "map_id": 197,
+      "recipient_species_id_after": 58,
+      "recipient_species_id_before": 58,
+      "source": "native_level_evolution"
+    },
+    {
+      "actor": "rule_based_support",
+      "experience_after": 29984,
+      "experience_before": 29882,
+      "experience_gained": 102,
+      "map_id": 197,
+      "recipient_species_id_after": 58,
+      "recipient_species_id_before": 58,
+      "source": "native_level_evolution"
+    }
+  ],
+  "authority": {
+    "changed_execution_support_disclosed": true,
+    "configuration_unchanged": true,
+    "fits": 0,
+    "goal_and_battle_models_unchanged": true,
+    "manual_actual_inputs": 0,
+    "new_weights": 0,
+    "operator_actual_targets": 0,
+    "runtime_llm_calls": 0,
+    "train_examples": 0
+  },
+  "candidate_manifest_sha256": "a5802d25fed3c30edec8e03e1d15e221a158cafe32a8c5710e5267112caaadef",
+  "completed_actual_checkpoints": 2,
+  "fresh_zero_load_acceptance": false,
+  "full_completion_proven": false,
+  "historical_archive_transfer_complete": false,
+  "latest_complete_actual_spent": {
+    "actions": 784662,
+    "cash_debits": 85414,
+    "decisions": 922,
+    "frames": 64932351,
+    "heals": 886,
+    "seconds": 14777.130222019403
+  },
+  "observed_at_utc": "2026-10-16T23:29:14.516117+00:00",
+  "original_assertion_reproduced": true,
+  "original_battle_actions": 48,
+  "original_battle_frames": 4356,
+  "original_battle_terminal_sha256": "0368a4f16e7030869f28573b8d625b57897eb3a91fb5a3211172e51e315ea7ea",
+  "original_cutoff_utc": "2026-10-17T07:49:36.070458+00:00",
+  "parallel_trials": "prepared; deferred until requested transfer/current-run boundaries",
+  "partition": "development",
+  "primary_failure_and_partial_costs_preserved_on_export_failure": true,
+  "qualified_checks": {
+    "execution_errors": 0,
+    "focused": 1379,
+    "ordinary_setbacks": 2,
+    "platform_bootstrap": 8,
+    "post_budget_menu_candidates": 4,
+    "strict_copied_choices": 8,
+    "supervisor": 10,
+    "targeted_not_full_suite": true
+  },
+  "recurring_monitor_recreated": false,
+  "related_copies_are_correlated": true,
+  "repair_battle_same_actions_frames_and_terminal": true,
+  "schema": "pokemon.red.windows-repair-efficiency.v1",
+  "separate_diagnostic_costs": {
+    "actions": 39539,
+    "cash_debits": 3200,
+    "decisions": 25,
+    "frames": 3090889,
+    "heals": 34,
+    "seconds": 807.6218826469994
+  },
+  "source_costs": {
+    "actions": 758216,
+    "cash_debits": 77214,
+    "decisions": 882,
+    "frames": 62995000,
+    "heals": 838,
+    "seconds": 14389.903119904404
+  },
+  "source_state_byte_exact": true,
+  "stop_handling": {
+    "controls_released": true,
+    "costs_retained": true,
+    "paired_checkpoint_registrations": 75,
+    "qualified_v3_then_explicit_same_save_continuation": true,
+    "repaired_v2_stopped_with": "menu_unavailable",
+    "scoped_zero_input_diagnosis": true
+  },
+  "training_comparison": [
+    {
+      "actions": 7335,
+      "battles": 85,
+      "evolution_complete": false,
+      "frames": 617293,
+      "heals": 4,
+      "label": "baseline",
+      "no_error": true,
+      "released": true,
+      "result_helper_passed": false,
+      "roster_restored": true,
+      "seconds": 91.68125272799989,
+      "useful_target_xp": 5293,
+      "xp_per_1000_frames": 8.574534297327201,
+      "xp_per_second": 57.732631726829496
+    },
+    {
+      "actions": 7459,
+      "battles": 87,
+      "evolution_complete": false,
+      "frames": 627459,
+      "heals": 4,
+      "label": "candidate",
+      "no_error": true,
+      "released": true,
+      "result_helper_passed": false,
+      "roster_restored": true,
+      "seconds": 91.71925210000154,
+      "useful_target_xp": 5420,
+      "xp_per_1000_frames": 8.638014595375953,
+      "xp_per_second": 59.09337326574111
+    },
+    {
+      "actions": 7775,
+      "battles": 82,
+      "evolution_complete": false,
+      "frames": 618670,
+      "heals": 8,
+      "label": "guarded-candidate",
+      "no_error": true,
+      "released": true,
+      "result_helper_passed": false,
+      "roster_restored": true,
+      "seconds": 91.83619132400054,
+      "useful_target_xp": 8437,
+      "xp_per_1000_frames": 13.637318764446313,
+      "xp_per_second": 91.87009912283969
+    }
+  ],
+  "training_comparison_limit": "One correlated exposed-source pair; both partial evolution, more healing; not a promised whole-run speedup.",
+  "useful_recipient_xp_per_second_improvement": 0.5913028104718434
+}

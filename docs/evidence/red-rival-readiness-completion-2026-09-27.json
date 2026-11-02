@@ -1,0 +1,119 @@
+{
+  "schema": "pokemon.red.rival-readiness-completion-result.v1",
+  "partition": "development",
+  "assisted": true,
+  "independent_origins": 1,
+  "source_commit": "d7e65338",
+  "source_bundle_sha256": "b408ae8cc7f7537d48c007712d4f8ee3b1d8b8dca611c96d70bcc71e3afe5e6b",
+  "plan_sha256": "fc118a60c093bd83bceba2c462819ef2c271acca1a909913c244f6ee3a08cc2f",
+  "result_sha256": "42afad9da798f155428057133ced4241894d6599f2404e773b44bf6ca7d9e753",
+  "audit_sha256": "4b01580829763d1411c7cee1a330d6ddb1523bb2f866b168c08a1623f206353b",
+  "prior_evidence": "docs/evidence/red-rival-readiness-test-2026-09-27.json",
+  "models": {
+    "k": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+    "damage": "4ea4cfde342406d55e54650572fd9a7991c7fa5216698ff3ecf62109284398c3"
+  },
+  "completed": true,
+  "remaining_unattempted": 0,
+  "completion_cases": 14,
+  "completion_wins": 3,
+  "completion_losses": 11,
+  "completion_invalids": 0,
+  "combined_attempts": 16,
+  "combined_valid_battles": 15,
+  "combined_wins": 3,
+  "combined_losses": 12,
+  "combined_infrastructure_invalids": 1,
+  "primary_offsets": [
+    4,
+    8,
+    12
+  ],
+  "primary": [
+    {
+      "party": "current",
+      "arm": "k",
+      "wins": 0,
+      "trials": 3,
+      "opponent_kos": [
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "party": "current",
+      "arm": "damage",
+      "wins": 0,
+      "trials": 3,
+      "opponent_kos": [
+        2,
+        2,
+        3
+      ]
+    },
+    {
+      "party": "reserves15",
+      "arm": "k",
+      "wins": 1,
+      "trials": 3,
+      "opponent_kos": [
+        3,
+        3,
+        4
+      ]
+    },
+    {
+      "party": "reserves15",
+      "arm": "damage",
+      "wins": 2,
+      "trials": 3,
+      "opponent_kos": [
+        4,
+        3,
+        4
+      ]
+    }
+  ],
+  "secondary_reserves_offset0": {
+    "k": "loss",
+    "damage": "loss"
+  },
+  "prespecified_signal_extra_wins": 2,
+  "readiness_signal_met": {
+    "k": false,
+    "damage": true
+  },
+  "policy_signal_met": {
+    "current": false,
+    "reserves15": false
+  },
+  "native_decisions": 324,
+  "independently_replayed_choices": 324,
+  "native_actions": 3858,
+  "native_frames": 330132,
+  "native_batch_wall_seconds": 19.12670625001192,
+  "policy_latency_ms": {
+    "mean": 1.6927331543209876,
+    "maximum": 4.888084
+  },
+  "audit_passed": true,
+  "audit_controller_inputs": 0,
+  "audit_frames": 0,
+  "fixture_differing_ram_bytes": 20,
+  "fixture_difference_only_reserve_slots": [
+    2,
+    3
+  ],
+  "original_input_failure_preserved": true,
+  "originals_unchanged": true,
+  "training_rows": 0,
+  "fits": 0,
+  "adoptions": 0,
+  "authority_promotions": 0,
+  "story_progress": 0,
+  "registrations": 0,
+  "gameplay_running": false,
+  "publication": false,
+  "next_decision": "Rival readiness comparison complete: primary current-party wins K0/3,damage0/3;stronger reserves K1/3,damage2/3. Readiness signal met only for damage;policy replacement threshold not met. Keep K and defer sequence learning. Next scope one useful-reserve preparation offer using existing semantic readiness and executors;do not force grinding or refit from DEVELOPMENT. See docs/work-sessions/2026-09-27-rival-readiness-completion-result.md."
+}

@@ -1,0 +1,397 @@
+{
+  "schema": "pokemon.red.champion-recovery-feasibility.v1",
+  "session_kind": "read_only_maintenance",
+  "source_commit": "8e0595bb2ef0f30c39ba7400c87380d6d05f54ff",
+  "campaign_stage": 463,
+  "source_sha256": "e40e37ce679531a46b0c52839b81ee4c582fc7e7a90dc99508a615e1c58d4ab6",
+  "envelope_sha256": "d572672b1efd9b2db52d5362b6d565caabf5800fed80234ee6585bcf332e95ea",
+  "actions": 0,
+  "frames": 0,
+  "model_calls": 0,
+  "memory_writes": 0,
+  "fits": 0,
+  "new_registrations": 0,
+  "campaign_unchanged": true,
+  "campaign_next_stage_absent": true,
+  "campaign_story_objectives": 34,
+  "campaign_money": 23843,
+  "campaign_actions_remaining": 17815,
+  "default_model_changed": false,
+  "collection_registered": 109,
+  "collection_target": 124,
+  "fresh_red_acceptance": "0/5",
+  "readonly_receipt_sha256": "6a19e9acaa4789d4bbf1bce01d68353f48f4d23ec5f83ddec49a50ad55647ae9",
+  "cost_receipt_sha256": "6ab1d3c488cbd6fb6e5c35a5850f6f2dda4afae87e2146a9148419f874c32dc4",
+  "options_receipt_sha256": "17a11fa6947bb4b044caac6c89b296df0167b1c362a1244833167fd8ec893542",
+  "legal_exit": {
+    "walking_back": false,
+    "live_lance_lock_flag": true,
+    "tileset": 5,
+    "dig": false,
+    "escape_rope": false,
+    "fly": false,
+    "teleport": false,
+    "champion_forward_route_steps": 4,
+    "blackout_anchor": 9,
+    "no_free_healing_in_room": true
+  },
+  "resources": {
+    "revives_bag": 1,
+    "hp_medicine_bag": 0,
+    "pp_medicine_bag": 0,
+    "pc_potions": 7,
+    "pc_pp_medicine": 0,
+    "current_recovery": {
+      "expected_hp": 72,
+      "expected_status": 0,
+      "item": 53,
+      "party_index": 2
+    },
+    "pc_accessible_from_current_room": false,
+    "stack_withdrawal_currently_supported": false
+  },
+  "blackout_cost": {
+    "cash_loss": 11922,
+    "cash_remaining": 11921,
+    "indigo_lobby_resets_elite_four": true,
+    "reentry_requires_four_bosses_before_champion": true,
+    "intentional_loss_executed": false
+  },
+  "source_revision": "a1a22aaf84d1675bcdbaeb194592379d586d838e",
+  "source_files": {
+    "data/items/marts.asm": "d227deffbe60d8c10f0602710c6fa966c80edc7b36cb4c6ee973e42787f66f89",
+    "data/items/prices.asm": "f5c70cea9cf59239ddb2deceda59e577cfe30cf2bc36c80e5e2a8834af788d60",
+    "data/maps/headers/LancesRoom.asm": "041b46fa24afc74a7079721bff6848f609fd1a79fd6bec5aa5230f61c26159c5",
+    "data/maps/objects/LancesRoom.asm": "83a99b8da65619f82e1a0d2a7014cccbf67909bcc07df8fbe53fd4924c5aeaef",
+    "data/tilesets/escape_rope_tilesets.asm": "2a296a4e87197acf3d6b38bc46a99e2f3a2d02020221190335daa577b5d56e1e",
+    "engine/events/heal_party.asm": "f7641cc9708f9da5b8ae4e678a63f61ebb9b51bcf7abaea4a594c4cf2276cd35",
+    "engine/items/item_effects.asm": "76b570b5216bbbcf6d9528c4704d931744a3740cce88afdc4f4f8f700449dda1",
+    "engine/menus/start_sub_menus.asm": "cce764b4234f1f2a97c8062654061a7af759e5ed9567ddb9c980776166c0c8d5",
+    "scripts/IndigoPlateauLobby.asm": "daaf965bc81b08a0694c16ad1e27c67d84774848e8041f615c9cc0689b0807ff",
+    "scripts/LancesRoom.asm": "f4a19abbb7a70bf4f9402eefe158d097fcbe254c0e47f62bafc447b36d0e8b77"
+  },
+  "exact_rom_price_table_match": true,
+  "shop_stock": {
+    "CinnabarMartClerkText": [
+      {
+        "item": "ULTRA_BALL",
+        "price": 1200
+      },
+      {
+        "item": "GREAT_BALL",
+        "price": 600
+      },
+      {
+        "item": "HYPER_POTION",
+        "price": 1500
+      },
+      {
+        "item": "MAX_REPEL",
+        "price": 700
+      },
+      {
+        "item": "ESCAPE_ROPE",
+        "price": 550
+      },
+      {
+        "item": "FULL_HEAL",
+        "price": 600
+      },
+      {
+        "item": "REVIVE",
+        "price": 1500
+      }
+    ],
+    "IndigoPlateauLobbyClerkText": [
+      {
+        "item": "ULTRA_BALL",
+        "price": 1200
+      },
+      {
+        "item": "GREAT_BALL",
+        "price": 600
+      },
+      {
+        "item": "FULL_RESTORE",
+        "price": 3000
+      },
+      {
+        "item": "MAX_POTION",
+        "price": 2500
+      },
+      {
+        "item": "FULL_HEAL",
+        "price": 600
+      },
+      {
+        "item": "REVIVE",
+        "price": 1500
+      },
+      {
+        "item": "MAX_REPEL",
+        "price": 700
+      }
+    ],
+    "SaffronMartClerkText": [
+      {
+        "item": "GREAT_BALL",
+        "price": 600
+      },
+      {
+        "item": "HYPER_POTION",
+        "price": 1500
+      },
+      {
+        "item": "MAX_REPEL",
+        "price": 700
+      },
+      {
+        "item": "ESCAPE_ROPE",
+        "price": 550
+      },
+      {
+        "item": "FULL_HEAL",
+        "price": 600
+      },
+      {
+        "item": "REVIVE",
+        "price": 1500
+      }
+    ]
+  },
+  "recommended_costed_option": {
+    "cash_after_hypothetical_blackout_and_purchase": 821,
+    "cost": 11100,
+    "guaranteed_sufficient": false,
+    "no_sales": true,
+    "orders": [
+      {
+        "absolute_index": 1,
+        "item": 18,
+        "quantity": 3,
+        "unit_price": 1500
+      },
+      {
+        "absolute_index": 5,
+        "item": 53,
+        "quantity": 4,
+        "unit_price": 1500
+      },
+      {
+        "absolute_index": 4,
+        "item": 52,
+        "quantity": 1,
+        "unit_price": 600
+      }
+    ],
+    "owned_pc_potions": 7,
+    "pc_potions_not_yet_executable": "withdraw_single_pc_item rejects quantity7;stack withdrawal requires bounded implementation/qualification.",
+    "recovery_only_model_not_learned": true,
+    "shop": "Saffron"
+  },
+  "pp_trace_coverage": [
+    {
+      "available_actual463": 25,
+      "move": 44,
+      "quantity_covers_trace": true,
+      "species": 28,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 15,
+      "move": 70,
+      "quantity_covers_trace": true,
+      "species": 28,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 8,
+      "move": 58,
+      "quantity_covers_trace": true,
+      "species": 28,
+      "used_on_assisted_win": 3
+    },
+    {
+      "available_actual463": 9,
+      "move": 57,
+      "quantity_covers_trace": true,
+      "species": 28,
+      "used_on_assisted_win": 4
+    },
+    {
+      "available_actual463": 35,
+      "move": 10,
+      "quantity_covers_trace": true,
+      "species": 118,
+      "used_on_assisted_win": 1
+    },
+    {
+      "available_actual463": 40,
+      "move": 45,
+      "quantity_covers_trace": true,
+      "species": 118,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 3,
+      "move": 91,
+      "quantity_covers_trace": true,
+      "species": 118,
+      "used_on_assisted_win": 1
+    },
+    {
+      "available_actual463": 14,
+      "move": 28,
+      "quantity_covers_trace": true,
+      "species": 118,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 35,
+      "move": 64,
+      "quantity_covers_trace": true,
+      "species": 64,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 14,
+      "move": 28,
+      "quantity_covers_trace": true,
+      "species": 64,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 30,
+      "move": 15,
+      "quantity_covers_trace": true,
+      "species": 64,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 13,
+      "move": 19,
+      "quantity_covers_trace": true,
+      "species": 64,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 15,
+      "move": 29,
+      "quantity_covers_trace": true,
+      "species": 132,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 20,
+      "move": 133,
+      "quantity_covers_trace": true,
+      "species": 132,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 10,
+      "move": 156,
+      "quantity_covers_trace": true,
+      "species": 132,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 3,
+      "move": 34,
+      "quantity_covers_trace": true,
+      "species": 132,
+      "used_on_assisted_win": 3
+    },
+    {
+      "available_actual463": 35,
+      "move": 33,
+      "quantity_covers_trace": true,
+      "species": 104,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 15,
+      "move": 28,
+      "quantity_covers_trace": true,
+      "species": 104,
+      "used_on_assisted_win": 2
+    },
+    {
+      "available_actual463": 30,
+      "move": 98,
+      "quantity_covers_trace": true,
+      "species": 104,
+      "used_on_assisted_win": 0
+    },
+    {
+      "available_actual463": 23,
+      "move": 84,
+      "quantity_covers_trace": true,
+      "species": 104,
+      "used_on_assisted_win": 3
+    }
+  ],
+  "pp_quantity_covers_winning_trace": true,
+  "hp_only_win_not_proved": true,
+  "corrected_routes": [
+    {
+      "boundary": [
+        7,
+        7
+      ],
+      "forecast_only": true,
+      "label": "indigo_nurse_counter",
+      "map_id": 174,
+      "steps": 5
+    },
+    {
+      "boundary": [
+        5,
+        2
+      ],
+      "forecast_only": true,
+      "label": "indigo_clerk",
+      "map_id": 174,
+      "steps": 12
+    },
+    {
+      "boundary": [
+        5,
+        2
+      ],
+      "forecast_only": true,
+      "label": "saffron_clerk",
+      "map_id": 180,
+      "steps": 62
+    }
+  ],
+  "route_audit_correction": "Initial COSTS routes used Saffron Pokecenter182 rather than Mart180 and wrong Indigo nurse coordinate;these named verified destinations supersede only those route claims.",
+  "previous_attempt_supplies_used": {
+    "revives_before_champion": 3,
+    "super_potions": 2,
+    "full_restores": 2,
+    "additional_revive_on_losing_champion_copy": 1
+  },
+  "conditional_victory_payouts": {
+    "defeat_agatha": 5940,
+    "defeat_bruno": 5742,
+    "defeat_champion": 6435,
+    "defeat_lance": 6138,
+    "defeat_lorelei": 5544
+  },
+  "conditional_full_league_gross": 29799,
+  "league_profit_qualified": false,
+  "regression_tests_passed": 201,
+  "recommendation": "Do not rerun the consumed Champion copy or intentionally throw a fight. First qualify legitimate recovery/resupply on the retained blackout copy,including owned Potion-stack withdrawal,then bind a bounded earned attempt and conditional recovery. No execution authorized by this report.",
+  "remaining_work": [
+    "Bounded stacked-item PC withdrawal;singleton implementation cannot withdraw seven Potions.",
+    "One recovery-only diagnostic from retained native blackout endpoint:verify lobby reset,actual full recovery,stock purchases and exact costs;no battle or save edits.",
+    "Fresh earned admission for a genuine Champion attempt with retained failure and resupply/re-entry path;no forced loss or assisted copy-back."
+  ],
+  "source_links": [
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/scripts/LancesRoom.asm",
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/scripts/IndigoPlateauLobby.asm",
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/data/items/marts.asm",
+    "https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/data/items/prices.asm"
+  ]
+}

@@ -18,10 +18,12 @@ from pokemon_red_completion.party_development_rank import (
     MAX_PRIOR_SUPPORT,
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
     PartyDevelopmentCandidateSet,
     PartyDevelopmentGoal,
     VenueOperationalPrior,
     VenuePriorFeatureMode,
+    party_development_feature_names,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -34,12 +36,8 @@ PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA = (
 PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA = (
     "pokemon.core.party-development-prospective-binding.v7"
 )
-_LEGACY_PROSPECTIVE_CATALOG_SCHEMA = (
-    "pokemon.core.party-development-prospective-catalog.v6"
-)
-_LEGACY_PROSPECTIVE_BINDING_SCHEMA = (
-    "pokemon.core.party-development-prospective-binding.v6"
-)
+_LEGACY_PROSPECTIVE_CATALOG_SCHEMA = "pokemon.core.party-development-prospective-catalog.v6"
+_LEGACY_PROSPECTIVE_BINDING_SCHEMA = "pokemon.core.party-development-prospective-binding.v6"
 _PROSPECTIVE_MENU_SCHEMA = "pokemon.core.party-development-prospective-menu.v5"
 _LEGACY_PROSPECTIVE_MENU_SCHEMA = "pokemon.core.party-development-prospective-menu.v4"
 
@@ -147,9 +145,22 @@ class PartyDevelopmentProspectiveBinding:
             raise PartyDevelopmentCatalogError(
                 "legacy prospective bindings require calibrated venue priors"
             )
-        if self.feature_schema_id != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID:
+        if self.feature_schema_id not in (
+            PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+            PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+        ) or (
+            self.contract_schema == _LEGACY_PROSPECTIVE_BINDING_SCHEMA
+            and self.feature_schema_id != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+        ):
             raise PartyDevelopmentCatalogError(
                 "party-development prospective feature schema is invalid"
+            )
+        if self.feature_names_sha256 != _feature_names_sha256(
+            party_development_feature_names(self.feature_schema_id),
+            feature_schema_id=self.feature_schema_id,
+        ):
+            raise PartyDevelopmentCatalogError(
+                "party-development prospective binding digest differs: feature names"
             )
         count = len(self.candidate_feature_sha256)
         if (
@@ -163,8 +174,7 @@ class PartyDevelopmentProspectiveBinding:
             )
             or any(not isinstance(value, bool) for value in self.candidate_available)
             or any(
-                reason is not None
-                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                reason is not None and not isinstance(reason, PartyDevelopmentUnavailableReason)
                 for reason in self.candidate_unavailable_reasons
             )
             or sum(self.candidate_available) < 2
@@ -263,9 +273,7 @@ class PartyDevelopmentProspectiveBinding:
         if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
             raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
         if not isinstance(venue_prior_feature_mode, VenuePriorFeatureMode):
-            raise PartyDevelopmentCatalogError(
-                "venue-prior feature mode must be typed"
-            )
+            raise PartyDevelopmentCatalogError("venue-prior feature mode must be typed")
         if (
             not isinstance(venue_priors, tuple)
             or len(venue_priors) != len(candidate_set.candidates)
@@ -295,8 +303,7 @@ class PartyDevelopmentProspectiveBinding:
             not isinstance(unavailable_reasons, tuple)
             or len(unavailable_reasons) != len(available)
             or any(
-                reason is not None
-                and not isinstance(reason, PartyDevelopmentUnavailableReason)
+                reason is not None and not isinstance(reason, PartyDevelopmentUnavailableReason)
                 for reason in unavailable_reasons
             )
             or any(
@@ -358,10 +365,13 @@ class PartyDevelopmentProspectiveBinding:
                 index=item.candidate_index,
                 features=item.features,
                 available=available[item.candidate_index],
+                feature_schema_id=item.feature_schema_id,
             )
             for item in candidate_set.candidates
         )
-        feature_names_sha256 = _feature_names_sha256(PARTY_DEVELOPMENT_FEATURE_NAMES)
+        feature_names_sha256 = _feature_names_sha256(
+            candidate_set.feature_names, feature_schema_id=candidate_set.feature_schema_id
+        )
         evidence = (
             tuple(None for _ in venue_priors)
             if candidate_set.kind is TrainingChoiceKind.TRAINEE
@@ -379,6 +389,7 @@ class PartyDevelopmentProspectiveBinding:
             candidate_unavailable_reasons=unavailable_reasons,
             venue_prior_evidence_sha256=evidence,
             shared_venue_prior_evidence_sha256=shared_evidence,
+            feature_schema_id=candidate_set.feature_schema_id,
         )
         menu_sha256 = canonical_sha256(menu_document)
         binding_document = _binding_document(
@@ -416,6 +427,7 @@ class PartyDevelopmentProspectiveBinding:
             shared_venue_prior_evidence_sha256=shared_evidence,
             candidate_menu_sha256=menu_sha256,
             binding_sha256=canonical_sha256(binding_document),
+            feature_schema_id=candidate_set.feature_schema_id,
         )
 
     @classmethod
@@ -464,7 +476,11 @@ class PartyDevelopmentProspectiveBinding:
             expected.add("venue_prior_feature_mode")
         if (
             set(value) != expected
-            or value["feature_schema_id"] != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+            or value["feature_schema_id"]
+            not in (
+                PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+                PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+            )
             or value["private_path_fields"] != 0
             or not isinstance(venue_prior_feature_mode_value, str)
         ):
@@ -486,8 +502,7 @@ class PartyDevelopmentProspectiveBinding:
             or value["candidate_count"] != len(reasons)
             or value["candidate_count"] != len(feature_digests)
             or value["candidate_count"] != len(evidence_digests)
-            or value["available_candidate_count"]
-            != sum(item is None for item in reasons)
+            or value["available_candidate_count"] != sum(item is None for item in reasons)
         ):
             raise PartyDevelopmentCatalogError(
                 "party-development prospective binding rows are invalid"
@@ -510,19 +525,16 @@ class PartyDevelopmentProspectiveBinding:
                 feature_names_sha256=value["feature_names_sha256"],
                 kind=TrainingChoiceKind(value["kind"]),
                 goal=PartyDevelopmentGoal(value["goal"]),
-                venue_prior_feature_mode=VenuePriorFeatureMode(
-                    venue_prior_feature_mode_value
-                ),
+                venue_prior_feature_mode=VenuePriorFeatureMode(venue_prior_feature_mode_value),
                 candidate_feature_sha256=tuple(feature_digests),
                 candidate_available=tuple(item is None for item in unavailable_reasons),
                 candidate_unavailable_reasons=unavailable_reasons,
                 venue_prior_evidence_sha256=tuple(evidence_digests),
-                shared_venue_prior_evidence_sha256=(
-                    value["shared_venue_prior_evidence_sha256"]
-                ),
+                shared_venue_prior_evidence_sha256=(value["shared_venue_prior_evidence_sha256"]),
                 candidate_menu_sha256=value["candidate_menu_sha256"],
                 binding_sha256=value["binding_sha256"],
                 contract_schema=contract_schema,
+                feature_schema_id=value["feature_schema_id"],
             )
         except (TypeError, ValueError) as error:
             raise PartyDevelopmentCatalogError(
@@ -550,7 +562,12 @@ class PartyDevelopmentProspectiveBinding:
             raise PartyDevelopmentCatalogError(
                 "party-development outcome differs from its prospective identity"
             )
-        if _feature_names_sha256(example.feature_names) != self.feature_names_sha256:
+        if (
+            _feature_names_sha256(
+                example.feature_names, feature_schema_id=example.feature_schema_id
+            )
+            != self.feature_names_sha256
+        ):
             raise PartyDevelopmentCatalogError(
                 "party-development outcome differs from its prospective feature contract"
             )
@@ -572,6 +589,7 @@ class PartyDevelopmentProspectiveBinding:
                 index=item.candidate_index,
                 features=item.features,
                 available=item.available,
+                feature_schema_id=example.feature_schema_id,
             )
             for item in example.candidates
         )
@@ -585,7 +603,11 @@ class PartyDevelopmentProspectiveBinding:
 
         if not isinstance(candidate_set, PartyDevelopmentCandidateSet):
             raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
-        if candidate_set.kind is not self.kind or candidate_set.goal is not self.goal:
+        if (
+            candidate_set.kind is not self.kind
+            or candidate_set.goal is not self.goal
+            or candidate_set.feature_schema_id != self.feature_schema_id
+        ):
             raise PartyDevelopmentCatalogError(
                 "retained party-development candidate semantics differ"
             )
@@ -594,6 +616,7 @@ class PartyDevelopmentProspectiveBinding:
                 index=item.candidate_index,
                 features=item.features,
                 available=self.candidate_available[item.candidate_index],
+                feature_schema_id=item.feature_schema_id,
             )
             for item in candidate_set.candidates
         )
@@ -611,8 +634,7 @@ class PartyDevelopmentProspectiveBinding:
             "venue.prior_support",
         )
         prior_feature_indexes = tuple(
-            PARTY_DEVELOPMENT_FEATURE_NAMES.index(name)
-            for name in prior_feature_names
+            PARTY_DEVELOPMENT_FEATURE_NAMES.index(name) for name in prior_feature_names
         )
         prior_rows = tuple(
             tuple(item.features[index] for index in prior_feature_indexes)
@@ -654,6 +676,7 @@ class PartyDevelopmentProspectiveBinding:
             venue_prior_evidence_sha256=self.venue_prior_evidence_sha256,
             shared_venue_prior_evidence_sha256=(self.shared_venue_prior_evidence_sha256),
             contract_schema=self.contract_schema,
+            feature_schema_id=self.feature_schema_id,
         )
 
     def _binding_document(self) -> dict[str, object]:
@@ -712,6 +735,8 @@ class PartyDevelopmentProspectiveCatalog:
             raise PartyDevelopmentCatalogError(
                 "party-development prospective catalog needs typed bindings"
             )
+        if len({item.feature_schema_id for item in self.bindings}) != 1:
+            raise PartyDevelopmentCatalogError("prospective catalog crosses feature schemas")
         expected_binding_schema = (
             PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA
             if self.contract_schema == PARTY_DEVELOPMENT_PROSPECTIVE_CATALOG_SCHEMA
@@ -830,12 +855,18 @@ class PartyDevelopmentProspectiveCatalog:
         }
 
 
-def _candidate_feature_sha256(*, index: int, features: tuple[float, ...], available: bool) -> str:
+def _candidate_feature_sha256(
+    *,
+    index: int,
+    features: tuple[float, ...],
+    available: bool,
+    feature_schema_id: str = PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+) -> str:
     return canonical_sha256(
         {
             "candidate_index": index,
-            "feature_schema_id": PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
-            "feature_names": list(PARTY_DEVELOPMENT_FEATURE_NAMES),
+            "feature_schema_id": feature_schema_id,
+            "feature_names": list(party_development_feature_names(feature_schema_id)),
             "features": list(features),
             "available": available,
         }
@@ -897,6 +928,7 @@ def _menu_document(
     venue_prior_evidence_sha256: tuple[str | None, ...],
     shared_venue_prior_evidence_sha256: str | None,
     contract_schema: str = PARTY_DEVELOPMENT_PROSPECTIVE_BINDING_SCHEMA,
+    feature_schema_id: str = PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
 ) -> dict[str, object]:
     document: dict[str, object] = {
         "schema": (
@@ -906,12 +938,11 @@ def _menu_document(
         ),
         "kind": kind.value,
         "goal": goal.value,
-        "feature_schema_id": PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+        "feature_schema_id": feature_schema_id,
         "candidate_feature_sha256": list(candidate_feature_sha256),
         "candidate_available": list(candidate_available),
         "candidate_unavailable_reasons": [
-            None if reason is None else reason.value
-            for reason in candidate_unavailable_reasons
+            None if reason is None else reason.value for reason in candidate_unavailable_reasons
         ],
         "venue_prior_evidence_sha256": list(venue_prior_evidence_sha256),
         "shared_venue_prior_evidence_sha256": (shared_venue_prior_evidence_sha256),
@@ -970,10 +1001,14 @@ def _binding_document(
     return document
 
 
-def _feature_names_sha256(feature_names: tuple[str, ...]) -> str:
+def _feature_names_sha256(
+    feature_names: tuple[str, ...],
+    *,
+    feature_schema_id: str = PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+) -> str:
     return canonical_sha256(
         {
-            "feature_schema_id": PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+            "feature_schema_id": feature_schema_id,
             "feature_names": list(feature_names),
         }
     )

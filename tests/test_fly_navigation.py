@@ -69,7 +69,7 @@ class FakeMemory:
             return moves[slot] if slot < len(moves) else 0
         if PP_OFFSET <= offset < PP_OFFSET + 4:
             slot = offset - PP_OFFSET
-            return 20 if slot < len(moves) else 0
+            return 5 if slot < len(moves) else 0
         return 0
 
 

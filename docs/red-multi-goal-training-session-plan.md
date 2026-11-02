@@ -1,5 +1,10 @@
 # Red multi-goal training session plan
 
+> Documentation role: historical scoped plan. The original trial, budget and
+> results below retain their date-specific scope. For current work follow
+> [HANDOFF](../HANDOFF.md) and latest user direction; this page is not a dispatch.
+
+
 ## Live progress update
 
 The calibration is complete: seven admitted outcomes, four positive and three negative, from four

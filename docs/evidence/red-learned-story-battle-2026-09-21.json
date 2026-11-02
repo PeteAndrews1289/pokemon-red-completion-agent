@@ -1,0 +1,129 @@
+{
+  "actions": 623,
+  "battle_choices": 2,
+  "battle_contract": {
+    "battle_plan_id": "battle-044-silph-5f-rocket",
+    "defeated_event": 1826,
+    "map_id": 210,
+    "objective_id": "liberate_silph",
+    "trainer_identity": [
+      230,
+      30,
+      28
+    ],
+    "victory_money": 990
+  },
+  "battle_model_sha256": "e626e3435d1aa75654593535acf0e5e52a7eb7430481217a80aff3a53c191472",
+  "blackouts": 0,
+  "card_key_acquired": true,
+  "cash_after": 14410,
+  "cash_before": 13420,
+  "chapter_complete": false,
+  "collection_delta": 0,
+  "combat_items": 0,
+  "envelope_sha256": "33f80aea4a6bcfb5369a2e84b7aea49bd36630cc765334b15a0695ec2d1c500a",
+  "episode_sha256": "63df9666d3f01221aaa1e8a14c5df33fd9c577086ed25d05d243c44de07e3ecd",
+  "faints": 0,
+  "frames": 214404,
+  "full_hp": true,
+  "full_pp": false,
+  "income": 990,
+  "lead_pp": [
+    25,
+    30,
+    9,
+    24
+  ],
+  "local_registrations": 15,
+  "log": {
+    "complete": true,
+    "completed_decisions": 2,
+    "event_count": 11,
+    "event_counts": {
+      "choice_recorded": 2,
+      "decision_completed": 2,
+      "decision_started": 2,
+      "episode_started": 1,
+      "model_input_prepared": 2,
+      "run_finished": 1,
+      "run_identity": 1
+    },
+    "failed_runs": 0,
+    "incomplete_decisions": 0,
+    "last_record_sha256": "1144b73e6012c3307a25e37e24e1df441a763212da6fe4045050029b5828f9d2",
+    "schema": "pokemon.red.trainer-practice-log-verification.v1",
+    "started_decisions": 2,
+    "terminal_event": "run_finished"
+  },
+  "map_id": 210,
+  "metrics": {
+    "attack_turn_utility_sum": 3,
+    "invalid_action_failures": 0,
+    "move_suppressed_or_failed": 0,
+    "opponent_faints": 1,
+    "party_faints": 0,
+    "party_hp_lost": 0,
+    "party_pp_spent": 2,
+    "party_status_changes": 0,
+    "policy_latency_ns_max": 7767500,
+    "policy_latency_ns_mean": 4602604,
+    "policy_latency_ns_min": 1437708,
+    "teacher_interventions": 0
+  },
+  "model_goal_queries": 0,
+  "moves_selected": [
+    55,
+    58
+  ],
+  "native_audit_frames": 0,
+  "native_audit_inputs": 0,
+  "new_fits": 0,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    131,
+    59,
+    37,
+    68
+  ],
+  "party_levels": [
+    42,
+    22,
+    22,
+    25
+  ],
+  "position_yx": [
+    16,
+    20
+  ],
+  "protected_primary_goal_model_and_k_unchanged": true,
+  "purchases": 0,
+  "qualification_sha256": "5fc8b4283d36e6f4ca272ff7fa5291b984e9c7a2cd85e5c16c1a34304467370f",
+  "sales": 0,
+  "schema": "pokemon.red.learned-story-native-audit.v1",
+  "source_commit": "e217ce95ee4ddcb2e02ad58c10c2242b0821a24e",
+  "source_sha256": "2938855cef18c97af469fe903259f807edd4d6407a58c70f7242ca606dcfa703",
+  "story_objectives": 19,
+  "terminal_sha256": "58b4f6b0f8eac2cec9cf799cb76b55050942bc362c084c993483324f1e021e9a",
+  "terminal_stage": "stage-039",
+  "wall_seconds": 8.28620612504892,
+  "native_audit_sha256": "abc771ccf06ae83776cdf87a44492748303e4082ea1561e6b2fa448e73ef3efa",
+  "limitations": [
+    "One correlated DEVELOPMENT encounter against level33 Arbok with level41 Blastoise; not independent transfer or superiority.",
+    "Two attack decisions; no native switching, gym badge, rival, boss or combat-item qualification.",
+    "Explicit opt-in story phase, not replacement of all gym/story dispatchers.",
+    "No fitting or new goal decisions; navigation and Card Key pickup remain support.",
+    "Stage038 is consumed. Resume stage039 partial Silph, not the pristine full-chapter entry."
+  ],
+  "protected_counters": {
+    "primary_registrations": 109,
+    "primary_denominator": 124,
+    "primary_specimens": 78,
+    "primary_cash": 11968,
+    "goal_model": 141,
+    "fitted_outcomes": 141,
+    "successful_outcomes": 96,
+    "economy_qualified_outcomes": 58,
+    "fresh_red_acceptance": 0,
+    "league_income_qualification": 0
+  }
+}

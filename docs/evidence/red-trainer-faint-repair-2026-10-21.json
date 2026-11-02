@@ -1,0 +1,282 @@
+{
+  "actual": {
+    "actual_registration_delta": 2,
+    "authority": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/QUALIFIED-CONTINUATION-AUTHORITY.json",
+    "badges": 4,
+    "cash": 11121,
+    "completed_model_choices": 4,
+    "completed_support_choices": 9,
+    "costs": {
+      "actions": 560694,
+      "cash_debits": 29115,
+      "decisions": 557,
+      "frames": 46039565,
+      "heals": 616,
+      "seconds": 7892.718121283
+    },
+    "costs_are_lower_bounds": true,
+    "current_goal": {
+      "execution_started": false,
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/runs/segment-001/native/episode/step-013",
+      "selected_kind": null
+    },
+    "dashboard": "http://127.0.0.1:8777/watch",
+    "execution_errors": 0,
+    "first_source_byte_exact": true,
+    "id": "restored-fresh006-v90-a9-20261021-004",
+    "launch": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/LAUNCH.json",
+    "master_ball": 0,
+    "native_boundary_support_recoveries": 0,
+    "observed_at_utc": "2026-10-21T19:19:23.735067+00:00",
+    "official_acceptance": false,
+    "ordinary_setbacks": 0,
+    "original_cutoff_utc": "2026-10-22T00:08:15.503715+00:00",
+    "paired_checkpoint": {
+      "context_sha256": "432cd3d5924c17743562af78cd97b6a7a7357500d4516be73f9d088b4f547571",
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v89-a9-20261021-003/runs/segment-003",
+      "spent": {
+        "actions": 550663,
+        "cash_debits": 29115,
+        "decisions": 544,
+        "frames": 45196719,
+        "heals": 609,
+        "seconds": 7790.341861556
+      },
+      "state_sha256": "2785b910abe4deae1bba6c3d3157b26032f1645efb3128c777e3fa51420905af"
+    },
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004",
+    "plan": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/PLAN.json",
+    "progress_scope": "Closed native receipts;open activity and paired exported checkpoint are distinct.",
+    "registration_denominator": 124,
+    "registrations": 54,
+    "restored_DEVELOPMENT": true,
+    "review": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/reviews/CURRENT.json",
+    "running": true,
+    "source_registrations": 52,
+    "source_state_sha256": "2785b910abe4deae1bba6c3d3157b26032f1645efb3128c777e3fa51420905af",
+    "status": "running_restored_DEVELOPMENT"
+  },
+  "actual_terminal_authenticated": true,
+  "actual_terminal_authentication_sha256": "c74a69c797b01f00a40635f8a6de6ac0b09c663fc80d5f695f9f02abd3d9b80a",
+  "all_diagnostic_controls_processes_released": true,
+  "automatic_recovery_observation": {
+    "actions": 79,
+    "battle_won": true,
+    "error": "Gen I route cannot dismiss 'trainer_engagement'",
+    "error_retained": true,
+    "extra_loads": 0,
+    "field_ready": true,
+    "frames": 7368,
+    "qualified_handoff": true,
+    "same_emulator": true
+  },
+  "current_component_gates_met": 4,
+  "current_native_package_sha256": "2785722c4c10753d8d1f9071daaae58df655448f7d74d37068094609a4b38d50",
+  "current_post_trainer_repair": {
+    "actual_gains_imported": false,
+    "diagnostic_full_holds_seconds": 3300,
+    "frozen_tests": 686,
+    "full_suite": false,
+    "native_copies": 5,
+    "native_qualified": true,
+    "package_sha256": "71a93d3a84e9039ba80a84b0bd0d46236053680b169a31e51428874d67e48d79",
+    "profile_copies": 1,
+    "profile_inputs": 0,
+    "qualification": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/capacity-planning/restored-fresh006-v90-a9-20261021-004/CONTINUATION-QUALIFICATION.json",
+    "retained_failures": [
+      "First routecopy changed model-visible budget;stopped before substitution.",
+      "Tailcopy healed and collected,but original first-action assertion failed.",
+      "Corrected routecopy exposed missing nested setback proof."
+    ]
+  },
+  "diagnostic_copies": 5,
+  "diagnostic_full_holds_retained_seconds": 2340,
+  "diagnostic_gains_imported": false,
+  "diagnostic_root_seconds_including_preflights": 605.761531183,
+  "exact_fainted_copy": {
+    "cash_reward": 665,
+    "field_ready": true,
+    "lead_hp": 0,
+    "living_reserves": 5,
+    "normal_model_choices": 1,
+    "trainer_outcome": "won"
+  },
+  "failures_retained": [
+    "Preflight staging rejected before worker/emulator creation.",
+    "First route copy used chunk1instead of7;normal gameplay passed but intended trainer boundary was not exercised."
+  ],
+  "fresh_attempts_failed": 6,
+  "fresh_successes": 0,
+  "frozen_tests": 685,
+  "full_suite": false,
+  "goals": [
+    {
+      "finding": "Ordinary funding has narrow native evidence; sustained low-resource recovery remains open.",
+      "id": "funding_recovery",
+      "status": "in_progress"
+    },
+    {
+      "finding": "P90r3 qualifies nested trainer-faint setback,normal recovery and a subsequent model choice;exact original failed52tail continuation is running. Broader sustained/fresh reliability remains open.",
+      "id": "execution_boundaries",
+      "status": "in_progress"
+    },
+    {
+      "finding": "10.1718% end-to-end reduction across eight matched goals; not a campaign speed estimate.",
+      "id": "menu_performance",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "Prior40.35%time/36.54%frame component gain retained. New actual audit:preparation76.92%of measured phase time;all7venue choices have unknown travel/recovery costs.",
+      "id": "training_efficiency",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "1.805x worker throughput,1.741x conservative driver-inclusive comparison in one mirrored context; not independent campaign reliability.",
+      "id": "two_worker_capacity",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "One recent genuine TRAIN fit changed880parameters; scoped gain only. No fit during Cave repair,actual continuation or this audit.",
+      "id": "model_decision_quality",
+      "status": "bounded_component_pass"
+    },
+    {
+      "finding": "Six fresh attempts remain failed;0fresh successes/heldout starts. Repaired restored actual cannot retroactively pass Fresh006.",
+      "id": "autonomous_acceptance",
+      "status": "not_met"
+    }
+  ],
+  "heldout_reliability_starts": 0,
+  "human_testing_time_or_count_limit": null,
+  "independent_origins": false,
+  "menu_profile": {
+    "frames": 0,
+    "inputs": 0,
+    "new_loads": 1,
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/trainer-faint-recovery-20261021-1555/slow-menu-profile-20261021-181829/CLOSEOUT.json"
+  },
+  "models_configuration_unchanged": true,
+  "native_allowance_at_launch": 20677.07007107,
+  "new_fits": 0,
+  "new_weights": 0,
+  "next_active_work_audit_utc": "2026-10-21T18:00:19.773019+00:00",
+  "not_completion_percentage": true,
+  "observed_at_utc": "2026-10-21T19:19:41.081612+00:00",
+  "original_actor_cutoff_utc": "2026-10-22T00:08:15.503715+00:00",
+  "package_sha256": "5413bbe2267cd6a2362d9c2ee6e77a6ff7b95ade43283eb97f6aa94e91d266f7",
+  "partition": "development",
+  "passing_native_contexts": 2,
+  "path_price_test": {
+    "closeout": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/trainer-faint-recovery-20261021-1555/route-path-price-reuse-20261021-1905/CLOSEOUT.json",
+    "complete_route_parity": true,
+    "median_slowdown_percent": 2.37975,
+    "native_followup": false,
+    "own_source_edit_reverted": true,
+    "promoted": false,
+    "queries": 793
+  },
+  "per_test_approval_required": false,
+  "preceding_fly_copy": {
+    "cash_reward": 665,
+    "field_ready": true,
+    "fly_learned_wrapper_calls": 1,
+    "normal_model_choices": 2,
+    "original_chunk_ordinal": 7,
+    "trainer_outcome": "won"
+  },
+  "preparation": {
+    "all_failed_native_costs_retained": true,
+    "candidate_cost_rows_unknown": 14,
+    "development_heals": 21,
+    "evolution_heals": 91,
+    "exact_waste_fraction_known": false,
+    "explicit_cost_feature_rows": 4,
+    "independent_learning_origins_proven_from_checked_inventory": 0,
+    "input_wiring_alone_cannot_change_these_channels": true,
+    "live_model_changed": false,
+    "maximum_score_difference": 0.0,
+    "measured_phase_seconds": 1329.8113669139984,
+    "next_experiment_designed_only": true,
+    "observed_venue_choices": 7,
+    "offline_candidate_scores_compared": 14,
+    "preparation_fraction": 0.7691690698333077,
+    "preparation_phase_seconds": 1022.8497721429995,
+    "zero_weights_per_row": 16
+  },
+  "previous_actual": {
+    "actual_registration_delta": 9,
+    "badges": 3,
+    "cash": 6836,
+    "completed_model_choices": 50,
+    "completed_support_choices": 4,
+    "controls_released": true,
+    "costs": {
+      "actions": 495244,
+      "cash_debits": 21915,
+      "decisions": 447,
+      "frames": 40721751,
+      "heals": 564,
+      "seconds": 6207.369195087
+    },
+    "costs_are_lower_bounds": false,
+    "execution_errors": 2,
+    "first_source_byte_exact": true,
+    "id": "restored-fresh006-v88-a9-20261021-002",
+    "master_ball": 0,
+    "native_boundary_support_recoveries": 2,
+    "observed_at_utc": "2026-10-21T17:00:52.672657+00:00",
+    "official_acceptance": false,
+    "ordinary_setbacks": 11,
+    "progress_scope": "Authenticated paired failed terminal with all closed actual outcomes.",
+    "registration_denominator": 124,
+    "registrations": 48,
+    "restored_DEVELOPMENT": true,
+    "running": false,
+    "source_registrations": 39,
+    "source_state_sha256": "78a12487903ce3f797c965c1c34bc85b0753781fd7c8fee5af7c113d36b18e40",
+    "status": "stopped_native_execution_error",
+    "terminal_context_sha256": "a29176dd6515c87649d29aae6b16886969848b2671c38345246b8cdee7debfe1",
+    "terminal_state_sha256": "fa496b4e246585cd8e7fcee93565a2e84ed2fa2cb83167b705e95a0a452a1c51"
+  },
+  "prior_F_hold_retained_seconds": 900,
+  "recovery_cost_measurement": {
+    "evolution_frames": 7411612,
+    "exact_unsafe_helper_triggers": 80,
+    "interpretation": "26.83percent of evolution frames are inside measured recovery trips,including travel,nursing and interruptions;not a wall-time or avoidable-waste fraction.",
+    "live_package_changed": false,
+    "native_qualified": false,
+    "recovery_trip_frames": 1988676,
+    "recovery_trips": 89,
+    "source_checks": 376
+  },
+  "remaining_diagnostic_loads": 0,
+  "remaining_diagnostic_loads_scope": "Closed finite allocations only; new ordinary tests use standing human authority.",
+  "repair": "Fly onward walk now uses the already supplied learned interruption wrapper,as ordinary walking does.",
+  "runtime_llm_calls": 0,
+  "schema": "pokemon.red.trainer-faint-repair-milestone.v1",
+  "selected_runtime_source_files": 1,
+  "session": "2026-10-17-seven-goal-implementation",
+  "setup_failure_conservative_debit_seconds": 60,
+  "status_reporting_tests": 263,
+  "story_budget_repair": {
+    "current_actual_resumed": true,
+    "diagnostic_holds_seconds": 1080,
+    "error_retained": true,
+    "frozen_focused_tests": 592,
+    "full_suite": false,
+    "human_approval_pending": false,
+    "local_decision_limit_unchanged": true,
+    "local_decisions": 80,
+    "native_error": "story battle did not settle to a supported field boundary",
+    "native_qualified": true,
+    "new_native_loads": 2,
+    "package_sha256": "2785722c4c10753d8d1f9071daaae58df655448f7d74d37068094609a4b38d50",
+    "proposed_copy_loads": 1,
+    "proposed_full_hold_seconds": 360,
+    "qualified_native_model_choices": 1,
+    "selected_attacks_without_execution": 65,
+    "status_policy_changed": false,
+    "two_slot_coverage_failure_retained": true,
+    "zero_emulator_staging_failure_retained": true
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schema": "pokemon.red.later-attrition-continuation.v1",
+  "session_id": "2026-09-24-later-attrition-fit",
+  "status": "data_audited_fit_rejected",
+  "source_commit": "afafaf2a461c00059a509761fdea1247f35175b6",
+  "hashes": {
+    "plan": "1581f372410d5a1841cda751a213530c525c38f1b90fe6183f82f5f8f0c5de31",
+    "result": "1bdb6827287c64149a2ba275cff2a981e272dca6849dee28d7001e711b1ed3ac",
+    "independent_audit": "20e9a5f28e81e5d980dac9e8e86d754ae70cc31744c1605bcb563cb671c4b755",
+    "targets": "34cc2b76fa8b26e7c8ef8d832180853f59f8fcd27b0772c8acbb39c2d46c4cdf",
+    "fit": "0d4935c169f964d301cfaec9e09e691ab61d5cd1a7b84c137830061770af7d89",
+    "candidate": "99296633386aac620ec0e2635eb92429725141f71b54cca7089f5df58fd0e80f"
+  },
+  "training": {
+    "attempted_contexts": 5,
+    "new_complete_targets": 4,
+    "missing_boundary": 1,
+    "retained_late_targets": 5,
+    "combined_late_targets": 9,
+    "prior_complete_targets": 36,
+    "recent_complete_targets": 45,
+    "phases": {
+      "forced_switch": 5,
+      "main": 4
+    },
+    "new_branches": 85,
+    "new_branch_decisions": 1948,
+    "new_trajectory_decisions": 125
+  },
+  "native": {
+    "actions": 32704,
+    "complete_episode_files": 90,
+    "completed_decisions": 2073,
+    "forced_mechanics": 0,
+    "frames": 2789029,
+    "invalid_action_failures": 0,
+    "native_episodes": 90,
+    "opponent_faints": 164,
+    "party_faints": 376,
+    "party_pp_spent": 837,
+    "prescribed_first_choices": 85,
+    "selected_choices": 2073,
+    "teacher_interventions": 0,
+    "verified_terminal_slot_clearings": 1,
+    "model_owned_decisions": 1988,
+    "outcomes": {
+      "battle_won": 1,
+      "party_defeated": 89
+    },
+    "phases": {
+      "attack": 1115,
+      "forced_switch": 337,
+      "switch_prompt": 162,
+      "voluntary_switch": 459
+    },
+    "seconds_including_fit": 434.35166470799595
+  },
+  "fit": {
+    "attempts": 1,
+    "passed": false,
+    "metrics": {
+      "control": {
+        "after": 0.8891855907000004,
+        "before": 0.9821167398500001,
+        "cases": 4
+      },
+      "switch": {
+        "after": 0.5313747160857142,
+        "before": 0.5313747160857142,
+        "cases": 7
+      }
+    },
+    "control_improvement_percent": 9.462332264511986,
+    "required_percent": 10,
+    "retention_groups": 18,
+    "retention_checks": 35,
+    "retention_regressions": 0,
+    "status_predictions_identical": 591,
+    "damage_status_fixed": true,
+    "switch_exactly_unchanged": true,
+    "selected_switch_epoch": 0,
+    "reported_feasible_switch_checkpoints": 1,
+    "selected_control_epoch": 485,
+    "conditional_control_regret_after": 0,
+    "composed_proposal_gap_after": 0.8891855907000004
+  },
+  "diagnosis": {
+    "prior36_optimization_anchor_overlap": 0,
+    "prior36_still_checked_as_constraints": true,
+    "recorded_switch_checkpoints": 97,
+    "post_initial_logged_switch_checkpoints_violating_complete36": 96,
+    "hypothesis": "Train against all relevant retained lessons,not only legacy anchors;keep every acceptance gate. No proof of feasibility or future improvement."
+  },
+  "verification": {
+    "evidence_valid": true,
+    "targets_reextracted": true,
+    "model_choices_reconstructed": true,
+    "native_endpoints_reobserved": true,
+    "incomplete_episodes": 0,
+    "uncommanded_in_battle_switches": 0,
+    "controller_inputs": 0
+  },
+  "comparison": {
+    "executed": 0,
+    "unopened_teams": 24,
+    "conditional_episodes": 216
+  },
+  "tests": {
+    "focused_passed": 149,
+    "full_suite": false
+  },
+  "deltas": {
+    "new_targets": 4,
+    "fits": 1,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "campaign_state": "359a96aa",
+    "campaign_envelope": "36dbc835",
+    "unused_stage": 462,
+    "deployed_actor": "4ea4cfde",
+    "experimental_parent": "b106108e",
+    "campaign_unchanged": true
+  },
+  "limitations": [
+    "Training branches prescribe85first choices;teacher setup disclosed,all1988subsequent/trajectorychoices model-owned.",
+    "1win/89losses in deliberately attrited training branches are not candidate evaluation or general battle-strength estimates.",
+    "Constructed TRAIN teams,timing siblings and reused source roots are correlated.",
+    "Fit rejected;candidate retained but not deployed. No secondfit,comparison,campaign inputs or publication."
+  ]
+}

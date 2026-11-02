@@ -386,8 +386,9 @@ def test_field_port_rejects_closed_or_unknown_macros_before_pressing_buttons() -
     assert world.actions == []
 
 
-def test_field_port_cut_requires_exact_live_block_and_tile_acknowledgement() -> None:
-    world = CutMenuWorld()
+@pytest.mark.parametrize("holder_hp", [25, 0])
+def test_field_port_cut_requires_exact_live_block_and_tile_acknowledgement(holder_hp) -> None:
+    world = CutMenuWorld(raw=cut_state(hp=(holder_hp,)))
     port = Gen1FieldMovePort(
         cast(RouteActionPort, world),
         cast(PokemonRedStateReader, world),
@@ -493,3 +494,51 @@ def test_field_port_strength_is_idempotent_but_still_checks_capability() -> None
     with pytest.raises(Gen1FieldMoveError, match="Rainbow Badge"):
         port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "strength:activate"))
     assert missing_badge.actions == []
+
+
+class NativeStaleFrontTileCutWorld(CutMenuWorld):
+    """The retained native tree changes52to111;front-tile cache stays3d."""
+    def execute(self, action):
+        was_dialogue = self.stage == "cut_dialogue"
+        result = super().execute(action)
+        if was_dialogue and self.stage == "field":
+            self.blocks = CurrentMapBlocks(0, ((0x01, 0x6F),))
+            self.tile_in_front = 0x3D
+        return result
+
+
+def test_cut_acknowledges_exact_native_block_when_front_tile_cache_is_stale():
+    world = NativeStaleFrontTileCutWorld(blocks=CurrentMapBlocks(0, ((0x01, 0x34),)))
+    port = Gen1FieldMovePort(world, world, world, cut_block_swaps={0x34: 0x6F})
+    receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "cut:right"))
+    assert (receipt.block_before, receipt.block_after) == (0x34, 0x6F)
+    assert receipt.target_tile_before == receipt.target_tile_after == 0x3D
+    assert receipt.confirmation_count == 1
+    assert world.stage == "field" and len(port.cut_receipts) == 1
+    # Completion sends no additional confirmation into the released field.
+    assert sum(a.kind is MacroActionKind.CONFIRM for a in world.actions) == 4
+
+
+@pytest.mark.parametrize("refresh_cache", [False, True])
+def test_cut_does_not_accept_tile_cache_or_idle_state_without_block_mutation(refresh_cache):
+    class NoBlockMutation(CutMenuWorld):
+        def execute(self, action):
+            was_dialogue = self.stage == "cut_dialogue"
+            result = super().execute(action)
+            if was_dialogue and self.stage == "field":
+                self.blocks = CurrentMapBlocks(0, ((0x01, 0x35),))
+                self.tile_in_front = 0x2C if refresh_cache else 0x3D
+            return result
+    world = NoBlockMutation()
+    port = Gen1FieldMovePort(world, world, world, cut_block_swaps={0x35: 0x4C})
+    with pytest.raises(Gen1FieldMoveError, match="did not acknowledge"):
+        port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "cut:right"))
+    assert port.cut_receipts == []
+
+
+def test_cut_rejects_nonmutating_swap_before_opening_a_menu():
+    world = CutMenuWorld()
+    port = Gen1FieldMovePort(world, world, world, cut_block_swaps={0x35: 0x35})
+    with pytest.raises(Gen1FieldMoveError, match="mutating"):
+        port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "cut:right"))
+    assert not any(a.kind is MacroActionKind.OPEN_MENU for a in world.actions)

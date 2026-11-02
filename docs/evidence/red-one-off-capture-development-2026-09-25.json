@@ -1,0 +1,442 @@
+{
+  "actual_campaign_unchanged": true,
+  "actual_captures": 0,
+  "assisted": true,
+  "audit_inputs": 0,
+  "cases": [
+    {
+      "actions": 49,
+      "captured": false,
+      "case": "144-master",
+      "error": "ball turn unexpectedly changed player PP",
+      "frames": 4116,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        8
+      ],
+      "result_sha256": "9b77eaf828f9ba4a93eef8aeac5f4c3e6c838d5f207427ac0aff8549437511bc",
+      "seconds": 0.3166159169995808,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "f68c5d78fa44be166e227e39f7e669837c68fa2c8511046faccd380ec2bd798b",
+      "throws": 0
+    },
+    {
+      "actions": 49,
+      "captured": false,
+      "case": "145-master",
+      "error": "ball turn unexpectedly changed player PP",
+      "frames": 4116,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        8
+      ],
+      "result_sha256": "68be58e06ee7ed762be096fe541de3d1b9630fc75aa572865b50ecad508213fa",
+      "seconds": 0.32568916699528927,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "7f90be9564d9b2c62428d953e953b299e944560587801928ab8ed48a56f2057a",
+      "throws": 0
+    },
+    {
+      "actions": 9,
+      "captured": false,
+      "case": "145-missing-ball",
+      "error": "selected ball unavailable; encounter retained",
+      "frames": 936,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121
+      ],
+      "result_sha256": "6bd8a480b5977217d99d224ba6f8384c61c645ac9f9da7324dd7575f56f50355",
+      "seconds": 0.13757558299403172,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "8d02a95a06944426f4d90dfae18b51fbb9599e69e1323b8e8a8f81bf70239b6c",
+      "throws": 0
+    },
+    {
+      "actions": 39,
+      "captured": false,
+      "case": "145-ordinary-budget-one",
+      "error": "throw budget exhausted; live encounter retained without Run",
+      "frames": 3396,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        178,
+        156,
+        144,
+        250,
+        121
+      ],
+      "result_sha256": "d138ba1d744cb85b5300783a7978e7f2514d8fb01e8891ba4e83084187e3a395",
+      "seconds": 0.30478025000047637,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "1ae4e74210f305474e77921da05b5d2b29b01a48601820e2f8eaeee280fe7db5",
+      "throws": 1
+    },
+    {
+      "actions": 49,
+      "captured": false,
+      "case": "146-master",
+      "error": "ball turn unexpectedly changed player PP",
+      "frames": 4116,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        8
+      ],
+      "result_sha256": "717f281d2c37e46dc74432fc1b5e9472d21cb2a86cb8c6e55381416a59604416",
+      "seconds": 0.31635141700098757,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "6fec4abb09cc5cad6dda185f5adc5d7bec5f688fd1a246a7def697b9c286fde1",
+      "throws": 0
+    },
+    {
+      "actions": 51,
+      "captured": false,
+      "case": "150-master",
+      "error": "ball turn unexpectedly changed player PP",
+      "frames": 4260,
+      "packet": "red-one-off-capture-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        8
+      ],
+      "result_sha256": "38aa806f45c13465263ada7bb2912e764d264ec790579918023936f6b04bd47b",
+      "seconds": 0.32754712499445304,
+      "status_attempts": 0,
+      "target_hp": 242,
+      "terminal_sha256": "d0cb798abc2f6b143b11eef7809f9a1c0103f0d957b6dbdc72a3196b77a8b782",
+      "throws": 0
+    },
+    {
+      "actions": 53,
+      "captured": true,
+      "case": "144-master",
+      "error": null,
+      "frames": 4404,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        160
+      ],
+      "result_sha256": "e5dd91b44b8c8b3a5656ab861cdfb7e25dc5a22c17091f18b3b79ba8f6ddc918",
+      "seconds": 0.4014397499995539,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "8a9bc0dccf6d10a93ad36d2ae9ab5b6f02f6eb2754653c350c7b76e7247882c1",
+      "throws": 1
+    },
+    {
+      "actions": 53,
+      "captured": true,
+      "case": "145-master",
+      "error": null,
+      "frames": 4404,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        160
+      ],
+      "result_sha256": "35de55fb1c7cfe622387adda6ee9681c32744b2ae81f1af7d1735209e4ca2a1a",
+      "seconds": 0.4035861250013113,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "d6bfce10ffa2855f859cc8e5a2b03596e01e947ec25181e259ed40ba02e4eab5",
+      "throws": 1
+    },
+    {
+      "actions": 9,
+      "captured": false,
+      "case": "145-missing-ball",
+      "error": "selected ball unavailable; encounter retained",
+      "frames": 936,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121
+      ],
+      "result_sha256": "a771f5ccecfb0b04cc0bf491e36c5799f1cd7f7f565a7cf4efa888bae22da1af",
+      "seconds": 0.13833891700051026,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "8d02a95a06944426f4d90dfae18b51fbb9599e69e1323b8e8a8f81bf70239b6c",
+      "throws": 0
+    },
+    {
+      "actions": 39,
+      "captured": false,
+      "case": "145-ordinary-budget-one",
+      "error": "throw budget exhausted; live encounter retained without Run",
+      "frames": 3396,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        178,
+        156,
+        144,
+        250,
+        121
+      ],
+      "result_sha256": "fd431b3be1e73d8a0a866861b058df566124de49c938d566a0dd1523970f2481",
+      "seconds": 0.3066534999961732,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "1ae4e74210f305474e77921da05b5d2b29b01a48601820e2f8eaeee280fe7db5",
+      "throws": 1
+    },
+    {
+      "actions": 53,
+      "captured": true,
+      "case": "146-master",
+      "error": null,
+      "frames": 4404,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        160
+      ],
+      "result_sha256": "1ea3d33fe68776f27b1b0b666c68f5ad64c0e8b81bc4949bb778f9541ac4f4fa",
+      "seconds": 0.4025015000006533,
+      "status_attempts": 0,
+      "target_hp": 160,
+      "terminal_sha256": "9269996ed677f2e050c1c6df2a1fd4c5e648a11604f1321894a712212620ad4c",
+      "throws": 1
+    },
+    {
+      "actions": 55,
+      "captured": true,
+      "case": "150-master",
+      "error": null,
+      "frames": 4548,
+      "packet": "red-one-off-capture-probe-20260925-v2",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        242
+      ],
+      "result_sha256": "d9568288adb09695b1f8a83124d66162cd65a3f76698905da2d3cea40a807469",
+      "seconds": 0.4145866660037427,
+      "status_attempts": 0,
+      "target_hp": 242,
+      "terminal_sha256": "55cf8ac7ccb06db5aa6df661f5a75894b285f445cd9d632aaa8dd860a2850603",
+      "throws": 1
+    },
+    {
+      "actions": 97,
+      "captured": true,
+      "case": "144-ordinary-status",
+      "error": null,
+      "frames": 8112,
+      "packet": "red-one-off-status-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        160
+      ],
+      "result_sha256": "27844eaedc8e7e6fadcca62f3a146936d0942b53e95c24070b112ef6d720fdad",
+      "seconds": 0.7221477920029429,
+      "status_attempts": 1,
+      "target_hp": 160,
+      "terminal_sha256": "fa2e5693b401ba0140e1073a1cd267160e7b5a6b7381164c39fe77081a9ddfcd",
+      "throws": 2
+    },
+    {
+      "actions": 329,
+      "captured": false,
+      "case": "145-ordinary-status",
+      "error": "catcher fainted; no automatic replacement or Run",
+      "frames": 27096,
+      "packet": "red-one-off-status-probe-20260925-v1",
+      "party_hp": [
+        53,
+        123,
+        0,
+        20,
+        121
+      ],
+      "result_sha256": "ca9aafa05bb14a9b4ca6354f9b789ab8fc30524a3c70db7cb5e7355a45c85207",
+      "seconds": 1.7591388340006233,
+      "status_attempts": 3,
+      "target_hp": 160,
+      "terminal_sha256": "a7f9c4370479ea5d6c85ff0147891ee7227a84b297f3042ead9223d49437df89",
+      "throws": 8
+    },
+    {
+      "actions": 537,
+      "captured": false,
+      "case": "146-ordinary-status",
+      "error": "throw budget exhausted; live encounter retained without Run",
+      "frames": 45672,
+      "packet": "red-one-off-status-probe-20260925-v1",
+      "party_hp": [
+        106,
+        122,
+        105,
+        130,
+        121
+      ],
+      "result_sha256": "df788b5579f432fdf5a6986a0e8bf4cd77dd02633acfd58fe3872b7292b5632c",
+      "seconds": 3.138677832997928,
+      "status_attempts": 3,
+      "target_hp": 160,
+      "terminal_sha256": "092e004cd64b648e4f8a043e40a7c06a25ca01c1d56ffb0ccb370958033a79f2",
+      "throws": 20
+    },
+    {
+      "actions": 121,
+      "captured": true,
+      "case": "150-ordinary-status",
+      "error": null,
+      "frames": 10500,
+      "packet": "red-one-off-status-probe-20260925-v1",
+      "party_hp": [
+        206,
+        156,
+        144,
+        250,
+        121,
+        242
+      ],
+      "result_sha256": "769031c5fa1f608373f2de2468021dc67ca6a6d2480300e9628d2505dceb6992",
+      "seconds": 0.8364669169968693,
+      "status_attempts": 1,
+      "target_hp": 242,
+      "terminal_sha256": "6a746bffc1339fc9bc999dbd8e0b8de97e82e96a3002d451eded4f869c4e251e",
+      "throws": 4
+    }
+  ],
+  "development_copies": 16,
+  "fits": 0,
+  "gameplay_running": false,
+  "independent_roots": 0,
+  "learning_delta": 0,
+  "passed": true,
+  "schema": "pokemon.red.one-off-capture-development.v1",
+  "source_sha256": "458df2913b3e1aea791ea1ee6038768f7ae6c4f41c85c1036391f9857cdc1979",
+  "targets": [
+    {
+      "at": [
+        9,
+        4
+      ],
+      "event_flag": 1129,
+      "internal_species": 75,
+      "level": 50,
+      "map_id": 83,
+      "object_index": 9,
+      "species_number": 145,
+      "sprite_id": 9
+    },
+    {
+      "at": [
+        1,
+        6
+      ],
+      "event_flag": 2522,
+      "internal_species": 74,
+      "level": 50,
+      "map_id": 162,
+      "object_index": 3,
+      "species_number": 144,
+      "sprite_id": 9
+    },
+    {
+      "at": [
+        5,
+        11
+      ],
+      "event_flag": 1342,
+      "internal_species": 73,
+      "level": 50,
+      "map_id": 194,
+      "object_index": 6,
+      "species_number": 146,
+      "sprite_id": 9
+    },
+    {
+      "at": [
+        13,
+        27
+      ],
+      "event_flag": 2241,
+      "internal_species": 131,
+      "level": 70,
+      "map_id": 227,
+      "object_index": 1,
+      "species_number": 150,
+      "sprite_id": 5
+    }
+  ],
+  "totals": {
+    "actions": 1592,
+    "frames": 134412
+  },
+  "source_commit": "3c3597ad",
+  "audit_sha256": "fa5d2cce1103826a97566642b35343320d9791d3fa13825c36159fa359d2048c",
+  "current_code_sha256": {
+    "src/pokemon_red_completion/red_static_capture.py": "f7de4acfff71cfc191ff2295e2239c61e273cfa79fac94c799612cf1778f1948",
+    "src/pokemon_red_completion/red_one_off_capture.py": "d7679aec296ca7409d9081b84120a80183099b6fa2e583a57af725c65f24114f",
+    "src/pokemon_red_completion/surge.py": "b97cfc0c5c2b9c466a6ba9faf91d48e1f7421118d3398f819cd85c80e8a913fb"
+  },
+  "tests": {
+    "targeted": 225,
+    "full_suite": false,
+    "lint": true,
+    "focused_typing": true
+  },
+  "scope": "Opt-in capture entry, static observation/admission and assisted native-copy mechanics; no actual route interaction, goal-provider promotion or learning.",
+  "implementation_after_native_runs": "Formatting plus stricter static descriptor identity validation; runtime algorithm unchanged after V2 correction.",
+  "next": "Capture-time recovery and status/switch efficiency, legitimate preparation, then exact static object interaction and acquisition-goal binding.",
+  "limits": [
+    "No route/object interaction or consumed-event lifecycle qualification.",
+    "Four V1 false PP stops retained;V2 same-lineage regression replay,not independent evidence.",
+    "Ordinary-status checks supplied Spore/PP in isolated copies;not actual trained capability.",
+    "Two ordinary-status failures retained:catcher faint and20-ball exhaustion."
+  ]
+}

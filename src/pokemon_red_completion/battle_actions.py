@@ -11,6 +11,7 @@ class BattleActionKind(StrEnum):
     """High-level decisions available at a main battle-menu boundary."""
 
     SELECT_MOVE = "select_move"
+    STRUGGLE = "struggle"
     USE_RECOVERY = "use_recovery"
     USE_BOOST = "use_boost"
     SWITCH = "switch"
@@ -63,6 +64,11 @@ class BattleAction:
         return cls(BattleActionKind.SELECT_MOVE, move_slot=slot)
 
     @classmethod
+    def struggle(cls) -> BattleAction:
+        """Choose the cartridge's zero-PP attack, not an invented move slot."""
+        return cls(BattleActionKind.STRUGGLE)
+
+    @classmethod
     def recovery(cls) -> BattleAction:
         return cls(BattleActionKind.USE_RECOVERY)
 
@@ -86,6 +92,8 @@ class BattleAction:
     def semantic_ref(self) -> str:
         if self.kind is BattleActionKind.SELECT_MOVE:
             return f"pokemon.core:battle:move:{self.move_slot}"
+        if self.kind is BattleActionKind.STRUGGLE:
+            return "pokemon.core:battle:struggle"
         if self.kind is BattleActionKind.SWITCH:
             target = "select" if self.party_slot is None else str(self.party_slot)
             return f"pokemon.core:battle:switch:{target}"

@@ -80,17 +80,37 @@ def test_truncated_table_and_aliased_pointers_reject():
 class Scene(FlyWorld):
     frame_count = 0
     walk_calls = 0
+    dialogue_on_walk = False
+    dialogue_cancels = 0
     destination_map = 89
     destination_at = (3, 3)
 
     def execute(self, action):
         self.frame_count += action.repeat
+        if self.stage == "dialogue" and action.kind is MacroActionKind.CANCEL:
+            self.actions.append(action)
+            self.dialogue_cancels += 1
+            if self.fault != "stuck_dialogue":
+                self.stage = "landed"
+                if self.fault == "dialogue_battle":
+                    self.raw = replace(self.raw, battle_state=1)
+                elif self.fault == "dialogue_lost_position":
+                    self.raw = replace(self.raw, player_x=None)
+            return
         if self.stage == "landed" and action.kind is MacroActionKind.MOVE:
             self.walk_calls += 1
             y, x = self.destination_at
             self.raw = replace(self.raw, map_id=self.destination_map, player_x=x, player_y=y)
+            if self.dialogue_on_walk:
+                self.stage = "dialogue"
             return
         super().execute(action)
+
+    def read_bottom_dialogue_box_visible(self):
+        return self.stage == "dialogue"
+
+    def read_retained_outside_map(self):
+        return None
 
 
 @pytest.fixture
@@ -100,12 +120,15 @@ def scene():
     game = Scene(available=(5,), selected=5)
     counted = CountingExecutor(game)
     template = _adapter(_Reader(raw=_raw(), ready=True)).observe()
-    adapter = SimpleNamespace(observe=lambda: replace(template, raw=game.raw, input_ready=True))
+    adapter = SimpleNamespace(observe=lambda: replace(
+        template, raw=game.raw, input_ready=game.read_input_readiness().ready,
+    ))
     observer = SimpleNamespace(
         observe=lambda: TraversalSnapshot(
             game.raw.map_id,
             (game.raw.player_y, game.raw.player_x),
-            True,
+            game.read_input_readiness().ready,
+            interruption=("scripted_dialogue" if game.read_bottom_dialogue_box_visible() else None),
             mode="land",
         )
     )
@@ -183,6 +206,7 @@ def scene():
         maximum_controller_actions=6000,
         maximum_emulator_frames=600000,
         routed_recovery=False,
+        interruption_handler_wrapper=None,
         _replan=lambda request: plan,
     )
 
@@ -215,6 +239,63 @@ def test_real_fly_controller_then_walk_and_fresh_skill_share_actual_accounting(s
     assert report.frames_executed == scene.game.frame_count
     with pytest.raises(RoutedSemanticGoalError):
         binding.execute()
+
+
+def test_fly_onward_handler_uses_existing_resource_route_allowances(scene, monkeypatch):
+    import pokemon_red_completion.red_routed_recovery as recovery
+    from pokemon_red_completion.red_resource_goal_router import _MAX_ROUTE_FLEES
+
+    real = recovery.guarded_collection_route_handler
+    calls = []
+
+    def handler(*args, **kwargs):
+        calls.append(kwargs)
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(recovery, "guarded_collection_route_handler", handler)
+    report = scene.bind().execute()
+    assert report.actions_executed > 0
+    assert calls == [dict(route_name="collection Fly onward walk",
+        maximum_flees=_MAX_ROUTE_FLEES,
+        maximum_scripted_dialogues=4, allow_field_faints=True, emulator=scene.game)]
+
+
+def test_fly_onward_walk_dismisses_native_dialogue_before_destination(scene):
+    scene.game.dialogue_on_walk = True
+    binding = scene.bind()
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+    assert scene.game.dialogue_cancels == 1
+    assert scene.provider_calls == [(89, 3, 3)]
+    assert scene.game.read_input_readiness().ready
+    assert report.actions_executed == scene.router.actions.actions_executed
+    assert report.frames_executed == scene.game.frame_count
+
+
+def test_fly_dialogue_recovery_is_bounded_and_never_runs_unready_destination(scene):
+    scene.game.dialogue_on_walk = True
+    scene.game.fault = "stuck_dialogue"
+    binding = scene.bind()
+    with pytest.raises(RuntimeError, match="dialogue"):
+        binding.execute()
+    assert scene.game.dialogue_cancels == 8
+    assert not scene.provider_calls
+
+
+@pytest.mark.parametrize("fault", ["dialogue_battle", "dialogue_lost_position"])
+def test_fly_dialogue_cannot_authorize_an_invalid_field_boundary(scene, fault):
+    scene.game.dialogue_on_walk = True
+    scene.game.fault = fault
+    binding = scene.bind()
+    # A separately verified successor battle may now leave the text handler.
+    # This fixture's stale observer still calls it field-ready; the independent
+    # fresh destination guard must reject that mismatch before invoking a skill.
+    message = ("fresh Red destination differs from the route terminal"
+               if fault == "dialogue_battle" else "scripted dialogue lost its traversal position")
+    with pytest.raises(RuntimeError, match=message):
+        binding.execute()
+    assert scene.game.dialogue_cancels == 1
+    assert not scene.provider_calls
 
 
 @pytest.mark.parametrize("enabled", [False, True])
@@ -360,14 +441,89 @@ def test_opt_in_preserves_previous_profile_and_rejects_nonboolean():
         )
 
 
-@pytest.mark.parametrize("succeeded", [True, False])
-def test_capture_uses_declared_grass_boundary_and_keeps_source_history(scene, succeeded):
+def _indoor_capture_profile(profile):
+    from pokemon_red_completion.red_goal_context_profile import (
+        _thaw,
+        build_red_goal_context_profile_payload,
+    )
+
+    rows = []
+    for provider in profile.providers:
+        parameters = _thaw(provider.parameters)
+        if provider.kind is GoalKind.ACQUIRE_SPECIES:
+            parameters.update(map_id=214, source_id="wild:PokemonMansion2F:grass")
+        rows.append((provider.kind, provider.mechanic, parameters))
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(rows)
+    ))
+
+
+@pytest.mark.parametrize("enabled,count", [(False, 6), (True, 0), (True, 6)])
+def test_fly_capture_route_work_is_explicit_read_only_and_uses_real_observation(
+    scene, monkeypatch, enabled, count
+):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 
+    import pokemon_red_completion.red_resource_goal_router as routing
+
+    spec = next(s for s in bind_capture_fly_profile(_local_discovery_profile()).providers
+                if s.kind is GoalKind.ACQUIRE_SPECIES)
+    target = spec.parameters["map_id"]
+    scene.provider.kind = GoalKind.ACQUIRE_SPECIES
+    scene.router.quote_capture_route_work = enabled
+    scene.router.world.macro_graph = MacroGraph({5: (MacroEdge(target),)})
+    scene.router.world.plan_feasible_to_map = lambda *_a, **_k: scene.plan
+    diagnostics, seen = [], []
+    scene.router.actions.record_diagnostic_event = (
+        lambda kind, payload: diagnostics.append((kind, payload))
+    )
+
+    def quote(plan, observed, rom, reader):
+        seen.append(observed.raw.map_id)
+        assert observed.raw == scene.game.raw
+        assert plan is scene.plan and reader is scene.game
+        return dict(ordinary_trainers_crossed=count)
+
+    monkeypatch.setattr(routing, "ordinary_route_work_quote", quote)
+    real = scene.router.runtime.adapter.observe()
+    # Qualification may project a different future departure map; it must not
+    # reinterpret real current-map object positions as belonging to that map.
+    projected = replace(real, raw=replace(real.raw, map_id=0))
+    fresh = FreshRedGoalObservation("0"*64, projected,
+                                   replace(scene.observer.observe(), map_id=0))
+    binding = bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer)
+    assert binding is not None and scene.game.actions == []
+    base = min(1.0, .42 + len(scene.plan.steps)/1000)
+    assert binding.estimated_effort == pytest.approx(min(1.0, base + (count/16 if enabled else 0)))
+    assert binding.estimated_risk == pytest.approx(min(1.0, .18 + (count/8 if enabled else 0)))
+    assert seen == ([scene.game.raw.map_id] if enabled else [])
+    assert len(diagnostics) == int(enabled)
+    if enabled:
+        assert diagnostics[0][1]["transport_leg"] == "post_fly_walking"
+        assert diagnostics[0][1]["source_id"] == spec.parameters["source_id"]
+
+
+@pytest.mark.parametrize("succeeded", [True, False])
+@pytest.mark.parametrize("observed", [False, True])
+@pytest.mark.parametrize("indoor", [False, True])
+def test_capture_uses_declared_or_observed_boundary_and_keeps_source_history(
+    scene, monkeypatch, succeeded, observed, indoor
+):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    import pokemon_red_completion.red_observed_local_capture as local
+    from pokemon_red_completion.red_goal_context_profile import bind_observed_local_capture_profile
+
     profile = bind_capture_fly_profile(_local_discovery_profile())
+    if observed:
+        profile = bind_observed_local_capture_profile(profile)
+    if indoor:
+        profile = _indoor_capture_profile(profile)
     spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
     target = spec.parameters["map_id"]
-    goal_at = (spec.parameters["player_y"], spec.parameters["player_x"])
+    declared_at = (spec.parameters["player_y"], spec.parameters["player_x"])
+    live_arrival = observed and indoor
+    goal_at = (3, 4) if live_arrival else declared_at
     assert (target, goal_at) != (89, (3, 3))
     scene.provider.kind = GoalKind.ACQUIRE_SPECIES
     scene.skill_passed[0] = succeeded
@@ -380,16 +536,31 @@ def test_capture_uses_declared_grass_boundary_and_keeps_source_history(scene, su
 
     def plan_to(start, map_id, *, goal_at):
         assert map_id == target
-        assert goal_at == scene.game.destination_at
+        # The observed profile must not ask for the disconnected static patch.
+        assert goal_at == (None if live_arrival else scene.game.destination_at)
         assert start.map_id == 5 and start.at == (6, 9)
         return plan
 
     scene.router.world.plan_feasible_to_map = plan_to
+    observed_calls = []
+
+    def live_bind(router, selected_spec, observation):
+        observed_calls.append((selected_spec, observation))
+        assert router is scene.router and selected_spec is spec
+        assert observation.raw.map_id == target
+        assert (observation.raw.player_y, observation.raw.player_x) == goal_at
+        assert scene.game.flight_confirms == scene.game.walk_calls == 1
+        offer = scene.provider.offer(observation)
+        return replace(offer.binding, search_source_ref=(
+            "pokemon.red:acquisition:" + str(spec.parameters["source_id"])
+        ))
+
+    monkeypatch.setattr(local, "bind_observed_local_capture", live_bind)
     fresh = FreshRedGoalObservation(
         "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
     )
     binding = bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer)
-    assert scene.game.actions == [] and scene.provider_calls == []
+    assert scene.game.actions == [] and scene.provider_calls == [] and observed_calls == []
     assert binding.kind is GoalKind.ACQUIRE_SPECIES
     assert binding.search_source_ref == "pokemon.red:acquisition:" + spec.parameters["source_id"]
     report = binding.execute()
@@ -397,6 +568,63 @@ def test_capture_uses_declared_grass_boundary_and_keeps_source_history(scene, su
     assert scene.provider_calls == [(target, *goal_at)]
     assert scene.game.flight_confirms == scene.game.walk_calls == 1
     assert report.actions_executed == scene.router.actions.actions_executed
+    assert report.frames_executed == scene.game.frame_count
+    assert len(observed_calls) == int(live_arrival)
+    assert (spec.parameters["player_y"], spec.parameters["player_x"]) == declared_at
+
+
+@pytest.mark.parametrize("fault", ["unreachable", "wrong_source", "wrong_kind"])
+def test_observed_capture_arrival_never_reinstates_static_provider(scene, monkeypatch, fault):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    import pokemon_red_completion.red_observed_local_capture as local
+    from pokemon_red_completion.red_goal_context_profile import bind_observed_local_capture_profile
+
+    profile = _indoor_capture_profile(bind_observed_local_capture_profile(bind_capture_fly_profile(
+        _local_discovery_profile()
+    )))
+    spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
+    target, arrival = spec.parameters["map_id"], (3, 4)
+    scene.provider.kind = GoalKind.ACQUIRE_SPECIES
+    scene.game.destination_map, scene.game.destination_at = target, arrival
+    scene.router.world.macro_graph = MacroGraph({5: (MacroEdge(target),)})
+    scene.router.world.plan_feasible_to_map = lambda *_a, **_k: replace(
+        scene.plan,
+        macro_path=MacroPath((5, target), (MacroEdge(target),)),
+        segments=(replace(scene.plan.segments[0], target_map=target,
+                          transition=MacroTransition((6, 9), arrival, "down")),),
+        terminal_at=arrival,
+    )
+
+    def live_bind(_router, _spec, observation):
+        if fault == "unreachable":
+            return None
+        return ExecutableGoalBinding(
+            "wrong-observed-child",
+            GoalKind.RESTORE_TEAM if fault == "wrong_kind" else GoalKind.ACQUIRE_SPECIES,
+            .1, .1,
+            lambda: pytest.fail("a changed-source/kind child must not run"),
+            lambda _: GoalVerification.succeeded(),
+            search_source_ref=("pokemon.red:acquisition:" + (
+                "wild:Route1:grass" if fault == "wrong_source" else spec.parameters["source_id"]
+            )),
+        )
+
+    monkeypatch.setattr(local, "bind_observed_local_capture", live_bind)
+    fresh = FreshRedGoalObservation(
+        "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
+    )
+    binding = bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer)
+    assert binding is not None and scene.game.actions == []
+    if fault == "unreachable":
+        report = binding.execute()
+        assert binding.verify(report).status.value == "failed"
+        assert report.actions_executed == scene.router.actions.actions_executed
+    else:
+        with pytest.raises(RuntimeError, match="source|kind"):
+            binding.execute()
+    assert scene.provider_calls == []
+    assert scene.game.flight_confirms == scene.game.walk_calls == 1
 
 
 def test_capture_fly_opt_in_is_strict_and_survives_source_retargeting():

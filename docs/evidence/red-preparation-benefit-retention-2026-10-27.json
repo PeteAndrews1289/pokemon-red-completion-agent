@@ -1,0 +1,383 @@
+{
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "all_native_and_fit_workers_closed": true,
+  "all_seven_goals_complete": false,
+  "audit_due_utc": "2026-10-27T18:17:00+00:00",
+  "audit_observed_at_utc": "2026-10-27T18:17:29.826583+00:00",
+  "audit_status": "OBSERVED_29_826583_SECONDS_LATE_NOT_BACKDATED",
+  "block_closed": true,
+  "cached_context_contrast": {
+    "DEV_maximum_level_deficit": 0.025,
+    "DEV_median_level_deficit": 0.01,
+    "DEV_preparation_minus_direct_gap": -0.8325847704043153,
+    "DEV_preparation_payoff_measured": true,
+    "TRAIN_preparation_minus_direct_gap": 0.27284189586263496,
+    "both_evolution_features_present": true,
+    "causal_feature_effect_proved": false,
+    "conditional_TRAIN_maximum_deficit_range": [
+      0.03,
+      0.035
+    ],
+    "conditional_TRAIN_median_deficit_range": [
+      0.015,
+      0.02
+    ],
+    "measurement_scope": "Earlier exactBE9/CTX8fd2with720/297,150s; not identical to current7da/300s or A9+33 configuration.",
+    "new_fits": 0,
+    "new_model_queries": 0,
+    "new_native_loads": 0,
+    "next": "Lower-deficit actor-aligned TRAIN contrast; no DEV relabeling or assumption of a preparation win.",
+    "other_three_varying_dose_coordinates_within_marginal_range": true,
+    "statistical_OOD_certificate": false
+  },
+  "cohort": {
+    "current_head_fit_rows": 13,
+    "development_fit_rows": 0,
+    "mixed_K_evidence_preserved_separately": true,
+    "new_channels": 27,
+    "new_optimizer_admitted_rows": 3,
+    "new_pair_fitted": false,
+    "original_origins": 1,
+    "repeated_direct8_excluded": true,
+    "rows": 15,
+    "story_actor": "29792a3292e8d5c103e39d5914d8b1c9388c65af107c989141331e14503712ad",
+    "wild_actor": "720"
+  },
+  "complete_source_metadata_preflight": {
+    "actual_guard_checks": 11,
+    "corrected_complete_source_passed": true,
+    "fits": 0,
+    "mandatory_for_future_launch_preflight": true,
+    "model_queries": 0,
+    "native_loads": 0,
+    "old_unsafe_prose_refused_before_native": true,
+    "passed": true,
+    "qualified_private_helper_sha256": "eb4c906c83ffec9740117782faa4f4604c5c0a90802fe02cc2e8bbf0b1a79195",
+    "source_and_frozen_packages_unchanged": true
+  },
+  "conditional_gate": {
+    "additional_fits": 0,
+    "all_eight_prior_orders_passed": true,
+    "candidate": null,
+    "current33_qualification_unchanged": true,
+    "decision": "UNINFORMATIVE_NO_FIT",
+    "meaning": "Labels measure a useful positive contrast, but current33f already orders it correctly; conditional optimizer work is therefore not warranted.",
+    "new_model_artifact": false,
+    "new_public_forecasts": 2,
+    "whole_process_NN_metering_complete": false
+  },
+  "constructed_TRAIN_source": {
+    "Rattata_level": 20,
+    "actually_changed_addresses": 10,
+    "approved_write_addresses": 17,
+    "curriculum_targeted_after_exposed_DEV": true,
+    "earned_XP": false,
+    "independent_new_origins": 0,
+    "optimizer_admission": false,
+    "other_party_world_roles_and_inherited_spend_preserved": true,
+    "parent_source_sha256": "0e691fe7b9c2624cc496ff07170c925c51fab3726245cc1547c887a69724575d",
+    "source_eligible_after_exact_catalog_and_P24_preflight": true,
+    "source_origin_sha256": "fb501fe63c2af637775c237861fe851f720d7f07c9218a6bb612b2937d46e111",
+    "state_sha256": "7da092393b618c187ef1f2ffadef50dd492be4944f96a6133aed1fe57c417755",
+    "supplied_XP": 8000,
+    "teacher_assisted": true,
+    "training_examples_created": 0
+  },
+  "corrected_TRAIN_pair": {
+    "actual_progress_credit": 0,
+    "autonomous_strategic_gain_proved": false,
+    "current33f_predicted_utility_gap": 0.272841895862635,
+    "current_model_already_correct": true,
+    "direct": {
+      "cash_credits": 0,
+      "cash_debits": 1500,
+      "frames": 37776,
+      "heals": 0,
+      "inputs": 418,
+      "native_seconds": 8.190268,
+      "outcome": "Misty loss",
+      "resource_seconds": 71.7747487279994
+    },
+    "evolution_alone_causal_effect_isolated": false,
+    "learned_battlers": true,
+    "new_fits": 0,
+    "new_independent_origins": 0,
+    "new_rows": 2,
+    "new_scalar_channels": 18,
+    "observed_utility_gap": 0.8229020451977401,
+    "optimizer_admission": true,
+    "preparation": {
+      "cash_credits": 2079,
+      "cash_debits": 0,
+      "frames": 623340,
+      "heals": 25,
+      "inputs": 8684,
+      "native_seconds": 139.4021675,
+      "observed_Rattata20_to_Raticate21": true,
+      "outcome": "Misty win",
+      "resource_seconds": 228.8288891989996,
+      "total_selected_trainee_XP_including_payoff": 2172
+    },
+    "required_predicted_margin": 0.01,
+    "same_source_actor_and_caps": true,
+    "status": "COMPLETE_STRICTLY_ADMITTED_UNFITTED",
+    "teacher_first_goals": true
+  },
+  "cost_label_correction": {
+    "exact_travel_share_known": false,
+    "numerical_counts_unchanged": true,
+    "original_report_preserved": true,
+    "pure_battle_cost_claim_retracted": true
+  },
+  "deadline_utc": "2026-10-27T19:17:00+00:00",
+  "failed_direct_metadata": {
+    "controls_and_backend_and_processes_closed": true,
+    "error": "episode records may not contain filesystem paths",
+    "error_type": "PrivateArtifactError",
+    "failed_before_first_macro": true,
+    "known_goal_policy_queries": 0,
+    "native_loads": 1,
+    "paired_terminal_context": false,
+    "repair": "Only two provenance prose leaves replaced; actual path guard unchanged; eleven real-validator checks pass",
+    "reported_cash_debits": null,
+    "reported_frames": null,
+    "reported_goal_attempts": null,
+    "reported_heals": null,
+    "reported_inputs": null,
+    "resource_seconds": 61.93100222400062,
+    "terminal_bytes_equal_source": true,
+    "whole_process_model_queries": null
+  },
+  "final_closed_resource_costs": {
+    "additional_zero_guest_preflight_wall_seconds": 61.18922722899879,
+    "additional_zero_guest_source_preflight_jobs": 2,
+    "cached_forecasts_reused_per_check": {
+      "conditional_baseline": 13,
+      "utilityfit13_baseline": 13
+    },
+    "known_frame_lower_bound": 700644,
+    "known_input_lower_bound": 9538,
+    "known_restoration_lower_bound": 25,
+    "new_actual_TRAIN_fits": 2,
+    "new_closed_resource_jobs": 9,
+    "new_closed_resource_seconds": 548.7621262120006,
+    "new_native_loads_known": 5,
+    "new_public_linear_forecasts": 54,
+    "new_setup_or_execution_failures": 2,
+    "non_native_script_parse_failure": {
+      "cpu_and_wall_cost_unknown": true,
+      "fits": 0,
+      "model_queries": 0,
+      "native_loads": 0,
+      "preserved_source": {
+        "path": "private-artifact://5d33dd269a5a/Documents/Codex/2026-10-16/continue-my-pok-mon-red-project-2/work/run_complete_source_preflight_jobs_20261027_syntax_failed.py",
+        "sha256": "cebeef5143cf129d2a1dc95083fdfc799a53d3f3195900c14a94b28631034568"
+      }
+    },
+    "ordinary_native_losses": 2
+  },
+  "fresh_acceptance": false,
+  "full_suite": false,
+  "global_adoption": false,
+  "goal_aware_wild_interface": {
+    "all42_initial_leads_selected_trainee": true,
+    "cached_only": true,
+    "classification": "missing goal-aware low-level interface/design limitation",
+    "lost_or_wrong_reference_proved": false,
+    "new_wild_controller_candidate_qualified": false,
+    "next": "ROM-free spy-seam/observability contract; then prospectively qualified wild-controller-only same-dose comparison if a candidate qualifies, with same story297/caps/recovery and TRAIN-only learning plus native benefit/retention gates.",
+    "outer_selected_ref_correct": true,
+    "runtime_bug_proved": false,
+    "selected_trainee_and_party_purpose_context_exposed_in_existing_wild_policy": false,
+    "total_voluntary_switches": 130,
+    "voluntary_switches_to_two_UNDECIDED_reserves": 95
+  },
+  "historical_payoff_correction": {
+    "observed_at_utc": "2026-10-27T20:26:48.290727+00:00",
+    "original_evidence_sha256": "1a1a5036077e9fd16ca614cf58d6c6407791e71095340c9320316f36a024710e",
+    "private_correction_sha256": "775ebcb05b7e7fe22eb02ab6e999a3108301a92da11a0bfb9802b33731b03c44",
+    "summary": "Historical payoff correction: exact BE9/8fd2 preparation with legacy720 had already evolved and won Misty at7460inputs/538,368frames/21heals. Alternative3428 achieved1282/94,428/3 and later4eab/3b187 retained the result. Those old150second limits/configuration differ from the new300second7da TRAIN comparison. The broad earlier claim that DEV preparation payoff was unmeasured is withdrawn; raw prior claims and costs remain preserved."
+  },
+  "learner": {
+    "all_eight_observed_orders_derived_from_native_utility": true,
+    "defaults_and_inference_unchanged": true,
+    "first_fit_quality_rejected": true,
+    "first_fit_utility_MAE": [
+      0.392279578912433,
+      0.39800312745709204
+    ],
+    "individual_rows4_and11_regressions_preserved": true,
+    "native_or_generalization_gain_proved": false,
+    "new_fit_after_pair": false,
+    "normalized_MSE": [
+      0.11386401038163539,
+      0.07543447932228468
+    ],
+    "qualified_model_numerical_status_unchanged": true,
+    "qualified_model_sha256": "33f98cd934e2d8dad9c6bf23273fa689f320484bca9fa91436cce1c8f574ef57",
+    "second_fixed_objective": "opt-in unit-L1 utility loss plus existing ridge and observed-order constraints",
+    "utility_MAE": [
+      0.392279578912433,
+      0.30783910885260235
+    ]
+  },
+  "models_adopted": 0,
+  "native_own_policy": {
+    "changed_choice": false,
+    "changed_outcome": false,
+    "choice": "DIRECT_MISTY",
+    "execution_errors": 0,
+    "frames": 39528,
+    "game_outcome": "ordinary Misty loss followed by native blackout/full-party recovery",
+    "genuine_child": true,
+    "genuine_global_parent": true,
+    "inputs": 436,
+    "narrow_battler_score_calls": 104,
+    "public_child_forecasts": 13,
+    "source_role": "related exposed DEVELOPMENT permanent no-fit"
+  },
+  "native_policy_benefit_proved": false,
+  "next": "First ROM-free spy-seam/observability contract for the absent explicit trainee/purpose context. Then, only if a controller candidate is qualified, run a prospective wild-controller-only comparison under the same TRAIN dose/story297/caps/recovery, with TRAIN-only learning/native-benefit/retention gates. Plan earned-prefix proof composition for lower-deficit TRAIN source in parallel; no checkpoint is READY. No DEV relabeling, guessed venue fix or unqualified new controller.",
+  "next_source_readiness": {
+    "DEV_relabel_allowed": false,
+    "arbitrary_new_RAM_source_allowed": false,
+    "earned_prefix_composition_qualification_required": true,
+    "existing_prefix_contract": "one DEVELOP phase plus restore/arrival, total2–3 phases",
+    "pointed_receipts_audited_only": true,
+    "qualified_exact_lower_deficit_source": false,
+    "strip_attempted_gym_tail_allowed": false
+  },
+  "observed_through_utc": "2026-10-27T18:56:25.784755+00:00",
+  "preparation_cost_bottleneck": {
+    "attacks": 146,
+    "battle_won_flags": 42,
+    "cached_only": true,
+    "coarse_window_semantics": "The 5138-input windows begin before encounter seeking and end after combat settlement. The remaining2627 excursion inputs include route and menus; no pure-combat input or exact travel share is isolated.",
+    "collateral_XP": 1832,
+    "counter_discrepancy_preserved": true,
+    "encounter_seek_combat_settlement_window_inputs": 5138,
+    "excursions": 25,
+    "first_choices_switch": 38,
+    "forced_switches": 16,
+    "full_payoff_inputs": 8684,
+    "health_limited_returns": 24,
+    "new_fits": 0,
+    "new_model_queries": 0,
+    "new_native_loads": 0,
+    "nurse_inputs": 528,
+    "optimization_fixed": false,
+    "preparation_input_fraction": 0.957508060801474,
+    "preparation_inputs": 8315,
+    "remaining_excursion_route_menu_residual_inputs": 2627,
+    "reported_opponent_faints": 40,
+    "selected_trainee_XP_fraction": 0.4152569422278966,
+    "selected_trainee_preparation_XP": 1301,
+    "total_party_preparation_XP": 3133,
+    "trainee_handoff_or_actor_defect_proved": false,
+    "unattributed_inputs": 22,
+    "undecided_reserve_XP": {
+      "Ekans": 690,
+      "Spearow": 957
+    },
+    "venue": "Route4 map15",
+    "voluntary_switches": 130,
+    "wild_battle_records": 42,
+    "wild_levels": [
+      6,
+      12
+    ]
+  },
+  "receipt_references": {
+    "TRAIN_DEV_context_contrast": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/deferred20-strict-inputs-proposal/CACHED-TRAIN20-VERSUS-DEV20-CONTEXT-AUDIT.json",
+      "sha256": "7da14d1f4333fd62554622064aae8ed45f4222bcb67616e436b20e55c0ead16e"
+    },
+    "admission": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/STRICT-ROOT-ADMISSION.json",
+      "sha256": "32741cdf56c2a246a96cab2257f400109b6aec882b3250e8feefb46a8aac0164"
+    },
+    "audit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/TWO-HOUR-AUDIT.json",
+      "sha256": "e3048c698a3423770cbcec357eadc2dc8dc5d8f7dbb21bd4fbe74474074a7fc9"
+    },
+    "complete_source_metadata_preflight": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/complete-source-preflight-v2/ROOT-QUALIFICATION.json",
+      "sha256": "52d59baab3b06e8237b3c0dc9a83fa2ceeae3e1490d323a01a6307072d1543bc"
+    },
+    "conditional_TRAIN_support": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/deferred20-strict-inputs-proposal/CACHED-CONDITIONAL-TRAIN-SUPPORT-R2.json",
+      "sha256": "2bc38f3039c5a162595a841b55ad088b1670a1c779b0921fa656747799f6bc17"
+    },
+    "conditional_no_fit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-UTILITY15-ROOT-QUALIFICATION.json",
+      "sha256": "c947bb4e3976584c419eaa30a2d606fa13e44905662e3236ec8851cc9dfd4801"
+    },
+    "constructed_TRAIN_source": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-SETUP-ROOT-QUALIFICATION.json",
+      "sha256": "020f3415f02d5893663d2943fd24e6b8ddb65b07d8760f00665b934213992ca8"
+    },
+    "failed_TRAIN_direct": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-DIRECT-V1-FAILED-ROOT-CLOSEOUT.json",
+      "sha256": "ef584342166112e5637097ebf02b407b64e5621b8cf2051df5925a1e7f247b22"
+    },
+    "final_cost_ledger": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/FINAL-COST-LEDGER.json",
+      "sha256": "fbef56e2c588ccb3544702853336a19f4efc4fc934302d7dc034117f4aa7ddbc"
+    },
+    "matched_direct": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-DIRECT-V2-ROOT-CLOSEOUT.json",
+      "sha256": "c962001f94ff45637c4ff25f3e340ac136e7d65b9e2fa472dfc76273afafa095"
+    },
+    "matched_preparation": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-PREPARATION-V2-ROOT-CLOSEOUT.json",
+      "sha256": "a94f1570be90eb6ee26f12817936a2d8567a0a28858dd7393a5c6e7c17da4fe0"
+    },
+    "native_preparation_cost_audit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/deferred20-strict-inputs-proposal/CACHED-NATIVE-PREPARATION-COST-AUDIT-R2.json",
+      "sha256": "f9422cf00d3b95729e6ea663a37b526eaeff4b52334cc1e1c61e340ccd67bf68"
+    },
+    "native_preparation_cost_audit_original_raw": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/deferred20-strict-inputs-proposal/CACHED-NATIVE-PREPARATION-COST-AUDIT.json",
+      "sha256": "a04ecc3e6b9497796140094866205c060e5769445456b976a67a079512ca1c64"
+    },
+    "native_unchanged": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/BEHAVIOR-BE9-V2-ROOT-CLOSEOUT.json",
+      "sha256": "10564c031bf6bd4237031ffdc854d6a406f5d9891b23ec2b2b5960d4d3b0e10e"
+    },
+    "preguest_failure": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/BEHAVIOR-BE9-V1-SETUP-ROOT-CLOSEOUT.json",
+      "sha256": "88ff42a43793d9f37965edf674c1f218f813c4a3b545b329b900a3176fb933a8"
+    },
+    "prose_guard_repair": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-PROVENANCE-ROOT-QUALIFICATION.json",
+      "sha256": "2fdc76663a6dc6c37c685d5b02b7a6cfac820c4fc413e58d8746714f946791c0"
+    },
+    "qualified_fit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/UTILITY-ALIGNED13-ROOT-QUALIFICATION.json",
+      "sha256": "4e7e65e539ce1efe906c81d1629062d661852a8878e9fe2ed7c06108ad40d6a2"
+    },
+    "rejected_fit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/ORDER-RETAINED13-ROOT-CLOSEOUT.json",
+      "sha256": "001cc8308b47b4b522cee7bc2de805a3c1bb7373948a94dbc213d9b7c64d1f0c"
+    },
+    "source_eligibility": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-P24-SOURCE-ELIGIBILITY-ROOT-QUALIFICATION.json",
+      "sha256": "69d333a8c92787d199660ab43f0e952f1d06ccffec4d8c5d00df0452162a2aab"
+    },
+    "strict_fifteen_admission": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/DEFERRED20-STRICT15-ROOT-ADMISSION.json",
+      "sha256": "8cfd3a977ecb386227216a7ce904b23e4d5c04bcdd2408d316c4fd5c51425aa1"
+    },
+    "wild_trainee_handoff_audit": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/preparation-benefit-retention-20261027-1617/deferred20-strict-inputs-proposal/CACHED-WILD-TRAINEE-HANDOFF-AUDIT.json",
+      "sha256": "cf5862ffbe6436029e5fff2a4deaee72aa829cc56157800686f9f06e0ed4505d"
+    }
+  },
+  "schema": "pokemon.red-preparation-benefit-retention-evidence.v1",
+  "session": "2026-10-27-preparation-benefit-retention",
+  "source_writer_closeout_pending": false,
+  "started_at_utc": "2026-10-27T16:17:00+00:00",
+  "status": "RUNTIME_CLOSED_DOCUMENTARY_CLOSEOUT_ACTIVE",
+  "summary": "Behavior-retained utility-aligned learning improves one-origin TRAIN calibration and all eight observed orders; genuine native choice/outcome remain unchanged. A disclosed canonical late-evolution TRAIN source is eligible for one finite matched contrast, whose corrected payoffs remain pending."
+}

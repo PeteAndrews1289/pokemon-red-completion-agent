@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 
 import pytest
+from route11_historical_fixture import historical_venue_source as historical_venue_source
 
 import pokemon_red_completion.red_cave_venue_prior as cave_prior_module
 from pokemon_red_completion.party_development_venue_priors import (
@@ -30,22 +31,13 @@ from pokemon_red_completion.team_training import GrindingArea
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PLAN_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-cave-venue-measurement-plan-v2-2026-08-15.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-cave-venue-measurement-plan-v2-2026-08-15.json"
 )
 RESULT_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-cave-venue-measurement-result-v2-2026-08-16.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-cave-venue-measurement-result-v2-2026-08-16.json"
 )
 COMPOSITION_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-cave-venue-prior-composition-v2-2026-08-16.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-cave-venue-prior-composition-v2-2026-08-16.json"
 )
 
 
@@ -96,9 +88,7 @@ def _existing_registry() -> PartyDevelopmentVenuePriorRegistry:
         ),
         source_commit="a" * 40,
         source_bundle_sha256="b" * 64,
-        measurement_contract_sha256=(
-            VenuePriorMeasurementContract().measurement_contract_sha256
-        ),
+        measurement_contract_sha256=(VenuePriorMeasurementContract().measurement_contract_sha256),
         operational_contract_sha256="7" * 64,
         source_compatibility_sha256="8" * 64,
         support_root_lineage_ids=("test-route-root",),
@@ -269,9 +259,7 @@ def test_composition_adds_exactly_one_cave_prior_without_a_training_example(
         public_plan_sha256=RED_CAVE_VENUE_MEASUREMENT_PUBLIC_PLAN_SHA256,
         public_result_sha256=RED_CAVE_VENUE_MEASUREMENT_PUBLIC_RESULT_SHA256,
         registry_source_commit=compatibility.current_commit,
-        registry_source_bundle_sha256=(
-            compatibility.current_source_bundle_sha256
-        ),
+        registry_source_bundle_sha256=(compatibility.current_source_bundle_sha256),
         source_compatibility=compatibility,
         repository_root=PROJECT_ROOT,
     )
@@ -305,8 +293,7 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
         row["path"]
         for row in rows
         if isinstance(row["path"], str)
-        and hashlib.sha256((PROJECT_ROOT / row["path"]).read_bytes()).hexdigest()
-        != row["sha256"]
+        and hashlib.sha256((PROJECT_ROOT / row["path"]).read_bytes()).hexdigest() != row["sha256"]
     )
 
     # The consumed Cave run remains valid historical evidence at its measured
@@ -316,7 +303,11 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
     # explicit review here rather than silently inheriting the old result.
     # 8d9dcc06 also refreshed the observation used to diagnose a final PP-gate
     # timeout in battle_runtime. It does not restore historical byte identity.
+    # Reviewed November 2: explicit Struggle actions and the default-none
+    # native_transport_ready field also differ from the historical Cave bytes.
+    # This continues to deny historical measurement authority to current source.
     assert drifted == (
+        "src/pokemon_red_completion/battle_actions.py",
         "src/pokemon_red_completion/battle_runtime.py",
         "src/pokemon_red_completion/blaine.py",
         "src/pokemon_red_completion/emulator.py",
@@ -324,8 +315,10 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
         "src/pokemon_red_completion/hideout.py",
         "src/pokemon_red_completion/observation.py",
         "src/pokemon_red_completion/red_battle_catalog.py",
+        "src/pokemon_red_completion/red_party.py",
         "src/pokemon_red_completion/red_party_development_venue_priors.py",
         "src/pokemon_red_completion/red_team_training.py",
+        "src/pokemon_red_completion/training_venue.py",
     )
 
 

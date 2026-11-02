@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+from contextlib import contextmanager
 from dataclasses import replace
 from pathlib import Path
 
@@ -22,7 +23,12 @@ from pokemon_red_completion.battle_scenario_capture import (
 )
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.emulator import PyBoyAdapter
-from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
+from pokemon_red_completion.executor import (
+    CountingExecutor,
+    FrameBudgetController,
+    FrameSafeExecutor,
+    MonotonicWallTimeBudgetController,
+)
 from pokemon_red_completion.observation import BattleMenuPhase, MapId, PokemonRedStateReader
 from pokemon_red_completion.opening import run_opening_chapter
 from pokemon_red_completion.play import (
@@ -44,9 +50,49 @@ MAX_POST_OPENING_ACTIONS = 120
 _PARTY_FIRST_OT_ID = 0xD177
 
 
-def _capture_one(rom_path: Path, rom: bytes, boot_frames: int, commit: str):
-    source_id = f"fresh-red-lab-rival-train-boot{boot_frames}"
+@contextmanager
+def _source_session(rom_path: Path, failure_output: Path | None):
     with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
+        if failure_output is None:
+            yield emulator
+            return
+        session = MonotonicWallTimeBudgetController(
+            FrameBudgetController(emulator, maximum_frames=MAX_TOTAL_FRAMES),
+            maximum_wall_seconds=180,
+        )
+        try:
+            yield session
+        except Exception as error:
+            # Preserve the actual failed setup; never replay or replace it.
+            diagnostic = {
+                "error_type": type(error).__name__, "error": str(error),
+                "frames": emulator.frame_count,
+                "wall_elapsed_seconds": session.elapsed_seconds,
+                "pressed_buttons": sorted(emulator.pressed_buttons),
+            }
+            try:
+                payload = emulator.save_state_bytes()
+                with (failure_output / "failed-source.state").open("xb") as stream:
+                    stream.write(payload)
+                diagnostic["state_sha256"] = hashlib.sha256(payload).hexdigest()
+            except Exception as retention_error:
+                diagnostic["retention_error"] = str(retention_error)
+            with (failure_output / "source-failure.json").open("x") as stream:
+                json.dump(diagnostic, stream, indent=2, sort_keys=True)
+            raise
+
+
+def _capture_one(
+    rom_path: Path, rom: bytes, boot_frames: int, commit: str,
+    *, partition: ScenarioPartition = ScenarioPartition.TRAIN,
+    failure_output: Path | None = None,
+):
+    if partition not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise ValueError("fresh source partition differs")
+    if partition is ScenarioPartition.DEVELOPMENT and failure_output is None:
+        raise ValueError("development source requires bounded retained setup")
+    source_id = f"fresh-red-lab-rival-{partition.value}-boot{boot_frames}"
+    with _source_session(rom_path, failure_output) as emulator:
         opening = run_opening_chapter(
             rom_path,
             _emulator=emulator,
@@ -105,7 +151,7 @@ def _capture_one(rom_path: Path, rom: bytes, boot_frames: int, commit: str):
         manifest = build_battle_scenario_capture_payload(
             capture_id=source_id,
             root_lineage_id=source_id,
-            partition=ScenarioPartition.TRAIN,
+            partition=partition,
             state_bytes=state,
             source_state_sha256=origin_sha256,
             initial_observation_sha256=prepared.initial_observation_sha256,
@@ -115,10 +161,10 @@ def _capture_one(rom_path: Path, rom: bytes, boot_frames: int, commit: str):
             observation_schema=OBSERVATION_SCHEMA_V2,
         )
         report = {
-            "schema": "pokemon.red.fresh-trainer-train-source.v1",
+            "schema": f"pokemon.red.fresh-trainer-{partition.value}-source.v1",
             "source_id": source_id,
             "root_lineage_id": source_id,
-            "partition": "train",
+            "partition": partition.value,
             "fresh_power_on": True,
             "boot_frames": boot_frames,
             "origin_state_sha256": origin_sha256,

@@ -1,0 +1,40 @@
+{
+  "actual_cutoff_sealed_badges": 7,
+  "actual_cutoff_sealed_registrations": 92,
+  "actual_running": false,
+  "archive_and_original_writes": 0,
+  "checkpoint_ids": [
+    "red-goal-v1-029-evolve_species-train-02",
+    "red-goal-v1-030-evolve_species-train-03"
+  ],
+  "completed_component_goals": 2,
+  "current_native_first_frame_qualified": false,
+  "emulators": 0,
+  "envelope_sha256": [
+    "9a4e26a3710fafb78417c33decb01b90583524a151c0feceb3b3d84bc940c660",
+    "42b12865ab549e57da1c95e4b10dca792f79a34324bfdf18ea1b7644bcd7c087"
+  ],
+  "exact_source_subset_authenticated": true,
+  "historical_partition": "train",
+  "historical_registry_sha256": "b30328606fbdc383e52a49b3c9b7800ffa65f14099605aa7b99e827aa35dc1dc",
+  "independent_origins_claimed": 0,
+  "inputs": 0,
+  "new_fits": 0,
+  "new_native_outcomes_required_before_fit": true,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-10-20T17:38:20.660963+00:00",
+  "official_fresh_successes": 0,
+  "partial_extraction_collision_retained": true,
+  "passed": true,
+  "related_contexts_not_independent_evaluation": true,
+  "schema": "pokemon.red.preparation-TRAIN-source-authentication-closeout.v1",
+  "state_loads": 0,
+  "state_sha256": [
+    "24b848eeb9d0d7b13d2edb96105cdbe58fde6c3212889a24eaaf210463141e3d",
+    "6af97317599bc22b8ccaa9c052db588ff80a0b4b5df8b16b75322bbb7cba0d95"
+  ],
+  "total_component_goals": 7,
+  "total_fit_attempts": 13,
+  "total_fits": 11
+}

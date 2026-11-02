@@ -18,6 +18,7 @@ from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
+from time import monotonic
 from typing import Protocol
 
 from .collection import CollectionObservation
@@ -127,19 +128,28 @@ class RedAcquisitionCatalog:
 
     def __post_init__(self) -> None:
         if self.registered_species is not None and (
-            not isinstance(self.registered_species, frozenset) or any(
+            not isinstance(self.registered_species, frozenset)
+            or any(
                 s not in RED_SOLO_COLLECTION_CONTRACT.species_universe
                 for s in self.registered_species
-            ) or not self.remaining_demand
+            )
+            or not self.remaining_demand
         ):
             raise ValueError("registered catalog needs immutable credit and remaining demand")
         if self.protected_counts and self.registered_species is None:
             raise ValueError("registered reserves require registered catalog mode")
-        if not isinstance(self.protected_counts, tuple) or any(
-            not isinstance(row, tuple) or len(row) != 2
-            or row[0] not in RED_SOLO_COLLECTION_CONTRACT.species_universe
-            or type(row[1]) is not int or row[1] < 0 for row in self.protected_counts
-        ) or len(dict(self.protected_counts)) != len(self.protected_counts):
+        if (
+            not isinstance(self.protected_counts, tuple)
+            or any(
+                not isinstance(row, tuple)
+                or len(row) != 2
+                or row[0] not in RED_SOLO_COLLECTION_CONTRACT.species_universe
+                or type(row[1]) is not int
+                or row[1] < 0
+                for row in self.protected_counts
+            )
+            or len(dict(self.protected_counts)) != len(self.protected_counts)
+        ):
             raise ValueError("registered reserves must be unique immutable species counts")
         if type(self.remaining_demand) is not bool:
             raise TypeError("remaining_demand must be a bool")
@@ -152,17 +162,23 @@ class RedAcquisitionCatalog:
             if not isinstance(offer, tuple) or len(offer) != 2:
                 raise ValueError("wild offer shape differs")
             source, refs = offer
-            if (not isinstance(source, str) or not source.startswith("wild:")
-                    or not source.endswith(":grass") or source in sources
-                    or not isinstance(refs, tuple) or not refs
-                    or any(ref not in RED_SOLO_COLLECTION_CONTRACT.target_species for ref in refs)
-                    or len(refs) != len(set(refs))):
+            if (
+                not isinstance(source, str)
+                or not source.startswith("wild:")
+                or not source.endswith(":grass")
+                or source in sources
+                or not isinstance(refs, tuple)
+                or not refs
+                or any(ref not in RED_SOLO_COLLECTION_CONTRACT.target_species for ref in refs)
+                or len(refs) != len(set(refs))
+            ):
                 raise ValueError("wild offers need unique grass sources and target species")
             sources.add(source)
         if self.level_evolution_edges and not self.remaining_demand:
             raise ValueError("level alternatives require remaining acquisition demand")
         if not isinstance(self.level_evolution_edges, tuple) or any(
-            not isinstance(edge, tuple) or len(edge) != 2
+            not isinstance(edge, tuple)
+            or len(edge) != 2
             or any(s not in RED_SOLO_COLLECTION_CONTRACT.target_species for s in edge)
             for edge in self.level_evolution_edges
         ):
@@ -269,7 +285,8 @@ class RedAcquisitionCatalog:
         return frozenset(reachable)
 
     def alternative_capture_holdings(
-        self, observation: CollectionObservation,
+        self,
+        observation: CollectionObservation,
         capture_species: tuple[str, ...] | None = None,
     ) -> dict[str, int]:
         """Marginal capture options, recomputed after each actual acquisition."""
@@ -280,30 +297,46 @@ class RedAcquisitionCatalog:
 
         counts = Counter(specimen.species_ref for specimen in observation.specimens)
         canonical_edges = tuple(
-            (method.consumes_species_ref, method.species_ref) for method in self.methods
+            (method.consumes_species_ref, method.species_ref)
+            for method in self.methods
             if method.consumes_species_ref is not None
         )
         if self.registered_species is not None:
             useful = useful_registered_capture_counts(
                 frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species),
-                self.registered_species | observation.owned_species, counts,
+                self.registered_species | observation.owned_species,
+                counts,
                 tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
-                (tuple(method.species_ref for method in self.methods
-                       if not method.transforms_precursor)
-                 if capture_species is None else capture_species),
+                (
+                    tuple(
+                        method.species_ref
+                        for method in self.methods
+                        if not method.transforms_precursor
+                    )
+                    if capture_species is None
+                    else capture_species
+                ),
                 protected_counts=dict(self.protected_counts),
             )
             # Potential future evolution is not an already registered species.
             # A direct wild capture of a missing entry remains a legal alternative
             # to developing existing stock; leave its cost tradeoff to the actor.
             credited = self.registered_species | observation.owned_species
-            return {species: counts[species] + max(quantity, int(species not in credited))
-                    for species, quantity in useful.items()}
+            return {
+                species: counts[species] + max(quantity, int(species not in credited))
+                for species, quantity in useful.items()
+            }
         useful = useful_capture_counts(
-            frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
+            frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species),
+            counts,
             tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
-            (tuple(method.species_ref for method in self.methods if not method.transforms_precursor)
-             if capture_species is None else capture_species),
+            (
+                tuple(
+                    method.species_ref for method in self.methods if not method.transforms_precursor
+                )
+                if capture_species is None
+                else capture_species
+            ),
         )
         return {species: counts[species] + quantity for species, quantity in useful.items()}
 
@@ -421,8 +454,7 @@ def _is_failure_reason_code(value: object) -> bool:
         and value[0].isalpha()
         and value[0].islower()
         and all(
-            character.islower() or character.isdigit() or character == "_"
-            for character in value
+            character.islower() or character.isdigit() or character == "_" for character in value
         )
         and "__" not in value
         and not value.endswith("_")
@@ -479,6 +511,10 @@ class RedAreaExecutionReport:
     safety_stopped: bool = False
     search_stop_reason: str | None = None
     capture_items_exhausted: bool = False
+    capture_attempts: int = 0
+    failed_capture_attempts: int = 0
+    direct_flees: int = 0
+    diagnostic_events: tuple[dict[str, object], ...] = ()
 
     @property
     def passed(self) -> bool:
@@ -521,17 +557,22 @@ def summarize_red_area_survey(
     if offers is not None:
         living = Counter(specimen.species_ref for specimen in observation.specimens)
         holdings = catalog.alternative_capture_holdings(observation, offers)
-        return RedAreaSurvey(source_id, tuple(
-            RedAreaRequirement(ref, holdings[ref], living[ref])
-            for ref in sorted(offers, key=red_species_number) if ref in holdings
-        ))
+        return RedAreaSurvey(
+            source_id,
+            tuple(
+                RedAreaRequirement(ref, holdings[ref], living[ref])
+                for ref in sorted(offers, key=red_species_number)
+                if ref in holdings
+            ),
+        )
     methods = catalog.methods_at_source(source_id)
     if not methods:
         raise ValueError("source_id is not present in the Red acquisition catalog")
     living = Counter(specimen.species_ref for specimen in observation.specimens)
     root_counts = (
         catalog.required_root_holdings(observation)
-        if catalog.remaining_demand else catalog.required_root_acquisitions()
+        if catalog.remaining_demand
+        else catalog.required_root_acquisitions()
     )
     if catalog.level_evolution_edges or catalog.registered_species is not None:
         root_counts = catalog.alternative_capture_holdings(observation)
@@ -696,6 +737,9 @@ def run_red_area_survey(
     catalog: RedAcquisitionCatalog | None = None,
     safety_check: Callable[[], bool] | None = None,
     capture_resources_available: Callable[[], bool] | None = None,
+    resource_stop_reason: Callable[[], str | None] | None = None,
+    record_diagnostic_event: Callable[[str, dict[str, object]], None] | None = None,
+    observe_diagnostics: Callable[[], dict[str, object]] | None = None,
 ) -> RedAreaExecutionReport:
     """Execute one bounded source survey through a semantic game adapter."""
 
@@ -706,6 +750,61 @@ def run_red_area_survey(
     captures = 0
     flees = 0
     box_switches = 0
+    capture_attempts = failed_capture_attempts = direct_flees = 0
+    events: list[dict[str, object]] = []
+    for callback in (record_diagnostic_event, observe_diagnostics):
+        if callback is not None and not callable(callback):
+            raise TypeError("area diagnostics require callable observers")
+
+    def emit(kind, **payload):
+        row = dict(
+            event_ordinal=len(events),
+            source_id=source_id,
+            selection_authority="deterministic_capture_support",
+            **payload,
+        )
+        if observe_diagnostics is not None:
+            row["state"] = observe_diagnostics()
+        if "operation" in row:
+            from .capture_survey import survey_operation_diagnostics
+
+            row["diagnostic_review"] = survey_operation_diagnostics(
+                row.pop("before_diagnostics", None), row.get("state"),
+                operation=row["operation"], elapsed_seconds=row.get("elapsed_seconds"),
+            )
+        events.append(dict(kind=kind, **row))
+        if record_diagnostic_event is not None:
+            record_diagnostic_event(kind, row)
+
+    def diagnostic_fields():
+        return dict(
+            capture_attempts=capture_attempts,
+            failed_capture_attempts=failed_capture_attempts,
+            direct_flees=direct_flees,
+            diagnostic_events=tuple(events),
+        )
+
+    def act(operation, callback):
+        before_diagnostics = None if observe_diagnostics is None else observe_diagnostics()
+        started = monotonic()
+        try:
+            result = callback()
+        except BaseException as error:
+            emit(
+                "survey_action_failed",
+                operation=operation,
+                error_type=type(error).__name__,
+                reason_code=getattr(error, "reason_code", None),
+                error=str(error),
+                before_diagnostics=before_diagnostics,
+                elapsed_seconds=monotonic() - started,
+            )
+            raise
+        emit(
+            "survey_action_returned", operation=operation, returned=result,
+            before_diagnostics=before_diagnostics, elapsed_seconds=monotonic() - started,
+        )
+        return result
 
     def safety_stop(action_count: int) -> RedAreaExecutionReport | None:
         if safety_check is None:
@@ -716,10 +815,24 @@ def run_red_area_survey(
         if safe:
             return None
         final = summarize_red_area_survey(source_id, executor.read_collection(), catalog)
+        emit(
+            "survey_stopped",
+            reason="safety_check_failed",
+            semantic_actions=action_count,
+            encounters_seen=encounters_seen,
+            missing_species_refs=list(final.missing_species_refs),
+        )
         return RedAreaExecutionReport(
-            source_id, initial.missing_species_refs, final.missing_species_refs,
-            action_count, encounters_seen, captures, flees, box_switches,
+            source_id,
+            initial.missing_species_refs,
+            final.missing_species_refs,
+            action_count,
+            encounters_seen,
+            captures,
+            flees,
+            box_switches,
             safety_stopped=True,
+            **diagnostic_fields(),
         )
 
     for action_count in range(policy.max_actions + 1):
@@ -741,6 +854,28 @@ def run_red_area_survey(
             required_species_ref=required_species_ref,
             catalog=catalog,
         )
+        emit(
+            "survey_decision",
+            semantic_action_ordinal=action_count,
+            encountered_species_ref=encountered,
+            required_species_ref=required_species_ref,
+            directive=decision.directive.value,
+            reason=decision.reason,
+            missing_species_refs=list(survey.missing_species_refs),
+            requirements=[
+                dict(
+                    species_ref=r.species_ref,
+                    required=r.required_count,
+                    retained=r.retained_count,
+                    missing=r.missing_count,
+                )
+                for r in survey.requirements
+            ],
+            owned_species=sorted(observation.owned_species),
+            party_size=observation.party_size,
+            box_counts=list(observation.box_counts),
+            current_box_index=observation.current_box_index,
+        )
         if decision.directive is RedAreaDirective.STOP:
             final = summarize_red_area_survey(source_id, observation, catalog)
             return RedAreaExecutionReport(
@@ -752,6 +887,7 @@ def run_red_area_survey(
                 captures,
                 flees,
                 box_switches,
+                **diagnostic_fields(),
             )
         if action_count >= policy.max_actions:
             break
@@ -763,13 +899,32 @@ def run_red_area_survey(
                 if type(available) is not bool:
                     raise TypeError("capture resource check must return a bool")
                 if not available:
+                    reason = resource_stop_reason() if resource_stop_reason is not None else None
+                    if reason is not None and not _is_failure_reason_code(reason):
+                        raise ValueError("resource stop reason must be a typed reason code")
+                    emit(
+                        "survey_stopped",
+                        reason="capture_resources_unavailable",
+                        reason_code=reason,
+                        semantic_actions=action_count,
+                        encounters_seen=encounters_seen,
+                        missing_species_refs=list(survey.missing_species_refs),
+                    )
                     return RedAreaExecutionReport(
-                        source_id, initial.missing_species_refs, survey.missing_species_refs,
-                        action_count, encounters_seen, captures, flees, box_switches,
+                        source_id,
+                        initial.missing_species_refs,
+                        survey.missing_species_refs,
+                        action_count,
+                        encounters_seen,
+                        captures,
+                        flees,
+                        box_switches,
                         capture_items_exhausted=True,
+                        search_stop_reason=reason,
+                        **diagnostic_fields(),
                     )
             try:
-                executor.seek_encounter()
+                act("seek_encounter", executor.seek_encounter)
             except RedAreaExecutionError as error:
                 # A bounded overworld search can legitimately find nothing.
                 # Battle/control defects and other limits remain exceptions.
@@ -778,9 +933,7 @@ def run_red_area_survey(
                     or executor.encountered_species_ref() is not None
                 ):
                     raise
-                final = summarize_red_area_survey(
-                    source_id, executor.read_collection(), catalog
-                )
+                final = summarize_red_area_survey(source_id, executor.read_collection(), catalog)
                 return RedAreaExecutionReport(
                     source_id,
                     initial.missing_species_refs,
@@ -792,6 +945,7 @@ def run_red_area_survey(
                     box_switches,
                     search_exhausted=True,
                     search_stop_reason="survey_leg_limit_exceeded",
+                    **diagnostic_fields(),
                 )
             if executor.encountered_species_ref() is not None:
                 encounters_seen += 1
@@ -809,7 +963,11 @@ def run_red_area_survey(
                     reason_code="capture_directive_missing_species",
                 )
             before = Counter(item.species_ref for item in observation.specimens)[species_ref]
-            captured = executor.capture_encounter(species_ref)
+            capture_attempts += 1
+            captured = act(
+                "capture_encounter",
+                lambda species_ref=species_ref: executor.capture_encounter(species_ref),
+            )
             after_observation = executor.read_collection()
             after = Counter(item.species_ref for item in after_observation.specimens)[species_ref]
             if captured is False:
@@ -819,6 +977,16 @@ def run_red_area_survey(
                         reason_code="capture_retry_postcondition_failed",
                     )
                 flees += 1
+                failed_capture_attempts += 1
+                emit(
+                    "capture_not_retained",
+                    species_ref=species_ref,
+                    specimen_count_before=before,
+                    specimen_count_after=after,
+                    failed_capture_attempts=failed_capture_attempts,
+                    attempt_unit="encounter_capture_operation_not_ball_throw",
+                    legacy_flees=flees,
+                )
                 continue
             if after != before + 1 or executor.encountered_species_ref() is not None:
                 raise RedAreaExecutionError(
@@ -826,6 +994,15 @@ def run_red_area_survey(
                     reason_code="capture_retention_postcondition_failed",
                 )
             captures += 1
+            emit(
+                "capture_verified",
+                species_ref=species_ref,
+                specimen_count_before=before,
+                specimen_count_after=after,
+                new_owned_species=sorted(
+                    after_observation.owned_species - observation.owned_species
+                ),
+            )
             if policy.capture_quota is not None and captures >= policy.capture_quota:
                 stopped = safety_stop(action_count + 1)
                 if stopped is not None:
@@ -844,16 +1021,25 @@ def run_red_area_survey(
                     captures,
                     flees,
                     box_switches,
+                    **diagnostic_fields(),
                 )
             continue
         if decision.directive is RedAreaDirective.FLEE_ENCOUNTER:
-            executor.flee_encounter()
+            act("flee_encounter", executor.flee_encounter)
             if executor.encountered_species_ref() is not None:
                 raise RedAreaExecutionError(
                     f"{source_id} flee did not end the encounter",
                     reason_code="flee_postcondition_failed",
                 )
             flees += 1
+            direct_flees += 1
+            emit(
+                "flee_verified",
+                species_ref=decision.species_ref,
+                reason=decision.reason,
+                direct_flees=direct_flees,
+                legacy_flees=flees,
+            )
             continue
         if decision.directive is RedAreaDirective.SWITCH_BOX:
             if decision.box_index is None:
@@ -862,7 +1048,7 @@ def run_red_area_survey(
                     reason_code="box_switch_directive_missing_destination",
                 )
             before_species = Counter(item.species_ref for item in observation.specimens)
-            executor.switch_box(decision.box_index)
+            act("switch_box", lambda box_index=decision.box_index: executor.switch_box(box_index))
             after_observation = executor.read_collection()
             after_species = Counter(item.species_ref for item in after_observation.specimens)
             if (

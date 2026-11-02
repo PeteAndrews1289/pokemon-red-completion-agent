@@ -1,0 +1,228 @@
+{
+  "actor_settings_sha256": "c87b6e059ba1186df7963b66eb2cd0b12f8023c25a523ec61a510c2a5b20ee9b",
+  "aggregate_development_cutoff": null,
+  "all_copy_receipts": [
+    {
+      "actions": 14,
+      "cash_debits": 0,
+      "exact_original_goal_replay": true,
+      "expected_blocker_reproduced": true,
+      "frames": 432,
+      "heals": 0,
+      "loads": 1,
+      "model_queries": 0,
+      "name": "baseline-exact-v1",
+      "passed": false,
+      "receipt_sha256": "97bec486408676395d0bcab509c23911e22f0fecec75f4510416c824c756299f"
+    },
+    {
+      "actions": 508,
+      "cash_debits": 0,
+      "exact_original_goal_replay": true,
+      "expected_blocker_reproduced": false,
+      "frames": 37928,
+      "heals": 0,
+      "loads": 1,
+      "model_queries": 0,
+      "name": "corrected-exact-v1",
+      "passed": true,
+      "receipt_sha256": "5db3ba7645c72a9ee4958cc2e83511aad5531afe218abe9c6b9e1b4b1b28c37e"
+    },
+    {
+      "actions": 40715,
+      "cash_debits": 8400,
+      "exact_original_goal_replay": false,
+      "expected_blocker_reproduced": false,
+      "frames": 3423933,
+      "heals": 34,
+      "loads": 1,
+      "model_queries": 15,
+      "name": "corrected-composed-v1",
+      "native_sha256": "a506355c995212ed0b8cc1731a8a58bd1d735780dee70ee9eaf99d5541216bc9",
+      "passed": true,
+      "receipt_sha256": "66ebf521a02b8129e9adcac409cf168e08ae65e3f4fac8f1c6fbc55c1fc95448",
+      "support_steps": 5
+    }
+  ],
+  "all_emulators_stopped": true,
+  "at_utc": "2026-10-16T15:18:46.670405+00:00",
+  "baseline_manifest_sha256": "c8adf1eacbf6ccc7537b432c8991fc62202c661d20ae6172dfd01e6eb84fc44e",
+  "candidate": "trade-escape-package-v1",
+  "changed_runtime_sources": [
+    "src/pokemon_red_completion/red_npc_trade_options.py"
+  ],
+  "composed_chain": {
+    "actions": 40715,
+    "cash_debits": 8400,
+    "completed_objectives": [
+      "begin_adventure",
+      "choose_starter",
+      "clear_rocket_hideout",
+      "defeat_brock",
+      "defeat_erika",
+      "defeat_koga",
+      "defeat_misty",
+      "defeat_sabrina",
+      "defeat_surge",
+      "help_bill",
+      "liberate_silph",
+      "obtain_cut",
+      "obtain_silph_scope",
+      "obtain_strength",
+      "obtain_surf",
+      "power_on",
+      "reach_celadon",
+      "reach_cerulean",
+      "reach_cinnabar",
+      "reach_fuchsia",
+      "reach_lavender",
+      "reach_pewter",
+      "reach_saffron",
+      "reach_vermilion",
+      "receive_pokedex",
+      "rescue_fuji"
+    ],
+    "copy_back": false,
+    "crossed_trade_escape_return": true,
+    "export_verified": true,
+    "fit_allowed": false,
+    "frames": 3423933,
+    "fresh_loads_allowed_only_on_related_copy": true,
+    "goal_attempts": 20,
+    "heals": 34,
+    "independent_origin": false,
+    "initial_copy_registrations": 71,
+    "later_actual_model_choices": 3,
+    "later_model_choices": 3,
+    "model_queries": 15,
+    "original_roster_returned": true,
+    "passed": true,
+    "related_copy": true,
+    "released": true,
+    "seconds": 548.0512025828939,
+    "source_sha256": "e4cd42872daec5fd479f42649d1f25a1b34807291498add48c3701443569ebb2",
+    "state_loads": 1,
+    "stop_reason": "decision_budget",
+    "supplied_strategic_goal": false,
+    "support_steps": 5,
+    "terminal_bag": [
+      [
+        234,
+        1
+      ],
+      [
+        42,
+        1
+      ],
+      [
+        211,
+        1
+      ],
+      [
+        49,
+        1
+      ],
+      [
+        228,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        224,
+        1
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        221,
+        1
+      ],
+      [
+        72,
+        1
+      ],
+      [
+        40,
+        1
+      ],
+      [
+        73,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        246,
+        1
+      ],
+      [
+        198,
+        1
+      ],
+      [
+        199,
+        1
+      ],
+      [
+        206,
+        1
+      ],
+      [
+        3,
+        8
+      ]
+    ],
+    "terminal_cash": 12757,
+    "terminal_copy_registrations": 79,
+    "terminal_sha256": "6ccb550d75cbc546f96e16231abf947917371d55cc71c2e505356de5a83305ce",
+    "trade_escape_return_verified": true,
+    "trade_registered": true,
+    "worker_stopped": true
+  },
+  "copied_back_progress": false,
+  "environment_pins": 4512,
+  "failed_actual": "red-frozen-autonomous-run-20261016-pc-return-v1",
+  "fits": 0,
+  "focused_rom_free_tests": 497,
+  "focused_test_receipt_sha256": "6d8b4ffe6badd455bfd72e93508d1a20df216f83ef875d858fc920c620c6bd34",
+  "forecast_limitation": "Reference output forecast is not a guarantee of sixteen-hour capacity or stochastic completion; supervisor retains unchanged three-GiB reserve.",
+  "forecast_output_bytes": 19517046089,
+  "full_suite_or_ci_claimed": false,
+  "headroom_after_forecast_and_reserve": 7763702455,
+  "helper_changes": 0,
+  "interpretation": "Single execution-wiring repair. Existing bounded wild escape now accompanies selected NPC-trade travel, sharing a finite allowance. Exact exchange and custody checks remain. No trainer fallback, model/helper change, TRAIN or copied gains.",
+  "isolated_inputs": 0,
+  "isolated_loads": 0,
+  "isolated_modules": 301,
+  "isolated_plan_sha256": "c523b08c8f3d6f9326b03785ab9a9f5262a771eeb0ba56fc34bb26676db31fa5",
+  "isolated_writes": 0,
+  "main_registration_delta": 0,
+  "manifest_sha256": "176702d6f04ccb3d5e0d228f808f379ffc710a5c71737c9f3fec9e95ffc92fbf",
+  "model_and_data_changes": 0,
+  "new_weights": 0,
+  "next_action": "Launch one distinct fresh sixteen-hour dashboard actor under continuing human authorization after exclusive preflight; review every two hours.",
+  "output_free_bytes": 30501974016,
+  "package_pins": 7878,
+  "passed": true,
+  "private_closeout_sha256": "1de1117785c90888a7321f51818d749e366d967c85cf81e585407ebe7e5a77ab",
+  "protected_pins": 1018,
+  "reserve_bytes": 3221225472,
+  "schema": "pokemon.red.npc-trade-wild-escape-repair-acceptance.v1",
+  "scoped_style_passed": true,
+  "scoped_whitespace_passed": true,
+  "session_started_at_utc": "2026-10-16T15:01:50.168868+00:00",
+  "terminal_review_sha256": "ff3bf198d6b057fd14030b0d8444d1f478e4a800ec482e7d6bb231817136a12c",
+  "total_copy_loads": 3,
+  "total_diagnostic_actions": 41237,
+  "total_diagnostic_cash_debits": 8400,
+  "total_diagnostic_frames": 3462293,
+  "total_diagnostic_heals": 34,
+  "train_examples": 0
+}

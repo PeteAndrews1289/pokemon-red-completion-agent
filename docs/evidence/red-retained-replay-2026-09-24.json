@@ -1,0 +1,126 @@
+{
+  "schema": "pokemon.red.retained-replay.v1",
+  "session_id": "2026-09-24-retained-replay",
+  "status": "fit_rejected",
+  "source_commit": "d1f5a866c662c8283ba18abe56f309f0ea4fec02",
+  "hashes": {
+    "plan": "ac0e5ff25e6f4cc8c57e00879d0a0a02cb0b0b45d2db3005c84d8107caf3fe36",
+    "fit": "a9abccdf71bae25bda9862576d7812de1ae8d0beecfaa288e2d5b23372bb6bf4",
+    "result": "ace8544511f71bbc2124169c0d4c2083eef662361d835ddeb7ce5b234ac5ea77",
+    "fit_audit": "5bb187a31f82c31d1d853e8a8b378c11cd3775b3c937fd3461cf3b450c005ed6",
+    "closure_audit": "8231cf64e8ad7a204130c6178cfc56e10366e76c970f7fc4d168cdd51f880cb3",
+    "readonly_diagnosis": "786915c577a22d20df9fd31f254dec449395cc88f14ff1779fc6f28804e38fb2",
+    "candidate": "d3dd6c09b2ed6a8b67623a470587677785fa1337e3a188307efee415731bb6be"
+  },
+  "implementation": {
+    "mode": "unique_budget_cases_v1",
+    "default_unchanged": true,
+    "inference_unchanged": true,
+    "fresh_weight": 0.5,
+    "replay_weight": 0.5,
+    "duplicates": "exact ordered feature vectors plus mean returns;one vote per distinct example",
+    "replay": {
+      "control": {
+        "anchor_cases": 281,
+        "budget_cases": 1186,
+        "fresh_weight": 0.5,
+        "mode": "unique_budget_cases_v1",
+        "replay_weight": 0.5,
+        "unique_replay_cases": 326
+      },
+      "switch": {
+        "anchor_cases": 289,
+        "budget_cases": 1234,
+        "fresh_weight": 0.5,
+        "mode": "unique_budget_cases_v1",
+        "replay_weight": 0.5,
+        "unique_replay_cases": 337
+      }
+    }
+  },
+  "training": {
+    "attempts": 1,
+    "epochs_per_head": 2400,
+    "learning_rate": 0.005,
+    "seconds": 156.97926158318296,
+    "late_targets": 9,
+    "prior_recent_targets": 36,
+    "recent_targets_retained": 45,
+    "new_targets": 0,
+    "metrics": {
+      "control": {
+        "after": 0.9821167398500001,
+        "before": 0.9821167398500001,
+        "cases": 4
+      },
+      "switch": {
+        "after": 0.5313747160857142,
+        "before": 0.5313747160857142,
+        "cases": 7
+      }
+    },
+    "improvement_percent": 0,
+    "required_control_improvement_percent": 10,
+    "selected_switch_epoch": 0,
+    "selected_control_epoch": 0,
+    "reported_feasible_checkpoints_per_head": 1,
+    "returned_head_weights_exactly_parent": true,
+    "retention_groups": 18,
+    "retention_checks": 35,
+    "retention_regressions": 0,
+    "frozen_damage_status": true,
+    "identical_status_predictions": 591
+  },
+  "diagnosis": {
+    "logged_checkpoints_per_head": 97,
+    "all_96_updated_switch_logs_violate": [
+      "complete36",
+      "complete36-forced_replacement",
+      "complete36-optional_prompt",
+      "retained52"
+    ],
+    "all_96_updated_control_logs_violate": [
+      "anchors",
+      "policy16"
+    ],
+    "exact_new_old_switch_inventory_matches": 2,
+    "disjoint_best_vector_matches": 0,
+    "interpretation": "Uniform complete replay alone is insufficient for this fixed trajectory. Feasibility checks reject iterates but do not redirect them. No proof of representational impossibility or guaranteed success from constrained updates."
+  },
+  "verification": {
+    "fit_metrics_recomputed": true,
+    "replay_inventory_reconstructed": true,
+    "recorded_budget_flags_verified": true,
+    "closure_audit_valid": true,
+    "focused_tests_passed": 181,
+    "full_suite": false,
+    "lint_passed": true
+  },
+  "deltas": {
+    "fits": 1,
+    "new_targets": 0,
+    "native_episodes": 0,
+    "controller_inputs": 0,
+    "frames": 0,
+    "comparisons": 0,
+    "authority_promotions": 0,
+    "story": 0,
+    "registrations": 0
+  },
+  "protected": {
+    "campaign_stage": 461,
+    "campaign_state": "359a96aa",
+    "campaign_envelope": "36dbc835",
+    "unused_stage": 462,
+    "deployed_actor": "4ea4cfde",
+    "parent_actor": "b106108e",
+    "unopened_comparison_teams": 24
+  },
+  "next": "Bounded constraint-aware training update design and ROM-free tests,then at most one separately frozen offline fit. No further collection or unchanged-Adam rerun.",
+  "limitations": [
+    "Optimization hypothesis rejected,not a model-strength improvement.",
+    "The returned candidate differs in training metadata,not switch/control weights;not deployed.",
+    "Exact alias screening does not establish neural capacity or global constraint feasibility.",
+    "No old trial replay,secondfit,opened comparison,promotion or publication."
+  ]
+}

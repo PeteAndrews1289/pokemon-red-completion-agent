@@ -1,0 +1,73 @@
+{
+  "actual_badges": 2,
+  "actual_registration_delta": 0,
+  "actual_registrations": 22,
+  "actual_running": false,
+  "actual_source_and_context_unchanged": true,
+  "all_controls_released": true,
+  "all_native_stopped": true,
+  "checks_overlap_not_added": true,
+  "child_model_unchanged": true,
+  "current_candidate_gates_passed": 1,
+  "current_package": {
+    "path": "private-artifact://96f12860087f46a4da17717499d85110dca4bc1f63c333a0e8aa34cd25979a00",
+    "sha256": "0c3bec3571dd2678b03cb0fdb25a2fb8d894ea7d0e9c6c3385a4ca3542a77e08"
+  },
+  "earlier_mid_badges": 8,
+  "earlier_mid_native_seconds": 2914.912373895,
+  "earlier_mid_package": {
+    "path": "private-artifact://fe19014df6b5d4bdb44196dc2506b3bcdee5f225b5b7951af8f846e791b5e615",
+    "sha256": "9ad91a3ad6774319ddff43d6a4a04fb9ec6d6cb44fc8332d28f903eadc321ea3"
+  },
+  "earlier_mid_registrations": 84,
+  "editable_source_commit": "d800544575b5e91061066f0d2de4ce66f95a73e7",
+  "editable_source_not_identical_to_frozen_candidate": true,
+  "fitted_parameters": 1,
+  "four_native_loads": 4,
+  "full_suite_claim": false,
+  "gate_adjudication": {
+    "path": "private-artifact://ba09fbbf54c13e066c023d6ffd893f8b718a33ed7fd3d52ce81b8fbb9019ee10",
+    "sha256": "44be691057b43119dd561d35c4399e060511f3bd41cc09b2b595c93b4cd795b5"
+  },
+  "gate_credit_not_stitched": true,
+  "gate_thresholds_unchanged": true,
+  "healing_exact_frozen_tests": 676,
+  "healing_source_focused_tests": 662,
+  "independent_TRAIN_origins": 1,
+  "known_remaining_gap": "Current build lacks same-candidate MID/endurance proof. First League entry underrepresented medicine cash demand; Champion loss and all costs retained. Editable known-cash/Strength fixes are not deployed.",
+  "latest_child_queries": 0,
+  "latest_closed_outcomes": 41,
+  "latest_diagnostic_facts": {
+    "badge_bits": 255,
+    "badges": 8,
+    "cash": 5765,
+    "master_ball": 1,
+    "party_levels": [
+      57,
+      67,
+      64,
+      56,
+      57,
+      56
+    ],
+    "registrations": 116
+  },
+  "latest_execution_or_nonordinary_errors": 0,
+  "latest_native_seconds": 1083.064485764,
+  "latest_ordinary_setbacks": 7,
+  "latest_parent_queries": 24,
+  "latest_root_inclusive_seconds": 1173.3812728489993,
+  "native_test_minutes": 80.66445681765005,
+  "new_native_TRAIN_rows": 0,
+  "next_action": "Qualify the original MID source on unchanged frozen0c3bec and test >=45 native minutes plus a new model-owned story milestone. Preserve the current LATE/Gate3 proof; do not silently include later editable-source repairs. Separately diagnose pre-League medicine demand before any TRAIN contrast or source promotion.",
+  "no_DEVELOPMENT_fitting": true,
+  "no_diagnostic_gain_import": true,
+  "observed_at_utc": "2026-10-29T23:12:56.215476+00:00",
+  "parent_model_sha256": "94a0a18f228262cdc6f27ccb9f7e1868b539959d6aba46e15861845460479a30",
+  "production_fits": 1,
+  "reused_TRAIN_rows": 18,
+  "schema": "pokemon.development-episode-evidence.v1",
+  "semantic_parity_cases": 1028,
+  "session_id": "2026-10-29-replenishment-value",
+  "status": "closed"
+}

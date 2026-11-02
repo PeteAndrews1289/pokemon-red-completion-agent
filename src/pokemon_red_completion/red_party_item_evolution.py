@@ -25,8 +25,9 @@ Capability Limitations:
   is called unconditionally after evolution without a method check, testing the
   evolved species' learnset at its current level. The controller now derives
   that learnset from the cartridge and rejects any exact level that would open
-  a move-learning path. Do not add speculative confirmation pulses or weaken
-  move preservation to accept arbitrary changes.
+  a move-learning path by default. Explicit full-moveset preservation support
+  may decline a semantically authenticated prompt; empty-slot allocation and
+  arbitrary move replacement remain unsupported.
 - Evolution modal mechanics:
   Evolution in Pokémon Red directly updates the Pokédex owned and seen flags
   in RAM without invoking a ShowPokedexData modal. ItemUseEvoStone removes the
@@ -216,7 +217,11 @@ class RedPartyItemEvolutionExecutor:
         observe_collection: Callable[[], CollectionObservation],
         timing: LavenderTiming = DEFAULT_LAVENDER_TIMING,
         max_evolution_confirmation_pulses: int = 64,
+        *,
+        allow_move_learning_preservation: bool = False,
     ) -> None:
+        if type(allow_move_learning_preservation) is not bool:
+            raise RedPartyItemEvolutionValidationError("move preservation mode must be boolean")
         if reader is None:
             raise RedPartyItemEvolutionValidationError("reader cannot be None")
         if emulator is None:
@@ -246,6 +251,7 @@ class RedPartyItemEvolutionExecutor:
         self.observe_collection = observe_collection
         self.timing = timing
         self.max_evolution_confirmation_pulses = max_evolution_confirmation_pulses
+        self.allow_move_learning_preservation = allow_move_learning_preservation
 
     def execute(
         self,
@@ -343,7 +349,7 @@ class RedPartyItemEvolutionExecutor:
             )
             if level == before_party_levels[request.party_slot]
         )
-        if learned_at_current_level:
+        if learned_at_current_level and not self.allow_move_learning_preservation:
             raise RedPartyItemEvolutionValidationError(
                 "Stone evolution would enter an unsupported cartridge-derived "
                 f"move-learning path at level {before_party_levels[request.party_slot]}: "
@@ -364,6 +370,13 @@ class RedPartyItemEvolutionExecutor:
                     f"Party moves for slot {slot_idx} must have exactly 4 moves, got {moves!r}"
                 )
         before_party_moves = tuple(tuple(m) for m in raw_before.party_moves)
+        if learned_at_current_level and (
+            not callable(getattr(self.reader, "read_move_learning_prompt", None))
+            or any(not 1 <= move <= 165 for move in before_party_moves[request.party_slot])
+        ):
+            raise RedPartyItemEvolutionValidationError(
+                "move-learning preservation requires a semantic detector and four existing moves"
+            )
 
         # 4. Bag items validation: reject unavailable bag or duplicate item rows before any input
         if raw_before.bag_items is None:
@@ -527,6 +540,14 @@ class RedPartyItemEvolutionExecutor:
             ) and _bag_matches_evolution(before_bag, current_bag, request.item_id):
                 evolved = True
                 break
+            if learned_at_current_level:
+                from .battle_runtime import move_learning_preservation_action
+
+                prompt = self.reader.read_move_learning_prompt(current_raw, allow_field=True)
+                if prompt is not None:
+                    action = move_learning_preservation_action(prompt)
+                    _pulse(actions, action.kind, action.value, frames=240)
+                    continue
             _pulse(actions, MacroActionKind.CONFIRM, frames=240)
 
         if not evolved:

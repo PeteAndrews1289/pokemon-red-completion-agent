@@ -1,0 +1,217 @@
+{
+  "actions": 1908,
+  "bag": [
+    [
+      20,
+      4
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      212,
+      1
+    ],
+    [
+      42,
+      1
+    ],
+    [
+      11,
+      2
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      63,
+      1
+    ],
+    [
+      196,
+      1
+    ],
+    [
+      15,
+      6
+    ],
+    [
+      74,
+      1
+    ],
+    [
+      46,
+      1
+    ],
+    [
+      221,
+      1
+    ],
+    [
+      19,
+      7
+    ],
+    [
+      82,
+      1
+    ],
+    [
+      40,
+      1
+    ],
+    [
+      73,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      246,
+      1
+    ],
+    [
+      3,
+      20
+    ]
+  ],
+  "battle_replays": 0,
+  "battles": [
+    {
+      "decisions": 5,
+      "income": 840,
+      "metrics": {
+        "attack_turn_utility_sum": 6,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 2,
+        "party_faints": 0,
+        "party_hp_lost": 17,
+        "party_pp_spent": 3,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 4720042,
+        "policy_latency_ns_mean": 2888649.8,
+        "policy_latency_ns_min": 682208,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "627fa0f038cbc42123e1d6291251118c905a28832277421e8a07b53a880d693a",
+      "stage": 167
+    },
+    {
+      "decisions": 2,
+      "income": 945,
+      "metrics": {
+        "attack_turn_utility_sum": 3,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 0,
+        "opponent_faints": 1,
+        "party_faints": 0,
+        "party_hp_lost": 24,
+        "party_pp_spent": 1,
+        "party_status_changes": 0,
+        "policy_latency_ns_max": 6471666,
+        "policy_latency_ns_mean": 4517520.5,
+        "policy_latency_ns_min": 2563375,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "ab7087fd0661aa843c5de371e8c9e16670e582eaf772206da5986cb4b513551c",
+      "stage": 169
+    },
+    {
+      "decisions": 15,
+      "income": 735,
+      "metrics": {
+        "attack_turn_utility_sum": 11.329896907216495,
+        "invalid_action_failures": 0,
+        "move_suppressed_or_failed": 4,
+        "opponent_faints": 4,
+        "party_faints": 0,
+        "party_hp_lost": 68,
+        "party_pp_spent": 5,
+        "party_status_changes": 2,
+        "policy_latency_ns_max": 5856042,
+        "policy_latency_ns_mean": 2898302.8,
+        "policy_latency_ns_min": 697292,
+        "teacher_interventions": 0
+      },
+      "outcome_sha256": "75d4397ce7296d5902ffe114ca3b8d95f31a3e112a5352973d42bc9a4cfad05e",
+      "stage": 170
+    }
+  ],
+  "capture": {
+    "caught": true,
+    "decisions": 12,
+    "potions": 0,
+    "teacher_support": true,
+    "throws": 9,
+    "weakening_observations": 9
+  },
+  "capture_authority": "disclosed guarded support, not learned",
+  "capture_decisions": {
+    "throw_ball": 9,
+    "weaken_target": 3
+  },
+  "cash": 249,
+  "dispatcher_noop_stage": 171,
+  "envelope_sha256": "0a750c886b8f3523e4ea29aa13a51454e9638836450318818d0047e5d194c5d4",
+  "errors_retained": [
+    165,
+    166,
+    168,
+    172
+  ],
+  "frames": 123768,
+  "fully_restored": true,
+  "funding_income": 2520,
+  "gameplay_running": false,
+  "learned_trainer_decisions": 22,
+  "local_registrations": 17,
+  "new_fits": 0,
+  "new_local_registrations": 1,
+  "next_preparation_guard_verified": true,
+  "partition": "DEVELOPMENT",
+  "party_hp": [
+    147,
+    78,
+    91,
+    99,
+    139
+  ],
+  "party_levels": [
+    47,
+    36,
+    35,
+    36,
+    30
+  ],
+  "primary_unchanged": true,
+  "purchase_cost": 19500,
+  "recomputed_heads": {
+    "attack": 13,
+    "control": 14,
+    "switch": 8
+  },
+  "sales": 0,
+  "schema": "pokemon.red.earned-snorlax.v1",
+  "story_objectives": 21,
+  "terminal_sha256": "e7a4c64d6936bffdd9f7a4d505e0c2f14638c4475f9c990a455f384702c391fb",
+  "terminal_stage": 174,
+  "weakening_proofs_recomputed": 9,
+  "native_execution_seconds": 56.50945070758462,
+  "targeted_tests_passed": 552,
+  "full_suite_run": false,
+  "global_registration_delta": "not claimed",
+  "mission_check": {
+    "reusable_capability": "No-sale funding and guarded live-stat capture; hazard-aware NPC approach.",
+    "learned_authority": "Existing additive battler owns trainer fights; other operations disclosed support.",
+    "transfer_test": "Unused natural trainer rosters and ROM-free changed stats, types, inventories and hazards.",
+    "cheapest_falsifier": "Capture resource admission and conservative sublethal weakening.",
+    "time_box": "One session, two-hour ceiling; 80 decisions per trainer battle.",
+    "stop_condition": "Retain failures; no rewind, teacher trainer fallback or unqualified damage."
+  },
+  "next_stage": 175,
+  "post_native_review": "Live converted attack types covered by adapter fix and ROM-free test; no gameplay replay."
+}

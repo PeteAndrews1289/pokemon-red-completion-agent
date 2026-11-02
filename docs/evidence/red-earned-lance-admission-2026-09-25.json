@@ -1,0 +1,17 @@
+{
+  "authority": "frozen-risk-cost-lance-development",
+  "campaign_stage": 463,
+  "copy_audit_sha256": "a721044e6c57a1391c748f76d0b609b14de37f2c04d6be872c81a71a6011aa67",
+  "copy_outer_error_retained": true,
+  "failed_broad_qualification_retained": true,
+  "maximum_battles": 1,
+  "maximum_decisions": 80,
+  "model_content_sha256": "905b7e5a8943278bee14d7cb1e55361c1bdb2445dd35e943382f24b2df39e3f4",
+  "model_sha256": "1b8c8361949bfe33f71f349078f100943c67acfd21b2f84f7cd2612ad958313a",
+  "objective_id": "defeat_lance",
+  "owner_direction": "Ok let's begin: one earned Lance attempt, then assess recovery before Champion.",
+  "partition": "development",
+  "prohibited": ["copy-back", "retry", "fit", "Champion execution", "default deployment", "ordinary funding", "wild execution"],
+  "schema": "pokemon.red.earned-lance-admission.v1",
+  "source_sha256": "6ab3bf1b2a81fe5d213f769124db17d9dca2e4b0313551c17765cb3cc9c35717"
+}

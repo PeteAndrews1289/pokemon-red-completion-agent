@@ -560,6 +560,26 @@ def test_area_survey_stops_before_seeking_without_capture_resources():
     assert report.encounters_seen == report.captures == report.flees == 0
 
 
+@pytest.mark.parametrize("reason", ["steps_reserve_exhausted", "balls_exhausted", None])
+def test_area_survey_preserves_explicit_resource_stop_reason(reason):
+    report = run_red_area_survey(
+        "wild:Route1:grass", _RouteOneSurveySimulation(()),
+        capture_resources_available=lambda: False, resource_stop_reason=lambda: reason,
+    )
+    assert report.search_stop_reason == reason
+    assert report.capture_items_exhausted  # Legacy flag; explicit reason disambiguates it.
+    assert report.actions_executed == report.encounters_seen == 0
+
+
+@pytest.mark.parametrize("reason", [False, "", "bad reason", {"reason": "no"}])
+def test_area_survey_rejects_invalid_resource_stop_reason(reason):
+    with pytest.raises(ValueError, match="resource stop reason"):
+        run_red_area_survey(
+            "wild:Route1:grass", _RouteOneSurveySimulation(()),
+            capture_resources_available=lambda: False, resource_stop_reason=lambda: reason,
+        )
+
+
 @pytest.mark.parametrize("value", [0, 1, None, "yes"])
 def test_area_survey_rejects_non_boolean_resource_evidence(value):
     with pytest.raises(TypeError, match="resource check"):

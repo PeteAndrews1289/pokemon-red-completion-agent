@@ -7,13 +7,20 @@ retain action/time/party costs and choice-admission evidence alongside these fac
 """
 
 import math
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
+from .goal_resource_quote import GoalResourceReserve
+
 ECONOMY_SCHEMA = "pokemon.core.resource-economy-snapshot.v1"
 ECONOMY_FEATURE_NAMES = (
-    "earning", "purchasing", "cash_shortfall", "conditional_income",
-    "planned_spend", "shortfall_income",
+    "earning",
+    "purchasing",
+    "cash_shortfall",
+    "conditional_income",
+    "planned_spend",
+    "shortfall_income",
 )
 
 
@@ -47,7 +54,8 @@ class EconomySnapshot:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": ECONOMY_SCHEMA, "cash": self.cash,
+            "schema": ECONOMY_SCHEMA,
+            "cash": self.cash,
             "inventory": [[key, count] for key, count in self.inventory],
         }
 
@@ -59,10 +67,58 @@ class EconomyMode(StrEnum):
 
 
 @dataclass(frozen=True, slots=True)
+class EconomyReplenishmentOffer:
+    """Prechoice reserve facts; quotes are not observed gains or authority."""
+
+    reserves: tuple[GoalResourceReserve, ...]
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.reserves) is not tuple
+            or not self.reserves
+            or any(type(r) is not GoalResourceReserve for r in self.reserves)
+            or len({r.resource for r in self.reserves}) != len(self.reserves)
+        ):
+            raise ValueError("replenishment reserves must be unique typed facts")
+        object.__setattr__(self, "reserves", tuple(sorted(self.reserves, key=lambda r: r.resource)))
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.replenishment-offer.v1",
+            "reserves": [r.public_dict() for r in self.reserves],
+        }
+
+    @classmethod
+    def from_public_dict(cls, value: object) -> "EconomyReplenishmentOffer":
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != {"schema", "reserves"}
+            or value["schema"] != "pokemon.core.replenishment-offer.v1"
+            or not isinstance(value["reserves"], list)
+        ):
+            raise ValueError("replenishment offer schema differs")
+        reserves = []
+        for row in value["reserves"]:
+            if not isinstance(row, Mapping) or set(row) != {
+                "resource",
+                "available",
+                "target",
+                "purchased",
+            }:
+                raise ValueError("replenishment reserve schema differs")
+            reserves.append(GoalResourceReserve(**row))
+        result = cls(tuple(reserves))
+        if result.public_dict() != value:
+            raise ValueError("replenishment offer is not canonical")
+        return result
+
+
+@dataclass(frozen=True, slots=True)
 class EconomyOffer:
     mode: EconomyMode
     conditional_income: int = 0
     planned_spend: int = 0
+    replenishment: EconomyReplenishmentOffer | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.mode, EconomyMode):
@@ -71,10 +127,50 @@ class EconomyOffer:
         _count(self.planned_spend, "planned spend")
         if self.mode != EconomyMode.EARN and self.conditional_income:
             raise ValueError("only an earning offer may quote income")
+        if self.replenishment is not None and (
+            type(self.replenishment) is not EconomyReplenishmentOffer
+            or self.mode is not EconomyMode.PURCHASE
+            or self.planned_spend <= 0
+        ):
+            raise ValueError("replenishment requires an explicit purchase offer")
+
+
+def quoted_replenishment_gain(
+    offer: EconomyOffer | None,
+    *,
+    qualified_resources: tuple[str, ...] = ("capture",),
+) -> float:
+    """Prospective demand-capped target satisfaction; never a success label.
+
+    Unknown, unsupported or already satisfied reserves yield no new reward.
+    This descriptor is intentionally excluded from every legacy feature vector.
+    """
+    if qualified_resources != ("capture",):
+        raise ValueError("only capture replenishment is qualified for this contract")
+    if offer is None:
+        return 0.0
+    if type(offer) is not EconomyOffer:
+        raise TypeError("replenishment requires a typed economy offer")
+    if offer.replenishment is None:
+        return 0.0
+    if any(r.resource not in qualified_resources for r in offer.replenishment.reserves):
+        return 0.0  # Mixed/medicine offers are not qualified by capture-only TRAIN.
+    rows = tuple(
+        r
+        for r in offer.replenishment.reserves
+        if r.resource in qualified_resources and r.target > 0
+    )
+    denominator = sum(r.target for r in rows)
+    if denominator == 0:
+        return 0.0
+    return sum(min(r.purchased, max(0, r.target - r.available)) for r in rows) / denominator
 
 
 def economy_features(
-    before: EconomySnapshot, offer: EconomyOffer, *, target_cash: int,
+    before: EconomySnapshot,
+    offer: EconomyOffer,
+    *,
+    target_cash: int,
 ) -> tuple[float, ...]:
     """Identity-free prospective features, relative to a declared useful budget.
 
@@ -89,7 +185,9 @@ def economy_features(
     return (
         float(offer.mode == EconomyMode.EARN),
         float(offer.mode == EconomyMode.PURCHASE),
-        shortfall, income, min(1.0, offer.planned_spend / scale),
+        shortfall,
+        income,
+        min(1.0, offer.planned_spend / scale),
         shortfall * income,
     )
 
@@ -125,13 +223,17 @@ class EconomyOutcome:
             "useful_liquidity_gain": self.useful_liquidity_gain,
             "cash_loss": self.cash_loss,
             # Endpoint differences cannot identify either gross flow.
-            "gross_income": None, "gross_spend": None,
+            "gross_income": None,
+            "gross_spend": None,
         }
 
 
 def economy_outcome(
-    before: EconomySnapshot | None, after: EconomySnapshot | None, *,
-    target_cash: int, interrupted: bool = False,
+    before: EconomySnapshot | None,
+    after: EconomySnapshot | None,
+    *,
+    target_cash: int,
+    interrupted: bool = False,
 ) -> EconomyOutcome | None:
     """Censor missing/interrupted data, never substitute a quote or zero money.
 

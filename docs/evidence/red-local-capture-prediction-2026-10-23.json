@@ -1,0 +1,100 @@
+{
+  "TRAIN_examples_added": 0,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_running": false,
+  "adopted_models": 0,
+  "all_native_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "audit_due_utc": "2026-10-23T18:42:46+00:00",
+  "benchmark": {
+    "adopted": false,
+    "reason": "Small single-ABBA effect; baseline drift exceeds mean gain.",
+    "relative_bind_reduction_percent": 1.1278327939170607,
+    "root_seconds": 106.98239585800002
+  },
+  "block_closed": false,
+  "capture_checks": {
+    "brier_better_than_constant": true,
+    "brier_better_than_parent": true,
+    "log_loss_no_worse_than_constant": true,
+    "log_loss_no_worse_than_parent": true,
+    "no_source_Brier_regression_vs_constant": true
+  },
+  "capture_metrics": {
+    "constant_local": {
+      "boundary_probability_count": 0,
+      "brier": 0.2553454826216955,
+      "clipped_count": 0,
+      "clipped_max": 0.5052993214763948,
+      "clipped_min": 0.39674290003295276,
+      "log_loss": 0.7040721855493581,
+      "n": 4,
+      "raw_max": 0.5052993214763948,
+      "raw_min": 0.39674290003295276
+    },
+    "horizon_local": {
+      "boundary_probability_count": 0,
+      "brier": 0.2422385666759799,
+      "clipped_count": 0,
+      "clipped_max": 0.5193816520581613,
+      "clipped_min": 0.38443761495579354,
+      "log_loss": 0.6772877454706633,
+      "n": 4,
+      "raw_max": 0.5193816520581613,
+      "raw_min": 0.38443761495579354
+    },
+    "parent": {
+      "boundary_probability_count": 4,
+      "brier": 0.5,
+      "clipped_count": 4,
+      "clipped_max": 1.0,
+      "clipped_min": 1.0,
+      "log_loss": 6.907755778968009,
+      "n": 4,
+      "raw_max": 3.721609246940787,
+      "raw_min": 3.613052825497345
+    }
+  },
+  "capture_predictive_gate_passed": true,
+  "capture_species_numbers": [
+    123
+  ],
+  "cash_debits": 2000,
+  "complete_total_cost_unknown": true,
+  "deadline_utc": "2026-10-23T19:42:46+00:00",
+  "exact_old_rows_retained": 173,
+  "fit_calls": 2,
+  "full_suite_claim": false,
+  "heals": 3,
+  "independent_origin_claim": false,
+  "known_native_study_parent_seconds": 289.5689551529997,
+  "latest_frozen_focused_tests": 194,
+  "model_owned_capture_choices": 0,
+  "native_actions": 5941,
+  "native_frames": 640168,
+  "native_loads": 5,
+  "nested_native_seconds": 80.67060202999997,
+  "new_capture_occurrences_on_copies": 2,
+  "observed_at_utc": "2026-10-23T17:44:33.107487+00:00",
+  "offline_costs_separate": true,
+  "preflights": 2,
+  "preparation_native_qualified": true,
+  "preparation_registration_credit": 0,
+  "preparation_xp_gained": 410,
+  "private_evidence_hashes": {
+    "CAPTURE-RESERVED-PANEL-ANALYSIS.json": "508041dd84c846d83d8a4192c5e7abb39057dae4a46ba6c2596e22e2ca1d73ac",
+    "HARNESS-ACCOUNTING-ERRATA.json": "e51898bbf4a11226d57b38670c6af497fc675f069c4152f623028b4388d9c709",
+    "V13-A9-RETENTION-CHECK-R3.json": "4a51ccfa722c776f7b0f296c587ac35c71e711b0c3b5a1ff75c79290125d2b85",
+    "capture-local-fit/RESULT.json": "c946fdc0a0b30841495c632545f21bc8e493fb941150e89aaf963af6eef79c1d",
+    "proposals/CAPTURE-PANEL-INDEPENDENT-REVIEW.json": "b1fcb3855aec78e7cefb86861e70ef3e40eb2bc0f8d2f53621e46a4c83e4b334",
+    "proposals/P164-NATIVE-INDEPENDENT-REVIEW.json": "53e3e9c0eac82035fc284fa58c5efd58f50c149f93c5327413f8cd701c61f1af",
+    "proposals/P167-ABBA-INDEPENDENT-CLOSEOUT.json": "e14e493a5f4ca016bafc7c51249c95493b7b4b8c8dcda2ddb787fd0d945a796b"
+  },
+  "retained_failures": [
+    "P165 unrelated economy behavior drift found by two retained retention failures",
+    "047-short original frame-accounting authentication failure; exact additive reconciliation; no rerun",
+    "all prior actual and diagnostic attempts remain"
+  ],
+  "schema": "pokemon.red.local-capture-prediction-milestone.v1"
+}

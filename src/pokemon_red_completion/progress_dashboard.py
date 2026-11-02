@@ -1008,6 +1008,11 @@ class _DashboardRequestHandler(BaseHTTPRequestHandler):
         if path == "/":
             self._send(HTTPStatus.OK, "text/html; charset=utf-8", _DASHBOARD_HTML)
             return
+        if path == "/watch":
+            from .run_dashboard_view import RUN_DASHBOARD_HTML
+
+            self._send(HTTPStatus.OK, "text/html; charset=utf-8", RUN_DASHBOARD_HTML)
+            return
         if path == "/api/status":
             payload, version = self.server.dashboard_state.status_bytes()
             self._send(
@@ -1049,21 +1054,26 @@ class _DashboardRequestHandler(BaseHTTPRequestHandler):
         *,
         etag: str | None = None,
     ) -> None:
-        self.send_response(status)
-        self.send_header("Content-Type", content_type)
-        self.send_header("Content-Length", str(len(payload)))
-        self.send_header("Cache-Control", "no-store")
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("X-Frame-Options", "DENY")
-        self.send_header(
-            "Content-Security-Policy",
-            "default-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; "
-            "script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'",
-        )
-        if etag is not None:
-            self.send_header("ETag", etag)
-        self.end_headers()
-        self.wfile.write(payload)
+        try:
+            self.send_response(status)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(payload)))
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header(
+                "Content-Security-Policy",
+                "default-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; "
+                "script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'",
+            )
+            if etag is not None:
+                self.send_header("ETag", etag)
+            self.end_headers()
+            self.wfile.write(payload)
+        except (BrokenPipeError, ConnectionResetError):
+            # The observer client may leave while a snapshot is sent.
+            # End only that HTTP connection; unexpected I/O still propagates.
+            self.close_connection = True
 
 
 class ProgressDashboardServer:

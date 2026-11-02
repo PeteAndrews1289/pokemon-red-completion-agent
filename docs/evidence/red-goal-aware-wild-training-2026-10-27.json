@@ -1,0 +1,211 @@
+{
+  "P26": {
+    "focused_catalog_checks": 85,
+    "full_suite_claim": false,
+    "old_default_and_models_unchanged": true,
+    "overlap_not_totaled": true,
+    "package": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/native-candidate26/frozen-runtime/PLAYER-PACKAGE.json",
+      "sha256": "5648cf3e0df6d8e9525dd7e90659371f9f8426c94402add5854bbbb16bd15c83"
+    },
+    "previous_P25_focused": 586,
+    "previous_P25_separate_subtests": 43,
+    "separate_subtests": 43,
+    "skips": 0
+  },
+  "Wartortle18_contrast": {
+    "Misty_win": false,
+    "autonomous_macro_credit": false,
+    "bootstrap_seconds": 0.9341653530000258,
+    "challenge_progress": 0.6355932203389831,
+    "costs": {
+      "actions": 999,
+      "cash_debits": 1500,
+      "decisions": 4,
+      "frames": 81396,
+      "heals": 1,
+      "seconds": 18.93374866799968
+    },
+    "party_XP": 688,
+    "root_closeout_sha256": "c6efe837c149c9fa74723ed7e7f539f367eda54d18ded4690269495de0ff0d54",
+    "target_XP": 688
+  },
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "all_native_and_fit_workers_stopped": true,
+  "all_seven_goals_complete": false,
+  "audit_due_utc": "2026-10-27T22:16:00+00:00",
+  "audit_status": "NOT_YET_DUE",
+  "conditional_fit_gate": {
+    "calibration_still_imperfect": true,
+    "decision": "UNINFORMATIVE_NO_FIT",
+    "new_fits": 0,
+    "observed_W_minus_R_utility": -0.052584632768361575,
+    "posthoc_calibration_refit": false,
+    "predicted_W_minus_R_utility": -0.90374281875456,
+    "public_forecasts": 2,
+    "ranking_correct": true,
+    "result_sha256": "1133f0da2fbd25a5e613dcb7be877f34d2dd6600101782ef4a7e9bb96733ddac",
+    "root_exit_sha256": "292725a1d9bdc8be5b70d065a480947640e5489458172bc9b02265aa898fa286"
+  },
+  "deadline_utc": "2026-10-27T23:16:00+00:00",
+  "existing_candidate": {
+    "content_sha256": "c9e129fd9413a1358c36801e1a0807b3af8187f1a30ab7af31a0b8f285fc1fb2",
+    "file_sha256": "3b187fc6bfb46dd0fd062f0d14ff5fadffe353347d4e94a2124bdbaba988c4b3",
+    "goal_context_consumed": false,
+    "inventory_sha256": "b91c0f6d0e8366c1c460121e58664eac6bdcb1091ba0d46bb0416dafce992eb8",
+    "new7da_transfer_measured": false,
+    "scope": "Previously qualified wild-preparation only; general trainers and global adoption not qualified."
+  },
+  "first_native_trial": {
+    "benefit_qualified": false,
+    "controls_released": true,
+    "costs": {
+      "actions": 1442,
+      "cash_debits": 1500,
+      "decisions": 4,
+      "frames": 115656,
+      "heals": 1,
+      "seconds": 27.326235026000177
+    },
+    "execution_and_pairing_valid": true,
+    "game_outcome": "Ordinary Misty loss; target evolved to21",
+    "independent_origin": false,
+    "optimizer_admission": false,
+    "paid_control": "Historical P24 win8684inputs/623340frames/25heals; static compatibility only, no fresh P25 baseline",
+    "root_closeout_sha256": "a7d89c6f5e95e25fba01e24196a44ddbc22be0f4a9f0c47c4b95c198d63aba1a",
+    "training_phase": {
+      "frames": 76068,
+      "inputs": 986,
+      "target_XP": 1276,
+      "total_party_XP": 1276,
+      "voluntary_switches": 0,
+      "wild_battles": 17
+    }
+  },
+  "fit_worker_dispatch_ready": false,
+  "fresh_acceptance": false,
+  "full_suite": false,
+  "gameplay_native_loads": 5,
+  "genuine_sequence": {
+    "Misty_win": false,
+    "TRAIN_exploration_policy": true,
+    "bootstrap_seconds_unknown": true,
+    "costs": {
+      "actions": 3711,
+      "cash_debits": 1500,
+      "frames": 268944,
+      "heals": 7,
+      "native_seconds": 60.705768603999786
+    },
+    "execution_valid": true,
+    "model_choices": 8,
+    "ordinary_setbacks": 2,
+    "production_greedy_performance_claim": false,
+    "root_closeout_sha256": "610aa4b4bea658c43b49e3af9a1154917139f07069210409a80cc65d5b7fda98"
+  },
+  "historical_composition_correction": "Earlier successful model-owned BE9 path included A9+1ff development-only readiness refinement plus3b/4eab and greedy selection. A9 alone on ordinary TRAIN is unmeasured; no1ff/33 TRAIN extension is authorized by this trial.",
+  "interface_scope": "Optional private trainee/role context and identity-free semantic projection only; legacy models do not consume it or acquire new learned ability by threading metadata.",
+  "learning_closeout": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/FINAL-LEARNING-STATE.json",
+    "sha256": "61c1c178ba4609f087a795d6ab002058550456b889bdc06f582172d493a8d513"
+  },
+  "lower_deficit_pair": {
+    "actual_raw_deficits": [
+      0.025,
+      0.01
+    ],
+    "direct": {
+      "actions": 464,
+      "debit": 1500,
+      "frames": 42120,
+      "heals": 0,
+      "native_seconds": 8.801985449999847,
+      "win": false
+    },
+    "heldout_generalization": false,
+    "learned_macro_selection": false,
+    "preparation": {
+      "actions": 1332,
+      "debit": 0,
+      "frames": 105720,
+      "heals": 1,
+      "native_seconds": 25.189015042000392,
+      "party_XP": 1276,
+      "target_XP": 1276,
+      "win": true
+    },
+    "root_closeout": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/LOWER-DEFICIT-DIRECT-PREP-ROOT-CLOSEOUT.json",
+      "sha256": "b60b7daecf25ec1419710738f384af3f7b4dd631537ff4cdbdb6110b8285e881"
+    },
+    "teacher_selected_macro": true
+  },
+  "lower_deficit_source": {
+    "one_related_origin": true,
+    "root_qualification": {
+      "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/LOWER-DEFICIT-SOURCE-ROOT-QUALIFICATION.json",
+      "sha256": "dcfacfd47119f3f5d415c88509680982a20f945d8a80d727b4b0b47c44791e35"
+    },
+    "state_sha256": "2d2eb758146be68e49bdbe08fa63177eb4852899e52ae9650aee17c423a51ef8",
+    "supplied_levels": [
+      18,
+      20,
+      19,
+      7,
+      12,
+      10
+    ],
+    "teacher_gifts_earned": false,
+    "zero_inputs_frames": true
+  },
+  "models_adopted": 0,
+  "new_TRAIN_rows": 4,
+  "new_TRAIN_scalar_channels": 36,
+  "new_actual_TRAIN_fits": 0,
+  "new_goal_policy_queries": 8,
+  "new_model_queries": null,
+  "new_native_loads": 7,
+  "new_public_linear_forecasts": 4,
+  "next": "Reuse the admitted17-row TRAIN cohort and all17 paid33 baseline forecasts (13old +2earlier3b +2newlower-deficit). Under a fresh finite mission, run one existing fixed ridge1 utility_absolute_loss correction if the exact cached information gate and prospective quality join hold. Retain all8old margins plus priorW/R order; old15MSE/utilityMAE no worse; new2MSE/MAE improve; all17MSE no worse/MAE improve. Freeze only a qualifying candidate, then test actual head selection/stopping consumption and whole-path payoff on an admitted untouched development case. If rejected, preserve candidate/failed constraints and change the next hypothesis before any refit.",
+  "next_learning_plan_review": {
+    "path": "private-artifact://117c02b60632/PokemonMigration-20261016/windows-seven-goal-implementation-20261017/goal-aware-wild-training-20261027-2016/NEXT-LEARNING-PLAN-ROOT-REVIEW.json",
+    "sha256": "c0c3e8fdd9c018a58df32cee3fe7cfafdc12f3b90b01b58c6fe404ae4a5704fc"
+  },
+  "observed_at_utc": "2026-10-27T23:07:55.486723+00:00",
+  "optional_objective_context": {
+    "consumed_by_heads": 0,
+    "correct": 17,
+    "goal_conditioned_learning": false,
+    "present": 17,
+    "wild_battles": 17
+  },
+  "payoff_correction": {
+    "receipt_sha256": "775ebcb05b7e7fe22eb02ab6e999a3108301a92da11a0bfb9802b33731b03c44",
+    "summary": "Historical payoff correction: exact BE9/8fd2 preparation with legacy720 had already evolved and won Misty at7460inputs/538,368frames/21heals. Alternative3428 achieved1282/94,428/3 and later4eab/3b187 retained the result. Those old150second limits/configuration differ from the new300second7da TRAIN comparison. The broad earlier claim that DEV preparation payoff was unmeasured is withdrawn; raw prior claims and costs remain preserved."
+  },
+  "prior_history_and_costs_preserved": true,
+  "schema": "pokemon.red-goal-aware-wild-training-evidence.v1",
+  "session": "2026-10-27-goal-aware-wild-training",
+  "source_qualification": {
+    "focused_tests": 586,
+    "full_suite": false,
+    "sha256": "2d77b24ada4b4e17492d5b0a390e30cc89392913c4534da8266d8e3cef617ede",
+    "subtests_separate": 43
+  },
+  "started_at_utc": "2026-10-27T20:16:00+00:00",
+  "status": "bounded_block_closing_actual_paused",
+  "strict_current_controller_lesson": {
+    "new_channels": 18,
+    "new_rows": 2,
+    "old13_exact": true,
+    "old720_deferred20_conflict_preserved": true,
+    "old_bootstrap_uncertainty_preserved": true,
+    "one_origin": true,
+    "root_admission_sha256": "3cf5101f5cc300b0c9c8fefc0b83f027d6cbfa51d62839513e4511ff67e824f1",
+    "seconds_not_in_native_feedback9": true,
+    "whole15_actor_mixture_disclosed": true
+  },
+  "teacher_setup_loads": 2,
+  "whole_process_NN_metering_complete": false
+}

@@ -157,17 +157,23 @@ class BattlePracticeSpec:
     opponent_reserves: tuple[PracticeReserve, ...] | None = None
     actor_national_number: int | None = None
     opponent_national_number: int | None = None
+    allow_status_only_wild_training: bool = False
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
             raise BattlePracticeError("practice source state hash differs")
         if _SAFE_ID.fullmatch(self.root_lineage_id) is None:
             raise BattlePracticeError("practice root lineage differs")
-        if self.partition is not ScenarioPartition.TRAIN:
-            raise BattlePracticeError("first practice factory is train-only")
+        self._validate_partition()
+        if type(self.allow_status_only_wild_training) is not bool:
+            raise BattlePracticeError("status-only TRAIN opt-in must be boolean")
+        if self.allow_status_only_wild_training and (
+            self.partition is not ScenarioPartition.TRAIN or self.battle_kind != "wild"
+        ):
+            raise BattlePracticeError("status-only opt-in requires isolated TRAIN wild practice")
         if (
             not isinstance(self.actor_moves, tuple)
-            or not 2 <= len(self.actor_moves) <= 4
+            or not (1 if self.allow_status_only_wild_training else 2) <= len(self.actor_moves) <= 4
             or any(not isinstance(move, PracticeMove) for move in self.actor_moves)
         ):
             raise BattlePracticeError("practice needs two to four declared moves")
@@ -251,6 +257,10 @@ class BattlePracticeSpec:
             ):
                 raise BattlePracticeError("trainer practice opponent reserves differ")
 
+    def _validate_partition(self) -> None:
+        if self.partition is not ScenarioPartition.TRAIN:
+            raise BattlePracticeError("first practice factory is train-only")
+
     @classmethod
     def from_dict(cls, value: object) -> BattlePracticeSpec:
         """Fail closed when a caller requests an axis this adapter cannot set."""
@@ -277,6 +287,7 @@ class BattlePracticeSpec:
             "opponent_reserves",
             "actor_national_number",
             "opponent_national_number",
+            "allow_status_only_wild_training",
         }
         if (
             not isinstance(value, dict)
@@ -351,6 +362,7 @@ class BattlePracticeSpec:
                 ),
                 actor_national_number=value.get("actor_national_number"),
                 opponent_national_number=value.get("opponent_national_number"),
+                allow_status_only_wild_training=value.get("allow_status_only_wild_training", False),
             )
         except (TypeError, ValueError, KeyError) as error:
             raise BattlePracticeError(f"invalid practice condition: {error}") from error
@@ -423,4 +435,27 @@ class BattlePracticeSpec:
             configuration["actor_national_number"] = self.actor_national_number
         if self.opponent_national_number is not None:
             configuration["opponent_national_number"] = self.opponent_national_number
+        if self.allow_status_only_wild_training:
+            configuration["schema"] = "pokemon.core.battle-practice-configuration.v6"
+            configuration["allow_status_only_wild_training"] = True
         return canonical_sha256(configuration)
+
+
+class AssistedDevelopmentPracticeSpec(BattlePracticeSpec):
+    """Explicit held-out construction; never admitted by the TRAIN entry point.
+
+    This does not create independent ancestry. The campaign must authenticate
+    fresh sources and freeze all conditions before any model evaluation.
+    """
+
+    def _validate_partition(self) -> None:
+        if self.partition is not ScenarioPartition.DEVELOPMENT:
+            raise BattlePracticeError("assisted held-out practice is development-only")
+        if (
+            self.battle_kind != "trainer"
+            or not isinstance(self.party_reserves, tuple)
+            or not 3 <= len(self.party_reserves) <= 5
+        ):
+            raise BattlePracticeError(
+                "assisted held-out practice needs four to six trainer members"
+            )

@@ -35,31 +35,47 @@ def _same(left: object, right: object) -> bool:
     return bool(left == right)
 
 
-def _validate(raw: RawGameState) -> None:
+def _validate(raw: RawGameState, *, allow_fainted_reserves: bool = False) -> None:
+    if type(allow_fainted_reserves) is not bool:
+        raise RedElixirPlanError("Elixir reserve profile must be a boolean")
     if (
-        not isinstance(raw, RawGameState) or raw.game_started is not True
+        not isinstance(raw, RawGameState)
+        or raw.game_started is not True
         or not _integer(raw.battle_state, 0, 0)
         or not _integer(raw.map_id, 0, 255)
-        or not _integer(raw.player_x, 0, 255) or not _integer(raw.player_y, 0, 255)
+        or not _integer(raw.player_x, 0, 255)
+        or not _integer(raw.player_y, 0, 255)
         or not _integer(raw.party_count, 1, 6)
         or not _integer(raw.player_money, 0, 999999)
-        or type(raw.event_flags) is not bytes or len(raw.event_flags) != EVENT_FLAG_BYTES
+        or type(raw.event_flags) is not bytes
+        or len(raw.event_flags) != EVENT_FLAG_BYTES
     ):
         raise RedElixirPlanError("Elixir requires a complete observed field boundary")
     count = cast(int, raw.party_count)
     for values, minimum, maximum in (
-        (raw.party_species_ids, 1, 190), (raw.party_levels, 1, 100),
-        (raw.party_hp, 1, 999), (raw.party_max_hp, 1, 999),
+        (raw.party_species_ids, 1, 190),
+        (raw.party_levels, 1, 100),
+        (raw.party_hp, 0 if allow_fainted_reserves else 1, 999),
+        (raw.party_max_hp, 1, 999),
         (raw.party_status, 0, 255),
     ):
-        if (type(values) is not tuple or len(values) != count
-                or not all(_integer(value, minimum, maximum) for value in values)):
+        if (
+            type(values) is not tuple
+            or len(values) != count
+            or not all(_integer(value, minimum, maximum) for value in values)
+        ):
             raise RedElixirPlanError("Elixir requires complete, living party data")
     assert raw.party_hp is not None and raw.party_max_hp is not None
+    if not any(raw.party_hp):
+        raise RedElixirPlanError("Elixir requires at least one living target")
     if any(hp > maximum for hp, maximum in zip(raw.party_hp, raw.party_max_hp, strict=True)):
         raise RedElixirPlanError("Elixir party HP exceeds its maximum")
-    if (type(raw.party_moves) is not tuple or type(raw.party_pp) is not tuple
-            or len(raw.party_moves) != count or len(raw.party_pp) != count):
+    if (
+        type(raw.party_moves) is not tuple
+        or type(raw.party_pp) is not tuple
+        or len(raw.party_moves) != count
+        or len(raw.party_pp) != count
+    ):
         raise RedElixirPlanError("Elixir party move/PP arrays differ")
     for moves, pp in zip(raw.party_moves, raw.party_pp, strict=True):
         try:
@@ -69,26 +85,38 @@ def _validate(raw: RawGameState) -> None:
         if not decoded.maximum_total:
             raise RedElixirPlanError("Elixir party member has no occupied move")
     bag = raw.bag_items
-    if (type(bag) is not tuple or len(bag) > 20 or any(
-        type(row) is not tuple or len(row) != 2
-        or not _integer(row[0], 1, 255) or not _integer(row[1], 1, 99)
-        for row in bag
-    )):
+    if (
+        type(bag) is not tuple
+        or len(bag) > 20
+        or any(
+            type(row) is not tuple
+            or len(row) != 2
+            or not _integer(row[0], 1, 255)
+            or not _integer(row[1], 1, 99)
+            for row in bag
+        )
+    ):
         raise RedElixirPlanError("Elixir bag is invalid")
     if len({item for item, _ in bag}) != len(bag):
         raise RedElixirPlanError("Elixir bag contains duplicate item stacks")
     if raw.bag_item_ids is not None and not _same(raw.bag_item_ids, tuple(i for i, _ in bag)):
         raise RedElixirPlanError("Elixir bag identity alias differs")
     for alias, alias_values in (
-        (raw.first_party_level, raw.party_levels), (raw.first_party_hp, raw.party_hp),
-        (raw.first_party_max_hp, raw.party_max_hp), (raw.first_party_status, raw.party_status),
-        (raw.first_party_moves, raw.party_moves), (raw.first_party_pp, raw.party_pp),
+        (raw.first_party_level, raw.party_levels),
+        (raw.first_party_hp, raw.party_hp),
+        (raw.first_party_max_hp, raw.party_max_hp),
+        (raw.first_party_status, raw.party_status),
+        (raw.first_party_moves, raw.party_moves),
+        (raw.first_party_pp, raw.party_pp),
     ):
         assert alias_values is not None
         if alias is not None and not _same(alias, alias_values[0]):
             raise RedElixirPlanError("Elixir first-party alias differs")
-    if any(getattr(raw, field.name) is not None for field in fields(raw)
-           if field.name.startswith("active_party_")):
+    if any(
+        getattr(raw, field.name) is not None
+        for field in fields(raw)
+        if field.name.startswith("active_party_")
+    ):
         raise RedElixirPlanError("Elixir field state contains active battle-party data")
     for value in (raw.badge_bits, raw.status_flags_1, raw.repel_remaining_steps):
         if value is not None and not _integer(value, 0, 255):
@@ -96,25 +124,40 @@ def _validate(raw: RawGameState) -> None:
     # Frozen RawGameState alone does not reject mutable or mistyped values in
     # its optional scratch fields. Keep the entire bound snapshot immutable.
     for name in (
-        "battle_result", "enemy_species_id", "enemy_hp", "enemy_level", "enemy_max_hp",
-        "player_attack_stage", "player_special_stage", "player_accuracy_stage",
-        "enemy_defense_stage", "player_disabled_move_slot", "player_disable_turns",
+        "battle_result",
+        "enemy_species_id",
+        "enemy_hp",
+        "enemy_level",
+        "enemy_max_hp",
+        "player_attack_stage",
+        "player_special_stage",
+        "player_accuracy_stage",
+        "enemy_defense_stage",
+        "player_disabled_move_slot",
+        "player_disable_turns",
     ):
         value = getattr(raw, name)
         if value is not None and not _integer(value, 0, 65535):
             raise RedElixirPlanError("Elixir optional raw field is invalid")
-    if (raw.enemy_using_trapping_move is not None
-            and type(raw.enemy_using_trapping_move) is not bool):
+    if (
+        raw.enemy_using_trapping_move is not None
+        and type(raw.enemy_using_trapping_move) is not bool
+    ):
         raise RedElixirPlanError("Elixir optional raw flag is invalid")
 
 
-def _selection(raw: RawGameState) -> tuple[int, tuple[int, ...], tuple[int, ...], tuple[int, ...]]:
-    _validate(raw)
+def _selection(
+    raw: RawGameState, *, allow_fainted_reserves: bool = False
+) -> tuple[int, tuple[int, ...], tuple[int, ...], tuple[int, ...]]:
+    _validate(raw, allow_fainted_reserves=allow_fainted_reserves)
     assert raw.bag_items is not None and raw.party_moves is not None and raw.party_pp is not None
+    assert raw.party_hp is not None
     if dict(raw.bag_items).get(ELIXIR_ITEM_ID, 0) < 1:
         raise RedElixirPlanError("Elixir is not owned")
     candidates = []
     for index, (moves, pp) in enumerate(zip(raw.party_moves, raw.party_pp, strict=True)):
+        if raw.party_hp[index] == 0:
+            continue
         decoded = decode_red_party_pp(moves, pp)
         gains = tuple(min(10, move.maximum_pp - move.current_pp) for move in decoded.moves)
         after = tuple(packed + gain for packed, gain in zip(pp, gains, strict=True))
@@ -132,9 +175,10 @@ class RedElixirPlan:
     before_pp: tuple[int, ...]
     after_pp: tuple[int, ...]
     slot_gains: tuple[int, ...]
+    allow_fainted_reserves: bool = False
 
     def __post_init__(self) -> None:
-        expected = _selection(self.before)
+        expected = _selection(self.before, allow_fainted_reserves=self.allow_fainted_reserves)
         if not _same((self.party_index, self.before_pp, self.after_pp, self.slot_gains), expected):
             raise RedElixirPlanError("Elixir plan differs from its bound observed benefit")
 
@@ -152,17 +196,21 @@ class RedElixirPlan:
         )
 
 
-def plan_field_elixir(raw: RawGameState) -> RedElixirPlan:
+def plan_field_elixir(raw: RawGameState, *, allow_fainted_reserves: bool = False) -> RedElixirPlan:
     """Maximize actual restored PP among living targets; ties use party order."""
-    return RedElixirPlan(raw, *_selection(raw))
+    return RedElixirPlan(
+        raw,
+        *_selection(raw, allow_fainted_reserves=allow_fainted_reserves),
+        allow_fainted_reserves=allow_fainted_reserves,
+    )
 
 
 def verify_field_elixir(plan: RedElixirPlan, before: RawGameState, after: RawGameState) -> None:
     """Verify exactly one application, not input readiness or completion authority."""
     if not isinstance(plan, RedElixirPlan):
         raise RedElixirPlanError("Elixir plan is unavailable")
-    _validate(before)
-    _validate(after)
+    _validate(before, allow_fainted_reserves=plan.allow_fainted_reserves)
+    _validate(after, allow_fainted_reserves=plan.allow_fainted_reserves)
     if not all(
         _same(getattr(before, f.name), getattr(plan.before, f.name)) for f in fields(before)
     ):
@@ -180,15 +228,34 @@ def verify_field_elixir(plan: RedElixirPlan, before: RawGameState, after: RawGam
     else:
         expected_ids = tuple(item for item, _ in plan.expected_bag)
     expected_first_pp = expected_pp[0] if before.first_party_pp is not None else None
-    if (not _same(after.bag_item_ids, expected_ids)
-            or not _same(after.first_party_pp, expected_first_pp)):
+    if not _same(after.bag_item_ids, expected_ids) or not _same(
+        after.first_party_pp, expected_first_pp
+    ):
         raise RedElixirPlanError("Elixir updated bag/PP aliases differ")
     for name in (
-        "game_started", "battle_state", "map_id", "player_x", "player_y", "player_money",
-        "event_flags", "badge_bits", "status_flags_1", "repel_remaining_steps",
-        "party_count", "party_species_ids", "party_levels", "party_moves",
-        "party_hp", "party_max_hp", "party_status", "first_party_level",
-        "first_party_hp", "first_party_max_hp", "first_party_status", "first_party_moves",
+        "game_started",
+        "battle_state",
+        "map_id",
+        "player_x",
+        "player_y",
+        "player_money",
+        "event_flags",
+        "badge_bits",
+        "status_flags_1",
+        "repel_remaining_steps",
+        "party_count",
+        "party_species_ids",
+        "party_levels",
+        "party_moves",
+        "party_hp",
+        "party_max_hp",
+        "party_status",
+        "party_stats",
+        "first_party_level",
+        "first_party_hp",
+        "first_party_max_hp",
+        "first_party_status",
+        "first_party_moves",
     ):
         if not _same(getattr(before, name), getattr(after, name)):
             raise RedElixirPlanError(f"Elixir changed protected {name}")

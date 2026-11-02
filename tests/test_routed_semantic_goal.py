@@ -62,9 +62,13 @@ def _composer(
     limits: RoutedSemanticGoalLimits | None = None,
     capture_support: dict[str, int] | None = None,
     capture_survey: dict[str, object] | None = None,
+    capture_diagnostics: dict[str, object] | None = None,
     storage_preparation: dict[str, object] | None = None,
     route_fields: dict[str, int] | None = None,
     destination_fields: dict[str, int] | None = None,
+    evolution_evidence: dict[str, object] | None = None,
+    destination_evidence: dict[str, object] | None = None,
+    destination_kind: GoalKind = GoalKind.RESUPPLY,
 ) -> tuple[
     RoutedSemanticGoalComposer,
     ExecutableGoalBinding,
@@ -76,17 +80,18 @@ def _composer(
     route_verdict = route_verification or GoalVerification.succeeded()
     destination_verdict = destination_verification or GoalVerification.succeeded()
     route_values = route_spend if route_report is None else route_report
-    destination_values = (
-        destination_spend if destination_report is None else destination_report
-    )
+    destination_values = destination_spend if destination_report is None else destination_report
 
     def execute_route() -> GoalExecutionReport:
         events.append("route_execute")
         meter.spend(*route_spend)
-        return GoalExecutionReport(*route_values, {
-            "private_route": True,
-            **({"field_moves": route_fields} if route_fields is not None else {}),
-        })
+        return GoalExecutionReport(
+            *route_values,
+            {
+                "private_route": True,
+                **({"field_moves": route_fields} if route_fields is not None else {}),
+            },
+        )
 
     def verify_route(_report: GoalExecutionReport) -> GoalVerification:
         events.append("route_verify")
@@ -106,12 +111,24 @@ def _composer(
         meter.spend(*destination_spend)
         return GoalExecutionReport(
             *destination_values,
-            {"semantic_destination": offered_kind.value,
-             **({"field_moves": destination_fields} if destination_fields is not None else {}),
-             **({"capture_support": capture_support} if capture_support is not None else {}),
-             **({"capture_survey": capture_survey} if capture_survey is not None else {}),
-             **({"storage_preparation": storage_preparation}
-                if storage_preparation is not None else {})},
+            {
+                "semantic_destination": offered_kind.value,
+                **({"field_moves": destination_fields} if destination_fields is not None else {}),
+                **({"capture_support": capture_support} if capture_support is not None else {}),
+                **({"capture_survey": capture_survey} if capture_survey is not None else {}),
+                **(
+                    {"capture_diagnostics": capture_diagnostics}
+                    if capture_diagnostics is not None
+                    else {}
+                ),
+                **(
+                    {"storage_preparation": storage_preparation}
+                    if storage_preparation is not None
+                    else {}
+                ),
+                **(evolution_evidence or {}),
+                **(destination_evidence or {}),
+            },
         )
 
     def verify_destination(_report: GoalExecutionReport) -> GoalVerification:
@@ -146,7 +163,7 @@ def _composer(
 
     composer = RoutedSemanticGoalComposer(
         binding_ref="private:composite",
-        destination_kind=GoalKind.RESUPPLY,
+        destination_kind=destination_kind,
         estimated_effort=0.5,
         estimated_risk=0.2,
         route=route,
@@ -157,29 +174,95 @@ def _composer(
     return composer, composer.binding(), meter, events
 
 
-@pytest.mark.parametrize('escape_bypasses', [0, 2])
+def test_partial_evolution_costs_survive_routing_without_private_identity():
+    counts = dict(
+        evolution_partial=True,
+        settlement_reserve_reached=True,
+        wall_limit_reached=False,
+        quantum_limit_reached=True,
+        completed_training_quanta=3,
+        maximum_training_quanta=3,
+        retained_active_roster_restored=True,
+        completed_training_battles=12,
+        healing_trips=3,
+    )
+    _, binding, meter, _ = _composer(
+        offered_kind=GoalKind.EVOLVE_SPECIES,
+        destination_kind=GoalKind.EVOLVE_SPECIES,
+        evolution_evidence={**counts, "profile_sha256": "private", "source_species_ref": "private"},
+        destination_verification=GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED),
+    )
+    report = binding.execute()
+    assert {key: report.evidence[key] for key in counts} == counts
+    assert "profile_sha256" not in report.evidence and "source_species_ref" not in report.evidence
+    assert report.actions_executed == meter.actions == 5
+    assert binding.verify(report).status is GoalDecisionOutcome.FAILED
+
+
+@pytest.mark.parametrize(
+    "counts",
+    [
+        {"completed_training_battles": -1},
+        {"completed_training_battles": True},
+        {"healing_trips": 1.5},
+        {"evolution_partial": 1},
+        {"quantum_limit_reached": 1},
+        {"completed_training_quanta": True},
+        {"maximum_training_quanta": -1},
+    ],
+)
+def test_evolution_cost_forwarding_rejects_ambiguous_counts(counts):
+    _, binding, _, _ = _composer(
+        offered_kind=GoalKind.EVOLVE_SPECIES,
+        destination_kind=GoalKind.EVOLVE_SPECIES,
+        evolution_evidence=counts,
+    )
+    with pytest.raises(RoutedSemanticGoalError, match="invalid typed costs"):
+        binding.execute()
+
+
+@pytest.mark.parametrize("escape_bypasses", [0, 2])
 def test_capture_support_counts_survive_routing_without_forwarding_private_evidence(
     escape_bypasses,
 ):
-    counts = {'status_attempts': 3, 'verified_status_observations': 1, 'party_preparations': 0}
+    counts = {"status_attempts": 3, "verified_status_observations": 1, "party_preparations": 0}
     if escape_bypasses:
-        counts['escape_setup_bypasses'] = escape_bypasses
+        counts["escape_setup_bypasses"] = escape_bypasses
     _, binding, _, _ = _composer(capture_support=counts)
     report = binding.execute()
-    assert report.evidence['capture_support'] == counts
-    assert 'private_route' not in report.evidence
+    assert report.evidence["capture_support"] == counts
+    assert "private_route" not in report.evidence
+
+
+def test_observed_nonlethal_capture_diagnostics_survive_route_composition():
+    counts = {
+        "status_attempts": 1,
+        "verified_status_observations": 1,
+        "party_preparations": 0,
+        "weakening_attempts": 2,
+        "weakening_hp_removed": 20,
+        "weakening_abstentions": 1,
+    }
+    _, binding, _, _ = _composer(capture_support=counts)
+    assert binding.execute().evidence["capture_support"] == counts
 
 
 @pytest.mark.parametrize("exhausted", [False, True])
 def test_capture_survey_survives_routed_destination(exhausted: bool) -> None:
     counts = {
-        "semantic_actions": 17, "encounters_seen": 5,
-        "captures": 0 if exhausted else 1, "flees": 4,
-        "search_exhausted": exhausted, "safety_stopped": False,
+        "semantic_actions": 17,
+        "encounters_seen": 5,
+        "captures": 0 if exhausted else 1,
+        "flees": 4,
+        "search_exhausted": exhausted,
+        "safety_stopped": False,
         **({"search_stop_reason": "survey_leg_limit_exceeded"} if exhausted else {}),
     }
-    verdict = (GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
-               if exhausted else GoalVerification.succeeded())
+    verdict = (
+        GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
+        if exhausted
+        else GoalVerification.succeeded()
+    )
     _, binding, _, _ = _composer(capture_survey=counts, destination_verification=verdict)
     report = binding.execute()
     assert report.evidence["capture_survey"] == counts
@@ -196,16 +279,38 @@ def test_unexecuted_destination_does_not_invent_survey_counts() -> None:
     assert "capture_survey" not in binding.execute().evidence
 
 
+def test_capture_diagnostics_survive_routing_without_changing_the_verdict():
+    diagnostics = dict(diagnostic_only=True, events=[dict(reason="safety_check_failed")])
+    failed = GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
+    _, binding, _, _ = _composer(capture_diagnostics=diagnostics, destination_verification=failed)
+    report = binding.execute()
+    diagnostics["events"].clear()
+    assert report.evidence["capture_diagnostics"]["events"] == [dict(reason="safety_check_failed")]
+    assert binding.verify(report) == failed
+
+
+def test_capture_diagnostics_cannot_be_passed_as_unmarked_outcome_evidence():
+    _, binding, _, _ = _composer(capture_diagnostics=dict(events=[]))
+    with pytest.raises(RoutedSemanticGoalError, match="explicitly observational"):
+        binding.execute()
+
+
 def test_ball_exhaustion_preserves_completed_transport_and_failed_destination():
     survey = {
-        "semantic_actions": 2, "encounters_seen": 1, "captures": 0, "flees": 1,
-        "search_exhausted": False, "safety_stopped": False,
+        "semantic_actions": 2,
+        "encounters_seen": 1,
+        "captures": 0,
+        "flees": 1,
+        "search_exhausted": False,
+        "safety_stopped": False,
         "capture_items_exhausted": True,
     }
     fields = {"cuts": 0, "surfs": 1, "flights": 1}
     verdict = GoalVerification.failed(GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED)
     _, binding, meter, _ = _composer(
-        capture_survey=survey, route_fields=fields, destination_verification=verdict,
+        capture_survey=survey,
+        route_fields=fields,
+        destination_verification=verdict,
     )
     report = binding.execute()
     assert report.evidence["field_moves"] == fields
@@ -255,9 +360,7 @@ def test_success_keeps_route_out_of_the_policy_kind_and_verifies_in_order() -> N
 
 def test_route_failure_never_binds_or_executes_the_destination() -> None:
     _composer_value, binding, _meter, events = _composer(
-        route_verification=GoalVerification.failed(
-            GoalFailureReason.OUTCOME_NOT_VERIFIED
-        )
+        route_verification=GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
     )
 
     report = binding.execute()
@@ -297,20 +400,19 @@ def test_fresh_destination_join_rejects_stale_or_drifted_identity(
     assert events == ["route_execute", "route_verify", "fresh_bind"]
 
 
-@pytest.mark.parametrize(("reason", "expected"), [
-    (GoalUnavailableReason.MISSING_RESOURCE, "missing_resource"),
-    (GoalUnavailableReason.STORAGE_BLOCKED, "storage_blocked"),
-])
+@pytest.mark.parametrize(
+    ("reason", "expected"),
+    [
+        (GoalUnavailableReason.MISSING_RESOURCE, "missing_resource"),
+        (GoalUnavailableReason.STORAGE_BLOCKED, "storage_blocked"),
+    ],
+)
 def test_unavailable_fresh_destination_settles_without_executing_an_alternate(reason, expected):
-    _composer_value, binding, _meter, events = _composer(
-        unavailable_reason=reason
-    )
+    _composer_value, binding, _meter, events = _composer(unavailable_reason=reason)
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.BINDING_FAILED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
     assert events == ["route_execute", "route_verify", "fresh_bind"]
     assert report.evidence["destination_bound"] is False
     assert report.evidence["destination_executed"] is False
@@ -320,10 +422,13 @@ def test_unavailable_fresh_destination_settles_without_executing_an_alternate(re
 
 @pytest.mark.parametrize("route_failed", [False, True])
 def test_no_unavailable_offer_does_not_invent_a_diagnostic(route_failed):
-    _, binding, _, _ = _composer(route_verification=(
-        GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
-        if route_failed else None
-    ))
+    _, binding, _, _ = _composer(
+        route_verification=(
+            GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+            if route_failed
+            else None
+        )
+    )
     report = binding.execute()
     assert "destination_unavailable" not in report.evidence
     assert binding.verify(report).status is (
@@ -331,13 +436,24 @@ def test_no_unavailable_offer_does_not_invent_a_diagnostic(route_failed):
     )
 
 
-@pytest.mark.parametrize("value", [
-    None, True, [], {}, {"reason": True}, {"reason": 1}, {"reason": None},
-    {"reason": "unknown"}, {"reason": "/private/example"},
-    {"reason": "missing_resource", "private_path": "/private/example"},
-])
+@pytest.mark.parametrize(
+    "value",
+    [
+        None,
+        True,
+        [],
+        {},
+        {"reason": True},
+        {"reason": 1},
+        {"reason": None},
+        {"reason": "unknown"},
+        {"reason": "/private/example"},
+        {"reason": "missing_resource", "private_path": "/private/example"},
+    ],
+)
 def test_destination_diagnostic_rejects_malformed_or_private_values(value):
     from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
+
     with pytest.raises(ValueError) as caught:
         DestinationUnavailableSummary.from_evidence({"destination_unavailable": value})
     assert "/private/example" not in str(caught.value)
@@ -345,10 +461,13 @@ def test_destination_diagnostic_rejects_malformed_or_private_values(value):
 
 def test_destination_diagnostic_round_trip_and_absence():
     from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
+
     assert DestinationUnavailableSummary.from_evidence({"unrelated": True}) is None
-    parsed = DestinationUnavailableSummary.from_evidence({
-        "destination_unavailable": {"reason": "missing_resource"},
-    })
+    parsed = DestinationUnavailableSummary.from_evidence(
+        {
+            "destination_unavailable": {"reason": "missing_resource"},
+        }
+    )
     assert parsed == DestinationUnavailableSummary(GoalUnavailableReason.MISSING_RESOURCE)
     assert parsed.public_dict() == {"reason": "missing_resource"}
     with pytest.raises(ValueError):
@@ -360,23 +479,17 @@ def test_route_self_report_must_match_the_independent_meter() -> None:
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.BINDING_FAILED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
     assert events == ["route_execute", "route_verify"]
     assert report.evidence["budget_reconciled"] is False
 
 
 def test_route_verifier_must_be_action_free() -> None:
-    _composer_value, binding, _meter, events = _composer(
-        route_verifier_spend=(1, 1)
-    )
+    _composer_value, binding, _meter, events = _composer(route_verifier_spend=(1, 1))
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.BINDING_FAILED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
     assert events == ["route_execute", "route_verify"]
 
 
@@ -385,22 +498,16 @@ def test_fresh_destination_binder_must_be_action_free() -> None:
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.BINDING_FAILED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
     assert events == ["route_execute", "route_verify", "fresh_bind"]
 
 
 def test_destination_self_report_and_total_must_match_the_independent_meter() -> None:
-    _composer_value, binding, _meter, events = _composer(
-        destination_report=(1, 20)
-    )
+    _composer_value, binding, _meter, events = _composer(destination_report=(1, 20))
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.BINDING_FAILED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
     assert events[-1] == "destination_verify"
     assert report.evidence["budget_reconciled"] is False
 
@@ -426,9 +533,7 @@ def test_route_budget_exhaustion_stops_before_destination(
 
 
 def test_whole_composite_budget_includes_destination_execution() -> None:
-    _composer_value, binding, _meter, events = _composer(
-        limits=RoutedSemanticGoalLimits(4, 100)
-    )
+    _composer_value, binding, _meter, events = _composer(limits=RoutedSemanticGoalLimits(4, 100))
 
     report = binding.execute()
 
@@ -441,9 +546,7 @@ def test_whole_composite_budget_includes_destination_execution() -> None:
 
 def test_destination_verdict_remains_the_semantic_outcome() -> None:
     expected = GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
-    _composer_value, binding, _meter, events = _composer(
-        destination_verification=expected
-    )
+    _composer_value, binding, _meter, events = _composer(destination_verification=expected)
 
     report = binding.execute()
 
@@ -452,15 +555,11 @@ def test_destination_verdict_remains_the_semantic_outcome() -> None:
 
 
 def test_destination_verifier_cannot_hide_controller_or_frame_effects() -> None:
-    _composer_value, binding, _meter, _events = _composer(
-        destination_verifier_spend=(1, 1)
-    )
+    _composer_value, binding, _meter, _events = _composer(destination_verifier_spend=(1, 1))
 
     report = binding.execute()
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.WORLD_STATE_DIVERGED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
 
 
 def test_external_budget_drift_between_execute_and_verify_fails_closed() -> None:
@@ -469,9 +568,7 @@ def test_external_budget_drift_between_execute_and_verify_fails_closed() -> None
     report = binding.execute()
     meter.spend(1, 1)
 
-    assert binding.verify(report) == GoalVerification.failed(
-        GoalFailureReason.WORLD_STATE_DIVERGED
-    )
+    assert binding.verify(report) == GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
 
 
 def test_execution_and_verification_are_each_single_use() -> None:

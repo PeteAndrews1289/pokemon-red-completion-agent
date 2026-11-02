@@ -1,79 +1,93 @@
-# Architecture: learned choices, bounded game-control skills
+# Architecture and authority boundaries
 
-This is a hierarchical player, not an end-to-end visual network or an LLM choosing buttons.
+The project combines local learned decisions with declared execution skills.
+It is not pixel-only play, and the coding assistant is not the runtime player.
+Current operation is stopped for review. [Handoff](../HANDOFF.md) ·
+[Active state](../ACTIVE_PRODUCT_STATE.md) · [Seven goals](seven-goals.md).
 
-## Runtime
+## Runtime path
 
-Observe coherent emulator state → propose semantic goals → learned selection → bounded skill
-execution → independent verification → durable saves and actual-outcome learning.
+```text
+Cartridge state → semantic observation → executable option inventory
+  → local goal/battle model → bounded executor → native referee/receipts
+  → retained same-save continuation
+```
 
-| Component | Responsibility |
-| --- | --- |
-| Python3.11+ / PyBoy2.7.0 | Runtime and private cartridge execution |
-| Observation adapters | Party, inventory, battle, map and Pokédex facts; raw addresses stay below policy |
-| Goal learner | NumPy multi-outcome option-value model; semantic goals and destinations |
-| Frozen battler J | Three small learned heads for moves, attack/switch control and replacement targets |
-| Cartridge routing and skills | Navigation, menus, capture, evolution, storage and recovery |
-| Executor | Sole controller-input owner; action and frame budgets |
-| Referee | Verifies outcomes without choosing an alternative action |
-| Shared memory | SQLite registrations; global credits, local flags and specimens stay distinct |
-| Persistence | Hash-linked choices, model identities, exact saves and resource costs |
-| Dashboard | Read-only saved evidence, live runtime and engineering status |
+The observation adapter contains raw emulator details. Higher-level decisions use
+semantic fields. The executor alone translates actions into controller inputs.
+The referee verifies native outcomes; it does not quietly choose another action.
+The recorder retains errors, costs and paired state/context exports.
 
-## Learned trainer integration
+## Model decisions and supplied mechanics
 
-An authenticated private collection plan may declare a `trainer_battler` model binding.
-The loader requires frozen J's qualified digest. The runtime passes an explicit per-run controller
-into ordinary trainer funding; there is no module-global replacement or teacher fallback.
+| Layer | Learned role | Declared support |
+| --- | --- | --- |
+| Goal selection | Rank executable story, collection, preparation and resource options | Construct legal options and execute selected skills |
+| Battle control | Choose attack, switch or supported prompt behavior | Bound execution, reject illegal/unsupported choices |
+| Move head | Rank the legal supported moves | Cartridge mechanics and observable feature projection |
+| Switch head | Rank living legal reserves | Preserve the full reserve menu and native switch semantics |
+| Preparation/readiness | Choose useful preparation and stopping where covered | Ordinary travel, healing, evolution and resource mechanics |
 
-The bridge advances the introduction, captures the live boundary, and borrows the running emulator
-without loading or closing it. Actor actions use the player's counted, limited executor. The outer
-preservation guard runs at each decision. Logs record choices/timings; failures retain final saves.
+The runtime uses local model artifacts and makes zero LLM calls. Offline fitting
+is explicit and separate. In-game XP is not a weight update. Pete's temporary
+League medicine-reserve safeguard remains disclosed rule-based support.
+[Assistance policy](assistance-policy.md) · [Mission](../MISSION.md).
 
-This entry supports one to three own party members, not arbitrary six-member teams. Wild captures
-and Elite Four controllers remain unchanged. Healing-item decisions and unsupported moves are not
-enabled. Default plans retain their historical controllers.
+## The coupling that matters now
 
-## Verified battle lifecycle and separate funding contract
+Changing a switch or move proposal can alter the control head input even when
+its weights remain identical. Native qualification checks the actual proposed
+references, vectors and full policy behavior; original-projection retention alone
+does not guarantee trajectory retention. Historical control/switch gains and
+regressions remain in their dated evidence.
 
-The first live integration used an earned two-member save, three ordinary Potions and a78-step
-route to a new trainer. J made four decisions through the main-player prepared battle seam.
-Wartortle fainted; the unchanged no-faints funding guard stopped before replacement. The goal
-failed, leaving the battle unfinished at that checkpoint; no payout was earned.
+The current preparation branch uses an existing model parent and consequence
+child. The child ranks legal story and preparation offers using semantic party,
+challenge, workload and readiness features. Controller improvement can make
+preparation cheaper while the strategic head still chooses an unhelpful battle.
+FBB's actual head receipts prove this failure: it is consumed, skips preparation
+and loses Misty twice. [Current evidence](evidence/red-retention-correction17-2026-10-27.json).
 
-This verifies invocation, budgets, logging and failure retention—not successful autonomous funding.
-The probe called the main-player battle entry directly; it did not run Model137's high-level
-selector or bypass its conservative funding-offer eligibility.
+## Training and evaluation
 
-A separate exact-state continuation now uses `continue_learned_trainer_battle` and the bridge's
-`continue_battle` entry. A faint/prompt starts at its owned boundary without driving toward MAIN.
-J chose one forced replacement and four attacks, then lost. Bounded terminal dialogue completed
-normal blackout; the verifier proved restored party, recorded recovery map, half cash and field
-control. Typed outcomes are won/lost/unresolved and never issue a funding-success verdict.
-The strict funding verifier is unchanged. No consumed source was replayed.
+Disclosed teachers may manipulate isolated TRAIN fixtures to measure real legal
+outcomes. Compared actions keep their own observed return; unplayed alternatives
+receive no invented label. Related snapshots remain correlated. DEVELOPMENT,
+benchmark and sealed outcomes never become fitting data.
 
-## Learning and claims
+The existing learner now offers an opt-in mean absolute utility budget over a
+declared subset of retained TRAIN rows, using its existing absolute-loss slacks.
+The objective, inference, feature projection and default numerical path remain.
+Observed pair orders and this budget are jointly feasible. The pooledold15 cap
+allows legacy13 subgroup regression, and the qualified17-row fit fails the exposed
+native readiness test. Before more fitting,
+inspect the actual feature/offer/horizon coverage and genuine stopping lessons.
+No new planner or runtime LLM is added.
 
-Model137 has137 examples,92 successes and58 economy-qualified outcomes from related development
-states, not independent games. Its collection save remains96/124 registrations.
+## Execution, platform and recovery
 
-J has318 physical TRAIN contexts from four origins. Its unused generated-team comparison was9/24
-wins versus H7/24: descriptive learning evidence, not statistically conclusive mastery.
-Natural attack/switching probes provide additional scoped evidence. DEVELOPMENT is not fitting data.
-LLMs develop and review software; they do not secretly supply live model choices.
+The active private deployment is Windows MAIN with its qualified WSL2 distribution,
+user and pinned Python environment. Exact paths and run/package/process identities
+belong to the machine handoff. A normal Windows review snapshot is not that runtime.
+At most two finite development workers qualify under the measured configuration
+and resource reserves; this does not promise twice the useful output.
 
-## Code map
+An authenticated plan binds source, package, model, save/context, limits and owner.
+Closed native receipts, process exit and released controls establish a safe boundary.
+Partial costs and failed tails remain, including ordinary in-game setbacks.
+Never import a diagnostic terminal or revive an expired actor by changing its name.
 
-| Concern | Starting points under the Python package |
-| --- | --- |
-| Goal runtime | `red_goal_context.py`, `red_autonomous_collection.py`, `red_resource_goal_router.py` |
-| Trainer binding | `red_learned_trainer.py`, `red_routed_trainer_funding.py` |
-| Actor and learning | `red_trainer_practice_episode.py`, `red_trainer_practice_outcome_policy.py`, `red_trainer_practice_fit.py` |
-| Decision logs | `red_trainer_practice_log.py` |
-| Resource verifier | `red_trainer_funding_battle.py` |
-| Registration | `registration_memory.py`, `registered_collection.py` |
-| Main entry | [Bounded collection runner](../scripts/run_red_autonomous_collection.py) |
+The dashboard is a spectator. Its last frame may remain visible after the player
+stops; presentation cannot change controller authority. No player or fit worker is currently live.
+[Dashboard](progress-dashboard.md) · [Operating contract](../NORTH_STAR.md).
 
-[Integration evidence](evidence/red-player-battler-integration-2026-09-19.json) ·
-[Setup](getting-started.md) · [Roadmap](model-first-roadmap.md) ·
-[Historical architecture](history/architecture-through-2026-09-10.md)
+## What is still unproved
+
+Earlier supported saves demonstrate execution coverage and legitimate registered
+credit, not frozen fresh autonomy. The final requirement is one unchanged fresh
+Red Champion/Hall-of-Fame plus 124 same-save registrations, then the declared
+reliability evaluation before later titles. No new component result waives it.
+[Completion contract](completion-contract.md) · [Remaining roadmap](model-first-roadmap.md).
+
+The [previous architecture account](history/2026-10-26-architecture-before-documentation-refresh.md)
+preserves older integration details and their dates.

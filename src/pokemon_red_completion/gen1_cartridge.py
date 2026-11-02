@@ -211,8 +211,36 @@ def wild_tables(
 
     if medium not in {None, "grass", "water"}:
         raise CartridgeReadError("wild-table medium must be grass or water")
+    decoded = wild_encounter_tables(rom)
+    return {
+        map_id: [
+            slot
+            for table in blocks
+            for slot in table.slots
+            if medium is None or table.medium == medium
+        ]
+        for map_id, blocks in decoded.items()
+        if medium is None or any(table.medium == medium for table in blocks)
+    }
+
+
+@dataclass(frozen=True, slots=True)
+class WildEncounterTable:
+    """Retain native rate bytes and slot order without inventing probabilities.
+
+    Slots do not have equal weight. The rate byte is not, by itself, a measured
+    per-step encounter probability: terrain, Repel and engine selection matter.
+    """
+
+    medium: str
+    rate_byte: int
+    slots: tuple[tuple[int, int], ...]
+
+
+def wild_encounter_tables(rom: bytes) -> dict[int, tuple[WildEncounterTable, ...]]:
+    """Decode both mechanisms with the same anchors as the legacy slot API."""
     tables: dict[int, list[tuple[int, int]]] = {}
-    selected: dict[int, list[tuple[int, int]]] = {}
+    decoded: dict[int, tuple[WildEncounterTable, ...]] = {}
     for map_id in range(MAP_ID_LIMIT):
         at = WILD_POINTER_ARRAY + 2 * map_id
         address = int.from_bytes(rom[at : at + 2], "little")
@@ -220,23 +248,28 @@ def wild_tables(
             continue
         cursor = bank_offset(WILD_DATA_BANK, address)
         slots: list[tuple[int, int]] = []
+        blocks: list[WildEncounterTable] = []
         for table_medium in ("grass", "water"):
+            if cursor >= len(rom):
+                raise CartridgeReadError("wild encounter rate lies outside the cartridge")
             rate = rom[cursor]
             cursor += 1
             if rate == 0:
                 continue
+            if cursor + 2 * SLOTS_PER_TABLE > len(rom):
+                raise CartridgeReadError("wild encounter slots lie outside the cartridge")
             block = [
                 (rom[cursor + 2 * slot], rom[cursor + 2 * slot + 1])
                 for slot in range(SLOTS_PER_TABLE)
             ]
             slots.extend(block)
-            if medium == table_medium:
-                selected[map_id] = block
+            blocks.append(WildEncounterTable(table_medium, rate, tuple(block)))
             cursor += 2 * SLOTS_PER_TABLE
         if slots:
             tables[map_id] = slots
+            decoded[map_id] = tuple(blocks)
     _verify_wild_tables(tables)
-    return tables if medium is None else selected
+    return decoded
 
 
 def _verify_wild_tables(tables: Mapping[int, list[tuple[int, int]]]) -> None:

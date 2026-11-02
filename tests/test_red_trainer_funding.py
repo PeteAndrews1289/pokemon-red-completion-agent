@@ -87,6 +87,14 @@ def test_additional_live_occupancy_and_hazards_are_preserved(setup):
     assert all({(4, 2), (5, 2)} <= call.occupied for call in world.calls)
 
 
+def test_geometric_cross_map_approach_is_unavailable_not_bad_cartridge(setup):
+    from types import SimpleNamespace as N
+
+    world, start, trainers, _ = setup
+    world.plan_feasible_to_map = lambda *a, **k: N(steps=(N(source_map=22, expected_map=23),))
+    assert funding.local_trainer_funding_candidates(b"rom", world, start, trainers) == ()
+
+
 @pytest.mark.parametrize(
     "changes", [{"ready": False}, {"interruption": "battle:2"}, {"mode": "water"}, {"at": (4, 4)}]
 )
@@ -138,6 +146,43 @@ def test_unreachable_trainers_are_not_candidates(setup):
     assert funding.local_trainer_funding_candidates(b"test", world, start, trainers) == ()
 
 
+@pytest.mark.parametrize("fault", [None, "disabled", "missing_graph", "wrong_path", "hazard"])
+def test_story_spinner_requires_explicit_scope_matching_edge_and_clear_path(setup, fault):
+    from types import SimpleNamespace as N
+
+    from pokemon_red_completion.actions import MacroActionKind
+    from pokemon_red_completion.route_plan import RouteStep
+
+    world, start, trainers, _ = setup
+    via = ((5, 2), (4, 2))
+    target = (3, 2)
+    edge = LocalEdge(target, "right", kind="forced_motion", via=via)
+    world.local_graphs = {} if fault == "missing_graph" else {
+        22: LocalGraph({start.at: (edge,)})
+    }
+    if fault == "hazard":
+        start = replace(start, hazards=(TraversalHazard(via[0], "test"),))
+    original = world.plan_feasible_to_map
+
+    def spinner(observed, goal_map, *, goal_at):
+        plan = original(replace(observed, at=target), goal_map, goal_at=goal_at)
+        step = RouteStep(22, start.at, "right", 22, target, "forced_motion",
+            MacroActionKind.MOVE, "land", "land",
+            via=((5, 3),) if fault == "wrong_path" else via)
+        return N(steps=(step, *plan.steps))
+
+    world.plan_feasible_to_map = spinner
+    if fault:
+        with pytest.raises(CartridgeReadError, match="corridor"):
+            funding.local_trainer_funding_candidates(
+                b"rom", world, start, trainers, allow_forced_motion=fault != "disabled"
+            )
+    else:
+        assert funding.local_trainer_funding_candidates(
+            b"rom", world, start, trainers, allow_forced_motion=True
+        )
+
+
 def test_router_cannot_ignore_reserved_corridor(setup, monkeypatch):
     world, start, trainers, _ = setup
     original = world.plan_feasible_to_map
@@ -148,3 +193,47 @@ def test_router_cannot_ignore_reserved_corridor(setup, monkeypatch):
     monkeypatch.setattr(world, "plan_feasible_to_map", ignoring)
     with pytest.raises(CartridgeReadError, match="corridor"):
         funding.local_trainer_funding_candidates(b"test", world, start, trainers)
+
+
+@pytest.mark.parametrize(
+    "fault", [None, "not_allowed", "no_capability", "movement", "wrong_action", "hazard"]
+)
+def test_story_cut_approach_is_explicit_stationary_and_guarded(setup, fault):
+    from types import SimpleNamespace as N
+
+    from pokemon_red_completion.actions import MacroActionKind
+
+    world, start, trainers, _ = setup
+    start = replace(
+        start, capabilities=frozenset({"move:cut"}) if fault != "no_capability" else frozenset()
+    )
+    original = world.plan_feasible_to_map
+
+    def with_cut(observed, goal_map, *, goal_at):
+        plan = original(observed, goal_map, goal_at=goal_at)
+        cut = N(
+            source_map=22,
+            expected_map=22,
+            source_at=start.at,
+            expected_at=(3, 4)
+            if fault == "hazard"
+            else ((5, 2) if fault == "movement" else start.at),
+            transient_at=None,
+            action_kind=MacroActionKind.FIELD_MOVE,
+            action="surf:right" if fault == "wrong_action" else "cut:right",
+            kind="cut_mutation",
+            source_mode="land",
+            expected_mode="land",
+        )
+        return N(steps=(cut, *plan.steps))
+
+    world.plan_feasible_to_map = with_cut
+    if fault:
+        with pytest.raises(CartridgeReadError, match="corridor"):
+            funding.local_trainer_funding_candidates(
+                b"rom", world, start, trainers, allow_cut=fault != "not_allowed"
+            )
+    else:
+        assert funding.local_trainer_funding_candidates(
+            b"rom", world, start, trainers, allow_cut=True
+        )

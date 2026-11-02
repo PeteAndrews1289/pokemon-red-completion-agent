@@ -1,0 +1,121 @@
+{
+  "schema": "pokemon.red.recovery-connection-and-collection.v1",
+  "date": "2026-09-20",
+  "source_commit": "ff7635fd49a59740ff66c016f987dada1512f359",
+  "status": "recovery_connection_tested_collection_resumed",
+  "implementation": {
+    "league_recovery": "Explicit frozen-K recoverable-faint controller now invokes actual recovery-versus-quoted-next-battle binding. One campaign item budget and shared action/frame executor; stale/failing boundaries stop.",
+    "accounting": "Exact field-item plus in-battle inventory depletion; source buy-price replacement valuation separated from observed cash. Nonpositive income after field-item replacement fails autonomous income verification.",
+    "qualification_limit": "ROM-free composition tested; no native League attempt or clean profitable cycle added. Prior native item/escape mechanics evidence is separate.",
+    "collection_scope": "User-authorized existing-resource collection excludes League funding explicitly in each plan and provenance; other real alternatives unchanged.",
+    "targeted_tests_passed": 422,
+    "full_suite_run": false,
+    "typing": "Three touched modules pass with imported-module diagnostics suppressed; broader check still reports three existing errors in trainer-funding/champion modules."
+  },
+  "learner": {
+    "model_sha256": "810ca703200831154804e89dcb5f5de4045a658ef2cb12223f8bbd7106a3e76e",
+    "fitted_examples": 137,
+    "fitted_successes": 92,
+    "economy_qualified_fitted_examples": 58,
+    "new_model_goal_decisions": 2,
+    "new_model_goal_successes": 1,
+    "model_updates": 0,
+    "safety_storage_steps": 1,
+    "operator_started_paid_session_continuations": 2,
+    "operator_started_autonomous_runs": 2,
+    "unattended_restart_qualified": false
+  },
+  "collection": {
+    "before": {
+      "registrations": 97,
+      "cash": 26868,
+      "specimens": 75,
+      "terminal_sha256": "66bfd0e0f5d089526910687b40bd22b5e760d2911e4b2fecb6620ca22e459505"
+    },
+    "after": {
+      "registrations": 98,
+      "cash": 24268,
+      "specimens": 75,
+      "map_id": 133,
+      "position_yx": [
+        4,
+        13
+      ],
+      "terminal_sha256": "d28d0da202d767c63e28d4677c654ef1226f67fae7ff2ca29c8370b4b45272f1",
+      "safari_active": false
+    },
+    "new_registration": {
+      "national_id": 62,
+      "name": "Poliwrath",
+      "method": "Model-selected Water Stone evolution from nine real alternatives; normal Safari departure and routed purchase/execution.",
+      "item_cost": 2100
+    },
+    "dependency": "The sole retained Poliwhirl evolved; one Poliwag remains. Jynx still requires another physical Poliwhirl, obtainable through a legitimate precursor evolution. Registered Poliwhirl is not a physical trade specimen.",
+    "safari": {
+      "admission_cost": 500,
+      "additional_admission_cost": 0,
+      "model_selected": true,
+      "original_search_failed_at_semantic_actions": 66,
+      "first_continuation_failed_at_semantic_actions": 200,
+      "second_continuation_stopped_at_reserved_steps": 100,
+      "continuation_encounters": 31,
+      "scyther_capture_attempts": 3,
+      "balls_spent": 6,
+      "captures": 0,
+      "failures_retained": true,
+      "legacy_report_note": "Second continuation reports capture_items_exhausted because the resource callback reached its 100-step reserve. Balls were NOT exhausted:24 remained. Session ended later by normal model-selected evolution departure."
+    },
+    "total_actions": 2350,
+    "total_frames": 265968,
+    "cash_spent": 2600,
+    "cash_earned": 0,
+    "save_edits": 0
+  },
+  "chain": [
+    {
+      "kind": "safety_storage",
+      "receipt_sha256": "3060cffb5d9f74a1a77b14d8147ff7d7b2928661e7ce578fd0999001bc1f3ef2",
+      "terminal_sha256": "0af40edf1710f9366cc07086d6bc8b15ffe417bb772817ed15b77e50a1dac7de"
+    },
+    {
+      "kind": "model_safari_search",
+      "receipt_sha256": "fdd16de4ed491aa56820fe65d41236d3ff8c1b9a2cc5af5508fafec225ba1b48",
+      "terminal_sha256": "6b64e9cc3dd77d42ee0bd320bf346e4f3438f0fc1b168f6471c8512bed3ddc8b"
+    },
+    {
+      "kind": "paid_continuation_1",
+      "receipt_sha256": "0d0aef5ddba45878a1026686592d66da1498455ca59052106e0b17afdfaaeb1d",
+      "terminal_sha256": "b8588b6527c72dc4868578a83f8ec69b6ef3440720a4056b6d0a09ff5c4bd8dd"
+    },
+    {
+      "kind": "paid_continuation_2",
+      "receipt_sha256": "ca94e42fe2295ab37abff66f5a783350b21717875ebb4af7926486233218a9c9",
+      "terminal_sha256": "727936903964f5574a8cfc91c12e8275f29ff4f868167f34c93e273a346ab27b"
+    },
+    {
+      "kind": "model_evolution",
+      "receipt_sha256": "6547f49e436d12397f711e33105d28bc752483bed6b8b02f8802feeb1afb049f",
+      "terminal_sha256": "d28d0da202d767c63e28d4677c654ef1226f67fae7ff2ca29c8370b4b45272f1"
+    }
+  ],
+  "verification": {
+    "all_five_state_links_and_receipt_hashes_checked": true,
+    "all_terminals_safe": true,
+    "final_native_dex_cash_and_specimens_independently_read": true,
+    "independent_inspection_frames": 0,
+    "original_earned_state_unchanged": true,
+    "frozen_k_and_l_unchanged": true
+  },
+  "remaining": {
+    "native_registrations": 26,
+    "clean_profitable_league_cycles": 0,
+    "required_league_cycles": 2,
+    "fresh_red_acceptance_gates": 0,
+    "required_fresh_red_gates": 5,
+    "next": "Continue bounded model-selected collection from the earned Celadon endpoint and24268cash. Do not replay Safari or require another League attempt. Preserve Jynx precursor requirement; package automatic paid-session continuation when it is the demonstrated next obstacle."
+  },
+  "gameplay_running": false,
+  "training_running": false,
+  "publication": false,
+  "external_agents_used": false
+}
