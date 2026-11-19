@@ -1,22 +1,9 @@
-# Focused review brief
+# Reviewing the four finishes and the solo repair
 
-Read-only source review. No gameplay, edits, fitting or external reviewer dispatch
-is implied. The handoff alone owns later executable work.
+Four independent starts on one seed each earned eight badges, entered the Hall of Fame and retained all 124 required registrations on their own saves. All four needed external continuations. Use the [public split table](work-sessions/four-run-splits-2026-11-19.md) and the [solo failure record](work-sessions/solo-field-blackout-2026-11-19.md).
 
-Read [the mission](../MISSION.md), [seven goals](seven-goals.md),
-[audit lessons](project-lessons-2026-10-28.md) and [handoff](../HANDOFF.md).
-Then inspect [the latest scoreboard](work-sessions/2026-10-28-play-first.md).
+1. Compare active wall time, dispatch-to-exit time, native frames and the capped cartridge clock. Count each external continuation.
+2. Trace the full-party poison failure from the selected healing route through the native loss, compulsory settlement and following model choice. The replay that begins before the failure tests live continuity.
+3. Compare complete objectives and target-specific XP with travel, healing, fees and failed attempts included. Repeated same-seed states provide a regression test; held-out starts provide a separate reliability test.
 
-1. Does the paid capture evidence correctly attribute knockout failures to the
-   deterministic helper? Is existing nonlethal support the smallest repair, and
-   what copied test would falsify it without fitting DEVELOPMENT?
-2. Does the shared supplier candidate preserve route, affordability and purchase
-   guards while exposing genuinely available actions? Keep its UNRUN status.
-3. What prevents45 uninterrupted native minutes: model choices, capability gaps,
-   execution contracts or setup friction? Return at most three causes and a
-   bounded plan with acceptance evidence and reassessment after15minutes/two failures.
-
-Inspect `LiveWildEncounterExecutor`, `RedCaptureStatusPreparer`, the configured
-player assembly and relevant tests. Reuse existing components. Public source
-excludes private assets and the complete external helper bundle; no clean-clone
-native reproduction or green CI claim is implied.
+Private reproduction packets require exact code, weights, inputs and provenance for the assigned scope. The public data contains outcome summaries. See the [current handoff](../HANDOFF.md) for ownership.

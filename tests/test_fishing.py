@@ -816,12 +816,11 @@ class _FishingSimulation:
                         self.bag_cursor += 1
                     elif action.value == "up":
                         self.bag_cursor = max(self.bag_cursor - 1, 0)
-            elif self.stage == "item_submenu":
-                if not self.stuck_submenu:
-                    if action.value == "down":
-                        self.submenu_cursor = min(self.submenu_cursor + 1, 1)
-                    elif action.value == "up":
-                        self.submenu_cursor = max(self.submenu_cursor - 1, 0)
+            elif self.stage == "item_submenu" and not self.stuck_submenu:
+                if action.value == "down":
+                    self.submenu_cursor = min(self.submenu_cursor + 1, 1)
+                elif action.value == "up":
+                    self.submenu_cursor = max(self.submenu_cursor - 1, 0)
         elif action.kind is MacroActionKind.CONFIRM:
             if self.stage == "start_menu":
                 if self.start_cursor == 2:  # ITEM

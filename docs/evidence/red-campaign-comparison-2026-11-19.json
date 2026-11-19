@@ -1,0 +1,1572 @@
+{
+  "all_four_badges": 8,
+  "all_four_hall_of_fame": true,
+  "cartridge_clock_cap_hours": 255,
+  "cohort_finish_proof_sha256": "a0950dcf5f756373cb8a7bb50d1301b04d64803245e7a576bfdf30b2f30a39e8",
+  "continuation_copy_tests": 2,
+  "continuation_focused_checks": 487,
+  "cost_observations": {
+    "acquisition_attempts75_to_100": {
+      "run2": 39,
+      "run3": 149
+    },
+    "badge4_to_badge8_minutes": {
+      "run2": 53.8,
+      "run4": 209.4
+    },
+    "badge4_to_badge8_silph_rival_losses_before_win": {
+      "run4": 19,
+      "runs1_to_3": "5\u20136"
+    },
+    "decisions75_to_100": {
+      "run2": 110,
+      "run3": 328
+    },
+    "dragonair_heal_trips_range": [
+      57,
+      115
+    ],
+    "dragonair_target_xp_range": [
+      174074,
+      174284
+    ],
+    "dragonair_training_battles_range": [
+      1302,
+      1518
+    ],
+    "fraction_active_after_hall_of_fame": 0.633,
+    "registrations75_to_100_minutes": {
+      "run2": 74.5,
+      "run3": 164.9
+    },
+    "restorations75_to_100": {
+      "run2": 31,
+      "run3": 142
+    }
+  },
+  "distinct_seeds": 1,
+  "evidence_date": "2026-11-19",
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "original_frame_seconds": "frames * 70224 / 4194304",
+  "original_fresh_recipe_sha256": "f4488e2d661e134cc44fa77d37c90b0ece0ae402da5c24a6ce0f02cb598c0035",
+  "parameter_fits": 0,
+  "partition": "development",
+  "previous_recipe_focused_checks": 691,
+  "previous_recipe_native_cases": 22,
+  "required_registrations": 124,
+  "roadmap_credit_from_snapshot": 0,
+  "runs": [
+    {
+      "cartridge_clock": "255:00:00",
+      "external_continuations": 14,
+      "final_split": {
+        "actions": 1254034,
+        "frames": 105248561,
+        "wall_seconds": 34449.830673990116
+      },
+      "real_dispatch_to_exit_seconds": 45073.464593,
+      "run": 1,
+      "splits": [
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 110.97710011000163
+          },
+          "id": "badges_1",
+          "label": "Badge 1 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 306.5365160470101
+          },
+          "id": "badges_2",
+          "label": "Badge 2 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 870.0401042380399
+          },
+          "id": "badges_3",
+          "label": "Badge 3 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1479.6742033650517
+          },
+          "id": "badges_4",
+          "label": "Badge 4 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 100053,
+            "frames": 7699431,
+            "wall_seconds": 4192.332329992074
+          },
+          "id": "badges_5",
+          "label": "Badge 5 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 103958,
+            "frames": 7965696,
+            "wall_seconds": 4418.493663988062
+          },
+          "id": "badges_6",
+          "label": "Badge 6 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 109660,
+            "frames": 8703960,
+            "wall_seconds": 4907.46454325605
+          },
+          "id": "badges_7",
+          "label": "Badge 7 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 114900,
+            "frames": 9088836,
+            "wall_seconds": 5046.092098861045
+          },
+          "id": "badges_8",
+          "label": "Badge 8 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 178,
+            "frames": 21216,
+            "wall_seconds": 3.4397811560047558
+          },
+          "id": "choose_starter",
+          "label": "Starter chosen"
+        },
+        {
+          "elapsed": {
+            "actions": 1565,
+            "frames": 127416,
+            "wall_seconds": 21.6651113179978
+          },
+          "id": "receive_pokedex",
+          "label": "Pok\u00e9dex received"
+        },
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 110.97710011000163
+          },
+          "id": "defeat_brock",
+          "label": "Brock \u00b7 Boulder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 27531,
+            "frames": 1890408,
+            "wall_seconds": 564.0891922720475
+          },
+          "id": "help_bill",
+          "label": "Bill helped \u00b7 SS Ticket"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 306.5365160470101
+          },
+          "id": "defeat_misty",
+          "label": "Misty \u00b7 Cascade Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 30027,
+            "frames": 2047212,
+            "wall_seconds": 656.2890240440465
+          },
+          "id": "obtain_cut",
+          "label": "Cut obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 870.0401042380399
+          },
+          "id": "defeat_surge",
+          "label": "Lt. Surge \u00b7 Thunder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 47807,
+            "frames": 3392367,
+            "wall_seconds": 1675.1539969830628
+          },
+          "id": "clear_rocket_hideout",
+          "label": "Rocket Hideout cleared"
+        },
+        {
+          "elapsed": {
+            "actions": 48099,
+            "frames": 3403719,
+            "wall_seconds": 1709.2784397550568
+          },
+          "id": "obtain_silph_scope",
+          "label": "Silph Scope obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1479.6742033650517
+          },
+          "id": "defeat_erika",
+          "label": "Erika \u00b7 Rainbow Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 53668,
+            "frames": 3800595,
+            "wall_seconds": 2197.62061736107
+          },
+          "id": "rescue_fuji",
+          "label": "Fuji rescued \u00b7 Pok\u00e9 Flute"
+        },
+        {
+          "elapsed": {
+            "actions": 66595,
+            "frames": 5160699,
+            "wall_seconds": 3042.6159421370685
+          },
+          "id": "obtain_surf",
+          "label": "Surf obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 100053,
+            "frames": 7699431,
+            "wall_seconds": 4192.332329992074
+          },
+          "id": "defeat_koga",
+          "label": "Koga \u00b7 Soul Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 66765,
+            "frames": 5165475,
+            "wall_seconds": 3050.657369898079
+          },
+          "id": "obtain_strength",
+          "label": "Strength obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 108547,
+            "frames": 8609856,
+            "wall_seconds": 4643.581956882059
+          },
+          "id": "liberate_silph",
+          "label": "Silph liberated"
+        },
+        {
+          "elapsed": {
+            "actions": 109660,
+            "frames": 8703960,
+            "wall_seconds": 4907.46454325605
+          },
+          "id": "defeat_sabrina",
+          "label": "Sabrina \u00b7 Marsh Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 100697,
+            "frames": 7732720,
+            "wall_seconds": 4255.130536800061
+          },
+          "id": "obtain_secret_key",
+          "label": "Secret Key obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 103958,
+            "frames": 7965696,
+            "wall_seconds": 4418.493663988062
+          },
+          "id": "defeat_blaine",
+          "label": "Blaine \u00b7 Volcano Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 114900,
+            "frames": 9088836,
+            "wall_seconds": 5046.092098861045
+          },
+          "id": "defeat_giovanni",
+          "label": "Giovanni \u00b7 Earth Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 118696,
+            "frames": 9366492,
+            "wall_seconds": 7971.208365944025
+          },
+          "id": "cross_victory_road",
+          "label": "Victory Road crossed"
+        },
+        {
+          "elapsed": {
+            "actions": 121872,
+            "frames": 9654252,
+            "wall_seconds": 8055.308253866024
+          },
+          "id": "defeat_lorelei",
+          "label": "Lorelei defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 122206,
+            "frames": 9686844,
+            "wall_seconds": 8060.861619378033
+          },
+          "id": "defeat_bruno",
+          "label": "Bruno defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 153389,
+            "frames": 12460320,
+            "wall_seconds": 9244.61542510803
+          },
+          "id": "defeat_agatha",
+          "label": "Agatha defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 160747,
+            "frames": 13138212,
+            "wall_seconds": 9631.250752198015
+          },
+          "id": "defeat_lance",
+          "label": "Lance defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 185875,
+            "frames": 15426702,
+            "wall_seconds": 10615.098670649037
+          },
+          "id": "defeat_champion",
+          "label": "Champion defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 185875,
+            "frames": 15426702,
+            "wall_seconds": 10615.098670649037
+          },
+          "id": "enter_hall_of_fame",
+          "label": "Hall of Fame"
+        },
+        {
+          "elapsed": {
+            "actions": 201248,
+            "frames": 16531626,
+            "wall_seconds": 11593.506505826037
+          },
+          "id": "registrations_25",
+          "label": "25 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 344379,
+            "frames": 28493253,
+            "wall_seconds": 18701.97241438902
+          },
+          "id": "registrations_50",
+          "label": "50 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 567276,
+            "frames": 48007507,
+            "wall_seconds": 23160.016867161117
+          },
+          "id": "registrations_75",
+          "label": "75 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 829720,
+            "frames": 70999464,
+            "wall_seconds": 28581.900965923116
+          },
+          "id": "registrations_100",
+          "label": "100 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1254034,
+            "frames": 105248561,
+            "wall_seconds": 34449.830673990116
+          },
+          "id": "registrations_124",
+          "label": "124 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1254034,
+            "frames": 105248561,
+            "wall_seconds": 34449.830673990116
+          },
+          "id": "complete_red_124",
+          "label": "Champion / Hall of Fame + route 124"
+        }
+      ]
+    },
+    {
+      "cartridge_clock": "255:00:00",
+      "external_continuations": 12,
+      "final_split": {
+        "actions": 1136464,
+        "frames": 95143772,
+        "wall_seconds": 29579.143614921184
+      },
+      "real_dispatch_to_exit_seconds": 39132.087887,
+      "run": 2,
+      "splits": [
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 112.34971562100691
+          },
+          "id": "badges_1",
+          "label": "Badge 1 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 309.54949335301353
+          },
+          "id": "badges_2",
+          "label": "Badge 2 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 871.9033299650473
+          },
+          "id": "badges_3",
+          "label": "Badge 3 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1483.7668069360516
+          },
+          "id": "badges_4",
+          "label": "Badge 4 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 106294,
+            "frames": 8591727,
+            "wall_seconds": 4246.881722952065
+          },
+          "id": "badges_5",
+          "label": "Badge 5 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 107177,
+            "frames": 8661819,
+            "wall_seconds": 4337.855563865058
+          },
+          "id": "badges_6",
+          "label": "Badge 6 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 112413,
+            "frames": 9013632,
+            "wall_seconds": 4609.860803154079
+          },
+          "id": "badges_7",
+          "label": "Badge 7 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 115102,
+            "frames": 9200244,
+            "wall_seconds": 4712.642847248077
+          },
+          "id": "badges_8",
+          "label": "Badge 8 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 178,
+            "frames": 21216,
+            "wall_seconds": 3.473042643003282
+          },
+          "id": "choose_starter",
+          "label": "Starter chosen"
+        },
+        {
+          "elapsed": {
+            "actions": 1565,
+            "frames": 127416,
+            "wall_seconds": 22.944160393002676
+          },
+          "id": "receive_pokedex",
+          "label": "Pok\u00e9dex received"
+        },
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 112.34971562100691
+          },
+          "id": "defeat_brock",
+          "label": "Brock \u00b7 Boulder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 27531,
+            "frames": 1890408,
+            "wall_seconds": 569.1650449120207
+          },
+          "id": "help_bill",
+          "label": "Bill helped \u00b7 SS Ticket"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 309.54949335301353
+          },
+          "id": "defeat_misty",
+          "label": "Misty \u00b7 Cascade Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 30027,
+            "frames": 2047212,
+            "wall_seconds": 658.906666918032
+          },
+          "id": "obtain_cut",
+          "label": "Cut obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 871.9033299650473
+          },
+          "id": "defeat_surge",
+          "label": "Lt. Surge \u00b7 Thunder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 47807,
+            "frames": 3392367,
+            "wall_seconds": 1679.0240834050637
+          },
+          "id": "clear_rocket_hideout",
+          "label": "Rocket Hideout cleared"
+        },
+        {
+          "elapsed": {
+            "actions": 48099,
+            "frames": 3403719,
+            "wall_seconds": 1712.690974037061
+          },
+          "id": "obtain_silph_scope",
+          "label": "Silph Scope obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1483.7668069360516
+          },
+          "id": "defeat_erika",
+          "label": "Erika \u00b7 Rainbow Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 53668,
+            "frames": 3800595,
+            "wall_seconds": 2199.6394953710405
+          },
+          "id": "rescue_fuji",
+          "label": "Fuji rescued \u00b7 Pok\u00e9 Flute"
+        },
+        {
+          "elapsed": {
+            "actions": 66595,
+            "frames": 5160699,
+            "wall_seconds": 3046.7563995450473
+          },
+          "id": "obtain_surf",
+          "label": "Surf obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 107177,
+            "frames": 8661819,
+            "wall_seconds": 4337.855563865058
+          },
+          "id": "defeat_koga",
+          "label": "Koga \u00b7 Soul Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 66765,
+            "frames": 5165475,
+            "wall_seconds": 3054.915698863042
+          },
+          "id": "obtain_strength",
+          "label": "Strength obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 105527,
+            "frames": 8530335,
+            "wall_seconds": 4215.789130248057
+          },
+          "id": "liberate_silph",
+          "label": "Silph liberated"
+        },
+        {
+          "elapsed": {
+            "actions": 106294,
+            "frames": 8591727,
+            "wall_seconds": 4246.881722952065
+          },
+          "id": "defeat_sabrina",
+          "label": "Sabrina \u00b7 Marsh Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 107823,
+            "frames": 8695156,
+            "wall_seconds": 4413.164784275068
+          },
+          "id": "obtain_secret_key",
+          "label": "Secret Key obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 112413,
+            "frames": 9013632,
+            "wall_seconds": 4609.860803154079
+          },
+          "id": "defeat_blaine",
+          "label": "Blaine \u00b7 Volcano Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 115102,
+            "frames": 9200244,
+            "wall_seconds": 4712.642847248077
+          },
+          "id": "defeat_giovanni",
+          "label": "Giovanni \u00b7 Earth Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 119221,
+            "frames": 9473748,
+            "wall_seconds": 7362.752733590067
+          },
+          "id": "cross_victory_road",
+          "label": "Victory Road crossed"
+        },
+        {
+          "elapsed": {
+            "actions": 144661,
+            "frames": 11585628,
+            "wall_seconds": 8327.131163982063
+          },
+          "id": "defeat_lorelei",
+          "label": "Lorelei defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 145002,
+            "frames": 11618244,
+            "wall_seconds": 8392.828168918059
+          },
+          "id": "defeat_bruno",
+          "label": "Bruno defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 151223,
+            "frames": 12188016,
+            "wall_seconds": 8700.068401846045
+          },
+          "id": "defeat_agatha",
+          "label": "Agatha defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 167932,
+            "frames": 13732752,
+            "wall_seconds": 9423.027064347043
+          },
+          "id": "defeat_lance",
+          "label": "Lance defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 194543,
+            "frames": 16189584,
+            "wall_seconds": 10639.869820434047
+          },
+          "id": "defeat_champion",
+          "label": "Champion defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 194543,
+            "frames": 16189584,
+            "wall_seconds": 10639.869820434047
+          },
+          "id": "enter_hall_of_fame",
+          "label": "Hall of Fame"
+        },
+        {
+          "elapsed": {
+            "actions": 203104,
+            "frames": 16776721,
+            "wall_seconds": 11061.133055455051
+          },
+          "id": "registrations_25",
+          "label": "25 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 325738,
+            "frames": 27808374,
+            "wall_seconds": 14189.003755592072
+          },
+          "id": "registrations_50",
+          "label": "50 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 543241,
+            "frames": 46355221,
+            "wall_seconds": 19437.096160446046
+          },
+          "id": "registrations_75",
+          "label": "75 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 768965,
+            "frames": 65822023,
+            "wall_seconds": 23905.948414654184
+          },
+          "id": "registrations_100",
+          "label": "100 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1136464,
+            "frames": 95143772,
+            "wall_seconds": 29579.143614921184
+          },
+          "id": "registrations_124",
+          "label": "124 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1136464,
+            "frames": 95143772,
+            "wall_seconds": 29579.143614921184
+          },
+          "id": "complete_red_124",
+          "label": "Champion / Hall of Fame + route 124"
+        }
+      ]
+    },
+    {
+      "cartridge_clock": "255:00:00",
+      "external_continuations": 10,
+      "final_split": {
+        "actions": 1134036,
+        "frames": 94487629,
+        "wall_seconds": 37964.190574239896
+      },
+      "real_dispatch_to_exit_seconds": 49940.814938,
+      "run": 3,
+      "splits": [
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 111.9242708820093
+          },
+          "id": "badges_1",
+          "label": "Badge 1 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 308.29864814598113
+          },
+          "id": "badges_2",
+          "label": "Badge 2 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 869.0970817049529
+          },
+          "id": "badges_3",
+          "label": "Badge 3 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1481.5260651689168
+          },
+          "id": "badges_4",
+          "label": "Badge 4 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 106294,
+            "frames": 8591727,
+            "wall_seconds": 4239.992447732919
+          },
+          "id": "badges_5",
+          "label": "Badge 5 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 107177,
+            "frames": 8661819,
+            "wall_seconds": 4330.963546212923
+          },
+          "id": "badges_6",
+          "label": "Badge 6 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 112413,
+            "frames": 9013632,
+            "wall_seconds": 4603.033290384919
+          },
+          "id": "badges_7",
+          "label": "Badge 7 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 115102,
+            "frames": 9200244,
+            "wall_seconds": 4705.657670861925
+          },
+          "id": "badges_8",
+          "label": "Badge 8 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 178,
+            "frames": 21216,
+            "wall_seconds": 3.696544813006767
+          },
+          "id": "choose_starter",
+          "label": "Starter chosen"
+        },
+        {
+          "elapsed": {
+            "actions": 1565,
+            "frames": 127416,
+            "wall_seconds": 23.839352501003304
+          },
+          "id": "receive_pokedex",
+          "label": "Pok\u00e9dex received"
+        },
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 111.9242708820093
+          },
+          "id": "defeat_brock",
+          "label": "Brock \u00b7 Boulder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 27531,
+            "frames": 1890408,
+            "wall_seconds": 567.542028620941
+          },
+          "id": "help_bill",
+          "label": "Bill helped \u00b7 SS Ticket"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 308.29864814598113
+          },
+          "id": "defeat_misty",
+          "label": "Misty \u00b7 Cascade Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 30027,
+            "frames": 2047212,
+            "wall_seconds": 657.0930132709618
+          },
+          "id": "obtain_cut",
+          "label": "Cut obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 31187,
+            "frames": 2127216,
+            "wall_seconds": 869.0970817049529
+          },
+          "id": "defeat_surge",
+          "label": "Lt. Surge \u00b7 Thunder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 47807,
+            "frames": 3392367,
+            "wall_seconds": 1676.4361332828994
+          },
+          "id": "clear_rocket_hideout",
+          "label": "Rocket Hideout cleared"
+        },
+        {
+          "elapsed": {
+            "actions": 48099,
+            "frames": 3403719,
+            "wall_seconds": 1710.3231636108976
+          },
+          "id": "obtain_silph_scope",
+          "label": "Silph Scope obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 45003,
+            "frames": 3196875,
+            "wall_seconds": 1481.5260651689168
+          },
+          "id": "defeat_erika",
+          "label": "Erika \u00b7 Rainbow Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 53668,
+            "frames": 3800595,
+            "wall_seconds": 2197.556703102935
+          },
+          "id": "rescue_fuji",
+          "label": "Fuji rescued \u00b7 Pok\u00e9 Flute"
+        },
+        {
+          "elapsed": {
+            "actions": 66595,
+            "frames": 5160699,
+            "wall_seconds": 3042.0601414679113
+          },
+          "id": "obtain_surf",
+          "label": "Surf obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 107177,
+            "frames": 8661819,
+            "wall_seconds": 4330.963546212923
+          },
+          "id": "defeat_koga",
+          "label": "Koga \u00b7 Soul Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 66765,
+            "frames": 5165475,
+            "wall_seconds": 3050.205406431909
+          },
+          "id": "obtain_strength",
+          "label": "Strength obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 105527,
+            "frames": 8530335,
+            "wall_seconds": 4209.090072223917
+          },
+          "id": "liberate_silph",
+          "label": "Silph liberated"
+        },
+        {
+          "elapsed": {
+            "actions": 106294,
+            "frames": 8591727,
+            "wall_seconds": 4239.992447732919
+          },
+          "id": "defeat_sabrina",
+          "label": "Sabrina \u00b7 Marsh Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 107823,
+            "frames": 8695156,
+            "wall_seconds": 4406.0692056399275
+          },
+          "id": "obtain_secret_key",
+          "label": "Secret Key obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 112413,
+            "frames": 9013632,
+            "wall_seconds": 4603.033290384919
+          },
+          "id": "defeat_blaine",
+          "label": "Blaine \u00b7 Volcano Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 115102,
+            "frames": 9200244,
+            "wall_seconds": 4705.657670861925
+          },
+          "id": "defeat_giovanni",
+          "label": "Giovanni \u00b7 Earth Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 119221,
+            "frames": 9473748,
+            "wall_seconds": 7347.893710889926
+          },
+          "id": "cross_victory_road",
+          "label": "Victory Road crossed"
+        },
+        {
+          "elapsed": {
+            "actions": 144661,
+            "frames": 11585628,
+            "wall_seconds": 8312.640646497923
+          },
+          "id": "defeat_lorelei",
+          "label": "Lorelei defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 145002,
+            "frames": 11618244,
+            "wall_seconds": 8377.91776800192
+          },
+          "id": "defeat_bruno",
+          "label": "Bruno defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 151223,
+            "frames": 12188016,
+            "wall_seconds": 8686.145528023932
+          },
+          "id": "defeat_agatha",
+          "label": "Agatha defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 167932,
+            "frames": 13732752,
+            "wall_seconds": 9406.855437359904
+          },
+          "id": "defeat_lance",
+          "label": "Lance defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 194543,
+            "frames": 16189584,
+            "wall_seconds": 10623.745834115907
+          },
+          "id": "defeat_champion",
+          "label": "Champion defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 194543,
+            "frames": 16189584,
+            "wall_seconds": 10623.745834115907
+          },
+          "id": "enter_hall_of_fame",
+          "label": "Hall of Fame"
+        },
+        {
+          "elapsed": {
+            "actions": 203104,
+            "frames": 16776721,
+            "wall_seconds": 11044.237860879934
+          },
+          "id": "registrations_25",
+          "label": "25 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 305675,
+            "frames": 26175550,
+            "wall_seconds": 14593.949267529882
+          },
+          "id": "registrations_50",
+          "label": "50 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 452798,
+            "frames": 38825734,
+            "wall_seconds": 21172.845369070885
+          },
+          "id": "registrations_75",
+          "label": "75 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 715281,
+            "frames": 60243825,
+            "wall_seconds": 31066.430921684885
+          },
+          "id": "registrations_100",
+          "label": "100 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1134036,
+            "frames": 94487629,
+            "wall_seconds": 37964.190574239896
+          },
+          "id": "registrations_124",
+          "label": "124 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1134036,
+            "frames": 94487629,
+            "wall_seconds": 37964.190574239896
+          },
+          "id": "complete_red_124",
+          "label": "Champion / Hall of Fame + route 124"
+        }
+      ]
+    },
+    {
+      "cartridge_clock": "255:00:00",
+      "external_continuations": 15,
+      "final_split": {
+        "actions": 1170462,
+        "frames": 99366634,
+        "wall_seconds": 34966.06555374209
+      },
+      "real_dispatch_to_exit_seconds": 45668.206661,
+      "run": 4,
+      "splits": [
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 110.19204270098999
+          },
+          "id": "badges_1",
+          "label": "Badge 1 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 306.67024027899606
+          },
+          "id": "badges_2",
+          "label": "Badge 2 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 34234,
+            "frames": 2323692,
+            "wall_seconds": 1218.23156060795
+          },
+          "id": "badges_3",
+          "label": "Badge 3 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 54735,
+            "frames": 3850822,
+            "wall_seconds": 1843.79831899493
+          },
+          "id": "badges_4",
+          "label": "Badge 4 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 225995,
+            "frames": 20523456,
+            "wall_seconds": 13604.235251517908
+          },
+          "id": "badges_5",
+          "label": "Badge 5 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 233096,
+            "frames": 21032280,
+            "wall_seconds": 14119.324325806898
+          },
+          "id": "badges_6",
+          "label": "Badge 6 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 235101,
+            "frames": 21174861,
+            "wall_seconds": 14303.198883243895
+          },
+          "id": "badges_7",
+          "label": "Badge 7 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 237029,
+            "frames": 21338469,
+            "wall_seconds": 14405.130899278884
+          },
+          "id": "badges_8",
+          "label": "Badge 8 earned"
+        },
+        {
+          "elapsed": {
+            "actions": 178,
+            "frames": 21216,
+            "wall_seconds": 3.8351667530077975
+          },
+          "id": "choose_starter",
+          "label": "Starter chosen"
+        },
+        {
+          "elapsed": {
+            "actions": 1565,
+            "frames": 127416,
+            "wall_seconds": 23.49982086000091
+          },
+          "id": "receive_pokedex",
+          "label": "Pok\u00e9dex received"
+        },
+        {
+          "elapsed": {
+            "actions": 6279,
+            "frames": 434784,
+            "wall_seconds": 110.19204270098999
+          },
+          "id": "defeat_brock",
+          "label": "Brock \u00b7 Boulder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 29022,
+            "frames": 2000508,
+            "wall_seconds": 585.2960120149801
+          },
+          "id": "help_bill",
+          "label": "Bill helped \u00b7 SS Ticket"
+        },
+        {
+          "elapsed": {
+            "actions": 17680,
+            "frames": 1341180,
+            "wall_seconds": 306.67024027899606
+          },
+          "id": "defeat_misty",
+          "label": "Misty \u00b7 Cascade Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 32353,
+            "frames": 2207592,
+            "wall_seconds": 706.7137454689655
+          },
+          "id": "obtain_cut",
+          "label": "Cut obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 34234,
+            "frames": 2323692,
+            "wall_seconds": 1218.23156060795
+          },
+          "id": "defeat_surge",
+          "label": "Lt. Surge \u00b7 Thunder Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 56535,
+            "frames": 3970774,
+            "wall_seconds": 2000.042231855943
+          },
+          "id": "clear_rocket_hideout",
+          "label": "Rocket Hideout cleared"
+        },
+        {
+          "elapsed": {
+            "actions": 56546,
+            "frames": 3971254,
+            "wall_seconds": 2002.3032215079438
+          },
+          "id": "obtain_silph_scope",
+          "label": "Silph Scope obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 54735,
+            "frames": 3850822,
+            "wall_seconds": 1843.79831899493
+          },
+          "id": "defeat_erika",
+          "label": "Erika \u00b7 Rainbow Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 62767,
+            "frames": 4416670,
+            "wall_seconds": 2679.310745984927
+          },
+          "id": "rescue_fuji",
+          "label": "Fuji rescued \u00b7 Pok\u00e9 Flute"
+        },
+        {
+          "elapsed": {
+            "actions": 231000,
+            "frames": 20861652,
+            "wall_seconds": 13969.891002133896
+          },
+          "id": "obtain_surf",
+          "label": "Surf obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 233096,
+            "frames": 21032280,
+            "wall_seconds": 14119.324325806898
+          },
+          "id": "defeat_koga",
+          "label": "Koga \u00b7 Soul Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 231170,
+            "frames": 20866428,
+            "wall_seconds": 13976.888470760896
+          },
+          "id": "obtain_strength",
+          "label": "Strength obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 225246,
+            "frames": 20474196,
+            "wall_seconds": 13496.787251675894
+          },
+          "id": "liberate_silph",
+          "label": "Silph liberated"
+        },
+        {
+          "elapsed": {
+            "actions": 225995,
+            "frames": 20523456,
+            "wall_seconds": 13604.235251517908
+          },
+          "id": "defeat_sabrina",
+          "label": "Sabrina \u00b7 Marsh Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 233882,
+            "frames": 21076885,
+            "wall_seconds": 14206.676630310889
+          },
+          "id": "obtain_secret_key",
+          "label": "Secret Key obtained"
+        },
+        {
+          "elapsed": {
+            "actions": 235101,
+            "frames": 21174861,
+            "wall_seconds": 14303.198883243895
+          },
+          "id": "defeat_blaine",
+          "label": "Blaine \u00b7 Volcano Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 237029,
+            "frames": 21338469,
+            "wall_seconds": 14405.130899278884
+          },
+          "id": "defeat_giovanni",
+          "label": "Giovanni \u00b7 Earth Badge"
+        },
+        {
+          "elapsed": {
+            "actions": 240649,
+            "frames": 21568701,
+            "wall_seconds": 14836.273374574885
+          },
+          "id": "cross_victory_road",
+          "label": "Victory Road crossed"
+        },
+        {
+          "elapsed": {
+            "actions": 251858,
+            "frames": 22465833,
+            "wall_seconds": 15069.005591803856
+          },
+          "id": "defeat_lorelei",
+          "label": "Lorelei defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 252385,
+            "frames": 22515405,
+            "wall_seconds": 15096.649225190864
+          },
+          "id": "defeat_bruno",
+          "label": "Bruno defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 288019,
+            "frames": 25824621,
+            "wall_seconds": 17174.750549109856
+          },
+          "id": "defeat_agatha",
+          "label": "Agatha defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 307994,
+            "frames": 27708837,
+            "wall_seconds": 18325.54246277988
+          },
+          "id": "defeat_lance",
+          "label": "Lance defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 308400,
+            "frames": 27743751,
+            "wall_seconds": 18348.762931110876
+          },
+          "id": "defeat_champion",
+          "label": "Champion defeated"
+        },
+        {
+          "elapsed": {
+            "actions": 308400,
+            "frames": 27743751,
+            "wall_seconds": 18348.762931110876
+          },
+          "id": "enter_hall_of_fame",
+          "label": "Hall of Fame"
+        },
+        {
+          "elapsed": {
+            "actions": 313790,
+            "frames": 28077891,
+            "wall_seconds": 18665.958777627864
+          },
+          "id": "registrations_25",
+          "label": "25 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 395921,
+            "frames": 35336278,
+            "wall_seconds": 21358.149763997862
+          },
+          "id": "registrations_50",
+          "label": "50 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 582737,
+            "frames": 51836951,
+            "wall_seconds": 24708.581666742073
+          },
+          "id": "registrations_75",
+          "label": "75 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 790810,
+            "frames": 69462269,
+            "wall_seconds": 28213.31608484907
+          },
+          "id": "registrations_100",
+          "label": "100 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1170462,
+            "frames": 99366634,
+            "wall_seconds": 34966.06555374209
+          },
+          "id": "registrations_124",
+          "label": "124 route registrations"
+        },
+        {
+          "elapsed": {
+            "actions": 1170462,
+            "frames": 99366634,
+            "wall_seconds": 34966.06555374209
+          },
+          "id": "complete_red_124",
+          "label": "Champion / Hall of Fame + route 124"
+        }
+      ]
+    }
+  ],
+  "schema": "pokemon.red.public-campaign-comparison.v1",
+  "seed": 202611161702301,
+  "session": "open-ended-red-union-f4488e2d661e",
+  "solo_continuation_recipe_sha256": "b75589bc4d7444134d5496a4b76fbd91da59789a0460e359eaa61c2ac6d964e7",
+  "solo_snapshot": {
+    "badges": 4,
+    "checkpoint_sha256": "08e932a6ca4d15c28f0fd87ce78d4d47b358526bbfb5616d2a1572c9985a87fc",
+    "external_continuations": 1,
+    "native_cash_after": 632,
+    "native_cash_before": 1265,
+    "observed_utc": "2026-11-19T16:30:55.576913+00:00",
+    "post_recovery_model_choice": "advance_story",
+    "registrations": 14,
+    "same_save_recovery_proof_sha256": "0beb6e208e3e1988d7fe4e6e43664fb92e0bfe5edd81d32b98718b1a3b1e0b1e",
+    "split_rows": 40,
+    "uninterrupted": false,
+    "verified_power_on": true
+  },
+  "status": "active_solo_campaign_at_snapshot"
+}

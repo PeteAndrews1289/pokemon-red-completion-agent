@@ -1,118 +1,45 @@
 # AI systems interview handoff
 
-Historical capability brief: October 4 local / October 5 UTC, 2026.
-For current status use [the handoff](../HANDOFF.md) and
-[October 7 project audit](work-sessions/2026-10-07-project-audit-and-refocus.md).
-The dated claims below are evidence, not current instructions or a live checkpoint.
+Updated November 19, 2026.
 
-## Product and authorship
+## A 30-second introduction
 
-Build a transferable Pokémon player, beginning with Red, that finishes stories and accumulates
-one shared verified registered Pokédex. Pete Andrews owns the product, priorities, acceptance
-criteria and validation. AI coding assistants contributed implementation and review. Do not
-present this as wholly hand-written or already completed.
+> I’m building a local agent that can finish Pokémon Red and register 124 obtainable species on one save. I define what counts as success, direct the engineering and review work, and use the emulator's own records to test our claims. Four fresh development runs finished the route. Every one needed intervention. We can now point to the exact moments and costs that stand between mechanical completion and an autonomous run.
 
-## Verified capabilities
+## The numbers worth remembering
 
-| Evidence | Result | Limitation |
-| --- | --- | --- |
-| Older collection development |109/124 registrations,78 specimens,11968 cash | Preserved separate save, not the latest earned ancestry |
-| Current earned coverage |36/36story objectives, Champion/Hall-of-Fame history and124/124native entries | Supplied preparation/targets/recovery; not fresh autonomous acceptance |
-| Prepared special-source choice | Frozen model chooses Articuno over Moltres; corrective copy completes capture/role return | Correlated122copy, original interruption retained; preparation/capture policy supplied |
-| Goal Model141 |141 fitted outcomes,96 successes,58 economy-qualified | Related development states; four teacher gift lessons are not sampled choices |
-| Battle training |318 TRAIN contexts, four origins | Supported small battle domain |
-| Unused generated3v3 | J9/24 wins; H7/24 | Descriptive, not statistically conclusive |
-| Natural Brock | J6/6; H5/6; first-legal0/6 | Two origins × three timings; one own Pokémon |
-| Earned natural switching | Two wins, two voluntary switches,33 decisions | Same two origins; not six-member mastery |
-| Main-player battle lifecycle | Four initial decisions, then five continuation decisions; loss and blackout verified | Original funding goal failed; no six-member promotion |
-| Natural six-member execution | J/K each4/4;210combined choices across two origins | Same enemy roster; K16faints versus J15 |
-| Continued goal selection | Seven decisions, boxed trade success, all3000spent retained | Five failed searches and final encounter-cap stop; not broad strategic superiority |
-| Earlier September22story combat | Seven badges; Blaine and seven trainers won with48learned choices | One prepared lineage; support navigation/healing; historical checkpoint |
-| Reserve preparation | Three level39targets;160encounters/153wins/496choices | Seven nonwinning exits; targets/venue/healing supported; no new fit |
-| Fresh Red acceptance |0/5 | No fresh start-to-finish model-directed completion |
+| Question | What the evidence says |
+|---|---|
+| How far has it gone? | Each of four same-seed starts reached eight badges, Champion, Hall of Fame and 124 required registrations on its own save. |
+| Did it do that uninterrupted? | Each run needed external continuations. The counts were 14, 12, 10 and 15, including host and game-runner interruptions. The subsequent solo attempt also needed one before Brock. |
+| How fast was it? | The fastest took 8h 12m 59s of active campaign time and 10h 52m 12s from launch to exit. Recorded frames represent 442h 29m at original hardware speed for that run. All four cartridge clocks reached their 255h display limit. |
+| What is the largest shared cost? | Across the four, 63.3% of active time came after the Hall of Fame. Run 3 took 165 minutes for registrations 75–100. Run 2 took 75 minutes. |
+| Does it generalize? | These four starts used one seed. Held-out clean completion and cross-game transfer still need independent evidence. |
 
-The historical September19 main-entry probe used three earned Potions and a new trainer. J switched once and selected
-three attacks. Wartortle fainted; the existing no-faints funding guard stopped before replacement.
-It earned no payout. A separate exact-state continuation produced one forced replacement and four
-attacks, followed by loss and normal blackout. Party, cash loss and field return were verified.
-This establishes lifecycle handling, not reliable autonomous funding.
+The public comparison contains the full 40-split table, clock definitions and timing differences. [Four-run results](work-sessions/four-run-splits-2026-11-19.md)
 
-At historical September22stage283, forced-motion geometry blocked Giovanni rather
-than a demonstrated battle weakness; an audit corrected an optimistic recovery-anchor
-claim. Later earned story/collection completion does not erase that failure. Current
-gaps are consequential preparation/resource ownership and sustained fresh-run autonomy,
-including the strict League income/epilogue return seam, not that old spinner stop.
+## One incident to tell in detail
 
-## Architecture and stack
+**The failure.** The solo player selected healing. Its poisoned Squirtle fainted on the way. Red had a legal next action, its blackout sequence, and the runner already knew how to settle it after a restart. In the live emulator the two pieces never connected. Hashes showed the same cartridge state at the first stop in all four earlier campaigns.
 
-Observe coherent state → semantic goals → learned selection → bounded skills → independent
-verification → saved evidence → eligible outcome learning.
+**The change.** The runner checks that the failed choice was routed healing, the whole party fainted, controls were released and the retained state matches the live emulator. It exposes the one compulsory recovery. The model resumes strategic control when the game returns to the field.
 
-| Layer | Technology / responsibility |
-| --- | --- |
-| Runtime | Python3.11+, PyBoy2.7.0 |
-| Observation | Revision-specific privileged emulator/cartridge readers; semantic state, not pixels alone |
-| Goal learner | NumPy regularized multi-outcome option values with declared exploration |
-| Battler | Three learned heads: move, attack/switch control, replacement target |
-| Mechanics | Cartridge maps/encounters; deterministic navigation and menu execution |
-| Memory | SQLite shared registrations; separate local flags and physical inventory |
-| Persistence | SHA-256 bindings, create-once records, exact endpoints and decision logs |
-| Verification | pytest, Ruff, mypy, documentation/private-artifact guards |
-| Viewer | Read-only dashboard distinguishing live runtime from saved evidence |
+**The test.** On an isolated copy we replayed the three preceding choices to the same state, observed Red deduct ₽633 from ₽1,265, and saw the model choose to advance the story. A second copy started at the stopped state and produced the same settlement. The real campaign resumed from its own save and beat Brock. The original interruption remains in the result. [Repair evidence](work-sessions/solo-field-blackout-2026-11-19.md)
 
-No LLM supplies each gameplay action. Coding agents are development collaborators. Source
-interfaces prevent accidental misuse, not malicious-code access in a security sandbox.
+## What Pete did
 
-## Authority and integrity
+- Defined same-save completion and required the project to keep unsuccessful runs, cash losses and operator repairs in the record.
+- Watched the player leave the Safari Zone and switch between unfinished goals. Asked for milestone splits, trainee-specific XP and comparable runs to distinguish poor decisions from emulator overhead.
+- Directed Codex, Claude and Antigravity during engineering and review. The runtime player uses local models and declared execution skills. [Project narrative](project-narrative.md)
 
-- The model selects declared semantic alternatives; only executors issue controller inputs.
-- The referee verifies outcomes and cannot substitute a better action.
-- Qualified J/K and narrowly admitted story actors are bound explicitly, not globally substituted.
-- Default wild-capture and Elite Four controllers are unchanged; K knockout preparation is separate.
-- Learned trainer actions share player action/frame budgets and resource checks.
-- Failures preserve real costs and saves rather than resetting into success.
-- Disclosed teacher assistance is allowed in TRAIN scaffolding, not the final actor.
-- DEVELOPMENT is never silently fitted; timing variants are not independent origins.
-- The additive actor won72/128versusK66 but required349decisions versus276. Its original
-  efficiency gate failed; owner-authorized story use does not turn that into a pass.
+## Architecture in one minute
 
-## Difficult problems and lessons
+Python and PyBoy run the game locally. The observation layer reads cartridge state and exposes facts such as party health, reachable locations and inventory. A goal model scores available work. Battle policies choose moves and switches. The executor sends controller inputs. A verifier compares before and after states, including Pokémon identity, real money, target XP and registered species. Hash-bound checkpoints link a save to its decision history and costs. Offline training uses separately admitted examples. [Architecture](architecture.md) · [Assistance policy](assistance-policy.md)
 
-The central challenge is composing learned authority with reliable mechanics without counting
-teacher success, test coverage or infrastructure as model competence. Coherent observation,
-changing geometry, dialogue, crash continuation, outcome labels, evaluation leakage and shared
-registration accounting are major engineering concerns.
+## What I would do next
 
-A first action followed by a strong teacher is not equivalent to one followed by the learner.
-Measuring16 training contexts under learner continuation produced J and a limited unused-team gain.
+First, demonstrate a clean completion on one unchanged build. Then compare complete candidates on matched seeds using all milestones, frames and active time. An apparent speed gain can come from running one emulator instead of four. The first two solo badge splits used exactly the same frame counts as the four-player runs. The solo process reached them sooner in real time. Held-out seeds and independent origins matter once reliability is repeatable. [Roadmap](model-first-roadmap.md) · [Completion criteria](completion-contract.md)
 
-A no-faints funding goal can fail while a battle still has a living reserve and a valid replacement
-decision. The first checkpoint retained the unfinished battle honestly. The subsequent continuation
-separated general completion from funding acceptance and verified a natural loss/blackout without
-rewriting that original failed-goal verdict.
+[Frozen blackout repair and build fingerprint](releases/red-solo-2026-11-19/README.md)
 
-## Remaining product sequence
-
-1. Connect existing resource-choice/income-return/spending mechanics without supplied winning goals.
-2. Address demonstrated preparation-authority gaps and qualify sustained model-directed play.
-3. Complete fresh model-directed Red with Champion/Hall of Fame and124 native registrations.
-4. Verify the deferred-dependency ledger, then test an unfamiliar compatible Red modification.
-5. Learn Crystal and continue through at least Emerald.
-
-Mew and unavailable version/link/event dependencies await legitimate later sources. Registration
-is required, not level100 or simultaneous living forms. Red/Blue linking is desirable later,
-not permission to fabricate owned flags.
-
-## Pete's interview-safe role
-
-“I defined the product and acceptance criteria, directed AI coding and review agents, challenged
-shortcuts and focus drift, and validated outcomes against preserved gameplay evidence.
-My contribution is systems direction and evaluation, including deciding what evidence establishes.”
-
-[Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) · [Handoff](../HANDOFF.md) ·
-[Latest evidence](work-sessions/2026-10-04-model-owned-special-acquisition.md) ·
-[Research retrospective](research-retrospective.md) ·
-[Architecture](architecture.md) · [Roadmap](model-first-roadmap.md)
-
-Private ROMs, saves, datasets and fitted models are not distributed. Superseded interview details
-remain in Git and the [historical archive](history/README.md).
+[Full development project](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-development-20261119) · [Exact frozen player and file hashes](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/bc5b05a0463ebbcb3c2139211b99ea2baa147b22/docs/releases/red-solo-2026-11-19)

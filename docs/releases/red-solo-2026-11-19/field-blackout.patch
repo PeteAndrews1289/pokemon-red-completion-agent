@@ -1,0 +1,88 @@
+--- a/scripts/run_configured_red_player.py
++++ b/scripts/run_configured_red_player.py
+@@ -2617,4 +2617,41 @@
+     from pokemon_red_completion.red_capture_switch_handoff import catcher_switch_failure, development_recovery
+     outcomes = result.get("episode", {}).get("outcomes") or ()
++    if (outcomes and outcomes[-1].get("error_type") == "Gen1FieldBlackoutPending"
++            and retained_parent is not None and failure_reason == "native_execution_error"
++            and development_recovery(catcher_plan)):
++        from pokemon_red_completion.red_player_configuration import _retained_field_blackout_inventory
++        last = outcomes[-1]
++        error = "observed all-party field poison faint requires native blackout"
++        if (result.get("error_type") or result.get("paired_context_authenticated") is not True
++                or result.get("episode", {}).get("stop_reason") != "execution_failed"
++                or any(row.get("error_type") for row in outcomes[:-1])
++                or last.get("failure_phase") != "execution" or last.get("safe_terminal") is not True
++                or last.get("error_chain") != [dict(error_type="Gen1FieldBlackoutPending",
++                                                    error=error, reason_code="world_state_diverged")]
++                or runtime.emulator.pressed_buttons or _field_ready(runtime)):
++            return None
++        started = Path(retained_parent)/"native"/"episode"/f"step-{last['ordinal']:03d}"/"execution-started.json"
++        if not started.is_file():
++            return None
++        choice = json.loads(started.read_bytes())
++        if (choice.get("selected_kind") != "restore_team"
++                or choice.get("state_sha256") != last.get("before_state_sha256")
++                or not str(choice.get("selected_binding_ref", "")).startswith("pokemon.red:routed-restoration:")):
++            return None
++        state, frame = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
++        inspection = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
++        inventory = _retained_field_blackout_inventory(runtime, inspection, parent=retained_parent, failed_result=result)
++        if runtime.emulator.save_state_bytes() != state or runtime.emulator.frame_count != frame:
++            raise ValueError("field blackout inspection changed the held checkpoint")
++        digest = sha256(state).hexdigest()
++        expected = "pokemon.red:field-blackout:" + digest
++        if (type(inventory) is not GoalBindingSet or len(inventory.bindings) != 1
++                or inventory.bindings[0].kind is not GoalKind.RECOVER_CONTROL
++                or inventory.bindings[0].binding_ref != expected):
++            return None
++        return dict(schema="pokemon.red.qualified-native-control-handoff.v1", state_sha256=digest,
++                    binding_ref=expected, qualified=True, inputs=0, frames=0, model_queries=0,
++                    failed_transport_preserved=True, strategic_substitution=False, original_terminal_safe=True,
++                    failed_outcome_sha256=canonical_sha256(last), retained_field_blackout=True)
+     if (outcomes and retained_parent is not None and failure_reason == "native_execution_error"
+             and development_recovery(catcher_plan)
+--- a/src/pokemon_red_completion/red_player_configuration.py
++++ b/src/pokemon_red_completion/red_player_configuration.py
+@@ -946,5 +946,5 @@
+ 
+ 
+-def _retained_field_blackout_inventory(runtime, actions, *, parent):
++def _retained_field_blackout_inventory(runtime, actions, *, parent, failed_result=None):
+     """Expose only the recorded, still pending native field blackout."""
+     read = getattr(getattr(runtime, "reader", None), "read", None)
+@@ -956,14 +956,29 @@
+     parent = Path(parent)
+     result_path = parent / "RESULT.json"
+-    if not result_path.is_file() or not (parent / "terminal.state").is_file():
+-        return None
+-    result = json.loads(result_path.read_bytes())
++    if (failed_result is None and not result_path.is_file()) or not (parent / "terminal.state").is_file():
++        return None
++    result = failed_result if failed_result is not None else json.loads(result_path.read_bytes())
+     outcomes = result.get("episode", {}).get("outcomes", ())
+     if not outcomes or not checkpoint_quiescent(result):
+         return None
+     last = outcomes[-1]
++    reason = result.get("continuation_reason")
++    if failed_result is None and reason != "native_execution_error":
++        receipt = result.get("qualified_native_control_handoff") or {}
++        if (
++            reason != "automatic_control_recovery"
++            or receipt.get("schema") != "pokemon.red.qualified-native-control-handoff.v1"
++            or receipt.get("retained_field_blackout") is not True
++            or receipt.get("qualified") is not True
++            or receipt.get("state_sha256") != result.get("state_sha256")
++            or receipt.get("failed_outcome_sha256") != canonical_sha256(last)
++            or receipt.get("binding_ref") != "pokemon.red:field-blackout:" + str(result.get("state_sha256"))
++            or receipt.get("strategic_substitution") is not False
++            or receipt.get("failed_transport_preserved") is not True
++            or any(receipt.get(k) != 0 for k in ("inputs", "frames", "model_queries"))
++        ):
++            return None
+     if (
+-        result.get("continuation_reason") != "native_execution_error"
+-        or result.get("field_ready") is not False
++        result.get("field_ready") is not False
+         or last.get("selected_kind") != GoalKind.RESTORE_TEAM.value
+         or last.get("error_type") != "Gen1FieldBlackoutPending"
