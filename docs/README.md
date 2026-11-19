@@ -10,6 +10,6 @@ Updated November 19, 2026.
 | How decisions reach the game | [Architecture](architecture.md) · [Assistance policy](assistance-policy.md) |
 | Where the project stands | [Current handoff](../HANDOFF.md) · [Delivery roadmap](model-first-roadmap.md) · [Seven goals](seven-goals.md) |
 | How the project developed | [Project narrative](project-narrative.md) · [Video treatment](youtube-video-narrative.md) · [Chronicle](chronicle/README.md) |
-| How to inspect the source | [Setup](getting-started.md) · [Dashboard guide](progress-dashboard.md) · [Public source snapshot](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-same-seed-20261119) |
+| How to inspect the source | [Setup](getting-started.md) · [Dashboard guide](progress-dashboard.md) · [Frozen blackout repair and build fingerprint](releases/red-solo-2026-11-19/README.md) |
 
 [Mission](../MISSION.md) · [North Star](../NORTH_STAR.md) · [Active product state](../ACTIVE_PRODUCT_STATE.md)
