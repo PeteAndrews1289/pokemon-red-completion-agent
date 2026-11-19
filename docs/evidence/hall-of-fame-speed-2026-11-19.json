@@ -1,0 +1,118 @@
+{
+  "candidate_promoted": false,
+  "early_preparation": {
+    "cartridge_ticks": 930991,
+    "decisions": 7,
+    "decisions_with_scored_story_alternative": 7,
+    "game_time": "4:18:37"
+  },
+  "elapsed_unit": "60 cartridge ticks per game second",
+  "experiments": {
+    "corrected_controller": {
+      "press": 8,
+      "release": 16,
+      "wait": 1
+    },
+    "observation_failure": "Twelve pilot arms stopped at the first query because status context was missing. Those zero-frame errors supplied zero fit rows.",
+    "pilot": "The initial standalone experiment used press 1, release 1. Repeated every admitted branch and the fit on campaign timing.",
+    "population": "One perturbation tied incumbent. The other was slower. Incumbent retained.",
+    "setup_failure": "The first fixture setup supplied partial reserve PP. The factory caught it before input. Reused the independently earned source with cartridge-defined PP."
+  },
+  "first_badge": "1:57:44",
+  "fit_algorithm": "Prior-regularized pairwise fit of the 16 output weights in the existing story attack/switch control head.",
+  "fitting": {
+    "development_examples": 0,
+    "examples": 4,
+    "held_out_examples": 0,
+    "partition": "train"
+  },
+  "fresh_validation_origins": 2,
+  "historical_blaine": {
+    "both_reward_verified": true,
+    "fight_ticks": 19272,
+    "fit_rows": 0,
+    "prepare_ticks": 256980,
+    "trainee": "Farfetch\u2019d",
+    "trainee_boss_attacks": 0
+  },
+  "objective": "Hall of Fame by 6:00:00 on Red\u2019s cartridge clock from power-on",
+  "partition": "development",
+  "prior_hall_of_fame": [
+    {
+      "active_seconds": 10615.098670649037,
+      "cartridge": "71:16:47",
+      "frames": 15426702,
+      "run": 1
+    },
+    {
+      "active_seconds": 10639.869820434047,
+      "cartridge": "74:48:27",
+      "frames": 16189584,
+      "run": 2
+    },
+    {
+      "active_seconds": 10623.745834115907,
+      "cartridge": "74:48:27",
+      "frames": 16189584,
+      "run": 3
+    },
+    {
+      "active_seconds": 18348.762931110876,
+      "cartridge": "128:13:56",
+      "frames": 27743751,
+      "run": 4
+    }
+  ],
+  "production_checks": {
+    "NATURAL": {
+      "candidate_ticks": 34436,
+      "candidate_wins": 2,
+      "incumbent_ticks": 34436,
+      "incumbent_wins": 2,
+      "lost_incumbent_wins": 0,
+      "paired_win_ticks_saved": 0,
+      "task_count": 2
+    },
+    "RESERVE": {
+      "candidate_ticks": 31480,
+      "candidate_wins": 4,
+      "incumbent_ticks": 36620,
+      "incumbent_wins": 4,
+      "lost_incumbent_wins": 0,
+      "paired_win_ticks_saved": 5140,
+      "task_count": 4
+    },
+    "TRAINED": {
+      "candidate_ticks": 31276,
+      "candidate_wins": 4,
+      "incumbent_ticks": 41944,
+      "incumbent_wins": 4,
+      "lost_incumbent_wins": 0,
+      "paired_win_ticks_saved": 10668,
+      "task_count": 4
+    }
+  },
+  "production_train_pairs": 4,
+  "protected_actual_cash": 8,
+  "protected_actual_registrations": 97,
+  "relatedness": "The two historical boss snapshots have distinct legacy identifiers. Their independent genesis is unproven.",
+  "scope": "Development assessment of the parked campaign and separate copy experiments.",
+  "second_badge": "6:08:52",
+  "session": "hall-of-fame-speed-training-20261119-01",
+  "solo": {
+    "active_hall_seconds": 8528.943270746007,
+    "badges": 8,
+    "cartridge_hall": "83:23:08",
+    "cartridge_parked": "86:28:57",
+    "external_continuations": 1,
+    "hof_frame_equivalent_seconds": 302127.64351272583,
+    "parked": true,
+    "registrations": 26,
+    "seed": 202611161702301,
+    "separate_host_memory_stop_after_hall": true
+  },
+  "status": "closed_practice_speed_gain_story_bosses_tied",
+  "terminal_readback_pairs": 20,
+  "training_origins": 2,
+  "whole_run_speedup_proven": false
+}

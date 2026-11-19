@@ -12,4 +12,4 @@ November 19, 2026. Four same-seed development saves reached Champion, the Hall o
 | Goal quality and learning | Can the player finish useful work with fewer repeated acquisition and restoration choices? |
 | Integrated delivery and transfer | Can clean Red performance repeat on held-out starts and later carry to unfamiliar games? |
 
-Across the four, 63.3% of active time came after the Hall of Fame. The solo attempt had one external intervention at the interview snapshot. [Four-run results](work-sessions/four-run-splits-2026-11-19.md) · [Solo recovery](work-sessions/solo-field-blackout-2026-11-19.md) · [Workstream percentages](model-first-roadmap.md)
+Across the four, 63.3% of active time came after the Hall of Fame. The solo reached the Hall of Fame at 83:23:08 on Red’s clock and is parked at 26/124. The six-hour speed study compares game time across verified wins. [Speed training results](work-sessions/hall-of-fame-speed-2026-11-19.md). [Four-run results](work-sessions/four-run-splits-2026-11-19.md) · [Solo recovery](work-sessions/solo-field-blackout-2026-11-19.md) · [Workstream percentages](model-first-roadmap.md)

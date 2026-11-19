@@ -13,6 +13,8 @@ Updated November 19, 2026.
 | How far has it gone? | Each of four same-seed starts reached eight badges, Champion, Hall of Fame and 124 required registrations on its own save. |
 | Did it do that uninterrupted? | Each run needed external continuations. The counts were 14, 12, 10 and 15, including host and game-runner interruptions. The subsequent solo attempt also needed one before Brock. |
 | How fast was it? | The fastest took 8h 12m 59s of active campaign time and 10h 52m 12s from launch to exit. Recorded frames represent 442h 29m at original hardware speed for that run. All four cartridge clocks reached their 255h display limit. |
+| How fast was the story itself? | Red recorded 71:16:47 at the quickest Hall of Fame entry. The solo took 83:23:08 in-game and 2:22:09 of active wall time. Its save is parked at 26/124. |
+| Have the weights learned to play faster? | The fitted battle weights preserved four out of four held-out practice wins and saved 1m 26s across them. On Erika and Blaine, both models won and their times matched. |
 | What is the largest shared cost? | Across the four, 63.3% of active time came after the Hall of Fame. Run 3 took 165 minutes for registrations 75–100. Run 2 took 75 minutes. |
 | Does it generalize? | These four starts used one seed. Held-out clean completion and cross-game transfer still need independent evidence. |
 
@@ -38,7 +40,7 @@ Python and PyBoy run the game locally. The observation layer reads cartridge sta
 
 ## What I would do next
 
-First, demonstrate a clean completion on one unchanged build. Then compare complete candidates on matched seeds using all milestones, frames and active time. An apparent speed gain can come from running one emulator instead of four. The first two solo badge splits used exactly the same frame counts as the four-player runs. The solo process reached them sooner in real time. Held-out seeds and independent origins matter once reliability is repeatable. [Roadmap](model-first-roadmap.md) · [Completion criteria](completion-contract.md)
+Our immediate speed target is a six-hour Hall of Fame clear on Red’s clock. All five same-seed starts reached Misty at 6:08:52. In the solo, seven preparation decisions before Misty consumed 4:18:37. We can compare preparing with taking the available story action through the same badge on eligible training copies. A successful fresh run measures the eventual impact on the story. The separate delivery benchmark still requires one uninterrupted 124-registration finish. [Speed training results](work-sessions/hall-of-fame-speed-2026-11-19.md) · [Cartridge splits](work-sessions/cartridge-splits-2026-11-19.md)
 
 [Frozen blackout repair and build fingerprint](releases/red-solo-2026-11-19/README.md)
 
