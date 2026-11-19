@@ -13,3 +13,5 @@ Updated November 19, 2026.
 | How to inspect the source | [Setup](getting-started.md) · [Dashboard guide](progress-dashboard.md) · [Frozen blackout repair and build fingerprint](releases/red-solo-2026-11-19/README.md) |
 
 [Mission](../MISSION.md) · [North Star](../NORTH_STAR.md) · [Active product state](../ACTIVE_PRODUCT_STATE.md)
+
+[Full development project](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-development-20261119) · [Exact frozen player and file hashes](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/bc5b05a0463ebbcb3c2139211b99ea2baa147b22/docs/releases/red-solo-2026-11-19)

@@ -41,3 +41,5 @@ Python and PyBoy run the game locally. The observation layer reads cartridge sta
 First, demonstrate a clean completion on one unchanged build. Then compare complete candidates on matched seeds using all milestones, frames and active time. An apparent speed gain can come from running one emulator instead of four. The first two solo badge splits used exactly the same frame counts as the four-player runs. The solo process reached them sooner in real time. Held-out seeds and independent origins matter once reliability is repeatable. [Roadmap](model-first-roadmap.md) · [Completion criteria](completion-contract.md)
 
 [Frozen blackout repair and build fingerprint](releases/red-solo-2026-11-19/README.md)
+
+[Full development project](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-development-20261119) · [Exact frozen player and file hashes](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/bc5b05a0463ebbcb3c2139211b99ea2baa147b22/docs/releases/red-solo-2026-11-19)
