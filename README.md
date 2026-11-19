@@ -1,60 +1,30 @@
 # Pokémon Red Completion Agent
 
-An AI-assisted project building a local Pokémon player that learns useful goals,
-battle decisions, preparation and recovery. Semantic observations and declared
-execution skills support the models. This is active development, not a finished
-autonomous or pixel-only player.
+A local player for Pokémon Red that chooses goals, fights battles and works toward 124 legitimate Pokédex registrations on one save. The player uses Pokémon game state, small learned models and a Game Boy emulator. It makes zero runtime calls to an LLM.
 
 ## What works today
 
-- Supported DEVELOPMENT ancestries completed Champion/Hall of Fame and124 declared
-  registrations. Repairs and assistance remain disclosed.
-- Scoped local models demonstrate preparation, stopping, recovery and battle wins.
-- A matched Forest comparison chooses and beats the trainer, then reaches Brock
-  in18choices versus89. A separate repaired midgame copy reaches77/124.
-- Historical finite two-worker capacity checks passed; all game runs are paused.
+**Four development campaigns started from power-on on the same seed. All four earned eight badges, entered the Hall of Fame and finished the 124-species route on their own saves.** An independent read of each terminal save verified the result. All four needed external continuations. The fastest used 8h 12m 59s of active campaign time and 10h 52m 12s from launch to exit. [Four-run results and all 40 splits](docs/work-sessions/four-run-splits-2026-11-19.md)
 
-[Latest lessons](docs/project-lessons-2026-10-28.md) ·
-[Seven goals](docs/seven-goals.md) · [Native scoreboard](docs/work-sessions/2026-10-30-forest-decision.md)
+Together, those campaigns spent 63.3% of active time **after** the Hall of Fame. One run spent 165 minutes progressing from 75 to 100 registrations, against 75 minutes for the fastest run. The slower player repeatedly tried to acquire Pokémon and restored the party. That difference gives us a specific behavior to improve and a frame-based way to measure it. [Split and cost evidence](docs/evidence/red-campaign-comparison-2026-11-19.json)
 
 ## What is not solved
 
-The latest original midgame test stopped on a productive-evolution verification
-mismatch; the repair passed focused tests and a short exact-tail continuation.
-Story-interaction learning and training-venue cost sensitivity remain gaps.
-Numerical fit passes and scoped wins do not establish broad autonomous reliability. Fresh same-save Champion/HOF+124 and the declared
-repeated-run gate remain unproved; later games stay behind Red.
-
-The source snapshot has known lint/type debt. The current player also depends on
-the declared external private helper bundle and model artifacts; a clean clone
-alone cannot reproduce the private player. See the lessons for validation limits.
+**The next delivery test is one unchanged run from power-on to Champion and 124.** A fifth, solo attempt exposed a stopping error before Brock. Its only Pokémon fainted from poison while walking to heal. We repaired the handoff to the game's blackout sequence, verified it from both sides on copies, then resumed that same save. The solo attempt counts as externally assisted. [Solo campaign and repair](docs/work-sessions/solo-field-blackout-2026-11-19.md)
 
 ## How it works
 
-Semantic observation → local model choice → bounded skill execution → native
-verification and retained continuation. The runtime player makes no LLM calls.
-Fitting is a separate explicit process; in-game XP does not update model weights.
-Python, PyBoy, NumPy and SQLite support the system.
+The observation layer reads semantic game state. A local policy chooses among available goals. Reusable skills perform legal navigation, menu and battle actions. A separate verifier checks the result and records its costs. Failures, cash losses and restores remain in the history. Fitting happens offline on eligible training examples. Experience points earned by a Pokémon are a game outcome. [Architecture](docs/architecture.md) · [Completion contract](docs/completion-contract.md)
 
-## Read and review
+## Where to start
 
-[HANDOFF.md](HANDOFF.md) is the sole current work order. Read
-[MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and the generated
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) first.
-
-[Documentation map](docs/README.md) · [Review brief](docs/review-brief.md) ·
-[Architecture](docs/architecture.md) · [Setup](docs/getting-started.md) ·
-[Dashboard](docs/progress-dashboard.md) · [Remaining work](docs/model-first-roadmap.md)
-
-ROMs, raw saves, training corpora and the playable private runtime are not included
-in the public source or read-only review copy. No gameplay starts from this page.
+- For an interview or portfolio review, start with the [interview handoff](docs/ai-systems-specialist-interview-handoff.md) or [one-page brief](docs/portfolio-brief.md).
+- For the development history, read the [project narrative](docs/project-narrative.md), [research retrospective](docs/research-retrospective.md), [chronicle](docs/chronicle/README.md) or [historical log](docs/worklog.md).
+- For the current work, use the [handoff](HANDOFF.md), [active product state](ACTIVE_PRODUCT_STATE.md), [roadmap](docs/model-first-roadmap.md) and [seven goals](docs/seven-goals.md).
+- For the code, see the [setup guide](docs/getting-started.md), [dashboard guide](docs/progress-dashboard.md) and [documentation map](docs/README.md). Native campaign reproduction also requires the private ROM, saves, weights and runtime inputs.
 
 ## Authorship
 
-Pete Andrews defines the product, directs development and validates outcomes.
-Coding assistants implement and review software; they are not the runtime student.
-Codex, Claude and Antigravity have contributed to the project's engineering/review.
+Pete Andrews defines the product, directs AI-assisted development, watches the player's decisions and sets the evidence required for acceptance. Codex, Claude and Antigravity have contributed engineering or review at different stages. The local player makes the gameplay decisions. [Project mission](MISSION.md) · [Research and assistance policy](docs/assistance-policy.md)
 
-[YouTube narrative](docs/youtube-video-narrative.md) ·
-[Research retrospective](docs/research-retrospective.md) ·
-[Chronicle](docs/chronicle/README.md) · [Historical work log](docs/worklog.md)
+[Source for the November 19 development player](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-same-seed-20261119)
