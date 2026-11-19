@@ -125,6 +125,10 @@ def test_observed_map_boundary_never_activates_oneoff(
         **({"combat_levels": (44, 31)} if descriptor else {}),
     )
     binding = row[0] if descriptor and row is not None else row
+    if binding is not None:
+        assert binding.story_approach_only is True
+        assert binding.story_unit == s.OptionStoryUnit("movement", True)
+        assert binding.movement_endpoint_sha256 == s.canonical_sha256(dict(map=10, at=[18, 1]))
     if descriptor and row is not None:
         assert not row[1].combat_required and not row[1].opposition_known
         assert binding.story_objective_ref == "reach_fuchsia"
@@ -232,6 +236,9 @@ def test_static_complete_approach_requires_one_observed_map(
     report = binding.execute()
     assert (raw.map_id, raw.player_y, raw.player_x) == (
         (8, 0, 5) if leaves_current_map else (23, 61, 10)
+    )
+    assert binding.movement_endpoint_sha256 == s.canonical_sha256(
+        dict(map=raw.map_id, at=[raw.player_y, raw.player_x])
     )
     assert report.evidence["complete_target_approach"] is (continuous and not leaves_current_map)
     assert not report.evidence["activated"]

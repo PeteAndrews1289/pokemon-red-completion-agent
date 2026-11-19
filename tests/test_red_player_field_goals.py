@@ -959,3 +959,64 @@ def test_injured_arrival_offers_restore_then_original_target_only_at_home(
     )
     assert (binding is not None) is available
     assert not calls
+
+
+@pytest.mark.parametrize("observe_terrain", [False, True])
+def test_center_quotes_match_ground_live_block_projection(monkeypatch, observe_terrain):
+    rt, actions, _, _, _, calls = setup(monkeypatch)
+    raw = rt.reader.read()
+    raw.map_id = 214
+    raw.party_hp = (20, 0)
+    block_reads, planned = [], []
+    blocks = object()
+    rt.reader.read_current_map_blocks = lambda: (block_reads.append(1) or blocks)
+    monkeypatch.setattr(f, "Gen1TrainerSightProjector", lambda *a, **kw: object())
+    monkeypatch.setattr(f, "Gen1TraversalObserver", lambda *a, **kw: N(observe=lambda: N()))
+    monkeypatch.setattr(f, "_raw_party_fully_restored", lambda _: False)
+    monkeypatch.setattr(f, "certified_cash_safe_transition", lambda *a: None)
+
+    @dataclass
+    class World:
+        live: bool = False
+
+        def with_current_blocks(self, value):
+            assert value is blocks
+            return World(True)
+
+        def plan_feasible_to_map(self, start, center, *, goal_at):
+            planned.append((self.live, center))
+            if self.live and center == 41:
+                raise f.RoutePlanningError("current door blocks the old quote")
+            return N(cost=1 if center == 41 else 10, steps=(1,), terminal_at=goal_at)
+
+    @dataclass
+    class Route:
+        route_world: object
+        observe_terrain: bool
+        rom: bytes = b"rom"
+        allow_surf: bool = False
+
+    route = Route(World(), observe_terrain)
+    center = f.nearest_reachable_player_center(rt, route=route, centers=frozenset({41, 171}))
+    assert center == (171 if observe_terrain else 41)
+    assert block_reads == ([1] if observe_terrain else [])
+    assert all(live is observe_terrain for live, _ in planned)
+    binding = f.routed_restoration_binding(rt, actions, home_map=41, route=route)
+    assert (binding is None) is observe_terrain
+    assert actions.actions_executed == 0 and not calls
+
+
+def test_current_block_observation_failure_is_not_a_cached_healing_offer(monkeypatch):
+    rt, actions, _, _, _, calls = setup(monkeypatch)
+    @dataclass
+    class Route:
+        route_world: object = None
+        observe_terrain: bool = True
+    def unavailable():
+        raise ValueError("current map blocks unavailable")
+    rt.reader.read_current_map_blocks = unavailable
+    with pytest.raises(ValueError, match="blocks unavailable"):
+        f.nearest_reachable_player_center(
+            rt, route=Route(N(with_current_blocks=lambda value: None)), centers=frozenset({41})
+        )
+    assert actions.actions_executed == 0 and not calls

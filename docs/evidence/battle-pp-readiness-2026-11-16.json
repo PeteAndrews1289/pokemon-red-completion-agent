@@ -1,0 +1,69 @@
+{
+  "DEV_rows_fitted": 0,
+  "TRAIN_fit_allowed": true,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restore_delta": 0,
+  "battle_timing_wins": {
+    "private_record_sha256": "c16d8c25967a8d56935aea8ec0b91baf5b5a7920c611855487a7e4d1e4066a60",
+    "record_items": 4
+  },
+  "case_metrics": {
+    "private_record_sha256": "739980a887dee1840241c13a240f8ea0aa5d9da768df3ce23b5e711249ed99a2",
+    "record_items": 7
+  },
+  "critic_fit_rows_unchanged": 32,
+  "default_changed": false,
+  "experimental_battle_weights_changed": true,
+  "fit_allowed": false,
+  "fit_calls": 4,
+  "fit_partition": "train",
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "fresh_start_binding_pass": true,
+  "frozen_focused_checks": 1180,
+  "full_suite": false,
+  "goal_sequence_venue_weights_changed": false,
+  "head_sha256": "143380c9e9ae288fd232acc1720c4c8b7330d13d54138def3225fd47d7e608c8",
+  "known_budget_failures": {
+    "private_record_sha256": "d3da43fb09d2e7f8cd6c6a8cbc4b9054d2ec73f8f155c5dabcd625ffe320de65",
+    "record_items": 2
+  },
+  "model_candidates": 3,
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_admitted_TRAIN_contexts": 12,
+  "new_admitted_TRAIN_timed_contexts": 60,
+  "new_campaign": false,
+  "new_fits": 4,
+  "new_goal_sequence_TRAIN_windows": 0,
+  "new_independent_origins": 0,
+  "new_native_TRAIN_branches": 160,
+  "partition": "development",
+  "policy_sha256": "c04c5a0112e1c5b2e83354d56f26ab02ef05e87f66837ba26cd8f4bd2dbd3516",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "raw_failures_preserved": true,
+  "receipt_digests": {
+    "private_record_sha256": "f55643abd0eed4a7821627853b21f9404d3819142bd01fa447f7b6f270f5a66e",
+    "record_items": 12
+  },
+  "reviewers": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "schema": "pokemon.red.battle-pp-readiness.v1",
+  "session": "battle-pp-readiness-20261116-2147",
+  "source_document_sha256": "320727f963b026bba839519b86ec375c4f8208e2f5da40d3cc727b53a370b43a",
+  "source_runtime_changed": true,
+  "status": "closed_scoped_battle_learning_campaign_held",
+  "summary": {
+    "private_record_sha256": "7b72c8d1b278642aa369710d98115f65b6e0af2053c8718c53a817f5be520d30",
+    "record_items": 1
+  },
+  "training_necessity_proven_here": false,
+  "varied_linked_tasks_pass": false
+}

@@ -1,0 +1,24 @@
+{
+  "actual_registration_delta": 0,
+  "evidence": {
+    "private_record_sha256": "9528d44e8517c5b443448b48b3a80b94707dac410d8444479bac28aed42a5d6d",
+    "record_items": 1
+  },
+  "external_reviews_dispatched": 0,
+  "gameplay_stopped": true,
+  "main_corpus_rows_added": 0,
+  "new_experimental_heads": 1,
+  "new_sequence_TRAIN_rows": 6,
+  "next": {
+    "private_record_sha256": "c53524469bc54b0c3183ef869c7f160dcf399935dbb27fe7c3c4fd968623dbb8",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fit_calls": 1,
+  "roadmap_stage_changes": 0,
+  "source_document_sha256": "5a7af02b681364b9b9847f8e93ca52fb3a5e5b4ed871e975174cf796e2416677",
+  "status": {
+    "private_record_sha256": "db37d693f060303db257b368461cd10fff60494fe01ace9e6db8635da483de2a",
+    "record_items": 1
+  }
+}

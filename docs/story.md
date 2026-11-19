@@ -8,7 +8,7 @@
 > **Historical narrative archive.** The sections below preserve the story as it developed and use
 > “current” relative to their dates. For the live state, read the
 > [project narrative](project-narrative.md), [active product state](../ACTIVE_PRODUCT_STATE.md), and
-> [latest session](work-sessions/2026-09-12-model111-zero-label-recovery.md).
+> [November 19 campaign comparison](work-sessions/four-run-splits-2026-11-19.md).
 
 ## Current — persisted search history; history-aware learner next
 

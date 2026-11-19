@@ -1,0 +1,98 @@
+{
+  "actual115_stopped": true,
+  "campaign2_native": {
+    "private_record_sha256": "fc1ca99ee7dcedbdcef8d7bee869a2370b8eff5b33e6cfdfefadd4885d0e29e4",
+    "record_items": 1
+  },
+  "campaign3_600_seconds_is_upper_bound_charge": true,
+  "campaign3_capture_loss": {
+    "private_record_sha256": "f73d42555e6807a1252c58d1036d561304ea8f0c1cb2aec94c8140cb7244f651",
+    "record_items": 1
+  },
+  "campaign3_sealed_tail": {
+    "private_record_sha256": "168d5cd14dec716abcff90cc6d2ab8bf28cde814e02ce6f814e23ac252cb9b47",
+    "record_items": 1
+  },
+  "campaign4_resume": {
+    "private_record_sha256": "bd9b04550e4f618484f18c949ca3daf9fa074e7532f1413afac4dee445cc0106",
+    "record_items": 1
+  },
+  "campaigns_still_unfinished": true,
+  "costs_snapshot": 772.0009713649815,
+  "elevator": {
+    "private_record_sha256": "9123aa144548d7fff56e6a4a7828240287230f6f8df97218552d5872eb8b6131",
+    "record_items": 1
+  },
+  "final_integrity": {
+    "private_record_sha256": "edb9af9ad8dc96469a658b7192aaa041b5ccaf6fa466d4b6c4853ff3fe839db1",
+    "record_items": 1
+  },
+  "forced_closure": {
+    "private_record_sha256": "e534f9117bd669ef6c8bb5c61a68709a8b2f9bd4197ac719d7053551538999b0",
+    "record_items": 1
+  },
+  "gate_adjudication": {
+    "private_record_sha256": "9c8049409a495f3823e6fca608e21effaad5896bf39bb88db4262cc4133737cb",
+    "record_items": 1
+  },
+  "goal_cost_audit_is_partial_DEV_not_fit": true,
+  "later_training": {
+    "private_record_sha256": "9c5cb5ac28221b7c33a9c5b6af3e942e3bb0caa81f7f2033886a0388df350a96",
+    "record_items": 1
+  },
+  "live_goal_cost_audit": {
+    "private_record_sha256": "c4a7d4f6c98add28deace48c2342372c0cb8604ba45745f5d4261b2129b997c9",
+    "record_items": 1
+  },
+  "mission": {
+    "private_record_sha256": "5c2f973b45151c3f6ee25e8105db285373bb628b7cdd0bd03bf27998adcf816f",
+    "record_items": 1
+  },
+  "models_unchanged": true,
+  "monitor": {
+    "private_record_sha256": "9f29334fd7830c4861dedaaed6c92fb5136140ed331d6bf68068e81921564fad",
+    "record_items": 1
+  },
+  "monitoring_in_progress": true,
+  "native_qualification": {
+    "private_record_sha256": "d18f2119047eef431530e43d1d7986dde619b1913677e6774ce524b33dba8c7d",
+    "record_items": 1
+  },
+  "native_venue": {
+    "private_record_sha256": "4ae5af75996cbdb6026dc48259cc5272a2fb094922f557d07a2d8ac95c931225",
+    "record_items": 1
+  },
+  "original_deadlines_retained": true,
+  "pagefile": {
+    "private_record_sha256": "2281d1375f687049ff01b71159f955909e0f699c751a739cbe9b6083690fcfc7",
+    "record_items": 1
+  },
+  "performance_memory": {
+    "private_record_sha256": "4d4f85b8fa7704cb18e60dc0cf86d5c858e8ec76d498f4fb019702db786e16a5",
+    "record_items": 1
+  },
+  "preclose_costs": {
+    "private_record_sha256": "b92bed805918ecc2253b8ed3d79be54ddfa447b76131762262b4b6c9f5060614",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualification": {
+    "private_record_sha256": "3b5a8ce15ab76184fc310b20cc4efca595bb238d500a8fd689bc713fc07c92f4",
+    "record_items": 1
+  },
+  "repair_extension_response_pending": true,
+  "selector_party_diagnostic_index": {
+    "private_record_sha256": "9d2db186210a25cfca1072ce51aef1600e63e343c5678fc1b9f1fdf4a62c296f",
+    "record_items": 1
+  },
+  "session_id": "2026-11-08-retained-capture-2130",
+  "source_document_sha256": "ca84f2897f8261f1aec9b4f55727cb59dda2ba4986436e1c8bb9ad0e5a6a6a18",
+  "source_engineering_closeout_prepared": true,
+  "source_lease_deadline_utc": "2026-11-09T00:23:49.789538+00:00",
+  "source_writer_end_utc": "2026-11-09T00:23:49.789538+00:00",
+  "source_writer_pid": 96337,
+  "windows_reproduction": {
+    "private_record_sha256": "9d8dfa04cde9471f1c24f89256751af432ed050dfd6d5f63f036a6f3f754c921",
+    "record_items": 1
+  }
+}

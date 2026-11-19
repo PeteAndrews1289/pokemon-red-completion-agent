@@ -63,13 +63,28 @@ def test_actual_factory_prefix_enables_support_only_for_existing_ordinary_early_
     factory = next(
         x for x in assembly.body if isinstance(x, ast.FunctionDef) and x.name == "factory"
     )
-    # Execute the actual first three statements; stop before party/ROM assembly.
-    factory.body = factory.body[:3] + [ast.Return(value=ast.Name(id="runtime", ctx=ast.Load()))]
+    # Execute through the actual early-support connection, including any
+    # preceding wiring, and stop before party/ROM assembly.
+    support_index = next(
+        i for i, statement in enumerate(factory.body)
+        if any(
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == "connect_early_capture_status_support"
+            for node in ast.walk(statement)
+        )
+    )
+    factory.body = factory.body[:support_index + 1] + [
+        ast.Return(value=ast.Name(id="runtime", ctx=ast.Load()))
+    ]
     module = ast.Module(body=[factory], type_ignores=[])
     ast.fix_missing_locations(module)
     runtime = early_runtime()
     namespace = dict(
         factory0=lambda _: runtime,
+        holder={},
+        _bind_required_registration_targets=configuration._bind_required_registration_targets,
+        required_species=None,
         configuration=N(
             assembly_flags=dict(include_rewards=rewards, include_early_preparation=early)
         ),

@@ -1,0 +1,45 @@
+{
+  "actual_cash": 8,
+  "actual_progress_delta": 0,
+  "actual_registrations": 97,
+  "additional_custody_checks": 2,
+  "coin_procurement_cash_spent": 21000,
+  "copied_spent_delta": {
+    "private_record_sha256": "a6c0927329c63fb7667b22f3cbc4400ddff3e49c434fb803c2ebd6fcd46ce4b0",
+    "record_items": 6
+  },
+  "diagnostic_registrations_after": 99,
+  "diagnostic_registrations_before": 97,
+  "frozen_focused_checks": 205,
+  "full_suite": false,
+  "funded_copy_cash_after": 107,
+  "funded_copy_cash_before": 29807,
+  "history_repair_frozen": "F121",
+  "independent_origins": 1,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_species": {
+    "private_record_sha256": "a4cccdf625a02bbd9ca6c9a85fd3617d655bccd2608629342ced6e6173a33d9e",
+    "record_items": 2
+  },
+  "normal_funded_continuation_passed": true,
+  "novel_models": 0,
+  "ordinary_ball_stock_after": {
+    "private_record_sha256": "33d4ba45d078a61b594a37d98626c8bbecd2fcc1398c27affe0144ccae19eb10",
+    "record_items": 2
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_optimizer_calls": 0,
+  "related_replicates": 2,
+  "retained_native_victory_replay_passed": true,
+  "review_result": {
+    "private_record_sha256": "b73a4f7ef2c38788bcc91ab62ed3baa64c44e445314b8ad8ce3962d05d6c6e41",
+    "record_items": 1
+  },
+  "schema": "pokemon.funded-history-qualification.v2",
+  "source_document_sha256": "51336bbbcc4f4a1deed97fa88fd4fbcb8e2d2c742a26b50941f613c7fd77c0ff",
+  "source_writer_release": "Authenticate separate final-control companion before later work.",
+  "status": "closed",
+  "weights_unchanged": true,
+  "whole_campaign_qualified": false
+}

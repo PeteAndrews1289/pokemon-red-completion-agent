@@ -160,9 +160,25 @@ def test_observer_exception_discards_all_projection_state():
     assert cache.projections == cache.graphs == cache.queries == {}
 
 
-def test_equal_but_different_observation_graphs_are_not_aliased():
+@pytest.mark.parametrize("mutation", [None, 0, 1, 2])
+def test_equal_observation_projection_preserves_semantics_and_mutation_guards(mutation):
     _, local = world()
     first = local[1]
     second = LocalGraph(dict(first.edges))
-    with routes.frozen_local_route_inventory() as cache:
-        assert cache.project(first, {(0, 2)}) is not cache.project(second, {(0, 2)})
+    expected = routes.without_coordinates(first, {(0, 2)})
+
+    def inspect():
+        with routes.frozen_local_route_inventory() as cache:
+            projected = cache.project(first, {(0, 2)})
+            assert cache.project(second, {(0, 2)}) == projected == expected
+            assert first is not second and first.edges is not second.edges
+            assert id(first) in cache.graphs and id(second) in cache.graphs
+            if mutation is not None:
+                (first, second, projected)[mutation].edges[(0, 0)] = ()
+        assert not cache.projections and not cache.graphs
+
+    if mutation is None:
+        inspect()
+    else:
+        with pytest.raises(routes.RoutePlanningError, match="changed a local graph"):
+            inspect()

@@ -1,0 +1,24 @@
+{
+  "actual_registration_delta": 0,
+  "at_utc": "2026-11-15T00:38:17.947558+00:00",
+  "baseline_only": true,
+  "campaign_running": false,
+  "diagnostic_registration_delta": 0,
+  "fit_calls": 0,
+  "native_seconds": 0,
+  "new_TRAIN_rows": 0,
+  "player_changed": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "rubric_sha256": "56c9f953b14480f60c38f42bc18a7060a8145cba2434a83e655f31cda070445e",
+  "rubric_version": "workstream-checklist-v1",
+  "score_replay": {
+    "private_record_sha256": "154bdf4ac8effc8551c146c1d3cae2e494efbf139702f14d806f77627afcfe57",
+    "record_items": 2
+  },
+  "session": "progress-and-coin-20261115-0024",
+  "session_delta_percentage_points": {
+    "private_record_sha256": "320db13225f2d587a4ae6681e840bfecd1322ad7c2af552c8d48c5a206e8ae22",
+    "record_items": 6
+  },
+  "source_document_sha256": "57deb3612750d4e1bd8205aa8f34b9908e7c309c0156e31a44bd89b6cb4ae68a"
+}

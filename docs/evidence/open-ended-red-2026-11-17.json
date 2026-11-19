@@ -1,0 +1,44 @@
+{
+  "actual_cash": 8,
+  "actual_registrations": 97,
+  "combined_recipe": {
+    "private_record_sha256": "5b875cc1c78898ceab6bdb4d05618d07939010255a255fc2bdcc09d115d8ed72",
+    "record_items": 1
+  },
+  "continuation_recipe": {
+    "private_record_sha256": "b563eb4edf2dcc11ef6a32c81c93ae989f66ad75c22fe36d18f1a3fc11bdf8c2",
+    "record_items": 1
+  },
+  "deadline_utc": null,
+  "fresh_qualification": {
+    "private_record_sha256": "d45e1f728865f7082d7ed44b3fafe31f3e3c78f8b279149b24a18ec3d32293dc",
+    "record_items": 1
+  },
+  "limitations": "On the exact TRAIN Blaine anchor, both arms won and verified the badge and TM. Fighting now used 247 inputs, 19,284 frames and no heals. Preparing first used 3,435 inputs, 257,628 frames and two heals. Farfetch’d gained 4,577 target XP and other party members gained 3,052 XP. Farfetch’d stayed at level 45 and took no attack turn against Blaine. The exact preparation checkpoint was restored once under the pinned production history contract. All failed harness attempts and costs remain recorded. No TRAIN rows were admitted or used in a fit.",
+  "mission": {
+    "private_record_sha256": "012ce6bc9838cf492d3812a63265e74316708dc21b725de290ca468c4289e21c",
+    "record_items": 1
+  },
+  "native_episode": true,
+  "new_campaign": true,
+  "no_new_fit": true,
+  "partition": "development",
+  "previous_release": {
+    "private_record_sha256": "d2988f28dbe5e37c1286e30cd9a7b49c4a673f155233785dfa2e5d4d087e3651",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "seed": 202611161702301,
+  "session": "open-ended-red-20261118-033528",
+  "source_document_sha256": "b24aef5cd05429fa84e31dde75eca6689f373d506f71488a94db01c9c25665e5",
+  "summary": "The combined F145 development recipe binds the route-124 contract from power-on with zero save loads. Four fresh independent runs use seed 202611161702301 and the same frozen weights. All four reached the same native poison-blackout checkpoint and resumed from their individually retained states using the earlier exact-state proof.",
+  "train_comparison": {
+    "private_record_sha256": "00bddecca49a45b20f734df10cb5e2aa93c097eb886b9e86d484dea2b57fa975",
+    "record_items": 1
+  },
+  "train_comparison_followup": {
+    "private_record_sha256": "2d98b7a6ef0e0d14d5fff6d3cb9240fa1525543638300a9906ccc6a0d9f4899c",
+    "record_items": 1
+  },
+  "workers": 4
+}

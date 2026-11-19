@@ -1,0 +1,53 @@
+{
+  "all_three_native_gates_remain_on_f28": {
+    "private_record_sha256": "01a0e58a4f70f34d294a771a2f1cb1ef0e6af57a7ae286c3123c639cbbf68114",
+    "record_items": 1
+  },
+  "f28_package_unchanged": true,
+  "frozen_before": {
+    "private_record_sha256": "4dec5a2486f0ba67b8e642a30ed05baf0e8840834fffffc1b76b43307e474461",
+    "record_items": 1
+  },
+  "future_build_inherits_no_native_gate_credit": true,
+  "issue": {
+    "private_record_sha256": "b3038be85424f7ddf321c1aabb0393e43c9a07aee01b62d38bf67918f0f64143",
+    "record_items": 1
+  },
+  "native_game_seconds": 0,
+  "new_fits": 0,
+  "new_weights": 0,
+  "next": {
+    "private_record_sha256": "b60b76d70ceae39b3f2f10cdff5358e3a22bc22cb3f115d51ac74d0f30a61879",
+    "record_items": 1
+  },
+  "observed_at_utc": "2026-11-03T19:57:55.949069+00:00",
+  "patch": {
+    "private_record_sha256": "14c9228cd6c5951cbe29388e9dfea3af63ac2fac7eb44c696173a1678fa6afc8",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_controller_inputs": 0,
+  "real_emulator_loads": 0,
+  "regression_green": {
+    "private_record_sha256": "ea2ffc521d27cdd045c13b85f58471fc1568f9250c789241ea107835b20f9b4c",
+    "record_items": 5
+  },
+  "regression_red": {
+    "private_record_sha256": "ad48ca683856804cb543db4bf8268dda61dc17748879b438fa6720dde39f21b6",
+    "record_items": 4
+  },
+  "repair": {
+    "private_record_sha256": "c1afce407767e8aee4ffad18b3652eb1eb34f66962396f1412e6f1e9fd0cc623",
+    "record_items": 1
+  },
+  "source_after": {
+    "private_record_sha256": "24ccb74676bb03be1205f124ce31e825f60db841ae244c72b490f78082d2c058",
+    "record_items": 1
+  },
+  "source_document_sha256": "65fb2c7c667cb8a6e2691aee0d02cfa01a7672d51961c4a19a96432169cabb8e",
+  "status": "SOURCE_FIXED_GUEST_FREE_TESTED_NOT_PACKAGED_OR_NATIVELY_QUALIFIED",
+  "test_source": {
+    "private_record_sha256": "9270b54d708aca40a3f24f9c5b432f75b46baceaa465698cd0090770f0f9c9a1",
+    "record_items": 1
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "private_record_sha256": "6720db2f0d88930b9e65965a5a47cda9b244c8b8cbde38b6b68fe08300c3254f",
+    "record_items": 1
+  },
+  "costs": {
+    "private_record_sha256": "0c6583ad54659b86cc39f8029110c9fe79d8eb22dad89bd2ade5968f734dc2b7",
+    "record_items": 1
+  },
+  "evidence": {
+    "private_record_sha256": "260040226732b568dacd281cc0d62053dfc28d1f6ce2f0ad0c554b2a7c05d25e",
+    "record_items": 1
+  },
+  "focus_checks_pending": false,
+  "next": {
+    "private_record_sha256": "84dbef6b2903d4708bf5a34bbadb845f34ae909d228445575d8021557e6a7b95",
+    "record_items": 1
+  },
+  "private_evidence": {
+    "private_record_sha256": "231b22271a9c76514b2c2d99ea1f6de7ea12344548fe543b1baf328a3ad8b29d",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_id": "2026-11-08-goal-training-comparison",
+  "source_document_sha256": "37fffd47fd0c8c18e4d2e7b0e3d7c77e124c67375e7036a75f2e86190cff95e4",
+  "source_writer_release_is_separate": true,
+  "status": {
+    "private_record_sha256": "9f781b1911a3a0f707ee5478eee8d4fe48aae843b0e4c7974e68a15a06b7eb47",
+    "record_items": 1
+  }
+}

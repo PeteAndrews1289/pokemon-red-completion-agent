@@ -120,6 +120,7 @@ class RedCartridgeChampionSkill:
     ) = field(default=None, init=False)
     _prepared_story_binding: object | None = field(default=None, init=False)
     _prepared_level_deficit: int | None = field(default=None, init=False)
+    _prepared_allow_uncovered_later: bool = field(default=False, init=False)
 
     def _learned_controller(self):
         return story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
@@ -296,6 +297,7 @@ class RedCartridgeChampionSkill:
         self._prepared_controller = self.recovery_controller
         self._prepared_rematch = self.rematch
         self._prepared_level_deficit = self.maximum_level_deficit
+        self._prepared_allow_uncovered_later = self.allow_uncovered_later
         self._prepared_learned_controller = self._learned_controller()
         self._prepared_story_binding = getattr(
             self._prepared_learned_controller, "binding_identity", None
@@ -323,7 +325,7 @@ class RedCartridgeChampionSkill:
             or self._prepared_controller != self.recovery_controller
             or self._prepared_rematch != self.rematch
             or self._prepared_level_deficit != self.maximum_level_deficit
-            or self.allow_uncovered_later != prepared.party.allow_uncovered_later
+            or self.allow_uncovered_later != self._prepared_allow_uncovered_later
             or self._prepared_learned_controller is not self._learned_controller()
             or self._prepared_story_binding
             != getattr(self._prepared_learned_controller, "binding_identity", None)

@@ -260,7 +260,7 @@ def test_composition_does_not_expand_native_or_source_authority(tmp_path, monkey
     if fault == "partition":
         actor.source_partition = ScenarioPartition.TRAIN
     elif fault == "budget":
-        arguments["maximum_decisions"] = 81
+        arguments["maximum_decisions"] = 161
     elif fault == "deficit":
         arguments["maximum_level_deficit"] = True
     elif fault == "work":

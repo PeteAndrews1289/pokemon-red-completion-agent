@@ -501,7 +501,12 @@ class RedRunReader:
             party.append(
                 DashboardPartyMember(index + 1, _species(species), level, hp, maximum, label)
             )
-        spent = (terminal.get("spent") if closed else None) or checkpoint.get("spent") or {}
+        spent = (
+            (terminal.get("spent") if closed else None)
+            or checkpoint.get("spent")
+            or plan.get("inherited_spent")
+            or {}
+        )
         registered = _count(native.get("registrations"))
         if not native and diag.get("collection_ledger"):
             registered = len(diag["collection_ledger"].get("local_registered_species") or [])
@@ -564,8 +569,52 @@ class RedRunReader:
                 decisions=totals["model_decisions"],
             ),
         )
+        splits = self.document(root / "milestone-splits.json")
+        split_error = None
+        if not splits and segments:
+            from .red_milestone_splits import merge_native_segment_splits
+            reports = [self.document(segment / "native" / "milestone-splits.json") for segment in segments]
+            reports = [report for report in reports if report]
+            if reports:
+                try:
+                    splits = merge_native_segment_splits(reports)
+                except (KeyError, TypeError, ValueError) as error:
+                    split_error = str(error)
+        if splits and splits.get("scope") == "checkpoint":
+            checkpoint_splits = splits
+            from .red_milestone_splits import fresh_start_split_projection,extend_split_history
+            try:
+                if plan.get("schema") == "pokemon.red.fresh-frozen-player-plan.v1":
+                    splits=fresh_start_split_projection(root,splits)
+                prefix_ref=plan.get("milestone_split_prefix")
+                if prefix_ref:
+                    import hashlib
+                    payload=Path(prefix_ref["path"]).read_bytes()
+                    if hashlib.sha256(payload).hexdigest()!=prefix_ref["sha256"]:raise ValueError("split prefix digest differs")
+                    campaign_id=plan.get("campaign_run_id")
+                    splits=dict(splits,identity=dict(splits.get("identity")or{},campaign_run_id=campaign_id))
+                    splits=extend_split_history(splits,json.loads(payload),campaign_run_id=campaign_id)
+            except (OSError,KeyError,TypeError,ValueError) as error:
+                split_error=str(error)
+                splits=checkpoint_splits
+        if not splits and plan.get("launch_authorized") is False and not running and not closed:
+            from .red_milestone_splits import pending_milestone_splits
+            target_species=plan.get("required_species")
+            if isinstance(target_species,list) and len(target_species)==124:
+                splits=pending_milestone_splits(target_species)
+        build_label = _text(plan.get("build_label"), "Selected build")
+        recipe = plan.get("development_source_recipe")
+        if isinstance(recipe, dict):
+            folder = Path(str(recipe.get("path", ""))).parent.name
+            version = re.fullmatch(r"normal-collection-campaign-successor-v(\d+)", folder)
+            digest = recipe.get("sha256")
+            if version and isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest):
+                build_label = f"Collection V{version[1]} · {digest[:12]}"
         metadata = dict(
             id=root.name,
+            seed=plan.get("seed") if type(plan.get("seed")) is int else None,
+            operator_repairs=plan.get("operator_repairs") if type(plan.get("operator_repairs")) is int else None,
+            build_label=build_label,
             lifecycle="stopped" if closed else "running" if running else "not_connected",
             badges=badges,
             badge_bits=badge_bits,
@@ -594,6 +643,8 @@ class RedRunReader:
             recent=recent[-10:],
             weights_updated=0,
             checkpoint_only=True,
+            milestone_split_error=split_error,
+            milestone_splits=splits if splits.get("schema") == "pokemon.red.milestone-splits.v1" else None,
         )
         return snapshot, metadata
 
@@ -601,19 +652,28 @@ class RedRunReader:
 class RunViewerState(DashboardRelayState):
     """Join only this run's metadata with the same run's optional live frames."""
 
-    def __init__(self, reader: RedRunReader, *, live_port: int) -> None:
+    def __init__(self, reader: RedRunReader, *, live_port: int, baseline_reader: RedRunReader | None = None) -> None:
         self.reader = reader
+        self.baseline_reader = baseline_reader
         self._retained_frame: bytes | None = None
         self._retained_at = 0.0
         self._retained_version = 0
         self._retained_token: tuple[object, object] | None = None
         snapshot, self.run_metadata = reader.read()
+        self._apply_split_reference()
         super().__init__(snapshot, live_port=live_port)
 
     def refresh(self) -> None:
         snapshot, self.run_metadata = self.reader.read()
+        self._apply_split_reference()
         self.publish(snapshot)
         self.poll()
+
+    def _apply_split_reference(self) -> None:
+        if self.baseline_reader is not None:
+            from .red_milestone_splits import attach_split_reference
+            _,reference=self.baseline_reader.read()
+            self.run_metadata=attach_split_reference(self.run_metadata,reference)
 
     def poll(self) -> bool:
         connected = super().poll()

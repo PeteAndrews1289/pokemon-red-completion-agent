@@ -219,3 +219,20 @@ def test_registered_regional_choice_reconstructs_real_versioned_target(
     assert actual.outcome.verified_success is not failed
     with pytest.raises(ValueError):
         load_red_regional_choice_example(store, item)
+
+
+def test_explicit_local_target_policy_roundtrips_and_cannot_silently_widen(tmp_path):
+    from pokemon_red_completion.red_collection import RED_SOLO_COLLECTION_CONTRACT
+    from pokemon_red_completion.provenance import canonical_sha256
+
+    _, _, document, _ = session(tmp_path, completion_scope="local_red")
+    policy = replace(load_registration_policy(document),
+                     target_species=tuple(RED_SOLO_COLLECTION_CONTRACT.target_species))
+    document["policy"] = policy.document()
+    document["policy_sha256"] = policy.sha256
+    assert load_registration_policy(document) == policy
+    tampered = deepcopy(document)
+    tampered["policy"].pop("target_species")
+    tampered["policy_sha256"] = canonical_sha256(tampered["policy"])
+    with pytest.raises(ValueError):
+        load_registration_policy(tampered)

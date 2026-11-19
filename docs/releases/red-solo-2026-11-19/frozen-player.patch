@@ -1,0 +1,1854 @@
+diff --git a/runtime_helpers/red_mixed_bird_collection_20261009.py b/runtime_helpers/red_mixed_bird_collection_20261009.py
+new file mode 100644
+--- /dev/null
++++ b/runtime_helpers/red_mixed_bird_collection_20261009.py
+@@ -0,0 +1,396 @@
++"""Reuse earned helper, native supplies and puzzles as selectable bird goals.
++
++No legacy session/admission dispatcher, supplied species order, injected stock,
++teacher combat, capture rollback or new learner. Preparation quantities and
++puzzles remain disclosed support; the local model chooses these real peers.
++"""
++
++from contextlib import contextmanager
++from dataclasses import asdict,dataclass,replace
++from hashlib import sha256
++from types import SimpleNamespace as N
++
++from pokemon_red_completion.goal_manager import GoalAvailability,GoalKind,GoalOpportunity,GoalUnavailableReason
++from pokemon_red_completion.goal_manager_runtime import GoalBindingSet,GoalExecutionReport,GoalVerification
++from pokemon_red_completion.observation import ItemId,MapId,event_flag_is_set
++from pokemon_red_completion.red_goal_skills import _raw_party_fully_restored
++from pokemon_red_completion.red_player_field_goals import _field_ready
++from pokemon_red_completion.red_static_capture import red_static_capture_targets
++from red_mixed_postgame_delivery_20261009 import (
++    learned_collection_transport,native_goal_binding,output_directory,quoted_native_arrival,
++)
++
++BIRDS=frozenset({144,145,146})
++BALL_RESERVE=99
++
++
++@dataclass(frozen=True)
++class BirdRoute:
++    rom: bytes
++    route_world: object
++
++
++def earned_status_helper(runtime):
++    """Actual boxed Mewtwo, retaining its native Recover and an owned TM path."""
++    raw=runtime.reader.read()
++    supported_targets=BIRDS
++    if getattr(getattr(runtime,'league_battle_controller',None),
++               'income_snorlax_helper_support',False) is True:
++        supported_targets=supported_targets|{143}
++    if (not runtime.scripted_gifts or raw.badge_bits!=255 or not _field_ready(runtime)
++            or not supported_targets-set(runtime.reader.read_pokedex_state().owned_species)):
++        return None
++    for member in runtime.reader.read_box_specimen_identities():
++        if member.species_id!=131 or member.level<70:
++            continue
++        moves=next(row.moves for row in runtime.reader.read_box_move_members(member.box_index)
++                   if row.box_slot==member.box_slot)
++        if 105 in moves and (86 in moves or any(m in moves for m in (0,129,112))):
++            return member,moves
++    return None
++
++
++def unmet_bird_stock_cash(runtime):
++    if earned_status_helper(runtime) is None:
++        return 0
++    held=dict(runtime.reader.read().bag_items or ()).get(int(ItemId.ULTRA_BALL),0)
++    return max(0,BALL_RESERVE-held)*1200
++
++
++@contextmanager
++def selected_learned_routes(runtime,actions,world):
++    """Scope old pure helpers to the already qualified learned route owner."""
++    import red_current_source_preparation_20261004 as prep
++    original=prep.route_to
++    wrapper=learned_collection_transport(runtime,actions,world)
++    def route(*args,**kwargs):
++        if kwargs.get('route_handler_wrapper') is not None:
++            raise ValueError('bird support cannot replace an explicitly owned route handler')
++        return original(*args,**{**kwargs,'route_handler_wrapper':wrapper})
++    prep.route_to=route
++    try:
++        yield
++    finally:
++        prep.route_to=original
++
++
++def native_support_api():
++    from red_earned_run_completion_20261005 import strongest_field_lead
++    from pokemon_red_completion.red_autonomous_player import _record
++    return N(strongest_field_lead=strongest_field_lead,p=N(_record=_record,_field_ready=_field_ready))
++
++
++def bird_resource_peers(runtime,actions,observed,route):
++    """Actual finite TM and affordable native Ultra Balls, never auto-purchase."""
++    helper=earned_status_helper(runtime)
++    if helper is None:
++        return ()
++    import red_current_source_preparation_20261004 as prep
++    from red_earned_unique_collection_20261006 import native_ultra_provider
++    from red_mixed_static_options_20261009 import NoncombatStaticTransport
++    from red_pc_registration_20261004 import stock_signature
++    from pokemon_red_completion.red_player_field_item import field_item_resupply_binding
++    from pokemon_red_completion.living_dex_goal_policy import project_living_dex_goal_candidate
++    from pokemon_red_completion.red_live_option_menu import supplemental_live_option
++    from pokemon_red_completion.resource_economy_observation import EconomyMode,EconomyOffer
++    raw=runtime.reader.read()
++    rows=[]
++    if 86 not in helper[1] and not dict(raw.bag_items or ()).get(245,0):
++        from red_whole_player_inventory_20261006 import preparation_quote_world
++        safe=replace(route,route_world=preparation_quote_world(
++            route.rom,route.route_world,raw,route.route_world.local_graphs))
++        tm=field_item_resupply_binding(runtime,actions,route=safe,item_id=245)
++        if tm is not None:
++            rows.append(tm)
++    cash=unmet_bird_stock_cash(runtime)
++    if not cash or raw.player_money<cash or raw.bag_items is None:
++        return tuple(rows)
++    if not dict(raw.bag_items).get(int(ItemId.ULTRA_BALL),0) and len(raw.bag_items)>=20:
++        return tuple(rows)
++    if quoted_native_arrival(runtime,route.route_world,town=8,
++            map_id=int(MapId.CINNABAR_MART),at=(5,2)) is None:
++        return tuple(rows)
++    order=prep.ultra_ball_order(raw,BALL_RESERVE)
++    if order is None:
++        return tuple(rows)
++    before=stock_signature(runtime)
++    bag=dict(raw.bag_items);bag[int(ItemId.ULTRA_BALL)]=BALL_RESERVE
++    def execute():
++        prep.route_to(N(rt=runtime,em=runtime.emulator,actions=actions),route.route_world,
++            town=8,map_id=int(MapId.CINNABAR_MART),at=(5,2),
++            route_handler_wrapper=NoncombatStaticTransport)
++        binding=native_ultra_provider(runtime,actions,order).offer(runtime.adapter.observe()).binding
++        if binding is None:
++            raise ValueError('selected bird stock did not requalify at its actual Mart')
++        report=binding.execute()
++        if binding.verify(report)!=GoalVerification.succeeded():
++            raise ValueError('native bird stock purchase was not verified')
++        return dict(native_ultra_procurement=True,quantity=order.quantity,cash_spent=cash,
++                    learned_quantity=False,original_reserve=BALL_RESERVE)
++    binding=native_goal_binding(runtime,actions,GoalKind.RESUPPLY,'bird-ultra',execute,
++        lambda:runtime.reader.read().player_money==raw.player_money-cash
++            and dict(runtime.reader.read().bag_items or ())==bag
++            and prep.preparation_stock_preserved(before,stock_signature(runtime)),
++        maximum_cash_debit=cash)
++    unavailable=GoalOpportunity('bird-stock:other',GoalKind.EXPLORE,GoalAvailability.UNAVAILABLE,
++        unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET)
++    question=GoalBindingSet((binding.opportunity,unavailable),(binding,)).question(observed.situation)
++    candidate=project_living_dex_goal_candidate(question,0,feature_version=5,binding_ref=binding.binding_ref)
++    candidate=replace(candidate,economy_offer=EconomyOffer(EconomyMode.PURCHASE,planned_spend=cash))
++    rows.append(supplemental_live_option(binding,candidate))
++    return tuple(rows)
++
++
++def bird_loan_guard(runtime,declaration=None):
++    """Authenticate the approved capture-only individual; no slot/species fallback."""
++    from pokemon_red_completion.red_player_party_guard import (
++        BIRD_CAPTURE_LOAN_POLICY, observed_transport_safe_bird_guard,
++        validate_bird_capture_loan_declaration,
++    )
++    validate_bird_capture_loan_declaration(declaration)
++    guard=runtime.adapter.party_guard
++    guard.verify_active_roster_restored()
++    if declaration is None:
++        return guard
++    if declaration.get('schema')==BIRD_CAPTURE_LOAN_POLICY['schema']:
++        helper=earned_status_helper(runtime)
++        return (None if helper is None else observed_transport_safe_bird_guard(
++            runtime,declaration,helper_moves=helper[1]))
++    if (type(declaration) is not dict
++            or declaration.get('schema')!='pokemon.red.bird-capture-loan.v1'
++            or declaration.get('user_authorized') is not True
++            or declaration.get('purpose')!='bird_capture_only'
++            or declaration.get('species_id')!=166
++            or type(declaration.get('original_refs')) is not list
++            or len(declaration['original_refs'])!=6
++            or set(declaration['original_refs'])!=set(guard.refs)):
++        raise ValueError('bird capture loan requires its approved original roster')
++    ref=declaration.get('specimen_ref')
++    refs=guard.reader.preparation_specimen_refs()
++    raw=runtime.reader.read()
++    if (ref not in guard.refs or ref not in refs
++            or raw.party_species_ids[refs.index(ref)]!=166):
++        raise ValueError('approved bird capture individual is not the exact active Raticate')
++    scoped=replace(guard,loanable_refs=frozenset({ref}))
++    scoped.verify_active_roster_restored()
++    return scoped
++
++
++@contextmanager
++def selected_bird_loan(runtime,declaration=None):
++    """Keep the exact loan guard through failure recovery until originals return."""
++    scoped=bird_loan_guard(runtime,declaration)
++    if scoped is None:
++        raise ValueError('selected bird lacks an observed transport-safe original loan')
++    with selected_capture_loan(runtime,scoped):
++        yield
++
++
++@contextmanager
++def selected_capture_loan(runtime,scoped):
++    """Mechanical exact-original return shared by separately authorized targets."""
++    original=runtime.adapter.party_guard
++    runtime.adapter.party_guard=scoped
++    try:
++        yield
++    finally:
++        active=scoped.reader.preparation_specimen_refs()
++        if set(original.refs)<=set(active):
++            original.verify_active_roster_restored()
++            runtime.adapter.party_guard=original
++        # If a failure leaves the original boxed, compulsory existing settlement
++        # must retain this exact guard. Export still requires all originals active.
++
++
++def execute_bird_recipe(runtime,actions,route,target,helper,*,capture_loan=None):
++    if target.species_number not in BIRDS:
++        raise ValueError('bird-only loan cannot activate another static source')
++    with selected_bird_loan(runtime,capture_loan):
++        return _execute_bird_recipe(runtime,actions,route,target,helper)
++
++
++def snorlax_loan_guard(runtime,declaration):
++    from pokemon_red_completion.red_player_party_guard import (
++        observed_transport_safe_snorlax_guard,validate_snorlax_capture_loan_declaration,
++    )
++    validate_snorlax_capture_loan_declaration(declaration)
++    if declaration is None:
++        return None
++    helper=earned_status_helper(runtime)
++    return (None if helper is None else observed_transport_safe_snorlax_guard(
++        runtime,declaration,helper_moves=helper[1]))
++
++
++def execute_snorlax_recipe(runtime,actions,route,target,helper,*,capture_loan):
++    from red_remaining_static_20261004 import route16_snorlax_target
++    if target!=route16_snorlax_target(route.rom):
++        raise ValueError('Snorlax loan cannot activate another static source')
++    scoped=snorlax_loan_guard(runtime,capture_loan)
++    if scoped is None:
++        raise ValueError('selected Snorlax lacks its observed transport-safe original loan')
++    with selected_capture_loan(runtime,scoped):
++        return _execute_bird_recipe(runtime,actions,route,target,helper)
++
++
++def _execute_bird_recipe(runtime,actions,route,target,helper):
++    """Selected native loan/puzzle/capture/return, never an old session recipe."""
++    import red_current_source_preparation_20261004 as prep
++    import red_pc_registration_20261004 as pc
++    import red_earned_unique_collection_20261006 as unique
++    from red_remaining_static_20261004 import native_catcher_recovery
++    from pokemon_red_completion.red_capture_lead import RedCaptureLeadPlan
++    from pokemon_red_completion.red_capture_preparation import prepare_observed_lead,status_prepared_static_offer
++    from pokemon_red_completion.red_machine_teaching import plan_machine_lesson,execute_machine_lesson
++    from pokemon_red_completion.red_static_capture_goal import RedStaticCaptureGoalProvider
++    api=native_support_api()
++    output=output_directory(runtime)
++    if output is None:
++        raise ValueError('native bird recipe lacks its configured evidence owner')
++    a0,f0=actions.actions_executed,runtime.emulator.frame_count
++    original=pc.stock_signature(runtime)
++    with selected_learned_routes(runtime,actions,route.route_world):
++        ref=unique.borrow_helper(api,runtime,actions,route.route_world,output,helper,
++                                 reserve_capture_box=True)
++        slot=runtime.adapter.party_guard.reader.preparation_specimen_refs().index(ref)+1
++        replace_slot=prep.capture_helper_lesson_slot(runtime.reader.read(),slot)
++        if replace_slot is not None:
++            lesson=plan_machine_lesson(route.rom,runtime.reader,item_id=245,
++                                      party_slot=slot,replace_slot=replace_slot)
++            execute_machine_lesson(runtime.emulator,actions,runtime.reader,lesson,rom=route.rom)
++            api.p._record(output/f'BIRD-OWNED-LESSON-{a0:08d}.json',dict(lesson=asdict(lesson),learned=False))
++        s=unique.session(runtime,actions,output)
++        unique.strong_lead(api,runtime,actions)
++        town,map_id,at=prep.STATIC_CAPTURE_DESTINATIONS[target.species_number]
++        if target.species_number==144:
++            for floor in (192,159,160,161):
++                unique.seafoam_floor(api,s,route,floor)
++        elif target.species_number==146:
++            route,_=prep.prepare_moltres_cave(s,route,town)
++        prep.route_to(s,route.route_world,town=town,map_id=map_id,at=at,
++                      capture_loan=True,allow_surf_origin=True)
++        index=runtime.adapter.party_guard.reader.preparation_specimen_refs().index(ref)
++        prepare_observed_lead(runtime,actions,RedCaptureLeadPlan(index,runtime.adapter.observe().party),
++                              label='disclosed earned bird status helper')
++        prep.prepare_static_facing(s,target)
++        balls=dict(runtime.reader.read().bag_items or ()).get(int(ItemId.ULTRA_BALL),0)
++        if balls<BALL_RESERVE:
++            raise ValueError('selected bird lacks its original99-ball allocation')
++        directory=output/f'mixed-bird-{target.species_number}-{sha256(runtime.emulator.save_state_bytes()).hexdigest()[:16]}'
++        from contextlib import nullcontext
++        from red_remaining_static_20261004 import native_snorlax_source
++        with (native_snorlax_source(route.rom,target)
++              if target.species_number==143 else nullcontext()):
++            provider=RedStaticCaptureGoalProvider(route.rom,target,ItemId.ULTRA_BALL,BALL_RESERVE,
++                runtime.reader,runtime.adapter,runtime.emulator,actions,directory,
++                prepare_status=True,maximum_status_attempts=10,preserve_viable_active=True,
++                minimum_prepared_helper_level=70,weaken_capture=False,prepare_facing=False,
++                require_status_success=True,allow_snorlax=target.species_number==143)
++            binding=status_prepared_static_offer(provider,runtime,actions,runtime.adapter.observe()).binding
++            if binding is None:
++                raise ValueError('selected static source lacks actual native status/capture admission')
++            with native_catcher_recovery():
++                report=binding.execute()
++            if binding.verify(report)!=GoalVerification.succeeded():
++                raise ValueError('selected static capture was not verified')
++        if not prep.capture_stock_preserved(original,pc.stock_signature(runtime),target):
++            raise ValueError('bird capture changed original individual stock')
++        unique.return_helper(api,runtime,actions,route.route_world,output)
++        if not prep.capture_stock_preserved(original,pc.stock_signature(runtime),target):
++            raise ValueError('bird return changed original individual stock')
++    return GoalExecutionReport(actions.actions_executed-a0,runtime.emulator.frame_count-f0,
++        {**report.evidence,('native_snorlax_registered' if target.species_number==143
++            else 'native_bird_registered'):target.species_number,
++         'native_helper_return':True,'puzzle_and_capture_preparation_learned':False})
++
++
++def routed_bird_bindings(runtime,observation,actions,route,*,capture_loan=None):
++    from pokemon_red_completion.red_routed_static_capture import prepared_static_acquisition_binding
++    from red_earned_unique_collection_20261006 import capture_box_for_loan
++    from pokemon_red_completion.red_pc_storage import RedPCStorageError
++    helper=earned_status_helper(runtime)
++    raw=runtime.reader.read()
++    if (helper is None or observation.party.fainted_count or observation.immediate_capture_slots<1
++            or dict(raw.bag_items or ()).get(int(ItemId.ULTRA_BALL),0)<BALL_RESERVE
++            or (86 not in helper[1] and not dict(raw.bag_items or ()).get(245,0))
++            or output_directory(runtime) is None):
++        return ()
++    guard=bird_loan_guard(runtime,capture_loan)
++    if guard is None or len(guard.loanable_refs)!=1 or raw.party_moves is None:
++        return ()
++    loan,=guard.loanable_refs
++    refs=guard.reader.preparation_specimen_refs()
++    loan_slot=refs.index(loan)
++    remaining_moves={move for i,moves in enumerate(raw.party_moves) if i!=loan_slot
++                     for move in moves}|set(helper[1])
++    try:
++        capture_box_for_loan(runtime.reader.read_all_box_states(),helper[0].box_index)
++    except RedPCStorageError:
++        return ()
++    owned=runtime.reader.read_pokedex_state().owned_species
++    rows=[]
++    for target in red_static_capture_targets(route.rom):
++        if (target.species_number not in BIRDS or target.species_number in owned
++                or event_flag_is_set(raw.event_flags,target.event_flag)):
++            continue
++        # Check the physical party after the named exchange. Both boulder routes
++        # call the native Strength skill, including on the return through Victory Road.
++        if target.species_number in (144,146) and 70 not in remaining_moves:
++            continue
++        if target.species_number in (144,145) and 57 not in remaining_moves:
++            continue  # The quoted water route must remain executable after the named loan.
++        town,stage=(7,192) if target.species_number==144 else (9,198) if target.species_number==146 else (3,83)
++        if quoted_native_arrival(runtime,route.route_world,town=town,map_id=stage,at=None) is None:
++            continue
++        def returned():
++            runtime.adapter.party_guard.verify_active_roster_restored()
++            return _field_ready(runtime) and _raw_party_fully_restored(runtime.reader.read())
++        binding=prepared_static_acquisition_binding(runtime,actions,rom=route.rom,target=target,
++            execute_prepared=lambda t:execute_bird_recipe(runtime,actions,route,t,helper[0],
++                                                         capture_loan=capture_loan),
++            verify_return=returned,estimated_effort=.65 if target.species_number==144 else .45,
++            estimated_risk=.25)
++        if binding is not None:
++            rows.append(binding)
++    return tuple(rows)
++
++
++def routed_snorlax_bindings(runtime,observation,actions,route,*,capture_loan=None):
++    """Quote only the protected Route16 source; keep the model's capture choice."""
++    from red_remaining_static_20261004 import route16_snorlax_target
++    from pokemon_red_completion.red_routed_static_capture import prepared_static_acquisition_binding
++    from red_earned_unique_collection_20261006 import capture_box_for_loan
++    from pokemon_red_completion.red_pc_storage import RedPCStorageError
++    from pokemon_red_completion.red_player_party_guard import validate_snorlax_capture_loan_declaration
++    validate_snorlax_capture_loan_declaration(capture_loan)
++    if capture_loan is None:
++        return ()
++    raw=runtime.reader.read()
++    target=route16_snorlax_target(route.rom)
++    helper=earned_status_helper(runtime)
++    if (helper is None or target.species_number in runtime.reader.read_pokedex_state().owned_species
++            or event_flag_is_set(raw.event_flags,target.event_flag)
++            or observation.party.fainted_count or observation.immediate_capture_slots<1
++            or dict(raw.bag_items or ()).get(int(ItemId.ULTRA_BALL),0)<BALL_RESERVE
++            or not dict(raw.bag_items or ()).get(int(ItemId.POKE_FLUTE),0)
++            or (86 not in helper[1] and not dict(raw.bag_items or ()).get(245,0))
++            or output_directory(runtime) is None):
++        return ()
++    scoped=snorlax_loan_guard(runtime,capture_loan)
++    if scoped is None or len(scoped.loanable_refs)!=1:
++        return ()
++    try:
++        capture_box_for_loan(runtime.reader.read_all_box_states(),helper[0].box_index)
++    except RedPCStorageError:
++        return ()
++    if quoted_native_arrival(runtime,route.route_world,town=6,map_id=target.map_id,
++            at=(10,27)) is None:
++        return ()
++    def returned():
++        runtime.adapter.party_guard.verify_active_roster_restored()
++        return _field_ready(runtime) and _raw_party_fully_restored(runtime.reader.read())
++    binding=prepared_static_acquisition_binding(runtime,actions,rom=route.rom,target=target,
++        execute_prepared=lambda t:execute_snorlax_recipe(runtime,actions,route,t,helper[0],
++                                                       capture_loan=capture_loan),
++        verify_return=returned,estimated_effort=.4,estimated_risk=.25,
++        allow_route16_snorlax=True)
++    return () if binding is None else (binding,)
+diff --git a/runtime_helpers/red_whole_player_inventory_20261006.py b/runtime_helpers/red_whole_player_inventory_20261006.py
+--- a/runtime_helpers/red_whole_player_inventory_20261006.py
++++ b/runtime_helpers/red_whole_player_inventory_20261006.py
+@@ -2137,8 +2137,6 @@
+     continuation_loan_refs=frozenset(),
+     quote_capture_route_work=False,
+     include_level_workload=False,
+-    regional_coverage=False,
+-    observe_collection_cost=False,
+     include_capture_invocation=False,
+     include_matchup_observation=False,
+     include_preparation_party_context=False,
+@@ -4248,8 +4246,6 @@
+                 world=geometry,
+                 quote_capture_route_work=quote_capture_route_work,
+                 **({"include_level_workload": True} if include_level_workload else {}),
+-                **({"regional_coverage": True} if regional_coverage else {}),
+-                **({"observe_collection_cost": True} if observe_collection_cost else {}),
+                 **({"include_capture_invocation": True} if include_capture_invocation else {}),
+                 prefer_highest_evolution_venue=True,
+                 maximum_evolution_quanta=512 if earned_eight_badges else 64,
+diff --git a/scripts/run_configured_red_player.py b/scripts/run_configured_red_player.py
+--- a/scripts/run_configured_red_player.py
++++ b/scripts/run_configured_red_player.py
+@@ -280,8 +280,6 @@
+ def validate_continued_sequence_wiring(plan, previous):
+     if plan.get("compare_evolution_recipient_yield", False) != previous.get("compare_evolution_recipient_yield", False):
+         raise ValueError("continued evolution venue comparison differs")
+-    if plan.get("regional_coverage", False) != previous.get("regional_coverage", False):
+-        raise ValueError("continued regional coverage mode differs")
+     if plan.get("collection_cost_frame_horizon") != previous.get("collection_cost_frame_horizon"):
+         raise ValueError("continued collection cost horizon differs")
+     if any(plan.get(key) != previous.get(key) for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income", "registration_task_continuation")):
+@@ -1295,9 +1293,6 @@
+         horizon = plan["collection_cost_frame_horizon"]
+         if type(horizon) is not int or horizon < 1 or plan.get("partition") != "development":
+             raise ValueError("collection cost quote requires a positive DEVELOPMENT frame horizon")
+-    if "regional_coverage" in plan and (type(plan["regional_coverage"]) is not bool
+-            or (plan["regional_coverage"] and plan.get("partition") != "development")):
+-        raise ValueError("regional coverage mode requires explicit development authority")
+     wiring = {
+         key: carrier
+         if key == "owned_field_carrier_exchange"
+@@ -1327,8 +1322,6 @@
+         wiring["goal_model_observation_compatibility"] = compatibility
+     if "collection_cost_frame_horizon" in plan:
+         wiring["collection_cost_frame_horizon"] = plan["collection_cost_frame_horizon"]
+-    if "regional_coverage" in plan:
+-        wiring["regional_coverage"] = plan["regional_coverage"]
+     for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income"):
+         if key in plan:
+             wiring[key] = plan[key]
+@@ -2981,7 +2974,7 @@
+         launcher_sha256=c.digest(Path(__file__)),
+     )
+     _record(output / "PLAN.json", declaration)
+-    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
++    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+     payload, factory, _, holder, source = assemble_configured_player(
+         backend, configuration, parent, output, plan_path=output / "PLAN.json",
+         **({"required_species": tuple(plan["required_species"])}
+@@ -3317,7 +3310,7 @@
+         launcher_sha256=c.digest(Path(__file__)),
+     )
+     _record(output / "PLAN.json", declaration)
+-    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
++    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+     payload, factory, menu, holder, source = assemble_configured_player(
+         backend, configuration, parent, output, plan_path=output / "PLAN.json",
+         **({"required_species": tuple(plan["required_species"])}
+@@ -3512,10 +3505,48 @@
+     print(json.dumps(dict(result, output=str(output)), default=str), flush=True)
+ 
+ 
++def require_collection_comparison_copy(plan):
++    """This private runner accepts version-one diagnostic copies or explicit normal campaigns."""
++    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
++    if development_campaign_scope(plan):
++        if (plan["new_campaign"] or plan.get("launch_authorized") is not True
++                or plan.get("readiness_only") is not False or plan.get("maximum_state_loads") != 1):
++            raise ValueError("loaded campaign requires its declared one-load continuation")
++        return
++    if (plan.get("partition") != "development" or plan.get("qualification_only") is not True
++            or plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
++            or plan.get("open_ended_campaign", False) is not False
++            or plan.get("actual_gameplay_resume_authorized") is not False
++            or plan.get("official_acceptance") is not False or plan.get("fit_allowed") is not False
++            or plan.get("copy_back") is not False
++            or any(k in plan for k in ("matched_collection_order", "collection_transfer_capture",
++                "collection_menu_probe", "matched_preparation", "evolution_copy_experiment"))):
++        raise ValueError("collection successor requires an unallocated, isolated DEVELOPMENT copy")
++
++
+ def run(args):
+     path = Path(args.plan).resolve()
+     plan, root = doc(path), path.parent
++    require_collection_comparison_copy(plan)
+     validate_sequence_runner_mode(plan, args)
++    open_ended = plan.get("open_ended_campaign", False)
++    if type(open_ended) is not bool or (open_ended and (
++        not plan.get("campaign_continuation") or plan.get("cutoff_utc") is not None
++        or plan.get("qualification_only") or not declared_automatic_renewal(plan)
++    )):
++        raise ValueError("invalid open-ended campaign continuation declaration")
++
++    def wall_seconds():
++        if open_ended:
++            return args.seconds
++        return int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds())
++
++    def chunk_allowance(current, *, inspection=False):
++        if not open_ended:
++            return remaining_allowance(current, plan["inherited_spent"], plan["allowance"], inspection=inspection)
++        if any(current[k] < plan["inherited_spent"][k] for k in plan["allowance"]):
++            raise ValueError("open-ended continuation lost cumulative native costs")
++        return dict(plan["allowance"])
+     declared_spectator(plan)
+     if plan["partition"] != "development" or plan["fit_allowed"] or plan["copy_back"]:
+         raise ValueError("configured launcher currently supports ordinary DEVELOPMENT only")
+@@ -3551,6 +3582,13 @@
+         verify_loan_copy(args, plan, root, backend, configuration)
+         return
+     nodes, ordinal = configured_run_nodes(root)
++    if plan.get("campaign_continuation") and "source_segment_ordinal" in plan:
++        source_ordinal = plan["source_segment_ordinal"]
++        if (type(source_ordinal) is not int or source_ordinal < 1
++                or origin.name != f"segment-{source_ordinal:03d}"):
++            raise ValueError("campaign source segment ordinal differs from its authenticated parent")
++        if not nodes:
++            ordinal = source_ordinal + 1
+     parent = nodes[-1] if nodes else origin
+     context = authenticate_parent(parent, c.digest)
+     search_memory = (
+@@ -3563,9 +3601,7 @@
+         if previous["configuration_sha256"] != configuration.sha256:
+             raise ValueError("cannot silently change configuration across a continuation")
+         validate_continued_sequence_wiring(plan, previous)
+-    left = remaining_allowance(
+-        context["spent"], plan["inherited_spent"], plan["allowance"], inspection=args.inspect
+-    )
++    left = chunk_allowance(context["spent"], inspection=args.inspect)
+     copies = diagnostic_spending(root)
+     left = {key: value - copies[key] for key, value in left.items()}
+     if min(left.values()) <= 0 and not args.inspect:
+@@ -3859,13 +3895,11 @@
+         renewed = 0
+         driver_terminal_reason = None
+         while True:
+-            wall_left = int(
+-                (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
+-            )
++            wall_left = wall_seconds()
+             if wall_left <= 0:
+                 raise ValueError("configured work block ended; no inputs authorized by this plan")
+             limits = configured_execution_limits(args, left, wall_left)
+-            _write(output / "executed-launcher.py", Path(__file__).read_bytes())
++            _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+             _write(output / "executed-backend.py", Path(backend.__file__).read_bytes())
+             result, exported = execute_player_chunk(
+                 plan=plan,
+@@ -3930,9 +3964,7 @@
+                 driver_terminal_reason = reason
+                 break
+             try:
+-                left = remaining_allowance(
+-                    exported["spent"], plan["inherited_spent"], plan["allowance"]
+-                )
++                left = chunk_allowance(exported["spent"])
+                 left = {key: value - copies[key] for key, value in left.items()}
+                 if min(left.values()) <= 0:
+                     driver_terminal_reason = "declared_budget_exhausted"
+@@ -3943,9 +3975,7 @@
+             driver_terminal_reason = configured_renewal_stop_reason(
+                 args,
+                 left,
+-                int(
+-                    (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
+-                ),
++                wall_seconds(),
+                 compulsory_settlement=requires_compulsory_settlement(holder["runtime"]),
+             )
+             if driver_terminal_reason is not None:
+diff --git a/scripts/run_fresh_red_player.py b/scripts/run_fresh_red_player.py
+--- a/scripts/run_fresh_red_player.py
++++ b/scripts/run_fresh_red_player.py
+@@ -209,7 +209,24 @@
+         or not 0 <= plan["seed"] < 2**64
+     ):
+         raise ValueError("fresh launch declaration has a restore, teacher or undeclared start")
+-    declared_fresh_acceptance(plan)
++    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
++    if development_campaign_scope(plan):
++        if (plan["new_campaign"] is not True or plan.get("maximum_state_loads") != 0
++                or (not import_only and plan.get("launch_authorized") is not True)):
++            raise ValueError("fresh campaign needs its normal zero-load power-on declaration")
++    elif (plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
++          or plan.get("official_acceptance") is not False or plan.get("maximum_state_loads") != 0
++          or plan.get("training_admission", False) is not False
++          or plan.get("actual_gameplay_resume_authorized", False) is not False):
++        raise ValueError("fresh successor comparison needs a zero-load diagnostic or a normal campaign")
++    official = declared_fresh_acceptance(plan)
++    open_ended = plan.get("open_ended_campaign", False)
++    if type(open_ended) is not bool or (open_ended and (
++        plan.get("cutoff_utc") is not None or official
++        or not plan.get("development_campaign") or not plan.get("new_campaign")
++        or plan.get("diagnostic_only") or not declared_automatic_renewal(plan)
++    )):
++        raise ValueError("invalid open-ended development campaign declaration")
+     NativePlayerLimits(**plan["limits"])
+     if any(
+         type(plan["chunk"][key]) is not int or plan["chunk"][key] <= 0
+@@ -356,6 +373,7 @@
+         model_bytes, expected_model_sha256=plan["configuration_template"]["goal_model_sha256"]
+     ).model
+     limits = NativePlayerLimits(**plan["limits"])
++    open_ended = plan.get("open_ended_campaign", False)
+     _record(
+         root / "CLAIM.json",
+         dict(
+@@ -406,8 +424,10 @@
+                 c.PyBoyAdapter(c.ROM, watch=False, speed=None, **feed.adapter_options), root, result
+             ) as emulator,
+         ):
+-            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=limits.seconds)
+-            controller = _NoLoadController(wall, maximum_frames=limits.frames)
++            opening_seconds = plan["chunk"]["seconds"] if open_ended else limits.seconds
++            opening_frames = plan["chunk"]["frames"] if open_ended else limits.frames
++            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=opening_seconds)
++            controller = _NoLoadController(wall, maximum_frames=opening_frames)
+             if controller.frame_count != 0 or controller.pressed_buttons:
+                 raise ValueError("fresh emulator was not at untouched power-on")
+             power_on = controller.save_state_bytes()
+@@ -494,11 +514,20 @@
+             )
+             parent, ordinal = initial, 0
+             while True:
+-                left = {
+-                    key: getattr(limits, key) - spent[key]
+-                    for key in ("decisions", "actions", "frames", "heals")
+-                }
+-                left["seconds"] = int(limits.seconds - (monotonic() - started))
++                if open_ended:
++                    # Renew only the existing per-chunk safety envelope. The
++                    # same native emulator, receipts and cumulative costs persist.
++                    left = dict(plan["chunk"], heals=limits.heals)
++                    wall = MonotonicWallTimeBudgetController(
++                        emulator, maximum_wall_seconds=left["seconds"]
++                    )
++                    controller = _NoLoadController(wall, maximum_frames=left["frames"])
++                else:
++                    left = {
++                        key: getattr(limits, key) - spent[key]
++                        for key in ("decisions", "actions", "frames", "heals")
++                    }
++                    left["seconds"] = int(limits.seconds - (monotonic() - started))
+                 if min(left.values()) <= 0:
+                     result["terminal_reason"] = "declared_budget_exhausted"
+                     break
+diff --git a/src/pokemon_red_completion/collection_training_cost.py b/src/pokemon_red_completion/collection_training_cost.py
+--- a/src/pokemon_red_completion/collection_training_cost.py
++++ b/src/pokemon_red_completion/collection_training_cost.py
+@@ -51,10 +51,7 @@
+     key = observed_context_key(transition, facts, trainee)
+     if key is None:
+         return None
+-    initial_xp = binding.level_evolution_initial_xp
+-    if type(initial_xp) is not int or initial_xp < 0:
+-        return None
+-    return dict(key=key, transition=list(transition), trainee_ref=trainee, boxed_ref=boxed_ref, initial_xp=initial_xp)
++    return dict(key=key, transition=list(transition), trainee_ref=trainee, boxed_ref=boxed_ref)
+ 
+ 
+ def trainee_ref(transition, facts, boxed_ref):
+@@ -87,7 +84,7 @@
+     return canonical_sha256(dict(transition=transition, trainee=trainee, source_area=area, roster=sorted(members)))
+ 
+ 
+-def measured_training_cost(outcome, transition, *, context=None):
++def measured_training_cost(outcome, transition):
+     if (outcome.get("error_type") is not None or outcome.get("safe_terminal") is not True
+             or outcome.get("selected_kind") != "evolve_species"):
+         return None
+@@ -104,9 +101,6 @@
+         return None
+     initial, terminal, xp = (ev.get(k) for k in ("trainee_initial_xp", "trainee_terminal_xp", "trainee_xp_gained"))
+     if any(type(n) is not int or n < 0 for n in (initial,terminal,xp)) or terminal-initial != xp:
+-        return None
+-    if context is not None and (context["initial_xp"] != initial
+-            or ev.get("zero_progress_trainee_ref", context["trainee_ref"]) != context["trainee_ref"]):
+         return None
+     cost = outcome.get("observed_cost") or {}
+     frames = cost.get("frames")
+@@ -203,7 +197,7 @@
+             or envelope["quotes"] != expected_quotes):
+         raise ValueError("collection cost quote or original menu differs")
+     selected = contexts.get(refs[outcome["choice"]["selected_candidate_index"]])
+-    observed = measured_training_cost(outcome, selected["transition"], context=selected) if selected is not None else None
++    observed = measured_training_cost(outcome, selected["transition"]) if selected is not None else None
+     if observed is None:
+         if after_path.exists():
+             raise ValueError("unmeasured collection cost recorded")
+diff --git a/src/pokemon_red_completion/goal_manager_runtime.py b/src/pokemon_red_completion/goal_manager_runtime.py
+--- a/src/pokemon_red_completion/goal_manager_runtime.py
++++ b/src/pokemon_red_completion/goal_manager_runtime.py
+@@ -280,7 +280,6 @@
+     # An adapter-private transition follows its validated executor through travel.
+     level_evolution_transition: tuple[str, str] | None = None
+     level_evolution_boxed_ref: str | None = None
+-    level_evolution_initial_xp: int | None = None
+ 
+     def __post_init__(self) -> None:
+         transition = self.level_evolution_transition
+@@ -294,9 +293,6 @@
+             transition is None or type(self.level_evolution_boxed_ref) is not str or not self.level_evolution_boxed_ref
+         ):
+             raise GoalManagerRuntimeError("boxed evolution observation requires a bound trainee")
+-        if self.level_evolution_initial_xp is not None and (transition is None
+-                or type(self.level_evolution_initial_xp) is not int or self.level_evolution_initial_xp < 0):
+-            raise GoalManagerRuntimeError("evolution observation requires verified initial experience")
+         if self.story_route_quote is not None and (
+             type(self.story_route_quote) is not StoryRouteQuote
+             or self.kind is not GoalKind.ADVANCE_STORY
+diff --git a/src/pokemon_red_completion/red_autonomous_player.py b/src/pokemon_red_completion/red_autonomous_player.py
+--- a/src/pokemon_red_completion/red_autonomous_player.py
++++ b/src/pokemon_red_completion/red_autonomous_player.py
+@@ -1482,7 +1482,7 @@
+                 from .collection_training_cost import measured_training_cost
+ 
+                 context = collection_contexts[selected.binding_ref]
+-                observation = measured_training_cost(outcome, context["transition"], context=context)
++                observation = measured_training_cost(outcome, context["transition"])
+                 if observation is not None:
+                     memory.record_collection_training_cost(context["key"], observation)
+                     _record(step / "collection-cost-after.json", dict(
+diff --git a/src/pokemon_red_completion/red_champion_story.py b/src/pokemon_red_completion/red_champion_story.py
+--- a/src/pokemon_red_completion/red_champion_story.py
++++ b/src/pokemon_red_completion/red_champion_story.py
+@@ -120,7 +120,6 @@
+     ) = field(default=None, init=False)
+     _prepared_story_binding: object | None = field(default=None, init=False)
+     _prepared_level_deficit: int | None = field(default=None, init=False)
+-    _prepared_allow_uncovered_later: bool = field(default=False, init=False)
+ 
+     def _learned_controller(self):
+         return story_league_controller(self.runtime, self.objective_id, rematch=self.rematch)
+@@ -297,7 +296,6 @@
+         self._prepared_controller = self.recovery_controller
+         self._prepared_rematch = self.rematch
+         self._prepared_level_deficit = self.maximum_level_deficit
+-        self._prepared_allow_uncovered_later = self.allow_uncovered_later
+         self._prepared_learned_controller = self._learned_controller()
+         self._prepared_story_binding = getattr(
+             self._prepared_learned_controller, "binding_identity", None
+@@ -325,7 +323,7 @@
+             or self._prepared_controller != self.recovery_controller
+             or self._prepared_rematch != self.rematch
+             or self._prepared_level_deficit != self.maximum_level_deficit
+-            or self.allow_uncovered_later != self._prepared_allow_uncovered_later
++            or self.allow_uncovered_later != prepared.party.allow_uncovered_later
+             or self._prepared_learned_controller is not self._learned_controller()
+             or self._prepared_story_binding
+             != getattr(self._prepared_learned_controller, "binding_identity", None)
+diff --git a/src/pokemon_red_completion/red_development_story_scope.py b/src/pokemon_red_completion/red_development_story_scope.py
+--- a/src/pokemon_red_completion/red_development_story_scope.py
++++ b/src/pokemon_red_completion/red_development_story_scope.py
+@@ -138,9 +138,9 @@
+                 raise ValueError("development gym contract/reward profile differs")
+ 
+         if self.train_admission is not None:
+-            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA, ScopedProductionStoryAdmission, SCOPED_STORY_TRAIN_SCHEMA
+-
+-            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission, ScopedProductionStoryAdmission):
++            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
++
++            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission):
+                 raise ValueError("typed production TRAIN admission required")
+             self.train_admission.require_scope(self, "story")
+ 
+@@ -180,10 +180,10 @@
+ 
+         values = dict(document)
+         if values.get("train_admission") is not None:
+-            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA, ScopedProductionStoryAdmission, SCOPED_STORY_TRAIN_SCHEMA
++            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
+ 
+             if train_admission is not None:
+-                if type(train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission, ScopedProductionStoryAdmission) or canonical_sha256(
++                if type(train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission) or canonical_sha256(
+                     values["train_admission"]
+                 ) != canonical_sha256(train_admission.document()):
+                     raise ValueError("story scope differs from authenticated TRAIN admission")
+@@ -191,7 +191,7 @@
+             else:
+                 # Original metadata-only admissions remain decodable. A derived
+                 # document needs its separately authenticated sealed proof.
+-                if values["train_admission"].get("schema") in (LEAGUE_TRAIN_SCHEMA, SCOPED_STORY_TRAIN_SCHEMA):
++                if values["train_admission"].get("schema") == LEAGUE_TRAIN_SCHEMA:
+                     raise ValueError("funding TRAIN scope needs authenticated admission bytes")
+                 values["train_admission"] = ProductionTrainAdmission.from_document(
+                     values["train_admission"]
+@@ -238,9 +238,9 @@
+ 
+     def require(self, actor, contract=None):
+         if self.train_admission is not None:
+-            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA, ScopedProductionStoryAdmission, SCOPED_STORY_TRAIN_SCHEMA
+-
+-            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission, ScopedProductionStoryAdmission):
++            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
++
++            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission):
+                 raise ValueError("typed production TRAIN admission required")
+             self.train_admission.require_actor(actor, self, "story")
+         partition = (
+diff --git a/src/pokemon_red_completion/red_game_corner_goals.py b/src/pokemon_red_completion/red_game_corner_goals.py
+--- a/src/pokemon_red_completion/red_game_corner_goals.py
++++ b/src/pokemon_red_completion/red_game_corner_goals.py
+@@ -42,7 +42,7 @@
+ 
+ 
+ def _occupied_prize_counter(start, at):
+-    return (getattr(start,'map_id',None) == PRIZE_ROOM and start.ready and start.interruption is None
++    return (start.map_id == PRIZE_ROOM and start.ready and start.interruption is None
+             and at in start.occupied and sum(abs(x-y) for x,y in zip(start.at,at,strict=True)) == 1)
+ 
+ 
+diff --git a/src/pokemon_red_completion/red_level_evolution_options.py b/src/pokemon_red_completion/red_level_evolution_options.py
+--- a/src/pokemon_red_completion/red_level_evolution_options.py
++++ b/src/pokemon_red_completion/red_level_evolution_options.py
+@@ -355,7 +355,7 @@
+                         RedEvolutionOption(
+                             profile,
+                             (replace(binding, level_evolution_transition=(source_ref, target_ref),
+-                                     level_evolution_boxed_ref=boxed_ref, level_evolution_initial_xp=observed_xp)
++                                     level_evolution_boxed_ref=boxed_ref)
+                              if bind_collection_cost and workload is not None else binding),
+                             EconomyOffer(EconomyMode.OTHER, planned_spend=0),
+                             level_evolution_effort(precursor.level, level, progress),
+diff --git a/src/pokemon_red_completion/red_lorelei_story.py b/src/pokemon_red_completion/red_lorelei_story.py
+--- a/src/pokemon_red_completion/red_lorelei_story.py
++++ b/src/pokemon_red_completion/red_lorelei_story.py
+@@ -124,6 +124,7 @@
+         consume_battle_start_schedule,
+         move_decision_guard,
+         battle_exit_guard=None,
++        evolution_rom=None,
+     ):
+         self.require_objective(intent.objective_id)
+         if (
+@@ -141,6 +142,7 @@
+             self.battler,
+             (self.contract,),
+             self.maximum_decisions,
++            evolution_rom=evolution_rom,
+         )
+         result = actor.run(
+             reader,
+diff --git a/src/pokemon_red_completion/red_milestone_splits.py b/src/pokemon_red_completion/red_milestone_splits.py
+--- a/src/pokemon_red_completion/red_milestone_splits.py
++++ b/src/pokemon_red_completion/red_milestone_splits.py
+@@ -112,10 +112,8 @@
+     """Descriptive comparison only; a short failed run is never a speed winner."""
+     for name in ('schema','catalog_sha256','scope','required_species_sha256','wall_basis'):
+         if current.get(name)!=baseline.get(name):raise ValueError('split comparison differs: '+name)
+-    if current['source_state_sha256']!=baseline['source_state_sha256']:
+-        raise ValueError('checkpoint or fresh splits require the same initial physical state')
+-    if current['scope']=='fresh_start' and not all(d.get('fresh_origin_authenticated') is True for d in (current,baseline)):
+-        raise ValueError('fresh comparison requires authenticated power-on origins')
++    if current['scope']=='checkpoint' and current['source_state_sha256']!=baseline['source_state_sha256']:
++        raise ValueError('checkpoint splits require the same initial physical state')
+     old={r['id']:r for r in baseline['rows']};rows=[]
+     for row in current['rows']:
+         other=old[row['id']];a,b=row.get('elapsed'),other.get('elapsed')
+@@ -147,16 +145,7 @@
+                     state_sha256=outcome['before_state_sha256'])
+             phases=outcome.get('phase_seconds')
+             if not isinstance(phases,dict) or not phases:raise ValueError('missing phase clocks; wall split is unknown')
+-            omitted=[key for key,value in phases.items() if value is None]
+-            if omitted:
+-                # The executor explicitly records an uncalled verifier as null
+-                # after an execution error. This is not an unknown elapsed phase.
+-                if not (omitted == ['verification'] and outcome.get('failure_phase') == 'execution'
+-                        and outcome.get('error_type') and outcome.get('verification') is None):
+-                    raise ValueError('unknown unmeasured phase clocks')
+-                tracker.header.setdefault('unexecuted_phases',[]).append(dict(
+-                    step=str(step.relative_to(root)),phase='verification',reason='execution_error_before_verifier'))
+-            values=[value for value in phases.values() if value is not None]
++            values=list(phases.values())
+             if any(type(x) not in (int,float) or not math.isfinite(x) or x<0 for x in values):
+                 raise ValueError('invalid phase clocks')
+             wall+=sum(values)
+@@ -168,181 +157,4 @@
+             meter=json.loads(costs.read_bytes());last_frames=max(last_frames,meter['frames']);last_actions=max(last_actions,meter['actions_attempted'])
+         offset_frames+=last_frames;offset_actions+=last_actions
+     if tracker is None:raise ValueError('no complete measured outcome boundaries')
+-    return with_badge_count_splits(tracker.document())
+-
+-
+-def merge_native_segment_splits(documents):
+-    """Join small passive receipts only across exact physical-state boundaries.
+-
+-    Wall time is summed active native segment time; driver gaps and pauses are
+-    excluded explicitly. No outcomes are rescanned and no emulator is observed.
+-    """
+-    docs=list(documents)
+-    if not docs: raise ValueError("no native split receipts")
+-    result=deepcopy(docs[0]);offset={k:0 for k in ("frames","actions","wall_seconds")}
+-    rows={r["id"]:r for r in result["rows"]};last_state=None;last_split=None
+-    fields=("schema","catalog_sha256","scope","required_species_sha256","required_species_count","wall_basis")
+-    for index,doc in enumerate(docs):
+-        if any(doc.get(k)!=docs[0].get(k) for k in fields) or doc.get("wall_basis")!="native_session_wall":
+-            raise ValueError("native segment split contracts differ")
+-        if index and doc.get("source_state_sha256")!=last_state:
+-            raise ValueError("native split segment state chain differs")
+-        elapsed=_clock(**doc["elapsed"])
+-        if {r["id"] for r in doc["rows"]}!=set(rows): raise ValueError("native split catalogs differ")
+-        for row in doc["rows"]:
+-            prior=rows[row["id"]]
+-            if row["status"]=="reached":
+-                if index and prior["status"]!="pending": raise ValueError("native milestone reached twice")
+-                value=deepcopy(row)
+-                for key in ("elapsed",): value[key]={k:offset[k]+row[key][k] for k in offset}
+-                value["interval"]={bound:{k:offset[k]+row["interval"][bound][k]for k in offset}for bound in ("lower","upper")}
+-                rows[row["id"]]=value
+-            elif index and row["status"]=="already_completed" and prior["status"]=="pending":
+-                raise ValueError("native milestone timing missing between segments")
+-        last_state=doc.get("last_observation_state_sha256")
+-        offset={k:offset[k]+elapsed[k]for k in offset}
+-    reached=sorted((r for r in rows.values()if r["status"]=="reached"),key=lambda r:(r["elapsed"]["frames"],r["elapsed"]["actions"],r["elapsed"]["wall_seconds"]))
+-    from itertools import groupby
+-    for _,group in groupby(reached,key=lambda r:tuple(r["elapsed"][k]for k in offset)):
+-        simultaneous=list(group)
+-        prior=last_split or {k:0 for k in offset}
+-        for row in simultaneous:
+-            row["segment"]={k:row["elapsed"][k]-prior[k]for k in offset}
+-        last_split=dict(simultaneous[0]["elapsed"])
+-    result.update(rows=list(rows.values()),elapsed=offset,wall_basis="sum_native_segment_wall",
+-                  segment_count=len(docs),last_observation_state_sha256=last_state,
+-                  initial_clock=None,last_clock=None)
+-    return with_badge_count_splits(result)
+-
+-
+-_BADGE_LABELS = {
+-    'defeat_brock':'Brock · Boulder Badge','defeat_misty':'Misty · Cascade Badge',
+-    'defeat_surge':'Lt. Surge · Thunder Badge','defeat_erika':'Erika · Rainbow Badge',
+-    'defeat_koga':'Koga · Soul Badge','defeat_sabrina':'Sabrina · Marsh Badge',
+-    'defeat_blaine':'Blaine · Volcano Badge','defeat_giovanni':'Giovanni · Earth Badge',
+-}
+-_BADGE_COUNTS = tuple((f'badges_{n}',f'Badge {n} earned') for n in range(1,9))
+-_DISPLAY_CATALOG = _BADGE_COUNTS + tuple((key,_BADGE_LABELS.get(key,label))for key,label in CATALOG)
+-_DISPLAY_SHA256 = hashlib.sha256(json.dumps(_DISPLAY_CATALOG,ensure_ascii=True,separators=(',',':')).encode()).hexdigest()
+-
+-
+-def with_badge_count_splits(document):
+-    """Show actual badge-count order independently of gym identity/order.
+-
+-    This is a pure presentation/export projection of the existing named-badge
+-    receipts. It neither changes the frozen native recorder nor invents an
+-    ordering between badges confirmed in the same observation interval.
+-    """
+-    if document.get('catalog_sha256') == _DISPLAY_SHA256:return deepcopy(document)
+-    if document.get('catalog_sha256') != CATALOG_SHA256:raise ValueError('unknown native split catalog')
+-    doc=deepcopy(document);by_id={r['id']:r for r in doc['rows']}
+-    badges=[by_id[key]for key in _BADGE_LABELS]
+-    counts={key:dict(id=key,label=label,status='pending')for key,label in _BADGE_COUNTS}
+-    initial=sum(row['status']=='already_completed'for row in badges)
+-    for n in range(1,initial+1):counts[f'badges_{n}'].update(status='already_completed',elapsed=None,interval=None,segment=None)
+-    from itertools import groupby
+-    reached=sorted((row for row in badges if row['status']=='reached'),key=lambda r:tuple(r['elapsed'][k]for k in ('frames','actions','wall_seconds')))
+-    count=initial
+-    for _,group in groupby(reached,key=lambda r:tuple(r['elapsed'][k]for k in ('frames','actions','wall_seconds'))):
+-        simultaneous=list(group)
+-        for _ in simultaneous:
+-            count+=1;key=f'badges_{count}'
+-            value=deepcopy(simultaneous[0]);value.update(id=key,label=counts[key]['label'],derived_from_badges=[r['id']for r in simultaneous]);counts[key]=value
+-    for key,label in _BADGE_LABELS.items():by_id[key]['label']=label
+-    doc.update(base_catalog_sha256=CATALOG_SHA256,catalog_sha256=_DISPLAY_SHA256,
+-               rows=[counts[key]for key,_ in _BADGE_COUNTS]+list(by_id.values()),
+-               badge_count_is_observed_order=True)
+-    return doc
+-
+-
+-def pending_milestone_splits(required_species):
+-    """Presentation only: no game has started and no measurement is claimed."""
+-    doc=MilestoneSplits(source_state_sha256=None,required_species=required_species).document()
+-    doc.update(scope='not_started',timing_started=False,presentation_only=True)
+-    return with_badge_count_splits(doc)
+-
+-
+-def attach_split_reference(metadata,reference):
+-    """Compare compatible recorded clocks; a live reference is never a speed winner."""
+-    result=deepcopy(metadata)
+-    current,baseline=result.get('milestone_splits'),reference.get('milestone_splits')
+-    if not current or not baseline or current.get('timing_started')is False or baseline.get('timing_started')is False:return result
+-    try:
+-        comparison=compare_splits(current,baseline)
+-    except ValueError as error:
+-        result['milestone_split_comparison_error']=str(error)
+-        return result
+-    comparison.update(reference_label=reference.get('id','Reference run'),reference_role='live_reference',completed_baseline=False)
+-    current['comparison']=comparison
+-    return result
+-
+-def fresh_start_split_projection(root,document):
+-    """Add authenticated opening costs to passive native-window measurements."""
+-    root=Path(root);plan=json.loads((root/'PLAN.json').read_bytes())
+-    if plan.get('schema')!='pokemon.red.fresh-frozen-player-plan.v1' or document.get('timing_started')is False:return deepcopy(document)
+-    claim=json.loads((root/'CLAIM.json').read_bytes())
+-    context=json.loads((root/'initial/CONTEXT.json').read_bytes())
+-    initial=json.loads((root/'initial/RESULT.json').read_bytes())
+-    configuration=json.loads((root/'REALIZED-CONFIGURATION.json').read_bytes())
+-    terminal=root/'RESULT.json'
+-    if terminal.exists() and json.loads(terminal.read_bytes()).get('state_loads')!=0:raise ValueError('fresh timing source has a state restoration')
+-    def digest(path):
+-        if path.is_symlink()or not path.resolve().is_relative_to(root.resolve()):raise ValueError('fresh timing source escaped its root')
+-        return hashlib.sha256(path.read_bytes()).hexdigest()
+-    origin=digest(root/'bootstrap/power-on.state');checkpoint=digest(root/'initial/terminal.state')
+-    if (plan.get('maximum_state_loads')!=0 or claim.get('no_resume')is not True
+-            or claim.get('started_new_attempt')is not True or initial.get('passed')is not True
+-            or origin!=configuration.get('origin_sha256') or checkpoint!=context.get('state_sha256')
+-            or checkpoint!=initial.get('state_sha256') or document.get('source_state_sha256')!=checkpoint
+-            or initial.get('spent')!=context.get('spent')):
+-        raise ValueError('fresh split origin or opening custody differs')
+-    spent=context['spent'];prefix=_clock(frames=spent['frames'],actions=spent['actions'],wall_seconds=spent['seconds'])
+-    doc=deepcopy(document);zero={k:0 for k in prefix}
+-    for row in doc['rows']:
+-        if row['status']=='reached':
+-            row['elapsed']={k:row['elapsed'][k]+prefix[k]for k in prefix}
+-            row['interval']={bound:{k:row['interval'][bound][k]+prefix[k]for k in prefix}for bound in ('lower','upper')}
+-        elif row['status']=='already_completed':
+-            row.update(status='reached',elapsed=dict(prefix),interval=dict(lower=dict(zero),upper=dict(prefix)),observation_state_sha256=checkpoint,confirmation='verified_opening_boundary')
+-    doc.update(scope='fresh_start',source_state_sha256=origin,initial_native_state_sha256=checkpoint,
+-               elapsed={k:doc['elapsed'][k]+prefix[k]for k in prefix},opening_cost=prefix,
+-               base_wall_basis=document['wall_basis'],wall_basis='opening_plus_'+document['wall_basis'],
+-               identity=dict(doc.get('identity')or{},campaign_run_id=plan.get('campaign_run_id')or configuration['origin_id']),
+-               fresh_origin_authenticated=True,restoration_disclosed=False)
+-    _recompute_split_segments(doc)
+-    return doc
+-
+-
+-def _recompute_split_segments(doc):
+-    from itertools import groupby
+-    keys=('frames','actions','wall_seconds');prior=dict.fromkeys(keys,0)
+-    reached=sorted((r for r in doc['rows']if r['status']=='reached'),key=lambda r:tuple(r['elapsed'][k]for k in keys))
+-    for _,group in groupby(reached,key=lambda r:tuple(r['elapsed'][k]for k in keys)):
+-        rows=list(group)
+-        for row in rows:row['segment']={k:row['elapsed'][k]-prior[k]for k in keys}
+-        prior=dict(rows[0]['elapsed'])
+-
+-
+-def extend_split_history(current,prefix,*,campaign_run_id):
+-    """Carry one campaign's measured history across its declared repair boundary."""
+-    if not campaign_run_id or any((d.get('identity')or{}).get('campaign_run_id')!=campaign_run_id for d in (current,prefix)):
+-        raise ValueError('split prefix belongs to a different campaign')
+-    if current.get('source_state_sha256')!=prefix.get('last_observation_state_sha256'):
+-        raise ValueError('split prefix physical state chain differs')
+-    for key in ('schema','catalog_sha256','required_species_sha256'):
+-        if current.get(key)!=prefix.get(key):raise ValueError('split prefix contracts differ')
+-    basis=prefix.get('base_wall_basis',prefix.get('wall_basis'))
+-    if current.get('wall_basis')!=basis:raise ValueError('split prefix clock basis differs')
+-    result=deepcopy(prefix);old={r['id']:r for r in result['rows']};offset=prefix['elapsed']
+-    for row in current['rows']:
+-        previous=old[row['id']]
+-        if previous['status']!='pending':continue
+-        if row['status']=='already_completed':raise ValueError('unmeasured milestone between split histories')
+-        if row['status']=='reached':
+-            value=deepcopy(row);value['elapsed']={k:row['elapsed'][k]+offset[k]for k in offset}
+-            value['interval']={bound:{k:row['interval'][bound][k]+offset[k]for k in offset}for bound in ('lower','upper')};old[row['id']]=value
+-    result.update(rows=list(old.values()),elapsed={k:offset[k]+current['elapsed'][k]for k in offset},
+-                  last_observation_state_sha256=current.get('last_observation_state_sha256'),
+-                  restoration_disclosed=True,history_prefixes=prefix.get('history_prefixes',0)+1)
+-    _recompute_split_segments(result)
+-    return result
++    return tracker.document()
+diff --git a/src/pokemon_red_completion/red_player_collection_options.py b/src/pokemon_red_completion/red_player_collection_options.py
+--- a/src/pokemon_red_completion/red_player_collection_options.py
++++ b/src/pokemon_red_completion/red_player_collection_options.py
+@@ -197,8 +197,6 @@
+     quote_capture_route_work=False,
+     include_level_workload=False,
+     include_capture_invocation=False,
+-    regional_coverage=False,
+-    observe_collection_cost=False,
+ ):
+     if evolution_venue_model is not None or evolution_venue_model_sha256 is not None:
+         from .red_native_boxed_evolution import validate_native_evolution_venue_model
+@@ -218,8 +216,6 @@
+         quote_capture_route_work,
+         include_level_workload,
+         include_capture_invocation,
+-        regional_coverage,
+-        observe_collection_cost,
+     ):
+         if type(permission) is not bool:
+             raise ValueError("collection evolution options require explicit booleans")
+@@ -284,7 +280,6 @@
+                 live,
+                 actions,
+                 world,
+-                **({"regional_coverage": True} if regional_coverage else {}),
+                 maximum_actions=maximum_actions,
+                 maximum_frames=maximum_frames,
+                 **(
+@@ -305,17 +300,14 @@
+     )
+     acquisitions += scripted_gift_bindings(runtime, live, actions, world)
+     if include_fossil_acquisition:
+-        existing_acquisitions = {binding.binding_ref for binding in acquisitions}
+-        fossils = fossil_acquisition_bindings(
++        acquisitions += fossil_acquisition_bindings(
+             runtime,
+             live,
+             actions,
+             world,
+             maximum_actions=maximum_actions,
+             maximum_frames=maximum_frames,
+-            allow_remote_departure=True,
+-        )
+-        acquisitions += tuple(binding for binding in fossils if binding.binding_ref not in existing_acquisitions)
++        )
+     acquisitions += npc_trade_dependency_bindings(
+         runtime,
+         live,
+@@ -353,8 +345,7 @@
+             maximum_frames if maximum_evolution_frames is None else maximum_evolution_frames
+         ),
+         maximum_quanta=maximum_evolution_quanta,
+-        **({"include_level_workload": True} if include_level_workload else {}),
+-        **({"bind_collection_cost": True} if observe_collection_cost else {}),
++        **({"include_level_workload": True, "bind_collection_cost": True} if include_level_workload else {}),
+         **(
+             {"maximum_wall_seconds": maximum_evolution_seconds}
+             if maximum_evolution_seconds is not None
+diff --git a/src/pokemon_red_completion/red_player_configuration.py b/src/pokemon_red_completion/red_player_configuration.py
+--- a/src/pokemon_red_completion/red_player_configuration.py
++++ b/src/pokemon_red_completion/red_player_configuration.py
+@@ -641,6 +641,121 @@
+     # Read-only phase check against the current cartridge facts. This does not
+     # claim field control or write any battle or story memory.
+     return fuji_phase(replace(raw, battle_state=0)) == ("rescue", 4, 149)
++
++
++def _retained_lorelei_dialogue_inventory(runtime, actions, parent):
++    """Admit the proved old terminal after a native Lorelei rematch win."""
++    from .actions import MacroAction, MacroActionKind
++    from .goal_manager import GoalFailureReason
++    from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
++    from .observation import EventFlag, MapId, event_flag_is_set
++    from .red_player_field_goals import _field_ready
++    from .red_player_lesson import capture_player_lesson_snapshot
++
++    reader = runtime.reader
++    raw = reader.read()
++    if (
++        raw.map_id != MapId.LORELEIS_ROOM or raw.battle_state != 0
++        or raw.battle_result != 0 or not any(raw.party_hp or ())
++        or not raw.event_flags or not event_flag_is_set(raw.event_flags, int(EventFlag.BEAT_LORELEI))
++        or not reader.read_input_readiness().ready or not reader.read_bottom_dialogue_box_visible()
++        or runtime.emulator.pressed_buttons
++    ):
++        return None
++    parent = Path(parent)
++    files = tuple(parent / n for n in ('RESULT.json', 'CONTEXT.json', 'terminal.state'))
++    if not all(p.is_file() for p in files):
++        return None
++    result_bytes, context_bytes, state = (p.read_bytes() for p in files)
++    result, context = json.loads(result_bytes), json.loads(context_bytes)
++    state_hash = sha256(state).hexdigest()
++    if (
++        state != runtime.emulator.save_state_bytes() or not checkpoint_quiescent(result)
++        or result.get('continuation_reason') != 'native_execution_error'
++        or result.get('field_ready') is not False
++        or result.get('state_sha256') != state_hash or context.get('state_sha256') != state_hash
++        or result.get('context_sha256') != sha256(context_bytes).hexdigest()
++        or result.get('spent') != context.get('spent') or context.get('cash') != raw.player_money
++    ):
++        return None
++    outcomes = result.get('episode', {}).get('outcomes', ())
++    outcome = outcomes[-1] if outcomes else {}
++    if (
++        outcome.get('selected_kind') != GoalKind.ADVANCE_STORY.value
++        or outcome.get('error_type') != 'TrainerBattleLifecycleError'
++        or outcome.get('error') != 'party, inventory or HP integrity changed'
++        or outcome.get('terminal_state_sha256') != state_hash
++        or outcome.get('after', {}).get('cash') != raw.player_money
++        or raw.player_money - outcome.get('before', {}).get('cash', raw.player_money) != 5544
++    ):
++        return None
++    witnesses = []
++    for path in parent.glob('league-defeat_lorelei/*/endpoint.json'):
++        endpoint = json.loads(path.read_bytes())
++        if endpoint.get('final_state_sha256') != state_hash or endpoint.get('actor_returned_win') is not True:
++            continue
++        battle_bytes = path.with_name('outcome.json').read_bytes()
++        battle = json.loads(battle_bytes)
++        if (canonical_sha256(battle) == endpoint.get('outcome_sha256')
++                and battle.get('battle_won') is True and battle.get('stop_reason') == 'battle_won'
++                and battle.get('final_battle_state') == 0):
++            witnesses.append(path)
++    if len(witnesses) != 1:
++        return None
++
++    before, before_lesson = capture_player_lesson_snapshot(runtime)
++    before_dex = reader.read_pokedex_state().owned_species
++    terminal = None
++    consumed = False
++
++    def check_boundary():
++        now = reader.read()
++        for key in ('map_id', 'player_x', 'player_y', 'battle_state', 'battle_result',
++                    'party_species_ids', 'party_levels', 'party_hp', 'party_max_hp',
++                    'party_status', 'party_pp', 'party_moves', 'bag_items', 'player_money', 'badge_bits'):
++            if getattr(raw, key) != getattr(now, key):
++                raise ValueError('retained Lorelei dialogue changed protected state')
++        if not event_flag_is_set(now.event_flags, int(EventFlag.BEAT_LORELEI)):
++            raise ValueError('retained Lorelei dialogue lost its verified event')
++
++    def execute():
++        nonlocal consumed, terminal
++        if consumed or runtime.emulator.save_state_bytes() != state:
++            raise ValueError('retained Lorelei dialogue is stale')
++        consumed = True
++        start_actions, start_frames = actions.actions_executed, runtime.emulator.frame_count
++        for _ in range(16):
++            check_boundary()
++            if _field_ready(runtime):
++                break
++            if reader.read_bottom_dialogue_box_visible():
++                actions.execute(MacroAction(MacroActionKind.CONFIRM))
++            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=96))
++        check_boundary()
++        after, after_lesson = capture_player_lesson_snapshot(runtime)
++        if (
++            not _field_ready(runtime) or before_lesson != after_lesson
++            or before.collection_observation != after.collection_observation
++            or before_dex != reader.read_pokedex_state().owned_species
++        ):
++            raise ValueError('retained Lorelei dialogue failed field and progress verification')
++        terminal = runtime.emulator.save_state_bytes()
++        return GoalExecutionReport(
++            actions.actions_executed - start_actions, runtime.emulator.frame_count - start_frames,
++            dict(model_queries=0, source_state_sha256=state_hash, retained_native_win=True),
++        )
++
++    def verify(report):
++        if terminal is not None and terminal == runtime.emulator.save_state_bytes() and _field_ready(runtime):
++            return GoalVerification.succeeded()
++        return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
++
++    binding = ExecutableGoalBinding('pokemon.red:retained-lorelei-dialogue:' + state_hash,
++                                    GoalKind.RECOVER_CONTROL, 0.04, 0.02, execute, verify)
++    blocked = GoalOpportunity(binding.binding_ref + ':settlement-only', GoalKind.ADVANCE_STORY,
++                              GoalAvailability.UNAVAILABLE,
++                              unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED)
++    return GoalBindingSet((binding.opportunity, blocked), (binding,))
+ 
+ 
+ def _retained_capture_inventory(runtime, actions, *, parent, output):
+@@ -1275,13 +1390,6 @@
+ 
+     income_declaration = (json.loads(Path(plan_path).read_bytes())
+         if Path(plan_path).is_file() else {})
+-    coverage = income_declaration.get("regional_coverage", False)
+-    cost_horizon = income_declaration.get("collection_cost_frame_horizon")
+-    if cost_horizon is not None and (type(cost_horizon) is not int or cost_horizon < 1
+-            or model_feature_version < 9 or income_declaration.get("partition") != "development"):
+-        raise ValueError("collection cost measurement requires a development level-workload model")
+-    if type(coverage) is not bool or (coverage and income_declaration.get("partition") != "development"):
+-        raise ValueError("regional coverage is an explicit development comparison")
+     if income_declaration.get("native_owned_stock_income") is not None and (
+         training_admission is not None or scoped_train_composition is not None
+     ):
+@@ -1312,8 +1420,6 @@
+             else {}
+         ),
+         **({"include_level_workload": True} if model_feature_version >= 9 else {}),
+-        **({"regional_coverage": True} if coverage else {}),
+-        **({"observe_collection_cost": True} if cost_horizon is not None else {}),
+         **({"include_capture_invocation": True} if model_feature_version >= 13 else {}),
+         **({"include_matchup_observation": True} if model_feature_version >= 15 else {}),
+         **(
+@@ -1492,6 +1598,9 @@
+         if retained is not None:
+             return retained
+         if training_admission is None:
++            retained = _retained_lorelei_dialogue_inventory(args[0], args[1], parent)
++            if retained is not None:
++                return retained
+             retained = _retained_wild_faint_inventory(
+                 args[0],
+                 args[1],
+diff --git a/src/pokemon_red_completion/red_regional_acquisition.py b/src/pokemon_red_completion/red_regional_acquisition.py
+--- a/src/pokemon_red_completion/red_regional_acquisition.py
++++ b/src/pokemon_red_completion/red_regional_acquisition.py
+@@ -219,7 +219,6 @@
+     unsupported_remote_maps: frozenset[int] = frozenset(),
+     interruption_handler_wrapper=None,
+     quote_capture_route_work: bool = False,
+-    regional_coverage: bool = False,
+ ) -> tuple[RedRegionalAcquisitionCandidate, ...]:
+     """Return up to four nearby, fully verified ordinary-grass options.
+ 
+@@ -236,8 +235,6 @@
+         raise TypeError("capture interruption wrapper must be callable")
+     if type(quote_capture_route_work) is not bool:
+         raise TypeError("capture route-work quote permission must be boolean")
+-    if type(regional_coverage) is not bool:
+-        raise TypeError("regional coverage comparison requires a boolean")
+     before = actions.actions_executed, runtime.emulator.frame_count
+     record = getattr(actions, "record_diagnostic_event", None)
+ 
+@@ -284,20 +281,6 @@
+         fly_origins=fly_origins,
+         record_diagnostic_event=(lambda kind, payload: audit(kind, **payload)),
+     )
+-    if regional_coverage:
+-        from .red_regional_coverage import diversify_regional_sources, missing_grass_targets
+-
+-        if not registered:
+-            raise ValueError("regional coverage requires a registered collection objective")
+-        policy = runtime.registration_policy
+-        missing = policy.targets - policy.goal_registered(observation.collection_observation)
+-        opportunities = missing_grass_targets(world.rom, missing)
+-        eligible_maps = {m for _,m in ranked_sources if (m == raw_map or m not in unsupported_remote_maps)
+-                         and not closed_remote_cave_entry(world.rom, runtime.reader, current_map=raw_map, target_map=m)}
+-        ranked_sources, alternate = diversify_regional_sources(ranked_sources, opportunities, eligible_maps)
+-        audit("regional_registration_coverage", missing_count=len(missing), comparison=alternate,
+-              route_evaluation_limit=MAXIMUM_ROUTED_SOURCE_EVALUATIONS,
+-              candidate_limit=TARGET_SOURCE_CANDIDATES, native_availability_checked_separately=True)
+     candidates: list[RedRegionalAcquisitionCandidate] = []
+     routed_source_evaluations = 0
+     route_plan_cache: dict[
+diff --git a/src/pokemon_red_completion/red_run_spectator.py b/src/pokemon_red_completion/red_run_spectator.py
+--- a/src/pokemon_red_completion/red_run_spectator.py
++++ b/src/pokemon_red_completion/red_run_spectator.py
+@@ -501,12 +501,7 @@
+             party.append(
+                 DashboardPartyMember(index + 1, _species(species), level, hp, maximum, label)
+             )
+-        spent = (
+-            (terminal.get("spent") if closed else None)
+-            or checkpoint.get("spent")
+-            or plan.get("inherited_spent")
+-            or {}
+-        )
++        spent = (terminal.get("spent") if closed else None) or checkpoint.get("spent") or {}
+         registered = _count(native.get("registrations"))
+         if not native and diag.get("collection_ledger"):
+             registered = len(diag["collection_ledger"].get("local_registered_species") or [])
+@@ -569,52 +564,8 @@
+                 decisions=totals["model_decisions"],
+             ),
+         )
+-        splits = self.document(root / "milestone-splits.json")
+-        split_error = None
+-        if not splits and segments:
+-            from .red_milestone_splits import merge_native_segment_splits
+-            reports = [self.document(segment / "native" / "milestone-splits.json") for segment in segments]
+-            reports = [report for report in reports if report]
+-            if reports:
+-                try:
+-                    splits = merge_native_segment_splits(reports)
+-                except (KeyError, TypeError, ValueError) as error:
+-                    split_error = str(error)
+-        if splits and splits.get("scope") == "checkpoint":
+-            checkpoint_splits = splits
+-            from .red_milestone_splits import fresh_start_split_projection,extend_split_history
+-            try:
+-                if plan.get("schema") == "pokemon.red.fresh-frozen-player-plan.v1":
+-                    splits=fresh_start_split_projection(root,splits)
+-                prefix_ref=plan.get("milestone_split_prefix")
+-                if prefix_ref:
+-                    import hashlib
+-                    payload=Path(prefix_ref["path"]).read_bytes()
+-                    if hashlib.sha256(payload).hexdigest()!=prefix_ref["sha256"]:raise ValueError("split prefix digest differs")
+-                    campaign_id=plan.get("campaign_run_id")
+-                    splits=dict(splits,identity=dict(splits.get("identity")or{},campaign_run_id=campaign_id))
+-                    splits=extend_split_history(splits,json.loads(payload),campaign_run_id=campaign_id)
+-            except (OSError,KeyError,TypeError,ValueError) as error:
+-                split_error=str(error)
+-                splits=checkpoint_splits
+-        if not splits and plan.get("launch_authorized") is False and not running and not closed:
+-            from .red_milestone_splits import pending_milestone_splits
+-            target_species=plan.get("required_species")
+-            if isinstance(target_species,list) and len(target_species)==124:
+-                splits=pending_milestone_splits(target_species)
+-        build_label = _text(plan.get("build_label"), "Selected build")
+-        recipe = plan.get("development_source_recipe")
+-        if isinstance(recipe, dict):
+-            folder = Path(str(recipe.get("path", ""))).parent.name
+-            version = re.fullmatch(r"normal-collection-campaign-successor-v(\d+)", folder)
+-            digest = recipe.get("sha256")
+-            if version and isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest):
+-                build_label = f"Collection V{version[1]} · {digest[:12]}"
+         metadata = dict(
+             id=root.name,
+-            seed=plan.get("seed") if type(plan.get("seed")) is int else None,
+-            operator_repairs=plan.get("operator_repairs") if type(plan.get("operator_repairs")) is int else None,
+-            build_label=build_label,
+             lifecycle="stopped" if closed else "running" if running else "not_connected",
+             badges=badges,
+             badge_bits=badge_bits,
+@@ -643,8 +594,6 @@
+             recent=recent[-10:],
+             weights_updated=0,
+             checkpoint_only=True,
+-            milestone_split_error=split_error,
+-            milestone_splits=splits if splits.get("schema") == "pokemon.red.milestone-splits.v1" else None,
+         )
+         return snapshot, metadata
+ 
+@@ -652,28 +601,19 @@
+ class RunViewerState(DashboardRelayState):
+     """Join only this run's metadata with the same run's optional live frames."""
+ 
+-    def __init__(self, reader: RedRunReader, *, live_port: int, baseline_reader: RedRunReader | None = None) -> None:
++    def __init__(self, reader: RedRunReader, *, live_port: int) -> None:
+         self.reader = reader
+-        self.baseline_reader = baseline_reader
+         self._retained_frame: bytes | None = None
+         self._retained_at = 0.0
+         self._retained_version = 0
+         self._retained_token: tuple[object, object] | None = None
+         snapshot, self.run_metadata = reader.read()
+-        self._apply_split_reference()
+         super().__init__(snapshot, live_port=live_port)
+ 
+     def refresh(self) -> None:
+         snapshot, self.run_metadata = self.reader.read()
+-        self._apply_split_reference()
+         self.publish(snapshot)
+         self.poll()
+-
+-    def _apply_split_reference(self) -> None:
+-        if self.baseline_reader is not None:
+-            from .red_milestone_splits import attach_split_reference
+-            _,reference=self.baseline_reader.read()
+-            self.run_metadata=attach_split_reference(self.run_metadata,reference)
+ 
+     def poll(self) -> bool:
+         connected = super().poll()
+diff --git a/src/pokemon_red_completion/red_scoped_training_battlers.py b/src/pokemon_red_completion/red_scoped_training_battlers.py
+--- a/src/pokemon_red_completion/red_scoped_training_battlers.py
++++ b/src/pokemon_red_completion/red_scoped_training_battlers.py
+@@ -45,8 +45,6 @@
+     _pool: "ScopedTrainingBattlers"
+ 
+     def pp_reentry_screen_active(self, authority):
+-        if self.development_story_scope is not None:
+-            return super().pp_reentry_screen_active(authority)
+         if not self._pool._allow_train_pp_reentry:
+             return super().pp_reentry_screen_active(authority)
+         # Explicit pool-only reuse of K's existing PP protection. This does not
+@@ -107,8 +105,6 @@
+         initial: BattleAftermath | None = None,
+         native_plan_sha256: str | None = None,
+         allow_train_pp_reentry: bool = False,
+-        story_admission=None,
+-        story_overrides: tuple[FrozenTrainerBattler, ...] = (),
+     ) -> "ScopedTrainingBattlers":
+         """Bind a fresh ordinary K prototype to caller-authenticated source metadata.
+ 
+@@ -160,8 +156,6 @@
+             initial=initial,
+             native_plan_sha256=native_plan_sha256,
+             allow_train_pp_reentry=allow_train_pp_reentry,
+-            story_admission=story_admission,
+-            story_overrides=story_overrides,
+         )
+ 
+     @classmethod
+@@ -216,7 +210,6 @@
+         native_plan_sha256: str | None = None,
+         story_overrides: tuple[FrozenTrainerBattler, ...] = (),
+         production_admission=None,
+-        story_admission=None,
+         production_reader=None,
+         allow_train_pp_reentry: bool = False,
+     ) -> None:
+@@ -225,15 +218,6 @@
+         ):
+             raise ValueError("scoped TRAIN PP screen requires separate explicit pool authority")
+         self._allow_train_pp_reentry = allow_train_pp_reentry
+-        if story_admission is not None:
+-            from .red_production_train_admission import ScopedProductionStoryAdmission
+-            if type(story_admission) is not ScopedProductionStoryAdmission or production_admission is not None:
+-                raise ValueError('production story pool needs its exact separate admission')
+-            story_admission.require_source(dict(partition='train',state_sha256=prototype.source_state_sha256,
+-                origin_sha256=story_admission.document()['source_origin_sha256'],source_commit=prototype.source_commit,
+-                experiment_sha256=experiment_sha256))
+-            if prototype.root_lineage_id!=story_admission.document()['root_lineage_id']:
+-                raise ValueError('production story pool root differs')
+         self._production_admission = production_admission
+         self._production_reader = production_reader
+         if production_admission is not None:
+@@ -292,7 +276,6 @@
+                 type(actor) is not FrozenTrainerBattler
+                 or (
+                     production_admission is None
+-                    and story_admission is None
+                     and type(actor.train_risk_story_scope) is not TrainRiskStoryScope
+                 )
+                 or type(actor.calls) is not int
+@@ -304,7 +287,6 @@
+                 or actor.public_species_base_stats != prototype.public_species_base_stats
+                 or (
+                     production_admission is None
+-                    and story_admission is None
+                     and (
+                         actor.train_risk_story_scope is None
+                         or actor.train_risk_story_scope.experiment_sha256 != experiment_sha256
+@@ -319,11 +301,6 @@
+                 )
+             ):
+                 raise ValueError("TRAIN story override differs from the declared lesson")
+-            if story_admission is not None:
+-                scope=actor.development_story_scope
+-                if scope is None or scope.train_admission is not story_admission:
+-                    raise ValueError('production story override lacks exact source witness')
+-                story_admission.require_actor(actor,scope,'story')
+             contract = actor.require_train_story_scope()
+             if contract not in contracts or contract in overrides:
+                 raise ValueError("TRAIN story override is undeclared or duplicated")
+@@ -411,12 +388,6 @@
+                 if scope is None:
+                     raise ValueError("production actor lacks its declared development scope")
+                 record["production_scope"] = scope.document()
+-        if story_admission is not None:
+-            declaration['schema']='pokemon.red.scoped-train-battlers.v4'
+-            declaration['production_story_admission']=story_admission.document()
+-            for record,actor in zip(actor_records,self._actors,strict=True):
+-                if actor.development_story_scope is not None:
+-                    record['production_scope']=actor.development_story_scope.document()
+         self.declaration_sha256 = canonical_sha256(declaration)
+         self.output.mkdir(mode=0o700, exist_ok=False)
+         _record(self.output / "declaration.json", declaration)
+diff --git a/src/pokemon_red_completion/red_trainer_funding_battle.py b/src/pokemon_red_completion/red_trainer_funding_battle.py
+--- a/src/pokemon_red_completion/red_trainer_funding_battle.py
++++ b/src/pokemon_red_completion/red_trainer_funding_battle.py
+@@ -257,6 +257,7 @@
+     prospective_story_recovery: bool = False,
+     story_income_recovery: bool = False,
+     preparation_evolution_guard=None,
++    league_evolution_rom=None,
+ ) -> TrainerFundingBattleReceipt:
+     """Execute a prepared trainer with shared identity/resource/victory checks.
+ 
+@@ -380,6 +381,21 @@
+                 or not story_income_recovery or maximum_full_restores or resume_active_battle
+                 or resume_pending_dialogue or validate_scripted_dialogue is not None):
+             raise ValueError("level evolution requires explicit qualified K preparation")
++
++    if league_evolution_rom is not None:
++        from .red_trainer_evolution import RedTrainerEvolutionGuard
++
++        if (
++            not isinstance(owner, FrozenLoreleiStoryController)
++            or not allow_faints
++            or not isinstance(league_evolution_rom, bytes)
++            or not league_evolution_rom
++            or preparation_evolution_guard is not None
++        ):
++            raise ValueError("League evolution requires the bound learned story controller")
++        preparation_evolution_guard = RedTrainerEvolutionGuard.from_rom(
++            league_evolution_rom, owner.battler.session
++        )
+ 
+     validate_target()
+ 
+@@ -585,6 +601,7 @@
+             label="trainer funding battle",
+             consume_battle_start_schedule=False,
+             move_decision_guard=_guard,
++            **({"evolution_rom": league_evolution_rom} if league_evolution_rom is not None else {}),
+         )
+     except FrozenTrainerTerminalUnverified:
+         if intent.battle_plan_id != "ordinary-trainer-funding":
+diff --git a/src/pokemon_red_completion/red_trainer_story.py b/src/pokemon_red_completion/red_trainer_story.py
+--- a/src/pokemon_red_completion/red_trainer_story.py
++++ b/src/pokemon_red_completion/red_trainer_story.py
+@@ -44,7 +44,7 @@
+ from .quest import Specialist
+ from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
+ from .red_goal_manager import RedGoalObservation
+-from .red_lorelei_story import story_league_controller
++from .red_lorelei_story import FrozenLoreleiStoryController, story_league_controller
+ from .red_pc_storage import face_pc_boundary
+ from .red_routed_recovery import RecoveryRouteInterruptionHandler
+ from .red_trainer_control import RedTrainerPartyController
+@@ -176,7 +176,6 @@
+     _arrival: ScriptedTrainerArrival | None = field(default=None, init=False)
+     _prepared_reentry: bool = field(default=False, init=False)
+     _prepared_level_deficit: int = field(default=5, init=False)
+-    _prepared_allow_uncovered_later: bool = field(default=False, init=False)
+     _lobby_events: bytes | None = field(default=None, init=False)
+     _lobby_reset_latch: bool | None = field(default=None, init=False)
+     _scripted_triggers: tuple[tuple[int, int], ...] = field(default=(), init=False)
+@@ -532,7 +531,6 @@
+         self._prepared_rematch = self.rematch
+         self._prepared_reentry = self.allow_scripted_reentry or self.development_retry_reentry
+         self._prepared_level_deficit = self.maximum_level_deficit
+-        self._prepared_allow_uncovered_later = self.allow_uncovered_later
+         self._prepared_learned_controller = story_league_controller(
+             self.runtime, self.objective_id, rematch=self.rematch,
+         )
+@@ -627,7 +625,7 @@
+                     self.allow_scripted_reentry or self.development_retry_reentry)):
+             raise RedTrainerStoryError("story origin or battle authority changed before input")
+         if (self._prepared_level_deficit != self.maximum_level_deficit
+-                or self.allow_uncovered_later != self._prepared_allow_uncovered_later):
++                or self.allow_uncovered_later != preparation.allow_uncovered_later):
+             raise RedTrainerStoryError("prepared level-screen declaration changed before input")
+         if self._prepared_blocks is not None and (
+             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
+@@ -776,6 +774,12 @@
+         if not self._scripted_triggers:
+             face_pc_boundary(actions, reader, target.interaction_facing.value)
+         controller = self._battle_controller(reader)
++        battle_start = self.runtime.adapter.observe()
++        evolution_guard = None
++        if isinstance(controller, FrozenLoreleiStoryController):
++            from .red_trainer_evolution import RedTrainerEvolutionGuard
++
++            evolution_guard = RedTrainerEvolutionGuard.from_rom(world.rom, self.runtime.emulator)
+         receipt = self._run_prepared_battle(
+             controller, reader, actions, target=target, validate_target=require_target,
+             move_slot_policy=recovery_guard._safe_trainer_move,
+@@ -792,6 +796,8 @@
+             validate_scripted_dialogue=scripted_dialogue,
+             maximum_full_restores=self.maximum_full_restores,
+             prospective_story_recovery=bool(self.maximum_full_restores),
++            **({"league_evolution_rom": world.rom}
++               if isinstance(controller, FrozenLoreleiStoryController) else {}),
+         )
+         spent = (
+             controller.heals_claimed if self.maximum_full_restores else 0
+@@ -806,10 +812,16 @@
+                 projected_events=self._lobby_events,
+                 lobby_reset_verified=getattr(traversal,"verified",False))
+         ) if self.rematch else self.expected_facts.issubset(after.game_state.facts)
++        from .red_routed_trainer_funding import _funding_evolution_ledger
++
++        ledger = _funding_evolution_ledger(
++            evolution_guard, battle_start, after,
++            tuple(battle_start.raw.party_species_ids or ()),
++            dependency_specimen_ledger(before.collection_observation),
++        )
+         if (
+             not after.input_ready or after.raw.battle_state
+-            or dependency_specimen_ledger(after.collection_observation)
+-            != dependency_specimen_ledger(before.collection_observation)
++            or ledger is None
+             or not event_verified
+             or after.raw.badge_bits != before.raw.badge_bits
+             or after.raw.bag_items != expected_bag
+diff --git a/src/pokemon_red_completion/route_plan.py b/src/pokemon_red_completion/route_plan.py
+--- a/src/pokemon_red_completion/route_plan.py
++++ b/src/pokemon_red_completion/route_plan.py
+@@ -18,8 +18,7 @@
+ from collections.abc import Mapping
+ from contextlib import contextmanager
+ from contextvars import ContextVar
+-from dataclasses import dataclass, replace
+-import sys
++from dataclasses import dataclass
+ from types import MappingProxyType
+ 
+ from pokemon_red_completion.actions import MacroAction, MacroActionKind
+@@ -64,11 +63,9 @@
+         self.queries = {}
+         self.searches = OrderedDict()
+         self.projections = {}
+-        self.warp_projections = {}
+         self.equivalent_graphs = {}
+         self.canonical_by_identity = {}
+         self.route_macro_graphs = {}
+-        self.macro_projections = {}
+         self.route_worlds = {}
+         self.routes = {}
+         self.route_invalidated = False
+@@ -122,25 +119,6 @@
+         self.canonical_by_identity[identity] = canonical
+         return canonical
+ 
+-    def retain_macro_graph(self, graph):
+-        identity = id(graph)
+-        state = (
+-            dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
+-            dict(graph.retained_outside_overrides),
+-            None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+-            None if graph.warp_triggers is None else dict(graph.warp_triggers),
+-        )
+-        previous = self.route_macro_graphs.get(identity)
+-        if previous is not None:
+-            if previous[0] is not graph or previous[1] != state:
+-                self.invalidated = self.route_invalidated = True
+-                raise RoutePlanningError("read-only route inventory changed a macro graph")
+-            return True
+-        if len(self.route_macro_graphs) >= 128:
+-            return False
+-        self.route_macro_graphs[identity] = graph, state
+-        return True
+-
+     def route_key(
+         self,
+         graph,
+@@ -164,8 +142,22 @@
+         ):
+             return None
+         macro_id, world_id = id(graph), id(local_graphs)
+-        if not self.retain_macro_graph(graph):
+-            return None
++        state = (
++            dict(graph.edges),
++            graph.outside_nodes,
++            dict(graph.warp_locations),
++            dict(graph.retained_outside_overrides),
++            None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
++            None if graph.warp_triggers is None else dict(graph.warp_triggers),
++        )
++        previous = self.route_macro_graphs.get(macro_id)
++        if previous is not None and (previous[0] is not graph or previous[1] != state):
++            self.invalidated = self.route_invalidated = True
++            raise RoutePlanningError("read-only route inventory changed a macro graph")
++        if previous is None:
++            if len(self.route_macro_graphs) >= 128:
++                return None
++            self.route_macro_graphs[macro_id] = (graph, state)
+         previous_world = self.route_worlds.get(world_id)
+         if previous_world is not None and (
+             previous_world[0] is not local_graphs
+@@ -234,21 +226,6 @@
+             self.projections[key] = projected
+         return projected
+ 
+-    def warp_projection(self, graph, warps, start, retained):
+-        # Off-warp starts all make the same tiles absorbing. A start on a
+-        # warp still needs its exact boundary exit and cannot share this key.
+-        if not warps:
+-            return graph, retained
+-        key = (id(graph), warps, start if start in warps else None)
+-        previous = self.warp_projections.get(key) if retained else None
+-        if previous is not None:
+-            return previous, self._retain_graph(previous)
+-        projected = without_warp_transit(graph, warps, start_at=start)
+-        projected_retained = self._retain_graph(projected)
+-        if retained and projected_retained and len(self.warp_projections) < _MAX_LOCAL_INVENTORY_SEARCHES:
+-            self.warp_projections[key] = projected
+-        return projected, projected_retained
+-
+     def paths(self, graph, warps, start, goals, capabilities, mode):
+         warps, goals = frozenset(warps), frozenset(goals)
+         graph = self.canonical_graph(graph)
+@@ -266,7 +243,8 @@
+         self.misses += 1
+         entry = self.searches.get(search_key)
+         if entry is None:
+-            projected, projected_retained = self.warp_projection(graph, warps, start, retained)
++            projected = without_warp_transit(graph, warps, start_at=start)
++            projected_retained = self._retain_graph(projected)
+             search = None
+             if (
+                 retained
+@@ -371,30 +349,12 @@
+         cache.searches.clear()
+         cache.routes.clear()
+         cache.route_macro_graphs.clear()
+-        cache.macro_projections.clear()
+         cache.route_worlds.clear()
+         cache.queries.clear()
+         cache.projections.clear()
+-        cache.warp_projections.clear()
+         cache.equivalent_graphs.clear()
+         cache.canonical_by_identity.clear()
+         cache.graphs.clear()
+-
+-
+-def without_macro_departures(graph: MacroGraph, map_id: int) -> MacroGraph:
+-    """Share an identical observed restriction only for the lifetime of one read-only menu."""
+-    cache = _FROZEN_LOCAL_ROUTE_CACHE.get()
+-    if cache is None or type(graph) is not MacroGraph or not cache.retain_macro_graph(graph):
+-        return replace(graph, edges={**graph.edges, map_id: ()})
+-    key = (id(graph), map_id)
+-    projected = cache.macro_projections.get(key)
+-    if projected is None:
+-        projected = replace(graph, edges={**graph.edges, map_id: ()})
+-        if cache.retain_macro_graph(projected):
+-            cache.macro_projections[key] = projected
+-    else:
+-        cache.retain_macro_graph(projected)
+-    return projected
+ 
+ 
+ @dataclass(frozen=True, slots=True)
+@@ -727,9 +687,6 @@
+         )
+         for map_id, local in local_graphs.items()
+     }
+-    # A caller may be exploring an alternative inside its own exception handler.
+-    # Re-raising a plain cached failure attaches that caller's current context.
+-    ambient_error = sys.exception() if route_key is not None else None
+     try:
+         result = _find_composed_route(
+             graph,
+@@ -751,8 +708,7 @@
+             and len(inventory_cache.routes) < 1024
+             and type(error) is RoutePlanningError
+             and error.__cause__ is None
+-            and error.__context__ is ambient_error
+-            and not error.__suppress_context__
++            and error.__context__ is None
+         ):
+             inventory_cache.routes[route_key] = (False, error.args)
+         raise
+diff --git a/src/pokemon_red_completion/strategic_navigation_scenario_runtime.py b/src/pokemon_red_completion/strategic_navigation_scenario_runtime.py
+--- a/src/pokemon_red_completion/strategic_navigation_scenario_runtime.py
++++ b/src/pokemon_red_completion/strategic_navigation_scenario_runtime.py
+@@ -65,7 +65,6 @@
+     RoutePlan,
+     RoutePlanningError,
+     plan_route,
+-    without_macro_departures,
+     without_warp_transit,
+ )
+ from pokemon_red_completion.semantic_traversal import apply_local_passage_requirements
+@@ -214,7 +213,7 @@
+     if raw.map_id != elevator:
+         # A selected return is not a promise about a future elevator visit.
+         if graph.edges.get(elevator):
+-            return without_macro_departures(graph, elevator)
++            return replace(graph, edges={**graph.edges, elevator: ()})
+         return graph
+     maps = map_graph(rom)
+     source = maps[elevator]
+@@ -557,7 +556,8 @@
+     ) -> RoutePlan:
+         elevator = int(MapId.SILPH_CO_ELEVATOR)
+         if start.map_id != elevator and self.macro_graph.edges.get(elevator):
+-            scoped = replace(self, macro_graph=without_macro_departures(self.macro_graph, elevator))
++            scoped = replace(self, macro_graph=replace(
++                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+             return scoped._plan_candidate(start, goal_map, goal_at=goal_at, blocked=blocked)
+         try:
+             return plan_route(
+@@ -738,7 +738,8 @@
+             raise TypeError("scenario relocation goal must be a non-negative map ID")
+         elevator = int(MapId.SILPH_CO_ELEVATOR)
+         if start.map_id != elevator and self.macro_graph.edges.get(elevator):
+-            scoped = replace(self, macro_graph=without_macro_departures(self.macro_graph, elevator))
++            scoped = replace(self, macro_graph=replace(
++                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+             return scoped._bounded_single_cut_plan(start, goal_map, goal_at=goal_at)
+         # A prospective approach has no authority to resolve a trainer fight.
+         # Reserve the complete observed sight lanes, not only solid objects or

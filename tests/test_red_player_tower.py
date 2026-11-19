@@ -466,7 +466,7 @@ def test_ordinary_wild_can_interrupt_the_final_step_before_the_ghost(monkeypatch
 
 
 @pytest.mark.parametrize("phase", ["rescue", "flute"])
-@pytest.mark.parametrize("fault", [None, "missing", "cash", "hp", "bag", "object"])
+@pytest.mark.parametrize("fault", [None, "missing", "cash", "hp", "bag", "object", "after_facing"])
 def test_fuji_interaction_readonly_admission_and_exact_outcome(monkeypatch, phase, fault):
     index = 4 if phase == "rescue" else 5
     raw = N(
@@ -481,11 +481,12 @@ def test_fuji_interaction_readonly_admission_and_exact_outcome(monkeypatch, phas
         player_money=100,
         badge_bits=15,
     )
+    target_visible = [fault != "object"]
     rt = N(
         reader=N(
             read=lambda: N(**raw.__dict__),
             read_current_map_objects=lambda: (
-                N(sprite_index=index, picture_id=23 if fault == "object" else 22, at=(1, 3)),
+                N(sprite_index=index, picture_id=22 if target_visible[0] else 23, at=(1, 3)),
             ),
         ),
         emulator=N(
@@ -502,7 +503,12 @@ def test_fuji_interaction_readonly_admission_and_exact_outcome(monkeypatch, phas
         lambda *a: (N(object_index=index, sprite_id=22, at=(1, 3), y=1, x=3),),
     )
     monkeypatch.setattr(s, "_origin", lambda *a: None)
-    monkeypatch.setattr(s, "face_pc_boundary", lambda *a: None)
+    def settle_facing(runtime, executor, direction):
+        assert runtime is rt and executor is actions
+        if fault == "after_facing":
+            target_visible[0] = False
+
+    monkeypatch.setattr(s, "face_field_item_boundary", settle_facing)
     monkeypatch.setattr(s, "capture_player_lesson_snapshot", lambda *a: None)
 
     @dataclass
@@ -545,6 +551,8 @@ def test_fuji_interaction_readonly_admission_and_exact_outcome(monkeypatch, phas
     if fault:
         with pytest.raises(ValueError):
             binding.execute()
+        if fault == "after_facing":
+            assert actions.actions_executed == 0
     else:
         report = binding.execute()
         assert binding.verify(report).status.value == "succeeded"

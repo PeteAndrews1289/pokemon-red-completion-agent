@@ -40,7 +40,8 @@ EXPORT_KEYS = (
     ]
     + ["missing:" + k for k in EXPORT_KEYS],
 )
-def test_actual_chunk_binds_limits_and_pairs_export(tmp_path, monkeypatch, fault):
+@pytest.mark.parametrize("recurrence", [False, True])
+def test_actual_chunk_binds_limits_and_pairs_export(tmp_path, monkeypatch, fault, recurrence):
     r = receipt()
     payload = b"fake-port-terminal"
     state_sha = sha256(payload).hexdigest()
@@ -64,6 +65,7 @@ def test_actual_chunk_binds_limits_and_pairs_export(tmp_path, monkeypatch, fault
     )
 
     def fake_native(**kwargs):
+        assert kwargs["movement_revisit_saturation"] is recurrence
         seen.append(kwargs["limits"])
         return copy.deepcopy(r["episode"])
 
@@ -100,7 +102,8 @@ def test_actual_chunk_binds_limits_and_pairs_export(tmp_path, monkeypatch, fault
         "native_player_options",
         lambda *a: dict(greedy_selection=True, resume_branch_refinement_after_settlement=False),
     )
-    monkeypatch.setattr(driver, "player_wiring_declaration", lambda *a: {})
+    monkeypatch.setattr(driver, "player_wiring_declaration",
+                        lambda *a: {"movement_revisit_saturation": recurrence})
     monkeypatch.setattr(driver, "_field_ready", lambda *a: True)
     monkeypatch.setattr(driver, "native_checkpoint_facts", lambda *a: {})
     monkeypatch.setattr(driver, "capture_player_continuation", capture)
@@ -125,7 +128,7 @@ def test_actual_chunk_binds_limits_and_pairs_export(tmp_path, monkeypatch, fault
 
     def execute():
         return driver.execute_player_chunk(
-            plan={"seed": 1},
+            plan={"seed": 1, "movement_revisit_saturation": recurrence},
             configuration=NS(sha256="c" * 64),
             c=NS(digest=lambda p: sha256(p.read_bytes()).hexdigest()),
             emulator=em,

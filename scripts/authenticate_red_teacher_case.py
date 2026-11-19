@@ -19,6 +19,128 @@ def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
+def verify_partial_teacher_outcome(outcome):
+    """Read the recorder's public target-array schema without inventing fields."""
+    import math
+
+    names = [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss",
+    ]
+    assert outcome["schema"] == "pokemon.core.living-dex-observed-outcome.v1"
+    assert outcome["status"] == "settled" and outcome["censor_reason"] is None
+    assert outcome["target_names"] == names
+    values = outcome["target_values"]
+    assert type(values) is list and len(values) == len(names)
+    assert all(type(v) in (int, float) and math.isfinite(v) and 0 <= v <= 1 for v in values)
+    assert values[:3] == [1.0, 0.0, 0.0]
+
+
+def verify_venue_teacher_outcome(plan, result, document, decision, setup=None):
+    """Authenticate one measured TRAIN arm; a pair still needs separate admission."""
+    high_level = plan["schema"] == "pokemon.red.native-venue-workload-TRAIN-case.v2"
+    assert high_level or plan["schema"] == "pokemon.red.native-venue-geometry-TRAIN-case.v1"
+    assert result["teacher_selected"] is True
+    model_mode = plan.get("sources", [{}])[0].get("venue_mode", "teacher") == "model"
+    partition = plan.get("sources", [{}])[0].get("execution_partition", "train")
+    admission = not model_mode and partition == "train" and not plan.get("validation_role")
+    assert result["training_admission"] is admission
+    assert result["new_fits"] == result["new_weights"] == 0
+    assert result["copy_back"] is False and result["campaign_progress"] is False
+    assert document["fit_eligible"] is admission and document["actual_progress"] is False
+    assert document["settled_native_attempt"] is True
+    assert document["controller_costs_are_full_native_totals"] is True
+    assert document["frames"] == result["frames"] and document["actions"] == result["actions"]
+    assert document["terminal_state_sha256"] == result["terminal_sha256"]
+    assert document["prospective_binding"] == decision["binding"]
+    assert document["candidate_set"] == decision["candidate_set"]
+    assert (
+        decision["teacher_forced_venue"] is (not model_mode)
+        and decision["outcomes_not_opened"] is True
+    )
+    assert document["assigned_index"] == decision["assigned_index"]
+    if model_mode:
+        assert plan["validation_role"] == document["validation_role"]
+        assert plan["validation_role"] in {
+            "exposed-TRAIN-component-no-admission",
+            "exposed-TRAIN-component-comparison-only",
+        }
+        if plan["validation_role"] == "exposed-TRAIN-component-comparison-only":
+            assert plan["fit_allowed"] is False and plan["diagnostic_only"] is True
+            assert plan["party_venue_fit_eligible"] is False
+        assert document["model_selected_venue"] is True
+        assert high_level or plan["sources"][0]["xp_condition"] == "original"
+        events = result["native_outcome"]["venue_choice_events"]
+        assert len(events) == 1
+        event = events[0]["payload"]
+        assert event["actor"] == "learned_venue_model" and event["model_selected"] is True
+        assert event["model_sha256"] == decision["model_sha256"] == plan["venue_model_sha256"]
+        assert event["selected_index"] == decision["assigned_index"]
+        assert event["candidate_count"] == len(decision["candidate_set"]["candidates"])
+        assert event["candidate_count"] == (
+            3 if high_level or plan.get("ordinary_full_venue_menu") else 2
+        )
+        # The existing live selector leaves optional geometry unknown. This
+        # candidate freezes those rows at zero; require every other covariate.
+        actual_menu = event["candidate_set"]
+        quoted_menu = decision["candidate_set"]
+        for actual, quoted in zip(
+            actual_menu["candidates"], quoted_menu["candidates"], strict=True
+        ):
+            assert actual["candidate_index"] == quoted["candidate_index"]
+            assert actual["feature_schema_id"] == quoted["feature_schema_id"]
+            af, qf = actual["features"], quoted["features"]
+            assert set(af) == set(qf)
+            assert all(
+                af[name] == qf[name]
+                for name in af
+                if not name.startswith(("venue.travel_steps", "venue.recovery_steps"))
+            )
+    assert decision["binding"]["partition"] == partition
+    if partition == "development":
+        assert plan["source_kind"] == "exposed_historical_development"
+        assert plan["validation_role"] == "related-DEV-matched-component-no-admission"
+        assert plan["sources"][0]["xp_condition"] == "original"
+    expected = plan["source_sha256"]
+    if plan.get("sources", [{}])[0].get("xp_condition", "original") != "original":
+        assert setup is not None
+        assert setup["partition"] == setup["evaluation_partition"] == "train"
+        assert setup["teacher_only"] is True
+        if high_level:
+            assert setup["xp_condition"] == "fixture_level"
+            assert setup["current_level"] == plan["sources"][0]["fixture_level"]
+            assert setup["non_target_party_fields_unchanged"] is True
+            assert setup["native_protected_party_fields_unchanged"] is False
+            assert setup["writes"] and plan["allow_direct_evolution"] is True
+        else:
+            assert setup["xp_condition"] == "near_next_level"
+        assert setup["original_state_sha256"] == plan["source_sha256"]
+        assert setup["frames"] == setup["inputs"] == 0
+        if not high_level:
+            assert setup["native_protected_party_fields_unchanged"] is True
+        if high_level:
+            # The witness reader reconciles the ordinary nursing prefix against
+            # sealed inputs. Setup and prospective-menu states are distinct.
+            prefix = decision["common_prefix_inputs"]
+            frames = decision["common_prefix_frames"]
+            assert type(prefix) is int and 0 <= prefix <= result["actions"]
+            assert type(frames) is int and 0 <= frames <= result["frames"]
+            assert decision["all_common_prefix_costs_included"] is True
+            if prefix == 0:
+                assert frames == 0 and setup["state_sha256"] == decision["state_sha256"]
+        else:
+            assert setup["state_sha256"] == decision["state_sha256"]
+        expected = setup["state_sha256"]
+    assert decision["binding"]["initial_state_sha256"] == expected
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spec", type=Path, required=True)
@@ -129,6 +251,7 @@ def main(argv=None):
         auth["exact_parent_chain"] = chain
         auth["closed_phase_classification"] = closeout
         auth["worker_result_sha256"] = sha(D / "RESULT.json")
+        auth["authentication_adapter_sha256"] = sha(Path(__file__))
         auth["finish_error"] = result.get("finish_error")
         auth["finish_traceback"] = result.get("finish_traceback")
         if native:
@@ -137,7 +260,42 @@ def main(argv=None):
                 assert (
                     pp["passed"] and pp["source_bytes_exact"] and pp["inputs"] == pp["frames"] == 0
                 )
-                assert result["goal_attempts"] == 1 and result["story_battles"] == 1
+                noncombat = plan.get("teacher_case", {}).get("schema") in {
+                    "pokemon.red.noncombat-story-unit-teacher-case.v1",
+                    "pokemon.red.noncombat-story-unit-teacher-case.v2",
+                    "pokemon.red.noncombat-story-unit-teacher-case.v3",
+                }
+                if noncombat:
+                    assert (
+                        result["goal_attempts"]
+                        == (1 if plan["teacher_case"]["schema"].endswith(".v3") else 2)
+                        and result["story_battles"] == 0
+                    )
+                    assert result["teacher_selected"] is True
+                    row = result["row"]
+                    assert row["feature_version"] == 16 and row["features"][-4:] == [
+                        1.0,
+                        0.0,
+                        1.0,
+                        1.0,
+                    ]
+                    outcome = row["outcome"]
+                    verify_partial_teacher_outcome(outcome)
+                    assert result["training_admission"] is True
+                    assert result["copy_back"] is False and result["campaign_progress"] is False
+                elif plan.get("schema") in {
+                    "pokemon.red.native-venue-geometry-TRAIN-case.v1",
+                    "pokemon.red.native-venue-workload-TRAIN-case.v2",
+                }:
+                    verify_venue_teacher_outcome(
+                        plan,
+                        result,
+                        read(D / "PARTY-VENUE-OUTCOME.json"),
+                        read(D / "PROSPECTIVE-VENUE-DECISION.json"),
+                        setup=read(D / "SETUP-RECEIPT.json"),
+                    )
+                else:
+                    assert result["goal_attempts"] == 1 and result["story_battles"] == 1
                 auth["live_pp_preinput_gate_sha256"] = sha(D / "LIVE-PP-PREINPUT-GATE.json")
             physical = closeout["physical_emulator_accounting"]
             pre = (

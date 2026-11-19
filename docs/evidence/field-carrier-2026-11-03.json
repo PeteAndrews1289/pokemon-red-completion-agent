@@ -1,0 +1,124 @@
+{
+  "active_diagnostic": null,
+  "actor_cutoff_utc": "2026-11-04T04:53:09.482206+00:00",
+  "actual_badge_delta": 1,
+  "actual_badges": 3,
+  "actual_cash": 13568,
+  "actual_continuation": "field-carrier-actual-v3",
+  "actual_cumulative_costs": {
+    "private_record_sha256": "d289ee8a3dcb9d27a2a56d33725323ed5b941c6a9bcdd14c60a70dff92d0ce6d",
+    "record_items": 6
+  },
+  "actual_current_continuation_admission_errors": 0,
+  "actual_current_continuation_choices": 136,
+  "actual_current_continuation_execution_errors": 0,
+  "actual_registration_delta": 6,
+  "actual_registrations": 34,
+  "actual_running": false,
+  "all_native_processes_stopped": true,
+  "all_seven_final_exits_open": true,
+  "all_source_mutations_complete": true,
+  "attempts": {
+    "private_record_sha256": "1b37c2ebec044d7ba7be27e9efb294909899e33665711374c06a502b94669d65",
+    "record_items": 9
+  },
+  "audit_due_utc": "2026-11-04T04:19:03+00:00",
+  "candidate_native_qualified": true,
+  "candidate_sha256": "4c322cba6d751c581533eac6f3852b56ae43a3563e01a2009ca13f0715c4d94a",
+  "closed_prior_copy": {
+    "private_record_sha256": "0bd8172d730f287b6d5e1dad72df62a22a87c4d68706521fe52559f63af0aae1",
+    "record_items": 11
+  },
+  "current_literal_criterion_erratum": {
+    "private_record_sha256": "d319ecde33bd2232f5004f145fdf2f0fae7aa1bedabb20f52a34284761256dbe",
+    "record_items": 1
+  },
+  "current_state": {
+    "private_record_sha256": "2ed297fcb5109a5f66c8c4939a433cd5b351843716cc9e33f44ba66399a62bf7",
+    "record_items": 1
+  },
+  "custody_checkpoint_rehydration": "Prior29b6fd3c copy closed6paired chunks without error;newcandidate must qualify independently.",
+  "cut_evidence": "Existing exact native block-mutation receipt forwarded to current diagnostic sink on verified route arrival.",
+  "diagnostic_progress_imported": false,
+  "earlier_failed_native_inputs": 0,
+  "earlier_failed_native_seconds": 1.3362618609999117,
+  "earlier_original_diagnostic_seconds": 2.4430818620021455,
+  "engineering_deadline_utc": "2026-11-04T05:19:03+00:00",
+  "evolution_time_loss": {
+    "private_record_sha256": "6398e9e8616f1c5cb2b9b182256de6adae5bd3b95d8553d5c282249ff2cdcf80",
+    "record_items": 1
+  },
+  "exact_actual_source": {
+    "private_record_sha256": "33edc87990f1f216bc843c338ea543388883cf7c873d6d5ddaf022c64acd6308",
+    "record_items": 2
+  },
+  "exchange_authority": {
+    "private_record_sha256": "fd804a7196c059192100e8767c69e323c24c08c536ff2bf6aa2815f2476f1ded",
+    "record_items": 1
+  },
+  "final_control_release": {
+    "private_record_sha256": "bd4c8ac9dd4e5147a3ba7d4e53efa2d167379453aec060d13df8ed1505421c7c",
+    "record_items": 1
+  },
+  "final_native_exit": {
+    "private_record_sha256": "6b4904b8ef46609241461734d9b32818235e0bc10ff2a74a8a3f305cd9fbf17b",
+    "record_items": 1
+  },
+  "final_source_authentication": {
+    "private_record_sha256": "e975b08df0ca550b2980f1b9d5207b705ed7468767539d7d53b083a17489c6ee",
+    "record_items": 1
+  },
+  "final_terminal_reason": "insufficient_settlement_allowance",
+  "focused_test_scope": {
+    "private_record_sha256": "0249de14d020f2f35730925597aab1f32c822a6e6880baa95677503b605debd0",
+    "record_items": 1
+  },
+  "focused_tests_passed": 981,
+  "full_suite_claim": false,
+  "generic_dependency_native_qualification": {
+    "private_record_sha256": "2552099d03bd40970ace39410d6881fa2378996a7636f949bdb758e74109caf8",
+    "record_items": 10
+  },
+  "generic_dependency_probe": {
+    "private_record_sha256": "f5526791fea7aa2547e924c82cbd398d6512a722b7bb4b1281d0633ae7955fce",
+    "record_items": 8
+  },
+  "matched_eight_choice_prefix": {
+    "private_record_sha256": "4bbdf2853297efe7ceebfbf69479d5b6cc75af1bcb44d59362339f45204bec2a",
+    "record_items": 7
+  },
+  "new_fits": 0,
+  "new_rom_free_cases": 44,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-04T04:54:51.157825+00:00",
+  "observed_diagnostic_exchange": true,
+  "preactor_supervisor_failure_retained": true,
+  "prior_three_gates_only_cc750": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualification": {
+    "private_record_sha256": "fdb257906c512673399db26b4b2e4308ac61e43b7589d70c0e369cb5e34e0d05",
+    "record_items": 1
+  },
+  "role_correction": "Selected field carrier now uses existing FIELD_UTILITY role;existing member-preparation excludes it. No COMBAT promotion.",
+  "scope": "DEVELOPMENT owned field carrier;diagnostic qualification in progress",
+  "sequencing_error": {
+    "private_record_sha256": "3f3e744b88fa525c5b329829d48cb7d4ecda38123b4283a4e595d7b8dfabb61c",
+    "record_items": 1
+  },
+  "session": "2026-11-03-field-carrier",
+  "source_document_sha256": "f5249601186d1e71b84cb5ca98863782a0a209514688f0bae62619f2c0d0c74e",
+  "source_observations": {
+    "private_record_sha256": "69857c5357727393c4afc2f8185d31db8a15cb2356fbb80d0e7042a9a869ae89",
+    "record_items": 2
+  },
+  "subsequent_story_approach": "Separate forced-singleton Surge approach succeeded;not newly learned strategy",
+  "time_loss_readback": {
+    "private_record_sha256": "7a1b7e155293286d3b62475fb77deb56eef7e4e86b31dce9f4e8ccfc07ad92f3",
+    "record_items": 1
+  },
+  "writer_release_evidence_pending": {
+    "private_record_sha256": "d113279965d93b5ad68b1be86e8de4873d6f159b9ef8fa714fff04778d3119d0",
+    "record_items": 1
+  }
+}

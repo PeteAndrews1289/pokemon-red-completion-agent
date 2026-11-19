@@ -45,6 +45,8 @@ class _ScopedActor(FrozenTrainerBattler):
     _pool: "ScopedTrainingBattlers"
 
     def pp_reentry_screen_active(self, authority):
+        if self.development_story_scope is not None:
+            return super().pp_reentry_screen_active(authority)
         if not self._pool._allow_train_pp_reentry:
             return super().pp_reentry_screen_active(authority)
         # Explicit pool-only reuse of K's existing PP protection. This does not
@@ -105,6 +107,8 @@ class ScopedTrainingBattlers:
         initial: BattleAftermath | None = None,
         native_plan_sha256: str | None = None,
         allow_train_pp_reentry: bool = False,
+        story_admission=None,
+        story_overrides: tuple[FrozenTrainerBattler, ...] = (),
     ) -> "ScopedTrainingBattlers":
         """Bind a fresh ordinary K prototype to caller-authenticated source metadata.
 
@@ -156,6 +160,8 @@ class ScopedTrainingBattlers:
             initial=initial,
             native_plan_sha256=native_plan_sha256,
             allow_train_pp_reentry=allow_train_pp_reentry,
+            story_admission=story_admission,
+            story_overrides=story_overrides,
         )
 
     @classmethod
@@ -210,6 +216,7 @@ class ScopedTrainingBattlers:
         native_plan_sha256: str | None = None,
         story_overrides: tuple[FrozenTrainerBattler, ...] = (),
         production_admission=None,
+        story_admission=None,
         production_reader=None,
         allow_train_pp_reentry: bool = False,
     ) -> None:
@@ -218,6 +225,15 @@ class ScopedTrainingBattlers:
         ):
             raise ValueError("scoped TRAIN PP screen requires separate explicit pool authority")
         self._allow_train_pp_reentry = allow_train_pp_reentry
+        if story_admission is not None:
+            from .red_production_train_admission import ScopedProductionStoryAdmission
+            if type(story_admission) is not ScopedProductionStoryAdmission or production_admission is not None:
+                raise ValueError('production story pool needs its exact separate admission')
+            story_admission.require_source(dict(partition='train',state_sha256=prototype.source_state_sha256,
+                origin_sha256=story_admission.document()['source_origin_sha256'],source_commit=prototype.source_commit,
+                experiment_sha256=experiment_sha256))
+            if prototype.root_lineage_id!=story_admission.document()['root_lineage_id']:
+                raise ValueError('production story pool root differs')
         self._production_admission = production_admission
         self._production_reader = production_reader
         if production_admission is not None:
@@ -276,6 +292,7 @@ class ScopedTrainingBattlers:
                 type(actor) is not FrozenTrainerBattler
                 or (
                     production_admission is None
+                    and story_admission is None
                     and type(actor.train_risk_story_scope) is not TrainRiskStoryScope
                 )
                 or type(actor.calls) is not int
@@ -287,6 +304,7 @@ class ScopedTrainingBattlers:
                 or actor.public_species_base_stats != prototype.public_species_base_stats
                 or (
                     production_admission is None
+                    and story_admission is None
                     and (
                         actor.train_risk_story_scope is None
                         or actor.train_risk_story_scope.experiment_sha256 != experiment_sha256
@@ -301,6 +319,11 @@ class ScopedTrainingBattlers:
                 )
             ):
                 raise ValueError("TRAIN story override differs from the declared lesson")
+            if story_admission is not None:
+                scope=actor.development_story_scope
+                if scope is None or scope.train_admission is not story_admission:
+                    raise ValueError('production story override lacks exact source witness')
+                story_admission.require_actor(actor,scope,'story')
             contract = actor.require_train_story_scope()
             if contract not in contracts or contract in overrides:
                 raise ValueError("TRAIN story override is undeclared or duplicated")
@@ -388,6 +411,12 @@ class ScopedTrainingBattlers:
                 if scope is None:
                     raise ValueError("production actor lacks its declared development scope")
                 record["production_scope"] = scope.document()
+        if story_admission is not None:
+            declaration['schema']='pokemon.red.scoped-train-battlers.v4'
+            declaration['production_story_admission']=story_admission.document()
+            for record,actor in zip(actor_records,self._actors,strict=True):
+                if actor.development_story_scope is not None:
+                    record['production_scope']=actor.development_story_scope.document()
         self.declaration_sha256 = canonical_sha256(declaration)
         self.output.mkdir(mode=0o700, exist_ok=False)
         _record(self.output / "declaration.json", declaration)

@@ -313,3 +313,49 @@ def test_sampling_replay_preserves_kind_balanced_and_legacy_receipts(
         decision["sampling_rule"] = "unrecorded-rule"
         with pytest.raises(ValueError, match="does not replay"):
             replay_recorded_sequence_choice(kwargs["model"], intent, decision, seed=101, ordinal=0)
+
+
+@pytest.mark.parametrize("seen", [False, True])
+def test_recorded_production_parent_replays_without_admitting_child_or_support(seen):
+    from test_recurrence_parent_exploration import observed_menu, dispatch_head
+    from pokemon_red_completion.red_consequence_choice import select_branch_recovery_live_option
+    from pokemon_red_completion.red_recorded_selection_authority import record_selection_authority
+    model, options=observed_menu(seen=seen)
+    head=dispatch_head();scope=("defeat_giovanni","defeat_misty")
+    flags=dict(greedy_selection=True,refine_preparation=True,defer_unbound_preparation=False,
+        allow_singleton_parent_support=False,associate_unique_combat=True,
+        explore_outside_scope=False,explore_on_movement_recurrence=True)
+    seed=int(canonical_sha256(dict(seed=31,ordinal=0))[:16],16)
+    choice=select_branch_recovery_live_option(model,options,head,objective_ref=scope,
+        seed=seed,source_state_sha256="a"*64,**flags)
+    intent=dict(selection_seed=seed,model_sha256=choice.model_sha256,state_sha256="a"*64,
+        menu=options.public_dict(),query_may_be_consumed=True,
+        private_selection_authority=record_selection_authority(options,
+            allow_earning_exploration=True,greedy_selection=True),
+        private_story_contexts=[dict(binding_ref=b.binding_ref,objective_ref=b.story_objective_ref)
+            for b in options.bindings],
+        private_recurrence_sampling_policy=dict(declared_greedy_selection=True,
+            explore_on_movement_recurrence=True,
+            trigger_rule="greedy-selected-observed-unchanged-endpoint-v1"))
+    context=(head,scope,flags)
+    decision=choice.public_dict()
+    assert replay_recorded_sequence_choice(model,intent,decision,seed=31,ordinal=0,
+        branch_recovery=context)==decision["mode"]
+    with pytest.raises(ValueError):
+        replay_recorded_sequence_choice(model,intent,decision,seed=31,ordinal=0)
+    with pytest.raises(ValueError):
+        replay_recorded_sequence_choice(model,intent,decision,seed=31,ordinal=0,
+            branch_recovery=(head,scope,{**flags,"explore_on_movement_recurrence":False}))
+    changed=json.loads(json.dumps(decision));changed["scores"][0]+=.01
+    with pytest.raises(ValueError,match="does not replay"):
+        replay_recorded_sequence_choice(model,intent,changed,seed=31,ordinal=0,
+            branch_recovery=context)
+
+
+def test_complete_greedy_native_trace_replays_its_actual_greedy_choices(tmp_path,monkeypatch):
+    root,kwargs,executed=collect(tmp_path,monkeypatch,greedy=True)
+    audit=audit_native_sequence_trace(root,**kwargs)
+    assert audit.model_choices_replayed==3
+    assert audit.recorded_selector_and_binding_replayed==3
+    assert audit.training_eligible is False
+    assert executed==[2,4,6]

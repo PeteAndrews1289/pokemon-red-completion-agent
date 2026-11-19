@@ -1,0 +1,51 @@
+{
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "aggregate_root_seconds": 1469.1779236420005,
+  "baseline_correct": 4,
+  "baseline_whole_Erika": true,
+  "candidate_correct": 7,
+  "candidate_rejected": true,
+  "date": "2026-11-12",
+  "evidence": {
+    "private_record_sha256": "573d910dc4805afc2434fbf36f23fb836f625feb64caefccda64e4aa6e098979",
+    "record_items": 8
+  },
+  "full_suite_or_CI": false,
+  "goal_TRAIN_rows_admitted": 0,
+  "gradient_fits": 1,
+  "heldout033_excluded_forever": true,
+  "heldout041042_unopened": true,
+  "latest_build": "F53",
+  "measured_menu_gate": 10,
+  "model_owned_rows_observed": 40,
+  "native_source_partition": "train",
+  "new_TRAIN_venue_menus": 1,
+  "new_admitted_venue_outcomes": 3,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "next": {
+    "private_record_sha256": "036c79dad65b2644bef36fe569fb925413fe593501fa27126006ce06e4acfb96",
+    "record_items": 1
+  },
+  "optimizer_rows": 9,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "readback_loads": 9,
+  "root_cases": 10,
+  "same_root_measured_guards": 1,
+  "schema": "pokemon.codex.goal-continuation-training-summary.v1",
+  "session": "codex-goal-continuation-20261112-0359",
+  "source_document_sha256": "8017494b4cdf588b3286373ffa8dee10bf0395b52925c1918f26b0c7b6a321de",
+  "source_executable_edits": 0,
+  "source_writer_release_required": true,
+  "status": "closed",
+  "support_rows_observed": 60,
+  "weights_changed": 96,
+  "whole_Code_parity": false,
+  "whole_story_objectives": {
+    "private_record_sha256": "5390d30b4444cee30edc30c6206f64cb38887425a3ddfec0e402a3396823cee0",
+    "record_items": 2
+  }
+}

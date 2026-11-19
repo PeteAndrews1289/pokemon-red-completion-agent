@@ -16,7 +16,7 @@ from typing import Protocol, cast
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort, fly_menu_indices
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, Gen1FieldMovePort, fly_menu_indices
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
 from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_runtime import (
@@ -26,6 +26,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 from pokemon_red_completion.observation import (
+    Badge,
     CurrentMapObject,
     EventFlag,
     ItemId,
@@ -59,7 +60,8 @@ from pokemon_red_completion.route_executor import (
     RouteExecutionLimits,
     execute_route,
 )
-from pokemon_red_completion.route_plan import RoutePlanningError
+from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
+from pokemon_red_completion.red_indoor_departure_plan import bounded_indoor_departure
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
 )
@@ -304,6 +306,7 @@ class RedFossilExecution:
     route_steps: int
     refresh_steps: int
     dig_escape_used: bool = False
+    indoor_departure_steps: int = 0
 
     @property
     def passed(self) -> bool:
@@ -340,6 +343,7 @@ class RedFossilExecution:
             "fly_used": self.fly_used,
             "route_steps": self.route_steps,
             "refresh_steps": self.refresh_steps,
+            **({"indoor_departure_steps": self.indoor_departure_steps} if self.indoor_departure_steps else {}),
             "actions_executed": self.actions_executed,
             "frames_executed": self.frames_executed,
             "species_specific_route_steps": 0,
@@ -358,10 +362,13 @@ class RedRoutedFossilRevival:
     timing: RedFossilTiming = DEFAULT_FOSSIL_TIMING
     route_limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS
     allow_dig_departure: bool = False
+    indoor_departure: RoutePlan | None = None
 
     def __post_init__(self):
         if type(self.allow_dig_departure) is not bool:
             raise ValueError("fossil Dig departure requires a boolean permission")
+        if self.indoor_departure is not None and not isinstance(self.indoor_departure, RoutePlan):
+            raise TypeError("fossil departure requires a quoted route")
 
     def execute(self, target: RedFossilTarget) -> RedFossilExecution:
         before_actions = self.actions.actions_executed
@@ -370,12 +377,25 @@ class RedRoutedFossilRevival:
         if not initial.executable:
             raise RedFossilAcquisitionError("fossil target is not executable")
         field_actions, observer = self._ports()
+        departure_steps = 0
+        if self.indoor_departure is not None:
+            departure = self.indoor_departure
+            report = execute_route(
+                departure, field_actions, observer, replanner=self.world.replanner(),
+                limits=self.route_limits, interruption_handler=self._route_handler(field_actions),
+            )
+            outside = observer.observe()
+            if (not report.passed or not outside.ready or outside.map_id != departure.macro_path.maps[-1]
+                    or outside.at != departure.terminal_at):
+                raise RedFossilAcquisitionError("fossil departure missed its quoted outdoor boundary")
+            departure_steps = len(report.executed_steps)
+            self._check_budget(before_actions, before_frames)
         escape = (plan_dig_escape(self.world, self.reader, self.reader.read(), observer.observe())
-                  if self.allow_dig_departure else None)
+                  if self.allow_dig_departure and self.indoor_departure is None else None)
         if escape is not None:
             execute_dig_escape(self.world, self.reader, self.emulator, field_actions, escape)
         fly_used = self._reach_cinnabar(field_actions, observer)
-        route_steps = self._route(
+        route_steps = departure_steps + self._route(
             field_actions,
             observer,
             FOSSIL_ROOM_MAP_ID,
@@ -421,6 +441,7 @@ class RedRoutedFossilRevival:
             route_steps=route_steps,
             refresh_steps=refresh_steps,
             dig_escape_used=escape is not None,
+            indoor_departure_steps=departure_steps,
         )
         if not result.passed:
             raise RedFossilAcquisitionError("fossil execution lacked its exact transition")
@@ -837,20 +858,19 @@ class RedFossilGoalProvider:
 
 def fossil_acquisition_bindings(
     runtime, observation, actions, world, *, maximum_actions=512, maximum_frames=180_000,
+    allow_remote_departure=False,
 ) -> tuple[ExecutableGoalBinding, ...]:
-    """Quote item-derived local revival peers without choosing or moving.
-
-    Other regions keep their existing explicit Fly adapter; this composition
-    only exposes a fully quoted local laboratory route. It never makes a
-    fossil, chooses a species, replaces a capture, or copies a prior terminal.
-    """
+    """Quote held or pending fossil work with its verified approach to the laboratory."""
     from .red_player_field_goals import _field_ready
 
     if any(type(n) is not int or n < 1 for n in (maximum_actions, maximum_frames)):
         raise ValueError("fossil menu needs finite positive limits")
     if observation != runtime.adapter.observe():
         raise ValueError("fossil menu observation is stale")
-    if not _field_ready(runtime) or observation.raw.map_id not in LOCAL_CINNABAR_MAPS:
+    if type(allow_remote_departure) is not bool:
+        raise TypeError("remote fossil departure requires a boolean")
+    remote = observation.raw.map_id not in LOCAL_CINNABAR_MAPS
+    if not _field_ready(runtime) or remote and not allow_remote_departure:
         return ()
     targets = available_red_fossil_targets(runtime.reader)
     if not targets:
@@ -868,13 +888,34 @@ def fossil_acquisition_bindings(
     )
     _, observer = executor._ports()
     quoted_start = observer.observe()
-    if executor.allow_dig_departure:
+    travel_cost = 0
+    if remote:
+        if not (int(observation.raw.badge_bits or 0) & int(Badge.THUNDER)
+                and CINNABAR_ISLAND_MAP_ID in runtime.reader.read_fly_destinations()):
+            return ()
+        try:
+            fly_menu_indices(observation.raw)
+        except Gen1FieldMoveError:
+            return ()
+        if quoted_start.map_id >= 0x25:
+            departure = bounded_indoor_departure(quoted_start, live_world)
+            if departure is None or not _supported_plan(departure, allow_cut=False, allow_surf=False):
+                return ()
+            executor = replace(executor, indoor_departure=departure)
+            travel_cost += departure.cost
+        elif not 0 <= quoted_start.map_id <= int(MapId.ROUTE_25) or quoted_start.map_id == 0x0B:
+            return ()
+        travel_cost += 1
+        quoted_start = replace(
+            quoted_start, map_id=CINNABAR_ISLAND_MAP_ID,
+            at=dict(red_fly_landings(live_world.rom))[CINNABAR_ISLAND_MAP_ID],
+            mode="land", last_outside_map=CINNABAR_ISLAND_MAP_ID, occupied=frozenset(), hazards=(),
+        )
+    elif executor.allow_dig_departure:
         escape = plan_dig_escape(live_world, runtime.reader, observation.raw, quoted_start)
         if escape is not None:
             if CINNABAR_ISLAND_MAP_ID not in runtime.reader.read_fly_destinations():
                 return ()
-            from .gen1_field_moves import Gen1FieldMoveError
-
             try:
                 fly_menu_indices(observation.raw)
             except Gen1FieldMoveError:
@@ -894,7 +935,7 @@ def fossil_acquisition_bindings(
     for target in targets:
         native = RedFossilGoalProvider(
             target, runtime.adapter, runtime.reader, executor,
-            estimated_effort=min(1.0, 0.24 + quote.cost / 3000),
+            estimated_effort=min(1.0, 0.24 + (travel_cost + quote.cost) / 3000),
         ).binding(observation)
         if native is None:
             continue

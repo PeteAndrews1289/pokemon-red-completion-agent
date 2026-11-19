@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-13",
+  "next_session_plan": {
+    "private_record_sha256": "543319f1cafdfaa5000576bac9cac74f7767563db20589cf688663c018928002",
+    "record_items": 8
+  },
+  "player_outcome": "Learn efficient target-task venue choices while retaining justified earlier choices.",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_id": "venue-reward-retention-20261113-1859",
+  "source_document_sha256": "d007dd04aa4eba99c188797d88fd6ebea443ab2bb154d2a0e9269d9aaa13283f",
+  "verified_outcome": {
+    "private_record_sha256": "be3efede631b00ed862ce378f4632f5ace658b3784f5890e51c7262da9d864ca",
+    "record_items": 53
+  }
+}

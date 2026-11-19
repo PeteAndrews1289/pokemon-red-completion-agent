@@ -11,6 +11,8 @@ from copy import deepcopy
 from dataclasses import dataclass
 
 SCHEMA = "pokemon.red.single-direct-teacher-case.v1"
+SEQUENCE_SCHEMA = "pokemon.red.sampled-direct-sequence-teacher-case.v2"
+TERMINAL_SEQUENCE_SCHEMA = "pokemon.red.task-terminal-sequence-teacher-case.v3"
 SESSION = {
     "model_feature_version": 10,
     "include_live_pp_readiness": True,
@@ -90,8 +92,39 @@ class TeacherTrainCaseSpec:
 
     @staticmethod
     def _canonical_document(value):
-        require(isinstance(value, dict) and set(value) == FIELDS, "teacher case fields differ")
-        require(value["schema"] == SCHEMA, "teacher case schema differs")
+        terminal = isinstance(value, dict) and value.get("schema") == TERMINAL_SEQUENCE_SCHEMA
+        sequence = isinstance(value, dict) and value.get("schema") in (
+            SEQUENCE_SCHEMA,
+            TERMINAL_SEQUENCE_SCHEMA,
+        )
+        require(
+            isinstance(value, dict)
+            and set(value)
+            == (
+                FIELDS
+                | {"sequence_horizon"}
+                | ({"sequence_target_contract"} if terminal else set())
+                if sequence
+                else FIELDS
+            ),
+            "teacher case fields differ",
+        )
+        require(
+            value["schema"] in (SCHEMA, SEQUENCE_SCHEMA, TERMINAL_SEQUENCE_SCHEMA),
+            "teacher case schema differs",
+        )
+        if terminal:
+            from .player_sequence_targets import TASK_TERMINAL_TARGET_CONTRACT
+
+            require(
+                value["sequence_target_contract"] == TASK_TERMINAL_TARGET_CONTRACT,
+                "task terminal target contract differs",
+            )
+        if sequence:
+            require(
+                type(value["sequence_horizon"]) is int and value["sequence_horizon"] == 2,
+                "sampled teacher requires predeclared two-choice horizon",
+            )
         require(
             value["mode"] in ("observed_story_obstruction", "blaine_leader"),
             "unsupported direct case mode",
@@ -116,7 +149,11 @@ class TeacherTrainCaseSpec:
             and len(refs) == len(set(refs)) == 6,
             "exact six combat roles required",
         )
-        _exact(value["session"], SESSION, "explicit live-equivalent session settings differ")
+        _exact(
+            value["session"],
+            {**SESSION, "model_feature_version": 16} if sequence else SESSION,
+            "explicit live-equivalent session settings differ",
+        )
         limits = value["native_limits"]
         require(
             isinstance(limits, dict)
@@ -125,7 +162,9 @@ class TeacherTrainCaseSpec:
             "limits fields differ",
         )
         require(
-            type(limits["decisions"]) is int and limits["decisions"] == 1, "one direct phase only"
+            type(limits["decisions"]) is int
+            and (2 <= limits["decisions"] <= 4 if sequence else limits["decisions"] == 1),
+            "bounded direct/sequence decisions differ",
         )
         for key in ("actions", "frames", "heals"):
             require(
@@ -256,6 +295,14 @@ class TeacherTrainCaseSpec:
         return json.loads(self._json)
 
     @property
+    def sequence_mode(self):
+        return self.document()["schema"] in (SEQUENCE_SCHEMA, TERMINAL_SEQUENCE_SCHEMA)
+
+    @property
+    def terminal_sequence_mode(self):
+        return self.document()["schema"] == TERMINAL_SEQUENCE_SCHEMA
+
+    @property
     def mode(self):
         return self.document()["mode"]
 
@@ -285,7 +332,8 @@ def validate_plan_case(plan, source_row):
     require(
         plan["arm"] == "direct"
         and plan["caps"]["new_fits"] == 0
-        and plan["caps"]["emulators"] == plan["caps"]["state_loads"] == plan["caps"]["goals"] == 1,
+        and plan["caps"]["emulators"] == plan["caps"]["state_loads"] == 1
+        and plan["caps"]["goals"] == data["native_limits"]["decisions"],
         "one-load direct collector scope differs",
     )
     require(
@@ -353,7 +401,9 @@ def build_teacher_session_kwargs(
         battle_observer=battle_observer,
         target_cash=0,
         collection_teacher_setup_receipt=teacher_receipt_sha256,
-        consequence_spec=ChallengeConsequenceSpec(
+        consequence_spec=None
+        if spec.sequence_mode
+        else ChallengeConsequenceSpec(
             GoalKind.ADVANCE_STORY,
             data["challenge_target"],
             maximum_phases=1,
@@ -393,6 +443,36 @@ def story_binding_settings(spec, leader_reward):
 def validate_retained_menu(spec, prior, menu, bindings, pp):
     """Only prospective PP observation and new marginal elapsed budget may differ."""
     expected = spec.document()["expected_menu"]
+    if spec.sequence_mode:
+        # V2 seals the actual current fixture menu. It does not assert V10
+        # representation or private-binding parity against the old teacher.
+        require(
+            len(menu["candidates"]) == len(bindings) == expected["candidate_count"],
+            "sampled fixture menu census differs",
+        )
+        require(
+            len({b["binding_ref"] for b in bindings}) == len(bindings), "ambiguous fixture bindings"
+        )
+        selected = [i for i, b in enumerate(bindings) if b["kind"] == "advance_story"]
+        require(len(selected) == 1, "sampled fixture needs one cartridge-bound story task")
+        _exact(
+            menu["candidates"][selected[0]]["challenge"],
+            expected["challenge"],
+            "sampled fixture challenge differs",
+        )
+        slots = [slot for member in pp["party_slots"] for slot in member if slot[1] > 0]
+        require(
+            len(pp["party_slots"]) == 6 and slots and all(a == b for a, b in slots),
+            "sampled fixture PP is not observed full",
+        )
+        return dict(
+            passed=True,
+            actual_fixture_menu_sealed=True,
+            historical_V10_menu_parity_claim=False,
+            teacher_selected_action=False,
+            raw_pp=pp,
+            challenge=expected["challenge"],
+        )
     count, selected = expected["candidate_count"], expected["selected_index"]
     require(
         len(prior["menu"]["candidates"]) == len(menu["candidates"]) == len(bindings) == count,

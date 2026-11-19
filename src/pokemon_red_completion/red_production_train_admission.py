@@ -819,3 +819,129 @@ class LeagueFundingTrainAdmission:
                 or actor.pp_depleted_switch_screen is not True or actor.mechanics_aware_tower_choices is not False
                 or actor.diagnostic_tower_productive_stay is not False):
             raise ValueError('funding TRAIN actor source/settings differ')
+
+
+SCOPED_STORY_TRAIN_SCHEMA = "pokemon.red.scoped-production-story-train.v1"
+_SCOPED_STORY_TOKEN = object()
+SCOPED_STORY_MODELS = frozenset({
+    STORY_MODEL,
+    "05a7afb42bfdf8b5d416782a516e78ae82d7a6d4cd72eea77134b484822c7333",
+})
+
+
+class ScopedProductionStoryAdmission:
+    """Exact production components beside a caller-authenticated TRAIN family.
+
+    Actual state/context/work bytes and the original TRAIN assignment are bound.
+    Ancestry, teacher interventions and row admission retain independent audits.
+    This witness grants only finite story-component reuse.
+    """
+    __slots__ = ('_bytes', '_contracts', '_routes', '_models')
+
+    def __init__(self, document, contracts, routes, models, *, _token=None):
+        if _token is not _SCOPED_STORY_TOKEN:
+            raise ValueError('scoped production story needs authenticated bytes')
+        from types import MappingProxyType
+        object.__setattr__(self, '_bytes', json.dumps(document,sort_keys=True,separators=(',',':')).encode())
+        object.__setattr__(self, '_contracts', MappingProxyType(dict(contracts)))
+        object.__setattr__(self, '_routes', MappingProxyType(dict(routes)))
+        object.__setattr__(self, '_models', MappingProxyType(dict(models)))
+
+    def __setattr__(self, name, value):
+        raise AttributeError('scoped production story witness is immutable')
+
+    def __deepcopy__(self, memo):
+        return self
+
+    @classmethod
+    def authenticate(cls, *, source, state_bytes, context_bytes, work_order_bytes, contracts):
+        from pathlib import Path
+        from dataclasses import asdict
+        from .red_story_battle import StoryTrainerContract
+        from .red_trainer_practice_fit import TrainerPracticeThreeHeadModel
+        from .red_learned_trainer import FROZEN_K_SHA256
+        from .red_scoped_training_battlers import scoped_train_root_lineage_id
+        if (type(source) is not dict or source.get('partition')!='train'
+                or any(type(v)is not bytes for v in (state_bytes,context_bytes,work_order_bytes))
+                or type(contracts)is not tuple or not 1<=len(contracts)<=4096
+                or any(type(c)is not StoryTrainerContract for c in contracts)):
+            raise ValueError('scoped production story requires finite TRAIN inputs')
+        context,work=map(json.loads,(context_bytes,work_order_bytes))
+        state=sha256(state_bytes).hexdigest();ctx=sha256(context_bytes).hexdigest();order=sha256(work_order_bytes).hexdigest()
+        if (source.get('state_sha256')!=state or source.get('experiment_sha256')!=order
+                or not _digest(source.get('source_commit'),40)
+                or not _digest(source.get('origin_sha256'))
+                or context.get('state_sha256')!=state
+                or context.get('fit_allowed')is not False or context.get('grants_new_budget')is not False
+                or work.get('partition')!='train' or work.get('fit_allowed')is not False):
+            raise ValueError('scoped production story source/context/work differs')
+        def pinned(spec):
+            if type(spec)is not dict or set(spec)!={'path','sha256'} or work.get('pins',{}).get(spec['path'])!=spec['sha256']:
+                raise ValueError('production TRAIN component needs a pinned file')
+            payload=Path(spec['path']).read_bytes()
+            if sha256(payload).hexdigest()!=spec['sha256']:
+                raise ValueError('production TRAIN component bytes changed')
+            return payload
+        chain=json.loads(pinned(work.get('TRAIN_source_authentication')))
+        assignment=chain.get('original_assignment',{})
+        if (chain.get('passed')is not True or assignment.get('partition')!='train'
+                or assignment.get('assignment_id')!=source['origin_sha256']
+                or assignment.get('root_lineage_id')!=scoped_train_root_lineage_id(source['origin_sha256'])):
+            raise ValueError('production story needs the original TRAIN assignment')
+        for key in ('registry','original_authentication'):
+            spec=chain[key]
+            if sha256(Path(spec['path']).read_bytes()).hexdigest()!=spec['sha256']:
+                raise ValueError('original TRAIN source authentication changed')
+        components=work.get('production_story_components');routes=work.get('production_story_routes')
+        if type(components)is not dict or not components or not set(components)<=SCOPED_STORY_MODELS or type(routes)is not dict:
+            raise ValueError('production story components are not exact retained models')
+        models={};contents={}
+        for digest,spec in components.items():
+            payload=pinned(spec)
+            if sha256(payload).hexdigest()!=digest:
+                raise ValueError('production story model digest differs')
+            model=TrainerPracticeThreeHeadModel.from_dict(json.loads(payload));models[digest]=model;contents[digest]=canonical_sha256(model.to_dict())
+        contract_map={canonical_sha256(asdict(c)):c for c in contracts}
+        if (len(contract_map)!=len(contracts) or set(routes)!=set(contract_map)
+                or any(v not in {*models,FROZEN_K_SHA256}for v in routes.values())):
+            raise ValueError('production story route/contract census differs')
+        document=dict(schema=SCOPED_STORY_TRAIN_SCHEMA,source_partition='train',source_state_sha256=state,
+            source_origin_sha256=source['origin_sha256'],source_commit=source['source_commit'],
+            root_lineage_id=scoped_train_root_lineage_id(source['origin_sha256']),context_sha256=ctx,
+            work_order_sha256=order,original_source_chain_sha256=work['TRAIN_source_authentication']['sha256'],
+            contracts_sha256=canonical_sha256([asdict(c)for c in contracts]),routes_sha256=canonical_sha256(routes),
+            model_content_sha256=contents,model_file_sha256=sorted(models),contract_count=len(contracts),
+            allow_learned_tactics=True,diagnostic_status_entry=True,screen_capped_status_moves=True,
+            fit_admission=False,new_independent_origin=False,source_ancestry_admission_conferred=False)
+        return cls(document,contract_map,routes,models,_token=_SCOPED_STORY_TOKEN)
+
+    def document(self):return json.loads(self._bytes)
+    @property
+    def identity(self):return canonical_sha256(self.document())
+    def require_source(self, source):
+        d=self.document()
+        expected=dict(partition='train',state_sha256=d['source_state_sha256'],origin_sha256=d['source_origin_sha256'],source_commit=d['source_commit'],experiment_sha256=d['work_order_sha256'])
+        if any(source.get(k)!=v for k,v in expected.items()):
+            raise ValueError('production story native source differs')
+    def component_for(self, contract):
+        from dataclasses import asdict
+        key=canonical_sha256(asdict(contract))
+        if self._contracts.get(key)!=contract:raise ValueError('undeclared production TRAIN story contract')
+        return self._routes[key]
+    def model_for(self, contract):return self._models[self.component_for(contract)]
+    def require_scope(self, scope, role):
+        d=self.document();digest=self.component_for(scope.contract)
+        if (role!='story' or digest not in self._models
+                or scope.source_state_sha256!=d['source_state_sha256']or scope.root_lineage_id!=d['root_lineage_id']
+                or scope.work_order_sha256!=d['work_order_sha256']or scope.model_sha256!=digest
+                or scope.model_content_sha256!=d['model_content_sha256'][digest]
+                or not scope.allow_learned_tactics or not scope.diagnostic_status_entry or not scope.screen_capped_status_moves
+                or scope.diagnostic_stay_when_productive or scope.diagnostic_prompt_stay or scope.diagnostic_status_release):
+            raise ValueError('production TRAIN story scope differs from retained recipe')
+    def require_actor(self, actor, scope, role):
+        self.require_scope(scope,role)
+        if (actor.source_partition is not ScenarioPartition.TRAIN
+                or actor.source_commit!=self.document()['source_commit']
+                or actor.train_story_contract!=scope.contract):
+            raise ValueError('production TRAIN story actor source differs')
+

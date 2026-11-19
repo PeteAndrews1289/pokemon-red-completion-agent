@@ -1,0 +1,45 @@
+{
+  "accounting": {
+    "private_record_sha256": "d575149c088efb350b1b42b7a20ff7ccaa53e4df6028764325d59b846d1336f5",
+    "record_items": 1
+  },
+  "actual": {
+    "private_record_sha256": "1728c174ce9ea7d9f34c219224b81a7f791037ba743817ea512cbf024faffd21",
+    "record_items": 13
+  },
+  "all_controls_released": true,
+  "all_native_workers_stopped": true,
+  "all_seven_full_delivery_exits_complete": false,
+  "capacity_workers": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "copy": {
+    "private_record_sha256": "0975a678de2eab90b0879c4f3e8e70761b82ff4318e3da8b5b7ca777fb02142d",
+    "record_items": 14
+  },
+  "earlier_candidates_and_failures_preserved": true,
+  "learning": {
+    "private_record_sha256": "3f8554cd0425c5be32f0d0f2d9cf576a0e0fa56c5078ce618fc649876b661783",
+    "record_items": 7
+  },
+  "next_candidate": {
+    "private_record_sha256": "b19e3581308498bfabbc160c104f7d3ed2c49f46bf5dc92c0db3c4c55e2f88a4",
+    "record_items": 5
+  },
+  "no_external_agents": true,
+  "no_publication": true,
+  "observed_at_utc": "2026-11-03T14:03:23.050129+00:00",
+  "original_three_gates_earlier_composition_only": true,
+  "performance": {
+    "private_record_sha256": "6b826706da0e762085ac9f40dd0e544571a94b18770af94bde4a02cc01858c48",
+    "record_items": 4
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualified_mechanics": {
+    "private_record_sha256": "9558b92dc5a7ddf2effbae9ac831a977a79ff0d15a5b782a61c1b224ed0c282a",
+    "record_items": 3
+  },
+  "schema": "pokemon.private.eight-hour-fresh-block-closeout.v1",
+  "source_document_sha256": "fa4a57f1b22b52df089557916e087079deaed22612e9b7c3a3aaa33ea7a8709b"
+}

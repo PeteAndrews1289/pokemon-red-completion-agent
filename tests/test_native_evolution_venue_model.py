@@ -305,6 +305,26 @@ def test_native_training_observes_once_inside_nursing_cost_scope(
         native, "PokemonRedPartyReader", lambda _: SimpleNamespace(read=lambda: exact)
     )
     seen = []
+    from pokemon_red_completion import red_native_venue_geometry as geometry
+
+    def quote(actual_runtime, world, observation, venues):
+        assert actual_runtime.reader is runtime.reader
+        assert actual_runtime.emulator is runtime.emulator and observation.party == exact
+        order.append("geometry")
+        return tuple(
+            geometry.NativeVenueGeometryQuote(
+                venue.band.identity,
+                observation.raw,
+                10 + index,
+                20 + index,
+                None,
+                0,
+                (),
+            )
+            for index, venue in enumerate(venues)
+        )
+
+    monkeypatch.setattr(geometry, "quote_native_evolution_venue_geometry", quote)
 
     def choose(observation, **arguments):
         order.append("model")
@@ -316,6 +336,8 @@ def test_native_training_observes_once_inside_nursing_cost_scope(
             for v in arguments["venues"]
         )
         assert arguments["source_id"] == source and arguments["target_id"] == target
+        assert arguments["allow_direct_evolution"] is True
+        assert [q.travel_steps for q in arguments["geometry_quotes"]] == [10, 11, 12]
         seen.append(arguments)
         return arguments["venues"][0]
 
@@ -352,10 +374,47 @@ def test_native_training_observes_once_inside_nursing_cost_scope(
         assert seen == []
     else:
         bound.party_level_evolution_executor(source, target, actions)
-        assert order == ["center", "nurse", "observer"] + (["model"] if use_model else []) + [
-            "train"
-        ]
+        assert order == ["center", "nurse", "observer"] + (
+            ["geometry", "model"] if use_model else []
+        ) + ["train"]
         assert len(seen) == int(use_model)
         if seen:
             assert seen[0]["model_sha256"] == digest
     assert actions.actions_executed == runtime.emulator.frame_count == 0
+
+
+@pytest.mark.parametrize(("values", "known", "available", "frozen", "expected", "reason"), [
+    ((0.1, 0.8, 0.8), (1, 1, 1), (True, True, True), 0, 0, "tied_maximum"),
+    ((0.1, 0.8, 0.9), (1, 0, 1), (True, True, True), 0, 0, "unknown_yield"),
+    ((0.1, 0.8, 0.9), (1, 1, 0), (True, True, False), 0, 1, "unique_maximum"),
+])
+def test_recipient_yield_uses_unique_known_legal_maximum(values, known, available, frozen, expected, reason):
+    rows = [dict(candidate_index=i, features={"venue.expected_recipient_xp_per_encounter": xp,
+                 "venue.useful_encounters_known": present}) for i, (xp, present) in enumerate(zip(values, known))]
+    assert native._recipient_yield_choice(rows, available, frozen) == (expected, reason)
+
+
+def test_recipient_yield_records_venue_actor_and_scoped_retention(menu_case):
+    rows = build(menu_case).candidate_set.public_dict()["candidates"]
+    rates = [row["features"]["venue.expected_recipient_xp_per_encounter"] for row in rows]
+    assert rates[0] != rates[1]
+    best = rates.index(max(rates))
+    model = SimpleNamespace(predict=lambda _: 1 - best)
+    events, state = [], {}
+    assert select(menu_case, model, state, events, compare_recipient_yield=True) == menu_case.venues[best]
+    event = events[0][1]
+    assert event["actor"] == "declared_yield_comparator" and event["model_selected"] is False
+    assert event["frozen_model_index"] == 1 - best and event["comparison_reason"] == "unique_maximum"
+    with pytest.raises(context.RedGoalContextError, match="another action"):
+        select(menu_case, model, state, events)
+
+
+def test_recipient_yield_deferral_keeps_model_attribution(menu_case, monkeypatch):
+    monkeypatch.setattr(native, "_recipient_yield_choice",
+                        lambda rows, available, frozen: (frozen, "unknown_yield"))
+    model = SimpleNamespace(predict=lambda _: 0)
+    events = []
+    assert select(menu_case, model, {}, events, compare_recipient_yield=True) == menu_case.venues[0]
+    event = events[0][1]
+    assert event["actor"] == "learned_venue_model" and event["model_selected"] is True
+    assert event["comparison_reason"] == "unknown_yield" and event["frozen_model_index"] == 0

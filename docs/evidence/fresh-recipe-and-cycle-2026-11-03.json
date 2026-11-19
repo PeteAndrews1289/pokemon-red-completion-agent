@@ -1,0 +1,38 @@
+{
+  "all_three_development_gates_passed": true,
+  "diagnostic_gains_imported": false,
+  "fits": 0,
+  "formal_acceptance": false,
+  "fresh_campaign": {
+    "private_record_sha256": "ce74d02722e804bf4cfc10e469c3a2f3fc54381dee4326800d794c643ebeafcf",
+    "record_items": 18
+  },
+  "fresh_entry": {
+    "private_record_sha256": "0cfa6ad1b9e104bfa46108020d5014f47441555fa46ccf4878ce0287624efb5a",
+    "record_items": 5
+  },
+  "full_suite_claim": false,
+  "independent_transfer": false,
+  "late": {
+    "private_record_sha256": "d787780c4bed9f130e2345b4cadfd7537f3d28006f032b13e57c2f9bb9aea4f5",
+    "record_items": 9
+  },
+  "mid": {
+    "private_record_sha256": "33c9e748ffbabfb4662929d9df425a3736a21ae643d9857bd2b6cdd3f35d6700",
+    "record_items": 8
+  },
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "no_successor": true,
+  "observed_at_utc": "2026-11-03T23:11:25.109516+00:00",
+  "original_actual_badges": 6,
+  "original_actual_registration_delta": 0,
+  "original_actual_registrations": 67,
+  "package_sha256": "cc750a3cf2c4f84632d2e1fc0ede195af464482c22423916eba02aac21a66d44",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "runtime_llm_calls": 0,
+  "same_recipe_both_original_cases": true,
+  "schema": "pokemon.development-session-summary.v1",
+  "session": "2026-11-03-fresh-entry-qualification",
+  "source_document_sha256": "838352198973e4704711cb7f3dfe95d22945eab6b9291486574ba22eac1fb5cb"
+}

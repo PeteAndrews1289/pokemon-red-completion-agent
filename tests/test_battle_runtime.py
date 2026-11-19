@@ -3831,8 +3831,9 @@ def test_trapping_damage_returns_at_first_main_without_second_fight(
     assert confirmations == 1
 
 
-def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -> None:
-    runtime = FakeRuntime(raw=replace(_raw(), enemy_using_trapping_move=True))
+@pytest.mark.parametrize("trapping_side", ["enemy", "player"])
+def test_trapping_turn_can_suppress_move_selection_without_spending_pp(trapping_side) -> None:
+    runtime = FakeRuntime(raw=replace(_raw(), **{f"{trapping_side}_using_trapping_move": True}))
     confirmations = 0
 
     def trap_then_finish(action: MacroAction) -> None:
@@ -3841,7 +3842,7 @@ def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -
             return
         confirmations += 1
         if confirmations == 1:
-            runtime.raw = replace(runtime.raw, enemy_using_trapping_move=False)
+            runtime.raw = replace(runtime.raw, **{f"{trapping_side}_using_trapping_move": False})
             runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
         else:
             runtime.raw = replace(
@@ -4086,3 +4087,67 @@ def test_expected_map_requires_an_unsigned_byte(expected_map: int) -> None:
             lambda _raw: 1,
             expected_map=expected_map,
         )
+
+
+@pytest.mark.parametrize("battle_state", [1, 2])
+@pytest.mark.parametrize("selected_slot", [1, 2, 3, 4])
+def test_pp_proven_unknown_text_cannot_enter_unowned_next_fight(battle_state, selected_slot):
+    runtime = MeasuredTurnRuntime(raw=_raw(battle_state=battle_state))
+    initial = runtime.raw
+    spends = 0
+    unowned_fights = 0
+    def advance(action):
+        nonlocal spends, unowned_fights
+        if action.kind is MacroActionKind.MOVE:
+            old = runtime.menu.selected_move_slot
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=old + (1 if action.value == 'down' else -1))
+        elif action.kind is MacroActionKind.CONFIRM:
+            if runtime.menu.phase is BattleMenuPhase.MAIN:
+                runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+            elif runtime.menu.phase is BattleMenuPhase.MOVE:
+                pp = list(initial.battler_pp); pp[selected_slot - 1] -= 1
+                runtime.raw = replace(initial, first_party_pp=tuple(pp))
+                runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+                spends += 1
+            else:
+                # A coarse UNKNOWN observation can cover text closing followed
+                # by HandleMenuInput accepting this same A as a new FIGHT.
+                runtime.raw = replace(runtime.raw, first_party_hp=initial.battler_hp - 7)
+                runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=selected_slot)
+                unowned_fights += 1
+        elif action.kind is MacroActionKind.CANCEL:
+            runtime.raw = replace(runtime.raw, first_party_hp=initial.battler_hp - 7)
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    runtime.on_action = advance
+    result = execute_bounded_battle_move_turn(runtime, runtime, expected_map=MapId.CERULEAN_CITY, expected_battle_state=battle_state, selected_slot=selected_slot, settle_to_next_decision=True)
+    assert result.move_executed
+    assert spends == 1 and unowned_fights == 0
+    assert runtime.menu.phase is BattleMenuPhase.MAIN
+    assert runtime.raw.battler_pp[selected_slot - 1] == initial.battler_pp[selected_slot - 1] - 1
+
+
+@pytest.mark.parametrize("pp", [(35, 30, 30, 11), (33, 30, 30, 11), (34, 29, 30, 11)])
+def test_bounded_live_text_settlement_retains_exact_whole_pp_guard(pp):
+    from pokemon_red_completion.battle_runtime import _await_selected_turn_effect
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    initial = runtime.raw
+    runtime.raw = replace(initial, first_party_pp=pp)
+    with pytest.raises(BattleRuntimeError, match="PP"):
+        _await_selected_turn_effect(runtime, runtime, expected_map=MapId.CERULEAN_CITY, raw=runtime.raw, initial_raw=initial, slot=1, timing=BattleRuntimeTiming(), label="bounded exact PP", preserve_next_decision=True)
+    assert runtime.actions == []
+
+
+@pytest.mark.parametrize("pp", [(33, 30, 30, 11), (34, 29, 30, 11)])
+def test_bounded_live_text_cannot_hide_pp_change_during_cancel(pp):
+    from pokemon_red_completion.battle_runtime import _await_selected_turn_effect
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    initial = runtime.raw
+    runtime.raw = replace(initial, first_party_pp=(34, 30, 30, 11))
+    def advance(action):
+        if action.kind is MacroActionKind.CANCEL:
+            runtime.raw = replace(runtime.raw, first_party_hp=initial.battler_hp - 7, first_party_pp=pp)
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+    runtime.on_action = advance
+    with pytest.raises(BattleRuntimeError, match="PP"):
+        _await_selected_turn_effect(runtime, runtime, expected_map=MapId.CERULEAN_CITY, raw=runtime.raw, initial_raw=initial, slot=1, timing=BattleRuntimeTiming(), label="bounded cancelling PP", preserve_next_decision=True)
+    assert all(a.kind is not MacroActionKind.CONFIRM for a in runtime.actions)

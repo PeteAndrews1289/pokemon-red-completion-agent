@@ -1,0 +1,314 @@
+{
+  "CONTINUITY-READER-PROVENANCE.json": {
+    "private_record_sha256": "dfb450ad89b0fba48f66d26d8ab2f7a80e5570a89c126a0aac1f7739e11ea3c8",
+    "record_items": 1
+  },
+  "DOC-CHECKS-active.json": {
+    "private_record_sha256": "7d27a72361be1f877c01ac20953386aaac8d1683182fd362b76aa6d50883e931",
+    "record_items": 1
+  },
+  "FINAL-CONTROL-RELEASE.json": {
+    "private_record_sha256": "91d883642608e87ddc7177f6a55087e3105662bde9a749185d4be40d4742a849",
+    "record_items": 1
+  },
+  "FINAL-FROZEN-INTEGRITY.json": {
+    "private_record_sha256": "b813aeda010945ab9b8f01e1229cc3b25d7c860ebf08962a7942e15c9c64e929",
+    "record_items": 1
+  },
+  "GATE-ADJUDICATION.json": {
+    "private_record_sha256": "ba7a0a10aec9a3af269a4c12252ae70a78b952aeb9e99905d60375e1dfac0f6f",
+    "record_items": 1
+  },
+  "GATE3-PASS.json": {
+    "private_record_sha256": "8331ba20826c03839710e85de6d8a4cf783123cff154c1a51911873ad7fddfb5",
+    "record_items": 1
+  },
+  "GATE3-READER-FORMAT-CORRECTION.json": {
+    "private_record_sha256": "4590284dff993c4c9c28be195606f7fefdfe87a2c883df9eca0add676f36d1a5",
+    "record_items": 1
+  },
+  "LATE-CONTINUITY-READER-LIMITS.json": {
+    "private_record_sha256": "e7fa5dc4eb3aa321ebece5bb92ce141a62cf159ee14c9e3c626687a3355e5764",
+    "record_items": 1
+  },
+  "LATE-EARLY-REVIEW.json": {
+    "private_record_sha256": "ac67f36751040d6e4ab9c5ee6046169fd4c8991be99f505c76271eb812569a8b",
+    "record_items": 1
+  },
+  "LATE-INITIAL-MENU-COMPARISON.json": {
+    "private_record_sha256": "57efe30dcc68dc7d6eb3c696bb099b875a84db2e4d056be6b7ccd359270ab4cd",
+    "record_items": 1
+  },
+  "LATE-SEMANTIC-RECIPE.json": {
+    "private_record_sha256": "446671edc81a29bf400971e25500c2f83a9d9c77e8bbb2d873799c25347b9bfe",
+    "record_items": 1
+  },
+  "LATE-V1-ACTIVATION.json": {
+    "private_record_sha256": "4676f3d8cc33ef67f2e4570a94000cc2e88b1f1eba9273933abe4b432ada80ef",
+    "record_items": 1
+  },
+  "LATE-V1-CLOSED.json": {
+    "private_record_sha256": "d41fd0fb6a19b897f226e2b60b3153de5affbbab7cd0c773645a3a3bb8055433",
+    "record_items": 1
+  },
+  "LATE-V1-CONTINUITY-final.json": {
+    "private_record_sha256": "3c9ae0381fb7d574645a599d90bf33ded97c31981ea330ce7eb2e6d7ab836a48",
+    "record_items": 1
+  },
+  "LATE-V1-CONTINUITY-ten-minute.json": {
+    "private_record_sha256": "46c464455916fa6f21fbcd815f01cdd75de65bcd1a7c6116247184f1a9ef9343",
+    "record_items": 1
+  },
+  "LATE-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "dbe78c22376e89b56d332b475d4c01b7216b18fae5d0e2bf5ae886a31271e0dc",
+    "record_items": 1
+  },
+  "LATE-V1-HOST-ADMISSION-ATTEMPT-01.json": {
+    "private_record_sha256": "0f20046929d07e62acb9c5f27967862683b6acf0ea284c1a7afd515cf9c695a2",
+    "record_items": 1
+  },
+  "LATE-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "17d13c913f7eaec19728c076d5f458b12062077a4fd16b7baf18886dbc5dc9c3",
+    "record_items": 1
+  },
+  "LATE-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "e308244bdc04eab7a8ecf3de9441f2831bbb2f829bf22ea9b8a0f08e3dad11ac",
+    "record_items": 1
+  },
+  "LATE-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "37ea87d8faa9314346b6b3c1cd0cc1aa5d91acbbcaeea47f785726ea95122830",
+    "record_items": 1
+  },
+  "LATE-V1-READBACK-final.json": {
+    "private_record_sha256": "24b39dc0c80e6e59837a5362352e8bb940856ae56ddb8ad54413dc60276a2df5",
+    "record_items": 1
+  },
+  "LATE-V1-READBACK-hall-of-fame.json": {
+    "private_record_sha256": "3c2a1becf00495fee0fbe9421b185fdae34e2d00c619f2850a194179651ade26",
+    "record_items": 1
+  },
+  "LATE-V1-READBACK-league-progress.json": {
+    "private_record_sha256": "729eddfb6572ae1291020b4cd4298bb430bd577fd8a7a83dff03160dd3d5a1ce",
+    "record_items": 1
+  },
+  "LATE-V1-READBACK-ten-minute.json": {
+    "private_record_sha256": "cf809ce826b9c0e00c88ffdacee85e4dde15ef4db1d825a82855d2bb38d05c9a",
+    "record_items": 1
+  },
+  "LATE-V1-READBACK-victory-road.json": {
+    "private_record_sha256": "ed62365afeddb7446103f76ecba795bc0c4cdfe41031c67232568431f8d106ca",
+    "record_items": 1
+  },
+  "LATE-V1-REVIEW-CURSOR.json": {
+    "private_record_sha256": "179d0af98c9b78209d8d8adccccf5340a00d09215335f8238545f4a2376101d9",
+    "record_items": 1
+  },
+  "LATE-V1-VIEWER-AUTHENTICATION.json": {
+    "private_record_sha256": "78fd84cdfff7ea978ec872089e2011cd5a2c3b767e53dae097ef9f0a2cbc1b29",
+    "record_items": 1
+  },
+  "MID-10MIN-REVIEW.json": {
+    "private_record_sha256": "ad440848db9f28d044f4dd9c8bd51480948cf3227a32490aa2556798c6adb229",
+    "record_items": 1
+  },
+  "MID-PREPARATION-PARTICIPATION-REVIEW.json": {
+    "private_record_sha256": "087cd54fd0ac68f35a304f01260ba39254b32bd99ca30aeb1d79dbae67047d34",
+    "record_items": 1
+  },
+  "MID-SEMANTIC-RECIPE.json": {
+    "private_record_sha256": "446671edc81a29bf400971e25500c2f83a9d9c77e8bbb2d873799c25347b9bfe",
+    "record_items": 1
+  },
+  "MID-V1-ACTIVATION.json": {
+    "private_record_sha256": "e35036652f117835dec3825d505425aa3fe851cabe65f081585e4cea9a8db389",
+    "record_items": 1
+  },
+  "MID-V1-CLOSED.json": {
+    "private_record_sha256": "61198acf4984998fcb1e50a5dd920c08cf43f2a2c0a08904887d1581462a85c6",
+    "record_items": 1
+  },
+  "MID-V1-CONTINUITY-endurance-approach.json": {
+    "private_record_sha256": "534ced2b306f044fba11495b1c5f788d70c6bc8612e46dacd34a2c81e15bb512",
+    "record_items": 1
+  },
+  "MID-V1-CONTINUITY-final.json": {
+    "private_record_sha256": "e94b21c821576762330efef1b109a8dafe56118e7f821e745be64bc4ce1767de",
+    "record_items": 1
+  },
+  "MID-V1-CONTINUITY-midpoint-corrected.json": {
+    "private_record_sha256": "e20e1112f6213d8aceb6a1e388f846b9439fe64b57faa361143d5566249dba58",
+    "record_items": 1
+  },
+  "MID-V1-CONTINUITY-midpoint.json": {
+    "private_record_sha256": "22828955b569fc3e1578482dfa5a46e7f429036b4a11c55002abfe7c77c97a05",
+    "record_items": 1
+  },
+  "MID-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "0c1ca6703c88758bcd884ddb6a1ff7382c1721b67add18a5655ea4ad6639feaa",
+    "record_items": 1
+  },
+  "MID-V1-GATE3-SEARCH.json": {
+    "private_record_sha256": "c9b3dd6f5ddd2bef5303d9db1a2a786c2033be14861910a0b1a5bad4960e5ebc",
+    "record_items": 1
+  },
+  "MID-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "d0052dfeb13653b2dd4b1727b31e9aa6992f3bd449558ecd72ce05ff14dc4607",
+    "record_items": 1
+  },
+  "MID-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "03cdd5d4634b187f90050ebb0db70025aac374ccd29b15ab407dff03b5d966be",
+    "record_items": 1
+  },
+  "MID-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "00e25a1248c81873c3a7ffbf5b3a486603260960da274ccaffb24963b79f1b84",
+    "record_items": 1
+  },
+  "MID-V1-READBACK-blaine.json": {
+    "private_record_sha256": "157e27bf4f43dd7fba81a9825be2cd1e7d5780531e647e04838b9ae44f24aab1",
+    "record_items": 1
+  },
+  "MID-V1-READBACK-endurance-approach.json": {
+    "private_record_sha256": "59cf8de1ca5f40939a92ebcf7234bb5098773c01432740ff49961aa48bbc2961",
+    "record_items": 1
+  },
+  "MID-V1-READBACK-final.json": {
+    "private_record_sha256": "fa87349a9964984f10f061961480cfe4d4d1b2ea8118913640f32784d58f7a6c",
+    "record_items": 1
+  },
+  "MID-V1-READBACK-key-preparation.json": {
+    "private_record_sha256": "5d0f7a9ef0d8be0186f7553f0c628eba6a515f808388613120f71b2a7776f364",
+    "record_items": 1
+  },
+  "MID-V1-READBACK-midpoint.json": {
+    "private_record_sha256": "da2b038ecab35221f625b6013bdd6a561dabe0a0c44fa027b5b692517d4ddece",
+    "record_items": 1
+  },
+  "MID-V1-REVIEW-CURSOR.json": {
+    "private_record_sha256": "158df1738a8736eb9627898993afcca53d360e9baaf791cffd8da5bb9a509972",
+    "record_items": 1
+  },
+  "MID-V1-VIEWER-AUTHENTICATION.json": {
+    "private_record_sha256": "f02490b1b75e7e79f1f0ba2325888ae98073eb2ba8677276f5ec7af9c56734a2",
+    "record_items": 1
+  },
+  "MISSION.json": {
+    "private_record_sha256": "5444f82e445853ec0c8dd7041be4fd7e3f89ac8bbd415ceba98b2a788d2ecc22",
+    "record_items": 1
+  },
+  "NEXT-SESSION-PLAN.json": {
+    "private_record_sha256": "7e56eeab7e9bc9c08d42d66df8e33338e387fa696ae2ea2b042988b5d0fc0edb",
+    "record_items": 1
+  },
+  "PRIOR-AUTHENTICATION.json": {
+    "private_record_sha256": "53b4798690d963045fa04a8352c3320558ba061aaf4d066a00e19b5678521833",
+    "record_items": 1
+  },
+  "PROJECT-READ-CACHE-ADVICE.json": {
+    "private_record_sha256": "8fbc12ff4416c14ba3e135173c0018dad230ae24d1e03a979bd109c123403667",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "a7bde084ee514fac58293de466aa951b7ba51784603503e75f1366e2af97cdc7",
+    "record_items": 1
+  },
+  "SESSION-DECISION.json": {
+    "private_record_sha256": "479e5cdd043a9898651bce558f881b5de3e2e976f4215687cf3248b8ad60bc63",
+    "record_items": 1
+  },
+  "SOURCE55-SEMANTIC-RECIPE.json": {
+    "private_record_sha256": "eece26c00f6521d1063073e81d5a275efa29134cd01a5a93192562a764f441e9",
+    "record_items": 1
+  },
+  "SOURCE55-V1-ACTIVATION.json": {
+    "private_record_sha256": "f491e2e3411ecc2c8d72a841ca8efd278c6a9559468f3d490a1b7149e2a9aca9",
+    "record_items": 1
+  },
+  "SOURCE55-V1-CLOSED.json": {
+    "private_record_sha256": "8bca11911ba987e8ebf4c1ed898a22a7fe65d230e3ccb591a4ee51ebf6bef3a1",
+    "record_items": 1
+  },
+  "SOURCE55-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "1cd36207e2db3213f604ac388864d1f2964ca815403cb09613ec131399e705d5",
+    "record_items": 1
+  },
+  "SOURCE55-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "8b0c461a9d7762edf1d63bd7ff683d06f5e4ee10028b695a2ca365074c23491f",
+    "record_items": 1
+  },
+  "SOURCE55-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "298e43fd424ed25f4f73af8b884cabc6c9efbde81f8bc681edd483b0c737e1b8",
+    "record_items": 1
+  },
+  "SOURCE55-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "0fae515f358e154d3591414d27aeb7bff55f7ff886bb4d7caea939501acf9548",
+    "record_items": 1
+  },
+  "SOURCE55-V1-QUALIFICATION.json": {
+    "private_record_sha256": "ff050fd088245f23593b6345cc21d8489d3d8c04197c2da2a38b2709ef30b54d",
+    "record_items": 1
+  },
+  "SOURCE55-V1-REVIEW-CURSOR.json": {
+    "private_record_sha256": "e90a6256dd319c5407dbe73da622c7a8027c6ad2ad9acecd84b41cfae171df30",
+    "record_items": 1
+  },
+  "SOURCE55-V1-VIEWER-AUTHENTICATION.json": {
+    "private_record_sha256": "fe2d899cb33f1416db1d63e4c5d28aad33b3071e0389265fa9d5fd076d0e4c95",
+    "record_items": 1
+  },
+  "TWO-HOUR-AUDIT-v2.json": {
+    "private_record_sha256": "92c1bc8cb5bc025e8b551c77c83a14941730e53011b69bcf2415de6bf3c10628",
+    "record_items": 1
+  },
+  "TWO-HOUR-AUDIT.json": {
+    "private_record_sha256": "1ad6adb2840432280210d488f4b215382013642c389007cf2d56065d8c8406b6",
+    "record_items": 1
+  },
+  "TWO-HOUR-WINDOWS-OBSERVATION.json": {
+    "private_record_sha256": "bd482c6c0ec02bdc86e6f074121358d44818367eef9b8e358a894adfa4f222de",
+    "record_items": 1
+  },
+  "VIEWER-SWITCH-TO-LATE-V1.json": {
+    "private_record_sha256": "3631308bc82ec198f736dbbf708fa63b7306bd3ead0ab88e4b7183bc2115caed",
+    "record_items": 1
+  },
+  "VIEWER-SWITCH-TO-MID-V1.json": {
+    "private_record_sha256": "9b9feed1c5109eedbfff65e4173d9b3729b1158b1c9bd6070d7b6011c7932dcf",
+    "record_items": 1
+  },
+  "WRITER-CLAIM.json": {
+    "private_record_sha256": "277d6a1299e05e4c6efaa078411ccdbd08b522859881c57f0b3dac03671b791a",
+    "record_items": 1
+  },
+  "actual55_delta": 0,
+  "actual_registration_delta": 0,
+  "completed_campaign": {
+    "private_record_sha256": "e0c7c116d269388a2f8a573cb4a8a640ea193cda7d60769a109bb89f523c5dbe",
+    "record_items": 15
+  },
+  "mission": {
+    "private_record_sha256": "5444f82e445853ec0c8dd7041be4fd7e3f89ac8bbd415ceba98b2a788d2ecc22",
+    "record_items": 1
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "next": "Review current exact-build gate receipts;prepare native clean-start DEVELOPMENT qualification and audit official-lane compatibility before any separately authorized frozen evaluation. Current owned-stock income bootstrap explicitly requires DEVELOPMENT;do not relabel that recipe as official. No new game or title starts automatically.",
+  "primary_package": {
+    "private_record_sha256": "67e712dc87a23ca2d73aabda098875969f04b957c05a2dd8fe8bed991b670d68",
+    "record_items": 1
+  },
+  "prior_costs": {
+    "private_record_sha256": "5a19453f5938ded6fff323a1a93e6b73ac15851b0270a4980864985726f04e87",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recipe": {
+    "private_record_sha256": "9127018e9880a600f57ebf15a4e4fdb71d4459fa222b17130e4df70a3f47c17e",
+    "record_items": 1
+  },
+  "source_document_sha256": "6ef20c2803be9b5667ade778428a465662621831fc336b0d3a66e929b6459299",
+  "status": {
+    "private_record_sha256": "d0915508181504f0e1588d0cc6b4137a2f53625b48b0a3f4a0fc3c87445ea507",
+    "record_items": 1
+  }
+}

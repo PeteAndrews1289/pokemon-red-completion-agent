@@ -302,6 +302,12 @@ def load_registration_policy(document: dict[str, Any]) -> RedRegistrationPolicy:
         initial,
         binding["protected_counts"],
         completion_scope=binding.get("completion_scope", "shared"),
+        target_species=(
+            tuple(binding["target_species"])
+            if binding.get("schema") == "pokemon.red.registered-runtime-binding.v3"
+            and type(binding.get("target_species")) is list
+            else None
+        ),
     )
     if result.document() != binding or result.sha256 != document["policy_sha256"]:
         raise ValueError("registration session policy differs")

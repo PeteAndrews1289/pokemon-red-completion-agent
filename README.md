@@ -27,4 +27,6 @@ The observation layer reads semantic game state. A local policy chooses among av
 
 Pete Andrews defines the product, directs AI-assisted development, watches the player's decisions and sets the evidence required for acceptance. Codex, Claude and Antigravity have contributed engineering or review at different stages. The local player makes the gameplay decisions. [Project mission](MISSION.md) · [Research and assistance policy](docs/assistance-policy.md)
 
-[Source for the November 19 development player](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-same-seed-20261119)
+[Frozen blackout repair and build fingerprint](docs/releases/red-solo-2026-11-19/README.md)
+
+[Full development tree](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/codex/red-development-20261119) · [Exact frozen player source](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/tree/bc5b05a0463ebbcb3c2139211b99ea2baa147b22/docs/releases/red-solo-2026-11-19)

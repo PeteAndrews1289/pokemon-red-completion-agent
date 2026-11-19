@@ -1,0 +1,20 @@
+{
+  "actual": {
+    "private_record_sha256": "11411a5dbca2e6a4b09559588ac45aef62baf9ed9f7dea4767c18d84a6bdeb1e",
+    "record_items": 18
+  },
+  "full_delivery_passed": false,
+  "gate_credit_transferred": false,
+  "learning": {
+    "private_record_sha256": "d7074fe12467df84a1279a5ea0034508a6e5078470aa289588012c51be3ec043",
+    "record_items": 4
+  },
+  "observed_at_utc": "2026-11-03T12:40:39.135720+00:00",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "repair": {
+    "private_record_sha256": "91e84f43f3314ac8e61e696f7ab4081499abc82fee7bc1e0846444a2fa9f73ae",
+    "record_items": 16
+  },
+  "scope": "Restored DEVELOPMENT in one fresh ancestry; not zero-load fresh frozen acceptance.",
+  "source_document_sha256": "fc1511d9dba5ece2c484fa59660c4cb6c800c8b45fc5aa6b60340a380c284332"
+}

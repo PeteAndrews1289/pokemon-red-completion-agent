@@ -1,11 +1,3 @@
-# Current ownership
+# Agent coordination
 
-[Active product state](ACTIVE_PRODUCT_STATE.md) · [Authoritative handoff](HANDOFF.md).
-Follow [NORTH_STAR.md](NORTH_STAR.md); the authoritative handoff defines the
-current bounded work order and ownership claim.
-
-All native copies in the October30 Forest block are closed. The current migration
-handoff records the source-writer lease and final release evidence. Internal
-reviewers supplied private audits and proposals; no external reviewer or worker2
-was dispatched. Future work needs a fresh bounded ownership claim. Root alone
-may dispatch native work and write Code under that claim.
+[HANDOFF.md](HANDOFF.md) is the authoritative handoff. Read [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) for the operating contract and current evidence. One writer owns the private campaign, its own save and repairs. The four prior lineages are complete. A dated review or a public checkout carries no live process ownership. Check the current claim before changing the active source.

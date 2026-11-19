@@ -24,6 +24,53 @@ def line(*coordinates: tuple[int, int]) -> LocalGraph:
     return LocalGraph(edges)
 
 
+def test_scoped_warp_projections_share_only_equivalent_departures():
+    from pokemon_red_completion.route_plan import frozen_local_route_inventory
+
+    graph = line((0, 0), (0, 1), (0, 2), (0, 3))
+    warps = frozenset({(0, 1), (0, 3)})
+    with frozen_local_route_inventory() as cache:
+        assert cache._retain_graph(graph)
+        first, _ = cache.warp_projection(graph, warps, (0, 0), True)
+        other, _ = cache.warp_projection(graph, warps, (0, 2), True)
+        on_warp, _ = cache.warp_projection(graph, warps, (0, 1), True)
+        assert first is other and first is not on_warp
+        assert first.edges[(0, 1)] == ()
+    assert not cache.warp_projections
+
+
+def test_scoped_macro_restriction_reuses_only_the_observed_graph_and_checks_mutation():
+    from pokemon_red_completion.route_plan import frozen_local_route_inventory, without_macro_departures
+
+    edge = MacroEdge(2, kind="connection", at=(0, 0), arrival_at=(0, 0))
+    graph = MacroGraph({1:(edge,), 2:()})
+    with frozen_local_route_inventory():
+        first = without_macro_departures(graph, 1)
+        assert first is without_macro_departures(graph, 1)
+        assert first.edges == {1:(), 2:()} and graph.edges[1] == (edge,)
+    assert first is not without_macro_departures(graph, 1)
+    with pytest.raises(RoutePlanningError, match="macro graph|route graph"):
+        with frozen_local_route_inventory():
+            without_macro_departures(graph, 1)
+            graph.edges[1] = ()
+
+
+def test_cached_plain_route_failure_preserves_each_callers_own_exception_context():
+    from pokemon_red_completion.route_plan import frozen_local_route_inventory
+
+    graph = MacroGraph({1:(), 2:()})
+    local = {1:line((0,0)), 2:line((0,0))}
+    with frozen_local_route_inventory() as cache:
+        for message in ("first caller", "second caller"):
+            try:
+                raise ValueError(message)
+            except ValueError as ambient:
+                with pytest.raises(RoutePlanningError) as error:
+                    plan_route(graph, local, 1, (0,0), 2)
+                assert error.value.__context__ is ambient
+        assert cache.route_hits == 1
+
+
 def test_joint_search_reuses_projection_with_paths_but_not_across_calls(monkeypatch):
     from pokemon_red_completion import route_plan as routes
 

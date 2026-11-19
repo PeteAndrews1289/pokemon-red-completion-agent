@@ -219,6 +219,7 @@ def enumerate_red_regional_acquisitions(
     unsupported_remote_maps: frozenset[int] = frozenset(),
     interruption_handler_wrapper=None,
     quote_capture_route_work: bool = False,
+    regional_coverage: bool = False,
 ) -> tuple[RedRegionalAcquisitionCandidate, ...]:
     """Return up to four nearby, fully verified ordinary-grass options.
 
@@ -235,6 +236,8 @@ def enumerate_red_regional_acquisitions(
         raise TypeError("capture interruption wrapper must be callable")
     if type(quote_capture_route_work) is not bool:
         raise TypeError("capture route-work quote permission must be boolean")
+    if type(regional_coverage) is not bool:
+        raise TypeError("regional coverage comparison requires a boolean")
     before = actions.actions_executed, runtime.emulator.frame_count
     record = getattr(actions, "record_diagnostic_event", None)
 
@@ -281,6 +284,20 @@ def enumerate_red_regional_acquisitions(
         fly_origins=fly_origins,
         record_diagnostic_event=(lambda kind, payload: audit(kind, **payload)),
     )
+    if regional_coverage:
+        from .red_regional_coverage import diversify_regional_sources, missing_grass_targets
+
+        if not registered:
+            raise ValueError("regional coverage requires a registered collection objective")
+        policy = runtime.registration_policy
+        missing = policy.targets - policy.goal_registered(observation.collection_observation)
+        opportunities = missing_grass_targets(world.rom, missing)
+        eligible_maps = {m for _,m in ranked_sources if (m == raw_map or m not in unsupported_remote_maps)
+                         and not closed_remote_cave_entry(world.rom, runtime.reader, current_map=raw_map, target_map=m)}
+        ranked_sources, alternate = diversify_regional_sources(ranked_sources, opportunities, eligible_maps)
+        audit("regional_registration_coverage", missing_count=len(missing), comparison=alternate,
+              route_evaluation_limit=MAXIMUM_ROUTED_SOURCE_EVALUATIONS,
+              candidate_limit=TARGET_SOURCE_CANDIDATES, native_availability_checked_separately=True)
     candidates: list[RedRegionalAcquisitionCandidate] = []
     routed_source_evaluations = 0
     route_plan_cache: dict[

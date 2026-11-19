@@ -360,14 +360,12 @@ def test_topology_rank_is_nearby_first_and_keeps_unreachable_sources_last(monkey
     map_ids = {sources[0]: 3, sources[1]: 4, sources[2]: 1}
     monkeypatch.setattr(regional, "map_id_for_wild_source", map_ids.__getitem__)
 
-    def topology(_graph, start, goal, *, last_outside):
+    def topology(_graph, start, goals, *, last_outside):
         assert (start, last_outside) == (1, 7)
-        if goal == 4:
-            raise regional.GlobalRouterError("disconnected")
-        costs = {1: (), 3: (SimpleNamespace(cost=5),)}
-        return SimpleNamespace(edges=costs[goal])
+        assert goals == {1, 3, 4}
+        return {1: (0, 0), 3: (5, 1)}
 
-    monkeypatch.setattr(regional, "find_macro_path", topology)
+    monkeypatch.setattr(regional, "macro_path_estimates", topology)
     world = SimpleNamespace(
         macro_graph=object(),
         terrain={1: object(), 3: object(), 4: object()},
@@ -385,14 +383,12 @@ def test_topology_rank_accounts_for_observed_fly_origins(monkeypatch):
     map_ids = {sources[0]: 2, sources[1]: 3}
     monkeypatch.setattr(regional, "map_id_for_wild_source", map_ids.__getitem__)
 
-    def topology(_graph, start, goal, *, last_outside):
+    def topology(_graph, start, goals, *, last_outside):
         assert last_outside in {7, 5}
         costs = {(100, 2): 3, (100, 3): 8, (5, 2): 5, (5, 3): 0}
-        return SimpleNamespace(
-            edges=tuple(SimpleNamespace(cost=1) for _ in range(costs[start, goal]))
-        )
+        return {goal: (costs[start, goal], costs[start, goal]) for goal in goals}
 
-    monkeypatch.setattr(regional, "find_macro_path", topology)
+    monkeypatch.setattr(regional, "macro_path_estimates", topology)
     world = SimpleNamespace(
         macro_graph=object(),
         terrain={2: object(), 3: object()},
@@ -672,3 +668,15 @@ def test_native_closed_entry_is_filtered_before_corridor_or_route_work(monkeypat
         "native_entry_guard_visible" if closed else "corridor_or_profile_unavailable"
     )
     assert actions.actions_executed == runtime.emulator.frame_count == 0
+
+
+@pytest.mark.parametrize("warp,occupied,expected", [
+    (True, False, (4, 1)), (False, False, None), (True, True, None),
+])
+def test_only_authentic_unoccupied_warp_can_seed_excluded_origin(warp, occupied, expected):
+    origin = (4, 1)
+    world = SimpleNamespace(
+        macro_graph=SimpleNamespace(warp_locations={13: {origin} if warp else set()}),
+        object_blockers={13: {origin} if occupied else set()},
+    )
+    assert regional._permitted_warp_origin(world, 13, origin) == expected

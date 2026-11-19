@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-13",
+  "next_session_plan": {
+    "private_record_sha256": "b109816bb3d60c0cfd4519764451e04d299662da60a098c84ce42d7941a37fcf",
+    "record_items": 8
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_id": "campaign-and-joint-rehearsal-20261113-2258",
+  "source_document_sha256": "c6466c44c948cb6c4a6c2512a8255622bf63519b5c963602a80f3e9d61779b31",
+  "status": "campaign-running",
+  "verified": {
+    "private_record_sha256": "84dd53be5ec079c41c8ff161d2bbf2286f0c44027730c078cebba533a87dcb6c",
+    "record_items": 14
+  }
+}

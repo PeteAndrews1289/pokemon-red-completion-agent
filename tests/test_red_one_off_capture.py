@@ -384,7 +384,7 @@ def test_outer_capture_guard_accepts_observed_opponent_rest_before_ball(monkeypa
 
 @pytest.mark.parametrize('hp,status,moves', [
     (46,2,(29,133,156,0)),(100,2,(29,133,156,0)),
-    (150,0,(29,133,156,0)),(150,3,(29,133,156,0)),(150,2,(29,133,0,0)),
+    (150,0,(29,133,156,0)),(150,1,(29,133,156,0)),(150,3,(29,133,156,0)),(150,2,(29,133,0,0)),
 ])
 def test_outer_capture_guard_rejects_unexplained_hp_change_before_ball(monkeypatch,hp,status,moves):
     s = Sim(monkeypatch)
@@ -397,3 +397,52 @@ def test_outer_capture_guard_rejects_unexplained_hp_change_before_ball(monkeypat
     with pytest.raises(OneOffCapturePaused, match='target HP'):
         s.run(prepare=unexplained)
     assert s.spends == 0 and not s.commands
+
+
+@pytest.mark.parametrize("sleep_counter", [0, 1])
+@pytest.mark.parametrize("fault", [None, "stale_recovery", "missing_final", "unexplained_damage", "foreign_reader"])
+def test_verified_preparer_carries_rest_through_later_sleep_turns(monkeypatch, sleep_counter, fault):
+    from pokemon_red_completion.red_capture_status_runtime import RedCaptureStatusPreparer
+    from pokemon_red_completion.red_one_off_capture import run_one_off_capture
+    s = Sim(monkeypatch)
+    s.raw = replace(s.raw, enemy_hp=47)
+    status = [2]
+    s.read_enemy_capture_moves = lambda: (29, 133, 156, 0)
+    s.read_enemy_capture_status = lambda: status[0]
+    identity = NS(original_species_id=75, displayed_species_id=75, transformed=False)
+    s.read_wild_capture_identity = lambda: identity if s.raw.battle_state == 1 else None
+    prepare = RedCaptureStatusPreparer(s, s.executor, s)
+
+    def verified_rest():
+        before = s.raw
+        s.raw = replace(s.raw, enemy_hp=150)
+        prepare._protect_after_turn(before, s.raw, identity, 47, s.raw.party_species_ids,
+                                   s.raw.bag_items, s.read_enemy_capture_moves(), phase="status_turn")
+        status[0] = sleep_counter
+        if fault == "unexplained_damage":
+            s.raw = replace(s.raw, enemy_hp=149)
+        if fault != "missing_final":
+            prepare._record_throw_preparation()
+        return True
+
+    if fault == "stale_recovery":
+        verified_rest()
+        s.raw = replace(s.raw, enemy_hp=47)
+        status[0] = sleep_counter
+        callback = lambda: (setattr(s, 'raw', replace(s.raw, enemy_hp=150)), True)[-1]
+    else:
+        callback = verified_rest
+    if fault == "foreign_reader":
+        prepare.reader = NS()
+    def run():
+        return run_one_off_capture(s, s.executor, s, OneOffCaptureRequest(75, 50, ItemId.GREAT_BALL),
+                                   max_throws=3, before_throw=callback, status_preparer=prepare)
+    if fault == "foreign_reader":
+        with pytest.raises(ValueError, match="witness must belong"):
+            run()
+    elif fault:
+        with pytest.raises(OneOffCapturePaused, match="target HP"):
+            run()
+    else:
+        assert run()
+    assert s.spends == (0 if fault else 1)

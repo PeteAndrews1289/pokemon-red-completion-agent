@@ -84,3 +84,38 @@ def classify_closed_phase(result, *, phase, processes_absent, cgroup_empty, term
         native_admission_authority=False,
         continuation_authority=False,
     )
+
+
+def classify_decision_ownership(choice):
+    """Count declared parent queries without losing branch-free singleton rows.
+
+    Raw model choice modes call the parent once, even without a child receipt.
+    Unknown receipts remain unknown; missing evidence must not count as support.
+    This classifies provenance only and never grants execution authority.
+    """
+    if not isinstance(choice, dict):
+        raise ValueError("decision ownership requires a receipt dictionary")
+    branch = choice.get("branch_recovery", {})
+    if not isinstance(branch, dict):
+        raise ValueError("branch ownership receipt differs")
+    parent = branch.get("parent_model_queries", choice.get("model_queries"))
+    if parent is None:
+        if choice.get("schema") == "pokemon.red.live-mixed-option-choice.v1":
+            if choice.get("mode") in {"model_greedy", "model_exploration"}:
+                parent = 1
+            elif choice.get("mode") in {
+                "equivalent_exploration", "deterministic_safety", "forced_singleton_support"
+            }:
+                parent = 0
+    if parent is not None and (type(parent) is not int or parent < 0):
+        raise ValueError("parent query count differs")
+    child = branch.get("child_model_queries", 0)
+    if type(child) is not int or child < 0:
+        raise ValueError("child query count differs")
+    return dict(
+        parent_queries=parent,
+        owner=("parent_model" if parent else "disclosed_support")
+        if parent is not None else "unknown",
+        child_queries=child,
+        child_overrode=branch.get("child_overrode_parent_binding", False),
+    )

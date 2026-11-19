@@ -8,7 +8,7 @@ playable distribution. A documentation/review copy does not authorize gameplay.
 
 The private Windows MAIN installation uses an already qualified WSL2 environment
 and its existing Python runtime. The local platform handoff identifies the exact
-distribution, user, project paths and current closed state. Do not reinstall or
+distribution, user, project paths and current process state. Do not reinstall or
 upgrade that pinned runtime merely to read code or review documents.
 
 The authoritative source checkout and a normal-Windows review copy have different
@@ -53,11 +53,7 @@ experimental model is not automatically the configured or adopted actor. Current
 source, package, model, continuation and limits belong to
 [HANDOFF.md](../HANDOFF.md) and its exact private plan.
 
-All runs remain stopped for review. Do not replay old commands, revive an expired
-lineage, treat an old unclaimed plan as current, or import a diagnostic terminal.
-An eventual official evaluation needs its own authenticated fresh start, frozen
-configuration, declared assistance and explicit authority under the
-[completion contract](completion-contract.md).
+The four reference development runs have finished. The [November 19 solo snapshot](work-sessions/solo-field-blackout-2026-11-19.md) records the follow-up on its own save. The private operator handoff governs live execution. Public source and ROM-free checks are available independently.
 
 [Architecture](architecture.md) · [Dashboard](progress-dashboard.md) ·
 [Contributor instructions](../AGENTS.md) · [Operating contract](../NORTH_STAR.md)

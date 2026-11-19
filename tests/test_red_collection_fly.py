@@ -210,6 +210,13 @@ def scene():
         _replan=lambda request: plan,
     )
 
+    from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
+
+    router.route_plan_cache = None
+    router.plan_feasible_to_map = lambda *a, **kw: RedResourceGoalRouter.plan_feasible_to_map(
+        router, *a, **kw
+    )
+
     def bind():
         fresh = FreshRedGoalObservation("0" * 64, adapter.observe(), observer.observe())
         return bind_collection_fly(router, spec, provider, fresh, observer)
@@ -257,7 +264,7 @@ def test_fly_onward_handler_uses_existing_resource_route_allowances(scene, monke
     assert report.actions_executed > 0
     assert calls == [dict(route_name="collection Fly onward walk",
         maximum_flees=_MAX_ROUTE_FLEES,
-        maximum_scripted_dialogues=4, allow_field_faints=True, emulator=scene.game)]
+        maximum_scripted_dialogues=4, allow_wild_faints=True, allow_field_faints=True, emulator=scene.game)]
 
 
 def test_fly_onward_walk_dismisses_native_dialogue_before_destination(scene):
@@ -675,4 +682,48 @@ def test_legacy_capture_profile_does_not_gain_fly_access(scene):
         "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
     )
     assert bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer) is None
+    assert scene.game.actions == [] and scene.provider_calls == []
+
+
+@pytest.mark.parametrize("failure", [False, True])
+@pytest.mark.parametrize("cache_enabled", [False, True])
+def test_fly_onward_query_uses_same_scoped_cache_as_walking(scene, failure, cache_enabled):
+    calls = []
+
+    def plan(start, goal_map, *, goal_at=None):
+        calls.append((start, goal_map, goal_at))
+        if failure:
+            raise RoutePlanningError("fixture has no onward route")
+        return scene.plan
+
+    scene.router.world.plan_feasible_to_map = plan
+    scene.router.route_plan_cache = {} if cache_enabled else None
+    first, second = scene.bind(), scene.bind()
+    assert (first is None) is failure and (second is None) is failure
+    if not failure:
+        assert first.opportunity == second.opportunity
+        assert first.maximum_cash_debit == second.maximum_cash_debit
+        assert first.resource_quote == second.resource_quote
+    assert len(calls) == (1 if cache_enabled else 2)
+    assert scene.game.actions == [] and scene.provider_calls == []
+    if cache_enabled:
+        scene.router.route_plan_cache.clear()
+        scene.bind()
+        assert len(calls) == 2
+
+
+def test_fly_inventory_cache_keeps_observed_capabilities_distinct(scene):
+    calls = []
+    scene.router.route_plan_cache = {}
+
+    def plan(start, goal_map, *, goal_at=None):
+        calls.append(start.capabilities)
+        return scene.plan
+
+    scene.router.world.plan_feasible_to_map = plan
+    original = scene.observer.observe
+    assert scene.bind() is not None
+    scene.observer.observe = lambda: replace(original(), capabilities=frozenset({"cut"}))
+    assert scene.bind() is not None
+    assert len(calls) == 2 and calls[0] != calls[1]
     assert scene.game.actions == [] and scene.provider_calls == []

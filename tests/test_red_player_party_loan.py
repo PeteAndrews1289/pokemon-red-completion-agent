@@ -40,7 +40,8 @@ def test_return_walk_uses_counted_center_waiter_and_preserves_walking_guard(
             raise RoutePlanningError("observed moving NPC occupies the destination")
         return original
 
-    def waiter(rt, current, port):
+    def waiter(rt, current, port, **options):
+        assert options == ({"allow_offscreen_approach": True} if phase == "initial" else {})
         assert rt is runtime and current is world and port is actions
         assert len(refreshes) == (1 if phase == "initial" else 2)
 
@@ -385,3 +386,31 @@ def test_loan_walk_refreshes_live_occupancy_without_relaxing_route_guards(monkey
     else:
         loan._walk(runtime, actions, world, 133, (3, 3))
         assert calls == ["refresh", "fresh-replan", "replacement-accepted"]
+
+
+@pytest.mark.parametrize("full", [False, True])
+def test_loan_return_keeps_earned_addition_when_guard_started_with_five(monkeypatch, full):
+    runtime, actions, state, calls = setup(monkeypatch)
+    guard = runtime.adapter.party_guard
+    retained = tuple(member for i, member in enumerate(guard.before.members) if i != 4)
+    runtime.adapter.party_guard = replace(
+        guard,
+        refs=tuple(ref for ref in guard.refs if ref != "e"),
+        before=PartyObservation(tuple(replace(member, slot=i + 1) for i, member in enumerate(retained))),
+    )
+    if full:
+        # A subsequently caught sixth member is retained; the trained guest is
+        # the first unreserved individual in the executor's existing ordering.
+        state.members.insert(0, state.members.pop())
+        state.refs.insert(0, state.refs.pop())
+    else:
+        state.members.pop()
+        state.refs.pop()
+    before = loan._stock(runtime)
+    assert loan.restore_guarded_party_loan(runtime, actions, None)
+    assert loan._stock(runtime) == before
+    assert set(state.refs) == {"a", "b", "c", "d", "e", "loan"}
+    assert ("deposit" in calls) is full
+    assert len(state.boxes) == int(full)
+    if full:
+        assert state.boxes[0].preparation_ref == "guest" and state.boxes[0].experience == 9000

@@ -1,0 +1,23 @@
+{
+  "evidence": {
+    "private_record_sha256": "6f76ad77d091ac8b7213a8de606bad5ea66bc88a34750db739c38e57d7919c23",
+    "record_items": 1
+  },
+  "experimental_models": 2,
+  "gameplay_stopped": true,
+  "new_actual_registrations": 0,
+  "new_train_rows": 0,
+  "next": {
+    "private_record_sha256": "b7e4c78e857a494d58df35d276b16c01bb913926630fd4800e095bfabd073195",
+    "record_items": 1
+  },
+  "prior_session": "2026-11-07-memory-ceiling",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fit_calls": 2,
+  "runtime_weight_adoptions": 0,
+  "source_document_sha256": "e22671a1881de047eeebd894057cc256d7789ed973505fbe2490201d7358d825",
+  "status": {
+    "private_record_sha256": "59e12ad2f255203d11f425bd55ace5267599a03467d1bc00455e7e864a5521ac",
+    "record_items": 1
+  }
+}

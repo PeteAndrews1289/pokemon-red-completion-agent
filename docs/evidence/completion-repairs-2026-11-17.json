@@ -1,0 +1,20 @@
+{
+  "baseline_fixture_failures": 1,
+  "copyback": false,
+  "fits": 0,
+  "full124": false,
+  "independent_origins": 0,
+  "matched_late_menus": 0,
+  "next_decision": "Verify fresh-start binding on the combined recipe and prepare one exact fresh 124 rehearsal. Qualify a TRAIN-only late-boss menu with both fight and useful preparation before a fit.",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "result": {
+    "private_record_sha256": "fd2f43cb785bf68aa385fd912010b16ea5f895b710bba95b2c73b7335dd58510",
+    "record_items": 1
+  },
+  "schema": "pokemon.red.completion-repairs.v1",
+  "session": "completion-repairs-20261118-024218",
+  "source_document_sha256": "81ee43a63de9922d2fad828bfe59f4c3df6dc6cb3d0076b0ff2cea8e3908267c",
+  "tests_passed": 408,
+  "train_menus_reviewed": 36,
+  "train_rows": 0
+}

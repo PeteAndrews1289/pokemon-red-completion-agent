@@ -1,0 +1,41 @@
+{
+  "actual_registration_delta": 0,
+  "goal_native_audit": {
+    "private_record_sha256": "844811f90ed84ff33fa94bc7e8fe280aa9c86cd97f9cf0a4ef3912f9b64a4ff4",
+    "record_items": 1
+  },
+  "goal_switching_solved": false,
+  "native_venue_party_readback": {
+    "private_record_sha256": "9d3b2108ffcdc434e89228b9ec0f23a2a7a12f744af1a11b3ebfb22e4557239b",
+    "record_items": 1
+  },
+  "new_goal_or_continuation_TRAIN_rows": 0,
+  "new_learned_heads": 3,
+  "new_venue_TRAIN_comparisons": 1,
+  "new_venue_native_outcomes": 3,
+  "next": {
+    "private_record_sha256": "f12fb59204ecb27d8897340776d12f78c335fef4ca2110ea4fc4cde6ddca8c4e",
+    "record_items": 1
+  },
+  "policy_promotions": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fits": 3,
+  "refs": {
+    "private_record_sha256": "9511f321ef2bf2c7646e7882e6f18dcb32206c81253a06d6d9f1d132972e8088",
+    "record_items": 13
+  },
+  "source_document_sha256": "3d632836b8658d68279172fa82693e0786171cc9036ed7c6e2ff7ed88007318b",
+  "status": {
+    "private_record_sha256": "9762fae2c9bc8c3e85a75c4143452eabd743ef4b8badc9a5ae1ae1da597d799f",
+    "record_items": 1
+  },
+  "venue_admission": {
+    "private_record_sha256": "13029c864105d8dcfa24383b701f69223ffaba9c15c15f724c35f47f8bb57699",
+    "record_items": 1
+  },
+  "venue_comparison": {
+    "private_record_sha256": "74a2ea070d57e78a8d2c26f06a9b25098725890ebcde143dee82e99da9c5ab2d",
+    "record_items": 1
+  },
+  "whole_Code_parity": false
+}

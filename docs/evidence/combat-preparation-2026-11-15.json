@@ -1,0 +1,54 @@
+{
+  "TRAIN": {
+    "private_record_sha256": "2d713946f6036ed69dfb446b2e0e8176926a3797447e4601df9a88a0053ca155",
+    "record_items": 24
+  },
+  "actual_cash": 8,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "cached_baseline_task_successes": 3,
+  "cached_baseline_wall_speed_not_controlled": true,
+  "candidate": {
+    "private_record_sha256": "c4a87ceaad408b4c8e823a34a7513d91be14516dcef1cb951f64edd484c82b48",
+    "record_items": 6
+  },
+  "candidate_task_successes": 3,
+  "comparison": {
+    "private_record_sha256": "4c32481d0dd231e58a3fa03970f41f406e7bf8b621d63aebadcda38f90207582",
+    "record_items": 3
+  },
+  "comparison_battle_losses": 0,
+  "comparison_technical_errors": 0,
+  "defaults_unchanged": true,
+  "diagnosis": {
+    "private_record_sha256": "8aa5894e24268d4d57a932603a40048eac1e8a62ce0afa3da97ec7cfa682d3ee",
+    "record_items": 5
+  },
+  "external_reviews_used": false,
+  "fresh_campaign_qualified": false,
+  "goal_switching_solved": false,
+  "new_campaign": false,
+  "new_comparison_gameplay_episodes": 3,
+  "production_defaults_unchanged": true,
+  "progress": {
+    "private_record_sha256": "5e21f0409ee6e76277a08b70f36d9acdf931eafc186e1423d410384354643792",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "roadmap_credit": {
+    "private_record_sha256": "538f9e0ffa56a3c648a157c154d4902a9657ecb24c152bdeb0db201e5faaaa1c",
+    "record_items": 1
+  },
+  "session": "combat-preparation-20261115-1705",
+  "source": {
+    "private_record_sha256": "8272fdec8d92e448d21ff29b587e80c391236d601c8252bfeb6fdd48142a3ab4",
+    "record_items": 7
+  },
+  "source_document_sha256": "fb089c59d925e5cf98df4fd7f813a6d9dd2b30919dafed3156be0debf6ce5fd8",
+  "training_benefit_credit_held_for_collection_cost": true,
+  "verification": {
+    "private_record_sha256": "4e453c177d65891184027babc1d4465209a03bcc6f27878a163bea6ecab94082",
+    "record_items": 13
+  },
+  "whole_campaign_speedup_proven": false
+}

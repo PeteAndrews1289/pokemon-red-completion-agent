@@ -1,0 +1,60 @@
+{
+  "DEV_rows_fitted": 0,
+  "TRAIN": {
+    "private_record_sha256": "fde090679a53065b9a678927e4e0edfb803054ceacfd99517963e7b9ab6802bc",
+    "record_items": 22
+  },
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "cases": {
+    "private_record_sha256": "39697df590502c8a7689eacd356a92382fac706a39c1105c9afb10323bdd8ef8",
+    "record_items": 2
+  },
+  "comparison": {
+    "private_record_sha256": "543c347b5625f8e37fcbad07c5a09d3bc6b006a839bc21892267debae73dbd54",
+    "record_items": 17
+  },
+  "default_changed": false,
+  "duplicate_physical_windows": 1,
+  "experimental_weights_changed": true,
+  "faint_repair": {
+    "private_record_sha256": "477630e0860099eb942ec239505cc92d0a5a91e894860514280842e076848293",
+    "record_items": 25
+  },
+  "fit_calls": 1,
+  "fit_partition": "train",
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "limitations": {
+    "private_record_sha256": "34d24f684b7684aefd8f2db172cfb04b43989c56e5057418cb7b182adc6ce7e9",
+    "record_items": 1
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 19,
+  "new_campaign": false,
+  "new_censored_windows": 6,
+  "new_fits": 1,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "ac69346fa82a6f4b82217fde6648d1a47703a4581c9177ca1e1d17d246dc7b67",
+    "record_items": 9
+  },
+  "schema": "pokemon.red.production-story-train.v1",
+  "session": "production-story-train-20261117-1422",
+  "source_document_sha256": "2c44d8f7a604d35ee7c63bd95706a1a0c041ccc1d044df27156021aeb7060c21",
+  "source_runtime_changed": true,
+  "status": "closed_candidate_rejected_execution_repair_held",
+  "summary": {
+    "private_record_sha256": "7ce541d2604bdd7a2bbfab3d7c0e610ff9fcc54dda17ab29b7f076c1ec5ebd23",
+    "record_items": 1
+  },
+  "total_fit_rows": 65
+}

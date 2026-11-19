@@ -1,0 +1,42 @@
+{
+  "conclusion": "Same weights and configuration hash did not imply identical task targets. Historical greedy passes are not a controlled full-recipe comparison against current124target runs. Current fixed-menu counterfactual compares exact same current menus only;both original native cases must qualify the explicit124target recipe.",
+  "initial_menu_cardinality_equal": true,
+  "new_plan": {
+    "private_record_sha256": "bead5adc9211b46f0dd094a09d089804b97fa5aaf25b61089074d2adcaa7f2bc",
+    "record_items": 1
+  },
+  "new_required_species_explicit": true,
+  "new_target_count": 124,
+  "no_fitting": true,
+  "no_gate_credit": true,
+  "no_native_changes": true,
+  "observed_at_utc": "2026-11-03T17:52:03.655291+00:00",
+  "old_effective_default_target_count": 151,
+  "old_package": {
+    "private_record_sha256": "0e1f657b83118fea81f98ea2c593d053aebbd6d69e546fec8787fe0d6c90f55c",
+    "record_items": 1
+  },
+  "old_pinned_assembly": {
+    "private_record_sha256": "8b7ed939ec3f2436678fd0ffc8e53686aca4b51c2256fb6a1fca9393baf5a80a",
+    "record_items": 1
+  },
+  "old_pinned_policy_source": {
+    "private_record_sha256": "e6a076428da5ad3668704b3c3486a819592ccd86b1a882e028087823397a365e",
+    "record_items": 1
+  },
+  "old_plan": {
+    "private_record_sha256": "d5d81e44ee7b7b1518ff0daf672cac90a9c355ed5940557643bc783083109cdf",
+    "record_items": 1
+  },
+  "old_required_species_explicit": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "same_source_opening_menus": {
+    "private_record_sha256": "b9a25f0b196ec6bd962f60688093a3db92c6672e19b73d1f013e35b90e09edcc",
+    "record_items": 2
+  },
+  "source_document_sha256": "c36317fefe9cdc4d4239df750aaf82c796a9628c76ee0674c7243b5a6b4d840f",
+  "target_default_source": {
+    "private_record_sha256": "d53f9d16b1e014e2b1923c8f7e58fcc2e904811145ee85732fe41c084ffb3b70",
+    "record_items": 1
+  }
+}

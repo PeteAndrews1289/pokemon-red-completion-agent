@@ -197,6 +197,8 @@ def player_collection_supplements(
     quote_capture_route_work=False,
     include_level_workload=False,
     include_capture_invocation=False,
+    regional_coverage=False,
+    observe_collection_cost=False,
 ):
     if evolution_venue_model is not None or evolution_venue_model_sha256 is not None:
         from .red_native_boxed_evolution import validate_native_evolution_venue_model
@@ -216,6 +218,8 @@ def player_collection_supplements(
         quote_capture_route_work,
         include_level_workload,
         include_capture_invocation,
+        regional_coverage,
+        observe_collection_cost,
     ):
         if type(permission) is not bool:
             raise ValueError("collection evolution options require explicit booleans")
@@ -280,6 +284,7 @@ def player_collection_supplements(
                 live,
                 actions,
                 world,
+                **({"regional_coverage": True} if regional_coverage else {}),
                 maximum_actions=maximum_actions,
                 maximum_frames=maximum_frames,
                 **(
@@ -300,14 +305,17 @@ def player_collection_supplements(
     )
     acquisitions += scripted_gift_bindings(runtime, live, actions, world)
     if include_fossil_acquisition:
-        acquisitions += fossil_acquisition_bindings(
+        existing_acquisitions = {binding.binding_ref for binding in acquisitions}
+        fossils = fossil_acquisition_bindings(
             runtime,
             live,
             actions,
             world,
             maximum_actions=maximum_actions,
             maximum_frames=maximum_frames,
+            allow_remote_departure=True,
         )
+        acquisitions += tuple(binding for binding in fossils if binding.binding_ref not in existing_acquisitions)
     acquisitions += npc_trade_dependency_bindings(
         runtime,
         live,
@@ -345,7 +353,8 @@ def player_collection_supplements(
             maximum_frames if maximum_evolution_frames is None else maximum_evolution_frames
         ),
         maximum_quanta=maximum_evolution_quanta,
-        **({"include_level_workload": True, "bind_collection_cost": True} if include_level_workload else {}),
+        **({"include_level_workload": True} if include_level_workload else {}),
+        **({"bind_collection_cost": True} if observe_collection_cost else {}),
         **(
             {"maximum_wall_seconds": maximum_evolution_seconds}
             if maximum_evolution_seconds is not None

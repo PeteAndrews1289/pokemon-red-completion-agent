@@ -1,0 +1,31 @@
+{
+  "actual_registration_delta": 0,
+  "additional_existing_adapter_comparisons": 2,
+  "all_game_runs_paused": true,
+  "claim": "These inspected exposed DEVELOPMENT cases only; no claim that existing value scoring is generally correct.",
+  "current_goal_model_sha256": "94a0a18f228262cdc6f27ccb9f7e1868b539959d6aba46e15861845460479a30",
+  "evidence_sha256": {
+    "private_record_sha256": "ee24f035b26ae72dad002c9a0679fd8cfc922334eeb331abce638b2c75704a17",
+    "record_items": 4
+  },
+  "findings": {
+    "private_record_sha256": "6849cd5435b58ccb2ba36f3e7917c7a0a59168e65174a39f21ded772a6b47bdf",
+    "record_items": 7
+  },
+  "gate_awards": 0,
+  "missing_fact": "No genuine settled partial noncombat interaction example in the current admitted TRAIN lineage; a completed gift or another movement unit does not identify that feature combination.",
+  "native_loads": 0,
+  "new_train_rows": 0,
+  "next_decision": {
+    "private_record_sha256": "465c6185fc0ada3205d18548d49403ac04a4d7ce2abb664424b915893a58a1ab",
+    "record_items": 1
+  },
+  "policy_changed": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "raw_saved_menus_rescored": 170,
+  "real_fits": 0,
+  "schema": "pokemon.public.scoring-purpose-assessment.v1",
+  "source_document_sha256": "260636f054a9b7dec1df488c9a4964df8cc8db79f3717f6dd09fb0b14c30ccf8",
+  "status": "CLOSED_NO_NEW_SATISFIED_PURPOSE_PATCH_JUSTIFIED",
+  "tests_passed": 46
+}

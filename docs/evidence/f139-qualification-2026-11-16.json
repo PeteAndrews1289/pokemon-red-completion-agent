@@ -1,0 +1,65 @@
+{
+  "DEV_rows_fitted": 0,
+  "F139_LATE_scoped_story": true,
+  "F139_MID_clean": false,
+  "F139_focused_checks": 850,
+  "F139_original55_scoped_clean": true,
+  "F140_focused_checks": 1018,
+  "F140_full_original_gate_credit": false,
+  "F140_task_handoff_and_whole_objectives": true,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restore_delta": 0,
+  "campaign_ready": false,
+  "cash8_follow_scope": {
+    "private_record_sha256": "302886a99276ff9e4fff20d679ca1df0055e9b46939ab653a01c10f7366ad98e",
+    "record_items": 4
+  },
+  "continuation_targeted_checks": 169,
+  "critic_fit_rows_unchanged": 32,
+  "default_changed": false,
+  "fit_allowed": false,
+  "fit_calls": 0,
+  "formal_full124_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "fresh_start_124_binding_pass": true,
+  "full_suite": false,
+  "head_sha256": "143380c9e9ae288fd232acc1720c4c8b7330d13d54138def3225fd47d7e608c8",
+  "known_failure": {
+    "private_record_sha256": "80b130f9c40aa57090ecc55c95c1c742fc2a394036d8e17fc586c9bec64c5b01",
+    "record_items": 1
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "policy_sha256": "c04c5a0112e1c5b2e83354d56f26ab02ef05e87f66837ba26cd8f4bd2dbd3516",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "12fad1014a2ea9143a8b00a34a9696d688e5eb8de66b69971c5079164dc12dc6",
+    "record_items": 7
+  },
+  "reviewers": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "schema": "pokemon.red.f139-qualification.v1",
+  "session": "f139-qualification-20261116-1702",
+  "source_document_sha256": "a31fff3dcdc17c6e114425d194217f091ea25584eb7ea3d10c9ded4065185aee",
+  "source_runtime_changed": true,
+  "status": "closed_scoped_progress_campaign_held",
+  "summary": {
+    "private_record_sha256": "d500735b5753f2e687483ce9e6f08db26ec603ba01e09af88df46f11ce8499f8",
+    "record_items": 1
+  },
+  "training_necessity_proven_here": false,
+  "venue_weights_changed": false,
+  "weights_changed": false
+}

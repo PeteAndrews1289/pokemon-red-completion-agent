@@ -1,7 +1,7 @@
 # Project chronicle: learning to play, not merely finishing a route
 
 > Current status is in [HANDOFF](../../HANDOFF.md), [active state](../../ACTIVE_PRODUCT_STATE.md),
-> the [October 26 session](../work-sessions/2026-10-26-masked-native-validation.md) and
+> the [November 19 results](../work-sessions/four-run-splits-2026-11-19.md) and
 > [seven goals](../seven-goals.md). “Latest” below is date-relative historical wording.
 > Preserve this chapter/source inventory and its original hashes; it is not current dispatch.
 
@@ -16,6 +16,10 @@ The story is about a changing answer to one question: **who is actually playing?
 A teacher can finish Red while a learner does very little. A battle model can win
 while navigation cannot reach the next opponent. A collector can add a species
 while its money supply becomes unsustainable. These distinctions shaped the work.
+
+## November 19 — Four complete development saves
+
+Four independent starts on one seed each earned eight badges, entered the Hall of Fame and retained all 124 required registrations on their own saves. All four needed external continuations. The solo follow-up reproduced an early blackout and continued on its own repaired save. [Four-run timing](../work-sessions/four-run-splits-2026-11-19.md) · [Solo recovery](../work-sessions/solo-field-blackout-2026-11-19.md)
 
 ## Read in chronological order
 

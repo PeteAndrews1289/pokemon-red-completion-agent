@@ -46,6 +46,7 @@ class Router:
     prepare_capture_storage: bool = True
     prepare_capture_escort: bool = True
     include_recovery_offers: bool = True
+    route_plan_cache: object = None
 
     def enumerate(self, observation):
         capture = self.runtime.profile.providers[0]
@@ -95,7 +96,12 @@ def scene(monkeypatch):
         blocks_read.append(blocks)
         return live
 
-    world = SimpleNamespace(with_current_blocks=overlay, rom=live.rom)
+    def observed_overlay(observed_reader):
+        assert observed_reader is reader
+        return overlay(observed_reader.read_current_map_blocks())
+
+    world = SimpleNamespace(with_current_blocks=overlay,
+                            with_current_observation=observed_overlay, rom=live.rom)
     runtime = Runtime(bind_observed_local_capture_profile(_local_discovery_profile()),
         reader, SimpleNamespace(observe=lambda: state.observation,
             semantic_observer=SimpleNamespace(observe_raw=lambda _: None)),
@@ -332,3 +338,120 @@ def test_scope_is_explicit_and_actual_current_map_only(scene, change):
         scene.state.observation = replace(scene.state.observation,
             raw=replace(scene.state.observation.raw, map_id=1))
     assert scene.bind() is None and scene.router.actions.actions_executed == 0
+
+@pytest.mark.parametrize('active_objects, available', [
+    (frozenset(), True),
+    (frozenset({(2, 4)}), False),
+    (frozenset({(1, 1)}), True),
+])
+def test_capture_refreshes_removed_or_moved_destination_objects(
+        scene, active_objects, available):
+    """Same terrain/source; only stale versus observed object occupancy differs."""
+    stale_blockers = frozenset({(2, 4)})
+    stale = SimpleNamespace(
+        terrain=scene.live.terrain, local_graphs=scene.live.local_graphs,
+        object_blockers={scene.map_id: stale_blockers},
+        macro_graph=scene.live.macro_graph, rom=scene.live.rom)
+    scene.live.object_blockers[scene.map_id] = active_objects
+    calls = []
+    def old_blocks_only(_blocks):
+        calls.append('blocks_only')
+        return stale
+    def fresh_objects_and_blocks(reader):
+        assert reader is scene.runtime.reader
+        calls.append('native_observation')
+        return scene.live
+    scene.router.world.with_current_blocks = old_blocks_only
+    scene.router.world.with_current_observation = fresh_objects_and_blocks
+    binding = scene.bind()
+    assert (binding is not None) is available
+    assert calls == ['native_observation']
+    assert stale.object_blockers[scene.map_id] == stale_blockers
+    assert scene.live.object_blockers[scene.map_id] == active_objects
+    assert scene.router.actions.actions_executed == 0
+    assert scene.runtime.emulator.frame_count == 0
+
+
+def test_invalid_native_object_observation_stops_before_binding_or_input(scene):
+    def incoherent(_reader):
+        raise ValueError('native occupancy changed during projection')
+    scene.router.world.with_current_observation = incoherent
+    with pytest.raises(local.RedObservedLocalCaptureError, match='terrain and occupancy'):
+        scene.bind()
+    assert scene.router.calls == []
+    assert scene.router.actions.actions_executed == 0
+@pytest.mark.parametrize('cached_outcome', ['success', 'unavailable'])
+def test_observed_world_rebind_does_not_reuse_prior_world_route_cache(
+    scene, monkeypatch, cached_outcome,
+):
+    """Earn a real cache entry, then require replanning for the observed world.
+
+    This is synthetic routing evidence. No controller input or ROM is involved.
+    Both old and fresh success plans have the same request/endpoints; a different
+    world can require a different safe approach even with an equal start snapshot.
+    """
+    import pokemon_red_completion.red_resource_goal_router as routing
+    from pokemon_red_completion.global_router import MacroPath
+    from pokemon_red_completion.local_router import LocalPath
+    from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
+
+    start = scene.state.traversal
+    target = (2, 4)
+    old_plan = RoutePlan(
+        MacroPath((scene.map_id,), ()), start.at, 'land', (),
+        LocalPath((start.at, target), (LocalEdge(target, 'up'),), ('land', 'land')),
+        target, 'land',
+    )
+    fresh_coordinates = (start.at, (3, 3), (2, 3), target)
+    fresh_plan = RoutePlan(
+        MacroPath((scene.map_id,), ()), start.at, 'land', (),
+        LocalPath(fresh_coordinates, (
+            LocalEdge((3, 3), 'left'), LocalEdge((2, 3), 'up'), LocalEdge(target, 'right'),
+        ), ('land',) * len(fresh_coordinates)),
+        target, 'land',
+    )
+    prior_calls, fresh_calls = [], []
+
+    def prior_query(snapshot, goal_map, *, goal_at=None):
+        prior_calls.append((snapshot, goal_map, goal_at))
+        if cached_outcome == 'unavailable':
+            raise RoutePlanningError('prior world has no legal approach')
+        return old_plan
+
+    def fresh_query(snapshot, goal_map, *, goal_at=None):
+        fresh_calls.append((snapshot, goal_map, goal_at))
+        return fresh_plan
+
+    cache = {}
+    prior = routing.RedResourceGoalRouter(
+        runtime=scene.runtime, world=SimpleNamespace(plan_feasible_to_map=prior_query),
+        actions=scene.router.actions, route_plan_cache=cache,
+    )
+    if cached_outcome == 'unavailable':
+        with pytest.raises(RoutePlanningError, match='prior world'):
+            prior.plan_feasible_to_map(start, scene.map_id, goal_at=target)
+    else:
+        assert prior.plan_feasible_to_map(start, scene.map_id, goal_at=target) is old_plan
+    earned_cache = dict(cache)
+    assert len(earned_cache) == 1
+
+    # Keep the caller's cache intact; only the new-world child must discard it.
+    scene.router.route_plan_cache = cache
+    scene.live.plan_feasible_to_map = fresh_query
+    original_enumerate = Router.enumerate
+
+    def enumerate_from_live_world(self, observation):
+        assert self.world is scene.live
+        result = routing.RedResourceGoalRouter.plan_feasible_to_map(
+            self, start, scene.map_id, goal_at=target,
+        )
+        assert result is fresh_plan
+        return original_enumerate(self, observation)
+
+    monkeypatch.setattr(Router, 'enumerate', enumerate_from_live_world)
+    binding = scene.bind()
+    assert binding is not None
+    assert prior_calls == fresh_calls == [(start, scene.map_id, target)]
+    assert scene.router.route_plan_cache is cache and cache == earned_cache
+    assert scene.router.actions.actions_executed == 0
+    assert scene.runtime.emulator.frame_count == 0

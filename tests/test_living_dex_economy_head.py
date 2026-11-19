@@ -409,3 +409,34 @@ def test_measured_outcomes_change_score_with_legacy_labels_fixed() -> None:
     assert scores_active[0] > scores_neutral[0]
     assert scores_active[1] < scores_neutral[1]
     assert fit_active.model.select(menu, util) == 0
+
+
+def test_economy_projection_ignores_storage_and_party_but_learns_cash_purchase():
+    from pokemon_red_completion.living_dex_option_value import option_feature_names
+    from pokemon_red_completion.resource_economy_observation import ECONOMY_FEATURE_NAMES
+    ctx = _econ_context()
+    free = _candidate("free", offer=EconomyOffer(mode=EconomyMode.OTHER))
+    buy = _candidate("buy", LivingDexOptionKind.RESUPPLY,
+                     offer=EconomyOffer(mode=EconomyMode.PURCHASE, planned_spend=100))
+    # Deliberately confound storage with cost in the observed TRAIN fixtures.
+    free = replace(free, features=replace(free.features, storage_cost=0.0, party_risk=0.0))
+    buy = replace(buy, features=replace(buy.features, storage_cost=1.0, party_risk=1.0))
+    menu = LivingDexOptionMenu(ctx, (free, buy))
+    rows = (_example(1000, menu=menu, selected=0, econ=EconomyOutcome(0, 0, 0, 0.0, 0.0)),
+            _example(1001, menu=menu, selected=1, econ=EconomyOutcome(-100, 0, 1, 0.0, 0.1)))
+    head = fit_living_dex_economy_head(rows, economy_features_only=True)
+    high_storage = replace(free, features=replace(free.features, storage_cost=1.0, party_risk=1.0))
+    assert head.predict_candidate(ctx, free) == head.predict_candidate(ctx, high_storage)
+    assert head.predict_candidate(ctx, buy).cash_loss > head.predict_candidate(ctx, free).cash_loss + 0.05
+    excluded = [i for i, name in enumerate(option_feature_names(4)) if name not in ECONOMY_FEATURE_NAMES]
+    assert np.count_nonzero(head.coefficients[excluded]) == 0
+    restored = LivingDexEconomyHead.from_dict(head.to_dict())
+    assert restored.predict_candidate(ctx, high_storage) == head.predict_candidate(ctx, high_storage)
+
+
+def test_economy_projection_is_explicit_and_old_default_is_preserved():
+    rows = (_example(1002, selected=0, econ=EconomyOutcome(200, 0, 0, 0.2, 0.0)),
+            _example(1003, selected=1, econ=EconomyOutcome(-100, 0, 1, 0.0, 0.1)))
+    assert fit_living_dex_economy_head(rows).to_dict() == fit_living_dex_economy_head(rows, economy_features_only=False).to_dict()
+    with pytest.raises(LivingDexOptionValueError, match="boolean"):
+        fit_living_dex_economy_head(rows, economy_features_only=1)

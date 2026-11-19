@@ -1,0 +1,47 @@
+{
+  "ROOT_seconds": 1122.0328492529993,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "authentication": {
+    "private_record_sha256": "0eaf4243c1c515b80a9e918010e9cbb8bc5c5f5d18e2c4bbec524cd87bd99d45",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "candidate_head_sha256": "e328a8cb1241cd56bb7159d04080e9db9f8cdf5d9279097a870993ab569f119e",
+  "candidate_policy_sha256": "57556efb0c74287ad0d14cb611dc644eb920e7df9718ed588d8546c8fae96b36",
+  "current_package": {
+    "private_record_sha256": "0fba5948e3cd2139bc70fcfce32e7306a374fb59ba7eecfa0207f499e1c4d2c7",
+    "record_items": 1
+  },
+  "evidence": {
+    "private_record_sha256": "c302aaf2ab57a1584ef5abe37602794320912beb2db915e9b75bf18165819a07",
+    "record_items": 9
+  },
+  "first_divergence": {
+    "private_record_sha256": "422a5447ac0eb90af9e70996757784dbdcd4796bcf298fbfa64a70d1640a8424",
+    "record_items": 1
+  },
+  "fit_calls": 1,
+  "full_suite": false,
+  "measured_TRAIN_windows": 12,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "new_optimizer_artifacts": 1,
+  "physical_TRAIN_quest_events": 2,
+  "positive_windows": 5,
+  "prior_focused_checks": 516,
+  "production_weight_changes": 0,
+  "prospective_comparison_plan": {
+    "private_record_sha256": "6dfab1b1c9d9f74ade0c738b7e709e2dc8ebf7687f830665e9f287f8eb5e0379",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.preparation-stop-diagnosis.v1",
+  "session": "codex-preparation-stop-20261112-1724",
+  "source_document_sha256": "dfbc9ebab7f46d02fa33d711cf223d2e62bd783677e33eec331f397cf24a7747",
+  "source_runtime_changed": false,
+  "status": "closed",
+  "validation_quest_events_not_fitted": 4
+}

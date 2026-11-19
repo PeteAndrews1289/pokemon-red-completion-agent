@@ -97,6 +97,44 @@ def test_escape_then_fresh_heal_retains_cost_and_does_not_execute_other_goal(mon
         selected.execute()
 
 
+def test_full_pp_need_survives_escape_when_every_move_still_has_pp(monkeypatch):
+    from pokemon_red_completion.red_goal_skills import (
+        _raw_party_fully_restored, _raw_party_restored,
+    )
+
+    router, bindings, observe, state, _, calls = scene(monkeypatch)
+    state["raw"] = replace(
+        state["raw"], party_hp=(30, 30), party_moves=((3, 91, 0, 0), (3, 91, 0, 0)),
+        party_pp=((10, 9, 0, 0), (10, 10, 0, 0)),
+    )
+    state["party"] = make_test_party(30, 30)
+    state["safety"] = 1.0
+    state["nurse_party_pp"] = ((10, 10, 0, 0), (10, 10, 0, 0))
+    assert _raw_party_restored(state["raw"])
+    assert not _raw_party_fully_restored(state["raw"])
+    offered = dig.bind_dig_recovery(
+        router, bindings, observe(), dig.Gen1TraversalObserver(router.runtime.reader).observe(),
+        prepare_escort=lambda: None, require_pp_restore=True, require_full_pp_restore=True,
+    )
+    selected = next(b for b in offered.bindings if b.kind is GoalKind.RESTORE_TEAM)
+    report = selected.execute()
+    assert selected.verify(report).status.value == "succeeded"
+    assert calls == ["dig", "transport"] and report.actions_executed > 1
+    assert _raw_party_fully_restored(state["raw"])
+    assert state["raw"].party_pp == state["nurse_party_pp"]
+
+
+@pytest.mark.parametrize("bad", [0, 1, "true", None])
+def test_full_pp_recovery_flag_is_typed_before_any_input(monkeypatch, bad):
+    router, bindings, observe, state, _, calls = scene(monkeypatch)
+    with pytest.raises(ValueError, match="full PP recovery mode"):
+        dig.bind_dig_recovery(
+            router, bindings, observe(), dig.Gen1TraversalObserver(router.runtime.reader).observe(),
+            prepare_escort=lambda: None, require_pp_restore=True, require_full_pp_restore=bad,
+        )
+    assert calls == [] and router.actions.actions_executed == 0
+
+
 @pytest.mark.parametrize("fault", ["flag", "terrain", "holder", "anchor", "pending", "landing"])
 def test_unavailable_escape_remains_unavailable_without_input(monkeypatch, fault):
     s = scene(monkeypatch)

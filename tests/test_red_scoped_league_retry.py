@@ -53,6 +53,11 @@ def test_retry_requires_native_rematch_and_its_exact_target(tmp_path, objective)
 )
 def test_retry_rechecks_original_scoped_guards(tmp_path, monkeypatch, fault):
     ctl = controller(tmp_path)
+    if fault == "budget":
+        ctl.maximum_decisions = 161
+        with pytest.raises(ValueError):
+            ctl.require_identity()
+        return
     monkeypatch.setattr(lorelei, "controller", lambda _: ctl)
     lorelei.test_scoped_lorelei_rejects_changed_authority(tmp_path, fault)
 

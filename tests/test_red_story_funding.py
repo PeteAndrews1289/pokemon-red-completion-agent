@@ -96,10 +96,18 @@ def test_income_requires_k_and_preserves_earned_state_without_teacher(
     monkeypatch.setattr(funding, "field_story_funding_candidates", lambda *a: (target,))
     monkeypatch.setattr(funding, "_face_trainer_boundary", lambda *a: None)
     monkeypatch.setattr(funding, "restore_story_team", lambda *a: calls.append("heal"))
+    from pokemon_red_completion import red_trainer_evolution
+
+    # M0: story funding admits one observed cartridge level evolution, exactly
+    # as preparation does; the stub keeps the unchanged-species proof here.
+    guard = NS(matches=lambda before, after: after.party_species_ids == before.party_species_ids)
+    monkeypatch.setattr(red_trainer_evolution.RedTrainerEvolutionGuard, "from_rom",
+                        classmethod(lambda cls, rom, em: guard))
 
     def battle(*args, **kwargs):
         assert kwargs["battle_runner_override"].__self__ is battler
         assert kwargs["story_income_recovery"] is True
+        assert kwargs["preparation_evolution_guard"] is guard
         with pytest.raises(RuntimeError, match="scripted attack"):
             kwargs["move_slot_policy"](raw)
         calls.append("battle")

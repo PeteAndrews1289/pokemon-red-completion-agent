@@ -1,0 +1,51 @@
+{
+  "F123_unchanged": true,
+  "F124_scoped_source_frozen": true,
+  "actual_cash": 8,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "candidate": {
+    "private_record_sha256": "d63de94ae4ef4c69594f8a49c66e58866147ed10ae3c14b834cd5faa0a2c7d4c",
+    "record_items": 3
+  },
+  "code": {
+    "private_record_sha256": "a8a7e6dcfe4568cd19e993d3fe0dfcf71c062cae8b5422241ce60e7de0c6d6ca",
+    "record_items": 8
+  },
+  "comparison": {
+    "private_record_sha256": "611c006541168615e7ada41219d7e6e43c9416debc814170cff42e0ccbb17477",
+    "record_items": 3
+  },
+  "comparison_battle_losses": 1,
+  "comparison_episode_outcomes_unfitted": true,
+  "comparison_readback_loads": 78,
+  "comparison_readback_states": 26,
+  "comparison_task_successes": 6,
+  "comparison_technical_errors": 0,
+  "external_reviews_used": false,
+  "focused_checks": {
+    "private_record_sha256": "66be02fef1f7ea129e0528d4dcd315df846f184428e17ce0f9dc2073988ea1c7",
+    "record_items": 4
+  },
+  "fresh_campaign_qualified": false,
+  "full_suite": false,
+  "goal_switching_solved": false,
+  "independent_generalization": false,
+  "learning": {
+    "private_record_sha256": "ca4f7d9e934f4c7278c9707b8347407fca844c7ef90ae3002f2055742e34e1b6",
+    "record_items": 18
+  },
+  "new_campaign": false,
+  "physical_frames": 0,
+  "physical_inputs": 0,
+  "production_defaults_unchanged": true,
+  "progress": {
+    "private_record_sha256": "45998d89d90dde1454126199ca09df3e0ed6b590e144a3aeaf687a3bc8a587d9",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session": "preparation-success-20261115-1600",
+  "source_document_sha256": "c04429a2d92765b0bd51dd6d43b5bcb9dda5f7997a4b8fa7c5a92b191c0965c5",
+  "unseen_source_claim": false,
+  "whole_Code_parity": false
+}

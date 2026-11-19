@@ -400,3 +400,42 @@ def test_live_failed_partial_flows_to_next_choice_and_current_continuation_captu
     assert context["spent"]["heals"] == 3 and context["spent"]["cash_debits"] == 100
     assert previous == saved_previous and context["grants_new_budget"] is False
     assert context["fit_allowed"] is False
+
+
+def test_settled_wild_loss_retains_original_target_and_zero_xp_across_doses(monkeypatch):
+    rt, actions, kw, mon, health, nursing, records, _ = exhausted_fixture(
+        monkeypatch, maximum_recoveries=1
+    )
+
+    def defeated_dose(**kwargs):
+        actions.actions_executed += 4
+        rt.emulator.frame_count += 120
+        raise p.WildPreparationDefeat("wild training defeat")
+
+    def fake_settle(runtime, act, *, record, **extra):
+        act.actions_executed += 6
+        runtime.emulator.frame_count += 180
+        state_sha = p.sha256(runtime.emulator.save_state_bytes()).hexdigest()
+        return dict(
+            status="settled_loss",
+            stop_reason="party_defeated",
+            successful_preparation=False,
+            learned_recovery=False,
+            terminal_sha256=state_sha,
+        )
+
+    monkeypatch.setattr(p, "execute_wild_preparation", defeated_dose)
+    monkeypatch.setattr(p, "settle_preparation_loss", fake_settle)
+    binding = p.preparation_binding(rt, actions, restore_exhausted_partial=True, **kw)
+    report = binding.execute()
+    verdict = binding.verify(report)
+    assert verdict.status is GoalDecisionOutcome.FAILED
+    assert verdict.failure_reason is GoalFailureReason.RESOURCE_LOST
+    assert report.evidence["status"] == "settled_loss"
+    assert report.evidence["original_target"] == dict(
+        specimen_ref=kw["plan"].targets[0][0],
+        level=6,
+    )
+    assert report.evidence["trainee_xp_gained_across_doses"] == 0
+    assert report.evidence["party_xp_gained_across_doses"] == 0
+

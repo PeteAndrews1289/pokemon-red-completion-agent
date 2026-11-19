@@ -13,6 +13,7 @@ from pokemon_red_completion import red_player_party_guard as guard_module
 class Guard:
     loanable_refs = frozenset({"retained-original"})
     storage_reader = object()
+    field_carrier = None
 
     def verify_active_roster_restored(self):
         self.calls.append("verify-restored")

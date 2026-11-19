@@ -280,6 +280,7 @@ class ExecutableGoalBinding:
     # An adapter-private transition follows its validated executor through travel.
     level_evolution_transition: tuple[str, str] | None = None
     level_evolution_boxed_ref: str | None = None
+    level_evolution_initial_xp: int | None = None
 
     def __post_init__(self) -> None:
         transition = self.level_evolution_transition
@@ -293,6 +294,9 @@ class ExecutableGoalBinding:
             transition is None or type(self.level_evolution_boxed_ref) is not str or not self.level_evolution_boxed_ref
         ):
             raise GoalManagerRuntimeError("boxed evolution observation requires a bound trainee")
+        if self.level_evolution_initial_xp is not None and (transition is None
+                or type(self.level_evolution_initial_xp) is not int or self.level_evolution_initial_xp < 0):
+            raise GoalManagerRuntimeError("evolution observation requires verified initial experience")
         if self.story_route_quote is not None and (
             type(self.story_route_quote) is not StoryRouteQuote
             or self.kind is not GoalKind.ADVANCE_STORY

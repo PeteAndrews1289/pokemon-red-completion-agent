@@ -1,0 +1,42 @@
+{
+  "actual_registration_delta": 0,
+  "candidate": {
+    "private_record_sha256": "b79285439c5e78c887efdb6da1c8840624d90dfa4310e11e49608119e72179e9",
+    "record_items": 3
+  },
+  "claude_contribution": "Read-only F35-F37 review identified automatic budget-reset bypass; Codex fixed it before final qualification. F38 ordinary80-interface compatibility repair tested by Codex.",
+  "date": "2026-11-11",
+  "evidence": {
+    "private_record_sha256": "65c95a87a268b4d23cf4654fb42b342f311ca21ab600e2146f12db0d96ace995",
+    "record_items": 6
+  },
+  "evidence_root": {
+    "private_record_sha256": "9b9bb30725f09a87a20061be150966f5d554fc602f08427471c5d2963a3791e6",
+    "record_items": 1
+  },
+  "fits": 0,
+  "focused_checks": {
+    "private_record_sha256": "b5fd8425e86de8fcc0b998e75b00b192aa7d277e96d82dda5db65a1d4c0cc7f0",
+    "record_items": 2
+  },
+  "limitations": {
+    "private_record_sha256": "cc3dd299cb3603300152dcefe0fcc27baceee0a20bb038ff866fa5119a49b9b5",
+    "record_items": 3
+  },
+  "model_adoptions": 0,
+  "native_results": {
+    "private_record_sha256": "03c3a621c3a590f236ae1481ea55ecb77f444e81c2c243db18834c778cef4ec7",
+    "record_items": 6
+  },
+  "new_train_rows": 0,
+  "protected_save_progress_changed": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "repairs": {
+    "private_record_sha256": "77fc85f2d21eff5eb6349e9469bbdea5aa9ce2d629f96558df5608023f6f249c",
+    "record_items": 2
+  },
+  "schema": "pokemon.codex.repair-session-summary.v1",
+  "session_id": "codex-route-rival-20261111-2022",
+  "source_document_sha256": "553c09cdea5b730940e15e8c62283dc60ba2849d61644b4a84db3d62ef364534",
+  "status": "bounded copied-component qualification complete; no campaign"
+}

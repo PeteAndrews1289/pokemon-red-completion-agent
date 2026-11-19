@@ -1,0 +1,61 @@
+{
+  "F95_LATE": "never_launched",
+  "F95_MID": "operator_retired_raw_results_retained",
+  "F95_original55": "strength_poison_HP_native_stopping_error",
+  "F96_package_sha256": "9fa91505228e2da001c111e128368d82ced420f7f47892f53279b59bcf554ddf",
+  "ROOT_reserved_seconds": 0,
+  "ROOT_seconds": 2623.4184847729994,
+  "actual_Champion_HOF": true,
+  "actual_MasterBall": 0,
+  "actual_badges": 8,
+  "actual_cash": 135,
+  "actual_gains": 0,
+  "actual_inputs": 0,
+  "actual_registered": 115,
+  "actual_registration_delta": 0,
+  "actual_restores": 3,
+  "actual_stopped": true,
+  "campaign_ready": false,
+  "external_receipts": {
+    "private_record_sha256": "3102950c71e45e459d8756d4decb7329177f7e0e684eba67c01ce68564f8f885",
+    "record_items": 10
+  },
+  "focused_checks": 122,
+  "full_suite": false,
+  "future_ROOT_limit": 12600,
+  "future_actual_snapshots": {
+    "private_record_sha256": "d46790b003952d715b8a7f84d9108cf31e0942b2fd99ded80c84a0a40ae452a3",
+    "record_items": 1
+  },
+  "future_actual_start_and_cutoff": "Dynamic after N2closeout and source release; label is not a clock.",
+  "future_approved_hours": 3,
+  "future_maximum_players": 2,
+  "future_readback_ROOT": 1800,
+  "future_session": "codex-strength-qualification-20261113-1430",
+  "gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_fits": 0,
+  "new_vitals_checks_included": 19,
+  "next_decision": {
+    "private_record_sha256": "acbdf13a740e9ee053d8dd17d119838c1cd0c066cd1ec3bca8544327f49a556f",
+    "record_items": 1
+  },
+  "old_costs_failures_saves_preserved": true,
+  "old_gate_credit_transferred": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "retained_physical": {
+    "private_record_sha256": "352236854064679df2d054c1fb35bd3bf7882818e07a5bbf36d0b463e22ff3c0",
+    "record_items": 9
+  },
+  "schema": "pokemon.full124-strength-repair-session.v1",
+  "session_id": "codex-full124-qualification-20261113-1326",
+  "source_document_sha256": "390ae46b1b05e970f5a2ec91dec43dfe1960ec5652e5f5911d60b1899913a934",
+  "source_writer_pid": 393,
+  "status": "native_closed_writer_release_pending",
+  "whole_Code_parity": false,
+  "writer_release_pending": true
+}

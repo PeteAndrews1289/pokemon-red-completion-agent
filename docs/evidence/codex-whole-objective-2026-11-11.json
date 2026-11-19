@@ -1,0 +1,47 @@
+{
+  "actual_registration_delta": 0,
+  "baseline": {
+    "private_record_sha256": "0d69bc997265aaa415921336ed645459894fc347ad8384932e5d4a3c1c5d9c7c",
+    "record_items": 2
+  },
+  "baseline_stop": {
+    "private_record_sha256": "812ae73732bc8bc7df87d8ffb3da5410510427986e3ae2091eedfd9d7e106362",
+    "record_items": 1
+  },
+  "candidate": {
+    "private_record_sha256": "00208f68b6ff0b512026ae75f8ef91147c0666feb939521d723e0fe62c47aac2",
+    "record_items": 2
+  },
+  "date": "2026-11-11",
+  "evidence": {
+    "private_record_sha256": "d4e0c8ba177e444874c03f81235eefb5396912c4408f98e3d1a8b6a7f5641685",
+    "record_items": 10
+  },
+  "evidence_root": {
+    "private_record_sha256": "4d8251b7b18e59153d09721f65cb62076acdbfe28a577097586121b16c341b34",
+    "record_items": 1
+  },
+  "faithfulness": {
+    "private_record_sha256": "e2c09b2f57067710777e697776eea9c2bcb40810171030607cb5e32b3ac9245e",
+    "record_items": 1
+  },
+  "fits": 0,
+  "formal_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "game_source_changes": 0,
+  "new_findings": "Kind commitment resets at every chunk despite its documentation; preserved during comparison. Missing target XP remains unknown, distinct from helper XP.",
+  "new_train_rows": 0,
+  "paired_results": {
+    "private_record_sha256": "25b344ff43a8d6bd345cff79ce20e9f9fac4853cadf21f1b7547152ffb2e406e",
+    "record_items": 2
+  },
+  "protected_saves_changed": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.codex.whole-objective-summary.v1",
+  "session_id": "codex-whole-objective-20261111-2055",
+  "source_document_sha256": "6698619babe7bfd75463bf73dcb1892ec7e3c3f15f0003e4ec01161f4e08b4f8",
+  "status": "All11 diagnostic cases closed; no campaign",
+  "weight_changes": 0
+}

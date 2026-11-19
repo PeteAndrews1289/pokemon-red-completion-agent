@@ -1,0 +1,49 @@
+{
+  "actual_registration_delta": 0,
+  "baseline_build": "F41",
+  "baseline_learning_eligible": 46,
+  "candidate_adopted": false,
+  "candidate_build": "F42",
+  "candidate_learning_eligible": 13,
+  "candidate_package_sha256": "39ca5c72cbd51deaab94ed5d42983688e2a2ef7fa232fda568e4c0a0121c7732",
+  "candidate_train_winners_correct": false,
+  "candidate_venue_model_sha256": "83704a56f32484599eb2dbdfae9e3965b4ec2794b779d3d7924760bc2487bc88",
+  "date": "2026-11-11",
+  "evidence": {
+    "private_record_sha256": "48dcf34c28c299fe42396fad4d3c93e320dfee2a908105862404c09dec99bc79",
+    "record_items": 9
+  },
+  "evidence_root": {
+    "private_record_sha256": "bc8aaf45c5b99197d6cefb5ad9808fddac7188435afa47873a4aadf8f754a82a",
+    "record_items": 1
+  },
+  "focused_checks_editable": 271,
+  "focused_checks_frozen": 271,
+  "formal_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "full_erika_decisions": 44,
+  "full_suite": false,
+  "gradient_fits": 1,
+  "historical_retention_missing": 2,
+  "native_state_kind_parity_rows": 48,
+  "new_goal_TRAIN_rows": 0,
+  "new_native_TRAIN_menus": 2,
+  "new_native_outcomes": 6,
+  "next": {
+    "private_record_sha256": "88914cb96839c739f697733faaef0671a1b7f5a64deca07cfdf2bf4316873e78",
+    "record_items": 1
+  },
+  "nonoverride_labels_unchanged": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "rehearsal_original_TRAIN_rows": 1,
+  "rehearsal_raw_refs_unresolved": 21,
+  "retention_regressions": 2,
+  "reused_TRAIN_menu": 1,
+  "rule_commitment_overrides": 33,
+  "schema": "pokemon.codex.train-parity-summary.v1",
+  "session_id": "codex-train-parity-20261111-2306",
+  "source_document_sha256": "d7eb94ad32185f37537d77d8e4c8e76b8bd1deb8adac7dfa9731d5d27b5e45e0",
+  "status": "closed native diagnostics; source release requires authenticated receipts"
+}

@@ -21,6 +21,8 @@ def project(tmp_path):
     names += [row["evidence"] for row in state["stages"].values() if row["evidence"]]
     names += [row["evidence"] for row in state["milestone"]["items"] if row["evidence"]]
     names += [json.loads((ROOT / names[3]).read_text())["path"]]
+    names += [c["evidence"]["path"] for w in state["workstream_progress"]["workstreams"]
+              for c in w["criteria"] if c["evidence"]]
     for name in set(names):
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -41,9 +43,10 @@ def test_current_graphic_and_accessible_page_are_reproducible(project):
     check_roadmap(project, write=True)
     check_roadmap(project)
     ElementTree.fromstring(svg)
-    assert "40%" in svg and "32 goal-value examples" in svg
+    assert "2 of 5 historical preparation items" in svg and "32 goal-value examples" in svg
+    assert "40%" not in svg and "NOT PROVEN" in svg
     assert "PHASE 02" in svg and "not demonstrated" in svg
-    assert "Checklist only. Not phase completion or a time estimate." in svg
+    assert "Not completed campaigns or a time estimate." in svg
     assert "Transfer and learn Crystal" in svg
     assert "cross-game registered Dex" in svg
     (project / SVG).write_text((project / SVG).read_text() + "<!-- stale -->")
@@ -88,7 +91,8 @@ def test_graphic_updates_current_position_and_checklist_without_static_claims(pr
     ]
     evidence["fit"]["model"]["settled_examples"] = 47
     graphic = render_svg(baseline, state, lane, evidence)
-    assert "60%" in graphic and "PHASE 04" in graphic
+    assert "3 of 5 historical preparation items" in graphic and "PHASE 04" in graphic
+    assert "60%" not in graphic and "NOT PROVEN" in graphic
     assert "47 goal-value examples" in graphic
     assert "Fresh-start Red story: not demonstrated" in graphic
     state["stages"]["red-story"]["status"] = "verified"
@@ -221,3 +225,65 @@ def test_long_realistic_checklist_expands_without_clipping(project):
     assert len(labels) > 17
     assert max(int(node.get("y")) for node in labels) + 20 < int(progress.get("y"))
     assert all(len(node.text or "") <= 48 for node in labels)
+
+def test_progress_credit_needs_exact_unchanged_evidence(project):
+    state = json.loads((project / STATE).read_text())
+    item = state["workstream_progress"]["workstreams"][0]["criteria"][0]
+    (project / item["evidence"]["path"]).write_text('{}')
+    with pytest.raises(ValueError, match="progress evidence changed"):
+        load_roadmap(project)
+
+
+def test_adding_easy_checkpoint_cannot_inflate_denominator(project):
+    state = json.loads((project / STATE).read_text())
+    work = state["workstream_progress"]["workstreams"][0]
+    work["criteria"].append(dict(work["criteria"][0], id="extra-easy-check"))
+    (project / STATE).write_text(json.dumps(state))
+    with pytest.raises(ValueError, match="denominator changed"):
+        load_roadmap(project)
+
+
+def test_progress_baseline_does_not_invent_prior_gains(project):
+    from development_roadmap import progress_rows
+    _, state, _, _ = load_roadmap(project)
+    baseline_state = {**state, "workstream_progress": {**state["workstream_progress"],
+        "sessions": state["workstream_progress"]["sessions"][:1]}}
+    assert all(row["delta"] == 0 for row in progress_rows(baseline_state))
+    first = state["workstream_progress"]["sessions"][0]
+    first["before"]["execution"] = []
+    (project / STATE).write_text(json.dumps(state))
+    with pytest.raises(ValueError, match="baseline cannot invent"):
+        load_roadmap(project)
+
+
+def test_regression_is_negative_and_history_carries_forward(project):
+    from copy import deepcopy
+    from development_roadmap import progress_rows, validate_progress
+    _, state, _, _ = load_roadmap(project)
+    track = state["workstream_progress"]
+    before = deepcopy(track["sessions"][-1]["after"])
+    after = deepcopy(before)
+    lost = after["execution"].pop(0)
+    track["workstreams"][0]["criteria"][0]["done"] = False
+    state["as_of_session"] = "regression-session"
+    track["sessions"].append(dict(session="regression-session",kind="session",before=before,after=after,note="Regression retained"))
+    validate_progress(project, state)
+    row = progress_rows(state)[0]
+    assert row["delta"] == -12.5 and row["percent"] == row["before"] - 12.5
+    track["sessions"][-1]["before"]["execution"].remove(lost)
+    with pytest.raises(ValueError, match="previous closeout"):
+        validate_progress(project, state)
+
+
+def test_workstream_credit_cannot_pass_fresh_run_delivery(project):
+    from development_roadmap import render_markdown
+    baseline, state, lane, evidence = load_roadmap(project)
+    page = render_markdown(baseline, state, lane, evidence)
+    assert "62.5%" in page and "+0.0pp" in page
+    assert "not yet proved" in page and "0/6" in page
+    svg = ElementTree.fromstring(render_svg(baseline, state, lane, evidence))
+    ns = {"s":"http://www.w3.org/2000/svg"}
+    texts = svg.findall("s:text", ns)
+    last_progress = next(t for t in texts if (t.text or "").startswith("Baseline established now"))
+    next_heading = next(t for t in texts if t.text == "THE WHOLE JOURNEY")
+    assert int(next_heading.get("y")) - int(last_progress.get("y")) >= 40

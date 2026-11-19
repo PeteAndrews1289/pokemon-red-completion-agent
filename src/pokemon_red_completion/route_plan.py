@@ -18,7 +18,8 @@ from collections import OrderedDict
 from collections.abc import Mapping
 from contextlib import contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+import sys
 from types import MappingProxyType
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -63,9 +64,11 @@ class _FrozenLocalRouteCache:
         self.queries = {}
         self.searches = OrderedDict()
         self.projections = {}
+        self.warp_projections = {}
         self.equivalent_graphs = {}
         self.canonical_by_identity = {}
         self.route_macro_graphs = {}
+        self.macro_projections = {}
         self.route_worlds = {}
         self.routes = {}
         self.route_invalidated = False
@@ -119,6 +122,25 @@ class _FrozenLocalRouteCache:
         self.canonical_by_identity[identity] = canonical
         return canonical
 
+    def retain_macro_graph(self, graph):
+        identity = id(graph)
+        state = (
+            dict(graph.edges), graph.outside_nodes, dict(graph.warp_locations),
+            dict(graph.retained_outside_overrides),
+            None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
+            None if graph.warp_triggers is None else dict(graph.warp_triggers),
+        )
+        previous = self.route_macro_graphs.get(identity)
+        if previous is not None:
+            if previous[0] is not graph or previous[1] != state:
+                self.invalidated = self.route_invalidated = True
+                raise RoutePlanningError("read-only route inventory changed a macro graph")
+            return True
+        if len(self.route_macro_graphs) >= 128:
+            return False
+        self.route_macro_graphs[identity] = graph, state
+        return True
+
     def route_key(
         self,
         graph,
@@ -142,22 +164,8 @@ class _FrozenLocalRouteCache:
         ):
             return None
         macro_id, world_id = id(graph), id(local_graphs)
-        state = (
-            dict(graph.edges),
-            graph.outside_nodes,
-            dict(graph.warp_locations),
-            dict(graph.retained_outside_overrides),
-            None if graph.warp_arrivals is None else dict(graph.warp_arrivals),
-            None if graph.warp_triggers is None else dict(graph.warp_triggers),
-        )
-        previous = self.route_macro_graphs.get(macro_id)
-        if previous is not None and (previous[0] is not graph or previous[1] != state):
-            self.invalidated = self.route_invalidated = True
-            raise RoutePlanningError("read-only route inventory changed a macro graph")
-        if previous is None:
-            if len(self.route_macro_graphs) >= 128:
-                return None
-            self.route_macro_graphs[macro_id] = (graph, state)
+        if not self.retain_macro_graph(graph):
+            return None
         previous_world = self.route_worlds.get(world_id)
         if previous_world is not None and (
             previous_world[0] is not local_graphs
@@ -226,6 +234,21 @@ class _FrozenLocalRouteCache:
             self.projections[key] = projected
         return projected
 
+    def warp_projection(self, graph, warps, start, retained):
+        # Off-warp starts all make the same tiles absorbing. A start on a
+        # warp still needs its exact boundary exit and cannot share this key.
+        if not warps:
+            return graph, retained
+        key = (id(graph), warps, start if start in warps else None)
+        previous = self.warp_projections.get(key) if retained else None
+        if previous is not None:
+            return previous, self._retain_graph(previous)
+        projected = without_warp_transit(graph, warps, start_at=start)
+        projected_retained = self._retain_graph(projected)
+        if retained and projected_retained and len(self.warp_projections) < _MAX_LOCAL_INVENTORY_SEARCHES:
+            self.warp_projections[key] = projected
+        return projected, projected_retained
+
     def paths(self, graph, warps, start, goals, capabilities, mode):
         warps, goals = frozenset(warps), frozenset(goals)
         graph = self.canonical_graph(graph)
@@ -243,8 +266,7 @@ class _FrozenLocalRouteCache:
         self.misses += 1
         entry = self.searches.get(search_key)
         if entry is None:
-            projected = without_warp_transit(graph, warps, start_at=start)
-            projected_retained = self._retain_graph(projected)
+            projected, projected_retained = self.warp_projection(graph, warps, start, retained)
             search = None
             if (
                 retained
@@ -349,12 +371,30 @@ def frozen_local_route_inventory():
         cache.searches.clear()
         cache.routes.clear()
         cache.route_macro_graphs.clear()
+        cache.macro_projections.clear()
         cache.route_worlds.clear()
         cache.queries.clear()
         cache.projections.clear()
+        cache.warp_projections.clear()
         cache.equivalent_graphs.clear()
         cache.canonical_by_identity.clear()
         cache.graphs.clear()
+
+
+def without_macro_departures(graph: MacroGraph, map_id: int) -> MacroGraph:
+    """Share an identical observed restriction only for the lifetime of one read-only menu."""
+    cache = _FROZEN_LOCAL_ROUTE_CACHE.get()
+    if cache is None or type(graph) is not MacroGraph or not cache.retain_macro_graph(graph):
+        return replace(graph, edges={**graph.edges, map_id: ()})
+    key = (id(graph), map_id)
+    projected = cache.macro_projections.get(key)
+    if projected is None:
+        projected = replace(graph, edges={**graph.edges, map_id: ()})
+        if cache.retain_macro_graph(projected):
+            cache.macro_projections[key] = projected
+    else:
+        cache.retain_macro_graph(projected)
+    return projected
 
 
 @dataclass(frozen=True, slots=True)
@@ -687,6 +727,9 @@ def plan_route(
         )
         for map_id, local in local_graphs.items()
     }
+    # A caller may be exploring an alternative inside its own exception handler.
+    # Re-raising a plain cached failure attaches that caller's current context.
+    ambient_error = sys.exception() if route_key is not None else None
     try:
         result = _find_composed_route(
             graph,
@@ -708,7 +751,8 @@ def plan_route(
             and len(inventory_cache.routes) < 1024
             and type(error) is RoutePlanningError
             and error.__cause__ is None
-            and error.__context__ is None
+            and error.__context__ is ambient_error
+            and not error.__suppress_context__
         ):
             inventory_cache.routes[route_key] = (False, error.args)
         raise

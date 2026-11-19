@@ -293,9 +293,16 @@ def test_metered_executor_and_independent_verification(monkeypatch, failure):
 
     actions = CountingExecutor(NS(execute=dispatch))
     monkeypatch.setattr(module, "Gen1FieldMovePort", lambda *a: NS())
-    monkeypatch.setattr(
-        module, "execute_route", lambda *a, **k: NS(passed=failure != "route", executed_steps=())
-    )
+    def execute_route(*args, **kwargs):
+        from pokemon_red_completion.gen1_route_runtime import Gen1WildFleeHandler
+        handler = kwargs["interruption_handler"]
+        assert isinstance(handler, Gen1WildFleeHandler)
+        assert "wild_battle" in handler.handled_interruption_kinds
+        assert "trainer_battle" not in handler.handled_interruption_kinds
+        assert not handler.allow_party_faints
+        return NS(passed=failure != "route", executed_steps=())
+
+    monkeypatch.setattr(module, "execute_route", execute_route)
     (binding,) = module.scripted_gift_bindings(runtime, obs, actions, world)
     # A fabricated report before execution never grants credit.
     assert binding.verify(GoalExecutionReport(1, 1, {})).status is GoalDecisionOutcome.FAILED

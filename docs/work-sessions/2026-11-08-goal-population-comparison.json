@@ -1,0 +1,31 @@
+{
+  "checks": {
+    "private_record_sha256": "df1cc661219b72dab7959b5df9b6fcd8cd070263cb4b2e592f94f5036c9c32b8",
+    "record_items": 1
+  },
+  "costs": {
+    "private_record_sha256": "59ea70962d19f6db0cd38b7cbbbbd515b0ba96ac464879084b493dc728e981e4",
+    "record_items": 1
+  },
+  "evidence": {
+    "private_record_sha256": "9aad35ada8f0dff70a50ba6caed1bbf77eda80cce2554adf87838eb3f3dc54ac",
+    "record_items": 1
+  },
+  "focus_checks_pending": false,
+  "next": {
+    "private_record_sha256": "40aab22e75e979be290dcb8951ca7a079acdb1a30711128b7fb90865f9c09681",
+    "record_items": 1
+  },
+  "private_evidence": {
+    "private_record_sha256": "2db0ceb7918e3b8026e726ecf8f65fa16ce45f744522e9c6dd114bf427cc4e71",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_id": "2026-11-08-goal-population-comparison",
+  "source_document_sha256": "f4991dc5dd6530d7028c331912f813b65f1627bc9c9a8a8e142f4b48e62b6d10",
+  "source_writer_release_is_separate": true,
+  "status": {
+    "private_record_sha256": "7bd296d96e1f46e1da4751d247df002f2c009e5f3bf1fd58b8b0b38854d38ba7",
+    "record_items": 1
+  }
+}

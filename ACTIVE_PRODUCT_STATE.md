@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Integrate and qualify the private mock-tested TRAIN collector, collect informative partial-interaction evidence, and fit only with strict retained-output proof; diagnose venue costs from existing receipts.
+- Next decision: Monitor the one resumed solo campaign, compare its 40 splits with the completed cohort and adjudicate its terminal save.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Reliable and efficient local autonomous Red play using the existing model/execution stack,with measured Windows scaling and later cross-title reuse. |
-| Authority now | Existing model stack owns choices; zero new fits. Source743d fixes productive-stop classification, truthful interaction metadata and redundant observations. All three current-candidate gates remain unproved; actual22/124 paused. |
+| Authority now | The solo player uses the frozen local goal and battle policies. The live blackout repair connects one compulsory recovery to normal model play. The cohort and repair added zero fits. |
 | Authority target | The local student chooses collection and preparation actions without runtime LLM calls or teacher substitution. Existing executors translate selected goals into normal inputs. |
-| Transfer test | Two isolated P7 actors completed eight choices each with matching 2,000-action, 124,644-frame traces and terminal states. Peak memory: 1.743 GiB; minimum available Windows/WSL memory: 15.260/13.207 GiB. No OOM or swap. At most two finite development workers qualify. The older P4 1.812x throughput estimate is separate. |
-| Cheapest falsifier | A stale/illegal menu,unretained failed tail,unsafe custody,unmeasured speed claim or two-worker memory/throughput failure disproves readiness. Use paired native evidence,not copied wins or counts alone. |
+| Transfer test | Relevant whole-objective copies and held-out TRAIN comparisons first; one exact recipe at the release boundary. Historical gates and sibling copies retain their scopes. |
+| Cheapest falsifier | A local repair cannot produce a meaningful integrated outcome, or a better fit cannot retain prior competence and improve native tasks. |
 | Time box | 1 session / 3 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-10-30-forest-decision** · status **closed** · evidence [development episode](docs/evidence/forest-decision-2026-10-30.json)
+**open-ended-red-union-f4488e2d661e** · status **active** · evidence [development episode](docs/evidence/red-campaign-comparison-2026-11-19.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Model-owned progress with persistent observed feedback, truthful opponent facts and authenticated logs; no hidden target substitution. |
-| Learning output | Zero fits/new weights/new TRAIN. Three isolated native copies; Forest3/124, original MID68to74/124, repaired tail77/124. Actual22/124 remains paused; no copied gains imported. |
-| Authority delta | Existing model unchanged. Scoped source repair under user authority; no gate credit or promotion. |
-| Transfer result | Matched Forest trainer win and local Brock efficiency are verified. Original MID failed and repaired tail is short correlated DEVELOPMENT; no gate inheritance. |
-| Blocker | Original MID stopped on a productive venue-exhaustion verification mismatch; repaired source now preserves ordinary failed status. Remaining strategic gaps: partial-interaction success coverage, and venue cost inputs both unpopulated and zero-weighted; the exact original TRAIN-matrix explanation remains unresolved. |
-| Decision | Integrate and qualify the private mock-tested TRAIN collector, collect informative partial-interaction evidence, and fit only with strict retained-output proof; diagnose venue costs from existing receipts. |
-| Next session | Improve useful autonomous story decisions, then attempt all three gates on one unchanged candidate. |
-| Next falsifier | No genuine informative partial-interaction label, unsafe failure accounting, lost movement-head retention, unchanged full-menu choice, or native regression rejects deployment. |
-| Stop condition | This finite block closed; all native workers and controls released. Next work requires a fresh bounded session, without reviving old trials or changing their costs. |
+| Product alignment | Complete an autonomous same-seed power-on to 124 and measure where time is spent. |
+| Learning output | Zero new TRAIN rows, fits and numerical weight updates. |
+| Authority delta | One authorized open-ended development campaign on the existing seed. |
+| Transfer result | Both native blackout copies returned control to the model after the real cash deduction. |
+| Blocker | An unchanged fresh completion and held-out repeatability remain open. |
+| Decision | Four independent starts on one seed each earned eight badges, entered the Hall of Fame and retained all 124 required registrations on their own saves. All four needed external continuations. The follow-up repaired solo run preserved one external restart. |
+| Next session | Track the same solo save to its terminal and compare its 40 splits with the cohort. |
+| Next falsifier | A stoppage or manual restore falsifies the uninterrupted claim. Verify 124, eight badges and the Hall of Fame on the same save. |
+| Stop condition | Keep a stopped save and its evidence. A manual recovery counts against uninterrupted completion. |
 
 ### Stop conditions
 
@@ -84,8 +84,8 @@ outputs.
 - Reversible provisional candidates may own development choices after relevant safety checks;retain baseline,source/model identity,intervention log and regressions. This is not broad qualification or final acceptance.
 - Every native episode authenticates its source,uses semantic goals,retains typed outcomes and verifies the fresh ledger even after failure. Stop for unverifiable state,illegal actions,hidden substitution or swallowed failures.
 - Reassess at15minutes or two failures of the same tactic;change approach within scope instead of automatically stopping. Runtime chunks remain finite and resumable;aggregate costs and every loss remain.
-- No new subsystem,unrelated teacher-route hardening,redundant clean-power factory,Crystal,sealed evaluation,main-save overwrite,destructive cleanup or publication. Explain material expansion before implementing.
-- The audit-readiness phase closes after the qualified P7 two-worker pilot. Full campaigns remain paused; further development uses fresh finite plans and namespaces without reviving old trial identities or cutoffs.
+- No new subsystem,unrelated teacher-route hardening,redundant clean-power factory,Crystal,sealed evaluation,main-save overwrite,destructive cleanup or unapproved publication. Explain material expansion before implementing.
+- The existing single same-seed campaign has an open-ended operator grant. Engineering blocks and guarded chunks retain their own budgets.
 
 ### Hard boundaries for this lane
 
@@ -148,9 +148,9 @@ and unmeasured teacher-label copying also require reassessment.
 
 ## Reviewer use
 
-- **Codex:** Own implementation, measurement, adjudication, documentation, publication, and the active-lane counter.
-- **Claude:** Review statistics, leakage, experimental power, and semantic overclaims at milestone decisions; remain read-only and do not duplicate Codex implementation work.
-- **Antigravity:** Review architecture, claim boundaries, and cross-game transfer at milestone decisions; remain read-only and do not block ordinary development while no review is pending.
+- **Codex:** No current assignment. No external model or subagent contributed this block;prior static reviews remain historical.
+- **Claude:** No current assignment. No external model or subagent contributed this block;prior static reviews remain historical.
+- **Antigravity:** No current assignment. No external model or subagent contributed this block;prior static reviews remain historical.
 
 ## Retired experiments
 

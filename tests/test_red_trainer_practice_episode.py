@@ -1009,3 +1009,45 @@ def test_struggle_cannot_be_enabled_for_wild_or_nonboolean_opt_in(tmp_path, opti
             wild_training=True,
             allow_forced_struggle=option,
         )
+
+
+@pytest.mark.parametrize("enemy_roster,party_hp,expected", [
+    ((0,), (40, 35), "battle_won"),
+    ((10,), (40, 35), "battle_exited_without_win"),
+    ((0,), (0, 0), "party_defeated"),
+])
+def test_episode_referees_closed_prompt_instead_of_assigning_a_win(
+    tmp_path, monkeypatch, enemy_roster, party_hp, expected
+):
+    capture = _capture(tmp_path)
+    session = Session()
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(episode.PokemonRedObservationEncoder, "from_state_reader",
+                        lambda reader: SimpleNamespace(snapshot_from_raw=lambda raw:
+                            SimpleNamespace(to_dict=lambda: {"prompt": True})))
+    monkeypatch.setattr(episode, "canonical_sha256", lambda value: "b" * 64)
+    monkeypatch.setattr(session, "trainer_switch_prompt_visible", lambda raw: raw.battle_state == 2)
+    monkeypatch.setattr(session, "read_enemy_party_roster_hp", lambda: enemy_roster)
+
+    def resolve(actions, reader, emulator, **kwargs):
+        assert kwargs['allow_closed_outcome'] is True
+        session.raw = replace(session.raw, battle_state=0, party_hp=party_hp,
+                              active_party_hp=party_hp[0], enemy_hp=enemy_roster[0])
+
+    monkeypatch.setattr(episode, "resolve_trainer_switch_prompt", resolve)
+
+    class Policy:
+        policy_id = "closed-prompt-model"
+
+        def choose_main(self, *args):
+            raise AssertionError("closed prompt must not request another attack")
+
+        def choose_switch(self, observation, legal_slots, *, forced, may_decline):
+            assert not forced and may_decline
+            return None
+
+    result = episode.run_red_trainer_practice_episode(capture,
+        session_factory=lambda: session, policy=Policy())
+    assert result.stop_reason == expected
+    assert result.battle_won is (expected == "battle_won")
+    assert len(result.decisions) == 1 and result.decisions[0]['kind'] == 'switch_prompt'

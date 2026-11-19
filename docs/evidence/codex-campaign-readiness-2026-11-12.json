@@ -1,0 +1,77 @@
+{
+  "actual_registration_delta": 0,
+  "audit_interval_hours": 2,
+  "blocker": {
+    "private_record_sha256": "5dfe134b138f6f9cd8a3a04d3eefd7a57646a0b5070d097c3e4acda4e891b357",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "candidate_adopted": false,
+  "combat_preparation_choice_opt_in": true,
+  "current_frozen_build": "F72",
+  "current_gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "cutoff_utc": "2026-11-12T13:49:34+00:00",
+  "earlier_no_loan_trials_invalidated": true,
+  "fit_library_invocations": 3,
+  "focused_frozen_checks": 1437,
+  "full_suite": false,
+  "gate_credit_transferred": false,
+  "gate_trials_active": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "goal_TRAIN_admitted": 0,
+  "goal_native_windows": 14,
+  "goal_whole_objectives": 0,
+  "latest_audit_number": 2,
+  "legacy_source_readmission_zero_inputs": true,
+  "live_models_changed": false,
+  "max_concurrent_guests": 2,
+  "native_root_seconds_limit": 14400,
+  "new_TRAIN_rows": 1,
+  "new_actual_combat_model_choices_preserved_offline": 1,
+  "new_campaigns": 0,
+  "new_evidence": {
+    "private_record_sha256": "abbfc3a9a860e397d6b3ea311b363c19343be3a8ca4e06c99b6af331881ffb9e",
+    "record_items": 27
+  },
+  "new_fits": 2,
+  "new_goal_rows_admitted": 0,
+  "new_independent_origins": 0,
+  "new_native_comparison_outcomes": 8,
+  "old_saved_menu_decisions_replayed": 7,
+  "ordinary_full_ready_arms": 16,
+  "ordinary_trainees_completed": 2,
+  "ordinary_venue_bridge_native_copy_verified": true,
+  "ordinary_venue_speed_gain": false,
+  "original55_source_recovered": true,
+  "partition": "development",
+  "preoptimization_validation_rejections": 1,
+  "prior_F69_gates": {
+    "private_record_sha256": "e6166068d2f60e065d5707b49ca250611aa3625e433e0f891d204c3f3cd05668",
+    "record_items": 3
+  },
+  "prior_closeout": {
+    "private_record_sha256": "c56ec26824bc6beb3a0c03992ec8b8ec52149608df4de65131554c1fbe4e3e83",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "raw_complete_goal_windows": 8,
+  "raw_goal_windows": 9,
+  "raw_positive_quest_windows": 1,
+  "recorder_component_native_qualified": true,
+  "schema": "pokemon.codex.campaign-readiness-work.v1",
+  "session": "codex-campaign-readiness-20261112-0549",
+  "source_document_sha256": "ed0327cef3af10460823e328d8d57219421854339b2962161005f580056783a6",
+  "source_guard_native_prefix_states_matched": 55,
+  "source_readback_guest_loads": {
+    "private_record_sha256": "28708abcf46b7d46216ad994b6f8a1dd884c2e8ce0a27bc5eddba05f8f5ffbf5",
+    "record_items": 3
+  },
+  "status": "active",
+  "user_window_hours": 8,
+  "whole_story_copy_completed": "defeat_erika"
+}

@@ -1,0 +1,61 @@
+{
+  "DEV_rows_fitted": 0,
+  "F138_focused_checks": 839,
+  "MID31_outcomes_exact_native_parity": true,
+  "MID_XP_training_doses": 0,
+  "MID_machine_preparation_inputs": 66,
+  "MID_new_goal_switching_improvement": false,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restore_delta": 0,
+  "automatic_wrapped_budget_renewal_qualified": false,
+  "campaign_ready": false,
+  "critic_fit_rows_unchanged": 32,
+  "cross_chunk_sequence_history_changed": false,
+  "default_changed": false,
+  "fit_allowed": false,
+  "fit_calls": 0,
+  "formal_full124_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "frozen_focused_checks": 850,
+  "full_suite": false,
+  "head_sha256": "143380c9e9ae288fd232acc1720c4c8b7330d13d54138def3225fd47d7e608c8",
+  "in_battle_export_and_actual_restore_pass": true,
+  "mid_metrics": {
+    "private_record_sha256": "32720e1287e45eb9f6ddeb3ef31436a239ccb8ff5e5185a9b65be3d94d1e96d0",
+    "record_items": 2
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "new_reader_checks": 148,
+  "partition": "development",
+  "policy_sha256": "c04c5a0112e1c5b2e83354d56f26ab02ef05e87f66837ba26cd8f4bd2dbd3516",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "7d8655fccf30e950cd32ea6befa838a797fb115e20ced825d9d1fa081d67741f",
+    "record_items": 8
+  },
+  "reviewers": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "schema": "pokemon.red.export-continuation.v1",
+  "session": "export-continuation-20261116-1554",
+  "source_document_sha256": "38e19bb12ac104917b68f39e41bf250c239fce5b95b2d3a13753a710b90cf8cd",
+  "source_runtime_changed": true,
+  "status": "closed_scoped_restore_and_MID_campaign_held",
+  "summary": "F139 combines the unchanged32-window critic with two export-reader repairs. Real in-battle1200-input cutoff exports authenticated context;new emulator restores its own terminal and reaches field progress with original aggregate costs. MID baseline: defeat_blaine, 2465 inputs, 243.628 native seconds; candidate: defeat_blaine, 2465 inputs, 239.184 native seconds. No fit,default change,campaign or formal gate credit.",
+  "training_necessity_proven_here": false,
+  "venue_weights_changed": false,
+  "weights_changed": false,
+  "whole_major_MID_baseline_pass": true,
+  "whole_major_MID_candidate_pass": true
+}

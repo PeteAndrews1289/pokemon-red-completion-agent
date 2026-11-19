@@ -307,3 +307,19 @@ def test_verified_executor_swaps_the_matchup_lead_and_preserves_resources(monkey
     with pytest.raises(RedTrainerPartyError):
         prepare_trainer_lead(state, object(), plan, current_quote=trainer)
     assert calls == [(1, 0)]
+
+
+def test_explicit_later_coverage_keeps_the_opening_requirement():
+    observed = party()
+    easy_opening = (34, 95, 55)
+    uncovered_later = (22, 130, 61)
+    trainer = quote(easy_opening, uncovered_later)
+    with pytest.raises(RedTrainerPartyError, match="roster positions"):
+        plan_trainer_party(observed, trainer)
+    partial = plan_trainer_party(observed, trainer, allow_uncovered_later=True)
+    partial.require_current(observed, trainer)
+    assert partial.lead.target_index == 1
+    assert partial.public_dict()["uncovered_roster_positions"] == [2]
+    assert partial.public_dict()["preferred_party_slots"] == [2, None]
+    with pytest.raises(RedTrainerPartyError, match="roster positions"):
+        plan_trainer_party(observed, quote(uncovered_later, easy_opening), allow_uncovered_later=True)

@@ -956,3 +956,37 @@ def test_live_fishing_validates_bounds():
             reader=SimpleNamespace(),
             emulator=SimpleNamespace(),
         )
+
+
+@pytest.mark.parametrize("departed", (False, True))
+def test_walk_only_fishing_observes_ship_departure(monkeypatch, departed):
+    flags = bytearray(320)
+    flag = int(live_fishing.EventFlag.SS_ANNE_LEFT)
+    if departed:
+        flags[flag // 8] |= 1 << (flag % 8)
+    observed = {}
+
+    def discover(*args, **options):
+        observed.update(options)
+        return ()
+
+    monkeypatch.setattr(live_fishing, "discover_reachable_red_fishing_destinations", discover)
+    live_fishing.build_red_live_fishing_inventory(
+        b"rom", {1}, _context(), free_storage_slots=30, world=SimpleNamespace(),
+        traversal=_traversal(), observer=SimpleNamespace(), field=SimpleNamespace(),
+        controller=SimpleNamespace(), actions=SimpleNamespace(actions_executed=0),
+        reader=SimpleNamespace(read=lambda: SimpleNamespace(event_flags=bytes(flags))),
+        emulator=SimpleNamespace(frame_count=0, pressed_buttons=frozenset()),
+    )
+    assert observed.get("ship_departed", False) is departed
+
+
+def test_departed_ship_closes_only_inbound_city_dock_transition():
+    city, dock = live_fishing.MapId.VERMILION_CITY, live_fishing.MapId.VERMILION_DOCK
+
+    def route(start, end):
+        return SimpleNamespace(steps=(SimpleNamespace(source_map=start, expected_map=end),))
+
+    assert live_fishing._crosses_departed_ship_entrance(route(city, dock))
+    assert not live_fishing._crosses_departed_ship_entrance(route(dock, city))
+    assert not live_fishing._crosses_departed_ship_entrance(route(dock, dock))

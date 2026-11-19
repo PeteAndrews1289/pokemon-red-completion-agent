@@ -1,0 +1,51 @@
+{
+  "actual_delta": 0,
+  "cohort_completion_sha256": "a0950dcf5f756373cb8a7bb50d1301b04d64803245e7a576bfdf30b2f30a39e8",
+  "combined_recipe_sha256": "f4488e2d661e134cc44fa77d37c90b0ece0ae402da5c24a6ce0f02cb598c0035",
+  "completed_development_saves": 4,
+  "editable_focused_tests": 691,
+  "fits": 0,
+  "native_replay_count": 22,
+  "new_train_rows": 0,
+  "number_uninterrupted": 0,
+  "qualification_sha256": "0785fa8764bf9cf825825d25540822ce3211eb2eee5b63be2bd0c121f3ccf373",
+  "scope": "Four repaired same-seed development completions, followed by bounded tests of their combined repair.",
+  "seed": 202611161702301,
+  "session": "four-run-repair-union-20261119-1437",
+  "split_rows_per_campaign": 40,
+  "times_seconds": [
+    {
+      "calendar": 45073.464593,
+      "campaign_split": 34449.830673990116,
+      "cartridge_hours": 255,
+      "native_hours_cap_confirmed": true,
+      "reported_frames": 105248561,
+      "run": 1
+    },
+    {
+      "calendar": 39132.087887,
+      "campaign_split": 29579.143614921184,
+      "cartridge_hours": 255,
+      "native_hours_cap_confirmed": true,
+      "reported_frames": 95143772,
+      "run": 2
+    },
+    {
+      "calendar": 49940.814938,
+      "campaign_split": 37964.190574239896,
+      "cartridge_hours": 255,
+      "native_hours_cap_confirmed": true,
+      "reported_frames": 94487629,
+      "run": 3
+    },
+    {
+      "calendar": 45668.206661,
+      "campaign_split": 34966.06555374209,
+      "cartridge_hours": 255,
+      "native_hours_cap_confirmed": true,
+      "reported_frames": 99366634,
+      "run": 4
+    }
+  ],
+  "weights_changed": false
+}

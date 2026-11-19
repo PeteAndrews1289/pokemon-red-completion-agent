@@ -213,3 +213,30 @@ def test_trainer_switch_prompt_executes_late_slot_without_changing_decline_seman
     assert simulation.active == target_index
     assert simulation.stage == "main"
     assert all(action.kind is not MacroActionKind.CANCEL for action in simulation.actions)
+
+
+@pytest.mark.parametrize("close_at", ["decline", "settlement"])
+@pytest.mark.parametrize("allowed", [False, True])
+@pytest.mark.parametrize("battle_state", [0, 1])
+def test_prompt_closed_outcome_hands_back_only_opted_in_field_exit(close_at, allowed, battle_state):
+    reader = PromptReader()
+    seen = []
+    reader.read_battle_menu_state = lambda raw: SimpleNamespace(phase=BattleMenuPhase.UNKNOWN)
+
+    def execute(action):
+        seen.append(action.kind)
+        if action.kind is MacroActionKind.CANCEL:
+            reader.prompt = False
+            if close_at == "decline" or seen.count(MacroActionKind.CANCEL) == 2:
+                reader.raw = SimpleNamespace(**{**vars(reader.raw), "battle_state": battle_state})
+
+    actions = SimpleNamespace(execute=execute)
+    if allowed and battle_state == 0:
+        resolve_trainer_switch_prompt(actions, reader, reader, target_index=None, label="test",
+                                     allow_closed_outcome=allowed)
+    else:
+        with pytest.raises(ProtectedRecoveryError, match="left its trainer battle"):
+            resolve_trainer_switch_prompt(actions, reader, reader, target_index=None, label="test",
+                                         allow_closed_outcome=allowed)
+    assert seen.count(MacroActionKind.CANCEL) == (1 if close_at == "decline" else 2)
+    assert set(seen) == {MacroActionKind.CANCEL, MacroActionKind.WAIT}

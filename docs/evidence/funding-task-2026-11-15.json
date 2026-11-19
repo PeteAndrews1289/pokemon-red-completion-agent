@@ -1,0 +1,67 @@
+{
+  "TRAIN_comparison_pairs": 2,
+  "TRAIN_comparisons": {
+    "private_record_sha256": "738ea379366cdc0802622d877f8e55682d326121110a9779625cdc0b86f10f54",
+    "record_items": 1
+  },
+  "TRAIN_complete_funding_attempts": 4,
+  "TRAIN_full_funding_successes": 0,
+  "TRAIN_native_battles": 14,
+  "TRAIN_sealed_inputs": 19110,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_restores": 0,
+  "campaign_ready": false,
+  "costs": {
+    "private_record_sha256": "0ff0b3b6a3e3592afc63ff357311f17a06aac73367b08b01400d65add439897f",
+    "record_items": 18
+  },
+  "current_test_goal": "A9",
+  "current_test_policy": "F125 scoped H4",
+  "default": {
+    "private_record_sha256": "5125be312205325a202b5397ed27c44c7bfbe882889174fab308b98e3dabe32b",
+    "record_items": 1
+  },
+  "fit_decision": "No fit: all four full funding attempts fail, intended one-level preparation adds cost without net-cash benefit, and no useful normal-runner cash-to-registration benefit is demonstrated. Preserve comparisons; do not invent success, utility targets, or independence.",
+  "full_suite": false,
+  "known_receipt_wording": "Worker inherited finite_8_chunk_boundary text, but prospective maximum_chunks=1 and actual chunks=1; no eight-chunk claim.",
+  "native_summary": {
+    "private_record_sha256": "65bee00041127e640dee6aae1e810d9419ab96d4524e6ac1f49c3a8380ddf99e",
+    "record_items": 1
+  },
+  "new_campaign": false,
+  "new_independent_origins": 0,
+  "new_retained_TRAIN_rows": 0,
+  "normal_copy": {
+    "private_record_sha256": "6c25d94d71c7377231cabc9ae750502ddaa64e95353a5fb8cebe55c089ae94f6",
+    "record_items": 1
+  },
+  "normal_outcomes": {
+    "private_record_sha256": "807375720b4baa342d00cd58ff9acb9d17084338cb3b47f93a70cb1ea24ae2bc",
+    "record_items": 2
+  },
+  "normal_physical_readback": {
+    "private_record_sha256": "d4777bbac4d22c70f0bb9aff2035a94b9e7ae00eccc3b4a7991afd0d50215db7",
+    "record_items": 1
+  },
+  "parameter_fits": 0,
+  "passed": true,
+  "physical_readback": {
+    "private_record_sha256": "85bc47b1bd81a103ec96f00f19f431aa427ed1a2f84cb4ef159708cfe1949f3e",
+    "record_items": 1
+  },
+  "prior_fit_F127_held": true,
+  "progress": {
+    "private_record_sha256": "d10a03776e0e20bd1e3e7a9e2c13ce424987a5073ecfce975423d23a35a994cb",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "resource_chain": "NOT_MET",
+  "scope_limitations": {
+    "private_record_sha256": "5a689cfcdaa4aef4c164433d2e79088bce40a81a65fcbcabcea4b15cae7b35c2",
+    "record_items": 5
+  },
+  "session": "funding-task-20261115-2303",
+  "source_document_sha256": "2b5a66709ee53dbf46dce804967d623c455edc2ccf7235b9592804c155115d8d",
+  "whole_Code_parity": false
+}

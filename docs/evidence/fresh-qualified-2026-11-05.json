@@ -1,0 +1,55 @@
+{
+  "all_seven_goals_working": false,
+  "baseline_gates": {
+    "private_record_sha256": "724a3a85a2906bba290f63c405213278625f88f3edc92cf8cf1f8acc9ddb17bc",
+    "record_items": 1
+  },
+  "costs": {
+    "private_record_sha256": "9a8fea9cd23e2064e8b46e14a1f809b7eb1141917f1859e7c1f21a76226d72f3",
+    "record_items": 1
+  },
+  "current_actual_progress": {
+    "private_record_sha256": "c2f9a105f2c1dc0f04ca9b1613eb348fbac6f45d46268326d7348ae7dfa595c7",
+    "record_items": 1
+  },
+  "field_faint_qualification": {
+    "private_record_sha256": "8afc8e428fe66632c404cd9e0aadf5d4c9cd5a4d52e3f14daa1e39e61a5e8c15",
+    "record_items": 1
+  },
+  "final_closeout": {
+    "private_record_sha256": "68f1551b099efc47ef8b2f928162d7da06ffa4cf753379c5e479a977ebf1b92a",
+    "record_items": 1
+  },
+  "final_source": {
+    "private_record_sha256": "6d1bfc306b55932a663b01a0762fc19d25c26193734552f67641efb744fe8f77",
+    "record_items": 1
+  },
+  "frozen_integrity": {
+    "private_record_sha256": "89e1afc396ed9a8b6f229d6badab50f057d430cb9cd40bc61197fe462b1200bd",
+    "record_items": 1
+  },
+  "full_fresh_completion": false,
+  "missed_six_hour_audit": {
+    "private_record_sha256": "5ed8c53133a96e3c56de5c52f9baef7906ce0d0cfb5842e6db58f62b0258c013",
+    "record_items": 1
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-05T13:59:44.643425+00:00",
+  "original_writer_end": {
+    "private_record_sha256": "c3ad222df215cbf42bce212de2215b3a81cc3897645a62a324a6a8fe855c9598",
+    "record_items": 1
+  },
+  "prior_costs": {
+    "private_record_sha256": "90849757a1750069b545bfc414c65d8a2fe9f1c5366541d55c8680e683082056",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "purification_qualification": {
+    "private_record_sha256": "9f2a416cf2b7fca901a82fe81b7a6c1b1f44bb5c14e221de5d72b732bdb7a21f",
+    "record_items": 1
+  },
+  "session_status": "CLOSED_TIMEOUT_INTERRUPTION_AND_STORY_GOAL_SWITCH_LOOP",
+  "source_document_sha256": "90020e545339045fe57b7b9dd977850bba1a76f162524991ff146b13f1c900ce"
+}

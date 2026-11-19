@@ -1,0 +1,51 @@
+{
+  "actual_registration_delta": 0,
+  "baseline": {
+    "private_record_sha256": "00208f68b6ff0b512026ae75f8ef91147c0666feb939521d723e0fe62c47aac2",
+    "record_items": 2
+  },
+  "baseline_decisions_to_objective": 159,
+  "baseline_full_decisions": 168,
+  "baseline_registration_delta": 10,
+  "candidate": {
+    "private_record_sha256": "178f4e59651bca11ccea76cd565ebdadb29044492024214d01cbdbea03249cd9",
+    "record_items": 2
+  },
+  "candidate_automatic_saffron_setbacks": 1,
+  "candidate_cross_chunk_overrides": 7,
+  "candidate_decisions_to_objective": 77,
+  "candidate_full_decisions": 78,
+  "candidate_registration_delta": 3,
+  "candidate_same_chunk_overrides": 6,
+  "date": "2026-11-11",
+  "error_free": false,
+  "evidence": {
+    "private_record_sha256": "09370209362c95c5ef129ddd89add082f728f8500fa8f325a206eb59024b4a47",
+    "record_items": 12
+  },
+  "evidence_root": {
+    "private_record_sha256": "64c6fa28cdc2dccaad1cb800897c9f856066cf26ad0376242744409ea2e66f32",
+    "record_items": 1
+  },
+  "failed_pilot": {
+    "private_record_sha256": "d0bb56987c1fbec876d8dbdcf51bbd90eecd0e04b535594473b60fe0086a440e",
+    "record_items": 3
+  },
+  "fits": 0,
+  "focused_checks": 612,
+  "formal_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "full_suite": false,
+  "new_train_rows": 0,
+  "objective": "clear_rocket_hideout",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.codex.commitment-continuation-summary.v1",
+  "session_id": "codex-commitment-handoff-20261111-2138",
+  "source_document_sha256": "4bfa850b80c8d84fc9495787d9a34b87d908fa0db2e07b9d362a824dd0835201",
+  "source_files_changed": 5,
+  "status": "All6 diagnostic cases stopped; source writer sealing closeout; no campaign",
+  "weight_changes": 0,
+  "whole_campaign_qualified": false
+}

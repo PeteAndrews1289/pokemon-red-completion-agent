@@ -1,0 +1,61 @@
+{
+  "all_seven_final_exits_open": true,
+  "audit_due_utc": "2026-11-04T01:16:19+00:00",
+  "boundary_tests_full_suite_claim": false,
+  "current_candidate_native_qualified": false,
+  "current_candidate_sha256": "870d3e6d68483883ff3ac48fdc1b83d5472fc8b7e3f8fa1a4e775274ec608c5c",
+  "diagnostic_imports": 0,
+  "engineering_deadline_utc": "2026-11-04T02:16:19+00:00",
+  "evolution_partial_work": {
+    "private_record_sha256": "3bac0cc35f731dce22dacadeea3d5a4ee013a65c9f6fd2609ec595696a647b46",
+    "record_items": 8
+  },
+  "exact_tail_diagnostic": {
+    "private_record_sha256": "4761a176959bef0a4c5c08063c485c57a2ab74b5aa1fd2c6fff3726a6aa07726",
+    "record_items": 13
+  },
+  "failed_attempts_preserved": {
+    "private_record_sha256": "1ed7a163239a5747a26800ae7c76b3b3eccaa02862c817bfba0f27a08a6b13f8",
+    "record_items": 5
+  },
+  "failure_accounting": {
+    "private_record_sha256": "56d51142773b3ec59a13642fb8e4bd0cdcdc02c8715ea6602a0b86d6650608de",
+    "record_items": 1
+  },
+  "focused_tests_passed": 884,
+  "formal_acceptance": false,
+  "fresh": {
+    "private_record_sha256": "760811a6d341cb01ff5853f104cbd9ef36b5375a3aa64ccbff9c52be17583fe6",
+    "record_items": 31
+  },
+  "full_suite_claim": false,
+  "latest_boundary_focused_tests_passed": 125,
+  "learning": {
+    "private_record_sha256": "22df45b8f43718b35e8b498544d4de25fb93998cb3c38ac57352b6c98e000caa",
+    "record_items": 15
+  },
+  "maximum_state_loads": 0,
+  "new_admission_repair": {
+    "private_record_sha256": "2c5b74bb454ce77eb5212dbed62b5feab275d22abc41bf25bd969ae6a7b5b36a",
+    "record_items": 15
+  },
+  "observed_at_utc": "2026-11-04T01:46:08.031953+00:00",
+  "original_actual67_unchanged": true,
+  "package_sha256": "44da62118913ea96930c4acd1155c690540075650b178edc9a06a52760102888",
+  "plan_sha256": "85c816c69627510d506d37f1520d86e471d19f90f3e5aaedc1f5949be507b353",
+  "policy_change": "Opt-in generic success-utility saturation for observed unchanged-progress movement revisits;not learned discrimination",
+  "policy_off_score_parity_menus": 989,
+  "prior_gate_credit": "All3original DEVELOPMENTgates oncc750only;44da does not inherit them",
+  "private_receipt_hashes": {
+    "private_record_sha256": "bdc3f92bdcd3cd20d9f69043f0f4fa0cd25b9cddc4edd0a18d5ff2b3ef97482b",
+    "record_items": 7
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.red.movement-recurrence-development-result.v1",
+  "session_id": "2026-11-03-movement-recurrence",
+  "source": "native_power_on_no_parent_save",
+  "source_document_sha256": "3a0c3c558fc7ebe5630fe883ba065f45271377dd3ae79486b1887d78146babd7",
+  "status": "actual_stopped_at_retained_28_entry_admission;copy_only_repair_unqualified",
+  "two_hour_audit_late_seconds": 111.891698,
+  "two_hour_audit_observed_at_utc": "2026-11-04T01:18:10.891698+00:00"
+}

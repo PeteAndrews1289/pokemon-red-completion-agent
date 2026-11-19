@@ -1,0 +1,57 @@
+{
+  "ROOT_seconds": 3341.10148515,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "authentication": {
+    "private_record_sha256": "e76fcc8ba128a6c4dfc795846eec5d050bc8593e724cc4aa96022b09fc305928",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "comparison": {
+    "private_record_sha256": "22da5acdd557bf541bd26159cda332fc4133bbecc426b3230a25e995341d04f0",
+    "record_items": 1
+  },
+  "current_package": {
+    "private_record_sha256": "ad18a0f1793700427aeb029d34d28f3ff46a41ca77582cf6736bde8da0dc4672",
+    "record_items": 1
+  },
+  "fit_calls": 0,
+  "focused_checks": 635,
+  "full_suite": false,
+  "gates": {
+    "private_record_sha256": "e947c27651f3ad2b020f42f3cfad10894d5c84ffc5f329024abcaa94c50f39a5",
+    "record_items": 1
+  },
+  "learning_output": {
+    "private_record_sha256": "a0f73030b47cbf79655d9f1bf21bdbd2221761bbef02e2606aa80cded2e48817",
+    "record_items": 1
+  },
+  "native_qualification": {
+    "private_record_sha256": "8ed5d89bb1939989f7e1addb6321dbf012c7bacaccebf1c08ffb8904cc3fad66",
+    "record_items": 1
+  },
+  "native_status": "All native cases closed; 124 unique zero-input physical boundaries. No native recurrence escape triggered.",
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "parent_package": {
+    "private_record_sha256": "0c595efb7dc8163ab6e6f56930e21dc6ca12e97b1e36deaa8536e8333ad0a142",
+    "record_items": 1
+  },
+  "pending": {
+    "private_record_sha256": "47607ebb224d589cbaae6b2c5667daf1f3389807fd1060fb17802a696905a1d1",
+    "record_items": 1
+  },
+  "production_weight_changes": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recipe": {
+    "private_record_sha256": "3fd1b54df32d63eec8e99ad53e7e187d4438e4f65697d128540c07b689ee4d91",
+    "record_items": 1
+  },
+  "schema": "pokemon.stable-selection-comparison.v1",
+  "session": "codex-stable-selection-20261112-2005",
+  "source_document_sha256": "2bb814b5cc909600bd4b1525de96fa24167ed4ab72e95b8ddc2d8b2bb0f46dce",
+  "status": "closed"
+}

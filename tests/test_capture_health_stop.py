@@ -110,9 +110,12 @@ def test_ordinary_capture_low_health_settles_before_false_return_without_spendin
     "reason",
     [
         None,
-        CaptureStatusDrift.TARGET_HP,
+        # TARGET_HP has its own custody-checked settlement:
+        # tests/test_capture_target_hp_settlement.py.
         CaptureStatusDrift.ORIGINAL_SPECIES,
         CaptureStatusDrift.BAG_ITEMS,
+        CaptureStatusDrift.PARTY_SPECIES,
+        CaptureStatusDrift.MAP,
     ],
 )
 def test_ordinary_health_stop_does_not_swallow_unknown_or_protected_state_errors(

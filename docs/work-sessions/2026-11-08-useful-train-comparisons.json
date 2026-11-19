@@ -1,0 +1,26 @@
+{
+  "actual_registration_delta": 0,
+  "evidence": {
+    "private_record_sha256": "131012a2b08b85d35d5eb609249c6db72d54c47268e29892594070cfbe69c2ac",
+    "record_items": 1
+  },
+  "external_reviews_dispatched": 0,
+  "gameplay_stopped": true,
+  "new_goal_TRAIN_rows": 0,
+  "new_learned_heads": 3,
+  "new_venue_TRAIN_comparisons": 1,
+  "new_venue_outcomes": 3,
+  "next": {
+    "private_record_sha256": "f12fb59204ecb27d8897340776d12f78c335fef4ca2110ea4fc4cde6ddca8c4e",
+    "record_items": 1
+  },
+  "policy_promotions": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fit_calls": 3,
+  "roadmap_stage_changes": 0,
+  "source_document_sha256": "37714f7de5769b82531166dee88e9bfeed8458cdca182566f9cde574df09fc65",
+  "status": {
+    "private_record_sha256": "9762fae2c9bc8c3e85a75c4143452eabd743ef4b8badc9a5ae1ae1da597d799f",
+    "record_items": 1
+  }
+}

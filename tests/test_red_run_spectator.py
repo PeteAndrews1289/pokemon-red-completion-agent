@@ -364,3 +364,50 @@ def test_watch_page_has_display_controls_only_and_rejects_writes(run):
 def test_server_cannot_bind_network_interface():
     with pytest.raises(ProgressDashboardError):
         ProgressDashboardServer(DashboardState(), host="0.0.0.0", port=0)
+
+
+@pytest.mark.parametrize("completed,expected", [
+    (False, "Step completed; goal pending"),
+    (True, "Goal completed"),
+    (None, "Step completed"),
+])
+def test_story_movement_success_does_not_claim_a_gym_win(run, completed, expected):
+    step = run / "runs/segment-001/native/episode/step-002"
+    after = {} if completed is None else {"completed_objectives": ["defeat_misty"] if completed else ["defeat_brock"]}
+    evidence = {"objective": "defeat_misty"}
+    if completed is not None:
+        evidence["objective_completed"] = completed
+    write(step / "outcome.json", dict(
+        selected_kind="advance_story", verification="succeeded",
+        ordinary_setback=False, evidence=evidence, after=after,
+    ))
+    _, meta = RedRunReader(run).read()
+    assert meta["recent"][-1]["goal"] == "Defeat misty"
+    assert meta["recent"][-1]["result"] == expected
+
+
+def test_four_prepared_viewers_keep_milestones_isolated(tmp_path):
+    import json
+    from pokemon_red_completion.red_run_spectator import RedRunReader
+    from pokemon_red_completion.red_milestone_splits import MilestoneSplits
+    readers=[]
+    for i in range(4):
+        root=tmp_path/f'campaign-{i+1}';root.mkdir()
+        (root/'PLAN.json').write_text(json.dumps(dict(launch_authorized=False,seed=123,operator_repairs=0,required_species=[f'pokemon:national:{n:03d}'for n in range(1,125)])))
+        readers.append(RedRunReader(root))
+    metadata=[reader.read()[1]for reader in readers]
+    assert len({m['id']for m in metadata})==4
+    assert all(m['seed']==123 and m['milestone_splits']['timing_started']is False for m in metadata)
+    tracker=MilestoneSplits(source_state_sha256='a')
+    tracker.observe(dict(completed_objectives=[],owned_species=[]),frames=0,actions=0,wall_seconds=0)
+    tracker.observe(dict(completed_objectives=['defeat_brock'],owned_species=[]),frames=100,actions=2,wall_seconds=3)
+    tracker.write(readers[0].root/'milestone-splits.json')
+    assert next(r for r in readers[0].read()[1]['milestone_splits']['rows']if r['id']=='defeat_brock')['status']=='reached'
+    assert all(reader.read()[1]['milestone_splits']['timing_started']is False for reader in readers[1:])
+
+
+def test_waiting_for_first_resumed_chunk_keeps_inherited_costs(tmp_path):
+    write(tmp_path / "PLAN.json", dict(inherited_spent=dict(decisions=267, actions=30000, frames=2300000)))
+    snapshot, meta = RedRunReader(tmp_path, owner_running=True).read()
+    assert meta["units"] == 267
+    assert snapshot.actions == 30000 and snapshot.frame_count == 2300000

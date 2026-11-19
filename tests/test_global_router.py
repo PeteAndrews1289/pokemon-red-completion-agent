@@ -34,6 +34,18 @@ def test_a_route_to_where_you_already_are_is_a_single_map() -> None:
     assert find_macro_route(MacroGraph({}), 7, 7) == (7,)
 
 
+def test_bulk_estimates_preserve_the_first_cheapest_route_and_skip_unreachable_maps():
+    from pokemon_red_completion.global_router import macro_path_estimates
+
+    # The direct route is discovered before the equally cheap two-hop route.
+    graph = MacroGraph({1: (MacroEdge(2, cost=4), MacroEdge(3, cost=1)),
+                        3: (MacroEdge(2, cost=3), MacroEdge(4, cost=1))})
+    assert macro_path_estimates(graph, 1, [4, 2, 1, 5, 2]) == {
+        1: (0, 0), 2: (4, 1), 4: (2, 2),
+    }
+    assert macro_path_estimates(graph, 1, []) == {}
+
+
 def test_the_cheapest_path_wins_over_the_shortest() -> None:
     """The reason this is Dijkstra and not a breadth-first walk.
 

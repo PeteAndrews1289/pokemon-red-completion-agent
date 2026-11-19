@@ -585,3 +585,53 @@ def test_plan_rejects_an_internal_species_identity_that_does_not_match_family() 
             plan.route_to_training,
             plan.training_binding_sha256,
         )
+
+
+def test_boxed_level_evolution_report_forwards_optional_trainee_xp_when_present(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    world = _world()
+    _patch_storage(monkeypatch, world)
+
+    def train_with_xp(precursor: int, evolved: int) -> BoundedEvolutionTrainingResult:
+        world.log.append("training")
+        world.party[world.party.index(precursor)] = evolved
+        return BoundedEvolutionTrainingResult(
+            3,
+            1,
+            trainee_initial_xp=1000,
+            trainee_terminal_xp=1450,
+            trainee_xp_gained=450,
+        )
+
+    adapter = RedBoxedLevelEvolutionAdapter(
+        _plan(),
+        world,
+        world,
+        world,
+        world.collection,
+        train_with_xp,
+    )
+    before = dependency_specimen_ledger(world.collection())
+    report = adapter.qualify(red_dual_capability_scenario_specs()[1], before).execute()
+    public = report.public_dict()
+    assert public["completed_training_battles"] == 3
+    assert public["healing_trips"] == 1
+    assert public["trainee_initial_xp"] == 1000
+    assert public["trainee_terminal_xp"] == 1450
+    assert public["trainee_xp_gained"] == 450
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"trainee_initial_xp": 100, "trainee_terminal_xp": 200, "trainee_xp_gained": 99},
+        {"trainee_initial_xp": -1, "trainee_terminal_xp": 200, "trainee_xp_gained": 201},
+        {"trainee_initial_xp": 100, "trainee_terminal_xp": None, "trainee_xp_gained": 100},
+    ],
+)
+def test_bounded_evolution_training_result_validates_trainee_xp_delta(
+    kwargs: dict[str, int | None],
+) -> None:
+    with pytest.raises(RedBoxedLevelEvolutionError, match="trainee XP"):
+        BoundedEvolutionTrainingResult(2, 0, **kwargs)

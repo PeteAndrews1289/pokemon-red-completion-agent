@@ -257,7 +257,6 @@ def run_prepared_trainer_funding(
     prospective_story_recovery: bool = False,
     story_income_recovery: bool = False,
     preparation_evolution_guard=None,
-    league_evolution_rom=None,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared trainer with shared identity/resource/victory checks.
 
@@ -381,21 +380,6 @@ def run_prepared_trainer_funding(
                 or not story_income_recovery or maximum_full_restores or resume_active_battle
                 or resume_pending_dialogue or validate_scripted_dialogue is not None):
             raise ValueError("level evolution requires explicit qualified K preparation")
-
-    if league_evolution_rom is not None:
-        from .red_trainer_evolution import RedTrainerEvolutionGuard
-
-        if (
-            not isinstance(owner, FrozenLoreleiStoryController)
-            or not allow_faints
-            or not isinstance(league_evolution_rom, bytes)
-            or not league_evolution_rom
-            or preparation_evolution_guard is not None
-        ):
-            raise ValueError("League evolution requires the bound learned story controller")
-        preparation_evolution_guard = RedTrainerEvolutionGuard.from_rom(
-            league_evolution_rom, owner.battler.session
-        )
 
     validate_target()
 
@@ -601,7 +585,6 @@ def run_prepared_trainer_funding(
             label="trainer funding battle",
             consume_battle_start_schedule=False,
             move_decision_guard=_guard,
-            **({"evolution_rom": league_evolution_rom} if league_evolution_rom is not None else {}),
         )
     except FrozenTrainerTerminalUnverified:
         if intent.battle_plan_id != "ordinary-trainer-funding":

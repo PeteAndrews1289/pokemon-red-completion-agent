@@ -154,6 +154,7 @@ def test_only_local_supply_peer_is_quoted_and_existing_router_owns_admission(mon
             prepare_capture_party=False,
             prepare_capture_escort=False,
             include_recovery_offers=False,
+            interruption_handler_wrapper=None,
         )
     assert rt.profile.profile_id == "original-regional-supply"
 

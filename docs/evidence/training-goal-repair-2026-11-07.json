@@ -1,0 +1,54 @@
+{
+  "actual_preservation": {
+    "private_record_sha256": "fda08d32a0a74647aa69403f0e0a14e2885f46ea2bfc9bb16220df8e1062a97c",
+    "record_items": 1
+  },
+  "all_original_gates": "UNPROVEN",
+  "candidate": {
+    "private_record_sha256": "b771e234e6828157817ffce3351afd12ea801793a8884718d6860de2d30fe093",
+    "record_items": 1
+  },
+  "first_startup_failure": {
+    "private_record_sha256": "25afb8a86a321b7e77d1f3592c8b499054b5339d386e65b95967003e2777829e",
+    "record_items": 1
+  },
+  "focused_checks": {
+    "private_record_sha256": "a3806084c181a934f02a8aa96f2b43ae3a0f44d7ad75b30533c05b517800f547",
+    "record_items": 1
+  },
+  "frozen_checks": {
+    "private_record_sha256": "af3d43fb32135958551b3dde92e8bc10a8fa46846b9acc35cc8fdeeb8b07d305",
+    "record_items": 1
+  },
+  "goal_switching_audit": {
+    "private_record_sha256": "c697c5c800f09aec8b22d6c1b677fcada40c192183d37f27f39573d86a995789",
+    "record_items": 1
+  },
+  "learning": {
+    "private_record_sha256": "5378d29374ff2873968070c8f38ce368ad0a78172f496d1e86141030789171cb",
+    "record_items": 14
+  },
+  "mission": {
+    "private_record_sha256": "23f5449e65c907aa8f0dfad167863b6b1d79498bf81d28d16951b77a4fb6d07f",
+    "record_items": 1
+  },
+  "native_qualification": {
+    "private_record_sha256": "d9b3a99e34c443eb37bf9582ace42ee6629c1b787180501899445dbbd887e4e6",
+    "record_items": 1
+  },
+  "next": {
+    "private_record_sha256": "b7e4c78e857a494d58df35d276b16c01bb913926630fd4800e095bfabd073195",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_costs": {
+    "private_record_sha256": "8903b20e64f941ec0657105f195057de477fff4a69a0398784098e6f6721b49d",
+    "record_items": 1
+  },
+  "source_document_sha256": "70bd67d00c73a15ff2f00f6b1e06163cafff1a42e098dde521f0ee731aecd9e3",
+  "status": {
+    "private_record_sha256": "59e12ad2f255203d11f425bd55ace5267599a03467d1bc00455e7e864a5521ac",
+    "record_items": 1
+  },
+  "whole_Code_parity_claim": false
+}

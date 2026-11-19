@@ -14,6 +14,30 @@ from pathlib import Path
 
 
 def run_direct(plan, *, output, worker_path, loader_definitions, started, write):
+    from .red_teacher_venue import is_venue_case, run_venue
+
+    if is_venue_case(plan):
+        return run_venue(
+            plan,
+            output=output,
+            worker_path=worker_path,
+            loader_definitions=loader_definitions,
+            started=started,
+            write=write,
+        )
+
+    from .red_teacher_story_unit import is_story_unit_case, run_story_unit
+
+    if is_story_unit_case(plan):
+        return run_story_unit(
+            plan,
+            output=output,
+            worker_path=worker_path,
+            loader_definitions=loader_definitions,
+            started=started,
+            write=write,
+        )
+
     OUT = Path(output)
     PLAN = OUT / "PLAN.json"
     package = Path(plan["package"]).parent
@@ -409,7 +433,11 @@ def run_direct(plan, *, output, worker_path, loader_definitions, started, write)
             upgrade_option_value_model_for_move_change,
         )
 
-        model = upgrade_option_value_model_for_move_change(baseline)
+        model = (
+            baseline
+            if case_spec.sequence_mode
+            else upgrade_option_value_model_for_move_change(baseline)
+        )
         assert model.model_sha256 == plan["zero_extended_goal_model_sha256"]
         q = read(plan["qualification"])
         assert (
@@ -570,7 +598,7 @@ def run_direct(plan, *, output, worker_path, loader_definitions, started, write)
                         frames=emulator.frame_count,
                         pressed_buttons=sorted(emulator.pressed_buttons),
                         goal_policy_queries=0,
-                        teacher_selected=True,
+                        teacher_selected=not case_spec.sequence_mode,
                     ),
                 )
                 pp_gate = validate_retained_menu(
@@ -601,7 +629,11 @@ def run_direct(plan, *, output, worker_path, loader_definitions, started, write)
                         independence_claim=False,
                     ),
                 )
-                prospective = session.consequence.begin(options, binding, preflight_only=True)
+                prospective = (
+                    None
+                    if case_spec.sequence_mode
+                    else session.consequence.begin(options, binding, preflight_only=True)
+                )
                 write(
                     OUT / "PREINPUT-QUALIFICATION.json",
                     dict(
@@ -609,10 +641,11 @@ def run_direct(plan, *, output, worker_path, loader_definitions, started, write)
                         source_bytes_exact=True,
                         source_state_sha256=plan["source_sha256"],
                         source_partition="train",
-                        feature_version=10,
+                        feature_version=16 if case_spec.sequence_mode else 10,
                         feature_width=len(
                             options.menu.candidate_vector(
-                                options.bindings.index(binding), feature_version=10
+                                options.bindings.index(binding),
+                                feature_version=16 if case_spec.sequence_mode else 10,
                             )
                         ),
                         selected_kind=initial.value,
@@ -622,70 +655,87 @@ def run_direct(plan, *, output, worker_path, loader_definitions, started, write)
                         inputs=0,
                         frames=0,
                         goal_policy_queries=0,
-                        teacher_selected=True,
+                        teacher_selected=not case_spec.sequence_mode,
                         consequence_plan=prospective,
                     ),
                 )
                 profile("preinput_qualified")
-                for ordinal in range(plan["native_limits"]["decisions"]):
-                    if ordinal:
-                        options = session.observe(ordinal)
-                        kind = (
-                            GoalKind.RESTORE_TEAM
-                            if not _raw_party_fully_restored(session.runtime.reader.read())
-                            else GoalKind.ADVANCE_STORY
-                        )
-                        binding = choose(options, kind)
-                    else:
-                        kind = initial
-                    write(
-                        OUT / (f"choice-{ordinal:02d}.json"),
-                        dict(
-                            kind=kind.value,
-                            binding_ref=binding.binding_ref,
-                            teacher_assigned=True,
-                            model_query=False,
-                        ),
-                    )
-                    report = binding.execute()
-                    verdict = binding.verify(report)
-                    session.finish_decision()
-                    write(
-                        OUT / (f"phase-verdict-{ordinal:02d}.json"),
-                        dict(
-                            kind=kind.value, status=verdict.status.value, evidence=report.evidence
-                        ),
-                    )
-                    if session.consequence.done:
-                        break
-                    assert session.snapshot().safe
-                profile("native_decisions_complete")
-                assert len(timing_calls) == 1, (
-                    "timing experiment requires exactly one observed declared trainer battle"
-                )
-                assert session.decisions == 1, "one direct native phase only"
-                recorded = session.consequence.finish()
-                admitted = load_challenge_consequence(
-                    store,
-                    declaration_sha256=recorded["declaration_sha256"],
-                    result_sha256=canonical_sha256(recorded),
-                )
-                result.update(
-                    passed=True,
-                    opening_idle_frames=plan["opening_idle_frames"],
-                    timing_interventions=timing_calls,
-                    admitted=admitted.outcome is not None,
-                    row=admitted.document(),
-                    training_admission=admitted.outcome is not None,
-                    declaration_sha256=recorded["declaration_sha256"],
-                    result_sha256=canonical_sha256(recorded),
-                    field_ready=_field_ready(session.runtime),
-                    acquisition_is_preexisting_sunk_cost=plan["separate_acquisition_cost"],
-                    actual_credit=0,
-                    model_feature_version=10,
-                    goal_policy_queries=0,
-                )
+                if case_spec.sequence_mode:
+                    from .red_teacher_sampled_sequence import run_sampled_teacher_sequence
 
+                    result.update(teacher_selected=False, goal_policy_queries=None, sampled_student_choices=True)
+                    sampled = run_sampled_teacher_sequence(
+                        session,
+                        model,
+                        source=source,
+                        spec=case_spec,
+                        seed=case["seed"],
+                        contract=holder["contract"],
+                        write=write,
+                        output=OUT,
+                    )
+                    result.update(sampled)
+                else:
+                    for ordinal in range(plan["native_limits"]["decisions"]):
+                        if ordinal:
+                            options = session.observe(ordinal)
+                            kind = (
+                                GoalKind.RESTORE_TEAM
+                                if not _raw_party_fully_restored(session.runtime.reader.read())
+                                else GoalKind.ADVANCE_STORY
+                            )
+                            binding = choose(options, kind)
+                        else:
+                            kind = initial
+                        write(
+                            OUT / (f"choice-{ordinal:02d}.json"),
+                            dict(
+                                kind=kind.value,
+                                binding_ref=binding.binding_ref,
+                                teacher_assigned=True,
+                                model_query=False,
+                            ),
+                        )
+                        report = binding.execute()
+                        verdict = binding.verify(report)
+                        session.finish_decision()
+                        write(
+                            OUT / (f"phase-verdict-{ordinal:02d}.json"),
+                            dict(
+                                kind=kind.value,
+                                status=verdict.status.value,
+                                evidence=report.evidence,
+                            ),
+                        )
+                        if session.consequence.done:
+                            break
+                        assert session.snapshot().safe
+                    profile("native_decisions_complete")
+                    assert len(timing_calls) == 1, (
+                        "timing experiment requires exactly one observed declared trainer battle"
+                    )
+                    assert session.decisions == 1, "one direct native phase only"
+                    recorded = session.consequence.finish()
+                    admitted = load_challenge_consequence(
+                        store,
+                        declaration_sha256=recorded["declaration_sha256"],
+                        result_sha256=canonical_sha256(recorded),
+                    )
+                    result.update(
+                        passed=True,
+                        opening_idle_frames=plan["opening_idle_frames"],
+                        timing_interventions=timing_calls,
+                        admitted=admitted.outcome is not None,
+                        row=admitted.document(),
+                        training_admission=admitted.outcome is not None,
+                        declaration_sha256=recorded["declaration_sha256"],
+                        result_sha256=canonical_sha256(recorded),
+                        field_ready=_field_ready(session.runtime),
+                        acquisition_is_preexisting_sunk_cost=plan["separate_acquisition_cost"],
+                        actual_credit=0,
+                        model_feature_version=10,
+                        goal_policy_queries=0,
+                    )
             finally:
                 result["release_only_cleanup"] = sorted(emulator.pressed_buttons)
                 from .executor import release_pressed_buttons

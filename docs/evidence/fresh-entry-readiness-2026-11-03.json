@@ -1,0 +1,40 @@
+{
+  "actual_badges": 6,
+  "actual_registrations": 67,
+  "all_players_closed": true,
+  "all_three_baseline_gates_passed": true,
+  "baseline_gate_package": {
+    "private_record_sha256": "93599f8877a0685da665fa828e5813f0db61433ae8b136c7c53676a2609d03c6",
+    "record_items": 1
+  },
+  "fresh_import_qualification": {
+    "private_record_sha256": "afa3abd364f4512fe60debb78d72dd02c5a2e886e2b89989906e84e4265e2031",
+    "record_items": 1
+  },
+  "fresh_source_fix": {
+    "private_record_sha256": "4021158a5ee144c8b0d4c284e1e48a34a14589ca6e79ae97ebfc538882be0b04",
+    "record_items": 1
+  },
+  "frozen_candidate": {
+    "private_record_sha256": "a7b83eea22bf5c80580530fbd16ffc7c9ffee78a00e32e68dc693af43797094b",
+    "record_items": 1
+  },
+  "main_gate_closeout": {
+    "private_record_sha256": "c1b7908b1d92e18960917f038837e05ed3a76a7e578aec4e54b3e4dc6c79b414",
+    "record_items": 1
+  },
+  "new_actual_native_launches": 0,
+  "new_candidate_focused_checks": 111,
+  "new_candidate_native_gates": "PENDING;no inherited native credit",
+  "next_blueprint": {
+    "private_record_sha256": "8543c030020e462b0336fbfc7430b624a1d3519c2b46434a5de796eea82cec02",
+    "record_items": 1
+  },
+  "observed_at_utc": "2026-11-03T20:18:12.226214+00:00",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "source_document_sha256": "5677687d14c9f66c8d4dbae572e4bf3d58633ac05451d749144aa802c6beb9a0",
+  "source_release_evidence": {
+    "private_record_sha256": "2e0190277ba096e026f3fbd1cc9ff356c08f81bd68127adb4cc79c584ed875d5",
+    "record_items": 1
+  }
+}

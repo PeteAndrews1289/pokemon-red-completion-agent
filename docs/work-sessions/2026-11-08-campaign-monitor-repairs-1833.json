@@ -1,0 +1,25 @@
+{
+  "actual115_stopped": true,
+  "full_suite": false,
+  "mission": {
+    "private_record_sha256": "574de0a388954d0b767d9cc2133f81df6ccb804a8b90707f35c3eb1ca2a517d1",
+    "record_items": 1
+  },
+  "models_unchanged": true,
+  "original_cutoffs_retained": true,
+  "previous": {
+    "private_record_sha256": "022b2f0df67af30c6f563cc0e03118ed5af185bea1f837a5e6ffad19f1e344ce",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "repair": {
+    "private_record_sha256": "cfc8029059e86133ff6b7f8e18de2f41e36a424e6f37451eb8e767b00c613738",
+    "record_items": 1
+  },
+  "same_campaign_native": {
+    "private_record_sha256": "4015618797550a8efb4ccd5f66a3eadc787bd240131801215f7db2bc81fb4954",
+    "record_items": 1
+  },
+  "session_id": "2026-11-08-campaign-monitor-repairs-1833",
+  "source_document_sha256": "3e4cf368668734a0406ecba09a8ec352821206fccab69e7cabbdfb7cbb9458a1"
+}

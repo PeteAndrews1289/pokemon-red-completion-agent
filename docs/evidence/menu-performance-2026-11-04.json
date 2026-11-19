@@ -1,0 +1,131 @@
+{
+  "ACTUAL31-SOURCE-AUTHENTICATION.json": {
+    "private_record_sha256": "6b0c048e40ada8449fb9008c5c33afce31b47b3329ae2561c54e2dde4c8a9264",
+    "record_items": 1
+  },
+  "FINAL-ACTUAL-SOURCE-AUTHENTICATION.json": {
+    "private_record_sha256": "72d6b7042ec7f21717d9cfc934f05e5b63d68c271e80393f69830a4e65d0a93f",
+    "record_items": 1
+  },
+  "FOCUSED-TEST-RESULT-v7.json": {
+    "private_record_sha256": "efdcfdcc0b1140c0a8c83a72b33ca711a150bf8f1b94f54c3ee4a25e84d476bb",
+    "record_items": 1
+  },
+  "GYM-COLLECTION-SCORE-READBACK.json": {
+    "private_record_sha256": "d74ad89f8500ecb36681336eaf9e0fc69cae2c4aa4a3e36248bbdffd7ac8397b",
+    "record_items": 1
+  },
+  "RECENT-ACTUAL-TIME-LOSS-AUDIT.json": {
+    "private_record_sha256": "eb0e5e35f17dee0d839e41dfd6801d3ce9c562a5c9b0b348365b421002463d00",
+    "record_items": 1
+  },
+  "SAME-SAVE-ACTUAL31-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "52871a80d97b5a3013c41bcd9f43d7cca0cdbf75893d352c5ae64e023fe7b8cd",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "9bbc97ddb9afcbfc509e1f50f9eaff09a41008f02e0b6ddcac0a46c5443b86e3",
+    "record_items": 1
+  },
+  "STORAGE-INCOME-QUALIFICATION.json": {
+    "private_record_sha256": "d1191d2f049fb3879ef0e0d262c6adfdb4ce243bb55fcf25e4c9b4579650b144",
+    "record_items": 1
+  },
+  "STORAGE-REPAIR-SIX-PART-AND-OWNERSHIP-CLARIFICATION.json": {
+    "private_record_sha256": "563cb357ff6a0c49040777831087591df522c6cf38901c521b0444d15567e634",
+    "record_items": 1
+  },
+  "STORAGE-ROUTE-NATIVE-QUALIFICATION.json": {
+    "private_record_sha256": "f2b4dd467afedbe4032bf6bb9d0b889f7f1c503dffedd8355409b8fa57e328e1",
+    "record_items": 1
+  },
+  "STORAGE-TRANSPORT-REASSESSMENT-v2.json": {
+    "private_record_sha256": "0298cee3dba2c662c6d6286688e63989760552ffa23c854e632334881296c341",
+    "record_items": 1
+  },
+  "STORAGE-TRANSPORT-REPAIR-MISSION.json": {
+    "private_record_sha256": "0b3090d9c620bed14d3b359043c0239ebaa07d50ceeac8cde398f7a0f9bb8943",
+    "record_items": 1
+  },
+  "active_carrier_partial_readback": {
+    "private_record_sha256": "0e1798b3832010b181b19530809aa270d26b9b35ebcf22d4f0ab493f5ca22c1c",
+    "record_items": 1
+  },
+  "actual18_source": {
+    "private_record_sha256": "4dcd9b55da8cd5b02a1b1f01a4d04e52fdc0bfafe7f09ebc617b4355908bf61b",
+    "record_items": 1
+  },
+  "actual_continuation_progress": {
+    "private_record_sha256": "753e9904e55fe3357855f89086a1edaa561e100369a11035d3698dd45f4fb26e",
+    "record_items": 1
+  },
+  "all_previous_failures_and_costs_preserved": true,
+  "audits": {
+    "private_record_sha256": "194b2d1fe527cd83800682a02147f45fcd68f6a1f137f167ff7df619870a1d2a",
+    "record_items": 3
+  },
+  "combined_local_repair_qualification": {
+    "private_record_sha256": "4b67d5f9734b07c19f8db3d65fd4ed4e9dd09e2a08b84b3a33aee5618b08ae96",
+    "record_items": 1
+  },
+  "current": {
+    "private_record_sha256": "39455e405bc78dc415fb7044709427bb9e97889f762110b29536e95e9d9947ce",
+    "record_items": 6
+  },
+  "current_build_three_gates_unproved": true,
+  "fly_readback": {
+    "private_record_sha256": "832e64ae775bdb28eea6e93f1bc8e91cafc8e3d327ed8c3724e30142c8f5ffd4",
+    "record_items": 1
+  },
+  "fly_time_loss": {
+    "private_record_sha256": "c16765d4e905435da8b6c3b847404ac375fc56acd775e59e618db7cf778addb1",
+    "record_items": 1
+  },
+  "fresh_attempt_progress": {
+    "private_record_sha256": "a4f431147f30c4ce2bd3b2ab47a5bb146513883ce3137f6e60ff717bf40cb04f",
+    "record_items": 1
+  },
+  "full_fresh_completion": false,
+  "gate_adjudication": {
+    "private_record_sha256": "6dc29dc4b6c800992862602af66f811084e9bc9e67907276935fef761994b60f",
+    "record_items": 1
+  },
+  "latest_actual_progress": {
+    "private_record_sha256": "e41ec4731d6919f4318494833d0518dd30934d63b2123840733e00c6a636e3c1",
+    "record_items": 1
+  },
+  "live_authentication": {
+    "private_record_sha256": "053d6be102f15a3ef9b8138fc9191166f2b39a1f0ad015f4a92bd17323d10f91",
+    "record_items": 1
+  },
+  "mission": {
+    "private_record_sha256": "a2359d4b2cbdd375b38070bf6e585b9adc9125fc2261282736eef16da276d70d",
+    "record_items": 1
+  },
+  "native_claim": {
+    "private_record_sha256": "a6aaab8d2209e72a8d13af359b9dd95cb0d6f36cc149e6de04e0dc0198893456",
+    "record_items": 3
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-04T12:58:14.962176+00:00",
+  "package": {
+    "private_record_sha256": "ce466931e859729140055f71759f71a2c9f7e3b877e79e87c60b4de8202eabda",
+    "record_items": 1
+  },
+  "performance_comparison": {
+    "private_record_sha256": "4af436a43c244152126b34de4f3eea4ad15067985ea3bbf740b3a8ed780b861d",
+    "record_items": 1
+  },
+  "preserved_actual": {
+    "private_record_sha256": "93e50ee5ad1fbfbfb5d91726d2ce6958369eeb3fa6c4bd355844457ff168e91a",
+    "record_items": 46
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "source_document_sha256": "60ed151e8d825d1f0badeab872a756639019516e04e23adaf718d203c766e399",
+  "transport_repair_qualification": {
+    "private_record_sha256": "ac261554adb1c911e14a66112eb8f6e291de4a65d8a3f94088033814de954a94",
+    "record_items": 1
+  }
+}

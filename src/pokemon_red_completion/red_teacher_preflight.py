@@ -16,6 +16,28 @@ def preflight_direct(plan, *, plan_sha256, worker_sha256, loader_definitions, ou
     cartridge interpretation occurs in this phase.
     """
 
+    from .red_teacher_venue import is_venue_case, preflight_venue
+
+    if is_venue_case(plan):
+        return preflight_venue(
+            plan,
+            plan_sha256=plan_sha256,
+            worker_sha256=worker_sha256,
+            loader_definitions=loader_definitions,
+            output=output,
+        )
+
+    from .red_teacher_story_unit import is_story_unit_case, preflight_story_unit
+
+    if is_story_unit_case(plan):
+        return preflight_story_unit(
+            plan,
+            plan_sha256=plan_sha256,
+            worker_sha256=worker_sha256,
+            loader_definitions=loader_definitions,
+            output=output,
+        )
+
     def read(path):
         return json.loads(Path(path).read_bytes())
 
@@ -74,8 +96,11 @@ def preflight_direct(plan, *, plan_sha256, worker_sha256, loader_definitions, ou
         Path(plan["goal_model_record"]["path"]), expected_model_sha256=plan["goal_model_sha256"]
     ).model
     require(
-        upgrade_option_value_model_for_move_change(model).model_sha256
-        == plan["zero_extended_goal_model_sha256"],
+        (
+            model if spec.sequence_mode else upgrade_option_value_model_for_move_change(model)
+        ).model_sha256
+        == plan["zero_extended_goal_model_sha256"]
+        and (not spec.sequence_mode or model.feature_version == 16),
         "zero-extension changed existing model",
     )
     kwargs = build_teacher_session_kwargs(

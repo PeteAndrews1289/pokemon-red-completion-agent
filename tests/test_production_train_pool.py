@@ -554,6 +554,7 @@ def test_helper_cannot_fall_back_to_k_under_explicit_train(admission):
     base = object()
     namespace = dict(
         training_admission=admission,
+        scoped_train_composition=None,
         d=N(prior=N(doc=lambda _: {})),
         declared=Path("unused"),
         holder=dict(actor=base),

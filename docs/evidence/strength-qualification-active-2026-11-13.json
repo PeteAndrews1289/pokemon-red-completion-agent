@@ -1,0 +1,56 @@
+{
+  "ROOT_limit": 12600,
+  "actual_registered": 115,
+  "actual_registration_delta": 0,
+  "actual_snapshot_requirement": {
+    "private_record_sha256": "2c6ccb6d0624583f00352300a2179d0cea95c4d7f7dca8172fd045bded7ebb5c",
+    "record_items": 1
+  },
+  "actual_stopped": true,
+  "campaign_ready": false,
+  "current_case_paths": {
+    "private_record_sha256": "a5932830296ee553084582b186a854226ce8da1e4104eee1b31c5124ba00be01",
+    "record_items": 1
+  },
+  "current_qualification_results_pending": true,
+  "current_recipe": {
+    "private_record_sha256": "0d8c4c00585b3298dd62cfc8d19b1259636e469214fd172f399cc7a749b24a9a",
+    "record_items": 2
+  },
+  "external_receipts": {
+    "private_record_sha256": "f5f2ada325ea9ba81154e9c7bbcc54c8a8ecfca3ea5f51f9d251ac09394e2e15",
+    "record_items": 13
+  },
+  "gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "historical135_examples16_fits_unchanged": true,
+  "maximum_concurrent_players": 2,
+  "model_sha256": "69386d64bdbd3cfa9ffc9aafc88bcb3d100ed3c59c9290dd1435e62815a388be",
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_fits": 0,
+  "next_decision": {
+    "private_record_sha256": "886c5ed1df9e54ee92a844a4406f655f7463f2da6d7ffbadb4104841225ad5e1",
+    "record_items": 1
+  },
+  "old_gate_credit_transferred": false,
+  "package_sha256": "9fa91505228e2da001c111e128368d82ced420f7f47892f53279b59bcf554ddf",
+  "prior_N2_ROOT_seconds": 2623.418484773,
+  "prior_N2_closed_authenticated": true,
+  "prior_writer393_released": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "readback_ROOT": 1800,
+  "schema": "pokemon.strength-qualification-active-session.v1",
+  "sequence_policy_sha256": "fb17aefb0281572ef80c32a9f6f35ba871e25a50b15c8157a7b1ccfba4ed47e5",
+  "session_id": "codex-strength-qualification-20261113-1430",
+  "source_document_sha256": "27763e5ab4ae7abfbab59405f6dea7ad856dd899a30dde1b024ff50d4090882b",
+  "source_writer_pid": 5156,
+  "status": "active",
+  "whole_Code_parity": false,
+  "window": {
+    "private_record_sha256": "26d0ef13f1f0fe483fc29e812c530d9c709fa9b8fc232b0dbf141f687357727c",
+    "record_items": 3
+  }
+}

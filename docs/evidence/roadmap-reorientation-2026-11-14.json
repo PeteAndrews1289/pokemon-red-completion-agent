@@ -1,0 +1,30 @@
+{
+  "actual_registered": 97,
+  "controller_inputs": 0,
+  "decision": "Whole-player rehearsals guide ranked repairs anduseful learning;twoengineering-onlyblocks endin concrete rehearsalproposal orjustifiedpivot;no campaignlaunched.",
+  "diagnostic_registered": 99,
+  "documentation_only": true,
+  "emulators": 0,
+  "final_exits_unchanged": true,
+  "fit_calls": 0,
+  "historical_preparation_checklist": "Preserved;removed completionpercentage;not fullrun evidence",
+  "model_adoptions": 0,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_registration_delta": 0,
+  "next": {
+    "private_record_sha256": "12d440b1bff52715c672baa413cb86b7d1a3d39d422d9e3d89dcab8b486bd1e3",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "reviewers": {
+    "private_record_sha256": "a11719f04b6735cfc43c5e2370a32e0ba1717648c0036bf0b6fdb8ccdf1a62c7",
+    "record_items": 2
+  },
+  "schema": "pokemon.roadmap-reorientation.v1",
+  "session_id": "roadmap-reorientation-20261114-2358",
+  "source_document_sha256": "41deabb3f0f6dabeddfe5dfbc2afb24e5998f4aff8cf3f0a522f69062b45bd40",
+  "stable_stage_ids_unchanged": true,
+  "state_loads": 0,
+  "workstreams": 6
+}

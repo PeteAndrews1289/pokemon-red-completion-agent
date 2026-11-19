@@ -47,9 +47,18 @@ class RedFossilIngredientGoalProvider:
     estimated_effort: float = 0.4
     estimated_risk: float = 0.12
     kind: GoalKind = GoalKind.ACQUIRE_SPECIES
+    before_revival: object = None
+    revival_party: tuple[int, ...] | None = None
 
     def __post_init__(self):
         old_amber_gift(self.rom)
+        if self.before_revival is None:
+            if self.revival_party is not None:
+                raise ValueError("revival roster requires its explicit return callback")
+        elif (not callable(self.before_revival) or type(self.revival_party) is not tuple
+                or len(self.revival_party) != 6
+                or any(type(s) is not int or not 1 <= s <= 255 for s in self.revival_party)):
+            raise ValueError("carrier return requires callback and observed full original roster")
         if self.kind is not GoalKind.ACQUIRE_SPECIES:
             raise ValueError("fossil ingredient belongs to acquisition")
         for key in ("maximum_actions", "maximum_route_steps", "maximum_flees"):
@@ -153,13 +162,14 @@ class RedFossilIngredientGoalProvider:
                 maximum_route_steps=self.maximum_route_steps,
                 maximum_flees=self.maximum_flees,
                 plans=[[asdict(step) for step in p.steps] for p in (outward, returning)],
+                **({"carrier_return": True, "revival_party": self.revival_party} if self.before_revival is not None else {}),
             )
         )
         initial_bag = dict(raw.bag_items)
         initial_specimens = Counter(raw.party_species_ids or ()) + Counter(
             s for box in boxes.boxes for s in box.species_ids
         )
-        expected_party = raw.party_species_ids
+        expected_party = raw.party_species_ids if self.before_revival is None else self.revival_party
         if raw.party_count is not None and raw.party_count < 6 and expected_party is not None:
             expected_party += (target.internal_species_id,)
         used = False
@@ -167,7 +177,7 @@ class RedFossilIngredientGoalProvider:
         terminal = None
 
         def execute():
-            nonlocal used, report, terminal
+            nonlocal used, report, terminal, expected_party
             if used:
                 raise RuntimeError("ingredient acquisition binding already attempted")
             used = True
@@ -238,6 +248,29 @@ class RedFossilIngredientGoalProvider:
             if not supported(return_plan):
                 raise RuntimeError("ingredient return lost its supported route")
             return_steps = route(return_plan)
+            carrier_return = None
+            if self.before_revival is not None:
+                before_return = self.reader.read()
+                before_owned = self.reader.read_pokedex_state().owned_species
+                before_stock = Counter(before_return.party_species_ids or ()) + Counter(
+                    s for box in self.reader.read_all_box_states().boxes for s in box.species_ids)
+                carrier_return = self.before_revival(actions, live_world, start)
+                actual = self.reader.read()
+                actual_stock = Counter(actual.party_species_ids or ()) + Counter(
+                    s for box in self.reader.read_all_box_states().boxes for s in box.species_ids)
+                arrived = self.traversal_observer.observe()
+                if (actual_stock != before_stock or Counter(actual.party_species_ids or ()) != Counter(self.revival_party)
+                        or actual.player_money != before_return.player_money
+                        or actual.bag_items != before_return.bag_items
+                        or actual.badge_bits != before_return.badge_bits
+                        or self.reader.read_pokedex_state().owned_species != before_owned
+                        or not arrived.ready or arrived.interruption is not None
+                        or (arrived.map_id, arrived.at, arrived.mode) != (start.map_id, start.at, "land")
+                        or self.emulator.pressed_buttons
+                        or self.reader.read_bottom_dialogue_box_visible()
+                        or not isinstance(carrier_return, dict) or not carrier_return.get("original_roster_restored")):
+                    raise RuntimeError("ingredient carrier return changed protected stock or arrival")
+                expected_party = actual.party_species_ids
             revival = RedRoutedFossilRevival(
                 actions,
                 self.reader,
@@ -255,6 +288,7 @@ class RedFossilIngredientGoalProvider:
                     outward_steps=outward_steps,
                     return_steps=return_steps,
                     learned_preparation=False,
+                    **({"carrier_return": carrier_return} if carrier_return is not None else {}),
                 ),
             )
             terminal = self.emulator.save_state_bytes()

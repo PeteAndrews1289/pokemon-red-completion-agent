@@ -280,6 +280,8 @@ def validate_sequence_runner_mode(plan, args):
 def validate_continued_sequence_wiring(plan, previous):
     if plan.get("compare_evolution_recipient_yield", False) != previous.get("compare_evolution_recipient_yield", False):
         raise ValueError("continued evolution venue comparison differs")
+    if plan.get("regional_coverage", False) != previous.get("regional_coverage", False):
+        raise ValueError("continued regional coverage mode differs")
     if plan.get("collection_cost_frame_horizon") != previous.get("collection_cost_frame_horizon"):
         raise ValueError("continued collection cost horizon differs")
     if any(plan.get(key) != previous.get(key) for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income", "registration_task_continuation")):
@@ -1293,6 +1295,9 @@ def player_wiring_declaration(plan):
         horizon = plan["collection_cost_frame_horizon"]
         if type(horizon) is not int or horizon < 1 or plan.get("partition") != "development":
             raise ValueError("collection cost quote requires a positive DEVELOPMENT frame horizon")
+    if "regional_coverage" in plan and (type(plan["regional_coverage"]) is not bool
+            or (plan["regional_coverage"] and plan.get("partition") != "development")):
+        raise ValueError("regional coverage mode requires explicit development authority")
     wiring = {
         key: carrier
         if key == "owned_field_carrier_exchange"
@@ -1322,6 +1327,8 @@ def player_wiring_declaration(plan):
         wiring["goal_model_observation_compatibility"] = compatibility
     if "collection_cost_frame_horizon" in plan:
         wiring["collection_cost_frame_horizon"] = plan["collection_cost_frame_horizon"]
+    if "regional_coverage" in plan:
+        wiring["regional_coverage"] = plan["regional_coverage"]
     for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income"):
         if key in plan:
             wiring[key] = plan[key]
@@ -2974,7 +2981,7 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
         launcher_sha256=c.digest(Path(__file__)),
     )
     _record(output / "PLAN.json", declaration)
-    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
     payload, factory, _, holder, source = assemble_configured_player(
         backend, configuration, parent, output, plan_path=output / "PLAN.json",
         **({"required_species": tuple(plan["required_species"])}
@@ -3310,7 +3317,7 @@ def verify_boxed_machine_copy(
         launcher_sha256=c.digest(Path(__file__)),
     )
     _record(output / "PLAN.json", declaration)
-    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
     payload, factory, menu, holder, source = assemble_configured_player(
         backend, configuration, parent, output, plan_path=output / "PLAN.json",
         **({"required_species": tuple(plan["required_species"])}
@@ -3505,48 +3512,10 @@ def verify_boxed_machine_copy(
     print(json.dumps(dict(result, output=str(output)), default=str), flush=True)
 
 
-def require_collection_comparison_copy(plan):
-    """This private runner accepts version-one diagnostic copies or explicit normal campaigns."""
-    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
-    if development_campaign_scope(plan):
-        if (plan["new_campaign"] or plan.get("launch_authorized") is not True
-                or plan.get("readiness_only") is not False or plan.get("maximum_state_loads") != 1):
-            raise ValueError("loaded campaign requires its declared one-load continuation")
-        return
-    if (plan.get("partition") != "development" or plan.get("qualification_only") is not True
-            or plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
-            or plan.get("open_ended_campaign", False) is not False
-            or plan.get("actual_gameplay_resume_authorized") is not False
-            or plan.get("official_acceptance") is not False or plan.get("fit_allowed") is not False
-            or plan.get("copy_back") is not False
-            or any(k in plan for k in ("matched_collection_order", "collection_transfer_capture",
-                "collection_menu_probe", "matched_preparation", "evolution_copy_experiment"))):
-        raise ValueError("collection successor requires an unallocated, isolated DEVELOPMENT copy")
-
-
 def run(args):
     path = Path(args.plan).resolve()
     plan, root = doc(path), path.parent
-    require_collection_comparison_copy(plan)
     validate_sequence_runner_mode(plan, args)
-    open_ended = plan.get("open_ended_campaign", False)
-    if type(open_ended) is not bool or (open_ended and (
-        not plan.get("campaign_continuation") or plan.get("cutoff_utc") is not None
-        or plan.get("qualification_only") or not declared_automatic_renewal(plan)
-    )):
-        raise ValueError("invalid open-ended campaign continuation declaration")
-
-    def wall_seconds():
-        if open_ended:
-            return args.seconds
-        return int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds())
-
-    def chunk_allowance(current, *, inspection=False):
-        if not open_ended:
-            return remaining_allowance(current, plan["inherited_spent"], plan["allowance"], inspection=inspection)
-        if any(current[k] < plan["inherited_spent"][k] for k in plan["allowance"]):
-            raise ValueError("open-ended continuation lost cumulative native costs")
-        return dict(plan["allowance"])
     declared_spectator(plan)
     if plan["partition"] != "development" or plan["fit_allowed"] or plan["copy_back"]:
         raise ValueError("configured launcher currently supports ordinary DEVELOPMENT only")
@@ -3582,13 +3551,6 @@ def run(args):
         verify_loan_copy(args, plan, root, backend, configuration)
         return
     nodes, ordinal = configured_run_nodes(root)
-    if plan.get("campaign_continuation") and "source_segment_ordinal" in plan:
-        source_ordinal = plan["source_segment_ordinal"]
-        if (type(source_ordinal) is not int or source_ordinal < 1
-                or origin.name != f"segment-{source_ordinal:03d}"):
-            raise ValueError("campaign source segment ordinal differs from its authenticated parent")
-        if not nodes:
-            ordinal = source_ordinal + 1
     parent = nodes[-1] if nodes else origin
     context = authenticate_parent(parent, c.digest)
     search_memory = (
@@ -3601,7 +3563,9 @@ def run(args):
         if previous["configuration_sha256"] != configuration.sha256:
             raise ValueError("cannot silently change configuration across a continuation")
         validate_continued_sequence_wiring(plan, previous)
-    left = chunk_allowance(context["spent"], inspection=args.inspect)
+    left = remaining_allowance(
+        context["spent"], plan["inherited_spent"], plan["allowance"], inspection=args.inspect
+    )
     copies = diagnostic_spending(root)
     left = {key: value - copies[key] for key, value in left.items()}
     if min(left.values()) <= 0 and not args.inspect:
@@ -3895,11 +3859,13 @@ def run(args):
         renewed = 0
         driver_terminal_reason = None
         while True:
-            wall_left = wall_seconds()
+            wall_left = int(
+                (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
+            )
             if wall_left <= 0:
                 raise ValueError("configured work block ended; no inputs authorized by this plan")
             limits = configured_execution_limits(args, left, wall_left)
-            _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
+            _write(output / "executed-launcher.py", Path(__file__).read_bytes())
             _write(output / "executed-backend.py", Path(backend.__file__).read_bytes())
             result, exported = execute_player_chunk(
                 plan=plan,
@@ -3964,7 +3930,9 @@ def run(args):
                 driver_terminal_reason = reason
                 break
             try:
-                left = chunk_allowance(exported["spent"])
+                left = remaining_allowance(
+                    exported["spent"], plan["inherited_spent"], plan["allowance"]
+                )
                 left = {key: value - copies[key] for key, value in left.items()}
                 if min(left.values()) <= 0:
                     driver_terminal_reason = "declared_budget_exhausted"
@@ -3975,7 +3943,9 @@ def run(args):
             driver_terminal_reason = configured_renewal_stop_reason(
                 args,
                 left,
-                wall_seconds(),
+                int(
+                    (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
+                ),
                 compulsory_settlement=requires_compulsory_settlement(holder["runtime"]),
             )
             if driver_terminal_reason is not None:

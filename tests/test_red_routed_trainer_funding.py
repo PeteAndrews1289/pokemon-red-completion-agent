@@ -1014,6 +1014,15 @@ def recovery_fixture(monkeypatch, *, mock_restore=True):
     router.runtime.trainer_funding_surf = False
     router.runtime.emulator.pressed_buttons = ()
     router.runtime.adapter.party_guard = SimpleNamespace(verify=lambda: None)
+    # The fake ROM has no evolution table. Recovery funding builds the cartridge
+    # level-evolution guard at battle start; an unchanged party never consults it.
+    from pokemon_red_completion.red_trainer_evolution import RedTrainerEvolutionGuard
+
+    monkeypatch.setattr(
+        RedTrainerEvolutionGuard,
+        "from_rom",
+        classmethod(lambda cls, rom, emulator: cls(None, None, (), frozenset())),
+    )
     state.party = PartyObservation(
         (state.party.members[0], replace(state.party.members[0], slot=2, level=21))
     )
@@ -1062,6 +1071,50 @@ def recovery_fixture(monkeypatch, *, mock_restore=True):
     if mock_restore:
         monkeypatch.setattr(funding, "_restore_funding_party", restore)
     return router, state, target, bindings, calls
+
+
+def _evolving_battle(monkeypatch, state, seen):
+    import pokemon_red_completion.red_trainer_funding_battle as battle_module
+
+    original = battle_module.run_prepared_trainer_funding
+
+    def battle(*args, **kwargs):
+        seen.append(kwargs.get("preparation_evolution_guard"))
+        receipt = original(*args, **kwargs)
+        state.raw = replace(state.raw, party_species_ids=(28, 29))
+        return receipt
+
+    monkeypatch.setattr(battle_module, "run_prepared_trainer_funding", battle)
+
+
+def test_recovery_funding_passes_the_cartridge_evolution_guard(monkeypatch):
+    from pokemon_red_completion.red_trainer_evolution import RedTrainerEvolutionGuard
+
+    router, state, _, bindings, _ = recovery_fixture(monkeypatch)
+    seen = []
+    _evolving_battle(monkeypatch, state, seen)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    # The stub guard rejects every change: an unverified species edit fails closed.
+    with pytest.raises(funding.RedTrainerFundingError, match="battle proof changed"):
+        bound.execute()
+    assert len(seen) == 1 and isinstance(seen[0], RedTrainerEvolutionGuard)
+
+
+def test_verified_funding_evolution_rebases_the_return_verifier(monkeypatch):
+    router, state, _, bindings, calls = recovery_fixture(monkeypatch)
+    seen, admitted = [], []
+    _evolving_battle(monkeypatch, state, seen)
+
+    def admit(guard, start, won, species, ledger):
+        admitted.append((species, tuple(won.raw.party_species_ids)))
+        assert guard is seen[0] and start is not None
+        return funding.dependency_specimen_ledger(won.collection_observation)
+
+    monkeypatch.setattr(funding, "_funding_evolution_ledger", admit)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    report = bound.execute()
+    assert admitted == [((28, 28), (28, 29))] and calls[-1] == "nurse"
+    assert bound.verify(report) == GoalVerification.succeeded()
 
 
 def test_qualified_faint_income_requires_and_verifies_healed_return(monkeypatch):

@@ -1,0 +1,33 @@
+{
+  "baseline": "F30 eight exposed DEVELOPMENT seeds, no completions",
+  "candidate": {
+    "private_record_sha256": "a37189c2c7d54fa748714586096a32594ccdb307d60b02cd809200c786fefe0d",
+    "record_items": 5
+  },
+  "date": "2026-11-11",
+  "evidence": {
+    "private_record_sha256": "f03e070e05d4f08d54c3d6b3cb93ebf627a77168daf73dbf6e6e6c4020877d16",
+    "record_items": 7
+  },
+  "fits": 0,
+  "focused_checks": {
+    "private_record_sha256": "21f3d405629a75117afa6534811bb7372d491285e29c8689c856daaca4443789",
+    "record_items": 7
+  },
+  "logging_evidence": {
+    "private_record_sha256": "765fe546f86823fa72911f2d5cdac8ec0ee1191c739153e8e5ec13904f3152ba",
+    "record_items": 1
+  },
+  "model_adoptions": 0,
+  "native_component_evidence": {
+    "private_record_sha256": "e01b8610ebbcdcb8b9c4a585c257c1796d66b2f9729a1de056d8b063430ead57",
+    "record_items": 1
+  },
+  "new_train_rows": 0,
+  "protected_save_progress_changed": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.codex.repair-session-summary.v1",
+  "source_document_sha256": "f3b57df2d06af05c8359e0d28b2939a2b6c35fa52c3085603095e70e370ffe35",
+  "source_writer": "codex",
+  "status": "closed gameplay at Pete request; final analysis, no new campaign"
+}

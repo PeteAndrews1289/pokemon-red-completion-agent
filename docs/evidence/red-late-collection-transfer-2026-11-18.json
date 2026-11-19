@@ -1,0 +1,33 @@
+{
+  "actual_cash": 8,
+  "actual_registrations": 97,
+  "adjudication_sha256": "ddd27640d2636e7955908efaad4706d664561cbdfad4f3c4f920d7711ad4c505",
+  "campaign_registrations": [
+    75,
+    82,
+    74,
+    75
+  ],
+  "campaigns_paused": true,
+  "findings": {
+    "private_record_sha256": "6a4b339b67ff0448bac5dfb50d9454dc56cca633cfceafb06edc0e6e26e134ba",
+    "record_items": 11
+  },
+  "fits": 0,
+  "limitations": {
+    "private_record_sha256": "4fb0dcfbf66c03854c08f17268f71d91e85a45db98c5b8c4d483f8e9748c9c08",
+    "record_items": 4
+  },
+  "next": "On dispatch, launch the four new saves from power-on on the shared seed, apply the existing per-worker memory guards, and bind the four dashboard feeds. Track all 40 splits, all technical and automatic recoveries, target XP, and time through Hall of Fame, 75 and 124 registrations.",
+  "prior_release_sha256": "91c3bcec695eccca40cbcb1d3b1c1a8e8ebd4201b6d2c6a88689b289a5c59e52",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "roadmap_changes": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "session": "late-collection-transfer-20261118-1741",
+  "source_document_sha256": "b3161be87490c36931772cb4049c802f8f7ad5cbfe4dcf548f41f4d4a2310384",
+  "summary": "V5 (74b063243008) is ready for four fresh, same-seed DEVELOPMENT campaigns. It retains the qualified branches from the previous four runs and has physically passed power-on, late collection, simultaneous catcher faint, Growlithe Roar and an interrupted PC loan on copies.",
+  "train_rows": 0,
+  "weight_updates": 0
+}

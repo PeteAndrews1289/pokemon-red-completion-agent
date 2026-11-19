@@ -812,6 +812,10 @@ def test_center_farewell_rejects_unsafe_boundary_before_input(change):
 
 
 class _MartPort(_ActionPort):
+    def __init__(self, reader):
+        super().__init__(reader)
+        reader.read_mart_input = lambda: ("buy", 0)
+
     def read_u8(self, address: int) -> int:
         if address == RamAddress.TOP_MENU_ITEM_X:
             return 5

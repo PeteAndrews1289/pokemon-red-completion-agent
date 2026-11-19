@@ -28,6 +28,7 @@ class ScopedTrainComposition:
     native_plan_path: Path
     contracts: tuple[StoryTrainerContract, ...]
     include_silph: bool = False
+    production_story_admission: object | None = None
 
     def __post_init__(self):
         for value, width in (
@@ -54,22 +55,33 @@ class ScopedTrainComposition:
             raise ValueError("scoped TRAIN composition requires finite unique contracts")
         if type(self.include_silph) is not bool:
             raise ValueError("scoped TRAIN Silph opt-in requires a boolean")
-        if self.include_silph and not {c.objective_id for c in self.contracts} <= {
+        if self.include_silph and not {c.objective_id for c in self.contracts} <= ({
             "defeat_erika",
             "rescue_fuji",
             "reach_saffron",
             "liberate_silph",
-        }:
+        } | ({"defeat_blaine", "defeat_giovanni", "obtain_strength"} if self.production_story_admission is not None else set())):
             raise ValueError("extended TRAIN scope contains an undeclared objective")
         groups = {}
         for contract in self.contracts:
             groups.setdefault(
                 (contract.objective_id, contract.battle_plan_id, contract.map_id), []
             ).append(contract)
-        if len({c.objective_id for c in self.contracts}) > 3 + int(self.include_silph) or any(
+        if len({c.objective_id for c in self.contracts}) > 3 + int(self.include_silph) + (3 if self.production_story_admission is not None else 0) or any(
             len(v) > 32 for v in groups.values()
         ):
             raise ValueError("scoped TRAIN composition exceeds existing finite pool scope")
+        if self.production_story_admission is not None:
+            from dataclasses import asdict
+            from .red_production_train_admission import ScopedProductionStoryAdmission
+            if type(self.production_story_admission) is not ScopedProductionStoryAdmission:
+                raise ValueError('typed scoped production story admission required')
+            d=self.production_story_admission.document()
+            if (d['source_state_sha256']!=self.source_state_sha256 or d['context_sha256']!=self.context_sha256
+                    or d['work_order_sha256']!=self.work_order_sha256 or d['source_origin_sha256']!=self.source_origin_sha256
+                    or d['source_commit']!=self.source_commit
+                    or d['contracts_sha256']!=canonical_sha256([asdict(c)for c in self.contracts])):
+                raise ValueError('production story admission differs from TRAIN composition')
         # A physical trainer may obstruct different model-selected goals. Keep
         # each existing exact-contract actor; aliases cannot change native reward.
         native = {}
@@ -79,6 +91,20 @@ class ScopedTrainComposition:
             if key in native and native[key] != reward:
                 raise ValueError("scoped TRAIN aliases disagree on native reward")
             native[key] = reward
+
+    def _production_story_actor(self, prototype, contract):
+        from .red_development_story_scope import DevelopmentStoryScope, _gym_rewards
+        admission=self.production_story_admission
+        model=admission.model_for(contract);digest=admission.component_for(contract)
+        reward=_gym_rewards().get(contract.objective_id) if contract.victory_badge_bits else None
+        scope=DevelopmentStoryScope(self.source_state_sha256,self.root_lineage_id,digest,
+            canonical_sha256(model.to_dict()),self.work_order_sha256,contract=contract,gym_reward=reward,
+            allow_learned_tactics=True,diagnostic_status_entry=True,screen_capped_status_moves=True,
+            train_admission=admission)
+        actor=replace(prototype,calls=0,model=model,model_sha256=digest,qualification_sha256=scope.identity,
+            train_story_contract=contract,development_story_scope=scope)
+        actor.require_train_story_scope()
+        return actor
 
     @property
     def root_lineage_id(self):
@@ -106,6 +132,8 @@ class ScopedTrainComposition:
             or source.get("experiment_sha256") != self.work_order_sha256
         ):
             raise ValueError("scoped TRAIN assembly source differs")
+        if self.production_story_admission is not None:
+            self.production_story_admission.require_source(source)
         native_sha = None
         output = Path(output)
         if isinstance(prototype.session, ReadOnlyController):
@@ -144,6 +172,10 @@ class ScopedTrainComposition:
                 initial=initial,
                 native_plan_sha256=native_sha,
                 allow_train_pp_reentry=True,
+                **(dict(story_admission=self.production_story_admission,
+                    story_overrides=tuple(self._production_story_actor(prototype,c)for c in contracts
+                        if self.production_story_admission.component_for(c) != prototype.model_sha256))
+                   if self.production_story_admission is not None else {}),
             )
             for objective, contracts in sorted(groups.items())
         }
@@ -206,7 +238,7 @@ class ScopedTrainBattlerGroup(ScopedTrainingBattlers):
         self._check_group()
         key = (contract.objective_id, contract.battle_plan_id, contract.map_id)
         if key not in self.pools:
-            raise ValueError("selected TRAIN contract is outside prospective scope")
+            raise ValueError(f"selected TRAIN contract is outside prospective scope: {contract!r}")
         return self.pools[key].story(contract)
 
     @property

@@ -1,5 +1,168 @@
 # Roadmap baseline and deviations
 
+## November 19 — One uninterrupted same-seed attempt
+
+Four repaired same-seed saves reached the Hall of Fame and 124 registrations. The combined recipe passed 22 bounded native cases, including the normal power-on and same-emulator recovery tests. Compare the first combined completion split in active time, calendar time and normal-speed frame equivalents. Keep all original saves, repair histories and costs. The approved attempt uses one emulator and a new save.
+
+[Four-run evidence](work-sessions/four-run-union-2026-11-19.md)
+
+## November17: same-seed completion preparation and split custody
+
+Combined-recipe fresh124 startup passes with zero state loads. The late118 copy reaches119/Dragonair in five closed greedy choices with zero technical errors; three unfinished evolution chunks retain target XP. Four same-seed campaigns and40 milestones per dashboard are prepared but not launched. No unchanged fresh completion or full current G1/G2/G3 proof. Late collection remains expensive:95513 inputs,8528735 frames,956.127 metered seconds. Four simultaneous native players were not qualified. No fit,new TRAIN,weights/default promotion,actual input or whole-Code parity. All six fixed-checklist session deltas are0percentagepoints. Startup and copied collection retain scoped coverage; they do not establish unchanged full completion or general efficiency.
+
+
+## November17: completion-first recovery and measured splits
+
+Two reproduced stopping classes now recover truthfully: a settled zero-XP evolution stays failed and returns control; a verified poison faint stops failed travel before an illegal Surf attempt. One unchanged original55 copy closes 96 decisions, reaches 57 registrations and seven badges, and earns Surf, Strength, Koga, Secret Key, Blaine, Silph and Sabrina with zero technical stops or operator repairs. These are exposed DEVELOPMENT copies. Fresh full completion, general goal efficiency and necessary training remain unproved. Two unfinished story-goal changes occur after recovery. One 500-fee Surf visit earns Surf. F145 plus declared V3 repair leaves and the separate passive timing/UI sources are pinned. No full-suite, whole-Code parity, new-weight or transferred gate-credit claim. No new fixed-rubric checkpoint closes; all six session deltas are 0 percentage points. Execution at 100% is historical scoped coverage, not universal reliability. This session closes two reproduced stopping classes and demonstrates nine new milestones on a copied path. Reuse prior combinedreview advice;pause default critic refitting and seek integratedcompletion evidence.
+
+
+## November17: reject production-component critic transfer
+
+Production story-component reuse now matches the current J/Silph/K mechanical roles without changing the full menu. Eight clean related TRAIN episodes produced six Erika completions,two ordinary losses,19 admitted H4 windows,nine positive andten zero taskreturns. One65-row fit retains46oldercash-only projections. Newhead868b/top07bb is rejected:both normal copies beat Giovanni,but the new candidate uses2.280 times the frames and2.268 times the inputs through that boss. Matching J and broad party levels didnot close task/roster/continuation coverage:TRAIN faces Erika29 withthree members;normalMID has six members at52/44/43/46/42/51. High44/51 Erika controls have nolegal levelpreparation. LateTRAIN049prefixes reached no useful combat/preparation anchor. Allnew behavior is sampled868c,notnormalgreedy. No DEV fitting,independentorigin orcausalnecessity claim. No new fixed checklist exit:the critic isrejected andthe execution repair isheld atzero-progress verification. All six deltas are0percentagepoints;denominators unchanged. Execution100percent remains scoped coverage,not universal reliability.
+
+
+## November17: reject unrepresentative preparation transfer
+
+Eight eligible related TRAIN episodes produced two whole Erika outcomes, 52 new measured H4 windows and 18 censored windows. One 98-row fit targeted the active preparation/story head 5bc,with funding 143 unchanged. The fitted 560d head is rejected:both normal-runner copies beat Giovanni, but the candidate used 2.483 times the frames and 2.448 times the inputs through that boss. Baseline completed three training actions; the candidate missed all four requested training levels. Neither had a technical stopping error.
+
+The TRAIN family uses scoped K story battlers,carry levels 38–41 and requested trainee levels 6–43. Normal MID uses production 29792a story battlers,a level-51 carry and training requests in the high 40s. This failed conditional transfer test is not production-matched data,causal training necessity or independent generalization. All outcomes and costs remain.
+
+Execution varied-integration credit combines the unchanged V3/F145 baseline whole-story training-use witnesses with prior exact-recipe native resource chains. This is scoped coverage,not universal reliability or full124 qualification. No learning improvement credit:the new candidate is rejected.
+
+
+## November 17: compare a whole MID objective
+
+The repaired original MID copy completes defeat_blaine, defeat_giovanni across 48 recorded goals, with technical_clean=True. It contains 3 routed training actions and 3 machine lessons. Native target XP is 13940; helper XP is 16574. Of the two XP trainees,1 executes 2 unique attacks in an intervening gym fight;neither attacks Giovanni. The stricter qualifying-boss referee records 0 XP-training use witnesses. Baseline control/input/frame/state parity is True. This is exposed-source retention evidence,not a learned speed gain or proof that all preparation was necessary.
+
+Use unchanged models and an exact shared source to separate repair retention from a goal-policy improvement. Retain full training,target/helper XP,resource costs and target-use evidence. The exposed MID copy cannot become TRAIN.
+
+
+## November16: repair exact states and retain normal behavior
+
+The exact retained Lance recovery wins in 50 decisions. The stranded Lorelei income copy earns cash from 376 to 30,175, buys coins and redeems Dratini, raising registrations from 117 to 118. The cash-8 chain retains its 97 to 99 result. All three previously successful Lance timing paths retain exact actions, frames and terminal bytes; two old 80-decision failures remain. Broad Focus Energy admission regressed from 3/5 to 1/5 and was retired; the narrow repair restores 3/5. No weights fitted or campaign launched. Genuine model goal choices are authenticated after mandatory recovery. The 16-decision followthrough includes two ordinary setbacks and stops cleanly at its declared budget; it does not establish a full-objective victory.
+
+Use lightweight source overlays for DEVELOPMENT;freeze the full recipe at an actual integration boundary. Keep provenance,costs,failed candidates and model/support ownership. Prior Fable/Argon reviews contributed diagnosis;their unsupported masks and invented roadmap/gate claims were withdrawn. No new external model or subagent was dispatched.
+
+
+## November16: PP-aware battle learning and truthful progress
+
+F145 corrects experimental income model identity;pre-failure coin-prize/evolution copy117to119,cash8retention97to99,fresh124binding pass. Battle candidate remains unpromoted:3of5timings versus2of5baseline;originalMIDandLATEare notclean.
+
+No external reviewer assigned. Four numerical head fits;no DEV fitting or campaign. Preserve all failed candidates and costs. [Evidence](evidence/battle-pp-readiness-2026-11-16.json).
+
+## November 16: canonical receipts and truthful departures
+
+F141 repairs loss-task receipt parity and unsupported indoor departure quotes. MID clean:False;LATE clean:False;fresh124:True. No fit or campaign. Separate F142 income availability repair tested on the retained LATE terminal;original gates remain unproven.
+
+No external reviewer assigned. Preserve all failed callers and prior costs.
+[Evidence](evidence/loss-league-repair-2026-11-16.json).
+
+## November 16: scoped qualifications and continuation
+
+F139 original55 clean55->56,LATE Champion/HOF116->117,and fresh124 binding pass scoped checks. MID defeats Blaine/Giovanni but fails League resupply departure. New opt-in F140 continues55->56 into Surf/Strength/Koga and passes fresh startup;full gates remain unproven. No fit or campaign.
+
+No external reviewer assigned. Only fresh-binding newly earned;no cross-build
+formal credit. [Evidence](evidence/f139-qualification-2026-11-16.json).
+
+## November 16: Freeze export repair;retain scoped credit
+
+F139 combines the unchanged32-window critic with two export-reader repairs. Real in-battle1200-input cutoff exports authenticated context;new emulator restores its own terminal and reaches field progress with original aggregate costs. MID baseline: defeat_blaine, 2465 inputs, 243.628 native seconds; candidate: defeat_blaine, 2465 inputs, 239.184 native seconds. No fit,default change,campaign or formal gate credit.
+
+All rubric percentages unchanged;no new independent origin or formal gate credit.
+[Evidence](evidence/export-continuation-2026-11-16.json) · [Session](work-sessions/export-continuation-2026-11-16.md).
+
+## November 16: Credit the cash-chain gain;correct holdout credit
+
+One32-window TRAIN refit on frozen F136 source completes cash8 chain97->99 in3703inputs versus baseline17358;native input/state audit passes. Resource-chain and scarcity-boundary earned. Withdraw prior learning-useful-benefit credit: exposed DEV is not an untouched holdout. Retain opt-in integration and matched whole-objective credit. No campaign or independent-origin credit.
+
+Both external reviews supplied useful diagnosis and next steps;exact source and native receipts corrected unsupported reviewer assertions. One observed-mixture fit;no DEV rows,default promotion or campaign.
+
+[Evidence](evidence/preparation-history-2026-11-16.json) · [Session](work-sessions/preparation-history-2026-11-16.md).
+
+## November 16: Credit useful native gains; hold campaign readiness
+
+One13-window TRAIN fit; native local benefit and opt-in normal-runner integration. F136 same5-decision frozen postcapture comparison99->100 versus99 unchanged,795 versus8036inputs. F136 original cash8 chain is not yet fully qualified; the bounded attempt and all costs remain retained. Full124 gates and broad retention remain unproven; fixed rubric unchanged.
+
+Earlier Fable/Argon feedback supplied the three-session plan; no new external review occurred. One fit total, no DEV data, no campaign, no publication.
+
+[Evidence](evidence/production-train-2026-11-16.json) · [Session](work-sessions/production-train-2026-11-16.md).
+
+## November5 22:32: Qualify the repaired build before a new fresh attempt
+
+CLOSED: e9 Disable repair native-qualified; original55 copy55to56. MID68to92, Blaine/Giovanni won, but one PC-route error at52.391native minutes; LATE not launched. New35f0ccf8 item-PC repair: native PASS,460focused checks. All three current gates UNPROVEN. All native actors/controls stopped/released; authenticate WRITER-END. Zero new TRAIN rows,fits,weights or actual55 progress.
+
+No subagents or external agents contributed. No old gate credit transferred.
+
+Next: Next finite session: authenticate released ownership and35f0ccf8/69a993c6. Reuse player,V9,status support and recorder; qualify original55 copy,then original MID/LATE gates on this exact recipe with full costs and target-XP/use proof. Pass all gates before fresh startup qualification. Up to3hours; triage10min,reassess15min/two failures,reserve closeout. No forced goals,masks,DEV fit,agents,automation,publication,old cutoff renewal or copied gains.
+
+[Evidence](evidence/disable-qualification-2026-11-05.json) · [Session](work-sessions/2026-11-05-disable-qualification.md).
+
+## November5 20:12: one fresh attempt on exact recurrence recipe
+
+Keep exact011387e1/V9 and recipe27787912 after their original three gates.
+Qualify clean startup,then test one separately bounded native power-on campaign.
+Normal greedy behavior,full menus and existing weights remain frozen. CLOSED:one fresh0113 attempt ended27/124,three badges,zero loads,66.540native minutes;3raw errors(two recovered,one Disable failure),16ordinary setbacks. Repair e9f53d18 passes470focused checks;copied integration20greedy choices/90.600seconds clean but Disable UNPROVEN. All new-build gates UNPROVEN. Block69.737native minutes,21setbacks;no TRAIN/fits/weights. Native actors stopped;writer closing;actual55 unchanged.
+
+Next:Authenticate final closeout,costs,both integrity receipts,repair native qualification/adoption and released writer. Next finite block:reuse existing source33 copy/strict harness with prospectively sufficient settlement allowance and unchanged full-menu recipe;prove active-Disable behavior before original55 and original MID/LATE qualification on exact e9f53d18. Preserve every failed attempt/cost;no gate transfer,DEV fit,old actual55 revival or fresh campaign before all proofs pass.
+
+Stable roadmap stage IDs and final exit criteria remain unchanged. This is
+DEVELOPMENT evidence;no independent-origin,reliability or sealed acceptance claim.
+No automatic second campaign,old actor revival or retrospective budget reset.
+[Evidence](evidence/fresh-recurrence-2026-11-05.json) · [Session](work-sessions/2026-11-05-fresh-recurrence.md).
+
+## November5 17:32: qualify recurrence without broad resampling
+
+Preserve greedy decisions in normal contexts and reuse the existing full-menu
+sampler only for a greedy-selected unchanged movement revisit. This replaces the
+rejected broad V8 composition as the current experiment;old defaults/weights
+remain. All three original gates PASS on exact frozen 011387e1/V9 recipe. MID 68->92, Secret Key/Blaine/Giovanni; LATE 116->119, Victory Road/Elite Four/Champion/Hall of Fame. Gate3 proves parent preparation/stopping/native use against Lorelei. Three copies:109.738 native minutes,327 attempts,zero execution/admission errors,27 ordinary setbacks. Rehashed78044 pins plus3067 environment pins. Tests915pass/1skip,not full suite. Actual55 unchanged/retired;no fresh run,TRAIN rows,fits or weights.
+
+Gate decision:gate1 PASS, gate2 PASS, gate3 PASS. Each result is bound to exact011387e1 and one recipe;
+no old gate credit is transferred. No new TRAIN fit,goal priority,mask,manual
+target or empirical-success fallback. Next:Authenticate final release,costs,integrity,gates and WRITER-END before a new claim. Reuse exact0113 recipe;qualify fresh startup,then separately declare finite native/root/engineering cutoffs for one fresh campaign toward same-save124+Champion/HOF. Reassess15minutes/two equivalent failures. Preserve costs;no actual55 revival,diagnostic continuation,DEV fitting,gate transfer or automatic launch.
+
+Stable roadmap stage IDs and final exits are unchanged. [Evidence](evidence/recurrence-escape-2026-11-05.json) · [Session](work-sessions/2026-11-05-recurrence-escape.md).
+
+## November4: retain capability proof and fix production-default contracts
+
+c5d0 passed the original MID/LATE and preparation/stopping gates on one 124-target recipe. Later fresh-play repairs have their own local qualifications only. Keep the latest frozen player running within its original cutoff; preserve every failed tail and debit. Prioritize exact production-default route/PC/custody contracts, then measured capture and observation cost. No new weights, manual story priority or DEVELOPMENT fit. A future full fresh attempt needs current-build qualification and its own declared finite denominator.
+
+[Current evidence](evidence/menu-performance-2026-11-04.json).
+
+## November4: qualify owned field custody and retain dynamic-lift failures
+
+The original six could not learn Cut. Exposing owned boxed carriers through
+explicit PC custody enabled the existing player to earn Surge and reach Lavender,
+Saffron and Celadon. The FIELD_UTILITY role removed invented helper training.
+Later native evidence exposed a static lift exit and an unready failed-tail
+boundary. Reuse the existing lift selector, exclude its false walking shortcut,
+and settle only authenticated pending arrival with bounded WAIT actions.
+No weights, goal priorities or manual actual targets changed. Copy gains remain
+separate. The current preserved actual save has independently cleared the Hideout
+and obtained the Silph Scope; three badges,28/124. Onlycc750 has the old broad
+three-gate pass; P7 has scoped copied recovery qualification. Keep cutoff/costs.
+[Session](work-sessions/2026-11-03-field-carrier.md) ·
+[Evidence](evidence/field-carrier-2026-11-03.json).
+
+## November4 closeout: expose the missing owned capability
+
+The correctedfreshplayer progresses to28/124but cannotcompile aCutcarrier action from boxedownedstock. Preserveexplicitcustody andseparatestoryphases ratherthanmasking thiswith anad-hocgymscript. Currentcorrectedcandidate isunqualified. Nochild/cost-onlyfit canreplace missing executable capability.
+[Session](work-sessions/2026-11-03-movement-recurrence.md).
+
+## November4: preserve physical success while removing repeat movement utility
+
+The old loop exposed a marginal-utility observation gap. Adopt an opt-in generic recurrence rule for provisional DEVELOPMENT after884focusedtests,989policy-off paritymenus and native exact-tail qualification. Do not claim it was learned or inheritcc750gatepasses. Preparation learning must reach parent94a0 rather than repeating unconsumed childfits.
+[Session](work-sessions/2026-11-03-movement-recurrence.md).
+
+## November2: do not generalize success saturation from stale controls
+
+The current-code scoring audit found no newly justified satisfied-purpose case in
+the inspected panel. Keep existing income/discovery guards and replenishment;
+defer the pooled success prior. Missing TRAIN partial-interaction coverage and
+unmet-resource timing remain distinct. Reuse the prepared collector before a
+conditional retained fit. No new policy or gate award results from this audit.
+[Session](work-sessions/2026-11-02-scoring-purpose.md).
+
 ## October30: align goal continuity and utility before another fit
 
 Original0cMID earned two badges in50.01native minutes, then failed at a corridor.
@@ -3430,3 +3593,264 @@ estimates too. Test one prospective correction using source-qualified TRAIN
 outcomes and explicit story/preparation guards; never reinterpret old fit success
 or weaken native gates. First qualify the narrow member-direct partial repair.
 No new planner, source factory, DEVELOPMENT fitting or final-stage change.
+
+## November2 — venue cost and full-menu scope
+
+Fallback venue learning qualified through measured TRAIN and related development. The ordinary three-way choice remains Cave; no general policy gain or gate award is inferred. Original MID68to82 is diagnostic only. Inspect actual complete menus, offered venue coverage and whole-task costs before another fit. [Session](work-sessions/2026-11-02-venue-cost-learning.md).
+
+## November3 — preserve the gate-passing build
+
+All three original development gates now verify on one unchanged player. Test the fresh opening and explicit124local target completion before another refit or broad redesign. Restored victories, fixed-dose completion and child overrides retain their distinct credit; fresh acceptance remains unproved. [Session](work-sessions/2026-11-03-original-three-gates.md).
+
+## November6: retain the qualified build while isolating optional improvements
+
+Original35 now passes unchanged endurance, original MID/LATE and useful preparation/use gates. Keep its exact package/recipe primary; a plausible scope-certification improvement does not inherit credit or invalidate those results. Qualify fresh startup next, preserve all earlier failures and seek the unchanged same-save124 plus Champion/HOF delivery. No DEV fit, broad redesign or stage-exit change. Useful assigned agents are permitted. [Session](work-sessions/2026-11-06-pc-original-gates.md).
+
+<!-- uninterrupted-baseline-20261107-0253 -->
+## November6 Eastern — establish a frozen fresh baseline before efficiency fitting
+
+The final ebd77ac6/dd511063 build now owns its original development-gate credit. Pete selected a new12-hour window to seek one fresh124+Champion/HOF run without operator repair or state restoration. Reuse clean startup,local learners,recorder and supervisor;freeze the player during each clean attempt and preserve interrupted ones. Repeated games alone do not fit weights. Keep future efficiency lessons in TRAIN and held-out checks separate;do not reward rawXP,money accumulation or forced goal commitment as substitutes for completion. [Session](work-sessions/2026-11-07-uninterrupted-0253.md).
+
+
+## November 7 — reject biased continuation fitting before another campaign
+
+The related Dragonair venue test supports the existing cave correction. Four
+bounded TRAIN-source copies show that the current fixed2choice contract excludes
+fast task-terminal story choices while retaining preparation detours. Keep all
+raw windows and costs,censoring unchanged,and do not fit this comparison. Review
+terminal-task semantics and genuine competing-story TRAIN contexts first. Reuse
+the existing learners and runtime;no new planner,forced priority or stage-exit
+change. Campaigns remain stopped;user plans a shared Opus5.5/Gemini Argon audit.
+[Session](work-sessions/2026-11-07-goal-continuity.json).
+
+
+## November 7 — retain truthful task terminals before strategic fitting
+
+Accept narrowly typed collection-health retry and explicitly versioned task
+termination after independent native proof. Do not fit one-trainer cost contrasts
+as a competing-story correction. Recovered original TRAIN003/004 supply genuine
+source coverage;qualify existing full-menu/battle composition before collection.
+All prior failures/costs and stage/exit criteria remain. Campaigns stay stopped.
+[Session](work-sessions/2026-11-07-terminal-continuity.json).
+
+
+## November 7 — admit masked native continuations,withhold deployment
+
+Reuse existing full menu,K pools and learner with explicit original-source TRAIN
+scope. Preserve safe negatives and whole-route costs;never fit failed projection
+or censored zeros. Admit5full horizons plus1native short task for six verified
+channels and perform one experimental ridge1fit. Unknown losses remain unlearned;
+no main model or default utility change. Require useful comparison before claiming
+strategic improvement. Stages/exits and all old failures remain. No campaign.
+[Session](work-sessions/2026-11-07-competing-continuations.json).
+
+
+## November 8 — hold exploration sampler fixed before crediting learning
+
+Explicit opt-in preserves baseline kind balancing while legacy default identities stay unchanged. Do not credit sampler changes to learned continuation value. Reject promotion after unchanged Saffron and worse post-Saffron switching. Seek new admissible whole-task TRAIN contrasts and risk coverage;never tune to DEV or replace goals with a priority/lock.
+[Session](work-sessions/2026-11-08-continuation-comparison.json).
+
+
+## November8 — retain local venue improvement without overriding regressions
+
+Collect and fit qualified TRAIN full-task costs. A related native79.3%frame saving does not erase older rank regressions. Keep all3heads experimental. Preserve the whole-quest goal-fit requirement despite2measurable windows without quest completion. Repair exact execution boundaries without goal locks/masks or hidden recovery labels.
+[Session](work-sessions/2026-11-08-useful-train-comparisons.json).
+
+
+## November8 — begin small TRAIN populations with completion-first fitness
+
+Use four bounded workers under shared8GiB. Parent selection counts as TRAIN;complete matched source cohorts and reliable safe completion precede speed. Retain baseline/multiple parents,all partial costs and older rank regressions. Venue lookup fitness is disclosed component/in-sample evidence;goal native fitness remains pending. No campaign or model adoption.
+[Session](work-sessions/2026-11-08-training-population-capacity.json).
+
+
+## November8 — negative goal fitness and exact native training-boundary repairs
+
+Eight clean four-candidate TRAIN runs complete0whole quests;baseline retained,0qualified parents/fits/adoptions. Status-turn helper faint repair replays exact native fault;declared boxed exchange passes native custody boundary only.1790focused checks,not full suite. Actual115/124unchanged;campaigns stopped.
+
+Keep campaigns stopped. Qualify repaired boxed training end-to-end. Check TRAIN comparison recipe against production before longer4worker cohorts:current sampler often chooses below maximum and short windows earn no whole quest. Reuse full menus,memory,K,recorders and learners;isolate recipe changes,collect useful whole-quest/full venue costs,then fit/select only verified TRAIN evidence. Retain baseline/regressions;qualify original55/MID/LATE on one exact recipe before a campaign.
+
+No external reviewers/subagents dispatched. Whole-quest fitness stays separate from
+Saffron arrival,short-window timing and changed probe budgets. No weights adopted;
+old failures/costs and all source reservations retained.
+[Evidence](evidence/goal-population-comparison-2026-11-08.json).
+
+
+## November 8 — target-task credit and guarded preparation continuity
+
+Native preparation custody and opt-in target-task reward repairs pass their stated checks. One venue fit rejected for three historical regressions; four longer goal runs earn no whole quest. 1,991 focused checks, not full suite. Actual 115/124 unchanged; campaigns stopped.
+
+Keep campaigns stopped. Connect authenticated TRAIN comparisons to the production selector/recurrence recipe before more population runs. Reuse the existing player, memory, sampler, typed admission and learner. Use target-task v4 costs with complete compatible TRAIN workloads; retain baseline until venue regressions are resolved. Then qualify original55/MID/LATE on one exact frozen recipe before a campaign.
+
+One real venue fit is rejected; native costs and all failures remain. Stored-menu
+qualification does not become full-campaign credit. No stages/exits changed.
+[Evidence](evidence/goal-training-comparison-2026-11-08.json).
+
+### November8—four development campaigns and continuation handoff
+
+Pete authorizes4different-seed freshdevelopment campaigns,12hours EACH from actual16:44:17UTC launch,with diagnosed same-ancestry repairs. Formal gates remain unproved and no frozen clean-run credit transfers. Claude OR Antigravity may audit AND implement locally after ownership release. No stage/exit criterion or deployed weight change.
+
+## November 12: stable score selection is an opt-in comparison
+
+Keep weights/defaults frozen while comparing explicit stable and recurrence modes.
+Related copied preparation and Erika completion do not qualify a fresh campaign.
+Native MID paid cycles demonstrate that exact resource equality can hide costly
+recurrence; a changed witness needs an explicit contract and positive/unknown
+progress checks. Goal continuity and complete training costs need measured TRAIN
+contrasts, never fits of exposed DEV runs. Reuse existing components and preserve
+all original gate criteria. See the current handoff and stable-selection evidence.
+
+## November 12: narrow costly recurrence and honest preparation evidence
+
+Use the existing memory/sampler to escape repeated paid non-improvement only on
+an explicit all-maxima witness. Preserve greedy defaults, scores, positive/unknown
+progress and legal alternatives. Native registration improvement does not replace
+story payoff or original gates. Typed routed refusals remain failures until their
+precise cause is proved; fresh-context success is not an original-path repair.
+
+Natural before/post TRAIN tasks can establish feasibility while remaining outside
+on-policy admission. Reuse existing prospective consequence/sequence contracts,
+include wholejob/helper injury/healing/travel/loss costs, and distinguish distinct
+compatible lessons for local fitting from independent origins for transfer claims.
+Do not create a training-root factory or new planner merely because a reviewer
+misstates a requirement. See the current costly-recurrence handoff/evidence.
+
+## November 13 UTC: observed capture and explicit selector recipes
+
+Refresh current occupancy after composite travel, and discard route-cache authority
+when creating a router for a different observed world. Native matched-path proof
+is stronger than cold-process success; preserve both the negative diagnostic and
+the final causal comparison. Never relax a refusal merely to keep a run moving.
+
+Useful training comparisons retain the entire job/helper/travel/healing/loss cost.
+The two new K lessons and older production13 are different response policies; do
+not silently pool them. Existing33f correctly orders this contrast, so no fit was
+made for count. Sequence and readiness selectors remain distinct recipes; test
+whole-objective outcomes before changing authority or claiming campaign readiness.
+
+
+## November13 — preserve qualified story scope; qualify explicit full124 separately
+
+F94/R2 all3story gatesPASS,520choices/threeHOF;current F95/full124 allUNPROVEN,
+campaign_ready=false. Fresh flag repair and import-only validation do not transfer
+gate credit. Partial original55 parity and remaining MID/LATE menu uncertainty
+stay explicit. New usergrant13:26:20–16:26:20UTC permits11520ROOT/max2qualification
+only after oldclosure;NOcampaign. No stage ID or exit-criterion change.
+One authorized calibration scalar uses4actual TRAIN rows/6retained outcomes;
+175core+2movement controls unchanged with one overlap. Preparation use is not
+necessity or venue optimality. Preserve all failures/costs and ACTUAL115+0.
+[Evidence](evidence/overnight-readiness-2026-11-13.json) ·
+[History](history/2026-11-13-overnight-readiness.md).
+
+
+## November 14 — whole-player convergence and readable delivery plan
+
+Pete requested a large roadmap with Claude/Antigravity feedback. Replace stale
+current dispatch paragraphs with six understandable workstreams and measurable
+whole-player milestones. Use bounded rehearsals to rank recurring stops and wasted
+work; combine focused repairs with informative TRAIN comparisons. Before a third
+engineering-only block, provide a finite rehearsal proposal or a concrete safety
+hold and changed tactic. This is not an automatic campaign launch or a promise
+that two blocks finish Red. Do not require every broad gate after every local fix.
+
+Remove the historical preparation percentage from the headline. Preserve its
+receipts, the eight stable stage IDs and the unchanged fresh Champion/HOF+124
+exit, followed by the existing 8-of-10 reliability target and later-title sequence.
+Keep actual97, diagnostic99, older115 and assisted124 distinct. A45-minute saved
+coin audit and preparation-purpose/stopping comparison are next; no DEV fitting,
+new campaign, native allowance renewal or publication follows from this plan.
+
+
+## November 14 — evidence-checklist percentages and per-session deltas
+
+Pete requested visible completion percentages for each roadmap workstream and a
+progress change after every session. Establish workstream-checklist-v1 now in the
+existing roadmap state/renderer: six fixed equal-checkpoint denominators, cited
+proof for checked items, a baseline and before/after snapshots. Report percentage
+points, including zero or regression. Do not invent earlier session gains, average
+unequal workstreams into a project percentage, infer time remaining or award fresh
+completion credit from scoped copied wins. Checkpoint/rubric changes require an
+explicit version and rebaseline separate from earned gains. No new logging system.
+
+## November 15: address preparation feasibility before another continuation fit
+
+Three matched Erika pairs have identical native input/frame/save traces after a
+28-row continuation fit. Seven new TRAIN windows are useful data, not an adopted
+improvement. Fresh native preparation misses level27 at26 despite predicted
+success1; the175-row parent has only5preparation rows. Next reuse actual target
+outcomes and the existing success-residual/retention solvers for a narrow correction,
+preserving movement/interaction heads and non-preparation behavior. Do not strip
+corrected heads to bypass the fitter's guard or repeat identical H3 fits. Scope and
+final stage exits stay unchanged; campaigns remain stopped. See
+[session evidence](evidence/preparation-value-2026-11-15.json).
+
+## November15: preparation target feasibility is not useful readiness
+
+One narrow9-target TRAIN success fit preserves old corrections and170non-preparation
+outputs. Six copied Erika tasks complete. Candidate target attainment improves but
+F70 has one recovered battle loss,more fainting/healing/cash and slower native wall;
+6.68%frame gain misses10%gate. Hold candidate,retain baseline and all negative data.
+Next diagnose task-value attribution and collect an eligible prospective TRAIN
+combat/preparation comparison before another fit. Current evaluation outcomes stay
+excluded; no claim of independent generalization or campaign readiness.
+[Evidence](evidence/preparation-success-2026-11-15.json).
+
+## November15: retain a local gain without hiding collection deferral
+
+F125 uses one46-row H4 fit plus a data-derived observed-kind retention composition.
+The unrestricted fit extrapolated to unobserved acquisition kinds;it was held before
+native input. Retained composition changes no fitted parameters or action availability.
+Three copied Erika tests pass;F70frames fall82.8%,prepared timings retain exact tapes.
+The baseline also registers Dugtrio;candidate defers it and has an extra faint.
+Close only integration-comparison(+12.5pp). Keep defaults and broader training/
+learning/campaign credit open. Next qualify normal-runner/MID/late collection and
+price equal linked story/collection outcomes before global adoption. No campaign.
+[Evidence](evidence/combat-preparation-2026-11-15.json).
+
+## November15: price linked outcomes and inspect missing alternatives
+
+Normal F125 completes the matched MID Blaine task with73.9%fewer prefix frames,
+same cash/Pokedex. Close training-benefit only(+8.333pp choices). All later chunk
+work remains. F125 also pays deferred Dugtrio:the linked saving is16.2%,with extra
+1000ball spend and18vs19heals. This replaces neither the earlier Erika-only result
+nor its disclosed faint/party tradeoffs.
+
+The late actor cannot choose income because a measured medicine-bootstrap guard
+requires every member>=54. Native funding route/coverage already passes. Keep the
+original minimal-stock Lance failure and guard;test a truthful existing-component
+income/preparation contrast before further fitting. Weights/defaults remain fixed;
+no campaign,DEV fitting or full124 qualification. [Evidence](evidence/f125-normal-runner-2026-11-15.json).
+
+## November15: distinguish availability from useful choice
+
+F126 retains a native-qualified existing-stock income option behind explicit
+DEVELOPMENT scope. Original reserve rule and all other options stay default.
+A new available option does not imply a useful policy:three recorded menus still
+choose preparation under H3,H4 and held F124. Raw A9 preparation success clips from
+2.527to1 although two native targets fail encounter limits. Old9-row correction
+covers levels17-36,current starts40->43. Keep current DEV results unfitted.
+
+No checklist credit until the cash->balls->registration objective qualifies.
+Preserve prior local MID/collection gains,earlier Lance loss and all costs.
+Prefer informative eligible late-resource/preparation TRAIN evidence over another
+unchanged test or refit. No campaign/default adoption or transferred gate credit.
+[Evidence](evidence/income-applicability-2026-11-15.json).
+
+## November15: separate mechanical success from useful preparation
+
+Four eligible level45+ preparation rows admitted (one success/three failures);one13-row preparation-success fit. Protected170 nonpreparation predictions bitwise unchanged. F127 frozen107focused checks,not full suite. Cash-chain copy is NOT_MET. No default adoption or new roadmap credit.
+
+Connect preparation value to a declared useful task using existing task-window/sequence interfaces, then collect matched production-battler late funding versus preparation/stopping TRAIN contrasts. Preserve mechanical target-success calibration separately from task payoff. Fit only eligible informative data; require model-owned cash->ordinary balls->new registration on copies before exact-recipe original55/MID/LATE qualification. No campaign or actual resume.
+
+Independent review closeout: Fable and Argon agree the old current-recipe scarcity/resource-chain/integration credit is too broad;3criteria revoked without changing rubric/stage exits or erasing historical F121/F125 gains. Execution62.5%(-12.5pp),choices66.7%(-8.3pp),integration37.5%(-12.5pp);learning50%,delivery16.7%,transfer0% unchanged. Fable supports retaining scoped stopping and F125 local training-choice evidence after full-receipt clarification. Argon initially proposes additionally removing training-benefit;Codex retains it only as the existing explicitly local retained-candidate milestone,not global venue/trainee generalization or current-build credit. Both recommend production111ef task-level funding/preparation/stopping comparisons over another calibration-only fit.
+
+## November15: retain negative production funding comparisons
+
+F131 adds narrowly authenticated TRAIN production111ef funding and walking-entry/history repairs. Two exact-trainee paired TRAIN comparisons close:additional level yields no net-cash benefit,all4full funding attempts lose.19110sealed inputs/14production battles/12input-deny readbacks authenticate. A9/F125H4 normal97copy chooses2failed preparations,cash8/97unchanged,0technicalerrors.0fits,0new retained TRAIN rows,0new origins;all checklist deltas0pp.
+
+Authenticate a resource-scarce assigned-TRAIN setup;reuse F131 production111ef,purchase/capture and task-window logging. Compare funding now versus preparation through a new capture,with complete losses,cash,medicine,travel,healing,target/helperXP. Fit at most once if eligible full-task evidence justifies it. Require model-owned candidate versus baseline cash8->balls->new registration on copies before exact full124 gates. Do not repeat unchanged +1level tests. No campaign or actual resume.
+
+## November16: compare complete scarce task returns
+
+F132 discloses scarce assigned-TRAIN derivatives;3 complete teacher task returns authenticate. One provisional whole-task-return fit,3 correlated TRAIN rows,0 new origins. F133 earns cash but stops on history order;F134 repairs per-battle refresh and passes508 focused checks. F134 cash-to-capture NOT_MET;matched4choice candidate 13638inputs versus baseline 32395,neither task complete;separate paired continuations disclosed. Default unchanged.
+
+Collect eligible post-funding TRAIN preparation-versus-purchase/capture returns under normal derived cash-demand and feature context;verify recipe parity before a justified fit. Reuse F134 income,shop,capture and retained-policy machinery. Require a clean matched full cash8 chain;never fit exposed97 or widen support from DEV. Triage10min,reassess15min or2equivalent failures. No campaign,actual resume,copyback or publication.

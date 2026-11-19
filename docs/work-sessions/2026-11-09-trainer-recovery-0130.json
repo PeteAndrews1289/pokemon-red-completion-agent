@@ -1,0 +1,27 @@
+{
+  "WSL_restart_performed_by_Codex": false,
+  "Windows_restart_performed_by_Codex": false,
+  "all_native_workers_stopped": true,
+  "campaign_clocks_unchanged": true,
+  "evidence": {
+    "private_record_sha256": "a84da840b8d652232c35b52efc242c88cef85aedaee5e3befdee197052e94388",
+    "record_items": 1
+  },
+  "final_handoff": {
+    "private_record_sha256": "4355b70a5b1fbda2e0e370d13f2a1727d1bbb119f73801629dd799b2930a6138",
+    "record_items": 1
+  },
+  "models_unchanged": true,
+  "phase": "handoff_only_after_expired_native_windows",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "retained_counts": [
+    114,
+    99,
+    95,
+    100
+  ],
+  "session_id": "2026-11-09-trainer-recovery-0130",
+  "source_closing": true,
+  "source_document_sha256": "49d332a839df3a7a4aea4171f972bbe4fea506ca5fd7b0c31a5d8932c33881ac",
+  "source_release_before_delivery": true
+}

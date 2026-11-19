@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Recorded four same-seed Champion and 124-registration finishes, published their 40 milestone splits, and connected the live full-party field poison blackout to verified recovery. The solo attempt kept its first external restart. [Campaign evidence](docs/work-sessions/four-run-splits-2026-11-19.md)
+
 - Aligned the public documentation with the model111 Red collection endpoint: 83 registrations,
   63 living species, 67 specimens and 111 settled training-only examples. Replaced the stale
   interview handoff with a concise working/partial/planned account, archived its August baseline,

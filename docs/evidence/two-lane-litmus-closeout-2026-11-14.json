@@ -1,0 +1,38 @@
+{
+  "actual": {
+    "private_record_sha256": "5f37b4c57570b21a75fcde2adf99a3cd1599c87bf02fa77417f3824655cffc04",
+    "record_items": 18
+  },
+  "focused_not_full_suite": true,
+  "learning": {
+    "private_record_sha256": "5c6a93241c9f44fa67dbd5bef8c8857b8ac60449087fa8d02ccaa1381f804497",
+    "record_items": 11
+  },
+  "next_campaign_cancelled": true,
+  "no_automatic_future_authority": true,
+  "planning_CPU_overruns_retained": {
+    "private_record_sha256": "4ece2e9d400b74711bc33b512f57852830cbb7309ba47372d7cbd46955176cee",
+    "record_items": 2
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "remaining_stop": {
+    "private_record_sha256": "458cd4efc68c94fc0b9ac5a586daa06e0df1a331bf3e8cc7652121eeacd52619",
+    "record_items": 1
+  },
+  "repairs": {
+    "private_record_sha256": "e5b77f085a5ecf33e2320bc10462071812bfeaebbbbc83e0a94dd2cfdb83c0bf",
+    "record_items": 4
+  },
+  "safari_through_Tauros": {
+    "private_record_sha256": "928babe5123066a769cde14fd1b19f3da81ce9d7006897c5546f46ed5144ab47",
+    "record_items": 7
+  },
+  "schema": "pokemon.two-lane-user-ended-litmus-closeout.v1",
+  "session_id": "two-lane-continuation-20261114-1442",
+  "source_document_sha256": "950e1947c39ddc26be865feb44d1fd7a4fe346beaa47f62fe3d413207ab5810f",
+  "unproved": {
+    "private_record_sha256": "4a764c7610d37f3316a5c6117d662ddefb2258421d8eba2500570f4e783a4b6f",
+    "record_items": 7
+  },
+  "user_ended_campaign": true
+}

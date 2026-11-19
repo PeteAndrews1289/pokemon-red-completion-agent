@@ -1,0 +1,77 @@
+{
+  "TRAIN_status": {
+    "private_record_sha256": "83026c446ca8be1cad252f1412e6f4fd0431577c0837479cba7419365db3714f",
+    "record_items": 1
+  },
+  "actual_audit_utc": "2026-11-14T16:47:39.139150+00:00",
+  "audit_scope": {
+    "private_record_sha256": "de54df9adc92c0ac56e9bb3b20ee2e0d063e70490f30f1779925aeeb8fd7b221",
+    "record_items": 1
+  },
+  "badges": 8,
+  "campaign_ROOT_remaining_upper_bound_before_live_cost": 16688.244481845995,
+  "campaign_class": "mixed-build development;F97 start,repairs through F111;F114 adopted",
+  "campaign_status": {
+    "private_record_sha256": "856ac5eb6da453a38557ec432966bb7d49a5f9138f6e0f3728b74bbbc8ae8b7f",
+    "record_items": 1
+  },
+  "cash": 14038,
+  "champion_reported": true,
+  "closed_campaign_ROOT_seconds_total": 26511.755518154005,
+  "closed_new_block_diagnostic_ROOT_seconds": 1131.9219056399975,
+  "current_snapshot_as_of_utc": "2026-11-14T17:22:11.672030+00:00",
+  "diagnostic_ROOT_remaining_upper_bound_before_live_cost": 6068.078094360002,
+  "due_utc": "2026-11-14T16:42:57+00:00",
+  "f113_failed_copy_ROOT_seconds": [
+    298.609584051,
+    101.662743355,
+    79.747680455
+  ],
+  "f114_focused_checks": 510,
+  "f114_freeze_sha256": "a39411fd9e6c6b6170abd878063200ec4a78726ee9e349391daf7eac1c3d17f2",
+  "f114_native_adjudication_sha256": "d22b3874bd1eea6b35ed8cdb978a294c6a88788b2e2e6a773d6a875b3b823cb7",
+  "f114_native_scope": {
+    "private_record_sha256": "9fc107920e2f4d8b48c1a5f73f7e3b8957caadccc895772ff0f96a5d59902937",
+    "record_items": 1
+  },
+  "f114_native_status": "adopted",
+  "f114_new_pins": 78239,
+  "f114_package_sha256": "fda001ef5e1eb646f1b6157a92a90110c9f5a08595d60aefee0ab3d46c059b56",
+  "f114_parent_pins_rehashed": 78238,
+  "first_audit_sha256": "1ce6038ca81a2fcc874445152b9068577533fe184c3c062744cb6fbf4f8e5cbb",
+  "hall_of_fame_reported": true,
+  "live_cost_note": {
+    "private_record_sha256": "21f7d117ba8cb18f201a9c7b4cf2ee0c7e3b965a93be6d85f29e75e996cbc747",
+    "record_items": 1
+  },
+  "mission_sha256": "d819046c1449ddfb5068d79650f3a0a8edcb214f5494a35c481ef021d28e9b2b",
+  "new_admitted_TRAIN_rows": 0,
+  "new_fit_count": 0,
+  "next_action": {
+    "private_record_sha256": "11242b66d70e8d3c59af2c0e1df90af7fcfa4df47b70602d2b994ce39647966a",
+    "record_items": 1
+  },
+  "next_fresh_campaign_condition": "after current completion;one newly frozen qualified recipe and finite admission",
+  "next_fresh_campaign_user_order_sha256": "2a90fab77bcabfa7801a969caa6f2eae49cdce7a72c1d582c1eb0bb5ecac66cd",
+  "official_completion_claim": false,
+  "original55_MID_LATE_gate_status": "UNPROVEN",
+  "original_pre_KO_mid_RUN_Fly_branch_native_proven": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "registration_delta_from_block_opening": 16,
+  "registrations": 74,
+  "root_snapshot_sha256": "11a858ad45af0bcd747e65086a5621366cb92ba0ced88e3f6f275429aea8b062",
+  "schema": "pokemon.two-lane-f114-current-doc-snapshot.v1",
+  "seconds_after_due": 282.13915,
+  "session_id": "two-lane-continuation-20261114-1442",
+  "source_context_sha256": "5b36a944cd76eae333ada6fd9a9a5b629511cacefb22153af1ddb69bc72499b7",
+  "source_controls_released": true,
+  "source_document_sha256": "0990c903cbb37cb07696a3c9a3ffda5fdd2f9bb68aa79387d049fd1c50660465",
+  "source_field_ready": false,
+  "source_private_namespace": {
+    "private_record_sha256": "84082207e2cdb1048549bcf4ef598d16279b3b8b7af36a2a7bd0e4122f78d13a",
+    "record_items": 1
+  },
+  "source_result_sha256": "68be6687ebaad89958c28b1155836d9bafc5085d9f04ba66ef7c2cf61d1000fd",
+  "source_state_sha256": "4c1701ce942da14f79220fc9cef952c5f499cedc8e692c40818f008aee38c6c5",
+  "whole_Code_parity": false
+}

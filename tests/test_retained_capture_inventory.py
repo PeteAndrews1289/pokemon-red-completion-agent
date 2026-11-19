@@ -84,3 +84,78 @@ def test_receipt_authentication_error_propagates_without_escape_fallback(tmp_pat
     module.retained_capture_binding = invalid
     with pytest.raises(ValueError, match="allocation mismatch"):
         _retained_capture_inventory(rt, object(), parent=tmp_path, output=tmp_path / "out")
+
+
+def paired_zero_input_child(child,parent,*,fault=None):
+    import json
+    child.mkdir()
+    state=b"different" if fault=="state" else b"exact"
+    (child/"terminal.state").write_bytes(state)
+    prior_bytes=(parent/"CONTEXT.json").read_bytes();prior=json.loads(prior_bytes)
+    spent=dict(prior["spent"],decisions=3,seconds=2)
+    if fault=="actions":spent["actions"]+=1
+    context=dict(state_sha256=sha256(state).hexdigest(),spent=spent)
+    payload=json.dumps(context).encode();(child/"CONTEXT.json").write_bytes(payload)
+    result=dict(context_sha256=sha256(payload).hexdigest(),state_sha256=sha256(state).hexdigest(),spent=spent)
+    if fault=="result":result["context_sha256"]="0"*64
+    (child/"RESULT.json").write_text(json.dumps(result))
+    plan=dict(actual_parent=str(parent),source_sha256=sha256(state).hexdigest(),context_sha256=sha256(prior_bytes).hexdigest(),inherited_spent=prior["spent"])
+    if fault=="parent_context":plan["context_sha256"]="0"*64
+    (child/"PLAN.json").write_text(json.dumps(plan))
+
+
+@pytest.mark.parametrize("fault",[None,"actions","result","parent_context"])
+def test_zero_input_exports_reconnect_only_authenticated_same_state_receipt_ancestry(tmp_path,monkeypatch,fault):
+    import json
+    parent=tmp_path/"original";parent.mkdir();rt,calls,binding,module=fixture(parent,monkeypatch)
+    context=dict(state_sha256=sha256(b"exact").hexdigest(),spent=dict(actions=7,frames=120,decisions=1,seconds=1))
+    (parent/"CONTEXT.json").write_text(json.dumps(context))
+    first=tmp_path/"first";paired_zero_input_child(first,parent)
+    child=tmp_path/"latest";paired_zero_input_child(child,first,fault=fault)
+    if fault is not None:
+        with pytest.raises(ValueError,match="zero-input"):_retained_capture_inventory(rt,object(),parent=child,output=tmp_path/"out")
+        assert not calls
+        return
+    result=_retained_capture_inventory(rt,object(),parent=child,output=tmp_path/"out")
+    assert result.bindings==(binding,) and len(calls)==1 and calls[0][2]==parent
+    assert json.loads((child/"CONTEXT.json").read_text())["spent"]["decisions"]==3
+
+
+@pytest.mark.parametrize("fault", [None,"capture","result","source","spent","terminal","unchanged"])
+def test_authenticated_non_capture_work_ends_journal_search_without_reusing_old_allocation(tmp_path,monkeypatch,fault):
+    import json
+    parent=tmp_path/"original";parent.mkdir();rt,calls,_,_=fixture(parent,monkeypatch)
+    prior=dict(state_sha256=sha256(b"exact").hexdigest(),spent=dict(actions=7,frames=120,decisions=1,seconds=1))
+    (parent/"CONTEXT.json").write_text(json.dumps(prior))
+    child=tmp_path/"new-native-work";paired_zero_input_child(child,parent)
+    state=b"exact" if fault=="unchanged" else b"new ordinary wild"
+    (child/"terminal.state").write_bytes(state)
+    context=dict(state_sha256=sha256(state).hexdigest(),spent=dict(actions=8,frames=144,decisions=3,seconds=2))
+    if fault=="spent":context["spent"]["frames"]=120
+    payload=json.dumps(context).encode();(child/"CONTEXT.json").write_bytes(payload)
+    outcome=dict(selected_kind="acquire_species" if fault=="capture" else "resupply",terminal_state_sha256=sha256(state).hexdigest())
+    if fault=="terminal":outcome["terminal_state_sha256"]="0"*64
+    result=dict(context_sha256=sha256(payload).hexdigest(),state_sha256=sha256(state).hexdigest(),spent=context["spent"],episode=dict(outcomes=[outcome]))
+    if fault=="result":result["context_sha256"]="0"*64
+    (child/"RESULT.json").write_text(json.dumps(result))
+    if fault=="source":
+        plan=json.loads((child/"PLAN.json").read_text());plan["source_sha256"]="0"*64;(child/"PLAN.json").write_text(json.dumps(plan))
+    rt.emulator.save_state_bytes=lambda:state
+    if fault:
+        with pytest.raises(ValueError,match="zero-input"):_retained_capture_inventory(rt,object(),parent=child,output=tmp_path/"out")
+    else:
+        assert _retained_capture_inventory(rt,object(),parent=child,output=tmp_path/"out") is None
+    assert not calls
+
+
+@pytest.mark.parametrize("kind",["develop_team","evolve_species"])
+def test_authenticated_training_work_does_not_inherit_old_capture_allocation(tmp_path,monkeypatch,kind):
+    import json
+    parent=tmp_path/"original";parent.mkdir();rt,calls,_,_=fixture(parent,monkeypatch)
+    prior=dict(state_sha256=sha256(b"exact").hexdigest(),spent=dict(actions=7,frames=120,decisions=1,seconds=1))
+    (parent/"CONTEXT.json").write_text(json.dumps(prior));child=tmp_path/"training";paired_zero_input_child(child,parent)
+    state=b"new ordinary training wild";(child/"terminal.state").write_bytes(state)
+    context=dict(state_sha256=sha256(state).hexdigest(),spent=dict(actions=8,frames=144,decisions=3,seconds=2));payload=json.dumps(context).encode();(child/"CONTEXT.json").write_bytes(payload)
+    result=dict(context_sha256=sha256(payload).hexdigest(),state_sha256=sha256(state).hexdigest(),spent=context["spent"],episode=dict(outcomes=[dict(selected_kind=kind,terminal_state_sha256=sha256(state).hexdigest())]));(child/"RESULT.json").write_text(json.dumps(result));rt.emulator.save_state_bytes=lambda:state
+    assert _retained_capture_inventory(rt,object(),parent=child,output=tmp_path/"out") is None
+    assert not calls

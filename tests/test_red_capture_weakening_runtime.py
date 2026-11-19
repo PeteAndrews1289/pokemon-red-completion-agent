@@ -271,3 +271,21 @@ def test_rejects_unsafe_or_unaccounted_native_outcome(monkeypatch, fault):
     with pytest.raises(RuntimeError):
         run(w)
     assert w.count == 1
+
+
+def test_ordinary_reply_faint_retains_damage_and_pp_without_another_attack(monkeypatch):
+    w = world(monkeypatch)
+    w.mutation = lambda: setattr(w, "raw", replace(w.raw, active_party_hp=0))
+    out = run(w)
+    assert out.stop_reason == "weakener_fainted"
+    assert out.attempts == w.count == 1 and out.damage == 30
+    assert w.raw.party_pp[0][3] == 29
+    assert out.turns[0]["move_executed"] is True
+
+
+def test_faint_does_not_hide_protected_inventory_drift(monkeypatch):
+    w = world(monkeypatch)
+    w.mutation = lambda: setattr(w, "raw", replace(w.raw, active_party_hp=0, bag_items=((3, 19),)))
+    with pytest.raises(RuntimeError, match="protected contract"):
+        run(w)
+    assert w.count == 1

@@ -51,7 +51,10 @@ def level_cost_context(binding, candidate, facts):
     key = observed_context_key(transition, facts, trainee)
     if key is None:
         return None
-    return dict(key=key, transition=list(transition), trainee_ref=trainee, boxed_ref=boxed_ref)
+    initial_xp = binding.level_evolution_initial_xp
+    if type(initial_xp) is not int or initial_xp < 0:
+        return None
+    return dict(key=key, transition=list(transition), trainee_ref=trainee, boxed_ref=boxed_ref, initial_xp=initial_xp)
 
 
 def trainee_ref(transition, facts, boxed_ref):
@@ -84,7 +87,7 @@ def observed_context_key(transition, facts, trainee):
     return canonical_sha256(dict(transition=transition, trainee=trainee, source_area=area, roster=sorted(members)))
 
 
-def measured_training_cost(outcome, transition):
+def measured_training_cost(outcome, transition, *, context=None):
     if (outcome.get("error_type") is not None or outcome.get("safe_terminal") is not True
             or outcome.get("selected_kind") != "evolve_species"):
         return None
@@ -101,6 +104,9 @@ def measured_training_cost(outcome, transition):
         return None
     initial, terminal, xp = (ev.get(k) for k in ("trainee_initial_xp", "trainee_terminal_xp", "trainee_xp_gained"))
     if any(type(n) is not int or n < 0 for n in (initial,terminal,xp)) or terminal-initial != xp:
+        return None
+    if context is not None and (context["initial_xp"] != initial
+            or ev.get("zero_progress_trainee_ref", context["trainee_ref"]) != context["trainee_ref"]):
         return None
     cost = outcome.get("observed_cost") or {}
     frames = cost.get("frames")
@@ -197,7 +203,7 @@ def replay_collection_cost_step(step, outcome, intent, memory, frame_horizon):
             or envelope["quotes"] != expected_quotes):
         raise ValueError("collection cost quote or original menu differs")
     selected = contexts.get(refs[outcome["choice"]["selected_candidate_index"]])
-    observed = measured_training_cost(outcome, selected["transition"]) if selected is not None else None
+    observed = measured_training_cost(outcome, selected["transition"], context=selected) if selected is not None else None
     if observed is None:
         if after_path.exists():
             raise ValueError("unmeasured collection cost recorded")

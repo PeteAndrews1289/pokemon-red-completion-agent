@@ -1,0 +1,26 @@
+{
+  "campaign_external_continuations_at_repair": 1,
+  "cash_after": 632,
+  "cash_before": 1265,
+  "cash_lost": 633,
+  "files": [
+    {
+      "path": "scripts/run_configured_red_player.py",
+      "previous_sha256": "cdf03ecb118209afa6263c1c53d382556e4c4aec3a817066e8d773f1cb4a1a19",
+      "repaired_sha256": "f75015b66c57c19c5a6e80451b3a57aef9e159bf2532b494d60ae92157784d40"
+    },
+    {
+      "path": "src/pokemon_red_completion/red_player_configuration.py",
+      "previous_sha256": "bbfd8c73cead33749af8ab88aeec13fe3be7401a35bb72b632f3a8bbdcfaef1a",
+      "repaired_sha256": "018355ca38194a082375fcd1d86ec37ff5c3eb166401b47afb249ab950f53534"
+    }
+  ],
+  "focused_editable_tests_passed": 487,
+  "native_replay_cases": 2,
+  "patch_sha256": "1ef3d3e4b3c571aefddaf4d3333f572ca07167e5ca5a7eb972850f4973bbf635",
+  "previous_campaigns_with_same_first_stop": 4,
+  "previous_recipe_sha256": "f4488e2d661e134cc44fa77d37c90b0ece0ae402da5c24a6ce0f02cb598c0035",
+  "qualified_following_choice": "advance_story",
+  "repaired_recipe_sha256": "b75589bc4d7444134d5496a4b76fbd91da59789a0460e359eaa61c2ac6d964e7",
+  "weights_changed": false
+}

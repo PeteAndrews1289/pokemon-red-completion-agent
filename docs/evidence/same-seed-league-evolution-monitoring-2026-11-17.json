@@ -1,0 +1,21 @@
+{
+  "campaigns_started": 4,
+  "campaigns_through_bruno": 4,
+  "copyback": false,
+  "fit_calls": 0,
+  "held_without_context": {
+    "private_record_sha256": "032acadd33d42cea565aec886fb5615b96c8069c645f63c1fbd6ddb3daad5b03",
+    "record_items": 2
+  },
+  "new_train_rows": 0,
+  "next_decision": "Monitor runs 1 and 4 under their original deadlines. Qualify exact context export for the two held on the retained evolution boundary in a new authorized engineering block.",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualified_same_save_continuations": {
+    "private_record_sha256": "6c62d4fdaa4975754a5ee08223300b10be0d8e9842b3ca848c43d9e039730b90",
+    "record_items": 2
+  },
+  "result": "All four reached Victory Road, Lorelei and Bruno. Runs 1 and 4 resumed their own 18-registration saves after an authenticated Lorelei dialogue settlement. Runs 2 and 3 stopped at 17 registrations when a native level evolution crossed a retained battle boundary and blocked export.",
+  "schema": "pokemon.red.same-seed-league-evolution-monitoring.v1",
+  "session": "same-seed-league-evolution-monitoring-20261117",
+  "source_document_sha256": "270f125317feeb5429e657096698234ca54c259bc33495ebb9aca182965c4000"
+}

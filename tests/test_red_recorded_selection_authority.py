@@ -93,3 +93,69 @@ def test_native_support_replay_and_selected_binding_check(tmp_path, monkeypatch,
     path.write_text(json.dumps(value))
     with pytest.raises(ValueError, match="different binding"):
         audit_native_sequence_trace(root, **audit_args)
+
+
+@pytest.mark.parametrize("safety", [0.1, 0.99])
+def test_model_owned_resources_replay_without_reintroducing_safety(safety):
+    model, intent, _, calls = records(safety)
+    options = build_red_live_option_set(
+        situation=_situation(resources=0.1, safety=safety),
+        binding_set=_ordinary_bindings(calls), supplements=(),
+        model_feature_version=4, ordering_seed_sha256="a" * 64,
+        economy_snapshot=EconomySnapshot(58, ()), target_cash=3000,
+        force_resource_safety=False,
+    )
+    choice = select_red_live_option(model, options, seed=23,
+                                   allow_earning_exploration=True)
+    intent = dict(menu=options.public_dict(), selection_seed=23,
+                  private_selection_authority=record_selection_authority(
+                      options, allow_earning_exploration=True))
+    assert choice.public_dict()["resource_authority"] == "model"
+    assert replay_selection_authority(
+        model, intent, choice.public_dict(), allow_earning_exploration=True
+    ) == choice.selected_binding.binding_ref
+    changed = copy.deepcopy(intent)
+    changed["menu"].pop("resource_authority")
+    with pytest.raises(ValueError):
+        replay_selection_authority(model, changed, choice.public_dict(),
+                                   allow_earning_exploration=True)
+    assert calls == []
+
+
+@pytest.mark.parametrize("seen", [False, True])
+def test_recorded_unmodified_branch_and_recurrence_replay(seen):
+    from test_recurrence_parent_exploration import observed_menu
+    from test_consequence_v15_vertical import dispatch_head
+    from pokemon_red_completion.red_consequence_choice import select_branch_recovery_live_option
+    from pokemon_red_completion.red_recorded_selection_authority import replay_unmodified_branch_recovery
+    model, options = observed_menu(seen=seen)
+    options = replace(options, force_resource_safety=False)
+    head = dispatch_head()
+    objectives = ("defeat_giovanni", "defeat_misty")
+    flags = dict(greedy_selection=True, refine_preparation=True,
+                 defer_unbound_preparation=False, allow_singleton_parent_support=False,
+                 associate_unique_combat=True, explore_outside_scope=False,
+                 explore_on_movement_recurrence=True)
+    choice = select_branch_recovery_live_option(model, options, head,
+                    objective_ref=objectives, seed=17, **flags)
+    intent = dict(menu=options.public_dict(), selection_seed=17, state_sha256="a"*64,
+                  model_sha256=choice.model_sha256,
+                  private_selection_authority=record_selection_authority(
+                    options, allow_earning_exploration=True, greedy_selection=True),
+                  private_story_contexts=[dict(binding_ref=b.binding_ref,
+                    objective_ref=b.story_objective_ref)for b in options.bindings],
+                  private_recurrence_sampling_policy=dict(declared_greedy_selection=True,
+                    explore_on_movement_recurrence=True,
+                    trigger_rule="greedy-selected-observed-unchanged-endpoint-v1"))
+    assert replay_unmodified_branch_recovery(model, head, intent, choice.public_dict(),
+                    objective_ref=objectives, flags=flags) == choice.selected_binding.binding_ref
+    tampered = copy.deepcopy(choice.public_dict())
+    tampered["scores"][0] += .01
+    with pytest.raises(ValueError, match="does not replay"):
+        replay_unmodified_branch_recovery(model, head, intent, tampered,
+                    objective_ref=objectives, flags=flags)
+    bad_context = copy.deepcopy(intent)
+    bad_context["private_story_contexts"][0]["objective_ref"] = "defeat_misty"
+    with pytest.raises(ValueError, match="in-scope combat"):
+        replay_unmodified_branch_recovery(model, head, bad_context, choice.public_dict(),
+                    objective_ref=objectives, flags=flags)

@@ -1,0 +1,64 @@
+{
+  "active_escape_repeat_probability": 0.677458,
+  "actual_cash": 8,
+  "actual_delta": 0,
+  "actual_registrations": 97,
+  "admitted_train_rows": 0,
+  "alternative_venue_comparison": {
+    "private_record_sha256": "3626d3b2df11e9ef38c2ec727923be63d8739f5fd945e514d532c3e5a1ad8fb2",
+    "record_items": 13
+  },
+  "benchmark_goal_order": "Predeclared by the diagnostic. Native skills, venue selection, fights and recovery ran on copies.",
+  "campaigns_running": 0,
+  "cohort": {
+    "private_record_sha256": "9bb01ed2a3f7b742252ac827898d8e4b04dfa81d50c76e0355e26330a6a27474",
+    "record_items": 4
+  },
+  "complete_order_comparison": true,
+  "exact_matched_order": {
+    "private_record_sha256": "6456c792fe4726e9c158a6f3927a0693c389a43a1f75e4bcca7e54fb8b46e6fa",
+    "record_items": 2
+  },
+  "fit_calls": 0,
+  "focused_tests": 1258,
+  "full_suite": false,
+  "greedy_reproduced": 30,
+  "grimer_cost": {
+    "private_record_sha256": "da9ca167c2df0f3dce44da830291a04592f1bbbb0e8c829acf01555e9236a46a",
+    "record_items": 5
+  },
+  "historical_evolution_attempts": 225,
+  "historical_evolution_seconds": 42265.798923,
+  "historical_zero_attempts": 11,
+  "historical_zero_seconds": 592.4987169999999,
+  "later_wild_escape_retest": {
+    "private_record_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "record_items": 0
+  },
+  "matched_normal_grimer": {
+    "private_record_sha256": "c984de0f035b78a7c37a54266796c40cd9090760e48e6f227459c3fa6b036713",
+    "record_items": 5
+  },
+  "maximum_effort_changes_choice": 0,
+  "menu_probes": {
+    "private_record_sha256": "3fd40b56d00d97a524d379239cb56c3375dd0fc1ebfdb160f56cc89e73613233",
+    "record_items": 4
+  },
+  "mixed_heads": 30,
+  "partition": "DEVELOPMENT",
+  "previous_order_cases": {
+    "private_record_sha256": "b1f19d8738d014f68d84b9879396a7991ef2cbeb49d81ac8767202928da19cd5",
+    "record_items": 7
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "quoted_effort_changes_choice": 0,
+  "retained_audits": {
+    "private_record_sha256": "400385303fde7c5bed8609d28f721e0b5da19e902a0a4de702763cc44c1d9608",
+    "record_items": 5
+  },
+  "session": "late-collection-comparison-20261118-1417",
+  "skipped": 0,
+  "source_document_sha256": "9bf638e261effaf2120d9ed7a96446c435725babf60fc5dbbb726285e4faa8fb",
+  "weight_updates": 0,
+  "with_positive_history": 26
+}

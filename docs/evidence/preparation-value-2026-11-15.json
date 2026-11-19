@@ -1,0 +1,55 @@
+{
+  "F123_unchanged": true,
+  "TRAIN": {
+    "private_record_sha256": "9317f2662ef7e5b90643cfb05b114026045ae249409f2f803f9891deaa7debec",
+    "record_items": 14
+  },
+  "actual_cash": 8,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "candidate": {
+    "private_record_sha256": "a35f3bd1aac76489619c1dd9c7a64401cfcc66636b567976c3a638213f15d039",
+    "record_items": 4
+  },
+  "cash_replay": {
+    "private_record_sha256": "6977823458999f6cae61d5b598d68ea721fa27878c5c7fda7cabe36dbfd1acdd",
+    "record_items": 5
+  },
+  "collector": {
+    "private_record_sha256": "9698d062f1b484233acd2da315f69c9c227a60e08a5ca9bd818309a50830b05d",
+    "record_items": 1
+  },
+  "comparison": {
+    "private_record_sha256": "3a81997ff7d8f59cfe24ad008a2b3efbddd6f7506f7c30e575d9bdb261ad57d8",
+    "record_items": 3
+  },
+  "comparison_battle_losses": 0,
+  "comparison_episode_outcomes_unfitted": true,
+  "comparison_readback_loads": 72,
+  "comparison_readback_states": 24,
+  "comparison_task_successes": 6,
+  "comparison_technical_errors": 0,
+  "diagnosis": {
+    "private_record_sha256": "3714c3d0ebd33b00b4c6d0954810889d9037af507c6a9c513a263e76e137f9e5",
+    "record_items": 18
+  },
+  "execution_source_changed": false,
+  "external_reviews_used": false,
+  "fresh_campaign_qualified": false,
+  "full_suite": false,
+  "goal_switching_solved": false,
+  "independent_generalization": false,
+  "new_campaign": false,
+  "physical_frames": 0,
+  "physical_inputs": 0,
+  "production_defaults_unchanged": true,
+  "progress": {
+    "private_record_sha256": "45998d89d90dde1454126199ca09df3e0ed6b590e144a3aeaf687a3bc8a587d9",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session": "preparation-value-20261115-1447",
+  "source_document_sha256": "fea051a1a27e92ad089428f7a3d926fafa2d1847fd22cea6ee74be73fb62b65c",
+  "unseen_source_claim": false,
+  "whole_Code_parity": false
+}

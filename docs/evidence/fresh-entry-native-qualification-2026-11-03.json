@@ -1,0 +1,33 @@
+{
+  "actual_preserved_registrations": 67,
+  "actual_registration_delta": 0,
+  "all_controls_released": true,
+  "all_processes_stopped": true,
+  "child_queries": 0,
+  "closed_choices": 24,
+  "earlier_resource_prefix_rejection_preserved": true,
+  "fresh_diagnostic_final_registrations": 2,
+  "manifest_sha256": "cc750a3cf2c4f84632d2e1fc0ede195af464482c22423916eba02aac21a66d44",
+  "native_costs": {
+    "private_record_sha256": "3c414c64305599befab76b96d655df36663dd90fcc9c7e3b0dd7ce43dad97f87",
+    "record_items": 6
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-03T20:43:58.371957+00:00",
+  "original_native_gates_on_this_candidate": "PENDING",
+  "parent_queries": 22,
+  "partition": "development",
+  "passed": true,
+  "private_receipt_sha256": "eee3a6c23efdd0fc1340fd75e1ff5b6cf25a3562c1025aee0031081020f1a0ae",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualification_limitations": {
+    "private_record_sha256": "80c844197991d7e20e0f914c5fbcdb1c1e306c1029148bb5a6ed09973ef0ec00",
+    "record_items": 1
+  },
+  "schema": "pokemon.red.fresh-entry-native-qualification.v1",
+  "sealed_records": 15096,
+  "source_document_sha256": "4df9d13f0ef705cb60a5fe3fee72b5f7bded3ea192c77fb4fe57c404d4f7c9ca",
+  "state_loads": 0,
+  "support_choices": 2
+}

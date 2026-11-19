@@ -15,3 +15,5 @@ Start the solo clip with Squirtle poisoned and the model already heading to heal
 ## End with the next test
 
 The four finishes established how much of the game the system can execute. The next target is one unchanged, uninterrupted run from power-on to 124. The same splits can later show whether a quicker result comes from better choices or faster emulation. [Project narrative](project-narrative.md) · [Earlier video treatment](chronicle/README.md)
+
+[September 22 video script](chronicle/video-script-through-2026-09-22.md) · [Earlier video narrative](history/video-narrative-before-chronicle-2026-09-22.md)

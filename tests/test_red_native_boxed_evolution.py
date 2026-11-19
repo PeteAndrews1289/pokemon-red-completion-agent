@@ -1369,3 +1369,21 @@ def test_model_venue_inventory_checks_transport_before_offering(
     offered = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(native.adapter.observe())
     assert (offered.binding is not None) == (remote_ready or local_peer)
     assert probes and actions.actions_executed == 0 and reader.raw == before
+
+
+@pytest.mark.parametrize("fault", [None,"healthy_damage","faint","heal","xp","move","status"])
+def test_center_walk_allows_only_exact_nonfaint_poison_hp_change(fault):
+    from pokemon_red_completion import red_native_boxed_evolution as module
+    from pokemon_red_completion.party import PartyObservation,PartyMemberObservation,StatusCondition
+    old=PartyMemberObservation(slot=1,species_id=28,level=55,hp=92,max_hp=160,status=StatusCondition.POISON,experience=160000)
+    new=replace(old,hp=89)
+    if fault=="healthy_damage":old=replace(old,status=StatusCondition.HEALTHY);new=replace(new,status=StatusCondition.HEALTHY)
+    elif fault=="faint":new=replace(new,hp=0,status=StatusCondition.HEALTHY)
+    elif fault=="heal":new=replace(new,hp=93)
+    elif fault=="xp":new=replace(new,experience=160001)
+    elif fault=="move":new=replace(new,species_id=64)
+    elif fault=="status":new=replace(new,status=StatusCondition.PARALYSIS)
+    encoded=lambda m:8 if m.status is StatusCondition.POISON else(64 if m.status is StatusCondition.PARALYSIS else 0)
+    before=SimpleNamespace(party=PartyObservation((old,)),raw=SimpleNamespace(party_hp=(old.hp,),party_status=(encoded(old),)))
+    after=SimpleNamespace(party=PartyObservation((new,)),raw=SimpleNamespace(party_hp=(new.hp,),party_status=(encoded(new),)))
+    assert module.center_walk_party_preserved(before,after) is (fault is None)

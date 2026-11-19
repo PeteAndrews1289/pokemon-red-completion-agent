@@ -1,0 +1,127 @@
+{
+  "R1_MID_HOF": true,
+  "R1_MID_native_seconds": 1571.7691385020044,
+  "R1_MID_registered_after": 68,
+  "R1_MID_registered_before": 68,
+  "R1_below_2700_second_gate1_floor": true,
+  "R1_not_fresh_start_or_124": true,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "admitted_and_retained_TRAIN_outcomes": 6,
+  "approved_fit_calls": 1,
+  "baseline_comparison": {
+    "private_record_sha256": "f20381dd7d78cf4fe6ac9597753aad338403254213b4827c9c3ad0d205969ec3",
+    "record_items": 1
+  },
+  "blocker": {
+    "private_record_sha256": "90985363d6572a62d02e804320a7b1b40951dd241c49a11ae6ac9cbe0ca8246c",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "candidate_model_sha256": "69386d64bdbd3cfa9ffc9aafc88bcb3d100ed3c59c9290dd1435e62815a388be",
+  "compatibility_status": "PARTIAL",
+  "compatibility_summary": {
+    "private_record_sha256": "c4b7e2143e537f2aaaf953efcfea3c328fedecb345784e4afc5b830879123151",
+    "record_items": 1
+  },
+  "core_parameter_changes": 0,
+  "cpu_readiness_diagnostic": {
+    "private_record_sha256": "896b4d7a16f064d7d12b1db581fd83c03cf843de21c28f1d2ab6990c1d27edef",
+    "record_items": 1
+  },
+  "current_F95_full124_gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "current_ROOT_seconds": 18585.675299635994,
+  "current_full124_qualification": false,
+  "current_package_sha256": "81c9a18c7fa205d8307ee9b96ef8e8f1819d023a814948970be3031848a0dc0c",
+  "current_recipe": "F95_full124_current_unqualified",
+  "e328_weights_unchanged": true,
+  "explicit_sequence_behavior_parent_rebound": true,
+  "external_receipts": {
+    "private_record_sha256": "7584b7493ef20765b80576fff42ca0ceb9fb87c81f138863764d8d7f6291ead5",
+    "record_items": 46
+  },
+  "final_case_scope": {
+    "private_record_sha256": "6a8de471f89b0e676f02dd1617f960c3dd9c60d9abdde49f1fc530b2d03c8ff8",
+    "record_items": 1
+  },
+  "final_native_summary": {
+    "private_record_sha256": "ee904fc1deb49cbf7760c4e0cf83e0c97de26b03d707de8bf79a5f2c84319d1d",
+    "record_items": 1
+  },
+  "fitted_actual_TRAIN_rows": 4,
+  "focused_batches": {
+    "private_record_sha256": "56769e9444a9099ab508ddd6e9ebfa23cd67457019842ee73f31381075e3208a",
+    "record_items": 4
+  },
+  "focused_skip_in_third_batch": 1,
+  "focused_union_or_unique_count_claimed": false,
+  "fresh_adjacent_checks": 225,
+  "fresh_flag_checks": 20,
+  "fresh_import_only_passed": true,
+  "fresh_import_power_on": false,
+  "full_suite": false,
+  "full_teacher_candidate_MSE": 0.003460207612456749,
+  "full_teacher_parent_MSE": 0.0,
+  "gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "inherited_failures_costs_saves_preserved": true,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "next_decision": {
+    "private_record_sha256": "68556bbd8595d7d2d32e99e4dba3a8cf18087964da9a2418d0e8b2730a55e5a1",
+    "record_items": 1
+  },
+  "no_gate_credit_transfer": true,
+  "old_F94_R2_story_gates": {
+    "private_record_sha256": "c34b8688e569d5df7e53689573944f9a5d8b12769271de5e07acc0fcead526e2",
+    "record_items": 3
+  },
+  "old_HOF_cases": 3,
+  "old_choices": 520,
+  "old_movement_and_other_outputs_retained": true,
+  "old_movement_controls": 2,
+  "old_qualified_recipe": "F94_R2_story_only",
+  "old_registrations": {
+    "private_record_sha256": "ced566b834b05223f591be6e8e6a8ea1af2843dc6d36753a69d1116b673a2e20",
+    "record_items": 3
+  },
+  "one_control_overlaps_old175": true,
+  "optional_scalar_parameter_changes": 1,
+  "parent_strategic_error_improvement_claimed": false,
+  "partial_compatibility_note": {
+    "private_record_sha256": "e0824ce06265a54acd07b0448da0bc69cd2a1160c89ffa0a26756e5ff732ac37",
+    "record_items": 1
+  },
+  "physical_prior_TRAIN_MSE_improved": true,
+  "preparation_policy_learning_claimed": false,
+  "production_defaults_promoted": false,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "registration_binding_change": {
+    "private_record_sha256": "5fd4f6028b4314da76989d7c89c3888e823a53c6a7cc8c7541a42237ee1204fd",
+    "record_items": 1
+  },
+  "retained_core_rows": 175,
+  "review_summary": {
+    "private_record_sha256": "795bf9fe96648c67c5cda887b19ededb3c145e0c66141c01c1001d90481ad81a",
+    "record_items": 1
+  },
+  "schema": "pokemon.overnight-readiness-session.v2",
+  "session": "codex-overnight-readiness-20261113-0426",
+  "source_document_sha256": "23280d8c1111d0425faae4ac3031528f7de8a3bb9ac4ab12110918219ce92c16",
+  "source_families": 1,
+  "source_release": {
+    "private_record_sha256": "506d56be8de716693b41985b8f9e3c5f383289a3e218264b80f0b8c9dd2bac60",
+    "record_items": 1
+  },
+  "status": "closed",
+  "successor_authorized": {
+    "private_record_sha256": "43e7e60a11c1ce5dbb1e3dc060c2880bb7aa61c18b9598af9df295eb2ec379dc",
+    "record_items": 6
+  },
+  "whole_Code_parity": false
+}

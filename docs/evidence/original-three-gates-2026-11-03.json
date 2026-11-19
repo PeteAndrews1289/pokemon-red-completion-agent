@@ -1,0 +1,71 @@
+{
+  "actual_registration_delta": 0,
+  "actual_registrations": 22,
+  "all_actual_campaigns_paused": true,
+  "all_native_workers_stopped": true,
+  "all_sealed_records_verified": 587762,
+  "all_three_one_unchanged_candidate": true,
+  "candidate_package_sha256": "482b4b30bca77a2f098144c6486b8ecc012aa7532b4fadff1343278fb914c6b6",
+  "champion_hall_of_fame_concurrent_native_evidence": true,
+  "completion_checks_private_sha256": "fb3f971c1cd78b438353c2d6297932ed8f35305ef1c9c145a16d66d344c35675",
+  "completion_contract_checks_passed": 16,
+  "configuration_sha256": "fadcac7ad483cdee8400f6da654892d6f70315487d69b7069ee47321139c3a61",
+  "controls_released": true,
+  "failed_qualification_cause": {
+    "private_record_sha256": "6807dfd838a9d1d0a766f0ec33274eb3f53d09add7de185db464bdde1901df75",
+    "record_items": 1
+  },
+  "failed_qualification_root_seconds": 117.93108647500003,
+  "failed_zero_guest_qualifications": 1,
+  "full_suite_or_CI_claim": false,
+  "gates": {
+    "private_record_sha256": "c34b8688e569d5df7e53689573944f9a5d8b12769271de5e07acc0fcead526e2",
+    "record_items": 3
+  },
+  "global_adoption": false,
+  "goal_model_sha256": "94a0a18f228262cdc6f27ccb9f7e1868b539959d6aba46e15861845460479a30",
+  "late": {
+    "private_record_sha256": "864db22945e00e733b464d63e8b45f76f1923ce7078cfa58fffb0fe8e1642f5c",
+    "record_items": 16
+  },
+  "late_sealed_records": 185035,
+  "mid": {
+    "private_record_sha256": "e8daad9209e015b40613bf4fa35ab566036c565f785c41cda34a085d1323a401",
+    "record_items": 16
+  },
+  "mid_sealed_records": 402727,
+  "native_execution_errors": 0,
+  "native_frames": 20898097,
+  "native_inputs": 263563,
+  "native_seconds": 5598.568771672002,
+  "native_seconds_nested_in_root": true,
+  "new_training_examples": 0,
+  "observed_at_utc": "2026-11-03T04:43:07.931371+00:00",
+  "ordinary_champion_loss_retained": true,
+  "parameter_updates": 0,
+  "performance": {
+    "private_record_sha256": "2eede6cd7cb7dcaeae706dc920744bdab9c001ef06bf1cb5fdacbf8d57438634",
+    "record_items": 5
+  },
+  "physical_native_loads": 2,
+  "preparation_witness": {
+    "private_record_sha256": "dbadba08ef252ed37089467eb7ff8dfc203deb83047e31bce7af396e6544417a",
+    "record_items": 11
+  },
+  "prior_costs_and_failures_preserved": true,
+  "private_evidence_sha256": {
+    "private_record_sha256": "187b7c2d5050966f2435f02a42b68469bee3dabd00acea2ba0f21a73f4a781b2",
+    "record_items": 10
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fits": 0,
+  "root_seconds": 6187.732680253,
+  "schema": "pokemon.original-three-gate-qualification-closeout.v1",
+  "scope": "Two related exposed DEVELOPMENT cases; not fresh acceptance, causal benefit or independent transfer.",
+  "sealed_audit_errors": 0,
+  "session_id": "2026-11-03-original-three-gates",
+  "source_document_sha256": "a885864d340ce5a195f55308525ce18e09a1581ae00c7d65a49b7ad51474cc2d",
+  "support": "Declared deterministic navigation,puzzles,nursing,medicine purchases and recovery; local frozen learned battlers own moves. Fixed dose completion alone is not learned stopping.",
+  "venue_model_sha256": "ebac53ca4106e44aa289f9168415949e4f0ae60965c49f4f55cd0a134c10803a",
+  "zero_guest_qualifications": 2
+}

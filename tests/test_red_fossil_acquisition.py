@@ -348,6 +348,39 @@ def test_fossil_native_escape_requires_boolean_opt_in(flag):
         RedRoutedFossilRevival(None, None, None, None, allow_dig_departure=flag)
 
 
+@pytest.mark.parametrize("fault", [None, "badge", "landing", "fainted", "no_exit", "no_item"])
+def test_remote_held_fossil_requires_observed_fly_exit_and_stock(monkeypatch, fault):
+    from pokemon_red_completion import red_fossil_acquisition as module
+    from pokemon_red_completion.route_executor import TraversalSnapshot
+
+    reader = _Reader()
+    outside = int(MapId.VERMILION_CITY)
+    start_map = int(MapId.VERMILION_POKECENTER) if fault == "no_exit" else outside
+    reader.raw = replace(_raw(item=None if fault=="no_item" else ItemId.HELIX_FOSSIL),
+                         map_id=start_map, badge_bits=0 if fault=="badge" else 255,
+                         party_count=1, party_species_ids=(1,), party_hp=(0 if fault=="fainted" else 1,),
+                         party_moves=((19,),))
+    reader.read_fly_destinations = lambda: () if fault=="landing" else (int(MapId.CINNABAR_ISLAND),)
+    live = SimpleNamespace(raw=reader.raw,collection_observation=SimpleNamespace(owned_species=frozenset(),specimens=()))
+    em = SimpleNamespace(frame_count=0,save_state_bytes=lambda:b"unchanged")
+    actions = SimpleNamespace(actions_executed=0)
+    runtime = SimpleNamespace(reader=reader,emulator=em,adapter=SimpleNamespace(observe=lambda:live))
+    start = TraversalSnapshot(start_map,(3,3),True,mode="land",last_outside_map=outside)
+    monkeypatch.setattr(module.RedRoutedFossilRevival,"_ports",lambda e:(None,SimpleNamespace(observe=lambda:start)))
+    monkeypatch.setattr("pokemon_red_completion.red_player_field_goals._field_ready",lambda rt:True)
+    monkeypatch.setattr(module,"bounded_indoor_departure",lambda origin,world:None)
+    monkeypatch.setattr(module,"red_fly_landings",lambda rom:((int(MapId.CINNABAR_ISLAND),(4,5)),))
+    monkeypatch.setattr(module,"_supported_plan",lambda plan,**kw:True)
+    quoted = []
+    world = SimpleNamespace(rom=b"observed",plan_feasible_to_map=lambda orig,dst:quoted.append(orig) or SimpleNamespace(cost=10))
+    world.with_current_observation = lambda r:world
+    bindings = module.fossil_acquisition_bindings(runtime,live,actions,world,allow_remote_departure=True)
+    assert len(bindings) == (1 if fault is None else 0)
+    if fault is None:
+        assert quoted[0].map_id == int(MapId.CINNABAR_ISLAND) and quoted[0].at == (4,5)
+    assert actions.actions_executed == em.frame_count == 0
+
+
 def test_fossil_provider_verifies_new_registration_and_retained_specimen() -> None:
     reader = _Reader()
     target = fossil_target_by_item(int(ItemId.HELIX_FOSSIL))

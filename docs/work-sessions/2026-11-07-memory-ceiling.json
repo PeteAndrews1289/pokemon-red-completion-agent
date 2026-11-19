@@ -1,0 +1,20 @@
+{
+  "evidence": {
+    "private_record_sha256": "d1422d0e36a364cd73389288a749e2c47853e1111a8bb735416a0b20daf60658",
+    "record_items": 1
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "next": {
+    "private_record_sha256": "06ad342dff3520452f0a9f19aa396ae3b6d6390b71bb77055ce86a61d3a31c1a",
+    "record_items": 1
+  },
+  "prior_session": "2026-11-07-uninterrupted-0253",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "source_document_sha256": "2f21bf81f773ad13fd583b3bc4fde08f869d925a0cf67842d29d0786e55ce9cb",
+  "status": {
+    "private_record_sha256": "ff4292fa14047a988177cfa90013898475ccb2a16b3d7fcebb2e330aadff897e",
+    "record_items": 1
+  }
+}

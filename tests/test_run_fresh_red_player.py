@@ -344,9 +344,11 @@ def test_readiness_adjudicates_only_matching_confirmed_control_receipt(fault):
     ],
 )
 @pytest.mark.parametrize("control_handoff", [None, "accepted", "rejected"])
-@pytest.mark.parametrize("model_version", [7, 9])
+@pytest.mark.parametrize(
+    "model_version,party_context", [(7, False), (9, False), (16, False), (16, True)]
+)
 def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
-    tmp_path, monkeypatch, control_handoff, machine_mode, model_version
+    tmp_path, monkeypatch, control_handoff, machine_mode, model_version, party_context
 ):
     class Emulator:
         frame_count = 0
@@ -397,6 +399,15 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         return sha256(path.read_bytes()).hexdigest()
 
     model = N(model_sha256="b" * 64, feature_version=model_version)
+    # The real head loader/scope has its separate frozen-pair qualification.
+    # This driver seam must retain its required observer on EVERY renewal.
+    monkeypatch.setattr(
+        fresh,
+        "declared_readiness_refinement",
+        lambda plan: {
+            "consequence_head": N(context_projection="prospective_preparation_party_context_v1")
+        } if party_context else {},
+    )
     initial_holder = dict(refs=("starter",), plan=object())
     teacher = N(
         kind=N(value="advance_story"),
@@ -445,10 +456,17 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
     )
     assembled, calls = [], []
 
-    def assembly(backend, config, parent, output, *, plan_path, model_feature_version):
+    def assembly(
+        backend, config, parent, output, *, plan_path, model_feature_version,
+        include_preparation_party_context=False, live_party_runtime=None,
+    ):
+        expected_prior = calls[-1]["holder"]["runtime"] if calls else initial_holder["runtime"]
+        assert live_party_runtime is expected_prior
+        assert live_party_runtime.emulator._backend is emulator._backend
         assert model_feature_version == model_version
+        assert include_preparation_party_context is party_context
         declared = json.loads(plan_path.read_bytes())
-        assert declared["goal_selection"]["mode"] == "exploration"
+        assert declared["goal_selection"]["mode"] == ("greedy" if party_context else "exploration")
         context = json.loads((parent / "CONTEXT.json").read_bytes())
         assert declared.get("owned_machine_options") == spec.get("owned_machine_options")
         holder = dict(
@@ -527,7 +545,10 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
     monkeypatch.setattr(fresh, "execute_player_chunk", chunk)
     handoff_calls = []
 
-    def qualify(row, *, runtime, menu):
+    def qualify(row, *, runtime, menu, retained_parent, catcher_plan=None, failure_reason=None, rom=None):
+        assert failure_reason == "native_execution_error" and callable(rom)
+        assert catcher_plan == json.loads(path.read_bytes())
+        assert retained_parent.name == "segment-001"
         handoff_calls.append(row["state_sha256"])
         if control_handoff == "rejected":
             return None
@@ -551,7 +572,9 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
         runtime_package=dict(path="manifest", sha256="a" * 64),
         backend_module="backend",
         goal_model_record=dict(path=str(actor), content_sha256=digest(actor)),
-        goal_selection=dict(mode="exploration", reason="Same frozen policy."),
+        goal_selection=dict(
+            mode="greedy" if party_context else "exploration", reason="Same frozen policy."
+        ),
         configuration_template=dict(
             goal_model_sha256=model.model_sha256,
             assembly_flags=tuple((k, k != "protect_party_species") for k in sorted(ASSEMBLY_FLAGS)),
@@ -591,3 +614,15 @@ def test_fresh_driver_renews_same_emulator_and_forwards_policy_without_loading(
     assert len(recipe_calls) == (
         len(calls) if machine_mode == "boxed_frontier_evolution_bundles_v3" else 0
     )
+
+
+@pytest.mark.parametrize("fault",[None,"custody","field","ref","unknown_error"])
+def test_fresh_adjudicates_only_qualified_named_loan_field_handoff(fault):
+    state="e"*64
+    outcome=dict(selected_kind="evolve_species",error_type="RedGoalContextError",error="PC loan settlement requires settled field control",terminal_state_sha256=state)
+    receipt=dict(schema="pokemon.red.qualified-native-control-handoff.v1",qualified=True,state_sha256=state,binding_ref="pokemon.red:retained-motion:"+state,failed_transport_preserved=True,strategic_substitution=False,inputs=0,frames=0,model_queries=0,retained_declared_loan=True,field_faint_before_pc_return=True)
+    if fault=="custody":receipt["retained_declared_loan"]=False
+    if fault=="field":receipt["field_faint_before_pc_return"]=False
+    if fault=="ref":receipt["binding_ref"]="unknown:"+state
+    if fault=="unknown_error":outcome["error"]="unknown"
+    assert fresh.model_handoff_verified([dict(model_decisions=1,outcomes=[outcome])],recovered_control_handoffs=[receipt]) is (fault is None)

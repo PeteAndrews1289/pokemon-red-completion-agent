@@ -209,24 +209,7 @@ def validate_fresh_plan(plan, *, import_only=False):
         or not 0 <= plan["seed"] < 2**64
     ):
         raise ValueError("fresh launch declaration has a restore, teacher or undeclared start")
-    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
-    if development_campaign_scope(plan):
-        if (plan["new_campaign"] is not True or plan.get("maximum_state_loads") != 0
-                or (not import_only and plan.get("launch_authorized") is not True)):
-            raise ValueError("fresh campaign needs its normal zero-load power-on declaration")
-    elif (plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
-          or plan.get("official_acceptance") is not False or plan.get("maximum_state_loads") != 0
-          or plan.get("training_admission", False) is not False
-          or plan.get("actual_gameplay_resume_authorized", False) is not False):
-        raise ValueError("fresh successor comparison needs a zero-load diagnostic or a normal campaign")
-    official = declared_fresh_acceptance(plan)
-    open_ended = plan.get("open_ended_campaign", False)
-    if type(open_ended) is not bool or (open_ended and (
-        plan.get("cutoff_utc") is not None or official
-        or not plan.get("development_campaign") or not plan.get("new_campaign")
-        or plan.get("diagnostic_only") or not declared_automatic_renewal(plan)
-    )):
-        raise ValueError("invalid open-ended development campaign declaration")
+    declared_fresh_acceptance(plan)
     NativePlayerLimits(**plan["limits"])
     if any(
         type(plan["chunk"][key]) is not int or plan["chunk"][key] <= 0
@@ -373,7 +356,6 @@ def run(plan_path):
         model_bytes, expected_model_sha256=plan["configuration_template"]["goal_model_sha256"]
     ).model
     limits = NativePlayerLimits(**plan["limits"])
-    open_ended = plan.get("open_ended_campaign", False)
     _record(
         root / "CLAIM.json",
         dict(
@@ -424,10 +406,8 @@ def run(plan_path):
                 c.PyBoyAdapter(c.ROM, watch=False, speed=None, **feed.adapter_options), root, result
             ) as emulator,
         ):
-            opening_seconds = plan["chunk"]["seconds"] if open_ended else limits.seconds
-            opening_frames = plan["chunk"]["frames"] if open_ended else limits.frames
-            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=opening_seconds)
-            controller = _NoLoadController(wall, maximum_frames=opening_frames)
+            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=limits.seconds)
+            controller = _NoLoadController(wall, maximum_frames=limits.frames)
             if controller.frame_count != 0 or controller.pressed_buttons:
                 raise ValueError("fresh emulator was not at untouched power-on")
             power_on = controller.save_state_bytes()
@@ -514,20 +494,11 @@ def run(plan_path):
             )
             parent, ordinal = initial, 0
             while True:
-                if open_ended:
-                    # Renew only the existing per-chunk safety envelope. The
-                    # same native emulator, receipts and cumulative costs persist.
-                    left = dict(plan["chunk"], heals=limits.heals)
-                    wall = MonotonicWallTimeBudgetController(
-                        emulator, maximum_wall_seconds=left["seconds"]
-                    )
-                    controller = _NoLoadController(wall, maximum_frames=left["frames"])
-                else:
-                    left = {
-                        key: getattr(limits, key) - spent[key]
-                        for key in ("decisions", "actions", "frames", "heals")
-                    }
-                    left["seconds"] = int(limits.seconds - (monotonic() - started))
+                left = {
+                    key: getattr(limits, key) - spent[key]
+                    for key in ("decisions", "actions", "frames", "heals")
+                }
+                left["seconds"] = int(limits.seconds - (monotonic() - started))
                 if min(left.values()) <= 0:
                     result["terminal_reason"] = "declared_budget_exhausted"
                     break

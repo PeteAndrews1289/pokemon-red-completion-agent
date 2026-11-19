@@ -93,3 +93,45 @@ def _apply_fixture_changes(memory, changes):
     if any(int(memory[row["address"]]) != row["after"] for row in rows):
         raise ValueError("income fixture readback failed; preserve terminal")
     return rows
+
+
+_RETAINED_LEAGUE_TRAIN_PARENTS = frozenset({
+    "04ceddd3119f1f43909eb9e0403e4990d2e0134c82da3ebd18dc8a714e88314a",
+    "03ad8eafd9a4f548a6ed2e04a53ab81018da5226f90b94d0953fba54a3787e57",
+})
+
+
+def prepare_retained_income_scarcity_fixture(
+    memory, *, source_state, isolated_training_setup, controller_released,
+    battle_state, partition,
+):
+    """Remove money/ordinary balls only from two assigned historical TRAIN sources.
+
+    The caller loads and authenticates source_state before this setup boundary.
+    No party, XP, medicine, story or registration byte is supplied. Returned writes
+    are synthetic interventions, never native earnings or a new independent origin.
+    """
+    from hashlib import sha256
+
+    if (isolated_training_setup is not True or partition != "train"
+        or controller_released is not True or type(battle_state) is not int
+        or battle_state != 0 or type(source_state) is not bytes
+        or sha256(source_state).hexdigest() not in _RETAINED_LEAGUE_TRAIN_PARENTS):
+        raise ValueError("scarcity setup requires exact assigned released TRAIN source")
+    count = int(memory[int(RamAddress.NUM_BAG_ITEMS)])
+    money = tuple(int(memory[int(RamAddress.PLAYER_MONEY)+i]) for i in range(3))
+    if money != (0, 0x60, 0) or not 1 <= count <= 20:
+        raise ValueError("retained TRAIN starting resources differ")
+    bag = tuple((int(memory[int(RamAddress.BAG_ITEMS)+i*2]),
+                 int(memory[int(RamAddress.BAG_ITEMS)+i*2+1])) for i in range(count))
+    ordinary = tuple(row for row in bag if row[0] in (2, 3, 4))
+    if ordinary != ((4, 5),) or int(memory[int(RamAddress.BAG_ITEMS)+count*2]) != 255:
+        raise ValueError("retained TRAIN ordinary-ball source differs")
+    retained = tuple(row for row in bag if row[0] not in (2, 3, 4))
+    changes = {int(RamAddress.PLAYER_MONEY): 0,
+               int(RamAddress.PLAYER_MONEY)+1: 0,
+               int(RamAddress.PLAYER_MONEY)+2: 8,
+               int(RamAddress.NUM_BAG_ITEMS): len(retained)}
+    for i, value in enumerate((*[v for row in retained for v in row], 255)):
+        changes[int(RamAddress.BAG_ITEMS)+i] = value
+    return _apply_fixture_changes(memory, changes)

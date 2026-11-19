@@ -78,6 +78,25 @@ def test_mart_route_uses_stairs_not_elevator_placeholder_without_mutating_graph(
     assert graph.edges[lift] == (MacroEdge(lobby),)
 
 
+@pytest.mark.parametrize("floor", [200, 202])
+def test_keyed_hideout_lift_approach_remains_but_static_exit_is_not_a_shortcut(floor):
+    lift, lobby, stairs = int(MapId.ROCKET_HIDEOUT_ELEVATOR), 199, 201
+    graph = MacroGraph({
+        floor: (MacroEdge(lift), MacroEdge(stairs, cost=2)),
+        lift: (MacroEdge(lobby),), stairs: (MacroEdge(lobby),), lobby: (),
+    }, warp_locations={lift: ((1, 2),)}, warp_triggers={lift: ((1, 2),)})
+    filtered = _without_unwired_celadon_elevator(graph)
+    assert find_macro_path(graph, floor, lobby).maps == (floor, lift, lobby)
+    assert find_macro_path(filtered, floor, lobby).maps == (floor, stairs, lobby)
+    assert find_macro_path(filtered, floor, lift).maps == (floor, lift)
+    assert filtered.edges[lift] == ()
+    assert filtered.warp_locations is graph.warp_locations
+    assert filtered.warp_triggers is graph.warp_triggers
+    assert graph.edges[lift] == (MacroEdge(lobby),)
+    with pytest.raises(RoutePlanningError):
+        plan_route(filtered, {}, lift, (2, 2), lobby)
+
+
 def test_scenario_interruption_limit_covers_both_handler_budgets() -> None:
     assert STRATEGIC_SCENARIO_MAXIMUM_FLEES == 32
     base = RouteExecutionLimits(max_interruptions=2)

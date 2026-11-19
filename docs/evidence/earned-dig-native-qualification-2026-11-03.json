@@ -1,0 +1,30 @@
+{
+  "actual_registration_delta": 0,
+  "admission_errors": 0,
+  "all_processes_stopped": true,
+  "candidate_sha256": "794f01fd9ccbf4f362be148b70301a75cdeafebcc7007293f3f87efd4343e951",
+  "closed_outcomes": 27,
+  "controls_released": true,
+  "copy_back": false,
+  "driver_terminal_reason": "insufficient_settlement_allowance",
+  "execution_errors": 0,
+  "incremental_native_costs": {
+    "private_record_sha256": "c8d5b0111f0e97e4707f7ffb46ea4b76ab2e524fb49cc8e3ecdfda0ea6b10123",
+    "record_items": 6
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-03T14:37:15.201123+00:00",
+  "ordinary_setbacks": 7,
+  "partition": "development",
+  "private_closeout_sha256": "69b5c1bc21bbccd6d9fad0495fe98da73ed31177dd2914addfd5f761f134c8ce",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "root_and_native_seconds_overlap": true,
+  "root_seconds": 620.94586886,
+  "schema": "pokemon.earned-dig-native-qualification.v1",
+  "scope": "Existing Dig collection escape before Hall of Fame; not all indoor walking or three gate qualification",
+  "source_document_sha256": "ea9844f9b9bab001e639363d3aa4e4418d53af7ebaff5c3d9630efedac809c63",
+  "source_role": "Related retained diagnostic pre-error pair, not actual continuation",
+  "status": "PASS",
+  "verified_model_selected_dig_departures": 2
+}

@@ -1,0 +1,33 @@
+{
+  "F122_candidate": {
+    "private_record_sha256": "8b0311ef460babdce68c4fc9c51bcc5f9a76808dda9c24c25521de3ff7155765",
+    "record_items": 14
+  },
+  "actual_progress_delta": 0,
+  "actual_registrations": 97,
+  "at_utc": "2026-11-15T02:25:30.516806+00:00",
+  "findings": {
+    "private_record_sha256": "62396ce71d858083288a68e600a16659d905a234dddc72aa35603634572a7af2",
+    "record_items": 15
+  },
+  "fresh_campaign_qualified": false,
+  "full_suite": false,
+  "learning": {
+    "private_record_sha256": "a31c9000cfda89b7ad8d839ccd82ec20816118a8ee7b06f2f62d2fc126c1f47f",
+    "record_items": 5
+  },
+  "new_F121_copy": {
+    "private_record_sha256": "6a9868ea6586e1463ff0823494165453f15792917c83b01e707b0188f03fe878",
+    "record_items": 13
+  },
+  "new_campaign": false,
+  "progress": {
+    "private_record_sha256": "fc6d64b37337adb818976c10ae678b67f1c357f37312257273bbb8d4454eea85",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session": "economy-preparation-20261115-0103",
+  "source_actual_sealed": true,
+  "source_document_sha256": "225d6cf0dc79575f345c2aef2f54bf1d0a8882e9157b386106905a787a552942",
+  "source_lineage_note": "Actual97,prior fundedF12199,new scarcityF12199 andF12298 are related copies,not pooled gains orindependent origins. Older115 andassisted124 remain separate."
+}

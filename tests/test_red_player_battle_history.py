@@ -254,7 +254,7 @@ def test_pre_capture_checkpoint_is_closed_no_inference_and_preserves_prefix(
         assert receipt["capture_stage"] == "before_initial_capture"
         assert receipt["manifest_sha256"] is receipt["outcome"] is None
         assert receipt["fresh_inference"] is False
-        with pytest.raises(ValueError):
+        with pytest.raises(FileNotFoundError):
             history()  # normal fresh inference still refuses the newest failure
 
 
@@ -455,3 +455,22 @@ def test_base_battler_does_not_gain_league_pp_screen_authority(tmp_path, authori
     )
     with pytest.raises(ValueError, match="PP screen scope"):
         history()
+
+
+@pytest.mark.parametrize("fault", [None,"terminal","initial","outcome","extra_event","wrong_error"])
+def test_async_interrupt_before_entry_preserves_no_inference_checkpoint(tmp_path,fault):
+    b=battler(tmp_path);history=NativeBattlerHistory(b);publish(b);previous=history();b.calls+=1
+    directory=b.output/f"battle-{b.calls:04d}";directory.mkdir();state=b"interrupted-before-entry";terminal=sha256(state).hexdigest();(directory/"final.state").write_bytes(state)
+    endpoint=dict(final_state_sha256=terminal,outcome_sha256=None,model_sha256=b.model_sha256,qualification_sha256=b.qualification_sha256,actor_returned_win=False,outer_goal_verification_required=True);(directory/"endpoint.json").write_text(json.dumps(endpoint))
+    log=TrainerPracticeEventLog(directory/"events",run_identity=dict(model_sha256=b.model_sha256,qualification_sha256=b.qualification_sha256,source_commit=b.source_commit,root_lineage_id=b.root_lineage_id,parent_state_sha256=b.source_state_sha256))
+    if fault=="extra_event":log.emit(dict(event="decision_started"))
+    error=RuntimeError("unknown") if fault=="wrong_error" else KeyboardInterrupt();log.fail(error)
+    if fault=="initial":(directory/"initial.state").write_bytes(b"partial")
+    if fault=="outcome":(directory/"outcome.json").write_text("{}")
+    if fault:
+        with pytest.raises(ValueError):history.checkpoint_after_execution_failure(terminal_state_sha256="0"*64 if fault=="terminal" else terminal,error_type=type(error).__name__)
+    else:
+        latest,receipt=history.checkpoint_after_execution_failure(terminal_state_sha256=terminal,error_type=type(error).__name__)
+        assert latest==previous and receipt["outcome"] is None and receipt["fresh_inference"] is False
+        assert receipt["capture_stage"]=="before_initial_capture"
+        with pytest.raises(FileNotFoundError):history()

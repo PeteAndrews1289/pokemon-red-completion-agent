@@ -204,7 +204,9 @@ def test_stone_transport_refreshes_geometry_and_keeps_blocker_replanning(
 
     def execute(actual_plan, actual_actions, actual_traversal, **kw):
         assert (actual_plan, actual_actions, actual_traversal) == (plan, actions, traversal)
-        assert kw == dict(limits=_ROUTE_LIMITS, replanner=replan, interruption_handler=handler)
+        assert kw['limits'] is _ROUTE_LIMITS and kw['interruption_handler'] is handler
+        ordinary = SimpleNamespace(goal_map=0, current=SimpleNamespace(map_id=0), goal_at=(0, 0))
+        assert kw['replanner'](ordinary) is ordinary
         return SimpleNamespace(passed=passed)
 
     monkeypatch.setattr(module, "execute_route", execute)

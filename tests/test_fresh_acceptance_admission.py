@@ -5,6 +5,7 @@ import run_fresh_red_player as fresh
 from test_run_fresh_red_player import plan
 
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_collection import RED_SOLO_COLLECTION_CONTRACT
 
 
 def official_plan():
@@ -18,7 +19,8 @@ def official_plan():
         source_and_models_frozen_during_attempt=True,
         no_midrun_repair_or_rollback=True,
         all_attempts_count=True,
-        required_species=[f"pokemon:national:{i:03d}" for i in range(1, 125)],
+        required_species=list(RED_SOLO_COLLECTION_CONTRACT.target_species),
+        objectives=["defeat_champion", "enter_hall_of_fame"],
         configuration_template={"goal_model_sha256": "b" * 64},
     )
     p["acceptance_declaration"] = dict(
@@ -172,3 +174,28 @@ def test_missing_zero_load_evidence_is_not_inferred():
         fresh.fresh_official_completion_candidate(official_plan(), r, "curriculum_complete")
         is False
     )
+
+
+@pytest.mark.parametrize("fault", ["missing", "123", "wrong_member_rehashed", "missing_champion", "missing_hof"])
+def test_full_contract_is_more_than_a_self_consistent_count_and_hash(fault):
+    p = official_plan()
+    if fault == "missing":
+        p.pop("required_species")
+    elif fault == "123":
+        p["required_species"].pop()
+    elif fault == "wrong_member_rehashed":
+        p["required_species"][0] = "pokemon:national:151"
+        p["acceptance_declaration"]["required_species_sha256"] = canonical_sha256(p["required_species"])
+    elif fault == "missing_champion":
+        p["objectives"].remove("defeat_champion")
+    else:
+        p["objectives"].remove("enter_hall_of_fame")
+    with pytest.raises(ValueError):
+        fresh.declared_fresh_acceptance(p)
+
+
+def test_exact_species_membership_does_not_require_an_arbitrary_order():
+    p = official_plan()
+    p["required_species"].reverse()
+    p["acceptance_declaration"]["required_species_sha256"] = canonical_sha256(p["required_species"])
+    assert fresh.declared_fresh_acceptance(p) is True

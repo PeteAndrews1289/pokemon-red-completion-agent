@@ -1,0 +1,112 @@
+{
+  "actual_preserved_badges": 6,
+  "actual_preserved_registrations": 67,
+  "actual_progress": 0,
+  "all_native_controls_released": true,
+  "all_three_passed": true,
+  "audit_after_two_hours": {
+    "private_record_sha256": "b81ffa24281a93a3fdb3649bf0d35c358fa90290f25475a94647527e03c5b10d",
+    "record_items": 1
+  },
+  "cases": {
+    "private_record_sha256": "305d5eee682a9462bbc0fc288a4d6440721bdaab33ddcb2a66120bdc9d1e1053",
+    "record_items": 2
+  },
+  "coins": {
+    "private_record_sha256": "9dcecb9396b821442574da1ec2679ee7eec716a6a90320a783b5584654197a1b",
+    "record_items": 5
+  },
+  "comparison": {
+    "private_record_sha256": "db9940d7af370d2eeb7e3c28e53300ecadc609cd4b0e3d16691fa8fec0d90ff6",
+    "record_items": 1
+  },
+  "controller_interventions": 0,
+  "copy_back": false,
+  "earlier_closed_block": {
+    "private_record_sha256": "686fc719d105e65a6f6113031488704cfd17e407612341f3c21ab7775b2f8177",
+    "record_items": 1
+  },
+  "engineering_deadline_utc": "2026-11-03T20:26:17+00:00",
+  "final_integrity": {
+    "private_record_sha256": "decb3dc85c53c6aa86a908e1e98b9b0cbe1da2b360361afe4c50dbd1bb03968a",
+    "record_items": 1
+  },
+  "focused_checks": {
+    "private_record_sha256": "350bf14549cc821c866a2b8e8df66a963faf79d19751e1040bf336ee48edd756",
+    "record_items": 4
+  },
+  "fresh_blueprint": {
+    "private_record_sha256": "0176e44cd97c4f7dfb78cfe47aa77a51a1d71fc3bdfef0fa01027b79817bf7d5",
+    "record_items": 1
+  },
+  "gate3_additional_raticate": {
+    "private_record_sha256": "76743144cbdb68160c9f11c92f07f8ee2d8cef913ce5c9344e6a5903a261b54e",
+    "record_items": 1
+  },
+  "gate3_primary": {
+    "private_record_sha256": "7197259fdeb7838945ea2641ef6988a3b40b2672486693d4857ea8fe25f47fd8",
+    "record_items": 1
+  },
+  "gate_adjudication": {
+    "private_record_sha256": "01a0e58a4f70f34d294a771a2f1cb1ef0e6af57a7ae286c3123c639cbbf68114",
+    "record_items": 1
+  },
+  "historical_target_contract": {
+    "private_record_sha256": "98cd5c10a875b936f56406f8262b43f7bfdf4060554b190d5e1467077239a36a",
+    "record_items": 1
+  },
+  "incremental_diagnostic_native_costs": {
+    "private_record_sha256": "321d4bc3b64ef518861be68b5c73251101850ab1c73fc7da592172692fe940e0",
+    "record_items": 6
+  },
+  "independent_native_guests": 2,
+  "largest_closed_actions": {
+    "private_record_sha256": "d409a28d90da0ed908e53d947ae07cebc159923cb52a05c3a099602a7bc0528d",
+    "record_items": 5
+  },
+  "manual_strategic_targets": 0,
+  "master_ball_changes": {
+    "private_record_sha256": "85078f388ff221a336886b6af1a0d7a0defc4841411c5c416b45308123f1ee11",
+    "record_items": 1
+  },
+  "never_add_root_and_native_seconds": true,
+  "new_TRAIN_rows": 0,
+  "new_fits": 0,
+  "new_weights": 0,
+  "next": "Keep this exact behavior frozen. Authenticate the existing zero-load initializer and source-only bindings,then run a sufficiently long fresh development campaign. Do not start a short end-of-block fragment or fit DEVELOPMENTmenus.",
+  "no_actual_resume": true,
+  "no_diagnostic_gains_imported": true,
+  "no_original_budget_reset": true,
+  "observed_at_utc": "2026-11-03T19:45:51.176440+00:00",
+  "original_actual_cutoff_still_expired": true,
+  "package": {
+    "private_record_sha256": "93599f8877a0685da665fa828e5813f0db61433ae8b136c7c53676a2609d03c6",
+    "record_items": 1
+  },
+  "pre_guest_host_rejection": {
+    "private_record_sha256": "5af248ea011a97a77110e246cedc6fbadc27d0454602394566db7a2905fcc8b5",
+    "record_items": 1
+  },
+  "private_tooling_errata": {
+    "private_record_sha256": "219b1b5eb354487356e56419d92f368ed60c937a1e3cb3a3fd62680a86f6aea8",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "publication": false,
+  "root_seconds_overlapping_native": 6780.868659993001,
+  "runtime_LLM_calls": 0,
+  "schema": "pokemon.consistent-recipe-gate-closeout.v1",
+  "scope": "Two related exposed DEVELOPMENTsources. Not a new fresh completion,independent generalization,calibrated success,causal superiority or8of10reliability.",
+  "selected_recipe": {
+    "private_record_sha256": "5a272fc1a9ae798d8abe12b4528ceac4935b227e50cc33640bcc43c52bde5b1e",
+    "record_items": 1
+  },
+  "semantic_recipe_sha256": "c705d58918956bb4cd926a2224963b3f2b1e5b6560ea9b5fdee9cb8055be336c",
+  "session_start_utc": "2026-11-03T17:26:17+00:00",
+  "source_document_sha256": "207b4d33e2a704354421496e7ee674c35825cb5bd49ca3258a8d911070e5ef4a",
+  "source_writer_release_pending_final_documentation_checks": true,
+  "source_writer_release_record": {
+    "private_record_sha256": "2e0190277ba096e026f3fbd1cc9ff356c08f81bd68127adb4cc79c584ed875d5",
+    "record_items": 1
+  }
+}

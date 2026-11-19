@@ -1,0 +1,83 @@
+{
+  "actual_preservation": {
+    "private_record_sha256": "97d0283c001a2621d2ad7b2d76cf191ef3c80bef5c4830a9022ba6fffa87e49d",
+    "record_items": 1
+  },
+  "actual_registration_delta": 0,
+  "comparison": {
+    "private_record_sha256": "75956fd9afa957154d614f808a3cedc18e7c35b93bd3e3369bef4a822f9b7423",
+    "record_items": 1
+  },
+  "costs": {
+    "private_record_sha256": "8b8216466bd3f5c8abbece29d076915c777d1b0f5be8eb49d43a080ed4fdac6f",
+    "record_items": 1
+  },
+  "failures": {
+    "private_record_sha256": "3cc1161232ab1a598a6fe3212147f7aba08b878d97ca6d0e95cf635f5349dde8",
+    "record_items": 1
+  },
+  "focused_checks": {
+    "private_record_sha256": "4b4aad36390208fa502306e3fe8eb4b03043223735f025c539675d9c35492011",
+    "record_items": 1
+  },
+  "gates": {
+    "private_record_sha256": "dc757bf537e37764680f6df620a9d86a9605402fce22432327a7f11e1e7b1ee6",
+    "record_items": 1
+  },
+  "goal_switching_solved": false,
+  "integrity": {
+    "private_record_sha256": "864081e04035103f485871a1cc16c447bf084d44624d6537830bbf1387180108",
+    "record_items": 1
+  },
+  "mission": {
+    "private_record_sha256": "9bd61df057dc0627a77f188e73c4552a924e6ba20fc0e142e87812848b9feb3f",
+    "record_items": 1
+  },
+  "model_authority": {
+    "private_record_sha256": "a8da42042c452d0bebf1ab4d26edb1900b06bc2868689334616f740933da8f37",
+    "record_items": 1
+  },
+  "native_audit": {
+    "private_record_sha256": "2753b02390dd0abc7fd38454483ae2491e5bcbb0393b7e6dec7c55ba4ccdc166",
+    "record_items": 1
+  },
+  "native_qualification": {
+    "private_record_sha256": "c58701cb574572520feb6fdc2f5b0e9a9aac17def597b9ef4d0da45a3e3399d2",
+    "record_items": 1
+  },
+  "new_TRAIN_rows": 0,
+  "new_learned_heads": 0,
+  "next": {
+    "private_record_sha256": "170e594f4e102f20ac4074dc719510d12c7ef6bbf6ca6b993f323891864f17ce",
+    "record_items": 1
+  },
+  "package": {
+    "private_record_sha256": "a7737341fb8f6dadb71bdee5caf02aecefbebb1055c9cbdbad1e341ec42e38ca",
+    "record_items": 1
+  },
+  "policy_promotions": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fits": 0,
+  "recipe": {
+    "private_record_sha256": "fdb8dd49fafddb46799e5b9cfff28604feb70c30ac498edbf377c63fbae7559f",
+    "record_items": 1
+  },
+  "sampler_confound": {
+    "private_record_sha256": "1e44f1d6cd76d87001565bb44936720a8e0164c0dce487f8bf44f23595f4010c",
+    "record_items": 1
+  },
+  "source_document_sha256": "71d51b7e3ab562324d5335b1bfe9b60a269fe57af743614162aec8f33056ce52",
+  "status": {
+    "private_record_sha256": "f4dabdcc230e8b7d1bc44e12bd9f75fe4d386f862c6d69335882729e4578413a",
+    "record_items": 1
+  },
+  "training_recovery": {
+    "private_record_sha256": "19637208a0b71ecc883873df0c3633b71a4bbad6451a9f8c4a5918d2292bf61b",
+    "record_items": 1
+  },
+  "training_validation": {
+    "private_record_sha256": "106ec691f4055cca9d58c55a623f65e9975f64eefd8d432c757bba3a8f0aa754",
+    "record_items": 1
+  },
+  "whole_Code_parity": false
+}

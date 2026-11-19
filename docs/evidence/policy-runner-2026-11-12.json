@@ -1,0 +1,50 @@
+{
+  "ROOT_seconds": 4554.10347532,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "authentication": {
+    "private_record_sha256": "9e76f99006050e2f5e20b82d22b914b672a6fd3094e85830c5e8bc327ae258a9",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "current_package": {
+    "private_record_sha256": "c51b0681c7f8ca867eecb161ef3b3d6bf451fc756e5ab97b982f90f9bbeaffe0",
+    "record_items": 1
+  },
+  "fit_calls": 0,
+  "focused_checks": 538,
+  "full_suite": false,
+  "gates": {
+    "private_record_sha256": "47b10c872aa6b36be3e0fe9e38ccd3c33e0f55abd1531907969bba38aa4af0a2",
+    "record_items": 1
+  },
+  "learning_output": {
+    "private_record_sha256": "a4bf8d5807475acc429dcf3206a6e75121203dd11ab3bf33e81ee6aea24a4698",
+    "record_items": 1
+  },
+  "native_qualification": {
+    "private_record_sha256": "350a6d84ab3edb4aba3ec91134df1d9482b713381e61109efb1c29ba68ead66f",
+    "record_items": 1
+  },
+  "native_status": "All six cases stopped; three F82 normalrunnercopies and zero-input physicalreadbacks pass their boundedchecks. Two F81interruptedprefixes retained.",
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "pending": "All three original gates remain UNPROVEN;campaignreadyfalse.",
+  "production_weight_changes": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recipe": {
+    "private_record_sha256": "106fccbb35f5147a8010d4d4a47aba54f59a8627f9233a5052330cc27ae92282",
+    "record_items": 1
+  },
+  "sampling_diagnosis": {
+    "private_record_sha256": "03b4eb41b19db410ff6810e58f9f0f3c0e94205d8baa32db76a3acee465c7d53",
+    "record_items": 1
+  },
+  "schema": "pokemon.policy-runner-integration.v1",
+  "session": "codex-policy-runner-20261112-1832",
+  "source_document_sha256": "ae58c4ed5cd0e9c8500d74aab34ef82b8007c9e66df58882ac5d15ebd2b84ba4",
+  "status": "closed"
+}

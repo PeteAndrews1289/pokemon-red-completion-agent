@@ -1,0 +1,62 @@
+{
+  "DEV_rows_fitted": 0,
+  "TRAIN": {
+    "private_record_sha256": "d16d97d0049327a48b2a66208bac30e4b5bc536eb9e53fbdcde2953ff7a0d59e",
+    "record_items": 18
+  },
+  "TRAIN_and_DEV_kept_separate": true,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "baseline_XP_to_Giovanni_use_witnesses": 3,
+  "baseline_next_comparative_choice_observed": false,
+  "baseline_varied_linked_execution_supported": true,
+  "candidate_XP_to_Giovanni_use_witnesses": 0,
+  "candidate_closed_actions": 15,
+  "candidate_finite_settlement_reserve_preserved": true,
+  "cases": {
+    "private_record_sha256": "308d4b55aedebdbf24b59bf16c81a87922c3f666756f6f5d90bd8e56c23530af",
+    "record_items": 2
+  },
+  "collection_partition": "train",
+  "comparison": {
+    "private_record_sha256": "e4cf0c43399248a42e7833c8a4018ff2b0303328cf3c463ee450616350b13c4a",
+    "record_items": 12
+  },
+  "comparison_partition": "development",
+  "default_changed": false,
+  "evidence_scope": "Primary DEVELOPMENT native comparison with linked eligible TRAIN collection andfit receipts. TRAIN native plans,rows andadmissions retain their original TRAIN partition.",
+  "experimental_weights_changed": true,
+  "fit_calls": 1,
+  "fit_partition": "train",
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "limitations": "The TRAIN family uses scoped K story battlers,carry levels 38–41 and requested trainee levels 6–43. Normal MID uses production 29792a story battlers,a level-51 carry and training requests in the high 40s. This failed conditional transfer test is not production-matched data,causal training necessity or independent generalization. All outcomes and costs remain.",
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 52,
+  "new_campaign": false,
+  "new_censored_windows": 18,
+  "new_fits": 1,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "be8879e06d910f40f35c1bf5128864b668dc314fe02af1ce5a5edb043f38b894",
+    "record_items": 8
+  },
+  "schema": "pokemon.red.train-preparation-choice.v1",
+  "session": "train-preparation-choice-20261117-0548",
+  "source_document_sha256": "7bce8debd6097d73b4f4ec64538513337992c99032e3528e6c9c6f794861e250",
+  "source_runtime_changed": false,
+  "status": "closed_candidate_rejected_campaign_held",
+  "summary": {
+    "private_record_sha256": "753870363cda9bab8be3b378ab25ace3e63f507fde7ecb63a0c87f82af5f8d94",
+    "record_items": 1
+  },
+  "total_fit_rows": 98
+}

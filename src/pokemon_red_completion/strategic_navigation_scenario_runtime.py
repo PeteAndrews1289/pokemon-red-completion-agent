@@ -65,6 +65,7 @@ from pokemon_red_completion.route_plan import (
     RoutePlan,
     RoutePlanningError,
     plan_route,
+    without_macro_departures,
     without_warp_transit,
 )
 from pokemon_red_completion.semantic_traversal import apply_local_passage_requirements
@@ -213,7 +214,7 @@ def _native_silph_elevator_exit(graph, rom, reader, raw):
     if raw.map_id != elevator:
         # A selected return is not a promise about a future elevator visit.
         if graph.edges.get(elevator):
-            return replace(graph, edges={**graph.edges, elevator: ()})
+            return without_macro_departures(graph, elevator)
         return graph
     maps = map_graph(rom)
     source = maps[elevator]
@@ -556,8 +557,7 @@ class StrategicScenarioRouteWorld:
     ) -> RoutePlan:
         elevator = int(MapId.SILPH_CO_ELEVATOR)
         if start.map_id != elevator and self.macro_graph.edges.get(elevator):
-            scoped = replace(self, macro_graph=replace(
-                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+            scoped = replace(self, macro_graph=without_macro_departures(self.macro_graph, elevator))
             return scoped._plan_candidate(start, goal_map, goal_at=goal_at, blocked=blocked)
         try:
             return plan_route(
@@ -738,8 +738,7 @@ class StrategicScenarioRouteWorld:
             raise TypeError("scenario relocation goal must be a non-negative map ID")
         elevator = int(MapId.SILPH_CO_ELEVATOR)
         if start.map_id != elevator and self.macro_graph.edges.get(elevator):
-            scoped = replace(self, macro_graph=replace(
-                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+            scoped = replace(self, macro_graph=without_macro_departures(self.macro_graph, elevator))
             return scoped._bounded_single_cut_plan(start, goal_map, goal_at=goal_at)
         # A prospective approach has no authority to resolve a trainer fight.
         # Reserve the complete observed sight lanes, not only solid objects or

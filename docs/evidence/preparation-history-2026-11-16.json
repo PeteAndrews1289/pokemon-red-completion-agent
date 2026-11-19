@@ -1,0 +1,73 @@
+{
+  "DEV_rows_fitted": 0,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restore_delta": 0,
+  "baseline_technical_budget_export_failure_preserved": true,
+  "campaign_ready": false,
+  "candidate_frozen_runtime_changed": false,
+  "cash_chain_local_pass": true,
+  "checkpoint_fix_archived_failed_terminal_replay_passed": true,
+  "checkpoint_fix_checks": 141,
+  "comparison_is_not_a_completion_time_speedup": true,
+  "cross_chunk_sequence_history_repair": false,
+  "default_changed": false,
+  "editable_checkpoint_export_fix_outside_F137": true,
+  "first_preparation_history_cause_falsified": true,
+  "fit_allowed": false,
+  "fit_calls": 1,
+  "fit_partition": "train",
+  "formal_full124_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "full_restored_in_battle_reentry_qualified": false,
+  "full_suite": false,
+  "learning_credit_correction": "Earlier exposed local contrast is not credited as a predeclared untouched holdout;retain benefit facts and opt-in integration credit.",
+  "metrics": {
+    "private_record_sha256": "1f5983cdedbcdc9ddd7195a628e6066855bd724d3f866f4a4ea6a2834b7428cd",
+    "record_items": 8
+  },
+  "models_adopted": 0,
+  "native_actors_fit_calls": 0,
+  "native_episode": true,
+  "new_admitted_TRAIN_rows": 19,
+  "new_campaign": false,
+  "new_fits": 1,
+  "new_gameplay_TRAIN_rows": 15,
+  "new_independent_origins": 0,
+  "new_policy_contract_checks": 82,
+  "observed_behavior_family_declared": true,
+  "one_related_historical_origin": true,
+  "overlapping_windows_correlated": true,
+  "partition": "development",
+  "postcapture_local_pass": false,
+  "postcapture_wrapper_timeout_preserved": true,
+  "prior_fit_rows_retained": 13,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "819e7a49fa8d8403e621005ec5b6c366f579acd3c12a40c42f17f04661a13080",
+    "record_items": 11
+  },
+  "recipe": "Frozen F136 source plus independently pinned F13732-window critic;not a newly copied full package.",
+  "reused_retained_TRAIN_rows": 4,
+  "reviewers": {
+    "private_record_sha256": "0fa4b1af5bc3b623e056b1f6fd1299d18b6ec4689a7b3e10c7ce5d826e543bb3",
+    "record_items": 2
+  },
+  "schema": "pokemon.red.preparation-history-learning.v1",
+  "session": "preparation-history-20261116-1337",
+  "source_document_sha256": "2e63b9140f5b0e6d92dc6c2d546634b79c517aab5db73c9e26b67adca7787c7f",
+  "source_runtime_changed": true,
+  "status": "closed_local_cash_chain_benefit_campaign_held",
+  "summary": {
+    "private_record_sha256": "1c0e142305ec1b68949f6086551299c1646f90989448b016571a95fecb7da0a3",
+    "record_items": 1
+  },
+  "total_compatible_fit_windows": 32,
+  "unknown_tails_excluded": 3,
+  "venue_efficiency_open": true,
+  "venue_weights_changed": false
+}

@@ -1,0 +1,43 @@
+{
+  "actual_registration_delta": 0,
+  "all_native_controls_released": true,
+  "all_native_players_stopped": true,
+  "all_three_passed": false,
+  "candidate_sha256": "f28de052b01160e8916d43b63696a631cc97d83040cf9fb9f2cfa93a6e6cb928",
+  "configuration_sha256": "fadcac7ad483cdee8400f6da654892d6f70315487d69b7069ee47321139c3a61",
+  "development_only": true,
+  "focused_tests": 145,
+  "fresh_acceptance": false,
+  "full_suite_claim": false,
+  "gate_status": {
+    "private_record_sha256": "2d562f68b00ba6bc7de66e00b87886628e7887fc796073b84c15096e142cf2f6",
+    "record_items": 3
+  },
+  "independent_probe_costs": {
+    "private_record_sha256": "e1c8448ceed3fa692369c9a9e8cbc4a13da815d885f514452710baff45aae964",
+    "record_items": 6
+  },
+  "integration_tests": 279,
+  "late": {
+    "private_record_sha256": "b103504d484e73b1656b61faef323498f15c3f86615a52149acecd4798fa7938",
+    "record_items": 8
+  },
+  "mid": {
+    "private_record_sha256": "7aedb772710cdae317d7cc1f0fd8e2cc8c1f6f36e385ffa7ba2f733b3d41e280",
+    "record_items": 11
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-03T17:13:45.386612+00:00",
+  "policy": "Stochastic parent,full124targets,no optional greedy-only child",
+  "private_evidence_sha256": {
+    "private_record_sha256": "a7c70b406acf6102a43c68838abd404a598e4c3d5dfa64f6ccaff15c9e5200e2",
+    "record_items": 4
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualified_full_pp_repair": true,
+  "root_and_native_seconds_overlap": true,
+  "schema": "pokemon.dig-repair-and-refrozen-gates-closeout.v1",
+  "scope": "Related exposed cases. Short LATEallocation is inconclusive at original3300maximum,not a full-horizon failure.",
+  "source_document_sha256": "ed3c668facb7d51f8baddd984424c770db3b93ea6b819a81254150cbd4cbee0b"
+}

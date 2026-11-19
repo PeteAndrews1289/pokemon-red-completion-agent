@@ -85,7 +85,7 @@ def fixture(monkeypatch):
         calls.append("travel")
         tick(7, 50)
         raw.map_id, raw.player_y, raw.player_x = 64, 4, 13
-        return SimpleNamespace(passed=True)
+        return SimpleNamespace(passed=True, interruptions=())
 
     def switch(target_box_index):
         calls.append(("switch", target_box_index))
@@ -132,6 +132,7 @@ def test_full_active_box_offers_action_free_routed_relief(monkeypatch):
         "collection_preserved": True,
         "setup_training_rows": 0,
         "route_steps": 2,
+        "verified_trainer_income": 0,
     }
     assert selected.verify(report).status.value == "succeeded"
     assert f.calls == ["travel", "face", ("switch", 2)]
@@ -266,3 +267,46 @@ def test_transport_cannot_hide_protected_mutation(monkeypatch, change):
     with pytest.raises(storage.RedRoutedStorageReliefError, match="protected state"):
         selected.execute()
     assert not any(isinstance(item, tuple) and item[0] == "switch" for item in f.calls)
+
+
+@pytest.mark.parametrize("income,delta,accepted", [(660,660,True),(660,661,False),(0,660,False),(660,0,False),(-1,-1,False),(True,1,False),(1.0,1,False),("660",660,False)])
+def test_only_exact_verified_trainer_income_survives_storage_transport(monkeypatch,income,delta,accepted):
+    import pokemon_red_completion.red_routed_recovery as recovery
+    f=fixture(monkeypatch)
+    f.router.routed_recovery=True
+    handler=SimpleNamespace(verified_trainer_income=income)
+    monkeypatch.setattr(recovery,"guarded_collection_route_handler",lambda *a,**k:handler)
+    travel=storage.execute_route
+    def paid(*a,**k):
+        result=travel(*a,**k)
+        f.raw.player_money+=delta
+        return result
+    monkeypatch.setattr(storage,"execute_route",paid)
+    selected=next(b for b in storage.bind_routed_storage_relief(f.router,f.bindings,f.observation).bindings if b.kind is GoalKind.MANAGE_STORAGE)
+    if not accepted:
+        with pytest.raises(storage.RedRoutedStorageReliefError):selected.execute()
+        assert not any(isinstance(c,tuple)and c[0]=="switch"for c in f.calls)
+        return
+    report=selected.execute()
+    assert report.evidence["routed_storage_relief"]["verified_trainer_income"]==660
+    assert selected.verify(report).status.value=="succeeded"
+    f.raw.player_money+=1
+    assert selected.verify(report).status.value=="failed"
+
+@pytest.mark.parametrize("mutation",["bag","stock","counts","box"])
+def test_verified_payout_never_waives_storage_protection(monkeypatch,mutation):
+    import pokemon_red_completion.red_routed_recovery as recovery
+    f=fixture(monkeypatch);f.router.routed_recovery=True
+    monkeypatch.setattr(recovery,"guarded_collection_route_handler",lambda *a,**k:SimpleNamespace(verified_trainer_income=660))
+    travel=storage.execute_route
+    def corrupt(*a,**k):
+        result=travel(*a,**k);f.raw.player_money+=660
+        if mutation=="bag":f.raw.bag_items=()
+        elif mutation=="stock":f.collection.specimens=("other",)
+        elif mutation=="counts":f.collection.box_counts=(19,)+(20,)*11
+        else:f.collection.current_box_index=1
+        return result
+    monkeypatch.setattr(storage,"execute_route",corrupt)
+    selected=next(b for b in storage.bind_routed_storage_relief(f.router,f.bindings,f.observation).bindings if b.kind is GoalKind.MANAGE_STORAGE)
+    with pytest.raises(storage.RedRoutedStorageReliefError,match="protected state"):selected.execute()
+    assert not any(isinstance(c,tuple)and c[0]=="switch"for c in f.calls)

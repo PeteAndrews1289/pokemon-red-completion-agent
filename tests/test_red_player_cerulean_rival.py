@@ -64,7 +64,11 @@ def fixture(monkeypatch, *, lost=False, identity=(225, 25, 8), proof=True, inclu
             public_dict=lambda: {"outcome": "lost" if lost else "won"},
         )
 
-    monkeypatch.setattr(r, "FrozenStoryBattleController", lambda *a, **k: N(run=battle))
+    def controller(*args, **kwargs):
+        raw.declared_decisions = kwargs["maximum_decisions"]
+        return N(run=battle, maximum_decisions=raw.declared_decisions)
+
+    monkeypatch.setattr(r, "FrozenStoryBattleController", controller)
     binding = r.cerulean_rival_binding(rt, actions, route=route, battler=object())
     result = (rt, actions, raw, binding, calls, inputs, lesson)
     return result + (route,) if include_route else result
@@ -76,6 +80,7 @@ def test_rival_execution_is_learned_and_never_completes_bill(monkeypatch, lost):
     assert not calls and not inputs and actions.actions_executed == 0
     report = binding.execute()
     assert len(calls) == 1 and not report.evidence["objective_completed"]
+    assert raw.declared_decisions == 160
     assert "help_bill" not in lesson["completed_objectives"]
     verdict = binding.verify(report)
     if lost:
@@ -146,7 +151,11 @@ def test_revision_bound_entry_reuses_owned_battle_and_paid_loss(monkeypatch, fau
             public_dict=lambda: {"outcome": "lost" if fault == "lost" else "won"},
         )
 
-    monkeypatch.setattr(r, "FrozenStoryBattleController", lambda *a, **k: N(run=battle))
+    def controller(*args, **kwargs):
+        raw.declared_decisions = kwargs["maximum_decisions"]
+        return N(run=battle, maximum_decisions=raw.declared_decisions)
+
+    monkeypatch.setattr(r, "FrozenStoryBattleController", controller)
     binding = r.scripted_rival_binding(
         rt,
         actions,
@@ -198,7 +207,11 @@ def test_ship_reuses_gate_with_declared_direction_and_native_script(monkeypatch,
         phase[0] = 4 if proof else 3
         return N(outcome="won", field_ready=True, public_dict=lambda: {"outcome": "won"})
 
-    monkeypatch.setattr(r, "FrozenStoryBattleController", lambda *a, **k: N(run=battle))
+    def controller(*args, **kwargs):
+        raw.declared_decisions = kwargs["maximum_decisions"]
+        return N(run=battle, maximum_decisions=raw.declared_decisions)
+
+    monkeypatch.setattr(r, "FrozenStoryBattleController", controller)
     binding = r.scripted_rival_binding(
         rt,
         actions,
@@ -217,3 +230,24 @@ def test_ship_reuses_gate_with_declared_direction_and_native_script(monkeypatch,
     assert binding.verify(report).status is (
         GoalDecisionOutcome.SUCCEEDED if proof else GoalDecisionOutcome.FAILED
     )
+
+
+@pytest.mark.parametrize("fault", [None, "count", "identity", "closed", "unsupported"])
+def test_rival_whole_budget_wiring_cannot_reset(monkeypatch, fault):
+    from pokemon_red_completion.red_player_story_battle import RivalBattleDecisionBudgetReached
+    rt, actions, raw, _, calls, inputs, _, route = fixture(monkeypatch, include_route=True)
+    contract = r.cerulean_rival_contract(route.rom, rt.reader)
+    def battle(*a, **k):
+        calls.append(k)
+        raw.battle_state = 0 if fault == "closed" else 2
+        if fault == "identity": rt.reader.read_active_trainer_identity = lambda:(225,25,7)
+        return N(outcome="unresolved",field_ready=False,episode=N(
+            stop_reason="unsupported_struggle_boundary" if fault == "unsupported" else "decision_budget",
+            battle_won=False,decisions=tuple(range(159 if fault == "count" else 160)),final_battle_state=raw.battle_state))
+    monkeypatch.setattr(r,"FrozenStoryBattleController",lambda *a,**k:N(run=battle,maximum_decisions=k["maximum_decisions"]))
+    binding=r.cerulean_rival_binding(rt,actions,route=route,battler=object())
+    with pytest.raises(RuntimeError if fault else RivalBattleDecisionBudgetReached) as error:
+        binding.execute()
+    if fault: assert str(error.value)=="rival battle did not settle"
+    else: assert error.value.reason_code=="rival_whole_battle_decision_budget"
+    assert len(calls)==1

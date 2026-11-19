@@ -1,0 +1,67 @@
+{
+  "DEV_fit_rows": 0,
+  "F123_package_sha256": "2de388afd582f47c681114f96920f3b4b4613ac4dc15718c018fb50d2be30685",
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "adopted_models": 0,
+  "bytes_unchanged": true,
+  "candidate_adoption": "REJECTED",
+  "cash_replay": {
+    "private_record_sha256": "33db5e6fb9022af640de4be518da1138f1eb92fdb31b135024480b61aa5e4bfe",
+    "record_items": 5
+  },
+  "causal_necessity_proven": false,
+  "checks_overlap_not_summed": true,
+  "collection_initial_chunk_choices": 12,
+  "comparison": {
+    "private_record_sha256": "b7197b809e45b9d648923965c20a20f0b1bf00bf4447a9c4d1514840cbc3f0cf",
+    "record_items": 4
+  },
+  "comparison_readback_loads": 276,
+  "comparison_readback_states": 92,
+  "complete_genesis": false,
+  "continuation_comparison_chunk_choices": 8,
+  "deadline_ROOT_limits_unchanged": true,
+  "external_reviews_used": false,
+  "first_fit_composition_refused_missing_cash": true,
+  "fit_calls": 2,
+  "fit_prerequisite_checks": 29,
+  "fresh_campaign_qualified": false,
+  "full_suite": false,
+  "goal_switching_solved": false,
+  "held_out_benefit": false,
+  "local_fit_cap_amended_1_to_2_by_Codex_under_current_user_and_repository_permission": true,
+  "masked_channels": {
+    "private_record_sha256": "3f815bb5e2a5f599d07099f4db7477f7a5ccfe2784c1b586ba5805d91d164c9f",
+    "record_items": 2
+  },
+  "measured_target_channels": {
+    "private_record_sha256": "597f2084cb587a509bc7c1b15e834277a7af4c8682b7668737636fb4fca36018",
+    "record_items": 5
+  },
+  "new_campaign": false,
+  "new_task_audit_adapter_checks": 27,
+  "ordinary_comparison_battle_losses": 4,
+  "physical_frames": 0,
+  "physical_inputs": 0,
+  "positive_task_windows": 3,
+  "prior_F123_auditor_claim_corrected": true,
+  "production_V4_H3_stride1": true,
+  "progress": {
+    "private_record_sha256": "3c4704a2ae8d3951081a78feec620673c8e1f12099b23d336efe0e84b8fe9169",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "runtime_defaults_unchanged": true,
+  "same_Erika_frame_ratio": 3.5296597895007884,
+  "same_source_stop_vs_extra_preparation_counterexample": true,
+  "session": "production-preparation-20261115-0619",
+  "single_correlated_TRAIN_origin": true,
+  "source_document_sha256": "901f1cbe547667b374906bfc42ee614b883231a4cc038c9a6fd74896f111142f",
+  "sources_overlap_fit": true,
+  "technical_gameplay_errors": 0,
+  "training_necessity_credit": "Scoped matched native counterexample: baseline stops afterone dose and wins sameErika at lower whole cost than four-dose candidate. Doesnot prove alltraining unnecessary,causality,heldoutbenefit or candidate improvement.",
+  "unique_native_TRAIN_windows": 21,
+  "whole_Code_parity": false,
+  "whole_normal_runner_parity": false
+}

@@ -128,3 +128,27 @@ def test_resource_completion_requires_actual_stock_and_local_species(monkeypatch
 def test_invalid_resource_contract_rejected(species, stock):
     with pytest.raises(ValueError, match="resource curriculum"):
         NativeResourceCurriculum(("pokedex",), (("starter", 8),), species, stock)
+
+
+@pytest.mark.parametrize("fault", [None, "missing_hof", "boxed_combat_specimen", "global_ledger_only"])
+def test_full_resource_completion_uses_local_flags_retained_story_and_declared_party(monkeypatch, fault):
+    import pokemon_red_completion.red_player_curriculum as module
+    from pokemon_red_completion.red_collection import RED_SOLO_COLLECTION_CONTRACT
+
+    monkeypatch.setattr(module, "_raw_party_fully_restored", lambda _: True)
+    b = boundary()
+    species = RED_SOLO_COLLECTION_CONTRACT.target_species
+    b.lesson_snapshot["completed_objectives"] = ["defeat_champion", "enter_hall_of_fame"]
+    b.observation.collection_observation.owned_species = species
+    # A global ledger is deliberately present but must never satisfy this predicate.
+    b.registered.owned_species = species
+    if fault == "missing_hof":
+        b.lesson_snapshot["completed_objectives"].remove("enter_hall_of_fame")
+    elif fault == "boxed_combat_specimen":
+        b.lesson_snapshot["party"] = [{"specimen_ref": "other", "level": 80}]
+    elif fault == "global_ledger_only":
+        b.observation.collection_observation.owned_species = species[:-1]
+    curriculum = NativeResourceCurriculum(
+        ("defeat_champion", "enter_hall_of_fame"), (("starter", 1),), species
+    )
+    assert (curriculum.completion(b) is not None) == (fault is None)

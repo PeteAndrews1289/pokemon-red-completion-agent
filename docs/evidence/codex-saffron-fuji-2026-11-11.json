@@ -1,0 +1,52 @@
+{
+  "actual_registration_delta": 0,
+  "baseline": {
+    "private_record_sha256": "00208f68b6ff0b512026ae75f8ef91147c0666feb939521d723e0fe62c47aac2",
+    "record_items": 2
+  },
+  "baseline_objective_decisions": 90,
+  "candidate": {
+    "private_record_sha256": "178f4e59651bca11ccea76cd565ebdadb29044492024214d01cbdbea03249cd9",
+    "record_items": 2
+  },
+  "candidate_commitment_overrides": {
+    "private_record_sha256": "fb7fad7b54c17fd0a73c5915d939e052c8ce45c6f3a93c16722259a82ffd9e20",
+    "record_items": 4
+  },
+  "candidate_objective_decisions": 90,
+  "date": "2026-11-11",
+  "diagnostic_registration_delta": 0,
+  "each_full_decisions": 96,
+  "evidence": {
+    "private_record_sha256": "f9aa24e997a56044085fd38061cf3b24b11056ff0e96785586d1ec8ef3f6b718",
+    "record_items": 12
+  },
+  "evidence_root": {
+    "private_record_sha256": "7449c2f70b36fdec74a462e092c5b34cf010645e0b475e8dd9b1beee0147cb4d",
+    "record_items": 1
+  },
+  "exact_three_way_native_state_kind_prefix": 96,
+  "fits": 0,
+  "formal_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "game_source_changes": 0,
+  "native_gameplay_errors": 0,
+  "new_train_rows": 0,
+  "new_unit_tests_run": 0,
+  "objective": "rescue_fuji plus earned Poke Flute",
+  "performance_improvement_shown": false,
+  "prior612_focused_checks_historical_not_rerun": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "saffron_audit": {
+    "private_record_sha256": "bd3c7de3c7cb61cfe75dc76b960f34a7acbd92e083d1d97fb983fdf7e8ba8aef",
+    "record_items": 1
+  },
+  "schema": "pokemon.codex.saffron-fuji-summary.v1",
+  "session_id": "codex-saffron-objective-20261111-2230",
+  "source_document_sha256": "370557d11285b11477e271d15922eb4c36d740304560c0fad87914850d7345b2",
+  "status": "All5 native diagnostic cases stopped; source writer sealing closeout; no campaign",
+  "weight_changes": 0,
+  "whole_campaign_qualified": false
+}

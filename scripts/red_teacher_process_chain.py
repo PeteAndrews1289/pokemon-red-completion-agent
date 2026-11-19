@@ -130,7 +130,9 @@ def validate_chain(spec, resource, early, setup, root, launch, snapshot, *, poke
     if not isinstance(actual, dict) or actual["ProcessId"] != launch["launch_process_id"]:
         raise ValueError("Windows original launch identity missing")
     exact = '"' + spec["wsl_executable"] + '" ' + " ".join(expected)
-    if actual["CommandLine"] != exact:
+    # Windows PowerShell may append argument-separator whitespace to Start-Process.
+    # Keep every executable/argument byte exact and retain the original receipt.
+    if actual["CommandLine"].rstrip(" \t") != exact:
         raise ValueError("Windows actual command differs")
     if snapshot["original_process"] != actual:
         raise ValueError("snapshot is not the launched Windows process")

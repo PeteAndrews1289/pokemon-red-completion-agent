@@ -1,0 +1,74 @@
+{
+  "DEV_rows_fitted": 0,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "case_costs": {
+    "private_record_sha256": "20ee087b065eaab933e98b1dd408268afb3396c78d56eea0dec3e89c9b2518de",
+    "record_items": 2
+  },
+  "case_registrations": {
+    "private_record_sha256": "a8e28a7d9f1efcd016de6dbf3ac69d1f78628e666c9316c56afa0a779039645d",
+    "record_items": 2
+  },
+  "causal_training_necessity_proven": false,
+  "closed_goals_per_arm": {
+    "private_record_sha256": "0f3c05ee3645f9bb5eeb2690f5a4b6b521e5597933205a7d009bbe4046055237",
+    "record_items": 2
+  },
+  "control_and_boundary_parity": true,
+  "default_changed": false,
+  "earlier_Safari_Koga_Silph_loop_tested": false,
+  "effective_preparation_head": "5bc4a43d40278020df16a6dc4ec2113af05de596c8e38fb903a83e768f10d122",
+  "fit_allowed": false,
+  "fit_calls": 0,
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "helper_XP": 16574,
+  "machine_lesson_count": 3,
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "prepared_use_proofs": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "028966904a5470ef0e31f3ae12ce51ef7ff1bc3d43adbf33361744a19bc2defb",
+    "record_items": 7
+  },
+  "routed_XP_use_proofs": 0,
+  "routed_training_count": 3,
+  "routed_unique_trainees_used": 1,
+  "schema": "pokemon.red.mid-objective-comparison.v1",
+  "scope_diagnosis": {
+    "private_record_sha256": "8f0e110e4d43cb5b323b711cd9c492a88ce55bac417beb61bd130ee10d142528",
+    "record_items": 1
+  },
+  "session": "mid-objective-comparison-20261117-0506",
+  "source_document_sha256": "6e30845386fe2e1dbcafdc0e8cf0925529a1c1565d3d33aa22ec14626ce3681b",
+  "source_runtime_changed": false,
+  "status": "closed_development_comparison_campaign_held",
+  "summary": {
+    "private_record_sha256": "14bd5730b5f7ab1458963b216f5bf6c6855944f1211c013e988647e500e79f64",
+    "record_items": 1
+  },
+  "target_XP": 13940,
+  "technical_clean_per_arm": {
+    "private_record_sha256": "4aef2ff663cf6eb7e8daaea21877201a7465fc0054a53abb7462476d2c04aca1",
+    "record_items": 2
+  },
+  "unique_trainee_gym_attacks": 2,
+  "varied_linked_execution_supported": false,
+  "weights_changed": false,
+  "whole_objectives": {
+    "private_record_sha256": "862b0033ec2daacf9c2f775062797ab9892120a34e5737632dc6dc9a7ad73412",
+    "record_items": 2
+  }
+}

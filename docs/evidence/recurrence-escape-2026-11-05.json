@@ -1,0 +1,157 @@
+{
+  "CANDIDATE-ADOPTION-DECISION.json": {
+    "private_record_sha256": "1c4435bf7aa22aef757dcff7b2c55c646b6db15df042db797f6fd7c9ac0f2eba",
+    "record_items": 1
+  },
+  "FINAL-CONTROL-RELEASE.json": {
+    "private_record_sha256": "188d67447774663cf7009d69c451964c33e075522a4db43c4072240f612e7d0a",
+    "record_items": 1
+  },
+  "FINAL-FROZEN-INTEGRITY.json": {
+    "private_record_sha256": "91c9d7d36b7a4e89a7158f9358617612f5ca41fdbf5a16e96f10b531caf9c438",
+    "record_items": 1
+  },
+  "GATE-ADJUDICATION.json": {
+    "private_record_sha256": "2d1f0cd51b9e209d9fe4a3e593f145eb3c9d1c30772cb777208decb5fed4efa9",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "80ad1ee005f513001c5156af4e5f795046147e75469e550f317ce49f2d57e918",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "17da8dd4134e1628998dd80949f95439ba3bc1947ae99ad8f11841d32831d9d2",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "04cf21b1ae9de0956e282dd9d88b9f2a50261e49428030ee313020d4a23d9144",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "39f282419419e2436798a5c969e594ed0853ad91d07c2eff2ef64d34e33eae02",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-READBACK-final.json": {
+    "private_record_sha256": "81ebf5d32cfc7dd6f7b19abb4205517c3eb25a9e127e07f325d5b3e7af5b5adc",
+    "record_items": 1
+  },
+  "GATE-LATE-V1-READBACK-milestone.json": {
+    "private_record_sha256": "995f21ff27cd54ff6e6a0ac7a5571f6c6a3c168de4fcb705f5f84b9dac81da10",
+    "record_items": 1
+  },
+  "GATE-MID-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "4463294578baedd68ca4b933936f98e05c8ce0d5fd4a197728014ddbc87041b2",
+    "record_items": 1
+  },
+  "GATE-MID-V1-COST-READBACK.json": {
+    "private_record_sha256": "9f6cf6d5be097968d91727247e1e164d81cf85301f363566a24a833e5697996d",
+    "record_items": 1
+  },
+  "GATE-MID-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "13cf1eda6f87550f3d67ceb6f6658d1647e039bf7c9ee79bad5a6e88d3c668ff",
+    "record_items": 1
+  },
+  "GATE-MID-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "e07267a3c4db7ec5e7f81d217c81e5110f9f51575988a2afbd0cdd0b7d487116",
+    "record_items": 1
+  },
+  "GATE-MID-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "bc3b43d2e7144527cd64c04db81ade9999c7f94ead002576f21a5aaf15c637e2",
+    "record_items": 1
+  },
+  "GATE-MID-V1-READBACK-final.json": {
+    "private_record_sha256": "ab2ae6269353200090f41e9949bae9e83ccba637d22bc675e33cdf8267ca7ff2",
+    "record_items": 1
+  },
+  "GATE-MID-V1-READBACK-milestone.json": {
+    "private_record_sha256": "cb1af325ae7243aba21a58b50d9a4a1805fb279434955f1390a1bc7f66e92701",
+    "record_items": 1
+  },
+  "LATE-15M-REASSESSMENT.json": {
+    "private_record_sha256": "4598dc78f26a76d333e3810357fc63064da59f654217aeec5877b980c7496b74",
+    "record_items": 1
+  },
+  "MID-15M-REASSESSMENT.json": {
+    "private_record_sha256": "d03d67b20b00a49246b7f3f6094ee388c7e2dc27f3666d7c33540d873857c054",
+    "record_items": 1
+  },
+  "REASSESSMENT-15M-v1.json": {
+    "private_record_sha256": "5fa2e6a9511ba0e57535e14c00910821a678fca77847d29f5cb218b9c79840f6",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "e9c21864d706f657072d409aab94ac1005e360cab0f960b5af97d83e23a33e5c",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-COST-READBACK.json": {
+    "private_record_sha256": "864c2768e8e9d1f871c94dea0be9a9310b9275806ed8a05b1afdbde26c00d515",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "9fe7446e8743082c143c4013ea71e9722109cc46ee41533ca1656fae87d833bc",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "d8157a44948f2dfd69f29f0c68e486bcc6bc00a0c7b062332ea666fe0e959b5c",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "84fda3b6eaf0ae8e238f439b4a870e68706715784dc17707ecaca5b52aefecad",
+    "record_items": 1
+  },
+  "RECURRENCE-COPY-V1-QUALIFICATION.json": {
+    "private_record_sha256": "d359dd2f6e2b834cc9fbbe880642c34ae9b5efaa428540162f8b69a0602af54e",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "9b24cde0cc627519fc99b17fe3c3d82fd18a60d982fa24cc2669ac9fafa2db22",
+    "record_items": 1
+  },
+  "TWO-HOUR-AUDIT.json": {
+    "private_record_sha256": "7fa01b62bfccadace55e763840c94ef8c793f8b7cb499c6e0269cf088ecde759",
+    "record_items": 1
+  },
+  "UNIT-FIXTURE-REASSESSMENT.json": {
+    "private_record_sha256": "75a75bd38a3f635f7dfc68f6415a4169305e0cd55713582aae1aaf73a3ff5cd8",
+    "record_items": 1
+  },
+  "actual_registration_delta": 0,
+  "actual_registrations": 55,
+  "actual_retired": true,
+  "all_three_current_gates_passed": true,
+  "candidate": {
+    "private_record_sha256": "86c8ac4f6e40c38ef7c8a24f4a125cdf8e771a8e6240b4f7b60cb8a4ae0e2ca2",
+    "record_items": 1
+  },
+  "current": {
+    "private_record_sha256": "3eed52c68743d0e7d0647caee404cfbf0c7346d2ae366abff96eccbab085266c",
+    "record_items": 2
+  },
+  "focused_tests": {
+    "private_record_sha256": "f32b54b52222842b6d9939968fc6bd50eca0f931a58d48b1ff8e3025d255c762",
+    "record_items": 1
+  },
+  "full_fresh_completion": false,
+  "mission": {
+    "private_record_sha256": "9a3249029166f998e0bf93577ae1d399fb162d9ac7d2015fd82d875d16cc49d4",
+    "record_items": 1
+  },
+  "native_claim": {
+    "private_record_sha256": "a6aaab8d2209e72a8d13af359b9dd95cb0d6f36cc149e6de04e0dc0198893456",
+    "record_items": 3
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-05T19:47:16.062429+00:00",
+  "policy": {
+    "private_record_sha256": "423a3b75b13b2ce8a90ff44a08f7df431b070143b049773e43a2af8a501e2cac",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "source_document_sha256": "ceb46262972c5184981a5e76757e2bf42595a47439aa896aef164b76439c8310",
+  "source_patch": {
+    "private_record_sha256": "8a1042498a800f18d5e430fb163c54b0417596927007404ef6ebfd23dff6dde6",
+    "record_items": 1
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "actual_registration_delta": 0,
+  "all_processes_stopped": true,
+  "bag_cash_specimens_preserved": true,
+  "candidate_sha256": "f28de052b01160e8916d43b63696a631cc97d83040cf9fb9f2cfa93a6e6cb928",
+  "controls_released": true,
+  "dig_escape": {
+    "private_record_sha256": "89de6478ad1b72408b0548493564a258faa78858994721cb888acf5ab1ce5e1b",
+    "record_items": 5
+  },
+  "discarded_hypothesis": "Landing terrain refresh alone failed native qualification;retained candidate602and failure,removed from adopted code.",
+  "focused_checks": 145,
+  "full_suite_claim": false,
+  "integration_checks": 279,
+  "native_baseline_quote_sha256": "7d016c0dfae91fd137a7aebe900c336eb412444ffb4b7a8e1cd2cd8904a387d4",
+  "native_costs": {
+    "private_record_sha256": "29e0cd319a973f44ac36ea47fa971fc59abc7a6445aba066d7886a6f128d9904",
+    "record_items": 6
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-03T16:02:06.611831+00:00",
+  "parent_selected": true,
+  "partition": "development",
+  "private_qualification_sha256": "6e505976ef7350d83726d94ac67524ff485495fa09511906e89ffef8aeabda38",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "repair": {
+    "private_record_sha256": "8b548bcba93a904adab7ea6293a47895d2cbd6b62089088fe25a08f1158b9130",
+    "record_items": 1
+  },
+  "resource_note": "Prospective soft threshold4GiB equals unchanged hard4GiB;no OOM. Startup135.215seconds vs earlier unprofiled failed138.822does not establish throughput improvement;hard memory pressure remained.",
+  "root_cause": "Full-PP nursing used a usable-PP recovery mode. A healthy party with nonzero but submaximum PP was rejected after legal escape despite a one-step Center route.",
+  "schema": "pokemon.full-pp-dig-recovery-native-qualification.v1",
+  "scope": "Exact related failed-source replay,not fresh acceptance or a gate pass",
+  "source_document_sha256": "176bace99dab5e7649860b39bd98484a04a563db7d5e197e1300ff7b093bf01a",
+  "source_sha256": "eead15e899a9529435416869f981633f0f614d472f7ed164c40c823dcfc23d63",
+  "status": "PASS",
+  "whole_party_hp_status_pp_restored": true
+}

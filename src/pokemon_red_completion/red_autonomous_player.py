@@ -1482,7 +1482,7 @@ def run_autonomous_options(
                 from .collection_training_cost import measured_training_cost
 
                 context = collection_contexts[selected.binding_ref]
-                observation = measured_training_cost(outcome, context["transition"])
+                observation = measured_training_cost(outcome, context["transition"], context=context)
                 if observation is not None:
                     memory.record_collection_training_cost(context["key"], observation)
                     _record(step / "collection-cost-after.json", dict(

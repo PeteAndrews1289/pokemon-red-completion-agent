@@ -340,7 +340,7 @@ def test_prepared_level_floor_excludes_unprepared_status_reserve(monkeypatch):
     prepare.minimum_prepared_helper_level = 55
     assert prepare()
     assert world.turns == prepare.attempts == 0
-    assert prepare.throw_preparations[-1]["target_status"] == "healthy"
+    assert prepare.throw_preparations[-1]["target_status"] == StatusCondition.HEALTHY.value
 
 
 @pytest.mark.parametrize("floor", [0, 101, True, 55.0])
@@ -535,7 +535,7 @@ def test_absent_helper_does_not_choose_damaging_replacement(monkeypatch):
     assert world.turns == 0 and prepare.reports == []
 
 
-def test_fainting_aborts_before_another_status_attempt(monkeypatch):
+def test_unconfirmed_native_faint_aborts_before_another_status_attempt(monkeypatch):
     world, prepare = setup(monkeypatch)
 
     def faint(*args, **kwargs):
@@ -704,3 +704,150 @@ def test_rest_does_not_waive_owned_pp_proof(monkeypatch):
     with pytest.raises(runtime.RedCaptureStatusError, match="PP differs"):
         prepare()
     assert not prepare.reports
+
+
+def test_disabled_status_slot_is_not_submitted(monkeypatch):
+    from pokemon_red_completion.battle_runtime import _choose_usable_slot
+
+    world, prepare = setup(monkeypatch)
+    first = replace(world.party.members[0], moves=tuple(
+        MoveObservation(move, 10) for move in (33, 45, 43, 95)
+    ))
+    world.party = replace(world.party, members=(first, world.party.members[1]))
+    world.raw = replace(
+        world.raw, active_party_moves=(33, 45, 43, 95), active_party_pp=(10, 10, 10, 10),
+        player_disabled_move_slot=4, player_disable_turns=2,
+    )
+
+    def guarded_turn(*_args, **kwargs):
+        # Use the unchanged executor legality guard: this must never receive
+        # the observed disabled status slot, rather than tolerating its error.
+        _choose_usable_slot(
+            lambda _raw: kwargs["selected_slot"], world.raw,
+            intent=None, label="non-damaging capture status",
+        )
+        raise AssertionError("No usable status move was available")
+
+    monkeypatch.setattr(runtime, "execute_bounded_battle_move_turn", guarded_turn)
+    assert prepare()
+    assert prepare.attempts == world.turns == 0
+    assert prepare.reports == []
+    assert world.status == 0
+    assert world.party.members[0].moves[3].current_pp == 10
+    assert prepare.throw_preparations[-1]["target_status"] == StatusCondition.HEALTHY.value
+
+
+def test_disable_from_opponent_reply_prevents_another_status_attempt(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    ordinary_turn = world.turn
+
+    def disable_reply(*args, **kwargs):
+        result = ordinary_turn(*args, **kwargs)
+        world.raw = replace(
+            world.raw, player_disabled_move_slot=1, player_disable_turns=3,
+        )
+        return result
+
+    monkeypatch.setattr(runtime, "execute_bounded_battle_move_turn", disable_reply)
+    assert prepare()
+    assert prepare.attempts == world.turns == 1
+    assert len(prepare.reports) == 1
+    assert not prepare.reports[0]["status_success"]
+    assert world.status == 0
+
+
+def test_disable_observed_after_switch_prevents_stale_status_submission(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(world.raw, active_party_index=1)
+
+    def opponent_disables_helper(_actions, _reader, _emulator, index, **_kwargs):
+        world.raw = replace(
+            world.raw, active_party_index=index,
+            player_disabled_move_slot=1, player_disable_turns=2,
+        )
+
+    monkeypatch.setattr(runtime, "switch_active_battler", opponent_disables_helper)
+    assert prepare()
+    assert prepare.attempts == world.turns == 0
+    assert world.status == 0
+
+
+def test_active_disable_does_not_remove_bench_status_capability(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(
+        world.raw, active_party_index=1,
+        player_disabled_move_slot=1, player_disable_turns=3,
+    )
+    switches = []
+
+    def ordinary_switch(_actions, _reader, _emulator, index, **_kwargs):
+        switches.append(index)
+        world.raw = replace(
+            world.raw, active_party_index=index,
+            player_disabled_move_slot=0, player_disable_turns=0,
+        )
+
+    ordinary_turn = world.turn
+
+    def sleep_turn(*args, **kwargs):
+        result = ordinary_turn(*args, **kwargs)
+        world.status = 3
+        return result
+
+    monkeypatch.setattr(runtime, "switch_active_battler", ordinary_switch)
+    monkeypatch.setattr(runtime, "execute_bounded_battle_move_turn", sleep_turn)
+    assert prepare()
+    assert switches[0] == 0
+    assert prepare.attempts == world.turns == 1
+    assert prepare.reports[0]["status_success"]
+
+
+@pytest.mark.parametrize(("slot", "turns"), [(1, 0), (1, None), (2, 3)])
+def test_inactive_disable_preserves_existing_status_behavior(monkeypatch, slot, turns):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(
+        world.raw, player_disabled_move_slot=slot, player_disable_turns=turns,
+    )
+    assert prepare()
+    assert prepare.attempts == world.turns == 3
+
+
+@pytest.mark.parametrize("move", (120, 153))
+@pytest.mark.parametrize("drift", (None, "same_move", "other_effect", "bag", "storage", "party_pp", "other_hp", "faint", "money", "tile", "field", "losing_result"))
+def test_renewable_switch_self_destruct(monkeypatch, move, drift):
+    world, prepare = setup(monkeypatch)
+    prepare.allow_renewable_self_destruct_exit = True
+    world.status = 3
+    world.raw = replace(world.raw, party_hp=(50, 200), party_moves=((95,), (57,)), party_pp=((10,), (10,)),
+                        player_money=541, party_status=(0, 0))
+    buffer = [move, 7] if drift == "same_move" else [111, 11]
+    box = ["unchanged"]
+    prepare.emulator = SimpleNamespace(pressed_buttons=(), read_u8=lambda a: buffer[a - runtime.RamAddress.ENEMY_MOVE_NUM])
+    world.read_enemy_capture_moves = lambda: (120, 153, 113, 129)
+    world.read_pokedex_state = lambda: SimpleNamespace(owned_species=(1, 2))
+    world.read_current_box_state = lambda: SimpleNamespace(box_index=2)
+    world.read_box_specimen_identities = lambda: tuple(box)
+    world.read_input_readiness = lambda: SimpleNamespace(ready=drift != "field")
+    world.read_bottom_dialogue_box_visible = world.read_overworld_start_menu_visible = lambda: False
+
+    def switch(_actions, _reader, _emulator, slot, **options):
+        assert options["allow_wild_field_return"] and slot == 1
+        changes = {"bag": {"bag_items": ((4, 1),)}, "party_pp": {"party_pp": ((9,), (10,))},
+                   "other_hp": {"party_hp": (49, 136)}, "faint": {"party_hp": (50, 0)},
+                   "money": {"player_money": 500}, "tile": {"player_y": 1}, "losing_result": {"battle_result": 1}}
+        settled = dict(battle_state=0, battle_result=0, enemy_hp=0, party_hp=(50, 136))
+        settled.update(changes.get(drift, {}))
+        world.raw = replace(world.raw, **settled)
+        if drift == "storage":
+            box.clear()
+        buffer[:] = [move, 9 if drift == "other_effect" else 7]
+
+    monkeypatch.setattr(runtime, "switch_active_battler", switch)
+    if drift:
+        with pytest.raises(runtime.RedCaptureStatusError, match="unverified wild exit"):
+            prepare()
+    else:
+        assert prepare() is False
+        assert prepare.reports[-1]["opponent_self_destruct_move"] == move
+        assert prepare.reports[-1]["balls_spent"] == 0
+    assert not prepare.throw_preparations

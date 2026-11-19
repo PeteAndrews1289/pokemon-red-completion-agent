@@ -110,13 +110,137 @@ def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
     evidence = _read(root, reference["path"])
     if hashlib.sha256((root / reference["path"]).read_bytes()).hexdigest() != reference["sha256"]:
         raise ValueError("roadmap learning evidence changed")
+    validate_progress(root, state)
     return baseline, state, lane, evidence
+
+
+
+PROGRESS_RUBRICS = {"workstream-checklist-v1": "56c9f953b14480f60c38f42bc18a7060a8145cba2434a83e655f31cda070445e"}
+
+
+def progress_rows(state: dict) -> list[dict]:
+    """Derive checklist percentages and percentage-point deltas; never average workstreams."""
+    tracking = state.get("workstream_progress")
+    if tracking is None:
+        return []  # Older archived roadmap documents have no invented baseline.
+    latest = tracking["sessions"][-1]
+    rows = []
+    for workstream in tracking["workstreams"]:
+        key = workstream["id"]
+        total = len(workstream["criteria"])
+        before = len(latest["before"][key])
+        after = len(latest["after"][key])
+        rows.append(dict(id=key, title=workstream["title"], total=total, done=after,
+                         before=100 * before / total, percent=100 * after / total,
+                         delta=100 * (after - before) / total))
+    return rows
+
+
+def validate_progress(root: Path, state: dict) -> None:
+    tracking = state.get("workstream_progress")
+    if tracking is None:
+        return
+    workstreams = tracking["workstreams"]
+    rubric = [dict(id=w["id"], title=w["title"], criteria=[
+        {k: c[k] for k in ("id", "label", "group")} for c in w["criteria"]
+    ]) for w in workstreams]
+    digest = hashlib.sha256(json.dumps(rubric, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    if (PROGRESS_RUBRICS.get(tracking["rubric_version"]) != digest
+            or tracking["rubric_sha256"] != digest):
+        raise ValueError("progress denominator changed; explicitly version and rebaseline the rubric")
+    inventory = {w["id"]: {c["id"] for c in w["criteria"]} for w in workstreams}
+    for w in workstreams:
+        if not w["criteria"] or len(inventory[w["id"]]) != len(w["criteria"]):
+            raise ValueError("progress criterion inventory differs")
+        for criterion in w["criteria"]:
+            evidence = criterion["evidence"]
+            if type(criterion["done"]) is not bool or (criterion["done"] and not evidence):
+                raise ValueError("progress credit requires evidence")
+            if evidence:
+                _read(root, evidence["path"])
+                if hashlib.sha256((root / evidence["path"]).read_bytes()).hexdigest() != evidence["sha256"]:
+                    raise ValueError("progress evidence changed")
+    previous = None
+    sessions = tracking["sessions"]
+    if (not sessions or sessions[0]["session"] != tracking["baseline_session"]
+            or sessions[-1]["session"] != state["as_of_session"]
+            or len({s["session"] for s in sessions}) != len(sessions)):
+        raise ValueError("progress session history is stale")
+    for index, session in enumerate(sessions):
+        for key in ("before", "after"):
+            snapshot = session[key]
+            if set(snapshot) != set(inventory) or any(
+                len(values) != len(set(values)) or not set(values) <= inventory[k]
+                for k, values in snapshot.items()
+            ):
+                raise ValueError("progress snapshot differs from rubric")
+        if index == 0:
+            if session["kind"] != "baseline" or session["before"] != session["after"]:
+                raise ValueError("progress baseline cannot invent a session gain")
+        elif session["kind"] != "session" or session["before"] != previous:
+            raise ValueError("progress history must carry the previous closeout forward")
+        previous = session["after"]
+    current = {w["id"]: [c["id"] for c in w["criteria"] if c["done"]] for w in workstreams}
+    if current != previous:
+        raise ValueError("progress current credit differs from latest session closeout")
+
+
+def progress_markdown(state: dict) -> list[str]:
+    rows = progress_rows(state)
+    if not rows:
+        return []
+    tracking = state["workstream_progress"]
+    output = ["## Workstream completion and session change", "",
+        "Percentages measure verified checkpoints in the fixed **workstream-checklist-v1** rubric.",
+        "They are a coarse capability assessment, not a fraction of remaining hours, a success probability,",
+        "or an overall project percentage. Some checked capabilities are historical scoped proofs;",
+        "the unchecked integration and fresh-run criteria require the current exact recipe.", "",
+        "Baseline starts with this tracking history; no earlier session gains are invented.",
+        "**pp** means percentage points: 40% to45% is +5pp. Regressions may reduce a score.", "",
+        "| Workstream | Verified checkpoints | Completion | This session |",
+        "| --- | ---: | ---: | ---: |"]
+    for row in rows:
+        output.append(f"| {row['title']} | {row['done']}/{row['total']} | {row['percent']:.1f}% | {row['delta']:+.1f}pp |")
+    output += ["", "### Evidence checklist", "",
+        "Equal checkpoint weights are a reporting convention; they do not imply equal difficulty.",
+        "Adding or changing checkpoints requires a new rubric version and explicit rebaseline,",
+        "reported separately from earned progress. Tracking/documentation alone earns no checkpoint.", ""]
+    for w in tracking["workstreams"]:
+        output += [f"#### {w['title']}", ""]
+        groups = list(dict.fromkeys(c["group"] for c in w["criteria"] if c["group"]))
+        for group in groups:
+            items = [c for c in w["criteria"] if c["group"] == group]
+            count = sum(c["done"] for c in items)
+            output += [f"{group}: **{count}/{len(items)} ({100 * count / len(items):.1f}%)**.", ""]
+        for c in w["criteria"]:
+            link = f" ([evidence](../{c['evidence']['path']}))" if c["evidence"] else ""
+            output.append(f"- [{'x' if c['done'] else ' '}] {c['label']}{link}")
+        output.append("")
+    output += ["### Recent session percentage-point history", "",
+        "The latest ten sessions are shown here. The [complete existing history](../configs/development-roadmap-state.json) retains every before/after snapshot.", "",
+        "| Session | " + " | ".join(w["id"] for w in tracking["workstreams"]) + " |",
+        "| --- | " + " | ".join("---:" for _ in rows) + " |"]
+    for session in tracking["sessions"][-10:]:
+        cells = []
+        for w in tracking["workstreams"]:
+            total = len(w["criteria"]); key = w["id"]
+            before = 100 * len(session["before"][key]) / total
+            after = 100 * len(session["after"][key]) / total
+            cells.append(f"{before:.1f}%→{after:.1f}% ({after-before:+.1f}pp)")
+        output.append("| " + session["session"] + " | " + " | ".join(cells) + " |")
+    output += ["", tracking["sessions"][-1]["note"], ""]
+    return output
+
+
+def _red_delivery_verified(state: dict) -> bool:
+    gate = state.get("red_completion_gate", {})
+    criteria = [value for key, value in gate.items() if key != "evidence"]
+    return bool(criteria) and all(value is True for value in criteria)
 
 
 def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     items = state["milestone"]["items"]
     done = sum(item["done"] for item in items)
-    percentage = round(100 * done / len(items))
     samples = evidence["fit"]["model"]["settled_examples"]
     dex_kind = "living" if baseline["baseline_id"] == "red-first-v1" else "registered"
     checklist_lines = [textwrap.wrap(item["label"], width=48) for item in items]
@@ -124,7 +248,9 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     expansion = max(0, checklist_height + 40 - 299)
     review_lines = textwrap.wrap(state["reviews"][-1]["result"], width=125)
     review_footer_y = 1767 + expansion + len(review_lines) * 25 + 15
-    height = max(1870 + expansion, review_footer_y + 40)
+    progress_height = 600 if progress_rows(state) else 0
+    review_footer_y += progress_height
+    height = max(1870 + expansion + progress_height, review_footer_y + 40)
     colors = {
         "verified": "#57dfb1",
         "current": "#ffd36a",
@@ -135,7 +261,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="{height}" '
         f'viewBox="0 0 1420 {height}" role="img" aria-labelledby="title description">',
         '<title id="title">Pokemon development roadmap</title>',
-        f'<desc id="description">{done} of {len(items)} current checklist items verified, '
+        f'<desc id="description">{done} of {len(items)} historical preparation items verified, '
         "not overall completion. Eight stages lead from the learning loop "
         f"to a cross-game {dex_kind} Pokedex.</desc>",
         "<style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>",
@@ -189,11 +315,11 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(80, 304, f"YOU ARE HERE / PHASE {current_number:02d}", "eyebrow", "#ffd36a")
     text(80, 349, state["milestone"]["title"], "heading")
     parts.append(
-        '<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">'
-        f"{percentage}%</text>"
+        '<text x="80" y="456" style="font-size:56px;font-weight:bold;fill:#ffd36a">'
+        + ('PROVEN' if _red_delivery_verified(state) else 'NOT PROVEN') + '</text>'
     )
-    text(82, 495, f"{done} of {len(items)} acceptance items verified", "body")
-    text(82, 529, "Checklist only. Not phase completion or a time estimate.", "small muted")
+    text(82, 495, f"{done} of {len(items)} historical preparation items", "body")
+    text(82, 529, "Not completed campaigns or a time estimate.", "small muted")
     y = 326
     for item, wrapped in zip(items, checklist_lines, strict=True):
         color = "#57dfb1" if item["done"] else "#8594ad"
@@ -204,16 +330,22 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     parts.append(
         f'<rect x="80" y="{625 + expansion}" width="1260" height="8" rx="4" fill="#293b55"/>'
     )
-    parts.append(
-        f'<rect x="80" y="{625 + expansion}" width="{1260 * done / len(items):g}" '
-        'height="8" rx="4" fill="#ffd36a"/>'
-    )
-    text(50, 695 + expansion, "THE WHOLE JOURNEY", "eyebrow")
-    text(740, 695 + expansion, "VERIFIED", "small", colors["verified"])
-    text(870, 695 + expansion, "CURRENT", "small", colors["current"])
-    text(1000, 695 + expansion, "PLANNED / NOT DEMONSTRATED", "small", colors["planned"])
+    if progress_height:
+        text(50, 695 + expansion, "WORKSTREAM CHECKLIST COMPLETION", "eyebrow", "#57dfb1")
+        text(50, 730 + expansion, "Fixed evidence checkpoints; not time remaining. Session changes in percentage points (pp).", "small muted")
+        for index, row in enumerate(progress_rows(state)):
+            y = 778 + expansion + index * 78
+            text(80, y, row["title"], "body")
+            text(910, y, f"{row['done']}/{row['total']}  {row['percent']:.1f}%  ({row['delta']:+.1f}pp)", "small", "#ffd36a")
+            parts.append(f'<rect x="80" y="{y+15}" width="1260" height="12" rx="6" fill="#293b55"/>')
+            parts.append(f'<rect x="80" y="{y+15}" width="{1260*row["percent"]/100:g}" height="12" rx="6" fill="#57dfb1"/>')
+        text(80, 1240 + expansion, "Baseline established now. Historical scoped proof is distinct from current-recipe integration.", "small muted")
+    text(50, 695 + expansion + progress_height, "THE WHOLE JOURNEY", "eyebrow")
+    text(740, 695 + expansion + progress_height, "VERIFIED", "small", colors["verified"])
+    text(870, 695 + expansion + progress_height, "CURRENT", "small", colors["current"])
+    text(1000, 695 + expansion + progress_height, "PLANNED / NOT DEMONSTRATED", "small", colors["planned"])
     for i, stage in enumerate(baseline["stages"]):
-        x, y = 50 + (i % 2) * 680, 735 + expansion + (i // 2) * 225
+        x, y = 50 + (i % 2) * 680, 735 + expansion + progress_height + (i // 2) * 225
         status = state["stages"][stage["id"]]["status"]
         color = colors[status]
         fill = "#202d3d" if status == "current" else "#111e31"
@@ -223,9 +355,9 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         text(x + 24, y + 72, stage["title"], "heading")
         lines(x + 24, y + 106, stage["goal"], width=57, gap=24)
         lines(x + 24, y + 155, stage["scope"], width=68, cls="small muted", gap=19)
-    text(50, 1694 + expansion, "SESSION CHECK-IN", "eyebrow", "#57dfb1")
-    text(50, 1732 + expansion, state["as_of_session"], "small muted")
-    lines(50, 1767 + expansion, state["reviews"][-1]["result"], width=125)
+    text(50, 1694 + expansion + progress_height, "SESSION CHECK-IN", "eyebrow", "#57dfb1")
+    text(50, 1732 + expansion + progress_height, state["as_of_session"], "small muted")
+    lines(50, 1767 + expansion + progress_height, state["reviews"][-1]["result"], width=125)
     text(
         50,
         review_footer_y,
@@ -251,11 +383,16 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
         "",
         baseline["mission"],
         "",
-        "## Current milestone",
+        "## Delivery status",
         "",
-        f"**{state['milestone']['title']}: {done}/{len(items)} acceptance items "
-        f"({round(100 * done / len(items))}%).**",
-        "This is a checklist, not project completion or a remaining-time estimate.",
+        f"**{state['milestone']['title']}: "
+        + ("proved." if _red_delivery_verified(state) else "not yet proved.") + "**",
+        "Use the [six workstreams and milestone ladder](model-first-roadmap.md) for the active delivery plan.",
+        "",
+        "<details>",
+        f"<summary>Historical preparation receipts: {done} of {len(items)} items</summary>",
+        "",
+        "These earlier component/reference receipts are not a full-run success rate or a project percentage.",
         "",
     ]
     for item in items:
@@ -263,27 +400,22 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
         result.append(f"- [{'x' if item['done'] else ' '}] {item['label']}{link}")
     result += [
         "",
+        "</details>",
+        "",
         f"Pinned historical learning receipt: **{evidence['fit']['model']['settled_examples']} "
         "examples**. The current model and integration boundary are reported below in the "
         "latest review and active state; this older chart receipt is not full-game competence.",
         "",
-        "## Stable goals and exit criteria",
-        "",
     ]
+    result += progress_markdown(state)
+    result += ["## Stable goals and exit criteria", ""]
+    result += ["| Stage and status | Goal | Exit criterion | Scope and evidence |", "| --- | --- | --- | --- |"]
+    cell = lambda value: str(value).replace("|", "\\|").replace("\n", " ")
     for i, stage in enumerate(baseline["stages"]):
         row = state["stages"][stage["id"]]
-        result += [
-            f"### {i + 1:02d}. {stage['title']} — {row['status']}",
-            "",
-            stage["goal"],
-            "",
-            f"**Exit criterion:** {stage['exit']}",
-            "",
-            stage["scope"],
-            "",
-        ]
-        if row["evidence"]:
-            result += [f"[Current evidence](../{row['evidence']})", ""]
+        link = f" [Evidence](../{row['evidence']})" if row["evidence"] else ""
+        result.append(f"| {i + 1:02d}. {cell(stage['title'])} — {row['status']} | {cell(stage['goal'])} | {cell(stage['exit'])} | {cell(stage['scope'])}{link} |")
+    result.append("")
     result += [
         "## Latest review",
         "",
@@ -305,6 +437,7 @@ def render_markdown(baseline: dict, state: dict, lane: dict, evidence: dict) -> 
     result += [
         "## Update contract",
         "",
+        "After every session, append the before/after checkpoint snapshot and explain each gain or regression. "
         "After a material learner milestone, strategy/requirements change "
         "or explicit request, update "
         "the [status record](../configs/development-roadmap-state.json), "

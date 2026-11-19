@@ -1,0 +1,28 @@
+{
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_native_stopped": true,
+  "evidence": {
+    "private_record_sha256": "85ea1e0c80ea5b934aef5783a3208d3bfddec01b7dcd824c87adf33ee4023a11",
+    "record_items": 1
+  },
+  "external_dispatch": 0,
+  "new_fitted_heads": 0,
+  "new_goal_rows": 0,
+  "new_gradient_fits": 0,
+  "new_native_venue_outcomes": 3,
+  "new_unfitted_goal_proposals": 2,
+  "new_venue_TRAIN_menus": 1,
+  "next": {
+    "private_record_sha256": "77cc98686733cbb9429e2f558fad12ed930c060ac5e6b21dbaebc8737c8e4c47",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "roadmap_stage_changes": 0,
+  "source_document_sha256": "71d71f5779f31bf402f41be2435d2b73a5e036cfd58c548c33181be4a5ed1208",
+  "status": {
+    "private_record_sha256": "ac0265a114333d024052136683bd8cb511dd0e852b2183dc578ee1f7f525fdff",
+    "record_items": 1
+  },
+  "venue_TRAIN_parent_selections": 1
+}

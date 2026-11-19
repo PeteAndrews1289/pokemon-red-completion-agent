@@ -319,22 +319,19 @@ def test_ticketed_boarding_does_not_change_an_unknown_route_type(monkeypatch):
 def test_bill_reuses_independent_existing_branch_not_misty_order(monkeypatch):
     rt, route, actor, binding, calls, _ = fixture(monkeypatch, objective="help_bill")
     challenge = p.OptionChallenge(False, False, 0.0, 0.0, 0.0)
-    monkeypatch.setattr(
-        p,
-        "cerulean_story_options",
-        lambda *a, **k: (
-            N(
-                objective_id="defeat_misty",
-                binding=replace(binding, binding_ref="misty"),
-                challenge=challenge,
-            ),
-            N(objective_id="help_bill", binding=binding, challenge=challenge),
-        ),
-    )
-    assert p.bill_story_option(rt, N(), route=route, battler=actor, combat_levels=(17,)) == (
+    quoted = []
+
+    def bill_quote(*args, **kwargs):
+        quoted.append((args, kwargs))
+        return N(objective_id="help_bill", binding=binding, challenge=challenge)
+
+    monkeypatch.setattr(p, "cerulean_bill_story_option", bill_quote)
+    actions = N()
+    assert p.bill_story_option(rt, actions, route=route, battler=actor, combat_levels=(17,)) == (
         binding,
         challenge,
     )
+    assert quoted == [((rt, actions), {"route": route, "battler": actor, "combat_levels": (17,)})]
     assert calls == []
 
 
@@ -426,6 +423,13 @@ def test_fuji_ordinary_trainers_use_explicit_actor_without_replacing_wild(
 
     def battle(*args, **kwargs):
         captured.append(kwargs["battler"])
+        observer = kwargs.get("observe_binding")
+        if observer is not None:
+            observer(
+                p.StoryTrainerContract(
+                    "rescue_fuji", "observed-story-obstruction", room, (202, 2, 3), 1380, 70
+                ), binding,
+            )
         return binding
 
     if room == 143:
@@ -442,7 +446,7 @@ def test_fuji_ordinary_trainers_use_explicit_actor_without_replacing_wild(
         )
         monkeypatch.setattr(p, "story_battle_binding", battle)
     row = p.fuji_story_option(
-        rt, N(), route=route, battler=actor, combat_levels=(30,), trainer_battler=trainer
+        rt, N(actions_executed=0), route=route, battler=actor, combat_levels=(30,), trainer_battler=trainer
     )
     assert row is not None and row[0].story_objective_ref == "rescue_fuji"
     assert captured and all(candidate is expected for candidate in captured)

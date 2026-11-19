@@ -82,3 +82,42 @@ def test_multifloor_departure_keeps_one_continuous_indoor_chain(damage):
     assert bounded_indoor_departure(start, NS(plan_feasible_to_map=lambda *_: plan)) is (
         plan if damage is None else None
     )
+
+
+def test_rejected_indoor_exit_diagnostic_keeps_native_slashes_out_of_record(monkeypatch):
+    from pokemon_red_completion import red_indoor_departure_plan as module
+    from pokemon_red_completion.observation import OverworldMovementMode
+    from pokemon_red_completion.private_artifacts import validate_private_record
+    from pokemon_red_completion.route_executor import RouteExecutionError
+    start = NS(map_id=197, at=(31, 37), last_outside_map=22,
+               mode="land", ready=True, interruption=None)
+    reader = NS(read_overworld_movement_mode=lambda: OverworldMovementMode.WALKING,
+                read_pending_trainer_battle_identity=lambda: None,
+                read_fly_menu_state=lambda: None)
+    runtime = NS(reader=reader, emulator=NS(save_state_bytes=lambda: b"unchanged"))
+    world = NS(with_current_observation=lambda _: NS())
+    route = NS(rom=b"fixture", route_world=world)
+    monkeypatch.setattr("pokemon_red_completion.red_player_field_goals._field_ready",
+                        lambda _: True)
+    monkeypatch.setattr("pokemon_red_completion.red_player_lesson.capture_player_lesson_snapshot",
+                        lambda _: (NS(raw=NS()), {}))
+    monkeypatch.setattr("pokemon_red_completion.gen1_route_runtime.Gen1TraversalObserver",
+                        lambda *_args, **_kwargs: NS(observe=lambda: start))
+    monkeypatch.setattr("pokemon_red_completion.gen1_trainer_sight.Gen1TrainerSightProjector",
+                        lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(module, "bounded_indoor_departure", lambda *_: NS())
+    def refuse(*_):
+        raise RouteExecutionError("cash-safe approach cannot certify poison/encounters/actions")
+    monkeypatch.setattr("pokemon_red_completion.red_player_cash_exposure.require_cash_safe_plan",
+                        refuse)
+    records = []
+    def record(kind, payload):
+        validate_private_record(payload)
+        records.append((kind, payload))
+    assert module.indoor_departure_binding(
+        runtime, NS(record_diagnostic_event=record), route=route) is None
+    assert len(records) == 1
+    assert records[0][1]["reason"] == "cash_safety_rejected"
+    assert records[0][1]["error_type"] == "RouteExecutionError"
+    assert "error" not in records[0][1]
+    assert runtime.emulator.save_state_bytes() == b"unchanged"

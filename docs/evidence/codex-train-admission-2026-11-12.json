@@ -1,0 +1,44 @@
+{
+  "actual_registration_delta": 0,
+  "blocker": {
+    "private_record_sha256": "75fd6c535c8c04cb3a794b01649263117c6e55831bf6b62b58a21e59b3f9ef58",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "candidate_adopted": false,
+  "current_frozen_build": "F76",
+  "current_gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "cutoff_utc": "2026-11-12T16:55:25+00:00",
+  "default_game_parity_rows": 24,
+  "evidence_refs": {
+    "private_record_sha256": "5bc4be1124df8ece6fa2c0ffda53aa608f0dae5697b78c2240dcc3df023382bb",
+    "record_items": 7
+  },
+  "failed_F75_raw_errors_retained": 2,
+  "focused_frozen_checks": 746,
+  "full_suite": false,
+  "live_models_changed": false,
+  "max_concurrent_guests": 2,
+  "native_root_seconds_limit": 5400,
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_fits": 0,
+  "new_goal_rows_admitted": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "prior_F69_gate_credit_not_transferred": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "retained_native_menu_readmission": {
+    "private_record_sha256": "502a1d8717d0be9239b714a5bf703e7a3e474ef1ae63fc6bda4c027fc548b74f",
+    "record_items": 2
+  },
+  "schema": "pokemon.codex.train-admission-work.v1",
+  "session": "codex-train-admission-20261112-1355",
+  "source_document_sha256": "380594f8c8be9d9d8e050ab1df9b1c8a3864caaa4d32f98076a3a4d337f69d48",
+  "status": "active",
+  "user_window_hours": 3,
+  "whole_story_copy_completed": "defeat_erika"
+}

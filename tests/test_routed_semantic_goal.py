@@ -185,6 +185,9 @@ def test_partial_evolution_costs_survive_routing_without_private_identity():
         retained_active_roster_restored=True,
         completed_training_battles=12,
         healing_trips=3,
+        trainee_initial_xp=1200,
+        trainee_terminal_xp=1850,
+        trainee_xp_gained=650,
     )
     _, binding, meter, _ = _composer(
         offered_kind=GoalKind.EVOLVE_SPECIES,
@@ -209,6 +212,9 @@ def test_partial_evolution_costs_survive_routing_without_private_identity():
         {"quantum_limit_reached": 1},
         {"completed_training_quanta": True},
         {"maximum_training_quanta": -1},
+        {"trainee_initial_xp": -1},
+        {"trainee_terminal_xp": True},
+        {"trainee_xp_gained": 1.5},
     ],
 )
 def test_evolution_cost_forwarding_rejects_ambiguous_counts(counts):
@@ -622,3 +628,274 @@ def test_process_interruption_propagates_and_consumes_the_composer() -> None:
         binding.execute()
     with pytest.raises(RoutedSemanticGoalError, match="already executed"):
         binding.execute()
+
+
+@pytest.mark.parametrize(
+    ("inner_kwargs", "expected_cause", "expected_flags"),
+    [
+        (
+            {"unavailable_reason": GoalUnavailableReason.MISSING_CAPABILITY},
+            "destination_unavailable",
+            {
+                "route_verified": True,
+                "destination_bound": False,
+                "destination_executed": False,
+                "budget_reconciled": True,
+                "within_budget": True,
+                "destination_unavailable": {"reason": "missing_capability"},
+            },
+        ),
+        (
+            {"binder_spend": (1, 1), "unavailable_reason": GoalUnavailableReason.MISSING_CAPABILITY},
+            "fresh_destination_binder_acted",
+            {
+                "route_verified": True,
+                "destination_bound": False,
+                "destination_executed": False,
+                "budget_reconciled": False,
+                "within_budget": True,
+            },
+        ),
+        (
+            {"route_report": (2, 30)},
+            "route_unaccounted",
+            {
+                "route_verified": True,
+                "destination_bound": False,
+                "destination_executed": False,
+                "budget_reconciled": False,
+                "within_budget": True,
+            },
+        ),
+    ],
+)
+def test_nested_composer_retains_inner_binding_failure_causes(
+    inner_kwargs, expected_cause, expected_flags
+) -> None:
+    meter = _Meter()
+    inner = RoutedSemanticGoalComposer(
+        binding_ref="private:inner-composite",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.4,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:inner-route",
+            origin_observation_sha256=ORIGIN,
+            terminal_boundary_sha256=TERMINAL,
+            execute=lambda: (
+                meter.spend(3, 30),
+                GoalExecutionReport(*(inner_kwargs.get("route_report") or (3, 30)), {"private_inner_route": True}),
+            )[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: (
+            meter.spend(*inner_kwargs.get("binder_spend", (0, 0))),
+            FreshDestinationGoalOffer.unavailable(
+                observation_sha256=FRESH,
+                terminal_boundary_sha256=TERMINAL,
+                kind=GoalKind.ACQUIRE_SPECIES,
+                reason=inner_kwargs["unavailable_reason"],
+            ),
+        )[1],
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+    outer = RoutedSemanticGoalComposer(
+        binding_ref="private:outer-composite",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.5,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:outer-route",
+            origin_observation_sha256="1" * 64,
+            terminal_boundary_sha256="2" * 64,
+            execute=lambda: (meter.spend(2, 20), GoalExecutionReport(2, 20, {"private_outer": True}))[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: FreshDestinationGoalOffer.available(
+            observation_sha256="3" * 64,
+            terminal_boundary_sha256="2" * 64,
+            binding=inner.binding(),
+        ),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+
+    outer_binding = outer.binding()
+    report = outer_binding.execute()
+    assert outer_binding.verify(report) == GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
+    assert "preliminary_failure_cause" not in report.evidence
+    chain = report.evidence["nested_destination_chain"]
+    assert len(chain) == 1
+    child = chain[0]
+    assert child["preliminary_failure_cause"] == expected_cause
+    for key, value in expected_flags.items():
+        assert child[key] == value
+    from collections.abc import Mapping
+
+    encoded = json.dumps(
+        report.evidence,
+        sort_keys=True,
+        default=lambda v: dict(v) if isinstance(v, Mapping) else v,
+    )
+    for private in ("private:inner", "private:outer", "private_inner_route", "private_outer", ORIGIN, TERMINAL, FRESH):
+        assert private not in encoded
+
+
+def test_nested_composer_success_preserves_clean_report_without_failure_chains() -> None:
+    meter = _Meter()
+    inner = RoutedSemanticGoalComposer(
+        binding_ref="private:inner-ok",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.4,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:inner-ok-route",
+            origin_observation_sha256=ORIGIN,
+            terminal_boundary_sha256=TERMINAL,
+            execute=lambda: (meter.spend(3, 30), GoalExecutionReport(3, 30, {}))[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: FreshDestinationGoalOffer.available(
+            observation_sha256=FRESH,
+            terminal_boundary_sha256=TERMINAL,
+            binding=ExecutableGoalBinding(
+                binding_ref="private:leaf-ok",
+                kind=GoalKind.ACQUIRE_SPECIES,
+                estimated_effort=0.1,
+                estimated_risk=0.1,
+                execute=lambda: (meter.spend(1, 10), GoalExecutionReport(1, 10, {}))[1],
+                verify=lambda _report: GoalVerification.succeeded(),
+            ),
+        ),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+    outer = RoutedSemanticGoalComposer(
+        binding_ref="private:outer-ok",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.5,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:outer-ok-route",
+            origin_observation_sha256="1" * 64,
+            terminal_boundary_sha256="2" * 64,
+            execute=lambda: (meter.spend(2, 20), GoalExecutionReport(2, 20, {}))[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: FreshDestinationGoalOffer.available(
+            observation_sha256="3" * 64,
+            terminal_boundary_sha256="2" * 64,
+            binding=inner.binding(),
+        ),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+
+    outer_binding = outer.binding()
+    report = outer_binding.execute()
+    assert outer_binding.verify(report) == GoalVerification.succeeded()
+    for absent in ("nested_destination_chain", "preliminary_failure_cause", "route_failure_reason", "destination_unavailable"):
+        assert absent not in report.evidence
+
+
+def test_three_level_nested_composer_retains_full_failure_chain() -> None:
+    meter = _Meter()
+    leaf = RoutedSemanticGoalComposer(
+        binding_ref="private:leaf-composite",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.3,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:leaf-route",
+            origin_observation_sha256="4" * 64,
+            terminal_boundary_sha256="5" * 64,
+            execute=lambda: (meter.spend(1, 10), GoalExecutionReport(1, 10, {}))[1],
+            verify=lambda _report: GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED),
+        ),
+        bind_fresh_destination=lambda: pytest.fail("leaf destination must not bind"),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+    mid = RoutedSemanticGoalComposer(
+        binding_ref="private:mid-composite",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.4,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:mid-route",
+            origin_observation_sha256=ORIGIN,
+            terminal_boundary_sha256=TERMINAL,
+            execute=lambda: (meter.spend(3, 30), GoalExecutionReport(3, 30, {}))[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: FreshDestinationGoalOffer.available(
+            observation_sha256=FRESH,
+            terminal_boundary_sha256=TERMINAL,
+            binding=leaf.binding(),
+        ),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+    outer = RoutedSemanticGoalComposer(
+        binding_ref="private:outer-composite",
+        destination_kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.5,
+        estimated_risk=0.18,
+        route=RoutedSemanticRouteBinding(
+            binding_ref="private:outer-route",
+            origin_observation_sha256="1" * 64,
+            terminal_boundary_sha256="2" * 64,
+            execute=lambda: (meter.spend(2, 20), GoalExecutionReport(2, 20, {}))[1],
+            verify=lambda _report: GoalVerification.succeeded(),
+        ),
+        bind_fresh_destination=lambda: FreshDestinationGoalOffer.available(
+            observation_sha256="3" * 64,
+            terminal_boundary_sha256="2" * 64,
+            binding=mid.binding(),
+        ),
+        budget_meter=meter,
+        limits=RoutedSemanticGoalLimits(100, 1000),
+    )
+
+    outer_binding = outer.binding()
+    report = outer_binding.execute()
+    assert outer_binding.verify(report) == GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+    chain = report.evidence["nested_destination_chain"]
+    assert len(chain) == 2
+    assert chain[0]["destination_executed"] is True
+    assert chain[0]["actions"] == 4
+    assert chain[1]["route_verified"] is False
+    assert chain[1]["route_failure_reason"] == "outcome_not_verified"
+    assert chain[1]["actions"] == 1
+
+
+def test_nested_failure_projection_strips_private_fields_at_every_level():
+    from pokemon_red_completion.routed_semantic_goal import _validated_nested_failure_node
+    node=dict(schema="pokemon.core.routed-semantic-goal-report.v1",
+              route_verified=True,destination_bound=False,destination_executed=False,
+              destination_kind="acquire_species",budget_reconciled=True,within_budget=True,
+              actions=1,frames=2,destination_unavailable={"reason":"missing_capability"},
+              preliminary_failure_cause="destination_unavailable",
+              private_source="private:source",private_path="/private/path",binding_ref="secret")
+    projected=_validated_nested_failure_node(node)
+    assert "private" not in json.dumps(projected) and "secret" not in json.dumps(projected)
+    assert projected["destination_unavailable"]=={"reason":"missing_capability"}
+
+
+@pytest.mark.parametrize("field,value",[
+    ("preliminary_failure_cause","/private/path"),
+    ("route_failure_reason","private:target"),
+    ("destination_kind","private:goal"),
+    ("route_verified",1),
+    ("actions",True),
+    ("frames",-1),
+])
+def test_nested_failure_projection_refuses_untyped_or_private_values(field,value):
+    from pokemon_red_completion.routed_semantic_goal import _validated_nested_failure_node
+    node=dict(schema="pokemon.core.routed-semantic-goal-report.v1",
+              route_verified=True,destination_bound=False,destination_executed=False,
+              destination_kind="acquire_species",budget_reconciled=True,within_budget=True,
+              actions=1,frames=2)
+    node[field]=value
+    with pytest.raises(RoutedSemanticGoalError):_validated_nested_failure_node(node)

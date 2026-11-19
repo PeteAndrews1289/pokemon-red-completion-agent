@@ -1,0 +1,63 @@
+{
+  "ROOT_seconds": 4809.518157051001,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "campaign_ready": false,
+  "capture_comparison": {
+    "private_record_sha256": "6fb0dcaa55121cf875a4fb854406ad85df12c26cc3cb2b30a313b2cc10d0a294",
+    "record_items": 1
+  },
+  "current_package": {
+    "private_record_sha256": "f8c0facc800140aa824c0123f107825e50168179ac7e5c9a2b3fdd617eecc6d6",
+    "record_items": 1
+  },
+  "fit_calls": 0,
+  "focused_checks": 796,
+  "full_suite": false,
+  "gates": {
+    "private_record_sha256": "5263742247dc4a40bcc1cac201cc6b386fdc35c11849f47d60e1c101dcc69708",
+    "record_items": 1
+  },
+  "learning_output": {
+    "private_record_sha256": "8052bff36397b6379acc613a34ae645f409f9d905da30ebead175a0852fad2c3",
+    "record_items": 1
+  },
+  "native_component_checks": {
+    "private_record_sha256": "da1b4cf58d3447b2f6348b7d41772b6cb0b0780aa25a63ed89240327398b592e",
+    "record_items": 1
+  },
+  "native_status": {
+    "private_record_sha256": "7969a5ac99e8a177701dcd18b303c2c13009cf9a29a99a447e6f9d14df9f0d0e",
+    "record_items": 1
+  },
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "optimizer_admitted_rows": 0,
+  "pending": {
+    "private_record_sha256": "816684c53a4a22cac387c8acf9b1e9eb14b02565a7427f94c96231b5473dfc60",
+    "record_items": 1
+  },
+  "predecessor": {
+    "private_record_sha256": "6780cfbee57e37af397f8d8fbeec64d622d16e50caa2750e6bfab972650d6c17",
+    "record_items": 1
+  },
+  "production_weight_changes": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "qualified_related_K_comparisons": 2,
+  "recipe": {
+    "private_record_sha256": "e3a1ebc22d22e2e7ff1eb39b01752294557d0559741cfa3b7c7f79d58190955c",
+    "record_items": 1
+  },
+  "schema": "pokemon.capture-preparation-comparison.v1",
+  "session": "codex-capture-prep-20261113-0200",
+  "skipped": 14,
+  "source_document_sha256": "dacae3ad1f362e3d2462690e20213c95877fdd258851462272fe88d7d8ad40f2",
+  "status": "closed",
+  "subtests_passed": 30,
+  "training_comparison": {
+    "private_record_sha256": "34db9d224522f0fa811e647cf25a0c5aeb697d67fee16fd13dab1af90211cd14",
+    "record_items": 1
+  }
+}

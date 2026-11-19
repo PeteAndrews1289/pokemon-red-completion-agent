@@ -371,3 +371,119 @@ def test_cli_direct_phase_cannot_use_disabled_proposal(tmp_path):
             ]
         )
     assert [item.name for item in tmp_path.iterdir()] == ["PLAN.json"]
+
+
+@pytest.mark.parametrize(
+    "suffix,accepted", [(" ", True), ("\t", True), (" \t ", True), (" --different ", False)]
+)
+def test_windows_command_tail_keeps_exact_argument_identity(tmp_path, suffix, accepted):
+    args = chain_fixture(tmp_path)
+    args[5]["actual_process"]["CommandLine"] += suffix
+    if accepted:
+        result = helper("red_teacher_process_chain").validate_chain(
+            *args, pokemon_uid=1000, now=datetime(2026, 10, 24, 2, 1, 10, tzinfo=UTC)
+        )
+        assert result["linux_parent_chain_exact"]
+        assert args[5]["actual_process"]["CommandLine"].endswith(suffix)
+    else:
+        with pytest.raises(ValueError, match="Windows actual command differs"):
+            helper("red_teacher_process_chain").validate_chain(
+                *args, pokemon_uid=1000, now=datetime(2026, 10, 24, 2, 1, 10, tzinfo=UTC)
+            )
+
+
+@pytest.mark.parametrize(
+    "fault", [None, "named_only", "censored", "wrong_order", "quest_gain", "nan", "bool"]
+)
+def test_partial_closeout_reads_real_public_outcome_schema(fault):
+    from pokemon_red_completion.living_dex_option_value import (
+        LivingDexObservedOutcome,
+        LivingDexOutcomeStatus,
+    )
+
+    outcome = LivingDexObservedOutcome(
+        LivingDexOutcomeStatus.SETTLED,
+        True,
+        0,
+        0,
+        0.1,
+        0.1,
+        0,
+        0,
+        0,
+        0,
+    ).public_dict()
+    if fault == "named_only":
+        outcome = {"verified_success": True}
+    elif fault == "censored":
+        outcome["status"] = "censored"
+    elif fault == "wrong_order":
+        outcome["target_names"].reverse()
+    elif fault == "quest_gain":
+        outcome["target_values"][1] = 1.0
+    elif fault == "nan":
+        outcome["target_values"][3] = float("nan")
+    elif fault == "bool":
+        outcome["target_values"][0] = True
+    check = helper("authenticate_red_teacher_case").verify_partial_teacher_outcome
+    if fault is None:
+        check(outcome)
+    else:
+        with pytest.raises((AssertionError, KeyError)):
+            check(outcome)
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [None, "development", "partial_cost", "copyback", "swapped_menu", "wrong_source", "fit"],
+)
+def test_venue_closeout_requires_real_bound_train_arm(fault):
+    plan = dict(schema="pokemon.red.native-venue-geometry-TRAIN-case.v1", source_sha256="a" * 64)
+    result = dict(
+        teacher_selected=True,
+        training_admission=True,
+        new_fits=0,
+        new_weights=0,
+        copy_back=False,
+        campaign_progress=False,
+        frames=100,
+        actions=10,
+        terminal_sha256="b" * 64,
+    )
+    decision = dict(
+        binding=dict(partition="train", initial_state_sha256="a" * 64),
+        candidate_set={"rows": [1, 2]},
+        teacher_forced_venue=True,
+        outcomes_not_opened=True,
+        assigned_index=0,
+    )
+    document = dict(
+        fit_eligible=True,
+        actual_progress=False,
+        settled_native_attempt=True,
+        controller_costs_are_full_native_totals=True,
+        frames=100,
+        actions=10,
+        terminal_state_sha256="b" * 64,
+        prospective_binding=deepcopy(decision["binding"]),
+        candidate_set=deepcopy(decision["candidate_set"]),
+        assigned_index=0,
+    )
+    if fault == "development":
+        decision["binding"]["partition"] = "development"
+    elif fault == "partial_cost":
+        document["controller_costs_are_full_native_totals"] = False
+    elif fault == "copyback":
+        result["copy_back"] = True
+    elif fault == "swapped_menu":
+        document["candidate_set"] = {"rows": [2, 1]}
+    elif fault == "wrong_source":
+        plan["source_sha256"] = "c" * 64
+    elif fault == "fit":
+        result["new_fits"] = 1
+    verify = helper("authenticate_red_teacher_case").verify_venue_teacher_outcome
+    if fault is None:
+        verify(plan, result, document, decision)
+    else:
+        with pytest.raises(AssertionError):
+            verify(plan, result, document, decision)

@@ -1,0 +1,39 @@
+{
+  "actual": {
+    "private_record_sha256": "3bdbe613f83d1db2af5ffdbad0cb57d5a2cb214513b8ae97f0e48db2986761d3",
+    "record_items": 7
+  },
+  "at_utc": "2026-11-14T10:36:31.853928+00:00",
+  "campaign": {
+    "private_record_sha256": "812c03bf38ed00665db01982854490b7eaeae7e415d9ff7be90e26fc478e50a2",
+    "record_items": 13
+  },
+  "costs": {
+    "private_record_sha256": "7498d22bf8d09cdd9d285fb6957a15eab7bb905050955365c9b1103b34d7f621",
+    "record_items": 6
+  },
+  "full_suite": false,
+  "historical_counters_unchanged": true,
+  "learning": {
+    "private_record_sha256": "8dc8a40961de7fbcbab0028602017fe66076cc656239f832a59c891c30faacbe",
+    "record_items": 14
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recording": {
+    "private_record_sha256": "f6a7c7b0d57cc53d482597a21e2dc51b4ffb35bdb4062c1299ad2ad3e98d6c5d",
+    "record_items": 8
+  },
+  "repairs": {
+    "private_record_sha256": "5e2d7ac8b06e6a21942d2fedd8d3f463f3ac8d492b2d43e86dc01de21f669082",
+    "record_items": 14
+  },
+  "research_current": {
+    "private_record_sha256": "26bb4b729e427ef3b1493423496857d8922f29d686c2a0455ca10d82df57fb48",
+    "record_items": 10
+  },
+  "schema": "pokemon.campaign-joint-venue-session.v2",
+  "session_id": "campaign-and-joint-rehearsal-20261113-2258",
+  "source_document_sha256": "9a59acb7dbf3b3ad4feb7caf13bd703d8b2f8cc04da050247c40d963abfedadc",
+  "status": "campaign-running",
+  "whole_player_gates": "UNPROVEN"
+}

@@ -288,8 +288,9 @@ def test_native_control_handoff_requires_exact_error_terminal_and_contract(monke
     ],
 )
 @pytest.mark.parametrize("terminal_safe", (False, True))
+@pytest.mark.parametrize("battle_state", (0, 1))
 def test_loan_wild_handoff_requires_exact_named_guard_and_compulsory_exit(
-    monkeypatch, fault, terminal_safe
+    monkeypatch, fault, terminal_safe, battle_state
 ):
     import run_configured_red_player as script
     from test_red_player_party_loan import setup
@@ -310,7 +311,7 @@ def test_loan_wild_handoff_requires_exact_named_guard_and_compulsory_exit(
     payload = [b"retained-evolution-loan-wild"]
     runtime.emulator = N(frame_count=0, pressed_buttons=(), save_state_bytes=lambda: payload[0])
     raw = runtime.reader.read()
-    runtime.reader.read = lambda: N(**dict(vars(raw), battle_state=2 if fault == "trainer" else 1))
+    runtime.reader.read = lambda: N(**dict(vars(raw), battle_state=2 if fault == "trainer" else battle_state))
     if fault == "unguarded":
         runtime.adapter.party_guard = None
     elif fault == "not_loanable":
@@ -352,7 +353,8 @@ def test_loan_wild_handoff_requires_exact_named_guard_and_compulsory_exit(
         ref = (
             "pokemon.red:retained-engagement:"
             if fault == "wrong_ref"
-            else "pokemon.red:interrupted-wild:"
+            else "pokemon.red:interrupted-wild:" if battle_state == 1
+            else "pokemon.red:retained-motion:"
         ) + state_sha
         binding = ExecutableGoalBinding(
             ref,
@@ -394,7 +396,9 @@ def test_loan_wild_handoff_requires_exact_named_guard_and_compulsory_exit(
             result, runtime=runtime, inspect_bindings=inventory
         )
         if fault is None:
-            assert receipt["retained_declared_loan"] and receipt["wild_exit_before_pc_return"]
+            assert receipt["retained_declared_loan"]
+            assert receipt["wild_exit_before_pc_return"] is (battle_state == 1)
+            assert receipt["field_faint_before_pc_return"] is (battle_state == 0)
             assert receipt["inputs"] == receipt["frames"] == receipt["model_queries"] == 0
         else:
             assert receipt is None
@@ -1200,6 +1204,37 @@ def test_custom_exploration_cannot_expand_other_policy_scopes(fault):
         declared_exploration_mix(plan)
 
 
+@pytest.mark.parametrize("mode", ["greedy", "exploration"])
+def test_declared_milestone_commitment_is_development_only_and_forwarded(mode, monkeypatch):
+    import run_configured_red_player as script
+
+    plan = dict(
+        partition="development",
+        goal_selection=dict(mode=mode, reason="M0 milestone.", story_milestone_commitment=True),
+    )
+    assert script.declared_story_milestone_commitment(plan) is True
+    monkeypatch.setattr(script, "requires_compulsory_settlement", lambda _: False)
+    monkeypatch.setattr(script, "declared_player_curriculum", lambda *_: None)
+    options = script.native_player_options(
+        plan, object(), [object()], N(native_callbacks=lambda: {}), refinement={}
+    )
+    assert options["story_milestone_commitment"] is True
+    plan["goal_selection"]["story_milestone_commitment"] = False
+    off = script.native_player_options(
+        plan, object(), [object()], N(native_callbacks=lambda: {}), refinement={}
+    )
+    assert "story_milestone_commitment" not in off
+    assert script.declared_story_milestone_commitment({}) is False
+    for bad in (1, "yes", None):
+        plan["goal_selection"]["story_milestone_commitment"] = bad
+        with pytest.raises(ValueError, match="explicit boolean"):
+            script.declared_story_milestone_commitment(plan)
+    plan["goal_selection"]["story_milestone_commitment"] = True
+    plan["partition"] = "train"
+    with pytest.raises(ValueError, match="DEVELOPMENT"):
+        script.declared_story_milestone_commitment(plan)
+
+
 def test_input_recording_keeps_original_probe_by_default():
     assert declared_input_recording({}) == {}
 
@@ -1767,7 +1802,8 @@ def test_shared_menu_handoff_delegates_to_exact_guard_without_inputs(monkeypatch
     result = {"unchanged_failure": True}
     receipt = {"qualified": True} if accepted else None
 
-    def exact_guard(row, *, runtime, inspect_bindings):
+    def exact_guard(row, *, runtime, inspect_bindings, retained_parent=None):
+        assert retained_parent is None
         assert row is result
         if accepted:
             assert inspect_bindings() is inventory

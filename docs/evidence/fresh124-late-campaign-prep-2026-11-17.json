@@ -1,0 +1,48 @@
+{
+  "DEV_rows_fitted": 0,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "default_changed": false,
+  "experimental_weights_changed": false,
+  "fit_calls": 0,
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "fresh": {
+    "private_record_sha256": "34c15e6bd060d0cc3734bcc8f70d3439abf0682cbcf1cdbe9fe1d46336873093",
+    "record_items": 10
+  },
+  "late": {
+    "private_record_sha256": "3927465721c4b7f753a5be6fea58c73381dd78ceca6fa08d59f033319afc601b",
+    "record_items": 20
+  },
+  "limitations": {
+    "private_record_sha256": "d0ce1a25fcfb9c62ba4d7ccedd070635fbb4d5fdf687660f0a13b4c59a330d95",
+    "record_items": 1
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "208f412eece3dcd940e6972daa5f38d03765994958f7461f09c6a7e078a8b19a",
+    "record_items": 7
+  },
+  "schema": "pokemon.red.fresh124-late-campaign-prep.v1",
+  "session": "fresh124-late-campaign-prep-20261117-2005",
+  "source_document_sha256": "d4e3bcc63143e05f18c1b7ead74a7c02fdc5afd942e08459594e3fe7fae313f1",
+  "source_runtime_changed": true,
+  "status": "closed_preparation_pass_full_completion_unproven",
+  "summary": {
+    "private_record_sha256": "395281f12720afd290d0671b79c3872e2bfd7164067f9231ba9cfa9179eb8b33",
+    "record_items": 1
+  }
+}

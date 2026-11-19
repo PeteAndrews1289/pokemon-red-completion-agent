@@ -1,0 +1,101 @@
+{
+  "LATE": "UNPROVEN",
+  "MID": "UNPROVEN",
+  "TRAIN_admission": {
+    "private_record_sha256": "f6789e558ee85c93940e873ce28f812e1702f6b603da0ef8c67ced4f8966e5b2",
+    "record_items": 1
+  },
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "baseline_comparison": {
+    "private_record_sha256": "0fb080063be696d5c29dc2117cbe295c69d2610ebe8d45b876863aba997cd9a1",
+    "record_items": 12
+  },
+  "campaign_ready": false,
+  "copy_cash": 8,
+  "copy_registrations": 97,
+  "default_adoptions": 0,
+  "default_models_unchanged": true,
+  "earned_credit": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "external_review_receipt": {
+    "private_record_sha256": "ba0636b97183b210706dd0a5b9fb7b71d54a0efd3b3e17d4c22704f69dbe894a",
+    "record_items": 1
+  },
+  "external_reviews_used": true,
+  "fit": {
+    "private_record_sha256": "35b8b4a30b1f3addabb572333d229784e0860f70aa88399f27ab6cf07b6427cd",
+    "record_items": 1
+  },
+  "frozen": {
+    "private_record_sha256": "f3ff779a1c21d7fd9185fc541b42d24c786d01e768b557544d91e38d0129d57b",
+    "record_items": 1
+  },
+  "full_actor_sequence_audit": true,
+  "income_chosen": false,
+  "meaning_of_passed": {
+    "private_record_sha256": "8ea4e5eb11bf3dc4ae8ca11d1ba24a21ab7a8208e7fbda2af927ec14f0f171a4",
+    "record_items": 1
+  },
+  "native_authentication": {
+    "private_record_sha256": "3463f90e1e528d0013db35ccfd30bb817bfb7e311653a0114b6c9db9148f2be7",
+    "record_items": 1
+  },
+  "native_costs": {
+    "private_record_sha256": "b94f2a3ff53a33fa73b92bff0c4c5a94253de5eea93a95b88315aa7048ee9c0c",
+    "record_items": 18
+  },
+  "native_summary": {
+    "private_record_sha256": "c4f1c5632d23eb6147f051e2bfb9790711d5073d43844e8afbb0e48ab1e331e1",
+    "record_items": 1
+  },
+  "new_TRAIN_preparation_rows": 4,
+  "new_TRAIN_production_income_rows": 0,
+  "new_TRAIN_rows": 4,
+  "new_campaign": false,
+  "new_independent_origins": 0,
+  "new_registration": false,
+  "no_new_campaign": true,
+  "ordinary_ball_purchase": false,
+  "ordinary_setbacks": 2,
+  "original55": "UNPROVEN",
+  "parameter_fits": 1,
+  "passed": true,
+  "physical_readback": {
+    "private_record_sha256": "4a13722fb970b0c94fff06d230e21bdfa55b724fb0aabed5265bfda6674bc375",
+    "record_items": 1
+  },
+  "production_funding_component_mismatch_disclosed": true,
+  "production_income_TRAIN_rows": 0,
+  "progress": {
+    "private_record_sha256": "db9051452317d45c3bcbe05a67455038db442a258d8497c726fe9a0f00a4cb52",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "resource_chain": "NOT_MET",
+  "revoked_credit": {
+    "private_record_sha256": "c7b7da0b362a52159485ff6e0eddde6d87ec126c89a93ff7bb7492254c231a12",
+    "record_items": 3
+  },
+  "roadmap_credit": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "rows": {
+    "private_record_sha256": "b65435c6f4ca749e52935768dbd6a73a4711e204645764c914752b1d1e90a71a",
+    "record_items": 2
+  },
+  "saved_DEV_menu_diagnosis": {
+    "private_record_sha256": "c0fd3e2615036d315cacb1554d1429cf79a5c6e7e7ce27385eb0bdbadc997bb5",
+    "record_items": 1
+  },
+  "session": "late-train-20261115-2143",
+  "source_document_sha256": "008c5a79c1f182daa7815236377e2a6c4594a0fc6015fe286138f9865a92e984",
+  "technical_errors": 0,
+  "whole_Code_parity": false,
+  "whole_V16_consequence_gate_not_qualified": true
+}

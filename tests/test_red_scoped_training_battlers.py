@@ -34,7 +34,10 @@ def test_native_immutable_cartridge_stats_are_supported_and_changes_rejected(tmp
     values = {179: (59, 63, 80, 58, 65)}
     p.public_species_base_stats = MappingProxyType(values)
     pool = ScopedTrainingBattlers(
-        p, contracts=(A, B), output=tmp_path / "pool", experiment_sha256="c" * 64,
+        p,
+        contracts=(A, B),
+        output=tmp_path / "pool",
+        experiment_sha256="c" * 64,
     )
     assert pool.wild.public_species_base_stats is p.public_species_base_stats
     values[179] = (1, 1, 1, 1, 1)
@@ -45,8 +48,15 @@ def test_native_immutable_cartridge_stats_are_supported_and_changes_rejected(tmp
 
 def prototype(tmp_path):
     return FrozenTrainerBattler(
-        NS(frame_count=0), None, tmp_path / "unused", "a" * 40, "train-root", "b" * 64, {},
-        model_sha256=FROZEN_K_SHA256, qualification_sha256=K_QUALIFICATION_SHA256,
+        NS(frame_count=0),
+        None,
+        tmp_path / "unused",
+        "a" * 40,
+        "train-root",
+        "b" * 64,
+        {},
+        model_sha256=FROZEN_K_SHA256,
+        qualification_sha256=K_QUALIFICATION_SHA256,
         source_partition=ScenarioPartition.TRAIN,
     )
 
@@ -54,7 +64,10 @@ def prototype(tmp_path):
 def setup(tmp_path, monkeypatch):
     p = prototype(tmp_path)
     pool = ScopedTrainingBattlers(
-        p, contracts=(A, B), output=tmp_path / "pool", experiment_sha256="c" * 64,
+        p,
+        contracts=(A, B),
+        output=tmp_path / "pool",
+        experiment_sha256="c" * 64,
     )
 
     def play(actor, *args, **kwargs):
@@ -69,7 +82,11 @@ def setup(tmp_path, monkeypatch):
 
 def battle(pool, contract):
     return pool.story(contract).continue_battle(
-        None, None, expected_map=contract.map_id, timing=None, decision_guard=lambda _: None,
+        None,
+        None,
+        expected_map=contract.map_id,
+        timing=None,
+        decision_guard=lambda _: None,
         story_authority=True,
     )
 
@@ -99,7 +116,11 @@ def test_interleaved_trainers_and_wild_retain_actual_order_and_losses(tmp_path, 
     battle(pool, B)
     reader = NS(read=lambda: NS(battle_state=1, map_id=1))
     pool.wild.run_wild_training(
-        reader, None, expected_map=1, timing=None, decision_guard=lambda _: None,
+        reader,
+        None,
+        expected_map=1,
+        timing=None,
+        decision_guard=lambda _: None,
     )
     battle(pool, A)
     assert pool.history().result is BattleResult.LOST
@@ -120,12 +141,19 @@ def test_unknown_or_altered_contract_fails_without_input(tmp_path, monkeypatch):
     assert p.session.frame_count == 0 and not tuple(pool.output.glob("battle-*"))
 
 
-@pytest.mark.parametrize("field,value", [
-    ("train_story_contract", B), ("source_partition", ScenarioPartition.DEVELOPMENT),
-    ("source_state_sha256", "f" * 64), ("model_sha256", "d" * 64),
-    ("qualification_sha256", "e" * 64), ("train_funding_diagnostic", True),
-    ("calls", True), ("calls", 1),
-])
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("train_story_contract", B),
+        ("source_partition", ScenarioPartition.DEVELOPMENT),
+        ("source_state_sha256", "f" * 64),
+        ("model_sha256", "d" * 64),
+        ("qualification_sha256", "e" * 64),
+        ("train_funding_diagnostic", True),
+        ("calls", True),
+        ("calls", 1),
+    ],
+)
 def test_changed_actor_rejected_before_next_input(tmp_path, monkeypatch, field, value):
     pool, p = setup(tmp_path, monkeypatch)
     setattr(pool.story(A), field, value)
@@ -134,10 +162,15 @@ def test_changed_actor_rejected_before_next_input(tmp_path, monkeypatch, field, 
     assert p.session.frame_count == 0
 
 
-@pytest.mark.parametrize("file", [
-    "declaration.json", "battle-000-start.json", "battle-000-end.json",
-    "actor-000/battle-0001/outcome.json",
-])
+@pytest.mark.parametrize(
+    "file",
+    [
+        "declaration.json",
+        "battle-000-start.json",
+        "battle-000-end.json",
+        "actor-000/battle-0001/outcome.json",
+    ],
+)
 def test_changed_receipt_stops_next_battle(tmp_path, monkeypatch, file):
     pool, p = setup(tmp_path, monkeypatch)
     battle(pool, A)
@@ -198,8 +231,9 @@ def test_invalid_declarations_create_no_output(tmp_path, change):
     else:
         digest = "invalid"
     with pytest.raises(ValueError):
-        ScopedTrainingBattlers(p, contracts=contracts, output=tmp_path / "pool",
-                              experiment_sha256=digest)
+        ScopedTrainingBattlers(
+            p, contracts=contracts, output=tmp_path / "pool", experiment_sha256=digest
+        )
     assert not (tmp_path / "pool").exists()
 
 
@@ -211,7 +245,10 @@ def test_existing_actor_resolution_is_unchanged(tmp_path):
 def test_original_guards_forbid_story_scope_for_wild_and_wild_for_story(tmp_path):
     p = prototype(tmp_path)
     pool = ScopedTrainingBattlers(
-        p, contracts=(A, B), output=tmp_path / "pool", experiment_sha256="c" * 64,
+        p,
+        contracts=(A, B),
+        output=tmp_path / "pool",
+        experiment_sha256="c" * 64,
     )
     with pytest.raises(ValueError, match="story actor"):
         validate_scoped_wild_battler(pool.story(A))
@@ -220,7 +257,11 @@ def test_original_guards_forbid_story_scope_for_wild_and_wild_for_story(tmp_path
     reader = NS(read=lambda: NS(battle_state=1, map_id=1))
     with pytest.raises(ValueError, match="another battle or mode"):
         pool.story(A).run_wild_training(
-            reader, None, expected_map=1, timing=None, decision_guard=lambda _: None,
+            reader,
+            None,
+            expected_map=1,
+            timing=None,
+            decision_guard=lambda _: None,
         )
     assert p.session.frame_count == 0 and pool.failed
 
@@ -250,7 +291,10 @@ def test_story_binding_resolves_exact_actor_and_rechecks_before_travel(tmp_path,
     rt, actions, route, _, _, inputs, _, contract, _ = story_setup(monkeypatch)
     p = replace(prototype(tmp_path), session=rt.emulator)
     pool = ScopedTrainingBattlers(
-        p, contracts=(contract, B), output=tmp_path / "pool", experiment_sha256="c" * 64,
+        p,
+        contracts=(contract, B),
+        output=tmp_path / "pool",
+        experiment_sha256="c" * 64,
     )
     selected = []
     original = story.FrozenStoryBattleController
@@ -261,7 +305,11 @@ def test_story_binding_resolves_exact_actor_and_rechecks_before_travel(tmp_path,
 
     monkeypatch.setattr(story, "FrozenStoryBattleController", controller)
     binding = story.story_battle_binding(
-        rt, actions, contract=contract, route=route, battler=pool,
+        rt,
+        actions,
+        contract=contract,
+        route=route,
+        battler=pool,
     )
     assert selected == [pool.story(contract)] and not inputs
     selected[0].source_partition = ScenarioPartition.DEVELOPMENT
@@ -279,13 +327,79 @@ def test_rival_binding_uses_same_pool_resolution_and_stale_guard(tmp_path, monke
     contract = rival.cerulean_rival_contract(None, None)
     p = replace(prototype(tmp_path), session=rt.emulator)
     pool = ScopedTrainingBattlers(
-        p, contracts=(A, contract), output=tmp_path / "pool", experiment_sha256="c" * 64,
+        p,
+        contracts=(A, contract),
+        output=tmp_path / "pool",
+        experiment_sha256="c" * 64,
     )
-    route = NS(rom=b"fixture", route_world=NS(plan_feasible_to_map=lambda *a, **k: NS(
-        terminal_at=k["goal_at"], cost=25,
-    )))
+    route = NS(
+        rom=b"fixture",
+        route_world=NS(
+            plan_feasible_to_map=lambda *a, **k: NS(
+                terminal_at=k["goal_at"],
+                cost=25,
+            )
+        ),
+    )
     binding = rival.cerulean_rival_binding(rt, actions, route=route, battler=pool)
     pool.story(contract).source_partition = ScenarioPartition.DEVELOPMENT
     with pytest.raises(ValueError, match="identity"):
         binding.execute()
     assert actions.actions_executed == 0 and not inputs
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_scoped_pool_explicitly_reuses_exact_k_pp_screen_without_relabel(tmp_path, enabled):
+    p = prototype(tmp_path)
+    p.pp_depleted_switch_screen = True
+    pool = ScopedTrainingBattlers(
+        p,
+        contracts=(A,),
+        output=tmp_path / "pp-pool",
+        experiment_sha256="c" * 64,
+        allow_train_pp_reentry=enabled,
+    )
+    actor = pool.story(A)
+    if not enabled:
+        with pytest.raises(ValueError, match="explicit frozen K"):
+            actor.pp_reentry_screen_active(actor.story_authority())
+        return
+    assert actor.pp_reentry_screen_active(actor.story_authority()) is True
+    assert actor.source_partition is ScenarioPartition.TRAIN
+    assert pool.wild.pp_reentry_screen_active(pool.wild.wild_authority()) is False
+    with pytest.raises(ValueError, match="story PP authority"):
+        actor.pp_reentry_screen_active("undeclared")
+    declaration = json.loads((pool.output / "declaration.json").read_bytes())
+    assert declaration["schema"] == "pokemon.red.scoped-train-battlers.v3"
+    assert declaration["scoped_train_pp_reentry"] is True
+    assert declaration["fit_allowed"] is False
+    assert p.session.frame_count == 0
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("source_partition", ScenarioPartition.DEVELOPMENT),
+        ("model_sha256", "d" * 64),
+        ("qualification_sha256", "e" * 64),
+        ("pp_depleted_switch_screen", False),
+        ("pp_depleted_switch_screen", 1),
+        ("train_story_contract", B),
+        ("source_state_sha256", "e" * 64),
+    ],
+)
+def test_scoped_pp_screen_rejects_changed_identity_before_input(tmp_path, field, value):
+    p = prototype(tmp_path)
+    p.pp_depleted_switch_screen = True
+    pool = ScopedTrainingBattlers(
+        p,
+        contracts=(A,),
+        output=tmp_path / "pp-pool",
+        experiment_sha256="c" * 64,
+        allow_train_pp_reentry=True,
+    )
+    actor = pool.story(A)
+    setattr(actor, field, value)
+    with pytest.raises(ValueError, match="identity differs"):
+        actor.pp_reentry_screen_active("frozen-k-story-development")
+    assert p.session.frame_count == 0

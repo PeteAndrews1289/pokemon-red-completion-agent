@@ -1,0 +1,221 @@
+{
+  "ACTUAL19-MOVEMENT-LOSS-ANALYSIS.json": {
+    "private_record_sha256": "f54b9748160b9d2d47ddf95899e6cc44fee0628231744e98b48efc1ad7445327",
+    "record_items": 1
+  },
+  "ACTUAL19-PRELAUNCH-COST-CLARIFICATION.json": {
+    "private_record_sha256": "1b9d4ddb3f929e0be975d5555f4cd7573f2b9bcf629f6bbba0e5358f211b6ffa",
+    "record_items": 1
+  },
+  "ACTUAL19-PROGRESS-LATEST.json": {
+    "private_record_sha256": "3b2ef72afb790021f8b0c048c73e2796516b82ae44c9f24039213c026a16c37b",
+    "record_items": 1
+  },
+  "ACTUAL19-V2-EXACT-PLAN-AUTHENTICATION.json": {
+    "private_record_sha256": "c4106bece4a6d57fdf8a70fcb388052f56ad5749e3671c3f233b625f168f2946",
+    "record_items": 1
+  },
+  "ACTUAL34-CONTINUATION-COST-BASIS.json": {
+    "private_record_sha256": "4c0263b5dbadee97bf846e075891556ff21a65d6ac5da383437656509c05c329",
+    "record_items": 1
+  },
+  "ACTUAL34-DASHBOARD-VERIFICATION.json": {
+    "private_record_sha256": "7dec0d929d11d729593454a82804121443a0e5383766344825c795956fbb07a8",
+    "record_items": 1
+  },
+  "ACTUAL34-EXACT-PLAN-AUTHENTICATION.json": {
+    "private_record_sha256": "44a9e82bc3a19ab8fa3e81f14958547aa64b539a51545d09d3b5611bf335c927",
+    "record_items": 1
+  },
+  "ACTUAL34-FOCUSED-RESULT.json": {
+    "private_record_sha256": "31022246271b0eb5bd614473f33ef6a194a68edb86bdeee4d821ad724307baa0",
+    "record_items": 1
+  },
+  "ACTUAL34-FROZEN-CANDIDATE.json": {
+    "private_record_sha256": "b432a128d107f6adff08a31b21aefc420cc00f889a6a0ce4898f1f963d2eb7c6",
+    "record_items": 1
+  },
+  "ACTUAL34-PROGRESS-LATEST.json": {
+    "private_record_sha256": "2bf21dabd1c7ec5a841966b5ebb73d53a7d21df459f42550fb87d386de2b3be0",
+    "record_items": 1
+  },
+  "ACTUAL34-REPAIR-QUALIFICATION.json": {
+    "private_record_sha256": "02eabd2082bbc7fdfbbe09a3b929cb106e834aa8f06bb4ec0ac95a165037655b",
+    "record_items": 1
+  },
+  "ACTUAL34-SOURCE-AUTHENTICATION.json": {
+    "private_record_sha256": "b8e91018247a6c0d962beee54868371f5aed2182719d831302d21a69ece4cbee",
+    "record_items": 1
+  },
+  "ACTUAL46-CONTINUATION-COST-BASIS.json": {
+    "private_record_sha256": "339744b2b5320fba645deb5ba814869b8467310a2ce4623009def27e265475aa",
+    "record_items": 1
+  },
+  "ACTUAL46-EXACT-PLAN-AUTHENTICATION.json": {
+    "private_record_sha256": "9b0238dae9e156de2ad3c54782da93ade71eaf3bc8a7ecb101b700616409f863",
+    "record_items": 1
+  },
+  "ACTUAL46-FOCUSED-RESULT.json": {
+    "private_record_sha256": "0617a927a70f996de42c64f2313724c76c9c44de4ddd36e212adf71ecf3e84ed",
+    "record_items": 1
+  },
+  "ACTUAL46-FROZEN-CANDIDATE.json": {
+    "private_record_sha256": "f423c7f35a8a07b3c752c76c479e47d6e91af1b1efdc26ebfd2aa7fd05b65019",
+    "record_items": 1
+  },
+  "ACTUAL46-PROGRESS-LATEST.json": {
+    "private_record_sha256": "8ee4bdbab976f5c8d13de4e5e3d3bbce799a6b5148eb8c70bde86bc4b76fc381",
+    "record_items": 1
+  },
+  "ACTUAL46-REPAIR-QUALIFICATION.json": {
+    "private_record_sha256": "a0dedc534eb86d40aaa61963705fed68a23ec251b3a415270f7240b7741fc715",
+    "record_items": 1
+  },
+  "ACTUAL46-SOURCE-AUTHENTICATION.json": {
+    "private_record_sha256": "bc805c0715baad6225d2b44550b91c4b1a753a723dc643a47fb3532646585730",
+    "record_items": 1
+  },
+  "CACHE-CAPACITY-READBACK.json": {
+    "private_record_sha256": "55fdefcca4a00f404315d80f114cdf720ffe7d4ad39f8e9d5958d53c76ad0239",
+    "record_items": 1
+  },
+  "COSTS-6H-PROFILE-METRICS-CLARIFICATION.json": {
+    "private_record_sha256": "555f9787d9bbf7409076b604f45538afb011b2ae4c2b4c43ffbc72c8d507e88a",
+    "record_items": 1
+  },
+  "DASHBOARD-RESOURCE-SAMPLE.json": {
+    "private_record_sha256": "2942994a48595458ce9c51a236a43cef0c69f2bf9cc89d67983ecf2d9ffecc0f",
+    "record_items": 1
+  },
+  "FINAL-ACTUAL-SOURCE-AUTHENTICATION.json": {
+    "private_record_sha256": "058a9960eabdc2b50ff314f135c5625006f2294212a2c24ba39beb60e06d22fb",
+    "record_items": 1
+  },
+  "FINAL-FROZEN-INTEGRITY-CURRENT.json": {
+    "private_record_sha256": "8cd4c5a099f229b23b3a69afca6c8a8d11b899c895cc4fc570858be5a8a8112c",
+    "record_items": 1
+  },
+  "FRESH-PROGRESS-LATEST.json": {
+    "private_record_sha256": "95f63ef9ca795e6273f89ec4599dcbcb7eff8c9efcd2e06ce2f7122579a2590b",
+    "record_items": 1
+  },
+  "FRESH-QUALIFIED-V1-RECOVERY-LATEST.json": {
+    "private_record_sha256": "404893a8248812de6c79eaedf5ad2ba2e7f5bae228d814ec5438e8513a3ed629",
+    "record_items": 1
+  },
+  "FRESH19-15M-REASSESSMENT.json": {
+    "private_record_sha256": "e5914685697c59f48122ebaa096f46769398ec672f724056091287d4ee7a347b",
+    "record_items": 1
+  },
+  "FRESH19-FROZEN-CANDIDATE-v2.json": {
+    "private_record_sha256": "b70a12be7775573cf807ab647d00705be89e1bbd108d368d27e29f76870cc8d5",
+    "record_items": 1
+  },
+  "FRESH19-REPAIR-QUALIFICATION-v2.json": {
+    "private_record_sha256": "368cb3f891c691c955080484f7946e472068fcc2acfde77f99ca1e5ffe5388e9",
+    "record_items": 1
+  },
+  "FRESH19-REPAIR-QUALIFICATION.json": {
+    "private_record_sha256": "0829fe1fe557e8b54f5e891717604b77ce4de830f6470e36a5986220ff2cda3b",
+    "record_items": 1
+  },
+  "GATE-ADJUDICATION.json": {
+    "private_record_sha256": "99bd7f50995a1cfd8f62b1f5e9cdadfa09b3d0432cb4838e61529f607e4bd794",
+    "record_items": 1
+  },
+  "GATE-LATE-V4-CLOSED.json": {
+    "private_record_sha256": "6cab194f006558f490b5a13b8810c543a124aaeb8b9c4f2e3a1f3a1e55b857c7",
+    "record_items": 1
+  },
+  "GATE-MID-V4-CLOSED.json": {
+    "private_record_sha256": "146ba31ea3a21af547b2bbfe1d79b6c9062e2ccde54766544d1bb85c9eb0e123",
+    "record_items": 1
+  },
+  "GATE3-PASS.json": {
+    "private_record_sha256": "fd6558701cd66cca9d8eb7c4397180a1c629c8506be7a9ba7142aa20d5d63b6e",
+    "record_items": 1
+  },
+  "LATE-GATE-PROTOCOL.json": {
+    "private_record_sha256": "e9dab153f3b5c8ec8e6573ac85a64b6c05c0581e48993a76067bc0437f177729",
+    "record_items": 1
+  },
+  "LOAN-REPAIRED-NATIVE-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "bbe7eab5fb66d17f8ef864949bb0f6fd436bbccdd04eca38740d9ef3cbdebbb4",
+    "record_items": 1
+  },
+  "LOAN-REPAIRED-NATIVE-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "ad8a7366b8534450bac33aca1f740f4df1f44e955113cf541ae04ebbef4cccff",
+    "record_items": 1
+  },
+  "MID-GATE-PROTOCOL.json": {
+    "private_record_sha256": "c0bd38e53547e2a67cdc132ed893a251b3aa9d3344dec1e3aa99b26cebfe5dd8",
+    "record_items": 1
+  },
+  "PENDING-SAME-GUEST-LOAN-HANDOFF.json": {
+    "private_record_sha256": "095ead66fa6b21d7ad531f21ed80e73c2152eddab75a16e7c2bc7a4641b16d9c",
+    "record_items": 1
+  },
+  "PERSISTENT-DASHBOARD.json": {
+    "private_record_sha256": "fb586f1fd2c31d1dafeb6a35de11c487e98e13c649b022270d4ce1483f35ebf3",
+    "record_items": 1
+  },
+  "SAME-SAVE-ACTUAL46-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "75caa54b0bd2e2f99c2609cf36b7e51bf677592638c854ba46b10316afba0a79",
+    "record_items": 1
+  },
+  "SAME-SAVE-ACTUAL46-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "a9271e72d9dcf7a863687471d864af79f9fa9961ed6ca79042676a30a6e0e648",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "e4e0d461ec50e4e9563922585c9544a67c651f3b81a119ebc7424975a2fae1be",
+    "record_items": 1
+  },
+  "STORY-BOUNDARY-NATIVE-V2-LOG-AUDIT.json": {
+    "private_record_sha256": "d75470af3581690d641d12f651c759e6bf4f30e4baa44341328854108d55e75a",
+    "record_items": 1
+  },
+  "STORY-BOUNDARY-NATIVE-V2-NATIVE-EXIT.json": {
+    "private_record_sha256": "7a41c36fe8228c0f9a3516592a10815e43776f278dcf10d6fe461593cc9eed58",
+    "record_items": 1
+  },
+  "audits": {
+    "private_record_sha256": "1e5742f9e65700db7259e11fafaf14aaf465e8c4fc22b3ab69d0c6ec728059f9",
+    "record_items": 3
+  },
+  "candidate": {
+    "private_record_sha256": "6de8702bd4987bf5498693e3f678d9f38b1b3e2828d111878d3d376f2e04f366",
+    "record_items": 1
+  },
+  "current": {
+    "private_record_sha256": "9e904d56f0855c78103b26001cdfd48e99d584994313b40ce2ec656ad2beafa8",
+    "record_items": 2
+  },
+  "full_fresh_completion": false,
+  "gate_scope": {
+    "private_record_sha256": "1d65ae8bd0bd3db4946ae68c057c474fc5f7fe79759eb75352784e1f5791d51b",
+    "record_items": 1
+  },
+  "mission": {
+    "private_record_sha256": "78a2fe275380e84b284cb0e50a80a73f213e4c9e6dae168e4a511b2fc2221b30",
+    "record_items": 1
+  },
+  "native_claim": {
+    "private_record_sha256": "a6aaab8d2209e72a8d13af359b9dd95cb0d6f36cc149e6de04e0dc0198893456",
+    "record_items": 3
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-04T21:43:14.941329+00:00",
+  "original_mission_candidate": {
+    "private_record_sha256": "ce466931e859729140055f71759f71a2c9f7e3b877e79e87c60b4de8202eabda",
+    "record_items": 1
+  },
+  "prior_block": {
+    "private_record_sha256": "60188d4c76c9817e0902ef6361dca67e091cb403486c858efd4294c9814e3b5e",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "source_document_sha256": "d56d3fb280a3c90615ccb2184ebe286925fac553c71a1ac24792b86b07a03a45"
+}

@@ -520,3 +520,50 @@ def test_travel_rejects_unexpected_resource_changes(monkeypatch, field, value, c
     )
     with pytest.raises(RuntimeError, match="protected resources"):
         binding.execute()
+
+
+@pytest.mark.parametrize("scope", ["valid", "blocked_prefix", "full_route", "off_corridor"])
+def test_intermediate_boundary_uses_real_frontier_when_shortest_corridor_is_closed(monkeypatch, scope):
+    rt, actions, route, raw, lesson = setup(monkeypatch)
+    objective=N(id="clear_rocket_hideout", completion_facts=frozenset({"quest:hideout"}))
+    rt.adapter.graph.objective=lambda _:objective
+    rt.adapter.graph.available_objectives=lambda _:(objective,)
+    raw.map_id=17; raw.player_y=35;raw.player_x=8
+    start=N(map_id=17,at=(35,8),last_outside_map=5)
+    monkeypatch.setattr(s,"Gen1TraversalObserver",lambda *a,**k:N(observe=lambda:start))
+    monkeypatch.setattr(s,"find_macro_path",lambda *a,**k:N(maps=(17,10,18,6,202) if scope=="off_corridor" else (17,10,18,6,135,202)))
+    calls=[];frontiers=[]
+    def quote(observed,destination,**kw):
+        assert observed is start
+        calls.append((destination,kw))
+        if destination==135 or scope=="blocked_prefix":raise s.RoutePlanningError("closed shortest corridor")
+        assert destination==74 and kw=={"goal_at":(7,3)}
+        return N(terminal_map=74,terminal_at=(7,3),cost=32,steps=(N(expected_map=74,expected_at=(7,3)),))
+    world=N(macro_graph=object(),plan_feasible_to_map=quote)
+    monkeypatch.setattr(type(route),"route_world",property(lambda _:world))
+    def frontier(real_world,observed,target):
+        assert real_world is world and observed is start and target==135
+        frontiers.append(target)
+        return 74,(7,3)
+    monkeypatch.setattr(s,"story_frontier_target",frontier)
+    if scope=="off_corridor":
+        with pytest.raises(s.StoryIntermediateBoundaryUnavailable):
+            s.story_travel_binding(rt,actions,objective_id=objective.id,route=route,intermediate_map=135,stop_at_map_boundary=True)
+        assert not calls and not frontiers
+        return
+    binding=s.story_travel_binding(rt,actions,objective_id=objective.id,route=route,intermediate_map=135,stop_at_map_boundary=scope!="full_route")
+    assert actions.actions_executed==0 and raw.map_id==17
+    if scope!="valid":
+        assert binding is None
+        assert bool(frontiers)==(scope=="blocked_prefix")
+        return
+    assert binding.story_objective_ref==objective.id and binding.story_approach_only
+    assert frontiers==[135] and calls==[(135,{}),(74,{"goal_at":(7,3)})]
+    def travel(self,*args):
+        assert self.destination_map==74 and self.destination_at==(7,3)
+        raw.map_id=74;raw.player_y=7;raw.player_x=3
+        actions.actions_executed+=1;rt.emulator.frame_count+=16
+    monkeypatch.setattr(type(route),"__call__",travel)
+    report=binding.execute()
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    assert not report.evidence["objective_completed"] and "clear_rocket_hideout" not in lesson["completed_objectives"]

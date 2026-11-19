@@ -1,0 +1,69 @@
+{
+  "DEV_fit_rows": 0,
+  "TRAIN_admission": {
+    "private_record_sha256": "89a67a19c0b9ed5272fd2400d04941945d1d27bcddae54f8785b3a5654b45f1f",
+    "record_items": 1
+  },
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_restores": 0,
+  "arms": {
+    "private_record_sha256": "4c6ed5968c644a272fc43316009522453c6d7438cd3bbb29505cecde81209277",
+    "record_items": 2
+  },
+  "continuation": {
+    "private_record_sha256": "2fe69a8d8a0a097cce86d3ec9e6d073b3f36347d33e06595ca9846bd8722162a",
+    "record_items": 22
+  },
+  "default": {
+    "private_record_sha256": "5125be312205325a202b5397ed27c44c7bfbe882889174fab308b98e3dabe32b",
+    "record_items": 1
+  },
+  "default_changed": false,
+  "fit": {
+    "private_record_sha256": "b54eaba55430e74263fdeaf050ae9573449ecbae71fc7336959b3bb2ccd66a50",
+    "record_items": 1
+  },
+  "full_suite": false,
+  "funded_menu_diagnosis": {
+    "private_record_sha256": "d2921f13a6317b395e900ed63e351205ab33ee1e17ea422ce790abd99b65c44e",
+    "record_items": 1
+  },
+  "history_repair": {
+    "private_record_sha256": "512fa6e50f5a6710fa4d0fb49bca174e26abb206380bd25956ad1918ee33ff04",
+    "record_items": 1
+  },
+  "limitations": {
+    "private_record_sha256": "2a895d0dc14cb3239256ebb885a85550ef045ac488bf567f93157274b3b45722",
+    "record_items": 8
+  },
+  "matched_benefit_and_cost": false,
+  "native_summary": "F134 changes initial choice to earned income and paid ball supply;baseline only prepares. Separate paired continuations reach98by evolution,then repeat preparation;strict ball-capture chain NOT_MET. Public resource pressure1->0.25 disables new head and returns exact old scores. Partial local benefit,no matched whole-task or speed pass.",
+  "native_trace": {
+    "private_record_sha256": "ad3179fc8eb8d6afec2cba8261978cfb563c46d6ae070cbfe7ae07697f47d614",
+    "record_items": 1
+  },
+  "new_campaign": false,
+  "new_independent_origins": 0,
+  "new_task_return_TRAIN_rows": 3,
+  "parameter_fits": 1,
+  "passed": true,
+  "physical_readback": {
+    "private_record_sha256": "61b14ed8c50e6a4630257060285fdc6ab8f60330eb9c4fa74fc4779be6fcfb19",
+    "record_items": 1
+  },
+  "prior_F133_stopping_error_retained": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "resource_chain": "NOT_MET",
+  "roadmap_credit": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "session": "scarce-task-20261116-0021",
+  "source_document_sha256": "dcacffd1423eda0c5411f143d2c509b6a786c6ca6c201f03de948d5c998a2acf",
+  "teacher_TRAIN_authentication": {
+    "private_record_sha256": "c86fd0852625f4757df698420e584471a2584453d3176e646273a77b13f7b02e",
+    "record_items": 1
+  },
+  "whole_Code_parity": false
+}

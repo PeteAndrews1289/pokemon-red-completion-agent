@@ -1,0 +1,49 @@
+{
+  "actual_campaigns_paused": true,
+  "actual_registration_delta": 0,
+  "additional_movement_setup_TRAIN_rows": 1,
+  "all_native_processes_absent": true,
+  "completion_target": 0.0,
+  "controls_released": true,
+  "cost_error": {
+    "private_record_sha256": "b469f234d9e229a97279915efce83b9237cfcdc65bcd5227213822847abaafbe",
+    "record_items": 5
+  },
+  "dependency_target": 0.0,
+  "evidence_sha256": {
+    "private_record_sha256": "eef84b4753e99b20d5d792eea400b0ac0b087be7fe473cbbed9759df29ab176a",
+    "record_items": 6
+  },
+  "exact_venue_coverage": {
+    "private_record_sha256": "4efcf1f53fa76c7a070ae1e4b0be418294b4d8360c7ce469ab1561d926bdbfd5",
+    "record_items": 6
+  },
+  "focused_tests_passed": 150,
+  "full_suite_or_CI_claim": false,
+  "gate_awards": 0,
+  "native_frames": 6340,
+  "native_inputs": 154,
+  "native_loads": 3,
+  "native_seconds": 47.185784190999584,
+  "native_seconds_nested_in_root": true,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "new_partial_interaction_TRAIN_rows": 1,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-02T22:51:31.147302+00:00",
+  "parent_goal_model_sha256": "94a0a18f228262cdc6f27ccb9f7e1868b539959d6aba46e15861845460479a30",
+  "partial_decision_sha256": "c8f94e7ccf08127cd76daf86518de760d7d8321be427d9403a79a550c08bc827",
+  "partial_terminal_sha256": "d67ef6a7357132d59423d5db7b8df8627032c58a9205645d880051268514a661",
+  "prior_attempts_and_costs_preserved": true,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "root_seconds": 399.90804326799866,
+  "schema": "pokemon.partial-interaction-collector-closeout.v1",
+  "session_id": "2026-11-02-partial-interaction",
+  "source_document_sha256": "779cf21b0e4533a1611001a9a12e0128845e20e25fa9d6d48884e0e5d6a34e9c",
+  "success_clipped": 1.0,
+  "success_fit_informative": false,
+  "success_raw": 1.0977835448999345,
+  "teacher_menu_available_choices": 1,
+  "type_check": "new collector module only",
+  "wild_encounter_count_known": false
+}

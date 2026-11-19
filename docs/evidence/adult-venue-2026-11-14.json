@@ -1,0 +1,70 @@
+{
+  "F123_repair": {
+    "private_record_sha256": "3b3f38a653b7e9e9fff7a9da166bfce69b58615113ef2c9b626ea61453a84be2",
+    "record_items": 25
+  },
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_sealed": true,
+  "baseline_control_F121_sha256": "1f6df5684cf1a555aaef990d6620a481d29910c6ba8a98ae9c64eee7b677271b",
+  "comparisons": {
+    "private_record_sha256": "6c28ea1d08636fd45fad4e457e407c77adf7ba6e4b8887977320ba282436e547",
+    "record_items": 3
+  },
+  "fit_hold": {
+    "private_record_sha256": "0ad7d01b94b70b357a78c7a1ed64ed642553ad95419d4d40114a8d92ccf293b4",
+    "record_items": 3
+  },
+  "fresh_campaign_qualified": false,
+  "goal_switching_solved": false,
+  "independent_readback": {
+    "private_record_sha256": "e87b531e9d45ac487d7ccf0b1387228e9ed1e49802de1acf0602ba3813297b8e",
+    "record_items": 7
+  },
+  "learning": {
+    "private_record_sha256": "28730fdbda97c13c12bf6e100d59f256db1ae65126e957aeb65c806879ae536b",
+    "record_items": 6
+  },
+  "legal_menu_size": 8,
+  "measured_venues": {
+    "private_record_sha256": "8d1ded2b7c7144aa9353477cb1541565908fe7e86c4b2aafb986b6d7f8898efa",
+    "record_items": 2
+  },
+  "mechanical_candidate_F123_sha256": "2de388afd582f47c681114f96920f3b4b4613ac4dc15718c018fb50d2be30685",
+  "new_campaign": false,
+  "new_independent_origins": 0,
+  "original_F121_tasks": {
+    "private_record_sha256": "004d635787e0d91a6f33d9d68c0b1bffe16b928d6edb48ceda17c909ed0ce6df",
+    "record_items": 4
+  },
+  "progress": {
+    "private_record_sha256": "96f0bb53590be6a9ad8d21e2e18cf9b3b1eb436347d9adbe8f180ab5ceb8812d",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "purpose_result": {
+    "private_record_sha256": "31b65184bed8f5ac1e20cfa1e4bef1536294a218bc06b1f41e2ac7c9abc850df",
+    "record_items": 9
+  },
+  "reviews": {
+    "private_record_sha256": "8c498045585e11c100898d5063a0a5f246074e8432b6fd71a5932851698c6b5e",
+    "record_items": 5
+  },
+  "saved_menu_diagnosis": {
+    "private_record_sha256": "75dfdbd16d33e30fa009a5a042ecba030e967953fc205f3c8af46fb62837d8d7",
+    "record_items": 2
+  },
+  "scope": "One correlated TRAIN ancestry. Scoped mechanical repair and measured venue costs,not a new learned policy or fresh completion.",
+  "session": "adult-venue-20261115-0247",
+  "source_document_sha256": "518c21e9925a7aa1f02ed0a22af800934939d95663f4804b3b6b46afcb367686",
+  "teacher_conditioned_levels_stats_moves_PP": true,
+  "timings": {
+    "private_record_sha256": "37bebb1a8e5c48984e9b899bdbb3573493c93c65250051752769ce91430a6eb3",
+    "record_items": 2
+  },
+  "trainees": {
+    "private_record_sha256": "e4e227025b03adbe775f902c76ad0de8f720176b105a931ed75e9494748b25f5",
+    "record_items": 2
+  },
+  "transport_carrier_preserved": true
+}

@@ -200,3 +200,31 @@ def test_escape_bypass_keeps_native_throw_guard_errors(monkeypatch):
     with pytest.raises(surge.SurgeChapterError, match="ordinary-ball accounting"):
         live.capture_encounter(target)
     assert w.helpers == 0 and live.capture_escape_bypasses == 1
+
+
+@pytest.mark.parametrize("settle", [False, True])
+def test_weakener_faint_never_becomes_a_ball_or_another_attack(monkeypatch, settle):
+    import pokemon_red_completion.red_capture_weakening_runtime as weakening
+    import pokemon_red_completion.capture_survey as survey
+    from pokemon_red_completion.red_capture_status_runtime import RedCaptureStatusError
+    w, live, target = capture_fixture(monkeypatch)
+    live._settle_unavailable_catcher = settle
+    def faint(*args, **kwargs):
+        w.raw = replace(w.raw, active_party_hp=0)
+        return CaptureWeakeningResult(1, 20, "weakener_fainted", ())
+    def flee():
+        w.calls.append("flee")
+        w.raw = replace(w.raw, battle_state=0)
+    events = []
+    monkeypatch.setattr(weakening, "prepare_nonlethal_capture", faint)
+    monkeypatch.setattr(live, "flee_encounter", flee)
+    monkeypatch.setattr(survey, "record_capture_diagnostic", lambda *a, **k: events.append(k))
+    if settle:
+        assert not live.capture_encounter(target)
+        assert w.calls == ["status", "flee"]
+        assert live.capture_health_stopped
+        assert events[0]["outcome"] == "capture_weakener_fainted"
+    else:
+        with pytest.raises(RedCaptureStatusError, match="weakener fainted"):
+            live.capture_encounter(target)
+        assert w.calls == ["status"] and not events

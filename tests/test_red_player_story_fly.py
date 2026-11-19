@@ -80,8 +80,11 @@ def setup(monkeypatch, *, arrival=False):
     monkeypatch.setattr(s, "_noncombat_fly_world", lambda w, r: w)
     monkeypatch.setattr(
         s,
-        "story_frontier_target",
-        lambda w, start, end: (end, start.at) if start.map_id == end else (7, (2, 2)),
+        "story_frontier_plan",
+        lambda w, start, end: N(
+            macro_path=N(maps=(start.map_id, 7, end)),
+            steps=(N(expected_map=7, expected_at=(2, 2)),),
+        ),
     )
     monkeypatch.setattr(s, "_field_ready", lambda rt: live.ready)
     monkeypatch.setattr(

@@ -111,7 +111,9 @@ is batched at material milestones or Pete's request. Preserve unique history and
 raw evidence; do not create another reporting or scheduling framework.
 
 Keep roadmap stage IDs and final exits stable. A percentage must name its
-denominator. Final-run gates are not an overall engineering completion percentage.
+denominator. After each session, record the existing versioned workstream checklist
+percentages and percentage-point deltas, including zero and regressions. Never
+backfill guessed historical gains or hide denominator changes as earned progress. Final-run gates are not an overall engineering completion percentage.
 Record material strategy changes in [roadmap decisions](docs/roadmap-decisions.md).
 
 ## Official evaluation and publication

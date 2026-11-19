@@ -1,0 +1,50 @@
+{
+  "F125_package_sha256": "180f96ff49e827cc4cd02e07af814b31add0563b6f331dfdd2efa1de2607de2a",
+  "MID": {
+    "private_record_sha256": "309f82d6281c869d42d8f19d4cbe4db92d9a0c8767b6a39bb1b618e3351ded16",
+    "record_items": 14
+  },
+  "actual_cash": 8,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "collection": {
+    "private_record_sha256": "e601523efdbf9f103aa7efc0d52265a997a82a513f2a9f46c6fb51c41d52e25e",
+    "record_items": 17
+  },
+  "current_outcomes_excluded_from_fitting": true,
+  "defaults_unchanged": true,
+  "exposed_correlated_sources": true,
+  "external_reviews_used": false,
+  "global_campaign_speedup_proven": false,
+  "global_goal_switching_solved": false,
+  "late": {
+    "private_record_sha256": "8472a9a7a2bdc93f38c04c5d87a1691f512b3c0ef0399b1f3cfe253d3df36954",
+    "record_items": 15
+  },
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_package": false,
+  "normal_binding": {
+    "private_record_sha256": "ce9bdb12f168d37477b360e7397f43d4ae36075913bd804d2c62ea53672209a8",
+    "record_items": 12
+  },
+  "parameter_fits": 0,
+  "progress": {
+    "private_record_sha256": "b2144ad8723a410f1b981fb2a5d2124376af5576e51abe4c8138c5c8e0e3a92a",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "roadmap_credit": {
+    "private_record_sha256": "31e9f439cb633423df6a3d1c0d3c153e99a1b58fb2718cb80553364f7e7693b4",
+    "record_items": 1
+  },
+  "runtime_source_edits": 0,
+  "scoped_policy_sha256": "092a0f15cd6b626fdfe7f1273e4b532f25803a82af242c3ed318cfabaf4c3f8e",
+  "session": "f125-runner-20261115-1856",
+  "source_document_sha256": "0cc8b5260c4e3f8f54d40e6d95660462316ab803adac496d8ba56fdb2d478abb",
+  "unseen_independent_origin_claim": false,
+  "verification": {
+    "private_record_sha256": "c570431006cbc6ae2ba82a5d48689b697bb36ca972f3126df16ef5439c18b6ed",
+    "record_items": 10
+  }
+}

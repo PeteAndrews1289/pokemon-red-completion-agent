@@ -1,0 +1,109 @@
+{
+  "CHAT-REQUEST-FAILURES.json": {
+    "private_record_sha256": "30f06ecdbeb7a6cc8a841a47d436a0f03aa62d5df5f7bed776a58e0db60481eb",
+    "record_items": 1
+  },
+  "EXPLORATION-COPY-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "d4405fa69e2221b091c2ea5452297bddb7f1d18f4e607b57b220d5b682f77210",
+    "record_items": 1
+  },
+  "EXPLORATION-COPY-V2-NATIVE-EXIT.json": {
+    "private_record_sha256": "9b2c4607fe6f89642e9b995f05b33c2100989f9e372ece18449371790c4c58fe",
+    "record_items": 1
+  },
+  "FINAL-CONTROL-RELEASE.json": {
+    "private_record_sha256": "5a2eba70601a0485eeb571e4e6474a4a8c0ff0a9c03a3e231e8f7f56e0c8b463",
+    "record_items": 1
+  },
+  "GATE-ADJUDICATION.json": {
+    "private_record_sha256": "abbfce40d4f5102c48660c0b406db55b940167a84be35a03b84cfec51ff7ddc8",
+    "record_items": 1
+  },
+  "MID-CHOICE-SWITCHING-AUDIT.json": {
+    "private_record_sha256": "4cb3883ce8975033af7bb544fd4bba5210d6114b93f6808b0adecde83ec345ed",
+    "record_items": 1
+  },
+  "SAMPLER-TWO-FAILURE-REASSESSMENT.json": {
+    "private_record_sha256": "1d1627c85bb2232d81f16c7ad2a4b58fe247376d08ba57a399df64f6b3b90da1",
+    "record_items": 1
+  },
+  "SCOPED-SAMPLER-COPY-V1-QUALIFICATION.json": {
+    "private_record_sha256": "04f355df77d653e5c35b1399b9b0a3146370c270da1108061157d5850efad565",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "ed9d84c847e58d570b7941b592cff989cd7f8715403112062ca0649c94e1c75b",
+    "record_items": 1
+  },
+  "STORY-LOOP-COPY-V1-PRE-GUEST-CLOSED.json": {
+    "private_record_sha256": "e6077c92f0acd9b48831ee3788fb4eddfa942ac86a75d793852711c7899c4b42",
+    "record_items": 1
+  },
+  "STORY-LOOP-COPY-V2-QUALIFICATION.json": {
+    "private_record_sha256": "888c1d997d598b71cab33b3b035bd6495a79856be715e4a7671b2008d75e8fd0",
+    "record_items": 1
+  },
+  "TIME-LOSS-PRIORITY-v1.json": {
+    "private_record_sha256": "4b1129aaecb03901cfb53a09efe9b94ca75e2b50106efffb9d7813e8f8ae3a27",
+    "record_items": 1
+  },
+  "TRAIN-COVERAGE-AUDIT-v1.json": {
+    "private_record_sha256": "431ac77e92faa787373bc94839e81ab536969722678536f8aaa74aaa0cdab8a9",
+    "record_items": 1
+  },
+  "TWO-HOUR-AUDIT.json": {
+    "private_record_sha256": "1416bc147820cea6feff643f366fbe50c191f3fe34ff61cdc972647968f18a87",
+    "record_items": 1
+  },
+  "actual_source": {
+    "private_record_sha256": "6d1bfc306b55932a663b01a0762fc19d25c26193734552f67641efb744fe8f77",
+    "record_items": 1
+  },
+  "all_three_current_gates_passed": false,
+  "candidate": {
+    "private_record_sha256": "b29e5f60ca6d728aaa6233c66107dda798a5b87f9122cc9d5e696545c6dfa0be",
+    "record_items": 1
+  },
+  "current": {
+    "private_record_sha256": "15f6747f419b210cdc45d4c61a6962d6ae2ff4348e7b372cf2e10e640e97b252",
+    "record_items": 3
+  },
+  "focused_tests": {
+    "private_record_sha256": "b9b91234df65691149eab4a08edcde04a676a050548b148b6dadb93e21b355f6",
+    "record_items": 1
+  },
+  "full_fresh_completion": false,
+  "mission": {
+    "private_record_sha256": "746dd368c69bf6eb8d7dfa6d41cb376d44a35a0ae26e288f28c0f5e7ce11a06c",
+    "record_items": 1
+  },
+  "native_claim": {
+    "private_record_sha256": "a6aaab8d2209e72a8d13af359b9dd95cb0d6f36cc149e6de04e0dc0198893456",
+    "record_items": 3
+  },
+  "new_fits": 0,
+  "new_weights": 0,
+  "observed_at_utc": "2026-11-05T16:55:00.206185+00:00",
+  "prior_closeout": {
+    "private_record_sha256": "68f1551b099efc47ef8b2f928162d7da06ffa4cf753379c5e479a977ebf1b92a",
+    "record_items": 1
+  },
+  "prior_costs": {
+    "private_record_sha256": "9a8fea9cd23e2064e8b46e14a1f809b7eb1141917f1859e7c1f21a76226d72f3",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "reassessment": {
+    "private_record_sha256": "cd296fa1d7701811f8ab5c1ab73070d1041ed35854cf5b44dda39a2690949236",
+    "record_items": 1
+  },
+  "saved_choice_falsifier": {
+    "private_record_sha256": "9e33be19efaaf513ee954d63016c664cc6be302787c03b565147281bedf8f495",
+    "record_items": 1
+  },
+  "source_document_sha256": "5ddb71a93b3fd1c107a0cb771442592138cfc03f46bc25e36011848203d2abf5",
+  "source_patch": {
+    "private_record_sha256": "05fec5151dad231b276e89b07f1bca671f95085cf390d07da65fe2e8c85d86ef",
+    "record_items": 1
+  }
+}

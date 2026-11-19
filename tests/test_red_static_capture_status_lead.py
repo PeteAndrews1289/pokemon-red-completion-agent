@@ -169,3 +169,22 @@ def test_optional_status_stale_source_does_not_activate(monkeypatch, tmp_path):
     with pytest.raises(RedCaptureLeadError, match="changed"):
         binding.execute()
     assert not captures
+
+
+@pytest.mark.parametrize("optional", [False, True])
+def test_fainted_teammate_blocks_only_static_offer(monkeypatch, tmp_path, optional):
+    from pokemon_red_completion.goal_manager import GoalUnavailableReason
+
+    provider, rt, actions, captures, _ = setup(monkeypatch, tmp_path)
+    rt.reader.raw = replace(rt.reader.raw, party_hp=(180, 0))
+    before = rt.adapter.observe()
+    offer = m.status_prepared_static_offer
+    if optional:
+        provider = replace(provider, require_status_success=False, weaken_capture=True)
+        offer = m.optional_status_static_offer
+    result = offer(provider, rt, actions, before)
+    assert result.binding is None
+    assert result.unavailable_reason is GoalUnavailableReason.TEMPORARILY_BLOCKED
+    assert rt.adapter.observe() == before
+    assert actions.actions_executed == rt.emulator.frame_count == 0
+    assert not captures

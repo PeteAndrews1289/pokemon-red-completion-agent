@@ -61,6 +61,11 @@ Replace current sections instead of stacking status paragraphs. Preserve unique
 history in the chronicle or a clearly labeled archive. Back up a substantial
 narrative rewrite. Update the roadmap, narrative and review log for a material
 milestone or Pete's request, not automatically after every small fix.
+After every session, update the existing roadmap workstream checklist and append
+its before/after snapshot. Report each workstream percentage and change in
+percentage points, including zero or regressions. Cite evidence for changed credit;
+keep rubric denominators fixed and label rebaselines separately from earned gains.
+No aggregate project percentage or estimated time follows from these checklists.
 Keep roadmap stage IDs and final exit criteria stable. Record strategy changes in
 [roadmap decisions](docs/roadmap-decisions.md). Do not build another logging system.
 
@@ -73,6 +78,21 @@ ordered next-session plan directly in chat: player outcome, blocker, components
 to reuse, work, acceptance/failure, time allowance, reassessment and exclusions.
 Recommend a model, effort and whether Fast is useful without claiming to change
 the user's setting.
+
+## External audit handoffs
+
+Pete requires each future Opus/Gemini review folder to contain all code and data
+needed for its assigned audit: exact source and runtime helpers, full relevant
+models and numerical corpora, source provenance, native states and journals,
+configuration and environment dependencies. Verify the file/hash closure and
+provide a path map and read-only reproduction instructions before handoff. A
+selective receipt packet with missing executors, weights or raw proof is not a
+complete audit folder. Use independent copies for native journal/capture trees
+whose readers require single-link files; packet creation must not change source
+link counts. File hashes alone do not verify this.
+Keep private game assets local; this instruction does not
+authorize committing, uploading or dispatching them. State any remaining
+reproduction limits explicitly and do not assign checks blocked by omissions.
 
 ## Ownership and publication
 

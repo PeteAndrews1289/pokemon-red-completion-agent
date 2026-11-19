@@ -18,6 +18,8 @@ def nested(name, **scope):
     module = ast.Module(
         body=[
             ast.ImportFrom(module="__future__", names=[ast.alias(name="annotations")], level=0),
+            *(n for n in root.body if isinstance(n,ast.FunctionDef)
+              and n.name in {"observe_trainee_xp","xp_kwargs"} and n.name != name),
             node,
         ],
         type_ignores=[],
@@ -139,6 +141,7 @@ def test_actual_productive_aggregator_returns_once_with_all_prior_counts():
         train_quantum=quantum,
         registration=None,
         retain_quantum=None,
+        venue_model=None,
         PokemonRedPartyReader=lambda _: N(read=lambda: N(members=(member_now(),))),
     )
     with pytest.raises(xp.EvolutionHelperXPExhausted) as caught:
@@ -185,7 +188,10 @@ def test_actual_balancer_pause_catch_requires_paid_trainee_progress(after_xp, ac
         orelse=[],
         finalbody=[],
     )
-    module = ast.Module(body=[node], type_ignores=[])
+    module = ast.Module(body=[
+        *(n for n in root.body if isinstance(n,ast.FunctionDef)
+          and n.name in {"observe_trainee_xp","xp_kwargs"}),
+        node],type_ignores=[])
     ast.fix_missing_locations(module)
     namespace = dict(vars(native))
     namespace.update(

@@ -59,6 +59,11 @@ def test_live_script_binds_all_native_champion_variants(tmp_path, variant, remat
 )
 def test_champion_preserves_source_model_and_support_guards(tmp_path, monkeypatch, fault):
     ctl = controller(tmp_path)
+    if fault == "budget":
+        ctl.maximum_decisions = 161
+        with pytest.raises(ValueError):
+            ctl.require_identity()
+        return
     monkeypatch.setattr(lorelei, "controller", lambda _: ctl)
     lorelei.test_scoped_lorelei_rejects_changed_authority(tmp_path, fault)
 

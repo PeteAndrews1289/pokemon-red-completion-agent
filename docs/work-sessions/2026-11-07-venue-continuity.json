@@ -1,0 +1,24 @@
+{
+  "actual_registration_delta": 0,
+  "broad_weight_adoption": false,
+  "evidence": {
+    "private_record_sha256": "8e43ab66568c83129985bca12ac2961896fa4005e22750adbc126461c633b4ff",
+    "record_items": 1
+  },
+  "experimental_models": 1,
+  "gameplay_stopped": true,
+  "main_goal_fits": 0,
+  "new_TRAIN_menus": 1,
+  "next": {
+    "private_record_sha256": "af6d3afbe0073ab8603c40e31b9ecd27e15f3cff551efb3222182f831eff375a",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "real_fit_calls": 1,
+  "roadmap_stage_changes": 0,
+  "source_document_sha256": "7d98a8c34df58d327f9141ac6868bc9212caf4ae0be47eb24fa4226764472360",
+  "status": {
+    "private_record_sha256": "d111c6459b7360d2af5ac2c3b3a73231c07a79a09f33b33512b95f379c335922",
+    "record_items": 1
+  }
+}

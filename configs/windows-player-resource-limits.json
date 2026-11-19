@@ -1,0 +1,12 @@
+{
+  "default_plan_builder": "scripts/prepare_campaign_resource_plan.py",
+  "gameplay_launch_authorization": false,
+  "limits": {
+    "memory.high": 8589934592,
+    "memory.max": 17179869184,
+    "memory.oom.group": 1,
+    "memory.swap.max": 0
+  },
+  "schema": "pokemon.windows.player-resource-limits.v1",
+  "scope": "Prospective Windows/WSL Pokemon jobs:16GiB hard ceiling,8GiB soft cache-reclaim threshold;not a reservation or floor. User explicitly approved16GiB on2026-11-08. Preserve every historical frozen plan/result;old8GiB default bytes archived in current session BEFORE-MEMORY-16."
+}

@@ -484,7 +484,7 @@ def test_fossil_revival_is_an_explicit_peer_not_a_replacement(monkeypatch, enabl
         rt, actions, obs, world=N(), include_fossil_acquisition=enabled
     )
     assert tuple(row.binding for row in rows) == ((capture, fossil) if enabled else (capture,))
-    assert calls == ([dict(maximum_actions=20000, maximum_frames=2000000)] if enabled else [])
+    assert calls == ([dict(maximum_actions=20000, maximum_frames=2000000, allow_remote_departure=True)] if enabled else [])
     assert actions.actions_executed == rt.emulator.frame_count == 0
 
 

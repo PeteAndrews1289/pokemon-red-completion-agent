@@ -1123,20 +1123,23 @@ def test_reader_exposes_pinned_player_special_stage() -> None:
     assert raw.player_special_stage == 10
 
 
-def test_reader_exposes_pinned_enemy_trapping_status() -> None:
+@pytest.mark.parametrize("player", [False, True])
+def test_reader_exposes_pinned_trapping_status_for_each_battler(player) -> None:
     memory = RecordingMemory(
         {
             RamAddress.STATUS_FLAGS_6: 1,
             RamAddress.IS_IN_BATTLE: 2,
             RamAddress.PARTY_COUNT: 1,
-            RamAddress.ENEMY_BATTLE_STATUS_1: 1 << 5,
+            RamAddress.ENEMY_BATTLE_STATUS_1: 0 if player else 1 << 5,
+            RamAddress.PLAYER_BATTLE_STATUS_1: 1 << 5 if player else 0,
         }
     )
 
     raw = PokemonRedStateReader(memory).read()
 
     assert RamAddress.ENEMY_BATTLE_STATUS_1 == 0xD067
-    assert raw.enemy_using_trapping_move is True
+    assert raw.enemy_using_trapping_move is (not player)
+    assert raw.player_using_trapping_move is player
 
 
 def test_reader_exposes_the_active_battler_without_overwriting_the_field_lead() -> None:

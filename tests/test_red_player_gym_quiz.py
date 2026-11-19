@@ -31,6 +31,7 @@ def setup(monkeypatch):
         ready=True,
         legal=True,
         fault=None,
+        approach_damage=0,
         costs={at: index * 20 for index, at in enumerate(s.QUIZ_APPROACHES, 1)},
         boxes=(),
         pc=(),
@@ -75,6 +76,8 @@ def setup(monkeypatch):
             calls.append((self.destination_map, self.destination_at))
             raw.map_id = self.destination_map
             raw.player_y, raw.player_x = self.destination_at
+            if state.approach_damage:
+                raw.party_hp = (raw.party_hp[0] - state.approach_damage,)
             if state.fault == "approach":
                 raw.player_y += 1
             actions.actions_executed += 1
@@ -83,7 +86,7 @@ def setup(monkeypatch):
 
     def lesson(_):
         return N(raw=deepcopy(raw), game_state=object()), dict(
-            party=[dict(level=raw.party_levels, hp=raw.party_hp, pp=raw.party_pp)],
+            party=[dict(level=raw.party_levels[0], hp=raw.party_hp[0], pp=raw.party_pp[0], status=raw.party_status[0])],
             completed_objectives=list(state.story),
         )
 
@@ -235,3 +238,20 @@ def test_stale_quiz_refuses_before_input(monkeypatch):
     with pytest.raises(ValueError, match="stale"):
         binding.execute()
     assert not calls and actions.actions_executed == rt.emulator.frame_count == 0
+
+
+@pytest.mark.parametrize("status, damage, accepted", [(8, 3, True), (0, 3, False), (8, 143, False), (8, -3, False)])
+def test_quiz_distinguishes_nonfainting_walk_poison_from_quiz_effects(monkeypatch, status, damage, accepted):
+    rt, actions, route, raw, state, calls = setup(monkeypatch)
+    raw.party_status = (status,)
+    state.approach_damage = damage
+    binding, _ = s.cinnabar_quiz_option(rt, actions, route=route)
+    if not accepted:
+        with pytest.raises(RuntimeError, match="outside native non-fainting poison movement"):
+            binding.execute()
+        assert len(calls) == 1
+        return
+    report = binding.execute()
+    assert report.evidence["approach_poison_damage_by_party_slot"] == [3]
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    assert raw.party_hp == (140,)

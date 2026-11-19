@@ -1,0 +1,91 @@
+{
+  "F96_error_preserved": true,
+  "F96_package_sha256": "9fa91505228e2da001c111e128368d82ced420f7f47892f53279b59bcf554ddf",
+  "F96_three_jobs_closed": true,
+  "F96_three_qualification_ROOT_seconds": 6964.561349724,
+  "F97_copy_ROOT_seconds": 128.31595479099997,
+  "F97_copy_actual_Windows_exit": {
+    "private_record_sha256": "a1d4086609f8dc6821d1da2eb52b7eca1a110c7232282db0cfa2edfffba46947",
+    "record_items": 3
+  },
+  "F97_experimental_unpromoted": true,
+  "F97_gates": {
+    "private_record_sha256": "bbca9e62b6fbd11e8dd9f5ea049ed00d304d360d151cf4a55a19dcec375a5a09",
+    "record_items": 3
+  },
+  "F97_native_copy": {
+    "private_record_sha256": "bc09a479439e0fc61fd32bdbaaa13b9cf72f74964ada49b8e0f229b1c5d57ca0",
+    "record_items": 17
+  },
+  "F97_native_copy_status": {
+    "private_record_sha256": "53a3e387dc1e54987f864f6eed97f2d4aaadd0e39aa904fe4839eacc2cd104c3",
+    "record_items": 1
+  },
+  "F97_package_sha256": "3b2af6bca8d226b02e49d659b9d3fd460f6673738010f19b91548e44b3ac7eb3",
+  "Ponyta": {
+    "private_record_sha256": "83b7f44eb9b59e1f42fc6348526c41efd0908a5780b2de47127bc03eb9373737",
+    "record_items": 19
+  },
+  "ROOT_limit": 12600,
+  "ROOT_uncommitted_at_audit": 3707.122695485,
+  "actual_registered": 115,
+  "actual_registration_delta": 0,
+  "actual_stopped": true,
+  "all_native_guests_stopped": true,
+  "campaign_ready": false,
+  "current_ROOT_spent": 7092.877304515,
+  "current_mission_allows_fits": false,
+  "explicit_current_scoped_League_whole_battle_decisions": 160,
+  "external_receipts": {
+    "private_record_sha256": "84265771e7f6bdc5f72e6216a73b8e1dc4bd4f795f93692a3f83071655bb040a",
+    "record_items": 29
+  },
+  "final_unused_hold_release_governed_by_companion": true,
+  "focused_checks": {
+    "private_record_sha256": "412636a242965fbf2f327f7c85c8f4caa517e67a15d9fb7fc85300a2aa99f39c",
+    "record_items": 3
+  },
+  "further_native_copy_allowed_only_after_new_factual_defect": true,
+  "generic_default_decisions": 80,
+  "higher_battle_cap_proposed": false,
+  "historical135_examples16_fits_unchanged": true,
+  "independent_bounded_reviews": {
+    "private_record_sha256": "d6ad927e1c3a57f084ba8e0639430e832dcb4a3ebdfa3e607f7f10ed01cabbca",
+    "record_items": 5
+  },
+  "loop": {
+    "private_record_sha256": "2407de78a3d89b8b30645e11251b7a4f84c88ceef8348c05c6e063913b0b06b6",
+    "record_items": 6
+  },
+  "maximum_concurrent_players": 2,
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_fits": 0,
+  "next_decision": {
+    "private_record_sha256": "1b528bae86160d699ce5cc66b1aca2b68433748f1465f549beaf6bc43cb59aa0",
+    "record_items": 1
+  },
+  "old_gate_credit_transferred": false,
+  "prefix": {
+    "private_record_sha256": "e8e34df5b6fe03a60244eda850e88b65961cec8f5001d5d9848d3d8dd6bf45cc",
+    "record_items": 5
+  },
+  "preparation_gate3": {
+    "private_record_sha256": "cdbe1545b32145912c100b92854124193e42c01a4820d4f6ce004aab60e3b8c5",
+    "record_items": 2
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "read_only_three_views_kept": true,
+  "readback_ROOT": 1800,
+  "readback_ROOT_hold_at_audit": 1800,
+  "schema": "pokemon.league-whole-battle-repair-session.v1",
+  "session_id": "codex-strength-qualification-20261113-1430",
+  "source_document_sha256": "cf99714445961b5b69d7f98e01928fcc63640a5155d0e194edefd5d4ba73347d",
+  "source_writer_pid": 5156,
+  "status": "native_negative_candidate_unpromoted",
+  "whole_Code_parity": false,
+  "window": {
+    "private_record_sha256": "26d0ef13f1f0fe483fc29e812c530d9c709fa9b8fc232b0dbf141f687357727c",
+    "record_items": 3
+  }
+}

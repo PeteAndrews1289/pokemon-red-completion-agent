@@ -217,3 +217,23 @@ def test_real_driver_renewal_block_admits_before_assembly_and_keeps_earned_pair(
         declaration = json.loads((tmp_path / "runs/segment-002/PLAN.json").read_text())
         assert declaration["inherited_spent"] == spent
         assert declaration["same_live_emulator"] and not declaration["state_restoration"]
+
+@pytest.mark.parametrize("seconds",[0,1e-12,0.25,0.999999999999])
+@pytest.mark.parametrize("unsettled",[False,True])
+def test_fractional_final_allowance_stops_before_constructing_limits(monkeypatch,seconds,unsettled):
+    import run_configured_red_player as driver
+    left=allowance();left["seconds"]=seconds;before=copy.deepcopy(left)
+    def forbidden(*a,**kw):raise AssertionError("exhausted allowance attempted a new runtime")
+    monkeypatch.setattr(driver,"configured_execution_limits",forbidden)
+    assert driver.configured_renewal_stop_reason(request(),left,600,compulsory_settlement=unsettled)=="declared_budget_exhausted"
+    assert left==before
+
+@pytest.mark.parametrize("axis",["decisions","actions","frames"])
+def test_other_required_zero_axes_stop_without_extending_the_allowance(axis):
+    left=allowance();left[axis]=0
+    assert configured_renewal_stop_reason(request(),left,600,compulsory_settlement=True)=="declared_budget_exhausted"
+
+def test_one_whole_second_retains_existing_compulsory_recovery_permission():
+    left=allowance();left["seconds"]=1
+    assert configured_renewal_stop_reason(request(),left,600,compulsory_settlement=True)is None
+    assert configured_execution_limits(request(),left,600).seconds==1

@@ -1,0 +1,46 @@
+{
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "campaign_partition": "development",
+  "campaign_restore_ordinals_after_staged_restart": {
+    "private_record_sha256": "4f300faec24525d28ccc7edb2c9fa1c4731406c8f4fe2098598854d22dad9ad6",
+    "record_items": 4
+  },
+  "campaigns_are_train_data": false,
+  "disclosed_safety_choices": 1,
+  "field_connection_faint_repair": true,
+  "focused_checks": 2286,
+  "focused_subtests": 44,
+  "full_suite": false,
+  "goal_switching_solved": false,
+  "gradient_fits": 0,
+  "memory_guard_stops": 3,
+  "memory_hard_ceiling_gib": 16,
+  "memory_soft_cache_threshold_gib": 8,
+  "model_choices": 70,
+  "new_campaigns": 4,
+  "new_fitted_heads": 0,
+  "new_goal_rows": 0,
+  "next": {
+    "private_record_sha256": "32ba7f3e244eba9baf5e3d9480a29f8890679679cd75cc954fa9e1d852a5b5de",
+    "record_items": 1
+  },
+  "original_twelve_hour_windows_retained": true,
+  "previous": {
+    "private_record_sha256": "d5fdf4e76976cc5f9dc7a7ed205935e01fdcad0cc6687b18e74045d17f95d794",
+    "record_items": 1
+  },
+  "production_matched_train_closed_outcomes": 71,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "refs": {
+    "private_record_sha256": "a8919f6a584630c59c93c394e6ef51ece82c24994559718c71feca6b708d765f",
+    "record_items": 19
+  },
+  "resource_focused_checks": 28,
+  "retained_field_party_menu_repair": true,
+  "source_document_sha256": "8916f227eb62df799c7f8b2ad1a9799772e906935dfa5fdec05b623597c8f483",
+  "status": "same_four_campaign_continuations_memory16_original_cutoffs",
+  "unspent_automatic_move_allocation_repair": true,
+  "whole_Code_parity": false,
+  "whole_quest_completions": 0
+}

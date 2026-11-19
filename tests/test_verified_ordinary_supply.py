@@ -18,7 +18,9 @@ from pokemon_red_completion.red_player_configuration import (
 )
 
 
-@pytest.mark.parametrize("mart", [int(MapId.CERULEAN_MART), int(MapId.VERMILION_MART)])
+@pytest.mark.parametrize(
+    "mart", [int(MapId.PEWTER_MART), int(MapId.CERULEAN_MART), int(MapId.VERMILION_MART)]
+)
 def test_verified_catalog_profile_preserves_other_skills_and_ordinary_order(mart):
     original = origin_profile()
     actual = local_ordinary_ball_supply_profile(original, mart)
@@ -37,21 +39,25 @@ def test_verified_catalog_profile_preserves_other_skills_and_ordinary_order(mart
     )
 
 
-@pytest.mark.parametrize("mart", [0, 3, 5, 68, 999, True, "67"])
+@pytest.mark.parametrize("mart", [0, 3, 5, 42, 68, 999, True, "56", "67"])
 def test_unsupported_or_unverified_store_cannot_supply_a_profile(mart):
     with pytest.raises(ValueError, match="verified clerk catalog"):
         local_ordinary_ball_supply_profile(origin_profile(), mart)
 
 
-@pytest.mark.parametrize("town", [3, 5, 4, 12, 17])
-def test_all_verified_suppliers_reach_actual_router_from_any_observed_locality(monkeypatch, town):
+@pytest.mark.parametrize("reached_pewter", [True, False])
+@pytest.mark.parametrize("town", [2, 3, 5, 4, 12, 17, 51])
+def test_all_verified_suppliers_reach_actual_router_from_any_observed_locality(
+    monkeypatch, town, reached_pewter
+):
     import pokemon_red_completion.red_resource_goal_router as module
 
     raw = replace(_raw(poke_balls=0, hyper_potions=10), map_id=town, player_money=1446)
+    completed = ("reach_pewter",) if reached_pewter else ()
     rt = Runtime(
         origin_profile(),
         N(read_retained_outside_map=lambda: town),
-        N(graph=N(completed_ids=lambda _: ())),
+        N(graph=N(completed_ids=lambda _: completed)),
     )
     observed = N(raw=raw, input_ready=True, game_state=object())
     calls = []
@@ -70,15 +76,29 @@ def test_all_verified_suppliers_reach_actual_router_from_any_observed_locality(m
                 bindings=(
                     ()
                     if self.mart == 91
-                    else (_binding(GoalKind.RESUPPLY, binding_ref="quoted:67", calls=[]),)
+                    else (
+                        _binding(
+                            GoalKind.RESUPPLY, binding_ref=f"quoted:{self.mart}", calls=[]
+                        ),
+                    )
                 )
             )
 
     monkeypatch.setattr(module, "RedResourceGoalRouter", Router)
     world = N(with_current_observation=lambda reader: "fresh-current-world")
-    rows = local_ordinary_ball_supply_peers(rt, N(), observed, world=world)
-    assert len(rows) == 1 and rows[0].binding_ref == "quoted:67"
-    assert [x[0] for x in calls] == [67, 91]
+    def transport(inner, spec):
+        pytest.fail("enumerating a quote must never play a trainer")
+
+    rows = local_ordinary_ball_supply_peers(
+        rt, N(), observed, world=world, interruption_handler_wrapper=transport
+    )
+    # Every verified clerk is quoted; the router alone rejects one. The model,
+    # not the catalog, chooses among the surviving executable peers.
+    # Pewter is admitted only after the verified arrival objective (native F17
+    # fresh runs otherwise quoted it from Oak's lab and hit the scripted rival).
+    pewter = [56] if reached_pewter else []
+    assert [row.binding_ref for row in rows] == [f"quoted:{m}" for m in (*pewter, 67)]
+    assert [x[0] for x in calls] == [*pewter, 67, 91]
     assert all(x[1] == "fresh-current-world" for x in calls)
     assert all(
         x[2]
@@ -87,6 +107,7 @@ def test_all_verified_suppliers_reach_actual_router_from_any_observed_locality(m
             prepare_capture_party=False,
             prepare_capture_escort=False,
             include_recovery_offers=False,
+            interruption_handler_wrapper=transport,
         )
         for x in calls
     )
@@ -117,7 +138,7 @@ def test_generic_catalog_keeps_original_deficit_and_safety_gates(monkeypatch, fa
     )
 
 
-@pytest.mark.parametrize("mart", [MapId.CERULEAN_MART, MapId.VERMILION_MART])
+@pytest.mark.parametrize("mart", [MapId.PEWTER_MART, MapId.CERULEAN_MART, MapId.VERMILION_MART])
 @pytest.mark.parametrize("cash,quantity", [(1446, 5), (999, 4), (200, 1), (199, 0), (0, 0)])
 def test_both_catalog_entries_keep_existing_native_affordability(mart, cash, quantity):
     raw = replace(_raw(poke_balls=0, hyper_potions=10), map_id=3, player_money=cash)
@@ -148,6 +169,8 @@ def test_supported_rom_catalog_stock_and_routes_from_both_closed_city_sources():
     )
 
     rom = Path(path).read_bytes()
+    # Pewter: ordinary Poke Ball (4) is stock index zero, like the other clerks.
+    assert list(rom[0x2449:0x2453]) == [254, 7, 4, 20, 29, 11, 12, 14, 15, 255]
     assert list(rom[0x2453:0x245D]) == [254, 7, 4, 20, 30, 11, 12, 14, 15, 255]
     assert list(rom[0x2461:0x246A]) == [254, 6, 4, 19, 13, 14, 15, 30, 255]
     world = StrategicScenarioRouteWorld.from_rom(rom)

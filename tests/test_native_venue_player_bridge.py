@@ -283,8 +283,9 @@ class _ConfiguredRoute:
 
 
 @pytest.mark.parametrize("cached", [False, True])
+@pytest.mark.parametrize("compare_yield", [False, True])
 def test_configured_factory_preserves_policy_across_runtime_renewal(
-    monkeypatch, model_record, tmp_path, cached
+    monkeypatch, model_record, tmp_path, cached, compare_yield
 ):
     from test_red_native_boxed_evolution import runtime_fixture
 
@@ -296,11 +297,18 @@ def test_configured_factory_preserves_policy_across_runtime_renewal(
         assembly_flags=tuple((name, False) for name in sorted(configuration.ASSEMBLY_FLAGS)),
     )
     plan = dict(model_record.plan, configuration=configured.to_dict())
+    if compare_yield:
+        plan.update(compare_evolution_recipient_yield=True, diagnostic_only=True, fit_allowed=False,
+                    copy_back=False, new_campaign=False, official_acceptance=False)
     path = tmp_path / "plan.json"
     path.write_text(json.dumps(plan))
     controller = N(frame_count=0, pressed_buttons=frozenset(), save_state_bytes=lambda: b"retained")
     guards, calls = [], []
-    guard = N(verify_active_roster_restored=lambda: guards.append(True))
+    # Use the real typed retained guard now required by the settlement adapter.
+    # This test isolates policy renewal; no controller/ROM is available here.
+    party_before = runtime.adapter.observe().party
+    guard = configuration.RedPlayerPartyGuard(N(), party_before, configured.loanable_specimen_refs, frozenset())
+    monkeypatch.setattr(configuration.RedPlayerPartyGuard, "verify_active_roster_restored", lambda self: guards.append(True))
     monkeypatch.setattr(configuration.RedPlayerPartyGuard, "from_rom", lambda *a, **k: guard)
     monkeypatch.setattr(
         party,
@@ -342,6 +350,7 @@ def test_configured_factory_preserves_policy_across_runtime_renewal(
         current = factory(controller)
         policy = current.native_evolution_venue_policy
         assert isinstance(policy, native.NativeEvolutionVenuePolicy)
+        assert policy.compare_recipient_yield is compare_yield
         assert policy.model_sha256 == model_record.canonical
         assert policy.training_venues == (
             context.ROUTE_11_TRAINING_VENUE,
@@ -422,6 +431,12 @@ def test_runtime_mode_reaches_native_selection_without_legacy_prefilter(
         return True
 
     monkeypatch.setattr(native, "_mansion_transport_ready", transport_ready)
+    # Geometry has its own state/route tests. This ROM-only fixture checks the
+    # configured scorer seam and cannot truthfully provide native geometry.
+    import pokemon_red_completion.red_native_venue_geometry as geometry
+    geometry_calls = []
+    monkeypatch.setattr(geometry, "quote_native_evolution_venue_geometry",
+        lambda *args: geometry_calls.append(args) or None)
     order = []
     monkeypatch.setattr(native, "prepare_native_training_center", lambda *a: order.append("center"))
     monkeypatch.setattr(
@@ -462,6 +477,7 @@ def test_runtime_mode_reaches_native_selection_without_legacy_prefilter(
     bound.party_level_evolution_executor(source, target, actions)
     assert order == ["center", "nurse"] + (["model"] if enabled else []) + ["train"]
     assert bool(transport_checks) is enabled
+    assert bool(geometry_calls) is enabled
     assert actions.actions_executed == runtime.emulator.frame_count == 0
 
 
@@ -538,3 +554,24 @@ def test_collection_refuses_unknown_runtime_policy_before_observation(monkeypatc
         options.player_collection_supplements(
             N(native_evolution_venue_policy=N()), None, None, world=None
         )
+
+
+def test_evolution_yield_wiring_requires_scoped_diagnostic_copy(model_record):
+    import run_configured_red_player as configured
+    plan = dict(model_record.plan, compare_evolution_recipient_yield=True, diagnostic_only=True,
+                fit_allowed=False, copy_back=False, new_campaign=False, official_acceptance=False)
+    wiring = configured.player_wiring_declaration(plan)
+    assert wiring["compare_evolution_recipient_yield"] is True
+    emitted = dict(wiring, partition="development", fit_allowed=False, copy_back=False)
+    assert configuration.declared_evolution_recipient_yield(emitted, model_record.model)
+    for field in ("diagnostic_only", "new_campaign", "official_acceptance"):
+        with pytest.raises(ValueError, match="venue yield comparison"):
+            configuration.declared_evolution_recipient_yield({k: v for k, v in emitted.items() if k != field}, model_record.model)
+    for key, value in (("diagnostic_only", False), ("fit_allowed", True), ("copy_back", True),
+                       ("new_campaign", True), ("official_acceptance", True),
+                       ("actual_gameplay_resume_authorized", True), ("compare_evolution_recipient_yield", 1)):
+        with pytest.raises(ValueError, match="venue yield comparison"):
+            configured.player_wiring_declaration(dict(plan, **{key: value}))
+    assert "compare_evolution_recipient_yield" not in configured.player_wiring_declaration(model_record.plan)
+    with pytest.raises(ValueError, match="continued evolution venue comparison"):
+        configured.validate_continued_sequence_wiring(plan, model_record.plan)

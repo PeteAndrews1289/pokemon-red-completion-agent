@@ -84,3 +84,66 @@ def test_local_policy_keeps_physical_and_monotonic_owned_guards(tmp_path):
         local.goal_registered(replace(before.collection_observation, owned_species=frozenset()))
     with pytest.raises(ValueError, match="completion scope"):
         replace(policy, completion_scope="all")
+
+
+def test_explicit124_planning_is_local_and_does_not_offer_alternate_one_off_targets(tmp_path):
+    from pokemon_red_completion.red_collection import red_species_ref
+    _, before, _, policy = observations(tmp_path)
+    scoped = replace(policy, completion_scope="local_red",
+                     target_species=tuple(RED_SOLO_COLLECTION_CONTRACT.target_species))
+    assert len(scoped.targets) == 124
+    assert red_species_ref(135) in scoped.targets
+    assert red_species_ref(134) not in scoped.targets
+    assert red_species_ref(136) not in scoped.targets
+    checkpoint = project_registered_observation(before, scoped).registered_checkpoint
+    assert set(checkpoint.target_species) == scoped.targets
+    assert checkpoint.registered_species == len(set(checkpoint.local_species) & scoped.targets)
+    assert scoped.document()["schema"].endswith(".v3")
+    assert replace(scoped, target_species=None).document()["schema"].endswith(".v2")
+
+
+@pytest.mark.parametrize("targets", [(), ("bogus",), ["pokemon:national:001"],
+                                     ("pokemon:national:001", "pokemon:national:001")])
+def test_explicit_planning_targets_fail_closed(tmp_path, targets):
+    _, _, _, policy = observations(tmp_path)
+    with pytest.raises(ValueError, match="registration targets"):
+        replace(policy, completion_scope="local_red", target_species=targets)
+
+
+def test_target_binding_reaches_live_projection_and_protects_irreversible_eevee_choice(tmp_path):
+    from dataclasses import dataclass
+    from types import SimpleNamespace
+    from pokemon_red_completion.red_player_configuration import _bind_required_registration_targets
+
+    _, before, _, policy = observations(tmp_path, inherited=(78, 151))
+    local = replace(policy, completion_scope="local_red")
+    @dataclass
+    class Runtime:
+        registration_policy: object
+        adapter: object
+    rt = Runtime(local, SimpleNamespace(registration_policy=local))
+    assert _bind_required_registration_targets(rt, None) is rt
+    bound = _bind_required_registration_targets(rt, tuple(RED_SOLO_COLLECTION_CONTRACT.target_species))
+    assert bound.adapter.registration_policy is bound.registration_policy
+    checkpoint = project_registered_observation(before, bound.adapter.registration_policy).registered_checkpoint
+    assert set(checkpoint.target_species) == set(RED_SOLO_COLLECTION_CONTRACT.target_species)
+    assert red_species_ref(78) not in bound.registration_policy.goal_registered(before.collection_observation)
+    from pokemon_red_completion.collection import CollectionLocation
+    from pokemon_red_completion.red_collection import RED_COLLECTION_GAME_ID
+    from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
+    from pokemon_red_completion.registration_memory import RegistrationSnapshot, observation_from_collection
+
+    original = before.collection_observation
+    eevee = replace(original.specimens[0], species_ref=red_species_ref(133), location=CollectionLocation.PARTY)
+    current = replace(original, owned_species=frozenset({red_species_ref(133)}),
+                      specimens=(eevee,), party_size=1, box_counts=(0,) * len(original.box_counts))
+    row = observation_from_collection(current, seen_species=current.owned_species,
+        national_ids={red_species_ref(n): n for n in range(1, 152)}, run_id="eevee-branch",
+        game_id=RED_COLLECTION_GAME_ID, adapter_id="test", cartridge_sha256="a" * 64,
+        snapshot_sha256="b" * 64, sequence=0)
+    local = RedRegistrationPolicy(RegistrationSnapshot((row,)), "eevee-branch", "b" * 64,
+                                  current, {}, completion_scope="local_red")
+    scoped = replace(local, target_species=tuple(RED_SOLO_COLLECTION_CONTRACT.target_species))
+    assert all(local.evolution_allowed(current, red_species_ref(133), red_species_ref(n)) for n in (134,135,136))
+    assert scoped.evolution_allowed(current, red_species_ref(133), red_species_ref(135))
+    assert not any(scoped.evolution_allowed(current, red_species_ref(133), red_species_ref(n)) for n in (134,136))

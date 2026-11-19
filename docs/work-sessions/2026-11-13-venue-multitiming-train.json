@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-13",
+  "next_session_plan": {
+    "private_record_sha256": "254b472e338a63263dd64f7d619981c68cff713dd6c63b8b05796a9f44733fd3",
+    "record_items": 8
+  },
+  "player_outcome": "Efficient fixed-target training across venues,timings and trainees.",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "session_id": "venue-multitiming-train-20261113-2005",
+  "source_document_sha256": "ac148c4be58644a3ca346fbd698c90b06a384ad7798fafae16c1cb159056ecdc",
+  "verified_outcome": {
+    "private_record_sha256": "6d61c74adea17a5bf8e7c4045afc306f5e6b7287393edb974106384ea1f5234f",
+    "record_items": 55
+  }
+}

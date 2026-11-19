@@ -1,0 +1,61 @@
+{
+  "ROOT_seconds": 4665.2356673489985,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "authentication": {
+    "private_record_sha256": "eaf5dc287e17f0c85ff65b28df518fe6bdd060cb2c7065963b361d2d1cfc5b7a",
+    "record_items": 1
+  },
+  "campaign_ready": false,
+  "current_package": {
+    "private_record_sha256": "29ce473e0ce5474b48a3c88c8f115600ea68e731d9d73881b54ed8c074401b7c",
+    "record_items": 1
+  },
+  "fit_calls": 0,
+  "focused_checks": 1068,
+  "full_suite": false,
+  "gates": {
+    "private_record_sha256": "a50411e3f74e372b8483f89cc850f1bfe32541ebd955a9ecbf7028b8ceabe686",
+    "record_items": 1
+  },
+  "learning_output": {
+    "private_record_sha256": "95824c1142e0c3be5ef237b0f7f0b89285668d357ff00570347e2c7d1c21b7c1",
+    "record_items": 1
+  },
+  "native_component_checks": {
+    "private_record_sha256": "2116a80f571238d52ca6d7ec36d004444dc1a3fa03e9ce8621915e57b4bc5432",
+    "record_items": 1
+  },
+  "native_status": "All19native cases stopped;110distinct zero-input physical boundaries.13gameplay diagnostics,2readbacks,4failed engineering cases retained.",
+  "new_TRAIN_rows": 0,
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "paid_comparison": {
+    "private_record_sha256": "6b2b0e473a72c95b97c0f5c7c2a7b14356756023e74f632bdc5c731c291834e8",
+    "record_items": 1
+  },
+  "pending": {
+    "private_record_sha256": "27163b130457b7fa25decffb2e04f0e8bc3e049f544035009c1fe58ab16ff1c1",
+    "record_items": 1
+  },
+  "production_weight_changes": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recipe": {
+    "private_record_sha256": "56f40586cfacd7af2ffad9abc0afc3ffebe8da4230062d1d91850c49953415c4",
+    "record_items": 1
+  },
+  "refusal": {
+    "private_record_sha256": "59aaca75975729fe75a6b701d08a922428765c6ee5a547e921400e6c60ad30a0",
+    "record_items": 1
+  },
+  "schema": "pokemon.costly-recurrence-comparison.v1",
+  "session": "codex-costly-loop-20261112-2300",
+  "source_document_sha256": "9c50df2c08b398c67e6f77ffff2d72cfd96acb1db1d5162186483df5f2961a0d",
+  "status": "closed",
+  "training_comparison": {
+    "private_record_sha256": "f8346a65c7bebf996a53fcd1069fe8755ab06031c3a2dbe981309abbd80de115",
+    "record_items": 1
+  }
+}

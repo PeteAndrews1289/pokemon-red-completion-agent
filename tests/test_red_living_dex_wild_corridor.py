@@ -583,3 +583,34 @@ def test_derived_parameters_build_the_existing_real_provider_profile() -> None:
     )
     assert acquisition.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
     assert acquisition.parameters["source_id"] == "wild:Route2:grass"
+
+
+def test_declared_current_warp_seeds_outward_component_without_becoming_patrol():
+    target = RedEncounterSourceTarget("wild:Route2:grass")
+    entry = (4, 1)
+    graph = LocalGraph({**_graph().edges, entry: (LocalEdge(
+        (3, 1), "up", required_mode="land", action_kind=MacroActionKind.MOVE),)})
+    kwargs = dict(reachable_from=entry, excluded={entry, (3, 4)})
+    with pytest.raises(RedLivingDexWildCorridorError, match="origin"):
+        derive_red_living_dex_wild_corridor(target, _terrain(), graph, **kwargs)
+    corridor = derive_red_living_dex_wild_corridor(
+        target, _terrain(), graph, permitted_excluded_origin=entry, **kwargs)
+    assert corridor.origin_at == (3, 1) and corridor.terminal_at == (2, 1)
+    assert entry not in (corridor.origin_at, corridor.terminal_at)
+    with pytest.raises(RedLivingDexWildCorridorError, match="unobstructed reversible"):
+        derive_red_living_dex_wild_corridor(
+            target, _terrain(), graph, reachable_from=entry,
+            excluded={entry, (3, 1)}, permitted_excluded_origin=entry)
+    with pytest.raises(RedLivingDexWildCorridorError, match="unobstructed reversible"):
+        derive_red_living_dex_wild_corridor(
+            target, _terrain(), _graph(), reachable_from=entry,
+            excluded={entry}, permitted_excluded_origin=entry)
+
+
+def test_warp_entry_permission_cannot_describe_a_different_or_unexcluded_origin():
+    for entry in ((0, 0), (3, 1)):
+        with pytest.raises(RedLivingDexWildCorridorError, match="permitted entry"):
+            derive_red_living_dex_wild_corridor(
+                RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+                reachable_from=(3, 1), excluded={(0, 0)},
+                permitted_excluded_origin=entry)

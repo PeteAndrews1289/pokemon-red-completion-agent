@@ -90,7 +90,7 @@ def load_collection_teacher_lesson(store, item):
     # A native action or trace is at most one MiB. Sixteen records therefore
     # fit the snapshot byte bound even at their individual maximum size.
     for start in range(0, len(result["trace"]), 16):
-        rows = result["trace"][start:start + 16]
+        rows = result["trace"][start : start + 16]
         records = []
         for phase in ("trace", "action"):
             kind = "red_native_lesson_" + phase
@@ -104,8 +104,10 @@ def load_collection_teacher_lesson(store, item):
                 batch = batch_reader(identifiers, expected_kind=kind)
                 if len(batch) != len(identifiers):
                     raise ValueError("collection teacher native batch length differs")
-                if any(record.summary.record_id != identifier or record.summary.kind != kind
-                       for record, identifier in zip(batch, identifiers, strict=True)):
+                if any(
+                    record.summary.record_id != identifier or record.summary.kind != kind
+                    for record, identifier in zip(batch, identifiers, strict=True)
+                ):
                     raise ValueError("collection teacher native batch identity differs")
                 records.append(tuple(record.read() for record in batch))
         for offset, (row, actual, action) in enumerate(zip(rows, *records, strict=True)):
@@ -343,6 +345,130 @@ def set_isolated_training_experience(
     return tuple(writes)
 
 
+def set_isolated_training_member_level(
+    memory,
+    *,
+    partition,
+    isolated_training_setup,
+    party_index,
+    level,
+    cartridge,
+    species_id=None,
+    preserve_moves=False,
+):
+    """Disclosed level/move/stat fixture; never reachable from a player action.
+
+    Preserve species and observed DVs. Reset stat experience explicitly, then
+    derive matching stats, intrinsic moves, full PP and growth-curve XP from
+    the cartridge. Every changed byte is returned in the teacher receipt.
+    """
+    from .red_battle_catalog import PokemonRedBattleCatalog, pokemon_red_move_ref
+    from .red_party import PokemonRedPartyReader, member_field_address
+    from .red_player_income_setup import _apply_fixture_changes
+
+    if partition != "train" or isolated_training_setup is not True:
+        raise ValueError("member fixture requires isolated TRAIN authority")
+    party = PokemonRedPartyReader(memory).read()
+    if type(party_index) is not int or not 0 <= party_index < party.size:
+        raise ValueError("member fixture party index differs")
+    if type(level) is not int or not 1 <= level < 100:
+        raise ValueError("member fixture level differs")
+    member = party.members[party_index]
+    if type(preserve_moves)is not bool or (preserve_moves and species_id is not None and species_id!=member.species_id):
+        raise ValueError('move preservation needs the unchanged TRAIN species')
+    if species_id is not None and (type(species_id) is not int or not 1 <= species_id <= 190):
+        raise ValueError("teacher species fixture differs")
+    species = cartridge.species(member.species_id if species_id is None else species_id)
+
+    def address(offset):
+        return member_field_address(party_index, offset)
+
+    a, b = memory.read_u8(address(27)), memory.read_u8(address(28))
+    stats = species.stats_with_dvs(level, (a >> 4, a & 15, b >> 4, b & 15))
+    moves = tuple(m.move_id for m in member.moves) if preserve_moves else species.intrinsic_moves_at_level(level)[-4:]
+    catalog = PokemonRedBattleCatalog()
+    changes = {
+        address(3): level,
+        address(33): level,
+        address(4): 0,
+        **{address(i): 0 for i in range(17, 27)},
+    }
+    if species_id is not None:
+        from .observation import RamAddress
+
+        changes[address(0)] = species_id
+        changes[int(RamAddress.PARTY_SPECIES) + party_index] = species_id
+        changes[address(5)], changes[address(6)] = species.types
+        changes[address(7)] = species.catch_rate
+        # Disclosed supplied TRAIN stock, not earned registration. Preserve all
+        # prior dex bits, and baseline this supplied member before native input.
+        dex_index = species.national_number - 1
+        for start in (int(RamAddress.POKEDEX_OWNED), int(RamAddress.POKEDEX_SEEN)):
+            offset = start + dex_index // 8
+            changes[offset] = memory.read_u8(offset) | (1 << (dex_index % 8))
+    for offset, value in (
+        (1, stats.max_hp),
+        (34, stats.max_hp),
+        (36, stats.attack),
+        (38, stats.defense),
+        (40, stats.speed),
+        (42, stats.special),
+    ):
+        changes[address(offset)], changes[address(offset + 1)] = value >> 8, value & 255
+    xp = species.experience_at_level(level)
+    for i in range(3):
+        changes[address(14 + i)] = (xp >> (16 - 8 * i)) & 255
+    for i in range(4):
+        move = moves[i] if i < len(moves) else 0
+        changes[address(8 + i)] = move
+        changes[address(29 + i)] = (
+            catalog.resolve_move(pokemon_red_move_ref(move)).max_pp if move else 0
+        )
+
+    class FixtureMemory:
+        def __getitem__(self, offset):
+            return memory.read_u8(offset)
+
+        def __setitem__(self, offset, value):
+            memory.write_u8(offset, value)
+
+    return _apply_fixture_changes(FixtureMemory(), changes)
+
+
+def set_isolated_training_emulator_member_level(
+    emulator,
+    *,
+    partition,
+    isolated_training_setup,
+    party_index,
+    level,
+    cartridge,
+    species_id=None,
+    preserve_moves=False,
+):
+    if partition != "train" or isolated_training_setup is not True or emulator.pressed_buttons:
+        raise ValueError("member fixture requires released isolated TRAIN authority")
+    backing = emulator._require_backend().memory
+
+    class FixtureMemory:
+        def read_u8(self, address):
+            return int(backing[address])
+
+        def write_u8(self, address, value):
+            backing[address] = value
+
+    return set_isolated_training_member_level(
+        FixtureMemory(),
+        partition=partition,
+        isolated_training_setup=isolated_training_setup,
+        party_index=party_index,
+        level=level,
+        cartridge=cartridge,
+        species_id=species_id,
+        preserve_moves=preserve_moves,
+    )
+
+
 def set_isolated_training_emulator_experience(
     emulator, *, partition, isolated_training_setup, party_index, experience, cartridge
 ):
@@ -367,7 +493,10 @@ def set_isolated_training_emulator_experience(
             memory[address] = value
 
     return set_isolated_training_experience(
-        ExperienceMemory(), partition=partition,
-        isolated_training_setup=isolated_training_setup, party_index=party_index,
-        experience=experience, cartridge=cartridge,
+        ExperienceMemory(),
+        partition=partition,
+        isolated_training_setup=isolated_training_setup,
+        party_index=party_index,
+        experience=experience,
+        cartridge=cartridge,
     )

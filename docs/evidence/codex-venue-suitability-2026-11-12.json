@@ -1,0 +1,69 @@
+{
+  "actual_registration_delta": 0,
+  "admission_errors": 0,
+  "aggregate_root_seconds": 1557.0883785569997,
+  "baseline_train_correct": 1,
+  "candidate_adopted": false,
+  "candidate_model_sha256": "1e38c9fc6973b014cfa78899ba312a9a55f1adb9a4e1ff110870b2cca453c8ae",
+  "candidate_train_correct": 3,
+  "collection_build": "F44",
+  "collection_package_sha256": "625f66fed67f9fa459b24328935fb92702b3e09b39b047e4c6b87c77592f41e6",
+  "component_training_partition": "train",
+  "date": "2026-11-12",
+  "documentation_gates_passed": true,
+  "documentation_tests_passed": 179,
+  "evidence": {
+    "private_record_sha256": "30cd72e0472e43d1148c864107132fa385ad6c00533c4a13289163e8ce100728",
+    "record_items": 12
+  },
+  "evidence_root": {
+    "private_record_sha256": "8ed4e13d0f0cc465b212d3faa4c57fe797b39e9bee9bfeb2be9335c962c76098",
+    "record_items": 1
+  },
+  "feature_count": 89,
+  "fit_build": "F45",
+  "fit_package_sha256": "5ea455fbedb0cae88fbaeb59f5b3b566a678b76d42324feff58654d24d6ac94b",
+  "fitted_parameters": 96,
+  "focused_checks_editable": 159,
+  "focused_checks_frozen": 159,
+  "formal_gates": {
+    "private_record_sha256": "1fcf2f3b4c2c6948f4a6fbdfa9fa786c89c7f720f3bef416a694f508549aca71",
+    "record_items": 3
+  },
+  "full_suite": false,
+  "goal_TRAIN_rows": 0,
+  "gradient_fits": 1,
+  "heldout033": {
+    "private_record_sha256": "13103e2b917cc2c6df906816dc21b4b3f5f83181b5b61cdb48b125d55e003c0a",
+    "record_items": 14
+  },
+  "heldout_source_role": "train-origin evaluation-only,never fitted",
+  "historical_retention_missing": 2,
+  "native_files": 155564,
+  "native_gameplay_errors": 0,
+  "new_diagnostic_stat_rows_frozen": 5,
+  "new_distinct_training_situations": 0,
+  "new_independent_origins": 0,
+  "new_learnable_rows": 6,
+  "new_native_TRAIN_outcomes": 9,
+  "new_observed_fields": 11,
+  "new_prospective_TRAIN_menus": 3,
+  "next": {
+    "private_record_sha256": "96d160d23a6d81b2ae199463be6b9c7290cb644a6696b8ae1ef34a1b0e781737",
+    "record_items": 1
+  },
+  "old_unknown_menu_scores_exact": 7,
+  "old_unknown_parity_is_algebra_not_fresh_context_validation": true,
+  "older_raw_refs_missing": 21,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "root_cases": 24,
+  "schema": "pokemon.codex.venue-suitability-summary.v1",
+  "session": "codex-venue-suitability-20261112-0000",
+  "session_id": "codex-venue-suitability-20261112-0000",
+  "source_document_sha256": "de2b244b30b61e13a1c6691305ca48a8cbc65c59faaecbfea2272dabe34be45e",
+  "status": "closed native diagnostics;authenticate writer release",
+  "train_completed_tasks": 8,
+  "train_settled_incomplete_tasks": 1,
+  "whole_Code_parity": false
+}

@@ -1,0 +1,43 @@
+{
+  "ROOT_seconds": 4452.264204590998,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "adoptions": 0,
+  "all_original_gates": "UNPROVEN",
+  "campaign_ready": false,
+  "candidate_policy_sha256": "6e33bfc7ead3ebb4fcbf7967371d56fe35c39a6b77f2c96e3979b4da36141a19",
+  "current_focused_checks": 516,
+  "date": "2026-11-12",
+  "distinct_native_quest_completions_used_in_second_fit": 1,
+  "evidence": {
+    "private_record_sha256": "41e1d64f326b2e6b1c91b392846cb530864d6863011c4a1effa611e79b657584",
+    "record_items": 9
+  },
+  "fit_calls": 2,
+  "full_goal_training_admission": false,
+  "full_suite": false,
+  "latest_build": "F80",
+  "latest_package_sha256": "5af388bd8cab47b2fd9dc5d5fced94318ef758d9154a2cbe30c0fa6960a1623d",
+  "learned_stopping_proven": false,
+  "live_diagnostics": "All native copies stopped;no campaigns launched.",
+  "measured_TRAIN_windows": 8,
+  "measured_TRAIN_windows_used_in_second_fit": 18,
+  "native_candidate_outcome_pending": false,
+  "native_comparison": {
+    "private_record_sha256": "22565837cbde563cbd2f43553433ef2f931f901274befff80b7ba8dbeeccd1a5",
+    "record_items": 1
+  },
+  "new_campaigns": 0,
+  "new_independent_origins": 0,
+  "new_optimizer_artifacts": 2,
+  "partial_unknown_windows": 2,
+  "partial_unknown_windows_in_second_fit": 5,
+  "production_weight_changes": 0,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "schema": "pokemon.codex.preparation-fit-comparison.v1",
+  "session": "codex-fit-compare-20261112-1526",
+  "shadow_choices_changed": 13,
+  "shadow_menus": 27,
+  "source_document_sha256": "e6204f4fc5a88514d9b0c0fbaca94b9b5a5fa3d349d585501c3685e7cfcd526f",
+  "status": "closed"
+}

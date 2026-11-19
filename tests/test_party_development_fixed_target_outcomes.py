@@ -209,3 +209,32 @@ def test_old_objectives_are_distinct_and_unchanged_by_new_adapter():
         PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE.objective_sha256,
         PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE.objective_sha256,
     }
+
+
+def test_matchup_schema_keeps_exact_fixed_target_ready_cost_contract():
+    from pokemon_red_completion.party_development_rank import (
+        PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID, PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES,
+    )
+    old_menu, contract, _, old_trials, endpoints = _fixture()
+    menu = replace(old_menu, candidates=tuple(replace(c,
+        feature_schema_id=PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
+        features=c.features + (0.0,) * (len(PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES) - len(c.features)))
+        for c in old_menu.candidates))
+    binding = freeze_fixed_level_ready_binding(menu, contract,
+        original_semantic_snapshot_sha256="3" * 64, scenario_id="unit-ready-v4",
+        root_lineage_id="unit-ready-root", initial_state_sha256="a" * 64,
+        partition=ScenarioPartition.TRAIN, source_commit="1" * 40, source_bundle_sha256="2" * 64,
+        venue_priors=(VenueOperationalPrior(),) * 2, venue_prior_registry_sha256="4" * 64,
+        venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED)
+    trials = tuple(replace(t, candidate=menu.candidates[t.candidate_index]) for t in old_trials)
+    result = _adapt((menu, contract, binding, trials, endpoints))
+    prior = _adapt(_fixture())
+    assert result.feature_schema_id == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
+    assert [o.criterion_values for o in result.outcomes] == [o.criterion_values for o in prior.outcomes]
+    # Extending the feature view grants no exemption from readiness/XP proof.
+    target = trials[0].after_party.members[0]
+    bad_party = replace(trials[0].after_party, members=(replace(target, hp=target.max_hp-1), *trials[0].after_party.members[1:]))
+    bad_trial = replace(trials[0], after_party=bad_party)
+    bad_endpoint = replace(endpoints[0], terminal_party_sha256=observed_party_sha256(bad_party))
+    with pytest.raises(ScenarioOutcomeError, match="full ready"):
+        _adapt((menu, contract, binding, (bad_trial, trials[1]), (bad_endpoint, endpoints[1])))

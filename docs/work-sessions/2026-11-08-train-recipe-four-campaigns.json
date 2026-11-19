@@ -1,0 +1,44 @@
+{
+  "actual115_unchanged": true,
+  "costs": {
+    "private_record_sha256": "3f5c709855e85c3ee2afa3623d43e4f600a2c031c270d80936656e489f503e3e",
+    "record_items": 1
+  },
+  "current_campaigns": 4,
+  "focused_checks": 2286,
+  "full_suite": false,
+  "host_memory_guard_stops": 3,
+  "memory16": {
+    "private_record_sha256": "cbb8716b9cb9dfad321b143dba3d87b5ef966c7ad2dc814812256f1253debc92",
+    "record_items": 1
+  },
+  "mission": {
+    "private_record_sha256": "dabf5efcaa82bba4d4ca9373b60afae4df2ff84c3322bbe210a488d0db1bb8f9",
+    "record_items": 1
+  },
+  "models_unchanged": true,
+  "native_repairs": {
+    "private_record_sha256": "ed4c7891b00985d3c43809291bae9792753b9d3849f756ffa681c5f1bc8e936b",
+    "record_items": 2
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "original_cutoffs_retained": true,
+  "ownership": "Authenticate final source-writer release;authorized finite frozen campaign actors may keep running.",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "remaining": {
+    "private_record_sha256": "7efa8459bddd3dc26dd8362f48a0f75ff20db3cd5b422e86649198e601453fe3",
+    "record_items": 1
+  },
+  "resource_checks": 28,
+  "restore_ordinals": {
+    "private_record_sha256": "4f300faec24525d28ccc7edb2c9fa1c4731406c8f4fe2098598854d22dad9ad6",
+    "record_items": 4
+  },
+  "retained_party_menu": {
+    "private_record_sha256": "eff8c5b3009712ade62cff9c0adefbd0364190c3bf2be3d345173454d9d79dab",
+    "record_items": 1
+  },
+  "session_id": "2026-11-08-train-recipe-four-campaigns",
+  "source_document_sha256": "148489f6b11f93610f4d81164389876d1ec825562d077f19bf9df6a84efab685"
+}

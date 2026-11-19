@@ -1,0 +1,61 @@
+{
+  "DEV_rows_fitted": 0,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "case_metrics": {
+    "private_record_sha256": "1364d98974c182c726c3e811e48996af36b60e6c273dff7cbe3a20344c6df396",
+    "record_items": 11
+  },
+  "default_changed": false,
+  "fit_allowed": false,
+  "fit_calls": 0,
+  "focused_checks": 233,
+  "followthrough": "Genuine model goal choices are authenticated after mandatory recovery. The 16-decision followthrough includes two ordinary setbacks and stops cleanly at its declared budget; it does not establish a full-objective victory.",
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "full_suite": false,
+  "goal_sequence_venue_weights_changed": false,
+  "known_remaining_budget_timings": {
+    "private_record_sha256": "d3da43fb09d2e7f8cd6c6a8cbc4b9054d2ec73f8f155c5dabcd625ffe320de65",
+    "record_items": 2
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "next_comparative_battle_choice_verified": true,
+  "partition": "development",
+  "prior_successful_paths_byte_exact": 3,
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "8fa89667abe7abe2f7d67313e21d937ed516f70524a3face0c900c2bd89b7d48",
+    "record_items": 5
+  },
+  "retained_timing_wins": {
+    "private_record_sha256": "553c5a8a88d808d158c2e9c1403bdf950f0e71b0260085c00c47d273d03e2d41",
+    "record_items": 2
+  },
+  "retired_broad_timing_wins": {
+    "private_record_sha256": "746a15be0e775bf976b0ac00e489e16bbd93a47feac19acf93420a43cdb0988e",
+    "record_items": 2
+  },
+  "schema": "pokemon.red.boundary-continuation.v1",
+  "session": "boundary-continuation-20261117-0104",
+  "source_document_sha256": "885dd349247cecb15712791ca1325ee1347d84b513819f9aa0b99f92f1c99213",
+  "source_runtime_changed": true,
+  "status": "closed_scoped_execution_repairs_campaign_held",
+  "summary": {
+    "private_record_sha256": "49a7d9a0bb0ee113899406f3f339d0472f9d07cff141d95bdb049290375c0ef5",
+    "record_items": 1
+  },
+  "target_stops_repaired": 2,
+  "target_stops_total": 2,
+  "weights_changed": false
+}

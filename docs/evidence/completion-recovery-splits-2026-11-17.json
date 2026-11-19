@@ -1,0 +1,45 @@
+{
+  "DEV_rows_fitted": 0,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restores": 0,
+  "cases": {
+    "private_record_sha256": "cec3116b0177c685a54129cdbec8d2ef99fbdc7ac7e59d1bcfb70bdb6a4b0b0a",
+    "record_items": 7
+  },
+  "default_changed": false,
+  "experimental_weights_changed": false,
+  "fit_calls": 0,
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "limitations": {
+    "private_record_sha256": "a72bfe54132a54ab3a6463d933b48ff74a7ae153647cf5b5d5596bf148383817",
+    "record_items": 1
+  },
+  "mid_retention": {
+    "private_record_sha256": "c67cc759e47368d75998fda0d7613f967e5f183c04493292ab697861c76defad",
+    "record_items": 4
+  },
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "491a712912ebc73da5b98c2a7f8f3737aa7ba3febaab986f49a5ff79d3898d31",
+    "record_items": 6
+  },
+  "schema": "pokemon.red.completion-recovery-splits.v1",
+  "session": "completion-recovery-splits-20261117-1745",
+  "source_document_sha256": "f3658d528e704fb8e76eea2f8f826836d81ac15964afac9131fbbc41dacf6ba2",
+  "source_runtime_changed": true,
+  "status": "closed_scoped_recovery_and_continuity_pass_full_completion_unproven",
+  "summary": "Two reproduced stopping classes now recover truthfully: a settled zero-XP evolution stays failed and returns control; a verified poison faint stops failed travel before an illegal Surf attempt. One unchanged original55 copy closes 96 decisions, reaches 57 registrations and seven badges, and earns Surf, Strength, Koga, Secret Key, Blaine, Silph and Sabrina with zero technical stops or operator repairs."
+}

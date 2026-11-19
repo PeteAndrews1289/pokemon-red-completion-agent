@@ -643,121 +643,6 @@ def _failed_fuji_facing_encounter(reader, result, outcome):
     return fuji_phase(replace(raw, battle_state=0)) == ("rescue", 4, 149)
 
 
-def _retained_lorelei_dialogue_inventory(runtime, actions, parent):
-    """Admit the proved old terminal after a native Lorelei rematch win."""
-    from .actions import MacroAction, MacroActionKind
-    from .goal_manager import GoalFailureReason
-    from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
-    from .observation import EventFlag, MapId, event_flag_is_set
-    from .red_player_field_goals import _field_ready
-    from .red_player_lesson import capture_player_lesson_snapshot
-
-    reader = runtime.reader
-    raw = reader.read()
-    if (
-        raw.map_id != MapId.LORELEIS_ROOM or raw.battle_state != 0
-        or raw.battle_result != 0 or not any(raw.party_hp or ())
-        or not raw.event_flags or not event_flag_is_set(raw.event_flags, int(EventFlag.BEAT_LORELEI))
-        or not reader.read_input_readiness().ready or not reader.read_bottom_dialogue_box_visible()
-        or runtime.emulator.pressed_buttons
-    ):
-        return None
-    parent = Path(parent)
-    files = tuple(parent / n for n in ('RESULT.json', 'CONTEXT.json', 'terminal.state'))
-    if not all(p.is_file() for p in files):
-        return None
-    result_bytes, context_bytes, state = (p.read_bytes() for p in files)
-    result, context = json.loads(result_bytes), json.loads(context_bytes)
-    state_hash = sha256(state).hexdigest()
-    if (
-        state != runtime.emulator.save_state_bytes() or not checkpoint_quiescent(result)
-        or result.get('continuation_reason') != 'native_execution_error'
-        or result.get('field_ready') is not False
-        or result.get('state_sha256') != state_hash or context.get('state_sha256') != state_hash
-        or result.get('context_sha256') != sha256(context_bytes).hexdigest()
-        or result.get('spent') != context.get('spent') or context.get('cash') != raw.player_money
-    ):
-        return None
-    outcomes = result.get('episode', {}).get('outcomes', ())
-    outcome = outcomes[-1] if outcomes else {}
-    if (
-        outcome.get('selected_kind') != GoalKind.ADVANCE_STORY.value
-        or outcome.get('error_type') != 'TrainerBattleLifecycleError'
-        or outcome.get('error') != 'party, inventory or HP integrity changed'
-        or outcome.get('terminal_state_sha256') != state_hash
-        or outcome.get('after', {}).get('cash') != raw.player_money
-        or raw.player_money - outcome.get('before', {}).get('cash', raw.player_money) != 5544
-    ):
-        return None
-    witnesses = []
-    for path in parent.glob('league-defeat_lorelei/*/endpoint.json'):
-        endpoint = json.loads(path.read_bytes())
-        if endpoint.get('final_state_sha256') != state_hash or endpoint.get('actor_returned_win') is not True:
-            continue
-        battle_bytes = path.with_name('outcome.json').read_bytes()
-        battle = json.loads(battle_bytes)
-        if (canonical_sha256(battle) == endpoint.get('outcome_sha256')
-                and battle.get('battle_won') is True and battle.get('stop_reason') == 'battle_won'
-                and battle.get('final_battle_state') == 0):
-            witnesses.append(path)
-    if len(witnesses) != 1:
-        return None
-
-    before, before_lesson = capture_player_lesson_snapshot(runtime)
-    before_dex = reader.read_pokedex_state().owned_species
-    terminal = None
-    consumed = False
-
-    def check_boundary():
-        now = reader.read()
-        for key in ('map_id', 'player_x', 'player_y', 'battle_state', 'battle_result',
-                    'party_species_ids', 'party_levels', 'party_hp', 'party_max_hp',
-                    'party_status', 'party_pp', 'party_moves', 'bag_items', 'player_money', 'badge_bits'):
-            if getattr(raw, key) != getattr(now, key):
-                raise ValueError('retained Lorelei dialogue changed protected state')
-        if not event_flag_is_set(now.event_flags, int(EventFlag.BEAT_LORELEI)):
-            raise ValueError('retained Lorelei dialogue lost its verified event')
-
-    def execute():
-        nonlocal consumed, terminal
-        if consumed or runtime.emulator.save_state_bytes() != state:
-            raise ValueError('retained Lorelei dialogue is stale')
-        consumed = True
-        start_actions, start_frames = actions.actions_executed, runtime.emulator.frame_count
-        for _ in range(16):
-            check_boundary()
-            if _field_ready(runtime):
-                break
-            if reader.read_bottom_dialogue_box_visible():
-                actions.execute(MacroAction(MacroActionKind.CONFIRM))
-            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=96))
-        check_boundary()
-        after, after_lesson = capture_player_lesson_snapshot(runtime)
-        if (
-            not _field_ready(runtime) or before_lesson != after_lesson
-            or before.collection_observation != after.collection_observation
-            or before_dex != reader.read_pokedex_state().owned_species
-        ):
-            raise ValueError('retained Lorelei dialogue failed field and progress verification')
-        terminal = runtime.emulator.save_state_bytes()
-        return GoalExecutionReport(
-            actions.actions_executed - start_actions, runtime.emulator.frame_count - start_frames,
-            dict(model_queries=0, source_state_sha256=state_hash, retained_native_win=True),
-        )
-
-    def verify(report):
-        if terminal is not None and terminal == runtime.emulator.save_state_bytes() and _field_ready(runtime):
-            return GoalVerification.succeeded()
-        return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
-
-    binding = ExecutableGoalBinding('pokemon.red:retained-lorelei-dialogue:' + state_hash,
-                                    GoalKind.RECOVER_CONTROL, 0.04, 0.02, execute, verify)
-    blocked = GoalOpportunity(binding.binding_ref + ':settlement-only', GoalKind.ADVANCE_STORY,
-                              GoalAvailability.UNAVAILABLE,
-                              unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED)
-    return GoalBindingSet((binding.opportunity, blocked), (binding,))
-
-
 def _retained_capture_inventory(runtime, actions, *, parent, output):
     """Reconnect an exact paused allocation before any ordinary wild exit.
 
@@ -1390,6 +1275,13 @@ def assemble_configured_player(
 
     income_declaration = (json.loads(Path(plan_path).read_bytes())
         if Path(plan_path).is_file() else {})
+    coverage = income_declaration.get("regional_coverage", False)
+    cost_horizon = income_declaration.get("collection_cost_frame_horizon")
+    if cost_horizon is not None and (type(cost_horizon) is not int or cost_horizon < 1
+            or model_feature_version < 9 or income_declaration.get("partition") != "development"):
+        raise ValueError("collection cost measurement requires a development level-workload model")
+    if type(coverage) is not bool or (coverage and income_declaration.get("partition") != "development"):
+        raise ValueError("regional coverage is an explicit development comparison")
     if income_declaration.get("native_owned_stock_income") is not None and (
         training_admission is not None or scoped_train_composition is not None
     ):
@@ -1420,6 +1312,8 @@ def assemble_configured_player(
             else {}
         ),
         **({"include_level_workload": True} if model_feature_version >= 9 else {}),
+        **({"regional_coverage": True} if coverage else {}),
+        **({"observe_collection_cost": True} if cost_horizon is not None else {}),
         **({"include_capture_invocation": True} if model_feature_version >= 13 else {}),
         **({"include_matchup_observation": True} if model_feature_version >= 15 else {}),
         **(
@@ -1598,9 +1492,6 @@ def assemble_configured_player(
         if retained is not None:
             return retained
         if training_admission is None:
-            retained = _retained_lorelei_dialogue_inventory(args[0], args[1], parent)
-            if retained is not None:
-                return retained
             retained = _retained_wild_faint_inventory(
                 args[0],
                 args[1],

@@ -1,0 +1,42 @@
+{
+  "MID": {
+    "private_record_sha256": "9c652351bf8554a239f1845642ac8735b361afb0d4986f71934d8319b6659324",
+    "record_items": 22
+  },
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_sealed": true,
+  "candidate_F123_sha256": "2de388afd582f47c681114f96920f3b4b4613ac4dc15718c018fb50d2be30685",
+  "control_F121_sha256": "1f6df5684cf1a555aaef990d6620a481d29910c6ba8a98ae9c64eee7b677271b",
+  "editable_closure_repair": {
+    "private_record_sha256": "f67f33a70cca0cac7133fedb6e77b2a1af6f797c9ca852c0727b532f2e54d28c",
+    "record_items": 8
+  },
+  "fresh_campaign_qualified": false,
+  "goal_switching_solved": false,
+  "learning": {
+    "private_record_sha256": "e3d080bd16f39f6744942249483f907d8bd7f1dfdf6cdd45566ce03faf779c8c",
+    "record_items": 5
+  },
+  "new_campaign": false,
+  "preparation": {
+    "private_record_sha256": "740f184b9c953a7937407725fd5e3539995423f52ab123f174156e5125f85805",
+    "record_items": 16
+  },
+  "progress": {
+    "private_record_sha256": "96f0bb53590be6a9ad8d21e2e18cf9b3b1eb436347d9adbe8f180ab5ceb8812d",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "readback": {
+    "private_record_sha256": "4be690d891f4d46106813e92f6f5cb22fd620427156512da8f89ab6fce61c317",
+    "record_items": 8
+  },
+  "reviews": {
+    "private_record_sha256": "677563fd89bb84b3bc82e9545b244ebeea6239396e1dfde26de15920886cfc83",
+    "record_items": 6
+  },
+  "scope": "Exposed copied MID rehearsal and one correlated TRAIN source; no actual gains or clean original gate pass.",
+  "session": "mid-preparation-20261115-0500",
+  "source_document_sha256": "b4b5d1db9b36b76c296c4cebbba71e9eb75b15e8e4ee1f3a5aaaef19cc0d22a7"
+}

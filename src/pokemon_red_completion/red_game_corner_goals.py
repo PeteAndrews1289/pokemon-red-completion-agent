@@ -42,7 +42,7 @@ from .route_plan import RoutePlanningError
 
 
 def _occupied_prize_counter(start, at):
-    return (start.map_id == PRIZE_ROOM and start.ready and start.interruption is None
+    return (getattr(start,'map_id',None) == PRIZE_ROOM and start.ready and start.interruption is None
             and at in start.occupied and sum(abs(x-y) for x,y in zip(start.at,at,strict=True)) == 1)
 
 

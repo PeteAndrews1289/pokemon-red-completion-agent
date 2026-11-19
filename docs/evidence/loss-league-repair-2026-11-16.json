@@ -1,0 +1,59 @@
+{
+  "DEV_rows_fitted": 0,
+  "F141_scoped_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "F142_scoped_terminal": true,
+  "League_departure_native_qualified": false,
+  "actual_cash": 8,
+  "actual_inputs": 0,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "actual_restore_delta": 0,
+  "case_metrics": {
+    "private_record_sha256": "3f83fbb811e4f948c86981a56de7cd09a5998cf017d5d15291990bf63a840d48",
+    "record_items": 5
+  },
+  "critic_fit_rows_unchanged": 32,
+  "cross_chunk_history_changed": false,
+  "default_changed": false,
+  "fit_allowed": false,
+  "fit_calls": 0,
+  "formal_gates": {
+    "private_record_sha256": "6d16b1859cb3b1ecca18fec5b54e09f6222512e930e6644bcc1a7371aa185f27",
+    "record_items": 3
+  },
+  "fresh_start_binding_pass": true,
+  "frozen_focused_checks": 1100,
+  "full_suite": false,
+  "head_sha256": "143380c9e9ae288fd232acc1720c4c8b7330d13d54138def3225fd47d7e608c8",
+  "loss_handoff_native_qualified": true,
+  "models_adopted": 0,
+  "native_episode": true,
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_fits": 0,
+  "new_independent_origins": 0,
+  "partition": "development",
+  "policy_sha256": "c04c5a0112e1c5b2e83354d56f26ab02ef05e87f66837ba26cd8f4bd2dbd3516",
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "receipt_digests": {
+    "private_record_sha256": "96c6a54ee1afb4b732ea663e54b05667ff59924be61d161e2407fe35763ebd91",
+    "record_items": 14
+  },
+  "reviewers": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "schema": "pokemon.red.loss-league-repair.v1",
+  "session": "loss-league-repair-20261116-1906",
+  "source_document_sha256": "25550711edb92c39f7755446902af4d2e2e1b8a7a0afccc4eb2a552d6da4948e",
+  "source_runtime_changed": true,
+  "status": "closed_copies_campaign_held",
+  "summary": "F141 repairs loss-task receipt parity and unsupported indoor departure quotes. MID clean:False;LATE clean:False;fresh124:True. No fit or campaign. Separate F142 income availability repair tested on the retained LATE terminal;original gates remain unproven.",
+  "training_necessity_proven_here": false,
+  "varied_linked_tasks_pass": false,
+  "venue_weights_changed": false,
+  "weights_changed": false
+}

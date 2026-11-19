@@ -1,0 +1,85 @@
+{
+  "F115": {
+    "private_record_sha256": "f93d9c2feb4aa8c51a2fecbe576007edb0c2883799444216b4b04a2f2215c0a9",
+    "record_items": 9
+  },
+  "F117": {
+    "private_record_sha256": "d61de9fff8785a6c783f402bfddbb8de02dfefb44504a95c0fd2dbdea618a5d5",
+    "record_items": 15
+  },
+  "TRAIN": {
+    "private_record_sha256": "795581665fcc9ea9b49df135ec59c5a9cb249c853f189799334d1c2b0bc46a2b",
+    "record_items": 18
+  },
+  "all_55_MID_LATE_gates": "UNPROVEN",
+  "audits": {
+    "private_record_sha256": "2ade1fb6966dd6eb98b0264c179c297d5171b219a2c79bde0bce540d0c409916",
+    "record_items": 7
+  },
+  "budget_renewals": 0,
+  "campaign_class": "Mixed-build SAME fresh DEV save from F97 with retained repairs; not an unchanged frozen benchmark.",
+  "closed_costs_as_of_snapshot": {
+    "private_record_sha256": "d33cdd9ec666e8aeb41beade957c399630448ea98ac494da8f30c3aeaf2cfbef",
+    "record_items": 13
+  },
+  "current_block_actual_registration_delta": 24,
+  "current_claim_pid": 275,
+  "cutoff_utc": "2026-11-15T02:42:57+00:00",
+  "document_generated_utc": "2026-11-14T19:39:58.521268+00:00",
+  "historical_learning_counters": {
+    "private_record_sha256": "64c9908c97f84a0d864a0ed9758dba220ab1e7adecb3088aee8686a9992a5a67",
+    "record_items": 4
+  },
+  "later_operational_fact_utc": "2026-11-14T19:32:47+00:00",
+  "latest_verified_actual": {
+    "private_record_sha256": "73ae6302c51e4e7b769770cf52fe0d6d8b5a3c7daa1ed8856e3f3eb8a034e9cc",
+    "record_items": 21
+  },
+  "mission_sha256": "d819046c1449ddfb5068d79650f3a0a8edcb214f5494a35c481ef021d28e9b2b",
+  "native_original_pre_KO_Fly_mid_RUN_branch_proved": false,
+  "next_fresh_campaign": {
+    "private_record_sha256": "8b92b018e0585f88d2562aee53f95c2bbc1df115ac4a8132b80fa8b4f82d6438",
+    "record_items": 4
+  },
+  "official_gate_credit": false,
+  "profiles": {
+    "private_record_sha256": "5814cb21c15f09797d00e9a128f9a86451807c71ab10dcde03e214f70e2ccb67",
+    "record_items": 6
+  },
+  "prototypes": {
+    "private_record_sha256": "e6c70a79fbf973554d2ffa683fc9d5f43b8aa6ff75f3e851c1bbe384a3df5658",
+    "record_items": 2
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "retained_history": {
+    "private_record_sha256": "b870b56ecdaca92d1db04f8596632666849f1bbe881943b2919ec0ad013a4267",
+    "record_items": 7
+  },
+  "root_cost_snapshot_sha256": "925e0e9ed8226822069fc7e014abb2564ce52baafd40b0c5547f323d79dc7a60",
+  "root_cost_snapshot_utc": "2026-11-14T19:20:24.872057+00:00",
+  "route_failure_evidence": {
+    "private_record_sha256": "02111eb9b70961fe99c9edea8bee24ce7986f1949778d81c1b634d47c888c8dd",
+    "record_items": 11
+  },
+  "schema": "pokemon.two-lane-current-doc-snapshot.v2",
+  "session_id": "two-lane-continuation-20261114-1442",
+  "source_document_sha256": "4b4b85f4131143f274dfdf2de8b0dd29416888295bfab20351658589b4511a70",
+  "speed_ledger": {
+    "private_record_sha256": "2873c8d1514747621515bb7e1ab6526c2298129a9127030361678c53704b91d2",
+    "record_items": 1
+  },
+  "v11_ROOT_seconds": 1347.863330078,
+  "v11_registration_change": {
+    "private_record_sha256": "db03081e0f59cfb5678e90a4e581cf352493f190408baab7f25cd1a94ea682e5",
+    "record_items": 2
+  },
+  "v12_ROOT_seconds": 213.690312644,
+  "v12_dojo_and_gift_earned_in_actual": true,
+  "v12_launched_from_original81_not_diagnostic82": true,
+  "v12_registration_change": {
+    "private_record_sha256": "1987b981fc46f0c3f8dbad9c42921ea7abcb60e577cae17bcc6a5e05f6162d77",
+    "record_items": 2
+  },
+  "whole_Code_parity": false,
+  "whole_campaign_ready": false
+}

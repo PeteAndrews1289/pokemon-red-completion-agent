@@ -1,0 +1,109 @@
+{
+  "FINAL-CONTROL-RELEASE.json": {
+    "private_record_sha256": "a4346f43095e0fa404013500082589946ebd20126e93d22c2cae9d5150725025",
+    "record_items": 1
+  },
+  "FINAL-FROZEN-INTEGRITY.json": {
+    "private_record_sha256": "2c080ff73f6468f3981f846bdb4daf95818a4d3a8bd1f5b4b5dd0369891833e7",
+    "record_items": 1
+  },
+  "FRESH-START-QUALIFICATION.json": {
+    "private_record_sha256": "88f94c0a6978d4c77d178d9d51ef3dc4b791110ca3a5881ac2ab6c0f0d7711d3",
+    "record_items": 1
+  },
+  "GUARDED-IO-QUALIFICATION.json": {
+    "private_record_sha256": "fc36334b773412b4916cb9b5cb71334315b4c92d4720cf137c7eee98c409563e",
+    "record_items": 1
+  },
+  "GUARDED-IO-V1-ACTIVATION.json": {
+    "private_record_sha256": "fcccf1d03a7e6f60ace76cf8dc8024cb875efc2171dadeb2b5eb65f1afc9d4dd",
+    "record_items": 1
+  },
+  "GUARDED-IO-V1-CLOSED.json": {
+    "private_record_sha256": "e5f72d093bb14abc77653a1f3780f9e31306cdaaae2058d32148e4b70de361fb",
+    "record_items": 1
+  },
+  "GUARDED-IO-V1-PROTOCOL.json": {
+    "private_record_sha256": "68512bc86264e1c6979c9d1fe49f5075e50f40ad7f1e29af908d9e3e8a2df1a8",
+    "record_items": 1
+  },
+  "MISSION.json": {
+    "private_record_sha256": "79e1733c5bee042e784333fc4b7cff2af8f694f50198a792be05f62c9003e9d9",
+    "record_items": 1
+  },
+  "PRIOR-AUTHENTICATION.json": {
+    "private_record_sha256": "17dd4ba3bf9fd5605614cce5beac4985c50721ff570eaa2f509017e2c6ebda8f",
+    "record_items": 1
+  },
+  "PROPOSED-CAMPAIGN-PLAN.json": {
+    "private_record_sha256": "0d1612833e609deb85d6afccee0f787b13be9546b6402c880346c14801383085",
+    "record_items": 1
+  },
+  "SESSION-COSTS-final.json": {
+    "private_record_sha256": "c9794a069cd4ccd509387905082a7db9a6baa1198b185207fdcf4db547060028",
+    "record_items": 1
+  },
+  "STARTUP-V1-ACTIVATION.json": {
+    "private_record_sha256": "bb6ad108048d4da3b16ab2391e61ad3a3d4be5a5baf1b89f2de21ab881b0279a",
+    "record_items": 1
+  },
+  "STARTUP-V1-CLOSED.json": {
+    "private_record_sha256": "34bbfb2c013c9c83b9437d746d34911a2e7629ebb1570ba48368448252cdfd75",
+    "record_items": 1
+  },
+  "STARTUP-V1-COST-READBACK-final.json": {
+    "private_record_sha256": "99c584d93e97733f0b678d51de57a1614435f358a76982b1751709a2b773d8bf",
+    "record_items": 1
+  },
+  "STARTUP-V1-LOG-AUDIT.json": {
+    "private_record_sha256": "8490f0d47f55883e33b4cae96721e3c779eac1e0dda87d5daa51ed3a50123686",
+    "record_items": 1
+  },
+  "STARTUP-V1-NATIVE-EXIT.json": {
+    "private_record_sha256": "d3359560b8353c6c2c768a38096fda4bfcf1cc063990df77d7f70e7ea5aa1af5",
+    "record_items": 1
+  },
+  "STARTUP-V1-PARENT-REPLAY.json": {
+    "private_record_sha256": "bcb39dd2a811710c8eb1d36c6cc731ba239a1236a46f179b02f0e6aad30404d6",
+    "record_items": 1
+  },
+  "STARTUP-V1-PROTOCOL.json": {
+    "private_record_sha256": "b1e1577bb9095becd4cbbe4ba08573fbe2ba77732800c07e897085c2db551d92",
+    "record_items": 1
+  },
+  "STARTUP-V1-REVIEW-CURSOR.json": {
+    "private_record_sha256": "64d1d16cb67ed084621089cd79e82252f4fa1461291991a828251070e2a99c91",
+    "record_items": 1
+  },
+  "WRITER-CLAIM.json": {
+    "private_record_sha256": "3bcbea737b22ee948afec36870c0846fb68e88f5d97078e341b6ec82cc358801",
+    "record_items": 1
+  },
+  "actual55_delta": 0,
+  "mission": {
+    "private_record_sha256": "79e1733c5bee042e784333fc4b7cff2af8f694f50198a792be05f62c9003e9d9",
+    "record_items": 1
+  },
+  "new_fits": 0,
+  "new_train_rows": 0,
+  "new_weights": 0,
+  "next": {
+    "private_record_sha256": "ac559c2ace27c6d0d1e5553bb0d112d88fcdc628f2b7f3914f5d29e542e4083d",
+    "record_items": 1
+  },
+  "primary_package": {
+    "private_record_sha256": "a8720517e4feed71db61790849f72bf14f201973c5a895d14bdef9ee481635a7",
+    "record_items": 1
+  },
+  "prior_gates": {
+    "private_record_sha256": "32f1432e2039e972c1130f8a13e3c2213ae3014918d3d9d36e5f23e066ceb481",
+    "record_items": 1
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "recipe": {
+    "private_record_sha256": "f1ebdb32d74d1f150ac60d5e67b2298abd0e3e46efd705596f5e19e540aaaeb6",
+    "record_items": 1
+  },
+  "source_document_sha256": "45fb1572b94462178833a2cd35431854f12fcfa09462fb3a6bb8a71c41715d6f",
+  "status": "CLOSED: exact35 fresh-start qualification passed;zero loads,unchanged124target recipe. Campaign proposal prepared;no full campaign launched. Native actors stopped;viewer remains view-only."
+}

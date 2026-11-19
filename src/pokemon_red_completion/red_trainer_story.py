@@ -44,7 +44,7 @@ from .observation import (
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
-from .red_lorelei_story import FrozenLoreleiStoryController, story_league_controller
+from .red_lorelei_story import story_league_controller
 from .red_pc_storage import face_pc_boundary
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
@@ -176,6 +176,7 @@ class RedCartridgeLoreleiSkill:
     _arrival: ScriptedTrainerArrival | None = field(default=None, init=False)
     _prepared_reentry: bool = field(default=False, init=False)
     _prepared_level_deficit: int = field(default=5, init=False)
+    _prepared_allow_uncovered_later: bool = field(default=False, init=False)
     _lobby_events: bytes | None = field(default=None, init=False)
     _lobby_reset_latch: bool | None = field(default=None, init=False)
     _scripted_triggers: tuple[tuple[int, int], ...] = field(default=(), init=False)
@@ -531,6 +532,7 @@ class RedCartridgeLoreleiSkill:
         self._prepared_rematch = self.rematch
         self._prepared_reentry = self.allow_scripted_reentry or self.development_retry_reentry
         self._prepared_level_deficit = self.maximum_level_deficit
+        self._prepared_allow_uncovered_later = self.allow_uncovered_later
         self._prepared_learned_controller = story_league_controller(
             self.runtime, self.objective_id, rematch=self.rematch,
         )
@@ -625,7 +627,7 @@ class RedCartridgeLoreleiSkill:
                     self.allow_scripted_reentry or self.development_retry_reentry)):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
         if (self._prepared_level_deficit != self.maximum_level_deficit
-                or self.allow_uncovered_later != preparation.allow_uncovered_later):
+                or self.allow_uncovered_later != self._prepared_allow_uncovered_later):
             raise RedTrainerStoryError("prepared level-screen declaration changed before input")
         if self._prepared_blocks is not None and (
             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
@@ -774,12 +776,6 @@ class RedCartridgeLoreleiSkill:
         if not self._scripted_triggers:
             face_pc_boundary(actions, reader, target.interaction_facing.value)
         controller = self._battle_controller(reader)
-        battle_start = self.runtime.adapter.observe()
-        evolution_guard = None
-        if isinstance(controller, FrozenLoreleiStoryController):
-            from .red_trainer_evolution import RedTrainerEvolutionGuard
-
-            evolution_guard = RedTrainerEvolutionGuard.from_rom(world.rom, self.runtime.emulator)
         receipt = self._run_prepared_battle(
             controller, reader, actions, target=target, validate_target=require_target,
             move_slot_policy=recovery_guard._safe_trainer_move,
@@ -796,8 +792,6 @@ class RedCartridgeLoreleiSkill:
             validate_scripted_dialogue=scripted_dialogue,
             maximum_full_restores=self.maximum_full_restores,
             prospective_story_recovery=bool(self.maximum_full_restores),
-            **({"league_evolution_rom": world.rom}
-               if isinstance(controller, FrozenLoreleiStoryController) else {}),
         )
         spent = (
             controller.heals_claimed if self.maximum_full_restores else 0
@@ -812,16 +806,10 @@ class RedCartridgeLoreleiSkill:
                 projected_events=self._lobby_events,
                 lobby_reset_verified=getattr(traversal,"verified",False))
         ) if self.rematch else self.expected_facts.issubset(after.game_state.facts)
-        from .red_routed_trainer_funding import _funding_evolution_ledger
-
-        ledger = _funding_evolution_ledger(
-            evolution_guard, battle_start, after,
-            tuple(battle_start.raw.party_species_ids or ()),
-            dependency_specimen_ledger(before.collection_observation),
-        )
         if (
             not after.input_ready or after.raw.battle_state
-            or ledger is None
+            or dependency_specimen_ledger(after.collection_observation)
+            != dependency_specimen_ledger(before.collection_observation)
             or not event_verified
             or after.raw.badge_bits != before.raw.badge_bits
             or after.raw.bag_items != expected_bag

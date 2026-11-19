@@ -1,0 +1,59 @@
+{
+  "F123_default_and_F125_local_benefit_preserved": true,
+  "F126_package_sha256": "ef15fe3000fa5dfcb9277eca9e4544d2c7f84d08ff1e7985e751989817e67833",
+  "LATE": "UNPROVEN",
+  "MID": "UNPROVEN",
+  "actual_cash": 8,
+  "actual_registration_delta": 0,
+  "actual_registrations": 97,
+  "availability": {
+    "private_record_sha256": "2f7addc58abf39c3c60474f37314bafefa927091099940ca2c5889816e48cdd3",
+    "record_items": 9
+  },
+  "campaign_ready": false,
+  "changed_runtime_sources": {
+    "private_record_sha256": "32dd2ae90acf55a0b889af6ea966c93cb87769003971c60713a4ffec3a392f72",
+    "record_items": 3
+  },
+  "choice": {
+    "private_record_sha256": "88041cc7597eaa65c229e9d939448d774a25b9282e76219f9ff2b3b8e329ccbd",
+    "record_items": 17
+  },
+  "default_models_unchanged": true,
+  "editable_venue_task_extension_and_economy_projection_excluded": true,
+  "external_reviews_used": false,
+  "focused_checks": 100,
+  "focused_full_suite": false,
+  "live": {
+    "private_record_sha256": "5d4b30a97cf96b2df6c04a45d97874314186f32f6503475998da921028845dd9",
+    "record_items": 22
+  },
+  "new_TRAIN_rows": 0,
+  "new_campaign": false,
+  "new_independent_origins": 0,
+  "old_full_gate_credit_not_transferred": true,
+  "optional_mode": "native_qualified_existing_stock_v1",
+  "original55": "UNPROVEN",
+  "parameter_fits": 0,
+  "progress": {
+    "private_record_sha256": "3bba0a3f4c9f3f90429e5439073e1dec4c8e64885dfab25b67cf95788fc921eb",
+    "record_items": 6
+  },
+  "public_projection": "Aggregate research outcomes. Identifying information and underlying private observations are retained locally.",
+  "roadmap_credit": {
+    "private_record_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "record_items": 0
+  },
+  "scope": {
+    "private_record_sha256": "591984134ffdfed45fff68b522ecc8cbccff94b58bf3d6c0f524f1efa9d3256c",
+    "record_items": 1
+  },
+  "session": "income-applicability-20261115-2031",
+  "source_document_sha256": "37b766fa4b26ec7279f925e82a7f252d10241a47be4f4fc21eb598a4af3c7de1",
+  "verification": {
+    "private_record_sha256": "380b10692d3158678cabbcc9faf6525004e9773de5184f8da88b6cf4377bb1bf",
+    "record_items": 9
+  },
+  "weights_and_utilities_unchanged": true,
+  "whole_Code_parity": false
+}

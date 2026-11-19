@@ -355,7 +355,7 @@ def enumerate_red_level_evolutions(
                         RedEvolutionOption(
                             profile,
                             (replace(binding, level_evolution_transition=(source_ref, target_ref),
-                                     level_evolution_boxed_ref=boxed_ref)
+                                     level_evolution_boxed_ref=boxed_ref, level_evolution_initial_xp=observed_xp)
                              if bind_collection_cost and workload is not None else binding),
                             EconomyOffer(EconomyMode.OTHER, planned_spend=0),
                             level_evolution_effort(precursor.level, level, progress),
